@@ -222,8 +222,8 @@ settings.
 
 # Define desired compute host credentials within config management
 
-[master]$ echo "<c1_ip> <c1_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
-[master]$ echo "<c2_ip> <c2_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
+[master]$ echo "c1 <c1_ip> <c1_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
+[master]$ echo "c2 <c2_ip> <c2_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
 
 # Register new compute hosts with provisioning system
 
