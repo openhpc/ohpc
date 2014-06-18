@@ -7,7 +7,7 @@
 \usepackage{listings}
 \usepackage{textcomp}
 
-\lstset{basicstyle=\small\ttfamily,
+\lstset{basicstyle=\footnotesize\ttfamily,
   frame=single,
   backgroundcolor=\color{grey},
   showstringspaces=false,
@@ -94,6 +94,7 @@ enable a local configuration management system. The config management system
 will then be used in subsequent commands to register additional FSP components
 for installation.
 
+\vspace*{0.2cm}
 % begin_fsp_run
 % fsp_validation_comment Bootstrap
 
@@ -119,6 +120,8 @@ In this demo, we choose to store the cluster config files in /tmp. However, in
 normal practice, this would likely be stored in a shared file system (with
 config/template files stored in an SCM for versioning).
 
+\vspace*{0.2cm}
+
 % begin_fsp_run
 % fsp_validation_comment Add baseline FSP and components for master node
 
@@ -143,6 +146,8 @@ At this point, all of the packages necessary to use warewulf on the {\em master}
 host should be installed.  Next, we need to build the vNFS image, modify a few
 settings to work on the Zeus cluster, and provision a host. Example steps are
 as follows:
+
+\vspace*{0.2cm}
 
 % begin_fsp_run
 % fsp_validation_comment Complete basic Warewulf setup for master node
@@ -208,14 +213,17 @@ as follows:
 In preparation for provisioning compute nodes, we can now register the desired
 network settings for two example compute nodes. Recall that this example is
 using the compute nodes assigned to master. Note the use of variables for the
-desired comute node IP and MAC addresses which should be modified for local settings. 
+desired comute node IP and MAC addresses which should be modified for local
+settings. 
 
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
+\vspace*{0.2cm}
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 
 # Define desired compute host credentials within config management
 
-[master]$ echo <c1_ip> <c1_mac> eth0 255.255.255.0 >> $LOSF_CONFIG_DIR/ips.cluster
-[master]$ echo <c2_ip> <c2_mac> eth0 255.255.255.0 >> $LOSF_CONFIG_DIR/ips.cluster
+[master]$ echo "<c1_ip> <c1_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
+[master]$ echo "<c2_ip> <c2_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
 
 # Register new compute hosts with provisioning system
 
@@ -242,6 +250,8 @@ IPMI is shown below.  Note that the \texttt{ireset} command requires that the
 \texttt{IPMI\_PASSWORD} variable be set with the local BMC password in order to
 work interactively.
 
+\vspace*{0.2cm}
+
 % begin_fsp_run
 % fsp_validation_comment Boot compute nodes
 
@@ -260,7 +270,7 @@ compute hosts:
 
 % begin_fsp_run
 
-\vspace*{0.25cm}
+\vspace*{0.2cm}
 \begin{lstlisting}[language=bash]
 [master]$ sleep 100
 [master]$ koomie_cf -n compute uptime
