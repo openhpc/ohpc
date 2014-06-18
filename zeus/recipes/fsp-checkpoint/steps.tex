@@ -127,8 +127,8 @@ config/template files stored in an SCM for versioning).
 [master]$ . /etc/profile.d/losf.sh         # setup env
 [master]$ export LOSF_CONFIG_DIR=/tmp/demo # path for configuration setup
 [master]$ initconfig cluster FSP_base      # init config with FSP template
-[master]$ losf addpkg lmod                 # adding modules support
-[master]$ losf addgroup FSP-warewulf       # adding Warewulf support
+[master]$ losf addpkg -y lmod              # adding modules support
+[master]$ losf addgroup -y FSP-warewulf    # adding Warewulf support
 [master]$ update -q                        # install required components
 \end{lstlisting}
 
