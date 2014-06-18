@@ -38,6 +38,7 @@ my $nfs_ip       = "";
 my $master_ip    = "";
 my @compute_ips  = ();
 my @compute_macs = ();
+my @compute_bmcs = ();
 
 if($ci_run == 1) {
 
@@ -55,6 +56,9 @@ if($ci_run == 1) {
 		}
 		if ($line =~ /^$compute\_mac=(\S+)$/) {
 		    push(@compute_macs,$1);
+		}
+		if ($line =~ /^$compute\_bmc=(\S+)$/) {
+		    push(@compute_bmcs,$1);
 		}
 	    }
 	}
@@ -114,6 +118,8 @@ while(my $line=<IN>) {
 
 	for (my $i=1;$i<=$num_computes; $i++) {
 	    $line =~ s/<c$i\_ip>/$compute_ips[$i-1]/g;
+	    $line =~ s/<c$i\_mac>/$compute_macs[$i-1]/g;
+	    $line =~ s/<c$i\_bmc>/$compute_bmcs[$i-1]/g;
 	}
 
 	print $line;

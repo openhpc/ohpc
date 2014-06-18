@@ -201,84 +201,75 @@ as follows:
 %%%[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=master/" 
 %%%     /etc/slurm/slurm.conf
 %%%\end{lstlisting}
-%%%
-%%%In preparation for provisioning compute nodes, we can now register the desired
-%%%network settings for two example compute nodes. Recall that this example is
-%%%using the compute nodes assigned to master. If using a different master host,
-%%%adjust the IP and MAC addresses accordingly.
-%%%
-%%%\begin{lstlisting}[language=bash,keywords={},upquote=true]
-%%%# Register new nodes: c1, c2
-%%%
-%%%[master]$ wwsh -y node new c1 --netdev=eth0 --ipaddr=192.168.0.40 
-%%%     --hwaddr=78:45:C4:F8:36:86
-%%%[master]$ wwsh -y node new c2 --netdev=eth0 --ipaddr=192.168.0.45
-%%%     --hwaddr=78:45:C4:F8:36:41
-%%%
-%%%# Define vNFS image
-%%%
-%%%[master]$ wwsh -y provision set c[1-2] --vnfs=base --bootstrap=`uname -r`
-%%%
-%%%# Update DHCP for Warewulf
-%%%
-%%%[master]$ wwsh dhcp update	
-%%%[master]$ wwsh dhcp restart
-%%%
-%%%# Import user credentials
-%%%
-%%%[master]$ wwsh file import /etc/passwd
-%%%[master]$ wwsh file import /etc/group
-%%%[master]$ wwsh file import /etc/shadow
-%%%
-%%%# Import SLURM config and MUNGE key
-%%%
-%%%[master]$ wwsh file import /etc/slurm/slurm.conf
-%%%[master]$ wwsh file import /etc/munge/munge.key 
-%%%
-%%%# Export credentials, hosts, and slurm-related files to computes
-%%%
-%%%[master]$ wwsh -y provision set c[1-2] 
-%%%     --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key
-%%%\end{lstlisting}
-%%%
-%%%
-%%%\subsection{Boot compute nodes}
-%%%
-%%%At this point, the {\em master} server should be able to boot the newly defined
-%%%compute nodes.  The service processors for the compute hosts are available via a separate
-%%%network on the Zeus cluster. You can point a web browser to their respective
-%%%IPs to reboot, or you can issue ipmi commands from the Zeus head node.  An example to reboot hosts {\em c1}
-%%%and {\em c2} from the Zeus {\em headnode} is shown below. Note that mnode09 and
-%%%mnode10 correspond to c1 and c2 for this example (see /etc/motd on Zeus
-%%%headnode for the node mapping).
-%%%
-%%%%%%On master, you can access the out-of-band BMC network on the
-%%%%%%second interface (eth1). Once enabled, you can use ipmi to restart the compute
-%%%%%%nodes to boot from this {\em master} host.
-%%%\vspace*{0.25cm}
-%%%%%%\begin{lstlisting}[language=bash]
-%%%%%%[master]$ ifup eth1 
-%%%%%%[master]$ ireset 10.23.183.153      # power cycles c1 through BMC IP
-%%%%%%[master]$ ireset 10.23.183.118      # power cycles c2 through BMC IP
-%%%%%%\end{lstlisting} 
-%%%
-%%%\begin{lstlisting}[language=bash]
-%%%[zeusheadnode]$ ireset mnode09
-%%%[zeusheadnode]$ ireset mnode10
-%%%\end{lstlisting}
-%%%
-%%%\vspace*{0.25cm}
-%%%Once kicked off, the boot process should take less than 5 minues and you can
-%%%verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
-%%%hosts. For example:
-%%%
-%%%\vspace*{0.25cm}
-%%%\begin{lstlisting}[language=bash]
-%%%[master]$ koomie_cf -x c[1-2] uptime
-%%%c1  14:59:46 up 1 min,  0 users,  load average: 0.12, 0.05, 0.02
-%%%c2  14:59:32 up 1 min,  0 users,  load average: 0.23, 0.08, 0.03
-%%%\end{lstlisting}
-%%%
+
+% begin_fsp_run
+% fsp_validation_comment Add hosts to cluster
+
+In preparation for provisioning compute nodes, we can now register the desired
+network settings for two example compute nodes. Recall that this example is
+using the compute nodes assigned to master. Note the use of variables for the
+desired comute node IP and MAC addresses which should be modified for local settings. 
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+
+# Define desired compute host credentials within config management
+
+[master]$ echo <c1_ip> <c1_mac> eth0 255.255.255.0 >> $LOSF_CONFIG_DIR/ips.cluster
+[master]$ echo <c2_ip> <c2_mac> eth0 255.255.255.0 >> $LOSF_CONFIG_DIR/ips.cluster
+
+# Register new compute hosts with provisioning system
+
+[master]$ losf add c1
+[master]$ losf add c2
+
+# Define provisioning image for hosts
+
+[master]$ wwsh -y provision set c[1-2] --vnfs=base --bootstrap=`uname -r`
+
+\end{lstlisting}
+
+% end_fsp_run
+
+
+\subsection{Boot compute nodes}
+
+At this point, the {\em master} server should be able to boot the newly defined
+compute nodes.  The service processors for the compute hosts are available via
+a separate network on the Zeus cluster. You can point a web browser to their
+respective IPs to reboot, or you can issue ipmi commands directly from the {\em
+  master} cluster node.  An example to reboot hosts {\em c1} and {\em c2} using
+IPMI is shown below.  Note that the \texttt{ireset} command requires that the
+\texttt{IPMI\_PASSWORD} variable be set with the local BMC password in order to
+work interactively.
+
+% begin_fsp_run
+% fsp_validation_comment Boot compute nodes
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ ireset <c1_bmc>         # power cycles c1 through BMC IP
+[master]$ ireset <c2_bmc>         # power cycles c2 through BMC IP
+\end{lstlisting} 
+
+% end_fsp_run
+
+\vspace*{0.25cm}
+Once kicked off, the boot process should take less than 2 minutes and you can
+verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
+hosts. For example, to wait 100 seconds, and run a command on the newly images
+compute hosts:
+
+% begin_fsp_run
+
+\vspace*{0.25cm}
+\begin{lstlisting}[language=bash]
+[master]$ sleep 100
+[master]$ koomie_cf -n compute uptime
+c1  14:59:46 up 1 min,  0 users,  load average: 0.12, 0.05, 0.02
+c2  14:59:32 up 1 min,  0 users,  load average: 0.23, 0.08, 0.03
+\end{lstlisting}
+
+% end_fsp_run
+
 %%%%%%\section{Local Site Config}
 %%%
 %%%%%%The above sections highlighted the basic steps required to be able to provision
