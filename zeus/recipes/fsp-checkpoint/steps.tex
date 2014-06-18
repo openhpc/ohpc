@@ -95,7 +95,7 @@ will then be used in subsequent commands to register additional FSP components
 for installation.
 
 % begin_fsp_run
-% fsp_validation_comment Installing config management component
+% fsp_validation_comment Bootstrap
 
 \begin{lstlisting}[language=bash,caption={Commands run on {\bf master node}.}]
 [master]$ yum install -y losf
@@ -120,7 +120,7 @@ normal practice, this would likely be stored in a shared file system (with
 config/template files stored in an SCM for versioning).
 
 % begin_fsp_run
-% fsp_validation_comment Installing FSP base components
+% fsp_validation_comment Add baseline FSP and components for master node
 
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ . /etc/profile.d/losf.sh         # setup env
@@ -145,7 +145,7 @@ settings to work on the Zeus cluster, and provision a host. Example steps are
 as follows:
 
 % begin_fsp_run
-% fsp_validation_comment Configuring Warewulf on master 
+% fsp_validation_comment Complete basic Warewulf setup for master node
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 
