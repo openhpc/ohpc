@@ -107,27 +107,32 @@ for installation.
 
 \subsection{Add baseline FSP and components for {\em master} node}
 
-%%%As an example of the convenience that can be added via combination of config
-%%%management and a pre-provided FSP template, the next step adds all the minimum remaining
-%%%baseline FSP components necessary for a {\em master} server. We begin by
-%%%initializing the config mgmt system with an FSP-tuned template that includes
-%%%the following FSP package groups:
-%%%\begin{itemize*}
-%%%\item FSP-base
-%%%\item FSP-warewulf
-%%%\item FSP-slurm-server
-%%%\item Infiniband Support
-%%%\end{itemize*}
-In this demo, we choose to store the cluster config files in /tmp. In normal
-practice, this would likely be stored in a shared file system (with
+As an example of the convenience that can be added via combination of config
+management and a pre-provided FSP template, the next step adds all the minimum remaining
+baseline FSP components necessary for a {\em master} server. We begin by
+initializing the config mgmt system with an FSP-tuned template that defines
+Warewulf as the underlying config management system and defined two node type classifications:
+\begin{itemize*}
+\item master
+\item compute (e.g. c1, c2, c3, etc.)
+\end{itemize*}
+In this demo, we choose to store the cluster config files in /tmp. However, in
+normal practice, this would likely be stored in a shared file system (with
 config/template files stored in an SCM for versioning).
+
+% begin_fsp_run
+% fsp_validation_comment Installing FSP base components
 
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ . /etc/profile.d/losf.sh         # setup env
 [master]$ export LOSF_CONFIG_DIR=/tmp/demo # path for configuration setup
 [master]$ initconfig cluster FSP_base      # init config with FSP template
+[master]$ losf addpkg lmod                 # adding modules support
+[master]$ losf addgroup FSP-warewulf       # adding Warewulf support
 [master]$ update -q                        # install required components
 \end{lstlisting}
+
+% end_fsp_run
 
 %%%Note that on a freshly installed system, the \texttt{update} process above will
 %%%download and install all of the pre-defined FSP provided packages (and
