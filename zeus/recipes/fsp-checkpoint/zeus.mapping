@@ -1,0 +1,16 @@
+# Zeus host definitions for CI testing
+ 
+master2_ip=192.168.0.2
+master2_ip=192.168.0.5
+master3_ip=192.168.0.10
+master4_ip=192.168.0.15
+
+node13_ip=192.168.0.60
+node14_ip=192.168.0.65
+node15_ip=192.168.0.70
+node16_ip=192.168.0.75
+
+node13_mac=78:45:C4:F8:35:42
+node14_mac=78:45:C4:F8:36:3B
+node15_mac=78:45:C4:F8:36:C8
+node16_mac=78:45:C4:F8:46:95
