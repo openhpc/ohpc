@@ -60,21 +60,19 @@ coordination with a config management system. \\
 \noindent For this recipe, we use the following nodes and network configuration
 settings:
 
+%%% \begin{itemize*}
+%%% \item hostname=master2 , ip=192.168.0.5
+%%% \item hostname=c1, eth0(ip=192.168.0.40, mac=78:45:C4:F8:36:86), bmc=10.23.183.106
+%%% \item hostname=c2, eth0(ip=192.168.0.45, mac=78:45:C4:F8:36:41), bmc=10.23.183.105
+%%% \end{itemize*}
+
 \begin{itemize*}
-\item hostname=master2 , ip=192.168.0.5
-\item hostname=c1, eth0(ip=192.168.0.40, mac=78:45:C4:F8:36:86), bmc=10.23.183.106
-\item hostname=c2, eth0(ip=192.168.0.45, mac=78:45:C4:F8:36:41), bmc=10.23.183.105
+\item hostname=master3 , ip=192.168.0.10
+\item hostname=c1, eth0(ip=192.168.0.60, mac=78:45:C4:F8:35:42), bmc(ip=10.23.183.153)
+\item hostname=c2, eth0(ip=192.168.0.65, mac=78:45:C4:F8:36:3B), bmc(ip=10.23.183.118)
+\item hostname=c3, eth0(ip=192.168.0.70, mac=78:45:C4:F8:36:C8), bmc(ip=10.23.183.42)
+\item hostname=c4, eth0(ip=192.168.0.75, mac=78:45:C4:F8:46:95), bmc(ip=10.23.183.100)
 \end{itemize*}
-
-%%%\begin{itemize*}
-%%%\item hostname=master3 , ip=192.168.0.10
-%%%\item hostname=c1, eth0(ip=192.168.0.60, mac=78:45:C4:F8:35:42), bmc(ip=10.23.183.153)
-%%%\item hostname=c2, eth0(ip=192.168.0.65, mac=78:45:C4:F8:36:3B), bmc(ip=10.23.183.118)
-%%%\item hostname=c3, eth0(ip=192.168.0.70, mac=78:45:C4:F8:36:C8), bmc(ip=10.23.183.42)
-%%%%\item hostname=c4, eth0(ip=192.168.0.75, mac=78:45:C4:F8:46:95), bmc(ip 
-%%%\end{itemize*}
-
-
 
 \section{Install Base Operating System(BOS)}
 
@@ -108,10 +106,11 @@ for installation.
 \subsection{Add baseline FSP and components for {\em master} node}
 
 As an example of the convenience that can be added via combination of config
-management and a pre-provided FSP template, the next step adds all the minimum remaining
-baseline FSP components necessary for a {\em master} server. We begin by
-initializing the config mgmt system with an FSP-tuned template that defines
-Warewulf as the underlying config management system and defined two node type classifications:
+management and a pre-provided FSP template, the next step adds all the minimum
+remaining baseline FSP components necessary for a {\em master} server. We begin
+by initializing the config mgmt system with an FSP-tuned template that defines
+Warewulf as the underlying config management system and defined two node type
+classifications:
 \begin{itemize*}
 \item master
 \item compute (e.g. c1, c2, c3, etc.)
@@ -138,50 +137,50 @@ config/template files stored in an SCM for versioning).
 %%%download and install all of the pre-defined FSP provided packages (and
 %%%associated dependencies) registered in the config mgmt. template.
 %%%
-%%%\subsection{Complete basic Warewulf setup for {\em master} node}
-%%%
-%%%At this point, all of the packages necessary to use warewulf on the {\em master}
-%%%host should be installed.  Next, we need to build the vNFS image, modify a few
-%%%settings to work on the Zeus cluster, and provision a host. Example steps are
-%%%as follows:
-%%%
-%%%\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-%%%
-%%%[master]$ unset BASH_ENV                  # Warewulf doesn't like BASH_ENV
-%%%[master]$ wwbootstrap `uname -r`          # create warewulf bootstrap image
-%%%[master]$ cluster-env                     # create warewulf ssh key
-%%%
-%%%[master]$ export CHROOT=/opt/fsp/admin/images/centos6.5/base
-%%%
-%%%# add new cluster key to base image
-%%%
-%%%[master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
-%%%
-%%%# add mount of $HOME and /opt/fsp/pub to base image
-%%%
-%%%[master]$ echo "192.168.0.1:/home /home nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
-%%%[master]$ echo "192.168.0.5:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
-%%%    $CHROOT/etc/fstab
-%%%
-%%%# Export /opt/fsp/pub to cluster
-%%%
-%%%[master]$ echo "/opt/fsp/pub 192.168.0.40(ro)" >> /etc/exports
-%%%[master]$ echo "/opt/fsp/pub 192.168.0.45(ro)" >> /etc/exports
-%%%[master]$ exportfs -a
-%%%
-%%%# fix perm for munge
-%%%
-%%%[master]$ chown munge: $CHROOT/etc/munge/
-%%%
-%%%# build local vnfs (note: base chroot image provided by FSP)
-%%%
-%%%[master]$ wwvnfs  -y --chroot /opt/fsp/admin/images/centos6.5/base
-%%%
-%%%# Configure warewulf to allow provisioning over eth0
-%%%
-%%%[master]$ perl -pi -e "s/eth1/eth0/"  /etc/warewulf/provision.conf 
-%%%\end{lstlisting}
-%%%
+\subsection{Complete basic Warewulf setup for {\em master} node}
+
+At this point, all of the packages necessary to use warewulf on the {\em master}
+host should be installed.  Next, we need to build the vNFS image, modify a few
+settings to work on the Zeus cluster, and provision a host. Example steps are
+as follows:
+
+% begin_fsp_run
+% fsp_validation_comment Configuring Warewulf on master 
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+
+[master]$ wwbootstrap `uname -r`          # create warewulf bootstrap image
+[master]$ cluster-env                     # create warewulf ssh key
+
+[master]$ export CHROOT=/opt/fsp/admin/images/centos6.5/base
+
+# add new cluster key to base image
+
+[master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
+
+# add mount of $HOME and /opt/fsp/pub to base image
+
+[master]$ echo "<nfs_ip>:/home /home nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+[master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
+    $CHROOT/etc/fstab
+
+# Export /opt/fsp/pub to cluster
+
+[master]$ echo "/opt/fsp/pub <c1_ip>(ro)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub <c2_ip>(ro)" >> /etc/exports
+[master]$ exportfs -a
+
+# build local vnfs (note: base chroot image provided by FSP)
+
+[master]$ wwvnfs  -y --chroot /opt/fsp/admin/images/centos6.5/base
+
+# Configure warewulf to allow provisioning over eth0
+
+[master]$ perl -pi -e "s/eth1/eth0/"  /etc/warewulf/provision.conf 
+\end{lstlisting}
+
+% end_fsp_run
+
 %%%To enable SLURM, the local site administrators would need to create the
 %%%\texttt{/etc/slurm/slurm.conf} file, customized to include desired compute
 %%%nodes, queue settings, etc. A minimal example to setup SLURM from an example

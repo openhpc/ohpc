@@ -1,6 +1,9 @@
 # Zeus host definitions for CI testing
- 
-master2_ip=192.168.0.2
+# Note: Compute host attributed must be defined in consistent order.
+
+nfs_ip=192.168.0.1
+
+master1_ip=192.168.0.2
 master2_ip=192.168.0.5
 master3_ip=192.168.0.10
 master4_ip=192.168.0.15
