@@ -97,15 +97,16 @@ will then be used in subsequent commands to register additional FSP components
 for installation.
 
 % begin_fsp_run
+% fsp_validation_comment Installing config management component
 
 \begin{lstlisting}[language=bash,caption={Commands run on {\bf master node}.}]
-[master]$ yum install losf
+[master]$ yum install -y losf
 \end{lstlisting}
 
 % end_fsp_run
 
-%%%\subsection{Add baseline FSP and components for {\em master} node}
-%%%
+\subsection{Add baseline FSP and components for {\em master} node}
+
 %%%As an example of the convenience that can be added via combination of config
 %%%management and a pre-provided FSP template, the next step adds all the minimum remaining
 %%%baseline FSP components necessary for a {\em master} server. We begin by
@@ -117,16 +118,16 @@ for installation.
 %%%\item FSP-slurm-server
 %%%\item Infiniband Support
 %%%\end{itemize*}
-%%%In this demo, we choose to store the cluster config files in /tmp. In normal
-%%%practice, this would likely be stored in a shared file system (with
-%%%config/template files stored in an SCM for versioning).
-%%%
-%%%\begin{lstlisting}[language=bash,keywords={}]
-%%%[master]$ . /etc/profile.d/losf.sh         # setup env
-%%%[master]$ export LOSF_CONFIG_DIR=/tmp/demo # path for configuration setup
-%%%[master]$ initconfig cluster FSP_template  # init config with FSP template
-%%%[master]$ update -q                        # install required components
-%%%\end{lstlisting}
+In this demo, we choose to store the cluster config files in /tmp. In normal
+practice, this would likely be stored in a shared file system (with
+config/template files stored in an SCM for versioning).
+
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ . /etc/profile.d/losf.sh         # setup env
+[master]$ export LOSF_CONFIG_DIR=/tmp/demo # path for configuration setup
+[master]$ initconfig cluster FSP_base      # init config with FSP template
+[master]$ update -q                        # install required components
+\end{lstlisting}
 
 %%%Note that on a freshly installed system, the \texttt{update} process above will
 %%%download and install all of the pre-defined FSP provided packages (and
