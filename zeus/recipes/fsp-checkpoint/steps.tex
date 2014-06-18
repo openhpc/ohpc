@@ -1,0 +1,338 @@
+\documentclass[letterpaper]{article}
+%\documentclass[letterpaper]{scrartcl}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{graphicx}
+\usepackage{mdwlist}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{textcomp}
+
+\lstset{basicstyle=\small\ttfamily,
+  frame=single,
+  backgroundcolor=\color{grey},
+  showstringspaces=false,
+  commentstyle=\color{blue},
+  captionpos=b,
+  keywordstyle=\color{blue}
+}
+
+\newcommand{\master}{master3}
+\definecolor{grey}{rgb}{0.96,0.96,0.96}
+%\captionsetup[lstlisting]{position=bottom}
+
+
+\begin{document}
+
+%\lfoot{\includegraphics[scale=0.5]{../figures/tron-approved}}
+{\hfill\includegraphics[scale=0.14]{../figures/tron-approved}}
+
+%\begin{titlepage}
+
+\begin{center}
+\vspace*{-0.5cm}
+{\Large Cluster Building Recipes} \\ \vspace*{0.2cm}
+{\large -- CentOS6.5 with FSP POC Repository -- } \\ \vspace*{0.75cm}
+
+{\large \em Cluster Maker Team} \\
+\today
+\end{center}
+%\end{titlepage}
+
+%\maketitle
+
+\section{Introduction}
+This document endeavors to walk through a simple cluster installation using
+components that are expected to be in FSP. This process is meant to be
+repeatable on the Zeus cluster and requires access to {\em yum} repositories
+that are currently hosted on the zeus head node. Note: this process is not
+meant to dictate a specific FSP implementation direction; instead, it serves as a {\em
+  proof-of-concept} highlighting interaction with an FSP repository and
+coordination with a config management system. \\
+
+\noindent {\bf Requirements}: this recipe assumes the availability of a head node
+	  {\em master}, and two {\em compute} nodes. The {\em master} node is
+	  provisioned with CentOS6.5 and is subsequently configured to
+	  provision the remaining {\em compute} nodes with Warewulf in a
+	  stateless configuration. We assume an external \$HOME file system is
+	  available on master/computes via NFS and that compute node BMCs are
+	  available via IPMI from the chosen master host. \\
+
+\noindent For this recipe, we use the following nodes and network configuration
+settings:
+
+\begin{itemize*}
+\item hostname=master2 , ip=192.168.0.5
+\item hostname=c1, eth0(ip=192.168.0.40, mac=78:45:C4:F8:36:86), bmc=10.23.183.106
+\item hostname=c2, eth0(ip=192.168.0.45, mac=78:45:C4:F8:36:41), bmc=10.23.183.105
+\end{itemize*}
+
+%%%\begin{itemize*}
+%%%\item hostname=master3 , ip=192.168.0.10
+%%%\item hostname=c1, eth0(ip=192.168.0.60, mac=78:45:C4:F8:35:42), bmc(ip=10.23.183.153)
+%%%\item hostname=c2, eth0(ip=192.168.0.65, mac=78:45:C4:F8:36:3B), bmc(ip=10.23.183.118)
+%%%\item hostname=c3, eth0(ip=192.168.0.70, mac=78:45:C4:F8:36:C8), bmc(ip=10.23.183.42)
+%%%%\item hostname=c4, eth0(ip=192.168.0.75, mac=78:45:C4:F8:46:95), bmc(ip 
+%%%\end{itemize*}
+
+
+
+\section{Install Base Operating System(BOS)}
+
+In an external setting, installing the BOS on a {\em master} host would
+typically involve booting from a DVD iso image on a new server.  However, on
+the Zeus cluster, several master nodes can be network booted with a minimal OS
+install using {\em Warewulf}. The Warewulf configuration provisions the OS into
+a ramdisk, configures local yum repositories to point to the FSP OBS server and
+underlying distro repos, and mounts an NFS \$HOME file system. With this setup,
+all that is required to achieve a clean BOS intall on a master host is a host
+{\em reboot}. 
+
+\section{Install FSP Components}
+
+\subsection{Bootstrap}
+
+To begin, bootstrap the master server with the bare essentials necessary to
+enable a local configuration management system. The config management system
+will then be used in subsequent commands to register additional FSP components
+for installation.
+
+% begin_fsp_run
+
+\begin{lstlisting}[language=bash,caption={Commands run on {\bf master node}.}]
+[master]$ yum install losf
+\end{lstlisting}
+
+% end_fsp_run
+
+%%%\subsection{Add baseline FSP and components for {\em master} node}
+%%%
+%%%As an example of the convenience that can be added via combination of config
+%%%management and a pre-provided FSP template, the next step adds all the minimum remaining
+%%%baseline FSP components necessary for a {\em master} server. We begin by
+%%%initializing the config mgmt system with an FSP-tuned template that includes
+%%%the following FSP package groups:
+%%%\begin{itemize*}
+%%%\item FSP-base
+%%%\item FSP-warewulf
+%%%\item FSP-slurm-server
+%%%\item Infiniband Support
+%%%\end{itemize*}
+%%%In this demo, we choose to store the cluster config files in /tmp. In normal
+%%%practice, this would likely be stored in a shared file system (with
+%%%config/template files stored in an SCM for versioning).
+%%%
+%%%\begin{lstlisting}[language=bash,keywords={}]
+%%%[master]$ . /etc/profile.d/losf.sh         # setup env
+%%%[master]$ export LOSF_CONFIG_DIR=/tmp/demo # path for configuration setup
+%%%[master]$ initconfig cluster FSP_template  # init config with FSP template
+%%%[master]$ update -q                        # install required components
+%%%\end{lstlisting}
+
+%%%Note that on a freshly installed system, the \texttt{update} process above will
+%%%download and install all of the pre-defined FSP provided packages (and
+%%%associated dependencies) registered in the config mgmt. template.
+%%%
+%%%\subsection{Complete basic Warewulf setup for {\em master} node}
+%%%
+%%%At this point, all of the packages necessary to use warewulf on the {\em master}
+%%%host should be installed.  Next, we need to build the vNFS image, modify a few
+%%%settings to work on the Zeus cluster, and provision a host. Example steps are
+%%%as follows:
+%%%
+%%%\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+%%%
+%%%[master]$ unset BASH_ENV                  # Warewulf doesn't like BASH_ENV
+%%%[master]$ wwbootstrap `uname -r`          # create warewulf bootstrap image
+%%%[master]$ cluster-env                     # create warewulf ssh key
+%%%
+%%%[master]$ export CHROOT=/opt/fsp/admin/images/centos6.5/base
+%%%
+%%%# add new cluster key to base image
+%%%
+%%%[master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
+%%%
+%%%# add mount of $HOME and /opt/fsp/pub to base image
+%%%
+%%%[master]$ echo "192.168.0.1:/home /home nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+%%%[master]$ echo "192.168.0.5:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
+%%%    $CHROOT/etc/fstab
+%%%
+%%%# Export /opt/fsp/pub to cluster
+%%%
+%%%[master]$ echo "/opt/fsp/pub 192.168.0.40(ro)" >> /etc/exports
+%%%[master]$ echo "/opt/fsp/pub 192.168.0.45(ro)" >> /etc/exports
+%%%[master]$ exportfs -a
+%%%
+%%%# fix perm for munge
+%%%
+%%%[master]$ chown munge: $CHROOT/etc/munge/
+%%%
+%%%# build local vnfs (note: base chroot image provided by FSP)
+%%%
+%%%[master]$ wwvnfs  -y --chroot /opt/fsp/admin/images/centos6.5/base
+%%%
+%%%# Configure warewulf to allow provisioning over eth0
+%%%
+%%%[master]$ perl -pi -e "s/eth1/eth0/"  /etc/warewulf/provision.conf 
+%%%\end{lstlisting}
+%%%
+%%%To enable SLURM, the local site administrators would need to create the
+%%%\texttt{/etc/slurm/slurm.conf} file, customized to include desired compute
+%%%nodes, queue settings, etc. A minimal example to setup SLURM from an example
+%%%config file is below:
+%%%
+%%%\begin{lstlisting}[language=bash,keywords={}]
+%%%
+%%%# Create minimal SLURM config
+%%%
+%%%[master]$ head -n -2  /etc/slurm/slurm.conf.example  > /etc/slurm/slurm.conf
+%%%[master]$ echo "PropagateResourceLimitsExcept=MEMLOCK" >> /etc/slurm/slurm.conf
+%%%[master]$ echo "SlurmdLogFile=/var/log/slurm.log" >> /etc/slurm/slurm.conf
+%%%[master]$ echo "NodeName=c[1-2] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 \
+%%%     State=UNKNOWN" >> /etc/slurm/slurm.conf
+%%%[master]$ echo "PartitionName=normal Nodes=c[1-2] Default=YES MaxTime=24:00:00 \
+%%%     State=UP" >> /etc/slurm/slurm.conf
+%%%
+%%%[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=master/" 
+%%%     /etc/slurm/slurm.conf
+%%%\end{lstlisting}
+%%%
+%%%In preparation for provisioning compute nodes, we can now register the desired
+%%%network settings for two example compute nodes. Recall that this example is
+%%%using the compute nodes assigned to master. If using a different master host,
+%%%adjust the IP and MAC addresses accordingly.
+%%%
+%%%\begin{lstlisting}[language=bash,keywords={},upquote=true]
+%%%# Register new nodes: c1, c2
+%%%
+%%%[master]$ wwsh -y node new c1 --netdev=eth0 --ipaddr=192.168.0.40 
+%%%     --hwaddr=78:45:C4:F8:36:86
+%%%[master]$ wwsh -y node new c2 --netdev=eth0 --ipaddr=192.168.0.45
+%%%     --hwaddr=78:45:C4:F8:36:41
+%%%
+%%%# Define vNFS image
+%%%
+%%%[master]$ wwsh -y provision set c[1-2] --vnfs=base --bootstrap=`uname -r`
+%%%
+%%%# Update DHCP for Warewulf
+%%%
+%%%[master]$ wwsh dhcp update	
+%%%[master]$ wwsh dhcp restart
+%%%
+%%%# Import user credentials
+%%%
+%%%[master]$ wwsh file import /etc/passwd
+%%%[master]$ wwsh file import /etc/group
+%%%[master]$ wwsh file import /etc/shadow
+%%%
+%%%# Import SLURM config and MUNGE key
+%%%
+%%%[master]$ wwsh file import /etc/slurm/slurm.conf
+%%%[master]$ wwsh file import /etc/munge/munge.key 
+%%%
+%%%# Export credentials, hosts, and slurm-related files to computes
+%%%
+%%%[master]$ wwsh -y provision set c[1-2] 
+%%%     --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key
+%%%\end{lstlisting}
+%%%
+%%%
+%%%\subsection{Boot compute nodes}
+%%%
+%%%At this point, the {\em master} server should be able to boot the newly defined
+%%%compute nodes.  The service processors for the compute hosts are available via a separate
+%%%network on the Zeus cluster. You can point a web browser to their respective
+%%%IPs to reboot, or you can issue ipmi commands from the Zeus head node.  An example to reboot hosts {\em c1}
+%%%and {\em c2} from the Zeus {\em headnode} is shown below. Note that mnode09 and
+%%%mnode10 correspond to c1 and c2 for this example (see /etc/motd on Zeus
+%%%headnode for the node mapping).
+%%%
+%%%%%%On master, you can access the out-of-band BMC network on the
+%%%%%%second interface (eth1). Once enabled, you can use ipmi to restart the compute
+%%%%%%nodes to boot from this {\em master} host.
+%%%\vspace*{0.25cm}
+%%%%%%\begin{lstlisting}[language=bash]
+%%%%%%[master]$ ifup eth1 
+%%%%%%[master]$ ireset 10.23.183.153      # power cycles c1 through BMC IP
+%%%%%%[master]$ ireset 10.23.183.118      # power cycles c2 through BMC IP
+%%%%%%\end{lstlisting} 
+%%%
+%%%\begin{lstlisting}[language=bash]
+%%%[zeusheadnode]$ ireset mnode09
+%%%[zeusheadnode]$ ireset mnode10
+%%%\end{lstlisting}
+%%%
+%%%\vspace*{0.25cm}
+%%%Once kicked off, the boot process should take less than 5 minues and you can
+%%%verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
+%%%hosts. For example:
+%%%
+%%%\vspace*{0.25cm}
+%%%\begin{lstlisting}[language=bash]
+%%%[master]$ koomie_cf -x c[1-2] uptime
+%%%c1  14:59:46 up 1 min,  0 users,  load average: 0.12, 0.05, 0.02
+%%%c2  14:59:32 up 1 min,  0 users,  load average: 0.23, 0.08, 0.03
+%%%\end{lstlisting}
+%%%
+%%%%%%\section{Local Site Config}
+%%%
+%%%%%%The above sections highlighted the basic steps required to be able to provision
+%%%%%%an FSP provided image on compute nodes. The next steps for local site
+%%%%%%customization would include:
+%%%%%%
+%%%%%%\begin{itemize*}
+%%%%%%\item Update /etc/fstab for vNFS image to mount \$HOME
+%%%%%%\item Create desired SLURM settings in /etc/slurm.conf and distribute
+%%%%%%\end{itemize*}
+%%%%%%
+%%%%\section{Add compilers/MPI}
+%%%
+%%%%\section{Configure SLURM}
+%%%
+%%%%\section{Configure and Boot Compute Nodes}
+%%%
+%%%\section{Install Licenses for Intel Software}
+%%%
+%%%For internal testing convenience, an RPM containing valid licenses for Intel
+%%%compilers and MPI is available. To install, issue:
+%%%
+%%%\vspace*{0.25cm}
+%%%\begin{lstlisting}[language=bash,keywords={},upquote=true]
+%%%[master]$ losf addpkg FSP-licenses
+%%%[master]$ update -q
+%%%\end{lstlisting}
+%%%
+%%%\section{Run a Test Job}
+%%%
+%%%At this point, the cluster should be available to run jobs. 
+%%%
+%%%\begin{lstlisting}[language=bash]
+%%%
+%%%# Start SLURM on master server
+%%%
+%%%[master]$ service slurm start
+%%%
+%%%# Open hosts for production
+%%%
+%%%[master]$ scontrol  update state=idle nodename=c[1-2]
+%%%
+%%%# Run a test job as a user
+%%%
+%%%[master]$ su - kwschulz
+%%%[kwschulz@master ~]$ mpicc hello.c
+%%%
+%%%[kwschulz@master ~]$ srun -n 8 -N 2 ./a.out 
+%%%
+%%% Hello, world (8 procs total)
+%%%    --> Process #   0 of   8 is alive. ->c1
+%%%    --> Process #   1 of   8 is alive. ->c1
+%%%    --> Process #   2 of   8 is alive. ->c1
+%%%    --> Process #   3 of   8 is alive. ->c1
+%%%    --> Process #   4 of   8 is alive. ->c2
+%%%    --> Process #   5 of   8 is alive. ->c2
+%%%    --> Process #   6 of   8 is alive. ->c2
+%%%    --> Process #   7 of   8 is alive. ->c2
+%%%\end{lstlisting}
+%%%
+\end{document}
+
