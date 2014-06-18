@@ -8,7 +8,7 @@ use strict;
 use File::Temp qw/tempfile/;
 
 if ( $#ARGV < 1) {
-    print "Usage: parse_doc <filename> <host_mapping>\n";
+    print STDERR "Usage: parse_doc <filename> <host_mapping>\n";
     exit 1;
 }
 
