@@ -6,6 +6,7 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{textcomp}
+\usepackage{array}
 
 \lstset{basicstyle=\footnotesize\ttfamily,
   frame=single,
@@ -39,16 +40,19 @@
 
 %\maketitle
 
+\vspace*{0.5cm}
 \section{Introduction}
 This document endeavors to walk through a simple cluster installation using
-components that are expected to be in FSP. This process is meant to be
-repeatable on the Zeus cluster and requires access to {\em yum} repositories
-that are currently hosted on the zeus head node. Note: this process is not
-meant to dictate a specific FSP implementation direction; instead, it serves as a {\em
-  proof-of-concept} highlighting interaction with an FSP repository and
-coordination with a config management system. \\
+components from the internal Forest Peak (FSP) 2014 checkpoint. This process is
+meant to be repeatable on the Zeus cluster and requires access to {\em RPM}
+repositories that are made available by the FSP Open Build Service (OBS)
+instance that is used to build and package components. Note: this process is
+not meant to dictate a specific, final FSP implementation or installation
+direction; instead, it serves as a learning vehicle and {\em proof-of-concept}
+highlighting interaction with an FSP repository and coordination with a config
+management system. \\
 
-\noindent {\bf Requirements}: this recipe assumes the availability of a head node
+\noindent {\bf Requirements}: this recipe assumes the availability of a single head node
 	  {\em master}, and two {\em compute} nodes. The {\em master} node is
 	  provisioned with CentOS6.5 and is subsequently configured to
 	  provision the remaining {\em compute} nodes with Warewulf in a
@@ -56,34 +60,37 @@ coordination with a config management system. \\
 	  available on master/computes via NFS and that compute node BMCs are
 	  available via IPMI from the chosen master host. \\
 
-\noindent For this recipe, we use the following nodes and network configuration
-settings:
+\noindent {\bf Inputs}: since this recipe details installing a cluster
+starting from bare-metal, there is a need to define IP addresses and gather
+hardware MAC addresses in order to support controlled provisioning. These values
+are hardware and site specific, and this document uses \texttt{<variable>}
+names in the command-line examples that follow to highlight where local site
+inputs are required. A summary of the required variables used in this recipe
+are as follows:
 
-%%% \begin{itemize*}
-%%% \item hostname=master2 , ip=192.168.0.5
-%%% \item hostname=c1, eth0(ip=192.168.0.40, mac=78:45:C4:F8:36:86), bmc=10.23.183.106
-%%% \item hostname=c2, eth0(ip=192.168.0.45, mac=78:45:C4:F8:36:41), bmc=10.23.183.105
-%%% \end{itemize*}
-
-%%%\begin{itemize*}
-%%%\item hostname=master3 , ip=192.168.0.10
-%%%\item hostname=c1, eth0(ip=192.168.0.60, mac=78:45:C4:F8:35:42), bmc(ip=10.23.183.153)
-%%%\item hostname=c2, eth0(ip=192.168.0.65, mac=78:45:C4:F8:36:3B), bmc(ip=10.23.183.118)
-%%%\item hostname=c3, eth0(ip=192.168.0.70, mac=78:45:C4:F8:36:C8), bmc(ip=10.23.183.42)
-%%%\item hostname=c4, eth0(ip=192.168.0.75, mac=78:45:C4:F8:46:95), bmc(ip=10.23.183.100)
-%%%\end{itemize*}
+\vspace*{0.2cm}
+\begin{tabular}{@{}>{\textbullet}cll@{}}
+& \texttt{<nfs\_ip>}:    & IP address of NFS server providing \$HOME \\
+& \texttt{<master\_ip>}: & IP address of the master server for the cluster
+  being installed\\
+& \texttt{<c1\_ip>}:     & IP address of first compute node \\
+& \texttt{<c1\_bmc>}:    & BMC address of first compute node \\
+& \texttt{<c2\_ip>}:     & IP address of second compute node \\
+& \texttt{<c2\_bmc>}:    & BMC address of second compute node \\
+\end{tabular}
 
 \section{Install Base Operating System(BOS)}
 
 In an external setting, installing the BOS on a {\em master} host would
 typically involve booting from a DVD iso image on a new server.  However, on
-the Zeus cluster, several master nodes can be network booted with a minimal OS
+the Zeus cluster, master nodes can be network booted with a minimal OS
 install using {\em Warewulf}. The Warewulf configuration provisions the OS into
-a ramdisk, configures local yum repositories to point to the FSP OBS server and
+a ramdisk, configures local package repositories to point to the FSP OBS server and
 underlying distro repos, and mounts an NFS \$HOME file system. With this setup,
 all that is required to achieve a clean BOS intall on a master host is a host
-{\em reboot}. 
+reboot. 
 
+\newpage
 \section{Install FSP Components}
 
 \subsection{Bootstrap}
