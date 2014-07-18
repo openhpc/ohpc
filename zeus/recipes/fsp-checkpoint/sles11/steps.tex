@@ -19,6 +19,7 @@
 
 \newcommand{\master}{master3}
 \definecolor{grey}{rgb}{0.96,0.96,0.96}
+\newcommand{\baseOS}{SLES11SP3}
 %\captionsetup[lstlisting]{position=bottom}
 
 
@@ -31,7 +32,7 @@
 \begin{center}
 \vspace*{-0.5cm}
 {\Large Cluster Building Recipes} \\ \vspace*{0.2cm}
-{\large -- BaseOS with FSP 2014 Checkpoint Repository -- } \\ \vspace*{0.75cm}
+{\large -- \baseOS{} Base OS with FSP 2014 Checkpoint Repository -- } \\ \vspace*{0.75cm}
 
 {\large \em Cluster Maker Team} \\
 \today
@@ -54,21 +55,19 @@ management system. \\
 
 \noindent {\bf Requirements}: this recipe assumes the availability of a single head node
 	  {\em master}, and two {\em compute} nodes. The {\em master} node is
-	  provisioned with CentOS6.5 and is subsequently configured to
+	  provisioned with \baseOS{} and is subsequently configured to
 	  provision the remaining {\em compute} nodes with Warewulf in a
 	  stateless configuration. We assume an external \$HOME file system is
 	  available on master/computes via NFS and that compute node BMCs are
 	  available via IPMI from the chosen master host. \\
 
 \noindent {\bf Inputs}: since this recipe details installing a cluster
-starting from bare-metal, there is a need to define IP addresses and gather
+starting from bare-metal, there is a requirement to define IP addresses and gather
 hardware MAC addresses in order to support controlled provisioning. These values
 are hardware and site specific, and this document uses \texttt{<variable>}
 names in the command-line examples that follow to highlight where local site
 inputs are required. A summary of the required variables used in this recipe
 are as follows:
-
-Ron rulez.
 
 \vspace*{0.2cm}
 \begin{tabular}{@{}>{\textbullet}cll@{}}
