@@ -1,7 +1,7 @@
 PAPER    := steps.pdf
 TEX_SUFS := .aux .log .nav .out .snm .toc .vrb .fdb_latexmk .bbl .blg .fls
 
-%.pdf:%.tex steps.tex ../../common/inputs.tex
+%.pdf:%.tex steps.tex ../../common/inputs.tex ../../common/requirements.tex
 	../../common/vc
 	latexmk -pdf $<
 
