@@ -54,31 +54,15 @@ highlighting interaction with an FSP repository and coordination with a config
 management system. \\
 
 \noindent {\bf Requirements}: this recipe assumes the availability of a single head node
-	  {\em master}, and two {\em compute} nodes. The {\em master} node is
-	  provisioned with \baseOS{} and is subsequently configured to
-	  provision the remaining {\em compute} nodes with Warewulf in a
-	  stateless configuration. We assume an external \$HOME file system is
-	  available on master/computes via NFS and that compute node BMCs are
-	  available via IPMI from the chosen master host. \\
+{\em master}, and two {\em compute} nodes. The {\em master} node is
+provisioned with \baseOS{} and is subsequently configured to
+provision the remaining {\em compute} nodes with Warewulf in a
+stateless configuration. We assume an external \$HOME file system is
+available on master/computes via NFS and that compute node BMCs are
+available via IPMI from the chosen master host. \\
 
-\noindent {\bf Inputs}: since this recipe details installing a cluster
-starting from bare-metal, there is a requirement to define IP addresses and gather
-hardware MAC addresses in order to support controlled provisioning. These values
-are hardware and site specific, and this document uses \texttt{<variable>}
-names in the command-line examples that follow to highlight where local site
-inputs are required. A summary of the required variables used in this recipe
-are as follows:
+\input{../common/inputs}
 
-\vspace*{0.2cm}
-\begin{tabular}{@{}>{\textbullet}cll@{}}
-& \texttt{<nfs\_ip>}:    & IP address of NFS server providing \$HOME \\
-& \texttt{<master\_ip>}: & IP address of the master server for the cluster
-  being installed\\
-& \texttt{<c1\_ip>}:     & IP address of first compute node \\
-& \texttt{<c1\_bmc>}:    & BMC address of first compute node \\
-& \texttt{<c2\_ip>}:     & IP address of second compute node \\
-& \texttt{<c2\_bmc>}:    & BMC address of second compute node \\
-\end{tabular}
 
 \section{Install Base Operating System(BOS)}
 
@@ -107,7 +91,7 @@ for installation.
 
 %\begin{lstlisting}[language=bash,caption={Commands run on {\bf master node}.}]
 \begin{lstlisting}[language=bash]
-[master]$ yum install -y losf
+[master]$ zypper -n install losf
 \end{lstlisting}
 
 % end_fsp_run
@@ -136,9 +120,9 @@ config/template files stored in an SCM for versioning).
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ . /etc/profile.d/losf.sh         # setup env
 [master]$ export LOSF_CONFIG_DIR=/tmp/demo # path for configuration setup
-[master]$ initconfig cluster FSP_base      # init config with FSP template
-[master]$ losf addpkg -y lmod              # adding modules support
-[master]$ losf addgroup -y FSP-warewulf    # adding Warewulf support
+[master]$ initconfig cluster               # init config with FSP template
+[master]$ losf addpkg lmod                 # adding modules support
+[master]$ losf addgroup FSP-warewulf       # adding Warewulf support
 [master]$ update -q                        # install required components
 \end{lstlisting}
 
