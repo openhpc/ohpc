@@ -1,37 +1,18 @@
 \documentclass[letterpaper]{article}
-\usepackage[margin=1.0in]{geometry}
-\usepackage{graphicx}
-\usepackage{mdwlist}
-\usepackage{xcolor}
-\usepackage{listings}
-\usepackage{textcomp}
-\usepackage{array}
-\usepackage{fancyhdr}
+\usepackage{../../common/fspdoc}
 
-\pagestyle{fancy}
-\fancyhead[LE,LO]{}
-\fancyhead[RE,RO]{\em \MakeUppercase{2014 FSP Checkpoint}}
-\fancyfoot[RE,RO]{Last Update: \VCDateISO~(Rev: \VCRevision) }
-
-\lstset{basicstyle=\footnotesize\ttfamily,
-  frame=single,
-  backgroundcolor=\color{grey},
-  showstringspaces=false,
-  commentstyle=\color{blue},
-  captionpos=b,
-  keywordstyle=\color{blue}
-}
-
-\newcommand{\master}{master3}
-\definecolor{grey}{rgb}{0.96,0.96,0.96}
-\newcommand{\baseOS}{SLES11SP3}
-%\captionsetup[lstlisting]{position=bottom}
+% Include git variables
 \input{vc.tex}
+
+% Define Base OS
+\newcommand{\baseOS}{SLES11SP3}
 
 \begin{document}
 \thispagestyle{empty}
 
 %%%{\hfill\includegraphics[scale=0.14]{../figures/tron-approved}}
+
+% Title
 
 \begin{center}
 \vspace*{-0.5cm}
@@ -41,10 +22,10 @@
 
 {\large Intel Cluster Maker Team} \\
 \end{center}
-%\end{titlepage}
 
-%\maketitle
-%\vspace*{0.5cm}
+
+% Introduction 
+
 \section{Introduction}
 This document endeavors to walk through a simple cluster installation using
 components from the internal Forest Peak (FSP) 2014 checkpoint. This process is
