@@ -1,5 +1,4 @@
 \documentclass[letterpaper]{article}
-%\documentclass[letterpaper]{scrartcl}
 \usepackage[margin=1.0in]{geometry}
 \usepackage{graphicx}
 \usepackage{mdwlist}
@@ -7,6 +6,12 @@
 \usepackage{listings}
 \usepackage{textcomp}
 \usepackage{array}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhead[LE,LO]{}
+\fancyhead[RE,RO]{\em \MakeUppercase{2014 FSP Checkpoint}}
+\fancyfoot[RE,RO]{Last Update: \VCDateISO~(Rev: \VCRevision) }
 
 \lstset{basicstyle=\footnotesize\ttfamily,
   frame=single,
@@ -21,26 +26,24 @@
 \definecolor{grey}{rgb}{0.96,0.96,0.96}
 \newcommand{\baseOS}{SLES11SP3}
 %\captionsetup[lstlisting]{position=bottom}
-
+\input{vc.tex}
 
 \begin{document}
+\thispagestyle{empty}
 
 %%%{\hfill\includegraphics[scale=0.14]{../figures/tron-approved}}
-
-%\begin{titlepage}
 
 \begin{center}
 \vspace*{-0.5cm}
 {\Large Cluster Building Recipes} \\ \vspace*{0.2cm}
-{\large -- \baseOS{} Base OS with FSP 2014 Checkpoint Repository -- } \\ \vspace*{0.75cm}
+{\large -- \baseOS{} Base OS with Foreset Peak 2014 Checkpoint Repository -- } \\ \vspace{0.2cm}
+{\large [~{\bf \em Config Management Edition using LosF}~]} \\ \vspace*{0.75cm}
 
-{\large \em Cluster Maker Team} \\
-\today
+{\large Intel Cluster Maker Team} \\
 \end{center}
 %\end{titlepage}
 
 %\maketitle
-
 %\vspace*{0.5cm}
 \section{Introduction}
 This document endeavors to walk through a simple cluster installation using
@@ -61,7 +64,7 @@ stateless configuration. We assume an external \$HOME file system is
 available on master/computes via NFS and that compute node BMCs are
 available via IPMI from the chosen master host. \\
 
-\input{../common/inputs}
+\input{../../common/inputs}
 
 
 \section{Install Base Operating System(BOS)}
