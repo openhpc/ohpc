@@ -1,0 +1,25 @@
+\ProvidesPackage{fspdoc}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{graphicx}
+\usepackage{mdwlist}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage{array}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhead[LE,LO]{}
+\fancyhead[RE,RO]{\em \MakeUppercase{2014 FSP Checkpoint}}
+\fancyfoot[RE,RO]{Last Update: \VCDateISO~(Rev: \VCRevision) }
+
+\lstset{basicstyle=\footnotesize\ttfamily,
+  frame=single,
+  backgroundcolor=\color{grey},
+  showstringspaces=false,
+  commentstyle=\color{blue},
+  captionpos=b,
+  keywordstyle=\color{blue}
+}
+
+\definecolor{grey}{rgb}{0.96,0.96,0.96}
