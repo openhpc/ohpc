@@ -6,6 +6,7 @@
 
 % Define Base OS
 \newcommand{\baseOS}{SLES11SP3}
+\newcommand{\LosF}{\emph{LosF}}
 
 \begin{document}
 \thispagestyle{empty}
@@ -17,7 +18,7 @@
 \begin{center}
 \vspace*{-0.5cm}
 {\Large Cluster Building Recipes} \\ \vspace*{0.2cm}
-{\large -- \baseOS{} Base OS with Foreset Peak 2014 Checkpoint Repository -- } \\ \vspace{0.2cm}
+{\large -- \baseOS{} Base OS with Forest Peak 2014 Checkpoint Repository -- } \\ \vspace{0.2cm}
 {\large [~{\bf \em Config Management Edition using LosF}~]} \\ \vspace*{0.75cm}
 
 {\large Intel Cluster Maker Team} \\
@@ -27,24 +28,20 @@
 % Introduction 
 
 \section{Introduction}
-This document endeavors to walk through a simple cluster installation using
-components from the internal Forest Peak (FSP) 2014 checkpoint. This process is
-meant to be repeatable on the Zeus cluster and requires access to {\em RPM}
-repositories that are made available by the FSP Open Build Service (OBS)
-instance that is used to build and package components. Note: this process is
-not meant to dictate a specific, final FSP implementation or installation
-direction; instead, it serves as a learning vehicle and {\em proof-of-concept}
-highlighting interaction with an FSP repository and coordination with a config
-management system. \\
+\input{../../common/intro} \\
 
-\noindent {\bf Requirements}: this recipe assumes the availability of a single head node
-{\em master}, and two {\em compute} nodes. The {\em master} node is
-provisioned with \baseOS{} and is subsequently configured to
-provision the remaining {\em compute} nodes with Warewulf in a
-stateless configuration. We assume an external \$HOME file system is
-available on master/computes via NFS and that compute node BMCs are
-available via IPMI from the chosen master host. \\
+This edition of the install guide highlights the coordinated use of a {\em
+  configuration management} system during the install and configuration
+process. In this case, the open-source package, \LosF{}, is used and is
+provided as a pre-built component via the FSP repository. The use of config
+management systems are common on high-end systems and allow administrators to
+capture the state of the cluster configuration for trace-ability and to aid in
+the distribution of desired software and settings to predefined host types
+(e.g. compute nodes, IO nodes, etc). Combined with the template configuration
+provided with the FSP checkpoint, it allows for a relatively simple install and
+configuration process that is descibed in subsequent sections. \\
 
+\input{../../common/requirements}
 \input{../../common/inputs}
 
 
