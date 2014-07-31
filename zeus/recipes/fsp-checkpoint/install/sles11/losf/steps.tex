@@ -230,9 +230,9 @@ settings.
 [master]$ losf add c3
 [master]$ losf add c4
 
-# Restart dhcp
+# Restart dhcp 
 
-[master]$ wwsh dhcp restart
+[master]$ service dhcp restart
 
 \end{lstlisting}
 % end_fsp_run
@@ -278,8 +278,10 @@ compute hosts:
 \begin{lstlisting}[language=bash]
 [master]$ sleep 100
 [master]$ koomie_cf -n compute uptime
-c1  14:59:46 up 1 min,  0 users,  load average: 0.12, 0.05, 0.02
-c2  14:59:32 up 1 min,  0 users,  load average: 0.23, 0.08, 0.03
+c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
+c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
+c3  05:08am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
+c4  05:09am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 \end{lstlisting}
 
 % end_fsp_run
