@@ -93,7 +93,12 @@ while(<IN>) {
 	} elsif ($_ =~ /\[master\]\$ (.+) \\$/) {
 	    print $fh "$1";
 	    my $next_line = <IN>;
-	    print $fh chomp($next_line)."\n";
+
+#           trim leading and trailing space
+	    $next_line =~ s/^\s+|\s+$//g;
+
+	    print $fh " $next_line\n";
+
 	    # TODO - add loop to accomodate multi-line continuation
 	} elsif ($_ =~ /\[master\]\$ (.+) #(.+)$/) {
 	    print $fh "$1\n";
