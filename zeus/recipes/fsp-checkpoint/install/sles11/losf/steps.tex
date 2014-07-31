@@ -94,8 +94,8 @@ config/template files stored in an SCM for versioning).
 [master]$ . /etc/profile.d/losf.sh         # setup env
 [master]$ export LOSF_CONFIG_DIR=/tmp/demo # path for configuration setup
 [master]$ initconfig cluster FSP_template  # init config with FSP template
-[master]$ losf addgroup FSP-base           # adding base FSP packages
-[master]$ losf addgroup FSP-warewulf       # adding Warewulf support
+[master]$ losf addgroup -y FSP-base        # adding base FSP packages
+[master]$ losf addgroup -y FSP-warewulf    # adding Warewulf support
 [master]$ update -q                        # install required components
 \end{lstlisting}
 
@@ -110,7 +110,7 @@ config/template files stored in an SCM for versioning).
 At this point, all of the packages necessary to use Warewulf on the {\em
   master} host should be installed.  Next, we need to configure Warewulf to
 work with SLES, build bootstrap and vNFS images, customize a few settings to
-work on the Zeus cluster, and provision two hosts. Specific steps are as
+work on the Zeus cluster, and provision four hosts. Specific steps are as
 follows:
 
 \vspace*{0.2cm}
@@ -120,23 +120,32 @@ follows:
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 
-# Configure DHCP server to use eth0
-[master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth0"/' /etc/sysconfig/dhcpd
-
-# Configure Warewulf to allow provisioning over eth0
-[master]$ perl -pi -e "s/eth1/eth0/"  /etc/warewulf/provision.conf 
+# Configure DHCP server to use eth1
+[master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
 
 # Configure Warewulf to use default SLES tftp location
-[master]$ perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /#"
-/etc/warewulf/provision.conf
+[master]$ perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /#" /etc/warewulf/provision.conf
 
-# Restart services
-[master]$ service xinetd restart              # enable tftp services
-[master]$ service mysql restart               # startup mysql database
+# Update Warewulf http config to use SLES version of mod_perl
+[master]$ export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
+[master]$ perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
 
-# Define chroot location for SLES and build bootstrap and base images
+# Enable http access for Warewulf cgi-bin directory (add "Allow from all")
+[master]$ perl -pi -e "s/cgi-bin>\$/cgi-bin>\n    Allow from all/" $MODFILE
+
+# Define eth1 interface for provisioning
+[master]$ ifconfig eth1 <master_ip> netmask 255.255.255.0 up
+
+# Restart relevant services
+[master]$ service xinetd restart              # tftp services
+[master]$ service mysql restart               # mysql database
+[master]$ service apache2 restart             # web server
+
+# Define chroot location for SLES 
 [master]$ export CHROOT=/opt/fsp/admin/images/sles11sp3
-[master]$ wwbootstrap `uname -r`              # create warewulf bootstrap image
+
+# Build bootstrap kernel and initial base image
+[master]$ wwbootstrap -y `uname -r`           # create warewulf bootstrap image
 [master]$ mkdir -p --mode=700 $CHROOT         # create chroot housing dir
 [master]$ mkdir -m 755 $CHROOT/dev            # create chroot /dev dir
 [master]$ mknod -m 666 $CHROOT/dev/zero c 1 5 # create /dev/zero device
@@ -148,7 +157,6 @@ follows:
 
 # add mount of $HOME and /opt/fsp/pub to base image
 
-[master]$ echo "<nfs_ip>:/home /home nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 [master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
     $CHROOT/etc/fstab
 
@@ -156,15 +164,23 @@ follows:
 
 [master]$ echo "/opt/fsp/pub <c1_ip>(ro)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <c2_ip>(ro)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub <c3_ip>(ro)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub <c4_ip>(ro)" >> /etc/exports
 [master]$ exportfs -a
 
-# build local vnfs (note: base chroot image provided by FSP)
+# build local vnfs 
 
 [master]$ wwvnfs -y --chroot $CHROOT
 
 \end{lstlisting}
 
 % end_fsp_run
+
+% Temporarily disabled for master1/2 CI builds
+
+%%% # Configure Warewulf to allow provisioning over eth0
+%%% [master]$ perl -pi -e "s/eth1/eth0/"  /etc/warewulf/provision.conf 
+%%%[master]$ echo "<nfs_ip>:/home /home nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
 %%%To enable SLURM, the local site administrators would need to create the
 %%%\texttt{/etc/slurm/slurm.conf} file, customized to include desired compute
@@ -191,7 +207,7 @@ follows:
 % fsp_validation_comment Add hosts to cluster
 
 In preparation for provisioning compute nodes, we can now register the desired
-network settings for two example compute nodes. Recall that this example is
+network settings for four example compute nodes. Recall that this example is
 using the compute nodes assigned to master. Note the use of variables for the
 desired comute node IP and MAC addresses which should be modified for local
 settings. 
@@ -204,19 +220,25 @@ settings.
 
 [master]$ echo "c1 <c1_ip> <c1_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
 [master]$ echo "c2 <c2_ip> <c2_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
+[master]$ echo "c3 <c3_ip> <c3_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
+[master]$ echo "c4 <c4_ip> <c4_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
 
 # Register new compute hosts with provisioning system
 
 [master]$ losf add c1
 [master]$ losf add c2
+[master]$ losf add c3
+[master]$ losf add c4
 
-# Define provisioning image for hosts
+# Restart dhcp
 
-[master]$ wwsh -y provision set c[1-2] --vnfs=base --bootstrap=`uname -r`
+[master]$ wwsh dhcp restart
 
 \end{lstlisting}
-
 % end_fsp_run
+
+%%%# Define provisioning image for hosts
+%%%[master]$ wwsh -y provision set c[1-2] --vnfs=base --bootstrap=`uname -r`
 
 
 \subsection{Boot compute nodes}
@@ -238,6 +260,8 @@ work interactively.
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ ireset <c1_bmc>         # power cycles c1 through BMC IP
 [master]$ ireset <c2_bmc>         # power cycles c2 through BMC IP
+[master]$ ireset <c3_bmc>         # power cycles c3 through BMC IP
+[master]$ ireset <c4_bmc>         # power cycles c4 through BMC IP
 \end{lstlisting} 
 
 % end_fsp_run
