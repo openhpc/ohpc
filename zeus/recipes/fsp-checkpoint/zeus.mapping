@@ -3,15 +3,50 @@
 
 nfs_ip=192.168.0.1
 
-master1_ip=192.168.0.2
-master2_ip=192.168.0.5
+master1_ip=172.16.0.1
+master2_ip=172.16.0.1
 master3_ip=192.168.0.10
 master4_ip=192.168.0.15
 
-node13_ip=192.168.0.60
-node14_ip=192.168.0.65
-node15_ip=192.168.0.70
-node16_ip=192.168.0.75
+node5_ip=172.16.0.10
+node6_ip=172.16.0.11
+node7_ip=172.16.0.12
+node8_ip=172.16.0.13
+
+node5old_ip=192.168.0.20
+node6old_ip=192.168.0.25
+node7old_ip=192.168.0.30
+node8old_ip=192.168.0.35
+
+node5_bmc=10.23.182.207
+node6_bmc=10.23.182.208
+node7_bmc=10.23.183.115
+node8_bmc=10.23.183.68
+
+node5_mac=78:45:C4:F8:32:54
+node6_mac=78:45:C4:F8:32:9F
+node7_mac=78:45:C4:F8:42:BA
+node8_mac=78:45:C4:F8:35:CF
+
+node9_ip=172.16.0.10
+node10_ip=172.16.0.11
+node11_ip=172.16.0.12
+node12_ip=172.16.0.13
+
+node9_bmc=10.23.183.106
+node10_bmc=10.23.183.105
+node11_bmc=10.23.183.107
+node12_bmc=(10.23.183.111
+
+node9_mac=78:45:C4:F8:36:86
+node10_mac=78:45:C4:F8:36:41
+node11_mac=78:45:C4:F8:35:B4
+node12_mac=84:8F:69:FE:8E:5D
+
+node9old_ip=192.168.0.40
+node10old_ip=192.168.0.45
+node11old_ip=192.168.0.50
+node12old_ip=192.168.0.55
 
 node13_bmc=10.23.183.153
 node14_bmc=10.23.183.118
