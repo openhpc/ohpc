@@ -75,9 +75,8 @@ highlight this process.
 \vspace*{0.2cm}
 % begin_fsp_run
 % fsp_validation_comment Enable FSP Repo
-
 \begin{lstlisting}[language=bash]
-[master]$ zypper ar http://fsp-obs.pdx.intel.com:82/fsp/SLE_11_SP3_Intel/fsp.repo 
+[master]$ zypper ar http://10.23.186.191:82/fsp/SLE_11_SP3_Intel/fsp.repo 
 \end{lstlisting}
 
 % end_fsp_run
@@ -99,6 +98,7 @@ of a common base package followed by the Warewulf provisioning system.
 [master]$ zypper -n install -t pattern FSP-base          # adding base FSP packages
 [master]$ zypper -n install -t pattern FSP-warewulf      # adding Warewulf support
 \end{lstlisting}
+
 % end_fsp_run
 
 
@@ -142,11 +142,25 @@ follows:
 [master]$ service xinetd restart                         # tftp services
 [master]$ service mysql restart                          # mysql database
 [master]$ service apache2 restart                        # web server
-
 \end{lstlisting}
-
 % end_fsp_run
 
+\subsection{Define {\em compute} image for provisioning}
+
+With the provisioning services enabled, the next step is to define and
+customize a system image that can subsequently be used to provision one or more
+{\em compute} nodes. The following subsections highlight this process.
+
+\subsubsection{Build initial BOS image}
+
+The FSP build of Warewulf includes specific enhancements enabling support for
+SLES~11. The following steps highlight the process to build a minimal, default
+image for use with Warewulf. In this example, the resulting image will be
+stored locally on the {\em master} host in the
+\texttt{/opt/fsp/admin/images/\baseOS{}} directory. \\
+
+% begin_fsp_run
+% fsp_validation_comment Create compute image for Warewulf
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Define chroot location for SLES 
 [master]$ export CHROOT=/opt/fsp/admin/images/sles11sp3
@@ -158,6 +172,47 @@ follows:
 [master]$ mknod -m 666 $CHROOT/dev/zero c 1 5 # create /dev/zero device
 [master]$ wwmkchroot sles-11 $CHROOT          # create base image
 
+\end{lstlisting}
+% end_fsp_run
+
+\subsubsection{Add FSP components}
+
+The \texttt{wwmkchroot} process used in the previous step is designed to
+provide a minimal SLES configuration. Next, we add addtitional components to
+include resource management client services, InfiniBand drivers, and other
+additional packages to support the default FSP environment. \\
+
+% begin_fsp_run
+% fsp_validation_comment Add FSP components to compute instance
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add SLURM client support
+[master]$ chroot $CHROOT zypper -n install -t pattern FSP-slurm-client
+
+# Add IB support
+[master]$ chroot $CHROOT zypper -n install ofed
+[master]$ chroot $CHROOT zypper -n install libmlx4-rdmav2
+
+# Add Network Time Protocol (NTP) support
+[master]$ chroot $CHROOT zypper -n install ntp
+
+# Include FSP default modules user environment
+[master]$ chroot $CHROOT zypper -n install lmod 
+[master]$ chroot $CHROOT zypper -n install FSP-lmod-defaults-intel
+\end{lstlisting}
+% end_fsp_run
+
+\subsubsection{Customize system configuration}
+
+Prior to assembling the image, it is advantageous to perform any additional
+customizations within the chroot environment created for the desired {\em
+  compute} instance. The following steps document the process to add a local
+{\em ssh} key created by Warewulf to support remote access, and enable NFS
+mounting of the public FSP install path (\texttt{/opt/fsp/pub}) that will be
+hosted by the {\em master} host in this example configuration. \\
+
+% begin_fsp_run
+% fsp_validation_comment Add ssh key and enable NFS mount of /opt/fsp/pub
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # add new cluster key to base image
 
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
@@ -167,21 +222,27 @@ follows:
 [master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
     $CHROOT/etc/fstab
 
-# Export /opt/fsp/pub to cluster
+# Export /opt/fsp/pub to cluster compute nodes
 
 [master]$ echo "/opt/fsp/pub <c1_ip>(ro)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <c2_ip>(ro)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <c3_ip>(ro)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <c4_ip>(ro)" >> /etc/exports
 [master]$ exportfs -a
-
-# build local vnfs 
-
-[master]$ wwvnfs -y --chroot $CHROOT
-
 \end{lstlisting}
-
 % end_fsp_run
+
+
+\subsubsection{Assemble vNFS image}
+
+% begin_fsp_run
+% fsp_validation_comment Assembly vNFS
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[master]$ wwvnfs -y --chroot $CHROOT
+\end{lstlisting}
+% end_fsp_run
+
+
 
 % Temporarily disabled for master1/2 CI builds
 
