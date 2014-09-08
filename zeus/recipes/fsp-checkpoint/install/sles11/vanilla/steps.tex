@@ -206,24 +206,32 @@ additional packages to support the default FSP environment. \\
 Prior to assembling the image, it is advantageous to perform any additional
 customizations within the chroot environment created for the desired {\em
   compute} instance. The following steps document the process to add a local
-{\em ssh} key created by Warewulf to support remote access, and enable NFS
-mounting of the public FSP install path (\texttt{/opt/fsp/pub}) that will be
-hosted by the {\em master} host in this example configuration. \\
+{\em ssh} key created by Warewulf to support remote access, identify the
+resource manager server, and enable NFS mounting of the public FSP
+install path (\texttt{/opt/fsp/pub}) that will be hosted by the {\em master}
+host in this example configuration. Note that the example shown here
+specifically exports the \texttt{/opt/fsp/pub} path to each compute node
+individually. In practice, however, a single entry would likely be used to
+export the mount point to a private subnet suitably sized to comprise all
+desired endpoints. \\
 
 % begin_fsp_run
 % fsp_validation_comment Add ssh key and enable NFS mount of /opt/fsp/pub
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # add new cluster key to base image
-
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # add mount of $HOME and /opt/fsp/pub to base image
-
 [master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
     $CHROOT/etc/fstab
 
-# Export /opt/fsp/pub to cluster compute nodes
+# Identify resource manager server in SLURM config files
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
+    $CHROOT/etc/slurm/slurm.conf
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
+    /etc/slurm/slurm.conf
 
+# Export /opt/fsp/pub to cluster compute nodes
 [master]$ echo "/opt/fsp/pub <c1_ip>(ro)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <c2_ip>(ro)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <c3_ip>(ro)" >> /etc/exports
@@ -235,13 +243,16 @@ hosted by the {\em master} host in this example configuration. \\
 
 \subsubsection{Assemble vNFS image}
 
+With the local site customizations in place, the following step uses the
+\texttt{wwvnfs} command to assemble a vNFS image from the chroot environment
+defined for the {\em compute} instance. 
+
 % begin_fsp_run
 % fsp_validation_comment Assembly vNFS
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ wwvnfs -y --chroot $CHROOT
 \end{lstlisting}
 % end_fsp_run
-
 
 
 % Temporarily disabled for master1/2 CI builds
@@ -277,7 +288,7 @@ hosted by the {\em master} host in this example configuration. \\
 \subsection{Add resource management services on {\em master} node}
 
 The following command adds the SLURM workload manager server components to the
-chose {\em master} host. Note that client-side components will be added to a
+chosen {\em master} host. Note that client-side components will be added to a
 compute image in a subsequent step.
 
 % begin_fsp_run
@@ -286,7 +297,6 @@ compute image in a subsequent step.
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ zypper -n install -t pattern FSP-slurm-server  # adding SLURM server support
 \end{lstlisting}
-
 % end_fsp_run
 
 In preparation for provisioning compute nodes, we can now register the desired
