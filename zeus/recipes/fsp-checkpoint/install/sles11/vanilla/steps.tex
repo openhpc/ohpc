@@ -13,20 +13,21 @@
 \thispagestyle{empty}
 
 %%%{\hfill\includegraphics[scale=0.14]{../figures/tron-approved}}
-{\hspace*{4in} \includegraphics[width=1.8in]{intel_1spot_100.pdf}}
 
 % Title Page
 
-\vspace*{5cm}
+{\hspace*{4in} \includegraphics[width=1.8in]{intel_1spot_100.pdf}}
+
+\vspace*{2cm}
 \noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont 2014 Forest Peak Checkpoint} \vspace*{0.1cm} \\
 \noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
-\noindent\rule{5in}{0.4pt} \\
+\noindent\rule{6in}{0.4pt} \\
 
 \noindent {\Large \baseOS{} Base OS} \\ \vspace{0.2cm}
 
-\noindent {\large {\em Base Linux Edition Without Config Management}}
+\noindent {\large {\em Base Linux Edition }}
 
-\vspace*{2in}
+\vspace*{3in}
 
 \noindent{\normalsize Intel Cluster Maker Team} \vspace*{0.1cm} \\
 {\normalsize Copyright~{\small\copyright}~2014 Intel Corporation} \vspace*{0.1cm} \\ 
@@ -37,81 +38,70 @@
 \tableofcontents
 \newpage
 
-% Introduction 
+% Introduction  --------------------------------------------------
 
 \section{Introduction}
 \input{../../common/intro} \\
 
-This edition of the install guide highlights the coordinated use of a {\em
-  configuration management} system during the install and configuration
-process. In this case, the open-source package, \LosF{}, is used and is
-provided as a pre-built component via the FSP repository. The use of config
-management systems are common on high-end systems and allow administrators to
-capture the state of the cluster configuration for trace-ability and to aid in
-the distribution of desired software and settings to predefined host types
-(e.g. compute nodes, IO nodes, etc). Combined with the template configuration
-provided with the FSP checkpoint, it allows for a relatively simple install and
-configuration process that is descibed in subsequent sections. \\
+\noindent {\bf Base Linux Addition}: this edition of the guide highlights
+installation without the use of a companion configuration management system and
+directly uses distro-provided package management tools for component
+selection. The steps that follow also highlight specific changes to system
+configuration files that are required as part of the cluster install
+process. Other editions of this guide provide similar install steps when using
+specific configuration management systems that can simplify the installation
+and configuration process. \\
 
 \input{../../common/requirements}
 \input{../../common/inputs}
 
+% ------------------------------------------------------------------
 
 \section{Install Base Operating System(BOS)}
 \input{../../common/bos}
 
+% ------------------------------------------------------------------
 
-%\newpage
 \section{Install FSP Components}
 
-\subsection{Bootstrap}
+With the BOS installed and booted, the next step is to add desired FSP packages
+onto the {\em master} server in order to provide provisioning and resource
+management services for the rest of the cluster. The following subsections
+highlight this process.
 
-To begin, bootstrap the master server with the bare essentials necessary to
-enable a local configuration management system. The config management system
-will then be used in subsequent commands to register additional FSP components
-for installation.
+\subsection{Enable FSP repository for local use}
+\input{../../common/enable_fsp_repo}
 
 \vspace*{0.2cm}
 % begin_fsp_run
-% fsp_validation_comment Bootstrap
+% fsp_validation_comment Enable FSP Repo
 
 \begin{lstlisting}[language=bash]
-[master]$ zypper -n install losf
+[master]$ zypper ar http://fsp-obs.pdx.intel.com:82/fsp/SLE_11_SP3_Intel/fsp.repo 
 \end{lstlisting}
 
 % end_fsp_run
 
-\subsection{Add baseline FSP and components on {\em master} node}
+\subsection{Add provisioning services on {\em master} node}
 
-As an example of the convenience that can be added via combination of config
-management and a pre-provided FSP template, the next step adds all the minimum
-remaining baseline FSP components necessary for a {\em master} server. We begin
-by initializing the config mgmt system with an FSP-tuned template that defines
-Warewulf as the underlying provisioning system and defined two node type
-classifications:
-\begin{itemize*}
-\item master
-\item compute (e.g. c1, c2, c3, etc.)
-\end{itemize*}
-In this demo, we choose to store the cluster config files in /tmp. However, in
-normal practice, this would likely be stored in a shared file system (with
-config/template files stored in an SCM for versioning).
+With the FSP repo enabled, we can now begin adding desired components onto the
+{\em master} server. The FSP repo provides a number of aliases that group
+logical components togetther in order to help aid in this process. To add
+support for provisioning services, the following commands illustrate addition
+of a common base package followed by the Warewulf provisioning system.
 
 \vspace*{0.2cm}
 
 % begin_fsp_run
-% fsp_validation_comment Add baseline FSP and components on master node
+% fsp_validation_comment Add baseline FSP and warewulf on master node
 
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ . /etc/profile.d/losf.sh         # setup env
-[master]$ export LOSF_CONFIG_DIR=/tmp/demo # path for configuration setup
-[master]$ initconfig cluster FSP_template  # init config with FSP template
-[master]$ losf addgroup -y FSP-base        # adding base FSP packages
-[master]$ losf addgroup -y FSP-warewulf    # adding Warewulf support
-[master]$ update -q                        # install required components
+[master]$ zypper -n install -t pattern FSP-base          # adding base FSP packages
+[master]$ zypper -n install -t pattern FSP-warewulf      # adding Warewulf support
 \end{lstlisting}
-
 % end_fsp_run
+
+
 
 %%%Note that on a freshly installed system, the \texttt{update} process above will
 %%%download and install all of the pre-defined FSP provided packages (and
@@ -120,9 +110,9 @@ config/template files stored in an SCM for versioning).
 \subsection{Complete basic Warewulf setup for {\em master} node}
 
 At this point, all of the packages necessary to use Warewulf on the {\em
-  master} host should be installed.  Next, we need to configure Warewulf to
-work with SLES, build bootstrap and vNFS images, customize a few settings to
-work on the Zeus cluster, and provision four hosts. Specific steps are as
+  master} host should be installed.  Next, we need to update several
+configuration files in order to allow Warewulf to work with SLES to support
+local provisioning using the {\em eth1} interface.  Specific steps are as
 follows:
 
 \vspace*{0.2cm}
@@ -135,10 +125,10 @@ follows:
 # Configure DHCP server to use eth1
 [master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
 
-# Configure Warewulf to use default SLES tftp location
+# Configure Warewulf to use the default SLES tftp location
 [master]$ perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /#" /etc/warewulf/provision.conf
 
-# Update Warewulf http config to use SLES version of mod_perl
+# Update Warewulf http config to use the SLES version of mod_perl
 [master]$ export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
 [master]$ perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
 
@@ -148,11 +138,16 @@ follows:
 # Define eth1 interface for provisioning
 [master]$ ifconfig eth1 <master_ip> netmask 255.255.255.0 up
 
-# Restart relevant services
-[master]$ service xinetd restart              # tftp services
-[master]$ service mysql restart               # mysql database
-[master]$ service apache2 restart             # web server
+# Restart relevant services to support provisioning
+[master]$ service xinetd restart                         # tftp services
+[master]$ service mysql restart                          # mysql database
+[master]$ service apache2 restart                        # web server
 
+\end{lstlisting}
+
+% end_fsp_run
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Define chroot location for SLES 
 [master]$ export CHROOT=/opt/fsp/admin/images/sles11sp3
 
@@ -217,6 +212,21 @@ follows:
 
 % begin_fsp_run
 % fsp_validation_comment Add hosts to cluster
+
+\subsection{Add resource management services on {\em master} node}
+
+The following command adds the SLURM workload manager server components to the
+chose {\em master} host. Note that client-side components will be added to a
+compute image in a subsequent step.
+
+% begin_fsp_run
+% fsp_validation_comment Add resource manager
+
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ zypper -n install -t pattern FSP-slurm-server  # adding SLURM server support
+\end{lstlisting}
+
+% end_fsp_run
 
 In preparation for provisioning compute nodes, we can now register the desired
 network settings for four example compute nodes. Recall that this example is
@@ -359,5 +369,13 @@ c4  05:09am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 %%%\end{lstlisting}
 %%%
 %%% hello world
+
+\section{Install FSP Development Components}
+\subsection{Compilers}
+\subsection{MPI Stacks}
+\subsection{3rd Party Libraries}
+
+\section{Run Example Job}
+
 \end{document}
 
