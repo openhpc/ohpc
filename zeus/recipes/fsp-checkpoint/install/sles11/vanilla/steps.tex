@@ -254,90 +254,49 @@ defined for the {\em compute} instance.
 \end{lstlisting}
 % end_fsp_run
 
-% Temporarily disabled for master1/2 CI builds
+\subsubsection{Register nodes for provisioning}
 
-%%% # Configure Warewulf to allow provisioning over eth0
-%%% [master]$ perl -pi -e "s/eth1/eth0/"  /etc/warewulf/provision.conf 
-%%%[master]$ echo "<nfs_ip>:/home /home nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
-
-%%%To enable SLURM, the local site administrators would need to create the
-%%%\texttt{/etc/slurm/slurm.conf} file, customized to include desired compute
-%%%nodes, queue settings, etc. A minimal example to setup SLURM from an example
-%%%config file is below:
-%%%
-%%%\begin{lstlisting}[language=bash,keywords={}]
-%%%
-%%%# Create minimal SLURM config
-%%%
-%%%[master]$ head -n -2  /etc/slurm/slurm.conf.example  > /etc/slurm/slurm.conf
-%%%[master]$ echo "PropagateResourceLimitsExcept=MEMLOCK" >> /etc/slurm/slurm.conf
-%%%[master]$ echo "SlurmdLogFile=/var/log/slurm.log" >> /etc/slurm/slurm.conf
-%%%[master]$ echo "NodeName=c[1-2] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 \
-%%%     State=UNKNOWN" >> /etc/slurm/slurm.conf
-%%%[master]$ echo "PartitionName=normal Nodes=c[1-2] Default=YES MaxTime=24:00:00 \
-%%%     State=UP" >> /etc/slurm/slurm.conf
-%%%
-%%%[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=master/" 
-%%%     /etc/slurm/slurm.conf
-%%%\end{lstlisting}
-
-
-
-In preparation for provisioning compute nodes, we can now register the desired
-network settings for four example compute nodes. Recall that this example is
-using the compute nodes assigned to master. Note the use of variables for the
-desired comute node IP and MAC addresses which should be modified for local
-settings. 
+In preparation for provisioning, we can now define the desired network
+settings for four example compute nodes with the underlying provisioning
+system. Note the use of variable names for the desired compute node IP and MAC
+addresses which should be modified to accomodate local settings and
+hardware. The final step in this process associates the vNFS image assembled
+in previous steps with the newly defined compute nodes. 
 
 % begin_fsp_run
 % fsp_validation_comment Add hosts to cluster
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-
-# Define desired compute host credentials within config management
-
-[master]$ echo "c1 <c1_ip> <c1_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
-[master]$ echo "c2 <c2_ip> <c2_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
-[master]$ echo "c3 <c3_ip> <c3_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
-[master]$ echo "c4 <c4_ip> <c4_mac> eth0 255.255.255.0" >> $LOSF_CONFIG_DIR/ips.cluster
-
-# Register new compute hosts with provisioning system
-
-[master]$ losf add c1
-[master]$ losf add c2
-[master]$ losf add c3
-[master]$ losf add c4
+# Define four compoute nodes and network settings 
+[master]$ wwsh -y node new c1 --ipaddr=<c1_ip> --hwaddr=<c1_mac> 
+[master]$ wwsh -y node new c2 --ipaddr=<c2_ip> --hwaddr=<c2_mac> 
+[master]$ wwsh -y node new c3 --ipaddr=<c3_ip> --hwaddr=<c3_mac> 
+[master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> 
 
 # Restart dhcp 
+#[master]$ service dhcpd restart
 
-[master]$ service dhcpd restart
-
+# Define provisioning image for hosts
+[master]$ wwsh -y provision set c[1-4] --vnfs=sles-11 --bootstrap=`uname -r`
 \end{lstlisting}
 % end_fsp_run
 
-%%%# Define provisioning image for hosts
-%%%[master]$ wwsh -y provision set c[1-2] --vnfs=base --bootstrap=`uname -r`
-
-
 \subsection{Boot compute nodes}
 
-At this point, the {\em master} server should be able to boot the newly defined
-compute nodes.  The service processors for the compute hosts are available via
-a separate network on the Zeus cluster. You can point a web browser to their
-respective IPs to reboot, or you can issue ipmi commands directly from the {\em
-  master} cluster node.  An example to reboot hosts {\em c1} and {\em c2} using
-IPMI is shown below.  Note that the \texttt{ireset} command requires that the
-\texttt{IPMI\_PASSWORD} variable be set with the local BMC password in order to
-work interactively.
+\input{../../common/reset_computes} 
+The following commands use the \texttt{ipmitool} utility to initiate power
+resets on each of the four compute hosts. Note that the utility requires that
+the \texttt{IPMI\_PASSWORD} variable be set with the local BMC password in
+order to work interactively.
 
 % begin_fsp_run
 % fsp_validation_comment Boot compute nodes
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ ireset <c1_bmc>         # power cycles c1 through BMC IP
-[master]$ ireset <c2_bmc>         # power cycles c2 through BMC IP
-[master]$ ireset <c3_bmc>         # power cycles c3 through BMC IP
-[master]$ ireset <c4_bmc>         # power cycles c4 through BMC IP
+[master]$ ipmitool -E -I lanplus -H <c1_bmc> -U root chassis power reset   # power cycle c1
+[master]$ ipmitool -E -I lanplus -H <c2_bmc> -U root chassis power reset   # power cycle c2
+[master]$ ipmitool -E -I lanplus -H <c3_bmc> -U root chassis power reset   # power cycle c3
+[master]$ ipmitool -E -I lanplus -H <c4_bmc> -U root chassis power reset   # power cycle c4
 \end{lstlisting} 
 
 % end_fsp_run
