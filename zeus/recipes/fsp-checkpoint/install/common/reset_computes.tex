@@ -1,6 +1,7 @@
 At this point, the {\em master} server should be able to boot the newly defined
-compute nodes and all that is required to initiate this process is to power
+compute nodes. Assuming that the compute hardware BIOS settings are configured
+to boot over PXE, all that is required to initiate the provisioning process is to power
 cycle each of the desired hosts.  On the Zeus cluster, each of the service
-processors for the compute hosts are available via a separate network on the
-Zeus cluster. You can point a web browser to their respective IPs to reboot, or
+processors for the compute hosts are available via a separate network.
+You can point a web browser to their respective IPs to reboot, or
 you can issue ipmi commands directly from the {\em master} cluster node.  
