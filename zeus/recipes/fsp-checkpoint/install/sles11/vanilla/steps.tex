@@ -72,7 +72,6 @@ highlight this process.
 \subsection{Enable FSP repository for local use}
 \input{../../common/enable_fsp_repo}
 
-\vspace*{0.2cm}
 % begin_fsp_run
 % fsp_validation_comment Enable FSP Repo
 \begin{lstlisting}[language=bash]
@@ -87,26 +86,30 @@ With the FSP repo enabled, we can now begin adding desired components onto the
 {\em master} server. The FSP repo provides a number of aliases that group
 logical components togetther in order to help aid in this process. To add
 support for provisioning services, the following commands illustrate addition
-of a common base package followed by the Warewulf provisioning system.
-
-\vspace*{0.2cm}
+of a common base package followed by the Warewulf provisioning system. 
 
 % begin_fsp_run
 % fsp_validation_comment Add baseline FSP and warewulf on master node
-
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ zypper -n install -t pattern FSP-base          # adding base FSP packages
 [master]$ zypper -n install -t pattern FSP-warewulf      # adding Warewulf support
 \end{lstlisting}
+% end_fsp_run
 
+\subsection{Add resource management services on {\em master} node}
+
+The following command adds the SLURM workload manager server components to the
+chosen {\em master} host. Note that client-side components will be added to a
+the corresponding compute image in a subsequent step.
+
+% begin_fsp_run
+% fsp_validation_comment Add resource manager
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ zypper -n install -t pattern FSP-slurm-server  # adding SLURM server support
+\end{lstlisting}
 % end_fsp_run
 
 
-
-%%%Note that on a freshly installed system, the \texttt{update} process above will
-%%%download and install all of the pre-defined FSP provided packages (and
-%%%associated dependencies) registered in the config mgmt. template.
-%%%
 \subsection{Complete basic Warewulf setup for {\em master} node}
 
 At this point, all of the packages necessary to use Warewulf on the {\em
@@ -115,13 +118,10 @@ configuration files in order to allow Warewulf to work with SLES to support
 local provisioning using the {\em eth1} interface.  Specific steps are as
 follows:
 
-\vspace*{0.2cm}
-
 % begin_fsp_run
 % fsp_validation_comment Complete basic Warewulf setup for master node
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-
 # Configure DHCP server to use eth1
 [master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
 
@@ -157,7 +157,7 @@ The FSP build of Warewulf includes specific enhancements enabling support for
 SLES~11. The following steps highlight the process to build a minimal, default
 image for use with Warewulf. In this example, the resulting image will be
 stored locally on the {\em master} host in the
-\texttt{/opt/fsp/admin/images/\baseOS{}} directory. \\
+\texttt{/opt/fsp/admin/images/\baseOS{}} directory.
 
 % begin_fsp_run
 % fsp_validation_comment Create compute image for Warewulf
@@ -180,7 +180,7 @@ stored locally on the {\em master} host in the
 The \texttt{wwmkchroot} process used in the previous step is designed to
 provide a minimal SLES configuration. Next, we add addtitional components to
 include resource management client services, InfiniBand drivers, and other
-additional packages to support the default FSP environment. \\
+additional packages to support the default FSP environment.
 
 % begin_fsp_run
 % fsp_validation_comment Add FSP components to compute instance
@@ -213,7 +213,7 @@ host in this example configuration. Note that the example shown here
 specifically exports the \texttt{/opt/fsp/pub} path to each compute node
 individually. In practice, however, a single entry would likely be used to
 export the mount point to a private subnet suitably sized to comprise all
-desired endpoints. \\
+desired endpoints. 
 
 % begin_fsp_run
 % fsp_validation_comment Add ssh key and enable NFS mount of /opt/fsp/pub
@@ -254,7 +254,6 @@ defined for the {\em compute} instance.
 \end{lstlisting}
 % end_fsp_run
 
-
 % Temporarily disabled for master1/2 CI builds
 
 %%% # Configure Warewulf to allow provisioning over eth0
@@ -282,22 +281,7 @@ defined for the {\em compute} instance.
 %%%     /etc/slurm/slurm.conf
 %%%\end{lstlisting}
 
-% begin_fsp_run
-% fsp_validation_comment Add hosts to cluster
 
-\subsection{Add resource management services on {\em master} node}
-
-The following command adds the SLURM workload manager server components to the
-chosen {\em master} host. Note that client-side components will be added to a
-compute image in a subsequent step.
-
-% begin_fsp_run
-% fsp_validation_comment Add resource manager
-
-\begin{lstlisting}[language=bash,keywords={}]
-[master]$ zypper -n install -t pattern FSP-slurm-server  # adding SLURM server support
-\end{lstlisting}
-% end_fsp_run
 
 In preparation for provisioning compute nodes, we can now register the desired
 network settings for four example compute nodes. Recall that this example is
@@ -305,7 +289,8 @@ using the compute nodes assigned to master. Note the use of variables for the
 desired comute node IP and MAC addresses which should be modified for local
 settings. 
 
-\vspace*{0.2cm}
+% begin_fsp_run
+% fsp_validation_comment Add hosts to cluster
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 
@@ -345,8 +330,6 @@ IPMI is shown below.  Note that the \texttt{ireset} command requires that the
 \texttt{IPMI\_PASSWORD} variable be set with the local BMC password in order to
 work interactively.
 
-\vspace*{0.2cm}
-
 % begin_fsp_run
 % fsp_validation_comment Boot compute nodes
 
@@ -359,7 +342,6 @@ work interactively.
 
 % end_fsp_run
 
-\vspace*{0.25cm}
 Once kicked off, the boot process should take less than 2 minutes and you can
 verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
 hosts. For example, to wait 100 seconds, and run a command on the newly imaged
@@ -367,7 +349,6 @@ compute hosts:
 
 % begin_fsp_run
 
-\vspace*{0.2cm}
 \begin{lstlisting}[language=bash]
 [master]$ sleep 100
 [master]$ koomie_cf -n compute uptime
