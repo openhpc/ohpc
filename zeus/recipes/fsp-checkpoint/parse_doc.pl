@@ -120,6 +120,7 @@ while(my $line=<IN>) {
     if($ci_run == 1) {
 	$line =~ s/<nfs_ip>/$nfs_ip/g;
 	$line =~ s/<master_ip>/$master_ip/g;
+	$line =~ s/<master_host>/$ENV{'NODE_NAME'}/g;
 
 	for (my $i=1;$i<=$num_computes; $i++) {
 	    $line =~ s/<c$i\_ip>/$compute_ips[$i-1]/g;
