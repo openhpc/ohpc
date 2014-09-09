@@ -109,6 +109,22 @@ the corresponding compute image in a subsequent step.
 \end{lstlisting}
 % end_fsp_run
 
+SLURM requires the delineation of the system user that runs the underlying
+resource management daemons. The default configuration file that is supplied
+with the FSP build of SLURM identifies this \texttt{SlurmUser} to be a
+dedicated user named \texttt{slurm} and this user must exist. 
+%The default location identified to save state information is
+%\texttt{/var/slurm} and this directory
+The following command can be used to add this user to the {\em
+  master} server:
+
+% begin_fsp_run
+% fsp_validation_comment Add slurm user
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ useradd slurm                                  # add "slurm" user
+\end{lstlisting}
+% end_fsp_run
+
 
 \subsection{Complete basic Warewulf setup for {\em master} node}
 
@@ -166,7 +182,7 @@ stored locally on the {\em master} host in the
 [master]$ export CHROOT=/opt/fsp/admin/images/sles11sp3
 
 # Build bootstrap kernel and initial base image
-[master]$ wwbootstrap -y `uname -r`           # create warewulf bootstrap image
+[master]$ wwbootstrap `uname -r`           # create warewulf bootstrap image
 [master]$ mkdir -p --mode=700 $CHROOT         # create chroot housing dir
 [master]$ mkdir -m 755 $CHROOT/dev            # create chroot /dev dir
 [master]$ mknod -m 666 $CHROOT/dev/zero c 1 5 # create /dev/zero device
@@ -256,12 +272,13 @@ defined for the {\em compute} instance.
 
 \subsubsection{Register nodes for provisioning}
 
-In preparation for provisioning, we can now define the desired network
-settings for four example compute nodes with the underlying provisioning
-system. Note the use of variable names for the desired compute node IP and MAC
-addresses which should be modified to accomodate local settings and
-hardware. The final step in this process associates the vNFS image assembled
-in previous steps with the newly defined compute nodes. 
+In preparation for provisioning, we can now define the desired network settings
+for four example compute nodes with the underlying provisioning system and
+restart the \texttt{dhcp} service. Note the use of variable names for the
+desired compute node IP and MAC addresses which should be modified to
+accomodate local settings and hardware. The final step in this process
+associates the vNFS image assembled in previous steps with the newly defined
+compute nodes.
 
 % begin_fsp_run
 % fsp_validation_comment Add hosts to cluster
@@ -274,7 +291,7 @@ in previous steps with the newly defined compute nodes.
 [master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> 
 
 # Restart dhcp 
-#[master]$ service dhcpd restart
+[master]$ service dhcpd restart
 
 # Define provisioning image for hosts
 [master]$ wwsh -y provision set c[1-4] --vnfs=sles-11 --bootstrap=`uname -r`
@@ -304,17 +321,17 @@ order to work interactively.
 Once kicked off, the boot process should take less than 2 minutes and you can
 verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
 hosts. For example, to wait 100 seconds, and run a command on the newly imaged
-compute hosts:
+compute hosts using \texttt{pdsh}, execute the following:
 
 % begin_fsp_run
 
 \begin{lstlisting}[language=bash]
 [master]$ sleep 100
-[master]$ koomie_cf -n compute uptime
+[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
 c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
-c3  05:08am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
-c4  05:09am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
+c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
+c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 \end{lstlisting}
 
 % end_fsp_run
@@ -336,16 +353,17 @@ c4  05:09am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 %%%
 %%%%\section{Configure and Boot Compute Nodes}
 %%%
-%%%\section{Install Licenses for Intel Software}
-%%%
-%%%For internal testing convenience, an RPM containing valid licenses for Intel
-%%%compilers and MPI is available. To install, issue:
-%%%
-%%%\vspace*{0.25cm}
-%%%\begin{lstlisting}[language=bash,keywords={},upquote=true]
-%%%[master]$ losf addpkg FSP-licenses
-%%%[master]$ update -q
-%%%\end{lstlisting}
+\section{Install Licenses for Intel Software}
+
+For internal testing convenience, an RPM containing valid licenses for Intel
+compilers and MPI is available. To install, issue:
+
+\vspace*{0.25cm}
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ losf addpkg FSP-licenses
+[master]$ update -q
+\end{lstlisting}
+
 %%%
 %%%\section{Run a Test Job}
 %%%
