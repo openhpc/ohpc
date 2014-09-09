@@ -40,7 +40,7 @@
 
 % Introduction  --------------------------------------------------
 
-\section{Introduction}
+\section{Introduction} \label{sec:introduction}
 \input{../../common/intro} \\
 
 \noindent {\bf Base Linux Addition}: this edition of the guide highlights
@@ -62,7 +62,7 @@ and configuration process. \\
 
 % ------------------------------------------------------------------
 
-\section{Install FSP Components}
+\section{Install FSP Components} \label{sec:basic_install}
 
 With the BOS installed and booted, the next step is to add desired FSP packages
 onto the {\em master} server in order to provide provisioning and resource
@@ -130,7 +130,7 @@ The following command can be used to add this user to the {\em
 
 At this point, all of the packages necessary to use Warewulf on the {\em
   master} host should be installed.  Next, we need to update several
-configuration files in order to allow Warewulf to work with SLES to support
+configuration files in order to allow Warewulf to work with SLES and to support
 local provisioning using the {\em eth1} interface.  Specific steps are as
 follows:
 
@@ -182,7 +182,7 @@ stored locally on the {\em master} host in the
 [master]$ export CHROOT=/opt/fsp/admin/images/sles11sp3
 
 # Build bootstrap kernel and initial base image
-[master]$ wwbootstrap `uname -r`           # create warewulf bootstrap image
+[master]$ wwbootstrap `uname -r`              # create warewulf bootstrap image
 [master]$ mkdir -p --mode=700 $CHROOT         # create chroot housing dir
 [master]$ mkdir -m 755 $CHROOT/dev            # create chroot /dev dir
 [master]$ mknod -m 666 $CHROOT/dev/zero c 1 5 # create /dev/zero device
@@ -194,7 +194,7 @@ stored locally on the {\em master} host in the
 \subsubsection{Add FSP components}
 
 The \texttt{wwmkchroot} process used in the previous step is designed to
-provide a minimal SLES configuration. Next, we add addtitional components to
+provide a minimal SLES configuration. Next, we add additional components to
 include resource management client services, InfiniBand drivers, and other
 additional packages to support the default FSP environment.
 
@@ -242,9 +242,9 @@ desired endpoints.
     $CHROOT/etc/fstab
 
 # Identify resource manager server in SLURM config files
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_host>/" \
     $CHROOT/etc/slurm/slurm.conf
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_host>/" \
     /etc/slurm/slurm.conf
 
 # Export /opt/fsp/pub to cluster compute nodes
@@ -294,7 +294,7 @@ compute nodes.
 [master]$ service dhcpd restart
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set c[1-4] --vnfs=sles-11 --bootstrap=`uname -r`
+[master]$ wwsh -y provision set c[1-4] --vnfs=sles11sp3 --bootstrap=`uname -r`
 \end{lstlisting}
 % end_fsp_run
 
@@ -303,7 +303,7 @@ compute nodes.
 \input{../../common/reset_computes} 
 The following commands use the \texttt{ipmitool} utility to initiate power
 resets on each of the four compute hosts. Note that the utility requires that
-the \texttt{IPMI\_PASSWORD} variable be set with the local BMC password in
+the \texttt{IPMI\_PASSWORD} environment variable be set with the local BMC password in
 order to work interactively.
 
 % begin_fsp_run
@@ -353,16 +353,7 @@ c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 %%%
 %%%%\section{Configure and Boot Compute Nodes}
 %%%
-\section{Install Licenses for Intel Software}
 
-For internal testing convenience, an RPM containing valid licenses for Intel
-compilers and MPI is available. To install, issue:
-
-\vspace*{0.25cm}
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ losf addpkg FSP-licenses
-[master]$ update -q
-\end{lstlisting}
 
 %%%
 %%%\section{Run a Test Job}
@@ -400,9 +391,26 @@ compilers and MPI is available. To install, issue:
 %%% hello world
 
 \section{Install FSP Development Components}
+
+Once the completion of the basic install procedure outlined in
+Section~\ref{sec:basic_install} is complete, additional packages can be added
+to provide a flexible HPC development environment including C/C++/Fortran
+compilers, MPI stacks, and a variety of 3rd party libraries.
+
 \subsection{Compilers}
 \subsection{MPI Stacks}
 \subsection{3rd Party Libraries}
+
+\section{Install Licenses for Intel Software}
+
+For internal testing convenience, an RPM containing valid licenses for Intel
+compilers and MPI is available. To install, issue:
+
+\vspace*{0.25cm}
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ losf addpkg FSP-licenses
+[master]$ update -q
+\end{lstlisting}
 
 \section{Run Example Job}
 
