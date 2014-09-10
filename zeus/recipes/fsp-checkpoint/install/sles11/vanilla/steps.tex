@@ -498,7 +498,7 @@ S | Name              | Summary                          | Type
 
 Note that FSP provided 3rd party library builds are configured to be installed
 into a common top-level repository so that they can be easily exported to
-desired hosts within the cluster. The top-level path (\texttt{/opt/fsp/pub})
+desired hosts within the cluster. This common top-level path (\texttt{/opt/fsp/pub})
 was previously configured to be mounted on {\em compute} nodes in
 \S\ref{sec:master_customization}, so the packages will be immediately available
 for use on the cluster after installation on the {\em master} host.  For
@@ -516,6 +516,39 @@ following:
 \end{lstlisting}
 % end_fsp_run
 
+\section{Resource Manager Startup}
+
+In section \S\ref{sec:basic_install}, the SLURM resource manager was installed
+and configured for use on both the {\em master} host and {\em compute} node
+instances. With the cluster nodes up and functional, we can startup the
+resource manager services in preparation for running user jobs. Generally, this
+is a two-step process that requires starting up the controller daemons on the {\em
+  master} host and the client daemons on each of the {\em compute} hosts.  Since the
+{\em compute} hosts were booted into an image that included the SLURM client
+components, the daemons should already be running on the {\em compute}
+hosts. Note that SLURM leverages the use of the {\em munge} library to provide
+authentication services and this daemon also needs to be running on all hosts
+requiring within the resource management pool. The munge daemons should already
+be running on the {\em compute} subsystem at this point, so the steps required
+to startup the required services on the {\em master} host are as follows: 
+
+% begin_fsp_run
+% fsp_validation_comment Startup RM
+\begin{lstlisting}[language=bash]
+[master]$ service munge start
+[master]$ service slurm start
+\end{lstlisting}
+% end_fsp_run
+
+In the default configuration, the {\em compute} hosts will be flagged in an
+{\em unkown} state. To place the hosts into production such that they are
+eligble to schedule user jobs, issue the following:
+
+% begin_fsp_run
+\begin{lstlisting}[language=bash]
+[master]$ scontrol update nodename=c[1-4] state=idle
+\end{lstlisting}
+% end_fsp_run
 
 
 \section{Run Example Job}
