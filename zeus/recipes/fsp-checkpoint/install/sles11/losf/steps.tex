@@ -57,12 +57,12 @@ configuration process that is descibed in subsequent sections. \\
 \input{../../common/inputs}
 
 
-\section{Install Base Operating System(BOS)}
+\section{Install Base Operating System (BOS)}
 \input{../../common/bos}
 
 
 %\newpage
-\section{Install FSP Components}
+\section{Install FSP Provisioning Components}
 
 \subsection{Bootstrap}
 
@@ -154,7 +154,7 @@ follows:
 [master]$ service apache2 restart             # web server
 
 # Define chroot location for SLES 
-[master]$ export CHROOT=/opt/fsp/admin/images/sles11sp3
+[master]$ export CHROOT=/opt/fsp/admin/images/sles11sp3/base
 
 # Build bootstrap kernel and initial base image
 [master]$ wwbootstrap -y `uname -r`           # create warewulf bootstrap image
@@ -219,10 +219,13 @@ follows:
 % fsp_validation_comment Add hosts to cluster
 
 In preparation for provisioning compute nodes, we can now register the desired
-network settings for four example compute nodes. Recall that this example is
-using the compute nodes assigned to master. Note the use of variables for the
-desired comute node IP and MAC addresses which should be modified for local
-settings. 
+network settings for four example compute nodes. First, the desired IP settings
+for each compute node are added to the LosF networking configuration stored in
+the ips.cluster file. Then, each host is registered for addition via ``losf
+add'' which performs the necessary configuration steps required for the
+underlying provisioning system (Warewulf in this example).  Again, note the use
+of variables for the desired compute node IP and MAC addresses which should be
+modified for local settings.
 
 \vspace*{0.2cm}
 
@@ -252,15 +255,17 @@ settings.
 %%%# Define provisioning image for hosts
 %%%[master]$ wwsh -y provision set c[1-2] --vnfs=base --bootstrap=`uname -r`
 
+\subsection{Define {\em compute} image for provisioning}
+\subsubsection{Initialize BOS image}
+\subsubsection{Add FSP components}
+\subsubsection{Customize settings}
+\subsubsection{Assemble vNFS image}
 
 \subsection{Boot compute nodes}
 
-At this point, the {\em master} server should be able to boot the newly defined
-compute nodes.  The service processors for the compute hosts are available via
-a separate network on the Zeus cluster. You can point a web browser to their
-respective IPs to reboot, or you can issue ipmi commands directly from the {\em
-  master} cluster node.  An example to reboot hosts {\em c1} and {\em c2} using
-IPMI is shown below.  Note that the \texttt{ireset} command requires that the
+\input{../../common/reset_computes} 
+An example to reboot four compute hosts using LosF provided ipmi utilities is
+shown below.  Note that the \texttt{ireset} command requires that the
 \texttt{IPMI\_PASSWORD} variable be set with the local BMC password in order to
 work interactively.
 
@@ -280,9 +285,13 @@ work interactively.
 
 \vspace*{0.25cm}
 Once kicked off, the boot process should take less than 2 minutes and you can
-verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
-hosts. For example, to wait 100 seconds, and run a command on the newly imaged
-compute hosts:
+verify that the compute hosts are available via ssh, or via LosF's parallel
+cluster fork tool (\texttt{koomie\_cf}) to spawn commands across multiple hosts
+in parallel.
+%access multiple hosts ssh tools to multiple
+%hosts. 
+For example, to wait 100 seconds, and run the \texttt{uptime} command on the newly imaged
+compute hosts, execute the following:
 
 % begin_fsp_run
 
@@ -295,6 +304,14 @@ c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
 c3  05:08am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
 c4  05:09am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 \end{lstlisting}
+
+\section{Install FSP Development Components}
+
+\subsection{Compilers}
+\subsection{MPI Stacks}
+\subsection{3rd Party Libraries}
+
+\section{Run Example Job}
 
 % end_fsp_run
 
