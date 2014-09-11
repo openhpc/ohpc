@@ -96,7 +96,7 @@ of a common base package followed by the Warewulf provisioning system.
 \end{lstlisting}
 % end_fsp_run
 
-\subsection{Add resource management services on {\em master} node}
+\subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 
 The following command adds the SLURM workload manager server components to the
 chosen {\em master} host. Note that client-side components will be added to a
@@ -125,6 +125,15 @@ The following command can be used to add this user to the {\em
 \end{lstlisting}
 % end_fsp_run
 
+To facilitate running test jobs later on under the resource manager, we also
+add a "test" user as follows:
+
+% begin_fsp_run
+% fsp_validation_comment Add test user
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ useradd test                                  # add "slurm" user
+\end{lstlisting}
+% end_fsp_run
 
 \subsection{Complete basic Warewulf setup for {\em master} node}
 
@@ -334,8 +343,8 @@ imported in \S\ref{sec:file_import}.
 [master]$ service dhcpd restart
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set c[1-4] --vnfs=sles11sp3 \
-     --files=dynamic_hosts,passwd,group,shadow,munge.key
+[master]$ wwsh -y provision set c[1-4] --vnfs=sles11sp3 --bootstrap=`uname -r` \
+     --files=dynamic_hosts,passwd,group,shadow,munge.key 
 \end{lstlisting}
 % end_fsp_run
 
@@ -511,27 +520,37 @@ following:
 
 In section \S\ref{sec:basic_install}, the SLURM resource manager was installed
 and configured for use on both the {\em master} host and {\em compute} node
-instances. With the cluster nodes up and functional, we can startup the
+instances. With the cluster nodes up and functional, we can now startup the
 resource manager services in preparation for running user jobs. Generally, this
 is a two-step process that requires starting up the controller daemons on the {\em
-  master} host and the client daemons on each of the {\em compute} hosts.  Since the
-{\em compute} hosts were booted into an image that included the SLURM client
-components, the daemons should already be running on the {\em compute}
-hosts. Note that SLURM leverages the use of the {\em munge} library to provide
+  master} host and the client daemons on each of the {\em compute} hosts.  
+%Since the {\em compute} hosts were booted into an image that included the SLURM client
+%components, the daemons should already be running on the {\em compute}
+%hosts. 
+Note that SLURM leverages the use of the {\em munge} library to provide
 authentication services and this daemon also needs to be running on all hosts
-requiring within the resource management pool. The munge daemons should already
-be running on the {\em compute} subsystem at this point, so the steps required
-to startup the required services on the {\em master} host are as follows: 
+requiring within the resource management pool. 
+%The munge daemons should already
+%be running on the {\em compute} subsystem at this point, 
+The following commands can be used to startup the necessary services to support
+resource management under SLURM.
+%,  onso the steps required
+%to startup the required services on the {\em master} host are as follows: 
 
 % begin_fsp_run
 % fsp_validation_comment Startup RM
 \begin{lstlisting}[language=bash]
+# start munge and slurm controller on master host
 [master]$ service munge start
 [master]$ service slurm start
+
+#  start munge and slurm clients on compute hosts
+[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service munge start
+[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service slurm start
 \end{lstlisting}
 % end_fsp_run
 
-In the default configuration, the {\em compute} hosts will be flagged in an
+In the default configuration, the {\em compute} hosts will be initialized in an
 {\em unkown} state. To place the hosts into production such that they are
 eligble to schedule user jobs, issue the following:
 
@@ -545,26 +564,27 @@ eligble to schedule user jobs, issue the following:
 \section{Run a Test Job}
 
 With the resource manager enabled for production usage, users should now be
-able to run jobs. The Warewulf system can be used to 
+able to run jobs. Recall that we added a "test" user on the {\em master} host
+in \S\ref{sec:add_rm} and the following commands use this account to compile a
+simple "hello-world" MPI application and execute it interactively through the
+resource manager.
 
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ su - test
+[test@master ~]$ mpicc -o hello -O3 hello.c
 
-%%%[master]$ su - kwschulz
-%%%[kwschulz@master ~]$ mpicc hello.c
-%%%
-%%%[kwschulz@master ~]$ srun -n 8 -N 2 ./a.out 
-%%%
-%%% Hello, world (8 procs total)
-%%%    --> Process #   0 of   8 is alive. ->c1
-%%%    --> Process #   1 of   8 is alive. ->c1
-%%%    --> Process #   2 of   8 is alive. ->c1
-%%%    --> Process #   3 of   8 is alive. ->c1
-%%%    --> Process #   4 of   8 is alive. ->c2
-%%%    --> Process #   5 of   8 is alive. ->c2
-%%%    --> Process #   6 of   8 is alive. ->c2
-%%%    --> Process #   7 of   8 is alive. ->c2
-%%%\end{lstlisting}
-%%%
-%%% hello world
+[test@master ~]$ srun -n 8 -N 2 ./hello
+
+Hello, world (8 procs total)
+   --> Process #   0 of   8 is alive. ->c1
+   --> Process #   1 of   8 is alive. ->c1
+   --> Process #   2 of   8 is alive. ->c1
+   --> Process #   3 of   8 is alive. ->c1
+   --> Process #   4 of   8 is alive. ->c2
+   --> Process #   5 of   8 is alive. ->c2
+   --> Process #   6 of   8 is alive. ->c2
+   --> Process #   7 of   8 is alive. ->c2
+\end{lstlisting}
 
 
 \end{document}
