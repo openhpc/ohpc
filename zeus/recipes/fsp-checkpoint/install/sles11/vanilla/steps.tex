@@ -125,16 +125,16 @@ The following command can be used to add this user to the {\em
 \end{lstlisting}
 % end_fsp_run
 
-To facilitate running test jobs later on under the resource manager, we also
-add a "test" user as follows:
-
-% begin_fsp_run
-% fsp_validation_comment Add test user
-\begin{lstlisting}[language=bash,keywords={}]
-[master]$ useradd test                                  # add "slurm" user
-\end{lstlisting}
-% end_fsp_run
-
+%%% To facilitate running test jobs later on under the resource manager, we also
+%%% add a "test" user as follows:
+%%% 
+%%% % begin_fsp_run
+%%% % fsp_validation_comment Add test user
+%%% \begin{lstlisting}[language=bash,keywords={}]
+%%% [master]$ useradd test                                  # add "slurm" user
+%%% \end{lstlisting}
+%%% % end_fsp_run
+%%% 
 \subsection{Complete basic Warewulf setup for {\em master} node}
 
 At this point, all of the packages necessary to use Warewulf on the {\em
@@ -264,9 +264,9 @@ desired endpoints.
     $CHROOT/etc/fstab
 
 # Identify resource manager server in SLURM config files
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_host>/" \
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
     $CHROOT/etc/slurm/slurm.conf
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_host>/" \
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
     /etc/slurm/slurm.conf
 
 # Export /opt/fsp/pub to cluster compute nodes
@@ -564,13 +564,51 @@ eligble to schedule user jobs, issue the following:
 \section{Run a Test Job}
 
 With the resource manager enabled for production usage, users should now be
-able to run jobs. Recall that we added a "test" user on the {\em master} host
-in \S\ref{sec:add_rm} and the following commands use this account to compile a
-simple "hello-world" MPI application and execute it interactively through the
-resource manager.
+able to run jobs. The Zeus system includes a "test" user account housed on the
+NFS file system that was propogated to the {\em compute} nodes in this recipe
+via the import of user credentials in \S\ref{sec:file_import}. 
+%Recall that we added a "test" user on the {\em master} host
+%in \S\ref{sec:add_rm} 
+This account is pre-populated with a simple "hello-world" MPI application and the source code
+for this example is highlighted below. To use this account to compile the application and
+execute it interactively through the resource manager, execute the following.
 
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ su - test
+
+# show "hello-world" source
+[test@master ~]$ cat hello.c
+#include ``mpi.h''
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main(int argc, char *argv[])
+{
+  int num_procs, num_local;
+  char mach_name[MPI_MAX_PROCESSOR_NAME];
+  int mach_len;
+
+  MPI_Init (&argc,&argv);
+  MPI_Comm_size (MPI_COMM_WORLD, &num_procs);
+  MPI_Comm_rank (MPI_COMM_WORLD, &num_local);
+  MPI_Get_processor_name(mach_name,&mach_len);
+
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  if(num_local == 0)
+      printf(``\n Hello, world (%i procs total)\n'',num_procs);
+
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  printf(``    --> Process # %3i of %3i is alive. ->%s\n'',
+   num_local,num_procs,mach_name);
+
+  MPI_Finalize();
+  return 0;
+}
+
+# Compile and execute with resource manager
 [test@master ~]$ mpicc -o hello -O3 hello.c
 
 [test@master ~]$ srun -n 8 -N 2 ./hello
