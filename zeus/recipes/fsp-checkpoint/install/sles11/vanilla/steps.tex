@@ -125,16 +125,16 @@ The following command can be used to add this user to the {\em
 \end{lstlisting}
 % end_fsp_run
 
-%%% To facilitate running test jobs later on under the resource manager, we also
-%%% add a "test" user as follows:
-%%% 
-%%% % begin_fsp_run
-%%% % fsp_validation_comment Add test user
-%%% \begin{lstlisting}[language=bash,keywords={}]
-%%% [master]$ useradd test                                  # add "slurm" user
-%%% \end{lstlisting}
-%%% % end_fsp_run
-%%% 
+To facilitate running test jobs later on under the resource manager, we also
+add a "test" user as follows:
+
+% begin_fsp_run
+% fsp_validation_comment Add test user
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ useradd test                                  # add "slurm" user
+\end{lstlisting}
+% end_fsp_run
+
 \subsection{Complete basic Warewulf setup for {\em master} node}
 
 At this point, all of the packages necessary to use Warewulf on the {\em
@@ -324,7 +324,7 @@ In preparation for provisioning, we can now define the desired network settings
 for four example compute nodes with the underlying provisioning system and
 restart the \texttt{dhcp} service. Note the use of variable names for the
 desired compute node IP and MAC addresses which should be modified to
-accomodate local settings and hardware. The final step in this process
+accommodate local settings and hardware. The final step in this process
 associates the vNFS image assembled in previous steps with the newly defined
 compute nodes, utilizing the user credential files and munge key that were
 imported in \S\ref{sec:file_import}.
@@ -333,7 +333,7 @@ imported in \S\ref{sec:file_import}.
 % fsp_validation_comment Add hosts to cluster
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Define four compoute nodes and network settings 
+# Define four compute nodes and network settings 
 [master]$ wwsh -y node new c1 --ipaddr=<c1_ip> --hwaddr=<c1_mac> 
 [master]$ wwsh -y node new c2 --ipaddr=<c2_ip> --hwaddr=<c2_mac> 
 [master]$ wwsh -y node new c3 --ipaddr=<c3_ip> --hwaddr=<c3_mac> 
@@ -402,7 +402,7 @@ development environment including C/C++/Fortran compilers, MPI stacks, and a
 variety of 3rd party libraries. The following subsections highlight the
 additional software installation procedures, including the addition of Intel
 licensed software (e.g. Composer compiler suite, Intel MPI). It is assumed that
-the end-site adminstrator will procure and install the necessary licenses in
+the end-site administrator will procure and install the necessary licenses in
 order to use the Intel proprietary software.
 
 \subsection{Compilers}
@@ -565,7 +565,7 @@ eligble to schedule user jobs, issue the following:
 
 With the resource manager enabled for production usage, users should now be
 able to run jobs. The Zeus system includes a "test" user account housed on the
-NFS file system that was propogated to the {\em compute} nodes in this recipe
+NFS file system that was propagated to the {\em compute} nodes in this recipe
 via the import of user credentials in \S\ref{sec:file_import}. 
 %Recall that we added a "test" user on the {\em master} host
 %in \S\ref{sec:add_rm} 
