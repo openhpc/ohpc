@@ -259,8 +259,10 @@ Prior to assembling the image, it is advantageous to perform any additional
 customizations within the chroot environment created for the desired {\em
   compute} instance. The following steps document the process to add a local
 {\em ssh} key created by Warewulf to support remote access, identify the
-resource manager server, and enable NFS mounting of a \$HOME file system and the
-public FSP install path (\texttt{/opt/fsp/pub}) that will be hosted by the {\em master} host in this example configuration. Note that the example shown here
+resource manager server, and enable NFS mounting of a \$HOME file system and
+the public FSP install path (\texttt{/opt/fsp/pub}) that will be hosted by the
+{\em master} host in this example configuration. Note that the example shown
+here leverages the {\em eth1} hostname identified for the {\em master} host and
 specifically exports the desired NFS paths to each compute node
 individually. In practice, however, a single entry would likely be used to
 export the mount point to a private subnet suitably sized to comprise all
@@ -279,14 +281,14 @@ desired endpoints.
      $CHROOT/etc/fstab
 
 # Identify resource manager server in SLURM config files
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>-eth1>/" \
     $CHROOT/etc/slurm/slurm.conf
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>-eth1/" \
     /etc/slurm/slurm.conf
 
 # Export /home and FSP public packages from master server to cluster compute nodes
-[master]$ echo "/home <internal_netmask>(ro,no_subtree_check,fsid=0)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=0)" >> /etc/exports
+[master]$ echo "/home <internal_netmask>(ro,no_subtree_check,fsid=10)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
 [master]$ service nfsserver reload
 \end{lstlisting}
