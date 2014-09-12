@@ -256,6 +256,9 @@ desired endpoints.
 # add new cluster key to base image
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
+# add NFS client mounts of /home and /opt/fsp/pub to base image
+[master]$ echo "<master_ip>:/home /home nfs nfsvers=3 0 0" >> \
+     $CHROOT/etc/fstab
 [master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
      $CHROOT/etc/fstab
 
@@ -265,10 +268,11 @@ desired endpoints.
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
     /etc/slurm/slurm.conf
 
-# Export /home and FSP public packages  to cluster compute nodes
+# Export /home and FSP public packages from master server to cluster compute nodes
 [master]$ echo "/home <internal_netmask>(ro,no_subtree_check,fsid=0)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=0)" >> /etc/exports
 [master]$ exportfs -a
+[master]$ service nfsserver reload
 \end{lstlisting}
 % end_fsp_run
 
