@@ -43,7 +43,7 @@
 \section{Introduction} \label{sec:introduction}
 \input{../../common/intro} \\
 
-\noindent {\bf Base Linux Addition}: this edition of the guide highlights
+\noindent {\bf Base Linux Edition}: this edition of the guide highlights
 installation without the use of a companion configuration management system and
 directly uses distro-provided package management tools for component
 selection. The steps that follow also highlight specific changes to system
@@ -75,7 +75,7 @@ highlight this process.
 % begin_fsp_run
 % fsp_validation_comment Enable FSP Repo
 \begin{lstlisting}[language=bash]
-[master]$ zypper ar http://10.23.186.191:82/fsp/SLE_11_SP3_Intel/fsp.repo 
+[master]$ zypper ar http://fsp-obs.pdx.intel.com:82/fsp/SLE_11_SP3_Intel/fsp.repo
 \end{lstlisting}
 
 % end_fsp_run
@@ -125,13 +125,13 @@ The following command can be used to add this user to the {\em
 \end{lstlisting}
 % end_fsp_run
 
-%%% To facilitate running test jobs later on under the resource manager, we also
-%%% add a "test" user as follows:
-%%% 
-%%% % fsp_validation_comment Add test user
-%%% \begin{lstlisting}[language=bash,keywords={}]
-%%% [master]$ useradd test                                  # add "slurm" user
-%%% \end{lstlisting}
+To facilitate running test jobs later on under the auspices of a resource
+manager, we also add a dedicated ``test'' user as follows:
+
+% fsp_validation_comment Add test user
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ useradd -m test                                # add "test" user
+\end{lstlisting}
 
 \subsection{Complete basic Warewulf setup for {\em master} node}
 
@@ -243,13 +243,12 @@ Prior to assembling the image, it is advantageous to perform any additional
 customizations within the chroot environment created for the desired {\em
   compute} instance. The following steps document the process to add a local
 {\em ssh} key created by Warewulf to support remote access, identify the
-resource manager server, and enable NFS mounting of the public FSP
-install path (\texttt{/opt/fsp/pub}) that will be hosted by the {\em master}
-host in this example configuration. Note that the example shown here
-specifically exports the \texttt{/opt/fsp/pub} path to each compute node
+resource manager server, and enable NFS mounting of a \$HOME file system and the
+public FSP install path (\texttt{/opt/fsp/pub}) that will be hosted by the {\em master} host in this example configuration. Note that the example shown here
+specifically exports the desired NFS paths to each compute node
 individually. In practice, however, a single entry would likely be used to
 export the mount point to a private subnet suitably sized to comprise all
-desired endpoints. 
+desired endpoints.
 
 % begin_fsp_run
 % fsp_validation_comment Add ssh key and enable NFS mount of /opt/fsp/pub
@@ -257,9 +256,6 @@ desired endpoints.
 # add new cluster key to base image
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
-# add mount of $HOME and /opt/fsp/pub to base image
-[master]$ echo "<nfs_ip>:/home /home nfs nfsvers=3 0 0" >> \
-     $CHROOT/etc/fstab
 [master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
      $CHROOT/etc/fstab
 
@@ -269,11 +265,9 @@ desired endpoints.
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
     /etc/slurm/slurm.conf
 
-# Export /opt/fsp/pub to cluster compute nodes
-[master]$ echo "/opt/fsp/pub <c1_ip>(ro)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub <c2_ip>(ro)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub <c3_ip>(ro)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub <c4_ip>(ro)" >> /etc/exports
+# Export /home and FSP public packages  to cluster compute nodes
+[master]$ echo "/home <internal_netmask>(ro,no_subtree_check,fsid=0)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=0)" >> /etc/exports
 [master]$ exportfs -a
 \end{lstlisting}
 % end_fsp_run
@@ -454,7 +448,7 @@ For internal testing convenience, an RPM containing valid licenses for Intel
 compilers and MPI is available. To install, issue:
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ zypper -n install FSP-licenses
+[master]$ zypper -n install intel-licenses
 \end{lstlisting}
 
 \subsection{3rd Party Libraries}
