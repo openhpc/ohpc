@@ -128,10 +128,12 @@ The following command can be used to add this user to the {\em
 To facilitate running test jobs later on under the auspices of a resource
 manager, we also add a dedicated ``test'' user as follows:
 
+% begin_fsp_run
 % fsp_validation_comment Add test user
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ useradd -m test                                # add "test" user
 \end{lstlisting}
+% end_fsp_run
 
 \subsection{Complete basic Warewulf setup for {\em master} node}
 
@@ -165,6 +167,20 @@ follows:
 [master]$ service xinetd restart                         # tftp services
 [master]$ service mysql restart                          # mysql database
 [master]$ service apache2 restart                        # web server
+\end{lstlisting}
+% end_fsp_run
+
+The steps above included starting the {\em eth1} interface on the {\em master}
+host in order to provide provisioning services locally for the cluster. In this
+install recipe, the {\em master} host will also provide resource manager
+services and requires a hostname to be associated with the {\em eth1} interface
+locally. Portions of the \texttt{/etc/hosts} file on the {\em master} host will
+be automatically propagated to the provisioned hosts and a hostname entry that
+maps to this {\em eth1} interface can be added as follows:
+
+% begin_fsp_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[master]$ echo "<master_ip> <master_hostname>-eth1" >> /etc/hosts
 \end{lstlisting}
 % end_fsp_run
 
@@ -562,14 +578,16 @@ eligble to schedule user jobs, issue the following:
 \section{Run a Test Job}
 
 With the resource manager enabled for production usage, users should now be
-able to run jobs. The Zeus system includes a "test" user account housed on the
-NFS file system that was propagated to the {\em compute} nodes in this recipe
-via the import of user credentials in \S\ref{sec:file_import}. 
-%Recall that we added a "test" user on the {\em master} host
-%in \S\ref{sec:add_rm} 
-This account is pre-populated with a simple "hello-world" MPI application and the source code
-for this example is highlighted below. To use this account to compile the application and
-execute it interactively through the resource manager, execute the following.
+able to run jobs. 
+%The Zeus system includes a ``test'' user account housed on the
+%NFS file system that was propagated to the {\em compute} nodes in this recipe
+%via the import of user credentials in \S\ref{sec:file_import}. 
+Recall that we added a ``test'' user on the {\em master} host in
+\S\ref{sec:add_rm} that can now be used to run an example test job.  The source
+code for a simple ``hello-world'' MPI application for this example is
+highlighted below. To use this account to compile the application and execute
+it interactively through the resource manager under the default FSP
+environment, execute the following.
 
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ su - test
