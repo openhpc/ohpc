@@ -598,61 +598,30 @@ able to run jobs.
 %NFS file system that was propagated to the {\em compute} nodes in this recipe
 %via the import of user credentials in \S\ref{sec:file_import}. 
 Recall that we added a ``test'' user on the {\em master} host in
-\S\ref{sec:add_rm} that can now be used to run an example test job.  The source
-code for a simple ``hello-world'' MPI application for this example is
-highlighted below. To use this account to compile the application and execute
-it interactively through the resource manager under the default FSP
-environment, execute the following.
+\S\ref{sec:add_rm} that can now be used to run an example test job.  FSP
+includes a simple ``hello-world'' MPI application in the
+\texttt{/opt/fsp/pub/examples} directory that can be used for this quick
+compilation and execution.  To use the test account to compile and execute the 
+application interactively through the resource manager, execute the following.
 
 \begin{lstlisting}[language=bash,keywords={}]
+# switch to "test" user
 [master]$ su - test
 
-# show "hello-world" source
-[test@master ~]$ cat hello.c
-#include ``mpi.h''
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-int main(int argc, char *argv[])
-{
-  int num_procs, num_local;
-  char mach_name[MPI_MAX_PROCESSOR_NAME];
-  int mach_len;
-
-  MPI_Init (&argc,&argv);
-  MPI_Comm_size (MPI_COMM_WORLD, &num_procs);
-  MPI_Comm_rank (MPI_COMM_WORLD, &num_local);
-  MPI_Get_processor_name(mach_name,&mach_len);
-
-  MPI_Barrier(MPI_COMM_WORLD);
-
-  if(num_local == 0)
-      printf(``\n Hello, world (%i procs total)\n'',num_procs);
-
-  MPI_Barrier(MPI_COMM_WORLD);
-
-  printf(``    --> Process # %3i of %3i is alive. ->%s\n'',
-   num_local,num_procs,mach_name);
-
-  MPI_Finalize();
-  return 0;
-}
-
 # Compile and execute with resource manager
-[test@master ~]$ mpicc -o hello -O3 hello.c
+[test@master ~]$ mpicc -o hello -O3 /opt/fsp/pub/examples/mpi/hello.c
 
 [test@master ~]$ srun -n 8 -N 2 ./hello
 
 Hello, world (8 procs total)
-   --> Process #   0 of   8 is alive. ->c1
-   --> Process #   1 of   8 is alive. ->c1
-   --> Process #   2 of   8 is alive. ->c1
-   --> Process #   3 of   8 is alive. ->c1
-   --> Process #   4 of   8 is alive. ->c2
-   --> Process #   5 of   8 is alive. ->c2
-   --> Process #   6 of   8 is alive. ->c2
-   --> Process #   7 of   8 is alive. ->c2
+    --> Process #   4 of   8 is alive. -> c2
+    --> Process #   0 of   8 is alive. -> c1
+    --> Process #   5 of   8 is alive. -> c2
+    --> Process #   1 of   8 is alive. -> c1
+    --> Process #   6 of   8 is alive. -> c2
+    --> Process #   2 of   8 is alive. -> c1
+    --> Process #   7 of   8 is alive. -> c2
+    --> Process #   3 of   8 is alive. -> c1
 \end{lstlisting}
 
 
