@@ -266,12 +266,15 @@ customizations within the chroot environment created for the desired {\em
 {\em ssh} key created by Warewulf to support remote access, identify the
 resource manager server, and enable NFS mounting of a \$HOME file system and
 the public FSP install path (\texttt{/opt/fsp/pub}) that will be hosted by the
-{\em master} host in this example configuration. Note that the example shown
-here leverages the {\em eth1} hostname identified for the {\em master} host and
-specifically exports the desired NFS paths to each compute node
-individually. In practice, however, a single entry would likely be used to
-export the mount point to a private subnet suitably sized to comprise all
-desired endpoints.
+{\em master} host in this example configuration.  The NFS exporting options use
+an address/netmask to limit export to the defined compute nodes.
+
+%%Note that the example shown
+%%here leverages the {\em eth1} hostname identified for the {\em master} host and
+%%specifically exports the desired NFS paths to each compute node
+%%individually. In practice, however, a single entry would likely be used to
+%%export the mount point to a private subnet suitably sized to comprise all
+%%desired endpoints.
 
 % begin_fsp_run
 % fsp_validation_comment Add ssh key and enable NFS mount of /opt/fsp/pub
@@ -285,15 +288,18 @@ desired endpoints.
 [master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
      $CHROOT/etc/fstab
 
-# Identify resource manager server in SLURM config files
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>-eth1/" \
+# Identify resource manager server IP in SLURM config file on computes
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
     $CHROOT/etc/slurm/slurm.conf
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>-eth1/" \
+
+# Identify resource manager hostname on master host
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>/" \
     /etc/slurm/slurm.conf
 
 # Export /home and FSP public packages from master server to cluster compute nodes
 [master]$ echo "/home <internal_netmask>(ro,no_subtree_check,fsid=10)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" \
+     >> /etc/exports
 [master]$ exportfs -a
 [master]$ service nfsserver restart
 \end{lstlisting}
