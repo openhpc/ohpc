@@ -170,24 +170,24 @@ follows:
 \end{lstlisting}
 % end_fsp_run
 
-The steps above included starting the {\em eth1} interface on the {\em master}
-host in order to provide provisioning services locally for the cluster. In this
-install recipe, the {\em master} host will also provide resource manager
-services and requires a hostname to be associated with the {\em eth1} interface
-so that the compute hosts can reference it by name. Portions of the
-\texttt{/etc/hosts} file on the {\em master} host will be automatically
-propagated to the provisioned hosts and a hostname entry that maps to this {\em
-  eth1} interface can be added as follows:
-
-% begin_fsp_run
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# add local hostname entry for eth1 
-[master]$ echo "<master_ip> <master_hostname>-eth1" >> /etc/hosts   
-
-# import (sync) the updated hosts file with Warewulf
-[master]$ wwsh file sync dynamic_hosts
-\end{lstlisting}
-% end_fsp_run
+%%% The steps above included starting the {\em eth1} interface on the {\em master}
+%%% host in order to provide provisioning services locally for the cluster. In this
+%%% install recipe, the {\em master} host will also provide resource manager
+%%% services and requires a hostname to be associated with the {\em eth1} interface
+%%% so that the compute hosts can reference it by name. Portions of the
+%%% \texttt{/etc/hosts} file on the {\em master} host will be automatically
+%%% propagated to the provisioned hosts and a hostname entry that maps to this {\em
+%%%   eth1} interface can be added as follows:
+%%% 
+%%% % abegin_fsp_run
+%%% \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+%%% # add local hostname entry for eth1 
+%%% [master]$ echo "<master_ip> <master_hostname>-eth1" >> /etc/hosts   
+%%% 
+%%% # import (sync) the updated hosts file with Warewulf
+%%% [master]$ wwsh file sync dynamic_hosts
+%%% \end{lstlisting}
+%%% % aend_fsp_run
 
 \subsection{Define {\em compute} image for provisioning}
 
