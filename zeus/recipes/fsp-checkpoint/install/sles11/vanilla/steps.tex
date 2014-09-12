@@ -174,13 +174,18 @@ The steps above included starting the {\em eth1} interface on the {\em master}
 host in order to provide provisioning services locally for the cluster. In this
 install recipe, the {\em master} host will also provide resource manager
 services and requires a hostname to be associated with the {\em eth1} interface
-locally. Portions of the \texttt{/etc/hosts} file on the {\em master} host will
-be automatically propagated to the provisioned hosts and a hostname entry that
-maps to this {\em eth1} interface can be added as follows:
+so that the compute hosts can reference it by name. Portions of the
+\texttt{/etc/hosts} file on the {\em master} host will be automatically
+propagated to the provisioned hosts and a hostname entry that maps to this {\em
+  eth1} interface can be added as follows:
 
 % begin_fsp_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ echo "<master_ip> <master_hostname>-eth1" >> /etc/hosts
+# add local hostname entry for eth1 
+[master]$ echo "<master_ip> <master_hostname>-eth1" >> /etc/hosts   
+
+# import (sync) the updated hosts file with Warewulf
+[master]$ wwsh file sync dynamic_hosts
 \end{lstlisting}
 % end_fsp_run
 
@@ -281,7 +286,7 @@ desired endpoints.
      $CHROOT/etc/fstab
 
 # Identify resource manager server in SLURM config files
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>-eth1>/" \
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>-eth1/" \
     $CHROOT/etc/slurm/slurm.conf
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>-eth1/" \
     /etc/slurm/slurm.conf
@@ -290,7 +295,7 @@ desired endpoints.
 [master]$ echo "/home <internal_netmask>(ro,no_subtree_check,fsid=10)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
-[master]$ service nfsserver reload
+[master]$ service nfsserver restart
 \end{lstlisting}
 % end_fsp_run
 
