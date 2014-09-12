@@ -3,7 +3,11 @@
 
 nfs_ip=192.168.0.1
 
+
+
 master1_ip=172.16.0.1
+master1_netmask=172.16.0.10/30
+
 master2_ip=172.16.0.1
 master3_ip=192.168.0.10
 master4_ip=192.168.0.15
