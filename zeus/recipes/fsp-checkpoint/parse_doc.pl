@@ -124,7 +124,9 @@ while(my $line=<IN>) {
 	$line =~ s/<nfs_ip>/$nfs_ip/g;
 	$line =~ s/<master_ip>/$master_ip/g;
 	$line =~ s/<internal_netmask>/$netmask/g;
-	$line =~ s/<master_host>/$master_host/g;
+#	$line =~ s/<master_hostname>/$master_host/g;
+	$line =~ s/<master_hostname>/$ENV{'NODE_NAME'}/g;
+#
 
 	for (my $i=1;$i<=$num_computes; $i++) {
 	    $line =~ s/<c$i\_ip>/$compute_ips[$i-1]/g;
