@@ -135,6 +135,22 @@ manager, we also add a dedicated ``test'' user as follows:
 \end{lstlisting}
 % end_fsp_run
 
+\subsection{Add Intel Cluster Checker ({\em optional})} \label{sec:add_clck}
+
+The Intel Cluster Checker provides a suite of diagnostics that can be used to
+aid in isolating hardware and software problems on an installed
+cluster. Although not required, this package can be optionally added using the
+command below. Note that a valid license will also need to be installed
+separately in order to use this software.
+
+% begin_fsp_run
+% fsp_validation_comment Add CLCK
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ zypper -n install FSP-intel-clck
+\end{lstlisting}
+% end_fsp_run
+
+
 \subsection{Complete basic Warewulf setup for {\em master} node}
 
 At this point, all of the packages necessary to use Warewulf on the {\em
