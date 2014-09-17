@@ -43,19 +43,13 @@
 \section{Introduction} \label{sec:introduction}
 \input{../../common/intro} \\
 
-\noindent {\bf Base Linux Edition}: this edition of the guide highlights
-installation without the use of a companion configuration management system and
-directly uses distro-provided package management tools for component
-selection. The steps that follow also highlight specific changes to system
-configuration files that are required as part of the cluster install
-process. Other editions of this guide provide similar install steps when using
-specific configuration management systems that can simplify the installation
-and configuration process. \\
+\input{../../common/base_edition/edition} \\
 
-\input{../../common/requirements}
+\input{../../common/requirements} \\
+
 \input{../../common/inputs}
 
-% ------------------------------------------------------------------
+% Base Operating System --------------------------------------------
 
 \section{Install Base Operating System(BOS)}
 \input{../../common/bos}
@@ -63,11 +57,7 @@ and configuration process. \\
 % ------------------------------------------------------------------
 
 \section{Install FSP Components} \label{sec:basic_install}
-
-With the BOS installed and booted, the next step is to add desired FSP packages
-onto the {\em master} server in order to provide provisioning and resource
-management services for the rest of the cluster. The following subsections
-highlight this process.
+\input{../../common/install_fsp_component_intro.tex}
 
 \subsection{Enable FSP repository for local use}
 \input{../../common/enable_fsp_repo}
@@ -81,12 +71,7 @@ highlight this process.
 % end_fsp_run
 
 \subsection{Add provisioning services on {\em master} node}
-
-With the FSP repo enabled, we can now begin adding desired components onto the
-{\em master} server. The FSP repo provides a number of aliases that group
-logical components togetther in order to help aid in this process. To add
-support for provisioning services, the following commands illustrate addition
-of a common base package followed by the Warewulf provisioning system. 
+\input{../../common/install_provisioning_intro}
 
 % begin_fsp_run
 % fsp_validation_comment Add baseline FSP and warewulf on master node
