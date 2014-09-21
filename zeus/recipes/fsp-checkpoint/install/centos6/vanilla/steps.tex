@@ -177,7 +177,7 @@ execution host in order to access default repositories that provide BOS
 packages. If your provisioning server does not have external network access,
 you can mirror the repositories within your datacenter and update the
 \texttt{YUM\_MIRROR} variable in the
-\texttt{/usr/libexec/warewulf/wwmkchroot/centos-6} file accordingly.
+\texttt{/usr/libexec/warewulf/wwmkchroot/centos-6} file accordingly.  
 
 % begin_fsp_run
 % fsp_validation_comment Use internal Centos mirror (CI only)
@@ -193,9 +193,26 @@ you can mirror the repositories within your datacenter and update the
 # Build bootstrap kernel and initial base image
 [master]$ wwbootstrap `uname -r`              # create warewulf bootstrap image
 [master]$ wwmkchroot centos-6 $CHROOT         # create base image
-
 \end{lstlisting}
 % end_fsp_run
+
+Note that the \texttt{mkchroot} process above will install a default CentOS
+file defining BOS package repositories in the chroot environment. If your
+provisioning server has access external network access, this default configuration
+should be adequate. However, if your provisioning server does not have external
+access and you are using locally mirrored BOS repositories, then the associated
+\texttt{yum} configuration file should be updated. Assuming that a valid
+configuration that identifies the local mirrors is in place on the provisioning
+server, it can be used to update the {\em compute} image as follows:
+
+% begin_fsp_run
+% fsp_validation_comment Update  BOS yum repo for compute image
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[master]$ cp -p /etc/yum.repos.d/CentOS-Base.repo $CHROOT/etc/yum.repos.d/
+\end{lstlisting}
+% end_fsp_run
+
+
 
 \subsubsection{Add FSP components}
 
