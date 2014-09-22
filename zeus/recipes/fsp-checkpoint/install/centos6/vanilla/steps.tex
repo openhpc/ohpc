@@ -392,12 +392,12 @@ order to work interactively.
 
 Once kicked off, the boot process should take less than 2 minutes and you can
 verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
-hosts. For example, to wait 100 seconds, and run a command on the newly imaged
+hosts. For example, to wait 120 seconds, and run a command on the newly imaged
 compute hosts using \texttt{pdsh}, execute the following:
 
 % begin_fsp_run
 \begin{lstlisting}[language=bash]
-[master]$ sleep 100
+[master]$ sleep 120
 [master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
 c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
