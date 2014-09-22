@@ -1,4 +1,4 @@
-export NODE_NAME=master4-centos6
+export NODE_NAME=master4-centos65
 export COMPUTE_HOSTS="node5, node6, node7, node8"
 
 unset ENV

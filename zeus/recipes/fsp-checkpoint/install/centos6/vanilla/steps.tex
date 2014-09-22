@@ -575,6 +575,11 @@ In the default configuration, the {\em compute} hosts will be initialized in an
 eligble to schedule user jobs, issue the following:
 
 % begin_fsp_run
+% fsp_validation_comment - Sleep for 5 seconds (CI only command)
+% [master]$ sleep 5
+% end_fsp_run
+
+% begin_fsp_run
 \begin{lstlisting}[language=bash]
 [master]$ scontrol update nodename=c[1-4] state=idle
 \end{lstlisting}
