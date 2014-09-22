@@ -6,7 +6,7 @@ nfs_ip=192.168.0.1
 master1_ip=172.16.0.1
 master1_netmask=172.16.0.10/24
 
-master2_ip=172.16.0.50
+master2_ip=172.16.50.1
 master2_netmask=172.16.50.10/24
 
 master3_ip=192.168.0.10
