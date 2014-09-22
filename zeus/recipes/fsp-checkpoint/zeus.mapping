@@ -3,12 +3,12 @@
 
 nfs_ip=192.168.0.1
 
-
-
 master1_ip=172.16.0.1
 master1_netmask=172.16.0.10/24
 
-master2_ip=172.16.0.1
+master2_ip=172.16.0.50
+master2_netmask=172.16.50.10/24
+
 master3_ip=192.168.0.10
 master4_ip=192.168.0.15
 
@@ -32,10 +32,10 @@ node6_mac=78:45:C4:F8:32:9F
 node7_mac=78:45:C4:F8:42:BA
 node8_mac=78:45:C4:F8:35:CF
 
-node9_ip=172.16.0.10
-node10_ip=172.16.0.11
-node11_ip=172.16.0.12
-node12_ip=172.16.0.13
+node9_ip=172.16.50.10
+node10_ip=172.16.50.11
+node11_ip=172.16.50.12
+node12_ip=172.16.50.13
 
 node9_bmc=10.23.183.106
 node10_bmc=10.23.183.105
