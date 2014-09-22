@@ -1,6 +1,13 @@
 \documentclass[letterpaper]{article}
 \usepackage{../../common/fspdoc}
 
+% Recipe commands to run initially only in CI
+
+% begin_fsp_run 
+% fsp_validation_comment - Remove WW file update crontab entry (CI only command)
+% [master]$ rm -f /etc/cron.d/wwupdatefiles
+% end_fsp_run
+
 % Include git variables
 \input{vc.tex}
 
