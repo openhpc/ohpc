@@ -308,7 +308,28 @@ an address/netmask to limit export to the defined compute nodes.
 % end_fsp_run
 
 \input{../../common/memlimits} 
+
+% begin_fsp_run
+% fsp_validation_comment Update memlock on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Update memlock settings on master
+[master]$ echo "* soft memlock unlimited" >> /etc/security/limits.conf
+[master]$ echo "* hard memlock unlimited" >> /etc/security/limits.conf
+
+# Update memlock settings within compute image
+[master]$ echo "* soft memlock unlimited" >> $CHROOT/etc/security/limits.conf
+[master]$ echo "* hard memlock unlimited" >> $CHROOT/etc/security/limits.conf
+\end{lstlisting}
+% end_fsp_run
+
 \input{../../common/slurm_pam}
+
+% begin_fsp_run
+% fsp_validation_comment Enbale slurm pam module
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
+\end{lstlisting}
+% end_fsp_run
 
 \subsubsection{Import files} \label{sec:file_import}
 
