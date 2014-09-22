@@ -1,0 +1,20 @@
+In addition to the above customizations, when using InfiniBand as the
+underlying high speed interconnect, it is generally necessary to increase the
+locked memory settings for system users. This can be accomplished by updating
+the \texttt{/etc/security/limits.conf} file and this should be performed within
+the {{\em compute} image and on all job submission hosts. In this recipe, jobs
+  are submitted from the {\em master} host, and the following commands can be
+  used to update the maximum locked memory settings:
+
+% begin_fsp_run
+% fsp_validation_comment Update memlock on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Update memlock settings on master
+[master]$ echo "* soft memlock unlimited" >> /etc/security/limits.conf
+[master]$ echo "* hard memlock unlimited" >> /etc/security/limits.conf
+
+# Update memlock settings within compute image
+[master]$ echo "* soft memlock unlimited" >> $CHROOT/etc/security/limits.conf
+[master]$ echo "* hard memlock unlimited" >> $CHROOT/etc/security/limits.conf
+\end{lstlisting}
+% end_fsp_run

@@ -1,0 +1,12 @@
+One additional customization that is recommended is to restrict \texttt{ssh} access to
+compute nodes to only allow access by users who have an
+active job associated with the node. This can be enabled via the use of a
+pluggable authentication module (PAM) provided as part of the SLURM package
+installs. To enable with the {\em compute} image, issue the following:
+
+% begin_fsp_run
+% fsp_validation_comment Enbale slurm pam module
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
+\end{lstlisting}
+% end_fsp_run
