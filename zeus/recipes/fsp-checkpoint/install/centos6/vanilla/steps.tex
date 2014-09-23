@@ -598,8 +598,8 @@ resource management under SLURM.
 [master]$ service slurm restart
 
 #  start munge and slurm clients on compute hosts
-[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service munge start
-[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service slurm start
+[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service munge restart
+[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service slurm restart
 \end{lstlisting}
 % end_fsp_run
 
