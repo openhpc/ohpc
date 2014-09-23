@@ -594,8 +594,8 @@ resource management under SLURM.
 % fsp_validation_comment Startup RM
 \begin{lstlisting}[language=bash]
 # start munge and slurm controller on master host
-[master]$ service munge start
-[master]$ service slurm start
+[master]$ service munge restart
+[master]$ service slurm restart
 
 #  start munge and slurm clients on compute hosts
 [master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service munge start
