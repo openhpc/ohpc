@@ -147,9 +147,8 @@ separately in order to use this software.
 
 At this point, all of the packages necessary to use Warewulf on the {\em
   master} host should be installed.  Next, we need to update several
-configuration files in order to allow Warewulf to work with SLES and to support
-local provisioning using the {\em eth1} interface.  Specific steps are as
-follows:
+configuration files in order to support local provisioning using the {\em eth1}
+interface.  Specific steps are as follows:
 
 % begin_fsp_run
 % fsp_validation_comment Complete basic Warewulf setup for master node
@@ -225,7 +224,7 @@ server, it can be used to update the {\em compute} image as follows:
 \subsubsection{Add FSP components}
 
 The \texttt{wwmkchroot} process used in the previous step is designed to
-provide a minimal SLES configuration. Next, we add additional components to
+provide a minimal CentOS configuration. Next, we add additional components to
 include resource management client services, InfiniBand drivers, and other
 additional packages to support the default FSP environment.  This process uses
 the \texttt{chroot} command to augment the base provisioning image and will
