@@ -1,5 +1,7 @@
 \documentclass[letterpaper]{article}
 \usepackage{../../common/fspdoc}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
 
 % Recipe commands to run initially only in CI
 
@@ -312,13 +314,32 @@ an address/netmask combination to limit the export scope to the defined compute 
     /etc/slurm/slurm.conf
 
 # Export /home and FSP public packages from master server to cluster compute nodes
-[master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10)" >> /etc/exports
+[master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10,no_root_squash)" \
+     >> /etc/exports
 [master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" \
      >> /etc/exports
 [master]$ exportfs -a
 [master]$ service nfsserver restart
 \end{lstlisting}
 % end_fsp_run
+
+
+\subsubsection{Additional Customizations ({\em optional})}
+
+This section highlights common additional customizations that
+can {\em optionally} be applied to the
+local cluster environment. These customizations include:
+
+\begin{itemize*}
+\item Increase memlimts to support InfiniBand
+\item Restrict ssh access to compute resources
+\item Add Lustre client
+\end{itemize*}
+
+\noindent Details on the steps required for each of these customizations is
+discussed further in the following sections.
+
+\paragraph{Increase locked memory limits}
 
 \input{../../common/memlimits} 
 
@@ -335,12 +356,57 @@ an address/netmask combination to limit the export scope to the defined compute 
 \end{lstlisting}
 % end_fsp_run
 
+\paragraph{Enable ssh control via resource manager} 
+
 \input{../../common/slurm_pam}
 
 % begin_fsp_run
 % fsp_validation_comment Enbale slurm pam module
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
+\end{lstlisting}
+% end_fsp_run
+
+\paragraph{Add Lustre client} 
+
+To add Lustre client support on the cluster, it necessary to install the client
+and associated modules on each host needing to access a Lustre file system.  In
+this recipe, it is assumed that the Lustre file system is hosted by servers
+that are pre-existing and are not part of the install process. Outlining the
+variety of Lustre client mounting options is beyond the scope of this document,
+%(please consult Lustre documentation for more details on failover configuration
+%support and networking options), 
+but the general requirement is to add a mount entry for
+the desired file system that defines the management server (MGS) and underlying network
+transport protocol.  To add client mounts on both the {\em master} server and
+{\em compute} image, the following commands can be used. Note that the MGS node is
+identified by the \texttt{<mgs\_node>} variable and this example mounts a filesystem
+named {\texttt{lustrewt} locally as \texttt{/mnt/lustre}. Additionally, note
+  that your default SLES environment may not allow loading of the necessary
+  Lustre kernel modules. Consequently, the example below includes steps which update the {\texttt
+    /etc/modprobe.d/unsupported-modules} file to allow loading of the
+  necessary modules.
+
+% begin_fsp_run
+% fsp_validation_comment Enbale slurm pam module
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Add Lustre client software to master host
+[master]$ zypper -n install lustre-client lustre-modules
+# Update config to allow Lustre modules to be loaded on master host
+[master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
+     /etc/modprobe.d/unsupported-modules
+# Mount the Lustre file system on master host
+[master]$ mkdir /mnt/lustre
+[master]$ mount -t lustre <mgs_node>:/lustrewt /mnt/lustre
+
+# Include Lustre client software in compute image
+[master]$ chroot $CHROOT zypper -n install lustre-client lustre-modules
+# Update config to allow Lustre modules to be loaded on compute hosts
+[master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
+     $CHROOT/etc/modprobe.d/unsupported-modules
+# Include mount point and file system mount in compute image
+[master]$ mkdir $CHROOT/mnt/lustre
+[master]$ echo "mount -t lustre <mgs_node>:/lustrewt /mnt/lustre" >> $CHROOT/etc/fstab
 \end{lstlisting}
 % end_fsp_run
 

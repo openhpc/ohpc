@@ -298,7 +298,8 @@ an address/netmask to limit export to the defined compute nodes.
     /etc/slurm/slurm.conf
 
 # Export /home and FSP public packages from master server to cluster compute nodes
-[master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10)" >> /etc/exports
+[master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10,no_root_squash)" \
+     >> /etc/exports
 [master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" \
      >> /etc/exports
 [master]$ exportfs -a
