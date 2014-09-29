@@ -398,7 +398,10 @@ named {\texttt{lustrewt} locally as \texttt{/mnt/lustre}. Additionally, note
 # Mount the Lustre file system on master host
 [master]$ mkdir /mnt/lustre
 [master]$ mount -t lustre <mgs_node>:/lustrewt /mnt/lustre
+\end{lstlisting}
+% end_fsp_run
 
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
 [master]$ chroot $CHROOT zypper -n install lustre-client lustre-modules
 # Update config to allow Lustre modules to be loaded on compute hosts
@@ -408,7 +411,6 @@ named {\texttt{lustrewt} locally as \texttt{/mnt/lustre}. Additionally, note
 [master]$ mkdir $CHROOT/mnt/lustre
 [master]$ echo "mount -t lustre <mgs_node>:/lustrewt /mnt/lustre" >> $CHROOT/etc/fstab
 \end{lstlisting}
-% end_fsp_run
 
 \subsubsection{Import files} \label{sec:file_import}
 
