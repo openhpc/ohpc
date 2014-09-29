@@ -37,6 +37,7 @@ if ( defined $ENV{'NODE_NAME'} && defined $ENV{'COMPUTE_HOSTS'} ) {
 my $nfs_ip       = "";
 my $master_ip    = "";
 my $netmask      = "";
+my $mgs_node     = "";
 my @compute_ips  = ();
 my @compute_macs = ();
 my @compute_bmcs = ();
@@ -50,6 +51,8 @@ if($ci_run == 1) {
 	    $master_ip = $1;
 	} elsif ($line =~ /^nfs_ip=(\S+)$/) {
 	    $nfs_ip = $1;
+	} elsif ($line =~ /^mgs_node=(\S+)$/) {
+	    $mgs_node = $1;
 	} elsif ($line =~ /^$master_host\_netmask=(\S+)$/) {
 	    $netmask = $1;
 	} else {
@@ -124,6 +127,7 @@ while(my $line=<IN>) {
 	$line =~ s/<nfs_ip>/$nfs_ip/g;
 	$line =~ s/<master_ip>/$master_ip/g;
 	$line =~ s/<internal_netmask>/$netmask/g;
+	$line =~ s/<mgs_node>/$mgs_node/g;
 #	$line =~ s/<master_hostname>/$master_host/g;
 	$line =~ s/<master_hostname>/$ENV{'NODE_NAME'}/g;
 #
