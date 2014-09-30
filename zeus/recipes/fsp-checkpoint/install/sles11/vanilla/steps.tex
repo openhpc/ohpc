@@ -300,7 +300,7 @@ an address/netmask combination to limit the export scope to the defined compute 
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # add NFS client mounts of /home and /opt/fsp/pub to base image
-[master]$ echo "<master_ip>:/home /home nfs nfsvers=3 0 0" >> \
+[master]$ echo "<master_ip>:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> \
      $CHROOT/etc/fstab
 [master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
      $CHROOT/etc/fstab
