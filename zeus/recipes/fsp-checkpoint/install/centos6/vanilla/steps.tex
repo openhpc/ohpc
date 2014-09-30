@@ -1,5 +1,7 @@
 \documentclass[letterpaper]{article}
 \usepackage{../../common/fspdoc}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
 
 % Recipe commands to run initially only in CI
 
@@ -307,6 +309,23 @@ an address/netmask to limit export to the defined compute nodes.
 \end{lstlisting}
 % end_fsp_run
 
+\subsubsection{Additional Customizations ({\em optional})}
+
+This section highlights common additional customizations that
+can {\em optionally} be applied to the
+local cluster environment. These customizations include:
+
+\begin{itemize*}
+\item Increase memlimts to support InfiniBand
+\item Restrict ssh access to compute resources
+\item Add Lustre client
+\end{itemize*}
+
+\noindent Details on the steps required for each of these customizations is
+discussed further in the following sections.
+
+\paragraph{Increase locked memory limits}
+
 \input{../../common/memlimits} 
 
 % begin_fsp_run
@@ -322,6 +341,7 @@ an address/netmask to limit export to the defined compute nodes.
 \end{lstlisting}
 % end_fsp_run
 
+\paragraph{Enable ssh control via resource manager} 
 \input{../../common/slurm_pam}
 
 % begin_fsp_run
@@ -330,6 +350,31 @@ an address/netmask to limit export to the defined compute nodes.
 [master]$ echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
 \end{lstlisting}
 % end_fsp_run
+
+\paragraph{Add Lustre client} 
+
+\input{../../common/lustre-client}
+
+% begin_fsp_run
+% fsp_validation_comment Enbale slurm pam module
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Add Lustre client software to master host
+[master]$ yum -y install lustre-client lustre-modules
+
+# Mount the Lustre file system on master host
+[master]$ mkdir /mnt/lustre
+[master]$ mount -t lustre <mgs_node>:/lustrewt /mnt/lustre
+\end{lstlisting}
+% end_fsp_run
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Include Lustre client software in compute image
+[master]$ chroot $CHROOT yum -y install lustre-client lustre-modules
+
+# Include mount point and file system mount in compute image
+[master]$ mkdir $CHROOT/mnt/lustre
+[master]$ echo "mount -t lustre <mgs_node>:/lustrewt /mnt/lustre" >> $CHROOT/etc/fstab
+\end{lstlisting}
 
 \subsubsection{Import files} \label{sec:file_import}
 
