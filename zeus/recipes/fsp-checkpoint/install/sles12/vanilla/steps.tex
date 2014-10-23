@@ -1,0 +1,734 @@
+\documentclass[letterpaper]{article}
+\usepackage{../../common/fspdoc}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+% Recipe commands to run initially only in CI
+
+% begin_fsp_run 
+% fsp_validation_comment - Remove WW file update crontab entry (CI only command)
+% [master]$ rm -f /etc/cron.d/wwupdatefiles
+% end_fsp_run
+
+% Include git variables
+\input{vc.tex}
+
+% Define Base OS
+\newcommand{\baseOS}{SLES12}
+\newcommand{\LosF}{\emph{LosF}}
+
+\begin{document}
+\graphicspath{{../../common/figures/}}
+\thispagestyle{empty}
+
+%%%{\hfill\includegraphics[scale=0.14]{../figures/tron-approved}}
+
+% Title Page
+
+{\hspace*{4in} \includegraphics[width=1.8in]{intel_1spot_100.pdf}}
+
+\vspace*{2cm}
+\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont 2014 Forest Peak Checkpoint} \vspace*{0.1cm} \\
+\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
+\noindent\rule{6in}{0.4pt} \\
+
+\noindent {\Large \baseOS{} Base OS} \\ \vspace{0.2cm}
+
+\noindent {\large {\em Base Linux Edition }}
+
+\vspace*{3in}
+
+\noindent{\normalsize Intel Cluster Maker Team} \vspace*{0.1cm} \\
+{\normalsize Copyright~{\small\copyright}~2014 Intel Corporation} \vspace*{0.1cm} \\ 
+{\normalsize Document Last Update: \VCDateISO} \vspace*{0.1cm} \\ 
+{\normalsize Document Revision: \VCRevision} \\ \vspace*{0.1cm}
+
+\newpage
+\tableofcontents
+\newpage
+
+% Introduction  --------------------------------------------------
+
+\section{Introduction} \label{sec:introduction}
+\input{../../common/intro} \\
+
+\input{../../common/base_edition/edition} \\
+
+\input{../../common/requirements} \\
+
+\input{../../common/inputs}
+
+% Base Operating System --------------------------------------------
+
+\section{Install Base Operating System(BOS)}
+\input{../../common/bos}
+
+% ------------------------------------------------------------------
+
+\section{Install FSP Components} \label{sec:basic_install}
+\input{../../common/install_fsp_component_intro.tex}
+
+\subsection{Enable FSP repository for local use}
+\input{../../common/enable_fsp_repo}
+
+% begin_fsp_run
+% fsp_validation_comment Enable FSP Repo
+\begin{lstlisting}[language=bash]
+[master]$ zypper ar http://fsp-obs.pdx.intel.com:82/fsp/SLE_12_GMC_Intel//fsp.repo
+\end{lstlisting}
+
+% end_fsp_run
+
+\subsection{Add provisioning services on {\em master} node}
+\input{../../common/install_provisioning_intro}
+
+% begin_fsp_run
+% fsp_validation_comment Add baseline FSP and warewulf on master node
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ zypper -n install -t pattern FSP-base          # adding base FSP packages
+[master]$ zypper -n install -t pattern FSP-warewulf      # adding Warewulf support
+\end{lstlisting}
+% end_fsp_run
+
+\subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
+
+The following command adds the SLURM workload manager server components to the
+chosen {\em master} host. Note that client-side components will be added to
+the corresponding compute image in a subsequent step.
+
+% begin_fsp_run
+% fsp_validation_comment Add resource manager
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ zypper -n install -t pattern FSP-slurm-server  # adding SLURM server support
+\end{lstlisting}
+% end_fsp_run
+
+SLURM requires the delineation of the system user that runs the underlying
+resource management daemons. The default configuration file that is supplied
+with the FSP build of SLURM identifies this \texttt{SlurmUser} to be a
+dedicated user named \texttt{slurm} and this user must exist. 
+%The default location identified to save state information is
+%\texttt{/var/slurm} and this directory
+The following command can be used to add this user to the {\em
+  master} server:
+
+% begin_fsp_run
+% fsp_validation_comment Add slurm user
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ useradd slurm                                  # add "slurm" user
+\end{lstlisting}
+% end_fsp_run
+
+To facilitate running test jobs later on under the auspices of a resource
+manager, we also add a dedicated ``test'' user as follows:
+
+% begin_fsp_run
+% fsp_validation_comment Add test user
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ useradd -m test                                # add "test" user
+\end{lstlisting}
+% end_fsp_run
+
+\subsection{Add Intel Cluster Checker ({\em optional})} \label{sec:add_clck}
+
+The Intel Cluster Checker provides a suite of diagnostics that can be used to
+aid in isolating hardware and software problems on an installed
+cluster. Although not required, this package can be optionally added using the
+command below. Note that a valid license will also need to be installed
+separately in order to use this software.
+
+% begin_fsp_run
+% fsp_validation_comment Add CLCK
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ zypper -n install FSP-intel-clck
+\end{lstlisting}
+% end_fsp_run
+
+
+\subsection{Complete basic Warewulf setup for {\em master} node}
+
+At this point, all of the packages necessary to use Warewulf on the {\em
+  master} host should be installed.  Next, we need to update several
+configuration files in order to allow Warewulf to work with SLES and to support
+local provisioning using the {\em eth1} interface.  Specific steps are as
+follows:
+
+% begin_fsp_run
+% fsp_validation_comment Complete basic Warewulf setup for master node
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Configure DHCP server to use eth1
+[master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
+
+# Configure Warewulf to use the default SLES tftp location
+[master]$ perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /#" /etc/warewulf/provision.conf
+
+# Update Warewulf http config to use the SLES version of mod_perl
+[master]$ export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
+[master]$ perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
+
+# Enable http access for Warewulf cgi-bin directory (add "Allow from all")
+[master]$ perl -pi -e "s/cgi-bin>\$/cgi-bin>\n    Allow from all/" $MODFILE
+
+# Define eth1 interface for provisioning
+[master]$ ifconfig eth1 <master_ip> netmask 255.255.255.0 up
+
+# Restart relevant services to support provisioning
+[master]$ service xinetd restart                         # tftp services
+[master]$ service mysql restart                          # mysql database
+[master]$ service apache2 restart                        # web server
+\end{lstlisting}
+% end_fsp_run
+
+%%% The steps above included starting the {\em eth1} interface on the {\em master}
+%%% host in order to provide provisioning services locally for the cluster. In this
+%%% install recipe, the {\em master} host will also provide resource manager
+%%% services and requires a hostname to be associated with the {\em eth1} interface
+%%% so that the compute hosts can reference it by name. Portions of the
+%%% \texttt{/etc/hosts} file on the {\em master} host will be automatically
+%%% propagated to the provisioned hosts and a hostname entry that maps to this {\em
+%%%   eth1} interface can be added as follows:
+%%% 
+%%% % abegin_fsp_run
+%%% \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+%%% # add local hostname entry for eth1 
+%%% [master]$ echo "<master_ip> <master_hostname>-eth1" >> /etc/hosts   
+%%% 
+%%% # import (sync) the updated hosts file with Warewulf
+%%% [master]$ wwsh file sync dynamic_hosts
+%%% \end{lstlisting}
+%%% % aend_fsp_run
+
+\subsection{Define {\em compute} image for provisioning}
+
+With the provisioning services enabled, the next step is to define and
+customize a system image that can subsequently be used to provision one or more
+{\em compute} nodes. The following subsections highlight this process.
+
+\subsubsection{Build initial BOS image}
+
+The FSP build of Warewulf includes specific enhancements enabling support for
+SLES~12. The following steps illustrate the process to build a minimal, default
+image for use with Warewulf. In this example, the resulting image will be
+stored locally on the {\em master} host in the
+\texttt{/opt/fsp/admin/images/sles12} directory.
+
+% begin_fsp_run
+% fsp_validation_comment Create compute image for Warewulf
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Define chroot location for SLES 
+[master]$ export CHROOT=/opt/fsp/admin/images/sles12
+
+# Build bootstrap kernel and initial base image
+[master]$ wwbootstrap `uname -r`              # create warewulf bootstrap image
+[master]$ mkdir -p --mode=700 $CHROOT         # create chroot housing dir
+[master]$ mkdir -m 755 $CHROOT/dev            # create chroot /dev dir
+[master]$ mknod -m 666 $CHROOT/dev/zero c 1 5 # create /dev/zero device
+[master]$ wwmkchroot sles-11 $CHROOT          # create base image
+
+\end{lstlisting}
+% end_fsp_run
+
+\subsubsection{Add FSP components}
+
+The \texttt{wwmkchroot} process used in the previous step is designed to
+provide a minimal SLES configuration. Next, we add additional components to
+include resource management client services, InfiniBand drivers, and other
+additional packages to support the default FSP environment.  This process uses
+the \texttt{chroot} command to augment the base provisioning image and will
+access the BOS and FSP repositories to resolve package install requests. To
+access the remote repositories by hostname (and not IP addresses), the chroot
+environment needs to be updated to enable DNS resolution. Assuming that
+the {\em master} host has a working DNS configuration in place, the chroot environment can
+be updated with a copy of the configuration as follows:
+
+% begin_fsp_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[master]$ cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
+\end{lstlisting}
+% end_fsp_run
+
+
+% begin_fsp_run
+% fsp_validation_comment Add FSP components to compute instance
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add SLURM client support
+[master]$ chroot $CHROOT zypper -n install -t pattern FSP-slurm-client
+
+# Add IB support
+[master]$ chroot $CHROOT zypper -n install ofed
+[master]$ chroot $CHROOT zypper -n install libmlx4-rdmav2
+[master]$ chroot $CHROOT zypper -n install libibmad5
+[master]$ chroot $CHROOT zypper -n install opensm
+
+# Add Network Time Protocol (NTP) support
+[master]$ chroot $CHROOT zypper -n install ntp
+
+# Include FSP default modules user environment
+[master]$ chroot $CHROOT zypper -n install lmod 
+[master]$ chroot $CHROOT zypper -n install FSP-lmod-defaults-intel
+\end{lstlisting}
+% end_fsp_run
+
+% begin_fsp_run 
+% fsp_validation_comment - Restart openibd (CI only command)
+% [master]$ service openibd restart
+% end_fsp_run
+
+\subsubsection{Customize system configuration} \label{sec:master_customization}
+
+Prior to assembling the image, it is advantageous to perform any additional
+customizations within the chroot environment created for the desired {\em
+  compute} instance. The following steps document the process to add a local
+{\em ssh} key created by Warewulf to support remote access, identify the
+resource manager server, and enable NFS mounting of a \$HOME file system and
+the public FSP install path (\texttt{/opt/fsp/pub}) that will be hosted by the
+{\em master} host in this example configuration.  The NFS exporting options use
+an address/netmask combination to limit the export scope to the defined compute nodes.
+
+%%Note that the example shown
+%%here leverages the {\em eth1} hostname identified for the {\em master} host and
+%%specifically exports the desired NFS paths to each compute node
+%%individually. In practice, however, a single entry would likely be used to
+%%export the mount point to a private subnet suitably sized to comprise all
+%%desired endpoints.
+
+% begin_fsp_run
+% fsp_validation_comment Add ssh key and enable NFS mount of /opt/fsp/pub
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# add new cluster key to base image
+[master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
+
+# add NFS client mounts of /home and /opt/fsp/pub to base image
+[master]$ echo "<master_ip>:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> \
+     $CHROOT/etc/fstab
+[master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
+     $CHROOT/etc/fstab
+
+# Identify resource manager server IP in SLURM config file on computes
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
+    $CHROOT/etc/slurm/slurm.conf
+
+# Identify resource manager hostname on master host
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>/" \
+    /etc/slurm/slurm.conf
+
+# Export /home and FSP public packages from master server to cluster compute nodes
+[master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10,no_root_squash)" \
+     >> /etc/exports
+[master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" \
+     >> /etc/exports
+[master]$ exportfs -a
+[master]$ service nfsserver restart
+\end{lstlisting}
+% end_fsp_run
+
+
+\subsubsection{Additional Customizations ({\em optional})}
+
+This section highlights common additional customizations that
+can {\em optionally} be applied to the
+local cluster environment. These customizations include:
+
+\begin{itemize*}
+\item Increase memlimts to support InfiniBand
+\item Restrict ssh access to compute resources
+\item Add Lustre client
+\end{itemize*}
+
+\noindent Details on the steps required for each of these customizations is
+discussed further in the following sections.
+
+\paragraph{Increase locked memory limits}
+
+\input{../../common/memlimits} 
+
+% begin_fsp_run
+% fsp_validation_comment Update memlock on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Update memlock settings on master
+[master]$ echo "* soft memlock unlimited" >> /etc/security/limits.conf
+[master]$ echo "* hard memlock unlimited" >> /etc/security/limits.conf
+
+# Update memlock settings within compute image
+[master]$ echo "* soft memlock unlimited" >> $CHROOT/etc/security/limits.conf
+[master]$ echo "* hard memlock unlimited" >> $CHROOT/etc/security/limits.conf
+\end{lstlisting}
+% end_fsp_run
+
+\paragraph{Enable ssh control via resource manager} 
+
+\input{../../common/slurm_pam}
+
+% begin_fsp_run
+% fsp_validation_comment Enbale slurm pam module
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
+\end{lstlisting}
+% end_fsp_run
+
+\paragraph{Add Lustre client} 
+
+\input{../../common/lustre-client}
+% SLES-specific addition
+ Additionally, note that your default SLES environment
+  may not allow loading of the necessary Lustre kernel modules. Consequently,
+  the example below includes steps which update the {\texttt
+    /etc/modprobe.d/unsupported-modules} file to allow loading of the necessary
+  modules.
+
+% begin_fsp_run
+% fsp_validation_comment Enbale slurm pam module
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Add Lustre client software to master host
+[master]$ zypper -n install lustre-client lustre-modules
+# Update config to allow Lustre modules to be loaded on master host
+[master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
+     /etc/modprobe.d/unsupported-modules
+# Mount the Lustre file system on master host
+[master]$ mkdir /mnt/lustre
+[master]$ mount -t lustre <mgs_node>:/lustrewt /mnt/lustre
+\end{lstlisting}
+% end_fsp_run
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Include Lustre client software in compute image
+[master]$ chroot $CHROOT zypper -n install lustre-client lustre-modules
+# Update config to allow Lustre modules to be loaded on compute hosts
+[master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
+     $CHROOT/etc/modprobe.d/unsupported-modules
+# Include mount point and file system mount in compute image
+[master]$ mkdir $CHROOT/mnt/lustre
+[master]$ echo "mount -t lustre <mgs_node>:/lustrewt /mnt/lustre" >> $CHROOT/etc/fstab
+\end{lstlisting}
+
+\subsubsection{Import files} \label{sec:file_import}
+
+The Warewulf system includes functionality to import arbitrary files from the
+provisioning server for distribution to managed hosts. This is one way
+to distribute user credentials across to {\em compute} hosts. To
+import local file-based credentials, issue the following:
+
+% begin_fsp_run
+% fsp_validation_comment Import credentials
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[master]$ wwsh file import /etc/passwd                                                                                                       
+[master]$ wwsh file import /etc/group
+[master]$ wwsh file import /etc/shadow 
+\end{lstlisting}
+% \end_fsp_run
+
+Similarly, to import the cryptographic key that is required by the {\em munge}
+authentication library to be available on every host in the resource management
+pool, issue the following:
+
+% begin_fsp_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[master]$ wwsh file import /etc/munge/munge.key
+\end{lstlisting}
+% \end_fsp_run
+
+
+\subsubsection{Assemble vNFS image}
+
+With the local site customizations in place, the following step uses the
+\texttt{wwvnfs} command to assemble a vNFS image from the chroot environment
+defined for the {\em compute} instance. 
+
+% begin_fsp_run
+% fsp_validation_comment Assemble vNFS
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[master]$ wwvnfs -y --chroot $CHROOT
+\end{lstlisting}
+% end_fsp_run
+
+\subsubsection{Register nodes for provisioning}
+
+In preparation for provisioning, we can now define the desired network settings
+for four example compute nodes with the underlying provisioning system and
+restart the \texttt{dhcp} service. Note the use of variable names for the
+desired compute node IP and MAC addresses which should be modified to
+accommodate local settings and hardware. The final step in this process
+associates the vNFS image assembled in previous steps with the newly defined
+compute nodes, utilizing the user credential files and munge key that were
+imported in \S\ref{sec:file_import}.
+
+% begin_fsp_run
+% fsp_validation_comment Add hosts to cluster
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Define four compute nodes and network settings 
+[master]$ wwsh -y node new c1 --ipaddr=<c1_ip> --hwaddr=<c1_mac> 
+[master]$ wwsh -y node new c2 --ipaddr=<c2_ip> --hwaddr=<c2_mac> 
+[master]$ wwsh -y node new c3 --ipaddr=<c3_ip> --hwaddr=<c3_mac> 
+[master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> 
+
+# Restart dhcp 
+[master]$ service dhcpd restart
+
+# Define provisioning image for hosts
+[master]$ wwsh -y provision set c[1-4] --vnfs=sles12 --bootstrap=`uname -r` \
+     --files=dynamic_hosts,passwd,group,shadow,munge.key 
+\end{lstlisting}
+% end_fsp_run
+
+%--bootstrap=`uname -r`
+
+
+
+
+\subsection{Boot compute nodes}
+
+\input{../../common/reset_computes} 
+The following commands use the \texttt{ipmitool} utility to initiate power
+resets on each of the four compute hosts. Note that the utility requires that
+the \texttt{IPMI\_PASSWORD} environment variable be set with the local BMC password in
+order to work interactively.
+
+% begin_fsp_run
+% fsp_validation_comment Boot compute nodes
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ ipmitool -E -I lanplus -H <c1_bmc> -U root chassis power reset   # power cycle c1
+[master]$ ipmitool -E -I lanplus -H <c2_bmc> -U root chassis power reset   # power cycle c2
+[master]$ ipmitool -E -I lanplus -H <c3_bmc> -U root chassis power reset   # power cycle c3
+[master]$ ipmitool -E -I lanplus -H <c4_bmc> -U root chassis power reset   # power cycle c4
+\end{lstlisting} 
+
+% end_fsp_run
+
+Once kicked off, the boot process should take less than 2 minutes and you can
+verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
+hosts. For example, to wait 120 seconds, and run a command on the newly imaged
+compute hosts using \texttt{pdsh}, execute the following:
+
+% begin_fsp_run
+\begin{lstlisting}[language=bash]
+[master]$ sleep 120
+[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] uptime
+c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
+c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
+c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
+c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
+\end{lstlisting}
+% end_fsp_run
+
+
+
+\section{Install FSP Development Components}
+
+The install procedure outlined in \S\ref{sec:basic_install}
+highlighted the steps necessary to install a {\em master} host,
+assemble and customize a {\em compute} image, and provision several
+compute hosts from bare-metal.  With these steps completed, 
+%a {\em compute} Once the completion of the
+%basic install procedure outlined in Section~\ref{sec:basic_install} is
+%complete, 
+additional FSP-provided packages can now be added to support a flexible HPC
+development environment including C/C++/Fortran compilers, MPI stacks, and a
+variety of 3rd party libraries. The following subsections highlight the
+additional software installation procedures, including the addition of Intel
+licensed software (e.g. Composer compiler suite, Intel MPI). It is assumed that
+the end-site administrator will procure and install the necessary licenses in
+order to use the Intel proprietary software.
+
+\subsection{Compilers}
+
+FSP presently provides two compiler families ({GNU} and {Intel}) that are
+integrated within the underlying modules-environment system in a hierarchical
+fashion. End users of a FSP system can choose to access one compiler at a time
+and will be presented with additional compiler-dependent software as a function
+of which compiler toolchain is currently loaded. Each compiler toolchain can be
+installed separately and the following commands illustrate the installation of
+both along with any necessary dependencies:
+
+% begin_fsp_run
+% fsp_validation_comment Install compilers
+\begin{lstlisting}[language=bash]
+[master]$ zypper -n install FSP-gnu-compilers FSP-intel-compilers
+\end{lstlisting}
+% end_fsp_run
+
+\subsection{MPI Stacks} \label{sec:mpi}
+
+For MPI development support, FSP presently provides pre-packaged builds for
+three MPI families: 
+
+\begin{itemize*}
+\item Intel~MPI
+\item OpenMPI
+\item MVAPICH2
+\end{itemize*}
+ For ABI consistency, each of the open-source MPI families (OpenMPI and
+ MVAPICH2) is built against each of the two supported compiler families
+ resulting in total of four build combinations.  The Intel MPI stack is also
+ configured to support both the GNU and Intel compiler toolchain directly, but
+ is packaged as a single RPM. Installation of all of the MPI family instances,
+ can be accomplished via the following command. Note the use of wildcards
+ (\texttt{*}) in this example in order to install both GNU and Intel builds for
+ OpenMPI and MVAPICH2.
+
+% begin_fsp_run
+% fsp_validation_comment Install MPI
+\begin{lstlisting}[language=bash]
+[master]$ zypper -n install FSP-openmpi-* FSP-mvapich2-* FSP-intel-mpi
+\end{lstlisting}
+% end_fsp_run
+
+\subsection{Install Licenses for Intel Software}
+
+For internal testing convenience, an RPM containing valid licenses for Intel
+compilers and MPI is available. To install, issue:
+
+% begin_fsp_run
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ zypper -n install intel_licenses
+\end{lstlisting}
+% end_fsp_run
+
+\subsection{3rd Party Libraries}
+
+FSP provides pre-packaged builds for a number of popular open-source libraries
+used by HPC applications and developers. For example, FSP provides builds for
+FFTW and HDF5 (including serial and parallel I/O support). Again, multiple
+builds of each package are available in the FSP repository to support multiple
+compiler and MPI family combinations. The general naming convention for builds
+provided by FSP is to append the compiler and MPI family name that the library
+was built against directly into the package name. For example, libraries that
+do not require MPI as part of the build process adopt the following RPM
+name: \\
+
+\noindent
+\texttt{package-<compiler\_family>-<package\_version>-<release>.rpm} \\
+
+\noindent Packages that require MPI as part of the build expand upon this convention to
+additionally include the MPI family name as follows: \\
+
+\noindent
+\texttt{package-<compiler\_family>-<mpi\_family>-<package\_version>-<release>.rpm} \\
+
+To illustrate this further, the command below queries the locally configured
+repositories to identify all of the available FFTW packages that were built
+with the GNU toolchain. The resulting output that is included shows that
+pre-built versions are available for each of the supported MPI families
+presented in \S\ref{sec:mpi}.
+
+\begin{lstlisting}[language=bash]
+[master]$ zypper search -t package fftw-gnu
+Loading repository data...
+Reading installed packages...
+
+S | Name              | Summary                          | Type      
+--+-------------------+----------------------------------+-----------
+  | fftw-gnu-impi     | A Fast Fourier Transform library | package   
+  | fftw-gnu-mvapich2 | A Fast Fourier Transform library | package   
+  | fftw-gnu-openmpi  | A Fast Fourier Transform library | package   
+\end{lstlisting}
+
+Note that FSP provided 3rd party library builds are configured to be installed
+into a common top-level repository so that they can be easily exported to
+desired hosts within the cluster. This common top-level path (\texttt{/opt/fsp/pub})
+was previously configured to be mounted on {\em compute} nodes in
+\S\ref{sec:master_customization}, so the packages will be immediately available
+for use on the cluster after installation on the {\em master} host.  For
+convenience, FSP provides package aliases for the FFTW and HDF5 libraries that
+can be used to install of the available compiler/MPI family permutations. To
+install all of the available package builds for these two libraries, issue the
+following:
+
+% begin_fsp_run
+% fsp_validation_comment Install 3rd party libraries
+\begin{lstlisting}[language=bash]
+[master]$ zypper -n install -t pattern FSP-fftw      # installs 6 fftw packages
+[master]$ zypper -n install -t pattern FSP-hdf5      # installs 2 (serial) hdf5 packages
+[master]$ zypper -n install -t pattern FSP-phdf5     # installs 6 p(arallel) hdf5 packages
+\end{lstlisting}
+% end_fsp_run
+
+\section{Resource Manager Startup}
+
+In section \S\ref{sec:basic_install}, the SLURM resource manager was installed
+and configured for use on both the {\em master} host and {\em compute} node
+instances. With the cluster nodes up and functional, we can now startup the
+resource manager services in preparation for running user jobs. Generally, this
+is a two-step process that requires starting up the controller daemons on the {\em
+  master} host and the client daemons on each of the {\em compute} hosts.  
+%Since the {\em compute} hosts were booted into an image that included the SLURM client
+%components, the daemons should already be running on the {\em compute}
+%hosts. 
+Note that SLURM leverages the use of the {\em munge} library to provide
+authentication services and this daemon also needs to be running on all hosts
+requiring within the resource management pool. 
+%The munge daemons should already
+%be running on the {\em compute} subsystem at this point, 
+The following commands can be used to startup the necessary services to support
+resource management under SLURM.
+%,  onso the steps required
+%to startup the required services on the {\em master} host are as follows: 
+
+% begin_fsp_run
+% fsp_validation_comment Startup RM
+\begin{lstlisting}[language=bash]
+# start munge and slurm controller on master host
+[master]$ service munge start
+[master]$ service slurm start
+
+#  start munge and slurm clients on compute hosts
+[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service munge start
+[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service slurm start
+\end{lstlisting}
+% end_fsp_run
+
+In the default configuration, the {\em compute} hosts will be initialized in an
+{\em unkown} state. To place the hosts into production such that they are
+eligble to schedule user jobs, issue the following:
+
+% begin_fsp_run
+% fsp_validation_comment - Sleep for 5 seconds (CI only command)
+% [master]$ sleep 5
+% end_fsp_run
+
+% begin_fsp_run
+\begin{lstlisting}[language=bash]
+[master]$ scontrol update nodename=c[1-4] state=idle
+\end{lstlisting}
+% end_fsp_run
+
+
+\section{Run a Test Job}
+
+With the resource manager enabled for production usage, users should now be
+able to run jobs. 
+%The Zeus system includes a ``test'' user account housed on the
+%NFS file system that was propagated to the {\em compute} nodes in this recipe
+%via the import of user credentials in \S\ref{sec:file_import}. 
+Recall that we added a ``test'' user on the {\em master} host in
+\S\ref{sec:add_rm} that can now be used to run an example test job.  FSP
+includes a simple ``hello-world'' MPI application in the
+\texttt{/opt/fsp/pub/examples} directory that can be used for this quick
+compilation and execution.  To use the test account to compile and execute the 
+application interactively through the resource manager, execute the following.
+
+\begin{lstlisting}[language=bash,keywords={}]
+# switch to "test" user
+[master]$ su - test
+
+# Compile and execute with resource manager
+[test@master ~]$ mpicc -o hello -O3 /opt/fsp/pub/examples/mpi/hello.c
+
+[test@master ~]$ srun -n 8 -N 2 ./hello
+
+Hello, world (8 procs total)
+    --> Process #   4 of   8 is alive. -> c2
+    --> Process #   0 of   8 is alive. -> c1
+    --> Process #   5 of   8 is alive. -> c2
+    --> Process #   1 of   8 is alive. -> c1
+    --> Process #   6 of   8 is alive. -> c2
+    --> Process #   2 of   8 is alive. -> c1
+    --> Process #   7 of   8 is alive. -> c2
+    --> Process #   3 of   8 is alive. -> c1
+\end{lstlisting}
+
+
+\end{document}
+
