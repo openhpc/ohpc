@@ -167,8 +167,9 @@ follows:
 [master]$ export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
 [master]$ perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
 
-# Enable http access for Warewulf cgi-bin directory (add "Allow from all")
-[master]$ perl -pi -e "s/cgi-bin>\$/cgi-bin>\n    Allow from all/" $MODFILE
+# Enable http access for Warewulf cgi-bin directory to support newer apache syntax
+[master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
+[master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Define eth1 interface for provisioning
 [master]$ ifconfig eth1 <master_ip> netmask 255.255.255.0 up
