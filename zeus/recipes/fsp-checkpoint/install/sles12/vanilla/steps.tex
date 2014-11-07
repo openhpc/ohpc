@@ -161,7 +161,10 @@ follows:
 [master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
 
 # Configure Warewulf to use the default SLES tftp location
-[master]$ perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /#" /etc/warewulf/provision.conf
+[master]$ perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv#" /etc/warewulf/provision.conf
+
+# Enable tftp service
+[master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
 
 # Update Warewulf http config to use the SLES version of mod_perl
 [master]$ export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
