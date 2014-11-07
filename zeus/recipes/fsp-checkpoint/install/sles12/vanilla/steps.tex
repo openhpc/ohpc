@@ -274,7 +274,7 @@ be updated with a copy of the configuration as follows:
 [master]$ chroot $CHROOT zypper -n install FSP-lmod-defaults-intel
 
 # Enable ssh access 
-[master]$ chroot $CHROOT systemctl status sshd.service
+[master]$ chroot $CHROOT systemctl enable sshd.service
 \end{lstlisting}
 % end_fsp_run
 
