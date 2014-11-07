@@ -171,6 +171,7 @@ follows:
 [master]$ perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
 
 # Enable http access for Warewulf cgi-bin directory to support newer apache syntax
+[master]$ perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
 [master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
 [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
