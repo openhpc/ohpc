@@ -275,6 +275,9 @@ be updated with a copy of the configuration as follows:
 
 # Enable ssh access 
 [master]$ chroot $CHROOT systemctl enable sshd.service
+
+# Remove default hostname to allow WW to provision network names
+[master]$ mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
 \end{lstlisting}
 % end_fsp_run
 
