@@ -72,9 +72,11 @@
 \input{../../common/enable_fsp_repo}
 
 % begin_fsp_run
-% fsp_validation_comment Enable FSP Repo
+% fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash]
-[master]$ zypper ar http://fsp-obs.pdx.intel.com:82/fsp/SLE_12_GMC_Intel//fsp.repo
+[master]$ zypper ar http://fsp-obs.pdx.intel.com:82/fsp/SLE_12_GMC_Intel/fsp.repo
+[master]$ zypper ar http://fsp-obs.pdx.intel.com:82/fsp/SLE_12_GMC_Intel/ForestPeak:Factory.repo
+[master]$ echo "priority=95" > /etc/zypp/repos.d/ForestPeak_Factory.repo
 \end{lstlisting}
 
 % end_fsp_run
