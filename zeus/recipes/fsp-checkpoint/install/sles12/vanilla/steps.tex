@@ -140,6 +140,7 @@ chosen {\em master} host.
 % fsp_validation_comment Add ofed
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ zypper -n install -t pattern ofed              # add ofed support
+[master]$ modprobe ib_uverbs ib_umad ib_ucm              # load IB 
 \end{lstlisting}
 % end_fsp_run
 
