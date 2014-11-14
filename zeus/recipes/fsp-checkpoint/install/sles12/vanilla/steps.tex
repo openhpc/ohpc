@@ -709,11 +709,13 @@ resource management under SLURM.
 \begin{lstlisting}[language=bash]
 # start munge and slurm controller on master host
 [master]$ service munge start
-[master]$ service slurm start
+[master]$ service slurmctld start
+[master]$ service slurmd start
+
 
 #  start munge and slurm clients on compute hosts
 [master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service munge start
-[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service slurm start
+[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service slurmd start
 \end{lstlisting}
 % end_fsp_run
 
