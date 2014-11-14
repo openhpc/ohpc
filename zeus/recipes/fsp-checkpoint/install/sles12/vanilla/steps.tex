@@ -412,7 +412,7 @@ discussed further in the following sections.
  Additionally, note that your default SLES environment
   may not allow loading of the necessary Lustre kernel modules. Consequently,
   the example below includes steps which update the {\texttt
-    /etc/modprobe.d/unsupported-modules} file to allow loading of the necessary
+    /etc/modprobe.d/10-unsupported-modules.conf} file to allow loading of the necessary
   modules.
 
 % begin_fsp_run
@@ -422,7 +422,7 @@ discussed further in the following sections.
 [master]$ zypper -n install lustre-client lustre-modules
 # Update config to allow Lustre modules to be loaded on master host
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
-     /etc/modprobe.d/unsupported-modules
+     /etc/modprobe.d/10-unsupported-modules.conf
 # Mount the Lustre file system on master host
 [master]$ mkdir /mnt/lustre
 [master]$ mount -t lustre <mgs_node>:/lustrewt /mnt/lustre
@@ -434,7 +434,7 @@ discussed further in the following sections.
 [master]$ chroot $CHROOT zypper -n install lustre-client lustre-modules
 # Update config to allow Lustre modules to be loaded on compute hosts
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
-     $CHROOT/etc/modprobe.d/unsupported-modules
+     $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
 # Include mount point and file system mount in compute image
 [master]$ mkdir $CHROOT/mnt/lustre
 [master]$ echo "mount -t lustre <mgs_node>:/lustrewt /mnt/lustre" >> $CHROOT/etc/fstab
