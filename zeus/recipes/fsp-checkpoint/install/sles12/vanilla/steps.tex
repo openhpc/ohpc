@@ -78,8 +78,14 @@
     http://fsp-obs.pdx.intel.com:82/ForestPeak:/Factory/SLE_12_Intel/ForestPeak:Factory.repo
 [master]$ zypper -n --gpg-auto-import-keys refresh
 \end{lstlisting}
-
 % end_fsp_run
+
+% begin_fsp_run
+% % fsp_validation_comment - format space for /opt/fsp (CI only command)
+% [master]$ mkfs -F -t ext4 /dev/sda8
+% [master]$ mkdir -p /opt/fsp
+% [master]$ mount /dev/sda8 /opt/fsp
+% end_fsp_run  
 
 \subsection{Add provisioning services on {\em master} node}
 \input{../../common/install_provisioning_intro}
