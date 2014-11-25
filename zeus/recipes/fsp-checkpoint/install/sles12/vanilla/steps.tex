@@ -184,9 +184,6 @@ follows:
 # Configure Warewulf to use the default SLES tftp location
 [master]$ perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv/#" /etc/warewulf/provision.conf
 
-# Configure Warewulf to use MariaDB as the datastore
-[master]$ perl -pi -e "s/driver\s+= mysql/driver     = mariadb/" /etc/warewulf/database.conf
-
 # Enable tftp service
 [master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
 
