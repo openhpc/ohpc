@@ -42,6 +42,8 @@ for this package are HPC system administrators and system architects who desire
 flexible command-line utilities for synchronizing various host types across a
 cluster.
 
+A NOOP change testing OBS.
+
 %prep
 %setup -q 
 
