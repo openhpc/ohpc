@@ -145,8 +145,11 @@ chosen {\em master} host.
 % begin_fsp_run
 % fsp_validation_comment Add ofed
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ zypper -n install -t pattern ofed              # add ofed support
-[master]$ modprobe ib_uverbs ib_umad ib_ucm              # load IB 
+[master]$ zypper -n install libibverbs-runtime libmlx4-rdmav2
+[master]$ zypper -n install libibmad5 librdmacm1 rdma
+
+# Load IB drivers
+[master]$ service rdma start
 \end{lstlisting}
 % end_fsp_run
 
@@ -291,8 +294,8 @@ be updated with a copy of the configuration as follows:
 [master]$ chroot $CHROOT zypper -n install -t pattern FSP-slurm-client
 
 # Add IB support
-[master]$ chroot $CHROOT zypper -n install -t pattern ofed
-[master]$ chroot $CHROOT zypper -n install libibmad5
+[master]$ chroot $CHROOT zypper -n install libibverbs-runtime libmlx4-rdmav2
+[master]$ chroot $CHROOT zypper -n install libibmad5 librdmacm1 rdma
 
 # Add Network Time Protocol (NTP) support
 [master]$ chroot $CHROOT zypper -n install ntp
