@@ -16,7 +16,6 @@ License: MIT
 Group: System Environment/Base
 Url: https://github.com/TACC/Lmod
 Source0: Lmod-%{version}.tar.bz2
-Source1: fsp-paths.inc
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
