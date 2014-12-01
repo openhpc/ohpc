@@ -58,7 +58,7 @@ Supports a Software Hierarchy
 unset MODULEPATH
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
-./configure --prefix=%{FSP_ADM_PATH} --libdir=%{lualibdir} --datadir=%{luapkgdir} --with-redirect=yes --with-autoSwap=no
+./configure --prefix=%{FSP_ADMIN} --libdir=%{lualibdir} --datadir=%{luapkgdir} --with-redirect=yes --with-autoSwap=no
 
 %install
 export LUA_CPATH="%{LUA_CPATH}"
