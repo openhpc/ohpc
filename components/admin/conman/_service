@@ -5,7 +5,7 @@
         <!--    Update following two lines to define the         -->
 	<!--    correct component path in git and desired branch -->
 
-        <param name="subdir">components/rms/conman</param>
+        <param name="subdir">components/admin/conman</param>
         <param name="revision">15.05</param>
 
         <!-- End INPUT ######################################    -->
