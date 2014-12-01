@@ -11,8 +11,6 @@ License: GPL
 Url: http://sourceforge.net/projects/pdsh
 Group: System Environment/Base
 Source0: pdsh-%{version}.tar.bz2
-Source1: FSP_macros
-Source2: FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 ### karl.w.schulz@intel.com (11/07/14) - temporarily disabling rcmd requirement
 ### Requires: pdsh-rcmd
@@ -128,27 +126,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %{?_with_torque:BuildRequires: torque-devel}
 
 
-#-fsp-header-comp-begin-----------------------------
-
-# Compiler dependencies
-BuildRequires: lmod
-%if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers
-%endif
-%if %{compiler_family} == intel
-BuildRequires: FSP-intel-compilers
-BuildRequires: gcc-c++ libstdc++ libstdc++-devel
-%if 0%{FSP_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
 BuildRequires: ncurses-devel
 BuildRequires: readline-devel
 BuildRequires: pam-devel
 BuildRequires: slurm-devel
 
-#-fsp-header-comp-end-------------------------------
 
 ##############################################################################
 # Pdsh description
@@ -319,10 +301,6 @@ from an allocated Torque job.
 ##############################################################################
 
 %build
-
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
 
 ./configure --prefix=%{install_path} \
     %{?_enable_debug}       \
