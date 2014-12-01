@@ -100,9 +100,9 @@ EOF
 
 %{__cat} << EOF >> %{buildroot}/%{_sysconfdir}/profile.d/lmod.sh
 
-    export BASH_ENV=%{FSP_ADM_PATH}/lmod/lmod/init/bash
+    export BASH_ENV=%{FSP_ADMIN}/lmod/lmod/init/bash
 
-    . %{FSP_ADM_PATH}/lmod/lmod/init/bash >/dev/null # Module Support
+    . %{FSP_ADMIN}/lmod/lmod/init/bash >/dev/null # Module Support
 
     # Load baseline fsp environment
 
@@ -144,9 +144,8 @@ EOF
 %endif
 
 %{__cat} << EOF >> %{buildroot}/%{_sysconfdir}/profile.d/lmod.csh
-###    setenv BASH_ENV %{FSP_ADM_PATH}/lmod/lmod/init/bash
 
-    source %{FSP_ADM_PATH}/lmod/lmod/init/csh >/dev/null # Module Support
+    source %{FSP_ADMIN}/lmod/lmod/init/csh >/dev/null # Module Support
 
     # Load baseline fsp environment
 
@@ -163,8 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_PATH}
-%dir %{FSP_ADM_PATH}
-%{FSP_ADM_PATH}/lmod
+%dir %{FSP_ADMIN}
+%{FSP_ADMIN}/lmod
 %config %{_sysconfdir}/profile.d/lmod.sh
 %config %{_sysconfdir}/profile.d/lmod.csh
