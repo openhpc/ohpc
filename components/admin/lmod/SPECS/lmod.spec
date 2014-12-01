@@ -35,10 +35,6 @@ AutoReq: 0
 Patch1: lmod.consulting.patch
 Patch2: lmod.site.patch
 
-# FSP defaults
-
-%include %{SOURCE1}
-
 # Known dependencies
 Requires: lua >= %{luaver}
 Requires: lua-filesystem
