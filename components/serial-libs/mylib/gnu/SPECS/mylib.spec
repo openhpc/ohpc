@@ -32,6 +32,7 @@ Group:     Development/Languages/C and C++
 URL:       http://random.org
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_setup_compiler
+Source2:   fsp_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define debug_package %{nil}
