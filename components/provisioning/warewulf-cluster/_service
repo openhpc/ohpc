@@ -1,0 +1,27 @@
+<services>
+    <service name="tar_scm">
+
+        <!-- Begin INPUT ######################################  -->
+        <!--    Update following two lines to define the         -->
+	<!--    correct component path in git and desired branch -->
+
+        <param name="subdir">components/provisioning/warewulf-cluster</param>
+        <param name="revision">15.05</param>
+
+        <!-- End INPUT ######################################    -->
+
+        <param name="scm">git</param>
+        <param name="git-annex">enable</param>
+        <param name="url">icss@mic-git.pdx.intel.com:forestpeak</param>
+        <param name="filename">git-infra</param>
+    </service>
+    <service name="extract_file">
+        <param name="archive">*.tar</param>
+        <param name="files">*/SPECS/*.spec */SOURCES/*</param>
+    </service>
+    <service name="recompress">
+        <param name="file">*git-infra*.tar</param>
+        <param name="compression">bz2</param>
+    </service>
+</services>
+
