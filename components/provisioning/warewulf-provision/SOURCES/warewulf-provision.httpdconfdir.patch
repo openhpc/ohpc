@@ -1,0 +1,14 @@
+--- warewulf-provision-3.5/configure	2014-02-07 15:39:40.000000000 -0800
++++ warewulf-provision-3.5.patch/configure	2014-06-26 14:41:02.000000000 -0700
+@@ -2372,7 +2372,10 @@
+ 
+ { $as_echo "$as_me:$LINENO: checking for Debian based system" >&5
+ $as_echo_n "checking for Debian based system... " >&6; }
+- if test -f /etc/debian_version; then
++if test -f /etc/debian_version; then
++  ISDEB_TRUE=
++  ISDEB_FALSE='#'
++elif test -f /etc/SuSE-release; then
+   ISDEB_TRUE=
+   ISDEB_FALSE='#'
+ else
