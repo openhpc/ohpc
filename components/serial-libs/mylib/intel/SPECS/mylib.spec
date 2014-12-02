@@ -2,7 +2,7 @@
 
 #-fsp-header-comp-begin-----------------------------
 
-%include fsp_compiler
+%include %{_sourcedir}/fsp_compiler
 
 # Compiler dependencies
 BuildRequires: lmod
