@@ -4,18 +4,22 @@
 
 %include %{_sourcedir}/fsp_compiler
 
-# Compiler dependencies
+# Compiler build requirements (all included, only 1 used per build)
 BuildRequires: lmod
-%if %{compiler_family} == gnu
 BuildRequires: FSP-gnu-compilers
-Requires:      FSP-gnu-compilers
-%endif
-%if %{compiler_family} == intel
 BuildRequires: gcc-c++ FSP-intel-compilers
-Requires:      gcc-c++ FSP-intel-compilers 
+
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
+
+# Package dependencies
+
+%if %{compiler_family} == gnu
+Requires:      FSP-gnu-compilers
+%endif
+%if %{compiler_family} == intel
+Requires:      gcc-c++ FSP-intel-compilers 
 %endif
 
 #-fsp-header-comp-end-------------------------------
