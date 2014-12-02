@@ -1,6 +1,8 @@
-%include foo
+
 
 #-fsp-header-comp-begin-----------------------------
+
+%include fsp_compiler
 
 # Compiler dependencies
 BuildRequires: lmod
