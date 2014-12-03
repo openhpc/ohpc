@@ -17,7 +17,7 @@
     </service>
     <service name="extract_file">
         <param name="archive">*.tar</param>
-        <param name="files">*/components/serial-libs/mylib/intel/SPECS/*.spec */components/serial-libs/mylib/intel/SOURCES/* */components/FSP_setup_*</param>
+        <param name="files">*/serial-libs/mylib/intel/SPECS/*.spec */serial-libs/mylib/intel/SOURCES/* */FSP_setup_*</param>
     </service>
     <service name="recompress">
         <param name="file">*git-infra*.tar</param>
