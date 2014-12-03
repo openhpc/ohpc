@@ -2,12 +2,17 @@
 
 #-fsp-header-comp-begin-----------------------------
 
-%include %{_sourcedir}/fsp_compiler
+%define compiler_family gnu
 
 # Compiler build requirements (all included, only 1 used per build)
 BuildRequires: lmod
+%if %{compiler_family} == gnu
 BuildRequires: FSP-gnu-compilers
+%endif
+
+%if %{compiler_family} == intel
 BuildRequires: gcc-c++ FSP-intel-compilers
+%endif
 
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
