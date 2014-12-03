@@ -1,34 +1,25 @@
 
 
-#-fsp-header-comp-begin-----------------------------
+#-fsp-header-comp-begin----------------------------------------------
 
-# default is assume the gnu compiler family. This can be overridden by
-# specifing the compiler_family variable via rpmbuild or other
-# mechanisms
+# FSP convention: the default is assume the gnu compiler family;
+# however, this can be overridden by specifing the compiler_family
+# variable via rpmbuild or other mechanisms
 
 %{!?compiler_family: %define compiler_family gnu}
 
-# Compiler build requirements (all included, only 1 used per build)
+# Compiler dependencies
 BuildRequires: lmod
 %if %{compiler_family} == gnu
 BuildRequires: FSP-gnu-compilers
-%endif
-
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers
-%endif
-
-%if 0%{FSP_BUILD}
-BuildRequires: intel_licenses
-%endif
-
-# Package dependencies
-
-%if %{compiler_family} == gnu
 Requires:      FSP-gnu-compilers
 %endif
 %if %{compiler_family} == intel
+BuildRequires: gcc-c++ FSP-intel-compilers
 Requires:      gcc-c++ FSP-intel-compilers 
+%endif
+%if 0%{FSP_BUILD}
+BuildRequires: intel_licenses
 %endif
 
 #-fsp-header-comp-end-------------------------------
