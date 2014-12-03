@@ -1,14 +1,14 @@
 <services>
     <service name="tar_scm">
 
-        <!-- Begin INPUT 1 ####################################  -->
+        <!-- Begin INPUT ######################################  -->
         <!--    Update following two lines to define the         -->
 	<!--    correct component path in git and desired branch -->
 
         <param name="subdir">components</param>
         <param name="revision">15.05</param>
 
-        <!-- End INPUT 1 ######################################  -->
+        <!-- End INPUT ######################################    -->
 
         <param name="scm">git</param>
         <param name="git-annex">enable</param>
@@ -16,16 +16,8 @@
         <param name="filename">git-infra</param>
     </service>
     <service name="extract_file">
-
-        <!-- Begin INPUT 2 ####################################  -->
-        <!--    Update the following line to highlight files to  -->
-        <!--    extract for package tarball   -->
-
-        <param name="files">*/serial-libs/hdf5/SPECS/*.spec */serial-libs/hdf5/SOURCES/* */FSP_setup_*</param>
-
-        <!-- End INPUT 2 ###################################### -->
-
         <param name="archive">*.tar</param>
+        <param name="files">*/serial-libs/hdf5/gnu/SPECS/*.spec */serial-libs/hdf5/gnu/SOURCES/* */FSP_setup_*</param>
     </service>
     <service name="recompress">
         <param name="file">*git-infra*.tar</param>
