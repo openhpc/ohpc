@@ -13,6 +13,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Collection of simple example programs for use wihin FSP development
 environment.
 
+
 %prep
 
 %build
