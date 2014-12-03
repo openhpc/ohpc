@@ -1,3 +1,5 @@
+<!ENTITY package_path "serial-libs/mylib">
+
 <services>
     <service name="tar_scm">
 
@@ -21,7 +23,7 @@
         <!--    Update the following line to highlight files to  -->
         <!--    extract for package tarball   -->
 
-        <param name="files">*/serial-libs/mylib/SPECS/*.spec */serial-libs/mylib/SOURCES/* */FSP_setup_*</param>
+        <param name="files">*/&package_path/SPECS/*.spec */serial-libs/mylib/SOURCES/* */FSP_setup_*</param>
 
         <!-- End INPUT 2 ###################################### -->
 
