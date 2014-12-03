@@ -1,6 +1,6 @@
 # Serial HDF5 library build that is dependent on compiler toolchain
 
-%define compiler_family gnu
+%{!?compiler_family: %define compiler_family gnu}
 %define _unpackaged_files_terminate_build 0
 
 #-fsp-header-comp-begin-----------------------------
