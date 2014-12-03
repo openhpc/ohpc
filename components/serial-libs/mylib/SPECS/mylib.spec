@@ -2,9 +2,9 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
-# FSP convention: the default is assume the gnu compiler family;
+# FSP convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms
+# variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
 
@@ -22,7 +22,7 @@ Requires:      gcc-c++ FSP-intel-compilers
 BuildRequires: intel_licenses
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-fsp-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname mylib
