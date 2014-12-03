@@ -5,7 +5,7 @@
         <!--    Update following two lines to define the         -->
 	<!--    correct component path in git and desired branch -->
 
-        <param name="subdir">components/serial-libs/mylib/gnu</param>
+        <param name="subdir">components</param>
         <param name="revision">15.05</param>
 
         <!-- End INPUT ######################################    -->
@@ -17,7 +17,7 @@
     </service>
     <service name="extract_file">
         <param name="archive">*.tar</param>
-        <param name="files">*/SPECS/*.spec */SOURCES/* foo</param>
+        <param name="files">*/serial-libs/mylib/gnu/SPECS/*.spec */serial-libs/mylib/gnu/SOURCES/* */FSP_setup_*</param>
     </service>
     <service name="recompress">
         <param name="file">*git-infra*.tar</param>
