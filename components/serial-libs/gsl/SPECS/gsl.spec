@@ -41,8 +41,6 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
-%include %{_sourcedir}/FSP_macros
-
 %define debug_package %{nil}
 
 # Default library install path
