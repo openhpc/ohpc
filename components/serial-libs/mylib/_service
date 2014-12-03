@@ -1,4 +1,5 @@
 <!ENTITY package_path "serial-libs/mylib">
+<!ENTITY git_branch   "15.05">
 
 <services>
     <service name="tar_scm">
@@ -8,7 +9,7 @@
 	<!--    correct component path in git and desired branch -->
 
         <param name="subdir">components</param>
-        <param name="revision">15.05</param>
+        <param name="revision">&git_branch</param>
 
         <!-- End INPUT 1 ######################################  -->
 
@@ -23,7 +24,7 @@
         <!--    Update the following line to highlight files to  -->
         <!--    extract for package tarball   -->
 
-        <param name="files">*/&package_path/SPECS/*.spec */serial-libs/mylib/SOURCES/* */FSP_setup_*</param>
+        <param name="files">*/&package_path/SPECS/*.spec */&package_path/SOURCES/* */FSP_setup_*</param>
 
         <!-- End INPUT 2 ###################################### -->
 
