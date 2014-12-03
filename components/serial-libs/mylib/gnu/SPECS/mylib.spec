@@ -2,7 +2,11 @@
 
 #-fsp-header-comp-begin-----------------------------
 
-%define compiler_family gnu
+# default is assume the gnu compiler family. This can be overridden by
+# specifing the compiler_family variable via rpmbuild or other
+# mechanisms
+
+%{!?compiler_family: %define compiler_family gnu}
 
 # Compiler build requirements (all included, only 1 used per build)
 BuildRequires: lmod
