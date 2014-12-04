@@ -38,6 +38,8 @@ Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
+%include %{_sourcedir}/FSP_macros
+
 %define debug_package %{nil}
 
 %if 0%{?sles_version} || 0%{?suse_version}
