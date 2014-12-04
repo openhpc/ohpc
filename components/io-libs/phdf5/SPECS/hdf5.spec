@@ -1,11 +1,15 @@
 # Parallel HDF5 library build that is dependent on compiler
 # toolchain and MPI
 
-%define compiler_family gnu
-%define mpi_family      openmpi
-%define _unpackaged_files_terminate_build 0
+#-fsp-header-comp-begin----------------------------------------------
 
-#-fsp-header-comp-begin-----------------------------
+# FSP convention: the default assumes the gnu toolchain and openmpi
+# MPI family; however, these can be overridden by specifing the
+# compiler_family and mpi_family variables via rpmbuild or other
+# mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
 
 # Compiler dependencies
 BuildRequires: lmod coreutils
@@ -35,7 +39,9 @@ BuildRequires: FSP-openmpi-%{compiler_family}
 Requires:      FSP-openmpi-%{compiler_family}
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-fsp-header-comp-end------------------------------------------------
+
+%define _unpackaged_files_terminate_build 0
 
 # Base package name
 %define pname hdf5
