@@ -34,13 +34,15 @@ License:   BSD-3-Clause
 Group:     Development/Libraries/Other
 URL:       http://www.hdfgroup.org/HDF5
 Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_setup_compiler
+Source1:   FSP_macros
+Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: zlib-devel
 Requires: zlib-devel
 
-#!BuildIgnore: post-build-checks rpmlint-Factory
+%include %{_sourcedir}/FSP_macros
 
+#!BuildIgnore: post-build-checks rpmlint-Factory
 
 %define debug_package %{nil}
 
