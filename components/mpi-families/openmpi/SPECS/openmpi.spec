@@ -1,6 +1,12 @@
-%define compiler_family gnu
+# OpenMPI stack that is dependent on compiler toolchain
 
-#-fsp-header-comp-begin-----------------------------
+#-fsp-header-comp-begin----------------------------------------------
+
+# FSP convention: the default assumes the gnu compiler family;
+# however, this can be overridden by specifing the compiler_family
+# variable via rpmbuild or other mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu}
 
 # Compiler dependencies
 BuildRequires: lmod
@@ -16,7 +22,7 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-fsp-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname openmpi
