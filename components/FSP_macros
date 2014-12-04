@@ -1,0 +1,11 @@
+%define FSP_BUILD 1
+%define FSP_HOME /opt/fsp
+%define FSP_ADMIN      %{FSP_HOME}/admin
+%define FSP_LOCAL      %{FSP_HOME}/local
+%define FSP_PUB        %{FSP_HOME}/pub
+%define FSP_COMPILERS  %{FSP_PUB}/compiler
+%define FSP_MPI_STACKS %{FSP_PUB}/mpi
+%define FSP_APPS       %{FSP_PUB}/apps
+%define FSP_LIBS       %{FSP_PUB}/libs
+%define FSP_MODULES    %{FSP_PUB}/modulefiles
+%define FSP_MODULEDEPS %{FSP_PUB}/moduledeps
