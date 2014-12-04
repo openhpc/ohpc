@@ -16,6 +16,7 @@ License: MIT
 Group: System Environment/Base
 Url: https://github.com/TACC/Lmod
 Source0: Lmod-%{version}.tar.bz2
+Source1: FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
@@ -25,6 +26,8 @@ BuildRequires: lua-bit
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
 BuildRequires: rsync
+
+%include %{_sourcedir}/FSP_macros
 
 # ks: disabling AutoReq to deal with /usr/bin/lua not being owned by an rpm in SLES11
 %if 0%{?suse_verion} <= 1220
