@@ -1,3 +1,13 @@
+%include %{_sourcedir}/FSP_macros
+
+%define pname lmod
+
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}
+%endif
+
 %if 0%{?suse_version} <= 1220
 %define luaver 5.1
 %else
@@ -9,7 +19,7 @@
 %define LUA_PATH ?.lua;?/?.lua;%{luapkgdir}/?.lua
 
 Summary:  Lua based Modules (lmod)
-Name: lmod
+Name: %{rpmname}
 Version: 5.8
 Release: 1
 License: MIT
@@ -26,8 +36,6 @@ BuildRequires: lua-bit
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
 BuildRequires: rsync
-
-%include %{_sourcedir}/FSP_macros
 
 # ks: disabling AutoReq to deal with /usr/bin/lua not being owned by an rpm in SLES11
 %if 0%{?suse_verion} <= 1220
