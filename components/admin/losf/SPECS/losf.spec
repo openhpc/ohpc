@@ -1,7 +1,7 @@
 %include %{_sourcedir}/FSP_macros
 
 %define pname losf
-%define rpmname %{rpmname}-%{PROJ_NAME}
+%define rpmname %{pname}-%{PROJ_NAME}
 
 Summary: A Linux operating system framework for managing HPC clusters
 Name: %{rpmname}
