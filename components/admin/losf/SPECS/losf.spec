@@ -1,3 +1,5 @@
+%include %{_sourcedir}/FSP_macros
+
 Summary: A Linux operating system framework for managing HPC clusters
 Name: losf
 Version: 0.50.0
@@ -7,6 +9,7 @@ Group: System Environment/Base
 BuildArch: noarch
 URL: https://github.com/hpcsi/losf 
 Source0: %{name}-%{version}.tar.gz
+Source1: FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %if 0%{?FSP_BUILD}
