@@ -1,16 +1,22 @@
 %include %{_sourcedir}/FSP_macros
 
+%define pname losf
+%define rpmname %{pname}
+%if 0%{?PROJ_NAME}
+%define rpmname %{rpmname}-%{PROJ_NAME}
+%endif
+
 Summary: A Linux operating system framework for managing HPC clusters
-Name: losf
+Name: %{rpmname}
 Version: 0.50.0
 Release: 1
 License: GPL-2
 Group: System Environment/Base
 BuildArch: noarch
 URL: https://github.com/hpcsi/losf 
-Source0: %{name}-%{version}.tar.gz
+Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %if 0%{?FSP_BUILD}
 %{!?prefix: %define prefix %{FSP_LOCAL}}
@@ -18,7 +24,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %{!?prefix: %define prefix /opt}
 %endif
 
-%define installPath %{prefix}/%{name}
+%define installPath %{prefix}/%{pname}
 
 provides: perl(LosF_node_types)
 provides: perl(LosF_rpm_topdir)
