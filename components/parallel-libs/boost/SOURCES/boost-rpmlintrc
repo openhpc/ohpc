@@ -1,0 +1,14 @@
+# This line is mandatory to access the configuration functions
+from Config import *
+
+addFilter("boost.* shlib-policy-nonversioned-dir")
+addFilter("boost.* shlib-policy-missing-suffix")
+addFilter("boost-doc.* devel-dependency")
+addFilter("boost.* rpm-buildroot-usage")
+addFilter("boost.* explicit-lib-dependency")
+addFilter("boost.* filename-too-long-for-joliet")
+addFilter("boost.* no-binary")
+addFilter("boost.* static-library-without-debuginfo")
+addFilter("boost.* obsolete-suse-version-check")
+addFilter("boost.* shlib-unversioned-lib")
+addFilter("boost.* no-dependency-on")
