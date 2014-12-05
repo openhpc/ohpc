@@ -51,7 +51,7 @@ cluster.
 A NOOP change testing OBS.
 
 %prep
-%setup -q 
+%setup -q -n %{pname}-%{version}
 
 %build
 # Binary pass-through - empty build section
