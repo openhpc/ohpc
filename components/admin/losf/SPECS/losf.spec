@@ -8,16 +8,16 @@
 %define rpmname %{pname}
 %endif
 
-Summary: A Linux operating system framework for managing HPC clusters
-Name: %{rpmname}
-Version: 0.50.0
-Release: 1
-License: GPL-2
-Group: System Environment/Base
+Summary:   A Linux operating system framework for managing HPC clusters
+Name:      %{rpmname}
+Version:   0.50.0
+Release:   1
+License:   GPL-2
+Group:     System Environment/Base
 BuildArch: noarch
-URL: https://github.com/hpcsi/losf 
-Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
+URL:       https://github.com/hpcsi/losf 
+Source0:   %{pname}-%{version}.tar.gz
+Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %if 0%{?FSP_BUILD}
