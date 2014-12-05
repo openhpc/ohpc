@@ -1,0 +1,144 @@
+Index: libs/python/src/dict.cpp
+===================================================================
+--- libs/python/src/dict.cpp.orig	2009-10-14 00:37:59.000000000 +0200
++++ libs/python/src/dict.cpp	2012-03-13 17:20:34.286172759 +0100
+@@ -28,9 +28,9 @@ namespace
+ 
+ detail::new_reference dict_base::call(object const& arg_)
+ {
++    union { PyTypeObject *ptop; PyObject *pop; }pun = { &PyDict_Type };
+     return (detail::new_reference)PyObject_CallFunction(
+-        (PyObject*)&PyDict_Type, const_cast<char*>("(O)"), 
+-        arg_.ptr());
++        pun.pop, const_cast<char*>("(O)"), arg_.ptr());
+ }
+ 
+ dict_base::dict_base()
+Index: libs/python/src/list.cpp
+===================================================================
+--- libs/python/src/list.cpp.orig	2009-10-14 00:37:59.000000000 +0200
++++ libs/python/src/list.cpp	2012-03-13 17:20:34.286172759 +0100
+@@ -10,11 +10,11 @@ namespace boost { namespace python { nam
+ 
+ detail::new_non_null_reference list_base::call(object const& arg_)
+ {
++    union{ PyTypeObject *ptop; PyObject *pop; }pun = { &PyList_Type };
+     return (detail::new_non_null_reference)
+         (expect_non_null)(
+             PyObject_CallFunction(
+-                (PyObject*)&PyList_Type, const_cast<char*>("(O)"), 
+-                arg_.ptr()));
++                pun.pop, const_cast<char*>("(O)"), arg_.ptr()));
+ }
+ 
+ list_base::list_base()
+Index: libs/python/src/long.cpp
+===================================================================
+--- libs/python/src/long.cpp.orig	2009-08-17 23:01:18.000000000 +0200
++++ libs/python/src/long.cpp	2012-03-13 17:20:34.287172735 +0100
+@@ -8,16 +8,16 @@ namespace boost { namespace python { nam
+ 
+ new_non_null_reference long_base::call(object const& arg_)
+ {
++    union { PyTypeObject *ptop; PyObject *pop; }pun = { &PyLong_Type };
+     return (detail::new_non_null_reference)PyObject_CallFunction(
+-        (PyObject*)&PyLong_Type, const_cast<char*>("(O)"), 
+-        arg_.ptr());
++        pun.pop, const_cast<char*>("(O)"), arg_.ptr());
+ }
+ 
+ new_non_null_reference long_base::call(object const& arg_, object const& base)
+ {
++    union { PyTypeObject *ptop; PyObject *pop; }pun = { &PyLong_Type };
+     return (detail::new_non_null_reference)PyObject_CallFunction(
+-        (PyObject*)&PyLong_Type, const_cast<char*>("(OO)"), 
+-        arg_.ptr(), base.ptr());
++        pun.pop, const_cast<char*>("(OO)"), arg_.ptr(), base.ptr());
+ }
+ 
+ long_base::long_base()
+@@ -25,7 +25,12 @@ long_base::long_base()
+         detail::new_reference(
+             PyObject_CallFunction((PyObject*)&PyLong_Type, const_cast<char*>("()")))
+         )
+-{}
++{
++    union { PyTypeObject *ptop; PyObject *pop; }pun = { &PyLong_Type };
++    object(detail::new_reference(
++            PyObject_CallFunction(pun.pop, const_cast<char*>("()"))));
++}
++
+ 
+ long_base::long_base(object_cref arg)
+     : object(long_base::call(arg))
+Index: libs/python/src/object/class.cpp
+===================================================================
+--- libs/python/src/object/class.cpp.orig	2011-06-07 06:15:33.000000000 +0200
++++ libs/python/src/object/class.cpp	2012-03-13 17:20:34.287172735 +0100
+@@ -616,9 +616,11 @@ namespace objects
+   void class_base::add_property(
+     char const* name, object const& fget, char const* docstr)
+   {
++      union { PyTypeObject *ptop; PyObject *pop; }pun = { &PyProperty_Type };
++
+       object property(
+           (python::detail::new_reference)
+-          PyObject_CallFunction((PyObject*)&PyProperty_Type, const_cast<char*>("Osss"), fget.ptr(), 0, 0, docstr));
++          PyObject_CallFunction(pun.pop, const_cast<char*>("Osss"), fget.ptr(), 0, 0, docstr));
+       
+       this->setattr(name, property);
+   }
+@@ -626,9 +628,11 @@ namespace objects
+   void class_base::add_property(
+     char const* name, object const& fget, object const& fset, char const* docstr)
+   {
++      union { PyTypeObject *ptop; PyObject *pop; }pun = { &PyProperty_Type };
++
+       object property(
+           (python::detail::new_reference)
+-          PyObject_CallFunction((PyObject*)&PyProperty_Type, const_cast<char*>("OOss"), fget.ptr(), fset.ptr(), 0, docstr));
++          PyObject_CallFunction(pun.pop, const_cast<char*>("OOss"), fget.ptr(), fset.ptr(), 0, docstr));
+       
+       this->setattr(name, property);
+   }
+Index: libs/python/src/str.cpp
+===================================================================
+--- libs/python/src/str.cpp.orig	2009-10-14 00:37:59.000000000 +0200
++++ libs/python/src/str.cpp	2012-03-13 17:20:34.287172735 +0100
+@@ -9,14 +9,14 @@ namespace boost { namespace python { nam
+ 
+ detail::new_reference str_base::call(object const& arg_)
+ {
+-    return (detail::new_reference)PyObject_CallFunction(
+ #if PY_VERSION_HEX >= 0x03000000
+-        (PyObject*)&PyUnicode_Type,
++    union { PyTypeObject *ptop; PyObject *pop; }pun = { &PyUnicode_Type };
+ #else
+-        (PyObject*)&PyString_Type, 
++    union { PyTypeObject *ptop; PyObject *pop; }pun = { &PyString_Type };
+ #endif
+-        const_cast<char*>("(O)"), 
+-        arg_.ptr());
++
++    return (detail::new_reference)PyObject_CallFunction(
++        pun.pop, const_cast<char*>("(O)"), arg_.ptr());
+ } 
+ 
+ str_base::str_base()
+Index: libs/python/src/tuple.cpp
+===================================================================
+--- libs/python/src/tuple.cpp.orig	2009-08-17 23:01:18.000000000 +0200
++++ libs/python/src/tuple.cpp	2012-03-13 17:20:34.287172735 +0100
+@@ -8,9 +8,10 @@ namespace boost { namespace python { nam
+ 
+ detail::new_reference tuple_base::call(object const& arg_)
+ {
++    union { PyTypeObject *ptop; PyObject *pop; }pun = { &PyTuple_Type };
++
+     return (detail::new_reference)PyObject_CallFunction(
+-        (PyObject*)&PyTuple_Type, const_cast<char*>("(O)"), 
+-        arg_.ptr());
++        pun.pop, const_cast<char*>("(O)"), arg_.ptr());
+ }
+     
+ tuple_base::tuple_base()

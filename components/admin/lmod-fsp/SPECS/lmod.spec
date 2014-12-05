@@ -93,7 +93,7 @@ if [ \$EUID -ne 0 ]; then
     export LMOD_FULL_SETTARG_SUPPORT=no
     export LMOD_COLORIZE=no
     export LMOD_PREPEND_BLOCK=normal
-    export MODULEPATH=%{FSP_MODULE_PATH}
+    export MODULEPATH=%{FSP_MODULES}
 
 EOF
 
