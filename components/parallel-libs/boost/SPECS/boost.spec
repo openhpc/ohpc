@@ -5,13 +5,13 @@
 # toolchain and MPI
 
 %{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
 #%define compiler_family gnu
 %define _unpackaged_files_terminate_build 0
 
 %define build_mpi 1
 
 %if %build_mpi
-%{!?mpi_family: %define mpi_family openmpi}
 #%define mpi_family      openmpi
 %define mpi 		1
 %endif
