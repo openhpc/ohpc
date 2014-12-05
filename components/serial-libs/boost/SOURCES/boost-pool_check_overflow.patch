@@ -1,0 +1,36 @@
+Upstream URL: https://svn.boost.org/trac/boost/ticket/6701
+
+Check that request size doesn't overflow.
+
+Index: boost/pool/pool.hpp
+===================================================================
+--- boost/pool/pool.hpp.orig	2007-11-25 19:07:19.000000000 +0100
++++ boost/pool/pool.hpp	2012-06-22 13:03:49.422438613 +0200
+@@ -10,6 +10,8 @@
+ #define BOOST_POOL_HPP
+ 
+ #include <boost/config.hpp>  // for workarounds
++// std::numeric_limits
++#include <boost/limits.hpp>
+ 
+ // std::less, std::less_equal, std::greater
+ #include <functional>
+@@ -793,6 +793,9 @@ void * pool<UserAllocator>::ordered_mall
+   //! \returns Address of chunk n if allocated ok.
+   //! \returns 0 if not enough memory for n chunks.
+ 
++  if (requested_size && (n > (std::numeric_limits<size_type>::max)() / requested_size))
++    return 0;
++
+   const size_type partition_size = alloc_size();
+   const size_type total_req_size = n * requested_size;
+   const size_type num_chunks = total_req_size / partition_size +
+@@ -975,6 +979,8 @@
+   {
+      if(max_alloc_size && (n > max_alloc_size))
+         return 0;
++     if(chunk_size && (n > (std::numeric_limits<size_type>::max)() / chunk_size))
++        return 0;
+      void* ret = (user_allocator::malloc)(chunk_size * n);
+      used_list.insert(ret);
+      return ret;

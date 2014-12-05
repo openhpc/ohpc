@@ -1,0 +1,46 @@
+Index: boost_1_56_0/tools/build/src/tools/boostbook.jam
+===================================================================
+--- boost_1_56_0.orig/tools/build/src/tools/boostbook.jam
++++ boost_1_56_0/tools/build/src/tools/boostbook.jam
+@@ -548,40 +548,7 @@ rule generate-xml-catalog ( target : sou
+         "  <rewriteURI uriStartString=\"http://www.boost.org/tools/boostbook/dtd/\" rewritePrefix=\"file://$(boostbook-dtd-dir)/\"/>"
+         : true ;
+ 
+-    local docbook-xsl-dir = [ boostbook.docbook-xsl-dir ] ;
+-    if ! $(docbook-xsl-dir)
+-    {
+-        ECHO "BoostBook warning: no DocBook XSL directory specified." ;
+-        ECHO "  If you have the DocBook XSL stylesheets installed, please " ;
+-        ECHO "  set DOCBOOK_XSL_DIR to the stylesheet directory on either " ;
+-        ECHO "  the command line (via -sDOCBOOK_XSL_DIR=...) or in a " ;
+-        ECHO "  Boost.Jam configuration file. The DocBook XSL stylesheets " ;
+-        ECHO "  are available here: http://docbook.sourceforge.net/ " ;
+-        ECHO "  Stylesheets will be downloaded on-the-fly (very slow!) " ;
+-    }
+-    else
+-    {
+-        docbook-xsl-dir = [ format-catalog-path $(docbook-xsl-dir) ] ;
+-        print.text "  <rewriteURI uriStartString=\"http://docbook.sourceforge.net/release/xsl/current/\" rewritePrefix=\"file://$(docbook-xsl-dir)/\"/>" ;
+-    }
+-
+-    local docbook-dtd-dir = [ boostbook.docbook-dtd-dir ] ;
+-    if ! $(docbook-dtd-dir)
+-    {
+-        ECHO "BoostBook warning: no DocBook DTD directory specified." ;
+-        ECHO "  If you have the DocBook DTD installed, please set " ;
+-        ECHO "  DOCBOOK_DTD_DIR to the DTD directory on either " ;
+-        ECHO "  the command line (via -sDOCBOOK_DTD_DIR=...) or in a " ;
+-        ECHO "  Boost.Jam configuration file. The DocBook DTD is available " ;
+-        ECHO "  here: http://www.oasis-open.org/docbook/xml/4.2/index.shtml" ;
+-        ECHO "  The DTD will be downloaded on-the-fly (very slow!) " ;
+-    }
+-    else
+-    {
+-        docbook-dtd-dir = [ format-catalog-path $(docbook-dtd-dir) ] ;
+-        print.text "  <rewriteURI uriStartString=\"http://www.oasis-open.org/docbook/xml/4.2/\" rewritePrefix=\"file://$(docbook-dtd-dir)/\"/>" ;
+-    }
+-
++    print.text " <nextCatalog catalog=\"file:///etc/xml/catalog\"/> " ;
+     print.text "</catalog>" ;
+ }
+ 

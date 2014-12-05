@@ -1,0 +1,12 @@
+Index: libs/python/build/Jamfile.v2
+===================================================================
+--- libs/python/build/Jamfile.v2.orig	2010-07-13 00:29:41.000000000 +0200
++++ libs/python/build/Jamfile.v2	2010-08-24 12:51:20.939878260 +0200
+@@ -51,6 +51,7 @@ project boost/python
+   : requirements
+     -<tag>@$(BOOST_JAMROOT_MODULE)%$(BOOST_JAMROOT_MODULE).tag
+     <tag>@$(__name__).tag
++	<cxxflags>-fno-strict-aliasing
+   ;
+ 
+ rule tag ( name : type ? : property-set )
