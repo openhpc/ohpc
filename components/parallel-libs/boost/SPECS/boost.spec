@@ -97,7 +97,7 @@ BuildRequires:  python-devel
 BuildRequires:  xorg-x11-devel
 #!BuildIgnore:  python
 BuildRequires:  zlib-devel
-BuildRequires:  openmpi-devel
+#BuildRequires:  openmpi-devel
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
