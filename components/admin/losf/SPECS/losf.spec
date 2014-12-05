@@ -2,7 +2,7 @@
 
 %define pname losf
 
-%if 0%{?PROJ_NAME}
+%if 0%{?PROJ_NAME:1}
 %define rpmname %{pname}-%{PROJ_NAME}
 %else
 %defien rpmname %{pname}
@@ -52,8 +52,6 @@ designed for use with high-performance computing (HPC) clusters. Target users
 for this package are HPC system administrators and system architects who desire
 flexible command-line utilities for synchronizing various host types across a
 cluster.
-
-A NOOP change testing OBS.
 
 %prep
 %setup -q -n %{pname}-%{version}
