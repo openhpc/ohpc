@@ -13,10 +13,12 @@
 # Compiler dependencies
 BuildRequires: lmod coreutils
 %if %{compiler_family} == gnu
+%define toolset gcc
 BuildRequires: FSP-gnu-compilers
 Requires:      FSP-gnu-compilers
 %endif
 %if %{compiler_family} == intel
+%define toolset intel-linux
 BuildRequires: gcc-c++ FSP-intel-compilers
 Requires:      gcc-c++ FSP-intel-compilers
 %if 0%{?FSP_BUILD}
