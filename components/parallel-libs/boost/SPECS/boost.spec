@@ -1,42 +1,24 @@
-#
-# spec file for package boost
-#
-# Library build that is dependent on compiler
-# toolchain and MPI
+# Boost C++ library that is is depdendent on compiler toolchain and MPI
+
+#-fsp-header-comp-begin----------------------------------------------
+
+# FSP convention: the default assumes the gnu toolchain and openmpi
+# MPI family; however, these can be overridden by specifing the
+# compiler_family and mpi_family variables via rpmbuild or other
+# mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
-#%define compiler_family gnu
-%define _unpackaged_files_terminate_build 0
-
-%define build_mpi 1
-
-%if %build_mpi
-#%define mpi_family      openmpi
-%define mpi 		1
-%endif
-
-#-fsp-header-comp-begin-----------------------------
-
 
 # Compiler dependencies
 BuildRequires: lmod coreutils
 %if %{compiler_family} == gnu
 BuildRequires: FSP-gnu-compilers
 Requires:      FSP-gnu-compilers
-## Toolsets supported by boost script are:
-##     acc, como, darwin, gcc, intel-darwin, intel-linux, kcc, kylix,
-##     mipspro, mingw(msys), pathscale, pgi, qcc, sun, sunpro, tru64cxx, vacpp
-%define toolset gcc 
 %endif
-
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ FSP-intel-compilers
 Requires:      gcc-c++ FSP-intel-compilers
-## Toolsets supported by boost script are:
-##     acc, como, darwin, gcc, intel-darwin, intel-linux, kcc, kylix,
-##     mipspro, mingw(msys), pathscale, pgi, qcc, sun, sunpro, tru64cxx, vacpp
-%define toolset intel-linux  
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -56,12 +38,13 @@ BuildRequires: FSP-openmpi-%{compiler_family}
 Requires:      FSP-openmpi-%{compiler_family}
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-fsp-header-comp-end------------------------------------------------
 
+%define _unpackaged_files_terminate_build 0
+%define build_mpi 1
 
 #Added FSP build convention
 %define debug_package %{nil}
-%define openmp        1
 
 %define ver 1.57.0
 %define bversion 1_57_0
@@ -85,32 +68,21 @@ Source100:      baselibs.conf
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
 Source103:	FSP_setup_mpi
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
-#__BuildRequires:  chrpath
-#__BuildRequires:  dos2unix
-#__BuildRequires:  fdupes
-#BuildRequires:  gcc-c++
+%include %{_sourcedir}/FSP_macros
+
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  libicu-devel >= 4.4
 BuildRequires:  python-devel
 BuildRequires:  xorg-x11-devel
-#!BuildIgnore:  python
 BuildRequires:  zlib-devel
-#BuildRequires:  openmpi-devel
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
-#FSP build root
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-#BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-
-%include %{_sourcedir}/FSP_macros
-
-
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
-
 
 %description
 Boost provides free peer-reviewed portable C++ source libraries. The
