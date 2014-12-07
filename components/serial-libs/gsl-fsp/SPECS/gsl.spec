@@ -13,12 +13,12 @@
 # Compiler dependencies
 BuildRequires: lmod
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers
-Requires:      FSP-gnu-compilers
+BuildRequires: gnu-compilers-fsp
+Requires:      gnu-compilers-fsp
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers
-Requires:      gcc-c++ FSP-intel-compilers 
+BuildRequires: gcc-c++ intel-compilers-fsp
+Requires:      gcc-c++ intel-compilers-fsp 
 %endif
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
