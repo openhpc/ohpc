@@ -1,12 +1,22 @@
-Summary: A GNU tool for automatically creating Makefiles
-Name: FSP-automake
-Version: 1.14.1
-Release: 1
-License: GPLv2+ and GFDL
-Group: Development/Tools
-URL: http://www.gnu.org/software/automake/
-Source0: automake-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+%include %{_sourcedir}/FSP_macros
+
+%define pname automake
+
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}
+%endif
+
+Summary:   A GNU tool for automatically creating Makefiles
+Name:      %{rpmname}
+Version:   1.14.1
+Release:   1
+License:   GPLv2+ and GFDL
+Group:     Development/Tools
+URL:       http://www.gnu.org/software/automake/
+Source0:   automake-%{version}.tar.gz
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
 %define install_path %{FSP_PUB}/autotools
