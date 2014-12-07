@@ -48,8 +48,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 # modulefile
 
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}
+%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 # FSP %{pname} environment
 #############################################################################
