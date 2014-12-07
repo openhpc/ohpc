@@ -11,7 +11,7 @@
 %{!?compiler_family: %define compiler_family gnu}
 
 # Compiler dependencies
-BuildRequires: lmod
+BuildRequires: lmod-fsp
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers-fsp
 Requires:      gnu-compilers-fsp
