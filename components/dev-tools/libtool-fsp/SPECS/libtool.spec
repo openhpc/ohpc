@@ -1,20 +1,31 @@
-Summary: The GNU Portable Library Tool
-Name: FSP-libtool
-Version: 2.4.3
-Release: 1
-License: GPLv2+ and LGPLv2+ and GFDL
-Group: Development/Tools
-URL: http://www.gnu.org/software/libtool/
-Source0: libtool-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+%include %{_sourcedir}/FSP_macros
+
+%define pname libtool
+
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}
+%endif
+
+Summary:   The GNU Portable Library Tool
+Name:      %{rpmname}
+Version:   2.4.3
+Release:   1
+License:   GPLv2+ and LGPLv2+ and GFDL
+Group:     Development/Tools
+URL:       http://www.gnu.org/software/libtool/
+Source0:   libtool-%{version}.tar.gz
+Source1:   FSP_macros
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
 %define install_path %{FSP_PUB}/autotools
 
-Requires: FSP-autoconf >= 2.69
-Requires: FSP-automake >= 1.14
-BuildRequires: FSP-autoconf >= 2.69
-BuildRequires: FSP-automake >= 1.14
+Requires:      autoconf-fsp >= 2.69
+Requires:      automake-fsp >= 1.14.1
+BuildRequires: autoconf-fsp >= 2.69
+BuildRequires: automake-fsp >= 1.14.1
 
 %description
 GNU Libtool is a set of shell scripts which automatically configure UNIX and
