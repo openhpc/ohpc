@@ -1,12 +1,23 @@
-Summary: A GNU tool for automatically configuring source code
-Name: FSP-autoconf
-Version: 2.69
-Release: 1
-License: GPLv3+ and GFDL
-Group: Development/Tools
-URL: http://www.gnu.org/software/autoconf/
-Source0: autoconf-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+%include %{_sourcedir}/FSP_macros
+
+%define pname autoconf
+
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}
+%endif
+
+Summary:   A GNU tool for automatically configuring source code
+Name:      %{rpmname}
+Version:   2.69
+Release:   1
+License:   GPLv3+ and GFDL
+Group:     Development/Tools
+URL:       http://www.gnu.org/software/autoconf/
+Source0:   autoconf-%{version}.tar.gz
+Source1:   FSP_macros
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 Requires: m4
 
@@ -30,6 +41,7 @@ Autoconf is only required for the generation of the scripts, not
 their use.
 
 %prep
+%{FSP_HOME}
 %setup -n autoconf-%{version}
 
 %build
