@@ -16,6 +16,7 @@ License:   GPLv2+ and GFDL
 Group:     Development/Tools
 URL:       http://www.gnu.org/software/automake/
 Source0:   automake-%{version}.tar.gz
+Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
