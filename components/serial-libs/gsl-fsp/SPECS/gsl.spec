@@ -2,6 +2,8 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
+%include %{_sourcedir}/FSP_macros
+
 # FSP convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
@@ -28,8 +30,15 @@ BuildRequires: intel_licenses
 %define pname gsl
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
+# RPM name
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{compiler_family}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}-%{compiler_family}
+%endif
+
 Summary:   GNU Scientific Library (GSL)
-Name:      %{pname}-%{compiler_family}
+Name:      %{rpmname}
 Version:   1.16
 Release:   1
 License:   GPL
@@ -39,8 +48,6 @@ Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-
-%include %{_sourcedir}/FSP_macros
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
