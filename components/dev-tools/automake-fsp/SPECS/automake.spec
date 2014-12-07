@@ -21,8 +21,8 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
 %define install_path %{FSP_PUB}/autotools
 
-Requires: FSP-autoconf >= 2.69
-BuildRequires: FSP-autoconf >= 2.69
+Requires:      autoconf-fsp >= 2.69
+BuildRequires: autoconf-fsp >= 2.69
 
 %description
 Automake is a tool for automatically generating `Makefile.in'
