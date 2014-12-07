@@ -19,7 +19,8 @@ Source0:   libtool-%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
-%{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
+#!BuildIgnore: post-build-checks rpmlint-Factory
+
 %define install_path %{FSP_PUB}/autotools
 
 Requires:      autoconf-fsp >= 2.69
@@ -55,6 +56,7 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # remove share/info/dir to avoid conflict with other package installs
 rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
+
 
 # modulefile
 
