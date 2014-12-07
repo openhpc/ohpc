@@ -19,9 +19,9 @@ Requires:      gnu-compilers-fsp
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-fsp
 Requires:      gcc-c++ intel-compilers-fsp 
-%endif
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
+%endif
 %endif
 
 #-fsp-header-comp-end------------------------------------------------
