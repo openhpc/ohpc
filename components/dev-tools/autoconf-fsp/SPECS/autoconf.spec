@@ -41,7 +41,6 @@ Autoconf is only required for the generation of the scripts, not
 their use.
 
 %prep
-%{FSP_HOME}
 %setup -n autoconf-%{version}
 
 %build
