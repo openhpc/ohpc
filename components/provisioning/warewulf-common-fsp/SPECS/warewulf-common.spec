@@ -15,7 +15,7 @@ Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: System Environment/Clustering
-Source0: %{name}-%{version}.tar.gz
+Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_Macros
 ExclusiveOS: linux
 Conflicts: warewulf <= 2.9
