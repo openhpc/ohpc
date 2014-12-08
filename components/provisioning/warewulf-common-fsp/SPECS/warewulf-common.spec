@@ -1,13 +1,22 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
+%include %{_sourcedir}/FSP_macros
 %define wwpkgdir /srv/
+%define pname warewulf-common
 
-Name: warewulf-common
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}
+%endif
+
+Name: %{rpmname}
 Summary: A suite of tools for clustering
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: System Environment/Clustering
-Source: %{name}-%{version}.tar.gz
+Source0: %{name}-%{version}.tar.gz
+Source1: FSP_Macros
 ExclusiveOS: linux
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
