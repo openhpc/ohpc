@@ -1,33 +1,44 @@
 # Serial HDF5 library build that is dependent on compiler toolchain
 
-%{!?compiler_family: %define compiler_family gnu}
-%define _unpackaged_files_terminate_build 0
+#-fsp-header-comp-begin----------------------------------------------
 
-#-fsp-header-comp-begin-----------------------------
+%include %{_sourcedir}/FSP_macros
+
+# FSP convention: the default assumes the gnu compiler family;
+# however, this can be overridden by specifing the compiler_family
+# variable via rpmbuild or other mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu}
 
 # Compiler dependencies
 BuildRequires: lmod coreutils
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers 
-Requires:      FSP-gnu-compilers 
+BuildRequires: gnu-compilers-fsp 
+Requires:      gnu-compilers-fsp 
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers 
-Requires:      gcc-c++ FSP-intel-compilers 
+BuildRequires: gcc-c++ intel-compilers-fsp
+Requires:      gcc-c++ intel-compilers-fsp
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-fsp-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname hdf5
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
+# RPM name
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{compiler_family}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}-%{compiler_family}
+%endif
 
 Summary:   A general purpose library and file format for storing scientific data
-Name:      %{pname}-%{compiler_family}
+Name:      %{rpmname}
 Version:   1.8.13
 Release:   0.1
 License:   BSD-3-Clause
@@ -36,11 +47,10 @@ URL:       http://www.hdfgroup.org/HDF5
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: zlib-devel
-Requires: zlib-devel
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
-%include %{_sourcedir}/FSP_macros
+BuildRequires: zlib-devel
+Requires:      zlib
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -118,7 +128,6 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
-family "hdf5"
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
