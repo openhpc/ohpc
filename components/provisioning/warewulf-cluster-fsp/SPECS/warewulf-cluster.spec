@@ -19,8 +19,8 @@ URL: http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 ExclusiveOS: linux
-Requires: warewulf-common warewulf-provision ntp
-BuildRequires: warewulf-common
+Requires: warewulf-common-fsp warewulf-provision ntp
+BuildRequires: warewulf-common-fsp
 Conflicts: warewulf < 3
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 %if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
