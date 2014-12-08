@@ -1,22 +1,31 @@
-%define compiler_family gnu
+%include %{_sourcedir}/FSP_macros
+
 %define pname pdsh
-%define debug_package %{nil}
-Name: pdsh
-Version:  2.31
-Release: %{_rel}
+
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}
+%endif
+
 
 Summary: Parallel remote shell program
-
+Name:    %{rpmname}
+Version: 2.31
+Release: %{_rel}
 License: GPL
-Url: http://sourceforge.net/projects/pdsh
-Group: System Environment/Base
+Url:     http://sourceforge.net/projects/pdsh
+Group:   System Environment/Base
 Source0: pdsh-%{version}.tar.bz2
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+
+%define debug_package %{nil}
+
 ### karl.w.schulz@intel.com (11/07/14) - temporarily disabling rcmd requirement
 ### Requires: pdsh-rcmd
 
 # Default library install path
-%define install_path %{FSP_HOME}/admin/%{name}
+%define install_path %{FSP_HOME}/admin/%{pname}
 
 #
 # Enabling and disabling pdsh options
