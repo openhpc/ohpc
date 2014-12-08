@@ -1,19 +1,28 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1547" != "0000" && echo "1547" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || echo 0000)}}
+%include %{_sourcedir}/FSP_macros
+%define pname warewulf-cluster
 %define debug_package %{nil}
 
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}
+%endif
+
+Name: %{rpmname}
 Summary: Tools used for clustering with Warewulf
-Name: warewulf-cluster
 Version: 3.6
 Release: %{_rel}
 License: US Dept. of Energy (BSD-like)
 Group: System Environment/Clustering
 URL: http://warewulf.lbl.gov/
-Source: %{name}-%{version}.tar.gz
+Source0: %{pname}-%{version}.tar.gz
+Source1: FSP_macros
 ExclusiveOS: linux
 Requires: warewulf-common warewulf-provision ntp
 BuildRequires: warewulf-common
 Conflicts: warewulf < 3
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{name}-%{version}-%{release}-root
+BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 %if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 %if ! 0%{?suse_version}
 BuildRequires: db4-utils
@@ -21,7 +30,7 @@ BuildRequires: db4-utils
 %endif
 
 # 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
-Patch1: %{name}.wwinit.patch
+Patch1: warewulf-cluster.wwinit.patch
 # 06/14/14 karl.w.schulz@intel.com - FSP flag used to disable inclusion of node package
 %define fsp_disable 0
 # 07/21/14 karl.w.schulz@intel.com - excplictly document libcom32 and libutil as being provided
@@ -51,7 +60,7 @@ provisioned nodes.
 %endif
 
 %prep
-%setup
+%setup -n %{pname}-%{version}
 
 %patch1 -p1
 
