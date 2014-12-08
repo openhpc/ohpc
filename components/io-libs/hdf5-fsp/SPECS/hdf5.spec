@@ -8,18 +8,18 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family:   %define compiler_family   gnu}
-%{!?project_delimiter: %define project_delimiter fsp}
+%{!?compiler_family:   %define compiler_family   gnu }
+%{!?PROJ_DELIM:        %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod-%{project_delimiter}
+BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{project_delimiter}
-Requires:      gnu-compilers%{project_delimiter}
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers%{project_delimiter}
-Requires:      gcc-c++ intel-compilers%{project_delimiter}
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -33,7 +33,7 @@ BuildRequires: intel_licenses
 
 # RPM name
 %if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{compiler_family}-%{project_delimiter}
+%define rpmname %{pname}-%{compiler_family}%{PROJ_DELIM}
 %else
 %define rpmname %{pname}-%{compiler_family}
 %endif
