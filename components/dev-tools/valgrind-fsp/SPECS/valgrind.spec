@@ -67,6 +67,7 @@ module-whatis "Description: Memory debugging utilities"
 
 prepend-path    PATH            %{install_path}/bin
 prepend-path    MANPATH         %{install_path}/share/man
+prepend-path    PKG_CONFIG_PATH %{install_path}/lib/pkgconfig
 
 setenv          %{PNAME}_DIR    %{install_path}
 EOF
