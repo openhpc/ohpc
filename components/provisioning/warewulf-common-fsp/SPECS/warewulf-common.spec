@@ -16,7 +16,7 @@ Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: System Environment/Clustering
 Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_Macros
+Source1: FSP_macros
 ExclusiveOS: linux
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
