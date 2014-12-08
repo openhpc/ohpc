@@ -14,7 +14,7 @@
 # Compiler dependencies
 #BuildRequires: lmod-%{PROJ_DELIM}
 %if 0%{FSP_BUILD}
-BuildRequires: lmod-fsp
+BuildRequires: lmod-fsp-%{FSP_BUILD}
 %endif
 
 %if %{compiler_family} == gnu
