@@ -14,12 +14,12 @@
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
+BuildRequires: gnu-compilers-%{PROJ_DELIM}
+Requires:      gnu-compilers-%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
+BuildRequires: gcc-c++ intel-compilers-%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-%{PROJ_DELIM}
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -31,15 +31,8 @@ BuildRequires: intel_licenses
 %define pname gsl
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-# RPM name
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{compiler_family}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}-%{compiler_family}
-%endif
-
 Summary:   GNU Scientific Library (GSL)
-Name:      %{rpmname}
+Name:      %{pname}-%{compiler_family}-%{PROJ_DELIM}
 Version:   1.16
 Release:   1
 License:   GPL
