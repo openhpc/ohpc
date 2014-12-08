@@ -27,9 +27,9 @@ BuildArch: noarch
 %endif
 BuildRoot: %{?_tmppath}/%{name}-%{version}-%{release}-root
 # 09/10/14 charles.r.baird@intel.com - patch to add SuSE as a system type
-Patch1: %{name}.system.patch
+Patch1: warewulf-common.system.patch
 # 09/10/14 charles.r.baird@intel.com - patch to add mariadb as a datastore
-Patch2: %{name}.mariadb.patch
+Patch2: warewulf-common.mariadb.patch
 # 05/23/14 charles.r.baird@intel.com - alternate package names for SuSE
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
