@@ -25,7 +25,7 @@ BuildArch: x86_64
 %else
 BuildArch: noarch
 %endif
-BuildRoot: %{?_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: %{?_tmppath}/%{pname}-%{version}-%{release}-root
 # 09/10/14 charles.r.baird@intel.com - patch to add SuSE as a system type
 Patch1: warewulf-common.system.patch
 # 09/10/14 charles.r.baird@intel.com - patch to add mariadb as a datastore
