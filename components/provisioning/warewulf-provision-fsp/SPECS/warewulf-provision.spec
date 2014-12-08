@@ -1,24 +1,32 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
+%include %{_sourcedir}/FSP_macros
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
+%define pname warewulf-common
 
-Name: warewulf-provision
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}
+%endif
+
+Name: %{rpmname}
 Summary: Warewulf - Provisioning Module
 Version: 3.6
 Release: %{_rel}%{?dist}
-#Release: 1.%{?_dist}
 License: US Dept. of Energy (BSD-like)
 Group: System Environment/Clustering
-Source: %{name}-%{version}.tar.gz
+Source0: %{pname}-%{version}.tar.gz
+Source1: FSP_macros
 ExclusiveOS: linux
-Requires: warewulf-common
-BuildRequires: warewulf-common
+Requires: warewulf-common-fsp
+BuildRequires: warewulf-common-fsp
 BuildRequires: libselinux-devel
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{name}-%{version}-%{release}-root
-Patch1: %{name}.busybox.patch.bz2
-Patch2: %{name}.httpdconfdir.patch
+BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
+Patch1: warewulf-provision.busybox.patch.bz2
+Patch2: warewulf-provision.httpdconfdir.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -34,7 +42,7 @@ administrative tools.  To actually provision systems, the
 %package server
 Summary: Warewulf - Provisioning Module - Server
 Group: System Environment/Clustering
-Requires: %{name} = %{version}-%{release}
+Requires: %{pname} = %{version}-%{release}
 
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -62,7 +70,7 @@ do not require this package.
 %package gpl_sources
 Summary: This package contains the GPL sources used in Warewulf
 Group: Development/System
-Requires: %{name} = %{version}-%{release}
+Requires: %{pname} = %{version}-%{release}
 
 %description gpl_sources
 Warewulf >= 3 is a set of utilities designed to better enable
