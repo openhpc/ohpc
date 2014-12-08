@@ -9,16 +9,10 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-#%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
+%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
-#BuildRequires: lmod-%{PROJ_DELIM}
-%if 0%{FSP_BUILD}
-BuildRequires: lmod-fsp-abcdefg
-%endif
-
-
-
+BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
