@@ -11,14 +11,14 @@
 %{!?compiler_family: %define compiler_family gnu}
 
 # Compiler dependencies
-BuildRequires: lmod coreutils
+BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
-BuildRequires: gnu-compilers-fsp 
-Requires:      gnu-compilers-fsp 
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-fsp
-Requires:      gcc-c++ intel-compilers-fsp
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
