@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM:      %define PROJ_DELIM      fsp}
 
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM}
+BuildRequires: lmod-%{PROJ_DELIM}
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers-%{PROJ_DELIM}
 Requires:      gnu-compilers-%{PROJ_DELIM}
