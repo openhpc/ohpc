@@ -2,7 +2,7 @@
 %include %{_sourcedir}/FSP_macros
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
-%define pname warewulf-common
+%define pname warewulf-provision
 
 %if 0%{?PROJ_NAME:1}
 %define rpmname %{pname}-%{PROJ_NAME}

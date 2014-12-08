@@ -1,14 +1,23 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
+%include %{_sourcedir}/FSP_macros
 %define debug_package %{nil}
+%define pname warewulf-vnfs
+
+%if 0%{?PROJ_NAME:1}
+%define rpmname %{pname}-%{PROJ_NAME}
+%else
+%define rpmname %{pname}
+%endif
+
 
 Summary: Warewulf VNFS Module
-Name: warewulf-vnfs
+Name: %{rpmname}
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: System Environment/Clustering
 URL: http://warewulf.lbl.gov/
-Source: %{name}-%{version}.tar.gz
+Source: %{pname}-%{version}.tar.gz
 ExclusiveOS: linux
 Requires: warewulf-common
 BuildRequires: warewulf-common
@@ -18,14 +27,14 @@ BuildArch: x86_64
 %else
 BuildArch: noarch
 %endif
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{name}-%{version}-%{release}-root
+BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 # Previous version had an architecture in its release. This is necessary for
 # YUM to properly update a package of a different BuildArch...
 Obsoletes: warewulf-vnfs < 3.2-0
 # 06/18/14 charles.r.baird@intel.com - wwmkchroot patch for SLES
-Patch1: %{name}.wwmkchroot.patch
+Patch1: warewulf-vnfs.wwmkchroot.patch
 # 09/10/14 charles.r.baird@intel.com - special chars in vnfs filenames
-Patch2: %{name}.utf8.patch
+Patch2: warewulf-vnfs.utf8.patch
 # 09/19/14 karl.w.schulz@intel.com - include yum/numactl in centos6 default image
 Patch3: centos-add-pkgs.patch
 
@@ -38,7 +47,7 @@ Virtual Node FileSystem objects.
 
 
 %prep
-%setup
+%setup -n %{pname}-%{version}
 
 # Intel FSP patches
 
