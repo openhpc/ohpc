@@ -219,7 +219,7 @@ fi
 %{_prefix}/lib/tmpfiles.d/munge.conf
 %endif
 
-%files %{pname}-devel-%{PROJ_DELIM}
+%files -n %{pname}-devel-%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %{_includedir}/*
 %{_libdir}/*.la
@@ -228,6 +228,6 @@ fi
 %{_libdir}/*.a
 %{_libdir}/*.so
 
-%files %{pname}-libs-%{PROJ_DELIM}
+%files -n %{pname}-libs-%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %{_libdir}/*.so.*
