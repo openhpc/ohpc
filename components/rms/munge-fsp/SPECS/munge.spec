@@ -177,7 +177,7 @@ if [ $1 -ge 1 ]; then
    %endif
 fi
 
-%postun %{pname}-libs-%{PROJ_DELIM}
+%postun -n %{pname}-libs-%{PROJ_DELIM}
 /sbin/ldconfig %{_libdir}
 
 %files
