@@ -154,7 +154,7 @@ fi
    if [ -x /sbin/chkconfig ]; then /sbin/chkconfig --add munge; fi
 %endif
 
-%post libs
+%post -n %{pname}-libs-%{PROJ_DELIM}
 /sbin/ldconfig %{_libdir}
 
 %preun
@@ -177,7 +177,7 @@ if [ $1 -ge 1 ]; then
    %endif
 fi
 
-%postun libs
+%postun %{pname}-libs-%{PROJ_DELIM}
 /sbin/ldconfig %{_libdir}
 
 %files
