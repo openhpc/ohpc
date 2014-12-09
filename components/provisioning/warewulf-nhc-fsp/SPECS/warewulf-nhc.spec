@@ -1,11 +1,12 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1723" != "0000" && echo "1723" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
 %include %{_sourcedir}/FSP_macros
 %define pname warewulf-nhc
+%define sname nhc
 %define debug_package %{nil}
 
 
-%{!?nhc_script_dir:%global nhc_script_dir %{_sysconfdir}/%{pname}/scripts}
-%{!?nhc_helper_dir:%global nhc_helper_dir %{_libexecdir}/%{pname}}
+%{!?nhc_script_dir:%global nhc_script_dir %{_sysconfdir}/%{sname}/scripts}
+%{!?nhc_helper_dir:%global nhc_helper_dir %{_libexecdir}/%{sname}}
 
 Name: %{pname}
 Summary: Warewulf Node Health Check System
@@ -60,13 +61,13 @@ test "$RPM_BUILD_ROOT" != "/" && %{__rm} -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root)
 %doc COPYING ChangeLog LICENSE nhc.conf contrib/nhc.cron
-%dir %{_sysconfdir}/%{pname}/
-%dir %{_localstatedir}/lib/%{pname}/
-%dir %{_localstatedir}/run/%{pname}/
+%dir %{_sysconfdir}/%{sname}/
+%dir %{_localstatedir}/lib/%{sname}/
+%dir %{_localstatedir}/run/%{sname}/
 %dir %{nhc_script_dir}/
 %dir %{nhc_helper_dir}/
-%config(noreplace) %{_sysconfdir}/%{pname}/%{pname}.conf
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{pname}
+%config(noreplace) %{_sysconfdir}/%{sname}/%{sname}.conf
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{sname}
 %config(noreplace) %{nhc_script_dir}/*.nhc
 %config(noreplace) %{nhc_helper_dir}/*
-%config(noreplace) %{_sbindir}/%{pname}
+%config(noreplace) %{_sbindir}/%{sname}
