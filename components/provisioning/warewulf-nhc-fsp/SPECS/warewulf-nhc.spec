@@ -40,7 +40,7 @@ which checks should be run on which nodes.
 
 
 %build
-%{configure}
+%{configure} --prefix=$RPM_BUILD_ROOT
 %{__make} %{?mflags}
 
 
