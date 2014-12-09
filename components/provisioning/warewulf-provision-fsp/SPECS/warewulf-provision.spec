@@ -89,7 +89,7 @@ available the included GPL software.
 
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch1 -p1
 %patch2 -p1
 
