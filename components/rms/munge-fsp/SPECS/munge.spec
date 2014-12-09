@@ -1,6 +1,6 @@
-%{!?PROJ_DELIM:      %define PROJ_DELIM      fsp}
+%define pname munge
 
-%define pname gsl
+%{!?PROJ_DELIM: %define PROJ_DELIM fsp}
 
 Name:		%{pname}-%{PROJ_DELIM}
 Version:	0.5.11
