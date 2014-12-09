@@ -19,8 +19,8 @@ Group: System Environment/Clustering
 URL: http://warewulf.lbl.gov/
 Source: %{pname}-%{version}.tar.gz
 ExclusiveOS: linux
-Requires: warewulf-common
-BuildRequires: warewulf-common
+Requires: warewulf-common-fsp
+BuildRequires: warewulf-common-fsp
 Conflicts: warewulf < 3
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildArch: x86_64
