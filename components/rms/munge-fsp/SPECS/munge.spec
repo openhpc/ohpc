@@ -80,7 +80,7 @@ A header file and static library for developing applications using MUNGE.
 A shared library for applications using MUNGE.
 
 %prep
-%setup
+%setup -n %{pname}-%{version}
 
 # Intel FSP patches
 %patch1
