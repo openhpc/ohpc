@@ -14,7 +14,7 @@
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod coreutils
+BuildRequires: lmod-fsp coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
