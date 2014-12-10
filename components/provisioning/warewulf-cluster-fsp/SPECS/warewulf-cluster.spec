@@ -17,7 +17,7 @@ Source1: FSP_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
 BuildRequires: warewulf-common%{PROJ_DELIM}
-Conflicts: warewulf%{PROJ_DELIM} < 3
+Conflicts: warewulf < 3
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 %if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 %if ! 0%{?suse_version}

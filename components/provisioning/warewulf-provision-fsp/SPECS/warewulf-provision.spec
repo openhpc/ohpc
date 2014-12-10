@@ -2,25 +2,21 @@
 %include %{_sourcedir}/FSP_macros
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
+
 %define pname warewulf-provision
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
-
-Name: %{rpmname}
+Name:    %{pname}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group: System Environment/Clustering
+Group:   System Environment/Clustering
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 ExclusiveOS: linux
-Requires: warewulf-common-fsp
-BuildRequires: warewulf-common-fsp
+Requires: warewulf-common%{PROJ_DELIM}
+BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
