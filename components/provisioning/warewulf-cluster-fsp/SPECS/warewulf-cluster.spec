@@ -1,33 +1,31 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1547" != "0000" && echo "1547" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || echo 0000)}}
+
 %include %{_sourcedir}/FSP_macros
+
 %define pname warewulf-cluster
-%define debug_package %{nil}
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
-
-Name: %{rpmname}
+Name:    %{pname}%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
 Version: 3.6
 Release: %{_rel}
 License: US Dept. of Energy (BSD-like)
-Group: System Environment/Clustering
-URL: http://warewulf.lbl.gov/
+Group:   System Environment/Clustering
+URL:     http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 ExclusiveOS: linux
-Requires: warewulf-common-fsp warewulf-provision-fsp ntp
-BuildRequires: warewulf-common-fsp
-Conflicts: warewulf < 3
+Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
+BuildRequires: warewulf-common%{PROJ_DELIM}
+Conflicts: warewulf%{PROJ_DELIM} < 3
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 %if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 %if ! 0%{?suse_version}
 BuildRequires: db4-utils
 %endif
 %endif
+
+%define debug_package %{nil}
 
 # 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
 Patch1: warewulf-cluster.wwinit.patch
