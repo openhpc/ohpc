@@ -256,7 +256,7 @@ scheduling and accounting modules
 Summary: Perl API to Slurm
 Group: Development/System
 Requires: %{pname}%{PROJ_DELIM}
-%description perlapi
+%description -n %{pname}-perlapi%{PROJ_DELIM}
 Perl API package for Slurm.  This package includes the perl API to provide a
 helpful interface to Slurm through Perl
 
@@ -279,7 +279,7 @@ and static libraries for the Slurm API
 Summary: Slurm auth NULL implementation (no authentication)
 Group: System Environment/Base
 Requires: %{pname}%{PROJ_DELIM}
-%description auth-none
+%description -n %{pname}-auth-none%{PROJ_DELIM}
 Slurm NULL authentication module
 %endif
 
@@ -288,7 +288,7 @@ Slurm NULL authentication module
 Summary: Slurm auth implementation using Brent Chun's authd
 Group: System Environment/Base
 Requires: %{pname}%{PROJ_DELIM} authd
-%description auth-authd
+%description -n %{pname}-auth-authd%{PROJ_DELIM}
 Slurm authentication module for Brent Chun's authd. Used to
 authenticate user originating an RPC
 %endif
@@ -302,7 +302,7 @@ Group: System Environment/Base
 Requires: %{pname}%{PROJ_DELIM} munge%{PROJ_DELIM}
 BuildRequires: munge-devel%{PROJ_DELIM} munge-libs%{PROJ_DELIM}
 Obsoletes: slurm-auth-munge
-%description munge
+%description -n %{pname}-munge%{PROJ_DELIM}
 Slurm authentication and crypto implementation using Munge. Used to
 authenticate user originating an RPC, digitally sign and/or encrypt messages
 %endif
@@ -320,20 +320,20 @@ Slurm plugin interfaces to IBM Blue Gene system
 Summary: Slurm database daemon
 Group: System Environment/Base
 Requires: slurm-plugins%{PROJ_DELIM} slurm-sql%{PROJ_DELIM}
-%description slurmdbd
+%description -n %{pname}-slurmdbd%{PROJ_DELIM}
 Slurm database daemon. Used to accept and process database RPCs and upload
 database changes to slurmctld daemons on each cluster
 
 %package -n %{pname}-sql%{PROJ_DELIM}
 Summary: Slurm SQL support
 Group: System Environment/Base
-%description sql
+%description -n %{pname}-sql%{PROJ_DELIM}
 Slurm SQL support. Contains interfaces to MySQL.
 
 %package -n %{pname}-plugins%{PROJ_DELIM}
 Summary: Slurm plugins (loadable shared objects)
 Group: System Environment/Base
-%description plugins
+%description -n %{pname}-plugins%{PROJ_DELIM}
 Slurm plugins (loadable shared objects) supporting a wide variety of
 architectures and behaviors. These basically provide the building blocks
 with which Slurm can be configured. Note that some system specific plugins
@@ -343,14 +343,14 @@ are in other packages
 Summary: Torque/PBS wrappers for transitition from Torque/PBS to Slurm
 Group: Development/System
 Requires: slurm-perlapi
-%description torque
+%description -n %{pname}-torque%{PROJ_DELIM}
 Torque wrapper scripts used for helping migrate from Torque/PBS to Slurm
 
 %package -n %{pname}-sjobexit%{PROJ_DELIM}
 Summary: Slurm job exit code management tools
 Group: Development/System
 Requires: slurm-perlapi%{PROJ_DELIM}
-%description sjobexit
+%description -n %{pname}-sjobexit%{PROJ_DELIM}
 Slurm job exit code management tools. Enables users to alter job exit code
 information for completed jobs
 
@@ -358,7 +358,7 @@ information for completed jobs
 Summary: Wrappers to write directly to the slurmdb
 Group: Development/System
 Requires: slurm-perlapi%{PROJ_DELIM}
-%description slurmdb-direct
+%description -n %{pname}-slurmdb-direct%{PROJ_DELIM}
 Wrappers to write directly to the slurmdb
 
 %if %{slurm_with aix}
@@ -400,7 +400,7 @@ Summary: Slurm lua bindings
 Group: System Environment/Base
 Requires: slurm%{PROJ_DELIM} lua
 BuildRequires: lua-devel
-%description lua
+%description -n %{pname}-lua%{PROJ_DELIM}
 Slurm lua bindings
 Includes the Slurm proctrack/lua and job_submit/lua plugin
 %endif
@@ -409,7 +409,7 @@ Includes the Slurm proctrack/lua and job_submit/lua plugin
 Summary: Perl tool to print Slurm job state information
 Group: Development/System
 Requires: slurm%{PROJ_DELIM}
-%description sjstat
+%description -n %{pname}-sjstat%{PROJ_DELIM}
 Perl tool to print Slurm job state information. The output is designed to give
 information on the resource usage and availablilty, as well as information
 about jobs that are currently active on the machine. This output is built
@@ -423,7 +423,7 @@ Group: System Environment/Base
 Requires: slurm%{PROJ_DELIM} slurm-devel
 BuildRequires: pam-devel
 Obsoletes: pam_slurm
-%description pam_slurm
+%description -n %{pname}-pam_slurm%{PROJ_DELIM}
 This module restricts access to compute nodes in a cluster where Slurm is in
 use.  Access is granted to root, any user with an Slurm-launched job currently
 running on the node, or any user who has allocated resources on the node
@@ -435,7 +435,7 @@ according to the Slurm
 Summary: Allows Slurm to use Berkeley Lab Checkpoint/Restart
 Group: System Environment/Base
 Requires: slurm%{PROJ_DELIM}
-%description blcr
+%description -n %{pname}-blcr%{PROJ_DELIM}
 Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 %endif
 
