@@ -58,7 +58,8 @@ BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
 %if 0%{with_slurm}
-BuildRequires:  slurm-devel%{PROJ_DELIM}
+#BuildRequires:  slurm-devel%{PROJ_DELIM}
+BuildRequires:  slurm-devel-fsp
 #!BuildIgnore:  slurm%{PROJ_DELIM}
 %endif
 
