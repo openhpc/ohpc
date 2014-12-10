@@ -1,17 +1,18 @@
 %define compiler_family intel
+%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
-Summary: FSP metapackage for Intel MPI
-Name:    FSP-intel-mpi
-Version: 5.0.2.044
-Source0: intel-mpi-l_mpi_p_%{version}.tar.gz
+Summary:   Intel MPI implementation
+Name:      intel-mpi%{PROJ_DELIM}
+Version:   5.0.2.044
+Source0:   intel-mpi-l_mpi_p_%{version}.tar.gz
 Source1:   FSP_macros
-Release: 1
-License: Intel
-Group: Development/Tools
+Release:   1
+License:   Intel
+Group:     Development/Tools
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+AutoReq:   no
 #AutoReqProv: no
-AutoReq: no
 
 %include %{_sourcedir}/FSP_macros
 

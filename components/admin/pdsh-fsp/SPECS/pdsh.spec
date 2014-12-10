@@ -1,22 +1,16 @@
 %include %{_sourcedir}/FSP_macros
 
 %define pname pdsh
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
-
-
-Summary: Parallel remote shell program
-Name:    %{rpmname}
-Version: 2.31
-Release: %{_rel}
-License: GPL
-Url:     http://sourceforge.net/projects/pdsh
-Group:   System Environment/Base
-Source0: pdsh-%{version}.tar.bz2
+Summary:   Parallel remote shell program
+Name:      %{pname}%{PROJ_DELIM}
+Version:   2.31
+Release:   %{_rel}
+License:   GPL
+Url:       http://sourceforge.net/projects/pdsh
+Group:     System Environment/Base
+Source0:   pdsh-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
@@ -131,14 +125,14 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %{?_with_nodeupdown:BuildRequires: whatsup}
 %{?_with_genders:BuildRequires: genders > 1.0}
 %{?_with_pam:BuildRequires: pam-devel}
-%{?_with_slurm:BuildRequires: slurm-devel}
+%{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
 %{?_with_torque:BuildRequires: torque-devel}
 
 
 BuildRequires: ncurses-devel
 BuildRequires: readline-devel
 BuildRequires: pam-devel
-BuildRequires: slurm-devel
+BuildRequires: slurm-devel%{PROJ_DELIM}
 
 
 ##############################################################################

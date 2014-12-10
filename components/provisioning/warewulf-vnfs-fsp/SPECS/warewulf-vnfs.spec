@@ -1,26 +1,21 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
 %include %{_sourcedir}/FSP_macros
 %define debug_package %{nil}
+
 %define pname warewulf-vnfs
-
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
-
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary: Warewulf VNFS Module
-Name: %{rpmname}
+Name:    %{pname}%{PROJ_DELIM}
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group: System Environment/Clustering
-URL: http://warewulf.lbl.gov/
-Source: %{pname}-%{version}.tar.gz
+Group:   System Environment/Clustering
+URL:     http://warewulf.lbl.gov/
+Source:  %{pname}-%{version}.tar.gz
 ExclusiveOS: linux
-Requires: warewulf-common-fsp
-BuildRequires: warewulf-common-fsp
+Requires: warewulf-common%{PROJ_DELIM}
+BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildArch: x86_64

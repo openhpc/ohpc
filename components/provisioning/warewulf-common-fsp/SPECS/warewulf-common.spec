@@ -1,20 +1,18 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-%include %{_sourcedir}/FSP_macros
+
 %define wwpkgdir /srv/
+
+%include %{_sourcedir}/FSP_macros
+
 %define pname warewulf-common
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
-
-Name: %{rpmname}
+Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group: System Environment/Clustering
+Group:   System Environment/Clustering
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 ExclusiveOS: linux

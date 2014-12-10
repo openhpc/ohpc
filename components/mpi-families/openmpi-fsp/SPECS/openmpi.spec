@@ -6,17 +6,18 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %define compiler_family gnu   }
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod
+BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers
-Requires: FSP-gnu-compilers
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers
-Requires:      gcc-c++ FSP-intel-compilers
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -32,7 +33,7 @@ BuildRequires: intel_licenses
 %define with_slurm 1
 
 Summary:   A powerful implementation of MPI
-Name:      FSP-%{pname}-%{compiler_family}
+Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.8.3
 Release:   1
 License:   BSD-3-Clause
@@ -43,7 +44,7 @@ Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 Patch1:    %{pname}-no_date_and_time.patch
 Patch2:    %{pname}-no_network_in_build.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %include %{_sourcedir}/FSP_macros
 
@@ -57,8 +58,8 @@ BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
 %if 0%{with_slurm}
-BuildRequires:  slurm-devel-fsp
-#!BuildIgnore:  slurm-fsp
+BuildRequires:  slurm-devel%{PROJ_DELIM}
+#!BuildIgnore:  slurm
 %endif
 
 %if 0%{?suse_version}
@@ -70,7 +71,7 @@ BuildRequires:  numactl-devel
 %endif
 
 %if %{with_lustre}
-BuildRequires:  lustre-client
+BuildRequires:  lustre-client%{PROJ_DELIM}
 %endif
 
 %if %{with_openib}

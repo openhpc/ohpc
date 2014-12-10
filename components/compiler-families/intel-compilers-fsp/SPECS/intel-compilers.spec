@@ -1,15 +1,10 @@
 %include %{_sourcedir}/FSP_macros
 
 %define pname intel-compilers
-
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Intel Parallel Studio 
-Name:      %{rpmname}
+Name:      %{pname}%{PROJ_DELIM}
 Version:   15.0.1.133
 Release:   1
 License:   Intel

@@ -1,4 +1,7 @@
-Name:		munge
+%define pname munge
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
+Name:           %{pname}%{PROJ_DELIM}
 Version:	0.5.11
 Release:	1%{?dist}
 
@@ -6,7 +9,7 @@ Summary:	MUNGE authentication service
 Group:		System Environment/Daemons
 License:	GPLv3+ and LGPLv3+
 URL:		https://munge.googlecode.com/
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
 
 %if 0%{?suse_version} >= 1100
 BuildRequires:	libbz2-devel
@@ -23,16 +26,16 @@ BuildRequires:	openssl-devel
 BuildRequires:	zlib-devel
 %endif
 %endif
-BuildRoot:	%{_tmppath}/%{name}-%{version}
+BuildRoot:	%{_tmppath}/%{pname}-%{version}
 BuildConflicts: post-build-checks
 
-Source0:	%{name}-%{version}.tar.bz2
+Source0:	%{pname}-%{version}.tar.bz2
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
-Patch1:     %{name}.logdir.patch
+Patch1:     %{pname}.logdir.patch
 # 6/12/14 karl.w.schulz@intel.com - define default runlevel
-Patch2:     %{name}.initd.patch
+Patch2:     %{pname}.initd.patch
 # 11/10/14 karl.w.schulz@intel.com - enable systemd-based startup
-Patch3:     %{name}.service.patch
+Patch3:     %{pname}.service.patch
 
 %if 0%{?suse_version} >= 1230
 Requires(pre):	shadow
@@ -44,20 +47,20 @@ Requires(pre):	shadow-utils
 %endif
 %endif
 
-%package devel
+%package -n %{pname}-devel%{PROJ_DELIM}
 Summary:	Headers and libraries for developing applications using MUNGE
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
 %if 0%{?suse_version}
 BuildRequires:	pkg-config
 %else
 BuildRequires:	pkgconfig
 %endif
 
-%package libs
+%package -n %{pname}-libs%{PROJ_DELIM}
 Summary:	Libraries for applications using MUNGE
 Group:		System Environment/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 %description
 MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating
@@ -69,14 +72,14 @@ defined by a shared cryptographic key.  Clients within this security realm
 can create and validate credentials without the use of root privileges,
 reserved ports, or platform-specific methods.
 
-%description devel
+%description -n %{pname}-devel%{PROJ_DELIM}
 A header file and static library for developing applications using MUNGE.
 
-%description libs
+%description -n %{pname}-libs%{PROJ_DELIM}
 A shared library for applications using MUNGE.
 
 %prep
-%setup
+%setup -n %{pname}-%{version}
 
 # Intel FSP patches
 %patch1
@@ -150,7 +153,7 @@ fi
    if [ -x /sbin/chkconfig ]; then /sbin/chkconfig --add munge; fi
 %endif
 
-%post libs
+%post -n %{pname}-libs%{PROJ_DELIM}
 /sbin/ldconfig %{_libdir}
 
 %preun
@@ -173,7 +176,7 @@ if [ $1 -ge 1 ]; then
    %endif
 fi
 
-%postun libs
+%postun -n %{pname}-libs%{PROJ_DELIM}
 /sbin/ldconfig %{_libdir}
 
 %files
@@ -215,7 +218,7 @@ fi
 %{_prefix}/lib/tmpfiles.d/munge.conf
 %endif
 
-%files devel
+%files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %{_includedir}/*
 %{_libdir}/*.la
@@ -224,6 +227,6 @@ fi
 %{_libdir}/*.a
 %{_libdir}/*.so
 
-%files libs
+%files -n %{pname}-libs%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %{_libdir}/*.so.*

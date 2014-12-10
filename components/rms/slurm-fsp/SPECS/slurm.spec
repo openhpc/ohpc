@@ -1,3 +1,6 @@
+%define pname slurm
+%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
+
 # $Id$
 #
 # Note that this package is not relocatable
@@ -83,7 +86,7 @@
 %slurm_with_opt sgijob
 %endif
 
-Name:    slurm 
+Name:    %{pname}%{PROJ_DELIM}
 Version: 14.11.1
 Release: %{?dist}
 
@@ -91,12 +94,12 @@ Summary: Slurm Workload Manager
 
 License: GPL
 Group: System Environment/Base
-Source: %{name}-%{version}.tar.bz2
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+Source: %{pname}-%{version}.tar.bz2
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
 URL: http://slurm.schedmd.com/
 
 # 8/11/14 karl.w.schulz@intel.com - update default runlevels
-Patch1:     %{name}.initd.patch
+Patch1:     %{pname}.initd.patch
 Patch2:     slurmctld.service.patch
 Patch3:     slurmdbd.service.patch
 Patch4:     slurmd.service.patch
@@ -109,7 +112,7 @@ BuildRequires: klogd sysconfig
 %endif
 %endif
 
-Requires: slurm-plugins
+Requires: %{pname}-plugins%{PROJ_DELIM}
 BuildConflicts: post-build-checks
 
 %ifos linux
@@ -249,43 +252,43 @@ scheduling and accounting modules
 %define _perlarchlibdir %{_prefix}%{_perlarchlib}
 %define _php_extdir %(php-config --extension-dir 2>/dev/null || echo %{_libdir}/php5)
 
-%package perlapi
+%package -n %{pname}-perlapi%{PROJ_DELIM}
 Summary: Perl API to Slurm
 Group: Development/System
-Requires: slurm
-%description perlapi
+Requires: %{pname}%{PROJ_DELIM}
+%description -n %{pname}-perlapi%{PROJ_DELIM}
 Perl API package for Slurm.  This package includes the perl API to provide a
 helpful interface to Slurm through Perl
 
-%package devel
+%package -n %{pname}-devel%{PROJ_DELIM}
 Summary: Development package for Slurm
 Group: Development/System
-Requires: slurm
+Requires: %{pname}%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires:  pkg-config
 %else
 BuildRequires:  pkgconfig
 %endif
 
-%description devel
+%description -n %{pname}-devel%{PROJ_DELIM}
 Development package for Slurm.  This package includes the header files
 and static libraries for the Slurm API
 
 %if %{slurm_with auth_none}
-%package auth-none
+%package -n %{pname}-auth-none%{PROJ_DELIM}
 Summary: Slurm auth NULL implementation (no authentication)
 Group: System Environment/Base
-Requires: slurm
-%description auth-none
+Requires: %{pname}%{PROJ_DELIM}
+%description -n %{pname}-auth-none%{PROJ_DELIM}
 Slurm NULL authentication module
 %endif
 
 %if %{slurm_with authd}
-%package auth-authd
+%package -n %{pname}-auth-authd%{PROJ_DELIM}
 Summary: Slurm auth implementation using Brent Chun's authd
 Group: System Environment/Base
-Requires: slurm authd
-%description auth-authd
+Requires: %{pname}%{PROJ_DELIM} authd
+%description -n %{pname}-auth-authd%{PROJ_DELIM}
 Slurm authentication module for Brent Chun's authd. Used to
 authenticate user originating an RPC
 %endif
@@ -293,13 +296,13 @@ authenticate user originating an RPC
 # This is named munge instead of auth-munge since there are 2 plugins in the
 # package.  auth-munge and crypto-munge
 %if %{slurm_with munge}
-%package munge
+%package -n %{pname}-munge%{PROJ_DELIM}
 Summary: Slurm authentication and crypto implementation using Munge
 Group: System Environment/Base
-Requires: slurm munge
-BuildRequires: munge-devel munge-libs
+Requires: %{pname}%{PROJ_DELIM} munge%{PROJ_DELIM}
+BuildRequires: munge-devel%{PROJ_DELIM} munge-libs%{PROJ_DELIM}
 Obsoletes: slurm-auth-munge
-%description munge
+%description -n %{pname}-munge%{PROJ_DELIM}
 Slurm authentication and crypto implementation using Munge. Used to
 authenticate user originating an RPC, digitally sign and/or encrypt messages
 %endif
@@ -313,49 +316,49 @@ Requires: slurm
 Slurm plugin interfaces to IBM Blue Gene system
 %endif
 
-%package slurmdbd
+%package -n %{pname}-slurmdbd%{PROJ_DELIM}
 Summary: Slurm database daemon
 Group: System Environment/Base
-Requires: slurm-plugins slurm-sql
-%description slurmdbd
+Requires: slurm-plugins%{PROJ_DELIM} slurm-sql%{PROJ_DELIM}
+%description -n %{pname}-slurmdbd%{PROJ_DELIM}
 Slurm database daemon. Used to accept and process database RPCs and upload
 database changes to slurmctld daemons on each cluster
 
-%package sql
+%package -n %{pname}-sql%{PROJ_DELIM}
 Summary: Slurm SQL support
 Group: System Environment/Base
-%description sql
+%description -n %{pname}-sql%{PROJ_DELIM}
 Slurm SQL support. Contains interfaces to MySQL.
 
-%package plugins
+%package -n %{pname}-plugins%{PROJ_DELIM}
 Summary: Slurm plugins (loadable shared objects)
 Group: System Environment/Base
-%description plugins
+%description -n %{pname}-plugins%{PROJ_DELIM}
 Slurm plugins (loadable shared objects) supporting a wide variety of
 architectures and behaviors. These basically provide the building blocks
 with which Slurm can be configured. Note that some system specific plugins
 are in other packages
 
-%package torque
+%package -n %{pname}-torque%{PROJ_DELIM}
 Summary: Torque/PBS wrappers for transitition from Torque/PBS to Slurm
 Group: Development/System
 Requires: slurm-perlapi
-%description torque
+%description -n %{pname}-torque%{PROJ_DELIM}
 Torque wrapper scripts used for helping migrate from Torque/PBS to Slurm
 
-%package sjobexit
+%package -n %{pname}-sjobexit%{PROJ_DELIM}
 Summary: Slurm job exit code management tools
 Group: Development/System
-Requires: slurm-perlapi
-%description sjobexit
+Requires: slurm-perlapi%{PROJ_DELIM}
+%description -n %{pname}-sjobexit%{PROJ_DELIM}
 Slurm job exit code management tools. Enables users to alter job exit code
 information for completed jobs
 
-%package slurmdb-direct
+%package -n %{pname}-slurmdb-direct%{PROJ_DELIM}
 Summary: Wrappers to write directly to the slurmdb
 Group: Development/System
-Requires: slurm-perlapi
-%description slurmdb-direct
+Requires: slurm-perlapi%{PROJ_DELIM}
+%description -n %{pname}-slurmdb-direct%{PROJ_DELIM}
 Wrappers to write directly to the slurmdb
 
 %if %{slurm_with aix}
@@ -392,21 +395,21 @@ Slurm process tracking plugin for SGI job containers
 %endif
 
 %if %{slurm_with lua}
-%package lua
+%package -n %{pname}-lua%{PROJ_DELIM}
 Summary: Slurm lua bindings
 Group: System Environment/Base
-Requires: slurm lua
+Requires: slurm%{PROJ_DELIM} lua
 BuildRequires: lua-devel
-%description lua
+%description -n %{pname}-lua%{PROJ_DELIM}
 Slurm lua bindings
 Includes the Slurm proctrack/lua and job_submit/lua plugin
 %endif
 
-%package sjstat
+%package -n %{pname}-sjstat%{PROJ_DELIM}
 Summary: Perl tool to print Slurm job state information
 Group: Development/System
-Requires: slurm
-%description sjstat
+Requires: slurm%{PROJ_DELIM}
+%description -n %{pname}-sjstat%{PROJ_DELIM}
 Perl tool to print Slurm job state information. The output is designed to give
 information on the resource usage and availablilty, as well as information
 about jobs that are currently active on the machine. This output is built
@@ -414,13 +417,13 @@ using the Slurm utilities, sinfo, squeue and scontrol, the man pages for these
 utilites will provide more information and greater depth of understanding
 
 %if %{slurm_with pam}
-%package pam_slurm
+%package -n %{pname}-pam_slurm%{PROJ_DELIM}
 Summary: PAM module for restricting access to compute nodes via Slurm
 Group: System Environment/Base
-Requires: slurm slurm-devel
+Requires: slurm%{PROJ_DELIM} slurm-devel
 BuildRequires: pam-devel
 Obsoletes: pam_slurm
-%description pam_slurm
+%description -n %{pname}-pam_slurm%{PROJ_DELIM}
 This module restricts access to compute nodes in a cluster where Slurm is in
 use.  Access is granted to root, any user with an Slurm-launched job currently
 running on the node, or any user who has allocated resources on the node
@@ -428,11 +431,11 @@ according to the Slurm
 %endif
 
 %if %{slurm_with blcr}
-%package blcr
+%package -n %{pname}-blcr%{PROJ_DELIM}
 Summary: Allows Slurm to use Berkeley Lab Checkpoint/Restart
 Group: System Environment/Base
-Requires: slurm
-%description blcr
+Requires: slurm%{PROJ_DELIM}
+%description -n %{pname}-blcr%{PROJ_DELIM}
 Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 %endif
 
@@ -657,7 +660,7 @@ libdir=%{_libdir}
 Cflags: -I\${includedir}
 Libs: -L\${libdir} -lslurm
 Description: Slurm API
-Name: %{name}
+Name: %{pname}
 Version: %{version}
 EOF
 
@@ -851,7 +854,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 #############################################################################
 
-%files -f devel.files devel
+%files -f devel.files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root)
 %dir %attr(0755,root,root)
 %dir %{_prefix}/include/slurm
@@ -865,14 +868,14 @@ rm -rf $RPM_BUILD_ROOT
 #############################################################################
 
 %if %{slurm_with auth_none}
-%files auth-none
+%files -n %{pname}-auth-none%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_libdir}/slurm/auth_none.so
 %endif
 #############################################################################
 
 %if %{slurm_with munge}
-%files munge
+%files -n %{pname}-munge%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_libdir}/slurm/auth_munge.so
 %{_libdir}/slurm/crypto_munge.so
@@ -881,7 +884,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %if %{slurm_with authd}
 %defattr(-,root,root)
-%files auth-authd
+%files -n %{pname}-auth-authd%{PROJ_DELIM}
 %{_libdir}/slurm/auth_authd.so
 %endif
 #############################################################################
@@ -898,7 +901,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 #############################################################################
 
-%files -f perlapi.files perlapi
+%files -f perlapi.files -n %{pname}-perlapi%PROJ_DELIM
 %defattr(-,root,root)
 %{_perldir}/Slurm.pm
 %{_perldir}/Slurm/Bitstr.pm
@@ -913,7 +916,7 @@ rm -rf $RPM_BUILD_ROOT
 
 #############################################################################
 
-%files -f slurmdbd.files slurmdbd
+%files -f slurmdbd.files -n %{pname}-slurmdbd%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_sbindir}/slurmdbd
 %{_mandir}/man5/slurmdbd.*
@@ -921,12 +924,12 @@ rm -rf $RPM_BUILD_ROOT
 %config %{_sysconfdir}/slurmdbd.conf.example
 #############################################################################
 
-%files -f sql.files sql
+%files -f sql.files -n %{pname}-sql%{PROJ_DELIM}
 %defattr(-,root,root)
 %dir %{_libdir}/slurm
 #############################################################################
 
-%files -f plugins.files plugins
+%files -f plugins.files -n %{pname}-plugins%{PROJ_DELIM}
 %defattr(-,root,root)
 %dir %{_libdir}/slurm
 %{_libdir}/slurm/accounting_storage_filetxt.so
@@ -998,7 +1001,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/slurm/topology_tree.so
 #############################################################################
 
-%files torque
+%files -n %{pname}-torque%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_bindir}/pbsnodes
 %{_bindir}/qalter
@@ -1014,13 +1017,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/slurm/spank_pbs.so
 #############################################################################
 
-%files sjobexit
+%files -n %{pname}-sjobexit%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_bindir}/sjobexitmod
 %{_mandir}/man1/sjobexit*
 #############################################################################
 
-%files slurmdb-direct
+%files -n %{pname}-slurmdb-direct%{PROJ_DELIM}
 %defattr(-,root,root)
 %config (noreplace) %{_perldir}/config.slurmdb.pl
 %{_sbindir}/moab_2_slurmdb
@@ -1047,7 +1050,7 @@ rm -rf $RPM_BUILD_ROOT
 #############################################################################
 
 %if %{slurm_with lua}
-%files lua
+%files -n %{pname}-lua%{PROJ_DELIM}
 %defattr(-,root,root)
 %doc contribs/lua/proctrack.lua
 %{_libdir}/slurm/job_submit_lua.so
@@ -1055,20 +1058,20 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 #############################################################################
 
-%files sjstat
+%files -n %{pname}-sjstat%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_bindir}/sjstat
 %{_mandir}/man1/sjstat*
 #############################################################################
 
 %if %{slurm_with pam}
-%files -f pam.files pam_slurm
+%files -f pam.files -n %{pname}-pam_slurm%{PROJ_DELIM}
 %defattr(-,root,root)
 %endif
 #############################################################################
 
 %if %{slurm_with blcr}
-%files blcr
+%files -n %{pname}-blcr%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_bindir}/srun_cr
 %{_libexecdir}/slurm/cr_*
@@ -1121,7 +1124,7 @@ if [ "$1" = 0 ]; then
     fi
 fi
 
-%preun slurmdbd
+%preun -n %{pname}-slurmdbd%{PROJ_DELIM}
 if [ "$1" = 0 ]; then
     if [ -x /etc/init.d/slurmdbd ]; then
 	[ -x /sbin/chkconfig ] && /sbin/chkconfig --del slurmdbd

@@ -1,15 +1,10 @@
 %include %{_sourcedir}/FSP_macros
 
 %define pname libtool
-
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   The GNU Portable Library Tool
-Name:      %{rpmname}
+Name:      %{pname}%{PROJ_DELIM}
 Version:   2.4.3
 Release:   1
 License:   GPLv2+ and LGPLv2+ and GFDL
@@ -23,10 +18,10 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define install_path %{FSP_PUB}/autotools
 
-Requires:      autoconf-fsp >= 2.69
-Requires:      automake-fsp >= 1.14.1
-BuildRequires: autoconf-fsp >= 2.69
-BuildRequires: automake-fsp >= 1.14.1
+Requires:      autoconf%{PROJ_DELIM} >= 2.69
+Requires:      automake%{PROJ_DELIM} >= 1.14.1
+BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
+BuildRequires: automake%{PROJ_DELIM} >= 1.14.1
 
 %description
 GNU Libtool is a set of shell scripts which automatically configure UNIX and
