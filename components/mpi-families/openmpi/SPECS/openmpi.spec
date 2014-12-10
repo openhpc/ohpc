@@ -57,8 +57,8 @@ BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
 %if 0%{with_slurm}
-BuildRequires:  slurm-devel
-#!BuildIgnore:  slurm
+BuildRequires:  slurm-devel-fsp
+#!BuildIgnore:  slurm-fsp
 %endif
 
 %if 0%{?suse_version}
