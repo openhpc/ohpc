@@ -58,7 +58,7 @@ BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
 %if 0%{with_slurm}
-BuildRequires:  slurm-devel
+BuildRequires:  slurm-devel%{PROJ_DELIM}
 #!BuildIgnore:  slurm
 %endif
 
@@ -71,7 +71,7 @@ BuildRequires:  numactl-devel
 %endif
 
 %if %{with_lustre}
-BuildRequires:  lustre-client
+BuildRequires:  lustre-client%{PROJ_DELIM}
 %endif
 
 %if %{with_openib}
