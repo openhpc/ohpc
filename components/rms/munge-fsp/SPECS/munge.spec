@@ -1,8 +1,7 @@
 %define pname munge
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-%{!?PROJ_DELIM: %define PROJ_DELIM fsp}
-
-Name:		%{pname}-%{PROJ_DELIM}
+Name:           %{pname}%{PROJ_DELIM}
 Version:	0.5.11
 Release:	1%{?dist}
 
@@ -10,7 +9,7 @@ Summary:	MUNGE authentication service
 Group:		System Environment/Daemons
 License:	GPLv3+ and LGPLv3+
 URL:		https://munge.googlecode.com/
-Requires:	%{pname}-libs-%{PROJ_DELIM} = %{version}-%{release}
+Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
 
 %if 0%{?suse_version} >= 1100
 BuildRequires:	libbz2-devel
@@ -48,20 +47,20 @@ Requires(pre):	shadow-utils
 %endif
 %endif
 
-%package -n %{pname}-devel-%{PROJ_DELIM}
+%package -n %{pname}-devel%{PROJ_DELIM}
 Summary:	Headers and libraries for developing applications using MUNGE
 Group:		Development/Libraries
-Requires:	%{pname}-libs-%{PROJ_DELIM} = %{version}-%{release}
+Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
 %if 0%{?suse_version}
 BuildRequires:	pkg-config
 %else
 BuildRequires:	pkgconfig
 %endif
 
-%package -n %{pname}-libs-%{PROJ_DELIM}
+%package -n %{pname}-libs%{PROJ_DELIM}
 Summary:	Libraries for applications using MUNGE
 Group:		System Environment/Libraries
-Requires:	%{pname}-%{PROJ_DELIM} = %{version}-%{release}
+Requires:	%{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 %description
 MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating
@@ -73,10 +72,10 @@ defined by a shared cryptographic key.  Clients within this security realm
 can create and validate credentials without the use of root privileges,
 reserved ports, or platform-specific methods.
 
-%description -n %{pname}-devel-%{PROJ_DELIM}
+%description -n %{pname}-devel%{PROJ_DELIM}
 A header file and static library for developing applications using MUNGE.
 
-%description -n %{pname}-libs-%{PROJ_DELIM}
+%description -n %{pname}-libs%{PROJ_DELIM}
 A shared library for applications using MUNGE.
 
 %prep
@@ -154,7 +153,7 @@ fi
    if [ -x /sbin/chkconfig ]; then /sbin/chkconfig --add munge; fi
 %endif
 
-%post -n %{pname}-libs-%{PROJ_DELIM}
+%post -n %{pname}-libs%{PROJ_DELIM}
 /sbin/ldconfig %{_libdir}
 
 %preun
@@ -177,7 +176,7 @@ if [ $1 -ge 1 ]; then
    %endif
 fi
 
-%postun -n %{pname}-libs-%{PROJ_DELIM}
+%postun -n %{pname}-libs%{PROJ_DELIM}
 /sbin/ldconfig %{_libdir}
 
 %files
@@ -219,7 +218,7 @@ fi
 %{_prefix}/lib/tmpfiles.d/munge.conf
 %endif
 
-%files -n %{pname}-devel-%{PROJ_DELIM}
+%files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %{_includedir}/*
 %{_libdir}/*.la
@@ -228,6 +227,6 @@ fi
 %{_libdir}/*.a
 %{_libdir}/*.so
 
-%files -n %{pname}-libs-%{PROJ_DELIM}
+%files -n %{pname}-libs%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %{_libdir}/*.so.*
