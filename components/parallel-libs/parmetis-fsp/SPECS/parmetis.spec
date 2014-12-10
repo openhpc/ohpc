@@ -2,6 +2,8 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
+%include %{_sourcedir}/FSP_macros
+
 # FSP convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
@@ -11,14 +13,14 @@
 %{!?mpi_family: %define mpi_family openmpi}
 
 # Compiler dependencies
-BuildRequires: lmod coreutils
+BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers 
-Requires:      FSP-gnu-compilers 
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers 
-Requires:      gcc-c++ FSP-intel-compilers 
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -26,16 +28,16 @@ BuildRequires: intel_licenses
 
 # MPI dependencies
 %if %{mpi_family} == impi
-BuildRequires: FSP-intel-mpi
-Requires:      FSP-intel-mpi
+BuildRequires: intel-mpi%{PROJ_DELIM}
+Requires:      intel-mpi%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == mvapich2
-BuildRequires: FSP-mvapich2-%{compiler_family}
-Requires:      FSP-mvapich2-%{compiler_family}
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == openmpi
-BuildRequires: FSP-openmpi-%{compiler_family}
-Requires:      FSP-openmpi-%{compiler_family}
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 #-fsp-header-comp-end------------------------------------------------
@@ -45,7 +47,7 @@ Requires:      FSP-openmpi-%{compiler_family}
 %define pname metis
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name: par%{pname}-%{compiler_family}-%{mpi_family}
+Name: par%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
 Version: 4.0.3
 Release: 1
@@ -56,18 +58,16 @@ Source0: par%{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler
 Source3: FSP_setup_mpi
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
 Requires:      libmetis0 = %{version}
 
-%include %{_sourcedir}/FSP_macros
-
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/par%{pname}/%version
 
 %description
 METIS is a family of programs for partitioning unstructured graphs and hypergraph
