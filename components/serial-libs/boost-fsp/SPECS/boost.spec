@@ -65,7 +65,7 @@ Url:            http://www.boost.org
 Source0:	%{pname}-%{version}.tar.gz 
 Source1:        boost-rpmlintrc
 #Source3:        %{pname}_%{short_version}_pdf.tar.bz2
-Source4:        existing_extra_docs
+Source3:        existing_extra_docs
 #Source5:        NEWS
 Source100:      baselibs.conf
 Source101:	FSP_macros
