@@ -1001,7 +1001,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/slurm/topology_tree.so
 #############################################################################
 
-%files torque
+%files -n %{pname}-torque%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_bindir}/pbsnodes
 %{_bindir}/qalter
