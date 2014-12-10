@@ -103,6 +103,10 @@ shown to produce high quality results and scale to very large problems.
 %build
 
 # FSP compiler/mpi designation
+
+%if %{compiler_family} == intel
+export CFLAGS="-fPIC $CFLAGS"
+%endif
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
