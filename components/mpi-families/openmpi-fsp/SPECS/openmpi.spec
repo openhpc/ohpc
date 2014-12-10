@@ -59,7 +59,7 @@ BuildRequires:  opensm-devel
 BuildRequires:  numactl
 %if 0%{with_slurm}
 BuildRequires:  slurm-devel%{PROJ_DELIM}
-#!BuildIgnore:  slurm
+#!BuildIgnore:  slurm%{PROJ_DELIM}
 %endif
 
 %if 0%{?suse_version}
