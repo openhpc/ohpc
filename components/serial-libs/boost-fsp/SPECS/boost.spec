@@ -1,22 +1,24 @@
-#
-# spec file for package boost
-#
-# Library build that is dependent on compiler
-# toolchain and MPI
+# Serial boost build that is dependent on compiler toolchain
 
-%{!?compiler_family: %define compiler_family gnu}
 %define _unpackaged_files_terminate_build 0
 %define build_mpi 0
 
-
 #-fsp-header-comp-begin-----------------------------
 
+%include %{_sourcedir}/FSP_macros
+
+# FSP convention: the default assumes the gnu compiler family;
+# however, this can be overridden by specifing the compiler_family
+# variable via rpmbuild or other mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu   }
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod coreutils
+BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers
-Requires:      FSP-gnu-compilers
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 ## Toolsets supported by boost script are:
 ##     acc, como, darwin, gcc, intel-darwin, intel-linux, kcc, kylix,
 ##     mipspro, mingw(msys), pathscale, pgi, qcc, sun, sunpro, tru64cxx, vacpp
@@ -24,8 +26,8 @@ Requires:      FSP-gnu-compilers
 %endif
 
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers
-Requires:      gcc-c++ FSP-intel-compilers
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 ## Toolsets supported by boost script are:
 ##     acc, como, darwin, gcc, intel-darwin, intel-linux, kcc, kylix,
 ##     mipspro, mingw(msys), pathscale, pgi, qcc, sun, sunpro, tru64cxx, vacpp
@@ -54,7 +56,7 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
-Name:		%{pname}-%{compiler_family}
+Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.56.0
 Release:        0
 License:        BSL-1.0
