@@ -1,12 +1,7 @@
 %include %{_sourcedir}/FSP_macros
 
 %define pname lmod
-
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 %if 0%{?suse_version} <= 1220
 %define luaver 5.1
@@ -18,16 +13,17 @@
 %define LUA_CPATH ?.so;?/?.so;%{lualibdir}/?.so
 %define LUA_PATH ?.lua;?/?.lua;%{luapkgdir}/?.lua
 
-Summary:  Lua based Modules (lmod)
-Name: %{rpmname}
-Version: 5.8
-Release: 1
-License: MIT
-Group: System Environment/Base
-Url: https://github.com/TACC/Lmod
-Source0: Lmod-%{version}.tar.bz2
-Source1: FSP_macros
+Summary:   Lua based Modules (lmod)
+Name:      %{pname}%{PROJ_DELIM}
+Version:   5.8
+Release:   1
+License:   MIT
+Group:     System Environment/Base
+Url:       https://github.com/TACC/Lmod
+Source0:   Lmod-%{version}.tar.bz2
+Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
 %if 0%{?suse_version} <= 1220
