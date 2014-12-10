@@ -132,7 +132,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires: ncurses-devel
 BuildRequires: readline-devel
 BuildRequires: pam-devel
-BuildRequires: slurm-devel
+BuildRequires: slurm-devel%{PROJ_DELIM}
 
 
 ##############################################################################
