@@ -1124,7 +1124,7 @@ if [ "$1" = 0 ]; then
     fi
 fi
 
-%preun slurmdbd
+%preun -n %{pname}-slurmdbd%{PROJ_DELIM}
 if [ "$1" = 0 ]; then
     if [ -x /etc/init.d/slurmdbd ]; then
 	[ -x /sbin/chkconfig ] && /sbin/chkconfig --del slurmdbd
