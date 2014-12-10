@@ -1,25 +1,20 @@
 %include %{_sourcedir}/FSP_macros
 
 %define pname gnu-compilers
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
-
-Summary: The GNU C Compiler and Support Files
-Name:    %{rpmname}
-Version: 4.9.2
-Release: 1
-License: GPL-3.0+
-Group:   Development/Languages/C and C++
-URL:     http://gcc.gnu.org/
-Source0: gcc-%{version}.tar.bz2
-Source1: gmp-6.0.0a.tar.bz2
-Source2: mpc-1.0.2.tar.gz
-Source3: mpfr-3.1.2.tar.bz2
-Source4: FSP_macros
+Summary:   The GNU C Compiler and Support Files
+Name:      %{pname}%{PROJ_DELIM}
+Version:   4.9.2
+Release:   1
+License:   GPL-3.0+
+Group:     Development/Languages/C and C++
+URL:       http://gcc.gnu.org/
+Source0:   gcc-%{version}.tar.bz2
+Source1:   gmp-6.0.0a.tar.bz2
+Source2:   mpc-1.0.2.tar.gz
+Source3:   mpfr-3.1.2.tar.bz2
+Source4:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
