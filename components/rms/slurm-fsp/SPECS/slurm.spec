@@ -929,7 +929,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/slurm
 #############################################################################
 
-%files -f plugins.files %{pname}-plugins%{PROJ_DELIM}
+%files -f plugins.files -n %{pname}-plugins%{PROJ_DELIM}
 %defattr(-,root,root)
 %dir %{_libdir}/slurm
 %{_libdir}/slurm/accounting_storage_filetxt.so
