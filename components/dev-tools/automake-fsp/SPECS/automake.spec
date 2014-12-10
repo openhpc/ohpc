@@ -1,15 +1,10 @@
 %include %{_sourcedir}/FSP_macros
 
 %define pname automake
-
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   A GNU tool for automatically creating Makefiles
-Name:      %{rpmname}
+Name:      %{pname}%{PROJ_DELIM}
 Version:   1.14.1
 Release:   1
 License:   GPLv2+ and GFDL
@@ -22,8 +17,8 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
 %define install_path %{FSP_PUB}/autotools
 
-Requires:      autoconf-fsp >= 2.69
-BuildRequires: autoconf-fsp >= 2.69
+Requires:      autoconf%{PROJ_DELIM} >= 2.69
+BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
 
 %description
 Automake is a tool for automatically generating `Makefile.in'
