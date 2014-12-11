@@ -8,6 +8,7 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
+%define compiler_family gnu
 %{!?compiler_family: %define compiler_family gnu   }
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
@@ -102,7 +103,6 @@ This package contains files for developing applications using %{pname}.
 
 %build
 # FSP compiler/mpi designation
-%define compiler_family gnu
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
