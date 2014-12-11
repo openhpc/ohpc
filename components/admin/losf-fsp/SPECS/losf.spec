@@ -1,15 +1,10 @@
 %include %{_sourcedir}/FSP_macros
 
 %define pname losf
-
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   A Linux operating system framework for managing HPC clusters
-Name:      %{rpmname}
+Name:      %{pname}%{PROJ_DELIM}
 Version:   0.50.0
 Release:   1
 License:   GPL-2

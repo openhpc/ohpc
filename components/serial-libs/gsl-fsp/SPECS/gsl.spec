@@ -8,18 +8,18 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      fsp}
+%{!?compiler_family: %define compiler_family gnu   }
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod-%{PROJ_DELIM}
+BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
-BuildRequires: gnu-compilers-%{PROJ_DELIM}
-Requires:      gnu-compilers-%{PROJ_DELIM}
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-%{PROJ_DELIM}
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -32,7 +32,7 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   GNU Scientific Library (GSL)
-Name:      %{pname}-%{compiler_family}-%{PROJ_DELIM}
+Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.16
 Release:   1
 License:   GPL
@@ -51,12 +51,13 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
-The GNU Scientific Library (GSL) is a numerical library for C and C++ 
-programmers.  The library provides a wide range of mathematical routines 
-such as random number generators, special functions and least-squares 
-fitting.  It contains over 1000 mathematical routines written in ANSI C.  
-The library follows modern coding conventions, and lends itself to being 
-used in very high level languages (VHLLs).
+
+The GNU Scientific Library (GSL) is a numerical library for C and C++
+programmers.  The library provides a wide range of mathematical
+routines such as random number generators, special functions and
+least-squares fitting.  It contains over 1000 mathematical routines
+written in ANSI C.  The library follows modern coding conventions, and
+lends itself to being used in very high level languages (VHLLs).
 
 %prep
 %setup -q -n %{pname}-%{version}

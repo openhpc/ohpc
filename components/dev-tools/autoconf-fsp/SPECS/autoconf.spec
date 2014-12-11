@@ -1,15 +1,10 @@
 %include %{_sourcedir}/FSP_macros
 
 %define pname autoconf
-
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   A GNU tool for automatically configuring source code
-Name:      %{rpmname}
+Name:      %{pname}%{PROJ_DELIM}
 Version:   2.69
 Release:   1
 License:   GPLv3+ and GFDL

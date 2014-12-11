@@ -3,14 +3,10 @@
 %define pname valgrind
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Valgrind Memory Debugger
-Name:      %{rpmname}
+Name:      %{pname}%{PROJ_DELIM}
 Version:   3.10.0
 Release:   1
 License:   GPL
@@ -41,10 +37,6 @@ make %{?_smp_mflags}
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
-
-### makeinstall
-### mkdir docs.installed
-### mv $RPM_BUILD_ROOT%{_datadir}/doc/valgrind/* docs.installed/
 
 # modulefile
 
