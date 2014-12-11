@@ -2,6 +2,8 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
+%include %{_sourcedir}/FSP_macros
+
 # FSP convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
@@ -9,16 +11,17 @@
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod coreutils
+BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers
-Requires:      FSP-gnu-compilers
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers
-Requires:      gcc-c++ FSP-intel-compilers
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -26,16 +29,16 @@ BuildRequires: intel_licenses
 
 # MPI dependencies
 %if %{mpi_family} == impi
-BuildRequires: FSP-intel-mpi
-Requires:      FSP-intel-mpi
+BuildRequires: intel-mpi%{PROJ_DELIM}
+Requires:      intel-mpi%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == mvapich2
-BuildRequires: FSP-mvapich2-%{compiler_family}
-Requires:      FSP-mvapich2-%{compiler_family}
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == openmpi
-BuildRequires: FSP-openmpi-%{compiler_family}
-Requires:      FSP-openmpi-%{compiler_family}
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 #-fsp-header-comp-end------------------------------------------------
@@ -45,7 +48,7 @@ Requires:      FSP-openmpi-%{compiler_family}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   A Fast Fourier Transform library
-Name:      %{pname}-%{compiler_family}-%{mpi_family}
+Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.3.4
 Release:   1
 License:   GPLv2+
@@ -55,9 +58,7 @@ Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 Source3:   FSP_setup_mpi
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-
-%include %{_sourcedir}/FSP_macros
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
 %define openmp        1
@@ -157,13 +158,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig || exit 1
-/sbin/install-info --section="Math" %{_infodir}/%{name}.info.gz %{_infodir}/dir  2>/dev/null || :
+/sbin/install-info --section="Math" %{_infodir}/%{pname}.info.gz %{_infodir}/dir  2>/dev/null || :
 exit 0
 %postun -p /sbin/ldconfig
 
 %preun
 if [ "$1" = 0 ]; then
-  /sbin/install-info --delete %{_infodir}/%{name}.info.gz %{_infodir}/dir 2>/dev/null || :
+  /sbin/install-info --delete %{_infodir}/%{pname}.info.gz %{_infodir}/dir 2>/dev/null || :
 fi
 
 %files
