@@ -1,16 +1,23 @@
-%define compiler_family gnu
+# Serial metis build dependent on compiler toolchain
 
 #-fsp-header-comp-begin-----------------------------
 
+# FSP convention: the default assumes the gnu compiler family;
+# however, this can be overridden by specifing the compiler_family
+# variable via rpmbuild or other mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu   }
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+
 # Compiler dependencies
-BuildRequires: lmod coreutils
+BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers 
-Requires:      FSP-gnu-compilers 
+BuildRequires: gnu-compilers%{PROJ_DELIM} 
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers 
-Requires:      gcc-c++ FSP-intel-compilers 
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -22,7 +29,7 @@ BuildRequires: intel_licenses
 %define pname metis
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name: %{pname}-%{compiler_family}
+Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
 Version: 5.1.0
 Release: 1
