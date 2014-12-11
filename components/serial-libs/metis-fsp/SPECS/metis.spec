@@ -1,5 +1,7 @@
 # Serial metis build dependent on compiler toolchain
 
+%include %{_sourcedir}/FSP_macros
+
 #-fsp-header-comp-begin-----------------------------
 
 # FSP convention: the default assumes the gnu compiler family;
@@ -44,8 +46,6 @@ BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
 Requires:      libmetis0 = %{version}
-
-%include %{_sourcedir}/FSP_macros
 
 %define debug_package %{nil}
 
