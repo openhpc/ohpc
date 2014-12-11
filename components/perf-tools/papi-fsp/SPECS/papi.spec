@@ -41,7 +41,7 @@ libraries and interfaces. This is required for rebuilding any program
 that uses PAPI.
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch1 -p1
 
 %build
