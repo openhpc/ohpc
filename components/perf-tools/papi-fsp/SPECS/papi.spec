@@ -1,5 +1,8 @@
+%include %{_sourcedir}/FSP_macros
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+
 Summary: Performance Application Programming Interface
-Name: papi
+Name: papi%{PROJ_DELIM}
 Version: 5.4.0
 Release: 1%{?dist}
 License: BSD
@@ -81,30 +84,3 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_mandir}/man1/*
 
 %changelog
-* Tue Jan 31 2012 Dan Terpstra <terpstra@eecs.utk.edu> - 4.2.1
-- Rebase to papi-4.2.1
-
-* Wed Dec 8 2010 Dan Terpstra <terpstra@eecs.utk.edu> - 4.1.2-1
-- Rebase to papi-4.1.2
-
-* Mon Jun 8 2010 William Cohen <wcohen@redhat.com> - 4.1.0-1
-- Rebase to papi-4.1.0
-
-* Mon May 17 2010 William Cohen <wcohen@redhat.com> - 4.0.0-5
-- Test run with upstream cvs version.
-
-* Wed Feb 10 2010 William Cohen <wcohen@redhat.com> - 4.0.0-4
-- Resolves: rhbz562935 Rebase to papi-4.0.0 (correct ExcludeArch).
-
-* Wed Feb 10 2010 William Cohen <wcohen@redhat.com> - 4.0.0-3
-- Resolves: rhbz562935 Rebase to papi-4.0.0 (bump nvr).
-
-* Wed Feb 10 2010 William Cohen <wcohen@redhat.com> - 4.0.0-2
-- correct the ctests/shlib test
-- have PAPI_set_multiplex() return proper value
-- properly handle event unit masks
-- correct PAPI_name_to_code() to match events
-- Resolves: rhbz562935 Rebase to papi-4.0.0 
-
-* Wed Jan 13 2010 William Cohen <wcohen@redhat.com> - 4.0.0-1
-- Generate papi.spec file for papi-4.0.0.
