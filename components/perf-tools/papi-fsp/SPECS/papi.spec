@@ -1,14 +1,19 @@
 %include %{_sourcedir}/FSP_macros
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
+# Base package name
+%define pname papi
+%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+
+
 Summary: Performance Application Programming Interface
-Name: papi%{PROJ_DELIM}
+Name: %{pname}%{PROJ_DELIM}
 Version: 5.4.0
 Release: 1%{?dist}
 License: BSD
 Group: Development/System
 URL: http://icl.cs.utk.edu/papi/
-Source0: http://icl.cs.utk.edu/projects/papi/downloads/%{name}-%{version}.tar.gz
+Source0: %{pname}-%{version}.tar.gz
 Patch1: %{name}.ldconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: ncurses-devel
