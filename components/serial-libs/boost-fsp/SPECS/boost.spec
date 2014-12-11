@@ -45,10 +45,10 @@ BuildRequires: intel_licenses
 %define debug_package %{nil}
 %define openmp        1
 
-%define ver 1.56.0
-%define bversion 1_56_0
-%define short_version 1_56
-%define lib_appendix 1_56_0
+%define ver 1.57.0
+%define bversion 1_57_0
+%define short_version 1_57
+%define lib_appendix 1_57_0
 
 
 # Base package name
@@ -57,7 +57,7 @@ BuildRequires: intel_licenses
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.56.0
+Version:        1.57.0
 Release:        0
 License:        BSL-1.0
 Group:		System Environment/Libraries
