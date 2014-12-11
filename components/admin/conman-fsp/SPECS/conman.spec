@@ -1,6 +1,12 @@
-# $Id: conman.spec 1063 2011-04-21 23:40:05Z chris.m.dunlap $
+%include %{_sourcedir}/FSP_macros
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
-Name:		conman
+# Base package name
+%define pname conman
+%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+
+
+Name:		%{pname}%{PROJ_DELIM}
 Version:	0.2.7
 Release:	1%{?dist}
 
@@ -23,8 +29,8 @@ BuildRequires:	freeipmi-devel
 %endif
 #!BuildIgnore: post-build-checks
 
-Source0:	%{name}-%{version}.tar.bz2
-Patch1:         %{name}.init.patch
+Source0:	%{pname}-%{version}.tar.bz2
+Patch1:         conman.init.patch
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -47,7 +53,7 @@ Its features include:
   - broadcasting client output to multiple consoles
 
 %prep
-%setup
+%setup -q -n %{pname}-%{version}
 %patch1 -p1
 
 %build
