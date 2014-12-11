@@ -102,6 +102,7 @@ This package contains files for developing applications using %{pname}.
 
 %build
 # FSP compiler/mpi designation
+%define compiler_family gnu
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
