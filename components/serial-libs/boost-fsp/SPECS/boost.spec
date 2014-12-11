@@ -64,32 +64,16 @@ Group:		System Environment/Libraries
 Url:            http://www.boost.org
 Source0:	%{pname}_%{bversion}.tar.gz 
 Source1:        boost-rpmlintrc
-#Source3:        %{pname}_%{short_version}_pdf.tar.bz2
-#Source3:        existing_extra_docs
-#Source5:        NEWS
 Source100:      baselibs.conf
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
 
-Patch1:         boost-thread.patch
-Patch2:         boost-no_type_punning.patch
-Patch3:         boost-no_segfault_in_Regex_filter.patch
-Patch4:         boost-pool_check_overflow.patch
-Patch5:         boost-strict_aliasing.patch
-Patch6:         boost-use_std_xml_catalog.patch
-Patch7:         bjam-alignment.patch
-#__BuildRequires:  chrpath
-#__BuildRequires:  dos2unix
-#__BuildRequires:  fdupes
-BuildRequires:  gcc-c++
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  libicu-devel >= 4.4
 BuildRequires:  python-devel
 BuildRequires:  xorg-x11-devel
-#!BuildIgnore:  python
 BuildRequires:  zlib-devel
-BuildRequires:  openmpi-devel
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -129,13 +113,6 @@ see the boost-doc package.
 %setup -q -n %{pname}_%{bversion} -b 3
 #everything in the tarball has the executable flag set ...
 find -type f ! \( -name \*.sh -o -name \*.py -o -name \*.pl \) -exec chmod -x {} +
-%patch1 -p1
-%patch2
-%patch3
-%patch4
-%patch5
-%patch6 -p1
-%patch7 -p1
 #stupid build machinery copies .orig files
 find . -name \*.orig -exec rm {} +
 
