@@ -5,7 +5,7 @@
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
-Version:   4.9.2
+Version:   4.8.3
 Release:   1
 License:   GPL-3.0+
 Group:     Development/Languages/C and C++
