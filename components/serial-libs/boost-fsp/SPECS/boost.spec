@@ -62,7 +62,7 @@ Release:        0
 License:        BSL-1.0
 Group:		System Environment/Libraries
 Url:            http://www.boost.org
-Source0:	%{pname}-%{version}.tar.gz 
+Source0:	%{pname}_%{bversion}.tar.gz 
 Source1:        boost-rpmlintrc
 #Source3:        %{pname}_%{short_version}_pdf.tar.bz2
 Source3:        existing_extra_docs
