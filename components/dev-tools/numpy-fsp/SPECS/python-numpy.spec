@@ -67,9 +67,6 @@ Obsoletes:      python-numeric < %{version}
 %endif
 %endif
 
-
-%include %{_sourcedir}/FSP_macros
-
 %description
 NumPy is a general-purpose array-processing package designed to
 efficiently manipulate large multi-dimensional arrays of arbitrary
