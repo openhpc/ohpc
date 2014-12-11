@@ -4,21 +4,28 @@
 # Copyright (c) 2014 
 #
 
-%define compiler_family gnu 
-%define mpi_family      openmpi
-%define _unpackaged_files_terminate_build 0
+#-fsp-header-comp-begin----------------------------------------------
 
-#-fsp-header-comp-begin-----------------------------
+%include %{_sourcedir}/FSP_macros
+
+# FSP convention: the default assumes the gnu toolchain and openmpi
+# MPI family; however, these can be overridden by specifing the
+# compiler_family and mpi_family variables via rpmbuild or other
+# mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod
-%if %{compiler_family} == gnu 
-BuildRequires: FSP-gnu-compilers 
-Requires:      FSP-gnu-compilers 
+BuildRequires: lmod%{PROJ_DELIM} coreutils
+%if %{compiler_family} == gnu
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers 
-Requires:      gcc-c++ FSP-intel-compilers 
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -26,26 +33,27 @@ BuildRequires: intel_licenses
 
 # MPI dependencies
 %if %{mpi_family} == impi
-BuildRequires: FSP-intel-mpi
-Requires:      FSP-intel-mpi
+BuildRequires: intel-mpi%{PROJ_DELIM}
+Requires:      intel-mpi%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == mvapich2
-BuildRequires: FSP-mvapich2-%{compiler_family}
-Requires:      FSP-mvapich2-%{compiler_family}
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == openmpi
-BuildRequires: FSP-openmpi-%{compiler_family}
-Requires:      FSP-openmpi-%{compiler_family}
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-fsp-header-comp-end------------------------------------------------
+
 
 # Base package name
 
 %define pname parallel-netcdf
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name:           %{pname}-%{compiler_family}-%{mpi_family}
+Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.5.0
 Release:        1
 Summary:        A library providing high-performance I/O with Unidata's NetCDF
@@ -61,7 +69,6 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
-%include %{_sourcedir}/FSP_macros
  
 %define debug_package %{nil}
  
