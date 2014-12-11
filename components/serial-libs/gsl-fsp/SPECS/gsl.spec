@@ -51,12 +51,13 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
-The GNU Scientific Library (GSL) is a numerical library for C and C++ 
-programmers.  The library provides a wide range of mathematical routines 
-such as random number generators, special functions and least-squares 
-fitting.  It contains over 1000 mathematical routines written in ANSI C.  
-The library follows modern coding conventions, and lends itself to being 
-used in very high level languages (VHLLs).
+
+The GNU Scientific Library (GSL) is a numerical library for C and C++
+programmers.  The library provides a wide range of mathematical
+routines such as random number generators, special functions and
+least-squares fitting.  It contains over 1000 mathematical routines
+written in ANSI C.  The library follows modern coding conventions, and
+lends itself to being used in very high level languages (VHLLs).
 
 %prep
 %setup -q -n %{pname}-%{version}
