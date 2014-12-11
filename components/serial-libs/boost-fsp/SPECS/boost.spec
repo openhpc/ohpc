@@ -110,7 +110,7 @@ see the boost-doc package.
 
 
 %prep
-%setup -q -n %{pname}_%{bversion} -b 3
+%setup -q -n %{pname}_%{bversion}
 #everything in the tarball has the executable flag set ...
 find -type f ! \( -name \*.sh -o -name \*.py -o -name \*.pl \) -exec chmod -x {} +
 #stupid build machinery copies .orig files
