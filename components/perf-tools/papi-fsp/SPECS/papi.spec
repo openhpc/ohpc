@@ -14,7 +14,7 @@ License: BSD
 Group: Development/System
 URL: http://icl.cs.utk.edu/papi/
 Source0: %{pname}-%{version}.tar.gz
-Patch1: %{name}.ldconfig.patch
+Patch1: papi.ldconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: ncurses-devel
 %if 0%{?suse_version}
