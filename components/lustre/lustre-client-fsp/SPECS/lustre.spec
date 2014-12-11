@@ -2,6 +2,8 @@
 
 %if 0%{?FSP_BUILD}
 
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 %if 0%{?suse_version} == 1110
 BuildRequires: kernel-source = 3.0.76-0.11.1
 BuildRequires: kernel-default-devel = 3.0.76-0.11.1
@@ -122,7 +124,7 @@ BuildRequires:	-post-build-checks
 %endif
 
 Summary: Lustre File System
-Name: %{lustre_name}
+Name: %{lustre_name}%{PROJ_DELIM}
 Version: %{version}
 Release: %{fullrelease}
 License: GPL
