@@ -126,6 +126,7 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/man
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib/shared
 prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/%{compiler_family}-%{pname}
+prepend-path    MPI_DIR             %{install_path}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 family "MPI"
