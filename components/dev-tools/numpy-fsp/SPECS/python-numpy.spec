@@ -25,6 +25,7 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
+%{!?compiler_family: %define compiler_family gnu   }
 #-fsp-header-comp-end-------------------------------
 
 # Base package name
