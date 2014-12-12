@@ -97,12 +97,12 @@ Requires:       gcc-gfortran
 This package contains files for developing applications using %{pname}.
 
 %prep
+%{!?compiler_family: %define compiler_family gnu   }
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 
 %build
 # FSP compiler/mpi designation
-%{!?compiler_family: %define compiler_family gnu   }
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
