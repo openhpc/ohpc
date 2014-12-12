@@ -115,7 +115,7 @@ module load phdf5
 	--with-debugging=no \
  	--with-shared-libraries \
 	--with-mpi=1 \
-        --with-mpi-dir=%{FSP_MPI_STACKS}/%{mpi_family}-%{compiler_family}%{PROJ_DELIM} \
+        --with-mpi-dir=$MPI_DIR \
 	--with-batch=0 \
         --with-hdf5=1 \
         --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
