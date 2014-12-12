@@ -79,6 +79,7 @@ interfacing with general-purpose data-base applications.
 There are also basic facilities for discrete fourier transform,
 basic linear algebra and random number generation.
 
+%{!?compiler_family: %define compiler_family gnu}
 %package devel
 Summary:        Development files for %{pname} applications
 Group:          Development/Libraries/Python
@@ -86,7 +87,6 @@ Requires:       %{name} = %{version}
 Requires:       blas-devel
 Requires:       lapack-devel
 Requires:       python-devel
-%{!?compiler_family: %define compiler_family gnu}
 %if 0%{?suse_version}
 Requires:       gcc-fortran
 %py_requires -d
