@@ -68,9 +68,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  Modules
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}
+BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
-BuildRequires:  valgrind
+BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 
