@@ -97,7 +97,6 @@ Requires:       gcc-gfortran
 This package contains files for developing applications using %{pname}.
 
 %prep
-%{!?compiler_family: %define compiler_family gnu   }
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 
