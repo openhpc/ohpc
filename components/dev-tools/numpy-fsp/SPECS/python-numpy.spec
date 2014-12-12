@@ -76,6 +76,7 @@ Requires:       %{name} = %{version}
 Requires:       blas-devel
 Requires:       lapack-devel
 Requires:       python-devel
+%{!?compiler_family: %define compiler_family gnu}
 %if 0%{?suse_version}
 %py_requires -d
 %endif
