@@ -51,20 +51,10 @@ Provides:       numpy = %{version}
 %if 0%{?suse_version}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
-# FIXME: atlas is horribly broken
-# %if 0%{?suse_version} <= 1210
-# BuildRequires:  libatlas3-devel
-# %endif
-%if 0%{?suse_version} <= 1110
-%{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-%else
-%py_requires
 %endif
-%else
 %if ! 0%{?fedora_version}
 Provides:       python-numeric = %{version}
 Obsoletes:      python-numeric < %{version}
-%endif
 %endif
 
 %description
