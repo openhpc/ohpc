@@ -79,6 +79,7 @@ interfacing with general-purpose data-base applications.
 There are also basic facilities for discrete fourier transform,
 basic linear algebra and random number generation.
 
+%{!?compiler_family: %define compiler_family gnu}
 %package devel
 Summary:        Development files for %{pname} applications
 Group:          Development/Libraries/Python
