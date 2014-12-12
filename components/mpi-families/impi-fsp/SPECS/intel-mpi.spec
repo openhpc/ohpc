@@ -136,7 +136,7 @@ set     version                 %{version}
 prepend-path    PATH            %{package_target}/intel64/bin
 prepend-path    MANPATH         %{package_target}/man/
 prepend-path    I_MPI_ROOT      %{package_target}
-prepend-path    MPI_DIR         %{package_target}
+prepend-path    MPI_DIR         %{package_target}/intel64
 prepend-path    LD_LIBRARY_PATH %{package_target}/intel64/lib
 
 prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/gnu-impi
