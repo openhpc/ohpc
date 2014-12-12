@@ -79,7 +79,6 @@ interfacing with general-purpose data-base applications.
 There are also basic facilities for discrete fourier transform,
 basic linear algebra and random number generation.
 
-%{!?compiler_family: %define compiler_family gnu}
 %package devel
 Summary:        Development files for %{pname} applications
 Group:          Development/Libraries/Python
@@ -93,6 +92,7 @@ Requires:       gcc-fortran
 %else
 Requires:       gcc-gfortran
 %endif
+%{!?compiler_family: %define compiler_family gnu}
 
 %description devel
 This package contains files for developing applications using %{pname}.
