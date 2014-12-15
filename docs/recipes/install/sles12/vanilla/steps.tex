@@ -28,7 +28,7 @@
 {\hspace*{4in} \includegraphics[width=1.8in]{intel_1spot_100.pdf}}
 
 \vspace*{2cm}
-\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont 2014 Forest Peak Checkpoint} \vspace*{0.1cm} \\
+\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont 2015 Forest Peak (v15.05)} \vspace*{0.1cm} \\
 \noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
 \noindent\rule{6in}{0.4pt} \\
 
@@ -423,7 +423,7 @@ discussed further in the following sections.
 % fsp_validation_comment Enbale slurm pam module
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
-[master]$ zypper -n install lustre-client lustre-modules
+[master]$ zypper -n install lustre-client-fsp lustre-modules-fsp
 # Update config to allow Lustre modules to be loaded on master host
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      /etc/modprobe.d/10-unsupported-modules.conf
