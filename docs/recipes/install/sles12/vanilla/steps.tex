@@ -94,8 +94,8 @@
 % begin_fsp_run
 % fsp_validation_comment Add baseline FSP and warewulf on master node
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ zypper -n install -t pattern FSP-base          # adding base FSP packages
-[master]$ zypper -n install -t pattern FSP-warewulf      # adding Warewulf support
+[master]$ zypper -n install -t pattern fsp-base          # adding base FSP packages
+[master]$ zypper -n install -t pattern fsp-warewulf      # adding Warewulf support
 \end{lstlisting}
 % end_fsp_run
 
@@ -108,7 +108,7 @@ the corresponding compute image in a subsequent step.
 % begin_fsp_run
 % fsp_validation_comment Add resource manager
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ zypper -n install -t pattern FSP-slurm-server  # adding SLURM server support
+[master]$ zypper -n install -t pattern fsp-slurm-server  # adding SLURM server support
 \end{lstlisting}
 % end_fsp_run
 
@@ -292,7 +292,7 @@ be updated with a copy of the configuration as follows:
 % fsp_validation_comment Add FSP components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add SLURM client support
-[master]$ chroot $CHROOT zypper -n install -t pattern FSP-slurm-client
+[master]$ chroot $CHROOT zypper -n install -t pattern fsp-slurm-client
 
 # Add IB support
 [master]$ chroot $CHROOT zypper -n install libibverbs-runtime libmlx4-rdmav2
@@ -302,7 +302,6 @@ be updated with a copy of the configuration as follows:
 [master]$ chroot $CHROOT zypper -n install ntp
 
 # Include FSP default modules user environment
-[master]$ chroot $CHROOT zypper -n install lmod 
 [master]$ chroot $CHROOT zypper -n install FSP-lmod-defaults-intel
 
 # Enable ssh access 
@@ -588,7 +587,7 @@ both along with any necessary dependencies:
 % begin_fsp_run
 % fsp_validation_comment Install compilers
 \begin{lstlisting}[language=bash]
-[master]$ zypper -n install FSP-gnu-compilers FSP-intel-compilers
+[master]$ zypper -n install gnu-compilers-fsp intel-compilers-fsp
 \end{lstlisting}
 % end_fsp_run
 
@@ -614,7 +613,7 @@ three MPI families:
 % begin_fsp_run
 % fsp_validation_comment Install MPI
 \begin{lstlisting}[language=bash]
-[master]$ zypper -n install FSP-openmpi-* FSP-mvapich2-* FSP-intel-mpi
+[master]$ zypper -n install  openmpi-*-fsp mvapich2-*-fsp intel-mpi-fsp
 \end{lstlisting}
 % end_fsp_run
 
@@ -657,15 +656,15 @@ pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
 \begin{lstlisting}[language=bash]
-[master]$ zypper search -t package fftw-gnu
+[master]$ zypper search -t package fftw-gnu-*-fsp
 Loading repository data...
 Reading installed packages...
 
-S | Name              | Summary                          | Type      
---+-------------------+----------------------------------+-----------
-  | fftw-gnu-impi     | A Fast Fourier Transform library | package   
-  | fftw-gnu-mvapich2 | A Fast Fourier Transform library | package   
-  | fftw-gnu-openmpi  | A Fast Fourier Transform library | package   
+S | Name                  | Summary                          | Type   
+--+-----------------------+----------------------------------+--------
+  | fftw-gnu-impi-fsp     | A Fast Fourier Transform library | package
+  | fftw-gnu-mvapich2-fsp | A Fast Fourier Transform library | package
+  | fftw-gnu-openmpi-fsp  | A Fast Fourier Transform library | package
 \end{lstlisting}
 
 Note that FSP provided 3rd party library builds are configured to be installed
@@ -682,9 +681,9 @@ following:
 % begin_fsp_run
 % fsp_validation_comment Install 3rd party libraries
 \begin{lstlisting}[language=bash]
-[master]$ zypper -n install -t pattern FSP-fftw      # installs 6 fftw packages
-[master]$ zypper -n install -t pattern FSP-hdf5      # installs 2 (serial) hdf5 packages
-[master]$ zypper -n install -t pattern FSP-phdf5     # installs 6 p(arallel) hdf5 packages
+[master]$ zypper -n install -t pattern fsp-fftw      # installs 6 fftw packages
+[master]$ zypper -n install -t pattern fsp-hdf5      # installs 2 (serial) hdf5 packages
+[master]$ zypper -n install -t pattern fsp-phdf5     # installs 6 p(arallel) hdf5 packages
 \end{lstlisting}
 % end_fsp_run
 
