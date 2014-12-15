@@ -27,7 +27,7 @@ Provides default login environment for compiler and MPI combinations.
 %install
 
 mkdir -p %{buildroot}/%{FSP_MODULES}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/fsp
 #%Module1.0#####################################################################
 # Default FSP environment
 #############################################################################
