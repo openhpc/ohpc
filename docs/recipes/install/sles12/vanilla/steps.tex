@@ -165,7 +165,7 @@ separately in order to use this software.
 % begin_fsp_run
 % fsp_validation_comment Add CLCK
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ zypper -n install FSP-intel-clck
+[master]$ zypper -n install intel-clck-fsp
 \end{lstlisting}
 % end_fsp_run
 
@@ -567,12 +567,25 @@ compute hosts from bare-metal.  With these steps completed,
 %basic install procedure outlined in Section~\ref{sec:basic_install} is
 %complete, 
 additional FSP-provided packages can now be added to support a flexible HPC
-development environment including C/C++/Fortran compilers, MPI stacks, and a
-variety of 3rd party libraries. The following subsections highlight the
-additional software installation procedures, including the addition of Intel
-licensed software (e.g. Composer compiler suite, Intel MPI). It is assumed that
-the end-site administrator will procure and install the necessary licenses in
-order to use the Intel proprietary software.
+development environment including development tools, C/C++/Fortran compilers,
+MPI stacks, and a variety of 3rd party libraries. The following subsections
+highlight the additional software installation procedures, including the
+addition of Intel licensed software (e.g. Composer compiler suite, Intel
+MPI). It is assumed that the end-site administrator will procure and install
+the necessary licenses in order to use the Intel proprietary software.
+
+\subsection{Development Tools}
+
+To aid in general development efforts, FSP provides recent versions of the GNU
+autotools collection and the {\em valgrind} memory debugger. These can be installed as follows:
+
+% begin_fsp_run
+% fsp_validation_comment Install dev tools
+\begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
+[master]$ zypper -n install -t pattern fsp-autotools
+[master]$ zypper -n install valgrind-fsp
+\end{lstlisting}
+% end_fsp_run
 
 \subsection{Compilers}
 
@@ -632,22 +645,22 @@ compilers and MPI is available. To install, issue:
 
 FSP provides pre-packaged builds for a number of popular open-source libraries
 used by HPC applications and developers. For example, FSP provides builds for
-FFTW and HDF5 (including serial and parallel I/O support). Again, multiple
-builds of each package are available in the FSP repository to support multiple
-compiler and MPI family combinations. The general naming convention for builds
-provided by FSP is to append the compiler and MPI family name that the library
-was built against directly into the package name. For example, libraries that
-do not require MPI as part of the build process adopt the following RPM
-name: \\
+FFTW and HDF5 (including serial and parallel I/O support), and the GNU
+Scientific Library (GSL). Again, multiple builds of each package are available
+in the FSP repository to support multiple compiler and MPI family combinations
+where appropriate. The general naming convention for builds provided by FSP is
+to append the compiler and MPI family name that the library was built against
+directly into the package name. For example, libraries that do not require MPI
+as part of the build process adopt the following RPM name: \\
 
 \noindent
-\texttt{package-<compiler\_family>-<package\_version>-<release>.rpm} \\
+\texttt{package-<compiler\_family>-fsp-<package\_version>-<release>.rpm} \\
 
 \noindent Packages that require MPI as part of the build expand upon this convention to
 additionally include the MPI family name as follows: \\
 
 \noindent
-\texttt{package-<compiler\_family>-<mpi\_family>-<package\_version>-<release>.rpm} \\
+\texttt{package-<compiler\_family>-<mpi\_family>-fsp-<package\_version>-<release>.rpm} \\
 
 To illustrate this further, the command below queries the locally configured
 repositories to identify all of the available FFTW packages that were built
@@ -669,21 +682,22 @@ S | Name                  | Summary                          | Type
 
 Note that FSP provided 3rd party library builds are configured to be installed
 into a common top-level repository so that they can be easily exported to
-desired hosts within the cluster. This common top-level path (\texttt{/opt/fsp/pub})
-was previously configured to be mounted on {\em compute} nodes in
-\S\ref{sec:master_customization}, so the packages will be immediately available
-for use on the cluster after installation on the {\em master} host.  For
-convenience, FSP provides package aliases for the FFTW and HDF5 libraries that
-can be used to install of the available compiler/MPI family permutations. To
-install all of the available package builds for these two libraries, issue the
-following:
+desired hosts within the cluster. This common top-level path
+(\texttt{/opt/fsp/pub}) was previously configured to be mounted on {\em
+  compute} nodes in \S\ref{sec:master_customization}, so the packages will be
+immediately available for use on the cluster after installation on the {\em
+  master} host.  For convenience, FSP provides package aliases for the FFTW,
+GSL, and HDF5 libraries that can be used to install all of the available
+compiler/MPI family permutations. To install all of the available package
+builds for these libraries, issue the following:
 
 % begin_fsp_run
 % fsp_validation_comment Install 3rd party libraries
 \begin{lstlisting}[language=bash]
-[master]$ zypper -n install -t pattern fsp-fftw      # installs 6 fftw packages
-[master]$ zypper -n install -t pattern fsp-hdf5      # installs 2 (serial) hdf5 packages
-[master]$ zypper -n install -t pattern fsp-phdf5     # installs 6 p(arallel) hdf5 packages
+[master]$ zypper -n install -t pattern fsp-fftw     # installs 6 fftw packages
+[master]$ zypper -n install -t pattern fsp-hdf5     # installs 2 (serial) hdf5 packages
+[master]$ zypper -n install -t pattern fsp-gsl      # installs 2 (serial) gsl packages
+[master]$ zypper -n install -t pattern fsp-phdf5    # installs 6 p(arallel) hdf5 packages
 \end{lstlisting}
 % end_fsp_run
 
