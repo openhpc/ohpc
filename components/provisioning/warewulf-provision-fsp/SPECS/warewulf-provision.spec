@@ -38,7 +38,7 @@ administrative tools.  To actually provision systems, the
 %package -n %{pname}-server%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module - Server
 Group: System Environment/Clustering
-Requires: %{pname} = %{version}-%{release}
+Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -66,7 +66,7 @@ do not require this package.
 %package -n %{pname}-gpl_sources%{PROJ_DELIM}
 Summary: This package contains the GPL sources used in Warewulf
 Group: Development/System
-Requires: %{pname} = %{version}-%{release}
+Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 %description -n %{pname}-gpl_sources%{PROJ_DELIM}
 Warewulf >= 3 is a set of utilities designed to better enable
