@@ -59,7 +59,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_PUB}
+%{FSP_MODULES}
 
 %changelog
 
