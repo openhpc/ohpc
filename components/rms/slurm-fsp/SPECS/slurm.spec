@@ -420,7 +420,7 @@ utilites will provide more information and greater depth of understanding
 %package -n %{pname}-pam_slurm%{PROJ_DELIM}
 Summary: PAM module for restricting access to compute nodes via Slurm
 Group: System Environment/Base
-Requires: slurm%{PROJ_DELIM} slurm-devel
+Requires: slurm%{PROJ_DELIM} slurm-devel%{PROJ_DELIM}
 BuildRequires: pam-devel
 Obsoletes: pam_slurm
 %description -n %{pname}-pam_slurm%{PROJ_DELIM}
