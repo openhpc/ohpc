@@ -4,7 +4,7 @@
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   FSP default login environment
-Name:      lmod-defaults-intel
+Name:      lmod-defaults-intel%{PROJ_DELIM}
 Version:   1.0
 Release:   1
 License:   Intel
