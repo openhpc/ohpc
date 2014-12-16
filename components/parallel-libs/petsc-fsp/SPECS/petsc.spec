@@ -65,7 +65,6 @@ Patch2:         petsc.usrlocal.patch
 #Patch3:         petsc-3.3-fix-error-detection-in-makefile.patch 
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  Modules
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
