@@ -74,7 +74,7 @@ BuildRequires:  blas-devel
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
-BuildRequires:  fftw-devel-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  lapack-devel
 BuildRequires:  python-devel
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}-devel
