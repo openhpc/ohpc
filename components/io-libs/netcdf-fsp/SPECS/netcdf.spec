@@ -4,26 +4,33 @@
 #
 # Copyright (c) 2015
 #
-%define compiler_family gnu
-%define _unpackaged_files_terminate_build 0
+#-fsp-header-comp-begin----------------------------------------------
 
-#-fsp-header-comp-begin-----------------------------
+%include %{_sourcedir}/FSP_macros
 
+# FSP convention: the default assumes the gnu compiler family;
+# however, this can be overridden by specifing the compiler_family
+# variable via rpmbuild or other mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu   }
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+ 
 # Compiler dependencies
-BuildRequires: lmod
-%if %{compiler_family} == gnu 
-BuildRequires: FSP-gnu-compilers 
-Requires:      FSP-gnu-compilers 
+BuildRequires: lmod%{PROJ_DELIM}
+%if %{compiler_family} == gnu
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers 
-Requires:      gcc-c++ FSP-intel-compilers 
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-fsp-header-comp-end------------------------------------------------
+
 
 # Base package name
 
@@ -32,7 +39,7 @@ BuildRequires: intel_licenses
 
 %define ncdf_so_major 7
 
-Name:           %{pname}-%{compiler_family}
+Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          System/Libraries
@@ -58,7 +65,7 @@ BuildRequires:  hdf5-gnu-fsp >= 1.8.8
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
 BuildRequires:  zlib-devel >= 1.2.5
-BuildRequires:  valgrind
+BuildRequires:  valgrind-fsp
 Requires:       hdf5-gnu-fsp
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
