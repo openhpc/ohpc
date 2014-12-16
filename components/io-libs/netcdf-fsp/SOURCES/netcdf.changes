@@ -1,0 +1,555 @@
+-------------------------------------------------------------------
+Tue Sep  2 12:31:13 UTC 2014 - coolo@suse.com
+
+- fix license for spdx 1.2
+
+-------------------------------------------------------------------
+Thu May  1 21:17:08 UTC 2014 - ocefpaf@gmail.com
+
+- update to 4.3.2
+  *  Improved type handling with respect to fill-values.
+  *  Enabled netCDF-4 bit-for-bit reproducibility for nccopy and other
+     applications (thanks to Rimvydas Jasinskas and Quincey Koziol).
+  *  Improved cmake build process.
+  *  As part of an ongoing project, the Doxygen-generated netCDF documentation
+     has been reorganized. The goal is to make the documentation easier to
+     parse, and to eliminate redundant material.
+
+-------------------------------------------------------------------
+Mon Feb 10 16:31:45 UTC 2014 - opensuse@dstoecker.de
+
+- update to 4.3.1.1
+  * Corrected a DAP issue reported by Jeff Whitaker related to
+    non-conforming servers.
+  * Corrected an issue with DAP tests failing in a 64-bit Cygwin
+    environment. NCF-286
+  * Add an extended format inquiry method to the netcdf API:
+    nc_inq_format_extended. NC_HAVE_INQ_FORMAT_EXTENDED is defined
+    in netcdf.h NCF-273
+  * Fixed fill value handling for string types in nc4_get_vara().
+  * Corrected behavior of nc_inq_unlimdim and nv_inq_unlimdims to
+    report dimids in same order as nc_inq_dimids.
+  * A number of previously-disabled unit tests were reviewed and
+    made active.
+  * When opening a netCDF-4 file, streamline the iteration over
+    objects in the underlying HDF5 file.
+  * Fixed netCDF-4 failure when renaming a dimension and renaming
+    a variable using that dimension, in either order. NCF-177
+  * When compiling with hdf4 support, both autotools and cmake-based
+    builds now properly look for the libjpeg dependency and will link
+    against it when found (or complain if it's not). Also added
+    ENABLE_HDF4_FILE_TESTS option to CMake-based builds.
+  * Fixed bug in ncgen; it was not properly filling empty string
+    constants ("") to be the proper length. NCF-279
+  * Fixed bug in ncgen where it was interpreting int64 constants as
+    uint64 constants. NCF-278
+  * Fixed bug in handling Http Basic Authorization. The code was
+    actually there but was not being executed. NCF-277
+  * Added hack to the DAP code to address a problem with the
+    Columbia.edu server. That server does not serve up proper DAP2 DDS
+    replies. The Dataset {...} name changes depending on if the request
+    has certain kinds of constraints. NCF-276
+  * Fixed bugs with ncdump annotation of values, using -b or -f
+    options. NCF-275
+  * Added better documentation about accessing ESG datasets. See
+    http://www.unidata.ucar.edu/software/netcdf/docs/esg.html.
+  * Corrected an issue with CMake-based builds enabling HDF4 support
+    where the HDF4 libraries were in a non-standard location.
+  * Fix bug introduced by NCF-267 where octal constants above '\177'
+    were not recognized as proper octal constants. NCF-271
+  * Fixed an issue where the netcdf.3 man page was not being installed
+    by CMake-based builds. Github
+  * Modify ncgen to support NUL characters in character array
+    constants. NCF-267
+  * Modify ncgen to support disambiguating references to an enum
+    constant in a data list. NCF-265
+  * Corrected bug in netCDF-4 dimension ID ordering assumptions,
+    resulting in access that works locally but fails through DAP
+    server. NCF-166
+  * Ensure netCDF-4 compiles with OpenMPI as an alternative to
+    MPICH2. NCF-160
+  * Addressed issue with hanging Parallel netCDF-4 using HDF5 1.8.10.
+    NCF-240
+  * Removed deprecated directories:
+        librpc/
+        udunits/
+        libcf/
+        libcdmr/
+  * Added configure and accompanying configuration files/templates to
+    release repository. These will only be added to tagged releases
+    on GitHub.
+  * Integrated a fix by Quincey Koziol which addressed a variation of
+    NCF-250, Fix issue of netCDF-4 parallel independent access with
+    unlimited dimension hanging.
+  * Integrated change contributed by Orion Poplawski which integrated
+    GNUInstallDirs into the netCDF-C CMake system; this will permit
+    systems that install into lib64 (such as Fedora) to make install
+    without problem.
+  * Corrected an error with the CMake config files that resulted in the
+    netcdf.3 manpage not being built or installed.
+  * Added nc_rename_grp to allow for group renaming in netCDF-4 files. NCF-204
+  * Added a NC_HAVE_RENAME_GRP macro to netcdf.h, as per a request by
+    Charlie Zender. This will allow software compiling against netcdf
+    to easily query whether or not nc_rename_grp() is available.
+  * Added Greg Sjaardema's contributed optimization for the nc4_find_dim_len
+    function in libsrc4/nc4internal.c. The patch eliminates several
+    malloc/free calls that exist in the original coding.
+  * Added support for dynamic loading, to compliment the dynamic loading
+    support introduced in hdf 1.8.11. Dynamic loading support depends on
+    libdl, and is enabled as follows: NCF-258
+        autotools-based builds: –enable-dynamic-loading
+        cmake-based builds: -DENABLE_DYNAMIC_LOADING=ON
+  * Fix issue of netCDF-4 parallel independent access with unlimited
+    dimension hanging. Extending the size of an unlimited dimension in
+    HDF5 must be a collective operation, so now an error is returned if
+    trying to extend in independent access mode. NCF-250
+  * Fixed bug with netCDF-4's inability to read HDF5 scalar numeric
+    attributes. Also allow, in addition to zero length strings, a new
+    NULL pointer as a string value. to improve interoperability with
+    HDF5. This required a new CDL constant, 'NIL', that can be output
+    from ncdump for such a string value in an HDF5 or netCDF-4 file.
+    The ncgen utility was also modified to properly handle such NIL
+    values for strings. NCF-56
+  * Fix contributed by Nath Gopalaswamy to large file problem reading
+    netCDF classic or 64-bit offset files that have a UINT32_MAX flag
+    for large last record size of a variable that has values larger than
+    1 byte. This problem had previously been fixed for writing such data,
+    but was only tested with an ncbyte variable.
+  * Fixed various minor documentation problems.
+
+-------------------------------------------------------------------
+Mon Oct 21 12:53:54 UTC 2013 - toddrme2178@gmail.com
+
+- Update to 4.3.0
+  * fsync: Changed default in autotools config file; fsync must
+    now be explicitely enabled instead of explicitely disabled.
+  * Fixed netCDF-4 bug where odometer code for libdap2 mishandled
+    stride > 1. Bug reported by Ansley Manke.
+  * Fixed netCDF-4 bug where netCDF would ignore the HDF5 reference
+    type in the file, instead of rejecting the file as it should.
+  * Fixed netCDF-4 bug with particular order of creation of
+    dimensions, coordinate variables, and subgroups resulting in
+    two dimensions with the same dimension ID.
+  * Fixed netCDF-4 bug with a multidimensional coordinate variable
+    in a subgroup getting the wrong dimension IDs for its
+    dimensions.
+  * Fixed bug with incorrect fixed-size variable offsets in header
+    getting written when schema changed for files created by
+    parallel-netcdf. Thanks to Wei-keng Liao for developing and
+    contributing the fix.
+  * Fixed bug in handling old servers that do not do proper
+    Grid to Structure conversions.
+  * Replaced the oc library with oc2.0
+  * Fix bug with nc_get_var1_uint() not accepting unsigned ints
+    larger than 2**31.
+  * Fix to convert occurrences of '/' in DAP names to %2f.
+  * Fix bug in netCDF-4 with scalar non-coordinate variables with
+    same name as dimensions.
+  * Fix bug in which calling netCDF-4 functions in which behavior
+    that should not depend on order of calls sometimes produces
+    the wrong results.
+  * Merged in nccopy additions from Martin van Driel to support 
+    -g and -v options for specifying which groups or variables are
+    to be copied.
+  * Merged in parallel-netcdf bugs fixes from Greg Sjaardema.
+  * Modify ncgen so that if the incoming file has a special
+    attribute, then it is used to establish the special property of
+    the netcdf file, but the attribute is not included as a real
+    attribute in the file..
+  * Added library version info to the user-agent string so that the
+    server logs will be more informative.
+  * Added work around for bad servers that sometimes sends DAP
+    dataset with duplicate field names.
+  * Fixed bug with strided access for NC_STRING type.
+  * Prevented adding an invalid _FillValue attribute to a variable
+    (with nonmatching type or multiple values), to avoid later
+    error when any record variable is extended.
+  * Fix bug in which some uses of vlen within compounds causes HDF5
+    errors.
+  * Fixed ncdump bug in display of data values of variables that use 
+    multiple unlimited dimensions.
+  * Fix bug in which interspersing def_var calls with put_var calls
+    can lead to corrupt metadata in a netCDF file with groups and
+    inherited dimensions.
+  * Building shared libraries works with DAP and netCDF4 
+    functionality.
+  * 32-and-64-bit builds are working under MinGW on Windows.
+  * Config.h for Windows compiles are included in the build.
+  * NetCDF-4 dependency on NC_MAX_DIMS has been removed.
+  * 64-bit DLL's are produced on Windows.
+  * DLL Packaging issues are resolved.
+  * The CMake build system (with related ctest and cdash systems 
+    for testing) has been integrated into netCDF-C. This allows for
+    Visual Studio-based builds in addition to gcc-based builds.
+    This requires at least CMake version 2.8.8. This 
+    replaces/supplements the cross-compiled set of Visual-Studio
+    compatible netCDF libraries introduced in netCDF 4.2.1-rc1.
+- Updated buildrequires versions.
+
+-------------------------------------------------------------------
+Tue Oct 16 13:21:13 CEST 2012 - pth@suse.de
+
+- Copy Changes from the release notes to here for the updates to 4.2.1
+  and 4.2.1.1
+
+-------------------------------------------------------------------
+Sun Aug  5 13:09:20 UTC 2012 - ocefpaf@gmail.com
+
+- Update to 4.2.1.1:
+  * Fix DAP performance bug remotely accessing large files (> 2GiB).
+  * Properly escape special characters in CDL output from ncdump for
+    netCDF-4 string data.
+
+-------------------------------------------------------------------
+Wed Jul 25 21:37:48 UTC 2012 - ocefpaf@gmail.com
+
+- Update to 4.2.1:
+  * Add a specific NC_MMAP mode flag to modify behavior of NC_DISKLESS.
+  * Changed the file protections for NC_DISKLESS created files to 0666.
+  * Fixed ncdump to report error when an unsupported option is specified.
+  * Fixed documentation of CDL char constants in Users Guide and ncgen
+    man page.
+  * Fixed memory leak detected by valgrind in one of the HDF5 tests.
+  
+  For further changes pleaase see the file RELEASE_NOTES in
+  /usr/share/doc/packages/netcdf
+
+-------------------------------------------------------------------
+Thu Apr 26 20:22:19 UTC 2012 - behrisch@users.sourceforge.net
+
+- upstream removed Texinfo documentation
+
+-------------------------------------------------------------------
+Mon Apr  9 22:20:02 UTC 2012 - ocefpaf@gmail.com
+
+- Updated to 4.2
+  * Fortran and C++ APIs are now in separate packages
+- Removed netcdf-dependencies.patch
+
+-------------------------------------------------------------------
+Thu Apr  5 00:05:54 UTC 2012 - jengelh@medozas.de
+
+- Do not require valgrind on arches where it is not available
+  (e.g. sparc)
+
+-------------------------------------------------------------------
+Fri Mar 16 15:55:13 UTC 2012 - cfarrell@suse.com
+
+- license update: SUSE-NetCDF
+  Use SPDX- proprietary prefix until this license is accepted upstream by
+  spdx.org
+
+-------------------------------------------------------------------
+Wed Nov 30 13:43:18 UTC 2011 - jengelh@medozas.de
+
+- Remove redundant/unwanted tags/section (cf. specfile guidelines)
+- Use %_smp_mflags for parallel building
+- Appropriate rpmgroups for shlib packages
+
+-------------------------------------------------------------------
+Tue Nov 29 19:18:45 UTC 2011 - ocefpaf@gmail.com
+
+- Added explicit hdf5 dependency.
+- Rebuild with hdf5 1.8.8
+- Some spec file clean-ups.
+
+-------------------------------------------------------------------
+Sun Jun 26 02:02:57 UTC 2011 - ocefpaf@yahoo.com.br
+
+- Added pkgconfig and fflags patches
+- Dropped libm patch fixed upstream
+- Fixed summary, license info, description
+- Created doc and static packages
+
+-------------------------------------------------------------------
+Sun Jun 26 01:31:36 UTC 2011 - ocefpaf@yahoo.com.br
+
+- updated to 4.1.3
+
+-------------------------------------------------------------------
+Thu Jun  2 20:43:32 UTC 2011 - ocefpaf@yahoo.com.br
+
+- rename libnetcdf-devel to netcdf-devel as recommended by pth
+
+-------------------------------------------------------------------
+Fri Apr 29 16:21:24 UTC 2011 - ocefpaf@yahoo.com.br
+
+- updated to version 4.1.2
+- added flag --enable-dap for OpenDap support
+- updated the patches
+
+-------------------------------------------------------------------
+Tue Nov 30 19:59:19 CET 2010 - pth@suse.de
+
+- Just fix the casting in px_get to avoid the type-punning warning.
+- Add a man page for nc-config.
+- Move nc-config and its man page to the devel package.
+- Remove the dependency on netcdf from libnetcdf.
+- BuildRequire pkgconfig for libnetcdf-devel.
+- Declare strlcat if needed.
+- Don't use __DATE__ and __TIME__ to reduce the need for recompiling.
+
+
+-------------------------------------------------------------------
+Tue May 19 17:15:44 CEST 2009 - prusnak@suse.cz
+
+- updated to 4.0.1
+  * Added optional arguments to F90 API to nf90_open/create,
+    nf90_create_var, and nf90_inquire_variable so that all netCDF-4
+    settings may be accomplished with optional arguments, instead
+    of separate function calls.
+  * Added control of HDF5 chunk cache to allow for user performance
+    tuning.
+  * Added parallel example program in F90.
+  * Changed default chunking to better handle very large variables.
+  * Made contiguous the default for fixed size data sets with no
+    filters.
+  * Fixed bug in nc_inq_ncid; now it returns NC_ENOGRP if the named
+    group is not found.
+  * Fixed man pages for C and F77 so that netCDF-4 builds will
+    result in man pages that document new netCDF-4 functions.
+  * Added OPeNDAP support based on a new C-only implementation.
+    This is enabled using --enable-dap option and requires libcurl.
+    The configure script will attempt to locate libcurl, but if it
+    fails, then its location must be specified by the --with-curl
+    option.
+  * Changed chunksizes to size_t from int.
+  * Fixed fill value problem from F77 API.
+  * Fixed problems in netcdf-4 files with multi-dimensional
+    coordinate variables.
+  * Fixed ncgen to properly handle CDL input that uses Windows line
+    endings ("\r\n"), instead of getting a syntax error.
+  * Added "-s" option to ncdump to display performance
+    characterisitics of netCDF-4 files as special virtual attributes,
+    such as _Chunking, _DeflateLevel, _Format, and _Endianness.
+  * Added "-t" option to ncdump to display times in human readable
+    form as strings.  Added code to interpret "calendar" attribute
+    according to CF conventions, if present, in displaying
+    human-readable times.
+  * Added experimental version of ncgen4 capable of generating
+    netcdf-4 data files and C code for creating them. In addition,
+    it supports the special attributes _Format, etc.
+  * Fixed Fortran 90 int64 problems.
+  * Rewrote HDF5 read/write code in accordance with performance advice
+    from Kent.
+  * Fixed memory leaks in gets/puts of HDF5 data.
+  * Fixed some broken tests for parallel I/O (i.e. MPI) builds.
+  * Fixed some cross-compile problems.
+  * Rewrote code which placed bogus errors on the HDF5 error stack,
+    trying to open non-existant attributes and variables. Now no HDF5
+    errors are seen.
+  * Removed man subdirectory. Now man4 subdirectory is used for all
+    builds.
+  * Changed build so that users with access to parallel make can
+    use it.
+  * Added experimental support for accessing data through OPeNDAP
+    servers using the DAP protocol (use --enable-opendap to build it).
+  * Fixed ncdump bugs with array field members of compound type
+    variables.  Fixed ncdump bug of assuming default fill value
+    for data of type unsigned byte.
+
+-------------------------------------------------------------------
+Fri Nov 14 16:30:21 CET 2008 - prusnak@suse.cz
+
+- fix wrong delete usage (delete.patch)
+
+-------------------------------------------------------------------
+Mon Sep  8 15:18:49 CEST 2008 - prusnak@suse.cz
+
+- move devel manpages and infopages to -devel subpackage
+
+-------------------------------------------------------------------
+Mon Sep  1 15:05:14 CEST 2008 - prusnak@suse.cz
+
+- disable static libraries
+
+-------------------------------------------------------------------
+Fri Aug 22 15:18:12 CEST 2008 - schwab@suse.de
+
+- Fix makefile dependencies.
+
+-------------------------------------------------------------------
+Wed Aug 13 16:53:01 CEST 2008 - prusnak@suse.cz
+
+- updated to 4.0
+  * Introduced the use of HDF5 as a storage layer, which allows use
+    of groups, user-defined types, multiple unlimited dimensions,
+    compression, data chunking, parallel I/O, and other features
+  * In ncdump and ncgen, added CDL support for UTF-8 encoding
+    of characters in names and for escaped special chars in names.
+    Made sure UTF-8 names are normalized using NFC rules before
+    storing or comparing
+  * Handle IEEE NaNs and infinities in a platform-independent way
+    in ncdump output
+  * Added support for ARM representation of doubles
+  * Fixed bug in C++ API creating 64-bit offset files
+  * Fixed bug for variables larger than 4 GB
+  * Changed the configure.ac to build either 3.6.x or 4.x build
+    from the same configure.ac
+  * Build now checks gfortran version and handles it cleanly,
+    also Portland Group in Intel fortran, with various configurations
+  * A Fortran netcdf.inc file is now created at build time, based
+    on the setting of --disable-v2
+  * Documentation has been fixed in several places
+  * Upgraded to automake 1.10, autoconf 2.62, and libtool 2.2.2
+  * Includes missing Windows Visual Studio build files
+  * Fixed missing include of config.h in a C++ test program
+  * Fixed maintainer-clean in man directory
+  * Fixed --enable-c-only and make check
+  * Fixed behavior when opening a zero-length file
+  * Many portability enhancements to build cleanly
+    on various platforms
+  * Turned on some old test programs which were not being used
+    in the build
+- dropped obsoleted patches:
+  * missing-includes.patch (included in update)
+
+-------------------------------------------------------------------
+Thu Jan 10 19:20:05 CET 2008 - lrupp@suse.de
+
+- use more macros in specfile
+- added netcdf-3.6.2-missing_includes.patch
+
+-------------------------------------------------------------------
+Mon Aug  6 08:46:52 CEST 2007 - zpetrova@suse.cz
+
+- split to libnetcdf-4, libnetcdf-devel and netcdf package
+  according to Shared library guidelines.
+
+-------------------------------------------------------------------
+Mon Jul 30 17:39:42 CEST 2007 - zpetrova@suse.cz
+
+-update to version 3.6.2
+  - Added support for shared libraries (with configure option --enable-shared).
+  - Improved performance of byte-swapping loops on little-endian platforms. 
+  - Added a "-k" option to ncdump and ncgen, for identifying or specifying the kind 
+    of netCDF file if other than "classic".
+  - Made long-threatened change of type of ncbyte in C++ interface from unsigned char 
+    to signed char, for consistency with C interface.
+  - Implemented the C++ API on the netCDF-3 C API instead of the older netCDF-2 API, 
+    providing automatic numeric type conversion as in the netCDF-3 C interface.
+  - Modified to build correctly for gfortran.
+  - Added more tests!
+  - Fixed minor bugs relating to creation of very small netCDF files.
+  - Added support for additional configure options 
+    (run configure --help for more information).
+
+-------------------------------------------------------------------
+Mon May 21 18:34:56 CEST 2007 - ro@suse.de
+
+- removed cfortran.doc from tarball due to "non-commercial" status
+- check in specfile to make sure the file does not reappear 
+
+-------------------------------------------------------------------
+Thu Oct 19 20:37:20 CEST 2006 - zpetrova@suse.cz
+
+- update to version 3.6.1
+  - updated installation manual
+  - netcdf padded small files with zero to 4096 bytes, when they
+    were opened and changed. Fixed.
+  - small fixes in test suite (return values, names of output files).
+  - Doubled arbitrary limits on number of dimensions, variables,
+    attributes, and length of names.
+  - added new functions, including doc and tests.
+  - correctly configure for Intel ifort Fortran compiler on Linux.
+
+-------------------------------------------------------------------
+Wed Apr 19 10:09:01 CEST 2006 - dmueller@suse.de
+
+- build PIC code 
+
+-------------------------------------------------------------------
+Mon Jan 30 17:35:08 CET 2006 - zpetrova@suse.cz
+
+- fixed permissions of libraries, man pages and header files (#131552)
+
+-------------------------------------------------------------------
+Wed Jan 25 21:38:38 CET 2006 - mls@suse.de
+
+- converted neededforbuild to BuildRequires
+
+-------------------------------------------------------------------
+Mon Jan 16 13:41:00 CET 2006 - zpetrova@suse.cz
+
+- update to netcdf-3.6.0-p1
+
+-------------------------------------------------------------------
+Thu Sep 29 17:50:33 CEST 2005 - zpetrova@suse.cz
+
+- add -fno-strict-aliasing
+
+-------------------------------------------------------------------
+Tue Jan 11 14:53:58 CET 2005 - didge@suse.de
+
+- Updated to new version
+- changed URL to the new one
+
+-------------------------------------------------------------------
+Thu Nov 11 12:54:19 CET 2004 - ro@suse.de
+
+- fixed file list 
+
+-------------------------------------------------------------------
+Fri Apr 23 14:48:00 CEST 2004 - didge@suse.de
+
+- Updated to new version 3.5.1 
+- Fixed strict aliasing problem
+
+-------------------------------------------------------------------
+Sat Jan 10 20:56:57 CET 2004 - adrian@suse.de
+
+- add %run_ldconfig
+
+-------------------------------------------------------------------
+Tue May 13 02:31:17 CEST 2003 - nashif@suse.de
+
+- added defattr to file list
+
+-------------------------------------------------------------------
+Mon Mar 10 17:31:24 CET 2003 - nashif@suse.de
+
+- fixed #24975: Build c++ library
+
+-------------------------------------------------------------------
+Tue Sep 17 17:34:28 CEST 2002 - ro@suse.de
+
+- removed bogus self-provides 
+
+-------------------------------------------------------------------
+Tue May 21 12:29:47 CEST 2002 - ro@suse.de
+
+- complete libdir usage 
+
+-------------------------------------------------------------------
+Fri Mar  1 07:08:27 CET 2002 - nashif@suse.de
+
+- use macro _libdir, fix for s390x build
+
+-------------------------------------------------------------------
+Fri Apr 20 07:35:03 CEST 2001 - nashif@suse.de
+
+- Update to version 3.5.0
+- fixed %files
+
+-------------------------------------------------------------------
+Sat Mar 24 00:01:43 CET 2001 - nashif@suse.de
+
+- Spec cleanups
+- Removed autospec from neededforbuild
+
+-------------------------------------------------------------------
+Thu Oct 12 00:45:21 MEST 2000 - nashif@suse.de
+
+- Use BuildRoot
+- Change maintainership to nashif@suse.de
+
+-------------------------------------------------------------------
+Tue Jun  6 18:50:31 MEST 2000 - marquardt@suse.de
+
+- added fortran interface
+
+-------------------------------------------------------------------
+Mon May  8 17:45:05 CEST 2000 - freitag@suse.de
+
+- initial build of version 3.4 
+
