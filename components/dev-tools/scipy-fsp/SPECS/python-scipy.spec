@@ -24,7 +24,7 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?compiler_family: %define mpi_family openmpi}
+%{!?mpi_family: %define mpi_family openmpi}
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
