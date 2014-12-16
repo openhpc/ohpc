@@ -35,10 +35,10 @@ administrative tools.  To actually provision systems, the
 %{name}-server package is also required.
 
 
-%package server
+%package -n %{pname}-server%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module - Server
 Group: System Environment/Clustering
-Requires: %{pname} = %{version}-%{release}
+Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -52,7 +52,7 @@ Requires: mod_perl httpd tftp-server dhcp
 BuildRequires: sles-release
 %endif
 
-%description server
+%description -n %{pname}-server%{PROJ_DELIM}
 Warewulf >= 3 is a set of utilities designed to better enable
 utilization and maintenance of clusters or groups of computers.  The
 provision module provides functionality for provisioning, configuring,
@@ -63,12 +63,12 @@ provision systems.  Systems used solely for administration of Warewulf
 do not require this package.
 
 
-%package gpl_sources
+%package -n %{pname}-gpl_sources%{PROJ_DELIM}
 Summary: This package contains the GPL sources used in Warewulf
 Group: Development/System
-Requires: %{pname} = %{version}-%{release}
+Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
-%description gpl_sources
+%description -n %{pname}-gpl_sources%{PROJ_DELIM}
 Warewulf >= 3 is a set of utilities designed to better enable
 utilization and maintenance of clusters or groups of computers.  The
 provision module provides functionality for provisioning, configuring,
@@ -99,7 +99,7 @@ available the included GPL software.
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
 
-%post server
+%post -n %{pname}-server%{PROJ_DELIM}
 # 07/22/14 karl.w.schulz@intel.com - specify alternate group per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
 usermod -a -G warewulf www >/dev/null 2>&1 || :
@@ -138,7 +138,7 @@ rm -rf $RPM_BUILD_ROOT
 %{perl_vendorlib}/Warewulf/Module/Cli/Provision.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Vnfs.pm
 
-%files server
+%files -n %{pname}-server%{PROJ_DELIM}
 %defattr(-, root, root)
 %config(noreplace) %{_sysconfdir}/warewulf/dhcpd-template.conf
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -160,7 +160,7 @@ rm -rf $RPM_BUILD_ROOT
 %{perl_vendorlib}/Warewulf/Module/Cli/Pxe.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Dhcp.pm
 
-%files gpl_sources
+%files -n %{pname}-gpl_sources%{PROJ_DELIM}
 %defattr(-, root, root)
 %{_prefix}/src/warewulf/3rd_party/GPL/
 

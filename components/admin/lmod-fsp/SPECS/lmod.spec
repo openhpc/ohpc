@@ -26,8 +26,10 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
+%if 0%{?suse_version}
 %if 0%{?suse_version} <= 1220
 BuildRequires: lua-bit
+%endif
 %endif
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix

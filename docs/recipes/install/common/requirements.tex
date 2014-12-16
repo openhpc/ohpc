@@ -1,0 +1,7 @@
+\noindent {\bf Requirements}: this recipe assumes the availability of a single head node
+{\em master}, and four {\em compute} nodes. The {\em master} node is
+provisioned with \baseOS{} and is subsequently configured to
+provision the remaining {\em compute} nodes with Warewulf in a
+stateless configuration. We assume an external \$HOME file system is
+available for use on both the master and compute nodes via NFS, and that compute node BMCs are
+available via IPMI from the chosen master host.
