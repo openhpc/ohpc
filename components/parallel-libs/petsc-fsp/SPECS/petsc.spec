@@ -118,7 +118,7 @@ module load phdf5
 	--with-batch=0 \
         --with-hdf5=1 \
         --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
-        --with-hdf5-include=$HDF5_INC \
+        --with-hdf5-include=$HDF5_INC || cat configure.log
 
 make
 
