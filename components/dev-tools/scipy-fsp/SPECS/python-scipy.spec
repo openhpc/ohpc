@@ -137,6 +137,10 @@ umfpack_libs = umfpack
 EOF
 
 %build
+# FSP compiler/mpi designation
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
+
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 ATLAS=%{_libdir}/atlas \
 FFTW=%{_libdir}
@@ -145,6 +149,10 @@ LAPACK=%{_libdir} \
 python setup.py config_fc --fcompiler=gnu95 --noarch build
 
 %install
+# FSP compiler/mpi designation
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
+
 python setup.py install --prefix=%{_prefix} --root=%{buildroot}
 find %{buildroot}%{python_sitearch}/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
