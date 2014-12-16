@@ -54,12 +54,12 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-fortran
-BuildRequires:  hdf5-gnu >= 1.8.8
+BuildRequires:  hdf5-gnu-fsp >= 1.8.8
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  valgrind
-Requires:       hdf5-gnu
+Requires:       hdf5-gnu-fsp
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
