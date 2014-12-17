@@ -15,6 +15,8 @@
 %{!?compiler_family: %define compiler_family gnu   }
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
  
+%define PROJ_DELIM fsp
+
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
