@@ -103,7 +103,7 @@ EOF
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-CFLAGS="%{optflags} -O3 -g -fPIC -fp-model strict -fomit-frame-pointer -openmp -xhost -fno-strict-aliasing" python setup.py build
+CFLAGS="%{optflags} -O3 -fPIC -fp-model -fomit-frame-pointer -openmp -static-intel -xhost -fno-strict-aliasing" python setup.py build
 
 %install
 # FSP compiler/mpi designation
