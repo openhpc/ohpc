@@ -88,6 +88,17 @@ This package contains files for developing applications using %{pname}.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 
+%if %{compiler_family} == intel
+cat > site.cfg << EOF
+[mkl]
+library_dirs = $MKLROOT/lib/intel64
+include_dirs = $mklroot/include
+mkl_libs = mkl_rt
+lapack_libs =
+EOF
+%define optflags "-O3 -g -fPIC -fp-model strict -fomit-frame-pointer -openmp -xhost"
+%endif
+
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
