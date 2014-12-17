@@ -89,10 +89,13 @@ This package contains files for developing applications using %{pname}.
 %patch1 -p1
 
 %if %{compiler_family} == intel
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
+
 cat > site.cfg << EOF
 [mkl]
-library_dirs = $MKLROOT/lib/intel64
-include_dirs = $mklroot/include
+library_dirs = $MKLROOTlib/intel64
+include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
