@@ -121,7 +121,7 @@ NetCDF data is:
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 . %{_sourcedir}/FSP_setup_compiler
 
-module load hdf5%{PROJ_DELIM}
+module load hdf5-%{compiler_family}%{PROJ_DELIM}
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
  
 
@@ -146,7 +146,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
 
-module load hdf5%{PROJ_DELIM}
+module load hdf5-%{compiler_family}%{PROJ_DELIM}
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
