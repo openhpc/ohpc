@@ -1,0 +1,25 @@
+diff -up netcdf-4.2.1-rc1/nc-config.in.pkgconfig netcdf-4.2.1-rc1/nc-config.in
+--- netcdf-4.2.1-rc1/nc-config.in.pkgconfig	2012-06-18 12:33:10.000000000 -0600
++++ netcdf-4.2.1-rc1/nc-config.in	2012-06-20 16:44:29.292019812 -0600
+@@ -6,12 +6,10 @@
+ 
+ prefix=@prefix@
+ exec_prefix=${prefix}
+-libdir=${exec_prefix}/lib
+ includedir=${prefix}/include
+ 
+ cc="@CC@"
+ cflags=" -I${includedir} @CPPFLAGS@" 
+-libs="-L${libdir} @NC_LIBS@"
+ has_dap="@HAS_DAP@"
+ has_nc2="@HAS_NC2@"
+ has_nc4="@HAS_NC4@"
+@@ -189,7 +187,7 @@ while test $# -gt 0; do
+        	;;
+ 
+      --libs)
+-       	echo $libs
++       	pkg-config netcdf --libs
+        	;;
+ 
+     --prefix)

@@ -83,9 +83,9 @@
 
 % begin_fsp_run
 % % fsp_validation_comment - format space for /opt/fsp (CI only command)
-% [master]$ mkfs -F -t ext4 /dev/sda8
+% [master]$ mkfs -F -t ext4 /dev/sda1
 % [master]$ mkdir -p /opt/fsp
-% [master]$ mount /dev/sda8 /opt/fsp
+% [master]$ mount /dev/sda1 /opt/fsp
 % end_fsp_run  
 
 \subsection{Add provisioning services on {\em master} node}
@@ -505,19 +505,15 @@ imported in \S\ref{sec:file_import}.
 [master]$ wwsh -y node new c3 --ipaddr=<c3_ip> --hwaddr=<c3_mac> 
 [master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> 
 
-# Restart dhcp 
-[master]$ service dhcpd restart
-
 # Define provisioning image for hosts
 [master]$ wwsh -y provision set c[1-4] --vnfs=sles12 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
+
+# Restart dhcp / update PXE
+[master]$ service dhcpd restart
+[master]$ wwsh pxe update
 \end{lstlisting}
 % end_fsp_run
-
-%--bootstrap=`uname -r`
-
-
-
 
 \subsection{Boot compute nodes}
 
