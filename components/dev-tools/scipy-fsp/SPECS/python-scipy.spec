@@ -150,6 +150,7 @@ FFTW=%{_libdir}
 BLAS=%{_libdir} \
 LAPACK=%{_libdir} \
 %if %{compiler_family} == intel
+LDSHARED="icc -shared" \
 python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem \ 
     --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
 %else
