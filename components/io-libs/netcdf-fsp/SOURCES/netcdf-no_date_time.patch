@@ -1,0 +1,13 @@
+Index: libdispatch/derror.c
+===================================================================
+--- libdispatch/derror.c.orig	2014-04-23 17:44:02.000000000 -0300
++++ libdispatch/derror.c	2014-05-01 20:31:46.305036284 -0300
+@@ -10,7 +10,7 @@ Research/Unidata. See COPYRIGHT file for
+ #include "ncdispatch.h"
+ 
+ /* Tell the user the version of netCDF. */
+-static const char nc_libvers[] = PACKAGE_VERSION " of "__DATE__" "__TIME__" $";
++static const char nc_libvers[] = PACKAGE_VERSION " $";
+ 
+ /**
+ \ingroup lib_version

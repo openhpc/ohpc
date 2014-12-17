@@ -65,7 +65,6 @@ Patch2:         petsc.usrlocal.patch
 #Patch3:         petsc-3.3-fix-error-detection-in-makefile.patch 
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  Modules
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -119,7 +118,7 @@ module load phdf5
 	--with-batch=0 \
         --with-hdf5=1 \
         --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
-        --with-hdf5-include=$HDF5_INC \
+        --with-hdf5-include=$HDF5_INC || cat configure.log
 
 make
 
