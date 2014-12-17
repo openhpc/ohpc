@@ -145,6 +145,7 @@ export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 . %{_sourcedir}/FSP_setup_compiler
 
+
 module load hdf5%{PROJ_DELIM}
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 
