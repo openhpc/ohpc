@@ -106,6 +106,9 @@ EOF
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+%if %{compiler_family} == intel
+LDSHARED="icc -shared" \
+%endif
 CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build
 
 %install
