@@ -1,4 +1,4 @@
-#
+##
 # netcdf spec file 
 # netcdf library build that is dependent on compiler toolchain
 #
