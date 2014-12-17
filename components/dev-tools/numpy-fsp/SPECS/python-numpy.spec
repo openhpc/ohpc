@@ -94,7 +94,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 cat > site.cfg << EOF
 [mkl]
-library_dirs = $MKLROOTlib/intel64
+library_dirs = $MKLROOT/lib/intel64
 include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
