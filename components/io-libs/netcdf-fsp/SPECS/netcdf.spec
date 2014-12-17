@@ -15,7 +15,6 @@
 %{!?compiler_family: %define compiler_family gnu   }
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
  
-%define PROJ_DELIM -fsp
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
@@ -63,12 +62,12 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
 #BuildRequires:  gcc-c++
 #BuildRequires:  gcc-fortran
-BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM} 
+BuildRequires:  hdf5-gnu-fsp 
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
 BuildRequires:  zlib-devel >= 1.2.5
-BuildRequires:  valgrind%{PROJ_DELIM}
-Requires:       hdf5-%{compiler_family}%{PROJ_DELIM} 
+BuildRequires:  valgrind-fsp
+Requires:       hdf5-gnu-fsp 
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -123,7 +122,7 @@ NetCDF data is:
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 . %{_sourcedir}/FSP_setup_compiler
 
-module load hdf5-%{compiler_family}%{PROJ_DELIM}
+module load hdf5
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
  
 
@@ -148,7 +147,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
 
-module load hdf5-%{compiler_family}%{PROJ_DELIM}
+module load hdf5
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
