@@ -59,14 +59,14 @@ Patch3:         netcdf-pkgconfig.patch
 #Strip FFLAGS from nc-config
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
-BuildRequires:  gcc-c++
-BuildRequires:  gcc-fortran
-BuildRequires:  hdf5-gnu-fsp >= 1.8.8
+#BuildRequires:  gcc-c++
+#BuildRequires:  gcc-fortran
+BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM} 
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
 BuildRequires:  zlib-devel >= 1.2.5
-BuildRequires:  valgrind-fsp
-Requires:       hdf5-gnu-fsp
+BuildRequires:  valgrind%{PROJ_DELIM}
+Requires:       hdf5-%{compiler_family}%{PROJ_DELIM} 
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -121,7 +121,7 @@ NetCDF data is:
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 . %{_sourcedir}/FSP_setup_compiler
 
-module load hdf5
+module load hdf5%{PROJ_DELIM}
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
  
 
@@ -145,7 +145,8 @@ export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 . %{_sourcedir}/FSP_setup_compiler
 
-module load hdf5
+
+module load hdf5%{PROJ_DELIM}
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
