@@ -162,7 +162,6 @@ find %{buildroot}%{python_sitearch}/scipy/weave -type d -name examples | xargs r
 %endif
 # fix executability issue
 chmod +x %{buildroot}%{python_sitearch}/%{pname}/io/arff/arffread.py
-#chmod +x %{buildroot}%{python_sitearch}/%{pname}/io/arff/utils.py
 chmod +x %{buildroot}%{python_sitearch}/%{pname}/special/spfun_stats.py
 
 %files
