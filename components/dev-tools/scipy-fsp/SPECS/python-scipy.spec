@@ -124,17 +124,21 @@ leading scientists and engineers.
 %setup -q -n %{pname}-%{version}
 find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
-cat > site.cfg << EOF
-[amd]
-library_dirs = %{_libdir}
-include_dirs = /usr/include/suitesparse:/usr/include/ufsparse
-amd_libs = amd
+%if %{compiler_family} == intel
+# FSP compiler/mpi designation
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
 
-[umfpack]
-library_dirs = %{_libdir}
-include_dirs = /usr/include/suitesparse:/usr/include/ufsparse
-umfpack_libs = umfpack
+cat > site.cfg << EOF
+[mkl]
+library_dirs = $MKLROOT/lib/intel64
+include_dirs = $MKLROOT/include
+mkl_libs = mkl_rt
+lapack_libs =
 EOF
+%define optflags "-O3 -g -fPIC -fp-model strict -fomit-frame-pointer -openmp -xhost"
+%endif
+
 
 %build
 # FSP compiler/mpi designation
@@ -146,7 +150,12 @@ ATLAS=%{_libdir}/atlas \
 FFTW=%{_libdir}
 BLAS=%{_libdir} \
 LAPACK=%{_libdir} \
+%if %{compiler_family} == intel
+python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem \ 
+    --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
+%else
 python setup.py config_fc --fcompiler=gnu95 --noarch build
+%endif
 
 %install
 # FSP compiler/mpi designation
