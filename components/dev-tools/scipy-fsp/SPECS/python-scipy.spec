@@ -136,7 +136,6 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
-%define optflags "-O3 -g -fPIC -fp-model strict -fomit-frame-pointer -openmp -xhost"
 %endif
 
 
