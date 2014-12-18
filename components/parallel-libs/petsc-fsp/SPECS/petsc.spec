@@ -105,7 +105,18 @@ module load phdf5
 
 ./config/configure.py \
 	--CFLAGS="$RPM_OPT_FLAGS" \
+%if %{compiler_family} == intel
+	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
+    --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
+%if %{mpi_family} == impi
+    --with-cc=$I_MPI_ROOT/intel64/bin_fsp/mpicc
+    --with-cxx=$I_MPI_ROOT/intel64/bin_fsp/mpicxx
+    --with-fc=$I_MPI_ROOT/intel64/bin_fsp/mpif90
+    --with-f77=$I_MPI_ROOT/intel64/bin_fsp/mpif77
+%endif
+%else
 	--FFLAGS="$RPM_OPT_FLAGS" \
+%endif
 	--CXXFLAGS="$RPM_OPT_FLAGS" \
 	--prefix=%{install_path} \
         --with-clanguage=C++ \
@@ -118,7 +129,7 @@ module load phdf5
 	--with-batch=0 \
         --with-hdf5=1 \
         --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
-        --with-hdf5-include=$HDF5_INC || cat configure.log
+        --with-hdf5-include=$HDF5_INC
 
 make
 
