@@ -108,6 +108,7 @@ module load phdf5
 %if %{compiler_family} == intel
 	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
     --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
+    --with-mpi-compilers=0 \
 %else
 	--FFLAGS="$RPM_OPT_FLAGS" \
 %endif
