@@ -109,10 +109,10 @@ module load phdf5
 	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
     --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %if %{mpi_family} == impi
-    --with-cc=$I_MPI_ROOT/intel64/bin/mpiicc \
-    --with-cxx=$I_MPI_ROOT/intel64/bin/mpiicxx \
-    --with-fc=$I_MPI_ROOT/intel64/bin/mpiifort \
-    --with-f77=$I_MPI_ROOT/intel64/bin/mpiifort \
+    --with-cc=$I_MPI_ROOT/intel64/bin_fsp/mpicc \
+    --with-cxx=$I_MPI_ROOT/intel64/bin_fsp/mpicxx \
+    --with-fc=$I_MPI_ROOT/intel64/bin_fsp/mpifort \
+    --with-f77=$I_MPI_ROOT/intel64/bin_fsp/mpifort \
 %endif
 %else
 	--FFLAGS="$RPM_OPT_FLAGS" \
