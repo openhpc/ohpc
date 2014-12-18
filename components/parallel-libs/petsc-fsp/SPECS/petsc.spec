@@ -105,7 +105,12 @@ module load phdf5
 
 ./config/configure.py \
 	--CFLAGS="$RPM_OPT_FLAGS" \
+%if %{compiler_family} == intel
+	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
+    --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
+%else
 	--FFLAGS="$RPM_OPT_FLAGS" \
+%endif
 	--CXXFLAGS="$RPM_OPT_FLAGS" \
 	--prefix=%{install_path} \
         --with-clanguage=C++ \
