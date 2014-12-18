@@ -104,10 +104,6 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load phdf5
 
 ./config/configure.py \
-    --CC=$CC \
-    --CXX=$CXX \
-    --FC=$FC \
-    --F77=$F77 \
 	--CFLAGS="$RPM_OPT_FLAGS" \
 	--FFLAGS="$RPM_OPT_FLAGS" \
 	--CXXFLAGS="$RPM_OPT_FLAGS" \
