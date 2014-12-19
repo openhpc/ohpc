@@ -114,7 +114,6 @@ module load phdf5
     --with-cxx=mpicxx \
     --with-fc=mpif90 \
     --with-f77=mpif77 \
-#    --with-mpi-dir=$MPI_DIR \
 %endif
 %if %{compiler_family} == intel
 	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
