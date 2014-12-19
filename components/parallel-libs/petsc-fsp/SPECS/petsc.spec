@@ -107,7 +107,7 @@ module load phdf5
 	--CFLAGS="$RPM_OPT_FLAGS" \
 %if %{mpi_family} == impi
     --with-cc=mpiicc \
-    --with-fc=miifort \
+    --with-fc=mpiifort \
 %else
     --with-mpi-dir=$MPI_DIR \
 %endif
