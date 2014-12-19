@@ -111,8 +111,9 @@ module load phdf5
     --with-fc=mpiifort \
 %else
     --with-cc=mpicc \
-    --with-cxx=mpicpc \
-    --with-fc=mpiiort \
+    --with-cxx=mpicxx \
+    --with-fc=mpif90 \
+    --with-f77=mpif77 \
 #    --with-mpi-dir=$MPI_DIR \
 %endif
 %if %{compiler_family} == intel
