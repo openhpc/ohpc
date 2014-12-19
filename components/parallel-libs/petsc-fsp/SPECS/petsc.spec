@@ -110,7 +110,10 @@ module load phdf5
     --with-cxx=mpiicpc \
     --with-fc=mpiifort \
 %else
-    --with-mpi-dir=$MPI_DIR \
+    --with-cc=mpicc \
+    --with-cxx=mpicpc \
+    --with-fc=mpiiort \
+#    --with-mpi-dir=$MPI_DIR \
 %endif
 %if %{compiler_family} == intel
 	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
