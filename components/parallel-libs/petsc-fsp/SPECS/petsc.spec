@@ -105,31 +105,34 @@ module load phdf5
 
 ./config/configure.py \
 	--CFLAGS="$RPM_OPT_FLAGS" \
+%if %{mpi_family} == impi
+    --with-cc=mpiicc \
+    --with-cxx=mpiicpc \
+    --with-fc=mpiifort \
+%else
+    --with-cc=mpicc \
+    --with-cxx=mpicxx \
+    --with-fc=mpif90 \
+    --with-f77=mpif77 \
+%endif
 %if %{compiler_family} == intel
 	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
     --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
-%if %{mpi_family} == impi
-    --with-cc=$I_MPI_ROOT/intel64/bin_fsp/mpicc \
-    --with-cxx=$I_MPI_ROOT/intel64/bin_fsp/mpicxx \
-    --with-fc=$I_MPI_ROOT/intel64/bin_fsp/mpifort \
-    --with-f77=$I_MPI_ROOT/intel64/bin_fsp/mpifort \
-%endif
 %else
 	--FFLAGS="$RPM_OPT_FLAGS" \
 %endif
 	--CXXFLAGS="$RPM_OPT_FLAGS" \
 	--prefix=%{install_path} \
-        --with-clanguage=C++ \
-        --with-c-support \
+    --with-clanguage=C++ \
+    --with-c-support \
 	--with-fortran-interfaces=1 \
 	--with-debugging=no \
  	--with-shared-libraries \
 	--with-mpi=1 \
-        --with-mpi-dir=$MPI_DIR \
 	--with-batch=0 \
-        --with-hdf5=1 \
-        --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
-        --with-hdf5-include=$HDF5_INC
+    --with-hdf5=1 \
+    --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
+    --with-hdf5-include=$HDF5_INC
 
 make
 
