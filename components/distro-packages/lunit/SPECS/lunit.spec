@@ -25,7 +25,7 @@ BuildRequires:  lua >= %{luaver}
 Requires:       lua >= %{luaver}
 
 BuildArch:      noarch
-Provides:       %{pname} = %{version}
+#Provides:       %{pname} = %{version}
 
 %description
 Lunit is a unit testing framework for lua, written in lua.
