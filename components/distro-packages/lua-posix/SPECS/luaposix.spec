@@ -29,9 +29,6 @@ Requires:       lua-bit%{PROJ_DELIM}
 %endif
 Requires:       lua >= %{luaver}
 
-Provides:       %{pname} = %{version}
-
-
 %description
 This is a POSIX library for Lua which provides access to many POSIX features
 to Lua programs.
