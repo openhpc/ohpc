@@ -65,7 +65,6 @@ Patch2:         petsc.usrlocal.patch
 #Patch3:         petsc-3.3-fix-error-detection-in-makefile.patch 
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  Modules
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -106,20 +105,34 @@ module load phdf5
 
 ./config/configure.py \
 	--CFLAGS="$RPM_OPT_FLAGS" \
+%if %{mpi_family} == impi
+    --with-cc=mpiicc \
+    --with-cxx=mpiicpc \
+    --with-fc=mpiifort \
+%else
+    --with-cc=mpicc \
+    --with-cxx=mpicxx \
+    --with-fc=mpif90 \
+    --with-f77=mpif77 \
+%endif
+%if %{compiler_family} == intel
+	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
+    --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
+%else
 	--FFLAGS="$RPM_OPT_FLAGS" \
+%endif
 	--CXXFLAGS="$RPM_OPT_FLAGS" \
 	--prefix=%{install_path} \
-        --with-clanguage=C++ \
-        --with-c-support \
+    --with-clanguage=C++ \
+    --with-c-support \
 	--with-fortran-interfaces=1 \
 	--with-debugging=no \
  	--with-shared-libraries \
 	--with-mpi=1 \
-        --with-mpi-dir=$MPI_DIR \
 	--with-batch=0 \
-        --with-hdf5=1 \
-        --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
-        --with-hdf5-include=$HDF5_INC \
+    --with-hdf5=1 \
+    --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
+    --with-hdf5-include=$HDF5_INC
 
 make
 

@@ -1,0 +1,11 @@
+--- netcdf-4.2.orig/libsrc/posixio.c	2012-03-20 21:30:52.000000000 -0400
++++ netcdf-4.2/libsrc/posixio.c	2012-04-09 17:42:39.802281622 -0400
+@@ -633,7 +633,7 @@
+ 	pxp->bf_rflags |= rflags;
+ 	pxp->bf_refcount++;
+ 
+-	*vpp = (char *)pxp->bf_base + diff;
++    *vpp = (void *)((char *)pxp->bf_base + diff);
+ 	return ENOERR;
+ }
+ 
