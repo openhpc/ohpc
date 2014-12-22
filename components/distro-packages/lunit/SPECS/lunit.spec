@@ -1,3 +1,6 @@
+%define pname lunit
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 %if 0%{?suse_version} <= 1220
 %define luaver 5.1
 %else
@@ -5,16 +8,16 @@
 %endif
 %define luapkgdir %{_datadir}/lua/%{luaver}
 
-Name:           lunit
+Name:           %{pname}%{PROJ_DELIM}
 Version:        0.5
-Release:        1%{?dist}
+Release:        %{?dist}
 Summary:        Unit testing framework for Lua
 
 Group:          Development/Libraries
 License:        MIT
 Url:            http://nessie.de/mroth/lunit
-Source0:        %{name}-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
+Source0:        %{pname}-%{version}.tar.gz
+BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 
 # for running tests
@@ -22,13 +25,14 @@ BuildRequires:  lua >= %{luaver}
 Requires:       lua >= %{luaver}
 
 BuildArch:      noarch
+Provides:       %{pname}
 
 %description
 Lunit is a unit testing framework for lua, written in lua.
 
 
 %prep
-%setup -q 
+%setup -q -n %{pname}-%{version}
 
 
 %build
