@@ -28,11 +28,11 @@ BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
 %if 0%{?suse_version}
 %if 0%{?suse_version} <= 1220
-BuildRequires: lua-bit
+BuildRequires: lua-bit%{PROJ_DELIM}
 %endif
 %endif
-BuildRequires: lua-filesystem
-BuildRequires: lua-posix
+BuildRequires: lua-filesystem%{PROJ_DELIM}
+BuildRequires: lua-posix%{PROJ_DELIM}
 BuildRequires: rsync
 
 # ks: disabling AutoReq to deal with /usr/bin/lua not being owned by an rpm in SLES11
@@ -46,8 +46,8 @@ Patch2: lmod.site.patch
 
 # Known dependencies
 Requires: lua >= %{luaver}
-Requires: lua-filesystem
-Requires: lua-posix
+Requires: lua-filesystem%{PROJ_DELIM}
+Requires: lua-posix%{PROJ_DELIM}
 Requires: tcl
 
 %define debug_package %{nil}
