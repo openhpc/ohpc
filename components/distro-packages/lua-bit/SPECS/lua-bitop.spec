@@ -1,3 +1,6 @@
+%define pname lua-bit
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 %if 0%{?suse_version} <= 1220
 %define luaver 5.1
 %else
@@ -6,7 +9,7 @@
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
 
-Name:           lua-bit
+Name:           %{pname}%{PROJ_DELIM}
 Version:        1.0.2
 Release:        1%{?dist}
 Summary:        Module for Lua which adds bitwise operations on numbers
@@ -15,7 +18,7 @@ License:        MIT
 Url:            http://bitop.luajit.org
 Source0:        LuaBitOp-%{version}.tar.gz
 Patch0:         Makefile.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 BuildRequires:  lua >= %{luaver}, lua-devel >= %{luaver}
 Requires:       lua >= %{luaver}
