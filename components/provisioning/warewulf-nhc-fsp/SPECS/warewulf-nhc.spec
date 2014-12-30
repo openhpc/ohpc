@@ -72,3 +72,5 @@ test "$RPM_BUILD_ROOT" != "/" && %{__rm} -rf $RPM_BUILD_ROOT
 %config(noreplace) %{nhc_script_dir}/*.nhc
 %config(noreplace) %{nhc_helper_dir}/*
 %config(noreplace) %{_sbindir}/%{sname}
+%config(noreplace) %{_sbindir}/%{sname}-genconf
+%config(noreplace) %{_sbindir}/%{sname}-wrapper
