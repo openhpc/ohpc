@@ -11,7 +11,7 @@
 
 Name: %{pname}%{PROJ_DELIM}
 Summary: Warewulf Node Health Check System
-Version: 1.4
+Version: 1.4.1
 Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: Applications/System
