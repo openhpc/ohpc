@@ -45,7 +45,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
-Requires:      libmetis0 = %{version}
+Requires:      libmetis = %{version}
 
 %define debug_package %{nil}
 
