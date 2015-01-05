@@ -63,6 +63,7 @@ BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
 Requires:      libmetis0 = %{version}
+Provides:      libmetis0 = %{version}
 
 %define debug_package %{nil}
 
@@ -82,6 +83,7 @@ Group:          System/Libraries
 %package devel
 License:         Free for non-commercial use
 Requires:        %name = %version
+Provides:        %name = %version
 Requires:	 pkgconfig
 Summary:         Metis development files
 Group:           Development/Libraries/C and C++
