@@ -46,6 +46,7 @@ BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
 Requires:      libmetis0 = %{version}
+Provides:      libmetis = %{version}
 Provides:      libmetis0 = %{version}
 
 %define debug_package %{nil}
