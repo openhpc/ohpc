@@ -14,7 +14,7 @@
 
 %{!?compiler_family: %define compiler_family gnu   }
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
- 
+  
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
