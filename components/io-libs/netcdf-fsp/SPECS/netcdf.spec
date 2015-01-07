@@ -30,7 +30,7 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
-BuildRequires: hdf52-%{compiler_family}-def-abc
+BuildRequires: hdf52-def-abc
 
 #-fsp-header-comp-end------------------------------------------------
 
