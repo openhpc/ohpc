@@ -31,7 +31,7 @@ BuildRequires: intel_licenses
 %endif
 
 #BuildRequires: hdf53-def-%{PROJ_DELIM}abc
-BuidlRequires: hdf51-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: hdf51-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: hdf53-def-%{PROJ_DELIM}abc%{compiler_family}
 
 
