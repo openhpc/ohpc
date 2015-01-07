@@ -62,7 +62,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
 #BuildRequires:  gcc-c++
 #BuildRequires:  gcc-fortran
-BuildRequires: hdf52-gnu-fsp
+BuildRequires: hdf52-gnu%{PROJ_DELIM}
 BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
