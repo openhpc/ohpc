@@ -14,6 +14,8 @@
 
 %{!?compiler_family: %define compiler_family gnu   }
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+
+BuildRequires: hdf52-def-%{PROJ_DELIM}abc
   
 
 # Compiler dependencies
@@ -30,7 +32,7 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
-BuildRequires: hdf52-def-abc
+
 
 #-fsp-header-comp-end------------------------------------------------
 
