@@ -12,9 +12,9 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM %{nil}}
-
+%{!?compiler_family: %define compiler_family gnu   }
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+  
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
@@ -29,14 +29,6 @@ Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 BuildRequires: intel_licenses
 %endif
 %endif
-
-%define hdf5_dependency hdf52-%{compiler_family}%{PROJ_DELIM}
-
-#BuildRequires: hdf53-def-%{PROJ_DELIM}abc
-BuildRequires: %{hdf5_dependency}
-BuildRequires: hdf53-def-%{PROJ_DELIM}abc%{compiler_family}
-
-
 
 #-fsp-header-comp-end------------------------------------------------
 
@@ -70,12 +62,12 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
 #BuildRequires:  gcc-c++
 #BuildRequires:  gcc-fortran
-
 BuildRequires:  valgrind%{PROJ_DELIM}
+BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
 BuildRequires:  zlib-devel >= 1.2.5
-#Requires:       abchdf5-%{compiler_family}-random2
+Requires:       hdf5-%{compiler_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
