@@ -30,6 +30,8 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
+BuildRequires: hdf52-%{compiler_family}%{PROJ_DELIM}
+
 #-fsp-header-comp-end------------------------------------------------
 
 
@@ -62,7 +64,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
 #BuildRequires:  gcc-c++
 #BuildRequires:  gcc-fortran
-BuildRequires: hdf52-%{compiler_family}%{PROJ_DELIM}
+
 BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
