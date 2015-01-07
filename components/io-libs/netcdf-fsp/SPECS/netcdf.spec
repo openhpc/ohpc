@@ -62,8 +62,8 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
 #BuildRequires:  gcc-c++
 #BuildRequires:  gcc-fortran
+BuildRequires:  hdf5-%{compiler_family}-random
 BuildRequires:  valgrind%{PROJ_DELIM}
-BuildRequires:  defhdf5-%{compiler_family}-random
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
 BuildRequires:  zlib-devel >= 1.2.5
