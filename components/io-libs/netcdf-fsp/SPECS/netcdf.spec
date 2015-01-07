@@ -67,7 +67,6 @@ BuildRequires:  hdf5-%{compiler_family}-random
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
 BuildRequires:  zlib-devel >= 1.2.5
-Requires:       hdf5-%{compiler_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
