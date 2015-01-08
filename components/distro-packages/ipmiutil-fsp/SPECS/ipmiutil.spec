@@ -57,7 +57,7 @@ An IPMI driver can be provided by either the OpenIPMI driver (/dev/ipmi0)
 or the Intel IPMI driver (/dev/imb), etc.  If used locally and no driver is
 detected, ipmiutil will use user-space direct I/Os instead.
 
-%package %{pname}-devel%{PROJ_DELIM}
+%package -n %{pname}-devel%{PROJ_DELIM}
 Group:    Development/Libraries
 Summary:  Includes libraries and headers for the ipmiutil package
 provides: %{pname}-devel
@@ -66,7 +66,7 @@ provides: %{pname}-devel
 The ipmiutil-devel package contains headers and libraries which are
 useful for building custom IPMI applications.
 
-%package %{pname}-static%{PROJ_DELIM}
+%package -n %{pname}-static%{PROJ_DELIM}
 Group:    Development/Libraries
 Summary:  Includes static libraries for the ipmiutil package
 
