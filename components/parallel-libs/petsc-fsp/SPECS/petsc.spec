@@ -104,24 +104,19 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load phdf5
 
 ./config/configure.py \
-	--CFLAGS="$RPM_OPT_FLAGS" \
-%if %{mpi_family} == impi
-#    --with-cc=mpiicc \
-#    --with-cxx=mpiicpc \
-#    --with-fc=mpiifort \
-#%else
+	#--CFLAGS="$RPM_OPT_FLAGS" \
     --with-cc=mpicc \
     --with-cxx=mpicxx \
     --with-fc=mpif90 \
     --with-f77=mpif77 \
-%endif
 %if %{compiler_family} == intel
-	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
+	#--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
+    --FFLAGS="-fPIC" \
     --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
-	--FFLAGS="$RPM_OPT_FLAGS" \
+	#--FFLAGS="$RPM_OPT_FLAGS" \
 %endif
-	--CXXFLAGS="$RPM_OPT_FLAGS" \
+	#--CXXFLAGS="$RPM_OPT_FLAGS" \
 	--prefix=%{install_path} \
     --with-clanguage=C++ \
     --with-c-support \
