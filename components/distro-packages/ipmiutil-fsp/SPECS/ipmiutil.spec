@@ -62,15 +62,15 @@ Group:    Development/Libraries
 Summary:  Includes libraries and headers for the ipmiutil package
 provides: %{pname}-devel
 
-%description devel
+%description -n %{pname}-devel%{PROJ_DELIM}
 The ipmiutil-devel package contains headers and libraries which are
 useful for building custom IPMI applications.
 
-%package static
+%package %{pname}-static%{PROJ_DELIM}
 Group:    Development/Libraries
 Summary:  Includes static libraries for the ipmiutil package
 
-%description static
+%description -n %{pname}-static%{PROJ_DELIM}
 The ipmiutil-static package contains static libraries which are
 useful for building custom IPMI applications.
 
@@ -168,7 +168,7 @@ rm -rf %{buildroot}
 %doc AUTHORS ChangeLog COPYING NEWS README TODO 
 %doc doc/UserGuide
 
-%files devel
+%files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root)
 # %{_datadir}/%{name} is used by both ipmiutil and ipmituil-devel
 %dir %{_datadir}/%{name}
@@ -182,7 +182,7 @@ rm -rf %{buildroot}
 %{_includedir}/ipmicmd.h
 %{_libdir}/libipmiutil.so
 
-%files static
+%files -N %{pname}-static%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_libdir}/libipmiutil.a
 
