@@ -41,7 +41,7 @@ BuildRequires: gcc gcc-c++ libtool
 %else
 %define unit_dir  %{_unitdir}
 %endif
-%define systemd_fls %{_datadir}/%{name}
+%define systemd_fls %{_datadir}/%{pname}
 %endif
 %define init_dir  %{_initrddir}
 
