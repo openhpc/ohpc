@@ -34,7 +34,7 @@ BuildRequires: intel_licenses
 
 Summary:   A powerful implementation of MPI
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.8.3
+Version:   1.8.4
 Release:   1
 License:   BSD-3-Clause
 Group:     Development/Libraries/Parallel
@@ -42,8 +42,8 @@ URL:       http://www.open-mpi.org
 Source0:   %{pname}-%{version}.tar.bz2
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
-Patch1:    %{pname}-no_date_and_time.patch
-Patch2:    %{pname}-no_network_in_build.patch
+#Patch1:    %{pname}-no_date_and_time.patch
+#Patch2:    %{pname}-no_network_in_build.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %include %{_sourcedir}/FSP_macros
