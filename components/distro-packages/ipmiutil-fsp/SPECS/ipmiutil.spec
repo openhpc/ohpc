@@ -60,6 +60,7 @@ detected, ipmiutil will use user-space direct I/Os instead.
 %package -n %{pname}-devel%{PROJ_DELIM}
 Group:    Development/Libraries
 Summary:  Includes libraries and headers for the ipmiutil package
+Requires: %{pname}
 provides: %{pname}-devel
 
 %description -n %{pname}-devel%{PROJ_DELIM}
