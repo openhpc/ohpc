@@ -97,8 +97,8 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-, root, root, -)
-%dir %{_datadir}/%{name}
-%dir %{_var}/lib/%{name}
+%dir %{_datadir}/%{pname}
+%dir %{_var}/lib/%{pname}
 %{_bindir}/ipmiutil
 %{_bindir}/idiscover
 %{_bindir}/ievents
@@ -121,23 +121,23 @@ rm -rf %{buildroot}
 %{_sbindir}/ifirewall 
 %{_sbindir}/ifwum 
 %{_sbindir}/ihpm 
-%{_datadir}/%{name}/ipmiutil_evt
-%{_datadir}/%{name}/ipmiutil_asy
-%{_datadir}/%{name}/ipmiutil_wdt
-%{_datadir}/%{name}/ipmi_port
-%{_datadir}/%{name}/ipmi_info
-%{_datadir}/%{name}/checksel
+%{_datadir}/%{pname}/ipmiutil_evt
+%{_datadir}/%{pname}/ipmiutil_asy
+%{_datadir}/%{pname}/ipmiutil_wdt
+%{_datadir}/%{pname}/ipmi_port
+%{_datadir}/%{pname}/ipmi_info
+%{_datadir}/%{pname}/checksel
 %{systemd_fls}/ipmiutil_evt.service
 %{systemd_fls}/ipmiutil_asy.service
 %{systemd_fls}/ipmiutil_wdt.service
 %{systemd_fls}/ipmi_port.service
-%{_datadir}/%{name}/ipmiutil.env
-%{_datadir}/%{name}/ipmiutil.pre
-%{_datadir}/%{name}/ipmiutil.setup
-%{_datadir}/%{name}/ipmi_if.sh
-%{_datadir}/%{name}/evt.sh
-%{_datadir}/%{name}/ipmi.init.basic
-%{_datadir}/%{name}/bmclanpet.mib
+%{_datadir}/%{pname}/ipmiutil.env
+%{_datadir}/%{pname}/ipmiutil.pre
+%{_datadir}/%{pname}/ipmiutil.setup
+%{_datadir}/%{pname}/ipmi_if.sh
+%{_datadir}/%{pname}/evt.sh
+%{_datadir}/%{pname}/ipmi.init.basic
+%{_datadir}/%{pname}/bmclanpet.mib
 %{_mandir}/man8/isel.8*
 %{_mandir}/man8/isensor.8*
 %{_mandir}/man8/ireset.8*
@@ -171,14 +171,14 @@ rm -rf %{buildroot}
 %files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root)
 # %{_datadir}/%{name} is used by both ipmiutil and ipmituil-devel
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/ipmi_sample.c
-%{_datadir}/%{name}/ipmi_sample_evt.c
-%{_datadir}/%{name}/isensor.c
-%{_datadir}/%{name}/ievents.c
-%{_datadir}/%{name}/isensor.h
-%{_datadir}/%{name}/ievents.h
-%{_datadir}/%{name}/Makefile
+%dir %{_datadir}/%{pname}
+%{_datadir}/%{pname}/ipmi_sample.c
+%{_datadir}/%{pname}/ipmi_sample_evt.c
+%{_datadir}/%{pname}/isensor.c
+%{_datadir}/%{pname}/ievents.c
+%{_datadir}/%{pname}/isensor.h
+%{_datadir}/%{pname}/ievents.h
+%{_datadir}/%{pname}/Makefile
 %{_includedir}/ipmicmd.h
 %{_libdir}/libipmiutil.so
 
@@ -196,14 +196,14 @@ rm -rf %{buildroot}
 if [ "$1" = "1" ]
 then
    # doing rpm -i, first time
-   vardir=%{_var}/lib/%{name}
-   scr_dir=%{_datadir}/%{name}
+   vardir=%{_var}/lib/%{pname}
+   scr_dir=%{_datadir}/%{pname}
 
 %if 0%{?req_systemd}
 %service_add_post ipmi_port.service ipmiutil_evt.service ipmiutil_asy.service ipmiutil_wdt.service
 %else
    if [ -x /bin/systemctl ]; then
-      echo "IINITDIR=%{init_dir}" >>%{_datadir}/%{name}/ipmiutil.env
+      echo "IINITDIR=%{init_dir}" >>%{_datadir}/%{pname}/ipmiutil.env
       cp -f ${scr_dir}/ipmiutil_evt.service %{unit_dir}
       cp -f ${scr_dir}/ipmiutil_asy.service %{unit_dir}
       cp -f ${scr_dir}/ipmiutil_wdt.service %{unit_dir}
@@ -225,7 +225,7 @@ then
    if [ $IPMIret -eq 0 ]; then
       # If IPMI is enabled, automate managing the IPMI SEL
       if [ -d %{_sysconfdir}/cron.daily ]; then
-         cp -f %{_datadir}/%{name}/checksel %{_sysconfdir}/cron.daily
+         cp -f %{_datadir}/%{pname}/checksel %{_sysconfdir}/cron.daily
       fi
       # IPMI_IS_ENABLED, so enable services, but only if Red Hat
       if [ -f /etc/redhat-release ]; then
@@ -254,7 +254,7 @@ else
    %{_bindir}/ipmiutil sel -v >/dev/null 2>&1 || :
    if [ $? -eq 0 ]; then
       if [ -d %{_sysconfdir}/cron.daily ]; then
-         cp -f %{_datadir}/%{name}/checksel %{_sysconfdir}/cron.daily
+         cp -f %{_datadir}/%{pname}/checksel %{_sysconfdir}/cron.daily
       fi
    fi
 fi
