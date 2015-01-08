@@ -105,7 +105,7 @@ module load phdf5
 
 ./config/configure.py \
 	--CFLAGS="$RPM_OPT_FLAGS" \
-#%if %{mpi_family} == impi
+%if %{mpi_family} == impi
 #    --with-cc=mpiicc \
 #    --with-cxx=mpiicpc \
 #    --with-fc=mpiifort \
@@ -114,7 +114,7 @@ module load phdf5
     --with-cxx=mpicxx \
     --with-fc=mpif90 \
     --with-f77=mpif77 \
-#%endif
+%endif
 %if %{compiler_family} == intel
 	--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
     --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
