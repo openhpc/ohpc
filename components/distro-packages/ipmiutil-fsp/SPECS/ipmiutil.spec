@@ -14,7 +14,7 @@ License:   BSD
 Group:     System/Management
 Source:    %{pname}-%{version}.tar.gz
 URL:       http://ipmiutil.sourceforge.net
-BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+BuildRoot: %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 provides: %{pname}
 # Suggests: cron or vixie-cron or cronie or similar
 %if 0%{?fedora} >= 15
