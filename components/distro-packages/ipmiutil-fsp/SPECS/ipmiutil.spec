@@ -182,7 +182,7 @@ rm -rf %{buildroot}
 %{_includedir}/ipmicmd.h
 %{_libdir}/libipmiutil.so
 
-%files -N %{pname}-static%{PROJ_DELIM}
+%files -n %{pname}-static%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_libdir}/libipmiutil.a
 
