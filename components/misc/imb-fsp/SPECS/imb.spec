@@ -75,7 +75,7 @@ a range of message sizes.
 
 
 %prep
-cd %{buildroot}
+#cd %{buildroot}
 rm -rf imb
 gzip -dc %{buildroot}/SOURCES/imb-4.0.1.tar.gz | tar -xvvf -
 if [ $? -ne 0 ]; then
