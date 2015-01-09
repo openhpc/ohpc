@@ -75,8 +75,15 @@ a range of message sizes.
 
 
 %prep
-
-%setup -q -n %{pname}-%{version}
+cd %{buildroot}
+rm -rf imb
+gzip -dc %{buildroot}/SOURCES/imb-4.0.1.tar.gz | tar -xvvf -
+if [ $? -ne 0 ]; then
+    exit $?
+fi
+cd imb
+chown -R root.root .
+chmod -R a+rX,g-w,o-w .
 
 # Intel FSP patches
 %patch1 -p1
