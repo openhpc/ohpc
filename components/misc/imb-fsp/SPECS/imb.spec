@@ -78,7 +78,7 @@ a range of message sizes.
 %setup -n imb
 
 # Intel FSP patches
-%patch1 -p1
+%patch1 -p0
 
 %build
 
