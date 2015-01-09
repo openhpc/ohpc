@@ -100,7 +100,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-mkdir %{buildroot}/%{install_path}/bin
+mkdir %{install_path}/bin
 cd src
 cp IMB_EXT  %{buildroot}/%{install_path}/bin/.
 cp IMB_IO   %{buildroot}/%{install_path}/bin/.
