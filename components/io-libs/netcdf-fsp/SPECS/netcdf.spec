@@ -51,12 +51,12 @@ Source0:	%{pname}-%{version}.tar.gz
 Source1:        nc-config.1.gz
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
-Patch0:         %{pname}-correct_casting.patch
-Patch1:         %{pname}-codecleanup.patch
-Patch2:         %{pname}-no_date_time.patch
+#Patch0:         %{pname}-correct_casting.patch
+#Patch1:         %{pname}-codecleanup.patch
+#Patch2:         %{pname}-no_date_time.patch
 #Strip FFLAGS from nc-config
 #Use pkgconfig in nc-config to avoid multi-lib issues
-Patch3:         netcdf-pkgconfig.patch
+#Patch3:         netcdf-pkgconfig.patch
 #Strip FFLAGS from nc-config
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
@@ -110,10 +110,10 @@ NetCDF data is:
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1 -b .correct_casting
-%patch1 -p1 -b .codecleanup
-%patch2 -p0 -b .no_date_time
-%patch3 -p1 -b .pkgconfig
+#%patch0 -p1 -b .correct_casting
+#%patch1 -p1 -b .codecleanup
+#%patch2 -p0 -b .no_date_time
+#%patch3 -p1 -b .pkgconfig
 
 %build
 # FSP compiler/mpi designation
@@ -207,19 +207,5 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
-#** %doc COPYRIGHT README.md RELEASE_NOTES.md
-#**  %{_bindir}/*
-#** %{_bindir}/nc-config
-#** %exclude %{_bindir}/nc-config
-#** %{_mandir}/man1/*
-#** %{_mandir}/man3/*
-#** %exclude %{_mandir}/man1/*.1.gz
-#** %{_includedir}/*
-#** %{_libdir}/*.so
-#** %{_libdir}/pkgconfig/netcdf.pc
-#** %{_libdir}/libnetcdf.so.*
-#** %{_libdir}/libnetcdf.a
-
-
 
 %changelog
