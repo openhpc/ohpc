@@ -67,7 +67,7 @@ lends itself to being used in very high level languages (VHLLs).
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-./configure --prefix=%{install_path} || cat config.log
+./configure --prefix=%{install_path} --disable-static || cat config.log
 make %{?_smp_mflags}
 
 %install
