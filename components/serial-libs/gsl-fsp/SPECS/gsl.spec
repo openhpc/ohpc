@@ -8,8 +8,8 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu   }
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?compiler_family: %define compiler_family gnu}
+%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
@@ -67,7 +67,7 @@ lends itself to being used in very high level languages (VHLLs).
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-./configure --prefix=%{install_path} || cat config.log
+./configure --prefix=%{install_path} --disable-static || cat config.log
 make %{?_smp_mflags}
 
 %install

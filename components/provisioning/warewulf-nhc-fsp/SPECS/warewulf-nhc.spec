@@ -3,14 +3,15 @@
 %define pname warewulf-nhc
 %define sname nhc
 %define debug_package %{nil}
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 
 %{!?nhc_script_dir:%global nhc_script_dir %{_sysconfdir}/%{sname}/scripts}
 %{!?nhc_helper_dir:%global nhc_helper_dir %{_libexecdir}/%{sname}}
 
-Name: %{pname}
+Name: %{pname}%{PROJ_DELIM}
 Summary: Warewulf Node Health Check System
-Version: 1.4
+Version: 1.4.1
 Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: Applications/System
@@ -71,3 +72,5 @@ test "$RPM_BUILD_ROOT" != "/" && %{__rm} -rf $RPM_BUILD_ROOT
 %config(noreplace) %{nhc_script_dir}/*.nhc
 %config(noreplace) %{nhc_helper_dir}/*
 %config(noreplace) %{_sbindir}/%{sname}
+%config(noreplace) %{_sbindir}/%{sname}-genconf
+%config(noreplace) %{_sbindir}/%{sname}-wrapper

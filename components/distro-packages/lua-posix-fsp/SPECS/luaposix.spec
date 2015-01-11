@@ -1,3 +1,6 @@
+%define pname lua-posix
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 %if 0%{?suse_version} <= 1220
 %define luaver 5.1
 %else
@@ -6,9 +9,9 @@
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
 
-Name:           lua-posix
+Name:           %{pname}%{PROJ_DELIM}
 Version:        31
-Release:        1%{?dist}
+Release:        %{?dist}
 Summary:        POSIX library for Lua
 
 Group:          Development/Libraries
@@ -18,14 +21,13 @@ Source0:        luaposix-release-v31.tar.gz
 BuildRoot:      %{_tmppath}/luaposix-%{version}-%{release}-root-
 
 BuildRequires:  lua >= %{luaver}, lua-devel >= %{luaver}
-BuildRequires:  lunit
+BuildRequires:  lunit%{PROJ_DELIM}
 BuildRequires:  ncurses-devel
 %if 0%{?suse_version} <= 1220
-BuildRequires:  lua-bit
-Requires:       lua-bit
+BuildRequires:  lua-bit%{PROJ_DELIM}
+Requires:       lua-bit%{PROJ_DELIM}
 %endif
 Requires:       lua >= %{luaver}
-
 
 %description
 This is a POSIX library for Lua which provides access to many POSIX features

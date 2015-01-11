@@ -88,11 +88,27 @@ This package contains files for developing applications using %{pname}.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 
+%if %{compiler_family} == intel
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
+
+cat > site.cfg << EOF
+[mkl]
+library_dirs = $MKLROOT/lib/intel64
+include_dirs = $MKLROOT/include
+mkl_libs = mkl_rt
+lapack_libs =
+EOF
+%endif
+
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+%if %{compiler_family} == intel
+LDSHARED="icc -shared" \
+%endif
 CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build
 
 %install

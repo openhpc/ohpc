@@ -1,0 +1,17 @@
+License for Use of "Intel(R) MPI Benchmarks" Name and Trademark
+
+In addition to the provisions of the Common Public License as included
+in the Intel(R) MPI Benchmarks distribution, Intel grants the recipient
+the right to use the name and trademark "Intel(R) MPI Benchmarks" in
+relation to disclosures or publications of results, provided that
+bespoke results were obtained by running the benchmarks generated from
+the original, unchanged source code as distributed by Intel.
+
+Under no circumstances shall the recipient be permitted to use the
+name and trademark "Intel(R) MPI Benchmarks" in relation to results
+obtained by running benchmarks generated from source code that is
+different from the original source code as distributed by Intel,
+regardless of whether the differences are caused by modifying the
+existing benchmark components or by adding new components.
+
+

@@ -1,3 +1,6 @@
+%define pname lua-filesystem
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 #
 # spec file for package luafilesystem
 # Copyright (c) 2009 florian.leparoux@gmail.com
@@ -23,7 +26,7 @@
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
 
-Name:           lua-filesystem
+Name:           %{pname}%{PROJ_DELIM}
 Version:        1.6.2
 Release:        0
 License:        MIT
@@ -36,7 +39,7 @@ Patch1:         luafilesystem-%{luaver}-optflags.patch
 # PATCH-FIX-UPSTREAM -- toganm@opensuse.org fixes Makefile for DESTDIR
 Patch2:         luafilesystem-1.6.2-destdir.patch
 BuildRequires:  lua-devel
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRoot:      %{_tmppath}/%{pname}-%{version}-build
 
 %description
 LuaFileSystem is a Lua library developed to complement the set of functions

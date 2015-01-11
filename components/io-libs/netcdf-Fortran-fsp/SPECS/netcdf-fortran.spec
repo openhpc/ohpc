@@ -1,6 +1,6 @@
-##
-# netcdf spec file 
-# netcdf library build that is dependent on compiler toolchain
+#
+# netcdf-fortran spec file 
+# netcdf-fortran library build that is dependent on compiler toolchain
 #
 # Copyright (c) 2015
 #
@@ -13,8 +13,7 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM %{nil}}
-  
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
@@ -35,25 +34,25 @@ BuildRequires: intel_licenses
 
 # Base package name
 
-%define pname netcdf
+%define pname netcdf-fortran
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %define ncdf_so_major 7
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Summary:        Libraries for the Unidata network Common Data Form
+Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          System/Libraries
-Version:        4.3.2
+Version:        4.4.1
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	%{pname}-%{version}.tar.gz
 Source1:        nc-config.1.gz
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
-#Patch0:         %{pname}-correct_casting.patch
-#Patch1:         %{pname}-codecleanup.patch
-#Patch2:         %{pname}-no_date_time.patch
+#Patch0:         netcdf-correct_casting.patch
+#Patch1:         netcdf-codecleanup.patch
+#Patch2:         netcdf-no_date_time.patch
 #Strip FFLAGS from nc-config
 #Use pkgconfig in nc-config to avoid multi-lib issues
 #Patch3:         netcdf-pkgconfig.patch
@@ -62,14 +61,16 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
 #BuildRequires:  gcc-c++
 #BuildRequires:  gcc-fortran
-BuildRequires:  valgrind%{PROJ_DELIM}
-BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM} >= 1.8.8
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
 BuildRequires:  zlib-devel >= 1.2.5
+BuildRequires:  valgrind%{PROJ_DELIM}
+BuildRequires:  netcdf-%{compiler_family}%{PROJ_DELIM}
 Requires:       hdf5-%{compiler_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
+
 
 %define debug_package %{nil}
 
@@ -121,8 +122,10 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
 module load hdf5
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
- 
+module load netcdf
+export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
+export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
+export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 
 ./configure --prefix=%{install_path} \
     --enable-shared \
@@ -144,9 +147,11 @@ export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 . %{_sourcedir}/FSP_setup_compiler
 
-
 module load hdf5
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
+module load netcdf
+export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
+export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
+export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
@@ -207,5 +212,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+
 
 %changelog

@@ -8,8 +8,8 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu   }
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?compiler_family: %define compiler_family gnu}
+%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
@@ -46,6 +46,8 @@ BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
 Requires:      libmetis0 = %{version}
+Provides:      libmetis = %{version}
+Provides:      libmetis0 = %{version}
 
 %define debug_package %{nil}
 
