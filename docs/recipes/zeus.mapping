@@ -10,7 +10,9 @@ master1_netmask=172.16.0.1/24
 master2_ip=172.16.0.2
 master2_netmask=172.16.0.1/24
 
-master3_ip=192.168.0.10
+master3_ip=172.16.0.3
+master3_netmask=172.16.0.1/24
+
 master4_ip=192.168.0.15
 
 node5_ip=172.16.0.5
