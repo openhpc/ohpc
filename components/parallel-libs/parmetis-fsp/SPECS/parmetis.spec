@@ -152,9 +152,9 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 
-setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_LIB        %{install_path}/lib
-setenv          %{PNAME}_INC        %{install_path}/include
+setenv          PAR%{PNAME}_DIR        %{install_path}
+setenv          PAR%{PNAME}_LIB        %{install_path}/lib
+setenv          PAR%{PNAME}_INC        %{install_path}/include
 
 family "parmetis"
 EOF
