@@ -22,6 +22,7 @@ AutoReq:   no
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
 
+#!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
 %define package_target /opt/fsp/pub/vtune_amplifier/%{version}
