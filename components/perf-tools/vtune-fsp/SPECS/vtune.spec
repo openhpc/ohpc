@@ -18,8 +18,6 @@ AutoReq:   no
 
 %include %{_sourcedir}/FSP_macros
 
-%define impi_release 5.0.2.044
-
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
@@ -74,7 +72,7 @@ prepend-path    MANPATH         %{package_target}/man/
 setenv          VTUNE_AMPLIFIER_XE_2015_DIR      %{package_target}
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/impi/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/vtune/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
 EOF
