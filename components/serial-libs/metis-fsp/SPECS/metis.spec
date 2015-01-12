@@ -130,7 +130,7 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
-family "hdf5"
+family "metis"
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
