@@ -72,7 +72,7 @@ prepend-path    MANPATH         %{package_target}/man/
 setenv          VTUNE_AMPLIFIER_XE_2015_DIR      %{package_target}
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/vtune/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/vtune/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
 EOF
