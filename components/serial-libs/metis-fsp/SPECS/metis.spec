@@ -8,8 +8,8 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu   }
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?compiler_family: %define compiler_family gnu}
+%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
