@@ -49,10 +49,9 @@ cd -
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the Intel Vtune environment:"
-puts stderr " "
-puts stderr "Execute 'amplxe-gui' to launch the GUI-based interface or 'amplxe-cl'. "
-puts stderr "for the command-line tool."
+puts stderr "This module loads the Intel(R) Vtune(TM) Amplifier environment:"
+puts stderr "   amplxe-cl  --> command-line tool
+puts stderr "   amplxe-gui --> GUI-based interface
 puts stderr " "
 puts stderr "Version %{version}"
 puts stderr " "
