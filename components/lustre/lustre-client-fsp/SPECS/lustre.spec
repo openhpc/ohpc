@@ -151,6 +151,11 @@ Requires: libselinux
 %endif
 %endif
 
+# Intel FSP
+# 01/13/15 karl.w.schulz@intel.com - inlcude patch for "text file busy"
+
+Patch1: 708d85a6.diff
+
 %description
 Userspace tools and files for the Lustre file system.
 
@@ -304,6 +309,9 @@ ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
 %build
+
+# Intel FSP patches
+%patch1 -p1
 
 # Set an explicit path to our Linux tree, if we can.
 cd $RPM_BUILD_DIR/lustre-%{version}
