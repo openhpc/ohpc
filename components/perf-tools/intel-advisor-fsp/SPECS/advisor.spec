@@ -3,7 +3,7 @@
 
 Summary:   Intel(R) Advisor XE
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   9.0.2.045
+Version:   15.1.10.380555
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   FSP_macros
 Release:   1
