@@ -14,7 +14,6 @@ Group:     Performance
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
-#AutoReqProv: no
 
 %include %{_sourcedir}/FSP_macros
 
