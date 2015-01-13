@@ -305,13 +305,14 @@ clients in order to run
 %endif
 %prep
 %setup -qn lustre-%{version}
+
+# Intel FSP patches
+%patch1 -p1
+
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
 %build
-
-# Intel FSP patches
-%patch1 -p1
 
 # Set an explicit path to our Linux tree, if we can.
 cd $RPM_BUILD_DIR/lustre-%{version}
