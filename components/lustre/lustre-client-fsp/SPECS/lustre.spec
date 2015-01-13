@@ -151,6 +151,10 @@ Requires: libselinux
 %endif
 %endif
 
+# Intel FSP
+# 01/13/15 karl.w.schulz@intel.com - inlcude patch for "text file busy" (http://review.whamcloud.com/#/c/11062/)
+Patch1: db5abf4b.diff
+
 %description
 Userspace tools and files for the Lustre file system.
 
@@ -300,6 +304,10 @@ clients in order to run
 %endif
 %prep
 %setup -qn lustre-%{version}
+
+# Intel FSP patches
+%patch1 -p1
+
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 

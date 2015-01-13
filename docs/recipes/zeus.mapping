@@ -63,9 +63,9 @@ node16_ip=172.16.0.75
 node13_bmc=10.23.183.153
 node14_bmc=10.23.183.118
 node15_bmc=10.23.183.42
-node16_bmc=10.23.183.119
+node16_bmc=10.23.182.205
 
 node13_mac=78:45:C4:F8:35:42
 node14_mac=78:45:C4:F8:36:3B
 node15_mac=78:45:C4:F8:36:C8
-node16_mac=78:45:C4:F8:46:95
+node16_mac=78:45:C4:F8:46:CB
