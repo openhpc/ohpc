@@ -8,7 +8,7 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %define compiler_family intel}
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
@@ -31,7 +31,7 @@ BuildRequires: intel_licenses
 %define pname numpy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:           python-%{pname}%{PROJ_DELIM}
 Version:        1.9.1
 Release:        1
 Url:            http://sourceforge.net/projects/numpy
@@ -57,6 +57,9 @@ Provides:       python-numeric = %{version}
 Obsoletes:      python-numeric < %{version}
 %endif
 
+# Default library install path
+%define install_path %{FSP_LIBS}/%{pname}/%version
+
 %description
 NumPy is a general-purpose array-processing package designed to
 efficiently manipulate large multi-dimensional arrays of arbitrary
@@ -68,21 +71,6 @@ interfacing with general-purpose data-base applications.
 
 There are also basic facilities for discrete fourier transform,
 basic linear algebra and random number generation.
-
-%package devel
-Summary:        Development files for %{pname} applications
-Group:          Development/Libraries/Python
-Requires:       %{name} = %{version}
-Requires:       blas-devel
-Requires:       lapack-devel
-Requires:       python-devel
-%if 0%{?suse_version}
-%py_requires -d
-%endif
-%{!?compiler_family: %define compiler_family gnu}
-
-%description devel
-This package contains files for developing applications using %{pname}.
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -116,30 +104,49 @@ CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-python setup.py install --root="%{buildroot}" --prefix="%{_prefix}"
+python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 rm -rf %{buildroot}%{python_sitearch}/%{pname}/{,core,distutils,f2py,fft,ma,matrixlib,oldnumeric,polynomial,random,testing}/tests # Don't package testsuite
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{_prefix}
 %endif
 
+# FSP module file
+%{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
+puts stderr "toolchain."
+puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "URL %{url}"
+
+set     version             %{version}
+
+prepend-path    PYTHONPATH          %{install_path}
+
+setenv          %{PNAME}_DIR        %{install_path}
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
+
 %files
 %defattr(-,root,root)
-%doc *.txt
-%{_bindir}/f2py
-%{python_sitearch}/%{pname}/
-%{python_sitearch}/*.egg-info
-%exclude %{python_sitearch}/%{pname}/*/*/*.c
-%exclude %{python_sitearch}/%{pname}/*/*.h
-%exclude %{python_sitearch}/%{pname}/*/*/*.h
-%exclude %{python_sitearch}/%{pname}/*/*/*/*.h
-%exclude %{python_sitearch}/%{pname}/core/lib/libnpymath.a
-
-%files devel
-%defattr(-,root,root)
-%{python_sitearch}/%{pname}/*/*/*.c
-%{python_sitearch}/%{pname}/*/*.h
-%{python_sitearch}/%{pname}/*/*/*.h
-%{python_sitearch}/%{pname}/*/*/*/*.h
-%{python_sitearch}/%{pname}/core/lib/libnpymath.a
+%{FSP_HOME}
 
 %changelog
