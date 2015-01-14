@@ -1,0 +1,10 @@
+This tarball of sigar 1.6.5 was gleened from the .src RPM from the
+latest Fedora release (Fedora 21). A copy is stored here that was obtained from:
+
+http://linux-ftp.jf.intel.com/pub/mirrors/fedora/linux/releases/21/Everything/source/SRPMS/s/
+
+Although 1.6.5 does not show up as being formally realeased on the
+sigar web page, the distro's have beein using variants of 1.6.5 for
+some time. Consequently, going with this latest version for now.
+
+
