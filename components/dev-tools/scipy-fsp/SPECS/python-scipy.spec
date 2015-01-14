@@ -89,7 +89,7 @@ BuildRequires:  swig
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %endif
-Requires:       python-numpy-fsp
+Requires:       python-numpy%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 # Default library install path
@@ -130,7 +130,7 @@ EOF
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-module load numpy-fsp
+module load numpy
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 ATLAS=%{_libdir}/atlas \
 FFTW=%{_libdir}
@@ -148,7 +148,7 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-module load numpy-fsp
+module load numpy
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
 find %{buildroot}%{python_sitearch}/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
