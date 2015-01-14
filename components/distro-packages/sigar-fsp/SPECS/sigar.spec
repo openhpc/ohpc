@@ -22,7 +22,7 @@ URL:		http://sigar.hyperic.com/
 #    git archive --prefix=sigar-1.6.5/ 833ca18 | bzip2 > sigar-1.6.5-833ca18.tbz2
 #
 # The diff from 1.6.4 is too huge to contemplate cherrypicking from
-Source0:	%{name}-%{version}-%{sigar_hash}.tbz2
+Source0:	%{pname}-%{version}-%{sigar_hash}.tbz2
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
