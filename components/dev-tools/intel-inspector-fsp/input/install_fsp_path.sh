@@ -8,20 +8,27 @@ relocate_ver=inspector_xe_20$version
 
 skip_arch=i486.rpm
 INSTALL=0
+TAR=0
 
-if [ $INSTALL -eq 1 ];then
-    for rpm in `ls $release/rpm/*.rpm`; do 
-        echo $rpm | grep -q "$skip_arch$" 
-        if [ $? -eq 0 ];then
-            echo "  [ ** skipping install of $rpm **]"
-            continue
-        fi
 
+for rpm in `ls $release/rpm/*.rpm`; do 
+    echo $rpm | grep -q "$skip_arch$" 
+    if [ $? -eq 0 ];then
+        echo "    --> ** skipping $rpm for consideration"
+        continue
+    fi
+    
+    if [ $INSTALL -eq 1 ];then
         echo "installing $rpm...."
         rpm -ivh --nodeps --relocate /opt/intel/$relocate_ver=/opt/fsp/pub/inspector/$version $rpm
-    done
-fi
+    else
+        echo "--> would install $rpm...."
+    fi
+done
 
-tar cfz intel-inspector-fsp-$version.tar.gz /opt/fsp/pub/inspector/$version
+
+if [ $TAR -eq 1 ];then
+    tar cfz intel-inspector-fsp-$version.tar.gz /opt/fsp/pub/inspector/$version
+fi
 
 
