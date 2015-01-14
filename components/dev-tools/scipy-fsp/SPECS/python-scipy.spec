@@ -23,8 +23,8 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
+%{!?compiler_family: %define compiler_family intel}
+%{!?mpi_family: %define mpi_family impi}
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
@@ -62,7 +62,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:           python-%{pname}%{PROJ_DELIM}
 Version:        0.14.0
 Release:        1
 Summary:        Scientific Tools for Python
@@ -77,7 +77,7 @@ BuildRequires:  fdupes
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  lapack-devel
 BuildRequires:  python-devel
-BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}-devel
+BuildRequires:  python-numpy%{PROJ_DELIM}
 BuildRequires:  swig
 #%if 0%{?suse_version} > 1140
 #BuildRequires:  suitesparse-devel-static
@@ -89,27 +89,13 @@ BuildRequires:  swig
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %endif
-Requires:       python-numpy
+Requires:       python-numpy%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
+# Default library install path
+%define install_path %{FSP_LIBS}/%{pname}/%version
+
 %description
-Scipy is open-source software for mathematics, science, and
-engineering. The core library is NumPy which provides convenient and
-fast N-dimensional array manipulation. The SciPy library is built to
-work with NumPy arrays, and provides many user-friendly and efficient
-numerical routines such as routines for numerical integration and
-optimization. Together, they run on all popular operating systems, are
-quick to install, and are free of charge. NumPy and SciPy are easy to
-use, but powerful enough to be depended upon by some of the world's
-leading scientists and engineers.
-
-%package weave
-Summary:        Scientific Tools for Python - Weave
-Group:          Development/Libraries/Python
-Requires:       %{name} = %{version}
-Provides:       python-scipy-devel = %{version}
-
-%description weave
 Scipy is open-source software for mathematics, science, and
 engineering. The core library is NumPy which provides convenient and
 fast N-dimensional array manipulation. The SciPy library is built to
@@ -144,6 +130,7 @@ EOF
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+module load numpy
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 ATLAS=%{_libdir}/atlas \
 FFTW=%{_libdir}
@@ -161,27 +148,55 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-python setup.py install --prefix=%{_prefix} --root=%{buildroot}
-find %{buildroot}%{python_sitearch}/scipy -type d -name tests | xargs rm -rf # Don't ship tests
+module load numpy
+python setup.py install --prefix=%{install_path} --root=%{buildroot}
+find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
-find %{buildroot}%{python_sitearch}/scipy/weave -type d -name examples | xargs rm -rf
+find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type d -name examples | xargs rm -rf
 %if 0%{?sles_version} || 0%{?suse_version}
-%fdupes %{buildroot}%{python_sitearch}
+%fdupes %{buildroot}%{install_path}/lib64/python2.7/site-packages
 %endif
 # fix executability issue
-chmod +x %{buildroot}%{python_sitearch}/%{pname}/io/arff/arffread.py
-chmod +x %{buildroot}%{python_sitearch}/%{pname}/special/spfun_stats.py
+chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/arff/arffread.py
+chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py
+
+# FSP module file
+%{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
+puts stderr "toolchain."
+puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Version: %{version}"
+module-whatis "Category: python module"
+module-whatis "Description: %{summary}"
+module-whatis "URL %{url}"
+
+set     version             %{version}
+
+prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
+
+setenv          %{PNAME}_DIR        %{install_path}
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE.txt
-%{python_sitearch}/%{pname}/
-%{python_sitearch}/*egg-info
-%exclude %{python_sitearch}/%{pname}/weave
-
-%files weave
-%defattr(-,root,root,-)
-%doc scipy/weave/examples
-%{python_sitearch}/%{pname}/weave
+%{FSP_HOME}
 
 %changelog
