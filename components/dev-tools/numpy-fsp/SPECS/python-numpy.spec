@@ -125,7 +125,7 @@ puts stderr "\nVersion %{version}\n"
 }
 module-whatis "Name: %{pname} built with %{compiler_family} compiler"
 module-whatis "Version: %{version}"
-module-whatis "Category: runtime library"
+module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
