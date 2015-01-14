@@ -150,15 +150,15 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 module load numpy
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
-find %{buildroot}%{python_sitearch}/scipy -type d -name tests | xargs rm -rf # Don't ship tests
+find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
-find %{buildroot}%{python_sitearch}/scipy/weave -type d -name examples | xargs rm -rf
+find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type d -name examples | xargs rm -rf
 %if 0%{?sles_version} || 0%{?suse_version}
-%fdupes %{buildroot}%{python_sitearch}
+%fdupes %{buildroot}%{install_path}/lib64/python2.7/site-packages
 %endif
 # fix executability issue
-chmod +x %{buildroot}%{python_sitearch}/%{pname}/io/arff/arffread.py
-chmod +x %{buildroot}%{python_sitearch}/%{pname}/special/spfun_stats.py
+chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/arff/arffread.py
+chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
