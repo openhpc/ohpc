@@ -423,7 +423,7 @@ discussed further in the following sections.
 % fsp_validation_comment Enbale slurm pam module
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
-[master]$ zypper -n install lustre-client-fsp lustre-fsp-modules
+[master]$ zypper -n install lustre-client-fsp lustre-client-fsp-modules
 # Update config to allow Lustre modules to be loaded on master host
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      /etc/modprobe.d/10-unsupported-modules.conf
@@ -435,7 +435,7 @@ discussed further in the following sections.
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
-[master]$ zypper --root=$CHROOT -n install lustre-client-fsp lustre-fsp-modules
+[master]$ zypper --root=$CHROOT -n install lustre-client-fsp lustre-client-fsp-modules
 # Update config to allow Lustre modules to be loaded on compute hosts
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
