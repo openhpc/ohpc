@@ -62,7 +62,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:           python-%{pname}%{PROJ_DELIM}
 Version:        0.14.0
 Release:        1
 Summary:        Scientific Tools for Python
