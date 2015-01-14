@@ -423,7 +423,7 @@ discussed further in the following sections.
 % fsp_validation_comment Enbale slurm pam module
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
-[master]$ zypper -n install lustre-client-fsp lustre-modules-fsp
+[master]$ zypper -n install lustre-client-fsp lustre-client-fsp-modules
 # Update config to allow Lustre modules to be loaded on master host
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      /etc/modprobe.d/10-unsupported-modules.conf
@@ -433,9 +433,11 @@ discussed further in the following sections.
 \end{lstlisting}
 % end_fsp_run
 
+% begin_fsp_run
+% fsp_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
-[master]$ chroot $CHROOT zypper -n install lustre-client lustre-modules
+[master]$ zypper --root=$CHROOT -n install lustre-client-fsp lustre-client-fsp-modules
 # Update config to allow Lustre modules to be loaded on compute hosts
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
@@ -443,6 +445,7 @@ discussed further in the following sections.
 [master]$ mkdir $CHROOT/mnt/lustre
 [master]$ echo "mount -t lustre <mgs_node>:/lustrewt /mnt/lustre" >> $CHROOT/etc/fstab
 \end{lstlisting}
+% end_fsp_run
 
 \subsubsection{Import files} \label{sec:file_import}
 
