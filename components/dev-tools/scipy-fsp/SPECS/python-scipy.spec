@@ -130,6 +130,7 @@ EOF
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+module load numpy-fsp
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 ATLAS=%{_libdir}/atlas \
 FFTW=%{_libdir}
@@ -147,6 +148,7 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+module load numpy-fsp
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
 find %{buildroot}%{python_sitearch}/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
