@@ -23,8 +23,8 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
+%{!?compiler_family: %define compiler_family intel}
+%{!?mpi_family: %define mpi_family impi}
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
