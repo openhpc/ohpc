@@ -60,7 +60,7 @@ Header files for developing against the Sigar API
 %prep
 # When using the GitHub tarballs, use:
 # setup -q -n hyperic-{name}-{sigar_hash}
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{name}-%{version}
 
 %patch100 -p1 -b .bz714249
 %patch101 -p1 -b .bz746288
