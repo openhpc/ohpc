@@ -749,8 +749,6 @@ resource management under SLURM.
 # start munge and slurm controller on master host
 [master]$ service munge start
 [master]$ service slurmctld start
-[master]$ service slurmd start
-
 
 #  start munge and slurm clients on compute hosts
 [master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service munge start
