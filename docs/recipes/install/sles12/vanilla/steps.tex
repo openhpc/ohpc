@@ -603,6 +603,22 @@ both along with any necessary dependencies:
 \end{lstlisting}
 % end_fsp_run
 
+\subsection{Performance Tools}
+
+To aid in application performance analysis, FSP provides a variety of
+open-source and Intel licensed software. These can be installed as follows:
+
+% begin_fsp_run
+% fsp_validation_comment Install performance tools
+\begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
+[master]$ zypper -n install papi-fsp
+[master]$ zypper -n install intel-itac-fsp
+[master]$ zypper -n install intel-vtune-fsp
+[master]$ zypper -n install intel-advisor-fsp
+[master]$ zypper -n install intel-inspector-fsp
+\end{lstlisting}
+% end_fsp_run
+
 \subsection{MPI Stacks} \label{sec:mpi}
 
 For MPI development support, FSP presently provides pre-packaged builds for
