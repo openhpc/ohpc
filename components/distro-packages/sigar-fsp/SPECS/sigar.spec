@@ -12,6 +12,7 @@ Summary:	System Information Gatherer And Reporter
 Group:		System Environment/Libraries
 License:	ASL 2.0
 URL:		http://sigar.hyperic.com/
+Provides:       %{pname}
 
 # Once 1.6.5 is released, we can use tarballs from GitHub:
 #    Source0:	http://download.github.com/hyperic-sigar-{name}-{version}-{sigar_suffix}.tar.gz
@@ -53,6 +54,7 @@ License:	ASL 2.0
 Group:		Development/Libraries
 Summary:	SIGAR Development package - System Information Gatherer And Reporter
 Requires:	%{name} = %{version}-%{release}
+Provides:       %{pname}-devel
 
 %description -n %{pname}-devel%{PROJ_DELIM}
 Header files for developing against the Sigar API
