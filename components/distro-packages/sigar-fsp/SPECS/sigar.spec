@@ -70,18 +70,13 @@ Header files for developing against the Sigar API
 # Fix lib directory
 sed -i.sed s:DESTINATION\ lib:DESTINATION\ %{_lib}: src/CMakeLists.txt
 
-mkdir build
-pushd build
-%cmake ..
+%cmake 
 make %{?_smp_mflags}
-popd
 
 %install
 rm -rf $RPM_BUILD_ROOT
-pushd build
-%cmake ..
+%cmake 
 make install DESTDIR=$RPM_BUILD_ROOT
-popd
 
 %clean
 rm -rf $RPM_BUILD_ROOT
