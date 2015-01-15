@@ -640,17 +640,18 @@ compilers and MPI is available. To install, issue:
 \end{lstlisting}
 % end_fsp_run
 
-\subsection{3rd Party Libraries}
+\subsection{3rd Party Libraries and Tools}
 
-FSP provides pre-packaged builds for a number of popular open-source libraries
-used by HPC applications and developers. For example, FSP provides builds for
-FFTW and HDF5 (including serial and parallel I/O support), and the GNU
-Scientific Library (GSL). Again, multiple builds of each package are available
-in the FSP repository to support multiple compiler and MPI family combinations
-where appropriate. The general naming convention for builds provided by FSP is
-to append the compiler and MPI family name that the library was built against
-directly into the package name. For example, libraries that do not require MPI
-as part of the build process adopt the following RPM name: \\
+FSP provides pre-packaged builds for a number of popular open-source
+tools and libraries used by HPC applications and developers. For
+example, FSP provides builds for FFTW and HDF5 (including serial and parallel
+I/O support), and the GNU Scientific Library (GSL). Again, multiple builds of
+each package are available in the FSP repository to support multiple compiler
+and MPI family combinations where appropriate. The general naming convention
+for builds provided by FSP is to append the compiler and MPI family name that
+the library was built against directly into the package name. For example,
+libraries that do not require MPI as part of the build process adopt the
+following RPM name: \\
 
 \noindent
 \texttt{package-<compiler\_family>-fsp-<package\_version>-<release>.rpm} \\
@@ -679,24 +680,25 @@ S | Name                  | Summary                          | Type
   | fftw-gnu-openmpi-fsp  | A Fast Fourier Transform library | package
 \end{lstlisting}
 
-Note that FSP provided 3rd party library builds are configured to be installed
+Note that FSP provided 3rd party builds are configured to be installed
 into a common top-level repository so that they can be easily exported to
 desired hosts within the cluster. This common top-level path
 (\texttt{/opt/fsp/pub}) was previously configured to be mounted on {\em
   compute} nodes in \S\ref{sec:master_customization}, so the packages will be
 immediately available for use on the cluster after installation on the {\em
-  master} host.  For convenience, FSP provides package aliases for the FFTW,
-GSL, and HDF5 libraries that can be used to install all of the available
+  master} host.  For convenience, FSP provides package aliases for these 3rd
+party libraries and utilities that can be used to install all of the available
 compiler/MPI family permutations. To install all of the available package
-builds for these libraries, issue the following:
+offerings within FSP, issue the following:
 
 % begin_fsp_run
 % fsp_validation_comment Install 3rd party libraries
 \begin{lstlisting}[language=bash]
-[master]$ zypper -n install -t pattern fsp-fftw     # installs 6 fftw packages
-[master]$ zypper -n install -t pattern fsp-hdf5     # installs 2 (serial) hdf5 packages
-[master]$ zypper -n install -t pattern fsp-gsl      # installs 2 (serial) gsl packages
-[master]$ zypper -n install -t pattern fsp-phdf5    # installs 6 p(arallel) hdf5 packages
+[master]$ zypper -n install -t pattern fsp-hdf5     # installs 2 HDF5 packages
+[master]$ zypper -n install -t pattern fsp-gsl      # installs 2 GSL packages
+[master]$ zypper -n install -t pattern fsp-metis    # installs 2 METIS packages
+[master]$ zypper -n install -t pattern fsp-fftw     # installs 6 FFTW packages
+[master]$ zypper -n install -t pattern fsp-phdf5    # installs 6 (parallel) HDF5 packages
 \end{lstlisting}
 % end_fsp_run
 
