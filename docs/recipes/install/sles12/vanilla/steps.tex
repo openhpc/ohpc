@@ -710,13 +710,15 @@ offerings within FSP, issue the following:
 % begin_fsp_run
 % fsp_validation_comment Install 3rd party libraries
 \begin{lstlisting}[language=bash]
-[master]$ zypper -n install -t pattern fsp-hdf5     # installs 2 HDF5 packages
-[master]$ zypper -n install -t pattern fsp-gsl      # installs 2 GSL packages
-[master]$ zypper -n install -t pattern fsp-metis    # installs 2 METIS packages
-[master]$ zypper -n install -t pattern fsp-fftw     # installs 6 FFTW packages
-[master]$ zypper -n install -t pattern fsp-phdf5    # installs 6 (parallel) HDF5 packages
-[master]$ zypper -n install -t pattern fsp-phdf5    # installs 6 PETSC packages
-[master]$ zypper -n install -t pattern fsp-boost    # installs 6 Boost packages
+[master]$ zypper -n install fsp-scipy               # adds 1 scientific python package
+[master]$ zypper -n install fsp-numpy               # adds 1 numerical python package
+[master]$ zypper -n install -t pattern fsp-hdf5     # adds 2 HDF5 packages
+[master]$ zypper -n install -t pattern fsp-gsl      # adds 2 GSL packages
+[master]$ zypper -n install -t pattern fsp-metis    # adds 2 METIS packages
+[master]$ zypper -n install -t pattern fsp-fftw     # adds 6 FFTW packages
+[master]$ zypper -n install -t pattern fsp-phdf5    # adds 6 (parallel) HDF5 packages
+[master]$ zypper -n install -t pattern fsp-phdf5    # adds 6 PETSC packages
+[master]$ zypper -n install -t pattern fsp-boost    # adds 6 Boost packages
 \end{lstlisting}
 % end_fsp_run
 
