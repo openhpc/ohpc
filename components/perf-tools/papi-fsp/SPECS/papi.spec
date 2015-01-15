@@ -68,7 +68,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
 cd src
-%configure --with-static-lib=no --with-shared-lib=yes --with-shlib --prefix=%{install_path}
+./configure --with-static-lib=no --with-shared-lib=yes --with-shlib --prefix=%{install_path}
 #DBG workaround to make sure libpfm just uses the normal CFLAGS
 DBG="" make
 
