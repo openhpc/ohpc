@@ -44,7 +44,7 @@ Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 BuildRequires: zlib-devel
-Requires:      zlib
+Requires:      zlib-devel
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
