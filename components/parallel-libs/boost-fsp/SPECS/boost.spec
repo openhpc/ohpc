@@ -51,10 +51,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 #Added FSP build convention
 %define debug_package %{nil}
 
-%define ver 1.57.0
 %define bversion 1_57_0
-%define short_version 1_57
-
 
 # Base package name
 %define pname boost
@@ -134,7 +131,7 @@ LIBRARIES_FLAGS=--with-libraries=all
 
 %if %build_mpi
 cat << EOF >>user-config.jam
-using mpi ;
+using mpi : mpicxx ;
 EOF
 %endif
 
