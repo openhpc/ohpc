@@ -136,7 +136,7 @@ EOF
 %endif
 
 # perform the compilation
-./b2 %{?_smp_mflags} stage --prefix=%{install_path} --user-config=./user-config.jam threading=multi link=shared variant=release || config.log
+./b2 %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam  || config.log
 
 
 %install
@@ -158,7 +158,7 @@ export MPIFC=mpifc
 export MPICXX=mpicxx
 %endif
 
-./b2 %{?_smp_mflags} install --prefix=%{buildroot}/%{install_path} --threading=multi --link=shared --user-config=./user-config.jam
+./b2 %{?_smp_mflags} install threading=multi link=shared --prefix=%{buildroot}/%{install_path} --user-config=./user-config.jam
 
 
 # FSP module file
