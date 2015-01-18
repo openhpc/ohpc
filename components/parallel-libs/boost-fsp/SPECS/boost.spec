@@ -136,7 +136,7 @@ EOF
 %endif
 
 # perform the compilation
-./b2 %{?_smp_mflags} --prefix=%{install_path} --user-config=./user-config.jam link=shared threading=multi variant=release || config.log
+./b2 %{?_smp_mflags} stage --prefix=%{install_path} --user-config=./user-config.jam threading=multi link=shared variant=release || config.log
 
 
 %install
