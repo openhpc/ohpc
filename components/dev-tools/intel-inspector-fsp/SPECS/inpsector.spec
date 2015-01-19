@@ -55,7 +55,7 @@ puts stderr " "
 
 }
 
-module-whatis "Name: Intel(R) Inspector XE
+module-whatis "Name: Intel(R) Inspector XE"
 module-whatis "Version: %{version}"
 module-whatis "Category: debug tools"
 module-whatis "Description: Intel(R) Inspector memory and thread debugger"
@@ -63,6 +63,7 @@ module-whatis "URL: https://software.intel.com/en-us/intel-inspector-xe"
 
 set     version                 %{version}
 
+setenv          INSPECTOR_DIR   %{package_target}
 prepend-path    PATH            %{package_target}/bin64
 prepend-path    LD_LIBRARY_PATH %{package_target}/lib
 
