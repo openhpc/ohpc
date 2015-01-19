@@ -64,8 +64,10 @@ module-whatis "URL: https://software.intel.com/en-us/intel-inspector-xe"
 set     version                 %{version}
 
 setenv          INSPECTOR_DIR   %{package_target}
+setenv          INSPECTOR_LIB   %{package_target}/lib64
+prepend-path    MANPATH         %{install_path}/man 
 prepend-path    PATH            %{package_target}/bin64
-prepend-path    LD_LIBRARY_PATH %{package_target}/lib
+prepend-path    LD_LIBRARY_PATH %{package_target}/lib64
 
 EOF
 
