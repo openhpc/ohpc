@@ -7,11 +7,11 @@ release=inspector_xe_2015_update1
 relocate_ver=inspector_xe_20$version
 
 skip_arch=i486.rpm
-INSTALL=0
-TAR=0
+INSTALL=1
+TAR=1
 
 
-for rpm in `ls $release/rpm/*.rpm`; do 
+for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm` ; do 
     echo $rpm | grep -q "$skip_arch$" 
     if [ $? -eq 0 ];then
         echo "    --> ** skipping $rpm for consideration"
