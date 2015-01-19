@@ -73,7 +73,7 @@ There are also basic facilities for discrete fourier transform,
 basic linear algebra and random number generation.
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}-%{compiler_family}
 %patch1 -p1
 
 %if %{compiler_family} == intel
