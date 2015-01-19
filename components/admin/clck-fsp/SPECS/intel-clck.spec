@@ -3,7 +3,7 @@
 
 Summary:   FSP packaging for Intel CLCK
 Name:      intel-clck%{PROJ_DELIM}
-Version:   2.2
+Version:   2.2.1
 Release:   1
 License:   Intel
 Group:     Development/Tools
