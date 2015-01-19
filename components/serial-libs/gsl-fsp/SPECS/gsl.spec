@@ -67,6 +67,10 @@ lends itself to being used in very high level languages (VHLLs).
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+%if %{compiler_family} == intel
+export CFLAGS="-fp-model strict $CFLAGS"
+%endif
+
 ./configure --prefix=%{install_path} --disable-static || cat config.log
 make %{?_smp_mflags}
 
