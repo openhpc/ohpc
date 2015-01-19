@@ -65,7 +65,7 @@ set     version                 %{version}
 
 setenv          INSPECTOR_DIR   %{package_target}
 setenv          INSPECTOR_LIB   %{package_target}/lib64
-prepend-path    MANPATH         %{install_path}/man 
+prepend-path    MANPATH         %{package_target}/man 
 prepend-path    PATH            %{package_target}/bin64
 prepend-path    LD_LIBRARY_PATH %{package_target}/lib64
 
