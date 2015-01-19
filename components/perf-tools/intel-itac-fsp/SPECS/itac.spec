@@ -64,7 +64,10 @@ module-whatis "URL: https://software.intel.com/en-us/intel-trace-analyzer"
 
 set     version                 %{version}
 
+setenv          ITAC_DIR        %{package_target}
+setenv          ITAC_LIB        %{package_target}/lib
 prepend-path    PATH            %{package_target}/bin
+prepend-path    MANPATH         %{package_target}/man
 prepend-path    LD_LIBRARY_PATH %{package_target}/lib
 
 EOF
