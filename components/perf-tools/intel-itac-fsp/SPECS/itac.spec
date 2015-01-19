@@ -64,8 +64,19 @@ module-whatis "URL: https://software.intel.com/en-us/intel-trace-analyzer"
 
 set     version                 %{version}
 
+setenv          ITAC_DIR        %{package_target}
+setenv          ITAC_BIN        %{package_target}/bin
+setenv          ITAC_LIB        %{package_target}/lib
 prepend-path    PATH            %{package_target}/bin
-prepend-path    LD_LIBRARY_PATH %{package_target}/lib
+prepend-path    MANPATH         %{package_target}/man
+prepend-path    LD_LIBRARY_PATH %{package_target}/mic/slib:%{package_target}/intel64/slib:%{package_target}/lib
+prepend-path    CLASSPATH       %{package_target}/intel64/lib
+
+setenv          VT_ADD_LIBS     "-ldwarf -lelf -lvtunwind -lnsl -lm -ldl -lpthread"
+setenv          VT_LIB_DIR      %{package_target}/intel64/lib
+setenv          VT_ROOT         %{package_target}
+setenv          VT_ARCH         intel64
+setenv          VT_SLIB_DIR     %{package_target}/intel64/slib
 
 EOF
 
