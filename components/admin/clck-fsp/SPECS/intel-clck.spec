@@ -33,7 +33,7 @@ Intel cluster checker.
 
 %{__mkdir} -p %{buildroot}/
 cd %{buildroot}
-%{__tar} xfz $RPM_SOURCE_DIR/intel-clck-%{version}.tar.gz
+%{__tar} xfz $RPM_SOURCE_DIR/intel-clck%{PROJ_DELIM}-%{version}.tar.gz
 # Update key executiables with static versions
 cp %{SOURCE1} %{buildroot}/%{FSP_ADMIN}/clck/2.2/share/intel64/stream
 cp %{SOURCE2} %{buildroot}/%{FSP_ADMIN}/clck/2.2/share/intel64/dgemm_mflops
