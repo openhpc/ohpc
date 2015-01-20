@@ -110,6 +110,12 @@ module load phdf5
     --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %endif
 %if %{mpi_family} == impi
+%if %{compiler_family} == gnu
+    --with-cc=mpicc \
+    --with-cxx=mpicpc \
+    --with-fc=mpifort \
+    --with-f77=mpifort \
+%else
     --with-cc=mpiicc \
     --with-cxx=mpiicpc \
     --with-fc=mpiifort \
