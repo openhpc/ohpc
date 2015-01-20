@@ -89,6 +89,7 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
+%endif
 
 %build
 # FSP compiler/mpi designation
