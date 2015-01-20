@@ -60,7 +60,6 @@ Obsoletes:      python-numeric < %{version}
 %define debug_package %{nil}
 
 # Default library install path
-%{!?compiler_family: %define compiler_family gnu}
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
@@ -71,10 +70,9 @@ records without sacrificing too much speed for small multi-dimensional
 arrays.  NumPy is built on the Numeric code base and adds features
 introduced by numarray as well as an extended C-API and the ability to
 create arrays of arbitrary type which also makes NumPy suitable for
-interfacing with general-purpose data-base applications.
-
-There are also basic facilities for discrete fourier transform,
-basic linear algebra and random number generation.
+interfacing with general-purpose data-base applications. There are also 
+basic facilities for discrete fourier transform, basic linear algebra,
+and random number generation.
 
 %prep
 %setup -q -n %{pname}-%{version}
