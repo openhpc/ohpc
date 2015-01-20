@@ -60,6 +60,7 @@ Obsoletes:      python-numeric < %{version}
 %define debug_package %{nil}
 
 # Default library install path
+%{!?compiler_family: %define compiler_family gnu}
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
@@ -78,6 +79,18 @@ basic linear algebra and random number generation.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
+
+%if %{compiler_family} == intel
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
+
+cat > site.cfg << EOF
+[mkl]
+library_dirs = $MKLROOT/lib/intel64
+include_dirs = $MKLROOT/include
+mkl_libs = mkl_rt
+lapack_libs =
+EOF
 
 %build
 # FSP compiler/mpi designation
