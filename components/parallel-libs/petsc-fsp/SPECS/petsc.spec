@@ -112,9 +112,9 @@ module load phdf5
 %if %{mpi_family} == impi
 %if %{compiler_family} == gnu
     --with-cc=mpicc \
-    --with-cxx=mpicpc \
-    --with-fc=mpifort \
-    --with-f77=mpifort \
+    --with-cxx=mpicxx \
+    --with-fc=mpif90 \
+    --with-f77=mpif77 \
 %else
     --with-cc=mpiicc \
     --with-cxx=mpiicpc \
