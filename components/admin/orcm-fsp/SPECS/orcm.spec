@@ -102,6 +102,18 @@ install -D -m 0644 %SOURCE2 %{buildroot}%{_unitdir}/orcmd.service
 %doc %{_mandir}/man7/*
 %{_unitdir}/*
 
+%pre 
+%service_add_pre orcmd.service
+
+%post
+%service_add_post orcmd.service
+
+%preun
+%service_del_preun orcmd.service
+
+%postun
+%service_del_postun orcmd.service
+
 
 %package -n %{pname}-devel%{PROJ_DELIM}
 Summary:       Development libraries for ORCM
