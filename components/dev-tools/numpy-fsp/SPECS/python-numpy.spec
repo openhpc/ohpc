@@ -42,7 +42,7 @@ Source0:         %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler
 Patch1:         numpy-buildfix.patch
-BuildRoot:      %{_tmppath}/%{name}-%{compiler_family}-%{version}-build
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
 BuildRequires:  python-devel
@@ -73,6 +73,7 @@ There are also basic facilities for discrete fourier transform,
 basic linear algebra and random number generation.
 
 %prep
+export foo=foo
 %setup -q -n %{pname}-%{version}-%{compiler_family}
 %patch1 -p1
 
