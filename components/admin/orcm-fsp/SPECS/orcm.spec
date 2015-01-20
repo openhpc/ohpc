@@ -1,3 +1,5 @@
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 Summary: Open Resiliency Cluster Management implementation
 Name: orcm
 Version: 0.5.0
@@ -23,11 +25,11 @@ BuildRequires: autoconf >= 2.69
 BuildRequires: automake >= 1.12.2
 BuildRequires: libtool >= 2.4.2
 %if 0%{?suse_version} || 0%{?rhel_version} || 0%{?centos_version} > 600
-BuildRequires: libsigar
-BuildRequires: libsigar-devel
+BuildRequires: libsigar%{PROJ_DELIM}
+BuildRequires: libsigar-devel%{PROJ_DELIM}
 %else
-BuildRequires: sigar
-BuildRequires: sigar-devel
+BuildRequires: sigar%{PROJ_DELIM}
+BuildRequires: sigar-devel%{PROJ_DELIM}
 %endif
 
 BuildRequires: unixODBC
