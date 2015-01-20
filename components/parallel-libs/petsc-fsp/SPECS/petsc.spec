@@ -116,6 +116,7 @@ module load phdf5
     --with-fc=mpiifort \
     --with-f77=mpiifort \
 %endif
+%endif
     --with-clanguage=C++ \
     --with-c-support \
 	--with-fortran-interfaces=1 \
