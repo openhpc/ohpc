@@ -42,7 +42,7 @@ Source0:         %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler
 Patch1:         numpy-buildfix.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRoot:      %{_tmppath}/%{name}-%{compiler_family}-%{version}-build
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
 BuildRequires:  python-devel
