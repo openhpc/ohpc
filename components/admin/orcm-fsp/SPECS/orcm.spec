@@ -2,7 +2,7 @@
 %define pname orcm
 
 Summary: Open Resiliency Cluster Management implementation
-Name:    %{pname}
+Name:    %{pname}%{PROJ_DELIM}
 Version: 0.5.0
 Release: 1
 License: See COPYING
@@ -12,7 +12,7 @@ URL:     https://github.com/open-mpi/orcm
 Prefix:  %{_prefix}
 Prefix:  %{_sysconfdir}
 Source0: %{pname}-%{version}.github.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires: flex >= 2.5.35
 %if 0%{?rhel_version} > 600
 BuildRequires: libtool-ltdl-devel
@@ -51,19 +51,23 @@ orcm is an opensource resiliency cluster management software implementation.
 
 %build
 pushd %{pname}-%{version}
-#pushd orcm-0.5+git+1412090826+3594823
 ./autogen.pl
 mkdir -p obj
 pushd obj
-../configure %{configure_flags} --prefix=%{_prefix} --sysconfdir=%{_sysconfdir} --libdir=%{_libdir} --datadir=%{_datadir} --bindir=%{_bindir} \
---with-platform=../contrib/platform/intel/hillsboro/orcm-linux
+../configure %{configure_flags}          \
+             --prefix=%{_prefix}         \
+             --sysconfdir=%{_sysconfdir} \
+             --libdir=%{_libdir}         \
+             --datadir=%{_datadir}       \
+             --bindir=%{_bindir}         \
+             --with-platform=../contrib/platform/intel/hillsboro/orcm-linux
+
 make %{?_smp_mflags}
 popd
 popd
 
 %install
 pushd %{pname}-%{version}
-#pushd orcm-0.5+git+1412090826+3594823
 pushd obj
 make install DESTDIR=%{buildroot}
 %if 0%{?suse_version} <= 1200
@@ -85,15 +89,15 @@ popd
 %doc %{_mandir}/man7/*
 
 
-%package devel
+%package -n %{pname}-devel%{PROJ_DELIM}
 Summary:       Development libraries for ORCM
 Group:         Development/Libraries
 BuildRequires: pkg-config
 
-%description devel
+%description -n %{pname}-devel%{PROJ_DELIM}
 An open source resiliency cluster management software implementation.
 
-%files devel
+%files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root,-)
 %{_includedir}/openmpi
 %dir %{_libdir}/openmpi
@@ -105,26 +109,26 @@ An open source resiliency cluster management software implementation.
 %{_libdir}/pkgconfig/*.pc
 %endif
 
-%post -n %{pname}-devel -p /sbin/ldconfig
+%post -n %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
 
-%postun -n %{pname}-devel -p /sbin/ldconfig
+%postun -n %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
 
 
-%package -n liborcm
+%package -n liborcm%{PROJ_DELIM}
 Summary:       Dynamic libraries for ORCM
 BuildRequires: pkg-config
 Group:         System Environment/Libraries
 
-%description -n liborcm
+%description -n liborcm%{PROJ_DELIM}
 An open source resiliency cluster management software implementation.
 
-%files -n liborcm
+%files -n liborcm%{PROJ_DELIM}
 %defattr(-,root,root,-)
 %{_libdir}/*.so.*
 
-%post -n liborcm -p /sbin/ldconfig
+%post -n liborcm%{PROJ_DELIM} -p /sbin/ldconfig
 
-%postun -n liborcm -p /sbin/ldconfig
+%postun -n liborcm%{PROJ_DELIM} -p /sbin/ldconfig
 
 
 %changelog
