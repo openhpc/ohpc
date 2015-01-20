@@ -104,15 +104,15 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load phdf5
 
 ./config/configure.py \
-    --with-cc=mpicc \
-    --with-cxx=mpicxx \
-    --with-fc=mpif90 \
-    --with-f77=mpif77 \
+	--prefix=%{install_path} \
 %if %{compiler_family} == intel
+    --with-cc=mpiicc \
+    --with-cxx=mpiicpc \
+    --with-fc=mpiifort \
+    --with-f77=mpiifort \
     --FFLAGS="-fPIC" \
     --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %endif
-	--prefix=%{install_path} \
     --with-clanguage=C++ \
     --with-c-support \
 	--with-fortran-interfaces=1 \
