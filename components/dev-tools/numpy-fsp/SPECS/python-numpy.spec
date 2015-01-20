@@ -79,19 +79,6 @@ basic linear algebra and random number generation.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 
-%if %{compiler_family} == intel
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
-
-cat > site.cfg << EOF
-[mkl]
-library_dirs = $MKLROOT/lib/intel64
-include_dirs = $MKLROOT/include
-mkl_libs = mkl_rt
-lapack_libs =
-EOF
-%endif
-
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
