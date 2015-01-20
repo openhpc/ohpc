@@ -2,6 +2,7 @@
 \usepackage{../../common/fspdoc}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
+\lhead{{\em 2015 FSP Install Guide}}
 
 % Recipe commands to run initially only in CI
 
@@ -806,6 +807,16 @@ Hello, world (8 procs total)
     --> Process #   7 of   8 is alive. -> c2
     --> Process #   3 of   8 is alive. -> c1
 \end{lstlisting}
+
+\section{ORCM RAS Subsystem {\em(optional)}}
+
+FSP includes a monitoring capability that can optionally be installed to
+support unified data collection across the cluster. This monitoring system is
+based on ORCM, the open resilient cluster manager project, and provides a
+convenient way to aggregate key node metrics including environmental sensors,
+processor power, and resource utilization into a centralized database for
+historical logging and analysis.
+
 
 
 \end{document}
