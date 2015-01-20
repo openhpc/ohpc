@@ -11,7 +11,7 @@ Vendor:  Intel Corporation
 URL:     https://github.com/open-mpi/orcm
 Prefix:  %{_prefix}
 Prefix:  %{_sysconfdir}
-Source0: %{pname}-%{version}-github.tar.gz
+Source0: %{pname}-%{version}.github.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: flex >= 2.5.35
 %if 0%{?rhel_version} > 600
