@@ -1,4 +1,4 @@
-# Numpy python library build that is dependent on compiler toolchain
+# Numeric python library build that is dependent on compiler toolchain
 
 #-fsp-header-comp-begin----------------------------------------------
 
@@ -25,24 +25,24 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-fsp-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname numpy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.9.1
-Release:        1
-Url:            http://sourceforge.net/projects/numpy
-Summary:        NumPy array processing for numbers, strings, records and objects
-License:        BSD-3-Clause
-Group:          Development/Libraries/Python
-Source0:         %{pname}-%{version}.tar.gz
-Source1: FSP_macros
-Source2: FSP_setup_compiler
-Patch1:         numpy-buildfix.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+Name:      python-%{pname}-%{compiler_family}%{PROJ_DELIM}
+Version:   1.9.1
+Release:   1
+Summary:   NumPy array processing for numbers, strings, records and objects
+URL:       http://sourceforge.net/projects/numpy
+License:   BSD-3-Clause
+Group:     Development/Libraries/Python
+Source0:   %{pname}-%{version}.tar.gz
+Source1:   FSP_macros
+Source2:   FSP_setup_compiler
+Patch1:    numpy-buildfix.patch
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
 BuildRequires:  python-devel
@@ -57,20 +57,22 @@ Provides:       python-numeric = %{version}
 Obsoletes:      python-numeric < %{version}
 %endif
 
+%define debug_package %{nil}
+
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
+
 NumPy is a general-purpose array-processing package designed to
 efficiently manipulate large multi-dimensional arrays of arbitrary
 records without sacrificing too much speed for small multi-dimensional
 arrays.  NumPy is built on the Numeric code base and adds features
 introduced by numarray as well as an extended C-API and the ability to
 create arrays of arbitrary type which also makes NumPy suitable for
-interfacing with general-purpose data-base applications.
-
-There are also basic facilities for discrete fourier transform,
-basic linear algebra and random number generation.
+interfacing with general-purpose data-base applications. There are also 
+basic facilities for discrete fourier transform, basic linear algebra,
+and random number generation.
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -100,15 +102,18 @@ LDSHARED="icc -shared" \
 CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build
 
 %install
-# FSP compiler/mpi designation
+# FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
-python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+#python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+python setup.py install --root="%{buildroot}" --prefix=%{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 rm -rf %{buildroot}%{python_sitearch}/%{pname}/{,core,distutils,f2py,fft,ma,matrixlib,oldnumeric,polynomial,random,testing}/tests # Don't package testsuite
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{_prefix}
 %endif
+
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -118,19 +123,19 @@ rm -rf %{buildroot}%{python_sitearch}/%{pname}/{,core,distutils,f2py,fft,ma,matr
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-puts stderr "toolchain."
+puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Name: %{PNAME} built with %{compiler_family} toolchain"
 module-whatis "Version: %{version}"
 module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
-module-whatis "URL %{url}"
+module-whatis "%{url}"
 
-set     version             %{version}
+set             version		    %{version}
 
+prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
@@ -145,8 +150,11 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %files
-%defattr(-,root,root)
+%defattr(-,root,root,-)
 %{FSP_HOME}
 
 %changelog

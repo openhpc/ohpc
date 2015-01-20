@@ -2,6 +2,7 @@
 \usepackage{../../common/fspdoc}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
+\lhead{{\em 2015 FSP Install Guide}}
 
 % Recipe commands to run initially only in CI
 
@@ -785,7 +786,7 @@ Recall that we added a ``test'' user on the {\em master} host in
 includes a simple ``hello-world'' MPI application in the
 \texttt{/opt/fsp/pub/examples} directory that can be used for this quick
 compilation and execution.  To use the test account to compile and execute the 
-application interactively through the resource manager, execute the following.
+application interactively through the resource manager, execute the following:
 
 \begin{lstlisting}[language=bash,keywords={}]
 # switch to "test" user
@@ -806,6 +807,21 @@ Hello, world (8 procs total)
     --> Process #   7 of   8 is alive. -> c2
     --> Process #   3 of   8 is alive. -> c1
 \end{lstlisting}
+
+\section{ORCM RAS Subsystem {\em(optional)}}
+
+FSP includes a monitoring capability that can optionally be installed to
+support unified data collection across the cluster. This monitoring system is
+based on ORCM, the open resilient cluster manager project, and provides a
+convenient way to aggregate key node metrics including environmental sensors,
+processor power, and resource utilization into a centralized database for
+historical logging and analysis.  In a typical HPC configuration, ORCM data
+collection relies on having IPMI access to the baseboard management controller
+(BMC) on each back-end compute resource. The data collection itself can either
+be performed using {\em in-band} methods where a daemon is instantiated on
+each compute resource or via {\em out-of-band} methods using external IPMI
+access on a management network.
+
 
 
 \end{document}
