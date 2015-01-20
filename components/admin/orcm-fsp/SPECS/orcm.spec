@@ -1,17 +1,17 @@
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+%define pname orcm
 
 Summary: Open Resiliency Cluster Management implementation
-Name: orcm
+Name:    %{pname}
 Version: 0.5.0
 Release: 1
 License: See COPYING
-Group: System Environment/Libraries
-Vendor: Intel Corporation
-URL: https://bitbucket.org/rhc/orcm/
-Prefix: %{_prefix}
-Prefix: %{_sysconfdir}
-#Source0: %{name}-%{version}.tar.gz
-Source0:  orcm-0.5+git+1412090826+3594823.tar.bz2
+Group:   System Environment/Libraries
+Vendor:  Intel Corporation
+URL:     https://github.com/open-mpi/orcm
+Prefix:  %{_prefix}
+Prefix:  %{_sysconfdir}
+Source0: %{pname}-%{version}-github.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: flex >= 2.5.35
 %if 0%{?rhel_version} > 600
@@ -47,11 +47,11 @@ Requires:      unixODBC
 orcm is an opensource resiliency cluster management software implementation.
 
 %prep
-%setup -q -c -T -a 0 -n orcm-0.5+git+1412090826+3594823
+%setup -q -c -T -a 0 -n %{pname}-%{version}
 
 %build
-#pushd %{name}-%{version}
-pushd orcm-0.5+git+1412090826+3594823
+pushd %{pname}-%{version}
+#pushd orcm-0.5+git+1412090826+3594823
 ./autogen.pl
 mkdir -p obj
 pushd obj
@@ -62,8 +62,8 @@ popd
 popd
 
 %install
-#pushd %{name}-%{version}
-pushd orcm-0.5+git+1412090826+3594823
+pushd %{pname}-%{version}
+#pushd orcm-0.5+git+1412090826+3594823
 pushd obj
 make install DESTDIR=%{buildroot}
 %if 0%{?suse_version} <= 1200
@@ -105,9 +105,9 @@ An open source resiliency cluster management software implementation.
 %{_libdir}/pkgconfig/*.pc
 %endif
 
-%post -n %{name}-devel -p /sbin/ldconfig
+%post -n %{pname}-devel -p /sbin/ldconfig
 
-%postun -n %{name}-devel -p /sbin/ldconfig
+%postun -n %{pname}-devel -p /sbin/ldconfig
 
 
 %package -n liborcm
