@@ -24,13 +24,8 @@ BuildRequires: libtool-ltdl-devel
 BuildRequires: autoconf >= 2.69
 BuildRequires: automake >= 1.12.2
 BuildRequires: libtool >= 2.4.2
-%if 0%{?suse_version} || 0%{?rhel_version} || 0%{?centos_version} > 600
-BuildRequires: libsigar%{PROJ_DELIM}
-BuildRequires: libsigar-devel%{PROJ_DELIM}
-%else
 BuildRequires: sigar%{PROJ_DELIM}
 BuildRequires: sigar-devel%{PROJ_DELIM}
-%endif
 
 BuildRequires: unixODBC
 BuildRequires: unixODBC-devel
