@@ -17,6 +17,13 @@ BuildRequires: flex >= 2.5.35
 %if 0%{?rhel_version} > 600
 BuildRequires: libtool-ltdl-devel
 %endif
+BuildRequires:  pkgconfig(systemd)
+%{?systemd_requires}
+
+# 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
+Source1: orcmd.service
+Source2: orcmd.sysconfig
+
 
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
 # using the source RPM and may not want to include some or all of these dependencies
@@ -76,6 +83,11 @@ rm -rf %{buildroot}%{_libdir}/pkgconfig
 popd
 popd
 
+# 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
+
+install -D -m 0644 %SOURCE1 %{buildroot}/etc/sysconfig/orcmd
+install -D -m 0644 %SOURCE2 %{buildroot}%{_unitdir}/orcmd.service
+
 %clean
 
 %files
@@ -83,10 +95,12 @@ popd
 %config %{_sysconfdir}/openmpi-default-hostfile
 %config %{_sysconfdir}/openmpi-mca-params.conf
 %config %{_sysconfdir}/orcm-site.xml
+%config /etc/sysconfig/*
 %{_bindir}/*
 %doc %{_datadir}/openmpi
 %doc %{_mandir}/man1/*
 %doc %{_mandir}/man7/*
+%{_unitdir}/*
 
 
 %package -n %{pname}-devel%{PROJ_DELIM}
