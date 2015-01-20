@@ -105,6 +105,7 @@ CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 rm -rf %{buildroot}%{python_sitearch}/%{pname}/{,core,distutils,f2py,fft,ma,matrixlib,oldnumeric,polynomial,random,testing}/tests # Don't package testsuite
