@@ -23,8 +23,8 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family intel}
-%{!?mpi_family: %define mpi_family impi}
+%{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
@@ -62,7 +62,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name:           python-%{pname}%{PROJ_DELIM}
+Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        0.14.0
 Release:        1
 Summary:        Scientific Tools for Python
@@ -86,14 +86,11 @@ BuildRequires:  swig
 # %if 0%{?suse_version} <= 1210
 # BuildRequires:  libatlas3-devel
 # %endif
-%if 0%{?suse_version} <= 1110
-%{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-%endif
-Requires:       python-numpy%{PROJ_DELIM}
+Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{pname}/%version
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}%{pname}/%version
 
 %description
 Scipy is open-source software for mathematics, science, and
@@ -161,19 +158,19 @@ chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/a
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%compiler_family}/%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
 puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-puts stderr "toolchain."
+puts stderr "toolchain and the %{mpi_family} MPI library."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family}"
 module-whatis "Version: %{version}"
 module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
@@ -187,7 +184,7 @@ setenv          %{PNAME}_DIR        %{install_path}
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
