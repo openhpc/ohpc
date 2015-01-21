@@ -127,6 +127,10 @@ EOF
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+export FSP_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/FSP_setup_mpi
+
+
 module load numpy
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 ATLAS=%{_libdir}/atlas \
@@ -144,6 +148,9 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
+
+export FSP_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/FSP_setup_mpi
 
 module load numpy
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
