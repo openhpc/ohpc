@@ -138,7 +138,7 @@ setenv          %{PNAME}_DIR        %{install_path}
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
