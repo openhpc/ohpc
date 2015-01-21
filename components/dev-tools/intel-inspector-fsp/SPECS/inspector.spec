@@ -15,6 +15,10 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 
+%if 0%{?sles_version} || 0%{?suse_version}
+requires:  libpng12-0
+%endif
+
 %include %{_sourcedir}/FSP_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
