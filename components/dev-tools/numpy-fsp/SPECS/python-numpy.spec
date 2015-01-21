@@ -110,6 +110,7 @@ python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 %endif
 
 # FSP module file
+%{!?compiler_family: %define compiler_family gnu}
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
