@@ -8,7 +8,7 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family intel}
+%{!?compiler_family: %define compiler_family gnu}
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
@@ -31,7 +31,7 @@ BuildRequires: intel_licenses
 %define pname numpy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name:           python-%{pname}%{PROJ_DELIM}
+Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.9.1
 Release:        1
 Url:            http://sourceforge.net/projects/numpy
@@ -58,7 +58,7 @@ Obsoletes:      python-numeric < %{version}
 %endif
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{pname}/%version
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
 NumPy is a general-purpose array-processing package designed to
@@ -111,8 +111,8 @@ rm -rf %{buildroot}%{python_sitearch}/%{pname}/{,core,distutils,f2py,fft,ma,matr
 %endif
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -131,13 +131,14 @@ module-whatis "URL %{url}"
 
 set     version             %{version}
 
+prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
