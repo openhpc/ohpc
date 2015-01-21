@@ -63,6 +63,10 @@ module-whatis "URL: https://software.intel.com/en-us/intel-advisor-xe"
 
 set     version                 %{version}
 
+setenv          ADVISOR_DIR     %{package_target}
+setenv          ADVISOR_BIN     %{package_target}/bin64
+setenv          ADVISOR_LIB     %{package_target}/lib64
+prepend-path    MANPATH         %{package_target}/man
 prepend-path    PATH            %{package_target}/bin64
 prepend-path    LD_LIBRARY_PATH %{package_target}/lib64
 
