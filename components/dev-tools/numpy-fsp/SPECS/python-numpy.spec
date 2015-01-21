@@ -112,7 +112,7 @@ rm -rf %{buildroot}%{python_sitearch}/%{pname}/{,core,distutils,f2py,fft,ma,matr
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS/%{compiler_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
