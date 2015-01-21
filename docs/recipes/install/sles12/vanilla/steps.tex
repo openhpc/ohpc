@@ -181,8 +181,10 @@ follows:
 
 % begin_fsp_run
 % fsp_validation_comment Complete basic Warewulf setup for master node
+%\begin{verbatim}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+
 # Configure DHCP server to use eth1
 [master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
 
@@ -209,6 +211,7 @@ follows:
 [master]$ service mysql restart                          # mysql database
 [master]$ service apache2 restart                        # web server
 \end{lstlisting}
+%\end{verbatim}
 % end_fsp_run
 
 %%% The steps above included starting the {\em eth1} interface on the {\em master}
@@ -822,7 +825,15 @@ be performed using {\em in-band} methods where a daemon is instantiated on
 each compute resource or via {\em out-of-band} methods using external IPMI
 access on a management network.
 
+To include all the components necessary to enable an ORCM server running on
+the {\em master} host, issue the following:
 
+% begin_fsp_run
+% fsp_validation_comment Install ORCM server
+\begin{lstlisting}[language=bash]
+[master]$ zypper -n install -t pattern fsp-orcm-server
+\end{lstlisting}
+% end_fsp_run
 
 \end{document}
 
