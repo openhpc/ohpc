@@ -105,7 +105,6 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
 python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
-rm -rf %{buildroot}%{python_sitearch}/%{pname}/{,core,distutils,f2py,fft,ma,matrixlib,oldnumeric,polynomial,random,testing}/tests # Don't package testsuite
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
 %endif
