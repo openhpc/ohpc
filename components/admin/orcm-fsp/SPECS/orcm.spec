@@ -57,7 +57,7 @@ orcm is an opensource resiliency cluster management software implementation.
 %setup -q -c -T -a 0 -n openrcm-%{version}
 
 %build
-pushd %{pname}-%{version}
+pushd openrcm-%{version}
 ./autogen.pl
 mkdir -p obj
 pushd obj
@@ -74,7 +74,7 @@ popd
 popd
 
 %install
-pushd %{pname}-%{version}
+pushd openrcm-%{version}
 pushd obj
 make install DESTDIR=%{buildroot}
 %if 0%{?suse_version} <= 1200
