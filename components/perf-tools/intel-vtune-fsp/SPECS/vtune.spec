@@ -72,7 +72,8 @@ prepend-path    VTUNE_LIB       %{package_target}/lib64
 prepend-path    PATH            %{package_target}/bin64
 prepend-path    MANPATH         %{package_target}/man/
 
-setenv          VTUNE_AMPLIFIER_XE_2015_DIR      %{package_target}
+setenv          LC_ALL C
+setenv          VTUNE_AMPLIFIER_XE_2015_DIR %{package_target}
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/vtune/.version.%{version}
