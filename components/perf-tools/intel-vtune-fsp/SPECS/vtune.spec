@@ -66,6 +66,9 @@ module-whatis "URL: https://software.intel.com/en-us/intel-vtune-amplifier-xe"
 
 set     version                 %{version}
 
+prepend-path    VTUNE_DIR       %{package_target}
+prepend-path    VTUNE_BIN       %{package_target}/bin64
+prepend-path    VTUNE_LIB       %{package_target}/lib64
 prepend-path    PATH            %{package_target}/bin64
 prepend-path    MANPATH         %{package_target}/man/
 
