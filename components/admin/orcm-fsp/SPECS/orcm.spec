@@ -85,8 +85,8 @@ popd
 
 # 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
 
-install -D -m 0644 %SOURCE1 %{buildroot}/etc/sysconfig/orcmd
-install -D -m 0644 %SOURCE2 %{buildroot}%{_unitdir}/orcmd.service
+install -D -m 0644 %SOURCE1 %{buildroot}%{_unitdir}/orcmd.service
+install -D -m 0644 %SOURCE2 %{buildroot}/etc/sysconfig/orcmd
 
 %clean
 
