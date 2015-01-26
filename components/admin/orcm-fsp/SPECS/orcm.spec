@@ -60,11 +60,11 @@ orcm is an opensource resiliency cluster management software implementation.
 %patch1 -p0
 
 %build
-pushd open-rcm-%{version}
+#pushd open-rcm-%{version}
 ./autogen.pl
-mkdir -p obj
-pushd obj
-../configure %{configure_flags}          \
+#mkdir -p obj
+#pushd obj
+./configure %{configure_flags}          \
              --prefix=%{_prefix}         \
              --sysconfdir=%{_sysconfdir} \
              --libdir=%{_libdir}         \
@@ -73,18 +73,18 @@ pushd obj
              --with-platform=../contrib/platform/intel/hillsboro/orcm-linux
 
 make %{?_smp_mflags}
-popd
-popd
+#popd
+#popd
 
 %install
-pushd open-rcm-%{version}
-pushd obj
+#pushd open-rcm-%{version}
+#pushd obj
 make install DESTDIR=%{buildroot}
 %if 0%{?suse_version} <= 1200
 rm -rf %{buildroot}%{_libdir}/pkgconfig
 %endif
-popd
-popd
+#popd
+#popd
 
 # 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
 
