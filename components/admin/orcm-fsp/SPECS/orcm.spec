@@ -23,7 +23,7 @@ BuildRequires:  pkgconfig(systemd)
 # 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
 Source1: orcmd.service
 Source2: orcmd.sysconfig
-Patch0:  bmc.patch
+Patch1:  bmc.patch
 
 
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
@@ -57,7 +57,7 @@ orcm is an opensource resiliency cluster management software implementation.
 %prep
 %setup -q -c -T -a 0 -n openrcm-%{version}
 
-%patch
+%patch1 -p0
 
 %build
 pushd open-rcm-%{version}
