@@ -191,6 +191,14 @@ prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-package
 
 setenv          %{PNAME}_DIR        %{install_path}
 
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    module load numpy
+}
+
+if [ module-info mode remove ] {
+    module unload numpy
+}
+
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
