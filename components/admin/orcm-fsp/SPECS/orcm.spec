@@ -70,7 +70,7 @@ orcm is an opensource resiliency cluster management software implementation.
              --libdir=%{_libdir}         \
              --datadir=%{_datadir}       \
              --bindir=%{_bindir}         \
-             --with-platform=../contrib/platform/intel/hillsboro/orcm-linux
+             --with-platform=./contrib/platform/intel/hillsboro/orcm-linux
 
 make %{?_smp_mflags}
 #popd
