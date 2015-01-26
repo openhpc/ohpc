@@ -55,7 +55,7 @@ Requires:      unixODBC
 orcm is an opensource resiliency cluster management software implementation.
 
 %prep
-%setup -q -n openrcm-%{version}
+%setup -q -n open-rcm-%{version}
 
 %patch1 -p0
 
