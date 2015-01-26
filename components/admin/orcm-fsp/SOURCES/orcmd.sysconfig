@@ -13,4 +13,4 @@
 #
 # Options for orcmd
 #
-ORCMD_OPTS="--omca mca_base_verbose syslog"
+ORCMD_OPTS="--mca mca_base_verbose syslog,syslogpri:info -s /etc/orcm-site.xml"
