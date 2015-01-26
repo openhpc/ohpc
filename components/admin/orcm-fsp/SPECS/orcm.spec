@@ -57,7 +57,7 @@ orcm is an opensource resiliency cluster management software implementation.
 %prep
 %setup -q -c -T -a 0 -n openrcm-%{version}
 
-%patch1 -p0
+%patch1 -p1
 
 %build
 pushd open-rcm-%{version}
