@@ -714,10 +714,11 @@ offerings within FSP, issue the following:
 
 % begin_fsp_run
 % fsp_validation_comment Install 3rd party libraries
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ zypper -n install -t pattern fsp-numpy    # adds 2 numerical python packages
 [master]$ zypper -n install -t pattern fsp-scipy    # adds 6 scientific python packages
 [master]$ zypper -n install -t pattern fsp-hdf5     # adds 2 HDF5 packages
+[master]$ zypper -n install -t pattern fsp-netcdf   # adds 6 NetCDF packages
 [master]$ zypper -n install -t pattern fsp-gsl      # adds 2 GSL packages
 [master]$ zypper -n install -t pattern fsp-metis    # adds 2 METIS packages
 [master]$ zypper -n install -t pattern fsp-fftw     # adds 6 FFTW packages
