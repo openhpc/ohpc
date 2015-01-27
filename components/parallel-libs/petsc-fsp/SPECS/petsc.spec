@@ -115,6 +115,8 @@ module load phdf5
     --with-cxx=mpiicpc \
     --with-fc=mpiifort \
     --with-f77=mpiifort \
+%else
+    --with-mpiuni-fortran-binding=0
 %endif
 %endif
     --with-clanguage=C++ \
