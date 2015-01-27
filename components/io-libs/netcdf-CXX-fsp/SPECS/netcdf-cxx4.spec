@@ -137,7 +137,7 @@ export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
     --disable-dap-remote-tests \
     --with-pic \
     --disable-doxygen \
-    --enable-static || cat config.log
+    --disable-static || cat config.log
 # %%ifnarch s390 s390x
 #            --enable-valgrind-tests \
 # %%endif
