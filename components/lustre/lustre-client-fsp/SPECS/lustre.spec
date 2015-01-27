@@ -152,7 +152,7 @@ Requires: libselinux
 %endif
 
 # Intel FSP
-# 01/13/15 karl.w.schulz@intel.com - inlcude patch for "text file busy" (http://review.whamcloud.com/#/c/11062/)
+# 01/13/15 karl.w.schulz@intel.com - include patch for "text file busy" (http://review.whamcloud.com/#/c/11062/)
 Patch1: db5abf4b.diff
 
 %description
