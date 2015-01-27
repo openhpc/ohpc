@@ -6,5 +6,5 @@
  
 -sensor_ipmi_bmc_username = root
 -sensor_ipmi_bmc_password = knc123
-+sensor_ipmi_bmc_username = <your-bmc-username>
-+sensor_ipmi_bmc_password = <your-bmc-password>
++sensor_ipmi_bmc_username = your-bmc-username
++sensor_ipmi_bmc_password = your-bmc-password
