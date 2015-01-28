@@ -145,7 +145,17 @@ find "%buildroot" -type f -name "*.la" | xargs rm -f
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
+puts stderr "This module loads the NetCDF library built with the %{compiler_family} compiler toolchain."
+puts stderr " "
+puts stderr "Note that this build of NetCDF is built on top of the HDF library and requires linkage"
+puts stderr "against hdf5. Consequently, the hdf5 package is loaded automatically as part of this module."
+puts stderr "In addition, the C++ and Fortran interface versions of NetCDF are also loaded with this"
+puts stderr "module. Typical compilation steps for C, C++, and Fortran applications are exemplified below:"
+puts stderr " "
+puts stderr "  C:   \$CC  -I\$NETCDF_INC app.c -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
+puts stderr "  C++: \$CXX -I\$NETCDF_CXX_INC app.cpp -L\$NETCDF_CXX_LIB -lnetcdf_c++ -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
+puts stderr "  F90: \$FC  -I\$NETCDF_FORTRAN_INC app.f90 -L\$NETCDF_FORTRAN_LIB -lnetcdff -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
+puts stderr " "
 puts stderr "\nVersion %{version}\n"
 
 }
@@ -156,6 +166,21 @@ module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
 set             version             %{version}
+
+# Require hdf5, netcdf-cxx, and netcdf-fortran
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  ![is-loaded hdf5]  } {
+        module load hdf5
+    }
+    if {  ![is-loaded netcdf-cxx]  } {
+        module load netcdf-cxx
+    }
+    if {  ![is-loaded netcdf-fortran]  } {
+        module load netcdf-fortran
+    }
+}
+
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
