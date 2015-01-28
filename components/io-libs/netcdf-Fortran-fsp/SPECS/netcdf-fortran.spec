@@ -35,7 +35,7 @@ BuildRequires: intel_licenses
 # Base package name
 
 %define pname netcdf-fortran
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+%define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
 %define ncdf_so_major 7
 
