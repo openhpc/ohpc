@@ -101,7 +101,7 @@ NetCDF data is:
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}4-%{version}
 
 %build
 # FSP compiler/mpi designation
