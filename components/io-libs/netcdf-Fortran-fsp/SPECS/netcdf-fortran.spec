@@ -35,7 +35,7 @@ BuildRequires: intel_licenses
 # Base package name
 
 %define pname netcdf-fortran
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+%define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
 %define ncdf_so_major 7
 
@@ -136,7 +136,7 @@ export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
     --disable-dap-remote-tests \
     --with-pic \
     --disable-doxygen \
-    --enable-static || cat config.log
+    --disable-static || cat config.log
 # %%ifnarch s390 s390x
 #            --enable-valgrind-tests \
 # %%endif
