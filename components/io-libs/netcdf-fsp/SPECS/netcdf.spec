@@ -149,7 +149,7 @@ puts stderr "This module loads the NetCDF library built with the %{compiler_fami
 puts stderr " "
 puts stderr "Note that this build of NetCDF is built on top of the HDF library and requires linkage"
 puts stderr "against hdf5. Consequently, the hdf5 package is loaded automatically as part of this module."
-puts stderr "In addition, the C++ and Fortran interface versions of NetCDF are also loaded with this"
+puts stderr "In addition, the C and Fortran interface versions of NetCDF are also loaded with this"
 puts stderr "module. Typical compilation steps for C, C++, and Fortran applications are exemplified below:"
 puts stderr " "
 puts stderr "  C:   \$CC  -I\$NETCDF_INC app.c -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
