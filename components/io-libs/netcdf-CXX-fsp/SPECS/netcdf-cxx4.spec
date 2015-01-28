@@ -47,7 +47,7 @@ Group:          System/Libraries
 Version:        4.2.1
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
-Source0:	%{pname}-%{version}.tar.gz
+Source0:	%{pname}4-%{version}.tar.gz
 Source1:        nc-config.1.gz
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
