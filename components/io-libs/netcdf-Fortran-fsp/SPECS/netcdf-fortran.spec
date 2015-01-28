@@ -149,10 +149,10 @@ find "%buildroot" -type f -name "*.la" | xargs rm -f
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the NetCDF C++ interface built with the %{compiler_family} compiler toolchain."
+puts stderr "This module loads the NetCDF Fortran interface built with the %{compiler_family} compiler toolchain."
 puts stderr " "
 puts stderr "Note that this build of NetCDF is built on top of the HDF library and requires linkage"
-puts stderr "against hdf5 and the native C NetCDF library. Consequently, the hdf5 and C/Fortran versions"
+puts stderr "against hdf5 and the native C NetCDF library. Consequently, the hdf5 and C/C++ versions"
 puts stderr "of NetCDF are loaded automatically as part of this module. Typical compilation steps"
 puts stderr "for C, C++, and Fortran applications are exemplified below:"
 puts stderr " "
