@@ -50,17 +50,9 @@ Source0:	%{pname}-%{version}.tar.gz
 Source1:        nc-config.1.gz
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
-#Patch0:         netcdf-correct_casting.patch
-#Patch1:         netcdf-codecleanup.patch
-#Patch2:         netcdf-no_date_time.patch
-#Strip FFLAGS from nc-config
-#Use pkgconfig in nc-config to avoid multi-lib issues
-#Patch3:         netcdf-pkgconfig.patch
-#Strip FFLAGS from nc-config
+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
-#BuildRequires:  gcc-c++
-#BuildRequires:  gcc-fortran
 BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM} >= 1.8.8
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
@@ -70,7 +62,6 @@ BuildRequires:  netcdf-%{compiler_family}%{PROJ_DELIM}
 Requires:       hdf5-%{compiler_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
-
 
 %define debug_package %{nil}
 
@@ -111,10 +102,6 @@ NetCDF data is:
 
 %prep
 %setup -q -n %{pname}-%{version}
-#%patch0 -p1 -b .correct_casting
-#%patch1 -p1 -b .codecleanup
-#%patch2 -p0 -b .no_date_time
-#%patch3 -p1 -b .pkgconfig
 
 %build
 # FSP compiler/mpi designation
@@ -137,10 +124,6 @@ export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
     --with-pic \
     --disable-doxygen \
     --disable-static || cat config.log
-# %%ifnarch s390 s390x
-#            --enable-valgrind-tests \
-# %%endif
-
 
 %install
 # FSP compiler/mpi designation
@@ -187,7 +170,6 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
-family "netcdf"
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
@@ -197,9 +179,6 @@ EOF
 ##
 set     ModulesVersion      "%{version}"
 EOF
-
-#**%check  ... Disabling make check during OBS build
-#**make check
 
 %post -p /sbin/ldconfig
 
