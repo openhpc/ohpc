@@ -109,7 +109,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
 module load hdf5
-module load netcdf
+module try-load netcdf
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
@@ -131,7 +131,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
 module load hdf5
-module load netcdf
+module try-load netcdf
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
@@ -149,7 +149,17 @@ find "%buildroot" -type f -name "*.la" | xargs rm -f
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
+puts stderr "This module loads the NetCDF Fortran interface built with the %{compiler_family} compiler toolchain."
+puts stderr " "
+puts stderr "Note that this build of NetCDF is built on top of the HDF library and requires linkage"
+puts stderr "against hdf5 and the native C NetCDF library. Consequently, the hdf5 and C/C++ versions"
+puts stderr "of NetCDF are loaded automatically as part of this module. Typical compilation steps"
+puts stderr "for C, C++, and Fortran applications are exemplified below:"
+puts stderr " "
+puts stderr "  C:   \$CC  -I\$NETCDF_INC app.c -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
+puts stderr "  C++: \$CXX -I\$NETCDF_CXX_INC app.cpp -L\$NETCDF_CXX_LIB -lnetcdf_c++ -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
+puts stderr "  F90: \$FC  -I\$NETCDF_FORTRAN_INC app.f90 -L\$NETCDF_FORTRAN_LIB -lnetcdff -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
+puts stderr " "
 puts stderr "\nVersion %{version}\n"
 
 }
@@ -159,6 +169,14 @@ module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
+# Require generic netcdf
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  ![is-loaded netcdf]  } {
+        module load netcdf
+    }
+}
+
 set             version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
@@ -167,6 +185,7 @@ prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
