@@ -114,7 +114,7 @@ module load phdf5
     --FFLAGS="-fPIC" \
     --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
-    --with-blas-lapack-dir=/etc/alternatives \
+    --with-blas-lapack-dir=/usr/lib64 \
 %endif
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
