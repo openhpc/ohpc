@@ -147,12 +147,12 @@ proc ModulesHelp { } {
 puts stderr " "
 puts stderr "This module loads the NetCDF C API built with the %{compiler_family} compiler toolchain."
 puts stderr " "
-puts stderr "Note that this build of NetCDF is built on top of the HDF library and requires linkage"
-puts stderr "against hdf5. Consequently, the hdf5 package is loaded automatically as part of this module."
-puts stderr "A typical compilation step for C applications required NetCDF is as follows:"
+puts stderr "Note that this build of NetCDF leverages the HDF I/O library and requires linkage"
+puts stderr "against hdf5. Consequently, the hdf5 package is loaded automatically with this module."
+puts stderr "A typical compilation step for C applications requiring NetCDF is as follows:"
 puts stderr " "
-puts stderr "\$CC  -I\$NETCDF_INC app.c -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
-puts stderr " "
+puts stderr "\\$CC -I\\$NETCDF_INC app.c -L\\$NETCDF_LIB -lnetcdf -L\\$HDF5_LIB -lhdf5"
+
 puts stderr "\nVersion %{version}\n"
 
 }
