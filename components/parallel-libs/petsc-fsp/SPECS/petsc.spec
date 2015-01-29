@@ -65,8 +65,13 @@ Patch2:         petsc.usrlocal.patch
 #Patch3:         petsc-3.3-fix-error-detection-in-makefile.patch 
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+%if 0%{?suse_version}
+BuildRequires:  libblas3
+BuildRequires:  liblapack3
+%else
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
+%endif
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
 BuildRequires:  valgrind%{PROJ_DELIM}
