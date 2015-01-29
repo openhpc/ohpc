@@ -65,13 +65,8 @@ Patch2:         petsc.usrlocal.patch
 #Patch3:         petsc-3.3-fix-error-detection-in-makefile.patch 
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-%if 0%{?suse_version}
-BuildRequires:  libblas3
-BuildRequires:  liblapack3
-%else
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
-%endif
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
 BuildRequires:  valgrind%{PROJ_DELIM}
@@ -113,9 +108,6 @@ module load phdf5
 %if %{compiler_family} == intel
     --FFLAGS="-fPIC" \
     --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
-%else
-    --with-blas-lapack-dir=/usr/lib64 \
-%endif
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
     --with-cc=mpiicc \
@@ -135,7 +127,7 @@ module load phdf5
 	--with-batch=0 \
     --with-hdf5=1 \
     --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
-    --with-hdf5-include=$HDF5_INC \ || cat configure.log
+    --with-hdf5-include=$HDF5_INC \
 	#--CFLAGS="$RPM_OPT_FLAGS" \
 	#--FFLAGS="$RPM_OPT_FLAGS" \
 	#--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
