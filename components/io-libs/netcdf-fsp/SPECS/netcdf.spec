@@ -151,7 +151,7 @@ puts stderr "Note that this build of NetCDF leverages the HDF I/O library and re
 puts stderr "against hdf5. Consequently, the hdf5 package is loaded automatically with this module."
 puts stderr "A typical compilation step for C applications requiring NetCDF is as follows:"
 puts stderr " "
-puts stderr "\\$CC -I\\$NETCDF_INC app.c -L\\$NETCDF_LIB -lnetcdf -L\\$HDF5_LIB -lhdf5"
+puts stderr "\\\$CC -I\\\$NETCDF_INC app.c -L\\\$NETCDF_LIB -lnetcdf -L\\\$HDF5_LIB -lhdf5"
 
 puts stderr "\nVersion %{version}\n"
 
