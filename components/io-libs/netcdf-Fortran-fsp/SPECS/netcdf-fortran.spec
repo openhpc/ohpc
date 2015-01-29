@@ -149,16 +149,14 @@ find "%buildroot" -type f -name "*.la" | xargs rm -f
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the NetCDF Fortran interface built with the %{compiler_family} compiler toolchain."
+puts stderr "This module loads the NetCDF Fortran API built with the %{compiler_family} compiler toolchain."
 puts stderr " "
 puts stderr "Note that this build of NetCDF is built on top of the HDF library and requires linkage"
-puts stderr "against hdf5 and the native C NetCDF library. Consequently, the hdf5 and C/C++ versions"
-puts stderr "of NetCDF are loaded automatically as part of this module. Typical compilation steps"
-puts stderr "for C, C++, and Fortran applications are exemplified below:"
+puts stderr "against hdf5 and the native C NetCDF library. Consequently, hdf5 and the standerd C"
+puts stderr "version of NetCDF are loaded automatically via this module. A typical compilation"
+puts stderr "example for Fortran applications requiring NetCDF is as follows:"
 puts stderr " "
-puts stderr "  C:   \$CC  -I\$NETCDF_INC app.c -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
-puts stderr "  C++: \$CXX -I\$NETCDF_CXX_INC app.cpp -L\$NETCDF_CXX_LIB -lnetcdf_c++ -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
-puts stderr "  F90: \$FC  -I\$NETCDF_FORTRAN_INC app.f90 -L\$NETCDF_FORTRAN_LIB -lnetcdff -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
+puts stderr "\$FC  -I\$NETCDF_FORTRAN_INC app.f90 -L\$NETCDF_FORTRAN_LIB -lnetcdff -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
 puts stderr " "
 puts stderr "\nVersion %{version}\n"
 
