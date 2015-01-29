@@ -151,13 +151,13 @@ proc ModulesHelp { } {
 puts stderr " "
 puts stderr "This module loads the NetCDF Fortran API built with the %{compiler_family} compiler toolchain."
 puts stderr " "
-puts stderr "Note that this build of NetCDF is built on top of the HDF library and requires linkage"
+puts stderr "Note that this build of NetCDF leverages the HDF I/O library and requires linkage"
 puts stderr "against hdf5 and the native C NetCDF library. Consequently, hdf5 and the standerd C"
 puts stderr "version of NetCDF are loaded automatically via this module. A typical compilation"
 puts stderr "example for Fortran applications requiring NetCDF is as follows:"
 puts stderr " "
-puts stderr "\$FC  -I\$NETCDF_FORTRAN_INC app.f90 -L\$NETCDF_FORTRAN_LIB -lnetcdff -L\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
-puts stderr " "
+puts stderr "\\\$FC  -I\\\$NETCDF_FORTRAN_INC app.f90 -L\\\$NETCDF_FORTRAN_LIB -lnetcdff -L\\\$NETCDF_LIB -lnetcdf -L\$HDF5_LIB -lhdf5"
+
 puts stderr "\nVersion %{version}\n"
 
 }
