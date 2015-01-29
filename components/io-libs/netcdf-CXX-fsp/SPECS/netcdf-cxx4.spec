@@ -156,7 +156,7 @@ puts stderr "against hdf5 and the native C NetCDF library. Consequently, hdf5 an
 puts stderr "version of NetCDF are loaded automatically via this module. A typical compilation"
 puts stderr "example for C++ applications requiring NetCDF is as follows:"
 puts stderr " "
-puts stderr "\\\$CXX -I\\\$NETCDF_CXX_INC app.cpp -L\\\$NETCDF_CXX_LIB -lnetcdf_c++ -L\\\$NETCDF_LIB -lnetcdf -L\\\$HDF5_LIB -lhdf5"
+puts stderr "\\\$CXX -I\\\$NETCDF_CXX_INC app.cpp -L\\\$NETCDF_CXX_LIB -lnetcdf_c++4 -L\\\$NETCDF_LIB -lnetcdf -L\\\$HDF5_LIB -lhdf5"
 
 puts stderr "\nVersion %{version}\n"
 
