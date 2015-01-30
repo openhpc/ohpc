@@ -15,8 +15,10 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+%define pname psqlODBC
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-Name:           psqlODBC
+Name:           %{pname}%{PROJ_DELIM}
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
