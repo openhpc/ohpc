@@ -42,6 +42,7 @@ Obsoletes:      postgresql-odbc
 Provides:       pg_iface:/usr/lib/pgsql/odbcinst.ini
 Provides:       pg_odbc
 Provides:       postgresql-odbc
+Requires:       libltdl7
 
 %description
 This package contains the ODBC (Open DataBase Connectivity) driver and
