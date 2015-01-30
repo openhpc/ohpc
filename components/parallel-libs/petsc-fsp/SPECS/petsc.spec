@@ -99,7 +99,8 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
-%{!?MKLROOT:      %define MKLROOT      /opt/fsp/pub/compiler/intel/composer_xe_2015.1.133/mkl}
+#%{!?MKLROOT:      %define MKLROOT      /opt/fsp/pub/compiler/intel/composer_xe_2015.1.133/mkl}
+%define MKLROOT /opt/fsp/pub/compiler/intel/composer_xe_2015.1.133/mkl
 module load phdf5
 
 ./config/configure.py \
