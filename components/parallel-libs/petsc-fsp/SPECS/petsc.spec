@@ -99,8 +99,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
-#%{!?MKLROOT:      %define MKLROOT      /opt/fsp/pub/compiler/intel/composer_xe_2015.1.133/mkl}
-%define MKLROOT /opt/fsp/pub/compiler/intel/composer_xe_2015.1.133/mkl
+%{!?MKLROOT:      %define MKLROOT      /opt/fsp/pub/compiler/intel/composer_xe_2015.1.133/mkl}
 module load phdf5
 
 ./config/configure.py \
@@ -108,7 +107,7 @@ module load phdf5
 %if %{compiler_family} == intel
     --FFLAGS="-fPIC" \
 %endif
-    --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
+    --with-blas-lapack-dir=%{MKLROOT}/lib/intel64 \
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
     --with-cc=mpiicc \
