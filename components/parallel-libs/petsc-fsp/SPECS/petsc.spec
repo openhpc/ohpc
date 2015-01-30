@@ -117,7 +117,7 @@ module load phdf5
     --with-fc=mpiifort \
     --with-f77=mpiifort \
 %else
-    --FFLAGS=$MPI_DIR/include/gfortran/4.8.0/ \
+    --FFLAGS=-I$MPI_DIR/include/gfortran/4.8.0/ \
 %endif
 %endif
     --with-clanguage=C++ \
