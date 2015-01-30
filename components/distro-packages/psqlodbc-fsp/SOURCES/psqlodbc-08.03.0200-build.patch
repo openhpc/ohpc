@@ -1,0 +1,47 @@
+Index: odbcapi.c
+===================================================================
+--- odbcapi.c.orig
++++ odbcapi.c
+@@ -1106,7 +1106,7 @@ SQLExtendedFetch(
+ 				 SQLUSMALLINT fFetchType,
+ 				 SQLLEN irow,
+ #ifdef WITH_UNIXODBC
+-				 SQLROWSETSIZE *pcrow,
++				 SQLULEN *pcrow,
+ #else
+ 				 SQLULEN *pcrow,
+ #endif /* WITH_UNIXODBC */
+Index: odbcapi30.c
+===================================================================
+--- odbcapi30.c.orig
++++ odbcapi30.c
+@@ -118,13 +118,7 @@ SQLColAttribute(SQLHSTMT StatementHandle
+ 			SQLPOINTER CharacterAttribute,
+ 			SQLSMALLINT BufferLength,
+ 			SQLSMALLINT *StringLength,
+-#if defined(_WIN64)
+ 			SQLLEN *NumericAttribute
+-#elif defined(WITH_UNIXODBC) || defined(WIN32)
+-			SQLPOINTER NumericAttribute
+-#else
+-			SQLLEN *NumericAttribute
+-#endif
+ 			)
+ {
+ 	CSTR	func = "SQLColAttribute";
+Index: odbcapi30w.c
+===================================================================
+--- odbcapi30w.c.orig
++++ odbcapi30w.c
+@@ -255,11 +255,7 @@ SQLRETURN SQL_API SQLColAttributeW(
+ 	SQLPOINTER	pCharAttr,
+ 	SQLSMALLINT	cbCharAttrMax,	
+ 	SQLSMALLINT	*pcbCharAttr,
+-#if defined(WITH_UNIXODBC) || (defined(WIN32) && ! defined(_WIN64))
+-	SQLPOINTER	pNumAttr
+-#else
+ 	SQLLEN		*pNumAttr
+-#endif
+ 	)
+ {
+ 	CSTR func = "SQLColAttributeW";
