@@ -23,6 +23,8 @@ BuildRequires:  pkgconfig(systemd)
 # 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
 Source1: orcmd.service
 Source2: orcmd.sysconfig
+Source3: psql_odbc_driver.ini
+Source4: orcmdb_psql.ini
 Patch1:  bmc.patch
 
 
@@ -82,6 +84,12 @@ rm -rf %{buildroot}%{_libdir}/pkgconfig
 
 install -D -m 0644 %SOURCE1 %{buildroot}%{_unitdir}/orcmd.service
 install -D -m 0644 %SOURCE2 %{buildroot}/etc/sysconfig/orcmd
+
+# 01/30/2015 karl.w.schulz@intel.com - include db ini files from newer orcm
+
+install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/psql_odbc_driver.ini
+install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/orcmdb_psql.ini
+
 
 %clean
 
