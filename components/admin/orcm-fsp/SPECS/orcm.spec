@@ -25,6 +25,7 @@ Source1: orcmd.service
 Source2: orcmd.sysconfig
 Source3: psql_odbc_driver.ini
 Source4: orcmdb_psql.ini
+Source5: orcmdb_psql.sql
 Patch1:  bmc.patch
 
 
@@ -89,15 +90,14 @@ install -D -m 0644 %SOURCE2 %{buildroot}/etc/sysconfig/orcmd
 
 install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/psql_odbc_driver.ini
 install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/orcmdb_psql.ini
+install -D -m 0644 %SOURCE5 %{buildroot}%{_sysconfdir}/orcmdb_psql.sql
 
 
 %clean
 
 %files
 %defattr(-,root,root,-)
-%config %{_sysconfdir}/openmpi-default-hostfile
-%config %{_sysconfdir}/openmpi-mca-params.conf
-%config %{_sysconfdir}/orcm-site.xml
+%config %{_sysconfdir}/*
 %config /etc/sysconfig/*
 %{_bindir}/*
 %doc %{_datadir}/openmpi
