@@ -65,8 +65,6 @@ Patch2:         petsc.usrlocal.patch
 #Patch3:         petsc-3.3-fix-error-detection-in-makefile.patch 
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  blas-devel
-BuildRequires:  lapack-devel
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
 BuildRequires:  valgrind%{PROJ_DELIM}
@@ -101,14 +99,15 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
+%{!?MKLROOT:      %define MKLROOT      /opt/fsp/pub/compiler/intel/composer_xe_2015.1.133/mkl}
 module load phdf5
 
 ./config/configure.py \
 	--prefix=%{install_path} \
 %if %{compiler_family} == intel
     --FFLAGS="-fPIC" \
-    --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %endif
+    --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
     --with-cc=mpiicc \
@@ -145,8 +144,8 @@ for f in $RPM_BUILD_ROOT%{install_path}/conf/*; do
 done
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/p%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/p%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
