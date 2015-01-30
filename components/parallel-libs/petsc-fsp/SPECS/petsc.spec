@@ -117,7 +117,6 @@ module load phdf5
     --with-fc=mpiifort \
     --with-f77=mpiifort \
 %else
-    --with-fc=mpif90 \
     --FFLAGS=$MPI_DIR/include/gfortran/4.8.0/ \
 %endif
 %endif
@@ -130,7 +129,7 @@ module load phdf5
 	--with-batch=0 \
     --with-hdf5=1 \
     --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
-    --with-hdf5-include=$HDF5_INC \
+    --with-hdf5-include=$HDF5_INC \ && cat configure.log
 	#--CFLAGS="$RPM_OPT_FLAGS" \
 	#--FFLAGS="$RPM_OPT_FLAGS" \
 	#--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
