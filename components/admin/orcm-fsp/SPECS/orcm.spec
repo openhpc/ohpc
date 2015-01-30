@@ -95,9 +95,7 @@ install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/orcmdb_psql.ini
 
 %files
 %defattr(-,root,root,-)
-%config %{_sysconfdir}/openmpi-default-hostfile
-%config %{_sysconfdir}/openmpi-mca-params.conf
-%config %{_sysconfdir}/orcm-site.xml
+%config %{_sysconfdir}/*
 %config /etc/sysconfig/*
 %{_bindir}/*
 %doc %{_datadir}/openmpi
