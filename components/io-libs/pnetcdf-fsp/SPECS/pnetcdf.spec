@@ -63,8 +63,8 @@ Url:            http://trac.mcs.anl.gov/projects/parallel-netcdf/
 Source0:        %{pname}-%{version}.tar.gz
 BuildRequires:  bison
 BuildRequires:  flex
-BuildRequires:  gcc-c++
-BuildRequires:  gcc-fortran
+#BuildRequires:  gcc-c++
+#BuildRequires:  gcc-fortran
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
@@ -96,7 +96,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 export MPICC=mpicc MPICXX=mpicxx MPIF77=mpif77 MPIF90=mpif90 
 export CFLAGS="-O2" FFLAGS="-O2" FCFLAGS="-O2"
 
-./configure --prefix=%{buildroot}/%{install_path} || cat config.log
+./configure --prefix=%{buildroot}/%{install_path} --disable-static --enable-shared || cat config.log
 
 make
 
@@ -152,7 +152,7 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
-family "netcdf"
+
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
