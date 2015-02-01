@@ -1,6 +1,13 @@
---- contrib/platform/intel/hillsboro/orcm-linux.xml	2015-02-01 14:51:36.000000000 -0500
-+++ contrib/platform/intel/hillsboro/orcm-linux.xml	2015-02-01 14:52:48.000000000 -0500
-@@ -13,7 +13,7 @@
+--- contrib/platform/intel/hillsboro/orcm-linux.xml.orig	2015-02-01 11:51:36.000000000 -0800
++++ contrib/platform/intel/hillsboro/orcm-linux.xml	2015-02-01 15:32:52.000000000 -0800
+@@ -7,13 +7,13 @@
+ 
+ <orcm-aggregators>
+   <nodes>
+-    <value>localhost</value>
++    <value>aggregator_hostname</value>
+   </nodes>
+   <port>
      <value>55805</value>
    </port>
    <mca-params>

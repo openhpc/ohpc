@@ -27,9 +27,9 @@ Source2: orcmd.sysconfig
 Source3: psql_odbc_driver.ini
 Source4: orcmdb_psql.ini
 Source5: orcmdb_psql.sql
-# 01/30/2015 karl.w.schulz@intel.com - use vanilla passwords and relax sensor frequency
+# 01/30/2015 karl.w.schulz@intel.com - use vanilla passwords, relax sensor frequency and alter aggregator hostname
 Patch1:  bmc.patch
-Patch2:  sensor_frequency.patch
+Patch2:  site-xml.patch
 
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
 # using the source RPM and may not want to include some or all of these dependencies
