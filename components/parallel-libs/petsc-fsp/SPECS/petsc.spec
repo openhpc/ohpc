@@ -114,7 +114,7 @@ module load mkl
 %if %{compiler_family} == intel
         --FFLAGS="-fPIC" \
 %endif
-        --with-blas-lapack-dir=%{MKLROOT}/lib/intel64 \
+        --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
         --with-cc=mpiicc    \
