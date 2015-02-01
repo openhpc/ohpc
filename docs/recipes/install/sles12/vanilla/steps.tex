@@ -470,6 +470,8 @@ server running on the {\em master} host, issue the following:
 % fsp_validation_comment Install ORCM server
 \begin{lstlisting}[language=bash]
 [master]$ zypper -n install -t pattern fsp-orcm-server
+# Set master host as data aggregator
+[master]$ perl -pi -e "s/aggregator_hostname/localhost/" /etc/orcm-site.xml
 \end{lstlisting}
 % end_fsp_run
 
@@ -481,6 +483,8 @@ be included in the compute image as follows:
 % fsp_validation_comment Install ORCM client
 \begin{lstlisting}[language=bash]
 [master]$ zypper --root=$CHROOT -n install -t pattern fsp-orcm-client
+# Set master host as data aggregator
+[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" /etc/orcm-site.xml
 \end{lstlisting}
 % end_fsp_run
 
