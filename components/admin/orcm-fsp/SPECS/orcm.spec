@@ -23,11 +23,13 @@ BuildRequires:  pkgconfig(systemd)
 # 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
 Source1: orcmd.service
 Source2: orcmd.sysconfig
+# 01/30/2015 karl.w.schulz@intel.com - include db files from newer orcm
 Source3: psql_odbc_driver.ini
 Source4: orcmdb_psql.ini
 Source5: orcmdb_psql.sql
+# 01/30/2015 karl.w.schulz@intel.com - use vanilla passwords and relax sensor frequency
 Patch1:  bmc.patch
-
+Patch2:  sensor_frequency.patch
 
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
 # using the source RPM and may not want to include some or all of these dependencies
@@ -61,6 +63,7 @@ orcm is an opensource resiliency cluster management software implementation.
 %setup -q -n open-rcm-%{version}
 
 %patch1 -p0
+%patch2 -p0
 
 %build
 ./autogen.pl
