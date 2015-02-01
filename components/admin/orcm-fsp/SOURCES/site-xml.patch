@@ -1,6 +1,6 @@
 --- contrib/platform/intel/hillsboro/orcm-linux.xml.orig	2015-02-01 11:51:36.000000000 -0800
-+++ contrib/platform/intel/hillsboro/orcm-linux.xml	2015-02-01 15:32:52.000000000 -0800
-@@ -7,13 +7,13 @@
++++ contrib/platform/intel/hillsboro/orcm-linux.xml	2015-02-01 15:56:10.000000000 -0800
+@@ -7,17 +7,27 @@
  
  <orcm-aggregators>
    <nodes>
@@ -16,7 +16,21 @@
    </mca-params>
  </orcm-aggregators>
  
-@@ -25,7 +25,7 @@
+ <orcm-daemons>
++ <nodes>
++    <value>c1</value>
++    <value>c2</value>
++    <value>c3</value>
++    <value>c4</value>
++    <value>c5</value>
++    <value>c6</value>
++    <value>c7</value>
++    <value>c8</value>
++ </nodes>
+   <port>
+     <value>55810</value>
+   </port>
+@@ -25,7 +35,7 @@
    <value>0,1</value>
  </cores>
    <mca-params>
