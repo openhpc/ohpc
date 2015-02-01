@@ -198,7 +198,6 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
 
-family "petsc"
 EOF
 
 %clean
