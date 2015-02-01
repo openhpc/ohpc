@@ -101,40 +101,46 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
-%{!?MKLROOT:      %define MKLROOT      /opt/fsp/pub/compiler/intel/composer_xe_2015.1.133/mkl}
+
 module load phdf5
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
 
 ./config/configure.py \
 	--prefix=%{install_path} \
 %if %{compiler_family} == intel
-    --FFLAGS="-fPIC" \
+        --FFLAGS="-fPIC" \
 %endif
-    --with-blas-lapack-dir=%{MKLROOT}/lib/intel64 \
+        --with-blas-lapack-dir=%{MKLROOT}/lib/intel64 \
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
-    --with-cc=mpiicc \
-    --with-cxx=mpiicpc \
-    --with-fc=mpiifort \
-    --with-f77=mpiifort \
+        --with-cc=mpiicc    \
+        --with-cxx=mpiicpc  \
+        --with-fc=mpiifort  \
+        --with-f77=mpiifort \
 %else
-    --FFLAGS=-I$MPI_DIR/include/gfortran/4.8.0/ \
+        --FFLAGS=-I$MPI_DIR/include/gfortran/4.8.0/ \
 %endif
 %endif
-    --with-clanguage=C++ \
-    --with-c-support \
+        --with-clanguage=C++ \
+        --with-c-support \
 	--with-fortran-interfaces=1 \
 	--with-debugging=no \
  	--with-shared-libraries \
 	--with-mpi=1 \
 	--with-batch=0 \
-    --with-hdf5=1 \
-    --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
-    --with-hdf5-include=$HDF5_INC \ && cat configure.log
+        --with-hdf5=1 \
+        --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
+        --with-hdf5-include=$HDF5_INC || cat configure.log
+
 	#--CFLAGS="$RPM_OPT_FLAGS" \
 	#--FFLAGS="$RPM_OPT_FLAGS" \
 	#--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
 	#--CXXFLAGS="$RPM_OPT_FLAGS" \
-make
+make %{?_smp_mflags}
 
 %install
 
@@ -153,8 +159,12 @@ done
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the parallel %{pname} library built with the %{compiler_family} compiler"
+puts stderr "This module loads the PETSc library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
+puts stderr " "
+puts stderr "Note that this build of PETSc leverages the FFTW and parallel HDF libraries."
+puts stderr "Consequently, these packages are loaded automatically with this module."
+
 puts stderr "\nVersion %{version}\n"
 
 }
@@ -166,6 +176,17 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
+# Require phdf5 and fftw
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  ![is-loaded phdf5]  } {
+        module load phdf5
+    }
+    if {  ![is-loaded fftw]  } {
+        module load fftw
+    }
+}
+
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
@@ -175,7 +196,6 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
-setenv          MKLROOT             %{MKLROOT}
 
 family "petsc"
 EOF
