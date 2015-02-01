@@ -140,7 +140,8 @@ module load mkl
 	#--FFLAGS="$RPM_OPT_FLAGS" \
 	#--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
 	#--CXXFLAGS="$RPM_OPT_FLAGS" \
-make %{?_smp_mflags}
+
+make
 
 %install
 
