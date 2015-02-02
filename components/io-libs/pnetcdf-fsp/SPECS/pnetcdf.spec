@@ -51,7 +51,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 # Base package name
 
 %define pname parallel-netcdf
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+%define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.5.0
