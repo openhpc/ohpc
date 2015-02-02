@@ -96,7 +96,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 export MPICC=mpicc MPICXX=mpicxx MPIF77=mpif77 MPIF90=mpif90 
 export CFLAGS="-O2" FFLAGS="-O2" FCFLAGS="-O2"
 
-./configure --prefix=%{buildroot}/%{install_path} --disable-static --enable-shared || cat config.log
+./configure --prefix=%{buildroot}/%{install_path} --enable-shared || cat config.log
 
 make
 
