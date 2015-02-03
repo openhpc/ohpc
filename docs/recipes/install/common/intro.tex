@@ -1,9 +1,23 @@
-This guide documents a simple cluster installation procedure using components
-from the internal Forest Peak (FSP) 2014 checkpoint. While this documentation
-is intended to be reasonably generic, it is targeted for reproducibility on the
-internal {\em Zeus} cluster at Intel, and requires access to RPM repositories that are made
-available by the FSP Open Build Service (OBS) instance that is used to build
-and package components. Note: this process is not meant to dictate a
-specific, final FSP implementation or installation direction; instead, it
-serves as a learning vehicle and demonstrates the ability to use the 2014 FSP
-checkpoint to install a small, working cluster.
+This guide presents a simple cluster installation procedure using components
+from the Forest Peak (FSP) software stack. FSP represents an aggregation of a number of
+common ingredients required to deploy and manage an HPC Linux cluster including
+provisioning tools, resource management, I/O clients, development tools, and a variety of
+scientific libraries. These packages have been pre-built with HPC integration
+in mind and represent a mix of open-source components combined with \Intel{}
+development and analysis tools (e.g. \Intel{} Parallel Studio XE Cluster Edition).
+%This install guide assumes availablility of a {\em master} host
+%that will have access to common OS repositories and the FSP repository in order
+%to facilitate software installs and dependency resolution.  
+The documentation herein is intended to be reasonably generic, but uses the
+underlying motivation of a small cluster install to define a step-by-step
+process. Several optional customizations are included and the intent is that
+these collective instructions can be modified as needed for local site
+customizations. 
+%targeted for reproducibility on the
+%%%internal {\em Zeus} cluster at Intel, and requires access to RPM repositories that are made
+%%%available by the FSP Open Build Service (OBS) instance that is used to build
+%%%and package components. 
+%%%Note: this process is not meant to dictate a
+%%%specific, final FSP implementation or installation direction; instead, it
+%%%serves as a learning vehicle and demonstrates the ability to use the 2014 FSP
+%%%checkpoint to install a small, working cluster.
