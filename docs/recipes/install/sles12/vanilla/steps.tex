@@ -497,19 +497,21 @@ for the new credential should also be placed in the final
 # Initialize postgres DB driver
 [master]$ odbcinst -i -d -f /etc/psql_odbc_driver.ini
 [master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
-# Update postgres config files using ORCM templates
-[master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data
-[master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data
 # Use db template for orcm runtime config
 [master]$ cp /etc/sysconfig/orcmd.db /etc/sysconfig/orcmd
 # Initialize postgres
 [master]$ service postgresql start
+# Update postgres config files using ORCM templates
+[master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data
+[master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data
 # Create ORCM db (note switch to postgres user)
 [master]$ su - postgres
 [postgres]$ psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
 [postgres]$ createdb -O orcmuser orcmdb
 [postgres]$ psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 [postgres]$ exit
+# Restart postgres
+[master]$ service postgresql restart
 # Start ORCM on master host
 [master]$ systemctl start orcmd
 \end{lstlisting}
