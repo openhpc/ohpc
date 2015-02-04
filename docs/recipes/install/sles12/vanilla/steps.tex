@@ -485,7 +485,7 @@ be included in the compute image as follows:
 \begin{lstlisting}[language=bash]
 [master]$ zypper --root=$CHROOT -n install -t pattern fsp-orcm-client
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" /etc/orcm-site.xml
+[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/etc/orcm-site.xml
 \end{lstlisting}
 % end_fsp_run
 
