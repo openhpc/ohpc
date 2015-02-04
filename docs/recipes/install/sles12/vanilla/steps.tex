@@ -471,17 +471,56 @@ server running on the {\em master} host, issue the following:
 % fsp_validation_comment Install ORCM server
 \begin{lstlisting}[language=bash]
 [master]$ zypper -n install -t pattern fsp-orcm-server
+\end{lstlisting}
+% end_fsp_run
+
+In order to coalesce sensor data into a central repository, ORCM requires
+data {\em aggregators} that are responsible for collecting data from one or
+more monitored resources. For a small cluster, a common configuration is to
+have a single aggregator defined and, in this example, we choose the {\em master} host
+as the data aggregator. In order to store historical logging data, ORCM
+includes support to store aggregated data into a centralized database. In this
+example, we will create an ORCM database using {\em postgres} on the chosen
+master host. The necessary config file changes and commands to create the
+underlying database for ORCM are highlighted below. Note that a generic DB
+password of ``orcmpassword'' is used; this should be altered locally to a
+site-specific credential. If the DB password is changed, a corresponding update
+for the new credential should also be placed in the final
+\texttt{/etc/sysconfig/orcmd} file.
+
+% begin_fsp_run
+% fsp_validation_comment Configure ORCM aggregator and DB
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Set master host as data aggregator
 [master]$ perl -pi -e "s/aggregator_hostname/localhost/" /etc/orcm-site.xml
+[master]$ perl -pi -e "s/Servername = (\S+)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
+# Initialize postgres DB driver
+[master]$ odbcinst -i -d -f /etc/psql_odbc_driver.ini
+[master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
+# Update postgres config files using ORCM templates
+[master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data
+[master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data
+# Use db template for orcm runtime config
+[master]$ cp /etc/sysconfig/orcmd.db /etc/sysconfig/orcmd
+# Initialize postgres
+[master]$ service postgresql start
+# Create ORCM db (note switch to postgres user)
+[master]$ su - postgres
+[postgres]$ psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
+[postgres]$ createdb -O orcmuser orcmdb
+[postgres]$ psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
+[postgres]$ exit
+# Start ORCM on master host
+[master]$ systemctl start orcmd
 \end{lstlisting}
 % end_fsp_run
 
 To use the {\em in-band} method of collecting data from compute resources, the
 ORCM client daemon is required to be available on each compute node. This can
-be included in the compute image as follows:
+be added to the compute image as follows:
 
 % begin_fsp_run
-% fsp_validation_comment Install ORCM client
+% fsp_validation_comment Install ORCM client on compute image
 \begin{lstlisting}[language=bash]
 [master]$ zypper --root=$CHROOT -n install -t pattern fsp-orcm-client
 # Set master host as data aggregator
