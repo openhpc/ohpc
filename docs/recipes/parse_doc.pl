@@ -110,6 +110,8 @@ while(<IN>) {
 	    print $fh "$1\n";
 	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
 	    print $fh "$1\n";
+	} elsif ($_ =~ /\[postgres\]\$ (.+)$/) {
+	    print $fh "$1\n";
 	}
 
     }
