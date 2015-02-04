@@ -30,9 +30,10 @@ Source5: orcmdb_psql.sql
 # 01/30/2015 karl.w.schulz@intel.com - use vanilla passwords, relax sensor frequency and alter aggregator hostname
 Patch1:  bmc.patch
 Patch2:  site-xml.patch
-# 02/03/2015 karl.w.schulz@intel.com - include updated postgres config files
+# 02/03/2015 karl.w.schulz@intel.com - include updated postgres config files and db-oriented orcmd.sysconfig
 Source6: pg_hba.conf
 Source7: postgresql.conf
+Source8: orcmd.db.sysconfig
 
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
 # using the source RPM and may not want to include some or all of these dependencies
@@ -102,6 +103,7 @@ install -D -m 0644 %SOURCE5 %{buildroot}%{_sysconfdir}/orcmdb_psql.sql
 
 install -D -m 0644 %SOURCE6 %{buildroot}%{_sysconfdir}/pg_hba.orcm.conf
 install -D -m 0644 %SOURCE7 %{buildroot}%{_sysconfdir}/postgresql.orcm.conf
+install -D -m 0644 %SOURCE8 %{buildroot}/etc/sysconfig/orcmd.db
 
 %clean
 
