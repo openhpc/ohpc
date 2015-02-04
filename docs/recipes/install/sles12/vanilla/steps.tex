@@ -502,12 +502,12 @@ for the new credential should also be placed in the final
 # Initialize postgres
 [master]$ service postgresql start
 # Update postgres config files using ORCM templates
-[master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data
-[master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data
+[master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
+[master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 # Create ORCM db
 [master]$ sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
 [master]$ sudo -u postgres createdb -O orcmuser orcmdb
-[master]$ sudo -u postgres psql -username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
+[master]$ sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 # Restart postgres
 [master]$ service postgresql restart
 # Start ORCM on master host
