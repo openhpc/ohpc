@@ -328,10 +328,11 @@ Prior to assembling the image, it is advantageous to perform any additional
 customizations within the chroot environment created for the desired {\em
   compute} instance. The following steps document the process to add a local
 {\em ssh} key created by Warewulf to support remote access, identify the
-resource manager server, and enable NFS mounting of a \$HOME file system and
-the public FSP install path (\texttt{/opt/fsp/pub}) that will be hosted by the
-{\em master} host in this example configuration.  The NFS exporting options use
-an address/netmask combination to limit the export scope to the defined compute nodes.
+resource manager server, configure NTP for compute resources, and enable NFS
+mounting of a \$HOME file system and the public FSP install path
+(\texttt{/opt/fsp/pub}) that will be hosted by the {\em master} host in this
+example configuration.  The NFS exporting options use an address/netmask
+combination to limit the export scope to the defined compute nodes.
 
 %%Note that the example shown
 %%here leverages the {\em eth1} hostname identified for the {\em master} host and
@@ -347,26 +348,24 @@ an address/netmask combination to limit the export scope to the defined compute 
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # add NFS client mounts of /home and /opt/fsp/pub to base image
-[master]$ echo "<master_ip>:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> \
-     $CHROOT/etc/fstab
-[master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> \
-     $CHROOT/etc/fstab
+[master]$ echo "<master_ip>:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
+[master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
 # Identify resource manager server IP in SLURM config file on computes
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" \
-    $CHROOT/etc/slurm/slurm.conf
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" $CHROOT/etc/slurm/slurm.conf
 
 # Identify resource manager hostname on master host
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>/" \
-    /etc/slurm/slurm.conf
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>/" /etc/slurm/slurm.conf
 
 # Export /home and FSP public packages from master server to cluster compute nodes
-[master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10,no_root_squash)" \
-     >> /etc/exports
-[master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" \
-     >> /etc/exports
+[master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
 [master]$ service nfsserver restart
+
+# Enable NTP time service on computes and identify master host as local NTP server
+[master]$ chroot $CHROOT systemctl enable ntpd
+[master]$ echo "server <master_ip>" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
 % end_fsp_run
 
