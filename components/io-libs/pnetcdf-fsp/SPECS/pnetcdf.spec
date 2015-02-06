@@ -50,7 +50,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 # Base package name
 
-%define pname parallel-netcdf
+%define pname pnetcdf
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -63,8 +63,6 @@ Url:            http://trac.mcs.anl.gov/projects/parallel-netcdf/
 Source0:        %{pname}-%{version}.tar.gz
 BuildRequires:  bison
 BuildRequires:  flex
-#BuildRequires:  gcc-c++
-#BuildRequires:  gcc-fortran
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
@@ -148,7 +146,6 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     }
 }
 
-
 set             version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
@@ -157,6 +154,7 @@ prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
