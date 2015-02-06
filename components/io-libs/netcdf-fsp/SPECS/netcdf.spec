@@ -64,7 +64,6 @@ Version:        4.3.2
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	%{pname}-%{version}.tar.gz
-#Source1:        nc-config.1.gz
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
 
@@ -73,12 +72,7 @@ Patch1:  435d8a03ed28bb5ad63aff12cbc6ab91531b6bc8.patch
 %global _default_patch_fuzz 2
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
-#BuildRequires:  gawk
-#BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-#BuildRequires:  libcurl-devel >= 7.18.0
-#BuildRequires:  pkg-config
-#BuildRequires:  zlib-devel >= 1.2.5
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
@@ -86,7 +80,6 @@ Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %define debug_package %{nil}
 
 # Default library install path
-#%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
@@ -155,7 +148,6 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-
 module load phdf5
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 
@@ -192,14 +184,13 @@ module-whatis "%{url}"
 
 set             version             %{version}
 
-# Require hdf5
+# Require phdf5
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded phdf5]  } {
         module load phdf5
     }
 }
-
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
