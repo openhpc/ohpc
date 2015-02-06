@@ -64,7 +64,7 @@ Version:        4.3.2
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	%{pname}-%{version}.tar.gz
-Source1:        nc-config.1.gz
+#Source1:        nc-config.1.gz
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
 
@@ -73,12 +73,12 @@ Patch1:  435d8a03ed28bb5ad63aff12cbc6ab91531b6bc8.patch
 %global _default_patch_fuzz 2
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires:  gawk
-BuildRequires:  valgrind%{PROJ_DELIM}
+#BuildRequires:  gawk
+#BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  libcurl-devel >= 7.18.0
-BuildRequires:  pkg-config
-BuildRequires:  zlib-devel >= 1.2.5
+#BuildRequires:  libcurl-devel >= 7.18.0
+#BuildRequires:  pkg-config
+#BuildRequires:  zlib-devel >= 1.2.5
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
