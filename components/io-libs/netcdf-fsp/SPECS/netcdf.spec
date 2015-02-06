@@ -68,14 +68,17 @@ Source1:        nc-config.1.gz
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
 
+# 02/06/2015 karl.w.schulz@intel.com - community patch for parallel i/o support with newer hdf5
+Patch1:  435d8a03ed28bb5ad63aff12cbc6ab91531b6bc8.patch
+
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  gawk
 BuildRequires:  valgrind%{PROJ_DELIM}
-BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  libcurl-devel >= 7.18.0
 BuildRequires:  pkg-config
 BuildRequires:  zlib-devel >= 1.2.5
-Requires:       hdf5-%{compiler_family}%{PROJ_DELIM}
+Requires:       phdf5-%{compiler_family}%{mpi_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -119,6 +122,8 @@ NetCDF data is:
 
 %prep
 %setup -q -n %{pname}-%{version}
+
+%patch1 -p1
 
 %build
 # FSP compiler/mpi designation
