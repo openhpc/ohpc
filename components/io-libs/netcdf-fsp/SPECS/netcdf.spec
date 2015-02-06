@@ -172,10 +172,11 @@ find "%buildroot" -type f -name "*.la" | xargs rm -f
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the NetCDF C API built with the %{compiler_family} compiler toolchain."
+puts stderr "This module loads the NetCDF C API built with the %{compiler_family} compiler"
+puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
 puts stderr "Note that this build of NetCDF leverages the HDF I/O library and requires linkage"
-puts stderr "against hdf5. Consequently, the hdf5 package is loaded automatically with this module."
+puts stderr "against hdf5. Consequently, the phdf5 package is loaded automatically with this module."
 puts stderr "A typical compilation step for C applications requiring NetCDF is as follows:"
 puts stderr " "
 puts stderr "\\\$CC -I\\\$NETCDF_INC app.c -L\\\$NETCDF_LIB -lnetcdf -L\\\$HDF5_LIB -lhdf5"
@@ -194,8 +195,8 @@ set             version             %{version}
 # Require hdf5
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded hdf5]  } {
-        module load hdf5
+    if {  ![is-loaded phdf5]  } {
+        module load phdf5
     }
 }
 
