@@ -149,6 +149,7 @@ prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 
 family "hdf5"
