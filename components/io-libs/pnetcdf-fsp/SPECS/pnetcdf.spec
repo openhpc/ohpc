@@ -60,7 +60,7 @@ Summary:        A library providing high-performance I/O with Unidata's NetCDF
 License:        GPL-2.0
 Group:          Development/Libraries/Parallel
 Url:            http://trac.mcs.anl.gov/projects/parallel-netcdf/
-Source0:        %{pname}-%{version}.tar.gz
+Source0:        parallel-netcdf-%{version}.tar.gz
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
