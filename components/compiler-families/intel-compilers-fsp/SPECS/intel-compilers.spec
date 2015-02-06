@@ -85,7 +85,7 @@ prepend-path    MANPATH             %{package_target}/debugger/gdb/intel64/share
 prepend-path    PATH                %{package_target}/debugger/gdb/intel64_mic/bin
 setenv          GDBSERVER_MIC       %{package_target}/debugger/gdb/target/mic/bin/gdbserver
 setenv          GDB_CROSS           %{package_target}/debugger/gdb/intel64_mic/bin/gdb-mic
-setenv          INTEL_PYTHONPATH    %{package_target}/debugger/python/intel64
+setenv          INTEL_PYTHONHOME    %{package_target}/debugger/python/intel64
 setenv          MPM_LAUNCHER        %{package_target}/debugger/mpm/bin/start_mpm.sh
 
 family "compiler"
