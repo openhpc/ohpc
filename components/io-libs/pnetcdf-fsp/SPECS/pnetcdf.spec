@@ -80,7 +80,7 @@ still maintaining file-format compatibility with Unidata's NetCDF.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n parallel-netcdf-%{version}
 
 %build
 # FSP compiler/mpi designation
