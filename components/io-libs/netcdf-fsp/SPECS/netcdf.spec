@@ -8,11 +8,13 @@
 
 %include %{_sourcedir}/FSP_macros
 
-# FSP convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
+# FSP convention: the default assumes the gnu toolchain and openmpi
+# MPI family; however, these can be overridden by specifing the
+# compiler_family and mpi_family variables via rpmbuild or other
+# mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
 %{!?PROJ_DELIM:      %define PROJ_DELIM %{nil}}
   
 
@@ -30,6 +32,20 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
+# MPI dependencies
+%if %{mpi_family} == impi
+BuildRequires: intel-mpi%{PROJ_DELIM}
+Requires:      intel-mpi%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == mvapich2
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == openmpi
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+%endif
+
 #-fsp-header-comp-end------------------------------------------------
 
 
@@ -40,7 +56,7 @@ BuildRequires: intel_licenses
 
 %define ncdf_so_major 7
 
-Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          System/Libraries
@@ -66,7 +82,8 @@ Requires:       hdf5-%{compiler_family}%{PROJ_DELIM}
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
+#%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 NetCDF (network Common Data Form) is an interface for array-oriented
@@ -108,17 +125,17 @@ NetCDF data is:
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 . %{_sourcedir}/FSP_setup_compiler
 
-module load hdf5
+module load phdf5
+export CPPFLAGS="-I$HDF5_INC"
+export LDFLAGS="-L$HDF5_LIB"
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
- 
+export CC=mpicc 
 
 ./configure --prefix=%{install_path} \
     --enable-shared \
     --enable-netcdf-4 \
     --enable-dap \
     --enable-ncgen4 \
-    --enable-extra-example-tests \
-    --disable-dap-remote-tests \
     --with-pic \
     --disable-doxygen \
     --disable-static || cat config.log
@@ -138,8 +155,8 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 find "%buildroot" -type f -name "*.la" | xargs rm -f
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -185,7 +202,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
