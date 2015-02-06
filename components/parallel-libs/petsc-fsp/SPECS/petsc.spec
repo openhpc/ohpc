@@ -60,11 +60,8 @@ Source0:        %{pname}-%{version}.tar.gz
 Source1:        FSP_macros
 Source2:        FSP_setup_compiler
 Source3:        FSP_setup_mpi
-#Patch0:         petsc-3.3-p2-fix-shared-libs-sonames.patch
 Patch1:         petsc.rpath.patch
 Patch2:         petsc.usrlocal.patch
-#Patch2:         petsc-3.3-p2-dont-check-for-option-mistakes.patch
-#Patch3:         petsc-3.3-fix-error-detection-in-makefile.patch 
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -75,7 +72,6 @@ BuildRequires:  zlib-devel
 
 %include %{_sourcedir}/FSP_macros
 #!BuildIgnore: post-build-checks
-
 %define debug_package %{nil}
 
 # Default library install path
@@ -88,11 +84,8 @@ differential equations.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#%patch0 -p1 -b .soname
 %patch1 -p1
 %patch2 -p1
-#%patch2 -p1 -b .option-mistakes
-#%patch3 -p1 -b .error-detect
 
 
 %build
@@ -110,11 +103,12 @@ module load mkl
 %endif
 
 ./config/configure.py \
-	--prefix=%{install_path} \
+        --prefix=%{install_path} \
 %if %{compiler_family} == intel
         --FFLAGS="-fPIC" \
 %endif
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
+# icc-impi requires mpiicc wrappers, otherwise dynamic libs are not genereated
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
         --with-cc=mpiicc    \
@@ -122,24 +116,20 @@ module load mkl
         --with-fc=mpiifort  \
         --with-f77=mpiifort \
 %else
+# gnu-impi finds include/4.8.0/mpi.mod first, unless told not to
         --FFLAGS=-I$MPI_DIR/include/gfortran/4.8.0/ \
 %endif
 %endif
         --with-clanguage=C++ \
         --with-c-support \
-	--with-fortran-interfaces=1 \
-	--with-debugging=no \
- 	--with-shared-libraries \
-	--with-mpi=1 \
-	--with-batch=0 \
+        --with-fortran-interfaces=1 \
+        --with-debugging=no \
+        --with-shared-libraries \
+        --with-mpi=1 \
+        --with-batch=0 \
         --with-hdf5=1 \
         --with-hdf5-lib=$HDF5_LIB/libhdf5.so \
         --with-hdf5-include=$HDF5_INC || cat configure.log
-
-	#--CFLAGS="$RPM_OPT_FLAGS" \
-	#--FFLAGS="$RPM_OPT_FLAGS" \
-	#--FFLAGS="-fPIC $RPM_OPT_FLAGS" \
-	#--CXXFLAGS="$RPM_OPT_FLAGS" \
 
 make
 
