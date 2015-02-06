@@ -102,13 +102,14 @@ module load phdf5
 module load mkl
 %endif
 
+# icc-impi requires mpiicc wrappers, otherwise dynamic libs are not genereated
+# gnu-impi finds include/4.8.0/mpi.mod first, unless told not to
 ./config/configure.py \
         --prefix=%{install_path} \
 %if %{compiler_family} == intel
         --FFLAGS="-fPIC" \
 %endif
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
-# icc-impi requires mpiicc wrappers, otherwise dynamic libs are not genereated
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
         --with-cc=mpiicc    \
@@ -116,7 +117,6 @@ module load mkl
         --with-fc=mpiifort  \
         --with-f77=mpiifort \
 %else
-# gnu-impi finds include/4.8.0/mpi.mod first, unless told not to
         --FFLAGS=-I$MPI_DIR/include/gfortran/4.8.0/ \
 %endif
 %endif
