@@ -93,7 +93,7 @@ Release: %{?dist}
 Summary: Slurm Workload Manager
 
 License: GPL
-Group: System Environment/Base
+Group: fsp/rms
 Source: %{pname}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
 URL: http://slurm.schedmd.com/

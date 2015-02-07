@@ -6,7 +6,7 @@ Version:	0.5.11
 Release:	1%{?dist}
 
 Summary:	MUNGE authentication service
-Group:		System Environment/Daemons
+Group:		fsp/rms
 License:	GPLv3+ and LGPLv3+
 URL:		https://munge.googlecode.com/
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
