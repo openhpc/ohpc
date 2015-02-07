@@ -13,7 +13,8 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
+%{!?PROJ_DELIM:      %define PROJ_DELIM %{nil}}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
@@ -58,8 +59,8 @@ BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM} >= 1.8.8
 #BuildRequires:  pkg-config
 #BuildRequires:  zlib-devel >= 1.2.5
 #BuildRequires:  valgrind%{PROJ_DELIM}
-BuildRequires:  netcdf-%{compiler_family}-openmpi%{PROJ_DELIM}
-Requires:       hdf5-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
