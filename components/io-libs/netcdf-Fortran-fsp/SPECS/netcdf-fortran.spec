@@ -70,12 +70,14 @@ Source103:	FSP_setup_mpi
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 #BuildRequires:  gawk
-BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM} >= 1.8.8
+
 #BuildRequires:  libcurl-devel >= 7.18.0
 #BuildRequires:  pkg-config
 #BuildRequires:  zlib-devel >= 1.2.5
 #BuildRequires:  valgrind%{PROJ_DELIM}
+BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.8.8
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
