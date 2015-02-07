@@ -34,7 +34,7 @@ Name: %{pname}%{PROJ_DELIM}
 Version: 5.4.0
 Release: 1%{?dist}
 License: BSD
-Group: Development/System
+Group: fsp/perf-tools
 URL: http://icl.cs.utk.edu/papi/
 Source0: %{pname}-%{version}.tar.gz
 Patch1: papi.ldconfig.patch
