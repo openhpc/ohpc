@@ -124,8 +124,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load phdf5
 module load netcdf
 export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
-export FCFLAGS="-I$HDF5_INC"
-export LDFLAGS="-L$HDF5_LIB"
+export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
 #export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 #export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
