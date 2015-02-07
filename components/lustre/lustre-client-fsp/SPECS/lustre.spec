@@ -128,7 +128,7 @@ Name: %{lustre_name}%{PROJ_DELIM}
 Version: %{version}
 Release: %{fullrelease}
 License: GPL
-Group: Utilities/System
+Group: fsp/lustre
 Source: lustre-%{version}.tar.gz
 URL: http://wiki.whamcloud.com/
 BuildRoot: %{_tmppath}/lustre-%{version}-root
