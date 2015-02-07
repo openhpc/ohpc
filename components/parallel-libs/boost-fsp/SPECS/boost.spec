@@ -62,7 +62,7 @@ Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.57.0
 Release:        0
 License:        BSL-1.0
-Group:		System Environment/Libraries
+Group:		fsp/parallel-libs
 Url:            http://www.boost.org
 Source0:	%{pname}_%{bversion}.tar.gz 
 Source1:        boost-rpmlintrc

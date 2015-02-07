@@ -47,13 +47,13 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define pname metis
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name: par%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name:    par%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
 Version: 4.0.3
 Release: 1
 License: BSD-like
-Group:   Productivity/Graphics/3D Editors  
-URL: http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
+Group:   fsp/parallel-libs
+URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
 Source0: par%{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler
