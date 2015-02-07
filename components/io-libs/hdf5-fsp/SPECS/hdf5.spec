@@ -36,7 +36,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.8.13
 Release:   0.1
 License:   BSD-3-Clause
-Group:     Development/Libraries/Other
+Group:     fsp/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros

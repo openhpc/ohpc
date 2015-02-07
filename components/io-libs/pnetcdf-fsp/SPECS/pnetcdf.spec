@@ -58,7 +58,7 @@ Version:        1.5.0
 Release:        1
 Summary:        A library providing high-performance I/O with Unidata's NetCDF
 License:        GPL-2.0
-Group:          Development/Libraries/Parallel
+Group:          fsp/io-libs
 Url:            http://trac.mcs.anl.gov/projects/parallel-netcdf/
 Source0:        parallel-netcdf-%{version}.tar.gz
 BuildRequires:  bison

@@ -43,7 +43,7 @@ BuildRequires: intel_licenses
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        Cxx Libraries for the Unidata network Common Data Form
 License:        NetCDF
-Group:          System/Libraries
+Group:          fsp/io-libs
 Version:        4.2.1
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
