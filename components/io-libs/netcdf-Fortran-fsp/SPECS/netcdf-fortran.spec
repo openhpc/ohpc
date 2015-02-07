@@ -58,7 +58,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
-Group:          System/Libraries
+Group:          io-libs
 Version:        4.4.1
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
@@ -130,7 +130,6 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
 
 module load phdf5
-#module try-load netcdf
 module load netcdf
 export CPPFLAGS="-I$HDF5_INC"
 export FCFLAGS="-I$HDF5_INC"
