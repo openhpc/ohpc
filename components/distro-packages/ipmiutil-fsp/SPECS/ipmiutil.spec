@@ -11,7 +11,7 @@ Version: 2.9.4
 Release: 1%{?dist}
 Summary:   Easy-to-use IPMI server management utilities
 License:   BSD
-Group:     System/Management
+Group:     fsp/distro-packages
 Source:    %{pname}-%{version}.tar.gz
 URL:       http://ipmiutil.sourceforge.net
 BuildRoot: %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)

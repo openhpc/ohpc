@@ -13,7 +13,7 @@ Version:        0.5
 Release:        %{?dist}
 Summary:        Unit testing framework for Lua
 
-Group:          Development/Libraries
+Group:          fsp/distro-packages
 License:        MIT
 Url:            http://nessie.de/mroth/lunit
 Source0:        %{pname}-%{version}.tar.gz

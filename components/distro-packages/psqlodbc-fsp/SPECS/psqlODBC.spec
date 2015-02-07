@@ -29,7 +29,7 @@ Url:            http://pgfoundry.org/projects/psqlodbc
 %define       tarname psqlodbc
 Summary:        ODBC Driver for PostgreSQL
 License:        LGPL-2.1+
-Group:          Productivity/Databases/Clients
+Group:          fsp/distro-packages
 Version:        08.03.0200
 Release:        33.1
 Source0:        %tarname-%{version}.tar.bz2
