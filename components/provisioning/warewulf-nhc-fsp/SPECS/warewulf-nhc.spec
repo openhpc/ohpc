@@ -14,7 +14,7 @@ Summary: Warewulf Node Health Check System
 Version: 1.4.1
 Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group: Applications/System
+Group: fsp/provisioning
 URL: http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros

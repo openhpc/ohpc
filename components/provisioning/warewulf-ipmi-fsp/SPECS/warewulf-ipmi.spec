@@ -16,7 +16,7 @@ Version: 3.6
 Release: %{_rel}%{?dist}
 #Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group: System Environment/Clustering
+Group: fsp/provisioning
 URL: http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros

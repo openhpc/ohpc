@@ -12,7 +12,7 @@ Summary: A suite of tools for clustering
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group:   System Environment/Clustering
+Group:   fsp/provisioning
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 ExclusiveOS: linux
