@@ -6,7 +6,7 @@ Name:      intel-clck%{PROJ_DELIM}
 Version:   2.2.1
 Release:   1
 License:   Intel
-Group:     Development/Tools
+Group:     fsp/admin
 BuildArch: x86_64
 Source1:   stream.static
 Source2:   dgemm_mflops.static
