@@ -52,13 +52,13 @@ Source101:	FSP_macros
 Source102:	FSP_setup_compiler
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires:  gawk
+#BuildRequires:  gawk
 BuildRequires:  hdf5-%{compiler_family}%{PROJ_DELIM} >= 1.8.8
-BuildRequires:  libcurl-devel >= 7.18.0
-BuildRequires:  pkg-config
-BuildRequires:  zlib-devel >= 1.2.5
-BuildRequires:  valgrind%{PROJ_DELIM}
-BuildRequires:  netcdf-%{compiler_family}%{PROJ_DELIM}
+#BuildRequires:  libcurl-devel >= 7.18.0
+#BuildRequires:  pkg-config
+#BuildRequires:  zlib-devel >= 1.2.5
+#BuildRequires:  valgrind%{PROJ_DELIM}
+BuildRequires:  netcdf-%{compiler_family}-openmpi%{PROJ_DELIM}
 Requires:       hdf5-%{compiler_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
