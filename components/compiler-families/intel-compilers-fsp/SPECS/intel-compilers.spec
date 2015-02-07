@@ -8,7 +8,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   15.0.1.133
 Release:   1
 License:   Intel
-Group:     Development/Tools
+Group:     fsp/compiler-families
 BuildArch: x86_64
 Source0:   intel-compilers-2015.1.133.tar.gz
 Source1:   FSP_macros

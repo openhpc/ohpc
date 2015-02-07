@@ -8,7 +8,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   4.8.3
 Release:   1
 License:   GPL-3.0+
-Group:     Development/Languages/C and C++
+Group:     fsp/compiler-families
 URL:       http://gcc.gnu.org/
 Source0:   gcc-%{version}.tar.bz2
 Source1:   gmp-6.0.0a.tar.bz2
