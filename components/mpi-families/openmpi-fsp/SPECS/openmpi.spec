@@ -37,7 +37,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.8.4
 Release:   1
 License:   BSD-3-Clause
-Group:     Development/Libraries/Parallel
+Group:     fsp/mpi-families
 URL:       http://www.open-mpi.org
 Source0:   %{pname}-%{version}.tar.bz2
 Source1:   FSP_macros

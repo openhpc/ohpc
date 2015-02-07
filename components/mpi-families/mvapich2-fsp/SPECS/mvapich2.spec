@@ -39,7 +39,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   2.1a
 Release:   1
 License:   BSD
-Group:     Development/Libraries
+Group:     fsp/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros

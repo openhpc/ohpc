@@ -8,7 +8,7 @@ Source0:   intel-mpi-l_mpi_p_%{version}.tar.gz
 Source1:   FSP_macros
 Release:   1
 License:   Intel
-Group:     Development/Tools
+Group:     fsp/mpi-families
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
