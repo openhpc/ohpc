@@ -80,7 +80,7 @@ Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 NetCDF (network Common Data Form) is an interface for array-oriented
@@ -154,9 +154,6 @@ export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
-
-# Remove static libraries
-#find "%buildroot" -type f -name "*.la" | xargs rm -f
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{mpi_family}/%{pname}
