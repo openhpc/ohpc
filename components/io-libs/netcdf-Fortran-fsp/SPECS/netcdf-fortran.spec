@@ -136,10 +136,6 @@ export CPPFLAGS="-I$HDF5_INC"
 export FCFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
 
-#export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
-#export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
-export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
-
 ./configure --prefix=%{install_path} \
     --enable-shared \
     --enable-netcdf-4 \
