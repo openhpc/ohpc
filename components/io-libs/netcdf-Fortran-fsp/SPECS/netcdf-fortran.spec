@@ -8,9 +8,10 @@
 
 %include %{_sourcedir}/FSP_macros
 
-# FSP convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
+# FSP convention: the default assumes the gnu toolchain and openmpi
+# MPI family; however, these can be overridden by specifing the
+# compiler_family and mpi_family variables via rpmbuild or other
+# mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family:      %define mpi_family openmpi}
@@ -28,6 +29,20 @@ Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
+%endif
+
+# MPI dependencies
+%if %{mpi_family} == impi
+BuildRequires: intel-mpi%{PROJ_DELIM}
+Requires:      intel-mpi%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == mvapich2
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == openmpi
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 #-fsp-header-comp-end------------------------------------------------
@@ -51,6 +66,7 @@ Source0:	%{pname}-%{version}.tar.gz
 Source1:        nc-config.1.gz
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
+Source103:	FSP_setup_mpi
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 #BuildRequires:  gawk
@@ -107,10 +123,13 @@ NetCDF data is:
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family} 
+export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/FSP_setup_mpi
 
 module load phdf5
 #module try-load netcdf
+module load netcdf
 export CPPFLAGS="-I$HDF5_INC"
 export FCFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
@@ -131,10 +150,12 @@ export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 %install
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family} 
+export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/FSP_setup_mpi
 
-module load hdf5
-module try-load netcdf
+module load phdf5
+module load netcdf
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
@@ -142,11 +163,11 @@ export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # Remove static libraries
-find "%buildroot" -type f -name "*.la" | xargs rm -f
+#find "%buildroot" -type f -name "*.la" | xargs rm -f
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -192,7 +213,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
