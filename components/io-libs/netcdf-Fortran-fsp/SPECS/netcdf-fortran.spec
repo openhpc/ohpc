@@ -108,10 +108,14 @@ NetCDF data is:
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 . %{_sourcedir}/FSP_setup_compiler
 
-module load hdf5
-module try-load netcdf
-export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
-export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
+module load phdf5
+#module try-load netcdf
+export CPPFLAGS="-I$HDF5_INC"
+export FCFLAGS="-I$HDF5_INC"
+export LDFLAGS="-L$HDF5_LIB"
+
+#export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
+#export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 
 ./configure --prefix=%{install_path} \
@@ -119,8 +123,6 @@ export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
     --enable-netcdf-4 \
     --enable-dap \
     --enable-ncgen4 \
-    --enable-extra-example-tests \
-    --disable-dap-remote-tests \
     --with-pic \
     --disable-doxygen \
     --disable-static || cat config.log
