@@ -126,7 +126,7 @@ module load netcdf
 
 export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export FCFLAGS="-I$HDF5_INC"
-export LDFLAGS="-L$HDF5_LIB"
+export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
 ./configure --prefix=%{install_path} \
     --enable-shared \
