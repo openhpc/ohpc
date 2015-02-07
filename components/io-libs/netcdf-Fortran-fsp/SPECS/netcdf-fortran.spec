@@ -69,12 +69,7 @@ Source102:	FSP_setup_compiler
 Source103:	FSP_setup_mpi
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
-#BuildRequires:  gawk
 
-#BuildRequires:  libcurl-devel >= 7.18.0
-#BuildRequires:  pkg-config
-#BuildRequires:  zlib-devel >= 1.2.5
-#BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.8.8
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -174,7 +169,7 @@ puts stderr " "
 puts stderr "This module loads the NetCDF Fortran API built with the %{compiler_family} compiler toolchain."
 puts stderr " "
 puts stderr "Note that this build of NetCDF leverages the HDF I/O library and requires linkage"
-puts stderr "against hdf5 and the native C NetCDF library. Consequently, hdf5 and the standerd C"
+puts stderr "against hdf5 and the native C NetCDF library. Consequently, phdf5 and the standard C"
 puts stderr "version of NetCDF are loaded automatically via this module. A typical compilation"
 puts stderr "example for Fortran applications requiring NetCDF is as follows:"
 puts stderr " "
