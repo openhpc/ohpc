@@ -9,7 +9,7 @@ Version:   2.31
 Release:   %{_rel}
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
-Group:     System Environment/Base
+Group:     fsp/admin
 Source0:   pdsh-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 

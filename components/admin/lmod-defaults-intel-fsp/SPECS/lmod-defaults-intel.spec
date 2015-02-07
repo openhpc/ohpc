@@ -36,7 +36,7 @@ Name:      lmod-defaults-intel%{PROJ_DELIM}
 Version:   1.0
 Release:   1
 License:   BSD
-Group:     Development/Tools
+Group:     fsp/admin
 BuildArch: noarch
 Source0:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root

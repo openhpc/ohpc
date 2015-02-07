@@ -18,7 +18,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   5.8
 Release:   1
 License:   MIT
-Group:     System Environment/Base
+Group:     fsp/admin
 Url:       https://github.com/TACC/Lmod
 Source0:   Lmod-%{version}.tar.bz2
 Source1:   FSP_macros

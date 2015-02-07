@@ -6,7 +6,7 @@ Name:    %{pname}%{PROJ_DELIM}
 Version: 0.5.0
 Release: 1
 License: See COPYING
-Group:   System Environment/Libraries
+Group:   fsp/admin
 Vendor:  Intel Corporation
 URL:     https://github.com/open-mpi/orcm
 Prefix:  %{_prefix}
