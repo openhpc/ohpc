@@ -53,9 +53,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define pname netcdf-fortran
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
-#%define ncdf_so_major 7
-
-Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          fsp/io-libs
