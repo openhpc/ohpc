@@ -8,7 +8,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   2.4.3
 Release:   1
 License:   GPLv2+ and LGPLv2+ and GFDL
-Group:     Development/Tools
+Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/libtool/
 Source0:   libtool-%{version}.tar.gz
 Source1:   FSP_macros

@@ -8,7 +8,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   1.14.1
 Release:   1
 License:   GPLv2+ and GFDL
-Group:     Development/Tools
+Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/automake/
 Source0:   automake-%{version}.tar.gz
 Source1:   FSP_macros

@@ -37,7 +37,7 @@ Release:        1
 Url:            http://sourceforge.net/projects/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
-Group:          Development/Libraries/Python
+Group:          fsp/dev-tools
 Source0:         %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler

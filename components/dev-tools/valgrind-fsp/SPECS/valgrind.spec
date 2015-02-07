@@ -11,7 +11,7 @@ Version:   3.10.0
 Release:   1
 License:   GPL
 URL:       http://www.valgrind.org/
-Group:     Development/Debuggers
+Group:     fsp/dev-tools
 Source:    valgrind-%{version}.tar.bz2
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root

@@ -67,7 +67,7 @@ Version:        0.14.0
 Release:        1
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
-Group:          Development/Libraries/Python
+Group:          fsp/dev-tools
 Url:            http://www.scipy.org
 Source0:        %{pname}-%{version}.tar.gz
 BuildRequires:  blas-devel

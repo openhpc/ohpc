@@ -8,7 +8,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   2.69
 Release:   1
 License:   GPLv3+ and GFDL
-Group:     Development/Tools
+Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   autoconf-%{version}.tar.gz
 Source1:   FSP_macros
