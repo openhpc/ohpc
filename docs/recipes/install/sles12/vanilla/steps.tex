@@ -448,16 +448,13 @@ steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
 file to allow loading of the necessary modules.
 
 % begin_fsp_run
-% fsp_validation_comment Enbale slurm pam module
+% fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
 [master]$ zypper -n install lustre-client-fsp lustre-client-fsp-modules
 # Update config to allow Lustre modules to be loaded on master host
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      /etc/modprobe.d/10-unsupported-modules.conf
-# Mount the Lustre file system on master host
-[master]$ mkdir /mnt/lustre
-[master]$ mount -t lustre -o localflock <mgs_fs_name> /mnt/lustre
 \end{lstlisting}
 % end_fsp_run
 
@@ -488,6 +485,16 @@ attached to \texttt{ib0}. Note that these modifications are made to both the
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
 [master]$ echo "options lnet networks=o2ib(ib0)" >> $CHROOT/etc/modprobe.d/lustre.conf
+\end{lstlisting}
+% end_fsp_run
+
+With the Lustre config complete, the client can be mounted on the {\em master}
+host as follows:
+% begin_fsp_run
+% fsp_validation_comment mount Lustre client on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ mkdir /mnt/lustre
+[master]$ mount -t lustre -o localflock <mgs_fs_name> /mnt/lustre
 \end{lstlisting}
 % end_fsp_run
 
