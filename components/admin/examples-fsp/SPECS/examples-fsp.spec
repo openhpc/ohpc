@@ -54,7 +54,7 @@ FSP development environment.
 
 install -D -m 0644 %SOURCE1 %{buildroot}%{FSP_HOME}/pub/examples/mpi/hello.c
 install -D -m 0644 %SOURCE2 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0
-install -D -m 0644 %SOURCE2 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0.ww
+install -D -m 0644 %SOURCE3 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0.ww
 
 %clean
 rm -rf $RPM_BUILD_ROOT
