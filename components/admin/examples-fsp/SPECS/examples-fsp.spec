@@ -37,6 +37,7 @@ Group:   fsp/misc
 Source0: FSP_macros
 Source1: hello.c
 Source2: ifcfg-ib0
+Source3: ifcfg-ib0.ww
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -53,6 +54,7 @@ FSP development environment.
 
 install -D -m 0644 %SOURCE1 %{buildroot}%{FSP_HOME}/pub/examples/mpi/hello.c
 install -D -m 0644 %SOURCE2 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0
+install -D -m 0644 %SOURCE2 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0.ww
 
 %clean
 rm -rf $RPM_BUILD_ROOT
