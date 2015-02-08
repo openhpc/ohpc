@@ -1,19 +1,25 @@
 # Zeus host definitions for CI testing
-# Note: Compute host attributed must be defined in consistent order.
 
 nfs_ip=192.168.0.1
 mgs_node=10.23.187.30@tcp
+ipoib_netmask=255.255.255.0
 
 master1_ip=172.16.0.1
 master1_netmask=172.16.0.1/24
+master1_ipoib=192.168.100.1
 
 master2_ip=172.16.0.2
 master2_netmask=172.16.0.1/24
+master2_ipoib=192.168.100.2
 
 master3_ip=172.16.0.3
 master3_netmask=172.16.0.1/24
+master3_ipoib=192.168.100.3
 
 master4_ip=192.168.0.15
+master4_ipoib=192.168.100.4
+
+# Nodes 5 thru 8
 
 node5_ip=172.16.0.5
 node6_ip=172.16.0.6
@@ -35,6 +41,13 @@ node6_mac=78:45:C4:F8:32:9F
 node7_mac=78:45:C4:F8:42:BA
 node8_mac=78:45:C4:F8:35:CF
 
+node5_ipoib=192.168.100.5
+node6_ipoib=192.168.100.6
+node7_ipoib=192.168.100.7
+node8_ipoib=192.168.100.8
+
+# Nodes 9 thru 12
+
 node9_ip=172.16.0.9
 node10_ip=172.16.0.10
 node11_ip=172.16.0.11
@@ -50,10 +63,17 @@ node10_mac=78:45:C4:F8:36:41
 node11_mac=78:45:C4:F8:35:B4
 node12_mac=84:8F:69:FE:8E:5D
 
+node9_ipoib=192.168.100.9
+node10_ipoib=192.168.100.10
+node11_ipoib=192.168.100.11
+node12_ipoib=192.168.100.12
+
 node9old_ip=192.168.0.40
 node10old_ip=192.168.0.45
 node11old_ip=192.168.0.50
 node12old_ip=192.168.0.55
+
+# Nodes 13 thru 16
 
 node13_ip=172.16.0.60
 node14_ip=172.16.0.65
@@ -69,3 +89,15 @@ node13_mac=78:45:C4:F8:35:42
 node14_mac=78:45:C4:F8:36:3B
 node15_mac=78:45:C4:F8:36:C8
 node16_mac=78:45:C4:F8:46:CB
+
+node13_ipoib=192.168.100.13
+node14_ipoib=192.168.100.14
+node15_ipoib=192.168.100.15
+node16_ipoib=192.168.100.16
+
+# Nodes 17 thru 20
+
+node17_ipoib=192.168.100.17
+node18_ipoib=192.168.100.18
+node19_ipoib=192.168.100.19
+node20_ipoib=192.168.100.20

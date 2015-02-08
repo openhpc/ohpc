@@ -34,13 +34,16 @@ if ( defined $ENV{'NODE_NAME'} && defined $ENV{'COMPUTE_HOSTS'} ) {
 
 # Obtain dynamic host info
 
-my $nfs_ip       = "";
-my $master_ip    = "";
-my $netmask      = "";
-my $mgs_node     = "";
-my @compute_ips  = ();
-my @compute_macs = ();
-my @compute_bmcs = ();
+my $nfs_ip         = "";
+my $master_ip      = "";
+my $master_ipoib   = "";
+my $netmask        = "";
+my $ipoib_netmask  = "";
+my $mgs_node       = "";
+my @compute_ips    = ();
+my @compute_ipoibs = ();
+my @compute_macs   = ();
+my @compute_bmcs   = ();
 
 if($ci_run == 1) {
 
@@ -49,16 +52,23 @@ if($ci_run == 1) {
     while(my $line=<IN>) {
 	if($line =~ /^$master_host\_ip=(\S+)$/) {
 	    $master_ip = $1;
+	} elsif ($line =~ /^$master_host\_ipoib=(\S+)$/) {
+	    $master_ipoib = $1;
 	} elsif ($line =~ /^nfs_ip=(\S+)$/) {
 	    $nfs_ip = $1;
 	} elsif ($line =~ /^mgs_node=(\S+)$/) {
 	    $mgs_node = $1;
 	} elsif ($line =~ /^$master_host\_netmask=(\S+)$/) {
 	    $netmask = $1;
+	} elsif ($line =~ /^ipoib_netmask=(\S+)$/) {
+	    $ipoib_netmask = $1;
 	} else {
 	    foreach my $compute (@computes) {
 		if ($line =~ /^$compute\_ip=(\S+)$/) {
 		    push(@compute_ips,$1);
+		}
+		if ($line =~ /^$compute\_ipoib=(\S+)$/) {
+		    push(@compute_ipoibs,$1);
 		}
 		if ($line =~ /^$compute\_mac=(\S+)$/) {
 		    push(@compute_macs,$1);
@@ -129,13 +139,15 @@ while(my $line=<IN>) {
 	$line =~ s/<nfs_ip>/$nfs_ip/g;
 	$line =~ s/<master_ip>/$master_ip/g;
 	$line =~ s/<internal_netmask>/$netmask/g;
+	$line =~ s/<master_ipoib>/$master_ipoib/g;
+	$line =~ s/<ipoib_netmask>/$ipoib_netmask/g;
 	$line =~ s/<mgs_node>/$mgs_node/g;
 #	$line =~ s/<master_hostname>/$master_host/g;
 	$line =~ s/<master_hostname>/$ENV{'NODE_NAME'}/g;
-#
 
 	for (my $i=1;$i<=$num_computes; $i++) {
 	    $line =~ s/<c$i\_ip>/$compute_ips[$i-1]/g;
+	    $line =~ s/<c$i\_ipoib>/$compute_ipoibs[$i-1]/g;
 	    $line =~ s/<c$i\_mac>/$compute_macs[$i-1]/g;
 	    $line =~ s/<c$i\_bmc>/$compute_bmcs[$i-1]/g;
 	}
