@@ -457,7 +457,7 @@ file to allow loading of the necessary modules.
      /etc/modprobe.d/10-unsupported-modules.conf
 # Mount the Lustre file system on master host
 [master]$ mkdir /mnt/lustre
-[master]$ mount -t lustre -o localflock <mgs_node>:/<lustre_fs_name> /mnt/lustre
+[master]$ mount -t lustre -o localflock <mgs_fs_name> /mnt/lustre
 \end{lstlisting}
 % end_fsp_run
 
@@ -471,8 +471,7 @@ file to allow loading of the necessary modules.
      $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
 # Include mount point and file system mount in compute image
 [master]$ mkdir $CHROOT/mnt/lustre
-[master]$ echo "<mgs_node>:/<lustre_fs_name> /mnt/lustre lustre defaults,_netdev,noauto,localflock 0 0" \
-     >> $CHROOT/etc/fstab
+[master]$ echo "<mgs_fs_name> /mnt/lustre lustre defaults,_netdev,noauto,localflock 0 0" >> $CHROOT/etc/fstab
 \end{lstlisting}
 % end_fsp_run
 
@@ -586,7 +585,7 @@ template file for Warewulf that can be imported and used later to provision
 
 % begin_fsp_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ wwsh file import /opt/fsp/pub/examples/network/sles/ifcfg-ib0
+[master]$ wwsh file import /opt/fsp/pub/examples/network/sles/ifcfg-ib0.ww
 [master]$ wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network-scripts/ifcfg-ib0
 \end{lstlisting}
 % \end_fsp_run
@@ -637,7 +636,7 @@ that were imported in \S\ref{sec:file_import}.
 [master]$ wwsh -y node set c2 -D ib0 --ipaddr=<c2_ipoib> --netmask=<ipoib_netmask>
 [master]$ wwsh -y node set c3 -D ib0 --ipaddr=<c3_ipoib> --netmask=<ipoib_netmask>
 [master]$ wwsh -y node set c4 -D ib0 --ipaddr=<c4_ipoib> --netmask=<ipoib_netmask>
-[master]$ wwsh provision set c[1-4] --fileadd=ifcfg-ib0.ww
+[master]$ wwsh -y provision set c[1-4] --fileadd=ifcfg-ib0.ww
 
 # Restart dhcp / update PXE
 [master]$ service dhcpd restart

@@ -39,7 +39,7 @@ my $master_ip      = "";
 my $master_ipoib   = "";
 my $netmask        = "";
 my $ipoib_netmask  = "";
-my $mgs_node       = "";
+my $mgs_fs_name    = "";
 my @compute_ips    = ();
 my @compute_ipoibs = ();
 my @compute_macs   = ();
@@ -56,8 +56,8 @@ if($ci_run == 1) {
 	    $master_ipoib = $1;
 	} elsif ($line =~ /^nfs_ip=(\S+)$/) {
 	    $nfs_ip = $1;
-	} elsif ($line =~ /^mgs_node=(\S+)$/) {
-	    $mgs_node = $1;
+	} elsif ($line =~ /^mgs_fs_name=(\S+)$/) {
+	    $mgs_fs_name = $1;
 	} elsif ($line =~ /^$master_host\_netmask=(\S+)$/) {
 	    $netmask = $1;
 	} elsif ($line =~ /^ipoib_netmask=(\S+)$/) {
@@ -141,7 +141,7 @@ while(my $line=<IN>) {
 	$line =~ s/<internal_netmask>/$netmask/g;
 	$line =~ s/<master_ipoib>/$master_ipoib/g;
 	$line =~ s/<ipoib_netmask>/$ipoib_netmask/g;
-	$line =~ s/<mgs_node>/$mgs_node/g;
+	$line =~ s/<mgs_fs_name>/$mgs_fs_name/g;
 #	$line =~ s/<master_hostname>/$master_host/g;
 	$line =~ s/<master_hostname>/$ENV{'NODE_NAME'}/g;
 

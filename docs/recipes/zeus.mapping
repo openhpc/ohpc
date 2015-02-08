@@ -1,7 +1,7 @@
 # Zeus host definitions for CI testing
 
 nfs_ip=192.168.0.1
-mgs_node=10.23.187.30@tcp
+mgs_fs_name=192.168.100.254@o2ib:/zeushome
 ipoib_netmask=255.255.255.0
 
 master1_ip=172.16.0.1
