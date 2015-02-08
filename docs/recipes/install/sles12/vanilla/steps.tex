@@ -475,6 +475,24 @@ file to allow loading of the necessary modules.
 \end{lstlisting}
 % end_fsp_run
 
+The default underlying network type used by Lustre is {\em tcp}. If your
+external Lustre file system is to be mounted using a network type other than
+tcp, additional configuration files are necessary to identify the desired
+network type. The example below illustrates creation of modprobe config files
+instructing Lustre to use an InfiniBand network with the {\em o2ib} LNET driver
+attached to \texttt{ib0}. Note that these modifications are made to both the
+{\em master} host and {\em compute} image.
+
+% begin_fsp_run
+% fsp_validation_comment Enable o2ib for Lustre
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[master]$ echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
+[master]$ echo "options lnet networks=o2ib(ib0)" >> $CHROOT/etc/modprobe.d/lustre.conf
+\end{lstlisting}
+% end_fsp_run
+
+
+
 \paragraph{Enable ORCM RAS subsystem} 
 
 FSP includes a monitoring capability that can optionally be installed to
