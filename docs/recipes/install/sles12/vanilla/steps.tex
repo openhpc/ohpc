@@ -470,7 +470,7 @@ file to allow loading of the necessary modules.
      $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
 # Include mount point and file system mount in compute image
 [master]$ mkdir $CHROOT/mnt/lustre
-[master]$ echo "<mgs_fs_name> /mnt/lustre lustre defaults,_netdev,noauto,localflock 0 0" >> $CHROOT/etc/fstab
+[master]$ echo "<mgs_fs_name> /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
 \end{lstlisting}
 % end_fsp_run
 
