@@ -284,6 +284,8 @@ stored locally on the {\em master} host in the
 [master]$ echo "drivers += pps_core, ahci, libahci, libata, scsi_mod" >> $WW_CONF
 [master]$ echo "drivers += nfs_acl, nfsv3, nfsv4, coretemp" >> $WW_CONF
 
+# (Optional) Include Lustre drivers; needed if enabling Lustre client on computes
+[master]$ echo "drivers += updates/kernel/" >> $WW_CONF
 
 # Build bootstrap kernel and initial base image
 [master]$ wwbootstrap `uname -r`              # create warewulf bootstrap image
