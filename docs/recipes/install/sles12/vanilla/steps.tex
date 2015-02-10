@@ -613,15 +613,10 @@ and creation of the bootstrap image based on the running kernel.
 % begin_fsp_run
 % fsp_validation_comment Create bootstrap image for Warewulf
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Configure additional required drivers for bootstrap
-[master]$ export WW_CONF=/etc/warewulf/bootstrap.conf
-[master]$ echo "drivers += af_packet, dns_resolver, auth_rpcgss, lockd, sunrpc" >> $WW_CONF
-[master]$ echo "drivers += dm_mod, dcdbas, dell_rbu, ipmi_msghandler, shpchp, ehci_pci" >> $WW_CONF
-[master]$ echo "drivers += wmi, processor, button, sg, igb, i2c_algo_bit, dca, ptp" >> $WW_CONF
-[master]$ echo "drivers += pps_core, ahci, libahci, libata, scsi_mod" >> $WW_CONF
-[master]$ echo "drivers += nfs_acl, nfsv3, nfsv4, coretemp" >> $WW_CONF
 # (Optional) Include Lustre drivers; needed if enabling Lustre client on computes
+[master]$ export WW_CONF=/etc/warewulf/bootstrap.conf
 [master]$ echo "drivers += updates/kernel/" >> $WW_CONF
+
 # Build bootstrap image
 [master]$ wwbootstrap `uname -r`
 \end{lstlisting}
