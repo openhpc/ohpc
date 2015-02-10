@@ -2,10 +2,19 @@
 # 
 # Simple parser to cull command-line instructions from documentation for
 # validation.
+# 
+# karl.w.schulz@intel.com
+#------------------------------------------------------------------------
 
 use warnings;
 use strict;
 use File::Temp qw/tempfile/;
+use Getopt::Long;
+
+# Optional command-line arguments
+my $repo = "";
+
+GetOptions ('repo=s' => \$repo);
 
 if ( $#ARGV < 1) {
     print STDERR "Usage: parse_doc <filename> <host_mapping>\n";
@@ -144,6 +153,12 @@ while(my $line=<IN>) {
 	$line =~ s/<mgs_fs_name>/$mgs_fs_name/g;
 #	$line =~ s/<master_hostname>/$master_host/g;
 	$line =~ s/<master_hostname>/$ENV{'NODE_NAME'}/g;
+
+	# Support for optionally defined FSP repo
+
+	if ( $repo ne "" ) {
+	    $line =~ s/zypper addrepo (\S+)/zypper addrepo $repo/g;
+	}
 
 	for (my $i=1;$i<=$num_computes; $i++) {
 	    $line =~ s/<c$i\_ip>/$compute_ips[$i-1]/g;
