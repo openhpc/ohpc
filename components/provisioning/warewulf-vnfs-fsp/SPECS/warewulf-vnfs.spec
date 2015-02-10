@@ -32,6 +32,8 @@ Patch1: warewulf-vnfs.wwmkchroot.patch
 Patch2: warewulf-vnfs.utf8.patch
 # 09/19/14 karl.w.schulz@intel.com - include yum/numactl in centos6 default image
 Patch3: centos-add-pkgs.patch
+# 02/10/15 charles.r.baird@intel.com - add drivers to bootstrap image
+Patch4: warewulf-vnfs.bootstrap.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -49,6 +51,7 @@ Virtual Node FileSystem objects.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 
 %build
