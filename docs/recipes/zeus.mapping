@@ -16,7 +16,8 @@ master3_ip=172.16.0.3
 master3_netmask=172.16.0.1/24
 master3_ipoib=192.168.100.3
 
-master4_ip=192.168.0.15
+master4_ip=172.16.0.4
+master4_netmask=172.16.0.1/24
 master4_ipoib=192.168.100.4
 
 # Nodes 5 thru 8
@@ -96,6 +97,21 @@ node15_ipoib=192.168.100.15
 node16_ipoib=192.168.100.16
 
 # Nodes 17 thru 20
+
+node17=172.16.0.80                                                        
+node18=172.16.0.85                                                        
+node19=172.16.0.90                                                        
+node20=172.16.0.95
+
+node17_mac=78:45:C4:F8:33:17                                                        
+node18_mac=78:45:C4:F8:36:95                                                        
+node19_mac=78:45:C4:F8:30:BC                                                        
+node20_mac=78:45:C4:F8:31:F4
+
+node17_bmc=10.23.183.103
+node18_bmc=10.23.183.97
+node19_bmc=10.23.183.96
+node20_bmc=10.23.183.100
 
 node17_ipoib=192.168.100.17
 node18_ipoib=192.168.100.18
