@@ -10,6 +10,8 @@ my @mpi_families     = ("mvapich2","openmpi","impi");
 
 my @single_package_exceptions = ("lmod-defaults-intel-fsp");
 
+my $longSummaryLine = 60;
+
 foreach my $category (@fspCategories) {
     print "Building latex table for packages in the $category category...\n";
 
@@ -73,7 +75,7 @@ foreach my $category (@fspCategories) {
     # Loop over cached data and generate latex data
 
     my $i = 0;
-    while ($i < $#nameData) {
+    while ($i <= $#nameData) {
 	my $name = $nameData[$i];
 
 	print "working on package $name\n";
@@ -141,9 +143,14 @@ foreach my $category (@fspCategories) {
 	    for my $k ($i .. $end_index) {
 		print OUT "$nameData[$k] & \n";
 		if($k == $i) {
+		    my $sumLength = length($summaryData[$k]);
+
 		    print OUT "\\multirow{$delta}{*}{$versionData[$k]} & \n";
-#		    die unless ("$urlData[$k]" ne "(none)");
-		    print OUT "\\multirow{$delta}{\\linewidth}{$summaryData[$k] \\newline ($urlData[$k])} \\\\ \n";
+		    print OUT "\\multirow{$delta}{\\linewidth}{$summaryData[$k] ";
+		    if($sumLength <= $longSummaryLine) {
+			print OUT "\\newline";
+		    }
+		    print OUT " ($urlData[$k])} \\\\ \n";
 		} else {
 		    print OUT "& \\\\ \n";
 	        }
@@ -155,12 +162,17 @@ foreach my $category (@fspCategories) {
 	    print OUT "% <-- end entry for $name_base\n\n";
 	    next;
 	} else {
+
+	    my $sumLength = length($summaryData[$i]);
 	    
  	    print OUT "\\multirow{2}{*}{$name_base} & \n";
  	    print OUT "\\multirow{2}{*}{$versionData[$i]} & \n";
  	    if ($urlData[$i] ne "(none)") {
- 		print OUT "$summaryData[$i] \\newline ";
- 		print OUT "($urlData[$i]) \n"
+ 		print OUT "$summaryData[$i] ";
+		if($sumLength <= $longSummaryLine) {
+		    print OUT "\\newline";
+		}
+ 		print OUT " ($urlData[$i]) \n"
  	    } else {
  		print OUT "\\multirow{2}{*}{$summaryData[$i]} \\\\\n";
  		print OUT "& & \n";
