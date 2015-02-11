@@ -1,7 +1,7 @@
 PAPER    := steps.pdf
 TEX_SUFS := .aux .log .nav .out .snm .toc .vrb .fdb_latexmk .bbl .blg .fls
 
-%.pdf:%.tex steps.tex $(wildcard ../../common/*.tex ../../common/fspdoc.sty )
+%.pdf:%.tex steps.tex manifest.tex $(wildcard ../../common/*.tex ../../common/fspdoc.sty data/manifest/*.tex )
 	../../common/vc
 	latexmk -pdf $<
 

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+logfile=pkg-fsp
+rm -f ${logfile}.*
+
+echo ++++ search and log FSP packages
+for pkg in `zypper search -i *-fsp`; do
+    name=`echo $pkg | grep -e -fsp | cut -d '|' -f 2 | tr -d ' '`
+    if [ "${name}" != "" ]; then
+	info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
+	echo ${info} >>${logfile}.all
+    fi
+done
+echo
+
+echo ++++ list of FSP package groups
+groups=`grep -o 'fsp/[^ ]*' pkg-fsp.all | sort -u | cut -c5-`
+echo $groups
+echo
+
+for grp in ${groups}; do
+    echo ++++ list of fsp/${grp} packages installed
+    grep "fsp/${grp}" ${logfile}.all 2>&1 | tee ${logfile}.${grp}
+    echo 
+done
