@@ -13,6 +13,7 @@ my @single_package_exceptions = ("lmod-defaults-intel-fsp");
 my $longSummaryLine = 60;
 my $urlColor="blue";
 my $REMOVE_HTTP=0;
+my $FIXD_WIDTH=1;
 
 foreach my $category (@fspCategories) {
     print "Building latex table for packages in the $category category...\n";
@@ -25,8 +26,14 @@ foreach my $category (@fspCategories) {
 
     # Table format/header
 
+    print OUT "\\newcolumntype{C}[1]{>{\\centering}p{#1}} \n";
+    print OUT "\\newcolumntype{L}[1]{>{\\raggedleft}p{#1}} \n";
+
+#    print OUT "\\footnotesize\n";
     print OUT "\\small\n";
-    print OUT "\\begin{tabularx}{\\textwidth}{r|c|X}\n";
+#    print OUT "\\begin{tabularx}{\\textwidth}{c|c|X}\n";
+#    print OUT "\\begin{tabularx}{\\textwidth}{C{4.5cm}|c|X}\n";
+    print OUT "\\begin{tabularx}{\\textwidth}{L{\\firstColWidth{}}|C{\\secondColWidth{}}|X}\n";
     print OUT "\\toprule\n";
     print OUT "{\\bf RPM Package Name} & {\\bf Version} & {\\bf Info/URL}  \\\\ \n";
     print OUT "\\midrule\n";
@@ -197,6 +204,7 @@ foreach my $category (@fspCategories) {
     
     print OUT "\\bottomrule\n";
     print OUT "\\end{tabularx}\n";
+#    print OUT "\\end{tabular}\n";
     
     close(OUT);
 }
