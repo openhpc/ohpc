@@ -1,0 +1,4 @@
+intel-advisor-fsp 15.1.10.380555 http://www.intel.com/software/products/ fsp/perf-tools Intel(R) Advisor XE
+intel-itac-fsp 9.0.2.045 http://www.intel.com/software/products/ fsp/perf-tools Intel(R) Trace Analyzer and Collector
+intel-vtune-fsp 15.1.1.380310 http://www.intel.com/software/products/ fsp/perf-tools Intel(R) VTune(TM) Amplifier XE 2015 Update 1
+papi-fsp 5.4.0 http://icl.cs.utk.edu/papi/ fsp/perf-tools Performance Application Programming Interface

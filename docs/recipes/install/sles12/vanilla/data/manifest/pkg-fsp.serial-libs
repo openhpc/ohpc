@@ -1,0 +1,4 @@
+gsl-gnu-fsp 1.16 http://www.gnu.org/software/gsl fsp/serial-libs GNU Scientific Library (GSL)
+gsl-intel-fsp 1.16 http://www.gnu.org/software/gsl fsp/serial-libs GNU Scientific Library (GSL)
+metis-gnu-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
+metis-intel-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
