@@ -3,71 +3,82 @@
 
 \definecolor{Gray}{gray}{0.5}
 
+\newcommand{\firstColWidth}{3.5cm}
+\newcommand{\secondColWidth}{1.5cm}
+
 % Administration Tools 
-\begin{table}[h]
-\caption{\bf Administrative Tools} \vspace*{0.1cm}
+
+\begin{table}[h!]
 \input data/manifest/admin
+\caption{\bf Administrative Tools} \vspace*{0.1cm}
 \end{table}
 
 % Provisioning
-\begin{table}[h]
-\caption{\bf Provisioning} \vspace*{0.1cm}
+\begin{table}[h!]
 \input data/manifest/provisioning
+\caption{\bf Provisioning} \vspace*{0.1cm}
 \end{table}
-
 
 % Resource Management
-\begin{table}[h]
-\caption{\bf Resource Management} \vspace*{0.1cm}
+\begin{table}[h!]
 \input data/manifest/rms
+\caption{\bf Resource Management} \vspace*{0.1cm}
 \end{table}
+
+\renewcommand{\firstColWidth}{4.5cm}
+\renewcommand{\secondColWidth}{2.0cm}
 
 % Compiler Families
-\begin{table}[h]
-\caption{\bf Compiler Families} \vspace*{0.1cm}
+\begin{table}[h!]
 \input data/manifest/compiler-families
+\caption{\bf Compiler Families} \vspace*{0.1cm}
 \end{table}
 
-% MPIr Families
-\begin{table}[h]
-\caption{\bf MPI Families} \vspace*{0.1cm}
+% MPI Families
+\begin{table}[h!]
 \input data/manifest/mpi-families
+\caption{\bf MPI Families} \vspace*{0.1cm}
 \end{table}
 
 % Development Tools
-\begin{table}[h]
-\caption{\bf Development Tools} \vspace*{0.1cm}
+\begin{table}[h!]
 \input data/manifest/dev-tools
+\caption{\bf Development Tools} \vspace*{0.1cm}
 \end{table}
 
+\renewcommand{\firstColWidth}{3.5cm}
 % Perf Tools
-\begin{table}[h]
-\caption{\bf Performance Analysis Tools} \vspace*{0.1cm}
+\begin{table}[h!]
 \input data/manifest/perf-tools
+\caption{\bf Performance Analysis Tools} \vspace*{0.1cm}
 \end{table}
 
 % Distro Packages
-\begin{table}[h]
-\caption{\bf Distro Support Packages/Dependencies} \vspace*{0.1cm}
+\begin{table}[h!]
 \input data/manifest/distro-packages
+\caption{\bf Distro Support Packages/Dependencies} \vspace*{0.1cm}
 \end{table}
 
+\renewcommand{\firstColWidth}{4.75cm}
+\renewcommand{\secondColWidth}{1.75cm}
+
+\clearpage
 % IO
-\begin{table}[h]
-\caption{\bf IO Libraries} \vspace*{0.1cm}
+\begin{table}[h!]
 \input data/manifest/io-libs
+\caption{\bf IO Libraries} \vspace*{0.1cm}
 \end{table}
 
 % Serial libs
-\begin{table}[h]
-\caption{\bf Serial Libraries} \vspace*{0.1cm}
+\begin{table}[h!]
 \input data/manifest/serial-libs
+\caption{\bf Serial Libraries} \vspace*{0.1cm}
 \end{table}
 
 % Parallel libs
-\begin{table}[h]
-\caption{\bf Parallel Libraries} \vspace*{0.1cm}
+\begin{table}[h!]
 \input data/manifest/parallel-libs
+\caption{\bf Parallel Libraries} \vspace*{0.1cm}
 \end{table}
 
 
