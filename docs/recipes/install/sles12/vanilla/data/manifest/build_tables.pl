@@ -11,6 +11,8 @@ my @mpi_families     = ("mvapich2","openmpi","impi");
 my @single_package_exceptions = ("lmod-defaults-intel-fsp");
 
 my $longSummaryLine = 60;
+my $urlColor="blue";
+my $REMOVE_HTTP=0;
 
 foreach my $category (@fspCategories) {
     print "Building latex table for packages in the $category category...\n";
@@ -24,7 +26,7 @@ foreach my $category (@fspCategories) {
     # Table format/header
 
     print OUT "\\small\n";
-    print OUT "\\begin{tabularx}{\\textwidth}{l|c|X}\n";
+    print OUT "\\begin{tabularx}{\\textwidth}{r|c|X}\n";
     print OUT "\\toprule\n";
     print OUT "{\\bf RPM Package Name} & {\\bf Version} & {\\bf Info/URL}  \\\\ \n";
     print OUT "\\midrule\n";
@@ -51,16 +53,24 @@ foreach my $category (@fspCategories) {
 
 	    my $url = $url_raw;
 
-	    if( $url_raw =~ /http:\/\/(\S+)/) {
-		$url=$1;
-	    } elsif ( $url_raw =~ /https:\/\/(\S+)/) {
-		$url=$1;
+	    if($REMOVE_HTTP) {
+		if( $url_raw =~ /http:\/\/(\S+)/) {
+		    $url=$1;
+		} elsif ( $url_raw =~ /https:\/\/(\S+)/) {
+		    $url=$1;
+		}
 	    }
 
 	    # Include period for summary
 	    
 	    if( (substr $summary,-1) ne "." ) {
 		$summary = "$summary.";
+	    }
+
+	    # trim final slash from url
+
+	    if ($url =~/(.*)\/$/) {
+		$url = $1;
 	    }
 
 	    push(@nameData,   $name);
@@ -147,10 +157,10 @@ foreach my $category (@fspCategories) {
 
 		    print OUT "\\multirow{$delta}{*}{$versionData[$k]} & \n";
 		    print OUT "\\multirow{$delta}{\\linewidth}{$summaryData[$k] ";
-		    if($sumLength <= $longSummaryLine) {
+		    if($sumLength <= $longSummaryLine || $delta > 2) {
 			print OUT "\\newline";
 		    }
-		    print OUT " ($urlData[$k])} \\\\ \n";
+		    print OUT " {\\color{$urlColor} $urlData[$k]}} \\\\ \n";
 		} else {
 		    print OUT "& \\\\ \n";
 	        }
@@ -172,7 +182,7 @@ foreach my $category (@fspCategories) {
 		if($sumLength <= $longSummaryLine) {
 		    print OUT "\\newline";
 		}
- 		print OUT " ($urlData[$i]) \n"
+ 		print OUT " { \\color{$urlColor} $urlData[$i]} \n"
  	    } else {
  		print OUT "\\multirow{2}{*}{$summaryData[$i]} \\\\\n";
  		print OUT "& & \n";
