@@ -791,17 +791,17 @@ three MPI families:
 
 \begin{itemize*}
 \item \Intel{}~MPI
-\item OpenMPI*
-\item MVAPICH2*
+\item OpenMPI
+\item MVAPICH2
 \end{itemize*}
- For ABI consistency, each of the open-source MPI families (OpenMPI* and
- MVAPICH2*) is built against each of the two supported compiler families
+ For ABI consistency, each of the open-source MPI families (OpenMPI and
+ MVAPICH2) is built against each of the two supported compiler families
  resulting in total of four build combinations.  The \Intel{} MPI stack is also
  configured to support both the \GNU{} and Intel compiler toolchain directly, but
  is packaged as a single RPM. Installation of all of the MPI family instances,
  can be accomplished via the following command. Note the use of wildcards
  (\texttt{*}) in this example in order to install both \GNU{} and Intel builds for
- OpenMPI* and MVAPICH2*.
+ OpenMPI and MVAPICH2.
 
 % begin_fsp_run
 % fsp_validation_comment Install MPI
