@@ -1,3 +1,9 @@
+imb-gnu-impi-fsp 4.0.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks fsp/perf-tools Intel MPI Benchmarks (IMB)
+imb-gnu-mvapich2-fsp 4.0.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks fsp/perf-tools Intel MPI Benchmarks (IMB)
+imb-gnu-openmpi-fsp 4.0.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks fsp/perf-tools Intel MPI Benchmarks (IMB)
+imb-intel-impi-fsp 4.0.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks fsp/perf-tools Intel MPI Benchmarks (IMB)
+imb-intel-mvapich2-fsp 4.0.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks fsp/perf-tools Intel MPI Benchmarks (IMB)
+imb-intel-openmpi-fsp 4.0.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks fsp/perf-tools Intel MPI Benchmarks (IMB)
 intel-advisor-fsp 15.1.10.380555 http://www.intel.com/software/products/ fsp/perf-tools Intel(R) Advisor XE
 intel-itac-fsp 9.0.2.045 http://www.intel.com/software/products/ fsp/perf-tools Intel(R) Trace Analyzer and Collector
 intel-vtune-fsp 15.1.1.380310 http://www.intel.com/software/products/ fsp/perf-tools Intel(R) VTune(TM) Amplifier XE 2015 Update 1
