@@ -52,7 +52,7 @@ Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   4.0.1
 Release:   1
 License:   CPL
-Group:     Benchmarks
+Group:     fsp/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
