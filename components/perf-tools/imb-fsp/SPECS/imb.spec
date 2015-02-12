@@ -73,7 +73,6 @@ The Intel MPI Benchmarks (IMB) perform a set of MPI performance
 measurements for point-to-point and global communication operations for
 a range of message sizes.
 
-
 %prep
 %setup -n imb
 
