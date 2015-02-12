@@ -159,7 +159,7 @@ chosen {\em master} host.
 \end{lstlisting}
 % end_fsp_run
 
-With the \InfiniBand{} drivers included, you can also enable IPoIB funcionality
+With the \InfiniBand{} drivers included, you can also enable IPoIB functionality
 which provides a mechanism to send IP packets over the IB network. If you plan
 to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_client}
 for additional details), then having IPoIB enabled is a requirement for the
@@ -423,7 +423,7 @@ discussed further in the following sections.
 \input{../../common/slurm_pam}
 
 % begin_fsp_run
-% fsp_validation_comment Enbale slurm pam module
+% fsp_validation_comment Enable slurm pam module
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
 \end{lstlisting}
@@ -750,13 +750,13 @@ autotools collection and the {\em valgrind*} memory debugger. These can be insta
 \subsection{Compilers}
 
 \FSP{} presently packages two compiler families ({\GNU{}} and {\Intel{}
-  Parallel Studio}) that are
-integrated within the underlying modules-environment system in a hierarchical
-fashion. End users of a \FSP{} system can choose to access one compiler at a time
-and will be presented with additional compiler-dependent software as a function
-of which compiler toolchain is currently loaded. Each compiler toolchain can be
-installed separately and the following commands illustrate the installation of
-both along with any necessary dependencies:
+  Parallel Studio}) that are integrated within the underlying
+modules-environment system in a hierarchical fashion. End users of a \FSP{}
+system can choose to access one compiler at a time and will be presented with
+additional compiler-dependent software as a function of which compiler
+toolchain is currently loaded. Each compiler toolchain can be installed
+separately and the following commands illustrate the installation of both along
+with any necessary dependencies:
 
 % begin_fsp_run
 % fsp_validation_comment Install compilers
