@@ -2,7 +2,7 @@
 \usepackage{../../common/fspdoc}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
-\lhead{{\em 2015 FSP Install Guide}}
+\lhead{{\em 2015 \FSP{} Install Guide}}
 
 
 % Recipe commands to run initially only in CI
@@ -70,10 +70,10 @@
 
 % ------------------------------------------------------------------
 
-\section{Install FSP Components} \label{sec:basic_install}
+\section{Install \FSP{} Components} \label{sec:basic_install}
 \input{../../common/install_fsp_component_intro.tex}
 
-\subsection{Enable FSP repository for local use}
+\subsection{Enable \FSP{} repository for local use}
 \input{../../common/enable_fsp_repo}
 
 % begin_fsp_run
@@ -143,9 +143,9 @@ manager, we also add a dedicated ``test'' user as follows:
 \end{lstlisting}
 % end_fsp_run
 
-\subsection{Add InfiniBand* support services on {\em master} node} \label{sec:add_ofed}
+\subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
-The following command adds OFED* support using distro-provided drivers to the
+The following command adds OFED support using distro-provided drivers to the
 chosen {\em master} host. 
 
 % begin_fsp_run
@@ -181,7 +181,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 \end{lstlisting}
 % end_fsp_run
 
-\subsection{Add Intel\textsuperscript{\textregistered} Cluster Checker ({\em optional})} \label{sec:add_clck}
+\subsection{Add Intel Cluster Checker ({\em optional})} \label{sec:add_clck}
 
 The \Intel{} Cluster Checker provides a suite of diagnostics that can be used to
 aid in isolating hardware and software problems on an installed
@@ -286,7 +286,7 @@ stored locally on the {\em master} host in the
 \end{lstlisting}
 % end_fsp_run
 
-\subsubsection{Add FSP components}
+\subsubsection{Add \FSP{} components}
 
 The \texttt{wwmkchroot} process used in the previous step is designed to
 provide a minimal \baseOS{} configuration. Next, we add additional components to
@@ -429,7 +429,7 @@ discussed further in the following sections.
 \end{lstlisting}
 % end_fsp_run
 
-\paragraph{Add Lustre* client} \label{sec:lustre_client}
+\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 
 \input{../../common/lustre-client}
 % SLES-specific addition
@@ -585,7 +585,7 @@ import local file-based credentials, issue the following:
 \end{lstlisting}
 % \end_fsp_run
 
-Similarly, to import the cryptographic key that is required by the {\em munge*}
+Similarly, to import the cryptographic key that is required by the {\em munge}
 authentication library to be available on every host in the resource management
 pool, issue the following:
 
@@ -717,7 +717,7 @@ c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 
 
 
-\section{Install FSP Development Components}
+\section{Install \FSP{} Development Components}
 
 The install procedure outlined in \S\ref{sec:basic_install}
 highlighted the steps necessary to install a {\em master} host,
@@ -749,7 +749,8 @@ autotools collection and the {\em valgrind*} memory debugger. These can be insta
 
 \subsection{Compilers}
 
-\FSP{} presently provides two compiler families ({\GNU{}} and {\Intel{}}) that are
+\FSP{} presently packages two compiler families ({\GNU{}} and {\Intel{}
+  Parallel Studio}) that are
 integrated within the underlying modules-environment system in a hierarchical
 fashion. End users of a \FSP{} system can choose to access one compiler at a time
 and will be presented with additional compiler-dependent software as a function
