@@ -54,7 +54,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Summary:        Cxx Libraries for the Unidata network Common Data Form
+Summary:        C++ Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          fsp/io-libs
 Version:        4.2.1
