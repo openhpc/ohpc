@@ -33,7 +33,7 @@ Name:    examples%{PROJ_DELIM}
 Version: 1.0
 Release: 1
 License: BSD
-Group:   fsp/misc
+Group:   fsp/admin
 Source0: FSP_macros
 Source1: hello.c
 Source2: ifcfg-ib0
