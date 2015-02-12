@@ -279,7 +279,7 @@ stored locally on the {\em master} host in the
 # Define chroot location for SLES 
 [master]$ export CHROOT=/opt/fsp/admin/images/sles12
 # Build initial chroot image
-[master]$ mkdir -p --mode=755 $CHROOT         # create chroot housing dir
+[master]$ mkdir -p -m 755 $CHROOT             # create chroot housing dir
 [master]$ mkdir -m 755 $CHROOT/dev            # create chroot /dev dir
 [master]$ mknod -m 666 $CHROOT/dev/zero c 1 5 # create /dev/zero device
 [master]$ wwmkchroot sles-12 $CHROOT          # create base image
