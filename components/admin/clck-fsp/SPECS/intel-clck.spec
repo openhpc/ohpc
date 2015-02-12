@@ -1,11 +1,12 @@
 %include %{_sourcedir}/FSP_macros
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-Summary:   FSP packaging for Intel CLCK
+Summary:   Intel(R) Cluster Checker
 Name:      intel-clck%{PROJ_DELIM}
 Version:   2.2.1
 Release:   1
 License:   Intel
+URL:       http://intel.com/go/cluster
 Group:     fsp/admin
 BuildArch: x86_64
 Source1:   stream.static
