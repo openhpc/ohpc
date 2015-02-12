@@ -3,11 +3,12 @@
 %define pname intel-compilers
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-Summary:   Intel Parallel Studio 
+Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
 Version:   15.0.1.133
 Release:   1
 License:   Intel
+URL:       http://www.intel.com/software/products
 Group:     fsp/compiler-families
 BuildArch: x86_64
 Source0:   intel-compilers-2015.1.133.tar.gz
