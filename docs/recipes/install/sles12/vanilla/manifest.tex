@@ -7,14 +7,14 @@
 
 %\subsection{Package Manifest}
 
-This appendix provides a summary of all of the RPM packages that are available
+This appendix provides a summary the underlying RPM packages that are available
 as part of this \FSP{} release. These packages are presented in groupings
-based on their general functionality as follows:
+based on their general functionality that are organized as follows:
 
 \begin{itemize*}
 \item Administrative tools
 \item Provisioning
-\item Resource ranagement
+\item Resource management
 \item Compiler families
 \item MPI families
 \item Development tools
@@ -25,9 +25,14 @@ based on their general functionality as follows:
 \item Parallel Libraries
 \end{itemize*}
 
-Tables summarizing each of these groupings are presented that include
-the package name, version, brief summary, and the web URL where more information
-can be contained for the component. Recall that 
+What follows in this Appendix are tables that summarize the packages in each
+group including information on the RPM name, version, brief summary, and the web
+URL where additional information can be contained for the component. Many of the 3rd
+party community libraries that are pre-packaged with \FSP{} are built using
+multiple compiler and MPI families. In these cases, the RPM package name
+includes delimiters identifying the development environment for which each
+package build is targeted.  Additional information on the \FSP{} packaging
+naming scheme is presented in \S\ref{sec:3rdparty}.
 
 
 \definecolor{Gray}{gray}{0.5}
@@ -37,81 +42,96 @@ can be contained for the component. Recall that
 
 % Administration Tools 
 
-\newpage
-\begin{table}[h!]
+\captionsetup{justification=raggedright,singlelinecheck=false}
+
+\vspace*{1.0cm}
+
+\newcommand{\captionSpace}{-0.15cm}
+\newcommand{\tabSpaceBot}{1.0cm}
+
+\begin{table}[h]
+\caption{\bf Administrative Tools} \vspace*{\captionSpace{}}
 \input data/manifest/admin
 \end{table}
-\vspace*{-0.2cm}
-\noindent Table 1: {\bf Administrative Tools} \vspace*{0.3cm}
-
-% Provisioning
-\begin{table}[h!]
-\input data/manifest/provisioning
-%\caption{\bf Provisioning} \vspace*{0.1cm}
-\end{table}
-\vspace*{-0.2cm}
-\noindent Table 2: {\bf Provisioning} \vspace*{0.3cm}
-
-% Resource Management
-\begin{table}[h!]
-\input data/manifest/rms
-\caption{\bf Resource Management} \vspace*{0.3cm}
-\end{table}
+\vspace*{0.5cm}
 
 \renewcommand{\firstColWidth}{4.5cm}
 \renewcommand{\secondColWidth}{2.0cm}
 
+% Provisioning
+
+\begin{table}[h!]
+\caption{\bf Provisioning} \vspace*{\captionSpace{}}
+\input data/manifest/provisioning
+\vspace*{\tabSpaceBot{}}
+\end{table} 
+
+% Resource Management
+\begin{table}[h!]
+\caption{\bf Resource Management} \vspace*{\captionSpace{}}
+\input data/manifest/rms
+\vspace*{\tabSpaceBot{}}
+\end{table}
+
 % Compiler Families
 \begin{table}[h!]
+\caption{\bf Compiler Families} \vspace*{\captionSpace{}}
 \input data/manifest/compiler-families
-\caption{\bf Compiler Families} \vspace*{0.1cm}
+\vspace*{\tabSpaceBot{}}
 \end{table}
 
 % MPI Families
 \begin{table}[h!]
+\caption{\bf MPI Families} \vspace*{\captionSpace{}}
 \input data/manifest/mpi-families
-\caption{\bf MPI Families} \vspace*{0.1cm}
+\vspace*{\tabSpaceBot{}}
 \end{table}
+
+\renewcommand{\firstColWidth}{4.5cm}
 
 % Development Tools
 \begin{table}[h!]
+\caption{\bf Development Tools} \vspace*{\captionSpace{}}
 \input data/manifest/dev-tools
-\caption{\bf Development Tools} \vspace*{0.1cm}
+\vspace*{\tabSpaceBot{}}
 \end{table}
 
-\renewcommand{\firstColWidth}{3.5cm}
 % Perf Tools
 \begin{table}[h!]
+\caption{\bf Performance Analysis Tools} \vspace*{\captionSpace{}}
 \input data/manifest/perf-tools
-\caption{\bf Performance Analysis Tools} \vspace*{0.1cm}
+\vspace*{\tabSpaceBot{}}
 \end{table}
 
 % Distro Packages
 \begin{table}[h!]
+\caption{\bf Distro Support Packages/Dependencies} \vspace*{\captionSpace{}}
 \input data/manifest/distro-packages
-\caption{\bf Distro Support Packages/Dependencies} \vspace*{0.1cm}
+\vspace*{\tabSpaceBot{}}
 \end{table}
 
 \renewcommand{\firstColWidth}{4.75cm}
 \renewcommand{\secondColWidth}{1.75cm}
 
-\clearpage
 % IO
 \begin{table}[h!]
+\caption{\bf IO Libraries} \vspace*{\captionSpace{}}
 \input data/manifest/io-libs
-\caption{\bf IO Libraries} \vspace*{0.1cm}
+\vspace*{\tabSpaceBot{}}
 \end{table}
 
 % Serial libs
 \begin{table}[h!]
+\caption{\bf Serial Libraries} \vspace*{\captionSpace{}} 
 \input data/manifest/serial-libs
-\caption{\bf Serial Libraries} \vspace*{0.1cm}
+\vspace*{\tabSpaceBot{}}
 \end{table}
 
 % Parallel libs
 \begin{table}[h!]
+\caption{\bf Parallel Libraries} \vspace*{\captionSpace{}} 
 \input data/manifest/parallel-libs
-\caption{\bf Parallel Libraries} \vspace*{0.1cm}
+\vspace*{\tabSpaceBot{}}
 \end{table}
 
 
