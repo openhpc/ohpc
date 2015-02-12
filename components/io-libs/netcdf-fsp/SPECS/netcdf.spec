@@ -57,7 +57,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define ncdf_so_major 7
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Summary:        Libraries for the Unidata network Common Data Form
+Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          fsp/io-libs
 Version:        4.3.2
