@@ -1,10 +1,11 @@
 This guide presents a simple cluster installation procedure using components
-from the Forest Peak (\FSP{}) software stack. \FSP{} represents an aggregation of a number of
-common ingredients required to deploy and manage an HPC Linux* cluster including
-provisioning tools, resource management, I/O clients, development tools, and a variety of
-scientific libraries. These packages have been pre-built with HPC integration
-in mind and represent a mix of open-source components combined with \Intel{}
-development and analysis tools (e.g. \Intel{} Parallel Studio XE Cluster Edition).
+from the Forest Peak (\FSP{}) software stack. \FSP{} represents an aggregation
+of a number of common ingredients required to deploy and manage an HPC Linux*
+cluster including provisioning tools, resource management, I/O clients,
+development tools, and a variety of scientific libraries. These packages have
+been pre-built with HPC integration in mind and represent a mix of open-source
+components combined with \Intel{} development and analysis tools (e.g. \Intel{}
+Parallel Studio XE Cluster Edition).
 %This install guide assumes availability of a {\em master} host
 %that will have access to common OS repositories and the \FSP{} repository in order
 %to facilitate software installs and dependency resolution.  
@@ -13,16 +14,17 @@ underlying motivation of a small, 4-node cluster install to define a step-by-ste
 process. Several optional customizations are included and the intent is that
 these collective instructions can be modified as needed for local site
 customizations. 
-
-Note that this guide is targeted at \Linux{} system administrators for HPC
-environments. Knowledge of software package management, system networking, and
-PXE booting is assumed.  Command-line input examples are highlighted throughout
-this guide via the following syntax:
-
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ echo "FSP hello world"
-\end{lstlisting}
-
-Unless specified otherwise, the examples presented herein are executed with
-elevated (root) privileges. The examples also presume use of the BASH login
-shell, though the equivilent commands in other shells should work fine.
+%% \subsection{Target Audience}
+%% 
+%% This guide is targeted at experienced \Linux{} system administrators for HPC
+%% environments. Knowledge of software package management, system networking, and
+%% PXE booting is assumed.  Command-line input examples are highlighted throughout
+%% this guide via the following syntax:
+%% 
+%% \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+%% [master]$ echo "FSP hello world"
+%% \end{lstlisting}
+%% 
+%% Unless specified otherwise, the examples presented herein are executed with
+%% elevated (root) privileges. The examples also presume use of the BASH login
+%% shell, though the equivilent commands in other shells should work fine.
