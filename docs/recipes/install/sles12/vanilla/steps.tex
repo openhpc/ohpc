@@ -184,9 +184,11 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % fsp_validation_comment Enable ib0
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ cp /opt/fsp/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
+
 # Define local IPoIB address and netmask
 [master]$ perl -pi -e 's/master_ipoib/<master_ipoib>/' /etc/sysconfig/network/ifcfg-ib0
 [master]$ perl -pi -e 's/ipoib_netmask/<ipoib_netmask>/' /etc/sysconfig/network/ifcfg-ib0
+
 # Initiate ib0
 [master]$ ifup ib0
 \end{lstlisting}
@@ -297,6 +299,7 @@ default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/sles12}.
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Define chroot location for SLES 
 [master]$ export CHROOT=/opt/fsp/admin/images/sles12
+
 # Build initial chroot image
 [master]$ mkdir -p -m 755 $CHROOT             # create chroot housing dir
 [master]$ mkdir -m 755 $CHROOT/dev            # create chroot /dev dir
@@ -462,6 +465,7 @@ file to allow loading of the necessary modules.
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
 [master]$ zypper -n install lustre-client-fsp lustre-client-fsp-modules
+
 # Update config to allow Lustre modules to be loaded on master host
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      /etc/modprobe.d/10-unsupported-modules.conf
@@ -473,9 +477,11 @@ file to allow loading of the necessary modules.
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
 [master]$ zypper --root=$CHROOT -n install lustre-client-fsp lustre-client-fsp-modules
+
 # Update config to allow Lustre modules to be loaded on compute hosts
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
+
 # Include mount point and file system mount in compute image
 [master]$ mkdir $CHROOT/mnt/lustre
 [master]$ echo "<mgs_fs_name> /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
@@ -552,22 +558,27 @@ for the new credential should also be placed in the final
 # Set master host as data aggregator
 [master]$ perl -pi -e "s/aggregator_hostname/localhost/" /etc/orcm-site.xml
 [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
+
 # Initialize postgres DB driver
 [master]$ odbcinst -i -d -f /etc/psql_odbc_driver.ini
 [master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
-# Use db template for orcm runtime config
+
+# Use DB template for orcm runtime config
 [master]$ cp /etc/sysconfig/orcmd.db /etc/sysconfig/orcmd
-# Initialize postgres
-[master]$ service postgresql start
+
+[master]$ service postgresql start # Initialize postgres
+
 # Update postgres config files using ORCM templates
 [master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
 [master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
-# Restart postgres
-[master]$ service postgresql restart
+
+[master]$ service postgresql restart # Restart postgres
+
 # Create ORCM db
 [master]$ sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
 [master]$ sudo -u postgres createdb -O orcmuser orcmdb
 [master]$ sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
+
 # Start ORCM on master host
 [master]$ systemctl start orcmd
 \end{lstlisting}
@@ -581,8 +592,10 @@ be added to the compute image as follows:
 % fsp_validation_comment Install ORCM client on compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ zypper --root=$CHROOT -n install -t pattern fsp-orcm-client
+
 # Set master host as data aggregator
 [master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/etc/orcm-site.xml
+
 # Enable orcmd client daemon on boot
 [master]$ chroot $CHROOT systemctl enable orcmd
 \end{lstlisting}
@@ -644,6 +657,7 @@ and creation of the bootstrap image based on the running kernel.
 # (Optional) Include Lustre drivers; needed if enabling Lustre client on computes
 [master]$ export WW_CONF=/etc/warewulf/bootstrap.conf
 [master]$ echo "drivers += updates/kernel/" >> $WW_CONF
+
 # Build bootstrap image
 [master]$ wwbootstrap `uname -r`
 \end{lstlisting}
