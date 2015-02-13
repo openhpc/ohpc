@@ -1,5 +1,7 @@
 \clearpage
 
+\definecolor{Gray}{gray}{0.5}
+
 \appendix
 \section*{Appendix - Package Manifest}
 \addcontentsline{toc}{section}{Appendix - Package Manifest}
@@ -34,21 +36,26 @@ includes delimiters identifying the development environment for which each
 package build is targeted.  Additional information on the \FSP{} package
 naming scheme is presented in \S\ref{sec:3rdparty}.
 
+\newcommand{\captionSpace}{-0.15cm}
+\newcommand{\tabSpaceBot}{1.0cm}
+\captionsetup{justification=raggedright,singlelinecheck=false}
 
-\definecolor{Gray}{gray}{0.5}
+\begin{table}[h]
+\caption{\bf Available FSP Convenience Groups} \vspace*{\captionSpace{}}
+\input data/manifest/patterns
+\end{table}
+\vspace*{0.5cm}
+
 
 \newcommand{\firstColWidth}{3.5cm}
 \newcommand{\secondColWidth}{1.5cm}
 
-% Administration Tools 
 
-\captionsetup{justification=raggedright,singlelinecheck=false}
 
 \vspace*{1.0cm}
 
-\newcommand{\captionSpace}{-0.15cm}
-\newcommand{\tabSpaceBot}{1.0cm}
 
+% Administration Tools 
 \begin{table}[h]
 \caption{\bf Administrative Tools} \vspace*{\captionSpace{}}
 \input data/manifest/admin
