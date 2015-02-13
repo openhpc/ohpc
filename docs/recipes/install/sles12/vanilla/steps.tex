@@ -87,6 +87,16 @@
 \end{lstlisting}
 % end_fsp_run
 
+In addition to the \FSP{} package repository, the {\em master} host also
+requires access to the standard distro repositories in order to resolve
+necessary dependencies. For \baseOS{}, the requirements are to have access to
+both the base and SDK repositories:
+
+\begin{itemize*}
+\item SLES12-12-0
+\item SLES12-12-sdk
+\end{itemize*}
+
 % begin_fsp_run
 % % fsp_validation_comment - format space for /opt/fsp (CI only command)
 % [master]$ mkfs -F -t ext4 /dev/sda1
@@ -100,8 +110,8 @@
 % begin_fsp_run
 % fsp_validation_comment Add baseline FSP and warewulf on master node
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ zypper -n install -t pattern fsp-base          # adding base FSP packages
-[master]$ zypper -n install -t pattern fsp-warewulf      # adding Warewulf support
+[master]$ zypper -n install -t pattern fsp-base      
+[master]$ zypper -n install -t pattern fsp-warewulf
 \end{lstlisting}
 % end_fsp_run
 
