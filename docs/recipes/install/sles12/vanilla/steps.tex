@@ -124,7 +124,7 @@ the corresponding compute image in a subsequent step.
 % begin_fsp_run
 % fsp_validation_comment Add resource manager
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ zypper -n install -t pattern fsp-slurm-server  # adding SLURM server support
+[master]$ zypper -n install -t pattern fsp-slurm-server
 \end{lstlisting}
 % end_fsp_run
 
@@ -461,6 +461,7 @@ the necessary \Lustre{} kernel modules. Consequently, the example below includes
 steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
 file to allow loading of the necessary modules.
 
+\vspace*{0.3cm}
 % begin_fsp_run
 % fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -473,6 +474,7 @@ file to allow loading of the necessary modules.
 \end{lstlisting}
 % end_fsp_run
 
+\newpage
 % begin_fsp_run
 % fsp_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -988,7 +990,7 @@ offerings within \FSP{}, issue the following:
 
 % begin_fsp_run
 % fsp_validation_comment Install 3rd party libraries
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 [master]$ zypper -n install -t pattern fsp-numpy    # adds 2 numerical python packages
 [master]$ zypper -n install -t pattern fsp-scipy    # adds 6 scientific python packages
 [master]$ zypper -n install -t pattern fsp-hdf5     # adds 2 HDF5 packages
@@ -1061,15 +1063,11 @@ eligble to schedule user jobs, issue the following:
 \section{Run a Test Job}
 
 With the resource manager enabled for production usage, users should now be
-able to run jobs. 
-%The Zeus system includes a ``test'' user account housed on the
-%NFS file system that was propagated to the {\em compute} nodes in this recipe
-%via the import of user credentials in \S\ref{sec:file_import}. 
-Recall that we added a ``test'' user on the {\em master} host in
-\S\ref{sec:add_rm} that can now be used to run an example test job.  \FSP{}
-includes a simple ``hello-world'' MPI application in the
+able to run jobs.  Recall that we added a ``test'' user on the {\em master}
+host in \S\ref{sec:add_rm} that can now be used to run an example test job.
+\FSP{} includes a simple ``hello-world'' MPI application in the
 \texttt{/opt/fsp/pub/examples} directory that can be used for this quick
-compilation and execution.  To use the test account to compile and execute the 
+compilation and execution.  To use the test account to compile and execute the
 application interactively through the resource manager, execute the following:
 
 \begin{lstlisting}[language=bash,keywords={}]
