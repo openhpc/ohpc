@@ -57,7 +57,7 @@ my @compute_bmcs   = ();
 if($ci_run == 1) {
 
     open(IN,"<$mapfile")  || die "Cannot open file -> $mapfile\n";
-    
+
     while(my $line=<IN>) {
 	if($line =~ /^$master_host\_ip=(\S+)$/) {
 	    $master_ip = $1;
@@ -88,14 +88,7 @@ if($ci_run == 1) {
 	    }
 	}
     }
-    
-# print "master_ip = $master_ip\n";
-# print "nfs_ip    = $nfs_ip\n";
-    
-# for (my $i=0;$i<$num_computes; $i++) {
-#     print "compute = $computes[$i] ip=$compute_ips[$i] mac=$compute_macs[$i]\n";
-# }
-    
+
     close(IN);
 }
 
@@ -121,7 +114,7 @@ while(<IN>) {
 	    print $fh "$1";
 	    my $next_line = <IN>;
 
-#           trim leading and trailing space
+	    #           trim leading and trailing space
 	    $next_line =~ s/^\s+|\s+$//g;
 
 	    print $fh " $next_line\n";
@@ -153,7 +146,7 @@ while(my $line=<IN>) {
 	$line =~ s/<master_ipoib>/$master_ipoib/g;
 	$line =~ s/<ipoib_netmask>/$ipoib_netmask/g;
 	$line =~ s/<mgs_fs_name>/$mgs_fs_name/g;
-#	$line =~ s/<master_hostname>/$master_host/g;
+	#	$line =~ s/<master_hostname>/$master_host/g;
 	$line =~ s/<master_hostname>/$ENV{'NODE_NAME'}/g;
 
 	# Support for optionally defined FSP repo
@@ -169,7 +162,15 @@ while(my $line=<IN>) {
 	    $line =~ s/<c$i\_bmc>/$compute_bmcs[$i-1]/g;
 	}
 
+	# addition for dynamic sizing - if any compute hosts remain - remove their <> brackets
+
+	$line =~ s/<c(\d+)\_ip>/c$1\_ip/g;
+	$line =~ s/<c(\d+)\_ipoib>/c$1\_ipoib/g;
+	$line =~ s/<c(\d+)\_mac>/c$1\_mac/g;
+	$line =~ s/<c(\d+)\_bmc>/c$1\_bmc/g;
+
 	print $line;
+
     } else {
 	print $line;
     }
