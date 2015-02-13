@@ -2,7 +2,7 @@
 export NODE_NAME=master4-sles12
 #export COMPUTE_HOSTS="node5, node6, node7, node8"
 #export COMPUTE_HOSTS="node9, node10, node11, node12"
-export COMPUTE_HOSTS="node17, node18, node19, node20"
+export COMPUTE_HOSTS="node5, node6, node7, node8, node17, node18, node19, node20"
 
 unset ENV
 export IPMI_PASSWORD=root
