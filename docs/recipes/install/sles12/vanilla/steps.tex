@@ -577,7 +577,7 @@ for the new credential should also be placed in the final
 
 [master]$ service postgresql restart # Restart postgres
 
-# Create ORCM db
+# Create ORCM DB
 [master]$ sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
 [master]$ sudo -u postgres createdb -O orcmuser orcmdb
 [master]$ sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
