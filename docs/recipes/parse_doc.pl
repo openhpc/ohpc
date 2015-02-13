@@ -109,6 +109,8 @@ my $prompt      = "\[master\]\$";
 
 print $fh "#!/bin/bash\n";
 
+print $fh "NUM_COMPUTES=$num_computes\n";
+
 while(<IN>) {
     if(/$begin_delim/../$end_delim/) {
 	if ($_ =~ /% fsp_validation_comment (.+)/) {
