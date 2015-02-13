@@ -288,9 +288,9 @@ customize a system image that can subsequently be used to provision one or more
 
 The \FSP{} build of \Warewulf{} includes specific enhancements enabling support for
 \baseOS{}. The following steps illustrate the process to build a minimal, default
-image for use with \Warewulf{}. In this example, the resulting image will be
-stored locally on the {\em master} host in the
-\texttt{/opt/fsp/admin/images/sles12} directory.
+image for use with \Warewulf{}.  We begin by creating a directory structure on the 
+{\em master} that will represent the root filesystem of the compute node. The 
+default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/sles12}.
 
 % begin_fsp_run
 % fsp_validation_comment Create compute image for Warewulf
