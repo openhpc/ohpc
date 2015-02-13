@@ -634,7 +634,6 @@ and creation of the bootstrap image based on the running kernel.
 # (Optional) Include Lustre drivers; needed if enabling Lustre client on computes
 [master]$ export WW_CONF=/etc/warewulf/bootstrap.conf
 [master]$ echo "drivers += updates/kernel/" >> $WW_CONF
-
 # Build bootstrap image
 [master]$ wwbootstrap `uname -r`
 \end{lstlisting}
