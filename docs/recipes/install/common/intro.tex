@@ -12,4 +12,11 @@ The documentation herein is intended to be reasonably generic, but uses the
 underlying motivation of a small, 4-node cluster install to define a step-by-step
 process. Several optional customizations are included and the intent is that
 these collective instructions can be modified as needed for local site
-customizations. 
+customizations. This guide is targeted at veteran Linux* system administrators. Knowledge of 
+software package management, system networking, and PXE booting is assumed. Shell 
+examples in the text are givin in BASH, though the equivilent commands in other
+shells should work fine. Command-line inputs in this guide are written as follows:
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[master]$ rm -rf /.
+\end{lstlisting}
