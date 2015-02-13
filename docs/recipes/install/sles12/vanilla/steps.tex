@@ -735,8 +735,8 @@ that were imported in \S\ref{sec:file_import}.
 % [master]$    wwsh -y node set c15 -D ib0 --ipaddr=<c15_ipoib> --netmask=<ipoib_netmask>
 % [master]$    wwsh -y node set c16 -D ib0 --ipaddr=<c16_ipoib> --netmask=<ipoib_netmask>
 
-% [master]$    wwsh -y provision set c[9-16] --vnfs=sles12 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
-% [master]$    wwsh -y provision set c[9-16] --fileadd=ifcfg-ib0.ww     
+% [master]$    wwsh -y provision set c* --vnfs=sles12 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
+% [master]$    wwsh -y provision set c* --fileadd=ifcfg-ib0.ww     
 % [master]$    service dhcpd restart
 % [master]$    wwsh pxe update
 % [master]$ fi
