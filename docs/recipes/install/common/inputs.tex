@@ -1,9 +1,8 @@
-%\noindent {\bf Inputs}: 
 \subsection{Inputs}
 As this recipe details installing a cluster
 starting from bare-metal, there is a requirement to define IP addresses and gather
-hardware MAC addresses in order to support controlled provisioning. These values
-are unique to the hardware being used, and this document uses \texttt{<variable>}
+hardware MAC addresses in order to support a controlled provisioning process. These values
+are necessarily unique to the hardware being used, and this document uses \texttt{<variable>}
 names in the command-line examples that follow to highlight where local site
 inputs are required. A summary of the required variables used in this recipe
 are as follows: \\
@@ -11,7 +10,7 @@ are as follows: \\
 \vspace*{0.2cm}
 \begin{tabular}{@{}>{\textbullet}cll@{}}
 & \texttt{<master\_name>}  & Hostname for master server \\
-& \texttt{<master\_ip>} & local private IP address on master server \\
+& \texttt{<master\_ip>} & Local private IP address on master server \\
 & \texttt{<internal\_netmask>} & Subnet netmask for internal cluster network \\
 & \texttt{<c1\_ip>},\texttt{<c2\_ip>},\texttt{<c3\_ip>},\texttt{<c4\_ip>}
 & Desired compute node addresses \\
