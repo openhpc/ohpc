@@ -1,0 +1,41 @@
+#!/bin/bash
+
+logfile=pattern-fsp
+rm -f ${logfile}.*
+
+echo ++++ search and log FSP patterns
+for pattern in `zypper search -t pattern fsp-* | grep -e fsp- | cut -d '|' -f 2`; do
+#    name=`echo $pattern| grep -e fsp- | cut -d '|' -f 2 | tr -d ' '`
+#    name=`echo $pattern| grep -e fsp- | cut -d '|' -f 2`
+    
+    echo "parsing $pattern"
+    info=`zypper info -t pattern $pattern | grep -A1 ^Description: | tail -1`
+    
+    echo $pattern $info >> ${logfile}.all
+
+
+done
+#echo
+
+## echo ++++ list of FSP package groups
+## groups=`grep -o 'fsp/[^ ]*' pkg-fsp.all | sort -u | cut -c5-`
+## echo $groups
+## echo
+## 
+## for grp in ${groups}; do
+##     echo ++++ list of fsp/${grp} packages installed
+##     grep "fsp/${grp}" ${logfile}.all 2>&1 | tee ${logfile}.${grp}
+##     echo 
+## done
+
+
+
+#   | fsp-autotools    | fsp-autotools    | pattern
+#   | fsp-base         | fsp-base         | pattern
+#   | fsp-boost        | fsp-boost        | pattern
+#   | fsp-fftw         | fsp-fftw         | pattern
+#   | fsp-gsl          | fsp-gsl          | pattern
+#   | fsp-hdf5         | fsp-hdf5         | pattern
+#   | fsp-imb          | fsp-imb          | pattern
+#   | fsp-metis        | fsp-metis        | pattern
+#   | fsp-netcdf       | fsp-netcdf       | pattern
