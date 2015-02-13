@@ -10,6 +10,8 @@
 % begin_fsp_run 
 % fsp_validation_comment - Remove WW file update crontab entry (CI only command)
 % [master]$ rm -f /etc/cron.d/wwupdatefiles
+% [master]$ TIME_T1=$(date +%s)
+% [master]$ echo " "; echo "BEGIN TIMING"
 % end_fsp_run
 
 % Include git variables
@@ -258,6 +260,14 @@ follows:
 %%% [master]$ wwsh file sync dynamic_hosts
 %%% \end{lstlisting}
 %%% % aend_fsp_run
+
+% begin_fsp_run 
+% fsp_validation_comment - time update
+% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
+% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
+% end_fsp_run
+
+
 
 \subsection{Define {\em compute} image for provisioning}
 
@@ -606,6 +616,12 @@ template file for \Warewulf{} that can be imported and used later to provision
 \end{lstlisting}
 % \end_fsp_run
 
+% begin_fsp_run 
+% fsp_validation_comment - time update
+% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
+% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
+% end_fsp_run
+
 \subsection{Assemble bootstrap image}
 
 \Warewulf{} requires a bootstrap image that is used to initialize the provisioning
@@ -679,6 +695,28 @@ that were imported in \S\ref{sec:file_import}.
 \end{lstlisting}
 % end_fsp_run
 
+% begin_fsp_run 
+% fsp_validation_comment - optionally add 4 more hosts
+% [master]$ if [[ $USE_DYNAMIC_HOSTNAME -eq 1 && $NUM_HOSTS -eq 8 ]];then
+% [master]$    wwsh -y node new c5 --ipaddr=<c5_ip> --hwaddr=<c5_mac> 
+% [master]$    wwsh -y node new c6 --ipaddr=<c6_ip> --hwaddr=<c6_mac> 
+% [master]$    wwsh -y node new c7 --ipaddr=<c7_ip> --hwaddr=<c7_mac> 
+% [master]$    wwsh -y node new c8 --ipaddr=<c8_ip> --hwaddr=<c8_mac> 
+% [master]$    wwsh -y node set c5 -D ib0 --ipaddr=<c5_ipoib> --netmask=<ipoib_netmask>
+% [master]$    wwsh -y node set c6 -D ib0 --ipaddr=<c6_ipoib> --netmask=<ipoib_netmask>
+% [master]$    wwsh -y node set c7 -D ib0 --ipaddr=<c7_ipoib> --netmask=<ipoib_netmask>
+% [master]$    wwsh -y node set c8 -D ib0 --ipaddr=<c8_ipoib> --netmask=<ipoib_netmask>
+% [master]$    wwsh -y provision set c[5-8] --vnfs=sles12 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
+% [master]$    wwsh -y provision set c[5-8] --fileadd=ifcfg-ib0.ww     
+% [master]$ fi
+% end_fsp_run
+
+% begin_fsp_run 
+% fsp_validation_comment - time update
+% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
+% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
+% end_fsp_run
+
 \subsection{Boot compute nodes}
 
 \input{../../common/reset_computes} 
@@ -696,6 +734,16 @@ order to work interactively.
 [master]$ ipmitool -E -I lanplus -H <c3_bmc> -U root chassis power reset   # power cycle c3
 [master]$ ipmitool -E -I lanplus -H <c4_bmc> -U root chassis power reset   # power cycle c4
 \end{lstlisting} 
+
+% begin_fsp_run 
+% fsp_validation_comment - optionally add 4 more hosts
+% [master]$ if [[ $USE_DYNAMIC_HOSTNAME -eq 1 && $NUM_HOSTS -eq 8 ]];then
+% [master]$    ipmitool -E -I lanplus -H <c5_bmc> -U root chassis power reset
+% [master]$    ipmitool -E -I lanplus -H <c6_bmc> -U root chassis power reset
+% [master]$    ipmitool -E -I lanplus -H <c7_bmc> -U root chassis power reset
+% [master]$    ipmitool -E -I lanplus -H <c8_bmc> -U root chassis power reset
+% [master]$ fi
+% end_fsp_run
 
 % end_fsp_run
 
@@ -886,6 +934,12 @@ offerings within \FSP{}, issue the following:
 \end{lstlisting}
 % end_fsp_run
 
+% begin_fsp_run 
+% fsp_validation_comment - time update
+% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
+% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
+% end_fsp_run
+
 \section{Resource Manager Startup}
 
 In section \S\ref{sec:basic_install}, the \SLURM{} resource manager was installed
@@ -971,6 +1025,12 @@ Hello, world (8 procs total)
 \end{lstlisting}
 
 \input{manifest}
+
+% begin_fsp_run 
+% fsp_validation_comment - time update
+% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
+% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
+% end_fsp_run
 
 \end{document}
 

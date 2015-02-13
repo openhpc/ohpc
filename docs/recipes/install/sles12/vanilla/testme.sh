@@ -7,6 +7,7 @@ export COMPUTE_HOSTS="node17, node18, node19, node20"
 unset ENV
 export IPMI_PASSWORD=root
 export REPO=http://fsp-obs.pdx.intel.com:82/ForestPeak:/15.05:/RC1/SLE_12_Intel/ForestPeak:15.05:RC1.repo
+export USE_DYNAMIC_HOSTNUM=1
 
 ../../../parse_doc.pl steps.tex ../../../zeus.mapping
 #../../../parse_doc.pl --repo=$REPO steps.tex ../../../zeus.mapping
