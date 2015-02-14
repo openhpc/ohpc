@@ -1,0 +1,18 @@
+fsp-autotools Collection of GNU autotools packages
+fsp-base Base package collection
+fsp-boost Boost library builds for various compiler/MPI combinations
+fsp-fftw FFTW library builds for various compiler/MPI combinations
+fsp-gsl GSL library builds for various compiler combinations
+fsp-hdf5 HDF5 library builds for various compiler combinations
+fsp-imb Intel(R) IMB MPI benchmarks for various MPI combinations
+fsp-metis METIS library builds for various compiler combinations
+fsp-netcdf NetCDF library builds for various compiler/MPI combinations
+fsp-numpy Numpy python module builds for various compiler combinations
+fsp-orcm-client ORCM client collection
+fsp-orcm-server ORCM server collection
+fsp-petsc PETSc library builds for various compiler/MPI combinations
+fsp-phdf5 HDF5 parallel library builds for various compiler/MPI combinations
+fsp-scipy Scientific Python library builds for various compiler/MPI combinations
+fsp-slurm-client Client packages for SLURM
+fsp-slurm-server Server packages for SLURM
+fsp-warewulf Base packages for Warewulf provisioning

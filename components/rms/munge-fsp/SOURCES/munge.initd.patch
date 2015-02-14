@@ -1,0 +1,16 @@
+--- src/etc/munge.init.in.orig	2014-06-12 16:25:07.838858594 -0700
++++ src/etc/munge.init.in	2014-06-12 17:05:53.430831795 -0700
+@@ -10,11 +10,11 @@
+ ###############################################################################
+ ### BEGIN INIT INFO
+ # Provides:           munge
+-# Required-Start:     $local_fs $remote_fs $network $time
++# Required-Start:     $local_fs $remote_fs $time
+ # Required-Stop:      $local_fs $remote_fs
+ # Should-Start:       $named $syslog
+ # Should-Stop:        $named $syslog
+-# Default-Start:
++# Default-Start:      2 3 5
+ # Default-Stop:
+ # Short-Description:  MUNGE Uid 'N' Gid Emporium authentication service
+ # Description:        MUNGE (MUNGE Uid 'N' Gid Emporium) is a highly scalable

@@ -1,0 +1,13 @@
+Index: dlg_specific.c
+===================================================================
+--- dlg_specific.c.orig
++++ dlg_specific.c
+@@ -912,7 +912,7 @@ writeDriverCommoninfo(const char *fileNa
+ 	char		tmp[128];
+ 	int		errc = 0;
+ 
+-	if (ODBCINST_INI == fileName && NULL == sectionName)
++	if ((strcmp( ODBCINST_INI, fileName) == 0) && NULL == sectionName)
+ 		sectionName = DBMS_NAME;
+  
+ 	sprintf(tmp, "%d", comval->commlog);

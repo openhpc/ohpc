@@ -1,0 +1,15 @@
+--- src/etc/munge.init.in	2013-08-27 11:35:31.000000000 -0700
++++ src/etc/munge.init.in	2014-05-12 05:23:31.928814684 -0700
+@@ -123,6 +123,12 @@
+ ##
+   log_init "Starting $SERVICE_NAME" "$DAEMON_NAME"
+ 
++  VARLOGDIR="$localstatedir/log/munge"
++  if [ ! -d "$VARLOGDIR" ]; then
++      mkdir -m 700 -p "$VARLOGDIR"
++      [ -n "$USER" ] && chown "$USER" "$VARLOGDIR"
++  fi
++
+   if [ -n "$VARRUNDIR" -a ! -d "$VARRUNDIR" ]; then
+     mkdir -m 755 -p "$VARRUNDIR"
+     [ -n "$USER" ] && chown "$USER" "$VARRUNDIR"

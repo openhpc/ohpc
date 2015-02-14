@@ -1,0 +1,34 @@
+%\noindent {\bf Requirements/Assumptions}: 
+\subsection{Requirements/Assumptions}
+This installation recipe assumes the availability of a single head node {\em
+master}, and four {\em compute} nodes. The {\em master} node serves as the
+overall system management server (SMS) and is provisioned with \baseOS{} and is
+subsequently configured to provision the remaining {\em compute} nodes with
+\Warewulf{} in a stateless configuration. For power management, we assume that the
+compute node BMCs are available via IPMI from the chosen master host. For file
+systems, we assume that the chosen master server will host an \NFS{} file
+system that is made available to the compute nodes. Installation information is
+also discussed to optionally include a \Lustre{} file system mount and in this
+case, the \Lustre{} file system is assumed to exist previously. 
+
+\begin{figure}[hbt]
+\center
+\includegraphics[width=0.8\linewidth]{fsp-arch-small.pdf}
+\vspace*{-0.2cm}
+\caption{Overview of physical cluster architecture.} \label{fig:physical_arch}
+\end{figure}
+\mbox{}
+
+An outline of the physical architecture discussed is shown in
+Figure~\ref{fig:physical_arch} and highlights the high-level networking
+configuration. The {\em master} host requires at least two ethernet interfaces
+with {\em eth0} connected to the local data center network and {\em eth1} used
+to provision and manage the cluster backend.  Two logical tcp interfaces are
+expected to each compute node: the first is the standard ethernet interface
+that will be used for provisioning and resource management. The second is used
+to connect to the hosts BMC and is used for power management and remote console
+access.  In addition to the tcp networking, there is a high-speed network
+(\InfiniBand{} in this recipe) that is also connected to each of the
+hosts. This high speed network is used for application message passing and
+optionally for \Lustre{} connectivity as well.
+

@@ -1,0 +1,2 @@
+gnu-compilers-fsp 4.8.3 http://gcc.gnu.org/ fsp/compiler-families The GNU C Compiler and Support Files
+intel-compilers-fsp 15.0.1.133 http://www.intel.com/software/products fsp/compiler-families Intel(R) Parallel Studio XE

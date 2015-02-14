@@ -1,0 +1,12 @@
+--- warewulf-vnfs-3.6/etc/bootstrap.conf	2014-05-21 11:13:14.000000000 -0700
++++ warewulf-vnfs-3.6.patch/etc/bootstrap.conf	2015-02-10 08:54:17.000000000 -0800
+@@ -30,3 +30,9 @@
+ modprobe += xhci-hcd, sl811-hcd, sd_mod
+ # modprobe += mlx4_core log_num_mtts=20 log_mtts_per_seg=6, ib_srp
+ 
++#FSP additions for SLES12
++drivers += af_packet, dns_resolver, auth_rpcgss, lockd, sunrpc
++drivers += dm_mod, dcdbas, dell_rbu, ipmi_msghandler, shpchp, ehci_pci
++drivers += wmi, processor, button, sg, igb, i2c_algo_bit, dca, ptp
++drivers += pps_core, ahci, libahci, libata, scsi_mod
++drivers += nfs_acl, nfsv3, nfsv4, coretemp

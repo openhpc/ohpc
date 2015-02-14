@@ -1,0 +1,74 @@
+commit 071a2eb9221ecad1ffc7e87e2cc8c4d8a25da519
+Author: Zane Bitter <zbitter@redhat.com>
+Date:   Tue Oct 18 18:56:24 2011 +0200
+
+    Parse /proc/cpuinfo correctly on non-x86 platforms
+    
+    S/390, PPC64 & Itanium have different formats for /proc/cpuinfo
+    
+    Signed-off-by: Zane Bitter <zbitter@redhat.com>
+
+diff --git a/src/os/linux/linux_sigar.c b/src/os/linux/linux_sigar.c
+index e65abd6..7d0389f 100644
+--- a/src/os/linux/linux_sigar.c
++++ b/src/os/linux/linux_sigar.c
+@@ -1515,6 +1515,7 @@ static int get_cpu_info(sigar_t *sigar, processor_info_t *proc,
+     int found = 0;
+ 
+     memset(proc, 0, sizeof(*proc));
++    info->cores_per_socket = 1;
+ 
+ #ifdef __powerpc64__
+     SIGAR_SSTRCPY(info->vendor, "IBM");
+@@ -1525,6 +1526,30 @@ static int get_cpu_info(sigar_t *sigar, processor_info_t *proc,
+           case 'p': /* processor	: 0 */
+             if (strnEQ(ptr, "processor", 9)) {
+                 found = 1;
++
++#ifdef __s390__
++    /*
++     * Handle S/390 processors, in the format:
++     * processor 0: version = FF,  identification = 32C5C2,  machine = 2097
++     * processor 1: version = FF,  identification = 32C5C2,  machine = 2097
++     */
++                if (sscanf(ptr, "processor %d", &proc->socket) == 1) {
++                    ptr = cpu_info_strval(ptr);
++                    ptr = strstr(ptr, "machine = ");
++                    if (ptr) {
++                        char *s = NULL;
++                        ptr = strtok_r(ptr, ",\n", &s);
++                        size_t len = sizeof(info->model) - 1;
++                        ptr = strchr(ptr, '=') + 2;
++                        strncpy(info->model, ptr, sizeof(info->model));
++                        info->model[sizeof(info->model) - 1] = '\0';
++                        return found;
++                    }
++                }
++#else
++                ptr = cpu_info_strval(ptr);
++                proc->socket = sigar_strtoul(ptr);
++#endif
+             }
+             else if (strnEQ(ptr, "physical id", 11)) {
+                 ptr = cpu_info_strval(ptr);
+@@ -1591,6 +1616,20 @@ static int get_cpu_info(sigar_t *sigar, processor_info_t *proc,
+                     /* "POWER5 (gr)" -> "POWER5" */
+                     *ptr = '\0';
+                 }
++
++                if (strncmp(info->model, "POWER", 5) == 0) {
++                    switch (info->model[5]) {
++                        case '5': // POWER5
++                        case '6': // POWER6
++                            proc->socket /= 2; // 2 threads per core
++                            break;
++                        case '7': // POWER7
++                            proc->socket /= 4; // 4 threads per core
++                            break;
++                        default:
++                            break;
++                    }
++                }
+             }
+ #endif
+             break;

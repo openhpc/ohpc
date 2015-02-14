@@ -1,0 +1,17 @@
+---
+ test/util/Makefile.am |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: test/util/Makefile.am
+===================================================================
+--- test/util/Makefile.am.orig	2014-04-22 16:51:00.000000000 +0200
++++ test/util/Makefile.am	2014-04-29 18:37:08.260494412 +0200
+@@ -33,7 +33,7 @@ AM_CPPFLAGS = -I$(top_srcdir)/test/suppo
+ 
+ 
+ check_PROGRAMS = \
+-	opal_bit_ops opal_path_nfs
++	opal_bit_ops
+ 
+ TESTS = \
+ 	$(check_PROGRAMS)

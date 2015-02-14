@@ -1,0 +1,15 @@
+--- etc/slurmd.service.in.orig	2014-11-13 10:57:33.238217657 -0800
++++ etc/slurmd.service.in	2014-11-13 10:57:45.800357900 -0800
+@@ -5,9 +5,10 @@
+ 
+ [Service]
+ Type=forking
+-EnvironmentFile=/etc/default/slurmd
++### EnvironmentFile=/etc/default/slurmd
+ ExecStart=@sbindir@/slurmd $SLURMD_OPTIONS
+-PIDFile=/var/run/slurm/slurmd.pid
++PIDFile=/var/run/slurmd.pid
++LimitMEMLOCK=infinity
+ 
+ [Install]
+ WantedBy=multi-user.target
