@@ -82,8 +82,7 @@
 % fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ export FSP_mirror=http://fsp-obs.pdx.intel.com:82
-[master]$ zypper addrepo \
-    $FSP_mirror/ForestPeak:/15.05/SLE_12_Intel/ForestPeak:15.05.repo
+[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.05/SLE_12_Intel/ForestPeak:15.05.repo
 [master]$ zypper -n --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_fsp_run
@@ -155,6 +154,7 @@ manager, we also add a dedicated ``test'' user as follows:
 \end{lstlisting}
 % end_fsp_run
 
+\newpage
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
 The following command adds OFED support using distro-provided drivers to the
@@ -329,7 +329,7 @@ be updated with a copy of the configuration as follows:
 \end{lstlisting}
 % end_fsp_run
 
-
+\newpage
 % begin_fsp_run
 % fsp_validation_comment Add FSP components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
@@ -406,7 +406,7 @@ combination to limit the export scope to the defined compute nodes.
 \end{lstlisting}
 % end_fsp_run
 
-
+\newpage
 \subsubsection{Additional Customizations ({\em optional})}
 
 This section highlights common additional customizations that
@@ -462,7 +462,7 @@ the necessary \Lustre{} kernel modules. Consequently, the example below includes
 steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
 file to allow loading of the necessary modules.
 
-\vspace*{0.3cm}
+\newpage
 % begin_fsp_run
 % fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -475,7 +475,6 @@ file to allow loading of the necessary modules.
 \end{lstlisting}
 % end_fsp_run
 
-\newpage
 % begin_fsp_run
 % fsp_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -570,13 +569,15 @@ for the new credential should also be placed in the final
 # Use DB template for orcm runtime config
 [master]$ cp /etc/sysconfig/orcmd.db /etc/sysconfig/orcmd
 
-[master]$ service postgresql start   # Initialize postgres
+# Initialize postgres
+[master]$ service postgresql start   
 
 # Update postgres config files using ORCM templates
 [master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
 [master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 
-[master]$ service postgresql restart # Restart postgres
+# Restart postgres
+[master]$ service postgresql restart 
 
 # Create ORCM DB
 [master]$ sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
@@ -621,6 +622,7 @@ import local file-based credentials, issue the following:
 \end{lstlisting}
 % \end_fsp_run
 
+\newpage
 Similarly, to import the cryptographic key that is required by the {\em munge}
 authentication library to be available on every host in the resource management
 pool, issue the following:
