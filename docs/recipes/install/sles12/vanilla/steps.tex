@@ -557,7 +557,7 @@ for the new credential should also be placed in the final
 
 % begin_fsp_run
 % fsp_validation_comment Configure ORCM aggregator and DB
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # Set master host as data aggregator
 [master]$ perl -pi -e "s/aggregator_hostname/localhost/" /etc/orcm-site.xml
 [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
@@ -569,7 +569,7 @@ for the new credential should also be placed in the final
 # Use DB template for orcm runtime config
 [master]$ cp /etc/sysconfig/orcmd.db /etc/sysconfig/orcmd
 
-[master]$ service postgresql start # Initialize postgres
+[master]$ service postgresql start   # Initialize postgres
 
 # Update postgres config files using ORCM templates
 [master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
