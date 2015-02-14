@@ -20,15 +20,15 @@ case, the \Lustre{} file system is assumed to exist previously.
 \mbox{}
 
 An outline of the physical architecture discussed is shown in
-Figure~\ref{fig:physical_arch} and it highlights the high-level networking
-configuration. The master hosts requires at least two ethernet interfaces with
-{\em eth0} connected to the local data center network and {\em eth1} used to
-provision and manage the cluster backend.  Two logical tcp interfaces are
+Figure~\ref{fig:physical_arch} and highlights the high-level networking
+configuration. The {\em master} host requires at least two ethernet interfaces
+with {\em eth0} connected to the local data center network and {\em eth1} used
+to provision and manage the cluster backend.  Two logical tcp interfaces are
 expected to each compute node: the first is the standard ethernet interface
-that will be used for provisioning and resource management. The second is
-used to connect to the hosts BMC and is used for power management and
-remote console access.  In addition to the tcp networking, there is a
-high-speed network (\InfiniBand{} in this recipe) that is also connected to
-each of the hosts. This high speed network is used for application message
-passing and optionally for \Lustre{} connectivity as well.
+that will be used for provisioning and resource management. The second is used
+to connect to the hosts BMC and is used for power management and remote console
+access.  In addition to the tcp networking, there is a high-speed network
+(\InfiniBand{} in this recipe) that is also connected to each of the
+hosts. This high speed network is used for application message passing and
+optionally for \Lustre{} connectivity as well.
 
