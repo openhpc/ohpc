@@ -88,6 +88,7 @@ cd src
 #sudo chown -R abuild $RPM_BUILD_ROOT
 
 make DESTDIR=$RPM_BUILD_ROOT install
+
 #chown -R abuild $RPM_BUILD_ROOT
 
 %if !0%{?suse_version}
