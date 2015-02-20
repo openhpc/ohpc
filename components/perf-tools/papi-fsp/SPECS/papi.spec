@@ -84,8 +84,11 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 rm -rf $RPM_BUILD_ROOT
 cd src
-sudo make DESTDIR=$RPM_BUILD_ROOT install
-sudo chown -R abuild $RPM_BUILD_ROOT
+#sudo make DESTDIR=$RPM_BUILD_ROOT install
+#sudo chown -R abuild $RPM_BUILD_ROOT
+
+make DESTDIR=$RPM_BUILD_ROOT install
+#chown -R abuild $RPM_BUILD_ROOT
 
 %if !0%{?suse_version}
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/*.so*
