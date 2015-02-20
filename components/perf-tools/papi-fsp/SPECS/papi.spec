@@ -91,9 +91,9 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 #chown -R abuild $RPM_BUILD_ROOT
 
-%if !0%{?suse_version}
-chrpath --delete $RPM_BUILD_ROOT%{_libdir}/*.so*
-%endif
+# if !0%{?suse_version}
+# chrpath --delete $RPM_BUILD_ROOT%{_libdir}/*.so*
+# endif
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
