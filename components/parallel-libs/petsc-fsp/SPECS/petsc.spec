@@ -53,7 +53,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        MIT
 Group:          fsp/parallel-libs
-Version:        3.5.2
+Version:        3.5.3
 Release:        0
 
 Source0:        %{pname}-%{version}.tar.gz
