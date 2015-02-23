@@ -21,7 +21,7 @@ Conflicts: warewulf < 3
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 %if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 %if ! 0%{?suse_version}
-BuildRequires: db4-utils
+BuildRequires: libdb4-utils
 %endif
 %endif
 
