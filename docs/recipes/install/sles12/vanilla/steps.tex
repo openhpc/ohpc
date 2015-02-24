@@ -33,7 +33,7 @@
 {\hspace*{4in} \includegraphics[width=1.8in]{intel_1spot_100.pdf}}
 
 \vspace*{2cm}
-\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont 2015 Forest Peak (v15.05)} \vspace*{0.1cm} \\
+\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont 2015 Forest Peak (v\FSPVersion{})} \vspace*{0.1cm} \\
 \noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
 \noindent\rule{6in}{0.4pt} \\
 
@@ -82,7 +82,7 @@
 % fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ export FSP_mirror=http://fsp-obs.pdx.intel.com:82
-[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.05/SLE_12_Intel/ForestPeak:15.05.repo
+[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
 [master]$ zypper -n --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_fsp_run
