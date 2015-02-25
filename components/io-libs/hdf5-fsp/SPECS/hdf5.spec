@@ -33,9 +33,9 @@ BuildRequires: intel_licenses
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.8.13
-Release:   0.1
-License:   BSD-3-Clause
+Version:   1.8.14
+Release:   1
+License:   BSD-style
 Group:     fsp/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 Source0:   %{pname}-%{version}.tar.gz
