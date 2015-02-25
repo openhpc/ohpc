@@ -98,7 +98,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 LDSHARED="icc -shared" \
 CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build
 %else
-CFLAGS="%{optflags} -fno-stack-protector-strong -fno-strict-aliasing" python setup.py build
+CFLAGS="-fno-strict-aliasing" python setup.py build
 %endif
 
 %install
