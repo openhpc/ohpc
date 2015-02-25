@@ -16,6 +16,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+# hack to install MKL for the moment
+BuildRequires: intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
