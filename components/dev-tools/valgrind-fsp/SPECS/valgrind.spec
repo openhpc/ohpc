@@ -7,7 +7,7 @@
 
 Summary:   Valgrind Memory Debugger
 Name:      %{pname}%{PROJ_DELIM}
-Version:   3.10.0
+Version:   3.10.1
 Release:   1
 License:   GPL
 URL:       http://www.valgrind.org/
@@ -29,7 +29,7 @@ platforms: x86/Linux, AMD64/Linux, PPC32/Linux, PPC64/Linux, x86/MacOSX,
 AMD64/MacOSX.
 
 %prep
-%setup -n valgrind-3.10.0
+%setup -q -n %{pname}-%{version}
 
 %build
 ./configure --prefix=%{install_path} || cat config.log
