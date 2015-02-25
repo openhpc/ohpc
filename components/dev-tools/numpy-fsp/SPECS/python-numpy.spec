@@ -78,10 +78,11 @@ basic linear algebra and random number generation.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 
-%if %{compiler_family} == intel
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
-%else
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
 module load mkl
 %endif
 
@@ -97,6 +98,12 @@ EOF
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 
 %if %{compiler_family} == intel
 LDSHARED="icc -shared" \
