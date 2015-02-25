@@ -82,10 +82,14 @@
 % fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ export FSP_mirror=http://fsp-obs.pdx.intel.com:82
-[master]$ yum -y install yum-utils
-[master]$ yum-config-manager --add-repo $FSP_mirror/ForestPeak:/15.16:/Factory/CentOS_7/ForestPeak:15.16:Factory.repo
+[master]$ wget -P /etc/yum.repos.d $FSP_mirror/ForestPeak:/15.16:/Factory/CentOS_7/ForestPeak:15.16:Factory.repo
 \end{lstlisting}
 % end_fsp_run
+
+% begin_fsp_run
+% % fsp_validation_comment - disable proxy for internal repo (CI only command)
+% [master]$ echo "proxy=_none" >> /etc/yum.repos.d/ForestPeak:15.16:Factory.repo
+% end_fsp_run  
 
 In addition to the \FSP{} package repository, the {\em master} host also
 requires access to the standard distro repositories in order to resolve
