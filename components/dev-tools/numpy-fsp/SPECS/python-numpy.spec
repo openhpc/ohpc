@@ -96,10 +96,8 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 %if %{compiler_family} == intel
 LDSHARED="icc -shared" \
-CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build
-%else
-CFLAGS="-fno-strict-aliasing" python setup.py build
 %endif
+CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build
 
 %install
 # FSP compiler/mpi designation
