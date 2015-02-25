@@ -5,7 +5,7 @@
 
 Summary:   A GNU tool for automatically creating Makefiles
 Name:      %{pname}%{PROJ_DELIM}
-Version:   1.14.1
+Version:   1.15
 Release:   1
 License:   GPLv2+ and GFDL
 Group:     fsp/dev-tools
