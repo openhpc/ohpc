@@ -79,6 +79,9 @@ basic linear algebra and random number generation.
 %if %{compiler_family} == intel
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
+%else
+module load mkl
+%endif
 
 cat > site.cfg << EOF
 [mkl]
@@ -87,7 +90,6 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
-%endif
 
 %build
 # FSP compiler/mpi designation
