@@ -41,7 +41,7 @@ Lunit is a unit testing framework for lua, written in lua.
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
-cp -p lua/lunit $RPM_BUILD_ROOT%{_bindir}
+cp -p lua/lunit.lua $RPM_BUILD_ROOT%{_bindir}
 
 mkdir -p $RPM_BUILD_ROOT%{luapkgdir}
 #cp -pr lua/lunit{,-console}.lua $RPM_BUILD_ROOT%{luapkgdir}
