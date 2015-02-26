@@ -22,6 +22,9 @@ Name:           %{pname}%{PROJ_DELIM}
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
+%if 0%{?rhel_version}
+BuildRequires:  libtool-ltdl
+%endif
 BuildRequires:  openssl-devel
 BuildRequires:  postgresql-devel
 BuildRequires:  unixODBC-devel
