@@ -1,9 +1,9 @@
 %define compiler_family intel
 %{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
-Summary:   Intel(R) VTune(TM) Amplifier XE 2015 Update 1
+Summary:   Intel(R) VTune(TM) Amplifier XE 2015 Update 2
 Name:      intel-vtune%{PROJ_DELIM}
-Version:   15.1.1.380310
+Version:   15.2.0.393444
 Source0:   intel-vtune-amplifier-fsp-%{version}.tar.gz
 Source1:   FSP_macros
 Release:   1
@@ -29,7 +29,7 @@ AutoReq:   no
 
 %description
 
-FSP collection of the Intel Vtune distribution.
+FSP collection of the Intel(R) VTune(TM) distribution.
 
 %prep
 
