@@ -3,7 +3,7 @@
 
 Summary:   Intel(R) MPI Library for Linux* OS
 Name:      intel-mpi%{PROJ_DELIM}
-Version:   5.0.2.044
+Version:   5.0.3.048
 Source0:   intel-mpi-l_mpi_p_%{version}.tar.gz
 Source1:   FSP_macros
 Release:   1
@@ -17,8 +17,6 @@ AutoReq:   no
 
 %include %{_sourcedir}/FSP_macros
 
-%define impi_release 5.0.2.044
-
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
@@ -30,7 +28,7 @@ AutoReq:   no
 
 %description
 
-FSP collection of the Intel MPI toolchain.
+FSP collection of the Intel(R) MPI toolchain.
 
 %prep
 
