@@ -32,6 +32,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+# hack to install MKL for the moment
+BuildRequires: intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -130,6 +132,10 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
 
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
 
 module load numpy
 CFLAGS="%{optflags} -fno-strict-aliasing" \
@@ -151,6 +157,11 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
 
 module load numpy
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
@@ -192,7 +203,17 @@ prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-package
 setenv          %{PNAME}_DIR        %{install_path}
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    module load numpy
+    if {  ![is-loaded fftw]  } {
+        module load fftw
+    }
+    if {  ![is-loaded numpy]  } {
+        module load numpy
+    }
+    if { [is-loaded gnu] } {
+        if { ![is-loaded mkl]  } {
+          module load mkl
+        }
+    }
 }
 
 if [ module-info mode remove ] {
