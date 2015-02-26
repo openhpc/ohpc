@@ -34,6 +34,7 @@ BuildRequires: lua-bit%{PROJ_DELIM}
 BuildRequires: lua-filesystem%{PROJ_DELIM}
 BuildRequires: lua-posix%{PROJ_DELIM}
 BuildRequires: rsync
+BuildRequires: tcl
 
 # ks: disabling AutoReq to deal with /usr/bin/lua not being owned by an rpm in SLES11
 %if 0%{?suse_verion} <= 1220
