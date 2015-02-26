@@ -22,6 +22,9 @@ Name:           %{pname}%{PROJ_DELIM}
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
+%if 0%{?rhel_version} || 0%{?centos_version}
+BuildRequires:  libtool-ltdl
+%endif
 BuildRequires:  openssl-devel
 BuildRequires:  postgresql-devel
 BuildRequires:  unixODBC-devel
@@ -63,7 +66,7 @@ Authors:
 %prep
 %setup -q -n %tarname-%version
 %patch1
-%if %?suse_version > 1230
+%if 0%{?suse_version} > 1230
 %patch2
 %endif
 
@@ -72,7 +75,7 @@ autoreconf -fi
 # they don't ship configure.in, so we have to patch configure :(
 sed -i '/LDFLAGS=/s/\$pg_libs//' configure
 export CFLAGS="%optflags -fno-strict-aliasing -I/usr/include/pgsql"
-%configure --with-unixodbc
+%configure --with-unixodbc || cat config.log
 
 %install
 make DESTDIR=%buildroot install
