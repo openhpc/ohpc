@@ -109,10 +109,14 @@ leading scientists and engineers.
 %setup -q -n %{pname}-%{version}
 find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
-%if %{compiler_family} == intel
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
 
 cat > site.cfg << EOF
 [mkl]
@@ -121,7 +125,6 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
-%endif
 
 
 %build
