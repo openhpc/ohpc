@@ -68,7 +68,6 @@ Source101:	FSP_macros
 Source102:	FSP_setup_compiler
 Source103:	FSP_setup_mpi
 
-#%global _default_patch_fuzz 2
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  zlib-devel >= 1.2.5
