@@ -22,7 +22,7 @@ Name:           %{pname}%{PROJ_DELIM}
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
-%if 0%{?rhel_version}
+%if 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  libtool-ltdl
 %endif
 BuildRequires:  openssl-devel
