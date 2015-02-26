@@ -68,10 +68,6 @@ Source101:	FSP_macros
 Source102:	FSP_setup_compiler
 Source103:	FSP_setup_mpi
 
-# 02/25/2015 TRon -- Commenting out Patch1 below to see if it's no longer needed with the newer 4.3.3 version
-# 02/06/2015 karl.w.schulz@intel.com - community patch for parallel i/o support with newer hdf5
-#Patch1:  435d8a03ed28bb5ad63aff12cbc6ab91531b6bc8.patch
-%global _default_patch_fuzz 2
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  zlib-devel >= 1.2.5
@@ -119,9 +115,6 @@ NetCDF data is:
 
 %prep
 %setup -q -n %{pname}-%{version}
-
-# 02/25/2015 TRon -- Commenting out Patch1 below to see if it's no longer needed with the newer 4.3.3 version
-#%patch1 -p1
 
 %build
 # FSP compiler/mpi designation
