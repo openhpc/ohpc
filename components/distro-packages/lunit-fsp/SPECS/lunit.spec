@@ -61,7 +61,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc LICENSE ANNOUNCE CHANGES DOCUMENTATION README* examples/example.lua
-%{_bindir}/lunit
+%{_bindir}/lunit.lua
 %dir %{_datadir}/lua
 %dir %{luapkgdir}
 %{luapkgdir}/*
