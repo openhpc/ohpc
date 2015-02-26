@@ -66,9 +66,7 @@ Authors:
 %prep
 %setup -q -n %tarname-%version
 %patch1
-%if 0%{?suse_version} > 1230
 %patch2
-%endif
 
 %build
 autoreconf -fi
