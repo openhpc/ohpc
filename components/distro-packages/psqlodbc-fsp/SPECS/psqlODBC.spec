@@ -35,7 +35,7 @@ License:        LGPL-2.1+
 Group:          fsp/distro-packages
 Version:        09.03.0400
 Release:        33.1
-Source0:        %tarname-%{version}.tar.bz2
+Source0:        %tarname-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 PreReq:         /usr/bin/odbcinst
 Obsoletes:      pg_odbc
