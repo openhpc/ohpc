@@ -38,7 +38,7 @@ to Lua programs.
 
 
 %build
-%configure --libexecdir=%{lualibdir} --libdir=%{lualibdir} --datadir=%{luapkgdir} --docdir=%{_docdir}
+%configure --libdir=%{lualibdir} --datadir=%{luapkgdir} --docdir=%{_docdir}
 make %{?_smp_mflags}
 
 
