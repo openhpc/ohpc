@@ -9,7 +9,7 @@
 %define luapkgdir %{_datadir}/lua/%{luaver}
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        0.8
+Version:        0.8.0
 Release:        %{?dist}
 Summary:        Unit testing framework for Lua
 
