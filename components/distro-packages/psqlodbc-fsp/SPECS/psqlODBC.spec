@@ -33,11 +33,9 @@ Url:            http://pgfoundry.org/projects/psqlodbc
 Summary:        ODBC Driver for PostgreSQL
 License:        LGPL-2.1+
 Group:          fsp/distro-packages
-Version:        08.03.0200
+Version:        09.03.0400
 Release:        33.1
 Source0:        %tarname-%{version}.tar.bz2
-Patch1:         psqlODBC-literal.patch
-Patch2:         psqlodbc-08.03.0200-build.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 PreReq:         /usr/bin/odbcinst
 Obsoletes:      pg_odbc
@@ -65,8 +63,6 @@ Authors:
 
 %prep
 %setup -q -n %tarname-%version
-%patch1
-%patch2
 
 %build
 autoreconf -fi
