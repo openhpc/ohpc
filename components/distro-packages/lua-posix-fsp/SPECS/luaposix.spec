@@ -40,7 +40,7 @@ to Lua programs.
 %setup -n luaposix-release-v%{version}
 
 # Intel FSP patches
-%patch1 -p1
+%patch1 -p0
 
 
 %build
