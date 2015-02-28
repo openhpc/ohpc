@@ -28,6 +28,10 @@ BuildRequires:  lua-bit%{PROJ_DELIM}
 Requires:       lua-bit%{PROJ_DELIM}
 %endif
 Requires:       lua >= %{luaver}
+BuildRequires:  automake
+
+# 02/27/15 karl.w.schulz@intel.com - patch to allow for non-hardcoded path install
+Patch1:  install_path.patch
 
 %description
 This is a POSIX library for Lua which provides access to many POSIX features
@@ -35,6 +39,9 @@ to Lua programs.
 
 %prep
 %setup -n luaposix-release-v%{version}
+
+# Intel FSP patches
+%patch1 -p0
 
 
 %build

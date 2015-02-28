@@ -59,6 +59,8 @@ Provides:       python-numeric = %{version}
 Obsoletes:      python-numeric < %{version}
 %endif
 
+%define debug_package %{nil}
+
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 

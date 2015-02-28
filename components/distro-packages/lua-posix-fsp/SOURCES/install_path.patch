@@ -1,0 +1,11 @@
+--- local.mk	2015-02-27 16:14:59.000000000 -0800
++++ local.mk	2015-02-27 16:30:27.000000000 -0800
+@@ -70,7 +70,7 @@
+ 	lib/posix/util.lua		\
+ 	$(NOTHING_ELSE)
+ 
+-luaexec_LTLIBRARIES += ext/posix/posix.la
++lib_LTLIBRARIES += ext/posix/posix.la
+ 
+ ext_posix_posix_la_SOURCES =		\
+ 	ext/posix/posix.c		\
