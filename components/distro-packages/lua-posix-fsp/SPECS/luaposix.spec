@@ -43,6 +43,8 @@ to Lua programs.
 # Intel FSP patches
 %patch1 -p0
 
+/opt/fsp/pub/autotools/bin/automake --version
+
 
 %build
 %configure --libdir=%{lualibdir} --datadir=%{luapkgdir} --docdir=%{_docdir}
