@@ -91,6 +91,8 @@ BuildRequires:  swig
 Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
+%define debug_package %{nil}
+
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}%{pname}/%version
 
