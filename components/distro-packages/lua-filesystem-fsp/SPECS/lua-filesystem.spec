@@ -27,7 +27,7 @@
 %define luapkgdir %{_datadir}/lua/%{luaver}
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        1.6.2
+Version:        1.6.3
 Release:        0
 License:        MIT
 Summary:        Lua library to Access Directories and Files
@@ -37,7 +37,7 @@ Source:         luafilesystem-%{version}.tar.gz
 # PATCH-FIX_UPSTREAM -- toganm@opensuse.org provide optflags for config
 Patch1:         luafilesystem-%{luaver}-optflags.patch
 # PATCH-FIX-UPSTREAM -- toganm@opensuse.org fixes Makefile for DESTDIR
-Patch2:         luafilesystem-1.6.2-destdir.patch
+Patch2:         luafilesystem-%{version}-destdir.patch
 BuildRequires:  lua-devel
 BuildRoot:      %{_tmppath}/%{pname}-%{version}-build
 
