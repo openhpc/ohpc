@@ -28,7 +28,8 @@ BuildRequires:  lua-bit%{PROJ_DELIM}
 Requires:       lua-bit%{PROJ_DELIM}
 %endif
 Requires:       lua >= %{luaver}
-BuildRequires:  automake-fsp >= 1.14
+BuildRequires:  autoconf-fsp
+BuildRequires:  automake-fsp
 
 # 02/27/15 karl.w.schulz@intel.com - patch to allow for non-hardcoded path install
 Patch1:  install_path.patch
