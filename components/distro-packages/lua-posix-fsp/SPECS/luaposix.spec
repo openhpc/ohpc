@@ -43,11 +43,9 @@ to Lua programs.
 # Intel FSP patches
 %patch1 -p0
 
-/opt/fsp/pub/autotools/bin/automake --version
-
-
 %build
-
+# include path to newer autotools
+export PATH=/opt/fsp/pub/autotools/bin:$PATH
 %configure --libdir=%{lualibdir} --datadir=%{luapkgdir} --docdir=%{_docdir}
 make %{?_smp_mflags}
 
