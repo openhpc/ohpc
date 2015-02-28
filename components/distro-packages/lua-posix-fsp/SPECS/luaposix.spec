@@ -82,3 +82,4 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{lualibdir}
 %{lualibdir}/*
 %{luapkgdir}/*.lua
+%{luapkgdir}/posix/*.lua
