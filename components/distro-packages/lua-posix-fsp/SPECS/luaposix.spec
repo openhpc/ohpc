@@ -48,14 +48,14 @@ to Lua programs.
 
 %build
 
-# include path to newer autotools
-export PATH=/opt/fsp/pub/autotools/bin:$PATH
-
 %configure --libdir=%{lualibdir} --datadir=%{luapkgdir} --docdir=%{_docdir}
 make %{?_smp_mflags}
 
 
 %install
+# include path to newer autotools
+export PATH=/opt/fsp/pub/autotools/bin:$PATH
+
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 
