@@ -46,6 +46,7 @@ to Lua programs.
 %build
 # include path to newer autotools
 export PATH=/opt/fsp/pub/autotools/bin:$PATH
+which automake-1.14
 %configure --libdir=%{lualibdir} --datadir=%{luapkgdir} --docdir=%{_docdir}
 make %{?_smp_mflags}
 
