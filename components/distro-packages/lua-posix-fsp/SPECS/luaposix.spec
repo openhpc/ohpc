@@ -74,7 +74,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_docdir}/examples
 %doc %{_docdir}/classes/posix.curses.*.html
 %doc %{_docdir}/examples/*.lua.html
-%doc %{_docdir}/modules/posix.*.html
+%doc %{_docdir}/modules/posix.html
 %doc %{_docdir}/index.html
 %doc %{_docdir}/ldoc.css
 %dir %{_datadir}/lua
