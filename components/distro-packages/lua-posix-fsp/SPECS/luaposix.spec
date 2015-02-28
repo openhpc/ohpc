@@ -73,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc README ChangeLog NEWS
 %dir %{_docdir}/examples
 %dir %{_docdir}/modules
-#%dir %{_docdir}/packages/modules
+%dir %{_docdir}/classes
 %doc %{_docdir}/classes/posix.curses.*.html
 %doc %{_docdir}/examples/*.lua.html
 %doc %{_docdir}/modules/posix.*.html
