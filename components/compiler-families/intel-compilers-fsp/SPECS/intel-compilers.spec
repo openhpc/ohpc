@@ -5,13 +5,13 @@
 
 Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
-Version:   15.0.1.133
+Version:   15.2.164
 Release:   1
-License:   Intel
+License:   Intel(R)
 URL:       http://www.intel.com/software/products
 Group:     fsp/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-2015.1.133.tar.gz
+Source0:   intel-compilers-fsp-20%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 #AutoReqProv: no
@@ -26,7 +26,7 @@ requires: gcc-c++
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
-%define composer_release composer_xe_2015.1.133
+%define composer_release composer_xe_20%{version}
 %define package_target %{FSP_COMPILERS}/intel/%{composer_release}
 
 %define package_version {%version}
