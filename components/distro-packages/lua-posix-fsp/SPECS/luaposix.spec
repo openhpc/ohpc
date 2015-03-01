@@ -31,7 +31,7 @@ Requires:       lua >= %{luaver}
 BuildRequires:  autoconf-fsp
 BuildRequires:  automake-fsp
 
-# 02/27/15 karl.w.schulz@intel.com - patch to allow for non-hardcoded path install
+# 02/27/15 karl.w.schulz@intel.com - introduce patch to allow for non-hardcoded path install
 Patch1:  install_path.patch
 
 %description
@@ -83,7 +83,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/lua
 %dir %{_libdir}/lua
 %dir %{luapkgdir}/posix
-# /usr/share/lua/5.2/posix
 %dir %{lualibdir}
 %{lualibdir}/*
 %{luapkgdir}/*.lua
