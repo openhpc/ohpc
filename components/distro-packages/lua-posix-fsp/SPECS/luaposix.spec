@@ -82,7 +82,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_docdir}/ldoc.css
 %dir %{_datadir}/lua
 %dir %{_libdir}/lua
-###%dir %{_docdir}/posix
+%dir %{luapkgdir}/posix
+# /usr/share/lua/5.2/posix
 %dir %{lualibdir}
 %{lualibdir}/*
 %{luapkgdir}/*.lua
