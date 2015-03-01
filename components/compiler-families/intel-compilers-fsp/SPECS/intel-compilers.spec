@@ -14,7 +14,7 @@ BuildArch: x86_64
 Source0:   intel-compilers-fsp-20%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-#AutoReqProv: no
+AutoReqProv: no
 AutoReq: no
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
