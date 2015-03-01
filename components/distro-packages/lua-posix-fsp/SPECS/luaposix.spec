@@ -81,8 +81,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{_docdir}/index.html
 %doc %{_docdir}/ldoc.css
 %dir %{_datadir}/lua
-#%dir %{_datadir}/posix
 %dir %{_libdir}/lua
+%dir %{_datadir}/posix
 %dir %{lualibdir}
 %{lualibdir}/*
 %{luapkgdir}/*.lua
