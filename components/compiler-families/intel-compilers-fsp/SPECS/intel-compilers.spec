@@ -88,6 +88,12 @@ setenv          GDB_CROSS           %{package_target}/debugger/gdb/intel64_mic/b
 setenv          INTEL_PYTHONHOME    %{package_target}/debugger/python/intel64
 setenv          MPM_LAUNCHER        %{package_target}/debugger/mpm/bin/start_mpm.sh
 
+# TBB related
+
+setenv          TBBROOT             %{package_target}/tbb
+prepend-path    LD_LIBRARY_PATH     %{package_target}/tbb/lib/intel64/gcc4.4
+prepend-path	MIC_LD_LIBRARY_PATH %{package_target}/tbb/lib/mic
+
 family "compiler"
 EOF
 
