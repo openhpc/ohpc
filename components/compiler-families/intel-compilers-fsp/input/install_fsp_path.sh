@@ -6,9 +6,10 @@ version=2015.2.164
 release=composer_xe_$version
 
 skip_arch=i486.rpm
-skip_keys='i486.rpm$|/intel-ipp|/intel-mkl-pgi'
-INSTALL=0
-TAR=0
+#skip_keys='i486.rpm$|/intel-ipp|/intel-mkl-pgi'
+skip_keys='i486.rpm$'
+INSTALL=1
+TAR=1
 UNINSTALL=0
 
 for rpm in `ls l_compxe_$version/rpm/*.rpm` ; do 
