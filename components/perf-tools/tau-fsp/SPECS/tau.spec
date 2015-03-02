@@ -46,7 +46,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary: Tuning and Analysis Utilities
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.2.4
+Version: 2.24
 Release: 1%{?dist}
 License: BSD
 Group: fsp/perf-tools
