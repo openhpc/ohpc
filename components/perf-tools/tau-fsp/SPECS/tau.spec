@@ -74,8 +74,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-./configure -prefix=%{install_path} -openmp -mpiinc=$MPI_INC -mpilib=$MPI_LIB
-make
+sudo ./configure -prefix=%{install_path} -openmp -mpiinc=$MPI_DIR/inc -mpilib=$MPI_DIR/lib
 
 %install
 
@@ -87,7 +86,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 rm -rf $RPM_BUILD_ROOT
 
-make DESTDIR=$RPM_BUILD_ROOT install
+make DESTDIR=$RPM_BUILD_ROOT clean install
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%%{compiler_family}-%{mpi_family}/{pname}
