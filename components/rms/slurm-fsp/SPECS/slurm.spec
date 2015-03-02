@@ -87,7 +87,7 @@
 %endif
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 14.11.1
+Version: 14.11.4
 Release: %{?dist}
 
 Summary: Slurm Workload Manager
