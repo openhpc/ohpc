@@ -74,7 +74,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-./configure --prefix=%{install_path}
+./configure -prefix=%{install_path} -openmp -mpiinc=$MPI_INC -mpilib=$MPI_LIB
 make
 
 %install
