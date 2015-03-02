@@ -48,7 +48,7 @@ Summary: Tuning and Analysis Utilities
 Name: %{pname}%{PROJ_DELIM}
 Version: 2.24
 Release: 1%{?dist}
-License: BSD
+License: Tuning and Analysis Utilities License
 Group: fsp/perf-tools
 URL: http://www.cs.uoregon.edu/research/tau/home.php
 Source0: %{pname}-%{version}.tar.gz
@@ -74,7 +74,8 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-sudo ./configure -prefix=%{install_path} -openmp -mpiinc=$MPI_DIR/inc -mpilib=$MPI_DIR/lib
+#sudo ./configure -prefix=%{install_path} -openmp -mpiinc=$MPI_DIR/inc -mpilib=$MPI_DIR/lib
+./configure
 
 %install
 
