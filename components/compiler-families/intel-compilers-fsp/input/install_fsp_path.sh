@@ -6,19 +6,27 @@ version=2015.2.164
 release=composer_xe_$version
 
 skip_arch=i486.rpm
+skip_keys='i486.rpm$|/intel-ipp|/intel-mkl-pgi'
 INSTALL=0
-TAR=1
+TAR=0
+UNINSTALL=0
 
 for rpm in `ls l_compxe_$version/rpm/*.rpm` ; do 
     echo "$rpm found"
-    echo $rpm | grep -q "$skip_arch$" 
+    echo $rpm | egrep -q "$skip_keys" 
     if [ $? -eq 0 ];then
-        echo "  --> skipping potential install of $rpm **"
+        echo "  --> skipping potential install of $rpm"
         continue
     fi
     if [ $INSTALL -eq 1 ];then
         echo "--> installing $rpm...."
         rpm -ivh --nodeps --relocate /opt/intel/$release=/opt/fsp/pub/compiler/intel/$release $rpm
+    fi
+
+    if [ $UNINSTALL -eq 1 ];then
+	localrpm=`basename --suffix=.rpm $rpm`
+        echo "--> uninstalling $localrpm ...."
+        rpm -e --nodeps $localrpm
     fi
 done
 
