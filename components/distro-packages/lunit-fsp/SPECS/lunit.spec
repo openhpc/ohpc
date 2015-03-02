@@ -36,7 +36,6 @@ Lunit is a unit testing framework for lua, written in lua.
 
 
 %build
-df -h
 
 %install
 rm -rf $RPM_BUILD_ROOT
