@@ -1,0 +1,7 @@
+<constraints>
+  <hardware>
+    <disk>
+      <size unit="G">60</size>
+    </disk>
+  </hardware>
+</constraints> 
