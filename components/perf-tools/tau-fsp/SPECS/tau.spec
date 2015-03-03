@@ -74,8 +74,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-#sudo ./configure -prefix=%{install_path} -openmp -mpiinc=$MPI_DIR/inc -mpilib=$MPI_DIR/lib
-./configure
+sudo ./configure -prefix=%{install_path} -openmp -mpiinc=$MPI_DIR/inc -mpilib=$MPI_DIR/lib
 
 %install
 
@@ -90,8 +89,8 @@ rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT clean install
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%%{compiler_family}-%{mpi_family}/{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%%{compiler_family}-%{mpi_family}/{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
