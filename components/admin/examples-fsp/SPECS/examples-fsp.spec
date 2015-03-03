@@ -50,6 +50,8 @@ FSP development environment.
 
 %build
 
+df -h
+
 %install
 
 install -D -m 0644 %SOURCE1 %{buildroot}%{FSP_HOME}/pub/examples/mpi/hello.c
