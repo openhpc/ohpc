@@ -83,10 +83,12 @@ prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/intel
 
 prepend-path    MANPATH             %{package_target}/debugger/gdb/intel64/share/man/:%{package_target}/debugger/gdb/intel64_mic/share/man
 prepend-path    PATH                %{package_target}/debugger/gdb/intel64_mic/bin
+prepend-path 	LD_LIBRARY_PATH     %{package_target}/debugger/ipt/intel64/lib
 setenv          GDBSERVER_MIC       %{package_target}/debugger/gdb/target/mic/bin/gdbserver
 setenv          GDB_CROSS           %{package_target}/debugger/gdb/intel64_mic/bin/gdb-mic
 setenv          INTEL_PYTHONHOME    %{package_target}/debugger/python/intel64
 setenv          MPM_LAUNCHER        %{package_target}/debugger/mpm/bin/start_mpm.sh
+
 
 # TBB related
 
