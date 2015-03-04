@@ -78,9 +78,9 @@ export FSP_MPI_FAMILY=%{mpi_family}
 export BUILDROOT=%{buildroot}
 ./configure \
         -arch=%_arch \
-        -c++=mpic++ \
+        -c++=mpicxx \
         -cc=mpicc \
-        -fortran=gfortran \
+        -fortran=mpif90 \
         -prefix=%{buildroot} \
         -exec-prefix= \
         -mpi \
@@ -88,7 +88,7 @@ export BUILDROOT=%{buildroot}
         -mpilib=$MPI_DIR/lib -mpilibrary="-lmpi" \
         -slog2 \
         -PROFILE -PROFILECALLPATH -PROFILEPARAM \
-        -DEPTHLIMIT -PROFILEMEMORY \
+        -PROFILEMEMORY \
         -CPUTIME -MULTIPLECOUNTERS \
         -MPITRACE \
         -openmp
