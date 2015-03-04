@@ -81,7 +81,7 @@ export BUILDROOT=%{buildroot}
         -c++=mpicxx \
         -cc=mpicc \
         -fortran=mpif90 \
-        --prefix=%{buildroot}$install_path
+        -prefix=%{buildroot}$install_path
         -exec-prefix= \
         -mpi \
         -mpiinc=$MPI_DIR/include \
