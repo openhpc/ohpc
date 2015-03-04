@@ -81,7 +81,7 @@ export BUILDROOT=%{buildroot}
         -c++=mpicxx \
         -cc=mpicc \
         -fortran=mpif90 \
-        -prefix=%{buildroot}$install_path \
+        -prefix=%{buildroot}%{install_path} \
         -exec-prefix= \
         -mpi \
         -mpiinc=$MPI_DIR/include \
@@ -97,7 +97,7 @@ export BUILDROOT=%{buildroot}
 #rm -rf $RPM_BUILD_ROOT
 
 #sudo make DESTDIR=$RPM_BUILD_ROOT clean install
-sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%{buildroot}$install_path|' \
+sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%{buildroot}%{install_path}|' \
     include/Makefile utils/Makefile
 TOPDIR=$PWD
 make install TOPDIR=$TOPDIR
