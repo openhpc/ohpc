@@ -100,7 +100,7 @@ export BUILDROOT=%{buildroot}
 sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%{buildroot}%prefix|' \
     include/Makefile utils/Makefile
 TOPDIR=$PWD
-%make install TOPDIR=$TOPDIR
+make install TOPDIR=$TOPDIR
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
