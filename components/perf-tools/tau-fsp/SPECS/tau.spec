@@ -81,7 +81,7 @@ export BUILDROOT=%{buildroot}
         -c++=mpicxx \
         -cc=mpicc \
         -fortran=mpif90 \
-        -prefix=%{buildroot} \
+        -prefix=%prefix \
         -exec-prefix= \
         -mpi \
         -mpiinc=$MPI_DIR/include \
@@ -97,7 +97,10 @@ export BUILDROOT=%{buildroot}
 #rm -rf $RPM_BUILD_ROOT
 
 #sudo make DESTDIR=$RPM_BUILD_ROOT clean install
-make install
+sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%{buildroot}%prefix|' \
+    include/Makefile utils/Makefile
+TOPDIR=$PWD
+%make install TOPDIR=$TOPDIR
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
