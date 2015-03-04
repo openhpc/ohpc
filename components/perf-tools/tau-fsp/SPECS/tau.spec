@@ -90,7 +90,6 @@ export BUILDROOT=%{buildroot}
         -PROFILE -PROFILECALLPATH -PROFILEPARAM \
         -PROFILEMEMORY \
         -CPUTIME -MULTIPLECOUNTERS \
-        -MPITRACE \
         -openmp
 
 
