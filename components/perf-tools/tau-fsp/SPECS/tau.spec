@@ -67,7 +67,7 @@ analysis of parallel programs written in Fortran, C, C++, UPC, Java, Python.
 %prep
 %setup -q -n %{pname}-%{version}
 %ifarch x86_64
-sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile
+sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 sed -i 's|lib/libpdb\.a|lib64/libpdb.a|g' utils/Makefile
 %endif
 
