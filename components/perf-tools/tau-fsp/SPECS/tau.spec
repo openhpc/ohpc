@@ -91,7 +91,7 @@ export BUILDROOT=%{buildroot}
         -PROFILE -PROFILECALLPATH -PROFILEPARAM \
         -PROFILEMEMORY \
         -CPUTIME -MULTIPLECOUNTERS \
-        -useropt="%optflags %optflags_shared -I$PWD/include -fno-strict-aliasing" \
+        -useropt="%optflags -I$PWD/include -fno-strict-aliasing" \
         -MPITRACE \
         -openmp
 
