@@ -66,16 +66,6 @@ analysis of parallel programs written in Fortran, C, C++, UPC, Java, Python.
 %prep
 %setup -q -n %{pname}-%{version}
 
-%build
-
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
-
-./configure -prefix=%{buildroot}%{install_path} -openmp -mpiinc=$MPI_DIR/include -mpilib=$MPI_DIR/lib
-
 %install
 
 # FSP compiler/mpi designation
@@ -84,10 +74,30 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-rm -rf $RPM_BUILD_ROOT
+#./configure -prefix=%{buildroot}%{install_path} -openmp -mpiinc=$MPI_DIR/include -mpilib=$MPI_DIR/lib
+export BUILDROOT=%{buildroot}
+./configure \
+        -arch=%_arch \
+        -c++=mpic++ \
+        -cc=mpicc \
+        -fortran=gfortran \
+        -prefix=%{buildroot} \
+        -exec-prefix= \
+        -mpi \
+        -mpiinc=$MPI_DIR/include \
+        -mpilib=$MPI_DIR/lib -mpilibrary="-lmpi" \
+        -slog2 \
+        -PROFILE -PROFILECALLPATH -PROFILEPARAM \
+        -DEPTHLIMIT -PROFILEMEMORY \
+        -CPUTIME -MULTIPLECOUNTERS \
+        -MPITRACE \
+        -openmp
+
+
+#rm -rf $RPM_BUILD_ROOT
 
 #sudo make DESTDIR=$RPM_BUILD_ROOT clean install
-make clean install
+make install
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
