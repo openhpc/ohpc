@@ -54,6 +54,7 @@ URL: http://www.cs.uoregon.edu/research/tau/home.php
 Source0: %{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
+BuildRequires: binutils
 %define debug_package %{nil}
 
 # Default library install path
@@ -90,6 +91,7 @@ export BUILDROOT=%{buildroot}
         -PROFILE -PROFILECALLPATH -PROFILEPARAM \
         -PROFILEMEMORY \
         -CPUTIME -MULTIPLECOUNTERS \
+        -useropt="%optflags %optflags_shared -I$PWD/include -fno-strict-aliasing" \
         -MPITRACE \
         -openmp
 
