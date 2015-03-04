@@ -66,6 +66,10 @@ analysis of parallel programs written in Fortran, C, C++, UPC, Java, Python.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%ifarch x86_64
+sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile
+sed -i 's|lib/libpdb\.a|lib64/libpdb.a|g' utils/Makefile
+%endif
 
 %install
 
@@ -75,7 +79,6 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-#./configure -prefix=%{buildroot}%{install_path} -openmp -mpiinc=$MPI_DIR/include -mpilib=$MPI_DIR/lib
 export BUILDROOT=%{buildroot}
 ./configure \
         -arch=%_arch \
@@ -98,6 +101,10 @@ export BUILDROOT=%{buildroot}
 #rm -rf $RPM_BUILD_ROOT
 
 #sudo make DESTDIR=$RPM_BUILD_ROOT clean install
+export BUILDROOTLIB=%buildroot%_libexecdir
+%ifarch x86_64
+export LIBSUFF=64
+%endif
 sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%{buildroot}%{install_path}|' \
     include/Makefile utils/Makefile
 TOPDIR=$PWD
