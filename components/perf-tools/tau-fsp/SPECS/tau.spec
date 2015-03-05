@@ -160,8 +160,16 @@ rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|%{buildroot}||g' $(egrep -R '%{buildroot}' ./|awk -F : '{print $1}')
 popd
+pushd %{buildroot}%{install_path}/include
+sed -i 's|%{buildroot}||g' $(egrep -R '%{buildroot}' ./|awk -F : '{print $1}')
+popd
 rm -f %{buildroot}%{install_path}/include/Makefile*
+rm -f %{buildroot}%{install_path}/lib/Makefile*
 rm -fR %{buildroot}%{install_path}/include/makefiles
+rm -fR %{buildroot}%{install_path}/.last_config
+rm -fR %{buildroot}%{install_path}/.all_configs
+rm -fR %{buildroot}%{install_path}/.active_stub*
+rm -fR %{buildroot}%{install_path}/lib/libtau-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
 
 %clean
 rm -rf $RPM_BUILD_ROOT
