@@ -157,11 +157,11 @@ EOF
 rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
 
 # Remove buildroot references
-pushd %{buildroot}%{_bindir}
+pushd %{buildroot}%{install_path}/bin
 sed -i 's|%{buildroot}||g' $(egrep -R '%{buildroot}' ./|awk -F : '{print $1}')
 popd
-rm -f %{buildroot}%{_includedir}/include/Makefile*
-rm -fR %{buildroot}%{_includedir}/include/makefiles
+rm -f %{buildroot}%{install_path}/include/Makefile*
+rm -fR %{buildroot}%{install_path}/include/makefiles
 
 %clean
 rm -rf $RPM_BUILD_ROOT
