@@ -39,8 +39,6 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 #-fsp-header-comp-end------------------------------------------------
 
-%define __spec_install /usr/lib/rpm/check-buildroot /bin/true
-
 # Base package name
 %define pname tau
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -170,6 +168,13 @@ rm -fR %{buildroot}%{install_path}/.last_config
 rm -fR %{buildroot}%{install_path}/.all_configs
 rm -fR %{buildroot}%{install_path}/.active_stub*
 rm -fR %{buildroot}%{install_path}/lib/libtau-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
+
+# Remove extra buildroot references for centos 7
+rm -fR %{buildroot}%{install_path}/lib/static-memory-callpath-param-mpi-openmp-profile-trace-mpitrace/libTauMemoryWrap.a
+rm -fR %{buildroot}%{install_path}/lib/libTauMpi-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
+rm -fR %{buildroot}%{install_path}/lib/libTAU_traceinput-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
+rm -fR %{buildroot}%{install_path}/bin/tau_timecorrect
+rm -fR %{buildroot}%{install_path}/bin/trace2profile
 
 %clean
 rm -rf $RPM_BUILD_ROOT
