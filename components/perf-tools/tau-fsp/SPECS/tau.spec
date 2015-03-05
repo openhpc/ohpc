@@ -165,6 +165,7 @@ sed -i 's|%{buildroot}||g' $(egrep -R '%{buildroot}' ./|awk -F : '{print $1}')
 popd
 rm -f %{buildroot}%{install_path}/include/Makefile*
 rm -f %{buildroot}%{install_path}/lib/Makefile*
+rm -f %{buildroot}%{install_path}/examples/gpu/cuda/unifmem/Makefile*
 rm -fR %{buildroot}%{install_path}/include/makefiles
 rm -fR %{buildroot}%{install_path}/.last_config
 rm -fR %{buildroot}%{install_path}/.all_configs
