@@ -152,13 +152,9 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-# Remove the static libraries. Static libraries are undesirable:
-# https://fedoraproject.org/wiki/Packaging/Guidelines#Packaging_Static_Libraries
-rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
-
 # Remove buildroot references
 pushd %{buildroot}%{install_path}/bin
-sed -i 's|%{buildroot}||g' $(egrep -R '%{buildroot}' ./|awk -F : '{print $1}')
+sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
 popd
 pushd %{buildroot}%{install_path}/include
 sed -i 's|%{buildroot}||g' $(egrep -R '%{buildroot}' ./|awk -F : '{print $1}')
