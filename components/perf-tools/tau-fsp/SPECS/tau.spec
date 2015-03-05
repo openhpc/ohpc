@@ -55,6 +55,7 @@ Source0: %{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildRequires: binutils
+#!BuildIgnore: post-build-checks
 %define debug_package %{nil}
 
 # Default library install path
