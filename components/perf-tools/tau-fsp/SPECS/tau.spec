@@ -39,6 +39,8 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 #-fsp-header-comp-end------------------------------------------------
 
+%define __spec_install_post /usr/lib/rpm/check-buildroot /bin/true
+
 # Base package name
 %define pname tau
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
