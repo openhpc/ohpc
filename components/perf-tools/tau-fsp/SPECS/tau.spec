@@ -156,9 +156,12 @@ EOF
 # https://fedoraproject.org/wiki/Packaging/Guidelines#Packaging_Static_Libraries
 rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
+# Remove buildroot references
+pushd %{buildroot}%{_bindir}
+sed -i 's|%{buildroot}||g' $(egrep -R '%{buildroot}' ./|awk -F : '{print $1}')
+popd
+rm -f %{buildroot}%{_includedir}/include/Makefile*
+rm -fR %{buildroot}%{_includedir}/include/makefiles
 
 %clean
 rm -rf $RPM_BUILD_ROOT
