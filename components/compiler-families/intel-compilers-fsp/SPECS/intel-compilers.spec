@@ -28,7 +28,7 @@ requires: gcc-c++
 %define composer_release composer_xe_20%{version}
 %define package_target %{FSP_COMPILERS}/intel/%{composer_release}
 
-%define package_version {%version}
+%define package_version 15.0.2.164
 
 %description
 
