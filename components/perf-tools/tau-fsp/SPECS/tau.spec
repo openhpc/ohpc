@@ -54,6 +54,8 @@ URL: http://www.cs.uoregon.edu/research/tau/home.php
 Source0: %{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
+BuildRequires: binutils
+#!BuildIgnore: post-build-checks
 %define debug_package %{nil}
 
 # Default library install path
@@ -65,17 +67,10 @@ analysis of parallel programs written in Fortran, C, C++, UPC, Java, Python.
 
 %prep
 %setup -q -n %{pname}-%{version}
-
-%build
-
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
-
-#sudo ./configure -prefix=%{install_path} -openmp -mpiinc=$MPI_DIR/inc -mpilib=$MPI_DIR/lib
-./configure
+%ifarch x86_64
+sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
+sed -i 's|lib/libpdb\.a|lib64/libpdb.a|g' utils/Makefile
+%endif
 
 %install
 
@@ -85,13 +80,41 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-rm -rf $RPM_BUILD_ROOT
+export BUILDROOT=%{buildroot}
+./configure \
+        -arch=%_arch \
+        -c++=mpicxx \
+        -cc=mpicc \
+        -fortran=mpif90 \
+        -prefix=%{buildroot}%{install_path} \
+        -exec-prefix= \
+        -mpi \
+        -mpiinc=$MPI_DIR/include \
+        -mpilib=$MPI_DIR/lib -mpilibrary="-lmpi" \
+        -slog2 \
+        -PROFILE -PROFILECALLPATH -PROFILEPARAM \
+        -PROFILEMEMORY \
+        -CPUTIME -MULTIPLECOUNTERS \
+        -useropt="%optflags -I$PWD/include -fno-strict-aliasing" \
+        -MPITRACE -DISABLESHARED \
+        -openmp
 
-make DESTDIR=$RPM_BUILD_ROOT clean install
+
+#rm -rf $RPM_BUILD_ROOT
+
+#sudo make DESTDIR=$RPM_BUILD_ROOT clean install
+export BUILDROOTLIB=%buildroot%_libexecdir
+%ifarch x86_64
+export LIBSUFF=64
+%endif
+sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%{buildroot}%{install_path}|' \
+    include/Makefile utils/Makefile
+TOPDIR=$PWD
+make install TOPDIR=$TOPDIR
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%%{compiler_family}-%{mpi_family}/{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%%{compiler_family}-%{mpi_family}/{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -130,13 +153,28 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-# Remove the static libraries. Static libraries are undesirable:
-# https://fedoraproject.org/wiki/Packaging/Guidelines#Packaging_Static_Libraries
-rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
+# Remove buildroot references
+pushd %{buildroot}%{install_path}/bin
+sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
+popd
+pushd %{buildroot}%{install_path}/include
+sed -i 's|%{buildroot}||g' $(egrep -R '%{buildroot}' ./|awk -F : '{print $1}')
+popd
+rm -f %{buildroot}%{install_path}/include/Makefile*
+rm -f %{buildroot}%{install_path}/lib/Makefile*
+rm -f %{buildroot}%{install_path}/examples/gpu/cuda/unifmem/Makefile*
+rm -fR %{buildroot}%{install_path}/include/makefiles
+rm -fR %{buildroot}%{install_path}/.last_config
+rm -fR %{buildroot}%{install_path}/.all_configs
+rm -fR %{buildroot}%{install_path}/.active_stub*
+rm -fR %{buildroot}%{install_path}/lib/libtau-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
+# Remove extra buildroot references for centos 7
+rm -fR %{buildroot}%{install_path}/lib/static-memory-callpath-param-mpi-openmp-profile-trace-mpitrace/libTauMemoryWrap.a
+rm -fR %{buildroot}%{install_path}/lib/libTauMpi-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
+rm -fR %{buildroot}%{install_path}/lib/libTAU_traceinput-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
+rm -fR %{buildroot}%{install_path}/bin/tau_timecorrect
+rm -fR %{buildroot}%{install_path}/bin/trace2profile
 
 %clean
 rm -rf $RPM_BUILD_ROOT
