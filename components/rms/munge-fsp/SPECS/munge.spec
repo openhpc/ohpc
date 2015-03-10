@@ -29,6 +29,8 @@ BuildRequires:	zlib-devel
 BuildRoot:	%{_tmppath}/%{pname}-%{version}
 BuildConflicts: post-build-checks
 
+Conflicts: munge 
+
 Source0:	%{pname}-%{version}.tar.bz2
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
 Patch1:     %{pname}.logdir.patch
@@ -56,11 +58,13 @@ BuildRequires:	pkg-config
 %else
 BuildRequires:	pkgconfig
 %endif
+Conflicts: %{pname}-devel
 
 %package -n %{pname}-libs%{PROJ_DELIM}
 Summary:	Libraries for applications using MUNGE
 Group:		System Environment/Libraries
 Requires:	%{pname}%{PROJ_DELIM} = %{version}-%{release}
+Conflicts: %{pname}-libs
 
 %description
 MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating
