@@ -11,7 +11,7 @@ BuildRequires:  texlive-colortbl
 BuildRequires:  texlive-fancyhdr
 BuildRequires:  texlive-mdwtools
 BuildRequires:  texlive-multirow
-BuildRequires:  texlive-ncctools
+BuildRequires:  texlive-draftwatermark
 BuildRequires:  latexmk
 Requires:       make
 
