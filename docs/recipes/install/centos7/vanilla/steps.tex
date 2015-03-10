@@ -91,7 +91,6 @@
 % [master]$ echo "proxy=_none_" >>
 % /etc/yum.repos.d/ForestPeak:15.16:Factory.repo
 % 
-% Workaround to get patterns visible for yum.
 % [master]$ yum repolist
 % [master]$ perl -i -pe 's/type="group"/type="group_gz"/' /var/cache/yum/x86_64/7/ForestPeak_15.16_Factory/repomd.xml
 % end_fsp_run  
