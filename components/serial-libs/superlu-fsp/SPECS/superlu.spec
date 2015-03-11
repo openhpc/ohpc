@@ -163,9 +163,9 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%post -n libsuperlu4 -p /sbin/ldconfig
+%post /sbin/ldconfig
 
-%postun -n libsuperlu4 -p /sbin/ldconfig
+%postun /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
