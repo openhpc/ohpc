@@ -66,8 +66,7 @@ Virtual Node FileSystem objects.
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
 # 03/11/15 karl.w.schulz@intel.com - add in centos7 template (culled from ww trunk)
-install -D -m 0644 %SOURCE1 %{buildroot}/usr/libexec/warewulf/wwmkchroot/
-
+install -D -m 0644 %SOURCE1 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/centos-7.tmpl
 
 %clean
 rm -rf $RPM_BUILD_ROOT
