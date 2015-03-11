@@ -163,9 +163,11 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%post /sbin/ldconfig
+%post 
+/sbin/ldconfig
 
-%postun /sbin/ldconfig
+%postun 
+/sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
