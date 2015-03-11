@@ -51,7 +51,8 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 #Added FSP build convention
 %define debug_package %{nil}
 
-%define bversion 1_57_0
+#%define bversion 1_57_0
+%define bversion %(echo %{version} | tr . _)
 
 # Base package name
 %define pname boost
@@ -66,6 +67,7 @@ Group:		fsp/parallel-libs
 Url:            http://www.boost.org
 Source0:	%{pname}_%{bversion}.tar.gz 
 Source1:        boost-rpmlintrc
+Source2:        intel-mkl-and-boost-example.zip
 Source100:      baselibs.conf
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
@@ -105,6 +107,7 @@ see the boost-doc package.
 
 %prep
 %setup -q -n %{pname}_%{bversion} 
+unzip -d boost intel-mkl-and-boost-example.zip
 
 %build
 # FSP compiler/mpi designation
@@ -219,6 +222,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
-
+cp $RPM_BUILD_ROOT/boost/MKL_and_boost_example/headers/.hpp %{install_path}/include
 
 %changelog
