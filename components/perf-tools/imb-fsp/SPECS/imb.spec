@@ -49,12 +49,12 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   4.0.1
+Version:   4.0.2
 Release:   1
 License:   CPL
 Group:     fsp/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
-Source0:   %{pname}-%{version}.tar.gz
+Source0:   %{PNAME}_%{version}.tgz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 Source3:   FSP_setup_mpi
