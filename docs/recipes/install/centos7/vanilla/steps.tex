@@ -223,7 +223,7 @@ separately in order to use this software.
 At this point, all of the packages necessary to use \Warewulf{} on the {\em
   master} host should be installed.  Next, we need to update several
 configuration files in order to allow \Warewulf{} to work with \baseOS{} and to support
-local provisioning using the {\em eth1} interface.  Specific steps are as
+local provisioning using the {\em eno2} interface.  Specific steps are as
 follows:
 
 % begin_fsp_run
@@ -232,31 +232,29 @@ follows:
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 
-# Configure DHCP server to use eth1
-[master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
+# Configure DHCP server to use eno2
+[master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eno2"/' /etc/sysconfig/dhcpd
 
 # Enable tftp service for compute node image distribution
-[master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
-
-# Configure Warewulf to use the default SLES tftp location
-[master]$ perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv/#" /etc/warewulf/provision.conf
+# [master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
 
 # Update Warewulf http config to use the SLES version of mod_perl
-[master]$ export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
-[master]$ perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
+# [master]$ perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
 
 # Enable http access for Warewulf cgi-bin directory to support newer apache syntax
+[master]$ export MODFILE=/etc/httpd/conf.d/warewulf-httpd.conf
 [master]$ perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
-[master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
-[master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
-# Define eth1 interface for provisioning
-[master]$ ifconfig eth1 <master_ip> netmask 255.255.255.0 up
+# [master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
+# [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
+
+# Define eno2 interface for provisioning
+[master]$ ifconfig eno2 <master_ip> netmask 255.255.255.0 up
 
 # Restart relevant services to support provisioning
-[master]$ service xinetd restart                         # tftp services
-[master]$ service mysql restart                          # mysql database
-[master]$ service apache2 restart                        # web server
+[master]$ systemctl restart xinetd                         # tftp services
+[master]$ systemctl restart mariadb                        # mysql database
+[master]$ systemctl restart httpd                          # web server
 \end{lstlisting}
 %\end{verbatim}
 % end_fsp_run
@@ -287,7 +285,6 @@ follows:
 % end_fsp_run
 
 
-
 \subsection{Define {\em compute} image for provisioning}
 
 With the provisioning services enabled, the next step is to define and
@@ -305,8 +302,8 @@ default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/sles12}.
 % begin_fsp_run
 % fsp_validation_comment Create compute image for Warewulf
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-# Define chroot location for SLES 
-[master]$ export CHROOT=/opt/fsp/admin/images/sles12
+# Define chroot location 
+[master]$ export CHROOT=/opt/fsp/admin/images/centos7
 
 # Build initial chroot image
 [master]$ wwmkchroot centos-7 $CHROOT
