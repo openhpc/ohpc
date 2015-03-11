@@ -96,6 +96,7 @@ setenv          TBBROOT             %{package_target}/tbb
 setenv          TBB_INC             %{package_target}/tbb/include
 setenv          TBB_LIB             %{package_target}/tbb/lib/intel64/gcc4.4
 prepend-path	MIC_LD_LIBRARY_PATH %{package_target}/tbb/lib/mic
+prepend-path 	LD_LIBRARY_PATH     %{package_target}/tbb/lib/intel64/gcc4.4
 
 family "compiler"
 EOF
