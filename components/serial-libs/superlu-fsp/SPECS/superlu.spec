@@ -91,7 +91,7 @@ Docu can be found on http://www.netlib.org.
 %patch2 -p1
 %patch3 -p1
 # superlu_ug.pdf in %%doc 
-cp %SOURCE1 %SOURCE2 ./
+cp %SOURCE1 ./
 
 %build
 export FSP_COMPILER_FAMILY=%{compiler_family}
