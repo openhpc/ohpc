@@ -27,10 +27,10 @@ This guide presents a simple cluster installation procedure using components fro
 %setup -qn recipes
 
 %build
-%if %{suse_version}
+%if 0%{?suse_version}
 %define source_path install/sles12/vanilla
 %else
-%if %{rhel_version} || %{centos_version}
+%if 0%{?rhel_version} || 0%{?centos_version}
 %define source_path install/centos7/vanilla
 %endif
 %endif
