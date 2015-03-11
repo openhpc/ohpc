@@ -34,6 +34,9 @@ Patch2: warewulf-vnfs.utf8.patch
 Patch3: centos-add-pkgs.patch
 # 02/10/15 charles.r.baird@intel.com - add drivers to bootstrap image
 Patch4: warewulf-vnfs.bootstrap.patch
+# 03/11/15 karl.w.schulz@intel.com - add in centos7 template (culled from ww trunk)
+Source1: centos-7.tmpl
+
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -61,6 +64,9 @@ Virtual Node FileSystem objects.
 
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+
+# 03/11/15 karl.w.schulz@intel.com - add in centos7 template (culled from ww trunk)
+install -D -m 0644 %SOURCE1 %{buildroot}/usr/libexec/warewulf/wwmkchroot/
 
 
 %clean
