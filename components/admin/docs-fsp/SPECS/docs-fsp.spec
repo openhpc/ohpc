@@ -39,9 +39,9 @@ make
 
 %install
 
+mv %{source_path}/steps.pdf %{source_path}/Install_guide.pdf
 %{__mkdir} -p %{buildroot}%{FSP_HOME}/docs
-mv %{source_path}/steps.pdf %{buildroot}/%{FSP_HOME}/docs/Install_guide.pdf
-install -m 0644 -p %{buildroot}/%{FSP_HOME}/docs/Install_guide.pdf
+install -m 0644 -p %{source_path}/Install_guide.pdf %{buildroot}/%{FSP_HOME}/docs/Install_guide.pdf 
 
 
 
