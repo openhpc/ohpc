@@ -1,3 +1,5 @@
+%include %{_sourcedir}/FSP_macros
+
 Name:           docs-fsp
 Version:        0.1
 Release:        1.2
