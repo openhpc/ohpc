@@ -145,8 +145,8 @@ EOF
 %install
 
 # Copy intel-MKL uBLAS header files
-install -D -m 0644 %SOURCE2 %{install_path}/include/boost/intel-mkl/mkl_boost_ublas_gemm.hpp
-install -D -m 0644 %SOURCE3 %{install_path}/include/boost/intel-mkl/mkl_boost_ublas_matrix_prod.hpp
+install -D -m 0644 %SOURCE2 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_gemm.hpp
+install -D -m 0644 %SOURCE3 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_matrix_prod.hpp
 
 
 # FSP compiler/mpi designation
