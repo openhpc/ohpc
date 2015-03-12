@@ -44,7 +44,11 @@ BuildRequires: intel_licenses
 
 #-fsp-header-comp-end-------------------------------
 
-Name:           superlu
+# Base package name
+%define pname superlu
+%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+
+Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          Development/Libraries/C and C++
