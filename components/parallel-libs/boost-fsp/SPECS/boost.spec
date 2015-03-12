@@ -108,7 +108,8 @@ see the boost-doc package.
 %prep
 %setup -q -n %{pname}_%{bversion} 
 cd boost
-unzip intel-mkl-and-boost-example.zip
+pwd
+unzip %{SOURCES}/intel-mkl-and-boost-example.zip
 #%setup -q -T -D -a 2
 #unzip -d boost intel-mkl-and-boost-example.zip
 
