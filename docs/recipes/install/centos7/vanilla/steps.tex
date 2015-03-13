@@ -297,7 +297,7 @@ The \FSP{} build of \Warewulf{} includes specific enhancements enabling support 
 \baseOS{}. The following steps illustrate the process to build a minimal, default
 image for use with \Warewulf{}.  We begin by creating a directory structure on the 
 {\em master} that will represent the root filesystem of the compute node. The 
-default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/sles12}.
+default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/centos7}.
 
 % begin_fsp_run
 % fsp_validation_comment Create compute image for Warewulf
@@ -707,7 +707,7 @@ that were imported in \S\ref{sec:file_import}.
 [master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> 
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set c[1-4] --vnfs=sles12 --bootstrap=`uname -r` \
+[master]$ wwsh -y provision set c[1-4] --vnfs=centos7 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
 # Optionally define IPoIB network settings (required if planning to mount Lustre* over IB)
@@ -763,7 +763,7 @@ that were imported in \S\ref{sec:file_import}.
 % [master]$    wwsh -y node set c15 -D ib0 --ipaddr=<c15_ipoib> --netmask=<ipoib_netmask>
 % [master]$    wwsh -y node set c16 -D ib0 --ipaddr=<c16_ipoib> --netmask=<ipoib_netmask>
 
-% [master]$    wwsh -y provision set c* --vnfs=sles12 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
+% [master]$    wwsh -y provision set c* --vnfs=centos-7 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
 % [master]$    wwsh -y provision set c* --fileadd=ifcfg-ib0.ww     
 % [master]$    service dhcpd restart
 % [master]$    wwsh pxe update
