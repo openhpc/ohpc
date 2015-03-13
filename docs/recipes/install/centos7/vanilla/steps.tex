@@ -232,8 +232,8 @@ follows:
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 
-# Configure DHCP server to use eno2
-[master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eno2"/' /etc/sysconfig/dhcpd
+# Configure Warewulf provisioning to use eno2 interface
+[master]$ perl -pi -e 's/^network device = eth1/network device = eno2/' /etc/warewulf/provision.conf
 
 # Enable tftp service for compute node image distribution
 # [master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
