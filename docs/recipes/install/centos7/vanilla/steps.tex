@@ -170,8 +170,8 @@ chosen {\em master} host.
 % begin_fsp_run
 % fsp_validation_comment Add ofed
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ yum -y install libibverbs-runtime libmlx4-rdmav2
-[master]$ yum -y install libibmad5 librdmacm1 rdma
+[master]$ yum -y install libibverbs-utils libmlx4 librdmacm
+# yum -y install libibmad5 librdmacm1 rdma
 
 # Load IB drivers
 [master]$ service rdma start
