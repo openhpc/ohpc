@@ -831,7 +831,7 @@ rm -rf $RPM_BUILD_ROOT
 
 # 11/13/14 karl.w.schulz@intel.com - include systemd files 
 
-%if 0%{?suse_version} >= 1200
+%if 0%{?suse_version} >= 1200 || 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
 
 %config /usr/lib/systemd/system/slurmctld.service
 %config /usr/lib/systemd/system/slurmd.service
