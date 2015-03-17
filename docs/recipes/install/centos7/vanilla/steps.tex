@@ -170,8 +170,8 @@ chosen {\em master} host.
 % begin_fsp_run
 % fsp_validation_comment Add ofed
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ yum -y install libibverbs-runtime libmlx4-rdmav2
-[master]$ yum -y install libibmad5 librdmacm1 rdma
+[master]$ yum -y install libibverbs-utils libmlx4 librdmacm rdma
+# yum -y install libibmad5 librdmacm1 rdma
 
 # Load IB drivers
 [master]$ service rdma start
@@ -191,11 +191,11 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % begin_fsp_run
 % fsp_validation_comment Enable ib0
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ cp /opt/fsp/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
+[master]$ cp /opt/fsp/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network-scripts
 
 # Define local IPoIB address and netmask
-[master]$ perl -pi -e 's/master_ipoib/<master_ipoib>/' /etc/sysconfig/network/ifcfg-ib0
-[master]$ perl -pi -e 's/ipoib_netmask/<ipoib_netmask>/' /etc/sysconfig/network/ifcfg-ib0
+[master]$ perl -pi -e 's/master_ipoib/<master_ipoib>/' /etc/sysconfig/network-scripts/ifcfg-ib0
+[master]$ perl -pi -e 's/ipoib_netmask/<ipoib_netmask>/' /etc/sysconfig/network-scripts/ifcfg-ib0
 
 # Initiate ib0
 [master]$ ifup ib0
@@ -232,8 +232,8 @@ follows:
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 
-# Configure DHCP server to use eno2
-[master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eno2"/' /etc/sysconfig/dhcpd
+# Configure Warewulf provisioning to use eno2 interface
+[master]$ perl -pi -e 's/^network device = eth1/network device = eno2/' /etc/warewulf/provision.conf
 
 # Enable tftp service for compute node image distribution
 # [master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
@@ -297,7 +297,7 @@ The \FSP{} build of \Warewulf{} includes specific enhancements enabling support 
 \baseOS{}. The following steps illustrate the process to build a minimal, default
 image for use with \Warewulf{}.  We begin by creating a directory structure on the 
 {\em master} that will represent the root filesystem of the compute node. The 
-default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/sles12}.
+default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/centos7}.
 
 % begin_fsp_run
 % fsp_validation_comment Create compute image for Warewulf
@@ -337,8 +337,8 @@ be updated with a copy of the configuration as follows:
 [master]$ chroot $CHROOT yum -y groupinstall fsp-slurm-client
 
 # Add IB support
-[master]$ yum -y --installroot=$CHROOT install libibverbs-runtime libmlx4-rdmav2
-[master]$ yum -y --installroot=$CHROOT install libibmad5 librdmacm1 rdma
+[master]$ yum -y --installroot=$CHROOT install libibverbs-utils libmlx4 librdmacm rdma
+# yum -y --installroot=$CHROOT install libibmad5 librdmacm1 rdma
 
 # Add Network Time Protocol (NTP) support
 [master]$ yum -y --installroot=$CHROOT install ntp
@@ -449,7 +449,7 @@ discussed further in the following sections.
 % begin_fsp_run
 % fsp_validation_comment Enable slurm pam module
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
+# echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
 \end{lstlisting}
 % end_fsp_run
 
@@ -707,7 +707,7 @@ that were imported in \S\ref{sec:file_import}.
 [master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> 
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set c[1-4] --vnfs=sles12 --bootstrap=`uname -r` \
+[master]$ wwsh -y provision set c[1-4] --vnfs=centos7 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
 # Optionally define IPoIB network settings (required if planning to mount Lustre* over IB)
@@ -763,7 +763,7 @@ that were imported in \S\ref{sec:file_import}.
 % [master]$    wwsh -y node set c15 -D ib0 --ipaddr=<c15_ipoib> --netmask=<ipoib_netmask>
 % [master]$    wwsh -y node set c16 -D ib0 --ipaddr=<c16_ipoib> --netmask=<ipoib_netmask>
 
-% [master]$    wwsh -y provision set c* --vnfs=sles12 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
+% [master]$    wwsh -y provision set c* --vnfs=centos-7 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
 % [master]$    wwsh -y provision set c* --fileadd=ifcfg-ib0.ww     
 % [master]$    service dhcpd restart
 % [master]$    wwsh pxe update

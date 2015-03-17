@@ -67,7 +67,8 @@ Group:		fsp/parallel-libs
 Url:            http://www.boost.org
 Source0:	%{pname}_%{bversion}.tar.gz 
 Source1:        boost-rpmlintrc
-Source2:        intel-mkl-and-boost-example.zip
+Source2:        mkl_boost_ublas_gemm.hpp
+Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
@@ -107,7 +108,6 @@ see the boost-doc package.
 
 %prep
 %setup -q -n %{pname}_%{bversion} 
-unzip -d boost intel-mkl-and-boost-example.zip
 
 %build
 # FSP compiler/mpi designation
@@ -143,6 +143,11 @@ EOF
 
 
 %install
+
+# Copy intel-MKL uBLAS header files
+install -D -m 0644 %SOURCE2 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_gemm.hpp
+install -D -m 0644 %SOURCE3 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_matrix_prod.hpp
+
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
@@ -222,6 +227,5 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
-cp $RPM_BUILD_ROOT/boost/MKL_and_boost_example/headers/.hpp %{install_path}/include
 
 %changelog
