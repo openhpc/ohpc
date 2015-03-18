@@ -10,9 +10,9 @@ fftw-gnu-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier 
 fftw-intel-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-intel-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-intel-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
-petsc-gnu-impi-fsp 3.5.2 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-gnu-mvapich2-fsp 3.5.2 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-gnu-openmpi-fsp 3.5.2 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-intel-impi-fsp 3.5.2 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-intel-mvapich2-fsp 3.5.2 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-intel-openmpi-fsp 3.5.2 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-impi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-mvapich2-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-openmpi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-impi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-mvapich2-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-openmpi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
