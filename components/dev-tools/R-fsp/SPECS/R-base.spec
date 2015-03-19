@@ -15,12 +15,20 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+%include %{_sourcedir}/FSP_macros
 
-Name:           R-base
-%define release 1 
+###Name:           R-base
+%define 	pname R-base
+%define 	PNAME %(echo %{pname} | tr [a-z] [A-Z])
+
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
+Name:		%{pname}%{PROJ_DELIM}
+###%define release 1 
+Release		1
 Version:        3.1.3
-Release:        %release
-Source:         R-%{version}.tar.bz2
+###Release:        %release
+Source:         R-%{version}.tar.gz
 #Source: http://cran.r-project.org/src/base/R-2/R-%%{version}.tar.gz
 # PATCH-FIX-UPSTREAM Fix tre when wchar_t is unsigned int
 Patch:          tre.patch
@@ -30,7 +38,13 @@ Url:            http://www.r-project.org/
 Summary:        R - statistics package (S-Plus like)
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Scientific/Math
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+###BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
+
+# Default library install path
+%define		install_path %{FSP_PUB}/%{pname}/%version
+
+
 BuildRequires:  cairo-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -122,17 +136,17 @@ Provides:       R-utils = %{version}
 R is a language which is not entirely unlike the S language developed at
 AT&T Bell Laboratories by Rick Becker, John Chambers and Allan Wilks.
 
-%package -n R-base-devel
-Summary:        Libraries and includefiles for developing with R-base
-Group:          Development/Libraries/Other
-Provides:       R-Matrix-devel = 1.1.5
-Provides:       R-devel = %{version}
-Requires:       R-base
-Obsoletes:      R-Matrix-devel < 1.1.5
+###%package -n R-base-devel
+###Summary:        Libraries and includefiles for developing with R-base
+###Group:          Development/Libraries/Other
+###Provides:       R-Matrix-devel = 1.1.5
+###Provides:       R-devel = %{version}
+###Requires:       R-base
+###Obsoletes:      R-Matrix-devel < 1.1.5
 
-%description -n R-base-devel
-This package provides the necessary development headers and
-libraries to allow you to devel with R-base.
+###%description -n R-base-devel
+###This package provides the necessary development headers and
+###libraries to allow you to devel with R-base.
 
 %prep 
 
@@ -142,7 +156,10 @@ libraries to allow you to devel with R-base.
 %build 
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
-%configure --enable-R-shlib LIBnn=%{_lib}
+
+%define MKL -lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm
+
+%configure --enable-R-shlib LIBnn=%{_lib} --with-blas=%{MKL} --with-lapack
 
 make %{?_smp_mflags}
 make pdf
