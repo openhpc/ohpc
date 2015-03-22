@@ -155,7 +155,9 @@ sed -i 's|%buildroot||g' %buildroot%{install_path}/include/Makefile
 
 # clean libs
 pushd %buildroot%{install_path}/lib
+if [-f  Makefile.tau-param-mpi-openmp-profile-trace ]
 sed -i 's|%buildroot||g' Makefile.tau-param-mpi-openmp-profile-trace
+fi
 sed -i 's|%buildroot||g' libTAUsh-param-mpi-openmp-profile-trace.so
 rm -f libtau-param-mpi-openmp-profile-trace.a
 rm -f libjogl*
