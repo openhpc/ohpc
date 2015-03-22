@@ -106,6 +106,7 @@ export fc=mpiifort
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_DIR/lib"
 
 export BUILDROOT=%buildroot%{install_path}
+export FFLAGS="%fflags -I$MPI_DIR/include"
 ./configure \
         -prefix=%buildroot%{install_path} \
 	-c++=mpicxx \
@@ -163,7 +164,16 @@ if [ -f libTAUsh-param-mpi-openmp-profile-trace.so ]
     then
         sed -i 's|%buildroot||g' libTAUsh-param-mpi-openmp-profile-trace.so
 fi
+if [ -f Makefile.tau-param-icpc-mpi-openmp-profile-trace ]
+    then
+        sed -i 's|%buildroot||g' Makefile.tau-param-icpc-mpi-openmp-profile-trace
+fi
+if [ -f libTAUsh-param-icpc-mpi-openmp-profile-trace.so ]
+    then
+        sed -i 's|%buildroot||g' libTAUsh-param-icpc-mpi-openmp-profile-trace.so
+fi
 rm -f libtau-param-mpi-openmp-profile-trace.a
+rm -f libtau-param-icpc-mpi-openmp-profile-trace.a
 rm -f libjogl*
 popd
 
