@@ -108,7 +108,7 @@ export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_DIR/lib"
 export BUILDROOT=%buildroot%{install_path}
 ./configure \
         -prefix=%buildroot%{install_path} \
-	-c++=mpic++ \
+	-c++=mpicxx \
 	-cc=mpicc \
 	-fortran=$fc \
 	-iowrapper \
