@@ -116,7 +116,7 @@ export BUILDROOT=%buildroot%{install_path}
 	-slog2 \
 	-PROFILEPARAM \
 	-CPUTIME \
-	-useropt="%optflags -I$PWD/include -fno-strict-aliasing" \
+	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
         -openmp \
 	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp"
 
@@ -159,7 +159,10 @@ if [ -f  Makefile.tau-param-mpi-openmp-profile-trace ]
     then
         sed -i 's|%buildroot||g' Makefile.tau-param-mpi-openmp-profile-trace
 fi
-sed -i 's|%buildroot||g' libTAUsh-param-mpi-openmp-profile-trace.so
+if [ -f libTAUsh-param-mpi-openmp-profile-trace.so ]
+    then
+        sed -i 's|%buildroot||g' libTAUsh-param-mpi-openmp-profile-trace.so
+fi
 rm -f libtau-param-mpi-openmp-profile-trace.a
 rm -f libjogl*
 popd
