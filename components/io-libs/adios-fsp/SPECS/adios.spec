@@ -7,7 +7,6 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
 %{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
@@ -24,23 +23,10 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
-# MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi%{PROJ_DELIM}
-Requires:      intel-mpi%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%endif
-
 #-fsp-header-comp-end------------------------------------------------
 
-%define mpidir %_libdir/%{mpi_family}
+%define mpiimpl openmpi
+%define mpidir %_libdir/%mpiimpl
 
 %define somver 0
 %define sover %somver.0.0
@@ -61,7 +47,7 @@ Source1: FSP_macros
 Source2: FSP_setup_compiler
 
 # Minimum Build Requires
-BuildRequires: mxml-devel cmake zlib-devel glib2-devel
+BuildRequires: mxml-devel %mpiimpl-devel cmake zlib-devel glib2-devel
 
 # Additional Build Requires
 #BuildRequires: libhdf5-mpi-devel
@@ -160,22 +146,20 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
 
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-#mpi-selector --set%{mpi_family} 
-#source %mpidir/bin/mpivars.sh
-#export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
-#export MPIDIR=%mpidir
-#TOPDIR=$PWD
+mpi-selector --set %mpiimpl
+source %mpidir/bin/mpivars.sh
+export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
+export MPIDIR=%mpidir
+TOPDIR=$PWD
 
-#%add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
-#%add_optflags -I$TOPDIR/src/public
+%add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
+%add_optflags -I$TOPDIR/src/public
 
 export CFLAGS="%optflags"
 
@@ -193,9 +177,9 @@ cmake \
 	-DFCFLAGS:STRING="%optflags" \
 	-DNC4PAR:BOOL=ON \
 	-DPHDF5:BOOL=ON \
-	-DMPIDIR:PATH="$MPI_DIR" \
-	-DMPILIBS:STRING="-L$MPI_DIR/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
-	-DCMAKE_INSTALL_RPATH:STRING="$MPI_DIR"/lib \
+	-DMPIDIR:PATH=%mpidir \
+	-DMPILIBS:STRING="-L%mpidir/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
+	-DCMAKE_INSTALL_RPATH:STRING=%mpidir/lib \
 	-DCMAKE_SKIP_RPATH:BOOL=ON \
 	-DSOMVER:STRING=%somver \
 	-DSOVER:STRING=%sover \
@@ -207,13 +191,10 @@ popd
 %install
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
-
-#source %mpidir/bin/mpivars.sh
-#export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
-#export MPIDIR=%mpidir
+source %mpidir/bin/mpivars.sh
+export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
+export MPIDIR=%mpidir
 
 pushd BUILD
 %makeinstall_std
