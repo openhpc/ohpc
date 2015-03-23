@@ -106,7 +106,7 @@ export fc=mpiifort
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_DIR/lib"
 
 export BUILDROOT=%buildroot%{install_path}
-export FFLAGS="%fflags -I$MPI_DIR/include"
+export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 ./configure \
         -prefix=%buildroot%{install_path} \
 	-c++=mpicxx \
