@@ -25,7 +25,7 @@ Name:           R-base
 
 Name:		%{pname}%{PROJ_DELIM}
 ###%define release 1 
-Release		1
+Release:		1
 Version:        3.1.3
 ###Release:        %release
 Source:         R-%{version}.tar.gz
