@@ -156,9 +156,10 @@ AT&T Bell Laboratories by Rick Becker, John Chambers and Allan Wilks.
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
-%define MKL -lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm
+###%define MKL -lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm
+export BLAS_LIBS="-lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm"
 
-%configure --enable-R-shlib LIBnn=%{_lib} --with-blas=%{MKL} --with-lapack
+%configure --enable-R-shlib LIBnn=lib64 --with-blas --with-lapack
 
 make %{?_smp_mflags}
 make pdf
