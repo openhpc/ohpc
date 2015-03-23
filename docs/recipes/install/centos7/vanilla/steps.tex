@@ -170,8 +170,7 @@ chosen {\em master} host.
 % begin_fsp_run
 % fsp_validation_comment Add ofed
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ yum -y install libibverbs-utils libmlx4 librdmacm rdma
-# yum -y install libibmad5 librdmacm1 rdma
+[master]$ yum -y groupinstall "InfiniBand Support"
 
 # Load IB drivers
 [master]$ service rdma start
@@ -314,6 +313,7 @@ default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/centos7}
 
 % begin_fsp_run
 % fsp_validation_comment - fix grouplist for chroot
+% [master]$ yum --installroot=$CHROOT repolist
 % [master]$ perl -i -pe 's/type="group"/type="group_gz"/' $CHROOT/var/cache/yum/x86_64/7/ForestPeak_15.16_Factory/repomd.xml
 % end_fsp_run
 
@@ -339,11 +339,11 @@ be updated with a copy of the configuration as follows:
 % fsp_validation_comment Add FSP components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add SLURM client support
-[master]$ chroot $CHROOT yum -y groupinstall fsp-slurm-client
+[master]$ yum --installroot=$CHROOT -y groupinstall fsp-slurm-client
 
 # Add IB support
 [master]$ yum -y --installroot=$CHROOT install libibverbs-utils libmlx4 librdmacm rdma
-# yum -y --installroot=$CHROOT install libibmad5 librdmacm1 rdma
+# yum -y --installroot=$CHROOT groupinstall "InfiniBand Support"
 
 # Add Network Time Protocol (NTP) support
 [master]$ yum -y --installroot=$CHROOT install ntp
