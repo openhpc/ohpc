@@ -245,44 +245,45 @@ cp -fR examples %buildroot%_libdir/%pname/
 install -d %buildroot%python_sitelibdir
 mv %buildroot%_libdir/python/*.py %buildroot%python_sitelibdir/
 
-# FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
-#%Module1.0#####################################################################
-
-proc ModulesHelp { } {
-
-puts stderr " "
-puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
-puts stderr "\nVersion %{version}\n"
-
-}
-module-whatis "Name: %{PNAME} built with %{compiler_family} toolchain"
-module-whatis "Version: %{version}"
-module-whatis "Category: runtime library"
-module-whatis "Description: %{summary}"
-module-whatis "%{url}"
-
-set             version             %{version}
-
-prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-
-setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_LIB        %{install_path}/lib
-setenv          %{PNAME}_INC        %{install_path}/include
-
-EOF
-
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
-#%Module1.0#####################################################################
-##
-## version file for %{pname}-%{version}
-##
-set     ModulesVersion      "%{version}"
-EOF
+# can't expand
+# # FSP module file
+# %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+# %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+# #%Module1.0#####################################################################
+# 
+# proc ModulesHelp { } {
+# 
+# puts stderr " "
+# puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
+# puts stderr "\nVersion %{version}\n"
+# 
+# }
+# module-whatis "Name: %{PNAME} built with %{compiler_family} toolchain"
+# module-whatis "Version: %{version}"
+# module-whatis "Category: runtime library"
+# module-whatis "Description: %{summary}"
+# module-whatis "%{url}"
+# 
+# set             version             %{version}
+# 
+# prepend-path    PATH                %{install_path}/bin
+# prepend-path    MANPATH             %{install_path}/share/man
+# prepend-path    INCLUDE             %{install_path}/include
+# prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+# 
+# setenv          %{PNAME}_DIR        %{install_path}
+# setenv          %{PNAME}_LIB        %{install_path}/lib
+# setenv          %{PNAME}_INC        %{install_path}/include
+# 
+# EOF
+# 
+# %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+# #%Module1.0#####################################################################
+# ##
+# ## version file for %{pname}-%{version}
+# ##
+# set     ModulesVersion      "%{version}"
+# EOF
 
 %files
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
