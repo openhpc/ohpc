@@ -14,12 +14,12 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-%define fc gfortran
+%define fcomp gfortran
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
-%define fc mpiifort
+%define fcomp mpiifort
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
