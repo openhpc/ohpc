@@ -125,16 +125,46 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 make install TOPDIR=$TOPDIR
 make exports TOPDIR=$TOPDIR
 
+pushd %{buildroot}%{install_path}/x86_64/bin
+sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
+popd
 mv %buildroot%{install_path}/x86_64/bin %buildroot%{install_path}/bin
 mv %buildroot%{install_path}/x86_64/lib %buildroot%{install_path}/lib
 install -d %buildroot%{install_path}/etc
 install -d %buildroot%_datadir/%name
 install -d %buildroot%{install_path}/include
 
-# killall java
+rm -rf %buildroot%{install_path}/x86_64
+rm -f  %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
+rm -f %buildroot%_includedir/include/Makefile*
+rm -fR %buildroot%_includedir/include/makefiles
+rm -f %buildroot%{install_path}/.last_config
+rm -f %buildroot%{install_path}/.all_configs
+rm -f %buildroot%{install_path}/.active_stub*
+
+# clean libs
 pushd %buildroot%{install_path}/lib
+if [ -f  Makefile.tau-param-mpi-openmp-profile-trace ]
+    then
+        sed -i 's|%buildroot||g' Makefile.tau-param-mpi-openmp-profile-trace
+fi
+if [ -f libTAUsh-param-mpi-openmp-profile-trace.so ]
+    then
+        sed -i 's|%buildroot||g' libTAUsh-param-mpi-openmp-profile-trace.so
+fi
+if [ -f Makefile.tau-param-icpc-mpi-openmp-profile-trace ]
+    then
+        sed -i 's|%buildroot||g' Makefile.tau-param-icpc-mpi-openmp-profile-trace
+fi
+if [ -f libTAUsh-param-icpc-mpi-openmp-profile-trace.so ]
+    then
+        sed -i 's|%buildroot||g' libTAUsh-param-icpc-mpi-openmp-profile-trace.so
+fi
+rm -f libtau-param-mpi-openmp-profile-trace.a
+rm -f libtau-param-icpc-mpi-openmp-profile-trace.a
 rm -f libjogl*
 popd
+
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
