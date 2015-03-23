@@ -14,10 +14,12 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+%define fcomp gfortran
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
+%define fcomp mpiifort
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -44,7 +46,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name: %{pname}%{PROJ_DELIM}
 Version: 2.24
 Release: 1%{?dist}
 Summary: Tuning and Analysis Utilities Profiling Package
@@ -119,59 +121,18 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
         -openmp \
 	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp"
 
-make
 
-%install
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
-
-TOPDIR=$PWD
 make install TOPDIR=$TOPDIR
 make exports TOPDIR=$TOPDIR
 
-pushd %{buildroot}%{install_path}/x86_64/bin
-sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
-popd
 mv %buildroot%{install_path}/x86_64/bin %buildroot%{install_path}/bin
 mv %buildroot%{install_path}/x86_64/lib %buildroot%{install_path}/lib
-rm -rf %buildroot%{install_path}/x86_64
 install -d %buildroot%{install_path}/etc
-rm -f  %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
-rm -f %buildroot%{install_path}/.last_config
-rm -f %buildroot%{install_path}/.all_configs
-rm -f %buildroot%{install_path}/.active_stub*
-
 install -d %buildroot%_datadir/%name
-
-rm -f %buildroot%_includedir/include/Makefile*
-rm -fR %buildroot%_includedir/include/makefiles
 install -d %buildroot%{install_path}/include
-sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*.h
-sed -i 's|%buildroot||g' %buildroot%{install_path}/include/Makefile
 
-# clean libs
+# killall java
 pushd %buildroot%{install_path}/lib
-if [ -f  Makefile.tau-param-mpi-openmp-profile-trace ]
-    then
-        sed -i 's|%buildroot||g' Makefile.tau-param-mpi-openmp-profile-trace
-fi
-if [ -f libTAUsh-param-mpi-openmp-profile-trace.so ]
-    then
-        sed -i 's|%buildroot||g' libTAUsh-param-mpi-openmp-profile-trace.so
-fi
-if [ -f Makefile.tau-param-icpc-mpi-openmp-profile-trace ]
-    then
-        sed -i 's|%buildroot||g' Makefile.tau-param-icpc-mpi-openmp-profile-trace
-fi
-if [ -f libTAUsh-param-icpc-mpi-openmp-profile-trace.so ]
-    then
-        sed -i 's|%buildroot||g' libTAUsh-param-icpc-mpi-openmp-profile-trace.so
-fi
-rm -f libtau-param-mpi-openmp-profile-trace.a
-rm -f libtau-param-icpc-mpi-openmp-profile-trace.a
 rm -f libjogl*
 popd
 
