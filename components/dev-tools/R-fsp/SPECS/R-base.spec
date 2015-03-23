@@ -15,7 +15,7 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#*#%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/FSP_macros
 
 Name:           R-base
 %define 	pname R-base
@@ -23,9 +23,9 @@ Name:           R-base
 
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-#*#Name:		%{pname}%{PROJ_DELIM}
+Name:		%{pname}%{PROJ_DELIM}
 ###%define release 1 
-Release		1
+Release:		1
 Version:        3.1.3
 ###Release:        %release
 Source:         R-%{version}.tar.gz
