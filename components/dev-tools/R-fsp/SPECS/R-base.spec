@@ -88,7 +88,7 @@ BuildRequires:  tcl-devel
 BuildRequires:  texinfo
 BuildRequires:  tk-devel
 BuildRequires:  xorg-x11-devel
-Requires:       R-base-devel = %{version}
+###Requires:       R-base-devel = %{version}
 Requires:       cairo >= 1.2
 Requires:       fontconfig
 Requires:       freetype2
