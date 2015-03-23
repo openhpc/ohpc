@@ -46,10 +46,21 @@ Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler
 
-BuildRequires: libmxml-devel %mpiimpl-devel libhdf5-mpi-devel
-BuildRequires: libnetcdf-mpi-devel libmpe2-devel libmxml-devel
-BuildRequires: python-modules-xml cmake bzlib-devel zlib-devel
-BuildRequires: libsz2-devel liblustre-devel glib2-devel libnumpy-devel
+# Minimum Build Requires
+BuildRequires: libmxml-devel %mpiimpl-devel cmake zlib-devel glib2-devel
+
+# Additional Build Requires
+#BuildRequires: libhdf5-mpi-devel
+#BuildRequires: libnetcdf-mpi-devel
+#BuildRequires: libmpe2-devel
+#BuildRequires: python-modules-xml
+#BuildRequires: bzlib-devel
+#BuildRequires: libsz2-devel
+# This is the legacy name for lustre-lite
+# BuildRequires: liblustre-devel
+BuildRequires: lustre-lite
+#BuildRequires: libnumpy-devel
+#!BuildIgnore: post-build-checks
 
 Requires: python-module-%pname = %version-%release
 
