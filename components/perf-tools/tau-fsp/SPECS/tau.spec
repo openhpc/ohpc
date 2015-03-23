@@ -133,6 +133,8 @@ mv %buildroot%{install_path}/x86_64/lib %buildroot%{install_path}/lib
 install -d %buildroot%{install_path}/etc
 install -d %buildroot%_datadir/%name
 install -d %buildroot%{install_path}/include
+sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*.h
+sed -i 's|%buildroot||g' %buildroot%{install_path}/include/Makefile
 
 rm -rf %buildroot%{install_path}/x86_64
 rm -f  %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
