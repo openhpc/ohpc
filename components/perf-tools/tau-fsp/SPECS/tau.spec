@@ -98,10 +98,10 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
 
 %if %{compiler_family} == gnu
-export fc=gfortran
+export fcomp=gfortran
 %endif
 %if %{compiler_family} == intel
-export fc=mpiifort
+export fcomp=mpiifort
 %endif
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_DIR/lib"
 
@@ -111,7 +111,7 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
         -prefix=%buildroot%{install_path} \
 	-c++=mpicxx \
 	-cc=mpicc \
-	-fortran=$fc \
+	-fortran=$fcomp \
 	-iowrapper \
 	-mpi \
 	-slog2 \
