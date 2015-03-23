@@ -312,6 +312,11 @@ default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/centos7}
 
 \subsubsection{Add \FSP{} components}
 
+% begin_fsp_run
+% fsp_validation_comment - fix grouplist for chroot
+% [master]$ perl -i -pe 's/type="group"/type="group_gz"/' $CHROOT/var/cache/yum/x86_64/7/ForestPeak_15.16_Factory/repomd.xml
+% end_fsp_run
+
 The \texttt{wwmkchroot} process used in the previous step is designed to
 provide a minimal \baseOS{} configuration. Next, we add additional components to
 include resource management client services, \InfiniBand{} drivers, and other
