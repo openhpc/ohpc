@@ -17,7 +17,6 @@
 
 %include %{_sourcedir}/FSP_macros
 
-Name:           R-base
 %define 	pname R-base
 %define 	PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
@@ -25,7 +24,7 @@ Name:           R-base
 
 Name:		%{pname}%{PROJ_DELIM}
 ###%define release 1 
-Release:		1
+Release:	1
 Version:        3.1.3
 ###Release:        %release
 Source:         R-%{version}.tar.gz
