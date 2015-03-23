@@ -220,7 +220,8 @@ EOF
 %install_info_delete --info-dir=%{_infodir} %{_infodir}/R-exts.info.gz
 %install_info_delete --info-dir=%{_infodir} %{_infodir}/R-ints.info.gz
 
-%files -n R-base
+#*#%files -n R-base
+%files -n %{name}
 %defattr(-, root, root)
 
 ## All languages files. Seems there is no short way to include all of them
