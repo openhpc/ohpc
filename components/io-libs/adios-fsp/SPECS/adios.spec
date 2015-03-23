@@ -25,8 +25,9 @@ BuildRequires: intel_licenses
 
 #-fsp-header-comp-end------------------------------------------------
 
-%define mpiimpl openmpi
-%define mpidir %_libdir/%mpiimpl
+# Attempt serial build
+# %define mpiimpl openmpi
+# %define mpidir %_libdir/%mpiimpl
 
 %define somver 0
 %define sover %somver.0.0
@@ -47,9 +48,11 @@ Source1: FSP_macros
 Source2: FSP_setup_compiler
 
 # Minimum Build Requires
-BuildRequires: mxml-devel %mpiimpl-devel cmake zlib-devel glib2-devel
+BuildRequires: mxml-devel cmake zlib-devel glib2-devel
 
 # Additional Build Requires
+# Attempt serial build
+# BuildRequires: %mpiimpl-devel
 #BuildRequires: libhdf5-mpi-devel
 #BuildRequires: libnetcdf-mpi-devel
 #BuildRequires: libmpe2-devel
@@ -152,13 +155,15 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-mpi-selector --set %mpiimpl
-source %mpidir/bin/mpivars.sh
-export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
-export MPIDIR=%mpidir
+# Attempt serial build
+# mpi-selector --set %mpiimpl
+# source %mpidir/bin/mpivars.sh
+# export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
+# export MPIDIR=%mpidir
 TOPDIR=$PWD
 
-%add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
+# Attempt to build serial
+# %add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
 %add_optflags -I$TOPDIR/src/public
 
 export CFLAGS="%optflags"
@@ -169,6 +174,22 @@ cmake \
 %if %_lib == lib64
 	-DLIB_SUFFIX=64 \
 %endif
+# Attempt to build serial
+#	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
+#	-DCMAKE_C_FLAGS:STRING="%optflags" \
+#	-DCMAKE_CXX_FLAGS:STRING="%optflags" \
+#	-DCMAKE_Fortran_FLAGS:STRING="%optflags" \
+#	-DCXXFLAGS:STRING="%optflags" \
+#	-DFCFLAGS:STRING="%optflags" \
+#	-DNC4PAR:BOOL=ON \
+#	-DPHDF5:BOOL=ON \
+#	-DMPIDIR:PATH=%mpidir \
+#	-DMPILIBS:STRING="-L%mpidir/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
+#	-DCMAKE_INSTALL_RPATH:STRING=%mpidir/lib \
+#	-DCMAKE_SKIP_RPATH:BOOL=ON \
+#	-DSOMVER:STRING=%somver \
+#	-DSOVER:STRING=%sover \
+#	..
 	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
 	-DCMAKE_C_FLAGS:STRING="%optflags" \
 	-DCMAKE_CXX_FLAGS:STRING="%optflags" \
@@ -176,10 +197,6 @@ cmake \
 	-DCXXFLAGS:STRING="%optflags" \
 	-DFCFLAGS:STRING="%optflags" \
 	-DNC4PAR:BOOL=ON \
-	-DPHDF5:BOOL=ON \
-	-DMPIDIR:PATH=%mpidir \
-	-DMPILIBS:STRING="-L%mpidir/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
-	-DCMAKE_INSTALL_RPATH:STRING=%mpidir/lib \
 	-DCMAKE_SKIP_RPATH:BOOL=ON \
 	-DSOMVER:STRING=%somver \
 	-DSOVER:STRING=%sover \
@@ -192,9 +209,11 @@ popd
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
-source %mpidir/bin/mpivars.sh
-export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
-export MPIDIR=%mpidir
+
+# Attempt to build serial
+#source %mpidir/bin/mpivars.sh
+#export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
+#export MPIDIR=%mpidir
 
 pushd BUILD
 %makeinstall_std
@@ -207,7 +226,9 @@ mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
 pushd wrappers/numpy
 export PATH=$PATH:%buildroot%_bindir
 export CFLAGS=-I%buildroot%_includedir
-%make MPI=y python
+# Attempt to build serial
+# %make MPI=y python
+%make python
 %python_install
 popd
 install -m644 utils/skel/lib/skel_suite.py \
