@@ -47,7 +47,7 @@ Source1: FSP_macros
 Source2: FSP_setup_compiler
 
 # Minimum Build Requires
-BuildRequires: libmxml-devel %mpiimpl-devel cmake zlib-devel glib2-devel
+BuildRequires: mxml-devel %mpiimpl-devel cmake zlib-devel glib2-devel
 
 # Additional Build Requires
 #BuildRequires: libhdf5-mpi-devel
