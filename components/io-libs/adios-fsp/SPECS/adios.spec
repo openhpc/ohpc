@@ -7,6 +7,7 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
 %{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
@@ -23,9 +24,23 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
+# MPI dependencies
+%if %{mpi_family} == impi
+BuildRequires: intel-mpi%{PROJ_DELIM}
+Requires:      intel-mpi%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == mvapich2
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == openmpi
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+%endif
+
 #-fsp-header-comp-end------------------------------------------------
 
-%define mpiimpl openmpi
+%define mpiimpl %{mpi_family}
 %define mpidir %_libdir/%mpiimpl
 
 %define somver 0
@@ -147,8 +162,10 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
+export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
-
+. %{_sourcedir}/FSP_setup_mp
+i
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
@@ -195,12 +212,14 @@ popd
 %install
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
+export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/FSP_setup_mpi
 
 # Attempt to build serial
 #source %mpidir/bin/mpivars.sh
-#export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
-#export MPIDIR=%mpidir
+export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
+export MPIDIR=%mpidir
 
 pushd BUILD
 %makeinstall_std
@@ -213,9 +232,7 @@ mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
 pushd wrappers/numpy
 export PATH=$PATH:%buildroot%_bindir
 export CFLAGS=-I%buildroot%_includedir
-# Attempt to build serial
-# %make MPI=y python
-%make python
+%make MPI=y python
 %python_install
 popd
 install -m644 utils/skel/lib/skel_suite.py \
@@ -232,45 +249,44 @@ cp -fR examples %buildroot%_libdir/%pname/
 install -d %buildroot%python_sitelibdir
 mv %buildroot%_libdir/python/*.py %buildroot%python_sitelibdir/
 
-# can't expand
-# # FSP module file
-# %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-# %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
-# #%Module1.0#####################################################################
-# 
-# proc ModulesHelp { } {
-# 
-# puts stderr " "
-# puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
-# puts stderr "\nVersion %{version}\n"
-# 
-# }
-# module-whatis "Name: %{PNAME} built with %{compiler_family} toolchain"
-# module-whatis "Version: %{version}"
-# module-whatis "Category: runtime library"
-# module-whatis "Description: %{summary}"
-# module-whatis "%{url}"
-# 
-# set             version             %{version}
-# 
-# prepend-path    PATH                %{install_path}/bin
-# prepend-path    MANPATH             %{install_path}/share/man
-# prepend-path    INCLUDE             %{install_path}/include
-# prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-# 
-# setenv          %{PNAME}_DIR        %{install_path}
-# setenv          %{PNAME}_LIB        %{install_path}/lib
-# setenv          %{PNAME}_INC        %{install_path}/include
-# 
-# EOF
-# 
-# %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
-# #%Module1.0#####################################################################
-# ##
-# ## version file for %{pname}-%{version}
-# ##
-# set     ModulesVersion      "%{version}"
-# EOF
+# FSP module file
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
+puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{PNAME} built with %{compiler_family} toolchain"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "%{url}"
+
+set             version             %{version}
+
+prepend-path    PATH                %{install_path}/bin
+prepend-path    MANPATH             %{install_path}/share/man
+prepend-path    INCLUDE             %{install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_INC        %{install_path}/include
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
 
 %files
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
