@@ -342,8 +342,7 @@ be updated with a copy of the configuration as follows:
 [master]$ yum --installroot=$CHROOT -y groupinstall fsp-slurm-client
 
 # Add IB support
-[master]$ yum -y --installroot=$CHROOT install libibverbs-utils libmlx4 librdmacm rdma
-# yum -y --installroot=$CHROOT groupinstall "InfiniBand Support"
+[master]$ yum -y --installroot=$CHROOT groupinstall "InfiniBand Support"
 
 # Add Network Time Protocol (NTP) support
 [master]$ yum -y --installroot=$CHROOT install ntp
