@@ -162,11 +162,12 @@ export CFLAGS="-fp-model strict $CFLAGS"
 # export MPIDIR=%mpidir
 TOPDIR=$PWD
 
+#%add_optflags -I$TOPDIR/src/public
 # Attempt to build serial
 # %add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
-%add_optflags -I$TOPDIR/src/public
 
-export CFLAGS="%optflags"
+#export CFLAGS="%optflags"
+export CFLAGS="-I$TOPDIR/src/public %optflags_shared"
 
 mkdir BUILD
 pushd BUILD
