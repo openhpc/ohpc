@@ -164,8 +164,7 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mp
-i
+. %{_sourcedir}/FSP_setup_mpi
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
