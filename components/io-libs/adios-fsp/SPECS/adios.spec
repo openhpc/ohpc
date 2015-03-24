@@ -167,7 +167,7 @@ TOPDIR=$PWD
 # %add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
 
 #export CFLAGS="%optflags"
-export CFLAGS="-I$TOPDIR/src/public %optflags_shared"
+export CFLAGS="-I$TOPDIR/src/public"
 
 mkdir BUILD
 pushd BUILD
@@ -175,6 +175,17 @@ cmake \
 %if %_lib == lib64
 	-DLIB_SUFFIX=64 \
 %endif
+	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
+	-DCMAKE_C_FLAGS:STRING="%optflags" \
+	-DCMAKE_CXX_FLAGS:STRING="%optflags" \
+	-DCMAKE_Fortran_FLAGS:STRING="%optflags" \
+	-DCXXFLAGS:STRING="%optflags" \
+	-DFCFLAGS:STRING="%optflags" \
+	-DNC4PAR:BOOL=ON \
+	-DCMAKE_SKIP_RPATH:BOOL=ON \
+	-DSOMVER:STRING=%somver \
+	-DSOVER:STRING=%sover \
+	..
 # Attempt to build serial
 #	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
 #	-DCMAKE_C_FLAGS:STRING="%optflags" \
@@ -191,17 +202,6 @@ cmake \
 #	-DSOMVER:STRING=%somver \
 #	-DSOVER:STRING=%sover \
 #	..
-	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
-	-DCMAKE_C_FLAGS:STRING="%optflags" \
-	-DCMAKE_CXX_FLAGS:STRING="%optflags" \
-	-DCMAKE_Fortran_FLAGS:STRING="%optflags" \
-	-DCXXFLAGS:STRING="%optflags" \
-	-DFCFLAGS:STRING="%optflags" \
-	-DNC4PAR:BOOL=ON \
-	-DCMAKE_SKIP_RPATH:BOOL=ON \
-	-DSOMVER:STRING=%somver \
-	-DSOVER:STRING=%sover \
-	..
 
 %make VERBOSE=1
 popd
