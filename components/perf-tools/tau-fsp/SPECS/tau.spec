@@ -46,7 +46,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name: %{pname}%{PROJ_DELIM}
+Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 2.24
 Release: 1%{?dist}
 Summary: Tuning and Analysis Utilities Profiling Package
