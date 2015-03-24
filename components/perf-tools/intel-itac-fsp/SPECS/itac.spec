@@ -16,6 +16,10 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 #AutoReqProv: no
 
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+Requires: libpng12
+%endif
+
 %include %{_sourcedir}/FSP_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
