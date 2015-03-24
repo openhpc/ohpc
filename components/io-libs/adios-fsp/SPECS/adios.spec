@@ -208,7 +208,8 @@ cmake \
 	-DSOVER:STRING=%sover \
 	..
 
-%make VERBOSE=1
+#%make VERBOSE=1
+make VERBOSE=1
 popd
 
 %install
@@ -224,7 +225,8 @@ export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
 export MPIDIR=$MPI_DIR
 
 pushd BUILD
-%makeinstall_std
+#%makeinstall_std
+make install
 #cp -P src/libadios_internal_nompi.so* %buildroot%_libdir/
 popd
 
@@ -234,7 +236,8 @@ mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
 pushd wrappers/numpy
 export PATH=$PATH:%buildroot%_bindir
 export CFLAGS=-I%buildroot%_includedir
-%make MPI=y python
+#%make MPI=y python
+make MPI=y python
 %python_install
 popd
 install -m644 utils/skel/lib/skel_suite.py \
