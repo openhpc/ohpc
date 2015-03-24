@@ -25,9 +25,8 @@ BuildRequires: intel_licenses
 
 #-fsp-header-comp-end------------------------------------------------
 
-# Attempt serial build
-# %define mpiimpl openmpi
-# %define mpidir %_libdir/%mpiimpl
+%define mpiimpl openmpi
+%define mpidir %_libdir/%mpiimpl
 
 %define somver 0
 %define sover %somver.0.0
@@ -49,10 +48,9 @@ Source2: FSP_setup_compiler
 
 # Minimum Build Requires
 BuildRequires: mxml-devel cmake zlib-devel glib2-devel
+BuildRequires: %mpiimpl-devel
 
 # Additional Build Requires
-# Attempt serial build
-# BuildRequires: %mpiimpl-devel
 #BuildRequires: libhdf5-mpi-devel
 #BuildRequires: libnetcdf-mpi-devel
 #BuildRequires: libmpe2-devel
@@ -158,8 +156,8 @@ export CFLAGS="-fp-model strict $CFLAGS"
 # Attempt serial build
 # mpi-selector --set %mpiimpl
 # source %mpidir/bin/mpivars.sh
-# export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
-# export MPIDIR=%mpidir
+export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
+export MPIDIR=%mpidir
 TOPDIR=$PWD
 
 #%add_optflags -I$TOPDIR/src/public
@@ -182,26 +180,14 @@ cmake \
 	-DCXXFLAGS:STRING="%optflags" \
 	-DFCFLAGS:STRING="%optflags" \
 	-DNC4PAR:BOOL=ON \
+	-DPHDF5:BOOL=ON \
+	-DMPIDIR:PATH=%mpidir \
+	-DMPILIBS:STRING="-L%mpidir/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
+	-DCMAKE_INSTALL_RPATH:STRING=%mpidir/lib \
 	-DCMAKE_SKIP_RPATH:BOOL=ON \
 	-DSOMVER:STRING=%somver \
 	-DSOVER:STRING=%sover \
 	..
-# Attempt to build serial
-#	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
-#	-DCMAKE_C_FLAGS:STRING="%optflags" \
-#	-DCMAKE_CXX_FLAGS:STRING="%optflags" \
-#	-DCMAKE_Fortran_FLAGS:STRING="%optflags" \
-#	-DCXXFLAGS:STRING="%optflags" \
-#	-DFCFLAGS:STRING="%optflags" \
-#	-DNC4PAR:BOOL=ON \
-#	-DPHDF5:BOOL=ON \
-#	-DMPIDIR:PATH=%mpidir \
-#	-DMPILIBS:STRING="-L%mpidir/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
-#	-DCMAKE_INSTALL_RPATH:STRING=%mpidir/lib \
-#	-DCMAKE_SKIP_RPATH:BOOL=ON \
-#	-DSOMVER:STRING=%somver \
-#	-DSOVER:STRING=%sover \
-#	..
 
 %make VERBOSE=1
 popd
