@@ -20,6 +20,10 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
 BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
 
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+Requires: perl-Thread-Queue
+%endif
+
 %description
 Automake is a tool for automatically generating `Makefile.in'
 files compliant with the GNU Coding Standards.
