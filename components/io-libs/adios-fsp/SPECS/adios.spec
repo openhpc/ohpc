@@ -65,6 +65,9 @@ Source2: FSP_setup_compiler
 BuildRequires: mxml-devel cmake zlib-devel glib2-devel
 BuildRequires: %{mpi_family}-devel
 
+# libm.a from CMakeLists
+BuildRequires: glibc-static
+
 # Additional Build Requires
 #BuildRequires: libhdf5-mpi-devel
 #BuildRequires: libnetcdf-mpi-devel
