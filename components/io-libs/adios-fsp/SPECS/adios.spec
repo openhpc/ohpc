@@ -40,8 +40,8 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 #-fsp-header-comp-end------------------------------------------------
 
-%define mpiimpl %{mpi_family}
-%define mpidir %_libdir/%mpiimpl
+#%define mpiimpl %{mpi_family}
+#%define mpidir %_libdir/%mpiimpl
 
 %define somver 0
 %define sover %somver.0.0
@@ -63,7 +63,7 @@ Source2: FSP_setup_compiler
 
 # Minimum Build Requires
 BuildRequires: mxml-devel cmake zlib-devel glib2-devel
-BuildRequires: %mpiimpl-devel
+BuildRequires: %{mpi_family}-devel
 
 # Additional Build Requires
 #BuildRequires: libhdf5-mpi-devel
@@ -172,8 +172,8 @@ export CFLAGS="-fp-model strict $CFLAGS"
 # Attempt serial build
 # mpi-selector --set %mpiimpl
 # source %mpidir/bin/mpivars.sh
-export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
-export MPIDIR=%mpidir
+export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
+export MPIDIR="$MPI_DIR"
 TOPDIR=$PWD
 
 #%add_optflags -I$TOPDIR/src/public
@@ -197,9 +197,9 @@ cmake \
 	-DFCFLAGS:STRING="%optflags" \
 	-DNC4PAR:BOOL=ON \
 	-DPHDF5:BOOL=ON \
-	-DMPIDIR:PATH=%mpidir \
-	-DMPILIBS:STRING="-L%mpidir/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
-	-DCMAKE_INSTALL_RPATH:STRING=%mpidir/lib \
+	-DMPIDIR:PATH="$MPI_DIR" \
+	-DMPILIBS:STRING="-L$MPI_DIR/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
+	-DCMAKE_INSTALL_RPATH:STRING="$MPI_DIR/lib" \
 	-DCMAKE_SKIP_RPATH:BOOL=ON \
 	-DSOMVER:STRING=%somver \
 	-DSOVER:STRING=%sover \
@@ -217,8 +217,8 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 # Attempt to build serial
 #source %mpidir/bin/mpivars.sh
-export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,%mpidir/lib -L%mpidir/lib"
-export MPIDIR=%mpidir
+export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
+export MPIDIR=$MPI_DIR
 
 pushd BUILD
 %makeinstall_std
