@@ -403,7 +403,7 @@ combination to limit the export scope to the defined compute nodes.
 [master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
-[master]$ service nfsserver restart
+[master]$ systemctl restart nfs
 
 # Enable NTP time service on computes and identify master host as local NTP server
 [master]$ chroot $CHROOT systemctl enable ntpd
