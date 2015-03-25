@@ -70,10 +70,13 @@ BuildRequires: glibc-static
 
 # Additional Build Requires
 #BuildRequires: libhdf5-mpi-devel
+Requires: phdf5-%{compiler_family}-%{mpi_family}-fsp
 #BuildRequires: libnetcdf-mpi-devel
+Requires: netcdf-%{compiler_family}-%{mpi_family}-fsp
 #BuildRequires: libmpe2-devel
 #BuildRequires: python-modules-xml
 #BuildRequires: bzlib-devel
+Requires: bzip2
 #BuildRequires: libsz2-devel
 # This is the legacy name for lustre-lite
 # BuildRequires: liblustre-devel
