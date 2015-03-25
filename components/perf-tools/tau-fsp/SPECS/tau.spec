@@ -64,7 +64,7 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
-BuildRequires: postgresql-devel binutils-devel
+BuildRequires: postgresql-devel binutils
 BuildRequires: libotf-devel zlib-devel python-devel
 
 %define debug_package %{nil}
