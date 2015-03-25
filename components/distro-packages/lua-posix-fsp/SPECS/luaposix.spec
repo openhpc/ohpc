@@ -21,7 +21,6 @@ Source0:        luaposix-release-v%{version}.tar.gz
 BuildRoot:      %{_tmppath}/luaposix-%{version}-%{release}-root-
 
 BuildRequires:  lua >= %{luaver}, lua-devel >= %{luaver}
-BuildRequires:  lunit%{PROJ_DELIM}
 BuildRequires:  ncurses-devel
 %if 0%{?suse_version} <= 1220
 BuildRequires:  lua-bit%{PROJ_DELIM}
