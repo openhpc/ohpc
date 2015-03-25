@@ -172,7 +172,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-module spider
+#module spider
 
 # Attempt serial build
 # mpi-selector --set %mpiimpl
