@@ -127,6 +127,7 @@ make exports TOPDIR=$TOPDIR
 
 pushd %{buildroot}%{install_path}/x86_64/bin
 sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
+rm -f tau_java
 popd
 mv %buildroot%{install_path}/x86_64/bin %buildroot%{install_path}/bin
 mv %buildroot%{install_path}/x86_64/lib %buildroot%{install_path}/lib
@@ -134,7 +135,9 @@ install -d %buildroot%{install_path}/etc
 install -d %buildroot%_datadir/%name
 install -d %buildroot%{install_path}/include
 sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*.h
+sed -i 's|x86_64/lib|lib|g' %buildroot%{install_path}/include/*.h
 sed -i 's|%buildroot||g' %buildroot%{install_path}/include/Makefile
+sed -i 's|x86_64/lib|lib|g' %buildroot%{install_path}/include/Makefile
 sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile
 sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
@@ -152,10 +155,12 @@ pushd %buildroot%{install_path}/lib
 if [ -f  Makefile.tau-param-mpi-openmp-profile-trace ]
     then
         sed -i 's|%buildroot||g' Makefile.tau-param-mpi-openmp-profile-trace
+        sed -i 's|x86_64/lib|lib|g' Makefile.tau-param-mpi-openmp-profile-trace
 fi
 if [ -f Makefile.tau-param-icpc-mpi-openmp-profile-trace ]
     then
         sed -i 's|%buildroot||g' Makefile.tau-param-icpc-mpi-openmp-profile-trace
+        sed -i 's|x86_64/lib|lib|g' Makefile.tau-param-icpc-mpi-openmp-profile-trace
 fi
 #rm -f libtau-param-mpi-openmp-profile-trace.a
 #rm -f libtau-param-icpc-mpi-openmp-profile-trace.a
