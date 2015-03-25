@@ -175,7 +175,6 @@ export FSP_MPI_FAMILY=%{mpi_family}
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-module spider
 module load phdf5
 
 # Attempt serial build
@@ -189,7 +188,7 @@ TOPDIR=$PWD
 # Attempt to build serial
 # %add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
 
-export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf" 
+export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf $INCLUDE" 
 export CFLAGS="$optflags"
 #export CFLAGS="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf"
 
