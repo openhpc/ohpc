@@ -183,8 +183,8 @@ TOPDIR=$PWD
 # Attempt to build serial
 # %add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
 
-%define optflags "-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf" 
-export CFLAGS="%optflags"
+export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf" 
+export CFLAGS="$optflags"
 #export CFLAGS="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf"
 
 mkdir BUILD
@@ -194,11 +194,11 @@ cmake \
 	-DLIB_SUFFIX=64 \
 %endif
 	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
-	-DCMAKE_C_FLAGS:STRING="%optflags" \
-	-DCMAKE_CXX_FLAGS:STRING="%optflags" \
-	-DCMAKE_Fortran_FLAGS:STRING="%optflags" \
-	-DCXXFLAGS:STRING="%optflags" \
-	-DFCFLAGS:STRING="%optflags" \
+	-DCMAKE_C_FLAGS:STRING="$optflags" \
+	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
+	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
+	-DCXXFLAGS:STRING="$optflags" \
+	-DFCFLAGS:STRING="$optflags" \
 	-DNC4PAR:BOOL=ON \
 	-DPHDF5:BOOL=ON \
 	-DMPIDIR:PATH="$MPI_DIR" \
