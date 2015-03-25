@@ -188,7 +188,7 @@ TOPDIR=$PWD
 # Attempt to build serial
 # %add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
 
-export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf -I$HDF5_INC -lpthread" 
+export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf -I$HDF5_INC -lpthread -L$MPI_DIR/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" 
 export CFLAGS="$optflags"
 #export CFLAGS="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf"
 
