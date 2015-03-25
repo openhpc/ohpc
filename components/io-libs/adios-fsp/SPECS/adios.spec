@@ -68,8 +68,8 @@ BuildRequires: %{mpi_family}-devel
 # libm.a from CMakeLists
 BuildRequires: glibc-static
 
-BuildRequires hdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires      hdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires: hdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      hdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 # Additional Build Requires
 #BuildRequires: libhdf5-mpi-devel
