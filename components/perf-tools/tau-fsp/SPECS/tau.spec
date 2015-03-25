@@ -166,6 +166,7 @@ fi
 #rm -f libtau-param-icpc-mpi-openmp-profile-trace.a
 rm -f libjogl*
 popd
+sed -i 's|x86_64/lib|lib|g' %buildroot%{install_path}/examples/Makefile*
 
 
 # FSP module file
