@@ -136,6 +136,7 @@ install -d %buildroot%{install_path}/include
 sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*.h
 sed -i 's|%buildroot||g' %buildroot%{install_path}/include/Makefile
 sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile
+sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 
 rm -rf %buildroot%{install_path}/x86_64
 rm -f  %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
