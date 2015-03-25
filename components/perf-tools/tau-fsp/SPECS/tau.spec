@@ -163,6 +163,7 @@ if [ -f libTAUsh-param-icpc-mpi-openmp-profile-trace.so ]
     then
         sed -i 's|%buildroot||g' libTAUsh-param-icpc-mpi-openmp-profile-trace.so
 fi
+ln -s libTAUsh-param-icpc-mpi-openmp-profile-trace.so libtau-param-icpc-mpi-openmp-profile-trace.so
 rm -f libtau-param-mpi-openmp-profile-trace.a
 rm -f libtau-param-icpc-mpi-openmp-profile-trace.a
 rm -f libjogl*
