@@ -175,6 +175,8 @@ export FSP_MPI_FAMILY=%{mpi_family}
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
+module load hdf5
+
 # Attempt serial build
 # mpi-selector --set %mpiimpl
 # source %mpidir/bin/mpivars.sh
