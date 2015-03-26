@@ -127,7 +127,7 @@ make exports TOPDIR=$TOPDIR
 
 pushd %{buildroot}%{install_path}/x86_64/bin
 sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
-sed -i 's|x86_64/lib|lib|g' $(egrep -IR 'x86_64/lib' ./|awk -F : '{print $1}')
+sed -i 's|x86_64/lib|lib|g' $(egrep -IR 'x86_64' ./|awk -F : '{print $1}')
 rm -f tau_java
 popd
 mv %buildroot%{install_path}/x86_64/bin %buildroot%{install_path}/bin
