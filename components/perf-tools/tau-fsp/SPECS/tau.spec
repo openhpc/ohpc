@@ -64,7 +64,6 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
-BuildRequires: papi-fsp
 BuildRequires: postgresql-devel binutils
 BuildRequires: libotf-devel zlib-devel python-devel
 
@@ -97,7 +96,6 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
-module load papi
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
@@ -119,7 +117,6 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-mpi \
 	-mpiinc=$MPI_DIR/include \
 	-mpilib=$MPI_DIR/lib \
-	-papi=$PAPI_DIR \
 	-slog2 \
 	-PROFILEPARAM \
 	-CPUTIME \
