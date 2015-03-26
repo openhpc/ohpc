@@ -188,7 +188,7 @@ TOPDIR=$PWD
 # Attempt to build serial
 # %add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
 
-export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf -I$HDF5_INC -lpthread" 
+export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf -I$HDF5_INC -lpthread -L$HDF5_LIB" 
 export CFLAGS="$optflags"
 #export CFLAGS="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf"
 
@@ -214,7 +214,7 @@ cmake \
 	-DFCFLAGS:STRING="$optflags" \
 	-DNC4PAR:BOOL=ON \
 	-DPHDF5:BOOL=ON \
-	-DPHDF5_CFLAGS:STRING="$optflags $HDF5_LIB" \
+	-DPHDF5_CFLAGS:STRING="$optflags" \
 	-DPHDF5_LIBS:STRING="-lhdf5_h1 -lhdf5 -lz" \
 	-DMPIDIR:PATH="$MPI_DIR" \
 	-DMPILIBS:STRING="-L$MPI_DIR/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
