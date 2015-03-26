@@ -64,6 +64,7 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
+BuildRequires: papi-fsp
 BuildRequires: postgresql-devel binutils
 BuildRequires: libotf-devel zlib-devel python-devel
 
