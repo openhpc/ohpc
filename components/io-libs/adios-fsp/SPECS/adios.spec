@@ -80,7 +80,7 @@ Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #BuildRequires: libsz2-devel
 # This is the legacy name for lustre-lite
 # BuildRequires: liblustre-devel
-BuildRequires: lustre-lite lustre-devel
+BuildRequires: lustre-lite
 #BuildRequires: libnumpy-devel
 #!BuildIgnore: post-build-checks
 
