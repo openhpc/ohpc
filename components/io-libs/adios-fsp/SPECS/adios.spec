@@ -80,7 +80,7 @@ Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #BuildRequires: libsz2-devel
 # This is the legacy name for lustre-lite
 # BuildRequires: liblustre-devel
-BuildRequires: lustre-lite
+BuildRequires: lustre-lite-devel
 #BuildRequires: libnumpy-devel
 #!BuildIgnore: post-build-checks
 
@@ -215,13 +215,13 @@ cmake \
 	-DNC4PAR:BOOL=ON \
 	-DPHDF5:BOOL=ON \
 	-DPHDF5_CFLAGS:STRING="$optflags" \
+	-DPHDF5_LIBS:STRING="-lhdf5_h1 -lhdf5 -lz" \
 	-DMPIDIR:PATH="$MPI_DIR" \
 	-DMPILIBS:STRING="-L$MPI_DIR/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
 	-DCMAKE_INSTALL_RPATH:STRING="$MPI_DIR/lib" \
 	-DCMAKE_SKIP_RPATH:BOOL=ON \
 	-DSOMVER:STRING=%somver \
 	-DSOVER:STRING=%sover \
-	-DCC:STRING="$CC" \
 	..
 
 #%make VERBOSE=1
