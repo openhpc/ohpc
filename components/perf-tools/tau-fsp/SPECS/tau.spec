@@ -111,6 +111,9 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-c++=mpicxx \
 	-cc=mpicc \
 	-fortran=$fcomp \
+%if %{compiler_family} == intel
+	-INTELCXXLIBICC
+%endif
 	-iowrapper \
 	-mpi \
 	-slog2 \
@@ -119,9 +122,6 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
 	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib" \
-%if %{compiler_family} == intel
-	-INTELCXXLIBICC
-%endif
 
 
 make install TOPDIR=$TOPDIR
