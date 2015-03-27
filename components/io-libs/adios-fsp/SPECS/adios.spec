@@ -270,8 +270,12 @@ export CFLAGS=-I%buildroot%_includedir
 # Need numpy/arrayobject.h -- assume the header from python-numpy
 # make MPI=y python
 #%python_install
-find / -name "*python_install*" || true
 popd
+
+find %buildroot -type d
+
+env
+
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \
 	utils/skel/lib/skel_test_plan.py \
