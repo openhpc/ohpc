@@ -247,6 +247,7 @@ make install
 popd
 
 install -d %buildroot%_datadir/%pname
+find
 mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
 
 pushd wrappers/numpy
