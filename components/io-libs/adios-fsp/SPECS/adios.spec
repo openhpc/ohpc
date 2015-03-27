@@ -251,6 +251,7 @@ install -d %buildroot%_datadir/%pname
 #mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
 find /home/abuild/rpmbuild -name "adios_config*"
 mv BUILD/adios_config.flags %buildroot%_datadir/%pname/
+ls -l BUILD/adios_config
 mv BUILD/adios_config %buildroot%_bindir
 #mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
 
