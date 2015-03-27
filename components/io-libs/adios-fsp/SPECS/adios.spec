@@ -215,7 +215,7 @@ cmake \
 	-DNC4PAR:BOOL=ON \
 	-DPHDF5:BOOL=ON \
 	-DPHDF5_CFLAGS:STRING="$optflags" \
-	-DPHDF5_LIBS:STRING="-lhdf5 -lz" \
+	-DPHDF5_LIBS:STRING="-lhdf5 -lhdf5_hl -lz" \
 	-DMPIDIR:PATH="$MPI_DIR" \
 	-DMPILIBS:STRING="-L$MPI_DIR/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
 	-DCMAKE_INSTALL_RPATH:STRING="$MPI_DIR/lib" \
