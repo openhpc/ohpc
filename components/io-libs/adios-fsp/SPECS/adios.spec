@@ -260,7 +260,7 @@ mv BUILD/adios_config %buildroot%_bindir
 pushd wrappers/numpy
 export PATH=$PATH:%buildroot%_bindir
 export CFLAGS=-I%buildroot%_includedir
-cat $(which adios_config)
+adios_config -s -c
 #%make MPI=y python
 make MPI=y python
 %python_install
