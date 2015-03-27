@@ -82,6 +82,8 @@ Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 # BuildRequires: liblustre-devel
 BuildRequires: lustre-lite
 #BuildRequires: libnumpy-devel
+BuildRequires: numpy-devel
+BuildRequires: numpy
 #!BuildIgnore: post-build-checks
 
 Requires: python-module-%pname = %version-%release
