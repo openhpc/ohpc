@@ -102,6 +102,7 @@ export fcomp=gfortran
 %endif
 %if %{compiler_family} == intel
 export fcomp=mpiifort
+%define intellib "-INTELCXXLIBICC"
 %endif
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_DIR/lib"
 
@@ -118,6 +119,7 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-slog2 \
 	-PROFILEPARAM \
 	-CPUTIME \
+	%intellib \
 	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
 	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib"
