@@ -261,6 +261,7 @@ pushd wrappers/numpy
 export PATH=$PATH:%buildroot%_bindir
 export CFLAGS=-I%buildroot%_includedir
 adios_config -s -c
+find / -type f -name "Python.h"
 #%make MPI=y python
 make MPI=y python
 %python_install
