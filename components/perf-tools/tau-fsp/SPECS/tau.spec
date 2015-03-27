@@ -14,12 +14,10 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-%define fcomp gfortran
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
-%define fcomp mpiifort
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -115,14 +113,12 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-fortran=$fcomp \
 	-iowrapper \
 	-mpi \
-	-mpiinc=$MPI_DIR/include \
-	-mpilib=$MPI_DIR/lib \
 	-slog2 \
 	-PROFILEPARAM \
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib"
+	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib" \
 
 
 make install TOPDIR=$TOPDIR
