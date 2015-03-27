@@ -76,6 +76,7 @@ Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #BuildRequires: libnetcdf-mpi-devel
 #BuildRequires: libmpe2-devel
 #BuildRequires: python-modules-xml
+BuildRequires: python-devel
 #BuildRequires: bzlib-devel
 #BuildRequires: libsz2-devel
 # This is the legacy name for lustre-lite
