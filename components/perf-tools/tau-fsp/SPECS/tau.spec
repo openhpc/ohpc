@@ -111,9 +111,6 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-c++=mpicxx \
 	-cc=mpicc \
 	-fortran=$fcomp \
-%if %{compiler_family} == intel
-	-INTELCXXLIBICC \
-%endif
 	-iowrapper \
 	-mpi \
 	-slog2 \
