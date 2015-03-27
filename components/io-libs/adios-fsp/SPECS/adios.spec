@@ -252,19 +252,23 @@ install -d %buildroot%_datadir/%pname
 install -d %buildroot%_bindir
 #mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
 mv BUILD/adios_config.flags %buildroot%_datadir/%pname/
-sed -i 's|%prefix/etc|%prefix'%_datadir/%pname/'|' BUILD/adios_config
-sed -i 's|%prefix|'%buildroot'|' BUILD/adios_config
-sed -i 's|^\.|. "$FLAGSFILE"|' BUILD/adios_config
-mv BUILD/adios_config %buildroot%_bindir
+
+
+####################################################################
+# adios_config and adios_config.flags have bogus info in them
+# required for make MPI=y python
+# sed -i 's|%prefix/etc|%prefix'%_datadir/%pname/'|' BUILD/adios_config
+# sed -i 's|%prefix|'%buildroot'|' BUILD/adios_config
+# sed -i 's|^\.|. "$FLAGSFILE"|' BUILD/adios_config
+# mv BUILD/adios_config %buildroot%_bindir
 #mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
 
 pushd wrappers/numpy
 export PATH=$PATH:%buildroot%_bindir
 export CFLAGS=-I%buildroot%_includedir
-adios_config -s -c
-find / -name "arrayobject.h" || true
 #%make MPI=y python
-make MPI=y python
+# Need numpy/arrayobject.h -- assume the header from python-numpy
+# make MPI=y python
 %python_install
 popd
 install -m644 utils/skel/lib/skel_suite.py \
