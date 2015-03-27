@@ -252,6 +252,7 @@ install -d %buildroot%_datadir/%pname
 find /home/abuild/rpmbuild -name "adios_config*"
 mv BUILD/adios_config.flags %buildroot%_datadir/%pname/
 #mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
+mv BUILD/adios_config wrappers/numpy
 
 pushd wrappers/numpy
 export PATH=$PATH:%buildroot%_bindir
