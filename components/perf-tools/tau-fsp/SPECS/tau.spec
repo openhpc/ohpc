@@ -62,7 +62,8 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
-BuildRequires: postgresql-devel binutils
+BuildRequires: postgresql-devel binutils-devel
+Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
 
 %define debug_package %{nil}
@@ -188,6 +189,7 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
 
 EOF
 
