@@ -115,8 +115,6 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-fortran=$fcomp \
 	-iowrapper \
 	-mpi \
-	-mpiinc=$MPI_DIR/include \
-	-mpilib=$MPI_DIR/lib \
 	-slog2 \
 	-PROFILEPARAM \
 	-CPUTIME \
