@@ -149,10 +149,12 @@ pushd %buildroot%{install_path}/lib
 if [ -f  Makefile.tau-param-mpi-openmp-profile-trace ]
     then
         sed -i 's|%buildroot||g' Makefile.tau-param-mpi-openmp-profile-trace
+        ln -s Makefile.tau-param-mpi-openmpi-profile-trace Makefile
 fi
 if [ -f Makefile.tau-param-icpc-mpi-openmp-profile-trace ]
     then
         sed -i 's|%buildroot||g' Makefile.tau-param-icpc-mpi-openmp-profile-trace
+        ln -s Makefile.tau-param-mpi-openmpi-profile-trace Makefile
 fi
 rm -f libjogl*
 popd
