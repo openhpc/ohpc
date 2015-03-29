@@ -53,6 +53,7 @@ Group: fsp/perf-tools
 Url: http://www.cs.uoregon.edu/research/tau/home.php
 Source0: %{pname}-%{version}.tar.gz
 Provides:  lib%PNAME.so()(64bit)
+Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
 
