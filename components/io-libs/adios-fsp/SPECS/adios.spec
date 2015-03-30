@@ -250,6 +250,7 @@ popd
 
 install -d %buildroot%_datadir/%pname
 install -d BUILD%_bindir
+install -d BUILD%_sysconfdir
 #mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
 mv BUILD/adios_config.flags BUILD%_sysconfdir
 cp BUILD%_sysconfdir/adios_config.flags %buildroot%_sysconfdir 
