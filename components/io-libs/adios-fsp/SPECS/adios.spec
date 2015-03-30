@@ -347,9 +347,9 @@ EOF
 %files -n lib%pname
 %_libdir/*.so.*
 
-%files -n python-module-%pname
-%python_sitelibdir/*
-%exclude %python_sitelibdir/argparse.py*
+#%files -n python-module-%pname
+#%python_sitelibdir/*
+#%exclude %python_sitelibdir/argparse.py*
 
 %files -n lib%pname-devel
 %_bindir/adios_config
