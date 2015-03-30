@@ -196,6 +196,7 @@ TOPDIR=$PWD
 
 export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf -I$HDF5_INC -lpthread -L$HDF5_LIB" 
 export CFLAGS="$optflags"
+export FCFLAGS="$optflags"
 #export CFLAGS="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf"
 
 export CC=mpicc
