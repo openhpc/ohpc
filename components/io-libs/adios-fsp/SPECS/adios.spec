@@ -232,7 +232,10 @@ export MPICXX=mpicxx
 	
 
 #%make VERBOSE=1
-configure --prefix=%{install_path}
+%if %{compiler_family} == intel
+export CFLAGS="-fp-model strict $CFLAGS"
+%endif
+./configure --prefix=%{install_path}
 make VERBOSE=1
 ##popd
 
