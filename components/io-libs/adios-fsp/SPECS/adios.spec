@@ -86,7 +86,12 @@ BuildRequires: lustre-lite
 BuildRequires: python-numpy
 #!BuildIgnore: post-build-checks
 
-Requires: python-module-%pname = %version-%release
+###############################################################
+# Disable until we get the numpy headers
+#Requires: python-module-%pname = %version-%release
+
+# Default library install path
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 The Adaptable IO System (ADIOS) provides a simple, flexible way for
@@ -208,7 +213,7 @@ cmake \
 %if %_lib == lib64
 	-DLIB_SUFFIX=64 \
 %endif
-	-DCMAKE_INSTALL_PREFIX:PATH=%buildroot \
+	-DCMAKE_INSTALL_PREFIX:PATH=%install_path \
 	-DCMAKE_C_FLAGS:STRING="$optflags" \
 	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
 	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
