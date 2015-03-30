@@ -196,7 +196,6 @@ TOPDIR=$PWD
 
 export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf -I$HDF5_INC -lpthread -L$HDF5_LIB" 
 export CFLAGS="$optflags"
-export FCFLAGS="$optflags"
 #export CFLAGS="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf"
 
 export CC=mpicc
@@ -204,7 +203,7 @@ export CXX=mpicxx
 export F77=mpif77
 export FC=mpif90
 export MPICC=mpicc
-export MPIFC=mpifc
+export MPIFC=mpifc90
 export MPICXX=mpicxx
 
 ##mkdir BUILD
@@ -236,9 +235,9 @@ export MPICXX=mpicxx
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
-./configure --prefix=%{install_path} --with-mpi="$MPI_DIR"
+./configure --prefix=%{install_path} --with-mxml=/usr/include --with-lustre=/usr/include/lustre --with-phdf5="$HDF5_LIB" --with-zlib=/usr/include 
 make VERBOSE=1
-##popd
+popd
 
 %install
 # FSP compiler designation
