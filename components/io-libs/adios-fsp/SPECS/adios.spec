@@ -251,7 +251,7 @@ popd
 install -d %buildroot%_datadir/%pname
 install -d %buildroot%_bindir
 #mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
-mv BUILD/adios_config.flags %buildroot%_datadir/%pname/
+mv BUILD/adios_config.flags BUILD%_sysconfdir
 
 
 ####################################################################
@@ -260,7 +260,7 @@ mv BUILD/adios_config.flags %buildroot%_datadir/%pname/
 # sed -i 's|%prefix/etc|%prefix'%_datadir/%pname/'|' BUILD/adios_config
 # sed -i 's|%prefix|'%buildroot'|' BUILD/adios_config
 # sed -i 's|^\.|. "$FLAGSFILE"|' BUILD/adios_config
-# mv BUILD/adios_config %buildroot%_bindir
+mv BUILD/adios_config BUILD%_bindir
 #mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
 
 pushd wrappers/numpy
