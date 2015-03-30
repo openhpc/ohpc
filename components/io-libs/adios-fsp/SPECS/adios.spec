@@ -274,12 +274,13 @@ popd
 
 find %buildroot -type d
 
-env
-
-install -m644 utils/skel/lib/skel_suite.py \
-	utils/skel/lib/skel_template.py \
-	utils/skel/lib/skel_test_plan.py \
-	%buildroot%python_sitelibdir/
+#####################################################################
+# %python_sitelibdir is undefined. not sure if this will be FSP
+# dependant or there is a global place for these.
+# install -m644 utils/skel/lib/skel_suite.py \
+# 	utils/skel/lib/skel_template.py \
+# 	utils/skel/lib/skel_test_plan.py \
+# 	%buildroot%python_sitelibdir/
 
 rm -f $(find examples -name '*.o') \
 	examples/staging/stage_write/writer_adios
@@ -287,8 +288,9 @@ rm -f $(find examples -name '*.o') \
 install -d %buildroot%_libdir/%pname
 cp -fR examples %buildroot%_libdir/%pname/
 
-install -d %buildroot%python_sitelibdir
-mv %buildroot%_libdir/python/*.py %buildroot%python_sitelibdir/
+# See above regarding %python_sutelibdir
+# install -d %buildroot%python_sitelibdir
+# mv %buildroot%_libdir/python/*.py %buildroot%python_sitelibdir/
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
