@@ -212,7 +212,7 @@ cmake \
 %ifarch x86_64
 	-DLIB_SUFFIX=64 \
 %endif
-	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
+	-DCMAKE_INSTALL_PREFIX:PATH=%{install_path} \
 	-DCMAKE_C_FLAGS:STRING="$optflags" \
 	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
 	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
@@ -338,6 +338,8 @@ EOF
 pushd ../..
 find
 popd
+
+find / -name "arrayobject.h"
 
 %files
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
