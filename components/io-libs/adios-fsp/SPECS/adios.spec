@@ -342,7 +342,7 @@ EOF
 %exclude %_bindir/adios_config
 
 %files -n lib%pname
-%_libdir/*.so.*
+%{install_path}/lib/*.so.*
 
 #%files -n python-module-%pname
 #%python_sitelibdir/*
@@ -350,7 +350,7 @@ EOF
 
 %files -n lib%pname-devel
 %_bindir/adios_config
-%_libdir/*.so
+%{install_dir}/lib/*.so
 %_includedir/*
 %_datadir/%pname
 %_libdir/FindADIOS.cmake
