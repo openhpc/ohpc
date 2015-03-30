@@ -208,7 +208,6 @@ cmake \
 %if %_lib == lib64
 	-DLIB_SUFFIX=64 \
 %endif
-	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
 	-DCMAKE_C_FLAGS:STRING="$optflags" \
 	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
 	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
@@ -225,6 +224,8 @@ cmake \
 	-DSOMVER:STRING=%somver \
 	-DSOVER:STRING=%sover \
 	..
+	
+# -DCMAKE_INSTALL_PREFIX:PATH=%prefix \
 
 #%make VERBOSE=1
 make VERBOSE=1
@@ -249,13 +250,10 @@ make install
 popd
 
 install -d %buildroot%_datadir/%pname
-install -d BUILD%_bindir
-install -d BUILD%_sysconfdir
 install -d %buildroot%_bindir
 install -d %buildroot%_sysconfdir
 #mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
-mv BUILD/adios_config.flags BUILD%_sysconfdir
-cp BUILD%_sysconfdir/adios_config.flags %buildroot%_sysconfdir 
+cp BUILD/adios_config.flags %buildroot%_sysconfdir
 
 
 ####################################################################
@@ -264,8 +262,7 @@ cp BUILD%_sysconfdir/adios_config.flags %buildroot%_sysconfdir
 # sed -i 's|%prefix/etc|%prefix'%_datadir/%pname/'|' BUILD/adios_config
 # sed -i 's|%prefix|'%buildroot'|' BUILD/adios_config
 # sed -i 's|^\.|. "$FLAGSFILE"|' BUILD/adios_config
-mv BUILD/adios_config BUILD%_bindir
-cp BUILD%_bindir/adios_config %buildroot%_bindir
+cp BUILD/adios_config %buildroot%_bindir
 #mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
 
 pushd wrappers/numpy
