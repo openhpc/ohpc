@@ -56,7 +56,7 @@ BuildRequires:	-post-build-checks
 
 
 
-%{!?version: %global version 2.6.0}
+%{!?version: %global version 2.7.0}
 %{!?kver: %global kver ""}
 %{!?kdir: %global kdir %(dir=$(echo "%configure_args" | sed -ne 's/.*--with-linux=\\([^ ][^ ]*\\).*$/\\1/p'); if [ -n "$dir" ]; then echo "$dir"; else if [ -n "%kver" ]; then kversion="%kver"; else kversion="$(uname -r)"; fi; echo "/lib/modules/$kversion/source"; fi)}
 
@@ -153,7 +153,8 @@ Requires: libselinux
 
 # Intel FSP
 # 01/13/15 karl.w.schulz@intel.com - include patch for "text file busy" (http://review.whamcloud.com/#/c/11062/)
-Patch1: db5abf4b.diff
+# 04/30/15 karl.w.schulz@intel.com - deprecating patch, already present in 2.7.0
+###Patch1: db5abf4b.diff
 
 %description
 Userspace tools and files for the Lustre file system.
