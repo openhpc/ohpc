@@ -335,6 +335,10 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+pushd ../..
+find -name "*.so*"
+popd
+
 %files
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
 %_sysconfdir/*
