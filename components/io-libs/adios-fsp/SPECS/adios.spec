@@ -251,6 +251,8 @@ popd
 install -d %buildroot%_datadir/%pname
 install -d BUILD%_bindir
 install -d BUILD%_sysconfdir
+install -d %buildroot%_bindir
+install -d %buildroot%_sysconfdir
 #mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
 mv BUILD/adios_config.flags BUILD%_sysconfdir
 cp BUILD%_sysconfdir/adios_config.flags %buildroot%_sysconfdir 
@@ -275,7 +277,9 @@ export CFLAGS=-I%buildroot%_includedir
 #%python_install
 popd
 
-find $(dirname %buildroot/../..)
+pushd ../..
+find
+popd
 
 #####################################################################
 # %python_sitelibdir is undefined. not sure if this will be FSP
