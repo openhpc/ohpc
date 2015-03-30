@@ -335,12 +335,6 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-pushd ../..
-find
-popd
-
-find / -name "arrayobject.h"
-
 %files
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
 %_sysconfdir/*
