@@ -249,7 +249,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 pushd BUILD
 #%makeinstall_std
-make install
+make DESTDIR=$RPM_BUILD_ROOT install
 #cp -P src/libadios_internal_nompi.so* %buildroot%_libdir/
 popd
 
