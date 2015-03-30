@@ -307,7 +307,8 @@ clients in order to run
 %setup -qn lustre-%{version}
 
 # Intel FSP patches
-%patch1 -p1
+# 04/30/15 karl.w.schulz@intel.com - deprecating patch, already present in 2.7.0
+#%patch1 -p1
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
