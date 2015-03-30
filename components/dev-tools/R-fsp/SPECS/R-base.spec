@@ -84,7 +84,7 @@ BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires:  cairo-devel
 ###BuildRequires:  gcc
 ###BuildRequires:  gcc-c++
-###BuildRequires:  gcc-fortran
+BuildRequires:  gcc-fortran
 BuildRequires:  libjpeg-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
