@@ -206,34 +206,35 @@ export MPICC=mpicc
 export MPIFC=mpifc
 export MPICXX=mpicxx
 
-mkdir BUILD
-pushd BUILD
-cmake \
-%ifarch x86_64
-	-DLIB_SUFFIX=64 \
-%endif
-	-DCMAKE_INSTALL_PREFIX:PATH=%{install_path} \
-	-DCMAKE_C_FLAGS:STRING="$optflags" \
-	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
-	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
-	-DCXXFLAGS:STRING="$optflags" \
-	-DFCFLAGS:STRING="$optflags" \
-	-DNC4PAR:BOOL=ON \
-	-DPHDF5:BOOL=ON \
-	-DPHDF5_CFLAGS:STRING="$optflags" \
-	-DPHDF5_LIBS:STRING="-lhdf5 -lhdf5_hl -lz" \
-	-DMPIDIR:PATH="$MPI_DIR" \
-	-DMPILIBS:STRING="-L$MPI_DIR/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
-	-DCMAKE_INSTALL_RPATH:STRING="$MPI_DIR/lib" \
-	-DCMAKE_SKIP_RPATH:BOOL=ON \
-	-DSOMVER:STRING=%somver \
-	-DSOVER:STRING=%sover \
-	..
+##mkdir BUILD
+##pushd BUILD
+##cmake \
+##%ifarch x86_64
+##	-DLIB_SUFFIX=64 \
+##%endif
+##	-DCMAKE_INSTALL_PREFIX:PATH=%{install_path} \
+##	-DCMAKE_C_FLAGS:STRING="$optflags" \
+##	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
+##	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
+##	-DCXXFLAGS:STRING="$optflags" \
+##	-DFCFLAGS:STRING="$optflags" \
+##	-DNC4PAR:BOOL=ON \
+##	-DPHDF5:BOOL=ON \
+##	-DPHDF5_CFLAGS:STRING="$optflags" \
+##	-DPHDF5_LIBS:STRING="-lhdf5 -lhdf5_hl -lz" \
+##	-DMPIDIR:PATH="$MPI_DIR" \
+##	-DMPILIBS:STRING="-L$MPI_DIR/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
+##	-DCMAKE_INSTALL_RPATH:STRING="$MPI_DIR/lib" \
+##	-DCMAKE_SKIP_RPATH:BOOL=ON \
+##	-DSOMVER:STRING=%somver \
+##	-DSOVER:STRING=%sover \
+##	..
 	
 
 #%make VERBOSE=1
+configure --prefix=%{install_path}
 make VERBOSE=1
-popd
+##popd
 
 %install
 # FSP compiler designation
