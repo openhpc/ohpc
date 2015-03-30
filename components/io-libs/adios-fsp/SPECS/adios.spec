@@ -208,6 +208,7 @@ cmake \
 %if %_lib == lib64
 	-DLIB_SUFFIX=64 \
 %endif
+	-DCMAKE_INSTALL_PREFIX:PATH=%buildroot \
 	-DCMAKE_C_FLAGS:STRING="$optflags" \
 	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
 	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
@@ -225,7 +226,6 @@ cmake \
 	-DSOVER:STRING=%sover \
 	..
 	
-# -DCMAKE_INSTALL_PREFIX:PATH=%prefix \
 
 #%make VERBOSE=1
 make VERBOSE=1
