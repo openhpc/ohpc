@@ -15,25 +15,62 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+
+# FSP convention: the default assumes the gnu toolchain and openmpi
+# MPI family; however, these can be overridden by specifing the
+# compiler_family variable via rpmbuild or other
+# mechanisms.
 %include %{_sourcedir}/FSP_macros
+
+%{!?compiler_family:	%define compiler_family gnu}
+%{!?mpi_family:		%define mpi_family openmpi}
+%{!?PROJ_DELIM:		%define PROJ_DELIM %{nil}}
+
+# Compiler dependencies
+BuildRequires: lmod%{PROJ_DELIM} coreutils
+%if %{compiler_family} == gnu
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
+%endif
+%if %{compiler_family} == intel
+BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
+%if 0%{?FSP_BUILD}
+BuildRequires: intel_licenses
+%endif
+%endif
+
+# MPI dependencies
+%if %{mpi_family} == impi
+BuildRequires: intel-mpi%{PROJ_DELIM}
+Requires:      intel-mpi%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == mvapich2
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == openmpi
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+%endif
+
+#-fsp-header-comp-end------------------------------------------------
+
 
 %define 	pname R-base
 %define 	PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:		%{pname}%{PROJ_DELIM}
 ###%define release 1 
-Release:	1
+Release:	1%{?dist}
 Version:        3.1.3
 ###Release:        %release
 Source:         R-%{version}.tar.gz
 #Source: http://cran.r-project.org/src/base/R-2/R-%%{version}.tar.gz
 # PATCH-FIX-UPSTREAM Fix tre when wchar_t is unsigned int
 Patch:          tre.patch
-
 Url:            http://www.r-project.org/
-
 Summary:        R - statistics package (S-Plus like)
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Scientific/Math
@@ -41,13 +78,13 @@ Group:          Productivity/Scientific/Math
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%define		install_path %{FSP_PUB}/%{pname}/%version
+%define 	install_path %{FSP_LIBS}/%{pname}/%version
 
 
 BuildRequires:  cairo-devel
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  gcc-fortran
+###BuildRequires:  gcc
+###BuildRequires:  gcc-c++
+###BuildRequires:  gcc-fortran
 BuildRequires:  libjpeg-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
@@ -195,6 +232,47 @@ chmod -x %{buildroot}%{_libdir}/R/library/mgcv/CITATION
 mkdir -p %{buildroot}/etc/ld.so.conf.d
 cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
 %{_libdir}/R/lib
+EOF
+
+# FSP module file
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+    puts stderr " "
+    puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
+    puts stderr "toolchain and the %{mpi_family} MPI stack."
+    puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "URL %{url}"
+
+set     version                     %{version}
+
+prepend-path    PATH                %{install_path}/bin
+prepend-path    MANPATH             %{install_path}/man
+prepend-path    INCLUDE             %{install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
+setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_INC        %{install_path}/include
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
 EOF
 
 %post
