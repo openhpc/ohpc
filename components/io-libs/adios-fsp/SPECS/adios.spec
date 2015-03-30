@@ -235,7 +235,7 @@ export MPICXX=mpicxx
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
-./configure --prefix=%{install_path} --with-mxml=/usr/include --with-lustre=/usr/include/lustre --with-phdf5="$HDF5_LIB" --with-zlib=/usr/include 
+./configure --prefix=%{install_path} --with-mxml=/usr/include --with-lustre=/usr/include/lustre --with-phdf5="$HDF5_LIB" --with-zlib=/usr/include || cat *log
 make VERBOSE=1
 popd
 
