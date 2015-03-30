@@ -184,11 +184,10 @@ export CFLAGS="-fp-model strict $CFLAGS"
 
 module load phdf5
 
-# Attempt serial build
 # mpi-selector --set %mpiimpl
 # source %mpidir/bin/mpivars.sh
-export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
-export MPIDIR="$MPI_DIR"
+# export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
+# export MPIDIR="$MPI_DIR"
 TOPDIR=$PWD
 
 #%add_optflags -I$TOPDIR/src/public
@@ -213,7 +212,7 @@ cmake \
 %ifarch x86_64
 	-DLIB_SUFFIX=64 \
 %endif
-	-DCMAKE_INSTALL_PREFIX:PATH=%prefix/%install_path \
+	-DCMAKE_INSTALL_PREFIX:PATH=%prefix \
 	-DCMAKE_C_FLAGS:STRING="$optflags" \
 	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
 	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
@@ -245,8 +244,8 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 # Attempt to build serial
 #source %mpidir/bin/mpivars.sh
-export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
-export MPIDIR=$MPI_DIR
+#export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
+#export MPIDIR=$MPI_DIR
 
 pushd BUILD
 #%makeinstall_std
@@ -277,10 +276,6 @@ export CFLAGS=-I%buildroot%_includedir
 # Need numpy/arrayobject.h -- assume the header from python-numpy
 # make MPI=y python
 #%python_install
-popd
-
-pushd ../..
-find
 popd
 
 #####################################################################
@@ -339,6 +334,10 @@ EOF
 ##
 set     ModulesVersion      "%{version}"
 EOF
+
+pushd ../..
+find
+popd
 
 %files
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
