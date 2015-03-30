@@ -235,7 +235,7 @@ export MPICXX=mpicxx
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
-./configure --prefix=%{install_path}
+./configure --prefix=%{install_path} --with-mpi="$MPI_DIR"
 make VERBOSE=1
 ##popd
 
