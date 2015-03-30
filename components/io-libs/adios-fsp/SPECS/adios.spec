@@ -210,10 +210,10 @@ export MPICXX=mpicxx
 mkdir BUILD
 pushd BUILD
 cmake \
-%if %_lib == lib64
+%ifarch x86_64
 	-DLIB_SUFFIX=64 \
 %endif
-	-DCMAKE_INSTALL_PREFIX:PATH=%install_path \
+	-DCMAKE_INSTALL_PREFIX:PATH=%prefix/%install_path \
 	-DCMAKE_C_FLAGS:STRING="$optflags" \
 	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
 	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
