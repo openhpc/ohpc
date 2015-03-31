@@ -93,17 +93,26 @@ make install DESTDIR=%{buildroot}
 rm -rf %{buildroot}%{_libdir}/pkgconfig
 %endif
 
-# 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
+install -D -m 0644 contrib/dist/linux/orcmd.service %{buildroot}%{_unitdir}/orcmd.service
+install -D -m 0644 contrib/dist/linux/orcmsched.service %{buildroot}%{_unitdir}/orcmsched.service
 
-install -D -m 0644 %SOURCE1 %{buildroot}%{_unitdir}/orcmd.service
-install -D -m 0644 %SOURCE2 %{buildroot}/etc/sysconfig/orcmd
+install -D -m 0644 contrib/dist/linux/orcmd.sysconfig %{buildroot}/etc/sysconfig/orcmd
+install -D -m 0644 contrib/dist/linux/orcmsched.sysconfig %{buildroot}/etc/sysconfig/orcmsched
+install -D -m 0644 contrib/database/orcmdb_psql.ini %{buildroot}%{_sysconfdir}/orcmdb_psql.ini
+install -D -m 0644 contrib/database/orcmdb_psql.sql %{buildroot}%{_sysconfdir}/orcmdb_psql.sql
+install -D -m 0644 contrib/database/psql_odbc_driver.ini %{buildroot}%{_sysconfdir}/psql_odbc_driver.ini
 
-# 01/30/2015 karl.w.schulz@intel.com - include db ini files from newer orcm
+### # 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
 
-install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/psql_odbc_driver.ini
-install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/orcmdb_psql.ini
-install -D -m 0644 %SOURCE5 %{buildroot}%{_sysconfdir}/orcmdb_psql.sql
-
+### install -D -m 0644 %SOURCE1 %{buildroot}%{_unitdir}/orcmd.service
+### install -D -m 0644 %SOURCE2 %{buildroot}/etc/sysconfig/orcmd
+### 
+### # 01/30/2015 karl.w.schulz@intel.com - include db ini files from newer orcm
+### 
+### install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/psql_odbc_driver.ini
+### install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/orcmdb_psql.ini
+### install -D -m 0644 %SOURCE5 %{buildroot}%{_sysconfdir}/orcmdb_psql.sql
+### 
 # 02/03/2015 karl.w.schulz@intel.com - include copy of updated postgres config files
 
 install -D -m 0644 %SOURCE6 %{buildroot}%{_sysconfdir}/pg_hba.orcm.conf
