@@ -51,7 +51,7 @@ Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version: 1.8.0
 Release: 1
-License: BSD
+License: BSD-3-Clause
 Group:   fsp/io-libs
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: %{pname}-%{version}.tar.gz
