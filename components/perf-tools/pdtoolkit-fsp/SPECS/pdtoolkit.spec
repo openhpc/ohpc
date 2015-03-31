@@ -76,7 +76,7 @@ rm -f %buildroot%{install_path}/mic_linux
 rm -f %buildroot%{install_path}/sparc64fx
 pushd %buildroot%{install_path}/x86_64/bin
 rm -f edg33-upcparse
-ln -s ../../../contrib/rose/roseparse/upcparse
+ln -s ../../../contrib/rose/roseparse/upcparse edg33-upcparse
 rm -f edg44-c-roseparse
 ln -s  ../../../contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
 rm -f edg44-cxx-roseparse
@@ -84,7 +84,7 @@ ln -s  ../../../contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
 rm -f edg44-upcparse
 ln -s  ../../../contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
 rm -f pebil.static
-ln -s  ../../../contrib/pebil/pebil/peil.static
+ln -s  ../../../contrib/pebil/pebil/pebil.static
 rm -f roseparse
 ln -s  ../../../contrib/rose/roseparse/roseparse
 rm -f smaqao
