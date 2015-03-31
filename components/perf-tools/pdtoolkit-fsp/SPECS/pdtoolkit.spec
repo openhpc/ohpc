@@ -60,7 +60,7 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-./configure -prefix=%{install_path}
+./configure -prefix=%buildroot%{install_path}
 make %{?_smp_mflags}
 
 %install
@@ -70,10 +70,8 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 export DONT_STRIP=1
 make %{?_smp_mflags} install
-mkdir -p %{buildroot}/opt/fsp/pub/libs
-mv %{install_path} %{buildroot}%{install_path}
-cd %{buildroot}%{install_path}/..
-ln -s %{name}-%{version} %{name}
+
+install -d %buildroot%{install_path}
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
