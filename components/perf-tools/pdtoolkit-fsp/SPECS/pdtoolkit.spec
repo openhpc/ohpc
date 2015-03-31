@@ -71,6 +71,25 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export DONT_STRIP=1
 make %{?_smp_mflags} install
 
+rm -f %buildroot%{install_path}/craycnl
+rm -f %buildroot%{install_path}/mic_linux
+rm -f %buildroot%{install_path}/sparc64fx
+rm -f %buildroot%{install_path}/x86_64/bin/edg33-upcparse
+ln -s %buildroot%{install_path}/x86_64/bin/edg33-upcparse ../../../contrib/rose/roseparse/upcparse
+rm -f %buildroot%{install_path}/x86_64/bin/edg44-c-roseparse
+ln -s %buildroot%{install_path}/x86_64/bin/edg44-c-roseparse ../../../contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
+rm -f %buildroot%{install_path}/x86_64/bin/edg44-cxx-roseparse
+ln -s %buildroot%{install_path}/x86_64/bin/edg44-cxx-roseparse ../../../contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
+rm -f %buildroot%{install_path}/x86_64/bin/edg44-upcparse
+ln -s %buildroot%{install_path}/x86_64/bin/edg44-upcparse ../../../contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
+rm -f %buildroot%{install_path}/x86_64/bin/pebil.static
+ln -s %buildroot%{install_path}/x86_64/bin/pebil.static ../../../contrib/pebil/pebil/peil.static
+rm -f %buildroot%{install_path}/x86_64/bin/roseparse
+ln -s %buildroot%{install_path}/x86_64/bin/roseparse ../../../contrib/rose/roseparse/roseparse
+rm -f %buildroot%{install_path}/x86_64/bin/smaqao
+ln -s %buildroot%{install_path}/x86_64/bin/smaqao ../../../contrib/maqao/maqao/smaqao
+rm -f %buildroot%{install_path}/x86_64/include
+ln -s %buildroot%{install_path}/x86_64/include ../../include
 install -d %buildroot%{install_path}
 
 # FSP module file
