@@ -218,9 +218,9 @@ make install-info
 %{__rm} -f %{buildroot}%{_infodir}/dir
 %{__rm} -f %{buildroot}%{_infodir}/dir.old
 
-chmod +x %{buildroot}%{_libdir}/R/share/sh/echo.sh
+###chmod +x %{buildroot}%{_libdir}/R/share/sh/echo.sh
 
-chmod -x %{buildroot}%{_libdir}/R/library/mgcv/CITATION
+###chmod -x %{buildroot}%{_libdir}/R/library/mgcv/CITATION
 
 # there is a backup file in survival for 3.1.3
 %{__rm} -f %{buildroot}%{_libdir}/R/library/survival/NEWS.Rd.orig
