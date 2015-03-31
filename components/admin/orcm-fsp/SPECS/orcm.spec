@@ -85,7 +85,7 @@ orcm is an opensource resiliency cluster management software implementation.
 ###              --bindir=%{_bindir}         \
 ###              --with-platform=./contrib/platform/intel/hillsboro/orcm-linux
 ### 
-./configure --prefix=/opt/open-rcm
+./configure --prefix=/opt/open-rcm \
              --with-platform=./contrib/platform/intel/hillsboro/orcm-linux
 
 make %{?_smp_mflags}
