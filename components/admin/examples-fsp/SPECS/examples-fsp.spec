@@ -30,7 +30,7 @@
 
 Summary: Example source code and templates for use within FSP environment.
 Name:    examples%{PROJ_DELIM}
-Version: 1.0
+Version: 1.1
 Release: 1
 License: BSD
 Group:   fsp/admin
@@ -57,6 +57,16 @@ df -h
 install -D -m 0644 %SOURCE1 %{buildroot}%{FSP_HOME}/pub/examples/mpi/hello.c
 install -D -m 0644 %SOURCE2 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0
 install -D -m 0644 %SOURCE3 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0.ww
+
+# 03/31/15 karl.w.schulz@intel.com - append timeout to centos7 version
+# of ww ib0 file (observed need for this extra timeout to have ib0
+# successful on boot)
+
+install -D -m 0644 %SOURCE3 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/ifcfg-ib0.ww
+echo "DEVTIMEOUT=2" >> %{buildroot}%{FSP_HOME}/pub/examples/network/centos/ifcfg-ib0.ww
+
+
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
