@@ -208,9 +208,9 @@ for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admi
 done
 
 %install 
+make DESTDIR=%{install_path} install
 ###make DESTDIR=%{buildroot} install
 ###make DESTDIR=%{buildroot} install-pdf
-make install
 
 # Installation of Info-files
 %{__install} -m 755 -d %{_infodir}
