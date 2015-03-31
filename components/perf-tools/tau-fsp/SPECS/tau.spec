@@ -78,7 +78,7 @@ the DOE and ASC program at University of Oregon. TAU provides a suite of
 static and dynamic tools that provide graphical user
 interaction and interoperation to form an integrated analysis environment for
 parallel Fortran 95, C and C++ applications.  In particular, a robust
-performance profiling facility availble in TAU has been applied extensively in
+performance profiling facility availible in TAU has been applied extensively in
 the ACTS toolkit.  Also, recent advancements in TAU's code analysis
 capabilities have allowed new static tools to be developed, such as an
 automatic instrumentation tool.
@@ -115,6 +115,8 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-fortran=$fcomp \
 	-iowrapper \
 	-mpi \
+	-mpiinc=$MPI_DIR/include \
+	-mpilib=$MPI_DIR/lib \
 	-slog2 \
 	-PROFILEPARAM \
 	-CPUTIME \
