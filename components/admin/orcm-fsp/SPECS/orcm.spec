@@ -41,6 +41,9 @@ Source8: orcmd.db.sysconfig
 #BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
 #BuildRequires: automake%{PROJ_DELIM} >= 1.12.2
 #BuildRequires: libtool%{PROJ_DELIM} >= 2.4.2
+BuildRequires: autoconf >= 2.69
+BuildRequires: automake >= 1.12.2
+BuildRequires: libtool >= 2.4.2
 BuildRequires: sigar%{PROJ_DELIM}
 BuildRequires: sigar-devel%{PROJ_DELIM}
 BuildRequires: psqlODBC%{PROJ_DELIM}
