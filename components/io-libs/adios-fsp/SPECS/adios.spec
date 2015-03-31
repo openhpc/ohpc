@@ -179,10 +179,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 pushd wrappers/numpy
 export PATH=$PATH:%buildroot%_bindir
 export CFLAGS=-I%buildroot%_includedir
-#%make MPI=y python
-# Need numpy/arrayobject.h -- assume the header from python-numpy
-# make MPI=y python
-#%python_install
+make MPI=y python
 popd
 
 #####################################################################
