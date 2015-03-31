@@ -30,7 +30,7 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name: %{pname}{PROJ_DELIM}
 Version:        3.20
 Release:        1
 License:        Program Database Toolkit License
@@ -52,7 +52,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Program Database Toolkit (PDT) is a framework for analyzing source code written in several programming languages and for making rich program knowledge accessible to developers of static and dynamic analysis tools. PDT implements a standard program representation, the program database (PDB), that can be accessed in a uniform way through a class library supporting common PDB operations.
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
+
 
 %build
 # FSP compiler/mpi designation
