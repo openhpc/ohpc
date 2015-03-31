@@ -94,7 +94,10 @@ pushd %buildroot%{install_path}/x86_64
 rm -f include
 ln -s ../../include
 popd
-install -d %buildroot%{install_path}
+install -d %buildroot%{install_path}/bin
+install -d %buildroot%{install_path}/include
+install -d %buildroot%{install_path}/lib
+install -d %buildroot%{install_path}/share
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
