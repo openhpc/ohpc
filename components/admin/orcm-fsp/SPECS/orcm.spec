@@ -9,8 +9,8 @@ License: See COPYING
 Group:   fsp/admin
 Vendor:  Intel Corporation
 URL:     https://github.com/open-mpi/orcm
-Prefix:  /opt/open-rcm
-Prefix:  %{_sysconfdir}
+#Prefix:  /opt/open-rcm
+#Prefix:  %{_sysconfdir}
 Source0: orcm-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires: flex >= 2.5.35
@@ -77,12 +77,15 @@ orcm is an opensource resiliency cluster management software implementation.
 
 ./autogen.pl
 
-./configure %{configure_flags}           \
-             --prefix=%{_prefix}         \
-             --sysconfdir=%{_sysconfdir} \
-             --libdir=%{_libdir}         \
-             --datadir=%{_datadir}       \
-             --bindir=%{_bindir}         \
+### ./configure %{configure_flags}           \
+###              --prefix=%{_prefix}         \
+###              --sysconfdir=%{_sysconfdir} \
+###              --libdir=%{_libdir}         \
+###              --datadir=%{_datadir}       \
+###              --bindir=%{_bindir}         \
+###              --with-platform=./contrib/platform/intel/hillsboro/orcm-linux
+### 
+./configure --prefix=/opt/open-rcm
              --with-platform=./contrib/platform/intel/hillsboro/orcm-linux
 
 make %{?_smp_mflags}
