@@ -243,7 +243,7 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-zlib=/usr/include \
 	--with-netcdf=$NETCDF_DIR || cat config.log
 make VERBOSE=1
-popd
+##popd
 
 %install
 # FSP compiler designation
