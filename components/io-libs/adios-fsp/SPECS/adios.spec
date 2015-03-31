@@ -176,8 +176,9 @@ make DESTDIR=$RPM_BUILD_ROOT install
 #cp adios_config %buildroot%_bindir
 #mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
 
+echo $TOPDIR
+export PATH=$(pwd)/BUILD/adios-1.8.0/:$PATH
 pushd wrappers/numpy
-export PATH=$PATH:%buildroot%_bindir
 export CFLAGS=-I%buildroot%_includedir
 find ~ -name adios_config
 make MPI=y python
