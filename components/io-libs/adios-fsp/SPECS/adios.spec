@@ -241,7 +241,7 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-lustre=/usr/include/lustre \
 	--with-phdf5="$HDF5_DIR" \
 	--with-zlib=/usr/include \
-	--with-netcdf=$NETCDF_DIR || cat config.log
+	--with-netcdf="$NETCDF_DIR"
 make VERBOSE=1
 ##popd
 
@@ -345,31 +345,34 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-pushd ~
-find -name "*.so*"
+pushd %_bindir
+find
 popd
 
 %files
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
 %_sysconfdir/*
 %_bindir/*
-%exclude %_bindir/adios_config
+#%exclude %_bindir/adios_config
+%_includedir/*
+%_datadir/%pname
+%_libdir/%pname
 
-%files -n lib%pname
-%{install_path}/lib/*.so.*
+#%files -n lib%pname
+#%{install_path}/lib/*.so.*
 
 #%files -n python-module-%pname
 #%python_sitelibdir/*
 #%exclude %python_sitelibdir/argparse.py*
 
-%files -n lib%pname-devel
-%_bindir/adios_config
-%{install_dir}/lib/*.so
-%_includedir/*
-%_datadir/%pname
-%_libdir/FindADIOS.cmake
+#%files -n lib%pname-devel
+#%_bindir/adios_config
+#%{install_dir}/lib/*.so
+#%_includedir/*
+#%_datadir/%pname
+#%_libdir/FindADIOS.cmake
 
-%files examples
-%_libdir/%pname
+#%files examples
+#%_libdir/%pname
 
 %changelog
