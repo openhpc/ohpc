@@ -24,6 +24,7 @@ BuildRequires:  automake
 BuildRequires:  libtool
 %if 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  libtool-ltdl
+Requires:       libtool-ltdl
 %endif
 BuildRequires:  openssl-devel
 BuildRequires:  postgresql-devel
@@ -43,7 +44,10 @@ Obsoletes:      postgresql-odbc
 Provides:       pg_iface:/usr/lib/pgsql/odbcinst.ini
 Provides:       pg_odbc
 Provides:       postgresql-odbc
+
+%if 0%{?sles_version}
 Requires:       libltdl7
+%endif
 
 %description
 This package contains the ODBC (Open DataBase Connectivity) driver and

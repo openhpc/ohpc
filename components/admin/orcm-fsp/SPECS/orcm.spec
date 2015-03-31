@@ -14,7 +14,7 @@ Prefix:  %{_sysconfdir}
 Source0: orcm-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires: flex >= 2.5.35
-%if 0%{?rhel_version} > 600
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 BuildRequires: libtool-ltdl-devel
 %endif
 BuildRequires:  pkgconfig(systemd)
@@ -38,11 +38,12 @@ Source8: orcmd.db.sysconfig
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
 # using the source RPM and may not want to include some or all of these dependencies
 %if 0%{?FSP_BUILD}
-BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
-BuildRequires: automake%{PROJ_DELIM} >= 1.12.2
-BuildRequires: libtool%{PROJ_DELIM} >= 2.4.2
+BuildRequires: autoconf >= 2.69
+BuildRequires: automake >= 1.12.2
+BuildRequires: libtool >= 2.4.2
 BuildRequires: sigar%{PROJ_DELIM}
 BuildRequires: sigar-devel%{PROJ_DELIM}
+BuildRequires: psqlODBC%{PROJ_DELIM}
 
 BuildRequires: unixODBC
 BuildRequires: unixODBC-devel
@@ -72,7 +73,7 @@ orcm is an opensource resiliency cluster management software implementation.
 %build
 
 # 03/30/15 karl.w.schulz@intel.pl - allow use fsp provided autotools
-export PATH=/opt/fsp/pub/autotools/bin/:$PATH
+#export PATH=/opt/fsp/pub/autotools/bin/:$PATH
 
 ./autogen.pl
 
