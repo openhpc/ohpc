@@ -257,17 +257,17 @@ export FSP_MPI_FAMILY=%{mpi_family}
 #export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
 #export MPIDIR=$MPI_DIR
 
-pushd BUILD
+##pushd BUILD
 #%makeinstall_std
 make DESTDIR=$RPM_BUILD_ROOT install
 #cp -P src/libadios_internal_nompi.so* %buildroot%_libdir/
-popd
+##popd
 
 install -d %buildroot%_datadir/%pname
 install -d %buildroot%_bindir
 install -d %buildroot%_sysconfdir
 #mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
-cp BUILD/adios_config.flags %buildroot%_sysconfdir
+cp adios_config.flags %buildroot%_sysconfdir
 
 
 ####################################################################
@@ -276,7 +276,7 @@ cp BUILD/adios_config.flags %buildroot%_sysconfdir
 # sed -i 's|%prefix/etc|%prefix'%_datadir/%pname/'|' BUILD/adios_config
 # sed -i 's|%prefix|'%buildroot'|' BUILD/adios_config
 # sed -i 's|^\.|. "$FLAGSFILE"|' BUILD/adios_config
-cp BUILD/adios_config %buildroot%_bindir
+cp adios_config %buildroot%_bindir
 #mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
 
 pushd wrappers/numpy
