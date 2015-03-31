@@ -73,7 +73,7 @@ Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 # Additional Build Requires
 #BuildRequires: libhdf5-mpi-devel
-#BuildRequires: libnetcdf-mpi-devel
+BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #BuildRequires: libmpe2-devel
 #BuildRequires: python-modules-xml
 BuildRequires: python-devel
@@ -183,6 +183,7 @@ export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
 module load phdf5
+module load netcdf
 
 # mpi-selector --set %mpiimpl
 # source %mpidir/bin/mpivars.sh
@@ -235,7 +236,12 @@ export MPICXX=mpicxx
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
-./configure --prefix=%{install_path} --with-mxml=/usr/include --with-lustre=/usr/include/lustre --with-phdf5="$HDF5_LIB" --with-zlib=/usr/include || cat *log
+./configure --prefix=%{install_path} \ 
+	--with-mxml=/usr/include \ 
+	--with-lustre=/usr/include/lustre \
+	--with-phdf5="$HDF5_LIB" \
+	--with-zlib=/usr/include \
+	--with-netcdf=$NETCDF_DIR || cat config.log
 make VERBOSE=1
 popd
 
