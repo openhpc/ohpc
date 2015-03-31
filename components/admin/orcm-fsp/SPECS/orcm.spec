@@ -38,9 +38,9 @@ Source8: orcmd.db.sysconfig
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
 # using the source RPM and may not want to include some or all of these dependencies
 %if 0%{?FSP_BUILD}
-BuildRequires: autoconf >= 2.69
-BuildRequires: automake >= 1.12.2
-BuildRequires: libtool >= 2.4.2
+BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
+BuildRequires: automake%{PROJ_DELIM} >= 1.12.2
+BuildRequires: libtool%{PROJ_DELIM} >= 2.4.2
 BuildRequires: sigar%{PROJ_DELIM}
 BuildRequires: sigar-devel%{PROJ_DELIM}
 
@@ -70,6 +70,10 @@ orcm is an opensource resiliency cluster management software implementation.
 %patch2 -p0
 
 %build
+
+# 03/30/15 karl.w.schulz@intel.pl - allow use fsp provided autotools
+export PATH=/opt/fsp/pub/autotools/bin/:$PATH
+
 ./autogen.pl
 
 ./configure %{configure_flags}           \
