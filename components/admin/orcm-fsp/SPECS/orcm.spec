@@ -9,7 +9,7 @@ License: See COPYING
 Group:   fsp/admin
 Vendor:  Intel Corporation
 URL:     https://github.com/open-mpi/orcm
-Prefix:  %{_prefix}
+Prefix:  /opt/open-rcm
 Prefix:  %{_sysconfdir}
 Source0: orcm-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
