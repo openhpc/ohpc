@@ -236,11 +236,10 @@ export MPICXX=mpicxx
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
-echo %{install_path}
 ./configure --prefix=%{install_path} \
 	--with-mxml=/usr/include \
 	--with-lustre=/usr/include/lustre \
-	--with-phdf5="$HDF5_LIB" \
+	--with-phdf5="$HDF5_DIR" \
 	--with-zlib=/usr/include \
 	--with-netcdf=$NETCDF_DIR || cat config.log
 make VERBOSE=1
