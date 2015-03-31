@@ -361,7 +361,7 @@ popd
 %{FSP_HOME}
 #%_sysconfdir/*
 #%_bindir/*
-#%exclude %_bindir/adios_config
+%exclude %{FSP_HOME}/lib/examples
 
 #%files -n lib%pname
 #%{install_path}/lib/*.so.*
@@ -377,7 +377,7 @@ popd
 #%_datadir/%pname
 #%_libdir/FindADIOS.cmake
 
-#%files examples
-#%_libdir/%pname
+%files examples
+%{FSP_HOME}/lib/examples
 
 %changelog
