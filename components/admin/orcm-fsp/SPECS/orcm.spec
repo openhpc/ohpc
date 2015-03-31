@@ -38,9 +38,6 @@ Source8: orcmd.db.sysconfig
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
 # using the source RPM and may not want to include some or all of these dependencies
 %if 0%{?FSP_BUILD}
-#BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
-#BuildRequires: automake%{PROJ_DELIM} >= 1.12.2
-#BuildRequires: libtool%{PROJ_DELIM} >= 2.4.2
 BuildRequires: autoconf >= 2.69
 BuildRequires: automake >= 1.12.2
 BuildRequires: libtool >= 2.4.2
@@ -56,6 +53,7 @@ BuildRequires: ipmiutil-devel >= 2.9.5
 BuildRequires: libopenssl-devel
 %else
 BuildRequires: openssl-devel
+BuildRequires: libtool-ltdl-devel
 %endif
 
 Requires:      ipmiutil
