@@ -93,13 +93,9 @@ make install DESTDIR=%{buildroot}
 rm -rf %{buildroot}%{_libdir}/pkgconfig
 %endif
 
-%if %{uses_systemd}
 install -D -m 0644 contrib/dist/linux/orcmd.service %{buildroot}%{_unitdir}/orcmd.service
 install -D -m 0644 contrib/dist/linux/orcmsched.service %{buildroot}%{_unitdir}/orcmsched.service
-%else
-install -D -m 0755 contrib/dist/linux/orcmd.init %{buildroot}%{_initddir}/orcmd
-install -D -m 0755 contrib/dist/linux/orcmsched.init %{buildroot}%{_initddir}/orcmsched
-%endif
+
 install -D -m 0644 contrib/dist/linux/orcmd.sysconfig %{buildroot}/etc/sysconfig/orcmd
 install -D -m 0644 contrib/dist/linux/orcmsched.sysconfig %{buildroot}/etc/sysconfig/orcmsched
 install -D -m 0644 contrib/database/orcmdb_psql.ini %{buildroot}%{_sysconfdir}/orcmdb_psql.ini
