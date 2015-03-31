@@ -358,7 +358,7 @@ popd
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
-%exclude %buildroot%{install_path}/lib/examples
+%exclude %{install_path}/lib/examples
 %{FSP_HOME}
 #%_sysconfdir/*
 #%_bindir/*
@@ -378,7 +378,7 @@ popd
 #%_libdir/FindADIOS.cmake
 
 %files examples
-%buildroot%{install_path}/lib/examples
+%{install_path}/lib/examples
 
 
 %changelog
