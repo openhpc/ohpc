@@ -79,6 +79,9 @@ BuildRequires: python-devel
 BuildRequires: lustre-lite
 BuildRequires: python-numpy
 
+# define fdupes, clean up rpmlint errors
+BuildRequires: fdupes
+
 ###############################################################
 # Disable until we get the numpy headers
 #Requires: python-module-%pname = %version-%release
@@ -195,9 +198,10 @@ rm -f $(find examples -name '*.o') \
 
 find examples -type f -name .gitignore -exec rm {} \;
 find examples -type f -name "*.xml" -exec chmod 644 {} \;
-find examples -type f -name ".lib" -exec rm {} \;
+find examples -type f -name ".lib" -exec rmdir {} \;
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
+%fdupes -s %buildroot%{install_path}/lib/examples
 
 # See above regarding %python_sutelibdir
 # install -d %buildroot%python_sitelibdir
