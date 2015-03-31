@@ -43,6 +43,7 @@ BuildRequires: automake%{PROJ_DELIM} >= 1.12.2
 BuildRequires: libtool%{PROJ_DELIM} >= 2.4.2
 BuildRequires: sigar%{PROJ_DELIM}
 BuildRequires: sigar-devel%{PROJ_DELIM}
+BuildRequires: psqlODBC%{PROJ_DELIM}
 
 BuildRequires: unixODBC
 BuildRequires: unixODBC-devel
