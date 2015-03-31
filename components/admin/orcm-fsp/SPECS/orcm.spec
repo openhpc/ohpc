@@ -3,7 +3,7 @@
 
 Summary: Open Resiliency Cluster Management implementation
 Name:    %{pname}%{PROJ_DELIM}
-Version: 0.5.0
+Version: 0.7.0
 Release: 1
 License: See COPYING
 Group:   fsp/admin
@@ -11,7 +11,7 @@ Vendor:  Intel Corporation
 URL:     https://github.com/open-mpi/orcm
 Prefix:  %{_prefix}
 Prefix:  %{_sysconfdir}
-Source0: openrcm-%{version}.tar.gz
+Source0: orcm-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires: flex >= 2.5.35
 %if 0%{?rhel_version} > 600
@@ -64,7 +64,7 @@ Requires:      unixODBC
 orcm is an opensource resiliency cluster management software implementation.
 
 %prep
-%setup -q -n open-rcm-%{version}
+%setup -q -n orcm-%{version}
 
 %patch1 -p0
 %patch2 -p0
