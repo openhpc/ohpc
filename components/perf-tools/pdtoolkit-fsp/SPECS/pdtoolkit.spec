@@ -30,7 +30,7 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name: %{pname}{PROJ_DELIM}
+Name: %{pname}%{PROJ_DELIM}
 Version:        3.20
 Release:        1
 License:        Program Database Toolkit License
@@ -60,7 +60,7 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-./configure -prefix=%buildroot%{install_path}
+./configure -prefix=%buildroot%{install_path} -exec-prefix=
 make %{?_smp_mflags}
 
 %install
