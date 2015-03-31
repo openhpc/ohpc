@@ -53,7 +53,6 @@ BuildRequires: ipmiutil-devel >= 2.9.5
 BuildRequires: libopenssl-devel
 %else
 BuildRequires: openssl-devel
-BuildRequires: libtool-ltdl-devel
 %endif
 
 Requires:      ipmiutil
