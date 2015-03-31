@@ -345,7 +345,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-pushd %_bindir
+pushd /home/abuild/rpmbuild/BUILDROOT/adios-gnu-fsp-1.8.0-118.1.x86_64
 find
 popd
 
