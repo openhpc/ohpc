@@ -345,7 +345,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-pushd ../..
+pushd ~
 find -name "*.so*"
 popd
 
