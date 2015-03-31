@@ -203,7 +203,7 @@ export CXX=mpicxx
 export F77=mpif77
 export FC=mpif90
 export MPICC=mpicc
-export MPIFC=mpifc90
+export MPIFC=mpif90
 export MPICXX=mpicxx
 
 ##mkdir BUILD
