@@ -24,6 +24,7 @@ BuildRequires:  automake
 BuildRequires:  libtool
 %if 0%{?rhel_version} || 0%{?centos_version}
 BuildRequires:  libtool-ltdl
+Requires:       libtool-ltdl
 %endif
 BuildRequires:  openssl-devel
 BuildRequires:  postgresql-devel
@@ -46,8 +47,6 @@ Provides:       postgresql-odbc
 
 %if 0%{?sles_version}
 Requires:       libltdl7
-%else
-Requires:       libtool-ltdl
 %endif
 
 %description
