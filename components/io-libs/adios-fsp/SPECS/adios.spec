@@ -301,8 +301,8 @@ rm -f $(find examples -name '*.o') \
 
 #install -d %buildroot%_libdir/%pname
 #cp -fR examples %buildroot%_libdir/%pname/
-install -d %{install_path}/lib
-cp -fR examples %{install_path}/lib
+install -d %buildroot%{install_path}/lib
+cp -fR examples %buildroot%{install_path}/lib
 
 # See above regarding %python_sutelibdir
 # install -d %buildroot%python_sitelibdir
@@ -356,13 +356,12 @@ cat ./opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/bin/adios_config
 popd
 
 %files
+%defattr(-,root,root,-)
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
-%_sysconfdir/*
-%_bindir/*
+%{FSP_HOME}
+#%_sysconfdir/*
+#%_bindir/*
 #%exclude %_bindir/adios_config
-%_includedir/*
-%_datadir/%pname
-%_libdir/%pname
 
 #%files -n lib%pname
 #%{install_path}/lib/*.so.*
