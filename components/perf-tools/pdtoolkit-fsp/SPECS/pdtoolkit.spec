@@ -98,12 +98,6 @@ install -d %buildroot%{install_path}/bin
 install -d %buildroot%{install_path}/include
 install -d %buildroot%{install_path}/lib
 install -d %buildroot%{install_path}/share
-install -d %buildroot%{install_path}/contrib/rose/roseparse/upcparse
-install -d %buildroot%{install_path}/contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
-install -d %buildroot%{install_path}/contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
-install -d %buildroot%{install_path}/contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
-install -d %buildroot%{install_path}/contrib/pebil/pebil/pebil.static
-install -d %buildroot%{install_path}/contrib/maqao/maqao/smaqao
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
