@@ -40,9 +40,6 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 #-fsp-header-comp-end------------------------------------------------
 
-#%define mpiimpl %{mpi_family}
-#%define mpidir %_libdir/%mpiimpl
-
 %define somver 0
 %define sover %somver.0.0
 
@@ -71,8 +68,6 @@ BuildRequires: glibc-static
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-# Additional Build Requires
-#BuildRequires: libhdf5-mpi-devel
 BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #BuildRequires: libmpe2-devel
 #BuildRequires: python-modules-xml
@@ -82,9 +77,7 @@ BuildRequires: python-devel
 # This is the legacy name for lustre-lite
 # BuildRequires: liblustre-devel
 BuildRequires: lustre-lite
-#BuildRequires: libnumpy-devel
 BuildRequires: python-numpy
-#!BuildIgnore: post-build-checks
 
 ###############################################################
 # Disable until we get the numpy headers
@@ -117,52 +110,6 @@ how they process the data.
 
 This package contains python module of ADIOS.
 
-%package -n lib%pname
-Summary: Shared libraries of the Adaptable IO System (ADIOS)
-Group: System/Libraries
-
-%description -n lib%pname
-The Adaptable IO System (ADIOS) provides a simple, flexible way for
-scientists to desribe the data in their code that may need to be
-written, read, or processed outside of the running simulation. By
-providing an external to the code XML file describing the various
-elements, their types, and how you wish to process them this run, the
-routines in the host code (either Fortran or C) can transparently change
-how they process the data.
-
-This package contains shared libraries of ADIOS.
-
-%package -n lib%pname-devel
-Summary: Development files of the Adaptable IO System (ADIOS)
-Group: Development/C
-Requires: lib%pname = %version-%release
-
-%description -n lib%pname-devel
-The Adaptable IO System (ADIOS) provides a simple, flexible way for
-scientists to desribe the data in their code that may need to be
-written, read, or processed outside of the running simulation. By
-providing an external to the code XML file describing the various
-elements, their types, and how you wish to process them this run, the
-routines in the host code (either Fortran or C) can transparently change
-how they process the data.
-
-This package contains development files of ADIOS.
-
-%package examples
-Summary: Examples for the Adaptable IO System (ADIOS)
-Group: Sciences/Mathematics
-
-%description examples
-The Adaptable IO System (ADIOS) provides a simple, flexible way for
-scientists to desribe the data in their code that may need to be
-written, read, or processed outside of the running simulation. By
-providing an external to the code XML file describing the various
-elements, their types, and how you wish to process them this run, the
-routines in the host code (either Fortran or C) can transparently change
-how they process the data.
-
-This package contains examples for ADIOS.
-
 %prep
 %setup -q -n %{pname}-%{version}
 
@@ -185,19 +132,9 @@ export CFLAGS="-fp-model strict $CFLAGS"
 module load phdf5
 module load netcdf
 
-# mpi-selector --set %mpiimpl
-# source %mpidir/bin/mpivars.sh
-# export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
-# export MPIDIR="$MPI_DIR"
 TOPDIR=$PWD
 
-#%add_optflags -I$TOPDIR/src/public
-# Attempt to build serial
-# %add_optflags -I%mpidir/include -I%mpidir/include/netcdf %optflags_shared
-
-export optflags="-I$TOPDIR/src/public -I$MPI_DIR/include -I$NETCDF_INC -I$HDF5_INC -lpthread -L$NETCDF_LIB -lnetcdf -L$HDF5_LIB" 
-export CFLAGS="$optflags"
-#export CFLAGS="-I$TOPDIR/src/public -I$MPI_DIR/include -I$MPI_DIR/include/netcdf"
+export CFLAGS="-I$TOPDIR/src/public -I$MPI_DIR/include -I$NETCDF_INC -I$HDF5_INC -lpthread -L$NETCDF_LIB -lnetcdf -L$HDF5_LIB" 
 
 export CC=mpicc
 export CXX=mpicxx
@@ -207,32 +144,6 @@ export MPICC=mpicc
 export MPIFC=mpif90
 export MPICXX=mpicxx
 
-##mkdir BUILD
-##pushd BUILD
-##cmake \
-##%ifarch x86_64
-##	-DLIB_SUFFIX=64 \
-##%endif
-##	-DCMAKE_INSTALL_PREFIX:PATH=%{install_path} \
-##	-DCMAKE_C_FLAGS:STRING="$optflags" \
-##	-DCMAKE_CXX_FLAGS:STRING="$optflags" \
-##	-DCMAKE_Fortran_FLAGS:STRING="$optflags" \
-##	-DCXXFLAGS:STRING="$optflags" \
-##	-DFCFLAGS:STRING="$optflags" \
-##	-DNC4PAR:BOOL=ON \
-##	-DPHDF5:BOOL=ON \
-##	-DPHDF5_CFLAGS:STRING="$optflags" \
-##	-DPHDF5_LIBS:STRING="-lhdf5 -lhdf5_hl -lz" \
-##	-DMPIDIR:PATH="$MPI_DIR" \
-##	-DMPILIBS:STRING="-L$MPI_DIR/lib -lmpi_f90 -lmpi_f77 -lmpi_cxx -lmpi" \
-##	-DCMAKE_INSTALL_RPATH:STRING="$MPI_DIR/lib" \
-##	-DCMAKE_SKIP_RPATH:BOOL=ON \
-##	-DSOMVER:STRING=%somver \
-##	-DSOVER:STRING=%sover \
-##	..
-	
-
-#%make VERBOSE=1
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
@@ -243,7 +154,6 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-zlib=/usr/include \
 	--with-netcdf="$NETCDF_DIR"
 make VERBOSE=1
-##popd
 
 %install
 # FSP compiler designation
@@ -252,23 +162,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-# Attempt to build serial
-#source %mpidir/bin/mpivars.sh
-#export OMPI_LDFLAGS="-Wl,--as-needed,-rpath,$MPI_DIR/lib -L$MPI_DIR/lib"
-#export MPIDIR=$MPI_DIR
-
-##pushd BUILD
-#%makeinstall_std
 make DESTDIR=$RPM_BUILD_ROOT install
-#cp -P src/libadios_internal_nompi.so* %buildroot%_libdir/
-##popd
-
-#install -d %buildroot%_datadir/%pname
-#install -d %buildroot%_bindir
-#install -d %buildroot%_sysconfdir
-#mv %buildroot%_bindir/adios_config.flags %buildroot%_datadir/%pname/
-#cp adios_config.flags %buildroot%_sysconfdir
-
 
 ####################################################################
 # adios_config and adios_config.flags have bogus info in them
@@ -299,8 +193,6 @@ popd
 rm -f $(find examples -name '*.o') \
 	examples/staging/stage_write/writer_adios
 
-#install -d %buildroot%_libdir/%pname
-#cp -fR examples %buildroot%_libdir/%pname/
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 
@@ -358,27 +250,15 @@ popd
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
-%exclude %{install_path}/lib/examples
+#%exclude %{install_path}/lib/examples
 %{FSP_HOME}
-#%_sysconfdir/*
-#%_bindir/*
-
-#%files -n lib%pname
-#%{install_path}/lib/*.so.*
 
 #%files -n python-module-%pname
 #%python_sitelibdir/*
 #%exclude %python_sitelibdir/argparse.py*
 
-#%files -n lib%pname-devel
-#%_bindir/adios_config
-#%{install_dir}/lib/*.so
-#%_includedir/*
-#%_datadir/%pname
-#%_libdir/FindADIOS.cmake
-
-%files examples
-%{install_path}/lib/examples
+#%files examples
+#%{install_path}/lib/examples
 
 
 %changelog
