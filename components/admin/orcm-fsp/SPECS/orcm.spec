@@ -46,8 +46,8 @@ BuildRequires: sigar-devel%{PROJ_DELIM}
 
 BuildRequires: unixODBC
 BuildRequires: unixODBC-devel
-BuildRequires: ipmiutil >= 2.9.3
-BuildRequires: ipmiutil-devel >= 2.9.3
+BuildRequires: ipmiutil >= 2.9.5
+BuildRequires: ipmiutil-devel >= 2.9.5
 %if 0%{?sles_version}
 BuildRequires: libopenssl-devel
 %else
