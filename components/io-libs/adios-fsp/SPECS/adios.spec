@@ -179,6 +179,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 pushd wrappers/numpy
 export PATH=$PATH:%buildroot%_bindir
 export CFLAGS=-I%buildroot%_includedir
+find ~ -name adios_config
 make MPI=y python
 popd
 
