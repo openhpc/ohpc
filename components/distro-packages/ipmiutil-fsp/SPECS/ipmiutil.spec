@@ -83,9 +83,9 @@ useful for building custom IPMI applications.
 autoconf
 %endif
 %if 0%{?req_systemd}
-%configure --enable-systemd
+%configure --enable-systemd --enable-libsensors
 %else
-%configure
+%configure --enable-libsensors
 %endif
 make 
 
