@@ -193,6 +193,9 @@ popd
 rm -f $(find examples -name '*.o') \
 	examples/staging/stage_write/writer_adios
 
+find examples -type f -name .gitignore -exec rm {} \;
+find examples -type f -name "*.xml" -exec chmod 644 {} \;
+find examples -type f -name ".lib" -exec rm {} \;
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 
@@ -245,6 +248,8 @@ echo -e '\n\n'
 cat ./opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/etc/adios_config.flags
 echo -e '\n\n'
 cat ./opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/bin/adios_config
+echo -e '\n\n'
+ls -l ./opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/bin/*.py
 popd
 
 %files
