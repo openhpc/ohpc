@@ -74,6 +74,7 @@ make %{?_smp_mflags} install
 rm -f %buildroot%{install_path}/craycnl
 rm -f %buildroot%{install_path}/mic_linux
 rm -f %buildroot%{install_path}/sparc64fx
+rm -f %buildroot%{install_path}/xt3
 pushd %buildroot%{install_path}/x86_64/bin
 rm -f edg33-upcparse
 ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
