@@ -66,6 +66,7 @@ BuildRequires: libgomp
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
+BuildRequires: papi-fsp
 
 %define debug_package %{nil}
 
