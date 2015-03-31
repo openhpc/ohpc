@@ -199,7 +199,7 @@ export BLAS_LIBS="-lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -
 ./configure --prefix=%{install_path} --enable-R-shlib LIBnn=lib64 --with-blas --with-lapack
 
 make %{?_smp_mflags}
-make pdf
+###make pdf
 make info
 # Convert to UTF-8
 for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admin.info doc/manual/R-exts.info-1; do
@@ -208,12 +208,14 @@ for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admi
 done
 
 %install 
-make DESTDIR=%{buildroot} install
-make DESTDIR=%{buildroot} install-pdf
+###make DESTDIR=%{buildroot} install
+###make DESTDIR=%{buildroot} install-pdf
+make install
 
 # Installation of Info-files
 %{__install} -m 755 -d %{_infodir}
-make DESTDIR=%{buildroot} INFODIR=%{buildroot}%{_infodir} install-info
+###make DESTDIR=%{buildroot} INFODIR=%{buildroot}%{_infodir} install-info
+make install-info
 %{__rm} -f %{buildroot}%{_infodir}/dir
 %{__rm} -f %{buildroot}%{_infodir}/dir.old
 
