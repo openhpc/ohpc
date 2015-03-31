@@ -198,7 +198,7 @@ rm -f $(find examples -name '*.o') \
 
 find examples -type f -name .gitignore -exec rm {} \;
 find examples -type f -name "*.xml" -exec chmod 644 {} \;
-find examples -type f -name ".lib" -exec rmdir {} \;
+find examples -type f -name ".lib" -exec rm -rf {} \;
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 %fdupes -s %buildroot%{install_path}/lib/examples
