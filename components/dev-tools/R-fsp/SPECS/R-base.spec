@@ -208,8 +208,7 @@ for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admi
 done
 
 %install 
-make DESTDIR=%{install_path} install
-###make DESTDIR=%{buildroot} install
+make DESTDIR=%{buildroot} install
 ###make DESTDIR=%{buildroot} install-pdf
 
 # Installation of Info-files
