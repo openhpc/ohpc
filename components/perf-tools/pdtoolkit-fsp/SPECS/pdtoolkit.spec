@@ -75,19 +75,31 @@ rm -f %buildroot%{install_path}/craycnl
 rm -f %buildroot%{install_path}/mic_linux
 rm -f %buildroot%{install_path}/sparc64fx
 rm -f %buildroot%{install_path}/xt3
+rm -f %buildroot%{install_path}/contrib/rose/roseparse/config.log
+rm -f %buildroot%{install_path}/contrib/rose/roseparse/config.status
+rm -f %buildroot%{install_path}/contrib/rose/edg44/x86_64/config.log
+rm -f %buildroot%{install_path}/contrib/rose/edg44/x86_64/config.status
+rm -f %buildroot%{install_path}/.all_configs
+rm -f %buildroot%{install_path}/.last_config
 pushd %buildroot%{install_path}/x86_64/bin
+sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
 rm -f edg33-upcparse
 ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
+sed -i 's|%buildroot||g' edg33-upcparse
 rm -f edg44-c-roseparse
 ln -s  ../../contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
+sed -i 's|%buildroot||g' edg44-c-roseparse
 rm -f edg44-cxx-roseparse
 ln -s  ../../contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
+sed -i 's|%buildroot||g' edg44-cxx-roseparse
 rm -f edg44-upcparse
 ln -s  ../../contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
+sed -i 's|%buildroot||g' edg44-upcparse
 rm -f pebil.static
 ln -s  ../../contrib/pebil/pebil/pebil.static
 rm -f roseparse
 ln -s  ../../contrib/rose/roseparse/roseparse
+sed -i 's|%buildroot||g' roseparse
 rm -f smaqao
 ln -s  ../../contrib/maqao/maqao/smaqao
 popd
