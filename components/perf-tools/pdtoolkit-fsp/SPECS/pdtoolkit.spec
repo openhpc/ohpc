@@ -74,22 +74,26 @@ make %{?_smp_mflags} install
 rm -f %buildroot%{install_path}/craycnl
 rm -f %buildroot%{install_path}/mic_linux
 rm -f %buildroot%{install_path}/sparc64fx
-rm -f %buildroot%{install_path}/x86_64/bin/edg33-upcparse
-ln -s %buildroot%{install_path}/x86_64/bin/edg33-upcparse ../../../contrib/rose/roseparse/upcparse
-rm -f %buildroot%{install_path}/x86_64/bin/edg44-c-roseparse
-ln -s %buildroot%{install_path}/x86_64/bin/edg44-c-roseparse ../../../contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
-rm -f %buildroot%{install_path}/x86_64/bin/edg44-cxx-roseparse
-ln -s %buildroot%{install_path}/x86_64/bin/edg44-cxx-roseparse ../../../contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
-rm -f %buildroot%{install_path}/x86_64/bin/edg44-upcparse
-ln -s %buildroot%{install_path}/x86_64/bin/edg44-upcparse ../../../contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
-rm -f %buildroot%{install_path}/x86_64/bin/pebil.static
-ln -s %buildroot%{install_path}/x86_64/bin/pebil.static ../../../contrib/pebil/pebil/peil.static
-rm -f %buildroot%{install_path}/x86_64/bin/roseparse
-ln -s %buildroot%{install_path}/x86_64/bin/roseparse ../../../contrib/rose/roseparse/roseparse
-rm -f %buildroot%{install_path}/x86_64/bin/smaqao
-ln -s %buildroot%{install_path}/x86_64/bin/smaqao ../../../contrib/maqao/maqao/smaqao
-rm -f %buildroot%{install_path}/x86_64/include
-ln -s %buildroot%{install_path}/x86_64/include ../../include
+pushd %buildroot%{install_path}/x86_64/bin
+rm -f edg33-upcparse
+ln -s ../../../contrib/rose/roseparse/upcparse
+rm -f edg44-c-roseparse
+ln -s  ../../../contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
+rm -f edg44-cxx-roseparse
+ln -s  ../../../contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
+rm -f edg44-upcparse
+ln -s  ../../../contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
+rm -f pebil.static
+ln -s  ../../../contrib/pebil/pebil/peil.static
+rm -f roseparse
+ln -s  ../../../contrib/rose/roseparse/roseparse
+rm -f smaqao
+ln -s  ../../../contrib/maqao/maqao/smaqao
+popd
+pushd %buildroot%{install_path}/x86_64
+rm -f include
+ln -s ../../include
+popd
 install -d %buildroot%{install_path}
 
 # FSP module file
