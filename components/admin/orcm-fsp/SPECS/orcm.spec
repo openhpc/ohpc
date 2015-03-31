@@ -14,7 +14,7 @@ Prefix:  %{_sysconfdir}
 Source0: orcm-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires: flex >= 2.5.35
-%if 0%{?rhel_version} > 600
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 BuildRequires: libtool-ltdl-devel
 %endif
 BuildRequires:  pkgconfig(systemd)
