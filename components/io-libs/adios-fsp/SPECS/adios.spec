@@ -176,12 +176,14 @@ make DESTDIR=$RPM_BUILD_ROOT install
 #cp adios_config %buildroot%_bindir
 #mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
 
+module load numpy
+
 chmod +x adios_config
 export PATH=$(pwd):$PATH
 adios_config -s -c
 env | grep NUM
 pushd wrappers/numpy
-export CFLAGS=-I%buildroot%_includedir
+export CFLAGS="-I%buildroot%_includedir -I$PYTHONPATH/numpy/core/include"
 find ~ -name adios_config
 make MPI=y python
 popd
