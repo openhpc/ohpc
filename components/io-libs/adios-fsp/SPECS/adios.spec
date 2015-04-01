@@ -183,13 +183,12 @@ chmod +x adios_config
 export PATH=$(pwd):$PATH
 adios_config -s -c
 
-pushd ..
+pushd ../..
 find -name adios_types.h
 popd
 
+export CFLAGS="-I%buildroot%_includedir -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public"
 pushd wrappers/numpy
-export CFLAGS="-I%buildroot%_includedir -I$PYTHONPATH/numpy/core/include"
-find ~ -name adios_config
 make MPI=y python
 popd
 
