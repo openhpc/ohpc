@@ -176,7 +176,7 @@ export PATH=$(pwd):$PATH
 export CFLAGS="-I%buildroot%{install_path}/include -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
 pushd wrappers/numpy
 make MPI=y python
-python setup.py install --prefix='%buildroot$PYTHONPATH/../../..'
+python setup.py install --prefix='%buildroot$NUMPY_DIR'
 popd
 
 install -m644 utils/skel/lib/skel_suite.py \
@@ -187,7 +187,7 @@ install -m644 utils/skel/lib/skel_suite.py \
 rm -f $(find examples -name '*.o') \
 	examples/staging/stage_write/writer_adios
 rm -f $(find examples -type f -name .gitignore)
-rm -rf $(find examples -type d -name ".lib")
+rm -rf $(find examples -type d -name ".libs")
 chmod 644 $(find examples -type f -name "*.xml")
 
 # compiler_family doesn't get expanded, but FSP_COMPILER_FAMILY does...
