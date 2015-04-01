@@ -168,7 +168,9 @@ export FSP_MPI_FAMILY=%{mpi_family}
 make DESTDIR=$RPM_BUILD_ROOT install
 
 module load numpy
+%if %{compiler_family} == gnu
 module load mkl
+%endif
 
 chmod +x adios_config
 export PATH=$(pwd):$PATH
