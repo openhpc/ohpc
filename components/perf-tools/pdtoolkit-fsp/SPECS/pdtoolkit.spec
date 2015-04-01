@@ -30,7 +30,7 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name: %{pname}%{PROJ_DELIM}
+Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        3.20
 Release:        1
 License:        Program Database Toolkit License
@@ -45,7 +45,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{pname}/%version
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 
 %description
@@ -108,8 +108,8 @@ install -d %buildroot%{install_path}/lib
 install -d %buildroot%{install_path}/share
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -140,7 +140,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
