@@ -182,7 +182,11 @@ module load mkl
 chmod +x adios_config
 export PATH=$(pwd):$PATH
 adios_config -s -c
-env | grep NUM
+
+pushd ..
+find -name adios_types.h
+popd
+
 pushd wrappers/numpy
 export CFLAGS="-I%buildroot%_includedir -I$PYTHONPATH/numpy/core/include"
 find ~ -name adios_config
