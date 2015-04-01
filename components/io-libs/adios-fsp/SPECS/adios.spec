@@ -137,7 +137,7 @@ module load netcdf
 
 TOPDIR=$PWD
 
-export CFLAGS="-I$TOPDIR/src/public -I$MPI_DIR/include -I$NETCDF_INC -I$HDF5_INC -lpthread -L$NETCDF_LIB -lnetcdf -L$HDF5_LIB" 
+export CFLAGS="-fPIC -I$TOPDIR/src/public -I$MPI_DIR/include -I$NETCDF_INC -I$HDF5_INC -lpthread -L$NETCDF_LIB -lnetcdf -L$HDF5_LIB" 
 
 export CC=mpicc
 export CXX=mpicxx
