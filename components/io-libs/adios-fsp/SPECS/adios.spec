@@ -77,7 +77,7 @@ BuildRequires: python-devel
 # This is the legacy name for lustre-lite
 # BuildRequires: liblustre-devel
 BuildRequires: lustre-lite
-BuildRequires: python-numpy
+BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 # define fdupes, clean up rpmlint errors
 BuildRequires: fdupes
