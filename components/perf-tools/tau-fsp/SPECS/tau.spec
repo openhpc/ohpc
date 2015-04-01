@@ -104,6 +104,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 module load papi
+module load pdt
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
@@ -128,6 +129,7 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-slog2 \
 	-PROFILEPARAM \
     -papi=$PAPI_DIR \
+	-pdt=$PDT_DIR \
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
