@@ -176,7 +176,7 @@ export PATH=$(pwd):$PATH
 export CFLAGS="-I%buildroot%{install_path}/include -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
 pushd wrappers/numpy
 make MPI=y python
-python setup.py install --prefix=%buildroot$PYTHONPATH
+python setup.py install --prefix='%buildroot$PYTHONPATH/../../..'
 popd
 
 install -m644 utils/skel/lib/skel_suite.py \
@@ -243,6 +243,7 @@ EOF
 pushd /home/abuild/rpmbuild/
 find
 echo -e '\n\n'
+file ./BUILDROOT/adios-gnu-fsp-1.8.0-*.x86_64/opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/lib/examples/C/flexpath_arrays/process_select/.libs
 popd
 
 %files
