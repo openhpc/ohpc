@@ -167,25 +167,11 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
-####################################################################
-# adios_config and adios_config.flags have bogus info in them
-# required for make MPI=y python
-# sed -i 's|%prefix/etc|%prefix'%_datadir/%pname/'|' BUILD/adios_config
-# sed -i 's|%prefix|'%buildroot'|' BUILD/adios_config
-# sed -i 's|^\.|. "$FLAGSFILE"|' BUILD/adios_config
-#cp adios_config %buildroot%_bindir
-#mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
-
 module load numpy
 module load mkl
 
 chmod +x adios_config
 export PATH=$(pwd):$PATH
-adios_config -s -c
-
-pushd ../..
-find -name adios_types.h
-popd
 
 export CFLAGS="-I%buildroot%{install_path}/include -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
 pushd wrappers/numpy
@@ -202,10 +188,10 @@ popd
 
 rm -f $(find examples -name '*.o') \
 	examples/staging/stage_write/writer_adios
+rm -f $(find examples -type f -name .gitignore)
+rm -rf $(find examples -type d -name ".lib")
+chmod 644 $(find examples -type f -name "*.xml")
 
-find examples -type f -name .gitignore -exec rm {} \;
-find examples -type f -name "*.xml" -exec chmod 644 {} \;
-find examples -type f -name ".lib" -exec rm -rf {} \;
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 %fdupes -s %buildroot%{install_path}/lib/examples
@@ -215,6 +201,7 @@ cp -fR examples %buildroot%{install_path}/lib
 # mv %buildroot%_libdir/python/*.py %buildroot%python_sitelibdir/
 
 # FSP module file
+echo %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
@@ -253,14 +240,9 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-pushd /home/abuild/rpmbuild/BUILDROOT/adios-gnu-fsp-1.8.0-*.1.x86_64
+pushd /home/abuild/rpmbuild/
 find
 echo -e '\n\n'
-cat ./opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/etc/adios_config.flags
-echo -e '\n\n'
-cat ./opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/bin/adios_config
-echo -e '\n\n'
-ls -l ./opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/bin/*.py
 popd
 
 %files
