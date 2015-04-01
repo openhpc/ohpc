@@ -176,7 +176,7 @@ export PATH=$(pwd):$PATH
 export CFLAGS="-I%buildroot%{install_path}/include -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
 pushd wrappers/numpy
 make MPI=y python
-python setup.py install
+python setup.py install --prefix=%buildroot/$PYTHONPATH
 popd
 
 #####################################################################
