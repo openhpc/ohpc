@@ -69,7 +69,7 @@ BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
 BuildRequires: papi-fsp
-BuildRequires: pdtoolkit-fsp
+BuildRequires: pdtoolkit-%{compiler_family}-fsp
 
 %define debug_package %{nil}
 
