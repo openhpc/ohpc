@@ -34,7 +34,7 @@ Name: %{pname}%{PROJ_DELIM}
 Version:        3.20
 Release:        1
 License:        Program Database Toolkit License
-Summary:        PDT is a framework for analyzing source code.
+Summary:        PDT is a framework for analyzing source code
 Url:            http://www.cs.uoregon.edu/Research/pdt
 Group:          fsp/perf-tools
 Source:         %{pname}-%{version}.tar.gz
@@ -99,7 +99,7 @@ rm -f pebil.static
 ln -s  ../../contrib/pebil/pebil/pebil.static
 rm -f roseparse
 ln -s  ../../contrib/rose/roseparse/roseparse
-sed -i 's|%buildroot||g' roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
 rm -f smaqao
 ln -s  ../../contrib/maqao/maqao/smaqao
 popd
