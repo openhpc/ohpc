@@ -88,13 +88,13 @@ ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
 rm -f edg44-c-roseparse
 ln -s  ../../contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
-sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/edg44-c-roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
 rm -f edg44-cxx-roseparse
 ln -s  ../../contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
-sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/edg44-cxx-roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
 rm -f edg44-upcparse
 ln -s  ../../contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
-sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/edg44-upcparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
 rm -f pebil.static
 ln -s  ../../contrib/pebil/pebil/pebil.static
 rm -f roseparse
