@@ -178,6 +178,8 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 chmod +x adios_config
 export PATH=$(pwd):$PATH
+adios_config -s -c
+env | grep NUM
 pushd wrappers/numpy
 export CFLAGS=-I%buildroot%_includedir
 find ~ -name adios_config
