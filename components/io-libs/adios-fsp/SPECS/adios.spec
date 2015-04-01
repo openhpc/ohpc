@@ -176,6 +176,7 @@ export PATH=$(pwd):$PATH
 export CFLAGS="-I%buildroot%{install_path}/include -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
 pushd wrappers/numpy
 make MPI=y python
+python setup.py install
 popd
 
 #####################################################################
@@ -202,6 +203,7 @@ cp -fR examples %buildroot%{install_path}/lib
 
 # FSP module file
 echo %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+echo $FSP_COMPILER_FAMILY
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
