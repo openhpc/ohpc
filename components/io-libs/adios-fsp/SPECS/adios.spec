@@ -177,6 +177,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 #mv BUILD/%prefix/%prefix/etc/adios_config.flags %buildroot%_datadir/%pname/
 
 module load numpy
+module load mkl
 
 chmod +x adios_config
 export PATH=$(pwd):$PATH
