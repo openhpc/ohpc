@@ -153,8 +153,6 @@ sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{in
 sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 
 rm -f  %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
-#rm -f %buildroot%_includedir/include/Makefile*
-#rm -fR %buildroot%_includedir/include/makefiles
 rm -f %buildroot%{install_path}/.last_config
 rm -f %buildroot%{install_path}/.all_configs
 rm -f %buildroot%{install_path}/.active_stub*
@@ -206,6 +204,19 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  ![is-loaded papi]  } {
+        module load papi
+    }
+    if {  ![is-loaded pdtoolkit]  } {
+        module load pdtoolkit
+    }
+}
+
+if [ module-info mode remove ] {
+    module unload pdtoolkit
+}
 
 EOF
 
