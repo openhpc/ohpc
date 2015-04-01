@@ -187,7 +187,7 @@ pushd ../..
 find -name adios_types.h
 popd
 
-export CFLAGS="-I%buildroot%_includedir -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public"
+export CFLAGS="-I%buildroot%{install_path}/include -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
 pushd wrappers/numpy
 make MPI=y python
 popd
