@@ -134,10 +134,10 @@ install -D -m 0644 %SOURCE8 %{buildroot}/etc/sysconfig/orcmd.db
 #%{_bindir}/*
 %{install_prefix}/*
 #%doc %{_datadir}/openmpi
-%doc %{install_prefix}/share/man1/*
-%doc %{install_prefix}/share/man7/*
-%doc %{_mandir}/man1/*
-%doc %{_mandir}/man7/*
+%doc %{install_prefix}/share/man/man1/*
+%doc %{install_prefix}/share/man/man7/*
+#%doc %{_mandir}/man1/*
+#%doc %{_mandir}/man7/*
 %{_unitdir}/*
 
 %pre 
