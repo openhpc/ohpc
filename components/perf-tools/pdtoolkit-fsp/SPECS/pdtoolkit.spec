@@ -102,10 +102,9 @@ pushd %buildroot%{install_path}/x86_64
 rm -f include
 ln -s ../include
 popd
-install -d %buildroot%{install_path}/bin
 install -d %buildroot%{install_path}/include
 install -d %buildroot%{install_path}/lib
-install -d %buildroot%{install_path}/share
+install -d %buildroot%{install_path}/man
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -128,13 +127,13 @@ module-whatis "URL %{url}"
 
 set     version                     %{version}
 
-prepend-path    PATH                %{install_path}/bin
+prepend-path    PATH                %{install_path}/x86_64/bin
 prepend-path    MANPATH             %{install_path}/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_BIN        %{install_path}/bin
+setenv          %{PNAME}_BIN        %{install_path}/x86_64/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
