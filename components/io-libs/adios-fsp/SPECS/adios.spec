@@ -190,6 +190,10 @@ rm -f $(find examples -type f -name .gitignore)
 rm -rf $(find examples -type d -name ".lib")
 chmod 644 $(find examples -type f -name "*.xml")
 
+# compiler_family doesn't get expanded, but FSP_COMPILER_FAMILY does...
+%define compiler_family $FSP_COMPILER_FAMILY
+%define mpi_family $FSP_MPI_FAMILY
+
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 %fdupes -s %buildroot%{install_path}/lib/examples
@@ -198,8 +202,6 @@ cp -fR examples %buildroot%{install_path}/lib
 mv %buildroot%{install_path}/lib/python/*.py %buildroot$PYTHONPATH
 
 # FSP module file
-# compiler_family doesn't get expanded, but FSP_COMPILER_FAMILY does...
-echo $FSP_COMPILER_FAMILY
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}/%{version}
 #%Module1.0#####################################################################
