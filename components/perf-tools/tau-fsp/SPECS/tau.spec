@@ -70,6 +70,8 @@ Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
 BuildRequires: papi-fsp
 BuildRequires: pdtoolkit-%{compiler_family}-fsp
+Requires: papi-fsp
+Requires: pdtoolkit-%{compiler_family}-fsp
 
 %define debug_package %{nil}
 
