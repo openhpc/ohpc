@@ -63,11 +63,6 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 ./configure -prefix=%buildroot%{install_path} -exec-prefix=
 make %{?_smp_mflags}
 
-%install
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
-
 export DONT_STRIP=1
 make %{?_smp_mflags} install
 
