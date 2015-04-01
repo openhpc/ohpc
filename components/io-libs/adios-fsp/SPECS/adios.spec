@@ -176,16 +176,13 @@ export PATH=$(pwd):$PATH
 export CFLAGS="-I%buildroot%{install_path}/include -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
 pushd wrappers/numpy
 make MPI=y python
-python setup.py install --prefix=%buildroot/$PYTHONPATH
+python setup.py install --prefix=%buildroot$PYTHONPATH
 popd
 
-#####################################################################
-# %python_sitelibdir is undefined. not sure if this will be FSP
-# dependant or there is a global place for these.
-# install -m644 utils/skel/lib/skel_suite.py \
-# 	utils/skel/lib/skel_template.py \
-# 	utils/skel/lib/skel_test_plan.py \
-# 	%buildroot%python_sitelibdir/
+install -m644 utils/skel/lib/skel_suite.py \
+	utils/skel/lib/skel_template.py \
+	utils/skel/lib/skel_test_plan.py \
+	%buildroot$PYTHONPATH
 
 rm -f $(find examples -name '*.o') \
 	examples/staging/stage_write/writer_adios
@@ -197,25 +194,24 @@ install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 %fdupes -s %buildroot%{install_path}/lib/examples
 
-# See above regarding %python_sutelibdir
 # install -d %buildroot%python_sitelibdir
-# mv %buildroot%_libdir/python/*.py %buildroot%python_sitelibdir/
+mv %buildroot%{install_path}/lib/python/*.py %buildroot$PYTHONPATH
 
 # FSP module file
-echo %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+# compiler_family doesn't get expanded, but FSP_COMPILER_FAMILY does...
 echo $FSP_COMPILER_FAMILY
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
+puts stderr "This module loads the %{PNAME} library built with the $FSP_COMPILER_FAMILY compiler toolchain."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{PNAME} built with %{compiler_family} toolchain"
+module-whatis "Name: %{PNAME} built with $FSP_COMPILER_FAMILY toolchain"
 module-whatis "Version: %{version}"
 module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
@@ -234,7 +230,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
