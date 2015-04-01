@@ -21,6 +21,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %{!?prefix: %define prefix /opt}
 %endif
 
+
 %define installPath %{prefix}/%{pname}
 
 provides: perl(LosF_node_types)
