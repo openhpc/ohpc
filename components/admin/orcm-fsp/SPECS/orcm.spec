@@ -20,6 +20,9 @@ BuildRequires: libtool-ltdl-devel
 BuildRequires:  pkgconfig(systemd)
 %{?systemd_requires}
 
+# Define prefix
+%define install_prefix /opt/open-rcm
+
 # 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
 Source1: orcmd.service
 Source2: orcmd.sysconfig
@@ -85,7 +88,7 @@ orcm is an opensource resiliency cluster management software implementation.
 ###              --bindir=%{_bindir}         \
 ###              --with-platform=./contrib/platform/intel/hillsboro/orcm-linux
 ### 
-./configure --prefix=/opt/open-rcm \
+./configure --prefix=%{install_prefix} \
              --with-platform=./contrib/platform/intel/hillsboro/orcm-linux
 
 make %{?_smp_mflags}
@@ -128,7 +131,8 @@ install -D -m 0644 %SOURCE8 %{buildroot}/etc/sysconfig/orcmd.db
 %defattr(-,root,root,-)
 %config %{_sysconfdir}/*
 %config /etc/sysconfig/*
-%{_bindir}/*
+#%{_bindir}/*
+%{install_prefix}/*
 %doc %{_datadir}/openmpi
 %doc %{_mandir}/man1/*
 %doc %{_mandir}/man7/*
