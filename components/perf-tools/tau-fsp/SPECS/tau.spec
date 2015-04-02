@@ -161,15 +161,15 @@ rm -f %buildroot%{install_path}/.active_stub*
 
 # clean libs
 pushd %buildroot%{install_path}/lib
-if [ -f  Makefile.tau-param-mpi-openmp-profile-trace ]
+if [ -f  Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace ]
     then
-        sed -i 's|%buildroot||g' Makefile.tau-param-mpi-openmp-profile-trace
-        ln -s Makefile.tau-param-mpi-openmpi-profile-trace Makefile
+        sed -i 's|%buildroot||g' Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace
+        ln -s Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace Makefile
 fi
-if [ -f Makefile.tau-param-icpc-mpi-openmp-profile-trace ]
+if [ -f Makefile.tau-param-icpc-papi-mpi-pdt-openmp-profile-trace ]
     then
-        sed -i 's|%buildroot||g' Makefile.tau-param-icpc-mpi-openmp-profile-trace
-        ln -s Makefile.tau-param-mpi-openmpi-profile-trace Makefile
+        sed -i 's|%buildroot||g' Makefile.tau-param-icpc-papi-mpi-pdt-openmp-profile-trace
+        ln -s Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace Makefile
 fi
 rm -f libjogl*
 popd
