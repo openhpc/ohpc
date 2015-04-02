@@ -180,13 +180,8 @@ chmod 644 $(find examples -type f -name "*.xml")
 
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
-%fdupes -s %buildroot%{install_path}/lib/examples
 
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
-
-# at some point compiler_family !expanded, but FSP_COMPILER_FAMILY does... after wrapper build?
-%define compiler_family $FSP_COMPILER_FAMILY
-%define mpi_family $FSP_MPI_FAMILY
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}
@@ -229,6 +224,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%fdupes -s %buildroot%{install_path}/lib/examples
 pushd /home/abuild/rpmbuild/
 find
 echo -e '\n\n'
