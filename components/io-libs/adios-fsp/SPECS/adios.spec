@@ -61,7 +61,6 @@ Source2: FSP_setup_compiler
 # Minimum Build Requires
 BuildRequires: mxml-devel cmake zlib-devel glib2-devel
 Requires:      libmxml1
-BuildRequires: %{mpi_family}-devel
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
