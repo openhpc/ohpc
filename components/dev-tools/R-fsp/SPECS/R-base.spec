@@ -78,8 +78,8 @@ Group:          Productivity/Scientific/Math
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%define 	install_path %{FSP_LIBS}/%{pname}/%version
-
+#%define 	install_path %{FSP_LIBS}/%{pname}/%version
+%define		install_path %{FSP_PUB}/%{pname}/%version
 
 BuildRequires:  cairo-devel
 ###BuildRequires:  gcc
@@ -244,21 +244,25 @@ cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
 EOF
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/%{pname}
+#%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+#%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
     puts stderr " "
-    puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-    puts stderr "toolchain and the %{mpi_family} MPI stack."
+    puts stderr "This module loads the %{pname} package for statistical computing."
     puts stderr "\nVersion %{version}\n"
+    puts stderr " "
 
 }
+
 module-whatis "Name: %{pname} built with %{compiler_family} compiler"
 module-whatis "Version: %{version}"
-module-whatis "Category: runtime library"
+module-whatis "Category: utility, developer support, user tool"
+module-whatis "Keywords: Statistics"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
@@ -276,13 +280,15 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+#%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
 set     ModulesVersion      "%{version}"
 EOF
+
 
 %post
 /sbin/ldconfig
