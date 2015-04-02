@@ -163,8 +163,8 @@ An open source resiliency cluster management software implementation.
 
 %files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root,-)
-%{_includedir}/openmpi
-%dir %{_libdir}/openmpi
+#%{_includedir}/openmpi
+#%dir %{_libdir}/openmpi
 %{_libdir}/*.so
 %{_libdir}/openmpi/*.so
 %{_libdir}/*.la
