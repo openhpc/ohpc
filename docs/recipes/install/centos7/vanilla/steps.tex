@@ -296,13 +296,23 @@ The \FSP{} build of \Warewulf{} includes specific enhancements enabling support 
 \baseOS{}. The following steps illustrate the process to build a minimal, default
 image for use with \Warewulf{}.  We begin by creating a directory structure on the 
 {\em master} that will represent the root filesystem of the compute node. The 
-default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/centos7}.
+default location for this in \FSP{} is in
+\texttt{/opt/fsp/admin/images/centos7}. Note that \Warewulf{} assumes access to
+an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
+process which requires external network connectivity on your chosen {\em
+  master} host. If this is not available, or if you prefer to access a locally cached
+mirror, the steps below include an example to update the OS mirror used by
+\texttt{wwmkchroot} to use an alternate location defined by a
+\texttt{BOS\_MIRROR} environment variable.
 
 % begin_fsp_run
 % fsp_validation_comment Create compute image for Warewulf
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location 
 [master]$ export CHROOT=/opt/fsp/admin/images/centos7
+
+# Override default OS repository (optional)
+[master]$ perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=$BOS_MIRROR#" /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
 
 # Build initial chroot image
 [master]$ wwmkchroot centos-7 $CHROOT
