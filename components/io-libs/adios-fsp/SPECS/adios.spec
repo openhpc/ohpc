@@ -60,6 +60,7 @@ Source2: FSP_setup_compiler
 
 # Minimum Build Requires
 BuildRequires: mxml-devel cmake zlib-devel glib2-devel
+Requires:      libmxml1
 BuildRequires: %{mpi_family}-devel
 
 # libm.a from CMakeLists
@@ -69,6 +70,7 @@ BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #BuildRequires: libmpe2-devel
 #BuildRequires: python-modules-xml
 BuildRequires: python-devel
@@ -82,10 +84,6 @@ BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 # define fdupes, clean up rpmlint errors
 BuildRequires: fdupes
 
-###############################################################
-# Disable until we get the numpy headers
-#Requires: python-module-%pname = %version-%release
-
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
@@ -97,21 +95,6 @@ providing an external to the code XML file describing the various
 elements, their types, and how you wish to process them this run, the
 routines in the host code (either Fortran or C) can transparently change
 how they process the data.
-
-%package -n python-module-%pname
-Summary: Python module of the Adaptable IO System (ADIOS)
-Group: Development/Python
-
-%description -n python-module-%pname
-The Adaptable IO System (ADIOS) provides a simple, flexible way for
-scientists to desribe the data in their code that may need to be
-written, read, or processed outside of the running simulation. By
-providing an external to the code XML file describing the various
-elements, their types, and how you wish to process them this run, the
-routines in the host code (either Fortran or C) can transparently change
-how they process the data.
-
-This package contains python module of ADIOS.
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -165,6 +148,10 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
+# at some point compiler_family !expanded, but FSP_COMPILER_FAMILY does... after wrapper build?
+%define compiler_family $FSP_COMPILER_FAMILY
+%define mpi_family $FSP_MPI_FAMILY
+
 make DESTDIR=$RPM_BUILD_ROOT install
 
 module load numpy
@@ -175,16 +162,19 @@ module load mkl
 chmod +x adios_config
 export PATH=$(pwd):$PATH
 
-export CFLAGS="-I%buildroot%{install_path}/include -I$PYTHONPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
+# this is clearly generated someway and shouldn't be static
+export PPATH="/lib64/python2.7/site-packages"
+
+export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
 pushd wrappers/numpy
 make MPI=y python
-python setup.py install --prefix='%buildroot$NUMPY_DIR'
+python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \
 	utils/skel/lib/skel_test_plan.py \
-	%buildroot$PYTHONPATH
+	%buildroot%{install_path}/python
 
 rm -f $(find examples -name '*.o') \
 	examples/staging/stage_write/writer_adios
@@ -192,16 +182,11 @@ rm -f $(find examples -type f -name .gitignore)
 rm -rf $(find examples -type d -name ".libs")
 chmod 644 $(find examples -type f -name "*.xml")
 
-# compiler_family doesn't get expanded, but FSP_COMPILER_FAMILY does...
-%define compiler_family $FSP_COMPILER_FAMILY
-%define mpi_family $FSP_MPI_FAMILY
-
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 %fdupes -s %buildroot%{install_path}/lib/examples
 
-# install -d %buildroot%python_sitelibdir
-mv %buildroot%{install_path}/lib/python/*.py %buildroot$PYTHONPATH
+mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}
@@ -224,11 +209,13 @@ module-whatis "%{url}"
 set             version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path	PYTHONPATH          %{install_path}/python/lib64/python2.7/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
+setenv          %{PNAME}_ETC        %{install_path}/etc
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
@@ -245,21 +232,12 @@ EOF
 pushd /home/abuild/rpmbuild/
 find
 echo -e '\n\n'
-file ./BUILDROOT/adios-gnu-fsp-1.8.0-*.x86_64/opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/lib/examples/C/flexpath_arrays/process_select/.libs
+file ./BUILDROOT/adios-gnu-fsp-1.8.0-*.x86_64/opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/lib/examples/C/flexpath_arrays/process_select/.libs || true
 popd
 
 %files
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
-#%exclude %{install_path}/lib/examples
 %{FSP_HOME}
-
-#%files -n python-module-%pname
-#%python_sitelibdir/*
-#%exclude %python_sitelibdir/argparse.py*
-
-#%files examples
-#%{install_path}/lib/examples
-
 
 %changelog
