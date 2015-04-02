@@ -148,10 +148,6 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-# at some point compiler_family !expanded, but FSP_COMPILER_FAMILY does... after wrapper build?
-%define compiler_family $FSP_COMPILER_FAMILY
-%define mpi_family $FSP_MPI_FAMILY
-
 make DESTDIR=$RPM_BUILD_ROOT install
 
 module load numpy
@@ -187,6 +183,10 @@ cp -fR examples %buildroot%{install_path}/lib
 %fdupes -s %buildroot%{install_path}/lib/examples
 
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
+
+# at some point compiler_family !expanded, but FSP_COMPILER_FAMILY does... after wrapper build?
+%define compiler_family $FSP_COMPILER_FAMILY
+%define mpi_family $FSP_MPI_FAMILY
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}
