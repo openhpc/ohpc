@@ -153,6 +153,7 @@ install -D -m 0644 %SOURCE8 %{buildroot}/etc/sysconfig/orcmd.db
 %service_del_postun orcmd.service
 
 
+<<<<<<< HEAD
 ### %package -n %{pname}-devel%{PROJ_DELIM}
 ### Summary:       Development libraries for ORCM
 ### Group:         Development/Libraries
@@ -172,6 +173,27 @@ install -D -m 0644 %SOURCE8 %{buildroot}/etc/sysconfig/orcmd.db
 ### %if 0%{?suse_version} > 1220
 ### %{_libdir}/pkgconfig/*.pc
 ### %endif
+=======
+%package -n %{pname}-devel%{PROJ_DELIM}
+Summary:       Development libraries for ORCM
+Group:         Development/Libraries
+BuildRequires: pkg-config
+
+%description -n %{pname}-devel%{PROJ_DELIM}
+An open source resiliency cluster management software implementation.
+
+%files -n %{pname}-devel%{PROJ_DELIM}
+%defattr(-,root,root,-)
+#%{_includedir}/openmpi
+#%dir %{_libdir}/openmpi
+%{_libdir}/*.so
+%{_libdir}/openmpi/*.so
+%{_libdir}/*.la
+%{_libdir}/openmpi/*.la
+%if 0%{?suse_version} > 1220
+%{_libdir}/pkgconfig/*.pc
+%endif
+>>>>>>> acc859ce8a02b281e8bc607476891b181db767f8
 
 %post -n %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
 
