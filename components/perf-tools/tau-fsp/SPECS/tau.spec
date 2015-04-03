@@ -135,7 +135,7 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-pdt=$PDTOOLKIT_DIR \
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
-	-openmp -opari \
+	-openmp \
 	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib" 
 
 
