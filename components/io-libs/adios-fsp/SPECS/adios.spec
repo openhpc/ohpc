@@ -40,6 +40,9 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 #-fsp-header-comp-end------------------------------------------------
 
+# not generating a debug package, CentOS build breaks without this if no debug package defined
+%define debug_package %{nil}
+
 %define somver 0
 %define sover %somver.0.0
 
