@@ -215,6 +215,7 @@ prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path	PYTHONPATH          %{install_path}/python/lib64/python2.7/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_DOC        %{install_path}/docs
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_ETC        %{install_path}/etc
 setenv          %{PNAME}_LIB        %{install_path}/lib
@@ -231,15 +232,13 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %fdupes -s %buildroot%{install_path}/lib/examples
-pushd /home/abuild/rpmbuild/
-find
-echo -e '\n\n'
-file ./BUILDROOT/adios-gnu-fsp-1.8.0-*.x86_64/opt/fsp/pub/libs/gnu/openmpi/adios/1.8.0/lib/examples/C/flexpath_arrays/process_select/.libs || true
-popd
+install -d %buildroot%{install_path}/docs
+cp -pr AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO \
+	%buildroot%{install_path}/docs
+ls -la %buildroot%{install_path}/docs
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO
 %{FSP_HOME}
 
 %changelog
