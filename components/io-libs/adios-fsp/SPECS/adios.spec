@@ -79,8 +79,10 @@ BuildRequires: python-devel
 BuildRequires: lustre-lite
 BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 
+%if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
 BuildRequires: fdupes
+%endif
 
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -235,8 +237,10 @@ cp -pr AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO \
 	%buildroot%{install_path}/docs
 ls -la %buildroot%{install_path}/docs
 
+%if 0%{?sles_version} || 0%{?suse_version}
 # This happens last -- compiler and mpi _family are unset after
 %fdupes -s %buildroot%{install_path}/lib/examples
+%endif
 
 %files
 %defattr(-,root,root,-)
