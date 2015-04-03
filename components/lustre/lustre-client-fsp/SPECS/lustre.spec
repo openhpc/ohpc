@@ -25,7 +25,6 @@ BuildRequires: kernel-devel = 2.6.32-431.el6
 %define kobjdir /lib/modules/2.6.32-431.el6.x86_64/build/
 %endif
 
-%{rhel_version}
 %{centos_version}
 %if 0%{?centos_version} == 700
 #BuildRequires: kernel = 3.10.0-123.el7
