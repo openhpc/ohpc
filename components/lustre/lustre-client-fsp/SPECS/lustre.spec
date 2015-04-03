@@ -26,15 +26,15 @@ BuildRequires: kernel-devel = 2.6.32-431.el6
 %endif
 
 %if 0%{?centos_version} == 700
-%{dump}
+#%{dump}
 #BuildRequires: kernel = 3.10.0-123.el7
 #BuildRequires: kernel-devel = 3.10.0-123.el7
-BuildRequires: kernel >= 3.10.0-123.el7
-BuildRequires: kernel-devel >= 3.10.0-123.el7
+BuildRequires: kernel = 3.10.0-229.el7
+BuildRequires: kernel-devel = 3.10.0-229.el7
 #%define kdir /lib/modules/3.10.0-123.el7.x86_64/source/
 #%define kobjdir /lib/modules/3.10.0-123.el7.x86_64/build/
-%define kdir /lib/modules/`uname -r`/source/
-%define kobjdir /lib/modules/`uname -r`/build/
+%define kdir /lib/modules/3.10.0-229.el7.x86_64/source/
+%define kobjdir /lib/modules/3.10.0-229.el7.x86_64/build/
 %endif
 
 %endif
