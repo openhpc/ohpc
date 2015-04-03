@@ -32,6 +32,8 @@ BuildRequires: kernel >= 3.10.0-123.el7
 BuildRequires: kernel-devel >= 3.10.0-123.el7
 #%define kdir /lib/modules/3.10.0-123.el7.x86_64/source/
 #%define kobjdir /lib/modules/3.10.0-123.el7.x86_64/build/
+%define kdir /lib/modules/`uname -r`/source/
+%define kobjdir /lib/modules/`uname -r`/build/
 %endif
 
 %endif
