@@ -26,6 +26,7 @@ BuildRequires: kernel-devel = 2.6.32-431.el6
 %endif
 
 %if 0%{?centos_version} == 700
+%{centos_rel}
 #BuildRequires: kernel = 3.10.0-123.el7
 #BuildRequires: kernel-devel = 3.10.0-123.el7
 BuildRequires: kernel >= 3.10.0-123.el7
