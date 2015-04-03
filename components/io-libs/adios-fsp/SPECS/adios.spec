@@ -231,11 +231,13 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%fdupes -s %buildroot%{install_path}/lib/examples
 install -d %buildroot%{install_path}/docs
 cp -pr AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO \
 	%buildroot%{install_path}/docs
 ls -la %buildroot%{install_path}/docs
+
+# This happens last -- compiler and mpi _family are unset after
+%fdupes -s %buildroot%{install_path}/lib/examples
 
 %files
 %defattr(-,root,root,-)
