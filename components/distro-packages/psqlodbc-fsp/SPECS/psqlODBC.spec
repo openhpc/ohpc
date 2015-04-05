@@ -15,7 +15,8 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-%define pname psqlODBC
+%define pname   psqlODBC
+%define tarname psqlodbc
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:           %{pname}%{PROJ_DELIM}
@@ -30,14 +31,14 @@ BuildRequires:  openssl-devel
 BuildRequires:  postgresql-devel
 BuildRequires:  unixODBC-devel
 
-%{sles_version}
-%if 0%{?sles_version}
-%{sles_version}
-Requires:       libltdl7
-%endif
+%{suse_version}
+#%if 0%{?sles_version}
+#%{sles_version}
+#Requires:       libltdl7
+#%endif
 
 Url:            http://pgfoundry.org/projects/psqlodbc
-%define       tarname psqlodbc
+
 Summary:        ODBC Driver for PostgreSQL
 License:        LGPL-2.1+
 Group:          fsp/distro-packages
