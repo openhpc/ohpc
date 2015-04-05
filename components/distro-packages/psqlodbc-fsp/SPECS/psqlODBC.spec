@@ -29,6 +29,12 @@ Requires:       libtool-ltdl
 BuildRequires:  openssl-devel
 BuildRequires:  postgresql-devel
 BuildRequires:  unixODBC-devel
+
+%if 0%{?sles_version}
+%{sles_version}
+Requires:       libltdl7
+%endif
+
 Url:            http://pgfoundry.org/projects/psqlodbc
 %define       tarname psqlodbc
 Summary:        ODBC Driver for PostgreSQL
@@ -45,10 +51,7 @@ Provides:       pg_iface:/usr/lib/pgsql/odbcinst.ini
 Provides:       pg_odbc
 Provides:       postgresql-odbc
 
-%if 0%{?sles_version}
-BuildRequires:  libltdl7
-Requires:       libltdl7
-%endif
+
 
 %description
 This package contains the ODBC (Open DataBase Connectivity) driver and
