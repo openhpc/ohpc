@@ -30,6 +30,7 @@ BuildRequires:  openssl-devel
 BuildRequires:  postgresql-devel
 BuildRequires:  unixODBC-devel
 
+%{sles_version}
 %if 0%{?sles_version}
 %{sles_version}
 Requires:       libltdl7
