@@ -46,6 +46,7 @@ Provides:       pg_odbc
 Provides:       postgresql-odbc
 
 %if 0%{?sles_version}
+BuildRequires:  libltdl7
 Requires:       libltdl7
 %endif
 
