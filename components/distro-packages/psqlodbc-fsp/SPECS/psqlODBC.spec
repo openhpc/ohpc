@@ -31,11 +31,9 @@ BuildRequires:  openssl-devel
 BuildRequires:  postgresql-devel
 BuildRequires:  unixODBC-devel
 
-%{suse_version}
-#%if 0%{?sles_version}
-#%{sles_version}
-#Requires:       libltdl7
-#%endif
+%if 0%{?suse_version} == 1315
+Requires:       libltdl7
+%endif
 
 Url:            http://pgfoundry.org/projects/psqlodbc
 
