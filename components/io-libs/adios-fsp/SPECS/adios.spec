@@ -151,7 +151,6 @@ export CFLAGS="-fp-model strict $CFLAGS"
 make VERBOSE=1
 
 # gnu builds need MKL -- can this dependency be removed?
-module load numpy
 %if %{compiler_family} == gnu
 module load mkl
 %endif
@@ -181,6 +180,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
+module load numpy
 pushd wrappers/numpy
 python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
