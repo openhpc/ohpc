@@ -26,10 +26,14 @@ BuildRequires: kernel-devel = 2.6.32-431.el6
 %endif
 
 %if 0%{?centos_version} == 700
-BuildRequires: kernel = 3.10.0-123.el7
-BuildRequires: kernel-devel = 3.10.0-123.el7
-%define kdir /lib/modules/3.10.0-123.el7.x86_64/source/
-%define kobjdir /lib/modules/3.10.0-123.el7.x86_64/build/
+#BuildRequires: kernel = 3.10.0-123.el7
+#BuildRequires: kernel-devel = 3.10.0-123.el7
+BuildRequires: kernel = 3.10.0-229.el7
+BuildRequires: kernel-devel = 3.10.0-229.el7
+#%define kdir /lib/modules/3.10.0-123.el7.x86_64/source/
+#%define kobjdir /lib/modules/3.10.0-123.el7.x86_64/build/
+%define kdir /lib/modules/3.10.0-229.el7.x86_64/source/
+%define kobjdir /lib/modules/3.10.0-229.el7.x86_64/build/
 %endif
 
 %endif
@@ -44,8 +48,10 @@ BuildRequires:	-post-build-checks
 %bcond_without ldiskfs
 %bcond_with zfs
 %bcond_without lustre_tests
+%bcond_without lustre_utils
 %bcond_without lustre_iokit
 %bcond_without lustre_modules
+%bcond_with lnet_dlc
 
 %if %{without servers}
     # --without servers overrides --with {ldiskfs|zfs}
@@ -54,9 +60,7 @@ BuildRequires:	-post-build-checks
     %undefine with_zfs
 %endif
 
-
-
-%{!?version: %global version 2.6.0}
+%{!?version: %global version 2.7.0}
 %{!?kver: %global kver ""}
 %{!?kdir: %global kdir %(dir=$(echo "%configure_args" | sed -ne 's/.*--with-linux=\\([^ ][^ ]*\\).*$/\\1/p'); if [ -n "$dir" ]; then echo "$dir"; else if [ -n "%kver" ]; then kversion="%kver"; else kversion="$(uname -r)"; fi; echo "/lib/modules/$kversion/source"; fi)}
 
@@ -123,6 +127,14 @@ BuildRequires:	-post-build-checks
 %define rpm_post_base %(echo $(dirname %{cross_path})/%{lustre_name})
 %endif
 
+# SUSE don't support .debug_info section from cross compiler:
+# /usr/lib/rpm/debugedit: Unhandled relocation 10 in .debug_info section
+%if %{defined cross_path} && 0%{?suse_version}
+%global __debug_install_post %{nil}
+%global __debug_package %{nil}
+%global debug_package %{nil}
+%endif
+
 Summary: Lustre File System
 Name: %{lustre_name}%{PROJ_DELIM}
 Version: %{version}
@@ -130,7 +142,7 @@ Release: %{fullrelease}
 License: GPL
 Group: fsp/lustre
 Source: lustre-%{version}.tar.gz
-URL: http://wiki.whamcloud.com/
+URL: https://wiki.hpdd.intel.com/
 BuildRoot: %{_tmppath}/lustre-%{version}-root
 Obsoletes: lustre-lite, lustre-lite-utils, lustre-ldap nfs-utils-lustre
 Provides: lustre-lite = %{version}, lustre-lite-utils = %{version}
@@ -138,6 +150,7 @@ Requires: %{name}-modules = %{version}
 BuildRequires: libtool
 %if %{with servers}
 Requires: lustre-osd
+Requires: lustre-osd-mount
 %endif
 %if %{defined cross_requires}
 Requires: %{cross_requires}
@@ -150,10 +163,6 @@ BuildRequires: libselinux-devel
 Requires: libselinux
 %endif
 %endif
-
-# Intel FSP
-# 01/13/15 karl.w.schulz@intel.com - include patch for "text file busy" (http://review.whamcloud.com/#/c/11062/)
-Patch1: db5abf4b.diff
 
 %description
 Userspace tools and files for the Lustre file system.
@@ -170,6 +179,10 @@ AutoReqProv: no
 # for RHEL we need to require the specific kernel still since weak-modules
 # support on RH is, well, weak, to be punny about it
 Requires: kernel = %{krequires}
+%if %{with lnet_dlc}
+Requires: libyaml
+BuildRequires: libyaml-devel
+%endif
 %endif
 %endif
 Group: Development/Kernel
@@ -181,8 +194,9 @@ Lustre file system, server and network drivers for Linux %{kversion}.
 %package osd-ldiskfs
 Summary: osd-ldiskfs contains both ldiskfs and its osd interface in Lustre.
 Requires: lustre-modules = %{version}
-Requires: modutils >= 2.4.10
+Requires: module-init-tools >= 3.9
 Requires: ldiskfsprogs >= 1.42.7.wc1
+Requires: lustre-osd-ldiskfs-mount
 Provides: lustre-osd
 Obsoletes: lustre-ldiskfs
 Group: Development/Kernel
@@ -193,12 +207,24 @@ modify data that is supposed to be stored persistently. This API is the interfac
 to code that bridges individual file systems. This specific package provides an
 implementation of the OSD API for using the Ldiskfs filesystem as the underlying
 backing store of a Lustre server.
+
+%if %{with lustre_utils}
+%package osd-ldiskfs-mount
+Summary: osd-ldiskfs-mount contains mount's ldiskfs specific dso.
+Provides: lustre-osd-mount
+Group: Development/Kernel
+
+%description osd-ldiskfs-mount
+LDISKFS hooks for mount/mkfs into a dynamic library.
+
+%endif
 %endif
 
 %if %{with zfs}
 %package osd-zfs
 Summary: osd-zfs is the mandatory glue for ZFS support in Lustre.
 Requires: lustre-modules = %{version}, zfs-kmod
+Requires: lustre-osd-zfs-mount
 Provides: lustre-osd
 Group: Development/Kernel
 
@@ -208,6 +234,17 @@ modify data that is supposed to be stored persistently. This API is the interfac
 to code that bridges individual file systems. This specific package provides an
 implementation of the OSD API for using the ZFS filesystem as the underlying
 backing store of a Lustre server.
+
+%if %{with lustre_utils}
+%package osd-zfs-mount
+Summary: osd-zfs-mount contains mount's ldiskfs specific dso.
+Provides: lustre-osd-mount
+Group: Development/Kernel
+
+%description osd-zfs-mount
+ZFS hooks for mount/mkfs into a dynamic library.
+
+%endif
 %endif
 %endif # with lustre_modules
 
@@ -258,6 +295,7 @@ Summary: Lustre testing framework
 Group: Development/Kernel
 Provides: %{name}-tests = %{version}
 Requires: %{name} = %{version}, %{name}-modules = %{version}, lustre-iokit
+Requires: attr, rsync, perl, lsof, /usr/bin/getconf
 
 %description tests
 This package contains a set of test binaries and scripts that are intended
@@ -305,9 +343,6 @@ clients in order to run
 %prep
 %setup -qn lustre-%{version}
 
-# Intel FSP patches
-%patch1 -p1
-
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
@@ -330,6 +365,13 @@ CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-tests"
 %else
 CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-tests"
 %endif
+
+%if %{with lustre_utils}
+CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-utils"
+%else
+CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-utils"
+%endif
+
 %if %{without lustre_iokit}
 CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-iokit"
 %endif
@@ -338,6 +380,14 @@ CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-iokit"
 CONFIGURE_ARGS="$CONFIGURE_ARGS --enable-modules"
 %else
 CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-modules"
+%endif
+
+%if %{without servers}
+CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-server"
+%endif
+
+%if %{without ldiskfs}
+CONFIGURE_ARGS="$CONFIGURE_ARGS --disable-ldiskfs"
 %endif
 
 %if %{without zfs}
@@ -376,9 +426,11 @@ make install DESTDIR=$RPM_BUILD_ROOT
 # The .ha_v2 extension identifies the heartbeat resource agent as using
 # legacy syntax. Install a compatibility symlink to avoid conflicts when
 # newer-style agents are added.
+%if %{with lustre_utils}
 ln -s Lustre.ha_v2 $RPM_BUILD_ROOT%{_sysconfdir}/ha.d/resource.d/Lustre
 echo '%{_sysconfdir}/ha.d/resource.d/Lustre.ha_v2' >>lustre.files
 echo '%{_sysconfdir}/ha.d/resource.d/Lustre' >>lustre.files
+%endif
 
 if [ -f $RPM_BUILD_ROOT%{_sysconfdir}/init.d/lustre ]; then
 	echo '%{_sysconfdir}/sysconfig/lustre' >>lustre.files
@@ -398,7 +450,17 @@ ln -s $RPM_BUILD_ROOT%{_prefix}/src lustre-source
 make distdir distdir=lustre-source/lustre-%{version}
 chmod -R go-w lustre-source/lustre-%{version}
 # fc18 needs 'x' permission for library files
-find $RPM_BUILD_ROOT -name '*.so' | xargs chmod +x
+find $RPM_BUILD_ROOT -name \*.so -type f -exec chmod +x {} \;
+
+if [ -f $RPM_BUILD_ROOT%{_libdir}/liblnetconfig.a ] ; then
+  echo '%attr(-, root, root) %{_libdir}/liblnetconfig.a' >>lustre.files
+  echo '%attr(-, root, root) %{_libdir}/liblnetconfig.so' >>lustre.files
+fi
+
+if [ -f $RPM_BUILD_ROOT%{_libdir}/liblustre.so ] ; then
+  echo '%{_libdir}/liblustre.a' >>lustre.files
+  echo '%{_libdir}/liblustre.so' >>lustre.files
+fi
 
 if [ -f $RPM_BUILD_ROOT%{_libdir}/libiam.a ] ; then
   echo '%{_libdir}/libiam.a' >>lustre.files
@@ -409,12 +471,15 @@ if [ -d $RPM_BUILD_ROOT%{_libdir}/lustre/snmp ] ; then
   echo '%{_datadir}/lustre/snmp/mibs' >>lustre.files
 fi
 
-find $RPM_BUILD_ROOT%{_libdir}/lustre/ -name \*.la -delete
+find $RPM_BUILD_ROOT%{_libdir}/lustre/ -name \*.la -type f -delete
 
 %if %{with lustre_tests}
 echo '%{_libdir}/lustre/tests/*' >>lustre-tests.files
 echo '%{_bindir}/mcreate' >>lustre-tests.files
 echo '%{_bindir}/munlink' >>lustre-tests.files
+echo '%{_bindir}/req_layout' >>lustre-tests.files
+echo '%{_sbindir}/wirecheck' >>lustre-tests.files
+echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %if %{with lustre_modules}
 echo '%{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/kernel/fs/lustre/llog_test.ko' >>lustre-tests.files
 %endif
@@ -429,9 +494,15 @@ if [ -f $POST_SCRIPT ]; then
 	cp -f $POST_SCRIPT $RPM_BUILD_ROOT/%{rpm_post_base}-modules.sh
 %if %{with ldiskfs}
 	cp -f $POST_SCRIPT $RPM_BUILD_ROOT/%{rpm_post_base}-osd-ldiskfs.sh
+%if %{with lustre_utils}
+	cp -f $POST_SCRIPT $RPM_BUILD_ROOT/%{rpm_post_base}-mount-osd-ldiskfs.sh
+%endif
 %endif
 %if %{with zfs}
 	cp -f $POST_SCRIPT $RPM_BUILD_ROOT/%{rpm_post_base}-osd-zfs.sh
+%if %{with lustre_utils}
+	cp -f $POST_SCRIPT $RPM_BUILD_ROOT/%{rpm_post_base}-mount-osd-zfs.sh
+%endif
 %endif
 %if %{with lustre_tests}
 	cp -f $POST_SCRIPT $RPM_BUILD_ROOT/%{rpm_post_base}-tests.sh
@@ -440,34 +511,39 @@ if [ -f $POST_SCRIPT ]; then
 fi
 %endif
 %else
+%if %{with lustre_modules}
 # mark modules executable for find-debuginfo.sh
-find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} -name "*.ko" -type f | \
-	xargs --no-run-if-empty chmod u+x
+find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} \
+    -name \*.ko -type f -exec chmod u+x {} \;
+%endif
 %endif
 
 %files -f lustre.files
 %defattr(-,root,root)
-%{?rootdir}/sbin/mount.lustre
 %{_sbindir}/*
-%{_bindir}/lfs
-%{_bindir}/lfs_migrate
-%{_bindir}/llbackup
+%if %{with lustre_utils}
+%if %{with servers}
+%{_libexecdir}/lustre/lc_common
+%{_libexecdir}/lustre/haconfig
+%{_bindir}/lustre_req_history
+%endif
+
 %{_bindir}/llobdstat
 %{_bindir}/llstat
-%{_bindir}/lustre_req_history
 %{_bindir}/plot-llstat
-%{_bindir}/req_layout
+
+%{_bindir}/lfs
+%{_bindir}/lfs_migrate
+%{?rootdir}/sbin/mount.lustre
 %{_libdir}/libptlctl.a
 %{_libdir}/libcfsutil.a
 %{_libdir}/liblustreapi.a
 %{_libdir}/liblustreapi.so
 %{_mandir}/man?/*
-%{_datadir}/lustre
 %{_includedir}/lustre
 %{_includedir}/libcfs
-%{_includedir}/linux/lustre_user.h
-%{_libexecdir}/lustre/lc_common
-%{_libexecdir}/lustre/haconfig
+%endif
+%{_datadir}/lustre
 %{_sysconfdir}/udev/rules.d/99-lustre.rules
 %config(noreplace) %{_sysconfdir}/ldev.conf
 
@@ -497,9 +573,16 @@ find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} -name "*.ko" 
 %defattr(-,root,root)
 %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/kernel/fs/lustre/ldiskfs.ko
 %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/kernel/fs/lustre/osd_ldiskfs.ko
-%{_libdir}/lustre/mount_osd_ldiskfs.so
 %if %{defined rpm_post_base}
 %attr(0555, root, root) %{rpm_post_base}-osd-ldiskfs.sh
+%endif
+%if %{with lustre_utils}
+%files osd-ldiskfs-mount
+%defattr(-,root,root)
+%{_libdir}/lustre/mount_osd_ldiskfs.so
+%if %{defined rpm_post_base}
+%attr(0555, root, root) %{rpm_post_base}-mount-osd-ldiskfs.sh
+%endif
 %endif
 %endif
 
@@ -507,9 +590,16 @@ find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} -name "*.ko" 
 %files osd-zfs
 %defattr(-,root,root)
 %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/kernel/fs/lustre/osd_zfs.ko
-%{_libdir}/lustre/mount_osd_zfs.so
 %if %{defined rpm_post_base}
 %attr(0555, root, root) %{rpm_post_base}-osd-zfs.sh
+%endif
+%if %{with lustre_utils}
+%files osd-zfs-mount
+%defattr(-,root,root)
+%{_libdir}/lustre/mount_osd_zfs.so
+%if %{defined rpm_post_base}
+%attr(0555, root, root) %{rpm_post_base}-mount-osd-zfs.sh
+%endif
 %endif
 %endif
 %endif # with lustre_modules
@@ -646,6 +736,12 @@ if sysctl kernel.unsupported >/dev/null 2>&1 &&
      into /etc/modprobe.d/unsupported_modules"
 fi
 %endif
+%if %{with lustre_utils} && %{defined rpm_post_base}
+%post osd-ldiskfs-mount
+if [ -x %{rpm_post_base}-mount-osd-ldiskfs.sh ]; then
+	%{rpm_post_base}-mount-osd-ldiskfs.sh %{cross_path} create
+fi
+%endif
 %endif
 
 %if %{with zfs}
@@ -689,6 +785,12 @@ if sysctl kernel.unsupported >/dev/null 2>&1 &&
      into /etc/modprobe.d/unsupported_modules"
 fi
 %endif
+%if %{with lustre_utils} && %{defined rpm_post_base}
+%post osd-zfs-mount
+if [ -x %{rpm_post_base}-mount-osd-zfs.sh ]; then
+	%{rpm_post_base}-mount-osd-zfs.sh %{cross_path} create
+fi
+%endif
 %endif
 
 %preun modules
@@ -711,6 +813,12 @@ fi
 OSD_LDISKFS_RPM_NAME=$(rpm -q %{name}-osd-ldiskfs | grep "%{version}-%{release}")
 rpm -ql $OSD_LDISKFS_RPM_NAME | grep '\.ko$' > /var/run/%{name}-osd-ldiskfs || true
 %endif
+%if %{with lustre_utils} && %{defined rpm_post_base}
+%preun osd-ldiskfs-mount
+if [ -x %{rpm_post_base}-mount-osd-ldiskfs.sh ]; then
+	%{rpm_post_base}-mount-osd-ldiskfs.sh %{cross_path} remove
+fi
+%endif
 %endif
 
 %if %{with zfs}
@@ -722,6 +830,12 @@ fi
 %else
 OSD_ZFS_RPM_NAME=$(rpm -q %{name}-osd-zfs | grep "%{version}-%{release}")
 rpm -ql $OSD_ZFS_RPM_NAME | grep '\.ko$' > /var/run/%{name}-osd-zfs || true
+%endif
+%if %{with lustre_utils} && %{defined rpm_post_base}
+%preun osd-zfs-mount
+if [ -x %{rpm_post_base}-mount-osd-zfs.sh ]; then
+	%{rpm_post_base}-mount-osd-zfs.sh %{cross_path} remove
+fi
 %endif
 %endif
 
