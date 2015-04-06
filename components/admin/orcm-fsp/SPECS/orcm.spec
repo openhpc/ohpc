@@ -27,7 +27,7 @@ BuildRequires:  pkgconfig(systemd)
 
 # 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
 Source1: orcmd.service
-Source2: orcmd.sysconfig
+###Source2: orcmd.sysconfig
 # 01/30/2015 karl.w.schulz@intel.com - include db files from newer orcm
 Source3: psql_odbc_driver.ini
 Source4: orcmdb_psql.ini
@@ -38,7 +38,7 @@ Patch2:  site-xml.patch
 # 02/03/2015 karl.w.schulz@intel.com - include updated postgres config files and db-oriented orcmd.sysconfig
 Source6: pg_hba.conf
 Source7: postgresql.conf
-Source8: orcmd.db.sysconfig
+###Source8: orcmd.db.sysconfig
 
 # 04/06/15 karl.w.schulz@intel.com - patch sysconfig file to not spam console
 Patch3: orcmd.sysconfig.patch
@@ -129,7 +129,7 @@ install -D -m 0644 contrib/database/psql_odbc_driver.ini %{buildroot}%{_sysconfd
 
 install -D -m 0644 %SOURCE6 %{buildroot}%{_sysconfdir}/pg_hba.orcm.conf
 install -D -m 0644 %SOURCE7 %{buildroot}%{_sysconfdir}/postgresql.orcm.conf
-install -D -m 0644 %SOURCE8 %{buildroot}/etc/sysconfig/orcmd.db
+###install -D -m 0644 %SOURCE8 %{buildroot}/etc/sysconfig/orcmd.db
 
 %clean
 
