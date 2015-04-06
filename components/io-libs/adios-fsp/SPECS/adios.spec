@@ -150,15 +150,6 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-netcdf="$NETCDF_DIR" || cat config.log
 make VERBOSE=1
 
-%install
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
-
-make DESTDIR=$RPM_BUILD_ROOT install
-
 # gnu builds need MKL -- can this dependency be removed?
 module load numpy
 %if %{compiler_family} == gnu
@@ -176,6 +167,15 @@ pushd wrappers/numpy
 make MPI=y python
 python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
+
+%install
+# FSP compiler designation
+export FSP_COMPILER_FAMILY=%{compiler_family}
+export FSP_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/FSP_setup_mpi
+
+make DESTDIR=$RPM_BUILD_ROOT install
 
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \
