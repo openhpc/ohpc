@@ -150,21 +150,11 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-netcdf="$NETCDF_DIR" || cat config.log
 make VERBOSE=1
 
-# gnu builds need MKL -- can this dependency be removed?
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
 chmod +x adios_config
-export PATH=$(pwd):$PATH
 
-# this is clearly generated someway and shouldn't be static
-export PPATH="/lib64/python2.7/site-packages"
 
-module load numpy
-export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
-pushd wrappers/numpy
-make MPI=y python
+pushd %buildroot
+find
 popd
 
 %install
@@ -181,9 +171,14 @@ make DESTDIR=$RPM_BUILD_ROOT install
 module load mkl
 %endif
 
+# this is clearly generated someway and shouldn't be static
+export PPATH="/lib64/python2.7/site-packages"
 export PATH=$(pwd):$PATH
+
 module load numpy
+export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
+make MPI=y python
 python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
