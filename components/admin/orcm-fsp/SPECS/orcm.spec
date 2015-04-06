@@ -40,8 +40,9 @@ Source6: pg_hba.conf
 Source7: postgresql.conf
 ###Source8: orcmd.db.sysconfig
 
-# 04/06/15 karl.w.schulz@intel.com - patch sysconfig file to not spam console
+# 04/06/15 karl.w.schulz@intel.com - patch sysconfig file(s) to not spam console
 Patch3: orcmd.sysconfig.patch
+Patch4: orcmsched.sysconfig.patch
 
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
 # using the source RPM and may not want to include some or all of these dependencies
@@ -78,11 +79,9 @@ orcm is an opensource resiliency cluster management software implementation.
 %patch1 -p0
 %patch2 -p0
 %patch3 -p1
+%patch4 -p1
 
 %build
-
-# 03/30/15 karl.w.schulz@intel.pl - allow use fsp provided autotools
-#export PATH=/opt/fsp/pub/autotools/bin/:$PATH
 
 ./autogen.pl
 
@@ -141,7 +140,6 @@ cat <<EOF > $RPM_BUILD_ROOT/etc/profile.d/%{orcm_name}-%{orcm_version}.sh
 #
 # profile.d files
 #
-if [ 1 == 1 ] ; then
 cat <<EOF > $RPM_BUILD_ROOT/etc/profile.d/%{orcm_name}-%{orcm_version}.sh
 %{__mkdir_p} $RPM_BUILD_ROOT/etc/profile.d/
 CHANGED=0
@@ -181,7 +179,6 @@ if ("$?MANPATH") then
     endif
 endif
 EOF
-fi
 
 %clean
 
@@ -192,11 +189,8 @@ fi
 #%{_bindir}/*
 %dir %{install_prefix}
 %{install_prefix}/*
-#%doc %{_datadir}/openmpi
 %doc %{install_prefix}/share/man/man1/*
 %doc %{install_prefix}/share/man/man7/*
-#%doc %{_mandir}/man1/*
-#%doc %{_mandir}/man7/*
 %{_unitdir}/*
 
 %pre 
@@ -211,47 +205,5 @@ fi
 %postun
 %service_del_postun orcmd.service
 
-
-### %package -n %{pname}-devel%{PROJ_DELIM}
-### Summary:       Development libraries for ORCM
-### Group:         Development/Libraries
-### BuildRequires: pkg-config
-### 
-### %description -n %{pname}-devel%{PROJ_DELIM}
-### An open source resiliency cluster management software implementation.
-### 
-### %files -n %{pname}-devel%{PROJ_DELIM}
-### %defattr(-,root,root,-)
-### ##%{_includedir}/openmpi
-### ##%dir %{_libdir}/openmpi
-### %{_libdir}/*.so
-### ##%{_libdir}/openmpi/*.so
-### %{_libdir}/*.la
-### ##%{_libdir}/openmpi/*.la
-### %if 0%{?suse_version} > 1220
-### %{_libdir}/pkgconfig/*.pc
-### %endif
-
-### %post -n %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
-### 
-### %postun -n %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
-### 
-### 
-### %package -n liborcm%{PROJ_DELIM}
-### Summary:       Dynamic libraries for ORCM
-### BuildRequires: pkg-config
-### Group:         System Environment/Libraries
-### 
-### %description -n liborcm%{PROJ_DELIM}
-### An open source resiliency cluster management software implementation.
-### 
-### %files -n liborcm%{PROJ_DELIM}
-### %defattr(-,root,root,-)
-### %{_libdir}/*.so.*
-### 
-### %post -n liborcm%{PROJ_DELIM} -p /sbin/ldconfig
-### 
-### %postun -n liborcm%{PROJ_DELIM} -p /sbin/ldconfig
-### 
 
 %changelog
