@@ -162,10 +162,13 @@ export PATH=$(pwd):$PATH
 # this is clearly generated someway and shouldn't be static
 export PPATH="/lib64/python2.7/site-packages"
 
-export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L%buildroot%{install_path}/lib"
+pushd ~/BUILD
+find -type f
+popd
+
+export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L~/BUILD"
 pushd wrappers/numpy
 make MPI=y python
-python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
 %install
@@ -176,6 +179,10 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
 
 make DESTDIR=$RPM_BUILD_ROOT install
+
+pushd wrappers/numpy
+python setup.py install --prefix="%buildroot%{install_path}/python"
+popd
 
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \
