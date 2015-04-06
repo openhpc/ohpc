@@ -152,11 +152,6 @@ make VERBOSE=1
 
 chmod +x adios_config
 
-
-pushd %buildroot
-find
-popd
-
 %install
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
