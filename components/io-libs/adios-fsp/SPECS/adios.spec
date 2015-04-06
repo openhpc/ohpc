@@ -181,6 +181,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 module load mkl
 %endif
 
+export PATH=$(pwd):$PATH
 module load numpy
 pushd wrappers/numpy
 python setup.py install --prefix="%buildroot%{install_path}/python"
