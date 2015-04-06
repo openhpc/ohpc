@@ -23,6 +23,8 @@ BuildRequires:  pkgconfig(systemd)
 # Define prefix
 %define install_prefix /opt/open-rcm
 
+
+
 # 01/20/2015 karl.w.schulz@intel.com - include systemd files from newer orcm
 Source1: orcmd.service
 Source2: orcmd.sysconfig
@@ -37,6 +39,9 @@ Patch2:  site-xml.patch
 Source6: pg_hba.conf
 Source7: postgresql.conf
 Source8: orcmd.db.sysconfig
+
+# 04/06/15 karl.w.schulz@intel.com - patch sysconfig file to not spam console
+Patch3: orcmd.sysconfig.patch
 
 # Disable dependencies for non-OBS builds since users need to be able to rebuild
 # using the source RPM and may not want to include some or all of these dependencies
@@ -72,6 +77,7 @@ orcm is an opensource resiliency cluster management software implementation.
 
 %patch1 -p0
 %patch2 -p0
+%patch3 -p1
 
 %build
 
