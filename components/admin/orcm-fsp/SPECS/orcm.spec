@@ -137,11 +137,11 @@ cat <<EOF > $RPM_BUILD_ROOT/etc/profile.d/orcm.sh
 # uninstalled, or b) if the RPM is upgraded or uninstalled.
 
 if [ -d %{install_prefix}/bin ];then
-    export PATH=%{install_prefix}/bin:$PATH
+    export PATH=%{install_prefix}/bin:\$PATH
 fi
 
 if [ -d %{install_prefix}/share/man ];then
-    export MANPATH=%{install_prefix}/share/man:$MANPATH
+    export MANPATH=%{install_prefix}/share/man:\$MANPATH
 fi
 EOF
 
@@ -151,11 +151,11 @@ cat <<EOF > $RPM_BUILD_ROOT/etc/profile.d/orcm.csh
 # uninstalled, or b) if the RPM is upgraded or uninstalled.
 
 if ( -d %{install_prefix}/bin ) then
-    set path = (%{install_prefix}/bin $path)
+    set path = (%{install_prefix}/bin \$path)
 endif
 
 if ( -d %{install_prefix}/share/man ) then
-   setenv  MANPATH %{install_prefix}/share/man:${MANPATH}
+   setenv  MANPATH %{install_prefix}/share/man:\${MANPATH}
 endif
 
 EOF
