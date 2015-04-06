@@ -44,73 +44,136 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Summary: Tuning and Analysis Utilities
-Name: %{pname}%{PROJ_DELIM}
+Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 2.24
 Release: 1%{?dist}
+Summary: Tuning and Analysis Utilities Profiling Package
 License: Tuning and Analysis Utilities License
 Group: fsp/perf-tools
-URL: http://www.cs.uoregon.edu/research/tau/home.php
+Url: http://www.cs.uoregon.edu/research/tau/home.php
 Source0: %{pname}-%{version}.tar.gz
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+Provides:  lib%PNAME.so()(64bit)
+Provides:  perl(ebs2otf)
+Conflicts: lib%pname < %version-%release
+Obsoletes: lib%pname < %version-%release
+# 03/31/15 charles.r.baird@intel.com - add return value that rpmlint complained about
+Patch1: tau.papilayer.patch
 
-BuildRequires: binutils
-#!BuildIgnore: post-build-checks
+%if 0%{?suse_version}
+BuildRequires: libgomp1
+%else
+BuildRequires: libgomp
+%endif
+
+BuildRequires: postgresql-devel binutils-devel
+Requires: binutils-devel
+BuildRequires: libotf-devel zlib-devel python-devel
+BuildRequires: papi-fsp
+BuildRequires: pdtoolkit-%{compiler_family}-fsp
+Requires: papi-fsp
+Requires: pdtoolkit-%{compiler_family}-fsp
+
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{pname}/%version
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-TAU Performance System is a portable profiling and tracing toolkit for performance 
-analysis of parallel programs written in Fortran, C, C++, UPC, Java, Python.
+TAU is a program and performance analysis tool framework being developed for
+the DOE and ASC program at University of Oregon. TAU provides a suite of 
+static and dynamic tools that provide graphical user
+interaction and interoperation to form an integrated analysis environment for
+parallel Fortran 95, C and C++ applications.  In particular, a robust
+performance profiling facility availible in TAU has been applied extensively in
+the ACTS toolkit.  Also, recent advancements in TAU's code analysis
+capabilities have allowed new static tools to be developed, such as an
+automatic instrumentation tool.
+
 
 %prep
 %setup -q -n %{pname}-%{version}
+
+# Intel FSP patches
+%patch1 -p1
+
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
-sed -i 's|lib/libpdb\.a|lib64/libpdb.a|g' utils/Makefile
 %endif
 
-%install
-
+%build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
+module load papi
+module load pdtoolkit
 
-export BUILDROOT=%{buildroot}
-./configure \
-        -arch=%_arch \
-        -c++=mpicxx \
-        -cc=mpicc \
-        -fortran=mpif90 \
-        -prefix=%{buildroot}%{install_path} \
-        -exec-prefix= \
-        -mpi \
-        -mpiinc=$MPI_DIR/include \
-        -mpilib=$MPI_DIR/lib -mpilibrary="-lmpi" \
-        -slog2 \
-        -PROFILE -PROFILECALLPATH -PROFILEPARAM \
-        -PROFILEMEMORY \
-        -CPUTIME -MULTIPLECOUNTERS \
-        -useropt="%optflags -I$PWD/include -fno-strict-aliasing" \
-        -MPITRACE \
-        -openmp
-
-
-#rm -rf $RPM_BUILD_ROOT
-
-#sudo make DESTDIR=$RPM_BUILD_ROOT clean install
-export BUILDROOTLIB=%buildroot%_libexecdir
-%ifarch x86_64
-export LIBSUFF=64
+%if %{compiler_family} == gnu
+export fcomp=gfortran
 %endif
-sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%{buildroot}%{install_path}|' \
-    include/Makefile utils/Makefile
-TOPDIR=$PWD
+%if %{compiler_family} == intel
+export fcomp=mpiifort
+%endif
+export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_DIR/lib"
+
+export BUILDROOT=%buildroot%{install_path}
+export FFLAGS="$FFLAGS -I$MPI_DIR/include"
+./configure \
+    -prefix=%buildroot%{install_path} \
+    -exec-prefix= \
+	-c++=mpicxx \
+	-cc=mpicc \
+	-fortran=$fcomp \
+	-iowrapper \
+	-mpi \
+	-mpiinc=$MPI_DIR/include \
+	-mpilib=$MPI_DIR/lib \
+	-slog2 \
+	-PROFILEPARAM \
+    -papi=$PAPI_DIR \
+	-pdt=$PDTOOLKIT_DIR \
+	-CPUTIME \
+	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
+	-openmp \
+	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib" 
+
+
 make install TOPDIR=$TOPDIR
+make exports TOPDIR=$TOPDIR
+
+pushd %{buildroot}%{install_path}/bin
+sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
+rm -f tau_java
+popd
+install -d %buildroot%{install_path}/etc
+install -d %buildroot%_datadir/%name
+install -d %buildroot%{install_path}/include
+sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*.h
+sed -i 's|%buildroot||g' %buildroot%{install_path}/include/Makefile
+sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
+sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
+
+rm -f  %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
+rm -f %buildroot%{install_path}/.last_config
+rm -f %buildroot%{install_path}/.all_configs
+rm -f %buildroot%{install_path}/.active_stub*
+
+# clean libs
+pushd %buildroot%{install_path}/lib
+if [ -f  Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace ]
+    then
+        sed -i 's|%buildroot||g' Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace
+        ln -s Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace Makefile
+fi
+if [ -f Makefile.tau-param-icpc-papi-mpi-pdt-openmp-profile-trace ]
+    then
+        sed -i 's|%buildroot||g' Makefile.tau-param-icpc-papi-mpi-pdt-openmp-profile-trace
+        ln -s Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace Makefile
+fi
+rm -f libjogl*
+popd
+
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -142,6 +205,20 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  ![is-loaded papi]  } {
+        module load papi
+    }
+    if {  ![is-loaded pdtoolkit]  } {
+        module load pdtoolkit
+    }
+}
+
+if [ module-info mode remove ] {
+    module unload pdtoolkit
+}
 
 EOF
 
@@ -153,34 +230,10 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-# Remove buildroot references
-pushd %{buildroot}%{install_path}/bin
-sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
-popd
-pushd %{buildroot}%{install_path}/include
-sed -i 's|%{buildroot}||g' $(egrep -R '%{buildroot}' ./|awk -F : '{print $1}')
-popd
-rm -f %{buildroot}%{install_path}/include/Makefile*
-rm -f %{buildroot}%{install_path}/lib/Makefile*
-rm -f %{buildroot}%{install_path}/examples/gpu/cuda/unifmem/Makefile*
-rm -fR %{buildroot}%{install_path}/include/makefiles
-rm -fR %{buildroot}%{install_path}/.last_config
-rm -fR %{buildroot}%{install_path}/.all_configs
-rm -fR %{buildroot}%{install_path}/.active_stub*
-rm -fR %{buildroot}%{install_path}/lib/libtau-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
-
-# Remove extra buildroot references for centos 7
-rm -fR %{buildroot}%{install_path}/lib/static-memory-callpath-param-mpi-openmp-profile-trace-mpitrace/libTauMemoryWrap.a
-rm -fR %{buildroot}%{install_path}/lib/libTauMpi-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
-rm -fR %{buildroot}%{install_path}/lib/libTAU_traceinput-memory-callpath-param-mpi-openmp-profile-trace-mpitrace.a
-rm -fR %{buildroot}%{install_path}/bin/tau_timecorrect
-rm -fR %{buildroot}%{install_path}/bin/trace2profile
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
 
 %changelog
+
