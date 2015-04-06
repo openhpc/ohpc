@@ -573,7 +573,7 @@ for the new credential should also be placed in the final
 % fsp_validation_comment Configure ORCM aggregator and DB
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/localhost/" /etc/orcm-site.xml
+[master]$ perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
 [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
 
 # Initialize postgres DB driver
@@ -613,7 +613,7 @@ be added to the compute image as follows:
 [master]$ yum -y --installroot=$CHROOT install -t pattern fsp-orcm-client
 
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/etc/orcm-site.xml
+[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" /etc/open-rcm/etc/orcm-site.xml
 
 # Enable orcmd client daemon on boot
 [master]$ chroot $CHROOT systemctl enable orcmd
