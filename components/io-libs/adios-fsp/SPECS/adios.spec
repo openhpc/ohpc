@@ -176,6 +176,11 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
+# gnu builds need MKL -- can this dependency be removed?
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 module load numpy
 pushd wrappers/numpy
 python setup.py install --prefix="%buildroot%{install_path}/python"
