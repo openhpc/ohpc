@@ -136,21 +136,12 @@ cat <<EOF > $RPM_BUILD_ROOT/etc/profile.d/orcm.sh
 # Open RCM RPM).  Any changes made here will be lost a) if the RPM is
 # uninstalled, or b) if the RPM is upgraded or uninstalled.
 
-CHANGED=0
-if test -z "`echo $PATH | grep %{_prefix}/bin`"; then
-    PATH=\${PATH}:%{_prefix}/bin/
-    CHANGED=1
+if [ -d %{install_prefix}/bin ];then
+    export PATH=%{install_prefix}/bin:$PATH
 fi
-if test -z "`echo $LD_LIBRARY_PATH | grep %{_libdir}`"; then
-    LD_LIBRARY_PATH=\${LD_LIBRARY_PATH}:%{_libdir}
-    CHANGED=1
-fi
-if test -z "`echo $MANPATH | grep %{_mandir}`"; then
-    MANPATH=\${MANPATH}:%{_mandir}
-    CHANGED=1
-fi
-if test "$CHANGED" = "1"; then
-    export PATH LD_LIBRARY_PATH MANPATH
+
+if [ -d %{install_prefix}/share/man ];then
+    export MANPATH=%{install_prefix}/share/man:$MANPATH
 fi
 EOF
 
@@ -159,19 +150,14 @@ cat <<EOF > $RPM_BUILD_ROOT/etc/profile.d/orcm.csh
 # Open RCM RPM).  Any changes made here will be lost a) if the RPM is
 # uninstalled, or b) if the RPM is upgraded or uninstalled.
 
-if ("`echo $PATH | grep %{_prefix}/bin`") then
-    setenv PATH \${PATH}:%{_prefix}/bin/
+if ( -d %{install_prefix}/bin ) then
+    set path = (%{install_prefix}/bin $path)
 endif
-if ("$?LD_LIBRARY_PATH") then
-    if ("`echo $LD_LIBRARY_PATH | grep %{_libdir}`") then
-        setenv LD_LIBRARY_PATH \${LD_LIBRARY_PATH}:%{_libdir}
-    endif
+
+if ( -d %{install_prefix}/share/man ) then
+   setenv  MANPATH %{install_prefix}/share/man:${MANPATH}
 endif
-if ("$?MANPATH") then
-    if ("`echo $MANPATH | grep %{_mandir}`") then
-        setenv MANPATH \${MANPATH}:%{_mandir}
-    endif
-endif
+
 EOF
 
 %clean
