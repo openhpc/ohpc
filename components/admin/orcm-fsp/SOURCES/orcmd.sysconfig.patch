@@ -5,4 +5,4 @@
  # Options for orcmd
  #
 -ORCMD_OPTS="--omca mca_base_verbose syslog"
-+ORCMD_OPTS="--omca mca_base_verbose syslog,syslogpri:info --omca db_odbc_user orcmuser:orcmpasswd --omca db_odbc_table data_sample"
++ORCMD_OPTS="--omca mca_base_verbose syslog,syslogpri:info --omca db_odbc_user orcmuser:orcmpasswd --omca db_odbc_table data_sample --omca db_odbc_dsn orcmdb_psql"
