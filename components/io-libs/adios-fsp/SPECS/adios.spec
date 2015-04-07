@@ -102,13 +102,13 @@ how they process the data.
 %prep
 %setup -q -n %{pname}-%{version}
 
+%build
 sed -i 's|@BUILDROOT@|%buildroot|' wrappers/numpy/setup*
 %ifarch x86_64
 LIBSUFF=64
 %endif
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
-%build
 pushd /home/abuild/rpmbuild/SOURCES
 cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
 popd
