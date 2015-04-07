@@ -49,6 +49,8 @@ my $master_ipoib   = "";
 my $netmask        = "";
 my $ipoib_netmask  = "";
 my $mgs_fs_name    = "";
+my $bmc_username   = "";
+my $bmc_password   = "";
 my @compute_ips    = ();
 my @compute_ipoibs = ();
 my @compute_macs   = ();
@@ -71,6 +73,10 @@ if($ci_run == 1) {
 	    $netmask = $1;
 	} elsif ($line =~ /^ipoib_netmask=(\S+)$/) {
 	    $ipoib_netmask = $1;
+	} elsif ($line =~ /^bmc_username=(\S+)$/) {
+	    $bmc_username = $1;
+	} elsif ($line =~ /^bmc_password=(\S+)$/) {
+	    $bmc_password = $1;
 	} else {
 	    foreach my $compute (@computes) {
 		if ($line =~ /^$compute\_ip=(\S+)$/) {
@@ -145,6 +151,8 @@ while(my $line=<IN>) {
 	$line =~ s/<internal_netmask>/$netmask/g;
 	$line =~ s/<master_ipoib>/$master_ipoib/g;
 	$line =~ s/<ipoib_netmask>/$ipoib_netmask/g;
+	$line =~ s/<bmc_username>/$bmc_username/g;
+	$line =~ s/<bmc_password>/$bmc_password/g;
 	$line =~ s/<mgs_fs_name>/$mgs_fs_name/g;
 	#	$line =~ s/<master_hostname>/$master_host/g;
 	$line =~ s/<master_hostname>/$ENV{'NODE_NAME'}/g;
