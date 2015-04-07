@@ -150,7 +150,12 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-netcdf="$NETCDF_DIR" || cat config.log
 
 # modify libtool script to not hardcode library paths
-sed -i -r 's/(hardcode_into_libs)=.*$/\1=no/' libtool
+sed -i -r -e 's/(hardcode_into_libs)=.*$/\1=no/' \
+	-e 's/^hardcode_direct.*$/hardcode_direct=yes/g' \
+	-e 's/^hardcode_minus_L.*$/hardcode_minus_L=yes/g' \
+	-e 's/^hardcode_shlibpath_var.*$/hardcode_shlibpath_var=no/g' \
+	-e 's/^hardcode_libdir_flag_spec.*$/hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/' \
+	libtool
 
 make VERBOSE=1
 
@@ -181,9 +186,9 @@ make MPI=y python
 python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
-%if 0%{?rhel_version} || 0%{?centos_version}
-	find $RPM_BUILD_ROOT -type f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
-%endif
+#%if 0%{?rhel_version} || 0%{?centos_version}
+#	find $RPM_BUILD_ROOT -type f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
+#%endif
 
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \
