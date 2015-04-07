@@ -188,9 +188,9 @@ make MPI=y python
 python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
-#%if 0%{?rhel_version} || 0%{?centos_version}
-#	find $RPM_BUILD_ROOT -type f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
-#%endif
+%if 0%{?rhel_version} || 0%{?centos_version}
+	find $RPM_BUILD_ROOT -type f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
+%endif
 
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \
