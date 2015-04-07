@@ -148,6 +148,10 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-phdf5="$HDF5_DIR" \
 	--with-zlib=/usr/include \
 	--with-netcdf="$NETCDF_DIR" || cat config.log
+
+# modify libtool script to not hardcode library paths
+sed -i -r 's/(hardcode_into_libs)=.*$/\1=no/' libtool
+
 make VERBOSE=1
 
 chmod +x adios_config
@@ -177,7 +181,7 @@ make MPI=y python
 python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
-find $RPM_BUILD_ROOT -type f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
+#find $RPM_BUILD_ROOT -type f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
 
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \
