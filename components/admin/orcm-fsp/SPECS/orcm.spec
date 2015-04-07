@@ -174,7 +174,7 @@ EOF
 %{_unitdir}/*
 
 
-%if 0%{?sles_version}
+%if 0%{?suse_version}
 
 %pre 
 %service_add_pre orcmd.service
@@ -187,6 +187,7 @@ EOF
 
 %postun
 %service_del_postun orcmd.service
+
 %endif
 
 
