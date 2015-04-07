@@ -598,7 +598,8 @@ for the new credential should also be placed in the final
 [master]$ sudo -u postgres createdb -O orcmuser orcmdb
 [master]$ sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 
-# Start ORCM on master host
+# Start ORCM on master host (requires both orcmsched and orcmd)
+[master]$ systemctl start orcmsched
 [master]$ systemctl start orcmd
 \end{lstlisting}
 % end_fsp_run
