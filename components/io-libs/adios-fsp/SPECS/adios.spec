@@ -51,7 +51,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary: The Adaptable IO System (ADIOS)
-Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 1.8.0
 Release: 1
 License: BSD-3-Clause
@@ -109,6 +109,8 @@ LIBSUFF=64
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
 %build
+cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
+
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
