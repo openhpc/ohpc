@@ -173,4 +173,21 @@ EOF
 %doc %{install_prefix}/share/man/man7/*
 %{_unitdir}/*
 
+
+%if 0%{?sles_version}
+
+%pre 
+%service_add_pre orcmd.service
+
+%post
+%service_add_post orcmd.service
+
+%preun
+%service_del_preun orcmd.service
+
+%postun
+%service_del_postun orcmd.service
+%endif
+
+
 %changelog
