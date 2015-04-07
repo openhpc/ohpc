@@ -211,18 +211,19 @@ cp -fR examples %buildroot%{install_path}/lib
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{PNAME} library built with the $FSP_COMPILER_FAMILY compiler toolchain."
+puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler"
+puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{PNAME} built with $FSP_COMPILER_FAMILY toolchain"
+module-whatis "Name: %{PNAME} built with %{compiler_family} compiler and %{mpi_family} MPI"
 module-whatis "Version: %{version}"
 module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
@@ -244,7 +245,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
