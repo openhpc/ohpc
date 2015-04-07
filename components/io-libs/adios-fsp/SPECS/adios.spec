@@ -109,8 +109,9 @@ LIBSUFF=64
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
 %build
-find ~ -name '*.spec'
+pushd /home/abuild/rpmbuild/SOURCES
 cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
+popd
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
