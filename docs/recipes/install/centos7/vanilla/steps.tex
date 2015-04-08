@@ -611,7 +611,7 @@ be added to the compute image as follows:
 % begin_fsp_run
 % fsp_validation_comment Install ORCM client on compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ yum -y --installroot=$CHROOT install -t pattern fsp-orcm-client
+[master]$ yum -y --installroot=$CHROOT groupinstall fsp-orcm-client
 
 # Set master host as data aggregator
 [master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" /etc/open-rcm/etc/orcm-site.xml
