@@ -5,7 +5,7 @@
 
 Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.51.0
+Version:   0.51.1
 Release:   1
 License:   GPL-2
 Group:     fsp/admin
