@@ -576,12 +576,14 @@ for the new credential should also be placed in the final
 [master]$ perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
 [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
 
+# Update BMC credentials to match local values
+
+[master]$ perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+[master]$ perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+
 # Initialize postgres DB driver
 [master]$ odbcinst -i -d -f /etc/psql_odbc_driver.ini
 [master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
-
-# Use DB template for orcm runtime config
-[master]$ cp /etc/sysconfig/orcmd.db /etc/sysconfig/orcmd
 
 # Initialize postgres
 [master]$ service postgresql start   
