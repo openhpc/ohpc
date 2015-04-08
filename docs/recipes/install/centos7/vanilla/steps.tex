@@ -586,14 +586,14 @@ for the new credential should also be placed in the final
 [master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
 
 # Initialize postgres
-[master]$ service postgresql start   
+[master]$ postgresql-setup initdb
 
 # Update postgres config files using ORCM templates
 [master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
 [master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 
 # Restart postgres
-[master]$ service postgresql restart 
+[master]$ service postgresql start
 
 # Create ORCM DB
 [master]$ sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
