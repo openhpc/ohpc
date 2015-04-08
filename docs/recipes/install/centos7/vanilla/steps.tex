@@ -576,22 +576,24 @@ for the new credential should also be placed in the final
 [master]$ perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
 [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
 
+# Update BMC credentials to match local values
+
+[master]$ perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+[master]$ perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+
 # Initialize postgres DB driver
 [master]$ odbcinst -i -d -f /etc/psql_odbc_driver.ini
 [master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
 
-# Use DB template for orcm runtime config
-[master]$ cp /etc/sysconfig/orcmd.db /etc/sysconfig/orcmd
-
 # Initialize postgres
-[master]$ service postgresql start   
+[master]$ postgresql-setup initdb
 
 # Update postgres config files using ORCM templates
 [master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
 [master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 
 # Restart postgres
-[master]$ service postgresql restart 
+[master]$ service postgresql start
 
 # Create ORCM DB
 [master]$ sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
@@ -614,7 +616,7 @@ be added to the compute image as follows:
 [master]$ yum -y --installroot=$CHROOT groupinstall fsp-orcm-client
 
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" /etc/open-rcm/etc/orcm-site.xml
+[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" /opt/open-rcm/etc/orcm-site.xml
 
 # Enable orcmd client daemon on boot
 [master]$ chroot $CHROOT systemctl enable orcmd
