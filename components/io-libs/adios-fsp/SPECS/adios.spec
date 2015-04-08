@@ -51,7 +51,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary: The Adaptable IO System (ADIOS)
-Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 1.8.0
 Release: 1
 License: BSD-3-Clause
@@ -102,13 +102,17 @@ how they process the data.
 %prep
 %setup -q -n %{pname}-%{version}
 
+%build
 sed -i 's|@BUILDROOT@|%buildroot|' wrappers/numpy/setup*
 %ifarch x86_64
 LIBSUFF=64
 %endif
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
-%build
+pushd /home/abuild/rpmbuild/SOURCES
+cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
+popd
+
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
@@ -148,14 +152,18 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-phdf5="$HDF5_DIR" \
 	--with-zlib=/usr/include \
 	--with-netcdf="$NETCDF_DIR" || cat config.log
+
+# modify libtool script to not hardcode library paths
+sed -i -r -e 's/(hardcode_into_libs)=.*$/\1=no/' \
+	-e 's/^hardcode_direct.*$/hardcode_direct=yes/g' \
+	-e 's/^hardcode_minus_L.*$/hardcode_minus_L=yes/g' \
+	-e 's/^hardcode_shlibpath_var.*$/hardcode_shlibpath_var=no/g' \
+	-e 's/^hardcode_libdir_flag_spec.*$/hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/' \
+	libtool
+
 make VERBOSE=1
 
 chmod +x adios_config
-
-
-pushd %buildroot
-find
-popd
 
 %install
 # FSP compiler designation
@@ -182,6 +190,10 @@ make MPI=y python
 python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
+%if 0%{?rhel_version} || 0%{?centos_version}
+	find $RPM_BUILD_ROOT -type f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
+%endif
+
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \
 	utils/skel/lib/skel_test_plan.py \
@@ -199,18 +211,19 @@ cp -fR examples %buildroot%{install_path}/lib
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{PNAME} library built with the $FSP_COMPILER_FAMILY compiler toolchain."
+puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler"
+puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{PNAME} built with $FSP_COMPILER_FAMILY toolchain"
+module-whatis "Name: %{PNAME} built with %{compiler_family} compiler and %{mpi_family} MPI"
 module-whatis "Version: %{version}"
 module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
@@ -232,7 +245,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/$FSP_COMPILER_FAMILY/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
