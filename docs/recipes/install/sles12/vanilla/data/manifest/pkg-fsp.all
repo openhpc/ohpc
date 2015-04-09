@@ -7,7 +7,7 @@ boost-intel-impi-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free pe
 boost-intel-mvapich2-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-openmpi-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
 conman-fsp 0.2.7 http://conman.googlecode.com/ fsp/admin ConMan: The Console Manager
-examples-fsp 1.0 (none) fsp/admin Example source code and templates for use within FSP environment.
+examples-fsp 1.1 (none) fsp/admin Example source code and templates for use within FSP environment.
 fftw-gnu-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-gnu-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-gnu-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
@@ -32,16 +32,15 @@ intel-inspector-fsp 15.1.2.379161 http://www.intel.com/software/products/ fsp/de
 intel-itac-fsp 9.0.3.049 http://www.intel.com/software/products/ fsp/perf-tools Intel(R) Trace Analyzer and Collector
 intel-mpi-fsp 5.0.3.048 https://software.intel.com/en-us/intel-mpi-library fsp/mpi-families Intel(R) MPI Library for Linux* OS
 intel-vtune-fsp 15.2.0.393444 http://www.intel.com/software/products/ fsp/perf-tools Intel(R) VTune(TM) Amplifier XE 2015 Update 2
-ipmiutil-devel-fsp 2.9.4 http://ipmiutil.sourceforge.net Development/Libraries Includes libraries and headers for the ipmiutil package
-ipmiutil-fsp 2.9.4 http://ipmiutil.sourceforge.net fsp/distro-packages Easy-to-use IPMI server management utilities
-liborcm-fsp 0.5.0 https://github.com/open-mpi/orcm System Environment/Libraries Dynamic libraries for ORCM
+ipmiutil-devel-fsp 2.9.5 http://ipmiutil.sourceforge.net Development/Libraries Includes libraries and headers for the ipmiutil package
+ipmiutil-fsp 2.9.5 http://ipmiutil.sourceforge.net fsp/distro-packages Easy-to-use IPMI server management utilities
 libtool-fsp 2.4.6 http://www.gnu.org/software/libtool/ fsp/dev-tools The GNU Portable Library Tool
 lmod-defaults-intel-fsp 1.0 (none) fsp/admin FSP default login environment
 lmod-fsp 5.8.6 https://github.com/TACC/Lmod fsp/admin Lua based Modules (lmod)
-losf-fsp 0.50.0 https://github.com/hpcsi/losf fsp/admin A Linux operating system framework for managing HPC clusters
+losf-fsp 0.51.0 https://github.com/hpcsi/losf fsp/admin A Linux operating system framework for managing HPC clusters
 lua-filesystem-fsp 1.6.3 http://keplerproject.github.com/luafilesystem fsp/distro-packages Lua library to Access Directories and Files
 lua-posix-fsp 33.2.1 https://github.com/luaposix/luaposix Development/Libraries POSIX library for Lua
-lustre-client-fsp 2.6.0 http://wiki.whamcloud.com/ fsp/lustre Lustre File System
+lustre-client-fsp 2.7.0 https://wiki.hpdd.intel.com/ fsp/lustre Lustre File System
 metis-gnu-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 metis-intel-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 munge-devel-fsp 0.5.11 https://munge.googlecode.com/ Development/Libraries Headers and libraries for developing applications using MUNGE
@@ -69,10 +68,11 @@ netcdf-intel-mvapich2-fsp 4.3.3 http://www.unidata.ucar.edu/software/netcdf/ fsp
 netcdf-intel-openmpi-fsp 4.3.3 http://www.unidata.ucar.edu/software/netcdf/ fsp/io-libs C Libraries for the Unidata network Common Data Form
 openmpi-gnu-fsp 1.8.4 http://www.open-mpi.org fsp/mpi-families A powerful implementation of MPI
 openmpi-intel-fsp 1.8.4 http://www.open-mpi.org fsp/mpi-families A powerful implementation of MPI
-orcm-devel-fsp 0.5.0 https://github.com/open-mpi/orcm Development/Libraries Development libraries for ORCM
-orcm-fsp 0.5.0 https://github.com/open-mpi/orcm fsp/admin Open Resiliency Cluster Management implementation
+orcm-fsp 0.7.0 https://github.com/open-mpi/orcm fsp/admin Open Resiliency Cluster Management implementation
 papi-fsp 5.4.0 http://icl.cs.utk.edu/papi/ fsp/perf-tools Performance Application Programming Interface
 pdsh-fsp 2.31 http://sourceforge.net/projects/pdsh fsp/admin Parallel remote shell program
+pdtoolkit-gnu-fsp 3.20 http://www.cs.uoregon.edu/Research/pdt fsp/perf-tools PDT is a framework for analyzing source code
+pdtoolkit-intel-fsp 3.20 http://www.cs.uoregon.edu/Research/pdt fsp/perf-tools PDT is a framework for analyzing source code
 petsc-gnu-impi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu-mvapich2-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu-openmpi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
@@ -103,6 +103,12 @@ slurm-plugins-fsp 14.11.4 http://slurm.schedmd.com/ System Environment/Base Slur
 slurm-slurmdb-direct-fsp 14.11.4 http://slurm.schedmd.com/ Development/System Wrappers to write directly to the slurmdb
 slurm-slurmdbd-fsp 14.11.4 http://slurm.schedmd.com/ System Environment/Base Slurm database daemon
 slurm-sql-fsp 14.11.4 http://slurm.schedmd.com/ System Environment/Base Slurm SQL support
+tau-gnu-impi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-gnu-mvapich2-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-gnu-openmpi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-intel-impi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-intel-mvapich2-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-intel-openmpi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
 valgrind-fsp 3.10.1 http://www.valgrind.org/ fsp/dev-tools Valgrind Memory Debugger
 warewulf-cluster-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used for clustering with Warewulf
 warewulf-common-fsp 3.6 (none) fsp/provisioning A suite of tools for clustering
