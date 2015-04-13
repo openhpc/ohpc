@@ -136,7 +136,8 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib" 
+	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp"
+#	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib" 
 
 
 make install TOPDIR=$TOPDIR
