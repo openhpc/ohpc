@@ -160,7 +160,8 @@ while(my $line=<IN>) {
 	# Support for optionally defined FSP repo
 
 	if ( $repo ne "" ) {
-	    $line =~ s/zypper addrepo (\S+)/zypper addrepo $repo/g;
+	    $line =~ s/zypper addrepo (\S+)/zypper addrepo $repo/g;                     # SLES
+            $line =~ s|wget -P /etc/yum.repos.d (\S+)|wget -P /etc/yum.repos.d $repo|g; # CentOS
 	}
 
 	for (my $i=1;$i<=$num_computes; $i++) {
