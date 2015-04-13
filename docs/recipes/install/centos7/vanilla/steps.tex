@@ -87,11 +87,8 @@
 % end_fsp_run
 
 % begin_fsp_run
-% fsp_validation_comment - disable proxy for internal repo (CI only command)
-% [master]$ echo "proxy=_none_" >> /etc/yum.repos.d/ForestPeak:15.16:Factory.repo
-% 
 % [master]$ yum repolist
-% [master]$ perl -i -pe 's/type="group"/type="group_gz"/' /var/cache/yum/x86_64/7/ForestPeak_15.16_Factory/repomd.xml
+% [master]$ perl -i -pe 's/type="group"/type="group_gz"/' /var/cache/yum/x86_64/7/ForestPeak_*/repomd.xml
 % end_fsp_run  
 
 In addition to the \FSP{} package repository, the {\em master} host also
@@ -347,7 +344,7 @@ be updated with a copy of the configuration as follows:
 % begin_fsp_run
 % fsp_validation_comment - fix grouplist for chroot
 % [master]$ chroot $CHROOT yum grouplist
-% [master]$ perl -i -pe 's/type="group"/type="group_gz"/' $CHROOT/var/cache/yum/x86_64/7/ForestPeak_15.16_Factory/repomd.xml
+% [master]$ perl -i -pe 's/type="group"/type="group_gz"/' $CHROOT/var/cache/yum/x86_64/7/ForestPeak_*/repomd.xml
 % end_fsp_run
 
 \newpage
