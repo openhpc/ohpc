@@ -136,8 +136,7 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp"
-#	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib" 
+	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L%{buildroot}%{install_path}/lib" 
 
 
 make install TOPDIR=$TOPDIR
@@ -162,16 +161,17 @@ rm -f %buildroot%{install_path}/.active_stub*
 
 # clean libs
 pushd %buildroot%{install_path}/lib
-if [ -f  Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace ]
-    then
-        sed -i 's|%buildroot||g' Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace
-        ln -s Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace Makefile
-fi
-if [ -f Makefile.tau-param-icpc-papi-mpi-pdt-openmp-profile-trace ]
-    then
-        sed -i 's|%buildroot||g' Makefile.tau-param-icpc-papi-mpi-pdt-openmp-profile-trace
-        ln -s Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace Makefile
-fi
+sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
+#if [ -f  Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace ]
+#    then
+#        sed -i 's|%buildroot||g' Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace
+#        ln -s Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace Makefile
+#fi
+#if [ -f Makefile.tau-param-icpc-papi-mpi-pdt-openmp-profile-trace ]
+#    then
+#        sed -i 's|%buildroot||g' Makefile.tau-param-icpc-papi-mpi-pdt-openmp-profile-trace
+#        ln -s Makefile.tau-param-papi-mpi-pdt-openmp-profile-trace Makefile
+#fi
 rm -f libjogl*
 popd
 
