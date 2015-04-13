@@ -17,6 +17,7 @@ BuildRequires:  texlive-draftwatermark
 BuildRequires:  latexmk
 Requires:       make
 
+%define debug_package %{nil}
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
@@ -40,13 +41,13 @@ make
 %install
 
 mv %{source_path}/steps.pdf %{source_path}/Install_guide.pdf
-%{__mkdir} -p %{buildroot}%{FSP_HOME}/docs
-install -m 0644 -p %{source_path}/Install_guide.pdf %{buildroot}/%{FSP_HOME}/docs/Install_guide.pdf 
+%{__mkdir} -p %{buildroot}%{FSP_PUB}/docs
+install -m 0644 -p %{source_path}/Install_guide.pdf %{buildroot}/%{FSP_PUB}/docs/install_guide.pdf 
 
 
 
 %files
 %defattr(-,root,root)
-%{FSP_HOME}
+%{FSP_PUB}
 
 %changelog
