@@ -142,8 +142,9 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 make install
 make exports
 
+
 pushd /tmp
-mv * %buildroot%{install_path}
+mv * %buildroot
 popd
 #pushd %{buildroot}%{install_path}/bin
 #sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
