@@ -142,10 +142,11 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 make install
 make exports
 
-pushd %{buildroot}%{install_path}/bin
-sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
-rm -f tau_java
-popd
+#pushd %{buildroot}%{install_path}/bin
+#sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
+#rm -f tau_java
+#popd
+mv /tmp%{install_path} %buildroot
 install -d %buildroot%{install_path}/etc
 install -d %buildroot%_datadir/%name
 install -d %buildroot%{install_path}/include
