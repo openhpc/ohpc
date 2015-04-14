@@ -144,7 +144,7 @@ make exports
 
 
 pushd /tmp
-mv * %buildroot
+mv */ %buildroot
 popd
 #pushd %{buildroot}%{install_path}/bin
 #sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
