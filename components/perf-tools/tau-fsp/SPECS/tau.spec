@@ -150,10 +150,10 @@ mv /tmp%{install_path} %buildroot
 install -d %buildroot%{install_path}/etc
 install -d %buildroot%_datadir/%name
 install -d %buildroot%{install_path}/include
-sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*.h
-sed -i 's|%buildroot||g' %buildroot%{install_path}/include/Makefile
-sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
-sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
+sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
+sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile
+#sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
+#sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 
 rm -f  %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
 rm -f %buildroot%{install_path}/.last_config
@@ -162,7 +162,7 @@ rm -f %buildroot%{install_path}/.active_stub*
 
 # clean libs
 pushd %buildroot%{install_path}/lib
-sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
+sed -i 's|/tmp}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
 rm -f libjogl*
 popd
 
