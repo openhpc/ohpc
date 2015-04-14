@@ -161,10 +161,10 @@ rm -f %buildroot%{install_path}/.all_configs
 rm -f %buildroot%{install_path}/.active_stub*
 
 # clean libs
-pushd %buildroot%{install_path}/lib
+#pushd %buildroot%{install_path}/lib
 #sed -i 's|/tmp}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
-rm -f libjogl*
-popd
+#rm -f libjogl*
+#popd
 
 
 # FSP module file
