@@ -120,7 +120,7 @@ export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_DIR/lib"
 export BUILDROOT=%buildroot%{install_path}
 export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 ./configure \
-    -prefix=%{install_path} \
+    -prefix=/tmp/%{install_path} \
     -exec-prefix= \
 	-c++=mpicxx \
 	-cc=mpicc \
