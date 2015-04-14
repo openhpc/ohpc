@@ -354,8 +354,9 @@ be updated with a copy of the configuration as follows:
 # Add SLURM client support
 [master]$ yum --installroot=$CHROOT -y groupinstall fsp-slurm-client
 
-# Add IB support
+# Add IB support and enable
 [master]$ yum -y --installroot=$CHROOT groupinstall "InfiniBand Support"
+[master]$ chroot $CHROOT systemctl enable rdma
 
 # Add Network Time Protocol (NTP) support
 [master]$ yum -y --installroot=$CHROOT install ntp
