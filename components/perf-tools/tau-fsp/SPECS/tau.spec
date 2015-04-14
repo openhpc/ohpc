@@ -143,8 +143,10 @@ make install
 make exports
 
 
+rm -rf %buildroot
+mkdir %buildroot%{install_prefix}
 pushd /tmp
-mv */ %buildroot
+mv %{install_prefix} %buildroot%{install_prefix}
 popd
 #pushd %{buildroot}%{install_path}/bin
 #sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
