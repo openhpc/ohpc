@@ -146,7 +146,8 @@ make exports
 #sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
 #rm -f tau_java
 #popd
-mv /tmp%{install_path} %buildroot
+mv /2.24 %buildroot%install_path
+
 install -d %buildroot%{install_path}/etc
 install -d %buildroot%_datadir/%name
 install -d %buildroot%{install_path}/include
@@ -159,6 +160,7 @@ rm -f  %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
 rm -f %buildroot%{install_path}/.last_config
 rm -f %buildroot%{install_path}/.all_configs
 rm -f %buildroot%{install_path}/.active_stub*
+
 
 # clean libs
 #pushd %buildroot%{install_path}/lib
