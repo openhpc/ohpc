@@ -144,7 +144,7 @@ make exports
 
 
 rm -rf %buildroot
-mkdir %buildroot%{install_path}
+mkdir -p %buildroot%{install_path}
 pushd /tmp
 mv %{install_path} %buildroot%{install_path}
 popd
