@@ -162,6 +162,7 @@ install -d %buildroot%{install_path}/include
 #sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 
 rm -f %{install_path}/examples/gpu/cuda/unifmem/Makefile~
+rm -f %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
 rm -f %{install_path}/.last_config
 rm -f %{install_path}/.all_configs
 rm -f %{install_path}/.active_stub*
