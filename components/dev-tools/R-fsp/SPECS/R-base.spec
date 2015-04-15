@@ -189,6 +189,8 @@ AT&T Bell Laboratories by Rick Becker, John Chambers and Allan Wilks.
 ###libraries to allow you to devel with R-base.
 
 %prep 
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
 
 %setup -n R-%{version}
 %patch -p1
