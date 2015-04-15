@@ -31,6 +31,8 @@ BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+# hack to install MKL for the moment
+BuildRequires: intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -127,6 +129,7 @@ BuildRequires:  tcl-devel
 BuildRequires:  texinfo
 BuildRequires:  tk-devel
 BuildRequires:  xorg-x11-devel
+BuildRequires:  intel-compilers%{PROJ_DELIM}
 ###Requires:       R-base-devel = %{version}
 Requires:       cairo >= 1.2
 Requires:       fontconfig
