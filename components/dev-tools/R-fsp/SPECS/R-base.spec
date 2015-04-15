@@ -59,7 +59,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 #-fsp-header-comp-end------------------------------------------------
 
 
-%define 	pname R-base
+%define 	pname R_base
 %define 	PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
@@ -75,7 +75,7 @@ Source:         R-%{version}.tar.gz
 #Source2:        FSP_setup_compiler
 Patch:          tre.patch
 Url:            http://www.r-project.org/
-Summary:        R - statistics package (S-Plus like)
+Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Scientific/Math
 ###BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -176,8 +176,17 @@ Provides:       R-utils = %{version}
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 %description
-R is a language which is not entirely unlike the S language developed at
-AT&T Bell Laboratories by Rick Becker, John Chambers and Allan Wilks.
+R is a language and environment for statistical computing and graphics. 
+It is a GNU project which is similar to the S language and environment 
+which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) 
+by John Chambers and colleagues. 
+
+R can be considered as a different implementation of S.  There are some important 
+differences, but much code written for S runs unaltered under R.
+
+R provides a wide variety of statistical (linear and nonlinear modelling, 
+classical statistical tests, time-series analysis, classification, clustering, …) 
+and graphical techniques, and is highly extensible.
 
 ###%package -n R-base-devel
 ###Summary:        Libraries and includefiles for developing with R-base
