@@ -146,7 +146,7 @@ make exports
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
 pushd /tmp
-mv %{install_path} %buildroot%{install_path}
+mv opt/fsp/pub/libs/%{compiler_family}/%{mpi_family}/%{pname}/%version %buildroot%{install_path}
 popd
 #pushd %{buildroot}%{install_path}/bin
 #sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
