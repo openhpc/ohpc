@@ -38,7 +38,7 @@ ipmiutil-fsp 2.9.5 http://ipmiutil.sourceforge.net fsp/distro-packages Easy-to-u
 libtool-fsp 2.4.6 http://www.gnu.org/software/libtool/ fsp/dev-tools The GNU Portable Library Tool
 lmod-defaults-intel-fsp 1.0 (none) fsp/admin FSP default login environment
 lmod-fsp 5.8.6 https://github.com/TACC/Lmod fsp/admin Lua based Modules (lmod)
-losf-fsp 0.51.1 https://github.com/hpcsi/losf fsp/admin A Linux operating system framework for managing HPC clusters
+losf-fsp 0.51.2 https://github.com/hpcsi/losf fsp/admin A Linux operating system framework for managing HPC clusters
 lua-filesystem-fsp 1.6.3 http://keplerproject.github.com/luafilesystem fsp/distro-packages Lua library to Access Directories and Files
 lua-posix-fsp 33.2.1 https://github.com/luaposix/luaposix Development/Libraries POSIX library for Lua
 lustre-client-fsp 2.7.0 https://wiki.hpdd.intel.com/ fsp/lustre Lustre File System
@@ -96,14 +96,14 @@ python-scipy-intel-impi-fsp 0.15.1 http://www.scipy.org fsp/dev-tools Scientific
 python-scipy-intel-mvapich2-fsp 0.15.1 http://www.scipy.org fsp/dev-tools Scientific Tools for Python
 python-scipy-intel-openmpi-fsp 0.15.1 http://www.scipy.org fsp/dev-tools Scientific Tools for Python
 sigar-fsp 1.6.5 http://sigar.hyperic.com/ System Environment/Libraries System Information Gatherer And Reporter
-slurm-devel-fsp 14.11.4 http://slurm.schedmd.com/ Development/System Development package for Slurm
+slurm-devel-fsp 14.11.4 http://slurm.schedmd.com/ fsp/rms Development package for Slurm
 slurm-fsp 14.11.4 http://slurm.schedmd.com/ fsp/rms Slurm Workload Manager
-slurm-munge-fsp 14.11.4 http://slurm.schedmd.com/ System Environment/Base Slurm authentication and crypto implementation using Munge
-slurm-perlapi-fsp 14.11.4 http://slurm.schedmd.com/ Development/System Perl API to Slurm
-slurm-plugins-fsp 14.11.4 http://slurm.schedmd.com/ System Environment/Base Slurm plugins (loadable shared objects)
-slurm-slurmdb-direct-fsp 14.11.4 http://slurm.schedmd.com/ Development/System Wrappers to write directly to the slurmdb
-slurm-slurmdbd-fsp 14.11.4 http://slurm.schedmd.com/ System Environment/Base Slurm database daemon
-slurm-sql-fsp 14.11.4 http://slurm.schedmd.com/ System Environment/Base Slurm SQL support
+slurm-munge-fsp 14.11.4 http://slurm.schedmd.com/ fsp/rms Slurm authentication and crypto implementation using Munge
+slurm-perlapi-fsp 14.11.4 http://slurm.schedmd.com/ fsp/rms Perl API to Slurm
+slurm-plugins-fsp 14.11.4 http://slurm.schedmd.com/ fsp/rms Slurm plugins (loadable shared objects)
+slurm-slurmdb-direct-fsp 14.11.4 http://slurm.schedmd.com/ fsp/rms Wrappers to write directly to the slurmdb
+slurm-slurmdbd-fsp 14.11.4 http://slurm.schedmd.com/ fsp/rms Slurm database daemon
+slurm-sql-fsp 14.11.4 http://slurm.schedmd.com/ fsp/rms Slurm SQL support
 tau-gnu-impi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu-mvapich2-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu-openmpi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
