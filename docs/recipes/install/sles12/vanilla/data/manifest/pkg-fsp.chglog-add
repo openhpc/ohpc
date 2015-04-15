@@ -1,0 +1,9 @@
+docs-fsp 0.1
+pdtoolkit-gnu-fsp 3.20
+pdtoolkit-intel-fsp 3.20
+tau-gnu-impi-fsp 2.24
+tau-gnu-mvapich2-fsp 2.24
+tau-gnu-openmpi-fsp 2.24
+tau-intel-impi-fsp 2.24
+tau-intel-mvapich2-fsp 2.24
+tau-intel-openmpi-fsp 2.24
