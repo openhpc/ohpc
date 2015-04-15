@@ -19,11 +19,13 @@ sub parse_changes {
 
     while(<IN>) {
         my $name = "";
+        my $old_version = "";
         my $version = "";
 
         if($_ =~ /^(\S+) (\S+) (\S+)$/) {
-            $name    = $1;
-            $version = $3;
+            $name        = $1;
+            $old_version = $2;
+            $version     = $3;
         } elsif ($_ =~ /^(\S+) (\S+)$/) {
             $name    = $1;
             $version = $2;
@@ -57,15 +59,24 @@ sub parse_changes {
         if($compiler_package || $mpi_package) {
             if (! defined $pkg_hash{$name_base} ) {
                 $pkg_hash{$name_base} = $version;
-                print OUT $logMessage . "$name_base-*-fsp (v$version)\n";
+                if($old_version ne "") {
+                    print OUT $logMessage . "$name_base-*-fsp (from v$old_version to v$version)\n";
+                } else {
+                    print OUT $logMessage . "$name_base-*-fsp (v$version)\n";
+                }
             } else {
                 if($version ne $pkg_hash{$name_base} ) {
                     print "ERROR: versions inconsistent for $name_base family\n";
                     exit(1);
                 }
             }
+#            print OUT $logMessage . "$name (v$version)\n";
         } else {
-            print OUT $logMessage . "$name (v$version)\n";
+            if($old_version ne "") {
+                print OUT $logMessage . "$name (from v$old_version to v$version)\n"; 
+            } else {
+                print OUT $logMessage . "$name (v$version)\n";
+            }
         }
     }
 
@@ -81,9 +92,14 @@ open(OUT,">$fileout")  || die "Cannot open file -> $fileout\n";
 #parse_changes("pkg-fsp.chglog-upd","        * [UPD] component updated - ");
 #parse_changes("pkg-fsp.chglog-del","        * [DEL] component removed - ");
 
-parse_changes("pkg-fsp.chglog-add","* [NEW] component added   - ");
-parse_changes("pkg-fsp.chglog-upd","* [UPD] component updated - ");
-parse_changes("pkg-fsp.chglog-del","* [DEL] component removed - ");
+### parse_changes("pkg-fsp.chglog-add","* [NEW] component added   - ");
+### parse_changes("pkg-fsp.chglog-upd","* [UPD] component updated - ");
+### parse_changes("pkg-fsp.chglog-del","* [DEL] component removed - ");
+### 
+print OUT "   [Component Changes]\n";
+parse_changes("pkg-fsp.chglog-add","      * added   - ");
+parse_changes("pkg-fsp.chglog-upd","      * updated - ");
+parse_changes("pkg-fsp.chglog-del","      * removed - ");
 
 close(OUT);
 
