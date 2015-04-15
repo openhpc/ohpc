@@ -69,6 +69,8 @@ Version:        3.1.3
 Source:         R-%{version}.tar.gz
 #Source: http://cran.r-project.org/src/base/R-2/R-%%{version}.tar.gz
 # PATCH-FIX-UPSTREAM Fix tre when wchar_t is unsigned int
+Source1:        FSP_macros
+Source2:        FSP_setup_compiler
 Patch:          tre.patch
 Url:            http://www.r-project.org/
 Summary:        R - statistics package (S-Plus like)
@@ -187,16 +189,13 @@ AT&T Bell Laboratories by Rick Becker, John Chambers and Allan Wilks.
 ###libraries to allow you to devel with R-base.
 
 %prep 
-export FSP_COMPILER_FAMILY=gnu
-. %{_sourcedir}/FSP_setup_compiler
 
 %setup -n R-%{version}
 %patch -p1
 
 %build 
 # FSP compiler/mpi designation
-#export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_COMPILER_FAMILY=gnu
+export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
 export R_BROWSER="xdg-open"
