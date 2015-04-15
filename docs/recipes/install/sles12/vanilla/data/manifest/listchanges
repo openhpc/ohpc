@@ -1,0 +1,37 @@
+t_old="obs/ForestPeak_15.05_Factory"
+t_new="obs/ForestPeak_15.16_Factory"
+
+f_all=pkg-fsp.all
+f_add=pkg-fsp.chglog-add
+f_del=pkg-fsp.chglog-del
+f_upd=pkg-fsp.chglog-upd
+
+f_dif=pkg-fsp.dif
+f_old=pkg-fsp.old
+f_new=pkg-fsp.new
+
+rm -f ${f_add} ${f_del} ${f_upd}
+rm -f ${f_dif} ${f_old} ${f_new}
+
+git diff ${t_old} ${t_new} ${f_all} >${f_dif}
+if [ $? -ne 0 ]; then
+   echo "ERROR: git diff failed!"
+   exit
+fi
+
+grep '^-' ${f_dif} | cut -c 2- | cut -f1,2 -d" " | tail -n +2 | sort >${f_old}
+grep '^+' ${f_dif} | cut -c 2- | cut -f1,2 -d" " | tail -n +2 | sort >${f_new}
+
+echo "*** Old release: ${t_old}"
+echo "*** New release: ${t_new}"
+echo
+echo "*** Packages Deleted:"
+join -v 1 ${f_old} ${f_new} | tee ${f_del}
+echo
+echo "*** Packages Added:"
+join -v 2 ${f_old} ${f_new} | tee ${f_add}
+echo
+echo "*** Pakages Updated:"
+join      ${f_old} ${f_new} | tee ${f_upd}
+
+rm -f ${f_dif} ${f_old} ${f_new}
