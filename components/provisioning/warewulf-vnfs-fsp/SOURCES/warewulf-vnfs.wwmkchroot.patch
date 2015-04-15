@@ -195,7 +195,7 @@
 +
 +
 +# Define the location of the Zypper repository
-+ZYP_MIRROR="http://10.23.187.83/cobbler/ks_mirror/SUSE-11SP3-Intel-x86_64/"
++ZYP_MIRROR="SUSE-url"
 +
 +# Install only what is necessary/specific for this distribution
 +PKGLIST="sysvinit aaa_base bash sles-release coreutils e2fsprogs ethtool \
@@ -220,7 +220,7 @@
 +
 +
 +# Define the location of the Zypper repository
-+ZYP_MIRROR="http://10.23.187.83/cobbler/ks_mirror/sles12-gmc/"
++ZYP_MIRROR="SUSE-url"
 +
 +# Install only what is necessary/specific for this distribution
 +PKGLIST="systemd-sysvinit aaa_base bash dracut sles-release coreutils e2fsprogs ethtool \
