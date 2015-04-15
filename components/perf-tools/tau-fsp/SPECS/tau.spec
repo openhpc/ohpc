@@ -144,9 +144,9 @@ make exports
 
 
 rm -rf %buildroot
-mkdir %buildroot%{install_prefix}
+mkdir %buildroot%{install_path}
 pushd /tmp
-mv %{install_prefix} %buildroot%{install_prefix}
+mv %{install_path} %buildroot%{install_path}
 popd
 #pushd %{buildroot}%{install_path}/bin
 #sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
