@@ -197,13 +197,20 @@ export R_PDFVIEWER="xdg-open"
 
 #MKL="-L${MKLROOT} -lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm"
 #export BLAS_LIBS="-lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm"
+module load mkl
+
+MKL_LIB_PATH=$MKLROOT/lib/intel64
+#MKL_LIB_PATH="/opt/fsp/pub/compiler/intel/composer_xe_2015.2.164/mkl/lib/intel64/"
+MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
+echo "MKL options flag .... $MKL "
 
 
-./configure --prefix=%{install_path} \
+#./configure --with-blas="$MKL" --with-lapack --enable-R-shlib --enable-BLAS-shlib LIBnn=lib64
+./configure --with-blas="$MKL" \
+            --with-lapack \
             --enable-R-shlib  \
             --enable-BLAS-shlib \
-            --with-blas \
-            --with-lapack \
+            --prefix=%{install_path} \
               LIBnn=lib64 
 
 make %{?_smp_mflags}
@@ -259,7 +266,7 @@ proc ModulesHelp { } {
 
 }
 
-module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Name: %{pname} built with %{compiler_family} compiler and Intel MKL support"
 module-whatis "Version: %{version}"
 module-whatis "Category: utility, developer support, user tool"
 module-whatis "Keywords: Statistics"
@@ -269,13 +276,13 @@ module-whatis "URL %{url}"
 set     version                     %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/man
+prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
-setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
