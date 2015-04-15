@@ -192,6 +192,10 @@ AT&T Bell Laboratories by Rick Becker, John Chambers and Allan Wilks.
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 %setup -n R-%{version}
 %patch -p1
 
@@ -200,12 +204,15 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
 #MKL="-L${MKLROOT} -lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm"
 #export BLAS_LIBS="-lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm"
-module load mkl
 
 MKL_LIB_PATH=$MKLROOT/lib/intel64
 #MKL_LIB_PATH="/opt/fsp/pub/compiler/intel/composer_xe_2015.2.164/mkl/lib/intel64/"
