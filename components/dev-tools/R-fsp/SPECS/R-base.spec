@@ -241,6 +241,14 @@ for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admi
 done
 
 %install 
+# FSP compiler/mpi designation
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
+
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 make DESTDIR=%{buildroot} install
 ###make DESTDIR=%{buildroot} install-pdf
 
