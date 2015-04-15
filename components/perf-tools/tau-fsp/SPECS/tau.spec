@@ -156,8 +156,8 @@ popd
 install -d %buildroot%{install_path}/etc
 install -d %buildroot%_datadir/%name
 install -d %buildroot%{install_path}/include
-sed -i 's|/tmp||g' %{install_path}/include/*.h
-sed -i 's|/tmp||g' %{install_path}/include/Makefile
+#sed -i 's|/tmp||g' %{install_path}/include/*.h
+#sed -i 's|/tmp||g' %{install_path}/include/Makefile
 #sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
 #sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 
