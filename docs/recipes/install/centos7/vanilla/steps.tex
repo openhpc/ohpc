@@ -67,7 +67,7 @@
 
 % Base Operating System --------------------------------------------
 
-\section{Install Base Operating System(BOS)}
+\section{Install Base Operating System (BOS)}
 \input{../../common/bos}
 
 % ------------------------------------------------------------------
@@ -82,9 +82,12 @@
 % fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ export FSP_mirror=http://fsp-obs.pdx.intel.com:82
-[master]$ wget -P /etc/yum.repos.d $FSP_mirror/ForestPeak:/15.16:/Factory/CentOS-7.1_Intel/ForestPeak:15.16:Factory.repo
+[master]$ wget -P /etc/yum.repos.d $FSP_mirror/ForestPeak:/15.16/CentOS-7.1_Intel/ForestPeak:15.16.repo
 \end{lstlisting}
 % end_fsp_run
+
+% Dev testing for Factory
+%[master]$ wget -P /etc/yum.repos.d $FSP_mirror/ForestPeak:/15.16:/Factory/CentOS-7.1_Intel/ForestPeak:15.16:Factory.repo
 
 \underline {Important note}: \FSP{} leverages the use of the Open Build
 Service, a generic open-source platform that can be used to build packages from
