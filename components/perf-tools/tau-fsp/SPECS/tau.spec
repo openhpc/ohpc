@@ -151,11 +151,10 @@ popd
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 rm -f tau_java
-#popd
+popd
 
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile
-sed -i 's|/tmp||g' %buildroot%{install_path}/lib/Makefile*
 #sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
 #sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 
@@ -168,7 +167,7 @@ rm -f %{install_path}/.active_stub*
 
 # clean libs
 pushd %buildroot%{install_path}/lib
-sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+sed -i 's|/tmp||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 rm -f libjogl*
 popd
 
