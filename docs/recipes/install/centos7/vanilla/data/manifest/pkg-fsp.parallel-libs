@@ -1,0 +1,18 @@
+boost-gnu-impi-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu-mvapich2-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu-openmpi-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-intel-impi-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-intel-mvapich2-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-intel-openmpi-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
+fftw-gnu-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
+fftw-gnu-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
+fftw-gnu-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
+fftw-intel-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
+fftw-intel-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
+fftw-intel-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
+petsc-gnu-impi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-mvapich2-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-openmpi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-impi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-mvapich2-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-intel-openmpi-fsp 3.5.3 http://www-unix.mcs.anl.gov/petsc/petsc-as/ fsp/parallel-libs Portable Extensible Toolkit for Scientific Computation
