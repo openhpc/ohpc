@@ -130,6 +130,12 @@ BuildRequires:  texinfo
 BuildRequires:  tk-devel
 BuildRequires:  xorg-x11-devel
 BuildRequires:  intel-compilers%{PROJ_DELIM}
+# CentOS needs X11 headers/libs like Intrisic.h which suse provides
+%if 0%{?suse_version}  
+#BuildRequires:  texlive-fonts-extra
+%else
+BuildRequires:  libXt-devel
+%endif
 ###Requires:       R-base-devel = %{version}
 Requires:       cairo >= 1.2
 Requires:       fontconfig
