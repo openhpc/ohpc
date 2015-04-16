@@ -55,39 +55,11 @@ sub parse_changes {
             }
         }
         
-        # hash the compiler/mpi packages to verify we detect the same
-        # version for all combinations
-
-        if($merge_package_families) {
-	    if($compiler_package || $mpi_package) {
-		if (! defined $pkg_hash{$name_base} ) {
-		    $pkg_hash{$name_base} = $version;
-		    if($old_version ne "") {
-			print OUT $logMessage . "$name_base-*-fsp (from v$old_version to v$version)\n";
-		    } else {
-			print OUT $logMessage . "$name_base-*-fsp (v$version)\n";
-		    }
-		} else {
-		    if($version ne $pkg_hash{$name_base} ) {
-			print "ERROR: versions inconsistent for $name_base family\n";
-			exit(1);
-		    }
-		}
-#            print OUT $logMessage . "$name (v$version)\n";
-	    } else {
-		if($old_version ne "") {
-		    print OUT $logMessage . "$name (v$old_version -> v$version)\n"; 
-		} else {
-		    print OUT $logMessage . "$name (v$version)\n";
-		}
-	    }
+	if($old_version ne "") {
+	    printf OUT "      * %-40s %s\n",$name,"(v$old_version -> v$version)";
 	} else {
-	    if($old_version ne "") {
-		print OUT $logMessage . "$name (v$old_version -> v$version)\n"; 
-	    } else {
-		print OUT $logMessage . "$name (v$version)\n";
-	    }
-	} 
+	    printf OUT "      * %-40s %s\n",$name,"(v$version)";
+	}
     }
 
     close(IN);
