@@ -168,7 +168,7 @@ rm -f %{install_path}/.active_stub*
 
 # clean libs
 pushd %buildroot%{install_path}/lib
-sed -i 's|/tmp/}||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 rm -f libjogl*
 popd
 
