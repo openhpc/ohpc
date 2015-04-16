@@ -94,18 +94,18 @@ BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
 BuildRequires:  perl
 BuildRequires:  readline-devel
-%if %suse_version <=1020
+%if 0%{?suse_version} <=1020
 BuildRequires:  te_latex
 BuildRequires:  tetex
 %endif
-%if %suse_version > 1020
+%if 0%{?suse_version} > 1020
 BuildRequires:  fdupes
-%if %suse_version < 1230
+%if 0%{?suse_version} < 1230
 BuildRequires:  texlive-bin
 BuildRequires:  texlive-bin-latex
 #BuildRequires:  texlive-bin-metafont # evtl nur für 12.3 und später
 BuildRequires:  texlive-latex
-%if %suse_version > 1120 
+%if 0%{?suse_version} > 1120 
 BuildRequires:  texlive-fonts-extra
 %endif
 %else
@@ -119,7 +119,7 @@ BuildRequires:  texlive-tex
 BuildRequires:  texlive-times
 BuildRequires:  xdg-utils
 # No tex(inconsolata.sty) provided in SLE-12
-%if %suse_version != 1315
+%if 0%{?suse_version} != 1315
 BuildRequires:  tex(inconsolata.sty)
 %endif
 %endif
@@ -275,7 +275,7 @@ make install-info
 # there is a backup file in survival for 3.1.3
 %{__rm} -f %{buildroot}%{_libdir}/R/library/survival/NEWS.Rd.orig
 
-%if %suse_version > 1020    
+%if 0%{?suse_version} > 1020    
 %fdupes -s $RPM_BUILD_ROOT  
 %endif
 
