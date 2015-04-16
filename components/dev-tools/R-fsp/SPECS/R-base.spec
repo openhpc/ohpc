@@ -23,14 +23,16 @@
 %include %{_sourcedir}/FSP_macros
 
 %{!?compiler_family:	%define compiler_family gnu}
-%{!?mpi_family:		%define mpi_family openmpi}
-%{!?PROJ_DELIM:		%define PROJ_DELIM %{nil}}
+%{!?mpi_family:		%define mpi_family  openmpi}
+%{!?PROJ_DELIM:		%define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+# hack to install MKL for the moment
+BuildRequires: intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -57,7 +59,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 #-fsp-header-comp-end------------------------------------------------
 
 
-%define 	pname R-base
+%define 	pname R_base
 %define 	PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
@@ -69,11 +71,11 @@ Version:        3.1.3
 Source:         R-%{version}.tar.gz
 #Source: http://cran.r-project.org/src/base/R-2/R-%%{version}.tar.gz
 # PATCH-FIX-UPSTREAM Fix tre when wchar_t is unsigned int
-Source1:        FSP_macros
-Source2:        FSP_setup_compiler
+#Source1:        FSP_macros
+#Source2:        FSP_setup_compiler
 Patch:          tre.patch
 Url:            http://www.r-project.org/
-Summary:        R - statistics package (S-Plus like)
+Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
 Group:          Productivity/Scientific/Math
 ###BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -92,18 +94,18 @@ BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
 BuildRequires:  perl
 BuildRequires:  readline-devel
-%if %suse_version <=1020
-BuildRequires:  te_latex
-BuildRequires:  tetex
-%endif
-%if %suse_version > 1020
+#%if 0%{?suse_version} <=1020
+#BuildRequires:  te_latex
+#BuildRequires:  tetex
+#%endif
+%if 0%{?suse_version} > 1020
 BuildRequires:  fdupes
-%if %suse_version < 1230
+%if 0%{?suse_version} < 1230
 BuildRequires:  texlive-bin
 BuildRequires:  texlive-bin-latex
 #BuildRequires:  texlive-bin-metafont # evtl nur für 12.3 und später
 BuildRequires:  texlive-latex
-%if %suse_version > 1120 
+%if 0%{?suse_version} > 1120 
 BuildRequires:  texlive-fonts-extra
 %endif
 %else
@@ -117,7 +119,7 @@ BuildRequires:  texlive-tex
 BuildRequires:  texlive-times
 BuildRequires:  xdg-utils
 # No tex(inconsolata.sty) provided in SLE-12
-%if %suse_version != 1315
+%if 0%{?suse_version} != 1315
 BuildRequires:  tex(inconsolata.sty)
 %endif
 %endif
@@ -127,6 +129,7 @@ BuildRequires:  tcl-devel
 BuildRequires:  texinfo
 BuildRequires:  tk-devel
 BuildRequires:  xorg-x11-devel
+BuildRequires:  intel-compilers%{PROJ_DELIM}
 ###Requires:       R-base-devel = %{version}
 Requires:       cairo >= 1.2
 Requires:       fontconfig
@@ -173,8 +176,17 @@ Provides:       R-utils = %{version}
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 %description
-R is a language which is not entirely unlike the S language developed at
-AT&T Bell Laboratories by Rick Becker, John Chambers and Allan Wilks.
+R is a language and environment for statistical computing and graphics. 
+It is a GNU project which is similar to the S language and environment 
+which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) 
+by John Chambers and colleagues. 
+
+R can be considered as a different implementation of S.  There are some important 
+differences, but much code written for S runs unaltered under R.
+
+R provides a wide variety of statistical (linear and nonlinear modelling, 
+classical statistical tests, time-series analysis, classification, clustering, …) 
+and graphical techniques, and is highly extensible.
 
 ###%package -n R-base-devel
 ###Summary:        Libraries and includefiles for developing with R-base
@@ -189,6 +201,12 @@ AT&T Bell Laboratories by Rick Becker, John Chambers and Allan Wilks.
 ###libraries to allow you to devel with R-base.
 
 %prep 
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
+
+%if %{compiler_family} == gnu
+module load mkl
+%endif
 
 %setup -n R-%{version}
 %patch -p1
@@ -198,12 +216,15 @@ AT&T Bell Laboratories by Rick Becker, John Chambers and Allan Wilks.
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
 #MKL="-L${MKLROOT} -lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm"
 #export BLAS_LIBS="-lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm"
-module load mkl
 
 MKL_LIB_PATH=$MKLROOT/lib/intel64
 #MKL_LIB_PATH="/opt/fsp/pub/compiler/intel/composer_xe_2015.2.164/mkl/lib/intel64/"
@@ -229,6 +250,14 @@ for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admi
 done
 
 %install 
+# FSP compiler/mpi designation
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
+
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 make DESTDIR=%{buildroot} install
 ###make DESTDIR=%{buildroot} install-pdf
 
@@ -246,7 +275,7 @@ make install-info
 # there is a backup file in survival for 3.1.3
 %{__rm} -f %{buildroot}%{_libdir}/R/library/survival/NEWS.Rd.orig
 
-%if %suse_version > 1020    
+%if 0%{?suse_version} > 1020    
 %fdupes -s $RPM_BUILD_ROOT  
 %endif
 
