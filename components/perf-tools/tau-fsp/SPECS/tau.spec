@@ -146,16 +146,13 @@ make exports
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
 pushd /tmp
-mv opt/fsp/pub/libs/%{compiler_family}/%{mpi_family}/%{pname}/%version %buildroot%{install_path}
+mv opt/fsp/pub/libs/%{compiler_family}/%{mpi_family}/%{pname}/%version %buildroot%{install_path}/..
 popd
 #pushd %{buildroot}%{install_path}/bin
 #sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
 #rm -f tau_java
 #popd
 
-install -d %buildroot%{install_path}/etc
-install -d %buildroot%_datadir/%name
-install -d %buildroot%{install_path}/include
 #sed -i 's|/tmp||g' %{install_path}/include/*.h
 #sed -i 's|/tmp||g' %{install_path}/include/Makefile
 #sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
