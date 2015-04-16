@@ -94,10 +94,10 @@ BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
 BuildRequires:  perl
 BuildRequires:  readline-devel
-%if 0%{?suse_version} <=1020
-BuildRequires:  te_latex
-BuildRequires:  tetex
-%endif
+#%if 0%{?suse_version} <=1020
+#BuildRequires:  te_latex
+#BuildRequires:  tetex
+#%endif
 %if 0%{?suse_version} > 1020
 BuildRequires:  fdupes
 %if 0%{?suse_version} < 1230
