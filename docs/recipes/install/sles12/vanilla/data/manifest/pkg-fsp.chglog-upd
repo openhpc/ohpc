@@ -65,7 +65,7 @@ slurm-fsp 14.11.1 14.11.4
 slurm-munge-fsp 14.11.1 14.11.4
 slurm-perlapi-fsp 14.11.1 14.11.4
 slurm-plugins-fsp 14.11.1 14.11.4
-slurm-slurmdb-direct-fsp 14.11.1 14.11.4
 slurm-slurmdbd-fsp 14.11.1 14.11.4
+slurm-slurmdb-direct-fsp 14.11.1 14.11.4
 slurm-sql-fsp 14.11.1 14.11.4
 valgrind-fsp 3.10.0 3.10.1

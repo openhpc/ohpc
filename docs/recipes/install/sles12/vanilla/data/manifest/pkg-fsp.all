@@ -7,7 +7,7 @@ boost-intel-impi-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free pe
 boost-intel-mvapich2-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-openmpi-fsp 1.57.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
 conman-fsp 0.2.7 http://conman.googlecode.com/ fsp/admin ConMan: The Console Manager
-docs-fsp 0.1 (none) fsp/admin Forest Peak documentation
+docs-fsp 15.16 (none) fsp/admin Forest Peak documentation
 examples-fsp 1.1 (none) fsp/admin Example source code and templates for use within FSP environment.
 fftw-gnu-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-gnu-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library

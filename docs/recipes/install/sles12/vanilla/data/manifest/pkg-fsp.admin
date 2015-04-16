@@ -1,5 +1,5 @@
 conman-fsp 0.2.7 http://conman.googlecode.com/ fsp/admin ConMan: The Console Manager
-docs-fsp 0.1 (none) fsp/admin Forest Peak documentation
+docs-fsp 15.16 (none) fsp/admin Forest Peak documentation
 examples-fsp 1.1 (none) fsp/admin Example source code and templates for use within FSP environment.
 intel-clck-fsp 2.2.1 http://intel.com/go/cluster fsp/admin Intel(R) Cluster Checker
 lmod-defaults-intel-fsp 1.0 (none) fsp/admin FSP default login environment
