@@ -86,19 +86,39 @@
 \end{lstlisting}
 % end_fsp_run
 
+\underline {Important note}: \FSP{} leverages the use of the Open Build
+Service, a generic open-source platform that can be used to build packages from
+source in an automated fashion for a variety of \Linux{} distributions. At
+present, the \FSP{} team has detected one caveat when used in conjunction with
+recent CentOS distributions that prevents repository access to defined groups
+with a local modification. Since the instructions that follow in this guide
+leverage the use of various group package definitions convenience, the cached
+\texttt{repomod.xml} file that is created locally after enabling a new yum
+repository needs to be altered in order to access defined yum groups. The
+following steps highlight this procedure:
+
 % begin_fsp_run
-% [master]$ yum repolist
-% [master]$ perl -i -pe 's/type="group"/type="group_gz"/' /var/cache/yum/x86_64/7/ForestPeak_*/repomd.xml
+\begin{lstlisting}[language=bash,keywords={}]
+# query newly added repo to trigger creation of local yum cache files
+[master]$ yum repolist          
+# update cached config file to enable group access
+[master]$ perl -i -pe 's/type="group"/type="group_gz"/' /var/cache/yum/x86_64/7/ForestPeak_*/repomd.xml
+\end{lstlisting}
 % end_fsp_run  
 
 In addition to the \FSP{} package repository, the {\em master} host also
-requires access to the standard distro repositories in order to resolve
+requires access to the standard base OS distro repositories in order to resolve
 necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base and SDK repositories:
+both the base OS and EPEL repositories (mirrors freely available online):
 
 \begin{itemize*}
-\item SLES12-12-0
-\item SLES12-12-sdk
+\item CentOS-7 - Base 7.1.1503
+  (e.g. \href{http://mirror.centos.org/centos/7.1.1503/os/x86\_64}
+             {\color{blue}{http://mirror.centos.org/centos/7.1.1503/os/x86\_64}} )
+%\item EPEL 7 (e.g. {\color{blue}
+%  \url{http://download.fedoraproject.org/pub/epel/7}} )
+\item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
+                        {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
 \end{itemize*}
 
 % begin_fsp_run
