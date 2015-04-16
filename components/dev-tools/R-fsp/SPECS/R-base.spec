@@ -267,10 +267,15 @@ module load mkl
 make DESTDIR=%{buildroot} install
 ###make DESTDIR=%{buildroot} install-pdf
 
+echo ".........................................."
+echo %{buildroot}
+echo %{__install}
+echo %{_infodir}
+
 # Installation of Info-files
 %{__install} -m 755 -d %{_infodir}
 ###make DESTDIR=%{buildroot} INFODIR=%{buildroot}%{_infodir} install-info
-make install-info
+make DESTDIR=%{buildroot} install-info
 %{__rm} -f %{buildroot}%{_infodir}/dir
 %{__rm} -f %{buildroot}%{_infodir}/dir.old
 
