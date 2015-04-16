@@ -1019,15 +1019,13 @@ pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
 \begin{lstlisting}[language=bash]
-[master]$ zypper search -t package fftw-gnu-*-fsp
-Loading repository data...
-Reading installed packages...
-
-S | Name                  | Summary                          | Type   
---+-----------------------+----------------------------------+--------
-  | fftw-gnu-impi-fsp     | A Fast Fourier Transform library | package
-  | fftw-gnu-mvapich2-fsp | A Fast Fourier Transform library | package
-  | fftw-gnu-openmpi-fsp  | A Fast Fourier Transform library | package
+[master]$ yum search fftw-gnu fsp
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+=========================== N/S matched: fftw-gnu, fsp ===========================
+fftw-gnu-impi-fsp.x86_64 : A Fast Fourier Transform library
+fftw-gnu-mvapich2-fsp.x86_64 : A Fast Fourier Transform library
+fftw-gnu-openmpi-fsp.x86_64 : A Fast Fourier Transform library
 \end{lstlisting}
 
 Note that \FSP{} provided 3rd party builds are configured to be installed
