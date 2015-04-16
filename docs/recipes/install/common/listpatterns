@@ -4,31 +4,29 @@ logfile=pattern-fsp
 rm -f ${logfile}.*
 
 echo ++++ search and log FSP patterns
-for pattern in `zypper search -t pattern fsp-* | grep -e fsp- | cut -d '|' -f 2`; do
-#    name=`echo $pattern| grep -e fsp- | cut -d '|' -f 2 | tr -d ' '`
-#    name=`echo $pattern| grep -e fsp- | cut -d '|' -f 2`
+
+if [ -e /etc/redhat-release ];then
+    for pattern in `yum grouplist | grep -e "fsp-"`; do
+        echo "parsing $pattern"
+        info=`yum groupinfo fsp-base | grep Description: | sed s/Description://`
+
+        echo $pattern $info >> ${logfile}.all
+    done
+
+elif [ -e /etc/SuSE-release ];then
+
+    for pattern in `zypper search -t pattern fsp-* | grep -e fsp- | cut -d '|' -f 2`; do
     
-    echo "parsing $pattern"
-    info=`zypper info -t pattern $pattern | grep -A1 ^Description: | tail -1`
+        echo "parsing $pattern"
+        info=`zypper info -t pattern $pattern | grep -A1 ^Description: | tail -1`
     
-    echo $pattern $info >> ${logfile}.all
+        echo $pattern $info >> ${logfile}.all
+    done
 
-
-done
-#echo
-
-## echo ++++ list of FSP package groups
-## groups=`grep -o 'fsp/[^ ]*' pkg-fsp.all | sort -u | cut -c5-`
-## echo $groups
-## echo
-## 
-## for grp in ${groups}; do
-##     echo ++++ list of fsp/${grp} packages installed
-##     grep "fsp/${grp}" ${logfile}.all 2>&1 | tee ${logfile}.${grp}
-##     echo 
-## done
-
-
+else
+    echo "ERROR: unknown distro type"
+    exit 1
+fi
 
 #   | fsp-autotools    | fsp-autotools    | pattern
 #   | fsp-base         | fsp-base         | pattern
