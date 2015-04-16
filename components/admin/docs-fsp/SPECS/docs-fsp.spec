@@ -42,7 +42,7 @@ make
 
 mv %{source_path}/steps.pdf %{source_path}/Install_guide.pdf
 %{__mkdir} -p %{buildroot}%{FSP_PUB}/docs
-install -m 0644 -p %{source_path}/Install_guide.pdf %{buildroot}/%{FSP_PUB}/docs/install_guide.pdf 
+install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/docs/Install_guide.pdf 
 
 
 
