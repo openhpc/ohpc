@@ -23,7 +23,6 @@
 %include %{_sourcedir}/FSP_macros
 
 %{!?compiler_family:	%define compiler_family gnu}
-%{!?mpi_family:		%define mpi_family  openmpi}
 %{!?PROJ_DELIM:		%define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
@@ -40,20 +39,6 @@ Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
-%endif
-
-# MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi%{PROJ_DELIM}
-Requires:      intel-mpi%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 #-fsp-header-comp-end------------------------------------------------
@@ -219,7 +204,7 @@ module load mkl
 %patch -p1
 
 %build 
-# FSP compiler/mpi designation
+# FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
@@ -257,7 +242,7 @@ for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admi
 done
 
 %install 
-# FSP compiler/mpi designation
+# FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
