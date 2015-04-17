@@ -29,10 +29,10 @@ This guide presents a simple cluster installation procedure using components fro
 
 %build
 %if 0%{?suse_version}
-%define source_path install/sles12/vanilla
+%define source_path sles12/vanilla
 %else
 %if 0%{?rhel_version} || 0%{?centos_version}
-%define source_path install/centos7/vanilla
+%define source_path centos7/vanilla
 %endif
 %endif
 cd %{source_path}
