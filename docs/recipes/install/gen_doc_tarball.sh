@@ -10,7 +10,7 @@ echo "Current branch name = $BRANCHNAME"
 echo "FSP version         = $VERSION"
 
 VERSION=15.16
-TARBALL=docs-$VERSION.tar.gz
+TARBALL=docs-fsp-$VERSION.tar.gz
 
 if [ -e $TARBALL ];then
     rm $TARBALL
@@ -19,7 +19,7 @@ fi
 echo " "
 echo "Packaging docs distribution tarball for v$VERSION..."
 
-git archive --format=tar --prefix=docs-$VERSION/ HEAD  | gzip -n > $TARBALL
+git archive --format=tar --prefix=docs-fsp-$VERSION/ HEAD  | gzip -n > $TARBALL
 
 if [ ! -s ./$TARBALL ];then
    echo "Error generating tarball.."
