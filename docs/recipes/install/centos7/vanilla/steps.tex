@@ -227,13 +227,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 \end{lstlisting}
 % end_fsp_run
 
-\subsection{Add Intel Cluster Checker ({\em optional})} \label{sec:add_clck}
-
-The \Intel{} Cluster Checker provides a suite of diagnostics that can be used to
-aid in isolating hardware and software problems on an installed
-cluster. Although not required, this package can be optionally added using the
-command below. Note that a valid license will also need to be installed
-separately in order to use this software.
+% Intel Cluster Checker section
+\input{../../common/cluster_checker}
 
 % begin_fsp_run
 % fsp_validation_comment Add CLCK
@@ -364,8 +359,8 @@ be updated with a copy of the configuration as follows:
 \end{lstlisting}
 % end_fsp_run
 
-Prior to using the \FSP{} respoitory to add desired yum groups, it is
-necessasry to fix the cached \texttt{repomod.xml} file within the chroot
+Prior to using the \FSP{} repository to add desired yum groups, it is
+necessary to fix the cached \texttt{repomod.xml} file within the chroot
 environment (similar to the initial modification made for the {\em master} host
 in \S\ref{sec:enable_repo}). This can be accomplished as follows:
 
