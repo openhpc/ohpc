@@ -1,0 +1,1 @@
+../../sles12/vanilla/Makefile
