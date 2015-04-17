@@ -6,7 +6,7 @@ Release:        1
 Summary:        Forest Peak documentation
 License:        BSD-3-Clause
 Group:          fsp/admin
-Source0:        recipes.tar.gz
+Source0:        docs-fsp-%{version}.tar.gz
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
@@ -25,7 +25,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 This guide presents a simple cluster installation procedure using components from the Forest Peak (FSP) software stack.
 
 %prep
-%setup -qn recipes
+%setup 
 
 %build
 %if 0%{?suse_version}
@@ -42,7 +42,6 @@ make
 
 %{__mkdir} -p %{buildroot}%{FSP_PUB}/docs
 install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/docs/Install_guide.pdf 
-
 
 
 %files
