@@ -31,12 +31,11 @@ Known Issues:
 Affected OS: CenOS7.x
 
 Notes:       FSP uses the Open Build Service (OBS) to orchestrate the
-             build process for all of the selected software components
-             for multiple OS distributions and to define convenience
-             groups for installation. There is a known problem with
-             accessing OBS defined yum groups that requires augmenting
-             a yum config file after it is downloaded from the FSP
-             repository.
+             build process for multiple OS distributions and to define
+             convenience groups for installation. There is a known
+             problem with accessing OBS defined yum groups that
+             requires augmenting a yum config file after it is
+             downloaded from the FSP repository.
 
              See the companion Install Guide for information on the
              work-around.
