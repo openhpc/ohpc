@@ -49,8 +49,6 @@ install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/docs/Install
 %files
 %defattr(-,root,root)
 %dir %{FSP_HOME}
-%doc %{FSP_PUB}/docs/ChangeLog
-%doc %{FSP_PUB}/docs/Release_Notes.txt
-%doc %{FSP_PUB}/docs/Install_guide.pdf
+%{FSP_PUB}/docs/*
 
 %changelog
