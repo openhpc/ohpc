@@ -8,7 +8,7 @@ echo ++++ search and log FSP patterns
 if [ -e /etc/redhat-release ];then
     for pattern in `yum grouplist | grep -e "fsp-"`; do
         echo "parsing $pattern"
-        info=`yum groupinfo fsp-base | grep Description: | sed s/Description://`
+        info=`yum groupinfo $pattern | grep Description: | sed s/Description://`
 
         echo $pattern $info >> ${logfile}.all
     done
