@@ -2,7 +2,7 @@ Version 15.16 (18 April 15)
 
    [General]
       * added CentOS7.1 support
-      * documentation added to fsp-base for local installation
+      * documentation added to fsp-base group for local installation
 
    [Component Additions]
       * docs-fsp                                 (v15.16)
