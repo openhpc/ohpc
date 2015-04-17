@@ -3,7 +3,7 @@ FSP 15.16 (18 April 2015)
 
 Summary of repository sizing (binary RPMs):
 
-  CentOS 7.1 - 142 RPMs, 2.5GB
-  SLES 12    - 134 RPMs, 2.0GB
+  CentOS 7.1 - 133 RPMs
+  SLES 12    - 133 RPMs
 
 
