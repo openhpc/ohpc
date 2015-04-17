@@ -21,7 +21,8 @@ Introduction:
 
 
 Questions, Comments, or Bug Reports?
-  * Please direct to karl.w.schulz@intel.com
+   
+    Please direct to: karl.w.schulz@intel.com
 
 
 Known Issues:
