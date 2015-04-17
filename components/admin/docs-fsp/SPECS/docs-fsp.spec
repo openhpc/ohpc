@@ -41,15 +41,16 @@ make
 %install
 
 %{__mkdir} -p %{buildroot}%{FSP_PUB}/docs
-install -m 0644 -p ChangeLog %{buildroot}/%{FSP_PUB}/docs/Install_guide.pdf 
+install -m 0644 -p ChangeLog %{buildroot}/%{FSP_PUB}/docs/ChangeLog
 install -m 0644 -p Release_Notes.txt %{buildroot}/%{FSP_PUB}/docs/Release_Notes.txt
 install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/docs/Install_guide.pdf 
-
 
 
 %files
 %defattr(-,root,root)
 %dir %{FSP_HOME}
-%{FSP_PUB}
+%doc %{FSP_PUB}/docs/ChangeLog
+%doc %{FSP_PUB}/docs/Release_Notes.txt
+%doc %{FSP_PUB}/docs/Install_guide.pdf
 
 %changelog
