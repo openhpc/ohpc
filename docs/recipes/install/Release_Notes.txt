@@ -1,6 +1,9 @@
 
 Forest Peak (FSP) Software Stack
-Version 15.16 (18 April 2015) - Internal Engineering Release
+Version 15.16 (18 April 2015) 
+
+Note: This is an internal engineering release - it is not for 
+external distribution.
 
 Introduction:
 
@@ -10,7 +13,7 @@ Introduction:
    tools, and a variety of scientific libraries.
    
    The compatible OS versions for this release and the total number of
-   FSP-packaged RPMS for each is as follows: 
+   FSP-packaged RPMs for each variant is as follows: 
    
      CentOS 7.1 - 133 RPMs
      SLES 12    - 133 RPMs
