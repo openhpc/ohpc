@@ -329,7 +329,7 @@ mirror, the steps below include an example to update the OS mirror used by
 [master]$ export CHROOT=/opt/fsp/admin/images/centos7.1
 
 # Override default OS repository (optional) - set BOS_MIRROR variable to desired location
-[master]$ perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=$BOS_MIRROR#" \ 
+[master]$ perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=$BOS_MIRROR#" \
      /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
 
 # Build initial chroot image
