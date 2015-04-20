@@ -308,6 +308,13 @@ module-whatis "URL %{url}"
 
 set     version                     %{version}
 
+## module load mkl ...
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  ![is-loaded mkl]  } {
+        module load mkl
+    }
+}
+
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
@@ -317,8 +324,6 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_INC        %{install_path}/include
-
-## Still need to module load mkl ...
 
 EOF
 
