@@ -51,7 +51,8 @@ BuildRequires: intel_licenses
 Name:		%{pname}%{PROJ_DELIM}
 ###%define release 1 
 Release:	1%{?dist}
-Version:        3.1.3
+#Version:        3.1.3
+Version:        3.2.0
 ###Release:        %release
 Source:         R-%{version}.tar.gz
 #Source: http://cran.r-project.org/src/base/R-2/R-%%{version}.tar.gz
