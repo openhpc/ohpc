@@ -136,6 +136,9 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
+%if %{compiler_family} == intel
+    -tbb \
+%endif
 	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L/tmp%{install_path}/lib" 
 
 
