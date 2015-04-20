@@ -253,7 +253,7 @@ module load mkl
 make DESTDIR=%{buildroot} install
 ###make DESTDIR=%{buildroot} install-pdf
 
-echo "****************"
+echo "*********11111***********"
 echo %{buildroot}
 echo %{__install}
 echo %{_infodir}
@@ -282,12 +282,12 @@ cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
 %{_libdir}/R/lib
 EOF
 
-echo "****************"
+echo "*******222222*********"
 # FSP module file
+
 %{__mkdir} -p %{buildroot}/%{FSP_MODULES}/%{pname}
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -318,9 +318,10 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_INC        %{install_path}/include
 
+## Still need to module load mkl ...
+
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
@@ -329,6 +330,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+export NO_BRP_CHECK_RPATH true
 
 %post
 /sbin/ldconfig
