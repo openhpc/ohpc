@@ -122,9 +122,9 @@ BuildRequires:  intel-compilers%{PROJ_DELIM}
 #BuildRequires:  texlive-fonts-extra
 %else
 BuildRequires:  libXt-devel
-BuildRequires:  bzip2
-BuildRequires:  bzip2-devel
-BuildRequires:  bzip2-libs
+#BuildRequires:  bzip2
+#BuildRequires:  bzip2-devel
+#BuildRequires:  bzip2-libs
 %endif
 ###Requires:       R-base-devel = %{version}
 Requires:       cairo >= 1.2
@@ -136,6 +136,7 @@ Requires:       readline
 Requires:       xdg-utils
 Requires:       xorg-x11-fonts-100dpi
 Requires:       xorg-x11-fonts-75dpi
+Requires:       texlive-latex
 
 Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
@@ -240,12 +241,17 @@ echo "MKL options flag .... $MKL "
 
 make %{?_smp_mflags}
 ###make pdf
+%if 0%{?suse_version}
+### don't make info
+### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
+%else
 make info
 # Convert to UTF-8
 for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admin.info doc/manual/R-exts.info-1; do
   iconv -f iso-8859-1 -t utf-8 -o $i{.utf8,}
   mv $i{.utf8,}
 done
+%endif
 
 %install 
 # FSP compiler designation
@@ -267,9 +273,16 @@ echo %{_infodir}
 # Installation of Info-files
 %{__install} -m 755 -d %{_infodir}
 ###make DESTDIR=%{buildroot} INFODIR=%{buildroot}%{_infodir} install-info
+###
+### 
+%if 0%{?suse_version}
+### don't make info
+### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
+%else
 make DESTDIR=%{buildroot} install-info
 %{__rm} -f %{buildroot}%{_infodir}/dir
 %{__rm} -f %{buildroot}%{_infodir}/dir.old
+%endif
 
 ###chmod +x %{buildroot}%{_libdir}/R/share/sh/echo.sh
 
