@@ -122,7 +122,7 @@ BuildRequires:  intel-compilers%{PROJ_DELIM}
 #BuildRequires:  texlive-fonts-extra
 %else
 BuildRequires:  libXt-devel
-BuildRequires:  bzip2
+BuildRequires:  bzip2-devel
 %endif
 ###Requires:       R-base-devel = %{version}
 Requires:       cairo >= 1.2
