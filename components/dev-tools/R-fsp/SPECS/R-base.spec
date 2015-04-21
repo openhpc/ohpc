@@ -234,7 +234,8 @@ echo "MKL options flag .... $MKL "
             --enable-R-shlib  \
             --enable-BLAS-shlib \
             --prefix=%{install_path} \
-#            --with-system-zlib=no \
+            --without-system-zlib \
+            --without-system-bzlib \
               LIBnn=lib64 
 
 make %{?_smp_mflags}
