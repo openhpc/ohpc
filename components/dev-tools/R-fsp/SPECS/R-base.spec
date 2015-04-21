@@ -113,7 +113,7 @@ BuildRequires:  tex(inconsolata.sty)
 %endif
 BuildRequires:  pango-devel
 BuildRequires:  tcl-devel
-BuildRequires:  texinfo
+BuildRequires:  texinfo >= 5.1 
 BuildRequires:  tk-devel
 BuildRequires:  xorg-x11-devel
 BuildRequires:  intel-compilers%{PROJ_DELIM}
@@ -122,6 +122,7 @@ BuildRequires:  intel-compilers%{PROJ_DELIM}
 #BuildRequires:  texlive-fonts-extra
 %else
 BuildRequires:  libXt-devel
+BuildRequires:  bzip2
 %endif
 ###Requires:       R-base-devel = %{version}
 Requires:       cairo >= 1.2
@@ -231,7 +232,7 @@ echo "MKL options flag .... $MKL "
             --enable-R-shlib  \
             --enable-BLAS-shlib \
             --prefix=%{install_path} \
-            --with-system-zlib=no \
+#            --with-system-zlib=no \
               LIBnn=lib64 
 
 make %{?_smp_mflags}
