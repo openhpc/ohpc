@@ -113,7 +113,8 @@ BuildRequires:  tex(inconsolata.sty)
 %endif
 BuildRequires:  pango-devel
 BuildRequires:  tcl-devel
-BuildRequires:  texinfo >= 5.1 
+### Moved to CENTOS only until SLES has a newer texinfo version
+###BuildRequires:  texinfo >= 5.1 
 BuildRequires:  tk-devel
 BuildRequires:  xorg-x11-devel
 BuildRequires:  intel-compilers%{PROJ_DELIM}
@@ -122,6 +123,7 @@ BuildRequires:  intel-compilers%{PROJ_DELIM}
 #BuildRequires:  texlive-fonts-extra
 %else
 BuildRequires:  libXt-devel
+BuildRequires:  texinfo >= 5.1 
 #BuildRequires:  bzip2
 #BuildRequires:  bzip2-devel
 #BuildRequires:  bzip2-libs
