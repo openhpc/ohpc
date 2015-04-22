@@ -15,10 +15,10 @@
 \usepackage[usenames,dvipsnames]{color}
 \usepackage{colortbl}
 
-% for non-released DRAFT
-\usepackage{draftwatermark}
-\SetWatermarkText{DRAFT / PRE-RELEASE}
-\SetWatermarkScale{1.35}
+% for non-released DRAFT - comment out for GA release
+%% \usepackage{draftwatermark}
+%% \SetWatermarkText{DRAFT / PRE-RELEASE}
+%% \SetWatermarkScale{1.35}
 
 \pagestyle{fancy}
 \setlength\headheight{59pt}
@@ -26,11 +26,12 @@
 \addtolength{\topmargin}{-1\baselineskip}
 \addtolength{\textheight}{-4\baselineskip}
 %\fancyhead[LE,LO]{}
-%\fancyhead[RE,RO]{\MakeUppercase{2014 FSP Install Guide}}
+%\fancyhead[LE,LO]{\MakeUppercase{2015 FSP Install Guide - {\em SLES12 Version}}}
 %\lhead{{\em 2014 FSP Install Guide}}
 \rhead{\includegraphics[width=0.75in]{intel_1spot_100-crop.pdf}}
-\fancyfoot[RE,RO]{Last Update: \VCDateISO~(Rev: \VCRevision) }
-
+\fancyfoot[CO,CE]{\small \thepage \\ \vspace *{0.7cm} [Internal engineering
+  release - not for external distribution]}
+\fancyfoot[RE,RO]{\small Last Update: \VCDateISO~(Rev: \VCRevision)}
 
 \lstset{basicstyle=\footnotesize\ttfamily,
   frame=single,

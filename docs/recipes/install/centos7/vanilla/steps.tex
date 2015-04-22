@@ -2,7 +2,7 @@
 \usepackage{../../common/fspdoc}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
-\lhead{{\em 2015 \FSP{} Install Guide}}
+\lhead{{2015 \FSP{} Install Guide - {\small \em CentOS7.1 Version}}}
 
 
 % Recipe commands to run initially only in CI
@@ -18,7 +18,7 @@
 \input{vc.tex}
 
 % Define Base OS
-\newcommand{\baseOS}{CentOS7*}
+\newcommand{\baseOS}{CentOS7.1*}
 \newcommand{\LosF}{\emph{LosF*}}
 \newcommand{\FSPVersion}{15.16}
 
@@ -67,7 +67,7 @@
 
 % Base Operating System --------------------------------------------
 
-\section{Install Base Operating System(BOS)}
+\section{Install Base Operating System (BOS)}
 \input{../../common/bos}
 
 % ------------------------------------------------------------------
@@ -75,33 +75,53 @@
 \section{Install \FSP{} Components} \label{sec:basic_install}
 \input{../../common/install_fsp_component_intro.tex}
 
-\subsection{Enable \FSP{} repository for local use}
+\subsection{Enable \FSP{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_fsp_repo}
 
 % begin_fsp_run
 % fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ export FSP_mirror=http://fsp-obs.pdx.intel.com:82
-[master]$ wget -P /etc/yum.repos.d $FSP_mirror/ForestPeak:/15.16:/Factory/CentOS-7_Intel/ForestPeak:15.16:Factory.repo
+[master]$ wget -P /etc/yum.repos.d $FSP_mirror/ForestPeak:/15.16/CentOS-7.1_Intel/ForestPeak:15.16.repo
 \end{lstlisting}
 % end_fsp_run
 
+% Dev testing for Factory
+%[master]$ wget -P /etc/yum.repos.d $FSP_mirror/ForestPeak:/15.16:/Factory/CentOS-7.1_Intel/ForestPeak:15.16:Factory.repo
+
+\underline {Important note}: \FSP{} leverages the use of the Open Build
+Service, a generic open-source platform that can be used to build packages from
+source in an automated fashion for a variety of \Linux{} distributions. At
+present, the \FSP{} team has detected one caveat when used in conjunction with
+recent CentOS distributions that prevents repository access to defined groups
+with a local modification. Since the instructions that follow in this guide
+leverage the use of various group package definitions convenience, the cached
+\texttt{repomod.xml} file that is created locally after enabling a new yum
+repository needs to be altered in order to access defined yum groups. The
+following steps highlight this procedure:
+
 % begin_fsp_run
-% fsp_validation_comment - disable proxy for internal repo (CI only command)
-% [master]$ echo "proxy=_none_" >> /etc/yum.repos.d/ForestPeak:15.16:Factory.repo
-% 
-% [master]$ yum repolist
-% [master]$ perl -i -pe 's/type="group"/type="group_gz"/' /var/cache/yum/x86_64/7/ForestPeak_15.16_Factory/repomd.xml
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# query newly added repo to trigger creation of local yum cache files
+[master]$ yum repolist          
+# update cached config file to enable group access
+[master]$ perl -i -pe 's/type="group"/type="group_gz"/' /var/cache/yum/x86_64/7/ForestPeak_*/repomd.xml
+\end{lstlisting}
 % end_fsp_run  
 
 In addition to the \FSP{} package repository, the {\em master} host also
-requires access to the standard distro repositories in order to resolve
+requires access to the standard base OS distro repositories in order to resolve
 necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base and SDK repositories:
+both the base OS and EPEL repositories (mirrors freely available online):
 
 \begin{itemize*}
-\item SLES12-12-0
-\item SLES12-12-sdk
+\item CentOS-7 - Base 7.1.1503
+  (e.g. \href{http://mirror.centos.org/centos/7.1.1503/os/x86\_64}
+             {\color{blue}{http://mirror.centos.org/centos/7.1.1503/os/x86\_64}} )
+%\item EPEL 7 (e.g. {\color{blue}
+%  \url{http://download.fedoraproject.org/pub/epel/7}} )
+\item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
+                        {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
 \end{itemize*}
 
 % begin_fsp_run
@@ -121,6 +141,12 @@ both the base and SDK repositories:
 [master]$ yum -y groupinstall fsp-warewulf
 \end{lstlisting}
 % end_fsp_run
+
+% begin_fsp_run 
+% fsp_validation_comment - allow sudo without tty (CI only)
+% [master]$ perl -pi -e "s/^Defaults\s+requiretty/# Defaults requiretty/" /etc/sudoers 
+% end_fsp_run
+
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 
@@ -161,7 +187,6 @@ manager, we also add a dedicated ``test'' user as follows:
 \end{lstlisting}
 % end_fsp_run
 
-\newpage
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
 The following command adds OFED support using distro-provided drivers to the
@@ -170,8 +195,7 @@ chosen {\em master} host.
 % begin_fsp_run
 % fsp_validation_comment Add ofed
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ yum -y install libibverbs-runtime libmlx4-rdmav2
-[master]$ yum -y install libibmad5 librdmacm1 rdma
+[master]$ yum -y groupinstall "InfiniBand Support"
 
 # Load IB drivers
 [master]$ service rdma start
@@ -191,24 +215,19 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % begin_fsp_run
 % fsp_validation_comment Enable ib0
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ cp /opt/fsp/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
+[master]$ cp /opt/fsp/pub/examples/network/centos/ifcfg-ib0 /etc/sysconfig/network-scripts
 
 # Define local IPoIB address and netmask
-[master]$ perl -pi -e 's/master_ipoib/<master_ipoib>/' /etc/sysconfig/network/ifcfg-ib0
-[master]$ perl -pi -e 's/ipoib_netmask/<ipoib_netmask>/' /etc/sysconfig/network/ifcfg-ib0
+[master]$ perl -pi -e 's/master_ipoib/<master_ipoib>/' /etc/sysconfig/network-scripts/ifcfg-ib0
+[master]$ perl -pi -e 's/ipoib_netmask/<ipoib_netmask>/' /etc/sysconfig/network-scripts/ifcfg-ib0
 
 # Initiate ib0
 [master]$ ifup ib0
 \end{lstlisting}
 % end_fsp_run
 
-\subsection{Add Intel Cluster Checker ({\em optional})} \label{sec:add_clck}
-
-The \Intel{} Cluster Checker provides a suite of diagnostics that can be used to
-aid in isolating hardware and software problems on an installed
-cluster. Although not required, this package can be optionally added using the
-command below. Note that a valid license will also need to be installed
-separately in order to use this software.
+% Intel Cluster Checker section
+\input{../../common/cluster_checker}
 
 % begin_fsp_run
 % fsp_validation_comment Add CLCK
@@ -223,7 +242,8 @@ separately in order to use this software.
 At this point, all of the packages necessary to use \Warewulf{} on the {\em
   master} host should be installed.  Next, we need to update several
 configuration files in order to allow \Warewulf{} to work with \baseOS{} and to support
-local provisioning using the {\em eno2} interface.  Specific steps are as
+local provisioning using the second ethernet interface (assumed to be {\em
+  eno2} in this example).  Specific steps are as
 follows:
 
 % begin_fsp_run
@@ -231,30 +251,26 @@ follows:
 %\begin{verbatim}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-
-# Configure DHCP server to use eno2
-[master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eno2"/' /etc/sysconfig/dhcpd
+# Configure Warewulf provisioning to use eno2 interface
+[master]$ perl -pi -e 's/^network device = eth1/network device = eno2/' /etc/warewulf/provision.conf
 
 # Enable tftp service for compute node image distribution
-# [master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
-
-# Update Warewulf http config to use the SLES version of mod_perl
-# [master]$ perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
+[master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
 
 # Enable http access for Warewulf cgi-bin directory to support newer apache syntax
 [master]$ export MODFILE=/etc/httpd/conf.d/warewulf-httpd.conf
 [master]$ perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
 
-# [master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
-# [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
+[master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
+[master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Define eno2 interface for provisioning
 [master]$ ifconfig eno2 <master_ip> netmask 255.255.255.0 up
 
 # Restart relevant services to support provisioning
-[master]$ systemctl restart xinetd                         # tftp services
-[master]$ systemctl restart mariadb                        # mysql database
-[master]$ systemctl restart httpd                          # web server
+[master]$ systemctl restart xinetd  
+[master]$ systemctl restart mariadb 
+[master]$ systemctl restart httpd   
 \end{lstlisting}
 %\end{verbatim}
 % end_fsp_run
@@ -297,13 +313,24 @@ The \FSP{} build of \Warewulf{} includes specific enhancements enabling support 
 \baseOS{}. The following steps illustrate the process to build a minimal, default
 image for use with \Warewulf{}.  We begin by creating a directory structure on the 
 {\em master} that will represent the root filesystem of the compute node. The 
-default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/sles12}.
+default location for this in \FSP{} is in
+\texttt{/opt/fsp/admin/images/centos7.1}. Note that \Warewulf{} assumes access to
+an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
+process which requires external network connectivity on your chosen {\em
+  master} host. If this is not available, or if you prefer to access a locally cached
+mirror, the steps below include an example to update the OS mirror used by
+\texttt{wwmkchroot} to use an alternate location defined by a
+\texttt{BOS\_MIRROR} environment variable.
 
 % begin_fsp_run
 % fsp_validation_comment Create compute image for Warewulf
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location 
-[master]$ export CHROOT=/opt/fsp/admin/images/centos7
+[master]$ export CHROOT=/opt/fsp/admin/images/centos7.1
+
+# Override default OS repository (optional) - set BOS_MIRROR variable to desired location
+[master]$ perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=$BOS_MIRROR#" \
+     /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
 
 # Build initial chroot image
 [master]$ wwmkchroot centos-7 $CHROOT
@@ -329,16 +356,31 @@ be updated with a copy of the configuration as follows:
 \end{lstlisting}
 % end_fsp_run
 
-\newpage
+Prior to using the \FSP{} repository to add desired yum groups, it is
+necessary to fix the cached \texttt{repomod.xml} file within the chroot
+environment (similar to the initial modification made for the {\em master} host
+in \S\ref{sec:enable_repo}). This can be accomplished as follows:
+
+% begin_fsp_run
+% fsp_validation_comment - fix grouplist for chroot
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[master]$ chroot $CHROOT yum grouplist
+[master]$ perl -i -pe 's/type="group"/type="group_gz"/' $CHROOT/var/cache/yum/x86_64/7/ForestPeak_*/repomd.xml
+\end{lstlisting}
+% end_fsp_run
+
+Now, we can include additional components to the compute instance using
+\texttt{yum} to install into the chroot location defined previously:
+
 % begin_fsp_run
 % fsp_validation_comment Add FSP components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add SLURM client support
-[master]$ chroot $CHROOT yum -y groupinstall fsp-slurm-client
+[master]$ yum --installroot=$CHROOT -y groupinstall fsp-slurm-client
 
-# Add IB support
-[master]$ yum -y --installroot=$CHROOT install libibverbs-runtime libmlx4-rdmav2
-[master]$ yum -y --installroot=$CHROOT install libibmad5 librdmacm1 rdma
+# Add IB support and enable
+[master]$ yum -y --installroot=$CHROOT groupinstall "InfiniBand Support"
+[master]$ chroot $CHROOT systemctl enable rdma
 
 # Add Network Time Protocol (NTP) support
 [master]$ yum -y --installroot=$CHROOT install ntp
@@ -398,7 +440,7 @@ combination to limit the export scope to the defined compute nodes.
 [master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
 [master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
-[master]$ service nfsserver restart
+[master]$ systemctl restart nfs
 
 # Enable NTP time service on computes and identify master host as local NTP server
 [master]$ chroot $CHROOT systemctl enable ntpd
@@ -406,7 +448,6 @@ combination to limit the export scope to the defined compute nodes.
 \end{lstlisting}
 % end_fsp_run
 
-\newpage
 \subsubsection{Additional Customizations ({\em optional})}
 
 This section highlights common additional customizations that
@@ -419,7 +460,7 @@ local cluster environment. These customizations include:
 \item Add \Lustre{} client
 \end{itemize*}
 
-\noindent Details on the steps required for each of these customizations is
+\noindent Details on the steps required for each of these customizations are
 discussed further in the following sections.
 
 \paragraph{Increase locked memory limits}
@@ -456,22 +497,17 @@ discussed further in the following sections.
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 
 \input{../../common/lustre-client}
-% SLES-specific addition
-Additionally, note that your default \baseOS{} environment may not allow loading of
-the necessary \Lustre{} kernel modules. Consequently, the example below includes
-steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
-file to allow loading of the necessary modules.
+%% % SLES-specific addition
+%% Additionally, note that your default \baseOS{} environment may not allow loading of
+%% the necessary \Lustre{} kernel modules. Consequently, the example below includes
+%% steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
+%% file to allow loading of the necessary modules.
 
-\newpage
 % begin_fsp_run
 % fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
 [master]$ yum -y install lustre-client-fsp lustre-client-fsp-modules
-
-# Update config to allow Lustre modules to be loaded on master host
-[master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
-     /etc/modprobe.d/10-unsupported-modules.conf
 \end{lstlisting}
 % end_fsp_run
 
@@ -480,10 +516,6 @@ file to allow loading of the necessary modules.
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
 [master]$ yum -y --installroot=$CHROOT install lustre-client-fsp lustre-client-fsp-modules
-
-# Update config to allow Lustre modules to be loaded on compute hosts
-[master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
-     $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
 
 # Include mount point and file system mount in compute image
 [master]$ mkdir $CHROOT/mnt/lustre
@@ -559,32 +591,35 @@ for the new credential should also be placed in the final
 % fsp_validation_comment Configure ORCM aggregator and DB
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/localhost/" /etc/orcm-site.xml
+[master]$ perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
 [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
+
+# Update BMC credentials to match local values
+
+[master]$ perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+[master]$ perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
 
 # Initialize postgres DB driver
 [master]$ odbcinst -i -d -f /etc/psql_odbc_driver.ini
 [master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
 
-# Use DB template for orcm runtime config
-[master]$ cp /etc/sysconfig/orcmd.db /etc/sysconfig/orcmd
-
 # Initialize postgres
-[master]$ service postgresql start   
+[master]$ postgresql-setup initdb
 
 # Update postgres config files using ORCM templates
 [master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
 [master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 
 # Restart postgres
-[master]$ service postgresql restart 
+[master]$ service postgresql start
 
 # Create ORCM DB
 [master]$ sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
 [master]$ sudo -u postgres createdb -O orcmuser orcmdb
 [master]$ sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 
-# Start ORCM on master host
+# Start ORCM on master host (requires both orcmsched and orcmd)
+[master]$ systemctl start orcmsched
 [master]$ systemctl start orcmd
 \end{lstlisting}
 % end_fsp_run
@@ -596,10 +631,10 @@ be added to the compute image as follows:
 % begin_fsp_run
 % fsp_validation_comment Install ORCM client on compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ yum -y --installroot=$CHROOT install -t pattern fsp-orcm-client
+[master]$ yum -y --installroot=$CHROOT groupinstall fsp-orcm-client
 
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/etc/orcm-site.xml
+[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/opt/open-rcm/etc/orcm-site.xml
 
 # Enable orcmd client daemon on boot
 [master]$ chroot $CHROOT systemctl enable orcmd
@@ -622,7 +657,6 @@ import local file-based credentials, issue the following:
 \end{lstlisting}
 % \end_fsp_run
 
-\newpage
 Similarly, to import the cryptographic key that is required by the {\em munge}
 authentication library to be available on every host in the resource management
 pool, issue the following:
@@ -639,8 +673,8 @@ template file for \Warewulf{} that can be imported and used later to provision
 
 % begin_fsp_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ wwsh file import /opt/fsp/pub/examples/network/sles/ifcfg-ib0.ww
-[master]$ wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network/ifcfg-ib0
+[master]$ wwsh file import /opt/fsp/pub/examples/network/centos/ifcfg-ib0.ww
+[master]$ wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network-scripts/ifcfg-ib0
 \end{lstlisting}
 % \end_fsp_run
 
@@ -707,7 +741,7 @@ that were imported in \S\ref{sec:file_import}.
 [master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> 
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set c[1-4] --vnfs=sles12 --bootstrap=`uname -r` \
+[master]$ wwsh -y provision set c[1-4] --vnfs=centos7.1 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
 # Optionally define IPoIB network settings (required if planning to mount Lustre* over IB)
@@ -763,7 +797,7 @@ that were imported in \S\ref{sec:file_import}.
 % [master]$    wwsh -y node set c15 -D ib0 --ipaddr=<c15_ipoib> --netmask=<ipoib_netmask>
 % [master]$    wwsh -y node set c16 -D ib0 --ipaddr=<c16_ipoib> --netmask=<ipoib_netmask>
 
-% [master]$    wwsh -y provision set c* --vnfs=sles12 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
+% [master]$    wwsh -y provision set c* --vnfs=centos-7 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
 % [master]$    wwsh -y provision set c* --fileadd=ifcfg-ib0.ww     
 % [master]$    service dhcpd restart
 % [master]$    wwsh pxe update
@@ -899,6 +933,8 @@ open-source and Intel licensed software. These can be installed as follows:
 [master]$ yum -y install intel-vtune-fsp
 [master]$ yum -y install intel-advisor-fsp
 [master]$ yum -y install intel-inspector-fsp
+[master]$ yum -y install intel-inspector-fsp
+[master]$ yum -y groupinstall fsp-tau
 \end{lstlisting}
 % end_fsp_run
 
@@ -969,15 +1005,13 @@ pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
 \begin{lstlisting}[language=bash]
-[master]$ zypper search -t package fftw-gnu-*-fsp
-Loading repository data...
-Reading installed packages...
-
-S | Name                  | Summary                          | Type   
---+-----------------------+----------------------------------+--------
-  | fftw-gnu-impi-fsp     | A Fast Fourier Transform library | package
-  | fftw-gnu-mvapich2-fsp | A Fast Fourier Transform library | package
-  | fftw-gnu-openmpi-fsp  | A Fast Fourier Transform library | package
+[master]$ yum search fftw-gnu fsp
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+=========================== N/S matched: fftw-gnu, fsp ===========================
+fftw-gnu-impi-fsp.x86_64 : A Fast Fourier Transform library
+fftw-gnu-mvapich2-fsp.x86_64 : A Fast Fourier Transform library
+fftw-gnu-openmpi-fsp.x86_64 : A Fast Fourier Transform library
 \end{lstlisting}
 
 Note that \FSP{} provided 3rd party builds are configured to be installed
@@ -1013,6 +1047,8 @@ offerings within \FSP{}, issue the following:
 % [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
 % end_fsp_run
 
+\vspace*{0.2cm}
+
 \section{Resource Manager Startup}
 
 In section \S\ref{sec:basic_install}, the \SLURM{} resource manager was installed
@@ -1031,8 +1067,8 @@ requiring within the resource management pool.
 %be running on the {\em compute} subsystem at this point, 
 The following commands can be used to startup the necessary services to support
 resource management under \SLURM{}.
-%,  onso the steps required
-%to startup the required services on the {\em master} host are as follows: 
+
+\vspace*{0.3cm}
 
 % begin_fsp_run
 % fsp_validation_comment Startup RM
@@ -1093,7 +1129,7 @@ Hello, world (8 procs total)
     --> Process #   3 of   8 is alive. -> c1
 \end{lstlisting}
 
-%\input{manifest}
+\input{manifest}
 
 % begin_fsp_run 
 % fsp_validation_comment - time update

@@ -2,7 +2,7 @@
 \usepackage{../../common/fspdoc}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
-\lhead{{\em 2015 \FSP{} Install Guide}}
+\lhead{{2015 \FSP{} Install Guide - {\small \em SLES12 Version}}}
 
 
 % Recipe commands to run initially only in CI
@@ -67,7 +67,7 @@
 
 % Base Operating System --------------------------------------------
 
-\section{Install Base Operating System(BOS)}
+\section{Install Base Operating System (BOS)}
 \input{../../common/bos}
 
 % ------------------------------------------------------------------
@@ -82,10 +82,13 @@
 % fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ export FSP_mirror=http://fsp-obs.pdx.intel.com:82
-[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.16:/Factory/SLE_12_Intel/ForestPeak:15.16:Factory.repo
+[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
 [master]$ zypper -n --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_fsp_run
+
+% Dev testing for Factory
+%[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.16:/Factory/SLE_12_Intel/ForestPeak:15.16:Factory.repo
 
 In addition to the \FSP{} package repository, the {\em master} host also
 requires access to the standard distro repositories in order to resolve
@@ -144,6 +147,7 @@ The following command can be used to add this user to the {\em
 \end{lstlisting}
 % end_fsp_run
 
+\newpage
 To facilitate running test jobs later on under the auspices of a resource
 manager, we also add a dedicated ``test'' user as follows:
 
@@ -154,7 +158,6 @@ manager, we also add a dedicated ``test'' user as follows:
 \end{lstlisting}
 % end_fsp_run
 
-\newpage
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
 The following command adds OFED support using distro-provided drivers to the
@@ -195,13 +198,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 \end{lstlisting}
 % end_fsp_run
 
-\subsection{Add Intel Cluster Checker ({\em optional})} \label{sec:add_clck}
-
-The \Intel{} Cluster Checker provides a suite of diagnostics that can be used to
-aid in isolating hardware and software problems on an installed
-cluster. Although not required, this package can be optionally added using the
-command below. Note that a valid license will also need to be installed
-separately in order to use this software.
+% Intel Cluster Checker section
+\input{../../common/cluster_checker}
 
 % begin_fsp_run
 % fsp_validation_comment Add CLCK
@@ -329,7 +327,7 @@ be updated with a copy of the configuration as follows:
 \end{lstlisting}
 % end_fsp_run
 
-\newpage
+%\newpage
 % begin_fsp_run
 % fsp_validation_comment Add FSP components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
@@ -419,7 +417,7 @@ local cluster environment. These customizations include:
 \item Add \Lustre{} client
 \end{itemize*}
 
-\noindent Details on the steps required for each of these customizations is
+\noindent Details on the steps required for each of these customizations are
 discussed further in the following sections.
 
 \paragraph{Increase locked memory limits}
@@ -559,15 +557,17 @@ for the new credential should also be placed in the final
 % fsp_validation_comment Configure ORCM aggregator and DB
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/localhost/" /etc/orcm-site.xml
+[master]$ perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
 [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
+
+# Update BMC credentials to match local values
+
+[master]$ perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+[master]$ perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
 
 # Initialize postgres DB driver
 [master]$ odbcinst -i -d -f /etc/psql_odbc_driver.ini
 [master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
-
-# Use DB template for orcm runtime config
-[master]$ cp /etc/sysconfig/orcmd.db /etc/sysconfig/orcmd
 
 # Initialize postgres
 [master]$ service postgresql start   
@@ -584,7 +584,8 @@ for the new credential should also be placed in the final
 [master]$ sudo -u postgres createdb -O orcmuser orcmdb
 [master]$ sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 
-# Start ORCM on master host
+# Start ORCM on master host (requires both orcmsched and orcmd)
+[master]$ systemctl start orcmsched
 [master]$ systemctl start orcmd
 \end{lstlisting}
 % end_fsp_run
@@ -599,7 +600,7 @@ be added to the compute image as follows:
 [master]$ zypper --root=$CHROOT -n install -t pattern fsp-orcm-client
 
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/etc/orcm-site.xml
+[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/opt/open-rcm/etc/orcm-site.xml
 
 # Enable orcmd client daemon on boot
 [master]$ chroot $CHROOT systemctl enable orcmd
@@ -616,7 +617,7 @@ import local file-based credentials, issue the following:
 % begin_fsp_run
 % fsp_validation_comment Import credentials
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ wwsh file import /etc/passwd                                                                                                       
+[master]$ wwsh file import /etc/passwd                                                          
 [master]$ wwsh file import /etc/group
 [master]$ wwsh file import /etc/shadow 
 \end{lstlisting}
@@ -899,6 +900,7 @@ open-source and Intel licensed software. These can be installed as follows:
 [master]$ zypper -n install intel-vtune-fsp
 [master]$ zypper -n install intel-advisor-fsp
 [master]$ zypper -n install intel-inspector-fsp
+[master]$ zypper -n install -t pattern fsp-tau
 \end{lstlisting}
 % end_fsp_run
 

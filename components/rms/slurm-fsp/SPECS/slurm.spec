@@ -254,7 +254,7 @@ scheduling and accounting modules
 
 %package -n %{pname}-perlapi%{PROJ_DELIM}
 Summary: Perl API to Slurm
-Group: Development/System
+Group: fsp/rms
 Requires: %{pname}%{PROJ_DELIM}
 %description -n %{pname}-perlapi%{PROJ_DELIM}
 Perl API package for Slurm.  This package includes the perl API to provide a
@@ -262,7 +262,7 @@ helpful interface to Slurm through Perl
 
 %package -n %{pname}-devel%{PROJ_DELIM}
 Summary: Development package for Slurm
-Group: Development/System
+Group: fsp/rms
 Requires: %{pname}%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires:  pkg-config
@@ -277,7 +277,7 @@ and static libraries for the Slurm API
 %if %{slurm_with auth_none}
 %package -n %{pname}-auth-none%{PROJ_DELIM}
 Summary: Slurm auth NULL implementation (no authentication)
-Group: System Environment/Base
+Group: fsp/rms
 Requires: %{pname}%{PROJ_DELIM}
 %description -n %{pname}-auth-none%{PROJ_DELIM}
 Slurm NULL authentication module
@@ -286,7 +286,7 @@ Slurm NULL authentication module
 %if %{slurm_with authd}
 %package -n %{pname}-auth-authd%{PROJ_DELIM}
 Summary: Slurm auth implementation using Brent Chun's authd
-Group: System Environment/Base
+Group: fsp/rms
 Requires: %{pname}%{PROJ_DELIM} authd
 %description -n %{pname}-auth-authd%{PROJ_DELIM}
 Slurm authentication module for Brent Chun's authd. Used to
@@ -298,7 +298,7 @@ authenticate user originating an RPC
 %if %{slurm_with munge}
 %package -n %{pname}-munge%{PROJ_DELIM}
 Summary: Slurm authentication and crypto implementation using Munge
-Group: System Environment/Base
+Group: fsp/rms
 Requires: %{pname}%{PROJ_DELIM} munge%{PROJ_DELIM}
 BuildRequires: munge-devel%{PROJ_DELIM} munge-libs%{PROJ_DELIM}
 Obsoletes: slurm-auth-munge
@@ -310,7 +310,7 @@ authenticate user originating an RPC, digitally sign and/or encrypt messages
 %if %{slurm_with bluegene}
 %package bluegene
 Summary: Slurm interfaces to IBM Blue Gene system
-Group: System Environment/Base
+Group: fsp/rms
 Requires: slurm
 %description bluegene
 Slurm plugin interfaces to IBM Blue Gene system
@@ -318,7 +318,7 @@ Slurm plugin interfaces to IBM Blue Gene system
 
 %package -n %{pname}-slurmdbd%{PROJ_DELIM}
 Summary: Slurm database daemon
-Group: System Environment/Base
+Group: fsp/rms
 Requires: slurm-plugins%{PROJ_DELIM} slurm-sql%{PROJ_DELIM}
 %description -n %{pname}-slurmdbd%{PROJ_DELIM}
 Slurm database daemon. Used to accept and process database RPCs and upload
@@ -326,13 +326,13 @@ database changes to slurmctld daemons on each cluster
 
 %package -n %{pname}-sql%{PROJ_DELIM}
 Summary: Slurm SQL support
-Group: System Environment/Base
+Group: fsp/rms
 %description -n %{pname}-sql%{PROJ_DELIM}
 Slurm SQL support. Contains interfaces to MySQL.
 
 %package -n %{pname}-plugins%{PROJ_DELIM}
 Summary: Slurm plugins (loadable shared objects)
-Group: System Environment/Base
+Group: fsp/rms
 %description -n %{pname}-plugins%{PROJ_DELIM}
 Slurm plugins (loadable shared objects) supporting a wide variety of
 architectures and behaviors. These basically provide the building blocks
@@ -341,14 +341,14 @@ are in other packages
 
 %package -n %{pname}-torque%{PROJ_DELIM}
 Summary: Torque/PBS wrappers for transitition from Torque/PBS to Slurm
-Group: Development/System
+Group: fsp/rms
 Requires: slurm-perlapi
 %description -n %{pname}-torque%{PROJ_DELIM}
 Torque wrapper scripts used for helping migrate from Torque/PBS to Slurm
 
 %package -n %{pname}-sjobexit%{PROJ_DELIM}
 Summary: Slurm job exit code management tools
-Group: Development/System
+Group: fsp/rms
 Requires: slurm-perlapi%{PROJ_DELIM}
 %description -n %{pname}-sjobexit%{PROJ_DELIM}
 Slurm job exit code management tools. Enables users to alter job exit code
@@ -356,7 +356,7 @@ information for completed jobs
 
 %package -n %{pname}-slurmdb-direct%{PROJ_DELIM}
 Summary: Wrappers to write directly to the slurmdb
-Group: Development/System
+Group: fsp/rms
 Requires: slurm-perlapi%{PROJ_DELIM}
 %description -n %{pname}-slurmdb-direct%{PROJ_DELIM}
 Wrappers to write directly to the slurmdb
@@ -364,7 +364,7 @@ Wrappers to write directly to the slurmdb
 %if %{slurm_with aix}
 %package aix
 Summary: Slurm interfaces to IBM AIX
-Group: System Environment/Base
+Group: fsp/rms
 Requires: slurm
 BuildRequires: proctrack >= 3
 Obsoletes: slurm-aix-federation
@@ -375,7 +375,7 @@ Slurm interfaces for IBM AIX systems
 %if %{slurm_with percs}
 %package percs
 Summary: Slurm plugins to run on an IBM PERCS system
-Group: System Environment/Base
+Group: fsp/rms
 Requires: slurm nrt
 BuildRequires: nrt
 %description percs
@@ -386,7 +386,7 @@ Slurm plugins to run on an IBM PERCS system, POE interface and NRT switch plugin
 %if %{slurm_with sgijob}
 %package proctrack-sgi-job
 Summary: Slurm process tracking plugin for SGI job containers
-Group: System Environment/Base
+Group: fsp/rms
 Requires: slurm
 BuildRequires: job
 %description proctrack-sgi-job
@@ -397,7 +397,7 @@ Slurm process tracking plugin for SGI job containers
 %if %{slurm_with lua}
 %package -n %{pname}-lua%{PROJ_DELIM}
 Summary: Slurm lua bindings
-Group: System Environment/Base
+Group: fsp/rms
 Requires: slurm%{PROJ_DELIM} lua
 BuildRequires: lua-devel
 %description -n %{pname}-lua%{PROJ_DELIM}
@@ -407,7 +407,7 @@ Includes the Slurm proctrack/lua and job_submit/lua plugin
 
 %package -n %{pname}-sjstat%{PROJ_DELIM}
 Summary: Perl tool to print Slurm job state information
-Group: Development/System
+Group: fsp/rms
 Requires: slurm%{PROJ_DELIM}
 %description -n %{pname}-sjstat%{PROJ_DELIM}
 Perl tool to print Slurm job state information. The output is designed to give
@@ -419,7 +419,7 @@ utilites will provide more information and greater depth of understanding
 %if %{slurm_with pam}
 %package -n %{pname}-pam_slurm%{PROJ_DELIM}
 Summary: PAM module for restricting access to compute nodes via Slurm
-Group: System Environment/Base
+Group: fsp/rms
 Requires: slurm%{PROJ_DELIM} slurm-devel%{PROJ_DELIM}
 BuildRequires: pam-devel
 Obsoletes: pam_slurm
@@ -433,7 +433,7 @@ according to the Slurm
 %if %{slurm_with blcr}
 %package -n %{pname}-blcr%{PROJ_DELIM}
 Summary: Allows Slurm to use Berkeley Lab Checkpoint/Restart
-Group: System Environment/Base
+Group: fsp/rms
 Requires: slurm%{PROJ_DELIM}
 %description -n %{pname}-blcr%{PROJ_DELIM}
 Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
@@ -831,7 +831,7 @@ rm -rf $RPM_BUILD_ROOT
 
 # 11/13/14 karl.w.schulz@intel.com - include systemd files 
 
-%if 0%{?suse_version} >= 1200
+%if 0%{?suse_version} >= 1200 || 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
 
 %config /usr/lib/systemd/system/slurmctld.service
 %config /usr/lib/systemd/system/slurmd.service

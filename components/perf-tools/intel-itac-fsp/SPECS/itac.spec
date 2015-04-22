@@ -3,7 +3,7 @@
 
 Summary:   Intel(R) Trace Analyzer and Collector
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   9.0.3.049
+Version:   9.0.2.045
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   FSP_macros
 Release:   1
@@ -15,6 +15,10 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 #AutoReqProv: no
+
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+Requires: libpng12
+%endif
 
 %include %{_sourcedir}/FSP_macros
 

@@ -1,12 +1,12 @@
 %include %{_sourcedir}/FSP_macros
 
 Name:           docs-fsp
-Version:        0.1
-Release:        1.2
+Version:        15.16
+Release:        1
 Summary:        Forest Peak documentation
 License:        BSD-3-Clause
 Group:          fsp/admin
-Source0:        recipes.tar.gz
+Source0:        docs-fsp-%{version}.tar.gz
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
@@ -17,6 +17,7 @@ BuildRequires:  texlive-draftwatermark
 BuildRequires:  latexmk
 Requires:       make
 
+%define debug_package %{nil}
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
@@ -24,14 +25,14 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 This guide presents a simple cluster installation procedure using components from the Forest Peak (FSP) software stack.
 
 %prep
-%setup -qn recipes
+%setup 
 
 %build
 %if 0%{?suse_version}
-%define source_path install/sles12/vanilla
+%define source_path sles12/vanilla
 %else
 %if 0%{?rhel_version} || 0%{?centos_version}
-%define source_path install/centos7/vanilla
+%define source_path centos7/vanilla
 %endif
 %endif
 cd %{source_path}
@@ -39,14 +40,15 @@ make
 
 %install
 
-mv %{source_path}/steps.pdf %{source_path}/Install_guide.pdf
-%{__mkdir} -p %{buildroot}%{FSP_HOME}/docs
-install -m 0644 -p %{source_path}/Install_guide.pdf %{buildroot}/%{FSP_HOME}/docs/Install_guide.pdf 
-
+%{__mkdir} -p %{buildroot}%{FSP_PUB}/docs
+install -m 0644 -p ChangeLog %{buildroot}/%{FSP_PUB}/docs/ChangeLog
+install -m 0644 -p Release_Notes.txt %{buildroot}/%{FSP_PUB}/docs/Release_Notes.txt
+install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/docs/Install_guide.pdf 
 
 
 %files
 %defattr(-,root,root)
-%{FSP_HOME}
+%dir %{FSP_HOME}
+%{FSP_PUB}
 
 %changelog
