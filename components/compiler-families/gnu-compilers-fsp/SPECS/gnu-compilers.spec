@@ -3,17 +3,24 @@
 %define pname gnu-compilers
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
+# Define subcomponent versions required for build
+
+%define gmp_version 6.0.0
+%define mpc_version 1.0.3
+%define mpfr_version 3.1.2
+
+
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
-Version:   4.8.3
+Version:   4.9.2
 Release:   1
 License:   GPL-3.0+
 Group:     fsp/compiler-families
 URL:       http://gcc.gnu.org/
 Source0:   gcc-%{version}.tar.bz2
-Source1:   gmp-6.0.0a.tar.bz2
-Source2:   mpc-1.0.2.tar.gz
-Source3:   mpfr-3.1.2.tar.bz2
+Source1:   gmp-%{gmp_version}a.tar.bz2
+Source2:   mpc-%{mpc_version}.tar.gz
+Source3:   mpfr-%{mpfr_version}.tar.bz2
 Source4:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
@@ -34,6 +41,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  fdupes
 %endif
 
+
 %define install_path %{FSP_COMPILERS}/gcc/%{version}
 
 %description
@@ -47,9 +55,9 @@ frontend.
 %setup -n gcc-%{version} -T -D -a 2
 %setup -n gcc-%{version} -T -D -a 3
 
-ln -s gmp-6.0.0 gmp
-ln -s mpc-1.0.2 mpc
-ln -s mpfr-3.1.2 mpfr
+ln -s gmp-%{gmp_version} gmp
+ln -s mpc-%{mpc_version} mpc
+ln -s mpfr-%{mpfr_version} mpfr
 
 %build
 

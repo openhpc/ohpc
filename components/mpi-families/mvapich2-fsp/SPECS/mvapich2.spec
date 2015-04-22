@@ -36,7 +36,7 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   2.1a
+Version:   2.1rc1
 Release:   1
 License:   BSD
 Group:     fsp/mpi-families
@@ -124,7 +124,7 @@ set     version			    %{version}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/man
-prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib/shared
+prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/%{compiler_family}-%{pname}
 prepend-path    MPI_DIR             %{install_path}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig

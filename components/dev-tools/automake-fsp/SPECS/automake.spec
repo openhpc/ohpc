@@ -5,7 +5,7 @@
 
 Summary:   A GNU tool for automatically creating Makefiles
 Name:      %{pname}%{PROJ_DELIM}
-Version:   1.14.1
+Version:   1.15
 Release:   1
 License:   GPLv2+ and GFDL
 Group:     fsp/dev-tools
@@ -19,6 +19,10 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
 BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
+
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+Requires: perl-Thread-Queue
+%endif
 
 %description
 Automake is a tool for automatically generating `Makefile.in'

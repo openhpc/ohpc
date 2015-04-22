@@ -49,6 +49,7 @@ BuildRequires: chrpath
 BuildRequires: kernel-headers >= 2.6.32
 #Right now libpfm does not know anything about s390 and will fail
 ExcludeArch: s390 s390x
+%global debug_package %{nil} 
 
 # Default library install path
 %define install_path %{FSP_LIBS}/%{pname}/%version
@@ -84,12 +85,16 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 rm -rf $RPM_BUILD_ROOT
 cd src
-sudo make DESTDIR=$RPM_BUILD_ROOT install
-sudo chown -R abuild $RPM_BUILD_ROOT
+#sudo make DESTDIR=$RPM_BUILD_ROOT install
+#sudo chown -R abuild $RPM_BUILD_ROOT
 
-%if !0%{?suse_version}
-chrpath --delete $RPM_BUILD_ROOT%{_libdir}/*.so*
-%endif
+make DESTDIR=$RPM_BUILD_ROOT install
+
+#chown -R abuild $RPM_BUILD_ROOT
+
+# if !0%{?suse_version}
+# chrpath --delete $RPM_BUILD_ROOT%{_libdir}/*.so*
+# endif
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}

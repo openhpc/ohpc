@@ -7,7 +7,7 @@
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 2.9.4
+Version: 2.9.5
 Release: 1%{?dist}
 Summary:   Easy-to-use IPMI server management utilities
 License:   BSD
@@ -83,9 +83,9 @@ useful for building custom IPMI applications.
 autoconf
 %endif
 %if 0%{?req_systemd}
-%configure --enable-systemd
+%configure --enable-systemd --enable-libsensors
 %else
-%configure
+%configure --enable-libsensors
 %endif
 make 
 

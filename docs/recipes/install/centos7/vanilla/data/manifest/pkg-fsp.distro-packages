@@ -1,0 +1,4 @@
+ipmiutil-fsp 2.9.5 http://ipmiutil.sourceforge.net fsp/distro-packages Easy-to-use IPMI server management utilities
+lua-bit-fsp 1.0.2 http://bitop.luajit.org fsp/distro-packages Module for Lua which adds bitwise operations on numbers
+lua-filesystem-fsp 1.6.3 http://keplerproject.github.com/luafilesystem fsp/distro-packages Lua library to Access Directories and Files
+psqlODBC-fsp 09.03.0400 http://pgfoundry.org/projects/psqlodbc fsp/distro-packages ODBC Driver for PostgreSQL

@@ -1,0 +1,21 @@
+--- luafilesystem-1.6.3/Makefile.orig	2015-02-27 18:24:13.000000000 -0800
++++ luafilesystem-1.6.2/Makefile	2015-02-27 18:40:33.000000000 -0800
+@@ -3,6 +3,7 @@
+ T= lfs
+ 
+ CONFIG= ./config
++DESTDIR=
+ 
+ include $(CONFIG)
+ 
+@@ -18,8 +19,7 @@
+ 	LUA_CPATH=./src/?.so lua tests/test.lua
+ 
+ install:
+-	mkdir -p $(LUA_LIBDIR)
+-	cp src/lfs.so $(LUA_LIBDIR)
+-
++	mkdir -p $(DESTDIR)$(LUA_LIBDIR)
++	install -m0755 src/lfs.so $(DESTDIR)$(LUA_LIBDIR)/
+ clean:
+ 	rm -f src/lfs.so $(OBJS)

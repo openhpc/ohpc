@@ -1,0 +1,39 @@
+#!/bin/bash
+
+logfile=pattern-fsp
+rm -f ${logfile}.*
+
+echo ++++ search and log FSP patterns
+
+if [ -e /etc/redhat-release ];then
+    for pattern in `yum grouplist | grep -e "fsp-"`; do
+        echo "parsing $pattern"
+        info=`yum groupinfo $pattern | grep Description: | sed s/Description://`
+
+        echo $pattern $info >> ${logfile}.all
+    done
+
+elif [ -e /etc/SuSE-release ];then
+
+    for pattern in `zypper search -t pattern fsp-* | grep -e fsp- | cut -d '|' -f 2`; do
+    
+        echo "parsing $pattern"
+        info=`zypper info -t pattern $pattern | grep -A1 ^Description: | tail -1`
+    
+        echo $pattern $info >> ${logfile}.all
+    done
+
+else
+    echo "ERROR: unknown distro type"
+    exit 1
+fi
+
+#   | fsp-autotools    | fsp-autotools    | pattern
+#   | fsp-base         | fsp-base         | pattern
+#   | fsp-boost        | fsp-boost        | pattern
+#   | fsp-fftw         | fsp-fftw         | pattern
+#   | fsp-gsl          | fsp-gsl          | pattern
+#   | fsp-hdf5         | fsp-hdf5         | pattern
+#   | fsp-imb          | fsp-imb          | pattern
+#   | fsp-metis        | fsp-metis        | pattern
+#   | fsp-netcdf       | fsp-netcdf       | pattern

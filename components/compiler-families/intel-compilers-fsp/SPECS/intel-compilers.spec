@@ -5,16 +5,15 @@
 
 Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
-Version:   15.0.1.133
+Version:   15.2.164
 Release:   1
-License:   Intel
+License:   Intel(R)
 URL:       http://www.intel.com/software/products
 Group:     fsp/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-2015.1.133.tar.gz
+Source0:   intel-compilers-fsp-20%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-#AutoReqProv: no
 AutoReq: no
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
@@ -26,10 +25,10 @@ requires: gcc-c++
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
-%define composer_release composer_xe_2015.1.133
+%define composer_release composer_xe_20%{version}
 %define package_target %{FSP_COMPILERS}/intel/%{composer_release}
 
-%define package_version {%version}
+%define package_version 15.0.2.164
 
 %description
 
@@ -84,10 +83,20 @@ prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/intel
 
 prepend-path    MANPATH             %{package_target}/debugger/gdb/intel64/share/man/:%{package_target}/debugger/gdb/intel64_mic/share/man
 prepend-path    PATH                %{package_target}/debugger/gdb/intel64_mic/bin
+prepend-path 	LD_LIBRARY_PATH     %{package_target}/debugger/ipt/intel64/lib
 setenv          GDBSERVER_MIC       %{package_target}/debugger/gdb/target/mic/bin/gdbserver
 setenv          GDB_CROSS           %{package_target}/debugger/gdb/intel64_mic/bin/gdb-mic
 setenv          INTEL_PYTHONHOME    %{package_target}/debugger/python/intel64
 setenv          MPM_LAUNCHER        %{package_target}/debugger/mpm/bin/start_mpm.sh
+
+
+# TBB related
+
+setenv          TBBROOT             %{package_target}/tbb
+setenv          TBB_INC             %{package_target}/tbb/include
+setenv          TBB_LIB             %{package_target}/tbb/lib/intel64/gcc4.4
+prepend-path	MIC_LD_LIBRARY_PATH %{package_target}/tbb/lib/mic
+prepend-path 	LD_LIBRARY_PATH     %{package_target}/tbb/lib/intel64/gcc4.4
 
 family "compiler"
 EOF

@@ -15,7 +15,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.8
+Version:   5.8.6
 Release:   1
 License:   MIT
 Group:     fsp/admin
@@ -34,6 +34,7 @@ BuildRequires: lua-bit%{PROJ_DELIM}
 BuildRequires: lua-filesystem%{PROJ_DELIM}
 BuildRequires: lua-posix%{PROJ_DELIM}
 BuildRequires: rsync
+BuildRequires: tcl
 
 # ks: disabling AutoReq to deal with /usr/bin/lua not being owned by an rpm in SLES11
 %if 0%{?suse_verion} <= 1220

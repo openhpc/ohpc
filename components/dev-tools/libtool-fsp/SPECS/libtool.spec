@@ -5,7 +5,7 @@
 
 Summary:   The GNU Portable Library Tool
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.4.3
+Version:   2.4.6
 Release:   1
 License:   GPLv2+ and LGPLv2+ and GFDL
 Group:     fsp/dev-tools

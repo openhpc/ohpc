@@ -16,6 +16,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+# hack to install MKL for the moment
+BuildRequires: intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -57,6 +59,8 @@ Provides:       python-numeric = %{version}
 Obsoletes:      python-numeric < %{version}
 %endif
 
+%define debug_package %{nil}
+
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
@@ -76,9 +80,13 @@ basic linear algebra and random number generation.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 
-%if %{compiler_family} == intel
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
 
 cat > site.cfg << EOF
 [mkl]
@@ -87,12 +95,17 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
-%endif
 
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 
 %if %{compiler_family} == intel
 LDSHARED="icc -shared" \

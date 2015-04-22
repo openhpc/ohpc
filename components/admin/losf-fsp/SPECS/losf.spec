@@ -5,7 +5,7 @@
 
 Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.50.0
+Version:   0.51.2
 Release:   1
 License:   GPL-2
 Group:     fsp/admin
@@ -20,6 +20,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %else
 %{!?prefix: %define prefix /opt}
 %endif
+
 
 %define installPath %{prefix}/%{pname}
 

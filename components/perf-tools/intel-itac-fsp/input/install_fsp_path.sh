@@ -2,7 +2,7 @@
 
 # FSP: install from release rpms into standard FSP path
 
-version=9.0.2.045
+version=9.0.3.049
 
 INSTALL=1
 

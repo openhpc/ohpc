@@ -32,6 +32,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+# hack to install MKL for the moment
+BuildRequires: intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -63,7 +65,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        0.14.0
+Version:        0.15.1
 Release:        1
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
@@ -89,8 +91,10 @@ BuildRequires:  swig
 Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
+%define debug_package %{nil}
+
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}%{pname}/%version
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 Scipy is open-source software for mathematics, science, and
@@ -107,10 +111,14 @@ leading scientists and engineers.
 %setup -q -n %{pname}-%{version}
 find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
-%if %{compiler_family} == intel
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
 
 cat > site.cfg << EOF
 [mkl]
@@ -119,7 +127,6 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
-%endif
 
 
 %build
@@ -130,6 +137,10 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
 
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
 
 module load numpy
 CFLAGS="%{optflags} -fno-strict-aliasing" \
@@ -151,6 +162,11 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
 
 module load numpy
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
@@ -192,7 +208,17 @@ prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-package
 setenv          %{PNAME}_DIR        %{install_path}
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    module load numpy
+    if {  ![is-loaded fftw]  } {
+        module load fftw
+    }
+    if {  ![is-loaded numpy]  } {
+        module load numpy
+    }
+    if { [is-loaded gnu] } {
+        if { ![is-loaded mkl]  } {
+          module load mkl
+        }
+    }
 }
 
 if [ module-info mode remove ] {
