@@ -228,8 +228,20 @@ namespace mkl {
             MKL_INT lda = leading_dimension(a(),orientation_category());
             MKL_INT ldb = leading_dimension(b(),orientation_category());
             MKL_INT ldc = leading_dimension(c,orientation_category());
-            value_type alpha = OneElement(value_type());  // boost/numeric/ublas/detail/concepts.hpp
-            value_type beta = ZeroElement(value_type());  // boost/numeric/ublas/detail/concepts.hpp
+			
+	/*boost 1.57 change the function OneElement definition from 1.0 to 0.0 in boost/numeric/ublas/detail/concepts.hpp 
+	template<class T>
+    T
+    OneElement (T) {
+        return T(0.0);
+    }
+		They explain this in boost/numeric/ublas/detail/concepts.hpp
+		Replaced the ZeroElement and OneElement functions with the templated versions
+		because the former where giving warnings with clang.  Anyway, It seems a bug or something else. so change 
+	//value_type alpha = OneElement(value_type());  // boost/numeric/ublas/detail/concepts.hpp  to 
+	*/    
+            value_type alpha = 1.0;  
+			value_type beta = ZeroElement(value_type());  // boost/numeric/ublas/detail/concepts.hpp
             CBLAS_ORDER layout = storage_layout(orientation_category());
             T *pa = pointer(a());
             T *pb = pointer(b());
