@@ -35,7 +35,7 @@ BuildRequires:  automake
 # BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  libart_lgpl-devel
-BuildRequires:  libconfuse-devel
+BuildRequires:  libconfuse0-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libtool
 BuildRequires:  make
@@ -52,7 +52,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
 BuildRequires: fdupes
-BuildRequires:  libapr1-devel
+BuildRequires: libapr1-devel
 %endif
 
 # different package name with redhat
@@ -129,10 +129,17 @@ gmetric/python modules via DSO at daemon start time instead of via gmetric.
 Summary:        Ganglia static libraries and header files
 Group:          Development/Libraries/C and C++
 Requires:       libganglia-%{lib_version} = %{version}
-Requires:       libapr1-devel
-Requires:       libconfuse-devel
+# Requires:       libapr1-devel
+Requires:       libconfuse0-devel
 Requires:       libganglia-%{lib_version}
 Requires:       libexpat-devel
+# different package name with redhat
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires: libapr1-devel
+%endif
+%if 0%{?rhel_version} || 0%{?centos_version}
+BuildRequires:  apr-devel
+%endif
 
 
 %description devel
