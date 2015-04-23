@@ -22,17 +22,17 @@ Summary:        A scalable distributed monitoring system for high-performance co
 License:        BSD-3-Clause
 Group:          System/Monitoring
 Name:           ganglia
-Version:        3.6.0
+Version:        3.7.1
 Release:        0
-%define lib_version 3_6_0-0
+%define lib_version 3_7_1-0
 Url:            http://ganglia.info/
 # The Release macro value is set in configure.in, please update it there.
 Source:         %{name}-%{version}.tar.gz
-# PATCH-FIX-OPENSUSE ganglia-3.5.0-init.patch
-Patch0:         ganglia-3.5.0-init.patch
+# # PATCH-FIX-OPENSUSE ganglia-3.5.0-init.patch
+# Patch0:         ganglia-3.5.0-init.patch
 BuildRequires:  autoconf
 BuildRequires:  automake
-BuildRequires:  fdupes
+# BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  libart_lgpl-devel
 BuildRequires:  libconfuse-devel
@@ -43,11 +43,22 @@ BuildRequires:  pcre-devel
 BuildRequires:  pkgconfig
 BuildRequires:  python-devel
 BuildRequires:  freetype2-devel
-BuildRequires:  libapr1-devel
+# BuildRequires:  libapr1-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  rrdtool-devel
 PreReq:         %insserv_prereq  %fillup_prereq
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+
+%if 0%{?sles_version} || 0%{?suse_version}
+# define fdupes, clean up rpmlint errors
+BuildRequires: fdupes
+BuildRequires:  libapr1-devel
+%endif
+
+# different package name with redhat
+%if 0%{?rhel_version} || 0%{?centos_version}
+BuildRequires:  apr-devel
+%endif
 
 %define gmond_conf %{_builddir}/%{?buildsubdir}/gmond/gmond.conf
 %define generate_gmond_conf %(test -e %gmond_conf && echo 0 || echo 1)
@@ -195,7 +206,9 @@ mv %{buildroot}%{_sysconfdir}/%{name}/conf.d/multicpu.conf %{buildroot}%{_syscon
 make DESTDIR=%{buildroot} install
 make -C gmond gmond.conf.5
 
+%if 0%{?sles_version} || 0%{?suse_version}
 %fdupes %{buildroot}
+%endif
 
 %post   -n libganglia-%{lib_version} -p /sbin/ldconfig
 
