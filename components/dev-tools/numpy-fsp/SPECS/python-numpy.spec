@@ -34,7 +34,7 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.9.1
+Version:        1.9.2
 Release:        1
 Url:            http://sourceforge.net/projects/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
