@@ -44,7 +44,7 @@
 -CFLAGS          = -fast -Mipa=fast,safe \
 +CFLAGS          =  $(RPM_OPT_FLAGS) -fPIC -fschedule-insns2 \
 +                -funroll-loops -fstrict-aliasing -frerun-loop-opt \
-+                += -O3 -finline-limit=720 --param max-inline-insns-auto=160
++                -O3 -finline-limit=720 --param max-inline-insns-auto=160
  		-DDEBUGlevel=0 -DPRNTlevel=1 -DPROFlevel=0 \
 -#		-D_LONGINT
 +		-D_LONGINT
