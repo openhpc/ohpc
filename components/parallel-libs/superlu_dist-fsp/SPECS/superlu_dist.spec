@@ -35,6 +35,7 @@ BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
 # hack to install MKL for the moment
 BuildRequires: intel-compilers%{PROJ_DELIM}
+Requires:      intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -98,6 +99,8 @@ Patch5:         superlu_dist-3.2-example-no-return-in-non-void.patch
 #BuildRequires:  mvapich2-devel
 #BuildRequires:  ptscotch-mvapich2-devel
 #%endif
+BuildRequires: metis-%{compiler_family}%{PROJ_DELIM}
+Requires: metis-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %include %{_sourcedir}/FSP_macros
