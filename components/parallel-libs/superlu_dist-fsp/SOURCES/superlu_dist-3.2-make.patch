@@ -1,0 +1,67 @@
+--- superlu_dist-3.2/make.inc	2012-10-24 12:46:19.000000000 -0700
++++ superlu_dist-3.2.patch/make.inc	2015-04-23 15:14:48.317200600 -0700
+@@ -17,26 +17,27 @@
+ #
+ #  The machine (platform) identifier to append to the library names
+ #
+-PLAT		= _xe6
++PLAT		= 
+ 
+ #
+ #  The name of the libraries to be created/linked to
+ #
+ DSuperLUroot 	= ${HOME}/Release_Codes/SuperLU_DIST-branch
+-DSUPERLULIB   	= $(DSuperLUroot)/lib/libsuperlu_dist_3.0.a
++DSUPERLULIB    = $(DSuperLUroot)/lib/libsuperlu_dist_3.2.a
++DSUPERLUSLIB       = -L$(DSuperLUroot)/lib -lsuperlu_dist
+ #
+ BLASDEF	     	= -DUSE_VENDOR_BLAS
+-BLASLIB	        =
++BLASLIB	        = -L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_core -lmkl_intel_thread -lpthread -lm
+ #
+ ## parmetis 4.x.x, 32-bit integer
+-METISLIB    	= -L${HOME}/Hopper/lib/parmetis-4.0.2/build/Linux-x86_64/libmetis -lmetis
+-PARMETISLIB  	= -L${HOME}/Hopper/lib/parmetis-4.0.2/build/Linux-x86_64/libparmetis -lparmetis
++METISLIB    	= -L${METIS_LIB} -lmetis
++#PARMETISLIB  	= -L${HOME}/Hopper/lib/parmetis-4.0.2/build/Linux-x86_64/libparmetis -lparmetis
+ ## parmetis 4.x.x, 64-bit integer
+ # METISLIB    	= -L${HOME}/Hopper/lib/parmetis-4.0.2-64bit/build/Linux-x86_64/libmetis -lmetis
+ # PARMETISLIB  	= -L${HOME}/Hopper/lib/parmetis-4.0.2-64bit/build/Linux-x86_64/libparmetis -lparmetis
+ 
+ # Define the required Fortran libraries, if you use C compiler to link
+-FLIBS	 	= -lpgf90 -lpgf90_rpm1
++FLIBS	 	= 
+ 
+ # Define all the libraries
+ LIBS	     	= $(DSUPERLULIB) $(BLASLIB) $(PARMETISLIB) $(METISLIB) $(FLIBS)
+@@ -51,21 +52,23 @@
+ 
+ ############################################################################
+ # C compiler setup
+-CC           	= cc
++CC           	= mpicc
+ # CFLAGS should be set to be the C flags that include optimization
+-CFLAGS          = -fast -Mipa=fast,safe \
++CFLAGS          =  $(RPM_OPT_FLAGS) -fPIC -fschedule-insns2 \
++                -funroll-loops -fstrict-aliasing -frerun-loop-opt \
++                -O3 -finline-limit=720 --param max-inline-insns-auto=160
+ 		-DDEBUGlevel=0 -DPRNTlevel=1 -DPROFlevel=0 \
+-#		-D_LONGINT
++		-D_LONGINT
+ #
+ # NOOPTS should be set to be the C flags that turn off any optimization
+-NOOPTS		= -O0
++NOOPTS		= $(RPM_OPT_FLAGS) -Os -fPIC
+ ############################################################################
+ # FORTRAN compiler setup
+-FORTRAN         = ftn
+-F90FLAGS	= -fast -Mipa=fast,safe
++FORTRAN         = mpif90
++F90FLAGS	= 
+ ############################################################################
+ LOADER	        = $(CC)
+-LOADOPTS	= -fast
++LOADOPTS	= 
+ ############################################################################
+ #  C preprocessor defs for compilation (-DNoChange, -DAdd_, or -DUpCase)
+ #

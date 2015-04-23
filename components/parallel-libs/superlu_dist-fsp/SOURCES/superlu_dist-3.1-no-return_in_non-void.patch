@@ -1,0 +1,142 @@
+diff -aruN SuperLU_DIST_3.1.orig/SRC/dutil.c SuperLU_DIST_3.1.no-return/SRC/dutil.c
+--- SuperLU_DIST_3.1.orig/SRC/dutil.c	2012-05-19 00:48:29.000000000 +0200
++++ SuperLU_DIST_3.1.no-return/SRC/dutil.c	2012-09-18 23:04:06.718662129 +0200
+@@ -185,6 +185,7 @@
+     if ( (dp = (double *) Astore->nzval) != NULL )
+         PrintDouble5("nzval", nnz_loc, dp);
+     printf("==== end CompRowLoc matrix\n");
++    return 0;
+ }
+ 
+ int file_dPrint_CompRowLoc_Matrix_dist(FILE *fp, SuperMatrix *A)
+@@ -205,6 +206,7 @@
+     if ( (dp = (double *) Astore->nzval) != NULL )
+         file_PrintDouble5(fp, "nzval", nnz_loc, dp);
+     fprintf(fp, "==== end CompRowLoc matrix\n");
++return 0;
+ }
+ 
+ void
+@@ -355,6 +357,7 @@
+ 	fprintf(fp, "%14e", x[i]);
+     }
+     fprintf(fp, "\n");
++return 0;
+ }
+ 
+ /*! \brief Print the blocks in the factored matrix L.
+@@ -461,6 +464,7 @@
+   file_PrintInt10(fp, "ptr_ind_torecv", procs+1, gsmv_comm->ptr_ind_torecv);
+   file_PrintInt10(fp, "SendCounts", procs, gsmv_comm->SendCounts);
+   file_PrintInt10(fp, "RecvCounts", procs, gsmv_comm->RecvCounts);
++return 0;
+ }
+ 
+ 
+diff -aruN SuperLU_DIST_3.1.orig/SRC/pddistribute.c SuperLU_DIST_3.1.no-return/SRC/pddistribute.c
+--- SuperLU_DIST_3.1.orig/SRC/pddistribute.c	2012-05-19 00:48:30.000000000 +0200
++++ SuperLU_DIST_3.1.no-return/SRC/pddistribute.c	2012-09-06 22:30:33.615933124 +0200
+@@ -303,7 +303,8 @@
+ #if ( DEBUGlevel>=1 )
+     CHECK_MALLOC(iam, "Exit dReDistribute_A()");
+ #endif
+- 
++
++return 0; 
+ } /* dReDistribute_A */
+ 
+ float
+diff -aruN SuperLU_DIST_3.1.orig/SRC/psymbfact.c SuperLU_DIST_3.1.no-return/SRC/psymbfact.c
+--- SuperLU_DIST_3.1.orig/SRC/psymbfact.c	2012-05-19 00:48:30.000000000 +0200
++++ SuperLU_DIST_3.1.no-return/SRC/psymbfact.c	2012-09-18 23:05:32.114659110 +0200
+@@ -2267,6 +2267,7 @@
+   
+   for (i = fstVtx_toUpd; i < nvtcs_toUpd; i++)
+     marker[i] = 0;
++return 0;
+ }
+ 
+ static int_t
+@@ -4005,6 +4006,7 @@
+   if (newelts_U) SUPERLU_FREE (newelts_U);
+   if (PS->szDnsSep < mem_dnsCS)
+     PS->szDnsSep = mem_dnsCS;
++return 0;
+ }
+ 
+ /*! \brief
+@@ -4534,6 +4536,7 @@
+   if (request_snd != NULL) SUPERLU_FREE (request_snd);
+   if (request_rcv != NULL) SUPERLU_FREE (request_rcv);
+   if (status != NULL) SUPERLU_FREE (status);
++  return 0;
+ }
+ 
+ static void
+diff -aruN SuperLU_DIST_3.1.orig/SRC/pzdistribute.c SuperLU_DIST_3.1.no-return/SRC/pzdistribute.c
+--- SuperLU_DIST_3.1.orig/SRC/pzdistribute.c	2012-05-19 00:48:30.000000000 +0200
++++ SuperLU_DIST_3.1.no-return/SRC/pzdistribute.c	2012-09-06 22:32:16.747929482 +0200
+@@ -302,7 +302,8 @@
+ #if ( DEBUGlevel>=1 )
+     CHECK_MALLOC(iam, "Exit zReDistribute_A()");
+ #endif
+- 
++
++return 0; 
+ } /* zReDistribute_A */
+ 
+ float
+diff -aruN SuperLU_DIST_3.1.orig/SRC/util.c SuperLU_DIST_3.1.no-return/SRC/util.c
+--- SuperLU_DIST_3.1.orig/SRC/util.c	2012-05-19 00:48:30.000000000 +0200
++++ SuperLU_DIST_3.1.no-return/SRC/util.c	2012-09-06 22:54:05.567883268 +0200
+@@ -493,6 +493,7 @@
+     gstrs_comm->ptr_to_ibuf = ptr_to_ibuf;
+     gstrs_comm->ptr_to_dbuf = ptr_to_ibuf + procs;
+ 
++return 0;
+ } /* PXGSTRS_INIT */
+ 
+ 
+@@ -766,6 +767,7 @@
+ 	fprintf(fp, "%6d", x[i]);
+     }
+     fprintf(fp, "\n");
++return 0;
+ }
+ 
+ int_t
+diff -aruN SuperLU_DIST_3.1.orig/SRC/zutil.c SuperLU_DIST_3.1.no-return/SRC/zutil.c
+--- SuperLU_DIST_3.1.orig/SRC/zutil.c	2012-05-19 00:48:29.000000000 +0200
++++ SuperLU_DIST_3.1.no-return/SRC/zutil.c	2012-09-06 22:57:07.099876858 +0200
+@@ -184,6 +184,7 @@
+     if ( (dp = (doublecomplex *) Astore->nzval) != NULL )
+         PrintDoublecomplex("nzval", nnz_loc, dp);
+     printf("==== end CompRowLoc matrix\n");
++return 0;
+ }
+ 
+ int file_zPrint_CompRowLoc_Matrix_dist(FILE *fp, SuperMatrix *A)
+@@ -204,6 +205,7 @@
+     if ( (dp = (doublecomplex *) Astore->nzval) != NULL )
+         file_PrintDoublecomplex(fp, "nzval", nnz_loc, dp);
+     fprintf(fp, "==== end CompRowLoc matrix\n");
++return 0;
+ }
+ 
+ void
+@@ -351,6 +353,7 @@
+     fprintf(fp, "%10s:\tReal\tImag\n", name);
+     for (i = 0; i < len; ++i)
+ 	fprintf(fp, "\t%d\t%.4f\t%.4f\n", i, x[i].r, x[i].i);
++return 0;
+ }
+ 
+ /*! \brief Print the blocks in the factored matrix L.
+@@ -457,6 +460,7 @@
+   file_PrintInt10(fp, "ptr_ind_torecv", procs+1, gsmv_comm->ptr_ind_torecv);
+   file_PrintInt10(fp, "SendCounts", procs, gsmv_comm->SendCounts);
+   file_PrintInt10(fp, "RecvCounts", procs, gsmv_comm->RecvCounts);
++return 0;
+ }
+ 
+ 

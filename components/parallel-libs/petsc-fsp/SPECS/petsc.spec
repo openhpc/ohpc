@@ -103,8 +103,8 @@ module load phdf5
 module load mkl
 %endif
 
-# icc-impi requires mpiicc wrappers, otherwise dynamic libs are not genereated
-# gnu-impi finds include/4.8.0/mpi.mod first, unless told not to
+# icc-impi requires mpiicc wrappers, otherwise dynamic libs are not generated.
+# gnu-impi finds include/4.8.0/mpi.mod first, unless told not to.
 ./config/configure.py \
         --prefix=%{install_path} \
 %if %{compiler_family} == intel
