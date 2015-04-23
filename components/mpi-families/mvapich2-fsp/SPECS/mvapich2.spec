@@ -36,7 +36,7 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   2.1rc1
+Version:   2.1
 Release:   1
 License:   BSD
 Group:     fsp/mpi-families
