@@ -227,7 +227,7 @@ export R_PDFVIEWER="xdg-open"
 echo "MKL options flag .... $MKL "
 
 
-./configure --with-blas 
+./configure --with-blas \
             --with-lapack \
             --enable-R-shlib  \
             --enable-BLAS-shlib \
