@@ -1,0 +1,40 @@
+diff -aruN SuperLU_DIST_3.2.orig/SRC/dreadMM.c SuperLU_DIST_3.2/SRC/dreadMM.c
+--- SuperLU_DIST_3.2.orig/SRC/dreadMM.c	2012-10-24 21:46:17.000000000 +0200
++++ SuperLU_DIST_3.2/SRC/dreadMM.c	2012-12-09 15:07:53.861879815 +0100
+@@ -7,6 +7,9 @@
+  *
+  */
+ #include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/socket.h>
+ #include "superlu_ddefs.h"
+ 
+ #undef EXPAND_SYM
+diff -aruN SuperLU_DIST_3.2.orig/SRC/xerbla.c SuperLU_DIST_3.2/SRC/xerbla.c
+--- SuperLU_DIST_3.2.orig/SRC/xerbla.c	2012-10-24 21:46:17.000000000 +0200
++++ SuperLU_DIST_3.2/SRC/xerbla.c	2012-12-09 15:06:51.125878327 +0100
+@@ -8,6 +8,10 @@
+        September 30, 1994   
+ </pre> 
+ */
++#include <string.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <sys/socket.h>
+ #include "Cnames.h"
+ 
+ /* Subroutine */ 
+diff -aruN SuperLU_DIST_3.2.orig/SRC/zreadMM.c SuperLU_DIST_3.2/SRC/zreadMM.c
+--- SuperLU_DIST_3.2.orig/SRC/zreadMM.c	2012-10-24 21:46:17.000000000 +0200
++++ SuperLU_DIST_3.2/SRC/zreadMM.c	2012-12-09 15:08:22.341880491 +0100
+@@ -6,6 +6,9 @@
+  *
+  */
+ #include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/socket.h>
+ #include "superlu_zdefs.h"
+ 
+ #undef EXPAND_SYM
