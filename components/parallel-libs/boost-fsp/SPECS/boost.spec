@@ -60,15 +60,15 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.57.0
+Version:        1.58.0
 Release:        0
 License:        BSL-1.0
 Group:		fsp/parallel-libs
 Url:            http://www.boost.org
 Source0:	%{pname}_%{bversion}.tar.gz 
 Source1:        boost-rpmlintrc
-#Source2:        mkl_boost_ublas_gemm.hpp
-#Source3:        mkl_boost_ublas_matrix_prod.hpp
+Source2:        mkl_boost_ublas_gemm.hpp
+Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
@@ -144,12 +144,13 @@ EOF
 
 %install
 
+# (TRon: Apr 23, 2015) Installing the fixed mkl header files. Source https://software.intel.com/en-us/articles/how-to-use-boost-ublas-with-intel-mkl
 # (TRon: Apr 7, 2015) Defer the installation of the mkl header files due to inconsistent results in the number of iterations to 
 #                     converged in computing the norm in the mkl example sylvester matrix test program.
 #                     This will be added when this issue has been resolved. 
 # Copy intel-MKL uBLAS header files
-#install -D -m 0644 %SOURCE2 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_gemm.hpp
-#install -D -m 0644 %SOURCE3 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_matrix_prod.hpp
+install -D -m 0644 %SOURCE2 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_gemm.hpp
+install -D -m 0644 %SOURCE3 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_matrix_prod.hpp
 
 
 # FSP compiler/mpi designation
