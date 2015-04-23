@@ -31,7 +31,7 @@ BuildRequires: intel_licenses
 
 Summary: Performance Application Programming Interface
 Name: %{pname}%{PROJ_DELIM}
-Version: 5.4.0
+Version: 5.4.1
 Release: 1%{?dist}
 License: BSD
 Group: fsp/perf-tools
