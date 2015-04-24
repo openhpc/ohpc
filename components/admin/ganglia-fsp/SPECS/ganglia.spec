@@ -56,6 +56,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 # define fdupes, clean up rpmlint errors
 BuildRequires: fdupes
 BuildRequires: libapr1-devel
+BuildRequires: systemd
 %endif
 
 # different package name with redhat
@@ -235,10 +236,10 @@ make -C gmond gmond.conf.5
 
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes %{buildroot}
-./scripts/fixconfig gmetad/gmetad.service.in
+#./scripts/fixconfig gmetad/gmetad.service.in
+# /bin/mkdir -p '/home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-29.1.x86_64/usr/lib/systemd/system'
+# /bin/install -c -m 644 gmetad.service '/home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-29.1.x86_64/usr/lib/systemd/system'
 %endif
-
-find %{buildroot}/..
 
 %post   -n libganglia-%{lib_version} -p /sbin/ldconfig
 
