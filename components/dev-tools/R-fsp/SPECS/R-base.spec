@@ -132,7 +132,7 @@ BuildRequires:  texinfo >= 5.1
 Requires:       cairo >= 1.2
 Requires:       fontconfig
 Requires:       freetype2
-Requires:       glibc-locale
+####Requires:       glibc-locale
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
