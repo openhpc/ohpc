@@ -165,11 +165,13 @@ make superlulib DSuperLUroot=$PWD
 
 %install
 
+%{__mkdir} -p %{buildroot}%{install_path}/include
 install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
               SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
               SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
               %{buildroot}%{install_path}/include/
 
+%{__mkdir} -p %{buildroot}%{install_path}/lib
 install -m 755 lib/libsuperlu_dist.so %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.3
