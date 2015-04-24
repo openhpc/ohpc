@@ -235,6 +235,7 @@ make -C gmond gmond.conf.5
 
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes %{buildroot}
+./scripts/fixconfig gmetad/gmetad.service.in
 %endif
 
 find %{buildroot}/..
