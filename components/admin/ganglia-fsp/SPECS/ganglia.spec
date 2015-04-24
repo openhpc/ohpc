@@ -46,7 +46,9 @@ BuildRequires:  freetype2-devel
 # BuildRequires:  libapr1-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  rrdtool-devel
+%if 0%{?sles_version} || 0%{?suse_version}
 PreReq:         %insserv_prereq  %fillup_prereq
+%endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -159,7 +161,7 @@ gmetad packages
 
 %prep
 %setup -q
-%patch0 -p1
+#%patch0 -p1
 
 %build
 %configure --with-gmetad \

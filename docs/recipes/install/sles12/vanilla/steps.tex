@@ -20,7 +20,7 @@
 % Define Base OS
 \newcommand{\baseOS}{SLES12*}
 \newcommand{\LosF}{\emph{LosF*}}
-\newcommand{\FSPVersion}{15.16}
+\newcommand{\FSPVersion}{15.27}
 
 \begin{document}
 \graphicspath{{../../common/figures/}}
@@ -82,13 +82,14 @@
 % fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ export FSP_mirror=http://fsp-obs.pdx.intel.com:82
-[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
+[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.27:/Factory/SLE_12_Intel/ForestPeak:15.27:Factory.repo
 [master]$ zypper -n --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_fsp_run
 
 % Dev testing for Factory
-%[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.16:/Factory/SLE_12_Intel/ForestPeak:15.16:Factory.repo
+%[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
+
 
 In addition to the \FSP{} package repository, the {\em master} host also
 requires access to the standard distro repositories in order to resolve
