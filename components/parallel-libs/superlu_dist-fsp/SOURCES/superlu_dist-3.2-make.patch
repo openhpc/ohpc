@@ -50,7 +50,7 @@
 -#		-D_LONGINT
 +CFLAGS          = $(RPM_OPT_FLAGS) -fPIC -fschedule-insns2 \
 +                  -funroll-loops -fstrict-aliasing -frerun-loop-opt \
-+                  -ftree-vectorize -funit-at-a-time
++                  -ftree-vectorize -funit-at-a-time \
 +                  -D_LONGINT
  #
  # NOOPTS should be set to be the C flags that turn off any optimization
