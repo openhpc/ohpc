@@ -187,6 +187,8 @@ install -d -m 0755 %{buildroot}/var/lib/ganglia/rrds
 
 # Move the files into the structure
 # SuSE patch adds additional features to init script, not essential
+ls -l gmond
+ls -l gmetad
 # cp -f gmond/gmond.init.SuSE %{buildroot}%{_initrddir}/ganglia-gmond
 # cp -f gmetad/gmetad.init.SuSE %{buildroot}%{_initrddir}/ganglia-gmetad
 install -d -m 0755 %{buildroot}%{_sbindir}
