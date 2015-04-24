@@ -183,6 +183,7 @@ make %{?_smp_mflags}
 %install
 # Create the directory structure
 install -d -m 0755 %{buildroot}/etc/init.d
+install -d -m 0755 %{buildroot}/etc/rc.d/init.d
 install -d -m 0755 %{buildroot}/var/lib/ganglia/rrds
 
 # Move the files into the structure
