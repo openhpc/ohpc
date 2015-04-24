@@ -88,26 +88,26 @@ BuildRequires:  readline-devel
 %if 0%{?suse_version} > 1020
 BuildRequires:  fdupes
 %if 0%{?suse_version} < 1230
-BuildRequires:  texlive-bin
-BuildRequires:  texlive-bin-latex
+###BuildRequires:  texlive-bin
+###BuildRequires:  texlive-bin-latex
 #BuildRequires:  texlive-bin-metafont # evtl nur für 12.3 und später
-BuildRequires:  texlive-latex
+###BuildRequires:  texlive-latex
 %if 0%{?suse_version} > 1120 
-BuildRequires:  texlive-fonts-extra
+###BuildRequires:  texlive-fonts-extra
 %endif
 %else
-BuildRequires:  texlive-bibtex
-BuildRequires:  texlive-cm-super
-BuildRequires:  texlive-latex
-BuildRequires:  texlive-makeindex
-BuildRequires:  texlive-metafont
-BuildRequires:  texlive-psnfss
-BuildRequires:  texlive-tex
-BuildRequires:  texlive-times
+###BuildRequires:  texlive-bibtex
+###BuildRequires:  texlive-cm-super
+###BuildRequires:  texlive-latex
+###BuildRequires:  texlive-makeindex
+###BuildRequires:  texlive-metafont
+###BuildRequires:  texlive-psnfss
+###BuildRequires:  texlive-tex
+###BuildRequires:  texlive-times
 BuildRequires:  xdg-utils
 # No tex(inconsolata.sty) provided in SLE-12
 %if 0%{?suse_version} != 1315
-BuildRequires:  tex(inconsolata.sty)
+###BuildRequires:  tex(inconsolata.sty)
 %endif
 %endif
 %endif
@@ -138,7 +138,7 @@ Requires:       readline
 Requires:       xdg-utils
 Requires:       xorg-x11-fonts-100dpi
 Requires:       xorg-x11-fonts-75dpi
-Requires:       texlive-latex
+###Requires:       texlive-latex
 
 Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
@@ -222,16 +222,12 @@ module load mkl
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
-#MKL="-L${MKLROOT} -lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm"
-#export BLAS_LIBS="-lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -ldl -lpthread -lm"
 
 MKL_LIB_PATH=$MKLROOT/lib/intel64
-#MKL_LIB_PATH="/opt/fsp/pub/compiler/intel/composer_xe_2015.2.164/mkl/lib/intel64/"
 MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
 echo "MKL options flag .... $MKL "
 
 
-#./configure --with-blas="$MKL" --with-lapack --enable-R-shlib --enable-BLAS-shlib LIBnn=lib64
 ./configure --with-blas="$MKL" \
             --with-lapack \
             --enable-R-shlib  \
@@ -247,12 +243,12 @@ make %{?_smp_mflags}
 ### don't make info
 ### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
 %else
-make info
+###make info
 # Convert to UTF-8
-for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admin.info doc/manual/R-exts.info-1; do
-  iconv -f iso-8859-1 -t utf-8 -o $i{.utf8,}
-  mv $i{.utf8,}
-done
+###for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admin.info doc/manual/R-exts.info-1; do
+###  iconv -f iso-8859-1 -t utf-8 -o $i{.utf8,}
+###  mv $i{.utf8,}
+###done
 %endif
 
 %install 
@@ -273,7 +269,7 @@ echo %{__install}
 echo %{_infodir}
 
 # Installation of Info-files
-%{__install} -m 755 -d %{_infodir}
+####%{__install} -m 755 -d %{_infodir}
 ###make DESTDIR=%{buildroot} INFODIR=%{buildroot}%{_infodir} install-info
 ###
 ### 
@@ -281,9 +277,9 @@ echo %{_infodir}
 ### don't make info
 ### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
 %else
-make DESTDIR=%{buildroot} install-info
-%{__rm} -f %{buildroot}%{_infodir}/dir
-%{__rm} -f %{buildroot}%{_infodir}/dir.old
+####make DESTDIR=%{buildroot} install-info
+####%{__rm} -f %{buildroot}%{_infodir}/dir
+####%{__rm} -f %{buildroot}%{_infodir}/dir.old
 %endif
 
 ###chmod +x %{buildroot}%{_libdir}/R/share/sh/echo.sh
