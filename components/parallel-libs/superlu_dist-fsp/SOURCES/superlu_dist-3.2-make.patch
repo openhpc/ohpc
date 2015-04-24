@@ -20,7 +20,7 @@ diff -aruN SuperLU_DIST_3.2.orig/make.inc SuperLU_DIST_3.2/make.inc
 -# METISLIB    	= -L${HOME}/Hopper/lib/parmetis-4.0.2-64bit/build/Linux-x86_64/libmetis -lmetis
 -# PARMETISLIB  	= -L${HOME}/Hopper/lib/parmetis-4.0.2-64bit/build/Linux-x86_64/libparmetis -lparmetis
 +METISLIB    	= -L$(METIS_LIB) -lmetis
-+PARMETISLIB  	= 
++#PARMETISLIB  	= 
  
  # Define the required Fortran libraries, if you use C compiler to link
 -FLIBS	 	= -lpgf90 -lpgf90_rpm1
