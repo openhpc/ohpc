@@ -1,6 +1,6 @@
 --- superlu_dist-3.2/make.inc	2012-10-24 12:46:19.000000000 -0700
-+++ superlu_dist-3.2.patch/make.inc	2015-04-23 15:14:48.317200600 -0700
-@@ -17,26 +17,27 @@
++++ superlu_dist-3.2.patch/make.inc	2015-04-24 08:10:36.000000000 -0700
+@@ -17,29 +17,30 @@
  #
  #  The machine (platform) identifier to append to the library names
  #
@@ -12,7 +12,7 @@
  #
  DSuperLUroot 	= ${HOME}/Release_Codes/SuperLU_DIST-branch
 -DSUPERLULIB   	= $(DSuperLUroot)/lib/libsuperlu_dist_3.0.a
-+DSUPERLULIB    = $(DSuperLUroot)/lib/libsuperlu_dist_3.2.a
++DSUPERLULIB   	= $(DSuperLUroot)/lib/libsuperlu_dist_3.2.a
 +DSUPERLUSLIB       = -L$(DSuperLUroot)/lib -lsuperlu_dist
  #
  BLASDEF	     	= -DUSE_VENDOR_BLAS
@@ -23,7 +23,7 @@
 -METISLIB    	= -L${HOME}/Hopper/lib/parmetis-4.0.2/build/Linux-x86_64/libmetis -lmetis
 -PARMETISLIB  	= -L${HOME}/Hopper/lib/parmetis-4.0.2/build/Linux-x86_64/libparmetis -lparmetis
 +METISLIB    	= -L${METIS_LIB} -lmetis
-+#PARMETISLIB  	= -L${HOME}/Hopper/lib/parmetis-4.0.2/build/Linux-x86_64/libparmetis -lparmetis
++PARMETISLIB  	= 
  ## parmetis 4.x.x, 64-bit integer
  # METISLIB    	= -L${HOME}/Hopper/lib/parmetis-4.0.2-64bit/build/Linux-x86_64/libmetis -lmetis
  # PARMETISLIB  	= -L${HOME}/Hopper/lib/parmetis-4.0.2-64bit/build/Linux-x86_64/libparmetis -lparmetis
@@ -33,25 +33,22 @@
 +FLIBS	 	= 
  
  # Define all the libraries
- LIBS	     	= $(DSUPERLULIB) $(BLASLIB) $(PARMETISLIB) $(METISLIB) $(FLIBS)
-@@ -51,21 +52,23 @@
+-LIBS	     	= $(DSUPERLULIB) $(BLASLIB) $(PARMETISLIB) $(METISLIB) $(FLIBS)
++LIBS	     	= $(DSUPERLUSLIB) $(BLASLIB) $(PARMETISLIB) $(METISLIB) $(FLIBS)
+ 
+ #
+ #  The archiver and the flag(s) to use when building archive (library)
+@@ -51,7 +52,7 @@
  
  ############################################################################
  # C compiler setup
 -CC           	= cc
 +CC           	= mpicc
  # CFLAGS should be set to be the C flags that include optimization
--CFLAGS          = -fast -Mipa=fast,safe \
-+CFLAGS          =  $(RPM_OPT_FLAGS) -fPIC -fschedule-insns2 \
-+                -funroll-loops -fstrict-aliasing -frerun-loop-opt \
-+                -O3 -finline-limit=720 --param max-inline-insns-auto=160
+ CFLAGS          = -fast -Mipa=fast,safe \
  		-DDEBUGlevel=0 -DPRNTlevel=1 -DPROFlevel=0 \
--#		-D_LONGINT
-+		-D_LONGINT
- #
- # NOOPTS should be set to be the C flags that turn off any optimization
--NOOPTS		= -O0
-+NOOPTS		= $(RPM_OPT_FLAGS) -Os -fPIC
+@@ -61,11 +62,11 @@
+ NOOPTS		= -O0
  ############################################################################
  # FORTRAN compiler setup
 -FORTRAN         = ftn
