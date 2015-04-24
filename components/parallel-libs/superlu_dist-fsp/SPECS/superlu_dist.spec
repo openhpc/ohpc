@@ -150,12 +150,13 @@ module load mkl
 
 make superlulib DSuperLUroot=$PWD 
 
-#mkdir tmp
-#(cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
+mkdir tmp
+(cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
 #%{_libdir}/mpi/gcc/$mpi/bin/mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
-#pushd lib
-#ln -s %{libname}.so.%{version} %{libname}.so
-#popd
+mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
+pushd lib
+ln -s %{libname}.so.%{version} %{libname}.so
+popd
 
 # build the examples
 #make example DSuperLUroot=$PWD \
