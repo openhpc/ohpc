@@ -237,7 +237,7 @@ make -C gmond gmond.conf.5
 %fdupes %{buildroot}
 %endif
 
-find %{buildroot}
+find %{buildroot}/..
 
 %post   -n libganglia-%{lib_version} -p /sbin/ldconfig
 
