@@ -136,8 +136,8 @@ Requires:       glibc-locale
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
-Requires:       xorg-x11-fonts-100dpi
-Requires:       xorg-x11-fonts-75dpi
+####Requires:       xorg-x11-fonts-100dpi
+####Requires:       xorg-x11-fonts-75dpi
 ###Requires:       texlive-latex
 
 Provides:       R = %{version}
@@ -235,6 +235,7 @@ echo "MKL options flag .... $MKL "
             --prefix=%{install_path} \
             --without-system-zlib \
             --without-system-bzlib \
+            --without-x \
               LIBnn=lib64 
 
 make %{?_smp_mflags}
