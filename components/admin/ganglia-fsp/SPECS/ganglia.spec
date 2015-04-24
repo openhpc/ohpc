@@ -65,6 +65,15 @@ BuildRequires:  apr-devel
 %define gmond_conf %{_builddir}/%{?buildsubdir}/gmond/gmond.conf
 %define generate_gmond_conf %(test -e %gmond_conf && echo 0 || echo 1)
 
+# + /usr/lib/rpm/brp-python-bytecompile /usr/bin/python 1
+# Compiling /home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-19.1.x86_64/usr/lib64/ganglia/python_modules/DBUtil.py ...
+#   File "/usr/lib64/ganglia/python_modules/DBUtil.py", line 272
+#     (options, args) = parser.parse_args()
+#                     ^
+# SyntaxError: invalid syntax
+# Turn off the brp-python-bytecompile script
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+
 
 %description
 Ganglia is a scalable distributed monitoring system for high-performance
