@@ -30,6 +30,7 @@ Url:            http://ganglia.info/
 Source:         %{name}-%{version}.tar.gz
 # # PATCH-FIX-OPENSUSE ganglia-3.5.0-init.patch
 # Patch0:         ganglia-3.5.0-init.patch
+Patch0:         ganglia-no-private-apr.patch
 BuildRequires:  autoconf
 BuildRequires:  automake
 # BuildRequires:  fdupes
@@ -170,7 +171,7 @@ gmetad packages
 
 %prep
 %setup -q
-#%patch0 -p1
+%patch0 -p1
 
 %build
 %configure --with-gmetad \
