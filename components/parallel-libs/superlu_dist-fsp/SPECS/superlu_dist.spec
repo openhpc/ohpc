@@ -152,16 +152,10 @@ make superlulib DSuperLUroot=$PWD
 
 mkdir tmp
 (cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
-#%{_libdir}/mpi/gcc/$mpi/bin/mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
 mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
 pushd lib
 ln -s %{libname}.so.%{version} %{libname}.so
 popd
-
-# build the examples
-#make example DSuperLUroot=$PWD \
-             #CC=%{_libdir}/mpi/gcc/$mpi/bin/mpicc \
-             #FORTRAN=%{_libdir}/mpi/gcc/$mpi/bin/mpif90
 
 
 %install
@@ -178,6 +172,64 @@ pushd %{buildroot}%{install_path}/lib
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.3
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
+
+# FSP module file
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "This module loads the SuperLU_dist library built with the %{compiler_family} compiler"
+puts stderr "toolchain and the %{mpi_family} MPI stack."
+puts stderr " "
+puts stderr "Note that this build of SuperLU_dist leverages the metis and MKL libraries."
+puts stderr "Consequently, these packages are loaded automatically with this module."
+
+puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "%{url}"
+
+set     version                     %{version}
+
+# Require phdf5 and fftw (and mkl for gnu compiler families)
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  ![is-loaded metis]  } {
+        module load metis
+    }
+    if { [is-loaded gnu] } {
+        if { ![is-loaded mkl]  } {
+          module load mkl
+        }
+    }
+}
+
+prepend-path    PATH                %{install_path}/bin
+prepend-path    INCLUDE             %{install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
+
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
+setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_LIB        %{install_path}/lib
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
 
 
 %clean

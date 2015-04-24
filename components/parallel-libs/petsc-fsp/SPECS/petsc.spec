@@ -196,6 +196,14 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
