@@ -65,6 +65,15 @@ BuildRequires:  apr-devel
 %define gmond_conf %{_builddir}/%{?buildsubdir}/gmond/gmond.conf
 %define generate_gmond_conf %(test -e %gmond_conf && echo 0 || echo 1)
 
+# + /usr/lib/rpm/brp-python-bytecompile /usr/bin/python 1
+# Compiling /home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-19.1.x86_64/usr/lib64/ganglia/python_modules/DBUtil.py ...
+#   File "/usr/lib64/ganglia/python_modules/DBUtil.py", line 272
+#     (options, args) = parser.parse_args()
+#                     ^
+# SyntaxError: invalid syntax
+# Turn off the brp-python-bytecompile script
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+
 
 %description
 Ganglia is a scalable distributed monitoring system for high-performance
@@ -174,11 +183,19 @@ make %{?_smp_mflags}
 %install
 # Create the directory structure
 install -d -m 0755 %{buildroot}/etc/init.d
+install -d -m 0755 %{buildroot}/etc/rc.d/init.d
 install -d -m 0755 %{buildroot}/var/lib/ganglia/rrds
 
 # Move the files into the structure
+%if 0%{?sles_version} || 0%{?suse_version}
 cp -f gmond/gmond.init.SuSE %{buildroot}%{_initrddir}/ganglia-gmond
 cp -f gmetad/gmetad.init.SuSE %{buildroot}%{_initrddir}/ganglia-gmetad
+%endif
+%if 0%{?rhel_version} || 0%{?centos_version}
+cp -f gmond/gmond.init %{buildroot}%{_initrddir}/ganglia-gmond
+cp -f gmetad/gmetad.init %{buildroot}%{_initrddir}/ganglia-gmetad
+%endif
+
 install -d -m 0755 %{buildroot}%{_sbindir}
 ln -s %{_initrddir}/ganglia-gmond %{buildroot}%{_sbindir}/rcganglia-gmond
 ln -s %{_initrddir}/ganglia-gmetad %{buildroot}%{_sbindir}/rcganglia-gmetad
@@ -302,6 +319,7 @@ fi
 %{_initrddir}/ganglia-gmetad
 %{_mandir}/man1/gmetad*1*
 %config(noreplace) %{_sysconfdir}/%{name}/gmetad.conf
+/usr/lib/systemd/system/gmetad.service
 
 %files gmond
 %defattr(-,root,root)
@@ -318,7 +336,7 @@ fi
 %dir %{_sysconfdir}/%{name}
 %dir %{_sysconfdir}/%{name}/conf.d/
 %config(noreplace) %{_sysconfdir}/%{name}/conf.d/modgstatus.conf
-%config(noreplace) %{_sysconfdir}/%{name}/conf.d/multicpu.conf.disabled
+#%config(noreplace) %{_sysconfdir}/%{name}/conf.d/multicpu.conf.disabled
 %dir %{_libdir}/ganglia/
 %{_libdir}/ganglia/modmulticpu.so*
 %{_sysconfdir}/%{name}/conf.d/multicpu.conf*
@@ -330,6 +348,7 @@ fi
 %{_libdir}/ganglia/modnet.so*
 %{_libdir}/ganglia/modproc.so*
 %{_libdir}/ganglia/modsys.so*
+/usr/lib/systemd/system/gmond.service
 
 %files gmond-modules-python
 %defattr(-,root,root,-)
