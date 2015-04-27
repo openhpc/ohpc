@@ -92,6 +92,14 @@ Docu can be found on http://www.netlib.org.
 %patch3 -p1
 
 %build
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 make lib
 
 mkdir tmp 
