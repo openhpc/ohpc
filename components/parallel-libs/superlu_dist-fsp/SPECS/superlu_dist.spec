@@ -65,29 +65,23 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define pname superlu_dist
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define major   3
+%define major   4
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.2
-Release:        3.4
+Version:        4.0
+Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
 License:        LGPL-2.1
 Group:          Development/Libraries/Parallel
 Url:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        %{pname}-%{version}.tar.gz
-# PATCH-FIX-UPSTREAM superlu_dist-3.1-no-return_in_non-void.patch
-Patch0:         superlu_dist-3.1-no-return_in_non-void.patch
 # PATCH-FIX-UPSTREAM superlu_dist-3.1-sequence-point.patch
-Patch1:         superlu_dist-3.1-sequence-point.patch
-# PATCH-FIX-UPSTREAM superlu_dist-3.2-implicit-fortify-decl.patch
-Patch2:         superlu_dist-3.2-implicit-fortify-decl.patch
-# PATCH-FIX-UPSTREAM superlu_dist-3.2-64-bit-portability.patch
-Patch3:         superlu_dist-3.2-64-bit-portability.patch
-# PATCH-FIX-OPENSUSE superlu_dist-3.2-make.patch
-Patch4:         superlu_dist-3.2-make.patch
+Patch0:         superlu_dist-3.1-sequence-point.patch
+# PATCH-FIX-OPENSUSE superlu_dist-4.0-make.patch
+Patch1:         superlu_dist-4.0-make.patch
 # PATCH-FIX-UPSTREAM superlu_dist-3.2-example-no-return-in-non-void.patch
-Patch5:         superlu_dist-3.2-example-no-return-in-non-void.patch
+Patch2:         superlu_dist-3.2-example-no-return-in-non-void.patch
 #BuildRequires:  blas-devel
 #BuildRequires:  gcc-fortran
 #BuildRequires:  scotch-devel
@@ -130,9 +124,6 @@ solutions.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 %build
 # FSP compiler/mpi designation

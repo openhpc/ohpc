@@ -1,0 +1,52 @@
+--- SuperLU_DIST_4.0/make.inc	2014-10-11 12:01:16.000000000 -0700
++++ SuperLU_DIST_4.0.patch/make.inc	2015-04-27 14:57:57.000000000 -0700
+@@ -24,19 +24,20 @@
+ #
+ DSuperLUroot 	= ${HOME}/Release_Codes/SuperLU_DIST-branch
+ DSUPERLULIB   	= $(DSuperLUroot)/lib/libsuperlu_dist_4.0.a
++DSUPERLUSLIB       = -L$(DSuperLUroot)/lib -lsuperlu_dist
+ #
+ BLASDEF	     	= -DUSE_VENDOR_BLAS
+ BLASLIB	        = ${MKL}
+ #
+ ############################################################################
+ ## parmetis 4.x.x, 32-bit integer
+-PARMETIS_DIR	:= ${HOME}/Carver/lib/parmetis-4.0.3
++# PARMETIS_DIR	:= ${HOME}/Carver/lib/parmetis-4.0.3
+ ## parmetis 4.x.x, 64-bit integer
+ # PARMETIS_DIR	:= ${HOME}/Carver/lib/parmetis-4.0.3_64
+ 
+-METISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libmetis -lmetis
+-PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
+-I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
++#METISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libmetis -lmetis
++#PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
++#I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
+ ############################################################################
+ 
+ # Define the required Fortran libraries, if you use C compiler to link
+@@ -46,7 +47,7 @@
+ LIBS   	= $(DSUPERLULIB) $(PARMETISLIB) $(METISLIB) $(BLASLIB) $(FLIBS)
+ 
+ # Include directories for header files
+-INCS	= ${I_PARMETIS}
++#INCS	= ${I_PARMETIS}
+ 
+ ifeq "${ACC}" "GPU"
+ CUDA_FLAGS = -DGPU_ACC
+@@ -67,13 +68,13 @@
+ # C compiler setup
+ CC           	= mpicc
+ # CFLAGS should be set to be the C flags that include optimization
+-CFLAGS          = ${CUDA_FLAGS} ${INCS} -std=c99 -O3 -Wall -w2 -mkl -openmp \
++CFLAGS          = $(RPM_OPT_FLAGS) -fPIC ${CUDA_FLAGS} ${INCS} -std=c99 -O3 -Wall -w2 -mkl -openmp \
+ 		-DDEBUGlevel=0 -DPRNTlevel=1 -DPROFlevel=0 \
+ #		-D_LONGINT 
+ #	-Wunused-variable 
+ #
+ # NOOPTS should be set to be the C flags that turn off any optimization
+-NOOPTS		= -O0
++NOOPTS		= $(RPM_OPT_FLAGS) -Os -fPIC
+ ############################################################################
+ # FORTRAN compiler setup
+ FORTRAN         = mpif90
