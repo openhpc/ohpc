@@ -57,7 +57,7 @@ Group:          Development/Libraries/C and C++
 Version:        4.3
 Release:        0
 #Source:         http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_4.3.tar.gz
-Source:         superlu_%{version}-bsd.tar.bz2
+Source:         %{pname}-%{version}.tar.gz
 Source2:        README.SUSE
 # PATCH-FEATURE-OPENSUSE superlu-4.3-make.patch : add compiler and build flags in make.inc
 Patch:          superlu-4.3-make.patch
