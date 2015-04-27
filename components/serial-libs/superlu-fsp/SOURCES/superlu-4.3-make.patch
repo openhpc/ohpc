@@ -1,0 +1,37 @@
+--- superlu-4.3/make.inc	2011-12-12 14:34:18.000000000 -0800
++++ superlu-4.3.patch/make.inc	2015-04-27 11:15:38.000000000 -0700
+@@ -23,12 +23,13 @@
+ #
+ SuperLUroot	= $(HOME)/Codes/SuperLU/SuperLU_4.3
+ SUPERLULIB   	= $(SuperLUroot)/lib/libsuperlu_4.3.a
++SUPERLUSLIB     = -L$(SuperLUroot)/lib -lsuperlu
+ TMGLIB       	= libtmglib.a
+ 
+ ## BLASLIB   	= $(SuperLUroot)/lib/libblas.a
+ 
+ BLASDEF 	= -DUSE_VENDOR_BLAS
+-BLASLIB 	= -L$(HOME)/lib/GotoBLAS -lgoto
++BLASLIB 	= -L$(MKLROOT)/intel64/lib -lmkl_rt
+ 
+ ## ATLAS BLAS causes single-precision to fail
+ #BLASLIB   	= -L/usr/lib/atlas -lblas
+@@ -45,10 +46,10 @@
+ ARCHFLAGS    = cr
+ RANLIB       = ranlib
+ 
+-CC           = gcc
++CC           = $(CC)
+ CFLAGS       = -DPRNTlevel=0 -O3
+ NOOPTS       = 
+-FORTRAN	     = g77
++FORTRAN	     = $(F90)
+ FFLAGS       = -O2
+ LOADER       = $(CC)
+ LOADOPTS     =
+@@ -61,5 +62,5 @@
+ #
+ # The directory in which Matlab is installed
+ #
+-MATLAB	     = /usr/sww/matlab
++#MATLAB	     = /usr/sww/matlab
+ 
