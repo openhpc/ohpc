@@ -100,7 +100,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 module load mkl
 %endif
 
-make lib DSuperLUroot=$PWD
+make lib
 
 mkdir tmp 
 (cd tmp; ar -x ../lib/libsuperlu_%{version}.a)

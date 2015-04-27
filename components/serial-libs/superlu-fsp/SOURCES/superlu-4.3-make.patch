@@ -1,8 +1,11 @@
 --- superlu-4.3/make.inc	2011-12-12 14:34:18.000000000 -0800
-+++ superlu-4.3.patch/make.inc	2015-04-27 11:15:38.000000000 -0700
-@@ -23,12 +23,13 @@
++++ superlu-4.3.patch/make.inc	2015-04-27 13:45:42.000000000 -0700
+@@ -21,14 +21,15 @@
  #
- SuperLUroot	= $(HOME)/Codes/SuperLU/SuperLU_4.3
+ #  The name of the libraries to be created/linked to
+ #
+-SuperLUroot	= $(HOME)/Codes/SuperLU/SuperLU_4.3
++SuperLUroot	= ../
  SUPERLULIB   	= $(SuperLUroot)/lib/libsuperlu_4.3.a
 +SUPERLUSLIB     = -L$(SuperLUroot)/lib -lsuperlu
  TMGLIB       	= libtmglib.a
