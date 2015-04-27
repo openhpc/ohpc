@@ -104,7 +104,7 @@ make lib
 
 mkdir tmp 
 (cd tmp; ar -x ../lib/libsuperlu_%{version}.a)
-$(F90) -shared -Wl,-soname,libsuperlu.so.4 -o lib/libsuperlu.so tmp/*.o
+$(FC) -shared -Wl,-soname,libsuperlu.so.4 -o lib/libsuperlu.so tmp/*.o
 
 %install
 mkdir -p %{buildroot}%{install_path}/lib
