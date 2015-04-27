@@ -201,7 +201,7 @@ set             version             %{version}
  
 ## module load mkl ... now that the mkl header files are included
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded mkl]  } {
+    if {  ![is-loaded intel]  } {
         module load mkl
     }
 }
