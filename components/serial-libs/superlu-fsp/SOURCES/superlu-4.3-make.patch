@@ -20,11 +20,11 @@
  RANLIB       = ranlib
  
 -CC           = gcc
-+CC           = $(CC)
++#CC           = gcc
  CFLAGS       = -DPRNTlevel=0 -O3
  NOOPTS       = 
 -FORTRAN	     = g77
-+FORTRAN	     = $(F90)
++#FORTRAN	     = g77
  FFLAGS       = -O2
  LOADER       = $(CC)
  LOADOPTS     =
