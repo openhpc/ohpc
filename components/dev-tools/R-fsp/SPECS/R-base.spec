@@ -328,7 +328,7 @@ set     version                     %{version}
 
 ## module load mkl ...
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded mkl]  } {
+    if {  ![is-loaded intel]  } {
         module load mkl
     }
 }
