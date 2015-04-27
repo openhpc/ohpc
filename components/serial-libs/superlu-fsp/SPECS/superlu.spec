@@ -58,7 +58,6 @@ Version:        4.3
 Release:        0
 #Source:         http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_4.3.tar.gz
 Source:         %{pname}-%{version}.tar.gz
-Source2:        README.SUSE
 # PATCH-FEATURE-OPENSUSE superlu-4.3-make.patch : add compiler and build flags in make.inc
 Patch:          superlu-4.3-make.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
@@ -116,16 +115,45 @@ ln -s libsuperlu.so.%{version} libsuperlu.so.4
 ln -s libsuperlu.so.4 libsuperlu.so
 popd
 
-#fix permissions
-#chmod 644 MATLAB/*
+# FSP module file
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+#%Module1.0#####################################################################
 
-# remove all build examples
-#cd EXAMPLE
-#make clean
-#rm -rf *itersol*
-#cd ..
-#mv EXAMPLE examples
-#cp FORTRAN/README README.fortran
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "This module loads the SuperLU_dist library built with the %{compiler_family} compiler"
+puts stderr "toolchain."
+puts stderr " "
+
+puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "%{url}"
+
+set     version                     %{version}
+
+prepend-path    INCLUDE             %{install_path}/include
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_LIB        %{install_path}/lib
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
 
 %post -p /sbin/ldconfig
 
