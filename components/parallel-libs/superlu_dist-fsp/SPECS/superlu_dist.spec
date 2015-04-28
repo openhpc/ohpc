@@ -132,7 +132,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-module load metis
+module load parmetis
 
 # Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
