@@ -129,6 +129,7 @@ module load mkl
 
 #FLAGS="%optflags -fPIC -I%{_includedir}/numpy"
 FLAGS="%optflags -fPIC"
+cd src
 %configure \
         --prefix=%{install_path} \
     --without-examples \
@@ -159,6 +160,7 @@ popd
 make %{?_smp_mflags} all CC="mpicc $FLAGS" \
                          CXX="mpicxx $FLAGS" \
                          F77="mpif77 $FLAGS"
+cd ..
 
 %install
 
