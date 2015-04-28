@@ -21,7 +21,7 @@
 -I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
 +METISLIB = 
 +PARMETISLIB := -L$(PARMETIS_LIB) -lparmetis
-+I_PARMETIS := -I${PARMETIS_INC)
++I_PARMETIS := -I$(PARMETIS_INC)
  ############################################################################
  
  # Define the required Fortran libraries, if you use C compiler to link
