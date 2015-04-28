@@ -61,7 +61,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 #-fsp-header-comp-end-------------------------------
 
 # Base package name
-%define pname petsc
+%define pname hypre
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -71,7 +71,7 @@ Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
 Group:          Development/Libraries/Parallel
 Url:            http://www.llnl.gov/casc/hypre/
-Source:         %{name}-%{version}.tar.gz
+Source:         %{pname}-%{version}.tar.gz
 #Patch0:         hypre-2.8.0b-no-date-and-time-fix.patch
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
