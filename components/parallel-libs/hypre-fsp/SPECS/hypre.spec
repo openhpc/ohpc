@@ -84,7 +84,11 @@ BuildRequires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 BuildRequires:  python-devel
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
+%if 0%{?suse_version}
 BuildRequires:  python-xml
+%else
+BuildRequires:  libxml2-python
+%endif
 BuildRequires:  xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
