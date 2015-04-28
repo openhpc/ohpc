@@ -93,8 +93,8 @@ Patch2:         superlu_dist-3.2-example-no-return-in-non-void.patch
 #BuildRequires:  mvapich2-devel
 #BuildRequires:  ptscotch-mvapich2-devel
 #%endif
-BuildRequires: metis-%{compiler_family}%{PROJ_DELIM}
-Requires: metis-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires: parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %include %{_sourcedir}/FSP_macros
@@ -175,7 +175,7 @@ puts stderr " "
 puts stderr "This module loads the SuperLU_dist library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of SuperLU_dist leverages the metis and MKL libraries."
+puts stderr "Note that this build of SuperLU_dist leverages the parmetis and MKL libraries."
 puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
@@ -192,8 +192,8 @@ set     version                     %{version}
 # Require phdf5 and fftw (and mkl for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded metis]  } {
-        module load metis
+    if {  ![is-loaded parmetis]  } {
+        module load parmetis
     }
     if { [is-loaded gnu] } {
         if { ![is-loaded mkl]  } {
