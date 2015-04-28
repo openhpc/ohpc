@@ -12,7 +12,7 @@
  ############################################################################
  ## parmetis 4.x.x, 32-bit integer
 -PARMETIS_DIR	:= ${HOME}/Carver/lib/parmetis-4.0.3
-+PARMETIS_DIR	= 
++PARMETIS_DIR	= $(PARMETIS_LIB)
  ## parmetis 4.x.x, 64-bit integer
  # PARMETIS_DIR	:= ${HOME}/Carver/lib/parmetis-4.0.3_64
  
@@ -20,20 +20,11 @@
 -PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
 -I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
 +METISLIB = 
-+PARMETISLIB = 
-+I_PARMETIS = 
++PARMETISLIB := -L$(PARMETIS_LIB) -lparmetis
++I_PARMETIS := -I${PARMETIS_INC)
  ############################################################################
  
  # Define the required Fortran libraries, if you use C compiler to link
-@@ -46,7 +47,7 @@
- LIBS   	= $(DSUPERLULIB) $(PARMETISLIB) $(METISLIB) $(BLASLIB) $(FLIBS)
- 
- # Include directories for header files
--INCS	= ${I_PARMETIS}
-+INCS	= 
- 
- ifeq "${ACC}" "GPU"
- CUDA_FLAGS = -DGPU_ACC
 @@ -67,13 +68,13 @@
  # C compiler setup
  CC           	= mpicc
