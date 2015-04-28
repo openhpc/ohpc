@@ -44,7 +44,7 @@ BuildRequires: intel_licenses
 #-fsp-header-comp-end------------------------------------------------
 
 
-%define 	pname R_base
+%define 	pname R_proj
 %define 	PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
@@ -88,26 +88,26 @@ BuildRequires:  readline-devel
 %if 0%{?suse_version} > 1020
 BuildRequires:  fdupes
 %if 0%{?suse_version} < 1230
-###BuildRequires:  texlive-bin
-###BuildRequires:  texlive-bin-latex
+BuildRequires:  texlive-bin
+BuildRequires:  texlive-bin-latex
 #BuildRequires:  texlive-bin-metafont # evtl nur für 12.3 und später
-###BuildRequires:  texlive-latex
+BuildRequires:  texlive-latex
 %if 0%{?suse_version} > 1120 
-###BuildRequires:  texlive-fonts-extra
+BuildRequires:  texlive-fonts-extra
 %endif
 %else
-###BuildRequires:  texlive-bibtex
-###BuildRequires:  texlive-cm-super
-###BuildRequires:  texlive-latex
-###BuildRequires:  texlive-makeindex
-###BuildRequires:  texlive-metafont
-###BuildRequires:  texlive-psnfss
-###BuildRequires:  texlive-tex
-###BuildRequires:  texlive-times
+BuildRequires:  texlive-bibtex
+BuildRequires:  texlive-cm-super
+BuildRequires:  texlive-latex
+BuildRequires:  texlive-makeindex
+BuildRequires:  texlive-metafont
+BuildRequires:  texlive-psnfss
+BuildRequires:  texlive-tex
+BuildRequires:  texlive-times
 BuildRequires:  xdg-utils
 # No tex(inconsolata.sty) provided in SLE-12
 %if 0%{?suse_version} != 1315
-###BuildRequires:  tex(inconsolata.sty)
+BuildRequires:  tex(inconsolata.sty)
 %endif
 %endif
 %endif
@@ -132,13 +132,13 @@ BuildRequires:  texinfo >= 5.1
 Requires:       cairo >= 1.2
 Requires:       fontconfig
 Requires:       freetype2
-####Requires:       glibc-locale
+Requires:       glibc-locale
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
-####Requires:       xorg-x11-fonts-100dpi
-####Requires:       xorg-x11-fonts-75dpi
-###Requires:       texlive-latex
+Requires:       xorg-x11-fonts-100dpi
+Requires:       xorg-x11-fonts-75dpi
+Requires:       texlive-latex
 
 Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
@@ -203,9 +203,9 @@ and graphical techniques, and is highly extensible.
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-%if %{compiler_family} == gnu
-module load mkl
-%endif
+###%if %{compiler_family} == gnu
+###module load mkl
+###%endif
 
 %setup -n R-%{version}
 %patch -p1
@@ -215,27 +215,25 @@ module load mkl
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-%if %{compiler_family} == gnu
-module load mkl
-%endif
+###%if %{compiler_family} == gnu
+###module load mkl
+###%endif
 
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
-
-MKL_LIB_PATH=$MKLROOT/lib/intel64
-MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
+###MKL_LIB_PATH=$MKLROOT/lib/intel64
+###MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
 echo "MKL options flag .... $MKL "
 
 
-./configure --with-blas="$MKL" \
+./configure --with-blas \
             --with-lapack \
             --enable-R-shlib  \
             --enable-BLAS-shlib \
             --prefix=%{install_path} \
             --without-system-zlib \
             --without-system-bzlib \
-            --without-x \
               LIBnn=lib64 
 
 make %{?_smp_mflags}
@@ -244,12 +242,12 @@ make %{?_smp_mflags}
 ### don't make info
 ### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
 %else
-###make info
+make info
 # Convert to UTF-8
-###for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admin.info doc/manual/R-exts.info-1; do
-###  iconv -f iso-8859-1 -t utf-8 -o $i{.utf8,}
-###  mv $i{.utf8,}
-###done
+for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admin.info doc/manual/R-exts.info-1; do
+  iconv -f iso-8859-1 -t utf-8 -o $i{.utf8,}
+  mv $i{.utf8,}
+done
 %endif
 
 %install 
@@ -257,9 +255,9 @@ make %{?_smp_mflags}
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-%if %{compiler_family} == gnu
-module load mkl
-%endif
+###%if %{compiler_family} == gnu
+###module load mkl
+###%endif
 
 make DESTDIR=%{buildroot} install
 ###make DESTDIR=%{buildroot} install-pdf
@@ -270,7 +268,7 @@ echo %{__install}
 echo %{_infodir}
 
 # Installation of Info-files
-####%{__install} -m 755 -d %{_infodir}
+%{__install} -m 755 -d %{_infodir}
 ###make DESTDIR=%{buildroot} INFODIR=%{buildroot}%{_infodir} install-info
 ###
 ### 
@@ -278,9 +276,9 @@ echo %{_infodir}
 ### don't make info
 ### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
 %else
-####make DESTDIR=%{buildroot} install-info
-####%{__rm} -f %{buildroot}%{_infodir}/dir
-####%{__rm} -f %{buildroot}%{_infodir}/dir.old
+make DESTDIR=%{buildroot} install-info
+%{__rm} -f %{buildroot}%{_infodir}/dir
+%{__rm} -f %{buildroot}%{_infodir}/dir.old
 %endif
 
 ###chmod +x %{buildroot}%{_libdir}/R/share/sh/echo.sh
@@ -317,7 +315,7 @@ proc ModulesHelp { } {
 
 }
 
-module-whatis "Name: %{pname} built with %{compiler_family} compiler and Intel MKL support"
+module-whatis "Name: %{pname} built with %{compiler_family} compiler"
 module-whatis "Version: %{version}"
 module-whatis "Category: utility, developer support, user tool"
 module-whatis "Keywords: Statistics"
@@ -327,11 +325,11 @@ module-whatis "URL %{url}"
 set     version                     %{version}
 
 ## module load mkl ...
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded intel]  } {
-        module load mkl
-    }
-}
+###if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+###    if {  ![is-loaded mkl]  } {
+###        module load mkl
+###    }
+###}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man

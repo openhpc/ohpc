@@ -199,6 +199,14 @@ module-whatis "%{url}"
 
 set             version             %{version}
  
+## module load mkl ... now that the mkl header files are included
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  ![is-loaded intel]  } {
+        module load mkl
+    }
+}
+
+
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include

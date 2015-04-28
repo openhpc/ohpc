@@ -22,17 +22,18 @@ Summary:        A scalable distributed monitoring system for high-performance co
 License:        BSD-3-Clause
 Group:          System/Monitoring
 Name:           ganglia
-Version:        3.6.0
+Version:        3.7.1
 Release:        0
-%define lib_version 3_6_0-0
+%define lib_version 3_7_1-0
 Url:            http://ganglia.info/
 # The Release macro value is set in configure.in, please update it there.
 Source:         %{name}-%{version}.tar.gz
-# PATCH-FIX-OPENSUSE ganglia-3.5.0-init.patch
-Patch0:         ganglia-3.5.0-init.patch
+# # PATCH-FIX-OPENSUSE ganglia-3.5.0-init.patch
+# Patch0:         ganglia-3.5.0-init.patch
+Patch0:         ganglia-no-private-apr.patch
 BuildRequires:  autoconf
 BuildRequires:  automake
-BuildRequires:  fdupes
+# BuildRequires:  fdupes
 BuildRequires:  gcc-c++
 BuildRequires:  libart_lgpl-devel
 BuildRequires:  libconfuse-devel
@@ -43,14 +44,37 @@ BuildRequires:  pcre-devel
 BuildRequires:  pkgconfig
 BuildRequires:  python-devel
 BuildRequires:  freetype2-devel
-BuildRequires:  libapr1-devel
+# BuildRequires:  libapr1-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  rrdtool-devel
+%if 0%{?sles_version} || 0%{?suse_version}
 PreReq:         %insserv_prereq  %fillup_prereq
+%endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+
+%if 0%{?sles_version} || 0%{?suse_version}
+# define fdupes, clean up rpmlint errors
+BuildRequires: fdupes
+BuildRequires: libapr1-devel
+BuildRequires: systemd
+%endif
+
+# different package name with redhat
+%if 0%{?rhel_version} || 0%{?centos_version}
+BuildRequires:  apr-devel
+%endif
 
 %define gmond_conf %{_builddir}/%{?buildsubdir}/gmond/gmond.conf
 %define generate_gmond_conf %(test -e %gmond_conf && echo 0 || echo 1)
+
+# + /usr/lib/rpm/brp-python-bytecompile /usr/bin/python 1
+# Compiling /home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-19.1.x86_64/usr/lib64/ganglia/python_modules/DBUtil.py ...
+#   File "/usr/lib64/ganglia/python_modules/DBUtil.py", line 272
+#     (options, args) = parser.parse_args()
+#                     ^
+# SyntaxError: invalid syntax
+# Turn off the brp-python-bytecompile script
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
 
 %description
@@ -118,10 +142,17 @@ gmetric/python modules via DSO at daemon start time instead of via gmetric.
 Summary:        Ganglia static libraries and header files
 Group:          Development/Libraries/C and C++
 Requires:       libganglia-%{lib_version} = %{version}
-Requires:       libapr1-devel
+# Requires:       libapr1-devel
 Requires:       libconfuse-devel
 Requires:       libganglia-%{lib_version}
 Requires:       libexpat-devel
+# different package name with redhat
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires: libapr1-devel
+%endif
+%if 0%{?rhel_version} || 0%{?centos_version}
+BuildRequires:  apr-devel
+%endif
 
 
 %description devel
@@ -154,11 +185,19 @@ make %{?_smp_mflags}
 %install
 # Create the directory structure
 install -d -m 0755 %{buildroot}/etc/init.d
+install -d -m 0755 %{buildroot}/etc/rc.d/init.d
 install -d -m 0755 %{buildroot}/var/lib/ganglia/rrds
 
 # Move the files into the structure
+%if 0%{?sles_version} || 0%{?suse_version}
 cp -f gmond/gmond.init.SuSE %{buildroot}%{_initrddir}/ganglia-gmond
 cp -f gmetad/gmetad.init.SuSE %{buildroot}%{_initrddir}/ganglia-gmetad
+%endif
+%if 0%{?rhel_version} || 0%{?centos_version}
+cp -f gmond/gmond.init %{buildroot}%{_initrddir}/ganglia-gmond
+cp -f gmetad/gmetad.init %{buildroot}%{_initrddir}/ganglia-gmetad
+%endif
+
 install -d -m 0755 %{buildroot}%{_sbindir}
 ln -s %{_initrddir}/ganglia-gmond %{buildroot}%{_sbindir}/rcganglia-gmond
 ln -s %{_initrddir}/ganglia-gmetad %{buildroot}%{_sbindir}/rcganglia-gmetad
@@ -195,7 +234,12 @@ mv %{buildroot}%{_sysconfdir}/%{name}/conf.d/multicpu.conf %{buildroot}%{_syscon
 make DESTDIR=%{buildroot} install
 make -C gmond gmond.conf.5
 
+%if 0%{?sles_version} || 0%{?suse_version}
 %fdupes %{buildroot}
+#./scripts/fixconfig gmetad/gmetad.service.in
+# /bin/mkdir -p '/home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-29.1.x86_64/usr/lib/systemd/system'
+# /bin/install -c -m 644 gmetad.service '/home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-29.1.x86_64/usr/lib/systemd/system'
+%endif
 
 %post   -n libganglia-%{lib_version} -p /sbin/ldconfig
 
@@ -280,6 +324,7 @@ fi
 %{_initrddir}/ganglia-gmetad
 %{_mandir}/man1/gmetad*1*
 %config(noreplace) %{_sysconfdir}/%{name}/gmetad.conf
+/usr/lib/systemd/system/gmetad.service
 
 %files gmond
 %defattr(-,root,root)
@@ -296,7 +341,7 @@ fi
 %dir %{_sysconfdir}/%{name}
 %dir %{_sysconfdir}/%{name}/conf.d/
 %config(noreplace) %{_sysconfdir}/%{name}/conf.d/modgstatus.conf
-%config(noreplace) %{_sysconfdir}/%{name}/conf.d/multicpu.conf.disabled
+#%config(noreplace) %{_sysconfdir}/%{name}/conf.d/multicpu.conf.disabled
 %dir %{_libdir}/ganglia/
 %{_libdir}/ganglia/modmulticpu.so*
 %{_sysconfdir}/%{name}/conf.d/multicpu.conf*
@@ -308,6 +353,7 @@ fi
 %{_libdir}/ganglia/modnet.so*
 %{_libdir}/ganglia/modproc.so*
 %{_libdir}/ganglia/modsys.so*
+/usr/lib/systemd/system/gmond.service
 
 %files gmond-modules-python
 %defattr(-,root,root,-)
