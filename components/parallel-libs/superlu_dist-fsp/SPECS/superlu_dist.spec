@@ -82,7 +82,6 @@ Patch0:         superlu_dist-3.1-sequence-point.patch
 Patch1:         superlu_dist-4.0-make.patch
 # PATCH-FIX-UPSTREAM superlu_dist-3.2-example-no-return-in-non-void.patch
 Patch2:         superlu_dist-3.2-example-no-return-in-non-void.patch
-Patch3:         ar.test.patch
 #BuildRequires:  blas-devel
 #BuildRequires:  gcc-fortran
 #BuildRequires:  scotch-devel
@@ -127,7 +126,6 @@ solutions.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 %build
 # FSP compiler/mpi designation
