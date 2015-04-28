@@ -261,7 +261,7 @@ EOF
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
-%files devel
+%files
 %defattr(-,root,root,-)
 %{FSP_HOME}
 
