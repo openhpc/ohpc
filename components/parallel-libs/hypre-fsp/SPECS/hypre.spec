@@ -71,9 +71,8 @@ Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
 Group:          Development/Libraries/Parallel
 Url:            http://www.llnl.gov/casc/hypre/
-Source:         %{name}-%{version}.tar.xz
-Source1:        babel_files
-Patch0:         hypre-2.8.0b-no-date-and-time-fix.patch
+Source:         %{name}-%{version}.tar.gz
+#Patch0:         hypre-2.8.0b-no-date-and-time-fix.patch
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -104,8 +103,8 @@ simulation codes being developed at LLNL and elsewhere to study physical
 phenomena in the defense, environmental, energy, and biological sciences.
 
 %prep
-%setup -q
-%patch0 -p1
+%setup -q -n %{pname}-%{version}
+#%patch0 -p1
 
 %build
 
