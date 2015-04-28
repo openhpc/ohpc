@@ -19,9 +19,9 @@
 -METISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libmetis -lmetis
 -PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
 -I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
-+METISLIB = 
++METISLIB := -L$(METIS_DIR) -lmetis
 +PARMETISLIB := -L$(PARMETIS_LIB) -lparmetis
-+I_PARMETIS := -I$(PARMETIS_INC)
++I_PARMETIS := -I$(PARMETIS_INC) -I$(METIS_INC)
  ############################################################################
  
  # Define the required Fortran libraries, if you use C compiler to link

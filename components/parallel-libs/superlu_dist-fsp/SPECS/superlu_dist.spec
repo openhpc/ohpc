@@ -95,6 +95,8 @@ Patch2:         superlu_dist-3.2-example-no-return-in-non-void.patch
 #%endif
 BuildRequires: parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires: parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires: metis-%{compiler_family}%{PROJ_DELIM}
+Requires: metis-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %include %{_sourcedir}/FSP_macros
@@ -132,6 +134,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
+module load metis
 module load parmetis
 
 # Enable MKL linkage for blas/lapack with gnu builds
@@ -192,6 +195,9 @@ set     version                     %{version}
 # Require phdf5 and fftw (and mkl for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  ![is-loaded metis]  } {
+        module load metis
+    }
     if {  ![is-loaded parmetis]  } {
         module load parmetis
     }
