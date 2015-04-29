@@ -164,6 +164,19 @@ cd ..
 
 %install
 
+export FSP_COMPILER_FAMILY=%{compiler_family}
+export FSP_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/FSP_setup_mpi
+
+module load superlu
+module load superlu_dist
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 # %%makeinstall macro does not work with hypre
 cd src
 make install HYPRE_INSTALL_DIR=%{buildroot}%{install_path} \
@@ -191,10 +204,7 @@ for i in $LIBS; do
         ar x ../$i.a
         mpicxx -shared * -L.. $ADDLIB \
                        -llapack -lblas \
-                       -Wl,-soname,$i.so.%{somver} -o ../$i.so.%sover
-        ln -s $i.so.%sover ../$i.so.%{somver}
-        ln -s $i.so.%{somver} ../$i.so
-        rm -f *
+                       -Wl,-soname,$i.so.%{version} -o ../$i.so.%{version}
         ADDLIB="-lHYPRE"
     fi
 done
