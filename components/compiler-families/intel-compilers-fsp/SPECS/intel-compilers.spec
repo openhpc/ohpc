@@ -26,7 +26,7 @@ requires: gcc-c++
 %define debug_package %{nil}
 
 %define composer_release compilers_and_libraries_20%{version}
-%define package_target %{FSP_COMPILERS}/intel/%{composer_release}
+%define package_target %{FSP_COMPILERS}/intel
 
 %define package_version %{version}
 
