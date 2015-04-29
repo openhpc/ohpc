@@ -203,8 +203,8 @@ for i in $LIBS; do
     then
         ar x ../$i.a
         mpicxx -shared * -L.. $ADDLIB \
-                       -llapack -lblas \
-                       -Wl,-soname,$i.so.%{version} -o ../$i.so.%{version}
+                       -lmkl_core -lmkl_intel_lp64 -lmkl_sequential \
+                       -Wl,-soname,$i.so -o ../$i.so
         ADDLIB="-lHYPRE"
     fi
 done
