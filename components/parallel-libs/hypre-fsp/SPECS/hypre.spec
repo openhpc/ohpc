@@ -1,5 +1,5 @@
 #
-# spec file for package superlu_dist
+# spec file for package hypre
 #
 # Copyright (c) 2012 SUSE LINUX Products GmbH, Nuernberg, Germany.
 #
@@ -35,7 +35,6 @@ BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
 # hack to install MKL for the moment
 BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -62,110 +61,154 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 #-fsp-header-comp-end-------------------------------
 
 # Base package name
-%define pname superlu_dist
+%define pname hypre
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define major   4
-%define libname libsuperlu_dist
-
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        4.0
+Version:        2.10.0b
 Release:        0
-Summary:        A general purpose library for the direct solution of linear equations
+Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
 Group:          Development/Libraries/Parallel
-Url:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
-Source0:        %{pname}-%{version}.tar.gz
-# PATCH-FIX-UPSTREAM superlu_dist-3.1-sequence-point.patch
-Patch0:         superlu_dist-3.1-sequence-point.patch
-# PATCH-FIX-OPENSUSE superlu_dist-4.0-make.patch
-Patch1:         superlu_dist-4.0-make.patch
-# PATCH-FIX-UPSTREAM superlu_dist-3.2-example-no-return-in-non-void.patch
-Patch2:         superlu_dist-3.2-example-no-return-in-non-void.patch
-#BuildRequires:  blas-devel
-#BuildRequires:  gcc-fortran
-#BuildRequires:  scotch-devel
-#%if 0%{?_openmpi}
-#BuildRequires:  openmpi-devel
-#BuildRequires:  ptscotch-openmpi-devel
-#%endif
-#%if 0%{?_mvapich2}
-#BuildRequires:  mvapich2-devel
-#BuildRequires:  ptscotch-mvapich2-devel
-#%endif
-BuildRequires: parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires: parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: metis-%{compiler_family}%{PROJ_DELIM}
-Requires: metis-%{compiler_family}%{PROJ_DELIM}
+Url:            http://www.llnl.gov/casc/hypre/
+Source:         %{pname}-%{version}.tar.gz
+#Patch0:         hypre-2.8.0b-no-date-and-time-fix.patch
+%if 0%{?suse_version} <= 1110
+%{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%endif
+# TODO : add babel
+#BuildRequires:  babel-devel
+#BuildRequires:  libltdl-devel
+BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  libxml2-devel
+BuildRequires:  python-devel
+BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
+%if 0%{?suse_version}
+BuildRequires:  python-xml
+%else
+BuildRequires:  libxml2-python
+%endif
+BuildRequires:  xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
-%include %{_sourcedir}/FSP_macros
-#!BuildIgnore: post-build-checks
 %define debug_package %{nil}
 
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-SuperLU is a general purpose library for the direct solution of large, sparse,
-nonsymmetric systems of linear equations on high performance machines. The 
-library is written in C and is callable from either C or Fortran. The library
-routines will perform an LU decomposition with partial pivoting and triangular
-system solves through forward and back substitution. The LU factorization routines
-can handle non-square matrices but the triangular solves are performed only for
-square matrices. The matrix columns may be preordered (before factorization)
-either through library or user supplied routines. This preordering for sparsity 
-is completely separate from the factorization. Working precision iterative
-refinement subroutines are provided for improved backward stability. Routines
-are also provided to equilibrate the system, estimate the condition number,
-calculate the relative backward error, and estimate error bounds for the refined
-solutions. 
+The goal of the Scalable Linear Solvers project is to develop scalable
+algorithms and software for solving large, sparse linear systems of equations on
+parallel computers. The primary software product is Hypre, a library of high
+performance preconditioners that features parallel multigrid methods for both
+structured and unstructured grid problems. The problems of interest arise in the
+simulation codes being developed at LLNL and elsewhere to study physical
+phenomena in the defense, environmental, energy, and biological sciences.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+#%patch0 -p1
 
 %build
-# FSP compiler/mpi designation
+
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-module load metis
-module load parmetis
+module load superlu
+module load superlu_dist
 
 # Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
 module load mkl
 %endif
 
-make superlulib DSuperLUroot=$PWD 
+#export includedir=%{_includedir}
 
-mkdir tmp
-(cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
-pushd lib
-ln -s %{libname}.so.%{version} %{libname}.so
+#FLAGS="%optflags -fPIC -I%{_includedir}/numpy"
+FLAGS="%optflags -fPIC"
+cd src
+%configure \
+        --prefix=%{install_path} \
+    --without-examples \
+    --with-MPI \
+    --with-MPI-include=$MPI_DIR/include \
+    --with-MPI-lib-dirs="$MPI_DIR/lib" \
+    --with-timing \
+    --without-openmp \
+    --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+    --with-blas-lib-dirs=$MKLROOT/intel64/lib \
+        --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+        --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
+    --with-lapack \
+    --with-mli \
+    --with-fei \
+        --with-superlu \
+        --with-superlu_dist \
+    CC="mpicc $FLAGS" \
+    CXX="mpicxx $FLAGS" \
+    F77="mpif77 $FLAGS"
+#    MPI_PREFIX=%{_libdir}/mpi/gcc/$mpi
+mkdir -p hypre/lib
+pushd FEI_mv/femli
+make %{?_smp_mflags} all CC="mpicc $FLAGS" \
+                         CXX="mpicxx $FLAGS" \
+                         F77="mpif77 $FLAGS"
 popd
-
+make %{?_smp_mflags} all CC="mpicc $FLAGS" \
+                         CXX="mpicxx $FLAGS" \
+                         F77="mpif77 $FLAGS"
+cd ..
 
 %install
 
-%{__mkdir} -p %{buildroot}%{install_path}/include
-install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
-              SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
-              SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
-              %{buildroot}%{install_path}/include/
+export FSP_COMPILER_FAMILY=%{compiler_family}
+export FSP_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/FSP_setup_mpi
 
-%{__mkdir} -p %{buildroot}%{install_path}/lib
-install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
+module load superlu
+module load superlu_dist
+
+# Enable MKL linkage for blas/lapack with gnu builds
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
+# %%makeinstall macro does not work with hypre
+cd src
+make install HYPRE_INSTALL_DIR=%{buildroot}%{install_path} \
+             HYPRE_LIB_INSTALL=%{buildroot}%{install_path}/lib \
+             HYPRE_INC_INSTALL=%{buildroot}%{install_path}/include
+install -m644 hypre/lib/* %{buildroot}%{install_path}/lib
+cd ..
+
+# Fix wrong permissions
+chmod 644 %{buildroot}%{install_path}/include/LLNL_FEI_*.h
+
+# This files are provided with babel
+#rm -f %{buildroot}%{_libdir}/mpi/gcc/$mpi/%_lib/libsidl*
+#popd
+
+# shared libraries
+
 pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.3
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
+LIBS="$(ls *.a|sed 's|\.a||'|sort)"
+mkdir tmp
+pushd tmp
+for i in $LIBS; do
+    if [ "$i" != "libbHYPREClient-F" -a "$i" != "libbHYPREClient-CX" ]
+    then
+        ar x ../$i.a
+        mpicxx -shared * -L.. $ADDLIB \
+                       -Wl,-soname,$i.so -o ../$i.so 
+        ADDLIB="-lHYPRE"
+    fi
+done
 popd
+rmdir tmp
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -175,10 +218,10 @@ popd
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the SuperLU_dist library built with the %{compiler_family} compiler"
+puts stderr "This module loads the hypre library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of SuperLU_dist leverages the parmetis and MKL libraries."
+puts stderr "Note that this build of hypre leverages the superlu and MKL libraries."
 puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
@@ -195,11 +238,11 @@ set     version                     %{version}
 # Require phdf5 and fftw (and mkl for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded metis]  } {
-        module load metis
+    if {  ![is-loaded superlu]  } {
+        module load superlu
     }
-    if {  ![is-loaded parmetis]  } {
-        module load parmetis
+    if {  ![is-loaded superlu_dist]  } {
+        module load superlu_dist
     }
     if { [is-loaded gnu] } {
         if { ![is-loaded mkl]  } {
@@ -228,16 +271,12 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-
-%clean
-rm -rf %{buildroot}
-
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
-
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
 
 %changelog
+
