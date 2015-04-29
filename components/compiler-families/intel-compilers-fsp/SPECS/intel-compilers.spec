@@ -5,7 +5,7 @@
 
 Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
-Version:   15.2.164
+Version:   16.0.042
 Release:   1
 License:   Intel(R)
 URL:       http://www.intel.com/software/products
@@ -25,10 +25,10 @@ requires: gcc-c++
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
-%define composer_release composer_xe_20%{version}
+%define composer_release compilers_and_libraries_20%{version}
 %define package_target %{FSP_COMPILERS}/intel/%{composer_release}
 
-%define package_version 15.0.2.164
+%define package_version %{version}
 
 %description
 
@@ -71,32 +71,21 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-compilers/"
 
 set     version			    %{version}
 
-setenv	        MKLROOT 	    %{package_target}/mkl
-prepend-path    PATH                %{package_target}/bin/intel64:%{package_target}/mpirt/bin/intel64
-prepend-path    MANPATH             %{package_target}/man/en_US
-prepend-path	LIBRARY_PATH	    %{package_target}/compiler/lib/intel64
-prepend-path 	LD_LIBRARY_PATH     %{package_target}/compiler/lib/intel64:%{package_target}/compiler/mpirt/lib/intel64:%{package_target}/mkl/lib/intel64
-prepend-path	MIC_LD_LIBRARY_PATH %{package_target}/compiler/lib/mic:%{package_target}/mpirt/lib/mic
-prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/intel
+setenv          MKLROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/mkl
+prepend         PATH                %{package_target}/compilers_and_libraries_20%{version}/linux/bin/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mpirt/bin/intel64_lin:%{package_target}/debugger_2016/gdb/intel64_mic/bin
+prepend         MANPATH             %{package_target}/documentation_2016/en/debugger//gdb-ia/man/:%{package_target}/documentation_2016/en/debugger//gdb-mic/man/:%{package_target}/documentation_2016/en/debugger//gdb-igfx/man/:
 
-# debugger related
-
-prepend-path    MANPATH             %{package_target}/debugger/gdb/intel64/share/man/:%{package_target}/debugger/gdb/intel64_mic/share/man
-prepend-path    PATH                %{package_target}/debugger/gdb/intel64_mic/bin
-prepend-path 	LD_LIBRARY_PATH     %{package_target}/debugger/ipt/intel64/lib
-setenv          GDBSERVER_MIC       %{package_target}/debugger/gdb/target/mic/bin/gdbserver
-setenv          GDB_CROSS           %{package_target}/debugger/gdb/intel64_mic/bin/gdb-mic
-setenv          INTEL_PYTHONHOME    %{package_target}/debugger/python/intel64
-setenv          MPM_LAUNCHER        %{package_target}/debugger/mpm/bin/start_mpm.sh
-
-
-# TBB related
-
-setenv          TBBROOT             %{package_target}/tbb
-setenv          TBB_INC             %{package_target}/tbb/include
-setenv          TBB_LIB             %{package_target}/tbb/lib/intel64/gcc4.4
-prepend-path	MIC_LD_LIBRARY_PATH %{package_target}/tbb/lib/mic
-prepend-path 	LD_LIBRARY_PATH     %{package_target}/tbb/lib/intel64/gcc4.4
+prepend         LIBRARY_PATH        %{package_target}/compilers_and_libraries_20%{version}/linux/ipp/../compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../tbb/lib/intel64_lin/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../compiler/lib/intel64_lin
+prepend         LD_LIBRARY_PATH     %{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mpirt/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/../compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4:%{package_target}/debugger_2016/libipt/intel64/lib:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../tbb/lib/intel64_lin/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../compiler/lib/intel64_lin
+ 
+prepend         MIC_LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/mic
+setenv          GDBSERVER_MIC       %{package_target}/debugger_2016/gdb/targets/mic/bin/gdbserver
+setenv          GDB_CROSS           %{package_target}/debugger_2016/gdb/intel64_mic/bin/gdb-mic
+setenv          INTEL_PYTHONHOME    %{package_target}/debugger_2016/python/intel64/
+setenv          MPM_LAUNCHER        %{package_target}/debugger_2016/mpm/mic/bin/start_mpm.sh
+setenv          TBBROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb
+setenv          TBB_INC             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/include
+setenv          TBB_LIB             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4
 
 family "compiler"
 EOF
