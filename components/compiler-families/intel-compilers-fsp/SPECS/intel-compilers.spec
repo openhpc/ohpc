@@ -11,7 +11,7 @@ License:   Intel(R)
 URL:       http://www.intel.com/software/products
 Group:     fsp/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-fsp-%{version}.tar.gz
+Source0:   intel-compilers-fsp-16.0.0-042.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
