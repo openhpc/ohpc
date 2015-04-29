@@ -1,3 +1,8 @@
+%include %{_sourcedir}/FSP_macros
+
+%define pname ganglia
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 #
 # spec file for package ganglia
 #
@@ -20,14 +25,14 @@
 
 Summary:        A scalable distributed monitoring system for high-performance computing systems
 License:        BSD-3-Clause
-Group:          System/Monitoring
-Name:           ganglia
+Group:          fsp-admin
+Name:           %{pname}%{PROJ_DELIM}
 Version:        3.7.1
 Release:        0
 %define lib_version 3_7_1-0
 Url:            http://ganglia.info/
 # The Release macro value is set in configure.in, please update it there.
-Source:         %{name}-%{version}.tar.gz
+Source:         %{pname}-%{version}.tar.gz
 # # PATCH-FIX-OPENSUSE ganglia-3.5.0-init.patch
 # Patch0:         ganglia-3.5.0-init.patch
 Patch0:         ganglia-no-private-apr.patch
