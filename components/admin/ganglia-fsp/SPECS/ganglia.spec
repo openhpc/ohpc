@@ -55,7 +55,7 @@ BuildRequires:  rrdtool-devel
 %if 0%{?sles_version} || 0%{?suse_version}
 PreReq:         %insserv_prereq  %fillup_prereq
 %endif
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRoot:      %{_tmppath}/%{pname}-%{version}-build
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
@@ -182,7 +182,7 @@ gmetad packages
 %build
 %configure --with-gmetad \
            --enable-status \
-           --sysconfdir=%{_sysconfdir}/%{name} \
+           --sysconfdir=%{_sysconfdir}/%{pname} \
            --enable-setuid=daemon \
            --enable-setgid=nogroup
 make %{?_smp_mflags}
@@ -208,33 +208,33 @@ ln -s %{_initrddir}/ganglia-gmond %{buildroot}%{_sbindir}/rcganglia-gmond
 ln -s %{_initrddir}/ganglia-gmetad %{buildroot}%{_sbindir}/rcganglia-gmetad
 
 
-install -d -m 0755 %{buildroot}%{_sysconfdir}/%{name}
-install -d -m 0755 %{buildroot}%{_sysconfdir}/%{name}/conf.d
+install -d -m 0755 %{buildroot}%{_sysconfdir}/%{pname}
+install -d -m 0755 %{buildroot}%{_sysconfdir}/%{pname}/conf.d
 install -d -m 0755 %{buildroot}%{_libdir}/ganglia/python_modules
 
 %if %generate_gmond_conf
 # We just output the default gmond.conf from gmond using the '-t' flag
-  gmond/gmond -t > %{buildroot}%{_sysconfdir}/%{name}/gmond.conf
+  gmond/gmond -t > %{buildroot}%{_sysconfdir}/%{pname}/gmond.conf
 %else
-  cp -f %gmond_conf %{buildroot}%{_sysconfdir}/%{name}/gmond.conf
+  cp -f %gmond_conf %{buildroot}%{_sysconfdir}/%{pname}/gmond.conf
 %endif
-cp -f gmond/modules/conf.d/* %{buildroot}%{_sysconfdir}/%{name}/conf.d
+cp -f gmond/modules/conf.d/* %{buildroot}%{_sysconfdir}/%{pname}/conf.d
 
 # Copy the python metric modules and .conf files
-cp -f gmond/python_modules/conf.d/*.pyconf* %{buildroot}%{_sysconfdir}/%{name}/conf.d/
+cp -f gmond/python_modules/conf.d/*.pyconf* %{buildroot}%{_sysconfdir}/%{pname}/conf.d/
 cp -f gmond/python_modules/*/*.py %{buildroot}%{_libdir}/ganglia/python_modules/
 python -c 'import compileall; compileall.compile_dir("%{buildroot}%{_libdir}/ganglia/python_modules/", 1, "/", 1)' > /dev/null
 
 # Don't install the example modules
-rm -f %{buildroot}%{_sysconfdir}/%{name}/conf.d/example.conf
-rm -f %{buildroot}%{_sysconfdir}/%{name}/conf.d/example.pyconf
-rm -f %{buildroot}%{_sysconfdir}/%{name}/conf.d/spfexample.pyconf
+rm -f %{buildroot}%{_sysconfdir}/%{pname}/conf.d/example.conf
+rm -f %{buildroot}%{_sysconfdir}/%{pname}/conf.d/example.pyconf
+rm -f %{buildroot}%{_sysconfdir}/%{pname}/conf.d/spfexample.pyconf
 
 # Clean up the .conf.in files
-rm -f %{buildroot}%{_sysconfdir}/%{name}/conf.d/*.conf.in
+rm -f %{buildroot}%{_sysconfdir}/%{pname}/conf.d/*.conf.in
 
 # Disable the multicpu module until it is configured properly
-mv %{buildroot}%{_sysconfdir}/%{name}/conf.d/multicpu.conf %{buildroot}%{_sysconfdir}/%{name}/conf.d/multicpu.conf.disabled
+mv %{buildroot}%{_sysconfdir}/%{pname}/conf.d/multicpu.conf %{buildroot}%{_sysconfdir}/%{pname}/conf.d/multicpu.conf.disabled
 
 make DESTDIR=%{buildroot} install
 make -C gmond gmond.conf.5
@@ -255,13 +255,13 @@ make -C gmond gmond.conf.5
 %fillup_and_insserv ganglia-gmetad
 
 if [ -e /etc/gmetad.conf ]; then
-  mv /etc/gmetad.conf %{_sysconfdir}/%{name}
+  mv /etc/gmetad.conf %{_sysconfdir}/%{pname}
 fi
 
 %post gmond
 %fillup_and_insserv ganglia-gmond 
 
-LEGACY_GMOND_CONF=%{_sysconfdir}/%{name}/gmond.conf
+LEGACY_GMOND_CONF=%{_sysconfdir}/%{pname}/gmond.conf
 if [ -e /etc/gmond.conf ];
 then
   LEGACY_GMOND_CONF=/etc/gmond.conf
@@ -297,7 +297,7 @@ else
     echo "create a valid configuration."
   else
     if [ -e /etc/gmond.conf ]; then
-      mv /etc/gmond.conf %{_sysconfdir}/%{name}
+      mv /etc/gmond.conf %{_sysconfdir}/%{pname}
     fi
   fi
 fi
@@ -328,7 +328,7 @@ fi
 %{_sbindir}/rcganglia-gmetad
 %{_initrddir}/ganglia-gmetad
 %{_mandir}/man1/gmetad*1*
-%config(noreplace) %{_sysconfdir}/%{name}/gmetad.conf
+%config(noreplace) %{_sysconfdir}/%{pname}/gmetad.conf
 /usr/lib/systemd/system/gmetad.service
 
 %files gmond
@@ -342,14 +342,14 @@ fi
 %{_mandir}/man1/gmond.1*
 %{_mandir}/man1/gstat.1*
 %{_mandir}/man5/gmond.conf.5*
-%config(noreplace) %{_sysconfdir}/%{name}/gmond.conf
-%dir %{_sysconfdir}/%{name}
-%dir %{_sysconfdir}/%{name}/conf.d/
-%config(noreplace) %{_sysconfdir}/%{name}/conf.d/modgstatus.conf
+%config(noreplace) %{_sysconfdir}/%{pname}/gmond.conf
+%dir %{_sysconfdir}/%{pname}
+%dir %{_sysconfdir}/%{pname}/conf.d/
+%config(noreplace) %{_sysconfdir}/%{pname}/conf.d/modgstatus.conf
 #%config(noreplace) %{_sysconfdir}/%{name}/conf.d/multicpu.conf.disabled
 %dir %{_libdir}/ganglia/
 %{_libdir}/ganglia/modmulticpu.so*
-%{_sysconfdir}/%{name}/conf.d/multicpu.conf*
+%{_sysconfdir}/%{pname}/conf.d/multicpu.conf*
 %{_libdir}/ganglia/modcpu.so*
 %{_libdir}/ganglia/moddisk.so*
 %{_libdir}/ganglia/modgstatus.so
@@ -365,8 +365,8 @@ fi
 %dir %{_libdir}/ganglia/python_modules/
 %{_libdir}/ganglia/python_modules/*.py*
 %{_libdir}/ganglia/modpython.so*
-%config(noreplace) %{_sysconfdir}/%{name}/conf.d/modpython.conf
-%config(noreplace) %{_sysconfdir}/%{name}/conf.d/*.pyconf*
+%config(noreplace) %{_sysconfdir}/%{pname}/conf.d/modpython.conf
+%config(noreplace) %{_sysconfdir}/%{pname}/conf.d/*.pyconf*
 
 %files devel
 %defattr(-,root,root,-)
