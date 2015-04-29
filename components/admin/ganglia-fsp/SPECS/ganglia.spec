@@ -176,7 +176,7 @@ gmetad packages
 
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch0 -p1
 
 %build
