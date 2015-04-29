@@ -168,7 +168,7 @@ cd ..
 cd src
 make install HYPRE_INSTALL_DIR=%{buildroot}%{install_path} \
              HYPRE_LIB_INSTALL=%{buildroot}%{install_path}/lib \
-             HYPRE_INC_INSTALL=%{buildroot}%{install_path}/include \
+             HYPRE_INC_INSTALL=%{buildroot}%{install_path}/include
 install -m644 hypre/lib/* %{buildroot}%{install_path}/lib
 cd ..
 
