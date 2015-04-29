@@ -203,7 +203,6 @@ for i in $LIBS; do
     then
         ar x ../$i.a
         mpicxx -shared * -L.. $ADDLIB \
-                       -L$MKLROOT/intel64/lib -lmkl_rt \
                        -Wl,-soname,$i.so -o ../$i.so 
         ADDLIB="-lHYPRE"
     fi
