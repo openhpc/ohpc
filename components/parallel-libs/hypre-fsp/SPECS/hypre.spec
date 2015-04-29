@@ -165,21 +165,23 @@ cd ..
 %install
 
 # %%makeinstall macro does not work with hypre
-make install HYPRE_INSTALL_DIR=%{buildroot}%{_libdir}/mpi/gcc/$mpi \
-             HYPRE_LIB_INSTALL=%{buildroot}%{_libdir}/mpi/gcc/$mpi/%_lib \
-             HYPRE_INC_INSTALL=%{buildroot}%{_libdir}/mpi/gcc/$mpi/include/%{name}
-install -m644 hypre/lib/* %{buildroot}%{_libdir}/mpi/gcc/$mpi/%_lib
+cd src
+make install HYPRE_INSTALL_DIR=%{buildroot}%{install_path} \
+             HYPRE_LIB_INSTALL=%{buildroot}%{install_path}/lib \
+             HYPRE_INC_INSTALL=%{buildroot}%{install_path}/include \
+install -m644 hypre/lib/* %{buildroot}%{install_path}/lib
+cd ..
 
 # Fix wrong permissions
-chmod 644 %{buildroot}%{_libdir}/mpi/gcc/$mpi/include/%{name}/LLNL_FEI_*.h
+chmod 644 %{buildroot}%{install_path}/include/LLNL_FEI_*.h
 
 # This files are provided with babel
-rm -f %{buildroot}%{_libdir}/mpi/gcc/$mpi/%_lib/libsidl*
-popd
+#rm -f %{buildroot}%{_libdir}/mpi/gcc/$mpi/%_lib/libsidl*
+#popd
 
 # shared libraries
 
-pushd %{buildroot}%{_libdir}/mpi/gcc/$mpi/%_lib
+pushd %{buildroot}%{install_path}/lib
 LIBS="$(ls *.a|sed 's|\.a||'|sort)"
 mkdir tmp
 pushd tmp
@@ -187,7 +189,7 @@ for i in $LIBS; do
     if [ "$i" != "libbHYPREClient-F" -a "$i" != "libbHYPREClient-CX" ]
     then
         ar x ../$i.a
-        %{_libdir}/mpi/gcc/$mpi/bin/mpicxx -shared * -L.. $ADDLIB \
+        mpicxx -shared * -L.. $ADDLIB \
                        -llapack -lblas \
                        -Wl,-soname,$i.so.%{somver} -o ../$i.so.%sover
         ln -s $i.so.%sover ../$i.so.%{somver}
