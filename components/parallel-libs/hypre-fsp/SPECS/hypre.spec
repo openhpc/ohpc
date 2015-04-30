@@ -130,7 +130,7 @@ module load mkl
 #FLAGS="%optflags -fPIC -I%{_includedir}/numpy"
 FLAGS="%optflags -fPIC"
 cd src
-%configure \
+./configure \
         --prefix=%{install_path} \
     --without-examples \
     --with-MPI \
