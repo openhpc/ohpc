@@ -208,7 +208,6 @@ for i in $LIBS; do
     fi
 done
 popd
-rmdir tmp
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
