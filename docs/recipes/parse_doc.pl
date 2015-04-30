@@ -35,6 +35,8 @@ if ( defined $ENV{'NODE_NAME'} && defined $ENV{'COMPUTE_HOSTS'} ) {
 
     if ($master_host =~ /(master[1-9])-(\S+)/ ) {
 	$master_host = $1;
+    } elsif ( $master_host =~ /(sms[1-9])/ ) {
+	$master_host = $1;
     }
     @computes = split(', ',$ENV{'COMPUTE_HOSTS'});
     $num_computes = @computes;
