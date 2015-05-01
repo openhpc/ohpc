@@ -1,0 +1,11 @@
+--- trilinos-11.14.3-Source/cmake/tribits/core/config_tests/fmangle/cmangle.c	2015-04-17 12:01:25.000000000 -0700
++++ trilinos-11.14.3-Source.patch/cmake/tribits/core/config_tests/fmangle/cmangle.c	2015-04-30 13:11:40.000000000 -0700
+@@ -33,7 +33,7 @@
+ extern void FN1 (void);
+ extern void FN2 (void);
+ 
+-int main (void)
++void main (void)
+ {
+     FN1 ();
+     FN2 ();
