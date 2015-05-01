@@ -7,7 +7,7 @@ License: BSD
 Vendor: Ganglia Development Team <ganglia-developers@lists.sourceforge.net>
 Group: System Environment/Base
 Source: %{name}-%{version}.tar.gz
-Source1: apache.conf
+#Source1: apache.conf
 Buildroot: %{_tmppath}/%{name}-%{version}-buildroot
 Obsoletes: ganglia-webfrontend
 Requires: php >= 5, php-gd
@@ -29,7 +29,7 @@ written in the PHP5 language and uses the Dwoo templating engine.
 
 %prep
 %setup -n %{name}-%{version}
-%__cp %{SOURCE1} .
+#%__cp %{SOURCE1} .
 
 %build
 
