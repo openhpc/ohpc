@@ -11,7 +11,7 @@ Source: %{name}-%{version}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-buildroot
 Obsoletes: ganglia-webfrontend
 Requires: php >= 5, php-gd
-%if 0%{?suse_version}
+%if 0%{?sles_version} || 0%{?suse_version}
 %define web_prefixdir /srv/www/htdocs/ganglia
 %else
 %define web_prefixdir %{custom_web_prefixdir}
@@ -61,6 +61,9 @@ written in the PHP5 language and uses the Dwoo templating engine.
 %config(noreplace) %{web_prefixdir}/conf_default.php
 /var/lib/ganglia-web/conf/*
 %config(noreplace) /etc/ganglia-web/apache.conf
+
+%dir %attr(0755,www-data,www-data)/var/lib/ganglia-web
+%dir %attr(0755,www-data,www-data)/etc/ganglia-web
 
 %clean
 %__rm -rf $RPM_BUILD_ROOT
