@@ -13,11 +13,9 @@ Obsoletes: ganglia-webfrontend
 Requires: php >= 5, php-gd
 %if 0%{?sles_version} || 0%{?suse_version}
 %define web_prefixdir /srv/www/htdocs/ganglia
-%else
-%define web_prefixdir %{custom_web_prefixdir}
 %endif
 
-%{!?custom_web_prefixdir: %define web_prefixdir /var/www/html/ganglia}
+%{!?web_prefixdir: %define web_prefixdir /var/www/html/ganglia}
 
 Prefix: %{web_prefixdir}
 BuildArchitectures: noarch
