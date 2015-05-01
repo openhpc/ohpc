@@ -45,8 +45,6 @@ Source1: FSP_macros
 Source2: FSP_setup_compiler
 Patch1:         numpy-buildfix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  blas-devel
-BuildRequires:  lapack-devel
 BuildRequires:  python-devel
 Requires:       python >= %{py_ver}
 Provides:       numpy = %{version}
@@ -109,8 +107,10 @@ module load mkl
 
 %if %{compiler_family} == intel
 LDSHARED="icc -shared" \
+COMPILER_FLAG="--compiler=intelem"
 %endif
-CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build
+CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
+
 
 %install
 # FSP compiler/mpi designation
