@@ -86,7 +86,7 @@ BuildRequires:  fdupes
 %endif
 #BuildRequires:  gcc-c++
 #BuildRequires:  gcc-fortran
-BuildRequires:  glpk-devel
+#BuildRequires:  glpk-devel
 BuildRequires:  graphviz
 #BuildRequires:  hdf5-devel
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -96,7 +96,7 @@ BuildRequires:  libxml2-devel
 ##BuildRequires:  mumps-devel
 BuildRequires:  perl
 BuildRequires:  libqt4-devel
-##BuildRequires:  suitesparse-common-devel
+#BuildRequires:  suitesparse-common-devel
 BuildRequires:  swig > 2.0.0
 #BuildRequires:  tbb-devel
 #BuildRequires:  superlu-devel
@@ -107,7 +107,7 @@ BuildRequires:  swig > 2.0.0
 #BuildRequires:  netcdf-devel
 #%endif
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-##BuildRequires:  umfpack-devel
+#BuildRequires:  umfpack-devel
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 %if 0%{?suse_version} <= 1110
