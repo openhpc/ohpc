@@ -106,10 +106,10 @@ module load mkl
 
 
 %if %{compiler_family} == intel
-LDSHARED="icc -shared" \
 COMPILER_FLAG="--compiler=intelem"
 %endif
-CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
+#CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
+python setup.py build $COMPILER_FLAG
 
 
 %install
