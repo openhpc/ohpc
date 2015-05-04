@@ -15,6 +15,7 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+
 #-fsp-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/FSP_macros
