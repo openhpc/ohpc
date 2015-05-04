@@ -91,9 +91,9 @@ BuildRequires:  graphviz
 #BuildRequires:  hdf5-devel
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  lapack-devel
-##BuildRequires:  libscotch-devel
+#BuildRequires:  libscotch-devel
 BuildRequires:  libxml2-devel
-##BuildRequires:  mumps-devel
+#BuildRequires:  mumps-devel
 BuildRequires:  perl
 BuildRequires:  libqt4-devel
 #BuildRequires:  suitesparse-common-devel
@@ -273,14 +273,14 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTPL_ENABLE_Zlib:BOOL=ON					\
 	-DTPL_ENABLE_Netcdf:BOOL=ON					\
 	-DTPL_ENABLE_QT:BOOL=ON						\
-	-DTPL_ENABLE_MUMPS:BOOL=ON					\
-	-DMUMPS_LIBRARY_DIRS:PATH=%{install_path}/lib	                \
-	-DMUMPS_INCLUDE_DIRS:PATH=%{_includedir}/mumps			\
-	-DTPL_ENABLE_AMD:BOOL=ON					\
-	-DAMD_INCLUDE_DIRS:PATH=%{_includedir}/suitesparse		\
-	-DTPL_ENABLE_SuperLU:BOOL=ON					\
-	-DTPL_ENABLE_UMFPACK:BOOL=ON					\
-	-DUMFPACK_INCLUDE_DIRS:PATH=%{_includedir}/suitesparse		\
+#	-DTPL_ENABLE_MUMPS:BOOL=ON					\
+#	-DMUMPS_LIBRARY_DIRS:PATH=%{install_path}/lib	                \
+#	-DMUMPS_INCLUDE_DIRS:PATH=%{_includedir}/mumps			\
+#	-DTPL_ENABLE_AMD:BOOL=ON					\
+#	-DAMD_INCLUDE_DIRS:PATH=%{_includedir}/suitesparse		\
+#	-DTPL_ENABLE_SuperLU:BOOL=ON					\
+#	-DTPL_ENABLE_UMFPACK:BOOL=ON					\
+#	-DUMFPACK_INCLUDE_DIRS:PATH=%{_includedir}/suitesparse		\
 	-DTPL_ENABLE_HDF5:BOOL=ON					\
 	-DHDF5_INCLUDE_DIRS:PATH=%{install_path}/include	        \
 	-DHDF5_LIBRARY_NAMES:STRING="hdf5"				\
@@ -289,7 +289,7 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 #	-DScotch_LIBRARY_DIRS:PATH=%{install_path}/lib	                \
 #	-DScotch_INCLUDE_DIRS:PATH=%{install_path}/include              \
 #	-DTPL_ENABLE_AMD:BOOL=ON					\
-	-DAMD_INCLUDE_DIRS:PATH=%{_includedir}/suitesparse		\
+#	-DAMD_INCLUDE_DIRS:PATH=%{_includedir}/suitesparse		\
 	-DTPL_ENABLE_HYPRE:BOOL=ON					\
 	-DHYPRE_INCLUDE_DIRS:PATH=%{install_path}/include               \
 	-DHYPRE_LIBRARY_DIRS:PATH=%{install_path}/lib	                \
