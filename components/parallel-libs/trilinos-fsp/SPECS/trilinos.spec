@@ -73,7 +73,7 @@ Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
 Group:          System/Libraries
 Url:            http://trilinos.sandia.gov/index.html
-Source0:        %{pname}-%{version}-Source.tar.gz
+Source0:        %{pname}-%{version}.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         trilinos-11.14.3-no_rpath.patch
 BuildRequires:  boost-devel
@@ -86,26 +86,28 @@ BuildRequires:  fdupes
 %endif
 #BuildRequires:  gcc-c++
 #BuildRequires:  gcc-fortran
-BuildRequires:  glpk-devel
+#BuildRequires:  glpk-devel
 BuildRequires:  graphviz
 #BuildRequires:  hdf5-devel
-BuildRequires:  phdf5-fsp
+BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  lapack-devel
-BuildRequires:  libscotch-devel
+##BuildRequires:  libscotch-devel
 BuildRequires:  libxml2-devel
-BuildRequires:  mumps-devel
+##BuildRequires:  mumps-devel
 BuildRequires:  perl
 BuildRequires:  libqt4-devel
-BuildRequires:  suitesparse-common-devel
+#BuildRequires:  suitesparse-common-devel
 BuildRequires:  swig > 2.0.0
 #BuildRequires:  tbb-devel
-BuildRequires:  superlu-devel
-%if 0%{?suse_version} == 1140 || 0%{?suse_version} == 1210
-BuildRequires:  libnetcdf-devel
-%else
-BuildRequires:  netcdf-devel
-%endif
-BuildRequires:  umfpack-devel
+#BuildRequires:  superlu-devel
+#BuildRequires:  superlu-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+#%if 0%{?suse_version} == 1140 || 0%{?suse_version} == 1210
+#BuildRequires:  libnetcdf-devel
+#%else
+#BuildRequires:  netcdf-devel
+#%endif
+BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+#BuildRequires:  umfpack-devel
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 %if 0%{?suse_version} <= 1110
@@ -218,7 +220,7 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 #This package contains the Trilinos HTML documentation.
 
 %prep
-%setup -q -n %{name}-%{version}-Source
+%setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
 #%patch2 -p1
