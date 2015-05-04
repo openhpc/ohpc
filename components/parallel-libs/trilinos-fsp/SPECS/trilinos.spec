@@ -220,7 +220,7 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 #This package contains the Trilinos HTML documentation.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
 #%patch2 -p1
