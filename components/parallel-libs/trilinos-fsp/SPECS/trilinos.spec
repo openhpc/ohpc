@@ -89,23 +89,23 @@ BuildRequires:  fdupes
 BuildRequires:  glpk-devel
 BuildRequires:  graphviz
 #BuildRequires:  hdf5-devel
-BuildRequires:  phdf5-fsp
+BuildRequires:  hdf5-fsp
 BuildRequires:  lapack-devel
-BuildRequires:  libscotch-devel
+##BuildRequires:  libscotch-devel
 BuildRequires:  libxml2-devel
-BuildRequires:  mumps-devel
+##BuildRequires:  mumps-devel
 BuildRequires:  perl
 BuildRequires:  libqt4-devel
-BuildRequires:  suitesparse-common-devel
+##BuildRequires:  suitesparse-common-devel
 BuildRequires:  swig > 2.0.0
 #BuildRequires:  tbb-devel
-BuildRequires:  superlu-devel
+##BuildRequires:  superlu-devel
 %if 0%{?suse_version} == 1140 || 0%{?suse_version} == 1210
 BuildRequires:  libnetcdf-devel
 %else
 BuildRequires:  netcdf-devel
 %endif
-BuildRequires:  umfpack-devel
+##BuildRequires:  umfpack-devel
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 %if 0%{?suse_version} <= 1110
