@@ -100,7 +100,7 @@ BuildRequires:  libqt4-devel
 BuildRequires:  swig > 2.0.0
 #BuildRequires:  tbb-devel
 #BuildRequires:  superlu-devel
-BuildRequires:  superlu-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+#BuildRequires:  superlu-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #%if 0%{?suse_version} == 1140 || 0%{?suse_version} == 1210
 #BuildRequires:  libnetcdf-devel
 #%else
