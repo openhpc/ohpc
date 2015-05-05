@@ -129,101 +129,10 @@ of equations and related capabilities. The majority of packages are written in
 C++ using object-oriented techniques. All packages are self-contained, with the 
 Trilinos top layer providing a common look-and-feel and infrastructure.
 
-#%package devel
-#Summary:        A collection of libraries of numerical algorithms
-#Group:          Development/Libraries/C and C++
-#Requires:       %{name} = %{version}
-#Requires:       glpk-devel
-#Requires:       hdf5-devel
-#Requires:       lapack-devel
-#Requires:       libscotch-devel
-#Requires:       libxml2-devel
-#Requires:       mumps-devel
-#Requires:       libqt4-devel
-#Requires:       suitesparse-common-devel
-#Requires:       umfpack-devel
-#Requires:       swig
-
-#%description devel
-#This package contains the development headers needed for the Trilinos packages.
-#It also contains the various Trilinos packages' examples.
-
-#%package -n python-PyTrilinos
-#Summary:        A Python binding to the trilinos libraries of numerical algorithms
-#Group:          Development/Languages/Python
-#Requires:       python-numpy
-#Requires:       swig
-#BuildRequires:  python-devel
-#BuildRequires:  python-numpy-devel
-
-#%description -n python-PyTrilinos
-#Trilinos is a collection of compatible software packages that support parallel 
-#linear algebra computations, solution of linear, non-linear and eigen systems 
-#of equations and related capabilities. The majority of packages are written in 
-#C++ using object-oriented techniques. All packages are self-contained, with the 
-#Trilinos top layer providing a common look-and-feel and infrastructure.
-
-#This package contains the Python binding to the trilinos libraries of numerical
-#algorithms.
-
-#%package openmpi
-#Summary:        A collection of libraries of numerical algorithms
-#Group:          Development/Libraries/Parallel
-#BuildRequires:  hdf5-openmpi-devel
-#BuildRequires:  hypre-openmpi-devel
-#BuildRequires:  mumps-openmpi-devel
-#BuildRequires:  ptscotch-openmpi-devel
-#BuildRequires:  blacs-openmpi-devel
-#BuildRequires:  scalapack-openmpi-devel
-
-#%description openmpi
-#Trilinos is a collection of compatible software packages that support parallel 
-#linear algebra computations, solution of linear, non-linear and eigen systems 
-#of equations and related capabilities. The majority of packages are written in 
-#C++ using object-oriented techniques. All packages are self-contained, with the 
-#Trilinos top layer providing a common look-and-feel and infrastructure.
-
-#This package contains the Trilinos library compiled against openmpi.
-
-#%package openmpi-devel
-#Summary:        A collection of libraries of numerical algorithms
-#Group:          Development/Libraries/C and C++
-#Requires:       %{name}-openmpi = %{version}
-#Requires:       glpk-devel
-#Requires:       hdf5-openmpi-devel
-#Requires:       hypre-openmpi-devel
-#Requires:       mumps-openmpi-devel
-#Requires:       ptscotch-openmpi-devel
-#Requires:       blacs-openmpi-devel
-#Requires:       scalapack-openmpi-devel
-#Requires:       swig
-
-#%description openmpi-devel
-#This package contains the development headers needed for the Trilinos packages.
-#It also contains the various Trilinos packages' examples.
-
-
-#%package doc
-#Summary:        The documentation and HTML files fof %{name}
-#Group:          Documentation/HTML
-#%if 0%{?suse_version} > 1110
-#BuildArch:      noarch
-#%endif
-
-#%description doc
-#Trilinos is a collection of compatible software packages that support parallel 
-#linear algebra computations, solution of linear, non-linear and eigen systems 
-#of equations and related capabilities. The majority of packages are written in 
-#C++ using object-oriented techniques. All packages are self-contained, with the 
-#Trilinos top layer providing a common look-and-feel and infrastructure.
-
-#This package contains the Trilinos HTML documentation.
-
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
-#%patch2 -p1
 
 %build
 # FSP compiler/mpi designation
@@ -232,9 +141,10 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-# TODO: build mvapich2 parallel version on SLE 11
-mkdir openmpi
-cd openmpi
+module load phdf5
+
+mkdir tmp
+cd tmp
 cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTrilinos_INSTALL_INCLUDE_DIR:PATH=%{install_path}/include	\
 	-DTrilinos_INSTALL_LIB_DIR:PATH=%{install_path}/lib             \
@@ -291,71 +201,6 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 make VERBOSE=1 
 make %{?_smp_mflags}
 cd ..
-
-#mkdir serial
-#cd serial
-#export CFLAGS="%{optflags} -fPIC"
-#export CXXFLAGS="%{optflags} -fpermissive -fPIC"
-#export FFLAGS="%{optflags} -fPIC"
-#cmake	-DCMAKE_INSTALL_PREFIX=%{_prefix}		\
-#	-DTrilinos_INSTALL_INCLUDE_DIR:PATH=%{_includedir}/%{name}	\\
-#	-DTrilinos_INSTALL_LIB_DIR:PATH=%{_libdir}/%{name}		\
-#	-DCMAKE_EXE_LINKER_FLAGS:STRING="-fPIC"				\
-#	-DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE				\
-#	-DCMAKE_BUILD_TYPE:STRING=RELEASE				\
-#	-DBUILD_SHARED_LIBS:BOOL=ON					\
-#	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON				\
-#	-DCMAKE_SKIP_RPATH:BOOL=ON					\
-#	-DTrilinos_VERBOSE_CONFIGURE:BOOL=ON				\
-#	-DTrilinos_ENABLE_ALL_PACKAGES:BOOL=ON 				\
-#	-DTrilinos_ENABLE_Didasko:BOOL=ON				\
-#	-DTrilinos_ENABLE_Stokhos:BOOL=ON				\
-#	-DTrilinos_ENABLE_Phalanx:BOOL=ON				\
-#	-DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON			\
-#	-DTrilinos_ENABLE_PyTrilinos:BOOL=ON				\
-#	-DPyTrilinos_INSTALL_DIR:PATH=%{python_sitearch}/PyTrilinos	\
-#	-DTrilinos_ENABLE_CTrilinos:BOOL=ON				\
-#%if 0%{?suse_version} >= 1210
-#	-DTrilinos_ENABLE_ForTrilinos:BOOL=ON				\
-#%endif
-#	-DTrilinos_ENABLE_TESTS:BOOL=OFF				\
-#	-DTEUCHOS_ENABLE_expat:BOOL=ON					\
-#	-DTEUCHOS_ENABLE_libxml2:BOOL=ON				\
-#	-DTEUCHOS_ENABLE_gmp:BOOL=ON					\
-#	-DBLAS_LIBRARY_DIRS:PATH=%{_libdir}				\
-#	-DBLAS_LIBRARY_NAMES:STRING="blas"				\
-#	-DTPL_ENABLE_BLAS:BOOL=ON					\
-#	-DLAPACK_LIBRARY_DIRS:PATH=%{_libdir}				\
-#	-DLAPACK_LIBRARY_NAMES:STRING="lapack"				\
-#	-DTPL_ENABLE_GLPK:BOOL=ON					\
-#	-DTPL_ENABLE_LAPACK:BOOL=ON					\
-#	-DNOX_ENABLE_lapack:BOOL=ON					\
-#	-DTPL_ENABLE_MPI:BOOL=OFF					\
-#	-DTPL_ENABLE_Pthread:BOOL=ON					\
-#	-DTPL_ENABLE_Boost:BOOL=ON					\
-#	-DTPL_ENABLE_CppUnit:BOOL=ON					\
-#	-DTPL_ENABLE_Zlib:BOOL=ON					\
-#	-DTPL_ENABLE_Scotch:BOOL=ON					\
-#	-DTPL_ENABLE_Netcdf:BOOL=ON					\
-#	-DTPL_ENABLE_QT:BOOL=ON						\
-#	-DTPL_ENABLE_MUMPS:BOOL=ON					\
-#	-DMUMPS_LIBRARY_NAMES='dmumps_seq;pord_seq'			\
-#	-DMUMPS_INCLUDE_DIRS:PATH=%{_includedir}/mumps			\
-#	-DTPL_ENABLE_AMD:BOOL=ON					\
-#	-DAMD_INCLUDE_DIRS:PATH=%{_includedir}/suitesparse		\
-#	-DTPL_ENABLE_SuperLU:BOOL=ON					\
-#	-DTPL_ENABLE_HYPRE:BOOL=OFF					\
-#	-DTPL_ENABLE_UMFPACK:BOOL=ON					\
-#	-DUMFPACK_INCLUDE_DIRS:PATH=%{_includedir}/suitesparse		\
-#	-DTPL_ENABLE_HDF5:BOOL=ON					\
-#	-DHDF5_INCLUDE_DIRS:PATH=%{_includedir}/hdf5			\
-#	-DHDF5_LIBRARY_NAMES:STRING="hdf5"				\
-#	-DHDF5_LIBRARY_DIRS:PATH=%{_libdir}/hdf5			\
-#	..
-#	-DTPL_ENABLE_TBB:BOOL=ON					\
-#make VERBOSE=1 
-#make %{?_smp_mflags}
-#cd ..
 
 # Build the doc
 echo "HTML_TIMESTAMP=NO" >> packages/common/Doxyfile
@@ -439,7 +284,7 @@ echo "%{_libdir}/%{name}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}.conf
 %fdupes -s %{buildroot}%{_includedir}
 %endif
 
-cd openmpi
+cd tmp
 make DESTDIR=%{buildroot} install INSTALL='install -p'
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes -s %{buildroot}%{_libdir}/mpi/gcc/openmpi/include
