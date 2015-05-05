@@ -144,6 +144,10 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load phdf5
 module load netcdf
 
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+
 mkdir tmp
 cd tmp
 cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
@@ -191,11 +195,11 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DHDF5_LIBRARY_DIRS:PATH=$HDF5_LIB				\
         -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
 	-DTPL_ENABLE_BLACS:BOOL=ON					\
-	-DBLACS_LIBRARY_DIRS:PATH=%{_libdir}	  			\
-	-DBLACS_INCLUDE_DIRS:PATH=%{_includedir}/blacs	                \
+	-DBLACS_LIBRARY_DIRS:PATH=$MKLROOT/lib/intel64			\
+	-DBLACS_INCLUDE_DIRS:PATH=$MKLROOT/include	                \
 	-DBLACS_LIBRARY_NAMES:STRING="mpiblacs;mpiblacsCinit;mpiblacsF77init"\
 	-DTPL_ENABLE_SCALAPACK:BOOL=ON					\
-	-DSCALAPACK_LIBRARY_DIRS:PATH=%{_libdir}			\
+	-DSCALAPACK_LIBRARY_DIRS:PATH=$MKLROOT/lib/intel64		\
 	-DSCALAPACK_LIBRARY_NAMES:STRING="scalapack"			\
         ..			
 make VERBOSE=1 
