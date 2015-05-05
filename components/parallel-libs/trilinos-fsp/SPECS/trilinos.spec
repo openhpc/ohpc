@@ -233,8 +233,8 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
 
 # TODO: build mvapich2 parallel version on SLE 11
-#mkdir openmpi
-#cd openmpi
+mkdir openmpi
+cd openmpi
 cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTrilinos_INSTALL_INCLUDE_DIR:PATH=%{install_path}/include	\
 	-DTrilinos_INSTALL_LIB_DIR:PATH=%{install_path}/lib             \
@@ -299,11 +299,11 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DBLACS_LIBRARY_NAMES:STRING="mpiblacs;mpiblacsCinit;mpiblacsF77init"\
 	-DTPL_ENABLE_SCALAPACK:BOOL=ON					\
 	-DSCALAPACK_LIBRARY_DIRS:PATH=%{install_path}/lib               \
-	-DSCALAPACK_LIBRARY_NAMES:STRING="scalapack"                    \
+	-DSCALAPACK_LIBRARY_NAMES:STRING="scalapack" \
         ..			
 make VERBOSE=1 
 make %{?_smp_mflags}
-#cd ..
+cd ..
 
 #mkdir serial
 #cd serial
@@ -452,12 +452,12 @@ echo "%{_libdir}/%{name}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}.conf
 %fdupes -s %{buildroot}%{_includedir}
 %endif
 
-#cd openmpi
+cd openmpi
 make DESTDIR=%{buildroot} install INSTALL='install -p'
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes -s %{buildroot}%{_libdir}/mpi/gcc/openmpi/include
 %endif
-#cd ..
+cd ..
 
 %clean
 rm -rf %{buildroot}
