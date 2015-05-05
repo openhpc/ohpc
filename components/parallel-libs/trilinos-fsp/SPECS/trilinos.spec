@@ -234,6 +234,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 # TODO: build mvapich2 parallel version on SLE 11
 mkdir openmpi
+cp CMakeLists.txt openmpi/.
 cd openmpi
 cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTrilinos_INSTALL_INCLUDE_DIR:PATH=%{install_path}/include	\
