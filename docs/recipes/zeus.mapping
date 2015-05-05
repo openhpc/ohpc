@@ -10,17 +10,33 @@ master1_ip=172.16.0.1
 master1_netmask=172.16.0.1/24
 master1_ipoib=192.168.100.1
 
+sms1_ip=172.16.0.1
+sms1_netmask=172.16.0.1/24
+sms1_ipoib=192.168.100.1
+
 master2_ip=172.16.0.2
 master2_netmask=172.16.0.1/24
 master2_ipoib=192.168.100.2
+
+sms2_ip=172.16.0.2
+sms2_netmask=172.16.0.1/24
+sms2_ipoib=192.168.100.2
 
 master3_ip=172.16.0.3
 master3_netmask=172.16.0.1/24
 master3_ipoib=192.168.100.3
 
+sms3_ip=172.16.0.3
+sms3_netmask=172.16.0.1/24
+sms3_ipoib=192.168.100.3
+
 master4_ip=172.16.0.4
 master4_netmask=172.16.0.1/24
 master4_ipoib=192.168.100.4
+
+sms4_ip=172.16.0.4
+sms4_netmask=172.16.0.1/24
+sms4_ipoib=192.168.100.4
 
 # Nodes 5 thru 8
 
