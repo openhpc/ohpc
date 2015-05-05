@@ -200,6 +200,7 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTPL_ENABLE_SCALAPACK:BOOL=ON					\
 	-DSCALAPACK_LIBRARY_DIRS:PATH=$MKLROOT/lib/intel64		\
 	-DSCALAPACK_LIBRARY_NAMES:STRING="mkl_intel_lp64;mkl_core;mkl_sequential"\
+	-DTPL_ENABLE_Matio=OFF						\
         ..			
 #       -DTPL_ENABLE_BLACS:BOOL=ON                                      \
 #       -DBLACS_LIBRARY_DIRS:PATH=$MKLROOT/lib/intel64                  \
