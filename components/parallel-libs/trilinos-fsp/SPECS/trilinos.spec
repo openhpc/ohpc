@@ -142,6 +142,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
 
 module load phdf5
+module load netcdf
 
 mkdir tmp
 cd tmp
@@ -182,11 +183,13 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTPL_ENABLE_CppUnit:BOOL=ON					\
 	-DTPL_ENABLE_Zlib:BOOL=ON					\
 	-DTPL_ENABLE_Netcdf:BOOL=ON					\
+        -DNetcdf_INCLUDE_DIRS:PATH=$NETCDF_INC                          \
+	-DNetcdf_LIBRARY_DIRS:PATH=$NETCDF_LIB                          \
 	-DTPL_ENABLE_QT:BOOL=ON						\
 	-DTPL_ENABLE_HDF5:BOOL=ON					\
 	-DHDF5_INCLUDE_DIRS:PATH=$HDF5_INC	        		\
-	-DHDF5_LIBRARY_NAMES:STRING="hdf5"				\
 	-DHDF5_LIBRARY_DIRS:PATH=$HDF5_LIB				\
+        -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
 	-DTPL_ENABLE_HYPRE:BOOL=ON					\
 	-DHYPRE_INCLUDE_DIRS:PATH=%{_includedir}			\
 	-DHYPRE_LIBRARY_DIRS:PATH=%{_libdir}				\
