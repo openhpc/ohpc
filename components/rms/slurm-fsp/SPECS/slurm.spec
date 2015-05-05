@@ -333,6 +333,7 @@ Slurm SQL support. Contains interfaces to MySQL.
 %package -n %{pname}-plugins%{PROJ_DELIM}
 Summary: Slurm plugins (loadable shared objects)
 Group: fsp/rms
+Requires: munge-libs%{PROJ_DELIM}
 %description -n %{pname}-plugins%{PROJ_DELIM}
 Slurm plugins (loadable shared objects) supporting a wide variety of
 architectures and behaviors. These basically provide the building blocks
