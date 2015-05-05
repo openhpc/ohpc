@@ -195,13 +195,13 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DHDF5_LIBRARY_DIRS:PATH=$HDF5_LIB				\
         -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
 	-DTPL_ENABLE_BLACS:BOOL=ON					\
-	-DBLACS_LIBRARY_DIRS:PATH=$MKLROOT/lib/intel64			\
-	-DBLACS_INCLUDE_DIRS:PATH=$MKLROOT/include	                \
-	-DBLACS_LIBRARY_NAMES:STRING="mpiblacs;mpiblacsCinit;mpiblacsF77init"\
 	-DTPL_ENABLE_SCALAPACK:BOOL=ON					\
 	-DSCALAPACK_LIBRARY_DIRS:PATH=$MKLROOT/lib/intel64		\
 	-DSCALAPACK_LIBRARY_NAMES:STRING="scalapack"			\
         ..			
+#       -DBLACS_LIBRARY_DIRS:PATH=$MKLROOT/lib/intel64                  \
+#       -DBLACS_INCLUDE_DIRS:PATH=$MKLROOT/include                      \
+#       -DBLACS_LIBRARY_NAMES:STRING="mpiblacs;mpiblacsCinit;mpiblacsF77init"\
 make VERBOSE=1 
 make %{?_smp_mflags}
 cd ..
