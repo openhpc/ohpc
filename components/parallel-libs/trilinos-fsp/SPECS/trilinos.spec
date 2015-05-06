@@ -90,7 +90,7 @@ BuildRequires:  fdupes
 BuildRequires:  graphviz
 #BuildRequires:  hdf5-devel
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  lapack-devel
+#BuildRequires:  lapack-devel
 #BuildRequires:  libscotch-devel
 BuildRequires:  libxml2-devel
 #BuildRequires:  mumps-devel
@@ -170,6 +170,7 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTrilinos_ENABLE_ForTrilinos:BOOL=ON				\
 %endif
 	-DTrilinos_ENABLE_TESTS:BOOL=OFF				\
+        -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
 	-DTEUCHOS_ENABLE_expat:BOOL=ON					\
 	-DTEUCHOS_ENABLE_libxml2:BOOL=ON				\
 	-DTEUCHOS_ENABLE_gmp:BOOL=ON					\
@@ -187,27 +188,24 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
  	-DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"		\
 	-DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"				\
-        -DTPL_ENABLE_SCALAPACK:BOOL=ON                                  \
-        -DSCALAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"          \
-        -DSCALAPACK_LIBRARY_NAMES:STRING="mkl_rt"                       \
- 	-DNOX_ENABLE_lapack:BOOL=ON					\
-	-DTrilinos_ENABLE_OpenMP:BOOL=ON				\
+        -DTPL_ENABLE_Netcdf:BOOL=ON                                     \
+        -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC}"                      \
+        -DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB}"                      \
+        -DTPL_ENABLE_HDF5:BOOL=ON                                       \
+        -DHDF5_INCLUDE_DIRS:PATH="${HDF5_INC}"                          \
+        -DHDF5_LIBRARY_DIRS:PATH="${HDF5_LIB}"                          \
+        -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
 	-DTPL_ENABLE_Pthread:BOOL=ON					\
 	-DTPL_ENABLE_Boost:BOOL=ON					\
 	-DTPL_ENABLE_CppUnit:BOOL=ON					\
 	-DTPL_ENABLE_Zlib:BOOL=ON					\
         -DTPL_ENABLE_QT:BOOL=OFF                                        \
-	-DTPL_ENABLE_Netcdf:BOOL=ON					\
-        -DTPL_ENABLE_BLACS:BOOL=OFF					\
-        -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC}"                      \
-	-DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB}"                      \
-	-DTPL_ENABLE_HDF5:BOOL=ON					\
-	-DHDF5_INCLUDE_DIRS:PATH="${HDF5_INC}"	        		\
-	-DHDF5_LIBRARY_DIRS:PATH="${HDF5_LIB}"				\
-        -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
 	-DTPL_ENABLE_Matio=OFF						\
 	-DTPL_ENABLE_GLM=OFF						\
         ..			
+#       -DTPL_ENABLE_SCALAPACK:BOOL=ON                                  \
+#       -DSCALAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"          \
+#       -DSCALAPACK_LIBRARY_NAMES:STRING="mkl_rt"                       \
 #       -DTPL_ENABLE_BLACS:BOOL=ON                                      \
 #       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
 #       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
