@@ -239,7 +239,24 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-make DESTDIR=$RPM_BUILD_ROOT install
+%if %{compiler_family} == gnu
+module load mkl
+%endif
+module load phdf5
+module load netcdf
+
+cd tmp
+make DESTDIR=%{buildroot} install INSTALL='install -p'
+cd ..
+find %{buildroot}%{_libdir} -name '*.la' -exec rm {} \;
+
+# ld.so.conf.d file
+mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+echo "%{_libdir}/%{name}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}.conf
+
+%if 0%{?sles_version} || 0%{?suse_version}
+%fdupes -s %{buildroot}%{_includedir}
+%endif
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -264,13 +281,13 @@ module-whatis "URL %{url}"
 set     version                     %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
@@ -282,26 +299,6 @@ EOF
 ##
 set     ModulesVersion      "%{version}"
 EOF
-
-#cd serial
-#make DESTDIR=%{buildroot} install INSTALL='install -p'
-#cd ..
-#find %{buildroot}%{_libdir} -name '*.la' -exec rm {} \;
-
-# ld.so.conf.d file
-mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-echo "%{_libdir}/%{name}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}.conf
-
-%if 0%{?sles_version} || 0%{?suse_version}
-%fdupes -s %{buildroot}%{_includedir}
-%endif
-
-cd tmp
-make DESTDIR=%{buildroot} install INSTALL='install -p'
-%if 0%{?sles_version} || 0%{?suse_version}
-%fdupes -s %{buildroot}%{_libdir}/mpi/gcc/openmpi/include
-%endif
-cd ..
 
 %clean
 rm -rf %{buildroot}
