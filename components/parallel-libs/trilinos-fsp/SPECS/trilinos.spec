@@ -199,7 +199,7 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTPL_ENABLE_Boost:BOOL=ON					\
 	-DTPL_ENABLE_CppUnit:BOOL=ON					\
 	-DTPL_ENABLE_Zlib:BOOL=ON					\
-        -DTPL_ENABLE_QT:BOOL=ON                                         \
+        -DTPL_ENABLE_QT:BOOL=OFF                                        \
 	-DTPL_ENABLE_Netcdf:BOOL=ON					\
         -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC}"                      \
 	-DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB}"                      \
@@ -209,7 +209,6 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
         -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
 	-DTPL_ENABLE_Matio=BOOL:OFF					\
 	-DTPL_ENABLE_GLM=BOOL:OFF					\
-	-DTPL_ENABLE_QT:BOOL=OFF					\
         ..			
 #       -DTPL_ENABLE_BLACS:BOOL=ON                                      \
 #       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
