@@ -111,6 +111,7 @@ BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 BuildRequires:	qt-devel
+Requires:	qt-devel
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -206,8 +207,9 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DHDF5_INCLUDE_DIRS:PATH="${HDF5_INC}"	        		\
 	-DHDF5_LIBRARY_DIRS:PATH="${HDF5_LIB}"				\
         -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
-	-DTPL_ENABLE_Matio=OFF						\
-	-DTPL_ENABLE_GLM=OFF						\
+	-DTPL_ENABLE_Matio=BOOL:OFF					\
+	-DTPL_ENABLE_GLM=BOOL:OFF					\
+	-DTPL_ENABLE_QT:BOOL=OFF					\
         ..			
 #       -DTPL_ENABLE_BLACS:BOOL=ON                                      \
 #       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
