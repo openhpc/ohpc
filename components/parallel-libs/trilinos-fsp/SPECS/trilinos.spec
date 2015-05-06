@@ -110,8 +110,6 @@ BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #BuildRequires:  umfpack-devel
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-BuildRequires:	qt-devel
-Requires:	qt-devel
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -143,12 +141,11 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-module load phdf5
-module load netcdf
-
 %if %{compiler_family} == gnu
 module load mkl
 %endif
+module load phdf5
+module load netcdf
 
 mkdir tmp
 cd tmp
@@ -201,6 +198,7 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTPL_ENABLE_Zlib:BOOL=ON					\
         -DTPL_ENABLE_QT:BOOL=OFF                                        \
 	-DTPL_ENABLE_Netcdf:BOOL=ON					\
+        -DTPL_ENABLE_BLACS:BOOL=OFF					\
         -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC}"                      \
 	-DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB}"                      \
 	-DTPL_ENABLE_HDF5:BOOL=ON					\
