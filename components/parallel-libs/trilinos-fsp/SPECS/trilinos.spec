@@ -171,9 +171,6 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTrilinos_ENABLE_ForTrilinos:BOOL=ON				\
 %endif
 	-DTrilinos_ENABLE_TESTS:BOOL=OFF				\
-	-DTEUCHOS_ENABLE_expat:BOOL=ON					\
-	-DTEUCHOS_ENABLE_libxml2:BOOL=ON				\
-	-DTEUCHOS_ENABLE_gmp:BOOL=ON					\
         -DTPL_ENABLE_MPI:BOOL=ON                                        \
         -DMPI_C_COMPILER:FILEPATH=mpicc                                 \
         -DMPI_CXX_COMPILER:FILEPATH=mpicxx                              \
@@ -191,10 +188,6 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
         -DTPL_ENABLE_SCALAPACK:BOOL=ON                                  \
         -DSCALAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"          \
         -DSCALAPACK_LIBRARY_NAMES:STRING="mkl_rt"                       \
-        -DTPL_ENABLE_BLACS:BOOL=ON                                      \
-        -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
-        -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
-        -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
  	-DNOX_ENABLE_lapack:BOOL=ON					\
 	-DTrilinos_ENABLE_OpenMP:BOOL=ON				\
 	-DTPL_ENABLE_Pthread:BOOL=ON					\
@@ -212,6 +205,13 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTPL_ENABLE_Matio=OFF						\
 	-DTPL_ENABLE_GLM=OFF						\
         ..			
+#       -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
+#       -DTEUCHOS_ENABLE_libxml2:BOOL=ON                                \
+#       -DTEUCHOS_ENABLE_gmp:BOOL=ON                                    \
+#       -DTPL_ENABLE_BLACS:BOOL=ON                                      \
+#       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
+#       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
+#       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
 make VERBOSE=1 
 make %{?_smp_mflags}
 cd ..
