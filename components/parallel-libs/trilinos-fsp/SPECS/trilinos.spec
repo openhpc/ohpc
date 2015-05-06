@@ -200,7 +200,6 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DTPL_ENABLE_Netcdf:BOOL=ON					\
         -DNetcdf_INCLUDE_DIRS:PATH=$NETCDF_INC                          \
 	-DNetcdf_LIBRARY_DIRS:PATH=$NETCDF_LIB                          \
-	-DTPL_ENABLE_QT:BOOL=ON						\
 	-DTPL_ENABLE_HDF5:BOOL=ON					\
 	-DHDF5_INCLUDE_DIRS:PATH=$HDF5_INC	        		\
 	-DHDF5_LIBRARY_DIRS:PATH=$HDF5_LIB				\
@@ -212,7 +211,7 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 #       -DTPL_ENABLE_BLACS:BOOL=ON                                      \
 #       -DBLACS_LIBRARY_DIRS:PATH=$MKLROOT/lib/intel64                  \
 #       -DBLACS_INCLUDE_DIRS:PATH=$MKLROOT/include                      \
-#       -DBLACS_LIBRARY_NAMES:STRING="mkl_intel_lp64;mkl_core;mkl_sequential"\
+#       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"				\
 make VERBOSE=1 
 make %{?_smp_mflags}
 cd ..
