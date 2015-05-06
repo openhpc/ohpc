@@ -110,6 +110,7 @@ BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #BuildRequires:  umfpack-devel
 BuildRequires:  xz
 BuildRequires:  zlib-devel
+BuildRequires:	qt-devel
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
