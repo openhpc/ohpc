@@ -207,8 +207,8 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 	-DHDF5_INCLUDE_DIRS:PATH="${HDF5_INC}"	        		\
 	-DHDF5_LIBRARY_DIRS:PATH="${HDF5_LIB}"				\
         -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
-	-DTPL_ENABLE_Matio=BOOL:OFF					\
-	-DTPL_ENABLE_GLM=BOOL:OFF					\
+	-DTPL_ENABLE_Matio=OFF						\
+	-DTPL_ENABLE_GLM=OFF						\
         ..			
 #       -DTPL_ENABLE_BLACS:BOOL=ON                                      \
 #       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
