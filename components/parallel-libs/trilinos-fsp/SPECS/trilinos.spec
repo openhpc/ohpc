@@ -248,7 +248,8 @@ module load netcdf
 cd tmp
 make DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
-find %{buildroot}%{_libdir} -name '*.la' -exec rm {} \;
+
+#find %{buildroot}%{_libdir} -name '*.la' -exec rm {} \;
 
 # ld.so.conf.d file
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
