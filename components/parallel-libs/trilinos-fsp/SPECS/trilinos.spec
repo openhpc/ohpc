@@ -123,10 +123,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-Trilinos is a collection of compatible software packages that support parallel 
-linear algebra computations, solution of linear, non-linear and eigen systems 
-of equations and related capabilities. The majority of packages are written in 
-C++ using object-oriented techniques. All packages are self-contained, with the 
+Trilinos is a collection of compatible software packages that support parallel
+linear algebra computations, solution of linear, non-linear and eigen systems
+of equations and related capabilities. The majority of packages are written in
+C++ using object-oriented techniques. All packages are self-contained, with the
 Trilinos top layer providing a common look-and-feel and infrastructure.
 
 %prep
@@ -149,31 +149,31 @@ module load netcdf
 
 mkdir tmp
 cd tmp
-cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
-	-DTrilinos_INSTALL_INCLUDE_DIR:PATH=%{install_path}/include	\
-	-DTrilinos_INSTALL_LIB_DIR:PATH=%{install_path}/lib             \
-	-DCMAKE_EXE_LINKER_FLAGS:STRING="-fPIC"				\
-	-DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE				\
-	-DCMAKE_BUILD_TYPE:STRING=RELEASE				\
-	-DBUILD_SHARED_LIBS:BOOL=ON					\
-	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON				\
-	-DCMAKE_SKIP_RPATH:BOOL=ON					\
-	-DTrilinos_VERBOSE_CONFIGURE:BOOL=ON				\
-	-DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF				\
-	-DTrilinos_ENABLE_Didasko:BOOL=ON				\
-	-DTrilinos_ENABLE_Stokhos:BOOL=ON				\
-	-DTrilinos_ENABLE_Phalanx:BOOL=ON				\
-	-DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON			\
-	-DTrilinos_ENABLE_PyTrilinos:BOOL=OFF				\
-	-DTrilinos_ENABLE_CTrilinos:BOOL=ON				\
+cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
+        -DTrilinos_INSTALL_INCLUDE_DIR:PATH=%{install_path}/include     \
+        -DTrilinos_INSTALL_LIB_DIR:PATH=%{install_path}/lib             \
+        -DCMAKE_EXE_LINKER_FLAGS:STRING="-fPIC"                         \
+        -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE                              \
+        -DCMAKE_BUILD_TYPE:STRING=RELEASE                               \
+        -DBUILD_SHARED_LIBS:BOOL=ON                                     \
+        -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON                              \
+        -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
+        -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
+        -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
+        -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
+        -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
+        -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
+        -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
+        -DTrilinos_ENABLE_PyTrilinos:BOOL=OFF                           \
+        -DTrilinos_ENABLE_CTrilinos:BOOL=ON                             \
 %if 0%{?suse_version} >= 1210
-	-DTrilinos_ENABLE_ForTrilinos:BOOL=ON				\
+        -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
 %endif
-	-DTrilinos_ENABLE_TESTS:BOOL=OFF				\
+        -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
         -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
-	-DTEUCHOS_ENABLE_expat:BOOL=ON					\
-	-DTEUCHOS_ENABLE_libxml2:BOOL=ON				\
-	-DTEUCHOS_ENABLE_gmp:BOOL=ON					\
+        -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
+        -DTEUCHOS_ENABLE_libxml2:BOOL=ON                                \
+        -DTEUCHOS_ENABLE_gmp:BOOL=ON                                    \
         -DTPL_ENABLE_MPI:BOOL=ON                                        \
         -DMPI_C_COMPILER:FILEPATH=mpicc                                 \
         -DMPI_CXX_COMPILER:FILEPATH=mpicxx                              \
@@ -183,11 +183,11 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
         -DMKL_LIBRARY_NAMES:STRING="mkl_rt"                             \
         -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
         -DTPL_ENABLE_BLAS:BOOL=ON                                       \
- 	-DBLAS_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"		\
-	-DBLAS_LIBRARY_NAMES:STRING="mkl_rt"				\
+        -DBLAS_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"               \
+        -DBLAS_LIBRARY_NAMES:STRING="mkl_rt"                            \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
- 	-DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"		\
-	-DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"				\
+        -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
+        -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
         -DTPL_ENABLE_Netcdf:BOOL=ON                                     \
         -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC}"                      \
         -DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB}"                      \
@@ -195,14 +195,14 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
         -DHDF5_INCLUDE_DIRS:PATH="${HDF5_INC}"                          \
         -DHDF5_LIBRARY_DIRS:PATH="${HDF5_LIB}"                          \
         -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
-	-DTPL_ENABLE_Pthread:BOOL=ON					\
-	-DTPL_ENABLE_Boost:BOOL=ON					\
-	-DTPL_ENABLE_CppUnit:BOOL=ON					\
-	-DTPL_ENABLE_Zlib:BOOL=ON					\
+        -DTPL_ENABLE_Pthread:BOOL=ON                                    \
+        -DTPL_ENABLE_Boost:BOOL=ON                                      \
+        -DTPL_ENABLE_CppUnit:BOOL=ON                                    \
+        -DTPL_ENABLE_Zlib:BOOL=ON                                       \
         -DTPL_ENABLE_QT:BOOL=OFF                                        \
-	-DTPL_ENABLE_Matio=OFF						\
-	-DTPL_ENABLE_GLM=OFF						\
-        ..			
+        -DTPL_ENABLE_Matio=OFF                                          \
+        -DTPL_ENABLE_GLM=OFF                                            \
+        ..
 #       -DTPL_ENABLE_SCALAPACK:BOOL=ON                                  \
 #       -DSCALAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"          \
 #       -DSCALAPACK_LIBRARY_NAMES:STRING="mkl_rt"                       \
@@ -210,7 +210,7 @@ cmake	-DCMAKE_INSTALL_PREFIX=%{install_path}		                \
 #       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
 #       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
 #       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
-make VERBOSE=1 
+make VERBOSE=1
 make %{?_smp_mflags}
 cd ..
 
@@ -225,7 +225,7 @@ cd ..
 # move html files in a single directory for doc package
 find ./ -type d -name html -print0 | xargs -0 -I '{}' cp --parent -r '{}' doc/
 test -d doc/doc && rm -rf doc/doc
-test -f doc/build_docs.pl && rm -f doc/build_docs.pl 
+test -f doc/build_docs.pl && rm -f doc/build_docs.pl
 sed -i s/href=\"\.\./href=\"\./ doc/index.html
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -315,7 +315,7 @@ rm -rf %{buildroot}
 #%files
 #%defattr(-, root, root, -)
 #%doc CHANGELOG LICENSE README RELEASE_NOTES
-#%dir %{_libdir}/%{name} 
+#%dir %{_libdir}/%{name}
 #%{_bindir}/*
 #%{_libdir}/%{name}/*.so
 #%{_libdir}/%{name}/cmake
