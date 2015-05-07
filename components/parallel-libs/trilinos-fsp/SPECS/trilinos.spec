@@ -1,20 +1,4 @@
-#
 # spec file for package trilinos
-#
-# Copyright (c) 2013 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
 
 #-fsp-header-comp-begin-----------------------------
 
@@ -76,7 +60,7 @@ Url:            http://trilinos.sandia.gov/index.html
 Source0:        %{pname}-%{version}.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         trilinos-11.14.3-no_rpath.patch
-BuildRequires:  boost-devel
+BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  cmake >= 2.8
 BuildRequires:  cppunit-devel
 BuildRequires:  doxygen
@@ -84,30 +68,13 @@ BuildRequires:  expat
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
-#BuildRequires:  gcc-c++
-#BuildRequires:  gcc-fortran
-#BuildRequires:  glpk-devel
 BuildRequires:  graphviz
-#BuildRequires:  hdf5-devel
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-#BuildRequires:  lapack-devel
-#BuildRequires:  libscotch-devel
 BuildRequires:  libxml2-devel
-#BuildRequires:  mumps-devel
 BuildRequires:  perl
 BuildRequires:  libqt4-devel
-#BuildRequires:  suitesparse-common-devel
 BuildRequires:  swig > 2.0.0
-#BuildRequires:  tbb-devel
-#BuildRequires:  superlu-devel
-#BuildRequires:  superlu-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-#%if 0%{?suse_version} == 1140 || 0%{?suse_version} == 1210
-#BuildRequires:  libnetcdf-devel
-#%else
-#BuildRequires:  netcdf-devel
-#%endif
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-#BuildRequires:  umfpack-devel
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 %if 0%{?suse_version} <= 1110
@@ -179,9 +146,9 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DMPI_CXX_COMPILER:FILEPATH=mpicxx                              \
         -DMPI_FORTRAN_COMPILER:FILEPATH=mpif90                          \
         -DTPL_ENABLE_MKL:BOOL=ON                                        \
+        -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
         -DMKL_LIBRARY_DIRS:FILEPATH="${MKLROOT}/lib/intel64"            \
         -DMKL_LIBRARY_NAMES:STRING="mkl_rt"                             \
-        -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
         -DTPL_ENABLE_BLAS:BOOL=ON                                       \
         -DBLAS_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"               \
         -DBLAS_LIBRARY_NAMES:STRING="mkl_rt"                            \
@@ -195,8 +162,11 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DHDF5_INCLUDE_DIRS:PATH="${HDF5_INC}"                          \
         -DHDF5_LIBRARY_DIRS:PATH="${HDF5_LIB}"                          \
         -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
-        -DTPL_ENABLE_Pthread:BOOL=ON                                    \
         -DTPL_ENABLE_Boost:BOOL=ON                                      \
+        -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
+        -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
+        -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
+        -DTPL_ENABLE_Pthread:BOOL=ON                                    \
         -DTPL_ENABLE_CppUnit:BOOL=ON                                    \
         -DTPL_ENABLE_Zlib:BOOL=ON                                       \
         -DTPL_ENABLE_QT:BOOL=OFF                                        \
@@ -214,24 +184,6 @@ make VERBOSE=1
 make %{?_smp_mflags}
 cd ..
 
-# Build the doc
-echo "HTML_TIMESTAMP=NO" >> packages/common/Doxyfile
-find packages/ -name 'footer.html' -print0 | xargs -0 sed -i 's/ on \$datetime//'
-find packages/ -name 'Doxyfile*' -print0 | xargs -0 sed -i 's/HTML_TIMESTAMP         = YES/HTML_TIMESTAMP         = NO/'
-
-cd doc
-perl ./build_docs.pl
-cd ..
-# move html files in a single directory for doc package
-find ./ -type d -name html -print0 | xargs -0 -I '{}' cp --parent -r '{}' doc/
-test -d doc/doc && rm -rf doc/doc
-test -f doc/build_docs.pl && rm -f doc/build_docs.pl
-#sed -i s/href=\"\.\./href=\"\./ doc/index.html
-
-%if 0%{?sles_version} || 0%{?suse_version}
-%fdupes -s doc/
-%endif
-
 %install
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
@@ -239,20 +191,9 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-
 cd tmp
 make DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
-
-#find %{buildroot}%{_libdir} -name '*.la' -exec rm {} \;
-
-# ld.so.conf.d file
-#mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-#echo "%{_libdir}/%{name}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}.conf
-
-#%if 0%{?sles_version} || 0%{?suse_version}
-#%fdupes -s %{buildroot}%{_includedir}
-#%endif
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -300,43 +241,8 @@ rm -rf %{buildroot}
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
-#%post openmpi -p /sbin/ldconfig
-#%postun openmpi -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
-
-#%files
-#%defattr(-, root, root, -)
-#%doc CHANGELOG LICENSE README RELEASE_NOTES
-#%dir %{_libdir}/%{name}
-#%{_bindir}/*
-#%{_libdir}/%{name}/*.so
-#%{_libdir}/%{name}/cmake
-#%config %{_sysconfdir}/ld.so.conf.d/%{name}.conf
-
-#%files devel
-#%defattr(-, root, root, -)
-#%{_includedir}/%{name}
-
-#%files doc
-#%defattr(-, root, root, -)
-#%doc doc/*
-
-#%files -n python-PyTrilinos
-#%defattr(-, root, root, -)
-#%{python_sitearch}/PyTrilinos
-
-#%files openmpi
-#%defattr(-, root, root, -)
-#%doc CHANGELOG LICENSE README RELEASE_NOTES
-#%{_libdir}/mpi/gcc/openmpi/bin/*
-#%{_libdir}/mpi/gcc/openmpi/%{_lib}/*.so
-#%{_libdir}/mpi/gcc/openmpi/%{_lib}/cmake
-
-#%files openmpi-devel
-#%defattr(-, root, root, -)
-#%{_libdir}/mpi/gcc/openmpi/include/%{name}
 
 %changelog
