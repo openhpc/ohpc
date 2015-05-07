@@ -226,7 +226,7 @@ cd ..
 find ./ -type d -name html -print0 | xargs -0 -I '{}' cp --parent -r '{}' doc/
 test -d doc/doc && rm -rf doc/doc
 test -f doc/build_docs.pl && rm -f doc/build_docs.pl
-sed -i s/href=\"\.\./href=\"\./ doc/index.html
+#sed -i s/href=\"\.\./href=\"\./ doc/index.html
 
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes -s doc/
