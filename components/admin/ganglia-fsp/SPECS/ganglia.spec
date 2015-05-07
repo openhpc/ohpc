@@ -305,10 +305,10 @@ fi
 
 %endif # systemd
 
-%post %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
-%postun %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
+%post -n %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
+%postun -n %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
 
-%post %{pname}-web%{PROJ_DELIM}
+%post -n %{pname}-web%{PROJ_DELIM}
 if [ ! -L /usr/share/ganglia/lib/Zend ]; then
   ln -s /usr/share/php/Zend /usr/share/ganglia/lib/Zend
 fi
