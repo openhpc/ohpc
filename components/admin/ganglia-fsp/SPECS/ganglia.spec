@@ -9,7 +9,7 @@
 %global systemd         1
 %global _hardened_build 1
 
-Name:               ganglia
+Name:               %{pname}%{PROJ_DELIM}
 Version:            %{gangver}
 Release:            1%{?dist}
 Summary:            Distributed Monitoring System
@@ -55,7 +55,7 @@ Ganglia is a scalable, real-time monitoring and execution environment
 with all execution requests and statistics expressed in an open
 well-defined XML format.
 
-%package web
+%package -n %{pname}-web%{PROJ_DELIM}
 Summary:            Ganglia Web Frontend
 Group:              Applications/Internet
 Version:            %{webver}
@@ -63,14 +63,14 @@ Requires:           rrdtool
 Requires:           php
 Requires:           php-gd
 Requires:           php-ZendFramework
-Requires:           %{name}-gmetad = %{gangver}-%{release}
+Requires:           %{pname}-gmetad%{PROJ_DELIM} = %{gangver}-%{release}
 
-%description        web
+%description -n %{pname}-web%{PROJ_DELIM}
 This package provides a web frontend to display the XML tree published by
 ganglia, and to provide historical graphs of collected metrics. This website is
 written in the PHP4 language.
 
-%package gmetad
+%package -n %{pname}-gmetad%{PROJ_DELIM}
 Summary:            Ganglia Metadata collection daemon
 Group:              Applications/Internet
 Requires:           %{name} = %{gangver}-%{release}
@@ -84,7 +84,7 @@ Requires(preun):    /sbin/chkconfig
 Requires(preun):    /sbin/service
 %endif #systemd
 
-%description        gmetad
+%description -n %{pname}-gmetad%{PROJ_DELIM}
 Ganglia is a scalable, real-time monitoring and execution environment
 with all execution requests and statistics expressed in an open
 well-defined XML format.
@@ -92,7 +92,7 @@ well-defined XML format.
 This gmetad daemon aggregates monitoring data from several clusters
 to form a monitoring grid. It also keeps metric history using rrdtool.
 
-%package            gmond
+%package -n %{pname}-gmond%{PROJ_DELIM}
 Summary:            Ganglia Monitoring daemon
 Group:              Applications/Internet
 Requires:           %{name} = %{gangver}-%{release}
@@ -106,7 +106,7 @@ Requires(preun):    /sbin/chkconfig
 Requires(preun):    /sbin/service
 %endif #systemd
 
-%description        gmond
+%description -n %{pname}-gmond%{PROJ_DELIM}
 Ganglia is a scalable, real-time monitoring and execution environment
 with all execution requests and statistics expressed in an open
 well-defined XML format.
@@ -114,13 +114,13 @@ well-defined XML format.
 This gmond daemon provides the ganglia service within a single cluster or
 Multicast domain.
 
-%package            gmond-python
+%package -n %{pname}-gmond-python%{PROJ_DELIM}
 Summary:            Ganglia Monitor daemon python DSO and metric modules
 Group:              Applications/Internet
-Requires:           ganglia-gmond
+Requires:           %{pname}-gmond%{PROJ_DELIM}
 Requires:           python
 
-%description        gmond-python
+%description -n %{pname}-gmond-python%{PROJ_DELIM}
 Ganglia is a scalable, real-time monitoring and execution environment
 with all execution requests and statistics expressed in an open
 well-defined XML format.
@@ -128,12 +128,12 @@ well-defined XML format.
 This package provides the gmond python DSO and python gmond modules, which
 can be loaded via the DSO at gmond daemon start time.
 
-%package            devel
+%package -n %{pname}-devel%{PROJ_DELIM}
 Summary:            Ganglia Library
 Group:              Applications/Internet
 Requires:           %{name} = %{gangver}-%{release}
 
-%description        devel
+%description -n %{pname}-devel%{PROJ_DELIM}
 The Ganglia Monitoring Core library provides a set of functions that
 programmers can use to build scalable cluster or grid applications
 
@@ -251,6 +251,10 @@ chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/css/smoothness/jquery-ui-1.10.2.cu
 # Remove shebang
 sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{name}/python_modules/*.py
 
+find $RPM_BUILD_ROOT -name conf.php
+echo
+find $RPM_BUILD_ROOT -name Zend
+
 %pre
 ## Add the "ganglia" user
 /usr/sbin/useradd -c "Ganglia Monitoring System" \
@@ -261,39 +265,39 @@ sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{name}/python_modules/*.py
 %postun -p /sbin/ldconfig
 
 %if 0%{?systemd}
-%post gmond
+%post -n %{pname}-gmond%{PROJ_DELIM}
 %systemd_post gmond.service
 
-%preun gmond
+%preun -n %{pname}-gmond%{PROJ_DELIM}
 %systemd_preun gmond.service
 
-%postun gmond
+%postun -n %{pname}-gmond%{PROJ_DELIM}
 %systemd_postun_with_restart gmond.service
 
-%post gmetad
+%post -n %{pname}-gmetad%{PROJ_DELIM}
 %systemd_post gmetad.service
 
-%preun gmetad
+%preun -n %{pname}-gmetad%{PROJ_DELIM}
 %systemd_preun gmetad.service
 
-%postun gmetad
+%postun -n %{pname}-gmetad%{PROJ_DELIM}
 %systemd_postun_with_restart gmetad.service
 
 %else 
 
-%post gmond
+%post -n %{pname}-gmond%{PROJ_DELIM}
 /sbin/chkconfig --add gmond
 
-%post gmetad
+%post -n %{pname}-gmetad%{PROJ_DELIM}
 /sbin/chkconfig --add gmetad
 
-%preun gmetad
+%preun -n %{pname}-gmetad%{PROJ_DELIM}
 if [ "$1" = 0 ]; then
   /sbin/service gmetad stop >/dev/null 2>&1 || :
   /sbin/chkconfig --del gmetad
 fi
 
-%preun gmond
+%preun -n %{pname}-gmond%{PROJ_DELIM}
 if [ "$1" = 0 ]; then
   /sbin/service gmond stop >/dev/null 2>&1 || :
   /sbin/chkconfig --del gmond
@@ -301,10 +305,10 @@ fi
 
 %endif # systemd
 
-%post devel -p /sbin/ldconfig
-%postun devel -p /sbin/ldconfig
+%post %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
+%postun %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
 
-%post web
+%post %{pname}-web%{PROJ_DELIM}
 if [ ! -L /usr/share/ganglia/lib/Zend ]; then
   ln -s /usr/share/php/Zend /usr/share/ganglia/lib/Zend
 fi
@@ -316,7 +320,7 @@ fi
 %{_libdir}/ganglia/*.so
 %exclude %{_libdir}/ganglia/modpython.so
 
-%files gmetad
+%files %{pname}-gmetad%{PROJ_DELIM}
 %dir %{_localstatedir}/lib/%{name}
 %attr(0755,ganglia,ganglia) %{_localstatedir}/lib/%{name}/rrds
 %{_sbindir}/gmetad
@@ -330,7 +334,7 @@ fi
 %dir %{_sysconfdir}/ganglia
 %config(noreplace) %{_sysconfdir}/ganglia/gmetad.conf
 
-%files gmond
+%files %{pname}-gmond%{PROJ_DELIM}
 %{_bindir}/gmetric
 %{_bindir}/gstat
 %{_sbindir}/gmond
@@ -349,19 +353,19 @@ fi
 %config(noreplace) %{_sysconfdir}/ganglia/conf.d/*.conf
 %exclude %{_sysconfdir}/ganglia/conf.d/modpython.conf
 
-%files gmond-python
+%files %{pname}-gmond-python%{PROJ_DELIM}
 %dir %{_libdir}/ganglia/python_modules/
 %{_libdir}/ganglia/python_modules/*.py*
 %{_libdir}/ganglia/modpython.so*
 %config(noreplace) %{_sysconfdir}/ganglia/conf.d/*.pyconf*
 %config(noreplace) %{_sysconfdir}/ganglia/conf.d/modpython.conf
 
-%files devel
+%files %{pname}-devel%{PROJ_DELIM}
 %{_bindir}/ganglia-config
 %{_includedir}/*.h
 %{_libdir}/libganglia*.so
 
-%files web
+%files %{pname}-web%{PROJ_DELIM}
 %doc web/AUTHORS web/COPYING web/README web/TODO
 %config(noreplace) %{_sysconfdir}/%{name}/conf.php
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
