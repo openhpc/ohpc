@@ -239,7 +239,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-%if 0%{?compiler_family} == gnu
+%if $FSP_COMPILER_FAMILY == gnu
 module load mkl
 %endif
 module load phdf5
