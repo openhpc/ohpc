@@ -33,18 +33,20 @@ BuildRequires:      rrdtool-devel
 BuildRequires:      libpng-devel
 BuildRequires:      libart_lgpl-devel
 BuildRequires:      libconfuse-devel
-BuildRequires:      libmemcached-devel
-BuildRequires:      expat-devel
 BuildRequires:      python-devel
 BuildRequires:      freetype-devel
 BuildRequires:      pcre-devel
-BuildRequires:      /usr/bin/pod2man
+BuildRequires:      perl
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
 BuildRequires: fdupes
 BuildRequires: libapr1-devel
+BuildRequires:      libexpat-devel
+BuildRequires:      php5-memcached
 %else
 BuildRequires:      apr-devel >= 1
+BuildRequires:      expat-devel
+BuildRequires:      libmemcached-devel
 %endif
 
 %description
