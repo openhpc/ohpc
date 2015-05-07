@@ -252,12 +252,12 @@ cd ..
 #find %{buildroot}%{_libdir} -name '*.la' -exec rm {} \;
 
 # ld.so.conf.d file
-mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-echo "%{_libdir}/%{name}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}.conf
+#mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+#echo "%{_libdir}/%{name}" > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}.conf
 
-%if 0%{?sles_version} || 0%{?suse_version}
-%fdupes -s %{buildroot}%{_includedir}
-%endif
+#%if 0%{?sles_version} || 0%{?suse_version}
+#%fdupes -s %{buildroot}%{_includedir}
+#%endif
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
