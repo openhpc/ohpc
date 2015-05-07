@@ -145,7 +145,7 @@ install -m 0644 %{SOURCE2} gmond/gmond.service.in
 install -m 0644 %{SOURCE3} gmetad/gmetad.service.in
 
 # web part
-%setup -q -T -D -a 1
+%setup -q -T -D -a 1 -n ganglia-%{gangver}
 %patch1 -p1
 mv ganglia-web-%{webver} web
 cd web
