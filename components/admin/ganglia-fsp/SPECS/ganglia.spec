@@ -3,108 +3,85 @@
 %define pname ganglia
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-#
-# spec file for package ganglia
-#
-# Copyright (c) 2013 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
+%global gangver     3.7.1
+%global webver      3.6.2
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
+%global systemd         1
+%global _hardened_build 1
 
-
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
-
-Summary:        A scalable distributed monitoring system for high-performance computing systems
-License:        BSD-3-Clause
-Group:          fsp-admin
-Name:           %{pname}%{PROJ_DELIM}
-Version:        3.7.1
-Release:        0
-%define lib_version 3_7_1-0
-Url:            http://ganglia.info/
-# The Release macro value is set in configure.in, please update it there.
-Source:         %{pname}-%{version}.tar.gz
-# # PATCH-FIX-OPENSUSE ganglia-3.5.0-init.patch
-# Patch0:         ganglia-3.5.0-init.patch
-Patch0:         ganglia-no-private-apr.patch
-BuildRequires:  autoconf
-BuildRequires:  automake
-# BuildRequires:  fdupes
-BuildRequires:  gcc-c++
-BuildRequires:  libart_lgpl-devel
-BuildRequires:  libconfuse-devel
-BuildRequires:  libpng-devel
-BuildRequires:  libtool
-BuildRequires:  make
-BuildRequires:  pcre-devel
-BuildRequires:  pkgconfig
-BuildRequires:  python-devel
-BuildRequires:  freetype2-devel
-# BuildRequires:  libapr1-devel
-BuildRequires:  libexpat-devel
-BuildRequires:  rrdtool-devel
-%if 0%{?sles_version} || 0%{?suse_version}
-PreReq:         %insserv_prereq  %fillup_prereq
+Name:               ganglia
+Version:            %{gangver}
+Release:            1%{?dist}
+Summary:            Distributed Monitoring System
+Group:              Applications/Internet
+License:            BSD-3-Clause
+URL:                http://ganglia.sourceforge.net/
+Source0:            ganglia-%{version}.tar.gz
+Source1:            ganglia-web-%{webver}.tar.gz
+Source2:            gmond.service
+Source3:            gmetad.service
+Source4:            ganglia-httpd24.conf.d
+Source5:            ganglia-httpd.conf.d
+Source6:            conf.php
+Patch0:             ganglia-web-3.5.7-statedir.patch
+Patch1:             ganglia-3.7.1-py-syntax.patch
+Patch2:             ganglia-no-private-apr.patch
+%if 0%{?systemd}
+BuildRequires:      systemd
 %endif
-BuildRoot:      %{_tmppath}/%{pname}-%{version}-build
-
+BuildRequires:      rrdtool-devel
+BuildRequires:      libpng-devel
+BuildRequires:      libart_lgpl-devel
+BuildRequires:      libconfuse-devel
+BuildRequires:      libmemcached-devel
+BuildRequires:      expat-devel
+BuildRequires:      python-devel
+BuildRequires:      freetype-devel
+BuildRequires:      pcre-devel
+BuildRequires:      /usr/bin/pod2man
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
 BuildRequires: fdupes
 BuildRequires: libapr1-devel
-BuildRequires: systemd
+%else
+BuildRequires:      apr-devel >= 1
 %endif
-
-# different package name with redhat
-%if 0%{?rhel_version} || 0%{?centos_version}
-BuildRequires:  apr-devel
-%endif
-
-%define gmond_conf %{_builddir}/%{?buildsubdir}/gmond/gmond.conf
-%define generate_gmond_conf %(test -e %gmond_conf && echo 0 || echo 1)
-
-# + /usr/lib/rpm/brp-python-bytecompile /usr/bin/python 1
-# Compiling /home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-19.1.x86_64/usr/lib64/ganglia/python_modules/DBUtil.py ...
-#   File "/usr/lib64/ganglia/python_modules/DBUtil.py", line 272
-#     (options, args) = parser.parse_args()
-#                     ^
-# SyntaxError: invalid syntax
-# Turn off the brp-python-bytecompile script
-%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
-
 
 %description
-Ganglia is a scalable distributed monitoring system for high-performance
-computing systems such as clusters and Grids. It is based on a hierarchical
-design targeted at federations of clusters. It leverages widely used
-technologies such as XML for data representation, XDR for compact, portable
-data transport, and RRDtool for data storage and visualization. It uses
-carefully engineered data structures and algorithms to achieve very low
-per-node overheads and high concurrency. The implementation is robust,
-has been ported to an extensive set of operating systems and processor
-architectures, and is currently in use on thousands of clusters around
-the world. It has been used to link clusters across university campuses
-and around the world and can scale to handle clusters with 2000 nodes.
+Ganglia is a scalable, real-time monitoring and execution environment
+with all execution requests and statistics expressed in an open
+well-defined XML format.
 
+%package web
+Summary:            Ganglia Web Frontend
+Group:              Applications/Internet
+Version:            %{webver}
+Requires:           rrdtool
+Requires:           php
+Requires:           php-gd
+Requires:           php-ZendFramework
+Requires:           %{name}-gmetad = %{gangver}-%{release}
+
+%description        web
+This package provides a web frontend to display the XML tree published by
+ganglia, and to provide historical graphs of collected metrics. This website is
+written in the PHP4 language.
 
 %package gmetad
-Summary:        Ganglia Meta daemon
-Group:          System/Monitoring
-Obsoletes:      ganglia-monitor-core < %{version}
-Obsoletes:      ganglia-monitor-core-gmetad < %{version}
-Provides:       ganglia-monitor-core = %{version}
-Provides:       ganglia-monitor-core-gmetad = %{version}
+Summary:            Ganglia Metadata collection daemon
+Group:              Applications/Internet
+Requires:           %{name} = %{gangver}-%{release}
+%if 0%{?systemd}
+Requires(post):     systemd
+Requires(preun):    systemd
+Requires(postun):   systemd
+%else
+Requires(post):     /sbin/chkconfig
+Requires(preun):    /sbin/chkconfig
+Requires(preun):    /sbin/service
+%endif #systemd
 
-%description gmetad
+%description        gmetad
 Ganglia is a scalable, real-time monitoring and execution environment
 with all execution requests and statistics expressed in an open
 well-defined XML format.
@@ -112,16 +89,21 @@ well-defined XML format.
 This gmetad daemon aggregates monitoring data from several clusters
 to form a monitoring grid. It also keeps metric history using rrdtool.
 
+%package            gmond
+Summary:            Ganglia Monitoring daemon
+Group:              Applications/Internet
+Requires:           %{name} = %{gangver}-%{release}
+%if 0%{?systemd}
+Requires(post):     systemd
+Requires(preun):    systemd
+Requires(postun):   systemd
+%else
+Requires(post):     /sbin/chkconfig
+Requires(preun):    /sbin/chkconfig
+Requires(preun):    /sbin/service
+%endif #systemd
 
-%package gmond
-Summary:        Ganglia Monitor daemon
-Group:          System/Monitoring
-Obsoletes:      ganglia-monitor-core < %{version}
-Obsoletes:      ganglia-monitor-core-gmond < %{version}
-Provides:       ganglia-monitor-core = %{version}
-Provides:       ganglia-monitor-core-gmond = %{version}
-
-%description gmond
+%description        gmond
 Ganglia is a scalable, real-time monitoring and execution environment
 with all execution requests and statistics expressed in an open
 well-defined XML format.
@@ -129,261 +111,257 @@ well-defined XML format.
 This gmond daemon provides the ganglia service within a single cluster or
 Multicast domain.
 
-%package gmond-modules-python
-Summary:        Ganglia Monitor daemon DSO/Python metric modules support
-Group:          System/Monitoring
-Requires:       ganglia-gmond
-Requires:       python
+%package            gmond-python
+Summary:            Ganglia Monitor daemon python DSO and metric modules
+Group:              Applications/Internet
+Requires:           ganglia-gmond
+Requires:           python
 
-%description gmond-modules-python
+%description        gmond-python
 Ganglia is a scalable, real-time monitoring and execution environment
 with all execution requests and statistics expressed in an open
 well-defined XML format.
 
-This gmond modules support package provides the capability of loading
-gmetric/python modules via DSO at daemon start time instead of via gmetric.
+This package provides the gmond python DSO and python gmond modules, which
+can be loaded via the DSO at gmond daemon start time.
 
-%package devel
-Summary:        Ganglia static libraries and header files
-Group:          Development/Libraries/C and C++
-Requires:       libganglia-%{lib_version} = %{version}
-# Requires:       libapr1-devel
-Requires:       libconfuse-devel
-Requires:       libganglia-%{lib_version}
-Requires:       libexpat-devel
-# different package name with redhat
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires: libapr1-devel
-%endif
-%if 0%{?rhel_version} || 0%{?centos_version}
-BuildRequires:  apr-devel
-%endif
+%package            devel
+Summary:            Ganglia Library
+Group:              Applications/Internet
+Requires:           %{name} = %{gangver}-%{release}
 
-
-%description devel
-The Ganglia Monitoring Core library provides a set of functions that programmers
-can use to build scalable cluster or grid applications
-
-%package -n libganglia-%{lib_version}
-Summary:        Ganglia Shared Libraries http://ganglia.sourceforge.net/
-Group:          System/Libraries
-Provides:       libganglia-3_1_0 = %{version}
-Obsoletes:      libganglia-3_1_0 < %{version}
-
-%description -n libganglia-%{lib_version}
-The Ganglia Shared Libraries contains common libraries required by both gmond and
-gmetad packages
-
+%description        devel
+The Ganglia Monitoring Core library provides a set of functions that
+programmers can use to build scalable cluster or grid applications
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q
+%patch2 -p1
+# fix broken systemd support
+install -m 0644 %{SOURCE2} gmond/gmond.service.in
+install -m 0644 %{SOURCE3} gmetad/gmetad.service.in
+
+# web part
+%setup -q -T -D -a 1
+%patch1 -p1
+mv ganglia-web-%{webver} web
+cd web
 %patch0 -p1
 
 %build
-%configure --with-gmetad \
-           --enable-status \
-           --sysconfdir=%{_sysconfdir}/%{pname} \
-           --enable-setuid=daemon \
-           --enable-setgid=nogroup
+%configure \
+    --enable-setuid=ganglia \
+    --enable-setgid=ganglia \
+    --with-gmetad \
+    --with-memcached \
+    --disable-static \
+    --enable-shared \
+    --sysconfdir=%{_sysconfdir}/ganglia
+
+# Remove rpaths
+%{__sed} -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+%{__sed} -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+
+## Default to run as user ganglia instead of nobody
+%{__perl} -pi.orig -e 's|nobody|ganglia|g' \
+    gmond/gmond.conf.html ganglia.html gmond/conf.pod
+
+%{__perl} -pi.orig -e 's|.*setuid_username.*|setuid_username ganglia|' \
+    gmetad/gmetad.conf.in
+
+## Don't have initscripts turn daemons on by default
+%{__perl} -pi.orig -e 's|2345|-|g' gmond/gmond.init gmetad/gmetad.init
+
 make %{?_smp_mflags}
 
 %install
-# Create the directory structure
-install -d -m 0755 %{buildroot}/etc/init.d
-install -d -m 0755 %{buildroot}/etc/rc.d/init.d
-install -d -m 0755 %{buildroot}/var/lib/ganglia/rrds
+make install DESTDIR=$RPM_BUILD_ROOT
 
-# Move the files into the structure
-%if 0%{?sles_version} || 0%{?suse_version}
-cp -f gmond/gmond.init.SuSE %{buildroot}%{_initrddir}/ganglia-gmond
-cp -f gmetad/gmetad.init.SuSE %{buildroot}%{_initrddir}/ganglia-gmetad
-%endif
-%if 0%{?rhel_version} || 0%{?centos_version}
-cp -f gmond/gmond.init %{buildroot}%{_initrddir}/ganglia-gmond
-cp -f gmetad/gmetad.init %{buildroot}%{_initrddir}/ganglia-gmetad
-%endif
+## Create directory structures
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/ganglia/python_modules
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/{rrds,conf}
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/dwoo/{cache,compiled}
 
-install -d -m 0755 %{buildroot}%{_sbindir}
-ln -s %{_initrddir}/ganglia-gmond %{buildroot}%{_sbindir}/rcganglia-gmond
-ln -s %{_initrddir}/ganglia-gmetad %{buildroot}%{_sbindir}/rcganglia-gmetad
-
-
-install -d -m 0755 %{buildroot}%{_sysconfdir}/%{pname}
-install -d -m 0755 %{buildroot}%{_sysconfdir}/%{pname}/conf.d
-install -d -m 0755 %{buildroot}%{_libdir}/ganglia/python_modules
-
-%if %generate_gmond_conf
-# We just output the default gmond.conf from gmond using the '-t' flag
-  gmond/gmond -t > %{buildroot}%{_sysconfdir}/%{pname}/gmond.conf
+## Install services
+%if 0%{?systemd}
+install -Dp -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/gmond.service
+install -Dp -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/gmetad.service
 %else
-  cp -f %gmond_conf %{buildroot}%{_sysconfdir}/%{pname}/gmond.conf
-%endif
-cp -f gmond/modules/conf.d/* %{buildroot}%{_sysconfdir}/%{pname}/conf.d
+install -Dp -m 0755 gmond/gmond.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/gmond
+install -Dp -m 0755 gmetad/gmetad.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/gmetad
+%endif # systemd
 
+## Build default gmond.conf from gmond using the '-t' flag
+LD_LIBRARY_PATH=lib/.libs gmond/gmond -t | %{__perl} -pe 's|nobody|ganglia|g' \
+    > $RPM_BUILD_ROOT%{_sysconfdir}/ganglia/gmond.conf
+
+## Python bits
 # Copy the python metric modules and .conf files
-cp -f gmond/python_modules/conf.d/*.pyconf* %{buildroot}%{_sysconfdir}/%{pname}/conf.d/
-cp -f gmond/python_modules/*/*.py %{buildroot}%{_libdir}/ganglia/python_modules/
-python -c 'import compileall; compileall.compile_dir("%{buildroot}%{_libdir}/ganglia/python_modules/", 1, "/", 1)' > /dev/null
+cp -p gmond/python_modules/conf.d/*.pyconf $RPM_BUILD_ROOT%{_sysconfdir}/ganglia/conf.d/
+cp -p gmond/modules/conf.d/*.conf $RPM_BUILD_ROOT%{_sysconfdir}/ganglia/conf.d/
+cp -p gmond/python_modules/*/*.py $RPM_BUILD_ROOT%{_libdir}/ganglia/python_modules/
 
-# Don't install the example modules
-rm -f %{buildroot}%{_sysconfdir}/%{pname}/conf.d/example.conf
-rm -f %{buildroot}%{_sysconfdir}/%{pname}/conf.d/example.pyconf
-rm -f %{buildroot}%{_sysconfdir}/%{pname}/conf.d/spfexample.pyconf
+## Web bits
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}
+cp -rp web/* $RPM_BUILD_ROOT%{_datadir}/%{name}/
+install -p -m 0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/ganglia/conf.php
+ln -s ../../..%{_sysconfdir}/%{name}/conf.php \
+    $RPM_BUILD_ROOT%{_datadir}/%{name}/conf.php
 
-# Clean up the .conf.in files
-rm -f %{buildroot}%{_sysconfdir}/%{pname}/conf.d/*.conf.in
-
-# Disable the multicpu module until it is configured properly
-mv %{buildroot}%{_sysconfdir}/%{pname}/conf.d/multicpu.conf %{buildroot}%{_sysconfdir}/%{pname}/conf.d/multicpu.conf.disabled
-
-make DESTDIR=%{buildroot} install
-make -C gmond gmond.conf.5
-
-%if 0%{?sles_version} || 0%{?suse_version}
-%fdupes %{buildroot}
-#./scripts/fixconfig gmetad/gmetad.service.in
-# /bin/mkdir -p '/home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-29.1.x86_64/usr/lib/systemd/system'
-# /bin/install -c -m 644 gmetad.service '/home/abuild/rpmbuild/BUILDROOT/ganglia-3.7.1-29.1.x86_64/usr/lib/systemd/system'
+%if 0%{?fedora} >= 18
+install -Dp -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
+%else
+install -Dp -m 0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 %endif
 
-%post   -n libganglia-%{lib_version} -p /sbin/ldconfig
+## Various clean up after install:
 
-%postun -n libganglia-%{lib_version} -p /sbin/ldconfig
+## Don't install the status modules and example.conf
+rm -f $RPM_BUILD_ROOT%{_sysconfdir}/ganglia/conf.d/{modgstatus,example}.conf
 
+## Disable the diskusage module until it is configured properly
+## mv $RPM_BUILD_ROOT%{_sysconfdir}/ganglia/conf.d/diskusage.pyconf \
+##   $RPM_BUILD_ROOT%{_sysconfdir}/ganglia/conf.d/diskusage.pyconf.off
 
-%post gmetad
-%fillup_and_insserv ganglia-gmetad
+## Remove unwanted files from web dir
+rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/{Makefile*,debian,ganglia-web.spec*,ganglia-web}
+rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/{conf_default.php.in,version.php.in}
 
-if [ -e /etc/gmetad.conf ]; then
-  mv /etc/gmetad.conf %{_sysconfdir}/%{pname}
-fi
+## Included as doc
+rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/{README,TODO,AUTHORS,COPYING}
 
+## House cleaning
+rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+
+## Use system php-ZendFramework
+rm -rf $RPM_BUILD_ROOT/usr/share/ganglia/lib/Zend
+ln -s /usr/share/php/Zend $RPM_BUILD_ROOT/usr/share/ganglia/lib/Zend
+
+# Remove execute bit
+chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/header.php
+chmod 0644 $RPM_BUILD_ROOT%{_libdir}/%{name}/python_modules/*.py
+chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/css/smoothness/jquery-ui-1.10.2.custom.css
+chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/css/smoothness/jquery-ui-1.10.2.custom.min.css
+
+# Remove shebang
+sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{name}/python_modules/*.py
+
+%pre
+## Add the "ganglia" user
+/usr/sbin/useradd -c "Ganglia Monitoring System" \
+        -s /sbin/nologin -r -d %{_localstatedir}/lib/%{name} ganglia 2> /dev/null || :
+/sbin/ldconfig
+
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+
+%if 0%{?systemd}
 %post gmond
-%fillup_and_insserv ganglia-gmond 
-
-LEGACY_GMOND_CONF=%{_sysconfdir}/%{pname}/gmond.conf
-if [ -e /etc/gmond.conf ];
-then
-  LEGACY_GMOND_CONF=/etc/gmond.conf
-fi
-
-METRIC_LIST="`%{_sbindir}/gmond -c ${LEGACY_GMOND_CONF} -m`"
-if [[ $? != 0 ]]; then
-  # They may have an old configuration file format
-  echo "-----------------------------------------------------------"
-  echo "IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT"
-  echo "-----------------------------------------------------------"
-  echo "Parsing your gmond.conf file failed"
-  echo "It appears that you are upgrading from ganglia gmond version"
-  echo "2.5.x.  The configuration file has changed and you need to "
-  echo "convert your old 2.5.x configuration file to the new format."
-  echo ""   
-  echo "To convert your old configuration file to the new format"
-  echo "simply run the command:"
-  echo ""
-  echo "% gmond --convert old.conf > new.conf"
-  echo ""
-  echo "This conversion was not made automatic to prevent unknowningly"
-  echo "altering your configuration without your notice."
-else
-  if [ `echo "$METRIC_LIST" | wc -l` -eq 0 ];
-  then
-    echo "-----------------------------------------------------------"
-    echo "IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT"
-    echo "-----------------------------------------------------------"
-    echo "No metrics detected - perhaps you are using a gmond.conf"
-    echo "file from Ganglia 3.0 or earlier."
-    echo "Please see the README file for details about how to"
-    echo "create a valid configuration."
-  else
-    if [ -e /etc/gmond.conf ]; then
-      mv /etc/gmond.conf %{_sysconfdir}/%{pname}
-    fi
-  fi
-fi
-
-%preun gmetad
-%stop_on_removal ganglia-gmetad
+%systemd_post gmond.service
 
 %preun gmond
-%stop_on_removal ganglia-gmond
-
-%postun gmetad
-%insserv_cleanup
-%restart_on_update ganglia-gmetad
+%systemd_preun gmond.service
 
 %postun gmond
-%insserv_cleanup
-%restart_on_update ganglia-gmond
- 
-%postun
-%insserv_cleanup
-%restart_on_update 
+%systemd_postun_with_restart gmond.service
 
+%post gmetad
+%systemd_post gmetad.service
+
+%preun gmetad
+%systemd_preun gmetad.service
+
+%postun gmetad
+%systemd_postun_with_restart gmetad.service
+
+%else 
+
+%post gmond
+/sbin/chkconfig --add gmond
+
+%post gmetad
+/sbin/chkconfig --add gmetad
+
+%preun gmetad
+if [ "$1" = 0 ]; then
+  /sbin/service gmetad stop >/dev/null 2>&1 || :
+  /sbin/chkconfig --del gmetad
+fi
+
+%preun gmond
+if [ "$1" = 0 ]; then
+  /sbin/service gmond stop >/dev/null 2>&1 || :
+  /sbin/chkconfig --del gmond
+fi
+
+%endif # systemd
+
+%post devel -p /sbin/ldconfig
+%postun devel -p /sbin/ldconfig
+
+%post web
+if [ ! -L /usr/share/ganglia/lib/Zend ]; then
+  ln -s /usr/share/php/Zend /usr/share/ganglia/lib/Zend
+fi
+
+%files
+%doc AUTHORS COPYING NEWS README ChangeLog
+%{_libdir}/libganglia*.so.*
+%dir %{_libdir}/ganglia
+%{_libdir}/ganglia/*.so
+%exclude %{_libdir}/ganglia/modpython.so
 
 %files gmetad
-%defattr(-,root,root)
-%attr(0755,daemon,nogroup) /var/lib/ganglia/
+%dir %{_localstatedir}/lib/%{name}
+%attr(0755,ganglia,ganglia) %{_localstatedir}/lib/%{name}/rrds
 %{_sbindir}/gmetad
-%{_sbindir}/rcganglia-gmetad
-%{_initrddir}/ganglia-gmetad
-%{_mandir}/man1/gmetad*1*
-%config(noreplace) %{_sysconfdir}/%{pname}/gmetad.conf
-/usr/lib/systemd/system/gmetad.service
+%if 0%{?systemd}
+%{_unitdir}/gmetad.service
+%else
+%{_sysconfdir}/init.d/gmetad
+%endif
+%{_mandir}/man1/gmetad.1*
+%{_mandir}/man1/gmetad.py.1*
+%dir %{_sysconfdir}/ganglia
+%config(noreplace) %{_sysconfdir}/ganglia/gmetad.conf
 
 %files gmond
-%defattr(-,root,root)
 %{_bindir}/gmetric
 %{_bindir}/gstat
 %{_sbindir}/gmond
-%{_sbindir}/rcganglia-gmond
-%{_initrddir}/ganglia-gmond
-%{_mandir}/man1/gmetric.1*
+%if 0%{?systemd}
+%{_unitdir}/gmond.service
+%else
+%{_sysconfdir}/init.d/gmond
+%endif
+%{_mandir}/man5/gmond.conf.5*
 %{_mandir}/man1/gmond.1*
 %{_mandir}/man1/gstat.1*
-%{_mandir}/man5/gmond.conf.5*
-%config(noreplace) %{_sysconfdir}/%{pname}/gmond.conf
-%dir %{_sysconfdir}/%{pname}
-%dir %{_sysconfdir}/%{pname}/conf.d/
-%config(noreplace) %{_sysconfdir}/%{pname}/conf.d/modgstatus.conf
-#%config(noreplace) %{_sysconfdir}/%{name}/conf.d/multicpu.conf.disabled
-%dir %{_libdir}/ganglia/
-%{_libdir}/ganglia/modmulticpu.so*
-%{_sysconfdir}/%{pname}/conf.d/multicpu.conf*
-%{_libdir}/ganglia/modcpu.so*
-%{_libdir}/ganglia/moddisk.so*
-%{_libdir}/ganglia/modgstatus.so
-%{_libdir}/ganglia/modload.so*
-%{_libdir}/ganglia/modmem.so*
-%{_libdir}/ganglia/modnet.so*
-%{_libdir}/ganglia/modproc.so*
-%{_libdir}/ganglia/modsys.so*
-/usr/lib/systemd/system/gmond.service
+%{_mandir}/man1/gmetric.1*
+%dir %{_sysconfdir}/ganglia
+%dir %{_sysconfdir}/ganglia/conf.d
+%config(noreplace) %{_sysconfdir}/ganglia/gmond.conf
+%config(noreplace) %{_sysconfdir}/ganglia/conf.d/*.conf
+%exclude %{_sysconfdir}/ganglia/conf.d/modpython.conf
 
-%files gmond-modules-python
-%defattr(-,root,root,-)
+%files gmond-python
 %dir %{_libdir}/ganglia/python_modules/
 %{_libdir}/ganglia/python_modules/*.py*
 %{_libdir}/ganglia/modpython.so*
-%config(noreplace) %{_sysconfdir}/%{pname}/conf.d/modpython.conf
-%config(noreplace) %{_sysconfdir}/%{pname}/conf.d/*.pyconf*
+%config(noreplace) %{_sysconfdir}/ganglia/conf.d/*.pyconf*
+%config(noreplace) %{_sysconfdir}/ganglia/conf.d/modpython.conf
 
 %files devel
-%defattr(-,root,root,-)
-%{_includedir}/ganglia.h
-%{_includedir}/ganglia_gexec.h
-%{_includedir}/gm_file.h
-%{_includedir}/gm_metric.h
-%{_includedir}/gm_mmn.h
-%{_includedir}/gm_msg.h
-%{_includedir}/gm_protocol.h
-%{_includedir}/gm_value.h
-%{_libdir}/libganglia*.so
-%{_libdir}/libganglia*.*a
 %{_bindir}/ganglia-config
+%{_includedir}/*.h
+%{_libdir}/libganglia*.so
 
-%files -n libganglia-%{lib_version}
-%defattr(-,root,root,-)
-%{_libdir}/libganglia*.so.*
-
-%changelog
+%files web
+%doc web/AUTHORS web/COPYING web/README web/TODO
+%config(noreplace) %{_sysconfdir}/%{name}/conf.php
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
+%{_datadir}/%{name}
+%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{name}/conf
+%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{name}/dwoo
+%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{name}/dwoo/cache
+%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{name}/dwoo/compiled
