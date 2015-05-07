@@ -239,21 +239,17 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/{README,TODO,AUTHORS,COPYING}
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
 ## Use system php-ZendFramework
-rm -rf $RPM_BUILD_ROOT/usr/share/ganglia/lib/Zend
-ln -s /usr/share/php/Zend $RPM_BUILD_ROOT/usr/share/ganglia/lib/Zend
+rm -rf $RPM_BUILD_ROOT/usr/share/%{name}/lib/Zend
+ln -s /usr/share/php/Zend $RPM_BUILD_ROOT/usr/share/%{name}/lib/Zend
 
 # Remove execute bit
 chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/header.php
-chmod 0644 $RPM_BUILD_ROOT%{_libdir}/%{name}/python_modules/*.py
+chmod 0644 $RPM_BUILD_ROOT%{_libdir}/%{pname}/python_modules/*.py
 chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/css/smoothness/jquery-ui-1.10.2.custom.css
 chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/css/smoothness/jquery-ui-1.10.2.custom.min.css
 
 # Remove shebang
-sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{name}/python_modules/*.py
-
-find $RPM_BUILD_ROOT -name conf.php
-echo
-find $RPM_BUILD_ROOT -name Zend
+sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{pname}/python_modules/*.py
 
 %pre
 ## Add the "ganglia" user
@@ -367,7 +363,7 @@ fi
 
 %files -n %{pname}-web%{PROJ_DELIM}
 %doc web/AUTHORS web/COPYING web/README web/TODO
-%config(noreplace) %{_sysconfdir}/%{name}/conf.php
+%config(noreplace) %{_sysconfdir}/%{pname}/conf.php
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
 %{_datadir}/%{name}
 %dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{name}/conf
