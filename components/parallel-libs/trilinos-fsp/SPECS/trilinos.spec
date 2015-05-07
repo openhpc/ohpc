@@ -239,11 +239,6 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-%if $FSP_COMPILER_FAMILY == gnu
-module load mkl
-%endif
-module load phdf5
-module load netcdf
 
 cd tmp
 make DESTDIR=%{buildroot} install INSTALL='install -p'
