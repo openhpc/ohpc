@@ -42,7 +42,8 @@ BuildRequires:      perl
 BuildRequires: fdupes
 BuildRequires: libapr1-devel
 BuildRequires:      libexpat-devel
-BuildRequires:      php5-memcached
+# Can't find memcached built for SLES
+#BuildRequires:      php5-memcached
 %else
 BuildRequires:      apr-devel >= 1
 BuildRequires:      expat-devel
@@ -155,7 +156,9 @@ cd web
     --enable-setuid=ganglia \
     --enable-setgid=ganglia \
     --with-gmetad \
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
     --with-memcached \
+%endif
     --disable-static \
     --enable-shared \
     --sysconfdir=%{_sysconfdir}/ganglia
