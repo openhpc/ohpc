@@ -138,7 +138,7 @@ The Ganglia Monitoring Core library provides a set of functions that
 programmers can use to build scalable cluster or grid applications
 
 %prep
-%setup -q
+%setup -q -n ganglia-%{gangver}
 %patch2 -p1
 # fix broken systemd support
 install -m 0644 %{SOURCE2} gmond/gmond.service.in
