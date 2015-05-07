@@ -320,7 +320,7 @@ fi
 %{_libdir}/ganglia/*.so
 %exclude %{_libdir}/ganglia/modpython.so
 
-%files %{pname}-gmetad%{PROJ_DELIM}
+%files -n %{pname}-gmetad%{PROJ_DELIM}
 %dir %{_localstatedir}/lib/%{name}
 %attr(0755,ganglia,ganglia) %{_localstatedir}/lib/%{name}/rrds
 %{_sbindir}/gmetad
@@ -334,7 +334,7 @@ fi
 %dir %{_sysconfdir}/ganglia
 %config(noreplace) %{_sysconfdir}/ganglia/gmetad.conf
 
-%files %{pname}-gmond%{PROJ_DELIM}
+%files -n %{pname}-gmond%{PROJ_DELIM}
 %{_bindir}/gmetric
 %{_bindir}/gstat
 %{_sbindir}/gmond
@@ -353,19 +353,19 @@ fi
 %config(noreplace) %{_sysconfdir}/ganglia/conf.d/*.conf
 %exclude %{_sysconfdir}/ganglia/conf.d/modpython.conf
 
-%files %{pname}-gmond-python%{PROJ_DELIM}
+%files -n %{pname}-gmond-python%{PROJ_DELIM}
 %dir %{_libdir}/ganglia/python_modules/
 %{_libdir}/ganglia/python_modules/*.py*
 %{_libdir}/ganglia/modpython.so*
 %config(noreplace) %{_sysconfdir}/ganglia/conf.d/*.pyconf*
 %config(noreplace) %{_sysconfdir}/ganglia/conf.d/modpython.conf
 
-%files %{pname}-devel%{PROJ_DELIM}
+%files -n %{pname}-devel%{PROJ_DELIM}
 %{_bindir}/ganglia-config
 %{_includedir}/*.h
 %{_libdir}/libganglia*.so
 
-%files %{pname}-web%{PROJ_DELIM}
+%files -n %{pname}-web%{PROJ_DELIM}
 %doc web/AUTHORS web/COPYING web/README web/TODO
 %config(noreplace) %{_sysconfdir}/%{name}/conf.php
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
