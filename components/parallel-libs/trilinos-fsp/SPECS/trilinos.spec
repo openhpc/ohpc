@@ -125,9 +125,12 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON                              \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
-        -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
-        -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
         -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
+        -DTrilinos_ENABLE_PyTrilinos:BOOL=OFF                           \
+        -DTrilinos_ENABLE_CTrilinos:BOOL=ON                             \
+%if 0%{?suse_version} >= 1210
+        -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
+%endif
         -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
         -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
         -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
