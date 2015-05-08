@@ -74,7 +74,6 @@ BuildRequires:  libqt4-devel
 BuildRequires:  swig > 2.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-BuildRequires:  boost-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -114,7 +113,7 @@ module load mkl
 %endif
 module load phdf5
 module load netcdf
-#module load boost
+module load boost
 
 mkdir tmp
 cd tmp
@@ -168,6 +167,10 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
         -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
         -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
+        -DTPL_ENABLE_BoostLib:BOOL=ON                                   \
+        -DBOOSTLIB_INCLUDE_DIRS:PATH="${BOOST_INC}"                     \
+        -DBOOSTLIB_LIBRARY_DIRS:PATH="${BOOST_LIB}"                     \
+        -DBOOSTLIB_LIBRARY_NAMES:STRING="boost"                         \
         -DTPL_ENABLE_Pthread:BOOL=ON                                    \
         -DTPL_ENABLE_CppUnit:BOOL=ON                                    \
         -DTPL_ENABLE_Zlib:BOOL=ON                                       \
@@ -182,10 +185,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 #       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
 #       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
 #       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
-#       -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
-#       -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
-#       -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
-#       -DTPL_ENABLE_BoostLib=OFF                                       \
 make VERBOSE=1
 make %{?_smp_mflags}
 cd ..
