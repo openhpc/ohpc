@@ -161,7 +161,8 @@ cd web
 %endif
     --disable-static \
     --enable-shared \
-    --sysconfdir=%{_sysconfdir}/ganglia
+    --sysconfdir=%{_sysconfdir}/%{pname} \
+    --localstatedir=%{_localstatedir}/lib/%{pname}
 
 # Remove rpaths
 %{__sed} -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -184,8 +185,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 ## Create directory structures
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/ganglia/python_modules
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/{rrds,conf}
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/dwoo/{cache,compiled}
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/%{pname}/{rrds,conf}
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/%{pname}/dwoo/{cache,compiled}
 
 ## Install services
 %if 0%{?systemd}
@@ -210,7 +211,7 @@ cp -p gmond/python_modules/*/*.py $RPM_BUILD_ROOT%{_libdir}/ganglia/python_modul
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{name}
 cp -rp web/* $RPM_BUILD_ROOT%{_datadir}/%{name}/
 install -p -m 0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/ganglia/conf.php
-ln -s ../../..%{_sysconfdir}/%{name}/conf.php \
+ln -s ../../..%{_sysconfdir}/%{pname}/conf.php \
     $RPM_BUILD_ROOT%{_datadir}/%{name}/conf.php
 
 %if 0%{?fedora} >= 18
@@ -240,7 +241,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
 ## Use system php-ZendFramework
 rm -rf $RPM_BUILD_ROOT/usr/share/%{name}/lib/Zend
-ln -s /usr/share/php/Zend $RPM_BUILD_ROOT/usr/share/%{name}/lib/Zend
+ln -nsf /usr/share/php/Zend $RPM_BUILD_ROOT/usr/share/%{name}/lib/Zend
 
 # Remove execute bit
 chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/header.php
@@ -254,7 +255,7 @@ sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{pname}/python_modules/*.py
 %pre
 ## Add the "ganglia" user
 /usr/sbin/useradd -c "Ganglia Monitoring System" \
-        -s /sbin/nologin -r -d %{_localstatedir}/lib/%{name} ganglia 2> /dev/null || :
+        -s /sbin/nologin -r -d %{_localstatedir}/lib/%{pname} ganglia 2> /dev/null || :
 /sbin/ldconfig
 
 %post -p /sbin/ldconfig
@@ -306,7 +307,7 @@ fi
 
 %post -n %{pname}-web%{PROJ_DELIM}
 if [ ! -L /usr/share/ganglia/lib/Zend ]; then
-  ln -s /usr/share/php/Zend /usr/share/ganglia/lib/Zend
+  ln -s /usr/share/php/Zend /usr/share/%{name}/lib/Zend
 fi
 
 %files
@@ -317,8 +318,8 @@ fi
 %exclude %{_libdir}/ganglia/modpython.so
 
 %files -n %{pname}-gmetad%{PROJ_DELIM}
-%dir %{_localstatedir}/lib/%{name}
-%attr(0755,ganglia,ganglia) %{_localstatedir}/lib/%{name}/rrds
+%dir %{_localstatedir}/lib/%{pname}
+%attr(0755,ganglia,ganglia) %{_localstatedir}/lib/%{pname}/rrds
 %{_sbindir}/gmetad
 %if 0%{?systemd}
 %{_unitdir}/gmetad.service
@@ -366,7 +367,7 @@ fi
 %config(noreplace) %{_sysconfdir}/%{pname}/conf.php
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
 %{_datadir}/%{name}
-%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{name}/conf
-%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{name}/dwoo
-%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{name}/dwoo/cache
-%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{name}/dwoo/compiled
+%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/conf
+%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/dwoo
+%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/dwoo/cache
+%dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/dwoo/compiled
