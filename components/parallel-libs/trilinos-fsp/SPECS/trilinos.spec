@@ -131,6 +131,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 %if 0%{?suse_version} >= 1210
         -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
 %endif
+        -DTrilinos_ENABLE_STK:BOOL=OFF                                  \
         -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
         -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
         -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
@@ -161,6 +162,9 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
         -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
         -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
+        -DBoostLib_INCLUDE_DIRS:PATH="${BOOST_INC}"                     \
+        -DBoostLib_LIBRARY_DIRS:PATH="${BOOST_LIB}"                     \
+        -DBoostLib_LIBRARY_NAMES:STRING="boost"                         \
         -DTPL_ENABLE_Pthread:BOOL=ON                                    \
         -DTPL_ENABLE_CppUnit:BOOL=ON                                    \
         -DTPL_ENABLE_Zlib:BOOL=ON                                       \
