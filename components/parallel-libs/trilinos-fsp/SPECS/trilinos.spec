@@ -60,7 +60,6 @@ Url:            http://trilinos.sandia.gov/index.html
 Source0:        %{pname}-%{version}.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         trilinos-11.14.3-no_rpath.patch
-BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  cmake >= 2.8
 BuildRequires:  cppunit-devel
 BuildRequires:  doxygen
@@ -113,7 +112,6 @@ module load mkl
 %endif
 module load phdf5
 module load netcdf
-module load boost
 
 mkdir tmp
 cd tmp
@@ -163,16 +161,13 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DHDF5_INCLUDE_DIRS:PATH="${HDF5_INC}"                          \
         -DHDF5_LIBRARY_DIRS:PATH="${HDF5_LIB}"                          \
         -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
-        -DTPL_ENABLE_Boost:BOOL=ON                                      \
-        -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
-        -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
-        -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
         -DTPL_ENABLE_Pthread:BOOL=ON                                    \
         -DTPL_ENABLE_CppUnit:BOOL=ON                                    \
         -DTPL_ENABLE_Zlib:BOOL=ON                                       \
         -DTPL_ENABLE_QT:BOOL=OFF                                        \
         -DTPL_ENABLE_Matio=OFF                                          \
         -DTPL_ENABLE_GLM=OFF                                            \
+        -DTPL_ENABLE_Boost:BOOL=OFF                                     \
         ..
 #       -DTPL_ENABLE_SCALAPACK:BOOL=ON                                  \
 #       -DSCALAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"          \
@@ -181,6 +176,10 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 #       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
 #       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
 #       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
+#       -DTPL_ENABLE_Boost:BOOL=ON                                      \
+#       -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
+#       -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
+#       -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
 make VERBOSE=1
 make %{?_smp_mflags}
 cd ..
