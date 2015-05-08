@@ -131,7 +131,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 %if 0%{?suse_version} >= 1210
         -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
 %endif
-        -DTrilinos_ENABLE_STK:BOOL=OFF                                  \
         -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
         -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
         -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
