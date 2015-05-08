@@ -68,14 +68,15 @@ BuildRequires:  expat
 BuildRequires:  fdupes
 %endif
 BuildRequires:  graphviz
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 BuildRequires:  perl
 BuildRequires:  libqt4-devel
 BuildRequires:  swig > 2.0.0
-BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  xz
 BuildRequires:  zlib-devel
+BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -112,6 +113,7 @@ module load mkl
 %endif
 module load phdf5
 module load netcdf
+module load boost
 
 mkdir tmp
 cd tmp
@@ -128,7 +130,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
-        -DTrilinos_ENABLE_Phalanx:BOOL=OFF                              \
+        -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
         -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
         -DTrilinos_ENABLE_PyTrilinos:BOOL=OFF                           \
         -DTrilinos_ENABLE_CTrilinos:BOOL=ON                             \
@@ -161,13 +163,17 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DHDF5_INCLUDE_DIRS:PATH="${HDF5_INC}"                          \
         -DHDF5_LIBRARY_DIRS:PATH="${HDF5_LIB}"                          \
         -DHDF5_LIBRARY_NAMES:STRING="hdf5"                              \
+        -DTPL_ENABLE_Boost:BOOL=ON                                      \
+        -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
+        -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
+        -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
+        -DTPL_ENABLE_BoostLib=OFF                                       \
         -DTPL_ENABLE_Pthread:BOOL=ON                                    \
         -DTPL_ENABLE_CppUnit:BOOL=ON                                    \
         -DTPL_ENABLE_Zlib:BOOL=ON                                       \
         -DTPL_ENABLE_QT:BOOL=OFF                                        \
         -DTPL_ENABLE_Matio=OFF                                          \
         -DTPL_ENABLE_GLM=OFF                                            \
-        -DTPL_ENABLE_Boost:BOOL=OFF                                     \
         ..
 #       -DTPL_ENABLE_SCALAPACK:BOOL=ON                                  \
 #       -DSCALAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"          \
@@ -177,9 +183,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 #       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
 #       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
 #       -DTPL_ENABLE_Boost:BOOL=ON                                      \
-#       -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
-#       -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
-#       -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
 make VERBOSE=1
 make %{?_smp_mflags}
 cd ..
