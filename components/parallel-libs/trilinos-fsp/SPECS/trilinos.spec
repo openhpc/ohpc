@@ -64,9 +64,6 @@ BuildRequires:  cmake >= 2.8
 BuildRequires:  cppunit-devel
 BuildRequires:  doxygen
 BuildRequires:  expat
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  fdupes
-%endif
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
 BuildRequires:  perl
@@ -74,8 +71,8 @@ BuildRequires:  libqt4-devel
 BuildRequires:  swig > 2.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-BuildRequires:  boost-devel
-#BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+#BuildRequires:  boost-devel
+BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %if 0%{?suse_version} <= 1110
@@ -114,7 +111,7 @@ module load mkl
 %endif
 module load phdf5
 module load netcdf
-#module load boost
+module load boost
 
 mkdir tmp
 cd tmp
@@ -128,16 +125,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON                              \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
-        -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
-        -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
-        -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
-        -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
-        -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
-        -DTrilinos_ENABLE_PyTrilinos:BOOL=OFF                           \
-        -DTrilinos_ENABLE_CTrilinos:BOOL=ON                             \
-%if 0%{?suse_version} >= 1210
-        -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
-%endif
         -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
         -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
         -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
