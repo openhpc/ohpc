@@ -113,6 +113,7 @@ module load mkl
 %endif
 module load phdf5
 module load netcdf
+module load boost
 
 mkdir tmp
 cd tmp
