@@ -74,7 +74,8 @@ BuildRequires:  libqt4-devel
 BuildRequires:  swig > 2.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  boost-devel
+#BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %if 0%{?suse_version} <= 1110
@@ -113,7 +114,7 @@ module load mkl
 %endif
 module load phdf5
 module load netcdf
-module load boost
+#module load boost
 
 mkdir tmp
 cd tmp
@@ -167,10 +168,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
         -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
         -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
-        -DTPL_ENABLE_BoostLib:BOOL=OFF                                  \
-        -DBoostLib_INCLUDE_DIRS:PATH="${BOOST_INC}"                     \
-        -DBoostLib_LIBRARY_DIRS:PATH="${BOOST_LIB}"                     \
-        -DBoostLib_LIBRARY_NAMES:STRING="boost"                         \
         -DTPL_ENABLE_Pthread:BOOL=ON                                    \
         -DTPL_ENABLE_CppUnit:BOOL=ON                                    \
         -DTPL_ENABLE_Zlib:BOOL=ON                                       \
