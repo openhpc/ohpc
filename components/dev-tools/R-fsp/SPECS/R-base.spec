@@ -333,15 +333,23 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     }
 }
 
+
+### TRon (4/27/15) Add path for shared libraries: libgfortran.so.3 when using Intel
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if {  [is-loaded intel]  } {
+        prepend-path    LD_LIBRARY_PATH     %{FSP_COMPILERS}/gcc/4.9.2/lib64
+        #/opt/fsp/pub/compiler/gcc/4.9.2/lib64
+    }
+}
+
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
-setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_SHARE      %{install_path}/share
 
 EOF
 
