@@ -10,8 +10,8 @@ skip_arch=i486.rpm
 #skip_keys='i486.rpm$|/intel-ipp|/intel-mkl-pgi'
 skip_keys='i486.rpm$'
 INSTALL=0
-TAR=1
-UNINSTALL=0
+TAR=0
+UNINSTALL=1
 
 for rpm in `ls $release_dir/rpm/*.rpm` ; do 
     echo "$rpm found"
