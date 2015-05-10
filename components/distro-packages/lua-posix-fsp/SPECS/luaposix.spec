@@ -10,7 +10,7 @@
 %define luapkgdir %{_datadir}/lua/%{luaver}
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        33.2.1
+Version:        33.3.1
 Release:        %{?dist}
 Summary:        POSIX library for Lua
 
