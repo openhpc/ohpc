@@ -2,7 +2,7 @@
 # Ganglia monitoring system php web frontend
 #
 
-Alias /ganglia /usr/share/ganglia
+Alias /ganglia /usr/share/ganglia-fsp
 
 <Location /ganglia>
   Require local
