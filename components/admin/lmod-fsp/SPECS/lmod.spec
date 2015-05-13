@@ -15,7 +15,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.8.6
+Version:   5.9.3
 Release:   1
 License:   MIT
 Group:     fsp/admin

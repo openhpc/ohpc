@@ -71,7 +71,6 @@ BuildRequires:  libqt4-devel
 BuildRequires:  swig > 2.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-#BuildRequires:  boost-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -125,6 +124,9 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON                              \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
+        -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
+        -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
+        -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
         -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
         -DTrilinos_ENABLE_PyTrilinos:BOOL=OFF                           \
         -DTrilinos_ENABLE_CTrilinos:BOOL=ON                             \
@@ -162,9 +164,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DBOOST_INCLUDE_DIRS:PATH="${BOOST_INC}"                        \
         -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
         -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
-        -DBoostLib_INCLUDE_DIRS:PATH="${BOOST_INC}"                     \
-        -DBoostLib_LIBRARY_DIRS:PATH="${BOOST_LIB}"                     \
-        -DBoostLib_LIBRARY_NAMES:STRING="boost"                         \
         -DTPL_ENABLE_Pthread:BOOL=ON                                    \
         -DTPL_ENABLE_CppUnit:BOOL=ON                                    \
         -DTPL_ENABLE_Zlib:BOOL=ON                                       \
