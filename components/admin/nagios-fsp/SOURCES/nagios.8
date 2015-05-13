@@ -1,0 +1,47 @@
+.TH nagios "8" "February 2006, May 2010" "sean finney, Lars Vogdt" "Nagios"
+.SH NAME
+Nagios \- network/systems status monitoring daemon
+
+.SH SYNOPSIS
+.B nagios [\-h] [\-v] [\-s] [\-d] <main_config_file>
+.br
+
+.SH DESCRIPTION
+.B nagios
+is a daemon program that monitors the status of various network
+accessible systems, devices, and more. For more information, please
+consult the online documentation available at http://www.nagios.org,
+or on your nagios server's web page.
+
+.SH OPTIONS
+.TP
+main_config_file
+The main configuration file.  On openSUSE systems this defaults to
+/etc/nagios/nagios.cfg
+.TP
+\fB\-h\fR
+A helpful usage message
+.TP
+\fB\-v\fR
+Reads all data in the configuration files and performs a basic
+verification/sanity check.  Always make sure you verify your
+config data before (re)starting Nagios. You can also use the Nagios 
+init script to verify your configuration - try: rcnagios check_verbose
+.TP
+\fB\-s\fR
+Shows projected/recommended check scheduling information based
+on the current data in the configuration files.
+.TP
+\fB\-d\fR
+Starts Nagios in daemon mode (instead of as a foreground process).
+
+.SH FILES
+.TP
+.IP /etc/nagios
+Default configuration directory for nagios
+
+.SH AUTHOR
+Nagios is written and maintained by Ethan Galstad <nagios@nagios.org>.  This
+manual page was written by sean finney <seanius@debian.org> for the
+Debian GNU/Linux operating system (but it may be freely used, modified,
+and redistributed by others) and adapted by Lars Vogdt for openSUSE.

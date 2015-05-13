@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+#
+# Compress old nagios logfiles in /var/log/nagios/archives/
+# once a week, if sysconfig variable is set to true
+#
+if [[ -r /etc/sysconfig/nagios ]]; then 
+. /etc/sysconfig/nagios
+else
+	echo "/etc/sysconfig/nagios not found or not readable." >&2
+	exit 1
+fi
+
+if [[ $NAGIOS_COMPRESS_LOGFILES = "true" ]]; then
+	for f in /var/log/nagios/archives/*.log ; do
+		if [[ -r $f ]] ; then
+			/usr/bin/bzip2 "$f"
+		fi
+	done
+fi

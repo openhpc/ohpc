@@ -1,0 +1,18 @@
+---
+ cgi/getcgi.c |    3 +++
+ 1 file changed, 3 insertions(+)
+
+Index: cgi/getcgi.c
+===================================================================
+--- cgi/getcgi.c.orig
++++ cgi/getcgi.c
+@@ -96,6 +96,9 @@ void unescape_cgi_input(char *input) {
+ 			break;
+ 		else if(input[x] == '%') {
+ 			input[y] = hex_to_char(&input[x + 1]);
++                        if (input[y] == '+') {
++                          input[y] = ' ';
++                          }
+ 			x += 2;
+ 			}
+ 		else

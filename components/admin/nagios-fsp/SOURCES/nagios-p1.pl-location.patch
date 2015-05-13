@@ -1,0 +1,57 @@
+Index: Makefile.in
+===================================================================
+--- Makefile.in.orig
++++ Makefile.in
+@@ -25,6 +25,7 @@ exec_prefix=@exec_prefix@
+ LOGDIR=@localstatedir@
+ CHECKRESULTDIR=@CHECKRESULTDIR@
+ CFGDIR=@sysconfdir@
++P1PLDIR=@p1pldir@
+ BINDIR=@bindir@
+ CGIDIR=@sbindir@
+ LIBEXECDIR=@libexecdir@
+@@ -239,7 +240,7 @@ install-basic:
+ 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(DESTDIR)$(LOGDIR)/archives
+ 	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(DESTDIR)$(CHECKRESULTDIR)
+ 	if [ $(INSTALLPERLSTUFF) = yes ]; then \
+-		$(INSTALL) -m 664 $(INSTALL_OPTS) p1.pl $(DESTDIR)$(BINDIR); \
++		$(INSTALL) -m 664 $(INSTALL_OPTS) p1.pl $(DESTDIR)$(P1PLDIR); \
+ 	fi;
+ 
+ 	@echo ""
+Index: configure.in
+===================================================================
+--- configure.in.orig
++++ configure.in
+@@ -16,6 +16,7 @@ PKG_REL_DATE="01-12-2013"
+ dnl Figure out how to invoke "install" and what install options to use.
+ AC_PROG_INSTALL
+ AC_SUBST(INSTALL)
++AC_SUBST(P1PLDIR)
+ 
+ dnl What OS are we running?
+ AC_CANONICAL_HOST
+Index: include/locations.h.in
+===================================================================
+--- include/locations.h.in.orig
++++ include/locations.h.in
+@@ -39,5 +39,5 @@
+ #define DEFAULT_OBJECT_CACHE_FILE		"@localstatedir@/objects.cache"
+ #define DEFAULT_PRECACHED_OBJECT_FILE		"@localstatedir@/objects.precache"
+ #define DEFAULT_EVENT_BROKER_FILE		"@localstatedir@/broker.socket"
+-#define DEFAULT_P1_FILE				"@bindir@/p1.pl"	/**** EMBEDDED PERL ****/
++#define DEFAULT_P1_FILE                "@p1pldir@/p1.pl"   /**** EMBEDDED PERL ****/
+ #define DEFAULT_AUTH_FILE			""			/**** EMBEDDED PERL - IS THIS USED? ****/
+Index: sample-config/nagios.cfg.in
+===================================================================
+--- sample-config/nagios.cfg.in.orig
++++ sample-config/nagios.cfg.in
+@@ -1142,7 +1142,7 @@ date_format=us
+ # embedded Perl interpreter) is located.  If you didn't compile
+ # Nagios with embedded Perl support, this option has no effect.
+ 
+-p1_file=@bindir@/p1.pl
++p1_file=@p1pldir@/p1.pl
+ 
+ 
+ 

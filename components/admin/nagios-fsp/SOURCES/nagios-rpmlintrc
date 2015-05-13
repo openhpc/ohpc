@@ -1,0 +1,12 @@
+# common.css is used in cgi - and can be expanded by user
+addFilter("zero-length.*/usr/share/nagios/stylesheets/common.css");
+# we need xntp for SLES9
+addFilter("init-script-non-var-dependency.*/etc/init.d/nagios xntpd");
+addFilter("subsys-unsupported.*/etc/init.d/nagios");
+# nagios comes with embedded perl
+addFilter("no-dependency-on.*perl")
+# The name of that package is used since years - no need to change it for this new 'policy'
+addFilter("name-repeated-in-summary.*Nagios")
+# avoid FollowSymlinks in apache configuration
+addFilter("files-duplicated-waste");
+addFilter("files-duplicate.*/usr/share/nagios/.*");

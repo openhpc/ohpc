@@ -1,0 +1,148 @@
+---
+ base/utils.c |  129 -----------------------------------------------------------
+ 1 file changed, 1 insertion(+), 128 deletions(-)
+
+Index: base/utils.c
+===================================================================
+--- base/utils.c.orig
++++ base/utils.c
+@@ -3935,138 +3935,11 @@ int check_for_nagios_updates(int force,
+ 
+ /* checks for updates at api.nagios.org */
+ int query_update_api(void) {
+-	char *api_server = "api.nagios.org";
+-	char *api_path = "/versioncheck/";
+-	char *api_query = NULL;
+-	char *api_query_opts = NULL;
+-	char *buf = NULL;
+-	char recv_buf[1024];
+-	int report_install = FALSE;
+-	int result = OK;
+-	char *ptr = NULL;
+-	int current_line = 0;
+-	int buf_index = 0;
+-	int in_header = TRUE;
+-	char *var = NULL;
+-	char *val = NULL;
+-	int sd = 0;
+-	int send_len = 0;
+-	int recv_len = 0;
+-	int update_check_succeeded = FALSE;
+-
+-	/* report a new install, upgrade, or rollback */
+-	/* Nagios monitors the world and we monitor Nagios taking over the world. :-) */
+-	if(last_update_check == (time_t)0L)
+-		report_install = TRUE;
+-	if(last_program_version == NULL || strcmp(PROGRAM_VERSION, last_program_version))
+-		report_install = TRUE;
+-	if(report_install == TRUE) {
+-		asprintf(&api_query_opts, "&firstcheck=1");
+-		if(last_program_version != NULL) {
+-			char *qopts2 = NULL;
+-			asprintf(&qopts2, "%s&last_version=%s", api_query_opts, last_program_version);
+-			my_free(api_query_opts);
+-			api_query_opts = qopts2;
+-			}
+-		}
+-
+-	/* generate the query */
+-	asprintf(&api_query, "v=1&product=nagios&tinycheck=1&stableonly=1&uid=%lu", update_uid);
+-	if(bare_update_check == FALSE) {
+-		char *api_query2 = NULL;
+-		asprintf(&api_query2, "%s&version=%s%s", api_query, PROGRAM_VERSION, (api_query_opts == NULL) ? "" : api_query_opts);
+-		my_free(api_query);
+-		api_query = api_query2;
+-		}
+-
+-	/* generate the HTTP request */
+-	asprintf(&buf,
+-	         "POST %s HTTP/1.0\r\nUser-Agent: Nagios/%s\r\n"
+-	         "Connection: close\r\nHost: %s\r\n"
+-	         "Content-Type: application/x-www-form-urlencoded\r\n"
+-	         "Content-Length: %zd\r\n\r\n%s",
+-	         api_path, PROGRAM_VERSION, api_server,
+-	         strlen(api_query), api_query);
+-
+-	/*
+-	printf("SENDING...\n");
+-	printf("==========\n");
+-	printf("%s",buf);
+-	printf("\n");
+-	*/
+-
+-
+-	result = my_tcp_connect(api_server, 80, &sd, 2);
+-	/*printf("CONN RESULT: %d, SD: %d\n",result,sd);*/
+-	if(sd > 0) {
+-
+-		/* send request */
+-		send_len = strlen(buf);
+-		result = my_sendall(sd, buf, &send_len, 2);
+-		/*printf("SEND RESULT: %d, SENT: %d\n",result,send_len);*/
+-
+-		/* get response */
+-		recv_len = sizeof(recv_buf);
+-		result = my_recvall(sd, recv_buf, &recv_len, 2);
+-		recv_buf[sizeof(recv_buf) - 1] = '\x0';
+-		/*printf("RECV RESULT: %d, RECEIVED: %d\n",result,recv_len);*/
+-
+-		/*
+-		printf("\n");
+-		printf("RECEIVED...\n");
+-		printf("===========\n");
+-		printf("%s",recv_buf);
+-		printf("\n");
+-		*/
+-
+-		/* close connection */
+-		close(sd);
+-
+-		/* parse the result */
+-		in_header = TRUE;
+-		while((ptr = get_next_string_from_buf(recv_buf, &buf_index, sizeof(recv_buf)))) {
+-
+-			strip(ptr);
+-			current_line++;
+-
+-			if(!strcmp(ptr, "")) {
+-				in_header = FALSE;
+-				continue;
+-				}
+-			if(in_header == TRUE)
+-				continue;
+-
+-			var = strtok(ptr, "=");
+-			val = strtok(NULL, "\n");
+-			/*printf("VAR: %s, VAL: %s\n",var,val);*/
+-
+-			if(!strcmp(var, "UPDATE_AVAILABLE")) {
+-				update_available = atoi(val);
+-				/* we were successful */
+-				update_check_succeeded = TRUE;
+-				}
+-			else if(!strcmp(var, "UPDATE_VERSION")) {
+-				if(new_program_version)
+-					my_free(new_program_version);
+-				new_program_version = strdup(val);
+-				}
+-			else if(!strcmp(var, "UPDATE_RELEASEDATE")) {
+-				}
+-			}
+-		}
+-
+-	/* cleanup */
+-	my_free(buf);
+-	my_free(api_query);
+-	my_free(api_query_opts);
+-
+ 	/* we were successful! */
++        int update_check_succeeded = TRUE;
+ 	if(update_check_succeeded == TRUE) {
+ 
+ 		time(&last_update_check);
+-		if(last_program_version)
+-			free(last_program_version);
+-		last_program_version = (char *)strdup(PROGRAM_VERSION);
+ 		}
+ 
+ 	return OK;

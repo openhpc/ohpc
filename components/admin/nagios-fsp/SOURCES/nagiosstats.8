@@ -1,0 +1,51 @@
+.TH nagiosstats "8" "February 2006, May 2010" "sean finney, Lars Vogdt " "nagios"
+.SH NAME
+nagiosstats \- report statistics information from the Nagios system
+
+.SH SYNOPSIS
+.B nagiosstats [\-hVL] [\-c config] [\-m] [\-d]
+.br
+
+.SH DESCRIPTION
+.B nagiosstats
+is a program designed to provide information on the running Nagios
+system.  It can provide a brief summary of information, or it can
+be used to export specific information about the Nagios system
+into an MRTG-compatible format.
+For more information please consult the Nagios online documentation
+available at http://www.nagios.org or the documentation available
+with your Nagios server's web page.
+
+.SH OPTIONS
+.TP
+\fB\-c\fR|\-\-config=FILE
+The main configuration file. On openSUSE systems this defaults to
+/etc/nagios/nagios.cfg
+.TP
+\fB\-m\fR|\-\-mrtg
+Print output in MRTG-compatible format. For more details run
+nagiosstats with \-\-help
+.TP
+\fB\-d\fR|\-\-data=VARS
+Comma-seperated list of variables to output in MRTG format.  For
+more details run nagiosstats with \-\-help.
+.TP
+\fB\-h\fR|\-\-help
+A helpful usage message
+.TP
+\fB\-V\fR|\-\-version
+Print version information
+.TP
+\fB\-L\fR|\-\-license
+Print license details
+
+.SH FILES
+.TP
+.IP /etc/nagios
+Default configuration directory for Nagios
+
+.SH AUTHOR
+Nagios is written and maintained by Ethan Galstad <nagios@nagios.org>. This
+manual page was written by sean finney <seanius@debian.org> for the
+Debian GNU/Linux operating system (but it may be freely used, modified,
+and redistributed by others) and adapted for openSUSE by Lars Vogdt.

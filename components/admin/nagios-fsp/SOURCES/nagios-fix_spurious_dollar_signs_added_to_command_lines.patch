@@ -1,0 +1,18 @@
+---
+ common/macros.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+Index: common/macros.c
+===================================================================
+--- common/macros.c.orig
++++ common/macros.c
+@@ -221,7 +221,8 @@ int process_macros_r(nagios_macros *mac,
+ 				*output_buffer = (char *)realloc(*output_buffer, strlen(*output_buffer) + strlen(temp_buffer) + 3);
+ 				strcat(*output_buffer, "$");
+ 				strcat(*output_buffer, temp_buffer);
+-				strcat(*output_buffer, "$");
++				if (buf_ptr != NULL)
++                                  strcat(*output_buffer, "$");
+ 				}
+ 
+ 			/* insert macro */

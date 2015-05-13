@@ -1,0 +1,314 @@
+#! /bin/sh
+# Copyright (c) 1995-2001 SuSE GmbH Nuernberg, Germany.
+#                    2002 SuSE Linux AG Nuernberg, Germany.
+#                    2007 SuSE Linux GmbH Nuernberg, Germany.
+#                    2010-2012 SUSE LINUX Products GmbH, Nuernberg, Germany
+#
+# Author: Wolfgang Rosenauer, Lars Vogdt
+# 
+#
+# /etc/init.d/nagios
+#
+#   and symbolic its link
+#
+# /usr/sbin/rcnagios
+#
+# System startup script for nagios
+#
+### BEGIN INIT INFO
+# Provides: 	  nagios monitoring_daemon
+# Required-Start: $local_fs $remote_fs $syslog $network 
+# Required-Stop:  $local_fs $remote_fs $syslog $network
+# Should-Start:   $time sendmail httpd2 xntpd $named cron ndo2db
+# Should-Stop:    sendmail ndo2db
+# Default-Start:  3 5
+# Default-Stop:   0 1 2 6
+# Short-Description: Network monitor Nagios
+# Description:    Starts and stops the Nagios monitor
+#	used to provide network services status for hosts,
+#	services and networks.
+### END INIT INFO
+
+. /etc/rc.status
+
+NAGIOS_BIN='/usr/sbin/nagios'
+NAGIOS_CFG='/etc/nagios/nagios.cfg'
+NAGIOS_PIDFILE='/var/run/nagios/nagios.pid'
+NAGIOS_SYSCONFIG='/etc/sysconfig/nagios'
+NAGIOS_CFG_ERR_LOG='/var/log/nagios/config.err'
+NAGIOS_DAEMONCHK='/usr/lib/nagios/cgi/daemonchk.cgi'
+
+# Read config and log errors in logfile
+function config_check () {
+    case "$1" in
+        verbose)
+            $NAGIOS_BIN -v "$NAGIOS_CFG" >"$NAGIOS_CFG_ERR_LOG" 2>&1
+            if [ $? -eq 0 ]; then
+                return 0
+            else
+                return 1
+            fi
+        ;;
+        *)   
+            $NAGIOS_BIN -v "$NAGIOS_CFG" >/dev/null 2>&1
+            if [ $? -eq 0 ]; then
+                return 0
+            else
+                $NAGIOS_BIN -v "$NAGIOS_CFG" >"$NAGIOS_CFG_ERR_LOG" 2>&1
+                return 1
+            fi
+        ;;
+    esac
+}
+
+# grab a config option 
+function get_var() {
+	if [ -n "$2" ]; then
+		set -- `grep ^$1 $2 | sed 's@=@ @' | tr -d '[:cntrl:]'`
+	else
+		set -- `grep ^$1 "$NAGIOS_CFG" | sed 's@=@ @' | tr -d '[:cntrl:]'`
+	fi
+	shift # remove first ARG => search-string
+	echo $*
+}
+
+# check some default files and directories
+function check_files() {
+    # remove some perhaps left over files 	
+    for file in "$command_file" "$lock_file" "$status_file" "$temp_file" "/var/lock/subsys/nagios"; do
+        test -f "$file" && rm -f "$file"
+    done
+    # set default access rights for files and directories
+    for file in "$log_file" "$state_retention_file" "$status_file"; do
+	  if [ ! -e "$file" ]; then
+	        touch "$file"
+	  fi
+      chown $nagios_user:$nagios_cmdgrp "$file"
+    done
+	for dir in "$check_result_path" $(dirname $status_file); do
+      if [ ! -d "$dir" ]; then
+          mkdir -p "$dir"
+      fi
+      chown $nagios_user:$nagios_cmdgrp "$dir"
+    done
+    chmod 660 "$resource_file"
+    chown $nagios_user:$nagios_cmdgrp "$resource_file"
+}
+
+function check_lock_file() {
+	PIDDIR=$(dirname $lock_file)
+	case "$PIDDIR" in
+		/var/run)
+			if [ x"$nagios_user" != x"root" ]; then
+				DATESTRING=`date +"%Y%m%d"`
+				mv -f "$NAGIOS_CFG" "$NAGIOS_CFG-$DATESTRING"
+				sed -e "s|^lock_file.*|pid_file=$NAGIOS_PIDFILE|g" "$NAGIOS_CFG-$DATESTRING" > "$NAGIOS_CFG"
+				/bin/logger -t rcnagios "Configured $lock_file in $NAGIOS_CFG moved to $NAGIOS_PIDFILE. Backup is $NAGIOS_CFG-$DATESTRING"
+				test -f "$lock_file" && rm -f "$lock_file"
+				install -d -m755 -o$nagios_user -g$nagios_cmdgrp $(dirname "$NAGIOS_PIDFILE")
+			else
+				test -d "$PIDDIR" || mkdir -p "$PIDDIR"
+			fi
+		;;
+		*)
+			install -d -m755 -o$nagios_user -g$nagios_cmdgrp $(dirname "$NAGIOS_PIDFILE")
+	esac
+}
+
+# Check for missing binaries (stale symlinks should not happen)
+# Note: Special treatment of stop for LSB conformance
+test -x "$NAGIOS_BIN" || { echo "$NAGIOS_BIN not installed or not executable.";
+    if [ "$1" = "stop" ]; then exit 0;
+    else exit 5; fi; }
+
+# Check for existence of needed config file
+test -r "$NAGIOS_CFG" || { echo "$NAGIOS_CFG not existing or readable.";
+    if [ "$1" = "stop" ]; then exit 0;
+    else exit 6; fi; }
+
+# Check for existence of sysconfig file and read it
+test -r "$NAGIOS_SYSCONFIG" || { echo "$NAGIOS_SYSCONFIG not existing or readable.";
+	if [ "$1" = "stop" ]; then exit 0;
+	else exit 6; fi; }
+
+. "$NAGIOS_SYSCONFIG"
+
+# set values for sysconfig vars
+if [ -n "$NAGIOS_NICELEVEL" ]; then
+	NICELEVEL="-n $NAGIOS_NICELEVEL"
+else
+	NICELEVEL="-n 0"
+fi
+if [ -z "$NAGIOS_TIMEOUT" ]; then
+	NAGIOS_TIMEOUT=10
+fi
+
+#
+# get variables from config file
+#
+nagios_user="$(get_var nagios_user)"
+lock_file="$(get_var lock_file)"
+status_file="$(get_var status_file)"
+log_file="$(get_var log_file)"
+temp_file="$(get_var temp_file)"
+state_retention_file="$(get_var state_retention_file)"
+command_file="$(get_var command_file)"
+resource_file="$(get_var resource_file)"
+object_cache_file="$(get_var object_cache_file)"
+check_result_path="$(get_var check_result_path)"
+check_external_commands="$(get_var check_external_commands)"
+
+#
+# use default values if above check doesn't work
+#
+: ${nagios_user:=nagios}
+: ${nagios_cmdgrp:=nagcmd}
+: ${resource_file:=/etc/nagios/resource.cfg}
+# check ownership files
+: ${check_result_path:=/var/spool/nagios}
+: ${log_file:=/var/log/nagios/nagios.log}
+: ${state_retention_file:=/var/log/nagios/retention.dat}
+: ${status_file:=/var/log/nagios/status.dat}
+: ${check_external_commands:=0}
+# files to remove
+: ${command_file:=/var/spool/nagios/nagios.cmd}
+: ${lock_file:=/var/run/nagios/nagios.pid}
+: ${object_cache_file:=/var/lib/nagios/objects.cache}
+: ${temp_file:=/var/log/nagios/nagios.tmp}
+
+# Reset status of this service
+rc_reset
+
+case "$1" in
+    start)
+        echo -n "Starting Nagios "
+        config_check
+        if [ $? -eq 0 ]; then
+            # check if nagios is already running
+            NAGPID=$(pidof "$NAGIOS_BIN")
+            if [ -n "$NAGPID" ]; then
+                echo "- Error: looks like Nagios is still running with PID $NAGPID"
+                echo -n "- trying to kill previous Nagios process"
+                kill -9 $NAGPID
+                sleep 2
+            fi	
+            check_files
+            check_lock_file
+            startproc $NICELEVEL -p "$lock_file" "$NAGIOS_BIN" -d "$NAGIOS_CFG"
+            if [ "$check_external_commands" != 0 ]; then
+                while [ ! -e "$command_file" ] && [ $NAGIOS_TIMEOUT -gt 0 ]; do
+			sleep 1
+			NAGIOS_TIMEOUT=$[$NAGIOS_TIMEOUT-1]
+		done
+                chgrp $nagios_cmdgrp "$command_file"
+                chown $nagios_user:$nagios_cmdgrp "$check_result_path"
+            fi
+        else
+            echo "Error in configuration - please read $NAGIOS_CFG_ERR_LOG"
+            rc_failed
+        fi
+        rc_status -v
+    ;;
+    stop)
+        echo -n "Shutting down Nagios "
+        # we have to wait for nagios to exit and remove its
+        # own Lockfile, otherwise a following "start" could
+        # happen, and then the exiting nagios will remove the
+        # new Lockfile, allowing multiple nagios daemons
+        # to (sooner or later) run - John Sellens
+
+        if checkproc "$NAGIOS_BIN" ; then
+            killproc -p "$lock_file" -TERM "$NAGIOS_BIN"
+            sleep 1
+            if [ -e "$lock_file" ]; then
+                echo "Warning - Nagios did not exit in a timely manner. Waiting..."
+                while [ -e "$lock_file" ] && [ $NAGIOS_TIMEOUT -gt 0 ] ; do
+                    sleep 1
+                    NAGIOS_TIMEOUT=$[$NAGIOS_TIMEOUT-1]
+                    echo -n '.'
+                    [ $NAGIOS_TIMEOUT -eq 41 ] && echo
+                done
+            fi
+            if checkproc "$NAGIOS_BIN" ; then
+                killproc -p "$lock_file" -SIGKILL "$NAGIOS_BIN"
+                echo -n "Warning: Nagios killed"
+            fi
+        else
+            echo -n "Nagios not running"
+            rc_failed 7
+        fi
+        check_files
+		rc_reset
+        rc_status -v
+    ;;
+    try-restart)
+        ## Do a restart only if the service was active before.
+        $0 status
+        if test $? = 0; then
+            $0 restart
+        else
+            rc_reset        # Not running is not a failure.
+        fi
+        rc_status
+    ;;
+    restart)
+        $0 check
+        $0 stop
+        $0 start
+        rc_status
+    ;;
+    reload|force-reload)
+        echo -n "Reload service Nagios "
+        config_check
+        if [ $? -eq 0 ]; then
+          echo -n "Passed configuration check - reloading..."
+          killproc -HUP -p "$lock_file" "$NAGIOS_BIN"
+        else
+          echo "- Error in configuration files"
+          echo -n "- aborting reload - please read $NAGIOS_CFG_ERR_LOG"
+          rc_failed
+        fi
+        rc_status -v
+    ;;
+    status)
+        echo -n "Checking for Nagios: "
+        if [ -x "$NAGIOS_DAEMONCHK" ]; then
+            if "$NAGIOS_DAEMONCHK" -l "$lock_file"; then
+                rc_failed 0
+            else
+                rc_failed 1
+            fi
+        else
+            checkproc -p "$lock_file" "$NAGIOS_BIN"
+        fi
+        rc_status -v
+    ;;
+    check)
+        echo -n "Starting configuration check "
+        config_check
+        if [ $? -eq 0 ]; then
+            echo "- passed configuration check"
+            test -f $NAGIOS_CFG_ERR_LOG && rm $NAGIOS_CFG_ERR_LOG
+            rc_reset
+        else
+            echo "- detected Error in configuration files"
+            echo "Please read $NAGIOS_CFG_ERR_LOG"
+            rc_failed
+        fi
+        rc_status -v
+    ;;
+    check_verbose)
+        echo "Running verbose configuration check..."
+        config_check verbose
+        exitcode=$?
+        cat "$NAGIOS_CFG_ERR_LOG"
+        rc_failed $exitcode
+        rc_status -v
+        rc_exit
+    ;;
+    *)
+        echo "Usage: $0 {start|stop|status|try-restart|restart|reload|check|check_verbose}"
+        exit 1
+        ;;
+esac
+rc_exit
