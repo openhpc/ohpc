@@ -135,7 +135,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
 %endif
         -DTrilinos_ENABLE_STK:BOOL=OFF                                  \
-        -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
+        -DTrilinos_ENABLE_TESTS:BOOL=ON                                 \
         -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
         -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
         -DTEUCHOS_ENABLE_libxml2:BOOL=ON                                \
