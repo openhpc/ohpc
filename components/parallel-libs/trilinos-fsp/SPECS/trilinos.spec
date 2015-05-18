@@ -115,8 +115,6 @@ module load boost
 mkdir tmp
 cd tmp
 cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
-        -DTrilinos_INSTALL_INCLUDE_DIR:PATH=%{install_path}/include     \
-        -DTrilinos_INSTALL_LIB_DIR:PATH=%{install_path}/lib             \
         -DCMAKE_EXE_LINKER_FLAGS:STRING="-fPIC"                         \
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE                              \
         -DCMAKE_BUILD_TYPE:STRING=RELEASE                               \
