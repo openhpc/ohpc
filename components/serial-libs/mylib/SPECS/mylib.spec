@@ -15,8 +15,8 @@ BuildRequires: FSP-gnu-compilers
 Requires:      FSP-gnu-compilers
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers
-Requires:      gcc-c++ FSP-intel-compilers 
+BuildRequires: gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
 %endif
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
