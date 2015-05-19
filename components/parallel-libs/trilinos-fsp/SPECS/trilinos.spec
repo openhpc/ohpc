@@ -61,7 +61,7 @@ Source0:        %{pname}-%{version}.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         trilinos-11.14.3-no_rpath.patch
 BuildRequires:  cmake >= 2.8
-BuildRequires:  cppunit-devel
+#BuildRequires:  cppunit-devel
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
@@ -164,7 +164,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DBOOST_LIBRARY_DIRS:PATH="${BOOST_LIB}"                        \
         -DBOOST_LIBRARY_NAMES:STRING="boost"                            \
         -DTPL_ENABLE_Pthread:BOOL=ON                                    \
-        -DTPL_ENABLE_CppUnit:BOOL=ON                                    \
+        -DTPL_ENABLE_CppUnit:BOOL=OFF                                   \
         -DTPL_ENABLE_Zlib:BOOL=ON                                       \
         -DTPL_ENABLE_QT:BOOL=OFF                                        \
         -DTPL_ENABLE_Matio=OFF                                          \
