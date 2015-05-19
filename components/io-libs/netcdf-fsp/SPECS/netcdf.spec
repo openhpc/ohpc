@@ -25,8 +25,8 @@ BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
