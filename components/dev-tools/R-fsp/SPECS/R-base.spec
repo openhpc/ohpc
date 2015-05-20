@@ -111,7 +111,8 @@ Requires:       xdg-utils
 ####Requires:       xorg-x11-fonts-100dpi
 ####Requires:       xorg-x11-fonts-75dpi
 ###Requires:       texlive-latex
-Requires:	lib-icu
+BuildRequires:  libicu
+Requires:	libicu
 
 Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
