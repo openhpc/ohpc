@@ -49,16 +49,9 @@ BuildRequires: intel_licenses
 
 
 Name:		%{pname}%{PROJ_DELIM}
-###%define release 1 
 Release:	1%{?dist}
-#Version:        3.1.3
 Version:        3.2.0
-###Release:        %release
 Source:         R-%{version}.tar.gz
-#Source: http://cran.r-project.org/src/base/R-2/R-%%{version}.tar.gz
-# PATCH-FIX-UPSTREAM Fix tre when wchar_t is unsigned int
-#Source1:        FSP_macros
-#Source2:        FSP_setup_compiler
 Patch:          tre.patch
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
@@ -68,44 +61,23 @@ Group:          Productivity/Scientific/Math
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-#%define 	install_path %{FSP_LIBS}/%{pname}/%version
 %define		install_path %{FSP_PUB}/%{pname}/%version
 %define         debug_package %{nil}
 
 BuildRequires:  cairo-devel
-###BuildRequires:  gcc
-###BuildRequires:  gcc-c++
 BuildRequires:  gcc-fortran
 BuildRequires:  libjpeg-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
 BuildRequires:  perl
 BuildRequires:  readline-devel
-#%if 0%{?suse_version} <=1020
-#BuildRequires:  te_latex
-#BuildRequires:  tetex
-#%endif
 %if 0%{?suse_version} > 1020
 BuildRequires:  fdupes
 %if 0%{?suse_version} < 1230
-###BuildRequires:  texlive-bin
-###BuildRequires:  texlive-bin-latex
-#BuildRequires:  texlive-bin-metafont # evtl nur für 12.3 und später
-###BuildRequires:  texlive-latex
 %if 0%{?suse_version} > 1120 
-###BuildRequires:  texlive-fonts-extra
 %endif
 %else
-###BuildRequires:  texlive-bibtex
-###BuildRequires:  texlive-cm-super
-###BuildRequires:  texlive-latex
-###BuildRequires:  texlive-makeindex
-###BuildRequires:  texlive-metafont
-###BuildRequires:  texlive-psnfss
-###BuildRequires:  texlive-tex
-###BuildRequires:  texlive-times
 BuildRequires:  xdg-utils
-# No tex(inconsolata.sty) provided in SLE-12
 %if 0%{?suse_version} != 1315
 ###BuildRequires:  tex(inconsolata.sty)
 %endif
@@ -139,6 +111,7 @@ Requires:       xdg-utils
 ####Requires:       xorg-x11-fonts-100dpi
 ####Requires:       xorg-x11-fonts-75dpi
 ###Requires:       texlive-latex
+Requires:	lib-icu
 
 Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
