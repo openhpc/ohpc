@@ -83,18 +83,17 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
 set     version                 %{version}
 
-prepend-path    PATH            %{package_target}/intel64/bin
-prepend-path    MANPATH         %{package_target}/man/
-prepend-path    I_MPI_ROOT      %{package_target}
-prepend-path    MPI_DIR         %{package_target}/intel64
-prepend-path    LD_LIBRARY_PATH %{package_target}/intel64/lib
+setenv          I_MPI_ROOT      %{package_target}/compilers_and_libraries_20%{version}/linux/mpi
+prepend-path    PATH            %{package_target}/compilers_and_libraries_20%{version}/linux/mpi/intel64/bin
+prepend-path    MANPATH         %{package_target}/compilers_and_libraries_20%{version}/linux/mpi/man
+prepend-path    LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_20%{version}/linux/mpi/intel64/lib
 
 prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/intel-impi
 
 # Prefer bin_fsp to allow developers to use standard mpicc, mpif90,
 # etc to access Intel toolchain.
 
-prepend-path    PATH            %{package_target}/intel64/bin_fsp
+prepend-path    PATH            %{package_target}/compilers_and_libraries_20%{version}/linux/mpi/intel64/bin_fsp
 
 # PMI job launch support
 
@@ -135,11 +134,10 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
 set     version                 %{version}
 
-prepend-path    PATH            %{package_target}/intel64/bin
-prepend-path    MANPATH         %{package_target}/man/
-prepend-path    I_MPI_ROOT      %{package_target}
-prepend-path    MPI_DIR         %{package_target}/intel64
-prepend-path    LD_LIBRARY_PATH %{package_target}/intel64/lib
+setenv          I_MPI_ROOT      %{package_target}/compilers_and_libraries_20%{version}/linux/mpi
+prepend-path    PATH            %{package_target}/compilers_and_libraries_20%{version}/linux/mpi/intel64/bin
+prepend-path    MANPATH         %{package_target}/compilers_and_libraries_20%{version}/linux/mpi/man
+prepend-path    LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_20%{version}/linux/mpi/intel64/lib
 
 prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/gnu-impi
 
