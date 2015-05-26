@@ -130,7 +130,7 @@ export MPICXX=mpicxx
 
 
 LIBRARIES_FLAGS=--with-libraries=all
-./bootstrap.sh $LIBRARIES_FLAGS --prefix=%{install_path} --with-toolset=%{toolset} || cat config.log
+./bootstrap.sh $LIBRARIES_FLAGS --prefix=%{install_path} --with-toolset=%{toolset} || cat bootstrap.log
 
 %if %build_mpi
 cat << EOF >>user-config.jam
