@@ -916,7 +916,7 @@ with any necessary dependencies:
 % begin_fsp_run
 % fsp_validation_comment Install compilers
 \begin{lstlisting}[language=bash]
-[master]$ yum -y install gnu-compilers-fsp intel-compilers-fsp
+[master]$ yum -y install gnu-compilers-fsp intel-compilers-devel-fsp
 \end{lstlisting}
 % end_fsp_run
 
@@ -1038,6 +1038,7 @@ offerings within \FSP{}, issue the following:
 [master]$ yum -y groupinstall fsp-phdf5    # adds 6 (parallel) HDF5 packages
 [master]$ yum -y groupinstall fsp-petsc    # adds 6 PETSC packages
 [master]$ yum -y groupinstall fsp-boost    # adds 6 Boost packages
+[master]$ yum -y groupinstall fsp-trilinos # adds 6 Trilinos packages
 [master]$ yum -y install R_base-fsp        # adds R_base 
 \end{lstlisting}
 % end_fsp_run

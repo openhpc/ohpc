@@ -111,7 +111,7 @@ Requires:       xdg-utils
 ####Requires:       xorg-x11-fonts-100dpi
 ####Requires:       xorg-x11-fonts-75dpi
 ###Requires:       texlive-latex
-%if 0%{suse_version}
+%if 0%{?suse_version}  
 BuildRequires:  libicu52_1
 Requires:	libicu52_1
 %else
