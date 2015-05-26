@@ -21,6 +21,7 @@
 \newcommand{\baseOS}{CentOS7.1*}
 \newcommand{\LosF}{\emph{LosF*}}
 \newcommand{\FSPVersion}{15.27}
+\newcommand{\groupinstall}{yum -y groupinstall}
 
 \begin{document}
 \graphicspath{{../../common/figures/}}
@@ -137,8 +138,8 @@ both the base OS and EPEL repositories (mirrors freely available online):
 % begin_fsp_run
 % fsp_validation_comment Add baseline FSP and warewulf on master node
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ yum -y groupinstall fsp-base      
-[master]$ yum -y groupinstall fsp-warewulf
+[master]$ (*\groupinstall*) fsp-base
+[master]$ (*\groupinstall*) fsp-warewulf
 \end{lstlisting}
 % end_fsp_run
 
