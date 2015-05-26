@@ -15,6 +15,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 #AutoReqProv: no
 
+%define pstudio_ver 2016.0.056
+
 %include %{_sourcedir}/FSP_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
@@ -44,9 +46,10 @@ cd -
 # Create extra bin dir with soft links that can be use to use Intel
 # toolchain with standard front-end names like mpicc, mpif90, etc)
 
-%{__mkdir}  %{buildroot}/%{FSP_MPI_STACKS}/impi/%{version}/intel64/bin_fsp
-cd %{buildroot}/%{FSP_MPI_STACKS}/impi/%{version}/intel64/bin_fsp
-ln -s ../bin/mpiicc mpicc
+
+%{__mkdir}  %{buildroot}/%{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_fsp
+cd %{buildroot}/%{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_fsp
+ln -s ../bin/mpiicc   mpicc
 ln -s ../bin/mpiifort mpif90
 ln -s ../bin/mpiifort mpif77
 ln -s ../bin/mpiicpc  mpicxx
