@@ -25,8 +25,10 @@ BuildRequires: intel_licenses
 
 # MPI dependencies
 %if %{mpi_family} == impi
-BuildRequires: intel-mpi%{PROJ_DELIM}
-Requires:      intel-mpi%{PROJ_DELIM}
+BuildRequires: impi%{PROJ_DELIM}
+BuildRequires: impi-devel%{PROJ_DELIM}
+Requires:      impi%{PROJ_DELIM}
+Requires:      impi-devel%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
