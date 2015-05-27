@@ -43,6 +43,29 @@ if ( defined $ENV{'NODE_NAME'} && defined $ENV{'COMPUTE_HOSTS'} ) {
     $ci_run = 1;
 } 
 
+# Determine BaseOS and define package manager commands
+
+my $groupInstall = "";
+
+die "Please define BaseOS env variable" unless (defined $ENV{'BaseOS'});
+if ( $ENV{'BaseOS'} =~ /centos\S+/ ) {
+    $groupInstall = "yum -y groupinstall"
+} elsif ($ENV{'BaseOS'} =~ /sles\S+/ ) {
+    print "using zypper\n";
+} else {
+    die "Unknown BaseOS defined ($ENV{'BaseOS'})";
+}
+
+sub update_cmd {
+    my $cmd = shift;
+
+    $cmd =~ s/\(\*\\groupinstall\*\)/$groupInstall/;
+
+    return($cmd);
+
+}
+
+
 # Obtain dynamic host info
 
 my $nfs_ip         = "";
@@ -119,7 +142,10 @@ while(<IN>) {
 	    print $fh "echo \"$1\"\n";
 	    print $fh "echo \"-------------------------------------------------------------------\"\n";
 	} elsif ($_ =~ /\[master\]\$ (.+) \\$/) {
-	    print $fh "$1";
+
+	    my $cmd = update_cmd($1);
+
+	    print $fh "$cmd";
 	    my $next_line = <IN>;
 
 	    #           trim leading and trailing space
@@ -129,11 +155,14 @@ while(<IN>) {
 
 	    # TODO - add loop to accomodate multi-line continuation
 	} elsif ($_ =~ /\[master\]\$ (.+) #(.+)$/) {
-	    print $fh "$1\n";
+	    my $cmd = update_cmd($1);
+	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
-	    print $fh "$1\n";
+	    my $cmd = update_cmd($1);
+	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[postgres\]\$ (.+)$/) {
-	    print $fh "$1\n";
+	    my $cmd = update_cmd($1);
+	    print $fh "$cmd\n";
 	}
 
     }
