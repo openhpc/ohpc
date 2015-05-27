@@ -373,7 +373,7 @@ find "%buildroot" -type f -name "*.a" | xargs rm -f
 ln -sf %{install_path}/bin/pdsh ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/dshbak ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/pdcp ${RPM_BUILD_ROOT}/%{_bindir}
-ln -sf %{install_path}/bin/rdcp ${RPM_BUILD_ROOT}/%{_bindir}
+ln -sf %{install_path}/bin/rpdcp ${RPM_BUILD_ROOT}/%{_bindir}
 
 
 ##############################################################################
@@ -390,6 +390,6 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_bindir}/pdsh
 %{_bindir}/dshbak
 %{_bindir}/pdcp
-%{_bindir}/rdcp
+%{_bindir}/rpdcp
 
 %changelog
