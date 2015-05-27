@@ -82,19 +82,18 @@ module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
 module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
 set     version                 %{version}
-set     prefix                  %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi
 
-setenv          I_MPI_ROOT      $prefix
-prepend-path    PATH            $prefix/intel64/bin
-prepend-path    MANPATH         $prefix/man
-prepend-path    LD_LIBRARY_PATH $prefix/intel64/lib
+setenv          I_MPI_ROOT      %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi
+prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin
+prepend-path    MANPATH         %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/man
+prepend-path    LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/lib
 
 prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/intel-impi
 
 # Prefer bin_fsp to allow developers to use standard mpicc, mpif90,
 # etc to access Intel toolchain.
 
-prepend-path    PATH            $prefix/intel64/bin_fsp
+prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_fsp
 
 # PMI job launch support
 
@@ -134,12 +133,11 @@ module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
 module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
 set     version                 %{version}
-set     prefix                  %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi
 
-setenv          I_MPI_ROOT      $prefix
-prepend-path    PATH            $prefix/intel64/bin
-prepend-path    MANPATH         $prefix/man
-prepend-path    LD_LIBRARY_PATH $prefix/intel64/lib
+setenv          I_MPI_ROOT      %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi
+prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin
+prepend-path    MANPATH         %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/man
+prepend-path    LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/lib
 
 prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/gnu-impi
 
