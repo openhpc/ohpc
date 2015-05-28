@@ -111,17 +111,21 @@ module load pdtoolkit
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
-export MPI_INCLUDE_DIR=$MPI_DIR/include
-export MPI_LIB_DIR=$MPI_DIR/lib
 %endif
 %if %{compiler_family} == intel
 export fcomp=mpiifort
+%endif
+
+%if %{mpi_family} == impi
 export MPI_DIR=$I_MPI_ROOT
 export MPI_INCLUDE_DIR=$MPI_DIR/include64
 export MPI_LIB_DIR=$MPI_DIR/lib64
+%else
+export MPI_INCLUDE_DIR=$MPI_DIR/include
+export MPI_LIB_DIR=$MPI_DIR/lib
 %endif
-export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_DIR/lib"
 
+export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
 export BUILDROOT=%buildroot%{install_path}
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
