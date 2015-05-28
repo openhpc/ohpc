@@ -116,7 +116,7 @@ export MPI_LIB_DIR=$MPI_DIR/lib
 %endif
 %if %{compiler_family} == intel
 export fcomp=mpiifort
-export MPI_DIR=$I_MPI_DIR
+export MPI_DIR=$I_MPI_ROOT
 export MPI_INCLUDE_DIR=$MPI_DIR/include64
 export MPI_LIB_DIR=$MPI_DIR/lib64
 %endif
