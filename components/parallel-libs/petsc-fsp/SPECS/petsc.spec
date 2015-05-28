@@ -118,8 +118,8 @@ module load mkl
         --with-cxx=mpiicpc  \
         --with-fc=mpiifort  \
         --with-f77=mpiifort \
-#%else
-#        --FFLAGS=-I$MPI_DIR/include/gfortran/4.8.0/ \
+%else
+        --FFLAGS=-I$I_MPI_ROOT/include64/gfortran/4.9.0/ \
 %endif
 %endif
         --with-clanguage=C++ \
