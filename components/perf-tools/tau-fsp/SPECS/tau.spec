@@ -111,14 +111,19 @@ module load pdtoolkit
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
+export MPI_INCLUDE_DIR=$MPI_DIR/include
+export MPI_LIB_DIR=$MPI_DIR/lib
 %endif
 %if %{compiler_family} == intel
 export fcomp=mpiifort
+export MPI_DIR=$I_MPI_DIR
+export MPI_INCLUDE_DIR=$MPI_DIR/include64
+export MPI_LIB_DIR=$MPI_DIR/lib64
 %endif
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_DIR/lib"
 
 export BUILDROOT=%buildroot%{install_path}
-export FFLAGS="$FFLAGS -I$MPI_DIR/include"
+export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     -prefix=/tmp/%{install_path} \
     -exec-prefix= \
@@ -127,19 +132,19 @@ export FFLAGS="$FFLAGS -I$MPI_DIR/include"
 	-fortran=$fcomp \
 	-iowrapper \
 	-mpi \
-	-mpiinc=$MPI_DIR/include \
-	-mpilib=$MPI_DIR/lib \
+	-mpiinc=$MPI_INCLUDE_DIR \
+	-mpilib=$MPI_LIB_DIR \
 	-slog2 \
 	-PROFILEPARAM \
     -papi=$PAPI_DIR \
 	-pdt=$PDTOOLKIT_DIR \
 	-CPUTIME \
-	-useropt="%optflags -I$MPI_DIR/include -I$PWD/include -fno-strict-aliasing" \
+	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
 %if %{compiler_family} == intel
     -tbb \
 %endif
-	-extrashlibopts="-L$MPI_DIR/lib -lmpi -lgomp -L/tmp%{install_path}/lib" 
+	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -lgomp -L/tmp%{install_path}/lib" 
 
 
 make install
