@@ -17,17 +17,19 @@
 % Include git variables
 \input{vc.tex}
 
-% Define Base OS
+% Define Base OS and other local macros
 \newcommand{\baseOS}{CentOS7.1*}
 \newcommand{\LosF}{\emph{LosF*}}
 \newcommand{\FSPVersion}{15.27}
+\newcommand{\install}{yum -y install}
+\newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
 \newcommand{\groupinstall}{yum -y groupinstall}
+\newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
+
 
 \begin{document}
 \graphicspath{{../../common/figures/}}
 \thispagestyle{empty}
-
-%%%{\hfill\includegraphics[scale=0.14]{../figures/tron-approved}}
 
 % Title Page
 
@@ -158,7 +160,7 @@ the corresponding compute image in a subsequent step.
 % begin_fsp_run
 % fsp_validation_comment Add resource manager
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ yum -y groupinstall fsp-slurm-server
+[master]$ (*\groupinstall*) fsp-slurm-server
 \end{lstlisting}
 % end_fsp_run
 
@@ -196,7 +198,7 @@ chosen {\em master} host.
 % begin_fsp_run
 % fsp_validation_comment Add ofed
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ yum -y groupinstall "InfiniBand Support"
+[master]$ (*\groupinstall*) "InfiniBand Support"
 
 # Load IB drivers
 [master]$ service rdma start
@@ -233,7 +235,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % begin_fsp_run
 % fsp_validation_comment Add CLCK
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ yum -y install intel-clck-fsp
+[master]$ (*\install*) intel-clck-fsp
 \end{lstlisting}
 % end_fsp_run
 
@@ -377,17 +379,17 @@ Now, we can include additional components to the compute instance using
 % fsp_validation_comment Add FSP components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add SLURM client support
-[master]$ yum --installroot=$CHROOT -y groupinstall fsp-slurm-client
+[master]$ (*\groupchrootinstall*) fsp-slurm-client
 
 # Add IB support and enable
-[master]$ yum -y --installroot=$CHROOT groupinstall "InfiniBand Support"
+[master]$ (*\groupchrootinstall*) "InfiniBand Support"
 [master]$ chroot $CHROOT systemctl enable rdma
 
 # Add Network Time Protocol (NTP) support
-[master]$ yum -y --installroot=$CHROOT install ntp
+[master]$ (*\chrootinstall*) ntp
 
 # Include FSP default modules user environment
-[master]$ yum -y --installroot=$CHROOT install lmod-defaults-intel-fsp
+[master]$ (*\chrootinstall*) lmod-defaults-intel-fsp
 \end{lstlisting}
 % end_fsp_run
 
@@ -508,7 +510,7 @@ discussed further in the following sections.
 % fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
-[master]$ yum -y install lustre-client-fsp lustre-client-fsp-modules
+[master]$ (*\install*) lustre-client-fsp lustre-client-fsp-modules
 \end{lstlisting}
 % end_fsp_run
 
@@ -516,7 +518,7 @@ discussed further in the following sections.
 % fsp_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
-[master]$ yum -y --installroot=$CHROOT install lustre-client-fsp lustre-client-fsp-modules
+[master]$ (*\chrootinstall*) lustre-client-fsp lustre-client-fsp-modules
 
 # Include mount point and file system mount in compute image
 [master]$ mkdir $CHROOT/mnt/lustre
@@ -570,7 +572,7 @@ server running on the {\em master} host, issue the following:
 % begin_fsp_run
 % fsp_validation_comment Install ORCM server
 \begin{lstlisting}[language=bash]
-[master]$ yum -y groupinstall fsp-orcm-server
+[master]$ (*\groupinstall*) fsp-orcm-server
 \end{lstlisting}
 % end_fsp_run
 
@@ -632,7 +634,7 @@ be added to the compute image as follows:
 % begin_fsp_run
 % fsp_validation_comment Install ORCM client on compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ yum -y --installroot=$CHROOT groupinstall fsp-orcm-client
+[master]$ (*\groupchrootinstall*) fsp-orcm-client
 
 # Set master host as data aggregator
 [master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/opt/open-rcm/etc/orcm-site.xml
@@ -898,8 +900,8 @@ autotools collection and the {\em valgrind*} memory debugger. These can be insta
 % begin_fsp_run
 % fsp_validation_comment Install dev tools
 \begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
-[master]$ yum -y groupinstall fsp-autotools
-[master]$ yum -y install valgrind-fsp
+[master]$ (*\groupinstall*) fsp-autotools
+[master]$ (*\install*) valgrind-fsp
 \end{lstlisting}
 % end_fsp_run
 
@@ -917,7 +919,7 @@ with any necessary dependencies:
 % begin_fsp_run
 % fsp_validation_comment Install compilers
 \begin{lstlisting}[language=bash]
-[master]$ yum -y install gnu-compilers-fsp intel-compilers-devel-fsp
+[master]$ (*\install*) gnu-compilers-fsp intel-compilers-devel-fsp
 \end{lstlisting}
 % end_fsp_run
 
@@ -929,13 +931,13 @@ open-source and Intel licensed software. These can be installed as follows:
 % begin_fsp_run
 % fsp_validation_comment Install performance tools
 \begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
-[master]$ yum -y install papi-fsp
-[master]$ yum -y install intel-itac-fsp
-[master]$ yum -y install intel-vtune-fsp
-[master]$ yum -y install intel-advisor-fsp
-[master]$ yum -y install intel-inspector-fsp
-[master]$ yum -y install intel-inspector-fsp
-[master]$ yum -y groupinstall fsp-tau
+[master]$ (*\install*) papi-fsp
+[master]$ (*\install*) intel-itac-fsp
+[master]$ (*\install*) intel-vtune-fsp
+[master]$ (*\install*) intel-advisor-fsp
+[master]$ (*\install*) intel-inspector-fsp
+[master]$ (*\install*) intel-inspector-fsp
+[master]$ (*\groupinstall*) fsp-tau
 \end{lstlisting}
 % end_fsp_run
 
@@ -961,8 +963,8 @@ three MPI families:
 % begin_fsp_run
 % fsp_validation_comment Install MPI
 \begin{lstlisting}[language=bash]
-[master]$ yum -y install  openmpi-*-fsp mvapich2-*-fsp intel-mpi-fsp
-[master]$ yum -y groupinstall fsp-imb
+[master]$ (*\install*)  openmpi-*-fsp mvapich2-*-fsp intel-mpi-fsp
+[master]$ (*\groupinstall*) fsp-imb
 \end{lstlisting}
 % end_fsp_run
 
@@ -973,7 +975,7 @@ three MPI families:
 % begin_fsp_run
 % fsp_validation_comment Install licenses
 % \begin{lstlisting}[language=bash,keywords={},upquote=true]
-% [master]$ yum -y install intel_licenses
+% [master]$ (*\install*) intel_licenses
 % \end{lstlisting}
 % end_fsp_run
 
@@ -1029,18 +1031,18 @@ offerings within \FSP{}, issue the following:
 % begin_fsp_run
 % fsp_validation_comment Install 3rd party libraries
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-[master]$ yum -y groupinstall fsp-numpy    # adds 2 numerical python packages
-[master]$ yum -y groupinstall fsp-scipy    # adds 6 scientific python packages
-[master]$ yum -y groupinstall fsp-hdf5     # adds 2 HDF5 packages
-[master]$ yum -y groupinstall fsp-netcdf   # adds 6 NetCDF packages
-[master]$ yum -y groupinstall fsp-gsl      # adds 2 GSL packages
-[master]$ yum -y groupinstall fsp-metis    # adds 2 METIS packages
-[master]$ yum -y groupinstall fsp-fftw     # adds 6 FFTW packages
-[master]$ yum -y groupinstall fsp-phdf5    # adds 6 (parallel) HDF5 packages
-[master]$ yum -y groupinstall fsp-petsc    # adds 6 PETSC packages
-[master]$ yum -y groupinstall fsp-boost    # adds 6 Boost packages
-[master]$ yum -y groupinstall fsp-trilinos # adds 6 Trilinos packages
-[master]$ yum -y install R_base-fsp        # adds R_base 
+[master]$ (*\groupinstall*) fsp-numpy    # adds 2 numerical python packages
+[master]$ (*\groupinstall*) fsp-scipy    # adds 6 scientific python packages
+[master]$ (*\groupinstall*) fsp-hdf5     # adds 2 HDF5 packages
+[master]$ (*\groupinstall*) fsp-netcdf   # adds 6 NetCDF packages
+[master]$ (*\groupinstall*) fsp-gsl      # adds 2 GSL packages
+[master]$ (*\groupinstall*) fsp-metis    # adds 2 METIS packages
+[master]$ (*\groupinstall*) fsp-fftw     # adds 6 FFTW packages
+[master]$ (*\groupinstall*) fsp-phdf5    # adds 6 (parallel) HDF5 packages
+[master]$ (*\groupinstall*) fsp-petsc    # adds 6 PETSC packages
+[master]$ (*\groupinstall*) fsp-boost    # adds 6 Boost packages
+[master]$ (*\groupinstall*) fsp-trilinos # adds 6 Trilinos packages
+[master]$ (*\install*) R_base-fsp        # adds R_base 
 \end{lstlisting}
 % end_fsp_run
 
