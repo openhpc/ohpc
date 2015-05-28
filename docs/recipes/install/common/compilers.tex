@@ -1,0 +1,15 @@
+\FSP{} presently packages two compiler families ({\GNU{}} and {\Intel{}
+  Parallel Studio}) that are integrated within the underlying
+modules-environment system in a hierarchical fashion. End users of a \FSP{}
+system can choose to access one compiler at a time and will be presented with
+additional compiler-dependent software as a function of which compiler
+toolchain is currently loaded. Each compiler toolchain can be installed
+separately and the following commands illustrate the installation of both along
+with any necessary dependencies:
+
+% begin_fsp_run
+% fsp_validation_comment Install compilers
+\begin{lstlisting}[language=bash]
+[master]$ (*\install*) gnu-compilers-fsp intel-compilers-devel-fsp
+\end{lstlisting}
+% end_fsp_run
