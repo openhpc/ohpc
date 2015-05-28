@@ -1,0 +1,34 @@
+The following command adds the \SLURM{} workload manager server components to the
+chosen {\em master} host. Note that client-side components will be added to
+the corresponding compute image in a subsequent step.
+
+% begin_fsp_run
+% fsp_validation_comment Add resource manager
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ (*\groupinstall*) fsp-slurm-server
+\end{lstlisting}
+% end_fsp_run
+
+\SLURM{} requires the delineation of the system user that runs the underlying
+resource management daemons. The default configuration file that is supplied
+with the \FSP{} build of \SLURM{} identifies this \texttt{SlurmUser} to be a
+dedicated user named \texttt{slurm} and this user must exist. 
+The following command can be used to add this user to the {\em
+  master} server:
+
+% begin_fsp_run
+% fsp_validation_comment Add slurm user
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ useradd slurm
+\end{lstlisting}
+% end_fsp_run
+
+To facilitate running test jobs later on under the auspices of a resource
+manager, we also add a dedicated ``test'' user as follows:
+
+% begin_fsp_run
+% fsp_validation_comment Add test user
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ useradd -m test
+\end{lstlisting}
+% end_fsp_run
