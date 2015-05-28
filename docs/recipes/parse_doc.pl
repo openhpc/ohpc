@@ -45,24 +45,56 @@ if ( defined $ENV{'NODE_NAME'} && defined $ENV{'COMPUTE_HOSTS'} ) {
 
 # Determine BaseOS and define package manager commands
 
-my $groupInstall = "";
+my $Install            = "";
+my $chrootInstall      = "";
+my $groupInstall       = "";
+my $groupChrootInstall = "";
 
-die "Please define BaseOS env variable" unless (defined $ENV{'BaseOS'});
-if ( $ENV{'BaseOS'} =~ /centos\S+/ ) {
-    $groupInstall = "yum -y groupinstall"
-} elsif ($ENV{'BaseOS'} =~ /sles\S+/ ) {
-    print "using zypper\n";
-} else {
-    die "Unknown BaseOS defined ($ENV{'BaseOS'})";
+# parse package command macro's from input file
+
+open(IN,"<$file")  || die "Cannot open file -> $file\n";
+while(my $line = <IN>) {
+    chomp($line);
+    if($line =~ /\\newcommand{\\install}{(.+)}/ ) {
+	$Install = $1;
+    } 
+    elsif ($line =~ /\\newcommand{\\chrootinstall}{(.+)}/ ) {
+	$chrootInstall = $1;
+    }
+    elsif ($line =~ /\\newcommand{\\groupinstall}{(.+)}/ ) {
+	$groupInstall = $1;
+    }
+    elsif ($line =~ /\\newcommand{\\groupchrootinstall}{(.+)}/ ) {
+	$groupChrootInstall = $1;
+    }
 }
+
+# Strip escape \ from latex macro
+
+$chrootInstall      =~ s/\\\$/\$/;
+$groupChrootInstall =~ s/\\\$/\$/;
+
+# print "Install             = $Install\n";
+# print "chrootInstall       = $chrootInstall\n";
+# print "groupInstall        = $groupInstall\n";
+# print "groupChrootInstall  = $groupChrootInstall\n";
+
+if ($Install eq "" || $chrootInstall eq "" || $groupInstall eq "" || $groupChrootInstall eq "") {
+    print "Error: package manager macros not defined\n";
+    exit 1;
+}
+
+close(IN);
 
 sub update_cmd {
     my $cmd = shift;
 
+    $cmd =~ s/\(\*\\install\*\)/$Install/;
+    $cmd =~ s/\(\*\\chrootinstall\*\)/$chrootInstall/;
     $cmd =~ s/\(\*\\groupinstall\*\)/$groupInstall/;
+    $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
 
     return($cmd);
-
 }
 
 
@@ -123,9 +155,50 @@ if($ci_run == 1) {
     close(IN);
 }
 
-(my $fh,my $tmpfile) = tempfile();
+# The input .tex file likely includes other input files via \input{foo}.  Do a
+# first pass through the input file and accumulate a temp file which includes
+# an aggregate copy of all the tex commands.
+
+(my $fh_raw, my $tmpfile_raw ) = tempfile();
 
 open(IN,"<$file")  || die "Cannot open file -> $file\n";
+
+while(my $line = <IN>) {
+
+    # Check for include 
+    if( $line =~ /\\input{(\S+)}/ ) {
+
+	my $inputFile = $1;
+	# verify input file has .tex extension or add it
+
+	if($inputFile !~ /(\S+).tex/ ) {
+	    $inputFile = $inputFile . ".tex";
+	}
+
+	open(IN2,"<$inputFile") || die "Cannot open embedded input file $inputFile for parsing";
+
+	while(my $line_embed = <IN2>) {
+	    if( $line_embed =~ /\\input{\S+}/ ) {
+		print "Error: nested \\input{} file parsing not supported\n";
+		exit 1;
+	    } elsif ($line !~ /^%/) {
+		print $fh_raw $line_embed;
+	    }
+	}		
+	close(IN2);
+    } else {
+	print $fh_raw $line;
+    }
+}
+
+close(IN);
+close($fh_raw);
+
+# Next, parse the raw file and look for commands to execute based on delimiter
+
+(my $fh,my $tmpfile) = tempfile();
+
+open(IN,"<$tmpfile_raw")  || die "Cannot open file -> $file\n";
 
 my $begin_delim = "% begin_fsp_run";
 my $end_delim   = "% end_fsp_run";
