@@ -61,7 +61,7 @@
 +# vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:
 --- /dev/null	2014-10-22 10:56:15.000000000 -0700
 +++ warewulf-vnfs-3.6.patch/libexec/wwmkchroot/include-suse	2014-10-22 10:41:33.956765500 -0700
-@@ -0,0 +1,121 @@
+@@ -0,0 +1,116 @@
 +
 +
 +REPO_NAME="SUSE-Linux-Enterprise-Server-11-SP3"
@@ -175,11 +175,6 @@
 +
 +postchroot() {
 +    touch $CHROOTDIR/fastboot
-+    if grep -q rename_device $CHROOTDIR/etc/sysconfig/network/scripts/functions; then
-+        echo "" >> $CHROOTDIR/etc/sysconfig/network/scripts/functions
-+        echo "# This is a kludge added by Warewulf so devices don't get renamed (broke things with IB)" >> $CHROOTDIR/etc/sysconfig/network/scripts/functions
-+        echo "rename_device() { return 0; }" >> $CHROOTDIR/etc/sysconfig/network/scripts/functions
-+    fi
 +    return 0
 +}
 +

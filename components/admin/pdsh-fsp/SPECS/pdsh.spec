@@ -367,10 +367,13 @@ fi
 # Remove all module .a's as they are not needed on any known RPM platform.
 find "%buildroot" -type f -name "*.a" | xargs rm -f
 
-# Add soft link to pdsh binary in default path
+# Add soft link to pdsh binaries in default path
 
 %{__mkdir} -p ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/pdsh ${RPM_BUILD_ROOT}/%{_bindir}
+ln -sf %{install_path}/bin/dshbak ${RPM_BUILD_ROOT}/%{_bindir}
+ln -sf %{install_path}/bin/pdcp ${RPM_BUILD_ROOT}/%{_bindir}
+ln -sf %{install_path}/bin/rpdcp ${RPM_BUILD_ROOT}/%{_bindir}
 
 
 ##############################################################################
@@ -385,5 +388,8 @@ rm -rf "$RPM_BUILD_ROOT"
 %doc README.KRB4 README.modules README.QsNet
 %{FSP_HOME}
 %{_bindir}/pdsh
+%{_bindir}/dshbak
+%{_bindir}/pdcp
+%{_bindir}/rpdcp
 
 %changelog
