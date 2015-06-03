@@ -84,7 +84,7 @@
 % begin_fsp_run
 % fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ export FSP_mirror=http://fsp-obs.pdx.intel.com:82
+[master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82
 [master]$ wget -P /etc/yum.repos.d $FSP_mirror/ForestPeak:/15.27:/Factory/CentOS-7.1_Intel/ForestPeak:15.27:Factory.repo
 \end{lstlisting}
 % end_fsp_run
@@ -221,6 +221,7 @@ follows:
 [master]$ systemctl restart xinetd  
 [master]$ systemctl restart mariadb 
 [master]$ systemctl restart httpd   
+[master]$ systemctl restart dhcpd
 \end{lstlisting}
 %\end{verbatim}
 % end_fsp_run

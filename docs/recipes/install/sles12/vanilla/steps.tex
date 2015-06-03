@@ -84,7 +84,7 @@
 % begin_fsp_run
 % fsp_validation_comment Enable FSP Repo(s)
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ export FSP_mirror=http://fsp-obs.pdx.intel.com:82
+[master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82
 [master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.27:/Factory/SLE_12_Intel/ForestPeak:15.27:Factory.repo
 [master]$ zypper -n --gpg-auto-import-keys refresh
 \end{lstlisting}
@@ -200,6 +200,7 @@ follows:
 [master]$ service xinetd restart                         # tftp services
 [master]$ service mysql restart                          # mysql database
 [master]$ service apache2 restart                        # web server
+[master]$ service dhcpd restart                          # DHCP server
 \end{lstlisting}
 %\end{verbatim}
 % end_fsp_run
