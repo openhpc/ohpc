@@ -23,6 +23,7 @@ BuildConflicts: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 Patch1: warewulf-provision.busybox.patch.bz2
 Patch2: warewulf-provision.httpdconfdir.patch
+Patch3: warewulf-provision.dhcpd.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -88,6 +89,7 @@ available the included GPL software.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 
 %build
