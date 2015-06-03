@@ -32,15 +32,15 @@
  
 --- /dev/null	2014-09-10 14:23:30.000000000 -0700
 +++ warewulf-common-3.5/lib/Warewulf/System/Suse.pm	2014-09-10 11:37:12.620256000 -0700
-@@ -0,0 +1,167 @@
+@@ -0,0 +1,168 @@
 +# Copyright (c) 2001-2003 Gregory M. Kurtzer
 +#
 +# Copyright (c) 2003-2011, The Regents of the University of California,
 +# through Lawrence Berkeley National Laboratory (subject to receipt of any
 +# required approvals from the U.S. Dept. of Energy).  All rights reserved.
 +#
-+# edited for Suse flavors Reese Baird
-+# $Id:$
++#
++# $Id$
 +#
 +
 +package Warewulf::System::Suse;
@@ -49,7 +49,6 @@
 +use Warewulf::Logger;
 +
 +our @ISA = ('Warewulf::System');
-+delete $ENV{'ENV'};
 +
 +=head1 NAME
 +
@@ -78,7 +77,9 @@
 +
 +=cut
 +
-+sub new($$) {
++sub
++new($$)
++{
 +    my $proto = shift;
 +    my $class = ref($proto) || $proto;
 +    my $self = {};
@@ -92,25 +93,19 @@
 +=item service($name, $command)
 +
 +Run a command on a service script (e.g. /etc/init.d/service restart).
-+Future versions may also support upstart.
 +
 +=cut
 +
-+sub service($$$) {
++sub
++service($$$)
++{
 +    my ($self, $service, $command) = @_;
-+
-+ 	# determine which distro we are working with
-+	# set distro specific init.d service commands
-+
-+	if ( ! -f "/etc/redhat-release" ) {
-+		if ( "$service" eq "dhcpd" ) {
-+			$service = 'dhcpd';
-+		}
-+	}
 +
 +    &dprint("Running service command: $service, $command\n");
 +
-+    if (-x "/etc/init.d/$service") {
++    if ( -x "/bin/systemctl" ) {
++        system("/bin/systemctl $command $service.service");
++    } elsif (-x "/etc/init.d/$service") {
 +        $self->{"OUTPUT"} = ();
 +        open(SERVICE, "/etc/init.d/$service $command 2>&1|");
 +        while(<SERVICE>) {
@@ -124,32 +119,37 @@
 +            &dprint("Error running: /etc/init.d/$service $command\n");
 +        }
 +    }
-+    return();
++        if ($self->{"OUTPUT"}) {
++        chomp($self->{"OUTPUT"});
++        if (close SERVICE) {
++            &dprint("Service command ran successfully\n");
++            return(1);
++        } else {
++            &dprint("Error running: /usr/bin/systemctl $command $service\n");
++        }
++    }
++    exit();
 +}
++
++
 +
 +
 +=item chkconfig($name, $command)
 +
 +Enable a service script to be enabled or disabled at boot (e.g.
 +/sbin/chkconfig service on).
-+This may be depicated in favor of upstart in the future.
 +
 +=cut
 +
-+sub chkconfig($$$) {
++sub
++chkconfig($$$)
++{
 +    my ($self, $service, $command) = @_;
 +
-+ 	# determine which distro we are working with
-+	# set distro specific init.d service commands
-+
-+	if ( ! -f "/etc/redhat-release" ) {
-+		if ( "$service" eq "dhcpd" ) {
-+			$service = 'dhcpd';
-+		}
-+	}
-+
-+    if (-x "/usr/lib/lsb/install_initd") {
-+        open(CHKCONFIG, "/usr/lib/lsb/install_initd $service 2>&1|");
++    if ( -x "/bin/systemctl" ) {
++        system("/bin/systemctl enable $service.service");
++    } elsif (-x "/sbin/chkconfig") {
++        open(CHKCONFIG, "/sbin/chkconfig $service $command 2>&1|");
 +        while(<CHKCONFIG>) {
 +            $self->{"OUTPUT"} .= $_;
 +        }
@@ -157,14 +157,13 @@
 +            chomp($self->{"OUTPUT"});
 +        }
 +        if (close CHKCONFIG) {
-+            &dprint("install_initd command ran successfully\n");
++            &dprint("Chkconfig command ran successfully\n");
 +            return(1);
-+        }
-+		else {
-+            &dprint("Error running: /usr/lib/lsb/install_initd $service \n");
++        } else {
++            &dprint("Error running: /sbin/chkconfig $service $command\n");
 +        }
 +    }
-+    return();
++    exit();
 +}
 +
 +
@@ -174,10 +173,12 @@
 +
 +=cut
 +
-+sub output($) {
++sub
++output($)
++{
 +    my $self = shift;
 +
-+    return(defined($self->{"OUTPUT"}) ? $self->{"OUTPUT"} : undef);
++    return(defined($self->{"OUTPUT"}) ? $self->{"OUTPUT"} : "");
 +}
 +
 +
@@ -210,3 +211,77 @@
          exec("/bin/sh", "-c", $command);
          die("Unable to execute $command -- $!");
      }
+--- warewulf-common-3.6/lib/Warewulf/System/Rhel.pm	2014-05-21 11:14:43.000000000 -0700
++++ warewulf-common-3.6.patch/lib/Warewulf/System/Rhel.pm	2015-06-03 09:37:34.000000000 -0700
+@@ -5,7 +5,7 @@
+ # required approvals from the U.S. Dept. of Energy).  All rights reserved.
+ #
+ #
+-# $Id: Rhel.pm 1680 2014-05-21 18:14:43Z gmk $
++# $Id$
+ #
+ 
+ package Warewulf::System::Rhel;
+@@ -68,7 +68,9 @@
+ 
+     &dprint("Running service command: $service, $command\n");
+ 
+-    if (-x "/etc/init.d/$service") {
++    if ( -x "/bin/systemctl" ) {
++        system("/bin/systemctl $command $service.service");
++    } elsif (-x "/etc/init.d/$service") {
+         $self->{"OUTPUT"} = ();
+         open(SERVICE, "/etc/init.d/$service $command 2>&1|");
+         while(<SERVICE>) {
+@@ -82,10 +84,21 @@
+             &dprint("Error running: /etc/init.d/$service $command\n");
+         }
+     }
+-    return();
++        if ($self->{"OUTPUT"}) {
++        chomp($self->{"OUTPUT"});
++        if (close SERVICE) {
++            &dprint("Service command ran successfully\n");
++            return(1);
++        } else {
++            &dprint("Error running: /usr/bin/systemctl $command $service\n");
++        }
++    }
++    exit();
+ }
+ 
+ 
++
++
+ =item chkconfig($name, $command)
+ 
+ Enable a service script to be enabled or disabled at boot (e.g.
+@@ -98,7 +111,9 @@
+ {
+     my ($self, $service, $command) = @_;
+ 
+-    if (-x "/sbin/chkconfig") {
++    if ( -x "/bin/systemctl" ) {
++        system("/bin/systemctl enable $service.service");
++    } elsif (-x "/sbin/chkconfig") {
+         open(CHKCONFIG, "/sbin/chkconfig $service $command 2>&1|");
+         while(<CHKCONFIG>) {
+             $self->{"OUTPUT"} .= $_;
+@@ -113,7 +128,7 @@
+             &dprint("Error running: /sbin/chkconfig $service $command\n");
+         }
+     }
+-    return();
++    exit();
+ }
+ 
+ 
+@@ -128,7 +143,7 @@
+ {
+     my $self = shift;
+ 
+-    return(defined($self->{"OUTPUT"}) ? $self->{"OUTPUT"} : undef);
++    return(defined($self->{"OUTPUT"}) ? $self->{"OUTPUT"} : "");
+ }
+ 
+ 
