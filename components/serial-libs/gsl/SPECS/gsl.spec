@@ -25,71 +25,91 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #-------------------------------------------------------------------------------
 
+# Serial GSL library build that is dependent on compiler toolchain
+
 #-fsp-header-comp-begin----------------------------------------------
+
+%include %{_sourcedir}/FSP_macros
 
 # FSP convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
+%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod
+BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers
-Requires:      FSP-gnu-compilers
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
-%endif
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
+%endif
 %endif
 
 #-fsp-header-comp-end------------------------------------------------
 
 # Base package name
-%define pname mylib
+%define pname gsl
+%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Summary:   Demo example
-Name:      %{pname}-%{compiler_family}
-Version:   2.0
+Summary:   GNU Scientific Library (GSL)
+Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+Version:   1.16
 Release:   1
-License:   GPL-3.0+
-Group:     Development/Languages/C and C++
-URL:       http://random.org
+License:   GPL
+Group:     fsp/serial-libs
+URL:       http://www.gnu.org/software/gsl
 Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_setup_compiler
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+Source1:   FSP_macros
+Source2:   FSP_setup_compiler
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+
+#!BuildIgnore: post-build-checks rpmlint-Factory
 
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{name}/%version
+%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
-Just an example to play with.
+
+The GNU Scientific Library (GSL) is a numerical library for C and C++
+programmers.  The library provides a wide range of mathematical
+routines such as random number generators, special functions and
+least-squares fitting.  It contains over 1000 mathematical routines
+written in ANSI C.  The library follows modern coding conventions, and
+lends itself to being used in very high level languages (VHLLs).
 
 %prep
-
 %setup -q -n %{pname}-%{version}
 
 %build
-
-# FSP compiler designation
+# FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-./configure --prefix=%{install_path}
+%if %{compiler_family} == intel
+export CFLAGS="-fp-model strict $CFLAGS"
+%endif
+
+./configure --prefix=%{install_path} --disable-static || cat config.log
+make %{?_smp_mflags}
 
 %install
-
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-make DESTDIR=$RPM_BUILD_ROOT install
+make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+
+# Remove static libraries
+find "%buildroot" -type f -name "*.la" | xargs rm -f
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -99,22 +119,27 @@ make DESTDIR=$RPM_BUILD_ROOT install
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} toolchain."
+puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{pname} built with %{compiler_family} toolchain"
+module-whatis "Name: %{PNAME} built with %{compiler_family} toolchain"
 module-whatis "Version: %{version}"
 module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
-module-whatis "URL: http://random.org"
+module-whatis "%{url}"
 
-set     version			    %{version}
+set             version		    %{version}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
-prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib64
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_INC        %{install_path}/include
+
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
@@ -132,8 +157,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{FSP_HOME}
 
-
 %changelog
-* Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
-- Initial build.
-

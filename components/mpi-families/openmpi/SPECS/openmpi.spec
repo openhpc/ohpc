@@ -25,6 +25,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #-------------------------------------------------------------------------------
 
+# OpenMPI stack that is dependent on compiler toolchain
+
 #-fsp-header-comp-begin----------------------------------------------
 
 # FSP convention: the default assumes the gnu compiler family;
@@ -32,44 +34,93 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
+%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod
+BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers
-Requires:      FSP-gnu-compilers
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
-%endif
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
+%endif
 %endif
 
 #-fsp-header-comp-end------------------------------------------------
 
 # Base package name
-%define pname mylib
+%define pname openmpi
+%define with_openib 1
+%define with_psm 0
+%define with_lustre 1
+%define with_slurm 1
 
-Summary:   Demo example
-Name:      %{pname}-%{compiler_family}
-Version:   2.0
+Summary:   A powerful implementation of MPI
+Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+Version:   1.8.4
 Release:   1
-License:   GPL-3.0+
-Group:     Development/Languages/C and C++
-URL:       http://random.org
-Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_setup_compiler
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+License:   BSD-3-Clause
+Group:     fsp/mpi-families
+URL:       http://www.open-mpi.org
+Source0:   %{pname}-%{version}.tar.bz2
+Source1:   FSP_macros
+Source2:   FSP_setup_compiler
+#Patch1:    %{pname}-no_date_and_time.patch
+#Patch2:    %{pname}-no_network_in_build.patch
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+
+%include %{_sourcedir}/FSP_macros
 
 %define debug_package %{nil}
 
-# Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{name}/%version
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:  postfix
+BuildRequires:  opensm
+BuildRequires:  opensm-devel
+BuildRequires:  numactl
+%if 0%{with_slurm}
+BuildRequires:  slurm-devel%{PROJ_DELIM}
+#!BuildIgnore:  slurm%{PROJ_DELIM}
+%endif
 
-%description
-Just an example to play with.
+%if 0%{?suse_version}
+BuildRequires:  libnuma1
+BuildRequires:  sysfsutils
+%else
+BuildRequires:  libsysfs-devel
+BuildRequires:  numactl-devel
+%endif
+
+%if %{with_lustre}
+BuildRequires:  lustre-client%{PROJ_DELIM}
+%endif
+
+%if %{with_openib}
+BuildRequires:  libibumad-devel
+BuildRequires:  libibverbs-devel
+%endif
+
+%if %{with_psm}
+BuildRequires:  infinipath-psm infinipath-psm-devel
+%endif
+
+# Default library install path
+%define install_path %{FSP_MPI_STACKS}/%{name}/%version
+
+%description 
+
+Open MPI is a project combining technologies and resources from several
+other projects (FT-MPI, LA-MPI, LAM/MPI, and PACX-MPI) in order to
+build the best MPI library available.
+
+This RPM contains all the tools necessary to compile, link, and run
+Open MPI jobs.
 
 %prep
 
@@ -81,7 +132,18 @@ Just an example to play with.
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-./configure --prefix=%{install_path}
+BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics"
+%if %{with_psm}
+  BASEFLAGS="$BASEFLAGS --with-psm"
+%endif
+%if %{with_openib}
+  BASEFLAGS="$BASEFLAGS --with-verbs"
+%endif
+%if %{with_lustre}
+  BASEFLAGS="$BASEFLAGS --with-io-romio-flags=--with-file-system=testfs+ufs+nfs+lustre"
+%endif
+
+./configure ${BASEFLAGS}
 
 %install
 
@@ -89,10 +151,15 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-make DESTDIR=$RPM_BUILD_ROOT install
+make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+
+# Remove .la files detected by rpm
+
+rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
+
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__mkdir} -p %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -107,14 +174,18 @@ module-whatis "Name: %{pname} built with %{compiler_family} toolchain"
 module-whatis "Version: %{version}"
 module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
-module-whatis "URL: http://random.org"
+module-whatis "URL: %{url}"
 
 set     version			    %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    INCLUDE             %{install_path}/include
-prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib64
+prepend-path    MANPATH             %{install_path}/man
+prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
+prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/%{compiler_family}-%{pname}
+prepend-path    MPI_DIR             %{install_path}
+prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
+
+family "MPI"
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
@@ -127,6 +198,11 @@ EOF
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+/sbin/ldconfig || exit 1
+
+%postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)

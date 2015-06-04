@@ -25,89 +25,107 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #-------------------------------------------------------------------------------
 
-#-fsp-header-comp-begin----------------------------------------------
+%include %{_sourcedir}/FSP_macros
 
-# FSP convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
+%define pname gnu-compilers
+%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-%{!?compiler_family: %define compiler_family gnu}
+# Define subcomponent versions required for build
 
-# Compiler dependencies
-BuildRequires: lmod
-%if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers
-Requires:      FSP-gnu-compilers
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
-%endif
-%if 0%{FSP_BUILD}
-BuildRequires: intel_licenses
-%endif
+%define gmp_version 6.0.0
+%define mpc_version 1.0.3
+%define mpfr_version 3.1.2
 
-#-fsp-header-comp-end------------------------------------------------
 
-# Base package name
-%define pname mylib
-
-Summary:   Demo example
-Name:      %{pname}-%{compiler_family}
-Version:   2.0
+Summary:   The GNU C Compiler and Support Files
+Name:      %{pname}%{PROJ_DELIM}
+Version:   4.9.2
 Release:   1
 License:   GPL-3.0+
-Group:     Development/Languages/C and C++
-URL:       http://random.org
-Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_setup_compiler
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+Group:     fsp/compiler-families
+URL:       http://gcc.gnu.org/
+Source0:   gcc-%{version}.tar.bz2
+Source1:   gmp-%{gmp_version}a.tar.bz2
+Source2:   mpc-%{mpc_version}.tar.gz
+Source3:   mpfr-%{mpfr_version}.tar.bz2
+Source4:   FSP_macros
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
 
-# Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{name}/%version
+BuildRequires:  bison
+BuildRequires:  flex
+BuildRequires:  gettext-devel
+BuildRequires:  perl
+BuildRequires:  gcc-c++
+%if 0%{?suse_version} > 1220
+BuildRequires:  makeinfo
+%else
+BuildRequires:  texinfo
+%endif
+BuildRequires:  zlib-devel
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires:  fdupes
+%endif
+
+
+%define install_path %{FSP_COMPILERS}/gcc/%{version}
 
 %description
-Just an example to play with.
+
+Core package for the GNU Compiler Collection, including the C language
+frontend.
 
 %prep
+%setup -n gcc-%{version}
+%setup -n gcc-%{version} -T -D -a 1
+%setup -n gcc-%{version} -T -D -a 2
+%setup -n gcc-%{version} -T -D -a 3
 
-%setup -q -n %{pname}-%{version}
+ln -s gmp-%{gmp_version} gmp
+ln -s mpc-%{mpc_version} mpc
+ln -s mpfr-%{mpfr_version} mpfr
 
 %build
 
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
-
-./configure --prefix=%{install_path}
+mkdir obj
+cd obj
+../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path}
 
 %install
+cd obj
+make %{?_smp_mflags} 
+make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
-
-make DESTDIR=$RPM_BUILD_ROOT install
+%if 0%{?sles_version} || 0%{?suse_version}
+%fdupes -s $RPM_BUILD_ROOT/%{install_path}/include
+%fdupes -s $RPM_BUILD_ROOT/%{install_path}/lib
+%fdupes -s $RPM_BUILD_ROOT/%{install_path}/install-tools
+%fdupes -s $RPM_BUILD_ROOT/%{install_path}/share
+%endif
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+mkdir -p %{buildroot}/%{FSP_MODULES}/gnu
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/gnu/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} toolchain."
+puts stderr "This module loads the GNU compiler collection"
+puts stderr " "
+puts stderr "See the man pages for gcc, g++, and gfortran for detailed information"
+puts stderr "on available compiler options and command-line syntax."
+puts stderr " "
+
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{pname} built with %{compiler_family} toolchain"
+module-whatis "Name: GNU Compiler Collection"
 module-whatis "Version: %{version}"
-module-whatis "Category: runtime library"
-module-whatis "Description: %{summary}"
-module-whatis "URL: http://random.org"
+module-whatis "Category: compiler, runtime support"
+module-whatis "Description: GNU Compiler Family (C/C++/Fortran for x86_64)"
+module-whatis "URL: http://gcc.gnu.org/"
 
 set     version			    %{version}
 
@@ -115,9 +133,12 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib64
+prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/gnu
+
+family "compiler"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/gnu/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -125,13 +146,20 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%post
+/sbin/ldconfig
+
+%postun
+/sbin/ldconfig
+
+
 %clean
 rm -rf $RPM_BUILD_ROOT
+
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
-
 
 %changelog
 * Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
