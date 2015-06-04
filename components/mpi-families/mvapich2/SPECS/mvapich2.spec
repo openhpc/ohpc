@@ -124,9 +124,8 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 #make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
-# 06/04/15 - karl.w.schulz@intel.com; running build twice to deal with module dependency
-make %{?_smp_mflags} 
-make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+# 06/04/15 - karl.w.schulz@intel.com; run serial build for fortran deps
+make DESTDIR=$RPM_BUILD_ROOT install
 
 # Remove .la files detected by rpm
 
