@@ -139,7 +139,7 @@ service httpd restart >/dev/null 2>&1 || :
 chkconfig httpd on >/dev/null 2>&1 || :
 chkconfig tftp on >/dev/null 2>&1 || :
 chkconfig xinetd on >/dev/null 2>&1 || :
-service xinetd restart >/dev/null 2>&1 || :
+killall -1 xinetd || service xinetd restart >/dev/null 2>&1 || :
 
 
 %clean
