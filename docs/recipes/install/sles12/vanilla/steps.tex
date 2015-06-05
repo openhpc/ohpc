@@ -442,47 +442,49 @@ host as follows:
 \end{lstlisting}
 % end_fsp_run
 
-\paragraph{Enable ORCM RAS subsystem} 
-\input{../../common/orcm}
+%% [FSP-469]: disabling ORCM
 
-% begin_fsp_run
-% fsp_validation_comment Configure ORCM aggregator and DB
-\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-# Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
-[master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
-
-# Update BMC credentials to match local values
-
-[master]$ perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
-[master]$ perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
-
-# Initialize postgres DB driver
-[master]$ odbcinst -i -d -f /etc/psql_odbc_driver.ini
-[master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
-
-# Initialize postgres
-[master]$ service postgresql start   
-
-# Update postgres config files using ORCM templates
-[master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
-[master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
-
-# Restart postgres
-[master]$ service postgresql restart 
-
-# Create ORCM DB
-[master]$ sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
-[master]$ sudo -u postgres createdb -O orcmuser orcmdb
-[master]$ sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
-
-# Start ORCM on master host (requires both orcmsched and orcmd)
-[master]$ systemctl start orcmsched
-[master]$ systemctl start orcmd
-\end{lstlisting}
-% end_fsp_run
-
-\input{../../common/orcm_client}
+%% [FSP-469] \paragraph{Enable ORCM RAS subsystem} 
+%% [FSP-469] \input{../../common/orcm}
+%% [FSP-469] 
+%% [FSP-469] % begin_fsp_run
+%% [FSP-469] % fsp_validation_comment Configure ORCM aggregator and DB
+%% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+%% [FSP-469] # Set master host as data aggregator
+%% [FSP-469] [master]$ perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
+%% [FSP-469] [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
+%% [FSP-469] 
+%% [FSP-469] # Update BMC credentials to match local values
+%% [FSP-469] 
+%% [FSP-469] [master]$ perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+%% [FSP-469] [master]$ perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+%% [FSP-469] 
+%% [FSP-469] # Initialize postgres DB driver
+%% [FSP-469] [master]$ odbcinst -i -d -f /etc/psql_odbc_driver.ini
+%% [FSP-469] [master]$ odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
+%% [FSP-469] 
+%% [FSP-469] # Initialize postgres
+%% [FSP-469] [master]$ service postgresql start   
+%% [FSP-469] 
+%% [FSP-469] # Update postgres config files using ORCM templates
+%% [FSP-469] [master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
+%% [FSP-469] [master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
+%% [FSP-469] 
+%% [FSP-469] # Restart postgres
+%% [FSP-469] [master]$ service postgresql restart 
+%% [FSP-469] 
+%% [FSP-469] # Create ORCM DB
+%% [FSP-469] [master]$ sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
+%% [FSP-469] [master]$ sudo -u postgres createdb -O orcmuser orcmdb
+%% [FSP-469] [master]$ sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
+%% [FSP-469] 
+%% [FSP-469] # Start ORCM on master host (requires both orcmsched and orcmd)
+%% [FSP-469] [master]$ systemctl start orcmsched
+%% [FSP-469] [master]$ systemctl start orcmd
+%% [FSP-469] \end{lstlisting}
+%% [FSP-469] % end_fsp_run
+%% [FSP-469] 
+%% [FSP-469] \input{../../common/orcm_client}
 
 \subsubsection{Import files} \label{sec:file_import}
 
