@@ -200,15 +200,19 @@ close($fh_raw);
 
 open(IN,"<$tmpfile_raw")  || die "Cannot open file -> $file\n";
 
-my $begin_delim = "% begin_fsp_run";
-my $end_delim   = "% end_fsp_run";
-my $prompt      = "\[master\]\$";
+my $begin_delim   = "% begin_fsp_run";
+my $end_delim     = "% end_fsp_run";
+my $prompt        = "\[master\]\$";
+my $disable_delim = "^%%";
 
 print $fh "#!/bin/bash\n";
 
 print $fh "NUM_COMPUTES=$num_computes\n";
 
 while(<IN>) {
+    if( $_ =~ /$disable_delim/ ) {
+	next;
+    }
     if(/$begin_delim/../$end_delim/) {
 	if ($_ =~ /% fsp_validation_comment (.+)/) {
 	    print $fh "echo \"-------------------------------------------------------------------\"\n";
