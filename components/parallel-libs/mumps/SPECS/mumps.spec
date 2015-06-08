@@ -135,7 +135,7 @@ install -m 644 bin/* %{buildroot}%{install_path}/bin
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the hypre library built with the %{compiler_family} compiler"
+puts stderr "This module loads the mumps library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
 puts stderr "Note that this build of mumps leverages and MKL libraries. Consequently,"
