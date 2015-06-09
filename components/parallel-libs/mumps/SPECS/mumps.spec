@@ -108,8 +108,8 @@ export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
 make MUMPS_MPI=$FSP_MPI_FAMILY \
      FC=mpif77 \
      MUMPS_LIBF77="$MPI_DIR/lib -lmpi_mpifh -lmpi" \
-     OPTC="$RPM_OPT_FLAGS" \
-     INCPAR=$MPI_DIR/include all
+     OPTC="$RPM_OPT_FLAGS" all
+
 
 %install
 
