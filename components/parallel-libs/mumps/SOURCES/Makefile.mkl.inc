@@ -62,16 +62,16 @@ MKLPATH = /opt/intel/Compiler/11.0/083/mkl/lib/em64t
 PLAT =
 RM = /bin/rm -f
 CC = mpicc
-FC = ifort
-FL = mpiifort
+FC = mpif77
+FL = mpif77
 AR = ar vr
 #RANLIB = ranlib
 RANLIB = echo
 SCALAP = -L$(MKLPATH) -lmkl_scalapack_lp64 $(MKLPATH)/libmkl_solver_lp64.a -Wl,--start-group -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lmkl_blacs_intelmpi_lp64 -Wl,--end-group -openmp -lpthread
 
-INCPAR = -I/home/opt/intel/impi/4.0.0.025/include64
+INCPAR = -I$MPI_DIR/include
 
-LIBPAR = $(SCALAP) -L/home/opt/intel/impi/4.0.0.025/lib64 -lmpi
+LIBPAR = $(SCALAP) -L$MPI_DIR/lib -lmpi
 
 INCSEQ = -I$(topdir)/libseq
 
