@@ -27,7 +27,7 @@
 
 # MVAPICH2 MPI stack that is dependent on compiler toolchain
 
-%define with_slurm 1
+%define with_slurm 0
 
 #-fsp-header-comp-begin----------------------------------------------
 
