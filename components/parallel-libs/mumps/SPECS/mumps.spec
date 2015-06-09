@@ -76,6 +76,12 @@ Source0:        %{pname}-%{version}.tar.gz
 Source1:        Makefile.mkl.inc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
+%if 0%{?suse_version}
+BuildRequires: libgomp1
+%else
+BuildRequires: libgomp
+%endif
+
 %define debug_package %{nil}
 
 # Default library install path
