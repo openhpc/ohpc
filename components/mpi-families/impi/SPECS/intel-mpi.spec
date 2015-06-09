@@ -123,12 +123,14 @@ prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/intel-impi
 
 prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_fsp
 
-# PMI job launch support
-
-setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
 
 family "MPI"
 EOF
+
+# PMI job launch support
+#
+#setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
+
 
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/intel/impi/.version.%{version}
 #%Module1.0#####################################################################
