@@ -174,8 +174,10 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-openmp \
 %if %{compiler_family} == intel
     -tbb \
-%endif
 	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -lgomp -L/tmp%{install_path}/lib" 
+%else
+	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
+%endif
 
 
 make install
