@@ -128,7 +128,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 %{__mkdir} -p %{buildroot}%{install_path}/include
 %{__mkdir} -p %{buildroot}%{install_path}/bin
 
-install -m 644 lib/*.so* %{buildroot}%{install_path}/lib
+install -m 644 lib/* %{buildroot}%{install_path}/lib
 install -m 644 include/* %{buildroot}%{install_path}/include
 install -m 644 bin/* %{buildroot}%{install_path}/bin
 
