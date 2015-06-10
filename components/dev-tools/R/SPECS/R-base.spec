@@ -1,7 +1,8 @@
 #
 # spec file for package R-base
-#
+#-------------------------------------------------------------------------------
 # Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
+# Copyright (c) 2015, Intel Corporation
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -11,9 +12,10 @@
 # case the license is the MIT License). An "Open Source License" is a
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
+# Please submit bugfixes or comments to bugs.FSP
+#
+#-------------------------------------------------------------------------------
 
 
 # FSP convention: the default assumes the gnu toolchain and openmpi
