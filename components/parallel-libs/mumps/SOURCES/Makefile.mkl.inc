@@ -83,7 +83,7 @@ INCSEQ = -I$(topdir)/libseq
 LIBSEQ  =  -L$(topdir)/libseq -lmpiseq
 #LIBBLAS = -L/usr/lib/xmm/ -lf77blas -latlas
 LIBBLAS = -L${MKLROOT}/lib/intel64 -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_gf_lp64.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_gnu_thread.a -Wl,--end-group ${MKLROOT}/lib/intel64/libmkl_blacs_openmpi_lp64.a -ldl -lpthread -lm
-LIBOTHERS = -lpthread
+LIBOTHERS = -lpthread -lgomp
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
 CDEFS   = -DAdd_
 
