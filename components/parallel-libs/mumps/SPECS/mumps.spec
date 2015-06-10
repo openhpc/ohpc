@@ -74,6 +74,7 @@ Group:          Development/Libraries/Parallel
 Url:            http://mumps.enseeiht.fr/
 Source0:        %{pname}-%{version}.tar.gz
 Source1:        Makefile.mkl.inc
+Patch0:         mumps-5.0.0-shared-mumps.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %if 0%{?suse_version}
@@ -95,7 +96,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#%patch0 -p1
+%patch0 -p1
 
 %build
 
@@ -128,9 +129,9 @@ export FSP_MPI_FAMILY=%{mpi_family}
 %{__mkdir} -p %{buildroot}%{install_path}/include
 %{__mkdir} -p %{buildroot}%{install_path}/bin
 
-install -m 644 lib/* %{buildroot}%{install_path}/lib
+install -m 644 lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 include/* %{buildroot}%{install_path}/include
-install -m 644 bin/* %{buildroot}%{install_path}/bin
+install -m 644 examples/* %{buildroot}%{install_path}/bin
 
 
 # FSP module file
