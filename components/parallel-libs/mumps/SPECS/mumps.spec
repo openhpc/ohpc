@@ -122,15 +122,15 @@ cp -f %{S:2} Makefile.inc
 %endif
 
 %if %{mpi_family} == impi
-export LIBS = "-L$MPI_DIR/lib -lmpi"
+export LIBS="-L$MPI_DIR/lib -lmpi"
 %endif 
 
 %if %{mpi_family} == mvapich2
-export LIBS = "-L$MPI_DIR/lib -lmpi"
+export LIBS="-L$MPI_DIR/lib -lmpi"
 %endif 
 
 %if %{mpi_family} == openmpi
-export LIBS = "-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
+export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %endif 
 
 export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
