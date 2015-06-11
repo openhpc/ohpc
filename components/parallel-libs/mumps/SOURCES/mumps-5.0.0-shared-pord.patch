@@ -1,8 +1,11 @@
 --- mumps-5.0.0/PORD/lib/Makefile	2015-02-20 00:19:56.000000000 -0800
-+++ mumps-5.0.0.patch/PORD/lib/Makefile	2015-06-11 10:28:18.000000000 -0700
-@@ -24,12 +24,16 @@
++++ mumps-5.0.0.patch/PORD/lib/Makefile	2015-06-11 10:34:39.000000000 -0700
+@@ -22,14 +22,18 @@
+ # OUTC = -o
+ 
  .c.o:
- 	$(CC) $(COPTIONS) -c $*.c $(OUTC)$*.o
+-	$(CC) $(COPTIONS) -c $*.c $(OUTC)$*.o
++	$(CC) $(COPTIONS) -fPIC -c $*.c $(OUTC)$*.o
  
 -libpord$(LIBEXT):$(OBJS)
 +libpord$(PLAT)$(LIBEXT):$(OBJS)
