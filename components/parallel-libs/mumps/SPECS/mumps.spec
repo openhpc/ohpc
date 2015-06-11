@@ -75,6 +75,7 @@ Url:            http://mumps.enseeiht.fr/
 Source0:        %{pname}-%{version}.tar.gz
 Source1:        Makefile.mkl.inc
 Patch0:         mumps-5.0.0-shared-mumps.patch
+Patch1:         mumps-5.0.0-shared-pord.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %if 0%{?suse_version}
@@ -97,6 +98,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
+%patch1 -p1
 
 %build
 
