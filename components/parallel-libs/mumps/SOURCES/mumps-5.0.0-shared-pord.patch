@@ -23,7 +23,7 @@
 -	rm -f *.o libpord.a
 +	rm -f *.o libpord*.a *.so
 --- mumps-5.0.0/Makefile	2015-02-20 00:19:56.000000000 -0800
-+++ mumps-5.0.0.patch/Makefile	2015-06-11 10:19:20.000000000 -0700
++++ mumps-5.0.0.patch/Makefile	2015-06-11 10:40:13.000000000 -0700
 @@ -51,7 +51,7 @@
  dexamples:	d
  	(cd examples ; $(MAKE) d)
@@ -45,7 +45,7 @@
 +$(libdir)/libpord$(PLAT).so:
 +	if [ "$(LPORDDIR)" != "" ] ; then \
 +	  cd $(LPORDDIR); \
-+	  $(MAKE) CC="$(CC)" CFLAGS="$(OPTC)" AR="$(AR)" RANLIB="$(RANLIB)" libpord$(PLAT).so; \
++	  $(MAKE) CC="$(CC)" CFLAGS="$(OPTC) -fPIC" AR="$(AR)" RANLIB="$(RANLIB)" libpord$(PLAT).so; \
 +	fi;
 +	if [ "$(LPORDDIR)" != "" ] ; then \
 +	  cp $(LPORDDIR)/libpord*.so $@; \
