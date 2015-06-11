@@ -121,10 +121,22 @@ cp -f %{S:1} Makefile.inc
 cp -f %{S:2} Makefile.inc
 %endif
 
+%if %{mpi_family} == impi
+export LIBS = "-L$MPI_DIR/lib -lmpi"
+%endif 
+
+%if %{mpi_family} == mvapich2
+export LIBS = "-L$MPI_DIR/lib -lmpi"
+%endif 
+
+%if %{mpi_family} == openmpi
+export LIBS = "-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
+%endif 
+
 export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
 make MUMPS_MPI=$FSP_MPI_FAMILY \
      FC=mpif77 \
-     MUMPS_LIBF77="-L$MPI_DIR/lib -lmpi_mpifh -lmpi" \
+     MUMPS_LIBF77="$LIBS" \
      OPTC="$RPM_OPT_FLAGS" all
 
 
