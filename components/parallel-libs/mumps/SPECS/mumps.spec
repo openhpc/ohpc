@@ -73,8 +73,10 @@ License:        CeCILL-C
 Group:          Development/Libraries/Parallel
 Url:            http://mumps.enseeiht.fr/
 Source0:        %{pname}-%{version}.tar.gz
-Source1:        Makefile.mkl.gnu.inc
-Source2:        Makefile.mkl.intel.inc
+Source1:        Makefile.mkl.gnu.openmpi.inc
+Source2:        Makefile.mkl.gnu.impi.inc
+Source3:        Makefile.mkl.intel.impi.inc
+Source4:        Makefile.mkl.intel.openmpi.inc
 Patch0:         mumps-5.0.0-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -113,24 +115,35 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load mkl
 %endif
 
-# Select appropriate MKL makefile
-%if %{compiler_family} == gnu
-cp -f %{S:1} Makefile.inc
-%endif
-%if %{compiler_family} == intel
-cp -f %{S:2} Makefile.inc
-%endif
-
+# Select appropriate Makefile.inc with MKL
 %if %{mpi_family} == impi
 export LIBS="-L$MPI_DIR/lib -lmpi"
+%if %{compiler_family} == gnu
+cp -f %{S:2} Makefile.inc
+%endif
+%if %{compiler_family} == intel
+cp -f %{S:3} Makefile.inc
+%endif
 %endif 
 
 %if %{mpi_family} == mvapich2
 export LIBS="-L$MPI_DIR/lib -lmpi"
+%if %{compiler_family} == gnu
+cp -f %{S:2} Makefile.inc
+%endif
+%if %{compiler_family} == intel
+cp -f %{S:3} Makefile.inc
+%endif
 %endif 
 
 %if %{mpi_family} == openmpi
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
+%if %{compiler_family} == gnu
+cp -f %{S:1} Makefile.inc
+%endif
+%if %{compiler_family} == intel
+cp -f %{S:4} Makefile.inc
+%endif
 %endif 
 
 export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
