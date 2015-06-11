@@ -73,7 +73,8 @@ License:        CeCILL-C
 Group:          Development/Libraries/Parallel
 Url:            http://mumps.enseeiht.fr/
 Source0:        %{pname}-%{version}.tar.gz
-Source1:        Makefile.mkl.inc
+Source1:        Makefile.mkl.gnu.inc
+Source2:        Makefile.mkl.intel.inc
 Patch0:         mumps-5.0.0-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -112,7 +113,14 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load mkl
 %endif
 
+# Select appropriate MKL makefile
+%if %{compiler_family} == gnu
 cp -f %{S:1} Makefile.inc
+%endif
+%if %{compiler_family} == intel
+cp -f %{S:2} Makefile.inc
+%endif
+
 export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
 make MUMPS_MPI=$FSP_MPI_FAMILY \
      FC=mpif77 \
@@ -133,7 +141,8 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 install -m 644 lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 include/* %{buildroot}%{install_path}/include
-install -m 644 examples/* %{buildroot}%{install_path}/bin
+install -m 755 examples/*simpletest %{buildroot}%{install_path}/bin
+install -m 755 examples/c_example %{buildroot}%{install_path}/bin
 
 
 # FSP module file
