@@ -1,17 +1,12 @@
 --- mumps-5.0.0/PORD/lib/Makefile	2015-02-20 00:19:56.000000000 -0800
-+++ mumps-5.0.0.patch/PORD/lib/Makefile	2015-06-11 08:52:40.000000000 -0700
-@@ -24,12 +24,16 @@
- .c.o:
- 	$(CC) $(COPTIONS) -c $*.c $(OUTC)$*.o
- 
--libpord$(LIBEXT):$(OBJS)
-+libpord$(PLAT)$(LIBEXT):$(OBJS)
++++ mumps-5.0.0.patch/PORD/lib/Makefile	2015-06-11 10:09:34.000000000 -0700
+@@ -28,8 +28,12 @@
  	$(AR)$@ $(OBJS)
  	$(RANLIB) $@
  
-+libpord$(PLAT).so:$(OBJS)
-+    $(CC) -shared $(OBJS) -Wl,-soname,libpord$(PLAT).so.5.0.0 -o libpord$(PLAT).so.5.0.0
-+	ln -s libpord$(PLAT).so.5.0.0 $@
++libpord.so:$(OBJS)
++    $(CC) -shared $(OBJS) -Wl,-soname,libpord.so.5.0.0 -o libpord.so.5.0.0
++	ln -s libpord.so.5.0.0 $@
 +
  clean:
  	rm -f *.o
