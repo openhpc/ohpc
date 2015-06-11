@@ -1,12 +1,17 @@
 --- mumps-5.0.0/PORD/lib/Makefile	2015-02-20 00:19:56.000000000 -0800
-+++ mumps-5.0.0.patch/PORD/lib/Makefile	2015-06-11 10:09:34.000000000 -0700
-@@ -28,8 +28,12 @@
++++ mumps-5.0.0.patch/PORD/lib/Makefile	2015-06-11 10:20:03.000000000 -0700
+@@ -24,12 +24,16 @@
+ .c.o:
+ 	$(CC) $(COPTIONS) -c $*.c $(OUTC)$*.o
+ 
+-libpord$(LIBEXT):$(OBJS)
++libpord$(PLAT)$(LIBEXT):$(OBJS)
  	$(AR)$@ $(OBJS)
  	$(RANLIB) $@
  
-+libpord.so:$(OBJS)
-+    $(CC) -shared $(OBJS) -Wl,-soname,libpord.so.5.0.0 -o libpord.so.5.0.0
-+	ln -s libpord.so.5.0.0 $@
++libpord$(PLAT).so:$(OBJS)
++    $(CC) -shared $(OBJS) -Wl,-soname,libpord$(PLAT).so.5.0.0 -o libpord$(PLAT).so.5.0.0
++	ln -s libpord$(PLAT).so.5.0.0 $@
 +
  clean:
  	rm -f *.o
@@ -15,7 +20,7 @@
 -	rm -f *.o libpord.a
 +	rm -f *.o libpord*.a *.so
 --- mumps-5.0.0/Makefile	2015-02-20 00:19:56.000000000 -0800
-+++ mumps-5.0.0.patch/Makefile	2015-06-11 08:59:01.000000000 -0700
++++ mumps-5.0.0.patch/Makefile	2015-06-11 10:19:20.000000000 -0700
 @@ -51,7 +51,7 @@
  dexamples:	d
  	(cd examples ; $(MAKE) d)
@@ -25,21 +30,24 @@
  
  # dummy MPI library (sequential version)
  
-@@ -65,13 +65,20 @@
+@@ -65,13 +65,23 @@
  	  $(MAKE) CC="$(CC)" CFLAGS="$(OPTC)" AR="$(AR)" RANLIB="$(RANLIB)" OUTC="$(OUTC)" LIBEXT=$(LIBEXT); \
  	fi;
  	if [ "$(LPORDDIR)" != "" ] ; then \
 -	  cp $(LPORDDIR)/libpord$(LIBEXT) $@; \
 +	  cp $(LPORDDIR)/libpord$(PLAT)$(LIBEXT) $@; \
- 	fi;
- 
++	fi;
++
 +# Build the libpord.so library and copy it into $(topdir)/lib
 +$(libdir)/libpord$(PLAT).so:
 +	if [ "$(LPORDDIR)" != "" ] ; then \
-+    cd $(LPORDDIR); make CC="$(CC)" CFLAGS="$(OPTC)" AR="$(AR)" ARFUNCT= RANLIB="$(RANLIB)" libpord$(PLAT).so; fi;
++	  cd $(LPORDDIR); \
++	  $(MAKE) CC="$(CC)" CFLAGS="$(OPTC)" AR="$(AR)" RANLIB="$(RANLIB)" libpord$(PLAT).so; \
++	fi;
 +	if [ "$(LPORDDIR)" != "" ] ; then \
-+    cp -a $(LPORDDIR)/libpord*.so lib/; fi;
-+
++	  cp $(LPORDDIR)/libpord*.so $@; \
+ 	fi;
+ 
  clean:
  	(cd src; $(MAKE) clean)
  	(cd examples; $(MAKE) clean)
