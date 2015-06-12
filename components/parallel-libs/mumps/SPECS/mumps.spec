@@ -87,7 +87,7 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
-Provides:      libpord = %{version}
+Provides:      libpord.so.%{version}()(64bit)
 
 %define debug_package %{nil}
 
