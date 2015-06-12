@@ -87,6 +87,8 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
+Provides:      libpord = %{version}
+
 %define debug_package %{nil}
 
 # Default library install path
