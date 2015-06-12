@@ -146,7 +146,7 @@ cp -f %{S:4} Makefile.inc
 %endif
 %endif 
 
-export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
+#export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
 make MUMPS_MPI=$FSP_MPI_FAMILY \
      FC=mpif77 \
      MUMPS_LIBF77="$LIBS" \
