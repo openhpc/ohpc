@@ -41,18 +41,12 @@ Source0:   %{pname}
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
-%if 0%{?FSP_BUILD}
-%{!?prefix: %define prefix %{FSP_ADMIN}}
-%else
-%{!?prefix: %define prefix /opt}
-%endif
-
-
-%define installPath /usr/local/bin/
+%define installPath %{FSP_BIN}
 
 %description
 
-prun provides a script-based wrapper for launching parallel for a variety of MPI families.
+prun provides a script-based wrapper for launching parallel jobs
+within a resource manager for a variety of MPI families.
 
 %prep
 
@@ -77,8 +71,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{installPath}
-%{installPath}/*
+%dir %{FSP_BIN}
+%{FSP_BIN}/prun
 
 
 
