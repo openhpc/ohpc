@@ -87,6 +87,8 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
+Provides:      libpord.so.%{version}()(64bit)
+
 %define debug_package %{nil}
 
 # Default library install path
@@ -164,6 +166,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 %{__mkdir} -p %{buildroot}%{install_path}/include
 %{__mkdir} -p %{buildroot}%{install_path}/bin
 
+install -m 644 PORD/lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 include/* %{buildroot}%{install_path}/include
 install -m 755 examples/*simpletest %{buildroot}%{install_path}/bin
