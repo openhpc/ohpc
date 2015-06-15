@@ -71,8 +71,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_BIN}
-%{FSP_BIN}/prun
+%{FSP_HOME}
 
 
 
