@@ -1,0 +1,178 @@
+#!/bin/bash
+#-------------------------------------------------------------------------------
+# Copyright (c) 2015, Intel Corporation
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+#     * Redistributions of source code must retain the above copyright notice,
+#       this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of Intel Corporation nor the names of its contributors
+#       may be used to endorse or promote products derived from this software
+#       without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#-------------------------------------------------------------------------------
+
+CONFIG=/etc/sysconfig/prun
+MODE=native
+LOGLEVEL=3     # 0=error,1=warn,2=info,3=debug
+RM=slurm
+
+function usage () {
+
+    echo " "
+    echo "Usage: $DELIM <options> executable [arguments]"
+    echo " "
+    echo "Submit parallel (MPI) application to resource manager for execution."
+    echo " "
+    exit 1
+}
+
+function parse_config_file () {
+
+    if [ -e $CONFIG ];then
+        source $CONFIG 2> /dev/null
+    fi
+}
+
+function _error () {
+    if [ $LOGLEVEL -ge 0 ];then
+        echo -n "[$DELIM] Error: "
+        echo "$@"
+    fi
+}
+
+function _warn () {
+    if [ $LOGLEVEL -ge 1 ];then
+        echo -n "[$DELIM] "
+        echo "$@"
+    fi
+}
+
+function _info () {
+    if [ $LOGLEVEL -ge 2 ];then
+        echo -n "[$DELIM] "
+        echo "$@"
+    fi
+}
+
+function _debug () {
+    if [ $LOGLEVEL -ge 3 ];then
+        echo -n "[$DELIM] "
+        echo "$@"
+    fi
+}
+
+function verify_launcher_avail () {
+    if [ ! $(type -P "$1") ];then
+        _error "Expected Job launcher $1 not found for $LMOD_FAMILY_MPI"
+        exit 1
+    fi
+}
+
+function launch_impi () {
+    if [ $MODE == "native" ];then
+        LAUNCHER="mpiexec.hydra"
+        verify_launcher_avail $LAUNCHER
+
+        cmd="$LAUNCHER -bootstrap slurm $@"
+        _info "Launch cmd = $cmd"
+        $cmd
+    fi
+}
+
+function launch_mvapich2 () {
+    if [ $MODE == "native" ];then
+        LAUNCHER="mpirun_rsh"
+        verify_launcher_avail $LAUNCHER
+
+        HOSTFILE=/tmp/hostfile.$USER.$RANDOM
+
+        _debug "Temporary hostfile = $HOSTFILE"
+
+        scontrol show hostnames > $HOSTFILE || _error "Unable to create hostfile ($LMOD_FAMILY_MPI)"
+        if [ ! -s $HOSTFILE ];then
+            _error "Hostfile does not exist or empty -> $HOSTFILE"
+            exit 1
+        fi
+
+        if [ -z $SLURM_NPROCS ];then
+            _error "SLURM_NPROCS env variable not set ($LMOD_FAMILY_MPI)"
+            exit 1
+        fi
+
+        cmd="$LAUNCHER -export -n $SLURM_NPROCS -hostfile $HOSTFILE $@"
+        _info "Launch cmd = $cmd"
+        $cmd
+
+        _debug "Removing hostfile  = $HOSTFILE"
+        rm -f $HOSTFILE
+    fi
+}
+
+function launch_openmpi () {
+    if [ $MODE == "native" ];then
+        LAUNCHER="mpirun"
+        verify_launcher_avail $LAUNCHER
+
+        cmd="mpirun $@"
+        _info "Launch cmd = $cmd"
+        $cmd
+    fi
+}
+
+
+parse_config_file
+
+DELIM=prun
+
+if [ $# -lt 1 ];then
+    usage
+fi
+
+EXEC=$1
+shift
+ARGS=$@
+
+if [ ! -x $EXEC ];then
+    _error "Unable to access executable -> $EXEC"
+    exit 1
+fi
+
+if [ -z $LMOD_FAMILY_MPI ];then
+    _error "LMOD_FAMILY_MPI environment variable must be set to desired MPI runtime"
+    exit 1
+fi
+
+masterHost=`hostname -s`
+_info "Master compute host = $masterHost"
+
+if [ $LMOD_FAMILY_MPI == "impi" ];then
+    launch_impi $EXEC $ARGS
+elif [ $LMOD_FAMILY_MPI == "mvapich2" ];then
+    launch_mvapich2 $EXEC $ARGS
+elif [ $LMOD_FAMILY_MPI == "openmpi" ];then
+    launch_openmpi $EXEC $ARGS
+else
+    _error "Unsupported or unknown MPI family -> $LMOD_FAMILY_MPI"
+fi
+
+
+
+
+
+
+
