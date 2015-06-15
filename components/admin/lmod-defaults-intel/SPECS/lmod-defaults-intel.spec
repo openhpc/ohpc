@@ -68,7 +68,7 @@ puts stderr "Setup default login environment"
 # Load Desired Modules
 #
 
-prepend_path     PATH   %{FSP_PUB}/bin
+prepend-path     PATH   %{FSP_PUB}/bin
 
 if { [ expr [module-info mode load] || [module-info mode display] ] } {
         prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
