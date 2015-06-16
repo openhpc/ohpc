@@ -84,6 +84,8 @@ Buildrequires: ofed
 Buildrequires: rdma
 %endif
 
+Requires: prun%{PROJ_DELIM}
+
 BuildRequires: bison
 BuildRequires: libibmad-devel libibverbs-devel
 
