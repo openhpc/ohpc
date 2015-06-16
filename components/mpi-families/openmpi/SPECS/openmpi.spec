@@ -110,6 +110,8 @@ BuildRequires:  libibverbs-devel
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
+Requires:       prun%{PROJ_DELIM}
+
 # Default library install path
 %define install_path %{FSP_MPI_STACKS}/%{name}/%version
 
