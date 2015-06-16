@@ -164,13 +164,14 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 %{__mkdir} -p %{buildroot}%{install_path}/lib
 %{__mkdir} -p %{buildroot}%{install_path}/include
-%{__mkdir} -p %{buildroot}%{install_path}/bin
+%{__mkdir} -p %{buildroot}%{install_path}/etc
+
+rm lib/sort*
 
 install -m 644 PORD/lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 include/* %{buildroot}%{install_path}/include
-install -m 755 examples/*simpletest %{buildroot}%{install_path}/bin
-install -m 755 examples/c_example %{buildroot}%{install_path}/bin
+install -m 644 Makefile.inc %{buildroot}%{install_path}/etc
 
 
 # FSP module file
