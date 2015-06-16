@@ -1,9 +1,9 @@
 #-------------------------------------------------------------------------------
 # Copyright (c) 2015, Intel Corporation
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-# 
+#
 #     * Redistributions of source code must retain the above copyright notice,
 #       this list of conditions and the following disclaimer.
 #     * Redistributions in binary form must reproduce the above copyright
@@ -12,7 +12,7 @@
 #     * Neither the name of Intel Corporation nor the names of its contributors
 #       may be used to endorse or promote products derived from this software
 #       without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 # AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 # IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,73 +25,54 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #-------------------------------------------------------------------------------
 
-
 %include %{_sourcedir}/FSP_macros
 
-%define pname lmod
+%define pname prun
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-Summary:   FSP default login environment
-Name:      lmod-defaults-intel%{PROJ_DELIM}
-Version:   1.1
+Summary:   Convenience utility for parallel job launch
+Name:      %{pname}%{PROJ_DELIM}
+Version:   0.1.0
 Release:   1
 License:   BSD
 Group:     fsp/admin
 BuildArch: noarch
-Source0:   FSP_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+Source0:   %{pname}
+Source1:   FSP_macros
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
-# FSP dependencies
-requires: lmod%{PROJ_DELIM}
+%define installPath %{FSP_BIN}
 
 %description
 
-Provides default login environment for compiler and MPI combinations.
+prun provides a script-based wrapper for launching parallel jobs
+within a resource manager for a variety of MPI families.
 
 %prep
 
+
 %build
+# Binary pass-through - empty build section
 
 %install
 
-mkdir -p %{buildroot}/%{FSP_MODULES}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/fsp
-#%Module1.0#####################################################################
-# Default FSP environment
-#############################################################################
+rm -rf $RPM_BUILD_ROOT
 
-proc ModulesHelp { } {
-puts stderr "Setup default login environment"
-}
-
-#
-# Load Desired Modules
-#
-
-prepend-path     PATH   %{FSP_PUB}/bin
-
-if { [ expr [module-info mode load] || [module-info mode display] ] } {
-        prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
-	module try-add autotools
-        module try-add intel
-        module try-add impi
-}
-
-if [ module-info mode remove ] {
-        module del impi
-        module del intel
-	module del autotools
-}
-EOF
+%{__mkdir} -p %{buildroot}/%{installPath}
+install -D -m 0755 %SOURCE0 %{buildroot}/%{installPath}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+
+%postun
+
+
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_HOME}
-%dir %{FSP_PUB}
-%{FSP_MODULES}
+%{FSP_HOME}
 
-%changelog
+
+
 

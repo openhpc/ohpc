@@ -42,6 +42,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 #AutoReqProv: no
 
+Requires:  prun%{PROJ_DELIM}
+
 %define pstudio_ver 2016.0.056
 
 %include %{_sourcedir}/FSP_macros
@@ -127,11 +129,6 @@ prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstu
 family "MPI"
 EOF
 
-# PMI job launch support
-#
-#setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
-
-
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/intel/impi/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
@@ -170,10 +167,6 @@ prepend-path    MANPATH         %{package_target}/compilers_and_libraries_%{pstu
 prepend-path    LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/lib
 
 prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/gnu-impi
-
-# PMI job launch support
-
-setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
 
 family "MPI"
 EOF
