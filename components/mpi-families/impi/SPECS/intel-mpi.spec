@@ -42,6 +42,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 #AutoReqProv: no
 
+Requires:  prun%{PROJ_DELIM}
+
 %define pstudio_ver 2016.0.056
 
 %include %{_sourcedir}/FSP_macros
