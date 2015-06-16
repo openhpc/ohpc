@@ -28,7 +28,7 @@
 
 CONFIG=/etc/sysconfig/prun
 MODE=native
-LOGLEVEL=3     # 0=error,1=warn,2=info,3=debug
+LOGLEVEL=2     # 0=error,1=warn,2=info,3=debug
 RM=slurm
 
 function usage () {
