@@ -155,6 +155,7 @@ make MUMPS_MPI=$FSP_MPI_FAMILY \
      OPTC="$RPM_OPT_FLAGS" all
 
 
+
 %install
 
 export FSP_COMPILER_FAMILY=%{compiler_family}
@@ -166,7 +167,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 %{__mkdir} -p %{buildroot}%{install_path}/include
 %{__mkdir} -p %{buildroot}%{install_path}/etc
 
-rm lib/sort*
+rm PORD/lib/sort*
 
 install -m 644 PORD/lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 lib/*so* %{buildroot}%{install_path}/lib
