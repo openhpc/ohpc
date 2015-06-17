@@ -32,8 +32,8 @@
 #LSCOTCH    = -L$(SCOTCHDIR)/lib -lptesmumps -lptscotch -lptscotcherr -lscotch
 
 
-LPORDDIR = $(topdir)/PORD/lib/
-IPORD    = -I$(topdir)/PORD/include/
+LPORDDIR = $(topdir)/lib/
+IPORD    = -I$(topdir)/include/
 LPORD    = -L$(LPORDDIR) -lpord
 
 #LMETISDIR = /local/metis/
