@@ -16,7 +16,7 @@
  	$(RANLIB) $@
  
 +$(libdir)/libmumps_common$(PLAT).so:	$(OBJS_COMMON)
-+	$(FC) -shared $^ -Wl,-soname,libmumps_common$(PLAT).so.5.0.0 -L$(libdir) $(LORDERINGS) -lpthread $(MUMPS_LIBF77) -o $(libdir)/libmumps_common$(PLAT).so.5.0.0
++	$(FC) -shared $? -Wl,-soname,libmumps_common$(PLAT).so.5.0.0 -L$(libdir) $(LORDERINGS) -lpthread $(MUMPS_LIBF77) -o $(libdir)/libmumps_common$(PLAT).so.5.0.0
 +	ln -s libmumps_common$(PLAT).so.5.0.0 $@
 +
  $(libdir)/lib$(ARITH)mumps$(PLAT)$(LIBEXT):    $(OBJS_MOD) $(OBJS_OTHER)
@@ -24,7 +24,7 @@
  	$(RANLIB) $@
  
 +$(libdir)/lib$(ARITH)mumps$(PLAT).so:	$(OBJS_COMMON)
-+	$(FC) -shared $^ -Wl,-soname,lib$(ARITH)mumps$(PLAT).so.5.0.0 -L$(libdir) $(LORDERINGS) -lpthread $(MUMPS_LIBF77) -o $(libdir)/lib$(ARITH)mumps$(PLAT).so.5.0.0
++	$(FC) -shared $? -Wl,-soname,lib$(ARITH)mumps$(PLAT).so.5.0.0 -L$(libdir) $(LORDERINGS) -lpthread $(MUMPS_LIBF77) -o $(libdir)/lib$(ARITH)mumps$(PLAT).so.5.0.0
 +	ln -s lib$(ARITH)mumps$(PLAT).so.5.0.0 $@
 +
  # Dependencies between modules:
