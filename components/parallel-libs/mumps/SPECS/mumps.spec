@@ -175,8 +175,6 @@ mv PORD/include/* include/.
 
 install -m 644 lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 include/* %{buildroot}%{install_path}/include
-install -m 644 PORD/lib/*so* %{buildroot}%{install_path}/PORD/lib
-install -m 644 PORD/include/* %{buildroot}%{install_path}/PORD/include
 install -m 644 Makefile.inc %{buildroot}%{install_path}/etc
 
 
