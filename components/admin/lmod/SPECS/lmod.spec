@@ -117,7 +117,7 @@ if [ \$EUID -ne 0 ]; then
 
     # NOOP if running under known resource manager
      if [ ! -z "\$SLURM_NODELIST" ];then
-         exit 0
+         return
     fi
 
     export LMOD_SETTARG_CMD=":"
@@ -162,13 +162,7 @@ EOF
 #
 ########################################################################
 
-if ( \`id -u\` != "0" ) then
-
-    # NOOP if running under known resource manager
-
-    if ( \$?SLURM_NODELIST ) then
-         exit 0
-    endif    
+if ( \`id -u\` != "0" && \$?SLURM_NODELIST ) then
 
     setenv LMOD_SETTARG_CMD ":"
     setenv LMOD_FULL_SETTARG_SUPPORT "no"
