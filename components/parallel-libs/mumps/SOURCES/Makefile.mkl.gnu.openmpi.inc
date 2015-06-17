@@ -63,7 +63,7 @@ IORDERINGSC = $(IMETIS) $(IPORD) $(ISCOTCH)
 ################################################################################
 
 PLAT    =
-LIBEXT  = .a
+LIBEXT  = .so
 OUTC    = -o 
 OUTF    = -o 
 RM = /bin/rm -f
@@ -73,16 +73,14 @@ FL = mpif77
 AR = ar vr 
 #RANLIB = ranlib
 RANLIB  = echo
-#SCALAP  = -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -Wl,--start-group -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lmkl_blacs_intelmpi_lp64 -Wl,--end-group -openmp -lpthread
-SCALAP  = -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_gf_lp64.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_gnu_thread.a -Wl,--end-group ${MKLROOT}/lib/intel64/libmkl_blacs_openmpi_lp64.a -ldl -lpthread -lm
+SCALAP  = -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -Wl,--start-group -lmkl_gf_lp64 -lmkl_core -lmkl_gnu_thread -Wl,--end-group -lmkl_blacs_openmpi_lp64 -ldl -lpthread -lm
 INCPAR = -I$(MPI_DIR)/include
 # LIBPAR = $(SCALAP)  -L/usr/local/lib/ -llamf77mpi -lmpi -llam
 LIBPAR = $(SCALAP)  -L$(MPI_DIR)/lib -lmpi 
 #LIBPAR = -lmpi++ -lmpi -ltstdio -ltrillium -largs -lt
 INCSEQ = -I$(topdir)/libseq
 LIBSEQ  =  -L$(topdir)/libseq -lmpiseq
-#LIBBLAS = -L/usr/lib/xmm/ -lf77blas -latlas
-LIBBLAS = -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_gf_lp64.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_gnu_thread.a -Wl,--end-group ${MKLROOT}/lib/intel64/libmkl_blacs_openmpi_lp64.a -ldl -lpthread -lm
+LIBBLAS = -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -Wl,--start-group -lmkl_gf_lp64 -lmkl_core -lmkl_gnu_thread -Wl,--end-group -lmkl_blacs_openmpi_lp64 -ldl -lpthread -lm
 LIBOTHERS = -lpthread -lgomp
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
 CDEFS   = -DAdd_
