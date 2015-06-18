@@ -1,3 +1,13 @@
+#----------------------------------------------------------------------------bh-
+# This RPM .spec file is part of the Performance Peak project.
+#
+# It may have been modified from the default version supplied by the underlying
+# release package (if available) in order to apply patches, perform customized
+# build/install configurations, and supply additional files to support
+# desired integration conventions.
+#
+#----------------------------------------------------------------------------eh-
+
 #-------------------------------------------------------------------------------
 # Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
 # Copyright (c) 2015, Intel Corporation
