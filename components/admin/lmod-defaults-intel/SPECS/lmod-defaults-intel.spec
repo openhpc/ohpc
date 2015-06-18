@@ -33,7 +33,7 @@
 
 Summary:   FSP default login environment
 Name:      lmod-defaults-intel%{PROJ_DELIM}
-Version:   1.0
+Version:   1.1
 Release:   1
 License:   BSD
 Group:     fsp/admin
@@ -68,9 +68,12 @@ puts stderr "Setup default login environment"
 # Load Desired Modules
 #
 
+prepend-path     PATH   %{FSP_PUB}/bin
+
 if { [ expr [module-info mode load] || [module-info mode display] ] } {
         prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
 	module try-add autotools
+	module try-add prun
         module try-add intel
         module try-add impi
 }
@@ -78,6 +81,7 @@ if { [ expr [module-info mode load] || [module-info mode display] ] } {
 if [ module-info mode remove ] {
         module del impi
         module del intel
+        module del prun
 	module del autotools
 }
 EOF

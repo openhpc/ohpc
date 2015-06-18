@@ -525,6 +525,11 @@ DESTDIR="$RPM_BUILD_ROOT" make install-contrib
    fi
 %endif
 
+# 6/16/15 karl.w.schulz@intel.com - do not package Slurm's version of libpmi with FSP.
+%if 0%{?FSP_BUILD}
+   rm -f $RPM_BUILD_ROOT/%{_libdir}/libpmi*
+%endif
+
 # Do not package Slurm's version of libpmi on Cray systems with ALPS.
 # Cray's version of libpmi should be used.
 %if %{slurm_with cray} || %{slurm_with cray_alps}

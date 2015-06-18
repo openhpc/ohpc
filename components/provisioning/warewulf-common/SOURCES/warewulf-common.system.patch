@@ -128,7 +128,7 @@
 +            &dprint("Error running: /usr/bin/systemctl $command $service\n");
 +        }
 +    }
-+    exit();
++    return(1);
 +}
 +
 +
@@ -163,7 +163,7 @@
 +            &dprint("Error running: /sbin/chkconfig $service $command\n");
 +        }
 +    }
-+    exit();
++    return(1);
 +}
 +
 +
@@ -247,7 +247,7 @@
 +            &dprint("Error running: /usr/bin/systemctl $command $service\n");
 +        }
 +    }
-+    exit();
++    return(1);
  }
  
  
@@ -272,7 +272,7 @@
          }
      }
 -    return();
-+    exit();
++    return(1);
  }
  
  

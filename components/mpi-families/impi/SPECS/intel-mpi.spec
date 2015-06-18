@@ -42,6 +42,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 #AutoReqProv: no
 
+Requires:  prun%{PROJ_DELIM}
+
 %define pstudio_ver 2016.0.056
 
 %include %{_sourcedir}/FSP_macros
@@ -111,6 +113,7 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 set     version                 %{version}
 
 setenv          I_MPI_ROOT      %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi
+setenv          MPI_DIR         %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64
 prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin
 prepend-path    MANPATH         %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/man
 prepend-path    LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/lib
@@ -122,9 +125,6 @@ prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/intel-impi
 
 prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_fsp
 
-# PMI job launch support
-
-setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
 
 family "MPI"
 EOF
@@ -167,10 +167,6 @@ prepend-path    MANPATH         %{package_target}/compilers_and_libraries_%{pstu
 prepend-path    LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/lib
 
 prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/gnu-impi
-
-# PMI job launch support
-
-setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
 
 family "MPI"
 EOF

@@ -115,6 +115,11 @@ mkdir -p %{buildroot}/%{_sysconfdir}/profile.d
 
 if [ \$EUID -ne 0 ]; then
 
+    # NOOP if running under known resource manager
+     if [ ! -z "\$SLURM_NODELIST" ];then
+         return
+    fi
+
     export LMOD_SETTARG_CMD=":"
     export LMOD_FULL_SETTARG_SUPPORT=no
     export LMOD_COLORIZE=no
@@ -143,9 +148,7 @@ EOF
 
     # Load baseline fsp environment
 
-    if [ -z "$SLURM_NODELIST" ];then
-       module try-add fsp
-    fi
+    module try-add fsp
 
 fi
 EOF
@@ -159,7 +162,7 @@ EOF
 #
 ########################################################################
 
-if ( \`id -u\` != "0" ) then
+if ( \`id -u\` != "0" && \$?SLURM_NODELIST ) then
 
     setenv LMOD_SETTARG_CMD ":"
     setenv LMOD_FULL_SETTARG_SUPPORT "no"
@@ -186,9 +189,7 @@ EOF
 
     # Load baseline fsp environment
 
-    if ( ! \$?SLURM_NODELIST ) then
-       module try-add fsp	    
-    endif
+    module try-add fsp	    
 
 endif
 EOF

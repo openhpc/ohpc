@@ -27,7 +27,7 @@
 
 # MVAPICH2 MPI stack that is dependent on compiler toolchain
 
-%define with_slurm 1
+%define with_slurm 0
 
 #-fsp-header-comp-begin----------------------------------------------
 
@@ -84,6 +84,8 @@ Buildrequires: ofed
 Buildrequires: rdma
 %endif
 
+Requires: prun%{PROJ_DELIM}
+
 BuildRequires: bison
 BuildRequires: libibmad-devel libibverbs-devel
 
@@ -122,7 +124,10 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+#make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+
+# 06/04/15 - karl.w.schulz@intel.com; run serial build for fortran deps
+make DESTDIR=$RPM_BUILD_ROOT install
 
 # Remove .la files detected by rpm
 

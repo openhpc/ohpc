@@ -32,3 +32,14 @@ manager, we also add a dedicated ``test'' user as follows:
 [master]$ useradd -m test
 \end{lstlisting}
 % end_fsp_run
+
+In order for \SLURM{} to terminate after a job completes rather then waiting
+for the job timeout to occur the \texttt{Waittime} needs to be set to
+less than infinite.
+
+% begin_fsp_run
+% fsp_validation_comment Reduce Waittime value
+\begin{lstlisting}[language=bash,keywords={}]
+[master$] perl -pi -e "s/^Waittime=0/Waittime=30/" /etc/slurm/slurm.conf
+\end{lstlisting}
+% end_fsp_run
