@@ -8,6 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%define pname lua-posix
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 %if 0%{?suse_version} <= 1220
