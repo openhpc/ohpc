@@ -7,6 +7,7 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
+%include %{_sourcedir}/FSP_macros
 
 %define pname valgrind
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
