@@ -54,6 +54,7 @@ Source0:         %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler
 Patch1:         numpy-buildfix.patch
+Patch2:         numpy-intelc.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  python-devel
 Requires:       python >= %{py_ver}
@@ -87,6 +88,7 @@ basic linear algebra and random number generation.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
+%patch2 -p1
 
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
