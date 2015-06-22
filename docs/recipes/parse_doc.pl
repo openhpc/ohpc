@@ -108,6 +108,7 @@ my $ipoib_netmask  = "";
 my $mgs_fs_name    = "";
 my $bmc_username   = "";
 my $bmc_password   = "";
+my $sms_eth_internal = "";
 my @compute_ips    = ();
 my @compute_ipoibs = ();
 my @compute_macs   = ();
@@ -132,6 +133,8 @@ if($ci_run == 1) {
 	    $ipoib_netmask = $1;
 	} elsif ($line =~ /^bmc_username=(\S+)$/) {
 	    $bmc_username = $1;
+	} elsif ($line =~ /^sms_eth_internal=(\S+)$/) {
+	    $sms_eth_internal = $1;
 	} elsif ($line =~ /^bmc_password=(\S+)$/) {
 	    $bmc_password = $1;
 	} else {
@@ -262,6 +265,7 @@ while(my $line=<IN>) {
 	$line =~ s/<bmc_username>/$bmc_username/g;
 	$line =~ s/<bmc_password>/$bmc_password/g;
 	$line =~ s/<mgs_fs_name>/$mgs_fs_name/g;
+	$line =~ s/<sms_eth_internal>/$sms_eth_internal/g;
 	#	$line =~ s/<master_hostname>/$master_host/g;
 	$line =~ s/<master_hostname>/$ENV{'NODE_NAME'}/g;
 
