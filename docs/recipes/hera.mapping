@@ -9,23 +9,23 @@ internal_netmask=255.255.0.0
 bmc_username=root
 bmc_password=root
 
-sms1_ip=172.16.1.1
-sms1_netmask=172.16.1.1/24
-sms1_ipoib=172.16.3.1
+sms001_ip=172.16.1.1
+sms001_netmask=172.16.1.1/24
+sms001_ipoib=172.16.3.1
 
-sms2_ip=172.16.1.2
-sms2_netmask=172.16.1.1/24
-sms2_ipoib=172.168.3.2
+sms002_ip=172.16.1.2
+sms002_netmask=172.16.1.1/24
+sms002_ipoib=172.168.3.2
 
-sms3_ip=172.16.1.3
-sms3_netmask=172.16.1.1/24
-sms3_ipoib=172.168.3.3
+sms003_ip=172.16.1.3
+sms003_netmask=172.16.1.1/24
+sms003_ipoib=172.168.3.3
 
-sms4_ip=172.16.1.4
-sms4_netmask=172.16.1.1/24
-sms4_ipoib=172.16.3.4
+sms004_ip=172.16.1.4
+sms004_netmask=172.16.1.1/24
+sms004_ipoib=172.16.3.4
 
-# Nodes 5 thru 8
+# Nodes 11 thru 20
 
 c011_ip=172.16.1.11
 c012_ip=172.16.1.12
