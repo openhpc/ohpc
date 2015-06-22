@@ -202,8 +202,8 @@ this setting to override with a potentially alternatively-named interface specif
 [master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
 [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
-# Define eno2 interface for provisioning
-[master]$ ifconfig eno2 <master_ip> netmask 255.255.255.0 up
+# Initialize 2nd interface for provisioning
+[master]$ ifconfig <sms_eth_internal> <master_ip> netmask 255.255.255.0 up
 
 # Restart relevant services to support provisioning
 [master]$ systemctl restart xinetd  
