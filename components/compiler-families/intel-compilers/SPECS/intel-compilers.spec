@@ -15,7 +15,7 @@
 
 Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
-Version:   16.0.0.056
+Version:   16.0.056
 Release:   1
 License:   Intel(R)
 URL:       http://www.intel.com/software/products
