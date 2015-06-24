@@ -32,13 +32,13 @@
 
 Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
-Version:   16.0.056
+Version:   16.0.069
 Release:   1
 License:   Intel(R)
 URL:       http://www.intel.com/software/products
 Group:     fsp/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-fsp-16.0.0-056.tar.gz
+Source0:   intel-compilers-fsp-16.0.0-069.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
@@ -58,7 +58,7 @@ requires: gcc-c++
 %define composer_release compilers_and_libraries_20%{version}
 %define package_target %{FSP_COMPILERS}/intel
 
-%define package_version %{version}
+%define package_version 16.0.0.069
 
 %description
 
