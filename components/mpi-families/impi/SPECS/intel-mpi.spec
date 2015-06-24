@@ -27,7 +27,7 @@ AutoReq:   no
 
 Requires:  prun%{PROJ_DELIM}
 
-%define pstudio_ver 2016.0.056
+%define pstudio_ver 2016.0.069
 
 %include %{_sourcedir}/FSP_macros
 
