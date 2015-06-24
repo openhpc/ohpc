@@ -60,7 +60,7 @@ cd %{buildroot}
 %{__tar} xfz %{SOURCE0}
 
 # 06/02/15 karl.w.schulz@intel.com - apply FSP patch
-patch -p1 --verbose < %{SOURCE2}
+# patch -p1 --verbose < %{SOURCE2}
 
 cd -
 
