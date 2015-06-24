@@ -24,6 +24,7 @@ Source2:   dgemm_mflops.static
 Source3:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
+Requires:  time
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true

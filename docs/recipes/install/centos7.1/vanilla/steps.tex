@@ -176,18 +176,21 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 
 At this point, all of the packages necessary to use \Warewulf{} on the {\em
   master} host should be installed.  Next, we need to update several
-configuration files in order to allow \Warewulf{} to work with \baseOS{} and to support
-local provisioning using the second ethernet interface (assumed to be {\em
-  eno2} in this example).  Specific steps are as
-follows:
+configuration files in order to allow \Warewulf{} to work with \baseOS{} and to
+support local provisioning using a second private interface (refer to
+Figure~\ref{fig:physical_arch}). Note that by default, \Warewulf{} is configured to
+provision over the \texttt{eth1} interface and the steps below include updating
+this setting to override with a potentially alternatively-named interface specified by
+\texttt{<sms\_eth\_internal>}.
+
 
 % begin_fsp_run
 % fsp_validation_comment Complete basic Warewulf setup for master node
 %\begin{verbatim}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-# Configure Warewulf provisioning to use eno2 interface
-[master]$ perl -pi -e 's/^network device = eth1/network device = eno2/' /etc/warewulf/provision.conf
+# Configure Warewulf provisioning to use desired internal interface
+[master]$ perl -pi -e 's/device = eth1/device = <sms_eth_internal>/' /etc/warewulf/provision.conf
 
 # Enable tftp service for compute node image distribution
 [master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
@@ -199,8 +202,8 @@ follows:
 [master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
 [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
-# Define eno2 interface for provisioning
-[master]$ ifconfig eno2 <master_ip> netmask 255.255.255.0 up
+# Initialize 2nd interface for provisioning
+[master]$ ifconfig <sms_eth_internal> <master_ip> netmask 255.255.255.0 up
 
 # Restart relevant services to support provisioning
 [master]$ systemctl restart xinetd  
@@ -612,6 +615,11 @@ that were imported in \S\ref{sec:file_import}.
 [master]$ service dhcpd restart
 [master]$ wwsh pxe update
 \end{lstlisting}
+% end_fsp_run
+
+% begin_fsp_run 
+% fsp_validation_comment - Add optional kargs to bootstrap kernel
+% [master]$ wwsh provision set c[1-4] --kargs=acpi_pad.disable=1
 % end_fsp_run
 
 % begin_fsp_run 
