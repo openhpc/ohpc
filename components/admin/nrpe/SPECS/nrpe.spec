@@ -62,7 +62,11 @@ BuildRequires:  systemd-units
 %if 0%{?el4}%{?el5}
 BuildRequires: tcp_wrappers
 %else
+%if 0%{?suse_version}
+BuildRequires: tcpd-devel
+%else
 BuildRequires: tcp_wrappers-devel
+%endif
 %endif
 
 Requires(pre): %{_sbindir}/useradd
