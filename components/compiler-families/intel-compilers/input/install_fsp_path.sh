@@ -4,14 +4,14 @@
 
 version=16.0.0-069
 #release=composer_xe_$version
-release_dir=update1/parallel_studio_xe_2016_beta
+release_dir=update2/parallel_studio_xe_2016_beta
 
 #skip_keys='i486.rpm$|/intel-ipp|/intel-mkl-pgi'
 skip_keys='i486.rpm$|intel-vtune-amplifier|intel-mpi|clck_|intel-advisor|intel-inspector|intel-itac|intel-tc-|intel-ta-'
-INSTALL=0
-TAR=0
-UNINSTALL=1
-DEVEL=0
+INSTALL=1
+TAR=1
+UNINSTALL=0
+DEVEL=1
 
 # Devel RPMs
 
