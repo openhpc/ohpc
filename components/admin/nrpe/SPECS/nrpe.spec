@@ -59,14 +59,14 @@ BuildRequires: openssl
 BuildRequires:  systemd-units
 %endif
 
-%if 0%{?suse_version}
 %if 0%{?el4}%{?el5}
 BuildRequires: tcp_wrappers
 %else
+%if 0%{?suse_version}
+BuildRequires: tcpd-devel
+%else
 BuildRequires: tcp_wrappers-devel
 %endif
-%else
-BuildRequires: tcpd-devel
 %endif
 
 Requires(pre): %{_sbindir}/useradd
