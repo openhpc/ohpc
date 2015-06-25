@@ -218,8 +218,8 @@ for i in $LIBS; do
         ADDLIB="-lHYPRE"
     fi
 done
-rm -rf tmp
 popd
+rm -rf tmp
 rm libHYPRE.a
 
 # FSP module file
