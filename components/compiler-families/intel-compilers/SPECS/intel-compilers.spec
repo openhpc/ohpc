@@ -41,7 +41,7 @@ requires: gcc-c++
 %define composer_release compilers_and_libraries_20%{version}
 %define package_target %{FSP_COMPILERS}/intel
 
-%define package_version 16.0.0.069
+%define module_version  16.0.0.069
 
 %description
 
@@ -66,7 +66,7 @@ cd -
 
 # FSP module file
 %{__mkdir} -p %{buildroot}/%{FSP_MODULES}/intel
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/%{package_version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/%{module_version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -74,11 +74,8 @@ proc ModulesHelp { } {
 puts stderr " "
 puts stderr "See the man pages for icc, icpc, and ifort for detailed information"
 puts stderr "on available compiler options and command-line syntax."
-puts stderr " "
-puts stderr "See the man pages for idb or idbc for more information on using the"
-puts stderr "Intel debugger."
 
-puts stderr "\nVersion %{package_version}\n"
+puts stderr "\nVersion %{module_version}\n"
 
 }
 
@@ -113,15 +110,15 @@ setenv          TBB_LIB             %{package_target}/compilers_and_libraries_20
 family "compiler"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/.version.%{package_version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/.version.%{module_version}
 #%Module1.0#####################################################################
-set     ModulesVersion      "%{package_version}"
+set     ModulesVersion      "%{module_version}"
 EOF
 
 # Provide standalone module for use with GNU toolchain
 
 %{__mkdir} -p %{buildroot}/%{FSP_MODULEDEPS}/gnu/mkl
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/gnu/mkl/%{package_version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/gnu/mkl/%{module_version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -129,7 +126,7 @@ proc ModulesHelp { } {
 puts stderr " "
 puts stderr "Sets MKLROOT environment variable"
 puts stderr " "
-puts stderr "%{package_version}"
+puts stderr "%{module_version}"
 
 }
 
