@@ -1,0 +1,45 @@
+From 7fad8bf3b07257c4507f5abe207e707525ec9432 Mon Sep 17 00:00:00 2001
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Wed, 16 Oct 2013 17:34:41 +0400
+Subject: [PATCH 8/8] Allow user to override all defaults (even command
+ definitions)
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+---
+ sample-config/nrpe.cfg.in | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/sample-config/nrpe.cfg.in b/sample-config/nrpe.cfg.in
+index 20eb927..38fa875 100644
+--- a/sample-config/nrpe.cfg.in
++++ b/sample-config/nrpe.cfg.in
+@@ -185,14 +185,6 @@ connection_timeout=300
+ 
+ 
+ 
+-# INCLUDE CONFIG DIRECTORY
+-# This directive allows you to include definitions from config files (with a
+-# .cfg extension) in one or more directories (with recursion).
+-
+-include_dir=/etc/nrpe.d/
+-
+-
+-
+ # COMMAND DEFINITIONS
+ # Command definitions that this daemon will run.  Definitions
+ # are in the following format:
+@@ -232,3 +224,11 @@ command[check_total_procs]=@libexecdir@/check_procs -w 150 -c 200
+ #command[check_load]=@libexecdir@/check_load -w $ARG1$ -c $ARG2$
+ #command[check_disk]=@libexecdir@/check_disk -w $ARG1$ -c $ARG2$ -p $ARG3$
+ #command[check_procs]=@libexecdir@/check_procs -w $ARG1$ -c $ARG2$ -s $ARG3$
++
++
++
++# INCLUDE CONFIG DIRECTORY
++# This directive allows you to include definitions from config files (with a
++# .cfg extension) in one or more directories (with recursion).
++
++include_dir=/etc/nrpe.d/
+-- 
+1.8.3.1
+
