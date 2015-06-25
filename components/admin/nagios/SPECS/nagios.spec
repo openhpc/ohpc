@@ -59,7 +59,11 @@ Patch12:        nagios-CVE-2013-2214.patch
 Patch13:        nagios-CVE-2013-7108.patch
 # PATCH-FIX-UPSTREAM fix CVE-2014-1878
 Patch14:        nagios-CVE-2014-1878.patch
+%if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  apache2-devel
+%else
+BuildRequires:  httpd-devel
+%endif
 BuildRequires:  freetype2-devel
 BuildRequires:  gd-devel
 BuildRequires:  iputils
@@ -80,12 +84,12 @@ Requires(pre):  pwdutils
 Requires(pre):  sed
 Provides:       monitoring_daemon
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-%if 0%{?suse_version} < 1010
-BuildRequires:  XFree86-devel
-BuildRequires:  XFree86-libs
-BuildRequires:  libapr0
-Requires:       cron
-%else
+#%if 0%{?suse_version} < 1010
+#BuildRequires:  XFree86-devel
+#BuildRequires:  XFree86-libs
+#BuildRequires:  libapr0
+#Requires:       cron
+#%else
 BuildRequires:  xorg-x11-devel
 BuildRequires:  pkgconfig(apr-util-1)
 Recommends:     %{name}-www
@@ -96,7 +100,7 @@ Recommends:     monitoring-tools
 Recommends:     perl = %{perl_version}
 # as long as it is enabled we need the following requires
 %{?libperl_requires}
-%endif
+#%endif
 Recommends:     icinga-monitoring-tools
 %if 0%{?suse_version} > 1020
 Recommends:     %{name}-plugins
