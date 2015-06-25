@@ -2,15 +2,15 @@
 
 # FSP: install from release rpms into standard FSP path
 
-version=16.0.60.410057
-release=advisor_xe_2016_beta_update2
+version=16.0.70.414655 
+release=advisor_xe_2016_beta_update3
 relocate_ver=advisor_xe_20$version
 
 input_dir=../../../compiler-families/intel-compilers/input/update1/parallel_studio_xe_2016_beta
 
 match_keys='intel-advisor-xe'
 skip_keys='i486.rpm$'
-INSTALL=0
+INSTALL=1
 TAR=1
 
 for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do 
