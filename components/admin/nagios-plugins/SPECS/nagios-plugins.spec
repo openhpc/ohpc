@@ -25,7 +25,7 @@ Summary: Host/service/network monitoring program plugins for Nagios
 Group: Applications/System
 License: GPLv2+
 URL: https://www.nagios-plugins.org/
-Source0: https://www.nagios-plugins.org/download/%{name}-%{version}.tar.gz
+Source0: %{pname}-%{version}.tar.gz
 Source1: nagios-plugins.README.Fedora
 Patch2: nagios-plugins-0002-Remove-assignment-of-not-parsed-to-jitter.patch
 Patch3: nagios-plugins-0003-Fedora-specific-fixes-for-searching-for-diff-and-tai.patch
