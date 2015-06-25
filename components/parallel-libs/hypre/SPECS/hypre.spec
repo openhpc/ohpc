@@ -219,8 +219,8 @@ for i in $LIBS; do
     fi
 done
 rm -rf tmp
-rm libHYPRE.a
 popd
+rm libHYPRE.a
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
