@@ -41,12 +41,16 @@ BuildRequires: net-snmp-utils
 BuildRequires: samba-client
 BuildRequires: postgresql-devel
 BuildRequires: gettext
-BuildRequires: %{_bindir}/ssh
+#BuildRequires: %{_bindir}/ssh
+BuildRequires: openssh-clients
 BuildRequires: bind-utils
 BuildRequires: ntp
-BuildRequires: %{_bindir}/mailq
-BuildRequires: %{_sbindir}/fping
-BuildRequires: perl(Net::SNMP)
+#BuildRequires: %{_bindir}/mailq
+BuildRequires: ssmtp
+#BuildRequires: %{_sbindir}/fping
+BuildRequires: fping
+#BuildRequires: perl(Net::SNMP)
+BuildRequires: perl-Net-SNMP
 BuildRequires: radiusclient-ng-devel
 BuildRequires: qstat
 BuildRequires: libdbi-devel
@@ -102,7 +106,8 @@ Provides check_breeze support for Nagios.
 Summary: Nagios Plugin - check_by_ssh
 Group: Applications/System
 Requires: nagios-plugins = %{version}-%{release}
-Requires: %{_bindir}/ssh
+#Requires: %{_bindir}/ssh
+Requires: openssh-clients
 
 %description by_ssh
 Provides check_by_ssh support for Nagios.
