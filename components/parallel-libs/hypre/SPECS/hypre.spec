@@ -212,11 +212,14 @@ pushd tmp
 for i in $LIBS; do
     if [ "$i" != "libbHYPREClient-F" -a "$i" != "libbHYPREClient-CX" ]
     then
+        ar x ../$i.a
         mpicxx -shared * -L.. $ADDLIB \
                        -Wl,-soname,$i.so -o ../$i.so 
         ADDLIB="-lHYPRE"
     fi
 done
+rm -rf tmp
+rm libHYPRE.a
 popd
 
 # FSP module file
