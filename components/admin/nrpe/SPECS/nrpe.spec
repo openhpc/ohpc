@@ -107,7 +107,7 @@ http://sourceforge.net/projects/nagiosplug
 This package provides the nrpe plugin for Nagios-related applications.
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch1 -p1 -b .reload
 %patch2 -p1 -b .extra_config
 %patch3 -p1 -b .include_etc_npre_d
