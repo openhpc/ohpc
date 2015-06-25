@@ -1,0 +1,26 @@
+From e0ddbf70a34c00f05d392bb85415163946623d63 Mon Sep 17 00:00:00 2001
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 23 Sep 2010 21:21:28 +0400
+Subject: [PATCH 05/11] Install config-files too
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+---
+ Makefile.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index c6e823d..801a6fd 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -291,7 +291,7 @@ install-commandmode:
+ 	@echo ""
+ 
+ 
+-fullinstall: install install-init install-commandmode install-webconf
++fullinstall: install install-init install-commandmode install-webconf install-config
+ 
+ # Uninstall is too destructive if base install directory is /usr, etc.
+ #uninstall:
+-- 
+1.7.3.5
+
