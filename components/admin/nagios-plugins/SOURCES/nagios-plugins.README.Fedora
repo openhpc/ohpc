@@ -1,0 +1,7 @@
+Fedora users
+
+Nagios plugins for Fedora have all been packaged separately. For
+example, to install the check_http just install nagios-plugins-http.
+
+All plugins are installed in the architecture dependent directory
+/usr/lib{,64}/nagios/plugins/.
