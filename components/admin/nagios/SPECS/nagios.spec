@@ -129,13 +129,13 @@ Provides: %{pname}-common
 Provides common directories, uid and gid among nagios-related packages.
 
 
-%package devel
+%package -n %{pname}-devel%{PROJ_DELIM}
 Group: Applications/System
 Summary: Provides include files that Nagios-related applications may compile against
 Requires: %{name} = %{version}-%{release}
 
 
-%description devel
+%description -n %{pname}-devel%{PROJ_DELIM}
 Nagios is a program that will monitor hosts and services on your
 network. It has the ability to email or page you when a problem arises
 and when a problem is resolved. Nagios is written in C and is
