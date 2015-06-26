@@ -641,7 +641,7 @@ rm -f %{buildroot}/%{_libdir}/nagios/plugins/check_sensors
 
 chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 
-%find_lang %{name}
+%find_lang %{pname}
 
 %files -f %{name}.lang
 %doc ACKNOWLEDGEMENTS AUTHORS ChangeLog CODING COPYING FAQ LEGAL NEWS README REQUIREMENTS SUPPORT THANKS README.Fedora
