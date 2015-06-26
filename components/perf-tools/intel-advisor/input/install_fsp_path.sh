@@ -2,26 +2,28 @@
 
 # FSP: install from release rpms into standard FSP path
 
-version=16.0.70.414655 
+version=16.0.70.414655
 release=advisor_xe_2016_beta_update3
 relocate_ver=advisor_xe_20$version
 
-input_dir=../../../compiler-families/intel-compilers/input/update1/parallel_studio_xe_2016_beta
+input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
 
 match_keys='intel-advisor-xe'
 skip_keys='i486.rpm$'
 INSTALL=1
+POST_UNINSTALL=1
 TAR=1
 
-for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do 
+installed_RPMS=""
 
-#for rpm in `ls $input_dir/rpm/*.rpm`; do
+#for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do 
+
+for rpm in `ls $input_dir/rpm/*.rpm`; do
 
     name=`basename $rpm`
 
     echo $rpm | egrep -q "$skip_keys" 
     if [ $? -eq 0 ];then
-#        echo "  --> skipping potential install of $rpm"
         continue
     fi
 
@@ -29,7 +31,6 @@ for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do
     if [ $? -eq 0 ];then
         echo "--> detected Intel Advisor rpm -> $name..."
     else
-#        echo "skipping $rpm"
         continue
     fi
     
@@ -37,6 +38,7 @@ for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do
 	echo "installing $rpm...."
 #        rpm -ivh --nodeps --relocate /opt/intel/=/opt/fsp/pub/compiler/intel $rpm
         rpm -ivh --nodeps --relocate /opt/intel/$relocate_ver=/opt/fsp/pub/advisor/$version $rpm
+        installed_RPMS="$name $installed_RPMS"
     fi
 done
 

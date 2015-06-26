@@ -26,9 +26,6 @@ Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
-# 06/02/15 karl.w.schulz@intel.com - fix error in ippvars.sh
-Source2: ipp.patch
-
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
@@ -58,9 +55,6 @@ compiler suite (including compilers for C,C++, and Fortran).
 %{__mkdir} -p %{buildroot}/
 cd %{buildroot}
 %{__tar} xfz %{SOURCE0}
-
-# 06/02/15 karl.w.schulz@intel.com - apply FSP patch
-# patch -p1 --verbose < %{SOURCE2}
 
 cd -
 
