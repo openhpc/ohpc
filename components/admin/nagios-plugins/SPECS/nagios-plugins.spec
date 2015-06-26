@@ -75,7 +75,7 @@ BuildRequires: radiusclient-ng-devel
 BuildRequires: qstat
 BuildRequires: libdbi-devel
 
-Requires: nagios-common >= 3.3.1-1
+Requires: %{pname}-common%{PROJ_DELIM} >= 3.3.1-1
 
 # nagios-plugins-1.4.16: the included gnulib files were last updated
 # in June/July 2010
@@ -585,7 +585,7 @@ Requires: nagios-plugins = %{version}-%{release}
 Provides check_wave support for Nagios.
 
 %prep
-%setup -q
+%setup -q -n %{pname}
 
 %patch2 -p1 -b .not_parsed
 %patch3 -p1 -b .proper_paths
