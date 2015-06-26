@@ -78,10 +78,11 @@ Requires(post): initscripts, chkconfig
 Requires(postun): initscripts
 
 Requires: nagios-common
-Requires: user(nagios)
-Requires(pre): user(nagios)
-Requires: group(nagios)
-Requires(pre): group(nagios)
+# OBS, if you're going to parse Requires you need to match what RPM does or you'll just cause problems
+#Requires: user(nagios)
+#Requires(pre): user(nagios)
+#Requires: group(nagios)
+#Requires(pre): group(nagios)
 
 
 Summary: Nagios monitors hosts and services and yells if somethings breaks
