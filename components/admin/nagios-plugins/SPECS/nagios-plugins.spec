@@ -643,7 +643,7 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 
 %find_lang %{pname}
 
-%files -f %{name}.lang
+%files -f %{pname}.lang
 %doc ACKNOWLEDGEMENTS AUTHORS ChangeLog CODING COPYING FAQ LEGAL NEWS README REQUIREMENTS SUPPORT THANKS README.Fedora
 %{_libdir}/nagios/plugins/negate
 %{_libdir}/nagios/plugins/urlize
