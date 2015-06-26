@@ -585,7 +585,7 @@ Requires: nagios-plugins = %{version}-%{release}
 Provides check_wave support for Nagios.
 
 %prep
-%setup -q -n %{pname}
+%setup -q -n %{pname}-%{version}
 
 %patch2 -p1 -b .not_parsed
 %patch3 -p1 -b .proper_paths
