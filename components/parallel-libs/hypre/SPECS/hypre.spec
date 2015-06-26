@@ -194,7 +194,10 @@ make install HYPRE_INSTALL_DIR=%{buildroot}%{install_path} \
              HYPRE_LIB_INSTALL=%{buildroot}%{install_path}/lib \
              HYPRE_INC_INSTALL=%{buildroot}%{install_path}/include
 install -m644 hypre/lib/* %{buildroot}%{install_path}/lib
-cp -r FEI_mv/ %{buildroot}%{install_path}/include/.
+
+# install LLNL FEI headers
+mkdir %{buildroot}%{install_path}/include/FEI_mv
+cp -r FEI_mv/fei-base %{buildroot}%{install_path}/include/FEI_mv/.
 cd ..
 
 # Fix wrong permissions
