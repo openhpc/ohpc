@@ -34,20 +34,44 @@ Patch4: nagios-plugins-0004-Fedora-specific-patch-for-not-to-fixing-fully-qualif
 Patch5: nagios-plugins-0005-Prevent-check_swap-from-returning-OK-if-no-swap-acti.patch
 Patch7: nagios-plugins-0007-Fix-the-use-lib-statement-and-the-external-ntp-comma.patch
 
+%if 0%{?suse_version}
+BuildRequires: openldap2-devel
+%else
 BuildRequires: openldap-devel
+%endif
 BuildRequires: mysql-devel
 BuildRequires: net-snmp-devel
+%if 0%{?suse_version}
+BuildRequires: net-snmp
+%else
 BuildRequires: net-snmp-utils
+%endif
 BuildRequires: samba-client
 BuildRequires: postgresql-devel
 BuildRequires: gettext
-BuildRequires: %{_bindir}/ssh
+#BuildRequires: %{_bindir}/ssh
+%if 0%{?suse_version}
+BuildRequires: openssh
+%else
+BuildRequires: openssh-clients
+%endif
 BuildRequires: bind-utils
 BuildRequires: ntp
-BuildRequires: %{_bindir}/mailq
-BuildRequires: %{_sbindir}/fping
-BuildRequires: perl(Net::SNMP)
+#BuildRequires: %{_bindir}/mailq
+%if 0%{?suse_version}
+BuildRequires: ssmtp
+%else
+BuildRequires: postfix
+%endif
+#BuildRequires: %{_sbindir}/fping
+BuildRequires: fping
+#BuildRequires: perl(Net::SNMP)
+BuildRequires: perl-Net-SNMP
+%if 0%{?suse_version}
+BuildRequires: freeradius-client-devel
+%else
 BuildRequires: radiusclient-ng-devel
+%endif
 BuildRequires: qstat
 BuildRequires: libdbi-devel
 
@@ -102,7 +126,8 @@ Provides check_breeze support for Nagios.
 Summary: Nagios Plugin - check_by_ssh
 Group: Applications/System
 Requires: nagios-plugins = %{version}-%{release}
-Requires: %{_bindir}/ssh
+#Requires: %{_bindir}/ssh
+Requires: openssh-clients
 
 %description by_ssh
 Provides check_by_ssh support for Nagios.

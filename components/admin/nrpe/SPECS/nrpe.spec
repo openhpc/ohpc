@@ -62,7 +62,11 @@ BuildRequires:  systemd-units
 %if 0%{?el4}%{?el5}
 BuildRequires: tcp_wrappers
 %else
+%if 0%{?suse_version}
+BuildRequires: tcpd-devel
+%else
 BuildRequires: tcp_wrappers-devel
+%endif
 %endif
 
 Requires(pre): %{_sbindir}/useradd
@@ -107,7 +111,7 @@ http://sourceforge.net/projects/nagiosplug
 This package provides the nrpe plugin for Nagios-related applications.
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 %patch1 -p1 -b .reload
 %patch2 -p1 -b .extra_config
 %patch3 -p1 -b .include_etc_npre_d
@@ -148,16 +152,16 @@ rm -rf %{buildroot}
 %if 0%{?el4}%{?el5}%{?el6}
 install -D -p -m 0755 init-script %{buildroot}/%{_initrddir}/nrpe
 %else
-install -D -m 0644 -p %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
+install -D -m 0644 -p %{SOURCE3} %{buildroot}%{_unitdir}/%{pname}.service
 %endif
-install -D -p -m 0644 sample-config/nrpe.cfg %{buildroot}/%{_sysconfdir}/nagios/%{name}.cfg
+install -D -p -m 0644 sample-config/nrpe.cfg %{buildroot}/%{_sysconfdir}/nagios/%{pname}.cfg
 install -D -p -m 0755 src/nrpe %{buildroot}/%{_sbindir}/nrpe
 install -D -p -m 0755 src/check_nrpe %{buildroot}/%{_libdir}/nagios/plugins/check_nrpe
-install -D -p -m 0644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/sysconfig/%{name}
+install -D -p -m 0644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/sysconfig/%{pname}
 install -d %{buildroot}%{_sysconfdir}/nrpe.d
-install -d %{buildroot}%{_localstatedir}/run/%{name}
+install -d %{buildroot}%{_localstatedir}/run/%{pname}
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
-install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{name}.conf
+install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{pname}.conf
 %endif
 
 
@@ -165,15 +169,15 @@ install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{name}.conf
 rm -rf %{buildroot}
 
 %pre
-getent group %{name} >/dev/null || groupadd -r %{name}
-getent passwd %{name} >/dev/null || \
-%{_sbindir}/useradd -c "NRPE user for the NRPE service" -d %{_localstatedir}/run/%{name} -r -g %{name} -s /sbin/nologin %{name} 2> /dev/null || :
+getent group %{pname} >/dev/null || groupadd -r %{pname}
+getent passwd %{pname} >/dev/null || \
+%{_sbindir}/useradd -c "NRPE user for the NRPE service" -d %{_localstatedir}/run/%{pname} -r -g %{pname} -s /sbin/nologin %{pname} 2> /dev/null || :
 
 %preun
 %if 0%{?el4}%{?el5}%{?el6}
 if [ $1 = 0 ]; then
-	/sbin/service %{name} stop > /dev/null 2>&1 || :
-	/sbin/chkconfig --del %{name} || :
+	/sbin/service %{pname} stop > /dev/null 2>&1 || :
+	/sbin/chkconfig --del %{pname} || :
 fi
 %else
 %systemd_preun nrpe.service
@@ -181,7 +185,7 @@ fi
 
 %post
 %if 0%{?el4}%{?el5}%{?el6}
-/sbin/chkconfig --add %{name} || :
+/sbin/chkconfig --add %{pname} || :
 %else
 %systemd_post nrpe.service
 %endif
@@ -189,7 +193,7 @@ fi
 %postun
 %if 0%{?el4}%{?el5}%{?el6}
 if [ "$1" -ge "1" ]; then
-	/sbin/service %{name} condrestart > /dev/null 2>&1 || :
+	/sbin/service %{pname} condrestart > /dev/null 2>&1 || :
 fi
 %else
 %systemd_postun_with_restart nrpe.service
@@ -199,17 +203,17 @@ fi
 %if 0%{?el4}%{?el5}%{?el6}
 %{_initrddir}/nrpe
 %else
-%{_unitdir}/%{name}.service
+%{_unitdir}/%{pname}.service
 %endif
 %{_sbindir}/nrpe
 %dir %{_sysconfdir}/nrpe.d
 %config(noreplace) %{_sysconfdir}/nagios/nrpe.cfg
-%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%config(noreplace) %{_sysconfdir}/sysconfig/%{pname}
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
-%config(noreplace) %{_tmpfilesdir}/%{name}.conf
+%config(noreplace) %{_tmpfilesdir}/%{pname}.conf
 %endif
 %doc Changelog LEGAL README README.SSL SECURITY docs/NRPE.pdf
-%dir %attr(775, %{name}, %{name}) %{_localstatedir}/run/%{name}
+%dir %attr(775, %{pname}, %{pname}) %{_localstatedir}/run/%{pname}
 
 %files -n nagios-plugins-nrpe
 %{_libdir}/nagios/plugins/check_nrpe

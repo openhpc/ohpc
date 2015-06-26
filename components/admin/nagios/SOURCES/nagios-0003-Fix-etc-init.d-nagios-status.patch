@@ -1,0 +1,42 @@
+From adc53e77fd938fe350b0a7c3c9a24470679a6134 Mon Sep 17 00:00:00 2001
+From: Ricky Zhou <rzhou@redhat.com>
+Date: Thu, 25 Feb 2010 14:27:08 +0300
+Subject: [PATCH 03/11] Fix /etc/init.d/nagios status
+
+Fix status return code.
+---
+ daemon-init.in |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/daemon-init.in b/daemon-init.in
+index 75aa0b3..ecd072a 100644
+--- a/daemon-init.in
++++ b/daemon-init.in
+@@ -52,12 +52,14 @@ status_nagios ()
+ 
+ printstatus_nagios()
+ {
+-
+-	if status_nagios $1 $2; then
++	status_nagios $1 $2
++	RETVAL=$?
++	if [ $RETVAL = 0 ]; then
+ 		echo "nagios (pid $NagiosPID) is running..."
+ 	else
+ 		echo "nagios is not running"
+ 	fi
++	return $RETVAL
+ }
+ 
+ 
+@@ -174,6 +176,7 @@ case "$1" in
+ 	status)
+ 		pid_nagios
+ 		printstatus_nagios nagios
++		exit $?
+ 		;;
+ 
+ 	checkconfig)
+-- 
+1.7.3.5
+

@@ -194,6 +194,10 @@ make install HYPRE_INSTALL_DIR=%{buildroot}%{install_path} \
              HYPRE_LIB_INSTALL=%{buildroot}%{install_path}/lib \
              HYPRE_INC_INSTALL=%{buildroot}%{install_path}/include
 install -m644 hypre/lib/* %{buildroot}%{install_path}/lib
+
+# install LLNL FEI headers
+mkdir %{buildroot}%{install_path}/include/FEI_mv
+cp -r FEI_mv/fei-base %{buildroot}%{install_path}/include/FEI_mv/.
 cd ..
 
 # Fix wrong permissions
@@ -219,6 +223,8 @@ for i in $LIBS; do
     fi
 done
 popd
+rm -rf tmp
+rm libHYPRE.a
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}

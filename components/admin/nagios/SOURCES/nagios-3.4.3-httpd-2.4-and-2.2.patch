@@ -1,0 +1,72 @@
+diff -ruN nagios/sample-config/httpd.conf.in nagios-modified/sample-config/httpd.conf.in
+--- nagios/sample-config/httpd.conf.in	2012-12-05 13:07:31.076014408 +0000
++++ nagios-modified/sample-config/httpd.conf.in	2012-12-05 13:10:07.261019793 +0000
+@@ -12,15 +12,28 @@
+ #  SSLRequireSSL
+    Options ExecCGI
+    AllowOverride None
+-   Order allow,deny
+-   Allow from all
+-#  Order deny,allow
+-#  Deny from all
+-#  Allow from 127.0.0.1
++
+    AuthName "Nagios Access"
+    AuthType Basic
+    AuthUserFile @sysconfdir@/passwd
+-   Require valid-user
++
++   <IfModule mod_authz_core.c>
++      # Apache 2.4
++      <RequireAll>
++         Require all granted
++         # Require local
++         Require valid-user
++      </RequireAll>
++   </IfModule>
++   <IfModule !mod_authz_core.c>
++      # Apache 2.2
++      Order allow,deny
++      Allow from all
++      #  Order deny,allow
++      #  Deny from all
++      #  Allow from 127.0.0.1
++      Require valid-user
++   </IfModule>
+ </Directory>
+ 
+ Alias @htmurl@ "@datadir@"
+@@ -29,14 +42,27 @@
+ #  SSLRequireSSL
+    Options None
+    AllowOverride None
+-   Order allow,deny
+-   Allow from all
+-#  Order deny,allow
+-#  Deny from all
+-#  Allow from 127.0.0.1
++
+    AuthName "Nagios Access"
+    AuthType Basic
+    AuthUserFile @sysconfdir@/passwd
+-   Require valid-user
++
++   <IfModule mod_authz_core.c>
++      # Apache 2.4
++      <RequireAll>
++         Require all granted
++         # Require local
++         Require valid-user
++      </RequireAll>
++   </IfModule>
++   <IfModule !mod_authz_core.c>
++      # Apache 2.2
++      Order allow,deny
++      Allow from all
++      #  Order deny,allow
++      #  Deny from all
++      #  Allow from 127.0.0.1
++      Require valid-user
++   </IfModule>
+ </Directory>
+ 
