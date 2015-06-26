@@ -1,0 +1,25 @@
+From e35cd91bdb0cd3b7c1adfa942491778c3ba97b79 Mon Sep 17 00:00:00 2001
+From: Peter Lemenkov <lemenkov@gmail.com>
+Date: Thu, 23 Sep 2010 18:46:50 +0400
+Subject: [PATCH 04/11] Fix installation of httpd/conf.d config-file
+
+Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
+---
+ Makefile.in |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index a7f77ca..c6e823d 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -264,6 +264,7 @@ install-config:
+ 	@echo ""
+ 
+ install-webconf:
++	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(DESTDIR)$(HTTPD_CONF)
+ 	$(INSTALL) -m 644 sample-config/httpd.conf $(DESTDIR)$(HTTPD_CONF)/nagios.conf
+ 
+ 	@echo ""
+-- 
+1.7.3.5
+
