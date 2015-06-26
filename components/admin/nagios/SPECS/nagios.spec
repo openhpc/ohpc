@@ -77,7 +77,7 @@ Requires(preun): initscripts, chkconfig
 Requires(post): initscripts, chkconfig
 Requires(postun): initscripts
 
-Requires: nagios-common
+Requires: %{pname}-common%{PROJ_DELIM}
 # OBS, if you're going to parse Requires you need to match what RPM does or you'll just cause problems
 #Requires: user(nagios)
 #Requires(pre): user(nagios)
@@ -115,16 +115,17 @@ Nagios überprüft die Rechner und Dienste nicht selber, sondern
 braucht dafür externe Programme. Viele dieser Programme finden
 Sie im Paket nagios-plugins.
 
-%package common
+%package -n %{pname}-common%{PROJ_DELIM}
 Group: Applications/System
 Summary: Provides common directories, uid and gid among nagios-related packages
 Requires(pre): shadow-utils
 Requires(post): shadow-utils
 Provides: user(nagios)
 Provides: group(nagios)
+Provides: %{pname}-common
 
 
-%description common
+%description -n %{pname}-common%{PROJ_DELIM}
 Provides common directories, uid and gid among nagios-related packages.
 
 
@@ -232,7 +233,7 @@ install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
 rm -rf %{buildroot}
 
 
-%pre common
+%pre -n %{pname}-common%{PROJ_DELIM}
 getent group nagios >/dev/null || groupadd -r nagios
 getent passwd nagios >/dev/null || useradd -r -g nagios -d %{_localstatedir}/spool/%{pname} -s /sbin/nologin nagios
 exit 0
