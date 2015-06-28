@@ -13,7 +13,7 @@
 
 Summary:   Intel(R) Cluster Checker
 Name:      intel-clck%{PROJ_DELIM}
-Version:   2.2.1
+Version:   3.0.0
 Release:   1
 License:   Intel
 URL:       http://intel.com/go/cluster
@@ -47,8 +47,8 @@ Intel cluster checker.
 cd %{buildroot}
 %{__tar} xfz $RPM_SOURCE_DIR/intel-clck%{PROJ_DELIM}-%{version}.tar.gz
 # Update key executiables with static versions
-cp %{SOURCE1} %{buildroot}/%{FSP_ADMIN}/clck/%{version}/share/intel64/stream
-cp %{SOURCE2} %{buildroot}/%{FSP_ADMIN}/clck/%{version}/share/intel64/dgemm_mflops
+#cp %{SOURCE1} %{buildroot}/%{FSP_ADMIN}/clck/%{version}/share/intel64/stream
+#cp %{SOURCE2} %{buildroot}/%{FSP_ADMIN}/clck/%{version}/share/intel64/dgemm_mflops
 cd -
 
 %clean

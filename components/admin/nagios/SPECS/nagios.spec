@@ -77,7 +77,7 @@ Requires(preun): initscripts, chkconfig
 Requires(post): initscripts, chkconfig
 Requires(postun): initscripts
 
-Requires: nagios-common
+Requires: %{pname}-common%{PROJ_DELIM}
 # OBS, if you're going to parse Requires you need to match what RPM does or you'll just cause problems
 #Requires: user(nagios)
 #Requires(pre): user(nagios)
@@ -115,26 +115,27 @@ Nagios überprüft die Rechner und Dienste nicht selber, sondern
 braucht dafür externe Programme. Viele dieser Programme finden
 Sie im Paket nagios-plugins.
 
-%package common
+%package -n %{pname}-common%{PROJ_DELIM}
 Group: Applications/System
 Summary: Provides common directories, uid and gid among nagios-related packages
 Requires(pre): shadow-utils
 Requires(post): shadow-utils
 Provides: user(nagios)
 Provides: group(nagios)
+Provides: %{pname}-common
 
 
-%description common
+%description -n %{pname}-common%{PROJ_DELIM}
 Provides common directories, uid and gid among nagios-related packages.
 
 
-%package devel
+%package -n %{pname}-devel%{PROJ_DELIM}
 Group: Applications/System
 Summary: Provides include files that Nagios-related applications may compile against
 Requires: %{name} = %{version}-%{release}
 
 
-%description devel
+%description -n %{pname}-devel%{PROJ_DELIM}
 Nagios is a program that will monitor hosts and services on your
 network. It has the ability to email or page you when a problem arises
 and when a problem is resolved. Nagios is written in C and is
@@ -232,7 +233,7 @@ install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
 rm -rf %{buildroot}
 
 
-%pre common
+%pre -n %{pname}-common%{PROJ_DELIM}
 getent group nagios >/dev/null || groupadd -r nagios
 getent passwd nagios >/dev/null || useradd -r -g nagios -d %{_localstatedir}/spool/%{pname} -s /sbin/nologin nagios
 exit 0
