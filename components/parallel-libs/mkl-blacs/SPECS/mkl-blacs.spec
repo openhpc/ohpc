@@ -61,8 +61,8 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        11.3
 Release:        0
-Summary:        Intel® Math Kernel Library Basic Linear Algebra Communication Subprograms
-License:        
+Summary:        Intel(R) Math Kernel Library Basic Linear Algebra Communication Subprograms
+License:        Intel(R) 
 Group:          Development/Libraries/Parallel
 Url:            http://software.intel.com/en-us/intel-mkl
 Source:         %{pname}-%{version}.tar.gz
@@ -71,7 +71,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %define debug_package %{nil}
 
 %description
-Intel® Math Kernel Library Basic Linear Algebra Communication Subprograms for openmpi
+Intel(R) Math Kernel Library Basic Linear Algebra Communication Subprograms for openmpi
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -102,7 +102,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load mkl
 %endif
 
-install -m644 *so %{buildroot}%{MKLROOT}/lib/intel64/.
+install -m644 *so %{buildroot}%{MPI_DIR}/lib/.
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
