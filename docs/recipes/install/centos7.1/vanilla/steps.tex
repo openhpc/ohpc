@@ -582,10 +582,10 @@ that were imported in \S\ref{sec:file_import}.
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define four compute nodes and network settings 
-[master]$ wwsh -y node new c1 --ipaddr=<c1_ip> --hwaddr=<c1_mac> 
-[master]$ wwsh -y node new c2 --ipaddr=<c2_ip> --hwaddr=<c2_mac> 
-[master]$ wwsh -y node new c3 --ipaddr=<c3_ip> --hwaddr=<c3_mac> 
-[master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> 
+[master]$ wwsh -y node new c1 --ipaddr=<c1_ip> --hwaddr=<c1_mac> -D <eth_provision>
+[master]$ wwsh -y node new c2 --ipaddr=<c2_ip> --hwaddr=<c2_mac> -D <eth_provision>
+[master]$ wwsh -y node new c3 --ipaddr=<c3_ip> --hwaddr=<c3_mac> -D <eth_provision>
+[master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> -D <eth_provision>
 
 # Define provisioning image for hosts
 [master]$ wwsh -y provision set c[1-4] --vnfs=centos7.1 --bootstrap=`uname -r` \

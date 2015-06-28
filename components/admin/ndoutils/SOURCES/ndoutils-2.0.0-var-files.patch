@@ -1,0 +1,54 @@
+diff -Naur ndoutils-2.0.0.old/config/ndo2db.cfg-sample.in ndoutils-2.0.0/config/ndo2db.cfg-sample.in
+--- ndoutils-2.0.0.old/config/ndo2db.cfg-sample.in	2014-04-16 11:30:01.808975064 +0200
++++ ndoutils-2.0.0/config/ndo2db.cfg-sample.in	2014-04-16 12:01:34.520376575 +0200
+@@ -10,7 +10,7 @@
+ # This is the lockfile that NDO2DB will use to store its PID number
+ # in when it is running in daemon mode.
+ 
+-lock_file=@localstatedir@/ndo2db.lock
++lock_file=@localstatedir@/run/ndoutils/ndo2db.pid
+ 
+ 
+ 
+@@ -41,7 +41,7 @@
+ # This option is only valid if the socket type specified above
+ # is "unix".
+ 
+-socket_name=@localstatedir@/ndo.sock
++socket_name=@localstatedir@/run/ndoutils/ndo2db.sock
+ 
+ 
+ 
+@@ -191,7 +191,7 @@
+ # DEBUG FILE
+ # This option determines where the daemon should write debugging information.
+ 
+-debug_file=@localstatedir@/ndo2db.debug
++debug_file=@localstatedir@/log/nagios/ndo2db.log
+ 
+ 
+ 
+diff -Naur ndoutils-2.0.0.old/config/ndomod.cfg-sample.in ndoutils-2.0.0/config/ndomod.cfg-sample.in
+--- ndoutils-2.0.0.old/config/ndomod.cfg-sample.in	2014-04-16 11:30:01.808975064 +0200
++++ ndoutils-2.0.0/config/ndomod.cfg-sample.in	2014-04-16 12:01:49.224247619 +0200
+@@ -35,9 +35,9 @@
+ # of fully qualified domain name of the host that the module should
+ # connect to for sending output.
+ 
+-#output=@localstatedir@/ndo.dat
++#output=@localstatedir@/run/ndoutils/ndo2db.dat
+ #output=127.0.0.1
+-output=@localstatedir@/ndo.sock
++output=@localstatedir@/run/ndoutils/ndo2db.sock
+ 
+ 
+ 
+@@ -82,7 +82,7 @@
+ # Nagios (re)starts, the NDO NEB module will read the contents of this
+ # file and send it to the NDO2DB daemon for processing.
+ 
+-buffer_file=@localstatedir@/ndomod.tmp
++buffer_file=@localstatedir@/cache/ndoutils/ndomod.tmp
+ 
+ 
+ 

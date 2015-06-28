@@ -83,7 +83,8 @@ Requires(postun): systemd
 %endif
 
 # owns /etc/nagios
-Requires: nagios-common
+Requires: nagios-common%{PROJ_DELIM}
+Provides: nagios-nrpe%{PROJ_DELIM} = %{version}-%{release}
 Provides: nagios-nrpe = %{version}-%{release}
 
 %description
@@ -95,13 +96,13 @@ http://sourceforge.net/projects/nagiosplug
 
 This package provides the core agent.
 
-%package -n nagios-plugins-nrpe
+%package -n nagios-plugins-nrpe%{PROJ_DELIM}
 Group: Applications/System
 Summary: Provides nrpe plugin for Nagios
-Requires: nagios-plugins
+Requires: nagios-plugins%{PROJ_DELIM}
 Provides: check_nrpe = %{version}-%{release}
 
-%description -n nagios-plugins-nrpe
+%description -n nagios-plugins-nrpe%{PROJ_DELIM}
 Nrpe is a system daemon that will execute various Nagios plugins
 locally on behalf of a remote (monitoring) host that uses the
 check_nrpe plugin.  Various plugins that can be executed by the
@@ -215,7 +216,7 @@ fi
 %doc Changelog LEGAL README README.SSL SECURITY docs/NRPE.pdf
 %dir %attr(775, %{pname}, %{pname}) %{_localstatedir}/run/%{pname}
 
-%files -n nagios-plugins-nrpe
+%files -n nagios-plugins-nrpe%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_nrpe
 %doc Changelog LEGAL README
 
