@@ -102,6 +102,8 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load mkl
 %endif
 
+%{__mkdir} -p %{buildroot}$MPI_DIR/lib
+
 install -m644 *so %{buildroot}$MPI_DIR/lib/.
 
 %post -p /sbin/ldconfig
