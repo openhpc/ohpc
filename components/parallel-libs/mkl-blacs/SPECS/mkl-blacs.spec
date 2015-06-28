@@ -27,8 +27,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
 # require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
+BuildRequires: intel-compilers-devel%{PROJ_DELIM}
+Requires:      intel-compilers-devel%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
