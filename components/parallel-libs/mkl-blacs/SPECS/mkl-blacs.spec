@@ -88,7 +88,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load mkl
 %endif
 
-make sointel64 INSTALL_LIBNAME=libmkl_blacs_openmpi_lp64 INSTALL_DIR=`pwd`
+make sointel64 INSTALL_LIBNAME=libmkl_blacs_%{mpi_family}_lp64 INSTALL_DIR=`pwd`
 
 %install
 
@@ -102,7 +102,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 module load mkl
 %endif
 
-install -m644 *so %{buildroot}%{MPI_DIR}/lib/.
+install -m644 *so %{buildroot}$MPI_DIR/lib/.
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
