@@ -288,6 +288,7 @@ Now, we can include additional components to the compute instance using
 
 # Add IB support and enable
 [master]$ (*\groupchrootinstall*) "InfiniBand Support"
+[master]$ (*\chrootinstall*) infinipath-psm
 [master]$ chroot $CHROOT systemctl enable rdma
 
 # Add Network Time Protocol (NTP) support
