@@ -132,13 +132,14 @@ both the base OS and EPEL repositories (mirrors freely available online):
 
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
-The following command adds OFED support using distro-provided drivers to the
-chosen {\em master} host. 
+The following command adds OFED and PSM support using distro-provided drivers
+to the chosen {\em master} host.
 
 % begin_fsp_run
-% fsp_validation_comment Add ofed
+% fsp_validation_comment Add ofed/psm
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ (*\groupinstall*) "InfiniBand Support"
+[master]$ (*\install*) install infinipath-psm
 
 # Load IB drivers
 [master]$ service rdma start
