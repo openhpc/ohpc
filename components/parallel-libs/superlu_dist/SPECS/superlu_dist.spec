@@ -165,7 +165,7 @@ popd
 %install
 
 %{__mkdir} -p %{buildroot}%{install_path}/etc
-install -m644 Makefile.inc %{buildroot}%{install_path}/etc
+install -m644 make.inc %{buildroot}%{install_path}/etc
 
 %{__mkdir} -p %{buildroot}%{install_path}/include
 install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
