@@ -91,7 +91,9 @@ Source:         %{pname}-%{version}.tar.gz
 #BuildRequires:  babel-devel
 #BuildRequires:  libltdl-devel
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
+Requires:  superlu-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 BuildRequires:  python-devel
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
