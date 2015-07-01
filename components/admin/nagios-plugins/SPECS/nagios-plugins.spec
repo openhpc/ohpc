@@ -252,6 +252,7 @@ Group: Applications/System
 Requires: %{name} = %{version}-%{release}
 Requires: qstat
 Provides: %{pname}-qstat
+Provides: %{pname}-game
 
 %description -n %{pname}-game%{PROJ_DELIM}
 Provides check_game support for Nagios.
