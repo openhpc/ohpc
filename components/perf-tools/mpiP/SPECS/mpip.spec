@@ -116,7 +116,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-make %{?_smp_mflags} shared
+make %{?_smp_mflags} 
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # FSP module file
