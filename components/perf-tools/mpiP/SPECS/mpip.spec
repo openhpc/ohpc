@@ -69,7 +69,6 @@ Source2:   FSP_setup_compiler
 Source3:   FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
-BuildRequires: libunwind-devel
 Requires: libunwind
 
 %define debug_package %{nil}
@@ -106,7 +105,7 @@ FC=mpif90
 
 
 
-./configure --prefix=%{install_path} || cat config.log
+./configure --prefix=%{install_path} --enable-demangling --disable-libunwind || cat config.log
 
 %install
 
@@ -134,7 +133,7 @@ puts stderr "\nVersion %{version}\n"
 }
 module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
 module-whatis "Version: %{version}"
-module-whatis "Category: runtime library"
+module-whatis "Category: Profiling library"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
