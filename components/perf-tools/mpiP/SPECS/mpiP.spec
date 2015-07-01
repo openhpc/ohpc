@@ -70,7 +70,6 @@ Source3:   FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 BuildRequires: python
-Requires: libunwind
 
 %define debug_package %{nil}
 
