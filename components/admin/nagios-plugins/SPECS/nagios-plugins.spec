@@ -169,7 +169,7 @@ Provides check_dhcp support for Nagios.
 %package -n %{pname}-dig%{PROJ_DELIM}
 Summary: Nagios Plugin - check_dig
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: %{_bindir}/dig
 Provides: %{pname}-dig
 
@@ -179,7 +179,7 @@ Provides check_dig support for Nagios.
 %package -n %{pname}-disk%{PROJ_DELIM}
 Summary: Nagios Plugin - check_disk
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-disk
 
 %description -n %{pname}-disk%{PROJ_DELIM}
@@ -188,7 +188,7 @@ Provides check_disk support for Nagios.
 %package -n %{pname}-disk_smb%{PROJ_DELIM}
 Summary: Nagios Plugin - check_disk_smb
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: %{_bindir}/smbclient
 Provides: %{pname}-disk_smb
 
@@ -198,7 +198,7 @@ Provides check_disk_smb support for Nagios.
 %package -n %{pname}-dns%{PROJ_DELIM}
 Summary: Nagios Plugin - check_dns
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: %{_bindir}/nslookup
 Provides: %{pname}-dns
 
@@ -208,7 +208,7 @@ Provides check_dns support for Nagios.
 %package -n %{pname}-dummy%{PROJ_DELIM}
 Summary: Nagios Plugin - check_dummy
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-dummy
 
 %description -n %{pname}-dummy%{PROJ_DELIM}
@@ -219,7 +219,7 @@ This plugin does not actually check anything, simply provide it with a flag
 %package -n %{pname}-file_age%{PROJ_DELIM}
 Summary: Nagios Plugin - check_file_age
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-file_age
 
 %description -n %{pname}-file_age%{PROJ_DELIM}
@@ -228,7 +228,7 @@ Provides check_file_age support for Nagios.
 %package -n %{pname}-flexlm%{PROJ_DELIM}
 Summary: Nagios Plugin - check_flexlm
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-flexlm
 
 %description -n %{pname}-flexlm%{PROJ_DELIM}
@@ -237,7 +237,7 @@ Provides check_flexlm support for Nagios.
 %package -n %{pname}-fping%{PROJ_DELIM}
 Summary: Nagios Plugin - check_fping
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: %{_sbindir}/fping
 Requires: group(nagios)
 Requires(pre): group(nagios)
@@ -249,9 +249,10 @@ Provides check_fping support for Nagios.
 %package -n %{pname}-game%{PROJ_DELIM}
 Summary: Nagios Plugin - check_game
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: qstat
 Provides: %{pname}-qstat
+Provides: %{pname}-game
 
 %description -n %{pname}-game%{PROJ_DELIM}
 Provides check_game support for Nagios.
@@ -259,7 +260,7 @@ Provides check_game support for Nagios.
 %package -n %{pname}-hpjd%{PROJ_DELIM}
 Summary: Nagios Plugin - check_hpjd
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-hpjd
 
 %description -n %{pname}-hpjd%{PROJ_DELIM}
@@ -268,7 +269,7 @@ Provides check_hpjd support for Nagios.
 %package -n %{pname}-http%{PROJ_DELIM}
 Summary: Nagios Plugin - check_http
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-http
 
 %description -n %{pname}-http%{PROJ_DELIM}
@@ -277,7 +278,7 @@ Provides check_http support for Nagios.
 %package -n %{pname}-icmp%{PROJ_DELIM}
 Summary: Nagios Plugin - check_icmp
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: group(nagios)
 Requires(pre): group(nagios)
 Provides: %{pname}-icmp
@@ -288,7 +289,7 @@ Provides check_icmp support for Nagios.
 %package -n %{pname}-ide_smart%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ide_smart
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: group(nagios)
 Requires(pre): group(nagios)
 Provides: %{pname}-ide_smart
@@ -299,7 +300,7 @@ Provides check_ide_smart support for Nagios.
 %package -n %{pname}-ifoperstatus%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ifoperstatus
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-ifoperstatus
 
 %description -n %{pname}-ifoperstatus%{PROJ_DELIM}
@@ -308,7 +309,7 @@ Provides check_ifoperstatus support for Nagios to monitor network interfaces.
 %package -n %{pname}-ifstatus%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ifstatus
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-ifstatus
 
 %description -n %{pname}-ifstatus%{PROJ_DELIM}
@@ -317,7 +318,7 @@ Provides check_ifstatus support for Nagios to monitor network interfaces.
 %package -n %{pname}-ircd%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ircd
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-ircd
 
 %description -n %{pname}-ircd%{PROJ_DELIM}
@@ -326,7 +327,7 @@ Provides check_ircd support for Nagios.
 %package -n %{pname}-ldap%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ldap
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-ldap
 
 %description -n %{pname}-ldap%{PROJ_DELIM}
@@ -335,7 +336,7 @@ Provides check_ldap support for Nagios.
 %package -n %{pname}-load%{PROJ_DELIM}
 Summary: Nagios Plugin - check_load
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-load
 
 %description -n %{pname}-load%{PROJ_DELIM}
@@ -344,7 +345,7 @@ Provides check_load support for Nagios.
 %package -n %{pname}-log%{PROJ_DELIM}
 Summary: Nagios Plugin - check_log
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: /bin/egrep
 Requires: /bin/mktemp
 Provides: %{pname}-log
@@ -355,7 +356,7 @@ Provides check_log support for Nagios.
 %package -n %{pname}-mailq%{PROJ_DELIM}
 Summary: Nagios Plugin - check_mailq
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: %{_bindir}/mailq
 Provides: %{pname}-mailq
 
@@ -365,7 +366,7 @@ Provides check_mailq support for Nagios.
 %package -n %{pname}-mrtg%{PROJ_DELIM}
 Summary: Nagios Plugin - check_mrtg
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-mrtg
 
 %description -n %{pname}-mrtg%{PROJ_DELIM}
@@ -374,7 +375,7 @@ Provides check_mrtg support for Nagios.
 %package -n %{pname}-mrtgtraf%{PROJ_DELIM}
 Summary: Nagios Plugin - check_mrtgtraf
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-mrtgtraf
 
 %description -n %{pname}-mrtgtraf%{PROJ_DELIM}
@@ -383,7 +384,7 @@ Provides check_mrtgtraf support for Nagios.
 %package -n %{pname}-mysql%{PROJ_DELIM}
 Summary: Nagios Plugin - check_mysql
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-mysql
 
 %description -n %{pname}-mysql%{PROJ_DELIM}
@@ -392,7 +393,7 @@ Provides check_mysql and check_mysql_query support for Nagios.
 %package -n %{pname}-nagios%{PROJ_DELIM}
 Summary: Nagios Plugin - check_nagios
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-nagios
 
 %description -n %{pname}-nagios%{PROJ_DELIM}
@@ -401,7 +402,7 @@ Provides check_nagios support for Nagios.
 %package -n %{pname}-nt%{PROJ_DELIM}
 Summary: Nagios Plugin - check_nt
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-nt
 
 %description -n %{pname}-nt%{PROJ_DELIM}
@@ -410,7 +411,7 @@ Provides check_nt support for Nagios.
 %package -n %{pname}-ntp%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ntp
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-ntp
 
 %description -n %{pname}-ntp%{PROJ_DELIM}
@@ -419,7 +420,7 @@ Provides check_ntp support for Nagios.
 %package -n %{pname}-ntp-perl%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ntp.pl
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: %{_sbindir}/ntpdate
 Requires: %{_sbindir}/ntpq
 Provides: %{pname}-ntp-perl
@@ -430,7 +431,7 @@ Provides check_ntp.pl support for Nagios.
 %package -n %{pname}-nwstat%{PROJ_DELIM}
 Summary: Nagios Plugin - check_nwstat
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-nwstat
 
 %description -n %{pname}-nwstat%{PROJ_DELIM}
@@ -439,7 +440,7 @@ Provides check_nwstat support for Nagios.
 %package -n %{pname}-oracle%{PROJ_DELIM}
 Summary: Nagios Plugin - check_oracle
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-oracle
 
 %description -n %{pname}-oracle%{PROJ_DELIM}
@@ -448,7 +449,7 @@ Provides check_oracle support for Nagios.
 %package -n %{pname}-overcr%{PROJ_DELIM}
 Summary: Nagios Plugin - check_overcr
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-overcr
 
 %description -n %{pname}-overcr%{PROJ_DELIM}
@@ -457,7 +458,7 @@ Provides check_overcr support for Nagios.
 %package -n %{pname}-perl%{PROJ_DELIM}
 Summary: Nagios plugins perl dep.
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-perl
 
 %description -n %{pname}-perl%{PROJ_DELIM}
@@ -467,7 +468,7 @@ utils.pm
 %package -n %{pname}-pgsql%{PROJ_DELIM}
 Summary: Nagios Plugin - check_pgsql
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-pgsql
 
 %description -n %{pname}-pgsql%{PROJ_DELIM}
@@ -476,7 +477,7 @@ Provides check_pgsql (PostgreSQL)  support for Nagios.
 %package -n %{pname}-ping%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ping
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: /bin/ping
 Requires: /bin/ping6
 Provides: %{pname}-ping
@@ -487,7 +488,7 @@ Provides check_ping support for Nagios.
 %package -n %{pname}-procs%{PROJ_DELIM}
 Summary: Nagios Plugin - check_procs
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-procs
 
 %description -n %{pname}-procs%{PROJ_DELIM}
@@ -496,7 +497,7 @@ Provides check_procs support for Nagios.
 %package -n %{pname}-radius%{PROJ_DELIM}
 Summary: Nagios Plugin - check_radius
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-radius
 
 %description -n %{pname}-radius%{PROJ_DELIM}
@@ -505,7 +506,7 @@ Provides check_radius support for Nagios.
 %package -n %{pname}-real%{PROJ_DELIM}
 Summary: Nagios Plugin - check_real
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-real
 
 %description -n %{pname}-real%{PROJ_DELIM}
@@ -514,7 +515,7 @@ Provides check_real (rtsp) support for Nagios.
 %package -n %{pname}-rpc%{PROJ_DELIM}
 Summary: Nagios Plugin - check_rpc
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: %{_sbindir}/rpcinfo
 Provides: %{pname}-rpc
 
@@ -525,7 +526,7 @@ Provides check_rpc support for Nagios.
 %package -n %{pname}-sensors%{PROJ_DELIM}
 Summary: Nagios Plugin - check_sensors
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: /bin/egrep
 Requires: %{_bindir}/sensors
 Provides: %{pname}-sensors
@@ -537,7 +538,7 @@ Provides check_sensors support for Nagios.
 %package -n %{pname}-smtp%{PROJ_DELIM}
 Summary: Nagios Plugin - check_smtp
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-smtp
 
 %description -n %{pname}-smtp%{PROJ_DELIM}
@@ -546,7 +547,7 @@ Provides check_smtp support for Nagios.
 %package -n %{pname}-snmp%{PROJ_DELIM}
 Summary: Nagios Plugin - check_snmp
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Requires: %{_bindir}/snmpgetnext
 Requires: %{_bindir}/snmpget
 Provides: %{pname}-snmp
@@ -557,7 +558,7 @@ Provides check_snmp support for Nagios.
 %package -n %{pname}-ssh%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ssh
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-ssh
 
 %description -n %{pname}-ssh%{PROJ_DELIM}
@@ -566,7 +567,7 @@ Provides check_ssh support for Nagios.
 %package -n %{pname}-swap%{PROJ_DELIM}
 Summary: Nagios Plugin - check_swap
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-swap
 
 %description -n %{pname}-swap%{PROJ_DELIM}
@@ -575,7 +576,7 @@ Provides check_swap support for Nagios.
 %package -n %{pname}-tcp%{PROJ_DELIM}
 Summary: Nagios Plugin - check_tcp
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: nagios-plugins-ftp = %{version}-%{release}
 Provides: nagios-plugins-imap = %{version}-%{release}
 Provides: nagios-plugins-jabber = %{version}-%{release}
@@ -598,7 +599,7 @@ and check_clamd support for Nagios.
 %package -n %{pname}-time%{PROJ_DELIM}
 Summary: Nagios Plugin - check_time
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-time
 
 %description -n %{pname}-time%{PROJ_DELIM}
@@ -607,7 +608,7 @@ Provides check_time support for Nagios.
 %package -n %{pname}-ups%{PROJ_DELIM}
 Summary: Nagios Plugin - check_ups
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-ups
 
 %description -n %{pname}-ups%{PROJ_DELIM}
@@ -616,7 +617,7 @@ Provides check_ups support for Nagios.
 %package -n %{pname}-uptime%{PROJ_DELIM}
 Summary: Nagios Plugin - check_uptime
 Group: Applications/Systems
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-uptime
 
 %description -n %{pname}-uptime%{PROJ_DELIM}
@@ -625,7 +626,7 @@ Provides check_uptime support for Nagios.
 %package -n %{pname}-users%{PROJ_DELIM}
 Summary: Nagios Plugin - check_users
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-users
 
 %description -n %{pname}-users%{PROJ_DELIM}
@@ -634,7 +635,7 @@ Provides check_users support for Nagios.
 %package -n %{pname}-wave%{PROJ_DELIM}
 Summary: Nagios Plugin - check_wave
 Group: Applications/System
-Requires: %{name}= %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-wave
 
 %description -n %{pname}-wave%{PROJ_DELIM}
