@@ -94,9 +94,10 @@ file.
 %build
 
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
 
+# note: in order to support call-site demangling, we compile mpiP with gnu
+export FSP_COMPILER_FAMILY=gnu
+export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
@@ -111,7 +112,9 @@ FC=mpif90
 %install
 
 # FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+
+# note: in order to support call-site demangling, we compile mpiP with gnu
+export FSP_COMPILER_FAMILY=gnu
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
