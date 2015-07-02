@@ -29,8 +29,8 @@ BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{?FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
@@ -38,8 +38,8 @@ BuildRequires: intel_licenses
 
 # MPI dependencies
 %if %{mpi_family} == impi
-BuildRequires: intel-mpi%{PROJ_DELIM}
-Requires:      intel-mpi%{PROJ_DELIM}
+BuildRequires: intel-mpi-devel%{PROJ_DELIM}
+Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
