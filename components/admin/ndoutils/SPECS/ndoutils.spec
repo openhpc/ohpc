@@ -65,6 +65,10 @@ Requires(preun):    /sbin/service
 Requires(postun):   /sbin/service
 %endif
 
+%if 0%{?rhel} || 0%{?rhel}
+BuildRequires:	-post-build-checks
+%endif
+
 %description
 The NDOUtils add on is designed to store all configuration and event data from
 Nagios in a MySQL database. Storing information from Nagios in a database will
