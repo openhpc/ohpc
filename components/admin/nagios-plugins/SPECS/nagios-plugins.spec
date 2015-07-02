@@ -8,6 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
+# Turn off strip'ng of binaries
+%global __strip /bin/true
+
 %include %{_sourcedir}/FSP_macros
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
@@ -65,6 +68,7 @@ BuildRequires: postfix
 %endif
 #BuildRequires: %{_sbindir}/fping
 BuildRequires: fping
+BuildRequires: iputils
 #BuildRequires: perl(Net::SNMP)
 BuildRequires: perl-Net-SNMP
 %if 0%{?suse_version}
@@ -478,8 +482,7 @@ Provides check_pgsql (PostgreSQL)  support for Nagios.
 Summary: Nagios Plugin - check_ping
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
-Requires: /bin/ping
-Requires: /bin/ping6
+Requires: iputils
 Provides: %{pname}-ping
 
 %description -n %{pname}-ping%{PROJ_DELIM}
