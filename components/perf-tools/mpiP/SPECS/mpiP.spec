@@ -56,7 +56,7 @@ Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.4.1
 Release:   1
 License:   GPLv2+
-Group:     fsp/parallel-libs
+Group:     fsp/perf-tools
 URL:       http://www.fftw.org
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
