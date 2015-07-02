@@ -67,6 +67,7 @@ Requires(postun):   /sbin/service
 
 %if 0%{?sles_version} || 0%{?suse_version}
 #!BuildIgnore: brp-check-suse
+BuildRequires: -post-build-checks
 %endif
 
 %description
