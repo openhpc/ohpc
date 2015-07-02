@@ -84,6 +84,11 @@ Requires(post): wicked-service,aaa_base
 Requires(postun): wicked-service
 %endif
 
+%if 0%{?sles_version} || 0%{?suse_version}
+#!BuildIgnore: brp-check-suse
+BuildRequires: -post-build-checks
+%endif
+
 Requires: %{pname}-common%{PROJ_DELIM}
 # OBS, if you're going to parse Requires you need to match what RPM does or you'll just cause problems
 #Requires: user(nagios)
