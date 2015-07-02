@@ -164,6 +164,9 @@ popd
 
 %install
 
+%{__mkdir} -p %{buildroot}%{install_path}/etc
+install -m644 make.inc %{buildroot}%{install_path}/etc
+
 %{__mkdir} -p %{buildroot}%{install_path}/include
 install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
               SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
@@ -224,7 +227,6 @@ prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
 
 setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
 
