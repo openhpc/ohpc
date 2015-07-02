@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 # Turn off strip'ng of binaries
-%global __strip /bin/true
+# %global __strip /bin/true
 
 %include %{_sourcedir}/FSP_macros
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
@@ -37,6 +37,10 @@ Patch4: nagios-plugins-0004-Fedora-specific-patch-for-not-to-fixing-fully-qualif
 Patch5: nagios-plugins-0005-Prevent-check_swap-from-returning-OK-if-no-swap-acti.patch
 Patch7: nagios-plugins-0007-Fix-the-use-lib-statement-and-the-external-ntp-comma.patch
 
+%if 0%{?fedora} || 0%{?rhel}
+BuildRequires:  qstat
+%endif
+
 %if 0%{?suse_version}
 BuildRequires: openldap2-devel
 %else
@@ -61,11 +65,11 @@ BuildRequires: openssh-clients
 BuildRequires: bind-utils
 BuildRequires: ntp
 #BuildRequires: %{_bindir}/mailq
-%if 0%{?suse_version}
-BuildRequires: ssmtp
-%else
+#%if 0%{?suse_version}
+#BuildRequires: ssmtp
+#%else
 BuildRequires: postfix
-%endif
+#%endif
 #BuildRequires: %{_sbindir}/fping
 BuildRequires: fping
 BuildRequires: iputils
@@ -76,7 +80,7 @@ BuildRequires: freeradius-client-devel
 %else
 BuildRequires: radiusclient-ng-devel
 %endif
-BuildRequires: qstat
+
 BuildRequires: libdbi-devel
 
 Requires: nagios-common%{PROJ_DELIM} >= 3.3.1-1
@@ -104,7 +108,11 @@ contains those plugins.
 %package -n %{pname}-all%{PROJ_DELIM}
 Summary: Nagios Plugins - All plugins
 Group: Applications/System
-Requires: nagios-plugins-breeze, nagios-plugins-by_ssh, nagios-plugins-dhcp, nagios-plugins-dig, nagios-plugins-disk, nagios-plugins-disk_smb, nagios-plugins-dns, nagios-plugins-dummy, nagios-plugins-file_age, nagios-plugins-flexlm, nagios-plugins-fping, nagios-plugins-hpjd, nagios-plugins-http, nagios-plugins-icmp, nagios-plugins-ide_smart, nagios-plugins-ircd, nagios-plugins-ldap, nagios-plugins-load, nagios-plugins-log, nagios-plugins-mailq, nagios-plugins-mrtg, nagios-plugins-mrtgtraf, nagios-plugins-mysql, nagios-plugins-nagios, nagios-plugins-nt, nagios-plugins-ntp, nagios-plugins-ntp-perl, nagios-plugins-nwstat, nagios-plugins-oracle, nagios-plugins-overcr, nagios-plugins-pgsql, nagios-plugins-ping, nagios-plugins-procs, nagios-plugins-game, nagios-plugins-real, nagios-plugins-rpc, nagios-plugins-smtp, nagios-plugins-snmp, nagios-plugins-ssh, nagios-plugins-swap, nagios-plugins-tcp, nagios-plugins-time, nagios-plugins-ups, nagios-plugins-users, nagios-plugins-wave, nagios-plugins-cluster
+Requires: nagios-plugins-breeze, nagios-plugins-by_ssh, nagios-plugins-dhcp, nagios-plugins-dig, nagios-plugins-disk, nagios-plugins-disk_smb, nagios-plugins-dns, nagios-plugins-dummy, nagios-plugins-file_age, nagios-plugins-flexlm, nagios-plugins-fping, nagios-plugins-hpjd, nagios-plugins-http, nagios-plugins-icmp, nagios-plugins-ide_smart, nagios-plugins-ircd, nagios-plugins-ldap, nagios-plugins-load, nagios-plugins-log, nagios-plugins-mailq, nagios-plugins-mrtg, nagios-plugins-mrtgtraf, nagios-plugins-mysql, nagios-plugins-nagios, nagios-plugins-nt, nagios-plugins-ntp, nagios-plugins-ntp-perl, nagios-plugins-nwstat, nagios-plugins-oracle, nagios-plugins-overcr, nagios-plugins-pgsql, nagios-plugins-ping, nagios-plugins-procs, nagios-plugins-real, nagios-plugins-rpc, nagios-plugins-smtp, nagios-plugins-snmp, nagios-plugins-ssh, nagios-plugins-swap, nagios-plugins-tcp, nagios-plugins-time, nagios-plugins-ups, nagios-plugins-users, nagios-plugins-wave, nagios-plugins-cluster
+%if 0%{?fedora} > 14 || 0%{?rhel} > 6
+nagios-plugins-game
+%endif
+
 %ifnarch ppc ppc64 ppc64p7 sparc sparc64
 Requires: nagios-plugins-sensors
 %endif
@@ -250,6 +258,7 @@ Provides: %{pname}-fping
 %description -n %{pname}-fping%{PROJ_DELIM}
 Provides check_fping support for Nagios.
 
+%if 0%{?fedora} > 14 || 0%{?rhel} > 6
 %package -n %{pname}-game%{PROJ_DELIM}
 Summary: Nagios Plugin - check_game
 Group: Applications/System
@@ -260,6 +269,7 @@ Provides: %{pname}-game
 
 %description -n %{pname}-game%{PROJ_DELIM}
 Provides check_game support for Nagios.
+%endif
 
 %package -n %{pname}-hpjd%{PROJ_DELIM}
 Summary: Nagios Plugin - check_hpjd
@@ -755,8 +765,10 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %defattr(4750,root,nagios,-)
 %{_libdir}/nagios/plugins/check_fping
 
+%if 0%{?fedora} > 14 || 0%{?rhel} > 6
 %files -n %{pname}-game%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_game
+%endif
 
 %files -n %{pname}-hpjd%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_hpjd
