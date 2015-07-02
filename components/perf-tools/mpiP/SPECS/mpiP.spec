@@ -22,19 +22,14 @@
 %{!?mpi_family:      %define mpi_family openmpi}
 %{!?PROJ_DELIM:      %define PROJ_DELIM %{nil}}
 
-# Compiler dependencies
+# Compiler dependencies 
+
+# Note: this package is slightly non-standard in that we always use
+# gnu compilers undernead in order to support call-site demangling
+
 BuildRequires: lmod%{PROJ_DELIM}
-%if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
 
 # MPI dependencies
 %if %{mpi_family} == impi
