@@ -79,9 +79,9 @@ Requires(preun): initscripts, chkconfig
 Requires(post): initscripts, chkconfig
 Requires(postun): initscripts
 %else
-Requires(preun): wicked_service,aaa_base
-Requires(post): wicked_service,aaa_base
-Requires(postun): wicked_service
+Requires(preun): wicked-service,aaa_base
+Requires(post): wicked-service,aaa_base
+Requires(postun): wicked-service
 %endif
 
 Requires: %{pname}-common%{PROJ_DELIM}
