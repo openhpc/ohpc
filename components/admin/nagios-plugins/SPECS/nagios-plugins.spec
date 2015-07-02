@@ -8,6 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
+# Turn off strip'ng of binaries
+%global __strip /bin/true
+
 %include %{_sourcedir}/FSP_macros
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
