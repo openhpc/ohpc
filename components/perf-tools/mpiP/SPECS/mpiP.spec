@@ -37,12 +37,12 @@ BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: mvapich2-gnu%{PROJ_DELIM}
+Requires:      mvapich2-gnu%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: openmpi-gnu%{PROJ_DELIM}
+Requires:      openmpi-gnu%{PROJ_DELIM}
 %endif
 
 #-fsp-header-comp-end------------------------------------------------
