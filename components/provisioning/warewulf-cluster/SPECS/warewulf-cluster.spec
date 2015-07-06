@@ -40,7 +40,7 @@ BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-roo
 # 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
 Patch1: warewulf-cluster.wwinit.patch
 # 06/14/14 karl.w.schulz@intel.com - FSP flag used to disable inclusion of node package
-%define fsp_disable 0
+%define fsp_disable 1
 # 07/21/14 karl.w.schulz@intel.com - excplictly document libcom32 and libutil as being provided
 provides: libcom32.c32
 provides: libutil.c32
