@@ -84,6 +84,10 @@ cp -r $RPM_BUILD_ROOT/etc/warewulf/vnfs/include/* $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT/etc/warewulf/vnfs
 rmdir $RPM_BUILD_ROOT/etc/warewulf >/dev/null 2>&1 || :
 
+%if 0%{?suse_version}
+mv $RPM_BUILD_ROOT/etc/rc.d/init.d  $RPM_BUILD_ROOT/etc/init.d
+%endif
+
 # 06/14/14 karl.w.schulz@intel.com - disable warewulf-cluster-node package
 %if !%{fsp_disable}
 rm -rf $RPM_BUILD_ROOT/etc/sysconfig/wwfirstboot.conf
@@ -109,7 +113,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{pname}-node%{PROJ_DELIM}
 %defattr(-, root, root)
 %doc AUTHORS COPYING LICENSE README.node
-%config(noreplace) %{_sysconfdir}/wwfirstboot.conf
+%config(noreplace) %{_sysconfdir}/sysconfig/wwfirstboot.conf
 %if 0%{?suse_version}
 %{_sysconfdir}/init.d/wwfirstboot
 %else
