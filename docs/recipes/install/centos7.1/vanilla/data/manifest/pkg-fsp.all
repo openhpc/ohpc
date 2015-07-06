@@ -8,6 +8,7 @@ boost-intel-impi-fsp 1.58.0 http://www.boost.org fsp/parallel-libs Boost free pe
 boost-intel-mvapich2-fsp 1.58.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-openmpi-fsp 1.58.0 http://www.boost.org fsp/parallel-libs Boost free peer-reviewed portable C++ source libraries
 conman-fsp 0.2.7 http://conman.googlecode.com/ fsp/admin ConMan: The Console Manager
+docs-fsp 15.16 (none) fsp/admin Forest Peak documentation
 examples-fsp 1.1 (none) fsp/admin Example source code and templates for use within FSP environment.
 fftw-gnu-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-gnu-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
@@ -52,12 +53,12 @@ lustre-client-fsp 2.7.0 https://wiki.hpdd.intel.com/ fsp/lustre Lustre File Syst
 metis-gnu-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 metis-intel-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 mkl-blacs-gnu-openmpi-fsp 11.3 http://software.intel.com/en-us/intel-mkl Development/Libraries/Parallel Intel(R) Math Kernel Library Basic Linear Algebra Communication Subprograms
-mpiP-gnu-impi-fsp 3.4.1 http://www.fftw.org fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
-mpiP-gnu-mvapich2-fsp 3.4.1 http://www.fftw.org fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
-mpiP-gnu-openmpi-fsp 3.4.1 http://www.fftw.org fsp/parallel-libs mpiP: a lightweight profiling library for MPI applications.
-mpiP-intel-impi-fsp 3.4.1 http://www.fftw.org fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
-mpiP-intel-mvapich2-fsp 3.4.1 http://www.fftw.org fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
-mpiP-intel-openmpi-fsp 3.4.1 http://www.fftw.org fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
+mpiP-gnu-impi-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
+mpiP-gnu-mvapich2-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
+mpiP-gnu-openmpi-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
+mpiP-intel-impi-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
+mpiP-intel-mvapich2-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
+mpiP-intel-openmpi-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mumps-gnu-impi-fsp 5.0.0 http://mumps.enseeiht.fr/ Development/Libraries/Parallel A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu-mvapich2-fsp 5.0.0 http://mumps.enseeiht.fr/ Development/Libraries/Parallel A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu-openmpi-fsp 5.0.0 http://mumps.enseeiht.fr/ Development/Libraries/Parallel A MUltifrontal Massively Parallel Sparse direct Solver
@@ -99,6 +100,7 @@ nagios-plugins-mrtg-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/Syste
 nagios-plugins-mrtgtraf-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_mrtgtraf
 nagios-plugins-mysql-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_mysql
 nagios-plugins-nagios-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_nagios
+nagios-plugins-nrpe-fsp 2.15 http://www.nagios.org Applications/System Provides nrpe plugin for Nagios
 nagios-plugins-nt-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_nt
 nagios-plugins-ntp-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ntp
 nagios-plugins-ntp-perl-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ntp.pl
@@ -121,6 +123,7 @@ nagios-plugins-time-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/Syste
 nagios-plugins-ups-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ups
 nagios-plugins-users-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_users
 nagios-plugins-wave-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_wave
+ndoutils-fsp 2.0.0 http://www.nagios.org/download/addons/ Applications/System Stores all configuration and event data from Nagios in a database
 netcdf-cxx-gnu-impi-fsp 4.2.1 http://www.unidata.ucar.edu/software/netcdf/ fsp/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-gnu-mvapich2-fsp 4.2.1 http://www.unidata.ucar.edu/software/netcdf/ fsp/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-gnu-openmpi-fsp 4.2.1 http://www.unidata.ucar.edu/software/netcdf/ fsp/io-libs C++ Libraries for the Unidata network Common Data Form
@@ -209,7 +212,6 @@ warewulf-provision-server-fsp 3.6 (none) System Environment/Clustering Warewulf 
 warewulf-vnfs-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf VNFS Module
 package R_proj-fsp.x86_64 is not installed
 package adios-gnu-openmpi-fsp.x86_64 is not installed
-package docs-fsp.x86_64 is not installed
 package ganglia-devel-fsp.x86_64 is not installed
 package ganglia-fsp.x86_64 is not installed
 package ganglia-gmetad-fsp.x86_64 is not installed
@@ -224,10 +226,8 @@ package nagios-plugins-apt-fsp.x86_64 is not installed
 package nagios-plugins-dbi-fsp.x86_64 is not installed
 package nagios-plugins-ifoperstatus-fsp.x86_64 is not installed
 package nagios-plugins-ifstatus-fsp.x86_64 is not installed
-package nagios-plugins-nrpe-fsp.x86_64 is not installed
 package nagios-plugins-radius-fsp.x86_64 is not installed
 package nagios-plugins-uptime-fsp.x86_64 is not installed
-package ndoutils-fsp.x86_64 is not installed
 package orcm-fsp.x86_64 is not installed
 package psqlODBC-fsp.x86_64 is not installed
 package sigar-devel-fsp.x86_64 is not installed
@@ -236,6 +236,8 @@ package slurm-pam_slurm-fsp.x86_64 is not installed
 package slurm-sjobexit-fsp.x86_64 is not installed
 package slurm-sjstat-fsp.x86_64 is not installed
 package slurm-torque-fsp.x86_64 is not installed
+warewulf-cluster-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used for clustering with Warewulf
+package warewulf-cluster-node-fsp.x86_64 is not installed
 package warewulf-ipmi-fsp.x86_64 is not installed
 package warewulf-nhc-fsp.noarch is not installed
 package warewulf-provision-gpl_sources-fsp.x86_64 is not installed
