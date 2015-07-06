@@ -73,9 +73,21 @@ Requires: httpd
 Requires: php
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires: mailx
+
+%if 0%{?fedora} || 0%{?rhel}
 Requires(preun): initscripts, chkconfig
 Requires(post): initscripts, chkconfig
 Requires(postun): initscripts
+%else
+Requires(preun): wicked-service,aaa_base
+Requires(post): wicked-service,aaa_base
+Requires(postun): wicked-service
+%endif
+
+%if 0%{?sles_version} || 0%{?suse_version}
+#!BuildIgnore: brp-check-suse
+BuildRequires: -post-build-checks
+%endif
 
 Requires: %{pname}-common%{PROJ_DELIM}
 # OBS, if you're going to parse Requires you need to match what RPM does or you'll just cause problems
@@ -118,8 +130,13 @@ Sie im Paket nagios-plugins.
 %package -n %{pname}-common%{PROJ_DELIM}
 Group: Applications/System
 Summary: Provides common directories, uid and gid among nagios-related packages
+%if 0%{?fedora} || 0%{?rhel}
 Requires(pre): shadow-utils
 Requires(post): shadow-utils
+%else
+Requires(pre): shadow
+Requires(post): shadow
+%endif
 Provides: user(nagios)
 Provides: group(nagios)
 Provides: %{pname}-common

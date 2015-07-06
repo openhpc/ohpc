@@ -56,7 +56,7 @@ if [ $POST_UNINSTALL -eq 1 ];then
     for pkg in $installed_RPMS; do 
         localrpm=`basename --suffix=.rpm $pkg`
         echo "[post-install] removing $localrpm...."
-#        rpm -e --nodeps $localrpm
+        rpm -e --nodeps $localrpm
     done
 fi
 

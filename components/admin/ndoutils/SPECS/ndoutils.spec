@@ -65,6 +65,11 @@ Requires(preun):    /sbin/service
 Requires(postun):   /sbin/service
 %endif
 
+%if 0%{?sles_version} || 0%{?suse_version}
+#!BuildIgnore: brp-check-suse
+BuildRequires: -post-build-checks
+%endif
+
 %description
 The NDOUtils add on is designed to store all configuration and event data from
 Nagios in a MySQL database. Storing information from Nagios in a database will
@@ -129,7 +134,7 @@ mkdir -p %{buildroot}%{_unitdir}
 install -p -m 644 -D %{SOURCE2} %{buildroot}%{_unitdir}/ndo2db.service
 
 # Runtime files (tmpfs)
-mkdir -p %{buildroot}/run/%{pname}
+#mkdir -p %{buildroot}/run/%{pname}
 install -p -m 644 -D %{SOURCE4} %{buildroot}%{_tmpfilesdir}/ndoutils.conf
 
 %else
@@ -139,9 +144,10 @@ mkdir -p %{buildroot}%{_initrddir}
 install -p -m 755 -D %{SOURCE3} %{buildroot}%{_initrddir}/ndo2db
 
 # Runtime files
-mkdir -p %{buildroot}%{_localstatedir}/run/ndoutils
+#mkdir -p %{buildroot}%{_localstatedir}/run/ndoutils
 
 %endif
+mkdir -p %{buildroot}%{_localstatedir}/run/ndoutils
 
 %clean
 rm -rf %{buildroot}
@@ -163,16 +169,17 @@ rm -rf %{buildroot}
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 
-%dir /run/%{pname}/
+#%dir %attr(-,nagios,root) /run/%{pname}/
 %{_tmpfilesdir}/ndoutils.conf
 %{_unitdir}/ndo2db.service
 
 %else
 
-%dir %attr(-,nagios,root) %{_localstatedir}/run/ndoutils
+#%dir %attr(-,nagios,root) %{_localstatedir}/run/ndoutils
 %{_initrddir}/ndo2db
 
 %endif
+%dir %attr(-,nagios,root) %{_localstatedir}/run/ndoutils
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 
