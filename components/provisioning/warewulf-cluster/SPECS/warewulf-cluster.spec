@@ -113,9 +113,9 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{pname}-node%{PROJ_DELIM}
 %defattr(-, root, root)
 %doc AUTHORS COPYING LICENSE README.node
-%dir %{_libexecdir}/warewulf/
 %config(noreplace) %{_sysconfdir}/sysconfig/wwfirstboot.conf
 %if 0%{?suse_version}
+%dir /usr/lib/warewulf/
 %{_sysconfdir}/init.d/wwfirstboot
 %else
 %{_sysconfdir}/rc.d/init.d/wwfirstboot
