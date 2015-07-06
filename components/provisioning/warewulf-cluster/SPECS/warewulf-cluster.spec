@@ -54,12 +54,12 @@ with Warewulf.
 
 # 06/14/14 karl.w.schulz@intel.com - disable warewulf-cluster-node package
 %if %{fsp_disable}
-%package node
+%package -n %{pname}-node%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
 Group: System Environment/Clustering
 Requires: /sbin/sfdisk
 
-%description node
+%description -n %{pname}-node%{PROJ_DELIM}
 Warewulf >= 3 is a set of utilities designed to better enable
 utilization and maintenance of clusters or groups of computers.
 
@@ -81,6 +81,8 @@ provisioned nodes.
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 cp -r $RPM_BUILD_ROOT/etc/warewulf/vnfs/include/* $RPM_BUILD_ROOT
+mv $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/* $RPM_BUILD_ROOT%{_sysconfdir}/init.d/.
+rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d
 rm -rf $RPM_BUILD_ROOT/etc/warewulf/vnfs
 rmdir $RPM_BUILD_ROOT/etc/warewulf >/dev/null 2>&1 || :
 
@@ -106,11 +108,11 @@ rm -rf $RPM_BUILD_ROOT
 # 06/14/14 karl.w.schulz@intel.com - disable warewulf-cluster-node package
 %if %{fsp_disable}
 
-%files node
+%files -n %{pname}-node%{PROJ_DELIM}
 %defattr(-, root, root)
 %doc AUTHORS COPYING LICENSE README.node
-%config(noreplace) /etc/sysconfig/wwfirstboot.conf
-/etc/rc.d/init.d/wwfirstboot
+%config(noreplace) %{_sysconfdir}/wwfirstboot.conf
+%{_sysconfdir}/init.d/wwfirstboot
 %defattr(0755, root, root)
 %{_libexecdir}/warewulf/wwfirstboot/*
 
