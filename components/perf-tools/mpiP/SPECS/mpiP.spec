@@ -57,7 +57,7 @@ Version:   3.4.1
 Release:   1
 License:   GPLv2+
 Group:     fsp/perf-tools
-URL:       http://www.fftw.org
+URL:       http://mpip.sourceforge.net/
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
