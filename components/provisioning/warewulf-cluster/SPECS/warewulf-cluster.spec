@@ -81,8 +81,6 @@ provisioned nodes.
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 cp -r $RPM_BUILD_ROOT/etc/warewulf/vnfs/include/* $RPM_BUILD_ROOT
-mv $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/* $RPM_BUILD_ROOT%{_sysconfdir}/init.d/.
-rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d
 rm -rf $RPM_BUILD_ROOT/etc/warewulf/vnfs
 rmdir $RPM_BUILD_ROOT/etc/warewulf >/dev/null 2>&1 || :
 
@@ -112,7 +110,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-, root, root)
 %doc AUTHORS COPYING LICENSE README.node
 %config(noreplace) %{_sysconfdir}/wwfirstboot.conf
+%if 0%{?suse_version}
 %{_sysconfdir}/init.d/wwfirstboot
+%else
+%{_sysconfdir}/rc.d/init.d/wwfirstboot
+%endif
 %defattr(0755, root, root)
 %{_libexecdir}/warewulf/wwfirstboot/*
 
