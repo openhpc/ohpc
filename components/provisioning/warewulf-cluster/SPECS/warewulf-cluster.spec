@@ -116,7 +116,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0755, root, root)
 %{_libexecdir}/warewulf/wwfirstboot/*
 
-%post node
+%post -n %{pname}-node%{PROJ_DELIM}
 chkconfig --add wwfirstboot
 
 %endif
