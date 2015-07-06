@@ -75,9 +75,7 @@ BuildRequires: fping
 BuildRequires: iputils
 #BuildRequires: perl(Net::SNMP)
 BuildRequires: perl-Net-SNMP
-%if 0%{?suse_version}
-BuildRequires: freeradius-client-devel
-%else
+%if 0%{?fedora} || 0%{?rhel}
 BuildRequires: radiusclient-ng-devel
 %endif
 
@@ -507,6 +505,7 @@ Provides: %{pname}-procs
 %description -n %{pname}-procs%{PROJ_DELIM}
 Provides check_procs support for Nagios.
 
+%if 0%{?fedora} || 0%{?rhel}
 %package -n %{pname}-radius%{PROJ_DELIM}
 Summary: Nagios Plugin - check_radius
 Group: Applications/System
@@ -515,6 +514,7 @@ Provides: %{pname}-radius
 
 %description -n %{pname}-radius%{PROJ_DELIM}
 Provides check_radius support for Nagios.
+%endif
 
 %package -n %{pname}-real%{PROJ_DELIM}
 Summary: Nagios Plugin - check_real
@@ -663,12 +663,15 @@ Provides check_wave support for Nagios.
 %patch5 -p1 -b .fix_missing_swap
 %patch7 -p1 -b .ext_ntp_cmds
 
+
 %build
 %configure \
 	--libexecdir=%{_libdir}/nagios/plugins \
 	--with-dbi \
 	--with-mysql \
+%if 0%{?fedora} > 14 || 0%{?rhel} > 6
 	PATH_TO_QSTAT=%{_bindir}/quakestat \
+%endif
 	PATH_TO_FPING=%{_sbindir}/fping \
 	PATH_TO_NTPQ=%{_sbindir}/ntpq \
 	PATH_TO_NTPDC=%{_sbindir}/ntpdc \
@@ -678,13 +681,18 @@ Provides check_wave support for Nagios.
 	--with-ps-format='%s %d %d %d %d %d %f %s %s %n' \
 	--with-ps-cols=10 \
 	--enable-extra-opts \
+%if 0%{?suse_version}
+        --without-game \
+%endif
 	--with-ps-varlist='procstat,&procuid,&procpid,&procppid,&procvsz,&procrss,&procpcpu,procetime,procprog,&pos'
 
 make %{?_smp_mflags}
 cd plugins
 make check_ide_smart
 make check_ldap
+%if 0%{?fedora} || 0%{?rhel}
 make check_radius
+%endif
 make check_pgsql
 
 cd ..
@@ -702,7 +710,9 @@ install -m 0755 plugins-root/check_dhcp %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins/check_ide_smart %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins/check_ldap %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins-scripts/check_ntp.pl %{buildroot}/%{_libdir}/nagios/plugins
+%if 0%{?fedora} || 0%{?rhel}
 install -m 0755 plugins/check_radius %{buildroot}/%{_libdir}/nagios/plugins
+%endif
 install -m 0755 plugins/check_pgsql %{buildroot}/%{_libdir}/nagios/plugins
 
 %ifarch ppc ppc64 ppc64p7 sparc sparc64
@@ -851,8 +861,10 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %files -n %{pname}-procs%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_procs
 
+%if 0%{?fedora} || 0%{?rhel}
 %files -n %{pname}-radius%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_radius
+%endif
 
 %files -n %{pname}-real%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_real
