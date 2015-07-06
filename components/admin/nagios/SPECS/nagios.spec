@@ -62,7 +62,7 @@ BuildRequires: perl(CPAN)
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 BuildRequires: perl(Test::Harness)
-%if 0%{?rhel} > 6 || %{?fedora}
+%if 0%{?rhel} > 6 || 0%{?fedora}
 BuildRequires: perl(Test::HTML::Lint)
 %endif
 BuildRequires: perl(Test::More)
