@@ -11,6 +11,7 @@
 # MVAPICH2 MPI stack that is dependent on compiler toolchain
 
 %define with_slurm 0
+%define with_psm 1
 
 #-fsp-header-comp-begin----------------------------------------------
 
@@ -39,6 +40,10 @@ BuildRequires: intel_licenses
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
+%endif
+
+%if %{with_psm}
+BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
 # Base package name
@@ -96,6 +101,10 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 ./configure --prefix=%{install_path} \
 	    --enable-cxx \
 	    --enable-g=dbg \
+            --with-device=ch3:mrail \
+%if %{with_psm}
+            --with-device=ch3:psm \
+%endif
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
