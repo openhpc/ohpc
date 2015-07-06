@@ -58,6 +58,9 @@ with Warewulf.
 Summary: Tools used for clustering with Warewulf
 Group: System Environment/Clustering
 Requires: /sbin/sfdisk
+%if 0%{?sles_version} || 0%{?suse_version}
+PreReq: %{insserv_prereq} %{fillup_prereq}
+%endif
 
 %description -n %{pname}-node%{PROJ_DELIM}
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -125,7 +128,13 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %post -n %{pname}-node%{PROJ_DELIM}
-chkconfig --add wwfirstboot
+%if 0%{?suse_version}
+%{fillup_and_insserv -f}
+%else
+if [ $1 = 1 ]; then
+   [ -x /sbin/chkconfig ] && /sbin/chkconfig --add wwfirstboot
+fi
+%endif
 
 %endif
 
