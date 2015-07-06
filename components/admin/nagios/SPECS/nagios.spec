@@ -62,12 +62,16 @@ BuildRequires: perl(CPAN)
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed)
 BuildRequires: perl(Test::Harness)
-%if 0%{?el6}%{?fedora}
+%if 0%{?rhel} > 6 || %{?fedora}
 BuildRequires: perl(Test::HTML::Lint)
 %endif
 BuildRequires: perl(Test::More)
 BuildRequires: perl(Test::Simple)
 
+%if 0%{?sles_version} || 0%{?suse_version}
+#!BuildIgnore: brp-check-suse
+BuildRequires: -post-build-checks
+%endif
 
 Requires: httpd
 Requires: php
@@ -82,11 +86,6 @@ Requires(postun): initscripts
 Requires(preun): wicked-service,aaa_base
 Requires(post): wicked-service,aaa_base
 Requires(postun): wicked-service
-%endif
-
-%if 0%{?sles_version} || 0%{?suse_version}
-#!BuildIgnore: brp-check-suse
-BuildRequires: -post-build-checks
 %endif
 
 Requires: %{pname}-common%{PROJ_DELIM}
@@ -129,7 +128,7 @@ Sie im Paket nagios-plugins.
 
 %package -n %{pname}-common%{PROJ_DELIM}
 Group: Applications/System
-Summary: Provides common directories, uid and gid among nagios-related packages
+Summary: Provides common directories, uid and gid among nagios-related packages. 
 %if 0%{?fedora} || 0%{?rhel}
 Requires(pre): shadow-utils
 Requires(post): shadow-utils
