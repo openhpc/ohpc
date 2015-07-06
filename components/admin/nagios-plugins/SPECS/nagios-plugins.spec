@@ -171,8 +171,8 @@ Provides check_dbi support for Nagios.
 Summary: Nagios Plugin - check_dhcp
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
-Requires: group(nagios)
-Requires(pre): group(nagios)
+Requires: nagios-common%{PROJ_DELIM}
+Requires(pre): nagios-common%{PROJ_DELIM}
 Provides: %{pname}-dhcp
 
 %description -n %{pname}-dhcp%{PROJ_DELIM}
@@ -251,8 +251,8 @@ Summary: Nagios Plugin - check_fping
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
 Requires: %{_sbindir}/fping
-Requires: group(nagios)
-Requires(pre): group(nagios)
+Requires: nagios-common%{PROJ_DELIM}
+Requires(pre): nagios-common%{PROJ_DELIM}
 Provides: %{pname}-fping
 
 %description -n %{pname}-fping%{PROJ_DELIM}
@@ -293,8 +293,8 @@ Provides check_http support for Nagios.
 Summary: Nagios Plugin - check_icmp
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
-Requires: group(nagios)
-Requires(pre): group(nagios)
+Requires: nagios-common%{PROJ_DELIM}
+Requires(pre): nagios-common%{PROJ_DELIM} 
 Provides: %{pname}-icmp
 
 %description -n %{pname}-icmp%{PROJ_DELIM}
@@ -304,8 +304,8 @@ Provides check_icmp support for Nagios.
 Summary: Nagios Plugin - check_ide_smart
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
-Requires: group(nagios)
-Requires(pre): group(nagios)
+Requires: nagios-common%{PROJ_DELIM}
+Requires(pre): nagios-common%{PROJ_DELIM}
 Provides: %{pname}-ide_smart
 
 %description -n %{pname}-ide_smart%{PROJ_DELIM}
