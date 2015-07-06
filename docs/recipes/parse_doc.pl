@@ -10,11 +10,15 @@ use warnings;
 use strict;
 use File::Temp qw/tempfile/;
 use Getopt::Long;
+use File::Basename;
+use File::Spec;
 
 # Optional command-line arguments
 my $repo = "";
+my $validation_mode=0;
 
-GetOptions ('repo=s' => \$repo);
+GetOptions ('repo=s' => \$repo,
+	    "validation_mode" => \$validation_mode);
 
 if ( $#ARGV < 1) {
     print STDERR "Usage: parse_doc <filename> <host_mapping>\n";
@@ -27,6 +31,9 @@ my $ci_run       = 0;
 my $master_host  = "";
 my @computes     = ();
 my $num_computes = 0;
+
+my $inputDir = dirname(File::Spec->rel2abs($file));
+my $basename = basename($file,".tex");
 
 # Test for CI environment
 
@@ -85,6 +92,30 @@ if ($Install eq "" || $chrootInstall eq "" || $groupInstall eq "" || $groupChroo
 }
 
 close(IN);
+
+sub check_for_section_replacement {
+    my $comment = shift;
+
+    if ($comment =~ /\\ref{sec:(\S+)}/) {
+	my $secname = $1;
+	
+	if ( ! -e "$inputDir/$basename.aux" ) { 
+	    die "Cannot access latex .aux file, verify documentation was built successfully"
+	}
+
+	my $secnum=`grep {sec:$secname} $inputDir/$basename.aux  | awk -v FS="{{|})" '{print \$2}' | awk -F '}' '{print \$1}'`;
+		
+	chomp($secnum);
+
+	if ($secnum eq "") {
+	    die "Unable to query section number, verify latex build is up to date"
+	}
+
+	$comment =~ s/\\ref{sec:(\S+)/(Section $secnum)/g;
+    }
+
+    return($comment);
+} # end check_for_section_replacement()
 
 sub update_cmd {
     my $cmd = shift;
@@ -213,34 +244,57 @@ my $disable_delim = "^%%";
 
 print $fh "#!/bin/bash\n";
 
-print $fh "NUM_COMPUTES=$num_computes\n";
-
 while(<IN>) {
     if( $_ =~ /$disable_delim/ ) {
 	next;
     }
     if(/$begin_delim/../$end_delim/) {
-	if ($_ =~ /% fsp_validation_comment (.+)/) {
-	    print $fh "echo \"-------------------------------------------------------------------\"\n";
-	    print $fh "echo \"$1\"\n";
-	    print $fh "echo \"-------------------------------------------------------------------\"\n";
+	if ($_ =~ /% fsp_validation_newline/) {
+	    print $fh "\n";
+	} elsif ($_ =~ /% fsp_ci_comment (.+)/) {
+	    if ( !$ci_run) {next;}
+	    print "# $1 (CI only)\n";
+	} elsif ($_ =~ /% fsp_comment_header (.+)/) {
+
+	    my $comment = check_for_section_replacement($1);
+	    my $strlen  = length $comment;
+
+	    printf $fh "\n";
+	    printf $fh "%s\n", '-' x $strlen;
+	    print $fh "$comment\n";
+	    printf $fh "%s\n", '-' x $strlen;
+	    
+	} elsif ($_ =~ /% fsp_validation_comment (.+)/) {
+	    my $comment = check_for_section_replacement($1);
+	    print $fh "# $comment\n";
+	} elsif ($_ =~ /% fsp_command (.+)/) {
+	    my $cmd = update_cmd($1);
+	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+) \\$/) {
+
+	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
 
 	    my $cmd = update_cmd($1);
 
 	    print $fh "$cmd";
 	    my $next_line = <IN>;
 
-	    #           trim leading and trailing space
+	    # trim leading and trailing space
 	    $next_line =~ s/^\s+|\s+$//g;
 
 	    print $fh " $next_line\n";
 
 	    # TODO - add loop to accomodate multi-line continuation
 	} elsif ($_ =~ /\[master\]\$ (.+) #(.+)$/) {
+
+	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
+
 	    my $cmd = update_cmd($1);
 	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
+
+	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
+
 	    my $cmd = update_cmd($1);
 	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[postgres\]\$ (.+)$/) {
