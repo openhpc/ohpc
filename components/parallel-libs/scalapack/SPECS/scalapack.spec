@@ -125,7 +125,7 @@ routines resemble their LAPACK equivalents as much as possible.
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n %{pname}-%{version}
 %patch0 -p1
 cp SLmake.inc.example SLmake.inc
 
