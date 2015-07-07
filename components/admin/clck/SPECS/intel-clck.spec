@@ -13,7 +13,7 @@
 
 Summary:   Intel(R) Cluster Checker
 Name:      intel-clck%{PROJ_DELIM}
-Version:   3.0.0
+Version:   2.2.2
 Release:   1
 License:   Intel
 URL:       http://intel.com/go/cluster
