@@ -2,14 +2,17 @@
 
 # FSP: install from release rpms into standard FSP path
 
-version=3.0.0
+version=2.2.2
 #release=inspector_xe_2015_update1
 #relocate_ver=inspector_xe_20$version
 release_dir=l_clck_p_2.2.1.003
 
 input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
+input_dir=l_clck_p_3.0.0.026
+input_dir=l_clck_p_2.2.2.004  # fsp 15.31
 
-match_keys='clck_'
+#match_keys='clck_'    # 3.x
+match_keys='intel-clck'    # 3.x
 INSTALL=1
 TARBALL=1
 POST_UNINSTALL=1

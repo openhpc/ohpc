@@ -75,13 +75,16 @@ BuildRequires: fping
 BuildRequires: iputils
 #BuildRequires: perl(Net::SNMP)
 BuildRequires: perl-Net-SNMP
-%if 0%{?suse_version}
-BuildRequires: freeradius-client-devel
-%else
+%if 0%{?fedora} || 0%{?rhel}
 BuildRequires: radiusclient-ng-devel
 %endif
 
 BuildRequires: libdbi-devel
+
+%if 0%{?sles_version} || 0%{?suse_version}
+#!BuildIgnore: brp-check-suse
+BuildRequires: -post-build-checks
+%endif
 
 Requires: nagios-common%{PROJ_DELIM} >= 3.3.1-1
 Provides: %{name}
@@ -171,8 +174,8 @@ Provides check_dbi support for Nagios.
 Summary: Nagios Plugin - check_dhcp
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
-Requires: group(nagios)
-Requires(pre): group(nagios)
+Requires: nagios-common%{PROJ_DELIM}
+Requires(pre): nagios-common%{PROJ_DELIM}
 Provides: %{pname}-dhcp
 
 %description -n %{pname}-dhcp%{PROJ_DELIM}
@@ -251,8 +254,8 @@ Summary: Nagios Plugin - check_fping
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
 Requires: %{_sbindir}/fping
-Requires: group(nagios)
-Requires(pre): group(nagios)
+Requires: nagios-common%{PROJ_DELIM}
+Requires(pre): nagios-common%{PROJ_DELIM}
 Provides: %{pname}-fping
 
 %description -n %{pname}-fping%{PROJ_DELIM}
@@ -293,8 +296,8 @@ Provides check_http support for Nagios.
 Summary: Nagios Plugin - check_icmp
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
-Requires: group(nagios)
-Requires(pre): group(nagios)
+Requires: nagios-common%{PROJ_DELIM}
+Requires(pre): nagios-common%{PROJ_DELIM} 
 Provides: %{pname}-icmp
 
 %description -n %{pname}-icmp%{PROJ_DELIM}
@@ -304,8 +307,8 @@ Provides check_icmp support for Nagios.
 Summary: Nagios Plugin - check_ide_smart
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
-Requires: group(nagios)
-Requires(pre): group(nagios)
+Requires: nagios-common%{PROJ_DELIM}
+Requires(pre): nagios-common%{PROJ_DELIM}
 Provides: %{pname}-ide_smart
 
 %description -n %{pname}-ide_smart%{PROJ_DELIM}
@@ -507,6 +510,7 @@ Provides: %{pname}-procs
 %description -n %{pname}-procs%{PROJ_DELIM}
 Provides check_procs support for Nagios.
 
+%if 0%{?fedora} || 0%{?rhel}
 %package -n %{pname}-radius%{PROJ_DELIM}
 Summary: Nagios Plugin - check_radius
 Group: Applications/System
@@ -515,6 +519,7 @@ Provides: %{pname}-radius
 
 %description -n %{pname}-radius%{PROJ_DELIM}
 Provides check_radius support for Nagios.
+%endif
 
 %package -n %{pname}-real%{PROJ_DELIM}
 Summary: Nagios Plugin - check_real
@@ -663,12 +668,17 @@ Provides check_wave support for Nagios.
 %patch5 -p1 -b .fix_missing_swap
 %patch7 -p1 -b .ext_ntp_cmds
 
+
 %build
+export SUID_CFLAGS=-fPIE
+export SUID_LDFLAGS=-pie
 %configure \
 	--libexecdir=%{_libdir}/nagios/plugins \
 	--with-dbi \
 	--with-mysql \
+%if 0%{?fedora} > 14 || 0%{?rhel} > 6
 	PATH_TO_QSTAT=%{_bindir}/quakestat \
+%endif
 	PATH_TO_FPING=%{_sbindir}/fping \
 	PATH_TO_NTPQ=%{_sbindir}/ntpq \
 	PATH_TO_NTPDC=%{_sbindir}/ntpdc \
@@ -678,13 +688,18 @@ Provides check_wave support for Nagios.
 	--with-ps-format='%s %d %d %d %d %d %f %s %s %n' \
 	--with-ps-cols=10 \
 	--enable-extra-opts \
+%if 0%{?suse_version}
+        --without-game \
+%endif
 	--with-ps-varlist='procstat,&procuid,&procpid,&procppid,&procvsz,&procrss,&procpcpu,procetime,procprog,&pos'
 
 make %{?_smp_mflags}
 cd plugins
 make check_ide_smart
 make check_ldap
+%if 0%{?fedora} || 0%{?rhel}
 make check_radius
+%endif
 make check_pgsql
 
 cd ..
@@ -702,7 +717,9 @@ install -m 0755 plugins-root/check_dhcp %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins/check_ide_smart %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins/check_ldap %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins-scripts/check_ntp.pl %{buildroot}/%{_libdir}/nagios/plugins
+%if 0%{?fedora} || 0%{?rhel}
 install -m 0755 plugins/check_radius %{buildroot}/%{_libdir}/nagios/plugins
+%endif
 install -m 0755 plugins/check_pgsql %{buildroot}/%{_libdir}/nagios/plugins
 
 %ifarch ppc ppc64 ppc64p7 sparc sparc64
@@ -737,7 +754,11 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_dbi
 
 %files -n %{pname}-dhcp%{PROJ_DELIM}
+%if 0%{?suse_version}
+%defattr(0750,root,nagios,-)
+%else
 %defattr(4750,root,nagios,-)
+%endif
 %{_libdir}/nagios/plugins/check_dhcp
 
 %files -n %{pname}-dig%{PROJ_DELIM}
@@ -762,7 +783,11 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_flexlm
 
 %files -n %{pname}-fping%{PROJ_DELIM}
+%if 0%{?suse_version}
+%defattr(0750,root,nagios,-)
+%else
 %defattr(4750,root,nagios,-)
+%endif
 %{_libdir}/nagios/plugins/check_fping
 
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
@@ -777,7 +802,11 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_http
 
 %files -n %{pname}-icmp%{PROJ_DELIM}
+%if 0%{?suse_version}
+%defattr(0750,root,nagios,-)
+%else
 %defattr(4750,root,nagios,-)
+%endif
 %{_libdir}/nagios/plugins/check_icmp
 
 %files -n %{pname}-ifoperstatus%{PROJ_DELIM}
@@ -787,7 +816,11 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_ifstatus
 
 %files -n %{pname}-ide_smart%{PROJ_DELIM}
+%if 0%{?suse_version}
+%defattr(0750,root,nagios,-)
+%else
 %defattr(4750,root,nagios,-)
+%endif
 %{_libdir}/nagios/plugins/check_ide_smart
 
 %files -n %{pname}-ircd%{PROJ_DELIM}
@@ -851,8 +884,10 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %files -n %{pname}-procs%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_procs
 
+%if 0%{?fedora} || 0%{?rhel}
 %files -n %{pname}-radius%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_radius
+%endif
 
 %files -n %{pname}-real%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_real
