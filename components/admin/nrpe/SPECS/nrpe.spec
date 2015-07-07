@@ -55,8 +55,13 @@ BuildRequires: libtool
 BuildRequires: openssl-devel
 # OpenSSL package was split into openssl and openssl-libs in F18+
 BuildRequires: openssl
-%if 0%{?fedora} > 17 || 0%{?rhel} > 6
-BuildRequires:  systemd-units
+#%if 0%{?fedora} > 17 || 0%{?rhel} > 6
+BuildRequires:  systemd
+#%endif
+
+%if 0%{?sles_version} || 0%{?suse_version}
+#!BuildIgnore: brp-check-suse
+BuildRequires: -post-build-checks
 %endif
 
 %if 0%{?el4}%{?el5}
@@ -188,7 +193,9 @@ fi
 %if 0%{?el4}%{?el5}%{?el6}
 /sbin/chkconfig --add %{pname} || :
 %else
-%systemd_post nrpe.service
+#%systemd_post nrpe.service
+/usr/bin/systemctl enable nrpe.service
+/usr/bin/systemctl start nrpe.service
 %endif
 
 %postun
@@ -197,7 +204,9 @@ if [ "$1" -ge "1" ]; then
 	/sbin/service %{pname} condrestart > /dev/null 2>&1 || :
 fi
 %else
-%systemd_postun_with_restart nrpe.service
+#%systemd_postun_with_restart nrpe.service
+/usr/bin/systemctl disable nrpe.service
+/usr/bin/systemctl reload-or-try-restart nrpe.service
 %endif
 
 %files
