@@ -8,6 +8,7 @@ version=3.0.0
 release_dir=l_clck_p_2.2.1.003
 
 input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
+input_dir=l_clck_p_3.0.0.026
 
 match_keys='clck_'
 INSTALL=1
