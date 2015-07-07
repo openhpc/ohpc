@@ -126,7 +126,7 @@ routines resemble their LAPACK equivalents as much as possible.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
+%patch0 -p2
 cp SLmake.inc.example SLmake.inc
 
 %build
