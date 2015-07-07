@@ -752,7 +752,11 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_dbi
 
 %files -n %{pname}-dhcp%{PROJ_DELIM}
+%if 0%{?suse_version}
+%defattr(0750,root,nagios,-)
+%else
 %defattr(4750,root,nagios,-)
+%endif
 %{_libdir}/nagios/plugins/check_dhcp
 
 %files -n %{pname}-dig%{PROJ_DELIM}
@@ -777,7 +781,11 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_flexlm
 
 %files -n %{pname}-fping%{PROJ_DELIM}
+%if 0%{?suse_version}
+%defattr(0750,root,nagios,-)
+%else
 %defattr(4750,root,nagios,-)
+%endif
 %{_libdir}/nagios/plugins/check_fping
 
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
@@ -792,7 +800,11 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_http
 
 %files -n %{pname}-icmp%{PROJ_DELIM}
+%if 0%{?suse_version}
+%defattr(0750,root,nagios,-)
+%else
 %defattr(4750,root,nagios,-)
+%endif
 %{_libdir}/nagios/plugins/check_icmp
 
 %files -n %{pname}-ifoperstatus%{PROJ_DELIM}
@@ -802,7 +814,11 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_ifstatus
 
 %files -n %{pname}-ide_smart%{PROJ_DELIM}
+%if 0%{?suse_version}
+%defattr(0750,root,nagios,-)
+%else
 %defattr(4750,root,nagios,-)
+%endif
 %{_libdir}/nagios/plugins/check_ide_smart
 
 %files -n %{pname}-ircd%{PROJ_DELIM}
