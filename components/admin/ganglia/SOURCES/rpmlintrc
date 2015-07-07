@@ -1,2 +1,3 @@
-addFilter("check-install-rpms")
-addFilter("check-filelist")
+addFilter("suse-filelist-forbidden")
+addFilter("files-duplicated-waste")
+addFilter("devel-file-in-non-devel-package")
