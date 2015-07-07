@@ -81,6 +81,11 @@ BuildRequires: radiusclient-ng-devel
 
 BuildRequires: libdbi-devel
 
+%if 0%{?sles_version} || 0%{?suse_version}
+#!BuildIgnore: brp-check-suse
+BuildRequires: -post-build-checks
+%endif
+
 Requires: nagios-common%{PROJ_DELIM} >= 3.3.1-1
 Provides: %{name}
 Provides: %{pname}
