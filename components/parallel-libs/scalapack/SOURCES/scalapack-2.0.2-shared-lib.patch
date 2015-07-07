@@ -1,0 +1,47 @@
+diff -urN scalapack/scalapack-2.0.2-orig/Makefile scalapack/scalapack-2.0.2/Makefile
+--- scalapack/scalapack-2.0.2-orig/Makefile	2011-10-19 19:38:15.000000000 +0200
++++ scalapack/scalapack-2.0.2/Makefile	2012-05-13 18:34:47.149098645 +0200
+@@ -49,7 +49,7 @@
+ 
+ all: lib exe example
+ 
+-lib: blacslib toolslib pblaslib redistlib scalapacklib
++lib: blacslib toolslib pblaslib redistlib scalapacklib shared
+ 
+ exe: blacsexe pblasexe redistexe scalapackexe
+ 
+@@ -107,3 +107,6 @@
+ cleanexample:
+ 	( cd EXAMPLE; $(MAKE) clean )
+ 
++shared: scalapacklib
++	( mkdir tmp ; cd tmp ; ar x ../$(SCALAPACKLIB) ; $(CC) -shared -o ../libscalapack.so.2.0.2 * -Wl,-soname=libscalapack.so.2 ; cd .. )
++
+diff -urN scalapack/scalapack-2.0.2-orig/SLmake.inc.example scalapack/scalapack-2.0.2/SLmake.inc.example
+--- scalapack/scalapack-2.0.2-orig/SLmake.inc.example	2011-11-01 18:24:54.000000000 +0100
++++ scalapack/scalapack-2.0.2/SLmake.inc.example	2012-05-13 18:32:06.945094843 +0200
+@@ -28,9 +28,9 @@
+ 
+ FC            = mpif90
+ CC            = mpicc 
+-NOOPT         = -O0
+-FCFLAGS       = -O3
+-CCFLAGS       = -O3
++NOOPT         = -fPIC
++FCFLAGS       = $(RPM_OPT_FLAGS) $(NOOPT)
++CCFLAGS       = $(RPM_OPT_FLAGS) $(NOOPT)
+ FCLOADER      = $(FC)
+ CCLOADER      = $(CC)
+ FCLOADFLAGS   = $(FCFLAGS)
+diff -urN scalapack/scalapack-2.0.2-orig/SRC/Makefile scalapack/scalapack-2.0.2/SRC/Makefile
+--- scalapack/scalapack-2.0.2-orig/SRC/Makefile	2012-04-24 18:26:51.000000000 +0200
++++ scalapack/scalapack-2.0.2/SRC/Makefile	2012-05-13 18:47:54.373117324 +0200
+@@ -217,7 +217,7 @@
+ clamov.o: clamov.c
+ zlamov.o: zlamov.c
+ slamov.o dlamov.o clamov.o zlamov.o: lamov.h
+-	$(CC) -c $(CFLAGS) $(CDEFS) $(@:.o=.c) -o $@
++	$(CC) -c $(CCFLAGS) $(CDEFS) $(@:.o=.c) -o $@
+ 
+ clean :
+ 	rm -f *.o
