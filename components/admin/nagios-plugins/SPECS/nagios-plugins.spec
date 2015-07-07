@@ -670,6 +670,8 @@ Provides check_wave support for Nagios.
 
 
 %build
+export SUID_CFLAGS=-fPIE
+export SUID_LDFLAGS=-pie
 %configure \
 	--libexecdir=%{_libdir}/nagios/plugins \
 	--with-dbi \
