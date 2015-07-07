@@ -191,6 +191,7 @@ cd web
 make %{?_smp_mflags}
 
 %install
+export NO_BRP_STALE_LINK_ERROR=yes
 make install DESTDIR=$RPM_BUILD_ROOT
 
 ## Create directory structures
