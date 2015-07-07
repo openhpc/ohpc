@@ -60,6 +60,9 @@ BuildRequires:      expat-devel
 BuildRequires:      libmemcached-devel
 %endif
 
+#!BuildIgnore: brp-check-suse
+#!BuildIgnore: post-build-checks
+
 %description
 Ganglia is a scalable, real-time monitoring and execution environment
 with all execution requests and statistics expressed in an open
