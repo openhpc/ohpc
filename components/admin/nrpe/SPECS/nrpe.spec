@@ -56,7 +56,7 @@ BuildRequires: openssl-devel
 # OpenSSL package was split into openssl and openssl-libs in F18+
 BuildRequires: openssl
 #%if 0%{?fedora} > 17 || 0%{?rhel} > 6
-BuildRequires:  systemd-units
+BuildRequires:  systemd
 #%endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
