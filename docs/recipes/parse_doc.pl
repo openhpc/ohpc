@@ -98,20 +98,23 @@ sub check_for_section_replacement {
 
     if ($comment =~ /\\ref{sec:(\S+)}/) {
 	my $secname = $1;
+	my $replacementText="";
 	
-	if ( ! -e "$inputDir/$basename.aux" ) { 
-	    die "Cannot access latex .aux file, verify documentation was built successfully"
+	# We can only replace section information if latex document was built - otherwise we remove the section info
+	if ( -e "$inputDir/$basename.aux" ) { 
+
+	    my $secnum=`grep {sec:$secname} $inputDir/$basename.aux  | awk -v FS="{{|})" '{print \$2}' | awk -F '}' '{print \$1}'`;
+	    
+	    chomp($secnum);
+	    
+	    if ($secnum eq "") {
+		die "Unable to query section number, verify latex build is up to date"
+	    }
+	    
+	    $replacementText="(Section $secnum)";
 	}
 
-	my $secnum=`grep {sec:$secname} $inputDir/$basename.aux  | awk -v FS="{{|})" '{print \$2}' | awk -F '}' '{print \$1}'`;
-		
-	chomp($secnum);
-
-	if ($secnum eq "") {
-	    die "Unable to query section number, verify latex build is up to date"
-	}
-
-	$comment =~ s/\\ref{sec:(\S+)/(Section $secnum)/g;
+	$comment =~ s/\\ref{sec:(\S+)/$replacementText/g;
     }
 
     return($comment);
