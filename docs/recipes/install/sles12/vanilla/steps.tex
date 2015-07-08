@@ -149,8 +149,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [master]$ cp /opt/fsp/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
 
 # Define local IPoIB address and netmask
-[master]$ perl -pi -e 's/master_ipoib/<master_ipoib>/' /etc/sysconfig/network/ifcfg-ib0
-[master]$ perl -pi -e 's/ipoib_netmask/<ipoib_netmask>/' /etc/sysconfig/network/ifcfg-ib0
+[master]$ perl -pi -e "s/master_ipoib/<master_ipoib>/" /etc/sysconfig/network/ifcfg-ib0
+[master]$ perl -pi -e "s/ipoib_netmask/<ipoib_netmask>/" /etc/sysconfig/network/ifcfg-ib0
 
 # Initiate ib0
 [master]$ ifup ib0
@@ -174,6 +174,9 @@ follows:
 %\begin{verbatim}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+
+# Configure Warewulf provisioning to use desired internal interface
+[master]$ perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
 
 # Configure DHCP server to use eth1
 [master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
