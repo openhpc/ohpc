@@ -180,7 +180,7 @@ this setting to override with a potentially alternatively-named interface specif
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Configure Warewulf provisioning to use desired internal interface
-[master]$ perl -pi -e 's/device = eth1/device = ${sms_eth_internal}/' /etc/warewulf/provision.conf
+[master]$ perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
 
 # Enable tftp service for compute node image distribution
 [master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
