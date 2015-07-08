@@ -24,7 +24,7 @@
 % fsp_command    echo "Error: Unable to access local input file -> ${inputFile}"
 % fsp_command    exit 1
 % fsp_command else
-% fsp_command    . ${inputFile} || {echo "Error sourcing ${inputFile}"; exit 1}
+% fsp_command    . ${inputFile} || { echo "Error sourcing ${inputFile}"; exit 1; }
 % fsp_command fi
 
 % fsp_validation_newline
