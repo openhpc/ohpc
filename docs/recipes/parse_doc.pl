@@ -256,7 +256,7 @@ while(<IN>) {
 	    print $fh "\n";
 	} elsif ($_ =~ /% fsp_ci_comment (.+)/) {
 	    if ( !$ci_run) {next;}
-	    print "# $1 (CI only)\n";
+	    print $fh "# $1 (CI only)\n";
 	} elsif ($_ =~ /% fsp_comment_header (.+)/) {
 
 	    my $comment = check_for_section_replacement($1);
@@ -275,9 +275,9 @@ while(<IN>) {
 	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+) \\$/) {
 
-	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
-
 	    my $cmd = update_cmd($1);
+
+	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
 
 	    print $fh "$cmd";
 	    my $next_line = <IN>;
@@ -289,16 +289,16 @@ while(<IN>) {
 
 	    # TODO - add loop to accomodate multi-line continuation
 	} elsif ($_ =~ /\[master\]\$ (.+) #(.+)$/) {
+	    my $cmd = update_cmd($1);
 
 	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
 
-	    my $cmd = update_cmd($1);
 	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
+	    my $cmd = update_cmd($1);
 
 	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
 
-	    my $cmd = update_cmd($1);
 	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[postgres\]\$ (.+)$/) {
 	    my $cmd = update_cmd($1);
