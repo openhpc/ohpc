@@ -151,8 +151,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [master]$ cp /opt/fsp/pub/examples/network/centos/ifcfg-ib0 /etc/sysconfig/network-scripts
 
 # Define local IPoIB address and netmask
-[master]$ perl -pi -e 's/master_ipoib/${sms_ipoib}/' /etc/sysconfig/network-scripts/ifcfg-ib0
-[master]$ perl -pi -e 's/ipoib_netmask/${ipoib_netmask}/' /etc/sysconfig/network-scripts/ifcfg-ib0
+[master]$ perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network-scripts/ifcfg-ib0
+[master]$ perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network-scripts/ifcfg-ib0
 
 # Initiate ib0
 [master]$ ifup ib0
