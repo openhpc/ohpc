@@ -513,12 +513,6 @@ template file for \Warewulf{} that can be imported and used later to provision
 \end{lstlisting}
 % \end_fsp_run
 
-% begin_fsp_run 
-% fsp_validation_comment - time update
-% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
-% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
-% end_fsp_run
-
 \subsection{Assemble bootstrap image} \label{sec:assemble_bootstrap}
 
 \Warewulf{} requires a bootstrap image that is used to initialize the provisioning
