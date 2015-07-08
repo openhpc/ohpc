@@ -591,61 +591,10 @@ that were imported in \S\ref{sec:file_import}.
 % end_fsp_run
 
 % begin_fsp_run 
-% fsp_validation_comment - Add optional kargs to bootstrap kernel
+% fsp_validation_newline
+% fsp_ci_comment Add optional kargs to bootstrap kernel
 % [master]$ wwsh provision set c[1-4] --kargs=acpi_pad.disable=1
-% end_fsp_run
-
-% begin_fsp_run 
-% fsp_validation_comment - optionally add 4 more hosts
-% [master]$ if [[ $USE_DYNAMIC_HOSTNUM -eq 1 && $NUM_COMPUTES -ge 8 ]];then
-% [master]$    wwsh -y node new c5 --ipaddr=<c5_ip> --hwaddr=<c5_mac> 
-% [master]$    wwsh -y node new c6 --ipaddr=<c6_ip> --hwaddr=<c6_mac> 
-% [master]$    wwsh -y node new c7 --ipaddr=<c7_ip> --hwaddr=<c7_mac> 
-% [master]$    wwsh -y node new c8 --ipaddr=<c8_ip> --hwaddr=<c8_mac> 
-% [master]$    wwsh -y node set c5 -D ib0 --ipaddr=<c5_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c6 -D ib0 --ipaddr=<c6_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c7 -D ib0 --ipaddr=<c7_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c8 -D ib0 --ipaddr=<c8_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y provision set c[5-8] --vnfs=sles12 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
-% [master]$    wwsh -y provision set c[5-8] --fileadd=ifcfg-ib0.ww     
-% [master]$    service dhcpd restart
-% [master]$    wwsh pxe update
-% [master]$ fi
-% end_fsp_run
-
-% begin_fsp_run 
-% fsp_validation_comment - optionally add 8 more hosts
-% [master]$ if [[ $USE_DYNAMIC_HOSTNUM -eq 1 && $NUM_COMPUTES -ge 16 ]];then
-% [master]$    wwsh -y node new c9  --ipaddr=<c9_ip>  --hwaddr=<c9_mac> 
-% [master]$    wwsh -y node new c10 --ipaddr=<c10_ip> --hwaddr=<c10_mac> 
-% [master]$    wwsh -y node new c11 --ipaddr=<c11_ip> --hwaddr=<c11_mac> 
-% [master]$    wwsh -y node new c12 --ipaddr=<c12_ip> --hwaddr=<c12_mac> 
-
-% [master]$    wwsh -y node new c13 --ipaddr=<c13_ip> --hwaddr=<c13_mac> 
-% [master]$    wwsh -y node new c14 --ipaddr=<c14_ip> --hwaddr=<c14_mac> 
-% [master]$    wwsh -y node new c15 --ipaddr=<c15_ip> --hwaddr=<c15_mac> 
-% [master]$    wwsh -y node new c16 --ipaddr=<c16_ip> --hwaddr=<c16_mac> 
-
-% [master]$    wwsh -y node set c9  -D ib0 --ipaddr=<c9_ipoib>  --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c10 -D ib0 --ipaddr=<c10_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c11 -D ib0 --ipaddr=<c11_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c12 -D ib0 --ipaddr=<c12_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c13 -D ib0 --ipaddr=<c13_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c14 -D ib0 --ipaddr=<c14_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c15 -D ib0 --ipaddr=<c15_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c16 -D ib0 --ipaddr=<c16_ipoib> --netmask=<ipoib_netmask>
-
-% [master]$    wwsh -y provision set c* --vnfs=centos-7 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
-% [master]$    wwsh -y provision set c* --fileadd=ifcfg-ib0.ww     
-% [master]$    service dhcpd restart
-% [master]$    wwsh pxe update
-% [master]$ fi
-% end_fsp_run
-
-% begin_fsp_run 
-% fsp_validation_comment - time update
-% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
-% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
+% fsp_validation_newline
 % end_fsp_run
 
 \subsection{Boot compute nodes} \label{sec:boot_computes}
