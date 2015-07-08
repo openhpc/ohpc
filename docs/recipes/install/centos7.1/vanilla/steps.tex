@@ -574,10 +574,10 @@ that were imported in \S\ref{sec:file_import}.
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
 # Optionally define IPoIB network settings (required if planning to mount Lustre* over IB)
-[master]$ wwsh -y node set c1 -D ib0 --ipaddr={c1_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c2 -D ib0 --ipaddr={c2_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c3 -D ib0 --ipaddr={c3_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c4 -D ib0 --ipaddr={c4_ipoib} --netmask=${ipoib_netmask}
+[master]$ wwsh -y node set c1 -D ib0 --ipaddr=${c1_ipoib} --netmask=${ipoib_netmask}
+[master]$ wwsh -y node set c2 -D ib0 --ipaddr=${c2_ipoib} --netmask=${ipoib_netmask}
+[master]$ wwsh -y node set c3 -D ib0 --ipaddr=${c3_ipoib} --netmask=${ipoib_netmask}
+[master]$ wwsh -y node set c4 -D ib0 --ipaddr=${c4_ipoib} --netmask=${ipoib_netmask}
 [master]$ wwsh -y provision set c[1-4] --fileadd=ifcfg-ib0.ww
 
 # Restart dhcp / update PXE
