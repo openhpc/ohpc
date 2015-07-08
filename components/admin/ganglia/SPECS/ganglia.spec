@@ -60,6 +60,9 @@ BuildRequires:      expat-devel
 BuildRequires:      libmemcached-devel
 %endif
 
+#!BuildIgnore: brp-check-suse
+#!BuildIgnore: post-build-checks
+
 %description
 Ganglia is a scalable, real-time monitoring and execution environment
 with all execution requests and statistics expressed in an open
@@ -191,6 +194,7 @@ cd web
 make %{?_smp_mflags}
 
 %install
+export NO_BRP_STALE_LINK_ERROR=yes
 make install DESTDIR=$RPM_BUILD_ROOT
 
 ## Create directory structures
