@@ -126,7 +126,7 @@ for (my $i=1;$i<=$num_computes; $i++) {
     printf OUT "c%i_mac=%s\n",$i,$compute_macs[$i-1];
  }
 for (my $i=1;$i<=$num_computes; $i++) {
-    printf OUT "c%i_bmcs=%s\n",$i,$compute_bmcs[$i-1];
+    printf OUT "c%i_bmc=%s\n",$i,$compute_bmcs[$i-1];
 }
  for (my $i=1;$i<=$num_computes; $i++) {
     printf OUT "c%i_ipoib=%s\n",$i,$compute_ipoibs[$i-1];
