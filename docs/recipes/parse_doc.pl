@@ -263,9 +263,9 @@ while(<IN>) {
 	    my $strlen  = length $comment;
 
 	    printf $fh "\n";
-	    printf $fh "%s\n", '-' x $strlen;
-	    print $fh "$comment\n";
-	    printf $fh "%s\n", '-' x $strlen;
+	    printf $fh "# %s\n", '-' x $strlen;
+	    print  $fh "# $comment\n";
+	    printf $fh "# %s\n", '-' x $strlen;
 	    
 	} elsif ($_ =~ /% fsp_validation_comment (.+)/) {
 	    my $comment = check_for_section_replacement($1);
@@ -296,6 +296,8 @@ while(<IN>) {
 	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
 	    my $cmd = update_cmd($1);
+
+	    my $extra_comment = "";
 
 	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
 

@@ -97,18 +97,23 @@ both the base OS and EPEL repositories (mirrors freely available online):
 \end{itemize*}
 
 % begin_fsp_run
-% % fsp_ci_comment - format space for /opt/fsp
+% fsp_validation_newline
+% fsp_ci_comment Format space for /opt/fsp
 % [master]$ mkfs -F -t ext4 /dev/sda1
-% [master]$ mkdir -p /opt/fsp
-% [master]$ mount /dev/sda1 /opt/fsp
+% [master]$ mkdir -p /opt/fsp        
+% [master]$ mount /dev/sda1 /opt/fsp 
+% fsp_validation_newline
 % end_fsp_run  
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{../../common/install_provisioning_intro}
 
 % begin_fsp_run 
+% fsp_validation_newline
 % fsp_ci_comment - allow sudo without tty
-% [master]$ perl -pi -e "s/^Defaults\s+requiretty/# Defaults requiretty/" /etc/sudoers 
+% [master]$ perl -pi -e "s/^Defaults\s+requiretty/# Defaults requiretty/"
+% /etc/sudoers 
+% fsp_validation_newline
 % end_fsp_run
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
@@ -735,9 +740,11 @@ the necessary licenses in order to use the Intel proprietary software.
 \input{../../common/mpi}
 
 % begin_fsp_run
+% fsp_validation_newline
 % fsp_ci_comment Install licenses
 % \begin{lstlisting}[language=bash,keywords={},upquote=true]
 % [master]$ (*\install*) intel_licenses
+% fsp_validation_newline
 % \end{lstlisting}
 % end_fsp_run
 
