@@ -38,7 +38,7 @@ cp vc.tex sles12/vanilla/
 cp vc.tex centos7.1/vanilla/
 
 tar rf $TARBALL --transform "flags=r;s|^|docs-fsp-$VERSION/sles12/vanilla/|" vc.tex
-tar rf $TARBALL --transform "flags=r;s|^|docs-fsp-$VERSION/centos7/vanilla/|" vc.tex
+tar rf $TARBALL --transform "flags=r;s|^|docs-fsp-$VERSION/centos7.1/vanilla/|" vc.tex
 
 gzip -n $TARBALL
 
