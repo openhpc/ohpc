@@ -122,6 +122,9 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
+# don't package static libs
+rm -f $RPM_BUILD_ROOT%{install_path}/lib/*la
+
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}

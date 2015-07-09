@@ -1,5 +1,3 @@
-addFilter("systemd-service-without-service_del_preun")
-addFilter("systemd-service-without-service_del_postun")
-addFilter("systemd-service-without-service_add_pre")
-addFilter("systemd-service-without-service_add_post")
-addFilter("shlib-policy-name-error")
+addFilter("suse-filelist-forbidden")
+addFilter("files-duplicated-waste")
+addFilter("devel-file-in-non-devel-package")
