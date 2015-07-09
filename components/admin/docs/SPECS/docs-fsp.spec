@@ -11,7 +11,7 @@
 %include %{_sourcedir}/FSP_macros
 
 Name:           docs-fsp
-Version:        15.16
+Version:        15.31
 Release:        1
 Summary:        Forest Peak documentation
 License:        BSD-3-Clause
@@ -48,13 +48,18 @@ This guide presents a simple cluster installation procedure using components fro
 cd %{source_path}
 make
 
+# Include convenience recipe script(s)
+
+../../parse_doc.pl --ci_run steps.tex > fsp_vanilla_recipe.sh
+
+
 %install
 
 %{__mkdir} -p %{buildroot}%{FSP_PUB}/docs
 install -m 0644 -p ChangeLog %{buildroot}/%{FSP_PUB}/docs/ChangeLog
 install -m 0644 -p Release_Notes.txt %{buildroot}/%{FSP_PUB}/docs/Release_Notes.txt
 install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/docs/Install_guide.pdf 
-
+install -m 0644 -p %{source_path}/fsp_vanilla_recipe.sh %{buildroot}/%{FSP_PUB}/docs/fsp_vanilla_recipe.sh
 
 %files
 %defattr(-,root,root)
