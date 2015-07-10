@@ -13,7 +13,7 @@
 
 Summary: Example source code and templates for use within FSP environment.
 Name:    examples%{PROJ_DELIM}
-Version: 1.1
+Version: 1.2
 Release: 1
 License: BSD
 Group:   fsp/admin
@@ -22,6 +22,7 @@ Source1: hello.c
 Source2: ifcfg-ib0
 Source3: ifcfg-ib0.sles.ww
 Source4: ifcfg-ib0.centos.ww
+Source5: job.mpi
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -44,6 +45,7 @@ install -D -m 0644 %SOURCE2 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/
 
 install -D -m 0644 %SOURCE3 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0.ww
 install -D -m 0644 %SOURCE4 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/ifcfg-ib0.ww
+install -D -m 0644 %SOURCE5 %{buildroot}%{FSP_HOME}/pub/examples/slurm/job.mpi
 
 
 %clean
