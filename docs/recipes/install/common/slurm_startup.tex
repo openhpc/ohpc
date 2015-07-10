@@ -18,7 +18,7 @@ resource management under \SLURM{}.
 \vspace*{0.3cm}
 
 % begin_fsp_run
-% fsp_validation_comment Startup RM
+% fsp_comment_header Resource Manager Startup \ref{sec:rms_startup}
 \begin{lstlisting}[language=bash]
 # start munge and slurm controller on master host
 [master]$ service munge start
@@ -33,11 +33,6 @@ resource management under \SLURM{}.
 In the default configuration, the {\em compute} hosts will be initialized in an
 {\em unknown} state. To place the hosts into production such that they are
 eligible to schedule user jobs, issue the following:
-
-% begin_fsp_run
-% fsp_validation_comment - Sleep for 5 seconds (CI only command)
-% [master]$ sleep 5
-% end_fsp_run
 
 % begin_fsp_run
 \begin{lstlisting}[language=bash]
