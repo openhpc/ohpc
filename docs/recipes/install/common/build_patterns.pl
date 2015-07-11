@@ -50,6 +50,13 @@ while(<IN>) {
 	    $summary = "$summary.";
 	}
 
+        # escape underscore
+
+        $name =~ s/_/\\_/g;
+        $summary =~ s/_/\\_/g;
+
+        print "name = $name\n";
+
 	print OUT "$name & $summary \\\\ \n";
 
     }
