@@ -186,8 +186,12 @@ foreach my $category (@fspCategories) {
 	} else {
 
 	    my $sumLength = length($summaryData[$i]);
+
+	    my $lname = $name_base;
+	    $lname =~ s/_/\\_/g;
+
 	    
- 	    print OUT "\\multirow{2}{*}{$name_base} & \n";
+ 	    print OUT "\\multirow{2}{*}{$lname} & \n";
  	    print OUT "\\multirow{2}{*}{$versionData[$i]} & \n";
  	    if ($urlData[$i] ne "(none)") {
  		print OUT "$summaryData[$i] ";
