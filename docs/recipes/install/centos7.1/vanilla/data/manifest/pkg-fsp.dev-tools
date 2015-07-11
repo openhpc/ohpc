@@ -1,3 +1,4 @@
+R_base-fsp 3.2.0 http://www.r-project.org/ fsp/dev-tools R is a language and environment for statistical computing and graphics (S-Plus like).
 autoconf-fsp 2.69 http://www.gnu.org/software/autoconf/ fsp/dev-tools A GNU tool for automatically configuring source code
 automake-fsp 1.15 http://www.gnu.org/software/automake/ fsp/dev-tools A GNU tool for automatically creating Makefiles
 intel-inspector-fsp 16.0.1.407184 http://www.intel.com/software/products/ fsp/dev-tools Intel(R) Inspector XE

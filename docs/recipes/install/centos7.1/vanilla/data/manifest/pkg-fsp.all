@@ -1,4 +1,4 @@
-R_base-fsp 3.2.0 http://www.r-project.org/ Productivity/Scientific/Math R is a language and environment for statistical computing and graphics (S-Plus like).
+R_base-fsp 3.2.0 http://www.r-project.org/ fsp/dev-tools R is a language and environment for statistical computing and graphics (S-Plus like).
 adios-gnu-impi-fsp 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ fsp/io-libs The Adaptable IO System (ADIOS)
 adios-gnu-mvapich2-fsp 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ fsp/io-libs The Adaptable IO System (ADIOS)
 adios-gnu-openmpi-fsp 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ fsp/io-libs The Adaptable IO System (ADIOS)
@@ -27,12 +27,12 @@ gsl-gnu-fsp 1.16 http://www.gnu.org/software/gsl fsp/serial-libs GNU Scientific 
 gsl-intel-fsp 1.16 http://www.gnu.org/software/gsl fsp/serial-libs GNU Scientific Library (GSL)
 hdf5-gnu-fsp 1.8.14 http://www.hdfgroup.org/HDF5 fsp/io-libs A general purpose library and file format for storing scientific data
 hdf5-intel-fsp 1.8.14 http://www.hdfgroup.org/HDF5 fsp/io-libs A general purpose library and file format for storing scientific data
-hypre-gnu-impi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ Development/Libraries/Parallel Scalable algorithms for solving linear systems of equations
-hypre-gnu-mvapich2-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ Development/Libraries/Parallel Scalable algorithms for solving linear systems of equations
-hypre-gnu-openmpi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ Development/Libraries/Parallel Scalable algorithms for solving linear systems of equations
-hypre-intel-impi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ Development/Libraries/Parallel Scalable algorithms for solving linear systems of equations
-hypre-intel-mvapich2-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ Development/Libraries/Parallel Scalable algorithms for solving linear systems of equations
-hypre-intel-openmpi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ Development/Libraries/Parallel Scalable algorithms for solving linear systems of equations
+hypre-gnu-impi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ fsp/parallel-libs Scalable algorithms for solving linear systems of equations
+hypre-gnu-mvapich2-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ fsp/parallel-libs Scalable algorithms for solving linear systems of equations
+hypre-gnu-openmpi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ fsp/parallel-libs Scalable algorithms for solving linear systems of equations
+hypre-intel-impi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ fsp/parallel-libs Scalable algorithms for solving linear systems of equations
+hypre-intel-mvapich2-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ fsp/parallel-libs Scalable algorithms for solving linear systems of equations
+hypre-intel-openmpi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ fsp/parallel-libs Scalable algorithms for solving linear systems of equations
 imb-gnu-impi-fsp 4.0.2 https://software.intel.com/en-us/articles/intel-mpi-benchmarks fsp/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu-mvapich2-fsp 4.0.2 https://software.intel.com/en-us/articles/intel-mpi-benchmarks fsp/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu-openmpi-fsp 4.0.2 https://software.intel.com/en-us/articles/intel-mpi-benchmarks fsp/perf-tools Intel MPI Benchmarks (IMB)
@@ -58,19 +58,19 @@ lua-posix-fsp 33.2.1 https://github.com/luaposix/luaposix Development/Libraries 
 lustre-client-fsp 2.7.0 https://wiki.hpdd.intel.com/ fsp/lustre Lustre File System
 metis-gnu-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 metis-intel-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
-mkl-blacs-gnu-openmpi-fsp 11.3 http://software.intel.com/en-us/intel-mkl Development/Libraries/Parallel Intel(R) Math Kernel Library Basic Linear Algebra Communication Subprograms
+mkl-blacs-gnu-openmpi-fsp 11.3 http://software.intel.com/en-us/intel-mkl fsp/parallel-libs Intel(R) Math Kernel Library Basic Linear Algebra Communication Subprograms
 mpiP-gnu-impi-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-gnu-mvapich2-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-gnu-openmpi-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-intel-impi-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-intel-mvapich2-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-intel-openmpi-fsp 3.4.1 http://mpip.sourceforge.net/ fsp/perf-tools mpiP: a lightweight profiling library for MPI applications.
-mumps-gnu-impi-fsp 5.0.0 http://mumps.enseeiht.fr/ Development/Libraries/Parallel A MUltifrontal Massively Parallel Sparse direct Solver
-mumps-gnu-mvapich2-fsp 5.0.0 http://mumps.enseeiht.fr/ Development/Libraries/Parallel A MUltifrontal Massively Parallel Sparse direct Solver
-mumps-gnu-openmpi-fsp 5.0.0 http://mumps.enseeiht.fr/ Development/Libraries/Parallel A MUltifrontal Massively Parallel Sparse direct Solver
-mumps-intel-impi-fsp 5.0.0 http://mumps.enseeiht.fr/ Development/Libraries/Parallel A MUltifrontal Massively Parallel Sparse direct Solver
-mumps-intel-mvapich2-fsp 5.0.0 http://mumps.enseeiht.fr/ Development/Libraries/Parallel A MUltifrontal Massively Parallel Sparse direct Solver
-mumps-intel-openmpi-fsp 5.0.0 http://mumps.enseeiht.fr/ Development/Libraries/Parallel A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-gnu-impi-fsp 5.0.0 http://mumps.enseeiht.fr/ fsp/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-gnu-mvapich2-fsp 5.0.0 http://mumps.enseeiht.fr/ fsp/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-gnu-openmpi-fsp 5.0.0 http://mumps.enseeiht.fr/ fsp/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-intel-impi-fsp 5.0.0 http://mumps.enseeiht.fr/ fsp/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-intel-mvapich2-fsp 5.0.0 http://mumps.enseeiht.fr/ fsp/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-intel-openmpi-fsp 5.0.0 http://mumps.enseeiht.fr/ fsp/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 munge-devel-fsp 0.5.11 https://munge.googlecode.com/ Development/Libraries Headers and libraries for developing applications using MUNGE
 munge-fsp 0.5.11 https://munge.googlecode.com/ fsp/rms MUNGE authentication service
 munge-libs-fsp 0.5.11 https://munge.googlecode.com/ System Environment/Libraries Libraries for applications using MUNGE
@@ -135,26 +135,26 @@ slurm-plugins-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Slurm plugins (loada
 slurm-slurmdb-direct-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Wrappers to write directly to the slurmdb
 slurm-slurmdbd-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Slurm database daemon
 slurm-sql-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Slurm SQL support
-superlu-gnu-fsp 4.3 http://crd.lbl.gov/~xiaoye/SuperLU/ Development/Libraries/C and C++ A general purpose library for the direct solution of linear equations
-superlu-intel-fsp 4.3 http://crd.lbl.gov/~xiaoye/SuperLU/ Development/Libraries/C and C++ A general purpose library for the direct solution of linear equations
-superlu_dist-gnu-impi-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ Development/Libraries/Parallel A general purpose library for the direct solution of linear equations
-superlu_dist-gnu-mvapich2-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ Development/Libraries/Parallel A general purpose library for the direct solution of linear equations
-superlu_dist-gnu-openmpi-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ Development/Libraries/Parallel A general purpose library for the direct solution of linear equations
-superlu_dist-intel-impi-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ Development/Libraries/Parallel A general purpose library for the direct solution of linear equations
-superlu_dist-intel-mvapich2-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ Development/Libraries/Parallel A general purpose library for the direct solution of linear equations
-superlu_dist-intel-openmpi-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ Development/Libraries/Parallel A general purpose library for the direct solution of linear equations
+superlu-gnu-fsp 4.3 http://crd.lbl.gov/~xiaoye/SuperLU/ fsp/serial-libs A general purpose library for the direct solution of linear equations
+superlu-intel-fsp 4.3 http://crd.lbl.gov/~xiaoye/SuperLU/ fsp/serial-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu-impi-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ fsp/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu-mvapich2-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ fsp/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu-openmpi-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ fsp/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-impi-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ fsp/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-mvapich2-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ fsp/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-openmpi-fsp 4.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ fsp/parallel-libs A general purpose library for the direct solution of linear equations
 tau-gnu-impi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu-mvapich2-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu-openmpi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-intel-impi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-intel-mvapich2-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-intel-openmpi-fsp 2.24 http://www.cs.uoregon.edu/research/tau/home.php fsp/perf-tools Tuning and Analysis Utilities Profiling Package
-trilinos-gnu-impi-fsp 11.14.3 http://trilinos.sandia.gov/index.html System/Libraries A collection of libraries of numerical algorithms
-trilinos-gnu-mvapich2-fsp 11.14.3 http://trilinos.sandia.gov/index.html System/Libraries A collection of libraries of numerical algorithms
-trilinos-gnu-openmpi-fsp 11.14.3 http://trilinos.sandia.gov/index.html System/Libraries A collection of libraries of numerical algorithms
-trilinos-intel-impi-fsp 11.14.3 http://trilinos.sandia.gov/index.html System/Libraries A collection of libraries of numerical algorithms
-trilinos-intel-mvapich2-fsp 11.14.3 http://trilinos.sandia.gov/index.html System/Libraries A collection of libraries of numerical algorithms
-trilinos-intel-openmpi-fsp 11.14.3 http://trilinos.sandia.gov/index.html System/Libraries A collection of libraries of numerical algorithms
+trilinos-gnu-impi-fsp 11.14.3 http://trilinos.sandia.gov/index.html fsp/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu-mvapich2-fsp 11.14.3 http://trilinos.sandia.gov/index.html fsp/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu-openmpi-fsp 11.14.3 http://trilinos.sandia.gov/index.html fsp/parallel-libs A collection of libraries of numerical algorithms
+trilinos-intel-impi-fsp 11.14.3 http://trilinos.sandia.gov/index.html fsp/parallel-libs A collection of libraries of numerical algorithms
+trilinos-intel-mvapich2-fsp 11.14.3 http://trilinos.sandia.gov/index.html fsp/parallel-libs A collection of libraries of numerical algorithms
+trilinos-intel-openmpi-fsp 11.14.3 http://trilinos.sandia.gov/index.html fsp/parallel-libs A collection of libraries of numerical algorithms
 valgrind-fsp 3.10.1 http://www.valgrind.org/ fsp/dev-tools Valgrind Memory Debugger
 warewulf-cluster-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used for clustering with Warewulf
 warewulf-cluster-node-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used for clustering with Warewulf
