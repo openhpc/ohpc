@@ -56,7 +56,7 @@ with Warewulf.
 %if %{fsp_disable}
 %package -n %{pname}-node%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
-Group: System Environment/Clustering
+Group: fsp/provisioning
 Requires: /sbin/sfdisk
 %if 0%{?sles_version} || 0%{?suse_version}
 PreReq: %{insserv_prereq} %{fillup_prereq}
