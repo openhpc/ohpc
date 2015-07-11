@@ -83,7 +83,7 @@ Version:        4.0
 Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
 License:        LGPL-2.1
-Group:          Development/Libraries/Parallel
+Group:          fsp/parallel-libs
 Url:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        %{pname}-%{version}.tar.gz
 # PATCH-FIX-UPSTREAM superlu_dist-3.1-sequence-point.patch

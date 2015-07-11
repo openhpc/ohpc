@@ -84,7 +84,7 @@ Version:        5.0.0
 Release:        0
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
-Group:          Development/Libraries/Parallel
+Group:          fsp/parallel-libs
 Url:            http://mumps.enseeiht.fr/
 Source0:        %{pname}-%{version}.tar.gz
 Source1:        Makefile.mkl.gnu.openmpi.inc
