@@ -23,7 +23,7 @@ Name:               %{pname}%{PROJ_DELIM}
 Version:            %{gangver}
 Release:            1%{?dist}
 Summary:            Distributed Monitoring System
-Group:              Applications/Internet
+Group:              fsp/admin
 License:            BSD-3-Clause
 URL:                http://ganglia.sourceforge.net/
 Source0:            ganglia-%{version}.tar.gz
