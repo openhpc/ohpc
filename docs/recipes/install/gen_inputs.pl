@@ -23,6 +23,14 @@ if ( $#ARGV < 0) {
     exit 1;
 }
 
+my $BaseOS;
+if( !defined $ENV{BaseOS} ) {
+    print STDERR "BaseOS environment variable must be set to choice of OS\n";
+    exit 1;
+} else {
+    $BaseOS=$ENV{BaseOS};
+}
+
 my $mapfile      = shift;
 my $master_host  = "";
 my @computes     = ();
@@ -80,7 +88,7 @@ while(my $line=<IN>) {
 	$ipoib_netmask = $1;
     } elsif ($line =~ /^bmc_username=(\S+)$/) {
 	$bmc_username = $1;
-    } elsif ($line =~ /^sms_eth_internal=(\S+)$/) {
+    } elsif ($line =~ /^sms_eth_internal_$BaseOS=(\S+)$/) {
 	$sms_eth_internal = $1;
     } elsif ($line =~ /^eth_provision=(\S+)$/) {
 	$eth_provision = $1;

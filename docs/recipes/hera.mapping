@@ -3,7 +3,10 @@
 nfs_ip=192.168.0.1
 mgs_fs_name=192.168.100.254@o2ib:/zeushome
 ipoib_netmask=255.255.255.0
-sms_eth_internal=eth2:0
+
+sms_eth_internal_sles12=eth2:0
+sms_eth_internal_centos7.1=eth2:0
+
 eth_provision=eth2
 internal_netmask=255.255.0.0
 
