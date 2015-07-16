@@ -96,6 +96,12 @@ both the base OS and EPEL repositories (mirrors freely available online):
                         {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
 \end{itemize*}
 
+% begin_fsp_run 
+% fsp_validation_newline
+% fsp_ci_comment - Remove WW file update crontab entry
+% [master]$ rm -f /etc/cron.d/wwupdatefiles
+% end_fsp_run
+
 % begin_fsp_run
 % fsp_validation_newline
 % fsp_ci_comment Format space for /opt/fsp
@@ -752,7 +758,7 @@ offerings within \FSP{}, issue the following:
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
-%\input{manifest}
+\input{manifest}
 
 \end{document}
 

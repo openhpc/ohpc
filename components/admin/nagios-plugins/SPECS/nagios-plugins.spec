@@ -25,7 +25,8 @@ Version: 2.0.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program plugins for Nagios
 
-Group: Applications/System
+Group: fsp/admin
+
 License: GPLv2+
 URL: https://www.nagios-plugins.org/
 Source0: %{pname}-%{version}.tar.gz

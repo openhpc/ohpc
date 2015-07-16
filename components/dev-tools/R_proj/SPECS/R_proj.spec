@@ -72,7 +72,7 @@ Patch:          tre.patch
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
-Group:          Productivity/Scientific/Math
+Group:          fsp/dev-tools
 ###BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 

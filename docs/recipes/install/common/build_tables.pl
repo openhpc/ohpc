@@ -8,7 +8,7 @@ my @fspCategories    = ("admin","compiler-families","dev-tools","distro-packages
 my @compiler_familes = ("gnu","intel");
 my @mpi_families     = ("mvapich2","openmpi","impi");
 
-my @single_package_exceptions = ("lmod-defaults-intel-fsp");
+my @single_package_exceptions = ("lmod-defaults-intel-fsp","mkl-blacs-gnu-openmpi-fsp");
 
 my $longSummaryLine = 60;
 my $urlColor="blue";
@@ -158,7 +158,12 @@ foreach my $category (@fspCategories) {
 
 	    my $k = $i;
 	    for my $k ($i .. $end_index) {
-		print OUT "$nameData[$k] & \n";
+
+                my $lname = $nameData[$k];
+                $lname =~ s/_/\\_/g;
+
+		print OUT "$lname & \n";
+
 		if($k == $i) {
 		    my $sumLength = length($summaryData[$k]);
 
@@ -181,8 +186,12 @@ foreach my $category (@fspCategories) {
 	} else {
 
 	    my $sumLength = length($summaryData[$i]);
+
+	    my $lname = $name_base;
+	    $lname =~ s/_/\\_/g;
+
 	    
- 	    print OUT "\\multirow{2}{*}{$name_base} & \n";
+ 	    print OUT "\\multirow{2}{*}{$lname} & \n";
  	    print OUT "\\multirow{2}{*}{$versionData[$i]} & \n";
  	    if ($urlData[$i] ne "(none)") {
  		print OUT "$summaryData[$i] ";
