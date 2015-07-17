@@ -26,6 +26,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 Requires: m4
 
+%define debug_package %{nil}
 %{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
 %define install_path %{FSP_PUB}/autotools
 
