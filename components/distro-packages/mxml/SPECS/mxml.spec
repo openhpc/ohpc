@@ -39,6 +39,7 @@ Source1:        baselibs.conf
 Patch:          mxml-2.3-nobinstrip.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  pkgconfig
+%define debug_package %{nil}
 
 %description
 Mini-XML is a small XML parsing library that you can use to read XML
