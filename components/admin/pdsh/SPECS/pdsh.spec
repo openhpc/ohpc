@@ -371,7 +371,9 @@ if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.mqshd ]; then
    install -D -m644 etc/mqshell.xinetd $RPM_BUILD_ROOT/%{_sysconfdir}/xinetd.d/mqshell
 fi
 
-
+%if 0%{?FSP_BUILD}
+%install_doc_files
+%endif
 
 # 
 # Remove all module .a's as they are not needed on any known RPM platform.
@@ -401,5 +403,10 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_bindir}/dshbak
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
+
+%if 0%{?FSP_BUILD}
+%dir %{FSP_PUB}/share/doc
+%{FSP_PUB}/share/doc/%{pname}
+%endif
 
 %changelog
