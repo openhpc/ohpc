@@ -24,6 +24,7 @@ URL:       https://github.com/hpcsi/losf
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+DocDir:    %{FSP_PUB}/doc/contrib
 
 %if 0%{?FSP_BUILD}
 %{!?prefix: %define prefix %{FSP_ADMIN}}
@@ -87,10 +88,6 @@ for i in idisk ilog ioff ion ipxe ireboot ireset isensor isoft istat ; do
     ln -sf %{installPath}/utils/$i ${RPM_BUILD_ROOT}/%{_bindir}
 done
 
-%if 0%{?FSP_BUILD}
-%install_doc_files
-%endif
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -113,13 +110,11 @@ fi
 %dir %{prefix}
 %endif
 
-%if 0%{?FSP_BUILD}
-%dir %{FSP_PUB}/share/doc
-%{FSP_PUB}/share/doc/%{pname}
-%endif
-
 %{installPath}
 %{_bindir}/*
+%doc LICENSE
+%doc COPYING
+%doc README
 
 
 
