@@ -119,7 +119,7 @@ fi
 #dir %{FSP_PUB}
 #dir %{FSP_PUB}/doc
 
-%{_docdir}
+%{FSP_PUB}
 
 %doc LICENSE COPYING CHANGES README
 
