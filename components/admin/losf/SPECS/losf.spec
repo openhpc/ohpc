@@ -114,6 +114,7 @@ fi
 %{_bindir}/*
 %doc LICENSE
 %doc COPYING
+%doc CHANGES
 %doc README
 
 
