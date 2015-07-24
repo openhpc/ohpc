@@ -88,6 +88,8 @@ for i in idisk ilog ioff ion ipxe ireboot ireset isensor isoft istat ; do
     ln -sf %{installPath}/utils/$i ${RPM_BUILD_ROOT}/%{_bindir}
 done
 
+mkdir -p ${RPM_BUILD_ROOT}/%{FSP_PUB}/doc/contrib
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -108,14 +110,16 @@ fi
 %if 0%{?FSP_BUILD}
 %dir %{FSP_HOME}
 %dir %{prefix}
+
 %endif
 
 %{installPath}
 %{_bindir}/*
-%docdir /opt/fsp/pub/doc/contrib
+%dir %{FSP_PUB}
+# docdir /opt/fsp/pub/doc/contrib
 %doc LICENSE
 %doc COPYING
 %doc CHANGES
 %doc README
 
-
+%dir %{FSP_PUB}
