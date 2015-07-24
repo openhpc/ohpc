@@ -13,6 +13,7 @@
 %if 0%{?FSP_BUILD}
 
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+%define debug_package %{nil}
 
 %if 0%{?suse_version} == 1110
 BuildRequires: kernel-source = 3.0.76-0.11.1

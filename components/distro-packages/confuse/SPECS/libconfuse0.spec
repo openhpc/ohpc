@@ -31,6 +31,7 @@ Recommends:     %{name}-lang
 BuildRequires:  check
 %endif
 %define pkg_name confuse
+%define debug_package %{nil}
 #
 URL:            http://www.nongnu.org/confuse/
 # taken from    http://download.savannah.gnu.org/releases/confuse/%{pkg_name}-%{version}.tar.gz

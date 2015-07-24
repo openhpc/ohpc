@@ -26,6 +26,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
+%define debug_package %{nil}
 %define install_path %{FSP_PUB}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
