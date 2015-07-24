@@ -112,6 +112,7 @@ fi
 
 %{installPath}
 %{_bindir}/*
+%dir %{FSP_PUB}/doc/contrib
 %doc LICENSE
 %doc COPYING
 %doc CHANGES
