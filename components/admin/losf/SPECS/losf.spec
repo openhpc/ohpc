@@ -116,12 +116,9 @@ fi
 %{installPath}
 %{_bindir}/*
 
-%dir %{FSP_PUB}/doc
+#dir %{FSP_PUB}
+#dir %{FSP_PUB}/doc
 %dir %{_docdir}
 
-%doc LICENSE
-%doc COPYING
-%doc CHANGES
-%doc README
+%doc LICENSE COPYING CHANGES README
 
-%dir %{FSP_PUB}
