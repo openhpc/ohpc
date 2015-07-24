@@ -155,7 +155,7 @@ module load mkl
 make superlulib DSuperLUroot=$PWD 
 
 pushd FORTRAN
-make F_MOD
+make
 popd
 
 mkdir tmp
