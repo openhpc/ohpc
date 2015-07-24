@@ -154,6 +154,10 @@ module load mkl
 
 make superlulib DSuperLUroot=$PWD 
 
+pushd FORTRAN
+make F_MOD
+popd
+
 mkdir tmp
 (cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
 mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
@@ -171,6 +175,7 @@ install -m644 make.inc %{buildroot}%{install_path}/etc
 install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
               SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
               SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
+              FORTRAN/*mod \
               %{buildroot}%{install_path}/include/
 
 %{__mkdir} -p %{buildroot}%{install_path}/lib
