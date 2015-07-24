@@ -118,7 +118,8 @@ fi
 
 #dir %{FSP_PUB}
 #dir %{FSP_PUB}/doc
-%dir %{_docdir}
+
+%{_docdir}
 
 %doc LICENSE COPYING CHANGES README
 
