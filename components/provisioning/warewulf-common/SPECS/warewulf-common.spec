@@ -27,6 +27,7 @@ URL:     http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 ExclusiveOS: linux
+DocDir: %{FSP_PUB}/doc/contrib
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -76,6 +77,7 @@ supporting libs.
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
 
 %pre
 groupadd -r warewulf >/dev/null 2>&1 || :
