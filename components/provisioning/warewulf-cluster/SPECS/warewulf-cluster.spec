@@ -106,6 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%{FSP_HOME}
 %{FSP_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL LICENSE NEWS README README.node TODO
 %{_sysconfdir}/profile.d/*
