@@ -52,6 +52,7 @@ Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+DocDir:    %{FSP_PUB}/doc/contrib
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -133,11 +134,16 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+
+%{FSP_PUB}
+%doc AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README THANKS TODO
 
 %changelog
