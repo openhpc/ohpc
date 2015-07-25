@@ -28,7 +28,7 @@ ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
-BuildRoot: %_{_tmppath}%{pname}-%{version}-%{release}-root
+BuildRoot: %_tmppath}%{pname}-%{version}-%{release}-root
 DocDir: %{FSP_PUB}/doc/contrib
 #%if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 #%if ! 0%{?suse_version}
