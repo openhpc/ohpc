@@ -29,6 +29,7 @@ Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
+DocDir: %{FSP_PUB}/doc/contrib
 #%if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 #%if ! 0%{?suse_version}
 #BuildRequires: libdb4-utils
@@ -98,6 +99,7 @@ rm -rf $RPM_BUILD_ROOT/etc/rc.d/init.d/wwfirstboot
 rm -rf $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/wwfirstboot/*
 %endif
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
