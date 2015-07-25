@@ -58,6 +58,7 @@ BuildRequires: cmake
 Requires:      libmetis0 = %{version}
 Provides:      libmetis = %{version}
 Provides:      libmetis0 = %{version}
+DocDir:        %{FSP_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -152,6 +153,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+
 %post -n libmetis0
 /sbin/ldconfig
 
@@ -164,3 +167,6 @@ rm -fr %buildroot
 %files
 %defattr(-,root,root)
 %{FSP_HOME}
+
+%{FSP_PUB}
+%doc BUILD.txt ChangeLog Install.txt LICENSE.txt
