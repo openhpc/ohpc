@@ -38,6 +38,7 @@ BuildRequires:	zlib-devel
 %endif
 %endif
 BuildRoot:	%{_tmppath}/%{pname}-%{version}
+DocDir:     %{FSP_PUB}/doc/contrib
 BuildConflicts: post-build-checks
 
 Conflicts: munge 
@@ -129,6 +130,7 @@ rm "$RPM_BUILD_ROOT"/etc/init.d/munge
 rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 %endif
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
@@ -206,6 +208,7 @@ fi
 %doc PLATFORMS
 %doc QUICKSTART
 %doc README*
+%doc TODO
 %doc doc/*
 %dir %attr(0700,munge,munge) %{_sysconfdir}/munge
 %attr(0600,munge,munge) %config(noreplace) %ghost %{_sysconfdir}/munge/munge.key
