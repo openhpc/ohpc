@@ -32,6 +32,7 @@ BuildRequires: libselinux-devel
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
+DocDir: %{FSP_PUB}/doc/contrib
 Patch1: warewulf-provision.busybox.patch.bz2
 Patch2: warewulf-provision.httpdconfdir.patch
 Patch3: warewulf-provision.dhcpd.patch
@@ -111,6 +112,7 @@ available the included GPL software.
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%_docdir}
 
 %post -n %{pname}-server%{PROJ_DELIM}
 # 07/22/14 karl.w.schulz@intel.com - specify alternate group per Base OS
@@ -132,6 +134,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%{FSP_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf
