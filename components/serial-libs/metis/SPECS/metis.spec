@@ -169,4 +169,4 @@ rm -fr %buildroot
 %{FSP_HOME}
 
 %{FSP_PUB}
-%doc BUILD.txt ChangeLog Install.txt LICENSE.txt
+%doc BUILD.txt Changelog Install.txt LICENSE.txt
