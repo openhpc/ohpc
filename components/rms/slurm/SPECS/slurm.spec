@@ -106,6 +106,7 @@ License: GPL
 Group: fsp/rms
 Source: %{pname}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
+DocDir: %{FSP_PUB}/doc/contrib
 URL: http://slurm.schedmd.com/
 
 # 8/11/14 karl.w.schulz@intel.com - update default runlevels
@@ -793,6 +794,8 @@ touch $LIST
     test -f $RPM_BUILD_ROOT/lib64/security/pam_slurm.so		&&
 	echo /lib64/security/pam_slurm.so	>>$LIST
 %endif
+
+mkdir -p %{RPM_BUILD_ROOT}/%{_docdir}
 #############################################################################
 
 %clean
@@ -839,6 +842,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/slurmconfgen.py
 %endif
 %config %{_sysconfdir}/slurm.conf.example
+
+%{FSP_PUB}
+%doc AUTHORS BUILD.NOTES ChangeLog COPYING DISCLAIMER INSTALL LICENSE.OpenSSL NEWS README.rst RELEASE_NOTES
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?FSP_BUILD}
