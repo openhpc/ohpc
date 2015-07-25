@@ -61,7 +61,7 @@ which checks should be run on which nodes.
 umask 0077
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
-%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %check
 %{__make} test

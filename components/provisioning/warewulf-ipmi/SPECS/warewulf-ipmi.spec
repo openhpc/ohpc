@@ -58,7 +58,7 @@ adding IPMI functionality.
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
-%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT

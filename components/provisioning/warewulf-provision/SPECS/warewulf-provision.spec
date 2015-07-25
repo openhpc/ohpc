@@ -112,7 +112,7 @@ available the included GPL software.
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
-%{__mkdir} -p %{RPM_BUILD_ROOT}/%_docdir}
+%{__mkdir} -p $RPM_BUILD_ROOT/%_docdir}
 
 %post -n %{pname}-server%{PROJ_DELIM}
 # 07/22/14 karl.w.schulz@intel.com - specify alternate group per Base OS
