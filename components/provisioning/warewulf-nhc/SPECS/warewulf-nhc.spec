@@ -35,6 +35,7 @@ Requires: bash
 BuildConflicts: post-build-checks
 BuildArch: noarch
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
+DocDir: %{FSP_PUB}/doc/contrib
 
 %description
 This package contains the Warewulf Node Health Check system.
@@ -60,6 +61,7 @@ which checks should be run on which nodes.
 umask 0077
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
 
 %check
 %{__make} test
@@ -71,6 +73,7 @@ test "$RPM_BUILD_ROOT" != "/" && %{__rm} -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%{FSP_PUB}
 %doc COPYING ChangeLog LICENSE nhc.conf contrib/nhc.cron
 %dir %{_sysconfdir}/%{sname}/
 %dir %{_localstatedir}/lib/%{sname}/
