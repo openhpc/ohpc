@@ -99,7 +99,7 @@ rm -rf $RPM_BUILD_ROOT/etc/rc.d/init.d/wwfirstboot
 rm -rf $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/wwfirstboot/*
 %endif
 
-%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
