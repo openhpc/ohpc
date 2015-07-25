@@ -106,6 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%{FSP_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL LICENSE NEWS README README.node TODO
 %{_sysconfdir}/profile.d/*
 %{_bindir}/*
@@ -117,6 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n %{pname}-node%{PROJ_DELIM}
 %defattr(-, root, root)
+%{FSP_PUB}
 %doc AUTHORS COPYING LICENSE README.node
 %config(noreplace) %{_sysconfdir}/sysconfig/wwfirstboot.conf
 %if 0%{?suse_version}

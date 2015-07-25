@@ -36,6 +36,7 @@ BuildRequires: warewulf-common-fsp
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
+DocDir: %{FSP_PUB}/doc/contrib
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -57,6 +58,7 @@ adding IPMI functionality.
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -64,6 +66,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
+%{FSP_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO
 %{wwpkgdir}/*
 %{_libexecdir}/warewulf/ipmitool

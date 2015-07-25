@@ -97,6 +97,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%{FSP_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/defaults/
