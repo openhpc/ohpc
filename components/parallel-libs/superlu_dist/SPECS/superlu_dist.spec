@@ -92,22 +92,12 @@ Patch0:         superlu_dist-3.1-sequence-point.patch
 Patch1:         superlu_dist-4.0-make.patch
 # PATCH-FIX-UPSTREAM superlu_dist-3.2-example-no-return-in-non-void.patch
 Patch2:         superlu_dist-3.2-example-no-return-in-non-void.patch
-#BuildRequires:  blas-devel
-#BuildRequires:  gcc-fortran
-#BuildRequires:  scotch-devel
-#%if 0%{?_openmpi}
-#BuildRequires:  openmpi-devel
-#BuildRequires:  ptscotch-openmpi-devel
-#%endif
-#%if 0%{?_mvapich2}
-#BuildRequires:  mvapich2-devel
-#BuildRequires:  ptscotch-mvapich2-devel
-#%endif
-BuildRequires: parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires: parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: metis-%{compiler_family}%{PROJ_DELIM}
-Requires: metis-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       parmetis-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
+Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %include %{_sourcedir}/FSP_macros
 #!BuildIgnore: post-build-checks
@@ -239,6 +229,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{buildroot}/%_docdir}
 
 %clean
 rm -rf %{buildroot}
@@ -250,5 +241,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc README
 
 %changelog
