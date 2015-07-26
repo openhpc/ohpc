@@ -8,6 +8,8 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%include %{_sourcedir}/FSP_macros
+
 %define pname munge
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 %define debug_package %{nil}
@@ -44,6 +46,7 @@ BuildConflicts: post-build-checks
 Conflicts: munge 
 
 Source0:	%{pname}-%{version}.tar.bz2
+Source1:   FSP_macros
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
 Patch1:     %{pname}.logdir.patch
 # 6/12/14 karl.w.schulz@intel.com - define default runlevel
@@ -130,7 +133,7 @@ rm "$RPM_BUILD_ROOT"/etc/init.d/munge
 rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 %endif
 
-%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %clean
 rm -rf "$RPM_BUILD_ROOT"
