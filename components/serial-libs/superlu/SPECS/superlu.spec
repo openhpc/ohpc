@@ -176,8 +176,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
-
-%{FSP_PUB}
+%{FSP_PUB}/doc/contrib
 %doc README
 
 %changelog
