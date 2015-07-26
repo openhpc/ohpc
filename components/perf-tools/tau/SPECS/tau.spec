@@ -68,6 +68,7 @@ Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
 # 03/31/15 charles.r.baird@intel.com - add return value that rpmlint complained about
 Patch1: tau.papilayer.patch
+DocDir: %{FSP_PUB}/doc/contrib
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -246,10 +247,13 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
 
 %changelog
 
