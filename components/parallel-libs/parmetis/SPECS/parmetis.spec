@@ -193,6 +193,6 @@ rm -fr ${RPM_BUILD_ROOT}
 %defattr(-,root,root)
 %{FSP_HOME}
 %{FSP_PUB}
-%doc BUILD.txt ChangeLog Install.txt LICENSE.txt
+%doc BUILD.txt Changelog Install.txt LICENSE.txt
 
 %changelog
