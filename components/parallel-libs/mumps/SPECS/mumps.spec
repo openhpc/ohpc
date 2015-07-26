@@ -248,7 +248,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%{__mkdir} -p %{buildroot}/%{{_docdir}
+%{__mkdir} -p %{buildroot}/%{_docdir}
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
