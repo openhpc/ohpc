@@ -88,6 +88,7 @@ BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %include %{_sourcedir}/FSP_macros
 #!BuildIgnore: post-build-checks
@@ -236,6 +237,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{buildroot}/%_docdir}
+
 %clean
 rm -rf %{buildroot}
 
@@ -245,5 +248,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc CHANGELOG Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 
 %changelog
