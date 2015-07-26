@@ -8,6 +8,8 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%include %{_sourcedir}/FSP_macros
+
 %define pname slurm
 %{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
@@ -105,6 +107,7 @@ Summary: Slurm Workload Manager
 License: GPL
 Group: fsp/rms
 Source: %{pname}-%{version}.tar.bz2
+Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
 DocDir: %{FSP_PUB}/doc/contrib
 URL: http://slurm.schedmd.com/
@@ -795,7 +798,7 @@ touch $LIST
 	echo /lib64/security/pam_slurm.so	>>$LIST
 %endif
 
-mkdir -p %{RPM_BUILD_ROOT}/%{_docdir}
+mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 #############################################################################
 
 %clean
