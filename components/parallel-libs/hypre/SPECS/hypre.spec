@@ -104,6 +104,7 @@ BuildRequires:  libxml2-python
 %endif
 BuildRequires:  xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -289,12 +290,16 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{buildroot}/%{_docdir}
+
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
 
 %changelog
 
