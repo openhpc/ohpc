@@ -167,7 +167,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %post -p /sbin/ldconfig
 
@@ -176,7 +176,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
-%{FSP_PUB}/doc/contrib
+%{FSP_PUB}
 %doc README
 
 %changelog
