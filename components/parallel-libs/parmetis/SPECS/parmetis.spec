@@ -69,6 +69,7 @@ Source1: FSP_macros
 Source2: FSP_setup_compiler
 Source3: FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+DocDir: %{FSP_PUB}doc/contrib
 BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
@@ -177,6 +178,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+
 %post -n libmetis0
 /sbin/ldconfig
 
@@ -189,3 +192,7 @@ rm -fr ${RPM_BUILD_ROOT}
 %files
 %defattr(-,root,root)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc BUILD.txt ChangeLog Install.txt LICENSE.txt
+
+%changelog
