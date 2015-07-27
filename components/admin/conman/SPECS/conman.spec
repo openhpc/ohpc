@@ -72,7 +72,7 @@ make %{?_smp_mflags}
 
 %install
 rm -rf "%{buildroot}"
-mkdir -p "%{buildroot}"
+%{__mkdir_p} "%{buildroot}"
 make install DESTDIR="%{buildroot}"
 #
 %if 0%{?_initrddir:1}
@@ -81,6 +81,8 @@ if [ "%{_sysconfdir}/init.d" != "%{_initrddir}" ]; then
   mv "%{buildroot}%{_sysconfdir}/init.d"/* "%{buildroot}%{_initrddir}/"
 fi
 %endif
+
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf "%{buildroot}"
