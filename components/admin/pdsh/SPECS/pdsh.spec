@@ -363,7 +363,7 @@ make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT
+%{mkdir_p} $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
 if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.qshd ]; then
    install -D -m644 etc/qshell.xinetd $RPM_BUILD_ROOT/%{_sysconfdir}/xinetd.d/qshell
@@ -382,12 +382,13 @@ find "%buildroot" -type f -name "*.a" | xargs rm -f
 
 # Add soft link to pdsh binaries in default path
 
-%{__mkdir} -p ${RPM_BUILD_ROOT}/%{_bindir}
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/pdsh ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/dshbak ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/pdcp ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/rpdcp ${RPM_BUILD_ROOT}/%{_bindir}
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 ##############################################################################
 
