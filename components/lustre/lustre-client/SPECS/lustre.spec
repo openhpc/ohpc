@@ -155,6 +155,7 @@ Release: %{fullrelease}
 License: GPL
 Group: fsp/lustre
 Source: lustre-%{version}.tar.gz
+Source1: FSP_macros
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{FSP_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
