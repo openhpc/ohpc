@@ -26,6 +26,7 @@ Summary:            Distributed Monitoring System
 Group:              fsp/admin
 License:            BSD-3-Clause
 URL:                http://ganglia.sourceforge.net/
+DocDir:             %{FSP_PUB}/doc/contrib
 Source0:            ganglia-%{version}.tar.gz
 Source1:            ganglia-web-%{webver}.tar.gz
 Source2:            gmond.service
