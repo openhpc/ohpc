@@ -56,6 +56,7 @@ Release:   1
 License:   BSD
 Group:     fsp/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
+DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
@@ -127,7 +128,7 @@ rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
 
 # FSP module file
-%{__mkdir} -p %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__mkdir_p} %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -164,6 +165,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -175,6 +178,11 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%doc README.envvar
+%doc COPYRIGHT
+%doc CHANGELOG
+%doc CHANGES
+%doc README
 
 
 %changelog
