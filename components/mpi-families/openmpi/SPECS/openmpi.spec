@@ -33,6 +33,8 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
+%include %{_sourcedir}/FSP_macros
+
 #-fsp-header-comp-end------------------------------------------------
 
 # Base package name
@@ -56,8 +58,6 @@ Source2:   FSP_setup_compiler
 #Patch1:    %{pname}-no_date_and_time.patch
 #Patch2:    %{pname}-no_network_in_build.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-
-%include %{_sourcedir}/FSP_macros
 
 %define debug_package %{nil}
 
