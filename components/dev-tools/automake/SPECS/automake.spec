@@ -20,6 +20,7 @@ Release:   1
 License:   GPLv2+ and GFDL
 Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/automake/
+DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   automake-%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -61,7 +62,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %dir %{FSP_PUB}
 %{FSP_PUB}/autotools
-
+%doc THANKS
+%doc ChangeLog
+%doc NEWS
+%doc AUTHORS
+%doc README
+%doc COPYING
 
 %changelog
 * Mon Sep 15 2014  <karl.w.schulz@intel.com> - 
