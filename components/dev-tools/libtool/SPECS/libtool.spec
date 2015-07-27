@@ -67,7 +67,7 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
 # modulefile
 
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}
+%{__mkdir_p} %{buildroot}/%{FSP_MODULES}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/autotools
 #%Module1.0#####################################################################
 # FSP Autotools environment
@@ -88,6 +88,8 @@ module-whatis "Description: Developer utilities"
 prepend-path    PATH            %{install_path}/bin
 prepend-path    MANPATH         %{install_path}/share/man
 EOF
+
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT

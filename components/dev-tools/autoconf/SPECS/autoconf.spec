@@ -59,6 +59,8 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 # remove share/info/dir to avoid conflict with other package installs
 rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
