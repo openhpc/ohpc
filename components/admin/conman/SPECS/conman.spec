@@ -129,6 +129,7 @@ fi
 %doc NEWS
 %doc README
 %doc THANKS
+%{FSP_PUB}
 %config(noreplace) %{_sysconfdir}/conman.conf
 %config(noreplace) %{_sysconfdir}/[dls]*/conman
 %{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}/conman
