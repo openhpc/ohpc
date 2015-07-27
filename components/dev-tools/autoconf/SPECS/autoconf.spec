@@ -19,6 +19,7 @@ Version:   2.69
 Release:   1
 License:   GPLv3+ and GFDL
 Group:     fsp/dev-tools
+DocDir:    %{FSP_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   autoconf-%{version}.tar.gz
 Source1:   FSP_macros
@@ -66,6 +67,19 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{FSP_HOME}
 %dir %{FSP_PUB}
 %{FSP_PUB}/autotools
+%doc THANKS
+%doc NEWS
+%doc ChangeLog.2
+%doc ChangeLog
+%doc COPYING
+%doc ChangeLog.3
+%doc README
+%doc AUTHORS
+%doc COPYINGv3
+%doc ChangeLog.0
+%doc ChangeLog.1
+%doc TODO
+%doc COPYING.EXCEPTION
 
 
 %changelog
