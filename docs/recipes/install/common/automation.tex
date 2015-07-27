@@ -1,0 +1,29 @@
+\subsection{Installation Template}
+The collection of command-line instructions included in this guide, when
+combined with local site inputs, can be used to implement a starting recipe for
+bare-metal system installation and configuration. To aid in direct usage of the
+commands called out in this particular recipe, and to also allow for potential
+site customization, \FSP{} documentation includes a template script summarizing
+the commands used herein. This script can be used in conjunction with a simple
+text file that defines the local site variables defined in the previous section
+(\S~\ref{sec:inputs}).
+
+By default, the template install script attempts to use local variable settings sourced
+from the \path{/opt/fsp/pub/docs/input.local} file, however, this choice can be
+overridden by the use of the \texttt{FSP\_INPUT\_LOCAL} environment
+variable. The template install script is intended for execution on the SMS {\em
+  master} host and installed as part of the {\em docs-fsp} package into
+\path{/opt/fsp/pub/docs/fsp_vanilla_recipe.sh}.  After reviewing the guide
+for additional information on the intent of the commands, the general starting
+approach for using this template is as follows:
+
+\begin{enumerate}[rightmargin=2cm,itemsep=-0.5ex]
+\item Copy the \path{/opt/fsp/pub/docs/input.local} example input file and edit the
+  variable definitions to match desired local settings.
+\item Review the \texttt{fsp\_vanilla\_recipe.sh} file which contains
+  command-line instructions culled from this guide and edit to suite.
+\item Execute the resulting script on chosen SMS host to perform a local installation.
+\end{enumerate}
+
+
+
