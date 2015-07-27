@@ -20,6 +20,7 @@ Version:   3.10.1
 Release:   1
 License:   GPL
 URL:       http://www.valgrind.org/
+DocDir:    %{FSP_PUB}/doc/contrib
 Group:     fsp/dev-tools
 Source:    valgrind-%{version}.tar.bz2
 Source1:   FSP_macros
@@ -50,7 +51,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 # modulefile
 
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/%{pname}
+%{__mkdir_p} %{buildroot}/%{FSP_MODULES}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 # FSP %{pname} environment
@@ -85,9 +86,21 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %files
 %defattr(-,root,root)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc AUTHORS
+%doc README_DEVELOPERS
+%doc README
+%doc COPYING.DOCS
+%doc README_PACKAGERS
+%doc README_MISSING_SYSCALL_OR_IOCTL
+%doc FAQ.txt
+%doc NEWS
+%doc COPYING
 
 %clean
 rm -rf $RPM_BUILD_ROOT
