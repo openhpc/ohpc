@@ -72,7 +72,7 @@ ln -s mpfr-%{mpfr_version} mpfr
 
 %build
 
-mkdir obj
+%{__mkdir} obj
 cd obj
 ../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path}
 
@@ -89,7 +89,7 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %endif
 
 # FSP module file
-mkdir -p %{buildroot}/%{FSP_MODULES}/gnu
+%{__mkdir_p} %{buildroot}/%{FSP_MODULES}/gnu
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/gnu/%{version}
 #%Module1.0#####################################################################
 
@@ -129,6 +129,8 @@ EOF
 ##
 set     ModulesVersion      "%{version}"
 EOF
+
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %post
 /sbin/ldconfig

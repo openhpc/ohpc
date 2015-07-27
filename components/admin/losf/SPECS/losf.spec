@@ -68,8 +68,8 @@ cluster.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p %{buildroot}/%{installPath}
-mkdir -p %{buildroot}/etc/profile.d
+%{__mkdir_p} %{buildroot}/%{installPath}
+%{__mkdir_p} %{buildroot}/etc/profile.d
 cp -a * %{buildroot}/%{installPath}
 
 # Remove separate test dir to minimize dependencies
@@ -78,7 +78,7 @@ rm -rf %{buildroot}/%{installPath}/test
 
 # Add soft links to CLI binaries in default path
 
-mkdir -p ${RPM_BUILD_ROOT}/%{_bindir}
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_bindir}
 
 for i in losf update initconfig koomie_cf sync_config_files node_types rpm_topdir ; do
     ln -sf %{installPath}/$i ${RPM_BUILD_ROOT}/%{_bindir}
@@ -88,7 +88,7 @@ for i in idisk ilog ioff ion ipxe ireboot ireset isensor isoft istat ; do
     ln -sf %{installPath}/utils/$i ${RPM_BUILD_ROOT}/%{_bindir}
 done
 
-mkdir -p ${RPM_BUILD_ROOT}/%{_docdir}
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT

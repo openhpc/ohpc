@@ -87,7 +87,7 @@ export LUA_PATH="%{LUA_PATH}"
 make DESTDIR=$RPM_BUILD_ROOT install
 # Customize startup script to suit
 
-mkdir -p %{buildroot}/%{_sysconfdir}/profile.d
+%{__mkdir_p} %{buildroot}/%{_sysconfdir}/profile.d
 %{__cat} << EOF > %{buildroot}/%{_sysconfdir}/profile.d/lmod.sh
 #!/bin/sh
 # -*- shell-script -*-
@@ -177,6 +177,8 @@ EOF
 
 endif
 EOF
+
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
