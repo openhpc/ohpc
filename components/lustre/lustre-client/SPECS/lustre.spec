@@ -154,6 +154,7 @@ License: GPL
 Group: fsp/lustre
 Source: lustre-%{version}.tar.gz
 URL: https://wiki.hpdd.intel.com/
+DocDir: %{FSP_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
 Obsoletes: lustre-lite, lustre-lite-utils, lustre-ldap nfs-utils-lustre
 Provides: lustre-lite = %{version}, lustre-lite-utils = %{version}
@@ -529,6 +530,8 @@ find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} \
 %endif
 %endif
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %files -f lustre.files
 %defattr(-,root,root)
 %{_sbindir}/*
@@ -578,6 +581,7 @@ find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} \
 %doc COPYING
 %doc ChangeLog-lustre
 %doc ChangeLog-lnet
+%{FSP_PUB}
 
 %if %{with ldiskfs}
 %files osd-ldiskfs
