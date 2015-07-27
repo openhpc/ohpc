@@ -19,6 +19,7 @@ Version:   2.31
 Release:   %{_rel}
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
+DocDir:    %{FSP_PUB}/doc/contrib
 Group:     fsp/admin
 Source0:   pdsh-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -372,7 +373,7 @@ if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.mqshd ]; then
 fi
 
 %if 0%{?FSP_BUILD}
-%install_doc_files
+# install_doc_files
 %endif
 
 # 
@@ -399,14 +400,17 @@ rm -rf "$RPM_BUILD_ROOT"
 %doc COPYING README NEWS DISCLAIMER 
 %doc README.KRB4 README.modules README.QsNet
 %{FSP_HOME}
+%{FSP_PUB}
 %{_bindir}/pdsh
 %{_bindir}/dshbak
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
 
 %if 0%{?FSP_BUILD}
-%dir %{FSP_PUB}/share/doc
-%{FSP_PUB}/share/doc/%{pname}
+# dir %{FSP_PUB}/share/doc
+# {FSP_PUB}/share/doc/%{pname}
+%doc AUTHORS
+
 %endif
 
 %changelog
