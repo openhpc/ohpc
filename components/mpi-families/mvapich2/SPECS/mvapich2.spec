@@ -46,6 +46,8 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
+%include %{_sourcedir}/FSP_macros
+
 # Base package name
 %define pname mvapich2
 
@@ -61,8 +63,6 @@ Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-
-%include %{_sourcedir}/FSP_macros
 
 %define debug_package %{nil}
 
