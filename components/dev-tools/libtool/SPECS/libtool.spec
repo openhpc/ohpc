@@ -98,7 +98,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %dir %{FSP_PUB}
 %dir %{FSP_MODULES}
-%{FSP_PUB}/autotools
+%{FSP_PUB}
 %{FSP_MODULES}/autotools
 %doc AUTHORS
 %doc ChangeLog
