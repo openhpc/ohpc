@@ -12,6 +12,8 @@
 
 %if 0%{?FSP_BUILD}
 
+%include %{_sourcedir}/FSP_macros
+
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 %define debug_package %{nil}
 
