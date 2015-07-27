@@ -20,6 +20,7 @@ Release:   1
 License:   GPLv2+ and LGPLv2+ and GFDL
 Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/libtool/
+DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   libtool-%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -97,6 +98,14 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{FSP_MODULES}
 %{FSP_PUB}/autotools
 %{FSP_MODULES}/autotools
+%doc AUTHORS
+%doc ChangeLog
+%doc COPYING
+%doc NEWS
+%doc README
+%doc THANKS
+%doc TODO
+
 
 
 %changelog
