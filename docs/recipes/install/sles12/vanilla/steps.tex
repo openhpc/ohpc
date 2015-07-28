@@ -77,7 +77,7 @@
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82
 [master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.31:/Factory/SLE_12_Intel/ForestPeak:15.31:Factory.repo
-[master]$ zypper -n --gpg-auto-import-keys refresh
+[master]$ zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_fsp_run
 
