@@ -154,16 +154,16 @@ popd
 
 %install
 
-%{__mkdir} -p %{buildroot}%{install_path}/etc
+%{__mkdir_p} %{buildroot}%{install_path}/etc
 install -m644 make.inc %{buildroot}%{install_path}/etc
 
-%{__mkdir} -p %{buildroot}%{install_path}/include
+%{__mkdir_p} %{buildroot}%{install_path}/include
 install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
               SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
               SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
               %{buildroot}%{install_path}/include/
 
-%{__mkdir} -p %{buildroot}%{install_path}/lib
+%{__mkdir_p} %{buildroot}%{install_path}/lib
 install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
@@ -171,7 +171,7 @@ ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -229,7 +229,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%{__mkdir} -p %{buildroot}/%_docdir}
+%{__mkdir_p} %{buildroot}/%_docdir
 
 %clean
 rm -rf %{buildroot}
