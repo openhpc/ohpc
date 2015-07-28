@@ -154,6 +154,9 @@ for f in $RPM_BUILD_ROOT%{install_path}/conf/*; do
     sed -i -e 's!%{buildroot}!!g' $f
 done
 
+# remove stock module file
+rm -rf $RPM_BUILDROOT%{install_path}/lib/modules
+
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}

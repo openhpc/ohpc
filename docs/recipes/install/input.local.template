@@ -1,22 +1,40 @@
-master_name=sms
-master_ip=172.16.0.1
-sms_eth_internal=eth1
-eth_provision=eth0
-internal_netmask=255.255.0.0
-bmc_username=root
-bmc_password=unknown
+# -*-sh-*-
 #
-c1_ip=172.16.1.1
+# ------------------------------------------------------------------------------------------------
+# Template input file to define local variable settings for use with
+# a FSP installation recipe.
+# ------------------------------------------------------------------------------------------------
+
+master_name=sms                             # Hostname for master server (SMS)
+master_ip=172.16.0.1		            # Local (internal) IP address on SMS
+sms_eth_internal=eth1		            # Internal ethernet interface on SMS
+internal_netmask=255.255.0.0	            # Subnet netmask for internal cluster network
+eth_provision=eth0		            # Provisioning interface used by compute hosts
+bmc_username=unknown		            # BMC username for use by IPMI
+bmc_password=unknown		            # BMC password for use by IPMI
+
+c1_ip=172.16.1.1		            # Desired compute node IP addresses
 c2_ip=172.16.1.2
 c3_ip=172.16.1.3
 c4_ip=172.16.1.4
-#
-c1_mac=00:1a:2b:3c:4f:56
+
+c1_mac=00:1a:2b:3c:4f:56	            # MAC addresses for compute nodes
 c2_mac=00:1a:2b:3c:4f:56
 c3_mac=00:1a:2b:3c:4f:56
 c4_mac=00:1a:2b:3c:4f:56
-#
-c1_bmc=10.16.1.1
+
+c1_bmc=10.16.1.1		            # BMC IP addresses for computes
 c2_bmc=10.16.1.2
 c3_bmc=10.16.1.3
 c4_bmc=10.16.1.4
+
+#-------------------
+# Optional settings
+#-------------------
+mgs_fs_name=192.168.100.254@o2ib:/lustre1   # Lustre MGS mount name
+sms_ipoib=192.168.0.1			    # IPoIB address for SMS server
+
+c1_ipoib=192.168.1.1		            # IPoIB addresses for computes
+c2_ipoib=192.168.1.2
+c3_ipoib=192.168.1.3
+c4_ipoib=192.168.1.4
