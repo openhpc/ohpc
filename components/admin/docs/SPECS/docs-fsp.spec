@@ -50,16 +50,16 @@ make
 
 # Include convenience recipe script(s)
 
-../../parse_doc.pl --ci_run steps.tex > fsp_vanilla_recipe.sh
+../../parse_doc.pl steps.tex > fsp_vanilla_recipe.sh
 
 
 %install
 
-%{__mkdir} -p %{buildroot}%{FSP_PUB}/docs
-install -m 0644 -p ChangeLog %{buildroot}/%{FSP_PUB}/docs/ChangeLog
-install -m 0644 -p Release_Notes.txt %{buildroot}/%{FSP_PUB}/docs/Release_Notes.txt
-install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/docs/Install_guide.pdf 
-install -m 0644 -p %{source_path}/fsp_vanilla_recipe.sh %{buildroot}/%{FSP_PUB}/docs/fsp_vanilla_recipe.sh
+%{__mkdir_p} %{buildroot}%{FSP_PUB}/doc
+install -m 0644 -p ChangeLog %{buildroot}/%{FSP_PUB}/doc/ChangeLog
+install -m 0644 -p Release_Notes.txt %{buildroot}/%{FSP_PUB}/doc/Release_Notes.txt
+install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/doc/Install_guide.pdf 
+install -m 0644 -p %{source_path}/fsp_vanilla_recipe.sh %{buildroot}/%{FSP_PUB}/doc/fsp_vanilla_recipe.sh
 
 %files
 %defattr(-,root,root)
