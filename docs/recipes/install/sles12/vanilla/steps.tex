@@ -260,6 +260,8 @@ be updated with a copy of the configuration as follows:
 % begin_fsp_run
 % fsp_validation_comment Add FSP components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Import GPG keys for chroot repository usage
+[master]$ zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 # Add SLURM client support
 [master]$ (*\groupchrootinstall*) fsp-slurm-client
 
