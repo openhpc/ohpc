@@ -198,7 +198,7 @@ make DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -237,7 +237,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%{__mkdir} -p %{buildroot}/%_docdir}
+%{__mkdir_p} %{buildroot}/%_docdir
 
 %clean
 rm -rf %{buildroot}
