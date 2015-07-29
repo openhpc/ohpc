@@ -27,6 +27,7 @@
 
 %include %{_sourcedir}/FSP_macros
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%define library_name libmxml1
 
 Name:           mxml
 Url:            http://www.msweet.org/projects.php?Z3
@@ -42,6 +43,7 @@ Source1:        baselibs.conf
 Patch:          mxml-2.3-nobinstrip.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  pkgconfig
+Requires:       %library_name
 %define debug_package %{nil}
 
 %description
@@ -51,7 +53,6 @@ nonstandard libraries.
 
 This package holds the commandline tools for mxml.
 
-%define library_name libmxml1
 
 %package -n %library_name
 #
@@ -90,10 +91,6 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %defattr(-,root,root)
 %{_bindir}/mxmldoc
 %{_mandir}/man1/mxmldoc.1*
-%doc %{_docdir}
-%exclude %{_docdir}/mxml.html
-%exclude %{_docdir}/*gif
-%{FSP_PUB}
 
 %files -n %{library_name}
 %defattr(-,root,root)
