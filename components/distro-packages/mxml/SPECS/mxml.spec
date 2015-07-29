@@ -56,6 +56,9 @@ This package holds the commandline tools for mxml.
 
 %package -n %library_name
 #
+Name:           %library_name
+Version:        2.9
+Release:        0
 Summary:        Shared library for mxml
 License:        LGPL-2.1+
 Group:          fsp/distro-packages
