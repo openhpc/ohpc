@@ -112,6 +112,9 @@ rm -rf examples/.deps/ examples/Makefile*
 %{_includedir}/confuse.h
 %{_mandir}/man3/*.3*
 %{_datadir}/
+%doc NEWS
+%doc README
+%doc AUTHORS
 %doc doc/html/ doc/tutorial-html/ examples/
 %{FSP_PUB}
 %{FSP_HOME}
