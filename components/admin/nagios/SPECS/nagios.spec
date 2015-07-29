@@ -244,7 +244,6 @@ install -d -m 0755 %{buildroot}%{_libdir}/%{pname}/plugins/eventhandlers
 
 install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
 
-%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf %{buildroot}

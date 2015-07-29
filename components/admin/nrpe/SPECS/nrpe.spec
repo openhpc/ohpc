@@ -170,7 +170,6 @@ install -d %{buildroot}%{_localstatedir}/run/%{pname}
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
 install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{pname}.conf
 %endif
-%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 
 %clean

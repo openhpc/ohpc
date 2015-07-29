@@ -722,7 +722,6 @@ install -m 0755 plugins-scripts/check_ntp.pl %{buildroot}/%{_libdir}/nagios/plug
 install -m 0755 plugins/check_radius %{buildroot}/%{_libdir}/nagios/plugins
 %endif
 install -m 0755 plugins/check_pgsql %{buildroot}/%{_libdir}/nagios/plugins
-%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %ifarch ppc ppc64 ppc64p7 sparc sparc64
 rm -f %{buildroot}/%{_libdir}/nagios/plugins/check_sensors
