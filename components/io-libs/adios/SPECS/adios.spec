@@ -72,7 +72,7 @@ Source1: FSP_macros
 Source2: FSP_setup_compiler
 
 # Minimum Build Requires
-BuildRequires: mxml-devel cmake zlib-devel glib2-devel
+BuildRequires: cmake zlib-devel glib2-devel
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
