@@ -263,10 +263,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-install -d %buildroot%{install_path}/docs
-cp -pr AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO \
-	%buildroot%{install_path}/docs
-ls -la %buildroot%{install_path}/docs
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # This happens last -- compiler and mpi _family are unset after
@@ -276,5 +273,12 @@ ls -la %buildroot%{install_path}/docs
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%doc AUTHORS
+%doc COPYING
+%doc ChangeLog
+%doc KNOWN_BUGS
+%doc NEWS
+%doc README
+%doc TODO
 
 %changelog
