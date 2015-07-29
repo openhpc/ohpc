@@ -15,7 +15,8 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-
+%include %{_sourcedir}/FSP_macros
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 Name:           libconfuse0
 Version:        2.7
