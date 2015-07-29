@@ -100,8 +100,11 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %{_libdir}/libmxml.so
 %{_libdir}/pkgconfig/mxml.pc
 %{_mandir}/man3/mxml.3*
-%doc %{_docdir}/mxml.html
-%doc %{_docdir}/*gif
+%doc mxml.html
+%doc *gif
+%doc CHANGES
+%doc COPYING
+%doc README
 %{FSP_PUB}
 %{FSP_HOME}
 
