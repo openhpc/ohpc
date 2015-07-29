@@ -5,17 +5,35 @@
 # an FSP installation recipe.
 # ------------------------------------------------------------------------------------------------
 
-master_name="${master_name:-sms}"                               # Hostname for master server (SMS)
-master_ip="${master_ip:-172.16.0.1}"                            # Local (internal) IP address on SMS
-sms_eth_internal="${sms_eth_internal:-eth1}"                    # Internal ethernet interface on SMS
-internal_netmask="${internal_netmask:-255.255.0.0}"             # Subnet netmask for internal cluster network
-eth_provision="${eth_provision:-eth0}" 		                # Provisioning interface used by compute hosts
-bmc_username="${bmc_username:-unknown}"   	                # BMC username for use by IPMI
-bmc_password="${bmc_password:-unknown}"  		        # BMC password for use by IPMI
+# ---------------------------
+# SMS (master) node settings
+# ---------------------------
+
+# URL for FSP repository
+fsp_repo="${fsp_repo:-http://tcgsw-obs.pdx.intel.com:82/ForestPeak:15.31:/CentOS-7.1_Intel/ForestPeak:15.31.repo}"
+
+# Hostname for master server (SMS)
+master_name="${master_name:-sms}" 
+                              
+# Local (internal) IP address on SMS
+master_ip="${master_ip:-172.16.0.1}"
+
+# Internal ethernet interface on SMS
+sms_eth_internal="${sms_eth_internal:-eth1}"                    
+
+# Subnet netmask for internal cluster network
+internal_netmask="${internal_netmask:-255.255.0.0}"
+
+# Provisioning interface used by compute hosts
+eth_provision="${eth_provision:-eth0}"
+
+# BMC user credentials for use by IPMI
+bmc_username="${bmc_username:-unknown}"
+bmc_password="${bmc_password:-unknown}"
 
 
 # -------------------------
-# compute node definitions
+# compute node settings
 # -------------------------
 
 # total number of computes
