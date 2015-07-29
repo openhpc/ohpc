@@ -25,6 +25,9 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+%include %{_sourcedir}/FSP_macros
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%define library_name libmxml1
 
 Name:           mxml
 Url:            http://www.msweet.org/projects.php?Z3
@@ -32,13 +35,14 @@ Version:        2.9
 Release:        0
 Summary:        Small XML Parsing Library
 License:        LGPL-2.1+
-Group:          Development/Libraries/C and C++
+Group:          fsp/distro-packages
 
 Source:         http://www.msweet.org/files/project3/%{name}-%{version}.tar.gz
 Source1:        baselibs.conf
 Patch:          mxml-2.3-nobinstrip.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  pkgconfig
+Requires:       %library_name
 %define debug_package %{nil}
 
 %description
@@ -48,13 +52,15 @@ nonstandard libraries.
 
 This package holds the commandline tools for mxml.
 
-%define library_name libmxml1
 
 %package -n %library_name
 #
+Version:        2.9
+Release:        0
 Summary:        Shared library for mxml
 License:        LGPL-2.1+
-Group:          System/Libraries
+Group:          fsp/distro-packages
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %description -n %library_name
 Mini-XML is a small XML parsing library that you can use to read XML
@@ -68,7 +74,7 @@ This package holds the shared library for mxml.
 %patch
 
 %build
-%configure --enable-shared --with-docdir=%{_docdir}/%{name}
+%configure --enable-shared --with-docdir=%{_docdir}
 make %{?_smp_mflags}
 
 %install
@@ -76,6 +82,7 @@ make %{?_smp_mflags}
 make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 # we dont want the static lib
 %{__rm} -rv %{buildroot}%{_libdir}/libmxml.a
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %post   -n %{library_name} -p /sbin/ldconfig
 
@@ -85,9 +92,6 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %defattr(-,root,root)
 %{_bindir}/mxmldoc
 %{_mandir}/man1/mxmldoc.1*
-%doc %{_docdir}/%{name}
-%exclude %{_docdir}/%{name}/mxml.html
-%exclude %{_docdir}/%{name}/*gif
 
 %files -n %{library_name}
 %defattr(-,root,root)
@@ -96,7 +100,9 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %{_libdir}/libmxml.so
 %{_libdir}/pkgconfig/mxml.pc
 %{_mandir}/man3/mxml.3*
-%doc %{_docdir}/%{name}/mxml.html
-%doc %{_docdir}/%{name}/*gif
+%doc %{_docdir}/mxml.html
+%doc %{_docdir}/*gif
+%{FSP_PUB}
+%{FSP_HOME}
 
 %changelog

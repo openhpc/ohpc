@@ -15,13 +15,15 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-
+%include %{_sourcedir}/FSP_macros
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 Name:           libconfuse0
 Version:        2.7
 Release:        1
 License:        LGPL-2.1+
 Group:          Development/Libraries/C and C++
+DocDir:         %{FSP_PUB}/doc/contrib
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  gcc-c++ gettext-devel libtool pkgconfig
 %if 0%{?suse_version} > 1020
@@ -91,6 +93,7 @@ autoreconf -fi
 # clean up examples
 %{__make} -C examples clean
 rm -rf examples/.deps/ examples/Makefile*
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %post   -p /sbin/ldconfig
 
@@ -109,7 +112,12 @@ rm -rf examples/.deps/ examples/Makefile*
 %{_includedir}/confuse.h
 %{_mandir}/man3/*.3*
 %{_datadir}/
+%doc NEWS
+%doc README
+%doc AUTHORS
 %doc doc/html/ doc/tutorial-html/ examples/
+%{FSP_PUB}
+%{FSP_HOME}
 
 
 %changelog
