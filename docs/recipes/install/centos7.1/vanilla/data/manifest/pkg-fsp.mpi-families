@@ -1,6 +1,0 @@
-intel-mpi-devel-fsp 5.1.0.069 https://software.intel.com/en-us/intel-mpi-library fsp/mpi-families Intel(R) MPI Library for Linux* OS
-intel-mpi-fsp 5.1.0.069 https://software.intel.com/en-us/intel-mpi-library fsp/mpi-families Intel(R) MPI Library for Linux* OS
-mvapich2-gnu-fsp 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ fsp/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-intel-fsp 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ fsp/mpi-families OSU MVAPICH2 MPI implementation
-openmpi-gnu-fsp 1.8.4 http://www.open-mpi.org fsp/mpi-families A powerful implementation of MPI
-openmpi-intel-fsp 1.8.4 http://www.open-mpi.org fsp/mpi-families A powerful implementation of MPI

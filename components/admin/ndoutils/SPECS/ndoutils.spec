@@ -150,6 +150,8 @@ install -p -m 755 -D %{SOURCE3} %{buildroot}%{_initrddir}/ndo2db
 %endif
 mkdir -p %{buildroot}%{_localstatedir}/run/ndoutils
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf %{buildroot}
 
