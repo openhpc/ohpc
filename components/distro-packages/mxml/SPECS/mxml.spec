@@ -68,7 +68,7 @@ This package holds the shared library for mxml.
 %patch
 
 %build
-%configure --enable-shared --with-docdir=%{_docdir}/%{name}
+%configure --enable-shared --with-docdir=%{DocDir}
 make %{?_smp_mflags}
 
 %install
@@ -85,9 +85,9 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %defattr(-,root,root)
 %{_bindir}/mxmldoc
 %{_mandir}/man1/mxmldoc.1*
-%doc %{_docdir}/%{name}
-%exclude %{_docdir}/%{name}/mxml.html
-%exclude %{_docdir}/%{name}/*gif
+%doc %{DocDir}
+%exclude %{DocDir}/mxml.html
+%exclude %{DocDir}/*gif
 
 %files -n %{library_name}
 %defattr(-,root,root)
@@ -96,7 +96,7 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %{_libdir}/libmxml.so
 %{_libdir}/pkgconfig/mxml.pc
 %{_mandir}/man3/mxml.3*
-%doc %{_docdir}/%{name}/mxml.html
-%doc %{_docdir}/%{name}/*gif
+%doc %{DocDir}/mxml.html
+%doc %{Docdir}/*gif
 
 %changelog

@@ -66,13 +66,14 @@ Version: 1.8.0
 Release: 1
 License: BSD-3-Clause
 Group:   fsp/io-libs
+DocDir:  %{FSP_PUB}/doc/contrib
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler
 
 # Minimum Build Requires
-BuildRequires: cmake zlib-devel glib2-devel
+BuildRequires: libmxml1 cmake zlib-devel glib2-devel
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
