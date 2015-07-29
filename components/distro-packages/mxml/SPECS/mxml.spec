@@ -34,7 +34,7 @@ Version:        2.9
 Release:        0
 Summary:        Small XML Parsing Library
 License:        LGPL-2.1+
-Group:          Development/Libraries/C and C++
+Group:          fsp/distro-packages
 DocDir:         %{FSP_PUB}/doc/contrib
 
 Source:         http://www.msweet.org/files/project3/%{name}-%{version}.tar.gz
