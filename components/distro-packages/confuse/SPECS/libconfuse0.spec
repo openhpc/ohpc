@@ -114,6 +114,7 @@ rm -rf examples/.deps/ examples/Makefile*
 %{_datadir}/
 %doc doc/html/ doc/tutorial-html/ examples/
 %{FSP_PUB}
+%{FSP_HOME}
 
 
 %changelog

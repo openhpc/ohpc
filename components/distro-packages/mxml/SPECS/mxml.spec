@@ -105,5 +105,6 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %doc %{_docdir}/mxml.html
 %doc %{_docdir}/*gif
 %{FSP_PUB}
+%{FSP_HOME}
 
 %changelog
