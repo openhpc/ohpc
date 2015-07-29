@@ -56,10 +56,12 @@ make
 %install
 
 %{__mkdir_p} %{buildroot}%{FSP_PUB}/doc
+%{__mkdir_p} %{buildroot}%{FSP_PUB}/recipes/vanilla
 install -m 0644 -p ChangeLog %{buildroot}/%{FSP_PUB}/doc/ChangeLog
 install -m 0644 -p Release_Notes.txt %{buildroot}/%{FSP_PUB}/doc/Release_Notes.txt
 install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/doc/Install_guide.pdf 
-install -m 0644 -p %{source_path}/fsp_vanilla_recipe.sh %{buildroot}/%{FSP_PUB}/doc/fsp_vanilla_recipe.sh
+install -m 0644 -p %{source_path}/fsp_vanilla_recipe.sh %{buildroot}/%{FSP_PUB}/doc/recipes/vanilla/fsp_recipe.sh
+install -m 0644 -p input.local.template %{buildroot}/%{FSP_PUB}/doc/recipes/vanilla/input.local.template
 
 %files
 %defattr(-,root,root)
