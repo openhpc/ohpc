@@ -56,7 +56,7 @@ make
 %install
 
 %{__mkdir_p} %{buildroot}%{FSP_PUB}/doc
-%{__mkdir_p} %{buildroot}%{FSP_PUB}/recipes/vanilla
+%{__mkdir_p} %{buildroot}%{FSP_PUB}/doc/recipes/vanilla
 install -m 0644 -p ChangeLog %{buildroot}/%{FSP_PUB}/doc/ChangeLog
 install -m 0644 -p Release_Notes.txt %{buildroot}/%{FSP_PUB}/doc/Release_Notes.txt
 install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/doc/Install_guide.pdf 
