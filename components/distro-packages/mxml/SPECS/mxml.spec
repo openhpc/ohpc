@@ -25,6 +25,8 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+%include %{_sourcedir}/FSP_macros
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 Name:           mxml
 Url:            http://www.msweet.org/projects.php?Z3
@@ -69,7 +71,7 @@ This package holds the shared library for mxml.
 %patch
 
 %build
-%configure --enable-shared --with-docdir=%{DocDir}
+%configure --enable-shared --with-docdir=%{_docdir}
 make %{?_smp_mflags}
 
 %install
@@ -77,6 +79,7 @@ make %{?_smp_mflags}
 make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 # we dont want the static lib
 %{__rm} -rv %{buildroot}%{_libdir}/libmxml.a
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %post   -n %{library_name} -p /sbin/ldconfig
 
@@ -86,9 +89,9 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %defattr(-,root,root)
 %{_bindir}/mxmldoc
 %{_mandir}/man1/mxmldoc.1*
-%doc %{DocDir}
-%exclude %{DocDir}/mxml.html
-%exclude %{DocDir}/*gif
+%doc %{_docdir}
+%exclude %{_docdir}/mxml.html
+%exclude %{_docdir}/*gif
 
 %files -n %{library_name}
 %defattr(-,root,root)
@@ -97,7 +100,7 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %{_libdir}/libmxml.so
 %{_libdir}/pkgconfig/mxml.pc
 %{_mandir}/man3/mxml.3*
-%doc %{DocDir}/mxml.html
-%doc %{Docdir}/*gif
+%doc %{_docdir}/mxml.html
+%doc %{_docdir}/*gif
 
 %changelog
