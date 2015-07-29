@@ -57,7 +57,8 @@ This package holds the commandline tools for mxml.
 #
 Summary:        Shared library for mxml
 License:        LGPL-2.1+
-Group:          System/Libraries
+Group:          fsp/distro-packages
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %description -n %library_name
 Mini-XML is a small XML parsing library that you can use to read XML
@@ -92,6 +93,7 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %doc %{_docdir}
 %exclude %{_docdir}/mxml.html
 %exclude %{_docdir}/*gif
+%{FSP_PUB}
 
 %files -n %{library_name}
 %defattr(-,root,root)
@@ -102,5 +104,6 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %{_mandir}/man3/mxml.3*
 %doc %{_docdir}/mxml.html
 %doc %{_docdir}/*gif
+%{FSP_PUB}
 
 %changelog
