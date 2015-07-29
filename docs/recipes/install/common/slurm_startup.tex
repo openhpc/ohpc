@@ -25,8 +25,8 @@ resource management under \SLURM{}.
 [master]$ service slurmctld start
 
 #  start munge and slurm clients on compute hosts
-[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service munge start
-[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service slurmd start
+[master]$ pdsh -w c[1-4] service munge start
+[master]$ pdsh -w c[1-4] service slurmd start
 \end{lstlisting}
 % end_fsp_run
 
