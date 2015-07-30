@@ -51,7 +51,7 @@ intel-vtune-fsp 16.0.1.414512 http://www.intel.com/software/products/ fsp/perf-t
 libtool-fsp 2.4.6 http://www.gnu.org/software/libtool/ fsp/dev-tools The GNU Portable Library Tool
 lmod-defaults-intel-fsp 1.1 (none) fsp/admin FSP default login environment
 lmod-fsp 5.9.3 https://github.com/TACC/Lmod fsp/admin Lua based Modules (lmod)
-losf-fsp 0.51.2 https://github.com/hpcsi/losf fsp/admin A Linux operating system framework for managing HPC clusters
+losf-fsp 0.52.0 https://github.com/hpcsi/losf fsp/admin A Linux operating system framework for managing HPC clusters
 lua-bit-fsp 1.0.2 http://bitop.luajit.org fsp/distro-packages Module for Lua which adds bitwise operations on numbers
 lua-filesystem-fsp 1.6.3 http://keplerproject.github.com/luafilesystem fsp/distro-packages Lua library to Access Directories and Files
 lua-posix-fsp 33.2.1 https://github.com/luaposix/luaposix Development/Libraries POSIX library for Lua
@@ -158,9 +158,9 @@ trilinos-intel-openmpi-fsp 11.14.3 http://trilinos.sandia.gov/index.html fsp/par
 valgrind-fsp 3.10.1 http://www.valgrind.org/ fsp/dev-tools Valgrind Memory Debugger
 warewulf-cluster-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used for clustering with Warewulf
 warewulf-cluster-node-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used for clustering with Warewulf
-warewulf-common-fsp 3.6 (none) fsp/provisioning A suite of tools for clustering
-warewulf-provision-fsp 3.6 (none) fsp/provisioning Warewulf - Provisioning Module
-warewulf-provision-server-fsp 3.6 (none) System Environment/Clustering Warewulf - Provisioning Module - Server
+warewulf-common-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning A suite of tools for clustering
+warewulf-provision-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf - Provisioning Module
+warewulf-provision-server-fsp 3.6 http://warewulf.lbl.gov/ System Environment/Clustering Warewulf - Provisioning Module - Server
 warewulf-vnfs-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf VNFS Module
 package R_proj-fsp.x86_64 is not installed
 package ganglia-devel-fsp.x86_64 is not installed
