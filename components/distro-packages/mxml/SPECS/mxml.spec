@@ -74,7 +74,7 @@ This package holds the shared library for mxml.
 %patch
 
 %build
-%configure --enable-shared --with-docdir=%{_docdir}
+%configure --enable-shared --with-docdir=%{_docdir}/%{library_name}-%{version}
 make %{?_smp_mflags}
 
 %install
@@ -100,12 +100,6 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %{_libdir}/libmxml.so
 %{_libdir}/pkgconfig/mxml.pc
 %{_mandir}/man3/mxml.3*
-%doc mxml.html
-%doc *gif
-%doc CHANGES
-%doc COPYING
-%doc README
-%{FSP_PUB}
 %{FSP_HOME}
 
 %changelog
