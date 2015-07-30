@@ -580,8 +580,8 @@ that were imported in \S\ref{sec:file_import}.
 [master]$ wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
 
 # Optionally register additional compute nodes
-[master]$ for ((i=4; i<$num_computes; i++)) ; do \
-              wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision} \
+[master]$ for ((i=4; i<$num_computes; i++)) ; do
+              wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
            done
 
 # Define provisioning image for hosts
@@ -589,8 +589,7 @@ that were imported in \S\ref{sec:file_import}.
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
 # Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
-
-[master]$ for ((i=0; i<$num_computes; i++)) ; do \
+[master]$ for ((i=0; i<$num_computes; i++)) ; do
               wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
            done
 [master]$ wwsh -y provision set ${compute_regex} --fileadd=ifcfg-ib0.ww
@@ -626,8 +625,8 @@ order to work interactively.
 [master]$ ipmitool -E -I lanplus -H ${c_bmc[3]} -U root chassis power reset   # power cycle c4
 
 # Optionally boot additional compute nodes
-[master]$ for ((i=4; i<$num_computes; i++)) ; do \
-              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U root chassis power reset \
+[master]$ for ((i=4; i<$num_computes; i++)) ; do
+              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U root chassis power reset
            done
 \end{lstlisting} 
 % end_fsp_run
