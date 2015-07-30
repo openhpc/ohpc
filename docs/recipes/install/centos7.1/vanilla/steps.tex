@@ -76,6 +76,10 @@
 \subsection{Enable \FSP{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_fsp_repo}
 
+\begin{lstlisting}[language=bash,keywords={},literate={VER}{\FSPVersion{}}1]
+[master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/CentOS-7.1_Intel/ForestPeak:VER.repo
+\end{lstlisting}
+
 % begin_fsp_run
 % fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
