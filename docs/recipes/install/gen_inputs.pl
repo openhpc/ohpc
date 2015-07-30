@@ -12,12 +12,15 @@ use Getopt::Long;
 
 # Optional command-line arguments
 my $outputFile = "/tmp/input.local";
+my $inputFile  = "/opt/fsp/pub/doc/recipes/vanilla/input.local/template";
 
-GetOptions ('o=s' => \$outputFile);
+GetOptions ('o=s' => \$outputFile,
+	    'i=s' => \$inputFile);
 
 if ( $#ARGV < 0) {
     print STDERR "Usage: gen_inputs [OPTIONS] <hardware_mapfile>\n";
     print STDERR "\nwhere available OPTIONS are:\n";
+    print STDERR "   -i input               Location of template input file (default=/opt/fsp/pub/doc/recipes/vanilla)\n";
     print STDERR "   -o output              Location of output file (default=/tmp/input.local)\n";
     print STDERR "\n";
     exit 1;
@@ -31,12 +34,20 @@ if( !defined $ENV{BaseOS} ) {
     $BaseOS=$ENV{BaseOS};
 }
 
+my $Repo;
+if( !defined $ENV{FSP_REPO} ) {
+    print STDERR "FSP_REPO environment variable must be set to desired repo location\n";
+    exit 1;
+} else {
+    $Repo=$ENV{FSP_REPO};
+}
+
 my $mapfile      = shift;
 my $master_host  = "";
 my @computes     = ();
 my $num_computes = 0;
 
-open(OUT,">$outputFile") || die ("Cannot create output file -> $outputFile");
+#open(OUT,">$outputFile") || die ("Cannot create output file -> $outputFile");
 
 # Test for CI environment
 
@@ -118,27 +129,45 @@ die "Unable to map compute IPs"  if (! @compute_ips);
 die "Unable to map compute MACs" if (! @compute_macs);
 die "Unable to map compute BMCs" if (! @compute_bmcs);
 
-print OUT "master_hostname=$ENV{'NODE_NAME'}\n";
-print OUT "master_ip=$master_ip\n";
-print OUT "sms_eth_internal=$sms_eth_internal\n";
-print OUT "ipoib_netmask=$ipoib_netmask\n";
-print OUT "sms_ipoib=$master_ipoib\n";
-print OUT "internal_netmask=$netmask\n";
-print OUT "eth_provision=$eth_provision\n";
-print OUT "mgs_fs_name=$mgs_fs_name\n";
+# Now, copy input -> output and update vars based on detected CI settings
 
-for (my $i=1;$i<=$num_computes; $i++) {
-    printf OUT "c%i_ip=%s\n",$i,$compute_ips[$i-1];
+#copy($inputFile,$outputFile) || die ("Cannot copy inputFile ($inputFile -> $outputFile)");
+open(IN,"<$inputFile")   || die ("Cannot open input  file -> $inputFile");
+open(OUT,">$outputFile") || die ("Cannot open output file -> $outputFile");
+
+while(my $line=<IN>) {
+    if($line =~ /^(fsp_repo=)\S+/) {
+	print OUT $1 . "$Repo\n";
+    } elsif($line =~ /^(master_name=)\S+/) {
+	print OUT $1 . "$ENV{'NODE_NAME'}\n";
+    } elsif ($line =~ /^(master_ip=)\S+/) {
+	print OUT $1 . "$master_ip\n";
+    } elsif ($line =~ /^(sms_eth_internal=)\S+/) {
+	print OUT $1 . "$sms_eth_internal\n";
+    } elsif ($line =~ /^(internal_netmask=)\S+/) {
+	print OUT $1 . "$netmask\n";
+    } elsif ($line =~ /^(eth_provision=)\S+/) {
+	print OUT $1 . "$eth_provision\n";
+    } elsif ($line =~ /^(bmc_username=)\S+/) {
+	print OUT $1 . "$bmc_username\n";
+    } elsif ($line =~ /^(num_computes=)\S+/) {
+	print OUT $1 . "$num_computes\n";
+    } elsif ($line =~ /^(sms_ipoib=)\S+/) {
+	print OUT $1 . "$master_ipoib\n";
+    } elsif ($line =~ /^(mgs_fs_name=)\S+/) {
+	print OUT $1 . "$mgs_fs_name\n";
+    } elsif ($line =~ /^c_ip\[(\d)\]=\S+/) {
+	print OUT "c_ip[$1]=$compute_ips[$1]\n";
+    } elsif ($line =~ /^c_mac\[(\d)\]=\S+/) {
+	print OUT "c_mac[$1]=$compute_macs[$1]\n";
+    } elsif ($line =~ /^c_bmc\[(\d)\]=\S+/) {
+	print OUT "c_bmc[$1]=$compute_bmcs[$1]\n";
+    } elsif ($line =~ /^c_ipib\[(\d)\]=\S+/) {
+	print OUT "c_ipib[$1]=$compute_ipoibs[$1]\n";
+    } else {
+	print OUT $line;
+    }
 }
- for (my $i=1;$i<=$num_computes; $i++) {
-    printf OUT "c%i_mac=%s\n",$i,$compute_macs[$i-1];
- }
-for (my $i=1;$i<=$num_computes; $i++) {
-    printf OUT "c%i_bmc=%s\n",$i,$compute_bmcs[$i-1];
-}
- for (my $i=1;$i<=$num_computes; $i++) {
-    printf OUT "c%i_ipoib=%s\n",$i,$compute_ipoibs[$i-1];
- }
 
 close OUT;
 print "Localized cluster input saved to $outputFile\n";
