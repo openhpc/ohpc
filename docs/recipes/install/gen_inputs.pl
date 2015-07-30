@@ -35,12 +35,15 @@ if( !defined $ENV{BaseOS} ) {
 }
 
 my $Repo;
-if( !defined $ENV{FSP_REPO} ) {
-    print STDERR "FSP_REPO environment variable must be set to desired repo location\n";
+if( !defined $ENV{Repo} ) {
+    print STDERR "Repo environment variable must be set to desired repo location\n";
     exit 1;
 } else {
-    $Repo=$ENV{FSP_REPO};
+    $Repo=$ENV{Repo};
 }
+
+    
+    
 
 my $mapfile      = shift;
 my $master_host  = "";
@@ -131,13 +134,19 @@ die "Unable to map compute BMCs" if (! @compute_bmcs);
 
 # Now, copy input -> output and update vars based on detected CI settings
 
-#copy($inputFile,$outputFile) || die ("Cannot copy inputFile ($inputFile -> $outputFile)");
 open(IN,"<$inputFile")   || die ("Cannot open input  file -> $inputFile");
 open(OUT,">$outputFile") || die ("Cannot open output file -> $outputFile");
 
+# http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/15.16/CentOS-7.1_Intel/ForestPeak:15.16.repo
+# http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/15.31:/Factory/CentOS-7.1_Intel/ForestPeak:15.31:Factory.repo
+
 while(my $line=<IN>) {
-    if($line =~ /^(fsp_repo=)\S+/) {
-	print OUT $1 . "$Repo\n";
+    if( $line =~ m!^(fsp_repo=http://\S+)/(\S+)/(\S+)/(\S+).repo$! ) {
+	if($Repo ne "Release" ) {
+	    print OUT "$1/$2:/$Repo/$3/$4:$Repo.repo\n";
+	} else {
+	    print OUT $line;
+	}
     } elsif($line =~ /^(master_name=)\S+/) {
 	print OUT $1 . "$ENV{'NODE_NAME'}\n";
     } elsif ($line =~ /^(master_ip=)\S+/) {
