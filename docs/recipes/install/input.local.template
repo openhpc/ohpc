@@ -40,7 +40,7 @@ bmc_password=unknown
 num_computes=4
 
 # regex that matches defined compute hostnames
-compute_regex='c*'
+compute_regex=c*
 
 # compute hostnames
 c_name[0]=c1
