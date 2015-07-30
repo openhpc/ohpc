@@ -10,29 +10,29 @@ used throughout this recipe are presented below. Note that while the example def
 node counts. \\
 
 \vspace*{0.2cm}
-\begin{tabular}{@{}>{\textbullet}cll@{}}
-& \texttt{\$\{master\_name\}} \hspace*{6.25cm} & {\small \# Hostname for master server} \\
+\begin{tabular}{@{}>{\textbullet}l p{7cm} l}
+& \texttt{\$\{fsp\_repo\}} & {\small \# FSP repo location} \\
+& \texttt{\$\{master\_name\}} & {\small \# Hostname for master server} \\
 & \texttt{\$\{master\_ip\}} & {\small \# Internal IP address on master server}  \\
 & \texttt{\$\{sms\_eth\_internal\}} & {\small \# Internal Ethernet interface on SMS} \\
 & \texttt{\$\{eth\_provision\}} & {\small \# Provisioning interface for computes} \\
 & \texttt{\$\{internal\_netmask\}} & {\small \# Subnet netmask for internal network} \\
 & \texttt{\$\{bmc\_username\}} & {\small \# BMC username for use by IPMI} \\
 & \texttt{\$\{bmc\_password\}} & {\small \# BMC password for use by IPMI} \\
-& \texttt{\$\{c\_ip[0]\}},\texttt{\$\{c\_ip[1]\}},\texttt{\$\{c\_ip[2]\}},\texttt{\$\{c\_ip[3]\}} & {\small \# Desired compute node addresses} \\
-& \texttt{\$\{c\_bmc[0]\}},\texttt{\$\{c\_bmc[1]\}},\texttt{\$\{c\_bmc[2]\}},\texttt{\$\{c\_bmc[3]\}} & {\small \# BMC addresses for computes} \\
-& \texttt{\$\{c\_mac[0]\}},\texttt{\$\{c\_mac[1]\}},\texttt{\$\{c\_mac[2]\}},\texttt{\$\{c\_mac[3]\}} & {\small \# MAC addresses for computes} \\
+& \texttt{\$\{c\_ip[0]\}}, \texttt{\$\{c\_ip[1]\}}, ... & {\small \# Desired compute node addresses} \\
+& \texttt{\$\{c\_bmc[0]\}}, \texttt{\$\{c\_bmc[1]\}}, ... & {\small \# BMC addresses for computes} \\
+& \texttt{\$\{c\_mac[0]\}}, \texttt{\$\{c\_mac[1]\}}, ... & {\small \# MAC addresses for computes} \\
 \end{tabular}
 
 \vspace*{0.2cm}
 \noindent {Optional:} 
 \vspace*{0.1cm}
 
-\begin{tabular}{@{}>{\textbullet}cll@{}}
+\begin{tabular}{@{}>{\textbullet}l p{7cm} l}
 & \texttt{\$\{mgs\_fs\_name\}} & {\small \# Lustre MGS mount name} \\
 & \texttt{\$\{sms\_ipoib\}} & {\small \# IPoIB address for SMS server} \\
 & \texttt{\$\{ipoib\_netmask\}} & {\small \# Subnet netmask for internal IPoIB} \\
-& \texttt{\$\{c\_ipib[0]\}},\texttt{\$\{c\_ipib[1]\}},\texttt{\$\{c\_ipib[2]\}},\texttt{\$\{c\_ipib[3]\}} & {\small \# IPoIB addresses for
-    computes} \\
+& \texttt{\$\{c\_ipoib[0]\}}, \texttt{\$\{c\_ipoib[1]\}}, ... & {\small \# IPoIB addresses for computes} \\
 \end{tabular}
 
 
