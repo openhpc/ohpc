@@ -4,6 +4,12 @@ adios-gnu-openmpi-fsp 1.8.0
 adios-intel-impi-fsp 1.8.0
 adios-intel-mvapich2-fsp 1.8.0
 adios-intel-openmpi-fsp 1.8.0
+ganglia-devel-fsp 3.7.1
+ganglia-fsp 3.7.1
+ganglia-gmetad-fsp 3.7.1
+ganglia-gmond-fsp 3.7.1
+ganglia-gmond-python-fsp 3.7.1
+ganglia-web-fsp 3.6.2
 hypre-gnu-impi-fsp 2.10.0b
 hypre-gnu-mvapich2-fsp 2.10.0b
 hypre-gnu-openmpi-fsp 2.10.0b
@@ -85,12 +91,6 @@ nagios-plugins-ups-fsp 2.0.1
 nagios-plugins-uptime-fsp 2.0.1
 nagios-plugins-users-fsp 2.0.1
 nagios-plugins-wave-fsp 2.0.1
-package ganglia-devel-fsp.x86_64
-package ganglia-fsp.x86_64
-package ganglia-gmetad-fsp.x86_64
-package ganglia-gmond-fsp.x86_64
-package ganglia-gmond-python-fsp.x86_64
-package ganglia-web-fsp.x86_64
 package ipmiutil-devel-fsp.x86_64
 package ipmiutil-fsp.x86_64
 package mkl-blacs-gnu-mvapich2-fsp.x86_64

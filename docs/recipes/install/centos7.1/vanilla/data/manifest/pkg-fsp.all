@@ -22,6 +22,12 @@ fftw-gnu-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier 
 fftw-intel-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-intel-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-intel-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
+ganglia-devel-fsp 3.7.1 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Library
+ganglia-fsp 3.7.1 http://ganglia.sourceforge.net/ fsp/admin Distributed Monitoring System
+ganglia-gmetad-fsp 3.7.1 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Metadata collection daemon
+ganglia-gmond-fsp 3.7.1 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Monitoring daemon
+ganglia-gmond-python-fsp 3.7.1 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Monitor daemon python DSO and metric modules
+ganglia-web-fsp 3.6.2 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Web Frontend
 gnu-compilers-fsp 4.9.2 http://gcc.gnu.org/ fsp/compiler-families The GNU C Compiler and Support Files
 gsl-gnu-fsp 1.16 http://www.gnu.org/software/gsl fsp/serial-libs GNU Scientific Library (GSL)
 gsl-intel-fsp 1.16 http://www.gnu.org/software/gsl fsp/serial-libs GNU Scientific Library (GSL)
@@ -223,12 +229,6 @@ warewulf-provision-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf - 
 warewulf-provision-server-fsp 3.6 http://warewulf.lbl.gov/ System Environment/Clustering Warewulf - Provisioning Module - Server
 warewulf-vnfs-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf VNFS Module
 package R_proj-fsp.x86_64 is not installed
-package ganglia-devel-fsp.x86_64 is not installed
-package ganglia-fsp.x86_64 is not installed
-package ganglia-gmetad-fsp.x86_64 is not installed
-package ganglia-gmond-fsp.x86_64 is not installed
-package ganglia-gmond-python-fsp.x86_64 is not installed
-package ganglia-web-fsp.x86_64 is not installed
 package ipmiutil-devel-fsp.x86_64 is not installed
 package ipmiutil-fsp.x86_64 is not installed
 package ipmiutil-static-fsp.x86_64 is not installed
