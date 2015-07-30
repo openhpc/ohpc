@@ -79,10 +79,13 @@
 % begin_fsp_run
 % fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
-% [master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:
-[master]$ wget -P /etc/yum.repos.d ${rsp_repo}/15.31:/Factory/CentOS-7.1_Intel/ForestPeak:15.31:Factory.repo
+[master]$ wget -P /etc/yum.repos.d ${fsp_repo}
 \end{lstlisting}
 % end_fsp_run
+
+% master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:
+% master]$ wget -P /etc/yum.repos.d
+% ${rsp_repo}/15.31:/Factory/CentOS-7.1_Intel/ForestPeak:15.31:Factory.repo
 
 In addition to the \FSP{} package repository, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
@@ -588,7 +591,7 @@ that were imported in \S\ref{sec:file_import}.
 # Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
 
 [master]$ for ((i=0; i<$num_computes; i++)) ; do \
-              wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipib[$i]} --netmask=${ipoib_netmask}
+              wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
            done
 [master]$ wwsh -y provision set ${compute_regex} --fileadd=ifcfg-ib0.ww
 
