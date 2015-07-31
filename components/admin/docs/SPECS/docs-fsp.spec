@@ -16,7 +16,7 @@ Release:        1
 Summary:        Forest Peak documentation
 License:        BSD-3-Clause
 Group:          fsp/admin
-Source0:        docs-fsp-%{version}.tar.gz
+Source0:        docs-fsp.tar
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
