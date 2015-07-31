@@ -35,7 +35,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 This guide presents a simple cluster installation procedure using components from the Forest Peak (FSP) software stack.
 
 %prep
-%setup 
+%setup -n docs-fsp
 
 %build
 %if 0%{?suse_version}
