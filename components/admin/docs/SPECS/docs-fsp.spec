@@ -45,6 +45,8 @@ This guide presents a simple cluster installation procedure using components fro
 %define source_path centos7.1/vanilla
 %endif
 %endif
+./common/vc
+cp vc.tex %{source_path}
 cd %{source_path}
 make
 
