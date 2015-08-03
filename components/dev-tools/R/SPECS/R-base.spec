@@ -63,6 +63,7 @@ Version:        3.2.0
 Source:         R-%{version}.tar.gz
 Patch:          tre.patch
 Url:            http://www.r-project.org/
+DocDir:         %{FSP_PUB}/doc/contrib
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
 Group:          fsp/dev-tools
@@ -228,7 +229,7 @@ echo %{_infodir}
 %endif
 
 # Install ld.so.conf.d file to ensure other applications access the shared lib
-mkdir -p %{buildroot}/etc/ld.so.conf.d
+%{__mkdir -p} %{buildroot}/etc/ld.so.conf.d
 cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
 %{_libdir}/R/lib
 EOF
@@ -278,40 +279,26 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+
 export NO_BRP_CHECK_RPATH true
 
 %post
 /sbin/ldconfig
-%install_info --info-dir=%{_infodir} %{_infodir}/R-exts.info-1.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-FAQ.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-lang.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-admin.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-exts.info-2.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-intro.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-data.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-exts.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-ints.info.gz
 
 %postun
 /sbin/ldconfig
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-exts.info-1.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-FAQ.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-lang.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-admin.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-exts.info-2.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-intro.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-data.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-exts.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-ints.info.gz
 
-#*#%files -n R-base%files -n %{name}
 %files
 %defattr(-,root,root)
 %{FSP_HOME}
-
+%doc ChangeLog
+%doc COPYING
+%doc README
 
 # ld.so.conf
 %config /etc/ld.so.conf.d/R.conf
+
 
 
 %changelog
