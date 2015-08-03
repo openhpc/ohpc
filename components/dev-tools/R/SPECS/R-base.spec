@@ -216,11 +216,6 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 make DESTDIR=%{buildroot} install
 
-echo "*********11111***********"
-echo %{buildroot}
-echo %{__install}
-echo %{_infodir}
-
 # there is a backup file in survival for 3.1.3
 %{__rm} -f %{buildroot}%{_libdir}/R/library/survival/NEWS.Rd.orig
 
@@ -229,7 +224,7 @@ echo %{_infodir}
 %endif
 
 # Install ld.so.conf.d file to ensure other applications access the shared lib
-%{__mkdir -p} %{buildroot}/etc/ld.so.conf.d
+%{__mkdir_p} %{buildroot}/etc/ld.so.conf.d
 cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
 %{_libdir}/R/lib
 EOF
