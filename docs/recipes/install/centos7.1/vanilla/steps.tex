@@ -17,6 +17,7 @@
 
 \newcommand{\install}{yum -y install}
 \newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
+\newcommand{\chrootgroupinstall}{yum -y --installroot=\$CHROOT groupinstall}
 \newcommand{\groupinstall}{yum -y groupinstall}
 \newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
 
@@ -347,6 +348,8 @@ local cluster environment. These customizations include:
 \item Increase memlimits to support \InfiniBand{}
 \item Restrict ssh access to compute resources
 \item Add \Lustre{} client
+\item Add \Nagios{} monitoring
+\item Add \Ganglia{} monitoring
 \end{itemize*}
 
 \noindent Details on the steps required for each of these customizations are
@@ -435,6 +438,55 @@ host as follows:
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ mkdir /mnt/lustre
 [master]$ mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
+\end{lstlisting}
+% end_fsp_run
+
+\paragraph{Add \Nagios{} monitoring}
+
+\input{../../common/nagios}
+
+% begin_fsp_run
+% fsp_validation_comment Install Nagios on master and vnfs image
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install Nagios base, Remote Plugin Engine, and Plugins on Master
+[master]$ (*\groupinstall*) fsp-nagios
+
+# Also install in compute node image
+[master]$ (*\chrootgroupinstall*) fsp-nagios
+
+# Enable NRPE on compute image, and configure
+[master]$ chroot $CHROOT systemctl enable nrpe
+[master]$ chroot $CHROOT perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" /etc/nagios/nrpe.cfg
+[master]$ echo "nrpe 5666/tcp # NRPE" >> $CHROOT/etc/services
+[master]$ echo "nrpe : nagiosserver : ALLOW" >> $CHROOT/etc/hosts.allow
+[master]$ echo "nrpe : ALL : DENY" >> $CHROOT/etc/hosts.allow
+[master]$ echo "${master_ip}    nagiosserver" >> $CHROOT/etc/hosts
+[master]$ chroot $CHROOT /usr/sbin/useradd -c "NRPE user for the NRPE service" -d /var/run/nrpe \
+        -r -g nrpe -s /sbin/nologin nrpe
+[master]$ chroot $CHROOT /usr/sbin/groupadd -r nrpe
+
+# Enable Nagios on master, and configure
+[master]$ chkconfig nagios on
+[master]$ systemctl start nagios
+[master]$ chmod u+s `which ping`
+\end{lstlisting}
+% end_fsp_run
+
+\paragraph{Add \Ganglia{} monitoring}
+
+\input{../../common/ganglia}
+
+% begin_fsp_run
+% fsp_validation_comment Install Ganglia on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install Ganglia
+[master]$ (*\groupinstall*) fsp-ganglia
+
+# Start and Enable Ganglia services
+[master]$ systemctl enable gmond
+[master]$ systemctl enable gmetad
+[master]$ systemctl start gmond
+[master]$ systemctl start gmetad
 \end{lstlisting}
 % end_fsp_run
 
