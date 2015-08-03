@@ -69,7 +69,7 @@ Group:          fsp/dev-tools
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%define		install_path %{FSP_PUB}/%{pname}/%version
+%define         install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 %define         debug_package %{nil}
 
 BuildRequires:  cairo-devel
@@ -233,11 +233,10 @@ cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
 %{_libdir}/R/lib
 EOF
 
-echo "*******222222*********"
 # FSP module file
 
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 
 #%Module1.0#####################################################################
 
@@ -250,7 +249,7 @@ proc ModulesHelp { } {
 
 }
 
-module-whatis "Name: R projct for statistical computing"
+module-whatis "Name: R project for statistical computing built with the %{compiler_family} compiler toolchain."
 module-whatis "Version: %{version}"
 module-whatis "Category: utility, developer support, user tool"
 module-whatis "Keywords: Statistics"
@@ -271,7 +270,7 @@ setenv          %{PNAME}_SHARE      %{install_path}/share
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
