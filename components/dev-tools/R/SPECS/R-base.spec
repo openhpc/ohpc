@@ -41,8 +41,6 @@ BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# hack to install MKL for the moment
-BuildRequires: intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -176,25 +174,9 @@ R provides a wide variety of statistical (linear and nonlinear modelling,
 classical statistical tests, time-series analysis, classification, clustering, …) 
 and graphical techniques, and is highly extensible.
 
-###%package -n R-base-devel
-###Summary:        Libraries and includefiles for developing with R-base
-###Group:          Development/Libraries/Other
-###Provides:       R-Matrix-devel = 1.1.5
-###Provides:       R-devel = %{version}
-###Requires:       R-base
-###Obsoletes:      R-Matrix-devel < 1.1.5
-
-###%description -n R-base-devel
-###This package provides the necessary development headers and
-###libraries to allow you to devel with R-base.
-
 %prep 
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
-
-%if %{compiler_family} == gnu
-module load mkl
-%endif
 
 %setup -n R-%{version}
 %patch -p1
@@ -204,20 +186,14 @@ module load mkl
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
-
 
 MKL_LIB_PATH=$MKLROOT/lib/intel64
 MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
 echo "MKL options flag .... $MKL "
 
-
-./configure --with-blas="$MKL" \
+./configure  \
             --with-lapack \
             --enable-R-shlib  \
             --enable-BLAS-shlib \
@@ -227,54 +203,22 @@ echo "MKL options flag .... $MKL "
             --without-x \
               LIBnn=lib64 
 
+# --with-blas="$MKL" \
+
 make %{?_smp_mflags}
-###make pdf
-%if 0%{?suse_version}
-### don't make info
-### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
-%else
-###make info
-# Convert to UTF-8
-###for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admin.info doc/manual/R-exts.info-1; do
-###  iconv -f iso-8859-1 -t utf-8 -o $i{.utf8,}
-###  mv $i{.utf8,}
-###done
-%endif
+
 
 %install 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
 make DESTDIR=%{buildroot} install
-###make DESTDIR=%{buildroot} install-pdf
 
 echo "*********11111***********"
 echo %{buildroot}
 echo %{__install}
 echo %{_infodir}
-
-# Installation of Info-files
-####%{__install} -m 755 -d %{_infodir}
-###make DESTDIR=%{buildroot} INFODIR=%{buildroot}%{_infodir} install-info
-###
-### 
-%if 0%{?suse_version}
-### don't make info
-### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
-%else
-####make DESTDIR=%{buildroot} install-info
-####%{__rm} -f %{buildroot}%{_infodir}/dir
-####%{__rm} -f %{buildroot}%{_infodir}/dir.old
-%endif
-
-###chmod +x %{buildroot}%{_libdir}/R/share/sh/echo.sh
-
-###chmod -x %{buildroot}%{_libdir}/R/library/mgcv/CITATION
 
 # there is a backup file in survival for 3.1.3
 %{__rm} -f %{buildroot}%{_libdir}/R/library/survival/NEWS.Rd.orig
@@ -306,7 +250,7 @@ proc ModulesHelp { } {
 
 }
 
-module-whatis "Name: %{pname} built with %{compiler_family} compiler and Intel MKL support"
+module-whatis "Name: R projct for statistical computing"
 module-whatis "Version: %{version}"
 module-whatis "Category: utility, developer support, user tool"
 module-whatis "Keywords: Statistics"
@@ -315,21 +259,6 @@ module-whatis "URL %{url}"
 
 set     version                     %{version}
 
-## module load mkl ...
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded intel]  } {
-        module load mkl
-    }
-}
-
-
-### TRon (4/27/15) Add path for shared libraries: libgfortran.so.3 when using Intel
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  [is-loaded intel]  } {
-        prepend-path    LD_LIBRARY_PATH     %{FSP_COMPILERS}/gcc/4.9.2/lib64
-        #/opt/fsp/pub/compiler/gcc/4.9.2/lib64
-    }
-}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
