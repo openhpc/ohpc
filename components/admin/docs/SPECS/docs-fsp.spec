@@ -16,7 +16,7 @@ Release:        1
 Summary:        Forest Peak documentation
 License:        BSD-3-Clause
 Group:          fsp/admin
-Source0:        docs-fsp-%{version}.tar.gz
+Source0:        docs-fsp.tar
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
@@ -35,7 +35,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 This guide presents a simple cluster installation procedure using components from the Forest Peak (FSP) software stack.
 
 %prep
-%setup 
+%setup -n docs-fsp
 
 %build
 %if 0%{?suse_version}
@@ -45,6 +45,8 @@ This guide presents a simple cluster installation procedure using components fro
 %define source_path centos7.1/vanilla
 %endif
 %endif
+./common/vc
+cp vc.tex %{source_path}
 cd %{source_path}
 make
 
