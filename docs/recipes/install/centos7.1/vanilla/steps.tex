@@ -17,7 +17,6 @@
 
 \newcommand{\install}{yum -y install}
 \newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
-\newcommand{\chrootgroupinstall}{yum -y --installroot=\$CHROOT groupinstall}
 \newcommand{\groupinstall}{yum -y groupinstall}
 \newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
 
@@ -452,7 +451,7 @@ host as follows:
 [master]$ (*\groupinstall*) fsp-nagios
 
 # Also install in compute node image
-[master]$ (*\chrootgroupinstall*) fsp-nagios
+[master]$ (*\groupchrootinstall*) fsp-nagios
 
 # Enable NRPE on compute image, and configure
 [master]$ chroot $CHROOT systemctl enable nrpe
