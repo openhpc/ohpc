@@ -456,7 +456,7 @@ host as follows:
 # Enable NRPE on compute image, and configure
 [master]$ chroot $CHROOT systemctl enable nrpe
 [master]$ chroot $CHROOT perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" /etc/nagios/nrpe.cfg
-[master]$ echo "nrpe 5666/tcp # NRPE" >> $CHROOT/etc/services
+[master]$ echo "nrpe 5666/tcp" >> $CHROOT/etc/services
 [master]$ echo "nrpe : nagiosserver : ALLOW" >> $CHROOT/etc/hosts.allow
 [master]$ echo "nrpe : ALL : DENY" >> $CHROOT/etc/hosts.allow
 [master]$ echo "${master_ip}    nagiosserver" >> $CHROOT/etc/hosts
