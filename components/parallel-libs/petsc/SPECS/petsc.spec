@@ -182,14 +182,11 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 and fftw (and mkl for gnu compiler families)
+# Require phdf5 (and mkl for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded phdf5]  } {
         module load phdf5
-    }
-    if {  ![is-loaded fftw]  } {
-        module load fftw
     }
     if { [is-loaded gnu] } {
         if { ![is-loaded mkl]  } {
