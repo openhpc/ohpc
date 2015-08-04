@@ -10,26 +10,26 @@
 # ---------------------------
 
 # URL for FSP repository
-fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/15.31/CentOS-7.1_Intel/ForestPeak:15.31.repo
+fsp_repo="${fsp_repo:-http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/15.31/CentOS-7.1_Intel/ForestPeak:15.31.repo}"
 
 # Hostname for master server (SMS)
-master_name=sms
+master_name="${master_name:-sms}" 
                               
 # Local (internal) IP address on SMS
-master_ip=172.16.0.1
+master_ip="${master_ip:-172.16.0.1}"
 
 # Internal ethernet interface on SMS
-sms_eth_internal=eth1
+sms_eth_internal="${sms_eth_internal:-eth1}"
 
 # Subnet netmask for internal cluster network
-internal_netmask=255.255.0.0
+internal_netmask="${internal_netmask:-255.255.0.0}"
 
 # Provisioning interface used by compute hosts
-eth_provision=eth0
+eth_provision="${eth_provision:-eth0}"
 
 # BMC user credentials for use by IPMI
-bmc_username=unknown
-bmc_password=unknown
+bmc_username="${bmc_username:-unknown}"
+bmc_password="${bmc_password:-unknown}"
 
 
 # -------------------------
@@ -37,10 +37,10 @@ bmc_password=unknown
 # -------------------------
 
 # total number of computes
-num_computes=4
+num_computes="${num_computes:-4"}
 
 # regex that matches defined compute hostnames
-compute_regex=c*
+compute_regex="${compute_rexex:-c*}"
 
 # compute hostnames
 c_name[0]=c1
@@ -71,16 +71,16 @@ c_bmc[3]=10.16.1.4
 #-------------------
 
 # additional arguments for bootstrap kernel
-kargs=acpi_pad.disable=1                    
+kargs="${kargs:-acpi_pad.disable=1}" 
 
 # Lustre MGS mount name
 mgs_fs_name=192.168.100.254@o2ib:/lustre1
 
 # Subnet netmask for IPoIB network
-ipoib_netmask=255.255.0.0
+ipoib_netmask="${ipoib_netmask:-255.255.0.0}"
 
 # IPoIB address for SMS server
-sms_ipoib=192.168.0.1
+sms_ipoib="${sms_ipoib:-192.168.0.1}"
 
 # IPoIB addresses for computes
 c_ipoib[0]=192.168.1.1		            
