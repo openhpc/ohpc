@@ -204,16 +204,8 @@ while(<IN>) {
 	    print $fh " $next_line\n";
 
 	    # TODO - add loop to accomodate multi-line continuation
-	} elsif ($_ =~ /\[master\]\$ (.+) #(.+)$/) {
-	    my $cmd = update_cmd($1);
-
-	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
-
-	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
 	    my $cmd = update_cmd($1);
-
-	    my $extra_comment = "";
 
 	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
 
