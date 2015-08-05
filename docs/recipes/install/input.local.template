@@ -13,7 +13,7 @@
 fsp_repo="${fsp_repo:-http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/15.31/CentOS-7.1_Intel/ForestPeak:15.31.repo}"
 
 # Hostname for master server (SMS)
-master_name="${master_name:-sms}" 
+master_name="${master_name:-sms}"
                               
 # Local (internal) IP address on SMS
 master_ip="${master_ip:-172.16.0.1}"
@@ -71,7 +71,7 @@ c_bmc[3]=10.16.1.4
 #-------------------
 
 # additional arguments for bootstrap kernel
-kargs="${kargs:-acpi_pad.disable=1}" 
+kargs="${kargs:-acpi_pad.disable=1}"
 
 # Lustre MGS mount name
 mgs_fs_name=192.168.100.254@o2ib:/lustre1
