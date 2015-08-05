@@ -15,16 +15,17 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
+%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
-BuildRequires: lmod
+BuildRequires: lmod{%PROJ_DELIM}
 %if %{compiler_family} == gnu
-BuildRequires: FSP-gnu-compilers
-Requires:      FSP-gnu-compilers
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
-BuildRequires: gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %endif
 %if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
