@@ -588,7 +588,7 @@ that were imported in \S\ref{sec:file_import}.
            done
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
+[master]$ wwsh -y provision set "${compute_regex}" --vnfs=sles12 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
 # Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
