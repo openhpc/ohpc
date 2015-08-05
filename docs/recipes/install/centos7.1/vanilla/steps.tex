@@ -61,7 +61,6 @@
 \input{../../common/audience}
 \input{../../common/requirements}
 \input{../../common/inputs}
-\input{../../common/automation}
 
 % Base Operating System --------------------------------------------
 
@@ -104,20 +103,8 @@ both the base OS and EPEL repositories (mirrors freely available online):
                         {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
 \end{itemize*}
 
-% begin_fsp_run 
-% fsp_validation_newline
-% fsp_ci_comment - Remove WW file update crontab entry
-% [master]$ rm -f /etc/cron.d/wwupdatefiles
-% end_fsp_run
+\input{../../common/automation}
 
-% begin_fsp_run
-% fsp_validation_newline
-% fsp_ci_comment Format space for /opt/fsp
-% [master]$ mkfs -F -t ext4 /dev/sda1
-% [master]$ mkdir -p /opt/fsp        
-% [master]$ mount /dev/sda1 /opt/fsp 
-% fsp_validation_newline
-% end_fsp_run  
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{../../common/install_provisioning_intro}
@@ -655,11 +642,13 @@ that were imported in \S\ref{sec:file_import}.
 \end{lstlisting}
 % end_fsp_run
 
-% begin_fsp_run 
-% fsp_validation_newline
-% fsp_ci_comment Add optional kargs to bootstrap kernel
-% [master]$ wwsh provision set c[1-4] --kargs=acpi_pad.disable=1
-% fsp_validation_newline
+% begin_fsp_run
+
+% fsp_validation_comment Optionally, add arguments to bootstrap kernel
+% fsp_command if [ ${enable_kargs} ]; then
+% fsp_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
+% fsp_command fi
+
 % end_fsp_run
 
 \subsection{Boot compute nodes} \label{sec:boot_computes}
