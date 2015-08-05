@@ -13,7 +13,10 @@ f_new=pkg-fsp.new
 rm -f ${f_add} ${f_del} ${f_upd}
 rm -f ${f_dif} ${f_old} ${f_new}
 
-git diff ${t_old} ${t_new} ${f_all} >${f_dif}
+#git diff ${t_old} ${t_new} ${f_all} >${f_dif}
+
+# updated to account for path rename (ks 7/30/15)
+git diff $t_old:docs/recipes/install/centos7/vanilla/data/manifest/${f_all}  -- ${f_all} > ${f_dif}
 if [ $? -ne 0 ]; then
    echo "ERROR: git diff failed!"
    exit

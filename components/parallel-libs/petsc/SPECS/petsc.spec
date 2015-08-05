@@ -168,7 +168,7 @@ puts stderr " "
 puts stderr "This module loads the PETSc library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of PETSc leverages the FFTW and parallel HDF libraries."
+puts stderr "Note that this build of PETSc leverages the Intel MKL and parallel HDF libraries."
 puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
@@ -182,14 +182,11 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 and fftw (and mkl for gnu compiler families)
+# Require phdf5 (and mkl for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded phdf5]  } {
         module load phdf5
-    }
-    if {  ![is-loaded fftw]  } {
-        module load fftw
     }
     if { [is-loaded gnu] } {
         if { ![is-loaded mkl]  } {

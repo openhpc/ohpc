@@ -225,17 +225,8 @@ while(<IN>) {
 	    $next_line =~ s/^\s+|\s+$//g;
 
 	    print $fh "$next_line\n";
-
-	} elsif ($_ =~ /\[master\]\$ (.+) #(.+)$/) {
-	    my $cmd = update_cmd($1);
-
-	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
-
-	    print $fh "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
 	    my $cmd = update_cmd($1);
-
-	    my $extra_comment = "";
 
 	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
 
