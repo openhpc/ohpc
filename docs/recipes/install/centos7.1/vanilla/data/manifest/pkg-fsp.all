@@ -22,7 +22,6 @@ fftw-gnu-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier 
 fftw-intel-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-intel-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-intel-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
-ganglia-devel-fsp 3.7.1 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Library
 ganglia-fsp 3.7.1 http://ganglia.sourceforge.net/ fsp/admin Distributed Monitoring System
 ganglia-gmetad-fsp 3.7.1 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Metadata collection daemon
 ganglia-gmond-fsp 3.7.1 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Monitoring daemon
@@ -83,14 +82,11 @@ munge-libs-fsp 0.5.11 https://munge.googlecode.com/ System Environment/Libraries
 mvapich2-gnu-fsp 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ fsp/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-intel-fsp 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ fsp/mpi-families OSU MVAPICH2 MPI implementation
 nagios-common-fsp 3.5.1 http://www.nagios.org/ Applications/System Provides common directories, uid and gid among nagios-related packages.
-nagios-devel-fsp 3.5.1 http://www.nagios.org/ Applications/System Provides include files that Nagios-related applications may compile against
 nagios-fsp 3.5.1 http://www.nagios.org/ fsp/admin Nagios monitors hosts and services and yells if somethings breaks
 nagios-plugins-all-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugins - All plugins
-nagios-plugins-apt-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_apt
 nagios-plugins-breeze-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_breeze
 nagios-plugins-by_ssh-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_by_ssh
 nagios-plugins-cluster-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_cluster
-nagios-plugins-dbi-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_dbi
 nagios-plugins-dhcp-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_dhcp
 nagios-plugins-dig-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_dig
 nagios-plugins-disk-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_disk
@@ -106,8 +102,6 @@ nagios-plugins-hpjd-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/Syste
 nagios-plugins-http-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_http
 nagios-plugins-icmp-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_icmp
 nagios-plugins-ide_smart-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ide_smart
-nagios-plugins-ifoperstatus-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ifoperstatus
-nagios-plugins-ifstatus-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ifstatus
 nagios-plugins-ircd-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ircd
 nagios-plugins-ldap-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ldap
 nagios-plugins-load-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_load
@@ -117,7 +111,6 @@ nagios-plugins-mrtg-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/Syste
 nagios-plugins-mrtgtraf-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_mrtgtraf
 nagios-plugins-mysql-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_mysql
 nagios-plugins-nagios-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_nagios
-nagios-plugins-nrpe-fsp 2.15 http://www.nagios.org Applications/System Provides nrpe plugin for Nagios
 nagios-plugins-nt-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_nt
 nagios-plugins-ntp-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ntp
 nagios-plugins-ntp-perl-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ntp.pl
@@ -128,7 +121,6 @@ nagios-plugins-perl-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/Syste
 nagios-plugins-pgsql-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_pgsql
 nagios-plugins-ping-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ping
 nagios-plugins-procs-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_procs
-nagios-plugins-radius-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_radius
 nagios-plugins-real-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_real
 nagios-plugins-rpc-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_rpc
 nagios-plugins-sensors-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_sensors
@@ -139,7 +131,6 @@ nagios-plugins-swap-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/Syste
 nagios-plugins-tcp-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_tcp
 nagios-plugins-time-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_time
 nagios-plugins-ups-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ups
-nagios-plugins-uptime-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/Systems Nagios Plugin - check_uptime
 nagios-plugins-users-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_users
 nagios-plugins-wave-fsp 2.0.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_wave
 netcdf-cxx-gnu-impi-fsp 4.2.1 http://www.unidata.ucar.edu/software/netcdf/ fsp/io-libs C++ Libraries for the Unidata network Common Data Form
@@ -160,6 +151,7 @@ netcdf-gnu-openmpi-fsp 4.3.3 http://www.unidata.ucar.edu/software/netcdf/ fsp/io
 netcdf-intel-impi-fsp 4.3.3 http://www.unidata.ucar.edu/software/netcdf/ fsp/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-mvapich2-fsp 4.3.3 http://www.unidata.ucar.edu/software/netcdf/ fsp/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-openmpi-fsp 4.3.3 http://www.unidata.ucar.edu/software/netcdf/ fsp/io-libs C Libraries for the Unidata network Common Data Form
+nrpe-fsp 2.15 http://www.nagios.org Applications/System Host/service/network monitoring agent for Nagios
 openmpi-gnu-fsp 1.8.4 http://www.open-mpi.org fsp/mpi-families A powerful implementation of MPI
 openmpi-intel-fsp 1.8.4 http://www.open-mpi.org fsp/mpi-families A powerful implementation of MPI
 papi-fsp 5.4.1 http://icl.cs.utk.edu/papi/ fsp/perf-tools Performance Application Programming Interface
@@ -226,17 +218,24 @@ warewulf-cluster-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used fo
 warewulf-cluster-node-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used for clustering with Warewulf
 warewulf-common-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning A suite of tools for clustering
 warewulf-provision-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf - Provisioning Module
-warewulf-provision-server-fsp 3.6 http://warewulf.lbl.gov/ System Environment/Clustering Warewulf - Provisioning Module - Server
+warewulf-provision-server-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf - Provisioning Module - Server
 warewulf-vnfs-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf VNFS Module
-package R_proj-fsp.x86_64 is not installed
+package ganglia-devel-fsp.x86_64 is not installed
 package ipmiutil-devel-fsp.x86_64 is not installed
 package ipmiutil-fsp.x86_64 is not installed
 package ipmiutil-static-fsp.x86_64 is not installed
 package mkl-blacs-gnu-mvapich2-fsp.x86_64 is not installed
 package mkl-blacs-intel-mvapich2-fsp.x86_64 is not installed
 package mkl-blacs-intel-openmpi-fsp.x86_64 is not installed
+package nagios-devel-fsp.x86_64 is not installed
+package nagios-plugins-apt-fsp.x86_64 is not installed
+package nagios-plugins-dbi-fsp.x86_64 is not installed
+package nagios-plugins-ifoperstatus-fsp.x86_64 is not installed
+package nagios-plugins-ifstatus-fsp.x86_64 is not installed
+package nagios-plugins-nrpe-fsp.x86_64 is not installed
+package nagios-plugins-radius-fsp.x86_64 is not installed
+package nagios-plugins-uptime-fsp.x86_64 is not installed
 package ndoutils-fsp.x86_64 is not installed
-package nrpe-fsp.x86_64 is not installed
 package psqlODBC-fsp.x86_64 is not installed
 package sigar-devel-fsp.x86_64 is not installed
 package sigar-fsp.x86_64 is not installed
