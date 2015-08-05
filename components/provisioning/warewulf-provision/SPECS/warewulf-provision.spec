@@ -50,7 +50,7 @@ administrative tools.  To actually provision systems, the
 
 %package -n %{pname}-server%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module - Server
-Group: System Environment/Clustering
+Group: fsp/provisioning
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS
