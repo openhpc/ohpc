@@ -204,6 +204,27 @@ while(<IN>) {
 	    print $fh " $next_line\n";
 
 	    # TODO - add loop to accomodate multi-line continuation
+	} elsif ($_ =~ /\[master\]\$ (.+ ; do)$/) {
+	    # special treatment for do loops
+
+	    my $cmd = update_cmd($1);
+
+	    print $fh "$cmd\n";
+	    my $next_line;# = <IN>;
+
+	    while ( $next_line = <IN> ) {
+		last if $next_line =~ m/\s+done/;
+
+		# trim leading and trailing space
+		$next_line =~ s/^\s+|\s+$//g;
+
+		printf $fh "   %s\n",$next_line;
+	    }
+
+	    # trim leading and trailing space
+	    $next_line =~ s/^\s+|\s+$//g;
+
+	    print $fh "$next_line\n";
 	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
 	    my $cmd = update_cmd($1);
 
