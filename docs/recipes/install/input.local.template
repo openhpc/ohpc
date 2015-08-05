@@ -37,7 +37,7 @@ bmc_password="${bmc_password:-unknown}"
 # -------------------------
 
 # total number of computes
-num_computes="${num_computes:-4"}
+num_computes="${num_computes:-4}"
 
 # regex that matches defined compute hostnames
 compute_regex="${compute_rexex:-c*}"
