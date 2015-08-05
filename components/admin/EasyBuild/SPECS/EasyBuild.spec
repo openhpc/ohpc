@@ -49,8 +49,8 @@ Source1:   %{pname}-easyconfigs-%{version}.tar.gz
 Source2:   %{pname}-framework-%{version}.tar.gz
 Source3:   vsc-base-2.2.2.tar.gz
 Source4:   bootstrap_eb.py
-Source4:   FSP_macros
-Source5:   FSP_setup_compiler
+Source5:   FSP_macros
+Source6:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch
 BuildRequires: python
