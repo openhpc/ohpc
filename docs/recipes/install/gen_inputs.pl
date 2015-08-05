@@ -7,12 +7,24 @@
 #------------------------------------------------------------------------
 
 use warnings;
-use strict;
+#use strict;
 use Getopt::Long;
 
 # Optional command-line arguments
 my $outputFile = "/tmp/input.local";
 my $inputFile  = "/opt/fsp/pub/doc/recipes/vanilla/input.local/template";
+
+sub update_var {
+    my $varname = shift;
+    my $value   = shift;
+
+    if($_[0] =~ /^($varname=\"\${$varname:-)(\S+)}\"$/) {
+	$_[0] = "$1"."$value}\"\n";
+	return(1);
+    } else {
+	return(0);
+    }
+}
 
 GetOptions ('o=s' => \$outputFile,
 	    'i=s' => \$inputFile);
@@ -50,7 +62,6 @@ my $master_host  = "";
 my @computes     = ();
 my $num_computes = 0;
 
-#open(OUT,">$outputFile") || die ("Cannot create output file -> $outputFile");
 
 # Test for CI environment
 
@@ -141,40 +152,41 @@ open(OUT,">$outputFile") || die ("Cannot open output file -> $outputFile");
 # http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/15.31:/Factory/CentOS-7.1_Intel/ForestPeak:15.31:Factory.repo
 
 while(my $line=<IN>) {
-    if( $line =~ m!^(fsp_repo=http://\S+)/(\S+)/(\S+)/(\S+).repo$! ) {
-	if($Repo ne "Release" ) {
-	    print OUT "$1/$2:/$Repo/$3/$4:$Repo.repo\n";
-	} else {
-	    print OUT $line;
-	}
-    } elsif($line =~ /^(master_name=)\S+/) {
-	print OUT $1 . "$ENV{'NODE_NAME'}\n";
-    } elsif ($line =~ /^(master_ip=)\S+/) {
-	print OUT $1 . "$master_ip\n";
-    } elsif ($line =~ /^(sms_eth_internal=)\S+/) {
-	print OUT $1 . "$sms_eth_internal\n";
-    } elsif ($line =~ /^(internal_netmask=)\S+/) {
-	print OUT $1 . "$netmask\n";
-    } elsif ($line =~ /^(eth_provision=)\S+/) {
-	print OUT $1 . "$eth_provision\n";
-    } elsif ($line =~ /^(bmc_username=)\S+/) {
-	print OUT $1 . "$bmc_username\n";
-    } elsif ($line =~ /^(num_computes=)\S+/) {
-	print OUT $1 . "$num_computes\n";
-    } elsif ($line =~ /^(sms_ipoib=)\S+/) {
-	print OUT $1 . "$master_ipoib\n";
-    } elsif ($line =~ /^(mgs_fs_name=)\S+/) {
-	print OUT $1 . "$mgs_fs_name\n";
-    } elsif ($line =~ /^c_ip\[(\d)\]=\S+/) {
-	print OUT "c_ip[$1]=$compute_ips[$1]\n";
-    } elsif ($line =~ /^c_mac\[(\d)\]=\S+/) {
-	print OUT "c_mac[$1]=$compute_macs[$1]\n";
-    } elsif ($line =~ /^c_bmc\[(\d)\]=\S+/) {
-	print OUT "c_bmc[$1]=$compute_bmcs[$1]\n";
-    } elsif ($line =~ /^c_ipib\[(\d)\]=\S+/) {
-	print OUT "c_ipib[$1]=$compute_ipoibs[$1]\n";
-    } else {
+
+    if( $line =~ m!^(fsp_repo=\"\${fsp_repo:-http://\S+)/(\S+)/(\S+)/(\S+).repo}\"$! ) {
+ 	if($Repo ne "Release" ) {
+ 	    print OUT "$1/$2:/$Repo/$3/$4:$Repo.repo}\"\n";
+ 	} else {
+ 	    print OUT $line;
+ 	}
+    } elsif( update_var("master_name",$ENV{'NODE_NAME'},$line) ) {
 	print OUT $line;
+    } elsif ( update_var("master_ip",$master_ip,$line) ) {
+	print OUT $line;
+    } elsif ( update_var("sms_eth_internal",$sms_eth_internal,$line) ) {
+	print OUT $line;
+    } elsif ( update_var("internal_netmask",$netmask,$line) ) {
+	print OUT $line;
+    } elsif ( update_var("eth_provision",$eth_provision,$line) ) {
+	print OUT $line;
+    } elsif ( update_var("bmc_username",$bmc_username,$line) ) {
+	print OUT $line;
+    } elsif ( update_var("num_computes",$num_computes,$line) ) {
+	print OUT $line;
+    } elsif ( update_var("sms_ipoib",$master_ipoib,$line) ) {
+	print OUT $line;
+    } elsif ( update_var("mgs_fs_name",$mgs_fs_name,$line) ) {
+	print OUT $line;
+    } elsif ($line =~ /^c_ip\[(\d)\]=\S+/) {
+ 	print OUT "c_ip[$1]=$compute_ips[$1]\n";
+    } elsif ($line =~ /^c_mac\[(\d)\]=\S+/) {
+ 	print OUT "c_mac[$1]=$compute_macs[$1]\n";
+    } elsif ($line =~ /^c_bmc\[(\d)\]=\S+/) {
+ 	print OUT "c_bmc[$1]=$compute_bmcs[$1]\n";
+    } elsif ($line =~ /^c_ipib\[(\d)\]=\S+/) {
+ 	print OUT "c_ipib[$1]=$compute_ipoibs[$1]\n";
+    } else {
+ 	print OUT $line;
     }
 }
 
