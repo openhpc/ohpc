@@ -576,21 +576,26 @@ that were imported in \S\ref{sec:file_import}.
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define four compute nodes and network settings 
-[master]$ wwsh -y node new c1 --ipaddr=${c1_ip} --hwaddr=${c1_mac} -D ${eth_provision}
-[master]$ wwsh -y node new c2 --ipaddr=${c2_ip} --hwaddr=${c2_mac} -D ${eth_provision}
-[master]$ wwsh -y node new c3 --ipaddr=${c3_ip} --hwaddr=${c3_mac} -D ${eth_provision}
-[master]$ wwsh -y node new c4 --ipaddr=${c4_ip} --hwaddr=${c4_mac} -D ${eth_provision}
+
+[master]$ wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+
+# Optionally register additional compute nodes
+[master]$ for ((i=4; i<$num_computes; i++)) ; do
+              wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
+           done
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set c[1-4] --vnfs=sles12 --bootstrap=`uname -r` \
+[master]$ wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
-# Optionally define IPoIB network settings (required if planning to mount Lustre* over IB)
-[master]$ wwsh -y node set c1 -D ib0 --ipaddr=${c1_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c2 -D ib0 --ipaddr=${c2_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c3 -D ib0 --ipaddr=${c3_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c4 -D ib0 --ipaddr=${c4_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y provision set c[1-4] --fileadd=ifcfg-ib0.ww
+# Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
+[master]$ for ((i=0; i<$num_computes; i++)) ; do
+              wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
+           done
+[master]$ wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 
 # Restart dhcp / update PXE
 [master]$ service dhcpd restart
