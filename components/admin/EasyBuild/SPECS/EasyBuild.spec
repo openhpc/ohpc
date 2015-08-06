@@ -59,6 +59,7 @@ BuildRequires: python
 BuildRequires: python-setuptools
 Requires: lmod
 Requires: python
+#!BuildIgnore: post-build-checks
 
 %define debug_package %{nil}
 
