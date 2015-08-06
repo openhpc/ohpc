@@ -76,6 +76,7 @@ systems in an efficient way.
 %build
 
 cd %{buildroot}
+%{__mkdir} -p %{install_path}
 cp %{_sourcedir}/*py .
 
 # FSP compiler designation
@@ -86,9 +87,8 @@ export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export PATH=${LMOD_DIR}:${PATH}
 
-python ./bootstrap_eb.py %{buildroot}/%{install_path}
+python ./bootstrap_eb.py %{install_path}
 
-rm %{buildroot}/opt/fsp/pub/libs/easybuild/2.1.1/modules/base/EasyBuild/2.1.1
 rm bootstrap_eb.py
 
 %install
