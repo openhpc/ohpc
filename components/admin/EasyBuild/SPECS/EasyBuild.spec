@@ -89,12 +89,6 @@ python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 %install
 
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
-
-make DESTDIR=$RPM_BUILD_ROOT install
-
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
