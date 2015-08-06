@@ -76,7 +76,6 @@ systems in an efficient way.
 %build
 
 cd %{buildroot}
-%{__mkdir} -p %{install_path}
 cp %{_sourcedir}/*py .
 
 # FSP compiler designation
