@@ -10,6 +10,8 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
+%include %{_sourcedir}/FSP_macros
+
 # FSP convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
@@ -72,12 +74,13 @@ systems in an efficient way.
 %build
 
 cd %{buildroot}
+cp %{_sourcedir}/*py .
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-export EASYBUILD_BOOTSTRAP_SOURCEPATH=.
+export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 
 python ./bootstrap_eb.py %{install_path}
 
