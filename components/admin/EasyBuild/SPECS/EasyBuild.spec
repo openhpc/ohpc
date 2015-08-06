@@ -75,6 +75,7 @@ systems in an efficient way.
 
 %build
 
+mkdir %{buildroot}
 cd %{buildroot}
 cp %{_sourcedir}/*py .
 
