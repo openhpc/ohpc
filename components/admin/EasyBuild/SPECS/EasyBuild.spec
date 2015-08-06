@@ -89,7 +89,6 @@ export PATH=${LMOD_DIR}:${PATH}
 python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 rm %{buildroot}/opt/fsp/pub/libs/easybuild/2.1.1/modules/base/EasyBuild/2.1.1
-ln -s  %{buildroot}/opt/fsp/pub/libs/easybuild/2.1.1/modules/all/EasyBuild/2.1.1 %{buildroot}/opt/fsp/pub/libs/easybuild/2.1.1/modules/base/EasyBuild/2.1.1/../../base/EasyBuild/2.1.1
 
 %install
 
