@@ -12,7 +12,7 @@
 -METISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libmetis -lmetis
 -PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
 -I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
-+#METISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libmetis -lmetis
++METISLIB := -L${METIS_LIB} -lmetis
 +#PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
 +#I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
  ############################################################################
