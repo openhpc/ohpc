@@ -1,28 +1,3 @@
---- superlu_dist-4.0/SRC/superlu_enum_consts.h	2012-04-17 12:27:50.000000000 -0700
-+++ superlu_dist-4.0.patch/SRC/superlu_enum_consts.h	2015-08-06 14:15:24.000000000 -0700
-@@ -17,7 +17,7 @@
- typedef enum {DOFACT, SamePattern, SamePattern_SameRowPerm, FACTORED} fact_t;
- typedef enum {NOROWPERM, LargeDiag, MY_PERMR}                   rowperm_t;
- typedef enum {NATURAL, MMD_ATA, MMD_AT_PLUS_A, COLAMD,
--	      METIS_AT_PLUS_A, PARMETIS, ZOLTAN, MY_PERMC}      colperm_t;
-+	      METIS_AT_PLUS_A, ZOLTAN, MY_PERMC}      colperm_t;
- typedef enum {NOTRANS, TRANS, CONJ}                             trans_t;
- typedef enum {NOEQUIL, ROW, COL, BOTH}                          DiagScale_t;
- typedef enum {NOREFINE, SLU_SINGLE=1, SLU_DOUBLE, SLU_EXTRA}    IterRefine_t;
---- superlu_dist-4.0/SRC/superlu_defs.h	2014-10-20 16:36:40.000000000 -0700
-+++ superlu_dist-4.0.patch/SRC/superlu_defs.h	2015-08-06 14:29:40.000000000 -0700
-@@ -658,9 +658,11 @@
-  Pslu_freeable_t *, MPI_Comm *, MPI_Comm *,  mem_usage_t *);
- 
- /* Get the column permutation using parmetis */
-+/*
- extern float get_perm_c_parmetis 
- (SuperMatrix *, int_t *, int_t *, int, int, 
-  int_t **, int_t **, gridinfo_t *, MPI_Comm *);
-+*/
- 
- /* Auxiliary routines for memory expansions used during
-    the parallel symbolic factorization routine */
 --- superlu_dist-4.0/SRC/Makefile	2014-09-20 07:55:32.000000000 -0700
 +++ superlu_dist-4.0.patch/SRC/Makefile	2015-08-06 14:54:38.000000000 -0700
 @@ -32,7 +32,7 @@
@@ -34,3 +9,31 @@
  	  static_schedule.o
  
  ifeq "${ACC}" "GPU"
+--- superlu_dist-4.0/SRC/pdgssvx.c	2014-10-04 08:34:43.000000000 -0700
++++ superlu_dist-4.0.patch/SRC/pdgssvx.c	2015-08-06 15:24:06.000000000 -0700
+@@ -924,9 +924,9 @@
+ 	       * and does not modify it.  It also allocates memory for       *
+ 	       * sizes[] and fstVtxSep[] arrays, that contain information    *
+ 	       * on the separator tree computed by ParMETIS.                 */
+-	      flinfo = get_perm_c_parmetis(A, perm_r, perm_c, nprocs_num,
++	      flinfo = 0;/*get_perm_c_parmetis(A, perm_r, perm_c, nprocs_num,
+                                   	   noDomains, &sizes, &fstVtxSep,
+-                                           grid, &symb_comm);
++                                           grid, &symb_comm);*/
+ 	      if (flinfo > 0)
+ 	          ABORT("ERROR in get perm_c parmetis.");
+ 	  } else {
+--- superlu_dist-4.0/SRC/pzgssvx.c	2014-10-04 08:34:43.000000000 -0700
++++ superlu_dist-4.0.patch/SRC/pzgssvx.c	2015-08-06 15:27:16.000000000 -0700
+@@ -925,9 +925,9 @@
+ 	       * and does not modify it.  It also allocates memory for       *
+ 	       * sizes[] and fstVtxSep[] arrays, that contain information    *
+ 	       * on the separator tree computed by ParMETIS.                 */
+-	      flinfo = get_perm_c_parmetis(A, perm_r, perm_c, nprocs_num,
++	      flinfo = 0;/*get_perm_c_parmetis(A, perm_r, perm_c, nprocs_num,
+                                   	   noDomains, &sizes, &fstVtxSep,
+-                                           grid, &symb_comm);
++                                           grid, &symb_comm);*/
+ 	      if (flinfo > 0)
+ 	          ABORT("ERROR in get perm_c parmetis.");
+ 	  } else {
