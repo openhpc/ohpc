@@ -87,11 +87,16 @@ export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export PATH=${LMOD_DIR}:${PATH}
 
-python ./bootstrap_eb.py %{install_path}
+python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 rm bootstrap_eb.py
 
 %install
+
+# remove buildroot
+#for f in $RPM_BUILD_ROOT%{install_path}/conf/*; do
+    #sed -i -e 's!%{buildroot}!!g' $f
+#done
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
