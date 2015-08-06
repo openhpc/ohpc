@@ -25,8 +25,8 @@ resource management under \SLURM{}.
 [master]$ service slurmctld start
 
 #  start munge and slurm clients on compute hosts
-[master]$ pdsh -w "1-${num_computes}" service munge start
-[master]$ pdsh -w "1-${num_computes}" service slurmd start
+[master]$ pdsh -w c[1-4] service munge start
+[master]$ pdsh -w c[1-4] service slurmd start
 \end{lstlisting}
 % end_fsp_run
 
@@ -38,4 +38,19 @@ eligible to schedule user jobs, issue the following:
 \begin{lstlisting}[language=bash]
 [master]$ scontrol update nodename=c[1-4] state=idle
 \end{lstlisting}
+% end_fsp_run
+
+
+% Additional recipe commands for additional computes.
+
+% begin_fsp_run
+% fsp_validation_newline
+% fsp_validation_comment Update basic slurm config if additional computes defined
+% fsp_command if [ ${num_computes} -gt 4 ];then
+% fsp_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% fsp_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=noarmal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% fsp_command    service slurmctld restart
+% fsp_command    pdsh -w c[5-$num_computes] service munge start
+% fsp_command    pdsh -w c[5-$num_computes] service slurmd start
+% fsp_command fi
 % end_fsp_run
