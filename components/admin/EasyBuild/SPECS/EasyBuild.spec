@@ -81,8 +81,9 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
+export PATH=${LMOD_DIR}:${PATH}
 
-python ./bootstrap_eb.py %{install_path}
+python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 %install
 
