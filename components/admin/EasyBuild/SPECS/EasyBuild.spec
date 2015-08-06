@@ -72,10 +72,10 @@ you to manage (scientific) software on High Performance Computing (HPC)
 systems in an efficient way.
 
 %prep
+mkdir %{buildroot}
 
 %build
 
-mkdir %{buildroot}
 cd %{buildroot}
 cp %{_sourcedir}/*py .
 
