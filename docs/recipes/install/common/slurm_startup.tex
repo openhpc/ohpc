@@ -25,8 +25,8 @@ resource management under \SLURM{}.
 [master]$ service slurmctld start
 
 #  start munge and slurm clients on compute hosts
-[master]$ pdsh -w c[1-4] service munge start
-[master]$ pdsh -w c[1-4] service slurmd start
+[master]$ pdsh -w "${compute_regex} service munge start
+[master]$ pdsh -w "${compute_regex} service slurmd start
 \end{lstlisting}
 % end_fsp_run
 
@@ -36,6 +36,6 @@ eligible to schedule user jobs, issue the following:
 
 % begin_fsp_run
 \begin{lstlisting}[language=bash]
-[master]$ scontrol update nodename=c[1-4] state=idle
+[master]$ scontrol update nodename="${compute_regex}" state=idle
 \end{lstlisting}
 % end_fsp_run
