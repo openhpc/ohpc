@@ -71,6 +71,8 @@ systems in an efficient way.
 
 %build
 
+cd %{buildroot}
+
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
