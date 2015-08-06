@@ -92,6 +92,8 @@ Patch0:         superlu_dist-3.1-sequence-point.patch
 Patch1:         superlu_dist-4.0-make.patch
 # PATCH-FIX-UPSTREAM superlu_dist-3.2-example-no-return-in-non-void.patch
 Patch2:         superlu_dist-3.2-example-no-return-in-non-void.patch
+# PATCH-FIX-FSP superlu_dist-4.0-parmetis.patch
+Patch3:         superlu_dist-4.0-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -124,6 +126,7 @@ solutions.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 # FSP compiler/mpi designation
