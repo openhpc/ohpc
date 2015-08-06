@@ -61,7 +61,6 @@
 \input{../../common/audience}
 \input{../../common/requirements}
 \input{../../common/inputs}
-\input{../../common/automation}
 
 % Base Operating System --------------------------------------------
 
@@ -76,13 +75,20 @@
 \subsection{Enable \FSP{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_fsp_repo}
 
+\begin{lstlisting}[language=bash,keywords={},literate={VER}{\FSPVersion{}}1]
+[master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/CentOS-7.1_Intel/ForestPeak:VER.repo
+\end{lstlisting}
+
 % begin_fsp_run
 % fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:
-[master]$ wget -P /etc/yum.repos.d ${FSP_mirror}/15.31:/Factory/CentOS-7.1_Intel/ForestPeak:15.31:Factory.repo
+[master]$ wget -P /etc/yum.repos.d ${fsp_repo}
 \end{lstlisting}
 % end_fsp_run
+
+% master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:
+% master]$ wget -P /etc/yum.repos.d
+% ${rsp_repo}/15.31:/Factory/CentOS-7.1_Intel/ForestPeak:15.31:Factory.repo
 
 In addition to the \FSP{} package repository, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
@@ -97,20 +103,8 @@ both the base OS and EPEL repositories (mirrors freely available online):
                         {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
 \end{itemize*}
 
-% begin_fsp_run 
-% fsp_validation_newline
-% fsp_ci_comment - Remove WW file update crontab entry
-% [master]$ rm -f /etc/cron.d/wwupdatefiles
-% end_fsp_run
+\input{../../common/automation}
 
-% begin_fsp_run
-% fsp_validation_newline
-% fsp_ci_comment Format space for /opt/fsp
-% [master]$ mkfs -F -t ext4 /dev/sda1
-% [master]$ mkdir -p /opt/fsp        
-% [master]$ mount /dev/sda1 /opt/fsp 
-% fsp_validation_newline
-% end_fsp_run  
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{../../common/install_provisioning_intro}
@@ -323,7 +317,7 @@ combination to limit the export scope to the defined compute nodes.
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
 
 # Identify resource manager hostname on master host
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_hostname}/" /etc/slurm/slurm.conf
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
 # Export /home and FSP public packages from master server to cluster compute nodes
 [master]$ echo "/home ${internal_netmask}(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
@@ -607,7 +601,7 @@ defined for the {\em compute} instance.
 In preparation for provisioning, we can now define the desired network settings
 for four example compute nodes with the underlying provisioning system and
 restart the \texttt{dhcp} service. Note the use of variable names for the
-desired compute node IP and MAC addresses which should be modified to
+desired compute hostnames, node IPs, and MAC addresses which should be modified to
 accommodate local settings and hardware. Included in these steps are commands
 to enable \Warewulf{} to manage IPoIB settings and corresponding definitions of
 IPoIB addresses for the compute nodes. This is typically optional unless you
@@ -621,21 +615,26 @@ that were imported in \S\ref{sec:file_import}.
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define four compute nodes and network settings 
-[master]$ wwsh -y node new c1 --ipaddr=${c1_ip} --hwaddr=${c1_mac} -D ${eth_provision}
-[master]$ wwsh -y node new c2 --ipaddr=${c2_ip} --hwaddr=${c2_mac} -D ${eth_provision}
-[master]$ wwsh -y node new c3 --ipaddr=${c3_ip} --hwaddr=${c3_mac} -D ${eth_provision}
-[master]$ wwsh -y node new c4 --ipaddr=${c4_ip} --hwaddr=${c4_mac} -D ${eth_provision}
+
+[master]$ wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+
+# Optionally register additional compute nodes
+[master]$ for ((i=4; i<$num_computes; i++)) ; do
+              wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
+           done
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set c[1-4] --vnfs=centos7.1 --bootstrap=`uname -r` \
+[master]$ wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
-# Optionally define IPoIB network settings (required if planning to mount Lustre* over IB)
-[master]$ wwsh -y node set c1 -D ib0 --ipaddr=${c1_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c2 -D ib0 --ipaddr=${c2_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c3 -D ib0 --ipaddr=${c3_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c4 -D ib0 --ipaddr=${c4_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y provision set c[1-4] --fileadd=ifcfg-ib0.ww
+# Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
+[master]$ for ((i=0; i<$num_computes; i++)) ; do
+              wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
+           done
+[master]$ wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 
 # Restart dhcp / update PXE
 [master]$ service dhcpd restart
@@ -643,11 +642,13 @@ that were imported in \S\ref{sec:file_import}.
 \end{lstlisting}
 % end_fsp_run
 
-% begin_fsp_run 
-% fsp_validation_newline
-% fsp_ci_comment Add optional kargs to bootstrap kernel
-% [master]$ wwsh provision set c[1-4] --kargs=acpi_pad.disable=1
-% fsp_validation_newline
+% begin_fsp_run
+
+% fsp_validation_comment Optionally, add arguments to bootstrap kernel
+% fsp_command if [ ${enable_kargs} ]; then
+% fsp_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
+% fsp_command fi
+
 % end_fsp_run
 
 \subsection{Boot compute nodes} \label{sec:boot_computes}
@@ -662,36 +663,16 @@ order to work interactively.
 % fsp_comment_header Boot compute nodes \ref{sec:boot_computes}
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ ipmitool -E -I lanplus -H ${c1_bmc} -U root chassis power reset   # power cycle c1
-[master]$ ipmitool -E -I lanplus -H ${c2_bmc} -U root chassis power reset   # power cycle c2
-[master]$ ipmitool -E -I lanplus -H ${c3_bmc} -U root chassis power reset   # power cycle c3
-[master]$ ipmitool -E -I lanplus -H ${c4_bmc} -U root chassis power reset   # power cycle c4
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[0]} -U root chassis power reset   # power cycle c1
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[1]} -U root chassis power reset   # power cycle c2
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[2]} -U root chassis power reset   # power cycle c3
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[3]} -U root chassis power reset   # power cycle c4
+
+# Optionally boot additional compute nodes
+[master]$ for ((i=4; i<$num_computes; i++)) ; do
+              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U root chassis power reset
+           done
 \end{lstlisting} 
-
-% begin_fsp_run 
-% fsp_validation_comment - optionally add 4 more hosts
-% [master]$ if [[ $USE_DYNAMIC_HOSTNUM -eq 1 && $NUM_COMPUTES -ge 8 ]];then
-% [master]$    ipmitool -E -I lanplus -H <c5_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c6_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c7_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c8_bmc> -U root chassis power reset
-% [master]$ fi
-% end_fsp_run
-
-% begin_fsp_run 
-% fsp_validation_comment - optionally add 8 more hosts
-% [master]$ if [[ $USE_DYNAMIC_HOSTNUM -eq 1 && $NUM_COMPUTES -ge 8 ]];then
-% [master]$    ipmitool -E -I lanplus -H <c9_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c10_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c11_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c12_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c13_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c14_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c15_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c16_bmc> -U root chassis power reset
-% [master]$ fi
-% end_fsp_run
-
 % end_fsp_run
 
 Once kicked off, the boot process should take less than 2 minutes and you can
@@ -702,7 +683,7 @@ compute hosts using \texttt{pdsh}, execute the following:
 % begin_fsp_run
 \begin{lstlisting}[language=bash]
 [master]$ sleep 120
-[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] uptime
+[master]$ pdsh -w c[1-4] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
 c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
 c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06

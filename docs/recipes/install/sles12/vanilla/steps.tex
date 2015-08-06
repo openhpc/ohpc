@@ -72,11 +72,14 @@
 \subsection{Enable \FSP{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_fsp_repo}
 
+\begin{lstlisting}[language=bash,keywords={},literate={VER}{\FSPVersion{}}1]
+[master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/SLE_12_Intel/ForestPeak:VER.repo
+\end{lstlisting}
+
 % begin_fsp_run
 % fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82
-[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.31:/Factory/SLE_12_Intel/ForestPeak:15.31:Factory.repo
+[master]$ zypper addrepo ${fsp_repo}
 [master]$ zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_fsp_run
@@ -94,21 +97,6 @@ both the base and SDK repositories:
 \item SLES12-12-0
 \item SLES12-12-sdk
 \end{itemize*}
-
-% begin_fsp_run 
-% fsp_validation_newline
-% fsp_ci_comment - Remove WW file update crontab entry
-% [master]$ rm -f /etc/cron.d/wwupdatefiles
-% end_fsp_run
-
-% begin_fsp_run
-% fsp_validation_newline
-% fsp_ci_comment Format space for /opt/fsp
-% [master]$ mkfs -F -t ext4 /dev/sda1
-% [master]$ mkdir -p /opt/fsp        
-% [master]$ mount /dev/sda1 /opt/fsp 
-% fsp_validation_newline
-% end_fsp_run  
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{../../common/install_provisioning_intro}
@@ -316,7 +304,7 @@ combination to limit the export scope to the defined compute nodes.
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
 
 # Identify resource manager hostname on master host
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_hostname}/" /etc/slurm/slurm.conf
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
 # Export /home and FSP public packages from master server to cluster compute nodes
 [master]$ echo "/home ${internal_netmask}(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
@@ -573,21 +561,26 @@ that were imported in \S\ref{sec:file_import}.
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define four compute nodes and network settings 
-[master]$ wwsh -y node new c1 --ipaddr=${c1_ip} --hwaddr=${c1_mac} -D ${eth_provision}
-[master]$ wwsh -y node new c2 --ipaddr=${c2_ip} --hwaddr=${c2_mac} -D ${eth_provision}
-[master]$ wwsh -y node new c3 --ipaddr=${c3_ip} --hwaddr=${c3_mac} -D ${eth_provision}
-[master]$ wwsh -y node new c4 --ipaddr=${c4_ip} --hwaddr=${c4_mac} -D ${eth_provision}
+
+[master]$ wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+
+# Optionally register additional compute nodes
+[master]$ for ((i=4; i<$num_computes; i++)) ; do
+              wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
+           done
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set c[1-4] --vnfs=sles12 --bootstrap=`uname -r` \
+[master]$ wwsh -y provision set "${compute_regex}" --vnfs=sles12 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
-# Optionally define IPoIB network settings (required if planning to mount Lustre* over IB)
-[master]$ wwsh -y node set c1 -D ib0 --ipaddr=${c1_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c2 -D ib0 --ipaddr=${c2_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c3 -D ib0 --ipaddr=${c3_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y node set c4 -D ib0 --ipaddr=${c4_ipoib} --netmask=${ipoib_netmask}
-[master]$ wwsh -y provision set c[1-4] --fileadd=ifcfg-ib0.ww
+# Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
+[master]$ for ((i=0; i<$num_computes; i++)) ; do
+              wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
+           done
+[master]$ wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 
 # Restart dhcp / update PXE
 [master]$ service dhcpd restart
@@ -607,10 +600,10 @@ order to work interactively.
 % fsp_comment_header Boot compute nodes \ref{sec:boot_computes}
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ ipmitool -E -I lanplus -H ${c1_bmc} -U root chassis power reset   # power cycle c1
-[master]$ ipmitool -E -I lanplus -H ${c2_bmc} -U root chassis power reset   # power cycle c2
-[master]$ ipmitool -E -I lanplus -H ${c3_bmc} -U root chassis power reset   # power cycle c3
-[master]$ ipmitool -E -I lanplus -H ${c4_bmc} -U root chassis power reset   # power cycle c4
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[0]} -U root chassis power reset   # power cycle c1
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[1]} -U root chassis power reset   # power cycle c2
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[2]} -U root chassis power reset   # power cycle c3
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[3]} -U root chassis power reset   # power cycle c4
 \end{lstlisting} 
 
 Once kicked off, the boot process should take less than 2 minutes and you can
