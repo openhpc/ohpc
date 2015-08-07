@@ -45,11 +45,8 @@ eligible to schedule user jobs, issue the following:
 
 % begin_fsp_run
 % fsp_validation_newline
-% fsp_validation_comment Update basic slurm config if additional computes defined
+% fsp_validation_comment Startup slurm on additional computes if defined
 % fsp_command if [ ${num_computes} -gt 4 ];then
-% fsp_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
-% fsp_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=noarmal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
-% fsp_command    service slurmctld restart
 % fsp_command    pdsh -w c[5-$num_computes] service munge start
 % fsp_command    pdsh -w c[5-$num_computes] service slurmd start
 % fsp_command fi
