@@ -111,7 +111,7 @@ both the base and SDK repositories:
 
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
-The following command adds OFED and PSM support using distro-provided drivers to the
+The following command adds OFED and PSM support using base distro-provided drivers to the
 chosen {\em master} host. 
 
 % begin_fsp_run
@@ -531,10 +531,12 @@ template file for \Warewulf{} that can be imported and used later to provision
 
 \subsection{Assemble bootstrap image} \label{sec:assemble_bootstrap}
 
-\Warewulf{} requires a bootstrap image that is used to initialize the provisioning
-process. This bootstrap image includes the runtime kernel and associated
-modules. The following commands highlight the inclusion of additional drivers
-and creation of the bootstrap image based on the running kernel.
+\Warewulf{} employs a two-stage boot process for provisioning compute nodes:
+a bootstrap image that is used to initialize the process, and a virtual node 
+file system capsule containing the full system image. The bootstrap image 
+includes the runtime kernel and associated modules. The following commands 
+highlight the inclusion of additional drivers and creation of the bootstrap 
+image based on the running kernel.
 
 % begin_fsp_run
 % fsp_comment_header Assemble bootstrap image \ref{sec:assemble_bootstrap}
