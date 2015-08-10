@@ -76,6 +76,11 @@
 [master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/SLE_12_Intel/ForestPeak:VER.repo
 \end{lstlisting}
 
+
+If outside of Intel, the repository location should be set to match the path to
+a locally accessibly copy of the \FSP{} repository. Once set, the repository can be
+enabled via the following:
+
 % begin_fsp_run
 % fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
@@ -316,6 +321,20 @@ combination to limit the export scope to the defined compute nodes.
 [master]$ chroot $CHROOT systemctl enable ntpd
 [master]$ echo "server ${master_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
+% end_fsp_run
+
+% Additional commands when additional computes are requested
+
+% begin_fsp_run
+% fsp_validation_newline
+% fsp_validation_comment Update basic slurm config if additional computes defined
+% fsp_command if [ ${num_computes} -gt 4 ];then
+% fsp_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% fsp_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+
+% fsp_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% fsp_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% fsp_command fi
 % end_fsp_run
 
 \subsubsection{Additional Customizations ({\em optional})} \label{sec:addl_customizations}
@@ -724,7 +743,15 @@ offerings within \FSP{}, issue the following:
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
+\clearpage
+\appendix
+\section*{Appendices}
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\input{../../common/automation_appendix}
 %\input{manifest}
+\input{../../common/signature}
 
 \end{document}
 

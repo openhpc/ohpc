@@ -79,6 +79,10 @@
 [master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/CentOS-7.1_Intel/ForestPeak:VER.repo
 \end{lstlisting}
 
+If outside of Intel, the repository location should be set to match the path to
+a locally accessibly copy of the \FSP{} repository. Once set, the repository can be
+enabled via the following:
+
 % begin_fsp_run
 % fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
@@ -805,7 +809,16 @@ offerings within \FSP{}, issue the following:
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
+\clearpage
+\appendix
+\section*{Appendices}
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\input{../../common/automation_appendix}
 \input{manifest}
+\input{../../common/signature}
+
 
 \end{document}
 

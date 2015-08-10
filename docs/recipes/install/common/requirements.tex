@@ -24,14 +24,16 @@ An outline of the physical architecture discussed is shown in
 Figure~\ref{fig:physical_arch} and highlights the high-level networking
 configuration. The {\em master} host requires at least two Ethernet interfaces
 with {\em eth0} connected to the local data center network and {\em eth1} used
-to provision and manage the cluster backend.  Two logical IP interfaces are
-expected to each compute node: the first is the standard Ethernet interface
-that will be used for provisioning and resource management. The second is used
-to connect to each host's BMC and is used for power management and remote console
-access. Physical connectivity for these two logical IP networks is often
-accommodated via separate cabling and switching infrastructure; however, an 
-alternate configuration can also be accommodated via the use of a shared NIC, which runs
-a packet filter to divert management packets between the host and BMC.
+to provision and manage the cluster backend (note that these interface names
+are examples and may be different depending on local settings and OS
+conventions).  Two logical IP interfaces are expected to each compute node: the
+first is the standard Ethernet interface that will be used for provisioning and
+resource management. The second is used to connect to each host's BMC and is
+used for power management and remote console access. Physical connectivity for
+these two logical IP networks is often accommodated via separate cabling and
+switching infrastructure; however, an alternate configuration can also be
+accommodated via the use of a shared NIC, which runs a packet filter to divert
+management packets between the host and BMC.
 
  In addition to the IP networking, there is a high-speed network
 (\InfiniBand{} in this recipe) that is also connected to each of the
