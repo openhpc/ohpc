@@ -8,7 +8,4 @@ python-numpy-intel-fsp 1.9.2 http://sourceforge.net/projects/numpy fsp/dev-tools
 python-scipy-gnu-impi-fsp 0.15.1 http://www.scipy.org fsp/dev-tools Scientific Tools for Python
 python-scipy-gnu-mvapich2-fsp 0.15.1 http://www.scipy.org fsp/dev-tools Scientific Tools for Python
 python-scipy-gnu-openmpi-fsp 0.15.1 http://www.scipy.org fsp/dev-tools Scientific Tools for Python
-python-scipy-intel-impi-fsp 0.15.1 http://www.scipy.org fsp/dev-tools Scientific Tools for Python
-python-scipy-intel-mvapich2-fsp 0.15.1 http://www.scipy.org fsp/dev-tools Scientific Tools for Python
-python-scipy-intel-openmpi-fsp 0.15.1 http://www.scipy.org fsp/dev-tools Scientific Tools for Python
 valgrind-fsp 3.10.1 http://www.valgrind.org/ fsp/dev-tools Valgrind Memory Debugger
