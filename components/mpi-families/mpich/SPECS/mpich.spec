@@ -46,6 +46,8 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
+%include %{_sourcedir}/FSP_macros
+
 # Base package name
 %define pname mpich
 
@@ -60,8 +62,6 @@ URL:		http://www.mpich.org/
 Source0:	http://www.mpich.org/static/downloads/%{version}/%{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib
-
-%include %{_sourcedir}/FSP_macros
 
 %define debug_package %{nil}
 
