@@ -81,15 +81,11 @@ BuildRequires:  libtiff-devel
 BuildRequires:  perl
 BuildRequires:  readline-devel
 %if 0%{?suse_version} > 1020
-BuildRequires:  fdupes
 %if 0%{?suse_version} < 1230
 %if 0%{?suse_version} > 1120 
 %endif
 %else
 BuildRequires:  xdg-utils
-%if 0%{?suse_version} != 1315
-###BuildRequires:  tex(inconsolata.sty)
-%endif
 %endif
 %endif
 BuildRequires:  pango-devel
@@ -97,8 +93,7 @@ BuildRequires:  tcl-devel
 ### Moved to CENTOS only until SLES has a newer texinfo version
 ###BuildRequires:  texinfo >= 5.1 
 BuildRequires:  tk-devel
-BuildRequires:  xorg-x11-devel
-BuildRequires:  intel-compilers%{PROJ_DELIM}
+# BuildRequires:  xorg-x11-devel
 # CentOS needs X11 headers/libs like Intrisic.h which suse provides
 %if 0%{?suse_version}  
 #BuildRequires:  texlive-fonts-extra
@@ -109,11 +104,9 @@ BuildRequires:  texinfo >= 5.1
 #BuildRequires:  bzip2-devel
 #BuildRequires:  bzip2-libs
 %endif
-###Requires:       R-base-devel = %{version}
 Requires:       cairo >= 1.2
 Requires:       fontconfig
 Requires:       freetype2
-####Requires:       glibc-locale
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
@@ -129,7 +122,6 @@ Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
 Provides:       R-MASS = 7.3.39
 Provides:       R-Matrix = 1.1.5
-#Provides:       R-base = %%{version} # implicitly provided
 Obsoletes:      R-Matrix < 1.1.5
 Provides:       R-boot = 1.3.15
 Provides:       R-class = 7.3.12
@@ -216,10 +208,6 @@ make DESTDIR=%{buildroot} install
 # there is a backup file in survival for 3.1.3
 %{__rm} -f %{buildroot}%{_libdir}/R/library/survival/NEWS.Rd.orig
 
-%if 0%{?suse_version} > 1020    
-%fdupes -s $RPM_BUILD_ROOT  
-%endif
-
 # Install ld.so.conf.d file to ensure other applications access the shared lib
 %{__mkdir_p} %{buildroot}/etc/ld.so.conf.d
 cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
@@ -228,7 +216,7 @@ EOF
 
 # FSP module file
 
-%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__mkdir_p}  %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 
 #%Module1.0#####################################################################
