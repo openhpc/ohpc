@@ -100,12 +100,6 @@ package nagios-plugins-uptime-fsp.x86_64
 package ndoutils-fsp.x86_64
 package psqlODBC-fsp.x86_64
 package sigar-fsp.x86_64
-parmetis-gnu-impi-fsp 4.0.3
-parmetis-gnu-mvapich2-fsp 4.0.3
-parmetis-gnu-openmpi-fsp 4.0.3
-parmetis-intel-impi-fsp 4.0.3
-parmetis-intel-mvapich2-fsp 4.0.3
-parmetis-intel-openmpi-fsp 4.0.3
 prun-fsp 0.1.0
 R_base-fsp 3.2.0
 superlu_dist-gnu-impi-fsp 4.0
