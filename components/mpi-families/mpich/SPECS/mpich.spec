@@ -104,7 +104,7 @@ mpich-autoload package.
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-%configure	\
+./configure	\
     --prefix=%{install_path} \
 	--enable-sharedlibs=gcc					\
 	--enable-shared						\
