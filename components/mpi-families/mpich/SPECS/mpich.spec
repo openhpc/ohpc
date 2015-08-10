@@ -59,7 +59,7 @@ License:	MIT
 Group:		fsp/mpi-families
 URL:		http://www.mpich.org/
 
-Source0:	http://www.mpich.org/static/downloads/%{version}/%{name}-%{version}.tar.gz
+Source0:	%{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib
 
