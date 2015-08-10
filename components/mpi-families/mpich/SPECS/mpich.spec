@@ -110,7 +110,6 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 	--enable-shared						\
 	--enable-static=no						\
 	--enable-lib-depend					\
-	--disable-rpath						\
 	--disable-silent-rules					\
 	--enable-fc						\
 	--enable-cxx						\
