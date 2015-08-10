@@ -1,5 +1,6 @@
-\newpage
-\section{Package Signatures}
+\clearpage
+\subsection{Package Signatures}
+%\addcontentsline{toc}{section}{Appendix B - Package Signatures}
 
 All of the RPMs provided via an \FSP{} repository are signed with a GPG
 signature. By default, the underlying package managers will verify these signatures during
@@ -9,10 +10,10 @@ repository is shown below: \\
 
 \texttt{Fingerprint: 72103C5A0589649FFBD57684F2C51DE9{\bf3A20D202}} \\
 
-\noindent The following command can be used to verify a local RPM highlighting if the package
-is signed, and if so, which key was used to sign it.  The example below highlights
-usage for a local copy of the \texttt{docs-fsp} package and illustrates how the
-key ID matches the fingerprint above.
+\noindent The following command can be used to verify a local RPM by highlighting if the package
+is signed, and if so, which key was used to sign it.  The example below
+highlights usage for a local copy of the \texttt{docs-fsp} package and
+illustrates how the key ID matches the fingerprint above.
 
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ rpm --checksig -v docs-fsp-15.31-1.1.x86_64.rpm
