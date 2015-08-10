@@ -1,3 +1,4 @@
+R_base-fsp 3.2.0
 adios-gnu-impi-fsp 1.8.0
 adios-gnu-mvapich2-fsp 1.8.0
 adios-gnu-openmpi-fsp 1.8.0
@@ -101,15 +102,14 @@ package ndoutils-fsp.x86_64
 package psqlODBC-fsp.x86_64
 package sigar-fsp.x86_64
 prun-fsp 0.1.0
-R_base-fsp 3.2.0
+superlu-gnu-fsp 4.3
+superlu-intel-fsp 4.3
 superlu_dist-gnu-impi-fsp 4.0
 superlu_dist-gnu-mvapich2-fsp 4.0
 superlu_dist-gnu-openmpi-fsp 4.0
 superlu_dist-intel-impi-fsp 4.0
 superlu_dist-intel-mvapich2-fsp 4.0
 superlu_dist-intel-openmpi-fsp 4.0
-superlu-gnu-fsp 4.3
-superlu-intel-fsp 4.3
 trilinos-gnu-impi-fsp 11.14.3
 trilinos-gnu-mvapich2-fsp 11.14.3
 trilinos-gnu-openmpi-fsp 11.14.3

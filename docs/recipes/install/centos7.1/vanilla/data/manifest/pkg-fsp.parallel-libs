@@ -7,9 +7,6 @@ boost-intel-openmpi-fsp 1.58.0 http://www.boost.org fsp/parallel-libs Boost free
 fftw-gnu-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-gnu-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 fftw-gnu-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
-fftw-intel-impi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
-fftw-intel-mvapich2-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
-fftw-intel-openmpi-fsp 3.3.4 http://www.fftw.org fsp/parallel-libs A Fast Fourier Transform library
 hypre-gnu-impi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ fsp/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu-mvapich2-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ fsp/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu-openmpi-fsp 2.10.0b http://www.llnl.gov/casc/hypre/ fsp/parallel-libs Scalable algorithms for solving linear systems of equations
