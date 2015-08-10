@@ -4,6 +4,7 @@ Version 15.31 (August 2015)
       * documentation extended to include template install scripts
       * Intel Parallel Studio split into separate runtime and devel packaging
       * fixes for various Perl warnings observed with Warewulf
+      * parallel job launch update - use "prun ./a.out" for MPI applications
 
    [Component Additions]
       * adios-gnu-impi-fsp                       (v1.8.0)
