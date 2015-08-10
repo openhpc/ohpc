@@ -10,6 +10,9 @@
 
 # MVAPICH2 MPI stack that is dependent on compiler toolchain
 
+%define with_slurm 0
+%define with_psm 0
+
 #-fsp-header-comp-begin----------------------------------------------
 
 # FSP convention: the default assumes the gnu compiler family;
