@@ -1,0 +1,27 @@
+\newpage
+\section{Package Signatures}
+
+All of the RPMs provided via an \FSP{} repository are signed with a GPG
+signature. By default, the underlying package managers will verify these signatures during
+installation to ensure that packages have not been altered. The RPMs can also
+be manually verified and the public signing key fingerprint for the latest
+repository is shown below: \\
+
+\texttt{Fingerprint: 72103C5A0589649FFBD57684F2C51DE9{\bf3A20D202}} \\
+
+\noindent The following command can be used to verify a local RPM highlighting if the package
+is signed, and if so, which key was used to sign it.  The example below highlights
+usage for a local copy of the \texttt{docs-fsp} package and illustrates how the
+key ID matches the fingerprint above.
+
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ rpm --checksig -v docs-fsp-15.31-1.1.x86_64.rpm
+docs-fsp-15.31-1.1.x86_64.rpm:
+    Header V3 RSA/SHA1 Signature, key ID 3a20d202: OK
+    Header SHA1 digest: OK (a1923ffeb5b67f81757aa3568183e023b312f64d)
+    V3 RSA/SHA1 Signature, key ID 3a20d202: OK
+    MD5 digest: OK (9aafe33bdec6ad7beb3a222f4960a0be)
+\end{lstlisting}
+
+
+
