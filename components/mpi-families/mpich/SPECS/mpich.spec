@@ -116,10 +116,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 	--enable-cxx						\
 	--enable-g=dbg						\
 	--with-hwloc-prefix=system				\
-    --with-device=ch3:mrail \
-%if %{with_psm}
-    --with-device=ch3:psm \
-%endif
+    --with-device=ch3:nemesis \
 %if 0%{with_slurm}
     --with-pm=no --with-pmi=slurm \
 %endif
