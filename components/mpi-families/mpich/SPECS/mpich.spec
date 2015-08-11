@@ -114,6 +114,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 	--enable-fc						\
 	--enable-cxx						\
 	--enable-g=dbg						\
+    --disable-wrapper-rpath         \
 	--with-hwloc-prefix=system				\
     --with-device=ch3:nemesis \
 %if 0%{with_slurm}
