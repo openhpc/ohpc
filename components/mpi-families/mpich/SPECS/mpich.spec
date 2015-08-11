@@ -130,7 +130,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 	--enable-threads=runtime						\
     --disable-wrapper-rpath         \
 	--with-hwloc-prefix=system				\
-    --with-device=ch3:nemesis:mxm \
+    --with-device=ch3:nemesis:ofi \
 %if 0%{with_slurm}
     --with-pm=no --with-pmi=slurm \
 %endif
