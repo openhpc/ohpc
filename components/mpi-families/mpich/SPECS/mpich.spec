@@ -65,6 +65,18 @@ DocDir:    %{FSP_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
+%if 0%{?sles_version} || 0%{?suse_version}
+Buildrequires: ofed
+%endif
+%if 0%{?rhel_version} || 0%{?centos_version}
+Buildrequires: rdma
+%endif
+
+Requires: prun%{PROJ_DELIM}
+
+BuildRequires: bison
+BuildRequires: libibmad-devel libibverbs-devel
+
 # For python_sitearch
 BuildRequires:  python-devel
 Provides:	mpi
