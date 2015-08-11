@@ -53,7 +53,7 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 
 Summary:	A high-performance implementation of MPI
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:	3.24b
+Version:	3.2b4
 Release:	4%{?dist}
 License:	MIT
 Group:		fsp/mpi-families
@@ -80,7 +80,7 @@ BuildRequires: libibmad-devel libibverbs-devel
 # For python_sitearch
 BuildRequires:  python-devel
 Provides:	mpi
-Provides:	mpich2 = 3.24b
+Provides:	mpich2 = 3.2b4
 Obsoletes:	mpich2 < 3.2
 
 # Default library install path
