@@ -40,14 +40,14 @@ This guide presents a simple cluster installation procedure using components fro
 
 %build
 %if 0%{?suse_version}
-%define source_path docs/recipes/install/sles12/vanilla
+%define source_path recipes/install/sles12/vanilla
 %else
 %if 0%{?rhel_version} || 0%{?centos_version}
-%define source_path docs/recipes/install/centos7.1/vanilla
+%define source_path recipes/install/centos7.1/vanilla
 %endif
 %endif
 
-
+mv git_config .git
 cd %{source_path}
 make
 
