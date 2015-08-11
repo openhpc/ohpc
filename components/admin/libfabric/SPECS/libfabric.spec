@@ -1,4 +1,4 @@
-Name: libfabric
+Name: libfabric1
 Version: 1.0.0
 Release: 1%{?dist}
 Summary: User-space RDMA Fabric Interfaces
