@@ -26,7 +26,7 @@ Requires: libfabric = %{version}
 Development files for the libfabric library.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q -n libfabric-%{version}
 
 %build
 # defaults: with-dlopen and without-valgrind can be over-rode:
