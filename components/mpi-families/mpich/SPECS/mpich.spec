@@ -122,6 +122,9 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 %endif
     --enable-fast=O3 || cat config.log
 
+# Remove rpaths
+%{__sed} -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+%{__sed} -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 
 make %{?_smp_mflags} VERBOSE=1
 
