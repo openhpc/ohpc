@@ -25,6 +25,7 @@ BuildRequires:  texlive-mdwtools
 BuildRequires:  texlive-multirow
 BuildRequires:  texlive-draftwatermark
 BuildRequires:  latexmk
+BuildRequires:  git
 Requires:       make
 
 %define debug_package %{nil}
