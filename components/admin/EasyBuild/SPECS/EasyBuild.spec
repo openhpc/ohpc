@@ -57,7 +57,6 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch
 BuildRequires: python
 BuildRequires: python-setuptools
-Requires: lmod
 Requires: python
 #!BuildIgnore: post-build-checks
 
