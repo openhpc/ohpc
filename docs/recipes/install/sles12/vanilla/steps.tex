@@ -8,7 +8,7 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{SLES12*}
+\newcommand{\baseOS}{SLES12}
 \newcommand{\LosF}{\emph{LosF*}}
 \newcommand{\FSPVersion}{15.31}
 \newcommand{\IMAGE}{sles12}
@@ -31,7 +31,7 @@
 \noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
 \noindent\rule{6in}{0.4pt} \\
 
-\noindent {\Large \baseOS{} Base OS} \\ \vspace{0.2cm}
+\noindent {\Large \baseOS{}* Base OS} \\ \vspace{0.2cm}
 
 \noindent {\large {\em Base Linux* Edition }}
 
@@ -166,7 +166,6 @@ follows:
 %\begin{verbatim}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-
 # Configure Warewulf provisioning to use desired internal interface
 [master]$ perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
 
@@ -222,7 +221,6 @@ default location for this example is in \path{/opt/fsp/admin/images/sles12}.
 [master]$ export CHROOT=/opt/fsp/admin/images/sles12
 
 # Build initial chroot image
-
 [master]$ mkdir -p -m 755 $CHROOT                        # create chroot housing dir
 [master]$ mkdir -m 755 $CHROOT/dev                       # create chroot /dev dir
 [master]$ mknod -m 666 $CHROOT/dev/zero c 1 5            # create /dev/zero device
@@ -393,7 +391,6 @@ the necessary \Lustre{} kernel modules. Consequently, the example below includes
 steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
 file to allow loading of the necessary modules.
 
-\newpage
 % begin_fsp_run
 % fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -696,12 +693,10 @@ offerings within \FSP{}, issue the following:
 
 \input{../../common/third_party_libs}
 
-
-\vspace*{0.2cm}
-
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{../../common/slurm_startup}
 
+\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
