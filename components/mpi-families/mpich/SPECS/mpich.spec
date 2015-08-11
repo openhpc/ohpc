@@ -70,6 +70,7 @@ Buildrequires: ofed
 %endif
 %if 0%{?rhel_version} || 0%{?centos_version}
 Buildrequires: rdma
+Buildrequires: librdmacm
 %endif
 
 Requires: prun%{PROJ_DELIM}
