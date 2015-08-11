@@ -1,4 +1,4 @@
-Name: libfabric1
+Name: libfabric
 Version: 1.0.0
 Release: 1%{?dist}
 Summary: User-space RDMA Fabric Interfaces
@@ -26,7 +26,7 @@ Requires: libfabric = %{version}
 Development files for the libfabric library.
 
 %prep
-%setup -q -n libfabric-%{version}
+%setup -q -n %{name}-%{version}
 
 %build
 # defaults: with-dlopen and without-valgrind can be over-rode:
