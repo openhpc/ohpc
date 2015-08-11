@@ -46,8 +46,8 @@ This guide presents a simple cluster installation procedure using components fro
 %define source_path centos7.1/vanilla
 %endif
 %endif
+
 cd %{source_path}
-../../common/vc
 make
 
 # Include convenience recipe script(s)
