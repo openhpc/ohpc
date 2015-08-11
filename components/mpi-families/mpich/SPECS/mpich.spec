@@ -77,7 +77,7 @@ Requires: prun%{PROJ_DELIM}
 
 BuildRequires: bison
 BuildRequires: libibmad-devel libibverbs-devel
-Buildrequires: libfabric
+Buildrequires: libfabric-devel
 
 # For python_sitearch
 BuildRequires:  python-devel
