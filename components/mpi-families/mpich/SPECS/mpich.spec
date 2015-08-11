@@ -53,7 +53,7 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 
 Summary:	A high-performance implementation of MPI
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:	3.1.4
+Version:	3.24b
 Release:	4%{?dist}
 License:	MIT
 Group:		fsp/mpi-families
@@ -80,8 +80,8 @@ BuildRequires: libibmad-devel libibverbs-devel
 # For python_sitearch
 BuildRequires:  python-devel
 Provides:	mpi
-Provides:	mpich2 = 3.1.4
-Obsoletes:	mpich2 < 3.1
+Provides:	mpich2 = 3.24b
+Obsoletes:	mpich2 < 3.2
 
 # Default library install path
 %define install_path %{FSP_MPI_STACKS}/%{name}/%version
@@ -126,9 +126,11 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 	--enable-fc						\
 	--enable-cxx						\
 	--enable-g=dbg						\
+	--enable-romeo						\
+	--enable-threads=runtime						\
     --disable-wrapper-rpath         \
 	--with-hwloc-prefix=system				\
-    --with-device=ch3:nemesis:mxm \
+    --with-device=ch3:nemesis:ib \
 %if 0%{with_slurm}
     --with-pm=no --with-pmi=slurm \
 %endif
