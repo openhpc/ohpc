@@ -26,8 +26,8 @@ slurm-fsp 14.11.4 14.11.5
 slurm-munge-fsp 14.11.4 14.11.5
 slurm-perlapi-fsp 14.11.4 14.11.5
 slurm-plugins-fsp 14.11.4 14.11.5
-slurm-slurmdbd-fsp 14.11.4 14.11.5
 slurm-slurmdb-direct-fsp 14.11.4 14.11.5
+slurm-slurmdbd-fsp 14.11.4 14.11.5
 slurm-sql-fsp 14.11.4 14.11.5
 warewulf-common-fsp 3.6 3.6
 warewulf-provision-fsp 3.6 3.6

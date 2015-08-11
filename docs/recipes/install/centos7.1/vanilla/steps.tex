@@ -125,7 +125,7 @@ both the base OS and EPEL repositories (mirrors freely available online):
 
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
-The following command adds OFED and PSM support using distro-provided drivers
+The following command adds OFED and PSM support using base distro-provided drivers
 to the chosen {\em master} host.
 
 % begin_fsp_run
@@ -145,8 +145,8 @@ to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_clien
 for additional details), then having IPoIB enabled is a requirement for the
 \Lustre{} client. \FSP{} provides a template configuration file to aid in setting up
 an {\em ib0} interface on the {\em master} host. To use, copy the template
-provided and update the \texttt{master\_ipoib} and
-\texttt{ipoib\_netmask} entries to match local desired settings (alter ib0
+provided and update the \texttt{\$\{master\_ipoib\}} and
+\texttt{\$\{ipoib\_netmask\}} entries to match local desired settings (alter ib0
 naming as appropriate if system contains dual-ported or multiple HCAs). 
 
 % begin_fsp_run
@@ -221,8 +221,8 @@ The \FSP{} build of \Warewulf{} includes specific enhancements enabling support 
 \baseOS{}. The following steps illustrate the process to build a minimal, default
 image for use with \Warewulf{}.  We begin by creating a directory structure on the 
 {\em master} that will represent the root filesystem of the compute node. The 
-default location for this in \FSP{} is in
-\texttt{/opt/fsp/admin/images/centos7.1}. Note that \Warewulf{} assumes access to
+default location for this example is in
+\path{/opt/fsp/admin/images/centos7.1}. Note that \Warewulf{} assumes access to
 an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
 process which requires external network connectivity on your chosen {\em
   master} host. If this is not available, or if you prefer to access a locally cached
@@ -356,7 +356,7 @@ can {\em optionally} be applied to the
 local cluster environment. These customizations include:
 
 \begin{itemize*}
-\item Increase memlimits to support \InfiniBand{}
+\item Increase memlimits to support MPI jobs over \InfiniBand{}
 \item Restrict ssh access to compute resources
 \item Add \Lustre{} client
 \item Add \Nagios{} monitoring
@@ -549,7 +549,7 @@ host as follows:
 
 The \Warewulf{} system includes functionality to import arbitrary files from the
 provisioning server for distribution to managed hosts. This is one way
-to distribute user credentials across to {\em compute} hosts. To
+to distribute user credentials to {\em compute} hosts. To
 import local file-based credentials, issue the following:
 
 % begin_fsp_run
@@ -582,58 +582,13 @@ template file for \Warewulf{} that can be imported and used later to provision
 \end{lstlisting}
 % \end_fsp_run
 
-\subsection{Assemble bootstrap image} \label{sec:assemble_bootstrap}
-
-\Warewulf{} requires a bootstrap image that is used to initialize the provisioning
-process. This bootstrap image includes the runtime kernel and associated
-modules. The following commands highlight the inclusion of additional drivers
-and creation of the bootstrap image based on the running kernel.
-
-% begin_fsp_run
-% fsp_comment_header Assemble bootstrap image \ref{sec:assemble_bootstrap}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# (Optional) Include Lustre drivers; needed if enabling Lustre client on computes
-[master]$ export WW_CONF=/etc/warewulf/bootstrap.conf
-[master]$ echo "drivers += updates/kernel/" >> $WW_CONF
-
-# Build bootstrap image
-[master]$ wwbootstrap `uname -r`
-\end{lstlisting}
-% end_fsp_run
-
-\subsubsection{Assemble Virtual Node File Sytem (VNFS) image}
-
-With the local site customizations in place, the following step uses the
-\texttt{wwvnfs} command to assemble a VNFS capsule from the chroot environment
-defined for the {\em compute} instance. 
-
-% begin_fsp_run
-% fsp_validation_comment Assemble VNFS
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ wwvnfs -y --chroot $CHROOT
-\end{lstlisting}
-% end_fsp_run
-
-\subsubsection{Register nodes for provisioning}
-
-In preparation for provisioning, we can now define the desired network settings
-for four example compute nodes with the underlying provisioning system and
-restart the \texttt{dhcp} service. Note the use of variable names for the
-desired compute hostnames, node IPs, and MAC addresses which should be modified to
-accommodate local settings and hardware. Included in these steps are commands
-to enable \Warewulf{} to manage IPoIB settings and corresponding definitions of
-IPoIB addresses for the compute nodes. This is typically optional unless you
-are planning to include a \Lustre{} client mount over \InfiniBand{}.  The final step
-in this process associates the VNFS image assembled in previous steps with the
-newly defined compute nodes, utilizing the user credential files and munge key
-that were imported in \S\ref{sec:file_import}.
+\input{../../common/finalize_provisioning}
 
 % begin_fsp_run
 % fsp_validation_comment Add hosts to cluster
 
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
 # Define four compute nodes and network settings 
-
 [master]$ wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
 [master]$ wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
 [master]$ wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
@@ -669,6 +624,7 @@ that were imported in \S\ref{sec:file_import}.
 
 % end_fsp_run
 
+
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 
 \input{../../common/reset_computes} 
@@ -679,7 +635,6 @@ order to work interactively.
 
 % begin_fsp_run
 % fsp_comment_header Boot compute nodes \ref{sec:boot_computes}
-
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ ipmitool -E -I lanplus -H ${c_bmc[0]} -U root chassis power reset   # power cycle c1
 [master]$ ipmitool -E -I lanplus -H ${c_bmc[1]} -U root chassis power reset   # power cycle c2
@@ -693,23 +648,18 @@ order to work interactively.
 \end{lstlisting} 
 % end_fsp_run
 
-Once kicked off, the boot process should take less than 2 minutes and you can
-verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
-hosts. For example, to wait 120 seconds, and run a command on the newly imaged
-compute hosts using \texttt{pdsh}, execute the following:
+Once kicked off, the boot process should take less than 5 minutes (depending on
+BIOS post times) and you can verify that the compute hosts are available via
+ssh, or via parallel ssh tools to multiple hosts. For example, to run a command
+on the newly imaged compute hosts using \texttt{pdsh}, execute the following:
 
-% begin_fsp_run
 \begin{lstlisting}[language=bash]
-[master]$ sleep 120
 [master]$ pdsh -w c[1-4] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
 c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
 c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
 c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 \end{lstlisting}
-% end_fsp_run
-
-
 
 \section{Install \FSP{} Development Components}
 
@@ -811,9 +761,11 @@ offerings within \FSP{}, issue the following:
 
 \clearpage
 \appendix
-\section*{Appendices}
+%\section*{Appendices}
+{\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
+
 \addcontentsline{toc}{section}{Appendices}
-\renewcommand{\thesubsection}{\Alph{subsection}}
+\renewcommand{\thesubsection}{\Alph{subsection}:}
 
 \input{../../common/automation_appendix}
 \input{manifest}
