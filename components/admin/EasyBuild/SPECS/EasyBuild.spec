@@ -122,7 +122,7 @@ prepend-path	LD_LIBRARY_PATH	    %{install_path}/software/EasyBuild/%{version}/l
 setenv          EBROOTEASYBUILD     %{install_path}
 setenv          EBVERSIONEASYBUILD  %{version}
 
-prepend-path	PYTHON_LIBRARY_PATH	    %{install_path}}/software/EasyBuild/%{version}/lib/python2.7/site-packages
+prepend-path	PYTHONPATH	    %{install_path}}/software/EasyBuild/%{version}/lib/python2.7/site-packages
 
 EOF
 
