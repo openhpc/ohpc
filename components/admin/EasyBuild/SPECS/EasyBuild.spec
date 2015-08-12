@@ -116,15 +116,13 @@ module-whatis "URL: http://hpcugent.github.com/easybuild/"
 
 set     version			    %{version}
 
-prepend-path    PATH                %{install_path}/bin
-prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
-prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib64
+prepend-path    PATH                %{install_path}/software/EasyBuild/%{version}/bin
+prepend-path	LD_LIBRARY_PATH	    %{install_path}/software/EasyBuild/%{version}/lib
 
 setenv          EBROOTEASYBUILD     %{install_path}
 setenv          EBVERSIONEASYBUILD  %{version}
 
-prepend-path	PYTHON_LIBRARY_PATH	    %{install_path}/lib/python2.7/site-packages
-prepend-path	PYTHON_LIBRARY_PATH	    %{install_path}/lib64/python2.7/site-packages
+prepend-path	PYTHON_LIBRARY_PATH	    %{install_path}}/software/EasyBuild/%{version}/lib/python2.7/site-packages
 
 EOF
 
