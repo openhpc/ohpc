@@ -89,7 +89,7 @@ python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 rm %{buildroot}%{install_path}/modules/base/EasyBuild/2.1.1
 rm bootstrap_eb.py
-cd %{buildroot}%{install_path}
+cd %{buildroot}%{install_path}/software
 patch -p1 < %{_sourcedir}/easybuild-sles12.patch
 
 %install
