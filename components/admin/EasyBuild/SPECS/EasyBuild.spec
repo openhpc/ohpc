@@ -100,8 +100,8 @@ patch -p1 < %{_sourcedir}/easybuild-sles12.patch
 #done
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{FSP_MODULES}/EasyBuild
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/EasyBuild/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -120,6 +120,7 @@ module-whatis "URL: http://hpcugent.github.com/easybuild/"
 set     version			    %{version}
 
 prepend-path    PATH                %{install_path}/software/EasyBuild/%{version}/bin
+prepend-path    PATH                ${LMOD_DIR}
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/software/EasyBuild/%{version}/lib
 prepend-path	LIBRARY_PATH	    %{install_path}/software/EasyBuild/%{version}/lib
 
@@ -130,7 +131,7 @@ prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/py
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/EasyBuild/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
