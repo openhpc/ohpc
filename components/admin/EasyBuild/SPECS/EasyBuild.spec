@@ -49,8 +49,9 @@ Source1:   %{pname}-easyconfigs-%{version}.tar.gz
 Source2:   %{pname}-framework-%{version}.tar.gz
 Source3:   vsc-base-2.2.2.tar.gz
 Source4:   bootstrap_eb.py
-Source5:   FSP_macros
-Source6:   FSP_setup_compiler
+Source5:   easybuild-sles12.patch
+Source6:   FSP_macros
+Source7:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch
 BuildRequires: python
@@ -86,8 +87,10 @@ export PATH=${LMOD_DIR}:${PATH}
 
 python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
-rm %{buildroot}/opt/fsp/pub/libs/easybuild/2.1.1/modules/base/EasyBuild/2.1.1
+rm %{buildroot}%{install_path}/modules/base/EasyBuild/2.1.1
 rm bootstrap_eb.py
+cd %{buildroot}%{install_path}
+patch -p1 < %{_sourcedir}/easybuild-sles12.patch
 
 %install
 
