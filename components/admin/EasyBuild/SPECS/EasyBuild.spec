@@ -118,12 +118,13 @@ module-whatis "Description: %{summary}"
 module-whatis "URL: http://hpcugent.github.com/easybuild/"
 
 set             version                 %{version}
+set             home                    \$::env(HOME)
 
 prepend-path    PATH                    %{install_path}/software/EasyBuild/%{version}/bin
 prepend-path    PATH                    ${LMOD_DIR}
 prepend-path	LD_LIBRARY_PATH         %{install_path}/software/EasyBuild/%{version}/lib
 prepend-path	LIBRARY_PATH            %{install_path}/software/EasyBuild/%{version}/lib
-module          use                     \$HOME/.local/easybuild/modules/all
+module          use                     \$home/.local/easybuild/modules/all
 
 setenv          EBROOTEASYBUILD         %{install_path}/software/EasyBuild/%{version}
 setenv          EBVERSIONEASYBUILD      %{version}
