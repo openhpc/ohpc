@@ -117,18 +117,17 @@ module-whatis "Category: system tool"
 module-whatis "Description: %{summary}"
 module-whatis "URL: http://hpcugent.github.com/easybuild/"
 
-set             version                    %{version}
+set             version                 %{version}
 
-prepend-path    PATH                       %{install_path}/software/EasyBuild/%{version}/bin
-prepend-path    PATH                       ${LMOD_DIR}
-prepend-path	LD_LIBRARY_PATH 	       %{install_path}/software/EasyBuild/%{version}/lib
-prepend-path	LIBRARY_PATH    	       %{install_path}/software/EasyBuild/%{version}/lib
-prepend-path	LMOD_DEFAULT_MODULEPATH    ~/.local/easybuild/modules/all
-prepend-path	MODULEPATH       	       ~/.local/easybuild/modules/all
+prepend-path    PATH                    %{install_path}/software/EasyBuild/%{version}/bin
+prepend-path    PATH                    ${LMOD_DIR}
+prepend-path	LD_LIBRARY_PATH         %{install_path}/software/EasyBuild/%{version}/lib
+prepend-path	LIBRARY_PATH            %{install_path}/software/EasyBuild/%{version}/lib
+module          use                     ~/.local/easybuild/modules/all
 
-setenv          EBROOTEASYBUILD            %{install_path}/software/EasyBuild/%{version}
-setenv          EBVERSIONEASYBUILD         %{version}
-setenv          EASYBUILD_MODULES_TOOL     Lmod
+setenv          EBROOTEASYBUILD         %{install_path}/software/EasyBuild/%{version}
+setenv          EBVERSIONEASYBUILD      %{version}
+setenv          EASYBUILD_MODULES_TOOL  Lmod
 
 prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/python2.7/site-packages
 
