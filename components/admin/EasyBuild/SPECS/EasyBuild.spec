@@ -123,7 +123,7 @@ prepend-path    PATH                    %{install_path}/software/EasyBuild/%{ver
 prepend-path    PATH                    ${LMOD_DIR}
 prepend-path	LD_LIBRARY_PATH         %{install_path}/software/EasyBuild/%{version}/lib
 prepend-path	LIBRARY_PATH            %{install_path}/software/EasyBuild/%{version}/lib
-prepend-path    MODULEPATH              \$\{HOME\}/.local/easybuild/modules/all
+prepend-path    MODULEPATH              \${HOME}/.local/easybuild/modules/all
 
 setenv          EBROOTEASYBUILD         %{install_path}/software/EasyBuild/%{version}
 setenv          EBVERSIONEASYBUILD      %{version}
