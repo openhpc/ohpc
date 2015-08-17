@@ -150,6 +150,42 @@ ln -fs libscalapack.so.2.0.2 libscalapack.so.2
 ln -s libscalapack.so.2.0.2 libscalapack.so
 popd
 
+# FSP module file
+%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "This module loads the ScaLAPACK library built with the %{compiler_family} compiler."
+puts stderr " "
+
+puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "%{url}"
+
+set     version                     %{version}
+
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_LIB        %{install_path}/lib
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
 
 %clean
 rm -fr ${RPM_BUILD_ROOT}
