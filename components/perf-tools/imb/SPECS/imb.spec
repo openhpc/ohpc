@@ -59,7 +59,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   4.0.2
+Version:   4.1
 Release:   1
 License:   CPL
 Group:     fsp/perf-tools
@@ -164,6 +164,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Aug 17 2015  <karl.w.schulz@intel.com> -
+- Update to version 4.1
+
 * Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
 - Initial build.
-
