@@ -92,6 +92,7 @@ Source1:        baselibs.conf
 Patch0:         scalapack-2.0.2-shared-lib.patch
 BuildRequires:  blas-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset 
@@ -138,7 +139,10 @@ export FSP_MPI_FAMILY=%{mpi_family}
 make lib
 
 %install
+%{__mkdir} -p %{buildroot}/%{_docdir}
+%{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/etc
 %{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/lib
+install -m 644 SLmake.inc ${RPM_BUILD_ROOT}%{install_path}/etc
 install -m 644 *so* ${RPM_BUILD_ROOT}%{install_path}/lib
 
 pushd ${RPM_BUILD_ROOT}%{install_path}/lib
@@ -157,5 +161,7 @@ rm -fr ${RPM_BUILD_ROOT}
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc README LICENSE
 
 %changelog
