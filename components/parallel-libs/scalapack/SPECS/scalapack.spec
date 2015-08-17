@@ -158,7 +158,8 @@ popd
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the ScaLAPACK library built with the %{compiler_family} compiler."
+puts stderr "This module loads the ScaLAPACK library built with the %{compiler_family} compiler"
+puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
 
 puts stderr "\nVersion %{version}\n"
