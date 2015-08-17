@@ -59,7 +59,7 @@ BuildRequires: intel_licenses
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.8.15patch1
+Version:   1.8.15.1
 Release:   1
 License:   BSD-style
 Group:     fsp/io-libs
