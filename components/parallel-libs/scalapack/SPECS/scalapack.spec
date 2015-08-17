@@ -138,10 +138,10 @@ export FSP_MPI_FAMILY=%{mpi_family}
 make lib
 
 %install
-%{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/%{_libdir}
-install -m 644 *so* ${RPM_BUILD_ROOT}%{install_path}/%{_libdir}
+%{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/lib
+install -m 644 *so* ${RPM_BUILD_ROOT}%{install_path}/lib
 
-pushd ${RPM_BUILD_ROOT}%{install_path}/%{_libdir}
+pushd ${RPM_BUILD_ROOT}%{install_path}/lib
 ln -fs libscalapack.so.2.0.2 libscalapack.so.2
 ln -s libscalapack.so.2.0.2 libscalapack.so
 popd
