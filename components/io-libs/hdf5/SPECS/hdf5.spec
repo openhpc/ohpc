@@ -59,13 +59,13 @@ BuildRequires: intel_licenses
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.8.15.1
+Version:   1.8.15
 Release:   1
 License:   BSD-style
 Group:     fsp/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{FSP_PUB}/doc/contrib
-Source0:   %{pname}-%{version}.tar.gz
+Source0:   %{pname}-%{version}-patch1.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -92,7 +92,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 
 %prep
 
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}-patch1
 
 %build
 
