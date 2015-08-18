@@ -118,8 +118,8 @@ chosen {\em master} host.
 % begin_fsp_run
 % fsp_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ (*\install*) libibverbs-runtime libmlx4-rdmav2
-[master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
+[master]$ (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
+[master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
 
 # Load IB drivers
 [master]$ service rdma start
@@ -258,7 +258,7 @@ be updated with a copy of the configuration as follows:
 [master]$ (*\groupchrootinstall*) fsp-slurm-client
 
 # Add IB support
-[master]$ (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2
+[master]$ (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
 [master]$ (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
 
 # Add Network Time Protocol (NTP) support
