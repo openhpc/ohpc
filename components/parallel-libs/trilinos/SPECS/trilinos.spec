@@ -185,8 +185,8 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 #       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
 #       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
 #       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
-#make VERBOSE=1
-make %{?_smp_mflags}
+make VERBOSE=1
+#make %{?_smp_mflags}
 cd ..
 
 %install
