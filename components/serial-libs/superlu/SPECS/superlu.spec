@@ -64,7 +64,7 @@ BuildRequires: intel_licenses
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
-Group:          Development/Libraries/C and C++
+Group:          fsp/serial-libs
 Version:        4.3
 Release:        0
 #Source:         http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_4.3.tar.gz
@@ -83,6 +83,7 @@ Patch3:         superlu-4.3-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
 BuildRequires:  tcsh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
@@ -166,6 +167,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -173,5 +176,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc README
 
 %changelog

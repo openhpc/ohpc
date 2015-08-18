@@ -75,6 +75,7 @@ Patch1:         petsc.rpath.patch
 Patch2:         petsc.usrlocal.patch
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
 BuildRequires:  valgrind%{PROJ_DELIM}
@@ -153,6 +154,9 @@ for f in $RPM_BUILD_ROOT%{install_path}/conf/*; do
     sed -i -e 's!%{buildroot}!!g' $f
 done
 
+# remove stock module file
+rm -rf $RPM_BUILDROOT%{install_path}/lib/modules
+
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
@@ -164,7 +168,7 @@ puts stderr " "
 puts stderr "This module loads the PETSc library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of PETSc leverages the FFTW and parallel HDF libraries."
+puts stderr "Note that this build of PETSc leverages the Intel MKL and parallel HDF libraries."
 puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
@@ -178,14 +182,11 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 and fftw (and mkl for gnu compiler families)
+# Require phdf5 (and mkl for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded phdf5]  } {
         module load phdf5
-    }
-    if {  ![is-loaded fftw]  } {
-        module load fftw
     }
     if { [is-loaded gnu] } {
         if { ![is-loaded mkl]  } {
@@ -214,6 +215,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -224,5 +227,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc CONTRIBUTING LICENSE
 
 %changelog

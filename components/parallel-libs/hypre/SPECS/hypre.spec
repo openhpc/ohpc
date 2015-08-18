@@ -80,7 +80,7 @@ Version:        2.10.0b
 Release:        0
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
-Group:          Development/Libraries/Parallel
+Group:          fsp/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         %{pname}-%{version}.tar.gz
 #Patch0:         hypre-2.8.0b-no-date-and-time-fix.patch
@@ -104,6 +104,7 @@ BuildRequires:  libxml2-python
 %endif
 BuildRequires:  xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -289,12 +290,16 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{buildroot}/%{_docdir}
+
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
 
 %changelog
 

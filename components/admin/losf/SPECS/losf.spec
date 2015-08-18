@@ -15,7 +15,7 @@
 
 Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.51.2
+Version:   0.52.0
 Release:   1
 License:   GPL-2
 Group:     fsp/admin
@@ -24,6 +24,7 @@ URL:       https://github.com/hpcsi/losf
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+DocDir:    %{FSP_PUB}/doc/contrib
 
 %if 0%{?FSP_BUILD}
 %{!?prefix: %define prefix %{FSP_ADMIN}}
@@ -67,8 +68,8 @@ cluster.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p %{buildroot}/%{installPath}
-mkdir -p %{buildroot}/etc/profile.d
+%{__mkdir_p} %{buildroot}/%{installPath}
+%{__mkdir_p} %{buildroot}/etc/profile.d
 cp -a * %{buildroot}/%{installPath}
 
 # Remove separate test dir to minimize dependencies
@@ -77,7 +78,7 @@ rm -rf %{buildroot}/%{installPath}/test
 
 # Add soft links to CLI binaries in default path
 
-mkdir -p ${RPM_BUILD_ROOT}/%{_bindir}
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_bindir}
 
 for i in losf update initconfig koomie_cf sync_config_files node_types rpm_topdir ; do
     ln -sf %{installPath}/$i ${RPM_BUILD_ROOT}/%{_bindir}
@@ -86,6 +87,8 @@ done
 for i in idisk ilog ioff ion ipxe ireboot ireset isensor isoft istat ; do 
     ln -sf %{installPath}/utils/$i ${RPM_BUILD_ROOT}/%{_bindir}
 done
+
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -107,10 +110,12 @@ fi
 %if 0%{?FSP_BUILD}
 %dir %{FSP_HOME}
 %dir %{prefix}
+
 %endif
 
 %{installPath}
 %{_bindir}/*
 
-
+%{FSP_PUB}
+%doc LICENSE COPYING CHANGES README
 

@@ -19,6 +19,7 @@ Version:   2.31
 Release:   %{_rel}
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
+DocDir:    %{FSP_PUB}/doc/contrib
 Group:     fsp/admin
 Source0:   pdsh-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -362,7 +363,7 @@ make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT
+%{__mkdir_p} $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
 if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.qshd ]; then
    install -D -m644 etc/qshell.xinetd $RPM_BUILD_ROOT/%{_sysconfdir}/xinetd.d/qshell
@@ -371,7 +372,9 @@ if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.mqshd ]; then
    install -D -m644 etc/mqshell.xinetd $RPM_BUILD_ROOT/%{_sysconfdir}/xinetd.d/mqshell
 fi
 
-
+%if 0%{?FSP_BUILD}
+# install_doc_files
+%endif
 
 # 
 # Remove all module .a's as they are not needed on any known RPM platform.
@@ -379,12 +382,13 @@ find "%buildroot" -type f -name "*.a" | xargs rm -f
 
 # Add soft link to pdsh binaries in default path
 
-%{__mkdir} -p ${RPM_BUILD_ROOT}/%{_bindir}
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/pdsh ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/dshbak ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/pdcp ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/rpdcp ${RPM_BUILD_ROOT}/%{_bindir}
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 ##############################################################################
 
@@ -397,9 +401,17 @@ rm -rf "$RPM_BUILD_ROOT"
 %doc COPYING README NEWS DISCLAIMER 
 %doc README.KRB4 README.modules README.QsNet
 %{FSP_HOME}
+%{FSP_PUB}
 %{_bindir}/pdsh
 %{_bindir}/dshbak
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
+
+%if 0%{?FSP_BUILD}
+# dir %{FSP_PUB}/share/doc
+# {FSP_PUB}/share/doc/%{pname}
+%doc AUTHORS
+
+%endif
 
 %changelog

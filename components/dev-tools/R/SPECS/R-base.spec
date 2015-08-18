@@ -41,8 +41,6 @@ BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# hack to install MKL for the moment
-BuildRequires: intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -65,14 +63,14 @@ Version:        3.2.2
 Source:         R-%{version}.tar.gz
 Patch:          tre.patch
 Url:            http://www.r-project.org/
+DocDir:         %{FSP_PUB}/doc/contrib
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
-Group:          Productivity/Scientific/Math
-###BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+Group:          fsp/dev-tools
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%define		install_path %{FSP_PUB}/%{pname}/%version
+%define         install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 %define         debug_package %{nil}
 
 BuildRequires:  cairo-devel
@@ -83,15 +81,11 @@ BuildRequires:  libtiff-devel
 BuildRequires:  perl
 BuildRequires:  readline-devel
 %if 0%{?suse_version} > 1020
-BuildRequires:  fdupes
 %if 0%{?suse_version} < 1230
 %if 0%{?suse_version} > 1120 
 %endif
 %else
 BuildRequires:  xdg-utils
-%if 0%{?suse_version} != 1315
-###BuildRequires:  tex(inconsolata.sty)
-%endif
 %endif
 %endif
 BuildRequires:  pango-devel
@@ -99,8 +93,7 @@ BuildRequires:  tcl-devel
 ### Moved to CENTOS only until SLES has a newer texinfo version
 ###BuildRequires:  texinfo >= 5.1 
 BuildRequires:  tk-devel
-BuildRequires:  xorg-x11-devel
-BuildRequires:  intel-compilers%{PROJ_DELIM}
+# BuildRequires:  xorg-x11-devel
 # CentOS needs X11 headers/libs like Intrisic.h which suse provides
 %if 0%{?suse_version}  
 #BuildRequires:  texlive-fonts-extra
@@ -111,17 +104,12 @@ BuildRequires:  texinfo >= 5.1
 #BuildRequires:  bzip2-devel
 #BuildRequires:  bzip2-libs
 %endif
-###Requires:       R-base-devel = %{version}
 Requires:       cairo >= 1.2
 Requires:       fontconfig
 Requires:       freetype2
-####Requires:       glibc-locale
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
-####Requires:       xorg-x11-fonts-100dpi
-####Requires:       xorg-x11-fonts-75dpi
-###Requires:       texlive-latex
 %if 0%{?suse_version}  
 BuildRequires:  libicu52_1
 Requires:	libicu52_1
@@ -134,7 +122,6 @@ Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
 Provides:       R-MASS = 7.3.39
 Provides:       R-Matrix = 1.1.5
-#Provides:       R-base = %%{version} # implicitly provided
 Obsoletes:      R-Matrix < 1.1.5
 Provides:       R-boot = 1.3.15
 Provides:       R-class = 7.3.12
@@ -177,25 +164,9 @@ R provides a wide variety of statistical (linear and nonlinear modelling,
 classical statistical tests, time-series analysis, classification, clustering, …) 
 and graphical techniques, and is highly extensible.
 
-###%package -n R-base-devel
-###Summary:        Libraries and includefiles for developing with R-base
-###Group:          Development/Libraries/Other
-###Provides:       R-Matrix-devel = 1.1.5
-###Provides:       R-devel = %{version}
-###Requires:       R-base
-###Obsoletes:      R-Matrix-devel < 1.1.5
-
-###%description -n R-base-devel
-###This package provides the necessary development headers and
-###libraries to allow you to devel with R-base.
-
 %prep 
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
-
-%if %{compiler_family} == gnu
-module load mkl
-%endif
 
 %setup -n R-%{version}
 %patch -p1
@@ -205,20 +176,14 @@ module load mkl
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
-
 
 MKL_LIB_PATH=$MKLROOT/lib/intel64
 MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
 echo "MKL options flag .... $MKL "
 
-
-./configure --with-blas="$MKL" \
+./configure  \
             --with-lapack \
             --enable-R-shlib  \
             --enable-BLAS-shlib \
@@ -228,73 +193,31 @@ echo "MKL options flag .... $MKL "
             --without-x \
               LIBnn=lib64 
 
+# --with-blas="$MKL" \
+
 make %{?_smp_mflags}
-###make pdf
-%if 0%{?suse_version}
-### don't make info
-### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
-%else
-###make info
-# Convert to UTF-8
-###for i in doc/manual/R-intro.info doc/manual/R-FAQ.info doc/FAQ doc/manual/R-admin.info doc/manual/R-exts.info-1; do
-###  iconv -f iso-8859-1 -t utf-8 -o $i{.utf8,}
-###  mv $i{.utf8,}
-###done
-%endif
+
 
 %install 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
 make DESTDIR=%{buildroot} install
-###make DESTDIR=%{buildroot} install-pdf
-
-echo "*********11111***********"
-echo %{buildroot}
-echo %{__install}
-echo %{_infodir}
-
-# Installation of Info-files
-####%{__install} -m 755 -d %{_infodir}
-###make DESTDIR=%{buildroot} INFODIR=%{buildroot}%{_infodir} install-info
-###
-### 
-%if 0%{?suse_version}
-### don't make info
-### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
-%else
-####make DESTDIR=%{buildroot} install-info
-####%{__rm} -f %{buildroot}%{_infodir}/dir
-####%{__rm} -f %{buildroot}%{_infodir}/dir.old
-%endif
-
-###chmod +x %{buildroot}%{_libdir}/R/share/sh/echo.sh
-
-###chmod -x %{buildroot}%{_libdir}/R/library/mgcv/CITATION
 
 # there is a backup file in survival for 3.1.3
 %{__rm} -f %{buildroot}%{_libdir}/R/library/survival/NEWS.Rd.orig
 
-%if 0%{?suse_version} > 1020    
-%fdupes -s $RPM_BUILD_ROOT  
-%endif
-
 # Install ld.so.conf.d file to ensure other applications access the shared lib
-mkdir -p %{buildroot}/etc/ld.so.conf.d
+%{__mkdir_p} %{buildroot}/etc/ld.so.conf.d
 cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
 %{_libdir}/R/lib
 EOF
 
-echo "*******222222*********"
 # FSP module file
 
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+%{__mkdir_p}  %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 
 #%Module1.0#####################################################################
 
@@ -307,7 +230,7 @@ proc ModulesHelp { } {
 
 }
 
-module-whatis "Name: %{pname} built with %{compiler_family} compiler and Intel MKL support"
+module-whatis "Name: R project for statistical computing built with the %{compiler_family} compiler toolchain."
 module-whatis "Version: %{version}"
 module-whatis "Category: utility, developer support, user tool"
 module-whatis "Keywords: Statistics"
@@ -316,21 +239,6 @@ module-whatis "URL %{url}"
 
 set     version                     %{version}
 
-## module load mkl ...
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded intel]  } {
-        module load mkl
-    }
-}
-
-
-### TRon (4/27/15) Add path for shared libraries: libgfortran.so.3 when using Intel
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  [is-loaded intel]  } {
-        prepend-path    LD_LIBRARY_PATH     %{FSP_COMPILERS}/gcc/4.9.2/lib64
-        #/opt/fsp/pub/compiler/gcc/4.9.2/lib64
-    }
-}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
@@ -343,7 +251,7 @@ setenv          %{PNAME}_SHARE      %{install_path}/share
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -351,40 +259,26 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+
 export NO_BRP_CHECK_RPATH true
 
 %post
 /sbin/ldconfig
-%install_info --info-dir=%{_infodir} %{_infodir}/R-exts.info-1.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-FAQ.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-lang.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-admin.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-exts.info-2.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-intro.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-data.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-exts.info.gz
-%install_info --info-dir=%{_infodir} %{_infodir}/R-ints.info.gz
 
 %postun
 /sbin/ldconfig
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-exts.info-1.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-FAQ.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-lang.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-admin.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-exts.info-2.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-intro.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-data.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-exts.info.gz
-%install_info_delete --info-dir=%{_infodir} %{_infodir}/R-ints.info.gz
 
-#*#%files -n R-base%files -n %{name}
 %files
 %defattr(-,root,root)
 %{FSP_HOME}
-
+%doc ChangeLog
+%doc COPYING
+%doc README
 
 # ld.so.conf
 %config /etc/ld.so.conf.d/R.conf
+
 
 
 %changelog

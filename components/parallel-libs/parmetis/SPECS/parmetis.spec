@@ -64,11 +64,13 @@ Release: 1
 License: BSD-like
 Group:   fsp/parallel-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
+DocDir:  %{FSP_PUB}/doc/contrib
 Source0: par%{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler
 Source3: FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+
 BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
@@ -138,7 +140,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 make install DESTDIR=${RPM_BUILD_ROOT}
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/par%{pname}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/par%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/par%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -177,6 +179,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+
 %post -n libmetis0
 /sbin/ldconfig
 
@@ -189,3 +193,7 @@ rm -fr ${RPM_BUILD_ROOT}
 %files
 %defattr(-,root,root)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc BUILD.txt Changelog Install.txt LICENSE.txt
+
+%changelog

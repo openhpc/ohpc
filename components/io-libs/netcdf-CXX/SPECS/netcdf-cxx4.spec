@@ -83,6 +83,7 @@ Group:          fsp/io-libs
 Version:        4.2.1
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
+DocDir:         %{FSP_PUB}/doc/contrib
 Source0:	%{pname}4-%{version}.tar.gz
 Source101:	FSP_macros
 Source102:	FSP_setup_compiler
@@ -176,7 +177,7 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 #find "%buildroot" -type f -name "*.la" | xargs rm -f
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -230,6 +231,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 
 %post -p /sbin/ldconfig
 
@@ -242,6 +245,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc COPYRIGHT
 
 
 %changelog

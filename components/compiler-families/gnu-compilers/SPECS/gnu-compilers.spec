@@ -27,6 +27,7 @@ Release:   1
 License:   GPL-3.0+
 Group:     fsp/compiler-families
 URL:       http://gcc.gnu.org/
+DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   gcc-%{version}.tar.bz2
 Source1:   gmp-%{gmp_version}a.tar.bz2
 Source2:   mpc-%{mpc_version}.tar.gz
@@ -71,7 +72,7 @@ ln -s mpfr-%{mpfr_version} mpfr
 
 %build
 
-mkdir obj
+%{__mkdir} obj
 cd obj
 ../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path}
 
@@ -88,7 +89,7 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %endif
 
 # FSP module file
-mkdir -p %{buildroot}/%{FSP_MODULES}/gnu
+%{__mkdir_p} %{buildroot}/%{FSP_MODULES}/gnu
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/gnu/%{version}
 #%Module1.0#####################################################################
 
@@ -129,6 +130,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %post
 /sbin/ldconfig
 
@@ -143,6 +146,17 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc COPYING
+%doc COPYING3
+%doc NEWS
+%doc COPYING3.LIB
+%doc README
+%doc ChangeLog.tree-ssa
+%doc ChangeLog
+%doc COPYING.LIB
+%doc COPYING.RUNTIME
+
 
 %changelog
 * Tue Aug  5 2014  <karl.w.schulz@intel.com> - 

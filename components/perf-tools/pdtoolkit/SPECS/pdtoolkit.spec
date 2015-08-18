@@ -51,6 +51,7 @@ Source:         %{pname}-%{version}.tar.gz
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -163,6 +164,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{buildroot}/%{_docdir}
+
 %clean
 %{?buildroot:%__rm -rf "%{buildroot}"}
 
@@ -173,6 +176,8 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc CREDITS LICENSE README
 
 %changelog
 

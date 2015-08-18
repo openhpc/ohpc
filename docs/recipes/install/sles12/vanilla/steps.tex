@@ -4,23 +4,14 @@
 \setcounter{tocdepth}{5}
 \lhead{{2015 \FSP{} Install Guide - {\small \em SLES12 Version}}}
 
-
-% Recipe commands to run initially only in CI
-
-% begin_fsp_run 
-% fsp_validation_comment - Remove WW file update crontab entry (CI only command)
-% [master]$ rm -f /etc/cron.d/wwupdatefiles
-% [master]$ TIME_T1=$(date +%s)
-% [master]$ echo " "; echo "BEGIN TIMING"
-% end_fsp_run
-
 % Include git variables
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{SLES12*}
+\newcommand{\baseOS}{SLES12}
 \newcommand{\LosF}{\emph{LosF*}}
-\newcommand{\FSPVersion}{15.27}
+\newcommand{\FSPVersion}{15.31}
+\newcommand{\IMAGE}{sles12}
 
 \newcommand{\install}{zypper -n install}
 \newcommand{\chrootinstall}{zypper -n --root \$CHROOT install}
@@ -40,7 +31,7 @@
 \noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
 \noindent\rule{6in}{0.4pt} \\
 
-\noindent {\Large \baseOS{} Base OS} \\ \vspace{0.2cm}
+\noindent {\Large \baseOS{}* Base OS} \\ \vspace{0.2cm}
 
 \noindent {\large {\em Base Linux* Edition }}
 
@@ -61,10 +52,11 @@
 % Introduction  --------------------------------------------------
 
 \section{Introduction} \label{sec:introduction}
+\input{../../common/install_header}
 \input{../../common/intro} \\
 
 \input{../../common/base_edition/edition}
-\input{../../common/audience.tex}
+\input{../../common/audience}
 \input{../../common/requirements}
 \input{../../common/inputs}
 
@@ -78,15 +70,23 @@
 \section{Install \FSP{} Components} \label{sec:basic_install}
 \input{../../common/install_fsp_component_intro.tex}
 
-\subsection{Enable \FSP{} repository for local use}
+\subsection{Enable \FSP{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_fsp_repo}
 
+\begin{lstlisting}[language=bash,keywords={},literate={VER}{\FSPVersion{}}1]
+[master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/SLE_12_Intel/ForestPeak:VER.repo
+\end{lstlisting}
+
+
+If outside of Intel, the repository location should be set to match the path to
+a locally accessibly copy of the \FSP{} repository. Once set, the repository can be
+enabled via the following:
+
 % begin_fsp_run
-% fsp_validation_comment Enable FSP Repo(s)
+% fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82
-[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.27:/Factory/SLE_12_Intel/ForestPeak:15.27:Factory.repo
-[master]$ zypper -n --gpg-auto-import-keys refresh
+[master]$ zypper addrepo ${fsp_repo}
+[master]$ zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_fsp_run
 
@@ -104,14 +104,7 @@ both the base and SDK repositories:
 \item SLES12-12-sdk
 \end{itemize*}
 
-% begin_fsp_run
-% % fsp_validation_comment - format space for /opt/fsp (CI only command)
-% [master]$ mkfs -F -t ext4 /dev/sda1
-% [master]$ mkdir -p /opt/fsp
-% [master]$ mount /dev/sda1 /opt/fsp
-% end_fsp_run  
-
-\subsection{Add provisioning services on {\em master} node}
+\subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{../../common/install_provisioning_intro}
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
@@ -119,14 +112,14 @@ both the base and SDK repositories:
 
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
-The following command adds OFED support using distro-provided drivers to the
+The following command adds OFED and PSM support using base distro-provided drivers to the
 chosen {\em master} host. 
 
 % begin_fsp_run
-% fsp_validation_comment Add ofed
+% fsp_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ (*\install*) libibverbs-runtime libmlx4-rdmav2
-[master]$ (*\install*) libibmad5 librdmacm1 rdma
+[master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
 
 # Load IB drivers
 [master]$ service rdma start
@@ -139,8 +132,8 @@ to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_clien
 for additional details), then having IPoIB enabled is a requirement for the
 \Lustre{} client. \FSP{} provides a template configuration file to aid in setting up
 an {\em ib0} interface on the {\em master} host. To use, copy the template
-provided and update the \texttt{master\_ipoib} and
-\texttt{ipoib\_netmask} entries to match local desired settings (alter ib0
+provided and update the \texttt{\$\{master\_ipoib\}} and
+\texttt{\$\{ipoib\_netmask\}} entries to match local desired settings (alter ib0
 naming as appropriate if system contains dual-ported or multiple HCAs). 
 
 % begin_fsp_run
@@ -149,8 +142,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [master]$ cp /opt/fsp/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
 
 # Define local IPoIB address and netmask
-[master]$ perl -pi -e 's/master_ipoib/<master_ipoib>/' /etc/sysconfig/network/ifcfg-ib0
-[master]$ perl -pi -e 's/ipoib_netmask/<ipoib_netmask>/' /etc/sysconfig/network/ifcfg-ib0
+[master]$ perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network/ifcfg-ib0
+[master]$ perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network/ifcfg-ib0
 
 # Initiate ib0
 [master]$ ifup ib0
@@ -160,8 +153,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 \subsection{Add Cluster Checker} \label{sec:add_clck}
 \input{../../common/cluster_checker}
 
-
-\subsection{Complete basic Warewulf setup for {\em master} node}
+\subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 
 At this point, all of the packages necessary to use \Warewulf{} on the {\em
   master} host should be installed.  Next, we need to update several
@@ -170,10 +162,12 @@ local provisioning using the {\em eth1} interface.  Specific steps are as
 follows:
 
 % begin_fsp_run
-% fsp_validation_comment Complete basic Warewulf setup for master node
+% fsp_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
 %\begin{verbatim}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+# Configure Warewulf provisioning to use desired internal interface
+[master]$ perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
 
 # Configure DHCP server to use eth1
 [master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
@@ -194,7 +188,7 @@ follows:
 [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Define eth1 interface for provisioning
-[master]$ ifconfig eth1 <master_ip> netmask 255.255.255.0 up
+[master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask 255.255.255.0 up
 
 # Restart relevant services to support provisioning
 [master]$ service xinetd restart                         # tftp services
@@ -205,13 +199,6 @@ follows:
 %\end{verbatim}
 % end_fsp_run
 
-% begin_fsp_run 
-% fsp_validation_comment - time update
-% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
-% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
-% end_fsp_run
-
-
 
 \subsection{Define {\em compute} image for provisioning}
 
@@ -219,22 +206,21 @@ With the provisioning services enabled, the next step is to define and
 customize a system image that can subsequently be used to provision one or more
 {\em compute} nodes. The following subsections highlight this process.
 
-\subsubsection{Build initial BOS image}
+\subsubsection{Build initial BOS image} \label{sec:assemble_bos}
 
 The \FSP{} build of \Warewulf{} includes specific enhancements enabling support for
 \baseOS{}. The following steps illustrate the process to build a minimal, default
 image for use with \Warewulf{}.  We begin by creating a directory structure on the 
 {\em master} that will represent the root filesystem of the compute node. The 
-default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/sles12}.
+default location for this example is in \path{/opt/fsp/admin/images/sles12}.
 
 % begin_fsp_run
-% fsp_validation_comment Create compute image for Warewulf
+% fsp_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location for SLES 
 [master]$ export CHROOT=/opt/fsp/admin/images/sles12
 
 # Build initial chroot image
-
 [master]$ mkdir -p -m 755 $CHROOT                        # create chroot housing dir
 [master]$ mkdir -m 755 $CHROOT/dev                       # create chroot /dev dir
 [master]$ mknod -m 666 $CHROOT/dev/zero c 1 5            # create /dev/zero device
@@ -242,7 +228,7 @@ default location for this in \FSP{} is in \texttt{/opt/fsp/admin/images/sles12}.
 \end{lstlisting}
 % end_fsp_run
 
-\subsubsection{Add \FSP{} components}
+\subsubsection{Add \FSP{} components} \label{sec:add_components}
 
 The \texttt{wwmkchroot} process used in the previous step is designed to
 provide a minimal \baseOS{} configuration. Next, we add additional components to
@@ -256,6 +242,7 @@ the {\em master} host has a working DNS configuration in place, the chroot envir
 be updated with a copy of the configuration as follows:
 
 % begin_fsp_run
+% fsp_comment_header Add FSP components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
 \end{lstlisting}
@@ -265,12 +252,14 @@ be updated with a copy of the configuration as follows:
 % begin_fsp_run
 % fsp_validation_comment Add FSP components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Import GPG keys for chroot repository usage
+[master]$ zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 # Add SLURM client support
 [master]$ (*\groupchrootinstall*) fsp-slurm-client
 
 # Add IB support
 [master]$ (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2
-[master]$ (*\chrootinstall*) libibmad5 librdmacm1 rdma
+[master]$ (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
 
 # Add Network Time Protocol (NTP) support
 [master]$ (*\chrootinstall*) ntp
@@ -287,8 +276,10 @@ be updated with a copy of the configuration as follows:
 % end_fsp_run
 
 % begin_fsp_run 
-% fsp_validation_comment - Restart openibd (CI only command)
+% fsp_validation_newline
+% fsp_ci_comment - Restart openibd
 % [master]$ service openibd restart
+% fsp_validation_newline
 % end_fsp_run
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
@@ -304,42 +295,55 @@ example configuration.  The \NFS{} exporting options use an address/netmask
 combination to limit the export scope to the defined compute nodes.
 
 % begin_fsp_run
-% fsp_validation_comment Add ssh key and enable NFS mount of /opt/fsp/pub
+% fsp_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # add new cluster key to base image
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # add NFS client mounts of /home and /opt/fsp/pub to base image
-[master]$ echo "<master_ip>:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
-[master]$ echo "<master_ip>:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+[master]$ echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
+[master]$ echo "${master_ip}:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
 # Identify resource manager server IP in SLURM config file on computes
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_ip>/" $CHROOT/etc/slurm/slurm.conf
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
 
 # Identify resource manager hostname on master host
-[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=<master_hostname>/" /etc/slurm/slurm.conf
+[master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
 # Export /home and FSP public packages from master server to cluster compute nodes
-[master]$ echo "/home <internal_netmask>(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub <internal_netmask>(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[master]$ echo "/home ${internal_netmask}(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub ${internal_netmask}(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
 [master]$ service nfsserver restart
 
 # Enable NTP time service on computes and identify master host as local NTP server
 [master]$ chroot $CHROOT systemctl enable ntpd
-[master]$ echo "server <master_ip>" >> $CHROOT/etc/ntp.conf
+[master]$ echo "server ${master_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
 % end_fsp_run
 
-\newpage
-\subsubsection{Additional Customizations ({\em optional})}
+% Additional commands when additional computes are requested
+
+% begin_fsp_run
+% fsp_validation_newline
+% fsp_validation_comment Update basic slurm config if additional computes defined
+% fsp_command if [ ${num_computes} -gt 4 ];then
+% fsp_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% fsp_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+
+% fsp_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% fsp_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% fsp_command fi
+% end_fsp_run
+
+\subsubsection{Additional Customizations ({\em optional})} \label{sec:addl_customizations}
 
 This section highlights common additional customizations that
 can {\em optionally} be applied to the
 local cluster environment. These customizations include:
 
 \begin{itemize*}
-\item Increase memlimits to support \InfiniBand{}
+\item Increase memlimits to support MPI jobs over \InfiniBand{}
 \item Restrict ssh access to compute resources
 \item Add \Lustre{} client
 \end{itemize*}
@@ -352,7 +356,7 @@ discussed further in the following sections.
 \input{../../common/memlimits} 
 
 % begin_fsp_run
-% fsp_validation_comment Update memlock on master
+% fsp_comment_header Additional customizations \ref{sec:addl_customizations}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Update memlock settings on master
 [master]$ echo "* soft memlock unlimited" >> /etc/security/limits.conf
@@ -387,7 +391,6 @@ the necessary \Lustre{} kernel modules. Consequently, the example below includes
 steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
 file to allow loading of the necessary modules.
 
-\newpage
 % begin_fsp_run
 % fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -412,7 +415,7 @@ file to allow loading of the necessary modules.
 
 # Include mount point and file system mount in compute image
 [master]$ mkdir $CHROOT/mnt/lustre
-[master]$ echo "<mgs_fs_name> /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
+[master]$ echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
 \end{lstlisting}
 % end_fsp_run
 
@@ -438,7 +441,7 @@ host as follows:
 % fsp_validation_comment mount Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ mkdir /mnt/lustre
-[master]$ mount -t lustre -o localflock <mgs_fs_name> /mnt/lustre
+[master]$ mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
 \end{lstlisting}
 % end_fsp_run
 
@@ -452,7 +455,7 @@ host as follows:
 %% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 %% [FSP-469] # Set master host as data aggregator
 %% [FSP-469] [master]$ perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
-%% [FSP-469] [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = <master_ip>/" /etc/orcmdb_psql.ini
+%% [FSP-469] [master]$ perl -pi -e "s/Servername = (<.+>)/Servername = ${master_ip}/" /etc/orcmdb_psql.ini
 %% [FSP-469] 
 %% [FSP-469] # Update BMC credentials to match local values
 %% [FSP-469] 
@@ -490,11 +493,11 @@ host as follows:
 
 The \Warewulf{} system includes functionality to import arbitrary files from the
 provisioning server for distribution to managed hosts. This is one way
-to distribute user credentials across to {\em compute} hosts. To
+to distribute user credentials to {\em compute} hosts. To
 import local file-based credentials, issue the following:
 
 % begin_fsp_run
-% fsp_validation_comment Import credentials
+% fsp_comment_header Import files \ref{sec:file_import}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ wwsh file import /etc/passwd                                                          
 [master]$ wwsh file import /etc/group
@@ -524,78 +527,32 @@ template file for \Warewulf{} that can be imported and used later to provision
 \end{lstlisting}
 % \end_fsp_run
 
-% begin_fsp_run 
-% fsp_validation_comment - time update
-% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
-% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
-% end_fsp_run
-
-\subsection{Assemble bootstrap image}
-
-\Warewulf{} requires a bootstrap image that is used to initialize the provisioning
-process. This bootstrap image includes the runtime kernel and associated
-modules. The following commands highlight the inclusion of additional drivers
-and creation of the bootstrap image based on the running kernel.
-
-% begin_fsp_run
-% fsp_validation_comment Create bootstrap image for Warewulf
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# (Optional) Include Lustre drivers; needed if enabling Lustre client on computes
-[master]$ export WW_CONF=/etc/warewulf/bootstrap.conf
-[master]$ echo "drivers += updates/kernel/" >> $WW_CONF
-
-# Build bootstrap image
-[master]$ wwbootstrap `uname -r`
-\end{lstlisting}
-% end_fsp_run
-
-\subsubsection{Assemble Virtual Node File Sytem (VNFS) image}
-
-With the local site customizations in place, the following step uses the
-\texttt{wwvnfs} command to assemble a VNFS capsule from the chroot environment
-defined for the {\em compute} instance. 
-
-% begin_fsp_run
-% fsp_validation_comment Assemble VNFS
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ wwvnfs -y --chroot $CHROOT
-\end{lstlisting}
-% end_fsp_run
-
-\subsubsection{Register nodes for provisioning}
-
-In preparation for provisioning, we can now define the desired network settings
-for four example compute nodes with the underlying provisioning system and
-restart the \texttt{dhcp} service. Note the use of variable names for the
-desired compute node IP and MAC addresses which should be modified to
-accommodate local settings and hardware. Included in these steps are commands
-to enable \Warewulf{} to manage IPoIB settings and corresponding definitions of
-IPoIB addresses for the compute nodes. This is typically optional unless you
-are planning to include a \Lustre{} client mount over \InfiniBand{}.  The final step
-in this process associates the VNFS image assembled in previous steps with the
-newly defined compute nodes, utilizing the user credential files and munge key
-that were imported in \S\ref{sec:file_import}.
+\input{../../common/finalize_provisioning}
 
 % begin_fsp_run
 % fsp_validation_comment Add hosts to cluster
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define four compute nodes and network settings 
-[master]$ wwsh -y node new c1 --ipaddr=<c1_ip> --hwaddr=<c1_mac> -D <eth_provision>
-[master]$ wwsh -y node new c2 --ipaddr=<c2_ip> --hwaddr=<c2_mac> -D <eth_provision>
-[master]$ wwsh -y node new c3 --ipaddr=<c3_ip> --hwaddr=<c3_mac> -D <eth_provision>
-[master]$ wwsh -y node new c4 --ipaddr=<c4_ip> --hwaddr=<c4_mac> -D <eth_provision>
+[master]$ wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
+[master]$ wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+
+# Optionally register additional compute nodes
+[master]$ for ((i=4; i<$num_computes; i++)) ; do
+              wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
+           done
 
 # Define provisioning image for hosts
-[master]$ wwsh -y provision set c[1-4] --vnfs=sles12 --bootstrap=`uname -r` \
+[master]$ wwsh -y provision set "${compute_regex}" --vnfs=sles12 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 
-# Optionally define IPoIB network settings (required if planning to mount Lustre* over IB)
-[master]$ wwsh -y node set c1 -D ib0 --ipaddr=<c1_ipoib> --netmask=<ipoib_netmask>
-[master]$ wwsh -y node set c2 -D ib0 --ipaddr=<c2_ipoib> --netmask=<ipoib_netmask>
-[master]$ wwsh -y node set c3 -D ib0 --ipaddr=<c3_ipoib> --netmask=<ipoib_netmask>
-[master]$ wwsh -y node set c4 -D ib0 --ipaddr=<c4_ipoib> --netmask=<ipoib_netmask>
-[master]$ wwsh -y provision set c[1-4] --fileadd=ifcfg-ib0.ww
+# Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
+[master]$ for ((i=0; i<$num_computes; i++)) ; do
+              wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
+           done
+[master]$ wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 
 # Restart dhcp / update PXE
 [master]$ service dhcpd restart
@@ -603,60 +560,16 @@ that were imported in \S\ref{sec:file_import}.
 \end{lstlisting}
 % end_fsp_run
 
-% begin_fsp_run 
-% fsp_validation_comment - optionally add 4 more hosts
-% [master]$ if [[ $USE_DYNAMIC_HOSTNUM -eq 1 && $NUM_COMPUTES -ge 8 ]];then
-% [master]$    wwsh -y node new c5 --ipaddr=<c5_ip> --hwaddr=<c5_mac> 
-% [master]$    wwsh -y node new c6 --ipaddr=<c6_ip> --hwaddr=<c6_mac> 
-% [master]$    wwsh -y node new c7 --ipaddr=<c7_ip> --hwaddr=<c7_mac> 
-% [master]$    wwsh -y node new c8 --ipaddr=<c8_ip> --hwaddr=<c8_mac> 
-% [master]$    wwsh -y node set c5 -D ib0 --ipaddr=<c5_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c6 -D ib0 --ipaddr=<c6_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c7 -D ib0 --ipaddr=<c7_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c8 -D ib0 --ipaddr=<c8_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y provision set c[5-8] --vnfs=sles12 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
-% [master]$    wwsh -y provision set c[5-8] --fileadd=ifcfg-ib0.ww     
-% [master]$    service dhcpd restart
-% [master]$    wwsh pxe update
-% [master]$ fi
+% begin_fsp_run
+
+% fsp_validation_comment Optionally, add arguments to bootstrap kernel
+% fsp_command if [ ${enable_kargs} ]; then
+% fsp_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
+% fsp_command fi
+
 % end_fsp_run
 
-% begin_fsp_run 
-% fsp_validation_comment - optionally add 8 more hosts
-% [master]$ if [[ $USE_DYNAMIC_HOSTNUM -eq 1 && $NUM_COMPUTES -ge 16 ]];then
-% [master]$    wwsh -y node new c9  --ipaddr=<c9_ip>  --hwaddr=<c9_mac> 
-% [master]$    wwsh -y node new c10 --ipaddr=<c10_ip> --hwaddr=<c10_mac> 
-% [master]$    wwsh -y node new c11 --ipaddr=<c11_ip> --hwaddr=<c11_mac> 
-% [master]$    wwsh -y node new c12 --ipaddr=<c12_ip> --hwaddr=<c12_mac> 
-
-% [master]$    wwsh -y node new c13 --ipaddr=<c13_ip> --hwaddr=<c13_mac> 
-% [master]$    wwsh -y node new c14 --ipaddr=<c14_ip> --hwaddr=<c14_mac> 
-% [master]$    wwsh -y node new c15 --ipaddr=<c15_ip> --hwaddr=<c15_mac> 
-% [master]$    wwsh -y node new c16 --ipaddr=<c16_ip> --hwaddr=<c16_mac> 
-
-% [master]$    wwsh -y node set c9  -D ib0 --ipaddr=<c9_ipoib>  --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c10 -D ib0 --ipaddr=<c10_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c11 -D ib0 --ipaddr=<c11_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c12 -D ib0 --ipaddr=<c12_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c13 -D ib0 --ipaddr=<c13_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c14 -D ib0 --ipaddr=<c14_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c15 -D ib0 --ipaddr=<c15_ipoib> --netmask=<ipoib_netmask>
-% [master]$    wwsh -y node set c16 -D ib0 --ipaddr=<c16_ipoib> --netmask=<ipoib_netmask>
-
-% [master]$    wwsh -y provision set c* --vnfs=sles12 --bootstrap=`uname -r` --files=dynamic_hosts,passwd,group,shadow,munge.key 
-% [master]$    wwsh -y provision set c* --fileadd=ifcfg-ib0.ww     
-% [master]$    service dhcpd restart
-% [master]$    wwsh pxe update
-% [master]$ fi
-% end_fsp_run
-
-% begin_fsp_run 
-% fsp_validation_comment - time update
-% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
-% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
-% end_fsp_run
-
-\subsection{Boot compute nodes}
+\subsection{Boot compute nodes} \label{sec:boot_computes}
 
 \input{../../common/reset_computes} 
 The following commands use the \texttt{ipmitool} utility to initiate power
@@ -665,56 +578,27 @@ the \texttt{IPMI\_PASSWORD} environment variable be set with the local BMC passw
 order to work interactively.
 
 % begin_fsp_run
-% fsp_validation_comment Boot compute nodes
+% fsp_comment_header Boot compute nodes \ref{sec:boot_computes}
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ ipmitool -E -I lanplus -H <c1_bmc> -U root chassis power reset   # power cycle c1
-[master]$ ipmitool -E -I lanplus -H <c2_bmc> -U root chassis power reset   # power cycle c2
-[master]$ ipmitool -E -I lanplus -H <c3_bmc> -U root chassis power reset   # power cycle c3
-[master]$ ipmitool -E -I lanplus -H <c4_bmc> -U root chassis power reset   # power cycle c4
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[0]} -U root chassis power reset   # power cycle c1
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[1]} -U root chassis power reset   # power cycle c2
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[2]} -U root chassis power reset   # power cycle c3
+[master]$ ipmitool -E -I lanplus -H ${c_bmc[3]} -U root chassis power reset   # power cycle c4
 \end{lstlisting} 
 
-% begin_fsp_run 
-% fsp_validation_comment - optionally add 4 more hosts
-% [master]$ if [[ $USE_DYNAMIC_HOSTNUM -eq 1 && $NUM_COMPUTES -ge 8 ]];then
-% [master]$    ipmitool -E -I lanplus -H <c5_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c6_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c7_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c8_bmc> -U root chassis power reset
-% [master]$ fi
-% end_fsp_run
+Once kicked off, the boot process should take less than 5 minutes (depending on
+BIOS post times) and you can verify that the compute hosts are available via
+ssh, or via parallel ssh tools to multiple hosts. For example, to run a command
+on the newly imaged compute hosts using \texttt{pdsh}, execute the following:
 
-% begin_fsp_run 
-% fsp_validation_comment - optionally add 8 more hosts
-% [master]$ if [[ $USE_DYNAMIC_HOSTNUM -eq 1 && $NUM_COMPUTES -ge 8 ]];then
-% [master]$    ipmitool -E -I lanplus -H <c9_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c10_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c11_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c12_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c13_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c14_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c15_bmc> -U root chassis power reset
-% [master]$    ipmitool -E -I lanplus -H <c16_bmc> -U root chassis power reset
-% [master]$ fi
-% end_fsp_run
-
-% end_fsp_run
-
-Once kicked off, the boot process should take less than 2 minutes and you can
-verify that the compute hosts are available via ssh, or via parallel ssh tools to multiple
-hosts. For example, to wait 120 seconds, and run a command on the newly imaged
-compute hosts using \texttt{pdsh}, execute the following:
-
-% begin_fsp_run
 \begin{lstlisting}[language=bash]
-[master]$ sleep 120
-[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] uptime
+[master]$ pdsh -w c[1-4] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
 c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
 c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
 c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 \end{lstlisting}
-% end_fsp_run
 
 
 
@@ -735,22 +619,24 @@ addition of Intel licensed software (e.g. Composer compiler suite, \Intel{}
 MPI). It is assumed that the end-site administrator will procure and install
 the necessary licenses in order to use the Intel proprietary software.
 
-\subsection{Development Tools}
+\subsection{Development Tools} \label{sec:install_dev_tools}
 \input{../../common/dev_tools}
 
-\subsection{Compilers}
+\subsection{Compilers} \label{sec:install_compilers}
 \input{../../common/compilers}
 
-\subsection{Performance Tools}
+\subsection{Performance Tools} \label{sec:install_perf_tools}
 \input{../../common/perf_tools}
 
 \subsection{MPI Stacks} \label{sec:mpi}
 \input{../../common/mpi}
 
 % begin_fsp_run
-% fsp_validation_comment Install licenses
+% fsp_validation_newline
+% fsp_ci_comment Install licenses
 % \begin{lstlisting}[language=bash,keywords={},upquote=true]
 % [master]$ (*\install*) intel_licenses
+% fsp_validation_newline
 % \end{lstlisting}
 % end_fsp_run
 
@@ -794,7 +680,7 @@ S | Name                  | Summary                          | Type
   | fftw-gnu-openmpi-fsp  | A Fast Fourier Transform library | package
 \end{lstlisting}
 
-Note that \FSP{} provided 3rd party builds are configured to be installed
+Note that \FSP{}-provided 3rd party builds are configured to be installed
 into a common top-level repository so that they can be easily exported to
 desired hosts within the cluster. This common top-level path
 (\texttt{/opt/fsp/pub}) was previously configured to be mounted on {\em
@@ -807,25 +693,22 @@ offerings within \FSP{}, issue the following:
 
 \input{../../common/third_party_libs}
 
-% begin_fsp_run 
-% fsp_validation_comment - time update
-% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
-% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
-% end_fsp_run
-
-\section{Resource Manager Startup}
+\section{Resource Manager Startup} \label{sec:rms_startup}
 \input{../../common/slurm_startup}
 
-\section{Run a Test Job}
+\clearpage
+\section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
-\input{manifest}
+\clearpage
+\appendix
+\section*{Appendices}
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
 
-% begin_fsp_run 
-% fsp_validation_comment - time update
-% [master]$ TIME_T2=$(date +%s) ; TIME_DELTA=$(($TIME_T2-$TIME_T1)) ; TIME_T1=$TIME_T2
-% [master]$ echo " "; echo "END TIMING = $TIME_DELTA (secs)"
-% end_fsp_run
+\input{../../common/automation_appendix}
+\input{manifest}
+\input{../../common/signature}
 
 \end{document}
 

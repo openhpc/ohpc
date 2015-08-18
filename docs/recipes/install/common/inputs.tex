@@ -1,31 +1,38 @@
-\subsection{Inputs}
-As this recipe details installing a cluster
-starting from bare-metal, there is a requirement to define IP addresses and gather
-hardware MAC addresses in order to support a controlled provisioning process. These values
-are necessarily unique to the hardware being used, and this document uses \texttt{<variable>}
-names in the command-line examples that follow to highlight where local site
-inputs are required. A summary of the required variables used in this recipe
-are as follows: \\
+% -*- mode: latex; fill-column: 120; -*- 
+
+\subsection{Inputs} \label{sec:inputs}
+As this recipe details installing a cluster starting from bare-metal, there is a requirement to define IP addresses and
+gather hardware MAC addresses in order to support a controlled provisioning process. These values are necessarily unique
+to the hardware being used, and this document uses variable substituion (\texttt{\$\{variable\}}) in the command-line
+examples that follow to highlight where local site inputs are required. A summary of the required and optional variables
+used throughout this recipe are presented below. Note that while the example definitions above correspond to a small
+4-node compute subsystem, the compute parameters are defined in array format to accomodate logical extension to larger
+node counts. \\
 
 \vspace*{0.2cm}
-\begin{tabular}{@{}>{\textbullet}cll@{}}
-& \texttt{<master\_name>}  & {\small \# Hostname for master server} \\
-& \texttt{<master\_ip>} & {\small \# Local private IP address on master server}  \\
-& \texttt{<sms\_eth\_internal>} & {\small \# Internal ethernet interface on SMS} \\
-& \texttt{<eth\_provision>} & {\small \# Provisioning interface for computes} \\
-& \texttt{<internal\_netmask>} & {\small \# Subnet netmask for internal cluster network} \\
-& \texttt{<bmc\_username>} & {\small \# BMC username for use by IPMI} \\
-& \texttt{<bmc\_password>} & {\small \# BMC password for use by IPMI} \\
-& \texttt{<c1\_ip>},\texttt{<c2\_ip>},\texttt{<c3\_ip>},\texttt{<c4\_ip>}
-& {\small \# Desired compute node addresses} \\
-& \texttt{<c1\_bmc>},\texttt{<c2\_bmc>},\texttt{<c3\_bmc>},\texttt{<c4\_bmc>}
-& {\small \# BMC addresses for computes} \\
-& \texttt{<c1\_mac>},\texttt{<c2\_mac>},\texttt{<c3\_mac>},\texttt{<c4\_mac>}
-& {\small \# MAC addresses for computes} \\
-& \texttt{<mgs\_fs\_name>} & {\small \# Lustre MGS mount name (\em Optional)} \\
-& \texttt{<master\_ipoib>} & {\small \# IPoIB address for master server (\em Optional)} \\
-& \texttt{<ipoib\_netmask>} & {\small \# Subnet netmask for internal IPoIB (\em Optional)} \\
-& \texttt{<c1\_ipoib>},\texttt{<c2\_ipoib>},\texttt{<c3\_ipoib>},\texttt{<c4\_ipoib>}
-& {\small \# IPoIB addresses for computes (\em Optional)}\\
-
+\begin{tabular}{@{}>{\textbullet}l p{7cm} l}
+& \texttt{\$\{fsp\_repo\}} & {\small \# FSP repo location} \\
+& \texttt{\$\{master\_name\}} & {\small \# Hostname for master server} \\
+& \texttt{\$\{master\_ip\}} & {\small \# Internal IP address on master server}  \\
+& \texttt{\$\{sms\_eth\_internal\}} & {\small \# Internal Ethernet interface on SMS} \\
+& \texttt{\$\{eth\_provision\}} & {\small \# Provisioning interface for computes} \\
+& \texttt{\$\{internal\_netmask\}} & {\small \# Subnet netmask for internal network} \\
+& \texttt{\$\{bmc\_username\}} & {\small \# BMC username for use by IPMI} \\
+& \texttt{\$\{bmc\_password\}} & {\small \# BMC password for use by IPMI} \\
+& \texttt{\$\{c\_ip[0]\}}, \texttt{\$\{c\_ip[1]\}}, ... & {\small \# Desired compute node addresses} \\
+& \texttt{\$\{c\_bmc[0]\}}, \texttt{\$\{c\_bmc[1]\}}, ... & {\small \# BMC addresses for computes} \\
+& \texttt{\$\{c\_mac[0]\}}, \texttt{\$\{c\_mac[1]\}}, ... & {\small \# MAC addresses for computes} \\
 \end{tabular}
+
+\vspace*{0.2cm}
+\noindent {Optional:} 
+\vspace*{0.1cm}
+
+\begin{tabular}{@{}>{\textbullet}l p{7cm} l}
+& \texttt{\$\{mgs\_fs\_name\}} & {\small \# Lustre MGS mount name} \\
+& \texttt{\$\{sms\_ipoib\}} & {\small \# IPoIB address for SMS server} \\
+& \texttt{\$\{ipoib\_netmask\}} & {\small \# Subnet netmask for internal IPoIB} \\
+& \texttt{\$\{c\_ipoib[0]\}}, \texttt{\$\{c\_ipoib[1]\}}, ... & {\small \# IPoIB addresses for computes} \\
+\end{tabular}
+
+

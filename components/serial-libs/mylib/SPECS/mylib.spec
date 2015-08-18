@@ -45,6 +45,7 @@ URL:       http://random.org
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+DocDir:    %{FSP_HOME}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -108,6 +109,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -115,6 +118,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{FSP_HOME}
 
+%{FSP_PUB}
+%doc AUTHORS ChangeLog COPYING INSTALL NEWS README
 
 %changelog
 * Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
