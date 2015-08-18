@@ -19,6 +19,7 @@ Version:   2.69
 Release:   1
 License:   GPLv3+ and GFDL
 Group:     fsp/dev-tools
+DocDir:    %{FSP_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   autoconf-%{version}.tar.gz
 Source1:   FSP_macros
@@ -26,6 +27,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 Requires: m4
 
+%define debug_package %{nil}
 %{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
 %define install_path %{FSP_PUB}/autotools
 
@@ -57,14 +59,28 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 # remove share/info/dir to avoid conflict with other package installs
 rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
 %dir %{FSP_HOME}
-%dir %{FSP_PUB}
-%{FSP_PUB}/autotools
+%{FSP_PUB}
+%doc THANKS
+%doc NEWS
+%doc ChangeLog.2
+%doc ChangeLog
+%doc COPYING
+%doc ChangeLog.3
+%doc README
+%doc AUTHORS
+%doc COPYINGv3
+%doc ChangeLog.0
+%doc ChangeLog.1
+%doc TODO
+%doc COPYING.EXCEPTION
 
 
 %changelog

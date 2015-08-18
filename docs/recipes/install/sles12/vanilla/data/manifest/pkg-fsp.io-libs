@@ -1,3 +1,9 @@
+adios-gnu-impi-fsp 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ fsp/io-libs The Adaptable IO System (ADIOS)
+adios-gnu-mvapich2-fsp 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ fsp/io-libs The Adaptable IO System (ADIOS)
+adios-gnu-openmpi-fsp 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ fsp/io-libs The Adaptable IO System (ADIOS)
+adios-intel-impi-fsp 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ fsp/io-libs The Adaptable IO System (ADIOS)
+adios-intel-mvapich2-fsp 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ fsp/io-libs The Adaptable IO System (ADIOS)
+adios-intel-openmpi-fsp 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ fsp/io-libs The Adaptable IO System (ADIOS)
 hdf5-gnu-fsp 1.8.14 http://www.hdfgroup.org/HDF5 fsp/io-libs A general purpose library and file format for storing scientific data
 hdf5-intel-fsp 1.8.14 http://www.hdfgroup.org/HDF5 fsp/io-libs A general purpose library and file format for storing scientific data
 netcdf-cxx-gnu-impi-fsp 4.2.1 http://www.unidata.ucar.edu/software/netcdf/ fsp/io-libs C++ Libraries for the Unidata network Common Data Form

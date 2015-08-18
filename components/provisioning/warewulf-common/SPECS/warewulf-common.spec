@@ -23,9 +23,11 @@ Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   fsp/provisioning
+URL:     http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 ExclusiveOS: linux
+DocDir: %{FSP_PUB}/doc/contrib
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -75,6 +77,7 @@ supporting libs.
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %pre
 groupadd -r warewulf >/dev/null 2>&1 || :
@@ -94,6 +97,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%{FSP_HOME}
+%{FSP_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/defaults/

@@ -100,6 +100,7 @@ Source101:	FSP_macros
 Source102:	FSP_setup_compiler
 Source103:	FSP_setup_mpi
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
+DocDir:         %{FSP_PUB}/doc/contrib
 
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
@@ -254,6 +255,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -265,5 +268,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc INSTALL LICENSE_1_0.txt
 
 %changelog

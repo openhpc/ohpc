@@ -84,7 +84,7 @@ Version:        5.0.0
 Release:        0
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
-Group:          Development/Libraries/Parallel
+Group:          fsp/parallel-libs
 Url:            http://mumps.enseeiht.fr/
 Source0:        %{pname}-%{version}.tar.gz
 Source1:        Makefile.mkl.gnu.openmpi.inc
@@ -94,6 +94,7 @@ Source4:        Makefile.mkl.intel.openmpi.inc
 Patch0:         mumps-5.0.0-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -247,12 +248,16 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{buildroot}/%{_docdir}
+
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc ChangeLog CREDITS INSTALL LICENSE README VERSION
 
 %changelog
 

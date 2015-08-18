@@ -63,7 +63,7 @@ Version:        11.3
 Release:        0
 Summary:        Intel(R) Math Kernel Library Basic Linear Algebra Communication Subprograms
 License:        Intel(R) 
-Group:          Development/Libraries/Parallel
+Group:          fsp/parallel-libs
 Url:            http://software.intel.com/en-us/intel-mkl
 Source:         %{pname}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build

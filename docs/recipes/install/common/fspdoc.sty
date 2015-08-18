@@ -16,9 +16,11 @@
 \usepackage{colortbl}
 
 % for non-released DRAFT - comment out for GA release
-%% \usepackage{draftwatermark}
-%% \SetWatermarkText{DRAFT / PRE-RELEASE}
-%% \SetWatermarkScale{1.35}
+\usepackage[firstpage]{draftwatermark}
+\SetWatermarkText{DRAFT / PRE-RELEASE}
+\SetWatermarkScale{1.45}
+%\SetWatermarkAngle{0}
+%\SetWatermarkVerCenter{0.5}
 
 \pagestyle{fancy}
 \setlength\headheight{59pt}
@@ -29,8 +31,8 @@
 %\fancyhead[LE,LO]{\MakeUppercase{2015 FSP Install Guide - {\em SLES12 Version}}}
 %\lhead{{\em 2014 FSP Install Guide}}
 \rhead{\includegraphics[width=0.75in]{intel_1spot_100-crop.pdf}}
-\fancyfoot[CO,CE]{\small \thepage \\ \vspace *{0.7cm} [Internal engineering
-  release - not for external distribution]}
+\fancyfoot[CO,CE]{\small \thepage \\ \vspace *{0.7cm} [~Limited availability engineering
+  release~]}
 \fancyfoot[RE,RO]{\small Last Update: \VCDateISO~(Rev: \VCRevision)}
 
 \lstset{basicstyle=\footnotesize\ttfamily,
@@ -39,7 +41,8 @@
   showstringspaces=false,
   commentstyle=\color{blue},
   captionpos=b,
-  columns=fullflexible,
+%  columns=fullflexible,
+  columns=flexible,
   belowskip=0.3cm,
   escapeinside={(*}{*)},
   aboveskip=0.4cm,
@@ -47,9 +50,10 @@
 }
 
 \definecolor{grey}{rgb}{0.96,0.96,0.96}
-\newcommand{\Intel}{{Intel\raisebox{0.39ex}{\scriptsize{\textregistered}}}}
+%\newcommand{\Intel}{{Intel\raisebox{0.39ex}{\scriptsize{\textregistered}}}}
+\newcommand{\Intel}{Intel}
 \newcommand{\FSP}{FSP}
-\newcommand{\Linux}{Linux*}
+\newcommand{\Linux}{Linux}
 \newcommand{\GNU}{GNU}
 \newcommand{\NFS}{NFS}
 \newcommand{\InfiniBand}{InfiniBand}
@@ -59,3 +63,5 @@
 \newcommand{\hdffive}{HDF5}
 \newcommand{\Warewulf}{Warewulf}
 \newcommand{\Lustre}{Lustre}
+\newcommand{\Nagios}{Nagios}
+\newcommand{\Ganglia}{Ganglia}

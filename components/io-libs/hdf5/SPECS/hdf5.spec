@@ -59,12 +59,13 @@ BuildRequires: intel_licenses
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.8.15.1
+Version:   1.8.15
 Release:   1
 License:   BSD-style
 Group:     fsp/io-libs
 URL:       http://www.hdfgroup.org/HDF5
-Source0:   %{pname}-%{version}.tar.gz
+DocDir:    %{FSP_PUB}/doc/contrib
+Source0:   %{pname}-%{version}-patch1.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -91,7 +92,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 
 %prep
 
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}-patch1
 
 %build
 
@@ -121,7 +122,7 @@ find "%buildroot" -type f -name "*.la" | xargs rm -f
 find "%buildroot"
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -161,12 +162,17 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc COPYING
+%doc README.txt
 
 %changelog
 

@@ -66,13 +66,14 @@ Version: 1.8.0
 Release: 1
 License: BSD-3-Clause
 Group:   fsp/io-libs
+DocDir:  %{FSP_PUB}/doc/contrib
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: %{pname}-%{version}.tar.gz
 Source1: FSP_macros
 Source2: FSP_setup_compiler
 
 # Minimum Build Requires
-BuildRequires: mxml-devel cmake zlib-devel glib2-devel
+BuildRequires: libmxml1 cmake zlib-devel glib2-devel
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
@@ -263,10 +264,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-install -d %buildroot%{install_path}/docs
-cp -pr AUTHORS COPYING ChangeLog KNOWN_BUGS NEWS README TODO \
-	%buildroot%{install_path}/docs
-ls -la %buildroot%{install_path}/docs
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # This happens last -- compiler and mpi _family are unset after
@@ -276,5 +274,12 @@ ls -la %buildroot%{install_path}/docs
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%doc AUTHORS
+%doc COPYING
+%doc ChangeLog
+%doc KNOWN_BUGS
+%doc NEWS
+%doc README
+%doc TODO
 
 %changelog

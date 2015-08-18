@@ -21,10 +21,10 @@ Name:    %{pname}%{PROJ_DELIM}
 Version: 3.5.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program
-
-Group: Applications/System
+Group:   fsp/admin
 License: GPLv2
 URL: http://www.nagios.org/
+DocDir:  %{FSP_PUB}/doc/contrib
 Source0: %{pname}-%{version}.tar.gz
 Source1: nagios.logrotate
 Source2: nagios.htaccess

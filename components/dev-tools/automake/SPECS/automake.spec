@@ -20,10 +20,12 @@ Release:   1
 License:   GPLv2+ and GFDL
 Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/automake/
+DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   automake-%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
+%define debug_package %{nil}
 %{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
 %define install_path %{FSP_PUB}/autotools
 
@@ -53,14 +55,21 @@ export PATH=%{install_path}/bin:$PATH
 %install
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
 %dir %{FSP_PUB}
-%{FSP_PUB}/autotools
-
+%{FSP_PUB}
+%doc THANKS
+%doc ChangeLog
+%doc NEWS
+%doc AUTHORS
+%doc README
+%doc COPYING
 
 %changelog
 * Mon Sep 15 2014  <karl.w.schulz@intel.com> - 

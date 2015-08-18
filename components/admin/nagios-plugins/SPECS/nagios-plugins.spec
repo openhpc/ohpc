@@ -24,8 +24,9 @@ Name: %{pname}%{PROJ_DELIM}
 Version: 2.0.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program plugins for Nagios
+DocDir:  %{FSP_PUB}/doc/contrib
+Group: fsp/admin
 
-Group: Applications/System
 License: GPLv2+
 URL: https://www.nagios-plugins.org/
 Source0: %{pname}-%{version}.tar.gz

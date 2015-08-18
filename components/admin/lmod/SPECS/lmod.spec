@@ -30,6 +30,7 @@ Release:   1
 License:   MIT
 Group:     fsp/admin
 Url:       https://github.com/TACC/Lmod
+DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   Lmod-%{version}.tar.bz2
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -86,7 +87,7 @@ export LUA_PATH="%{LUA_PATH}"
 make DESTDIR=$RPM_BUILD_ROOT install
 # Customize startup script to suit
 
-mkdir -p %{buildroot}/%{_sysconfdir}/profile.d
+%{__mkdir_p} %{buildroot}/%{_sysconfdir}/profile.d
 %{__cat} << EOF > %{buildroot}/%{_sysconfdir}/profile.d/lmod.sh
 #!/bin/sh
 # -*- shell-script -*-
@@ -177,6 +178,8 @@ EOF
 endif
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -188,3 +191,6 @@ rm -rf $RPM_BUILD_ROOT
 %{FSP_ADMIN}/lmod
 %config %{_sysconfdir}/profile.d/lmod.sh
 %config %{_sysconfdir}/profile.d/lmod.csh
+%{FSP_PUB}
+%doc License
+%doc README

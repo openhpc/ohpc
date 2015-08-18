@@ -9,7 +9,7 @@ is a two-step process that requires starting up the controller daemons on the {\
 %hosts. 
 Note that \SLURM{} leverages the use of the {\em munge} library to provide
 authentication services and this daemon also needs to be running on all hosts
-requiring within the resource management pool. 
+within the resource management pool. 
 %The munge daemons should already
 %be running on the {\em compute} subsystem at this point, 
 The following commands can be used to startup the necessary services to support
@@ -18,15 +18,15 @@ resource management under \SLURM{}.
 \vspace*{0.3cm}
 
 % begin_fsp_run
-% fsp_validation_comment Startup RM
+% fsp_comment_header Resource Manager Startup \ref{sec:rms_startup}
 \begin{lstlisting}[language=bash]
 # start munge and slurm controller on master host
 [master]$ service munge start
 [master]$ service slurmctld start
 
 #  start munge and slurm clients on compute hosts
-[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service munge start
-[master]$ /opt/fsp/admin/pdsh/bin/pdsh -w c[1-4] service slurmd start
+[master]$ pdsh -w c[1-4] service munge start
+[master]$ pdsh -w c[1-4] service slurmd start
 \end{lstlisting}
 % end_fsp_run
 
@@ -35,12 +35,19 @@ In the default configuration, the {\em compute} hosts will be initialized in an
 eligible to schedule user jobs, issue the following:
 
 % begin_fsp_run
-% fsp_validation_comment - Sleep for 5 seconds (CI only command)
-% [master]$ sleep 5
-% end_fsp_run
-
-% begin_fsp_run
 \begin{lstlisting}[language=bash]
 [master]$ scontrol update nodename=c[1-4] state=idle
 \end{lstlisting}
+% end_fsp_run
+
+
+% Additional recipe commands for additional computes.
+
+% begin_fsp_run
+% fsp_validation_newline
+% fsp_validation_comment Startup slurm on additional computes if defined
+% fsp_command if [ ${num_computes} -gt 4 ];then
+% fsp_command    pdsh -w c[5-$num_computes] service munge start
+% fsp_command    pdsh -w c[5-$num_computes] service slurmd start
+% fsp_command fi
 % end_fsp_run

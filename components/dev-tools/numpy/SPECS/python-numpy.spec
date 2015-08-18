@@ -47,12 +47,13 @@ Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.9.2
 Release:        1
 Url:            http://sourceforge.net/projects/numpy
+DocDir:         %{FSP_PUB}/doc/contrib
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          fsp/dev-tools
-Source0:         %{pname}-%{version}.tar.gz
-Source1: FSP_macros
-Source2: FSP_setup_compiler
+Source0:        %{pname}-%{version}.tar.gz
+Source1:        FSP_macros
+Source2:        FSP_setup_compiler
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelc.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -137,7 +138,7 @@ python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 
 # FSP module file
 %{!?compiler_family: %define compiler_family gnu}
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -173,8 +174,15 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %files
 %defattr(-,root,root)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc DEV_README.txt
+%doc THANKS.txt
+%doc LICENSE.txt
+%doc README.txt
 
 %changelog

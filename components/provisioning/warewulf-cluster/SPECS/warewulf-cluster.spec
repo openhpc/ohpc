@@ -28,7 +28,8 @@ ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
+BuildRoot: %_tmppath}%{pname}-%{version}-%{release}-root
+DocDir: %{FSP_PUB}/doc/contrib
 #%if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 #%if ! 0%{?suse_version}
 #BuildRequires: libdb4-utils
@@ -56,7 +57,7 @@ with Warewulf.
 %if %{fsp_disable}
 %package -n %{pname}-node%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
-Group: System Environment/Clustering
+Group: fsp/provisioning
 Requires: /sbin/sfdisk
 %if 0%{?sles_version} || 0%{?suse_version}
 PreReq: %{insserv_prereq} %{fillup_prereq}
@@ -98,12 +99,15 @@ rm -rf $RPM_BUILD_ROOT/etc/rc.d/init.d/wwfirstboot
 rm -rf $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/wwfirstboot/*
 %endif
 
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%{FSP_HOME}
+%{FSP_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL LICENSE NEWS README README.node TODO
 %{_sysconfdir}/profile.d/*
 %{_bindir}/*
@@ -115,7 +119,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n %{pname}-node%{PROJ_DELIM}
 %defattr(-, root, root)
-%doc AUTHORS COPYING LICENSE README.node
 %config(noreplace) %{_sysconfdir}/sysconfig/wwfirstboot.conf
 %if 0%{?suse_version}
 %dir %{_libexecdir}/warewulf/wwfirstboot

@@ -69,6 +69,7 @@ Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 Source3:   FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+DocDir:    %{FSP_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -155,12 +156,16 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p %{buildroot}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc license/license.txt license/use-of-trademark-license.txt ReadMe_IMB.txt
 
 
 %changelog

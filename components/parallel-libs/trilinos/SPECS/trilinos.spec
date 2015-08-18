@@ -65,7 +65,7 @@ Version:        12.2.1
 Release:        0
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
-Group:          System/Libraries
+Group:          fsp/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
 Source0:        %{pname}-%{version}.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
@@ -87,6 +87,7 @@ BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %include %{_sourcedir}/FSP_macros
 #!BuildIgnore: post-build-checks
@@ -196,7 +197,7 @@ make DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -235,6 +236,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} %{buildroot}/%_docdir
+
 %clean
 rm -rf %{buildroot}
 
@@ -244,5 +247,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc CHANGELOG Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 
 %changelog

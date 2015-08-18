@@ -20,12 +20,14 @@ Release:   1
 License:   GPLv2+ and LGPLv2+ and GFDL
 Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/libtool/
+DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   libtool-%{version}.tar.gz
 Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
+%define debug_package %{nil}
 %define install_path %{FSP_PUB}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
@@ -65,7 +67,7 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
 # modulefile
 
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}
+%{__mkdir_p} %{buildroot}/%{FSP_MODULES}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/autotools
 #%Module1.0#####################################################################
 # FSP Autotools environment
@@ -87,6 +89,8 @@ prepend-path    PATH            %{install_path}/bin
 prepend-path    MANPATH         %{install_path}/share/man
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -94,8 +98,16 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %dir %{FSP_PUB}
 %dir %{FSP_MODULES}
-%{FSP_PUB}/autotools
+%{FSP_PUB}
 %{FSP_MODULES}/autotools
+%doc AUTHORS
+%doc ChangeLog
+%doc COPYING
+%doc NEWS
+%doc README
+%doc THANKS
+%doc TODO
+
 
 
 %changelog

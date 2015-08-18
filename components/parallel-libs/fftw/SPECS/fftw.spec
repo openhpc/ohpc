@@ -69,6 +69,7 @@ Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 Source3:   FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+DocDir:    %{FSP_PUB}/doc/contrib
 
 %define debug_package %{nil}
 %define openmp        1
@@ -166,6 +167,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -183,6 +186,8 @@ fi
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO
 
 
 %changelog

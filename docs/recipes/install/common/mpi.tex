@@ -13,10 +13,12 @@ three MPI families:
  is packaged as a single RPM. Installation of all of the MPI family instances,
  can be accomplished via the following command. Note the use of wildcards
  (\texttt{*}) in this example in order to install both \GNU{} and Intel builds for
- OpenMPI and MVAPICH2.
+ OpenMPI and MVAPICH2. In addititon to installing available MPI toolchains,
+ the example below includes installation of a suite of pre-built MPI
+ benchmarks (IMB) that are also provided via \FSP{}.
 
 % begin_fsp_run
-% fsp_validation_comment Install MPI
+% fsp_comment_header Install MPI Stacks \ref{sec:mpi}
 \begin{lstlisting}[language=bash]
 [master]$ (*\install*)  openmpi-*-fsp mvapich2-*-fsp intel-mpi-fsp
 [master]$ (*\groupinstall*) fsp-imb

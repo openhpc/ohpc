@@ -24,10 +24,10 @@ Summary:	ConMan: The Console Manager
 Group:		fsp/admin
 License:	GPLv3+
 URL:		http://conman.googlecode.com/
+DocDir:         %{FSP_PUB}/doc/contrib
 
 Requires:	expect
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
 
 
 %if 0%{?suse_version}
@@ -72,7 +72,7 @@ make %{?_smp_mflags}
 
 %install
 rm -rf "%{buildroot}"
-mkdir -p "%{buildroot}"
+%{__mkdir_p} "%{buildroot}"
 make install DESTDIR="%{buildroot}"
 #
 %if 0%{?_initrddir:1}
@@ -81,6 +81,8 @@ if [ "%{_sysconfdir}/init.d" != "%{_initrddir}" ]; then
   mv "%{buildroot}%{_sysconfdir}/init.d"/* "%{buildroot}%{_initrddir}/"
 fi
 %endif
+
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
 rm -rf "%{buildroot}"
@@ -129,6 +131,7 @@ fi
 %doc NEWS
 %doc README
 %doc THANKS
+%{FSP_PUB}
 %config(noreplace) %{_sysconfdir}/conman.conf
 %config(noreplace) %{_sysconfdir}/[dls]*/conman
 %{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}/conman

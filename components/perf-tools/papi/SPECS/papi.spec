@@ -49,6 +49,7 @@ URL: http://icl.cs.utk.edu/papi/
 Source0: %{pname}-%{version}.tar.gz
 Patch1: papi.ldconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+DocDir: %{FSP_PUB}/doc/contrib
 BuildRequires: ncurses-devel
 %if 0%{?suse_version}
 BuildRequires: gcc-fortran
@@ -151,6 +152,8 @@ EOF
 # https://fedoraproject.org/wiki/Packaging/Guidelines#Packaging_Static_Libraries
 rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
 
+%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 %clean
@@ -159,5 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc ChangeLog*.txt INSTALL.txt LICENSE.txt README RELEASENOTES.txt
 
 %changelog

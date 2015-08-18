@@ -81,6 +81,7 @@ Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
 Group:          fsp/dev-tools
 Url:            http://www.scipy.org
+DocDir:         %{FSP_PUB}/doc/contrib
 Source0:        %{pname}-%{version}.tar.gz
 BuildRequires:  blas-devel
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -193,7 +194,7 @@ chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/a
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -245,8 +246,13 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc THANKS.txt
+%doc LICENSE.txt
 
 %changelog
