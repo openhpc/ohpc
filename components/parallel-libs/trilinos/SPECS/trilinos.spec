@@ -248,6 +248,6 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %{FSP_HOME}
 %{FSP_PUB}
-%doc CHANGELOG Copyright.txt INSTALL LICENSE README RELEASE_NOTES
+%doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 
 %changelog
