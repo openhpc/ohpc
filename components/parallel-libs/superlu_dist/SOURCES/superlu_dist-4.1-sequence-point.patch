@@ -1,7 +1,6 @@
-diff -aruN SuperLU_DIST_3.1.orig/SRC/util.c SuperLU_DIST_3.1/SRC/util.c
---- SuperLU_DIST_3.1.orig/SRC/util.c	2012-05-19 00:48:30.000000000 +0200
-+++ SuperLU_DIST_3.1/SRC/util.c	2012-09-06 22:44:16.011904085 +0200
-@@ -653,7 +653,7 @@
+--- superlu_dist-4.1/SRC/util.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/SRC/util.c	2015-08-19 15:02:20.000000000 -0700
+@@ -681,7 +681,7 @@
  get_diag_procs(int_t n, Glu_persist_t *Glu_persist, gridinfo_t *grid,
  	       int_t *num_diag_procs, int_t **diag_procs, int_t **diag_len)
  {
@@ -10,7 +9,7 @@ diff -aruN SuperLU_DIST_3.1.orig/SRC/util.c SuperLU_DIST_3.1/SRC/util.c
      int_t *xsup;
  
      i = j = *num_diag_procs = pkk = 0;
-@@ -664,8 +664,10 @@
+@@ -692,8 +692,10 @@
  
      do {
  	++(*num_diag_procs);
@@ -23,7 +22,7 @@ diff -aruN SuperLU_DIST_3.1.orig/SRC/util.c SuperLU_DIST_3.1/SRC/util.c
  	pkk = PNUM( i, j, grid );
      } while ( pkk != 0 ); /* Until wrap back to process 0 */
      if ( !(*diag_procs = intMalloc_dist(*num_diag_procs)) )
-@@ -675,8 +677,10 @@
+@@ -703,8 +705,10 @@
      for (i = j = k = 0; k < *num_diag_procs; ++k) {
  	pkk = PNUM( i, j, grid );
  	(*diag_procs)[k] = pkk;

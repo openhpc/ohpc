@@ -79,33 +79,21 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        4.0
+Version:        4.1
 Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
 License:        LGPL-2.1
-Group:          Development/Libraries/Parallel
+Group:          fsp/parallel-libs
 Url:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        %{pname}-%{version}.tar.gz
-# PATCH-FIX-UPSTREAM superlu_dist-3.1-sequence-point.patch
-Patch0:         superlu_dist-3.1-sequence-point.patch
-# PATCH-FIX-OPENSUSE superlu_dist-4.0-make.patch
-Patch1:         superlu_dist-4.0-make.patch
-# PATCH-FIX-UPSTREAM superlu_dist-3.2-example-no-return-in-non-void.patch
-Patch2:         superlu_dist-3.2-example-no-return-in-non-void.patch
-#BuildRequires:  blas-devel
-#BuildRequires:  gcc-fortran
-#BuildRequires:  scotch-devel
-#%if 0%{?_openmpi}
-#BuildRequires:  openmpi-devel
-#BuildRequires:  ptscotch-openmpi-devel
-#%endif
-#%if 0%{?_mvapich2}
-#BuildRequires:  mvapich2-devel
-#BuildRequires:  ptscotch-mvapich2-devel
-#%endif
-BuildRequires: metis-%{compiler_family}%{PROJ_DELIM}
-Requires: metis-%{compiler_family}%{PROJ_DELIM}
+Patch0:         superlu_dist-4.1-sequence-point.patch
+Patch1:         superlu_dist-4.1-make.patch
+Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
+Patch3:         superlu_dist-4.1-parmetis.patch
+BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
+Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{FSP_PUB}/doc/contrib
 
 %include %{_sourcedir}/FSP_macros
 #!BuildIgnore: post-build-checks
@@ -134,6 +122,7 @@ solutions.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 # FSP compiler/mpi designation
@@ -161,24 +150,24 @@ popd
 
 %install
 
-%{__mkdir} -p %{buildroot}%{install_path}/etc
+%{__mkdir_p} %{buildroot}%{install_path}/etc
 install -m644 make.inc %{buildroot}%{install_path}/etc
 
-%{__mkdir} -p %{buildroot}%{install_path}/include
+%{__mkdir_p} %{buildroot}%{install_path}/include
 install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
               SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
               SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
               %{buildroot}%{install_path}/include/
 
-%{__mkdir} -p %{buildroot}%{install_path}/lib
+%{__mkdir_p} %{buildroot}%{install_path}/lib
 install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.3
+ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -202,7 +191,7 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 and fftw (and mkl for gnu compiler families)
+# Require metis and (and mkl for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded metis]  } {
@@ -218,7 +207,6 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_INC        %{install_path}/include
@@ -234,6 +222,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} %{buildroot}/%_docdir
 
 %clean
 rm -rf %{buildroot}
@@ -245,5 +234,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{FSP_HOME}
+%{FSP_PUB}
+%doc README
 
 %changelog
