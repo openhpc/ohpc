@@ -1,5 +1,5 @@
 --- superlu_dist-4.1/make.inc	2015-08-05 15:56:21.000000000 -0700
-+++ superlu_dist-4.1.patch/make.inc	2015-08-20 10:57:13.000000000 -0700
++++ superlu_dist-4.1.patch/make.inc	2015-08-20 11:06:57.000000000 -0700
 @@ -31,13 +31,14 @@
  #
  ############################################################################
@@ -41,7 +41,7 @@
 -FORTRAN         = ftn
 -F90FLAGS	= -fast #-Mipa=fast,safe
 +FORTRAN         = mpif90
-+F90FLAGS	= 
++F90FLAGS	= -fPIC
  # uncomment the following to use 64-bit integer
  # F90FLAGS	+= -i8
  ############################################################################
