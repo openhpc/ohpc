@@ -1,5 +1,5 @@
 --- superlu_dist-4.1/make.inc	2015-08-05 15:56:21.000000000 -0700
-+++ superlu_dist-4.1.patch/make.inc	2015-08-20 12:54:14.000000000 -0700
++++ superlu_dist-4.1.patch/make.inc	2015-08-20 14:40:18.000000000 -0700
 @@ -31,13 +31,14 @@
  #
  ############################################################################
@@ -19,7 +19,7 @@
  ############################################################################
  
  # Define the required Fortran libraries, if you use C compiler to link
-@@ -57,19 +58,19 @@
+@@ -57,24 +58,24 @@
  
  ############################################################################
  # C compiler setup
@@ -28,7 +28,7 @@
  # CFLAGS should be set to be the C flags that include optimization
 -CFLAGS          = -fast -m64 -std=c99 -Wall -openmp \
 -		$(I_PARMETIS) -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0 \
-+CFLAGS          = -m64 -std=c99 -Wall -O3 \
++CFLAGS          = -m64 -std=c99 -Wall -openmp \
 +		$(I_METIS) -fPIC -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0 \
  # uncomment the following to use 64-bit integer
  # CFLAGS 		+= -D_LONGINT
@@ -45,3 +45,9 @@
  # uncomment the following to use 64-bit integer
  # F90FLAGS	+= -i8
  ############################################################################
+ LOADER	        = $(CC)
+-LOADOPTS	= -openmp
++LOADOPTS	= -openmp -fPIC
+ ############################################################################
+ #  C preprocessor defs for compilation (-DNoChange, -DAdd_, or -DUpCase)
+ #
