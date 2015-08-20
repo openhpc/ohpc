@@ -53,7 +53,7 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
-7
+
 #-fsp-header-comp-end-------------------------------
 
 # Base package name
@@ -132,6 +132,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=ON                          \
+        -DTrilinos_ENABLE_Muelu:BOOL=OFF                                \
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
