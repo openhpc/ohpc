@@ -1,6 +1,6 @@
 --- superlu_dist-4.1/make.inc	2015-08-05 15:56:21.000000000 -0700
-+++ superlu_dist-4.1.patch/make.inc	2015-08-20 14:40:18.000000000 -0700
-@@ -31,13 +31,14 @@
++++ superlu_dist-4.1.patch/make.inc	2015-08-21 09:23:14.000000000 -0700
+@@ -31,13 +31,13 @@
  #
  ############################################################################
  ## parmetis 4.x.x, 32-bit integer
@@ -12,14 +12,13 @@
 -METISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libmetis -lmetis
 -PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
 -I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
-+METISLIB := -L${METIS_LIB} -lmetis
-+I_METIS := -I${METIS_inc}
++#METISLIB := -L${METIS_LIB} -lmetis
 +#PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
 +#I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
  ############################################################################
  
  # Define the required Fortran libraries, if you use C compiler to link
-@@ -57,24 +58,24 @@
+@@ -57,24 +57,23 @@
  
  ############################################################################
  # C compiler setup
@@ -28,8 +27,7 @@
  # CFLAGS should be set to be the C flags that include optimization
 -CFLAGS          = -fast -m64 -std=c99 -Wall -openmp \
 -		$(I_PARMETIS) -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0 \
-+CFLAGS          = -std=c99 -Wall -openmp \
-+		$(I_METIS) -fPIC -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0 \
++CFLAGS          = -std=c99 -Wall -fPIC -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0
  # uncomment the following to use 64-bit integer
  # CFLAGS 		+= -D_LONGINT
  
@@ -47,7 +45,7 @@
  ############################################################################
  LOADER	        = $(CC)
 -LOADOPTS	= -openmp
-+LOADOPTS	= -openmp -fPIC
++LOADOPTS	= -fPIC
  ############################################################################
  #  C preprocessor defs for compilation (-DNoChange, -DAdd_, or -DUpCase)
  #
