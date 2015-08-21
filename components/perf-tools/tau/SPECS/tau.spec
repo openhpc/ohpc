@@ -55,7 +55,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 2.24
+Version: 2.24.1
 Release: 1%{?dist}
 Summary: Tuning and Analysis Utilities Profiling Package
 License: Tuning and Analysis Utilities License
@@ -66,8 +66,6 @@ Provides:  lib%PNAME.so()(64bit)
 Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
-# 03/31/15 charles.r.baird@intel.com - add return value that rpmlint complained about
-Patch1: tau.papilayer.patch
 DocDir: %{FSP_PUB}/doc/contrib
 
 %if 0%{?suse_version}
@@ -103,9 +101,6 @@ automatic instrumentation tool.
 
 %prep
 %setup -q -n %{pname}-%{version}
-
-# Intel FSP patches
-%patch1 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
