@@ -148,9 +148,9 @@ make
 make install DESTDIR=$RPM_BUILD_ROOT/%{install_path}
 
 # remove buildroot
-for f in $RPM_BUILD_ROOT%{install_path}/conf/*; do
-    sed -i -e 's!%{buildroot}!!g' $f
-done
+#for f in $RPM_BUILD_ROOT%{install_path}/conf/*; do
+#    sed -i -e 's!%{buildroot}!!g' $f
+#done
 
 # remove stock module file
 rm -rf $RPM_BUILDROOT%{install_path}/lib/modules
