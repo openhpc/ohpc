@@ -150,7 +150,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/%{install_path}
 rm %{buildroot}%{install_path}/lib/petsc/conf/configure.log
 
 # remove stock module file
-rm -rf $RPM_BUILDROOT%{install_path}/lib/modules
+rm -rf %{buildroot}%{install_path}/lib/modules
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
