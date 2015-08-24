@@ -46,7 +46,7 @@ BuildRequires: intel_licenses
 
 Summary:   A powerful implementation of MPI
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.8.4
+Version:   1.8.8
 Release:   1
 License:   BSD-3-Clause
 Group:     fsp/mpi-families
