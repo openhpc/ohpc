@@ -80,7 +80,7 @@ Requires:      mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        5.0.0
+Version:        5.0.1
 Release:        0
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
@@ -91,7 +91,7 @@ Source1:        Makefile.mkl.gnu.openmpi.inc
 Source2:        Makefile.mkl.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
-Patch0:         mumps-5.0.0-shared-mumps.patch
+Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{FSP_PUB}/doc/contrib
