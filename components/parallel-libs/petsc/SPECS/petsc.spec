@@ -64,7 +64,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        MIT
 Group:          fsp/parallel-libs
-Version:        3.5.3
+Version:        3.6.1
 Release:        0
 
 Source0:        %{pname}-%{version}.tar.gz
@@ -72,7 +72,6 @@ Source1:        FSP_macros
 Source2:        FSP_setup_compiler
 Source3:        FSP_setup_mpi
 Patch1:         petsc.rpath.patch
-Patch2:         petsc.usrlocal.patch
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{FSP_PUB}/doc/contrib
@@ -97,7 +96,6 @@ differential equations.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
-%patch2 -p1
 
 
 %build
