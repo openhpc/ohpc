@@ -125,7 +125,7 @@ to enable user access.
 [master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
-[master]$ cp /opt/fsp/pub/examples/network/udev/60-ipath.rules /etc/udev/rules.d/
+[master]$ cp /opt/fsp/pub/examples/udev/60-ipath.rules /etc/udev/rules.d/
 
 # Load IB drivers
 [master]$ service rdma start
@@ -267,7 +267,7 @@ be updated with a copy of the configuration as follows:
 [master]$ (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
-[master]$ cp /opt/fsp/pub/examples/network/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
+[master]$ cp /opt/fsp/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
 
 # Add Network Time Protocol (NTP) support
 [master]$ (*\chrootinstall*) ntp
