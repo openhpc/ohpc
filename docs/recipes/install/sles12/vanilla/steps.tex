@@ -112,15 +112,19 @@ both the base and SDK repositories:
 
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
-The following command adds OFED and PSM support using base distro-provided drivers to the
-chosen {\em master} host.
+The following commands add OFED and PSM support using base distro-provided drivers to the
+chosen {\em master} host. Note that the default permission for InfiniPath
+devices under \baseOS{} are not directly accessible by users. Consequently, the commands
+below include the addition of \texttt{udev} rules that are provided by \FSP{}
+to enable user access.
 
 % begin_fsp_run
 % fsp_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
 [master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
-[master]$ # provide udev rules to enable /dev/ipath access for Infinipath devices
+
+# Provide udev rules to enable /dev/ipath access for InfiniPath devices
 [master]$ cp /opt/fsp/pub/examples/network/udev/60-ipath.rules /etc/udev/rules.d/
 
 # Load IB drivers
@@ -261,6 +265,9 @@ be updated with a copy of the configuration as follows:
 # Add IB support
 [master]$ (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
 [master]$ (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
+
+# Provide udev rules to enable /dev/ipath access for InfiniPath devices
+[master]$ cp /opt/fsp/pub/examples/network/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
 
 # Add Network Time Protocol (NTP) support
 [master]$ (*\chrootinstall*) ntp
