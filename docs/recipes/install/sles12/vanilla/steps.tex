@@ -118,8 +118,8 @@ chosen {\em master} host.
 % begin_fsp_run
 % fsp_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ (*\install*) libibverbs-runtime libmlx4-rdmav2
-[master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
+[master]$ (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
+[master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
 
 # Load IB drivers
 [master]$ service rdma start
@@ -170,7 +170,7 @@ follows:
 [master]$ perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
 
 # Configure DHCP server to use eth1
-[master]$ perl -pi -e 's/^DHCPD_INTERFACE=""/DHCPD_INTERFACE="eth1"/' /etc/sysconfig/dhcpd
+[master]$ perl -pi -e "s/^DHCPD_INTERFACE=\S+/DHCPD_INTERFACE=${sms_eth_internal}/" /etc/sysconfig/dhcpd
 
 # Enable tftp service for compute node image distribution
 [master]$ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
@@ -194,7 +194,6 @@ follows:
 [master]$ service xinetd restart                         # tftp services
 [master]$ service mysql restart                          # mysql database
 [master]$ service apache2 restart                        # web server
-[master]$ service dhcpd restart                          # DHCP server
 \end{lstlisting}
 %\end{verbatim}
 % end_fsp_run
@@ -258,7 +257,7 @@ be updated with a copy of the configuration as follows:
 [master]$ (*\groupchrootinstall*) fsp-slurm-client
 
 # Add IB support
-[master]$ (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2
+[master]$ (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
 [master]$ (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
 
 # Add Network Time Protocol (NTP) support
