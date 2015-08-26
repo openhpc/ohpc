@@ -113,13 +113,15 @@ both the base and SDK repositories:
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
 The following command adds OFED and PSM support using base distro-provided drivers to the
-chosen {\em master} host. 
+chosen {\em master} host.
 
 % begin_fsp_run
 % fsp_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
 [master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
+[master]$ # provide udev rules to enable /dev/ipath access for Infinipath devices
+[master]$ cp /opt/fsp/pub/examples/network/udev/60-ipath.rules /etc/udev/rules.d/
 
 # Load IB drivers
 [master]$ service rdma start
