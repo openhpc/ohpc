@@ -11,7 +11,7 @@
 %include %{_sourcedir}/FSP_macros
 
 Name:           docs-fsp
-Version:        15.31
+Version:        15.42
 Release:        1
 Summary:        Forest Peak documentation
 License:        BSD-3-Clause
