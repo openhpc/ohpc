@@ -199,9 +199,11 @@ this setting to override with a potentially alternatively-named interface specif
 # Initialize 2nd interface for provisioning
 [master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask 255.255.255.0 up
 
-# Restart relevant services to support provisioning
-[master]$ systemctl restart xinetd  
+# Restart/enable relevant services to support provisioning
+[master]$ systemctl restart xinetd 
+[master]$ systemctl enable mariadb.service 
 [master]$ systemctl restart mariadb 
+[master]$ systemctl enable httpd.service 
 [master]$ systemctl restart httpd   
 \end{lstlisting}
 %\end{verbatim}
