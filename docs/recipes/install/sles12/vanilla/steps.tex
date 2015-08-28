@@ -196,10 +196,12 @@ follows:
 # Define eth1 interface for provisioning
 [master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask 255.255.255.0 up
 
-# Restart relevant services to support provisioning
-[master]$ service xinetd restart                         # tftp services
-[master]$ service mysql restart                          # mysql database
-[master]$ service apache2 restart                        # web server
+# Restart/enable relevant services to support provisioning
+[master]$ service xinetd restart
+[master]$ systemctl enable mysql.service
+[master]$ service mysql restart                          
+[master]$ systemctl enable apache2.service
+[master]$ service apache2 restart
 \end{lstlisting}
 %\end{verbatim}
 % end_fsp_run
