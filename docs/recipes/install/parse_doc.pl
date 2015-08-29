@@ -160,6 +160,7 @@ my $begin_delim   = "% begin_fsp_run";
 my $end_delim     = "% end_fsp_run";
 my $prompt        = "\[master\]\$";
 my $disable_delim = "^%%";
+my $indent        = 0;
 
 print $fh "#!/bin/bash\n";
 
@@ -170,6 +171,8 @@ while(<IN>) {
     if(/$begin_delim/../$end_delim/) {
 	if ($_ =~ /% fsp_validation_newline/) {
 	    print $fh "\n";
+#	} elsif ($_ =~ /^\s*$/) {
+#	    print $fh "\n";
 	} elsif ($_ =~ /% fsp_ci_comment (.+)/) {
 	    if ( !$ci_run) {next;}
 	    print $fh "# $1 (CI only)\n";
@@ -185,17 +188,19 @@ while(<IN>) {
 	    
 	} elsif ($_ =~ /% fsp_validation_comment (.+)/) {
 	    my $comment = check_for_section_replacement($1);
-	    print $fh "# $comment\n";
+	    print $fh ' ' x $indent . "# $comment\n";
+	} elsif ($_ =~ /% fsp_indent (\d+)/) {
+	    $indent = $1;
 	} elsif ($_ =~ /% fsp_command (.+)/) {
 	    my $cmd = update_cmd($1);
-	    print $fh "$cmd\n";
+	    print $fh ' ' x $indent . "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+) \\$/) {
 
 	    my $cmd = update_cmd($1);
 
 	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
 
-	    print $fh "$cmd";
+	    print $fh ' ' x $indent . "$cmd";
 	    my $next_line = <IN>;
 
 	    # trim leading and trailing space
@@ -208,8 +213,9 @@ while(<IN>) {
 	    # special treatment for do loops
 
 	    my $cmd = update_cmd($1);
-
-	    print $fh "$cmd\n";
+	    
+#	    print $fh "$cmd\n";
+	    print $fh ' ' x $indent . "$cmd\n";
 	    my $next_line;# = <IN>;
 
 	    while ( $next_line = <IN> ) {
@@ -218,22 +224,23 @@ while(<IN>) {
 		# trim leading and trailing space
 		$next_line =~ s/^\s+|\s+$//g;
 
-		printf $fh "   %s\n",$next_line;
+#		printf $fh "   %s\n",$next_line;
+		printf $fh ' ' x $indent . "   %s\n",$next_line;
 	    }
 
 	    # trim leading and trailing space
 	    $next_line =~ s/^\s+|\s+$//g;
 
-	    print $fh "$next_line\n";
+	    print $fh ' ' x $indent . "$next_line\n";
 	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
 	    my $cmd = update_cmd($1);
 
 	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
 
-	    print $fh "$cmd\n";
+	    print $fh ' ' x $indent . "$cmd\n";
 	} elsif ($_ =~ /\[postgres\]\$ (.+)$/) {
 	    my $cmd = update_cmd($1);
-	    print $fh "$cmd\n";
+	    print $fh ' ' x $indent . "$cmd\n";
 	}
 
     }
