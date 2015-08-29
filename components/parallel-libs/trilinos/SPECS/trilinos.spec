@@ -114,6 +114,8 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
+export CXXFLAGS="-std=c++11 $CXXFLAGS"
+
 %if %{compiler_family} == gnu
 module load mkl
 %endif
@@ -132,9 +134,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=ON                          \
-%if %{compiler_family} == intel
-        -DTrilinos_ENABLE_MueLu:BOOL=OFF                                \
-%endif
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
