@@ -281,6 +281,9 @@ Now, we can include additional components to the compute instance using
 # Add Network Time Protocol (NTP) support
 [master]$ (*\chrootinstall*) ntp
 
+# Add kernel drivers
+[master]$ (*\chrootinstall*) kernel
+
 # Include FSP default modules user environment
 [master]$ (*\chrootinstall*) lmod-defaults-intel-fsp
 \end{lstlisting}
