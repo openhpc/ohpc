@@ -76,7 +76,7 @@
 \input{../../common/enable_fsp_repo}
 
 \begin{lstlisting}[language=bash,keywords={},literate={VER}{\FSPVersion{}}1]
-[master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/CentOS-7.1_Intel/ForestPeak:VER.repo
+[master]$ fsp_repo=http://fsp.cmt.intel.com/ForestPeak/VER/CentOS-7.1_Intel/ForestPeak:VER.repo 
 \end{lstlisting}
 
 If outside of Intel, the repository location should be set to match the path to
@@ -174,16 +174,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 \input{../../common/cluster_checker}
 
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
-
-At this point, all of the packages necessary to use \Warewulf{} on the {\em
-  master} host should be installed.  Next, we need to update several
-configuration files in order to allow \Warewulf{} to work with \baseOS{} and to
-support local provisioning using a second private interface (refer to
-Figure~\ref{fig:physical_arch}). Note that by default, \Warewulf{} is configured to
-provision over the \texttt{eth1} interface and the steps below include updating
-this setting to override with a potentially alternatively-named interface specified by
-\texttt{\$\{sms\_eth\_internal\}}.
-
+\input{../../common/warewulf_setup}
 
 % begin_fsp_run
 % fsp_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
@@ -203,7 +194,7 @@ this setting to override with a potentially alternatively-named interface specif
 [master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
 [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
-# Initialize 2nd interface for provisioning
+# Enable internal interface for provisioning
 [master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
@@ -307,8 +298,9 @@ customizations within the chroot environment created for the desired {\em
 resource manager server, configure NTP for compute resources, and enable \NFS{}
 mounting of a \$HOME file system and the public \FSP{} install path
 (\texttt{/opt/fsp/pub}) that will be hosted by the {\em master} host in this
-example configuration.  The \NFS{} exporting options use an address/netmask
-combination to limit the export scope to the defined compute nodes.
+example configuration.  
+%The \NFS{} exporting options use an address/netmask
+%combination to limit the export scope to the defined compute nodes.
 
 % begin_fsp_run
 % fsp_comment_header Customize system configuration \ref{sec:master_customization}
@@ -588,7 +580,7 @@ pool, issue the following:
 % \end_fsp_run
 
 Finally, to add support for controlling IPoIB interfaces, \FSP{} includes a
-template file for \Warewulf{} that can be imported and used later to provision
+template file for \Warewulf{} that can optionally be imported and used later to provision
 \texttt{ib0} network settings.
 
 % begin_fsp_run

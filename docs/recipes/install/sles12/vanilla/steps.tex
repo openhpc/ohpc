@@ -74,7 +74,7 @@
 \input{../../common/enable_fsp_repo}
 
 \begin{lstlisting}[language=bash,keywords={},literate={VER}{\FSPVersion{}}1]
-[master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/SLE_12_Intel/ForestPeak:VER.repo
+[master]$ fsp_repo=http://fsp.cmt.intel.com/ForestPeak/VER/SLE_12_Intel/ForestPeak:VER.repo 
 \end{lstlisting}
 
 
@@ -174,12 +174,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 \input{../../common/cluster_checker}
 
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
-
-At this point, all of the packages necessary to use \Warewulf{} on the {\em
-  master} host should be installed.  Next, we need to update several
-configuration files in order to allow \Warewulf{} to work with \baseOS{} and to support
-local provisioning using the {\em eth1} interface.  Specific steps are as
-follows:
+\input{../../common/warewulf_setup}
 
 % begin_fsp_run
 % fsp_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
@@ -189,7 +184,7 @@ follows:
 # Configure Warewulf provisioning to use desired internal interface
 [master]$ perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
 
-# Configure DHCP server to use eth1
+# Configure DHCP server to use desired internal interface
 [master]$ perl -pi -e "s/^DHCPD_INTERFACE=\S+/DHCPD_INTERFACE=${sms_eth_internal}/" /etc/sysconfig/dhcpd
 
 # Enable tftp service for compute node image distribution
@@ -207,7 +202,7 @@ follows:
 [master]$ perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
 [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
-# Define eth1 interface for provisioning
+# Enable internal interface for provisioning
 [master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
@@ -220,7 +215,7 @@ follows:
 %\end{verbatim}
 % end_fsp_run
 
-
+\clearpage
 \subsection{Define {\em compute} image for provisioning}
 
 With the provisioning services enabled, the next step is to define and
@@ -274,6 +269,7 @@ be updated with a copy of the configuration as follows:
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Import GPG keys for chroot repository usage
 [master]$ zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
+
 # Add SLURM client support
 [master]$ (*\groupchrootinstall*) fsp-slurm-client
 
@@ -307,8 +303,9 @@ customizations within the chroot environment created for the desired {\em
 resource manager server, configure NTP for compute resources, and enable \NFS{}
 mounting of a \$HOME file system and the public \FSP{} install path
 (\texttt{/opt/fsp/pub}) that will be hosted by the {\em master} host in this
-example configuration.  The \NFS{} exporting options use an address/netmask
-combination to limit the export scope to the defined compute nodes.
+example configuration.  
+%The \NFS{} exporting options use an address/netmask
+%combination to limit the export scope to the defined compute nodes.
 
 % begin_fsp_run
 % fsp_comment_header Customize system configuration \ref{sec:master_customization}
@@ -529,7 +526,6 @@ import local file-based credentials, issue the following:
 \end{lstlisting}
 % \end_fsp_run
 
-\newpage
 Similarly, to import the cryptographic key that is required by the {\em munge}
 authentication library to be available on every host in the resource management
 pool, issue the following:
@@ -541,7 +537,7 @@ pool, issue the following:
 % \end_fsp_run
 
 Finally, to add support for controlling IPoIB interfaces, \FSP{} includes a
-template file for \Warewulf{} that can be imported and used later to provision
+template file for \Warewulf{} that can optionally be imported and used later to provision
 \texttt{ib0} network settings.
 
 % begin_fsp_run
@@ -699,6 +695,7 @@ with the \GNU{} toolchain. The resulting output that is included shows that
 pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
+\clearpage
 \begin{lstlisting}[language=bash]
 [master]$ zypper search -t package fftw-gnu-*-fsp
 Loading repository data...
@@ -727,7 +724,6 @@ offerings within \FSP{}, issue the following:
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{../../common/slurm_startup}
 
-\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
