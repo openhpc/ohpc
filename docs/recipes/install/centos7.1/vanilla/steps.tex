@@ -113,13 +113,6 @@ both the base OS and EPEL repositories (mirrors freely available online):
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{../../common/install_provisioning_intro}
 
-% begin_fsp_run 
-% fsp_validation_newline
-% fsp_ci_comment - allow sudo without tty
-% [master]$ perl -pi -e "s/^Defaults\s+requiretty/# Defaults requiretty/" /etc/sudoers 
-% fsp_validation_newline
-% end_fsp_run
-
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{../../common/install_slurm}
 
@@ -150,6 +143,9 @@ provided and update the \texttt{\$\{master\_ipoib\}} and
 naming as appropriate if system contains dual-ported or multiple HCAs). 
 
 % begin_fsp_run
+% fsp_validation_newline
+% fsp_command if [ ${enable_ipoib} -eq 1 ];then
+% fsp_indent 5
 % fsp_validation_comment Enable ib0
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ cp /opt/fsp/pub/examples/network/centos/ifcfg-ib0 /etc/sysconfig/network-scripts
@@ -161,6 +157,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 # Initiate ib0
 [master]$ ifup ib0
 \end{lstlisting}
+% fsp_indent 0
+% fsp_command fi
 % end_fsp_run
 
 \subsection{Add Cluster Checker} \label{sec:add_clck}
@@ -283,17 +281,12 @@ Now, we can include additional components to the compute instance using
 # Add Network Time Protocol (NTP) support
 [master]$ (*\chrootinstall*) ntp
 
+# Add kernel drivers
+[master]$ (*\chrootinstall*) kernel
+
 # Include FSP default modules user environment
 [master]$ (*\chrootinstall*) lmod-defaults-intel-fsp
 \end{lstlisting}
-% end_fsp_run
-
-
-% begin_fsp_run 
-% fsp_validation_newline
-% fsp_ci_comment - Restart openibd
-% [master]$ service openibd restart
-% fsp_validation_newline
 % end_fsp_run
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
@@ -401,13 +394,12 @@ discussed further in the following sections.
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 
 \input{../../common/lustre-client}
-%% % SLES-specific addition
-%% Additionally, note that your default \baseOS{} environment may not allow loading of
-%% the necessary \Lustre{} kernel modules. Consequently, the example below includes
-%% steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
-%% file to allow loading of the necessary modules.
 
 % begin_fsp_run
+% fsp_validation_newline
+% fsp_command if [ ${enable_lustre_client} -eq 1 ];then
+% fsp_indent 5
+
 % fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
@@ -451,13 +443,20 @@ host as follows:
 [master]$ mkdir /mnt/lustre
 [master]$ mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
 \end{lstlisting}
+% fsp_indent 0
+% fsp_command fi
+% fsp_validation_newline
 % end_fsp_run
+
 
 \paragraph{Add \Nagios{} monitoring}
 
 \input{../../common/nagios}
 
 % begin_fsp_run
+% fsp_validation_newline
+% fsp_command if [ ${enable_nagios} -eq 1 ];then
+% fsp_indent 5
 % fsp_validation_comment Install Nagios on master and vnfs image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Nagios base, Remote Plugin Engine, and Plugins on Master
@@ -482,6 +481,8 @@ host as follows:
 [master]$ systemctl start nagios
 [master]$ chmod u+s `which ping`
 \end{lstlisting}
+% fsp_indent 0
+% fsp_command fi
 % end_fsp_run
 
 \paragraph{Add \Ganglia{} monitoring}
@@ -489,6 +490,9 @@ host as follows:
 \input{../../common/ganglia}
 
 % begin_fsp_run
+% fsp_validation_newline
+% fsp_command if [ ${enable_ganglia} -eq 1 ];then
+% fsp_indent 5
 % fsp_validation_comment Install Ganglia on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Ganglia
@@ -500,6 +504,8 @@ host as follows:
 [master]$ systemctl start gmond
 [master]$ systemctl start gmetad
 \end{lstlisting}
+% fsp_indent 0
+% fsp_command fi
 % end_fsp_run
 
 %% [FSP-469]: disabling ORCM
@@ -577,10 +583,15 @@ template file for \Warewulf{} that can be imported and used later to provision
 \texttt{ib0} network settings.
 
 % begin_fsp_run
+% fsp_validation_newline
+% fsp_command if [ ${enable_ipoib} -eq 1 ];then
+% fsp_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ wwsh file import /opt/fsp/pub/examples/network/centos/ifcfg-ib0.ww
 [master]$ wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network-scripts/ifcfg-ib0
 \end{lstlisting}
+% fsp_indent 0
+% fsp_command fi
 % \end_fsp_run
 
 \input{../../common/finalize_provisioning}
@@ -603,13 +614,24 @@ template file for \Warewulf{} that can be imported and used later to provision
 # Define provisioning image for hosts
 [master]$ wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
+\end{lstlisting}
 
+% fsp_validation_newline
+% fsp_validation_comment Optionally, define IPoIB network settings (required if planning to mount Lustre over IB)
+% fsp_command if [ ${enable_ipoib} -eq 1 ];then
+% fsp_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
 [master]$ for ((i=0; i<$num_computes; i++)) ; do
               wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
            done
 [master]$ wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
+\end{lstlisting}
+% fsp_indent 0
+% fsp_command fi
+% fsp_validation_newline
 
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
 [master]$ service dhcpd restart
 [master]$ wwsh pxe update
@@ -690,15 +712,6 @@ the necessary licenses in order to use the Intel proprietary software.
 
 \subsection{MPI Stacks} \label{sec:mpi}
 \input{../../common/mpi}
-
-% begin_fsp_run
-% fsp_validation_newline
-% fsp_ci_comment Install licenses
-% \begin{lstlisting}[language=bash,keywords={},upquote=true]
-% [master]$ (*\install*) intel_licenses
-% fsp_validation_newline
-% \end{lstlisting}
-% end_fsp_run
 
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 
