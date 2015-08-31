@@ -204,7 +204,7 @@ this setting to override with a potentially alternatively-named interface specif
 [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Initialize 2nd interface for provisioning
-[master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask 255.255.255.0 up
+[master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
 [master]$ systemctl restart xinetd 
@@ -327,8 +327,8 @@ combination to limit the export scope to the defined compute nodes.
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
 # Export /home and FSP public packages from master server to cluster compute nodes
-[master]$ echo "/home ${internal_netmask}(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub ${internal_netmask}(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[master]$ echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
 [master]$ systemctl restart nfs
 

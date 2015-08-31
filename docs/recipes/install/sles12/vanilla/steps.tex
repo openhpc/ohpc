@@ -208,7 +208,7 @@ follows:
 [master]$ perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Define eth1 interface for provisioning
-[master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask 255.255.255.0 up
+[master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
 [master]$ service xinetd restart
@@ -326,9 +326,9 @@ combination to limit the export scope to the defined compute nodes.
 # Identify resource manager hostname on master host
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
-# Export /home and FSP public packages from master server to cluster compute nodes
-[master]$ echo "/home ${internal_netmask}(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub ${internal_netmask}(ro,no_subtree_check,fsid=11)" >> /etc/exports
+# Export /home and FSP public packages from master server
+[master]$ echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[master]$ echo "/opt/fsp/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
 [master]$ service nfsserver restart
 
