@@ -106,6 +106,15 @@ both the base and SDK repositories:
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{../../common/install_provisioning_intro}
+\input{../../common/firewall}
+
+% begin_fsp_run
+% fsp_validation_comment Disable firewall 
+\begin{lstlisting}[language=bash,keywords={}]
+[master]$ systemctl disable SuSEfirewall2
+[master]$ systemctl stop SuSEfirewall2
+\end{lstlisting}
+% end_fsp_run
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{../../common/install_slurm}
