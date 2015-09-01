@@ -52,7 +52,7 @@ install -D -m 0644 %SOURCE5 %{buildroot}%{FSP_HOME}/pub/examples/slurm/job.mpi
 install -D -m 0644 %SOURCE6 %{buildroot}%{FSP_HOME}/pub/examples/udev/60-ipath.rules
 
 #install -D -m 0644 %SOURCE7 %{buildroot}%{FSP_HOME}/pub/examples/LICENSE
-install -D -m 0644 %SOURCE7 %{buildroot}%{FSP_HOME}/LICENSE
+install -D -m 0644 %SOURCE7 %{buildroot}/LICENSE
 
 %clean
 rm -rf $RPM_BUILD_ROOT
