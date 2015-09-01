@@ -193,7 +193,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 # Configure Warewulf to use the default SLES tftp location
 [master]$ perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv/#" /etc/warewulf/provision.conf
 
-# Update Warewulf http config to use the SLES version of mod_perl
+# Update Warewulf http configuration to use the SLES version of mod_perl
 [master]$ export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
 [master]$ perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
 
@@ -317,7 +317,7 @@ example configuration.
 [master]$ echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
 [master]$ echo "${master_ip}:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
-# Identify resource manager server IP in SLURM config file on computes
+# Identify resource manager server IP in SLURM configuration file on computes
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
 
 # Identify resource manager hostname on master host
@@ -339,7 +339,7 @@ example configuration.
 
 % begin_fsp_run
 % fsp_validation_newline
-% fsp_validation_comment Update basic slurm config if additional computes defined
+% fsp_validation_comment Update basic slurm configuration if additional computes defined
 % fsp_command if [ ${num_computes} -gt 4 ];then
 % fsp_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
 % fsp_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
@@ -414,7 +414,7 @@ file to allow loading of the necessary modules.
 # Add Lustre client software to master host
 [master]$ (*\install*) lustre-client-fsp lustre-client-fsp-modules
 
-# Update config to allow Lustre modules to be loaded on master host
+# Update configuration to allow Lustre modules to be loaded on master host
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      /etc/modprobe.d/10-unsupported-modules.conf
 \end{lstlisting}
@@ -426,7 +426,7 @@ file to allow loading of the necessary modules.
 # Include Lustre client software in compute image
 [master]$ (*\chrootinstall*) lustre-client-fsp lustre-client-fsp-modules
 
-# Update config to allow Lustre modules to be loaded on compute hosts
+# Update configuration to allow Lustre modules to be loaded on compute hosts
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
 
@@ -441,7 +441,7 @@ file to allow loading of the necessary modules.
 The default underlying network type used by \Lustre{} is {\em tcp}. If your
 external \Lustre{} file system is to be mounted using a network type other than
 tcp, additional configuration files are necessary to identify the desired
-network type. The example below illustrates creation of modprobe config files
+network type. The example below illustrates creation of modprobe configuration files
 instructing \Lustre{} to use an \InfiniBand{} network with the {\em o2ib} LNET driver
 attached to \texttt{ib0}. Note that these modifications are made to both the
 {\em master} host and {\em compute} image.
@@ -454,7 +454,7 @@ attached to \texttt{ib0}. Note that these modifications are made to both the
 \end{lstlisting}
 % end_fsp_run
 
-With the \Lustre{} config complete, the client can be mounted on the {\em master}
+With the \Lustre{} configuration complete, the client can be mounted on the {\em master}
 host as follows:
 % begin_fsp_run
 % fsp_validation_comment mount Lustre client on master
@@ -490,7 +490,7 @@ host as follows:
 %% [FSP-469] # Initialize postgres
 %% [FSP-469] [master]$ service postgresql start   
 %% [FSP-469] 
-%% [FSP-469] # Update postgres config files using ORCM templates
+%% [FSP-469] # Update postgres configuration files using ORCM templates
 %% [FSP-469] [master]$ cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
 %% [FSP-469] [master]$ cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 %% [FSP-469] 
