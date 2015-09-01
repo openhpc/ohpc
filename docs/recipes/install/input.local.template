@@ -10,7 +10,7 @@
 # ---------------------------
 
 # URL for FSP repository
-fsp_repo="${fsp_repo:-http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/15.31/CentOS-7.1_Intel/ForestPeak:15.31.repo}"
+fsp_repo="${fsp_repo:-http://fsp.cmt.intel.com/ForestPeak/15.31/SLE_12_Intel/ForestPeak:15.31.repo}"
 
 # Hostname for master server (SMS)
 master_name="${master_name:-sms}"
@@ -31,6 +31,13 @@ eth_provision="${eth_provision:-eth0}"
 bmc_username="${bmc_username:-unknown}"
 bmc_password="${bmc_password:-unknown}"
 
+# Flags for optional installation/configuration
+
+enable_lustre_client="${enable_lustre_client:-0}"
+enable_ipoib="${enable_ipoib:-0}"
+enable_kargs="${enable_kargs:-0}"
+enable_nagios="${enable_nagios:-0}"
+enable_ganglia="${enable_ganglia:-0}"
 
 # -------------------------
 # compute node settings
@@ -71,7 +78,6 @@ c_bmc[3]=10.16.1.4
 #-------------------
 
 # additional arguments to enable optional arguments for bootstrap kernel
-enable_kargs="${enable_kargs:-0}"
 kargs="${kargs:-acpi_pad.disable=1}"
 
 # Lustre MGS mount name
