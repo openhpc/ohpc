@@ -24,7 +24,7 @@ Source3: ifcfg-ib0.sles.ww
 Source4: ifcfg-ib0.centos.ww
 Source5: job.mpi
 Source6: 60-ipath.rules
-Source7: IntelSampleSourceCodeLicense
+Source7: LICENSE
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
