@@ -15,7 +15,7 @@ Summary: Example source code and templates for use within FSP environment.
 Name:    examples%{PROJ_DELIM}
 Version: 1.2
 Release: 1
-License: Intel Sample Source Code License
+License: BSD-3
 Group:   fsp/admin
 Source0: FSP_macros
 Source1: hello.c
