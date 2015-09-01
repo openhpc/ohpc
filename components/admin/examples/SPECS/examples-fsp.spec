@@ -51,8 +51,8 @@ install -D -m 0644 %SOURCE4 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/
 install -D -m 0644 %SOURCE5 %{buildroot}%{FSP_HOME}/pub/examples/slurm/job.mpi
 install -D -m 0644 %SOURCE6 %{buildroot}%{FSP_HOME}/pub/examples/udev/60-ipath.rules
 
-#install -D -m 0644 %SOURCE7 %{buildroot}%{FSP_HOME}/pub/examples/LICENSE
-install -D -m 0644 %SOURCE7 %{buildroot}/LICENSE
+install -D -m 0644 %SOURCE7 %{buildroot}%{FSP_HOME}/pub/examples/LICENSE
+#install -D -m 0644 %SOURCE7 %{buildroot}/LICENSE
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -63,7 +63,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{FSP_HOME}
 %dir %{FSP_HOME}/pub
 %{FSP_HOME}/pub/examples
-%doc LICENSE
+%doc %{FSP_HOME}/pub/examples/LICENSE
 
 %changelog
 
