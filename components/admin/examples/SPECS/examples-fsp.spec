@@ -50,7 +50,7 @@ install -D -m 0644 %SOURCE3 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/if
 install -D -m 0644 %SOURCE4 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/ifcfg-ib0.ww
 install -D -m 0644 %SOURCE5 %{buildroot}%{FSP_HOME}/pub/examples/slurm/job.mpi
 install -D -m 0644 %SOURCE6 %{buildroot}%{FSP_HOME}/pub/examples/udev/60-ipath.rules
-install -D -m 0644 %SOURCE7 %{buildroot}%{FSP_HOME}/pub/examples/License
+install -D -m 0644 %SOURCE7 %{buildroot}%{FSP_HOME}/pub/examples/LICENSE
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -61,7 +61,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{FSP_HOME}
 %dir %{FSP_HOME}/pub
 %{FSP_HOME}/pub/examples
-%doc %SOURCE7
+%doc LICENSE
 
 %changelog
 
