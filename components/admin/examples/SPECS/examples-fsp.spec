@@ -27,6 +27,7 @@ Source6: 60-ipath.rules
 Source7: LICENSE
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+DocDir:    %{FSP_PUB}/doc/contrib
 
 %description
 
@@ -60,7 +61,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{FSP_HOME}
 %dir %{FSP_HOME}/pub
 %{FSP_HOME}/pub/examples
-%doc LICENSE 
+%doc %SOURCE7
 
 %changelog
 
