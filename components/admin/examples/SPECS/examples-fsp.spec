@@ -58,6 +58,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{FSP_HOME}
 %dir %{FSP_HOME}/pub
 %{FSP_HOME}/pub/examples
+%doc LICENSE 
 
 %changelog
 
