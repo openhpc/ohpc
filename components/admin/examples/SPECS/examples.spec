@@ -61,8 +61,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_HOME}
-%dir %{FSP_HOME}/pub
+# dir %{FSP_HOME}
+# dir %{FSP_HOME}/pub
 # {FSP_HOME}/pub/examples
 %{FSP_PUB}
 %doc LICENSE
