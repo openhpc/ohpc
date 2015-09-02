@@ -30,7 +30,8 @@ Requires:       make
 
 %define debug_package %{nil}
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRoot:     %{_tmppath}/%{name}-%{version}-build
+DocDir:        %{FSP_PUB}/doc/contrib
 
 %description
 This guide presents a simple cluster installation procedure using components from the Forest Peak (FSP) software stack.
@@ -65,9 +66,12 @@ install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/doc/Install_
 install -m 0755 -p %{source_path}/fsp_vanilla_recipe.sh %{buildroot}/%{FSP_PUB}/doc/recipes/vanilla/recipe.sh
 install -m 0644 -p docs/recipes/install/input.local.template %{buildroot}/%{FSP_PUB}/doc/recipes/vanilla/input.local.template
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %files
 %defattr(-,root,root)
 %dir %{FSP_HOME}
 %{FSP_PUB}
+%doc LICENSE
 
 %changelog
