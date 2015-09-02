@@ -17,7 +17,7 @@
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 2.9.5
+Version: 2.9.6
 Release: 1%{?dist}
 Summary:   Easy-to-use IPMI server management utilities
 License:   BSD
