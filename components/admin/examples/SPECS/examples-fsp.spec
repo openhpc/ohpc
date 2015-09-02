@@ -36,7 +36,7 @@ FSP development environment.
 
 %prep
 
-install -D -m 0644 %SOURCE7 %_builddir/LICENSE
+%{__cp} %SOURCE7 .
 
 %build
 
@@ -53,7 +53,7 @@ install -D -m 0644 %SOURCE4 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/
 install -D -m 0644 %SOURCE5 %{buildroot}%{FSP_HOME}/pub/examples/slurm/job.mpi
 install -D -m 0644 %SOURCE6 %{buildroot}%{FSP_HOME}/pub/examples/udev/60-ipath.rules
 
-install -D -m 0644 %SOURCE7 %{buildroot}%{FSP_HOME}/pub/examples/LICENSE
+#install -D -m 0644 %SOURCE7 %{buildroot}%{FSP_HOME}/pub/examples/LICENSE
 
 %clean
 rm -rf $RPM_BUILD_ROOT
