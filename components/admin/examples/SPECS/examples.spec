@@ -51,6 +51,8 @@ install -D -m 0644 %SOURCE4 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/
 install -D -m 0644 %SOURCE5 %{buildroot}%{FSP_HOME}/pub/examples/slurm/job.mpi
 install -D -m 0644 %SOURCE6 %{buildroot}%{FSP_HOME}/pub/examples/udev/60-ipath.rules
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
