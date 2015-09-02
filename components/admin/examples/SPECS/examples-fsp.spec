@@ -36,6 +36,8 @@ FSP development environment.
 
 %prep
 
+install -D -m 0644 %SOURCE7 %_builddir/LICENSE
+
 %build
 
 df -h
