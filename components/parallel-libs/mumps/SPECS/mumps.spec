@@ -201,8 +201,6 @@ puts stderr " "
 puts stderr "This module loads the mumps library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of mumps leverages and MKL libraries. Consequently,"
-puts stderr "this package is loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
 
@@ -214,16 +212,6 @@ module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
 set     version                     %{version}
-
-# Require mkl for gnu compiler families
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { [is-loaded gnu] } {
-        if { ![is-loaded mkl]  } {
-          module load mkl
-        }
-    }
-}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
