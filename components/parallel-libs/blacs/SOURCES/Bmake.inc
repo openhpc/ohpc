@@ -49,7 +49,7 @@
 #  -------------------------------------
 #   MPIdir = /usr/local/mpich
 #   MPILIBdir = $(MPIdir)/lib/
-#   MPIINCdir = $(MPIdir)/include
+    MPIINCdir = $(MPI_DIR)/include
 #   MPILIB = $(MPILIBdir)/libmpich.a
 
 #  -------------------------------------
