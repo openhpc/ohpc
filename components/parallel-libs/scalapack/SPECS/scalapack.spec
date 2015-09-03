@@ -93,6 +93,7 @@ Patch0:         scalapack-2.0.2-shared-lib.patch
 BuildRequires:  blas-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{FSP_PUB}/doc/contrib
+Provides:       libscalapack.so.2()(64bit)
 
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset 
