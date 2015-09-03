@@ -72,6 +72,6 @@ install -m 0644 -p docs/recipes/install/input.local.template %{buildroot}/%{FSP_
 %defattr(-,root,root)
 %dir %{FSP_HOME}
 %{FSP_PUB}
-%doc LICENSE
+%doc docs/LICENSE
 
 %changelog

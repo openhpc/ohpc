@@ -76,8 +76,11 @@
 \input{../../common/enable_fsp_repo}
 
 \begin{lstlisting}[language=bash,keywords={},literate={VER}{\FSPVersion{}}1]
-[master]$ fsp_repo=http://fsp.cmt.intel.com/ForestPeak/VER/CentOS-7.1_Intel/ForestPeak:VER.repo 
+[master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/CentOS-7.1_Intel/ForestPeak:VER.repo
+
 \end{lstlisting}
+
+%[master]$ fsp_repo=http://fsp.cmt.intel.com/ForestPeak/VER/CentOS-7.1_Intel/ForestPeak:VER.repo 
 
 If outside of Intel, the repository location should be set to match the path to
 a locally accessibly copy of the \FSP{} repository. Once set, the repository can be
