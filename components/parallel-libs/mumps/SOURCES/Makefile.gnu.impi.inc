@@ -73,14 +73,14 @@ FL = mpif77
 AR = ar vr 
 #RANLIB = ranlib
 RANLIB  = echo
-SCALAP  = -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -Wl,--start-group -lmkl_gf_lp64 -lmkl_core -lmkl_gnu_thread -Wl,--end-group -lmkl_blacs_intelmpi_lp64 -ldl -lpthread -lm
+SCALAP  = -lscalapack -lblacs
 INCPAR = -I$(MPI_DIR)/include
 # LIBPAR = $(SCALAP)  -L/usr/local/lib/ -llamf77mpi -lmpi -llam
 LIBPAR = $(SCALAP)  -L$(MPI_DIR)/lib -lmpi 
 #LIBPAR = -lmpi++ -lmpi -ltstdio -ltrillium -largs -lt
 INCSEQ = -I$(topdir)/libseq
 LIBSEQ  =  -L$(topdir)/libseq -lmpiseq
-LIBBLAS = -L$(MKLROOT)/lib/intel64 -lmkl_scalapack_lp64 -Wl,--start-group -lmkl_gf_lp64 -lmkl_core -lmkl_gnu_thread -Wl,--end-group -lmkl_blacs_intelmpi_lp64 -ldl -lpthread -lm
+LIBBLAS = -blas
 LIBOTHERS = -lpthread -lgomp
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
 CDEFS   = -DAdd_

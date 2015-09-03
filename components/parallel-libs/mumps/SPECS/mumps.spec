@@ -84,8 +84,8 @@ License:        CeCILL-C
 Group:          fsp/parallel-libs
 Url:            http://mumps.enseeiht.fr/
 Source0:        %{pname}-%{version}.tar.gz
-Source1:        Makefile.mkl.gnu.openmpi.inc
-Source2:        Makefile.mkl.gnu.impi.inc
+Source1:        Makefile.gnu.openmpi.inc
+Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
 Patch0:         mumps-5.0.1-shared-mumps.patch
