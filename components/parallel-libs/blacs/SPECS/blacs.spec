@@ -59,19 +59,12 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.1
 Release:        0
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
-License:        CeCILL-C
 Group:          fsp/parallel-libs
 Url:            http://www.netlib.org/blacs
 Source0:        BLACS.tar.gz
 Source1:        Bmake.inc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{FSP_PUB}/doc/contrib
-
-%if 0%{?suse_version}
-BuildRequires: libgomp1
-%else
-BuildRequires: libgomp
-%endif
 
 %define debug_package %{nil}
 
@@ -104,16 +97,13 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-%{__mkdir} -p %{buildroot}%{install_path}/lib
 %{__mkdir} -p %{buildroot}%{install_path}/include
-%{__mkdir} -p %{buildroot}%{install_path}/PORD/lib
-%{__mkdir} -p %{buildroot}%{install_path}/PORD/include
-%{__mkdir} -p %{buildroot}%{install_path}/etc
+%{__mkdir} -p %{buildroot}%{install_path}/lib
 
 
 #install -m 644 lib/*so* %{buildroot}%{install_path}/lib
-install -m 644 lib/*a %{buildroot}%{install_path}/lib
-install -m 644 include/* %{buildroot}%{install_path}/include
+install -m 644 LIB/*a %{buildroot}%{install_path}/lib
+install -m 644 SRC/MPI/*h %{buildroot}%{install_path}/include
 
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
