@@ -95,7 +95,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
 
 cp -f %{S:1} .
-make 
+make mpi
 
 %install
 
