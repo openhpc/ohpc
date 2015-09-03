@@ -10,7 +10,7 @@
 # ---------------------------
 
 # URL for FSP repository
-fsp_repo="${fsp_repo:-http://fsp.cmt.intel.com/ForestPeak/15.31/SLE_12_Intel/ForestPeak:15.31.repo}"
+fsp_repo="${fsp_repo:-http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/15.31/CentOS-7.1_Intel/ForestPeak:15.31.repo}"
 
 # Hostname for master server (SMS)
 master_name="${master_name:-sms}"
