@@ -13,7 +13,7 @@
 #  -----------------------------
 #  The top level BLACS directory
 #  -----------------------------
-   BTOPdir = $(RPMBUILDROOT)/BLACS
+   BTOPdir = /home/abuild/rpmbuild/BUILD/BLACS
 
 #  ---------------------------------------------------------------------------
 #  The communication library your BLACS have been written for.
