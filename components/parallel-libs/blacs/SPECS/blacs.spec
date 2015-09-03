@@ -59,6 +59,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.1
 Release:        0
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
+License:        BSD
 Group:          fsp/parallel-libs
 Url:            http://www.netlib.org/blacs
 Source0:        BLACS.tar.gz
