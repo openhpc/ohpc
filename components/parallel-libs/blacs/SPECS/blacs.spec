@@ -86,8 +86,6 @@ of distributed memory platforms.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
-%patch1 -p1
 
 %build
 
