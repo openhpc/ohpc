@@ -47,10 +47,6 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %if %{mpi_family} == openmpi
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%if %{compiler_family} == gnu
-BuildRequires: mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
 %endif
 
 #-fsp-header-comp-end-------------------------------
