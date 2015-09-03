@@ -62,7 +62,7 @@ Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
 Group:          fsp/parallel-libs
 Url:            http://www.netlib.org/blacs
-Source0:        %{pname}-%{version}.tar.gz
+Source0:        BLACS.tar.gz
 Source1:        Bmake.inc
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{FSP_PUB}/doc/contrib
@@ -85,7 +85,7 @@ interface that may be implemented efficiently and uniformly across a large range
 of distributed memory platforms.
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n BLACS
 
 %build
 
