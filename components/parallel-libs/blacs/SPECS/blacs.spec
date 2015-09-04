@@ -95,16 +95,11 @@ make mpi
 
 %install
 
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
-
 %{__mkdir} -p %{buildroot}%{install_path}/include
 %{__mkdir} -p %{buildroot}%{install_path}/lib
 
 
-#install -m 644 lib/*so* %{buildroot}%{install_path}/lib
+install -m 644 lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 LIB/*a %{buildroot}%{install_path}/lib
 install -m 644 SRC/MPI/*h %{buildroot}%{install_path}/include
 
