@@ -4,7 +4,7 @@
  	make $(BLACSCINIT)
  	$(ARCH) $(ARCHFLAGS) $(BLACSLIB) $(Fintobj) $(Cintobj)
  	$(RANLIB) $(BLACSLIB)
-+	$(CC) -shared $(Fintobj) $(Cintobj) -o libblacs.so
++	$(CC) -shared $(Fintobj) -o libblacs.so
  
  $(BLACSFINIT) :
  	$(CC) -o Cblacs_pinfo.o -c $(CCFLAGS) $(BLACSDEFS) -DCallFromC -DMainInF77 \
