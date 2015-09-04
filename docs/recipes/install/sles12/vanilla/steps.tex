@@ -217,7 +217,6 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 %\end{verbatim}
 % end_fsp_run
 
-\clearpage
 \subsection{Define {\em compute} image for provisioning}
 
 With the provisioning services enabled, the next step is to define and
@@ -422,6 +421,7 @@ file to allow loading of the necessary modules.
 \end{lstlisting}
 % end_fsp_run
 
+\clearpage
 % begin_fsp_run
 % fsp_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -591,6 +591,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % fsp_command fi
 % fsp_validation_newline
 
+\clearpage
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
 [master]$ service dhcpd restart
@@ -615,7 +616,6 @@ resets on each of the four compute hosts. Note that the utility requires that
 the \texttt{IPMI\_PASSWORD} environment variable be set with the local BMC password in
 order to work interactively.
 
-\clearpage
 % begin_fsp_run
 % fsp_comment_header Boot compute nodes \ref{sec:boot_computes}
 
@@ -698,7 +698,6 @@ with the \GNU{} toolchain. The resulting output that is included shows that
 pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
-\clearpage
 \begin{lstlisting}[language=bash]
 [master]$ zypper search -t package fftw-gnu-*-fsp
 Loading repository data...
