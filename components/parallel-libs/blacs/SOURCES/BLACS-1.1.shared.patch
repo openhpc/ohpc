@@ -4,7 +4,7 @@
  	make $(BLACSCINIT)
  	$(ARCH) $(ARCHFLAGS) $(BLACSLIB) $(Fintobj) $(Cintobj)
  	$(RANLIB) $(BLACSLIB)
-+	$(CC) -shared -wl,-soname,lib$(BLACSLIB).so $(Fintobj) $(Cintobj) -o lib$(BLACSLIB)
++	$(CC) -shared -wl,-soname,libblacs.so $(Fintobj) $(Cintobj) -o libblacs.so
  
  $(BLACSFINIT) :
  	$(CC) -o Cblacs_pinfo.o -c $(CCFLAGS) $(BLACSDEFS) -DCallFromC -DMainInF77 \
@@ -12,7 +12,7 @@
  	$(CC) -c $(CCFLAGS) $(BLACSDEFS) -DMainInF77 blacs_pinfo_.c
  	$(ARCH) $(ARCHFLAGS) $(BLACSFINIT) blacs_pinfo_.o Cblacs_pinfo.o
  	$(RANLIB) $(BLACSFINIT)
-+	$(CC) -shared -wl,-soname,lib$(BLACSFINIT).so blacs_pinfo_.o Cblacs_pinfo.o -o lib$(BLACSFINIT)
++	$(CC) -shared -wl,-soname,libblacsF77init.so blacs_pinfo_.o Cblacs_pinfo.o -o libblacsF77init.so
  
  $(BLACSCINIT) :
  	$(CC) -o Cblacs_pinfo.o -c $(CCFLAGS) $(BLACSDEFS) -DCallFromC -DMainInC \
@@ -20,7 +20,7 @@
  	$(CC) -c $(CCFLAGS) $(BLACSDEFS) -DMainInC blacs_pinfo_.c
  	$(ARCH) $(ARCHFLAGS) $(BLACSCINIT) blacs_pinfo_.o Cblacs_pinfo.o
  	$(RANLIB) $(BLACSCINIT)
-+	$(CC) -shared -wl,-soname,lib$(BLACSCINIT).so blacs_pinfo_.o Cblacs_pinfo.o -o lib$(BLACSCINIT)
++	$(CC) -shared -wl,-soname,libblacsCinit.so blacs_pinfo_.o Cblacs_pinfo.o -o libblacsCinit.so
  
  #  ------------------
  #  Make the internals
