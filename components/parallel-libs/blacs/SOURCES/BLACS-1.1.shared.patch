@@ -1,0 +1,26 @@
+--- BLACS/SRC/MPI/Makefile	2000-02-24 16:04:50.000000000 -0800
++++ BLACS.patch/SRC/MPI/Makefile	2015-09-04 09:27:01.000000000 -0700
+@@ -88,6 +88,7 @@
+ 	make $(BLACSCINIT)
+ 	$(ARCH) $(ARCHFLAGS) $(BLACSLIB) $(Fintobj) $(Cintobj)
+ 	$(RANLIB) $(BLACSLIB)
++	$(CC) -shared -wl,-soname,lib$(BLACSLIB).so $(Fintobj) $(Cintobj) -o lib$(BLACSLIB)
+ 
+ $(BLACSFINIT) :
+ 	$(CC) -o Cblacs_pinfo.o -c $(CCFLAGS) $(BLACSDEFS) -DCallFromC -DMainInF77 \
+@@ -95,6 +96,7 @@
+ 	$(CC) -c $(CCFLAGS) $(BLACSDEFS) -DMainInF77 blacs_pinfo_.c
+ 	$(ARCH) $(ARCHFLAGS) $(BLACSFINIT) blacs_pinfo_.o Cblacs_pinfo.o
+ 	$(RANLIB) $(BLACSFINIT)
++	$(CC) -shared -wl,-soname,lib$(BLACSFINIT).so blacs_pinfo_.o Cblacs_pinfo.o -o lib$(BLACSFINIT)
+ 
+ $(BLACSCINIT) :
+ 	$(CC) -o Cblacs_pinfo.o -c $(CCFLAGS) $(BLACSDEFS) -DCallFromC -DMainInC \
+@@ -102,6 +104,7 @@
+ 	$(CC) -c $(CCFLAGS) $(BLACSDEFS) -DMainInC blacs_pinfo_.c
+ 	$(ARCH) $(ARCHFLAGS) $(BLACSCINIT) blacs_pinfo_.o Cblacs_pinfo.o
+ 	$(RANLIB) $(BLACSCINIT)
++	$(CC) -shared -wl,-soname,lib$(BLACSCINIT).so blacs_pinfo_.o Cblacs_pinfo.o -o lib$(BLACSCINIT)
+ 
+ #  ------------------
+ #  Make the internals

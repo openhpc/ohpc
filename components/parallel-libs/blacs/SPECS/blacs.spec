@@ -64,6 +64,7 @@ Group:          fsp/parallel-libs
 Url:            http://www.netlib.org/blacs
 Source0:        BLACS.tar.gz
 Source1:        Bmake.inc
+Patch0:         BLACS-1.1.shared.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{FSP_PUB}/doc/contrib
 
@@ -80,6 +81,7 @@ of distributed memory platforms.
 
 %prep
 %setup -q -n BLACS
+%patch0 -p1
 
 %build
 
