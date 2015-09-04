@@ -201,7 +201,7 @@
    F77LOADER      = $(F77)
    F77LOADFLAGS   = 
    CC             = mpicc
-   CCFLAGS        = -O4
+   CCFLAGS        = -O4 -fPIC
    CCLOADER       = $(CC)
    CCLOADFLAGS    = 
 
