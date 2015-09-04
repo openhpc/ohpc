@@ -99,7 +99,7 @@ make mpi
 %{__mkdir} -p %{buildroot}%{install_path}/lib
 
 
-install -m 644 LIB/*so* %{buildroot}%{install_path}/lib
+install -m 644 BLACS/SRC/MPI/*so* %{buildroot}%{install_path}/lib
 install -m 644 LIB/*a %{buildroot}%{install_path}/lib
 install -m 644 SRC/MPI/*h %{buildroot}%{install_path}/include
 
