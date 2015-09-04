@@ -15,7 +15,7 @@ Summary: Example source code and templates for use within FSP environment.
 Name:    examples%{PROJ_DELIM}
 Version: 1.2
 Release: 1
-License: BSD
+License: BSD-3
 Group:   fsp/admin
 Source0: FSP_macros
 Source1: hello.c
@@ -24,19 +24,21 @@ Source3: ifcfg-ib0.sles.ww
 Source4: ifcfg-ib0.centos.ww
 Source5: job.mpi
 Source6: 60-ipath.rules
+Source7: LICENSE
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+DocDir:    %{FSP_PUB}/doc/contrib
 
 %description
 
-Collection of simple example programs and file templates for use wihin
+Collection of simple example programs and file templates for use within
 FSP development environment.
 
 %prep
 
-%build
+%{__cp} %SOURCE7 .
 
-df -h
+%build
 
 %install
 
@@ -49,6 +51,8 @@ install -D -m 0644 %SOURCE4 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/
 install -D -m 0644 %SOURCE5 %{buildroot}%{FSP_HOME}/pub/examples/slurm/job.mpi
 install -D -m 0644 %SOURCE6 %{buildroot}%{FSP_HOME}/pub/examples/udev/60-ipath.rules
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -56,8 +60,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %dir %{FSP_HOME}
-%dir %{FSP_HOME}/pub
-%{FSP_HOME}/pub/examples
+%doc LICENSE
+%{FSP_PUB}
 
 %changelog
 

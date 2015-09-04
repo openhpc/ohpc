@@ -22,7 +22,10 @@ Group:     fsp/admin
 BuildArch: noarch
 Source0:   %{pname}
 Source1:   FSP_macros
+Source2:   LICENSE      
+
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+DocDir:    %{FSP_PUB}/doc/contrib
 
 %define package_target %{FSP_PUB}/%{pname}/%{version}
 
@@ -32,6 +35,8 @@ prun provides a script-based wrapper for launching parallel jobs
 within a resource manager for a variety of MPI families.
 
 %prep
+
+%{__cp} %SOURCE2 .
 
 
 %build
@@ -75,6 +80,8 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -85,6 +92,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
+%dir %{FSP_HOME}
+%doc LICENSE
 %{FSP_HOME}
 
 
