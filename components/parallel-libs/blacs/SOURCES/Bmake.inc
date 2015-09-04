@@ -93,7 +93,7 @@
 #  setting for your platform, compile and run BLACS/INSTALL/xintface.
 #  Choices are: Add_, NoChange, UpCase, or f77IsF2C.
 #  ---------------------------------------------------------------------------
-   INTFACE = -Df77IsF2C
+   INTFACE = -DAdd_
 
 #  ------------------------------------------------------------------------
 #  Allows the user to vary the topologies that the BLACS default topologies
