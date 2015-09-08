@@ -132,7 +132,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
-        -DTrilinos_ENABLE_EXPLICIT_INSTANTIATION:BOOL=ON                \
 %if %{compiler_family} == intel
         -DTrilinos_ENABLE_MueLu:BOOL=OFF                                \
 %endif
