@@ -64,6 +64,7 @@ Source1:   FSP_macros
 Source2:   FSP_setup_compiler
 
 # karl.w.schulz@intel.com (09/08/2015)
+%global _default_patch_fuzz 2
 Patch0:    winfree.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
