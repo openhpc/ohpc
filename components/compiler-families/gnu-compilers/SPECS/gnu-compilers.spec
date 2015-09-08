@@ -17,12 +17,12 @@
 
 %define gmp_version 6.0.0
 %define mpc_version 1.0.3
-%define mpfr_version 3.1.2
+%define mpfr_version 3.1.3
 
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
-Version:   4.9.2
+Version:   5.2.0
 Release:   1
 License:   GPL-3.0+
 Group:     fsp/compiler-families
