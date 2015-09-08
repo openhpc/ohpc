@@ -1,0 +1,133 @@
+diff --git a/src/mpid/ch3/channels/mrail/src/gen2/rdma_iba_1sc.c b/src/mpid/ch3/channels/mrail/src/gen2/rdma_iba_1sc.c
+index 9060d43..6e838b0 100644
+--- a/src/mpid/ch3/channels/mrail/src/gen2/rdma_iba_1sc.c
++++ b/src/mpid/ch3/channels/mrail/src/gen2/rdma_iba_1sc.c
+@@ -1317,6 +1317,24 @@ MPIDI_CH3I_RDMA_win_create (void *base,
+         goto err_postflag_register;
+     }
+ 
++    win_elem_t *new_element = (win_elem_t *) MPIU_Malloc(sizeof(win_elem_t));
++    new_element->next = NULL;
++
++    if (mv2_win_list) {                                                                               
++        new_element->prev = mv2_win_list->prev;                                                         
++        mv2_win_list->prev->next = new_element;                                                     
++        mv2_win_list->prev = new_element;                                                            
++        new_element->next = NULL;                                                              
++    } else {                                                                                  
++        mv2_win_list = new_element;                                                                         
++        mv2_win_list->prev = new_element;                                                           
++        mv2_win_list->next = NULL;                                                             
++    }                          
++
++    new_element->win_base = (*win_ptr)->win_dreg_entry;
++    new_element->complete_counter = (*win_ptr)->completion_counter_dreg_entry;
++    new_element->post_flag = (*win_ptr)->post_flag_dreg_entry; 
++
+     for (i = 0; i < rdma_num_hcas; ++i)
+     {
+         win_info_exchange[my_rank].post_flag_rkeys[i] = 
+@@ -1541,9 +1559,24 @@ fn_exit:
+ 
+ void MPIDI_CH3I_RDMA_win_free(MPID_Win** win_ptr)
+ {
+-    if ((*win_ptr)->win_dreg_entry != NULL) {
+-        dreg_unregister((*win_ptr)->win_dreg_entry);
++    win_elem_t * curr_ptr, *tmp;
++    curr_ptr = mv2_win_list;
++
++    while(curr_ptr != NULL) {
++        if (curr_ptr->win_base != NULL) {
++            dreg_unregister((dreg_entry *)curr_ptr->win_base);
++        }
++        if (curr_ptr->complete_counter) {
++            dreg_unregister((dreg_entry *)curr_ptr->complete_counter);
++        }
++        if (curr_ptr->post_flag != NULL) {
++            dreg_unregister((dreg_entry *)curr_ptr->post_flag);
++        }
++        tmp = curr_ptr;
++        curr_ptr = curr_ptr->next;
++        MPIU_Free(tmp);
+     }
++    mv2_win_list = NULL;
+ 
+     MPIU_Free((*win_ptr)->win_rkeys);
+     MPIU_Free((*win_ptr)->completion_counter_rkeys);
+@@ -1553,14 +1586,6 @@ void MPIDI_CH3I_RDMA_win_free(MPID_Win** win_ptr)
+     MPIU_Free((*win_ptr)->put_get_list);
+     MPIU_Free((*win_ptr)->put_get_list_size_per_process);
+ 
+-    if ((*win_ptr)->completion_counter_dreg_entry != NULL) {
+-        dreg_unregister((*win_ptr)->completion_counter_dreg_entry);
+-    }
+-
+-    if ((*win_ptr)->post_flag_dreg_entry != NULL) {
+-        dreg_unregister((*win_ptr)->post_flag_dreg_entry);
+-    }
+-
+     MPIU_Free((void *) (*win_ptr)->completion_counter);
+     MPIU_Free((void *) (*win_ptr)->all_completion_counter);
+ }
+diff --git a/src/mpid/ch3/channels/mrail/src/gen2/rdma_iba_init.c b/src/mpid/ch3/channels/mrail/src/gen2/rdma_iba_init.c
+index f6e5d92..6bb6603 100644
+--- a/src/mpid/ch3/channels/mrail/src/gen2/rdma_iba_init.c
++++ b/src/mpid/ch3/channels/mrail/src/gen2/rdma_iba_init.c
+@@ -43,6 +43,9 @@ int ring_setup_done = 0;
+ int g_mv2_init_done = 0;
+ #endif
+ 
++/*keep track of registered resources for RMA windows*/
++win_elem_t *mv2_win_list = NULL;
++
+ #undef FUNCNAME
+ #define FUNCNAME MPIDI_CH3I_MRAIL_CM_Alloc
+ #undef FCNAME
+@@ -967,6 +970,25 @@ int MPIDI_CH3I_RDMA_finalize(void)
+     }
+ 
+     deallocate_vbuf_region();
++
++    win_elem_t * curr_ptr, *tmp;
++    curr_ptr = mv2_win_list;
++    while(curr_ptr != NULL) {
++        if (curr_ptr->win_base != NULL) {
++            dreg_unregister((dreg_entry *)curr_ptr->win_base);
++        }
++        if (curr_ptr->complete_counter) {
++            dreg_unregister((dreg_entry *)curr_ptr->complete_counter);
++        }
++        if (curr_ptr->post_flag != NULL) {
++            dreg_unregister((dreg_entry *)curr_ptr->post_flag);
++        }
++        tmp = curr_ptr;
++        curr_ptr = curr_ptr->next;
++        MPIU_Free(tmp);
++    }
++    mv2_win_list = NULL;
++
+     dreg_finalize();
+ 
+     for (i = 0; i < rdma_num_hcas; i++) {
+diff --git a/src/mpid/ch3/channels/mrail/src/gen2/rdma_impl.h b/src/mpid/ch3/channels/mrail/src/gen2/rdma_impl.h
+index 317b340..b12e6c9 100644
+--- a/src/mpid/ch3/channels/mrail/src/gen2/rdma_impl.h
++++ b/src/mpid/ch3/channels/mrail/src/gen2/rdma_impl.h
+@@ -189,6 +189,17 @@ typedef struct ud_addr_info {
+ 
+ struct MPIDI_PG;
+ 
++typedef struct win_element
++{
++    struct win_element *prev;
++    struct win_element *next;
++    void *win_base;
++    void *complete_counter;
++    void *post_flag;
++}win_elem_t;
++
++extern win_elem_t *mv2_win_list;
++
+ extern mv2_MPIDI_CH3I_RDMA_Process_t mv2_MPIDI_CH3I_RDMA_Process;
+ extern int (*perform_blocking_progress) (int hca_num, int num_cqs);
+ extern void (*handle_multiple_cqs) (int num_cqs, int cq_choice, int is_send_completion);
