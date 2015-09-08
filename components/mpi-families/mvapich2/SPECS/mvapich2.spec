@@ -62,6 +62,10 @@ DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   FSP_macros
 Source2:   FSP_setup_compiler
+
+# karl.w.schulz@intel.com (09/08/2015)
+Patch0:    winfree.patch
+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define debug_package %{nil}
@@ -92,6 +96,7 @@ across multiple networks.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch0 -p1
 
 %build
 
