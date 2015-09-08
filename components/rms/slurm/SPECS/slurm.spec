@@ -99,7 +99,7 @@
 %endif
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 14.11.5
+Version: 15.08.0
 Release: %{?dist}
 
 Summary: Slurm Workload Manager
@@ -460,10 +460,10 @@ Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 %setup -n slurm-%{version}
 
 # Intel FSP patches
-%patch1
-%patch2
-%patch3
-%patch4
+### patch1
+### patch2
+### patch3
+### patch4
 
 %build
 %configure \
