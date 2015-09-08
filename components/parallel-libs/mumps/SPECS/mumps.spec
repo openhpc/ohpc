@@ -43,6 +43,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+BuildRequires: scalapack%{PROJ_DELIM}
+Requires:      scalapack%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -64,10 +66,6 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %if %{mpi_family} == openmpi
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%if %{compiler_family} == gnu
-BuildRequires: mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
 %endif
 
 #-fsp-header-comp-end-------------------------------
@@ -124,9 +122,9 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
-# Enable MKL linkage for blas/lapack with gnu builds
+# Enable scalapack linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load scalapack
 %endif
 
 # Select appropriate Makefile.inc with MKL
