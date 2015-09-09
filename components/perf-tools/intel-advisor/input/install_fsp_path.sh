@@ -2,8 +2,9 @@
 
 # FSP: install from release rpms into standard FSP path
 
-version=16.0.70.414655
-release=advisor_xe_2016_beta_update3
+#version=16.0.70.414655 (15.31)
+version=16.1.0.423501
+release=advisor_xe_2016
 relocate_ver=advisor_xe_20$version
 
 input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
@@ -16,9 +17,9 @@ TAR=1
 
 installed_RPMS=""
 
-#for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do 
+for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do 
 
-for rpm in `ls $input_dir/rpm/*.rpm`; do
+#for rpm in `ls $input_dir/rpm/*.rpm`; do
 
     name=`basename $rpm`
 
@@ -36,7 +37,6 @@ for rpm in `ls $input_dir/rpm/*.rpm`; do
     
     if [ $INSTALL -eq 1 ];then
 	echo "installing $rpm...."
-#        rpm -ivh --nodeps --relocate /opt/intel/=/opt/fsp/pub/compiler/intel $rpm
         rpm -ivh --nodeps --relocate /opt/intel/$relocate_ver=/opt/fsp/pub/advisor/$version $rpm
         installed_RPMS="$name $installed_RPMS"
     fi
@@ -44,7 +44,6 @@ done
 
 if [ $TAR -eq 1 ];then
     tar cfz intel-advisor-fsp-$version.tar.gz /opt/fsp/pub/advisor/$version
-#    tar cfz intel-advisor-fsp-$version.tar.gz /opt/fsp/pub/compiler/$version
 fi
 
 
