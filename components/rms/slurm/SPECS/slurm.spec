@@ -463,7 +463,7 @@ Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 ### patch1
 ### patch2
 ### patch3
-### patch4
+patch4
 
 %build
 %configure \
