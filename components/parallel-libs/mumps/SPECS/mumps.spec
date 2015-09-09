@@ -43,8 +43,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-BuildRequires: scalapack%{PROJ_DELIM}
-Requires:      scalapack%{PROJ_DELIM}
+BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
