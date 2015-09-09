@@ -2,8 +2,9 @@
 
 # FSP: install from release rpms into standard FSP path
 
-version=16.0.1.407184
-release=inspector_xe_2015_update1
+#version=16.0.1.407184  # 15.31
+version=16.1.0.423441   # 15.42
+release=inspector_xe_2016
 relocate_ver=inspector_xe_20$version
 
 input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
@@ -17,9 +18,9 @@ TARBALL=1
 
 installed_RPMS=""
 
-#for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm` ; do 
+for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm` ; do 
 
-for rpm in `ls $input_dir/rpm/*.rpm`; do
+#for rpm in `ls $input_dir/rpm/*.rpm`; do
 
     name=`basename $rpm`
 
