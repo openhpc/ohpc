@@ -57,7 +57,7 @@ BuildRequires: intel_licenses
 %define pname openblas
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        0.2.14
 Release:        21.1
 Summary:        An optimized BLAS library based on GotoBLAS2
@@ -86,7 +86,7 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
 
 %prep
-%setup -q -c -T
+%setup -q -n %{pname}-%{version}
 
 # Untar source
 tar -zxf %{SOURCE0}
