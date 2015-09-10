@@ -99,6 +99,7 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 BuildRequires: blas-devel
+BuildRequires: lapack-devel
 
 Provides:      libpord.so.%{version}()(64bit)
 
