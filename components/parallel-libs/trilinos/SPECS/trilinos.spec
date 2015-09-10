@@ -190,13 +190,12 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 #       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
 #       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
 
-make VERBOSE=1
-make %{?_smp_mflags}
+make %{?_smp_mflags} VERBOSE=1
 cd ..
 
 %install
 cd tmp
-make DESTDIR=%{buildroot} install INSTALL='install -p'
+make %{?_smp_mflags} DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
 
 # FSP module file
