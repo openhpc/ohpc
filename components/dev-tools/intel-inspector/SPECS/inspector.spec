@@ -13,7 +13,7 @@
 
 Summary:   Intel(R) Inspector XE
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   16.0.1.407184
+Version:   16.1.0.423441
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   FSP_macros
 Release:   1

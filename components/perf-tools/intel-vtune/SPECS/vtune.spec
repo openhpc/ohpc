@@ -13,7 +13,7 @@
 
 Summary:   Intel(R) VTune(TM) Amplifier XE 2015 Update 2
 Name:      intel-vtune%{PROJ_DELIM}
-Version:   16.0.1.414512
+Version:   16.1.0.424694
 Source0:   intel-vtune-amplifier-fsp-%{version}.tar.gz
 Source1:   FSP_macros
 Release:   1
