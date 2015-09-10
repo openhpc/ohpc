@@ -109,18 +109,14 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 %endif
 
 make    %{?openblas_target} USE_THREAD=1 USE_OPENMP=1 \
-        COMMON_OPT="%{optflags}" NUM_THREADS=64
+        PREFIX=%{buildroot}%{install_path}
 
 %install
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/FSP_setup_compiler
 
-make    USE_THREAD=0 \
-        OPENBLAS_LIBRARY_DIR=%{buildroot}%{install_path}/lib \
-        OPENBLAS_INCLUDE_DIR=%{buildroot}%{install_path}/include \
-        OPENBLAS_CMAKE_DIR=%{buildroot}%{install_path}/cmake \
-        PREFIX=%{buildroot}%{install_path} install 
+make   PREFIX=%{buildroot}%{install_path} install 
 
 # Fix cmake config file
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/cmake/*.cmake
