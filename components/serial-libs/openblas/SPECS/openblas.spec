@@ -89,13 +89,10 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %setup -q -n %{pname}-%{version}
 
 # Untar source
-tar -zxf %{SOURCE0}
-cd OpenBLAS-%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-cd ..
 
 %build
 
