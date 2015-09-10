@@ -126,6 +126,9 @@ sed -i '/#define OPENBLAS_NEEDBUNDERSCORE/,/#define OPENBLAS_VERSION/{//!d}' %{b
 # Remove buildroot
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/lib/cmake/openblas/OpenBLASConfig.cmake
 
+# Remove static lib
+rm -f %{buildroot}%{install_path}/lib/*a
+
 # FSP module file
 %{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
