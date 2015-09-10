@@ -83,10 +83,10 @@ Url:            http://www.netlib.org/lapack-dev/
 Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
 Patch0:         scalapack-2.0.2-shared-lib.patch
-BuildRequires:  blas-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{FSP_PUB}/doc/contrib
 Provides:       libscalapack.so.2()(64bit)
+BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset 
@@ -129,6 +129,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
+module load openblas
 
 make lib
 
