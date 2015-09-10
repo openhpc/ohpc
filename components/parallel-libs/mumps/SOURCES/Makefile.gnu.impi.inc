@@ -80,7 +80,7 @@ LIBPAR = $(SCALAP)  -L$(MPI_DIR)/lib -lmpi
 #LIBPAR = -lmpi++ -lmpi -ltstdio -ltrillium -largs -lt
 INCSEQ = -I$(topdir)/libseq
 LIBSEQ  =  -L$(topdir)/libseq -lmpiseq
-LIBBLAS = -blas
+LIBBLAS = -lblas
 LIBOTHERS = -lpthread -lgomp
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
 CDEFS   = -DAdd_
