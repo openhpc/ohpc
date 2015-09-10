@@ -2,9 +2,11 @@
 
 # FSP: install from release rpms into standard FSP path
 
-version=16.0.0-069
+#version=16.0.0-069
+version=16.0.0-109
 #release=composer_xe_$version
-release_dir=update2/parallel_studio_xe_2016_beta
+#release_dir=update2/parallel_studio_xe_2016_beta (15.31)
+release_dir=parallel_studio_xe_2016_composer_edition
 
 #skip_keys='i486.rpm$|/intel-ipp|/intel-mkl-pgi'
 skip_keys='i486.rpm$|intel-vtune-amplifier|intel-mpi|clck_|intel-advisor|intel-inspector|intel-itac|intel-tc-|intel-ta-'
