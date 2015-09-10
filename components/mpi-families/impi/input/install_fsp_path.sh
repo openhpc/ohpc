@@ -2,16 +2,15 @@
 
 # FSP: install from release rpms into standard FSP path
 
-version=5.1.0.069
-release=vtune_amplifier_xe_2015_update2
-relocate_ver=vtune_amplifier_xe_20$version
-
-input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
+version=5.1.1.109
+input_dir=l_mpi_p_5.1.1.109
 
 INSTALL=1
-TARBALL=0
-UNINSTALL=1
+TARBALL=1
+POST_UNINSTALL=1
 DEVEL=1
+
+installed_RPMS=""
 
 match_keys='intel-mpi'
 skip_keys='i486.rpm$'
@@ -51,16 +50,17 @@ for rpm in `ls $input_dir/rpm/*.rpm`; do
         fi
     fi
 
+    echo "--> installing $rpm...."
     if [ $INSTALL -eq 1 ];then
-        echo "--> installing $rpm...."
         rpm -ivh --nodeps --relocate /opt/intel/=/opt/fsp/pub/compiler/intel $rpm
+        installed_RPMS="$name $installed_RPMS"
     fi
 
-    if [ $UNINSTALL -eq 1 ];then
-	localrpm=`basename --suffix=.rpm $rpm`
-        echo "--> uninstalling $localrpm ...."
-        rpm -e --nodeps $localrpm
-    fi
+###     if [ $UNINSTALL -eq 1 ];then
+### 	localrpm=`basename --suffix=.rpm $rpm`
+###         echo "--> uninstalling $localrpm ...."
+###         rpm -e --nodeps $localrpm
+###     fi
 done
 
 if [ $TARBALL -eq 1 ];then
@@ -74,3 +74,11 @@ if [ $TARBALL -eq 1 ];then
 fi
 
 
+if [ $POST_UNINSTALL -eq 1 ];then
+    echo " "
+    for pkg in $installed_RPMS; do 
+        localrpm=`basename --suffix=.rpm $pkg`
+        echo "[post-install] removing $localrpm...."
+        rpm -e --nodeps $localrpm
+    done
+fi

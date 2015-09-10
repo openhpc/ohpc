@@ -13,7 +13,7 @@
 
 Summary:   Intel(R) MPI Library for Linux* OS
 Name:      intel-mpi%{PROJ_DELIM}
-Version:   5.1.0.069
+Version:   5.1.1.109
 Source0:   intel-impi-fsp-%{version}.tar.gz
 Source1:   FSP_macros
 Release:   1
@@ -27,7 +27,7 @@ AutoReq:   no
 
 Requires:  prun%{PROJ_DELIM}
 
-%define pstudio_ver 2016.0.069
+%define pstudio_ver 2016.0.109 
 
 %include %{_sourcedir}/FSP_macros
 
