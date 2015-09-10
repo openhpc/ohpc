@@ -1,0 +1,29 @@
+Index: OpenBLAS-0.2.9/exports/Makefile
+===================================================================
+--- OpenBLAS-0.2.9.orig/exports/Makefile
++++ OpenBLAS-0.2.9/exports/Makefile
+@@ -26,10 +26,10 @@ ifndef ONLY_CBLAS
+ ONLY_CBLAS	= 0
+ endif
+ 
+-ifeq ($(OSNAME), WINNT)
++
+ ifeq ($(F_COMPILER), GFORTRAN)
+ EXTRALIB += -lgfortran
+-endif
++
+ ifeq ($(USE_OPENMP), 1)
+ ifeq ($(C_COMPILER), GCC)
+ EXTRALIB += -lgomp
+@@ -37,11 +37,6 @@ endif
+ endif
+ endif
+ 
+-ifeq ($(OSNAME), CYGWIN_NT)
+-ifeq ($(F_COMPILER), GFORTRAN)
+-EXTRALIB += -lgfortran
+-endif
+-endif
+ 
+ all::
+ 
