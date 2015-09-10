@@ -118,9 +118,6 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 make   PREFIX=%{buildroot}%{install_path} install 
 
-# Fix cmake config file
-sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/cmake/*.cmake
-
 # Delete info about host cpu
 %ifarch %ix86 x86_64
 sed -i '/#define OPENBLAS_NEEDBUNDERSCORE/,/#define OPENBLAS_VERSION/{//!d}' %{buildroot}%{install_path}/include/openblas_config.h
@@ -151,7 +148,6 @@ prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_CMAKE        %{install_path}/cmake
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
