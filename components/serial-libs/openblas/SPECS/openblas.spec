@@ -172,7 +172,7 @@ EOF
 
 %postun -p /sbin/ldconfig
 
-%files -n lib%{pname}_serial0
+%files
 %{FSP_HOME}
 %{FSP_PUB}
 %doc BACKERS.md Changelog.txt CONTRIBUTORS.md GotoBLAS_00License.txt GotoBLAS_01Readme.txt GotoBLAS_02QuickInstall.txt GotoBLAS_03FAQ.txt GotoBLAS_04FAQ.txt GotoBLAS_05LargePage.txt GotoBLAS_06WeirdPerformance.txt LICENSE README.md TargetList.txt
