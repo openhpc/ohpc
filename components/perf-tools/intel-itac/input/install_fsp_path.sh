@@ -2,9 +2,9 @@
 
 # FSP: install from release rpms into standard FSP path
 
-version=9.1.0.010
+version=9.1.1.017
 
-input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
+input_dir=l_itac_p_9.1.1.017
 
 skip_arch=i486.rpm
 INSTALL=1
