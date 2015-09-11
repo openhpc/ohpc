@@ -108,7 +108,7 @@ module load phdf5
 
 # Enable scalapack linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load openblas
+module load scalapack openblas
 %endif
 
 # icc-impi requires mpiicc wrappers, otherwise dynamic libs are not generated.
