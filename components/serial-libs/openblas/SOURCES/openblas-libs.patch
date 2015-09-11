@@ -1,11 +1,11 @@
---- openblas-0.2.14/Makefile.system	2015-03-24 13:07:07.000000000 -0700
-+++ openblas-0.2.14.patch/Makefile.system	2015-09-10 18:23:13.000000000 -0700
-@@ -556,7 +556,7 @@
- FCOMMON_OPT += -Wall
- #Don't include -lgfortran, when NO_LAPACK=1 or lsbcc
- ifneq ($(NO_LAPACK), 1)
--EXTRALIB += -lgfortran
-+#EXTRALIB += -lgfortran
+--- openblas-0.2.14/Makefile	2015-03-24 13:07:07.000000000 -0700
++++ openblas-0.2.14.patch/Makefile	2015-09-10 18:42:31.000000000 -0700
+@@ -20,7 +20,7 @@
+ SUBDIRS	+= lapack
  endif
- ifdef NO_BINARY_MODE
- ifeq ($(ARCH), mips64)
+ 
+-SUBDIRS_ALL = $(SUBDIRS) test ctest utest exports benchmark ../laswp ../bench
++SUBDIRS_ALL = $(SUBDIRS) test ctest utest benchmark ../laswp ../bench
+ 
+ .PHONY : all libs netlib test ctest shared install
+ .NOTPARALLEL : all libs prof lapack-test install blas-test
