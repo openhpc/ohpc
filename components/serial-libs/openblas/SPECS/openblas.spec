@@ -65,7 +65,6 @@ License:        BSD-3-Clause
 Group:          Productivity/Scientific/Math
 Url:            http://www.openblas.net
 Source0:        https://github.com/xianyi/OpenBLAS/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-# PATCH-FIX-UPSTREAM openblas-libs.patch: Link against libgfortran
 Patch0:         openblas-libs.patch
 # PATCH-FIX-UPSTREAM c_xerbla_no-void-return.patch
 Patch1:         c_xerbla_no-void-return.patch
@@ -88,7 +87,6 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %prep
 %setup -q -n %{pname}-%{version}
 
-%patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
