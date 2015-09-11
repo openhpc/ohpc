@@ -73,14 +73,14 @@ FL = mpif77
 AR = ar vr 
 #RANLIB = ranlib
 RANLIB  = echo
-SCALAP  = -L$(SCALAPACK_LIB) -lscalapack -lblas -llapack
+SCALAP  = -L$(SCALAPACK_LIB) -lscalapack -lopenblas
 INCPAR = -I$(MPI_DIR)/include
 # LIBPAR = $(SCALAP)  -L/usr/local/lib/ -llamf77mpi -lmpi -llam
 LIBPAR = $(SCALAP)  -L$(MPI_DIR)/lib -lmpi 
 #LIBPAR = -lmpi++ -lmpi -ltstdio -ltrillium -largs -lt
 INCSEQ = -I$(topdir)/libseq
 LIBSEQ  =  -L$(topdir)/libseq -lmpiseq
-LIBBLAS = -lblas
+LIBBLAS = -lopenblas
 LIBOTHERS = -lpthread -lgomp
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
 CDEFS   = -DAdd_
