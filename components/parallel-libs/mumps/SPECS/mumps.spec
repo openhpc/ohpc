@@ -96,8 +96,6 @@ BuildRequires: libgomp1
 %else
 BuildRequires: libgomp
 %endif
-BuildRequires: blas-devel
-BuildRequires: lapack-devel
 
 Provides:      libpord.so.%{version}()(64bit)
 
@@ -126,7 +124,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 # Enable scalapack linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load scalapack
+module load scalapack openblas
 %endif
 
 # Select appropriate Makefile.inc with MKL
