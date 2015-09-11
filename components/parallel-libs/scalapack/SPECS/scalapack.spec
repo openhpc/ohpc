@@ -43,6 +43,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
+Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -86,7 +88,6 @@ Patch0:         scalapack-2.0.2-shared-lib.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{FSP_PUB}/doc/contrib
 Provides:       libscalapack.so.2()(64bit)
-BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset 
