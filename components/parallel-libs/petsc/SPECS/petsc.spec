@@ -28,9 +28,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
+BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -107,9 +106,9 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 module load phdf5
 
-# Enable MKL linkage for blas/lapack with gnu builds
+# Enable scalapack linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load openblas
 %endif
 
 # icc-impi requires mpiicc wrappers, otherwise dynamic libs are not generated.
@@ -118,8 +117,10 @@ module load mkl
         --prefix=%{install_path} \
 %if %{compiler_family} == intel
         --FFLAGS="-fPIC" \
-%endif
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
+%else
+        --with-scalapack-dir=$SCALAPACK_DIR \
+%endif
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
         --with-cc=mpiicc    \
@@ -177,15 +178,15 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 (and mkl for gnu compiler families)
+# Require phdf5 (and scalapack for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded phdf5]  } {
         module load phdf5
     }
     if { [is-loaded gnu] } {
-        if { ![is-loaded mkl]  } {
-          module load mkl
+        if { ![is-loaded scalapack]  } {
+          module load scalapack
         }
     }
 }
