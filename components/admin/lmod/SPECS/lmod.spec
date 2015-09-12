@@ -37,13 +37,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
-%if 0%{?suse_verion}
 BuildRequires: lua-filesystem%{PROJ_DELIM}
 BuildRequires: lua-posix%{PROJ_DELIM}
-%else
-BuildRequires: lua-filesystem
-BuildRequires: lua-posix
-%endif
 
 BuildRequires: rsync
 BuildRequires: tcl
@@ -60,13 +55,8 @@ Patch2: lmod.site.patch
 # Known dependencies
 Requires: lua >= %{luaver}
 Requires: tcl
-%if 0%{?suse_verion}
 Requires: lua-filesystem%{PROJ_DELIM}
 Requires: lua-posix%{PROJ_DELIM}
-%else
-Requires: lua-filesystem
-Requires: lua-posix
-%endif
 
 %define debug_package %{nil}
 
