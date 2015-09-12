@@ -119,7 +119,7 @@ module load scalapack openblas
         --FFLAGS="-fPIC" \
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
-        --with-scalapack-dir=$SCALAPACK_DIR \
+        --with-scalapack \
 %endif
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
