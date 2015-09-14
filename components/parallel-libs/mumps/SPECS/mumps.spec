@@ -211,6 +211,14 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { [is-loaded gnu] } {
+        if { ![is-loaded scalapack]  } {
+          module load scalapack
+        }
+    }
+}
+
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
