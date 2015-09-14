@@ -25,7 +25,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.9.3
+Version:   6.0.10
 Release:   1
 License:   MIT
 Group:     fsp/admin
@@ -37,13 +37,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
-%if 0%{?suse_version}
-%if 0%{?suse_version} <= 1220
-BuildRequires: lua-bit%{PROJ_DELIM}
-%endif
-%endif
 BuildRequires: lua-filesystem%{PROJ_DELIM}
 BuildRequires: lua-posix%{PROJ_DELIM}
+
 BuildRequires: rsync
 BuildRequires: tcl
 
@@ -58,9 +54,9 @@ Patch2: lmod.site.patch
 
 # Known dependencies
 Requires: lua >= %{luaver}
+Requires: tcl
 Requires: lua-filesystem%{PROJ_DELIM}
 Requires: lua-posix%{PROJ_DELIM}
-Requires: tcl
 
 %define debug_package %{nil}
 
