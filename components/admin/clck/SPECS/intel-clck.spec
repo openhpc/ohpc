@@ -16,12 +16,10 @@ Name:      intel-clck%{PROJ_DELIM}
 Version:   3.0.1
 Release:   1
 License:   Intel
-URL:       http://intel.com/go/cluster
+URL:       https://clusterready.intel.com/intel-cluster-checker/
 Group:     fsp/admin
 BuildArch: x86_64
-Source1:   stream.static
-Source2:   dgemm_mflops.static
-Source3:   FSP_macros
+Source1:   FSP_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 Requires:  time
@@ -46,10 +44,26 @@ Intel cluster checker.
 %{__mkdir} -p %{buildroot}/
 cd %{buildroot}
 %{__tar} xfz $RPM_SOURCE_DIR/intel-clck%{PROJ_DELIM}-%{version}.tar.gz
-# Update key executiables with static versions
-#cp %{SOURCE1} %{buildroot}/%{FSP_ADMIN}/clck/%{version}/share/intel64/stream
-#cp %{SOURCE2} %{buildroot}/%{FSP_ADMIN}/clck/%{version}/share/intel64/dgemm_mflops
 cd -
+
+# FSP module file
+%{__mkdir} -p %{buildroot}/%{FSP_ADMIN}/modulefiles/clck
+%{__cat} << EOF > %{buildroot}/%{FSP_ADMIN}/modulefiles/clck/%{module_version}
+#%Module1.0#####################################################################
+
+module-whatis "Name: Intel Cluster Checker"
+module-whatis "Version: %{version}"
+module-whatis "Category: diagnostics"
+module-whatis "Description: Intel Cluster Checker"
+module-whatis "URL: https://clusterready.intel.com/intel-cluster-checker/"
+
+set     version			    %{version}
+
+EOF
+
+# Parse shell script to derive module settings
+
+./OHPC_mod_generator.sh /opt/fsp/admin/clck/3.0.1/bin/clckvars.sh >> %{buildroot}/%{FSP_ADMIN}/modulefiles/clck/%{module_version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
