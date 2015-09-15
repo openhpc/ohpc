@@ -64,6 +64,7 @@ EOF
 
 # Parse shell script to derive module settings
 
+%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
 %{_sourcedir}/OHPC_mod_generator.sh /opt/fsp/admin/clck/3.0.1/bin/clckvars.sh >> %{buildroot}/%{FSP_ADMIN}/modulefiles/clck/%{module_version}
 
 %clean
