@@ -49,7 +49,7 @@ cd -
 
 # FSP module file
 %{__mkdir} -p %{buildroot}/%{FSP_ADMIN}/modulefiles/clck
-%{__cat} << EOF > %{buildroot}/%{FSP_ADMIN}/modulefiles/clck/%{module_version}
+%{__cat} << EOF > %{buildroot}/%{FSP_ADMIN}/modulefiles/clck/%{version}
 #%Module1.0#####################################################################
 
 module-whatis "Name: Intel Cluster Checker"
@@ -65,7 +65,7 @@ EOF
 # Parse shell script to derive module settings
 
 %{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{FSP_ADMIN}/clck/%{version}/bin/clckvars.sh >> %{buildroot}/%{FSP_ADMIN}/modulefiles/clck/%{module_version}
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{FSP_ADMIN}/clck/%{version}/bin/clckvars.sh >> %{buildroot}/%{FSP_ADMIN}/modulefiles/clck/%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
