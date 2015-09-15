@@ -60,7 +60,7 @@ for var in `cat $OUTFILE`; do
 done
 
 echo " "
-echo "# machine generated from $inFile"
+echo "# machine generated from `basename $inFile`"
 echo " "
 for var in `cat $OUTFILE`; do 
     varName=`echo $var | awk -F = '{print $1}'` || exit 1
