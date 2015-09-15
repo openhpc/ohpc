@@ -43,11 +43,6 @@ BuildRequires: lua-posix%{PROJ_DELIM}
 BuildRequires: rsync
 BuildRequires: tcl
 
-# ks: disabling AutoReq to deal with /usr/bin/lua not being owned by an rpm in SLES11
-%if 0%{?suse_verion} <= 1220
-AutoReq: 0
-%endif
-
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch
 Patch2: lmod.site.patch
@@ -93,44 +88,30 @@ make DESTDIR=$RPM_BUILD_ROOT install
 #
 ########################################################################
 
-if [ \$EUID -ne 0 ]; then
-
-    # NOOP if running under known resource manager
-     if [ ! -z "\$SLURM_NODELIST" ];then
-         return
-    fi
-
-    export LMOD_SETTARG_CMD=":"
-    export LMOD_FULL_SETTARG_SUPPORT=no
-    export LMOD_COLORIZE=no
-    export LMOD_PREPEND_BLOCK=normal
-    export MODULEPATH=%{FSP_MODULES}
-
-EOF
-
-# Deal with SLES default lua not having /usr/lib64 in search path
-%if 0%{?suse_version} <= 1220
-%{__cat} << EOF >> %{buildroot}/%{_sysconfdir}/profile.d/lmod.sh
-    if [ -n \$LUA_CPATH ];then
-         export LUA_CPATH="%{LUA_CPATH}"
-    fi
-    if [ -n \$LUA_PATH ] ;then
-         export LUA_PATH="%{LUA_PATH}"
-    fi
-EOF
-%endif
-
-%{__cat} << EOF >> %{buildroot}/%{_sysconfdir}/profile.d/lmod.sh
-
-    export BASH_ENV=%{FSP_ADMIN}/lmod/lmod/init/bash
-
-    . %{FSP_ADMIN}/lmod/lmod/init/bash >/dev/null # Module Support
-
-    # Load baseline fsp environment
-
-    module try-add fsp
-
+# NOOP if running under known resource manager
+if [ ! -z "\$SLURM_NODELIST" ];then
+     return
 fi
+
+export LMOD_SETTARG_CMD=":"
+export LMOD_FULL_SETTARG_SUPPORT=no
+export LMOD_COLORIZE=no
+export LMOD_PREPEND_BLOCK=normal
+
+if [ \$EUID -eq 0 ]; then
+    export MODULEPATH=%{FSP_ADMIN}/modulefiles
+else
+    export MODULEPATH=%{FSP_MODULES}
+fi
+
+export BASH_ENV=%{FSP_ADMIN}/lmod/lmod/init/bash
+
+# Initialize modules system
+. %{FSP_ADMIN}/lmod/lmod/init/bash >/dev/null
+
+# Load baseline OpenHPC environment
+module try-add ohpc
+
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{_sysconfdir}/profile.d/lmod.csh
@@ -142,34 +123,25 @@ EOF
 #
 ########################################################################
 
-if ( \`id -u\` != "0" && \$?SLURM_NODELIST ) then
+if ( \$?SLURM_NODELIST ) then
 
     setenv LMOD_SETTARG_CMD ":"
     setenv LMOD_FULL_SETTARG_SUPPORT "no"
     setenv LMOD_COLORIZE "no"
     setenv LMOD_PREPEND_BLOCK "normal"
-    setenv MODULEPATH "%{FSP_MODULE_PATH}"
 
-EOF
-# Deal with SLES default lua not having /usr/lib64 in search path
-%if 0%{?suse_version} <= 1220
-%{__cat} << EOF >> %{buildroot}/%{_sysconfdir}/profile.d/lmod.csh
-    if ( ! \$?LUA_CPATH ) then
-         setenv LUA_CPATH "%{LUA_CPATH}"
+
+    if ( \`id -u\` == "0" ) then
+       setenv MODULEPATH "%{FSP_ADMIN}/modulefiles"
+    else   
+       setenv MODULEPATH "%{FSP_MODULE_PATH}"
     endif
-    if ( ! \$?LUA_PATH ) then
-         setenv LUA_PATH "%{LUA_PATH}"
-    endif
-EOF
-%endif
 
-%{__cat} << EOF >> %{buildroot}/%{_sysconfdir}/profile.d/lmod.csh
+    # Initialize modules system
+    source %{FSP_ADMIN}/lmod/lmod/init/csh >/dev/null
 
-    source %{FSP_ADMIN}/lmod/lmod/init/csh >/dev/null # Module Support
-
-    # Load baseline fsp environment
-
-    module try-add fsp	    
+    # Load baseline OpenHPC environment
+    module try-add ohpc 
 
 endif
 EOF
