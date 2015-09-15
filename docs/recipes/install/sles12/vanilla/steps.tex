@@ -217,7 +217,6 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 %\end{verbatim}
 % end_fsp_run
 
-\clearpage
 \subsection{Define {\em compute} image for provisioning}
 
 With the provisioning services enabled, the next step is to define and
@@ -360,6 +359,7 @@ local cluster environment. These customizations include:
 \begin{itemize*}
 \item Increase memlimits to support MPI jobs over \InfiniBand{}
 \item Restrict ssh access to compute resources
+\item Add Cluster Checker
 \item Add \Lustre{} client
 \end{itemize*}
 
@@ -397,6 +397,9 @@ discussed further in the following sections.
 \end{lstlisting}
 % end_fsp_run
 
+\paragraph{Add Cluster Checker} \label{sec:add_clck}
+\input{../../common/cluster_checker}
+
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 
 \input{../../common/lustre-client}
@@ -422,6 +425,7 @@ file to allow loading of the necessary modules.
 \end{lstlisting}
 % end_fsp_run
 
+\clearpage
 % begin_fsp_run
 % fsp_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -591,6 +595,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % fsp_command fi
 % fsp_validation_newline
 
+\clearpage
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
 [master]$ service dhcpd restart
@@ -615,7 +620,6 @@ resets on each of the four compute hosts. Note that the utility requires that
 the \texttt{IPMI\_PASSWORD} environment variable be set with the local BMC password in
 order to work interactively.
 
-\clearpage
 % begin_fsp_run
 % fsp_comment_header Boot compute nodes \ref{sec:boot_computes}
 
@@ -624,6 +628,11 @@ order to work interactively.
 [master]$ ipmitool -E -I lanplus -H ${c_bmc[1]} -U root chassis power reset   # power cycle c2
 [master]$ ipmitool -E -I lanplus -H ${c_bmc[2]} -U root chassis power reset   # power cycle c3
 [master]$ ipmitool -E -I lanplus -H ${c_bmc[3]} -U root chassis power reset   # power cycle c4
+
+# Optionally boot additional compute nodes
+[master]$ for ((i=4; i<$num_computes; i++)) ; do
+              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U root chassis power reset
+           done
 \end{lstlisting} 
 
 Once kicked off, the boot process should take less than 5 minutes (depending on
@@ -698,7 +707,6 @@ with the \GNU{} toolchain. The resulting output that is included shows that
 pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
-\clearpage
 \begin{lstlisting}[language=bash]
 [master]$ zypper search -t package fftw-gnu-*-fsp
 Loading repository data...
