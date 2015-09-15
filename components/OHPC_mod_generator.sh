@@ -69,7 +69,7 @@ for var in `cat $OUTFILE`; do
     echo $varName | grep -q PATH
 
     if [ $? -eq 0 ];then
-        printf "%-13s %-${maxLen}s %s\n" "prepend_path" $varName $varDef
+        printf "%-13s %-${maxLen}s %s\n" "prepend-path" $varName $varDef
     else
         printf "%-13s %-${maxLen}s %s\n" "setenv" $varName $varDef
     fi
