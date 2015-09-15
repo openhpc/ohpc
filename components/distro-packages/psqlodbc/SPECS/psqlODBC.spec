@@ -88,7 +88,7 @@ autoreconf -fi
 # they don't ship configure.in, so we have to patch configure :(
 sed -i '/LDFLAGS=/s/\$pg_libs//' configure
 export CFLAGS="%optflags -fno-strict-aliasing -I/usr/include/pgsql"
-%configure --with-unixodbc || cat config.log
+%configure --with-unixodbc || { cat config.log && exit 1; }
 
 %install
 make DESTDIR=%buildroot install

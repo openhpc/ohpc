@@ -111,7 +111,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
 %endif
 
-./configure --prefix=%{install_path} ${BASEFLAGS} --enable-static=no || cat config.log
+./configure --prefix=%{install_path} ${BASEFLAGS} --enable-static=no || { cat config.log && exit 1; }
 
 %install
 

@@ -137,7 +137,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 %if 0%{with_slurm}
     --with-pm=no --with-pmi=slurm \
 %endif
-    --enable-fast=O3 || cat config.log
+    --enable-fast=O3 || { cat config.log && exit 1; }
 
 # Remove rpaths
 %{__sed} -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool

@@ -82,7 +82,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-./configure --prefix=%{install_path} --disable-static || cat config.log
+./configure --prefix=%{install_path} --disable-static || { cat config.log && exit 1; }
 make %{?_smp_mflags}
 
 %install

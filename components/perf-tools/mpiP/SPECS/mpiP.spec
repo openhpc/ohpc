@@ -103,7 +103,7 @@ FC=mpif90
 
 
 
-./configure --prefix=%{install_path} --enable-demangling --disable-libunwind || cat config.log
+./configure --prefix=%{install_path} --enable-demangling --disable-libunwind || { cat config.log && exit 1; }
 
 %install
 
