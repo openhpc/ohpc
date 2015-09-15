@@ -20,6 +20,7 @@ URL:       https://clusterready.intel.com/intel-cluster-checker/
 Group:     fsp/admin
 BuildArch: x86_64
 Source1:   FSP_macros
+Source2:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 Requires:  time
