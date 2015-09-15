@@ -97,7 +97,7 @@ across multiple networks.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
+#patch0 -p1
 
 %build
 
