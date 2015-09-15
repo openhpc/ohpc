@@ -1,8 +1,0 @@
---- orcm-0.7.0/contrib/dist/linux/orcmd.sysconfig.orig	2015-04-06 05:00:44.000000000 -0700
-+++ orcm-0.7.0/contrib/dist/linux/orcmd.sysconfig	2015-04-06 10:54:10.000000000 -0700
-@@ -13,4 +13,4 @@
- #
- # Options for orcmd
- #
--ORCMD_OPTS="--omca mca_base_verbose syslog"
-+ORCMD_OPTS="--omca mca_base_verbose syslog,syslogpri:info --omca db_odbc_user orcmuser:orcmpasswd --omca db_odbc_table data_sample --omca db_odbc_dsn orcmdb_psql"
