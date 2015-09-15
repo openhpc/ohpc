@@ -359,6 +359,7 @@ local cluster environment. These customizations include:
 \begin{itemize*}
 \item Increase memlimits to support MPI jobs over \InfiniBand{}
 \item Restrict ssh access to compute resources
+\item Add Cluster Checker
 \item Add \Lustre{} client
 \end{itemize*}
 
@@ -395,6 +396,9 @@ discussed further in the following sections.
 [master]$ echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
 \end{lstlisting}
 % end_fsp_run
+
+\paragraph{Add Cluster Checker} \label{sec:add_clck}
+\input{../../common/cluster_checker}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 
