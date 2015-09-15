@@ -163,7 +163,7 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-lustre=/usr/include/lustre \
 	--with-phdf5="$HDF5_DIR" \
 	--with-zlib=/usr/include \
-	--with-netcdf="$NETCDF_DIR" || cat config.log
+	--with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
 
 # modify libtool script to not hardcode library paths
 sed -i -r -e 's/(hardcode_into_libs)=.*$/\1=no/' \
