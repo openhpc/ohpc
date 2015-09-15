@@ -64,7 +64,7 @@ EOF
 
 # Parse shell script to derive module settings
 
-./OHPC_mod_generator.sh /opt/fsp/admin/clck/3.0.1/bin/clckvars.sh >> %{buildroot}/%{FSP_ADMIN}/modulefiles/clck/%{module_version}
+%{_sourcedir}/OHPC_mod_generator.sh /opt/fsp/admin/clck/3.0.1/bin/clckvars.sh >> %{buildroot}/%{FSP_ADMIN}/modulefiles/clck/%{module_version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
