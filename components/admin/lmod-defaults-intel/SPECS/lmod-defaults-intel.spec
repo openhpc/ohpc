@@ -10,12 +10,11 @@
 
 %include %{_sourcedir}/FSP_macros
 
-%define pname lmod
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   FSP default login environment
 Name:      lmod-defaults-intel%{PROJ_DELIM}
-Version:   1.1
+Version:   1.2
 Release:   1
 License:   BSD
 Group:     fsp/admin
@@ -28,7 +27,7 @@ requires: lmod%{PROJ_DELIM}
 
 %description
 
-Provides default login environment for compiler and MPI combinations.
+Provides default login environment for Intel toolchain (compiler and MPI families).
 
 %prep
 
@@ -37,7 +36,7 @@ Provides default login environment for compiler and MPI combinations.
 %install
 
 mkdir -p %{buildroot}/%{FSP_MODULES}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/fsp
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/ohpc
 #%Module1.0#####################################################################
 # Default FSP environment
 #############################################################################
