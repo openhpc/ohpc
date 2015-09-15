@@ -43,9 +43,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
+BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -133,9 +132,8 @@ export FSP_MPI_FAMILY=%{mpi_family}
 
 module load metis
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load scalapack
 %endif
 
 make superlulib DSuperLUroot=$PWD 
