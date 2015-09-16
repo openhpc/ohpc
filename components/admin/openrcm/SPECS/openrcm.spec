@@ -132,6 +132,7 @@ Requires: sigar%{PROJ_DELIM} >= 1.6.4
 ## john.a.westlund@intel.com addition
 BuildRequires: glibc-headers
 BuildRequires: glibc-devel
+BuildRequires: glibc-static
 Requires:      glibc
 ##
 
@@ -186,6 +187,7 @@ BuildRoot: %{orcm_build_root}
 ## john.a.westlund@intel.com addition
 BuildRequires: glibc-headers
 BuildRequires: glibc-devel
+BuildRequires: glibc-static
 Requires:      glibc
 ##
 
@@ -347,6 +349,7 @@ Requires: sigar%{PROJ_DELIM} >= 1.6.4
 ## john.a.westlund@intel.com addition
 BuildRequires: glibc-headers
 BuildRequires: glibc-devel
+BuildRequires: glibc-static
 Requires:      glibc
 ##
 
