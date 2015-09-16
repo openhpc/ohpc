@@ -183,6 +183,12 @@ URL: %{orcm_url}
 Source0: %{orcm_source}
 BuildRoot: %{orcm_build_root}
 
+## john.a.westlund@intel.com addition
+BuildRequires: glibc-headers
+BuildRequires: glibc-devel
+Requires:      glibc
+##
+
 %description
 This part build and install the Open RCM source tree.
 
