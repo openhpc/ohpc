@@ -56,7 +56,7 @@ cd %{buildroot}
 %{__tar} xfz %{SOURCE0}
 
 # OpenHPC patches
-%{__patch} -p2 < ${SOURCE2}
+%{__patch} -p2 < %{SOURCE2}
 
 cd -
 
