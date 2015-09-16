@@ -133,7 +133,7 @@ export MPICXX=mpicxx
             --enable-static=no       \
             --enable-parallel        \
 	    --enable-shared          \
-	    --enable-fortran2003    || cat config.log
+	    --enable-fortran2003     || { cat config.log && exit 1; }
 
 %install
 

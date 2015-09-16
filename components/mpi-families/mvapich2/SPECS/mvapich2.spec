@@ -97,7 +97,7 @@ across multiple networks.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
+#patch0 -p1
 
 %build
 
@@ -115,7 +115,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
-	    --enable-fast=O3 || cat config.log
+	    --enable-fast=O3 || { cat config.log && exit 1; }
 
 %install
 

@@ -105,7 +105,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
             --enable-static=no       \
 	    --enable-shared          \
 	    --enable-cxx             \
-	    --enable-fortran2003    || cat config.log
+	    --enable-fortran2003    || { cat config.log && exit 1; }
 
 %install
 

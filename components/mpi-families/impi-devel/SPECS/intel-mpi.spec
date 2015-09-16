@@ -25,6 +25,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 #AutoReqProv: no
 
+# 09/16/15 karl.w.schulz@intel.com - patch to enable gfortran 5.2.x MPI module support
+Source2:   gfortran_support_fix.patch
+
 %include %{_sourcedir}/FSP_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
@@ -51,6 +54,10 @@ FSP collection of the Intel(R) MPI toolchain.
 %{__mkdir} -p %{buildroot}/
 cd %{buildroot}
 %{__tar} xfz %{SOURCE0}
+
+# OpenHPC patches
+%{__patch} -p1 < %{SOURCE2}
+
 cd -
 
 %clean

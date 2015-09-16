@@ -160,7 +160,7 @@ export CC=mpicc
     --enable-ncgen4 \
     --with-pic \
     --disable-doxygen \
-    --disable-static || cat config.log
+    --disable-static || { cat config.log && exit 1; }
 
 %install
 # FSP compiler/mpi designation
