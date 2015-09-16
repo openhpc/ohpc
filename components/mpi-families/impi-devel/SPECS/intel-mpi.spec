@@ -26,7 +26,7 @@ AutoReq:   no
 #AutoReqProv: no
 
 # 09/16/15 karl.w.schulz@intel.com - patch to enable gfortran 5.2.x MPI module support
-Patch1: gfortran_support_fix.patch
+Source2:   gfortran_support_fix.patch
 
 %include %{_sourcedir}/FSP_macros
 
@@ -56,7 +56,8 @@ cd %{buildroot}
 %{__tar} xfz %{SOURCE0}
 
 # OpenHPC patches
-%patch1 -p2 
+%{__patch} -p2 < ${SOURCE2}
+
 cd -
 
 %clean
