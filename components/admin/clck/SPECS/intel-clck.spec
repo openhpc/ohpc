@@ -25,6 +25,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 Requires:  time
 
+# 09/16/15 karl.w.schulz@intel.com - patch to ignore XDG_SESSION_ID variable during env test
+Source3:   XDG_SESSION.patch
+
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
@@ -45,6 +48,10 @@ Intel cluster checker.
 %{__mkdir} -p %{buildroot}/
 cd %{buildroot}
 %{__tar} xfz $RPM_SOURCE_DIR/intel-clck%{PROJ_DELIM}-%{version}.tar.gz
+
+# OpenHPC patches
+%{__patch} -p1 < %{SOURCE3}
+
 cd -
 
 # FSP module file
