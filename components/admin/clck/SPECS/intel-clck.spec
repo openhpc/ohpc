@@ -50,7 +50,7 @@ cd %{buildroot}
 %{__tar} xfz $RPM_SOURCE_DIR/intel-clck%{PROJ_DELIM}-%{version}.tar.gz
 
 # OpenHPC patches
-%{__patch} -p1 < %{SOURCE3}
+%{__patch} -p0 < %{SOURCE3}
 
 cd -
 
