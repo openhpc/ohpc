@@ -136,6 +136,7 @@ Requires: sigar%{PROJ_DELIM} >= 1.6.4
 This part build and install the Open RCM source tree.
 
 %prep
+rpm -qa
 %setup -q -n %{orcm_name}-%{orcm_version}
 
 %build
