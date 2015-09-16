@@ -31,12 +31,7 @@
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 # don't stop with an error if we don't pack all files at once
-%define _unpackaged_files_terminate_build  0
-
-# macros to select which part of the specfile should be active
-%{!?build_build: %define build_build 0}
-%{!?build_install: %define build_install 0}
-%{!?build_default: %define build_default 1}
+#%define _unpackaged_files_terminate_build  0
 
 #
 # System versions
@@ -121,8 +116,10 @@ BuildRequires: libtool%{PROJ_DELIM}
 %if 0%{?el6}
 BuildRequires: libtool-ltdl
 %endif 
-BuildRequires: sigar%{PROJ_DELIM} >= 1.6.4
-BuildRequires: sigar-devel%{PROJ_DELIM} >= 1.6.4
+BuildRequires: sigar%{PROJ_DELIM} 
+#>= 1.6.4
+BuildRequires: sigar-devel%{PROJ_DELIM} 
+#>= 1.6.4
 BuildRequires: postgresql
 BuildRequires: postgresql-devel
 ## john.a.westlund@intel.com addition
