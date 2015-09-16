@@ -129,6 +129,11 @@ BuildRequires: postgresql-devel
 Requires: ipmiutil-devel%{PROJ_DELIM} >= 2.9.5
 Requires: sigar%{PROJ_DELIM} >= 1.6.4
 
+## john.a.westlund@intel.com addition
+BuildRequires: glibc-headers
+Requires:      glibc
+##
+
 %description
 This part build and install the Open RCM source tree.
 
