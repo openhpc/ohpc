@@ -251,10 +251,11 @@
  
 --- warewulf-vnfs-3.6/bin/wwbootstrap	2014-05-21 11:13:14.000000000 -0700
 +++ warewulf-vnfs-3.6.patch/bin/wwbootstrap	2014-10-22 10:41:34.007775700 -0700
-@@ -20,6 +20,7 @@
+@@ -20,6 +20,8 @@
  &set_log_level("NOTICE");
  
  $ENV{"PATH"} = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
++delete $ENV{"BASH_ENV"};
 +delete $ENV{"ENV"};
  
  my $randstring = &rand_string("12");
