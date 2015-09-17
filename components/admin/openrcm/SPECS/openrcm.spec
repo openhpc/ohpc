@@ -28,15 +28,51 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+#-fsp-header-comp-begin----------------------------------------------
+
+%include %{_sourcedir}/FSP_macros
+
+# FSP convention: the default assumes the gnu compiler family;
+# however, this can be overridden by specifing the compiler_family
+# variable via rpmbuild or other mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
+%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
+
+# Compiler dependencies
+BuildRequires: lmod%{PROJ_DELIM}
+%if %{compiler_family} == gnu
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
+%endif
+%if %{compiler_family} == intel
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+%if 0%{FSP_BUILD}
+BuildRequires: intel_licenses
+%endif
+%endif
+
+# MPI dependencies
+%if %{mpi_family} == impi
+BuildRequires: intel-mpi-devel%{PROJ_DELIM}
+Requires:      intel-mpi-devel%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == mvapich2
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == openmpi
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+%endif
+
+#-fsp-header-comp-end------------------------------------------------
+
 
 # don't stop with an error if we don't pack all files at once
-%define _unpackaged_files_terminate_build  0
-
-# macros to select which part of the specfile should be active
-%{!?build_build: %define build_build 0}
-%{!?build_install: %define build_install 0}
-%{!?build_default: %define build_default 1}
+#%define _unpackaged_files_terminate_build  0
 
 #
 # System versions
@@ -103,7 +139,6 @@ Prefix: /opt/openrcm
 # Build section
 #
 ######################################################################
-%if %{build_build}
 Summary: Configure and build the Open RCM tree
 Name: %{orcm_name}%{PROJ_DELIM}
 Version: %{orcm_version}
@@ -122,10 +157,16 @@ BuildRequires: libtool%{PROJ_DELIM}
 %if 0%{?el6}
 BuildRequires: libtool-ltdl
 %endif 
-BuildRequires: sigar%{PROJ_DELIM} >= 1.6.4
-BuildRequires: sigar-devel%{PROJ_DELIM} >= 1.6.4
+BuildRequires: sigar%{PROJ_DELIM} 
+#>= 1.6.4
+BuildRequires: sigar-devel%{PROJ_DELIM} 
+#>= 1.6.4
 BuildRequires: postgresql
 BuildRequires: postgresql-devel
+## john.a.westlund@intel.com addition
+BuildRequires: flex
+##
+
 Requires: ipmiutil-devel%{PROJ_DELIM} >= 2.9.5
 Requires: sigar%{PROJ_DELIM} >= 1.6.4
 
@@ -146,48 +187,6 @@ fi
 make -j4
 
 %install
-
-%clean
-
-%files 
-%defattr(-,root,root,-)
-%config %{_sysconfdir}/*
-%{_prefix}/bin/*
-%{_libdir}/*
-%{_includedir}/*
-%doc %{_pkgdatadir}/*
-%doc %{_mandir}/man1/*
-%doc %{_mandir}/man7/*
-%endif 
-
-
-######################################################################
-#
-# Install section
-#
-######################################################################
-%if %{build_install}
-Summary: Install a already compiled tree 
-Name: %{orcm_name}%{PROJ_DELIM}
-Version: %{orcm_version}
-Release: %{orcm_release}
-License: BSD
-Group: fsp/admin
-URL: %{orcm_url}
-Source0: %{orcm_source}
-BuildRoot: %{orcm_build_root}
-
-%description
-This part build and install the Open RCM source tree.
-
-%prep
-
-%build
-
-
-%install
-cd %{orcm_compile_root}
-rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
 
 %if %{uses_systemd}
@@ -281,6 +280,7 @@ fi
 %clean
 
 %files 
+
 %defattr(-,root,root,-)
 %config %{_sysconfdir}/*
 %config /etc/sysconfig/*
@@ -295,117 +295,6 @@ fi
 %else
 %{_initddir}/*
 %endif
-
-%endif
-
-
-######################################################################
-#
-# default  
-#
-######################################################################
-%if %{build_default}
-Summary: Open RCM 
-Name: %{orcm_name}%{PROJ_DELIM}
-Version: %{orcm_version}%{orcm_extra_version}
-Release: %{orcm_release}
-License: %{orcm_license}
-Group: System Environment/Base
-URL: %{orcm_url}
-Source0: %{orcm_source}
-BuildRoot: %{orcm_build_root}
-%if %{uses_systemd}
-BuildRequires:  pkgconfig(systemd)
-%{?systemd_requires}
-%endif
-
-
-BuildRequires: ipmiutil-devel%{PROJ_DELIM} >= 2.9.5
-BuildRequires: libtool%{PROJ_DELIM}
-%if 0%{?el6}
-BuildRequires: libtool-ltdl
-%endif
-BuildRequires: sigar%{PROJ_DELIM} >= 1.6.4 
-BuildRequires: sigar-devel%{PROJ_DELIM} >= 1.6.4
-BuildRequires: postgresql
-BuildRequires: postgresql-devel
-Requires: ipmiutil-devel%{PROJ_DELIM} >= 2.9.5
-Requires: sigar%{PROJ_DELIM} >= 1.6.4
-
-%description
-The Open Resilient Cluster Manager (ORCM)
-
-%prep
-
-%build
-
-BUILD_PACKAGE=1
-for entry in /no_build; do
-    for file in  $RPM_BUILD_ROOT/$entry; do
-        if [ -e $file ] ; then
-            BUILD_PACKAGE=1
-        fi
-    done
-done
-if [ $BUILD_PACKAGE == 1 ] ; then 
-eval export ORCM_PACKAGE_VERSION=`/bin/echo unknown`
-rpmbuild -bc --define '_topdir %_topdir'  --define 'build_build 1' --define 'build_default 0' --define "orcm_package_version $ORCM_PACKAGE_VERSION" %{orcm_specfile}
-fi
-
-BUILD_PACKAGE=1
-for entry in /no_install; do
-    for file in  $RPM_BUILD_ROOT/$entry; do
-        if [ -e $file ] ; then
-            BUILD_PACKAGE=1
-        fi
-    done
-done
-if [ $BUILD_PACKAGE == 1 ] ; then 
-eval export ORCM_PACKAGE_VERSION=`/bin/echo unknown`
-rpmbuild -bi --define '_topdir %_topdir'  --define 'build_install 1' --define 'build_default 0' --define "orcm_package_version $ORCM_PACKAGE_VERSION" %{orcm_specfile}
-fi
-
-
-%install
-cd %{orcm_compile_root}
-#rm -rf $RPM_BUILD_ROOT
-make DESTDIR=$RPM_BUILD_ROOT install
-
-%if %{uses_systemd}
-install -D -m 0644 contrib/dist/linux/orcmd.service %{buildroot}%{_unitdir}/orcmd.service
-install -D -m 0644 contrib/dist/linux/orcmsched.service %{buildroot}%{_unitdir}/orcmsched.service
-%else
-install -D -m 0755 contrib/dist/linux/orcmd.init %{buildroot}%{_initddir}/orcmd
-install -D -m 0755 contrib/dist/linux/orcmsched.init %{buildroot}%{_initddir}/orcmsched
-%endif
-install -D -m 0644 contrib/dist/linux/orcmd.sysconfig %{buildroot}/etc/sysconfig/orcmd
-install -D -m 0644 contrib/dist/linux/orcmsched.sysconfig %{buildroot}/etc/sysconfig/orcmsched
-install -D -m 0644 contrib/database/orcmdb_psql.ini %{buildroot}%{_sysconfdir}/orcmdb_psql.ini
-install -D -m 0644 contrib/database/orcmdb_psql.sql %{buildroot}%{_sysconfdir}/orcmdb_psql.sql
-install -D -m 0644 contrib/database/psql_odbc_driver.ini %{buildroot}%{_sysconfdir}/psql_odbc_driver.ini
-
-
-%clean
-#rm -rf $RPM_BUILD_ROOT
-
-%files
-%defattr(-,root,root,-)
-%config %{_sysconfdir}/*
-%config /etc/sysconfig/*
-%{_prefix}/bin/*
-%{_libdir}/*
-%{_includedir}/*
-%doc %{_pkgdatadir}/*
-%doc %{_mandir}/man1/*
-%doc %{_mandir}/man7/*
-%if %{uses_systemd}
-%{_unitdir}/*
-%else
-%{_initddir}/*
-%endif
-
-%endif
-
 
 #############################################################################
 #
