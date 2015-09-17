@@ -123,10 +123,7 @@ BuildRequires: sigar-devel%{PROJ_DELIM}
 BuildRequires: postgresql
 BuildRequires: postgresql-devel
 ## john.a.westlund@intel.com addition
-BuildRequires: glibc-headers
-BuildRequires: glibc-devel
-BuildRequires: glibc-static
-Requires:      glibc
+BuildRequires: flex
 ##
 
 Requires: ipmiutil-devel%{PROJ_DELIM} >= 2.9.5
@@ -136,7 +133,6 @@ Requires: sigar%{PROJ_DELIM} >= 1.6.4
 This part build and install the Open RCM source tree.
 
 %prep
-rpm -qa
 %setup -q -n %{orcm_name}-%{orcm_version}
 
 %build
@@ -150,8 +146,6 @@ fi
 make -j4
 
 %install
-cd %{orcm_compile_root}
-rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
 
 %if %{uses_systemd}
