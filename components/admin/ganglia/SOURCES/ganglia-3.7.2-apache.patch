@@ -1,0 +1,11 @@
+--- gmond/python_modules/apache_status/apache_status.py.orig	2015-08-19 09:34:42.310000000 +1200
++++ gmond/python_modules/apache_status/apache_status.py	2015-08-19 09:35:33.989000000 +1200
+@@ -86,6 +86,8 @@
+                     for sck in split_line[1]:
+                         metrics[ Scoreboard_bykey[sck] ] += 1
+                 else:
++                    if len(split_line) == 1:
++                        continue
+                     if long_metric_name in Metric_Map:
+                         metric_name = Metric_Map[long_metric_name]
+                     else:

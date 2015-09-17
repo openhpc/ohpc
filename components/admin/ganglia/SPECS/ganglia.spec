@@ -13,8 +13,8 @@
 %define pname ganglia
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-%global gangver     3.7.1
-%global webver      3.6.2
+%global gangver     3.7.2
+%global webver      3.7.0
 
 %global systemd         1
 %global _hardened_build 1
@@ -37,6 +37,7 @@ Source6:            conf.php
 Patch0:             ganglia-web-3.5.7-statedir.patch
 Patch1:             ganglia-3.7.1-py-syntax.patch
 Patch2:             ganglia-no-private-apr.patch
+Patch3:             ganglia-3.7.2-apache.patch
 %if 0%{?systemd}
 BuildRequires:      systemd
 %endif
@@ -157,6 +158,8 @@ programmers can use to build scalable cluster or grid applications
 # fix broken systemd support
 install -m 0644 %{SOURCE2} gmond/gmond.service.in
 install -m 0644 %{SOURCE3} gmetad/gmetad.service.in
+
+%patch3 -p0
 
 # web part
 %setup -n ganglia-%{gangver} -q -T -D -a 1
