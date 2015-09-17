@@ -28,7 +28,48 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+#-fsp-header-comp-begin----------------------------------------------
+
+%include %{_sourcedir}/FSP_macros
+
+# FSP convention: the default assumes the gnu compiler family;
+# however, this can be overridden by specifing the compiler_family
+# variable via rpmbuild or other mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
+%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
+
+# Compiler dependencies
+BuildRequires: lmod%{PROJ_DELIM}
+%if %{compiler_family} == gnu
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
+%endif
+%if %{compiler_family} == intel
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+%if 0%{FSP_BUILD}
+BuildRequires: intel_licenses
+%endif
+%endif
+
+# MPI dependencies
+%if %{mpi_family} == impi
+BuildRequires: intel-mpi-devel%{PROJ_DELIM}
+Requires:      intel-mpi-devel%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == mvapich2
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == openmpi
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+%endif
+
+#-fsp-header-comp-end------------------------------------------------
+
 
 # don't stop with an error if we don't pack all files at once
 #%define _unpackaged_files_terminate_build  0
