@@ -35,7 +35,7 @@ Source4:            ganglia-httpd24.conf.d
 Source5:            ganglia-httpd.conf.d
 Source6:            conf.php
 Patch0:             ganglia-web-3.5.7-statedir.patch
-Patch1:             ganglia-3.7.1-py-syntax.patch
+#Patch1:             ganglia-3.7.1-py-syntax.patch
 Patch2:             ganglia-no-private-apr.patch
 Patch3:             ganglia-3.7.2-apache.patch
 %if 0%{?systemd}
@@ -163,7 +163,7 @@ install -m 0644 %{SOURCE3} gmetad/gmetad.service.in
 
 # web part
 %setup -n ganglia-%{gangver} -q -T -D -a 1
-%patch1 -p1
+#%patch1 -p1
 mv ganglia-web-%{webver} web
 cd web
 %patch0 -p1
