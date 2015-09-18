@@ -262,10 +262,11 @@
  my $tmpdir = "/var/tmp/wwinitrd.$randstring";
 --- warewulf-vnfs-3.6/bin/wwvnfs	2014-05-21 11:13:14.000000000 -0700
 +++ warewulf-vnfs-3.6.patch/bin/wwvnfs	2014-10-22 10:41:33.994773100 -0700
-@@ -265,6 +265,7 @@
+@@ -265,6 +265,8 @@
  
  &dprint("Sanitizing the PATH environment variable\n");
  $ENV{"PATH"} = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
++delete $ENV{"BASH_ENV"};
 +delete $ENV{"ENV"};
  
  
