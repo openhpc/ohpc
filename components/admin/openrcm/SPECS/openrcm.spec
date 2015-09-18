@@ -165,8 +165,11 @@ BuildRequires: postgresql
 BuildRequires: postgresql-devel
 ## john.a.westlund@intel.com addition
 BuildRequires: flex
+%if 0%{?sles_version}
+BuildRequires: libopenssl-devel
+%else
 BuildRequires: openssl-devel
-BuildRequires: openssl
+%endif
 Requires:      openssl
 ##
 
@@ -180,6 +183,7 @@ This part build and install the Open RCM source tree.
 %setup -q -n %{orcm_name}-%{orcm_version}
 
 %build
+./autogen.pl
 ORCM_CONFIGURE_FLAGS="%{orcm_configure_params}"
 ORCM_CONFIGURE_OPTIONS="%{configure_options}"
 if [ "%{orcm_compiler}" != "default" ]; then
