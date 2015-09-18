@@ -43,6 +43,7 @@
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
+BuildRequires: gcc-c++
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
 %endif
@@ -161,14 +162,16 @@ BuildRequires: sigar%{PROJ_DELIM}
 #>= 1.6.4
 BuildRequires: sigar-devel%{PROJ_DELIM} 
 #>= 1.6.4
-BuildRequires: postgresql
-BuildRequires: postgresql-devel
 ## john.a.westlund@intel.com addition
 BuildRequires: flex
 %if 0%{?sles_version}
 BuildRequires: libopenssl-devel
+BuildRequires: postgresql93
+BuildRequires: postgresql93-devel
 %else
 BuildRequires: openssl-devel
+BuildRequires: postgresql
+BuildRequires: postgresql-devel
 %endif
 Requires:      openssl
 ##
