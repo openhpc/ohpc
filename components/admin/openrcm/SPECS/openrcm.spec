@@ -55,18 +55,18 @@ BuildRequires: intel_licenses
 %endif
 
 # MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi-devel%{PROJ_DELIM}
-Requires:      intel-mpi-devel%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%endif
+#%if %{mpi_family} == impi
+#BuildRequires: intel-mpi-devel%{PROJ_DELIM}
+#Requires:      intel-mpi-devel%{PROJ_DELIM}
+#%endif
+#%if %{mpi_family} == mvapich2
+#BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+#Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
+#%endif
+#%if %{mpi_family} == openmpi
+#BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+#Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+#%endif
 
 #-fsp-header-comp-end------------------------------------------------
 
@@ -165,6 +165,9 @@ BuildRequires: postgresql
 BuildRequires: postgresql-devel
 ## john.a.westlund@intel.com addition
 BuildRequires: flex
+BuildRequires: openssl-devel
+BuildRequires: openssl
+Requires:      openssl
 ##
 
 Requires: ipmiutil-devel%{PROJ_DELIM} >= 2.9.5
