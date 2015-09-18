@@ -1,0 +1,21 @@
+diff -Naur a/orte/mca/oob/tcp/oob_tcp.c b/orte/mca/oob/tcp/oob_tcp.c
+--- a/orte/mca/oob/tcp/oob_tcp.c	2015-09-18 15:09:23.000000000 -0700
++++ b/orte/mca/oob/tcp/oob_tcp.c	2015-09-11 15:13:35.000000000 -0700
+@@ -221,7 +221,7 @@
+ static int parse_uri(const uint16_t af_family,
+                      const char* host,
+                      const char *port,
++                     struct sockaddr_in* inaddr)
+-                     struct sockaddr* inaddr)
+ {
+     struct sockaddr_in *in;
+ 
+@@ -290,7 +290,7 @@
+         }
+     }
+ 
++    if ((rc = parse_uri(pop->af_family, pop->net, pop->port, (struct sockaddr_in*) &inaddr)) != ORTE_SUCCESS) {
+-    if ((rc = parse_uri(pop->af_family, pop->net, pop->port, (struct sockaddr*) &inaddr)) != ORTE_SUCCESS) {
+         ORTE_ERROR_LOG(rc);
+         goto cleanup;
+     }

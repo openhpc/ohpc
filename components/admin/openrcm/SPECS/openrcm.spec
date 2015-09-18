@@ -148,6 +148,7 @@ License: BSD
 Group: fsp/admin
 URL: %{orcm_url}
 Source0: %{orcm_source}
+Patch0:  orte_oob_tcp_overflow.patch
 BuildRoot: %{orcm_build_root}
 %if %{uses_systemd}
 BuildRequires:  pkgconfig(systemd)
@@ -184,6 +185,7 @@ This part build and install the Open RCM source tree.
 
 %prep
 %setup -q -n %{orcm_name}-%{orcm_version}
+%patch0 -p1
 
 %build
 ORCM_CONFIGURE_FLAGS="%{orcm_configure_params}"
