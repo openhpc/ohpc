@@ -74,7 +74,6 @@ BuildRequires: -post-build-checks
 %endif
 
 Requires: httpd
-Requires: php
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires: mailx
 
@@ -82,10 +81,12 @@ Requires: mailx
 Requires(preun): initscripts, chkconfig
 Requires(post): initscripts, chkconfig
 Requires(postun): initscripts
+Requires: php
 %else
 Requires(preun): wicked-service,aaa_base
 Requires(post): wicked-service,aaa_base
 Requires(postun): wicked-service
+Requires: php5
 %endif
 
 Requires: %{pname}-common%{PROJ_DELIM}
