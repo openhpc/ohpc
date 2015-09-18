@@ -58,11 +58,6 @@ BuildRequires: samba-client
 BuildRequires: postgresql-devel
 BuildRequires: gettext
 #BuildRequires: %{_bindir}/ssh
-%if 0%{?suse_version}
-BuildRequires: openssh
-%else
-BuildRequires: openssh-clients
-%endif
 BuildRequires: bind-utils
 BuildRequires: ntp
 #BuildRequires: %{_bindir}/mailq
@@ -147,7 +142,11 @@ Summary: Nagios Plugin - check_by_ssh
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
 #Requires: %{_bindir}/ssh
-Requires: openssh-clients
+%if 0%{?suse_version}
+BuildRequires: openssh
+%else
+BuildRequires: openssh-clients
+%endif
 Provides: %{pname}-by_ssh
 
 %description -n %{pname}-by_ssh%{PROJ_DELIM}
@@ -535,7 +534,11 @@ Provides check_real (rtsp) support for Nagios.
 Summary: Nagios Plugin - check_rpc
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+%if 0%{?fedora} || 0%{?rhel}
 Requires: %{_sbindir}/rpcinfo
+%else
+Requires: /sbin/rpcinfo
+%endif`
 Provides: %{pname}-rpc
 
 %description -n %{pname}-rpc%{PROJ_DELIM}
@@ -578,6 +581,11 @@ Provides check_snmp support for Nagios.
 Summary: Nagios Plugin - check_ssh
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+%if 0%{?suse_version}
+BuildRequires: openssh
+%else
+BuildRequires: openssh-clients
+%endif
 Provides: %{pname}-ssh
 
 %description -n %{pname}-ssh%{PROJ_DELIM}
