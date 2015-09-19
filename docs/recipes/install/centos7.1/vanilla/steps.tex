@@ -197,12 +197,14 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 # Enable internal interface for provisioning
 [master]$ ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
 
-# Restart/enable relevant services to support provisioning
+# Restart/enable relevant services to support provisioning and ntp
 [master]$ systemctl restart xinetd 
 [master]$ systemctl enable mariadb.service 
 [master]$ systemctl restart mariadb 
 [master]$ systemctl enable httpd.service 
 [master]$ systemctl restart httpd   
+[master]$ systemctl enable ntpd.service
+[master]$ systemctl restart ntpd
 \end{lstlisting}
 %\end{verbatim}
 % end_fsp_run
