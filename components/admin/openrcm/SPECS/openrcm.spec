@@ -306,6 +306,18 @@ fi
 %else
 %{_initddir}/*
 %endif
+## john.a.westlund@intel.com
+%{_prefix}
+%{_prefix}/bin
+%{_prefix}/etc
+%{_prefix}/include
+%{_prefix}/lib64
+%{_prefix}/share
+%{_prefix}/share/man
+%{_prefix}/share/man/man1
+%{_prefix}/share/man/man7
+%{_prefix}/share/openmpi
+##
 
 #############################################################################
 #
