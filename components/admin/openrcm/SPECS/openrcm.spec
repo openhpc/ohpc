@@ -287,6 +287,11 @@ endif
 EOF
 fi
 
+%post
+/sbin/ldconfig %{_libdir}
+
+%postun
+/sbin/ldconfig %{_libdir}
 
 %clean
 
@@ -308,15 +313,15 @@ fi
 %endif
 ## john.a.westlund@intel.com
 %{_prefix}
-%{_prefix}/bin
-%{_prefix}/etc
-%{_prefix}/include
-%{_prefix}/lib64
-%{_prefix}/share
-%{_prefix}/share/man
-%{_prefix}/share/man/man1
-%{_prefix}/share/man/man7
-%{_prefix}/share/openmpi
+#%{_prefix}/bin
+#%{_prefix}/etc
+#%{_prefix}/include
+#%{_prefix}/lib64
+#%{_prefix}/share
+#%{_prefix}/share/man
+#%{_prefix}/share/man/man1
+#%{_prefix}/share/man/man7
+#%{_prefix}/share/openmpi
 ##
 
 #############################################################################
