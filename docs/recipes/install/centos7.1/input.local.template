@@ -27,6 +27,9 @@ internal_netmask="${internal_netmask:-255.255.0.0}"
 # Provisioning interface used by compute hosts
 eth_provision="${eth_provision:-eth0}"
 
+# Local ntp server for time synchronization
+ntp_server="${ntp_server:-0.centos.pool.ntp.org}"
+
 # BMC user credentials for use by IPMI
 bmc_username="${bmc_username:-unknown}"
 bmc_password="${bmc_password:-unknown}"
