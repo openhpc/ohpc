@@ -264,7 +264,11 @@ fi
 
 
 %post
+%if 0%{?sles_version} || 0%{?suse_version}
+%{_sbindir}/usermod -a -G %{pname} www || :
+%else
 %{_sbindir}/usermod -a -G %{pname} apache || :
+%endif
 /sbin/chkconfig --add %{pname} || :
 /sbin/service httpd condrestart > /dev/null 2>&1 || :
 
@@ -299,8 +303,13 @@ fi
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/objects
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/conf.d
 %attr(0640,root,nagios) %config(noreplace) %{_sysconfdir}/%{pname}/private/resource.cfg
+%if 0%{?sles_version} || 0%{?suse_version}
+%attr(0640,root,www) %config(noreplace) %{_sysconfdir}/%{pname}/passwd
+%attr(0640,root,www) %config(noreplace) %{_datadir}/%{pname}/html/config.inc.php
+%else
 %attr(0640,root,apache) %config(noreplace) %{_sysconfdir}/%{pname}/passwd
 %attr(0640,root,apache) %config(noreplace) %{_datadir}/%{pname}/html/config.inc.php
+%endif
 %attr(2775,nagios,nagios) %dir %{_localstatedir}/spool/%{pname}/cmd
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}/archives
