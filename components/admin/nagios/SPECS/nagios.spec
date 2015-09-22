@@ -265,7 +265,7 @@ fi
 
 %post
 %if 0%{?sles_version} || 0%{?suse_version}
-%{_sbindir}/usermod -a -G %{pname} www || :
+%{_sbindir}/usermod -a -G %{pname} wwwrun || :
 %else
 %{_sbindir}/usermod -a -G %{pname} apache || :
 %endif
@@ -283,6 +283,7 @@ fi
 
 
 %files
+%defattr(-,root,root,-)
 %dir %{_libdir}/%{pname}/plugins/eventhandlers
 %dir %{_libdir}/%{pname}/cgi-bin
 %dir %{_datadir}/%{pname}
