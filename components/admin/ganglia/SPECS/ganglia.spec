@@ -274,12 +274,9 @@ sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{pname}/python_modules/*.py
 /usr/sbin/useradd -c "Ganglia Monitoring System" \
         -s /sbin/nologin -r -d %{_localstatedir}/lib/%{pname} ganglia 2> /dev/null || :
 #/sbin/ldconfig -- this is already in post and postun, no reason to run it before
-/usr/bin/ln -nsf /usr/share/php/Zend /usr/share/%{name}/lib/Zend
 
 %post -p /sbin/ldconfig
-%postun
-/sbin/ldconfig
-/usr/bin/unlink /usr/share/%{name}/lib/Zend
+%postun -p /sbin/ldconfig
 
 %if 0%{?systemd}
 %post -n %{pname}-gmond%{PROJ_DELIM}
@@ -326,8 +323,8 @@ fi
 %postun -n %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
 
 %post -n %{pname}-web%{PROJ_DELIM}
-if [ ! -L /usr/share/ganglia/lib/Zend ]; then
-  ln -s /usr/share/php/Zend /usr/share/%{name}/lib/Zend
+if [ ! -L /usr/share/%{name}/lib/Zend ]; then
+  /usr/bin/ln -s /usr/share/php/Zend /usr/share/%{name}/lib/Zend
 fi
 
 %files
