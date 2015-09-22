@@ -324,6 +324,8 @@ sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{pname}/python_modules/*.py
 %systemd_postun_with_restart gmetad.service
 %endif
 
+%else
+
 %post -n %{pname}-gmond%{PROJ_DELIM}
 /sbin/chkconfig --add gmond
 
