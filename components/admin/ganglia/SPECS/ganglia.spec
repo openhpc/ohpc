@@ -271,7 +271,7 @@ sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{pname}/python_modules/*.py
 
 %pre
 ## Add the "ganglia" user
-/usr/sbin/useradd -c "Ganglia Monitoring System" \
+/usr/sbin/useradd -U -c "Ganglia Monitoring System" \
         -s /sbin/nologin -r -d %{_localstatedir}/lib/%{pname} ganglia 2> /dev/null || :
 #/sbin/ldconfig -- this is already in post and postun, no reason to run it before
 
@@ -384,7 +384,14 @@ fi
 %config(noreplace) %{_sysconfdir}/%{pname}/conf.php
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
 %{_datadir}/%{name}
+%if 0%{?sles_version} || 0%{?suse_version}
+%dir %attr(0755,wwwrun,www) %{_localstatedir}/lib/%{pname}/conf
+%dir %attr(0755,wwwrun,www) %{_localstatedir}/lib/%{pname}/dwoo
+%dir %attr(0755,wwwrun,www) %{_localstatedir}/lib/%{pname}/dwoo/cache
+%dir %attr(0755,wwwrun,www) %{_localstatedir}/lib/%{pname}/dwoo/compiled
+%else
 %dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/conf
 %dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/dwoo
 %dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/dwoo/cache
 %dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/dwoo/compiled
+%endif
