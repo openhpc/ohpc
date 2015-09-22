@@ -61,6 +61,9 @@ BuildRequires:      apr-devel >= 1
 BuildRequires:      expat-devel
 BuildRequires:      libmemcached-devel
 %endif
+%if 0%{?suse_version} >= 1210
+BuildRequires: systemd-rpm-macros
+%endif
 
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
@@ -280,24 +283,46 @@ sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{pname}/python_modules/*.py
 
 %if 0%{?systemd}
 %post -n %{pname}-gmond%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_add_post gmond.service
+%else
 %systemd_post gmond.service
+%endif
 
 %preun -n %{pname}-gmond%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_del_preun gmond.service
+%else
 %systemd_preun gmond.service
+%endif
 
 %postun -n %{pname}-gmond%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_del_postun gmond.service
+%else
 %systemd_postun_with_restart gmond.service
+%endif
 
 %post -n %{pname}-gmetad%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_add_post gmetad.service
+%else
 %systemd_post gmetad.service
+%endif
 
 %preun -n %{pname}-gmetad%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_del_preun gmetad.service
+%else
 %systemd_preun gmetad.service
+%endif
 
 %postun -n %{pname}-gmetad%{PROJ_DELIM}
-%systemd_postun_with_restart gmetad.service
-
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_del_postun gmetad.service
 %else 
+%systemd_postun_with_restart gmetad.service
+%endif
 
 %post -n %{pname}-gmond%{PROJ_DELIM}
 /sbin/chkconfig --add gmond
