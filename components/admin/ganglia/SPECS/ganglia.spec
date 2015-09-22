@@ -259,7 +259,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
 ## Use system php-ZendFramework
 rm -rf $RPM_BUILD_ROOT/usr/share/%{name}/lib/Zend
-ln -nsf /usr/share/php/Zend $RPM_BUILD_ROOT/usr/share/%{name}/lib/Zend
 
 # Remove execute bit
 chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/header.php
@@ -274,10 +273,13 @@ sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{pname}/python_modules/*.py
 ## Add the "ganglia" user
 /usr/sbin/useradd -c "Ganglia Monitoring System" \
         -s /sbin/nologin -r -d %{_localstatedir}/lib/%{pname} ganglia 2> /dev/null || :
-/sbin/ldconfig
+#/sbin/ldconfig -- this is already in post and postun, no reason to run it before
+/usr/bin/ln -nsf /usr/share/php/Zend /usr/share/%{name}/lib/Zend
 
 %post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%postun
+/sbin/ldconfig
+/usr/bin/unlink /usr/share/%{name}/lib/Zend
 
 %if 0%{?systemd}
 %post -n %{pname}-gmond%{PROJ_DELIM}
