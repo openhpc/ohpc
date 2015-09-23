@@ -80,7 +80,7 @@ Version:        2.10.0b
 Release:        0
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
-Group:          fsp/parallel-libs
+Group:          ohpc/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         %{pname}-%{version}.tar.gz
 #Patch0:         hypre-2.8.0b-no-date-and-time-fix.patch

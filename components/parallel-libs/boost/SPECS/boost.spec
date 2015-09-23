@@ -86,7 +86,7 @@ Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.59.0
 Release:        0
 License:        BSL-1.0
-Group:		fsp/parallel-libs
+Group:		ohpc/parallel-libs
 Url:            http://www.boost.org
 Source0:	%{pname}_%{bversion}.tar.gz 
 Source1:        boost-rpmlintrc

@@ -62,7 +62,7 @@ Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
 Version: 4.0.3
 Release: 1
 License: BSD-like
-Group:   fsp/parallel-libs
+Group:   ohpc/parallel-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
 DocDir:  %{OHPC_PUB}/doc/contrib
 Source0: par%{pname}-%{version}.tar.gz
