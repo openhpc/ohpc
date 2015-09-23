@@ -2,9 +2,10 @@
 
 # Install from release rpms into standard OpenHPC path
 
-version=16.0.1.414512 # 15.31
-version=16.1.0.424694 # 15.42
-release=vtune_amplifier_xe_2016  # 15.42
+delim=ohpc
+pubdir=/opt/${delim}/pub
+
+release=vtune_amplifier_xe_2016  # 15.44
 relocate_ver=vtune_amplifier_xe_20$version
 
 input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
@@ -42,8 +43,7 @@ for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do
     if [ $INSTALL -eq 1 ];then
 
         echo "--> installing $rpm...."
-#        rpm -ivh --nodeps --relocate /opt/intel/=/opt/fsp/pub/compiler/intel $rpm || exit 1
-        rpm -ivh --nodeps --relocate /opt/intel/$relocate_ver=/opt/fsp/pub/vtune_amplifier/$version $rpm || exit 1
+        rpm -ivh --nodeps --relocate /opt/intel/$relocate_ver=${pubdir}/vtune_amplifier/$version $rpm || exit 1
         installed_RPMS="$name $installed_RPMS"
     fi
 
@@ -51,7 +51,7 @@ done
 
 
 if [ $TARBALL -eq 1 ];then
-    tar cfz intel-vtune-amplifier-fsp-$version.tar.gz /opt/fsp/pub/vtune_amplifier/$version
+    tar cfz intel-vtune-amplifier-%{delim}-$version.tar.gz ${pubdir}/vtune_amplifier/$version
 fi
 
 if [ $POST_UNINSTALL -eq 1 ];then

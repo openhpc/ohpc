@@ -11,13 +11,13 @@
 %define compiler_family intel
 %{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
-Summary:   Intel(R) VTune(TM) Amplifier XE 2015 Update 2
+Summary:   Intel(R) VTune(TM) Amplifier XE
 Name:      intel-vtune%{PROJ_DELIM}
 Version:   16.1.0.424694
-Source0:   intel-vtune-amplifier-fsp-%{version}.tar.gz
+Source0:   intel-vtune-amplifier%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
 Release:   1
-License:   Copyright (C) 2011-2014 Intel Corporation. All rights reserved.
+License:   Copyright (C) 2011-2015 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
 URL:       http://www.intel.com/software/products/
 Group:     ohpc/perf-tools
@@ -35,7 +35,7 @@ AutoReq:   no
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
-%define package_target /opt/fsp/pub/vtune_amplifier/%{version}
+%define package_target %{OHPC_PUB}/vtune_amplifier/%{version}
 
 %description
 

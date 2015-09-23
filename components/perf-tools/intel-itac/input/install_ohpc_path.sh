@@ -2,6 +2,9 @@
 
 # Install from release rpms into standard OpenHPC path
 
+delim=ohpc
+pubdir=/opt/${delim}/pub
+
 version=9.1.1.017
 
 input_dir=l_itac_p_9.1.1.017
@@ -35,14 +38,14 @@ for rpm in `ls $input_dir/rpm/*.rpm`; do
     if [ $INSTALL -eq 1 ];then
 
         echo "--> installing $rpm...."
-        rpm -ivh --nodeps --relocate /opt/intel/itac/$version=/opt/fsp/pub/itac/$version $rpm || exit 1
+        rpm -ivh --nodeps --relocate /opt/intel/itac/$version=${pubdir}/itac/$version $rpm || exit 1
         installed_RPMS="$name $installed_RPMS"
     fi
 
 done
 
 if [ $TARBALL -eq 1 ];then
-    tar cfz intel-itac-fsp-$version.tar.gz /opt/fsp/pub/itac/$version
+    tar cfz intel-itac-%{delim}-$version.tar.gz ${pubdir}/itac/$version
 fi
 
 if [ $POST_UNINSTALL -eq 1 ];then

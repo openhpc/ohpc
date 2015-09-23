@@ -2,7 +2,9 @@
 
 # Install from release rpms into standard OpenHPC path
 
-#version=16.0.70.414655 (15.31)
+delim=ohpc
+pubdir=/opt/${delim}/pub
+
 version=16.1.0.423501
 release=advisor_xe_2016
 relocate_ver=advisor_xe_20$version
@@ -37,13 +39,13 @@ for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do
     
     if [ $INSTALL -eq 1 ];then
 	echo "installing $rpm...."
-        rpm -ivh --nodeps --relocate /opt/intel/$relocate_ver=/opt/fsp/pub/advisor/$version $rpm
+        rpm -ivh --nodeps --relocate /opt/intel/$relocate_ver=${pubdir}/advisor/$version $rpm
         installed_RPMS="$name $installed_RPMS"
     fi
 done
 
 if [ $TAR -eq 1 ];then
-    tar cfz intel-advisor-fsp-$version.tar.gz /opt/fsp/pub/advisor/$version
+    tar cfz intel-advisor-${delim}-$version.tar.gz ${pubdir}/advisor/$version
 fi
 
 

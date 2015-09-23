@@ -17,7 +17,7 @@ Version:   16.1.0.423501
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
 Release:   1
-License:   Copyright (C) 2014 Intel Corporation. All rights reserved.
+License:   Copyright (C) 2015 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
 URL:       http://www.intel.com/software/products/
 Group:     ohpc/perf-tools
@@ -34,7 +34,7 @@ AutoReq:   no
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
-%define package_target /opt/fsp/pub/%{pname}/%{version}
+%define package_target %{OHPC_PUB}/%{pname}/%{version}
 
 %description
 
