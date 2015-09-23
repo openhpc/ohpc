@@ -8,13 +8,6 @@
 
 % Define Base OS and other local macros
 \newcommand{\baseOS}{CentOS7.1}
-\newcommand{\LosF}{\emph{LosF*}}
-\newcommand{\FSPVersion}{15.42}
-
-\lhead{{2015 \OHPC{} Install Guide - {\small \em \baseOS{} Version}
-    (v\FSPVersion{}) } }
-%\fancyfoot[RE,RO]{\small Last Update: \VCDateISO~(Rev: \VCRevision) - v\FSPVersion{}}
-
 \newcommand{\install}{yum -y install}
 \newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
 \newcommand{\groupinstall}{yum -y groupinstall}
@@ -26,10 +19,11 @@
 
 % Title Page
 
+\lhead{{\OHPC{} Install Guide - {\small \em \baseOS{} Version} (v\OHPCVersion{}) } }
 {\hspace*{4in} \includegraphics[width=1.8in]{intel_1spot_100.pdf}}
 
 \vspace*{2cm}
-\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont 2015 Forest Peak (v\FSPVersion{})} \vspace*{0.1cm} \\
+\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont OpenHPC (v\OHPCVersion{})} \vspace*{0.1cm} \\
 \noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
 \noindent\rule{6in}{0.4pt} \\
 
@@ -75,7 +69,7 @@
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_fsp_repo}
 
-\begin{lstlisting}[language=bash,keywords={},literate={VER}{\FSPVersion{}}1]
+\begin{lstlisting}[language=bash,keywords={},literate={VER}{\OHPCVersion{}}1]
 [master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/CentOS-7.1_Intel/ForestPeak:VER.repo
 
 \end{lstlisting}

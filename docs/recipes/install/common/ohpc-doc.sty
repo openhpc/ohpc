@@ -20,16 +20,19 @@
 %%% \SetWatermarkText{DRAFT / PRE-RELEASE}
 %%% \SetWatermarkScale{1.45}
 
-%\SetWatermarkAngle{0}
-%\SetWatermarkVerCenter{0.5}
+% ----------- Variables to change per release -------------
+
+\newcommand{\OHPCVersion}{15.42}
+
+% ---------------------------------------------------------
+
 
 \pagestyle{fancy}
 \setlength\headheight{59pt}
-%\addtolength{\textheight}{-50pt}
 \addtolength{\topmargin}{-1\baselineskip}
 \addtolength{\textheight}{-4\baselineskip}
 \rhead{\includegraphics[width=0.75in]{intel_1spot_100-crop.pdf}}
-\fancyfoot[CO,CE]{\small \thepage \\ \vspace *{0.7cm} [~Limited availability release~]}
+\fancyfoot[CO,CE]{\small \thepage \\ \vspace *{0.7cm} [~Community release~]}
 \fancyfoot[RE,RO]{\small Last Update: \VCDateISO~(Rev: \VCRevision)}
 
 \lstset{basicstyle=\footnotesize\ttfamily,
@@ -62,3 +65,4 @@
 \newcommand{\Lustre}{Lustre}
 \newcommand{\Nagios}{Nagios}
 \newcommand{\Ganglia}{Ganglia}
+\newcommand{\LosF}{\emph{LosF*}}
