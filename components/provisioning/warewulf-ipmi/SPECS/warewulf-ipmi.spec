@@ -31,8 +31,8 @@ URL: http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
-Requires: warewulf-common-fsp
-BuildRequires: warewulf-common-fsp
+Requires: warewulf-common%{PROJ_DELIM}
+BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
