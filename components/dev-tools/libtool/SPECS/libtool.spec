@@ -70,11 +70,9 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULES}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/autotools
 #%Module1.0#####################################################################
-# FSP Autotools environment
-#############################################################################
 
 proc ModulesHelp { } {
-puts stderr "This module loads the FSP autotools collection to provide recent"
+puts stderr "This module loads the autotools collection to provide recent"
 puts stderr "versions of autoconf, automake, and libtool."
 puts stderr " "
 }
