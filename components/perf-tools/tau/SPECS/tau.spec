@@ -77,10 +77,10 @@ BuildRequires: libgomp
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
-BuildRequires: papi-fsp
-BuildRequires: pdtoolkit-%{compiler_family}-fsp
-Requires: papi-fsp
-Requires: pdtoolkit-%{compiler_family}-fsp
+BuildRequires: papi%{PROJ_DELIM}
+BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+Requires: papi%{PROJ_DELIM}
+Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
 %define debug_package %{nil}
 
@@ -161,7 +161,8 @@ make exports
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
 pushd /tmp
-mv opt/fsp/pub/libs/%{compiler_family}/%{mpi_family}/%{pname}/%version %buildroot%{install_path}/..
+%define tmp_path %{install_path#*/}
+mv %{install_path#*/}%{compiler_family}/%{mpi_family}/%{pname}/%version %buildroot%{install_path}/..
 popd
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
