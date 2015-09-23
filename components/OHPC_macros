@@ -5,7 +5,7 @@
 %define OHPC_PUB        %{OHPC_HOME}/pub
 %define OHPC_COMPILERS  %{OHPC_PUB}/compiler
 %define OHPC_MPI_STACKS %{OHPC_PUB}/mpi
-%define FSP_APPS        %{FSP_PUB}/apps
+%define OHPC_APPS       %{OHPC_PUB}/apps
 %define FSP_LIBS        %{FSP_PUB}/libs
 %define FSP_MODULES     %{FSP_PUB}/modulefiles
 %define FSP_MODULEDEPS  %{FSP_PUB}/moduledeps
