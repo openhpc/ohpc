@@ -29,7 +29,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-# FSP convention: the default assumes the gnu compiler family;
+# OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 

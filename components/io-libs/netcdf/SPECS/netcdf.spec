@@ -31,7 +31,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
