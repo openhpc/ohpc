@@ -78,7 +78,7 @@ Intel(R) Math Kernel Library Basic Linear Algebra Communication Subprograms for 
 
 %build
 
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
@@ -92,7 +92,7 @@ make sointel64 INSTALL_LIBNAME=libmkl_blacs_%{mpi_family}_lp64 INSTALL_DIR=`pwd`
 
 %install
 
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi

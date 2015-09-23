@@ -121,7 +121,7 @@ shown to produce high quality results and scale to very large problems.
 %if %{compiler_family} == intel
 export CFLAGS="-fPIC $CFLAGS"
 %endif
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
@@ -132,7 +132,7 @@ make
 %install
 
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi

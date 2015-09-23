@@ -99,7 +99,7 @@ shown to produce high quality results and scale to very large problems.
 %build
 
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 make config shared=1 prefix=%{install_path}
@@ -108,7 +108,7 @@ make
 %install
 
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 make install DESTDIR=${RPM_BUILD_ROOT}

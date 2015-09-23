@@ -98,7 +98,7 @@ data, and of arbitrary input size.
 %build
 
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 BASEFLAGS="--enable-shared --disable-dependency-tracking --enable-threads"
@@ -116,7 +116,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 %install
 
 # OpenHPC compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi

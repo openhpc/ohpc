@@ -165,7 +165,7 @@ classical statistical tests, time-series analysis, classification, clustering, â
 and graphical techniques, and is highly extensible.
 
 %prep 
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 %setup -n R-%{version}
@@ -173,7 +173,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 %build 
 # OpenHPC compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 export R_BROWSER="xdg-open"
@@ -200,7 +200,7 @@ make %{?_smp_mflags}
 
 %install 
 # OpenHPC compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 make DESTDIR=%{buildroot} install

@@ -209,7 +209,7 @@ and graphical techniques, and is highly extensible.
 ###libraries to allow you to devel with R-base.
 
 %prep 
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 ###%if %{compiler_family} == gnu
@@ -221,7 +221,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 %build 
 # OpenHPC compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 ###%if %{compiler_family} == gnu
@@ -261,7 +261,7 @@ done
 
 %install 
 # OpenHPC compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 ###%if %{compiler_family} == gnu

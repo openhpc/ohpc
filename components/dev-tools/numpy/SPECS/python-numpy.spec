@@ -91,7 +91,7 @@ basic linear algebra and random number generation.
 %patch1 -p1
 %patch2 -p1
 
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 # Enable MKL linkage for blas/lapack with gnu builds
@@ -109,7 +109,7 @@ EOF
 
 %build
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 # Enable MKL linkage for blas/lapack with gnu builds
@@ -128,7 +128,7 @@ python setup.py build $COMPILER_FLAG
 
 %install
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 python setup.py install --root="%{buildroot}" --prefix="%{install_path}"

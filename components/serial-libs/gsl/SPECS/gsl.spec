@@ -75,7 +75,7 @@ lends itself to being used in very high level languages (VHLLs).
 
 %build
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 %if %{compiler_family} == intel
@@ -87,7 +87,7 @@ make %{?_smp_mflags}
 
 %install
 # OpenHPC compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install

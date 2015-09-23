@@ -78,7 +78,7 @@ cd %{buildroot}
 cp %{_sourcedir}/*py .
 
 # OpenHPC compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1

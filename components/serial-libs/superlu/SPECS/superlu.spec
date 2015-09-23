@@ -103,7 +103,7 @@ Docu can be found on http://www.netlib.org.
 %patch3 -p1
 
 %build
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 # Enable MKL linkage for blas/lapack with gnu builds

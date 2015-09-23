@@ -138,7 +138,7 @@ see the boost-doc package.
 
 %build
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 
@@ -181,7 +181,7 @@ install -D -m 0644 %SOURCE3 %{buildroot}%{install_path}/include/boost/intel-mkl/
 
 
 # FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
+export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 
