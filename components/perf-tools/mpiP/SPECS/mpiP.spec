@@ -56,7 +56,7 @@ Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.4.1
 Release:   1
 License:   GPLv2+
-Group:     fsp/perf-tools
+Group:     ohpc/perf-tools
 URL:       http://mpip.sourceforge.net/
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   OHPC_macros

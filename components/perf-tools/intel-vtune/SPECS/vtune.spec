@@ -20,7 +20,7 @@ Release:   1
 License:   Copyright (C) 2011-2014 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
 URL:       http://www.intel.com/software/products/
-Group:     fsp/perf-tools
+Group:     ohpc/perf-tools
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
