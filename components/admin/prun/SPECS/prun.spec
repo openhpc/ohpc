@@ -49,7 +49,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__mkdir} -p %{buildroot}/%{package_target}
 install -D -m 0755 %SOURCE0 %{buildroot}/%{package_target}
 
-# FSP moduelfile
+# OpenHPC modulefile
 
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
