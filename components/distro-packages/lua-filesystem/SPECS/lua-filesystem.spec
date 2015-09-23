@@ -43,7 +43,7 @@ Release:        0
 License:        MIT
 Summary:        Lua library to Access Directories and Files
 Url:            http://keplerproject.github.com/luafilesystem
-Group:          fsp/distro-packages
+Group:          ohpc/distro-packages
 Source:         luafilesystem-%{version}.tar.gz
 # PATCH-FIX_UPSTREAM -- toganm@opensuse.org provide optflags for config
 Patch1:         luafilesystem-%{luaver}-optflags.patch
