@@ -38,7 +38,7 @@ requires:  libpng12-0
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
-%define package_target /opt/fsp/pub/%{pname}/%{version}
+%define package_target %{OHPC_PUB}/%{pname}/%{version}
 
 %description
 

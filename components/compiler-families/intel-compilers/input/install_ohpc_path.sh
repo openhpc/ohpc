@@ -2,10 +2,10 @@
 
 # Install from release rpms into standard OpenHPC path
 
-#version=16.0.0-069
+delim=ohpc
+pubdir=/opt/${delim}/pub
+
 version=16.0.0-109
-#release=composer_xe_$version
-#release_dir=update2/parallel_studio_xe_2016_beta (15.31)
 release_dir=parallel_studio_xe_2016_composer_edition
 
 #skip_keys='i486.rpm$|/intel-ipp|/intel-mkl-pgi'
@@ -45,7 +45,7 @@ for rpm in `ls $release_dir/rpm/*.rpm` ; do
 
     if [ $INSTALL -eq 1 ];then
         echo "--> installing $rpm...."
-        rpm -ivh --nodeps --relocate /opt/intel=/opt/fsp/pub/compiler/intel $rpm
+        rpm -ivh --nodeps --relocate /opt/intel=${pubdir}/compiler/intel $rpm
     fi
 
     if [ $UNINSTALL -eq 1 ];then
@@ -58,10 +58,10 @@ done
 if [ $TAR -eq 1 ];then
     if [ $DEVEL -eq 1 ];then
         echo "creating devel tarball..."
-        tar cfz intel-compilers-devel-fsp-$version.tar.gz /opt/fsp/pub/compiler/intel
+        tar cfz intel-compilers-devel-${delim}-$version.tar.gz ${pubdir}/compiler/intel
     else
         echo "creating runtime tarball..."
-        tar cfz intel-compilers-fsp-$version.tar.gz /opt/fsp/pub/compiler/intel
+        tar cfz intel-compilers-${delim}-$version.tar.gz ${pubdir}/compiler/intel
     fi
 
 fi

@@ -2,8 +2,10 @@
 
 # Install from release rpms into standard OpenHPC path
 
-#version=16.0.1.407184  # 15.31
-version=16.1.0.423441   # 15.42
+delim=ohpc
+pubdir=/opt/${delim}/pub
+
+version=16.1.0.423441   # 15.44
 release=inspector_xe_2016
 relocate_ver=inspector_xe_20$version
 
@@ -38,14 +40,14 @@ for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm` ; do
 
     if [ $INSTALL -eq 1 ];then
         echo "installing $rpm...."
-        rpm -ivh --nodeps --relocate /opt/intel/$relocate_ver=/opt/fsp/pub/inspector/$version $rpm
+        rpm -ivh --nodeps --relocate /opt/intel/$relocate_ver=${pubdir}/inspector/$version $rpm
         installed_RPMS="$name $installed_RPMS"
     fi
 done
 
 
 if [ $TARBALL -eq 1 ];then
-    tar cfz intel-inspector-fsp-$version.tar.gz /opt/fsp/pub/inspector/$version
+    tar cfz intel-inspector-${delim}-$version.tar.gz ${pubdir}/inspector/$version
 fi
 
 if [ $POST_UNINSTALL -eq 1 ];then

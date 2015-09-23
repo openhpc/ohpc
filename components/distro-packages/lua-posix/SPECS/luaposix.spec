@@ -38,8 +38,8 @@ BuildRequires:  lua-bit%{PROJ_DELIM}
 Requires:       lua-bit%{PROJ_DELIM}
 %endif
 Requires:       lua >= %{luaver}
-BuildRequires:  autoconf-fsp
-BuildRequires:  automake-fsp
+BuildRequires:  autoconf%{PROJ_DELIM}
+BuildRequires:  automake%{PROJ_DELIM}
 
 # 02/27/15 karl.w.schulz@intel.com - introduce patch to allow for non-hardcoded path install
 Patch1:  install_path.patch
@@ -56,7 +56,7 @@ to Lua programs.
 
 %build
 # include path to newer autotools
-export PATH=/opt/fsp/pub/autotools/bin:$PATH
+export PATH=%{OHPC_PUB}/autotools/bin:$PATH
 autoreconf
 %configure --libdir=%{lualibdir} --datadir=%{luapkgdir} --docdir=%{_docdir}
 make %{?_smp_mflags}
@@ -64,7 +64,7 @@ make %{?_smp_mflags}
 
 %install
 # include path to newer autotools
-export PATH=/opt/fsp/pub/autotools/bin:$PATH
+export PATH=%{OHPC_PUB}/autotools/bin:$PATH
 
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT

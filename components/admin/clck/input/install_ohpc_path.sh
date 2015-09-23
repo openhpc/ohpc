@@ -2,7 +2,8 @@
 
 # Install from release rpms into standard OpenHPC path
 
-topdir=/opt/ohpc
+delim=ohpc
+admindir=/opt/${delim}/admin
 
 version=3.0.1
 release_dir=l_clck_p_3.0.1.030
@@ -23,7 +24,7 @@ installed_RPMS=""
 
     if [ $INSTALL -eq 1 ];then
         echo "installing $match_keys*.rpm $rpm(s)..."
-        rpm -ivh --nodeps --relocate /opt/intel/clck/$version=${topdir}/admin/clck/$version $input_dir/rpm/$match_keys*.rpm
+        rpm -ivh --nodeps --relocate /opt/intel/clck/$version=${admindir}/clck/$version $input_dir/rpm/$match_keys*.rpm
 
         for rpm in `ls $input_dir/rpm/$match_keys*.rpm`; do
             name=`basename $rpm`
@@ -35,7 +36,7 @@ installed_RPMS=""
 
 
 if [ $TARBALL -eq 1 ];then
-    tar cfz intel-clck-fsp-$version.tar.gz ${topdir}/admin/clck/$version
+    tar cfz intel-clck-${delim}-$version.tar.gz ${admindir}/clck/$version
 fi
 
 if [ $POST_UNINSTALL -eq 1 ];then

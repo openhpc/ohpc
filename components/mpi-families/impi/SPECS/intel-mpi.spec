@@ -14,7 +14,7 @@
 Summary:   Intel(R) MPI Library for Linux* OS
 Name:      intel-mpi%{PROJ_DELIM}
 Version:   5.1.1.109
-Source0:   intel-impi-fsp-%{version}.tar.gz
+Source0:   intel-impi%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
 Release:   1
 License:   Intel
@@ -59,8 +59,8 @@ cd -
 # toolchain with standard front-end names like mpicc, mpif90, etc)
 
 
-%{__mkdir}  %{buildroot}/%{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_fsp
-cd %{buildroot}/%{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_fsp
+%{__mkdir}  %{buildroot}/%{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_ohpc
+cd %{buildroot}/%{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_ohpc
 ln -s ../bin/mpiicc   mpicc
 ln -s ../bin/mpiifort mpif90
 ln -s ../bin/mpiifort mpif77
@@ -103,10 +103,10 @@ prepend-path    LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_%{pstu
 
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/intel-impi
 
-# Prefer bin_fsp to allow developers to use standard mpicc, mpif90,
+# Prefer bin_ohpc to allow developers to use standard mpicc, mpif90,
 # etc to access Intel toolchain.
 
-prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_fsp
+prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_ohpc
 
 
 family "MPI"

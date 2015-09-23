@@ -21,7 +21,7 @@ License:   Intel(R)
 URL:       http://www.intel.com/software/products
 Group:     ohpc/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-fsp-16.0.0-109.tar.gz
+Source0:   intel-compilers%{PROJ_DELIM}-16.0.0-109.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
@@ -82,7 +82,7 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-compilers/"
 set     version			    %{version}
 
 # update module path hierarchy
-prepend-path    MODULEPATH          /opt/fsp/pub/moduledeps/intel
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/intel
 
 setenv          MKLROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/mkl
 prepend-path    PATH                %{package_target}/compilers_and_libraries_20%{version}/linux/bin/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mpirt/bin/intel64_lin:%{package_target}/debugger_2016/gdb/intel64_mic/bin

@@ -28,7 +28,6 @@ Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%{!?OHPC_PUB: %define OHPC_PUB /opt/fsp/pub}
 %define install_path %{OHPC_PUB}/%{pname}/%version
 
 %description 

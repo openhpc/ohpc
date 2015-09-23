@@ -21,7 +21,7 @@ License:   Intel(R)
 URL:       http://www.intel.com/software/products
 Group:     ohpc/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-devel-fsp-16.0.0-109.tar.gz
+Source0:   intel-compilers-devel%{PROJ_DELIM}-16.0.0-109.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no

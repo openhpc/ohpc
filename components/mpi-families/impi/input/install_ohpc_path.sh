@@ -2,6 +2,9 @@
 
 # Install from release rpms into standard OpenHPC path
 
+delim=ohpc
+pubdir=/opt/${delim}/pub
+
 version=5.1.1.109
 input_dir=l_mpi_p_5.1.1.109
 
@@ -52,24 +55,19 @@ for rpm in `ls $input_dir/rpm/*.rpm`; do
 
     echo "--> installing $rpm...."
     if [ $INSTALL -eq 1 ];then
-        rpm -ivh --nodeps --relocate /opt/intel/=/opt/fsp/pub/compiler/intel $rpm
+        rpm -ivh --nodeps --relocate /opt/intel/=${pubdir}/compiler/intel $rpm
         installed_RPMS="$name $installed_RPMS"
     fi
 
-###     if [ $UNINSTALL -eq 1 ];then
-### 	localrpm=`basename --suffix=.rpm $rpm`
-###         echo "--> uninstalling $localrpm ...."
-###         rpm -e --nodeps $localrpm
-###     fi
 done
 
 if [ $TARBALL -eq 1 ];then
     if [ $DEVEL -eq 1 ];then
         echo "Building devel tarball...."
-        tar cfz intel-impi-devel-fsp-$version.tar.gz /opt/fsp/pub/compiler/intel
+        tar cfz intel-impi-devel-${delim}-$version.tar.gz ${OHPC_PUB}/compiler/intel
     else
         echo "Building runtime tarball...."
-        tar cfz intel-impi-fsp-$version.tar.gz /opt/fsp/pub/compiler/intel
+        tar cfz intel-impi-${delim}-$version.tar.gz ${OHPC_PUB}/pub/compiler/intel
     fi
 fi
 

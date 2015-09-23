@@ -25,8 +25,6 @@ Source0:   automake-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
-%define debug_package %{nil}
-%{!?OHPC_PUB: %define OHPC_PUB /opt/fsp/pub}
 %define install_path %{OHPC_PUB}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
