@@ -62,7 +62,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.8.15
 Release:   1
 License:   BSD-style
-Group:     fsp/io-libs
+Group:     ohpc/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   %{pname}-%{version}-patch1.tar.gz

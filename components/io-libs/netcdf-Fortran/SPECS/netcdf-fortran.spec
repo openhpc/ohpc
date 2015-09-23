@@ -79,7 +79,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
-Group:          fsp/io-libs
+Group:          ohpc/io-libs
 Version:        4.4.2
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/

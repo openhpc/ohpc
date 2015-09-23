@@ -65,7 +65,7 @@ Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 1.8.0
 Release: 1
 License: BSD-3-Clause
-Group:   fsp/io-libs
+Group:   ohpc/io-libs
 DocDir:  %{OHPC_PUB}/doc/contrib
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: %{pname}-%{version}.tar.gz
