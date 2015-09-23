@@ -100,7 +100,7 @@ differential equations.
 %build
 # FSP compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 

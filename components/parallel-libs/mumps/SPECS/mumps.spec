@@ -118,7 +118,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %build
 
 export OHPC_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
@@ -159,7 +159,7 @@ cp -f %{S:4} Makefile.inc
 %endif 
 
 #export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
-make MUMPS_MPI=$FSP_MPI_FAMILY \
+make MUMPS_MPI=$OHPC_MPI_FAMILY \
      FC=mpif77 \
      MUMPS_LIBF77="$LIBS" \
      OPTC="$RPM_OPT_FLAGS" all
@@ -169,7 +169,7 @@ make MUMPS_MPI=$FSP_MPI_FAMILY \
 %install
 
 export OHPC_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 

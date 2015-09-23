@@ -143,7 +143,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 
 
 %if %build_mpi
-export FSP_MPI_FAMILY=%{mpi_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 export CC=mpicc
 export CXX=mpicxx
@@ -186,7 +186,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 
 
 %if %build_mpi
-export FSP_MPI_FAMILY=%{mpi_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 export CC=mpicc
 export CXX=mpicxx
