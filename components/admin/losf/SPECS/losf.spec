@@ -108,7 +108,7 @@ fi
 %files
 %defattr(-,root,root,-)
 %if 0%{?OHPC_build}
-%dir %{FSP_HOME}
+%dir %{OHPC_HOME}
 %dir %{prefix}
 
 %endif

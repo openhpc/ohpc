@@ -1,6 +1,6 @@
 %define OHPC_BUILD 1
 %define PROJ_NAME      ohpc
-%define FSP_HOME       /opt/%{PROJ_NAME}
+%define OHPC_HOME       /opt/%{PROJ_NAME}
 %define FSP_ADMIN      %{FSP_HOME}/admin
 %define FSP_LOCAL      %{FSP_HOME}/local
 %define FSP_PUB        %{FSP_HOME}/pub

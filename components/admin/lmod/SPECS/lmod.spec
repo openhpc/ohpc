@@ -154,7 +154,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_HOME}
+%dir %{OHPC_HOME}
 %dir %{FSP_ADMIN}
 %{FSP_ADMIN}/lmod
 %config %{_sysconfdir}/profile.d/lmod.sh

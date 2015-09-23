@@ -42,14 +42,14 @@ FSP development environment.
 
 %install
 
-install -D -m 0644 %SOURCE1 %{buildroot}%{FSP_HOME}/pub/examples/mpi/hello.c
-install -D -m 0644 %SOURCE2 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0
-install -D -m 0644 %SOURCE2 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/ifcfg-ib0
+install -D -m 0644 %SOURCE1 %{buildroot}%{OHPC_HOME}/pub/examples/mpi/hello.c
+install -D -m 0644 %SOURCE2 %{buildroot}%{OHPC_HOME}/pub/examples/network/sles/ifcfg-ib0
+install -D -m 0644 %SOURCE2 %{buildroot}%{OHPC_HOME}/pub/examples/network/centos/ifcfg-ib0
 
-install -D -m 0644 %SOURCE3 %{buildroot}%{FSP_HOME}/pub/examples/network/sles/ifcfg-ib0.ww
-install -D -m 0644 %SOURCE4 %{buildroot}%{FSP_HOME}/pub/examples/network/centos/ifcfg-ib0.ww
-install -D -m 0644 %SOURCE5 %{buildroot}%{FSP_HOME}/pub/examples/slurm/job.mpi
-install -D -m 0644 %SOURCE6 %{buildroot}%{FSP_HOME}/pub/examples/udev/60-ipath.rules
+install -D -m 0644 %SOURCE3 %{buildroot}%{OHPC_HOME}/pub/examples/network/sles/ifcfg-ib0.ww
+install -D -m 0644 %SOURCE4 %{buildroot}%{OHPC_HOME}/pub/examples/network/centos/ifcfg-ib0.ww
+install -D -m 0644 %SOURCE5 %{buildroot}%{OHPC_HOME}/pub/examples/slurm/job.mpi
+install -D -m 0644 %SOURCE6 %{buildroot}%{OHPC_HOME}/pub/examples/udev/60-ipath.rules
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
@@ -59,7 +59,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_HOME}
+%dir %{OHPC_HOME}
 %doc LICENSE
 %{FSP_PUB}
 

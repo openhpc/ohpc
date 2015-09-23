@@ -30,7 +30,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 ### Requires: pdsh-rcmd
 
 # Default library install path
-%define install_path %{FSP_HOME}/admin/%{pname}
+%define install_path %{OHPC_HOME}/admin/%{pname}
 
 #
 # Enabling and disabling pdsh options
@@ -400,7 +400,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %defattr(-,root,root)
 %doc COPYING README NEWS DISCLAIMER 
 %doc README.KRB4 README.modules README.QsNet
-%{FSP_HOME}
+%{OHPC_HOME}
 %{FSP_PUB}
 %{_bindir}/pdsh
 %{_bindir}/dshbak

@@ -194,7 +194,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 %{FSP_PUB}
 %doc NEWS
 %doc README

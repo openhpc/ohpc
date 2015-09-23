@@ -71,7 +71,7 @@ install -m 0644 -p %{source_path}/../input.local.template %{buildroot}/%{FSP_PUB
 
 %files
 %defattr(-,root,root)
-%dir %{FSP_HOME}
+%dir %{OHPC_HOME}
 %{FSP_PUB}
 %doc docs/LICENSE
 

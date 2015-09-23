@@ -166,7 +166,7 @@ rm -fr %buildroot
 
 %files
 %defattr(-,root,root)
-%{FSP_HOME}
+%{OHPC_HOME}
 
 %{FSP_PUB}
 %doc BUILD.txt Changelog Install.txt LICENSE.txt

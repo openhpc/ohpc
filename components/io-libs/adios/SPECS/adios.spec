@@ -274,7 +274,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 %doc AUTHORS
 %doc COPYING
 %doc ChangeLog

@@ -92,9 +92,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_HOME}
+%dir %{OHPC_HOME}
 %doc LICENSE
-%{FSP_HOME}
+%{OHPC_HOME}
 
 
 

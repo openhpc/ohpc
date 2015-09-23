@@ -111,7 +111,7 @@ install -m644 *so %{buildroot}$MPI_DIR/lib/.
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 
 %changelog
 

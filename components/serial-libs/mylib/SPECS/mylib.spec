@@ -45,7 +45,7 @@ URL:       http://random.org
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:    %{FSP_HOME}/doc/contrib
+DocDir:    %{OHPC_HOME}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -116,7 +116,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 
 %{FSP_PUB}
 %doc AUTHORS ChangeLog COPYING INSTALL NEWS README

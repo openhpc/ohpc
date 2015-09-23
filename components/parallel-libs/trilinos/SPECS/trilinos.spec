@@ -248,7 +248,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 %{FSP_PUB}
 %doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 

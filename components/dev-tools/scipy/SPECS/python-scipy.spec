@@ -250,7 +250,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 %{FSP_PUB}
 %doc THANKS.txt
 %doc LICENSE.txt

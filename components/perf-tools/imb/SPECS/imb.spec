@@ -163,7 +163,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 %{FSP_PUB}
 %doc license/license.txt license/use-of-trademark-license.txt ReadMe_IMB.txt
 

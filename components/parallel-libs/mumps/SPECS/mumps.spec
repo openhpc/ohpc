@@ -246,7 +246,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 %{FSP_PUB}
 %doc ChangeLog CREDITS INSTALL LICENSE README VERSION
 

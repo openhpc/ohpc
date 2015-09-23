@@ -271,7 +271,7 @@ export NO_BRP_CHECK_RPATH true
 
 %files
 %defattr(-,root,root)
-%{FSP_HOME}
+%{OHPC_HOME}
 %doc ChangeLog
 %doc COPYING
 %doc README

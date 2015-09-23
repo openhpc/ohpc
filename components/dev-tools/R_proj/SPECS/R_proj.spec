@@ -389,7 +389,7 @@ export NO_BRP_CHECK_RPATH true
 #*#%files -n R-base%files -n %{name}
 %files
 %defattr(-,root,root)
-%{FSP_HOME}
+%{OHPC_HOME}
 
 
 # ld.so.conf
