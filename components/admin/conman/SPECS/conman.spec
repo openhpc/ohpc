@@ -21,7 +21,7 @@ Version:	0.2.7
 Release:	1%{?dist}
 
 Summary:	ConMan: The Console Manager
-Group:		fsp/admin
+Group:		ohpc/admin
 License:	GPLv3+
 URL:		http://conman.googlecode.com/
 DocDir:         %{OHPC_PUB}/doc/contrib

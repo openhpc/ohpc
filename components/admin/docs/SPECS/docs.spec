@@ -15,7 +15,7 @@ Version:        15.42
 Release:        1
 Summary:        Forest Peak documentation
 License:        BSD-3-Clause
-Group:          fsp/admin
+Group:          ohpc/admin
 Source0:        docs-fsp.tar
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption

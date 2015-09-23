@@ -17,7 +17,7 @@ Version:   3.0.1
 Release:   1
 License:   Intel
 URL:       https://clusterready.intel.com/intel-cluster-checker/
-Group:     fsp/admin
+Group:     ohpc/admin
 BuildArch: x86_64
 Source1:   OHPC_macros
 Source2:   OHPC_mod_generator.sh

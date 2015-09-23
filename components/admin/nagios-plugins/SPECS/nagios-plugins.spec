@@ -25,7 +25,7 @@ Version: 2.0.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program plugins for Nagios
 DocDir:  %{OHPC_PUB}/doc/contrib
-Group: fsp/admin
+Group: ohpc/admin
 
 License: GPLv2+
 URL: https://www.nagios-plugins.org/

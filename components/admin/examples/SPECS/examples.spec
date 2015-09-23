@@ -16,7 +16,7 @@ Name:    examples%{PROJ_DELIM}
 Version: 1.2
 Release: 1
 License: BSD-3
-Group:   fsp/admin
+Group:   ohpc/admin
 Source0: OHPC_macros
 Source1: hello.c
 Source2: ifcfg-ib0

@@ -18,7 +18,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   0.52.0
 Release:   1
 License:   GPL-2
-Group:     fsp/admin
+Group:     ohpc/admin
 BuildArch: noarch
 URL:       https://github.com/hpcsi/losf 
 Source0:   %{pname}-%{version}.tar.gz

@@ -21,7 +21,7 @@ Name:    %{pname}%{PROJ_DELIM}
 Version: 3.5.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program
-Group:   fsp/admin
+Group:   ohpc/admin
 License: GPLv2
 URL: http://www.nagios.org/
 DocDir:  %{OHPC_PUB}/doc/contrib

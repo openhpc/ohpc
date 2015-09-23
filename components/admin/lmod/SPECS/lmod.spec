@@ -28,7 +28,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   6.0.10
 Release:   1
 License:   MIT
-Group:     fsp/admin
+Group:     ohpc/admin
 Url:       https://github.com/TACC/Lmod
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   Lmod-%{version}.tar.bz2

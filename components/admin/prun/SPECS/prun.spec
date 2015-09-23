@@ -18,7 +18,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   0.1.0
 Release:   1
 License:   BSD
-Group:     fsp/admin
+Group:     ohpc/admin
 BuildArch: noarch
 Source0:   %{pname}
 Source1:   OHPC_macros

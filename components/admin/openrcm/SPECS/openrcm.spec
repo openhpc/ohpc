@@ -105,7 +105,7 @@ Name: %{orcm_name}%{PROJ_DELIM}
 Version: %{orcm_version}
 Release: %{orcm_release}
 License: BSD
-Group: fsp/admin
+Group: ohpc/admin
 URL: %{orcm_url}
 Source0: %{orcm_source}
 Patch0:  orte_oob_tcp_overflow.patch

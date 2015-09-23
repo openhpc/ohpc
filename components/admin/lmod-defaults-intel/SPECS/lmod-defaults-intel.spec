@@ -17,7 +17,7 @@ Name:      lmod-defaults-intel%{PROJ_DELIM}
 Version:   1.2
 Release:   1
 License:   BSD
-Group:     fsp/admin
+Group:     ohpc/admin
 BuildArch: noarch
 Source0:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
