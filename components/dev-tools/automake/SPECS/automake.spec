@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname automake
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -22,7 +22,7 @@ Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/automake/
 DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   automake-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}

@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname libtool
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -22,7 +22,7 @@ Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/libtool/
 DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   libtool-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory

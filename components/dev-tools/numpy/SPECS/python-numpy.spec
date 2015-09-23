@@ -12,7 +12,7 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # FSP convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
@@ -52,7 +52,7 @@ Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          fsp/dev-tools
 Source0:        %{pname}-%{version}.tar.gz
-Source1:        FSP_macros
+Source1:        OHPC_macros
 Source2:        FSP_setup_compiler
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelc.patch

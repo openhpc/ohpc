@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname autoconf
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -22,7 +22,7 @@ Group:     fsp/dev-tools
 DocDir:    %{FSP_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   autoconf-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 Requires: m4

@@ -29,7 +29,7 @@
 # MPI family; however, these can be overridden by specifing the
 # compiler_family variable via rpmbuild or other
 # mechanisms.
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %{!?compiler_family:	%define compiler_family gnu}
 %{!?PROJ_DELIM:		%define PROJ_DELIM   %{nil}}
@@ -66,7 +66,7 @@ Version:        3.2.0
 Source:         R-%{version}.tar.gz
 #Source: http://cran.r-project.org/src/base/R-2/R-%%{version}.tar.gz
 # PATCH-FIX-UPSTREAM Fix tre when wchar_t is unsigned int
-#Source1:        FSP_macros
+#Source1:        OHPC_macros
 #Source2:        FSP_setup_compiler
 Patch:          tre.patch
 Url:            http://www.r-project.org/

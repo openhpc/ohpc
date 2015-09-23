@@ -31,7 +31,7 @@
 # MPI family; however, these can be overridden by specifing the
 # compiler_family variable via rpmbuild or other
 # mechanisms.
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %{!?compiler_family:	%define compiler_family gnu}
 %{!?PROJ_DELIM:		%define PROJ_DELIM   %{nil}}

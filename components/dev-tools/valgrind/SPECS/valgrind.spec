@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname valgrind
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -24,7 +24,7 @@ URL:       http://www.valgrind.org/
 DocDir:    %{FSP_PUB}/doc/contrib
 Group:     fsp/dev-tools
 Source:    valgrind-%{version}.tar.bz2
-Source1:   FSP_macros
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
