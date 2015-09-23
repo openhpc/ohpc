@@ -249,7 +249,6 @@ make %{?_smp_mflags}
 ###make pdf
 %if 0%{?suse_version}
 ### don't make info
-### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
 %else
 make info
 # Convert to UTF-8
@@ -283,7 +282,6 @@ echo %{_infodir}
 ### 
 %if 0%{?suse_version}
 ### don't make info
-### need texinfo > 5.1 but SLE12 only provides ver 4.xx; update the distro or add newer texinfo to FSP?
 %else
 make DESTDIR=%{buildroot} install-info
 %{__rm} -f %{buildroot}%{_infodir}/dir
