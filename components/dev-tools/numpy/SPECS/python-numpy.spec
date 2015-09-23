@@ -50,7 +50,7 @@ Url:            http://sourceforge.net/projects/numpy
 DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
-Group:          fsp/dev-tools
+Group:          ohpc/dev-tools
 Source0:        %{pname}-%{version}.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler

@@ -66,7 +66,7 @@ Url:            http://www.r-project.org/
 DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
-Group:          fsp/dev-tools
+Group:          ohpc/dev-tools
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path

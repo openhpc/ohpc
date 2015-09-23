@@ -18,7 +18,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   2.69
 Release:   1
 License:   GPLv3+ and GFDL
-Group:     fsp/dev-tools
+Group:     ohpc/dev-tools
 DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   autoconf-%{version}.tar.gz

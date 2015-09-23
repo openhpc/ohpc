@@ -22,7 +22,7 @@ Release:   1
 License:   GPL
 URL:       http://www.valgrind.org/
 DocDir:    %{OHPC_PUB}/doc/contrib
-Group:     fsp/dev-tools
+Group:     ohpc/dev-tools
 Source:    valgrind-%{version}.tar.bz2
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root

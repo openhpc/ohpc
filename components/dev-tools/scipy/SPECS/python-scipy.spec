@@ -79,7 +79,7 @@ Version:        0.15.1
 Release:        1
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
-Group:          fsp/dev-tools
+Group:          ohpc/dev-tools
 Url:            http://www.scipy.org
 DocDir:         %{OHPC_PUB}/doc/contrib
 Source0:        %{pname}-%{version}.tar.gz
