@@ -198,7 +198,7 @@ cd tmp
 make %{?_smp_mflags} DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################

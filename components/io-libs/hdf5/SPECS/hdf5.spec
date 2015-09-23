@@ -121,7 +121,7 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 find "%buildroot" -type f -name "*.la" | xargs rm -f
 find "%buildroot"
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################

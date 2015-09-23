@@ -222,7 +222,7 @@ cp -fR examples %buildroot%{install_path}/lib
 
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################

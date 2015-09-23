@@ -99,7 +99,7 @@ patch -p1 < %{_sourcedir}/easybuild-sles12.patch
     #sed -i -e 's!%{buildroot}!!g' $f
 #done
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULES}/EasyBuild
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/EasyBuild/%{version}
 #%Module1.0#####################################################################

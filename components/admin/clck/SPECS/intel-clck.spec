@@ -54,7 +54,7 @@ cd %{buildroot}
 
 cd -
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_ADMIN}/modulefiles/clck
 %{__cat} << EOF > %{buildroot}/%{OHPC_ADMIN}/modulefiles/clck/%{version}
 #%Module1.0#####################################################################

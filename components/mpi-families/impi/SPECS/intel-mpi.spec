@@ -69,7 +69,7 @@ ln -s ../bin/mpiicpc  mpicxx
 # Intel MPI has support for both the Intel and GNU
 # toolchains. Therefore, we create a gnu and intel modulefile here.
 
-# FSP module file for Intel compiler toolchain
+# OpenHPC module file for Intel compiler toolchain
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi/%{version}
 #%Module1.0#####################################################################
@@ -117,7 +117,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-# FSP module file for GNU compiler toolchain
+# OpenHPC module file for GNU compiler toolchain
 mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi/%{version}
 #%Module1.0#####################################################################

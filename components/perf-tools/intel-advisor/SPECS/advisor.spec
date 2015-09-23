@@ -51,7 +51,7 @@ cd %{buildroot}
 %{__tar} xfz %{SOURCE0}
 cd -
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################

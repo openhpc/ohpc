@@ -308,7 +308,7 @@ cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
 EOF
 
 echo "*******222222*********"
-# FSP module file
+# OpenHPC module file
 
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}

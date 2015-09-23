@@ -139,7 +139,7 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 
 make install DESTDIR=${RPM_BUILD_ROOT}
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/par%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/par%{pname}/%{version}
 #%Module1.0#####################################################################

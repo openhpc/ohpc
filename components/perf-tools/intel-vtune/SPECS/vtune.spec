@@ -52,7 +52,7 @@ cd %{buildroot}
 %{__tar} xfz %{SOURCE0}
 cd -
 
-# FSP module file for Intel Vtune
+# OpenHPC module file for Intel Vtune
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/vtune
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/vtune/%{version}
 #%Module1.0#####################################################################

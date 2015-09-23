@@ -107,7 +107,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 # chrpath --delete $RPM_BUILD_ROOT%{_libdir}/*.so*
 # endif
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULES}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################

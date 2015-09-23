@@ -58,7 +58,7 @@ cd %{buildroot}
 
 cd -
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
 #%Module1.0#####################################################################

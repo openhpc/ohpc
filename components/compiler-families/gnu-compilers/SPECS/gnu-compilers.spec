@@ -88,7 +88,7 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/share
 %endif
 
-# FSP module file
+# OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/gnu
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/gnu/%{version}
 #%Module1.0#####################################################################

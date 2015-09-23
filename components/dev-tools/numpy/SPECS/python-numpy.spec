@@ -136,7 +136,7 @@ python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 %fdupes -s %{buildroot}%{install_path}
 %endif
 
-# FSP module file
+# OpenHPC module file
 %{!?compiler_family: %define compiler_family gnu}
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
