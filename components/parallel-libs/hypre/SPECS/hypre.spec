@@ -104,7 +104,7 @@ BuildRequires:  libxml2-python
 %endif
 BuildRequires:  xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -298,7 +298,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
 
 %changelog

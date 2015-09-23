@@ -118,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{OHPC_HOME}
 
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS ChangeLog COPYING INSTALL NEWS README
 
 %changelog

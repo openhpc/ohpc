@@ -73,7 +73,7 @@ Source3:        OHPC_setup_mpi
 Patch1:         petsc.rpath.patch
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
 BuildRequires:  valgrind%{PROJ_DELIM}
@@ -224,7 +224,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc CONTRIBUTING LICENSE
 
 %changelog

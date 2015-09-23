@@ -86,7 +86,7 @@ Group:          fsp/io-libs
 Version:        4.3.3.1
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 Source0:	%{pname}-%{version}.tar.gz
 Source101:	OHPC_macros
 Source102:	OHPC_setup_compiler
@@ -243,7 +243,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc COPYRIGHT
 %doc README.md
 

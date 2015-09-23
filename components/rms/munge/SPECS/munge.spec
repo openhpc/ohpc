@@ -40,7 +40,7 @@ BuildRequires:	zlib-devel
 %endif
 %endif
 BuildRoot:	%{_tmppath}/%{pname}-%{version}
-DocDir:     %{FSP_PUB}/doc/contrib
+DocDir:     %{OHPC_PUB}/doc/contrib
 BuildConflicts: post-build-checks
 
 Conflicts: munge 

@@ -92,7 +92,7 @@ Patch3:         superlu_dist-4.1-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 %include %{_sourcedir}/OHPC_macros
 #!BuildIgnore: post-build-checks
@@ -232,7 +232,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc README
 
 %changelog

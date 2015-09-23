@@ -27,7 +27,7 @@ URL:     http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -98,7 +98,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/defaults/

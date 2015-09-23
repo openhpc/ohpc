@@ -21,15 +21,15 @@ Version:   3.10.1
 Release:   1
 License:   GPL
 URL:       http://www.valgrind.org/
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     fsp/dev-tools
 Source:    valgrind-%{version}.tar.bz2
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
-%define install_path %{FSP_PUB}/%{pname}/%version
+%{!?OHPC_PUB: %define OHPC_PUB /opt/fsp/pub}
+%define install_path %{OHPC_PUB}/%{pname}/%version
 
 %description 
 
@@ -92,7 +92,7 @@ EOF
 %files
 %defattr(-,root,root)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS
 %doc README_DEVELOPERS
 %doc README

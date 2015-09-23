@@ -20,14 +20,14 @@ Release:   1
 License:   GPLv2+ and GFDL
 Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/automake/
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   automake-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
-%{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
-%define install_path %{FSP_PUB}/autotools
+%{!?OHPC_PUB: %define OHPC_PUB /opt/fsp/pub}
+%define install_path %{OHPC_PUB}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
 BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
@@ -62,8 +62,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_PUB}
-%{FSP_PUB}
+%dir %{OHPC_PUB}
+%{OHPC_PUB}
 %doc THANKS
 %doc ChangeLog
 %doc NEWS

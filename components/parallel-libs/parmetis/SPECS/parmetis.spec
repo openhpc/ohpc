@@ -64,7 +64,7 @@ Release: 1
 License: BSD-like
 Group:   fsp/parallel-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
-DocDir:  %{FSP_PUB}/doc/contrib
+DocDir:  %{OHPC_PUB}/doc/contrib
 Source0: par%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
 Source2: OHPC_setup_compiler
@@ -193,7 +193,7 @@ rm -fr ${RPM_BUILD_ROOT}
 %files
 %defattr(-,root,root)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc BUILD.txt Changelog Install.txt LICENSE.txt
 
 %changelog

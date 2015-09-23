@@ -49,7 +49,7 @@ puts stderr "Setup default login environment"
 # Load Desired Modules
 #
 
-prepend-path     PATH   %{FSP_PUB}/bin
+prepend-path     PATH   %{OHPC_PUB}/bin
 
 if { [ expr [module-info mode load] || [module-info mode display] ] } {
         prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
@@ -73,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %dir %{OHPC_HOME}
-%dir %{FSP_PUB}
+%dir %{OHPC_PUB}
 %{FSP_MODULES}
 
 %changelog

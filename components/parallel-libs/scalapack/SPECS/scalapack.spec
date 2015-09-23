@@ -86,7 +86,7 @@ Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
 Patch0:         scalapack-2.0.2-shared-lib.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 Provides:       libscalapack.so.2()(64bit)
 
 %description
@@ -204,7 +204,7 @@ rm -fr ${RPM_BUILD_ROOT}
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc README LICENSE
 
 %changelog

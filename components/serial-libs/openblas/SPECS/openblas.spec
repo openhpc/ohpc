@@ -74,7 +74,7 @@ Patch2:         openblas-noexecstack.patch
 Patch3:         openblas-arm64-build.patch
 BuildRoot:      %{_tmppath}/%{pname}-%{version}-build
 ExclusiveArch:  %ix86 ia64 ppc ppc64 x86_64 aarch64
-DocDir:        %{FSP_PUB}/doc/contrib
+DocDir:        %{OHPC_PUB}/doc/contrib
 
 %description
 OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
@@ -175,7 +175,7 @@ EOF
 
 %files
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc BACKERS.md Changelog.txt CONTRIBUTORS.md GotoBLAS_00License.txt GotoBLAS_01Readme.txt GotoBLAS_02QuickInstall.txt GotoBLAS_03FAQ.txt GotoBLAS_04FAQ.txt GotoBLAS_05LargePage.txt GotoBLAS_06WeirdPerformance.txt LICENSE README.md TargetList.txt
 
 %changelog

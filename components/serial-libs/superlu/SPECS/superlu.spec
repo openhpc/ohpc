@@ -83,7 +83,7 @@ Patch3:         superlu-4.3-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
 BuildRequires:  tcsh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 # Default library install path
 %define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
@@ -176,7 +176,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc README
 
 %changelog

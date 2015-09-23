@@ -66,7 +66,7 @@ Provides:  lib%PNAME.so()(64bit)
 Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -247,7 +247,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
 
 %changelog

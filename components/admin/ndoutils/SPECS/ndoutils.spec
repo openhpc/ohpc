@@ -19,7 +19,7 @@
 Name:               %{pname}%{PROJ_DELIM}
 Version:            2.0.0
 Release:            7%{?dist}
-DocDir:             %{FSP_PUB}/doc/contrib
+DocDir:             %{OHPC_PUB}/doc/contrib
 
 Summary:            Stores all configuration and event data from Nagios in a database
 Group:              Applications/System

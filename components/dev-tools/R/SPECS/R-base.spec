@@ -63,7 +63,7 @@ Version:        3.2.2
 Source:         R-%{version}.tar.gz
 Patch:          tre.patch
 Url:            http://www.r-project.org/
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
 Group:          fsp/dev-tools

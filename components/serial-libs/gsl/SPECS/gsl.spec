@@ -52,7 +52,7 @@ Source0:   %{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -143,7 +143,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{OHPC_HOME}
 
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README THANKS TODO
 
 %changelog

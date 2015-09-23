@@ -19,7 +19,7 @@ Version:   2.69
 Release:   1
 License:   GPLv3+ and GFDL
 Group:     fsp/dev-tools
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   autoconf-%{version}.tar.gz
 Source1:   OHPC_macros
@@ -28,8 +28,8 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 Requires: m4
 
 %define debug_package %{nil}
-%{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
-%define install_path %{FSP_PUB}/autotools
+%{!?OHPC_PUB: %define OHPC_PUB /opt/fsp/pub}
+%define install_path %{OHPC_PUB}/autotools
 
 %description
 GNU Autoconf is a tool for configuring source code and Makefiles.
@@ -67,7 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %dir %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc THANKS
 %doc NEWS
 %doc ChangeLog.2

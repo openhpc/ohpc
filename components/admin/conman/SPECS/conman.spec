@@ -24,7 +24,7 @@ Summary:	ConMan: The Console Manager
 Group:		fsp/admin
 License:	GPLv3+
 URL:		http://conman.googlecode.com/
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 Requires:	expect
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -131,7 +131,7 @@ fi
 %doc NEWS
 %doc README
 %doc THANKS
-%{FSP_PUB}
+%{OHPC_PUB}
 %config(noreplace) %{_sysconfdir}/conman.conf
 %config(noreplace) %{_sysconfdir}/[dls]*/conman
 %{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}/conman

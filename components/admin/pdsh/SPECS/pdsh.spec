@@ -19,7 +19,7 @@ Version:   2.31
 Release:   %{_rel}
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     fsp/admin
 Source0:   pdsh-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -401,15 +401,15 @@ rm -rf "$RPM_BUILD_ROOT"
 %doc COPYING README NEWS DISCLAIMER 
 %doc README.KRB4 README.modules README.QsNet
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %{_bindir}/pdsh
 %{_bindir}/dshbak
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
 
 %if 0%{?OHPC_build}
-# dir %{FSP_PUB}/share/doc
-# {FSP_PUB}/share/doc/%{pname}
+# dir %{OHPC_PUB}/share/doc
+# {OHPC_PUB}/share/doc/%{pname}
 %doc AUTHORS
 
 %endif

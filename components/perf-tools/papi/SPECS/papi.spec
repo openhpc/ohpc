@@ -49,7 +49,7 @@ URL: http://icl.cs.utk.edu/papi/
 Source0: %{pname}-%{version}.tar.gz
 Patch1: papi.ldconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 BuildRequires: ncurses-devel
 %if 0%{?suse_version}
 BuildRequires: gcc-fortran
@@ -162,7 +162,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc ChangeLog*.txt INSTALL.txt LICENSE.txt README RELEASENOTES.txt
 
 %changelog

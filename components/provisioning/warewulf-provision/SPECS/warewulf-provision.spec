@@ -32,7 +32,7 @@ BuildRequires: libselinux-devel
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 Patch1: warewulf-provision.busybox.patch.bz2
 Patch2: warewulf-provision.httpdconfdir.patch
 Patch3: warewulf-provision.dhcpd.patch
@@ -134,7 +134,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf

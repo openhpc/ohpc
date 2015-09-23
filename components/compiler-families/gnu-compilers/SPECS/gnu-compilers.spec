@@ -27,7 +27,7 @@ Release:   1
 License:   GPL-3.0+
 Group:     fsp/compiler-families
 URL:       http://gcc.gnu.org/
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   gcc-%{version}.tar.bz2
 Source1:   gmp-%{gmp_version}a.tar.bz2
 Source2:   mpc-%{mpc_version}.tar.gz
@@ -146,7 +146,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc COPYING
 %doc COPYING3
 %doc NEWS

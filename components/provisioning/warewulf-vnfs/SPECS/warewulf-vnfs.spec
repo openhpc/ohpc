@@ -33,7 +33,7 @@ BuildArch: x86_64
 BuildArch: noarch
 %endif
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 # Previous version had an architecture in its release. This is necessary for
 # YUM to properly update a package of a different BuildArch...
 Obsoletes: warewulf-vnfs < 3.2-0
@@ -91,7 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/vnfs.conf
 %config(noreplace) %{_sysconfdir}/warewulf/bootstrap.conf

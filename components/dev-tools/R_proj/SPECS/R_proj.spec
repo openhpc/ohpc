@@ -78,7 +78,7 @@ BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
 #%define 	install_path %{FSP_LIBS}/%{pname}/%version
-%define		install_path %{FSP_PUB}/%{pname}/%version
+%define		install_path %{OHPC_PUB}/%{pname}/%version
 %define         debug_package %{nil}
 
 BuildRequires:  cairo-devel

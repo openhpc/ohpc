@@ -20,7 +20,7 @@ Release:   1
 License:   GPLv2+ and LGPLv2+ and GFDL
 Group:     fsp/dev-tools
 URL:       http://www.gnu.org/software/libtool/
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   libtool-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -28,7 +28,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 %define debug_package %{nil}
-%define install_path %{FSP_PUB}/autotools
+%define install_path %{OHPC_PUB}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
 Requires:      automake%{PROJ_DELIM} >= 1.14.1
@@ -96,9 +96,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_PUB}
+%dir %{OHPC_PUB}
 %dir %{FSP_MODULES}
-%{FSP_PUB}
+%{OHPC_PUB}
 %{FSP_MODULES}/autotools
 %doc AUTHORS
 %doc ChangeLog

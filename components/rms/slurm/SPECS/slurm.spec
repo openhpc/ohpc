@@ -109,7 +109,7 @@ Group: fsp/rms
 Source: %{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 URL: http://slurm.schedmd.com/
 
 # 8/11/14 karl.w.schulz@intel.com - update default runlevels
@@ -846,7 +846,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %config %{_sysconfdir}/slurm.conf.example
 
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS BUILD.NOTES ChangeLog COPYING DISCLAIMER INSTALL LICENSE.OpenSSL NEWS README.rst RELEASE_NOTES
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file

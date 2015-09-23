@@ -24,7 +24,7 @@ Summary: Host/service/network monitoring program
 Group:   fsp/admin
 License: GPLv2
 URL: http://www.nagios.org/
-DocDir:  %{FSP_PUB}/doc/contrib
+DocDir:  %{OHPC_PUB}/doc/contrib
 Source0: %{pname}-%{version}.tar.gz
 Source1: nagios.logrotate
 Source2: nagios.htaccess

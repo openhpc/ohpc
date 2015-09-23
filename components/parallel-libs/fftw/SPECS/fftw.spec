@@ -69,7 +69,7 @@ Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define debug_package %{nil}
 %define openmp        1
@@ -186,7 +186,7 @@ fi
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO
 
 

@@ -2,7 +2,7 @@
 %define PROJ_NAME      ohpc
 %define OHPC_HOME      /opt/%{PROJ_NAME}
 %define OHPC_ADMIN     %{OHPC_HOME}/admin
-%define FSP_PUB        %{FSP_HOME}/pub
+%define OHPC_PUB       %{OHPC_HOME}/pub
 %define FSP_BIN        %{FSP_PUB}/bin
 %define FSP_COMPILERS  %{FSP_PUB}/compiler
 %define FSP_MPI_STACKS %{FSP_PUB}/mpi

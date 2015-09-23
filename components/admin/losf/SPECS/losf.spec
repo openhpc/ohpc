@@ -24,7 +24,7 @@ URL:       https://github.com/hpcsi/losf
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 %if 0%{?OHPC_build}
 %{!?prefix: %define prefix %{OHPC_ADMIN}}
@@ -116,6 +116,6 @@ fi
 %{installPath}
 %{_bindir}/*
 
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc LICENSE COPYING CHANGES README
 

@@ -100,7 +100,7 @@ Source101:	OHPC_macros
 Source102:	OHPC_setup_compiler
 Source103:	OHPC_setup_mpi
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
@@ -268,7 +268,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc INSTALL LICENSE_1_0.txt
 
 %changelog

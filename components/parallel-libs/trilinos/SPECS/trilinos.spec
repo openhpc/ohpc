@@ -87,7 +87,7 @@ BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 %include %{_sourcedir}/OHPC_macros
 #!BuildIgnore: post-build-checks
@@ -249,7 +249,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 
 %changelog

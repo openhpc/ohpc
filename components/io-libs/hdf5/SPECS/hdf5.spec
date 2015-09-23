@@ -64,7 +64,7 @@ Release:   1
 License:   BSD-style
 Group:     fsp/io-libs
 URL:       http://www.hdfgroup.org/HDF5
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   %{pname}-%{version}-patch1.tar.gz
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
@@ -170,7 +170,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc COPYING
 %doc README.txt
 

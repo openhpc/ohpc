@@ -81,7 +81,7 @@ Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
 Group:          fsp/dev-tools
 Url:            http://www.scipy.org
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 Source0:        %{pname}-%{version}.tar.gz
 BuildRequires:  blas-devel
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -251,7 +251,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc THANKS.txt
 %doc LICENSE.txt
 

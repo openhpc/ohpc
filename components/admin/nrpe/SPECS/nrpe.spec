@@ -28,7 +28,7 @@ Summary: Host/service/network monitoring agent for Nagios
 Group: Applications/System
 License: GPLv2
 URL: http://www.nagios.org
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 Source0: %{pname}-%{version}.tar.gz
 Source1: nrpe.sysconfig
 Source2: nrpe-tmpfiles.conf

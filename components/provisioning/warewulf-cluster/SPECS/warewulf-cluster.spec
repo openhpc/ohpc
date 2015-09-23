@@ -29,7 +29,7 @@ Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 BuildRoot: %_tmppath}%{pname}-%{version}-%{release}-root
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 #%if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 #%if ! 0%{?suse_version}
 #BuildRequires: libdb4-utils
@@ -107,7 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL LICENSE NEWS README README.node TODO
 %{_sysconfdir}/profile.d/*
 %{_bindir}/*

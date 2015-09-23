@@ -31,7 +31,7 @@ Requires:       make
 %define debug_package %{nil}
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-build
-DocDir:        %{FSP_PUB}/doc/contrib
+DocDir:        %{OHPC_PUB}/doc/contrib
 
 %description
 This guide presents a simple cluster installation procedure using components from the Forest Peak (FSP) software stack.
@@ -58,21 +58,21 @@ make
 
 %install
 
-%{__mkdir_p} %{buildroot}%{FSP_PUB}/doc
-%{__mkdir_p} %{buildroot}%{FSP_PUB}/doc/recipes/vanilla
-install -m 0644 -p docs/recipes/install/ChangeLog %{buildroot}/%{FSP_PUB}/doc/ChangeLog
-install -m 0644 -p docs/recipes/install/Release_Notes.txt %{buildroot}/%{FSP_PUB}/doc/Release_Notes.txt
-install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{FSP_PUB}/doc/Install_guide.pdf 
-install -m 0755 -p %{source_path}/fsp_vanilla_recipe.sh %{buildroot}/%{FSP_PUB}/doc/recipes/vanilla/recipe.sh
+%{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc
+%{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc/recipes/vanilla
+install -m 0644 -p docs/recipes/install/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
+install -m 0644 -p docs/recipes/install/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
+install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/Install_guide.pdf 
+install -m 0755 -p %{source_path}/fsp_vanilla_recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe.sh
 
-install -m 0644 -p %{source_path}/../input.local.template %{buildroot}/%{FSP_PUB}/doc/recipes/vanilla/input.local
+install -m 0644 -p %{source_path}/../input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/input.local
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
 %defattr(-,root,root)
 %dir %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc docs/LICENSE
 
 %changelog

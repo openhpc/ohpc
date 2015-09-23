@@ -47,7 +47,7 @@ Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.9.2
 Release:        1
 Url:            http://sourceforge.net/projects/numpy
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          fsp/dev-tools
@@ -179,7 +179,7 @@ EOF
 %files
 %defattr(-,root,root)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc DEV_README.txt
 %doc THANKS.txt
 %doc LICENSE.txt

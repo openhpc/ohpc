@@ -51,7 +51,7 @@ Release:   1
 License:   BSD-3-Clause
 Group:     fsp/mpi-families
 URL:       http://www.open-mpi.org
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   %{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
@@ -195,7 +195,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc NEWS
 %doc README
 %doc LICENSE

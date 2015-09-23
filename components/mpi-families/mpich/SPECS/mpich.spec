@@ -61,7 +61,7 @@ URL:		http://www.mpich.org/
 
 Source0:	%{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -204,7 +204,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc CHANGES COPYRIGHT README README.envvar RELEASE_NOTES
 
 %changelog

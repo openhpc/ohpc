@@ -58,7 +58,7 @@ BuildRequires: cmake
 Requires:      libmetis0 = %{version}
 Provides:      libmetis = %{version}
 Provides:      libmetis0 = %{version}
-DocDir:        %{FSP_PUB}/doc/contrib
+DocDir:        %{OHPC_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
@@ -168,5 +168,5 @@ rm -fr %buildroot
 %defattr(-,root,root)
 %{OHPC_HOME}
 
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc BUILD.txt Changelog Install.txt LICENSE.txt
