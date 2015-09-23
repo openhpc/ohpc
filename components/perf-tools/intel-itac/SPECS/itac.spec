@@ -15,7 +15,7 @@ Summary:   Intel(R) Trace Analyzer and Collector
 Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   9.1.1.017
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Release:   1
 License:   Copyright (C) 2003-2014 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
@@ -30,7 +30,7 @@ AutoReq:   no
 Requires: libpng12
 %endif
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true

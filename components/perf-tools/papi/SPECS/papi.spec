@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # FSP convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the

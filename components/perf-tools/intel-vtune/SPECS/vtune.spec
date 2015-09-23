@@ -15,7 +15,7 @@ Summary:   Intel(R) VTune(TM) Amplifier XE 2015 Update 2
 Name:      intel-vtune%{PROJ_DELIM}
 Version:   16.1.0.424694
 Source0:   intel-vtune-amplifier-fsp-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Release:   1
 License:   Copyright (C) 2011-2014 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
@@ -26,7 +26,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 #AutoReqProv: no
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true

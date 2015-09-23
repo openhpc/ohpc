@@ -11,7 +11,7 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # FSP convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -59,7 +59,7 @@ License:   GPLv2+
 Group:     fsp/perf-tools
 URL:       http://mpip.sourceforge.net/
 Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Source2:   FSP_setup_compiler
 Source3:   FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root

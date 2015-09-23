@@ -15,7 +15,7 @@ Summary:   Intel(R) Advisor XE
 Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   16.1.0.423501
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Release:   1
 License:   Copyright (C) 2014 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
@@ -25,7 +25,7 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
