@@ -107,7 +107,7 @@ FC=mpif90
 
 %install
 
-# FSP compiler designation
+# OpenHPC compiler designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
 export FSP_COMPILER_FAMILY=gnu

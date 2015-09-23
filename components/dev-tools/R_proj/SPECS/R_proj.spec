@@ -220,7 +220,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 %patch -p1
 
 %build 
-# FSP compiler designation
+# OpenHPC compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
@@ -260,7 +260,7 @@ done
 %endif
 
 %install 
-# FSP compiler designation
+# OpenHPC compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 

@@ -115,7 +115,7 @@ mpich-autoload package.
 
 %build
 
-# FSP compiler designation
+# OpenHPC compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
@@ -147,7 +147,7 @@ make %{?_smp_mflags} VERBOSE=1
 
 %install
 
-# FSP compiler designation
+# OpenHPC compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 

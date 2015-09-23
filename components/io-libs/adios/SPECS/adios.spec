@@ -178,7 +178,7 @@ make VERBOSE=1
 chmod +x adios_config
 
 %install
-# FSP compiler designation
+# OpenHPC compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
