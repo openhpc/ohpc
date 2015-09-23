@@ -10,7 +10,7 @@
 
 # petsc library that is is dependent on compiler toolchain and MPI
 
-#-fsp-header-comp-begin-----------------------------
+#-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
 

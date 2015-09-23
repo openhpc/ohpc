@@ -10,7 +10,7 @@
 
 # spec file for package trilinos
 
-#-fsp-header-comp-begin-----------------------------
+#-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
 

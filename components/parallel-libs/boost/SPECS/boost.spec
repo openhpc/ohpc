@@ -26,7 +26,7 @@
 
 # Boost C++ library that is is dependent on compiler toolchain and MPI
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
 
@@ -73,9 +73,6 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 %define _unpackaged_files_terminate_build 0
 %define build_mpi 1
-
-#Added FSP build convention
-%define debug_package %{nil}
 
 #%define bversion 1_57_0
 %define bversion %(echo %{version} | tr . _)
@@ -153,7 +150,6 @@ export MPICC=mpicc
 export MPIFC=mpifc
 export MPICXX=mpicxx
 %endif
-# End FSP #####################
 
 
 LIBRARIES_FLAGS=--with-libraries=all

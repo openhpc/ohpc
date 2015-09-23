@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family

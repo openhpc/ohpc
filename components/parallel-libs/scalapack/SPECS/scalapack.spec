@@ -25,7 +25,7 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-fsp-header-comp-begin-----------------------------
+#-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
 

@@ -13,7 +13,7 @@
 %define with_slurm 0
 %define with_psm 0
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family

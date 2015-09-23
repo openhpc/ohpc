@@ -27,7 +27,7 @@
 # netcdf spec file 
 # netcdf library build that is dependent on compiler toolchain
 #
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
 

@@ -27,7 +27,7 @@
 # Parallel HDF5 library build that is dependent on compiler
 # toolchain and MPI
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
 
