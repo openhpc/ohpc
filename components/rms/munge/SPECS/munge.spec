@@ -217,7 +217,7 @@ fi
 %attr(0600,munge,munge) %config(noreplace) %ghost %{_sysconfdir}/munge/munge.key
 %config(noreplace) %{_sysconfdir}/sysconfig/munge
 
-# FSP mods - systemd 
+# OpenHPC mods - systemd 
 %if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 %{_prefix}/lib/systemd/system/munge.service
 %else
