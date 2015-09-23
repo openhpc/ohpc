@@ -9,8 +9,8 @@ use File::Compare;
 use File::Basename;
 use Getopt::Long;
 
-my $license_begin_delim='----------bl-$';
-my $license_end_delim='----------el-$';
+my $license_begin_delim='----------bh-$';
+my $license_end_delim='----------eh-$';
 
 # Command-line parsing
 
@@ -71,7 +71,7 @@ while (@ARGV)
     while (<$IN>) {
 	if(/$license_begin_delim/../$license_end_delim/) {
 	    $found_delim=1;
-	    if (/--bl-$/) {
+		if (/$license_begin_delim/) {
 		print $TMPFILE @license_text;
 	    }
 	} else {
