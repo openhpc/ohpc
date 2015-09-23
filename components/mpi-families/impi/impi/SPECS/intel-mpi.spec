@@ -54,8 +54,8 @@ cd -
 # Create extra bin dir with soft links that can be use to use Intel
 # toolchain with standard front-end names like mpicc, mpif90, etc)
 
-%{__mkdir}  %{buildroot}/%{FSP_MPI_STACKS}/impi/%{version}/intel64/bin_fsp
-cd %{buildroot}/%{FSP_MPI_STACKS}/impi/%{version}/intel64/bin_fsp
+%{__mkdir}  %{buildroot}/%{OHPC_MPI_STACKS}/impi/%{version}/intel64/bin_fsp
+cd %{buildroot}/%{OHPC_MPI_STACKS}/impi/%{version}/intel64/bin_fsp
 ln -s ../bin/mpiicc mpicc
 ln -s ../bin/mpiifort mpif90
 ln -s ../bin/mpiifort mpif77

@@ -1,13 +1,13 @@
 %define OHPC_BUILD 1
-%define PROJ_NAME      ohpc
-%define OHPC_HOME      /opt/%{PROJ_NAME}
-%define OHPC_ADMIN     %{OHPC_HOME}/admin
-%define OHPC_PUB       %{OHPC_HOME}/pub
-%define OHPC_COMPILERS %{OHPC_PUB}/compiler
-%define FSP_MPI_STACKS %{FSP_PUB}/mpi
-%define FSP_APPS       %{FSP_PUB}/apps
-%define FSP_LIBS       %{FSP_PUB}/libs
-%define FSP_MODULES    %{FSP_PUB}/modulefiles
-%define FSP_MODULEDEPS %{FSP_PUB}/moduledeps
-%define debug_package  %{nil}
+%define PROJ_NAME       ohpc
+%define OHPC_HOME       /opt/%{PROJ_NAME}
+%define OHPC_ADMIN      %{OHPC_HOME}/admin
+%define OHPC_PUB        %{OHPC_HOME}/pub
+%define OHPC_COMPILERS  %{OHPC_PUB}/compiler
+%define OHPC_MPI_STACKS %{OHPC_PUB}/mpi
+%define FSP_APPS        %{FSP_PUB}/apps
+%define FSP_LIBS        %{FSP_PUB}/libs
+%define FSP_MODULES     %{FSP_PUB}/modulefiles
+%define FSP_MODULEDEPS  %{FSP_PUB}/moduledeps
+%define debug_package   %{nil}
 

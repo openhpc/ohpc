@@ -87,7 +87,7 @@ Provides:	mpich2 = 3.2b4
 Obsoletes:	mpich2 < 3.2
 
 # Default library install path
-%define install_path %{FSP_MPI_STACKS}/%{name}/%version
+%define install_path %{OHPC_MPI_STACKS}/%{name}/%version
 
 %description
 MPICH is a high-performance and widely portable implementation of the Message

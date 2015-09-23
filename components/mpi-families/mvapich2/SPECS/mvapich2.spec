@@ -84,7 +84,7 @@ BuildRequires: bison
 BuildRequires: libibmad-devel libibverbs-devel
 
 # Default library install path
-%define install_path %{FSP_MPI_STACKS}/%{name}/%version
+%define install_path %{OHPC_MPI_STACKS}/%{name}/%version
 
 %description 
 
