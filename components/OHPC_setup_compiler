@@ -1,19 +1,19 @@
-if [ -z "$FSP_COMPILER_FAMILY" ]; then
-    echo "Unknown FSP_COMPILER_FAMILY"
+if [ -z "$OHPC_COMPILER_FAMILY" ]; then
+    echo "Unknown OHPC_COMPILER_FAMILY"
     exit 1
 fi
 
 export MODULEPATH=/opt/fsp/pub/modulefiles
 . /opt/fsp/admin/lmod/lmod/init/sh || exit 1
 
-if [ "$FSP_COMPILER_FAMILY" = "gnu" ]; then
+if [ "$OHPC_COMPILER_FAMILY" = "gnu" ]; then
     export CC=gcc
     export CXX=g++
     export FC=gfortran
     export F77=gfortran
     module purge
     module load gnu
-elif [ "$FSP_COMPILER_FAMILY" = "intel" ]; then
+elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
     export CC=icc
     export CXX=icpc
     export FC=ifort
@@ -21,7 +21,7 @@ elif [ "$FSP_COMPILER_FAMILY" = "intel" ]; then
     module purge
     module load intel
 else
-    echo "Unsupported FSP_COMPILER_FAMILY -> $FSP_COMPILER_FAMILY"
+    echo "Unsupported OHPC_COMPILER_FAMILY -> $OHPC_COMPILER_FAMILY"
     exit 1
 fi
 
