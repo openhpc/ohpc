@@ -12,7 +12,7 @@
 
 %if 0%{?FSP_BUILD}
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 %define debug_package %{nil}
@@ -155,7 +155,7 @@ Release: %{fullrelease}
 License: GPL
 Group: fsp/lustre
 Source: lustre-%{version}.tar.gz
-Source1: FSP_macros
+Source1: OHPC_macros
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{FSP_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
