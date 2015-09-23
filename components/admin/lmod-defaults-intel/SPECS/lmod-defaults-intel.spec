@@ -12,7 +12,7 @@
 
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-Summary:   FSP default login environment
+Summary:   OpenHPC default login environment
 Name:      lmod-defaults-intel%{PROJ_DELIM}
 Version:   1.2
 Release:   1
@@ -22,7 +22,7 @@ BuildArch: noarch
 Source0:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
-# FSP dependencies
+# OpenHPC dependencies
 requires: lmod%{PROJ_DELIM}
 
 %description
