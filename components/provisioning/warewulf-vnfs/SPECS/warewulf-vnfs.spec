@@ -20,7 +20,7 @@ Name:    %{pname}%{PROJ_DELIM}
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group:   fsp/provisioning
+Group:   ohpc/provisioning
 URL:     http://warewulf.lbl.gov/
 Source:  %{pname}-%{version}.tar.gz
 ExclusiveOS: linux
