@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname lmod
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -32,7 +32,7 @@ Group:     fsp/admin
 Url:       https://github.com/TACC/Lmod
 DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   Lmod-%{version}.tar.bz2
-Source1:   FSP_macros
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildRequires: lua >= %{luaver}

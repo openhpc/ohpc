@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname prun
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -21,7 +21,7 @@ License:   BSD
 Group:     fsp/admin
 BuildArch: noarch
 Source0:   %{pname}
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Source2:   LICENSE      
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root

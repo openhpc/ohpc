@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary: Example source code and templates for use within FSP environment.
@@ -17,7 +17,7 @@ Version: 1.2
 Release: 1
 License: BSD-3
 Group:   fsp/admin
-Source0: FSP_macros
+Source0: OHPC_macros
 Source1: hello.c
 Source2: ifcfg-ib0
 Source3: ifcfg-ib0.sles.ww

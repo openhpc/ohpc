@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Base package name

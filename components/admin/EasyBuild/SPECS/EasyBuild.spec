@@ -10,7 +10,7 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # FSP convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
@@ -50,7 +50,7 @@ Source2:   %{pname}-framework-%{version}.tar.gz
 Source3:   vsc-base-2.2.2.tar.gz
 Source4:   bootstrap_eb.py
 Source5:   easybuild-sles12.patch
-Source6:   FSP_macros
+Source6:   OHPC_macros
 Source7:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch

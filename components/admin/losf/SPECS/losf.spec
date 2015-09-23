@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname losf
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -22,7 +22,7 @@ Group:     fsp/admin
 BuildArch: noarch
 URL:       https://github.com/hpcsi/losf 
 Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib
 

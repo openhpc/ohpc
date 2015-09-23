@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Intel(R) Cluster Checker
@@ -19,7 +19,7 @@ License:   Intel
 URL:       https://clusterready.intel.com/intel-cluster-checker/
 Group:     fsp/admin
 BuildArch: x86_64
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Source2:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
