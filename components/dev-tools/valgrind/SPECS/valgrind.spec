@@ -55,8 +55,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
-# FSP %{pname} environment
-#############################################################################
 
 proc ModulesHelp { } {
 puts stderr "This module loads the %{pname} package for performing dynamic analysis."
