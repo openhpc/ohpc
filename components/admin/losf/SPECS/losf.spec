@@ -27,7 +27,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib
 
 %if 0%{?OHPC_build}
-%{!?prefix: %define prefix %{FSP_ADMIN}}
+%{!?prefix: %define prefix %{OHPC_ADMIN}}
 %else
 %{!?prefix: %define prefix /opt}
 %endif

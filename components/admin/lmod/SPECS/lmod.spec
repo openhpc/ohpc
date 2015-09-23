@@ -70,7 +70,7 @@ Supports a Software Hierarchy
 unset MODULEPATH
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
-./configure --prefix=%{FSP_ADMIN} --libdir=%{lualibdir} --datadir=%{luapkgdir} --with-redirect=yes --with-autoSwap=no
+./configure --prefix=%{OHPC_ADMIN} --libdir=%{lualibdir} --datadir=%{luapkgdir} --with-redirect=yes --with-autoSwap=no
 
 %install
 export LUA_CPATH="%{LUA_CPATH}"
@@ -99,15 +99,15 @@ export LMOD_COLORIZE=no
 export LMOD_PREPEND_BLOCK=normal
 
 if [ \$EUID -eq 0 ]; then
-    export MODULEPATH=%{FSP_ADMIN}/modulefiles
+    export MODULEPATH=%{OHPC_ADMIN}/modulefiles
 else
     export MODULEPATH=%{FSP_MODULES}
 fi
 
-export BASH_ENV=%{FSP_ADMIN}/lmod/lmod/init/bash
+export BASH_ENV=%{OHPC_ADMIN}/lmod/lmod/init/bash
 
 # Initialize modules system
-. %{FSP_ADMIN}/lmod/lmod/init/bash >/dev/null
+. %{OHPC_ADMIN}/lmod/lmod/init/bash >/dev/null
 
 # Load baseline OpenHPC environment
 module try-add ohpc
@@ -132,13 +132,13 @@ if ( \$?SLURM_NODELIST ) then
 
 
     if ( \`id -u\` == "0" ) then
-       setenv MODULEPATH "%{FSP_ADMIN}/modulefiles"
+       setenv MODULEPATH "%{OHPC_ADMIN}/modulefiles"
     else   
        setenv MODULEPATH "%{FSP_MODULE_PATH}"
     endif
 
     # Initialize modules system
-    source %{FSP_ADMIN}/lmod/lmod/init/csh >/dev/null
+    source %{OHPC_ADMIN}/lmod/lmod/init/csh >/dev/null
 
     # Load baseline OpenHPC environment
     module try-add ohpc 
@@ -155,8 +155,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %dir %{OHPC_HOME}
-%dir %{FSP_ADMIN}
-%{FSP_ADMIN}/lmod
+%dir %{OHPC_ADMIN}
+%{OHPC_ADMIN}/lmod
 %config %{_sysconfdir}/profile.d/lmod.sh
 %config %{_sysconfdir}/profile.d/lmod.csh
 %{FSP_PUB}
