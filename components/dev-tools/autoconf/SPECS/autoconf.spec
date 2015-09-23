@@ -27,8 +27,6 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 Requires: m4
 
-%define debug_package %{nil}
-%{!?OHPC_PUB: %define OHPC_PUB /opt/fsp/pub}
 %define install_path %{OHPC_PUB}/autotools
 
 %description
