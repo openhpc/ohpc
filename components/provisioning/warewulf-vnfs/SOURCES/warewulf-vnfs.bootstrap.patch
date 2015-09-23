@@ -4,7 +4,7 @@
  modprobe += xhci-hcd, sl811-hcd, sd_mod
  # modprobe += mlx4_core log_num_mtts=20 log_mtts_per_seg=6, ib_srp
  
-+#FSP additions for SLES12
++#OpenHPC additions for SLES12
 +drivers += af_packet, dns_resolver, auth_rpcgss, lockd, sunrpc
 +drivers += dm_mod, dcdbas, dell_rbu, ipmi_msghandler, shpchp, ehci_pci
 +drivers += wmi, processor, button, sg, igb, i2c_algo_bit, dca, ptp
