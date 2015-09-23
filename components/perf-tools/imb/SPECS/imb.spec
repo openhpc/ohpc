@@ -73,7 +73,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
-# Include FSP patches
+# OpenHPC patches
 Patch1: imb.cc.patch
 
 # Default library install path
