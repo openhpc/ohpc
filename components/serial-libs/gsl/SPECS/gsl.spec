@@ -46,7 +46,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.16
 Release:   1
 License:   GPL
-Group:     fsp/serial-libs
+Group:     ohpc/serial-libs
 URL:       http://www.gnu.org/software/gsl
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   OHPC_macros

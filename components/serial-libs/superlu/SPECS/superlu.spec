@@ -64,7 +64,7 @@ BuildRequires: intel_licenses
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
-Group:          fsp/serial-libs
+Group:          ohpc/serial-libs
 Version:        4.3
 Release:        0
 #Source:         http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_4.3.tar.gz
