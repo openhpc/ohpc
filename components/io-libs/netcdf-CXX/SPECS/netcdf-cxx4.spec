@@ -29,7 +29,7 @@
 #
 #-fsp-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # FSP convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -85,7 +85,7 @@ Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 DocDir:         %{FSP_PUB}/doc/contrib
 Source0:	%{pname}4-%{version}.tar.gz
-Source101:	FSP_macros
+Source101:	OHPC_macros
 Source102:	FSP_setup_compiler
 Source103:	FSP_setup_mpi
 

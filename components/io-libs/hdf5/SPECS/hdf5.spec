@@ -28,7 +28,7 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # FSP convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
@@ -66,7 +66,7 @@ Group:     fsp/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   %{pname}-%{version}-patch1.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
