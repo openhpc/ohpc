@@ -122,7 +122,7 @@ leading scientists and engineers.
 %setup -q -n %{pname}-%{version}
 find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
@@ -141,7 +141,7 @@ EOF
 
 
 %build
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
@@ -167,7 +167,7 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 %endif
 
 %install
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 

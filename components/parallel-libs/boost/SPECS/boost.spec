@@ -137,7 +137,7 @@ see the boost-doc package.
 %setup -q -n %{pname}_%{bversion} 
 
 %build
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
@@ -180,7 +180,7 @@ install -D -m 0644 %SOURCE2 %{buildroot}%{install_path}/include/boost/intel-mkl/
 install -D -m 0644 %SOURCE3 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_matrix_prod.hpp
 
 
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 

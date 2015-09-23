@@ -92,7 +92,7 @@ a range of message sizes.
 
 %build
 
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}

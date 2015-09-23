@@ -96,7 +96,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 
 %build
 
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 

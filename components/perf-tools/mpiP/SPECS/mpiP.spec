@@ -89,7 +89,7 @@ file.
 
 %build
 
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
 export OHPC_COMPILER_FAMILY=gnu

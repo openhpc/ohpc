@@ -67,7 +67,7 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 
 
 %build
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 

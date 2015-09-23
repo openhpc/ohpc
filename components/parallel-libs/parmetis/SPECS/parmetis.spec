@@ -116,7 +116,7 @@ shown to produce high quality results and scale to very large problems.
 %setup -q -n par%{pname}-%{version}
 %build
 
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 
 %if %{compiler_family} == intel
 export CFLAGS="-fPIC $CFLAGS"
@@ -131,7 +131,7 @@ make
 
 %install
 
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
