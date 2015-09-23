@@ -41,7 +41,10 @@ DocDir: %{OHPC_PUB}/doc/contrib
 # 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
 Patch1: warewulf-cluster.wwinit.patch
 # 06/14/14 karl.w.schulz@intel.com - OpenHPC flag used to disable inclusion of node package
-%define fsp_disable 1
+%if %{OHPC_BUILD}
+%define disable_node_package 1
+%endif
+
 # 07/21/14 karl.w.schulz@intel.com - excplictly document libcom32 and libutil as being provided
 provides: libcom32.c32
 provides: libutil.c32
@@ -54,7 +57,7 @@ This package contains tools to facilitate management of a Cluster
 with Warewulf.
 
 # 06/14/14 karl.w.schulz@intel.com - disable warewulf-cluster-node package
-%if %{fsp_disable}
+%if %{disable_node_package}
 %package -n %{pname}-node%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
 Group: ohpc/provisioning
@@ -93,7 +96,7 @@ mv $RPM_BUILD_ROOT/etc/rc.d/init.d  $RPM_BUILD_ROOT/etc/init.d
 %endif
 
 # 06/14/14 karl.w.schulz@intel.com - disable warewulf-cluster-node package
-%if !%{fsp_disable}
+%if !%{disable_node_package}
 rm -rf $RPM_BUILD_ROOT/etc/sysconfig/wwfirstboot.conf
 rm -rf $RPM_BUILD_ROOT/etc/rc.d/init.d/wwfirstboot
 rm -rf $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/wwfirstboot/*
@@ -115,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 %{perl_vendorlib}/Warewulf/Module/Cli/*
 
 # 06/14/14 karl.w.schulz@intel.com - disable warewulf-cluster-node package
-%if %{fsp_disable}
+%if %{disable_node_package}
 
 %files -n %{pname}-node%{PROJ_DELIM}
 %defattr(-, root, root)
