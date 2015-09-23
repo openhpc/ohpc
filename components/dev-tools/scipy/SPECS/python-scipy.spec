@@ -48,7 +48,7 @@ BuildRequires: intel-compilers%{PROJ_DELIM}
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 BuildRequires: intel_licenses
 %endif
 %endif

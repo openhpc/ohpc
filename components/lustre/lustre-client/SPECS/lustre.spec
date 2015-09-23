@@ -10,7 +10,7 @@
 
 # lustre.spec
 
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 
 %include %{_sourcedir}/OHPC_macros
 
@@ -53,7 +53,7 @@ BuildRequires: kernel-devel = 3.10.0-229.el7
 BuildRequires:	-post-build-checks
 
 # Declare rpmbuild --with/--without parameters
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 %bcond_with servers
 %else
 %bcond_without servers
@@ -369,7 +369,7 @@ cd $RPM_BUILD_DIR/lustre-%{version}
 # build failures
 %define optflags -g -O2 -Werror
 
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 CONFIGURE_ARGS="%{?configure_args} --with-release=3.0.76-0.11-default --disable-ldiskfs --disable-server"
 %else
 CONFIGURE_ARGS="%{?configure_args} --with-release=%release"

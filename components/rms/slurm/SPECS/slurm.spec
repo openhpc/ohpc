@@ -513,7 +513,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install-contrib
 %endif
 
 # 6/16/15 karl.w.schulz@intel.com - do not package Slurm's version of libpmi with FSP.
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
    rm -f $RPM_BUILD_ROOT/%{_libdir}/libpmi*
 %endif
 
@@ -546,7 +546,7 @@ install -D -m755 contribs/sgather/sgather ${RPM_BUILD_ROOT}%{_bindir}/sgather
 install -D -m755 contribs/sjstat ${RPM_BUILD_ROOT}%{_bindir}/sjstat
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "# FSP default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
@@ -850,7 +850,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS BUILD.NOTES ChangeLog COPYING DISCLAIMER INSTALL LICENSE.OpenSSL NEWS README.rst RELEASE_NOTES
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 %config %{_sysconfdir}/slurm.conf
 %endif
 

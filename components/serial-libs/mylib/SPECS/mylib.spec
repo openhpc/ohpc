@@ -26,7 +26,7 @@ Requires:      FSP-gnu-compilers
 BuildRequires: gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ FSP-intel-compilers-devel%{PROJ_DELIM}
 %endif
-%if 0%{FSP_BUILD}
+%if 0%{OHPC_build}
 BuildRequires: intel_licenses
 %endif
 

@@ -26,7 +26,7 @@ Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib
 
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 %{!?prefix: %define prefix %{FSP_ADMIN}}
 %else
 %{!?prefix: %define prefix /opt}
@@ -107,7 +107,7 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 %dir %{FSP_HOME}
 %dir %{prefix}
 

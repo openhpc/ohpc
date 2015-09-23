@@ -372,7 +372,7 @@ if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.mqshd ]; then
    install -D -m644 etc/mqshell.xinetd $RPM_BUILD_ROOT/%{_sysconfdir}/xinetd.d/mqshell
 fi
 
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 # install_doc_files
 %endif
 
@@ -407,7 +407,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
 
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_build}
 # dir %{FSP_PUB}/share/doc
 # {FSP_PUB}/share/doc/%{pname}
 %doc AUTHORS
