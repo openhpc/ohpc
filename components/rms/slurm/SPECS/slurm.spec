@@ -512,7 +512,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install-contrib
    fi
 %endif
 
-# 6/16/15 karl.w.schulz@intel.com - do not package Slurm's version of libpmi with FSP.
+# 6/16/15 karl.w.schulz@intel.com - do not package Slurm's version of libpmi with OpenHPC.
 %if 0%{?OHPC_build}
    rm -f $RPM_BUILD_ROOT/%{_libdir}/libpmi*
 %endif
@@ -548,7 +548,7 @@ install -D -m755 contribs/sjstat ${RPM_BUILD_ROOT}%{_bindir}/sjstat
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_build}
 head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-echo "# FSP default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
+echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "SlurmdLogFile=/var/log/slurm.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "SlurmctldLogFile=/var/log/slurmctld.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
@@ -557,7 +557,7 @@ echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN"
 echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 
 # 9/17/14 karl.w.schulz@intel.com - Add option to drop VM cache during epilog
-sed -i '/^# No other SLURM jobs,/i \\n# Drop clean caches (FSP)\necho 3 > /proc/sys/vm/drop_caches\n\n#' $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.epilog.clean
+sed -i '/^# No other SLURM jobs,/i \\n# Drop clean caches (OpenHPC)\necho 3 > /proc/sys/vm/drop_caches\n\n#' $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.epilog.clean
 
 %endif
 
