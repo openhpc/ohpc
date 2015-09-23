@@ -19,7 +19,7 @@ Source1:   OHPC_macros
 Release:   1
 License:   Intel
 URL:       https://software.intel.com/en-us/intel-mpi-library
-Group:     fsp/mpi-families
+Group:     ohpc/mpi-families
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no

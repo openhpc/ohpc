@@ -49,7 +49,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.8.8
 Release:   1
 License:   BSD-3-Clause
-Group:     fsp/mpi-families
+Group:     ohpc/mpi-families
 URL:       http://www.open-mpi.org
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   %{pname}-%{version}.tar.bz2
