@@ -7,7 +7,7 @@
 %define OHPC_MPI_STACKS %{OHPC_PUB}/mpi
 %define OHPC_APPS       %{OHPC_PUB}/apps
 %define OHPC_LIBS       %{OHPC_PUB}/libs
-%define FSP_MODULES     %{FSP_PUB}/modulefiles
+%define OHPC_MODULES    %{OHPC_PUB}/modulefiles
 %define FSP_MODULEDEPS  %{FSP_PUB}/moduledeps
 %define debug_package   %{nil}
 

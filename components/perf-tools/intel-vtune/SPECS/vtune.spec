@@ -53,8 +53,8 @@ cd %{buildroot}
 cd -
 
 # FSP module file for Intel Vtune
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/vtune
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/vtune/%{version}
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/vtune
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/vtune/%{version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -86,7 +86,7 @@ setenv          LC_ALL C
 setenv          VTUNE_AMPLIFIER_XE_2015_DIR %{package_target}
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/vtune/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/vtune/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
 EOF

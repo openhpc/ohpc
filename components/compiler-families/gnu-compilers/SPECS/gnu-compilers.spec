@@ -89,8 +89,8 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %endif
 
 # FSP module file
-%{__mkdir_p} %{buildroot}/%{FSP_MODULES}/gnu
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/gnu/%{version}
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/gnu
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/gnu/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -122,7 +122,7 @@ prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/gnu
 family "compiler"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/gnu/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/gnu/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}

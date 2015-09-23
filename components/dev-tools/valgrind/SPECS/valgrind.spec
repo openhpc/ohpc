@@ -52,8 +52,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 # modulefile
 
-%{__mkdir_p} %{buildroot}/%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 # FSP %{pname} environment
 #############################################################################
@@ -79,7 +79,7 @@ setenv          %{PNAME}_LIB     %{install_path}/lib/valgrind
 setenv          %{PNAME}_INC     %{install_path}/include
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}

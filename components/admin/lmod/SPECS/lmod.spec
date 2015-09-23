@@ -101,7 +101,7 @@ export LMOD_PREPEND_BLOCK=normal
 if [ \$EUID -eq 0 ]; then
     export MODULEPATH=%{OHPC_ADMIN}/modulefiles
 else
-    export MODULEPATH=%{FSP_MODULES}
+    export MODULEPATH=%{OHPC_MODULES}
 fi
 
 export BASH_ENV=%{OHPC_ADMIN}/lmod/lmod/init/bash

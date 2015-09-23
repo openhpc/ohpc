@@ -67,8 +67,8 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
 # modulefile
 
-%{__mkdir_p} %{buildroot}/%{FSP_MODULES}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/autotools
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/autotools
 #%Module1.0#####################################################################
 # FSP Autotools environment
 #############################################################################
@@ -97,9 +97,9 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %dir %{OHPC_PUB}
-%dir %{FSP_MODULES}
+%dir %{OHPC_MODULES}
 %{OHPC_PUB}
-%{FSP_MODULES}/autotools
+%{OHPC_MODULES}/autotools
 %doc AUTHORS
 %doc ChangeLog
 %doc COPYING

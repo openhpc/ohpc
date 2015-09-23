@@ -100,8 +100,8 @@ patch -p1 < %{_sourcedir}/easybuild-sles12.patch
 #done
 
 # FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULES}/EasyBuild
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/EasyBuild/%{version}
+%{__mkdir} -p %{buildroot}%{OHPC_MODULES}/EasyBuild
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/EasyBuild/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -135,7 +135,7 @@ prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/py
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/EasyBuild/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/EasyBuild/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}

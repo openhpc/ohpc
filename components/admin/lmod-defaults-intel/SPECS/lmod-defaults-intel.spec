@@ -35,8 +35,8 @@ Provides default login environment for Intel toolchain (compiler and MPI familie
 
 %install
 
-mkdir -p %{buildroot}/%{FSP_MODULES}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/ohpc
+mkdir -p %{buildroot}/%{OHPC_MODULES}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/ohpc
 #%Module1.0#####################################################################
 # Default FSP environment
 #############################################################################
@@ -74,7 +74,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %dir %{OHPC_HOME}
 %dir %{OHPC_PUB}
-%{FSP_MODULES}
+%{OHPC_MODULES}
 
 %changelog
 

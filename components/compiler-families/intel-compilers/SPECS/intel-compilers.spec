@@ -59,8 +59,8 @@ cd %{buildroot}
 cd -
 
 # FSP module file
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/intel
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/%{module_version}
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -104,7 +104,7 @@ setenv          TBB_LIB             %{package_target}/compilers_and_libraries_20
 family "compiler"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/.version.%{module_version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/.version.%{module_version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{module_version}"
 EOF
