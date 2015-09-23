@@ -89,7 +89,7 @@ Url:            http://www.unidata.ucar.edu/software/netcdf/
 DocDir:         %{FSP_PUB}/doc/contrib
 Source0:	%{pname}-%{version}.tar.gz
 Source101:	OHPC_macros
-Source102:	FSP_setup_compiler
+Source102:	OHPC_setup_compiler
 Source103:	FSP_setup_mpi
 
 
@@ -144,7 +144,7 @@ NetCDF data is:
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 module load phdf5
@@ -166,7 +166,7 @@ export CC=mpicc
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 module load phdf5

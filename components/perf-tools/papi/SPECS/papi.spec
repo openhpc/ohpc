@@ -77,7 +77,7 @@ running programs.
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 cd src
 ./configure --with-static-lib=no --with-shared-lib=yes --with-shlib --prefix=%{install_path}
@@ -92,7 +92,7 @@ DBG="" make
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 rm -rf $RPM_BUILD_ROOT
 cd src

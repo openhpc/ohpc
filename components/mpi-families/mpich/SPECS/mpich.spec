@@ -117,7 +117,7 @@ mpich-autoload package.
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 ./configure	\
     --prefix=%{install_path} \
@@ -149,7 +149,7 @@ make %{?_smp_mflags} VERBOSE=1
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 make DESTDIR=%{buildroot} install
 

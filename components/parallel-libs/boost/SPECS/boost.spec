@@ -97,7 +97,7 @@ Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
 Source101:	OHPC_macros
-Source102:	FSP_setup_compiler
+Source102:	OHPC_setup_compiler
 Source103:	FSP_setup_mpi
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:         %{FSP_PUB}/doc/contrib
@@ -139,7 +139,7 @@ see the boost-doc package.
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 
 %if %build_mpi
@@ -182,7 +182,7 @@ install -D -m 0644 %SOURCE3 %{buildroot}%{install_path}/include/boost/intel-mkl/
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 
 %if %build_mpi

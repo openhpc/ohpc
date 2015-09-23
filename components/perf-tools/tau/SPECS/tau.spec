@@ -110,7 +110,7 @@ sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 module load papi
 module load pdtoolkit

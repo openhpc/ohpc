@@ -166,7 +166,7 @@ and graphical techniques, and is highly extensible.
 
 %prep 
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 %setup -n R-%{version}
 %patch -p1
@@ -174,7 +174,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 %build 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
@@ -201,7 +201,7 @@ make %{?_smp_mflags}
 %install 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 make DESTDIR=%{buildroot} install
 

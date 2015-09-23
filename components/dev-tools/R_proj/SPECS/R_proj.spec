@@ -67,7 +67,7 @@ Source:         R-%{version}.tar.gz
 #Source: http://cran.r-project.org/src/base/R-2/R-%%{version}.tar.gz
 # PATCH-FIX-UPSTREAM Fix tre when wchar_t is unsigned int
 #Source1:        OHPC_macros
-#Source2:        FSP_setup_compiler
+#Source2:        OHPC_setup_compiler
 Patch:          tre.patch
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
@@ -210,7 +210,7 @@ and graphical techniques, and is highly extensible.
 
 %prep 
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 ###%if %{compiler_family} == gnu
 ###module load mkl
@@ -222,7 +222,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 %build 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 ###%if %{compiler_family} == gnu
 ###module load mkl
@@ -262,7 +262,7 @@ done
 %install 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 ###%if %{compiler_family} == gnu
 ###module load mkl

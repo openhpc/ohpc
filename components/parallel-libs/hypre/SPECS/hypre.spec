@@ -128,7 +128,7 @@ phenomena in the defense, environmental, energy, and biological sciences.
 
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 module load superlu
@@ -180,7 +180,7 @@ cd ..
 
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 module load superlu

@@ -50,7 +50,7 @@ Group:   fsp/serial-libs
 URL: http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
 Source0: %{pname}-%{version}.tar.gz
 Source1: OHPC_macros
-Source2: FSP_setup_compiler
+Source2: OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: make
 BuildRequires: pkgconfig
@@ -100,7 +100,7 @@ shown to produce high quality results and scale to very large problems.
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 make config shared=1 prefix=%{install_path}
 make
@@ -109,7 +109,7 @@ make
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 make install DESTDIR=${RPM_BUILD_ROOT}
 

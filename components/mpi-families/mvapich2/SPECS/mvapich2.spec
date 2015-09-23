@@ -61,7 +61,7 @@ URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
 DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   FSP_setup_compiler
+Source2:   OHPC_setup_compiler
 
 # karl.w.schulz@intel.com (09/08/2015)
 %global _default_patch_fuzz 2
@@ -103,7 +103,7 @@ across multiple networks.
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 ./configure --prefix=%{install_path} \
 	    --enable-cxx \
@@ -121,7 +121,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 #make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 

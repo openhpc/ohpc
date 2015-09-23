@@ -119,7 +119,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 # Enable scalapack linkage for blas/lapack with gnu builds
@@ -170,7 +170,7 @@ make MUMPS_MPI=$FSP_MPI_FAMILY \
 
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 %{__mkdir} -p %{buildroot}%{install_path}/lib

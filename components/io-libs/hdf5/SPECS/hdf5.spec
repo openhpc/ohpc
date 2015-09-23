@@ -67,7 +67,7 @@ URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   %{pname}-%{version}-patch1.tar.gz
 Source1:   OHPC_macros
-Source2:   FSP_setup_compiler
+Source2:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 BuildRequires: zlib-devel
@@ -98,7 +98,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 ./configure --prefix=%{install_path} \
 	    --enable-fortran         \
@@ -111,7 +111,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 export NO_BRP_CHECK_RPATH=true
 

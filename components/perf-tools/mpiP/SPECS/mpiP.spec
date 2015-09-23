@@ -60,7 +60,7 @@ Group:     fsp/perf-tools
 URL:       http://mpip.sourceforge.net/
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   FSP_setup_compiler
+Source2:   OHPC_setup_compiler
 Source3:   FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib
@@ -94,7 +94,7 @@ file.
 # note: in order to support call-site demangling, we compile mpiP with gnu
 export FSP_COMPILER_FAMILY=gnu
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 CC=mpicc
@@ -112,7 +112,7 @@ FC=mpif90
 # note: in order to support call-site demangling, we compile mpiP with gnu
 export FSP_COMPILER_FAMILY=gnu
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 make %{?_smp_mflags} 

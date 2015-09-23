@@ -53,7 +53,7 @@ License:        BSD-3-Clause
 Group:          fsp/dev-tools
 Source0:        %{pname}-%{version}.tar.gz
 Source1:        OHPC_macros
-Source2:        FSP_setup_compiler
+Source2:        OHPC_setup_compiler
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelc.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -92,7 +92,7 @@ basic linear algebra and random number generation.
 %patch2 -p1
 
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 # Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
@@ -110,7 +110,7 @@ EOF
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 # Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
@@ -129,7 +129,7 @@ python setup.py build $COMPILER_FLAG
 %install
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 %if 0%{?suse_version}

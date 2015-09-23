@@ -104,7 +104,7 @@ Docu can be found on http://www.netlib.org.
 
 %build
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 # Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu

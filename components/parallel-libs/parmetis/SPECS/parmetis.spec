@@ -67,7 +67,7 @@ URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
 DocDir:  %{FSP_PUB}/doc/contrib
 Source0: par%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
-Source2: FSP_setup_compiler
+Source2: OHPC_setup_compiler
 Source3: FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
@@ -123,7 +123,7 @@ export CFLAGS="-fPIC $CFLAGS"
 %endif
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 make config shared=1 prefix=%{install_path}
@@ -134,7 +134,7 @@ make
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 make install DESTDIR=${RPM_BUILD_ROOT}

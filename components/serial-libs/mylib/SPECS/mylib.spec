@@ -43,7 +43,7 @@ License:   GPL-3.0+
 Group:     Development/Languages/C and C++
 URL:       http://random.org
 Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_setup_compiler
+Source1:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{FSP_HOME}/doc/contrib
 
@@ -63,7 +63,7 @@ Just an example to play with.
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 ./configure --prefix=%{install_path}
 
@@ -71,7 +71,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 make DESTDIR=$RPM_BUILD_ROOT install
 

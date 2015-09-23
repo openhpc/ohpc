@@ -54,7 +54,7 @@ URL:       http://www.open-mpi.org
 DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   %{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
-Source2:   FSP_setup_compiler
+Source2:   OHPC_setup_compiler
 #Patch1:    %{pname}-no_date_and_time.patch
 #Patch2:    %{pname}-no_network_in_build.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -116,7 +116,7 @@ Open MPI jobs.
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics"
 %if %{with_psm}
@@ -135,7 +135,7 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics"
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 

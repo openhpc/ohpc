@@ -51,7 +51,7 @@ Source3:   vsc-base-2.2.2.tar.gz
 Source4:   bootstrap_eb.py
 Source5:   easybuild-sles12.patch
 Source6:   OHPC_macros
-Source7:   FSP_setup_compiler
+Source7:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch
 BuildRequires: python
@@ -79,7 +79,7 @@ cp %{_sourcedir}/*py .
 
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}

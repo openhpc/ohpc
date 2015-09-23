@@ -87,7 +87,7 @@ DocDir:    %{FSP_PUB}/doc/contrib
 
 Source0:   %{pname}-%{version}-patch1.tar.gz
 Source1:   OHPC_macros
-Source2:   FSP_setup_compiler
+Source2:   OHPC_setup_compiler
 Source3:   FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: zlib-devel
@@ -117,7 +117,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 export CC=mpicc 
@@ -140,7 +140,7 @@ export MPICXX=mpicxx
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 export NO_BRP_CHECK_RPATH=true

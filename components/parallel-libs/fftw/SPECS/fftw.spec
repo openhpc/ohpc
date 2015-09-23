@@ -66,7 +66,7 @@ Group:     fsp/parallel-libs
 URL:       http://www.fftw.org
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   FSP_setup_compiler
+Source2:   OHPC_setup_compiler
 Source3:   FSP_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib
@@ -99,7 +99,7 @@ data, and of arbitrary input size.
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 BASEFLAGS="--enable-shared --disable-dependency-tracking --enable-threads"
 %if %{openmp}
@@ -118,7 +118,7 @@ export FSP_MPI_FAMILY=%{mpi_family}
 # FSP compiler designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/FSP_setup_mpi
 
 make DESTDIR=$RPM_BUILD_ROOT install

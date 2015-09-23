@@ -95,7 +95,7 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 # Only *86 CPUs support DYNAMIC_ARCH
 %ifarch %ix86 x86_64
@@ -112,7 +112,7 @@ make    %{?openblas_target} USE_THREAD=1 USE_OPENMP=1 \
 %install
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 make   PREFIX=%{buildroot}%{install_path} install 
 

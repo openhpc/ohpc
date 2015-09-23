@@ -124,7 +124,7 @@ find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 # Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
@@ -143,7 +143,7 @@ EOF
 %build
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
@@ -169,7 +169,7 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 %install
 # FSP compiler/mpi designation
 export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+. %{_sourcedir}/OHPC_setup_compiler
 
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/FSP_setup_mpi
