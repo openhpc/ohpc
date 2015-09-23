@@ -19,7 +19,7 @@ Version:   16.0.109
 Release:   1
 License:   Intel(R)
 URL:       http://www.intel.com/software/products
-Group:     fsp/compiler-families
+Group:     ohpc/compiler-families
 BuildArch: x86_64
 Source0:   intel-compilers-fsp-16.0.0-109.tar.gz
 Source1:   OHPC_macros

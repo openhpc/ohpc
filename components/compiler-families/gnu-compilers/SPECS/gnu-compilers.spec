@@ -25,7 +25,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   5.2.0
 Release:   1
 License:   GPL-3.0+
-Group:     fsp/compiler-families
+Group:     ohpc/compiler-families
 URL:       http://gcc.gnu.org/
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   gcc-%{version}.tar.bz2
