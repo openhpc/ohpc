@@ -42,7 +42,7 @@ Requires:  prun%{PROJ_DELIM}
 
 %description
 
-FSP collection of the Intel(R) MPI toolchain.
+OpenHPC collection of the Intel(R) MPI toolchain.
 
 %prep
 

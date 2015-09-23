@@ -43,7 +43,7 @@ requires: intel-compilers%{PROJ_DELIM}
 
 %description
 
-FSP collection of development packages for Intel(R) Parallel Studio
+OpenHPC collection of development packages for Intel(R) Parallel Studio
 compiler suite (including compilers for C,C++, and Fortran).
 
 %prep

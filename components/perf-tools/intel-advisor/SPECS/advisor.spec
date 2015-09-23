@@ -38,7 +38,7 @@ AutoReq:   no
 
 %description
 
-FSP collection of the Intel(R) Adviser XE toolset for treading design and prototyping.
+OpenHPC collection of the Intel(R) Adviser XE toolset for treading design and prototyping.
 
 %prep
 

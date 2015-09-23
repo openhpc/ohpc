@@ -42,7 +42,7 @@ requires:  libpng12-0
 
 %description
 
-FSP collection of the Intel(R) Inspector memory and thread debugging tools.
+OpenHPC collection of the Intel(R) Inspector memory and thread debugging tools.
 
 %prep
 

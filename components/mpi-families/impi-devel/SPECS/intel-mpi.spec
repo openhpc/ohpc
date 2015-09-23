@@ -43,7 +43,7 @@ requires: intel-mpi%{PROJ_DELIM}
 
 %description
 
-FSP collection of the Intel(R) MPI toolchain.
+OpenHPC collection of the Intel(R) MPI toolchain.
 
 %prep
 

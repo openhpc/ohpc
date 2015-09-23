@@ -38,7 +38,7 @@ AutoReq:   no
 
 %description
 
-FSP collection of the Intel(R) MPI toolchain.
+OpenHPC collection of the Intel(R) MPI toolchain.
 
 %prep
 

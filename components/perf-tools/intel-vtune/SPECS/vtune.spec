@@ -39,7 +39,7 @@ AutoReq:   no
 
 %description
 
-FSP collection of the Intel(R) VTune(TM) distribution.
+OpenHPC collection of the Intel(R) VTune(TM) distribution.
 
 %prep
 

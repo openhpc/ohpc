@@ -43,7 +43,7 @@ Requires: libpng12
 
 %description
 
-FSP collection of the Intel(R) Trace Analyzer and Collector for Linux* OS.
+OpenHPC collection of the Intel(R) Trace Analyzer and Collector for Linux* OS.
 
 %prep
 
