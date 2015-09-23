@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# FSP: install from release rpms into standard FSP path
+# Install from release rpms into standard OpenHPC path
 
 #version=16.0.1.407184  # 15.31
 version=16.1.0.423441   # 15.42

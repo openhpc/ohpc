@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# FSP: install from release rpms into standard FSP path
+# Install from release rpms into standard OpenHPC path
 
 version=5.1.1.109
 input_dir=l_mpi_p_5.1.1.109
