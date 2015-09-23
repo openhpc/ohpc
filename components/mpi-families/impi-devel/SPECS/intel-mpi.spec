@@ -39,7 +39,7 @@ requires: intel-mpi%{PROJ_DELIM}
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
-%define package_target %{FSP_COMPILERS}/intel
+%define package_target %{OHPC_COMPILERS}/intel
 
 %description
 

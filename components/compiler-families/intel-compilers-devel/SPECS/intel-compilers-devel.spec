@@ -37,7 +37,7 @@ requires: intel-compilers%{PROJ_DELIM}
 %define debug_package %{nil}
 
 %define composer_release compilers_and_libraries_20%{version}
-%define package_target %{FSP_COMPILERS}/intel
+%define package_target %{OHPC_COMPILERS}/intel
 
 %define package_version %{version}
 

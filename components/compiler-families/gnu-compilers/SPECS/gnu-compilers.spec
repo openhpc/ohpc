@@ -53,7 +53,7 @@ BuildRequires:  fdupes
 %endif
 
 
-%define install_path %{FSP_COMPILERS}/gcc/%{version}
+%define install_path %{OHPC_COMPILERS}/gcc/%{version}
 
 %description
 
