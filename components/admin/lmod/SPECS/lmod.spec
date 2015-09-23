@@ -62,7 +62,7 @@ Supports a Software Hierarchy
 %prep
 %setup -q -n Lmod-%{version}
 
-# Intel FSP patches
+# OpenHPC patches
 %patch1 -p1
 %patch2 -p1
 

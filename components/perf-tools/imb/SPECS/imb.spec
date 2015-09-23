@@ -87,7 +87,7 @@ a range of message sizes.
 %prep
 %setup -n imb
 
-# Intel FSP patches
+# OpenHPC patches
 %patch1 -p0
 
 %build

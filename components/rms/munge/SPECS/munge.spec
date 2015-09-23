@@ -100,7 +100,7 @@ A shared library for applications using MUNGE.
 %prep
 %setup -n %{pname}-%{version}
 
-# Intel FSP patches
+# OpenHPC patches
 %patch1
 %patch2
 %patch3

@@ -51,7 +51,7 @@ to Lua programs.
 %prep
 %setup -n luaposix-release-v%{version}
 
-# Intel FSP patches
+# OpenHPC patches
 %patch1 -p0
 
 %build

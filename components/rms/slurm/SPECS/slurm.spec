@@ -459,7 +459,7 @@ Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 %prep
 %setup -n slurm-%{version}
 
-# Intel FSP patches
+# OpenHPC patches
 ### patch1
 ### patch2
 ### patch3

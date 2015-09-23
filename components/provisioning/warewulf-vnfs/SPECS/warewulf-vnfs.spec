@@ -62,7 +62,7 @@ Virtual Node FileSystem objects.
 %prep
 %setup -n %{pname}-%{version}
 
-# Intel FSP patches
+# OpenHPC patches
 
 %patch1 -p1
 %patch2 -p1
