@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname intel-compilers
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -22,7 +22,7 @@ URL:       http://www.intel.com/software/products
 Group:     fsp/compiler-families
 BuildArch: x86_64
 Source0:   intel-compilers-fsp-16.0.0-109.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 

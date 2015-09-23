@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname gnu-compilers
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -32,7 +32,7 @@ Source0:   gcc-%{version}.tar.bz2
 Source1:   gmp-%{gmp_version}a.tar.bz2
 Source2:   mpc-%{mpc_version}.tar.gz
 Source3:   mpfr-%{mpfr_version}.tar.bz2
-Source4:   FSP_macros
+Source4:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
