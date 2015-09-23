@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -7,6 +7,7 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
+
 %include %{_sourcedir}/FSP_macros
 
 %define pname valgrind
