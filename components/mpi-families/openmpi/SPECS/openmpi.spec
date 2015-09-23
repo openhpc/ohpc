@@ -35,7 +35,7 @@ BuildRequires: intel_licenses
 
 %include %{_sourcedir}/OHPC_macros
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname openmpi

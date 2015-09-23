@@ -55,7 +55,7 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-ohpc-header-comp-end-------------------------------
 
 # Base package name
 %define pname superlu

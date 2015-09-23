@@ -32,7 +32,7 @@
 
 %{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname hdf5

@@ -45,7 +45,7 @@ BuildRequires: openmpi-gnu%{PROJ_DELIM}
 Requires:      openmpi-gnu%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname mpiP

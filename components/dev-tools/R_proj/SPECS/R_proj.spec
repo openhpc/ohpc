@@ -50,7 +50,7 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 
 %define 	pname R_proj

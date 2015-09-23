@@ -31,7 +31,7 @@ BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: intel_licenses
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname easybuild
