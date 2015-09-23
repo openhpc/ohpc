@@ -33,8 +33,10 @@ Requires:       make
 BuildRoot:     %{_tmppath}/%{name}-%{version}-build
 DocDir:        %{OHPC_PUB}/doc/contrib
 
-%description
-This guide presents a simple cluster installation procedure using components from the Forest Peak (FSP) software stack.
+%description 
+
+This guide presents a simple cluster installation procedure using components
+from the OpenHPC software stack.
 
 %prep
 %setup -n docs-fsp
