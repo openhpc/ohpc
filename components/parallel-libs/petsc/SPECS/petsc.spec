@@ -12,7 +12,7 @@
 
 #-fsp-header-comp-begin-----------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # FSP convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -67,7 +67,7 @@ Version:        3.6.1
 Release:        0
 
 Source0:        %{pname}-%{version}.tar.gz
-Source1:        FSP_macros
+Source1:        OHPC_macros
 Source2:        FSP_setup_compiler
 Source3:        FSP_setup_mpi
 Patch1:         petsc.rpath.patch
@@ -80,7 +80,7 @@ BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 #!BuildIgnore: post-build-checks
 %define debug_package %{nil}
 

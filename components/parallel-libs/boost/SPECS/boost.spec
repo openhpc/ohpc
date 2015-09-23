@@ -28,7 +28,7 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # FSP convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -96,7 +96,7 @@ Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
-Source101:	FSP_macros
+Source101:	OHPC_macros
 Source102:	FSP_setup_compiler
 Source103:	FSP_setup_mpi
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
