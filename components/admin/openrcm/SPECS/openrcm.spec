@@ -1,3 +1,12 @@
+#----------------------------------------------------------------------------bh-
+# This RPM .spec file is part of the OpenHPC project.
+#
+# It may have been modified from the default version supplied by the underlying
+# release package (if available) in order to apply patches, perform customized
+# build/install configurations, and supply additional files to support
+# desired integration conventions.
+#
+#----------------------------------------------------------------------------eh-
 #
 # Copyright (c) 2004-2005 The Trustees of Indiana University and Indiana
 #                         University Research and Technology
@@ -19,14 +28,6 @@
 # $HEADER$
 #
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
-#
-# It may have been modified from the default version supplied by the underlying
-# release package (if available) in order to apply patches, perform customized
-# build/install configurations, and supply additional files to support
-# desired integration conventions.
-#
-#----------------------------------------------------------------------------eh-
 
 %{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
