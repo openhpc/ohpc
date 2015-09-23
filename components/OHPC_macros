@@ -8,6 +8,6 @@
 %define OHPC_APPS       %{OHPC_PUB}/apps
 %define OHPC_LIBS       %{OHPC_PUB}/libs
 %define OHPC_MODULES    %{OHPC_PUB}/modulefiles
-%define FSP_MODULEDEPS  %{FSP_PUB}/moduledeps
+%define OHPC_MODULEDEPS %{OHPC_PUB}/moduledeps
 %define debug_package   %{nil}
 

@@ -65,8 +65,8 @@ ln -s ../bin/mpiicpc  mpicxx
 # toolchains. Therefore, we create a gnu and intel modulefile here.
 
 # FSP module file for Intel compiler toolchain
-%{__mkdir} -p %{buildroot}/%{FSP_MODULEDEPS}/intel/impi
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/intel/impi/%{version}
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi/%{version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -96,7 +96,7 @@ prepend-path    I_MPI_ROOT      %{package_target}
 prepend-path    MPI_DIR         %{package_target}/intel64
 prepend-path    LD_LIBRARY_PATH %{package_target}/intel64/lib
 
-prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/intel-impi
+prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/intel-impi
 
 # Prefer bin_fsp to allow developers to use standard mpicc, mpif90,
 # etc to access Intel toolchain.
@@ -110,14 +110,14 @@ setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
 family "MPI"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/intel/impi/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
 EOF
 
 # FSP module file for GNU compiler toolchain
-mkdir -p %{buildroot}/%{FSP_MODULEDEPS}/gnu/impi
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/gnu/impi/%{version}
+mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi/%{version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -148,7 +148,7 @@ prepend-path    I_MPI_ROOT      %{package_target}
 prepend-path    MPI_DIR         %{package_target}/intel64
 prepend-path    LD_LIBRARY_PATH %{package_target}/intel64/lib
 
-prepend-path    MODULEPATH      %{FSP_MODULEDEPS}/gnu-impi
+prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
 
 # PMI job launch support
 
@@ -157,7 +157,7 @@ setenv I_MPI_PMI_LIBRARY /usr/lib64/libpmi.so
 family "MPI"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/gnu/impi/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
 EOF

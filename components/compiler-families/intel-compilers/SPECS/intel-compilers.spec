@@ -111,8 +111,8 @@ EOF
 
 # Provide standalone module for use with GNU toolchain
 
-%{__mkdir} -p %{buildroot}/%{FSP_MODULEDEPS}/gnu/mkl
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/gnu/mkl/%{module_version}
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/mkl
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/mkl/%{module_version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
