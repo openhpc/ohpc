@@ -50,7 +50,7 @@ DocDir:    %{OHPC_HOME}/doc/contrib
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{name}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{name}/%version
 
 %description
 Just an example to play with.

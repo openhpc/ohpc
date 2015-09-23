@@ -100,7 +100,7 @@ BuildRequires: fdupes
 %endif
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 The Adaptable IO System (ADIOS) provides a simple, flexible way for

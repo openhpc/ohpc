@@ -70,7 +70,7 @@ Group:          fsp/dev-tools
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%define         install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
+%define         install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 %define         debug_package %{nil}
 
 BuildRequires:  cairo-devel

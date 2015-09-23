@@ -63,7 +63,7 @@ ExcludeArch: s390 s390x
 %global debug_package %{nil} 
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{pname}/%version
 
 %description
 PAPI provides a programmer interface to monitor the performance of

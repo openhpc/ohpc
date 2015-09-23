@@ -80,7 +80,7 @@ Provides:      libmetis0 = %{version}
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/par%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/par%{pname}/%version
 
 %description
 METIS is a family of programs for partitioning unstructured graphs and hypergraph

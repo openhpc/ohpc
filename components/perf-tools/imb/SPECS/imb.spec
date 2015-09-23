@@ -77,7 +77,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 Patch1: imb.cc.patch
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 The Intel MPI Benchmarks (IMB) perform a set of MPI performance

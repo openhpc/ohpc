@@ -62,7 +62,7 @@ Requires: python
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{pname}/%version
 
 %description
 EasyBuild is a software build and installation framework that allows 

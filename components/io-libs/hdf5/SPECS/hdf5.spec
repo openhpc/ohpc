@@ -78,7 +78,7 @@ Requires:      zlib-devel
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
 HDF5 is a general purpose library and file format for storing scientific data.

@@ -85,7 +85,7 @@ Requires: pdtoolkit-%{compiler_family}-fsp
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 TAU is a program and performance analysis tool framework being developed for

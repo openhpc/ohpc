@@ -72,7 +72,7 @@ Obsoletes:      python-numeric < %{version}
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
 NumPy is a general-purpose array-processing package designed to

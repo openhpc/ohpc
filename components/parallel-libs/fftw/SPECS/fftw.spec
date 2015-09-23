@@ -83,7 +83,7 @@ Requires(preun):      info
 
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 FFTW is a C subroutine library for computing the Discrete Fourier

@@ -118,7 +118,7 @@ routines resemble their LAPACK equivalents as much as possible.
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %prep
 %setup -q -n %{pname}-%{version}

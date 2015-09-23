@@ -109,7 +109,7 @@ DocDir:         %{OHPC_PUB}/doc/contrib
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 The goal of the Scalable Linear Solvers project is to develop scalable
