@@ -32,7 +32,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 %description
 
 Collection of simple example programs and file templates for use within
-FSP development environment.
+OpenHPC development environment.
 
 %prep
 
