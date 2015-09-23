@@ -98,7 +98,7 @@ Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
 Source101:	OHPC_macros
 Source102:	OHPC_setup_compiler
-Source103:	FSP_setup_mpi
+Source103:	OHPC_setup_mpi
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:         %{FSP_PUB}/doc/contrib
 
@@ -144,7 +144,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 %if %build_mpi
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 export CC=mpicc
 export CXX=mpicxx
 export F77=mpif77
@@ -187,7 +187,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 
 %if %build_mpi
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 export CC=mpicc
 export CXX=mpicxx
 export F77=mpif77

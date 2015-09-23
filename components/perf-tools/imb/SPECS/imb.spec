@@ -67,7 +67,7 @@ URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
 Source0:   %{PNAME}_%{version}.tgz
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
-Source3:   FSP_setup_mpi
+Source3:   OHPC_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib
 
@@ -96,7 +96,7 @@ a range of message sizes.
 export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 cd src
 make all
@@ -108,7 +108,7 @@ cd -
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 %{__mkdir} -p %{buildroot}%{install_path}/bin
 cd src

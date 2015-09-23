@@ -146,7 +146,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 # Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
@@ -172,7 +172,7 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 # Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu

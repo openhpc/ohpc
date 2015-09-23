@@ -90,7 +90,7 @@ DocDir:         %{FSP_PUB}/doc/contrib
 Source0:	%{pname}-%{version}.tar.gz
 Source101:	OHPC_macros
 Source102:	OHPC_setup_compiler
-Source103:	FSP_setup_mpi
+Source103:	OHPC_setup_mpi
 
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
@@ -145,7 +145,7 @@ NetCDF data is:
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 export CPPFLAGS="-I$HDF5_INC"
@@ -167,7 +167,7 @@ export CC=mpicc
 export FSP_COMPILER_FAMILY=%{compiler_family} 
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"

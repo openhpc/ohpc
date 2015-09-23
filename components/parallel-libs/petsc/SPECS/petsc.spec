@@ -69,7 +69,7 @@ Release:        0
 Source0:        %{pname}-%{version}.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
-Source3:        FSP_setup_mpi
+Source3:        OHPC_setup_mpi
 Patch1:         petsc.rpath.patch
 Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -102,7 +102,7 @@ differential equations.
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 

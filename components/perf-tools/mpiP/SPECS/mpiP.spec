@@ -61,7 +61,7 @@ URL:       http://mpip.sourceforge.net/
 Source0:   %{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
-Source3:   FSP_setup_mpi
+Source3:   OHPC_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib
 
@@ -95,7 +95,7 @@ file.
 export FSP_COMPILER_FAMILY=gnu
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 CC=mpicc
 CXX=mpicxx
@@ -113,7 +113,7 @@ FC=mpif90
 export FSP_COMPILER_FAMILY=gnu
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 make %{?_smp_mflags} 
 make DESTDIR=$RPM_BUILD_ROOT install

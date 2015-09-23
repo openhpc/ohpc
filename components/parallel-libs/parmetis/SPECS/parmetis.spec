@@ -68,7 +68,7 @@ DocDir:  %{FSP_PUB}/doc/contrib
 Source0: par%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
 Source2: OHPC_setup_compiler
-Source3: FSP_setup_mpi
+Source3: OHPC_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 BuildRequires: make
@@ -124,7 +124,7 @@ export CFLAGS="-fPIC $CFLAGS"
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 make config shared=1 prefix=%{install_path}
 make
@@ -135,7 +135,7 @@ make
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 make install DESTDIR=${RPM_BUILD_ROOT}
 

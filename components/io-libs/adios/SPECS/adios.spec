@@ -129,7 +129,7 @@ popd
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
@@ -182,7 +182,7 @@ chmod +x adios_config
 export FSP_COMPILER_FAMILY=%{compiler_family}
 export FSP_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+. %{_sourcedir}/OHPC_setup_mpi
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
