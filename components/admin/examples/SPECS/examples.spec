@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-Summary: Example source code and templates for use within FSP environment.
+Summary: Example source code and templates for use within OpenHPC environment.
 Name:    examples%{PROJ_DELIM}
 Version: 1.2
 Release: 1

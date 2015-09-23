@@ -38,7 +38,7 @@ Provides default login environment for Intel toolchain (compiler and MPI familie
 mkdir -p %{buildroot}/%{OHPC_MODULES}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/ohpc
 #%Module1.0#####################################################################
-# Default FSP environment
+# Default OpenHPC environment
 #############################################################################
 
 proc ModulesHelp { } {
