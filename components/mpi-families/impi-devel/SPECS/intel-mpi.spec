@@ -15,7 +15,7 @@ Summary:   Intel(R) MPI Library for Linux* OS
 Name:      intel-mpi-devel%{PROJ_DELIM}
 Version:   5.1.1.109
 Source0:   intel-impi-devel-fsp-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Release:   1
 License:   Intel
 URL:       https://software.intel.com/en-us/intel-mpi-library
@@ -28,7 +28,7 @@ AutoReq:   no
 # 09/16/15 karl.w.schulz@intel.com - patch to enable gfortran 5.2.x MPI module support
 Source2:   gfortran_support_fix.patch
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true

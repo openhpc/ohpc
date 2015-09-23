@@ -46,7 +46,7 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # Base package name
 %define pname mpich

@@ -33,7 +33,7 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 #-fsp-header-comp-end------------------------------------------------
 
@@ -53,7 +53,7 @@ Group:     fsp/mpi-families
 URL:       http://www.open-mpi.org
 DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   %{pname}-%{version}.tar.bz2
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Source2:   FSP_setup_compiler
 #Patch1:    %{pname}-no_date_and_time.patch
 #Patch2:    %{pname}-no_network_in_build.patch

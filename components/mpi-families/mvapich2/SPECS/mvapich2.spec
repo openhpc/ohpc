@@ -46,7 +46,7 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # Base package name
 %define pname mvapich2
@@ -60,7 +60,7 @@ Group:     fsp/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
 DocDir:    %{FSP_PUB}/doc/contrib
 Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Source2:   FSP_setup_compiler
 
 # karl.w.schulz@intel.com (09/08/2015)
