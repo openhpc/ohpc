@@ -60,7 +60,7 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+%{__rm} -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
