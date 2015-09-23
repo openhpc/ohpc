@@ -12,7 +12,7 @@
 
 %define wwpkgdir /srv/
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname warewulf-common
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -25,7 +25,7 @@ License: US Dept. of Energy (BSD-like)
 Group:   fsp/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
+Source1: OHPC_macros
 ExclusiveOS: linux
 DocDir: %{FSP_PUB}/doc/contrib
 Conflicts: warewulf <= 2.9

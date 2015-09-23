@@ -10,7 +10,7 @@
 
 # Serial metis build dependent on compiler toolchain
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 #-fsp-header-comp-begin-----------------------------
 
@@ -49,7 +49,7 @@ License: BSD-like
 Group:   fsp/serial-libs
 URL: http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
 Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
+Source1: OHPC_macros
 Source2: FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: make

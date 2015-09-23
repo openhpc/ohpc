@@ -12,7 +12,7 @@
 
 #-fsp-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 # FSP convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
@@ -49,7 +49,7 @@ License:   GPL
 Group:     fsp/serial-libs
 URL:       http://www.gnu.org/software/gsl
 Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Source2:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{FSP_PUB}/doc/contrib

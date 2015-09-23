@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname munge
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
@@ -46,7 +46,7 @@ BuildConflicts: post-build-checks
 Conflicts: munge 
 
 Source0:	%{pname}-%{version}.tar.bz2
-Source1:   FSP_macros
+Source1:   OHPC_macros
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
 Patch1:     %{pname}.logdir.patch
 # 6/12/14 karl.w.schulz@intel.com - define default runlevel

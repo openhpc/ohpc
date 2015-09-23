@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1723" != "0000" && echo "1723" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 %define pname warewulf-nhc
 %define sname nhc
 %define debug_package %{nil}
@@ -27,7 +27,7 @@ License: US Dept. of Energy (BSD-like)
 Group: fsp/provisioning
 URL: http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
+Source1: OHPC_macros
 Packager: %{?_packager}%{!?_packager:Michael Jennings <mej@lbl.gov>}
 Vendor: %{?_vendorinfo}%{!?_vendorinfo:Warewulf Project (http://warewulf.lbl.gov/)}
 Distribution: %{?_distribution:%{_distribution}}%{!?_distribution:%{_vendor}}

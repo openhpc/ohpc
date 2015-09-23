@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 %define pname warewulf-ipmi
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
@@ -29,7 +29,7 @@ License: US Dept. of Energy (BSD-like)
 Group: fsp/provisioning
 URL: http://warewulf.lbl.gov/
 Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
+Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common-fsp
 BuildRequires: warewulf-common-fsp
