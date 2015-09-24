@@ -3,7 +3,7 @@ chosen {\em master} host. Note that client-side components will be added to
 the corresponding compute image in a subsequent step.
 
 % begin_ohpc_run
-% fsp_comment_header Add resource management services on master node \ref{sec:add_rm}
+% ohpc_comment_header Add resource management services on master node \ref{sec:add_rm}
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ (*\groupinstall*) ohpc-slurm-server
 \end{lstlisting}
@@ -31,15 +31,4 @@ manager, we also add a dedicated ``test'' user as follows:
 \end{lstlisting}
 % end_ohpc_run
 
-% todo - decide on this, karl disabling for now...it was not being run in CI
 
-%% In order for \SLURM{} to terminate after a job completes rather then waiting
-%% for the job timeout to occur the \texttt{Waittime} needs to be set to
-%% less than infinite.
-%% 
-%% % begin_ohpc_run
-%% % ohpc_validation_comment Reduce Waittime value
-%% \begin{lstlisting}[language=bash,keywords={}]
-%% [master]$ perl -pi -e "s/^Waittime=0/Waittime=30/" /etc/slurm/slurm.conf
-%% \end{lstlisting}
-%% % end_ohpc_run
