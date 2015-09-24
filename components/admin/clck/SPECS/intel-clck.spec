@@ -51,6 +51,10 @@ Intel cluster checker.
 
 %install
 
+match_keys='clck_'
+rm rpm/clck_common-pset*.rpm
+rpm -ivh --nodeps --relocate /opt/intel/clck/%{version}=%{OHPC_ADMIN}/clck/%{version} rpm/$match_keys*.rpm
+
 %{__mkdir_p} %{buildroot}
 cd %{buildroot}
 #%{__tar} xfz $RPM_SOURCE_DIR/intel-clck%{PROJ_DELIM}-%{version}.tar.gz
