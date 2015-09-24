@@ -70,11 +70,9 @@
 \input{../../common/enable_fsp_repo}
 
 \begin{lstlisting}[language=bash,keywords={},literate={VER}{\OHPCVersion{}}1]
-[master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/CentOS-7.1_Intel/ForestPeak:VER.repo
+[master]$ ohpc_repo=http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/VER/CentOS-7.1_Intel/OpenHPC:VER.repo
 
 \end{lstlisting}
-
-%[master]$ fsp_repo=http://fsp.cmt.intel.com/ForestPeak/VER/CentOS-7.1_Intel/ForestPeak:VER.repo 
 
 If outside of Intel, the repository location should be set to match the path to
 a locally accessibly copy of the \OHPC{} repository. Once set, the repository can be
@@ -83,7 +81,7 @@ enabled via the following:
 % begin_fsp_run
 % fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ wget -P /etc/yum.repos.d ${fsp_repo}
+[master]$ wget -P /etc/yum.repos.d ${ohpc_repo}
 \end{lstlisting}
 % end_fsp_run
 

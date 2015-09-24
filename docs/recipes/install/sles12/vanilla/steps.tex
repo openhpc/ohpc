@@ -71,10 +71,10 @@
 \input{../../common/install_fsp_component_intro.tex}
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
-\input{../../common/enable_fsp_repo}
+\input{../../common/enable_ohpc_repo}
 
 \begin{lstlisting}[language=bash,keywords={},literate={VER}{\OHPCVersion{}}1]
-[master]$ fsp_repo=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/VER/SLE_12_Intel/ForestPeak:VER.repo
+[master]$ ohpc_repo=http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/VER/SLE_12_Intel/OpenHPC:VER.repo
 \end{lstlisting}
 
 
@@ -85,7 +85,7 @@ enabled via the following:
 % begin_fsp_run
 % fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ zypper addrepo ${fsp_repo}
+[master]$ zypper addrepo ${ohpc_repo}
 [master]$ zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_fsp_run

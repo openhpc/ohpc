@@ -1,5 +1,5 @@
 # -*-sh-*-
-#
+# ------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------
 # Template input file to define local variable settings for use with
 # an openHPC installation recipe.
@@ -9,8 +9,8 @@
 # SMS (master) node settings
 # ---------------------------
 
-# URL for FSP repository
-fsp_repo="${fsp_repo:-http://tcgsw-obs.pdx.intel.com:82/ForestPeak:/15.42/SLE_12_Intel/ForestPeak:15.42.repo}"
+# URL for OpenHPC repository
+ohpc_repo="${ohpc_repo:-http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/1.0/SLE_12_Intel/OpenHPC:1.0.repo}"
 
 # Hostname for master server (SMS)
 master_name="${master_name:-sms}"
