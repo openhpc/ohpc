@@ -13,7 +13,7 @@
 Name:           docs-fsp
 Version:        15.42
 Release:        1
-Summary:        Forest Peak documentation
+Summary:        OpenHPC documentation
 License:        BSD-3-Clause
 Group:          ohpc/admin
 Source0:        docs-fsp.tar
