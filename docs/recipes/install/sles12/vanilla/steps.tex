@@ -82,13 +82,13 @@ If outside of Intel, the repository location should be set to match the path to
 a locally accessibly copy of the \OHPC{} repository. Once set, the repository can be
 enabled via the following: 
 
-% begin_fsp_run
-% fsp_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
+% begin_ohpc_run
+% ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ zypper addrepo ${ohpc_repo}
 [master]$ zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 % Dev testing for Factory
 %[master]$ zypper addrepo $OpenHPC_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
@@ -110,13 +110,13 @@ both the base and SDK repositories:
 \input{../../common/install_provisioning_intro}
 \input{../../common/firewall}
 
-% begin_fsp_run
-% fsp_validation_comment Disable firewall 
+% begin_ohpc_run
+% ohpc_validation_comment Disable firewall 
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ systemctl disable SuSEfirewall2
 [master]$ systemctl stop SuSEfirewall2
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{../../common/install_slurm}
@@ -129,8 +129,8 @@ devices under \baseOS{} are not directly accessible by users. Consequently, the 
 below include the addition of \texttt{udev} rules that are provided by \OHPC{}
 to enable user access.
 
-% begin_fsp_run
-% fsp_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
+% begin_ohpc_run
+% ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
 [master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
@@ -141,7 +141,7 @@ to enable user access.
 # Load IB drivers
 [master]$ service rdma start
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 With the \InfiniBand{} drivers included, you can also enable IPoIB functionality
 which provides a mechanism to send IP packets over the IB network. If you plan
@@ -153,11 +153,11 @@ provided and update the \texttt{\$\{master\_ipoib\}} and
 \texttt{\$\{ipoib\_netmask\}} entries to match local desired settings (alter ib0
 naming as appropriate if system contains dual-ported or multiple HCAs). 
 
-% begin_fsp_run
-% fsp_validation_newline
-% fsp_command if [ ${enable_ipoib} -eq 1 ];then
-% fsp_indent 5
-% fsp_validation_comment Enable ib0
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [ ${enable_ipoib} -eq 1 ];then
+% ohpc_indent 5
+% ohpc_validation_comment Enable ib0
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ cp /opt/ohpc/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
 
@@ -168,15 +168,15 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 # Initiate ib0
 [master]$ ifup ib0
 \end{lstlisting}
-% fsp_indent 0
-% fsp_command fi
-% end_fsp_run
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
 
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{../../common/warewulf_setup}
 
-% begin_fsp_run
-% fsp_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
+% begin_ohpc_run
+% ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
 %\begin{verbatim}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
@@ -212,7 +212,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [master]$ service apache2 restart
 \end{lstlisting}
 %\end{verbatim}
-% end_fsp_run
+% end_ohpc_run
 
 \subsection{Define {\em compute} image for provisioning}
 
@@ -228,8 +228,8 @@ image for use with \Warewulf{}.  We begin by creating a directory structure on t
 {\em master} that will represent the root filesystem of the compute node. The 
 default location for this example is in \path{/opt/ohpc/admin/images/sles12}.
 
-% begin_fsp_run
-% fsp_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
+% begin_ohpc_run
+% ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location for SLES 
 [master]$ export CHROOT=/opt/ohpc/admin/images/sles12
@@ -240,7 +240,7 @@ default location for this example is in \path{/opt/ohpc/admin/images/sles12}.
 [master]$ mknod -m 666 $CHROOT/dev/zero c 1 5            # create /dev/zero device
 [master]$ wwmkchroot sles-12 $CHROOT                     # create base image
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 
@@ -255,15 +255,15 @@ environment needs to be updated to enable DNS resolution. Assuming that
 the {\em master} host has a working DNS configuration in place, the chroot environment can
 be updated with a copy of the configuration as follows:
 
-% begin_fsp_run
-% fsp_comment_header Add OpenHPC components to compute image \ref{sec:add_components}
+% begin_ohpc_run
+% ohpc_comment_header Add OpenHPC components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 %\newpage
-% begin_fsp_run
+% begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Import GPG keys for chroot repository usage
 [master]$ zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
@@ -290,7 +290,7 @@ be updated with a copy of the configuration as follows:
 # Remove default hostname to allow WW to provision network names
 [master]$ mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 
@@ -305,8 +305,8 @@ example configuration.
 %The \NFS{} exporting options use an address/netmask
 %combination to limit the export scope to the defined compute nodes.
 
-% begin_fsp_run
-% fsp_comment_header Customize system configuration \ref{sec:master_customization}
+% begin_ohpc_run
+% ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # add new cluster key to base image
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
@@ -331,21 +331,21 @@ example configuration.
 [master]$ chroot $CHROOT systemctl enable ntpd
 [master]$ echo "server ${master_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 % Additional commands when additional computes are requested
 
-% begin_fsp_run
-% fsp_validation_newline
-% fsp_validation_comment Update basic slurm configuration if additional computes defined
-% fsp_command if [ ${num_computes} -gt 4 ];then
-% fsp_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
-% fsp_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Update basic slurm configuration if additional computes defined
+% ohpc_command if [ ${num_computes} -gt 4 ];then
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
 
-% fsp_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% fsp_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% fsp_command fi
-% end_fsp_run
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command fi
+% end_ohpc_run
 
 \subsubsection{Additional Customizations ({\em optional})} \label{sec:addl_customizations}
 
@@ -367,8 +367,8 @@ discussed further in the following sections.
 
 \input{../../common/memlimits} 
 
-% begin_fsp_run
-% fsp_comment_header Additional customizations \ref{sec:addl_customizations}
+% begin_ohpc_run
+% ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Update memlock settings on master
 [master]$ echo "* soft memlock unlimited" >> /etc/security/limits.conf
@@ -378,7 +378,7 @@ discussed further in the following sections.
 [master]$ echo "* soft memlock unlimited" >> $CHROOT/etc/security/limits.conf
 [master]$ echo "* hard memlock unlimited" >> $CHROOT/etc/security/limits.conf
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 %# Enable larger locked memory limits for SLURM daemon
 %[master]$ echo "ulimit -l unlimited" >> $CHROOT/etc/sysconfig/slurm
@@ -387,12 +387,12 @@ discussed further in the following sections.
 
 \input{../../common/slurm_pam}
 
-% begin_fsp_run
-% fsp_validation_comment Enable slurm pam module
+% begin_ohpc_run
+% ohpc_validation_comment Enable slurm pam module
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \paragraph{Add Cluster Checker} \label{sec:add_clck}
 \input{../../common/cluster_checker}
@@ -406,12 +406,12 @@ the necessary \Lustre{} kernel modules. Consequently, the example below includes
 steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
 file to allow loading of the necessary modules.
 
-% begin_fsp_run
-% fsp_validation_newline
-% fsp_command if [ ${enable_lustre_client} -eq 1 ];then
-% fsp_indent 5
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [ ${enable_lustre_client} -eq 1 ];then
+% ohpc_indent 5
 
-% fsp_validation_comment Install Lustre client on master
+% ohpc_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
 [master]$ (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
@@ -420,11 +420,11 @@ file to allow loading of the necessary modules.
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      /etc/modprobe.d/10-unsupported-modules.conf
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \clearpage
-% begin_fsp_run
-% fsp_validation_comment Enable lustre in WW compute image
+% begin_ohpc_run
+% ohpc_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
 [master]$ (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
@@ -437,7 +437,7 @@ file to allow loading of the necessary modules.
 [master]$ mkdir $CHROOT/mnt/lustre
 [master]$ echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 
 
@@ -449,33 +449,33 @@ instructing \Lustre{} to use an \InfiniBand{} network with the {\em o2ib} LNET d
 attached to \texttt{ib0}. Note that these modifications are made to both the
 {\em master} host and {\em compute} image.
 
-% begin_fsp_run
-% fsp_validation_comment Enable o2ib for Lustre
+% begin_ohpc_run
+% ohpc_validation_comment Enable o2ib for Lustre
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
 [master]$ echo "options lnet networks=o2ib(ib0)" >> $CHROOT/etc/modprobe.d/lustre.conf
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 With the \Lustre{} configuration complete, the client can be mounted on the {\em master}
 host as follows:
-% begin_fsp_run
-% fsp_validation_comment mount Lustre client on master
+% begin_ohpc_run
+% ohpc_validation_comment mount Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ mkdir /mnt/lustre
 [master]$ mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
 \end{lstlisting}
-% fsp_indent 0
-% fsp_command fi
-% end_fsp_run
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
 
 %% [FSP-469]: disabling ORCM
 
 %% [FSP-469] \paragraph{Enable ORCM RAS subsystem} 
 %% [FSP-469] \input{../../common/orcm}
 %% [FSP-469] 
-%% [FSP-469] % begin_fsp_run
-%% [FSP-469] % fsp_validation_comment Configure ORCM aggregator and DB
+%% [FSP-469] % begin_ohpc_run
+%% [FSP-469] % ohpc_validation_comment Configure ORCM aggregator and DB
 %% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 %% [FSP-469] # Set master host as data aggregator
 %% [FSP-469] [master]$ perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
@@ -509,7 +509,7 @@ host as follows:
 %% [FSP-469] [master]$ systemctl start orcmsched
 %% [FSP-469] [master]$ systemctl start orcmd
 %% [FSP-469] \end{lstlisting}
-%% [FSP-469] % end_fsp_run
+%% [FSP-469] % end_ohpc_run
 %% [FSP-469] 
 %% [FSP-469] \input{../../common/orcm_client}
 
@@ -520,45 +520,45 @@ provisioning server for distribution to managed hosts. This is one way
 to distribute user credentials to {\em compute} hosts. To
 import local file-based credentials, issue the following:
 
-% begin_fsp_run
-% fsp_comment_header Import files \ref{sec:file_import}
+% begin_ohpc_run
+% ohpc_comment_header Import files \ref{sec:file_import}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ wwsh file import /etc/passwd                                                          
 [master]$ wwsh file import /etc/group
 [master]$ wwsh file import /etc/shadow 
 \end{lstlisting}
-% \end_fsp_run
+% \end_ohpc_run
 
 Similarly, to import the cryptographic key that is required by the {\em munge}
 authentication library to be available on every host in the resource management
 pool, issue the following:
 
-% begin_fsp_run
+% begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ wwsh file import /etc/munge/munge.key
 \end{lstlisting}
-% \end_fsp_run
+% \end_ohpc_run
 
 Finally, to add support for controlling IPoIB interfaces, \OHPC{} includes a
 template file for \Warewulf{} that can optionally be imported and used later to provision
 \texttt{ib0} network settings.
 
-% begin_fsp_run
-% fsp_validation_newline
-% fsp_command if [ ${enable_ipoib} -eq 1 ];then
-% fsp_indent 5
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [ ${enable_ipoib} -eq 1 ];then
+% ohpc_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ wwsh file import /opt/ohpc/pub/examples/network/sles/ifcfg-ib0.ww
 [master]$ wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network/ifcfg-ib0
 \end{lstlisting}
-% fsp_indent 0
-% fsp_command fi
-% \end_fsp_run
+% ohpc_indent 0
+% ohpc_command fi
+% \end_ohpc_run
 
 \input{../../common/finalize_provisioning}
 
-% begin_fsp_run
-% fsp_validation_comment Add hosts to cluster
+% begin_ohpc_run
+% ohpc_validation_comment Add hosts to cluster
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define four compute nodes and network settings 
@@ -577,10 +577,10 @@ template file for \Warewulf{} that can optionally be imported and used later to 
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 \end{lstlisting}
 
-% fsp_validation_newline
-% fsp_validation_comment Optionally, define IPoIB network settings (required if planning to mount Lustre over IB)
-% fsp_command if [ ${enable_ipoib} -eq 1 ];then
-% fsp_indent 5
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, define IPoIB network settings (required if planning to mount Lustre over IB)
+% ohpc_command if [ ${enable_ipoib} -eq 1 ];then
+% ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
 [master]$ for ((i=0; i<$num_computes; i++)) ; do
@@ -588,9 +588,9 @@ template file for \Warewulf{} that can optionally be imported and used later to 
            done
 [master]$ wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 \end{lstlisting}
-% fsp_indent 0
-% fsp_command fi
-% fsp_validation_newline
+% ohpc_indent 0
+% ohpc_command fi
+% ohpc_validation_newline
 
 \clearpage
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
@@ -598,16 +598,16 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 [master]$ service dhcpd restart
 [master]$ wwsh pxe update
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
-% begin_fsp_run
+% begin_ohpc_run
 
-% fsp_validation_comment Optionally, add arguments to bootstrap kernel
-% fsp_command if [ ${enable_kargs} ]; then
-% fsp_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
-% fsp_command fi
+% ohpc_validation_comment Optionally, add arguments to bootstrap kernel
+% ohpc_command if [ ${enable_kargs} ]; then
+% ohpc_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
+% ohpc_command fi
 
-% end_fsp_run
+% end_ohpc_run
 
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 
@@ -617,8 +617,8 @@ resets on each of the four compute hosts. Note that the utility requires that
 the \texttt{IPMI\_PASSWORD} environment variable be set with the local BMC password in
 order to work interactively.
 
-% begin_fsp_run
-% fsp_comment_header Boot compute nodes \ref{sec:boot_computes}
+% begin_ohpc_run
+% ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [master]$ ipmitool -E -I lanplus -H ${c_bmc[0]} -U root chassis power reset   # power cycle c1
