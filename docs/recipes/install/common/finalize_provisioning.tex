@@ -22,7 +22,7 @@ of the bootstrap image based on the running kernel.
 # Build bootstrap image
 [master]$ wwbootstrap `uname -r`
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \subsubsection{Assemble Virtual Node File System (VNFS) image}
 
@@ -35,7 +35,7 @@ defined for the {\em compute} instance.
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ wwvnfs -y --chroot $CHROOT
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \subsubsection{Register nodes for provisioning}
 
@@ -80,5 +80,5 @@ that were imported in \S\ref{sec:file_import}.
 %%% [master]$ service dhcpd restart
 %%% [master]$ wwsh pxe update
 %%% \end{lstlisting}
-%%% % end_fsp_run
+%%% % end_ohpc_run
 
