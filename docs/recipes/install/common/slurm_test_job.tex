@@ -2,7 +2,7 @@ With the resource manager enabled for production usage, users should now be
 able to run jobs.  Recall that we added a ``test'' user on the {\em master}
 host in \S\ref{sec:add_rm} that can now be used to run an example test job.
 \OHPC{} includes a simple ``hello-world'' MPI application in the
-\texttt{/opt/fsp/pub/examples} directory that can be used for this quick
+\texttt{/opt/ohpc/pub/examples} directory that can be used for this quick
 compilation and execution.  To use the test account to compile and execute the
 application interactively through the resource manager, execute the following:
 
@@ -11,7 +11,7 @@ application interactively through the resource manager, execute the following:
 [master]$ su - test
 
 # Compile MPI "hello world" example
-[test@master ~]$ mpicc -o hello -O3 /opt/fsp/pub/examples/mpi/hello.c
+[test@master ~]$ mpicc -o hello -O3 /opt/ohpc/pub/examples/mpi/hello.c
 
 # Submit interactive job request and use prun to launch executable
 [test@master ~]$ srun -n 8 -N 2 --pty /bin/bash
