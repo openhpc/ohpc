@@ -2,7 +2,7 @@
 #
 # ------------------------------------------------------------------------------------------------
 # Template input file to define local variable settings for use with
-# an FSP installation recipe.
+# an openHPC installation recipe.
 # ------------------------------------------------------------------------------------------------
 
 # ---------------------------
