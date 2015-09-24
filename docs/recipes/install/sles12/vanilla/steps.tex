@@ -83,7 +83,7 @@ a locally accessibly copy of the \OHPC{} repository. Once set, the repository ca
 enabled via the following: 
 
 % begin_fsp_run
-% fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
+% fsp_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ zypper addrepo ${ohpc_repo}
 [master]$ zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
@@ -91,7 +91,7 @@ enabled via the following:
 % end_fsp_run
 
 % Dev testing for Factory
-%[master]$ zypper addrepo $FSP_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
+%[master]$ zypper addrepo $OpenHPC_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
 
 
 In addition to the \OHPC{} package repository, the {\em master} host also
@@ -136,7 +136,7 @@ to enable user access.
 [master]$ (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
-[master]$ cp /opt/fsp/pub/examples/udev/60-ipath.rules /etc/udev/rules.d/
+[master]$ cp /opt/ohpc/pub/examples/udev/60-ipath.rules /etc/udev/rules.d/
 
 # Load IB drivers
 [master]$ service rdma start
@@ -159,7 +159,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % fsp_indent 5
 % fsp_validation_comment Enable ib0
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ cp /opt/fsp/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
+[master]$ cp /opt/ohpc/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
 
 # Define local IPoIB address and netmask
 [master]$ perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network/ifcfg-ib0
@@ -226,13 +226,13 @@ The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support
 \baseOS{}. The following steps illustrate the process to build a minimal, default
 image for use with \Warewulf{}.  We begin by creating a directory structure on the 
 {\em master} that will represent the root filesystem of the compute node. The 
-default location for this example is in \path{/opt/fsp/admin/images/sles12}.
+default location for this example is in \path{/opt/ohpc/admin/images/sles12}.
 
 % begin_fsp_run
 % fsp_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location for SLES 
-[master]$ export CHROOT=/opt/fsp/admin/images/sles12
+[master]$ export CHROOT=/opt/ohpc/admin/images/sles12
 
 # Build initial chroot image
 [master]$ mkdir -p -m 755 $CHROOT                        # create chroot housing dir
@@ -256,7 +256,7 @@ the {\em master} host has a working DNS configuration in place, the chroot envir
 be updated with a copy of the configuration as follows:
 
 % begin_fsp_run
-% fsp_comment_header Add FSP components to compute image \ref{sec:add_components}
+% fsp_comment_header Add OpenHPC components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
 \end{lstlisting}
@@ -269,20 +269,20 @@ be updated with a copy of the configuration as follows:
 [master]$ zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 
 # Add SLURM client support
-[master]$ (*\groupchrootinstall*) fsp-slurm-client
+[master]$ (*\groupchrootinstall*) ohpc-slurm-client
 
 # Add IB support
 [master]$ (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
 [master]$ (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
-[master]$ cp /opt/fsp/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
+[master]$ cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
 
 # Add Network Time Protocol (NTP) support
 [master]$ (*\chrootinstall*) ntp
 
-# Include FSP default modules user environment
-[master]$ (*\chrootinstall*) lmod-defaults-intel-fsp
+# Include OpenHPC default modules user environment
+[master]$ (*\chrootinstall*) lmod-defaults-intel-ohpc
 
 # Enable ssh access 
 [master]$ chroot $CHROOT systemctl enable sshd.service
@@ -300,7 +300,7 @@ customizations within the chroot environment created for the desired {\em
 {\em ssh} key created by \Warewulf{} to support remote access, identify the
 resource manager server, configure NTP for compute resources, and enable \NFS{}
 mounting of a \$HOME file system and the public \OHPC{} install path
-(\texttt{/opt/fsp/pub}) that will be hosted by the {\em master} host in this
+(\texttt{/opt/ohpc/pub}) that will be hosted by the {\em master} host in this
 example configuration.  
 %The \NFS{} exporting options use an address/netmask
 %combination to limit the export scope to the defined compute nodes.
@@ -311,9 +311,9 @@ example configuration.
 # add new cluster key to base image
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
-# add NFS client mounts of /home and /opt/fsp/pub to base image
+# add NFS client mounts of /home and /opt/ohpc/pub to base image
 [master]$ echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
-[master]$ echo "${master_ip}:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+[master]$ echo "${master_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
 # Identify resource manager server IP in SLURM configuration file on computes
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
@@ -321,9 +321,9 @@ example configuration.
 # Identify resource manager hostname on master host
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
-# Export /home and FSP public packages from master server
+# Export /home and OpenHPC public packages from master server
 [master]$ echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[master]$ echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
 [master]$ service nfsserver restart
 
@@ -414,7 +414,7 @@ file to allow loading of the necessary modules.
 % fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
-[master]$ (*\install*) lustre-client-fsp lustre-client-fsp-modules
+[master]$ (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
 
 # Update configuration to allow Lustre modules to be loaded on master host
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
@@ -427,7 +427,7 @@ file to allow loading of the necessary modules.
 % fsp_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
-[master]$ (*\chrootinstall*) lustre-client-fsp lustre-client-fsp-modules
+[master]$ (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
 
 # Update configuration to allow Lustre modules to be loaded on compute hosts
 [master]$ perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
@@ -548,7 +548,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % fsp_command if [ ${enable_ipoib} -eq 1 ];then
 % fsp_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ wwsh file import /opt/fsp/pub/examples/network/sles/ifcfg-ib0.ww
+[master]$ wwsh file import /opt/ohpc/pub/examples/network/sles/ifcfg-ib0.ww
 [master]$ wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network/ifcfg-ib0
 \end{lstlisting}
 % fsp_indent 0
@@ -690,13 +690,13 @@ libraries that do not require MPI as part of the build process adopt the
 following RPM name: \\
 
 \noindent
-\texttt{package-<compiler\_family>-fsp-<package\_version>-<release>.rpm} \\
+\texttt{package-<compiler\_family>-ohpc-<package\_version>-<release>.rpm} \\
 
 \noindent Packages that require MPI as part of the build expand upon this convention to
 additionally include the MPI family name as follows: \\
 
 \noindent
-\texttt{package-<compiler\_family>-<mpi\_family>-fsp-<package\_version>-<release>.rpm} \\
+\texttt{package-<compiler\_family>-<mpi\_family>-ohpc-<package\_version>-<release>.rpm} \\
 
 To illustrate this further, the command below queries the locally configured
 repositories to identify all of the available \FFTW{} packages that were built
@@ -705,21 +705,21 @@ pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
 \begin{lstlisting}[language=bash]
-[master]$ zypper search -t package fftw-gnu-*-fsp
+[master]$ zypper search -t package fftw-gnu-*-ohpc
 Loading repository data...
 Reading installed packages...
 
 S | Name                  | Summary                          | Type   
 --+-----------------------+----------------------------------+--------
-  | fftw-gnu-impi-fsp     | A Fast Fourier Transform library | package
-  | fftw-gnu-mvapich2-fsp | A Fast Fourier Transform library | package
-  | fftw-gnu-openmpi-fsp  | A Fast Fourier Transform library | package
+  | fftw-gnu-impi-ohpc     | A Fast Fourier Transform library | package
+  | fftw-gnu-mvapich2-ohpc | A Fast Fourier Transform library | package
+  | fftw-gnu-openmpi-ohpc  | A Fast Fourier Transform library | package
 \end{lstlisting}
 
 Note that \OHPC{}-provided 3rd party builds are configured to be installed
 into a common top-level repository so that they can be easily exported to
 desired hosts within the cluster. This common top-level path
-(\texttt{/opt/fsp/pub}) was previously configured to be mounted on {\em
+(\texttt{/opt/ohpc/pub}) was previously configured to be mounted on {\em
   compute} nodes in \S\ref{sec:master_customization}, so the packages will be
 immediately available for use on the cluster after installation on the {\em
   master} host.  For convenience, \OHPC{} provides package aliases for these 3rd

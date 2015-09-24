@@ -79,13 +79,13 @@ a locally accessibly copy of the \OHPC{} repository. Once set, the repository ca
 enabled via the following: 
 
 % begin_fsp_run
-% fsp_comment_header Enable FSP repository for local use \ref{sec:enable_repo}
+% fsp_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
 [master]$ wget -P /etc/yum.repos.d ${ohpc_repo}
 \end{lstlisting}
 % end_fsp_run
 
-% master]$ export FSP_mirror=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:
+% master]$ export OpenHPC_mirror=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:
 % master]$ wget -P /etc/yum.repos.d
 % ${rsp_repo}/15.31:/Factory/CentOS-7.1_Intel/ForestPeak:15.31:Factory.repo
 
@@ -154,7 +154,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % fsp_indent 5
 % fsp_validation_comment Enable ib0
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ cp /opt/fsp/pub/examples/network/centos/ifcfg-ib0 /etc/sysconfig/network-scripts
+[master]$ cp /opt/ohpc/pub/examples/network/centos/ifcfg-ib0 /etc/sysconfig/network-scripts
 
 # Define local IPoIB address and netmask
 [master]$ perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network-scripts/ifcfg-ib0
@@ -215,7 +215,7 @@ The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support
 image for use with \Warewulf{}.  We begin by creating a directory structure on the 
 {\em master} that will represent the root filesystem of the compute node. The 
 default location for this example is in
-\path{/opt/fsp/admin/images/centos7.1}. Note that \Warewulf{} assumes access to
+\path{/opt/ohpc/admin/images/centos7.1}. Note that \Warewulf{} assumes access to
 an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
 process which requires external network connectivity on your chosen {\em
   master} host. If this is not available, or if you prefer to access a locally cached
@@ -227,7 +227,7 @@ mirror, the steps below include an example to update the OS mirror used by
 % fsp_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location 
-[master]$ export CHROOT=/opt/fsp/admin/images/centos7.1
+[master]$ export CHROOT=/opt/ohpc/admin/images/centos7.1
 
 # Override default OS repository (optional) - set BOS_MIRROR variable to desired location
 [master]$ perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=$BOS_MIRROR#" \
@@ -252,7 +252,7 @@ the {\em master} host has a working DNS configuration in place, the chroot envir
 be updated with a copy of the configuration as follows:
 
 % begin_fsp_run
-% fsp_comment_header Add FSP components to compute image \ref{sec:add_components}
+% fsp_comment_header Add OpenHPC components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [master]$ cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
 \end{lstlisting}
@@ -262,10 +262,10 @@ Now, we can include additional components to the compute instance using
 \texttt{yum} to install into the chroot location defined previously:
 
 % begin_fsp_run
-% fsp_validation_comment Add FSP components to compute instance
+% fsp_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add SLURM client support
-[master]$ (*\groupchrootinstall*) fsp-slurm-client
+[master]$ (*\groupchrootinstall*) ohpc-slurm-client
 
 # Add IB support and enable
 [master]$ (*\groupchrootinstall*) "InfiniBand Support"
@@ -278,8 +278,8 @@ Now, we can include additional components to the compute instance using
 # Add kernel drivers
 [master]$ (*\chrootinstall*) kernel
 
-# Include FSP default modules user environment
-[master]$ (*\chrootinstall*) lmod-defaults-intel-fsp
+# Include OpenHPC default modules user environment
+[master]$ (*\chrootinstall*) lmod-defaults-intel-ohpc
 \end{lstlisting}
 % end_fsp_run
 
@@ -291,7 +291,7 @@ customizations within the chroot environment created for the desired {\em
 {\em ssh} key created by \Warewulf{} to support remote access, identify the
 resource manager server, configure NTP for compute resources, and enable \NFS{}
 mounting of a \$HOME file system and the public \OHPC{} install path
-(\texttt{/opt/fsp/pub}) that will be hosted by the {\em master} host in this
+(\texttt{/opt/ohpc/pub}) that will be hosted by the {\em master} host in this
 example configuration.  
 %The \NFS{} exporting options use an address/netmask
 %combination to limit the export scope to the defined compute nodes.
@@ -302,9 +302,9 @@ example configuration.
 # add new cluster key to base image
 [master]$ cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
-# add NFS client mounts of /home and /opt/fsp/pub to base image
+# add NFS client mounts of /home and /opt/ohpc/pub to base image
 [master]$ echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
-[master]$ echo "${master_ip}:/opt/fsp/pub /opt/fsp/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+[master]$ echo "${master_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
 # Identify resource manager server IP in SLURM configuration file on computes
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
@@ -312,9 +312,9 @@ example configuration.
 # Identify resource manager hostname on master host
 [master]$ perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
-# Export /home and FSP public packages from master server to cluster compute nodes
+# Export /home and OpenHPC public packages from master server to cluster compute nodes
 [master]$ echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
-[master]$ echo "/opt/fsp/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[master]$ echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master]$ exportfs -a
 [master]$ systemctl restart nfs
 
@@ -402,7 +402,7 @@ discussed further in the following sections.
 % fsp_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
-[master]$ (*\install*) lustre-client-fsp lustre-client-fsp-modules
+[master]$ (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
 \end{lstlisting}
 % end_fsp_run
 
@@ -410,7 +410,7 @@ discussed further in the following sections.
 % fsp_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
-[master]$ (*\chrootinstall*) lustre-client-fsp lustre-client-fsp-modules
+[master]$ (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
 
 # Include mount point and file system mount in compute image
 [master]$ mkdir $CHROOT/mnt/lustre
@@ -459,10 +459,10 @@ host as follows:
 % fsp_validation_comment Install Nagios on master and vnfs image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Nagios base, Remote Plugin Engine, and Plugins on Master
-[master]$ (*\groupinstall*) fsp-nagios
+[master]$ (*\groupinstall*) ohpc-nagios
 
 # Also install in compute node image
-[master]$ (*\groupchrootinstall*) fsp-nagios
+[master]$ (*\groupchrootinstall*) ohpc-nagios
 
 # Enable NRPE on compute image, and configure
 [master]$ chroot $CHROOT systemctl enable nrpe
@@ -495,7 +495,7 @@ host as follows:
 % fsp_validation_comment Install Ganglia on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Ganglia
-[master]$ (*\groupinstall*) fsp-ganglia
+[master]$ (*\groupinstall*) ohpc-ganglia
 
 # Start and Enable Ganglia services
 [master]$ systemctl enable gmond
@@ -586,7 +586,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % fsp_command if [ ${enable_ipoib} -eq 1 ];then
 % fsp_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ wwsh file import /opt/fsp/pub/examples/network/centos/ifcfg-ib0.ww
+[master]$ wwsh file import /opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww
 [master]$ wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network-scripts/ifcfg-ib0
 \end{lstlisting}
 % fsp_indent 0
@@ -726,13 +726,13 @@ libraries that do not require MPI as part of the build process adopt the
 following RPM name: \\
 
 \noindent
-\texttt{package-<compiler\_family>-fsp-<package\_version>-<release>.rpm} \\
+\texttt{package-<compiler\_family>-ohpc-<package\_version>-<release>.rpm} \\
 
 \noindent Packages that require MPI as part of the build expand upon this convention to
 additionally include the MPI family name as follows: \\
 
 \noindent
-\texttt{package-<compiler\_family>-<mpi\_family>-fsp-<package\_version>-<release>.rpm} \\
+\texttt{package-<compiler\_family>-<mpi\_family>-ohpc-<package\_version>-<release>.rpm} \\
 
 To illustrate this further, the command below queries the locally configured
 repositories to identify all of the available \FFTW{} packages that were built
@@ -741,19 +741,19 @@ pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
 \begin{lstlisting}[language=bash]
-[master]$ yum search fftw-gnu fsp
+[master]$ yum search fftw-gnu ohpc
 Loaded plugins: fastestmirror
 Loading mirror speeds from cached hostfile
-=========================== N/S matched: fftw-gnu, fsp ===========================
-fftw-gnu-impi-fsp.x86_64 : A Fast Fourier Transform library
-fftw-gnu-mvapich2-fsp.x86_64 : A Fast Fourier Transform library
-fftw-gnu-openmpi-fsp.x86_64 : A Fast Fourier Transform library
+=========================== N/S matched: fftw-gnu, ohpc ===========================
+fftw-gnu-impi-ohpc.x86_64 : A Fast Fourier Transform library
+fftw-gnu-mvapich2-ohpc.x86_64 : A Fast Fourier Transform library
+fftw-gnu-openmpi-ohpc.x86_64 : A Fast Fourier Transform library
 \end{lstlisting}
 
 Note that \OHPC{}-provided 3rd party builds are configured to be installed
 into a common top-level repository so that they can be easily exported to
 desired hosts within the cluster. This common top-level path
-(\texttt{/opt/fsp/pub}) was previously configured to be mounted on {\em
+(\texttt{/opt/ohpc/pub}) was previously configured to be mounted on {\em
   compute} nodes in \S\ref{sec:master_customization}, so the packages will be
 immediately available for use on the cluster after installation on the {\em
   master} host.  For convenience, \OHPC{} provides package aliases for these 3rd
