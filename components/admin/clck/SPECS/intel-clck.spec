@@ -43,10 +43,11 @@ Source3:   XDG_SESSION.patch
 Intel cluster checker.
 
 %prep
+%setup -n l_clck_p_%{version}.%{buildId}
 
 %build
 
-%setup -n l_clck_p_%{version}.%{buildId}
+
 
 %install
 
