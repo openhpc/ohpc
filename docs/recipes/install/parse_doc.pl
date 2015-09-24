@@ -156,8 +156,8 @@ close($fh_raw);
 
 open(IN,"<$tmpfile_raw")  || die "Cannot open file -> $file\n";
 
-my $begin_delim   = "% begin_fsp_run";
-my $end_delim     = "% end_fsp_run";
+my $begin_delim   = "% begin_ohpc_run";
+my $end_delim     = "% end_ohpc_run";
 my $prompt        = "\[master\]\$";
 my $disable_delim = "^%%";
 my $indent        = 0;
@@ -169,14 +169,12 @@ while(<IN>) {
 	next;
     }
     if(/$begin_delim/../$end_delim/) {
-	if ($_ =~ /% fsp_validation_newline/) {
+	if ($_ =~ /% ohpc_validation_newline/) {
 	    print $fh "\n";
-#	} elsif ($_ =~ /^\s*$/) {
-#	    print $fh "\n";
-	} elsif ($_ =~ /% fsp_ci_comment (.+)/) {
+	} elsif ($_ =~ /% ohpc_ci_comment (.+)/) {
 	    if ( !$ci_run) {next;}
 	    print $fh "# $1 (CI only)\n";
-	} elsif ($_ =~ /% fsp_comment_header (.+)/) {
+	} elsif ($_ =~ /% ohpc_comment_header (.+)/) {
 
 	    my $comment = check_for_section_replacement($1);
 	    my $strlen  = length $comment;
@@ -186,12 +184,12 @@ while(<IN>) {
 	    print  $fh "# $comment\n";
 	    printf $fh "# %s\n", '-' x $strlen;
 	    
-	} elsif ($_ =~ /% fsp_validation_comment (.+)/) {
+	} elsif ($_ =~ /% ohpc_validation_comment (.+)/) {
 	    my $comment = check_for_section_replacement($1);
 	    print $fh ' ' x $indent . "# $comment\n";
-	} elsif ($_ =~ /% fsp_indent (\d+)/) {
+	} elsif ($_ =~ /% ohpc_indent (\d+)/) {
 	    $indent = $1;
-	} elsif ($_ =~ /% fsp_command (.+)/) {
+	} elsif ($_ =~ /% ohpc_command (.+)/) {
 	    my $cmd = update_cmd($1);
 	    print $fh ' ' x $indent . "$cmd\n";
 	} elsif ($_ =~ /\[master\]\$ (.+) \\$/) {
