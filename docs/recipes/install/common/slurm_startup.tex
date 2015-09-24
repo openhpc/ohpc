@@ -17,7 +17,7 @@ resource management under \SLURM{}.
 
 \vspace*{0.3cm}
 
-% begin_fsp_run
+% begin_ohpc_run
 % fsp_comment_header Resource Manager Startup \ref{sec:rms_startup}
 \begin{lstlisting}[language=bash]
 # start munge and slurm controller on master host
@@ -34,7 +34,7 @@ In the default configuration, the {\em compute} hosts will be initialized in an
 {\em unknown} state. To place the hosts into production such that they are
 eligible to schedule user jobs, issue the following:
 
-% begin_fsp_run
+% begin_ohpc_run
 \begin{lstlisting}[language=bash]
 [master]$ scontrol update nodename=c[1-4] state=idle
 \end{lstlisting}
@@ -43,7 +43,7 @@ eligible to schedule user jobs, issue the following:
 
 % Additional recipe commands for additional computes.
 
-% begin_fsp_run
+% begin_ohpc_run
 % fsp_validation_newline
 % fsp_validation_comment Startup slurm on additional computes if defined
 % fsp_command if [ ${num_computes} -gt 4 ];then
