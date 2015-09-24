@@ -17,14 +17,14 @@
 % ohpc_validation_comment -----------------------------------------------------------------------------------------
 % fsp_validation_newline
 
-% fsp_command inputFile=${FSP_INPUT_LOCAL:-/opt/fsp/pub/doc/recipes/vanilla/input.local}
+% ohpc_command inputFile=${FSP_INPUT_LOCAL:-/opt/fsp/pub/doc/recipes/vanilla/input.local}
 % fsp_validation_newline
-% fsp_command if [ ! -e ${inputFile} ];then
-% fsp_command    echo "Error: Unable to access local input file -> ${inputFile}"
-% fsp_command    exit 1
-% fsp_command else
-% fsp_command    . ${inputFile} || { echo "Error sourcing ${inputFile}"; exit 1; }
-% fsp_command fi
+% ohpc_command if [ ! -e ${inputFile} ];then
+% ohpc_command    echo "Error: Unable to access local input file -> ${inputFile}"
+% ohpc_command    exit 1
+% ohpc_command else
+% ohpc_command    . ${inputFile} || { echo "Error sourcing ${inputFile}"; exit 1; }
+% ohpc_command fi
 
 % fsp_validation_newline
 % ohpc_validation_comment ------------------------------ Begin FSP Recipe -----------------------------------------

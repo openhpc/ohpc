@@ -46,8 +46,8 @@ eligible to schedule user jobs, issue the following:
 % begin_ohpc_run
 % fsp_validation_newline
 % ohpc_validation_comment Startup slurm on additional computes if defined
-% fsp_command if [ ${num_computes} -gt 4 ];then
-% fsp_command    pdsh -w c[5-$num_computes] service munge start
-% fsp_command    pdsh -w c[5-$num_computes] service slurmd start
-% fsp_command fi
+% ohpc_command if [ ${num_computes} -gt 4 ];then
+% ohpc_command    pdsh -w c[5-$num_computes] service munge start
+% ohpc_command    pdsh -w c[5-$num_computes] service slurmd start
+% ohpc_command fi
 % end_ohpc_run
