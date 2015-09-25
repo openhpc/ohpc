@@ -1,5 +1,5 @@
---- opt/fsp/admin/clck/3.0.1/etc/clck.xml	2015-09-16 12:29:31.000000000 -0700
-+++ opt/fsp/admin/clck/3.0.1/etc/clck.xml	2015-09-16 12:30:59.000000000 -0700
+--- opt/ohpc/admin/clck/3.0.1/etc/clck.xml	2015-09-16 12:29:31.000000000 -0700
++++ opt/ohpc/admin/clck/3.0.1/etc/clck.xml	2015-09-16 12:30:59.000000000 -0700
 @@ -28,6 +28,11 @@
    <!-- Knowledge Base Configuration -->
    <config>
