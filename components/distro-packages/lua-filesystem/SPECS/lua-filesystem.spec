@@ -37,6 +37,8 @@
 %define luapkgdir %{_datadir}/lua/%{luaver}
 %define debug_package %{nil}
 
+%define version_exp 1_6_3
+
 Name:           %{pname}%{PROJ_DELIM}
 Version:        1.6.3
 Release:        0
@@ -59,7 +61,7 @@ LuaFileSystem offers a portable way to access the underlying directory
 structure and file attributes.
 
 %prep
-%setup -q -n luafilesystem-%{version}
+%setup -q -n luafilesystem-v_%{version_exp}
 %patch1
 %patch2 -p1
 
