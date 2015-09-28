@@ -15,7 +15,7 @@
 
 Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.52.0
+Version:   0.53.0
 Release:   1
 License:   GPL-2
 Group:     ohpc/admin
