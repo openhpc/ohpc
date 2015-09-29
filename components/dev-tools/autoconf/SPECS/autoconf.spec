@@ -21,7 +21,7 @@ License:   GPLv3+ and GFDL
 Group:     ohpc/dev-tools
 DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/
-Source0:   autoconf-%{version}.tar.gz
+Source0:   https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
