@@ -21,7 +21,7 @@ License:   GPL-2
 Group:     ohpc/admin
 BuildArch: noarch
 URL:       https://github.com/hpcsi/losf 
-Source0:   %{pname}-%{version}.tar.gz
+Source0:   https://github.com/hpcsi/losf/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
