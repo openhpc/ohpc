@@ -28,10 +28,10 @@ License:   GPL-3.0+
 Group:     ohpc/compiler-families
 URL:       http://gcc.gnu.org/
 DocDir:    %{OHPC_PUB}/doc/contrib
-Source0:   gcc-%{version}.tar.bz2
-Source1:   gmp-%{gmp_version}a.tar.bz2
-Source2:   mpc-%{mpc_version}.tar.gz
-Source3:   mpfr-%{mpfr_version}.tar.bz2
+Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{version}.tar.bz2
+Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}a.tar.bz2
+Source2:   ftp://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
+Source3:   http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.gz
 Source4:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
