@@ -27,7 +27,7 @@ Summary:        Module for Lua which adds bitwise operations on numbers
 Group:          ohpc/distro-packages
 License:        MIT
 Url:            http://bitop.luajit.org
-Source0:        http:/bitop.luajit.org/download/LuaBitOp-%{version}.tar.gz
+Source0:        http://bitop.luajit.org/download/LuaBitOp-%{version}.tar.gz
 Patch0:         Makefile.patch
 BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
 
