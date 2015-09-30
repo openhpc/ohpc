@@ -46,7 +46,7 @@ License:        MIT
 Summary:        Lua library to Access Directories and Files
 Url:            http://keplerproject.github.com/luafilesystem
 Group:          ohpc/distro-packages
-Source:         https://github.com/keplerproject/luafilesystem/archive/v%{version_exp}.tar.gz
+Source:         https://github.com/keplerproject/luafilesystem/archive/v_%{version_exp}.tar.gz
 # PATCH-FIX_UPSTREAM -- toganm@opensuse.org provide optflags for config
 Patch1:         luafilesystem-%{luaver}-optflags.patch
 # PATCH-FIX-UPSTREAM -- toganm@opensuse.org fixes Makefile for DESTDIR
