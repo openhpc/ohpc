@@ -28,7 +28,7 @@ Summary:        POSIX library for Lua
 Group:          Development/Libraries
 License:        MIT
 Url:            https://github.com/luaposix/luaposix
-Source0:        luaposix-release-v%{version}.tar.gz
+Source0:        https://github.com/luaposix/luaposix/archive/release-v%{version}.tar.gz
 BuildRoot:      %{_tmppath}/luaposix-%{version}-%{release}-root-
 
 BuildRequires:  lua >= %{luaver}, lua-devel >= %{luaver}
