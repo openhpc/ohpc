@@ -21,7 +21,7 @@ License:   GPLv2+ and LGPLv2+ and GFDL
 Group:     ohpc/dev-tools
 URL:       http://www.gnu.org/software/libtool/
 DocDir:    %{OHPC_PUB}/doc/contrib
-Source0:   libtool-%{version}.tar.gz
+Source0:   https://ftp.gnu.org/gnu/libtool/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
