@@ -6,7 +6,7 @@ fi
 export MODULEPATH=%{OHPC_MODULES}
 . %{OHPC_ADMIN}/lmod/lmod/init/sh || exit 1
 
-#export MODULEPATH=/opt/ohpc/pub/modulefiles
+export MODULEPATH=/opt/ohpc/pub/modulefiles
 #. /opt/ohpc/admin/lmod/lmod/init/sh || exit 1
 
 
