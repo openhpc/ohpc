@@ -460,7 +460,7 @@ Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 #############################################################################
 
 %prep
-%setup -n slurm-%{ver_exp}
+%setup -n slurm-slurm-%{ver_exp}
 
 # OpenHPC patches
 ### patch1
