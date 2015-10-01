@@ -45,7 +45,7 @@ BuildConflicts: post-build-checks
 
 Conflicts: munge 
 
-Source0:	%{pname}-%{version}.tar.bz2
+Source0:   https://github.com/dun/munge/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
 Patch1:     %{pname}.logdir.patch
