@@ -99,7 +99,7 @@
 %endif
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 15.08.0
+Version: 15.08.1
 Release: %{?dist}
 
 Summary:   Slurm Workload Manager
