@@ -102,15 +102,15 @@ Name:    %{pname}%{PROJ_DELIM}
 Version: 15.08.0
 Release: %{?dist}
 
-Summary: Slurm Workload Manager
+Summary:   Slurm Workload Manager
 
-License: GPL
-Group: ohpc/rms
-Source: %{pname}-%{version}.tar.bz2
+License:   GPL
+Group:     ohpc/rms
+Source:    http://www.schedmd.com/download/archive/%{pname}slurm-%{version}.tar.bz2
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
-DocDir: %{OHPC_PUB}/doc/contrib
-URL: http://slurm.schedmd.com/
+DocDir:    %{OHPC_PUB}/doc/contrib
+URL:       http://slurm.schedmd.com/
 
 # 8/11/14 karl.w.schulz@intel.com - update default runlevels
 Patch1:     %{pname}.initd.patch
