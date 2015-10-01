@@ -48,7 +48,7 @@ Release:   1
 License:   GPL
 Group:     ohpc/serial-libs
 URL:       http://www.gnu.org/software/gsl
-Source0:   %{pname}-%{version}.tar.gz
+Source0:   https://ftp.gnu.org/gnu/%{pname}/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
