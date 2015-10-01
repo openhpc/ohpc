@@ -15,13 +15,13 @@
 
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.31
+Version:   2.29
 Release:   %{_rel}
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
 DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     ohpc/admin
-Source0:   https://pdsh.googlecode.com/archive/%{pname}-%{version}.tar.gz
+Source0:   https://pdsh.googlecode.com/files/pdsh-2.29.tar.bz2
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
@@ -311,7 +311,7 @@ from an allocated Torque job.
 ##############################################################################
 
 %prep
-%setup  -q -n %{pname}-%{pname}-%{version}
+%setup  -q -n %{pname}-%{version}
 ##############################################################################
 
 %build
