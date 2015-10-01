@@ -21,7 +21,7 @@ License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
 DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     ohpc/admin
-Source0:   pdsh-%{version}.tar.bz2
+Source0:   https://pdsh.googlecode.com/archive/%{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
