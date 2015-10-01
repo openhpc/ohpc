@@ -29,7 +29,7 @@ License:            GPLv2 and BSD
 URL:                http://www.nagios.org/download/addons/
 BuildRoot:          %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Source0:            %{pname}-%{version}.tar.gz
+Source0:            http://sourceforge.net/nagios/ndoutils-%{version}.tar.gz
 Source1:            README.Fedora
 Source2:            ndo2db.service
 Source3:            ndo2db.init
