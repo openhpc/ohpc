@@ -34,11 +34,6 @@
 
 #-ohpc-header-comp-end------------------------------------------------
 
-# Base package name
-%define pname hdf5
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-
-
 Name:           mxml
 Url:            http://www.msweet.org/projects.php?Z3
 Version:        2.9
@@ -47,7 +42,7 @@ Summary:        Small XML Parsing Library
 License:        LGPL-2.1+
 Group:          Development/Libraries/C and C++
 
-Source:         %{name}-%{version}.tar.gz
+Source:         http://www.msweet.org/files/project3/mxml-%{version}.tar.gz
 Source1:        baselibs.conf
 Patch:          mxml-2.3-nobinstrip.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
