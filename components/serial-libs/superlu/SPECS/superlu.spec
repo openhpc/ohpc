@@ -179,4 +179,3 @@ EOF
 %doc README
 
 %changelog
-
