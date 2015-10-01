@@ -7,7 +7,7 @@ fi
 #. %{OHPC_ADMIN}/lmod/lmod/init/sh || exit 1
 
 export MODULEPATH=/opt/ohpc/pub/modulefiles
-. /opt/ophc/admin/lmod/lmod/init/sh || exit 1
+. /opt/ohpc/admin/lmod/lmod/init/sh || exit 1
 
 
 if [ "$OHPC_COMPILER_FAMILY" = "gnu" ]; then
