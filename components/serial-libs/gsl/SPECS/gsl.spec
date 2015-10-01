@@ -12,7 +12,7 @@
 
 #-ohpc-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/OHPC_macros
+# include %{_sourcedir}/OHPC_macros
 
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
