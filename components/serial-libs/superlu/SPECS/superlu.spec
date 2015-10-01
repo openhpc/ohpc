@@ -67,8 +67,7 @@ License:        BSD-3-Clause
 Group:          ohpc/serial-libs
 Version:        4.3
 Release:        0
-#Source:         http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_4.3.tar.gz
-Source:         %{pname}-%{version}.tar.gz
+Source          http://crd-legacy.lbl.gov/%7Exiaoye/SuperLU/%{pname}_%{version}.tar.gz
 # PATCH-FEATURE-OPENSUSE superlu-4.3-make.patch : add compiler and build flags in make.inc
 Patch:          superlu-4.3-make.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
