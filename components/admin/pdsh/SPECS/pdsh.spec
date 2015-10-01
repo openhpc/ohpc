@@ -21,7 +21,7 @@ License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
 DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     ohpc/admin
-Source0:   https://github.com/grondo/%{pname}/archive/%{pdsh}-%{version}.tar.gz
+Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
