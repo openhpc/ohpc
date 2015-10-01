@@ -251,4 +251,3 @@ fi
 %files -n %{pname}-libs%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %{_libdir}/*.so.*
-
