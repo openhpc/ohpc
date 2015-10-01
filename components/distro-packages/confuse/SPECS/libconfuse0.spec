@@ -44,7 +44,7 @@ BuildRequires:  check
 #
 URL:            http://www.nongnu.org/confuse/
 # taken from    http://download.savannah.gnu.org/releases/confuse/%{pkg_name}-%{version}.tar.gz
-Source:         %{pkg_name}-%{version}.tar.gz
+Source:         http://savannah.nongnu.org/download/confuse/confuse-%{version}.tar.gz 
 #
 Summary:        A configuration file parser library
 
