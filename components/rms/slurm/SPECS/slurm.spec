@@ -106,7 +106,8 @@ Summary:   Slurm Workload Manager
 
 License:   GPL
 Group:     ohpc/rms
-Source:    http://www.schedmd.com/download/archive/%{pname}-%{version}.tar.bz2
+Source:    https://github.com/SchedMD/slurm/archive/%{pname}-15-08-1-1.tar.gz
+#Source:    http://www.schedmd.com/download/archive/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
 DocDir:    %{OHPC_PUB}/doc/contrib
