@@ -39,7 +39,7 @@ BuildRequires:	freeipmi-devel
 %endif
 #!BuildIgnore: post-build-checks
 
-Source0:	%{pname}-%{version}.tar.bz2
+Source0:	https://github.com/dun/conman/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.bz2
 Patch1:         conman.init.patch
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
