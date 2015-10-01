@@ -76,7 +76,6 @@ lends itself to being used in very high level languages (VHLLs).
 %build
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
-export OHPC_MODULEPATH=%{OHPC_MODULES_PATH}
 . %{_sourcedir}/OHPC_setup_compiler
 
 %if %{compiler_family} == intel
