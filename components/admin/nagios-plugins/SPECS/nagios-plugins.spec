@@ -21,7 +21,7 @@
 %global _hardened_build 1
 
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.0.1
+Version: 2.1.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program plugins for Nagios
 DocDir:  %{OHPC_PUB}/doc/contrib
@@ -29,7 +29,7 @@ Group: ohpc/admin
 
 License: GPLv2+
 URL: https://www.nagios-plugins.org/
-Source0: %{pname}-%{version}.tar.gz
+Source0: http://www.nagios-plugins.org/download/nagios-plugins-%{version}.tar.gz
 Source1: nagios-plugins.README.Fedora
 Patch2: nagios-plugins-0002-Remove-assignment-of-not-parsed-to-jitter.patch
 Patch3: nagios-plugins-0003-Fedora-specific-fixes-for-searching-for-diff-and-tai.patch
