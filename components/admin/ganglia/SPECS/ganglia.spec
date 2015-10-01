@@ -14,7 +14,7 @@
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 %global gangver     3.7.2
-%global webver      3.7.0
+%global webver      3.7.1
 
 %global systemd         1
 %global _hardened_build 1
@@ -27,8 +27,8 @@ Group:              ohpc/admin
 License:            BSD-3-Clause
 URL:                http://ganglia.sourceforge.net/
 DocDir:             %{OHPC_PUB}/doc/contrib
-Source0:            ganglia-%{version}.tar.gz
-Source1:            ganglia-web-%{webver}.tar.gz
+Source0:            http://downloads.sourceforge.net/ganglia/ganglia-%{version}.tar.gz
+Source1:            http://downloads.sourceforge.net/ganglia/ganglia-web-%{webver}.tar.gz
 Source2:            gmond.service
 Source3:            gmetad.service
 Source4:            ganglia-httpd24.conf.d
