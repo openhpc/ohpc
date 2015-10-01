@@ -99,14 +99,16 @@
 %endif
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 15.08.1
-Release: %{?dist}
 
+Version: 15.08.1
+%define ver_exp 15-08-1-1
+
+Release:   %{?dist}
 Summary:   Slurm Workload Manager
 
 License:   GPL
 Group:     ohpc/rms
-Source:    https://github.com/SchedMD/slurm/archive/%{pname}-15-08-1-1.tar.gz
+Source:    https://github.com/SchedMD/slurm/archive/%{pname}-%{ver_exp}.tar.gz
 #Source:    http://www.schedmd.com/download/archive/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
@@ -458,7 +460,7 @@ Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 #############################################################################
 
 %prep
-%setup -n slurm-%{version}
+%setup -n slurm-%{ver_exp}
 
 # OpenHPC patches
 ### patch1
