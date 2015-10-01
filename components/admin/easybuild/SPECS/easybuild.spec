@@ -8,11 +8,11 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#-ohpc-header-comp-begin----------------------------------------------
+#-fsp-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/OHPC_macros
+%include %{_sourcedir}/FSP_macros
 
-# OpenHPC convention: the default assumes the gnu compiler family;
+# FSP convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
@@ -27,11 +27,11 @@ BuildRequires: gnu-compilers%{PROJ_DELIM}
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %endif
-%if 0%{OHPC_build}
+%if 0%{FSP_BUILD}
 BuildRequires: intel_licenses
 %endif
 
-#-ohpc-header-comp-end------------------------------------------------
+#-fsp-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname easybuild
@@ -50,8 +50,8 @@ Source2:   %{pname}-framework-%{version}.tar.gz
 Source3:   vsc-base-2.2.2.tar.gz
 Source4:   bootstrap_eb.py
 Source5:   easybuild-sles12.patch
-Source6:   OHPC_macros
-Source7:   OHPC_setup_compiler
+Source6:   FSP_macros
+Source7:   FSP_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch
 BuildRequires: python
@@ -62,7 +62,7 @@ Requires: python
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{pname}/%version
+%define install_path %{FSP_LIBS}/%{pname}/%version
 
 %description
 EasyBuild is a software build and installation framework that allows 
@@ -77,12 +77,13 @@ mkdir %{buildroot}
 cd %{buildroot}
 cp %{_sourcedir}/*py .
 
-# OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+# FSP compiler designation
+export FSP_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/FSP_setup_compiler
 
 export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
+export EASYBUILD_INSTALLPATH=%{install_path}
 export PATH=${LMOD_DIR}:${PATH}
 
 python ./bootstrap_eb.py %{buildroot}/%{install_path}
@@ -92,16 +93,10 @@ rm bootstrap_eb.py
 cd %{buildroot}%{install_path}/software
 patch -p1 < %{_sourcedir}/easybuild-sles12.patch
 
-%install
 
-# remove buildroot
-#for f in $RPM_BUILD_ROOT%{install_path}/conf/*; do
-    #sed -i -e 's!%{buildroot}!!g' $f
-#done
-
-# OpenHPC module file
-%{__mkdir} -p %{buildroot}%{OHPC_MODULES}/EasyBuild
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/EasyBuild/%{version}
+# FSP module file
+%{__mkdir} -p %{buildroot}%{FSP_MODULES}/EasyBuild
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/EasyBuild/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -135,7 +130,7 @@ prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/py
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/EasyBuild/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/EasyBuild/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -148,7 +143,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
+%{FSP_HOME}
+%{FSP_PUB}
 
 
 %changelog
