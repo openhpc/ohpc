@@ -3,16 +3,6 @@ if [ -z "$OHPC_COMPILER_FAMILY" ]; then
     exit 1
 fi
 
-#export MODULEPATH=$OHPC_MODULES_PATH
-#. %{OHPC_ADMIN}/lmod/lmod/init/sh || exit 1
-
-#export MODULEPATH=/opt/ohpc/pub/modulefiles
-#. /opt/ohpc/admin/lmod/lmod/init/sh || exit 1
-
-#export MODULEPATH=$OHPC_MODULEPATH
-#. $OHPC_/opt/ohpc/admin/lmod/lmod/init/sh || exit 1
-
-
 if [ "$OHPC_COMPILER_FAMILY" = "gnu" ]; then
     export CC=gcc
     export CXX=g++
