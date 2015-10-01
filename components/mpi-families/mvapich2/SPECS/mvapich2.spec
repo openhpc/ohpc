@@ -59,7 +59,7 @@ License:   BSD
 Group:     ohpc/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
 DocDir:    %{OHPC_PUB}/doc/contrib
-Source0:   %{pname}-%{version}.tar.gz
+Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 
