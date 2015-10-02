@@ -26,10 +26,11 @@ BuildRequires: gnu-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%endif
 %if 0%{OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
+%endif
+
 
 #-ohpc-header-comp-end------------------------------------------------
 
