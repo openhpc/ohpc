@@ -194,4 +194,3 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
 - Initial build.
-
