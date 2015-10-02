@@ -131,7 +131,7 @@ see the boost-doc package.
 
 
 %prep
-%setup -q -n %{pname}_%{bversion} 
+%setup -q -n %{pname}_%{version_exp} 
 
 %build
 # OpenHPC compiler/mpi designation
