@@ -88,7 +88,7 @@ Release:        0
 License:        BSL-1.0
 Group:		ohpc/parallel-libs
 Url:            http://www.boost.org
-Source0:	http://sourceforge.net/projects/boost/files/boost/%{version}/%{pname}_%{bversion}.tar.gz/download 
+Source0:        http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_%{bversion}.tar.gz
 Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
