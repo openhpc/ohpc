@@ -81,9 +81,10 @@ Release:        0
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
 Group:          ohpc/parallel-libs
+https://computation.llnl.gov/project/linear_solvers/download/hypre-2.10.0b_reg.php
 Url:            http://www.llnl.gov/casc/hypre/
-Source:         %{pname}-%{version}.tar.gz
-#Patch0:         hypre-2.8.0b-no-date-and-time-fix.patch
+Source:         http://ftp.mcs.anl.gov/pub/petsc/externalpackages/hypre-%{version}.tar.gz
+
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
