@@ -107,7 +107,6 @@ setenv          EASYBUILD_MODULES_TOOL  Lmod
 
 prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/python2.7/site-packages
 
-
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/EasyBuild/.version.%{version}
