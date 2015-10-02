@@ -21,7 +21,7 @@ Release:   1%{?dist}
 License:   BSD
 Group:     ohpc/perf-tools
 URL:       http://icl.cs.utk.edu/papi/
-Source0:   %{pname}-%{version}.tar.gz
+Source0:   http://icl.cs.utk.edu/projects/papi/downloads/papi-%{version}.tar.gz
 Patch1:    papi.ldconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
