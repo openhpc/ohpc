@@ -81,14 +81,14 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.59.0
+
+%define version_exp 1_59_0
+
 Release:        0
 License:        BSL-1.0
 Group:		ohpc/parallel-libs
 Url:            http://www.boost.org
-
-%define bversion %(echo 1.59.0 | tr . _)
-
-Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boost_%{bversion}.tar.gz
+Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boost_%{version_exp}.tar.gz
 Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
