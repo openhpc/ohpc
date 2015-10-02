@@ -10,46 +10,22 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family variable via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
-
-# Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
-%if 0%{?OHPC_build}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
-
 # Base package name
 %define pname papi
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-
-Summary: Performance Application Programming Interface
-Name: %{pname}%{PROJ_DELIM}
-Version: 5.4.1
-Release: 1%{?dist}
-License: BSD
-Group: ohpc/perf-tools
-URL: http://icl.cs.utk.edu/papi/
-Source0: %{pname}-%{version}.tar.gz
-Patch1: papi.ldconfig.patch
+Summary:   Performance Application Programming Interface
+Name:      %{pname}%{PROJ_DELIM}
+Version:   5.4.1
+Release:   1%{?dist}
+License:   BSD
+Group:     ohpc/perf-tools
+URL:       http://icl.cs.utk.edu/papi/
+Source0:   %{pname}-%{version}.tar.gz
+Patch1:    papi.ldconfig.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir: %{OHPC_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
+
 BuildRequires: ncurses-devel
 %if 0%{?suse_version}
 BuildRequires: gcc-fortran
@@ -75,18 +51,10 @@ running programs.
 
 %build
 
-# OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
 cd src
 ./configure --with-static-lib=no --with-shared-lib=yes --with-shlib --prefix=%{install_path}
 #DBG workaround to make sure libpfm just uses the normal CFLAGS
 DBG="" make
-
-#%check
-#cd src
-#make fulltest
 
 %install
 
@@ -96,16 +64,8 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 
 rm -rf $RPM_BUILD_ROOT
 cd src
-#sudo make DESTDIR=$RPM_BUILD_ROOT install
-#sudo chown -R abuild $RPM_BUILD_ROOT
 
 make DESTDIR=$RPM_BUILD_ROOT install
-
-#chown -R abuild $RPM_BUILD_ROOT
-
-# if !0%{?suse_version}
-# chrpath --delete $RPM_BUILD_ROOT%{_libdir}/*.so*
-# endif
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULES}/%{pname}
@@ -152,7 +112,7 @@ EOF
 # https://fedoraproject.org/wiki/Packaging/Guidelines#Packaging_Static_Libraries
 rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
 
-%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+%{__mkdir_p} $RPM_BUILD_ROOT/%{_docdir}
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
