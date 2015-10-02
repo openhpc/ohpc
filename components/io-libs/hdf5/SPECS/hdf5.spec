@@ -65,7 +65,7 @@ License:   BSD-style
 Group:     ohpc/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib
-Source0:   %{pname}-%{version}-patch1.tar.gz
+Source0:   http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-%{version}-patch1.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
