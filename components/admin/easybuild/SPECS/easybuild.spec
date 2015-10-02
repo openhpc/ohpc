@@ -14,7 +14,7 @@
 %define pname easybuild
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define vsc_base_ver 2.2.2
+%define vsc_base_ver 2.2.4
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
