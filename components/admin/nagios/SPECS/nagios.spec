@@ -77,6 +77,10 @@ Requires: httpd
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires: mailx
 
+%if 0%{?suse_version} >= 1210
+Requires:           apache2-mod_php5
+%endif
+
 %if 0%{?fedora} || 0%{?rhel}
 Requires(preun): initscripts, chkconfig
 Requires(post): initscripts, chkconfig
@@ -206,6 +210,11 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
     --with-perlcache \
     --with-template-objects \
     --with-template-extinfo \
+    %if 0%{?sles_version} || 0%{?suse_version}
+    --with-httpd-conf=/etc/apache2/conf.d \
+    %else
+    --with-httpd-conf=/etc/httpd/conf.d \
+    %endif
     STRIP=/bin/true
 make %{?_smp_mflags} all
 
@@ -265,17 +274,23 @@ fi
 
 %post
 %if 0%{?sles_version} || 0%{?suse_version}
+/usr/sbin/a2enmod php5
 %{_sbindir}/usermod -a -G %{pname} wwwrun || :
+/usr/bin/systemctl try-restart apache2 > /dev/null 2>&1 || :
 %else
 %{_sbindir}/usermod -a -G %{pname} apache || :
+/usr/bin/systemctl try-restart httpd > /dev/null 2>&1 || :
 %endif
 /sbin/chkconfig --add %{pname} || :
 /sbin/service httpd condrestart > /dev/null 2>&1 || :
 
 
 %postun
-/sbin/service httpd condrestart > /dev/null 2>&1 || :
-
+%if 0%{?sles_version} || 0%{?suse_version}
+/usr/bin/systemctl try-restart apache2 > /dev/null 2>&1 || :
+%else
+/usr/bin/systemctl try-restart httpd > /dev/null 2>&1 || :
+%endif
 
 # missing buildrequires
 #%check
@@ -296,7 +311,11 @@ fi
 %{_bindir}/*
 %{_libdir}/%{pname}/cgi-bin/*cgi
 %{_initrddir}/nagios
+%if 0%{?sles_version} || 0%{?suse_version}
+%config(noreplace) %{_sysconfdir}/apache2/conf.d/nagios.conf
+%else
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/nagios.conf
+%endif
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{pname}
 %config(noreplace) %{_sysconfdir}/%{pname}/*cfg
 %config(noreplace) %{_sysconfdir}/%{pname}/objects/*cfg
