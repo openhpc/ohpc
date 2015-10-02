@@ -74,9 +74,6 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define _unpackaged_files_terminate_build 0
 %define build_mpi 1
 
-#%define bversion 1_57_0
-%define bversion %(echo %{version} | tr . _)
-
 # Base package name
 %define pname boost
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -88,7 +85,10 @@ Release:        0
 License:        BSL-1.0
 Group:		ohpc/parallel-libs
 Url:            http://www.boost.org
-Source0:        http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_%{bversion}.tar.gz
+
+%define bversion %(echo %{version} | tr . _)
+
+Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boost_%{bversion}.tar.gz
 Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
