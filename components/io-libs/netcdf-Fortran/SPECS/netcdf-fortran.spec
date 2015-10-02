@@ -84,7 +84,7 @@ Version:        4.4.2
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 DocDir:         %{OHPC_PUB}/doc/contrib
-Source0:	%{pname}-%{version}.tar.gz
+Source0:	https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
 Source101:	OHPC_macros
 Source102:	OHPC_setup_compiler
 Source103:	OHPC_setup_mpi
