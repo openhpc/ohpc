@@ -51,7 +51,7 @@ DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          ohpc/dev-tools
-Source0:        %{pname}-%{version}.tar.gz
+Source0:        http://sourceforge.net/projects/numpy/files/NumPy/1.9.2/numpy-1.9.2.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
 Patch1:         numpy-buildfix.patch
