@@ -67,6 +67,8 @@ python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
 rm bootstrap_eb.py
+
+# Patch to add SLES 12 kernel version
 cd %{buildroot}%{install_path}/software/EasyBuild/%{version}/lib/python$PYTHON_VERSION/site-packages/easybuild_framework-%{version}-py$PYTHON_VERSION.egg/easybuild/tools
 patch -p9 < %{_sourcedir}/easybuild-sles12.patch
 cd -
