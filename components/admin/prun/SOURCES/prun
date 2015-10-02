@@ -97,9 +97,6 @@ function launch_impi () {
 function launch_mvapich2 () {
     if [ $MODE == "native" ];then
 
-###        LAUNCHER="mpirun_rsh"
-###        HOSTFILE=/tmp/hostfile.$USER.$RANDOM
-
         LAUNCHER="mpiexec.hydra"
         verify_launcher_avail $LAUNCHER
 
