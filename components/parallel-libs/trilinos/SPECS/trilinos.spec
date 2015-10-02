@@ -67,7 +67,7 @@ Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
 Group:          ohpc/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
-Source0:        %{pname}-%{version}.tar.gz
+Source0:        http://trilinos.csbsju.edu/download/files/trilinos-%{version}-Source.tar.bz2
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 BuildRequires:  cmake >= 2.8
 #BuildRequires:  cppunit-devel
