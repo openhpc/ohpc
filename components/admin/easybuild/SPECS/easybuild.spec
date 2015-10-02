@@ -32,6 +32,7 @@ Source4:   bootstrap_eb.py
 Source5:   easybuild-sles12.patch
 Source6:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRequires: lmod%{PROJ_DELIM}
 BuildRequires: patch
 BuildRequires: python
 BuildRequires: python-setuptools
