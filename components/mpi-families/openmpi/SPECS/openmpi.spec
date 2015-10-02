@@ -41,7 +41,7 @@ BuildRequires: intel_licenses
 %define pname openmpi
 %define with_openib 1
 %define with_psm 1
-%define with_lustre 1
+%define with_lustre 0
 %define with_slurm 1
 
 Summary:   A powerful implementation of MPI
