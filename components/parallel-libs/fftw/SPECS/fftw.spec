@@ -64,7 +64,7 @@ Release:   1
 License:   GPLv2+
 Group:     ohpc/parallel-libs
 URL:       http://www.fftw.org
-Source0:   %{pname}-%{version}.tar.gz
+Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
