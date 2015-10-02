@@ -86,7 +86,7 @@ License:        BSL-1.0
 Group:		ohpc/parallel-libs
 Url:            http://www.boost.org
 
-%define bversion %(echo %{version} | tr . _)
+%define bversion %(echo 1.59.0 | tr . _)
 
 Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boost_%{bversion}.tar.gz
 Source1:        boost-rpmlintrc
