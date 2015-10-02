@@ -85,7 +85,7 @@ Group:     ohpc/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-Source0:   %{pname}-%{version}-patch1.tar.gz
+Source0:   http://www.hdfgroup.org/ftp/HDF5/current/src/%{pname}-%{version}-patch1.tar
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
