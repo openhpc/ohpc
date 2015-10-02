@@ -60,7 +60,7 @@ BuildRequires: intel_licenses
 Name:		%{pname}%{PROJ_DELIM}
 Release:	1%{?dist}
 Version:        3.2.2
-Source:         R-%{version}.tar.gz
+Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Patch:          tre.patch
 Url:            http://www.r-project.org/
 DocDir:         %{OHPC_PUB}/doc/contrib
