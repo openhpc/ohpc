@@ -18,7 +18,7 @@
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   2.1.1
+Version:   2.3.0
 Release:   1
 License:   GPLv2
 Group:     System/Configuration
@@ -61,13 +61,15 @@ export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export EASYBUILD_INSTALLPATH=%{install_path}
 export PATH=${LMOD_DIR}:${PATH}
+export PYTHON_VERSION=`python -c 'print ".".join(map(str, __import__("sys").version_info[:2]))'`
 
 python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
 rm bootstrap_eb.py
-cd %{buildroot}%{install_path}/software
-patch -p1 < %{_sourcedir}/easybuild-sles12.patch
+cd %{buildroot}%{install_path}/software/EasyBuild/%{version}/lib/python$PYTHON_VERSION/site-packages/easybuild_framework-%{version}-py$PYTHON_VERSION.egg/easybuild/tools
+patch -p9 < %{_sourcedir}/easybuild-sles12.patch
+cd -
 
 
 # OHPC module file
