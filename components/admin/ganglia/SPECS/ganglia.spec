@@ -82,6 +82,9 @@ Requires:           php
 Requires:           php-gd
 Requires:           php-ZendFramework
 Requires:           %{pname}-gmetad%{PROJ_DELIM} = %{gangver}-%{release}
+%if 0%{?suse_version} >= 1210
+Requires:           apache2-mod_php5
+%endif
 
 %description -n %{pname}-web%{PROJ_DELIM}
 This package provides a web frontend to display the XML tree published by
@@ -235,10 +238,10 @@ install -p -m 0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/ganglia/conf.php
 ln -s ../../..%{_sysconfdir}/%{pname}/conf.php \
     $RPM_BUILD_ROOT%{_datadir}/%{name}/conf.php
 
-%if 0%{?fedora} >= 18
-install -Dp -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
+%if 0%{?sles_version} || 0%{?suse_version}
+install -Dp -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/apache2/conf.d/%{name}.conf
 %else
-install -Dp -m 0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
+install -Dp -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 %endif
 
 ## Various clean up after install:
@@ -353,6 +356,12 @@ fi
 if [ ! -L /usr/share/%{name}/lib/Zend ]; then
   /usr/bin/ln -s /usr/share/php/Zend /usr/share/%{name}/lib/Zend
 fi
+%if 0%{?sles_version} || 0%{?suse_version}
+/usr/sbin/a2enmod php5
+/usr/bin/systemctl try-restart apache2.service
+%else
+/usr/bin/systemctl try-restart httpd.service
+%endif
 
 %files
 %doc AUTHORS COPYING NEWS README ChangeLog
@@ -409,7 +418,11 @@ fi
 %files -n %{pname}-web%{PROJ_DELIM}
 %doc web/AUTHORS web/COPYING web/README web/TODO
 %config(noreplace) %{_sysconfdir}/%{pname}/conf.php
+%if 0%{?sles_version} || 0%{?suse_version}
+%config(noreplace) %{_sysconfdir}/apache2/conf.d/%{name}.conf
+%else
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
+%endif
 %{_datadir}/%{name}
 %if 0%{?sles_version} || 0%{?suse_version}
 %dir %attr(0755,wwwrun,www) %{_localstatedir}/lib/%{pname}/conf
