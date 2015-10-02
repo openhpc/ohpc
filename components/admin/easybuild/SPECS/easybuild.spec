@@ -8,31 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-
-# OHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
-
-# Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM}
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-
-#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname easybuild
@@ -42,7 +18,7 @@ BuildRequires: intel_licenses
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   2.1.1
+Version:   2.3.0
 Release:   1
 License:   GPLv2
 Group:     System/Configuration
@@ -55,7 +31,6 @@ Source3:   https://pypi.python.org/packages/source/v/vsc-base/vsc-base-%{vsc_bas
 Source4:   bootstrap_eb.py
 Source5:   easybuild-sles12.patch
 Source6:   OHPC_macros
-Source7:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch
 BuildRequires: python
@@ -80,10 +55,6 @@ mkdir %{buildroot}
 
 cd %{buildroot}
 cp %{_sourcedir}/*py .
-
-# OHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
 
 export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
