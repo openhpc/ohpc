@@ -39,7 +39,6 @@ BuildRequires: intel_licenses
 %define pname pdtoolkit
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-
 Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        3.20
 Release:        1
