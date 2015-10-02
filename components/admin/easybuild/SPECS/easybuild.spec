@@ -37,7 +37,7 @@ BuildRequires: intel_licenses
 %define pname easybuild
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define vsc-base-ver 2.2.2
+%define vsc_base_ver 2.2.2
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
@@ -50,7 +50,7 @@ URL:       http://hpcugent.github.com/easybuild
 Source0:   https://pypi.python.org/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
 Source1:   https://pypi.python.org/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
 Source2:   https://pypi.python.org/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
-Source3:   https://pypi.python.org/packages/source/v/vsc-base/vsc-base-%{vsc-base-ver}.tar.gz
+Source3:   https://pypi.python.org/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.tar.gz
 Source4:   bootstrap_eb.py
 Source5:   easybuild-sles12.patch
 Source6:   OHPC_macros
