@@ -111,7 +111,7 @@ operate on distributed matrices e.g. over a cluster.  It has Fortran and
 C interfaces, and can interface with ordering tools such as Scotch.
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n MUMPS_%{version}
 %patch0 -p1
 %patch1 -p1
 
