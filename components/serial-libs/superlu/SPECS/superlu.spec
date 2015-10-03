@@ -94,7 +94,7 @@ linear systems that the author is aware of.
 Docu can be found on http://www.netlib.org.
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n SuperLU_%{version}
 %patch -p1
 %patch1 -p1
 %patch2 -p1
