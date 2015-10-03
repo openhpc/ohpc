@@ -26,7 +26,7 @@ Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-%if 0%{?OHPC_build}
+%if 0%{?OHPC_BUILD}
 %{!?prefix: %define prefix %{OHPC_ADMIN}}
 %else
 %{!?prefix: %define prefix /opt}
@@ -107,7 +107,7 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%if 0%{?OHPC_build}
+%if 0%{?OHPC_BUILD}
 %dir %{OHPC_HOME}
 %dir %{prefix}
 
