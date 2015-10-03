@@ -116,7 +116,7 @@ calculate the relative backward error, and estimate error bounds for the refined
 solutions. 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n SuperLU_DIST_%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
