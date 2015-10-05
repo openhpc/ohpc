@@ -11,8 +11,6 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM:%define PROJ_DELIM ohpc}
 
-%define buildId 030
-
 Summary:   Intel(R) Cluster Checker
 Name:      intel-clck%{PROJ_DELIM}
 Version:   3.0.1
@@ -21,7 +19,6 @@ License:   Intel
 URL:       https://clusterready.intel.com/intel-cluster-checker/
 Group:     ohpc/admin
 BuildArch: x86_64
-#Source0:   l_clck_p_%{version}.%{buildId}.tgz
 Source1:   OHPC_macros
 Source2:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -43,17 +40,12 @@ Source3:   XDG_SESSION.patch
 Intel cluster checker.
 
 %prep
-#setup -n l_clck_p_%{version}.%{buildId}
 
 %build
 
 
 
 %install
-
-#match_keys='clck_'
-#rm rpm/clck_common-pset*.rpm
-#rpm -ivh --nodeps --relocate /opt/intel/clck/%{version}=%{OHPC_ADMIN}/clck/%{version} rpm/$match_keys*.rpm
 
 %{__mkdir_p} %{buildroot}
 cd %{buildroot}
