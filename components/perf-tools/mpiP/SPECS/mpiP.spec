@@ -58,7 +58,7 @@ Release:   1
 License:   GPLv2+
 Group:     ohpc/perf-tools
 URL:       http://mpip.sourceforge.net/
-Source0:   %{pname}-%{version}.tar.gz
+Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
