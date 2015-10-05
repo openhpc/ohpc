@@ -55,18 +55,19 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 2.24.1
-Release: 1%{?dist}
-Summary: Tuning and Analysis Utilities Profiling Package
-License: Tuning and Analysis Utilities License
-Group: ohpc/perf-tools
-Url: http://www.cs.uoregon.edu/research/tau/home.php
-Source0: %{pname}-%{version}.tar.gz
+
+Version:   2.24.1
+Release:   1%{?dist}
+Summary:   Tuning and Analysis Utilities Profiling Package
+License:   Tuning and Analysis Utilities License
+Group:     ohpc/perf-tools
+Url:       http://www.cs.uoregon.edu/research/tau/home.php
+Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
 Provides:  lib%PNAME.so()(64bit)
 Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
-DocDir: %{OHPC_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
