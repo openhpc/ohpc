@@ -82,7 +82,7 @@ License:        BSD-3-Clause
 Group:          ohpc/dev-tools
 Url:            http://www.scipy.org
 DocDir:         %{OHPC_PUB}/doc/contrib
-Source0:        %{pname}-%{version}.tar.gz
+Source0:        http://sourceforge.net/projects/scipy/files/scipy/0.15.1/scipy-%{version}.tar.gz
 BuildRequires:  blas-devel
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
