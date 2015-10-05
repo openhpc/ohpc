@@ -23,7 +23,6 @@ Group:     ohpc/compiler-families
 BuildArch: x86_64
 Source0:   intel-compilers%{PROJ_DELIM}-16.0.0-109.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
@@ -45,6 +44,7 @@ requires: gcc-c++
 
 OpenHPC collection of runtime packages for Intel(R) Parallel Studio
 compiler suite (including compilers for C,C++, and Fortran).
+
 
 %prep
 
@@ -84,13 +84,25 @@ set     version			    %{version}
 # update module path hierarchy
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/intel
 
+setenv          MKLROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/mkl
+prepend-path    PATH                %{package_target}/compilers_and_libraries_20%{version}/linux/bin/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mpirt/bin/intel64_lin:%{package_target}/debugger_2016/gdb/intel64_mic/bin
+prepend-path    MANPATH             %{package_target}/documentation_2016/en/man/common/:%{package_target}/documentation_2016/en/debugger/gdb-ia/man/:%{package_target}/documentation_2016/en/debugger/gdb-mic/man/:%{package_target}/documentation_2016/en/debugger/gdb-igfx/man/:
+
+prepend-path    LIBRARY_PATH        %{package_target}/compilers_and_libraries_20%{version}/linux/ipp/../compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../tbb/lib/intel64_lin/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../compiler/lib/intel64_lin
+prepend-path    LD_LIBRARY_PATH     %{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mpirt/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/../compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4:%{package_target}/debugger_2016/libipt/intel64/lib:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../tbb/lib/intel64_lin/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../compiler/lib/intel64_lin
+ 
+prepend-path    MIC_LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/mic
+
+setenv          GDBSERVER_MIC       %{package_target}/debugger_2016/gdb/targets/mic/bin/gdbserver
+setenv          GDB_CROSS           %{package_target}/debugger_2016/gdb/intel64_mic/bin/gdb-mic
+setenv          INTEL_PYTHONHOME    %{package_target}/debugger_2016/python/intel64/
+setenv          MPM_LAUNCHER        %{package_target}/debugger_2016/mpm/mic/bin/start_mpm.sh
+setenv          TBBROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb
+setenv          TBB_INC             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/include
+setenv          TBB_LIB             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4
+
 family "compiler"
 EOF
-
-# Auto-generate remaining portion of modulefile based on iccvars.sh script
-
-%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/compilers_and_libraries_20%{version}/linux/bin/iccvars.sh intel64 >> %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/.version.%{module_version}
 #%Module1.0#####################################################################
