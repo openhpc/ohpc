@@ -162,8 +162,8 @@ make exports
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
 pushd /tmp
-%define tmp_path %{install_path#*/}
-mv %{tmp_path}%{compiler_family}/%{mpi_family}/%{pname}/%version %buildroot%{install_path}/..
+export tmp_path=%{install_path}
+mv ${tmp_path#*/}%{compiler_family}/%{mpi_family}/%{pname}/%version %buildroot%{install_path}/..
 popd
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
