@@ -138,7 +138,7 @@ NetCDF data is:
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-c-%{version}
 
 %build
 # OpenHPC compiler/mpi designation
