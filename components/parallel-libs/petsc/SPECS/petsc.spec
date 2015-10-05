@@ -66,12 +66,12 @@ Group:          ohpc/parallel-libs
 Version:        3.6.1
 Release:        0
 
-Source0:        %{pname}-%{version}.tar.gz
+Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
 Source3:        OHPC_setup_mpi
 Patch1:         petsc.rpath.patch
-Url:            http://www-unix.mcs.anl.gov/petsc/petsc-as/
+Url:            http://www.mcs.anl.gov/petsc/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{OHPC_PUB}/doc/contrib
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
