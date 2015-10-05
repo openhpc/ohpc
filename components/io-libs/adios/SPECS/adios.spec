@@ -68,7 +68,7 @@ License: BSD-3-Clause
 Group:   ohpc/io-libs
 DocDir:  %{OHPC_PUB}/doc/contrib
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
-Source0: http://users.nccs.gov/~pnorbert/adios-%{Version}.tar.gz 
+Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz 
 Source1: OHPC_macros
 Source2: OHPC_setup_compiler
 
