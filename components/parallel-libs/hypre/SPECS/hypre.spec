@@ -43,9 +43,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
+BuildRequires: openblas-gnu%{PROJ_DELIM}
+Requires:      openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -83,7 +82,6 @@ License:        LGPL-2.1
 Group:          ohpc/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         https://computation.llnl.gov/project/linear_solvers/download/hypre-%{version}.tar.gz
-
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -122,7 +120,6 @@ phenomena in the defense, environmental, energy, and biological sciences.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#%patch0 -p1
 
 %build
 
@@ -134,37 +131,40 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 module load superlu
 module load superlu_dist
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load scalapack
 %endif
 
-#export includedir=%{_includedir}
 
-#FLAGS="%optflags -fPIC -I%{_includedir}/numpy"
 FLAGS="%optflags -fPIC"
 cd src
 ./configure \
-        --prefix=%{install_path} \
+    --prefix=%{install_path} \
     --without-examples \
     --with-MPI \
     --with-MPI-include=$MPI_DIR/include \
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
     --with-timing \
     --without-openmp \
+%if %{compiler_family} == intel
     --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
     --with-blas-lib-dirs=$MKLROOT/intel64/lib \
-        --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-        --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
-    --with-lapack \
+    --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+    --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
+%else
+    --with-blas-libs=openblas \
+    --with-blas-lib-dirs=$OPENBLAS_LIB \
+    --with-lapack-libs=openblas \
+    --with-lapack-lib-dirs=$OPENBLAS_LIB \
+%endif
     --with-mli \
     --with-fei \
-        --with-superlu \
-        --with-superlu_dist \
+    --with-superlu \
+    --with-superlu_dist \
     CC="mpicc $FLAGS" \
     CXX="mpicxx $FLAGS" \
     F77="mpif77 $FLAGS"
-#    MPI_PREFIX=%{_libdir}/mpi/gcc/$mpi
+
 mkdir -p hypre/lib
 pushd FEI_mv/femli
 make %{?_smp_mflags} all CC="mpicc $FLAGS" \
@@ -186,9 +186,8 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 module load superlu
 module load superlu_dist
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load scalapack
 %endif
 
 # %%makeinstall macro does not work with hypre
@@ -254,7 +253,7 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 and fftw (and mkl for gnu compiler families)
+# Require superlu (and scalapack for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded superlu]  } {
@@ -264,8 +263,8 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
         module load superlu_dist
     }
     if { [is-loaded gnu] } {
-        if { ![is-loaded mkl]  } {
-          module load mkl
+        if { ![is-loaded scalapack]  } {
+          module load scalapack
         }
     }
 }
