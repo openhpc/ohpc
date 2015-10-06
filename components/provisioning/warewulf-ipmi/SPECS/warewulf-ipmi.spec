@@ -24,10 +24,10 @@ Name: %{rpmname}
 Summary: IPMI Module for Warewulf
 Version: 3.6
 Release: %{_rel}%{?dist}
-#Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: ohpc/provisioning
 URL: http://warewulf.lbl.gov/
+Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-ipmi/warewulf-ipmi-%{version}.tar.gz
 Source0: %{pname}-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
