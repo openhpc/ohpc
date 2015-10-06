@@ -32,8 +32,9 @@ URL: https://www.nagios-plugins.org/
 Source0: http://www.nagios-plugins.org/download/nagios-plugins-%{version}.tar.gz
 Source1: nagios-plugins.README.Fedora
 Patch2: nagios-plugins-0002-Remove-assignment-of-not-parsed-to-jitter.patch
-Patch3: nagios-plugins-0003-Fedora-specific-fixes-for-searching-for-diff-and-tai.patch
-Patch4: nagios-plugins-0004-Fedora-specific-patch-for-not-to-fixing-fully-qualif.patch
+# 3 & 4 appear to no longer be necessary in 2.1.1
+#Patch3: nagios-plugins-0003-Fedora-specific-fixes-for-searching-for-diff-and-tai.patch
+#Patch4: nagios-plugins-0004-Fedora-specific-patch-for-not-to-fixing-fully-qualif.patch
 # https://bugzilla.redhat.com/512559
 Patch5: nagios-plugins-0005-Prevent-check_swap-from-returning-OK-if-no-swap-acti.patch
 Patch7: nagios-plugins-0007-Fix-the-use-lib-statement-and-the-external-ntp-comma.patch
@@ -672,8 +673,8 @@ Provides check_wave support for Nagios.
 %setup -q -n %{pname}-%{version}
 
 %patch2 -p1 -b .not_parsed
-%patch3 -p1 -b .proper_paths
-%patch4 -p1 -b .no_need_fo_fix_paths
+#%patch3 -p1 -b .proper_paths
+#%patch4 -p1 -b .no_need_fo_fix_paths
 %patch5 -p1 -b .fix_missing_swap
 %patch7 -p1 -b .ext_ntp_cmds
 
