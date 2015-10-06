@@ -24,12 +24,12 @@ Summary: Warewulf Node Health Check System
 Version: 1.4.1
 Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group: ohpc/provisioning
-URL: http://warewulf.lbl.gov/
-Source0: %{pname}-%{version}.tar.gz
+Group:   ohpc/provisioning
+URL:     http://warewulf.lbl.gov/
+Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-nhc/warewulf-nhc-%{version}.tar.gz
 Source1: OHPC_macros
 Packager: %{?_packager}%{!?_packager:Michael Jennings <mej@lbl.gov>}
-Vendor: %{?_vendorinfo}%{!?_vendorinfo:Warewulf Project (http://warewulf.lbl.gov/)}
+Vendor:  %{?_vendorinfo}%{!?_vendorinfo:Warewulf Project (http://warewulf.lbl.gov/)}
 Distribution: %{?_distribution:%{_distribution}}%{!?_distribution:%{_vendor}}
 Requires: bash
 BuildConflicts: post-build-checks
