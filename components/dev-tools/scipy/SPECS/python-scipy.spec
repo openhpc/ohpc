@@ -42,8 +42,7 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# hack to install MKL for the moment
-BuildRequires: intel-compilers%{PROJ_DELIM}
+BuildRequires: openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -126,11 +125,7 @@ find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-# Enable MKL linkage for blas/lapack with gnu builds
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
+%if %{compiler_family} == intel
 cat > site.cfg << EOF
 [mkl]
 library_dirs = $MKLROOT/lib/intel64
@@ -138,7 +133,17 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
+%endif
 
+%if %{compiler_family} == gnu
+module load openblas
+cat > site.cfg << EOF
+[openblas]
+libraries = openblas
+library_dirs = $OPENBLAS_LIB
+include_dirs = $OPENBLAS_INC
+EOF
+%endif
 
 %build
 # OpenHPC compiler/mpi designation
@@ -148,9 +153,8 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load openblas
 %endif
 
 module load numpy
@@ -174,9 +178,8 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load openblas
 %endif
 
 module load numpy
@@ -225,10 +228,8 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded numpy]  } {
         module load numpy
     }
-    if { [is-loaded gnu] } {
-        if { ![is-loaded mkl]  } {
-          module load mkl
-        }
+    if {  ![is-loaded openblas]  } {
+        module load openblas
     }
 }
 
