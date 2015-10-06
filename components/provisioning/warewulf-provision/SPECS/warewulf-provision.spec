@@ -23,7 +23,7 @@ Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   ohpc/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: %{pname}-%{version}.tar.gz
+Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-provision/warewulf-provision-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
