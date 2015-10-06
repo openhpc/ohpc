@@ -26,8 +26,8 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# hack to install MKL for the moment
-BuildRequires: intel-compilers-devel%{PROJ_DELIM}
+BuildRequires: openblas-gnu%{PROJ_DELIM}
+Requires:      openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -94,11 +94,7 @@ basic linear algebra and random number generation.
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-# Enable MKL linkage for blas/lapack with gnu builds
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
+%if %{compiler_family} == intel
 cat > site.cfg << EOF
 [mkl]
 library_dirs = $MKLROOT/lib/intel64
@@ -106,21 +102,30 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
+%endif
+
+%if %{compiler_family} == gnu
+module load openblas
+
+cat > site.cfg << EOF
+[openblas]
+libraries = openblas
+library_dirs = $OPENBLAS_LIB
+include_dirs = $OPENBLAS_INC
+EOF
+%endif
 
 %build
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load openblas
 %endif
-
 
 %if %{compiler_family} == intel
 COMPILER_FLAG="--compiler=intelem"
-
 %endif
 #CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
 python setup.py build $COMPILER_FLAG
