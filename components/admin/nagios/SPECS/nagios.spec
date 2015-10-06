@@ -18,7 +18,7 @@
 %global _hardened_build 1
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.5.1
+Version: 4.1.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program
 Group:   ohpc/admin
@@ -37,7 +37,8 @@ Source10: printer.png
 Source11: router.png
 Source12: switch.png
 
-Patch1: nagios-0001-from-rpm.patch
+# looks fixed in 4.1.1
+#Patch1: nagios-0001-from-rpm.patch
 Patch2: nagios-0002-SELinux-relabeling.patch
 # Sent upstream
 Patch3: nagios-0003-Fix-etc-init.d-nagios-status.patch
@@ -169,8 +170,9 @@ may compile against.
 
 
 %prep
-%setup -q -n %{pname}
-%patch1 -p1 -b .fedora
+%setup -q -n %{pname}-%{version}
+# appears to be corrected in 4.1.1
+#%patch1 -p1 -b .fedora
 %patch2 -p1 -b .selinux_relabel
 %patch3 -p1 -b .fix_status_retcode
 %patch4 -p1 -b .fix_httpd_conf_d
@@ -218,9 +220,10 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
     STRIP=/bin/true
 make %{?_smp_mflags} all
 
-sed -i -e "s| package Embed::Persistent;|#\!%{_bindir}/perl\npackage Embed::Persistent;|" p1.pl
+#sed -i -e "s| package Embed::Persistent;|#\!%{_bindir}/perl\npackage Embed::Persistent;|" p1.pl
 sed -i -e "s|NagiosCmd=/var/log/nagios/rw/nagios.cmd|NagiosCmd=%{_localstatedir}/spool/%{pname}/cmd/nagios.cmd|" daemon-init
 sed -i -e "s|resource.cfg|private/resource.cfg|" \
+     -e "s|#query_socket=/var/log/nagios/rw/nagios.qh|query_socket=%{_localstatedir}/log/%{pname}/nagios.qh|" \
      -e "s|command_file=/var/log/nagios/rw/nagios.cmd|command_file=%{_localstatedir}/spool/%{pname}/cmd/nagios.cmd|" sample-config/nagios.cfg 
 sed -e "s|/usr/lib/|%{_libdir}/|" %{SOURCE2} > %{pname}.htaccess
 cp -f %{SOURCE3} internet.cfg
@@ -254,6 +257,9 @@ install -d -m 0755 %{buildroot}%{_libdir}/%{pname}/plugins/eventhandlers
 
 install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
 
+# remove static library that is build in 4.1.1
+rm -v    %{buildroot}%{_libdir}/%{pname}/libnagios.a
+
 
 %clean
 rm -rf %{buildroot}
@@ -282,7 +288,6 @@ fi
 /usr/bin/systemctl try-restart httpd > /dev/null 2>&1 || :
 %endif
 /sbin/chkconfig --add %{pname} || :
-/sbin/service httpd condrestart > /dev/null 2>&1 || :
 
 
 %postun
@@ -307,6 +312,9 @@ fi
 %doc Changelog INSTALLING LICENSE README UPGRADING UpgradeToVersion3.ReadMe UpgradeToVersion3.sh
 %doc internet.cfg
 %{_datadir}/%{pname}/html/[^d]*
+# d3 javascript appears to be new for 4.1.1, include directory and files
+%dir %{_datadir}/%{pname}/html/d3
+%{_datadir}/%{pname}/html/d3/*
 %{_sbindir}/*
 %{_bindir}/*
 %{_libdir}/%{pname}/cgi-bin/*cgi

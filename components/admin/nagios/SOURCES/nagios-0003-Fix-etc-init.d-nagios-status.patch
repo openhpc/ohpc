@@ -12,15 +12,14 @@ diff --git a/daemon-init.in b/daemon-init.in
 index 75aa0b3..ecd072a 100644
 --- a/daemon-init.in
 +++ b/daemon-init.in
-@@ -52,12 +52,14 @@ status_nagios ()
+@@ -128,11 +128,14 @@
  
- printstatus_nagios()
+ printstatus_nagios ()
  {
--
--	if status_nagios $1 $2; then
-+	status_nagios $1 $2
+-	if status_nagios; then
++	status_nagios
 +	RETVAL=$?
-+	if [ $RETVAL = 0 ]; then
++	if [ "0" -eq "$RETVAL" ]; then
  		echo "nagios (pid $NagiosPID) is running..."
  	else
  		echo "nagios is not running"
@@ -28,15 +27,12 @@ index 75aa0b3..ecd072a 100644
 +	return $RETVAL
  }
  
- 
-@@ -174,6 +176,7 @@ case "$1" in
+ killproc_nagios ()
+@@ -227,6 +230,7 @@
  	status)
  		pid_nagios
- 		printstatus_nagios nagios
+ 		printstatus_nagios
 +		exit $?
  		;;
  
  	checkconfig)
--- 
-1.7.3.5
-

@@ -1,26 +1,11 @@
-From be1a5ac3efb5a443c82cbd3ee2e0656d2e7aca52 Mon Sep 17 00:00:00 2001
-From: Peter Lemenkov <lemenkov@gmail.com>
-Date: Fri, 24 Sep 2010 14:20:54 +0400
-Subject: [PATCH 07/11] The init-script should return 2 in case of unknown command.
-
-Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
----
- daemon-init.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/daemon-init.in b/daemon-init.in
-index 5e52637..16b98be 100644
 --- a/daemon-init.in
 +++ b/daemon-init.in
-@@ -229,7 +229,7 @@ case "$1" in
+@@ -284,7 +284,7 @@
  
  	*)
- 		echo "Usage: nagios {start|stop|restart|reload|force-reload|status|checkconfig}"
+ 		echo "Usage: nagios {start|stop|restart|reload|force-reload|status|checkconfig|configtest}"
 -		exit 1
 +		exit 2
  		;;
  
  esac
--- 
-1.7.3.5
-
