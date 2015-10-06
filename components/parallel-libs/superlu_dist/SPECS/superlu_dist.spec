@@ -188,16 +188,11 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require metis and (and mkl for gnu compiler families)
+# Require metis
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded metis]  } {
         module load metis
-    }
-    if { [is-loaded gnu] } {
-        if { ![is-loaded mkl]  } {
-          module load mkl
-        }
     }
 }
 
