@@ -68,6 +68,7 @@ BuildRequires: perl(Test::Harness)
 #%endif
 BuildRequires: perl(Test::More)
 BuildRequires: perl(Test::Simple)
+BuildRequires: unzip
 
 %if 0%{?sles_version} || 0%{?suse_version}
 #!BuildIgnore: brp-check-suse
