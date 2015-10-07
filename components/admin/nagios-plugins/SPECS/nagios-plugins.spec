@@ -435,16 +435,17 @@ Provides: %{pname}-ntp
 %description -n %{pname}-ntp%{PROJ_DELIM}
 Provides check_ntp support for Nagios.
 
-%package -n %{pname}-ntp-perl%{PROJ_DELIM}
-Summary: Nagios Plugin - check_ntp.pl
-Group: Applications/System
-Requires: %{name} = %{version}-%{release}
-Requires: %{_sbindir}/ntpdate
-Requires: %{_sbindir}/ntpq
-Provides: %{pname}-ntp-perl
-
-%description -n %{pname}-ntp-perl%{PROJ_DELIM}
-Provides check_ntp.pl support for Nagios.
+# perl scripts aren't getting substitutions done in 2.1.1, Makefile issue?
+#%package -n %{pname}-ntp-perl%{PROJ_DELIM}
+#Summary: Nagios Plugin - check_ntp.pl
+#Group: Applications/System
+#Requires: %{name} = %{version}-%{release}
+#Requires: %{_sbindir}/ntpdate
+#Requires: %{_sbindir}/ntpq
+#Provides: %{pname}-ntp-perl
+#
+#%description -n %{pname}-ntp-perl%{PROJ_DELIM}
+#Provides check_ntp.pl support for Nagios.
 
 %package -n %{pname}-nwstat%{PROJ_DELIM}
 Summary: Nagios Plugin - check_nwstat
@@ -714,8 +715,9 @@ make check_pgsql
 
 cd ..
 
-mv plugins-scripts/check_ntp.pl plugins-scripts/check_ntp.pl.in
-gawk -f plugins-scripts/subst plugins-scripts/check_ntp.pl.in > plugins-scripts/check_ntp.pl
+# perl scripts aren't getting substitutions done in 2.1.1, Makefile issue?
+#mv plugins-scripts/check_ntp.pl plugins-scripts/check_ntp.pl.in
+#gawk -f plugins-scripts/subst plugins-scripts/check_ntp.pl.in > plugins-scripts/check_ntp.pl
 
 cp %{SOURCE1} ./README.Fedora
 
@@ -726,7 +728,8 @@ install -m 0755 plugins-root/check_icmp %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins-root/check_dhcp %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins/check_ide_smart %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins/check_ldap %{buildroot}/%{_libdir}/nagios/plugins
-install -m 0755 plugins-scripts/check_ntp.pl %{buildroot}/%{_libdir}/nagios/plugins
+# perl scripts aren't getting substitutions done in 2.1.1, Makefile issue?
+#install -m 0755 plugins-scripts/check_ntp.pl %{buildroot}/%{_libdir}/nagios/plugins
 %if 0%{?fedora} || 0%{?rhel}
 install -m 0755 plugins/check_radius %{buildroot}/%{_libdir}/nagios/plugins
 %endif
@@ -870,8 +873,9 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_ntp_peer
 %{_libdir}/nagios/plugins/check_ntp_time
 
-%files -n %{pname}-ntp-perl%{PROJ_DELIM}
-%{_libdir}/nagios/plugins/check_ntp.pl
+# perl scripts aren't getting substitutions done in 2.1.1, Makefile issue?
+#%files -n %{pname}-ntp-perl%{PROJ_DELIM}
+#%{_libdir}/nagios/plugins/check_ntp.pl
 
 %files -n %{pname}-nwstat%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_nwstat
