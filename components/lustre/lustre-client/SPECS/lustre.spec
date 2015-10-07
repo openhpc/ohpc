@@ -73,7 +73,10 @@ BuildRequires:	-post-build-checks
     %undefine with_zfs
 %endif
 
+%define sha_full  8eb26594344887fabc4b81245abd12b1aeefbccb
+%define sha_short 8eb2659
 %{!?version: %global version 2.7.0}
+
 %{!?kver: %global kver ""}
 %{!?kdir: %global kdir %(dir=$(echo "%configure_args" | sed -ne 's/.*--with-linux=\\([^ ][^ ]*\\).*$/\\1/p'); if [ -n "$dir" ]; then echo "$dir"; else if [ -n "%kver" ]; then kversion="%kver"; else kversion="$(uname -r)"; fi; echo "/lib/modules/$kversion/source"; fi)}
 
@@ -154,7 +157,7 @@ Version: %{version}
 Release: %{fullrelease}
 License: GPL
 Group: fsp/lustre
-Source: lustre-%{version}.tar.gz
+Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
 Source1: OHPC_macros
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
@@ -356,7 +359,8 @@ clients in order to run
 %debug_package
 %endif
 %prep
-%setup -qn lustre-%{version}
+
+%setup -qn lustre-release-%{sha_short}
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
