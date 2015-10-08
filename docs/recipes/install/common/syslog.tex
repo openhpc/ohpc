@@ -1,0 +1,18 @@
+It is desirable to consolidate system logging information for the cluster in a
+central location, both to provide easy access to the data, and to reduce the
+impact of storing data inside the stateless compute image memory footprint. The
+compute nodes must be configured to forward their logs to the SMS, and the SMS
+must be configured to accept those logs.
+
+% begin_ohpc_run
+% ohpc_comment_header Add Cluster Checker to SMS and computes \ref{sec:add_clck}
+\begin{lstlisting}[language=bash,keywords={}]
+# Configure SMS to receive messages and reload rsyslog configuration
+[master]# echo "$ModLoad imudp" >> /etc/rsyslog.conf
+[master]# echo "$UDPServerRun 514" >> /etc/rsyslog.conf
+[master]# systemctl kill -s HUP rsyslog
+
+# Define compute node forwarding destination
+[master]# echo "*.* @${sms_eth_internal}:514" >> $CHROOT/etc/rsyslog.conf
+\end{lstlisting}
+% end_ohpc_run
