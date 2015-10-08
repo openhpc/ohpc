@@ -6,8 +6,8 @@ issue the following:
 % begin_ohpc_run
 % ohpc_validation_comment Enable NTP services on SMS host
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-[master]$ systemctl enable ntpd.service
-[master]$ echo "server ${ntp_server}" >> /etc/ntp.conf
-[master]$ systemctl restart ntpd
+[master]# systemctl enable ntpd.service
+[master]# echo "server ${ntp_server}" >> /etc/ntp.conf
+[master]# systemctl restart ntpd
 \end{lstlisting}
 % end_ohpc_run
