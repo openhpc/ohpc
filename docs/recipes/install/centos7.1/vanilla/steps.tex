@@ -70,7 +70,7 @@
 \input{../../common/enable_ohpc_repo}
 
 \begin{lstlisting}[language=bash,keywords={},literate={VER}{\OHPCVersion{}}1]
-[master]# ohpc_repo=http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/VER/CentOS-7.1_Intel/OpenHPC:VER.repo
+[master](*\#*) ohpc_repo=http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/VER/CentOS-7.1_Intel/OpenHPC:VER.repo
 
 \end{lstlisting}
 
@@ -81,7 +81,7 @@ enabled via the following:
 % begin_ohpc_run
 % ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]# wget -P /etc/yum.repos.d ${ohpc_repo}
+[master](*\#*) wget -P /etc/yum.repos.d ${ohpc_repo}
 \end{lstlisting}
 % end_ohpc_run
 
@@ -112,8 +112,8 @@ both the base OS and EPEL repositories (mirrors freely available online):
 % begin_ohpc_run
 % ohpc_validation_comment Disable firewall 
 \begin{lstlisting}[language=bash,keywords={}]
-[master]# systemctl disable firewalld
-[master]# systemctl stop firewalld
+[master](*\#*) systemctl disable firewalld
+[master](*\#*) systemctl stop firewalld
 \end{lstlisting}
 % end_ohpc_run
 
@@ -130,11 +130,11 @@ to the chosen {\em master} host.
 % begin_ohpc_run
 % ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]# (*\groupinstall*) "InfiniBand Support"
-[master]# (*\install*) infinipath-psm
+[master](*\#*) (*\groupinstall*) "InfiniBand Support"
+[master](*\#*) (*\install*) infinipath-psm
 
 # Load IB drivers
-[master]# service rdma start
+[master](*\#*) service rdma start
 \end{lstlisting}
 % end_ohpc_run
 
@@ -154,14 +154,14 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % ohpc_indent 5
 % ohpc_validation_comment Enable ib0
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]# cp /opt/ohpc/pub/examples/network/centos/ifcfg-ib0 /etc/sysconfig/network-scripts
+[master](*\#*) cp /opt/ohpc/pub/examples/network/centos/ifcfg-ib0 /etc/sysconfig/network-scripts
 
 # Define local IPoIB address and netmask
-[master]# perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network-scripts/ifcfg-ib0
-[master]# perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network-scripts/ifcfg-ib0
+[master](*\#*) perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network-scripts/ifcfg-ib0
+[master](*\#*) perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network-scripts/ifcfg-ib0
 
 # Initiate ib0
-[master]# ifup ib0
+[master](*\#*) ifup ib0
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -176,27 +176,27 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Configure Warewulf provisioning to use desired internal interface
-[master]# perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
+[master](*\#*) perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
 
 # Enable tftp service for compute node image distribution
-[master]# perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
+[master](*\#*) perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
 
 # Enable http access for Warewulf cgi-bin directory to support newer apache syntax
-[master]# export MODFILE=/etc/httpd/conf.d/warewulf-httpd.conf
-[master]# perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
+[master](*\#*) export MODFILE=/etc/httpd/conf.d/warewulf-httpd.conf
+[master](*\#*) perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
 
-[master]# perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
-[master]# perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
+[master](*\#*) perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
+[master](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Enable internal interface for provisioning
-[master]# ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
+[master](*\#*) ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
-[master]# systemctl restart xinetd 
-[master]# systemctl enable mariadb.service 
-[master]# systemctl restart mariadb 
-[master]# systemctl enable httpd.service 
-[master]# systemctl restart httpd   
+[master](*\#*) systemctl restart xinetd 
+[master](*\#*) systemctl enable mariadb.service 
+[master](*\#*) systemctl restart mariadb 
+[master](*\#*) systemctl enable httpd.service 
+[master](*\#*) systemctl restart httpd   
 \end{lstlisting}
 %\end{verbatim}
 % end_ohpc_run
@@ -227,14 +227,14 @@ mirror, the steps below include an example to update the OS mirror used by
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location 
-[master]# export CHROOT=/opt/ohpc/admin/images/centos7.1
+[master](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.1
 
 # Override default OS repository (optional) - set BOS_MIRROR variable to desired location
-[master]# perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=$BOS_MIRROR#" \
+[master](*\#*) perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=$BOS_MIRROR#" \
      /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
 
 # Build initial chroot image
-[master]# wwmkchroot centos-7 $CHROOT
+[master](*\#*) wwmkchroot centos-7 $CHROOT
 \end{lstlisting}
 % end_ohpc_run
 
@@ -254,7 +254,7 @@ be updated with a copy of the configuration as follows:
 % begin_ohpc_run
 % ohpc_comment_header Add OpenHPC components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]# cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
+[master](*\#*) cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
 \end{lstlisting}
 % end_ohpc_run
 
@@ -265,21 +265,21 @@ Now, we can include additional components to the compute instance using
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add SLURM client support
-[master]# (*\groupchrootinstall*) ohpc-slurm-client
+[master](*\#*) (*\groupchrootinstall*) ohpc-slurm-client
 
 # Add IB support and enable
-[master]# (*\groupchrootinstall*) "InfiniBand Support"
-[master]# (*\chrootinstall*) infinipath-psm
-[master]# chroot $CHROOT systemctl enable rdma
+[master](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
+[master](*\#*) (*\chrootinstall*) infinipath-psm
+[master](*\#*) chroot $CHROOT systemctl enable rdma
 
 # Add Network Time Protocol (NTP) support
-[master]# (*\chrootinstall*) ntp
+[master](*\#*) (*\chrootinstall*) ntp
 
 # Add kernel drivers
-[master]# (*\chrootinstall*) kernel
+[master](*\#*) (*\chrootinstall*) kernel
 
 # Include OpenHPC default modules user environment
-[master]# (*\chrootinstall*) lmod-defaults-intel-ohpc
+[master](*\#*) (*\chrootinstall*) lmod-defaults-intel-ohpc
 \end{lstlisting}
 % end_ohpc_run
 
@@ -300,27 +300,27 @@ example configuration.
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # add new cluster key to base image
-[master]# cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
+[master](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # add NFS client mounts of /home and /opt/ohpc/pub to base image
-[master]# echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
-[master]# echo "${master_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+[master](*\#*) echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
+[master](*\#*) echo "${master_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
 # Identify resource manager server IP in SLURM configuration file on computes
-[master]# perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
+[master](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
 
 # Identify resource manager hostname on master host
-[master]# perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
+[master](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
 # Export /home and OpenHPC public packages from master server to cluster compute nodes
-[master]# echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
-[master]# echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
-[master]# exportfs -a
-[master]# systemctl restart nfs
+[master](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[master](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[master](*\#*) exportfs -a
+[master](*\#*) systemctl restart nfs
 
 # Enable NTP time service on computes and identify master host as local NTP server
-[master]# chroot $CHROOT systemctl enable ntpd
-[master]# echo "server ${master_ip}" >> $CHROOT/etc/ntp.conf
+[master](*\#*) chroot $CHROOT systemctl enable ntpd
+[master](*\#*) echo "server ${master_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
 % end_ohpc_run
 
@@ -364,17 +364,17 @@ discussed further in the following sections.
 % ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Update memlock settings on master
-[master]# echo "* soft memlock unlimited" >> /etc/security/limits.conf
-[master]# echo "* hard memlock unlimited" >> /etc/security/limits.conf
+[master](*\#*) echo "* soft memlock unlimited" >> /etc/security/limits.conf
+[master](*\#*) echo "* hard memlock unlimited" >> /etc/security/limits.conf
 
 # Update memlock settings within compute image
-[master]# echo "* soft memlock unlimited" >> $CHROOT/etc/security/limits.conf
-[master]# echo "* hard memlock unlimited" >> $CHROOT/etc/security/limits.conf
+[master](*\#*) echo "* soft memlock unlimited" >> $CHROOT/etc/security/limits.conf
+[master](*\#*) echo "* hard memlock unlimited" >> $CHROOT/etc/security/limits.conf
 \end{lstlisting}
 % end_ohpc_run
 
 %# Enable larger locked memory limits for SLURM daemon
-%[master]# echo "ulimit -l unlimited" >> $CHROOT/etc/sysconfig/slurm
+%[master](*\#*) echo "ulimit -l unlimited" >> $CHROOT/etc/sysconfig/slurm
 
 \paragraph{Enable ssh control via resource manager} 
 
@@ -383,7 +383,7 @@ discussed further in the following sections.
 % begin_ohpc_run
 % ohpc_validation_comment Enable slurm pam module
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]# echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
+[master](*\#*) echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
 \end{lstlisting}
 % end_ohpc_run
 
@@ -402,7 +402,7 @@ discussed further in the following sections.
 % ohpc_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
-[master]# (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
+[master](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
 \end{lstlisting}
 % end_ohpc_run
 
@@ -410,11 +410,11 @@ discussed further in the following sections.
 % ohpc_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
-[master]# (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
+[master](*\#*) (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
 
 # Include mount point and file system mount in compute image
-[master]# mkdir $CHROOT/mnt/lustre
-[master]# echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
+[master](*\#*) mkdir $CHROOT/mnt/lustre
+[master](*\#*) echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
 \end{lstlisting}
 % end_ohpc_run
 
@@ -429,8 +429,8 @@ attached to \texttt{ib0}. Note that these modifications are made to both the
 % begin_ohpc_run
 % ohpc_validation_comment Enable o2ib for Lustre
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]# echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
-[master]# echo "options lnet networks=o2ib(ib0)" >> $CHROOT/etc/modprobe.d/lustre.conf
+[master](*\#*) echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
+[master](*\#*) echo "options lnet networks=o2ib(ib0)" >> $CHROOT/etc/modprobe.d/lustre.conf
 \end{lstlisting}
 % end_ohpc_run
 
@@ -439,8 +439,8 @@ host as follows:
 % begin_ohpc_run
 % ohpc_validation_comment mount Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]# mkdir /mnt/lustre
-[master]# mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
+[master](*\#*) mkdir /mnt/lustre
+[master](*\#*) mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -459,26 +459,26 @@ host as follows:
 % ohpc_validation_comment Install Nagios on master and vnfs image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Nagios base, Remote Plugin Engine, and Plugins on Master
-[master]# (*\groupinstall*) ohpc-nagios
+[master](*\#*) (*\groupinstall*) ohpc-nagios
 
 # Also install in compute node image
-[master]# (*\groupchrootinstall*) ohpc-nagios
+[master](*\#*) (*\groupchrootinstall*) ohpc-nagios
 
 # Enable NRPE on compute image, and configure
-[master]# chroot $CHROOT systemctl enable nrpe
-[master]# chroot $CHROOT perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" /etc/nagios/nrpe.cfg
-[master]# echo "nrpe 5666/tcp # NRPE" >> $CHROOT/etc/services
-[master]# echo "nrpe : nagiosserver : ALLOW" >> $CHROOT/etc/hosts.allow
-[master]# echo "nrpe : ALL : DENY" >> $CHROOT/etc/hosts.allow
-[master]# echo "${master_ip}    nagiosserver" >> $CHROOT/etc/hosts
-[master]# chroot $CHROOT /usr/sbin/useradd -c "NRPE user for the NRPE service" -d /var/run/nrpe \
+[master](*\#*) chroot $CHROOT systemctl enable nrpe
+[master](*\#*) chroot $CHROOT perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" /etc/nagios/nrpe.cfg
+[master](*\#*) echo "nrpe 5666/tcp # NRPE" >> $CHROOT/etc/services
+[master](*\#*) echo "nrpe : nagiosserver : ALLOW" >> $CHROOT/etc/hosts.allow
+[master](*\#*) echo "nrpe : ALL : DENY" >> $CHROOT/etc/hosts.allow
+[master](*\#*) echo "${master_ip}    nagiosserver" >> $CHROOT/etc/hosts
+[master](*\#*) chroot $CHROOT /usr/sbin/useradd -c "NRPE user for the NRPE service" -d /var/run/nrpe \
         -r -g nrpe -s /sbin/nologin nrpe
-[master]# chroot $CHROOT /usr/sbin/groupadd -r nrpe
+[master](*\#*) chroot $CHROOT /usr/sbin/groupadd -r nrpe
 
 # Enable Nagios on master, and configure
-[master]# chkconfig nagios on
-[master]# systemctl start nagios
-[master]# chmod u+s `which ping`
+[master](*\#*) chkconfig nagios on
+[master](*\#*) systemctl start nagios
+[master](*\#*) chmod u+s `which ping`
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -495,13 +495,13 @@ host as follows:
 % ohpc_validation_comment Install Ganglia on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Ganglia
-[master]# (*\groupinstall*) ohpc-ganglia
+[master](*\#*) (*\groupinstall*) ohpc-ganglia
 
 # Start and Enable Ganglia services
-[master]# systemctl enable gmond
-[master]# systemctl enable gmetad
-[master]# systemctl start gmond
-[master]# systemctl start gmetad
+[master](*\#*) systemctl enable gmond
+[master](*\#*) systemctl enable gmetad
+[master](*\#*) systemctl start gmond
+[master](*\#*) systemctl start gmetad
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -516,36 +516,36 @@ host as follows:
 %% [FSP-469] % ohpc_validation_comment Configure ORCM aggregator and DB
 %% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 %% [FSP-469] # Set master host as data aggregator
-%% [FSP-469] [master]# perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
-%% [FSP-469] [master]# perl -pi -e "s/Servername = (<.+>)/Servername = ${master_ip}/" /etc/orcmdb_psql.ini
+%% [FSP-469] [master](*\#*) perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
+%% [FSP-469] [master](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${master_ip}/" /etc/orcmdb_psql.ini
 %% [FSP-469] 
 %% [FSP-469] # Update BMC credentials to match local values
 %% [FSP-469] 
-%% [FSP-469] [master]# perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
-%% [FSP-469] [master]# perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+%% [FSP-469] [master](*\#*) perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+%% [FSP-469] [master](*\#*) perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
 %% [FSP-469] 
 %% [FSP-469] # Initialize postgres DB driver
-%% [FSP-469] [master]# odbcinst -i -d -f /etc/psql_odbc_driver.ini
-%% [FSP-469] [master]# odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
+%% [FSP-469] [master](*\#*) odbcinst -i -d -f /etc/psql_odbc_driver.ini
+%% [FSP-469] [master](*\#*) odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
 %% [FSP-469] 
 %% [FSP-469] # Initialize postgres
-%% [FSP-469] [master]# postgresql-setup initdb
+%% [FSP-469] [master](*\#*) postgresql-setup initdb
 %% [FSP-469] 
 %% [FSP-469] # Update postgres configuration files using ORCM templates
-%% [FSP-469] [master]# cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
-%% [FSP-469] [master]# cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
+%% [FSP-469] [master](*\#*) cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
+%% [FSP-469] [master](*\#*) cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 %% [FSP-469] 
 %% [FSP-469] # Restart postgres
-%% [FSP-469] [master]# service postgresql start
+%% [FSP-469] [master](*\#*) service postgresql start
 %% [FSP-469] 
 %% [FSP-469] # Create ORCM DB
-%% [FSP-469] [master]# sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
-%% [FSP-469] [master]# sudo -u postgres createdb -O orcmuser orcmdb
-%% [FSP-469] [master]# sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
+%% [FSP-469] [master](*\#*) sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
+%% [FSP-469] [master](*\#*) sudo -u postgres createdb -O orcmuser orcmdb
+%% [FSP-469] [master](*\#*) sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 %% [FSP-469] 
 %% [FSP-469] # Start ORCM on master host (requires both orcmsched and orcmd)
-%% [FSP-469] [master]# systemctl start orcmsched
-%% [FSP-469] [master]# systemctl start orcmd
+%% [FSP-469] [master](*\#*) systemctl start orcmsched
+%% [FSP-469] [master](*\#*) systemctl start orcmd
 %% [FSP-469] \end{lstlisting}
 %% [FSP-469] %% [FSP-469] % end_ohpc_run
 %% [FSP-469] 
@@ -565,9 +565,9 @@ import local file-based credentials, issue the following:
 % begin_ohpc_run
 % ohpc_comment_header Import files \ref{sec:file_import}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]# wwsh file import /etc/passwd                                                                                                       
-[master]# wwsh file import /etc/group
-[master]# wwsh file import /etc/shadow 
+[master](*\#*) wwsh file import /etc/passwd                                                                                                       
+[master](*\#*) wwsh file import /etc/group
+[master](*\#*) wwsh file import /etc/shadow 
 \end{lstlisting}
 % \end_ohpc_run
 
@@ -577,7 +577,7 @@ pool, issue the following:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]# wwsh file import /etc/munge/munge.key
+[master](*\#*) wwsh file import /etc/munge/munge.key
 \end{lstlisting}
 % \end_ohpc_run
 
@@ -590,8 +590,8 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % ohpc_command if [ ${enable_ipoib} -eq 1 ];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]# wwsh file import /opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww
-[master]# wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network-scripts/ifcfg-ib0
+[master](*\#*) wwsh file import /opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww
+[master](*\#*) wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network-scripts/ifcfg-ib0
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -604,18 +604,18 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
 # Define four compute nodes and network settings 
-[master]# wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
-[master]# wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
-[master]# wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
-[master]# wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+[master](*\#*) wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
+[master](*\#*) wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
+[master](*\#*) wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
+[master](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
 
 # Optionally register additional compute nodes
-[master]# for ((i=4; i<$num_computes; i++)) ; do
+[master](*\#*) for ((i=4; i<$num_computes; i++)) ; do
               wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
            done
 
 # Define provisioning image for hosts
-[master]# wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
+[master](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 \end{lstlisting}
 
@@ -625,10 +625,10 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
-[master]# for ((i=0; i<$num_computes; i++)) ; do
+[master](*\#*) for ((i=0; i<$num_computes; i++)) ; do
               wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
            done
-[master]# wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
+[master](*\#*) wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -636,8 +636,8 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
-[master]# service dhcpd restart
-[master]# wwsh pxe update
+[master](*\#*) service dhcpd restart
+[master](*\#*) wwsh pxe update
 \end{lstlisting}
 % end_ohpc_run
 
@@ -662,13 +662,13 @@ order to work interactively.
 % begin_ohpc_run
 % ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]# ipmitool -E -I lanplus -H ${c_bmc[0]} -U root chassis power reset   # power cycle c1
-[master]# ipmitool -E -I lanplus -H ${c_bmc[1]} -U root chassis power reset   # power cycle c2
-[master]# ipmitool -E -I lanplus -H ${c_bmc[2]} -U root chassis power reset   # power cycle c3
-[master]# ipmitool -E -I lanplus -H ${c_bmc[3]} -U root chassis power reset   # power cycle c4
+[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[0]} -U root chassis power reset   # power cycle c1
+[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[1]} -U root chassis power reset   # power cycle c2
+[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[2]} -U root chassis power reset   # power cycle c3
+[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[3]} -U root chassis power reset   # power cycle c4
 
 # Optionally boot additional compute nodes
-[master]# for ((i=4; i<$num_computes; i++)) ; do
+[master](*\#*) for ((i=4; i<$num_computes; i++)) ; do
               ipmitool -E -I lanplus -H ${c_bmc[$i]} -U root chassis power reset
            done
 \end{lstlisting} 
@@ -680,7 +680,7 @@ ssh, or via parallel ssh tools to multiple hosts. For example, to run a command
 on the newly imaged compute hosts using \texttt{pdsh}, execute the following:
 
 \begin{lstlisting}[language=bash]
-[master]# pdsh -w c[1-4] uptime
+[master](*\#*) pdsh -w c[1-4] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
 c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
 c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
@@ -745,7 +745,7 @@ pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
 \begin{lstlisting}[language=bash]
-[master]# yum search fftw-gnu ohpc
+[master](*\#*) yum search fftw-gnu ohpc
 Loaded plugins: fastestmirror
 Loading mirror speeds from cached hostfile
 =========================== N/S matched: fftw-gnu, ohpc ===========================

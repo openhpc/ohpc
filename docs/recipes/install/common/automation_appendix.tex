@@ -30,13 +30,13 @@ commands, the general starting approach for using this template is as follows:
 \item Install the \texttt{docs-ohpc} package
 
 \begin{lstlisting}[language=bash,keywords={}]
-[master]# (*\install*) docs-ohpc
+[master](*\#*) (*\install*) docs-ohpc
 \end{lstlisting}
 
 \item Copy the provided template input file to use as a starting point to
   define local site settings:
 \begin{lstlisting}
-[master]# cp  /opt/ohpc/pub/doc/recipes/vanilla/input.local input.local
+[master](*\#*) cp  /opt/ohpc/pub/doc/recipes/vanilla/input.local input.local
 \end{lstlisting}
 
 \item Update \path{input.local} with desired settings
@@ -45,7 +45,7 @@ commands, the general starting approach for using this template is as follows:
   instructions culled from this guide.
 
 \begin{lstlisting}[language=bash,keywords={}]
-[master]# cp -p /opt/ohpc/pub/doc/recipes/vanilla/recipe.sh .
+[master](*\#*) cp -p /opt/ohpc/pub/doc/recipes/vanilla/recipe.sh .
 \end{lstlisting}
 
 \item Review and edit \path{recipe.sh} to suite.
@@ -54,8 +54,8 @@ commands, the general starting approach for using this template is as follows:
   \path{recipe.sh} to perform a local installation.
 
 \begin{lstlisting}[language=bash,keywords={}]
-[master]# export OHPC_INPUT_LOCAL=./input.local
-[master]# ./recipe.sh
+[master](*\#*) export OHPC_INPUT_LOCAL=./input.local
+[master](*\#*) ./recipe.sh
 \end{lstlisting}
 \end{enumerate}
 
