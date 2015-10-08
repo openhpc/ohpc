@@ -158,7 +158,7 @@ open(IN,"<$tmpfile_raw")  || die "Cannot open file -> $file\n";
 
 my $begin_delim   = "% begin_ohpc_run";
 my $end_delim     = "% end_ohpc_run";
-my $prompt        = "\[master\]\#";
+my $prompt        = "\[master\]\(\*\\\#\*\)";
 my $disable_delim = "^%%";
 my $indent        = 0;
 
@@ -192,7 +192,7 @@ while(<IN>) {
 	} elsif ($_ =~ /% ohpc_command (.+)/) {
 	    my $cmd = update_cmd($1);
 	    print $fh ' ' x $indent . "$cmd\n";
-	} elsif ($_ =~ /\[master\]\# (.+) \\$/) {
+	} elsif ($_ =~ /\[master\]\(\*\\\#\*\) (.+) \\$/) {
 
 	    my $cmd = update_cmd($1);
 
@@ -207,7 +207,7 @@ while(<IN>) {
 	    print $fh " $next_line\n";
 
 	    # TODO - add loop to accomodate multi-line continuation
-	} elsif ($_ =~ /\[master\]\# (.+ ; do)$/) {
+	} elsif ($_ =~ /\[master\]\(\*\\\#\*\) (.+ ; do)$/) {
 	    # special treatment for do loops
 
 	    my $cmd = update_cmd($1);
@@ -230,7 +230,7 @@ while(<IN>) {
 	    $next_line =~ s/^\s+|\s+$//g;
 
 	    print $fh ' ' x $indent . "$next_line\n";
-	} elsif ($_ =~ /\[master\]\# (.+)$/) {
+	} elsif ($_ =~ /\[master\]\(\*\\\#\*\) (.+)$/) {
 	    my $cmd = update_cmd($1);
 
 	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
