@@ -370,6 +370,7 @@ ln lnet/ChangeLog ChangeLog-lnet
 # Set an explicit path to our Linux tree, if we can.
 
 cd $RPM_BUILD_DIR/lustre-release-%{sha_short}
+sh ./autogen.sh
 
 # override %optflags so that the vendor's overzealous flags don't create
 # build failures
