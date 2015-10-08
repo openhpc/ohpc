@@ -157,7 +157,8 @@ Version: %{version}
 Release: %{fullrelease}
 License: GPL
 Group: fsp/lustre
-Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
+#Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
+Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
@@ -360,7 +361,7 @@ clients in order to run
 %endif
 %prep
 
-%setup -qn lustre-release-%{sha_short}
+%setup -qn lustre-%{version}
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
@@ -369,8 +370,7 @@ ln lnet/ChangeLog ChangeLog-lnet
 
 # Set an explicit path to our Linux tree, if we can.
 
-cd $RPM_BUILD_DIR/lustre-release-%{sha_short}
-sh ./autogen.sh
+cd $RPM_BUILD_DIR/lustre-%{version}
 
 # override %optflags so that the vendor's overzealous flags don't create
 # build failures
