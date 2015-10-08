@@ -5,7 +5,7 @@ the corresponding compute image in a subsequent step.
 % begin_ohpc_run
 % ohpc_comment_header Add resource management services on master node \ref{sec:add_rm}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ (*\groupinstall*) ohpc-slurm-server
+[master]# (*\groupinstall*) ohpc-slurm-server
 \end{lstlisting}
 % end_ohpc_run
 
@@ -18,7 +18,7 @@ The following command can be used to add this user to the {\em
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ useradd slurm
+[master]# useradd slurm
 \end{lstlisting}
 % end_ohpc_run
 
@@ -27,7 +27,7 @@ manager, we also add a dedicated ``test'' user as follows:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ useradd -m test
+[master]# useradd -m test
 \end{lstlisting}
 % end_ohpc_run
 

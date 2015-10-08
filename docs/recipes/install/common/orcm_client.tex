@@ -5,12 +5,12 @@ be added to the compute image as follows:
 % begin_ohpc_run
 % ohpc_validation_comment Install ORCM client on compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ (*\groupchrootinstall*) ohpc-orcm-client
+[master]# (*\groupchrootinstall*) ohpc-orcm-client
 
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/opt/open-rcm/etc/orcm-site.xml
+[master]# perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/opt/open-rcm/etc/orcm-site.xml
 
 # Enable orcmd client daemon on boot
-[master]$ chroot $CHROOT systemctl enable orcmd
+[master]# chroot $CHROOT systemctl enable orcmd
 \end{lstlisting}
 % end_ohpc_run

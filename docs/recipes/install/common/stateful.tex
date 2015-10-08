@@ -8,10 +8,10 @@ node definition in the warewulf data store.
 % fsp_validation_comment Add stateful provisioning support
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add GRUB2 Bootloader
-[master]$ (*\chrootinstall*) grub2
+[master]# (*\chrootinstall*) grub2
 
 # Re-assemble VNFS image
-[master]$ wwvnfs  -y --chroot $CHROOT
+[master]# wwvnfs  -y --chroot $CHROOT
 \end{lstlisting}
 % end_fsp_run 
 
@@ -25,11 +25,14 @@ provision statefully.
 % fsp_validation_comment Add stateful node object parameters
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Update node object parameters
-[master]$ for ((i=0; i<$num_computes; i++)) ; do 
+[master]# export filesystems="mountpoint=/boot:dev=sda1:type=ext3:size=500," \
+              "dev=sda2:type=swap:size=32768," \
+              "mountpoint=/:dev=sda3:type=ext3:size=fill"
+[master]# for ((i=0; i<$num_computes; i++)) ; do 
               wwsh -y object modify -s bootloader=sda ${c_name[$i]};
               wwsh -y object modify -s diskpartition=sda ${c_name[$i]};
               wwsh -y object modify -s diskformat=sda1,sda2,sda3 ${c_name[$i]};
-              wwsh -y object modify -s filesystems="mountpoint=/boot:dev=sda1:type=ext3:size=500,dev=sda2:type=swap:size=32768,mountpoint=/:dev=sda3:type=ext3:size=fill" ${c_name[$i]};
+              wwsh -y object modify -s filesystems="$filesystems" ${c_name[$i]};
            done
 \end{lstlisting}
 % end_fsp_run 
@@ -44,7 +47,7 @@ the local storage.
 % fsp_validation_comment Add bootlocal node object parameters
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Update node object parameters
-[master]$ for ((i=0; i<$num_computes; i++)) ; do 
+[master]# for ((i=0; i<$num_computes; i++)) ; do 
               wwsh -y object modify -s bootlocal=EXIT ${c_name[$i]};
            done
 \end{lstlisting}
