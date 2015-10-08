@@ -368,7 +368,9 @@ ln lnet/ChangeLog ChangeLog-lnet
 %build
 
 # Set an explicit path to our Linux tree, if we can.
-cd $RPM_BUILD_DIR/lustre-%{version}
+
+cd $RPM_BUILD_DIR/lustre-release-%{sha_short}
+
 # override %optflags so that the vendor's overzealous flags don't create
 # build failures
 %define optflags -g -O2 -Werror
