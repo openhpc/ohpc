@@ -100,6 +100,7 @@ setenv          MPM_LAUNCHER        %{package_target}/debugger_2016/mpm/mic/bin/
 setenv          TBBROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb
 setenv          TBB_INC             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/include
 setenv          TBB_LIB             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4
+prepend-path    CPATH               %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/include
 
 family "compiler"
 EOF
