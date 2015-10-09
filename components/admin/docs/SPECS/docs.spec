@@ -10,13 +10,13 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-Name:           docs-fsp
-Version:        15.42
+Name:           docs%{PROJ_DELIM}
+Version:        1.0
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
 Group:          ohpc/admin
-Source0:        docs-fsp.tar
+Source0:        docs-ohpc.tar
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
@@ -39,7 +39,7 @@ This guide presents a simple cluster installation procedure using components
 from the OpenHPC software stack.
 
 %prep
-%setup -n docs-fsp
+%setup -n docs-ohpc
 
 %build
 %if 0%{?suse_version}
