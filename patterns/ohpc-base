@@ -1,0 +1,32 @@
+<pattern xmlns="http://novell.com/package/metadata/suse/pattern"
+ xmlns:rpm="http://linux.duke.edu/metadata/rpm">
+ <name>ohpc-base</name>
+ <summary>ohpc-base</summary>
+ <description>OpenHPC base packages</description>
+ <uservisible/>
+ <category lang="en"></category>
+ <rpm:requires>
+   <rpm:entry name="lmod-ohpc"/>
+   <rpm:entry name="examples-ohpc"/>
+   <rpm:entry name="lmod-defaults-intel-ohpc"/>
+   <rpm:entry name="losf-ohpc"/>
+   <rpm:entry name="pdsh-ohpc"/>
+   <rpm:entry name="conman-ohpc"/>
+   <rpm:entry name="libstdc++-devel"/>
+   <rpm:entry name="ntp"/>
+   <rpm:entry name="nfs-kernel-server"/>
+   <rpm:entry name="libmlx4-rdmav2"/>
+   <rpm:entry name="ipmitool"/>
+   <rpm:entry name="OpenIPMI"/>
+   <rpm:entry name="glibc-locale"/>
+   <rpm:entry name="binutils"/>
+   <rpm:entry name="make"/>
+   <rpm:entry name="bc"/>
+   <rpm:entry name="screen"/>
+   <rpm:entry name="emacs-nox"/>
+   <rpm:entry name="man"/>
+   <rpm:entry name="gdb"/>
+   <rpm:entry name="sudo"/>
+ </rpm:requires>
+</pattern>
+
