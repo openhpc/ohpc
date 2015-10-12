@@ -664,14 +664,14 @@ order to work interactively.
 % begin_ohpc_run
 % ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[0]} -U root chassis power reset   # power cycle c1
-[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[1]} -U root chassis power reset   # power cycle c2
-[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[2]} -U root chassis power reset   # power cycle c3
-[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[3]} -U root chassis power reset   # power cycle c4
+[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[0]} -U ${bmc_username} chassis power reset   # power cycle c1
+[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[1]} -U ${bmc_username} chassis power reset   # power cycle c2
+[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[2]} -U ${bmc_username} chassis power reset   # power cycle c3
+[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[3]} -U ${bmc_username} chassis power reset   # power cycle c4
 
 # Optionally boot additional compute nodes
 [master](*\#*) for ((i=4; i<$num_computes; i++)) ; do
-              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U root chassis power reset
+              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
            done
 \end{lstlisting} 
 % end_ohpc_run
