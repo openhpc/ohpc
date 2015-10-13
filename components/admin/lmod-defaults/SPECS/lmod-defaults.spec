@@ -10,10 +10,12 @@
 
 %include %{_sourcedir}/OHPC_macros
 
+%{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
 %{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-Summary:   OpenHPC default login environment
-Name:      lmod-defaults-intel%{PROJ_DELIM}
+Summary:   OpenHPC default login environments
+Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.2
 Release:   1
 License:   BSD
@@ -27,7 +29,8 @@ requires: lmod%{PROJ_DELIM}
 
 %description
 
-Provides default login environment for Intel toolchain (compiler and MPI families).
+Provides default login configuration using the %{compiler_family} compiler
+toolchain and %{mpi_family} MPI environment.
 
 %prep
 
@@ -55,13 +58,13 @@ if { [ expr [module-info mode load] || [module-info mode display] ] } {
         prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
 	module try-add autotools
 	module try-add prun
-        module try-add intel
-        module try-add impi
+        module try-add %{compiler_family}
+        module try-add %{mpi_family}
 }
 
 if [ module-info mode remove ] {
-        module del impi
-        module del intel
+        module del %{mpi_family}
+        module del %{compiler_family}
         module del prun
 	module del autotools
 }
