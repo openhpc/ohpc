@@ -38,9 +38,16 @@
 %\fancyfoot[CO,CE]{\small \thepage \\ \vspace *{0.7cm} [~Community release~]}
 \fancyfoot[RE,RO]{\small Last Update: \VCDateISO~(Rev: \VCRevision)}
 
+% custom colors
+
+\definecolor{grey}{rgb}{0.96,0.96,0.96}
+\definecolor{logoblue}{RGB}{96,170,210}
+\definecolor{logodarkgrey}{RGB}{119,120,119}
+\definecolor{logolightgrey}{RGB}{166,167,159}
+
 % tipbox settings
 
-\tcbset{enhanced,width=(\linewidth-2cm),colback=white,title=Tip}
+\tcbset{enhanced,width=(\linewidth-0cm),colback=white,title=Tip,colframe=logoblue}
 
 % commandbox settings
 
@@ -58,10 +65,7 @@
   keywordstyle=\color{blue}
 }
 
-\definecolor{grey}{rgb}{0.96,0.96,0.96}
-\definecolor{logoblue}{RGB}{96,170,210}
-\definecolor{logodarkgrey}{RGB}{119,120,119}
-\definecolor{logolightgrey}{RGB}{166,167,159}
+
 
 %\newcommand{\Intel}{{Intel\raisebox{0.39ex}{\scriptsize{\textregistered}}}}
 \newcommand{\Intel}{Intel}
