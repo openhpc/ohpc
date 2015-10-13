@@ -196,6 +196,9 @@ module load mkl
 export PPATH="/lib64/python2.7/site-packages"
 export PATH=$(pwd):$PATH
 
+%if %{compiler_family} == gnu
+module load openblas
+%endif
 module load numpy
 export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
