@@ -73,8 +73,8 @@ Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
 Source1: OHPC_macros
 Source2: OHPC_setup_compiler
 
-# Minimum Build Requires
-BuildRequires: libmxml1 mxml-devel cmake zlib-devel glib2-devel
+# Minimum Build Requires - our mxml build included devel headers in libmxml1
+BuildRequires: libmxml1 cmake zlib-devel glib2-devel
 Requires:      libmxml1
 
 # libm.a from CMakeLists
