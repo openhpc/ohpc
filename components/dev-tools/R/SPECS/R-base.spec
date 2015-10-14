@@ -41,6 +41,8 @@ BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+BuildRequires: openblas-gnu%{PROJ_DELIM}
+Requires:      openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
@@ -179,21 +181,25 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
+%if %{compiler_family} == gnu
+module load openblas
+BLAS="-L${OPENBLAS_LIB} -lopenblas"
+%else
 MKL_LIB_PATH=$MKLROOT/lib/intel64
-MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
+BLAS="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
 echo "MKL options flag .... $MKL "
+%endif
 
 ./configure  \
-            --with-lapack \
+            --with-lapack="$BLAS" \
+            --with-blas="$BLAS" \
             --enable-R-shlib  \
-            --enable-BLAS-shlib \
             --prefix=%{install_path} \
             --without-system-zlib \
             --without-system-bzlib \
             --without-x \
               LIBnn=lib64 
 
-# --with-blas="$MKL" \
 
 make %{?_smp_mflags}
 
@@ -248,6 +254,14 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_SHARE      %{install_path}/share
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { [is-loaded gnu] } {
+        if { ![is-loaded openblas]  } {
+          module load openblas
+        }
+    }
+}
 
 EOF
 
