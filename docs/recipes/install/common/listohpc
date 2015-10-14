@@ -1,13 +1,13 @@
 #!/bin/bash
 
-logfile=pkg-fsp
+logfile=pkg-ohpc
 rm -f ${logfile}.*
 
-echo ++++ search and log FSP packages
+echo ++++ search and log OpenHPC packages
 
 if [ -e /etc/redhat-release ];then
-    for pkg in `yum list \*-fsp`; do
-        name=`echo $pkg | grep -e -fsp | awk '{print $1}'`
+    for pkg in `yum list \*-ohpc`; do
+        name=`echo $pkg | grep -e -ohpc | awk '{print $1}'`
         if [ "${name}" != "" ]; then
 	    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
 	    echo ${info} >>${logfile}.all
@@ -15,8 +15,8 @@ if [ -e /etc/redhat-release ];then
     done
 
 elif [ -e /etc/SuSE-release ];then
-    for pkg in `zypper search -i *-fsp`; do
-        name=`echo $pkg | grep -e -fsp | cut -d '|' -f 2 | tr -d ' '`
+    for pkg in `zypper search -i *-ohpc`; do
+        name=`echo $pkg | grep -e -ohpc | cut -d '|' -f 2 | tr -d ' '`
         if [ "${name}" != "" ]; then
 	    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
 	    echo ${info} >>${logfile}.all
@@ -30,13 +30,13 @@ fi
 
 
 echo
-echo ++++ list of FSP package groups
-groups=`grep -o 'fsp/[^ ]*' pkg-fsp.all | sort -u | cut -c5-`
+echo ++++ list of OpenHPC package groups
+groups=`grep -o 'ohpc/[^ ]*' pkg-ohpc.all | sort -u | cut -c5-`
 echo $groups
 echo
 
 for grp in ${groups}; do
-    echo ++++ list of fsp/${grp} packages installed
-    grep "fsp/${grp}" ${logfile}.all 2>&1 | tee ${logfile}.${grp}
+    echo ++++ list of ohpc/${grp} packages installed
+    grep "ohpc/${grp}" ${logfile}.all 2>&1 | tee ${logfile}.${grp}
     echo 
 done
