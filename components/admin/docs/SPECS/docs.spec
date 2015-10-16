@@ -26,6 +26,7 @@ BuildRequires:  texlive-multirow
 BuildRequires:  texlive-draftwatermark
 BuildRequires:  texlive-tcolorbox
 BuildRequires:  texlive-environ
+BuildRequires:  texlive-trimspaces
 BuildRequires:  latexmk
 BuildRequires:  git
 Requires:       make
