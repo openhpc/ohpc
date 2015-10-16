@@ -24,6 +24,7 @@ BuildRequires:  texlive-fancyhdr
 BuildRequires:  texlive-mdwtools
 BuildRequires:  texlive-multirow
 BuildRequires:  texlive-draftwatermark
+BuildRequires:  texlive-tcolorbox
 BuildRequires:  latexmk
 BuildRequires:  git
 Requires:       make
