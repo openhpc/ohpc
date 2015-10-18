@@ -1,0 +1,11 @@
+#!/bin/bash
+
+dir=../../common
+
+cp ${dir}/YAML_Doc.cpp .
+cp ${dir}/YAML_Doc.hpp .
+cp ${dir}/YAML_Element.cpp .
+cp ${dir}/YAML_Element.hpp .
+
+cp ${dir}/generate_info_header .
+

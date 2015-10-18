@@ -1,0 +1,44 @@
+#!../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../common/test_helper_functions || exit 1
+source ../../common/functions || exit 1
+
+if [ "$LMOD_FAMILY_COMPILER" = "gnu" ];then
+    family=gnu
+elif [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
+    family=intel
+else
+    ERROR "Unsupported or unknown compiler family"
+fi
+
+@test "[Compilers] debugger man page ($family)" {
+    if [ "$family" = "gnu" ];then
+        run man -w gdb
+        assert_success
+    elif [ "$family" = "intel" ];then
+        run man -w gdb-ia
+        assert_success
+    fi
+}
+
+@test "[Compilers] debugger availability ($family)" {
+    if [ "$family" = "gnu" ];then
+        run which gdb
+        assert_success
+
+        run gdb --version
+        assert_success
+    elif [ "$family" = "intel" ];then
+        run which gdb-ia
+        assert_success
+
+        run gdb-ia --version
+        assert_success
+    fi
+}
+
+
+
+
+

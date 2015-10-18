@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+
+    <adios-group name="alltypes" coordination-communicator="comm">
+        <!-- dimension variables (scalars) -->
+        <var name="gdim1" type="integer"/>
+        <var name="gdim2" type="integer"/>
+        <var name="gdim3" type="integer"/>
+        <var name="gdim4" type="integer"/>
+        <var name="gdim5" type="integer"/>
+        <var name="gdim6" type="integer"/>
+        <var name="ldim1" type="integer"/>
+        <var name="ldim2" type="integer"/>
+        <var name="ldim3" type="integer"/>
+        <var name="ldim4" type="integer"/>
+        <var name="ldim5" type="integer"/>
+        <var name="ldim6" type="integer"/>
+        <var name="offs1" type="integer"/>
+        <var name="offs2" type="integer"/>
+        <var name="offs3" type="integer"/>
+        <var name="offs4" type="integer"/>
+        <var name="offs5" type="integer"/>
+        <var name="offs6" type="integer"/>
+
+        <!-- Scalars -->
+        <var name="scalar_byte"            path="/scalars" type="byte"/>
+        <var name="scalar_short"           path="/scalars" type="short"/>
+        <var name="scalar_int"             path="/scalars" type="integer"/>
+        <var name="scalar_long"            path="/scalars" type="long"/>
+        <var name="scalar_ubyte"           path="/scalars" type="unsigned byte"/>
+        <var name="scalar_ushort"          path="/scalars" type="unsigned short"/>
+        <var name="scalar_uint"            path="/scalars" type="unsigned integer"/>
+        <var name="scalar_ulong"           path="/scalars" type="unsigned long"/>
+        <var name="scalar_float"           path="/scalars" type="float"/>
+        <var name="scalar_double"          path="/scalars" type="double"/>
+        <var name="scalar_string"          path="/scalars" type="string"/>
+        <var name="scalar_complex"         path="/scalars" type="complex"/>
+        <var name="scalar_double_complex"  path="/scalars" type="double complex"/>
+
+        <!-- 1D Arrays -->
+        <global-bounds dimensions="gdim1" offsets="offs1">
+            <var name="a1_byte"            path="/1D" dimensions="ldim1" type="byte"/>
+            <var name="a1_short"           path="/1D" dimensions="ldim1" type="short"/>
+            <var name="a1_int"             path="/1D" dimensions="ldim1" type="integer"/>
+            <var name="a1_long"            path="/1D" dimensions="ldim1" type="long"/>
+            <var name="a1_ubyte"           path="/1D" dimensions="ldim1" type="unsigned byte"/>
+            <var name="a1_ushort"          path="/1D" dimensions="ldim1" type="unsigned short"/>
+            <var name="a1_uint"            path="/1D" dimensions="ldim1" type="unsigned integer"/>
+            <var name="a1_ulong"           path="/1D" dimensions="ldim1" type="unsigned long"/>
+            <var name="a1_float"           path="/1D" dimensions="ldim1" type="float"/>
+            <var name="a1_double"          path="/1D" dimensions="ldim1" type="double"/>
+            <var name="a1_complex"         path="/1D" dimensions="ldim1" type="complex"/>
+            <var name="a1_double_complex"  path="/1D" dimensions="ldim1" type="double complex"/>
+        </global-bounds>
+
+        <!-- 2D Arrays -->
+        <global-bounds dimensions="gdim1,gdim2" offsets="offs1,offs2">
+            <var name="a2_byte"            path="/2D" dimensions="ldim1,ldim2" type="byte"/>
+            <var name="a2_short"           path="/2D" dimensions="ldim1,ldim2" type="short"/>
+            <var name="a2_int"             path="/2D" dimensions="ldim1,ldim2" type="integer"/>
+            <var name="a2_long"            path="/2D" dimensions="ldim1,ldim2" type="long"/>
+            <var name="a2_ubyte"           path="/2D" dimensions="ldim1,ldim2" type="unsigned byte"/>
+            <var name="a2_ushort"          path="/2D" dimensions="ldim1,ldim2" type="unsigned short"/>
+            <var name="a2_uint"            path="/2D" dimensions="ldim1,ldim2" type="unsigned integer"/>
+            <var name="a2_ulong"           path="/2D" dimensions="ldim1,ldim2" type="unsigned long"/>
+            <var name="a2_float"           path="/2D" dimensions="ldim1,ldim2" type="float"/>
+            <var name="a2_double"          path="/2D" dimensions="ldim1,ldim2" type="double"/>
+            <var name="a2_complex"         path="/2D" dimensions="ldim1,ldim2" type="complex"/>
+            <var name="a2_double_complex"  path="/2D" dimensions="ldim1,ldim2" type="double complex"/>
+        </global-bounds>
+
+        <!-- 3D Arrays -->
+        <global-bounds dimensions="gdim1,gdim2,gdim3" offsets="offs1,offs2,offs3">
+            <var name="a3_byte"            path="/3D" type="byte"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_short"           path="/3D" type="short"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_int"             path="/3D" type="integer"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_long"            path="/3D" type="long"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_ubyte"           path="/3D" type="unsigned byte"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_ushort"          path="/3D" type="unsigned short"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_uint"            path="/3D" type="unsigned integer"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_ulong"           path="/3D" type="unsigned long"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_float"           path="/3D" type="float"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_double"          path="/3D" type="double"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_complex"         path="/3D" type="complex"
+                 dimensions="ldim1,ldim2,ldim3"/>
+            <var name="a3_double_complex"  path="/3D" type="double complex"
+                 dimensions="ldim1,ldim2,ldim3"/>
+        </global-bounds>
+
+        <!-- 6D Arrays -->
+        <global-bounds dimensions="gdim1,gdim2,gdim3,gdim4,gdim5,gdim6" 
+                       offsets="offs1,offs2,offs3,offs4,offs5,offs6">
+            <var name="a6_byte"            path="/6D" type="byte"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_short"           path="/6D" type="short"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_int"             path="/6D" type="integer"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_long"            path="/6D" type="long"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_ubyte"           path="/6D" type="unsigned byte"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_ushort"          path="/6D" type="unsigned short"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_uint"            path="/6D" type="unsigned integer"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_ulong"           path="/6D" type="unsigned long"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_float"           path="/6D" type="float"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_double"          path="/6D" type="double"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_complex"         path="/6D" type="complex"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+            <var name="a6_double_complex"  path="/6D" type="double complex"
+                 dimensions="ldim1,ldim2,ldim3,ldim4,ldim5,ldim6"/>
+        </global-bounds>
+
+    </adios-group>
+
+<method group="alltypes" method="MPI"/>
+
+<buffer size-MB="20" allocate-time="now"/>
+
+</adios-config>
+

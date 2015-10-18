@@ -1,0 +1,38 @@
+#name of MPI C compiler, e.g. mpiicc, mpicc
+MPICC=mpicc
+
+#name of C compiler, e.g. icc, xlc, gcc
+CC=mpicc
+
+#name of compile line flag enabling OpenMP, e.g. -qopenmp, -openmp, -fopenmp
+ifeq ($(LMOD_FAMILY_COMPILER),gnu)
+  OPENMPFLAG=-fopenmp
+else
+  OPENMPFLAG=-openmp
+endif
+
+#default compiler optimization flags
+DEFAULT_OPT_FLAGS=-O3
+
+############################   OPTIONAL #########################
+
+#name of C++ compiler (to be used in MPI context for Grappa), e.g. mpigxx, mpiicpc
+CXX=mpicxx
+
+#name of MPI C compiler (to be used in Fine-Grain MPI context), e.g. mpicc
+FGMPICC=mpicc
+
+#location where SHMEM is installed, e.g. $(HOME)/oshmpi-install
+SHMEMTOP=
+
+#name of C compiler (to be used in MPI context of OpenSHMEM), e.g. $(MPICC)
+SHMEMCC=mpicc
+
+#location where Charm++ is installed, e.g. $(HOME)/charm/mpi-linux-x86_64-ifort-smp-mpicxx
+CHARMTOP=
+
+#location where Grappa is installed, e.g. $(HOME)/grappa
+GRAPPATOP=
+
+#location where Fine-Grain MPI is installed, e.g. $(HOME)/fgmpi-install
+FGMPITOP=

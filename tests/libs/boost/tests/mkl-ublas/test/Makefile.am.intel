@@ -1,0 +1,23 @@
+TESTS_ENVIRONMENT          = BATS_NO_SUMMARY=1
+AM_CXXFLAGS                = -DMKL_ILP64 -DMKL -I$(BOOST_ROOT) -I$(BOOST_INC) -I$(BOOST_INC)/boost/intel-mkl -I$(MKLROOT)/include -L$(MKLROOT)/lib/intel64 -L/opt/ohpc/pub/compiler/intel/composer_xe_2015.2.164/compiler/lib/intel64/ -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lstdc++ -lpthread -lm -ldl
+
+INTEL_LIBS                 = $(MKLROOT)/lib/intel64 /opt/ohpc/pub/compiler/intel/composer_xe_2015.2.164/compiler/lib/intel64/
+# Test compilations/execution
+
+TESTS                      = sylvester
+check_PROGRAMS             = sylvester
+#lib_PROGRAMS               =
+#include_PROGRAMS           =
+sylvester_SOURCES          = sylvester.cpp
+#sylvester_LDADD            = $(INTEL_LIBS)
+
+
+# Test execution through resource manager
+
+#TESTS                     += rm_execution
+
+
+##
+#icc -Wl,--no-as-needed -DMKL_ILP64 -DMKL -I$BOOST_ROOT -I$BOOST_INC -I$BOOST_ROOT/include/boost/intel-mkl -I$MKLROOT/include -L$MKLROOT/lib/intel64 -I/opt/ohpc/pub/compiler/intel/composer_xe_2015.2.164/compiler/lib/intel64/ sylvester.cpp -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -ldl -o i.out
+
+#gcc -Wl,--no-as-needed -DMKL_ILP64 -DMKL -I$BOOST_ROOT -I$BOOST_INC -I$BOOST_ROOT/include/boost/intel-mkl -I$MKLROOT/include -L$MKLROOT/lib/intel64 -I/opt/ohpc/pub/compiler/intel/composer_xe_2015.2.164/compiler/lib/intel64/ sylvester.cpp -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lstdc++ -lpthread -lm -ldl -o g.out

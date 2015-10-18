@@ -1,0 +1,144 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+check_rms
+
+testname="libs/NetCDF"
+delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
+
+@test "[$testname] ncdump availability ($delimiter)" {
+    run which ncdump
+    assert_success
+
+    run ncdump simple_xy_nc4.nc.ref
+    assert_success
+}
+
+@test "[$testname] verify nc4/hdf5 available for C interface ($delimiter)" {
+    run nc-config --has-nc4
+    assert_output "yes"
+    run nc-config --has-hdf5
+    assert_output "yes"
+}
+
+@test "[$testname] verify nc4 available for Fortran interface ($delimiter)" {
+    run nf-config --has-nc4
+    assert_output "yes"
+}
+
+@test "[$testname] verify nc4 available for C++ interface ($delimiter)" {
+    run ncxx4-config --has-nc4
+    assert_output "yes"
+}
+
+@test "[$testname] C write/read  ($RESOURCE_MANAGER/$delimiter)" {
+    if [ ! -x C_write ];then
+        flunk "C_write binary not available"
+    fi
+
+    if [ ! -x C_read ];then
+        flunk "C_read binary not available"
+    fi
+
+    rm -f simple_xy_nc4.nc
+
+    run ./C_read
+    assert_failure
+
+    run run_serial_binary ./C_write
+    assert_success
+
+    run run_serial_binary ./C_read
+    assert_success
+
+    run cmp simple_xy_nc4.nc simple_xy_nc4.nc.ref 
+    assert_success
+}
+
+
+@test "[$testname] Fortran write/read ($RESOURCE_MANAGER/$delimiter)" {
+    if [ ! -x F90_write ];then
+        flunk "F90_write binary not available"
+    fi
+
+    if [ ! -x F90_read ];then
+        flunk "F90_read binary not available"
+    fi
+
+    rm -f simple_xy_nc4.nc
+
+    run run_serial_binary ./F90_write
+    assert_success
+
+    run ls simple_xy_nc4.nc
+    assert_success
+
+    run run_serial_binary ./F90_read
+    assert_success
+
+    # Verify contents against C ref
+
+    ncdump -n test simple_xy_nc4.nc.ref > .c.data.ascii
+    ncdump -n test simple_xy_nc4.nc > .f.data.ascii
+
+    run ls .c.data.ascii
+    assert_success
+
+    run ls .f.data.ascii
+    assert_success
+
+    run diff .c.data.ascii .f.data.ascii
+    assert_success
+
+    rm -f .c.data.ascii
+    rm -f .f.data.ascii
+    rm -f simple_xy_nc4.nc
+}
+
+@test "[$testname] C++ write/read ($RESOURCE_MANAGER/$delimiter)" {
+    if [ ! -x CXX_write ];then
+        flunk "CXX_write binary not available"
+    fi
+
+    if [ ! -x CXX_read ];then
+        flunk "CXX_read binary not available"
+    fi
+
+    rm -f simple_xy_nc4.nc
+
+    run run_serial_binary ./CXX_write
+    assert_success
+
+    run ls simple_xy.nc
+    assert_success
+
+    run run_serial_binary ./CXX_read
+    assert_success
+
+    # Verify contents against C ref
+
+    ncdump -n test simple_xy_nc4.nc.ref > .c.data.ascii
+    ncdump -n test simple_xy.nc > .cxx.data.ascii
+
+    run ls .c.data.ascii
+    assert_success
+
+    run ls .cxx.data.ascii
+    assert_success
+
+    run diff .c.data.ascii .cxx.data.ascii
+    assert_success
+
+    rm -f .c.data.ascii
+    rm -f .cxx.data.ascii
+    rm -f simple_xy.nc
+}
+
+

@@ -1,0 +1,11 @@
+#!/bin/csh
+#PBS -q regular
+#PBS -l mppwidth=48
+#PBS -j oe
+#PBS -l walltime=00:10:00
+#PBS -N SingleNodeMiniDft
+#PBS -V
+
+cd $PBS_O_WORKDIR
+
+aprun -n 40 ../src/mini_dft -ntg 5 -in single-node.in > single-node.out

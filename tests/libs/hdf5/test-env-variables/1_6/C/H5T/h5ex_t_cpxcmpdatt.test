@@ -1,0 +1,32 @@
+*******************************
+*  Output of example program  *
+*******************************
+
+A1[0]:
+   Vehicle name :
+      Airplane
+   Sensor locations :
+      Exterior (static)
+      Intake
+      Intake manifold
+      Exhaust manifold
+A1[1]:
+   Vehicle name :
+      Automobile
+   Sensor locations :
+      Roof
+
+
+**********************
+*  Output of h5dump  *
+**********************
+
+HDF5 "h5ex_t_cpxcmpdatt.h5" {
+FILE_CONTENTS {
+ group      /
+ group      /Air_Vehicles
+ dataset    /Ambient_Temperature
+ dataset    /DS1
+ group      /Land_Vehicles
+ }
+}

@@ -1,0 +1,43 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV         || exit 1
+source ./common/functions || exit 1
+
+cd libs/netcdf            || exit 1
+export BATS_JUNIT_CLASS=NetCDF
+
+# bootstrap the local autotools project if necessary
+
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+    for mpi in $MPI_FAMILIES ; do
+
+        echo " "
+        echo " "
+        echo "----------------------------------------------------------"
+        echo "User Libraries: NetCDF tests: $compiler-$mpi"
+        echo "----------------------------------------------------------"
+        
+        module purge                || exit 1
+        module load prun            || exit 1
+        module load $compiler       || exit 1
+        module load $mpi            || exit 1
+        module load netcdf          || exit 1
+        module load netcdf-cxx      || exit 1
+        module load netcdf-fortran  || exit 1
+        
+        ./configure                 || exit 1
+        make clean                  || exit 1
+        make -k check
+
+        save_logs_mpi_family tests          $compiler $mpi
+        save_logs_mpi_family tests-parallel $compiler $mpi
+
+        make distclean
+    done
+done

@@ -1,0 +1,125 @@
+This is the README file for MiniDFT 1.06.
+
+A.) Description
+
+Mini-DFT is a plane-wave denstity functional theory (DFT) mini-app for modeling materials.  Given an set of atomic coordinates and pseudopotentials,  mini-DFT computes self-consistent solutions of the Kohn-Sham equations  using either the LDA or PBE exchange-correlation functionals. For each iteration of the self-consistent field cycle, the Fock matrix is constructed and then diagonalized. To build the Fock matrix, Fast Fourier Transforms are used to tranform orbitals from the plane wave basis ( where the kinetic energy is most readily compted ) to real space ( where the potential is evaluated ) and back. Davidson diagonalization is used to compute the orbital energies and update the orbital coefficients.
+
+The mini-DFT mini-app was excised from the general-purpose Quantum Espresso (QE) code .
+Quantum Espresso is licensed per the GNU General Public License (GPL).
+A copy of the GPL is provided in the 'License' file in this directory.
+
+The mini-DFT distribution consists for four top-level directories.
+src: source code and makefiles for mini-DFT
+test: small input files for build validation
+benchmark: input files for performance measurement
+espresso: mirrors the test and benchmark directories, but with QE-compatible input files
+
+B.) How to Build mini-DFT:
+
+B.0) Dependencies: mini-DFT requires ScaLAPACK, BLAS and FFT libraries. Mini-DFT calls the FFT routines through the FFTW3 interface.
+
+B.1) Define the mini-DFT root directory 
+
+> export MDFT_ROOT=/path/to/mini-DFT
+
+B.2) Move to the src directory.
+
+> cd $MDFT_ROOT/src
+
+B.3) Configure manually...
+     a) Select the Makefile.system.compiler that most closely resembles your own.
+     b) Edit the chosen makefile to your liking.
+        NB: The first line of the makefile can be uncommented to enable OpenMP support.
+     c) Create a link to the selected makefile.
+
+> ln -s Makefile.system.compiler Makefile
+
+B.4) Initiate the build
+
+> make
+
+Note: parallel make (e.g., -j 4) will not work.
+
+B.5) Validate your build (optional): 
+
+B.5.i) Move to the test directory.  The two jobs in this directory are significantly smaller than either of the required benchmark runs, and can be used to quickly confirm that your build of mini-DFT gives correct results. These jobs can run with any concurrency less than about 70 MPI tasks.  Section C provides more detail about how to run the code.
+
+> cd $MDFT_ROOT/test
+
+B.5.ii) The first test simulates a 3x3x3 super-cell for bulk silicon, using the LDA functional and a 30 Ry plane-wave cutoff.
+
+> mpirun -np 8 ./mini_dft -in Si_333.in > Si_333.out
+
+B.5.iii) The second test is a 2 x 2 x 2 super-cell for TiO2, using the PBE GGA functional and a 100 Ry plane-wave cutoff.
+
+B.5.iv) The output from these to runs can be compared to the Quantum Espresso output in the test directory. After the SCF has converged, the final value of the "total energy" should agree with the QE output to within 1e-6 Ry, regardless of the number of MPI tasks used.
+
+> diff QE_Si_333.out.ref   Si_333.out 
+> diff QE_TiO2_222.out.ref TiO2_222.out
+
+C.) How to run mini-DFT:
+
+Mini-DFT accepts three mutally-compatible command line options. 
+
+The -in flag (required) is used to identify the input file read by mini-DFT.
+
+The -ntg flag (optional) enables task-group parallelism to improve the parallel scalingof the FFTs.  The number of task groups must be a divisor of the number of MPI ranks. The default value for ntg is 1.
+
+The -ndiag flag (optional) sets the number of MPI ranks used for diagonalizaton Ndiag must be a square integer. The default value for Ndiag is the largest square integer less than half the total number of MPI ranks.
+
+The -npool flag (optional) divides the MPI ranks into "pools".  K-points are distributed among pools, and individual k-points can be evaluated with very little communication between pools. The default value for npool is 1.
+
+To run the code, do someting like:
+export OMP_NUM_THREADS=2
+mpirun -np 32 ./mini_dft -in Si_333.in -ntg 4 -ndiag 25 > Si_333.out
+
+D.) Required Problems:
+Input decks for for two problem sizes (single-node and large) are provided in the $MDFT_ROOT/benchmark directory. 
+
+
+D.1) Single_node case
+The single-node input file (single-node.in) performs one SCF cycle for a 3x3x3 super-cell for TiO2, using the PBE GGA functional and a 120 Ry plane wave cutoff. Only one SCF iteration is performed, so the jobs will exit before the SCF cycle converges. Two runs are required:
+
+D.1.a) MPI-only: Un-optimized code using only MPI as an execution model is allowed (see RFP documentation). The MPI concurrency is fixed to 40 MPI tasks, but affinity (their placement of those tasks) is left to the discretion of the vendor. The -ndiag and -ntg flags may not be used. Please ensure that OpenMP is turned off for these runs.
+
+D.1.b) MPI+X: Using an additional parallelism-enabling API (such as OpenMP, etc), and any other possible optimizations (see RFP documentation) the vendor will return the result of a run that minimizes execution time with concurrency (MPI tasks and number of threads) and affinity at the discretion of the vendor. The -ndiag and -ntg flags may also be tuned by the vendor.
+
+
+D.2) Large case
+The large test case (large.in) performs one SCF cycle for a 10x10x10 super-cell of MgO, using the LDA functional and a 130 Ry plane wave cutoff. Only one SCF iteration is performed, so the jobs will exit before the SCF cycle converges. Two runs are required:
+
+D.2.a) MPI-only: As per (D.1.a) for the single node test, but the MPI concurrency is set to 10000 tasks.
+
+D.2.b) MPI+X: Same rules as for the optimized single node case but for a large problem that spans many nodes. This problem has been tested at 10000 MPI ranks in MPI-only mode
+
+D.3) Capability Improvement
+Capability improvement measurements are enabled by increasing the number of k-points used in the large test case. The k-point grid is specified on the last two lines of large.in:
+
+K_POINTS automatic
+nk1 nk2 nk3 1 1 1
+
+To increase the number of k-points, adjust the (integer) parameters nk1, nk2 and nk3, which determine the size of the k-point integration grid. The number of k-points increases (roughly) linearly with the product nk1 * nk2 * nk3, though a significant fraction of these points are excluded due to symmetry. Grep for "number of k points" to determine the actual number of k-points used. The increase in capability for the capability improvement calculation is the increase in the number of k-oints used for the large problem (1). 
+
+The rules for the capability improvement measurement are the same as the MPI+X case (D.1.b). The -npool command line argument should be set to the number of k-points.
+
+Advice to vendors: The number of k-points is printed at the beginning of a MiniDFT run, but cannot be easily counted beforehand to set -npool. A reasonable solution is to initiate a trial-run with -npool=1. The trial-run will print the number of k-points and stop if there is not an equal number of pools. Then restart with an appropriate value for npool.
+
+
+E) Verification:
+The benchmark runs are validated based on the total energy after one SCF cycle. The total energy should agree with the reference value to within 1e-6 Ry. The script validate_minidft.py should be used extract the energies and perform the comparison.
+
+> ./validate_minidft.py single-node.out
+> ./validate_minidft.py       large.out
+
+Reference output listings for the small and large case are in the ../sample_outputs directory.
+
+F.) Timing. 
+ The time measured by the miniDFT benchmark excludes initialization and finalization stages. It is labeled "Benchmark_Time" (without quotes) and is on the final line of output. The Benchmark_Time is also printed by validate_minidft.py.
+
+G.) Reporting
+
+For the electronic submission, include all the source and the makefiles used to build on the target platform.  Include all standard output files.
+
+H.) Authorship
+
+The mini-DFT mini-app was excised from the general-purpose Quantum Espresso http://www.quantum-espresso.org/ (QE) code. QE is an open-source program licensed per the GNU General Public License (GPL). A copy of the GPL is provided in the 'License' file in this directory.

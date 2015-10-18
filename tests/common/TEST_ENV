@@ -1,0 +1,38 @@
+DELIM="-ohpc"
+CMD_TIMEOUT="20s"
+RESOURCE_MANAGER=slurm
+COMPILER_FAMILIES="gnu intel"
+MPI_FAMILIES="mvapich2 openmpi impi"
+BOS_RELEASE=SuSE-release
+LUSTRE_TEST_PATH="/mnt/lustre/jenkins"
+NUM_COMPUTES=4
+export INTEL_LICENSE_FILE=/opt/intel/licenses/intel.lic
+export BATS_USE_MKTEMP=1
+#
+#------------------------
+# TAU profiling options
+#------------------------
+#
+TAU_TRACE=0,
+TAU_CALLPATH=0,
+TAU_PROFILE=1,
+TAU_METRICS=GET_TIME_OF_DAY:PAPI_L1_DCM:PAPI_LD_INS
+
+#
+#------------------------
+# Performance thresholds
+#------------------------
+#
+if [ "x$CI_CLUSTER" == "xhera" ];then
+   OHPC_HSN_MIN_BANDWIDTH=3000
+   OHPC_HSN_MAX_LATENCY=6.0 
+else
+   OHPC_HSN_MIN_BANDWIDTH=4500
+   OHPC_HSN_MAX_LATENCY=3.0
+fi
+
+OHPC_STREAM_BW_master=65000
+OHPC_STREAM_BW_compute=65000
+OHPC_DGEMM_GFLOPS_master=340
+OHPC_DGEMM_GFLOPS_compute=340
+

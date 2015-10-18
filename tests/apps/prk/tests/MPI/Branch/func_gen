@@ -1,0 +1,168 @@
+# Copyright (c) 2013, Intel Corporation
+# 
+# Redistribution and use in source and binary forms, with or without 
+# modification, are permitted provided that the following conditions 
+# are met:
+# 
+#     * Redistributions of source code must retain the above copyright 
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above 
+#       copyright notice, this list of conditions and the following 
+#       disclaimer in the documentation and/or other materials provided 
+#       with the distribution.
+#     * Neither the name of Intel Corporation nor the names of its 
+#       contributors may be used to endorse or promote products 
+#       derived from this software without specific prior written 
+#       permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+# POSSIBILITY OF SUCH DAMAGE.
+#
+#*********************************************************************
+
+if [ $# -ne 2 ]; then
+  echo "Usage: \"$0 <matrix order> <number of functions>\""
+  exit
+fi
+
+n=$1
+nfunc=$2
+PID=$$
+NAME=___func.c$PID
+
+if [ $n -lt 1 ]; then
+  echo "ERROR: Invalid matrix size $n"
+  exit
+fi
+if [ $nfunc -lt 1 ]; then
+  echo "ERROR: Invalid number of functions $nfunc"
+  exit
+fi
+
+echo "Generating $nfunc functions with matrix order $n"
+
+# empty the file func.c
+cp /dev/null func.c
+
+# insert the right header file
+echo "#include <par-res-kern_general.h>"                                                >> func.c
+#create some global read-only arrays
+echo "static int one[$n], zero[$n];"                                                >> func.c
+
+#write prototype matrix function
+echo "int funcVERSION(int index, int a[$n][$n], int b[$n][$n]){"                    >  $NAME
+echo "  int i, j, x1, x2, x3, error=0;"                                             >> $NAME
+echo                                                                                >> $NAME
+
+j=0
+while [ $j -lt $n ]; do
+  i=0
+  while [ $i -lt $n ]; do
+    echo "  x1 = `expr \( \( $i + $j \) \* 48611 \) % 8389` + index;"               >> $NAME
+    echo "  x2 = `expr \( \( $i + 17 + 19 \* $j \) \* 29443 \) % 77029`;"   >> $NAME
+    echo "  x3 = (x1 + (VERSION+1)*x2) % $n;"                                       >> $NAME
+    echo "  x1 += (x2 - x3 + $n ) % $n;"                                            >> $NAME
+    echo "  x2 += (x1 - 5*x3 + 7 * $n ) % $n;"                                      >> $NAME
+    echo "  x3 = (x1 + 4*x2) % $n;"                                                 >> $NAME 
+    if [ $i -ne $j ]; then
+      echo "  a[$j][$i] = zero[x3];"                                                >> $NAME
+    else
+      echo "  a[$j][$i] = one[x3];"                                                 >> $NAME
+    fi
+    echo                                                                            >> $NAME
+    i=`expr $i + 1`
+  done
+  j=`expr $j + 1`
+done
+
+echo "  for (j=0; j<$n; j++) for (i=0; i<$n; i++)"                                  >> $NAME
+echo "    b[j][i] = (a[i][j]+a[j][i])/2;"                                           >> $NAME
+echo "  for (j=0; j<$n; j++) for (i=0; i<$n; i++)"                                  >> $NAME
+echo "    if (i != j) error += ABS(b[j][i]);"                                       >> $NAME
+echo "  for (i=0; i<$n; i++) error += ABS(1-b[i][i]);"                              >> $NAME
+  
+echo "  if (error) return(0);"                                                      >> $NAME
+echo "  else       return(index);"                                                  >> $NAME
+echo "}"                                                                            >> $NAME
+echo                                                                                >> $NAME
+
+#write the list of matrix functions; do odd/even scrambling to kill unit instruction stride
+v=0
+half=`expr \( $nfunc + 1 \) / 2` 
+while [ $v -lt $nfunc ]; do
+  v2=`expr $half \* \( $v % 2 \) + $v / 2`
+  cat $NAME | sed "s/VERSION/$v2/"                                                  >> func.c     
+  v=`expr $v + 1`
+done
+
+#remove prototype matrix function
+rm -f $NAME
+
+
+echo "int fill_vec(int *vector, int length, int iterations, int branch,  "          >> func.c
+echo "             int *nfunc, int *rank) {"                                        >> func.c
+
+echo "  static int a[$n][$n], b[$n][$n];"                                           >> func.c
+echo "  int aux, aux2, i, iter;"                                                  >> func.c
+
+echo "  /* return generator values to calling program */"                           >> func.c
+echo "  *nfunc = $nfunc;"                                                           >> func.c
+echo "  *rank  = $n;"                                                               >> func.c
+echo                                                                                >> func.c
+echo "  if (!branch)"                                                               >> func.c
+echo "    for (iter=0; iter<iterations; iter+=2) {"                                 >> func.c
+echo "      for (i=0; i<length; i++) {"                                             >> func.c
+echo "         aux2 = -(3-(func0(i,a,b)&7));"                                       >> func.c
+echo "         vector[i] -= (vector[i]+aux2);"                                      >> func.c
+echo "      }"                                                                      >> func.c
+echo "      for (i=0; i<length; i++) {"                                             >> func.c
+echo "         aux2 = (3-(func0(i,a,b)&7));"                                        >> func.c
+echo "         vector[i] -= (vector[i]+aux2);"                                      >> func.c
+echo "      }"                                                                      >> func.c
+echo "    }"                                                                        >> func.c
+echo "  else {"                                                                     >> func.c
+echo "    for (i=0; i<$n; i++) {"                                                   >> func.c
+echo "      zero[i] = 0; one[i]  = 1;"                                              >> func.c
+echo "    }"                                                                        >> func.c
+echo "    for (iter=0; iter<iterations; iter+=2) {"                                 >> func.c
+echo "      for (i=0; i<length; i++) {"                                             >> func.c
+echo "        aux = i%$nfunc;"                                                      >> func.c
+echo "        switch(aux) {"                                                        >> func.c
+v=0
+while [ $v -lt $nfunc ]; do
+  echo "          case $v: aux2 = -(3-(func$v(i,a,b)&7));"                          >> func.c
+  echo "                   vector[i] -= (vector[i]+aux2);"                          >> func.c
+  echo "                   break;"                                                  >> func.c
+  v=`expr $v + 1`
+done
+echo "          default: vector[i] = 0;"                                            >> func.c
+echo "        }"                                                                    >> func.c
+echo "      }"                                                                      >> func.c
+echo "      for (i=0; i<length; i++) {"                                             >> func.c
+echo "        aux = i%$nfunc;"                                                      >> func.c
+echo "        switch(aux) {"                                                        >> func.c
+v=0
+while [ $v -lt $nfunc ]; do
+  echo "          case $v: aux2 = (3-(func$v(i,a,b)&7));"                           >> func.c
+  echo "                   vector[i] -= (vector[i]+aux2);"                          >> func.c
+  echo "                   break;"                                                  >> func.c
+  v=`expr $v + 1`
+done
+echo "          default: vector[i] = 0;"                                            >> func.c
+echo "        }"                                                                    >> func.c
+echo "      }"                                                                      >> func.c
+echo "    }"                                                                        >> func.c
+echo "  }"                                                                          >> func.c
+echo "  return(0);"                                                                 >> func.c
+echo "}"                                                                            >> func.c
+

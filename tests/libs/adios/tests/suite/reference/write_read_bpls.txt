@@ -1,0 +1,79 @@
+  integer             gdim1                           scalar
+  integer             gdim2                           scalar
+  integer             gdim3                           scalar
+  integer             gdim4                           scalar
+  integer             gdim5                           scalar
+  integer             gdim6                           scalar
+  integer             ldim1                           scalar
+  integer             ldim2                           scalar
+  integer             ldim3                           scalar
+  integer             ldim4                           scalar
+  integer             ldim5                           scalar
+  integer             ldim6                           scalar
+  integer             offs1                           scalar
+  integer             offs2                           scalar
+  integer             offs3                           scalar
+  integer             offs4                           scalar
+  integer             offs5                           scalar
+  integer             offs6                           scalar
+  byte                /scalars/scalar_byte            scalar
+  short               /scalars/scalar_short           scalar
+  integer             /scalars/scalar_int             scalar
+  long long           /scalars/scalar_long            scalar
+  unsigned byte       /scalars/scalar_ubyte           scalar
+  unsigned short      /scalars/scalar_ushort          scalar
+  unsigned integer    /scalars/scalar_uint            scalar
+  unsigned long long  /scalars/scalar_ulong           scalar
+  real                /scalars/scalar_float           scalar
+  double              /scalars/scalar_double          scalar
+  string              /scalars/scalar_string          scalar
+  complex             /scalars/scalar_complex         scalar
+  double complex      /scalars/scalar_double_complex  scalar
+  byte                /1D/a1_byte                     {21}
+  short               /1D/a1_short                    {21}
+  integer             /1D/a1_int                      {21}
+  long long           /1D/a1_long                     {21}
+  unsigned byte       /1D/a1_ubyte                    {21}
+  unsigned short      /1D/a1_ushort                   {21}
+  unsigned integer    /1D/a1_uint                     {21}
+  unsigned long long  /1D/a1_ulong                    {21}
+  real                /1D/a1_float                    {21}
+  double              /1D/a1_double                   {21}
+  complex             /1D/a1_complex                  {21}
+  double complex      /1D/a1_double_complex           {21}
+  byte                /2D/a2_byte                     {21, 5}
+  short               /2D/a2_short                    {21, 5}
+  integer             /2D/a2_int                      {21, 5}
+  long long           /2D/a2_long                     {21, 5}
+  unsigned byte       /2D/a2_ubyte                    {21, 5}
+  unsigned short      /2D/a2_ushort                   {21, 5}
+  unsigned integer    /2D/a2_uint                     {21, 5}
+  unsigned long long  /2D/a2_ulong                    {21, 5}
+  real                /2D/a2_float                    {21, 5}
+  double              /2D/a2_double                   {21, 5}
+  complex             /2D/a2_complex                  {21, 5}
+  double complex      /2D/a2_double_complex           {21, 5}
+  byte                /3D/a3_byte                     {21, 5, 3}
+  short               /3D/a3_short                    {21, 5, 3}
+  integer             /3D/a3_int                      {21, 5, 3}
+  long long           /3D/a3_long                     {21, 5, 3}
+  unsigned byte       /3D/a3_ubyte                    {21, 5, 3}
+  unsigned short      /3D/a3_ushort                   {21, 5, 3}
+  unsigned integer    /3D/a3_uint                     {21, 5, 3}
+  unsigned long long  /3D/a3_ulong                    {21, 5, 3}
+  real                /3D/a3_float                    {21, 5, 3}
+  double              /3D/a3_double                   {21, 5, 3}
+  complex             /3D/a3_complex                  {21, 5, 3}
+  double complex      /3D/a3_double_complex           {21, 5, 3}
+  byte                /6D/a6_byte                     {21, 5, 3, 2, 4, 9}
+  short               /6D/a6_short                    {21, 5, 3, 2, 4, 9}
+  integer             /6D/a6_int                      {21, 5, 3, 2, 4, 9}
+  long long           /6D/a6_long                     {21, 5, 3, 2, 4, 9}
+  unsigned byte       /6D/a6_ubyte                    {21, 5, 3, 2, 4, 9}
+  unsigned short      /6D/a6_ushort                   {21, 5, 3, 2, 4, 9}
+  unsigned integer    /6D/a6_uint                     {21, 5, 3, 2, 4, 9}
+  unsigned long long  /6D/a6_ulong                    {21, 5, 3, 2, 4, 9}
+  real                /6D/a6_float                    {21, 5, 3, 2, 4, 9}
+  double              /6D/a6_double                   {21, 5, 3, 2, 4, 9}
+  complex             /6D/a6_complex                  {21, 5, 3, 2, 4, 9}
+  double complex      /6D/a6_double_complex           {21, 5, 3, 2, 4, 9}

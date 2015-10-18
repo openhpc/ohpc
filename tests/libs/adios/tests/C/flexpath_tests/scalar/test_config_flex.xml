@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+<adios-group name="scalar" coordination-communicator="comm" stats="On">
+    <var name="size" type="integer"/>
+    <var name="rank" type="integer"/>
+    <var name="lucky_scalar" type="integer" />
+</adios-group>
+
+<!-- The queue size says how many timesteps the writer can buffer before it blocks -->
+<method group="scalar"  method="FLEXPATH">QUEUE_SIZE=4;</method>    
+
+<buffer size-MB="20" allocate-time="now"/>
+
+</adios-config>
+

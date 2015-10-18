@@ -1,0 +1,50 @@
+Run the test after compiling adios in the trunk. I.e. after "make"
+
+1. Build the codes necessary for the tests and run sequential tests, i.e. do
+   a "make check" in adios trunk.
+
+2. Run test.sh script in an interactive-job environment to run the parallel tests.
+   Define the command for running parallel programs like mpirun -np  or  aprun -q -n
+   Run the script in the job directory with full path.
+
+Usage:  <path>/`basename $0` [-m runcmd] [-n "-np"] [-p procs] [-h] [-v] [-k]
+                             [pattern [pattern2 pattern3 ...]]
+  <path>    is used to find all the test codes, inputs and reference outputs. 
+            codes and inputs will be copied to the job directory
+  pattern   if given, only those tests are executed, that match 
+            'tests/*<pattern>*.sh';  otherwise all tests are executed.
+            e.g. arguments   1[0-3] attr global   will execute all tests that
+            have any of the strings 10,11,12,13,attr or global in their name
+            (and end with .sh)
+  OPTIONS
+     -m runcmd  command to start an MPI program. Default is "aprun -q" if aprun
+                is found, otherwise "mpirun"
+     -n runopt  option to runcmd to specify number of cores. 
+                Default is "-n" for aprun, "-np" for mpirun
+     -p procs   Run only those tests that use less up to 'procs' processes. 
+                Default: 128
+     -k         Do not remove logs and work dir of successful tests.
+     -v         Verbose mode
+     -h         Print this help.
+
+Each test will have an ./work.<testname> directory to store anything needed. 
+The test's stdout and stderr is redirected into ./log.<testname> file. 
+
+E.g.
+$ qsub -I -lwalltime=1:00:00 -lsize=12
+$ cd /tmp/work/pnorbert/test/adios/suite
+$ /ccs/proj/e2e/pnorbert/ADIOS/ADIOS/trunk/tests/suite/test.sh -p 12  
+Settings:
+  Test source directory:  /ccs/proj/e2e/pnorbert/ADIOS/ADIOS/trunk/tests/suite
+  Run command:            aprun -q
+  Run command np option:  -n
+  Max. processes to use:  12
+  Keep successful tests' output: no
+
+Run tests
+  Test 01_scalars ... OK
+  Test 02_attributes ... OK
+  Test 03_arrays ... OK
+  ...
+$
+

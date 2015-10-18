@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+    <adios-group name="transform" stats="On">
+    <var name="g1" type="integer"/>
+    <var name="g2" type="integer"/>
+    <var name="o1" type="integer"/>
+    <var name="o2" type="integer"/>
+    <var name="l1" type="integer"/>
+    <var name="l2" type="integer"/>
+    <global-bounds dimensions="g1,g2" offsets="o1,o2">
+       <var name="t_none"     gwrite="t" type="double" dimensions="l1,l2" transform="none"    />
+       <var name="t_zlib"     gwrite="t" type="double" dimensions="l1,l2" transform="zlib"/>
+       <var name="t_szip"     gwrite="t" type="double" dimensions="l1,l2" transform="szip"/>
+       <var name="t_bzip2"    gwrite="t" type="double" dimensions="l1,l2" transform="bzip2"/>
+       <var name="t_identity" gwrite="t" type="double" dimensions="l1,l2" transform="identity"/>
+       <var name="t_aplod"    gwrite="t" type="double" dimensions="l1,l2" transform="aplod"   />
+       <var name="t_isobar"   gwrite="t" type="double" dimensions="l1,l2" transform="isobar"  />
+    </global-bounds>
+</adios-group>
+
+<method group="transform" method="MPI"/>
+
+<buffer size-MB="500" allocate-time="now"/>
+
+</adios-config>
+

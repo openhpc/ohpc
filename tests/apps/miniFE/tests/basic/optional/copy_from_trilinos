@@ -1,0 +1,25 @@
+#!/bin/bash
+
+TRILINOS_SRC=$1
+
+if [ -d "${TRILINOS_SRC}" -a -d "${TRILINOS_SRC}/packages" ] ;
+then
+
+#-----------------------------------------------------------------------
+cp -r ${TRILINOS_SRC}/packages/ThreadPool/* ThreadPool
+rm -rf ThreadPool/doc
+
+cat << END_CAT > ThreadPool/ThreadPool_config.h
+#ifndef HAVE_PTHREAD
+#define HAVE_PTHREAD
+#endif
+END_CAT
+
+#-----------------------------------------------------------------------
+
+else
+
+  echo 'usage: ' $0 '<path-to-Trilinos-source>'
+
+fi
+

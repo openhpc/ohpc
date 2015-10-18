@@ -1,0 +1,15 @@
+#
+# Copyright by The HDF Group.
+# All rights reserved.
+#
+##
+## Makefile.am
+## Run automake to generate a Makefile.in from this file.
+##
+
+noinst_PROGRAMS = h5slabread h5slabwrite h5efc
+
+EXTRA_DIST = 
+
+TESTS_ENVIRONMENT = sh
+TESTS = 

@@ -1,0 +1,32 @@
+XML::Generator - A module to help in generating XML documents
+
+SYNOPSIS
+--------
+Lets you do this:
+
+	use XML::Generator  ':pretty';
+	print this(is(a(document())));
+
+To get this:
+
+	<this>
+	  <is>
+	    <a>
+	      <document />
+	    </a>
+	  </is>
+	</this>
+
+RECENT CHANGES
+------ -------
+
+1.04     Fri Jul 15 08:35:00 2011
+        - Added the filter_invalid_chars option, which is turned on by default
+          under strict mode.
+
+
+COPYRIGHT
+---------
+Copyright 1999-2011 Benjamin Holzman. All rights reserved.
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.

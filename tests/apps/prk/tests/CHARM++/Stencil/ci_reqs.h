@@ -1,0 +1,2 @@
+#define WEIGHTSIZE ((2*RADIUS+1)*(2*RADIUS+1))
+#define RADIUSTIMESWIDTH ((RADIUS)*(width))

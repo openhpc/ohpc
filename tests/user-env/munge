@@ -1,0 +1,34 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+@test "[munge] check for RPM" {
+    run rpm -q munge${DELIM}
+    assert_success
+}
+
+# Basic munge tests as outlined in https://code.google.com/p/munge/wiki/InstallationGuide
+
+@test "[munge] Generate a credential" {
+    run munge -n 
+    assert_success
+}
+
+@test "[munge] Decode credential locally" {
+    munge -n | unmunge >& /dev/null || flunk "Unable decode local credential"
+ }
+
+@test "[munge] Run benchmark" {
+    run remunge
+    assert_success
+}
+
+
+
+

@@ -1,0 +1,62 @@
+#!../../../common/bats/bin/bats --tap
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+   . ./TEST_ENV
+else
+    ERROR "TEST_ENV does not exist"
+fi
+
+rm=$RESOURCE_MANAGER
+
+# init run options
+nx=100
+ny=$nx
+nz=$nx
+
+NODES=1
+TASKS=$((NODES*TEST_NUM_RANKS))
+ARGS="nx=$nx ny=$ny nz=$nz verify_solution=$TEST_VERIFY"
+EXE=$TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
+
+# set global env settings
+export OMP_NUM_THREADS=$TEST_NUM_THREADS
+if [ $LMOD_FAMILY_MPI == "mvapich2" ];then
+    export MV2_ENABLE_AFFINITY=0
+    export IPATH_NO_CPUAFFINITY=1
+fi
+
+@test "[Apps/miniFE] run miniFE on single node under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -x $EXE ];then
+        flunk "missing $EXE"
+    fi
+
+    run_mpi_binary -t $CMD_TIMEOUT $EXE "$ARGS" $NODES $TASKS
+    assert_success
+}
+
+@test "[Apps/miniFE] log miniFE single node results ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+
+    run_tag=miniFE.${nx}x${ny}x${nz}.P${TASKS}
+    run_yaml=`ls -t $run_tag.*.yaml | head -n 1`
+    wrk_yaml=$run_tag.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI.yaml
+    mv $run_yaml $wrk_yaml || flunk "Unable to move ${run_yaml} file to ${work_yaml}"
+
+    str="Total Program Time"
+    ref_time=`grep $str ref/$wrk_yaml | cut -d ' ' -f4`
+    cur_time=`grep $str     $wrk_yaml | cut -d ' ' -f4`
+
+    if [ -z $ref_time ];then
+        ref_time="?"
+    fi
+
+    if [ -z $cur_time ];then
+        cur_time="?"
+    fi
+
+    fmt="%-24s %-10s %-10s %16s %16s\n"
+    printf "$fmt" $run_tag $LMOD_FAMILY_COMPILER $LMOD_FAMILY_MPI $ref_time $cur_time >>$TEST_PERFLOG
+}

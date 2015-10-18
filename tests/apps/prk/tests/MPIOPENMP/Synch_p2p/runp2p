@@ -1,0 +1,17 @@
+if [ $# -ne 6 ]; then 
+  echo "Usage: $0 <#mpi ranks><hostfile><#threads><#iterations><x grid size><y grid size>" 
+  echo "If no hostfile, use \"none\"" 
+  exit 
+fi 
+ 
+procs=$1 
+hostfile=$2 
+threads=$3 
+iterations=$4 
+xsize=$5 
+ysize=$6 
+if [ $hostfile == "none" ]; then 
+  mpiexec.hydra -np $procs -ppn 1 ./p2p $threads $iterations $xsize $ysize 
+else 
+  mpiexec.hydra -np $procs -f $hostfile -ppn 1 ./p2p $threads $iterations $xsize $ysize 
+fi 

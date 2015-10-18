@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+    <adios-group name="transforms" coordination-communicator="comm" stats="Off" time-index="iter">
+        <global-bounds dimensions="1048576" offsets="0">
+            <var name="rawdouble" gwrite="rd" type="double" dimensions="iter,1048576"/>
+            <var name="transformdouble" gwrite="td" type="double" dimensions="iter,1048576" transform="identity"/>
+        </global-bounds>
+    </adios-group>
+    <method group="transforms" method="MPI"></method>
+    <buffer size-MB="100" allocate-time="now"/>
+</adios-config>
+

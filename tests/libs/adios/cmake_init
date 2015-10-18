@@ -1,0 +1,621 @@
+#!/bin/bash
+#
+# This script is for configuring adios on the authors' machines
+# You can study it to figure out how to configure adios on your system
+#
+
+if [ `hostname | cut -c 1-4` == "sith" ]; then
+
+    ########
+    # Sith #
+    ########
+    source /etc/profile.d/modules.sh
+    TARGET=`module list 2>&1 | grep "PE"- | sed "s/^.*PE-\([a-z]*\).*/\1/"`
+
+    if [ -z "$TARGET" ]; then
+        echo "Cannot determine Programming environment. Exit"
+        exit 1
+    fi
+    echo "Configure on SITH for $TARGET env."
+    source /etc/profile.d/modules.sh
+    module unload hdf5
+    module unload netcdf
+    module unload PE-gnu
+    module unload PE-pgi
+    module unload PE-intel
+    module unload PE-pathscale
+    module unload pgi gcc intel pathscale
+    module unload python
+    module load PE-$TARGET
+    module load mxml
+    module load python
+    module load szip
+    module load bzip2
+    export LUSTRE_DIR="/usr/lib64"
+#    export FGR_DIR="/ccs/proj/e2e/qliu/tap"
+    export GLIB_DIR="/ccs/proj/e2e/qliu/glib"
+    export BUILD_WRITE=ON
+    export BUILD_FORTRAN=ON
+    export adios_timers=ON
+    export research_transports=ON
+    export CC=mpicc
+    export CXX=mpiCC
+    export FC=mpif90
+    export INSTALL_PREFIX="/ccs/home/jya/ADIOS/sith.$TARGET"
+    export APLOD_DIR="/ccs/proj/e2e/ncsu/sith.gnu"
+    export ISOBAR_DIR="/ccs/proj/e2e/ncsu/sith.gnu"
+    export ALACRITY_DIR
+    export NCSU_TIMER_DIR
+    if [ "$TARGET" == "pgi" ]; then
+        module load hdf5/1.8.10
+        export SEQ_HDF5_DIR=$HDF5_DIR
+        export SEQ_HDF5_LIBS="-L/sw/sith/hdf5/1.8.10/rhel6_pgi12.8/lib -L/sw/sith/szip/2.1/rhel6_pgi12.8/lib -lhdf5_hl -lhdf5 -lsz -lz -lm"
+        module unload hdf5/1.8.10
+        module load hdf5/1.8.10_par
+        export PAR_HDF5_DIR=$HDF5_DIR
+        export PAR_HDF5_LIBS="-L/sw/sith/hdf5/1.8.10/rhel6_pgi13.4_ompi1.6.3/lib -L/sw/sith/szip/2.1/rhel6_pgi13.4/lib -lhdf5_hl -lhdf5 -lsz -lz -lm"
+        module unload hdf5/1.8.10_par
+        module load netcdf/4.1.3
+        export SEQ_NC_DIR=$NETCDF_DIR
+        export SEQ_NC_LIBS="-L/sw/sith/netcdf/4.1.3/rhel6_pgi12.8/lib -L/sw/sith/hdf5/1.8.10/rhel6_pgi12.8/lib -L/sw/sith/szip/2.1/rhel6_pgi12.8/lib -lnetcdf -lcurl -lhdf5_hl -lhdf5 -lsz -lz -lm"
+        module unload netcdf/4.1.3
+        module load netcdf/4.1.3_par
+        export PAR_NC_DIR=$NETCDF_DIR
+        export PAR_NC_LIBS="-L/sw/sith/netcdf/4.1.3/rhel6_pgi13.4_ompi1.6.3/lib -L/sw/sith/hdf5/1.8.10/rhel6_pgi13.4_ompi1.6.3/lib -L/sw/sith/szip/2.1/rhel6_pgi13.4/lib -lnetcdf -lcurl -lhdf5_hl -lhdf5 -lsz -lz -lm"
+        module unload netcdf/4.1.3_par
+
+        export DATASPACES_DIR="/ccs/proj/e2e/dataspaces/sith/$TARGET"
+        export FLEXPATH_DIR="/ccs/proj/e2e/chaos/sith/$TARGET"
+        export FASTBIT_DIR="/sw/redhat6/fastbit/svn/rhel6_gnu4.7.2"
+    elif [ "$TARGET" == "gnu" ]; then
+        module load hdf5/1.8.10
+        export SEQ_HDF5_DIR=$HDF5_DIR
+        export SEQ_HDF5_LIBS="-L/sw/sith/hdf5/1.8.10/rhel6_gnu4.7.1/lib -lhdf5_hl -lhdf5 -L/sw/sith/szip/2.1/rhel6_gnu4.7.1/lib -lsz -lz -lm"
+        module unload hdf5/1.8.10
+        module load hdf5/1.8.10_par
+        export PAR_HDF5_DIR=$HDF5_DIR
+        export PAR_HDF5_LIBS="-L/sw/sith/hdf5/1.8.10/rhel6_gnu4.7.1_ompi1.6.3/lib -lhdf5_hl -lhdf5 -L/sw/sith/szip/2.1/rhel6_gnu4.7.1/lib -lsz -lz -lm"
+        module unload hdf5/1.8.10_par
+        module load netcdf/4.1.3
+        export SEQ_NC_DIR=$NETCDF_DIR
+        export SEQ_NC_LIBS="-L/sw/sith/netcdf/4.1.3/rhel6_gnu4.7.1/lib -L/sw/sith/hdf5/1.8.10/rhel6_gnu4.7.1/lib -L/sw/sith/szip/2.1/rhel6_gnu4.7.1/lib -lnetcdf -lm -lcurl -lhdf5_hl -lhdf5 -lsz -lz -lm"
+        module unload netcdf/4.1.3
+#        module load netcdf/4.1.3_par
+#        export PAR_NC_DIR=$NETCDF_DIR
+#        export PAR_NC_LIBS=""
+#        module unload netcdf/4.1.3_par
+#        export DATASPACES_DIR="/ccs/proj/e2e/dataspaces/sith/$TARGET"
+        export FLEXPATH_DIR="/ccs/proj/e2e/chaos/sith/$TARGET"
+        export FASTBIT_DIR="/sw/redhat6/fastbit/svn/rhel6_gnu4.7.2"
+    elif [ "$TARGET" == "intel" ]; then
+        module load hdf5/1.8.10
+        export SEQ_HDF5_DIR=$HDF5_DIR
+        export SEQ_HDF5_LIBS="-L/sw/sith/hdf5/1.8.10/rhel6_intel11.1/lib -lhdf5_hl -lhdf5 -L/sw/sith/szip/2.1/rhel6_intel11.1.072/lib -lsz -lz -lm"
+        module unload hdf5/1.8.10
+        module load hdf5/1.8.10_par
+        export PAR_HDF5_DIR=$HDF5_DIR
+        export PAR_HDF5_LIBS="-L/sw/sith/hdf5/1.8.10/rhel6_intel11.1_ompi1.6.3/lib -lhdf5_hl -lhdf5 -L/sw/sith/szip/2.1/rhel6_intel11.1.072/lib -lsz -lz -lm"
+        module unload hdf5/1.8.10_par
+        module load netcdf/4.1.3
+        export SEQ_NC_DIR=$NETCDF_DIR
+        export SEQ_NC_LIBS="-L/sw/sith/netcdf/4.1.3/rhel6_intel11.1/lib -L/sw/sith/hdf5/1.8.10/rhel6_intel11.1/lib -L/sw/sith/szip/2.1/rhel6_intel11.1.072/lib -lnetcdf -lm -lcurl -lhdf5_hl -lhdf5 -lsz -lz -lm"
+        module unload netcdf/4.1.3
+#        module load netcdf/4.1.3_par
+#        export PAR_NC_DIR=$NETCDF_DIR
+#        export PAR_NC_LIBS=""
+#        module unload netcdf/4.1.3_par
+#        export DATASPACES_DIR="/ccs/proj/e2e/dataspaces/sith/$TARGET"
+        export FLEXPATH_DIR=
+    else
+        echo "TARGET must be pgi or gnu or intel"
+        exit 1
+    fi
+        
+    export CPPFLAGS="-DMPICH_IGNORE_CXX_SEEK" 
+    export CFLAGS="-g -fPIC" 
+
+
+elif [ `hostname | cut -c 1-4` == "lens" ]; then
+    source /etc/profile.d/modules.sh
+    source /etc/profile.d/modules.sh
+    TARGET=`module list 2>&1 | grep "PE"- | sed "s/^.*PE-\([a-z]*\).*/\1/"`
+
+    if [ -z "$TARGET" ]; then
+        echo "Cannot determine Programming environment. Exit"
+        exit 1
+    fi
+    echo "Configure on LENS for $TARGET env."
+    module unload hdf5
+    module unload netcdf
+    module unload PE-gnu
+    module unload PE-pgi
+    module unload PE-pathscale
+    module unload pgi
+    module load PE-$TARGET
+    module load mxml
+    # Use both seq hdf5 (for utils) and 
+    #   parallel hdf5 (for PHDF5 method)
+#    module load hdf5/1.8.6
+#    export SEQ_HDF5_DIR=$HDF5_DIR
+#    export SEQ_HDF5_CLIB=$HDF5_CLIB
+#    module unload hdf5
+#    module load hdf5/1.8.6_ompi1.4.2
+#    export PAR_HDF5_DIR=$HDF5_DIR
+#    export PAR_HDF5_CLIB=$HDF5_CLIB
+#    module unload hdf5
+    # Seq NetCDF 3 for bp2ncd
+    module unload netcdf
+    module load netcdf/4.1.3
+    export SEQ_NC_DIR=$NETCDF_DIR
+    module unload netcdf
+#    module load netcdf/4.1.1_ompi1.3.1
+#    export PAR_NC_DIR=$NETCDF_DIR
+#    module unload netcdf
+
+    export BUILD_WRITE=ON
+    export BUILD_FORTRAN=ON
+    export adios_timers=ON
+    export INSTALL_PREFIX="/ccs/home/jya/ADIOS/lens.$TARGET"
+    export CC=mpicc
+    export CXX=mpiCC
+    export FC=mpif90
+    if [ "$TARGET" == "pgi" ]; then
+#        export CC=pgcc
+#        export CXX=pgCC
+#        export FC=pgf90
+        module switch pgi pgi/10.5
+    elif [ "$TARGET" == "gnu" ]; then
+#        export CC=gcc
+#        export CXX=g++
+#        export FC=gfortran
+	module unload PE-pgi
+	module load PE-gnu
+    else
+        echo "TARGET must be pgi or gnu"
+        exit 1
+    fi
+
+    export CFLAGS="-g -fPIC"
+
+
+elif [ `hostname | cut -c 1-5` == "titan" ]; then
+
+    BUILD_STAGING=true
+    if [ $BUILD_STAGING == "false" ]; then
+    
+        ################
+        # Titan #
+        ################
+        TARGET=pgi
+        echo "Configure on TITAN (XK7) for $TARGET env."
+        #export CFLAGS="-Wall -g" 
+        source /opt/modules/default/etc/modules.sh
+        module unload szip
+        module unload hdf5
+        module unload netcdf
+        module unload netcdf-hdf5parallel
+        module unload hdf5-parallel
+        module unload mxml
+        module unload PrgEnv-gnu
+        module unload PrgEnv-pgi
+        module unload PrgEnv-intel
+        module unload PrgEnv-cray
+        module load PrgEnv-$TARGET
+        module load craype-target-compute_node
+        module load craype-interlagos
+        module load cmake
+        export CRAYPE_LINK_TYPE=static
+        module load cray-mpich
+        module load szip
+        module load mxml
+        export CRAY_UGNI_DIR="/opt/cray/ugni/4.0-1.0401.5928.9.5.gem"
+        export CRAY_PMI_DIR="/opt/cray/pmi/4.0.1-1.0000.9421.73.3.gem"
+        export LUSTRE_DIR="/usr/lib64"
+    	export BUILD_WRITE=ON
+    	export BUILD_FORTRAN=ON
+        export CFLAGS="-g -fPIC -O0" 
+    	export adios_timers=ON
+    	export INSTALL_PREFIX="/ccs/home/jya/ADIOS/titan.$TARGET"
+            
+    else 
+    
+        ##########################
+        # Titan + staging #
+        ##########################
+        TARGET=pgi
+        echo "Configure on TITAN (XK7) including staging methods for $TARGET env."
+        source /opt/modules/default/etc/modules.sh
+        module unload szip
+        module unload hdf5
+        module unload netcdf
+        module unload hdf5-parallel
+        module unload netcdf-hdf5parallel
+        module unload mxml
+        module unload PrgEnv-gnu
+        module unload PrgEnv-pgi
+        module unload PrgEnv-intel
+        module unload PrgEnv-cray
+        module load PrgEnv-$TARGET
+        module load craype-target-compute_node
+        module load craype-interlagos
+        module load cmake
+        export CRAYPE_LINK_TYPE=static
+        module load cray-mpich
+        module load cray-netcdf-hdf5parallel
+        module load mxml
+        module load szip
+
+        unset EXTRA_LIBS
+        unset LDFLAGS
+        export PAR_HDF5_DIR=$HDF5_DIR
+        export PAR_HDF5_LIBS=${HDF5_DIR}/lib/libhdf5_parallel.a
+        export PAR_NC_DIR=${NETCDF_DIR}
+        export PAR_NC_LIBS=${NETCDF_DIR}/lib/libnetcdf_parallel.a
+        export LUSTRE_DIR=/usr/lib64
+        export BZIP2_DIR=${SYSROOT_DIR}/usr
+        if [ "$TARGET" == "pgi" ]; then
+            module load dataspaces/1.4.0
+            export DATASPACES_LIBDIR=${DATASPACES_DIR}/lib
+            export LDFLAGS="-pgcpplibs -Wl,-Bstatic" 
+#            export FLEXPATH_DIR="/ccs/proj/e2e/chaos/titan/$TAGET"
+            export EXTRA_LIBS="/opt/gcc/4.8.2/snos/lib64/libstdc++.a"
+        elif [ "$TARGET" == "gnu" ]; then
+            # currently dependencies are not available for > 4.7.2
+            module load gcc/4.7.2
+            module load dataspaces/1.4.0
+            export DATASPACES_DIR=$DATASPACES_DIR
+            export FLEXPATH_DIR="/ccs/proj/e2e/chaos/titan/gnu"
+#            module load fastbit/svn
+#            export FASTBIT_DIR=$FASTBIT_DIR
+            # NSSI needs libstdc++
+            export EXTRA_LIBS="${GCC_PATH}/snos/lib64/libstdc++.a"
+        else
+            unset DATASPACES_DIR
+        fi
+     
+        # NOTE hdf5-parallel module does not work with C++ compiler
+        # use the two lines below for openmpi
+        export CRAY_UGNI_DIR="/opt/cray/ugni/default"
+        export CRAY_PMI_DIR="/opt/cray/pmi/default"
+        export BUILD_WRITE=ON
+        export BUILD_FORTRAN=ON
+        export CFLAGS="-g -fPIC -O0"
+        export CPPFLAGS="-DMPICH_IGNORE_CXX_SEEK -DDART_DO_VERSIONING"
+        export adios_timers=ON
+        export INSTALL_PREFIX="/ccs/home/jya/ADIOS/titan.$TARGET" 
+    fi
+    
+
+elif [ `hostname | cut -c 1-4` == "eos-" ]; then
+
+      #################
+      # EOS Cray XC30 #
+      #################
+      TARGET=`module list 2>&1 | grep "PrgEnv"- | sed "s/^.*PrgEnv-\([a-z]*\).*/\1/"`
+      echo "Configure on EOS (Cray XC30) for $TARGET env."
+      #export CFLAGS="-Wall -g" 
+      source /opt/modules/default/etc/modules.sh
+      module unload szip
+      module unload hdf5
+      module unload netcdf
+      module unload netcdf-hdf5parallel
+      module unload hdf5-parallel
+      module unload mxml
+      module unload PrgEnv-gnu
+      module unload PrgEnv-pgi
+      module unload PrgEnv-intel
+      module unload PrgEnv-cray
+      module load PrgEnv-$TARGET
+      module load craype-target-compute_node
+      module load cmake
+      export CRAYPE_LINK_TYPE=static
+      module load cray-mpich
+      module load mxml
+      export BUILD_WRITE=ON
+      export BUILD_FORTRAN=ON
+      if [ "$TARGET" == "pgi" ]; then
+          # NSSI needs -pgcpplibs flag 
+          export LDFLAGS="-pgcpplibs"
+          unset EXTRA_LIBS 
+      elif [ "$TARGET" == "gnu" ]; then
+          # NSSI needs libstdc++
+          unset LDFLAGS 
+          export EXTRA_LIBS="/opt/gcc/4.8.1/snos/lib64/libstdc++.a"
+          module swap gcc gcc/4.8.1
+      elif [ "$TARGET" == "intel" ]; then
+          export LDFLAGS=
+      else
+          unset LDFLAGS 
+          unset EXTRA_LIBS 
+      fi
+      module load mxml
+      module load pmi
+      export CFLAGS="-g -fPIC"
+      export INSTALL_PREFIX="/ccs/home/jya/ADIOS/eos.$TARGET"
+
+
+elif [ `hostname | cut -c 1-7` == "chester" ]; then
+
+      ###############
+      # Chester XK6 #
+      ###############
+      TARGET=`module list 2>&1 | grep "PrgEnv"- | sed "s/^.*PrgEnv-\([a-z]*\).*/\1/"`
+      echo "Configure on Chester (XK6) for $TARGET env."
+      #export CFLAGS="-Wall -g" 
+      source /opt/modules/default/etc/modules.sh
+      module unload szip
+      module unload hdf5
+      module unload netcdf
+      module unload netcdf-hdf5parallel
+      module unload hdf5-parallel
+      module unload PrgEnv-gnu
+      module unload PrgEnv-pgi
+      module unload PrgEnv-intel
+      module unload PrgEnv-cray
+      module unload papi
+      module unload pmi
+      module unload ugni
+      module load PrgEnv-$TARGET
+      module load craype-target-compute_node
+      module load cmake
+      export CRAYPE_LINK_TYPE=static
+      module load cray-mpich
+      module load cray-netcdf-hdf5parallel
+      module load mxml
+      module load szip
+      module load pmi
+      module load ugni
+      export PAR_HDF5_DIR=$HDF5_DIR
+      export PAR_HDF5_LIBS=${HDF5_DIR}/lib/libhdf5_parallel.a
+      export PAR_NC_DIR=${NETCDF_DIR}
+      export PAR_NC_LIBS=${NETCDF_DIR}/lib/libnetcdf_parallel.a
+      export LUSTRE_DIR=/usr/lib64
+      export BZIP2_DIR=${SYSROOT_DIR}/usr
+      export CRAY_PMI_DIR=$(echo "${CRAY_PMI_POST_LINK_OPTS}" | sed 's|.*-L\([^ ]*\)/lib64.*|\1|')
+      export CRAY_UGNI_DIR=$(echo "${CRAY_UGNI_POST_LINK_OPTS}" | sed 's|.*-L\([^ ]*\)/lib64.*|\1|')
+      export BUILD_WRITE=ON
+      export BUILD_FORTRAN=ON
+      if [ "$TARGET" == "pgi" ]; then
+          # NSSI needs -pgcpplibs flag 
+          export LDFLAGS="-pgcpplibs" 
+          module load dataspaces/1.4.0
+          export DATASPACES_LIBDIR=${DATASPACES_DIR}/lib
+          unset EXTRA_LIBS 
+      elif [ "$TARGET" == "gnu" ]; then
+          # NSSI needs libstdc++
+          unset LDFLAGS 
+          export EXTRA_LIBS="/opt/gcc/4.7.1/snos/lib64/libstdc++.a"
+          module load dataspaces/1.4.0
+          export DATASPACES_LIBDIR=${DATASPACES_DIR}/lib
+          #module swap gcc gcc/4.4.4
+      else
+          unset LDFLAGS 
+          unset EXTRA_LIBS 
+#          WITHDART=""
+      fi
+      export CFLAGS="-g -fPIC" 
+            
+
+elif [ "x"`hostname -f | cut -c 8-15` == "xintrepid" ]; then
+    #####################
+    # Intrepid BlueGene #
+    #####################
+    echo "Configure on Intrepid (BlueGene)"
+    export CC=mpixlc_r
+    export FC=mpixlf90
+    export CFLAGS=""
+#    export FC=xlf90
+#    export CC=xlc_r
+    export MXML_DIR=/home/jya/mxml
+
+    
+elif [ `hostname | cut -c 1-4` == "nid0" ]; then
+    ############
+    # Franklin #
+    ############
+    TARGET=pgi
+    echo "Configure on FRANKLIN for $TARGET env."
+    export CC=cc
+    export CXX=CC
+    export FC=ftn
+    module unload hdf5
+    module unload netcdf
+    module unload hdf5-parallel
+    module unload netcdf-hdf5parallel
+    module unload PrgEnv-gnu
+    module unload PrgEnv-pgi
+    module unload PrgEnv-pathscale
+    module unload PrgEnv-cray
+    module load PrgEnv-$TARGET
+    #if [ "${TARGET}" == "pgi" ]; then
+    #    module swap pgi pgi/10.5.0
+    #fi
+    export LDFLAGS="-pgcpplibs"
+    export CPPFLAGS="-DMPICH_IGNORE_CXX_SEEK"
+    export CFLAGS="-fPIC"
+    
+
+elif [ `hostname | cut -c 1-6` == "hopper" ]; then
+    ##########
+    # Hopper #
+    ##########
+    TARGET=pgi
+    echo "Configure on HOPPER for $TARGET env."
+    export CC=cc
+    export CXX=CC
+    export FC=ftn
+    module unload hdf5
+    module unload netcdf
+    module unload hdf5-parallel
+    module unload netcdf-hdf5parallel
+    module unload PrgEnv-gnu
+    module unload PrgEnv-pgi
+    module unload PrgEnv-pathscale
+    module unload PrgEnv-cray
+    TARGET=pgi
+    module load PrgEnv-$TARGET
+    module load python
+    if [ "$TARGET" == "pgi" ]; then
+        export LDFLAGS="-pgcpplibs"
+    elif [ "$TARGET" == "gnu" ]; then
+        export LDFLAGS=""
+    elif [ "$TARGET" == "intel" ]; then
+        export LDFLAGS=""
+    else
+        echo "TARGET must be pgi or gnu or intel"
+        exit 1
+    fi
+    export CPPFLAGS="-DMPICH_IGNORE_CXX_SEEK"
+    export CFLAGS="-fPIC"
+
+
+elif [ `hostname | cut -c 1-6` == "kraken" ]; then
+    ##########
+    # Kraken #
+    ##########
+    source /opt/modules/default/etc/modules.sh
+    TARGET=`module list 2>&1 | grep PrgEnv | sed "s/^.*Env-\([a-z]*\).*/\1/"`
+
+    if [ -z "$TARGET" ]; then
+        echo "Cannot determine Programming environment. Exit"
+        exit 1
+    fi
+    echo ""
+    echo "Configure KRAKEN for the $TARGET compiler"
+    echo ""
+    export CC=cc
+    export FC=ftn
+    export CXX=CC
+    module unload szip
+    module unload hdf5
+    module unload netcdf
+    module unload hdf5-parallel
+    module unload netcdf-hdf5parallel
+    module unload xt-papi
+    module unload papi
+    if [ "$TARGET" == "pgi" ]; then
+        #module swap pgi pgi/10.4.0
+        # NSSI needs -pgcpplibs flag 
+        export EXTRA_LIBS=""
+        export LDFLAGS="-pgcpplibs" 
+    elif [ "$TARGET" == "gnu" ]; then
+        # NSSI needs libstdc++
+        export EXTRA_LIBS="/opt/gcc/4.4.4/snos/lib64/libstdc++.a"
+        export LDFLAGS="" 
+        #module swap gcc gcc/4.4.4
+    fi
+
+    module load szip
+    module load mxml
+    module load subversion
+    export CPPFLAGS="-DMPICH_IGNORE_CXX_SEEK" 
+    export CFLAGS="-fPIC -g -O0" 
+
+
+elif [ `hostname | cut -c 1-4` == "dyn9" -o `hostname | cut -c 1-3` == "pnb" ]; then
+
+    #######
+    # Mac #
+    #######
+    echo "Configure on Mac"
+    # Installed MacPorts and GCC4.4 and OpenMPI 1.4.2 ports 
+    # But should work with default mpicc and gcc, using --disable-fortran
+#    export CC=/opt/local/bin/gcc-mp-4.4
+#    export FC=/opt/local/bin/gfortran-mp-4.4
+#    export CXX=/opt/local/bin/g++-mp-4.4
+    export CC=/opt/local/bin/openmpicc
+    export FC=/opt/local/bin/openmpif90
+    export CXX=/opt/local/bin/openmpicxx
+    CFLAGS="-g -DO_LARGEFILE=0 -fno-common" 
+    export BUILD_WRITE=ON
+    export BUILD_FORTRAN=ON
+    export adios_timers=ON
+    export INSTALL_PREFIX="/opt/adios"
+#        --with-mxml=/opt/mxml \
+#        --with-netcdf=/opt/netcdf \
+#        --with-phdf5=/opt/hdf5 \
+#        --with-hdf5=/opt/hdf5.seq
+
+
+elif [ `hostname | cut -c 1-7` == "ubuntu" ]; then
+
+    #########################
+    # Scott's ubuntu laptop #
+    #########################
+    echo "Configure on UBUNTU"
+    export CC=mpicc
+
+
+elif [ `hostname | cut -c 1-6` == "tomato" ]; then
+
+    #########################
+    # Todd's ubuntu laptop #
+    #########################
+    echo "Configure on UBUNTU"
+    export CC=mpicc
+
+
+elif [ `hostname | cut -c 1-4` == "qliu" ]; then
+
+    #########################
+    # Gary's ubuntu laptop #
+    #########################
+    echo "Configure on UBUNTU"
+    export CC=mpicc
+    export CFLAGS="-g -O0 -fPIC"
+
+elif [ `hostname | cut -c 1-7` == "esimmon" ]; then
+
+    #######################
+    # Esimmon Virtual Box #
+    #######################
+    echo "Configure on ESIMMON VirtualBox ."
+    export BUILD_WRITE=ON
+    export BUILD_FORTRAN=ON
+    export adios_timers=ON
+    export CC=mpicc
+    export CXX=mpicxx
+    export FC=mpif90
+    export INSTALL_PREFIX="/opt/adios/1.5.0"
+    export CPPFLAGS="-DMPICH_IGNORE_CXX_SEEK"
+    export CFLAGS="-g -fPIC"
+    export MXML_DIR=/opt/mxml
+    export SEQ_HDF5_DIR=/opt/hdf5
+    export SEQ_HDF5_LIBS="-L/opt/hdf5/lib -lhdf5_hl -lhdf5 -lm"
+    export PAR_HDF5_DIR=/opt/phdf5
+    export PAR_HDF5_LIBS="-L/opt/phdf5/lib -lhdf5_hl -lhdf5 -lm"
+    export SEQ_NC_DIR=/opt/netcdf3
+    export SEQ_NC_LIBS="-L/opt/netcdf3/lib -lnetcdf"
+    export PAR_NC_DIR=/opt/nc4par
+    export PAR_NC_LIBS="-L/opt/nc4par/lib -lnetcdf"
+
+elif [ `hostname | cut -c 1-7` == "adiosVM" ]; then
+
+    #######################
+    # ADIOS Virtual Box   #
+    #######################
+    echo "Configure on adiosVM VirtualBox ."
+    export BUILD_WRITE=ON
+    export BUILD_FORTRAN=ON
+    export adios_timers=ON
+    export CC=mpicc
+    export CXX=mpicxx
+    export FC=mpif90
+    export INSTALL_PREFIX="/opt/adios/1.8"
+    export CPPFLAGS="-DMPICH_IGNORE_CXX_SEEK"
+    export CFLAGS="-g -O0 -fPIC -Wno-int-to-pointer-cast -Wno-pointer-to-int-cast"
+    export MXML_DIR=/opt/mxml/2.8
+    export SEQ_HDF5_DIR=/opt/hdf5-1.8.12
+    export SEQ_HDF5_LIBS="-L/opt/hdf5-1.8.12/lib -lhdf5_hl -lhdf5 -lm"
+    export PAR_HDF5_DIR=/opt/hdf5-1.8.12-parallel
+    export PAR_HDF5_LIBS="-L/opt/hdf5-1.8.12-parallel/lib -lhdf5_hl -lhdf5 -lm"
+    export SEQ_NC_DIR=/opt/netcdf-3.6.3
+    export SEQ_NC_LIBS="-L/opt/netcdf-3.6.3/lib -lnetcdf"
+else
+    echo "Could not determine what machine is this."
+    echo "This script is for configuring adios on the authors' machines."
+    echo "You can study it to figure out how to configure adios on your system."
+fi
+    
+    
+    

@@ -1,0 +1,130 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+testname="perf-tools/papi"
+
+NODES=2
+TASKS=5
+ARGS=5
+
+@test "[$testname] C dynamic memory info under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s dmem_info ];then
+	flunk "dmem_info binary does not exit"
+    fi
+
+    run_serial_binary ./dmem_info
+    assert_success
+}
+
+@test "[$testname] C branch accuracy under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s branches ];then
+	flunk "branches binary does not exit"
+    fi
+
+    run_serial_binary ./branches
+    assert_success
+}
+
+@test "[$testname] C Clock latency and resolution under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s clockres_pthreads ];then
+	flunk "clockres_pthreads binary does not exit"
+    fi
+
+    run_serial_binary ./clockres_pthreads
+    assert_success
+}
+
+@test "[$testname] C cycle ratio under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s cycle_ratio ];then
+	flunk "cycle_ratio binary does not exit"
+    fi
+
+    run_serial_binary ./cycle_ratio
+    assert_success
+}
+
+@test "[$testname] C start, read, stop and again under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s first ];then
+	flunk "first binary does not exit"
+    fi
+
+    run_serial_binary ./first
+    assert_success
+}
+
+@test "[$testname] C L1 related events under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s memory ];then
+	flunk "memory binary does not exit"
+    fi
+
+    run_serial_binary ./memory
+    assert_success
+}
+
+@test "[$testname] FORTRAN start/stop and read under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s cost ];then
+	flunk "cost binary does not exit"
+    fi
+
+    run_serial_binary ./cost
+    assert_success
+}
+
+@test "[$testname] FORTRAN multiplex under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s fmultiplex1 ];then
+	flunk "fmultiplex1 binary does not exit"
+    fi
+
+    run_serial_binary ./fmultiplex1
+    assert_success
+}
+
+@test "[$testname] FORTRAN high-level APIs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s highlevel ];then
+	flunk "highlevel binary does not exit"
+    fi
+
+    run_serial_binary ./highlevel
+    assert_success
+}
+
+@test "[$testname] FORTRAN string passing under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s strtest ];then
+	flunk "strtest binary does not exit"
+    fi
+
+    run_serial_binary ./strtest
+    assert_success
+}
+
+@test "[$testname] FORTRAN L1 cache miss under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s tenth ];then
+	flunk "tenth binary does not exit"
+    fi
+
+    run_serial_binary ./tenth
+    assert_success
+}
+
+@test "[$testname] FORTRAN start, stop and timer under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s zero ];then
+	flunk "zero binary does not exit"
+    fi
+
+    run_serial_binary ./zero
+    assert_success
+}

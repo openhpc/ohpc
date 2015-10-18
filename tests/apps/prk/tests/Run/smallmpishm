@@ -1,0 +1,9 @@
+NUMPROCS=4 
+NUMSUBPROCS=2 
+NUMITERS=10 
+SEPLINE="===============================================================" 
+MPIRUN=mpirun 
+ 
+$MPIRUN -np $NUMPROCS MPISHM/Stencil/stencil        $NUMSUBPROCS $NUMITERS 1000;       echo $SEPLINE 
+$MPIRUN -np $NUMPROCS MPISHM/Synch_p2p/p2p          $NUMITERS 1000 100;                echo $SEPLINE 
+$MPIRUN -np $NUMPROCS MPISHM/Transpose/transpose    $NUMSUBPROCS $NUMITERS 1000 64;    echo $SEPLINE

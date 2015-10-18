@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<query num="4" from-timestep="0" num-timesteps="2" batchsize="8">
+
+    <output type="ADIOS_SELECTION_BOUNDINGBOX" dim="2" start="0,16" count="1,32"/>
+
+    <entry var="temp" op=">=" constraint="100.8"> 
+        <selection type="ADIOS_SELECTION_BOUNDINGBOX" dim="2" start="1,16" count="1,32"/>
+    </entry>
+    <entry var="temp" op="<=" constraint="101.0"> 
+        <selection type="ADIOS_SELECTION_BOUNDINGBOX" dim="2" start="1,16" count="1,32"/>
+    </entry>
+
+    <combine op="AND"/>
+
+    <entry var="temp" op=">=" constraint="1000.0"> 
+        <selection type="ADIOS_SELECTION_BOUNDINGBOX" dim="2" start="2,16" count="1,32"/>
+    </entry>
+    <entry var="temp" op="<=" constraint="1000.2"> 
+        <selection type="ADIOS_SELECTION_BOUNDINGBOX" dim="2" start="2,16" count="1,32"/>
+    </entry>
+
+    <combine op="AND"/>
+    <combine op="OR"/>
+
+
+</query>
+  

@@ -1,0 +1,47 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+   . ./TEST_ENV
+else
+    ERROR "TEST_ENV does not exist"
+fi
+
+rm=$RESOURCE_MANAGER
+
+NODES=4
+TASKS=$((NODES*TEST_NUM_RANKS))
+
+# set global env settings
+export OMP_NUM_THREADS=$TEST_NUM_THREADS
+if [ $LMOD_FAMILY_MPI == "mvapich2" ];then
+    export MV2_ENABLE_AFFINITY=0
+    export IPATH_NO_CPUAFFINITY=1
+fi
+
+@test "[Libs/IMB] run IMB-EXT on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=$IMB_DIR/bin/IMB-EXT
+    ARGS="Bidir_Get Bidir_Put"
+
+    if [ ! -x $EXE ];then
+        flunk "missing $EXE"
+    fi
+
+    run_mpi_binary -t $CMD_TIMEOUT -o log.imb-ext $EXE "$ARGS" $NODES $TASKS
+    assert_success
+}
+
+@test "[Libs/IMB] run IMB-IO on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=$IMB_DIR/bin/IMB-IO
+    ARGS="Open_Close"
+
+    if [ ! -x $EXE ];then
+        flunk "missing $EXE"
+    fi
+
+    run_mpi_binary -t $CMD_TIMEOUT -o log.imb-io $EXE "$ARGS" $NODES $TASKS
+    assert_success
+}

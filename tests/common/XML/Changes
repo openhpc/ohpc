@@ -1,0 +1,159 @@
+Revision history for Perl extension XML::Generator.
+
+1.04     Fri Jul 15 08:35:00 2011
+        - Added the filter_invalid_chars option, which is turned on by default
+          under strict mode.
+
+1.03     Thu Jul 30 17:02:00 2009
+        - Version bump because somebody released an unauthorized
+          XML-Generator-1.02
+
+1.01     Tue Jul 8  11:45:00 2007
+	- Documentation cleanup.
+
+1.0      Fri Jun 22 16:51:00 2007
+	- Fixed bug #23594, "Embedded escaping does not work as expected",
+	  reported by M. Zizka; clarified documentation and added 'even-entities'
+	  argument to 'escape' parameter.
+	- As part of above fix, supplying an unexpected true argument to 'escape'
+	  parameter results in warning. 
+	- Fixed bug #18609, "cdata also pretty-printed", reported by Daniel Schroeer.
+	- Fixed bug #18656, reported by Peter (Stig) Edwards; just removed single
+	  quotes around Tie::IxHash in require line.
+
+0.99_02  Tue Oct 19 23:02:00 2004
+	- Fixed mistake in RDF example.
+
+0.99_01  Tue Oct 19 22:58:00 2004
+	- Changed default behavior of 'use XML::Generator' to not attempt to export
+	  AUTOLOAD. Removed ':noimport' option.
+	- Allowed more than two components in a namespace, to allow explicit xmlns:
+	  attributes to be output on demand.  Introduced '#default' token.
+	- Improved output aesthetics when there are lot of attributes and the generator
+	  was configured with the 'pretty' option.
+	- Added allowedXMLTags (alias to allowed_xml_tags) and qualified_attributes
+	  (alias to qualifiedAttributes) to rationalize interface.
+
+0.99  Tue Mar 23 11:17:00 2004
+	- Removed automatic prefixing of attribute names when using a namespace.
+	- Added 'qualifiedAttributes' constructor option to emulate prior attribute
+	  prefixing behavior.
+	- Always syntax check attribute names under strict conformance.
+	- Add documentation on using Tie::IxHash to get predictable attribute ordering.
+	- Allow tag 'AUTOLOAD'.
+	- Fixed bug with default namespace.
+	- More tests
+
+0.98  Mon Mar  1 18:26:00 2004
+	- Fixed bug in DOM.t when XML::DOM not installed (caused by fix in 0.97)
+
+0.97  Mon Mar  1 15:22:00 2004
+	- Fixed bugs in DOM.t reported by David Wheeler.
+
+0.96  Sun Feb 29 23:00:00 2004
+	- More documentation fixups.
+	- Only check for xml() subs under strict conformance.
+	- Small performance optimizations.
+
+0.95  Sun Feb 29 22:21:00 2004
+	- Enhanced STACKED AUTOLOAD feature to provide a default import()
+	- Documentation fixups.
+
+0.94  Sun Feb 29 14:21:00 2004
+	- FIXED IMPLEMENTATION OF NAMESPACES!! XML::Generator is now conformant.
+	  Note that the semantics of namespaces have changed!
+	- Implemented AUTOLOAD exporting to simplify syntax.
+	- Implement STACKED AUTOLOADs to simplify sub-classing.
+	- Added "macro" options ':standard', ':std', ':strict' and ':pretty'.
+	- Added new 'allowed_xml_tags' option to allow tags starting with 'xml'
+	  under strict conformance.
+	- Documented the 'version', 'encoding' and 'dtd' options.
+	- Added arguments to xmldecl() to allow more control.
+	- Changed XML comment behavior when escaping '--' to escape both dashes.
+	- Fixed memory leak in constructor. Bug #4513.
+	- Fixed bug in t/DOM.t that caused it to fail when DOM.pm was installed. Bug #3220.
+
+0.93  Wed Jan 22 10:41:00 2003
+	- Added 'high-bit' option to escape to allow escaping of upper ASCII.
+	- Fixed a test bug that assumed the order of elements in a hash.
+
+0.92  Tue Jan 21 13:12:00 2003
+	- Finally (after multiple bug reports) stopped requiring that XML::DOM be
+	  installed for the tests to pass.  Sorry this took so long to get fixed.
+	- Also fixed a bug in XML::Generator::DOM's POD that made it look strange
+	  on search.cpan.org (reported by Ken Williams).
+
+0.91  Mon Dec 11 11:33:32 2000
+	- Added XML::Generator::DOM subclass for producing DOM trees instead of
+	  strings.
+	- New choices for the 'empty' option: 'compact' and 'args'.
+	- Changed the semantics of 'pretty' option; CDATA sections and Processing
+	  Instructions are no longer subject to the pretty printing rules.  Thanks
+	  for the bug report from Murat Uenalan.
+	- Using closures for tag generation, which seems to save a little bit of
+	  time.  Might not be worth it in the long run, for maintainability's sake.
+	- Fix for perl versions that can't use 'for' as a statement modifier (pre 5.005)
+	  courtesy of Neil Prockter (n.prockter@lse.ac.uk).
+	- Some documentation fixups.
+
+0.9   Sat Nov 18 11:13:24 2000
+	- Massive code reorganization to support subclassing, courtesy of
+	  Nathan Winger (nate@nateware.com)
+	- New instantiation option, 'empty', to control how empty tags are
+	  rendered.
+	- Improved internal representation for improved performance
+	  ( $gen->foo($gen->bar($gen->baz( $really_big_string ))) used to copy
+	  $really_big_string three times; as long as the 'pretty' option is not
+	  supplied, this is no longer the case. )
+	- Fixed xml() tag to allow comments and processing instructions before
+	  and/or after the xml document.
+	- New special tag, xmldtd(), which used to be part of xmldecl().
+
+0.8   Wed Jul 12 17:10:12 2000
+	- Bug-fix for pretty-printing
+	- New special tag, "xml" which takes a complete XML document and
+	  "finalizes" it, so it can't be further embedded.
+	- Arguments passed as scalar refs will not be escaped, even if the
+	  XML::Generator object was constructed with the 'escape' => "always"
+	  option.
+
+0.7   Mon Jun 13 09:14:32 2000
+	- Pretty-printing patch from Bron Gondwana
+	- Undefined warnings patch from Bron Gondwana
+
+0.6   Sun Jun 11 16:02:00 2000
+	- Cleaned-up, modularized rewrite courtesy of Bron Gondwana
+	  (perlcode@brong.net)
+	- XML::Generator now returns objects blessed into XML::Generator::auto
+	  which contains only an AUTOLOAD that redirects requests to the
+	  proper method in XML::Generator.
+	- A new option is available in the constructor to force stricter
+	  conformance to the XML specification ('conformance' => 'strict').
+	  This also enables some special tags; "xmlpi", "xmlcmnt", "xmldecl"
+	  and "xmlcdata" that can be used to generate, respectively, processing
+	  instructions, comments, the XML declaration, and character data
+	  sections. 
+
+0.5   Thu Sep 08 11:12:04 1999
+	- Fixed one lingering definedness bug
+	- Added escaping options to XMLify content
+	- Added global namespace option
+	- Fixed namespace support somewhat
+
+0.4   Fri Jul 02 11:44:32 1999
+	- Fixed a few remarkably dumb bugs which I can't believe survived
+	  this long.  Improved the documentation slightly. 
+
+0.3   Tue Apr 13 09:11:13 1999
+	- Fixed undefined variables warnings as reported by John Labovitz
+	 (johnl@meer.net)
+
+0.2   Wed Feb 10 12:00:00 1999
+	- Added support for namespaces; bholzman
+	- Allowed "new" as a tag name; bholzman
+
+0.1   Wed Nov 11 20:39:11 1998
+	- first public version; bholzman
+
+0.01  Wed Nov 11 20:17:39 1998
+	- original version; created by h2xs 1.18

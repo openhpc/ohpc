@@ -1,0 +1,26 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions
+source ./common/functions || exit 1
+
+testname=libs/PAPI
+
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+@test "[$testname] PAPI_L1_DCM available" {
+    run papi_native_avail -e PAPI_L1_DCM
+    assert_success
+}
+
+@test "[$testname] PAPI_TLB_DM available" {
+    run papi_native_avail -e PAPI_TLB_DM
+    assert_success
+}
+
+@test "[$testname] PAPI_L1_DCA available" {
+    run papi_native_avail -e PAPI_L1_DCA
+    assert_success
+}

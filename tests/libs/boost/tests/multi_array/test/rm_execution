@@ -1,0 +1,55 @@
+#!.//common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+PKG="Boost/Multi Array"
+
+@test "[$PKG] access-test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=access
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] iterators-test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=iterators
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] resize-test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=resize
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] idxgen1-test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=idxgen1
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+

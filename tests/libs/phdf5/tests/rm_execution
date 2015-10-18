@@ -1,0 +1,41 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+NODES=4
+TASKS=8
+ARGS="$LUSTRE_TEST_PATH/phdf_test.out"
+
+@test "[libs/PHDF5] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s C_mpi_test ];then
+	flunk "C_mpi_test binary does not exit"
+    fi
+
+    run_mpi_binary ./C_mpi_test $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[libs/PHDF5] Parallel Fortran binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s F_mpi_test ];then
+	flunk "F_mpi_test binary does not exit"
+    fi
+
+    run_mpi_binary ./F_mpi_test $ARGS $NODES $TASKS
+    assert_success
+}
+
+
+

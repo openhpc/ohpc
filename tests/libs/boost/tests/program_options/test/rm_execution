@@ -1,0 +1,117 @@
+#!../../../../../common/bats/bin/bats 
+# -*-sh-*-
+
+source ../../../../../common/test_helper_functions.bash || exit 1
+source ../../../../../common/functions || exit 1
+
+if [ -s ../../../../../TEST_ENV ];then
+    source ../../../../../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+PKG="Boost/Program Options"
+
+@test "[$PKG] cmdline_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=cmdline_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] exception_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=exception_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] options_description_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=options_description_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] parsers_test on master host($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=parsers_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    ./$test config_test.cfg 
+    assert_success
+}
+
+@test "[$PKG] parsers_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=parsers_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test config_test.cfg 
+    assert_success
+}
+
+@test "[$PKG] positional_options_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=positional_options_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] required_test on master host($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=required_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    ./$test required_test.cfg
+    assert_success
+}
+
+@test "[$PKG] required_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=required_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test required_test.cfg 
+    assert_success
+}
+
+@test "[$PKG] unicode_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=unicode_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] unrecognized_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=unrecognized_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] variable_map_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=variable_map_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}

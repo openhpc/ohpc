@@ -1,0 +1,22 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+source ./common/TEST_ENV
+
+#if [ -s ./LOCAL_ENV ];then
+#   . ./LOCAL_ENV
+#else
+#    ERROR "LOCAL_ENV does not exist"
+#fi
+
+@test "[Adios] clean testing directory" {
+	make clean
+}
+@test "[Adios] check adios functionality" {
+	make -k check
+}
+#@test "[Adios] clean tests temporary files" {
+#	make distclean
+#}

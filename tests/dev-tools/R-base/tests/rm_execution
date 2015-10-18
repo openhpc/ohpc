@@ -1,0 +1,42 @@
+#!.//common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+PKG="R_base"
+
+
+@test "[$PKG] Running Rscript bench.R under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    test="bench"
+    CMD_TIMEOUT=30
+    echo $test.R 
+    if [ ! -e $test.R ];then
+        flunk "$test.R does not exist"
+    fi
+
+    rm -f $test.results
+
+    run run_serial_binary -o $test.results Rscript ./$test.R 
+    assert_success
+
+    # Verify a timing was recorded
+    # run grep "Total time" $test.results 
+    # Verify run results are available
+    run grep "loess n=4" $test.results 
+    assert_success
+
+}
+
+

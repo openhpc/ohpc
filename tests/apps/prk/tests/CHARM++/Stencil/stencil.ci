@@ -1,0 +1,75 @@
+mainmodule stencil {
+  include "ci_reqs.h";
+  readonly CProxy_Main mainProxy;
+  readonly int n;
+  readonly int num_chare_rows;
+  readonly int num_chare_cols;
+  readonly int overdecomposition;
+  readonly double weight[WEIGHTSIZE];
+  readonly double startTime;
+  readonly double endTime;
+
+  readonly int maxiterations;
+
+  message ghostMsg {
+    double edge[];
+  };
+
+  mainchare Main {
+    entry Main(CkArgMsg *m);
+    entry void report(double);
+  };
+
+  array [2D] Stencil {
+    entry Stencil(void);
+    entry void begin_iteration(void);
+    entry void receiveGhosts(ghostMsg *msg);
+    entry void processGhosts(ghostMsg *msg);
+    entry [reductiontarget] void global_norm(double result);
+    entry [reductiontarget] void barrier_start(void);
+    entry [reductiontarget] void barrier_stop(void);
+
+    entry void run() {
+      for (iterations=0; iterations<=maxiterations; iterations++) {
+        if (iterations == 1) {
+          serial "start the timer" {
+            // implement a barrier by doing an empty collective; then start the timer          
+            CkCallback cb(CkReductionTarget(Stencil, barrier_start), thisProxy);     
+            contribute(0, NULL, CkReduction::nop, cb);
+          }
+          when barrier_start(void) serial "barrier_start" {
+            if (thisIndex.x==0 && thisIndex.y==0) startTime = CkWallTimer();
+          }
+        }
+
+        serial "begin_iteration" { 
+           begin_iteration();
+        }
+        for (messages_due=0; messages_due < max_messages_due; messages_due++) {
+          when receiveGhosts[iterations](ghostMsg *msg) 
+            serial "processGhosts" {
+              processGhosts(msg);
+            }
+        }
+        serial "compute" {
+          compute();
+        }
+      }
+      serial "stop the timer" {
+        CkCallback cb(CkReductionTarget(Stencil, barrier_stop), thisProxy);     
+        contribute(0, NULL, CkReduction::nop, cb);
+      }
+      when barrier_stop(void) serial "barrier_stop" {
+        if (thisIndex.x == 0 && thisIndex.y == 0) endTime =  CkWallTimer();
+      }
+      serial "compute solution norm" {
+        compute_local_norm();
+        CkCallback cb(CkReductionTarget(Stencil, global_norm), thisProxy);     
+        contribute(sizeof(double), &local_norm, CkReduction::sum_double, cb);
+      }
+      when global_norm(double result) serial "report solution norm" {
+        if (thisIndex.x==0 && thisIndex.y==0) mainProxy.report(result);
+      }
+    };
+  };
+};

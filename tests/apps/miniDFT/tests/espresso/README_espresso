@@ -1,0 +1,11 @@
+This directory provides Quantum Espresso input files that are equivalent 
+to the MiniDFT benchmark calculations. Although the input options for 
+MiniDFT reproduce those of QE, MiniDFT uses a different format for 
+pseudopotential files because miniDFT does not include QE's I/O toolkit.
+
+MiniDFT developers should use these input files to ensure that the Mini-DFT mini-app reproduces both the physics and the computational profile of the full-application (i.e. Quantum Espresso.)
+
+The QE documention includes instructions for building QE. The README 
+file in this directory describes the procedure for running the miniDFT 
+benchmark calculations. The same instructions can be followed using the 
+pw.x executable from the QE package.

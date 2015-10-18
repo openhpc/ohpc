@@ -1,0 +1,27 @@
+# Identity plugin:
+transforms_write_method_SOURCES += transforms/adios_transform_identity_write.c
+transforms_read_method_SOURCES += transforms/adios_transform_identity_read.c
+
+# Zlib plugin:
+transforms_write_method_SOURCES += transforms/adios_transform_zlib_write.c
+transforms_read_method_SOURCES += transforms/adios_transform_zlib_read.c
+
+# Bzip2 plugin:
+transforms_write_method_SOURCES += transforms/adios_transform_bzip2_write.c
+transforms_read_method_SOURCES += transforms/adios_transform_bzip2_read.c
+
+# Szip plugin:
+transforms_write_method_SOURCES += transforms/adios_transform_szip_write.c
+transforms_read_method_SOURCES += transforms/adios_transform_szip_read.c
+
+# ISOBAR plugin:
+transforms_write_method_SOURCES += transforms/adios_transform_isobar_write.c
+transforms_read_method_SOURCES += transforms/adios_transform_isobar_read.c
+
+# APLOD plugin:
+transforms_write_method_SOURCES += transforms/adios_transform_aplod_write.c
+transforms_read_method_SOURCES += transforms/adios_transform_aplod_read.c
+
+# ALACRITY plugin:
+transforms_write_method_SOURCES += transforms/adios_transform_alacrity_write.c
+transforms_read_method_SOURCES += transforms/adios_transform_alacrity_read.c

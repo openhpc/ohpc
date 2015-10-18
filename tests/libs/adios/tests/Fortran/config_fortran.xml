@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<adios-config host-language="Fortran">
+  <adios-group name="restart" coordination-communicator="group_comm">
+    <var name="small_int" path="/abc/me" type="integer"/>
+    <var name="big_int" path="/abc/me" type="integer*8"/>
+    <var name="small_real" path="/abc/me" type="real"/>
+    <var name="big_real" path="/abc/me" type="double"/>
+
+    <var name="ze0size" type="integer"/>
+    <var name="ze1size" type="integer"/>
+    <var name="zelectron0" type="real" dimensions="ze0size"/>
+    <var name="zelectron1" type="real" dimensions="ze0size,ze1size"/>
+
+    <var name="istep1" type="integer"/>
+    <var name="istep2" type="integer"/>
+    <var name="istep3" type="integer"/>
+
+    <var name="str_var" type="string"/>
+    <attribute name="desc" path="/str_var" value="A character(5)='abc' variable written as string"/>
+    <var name="str_const" type="string"/>
+    <attribute name="desc" path="/str_const/" value="A constant 'abc' string written as string"/>
+    <var name="str_arr" type="byte" dimensions="5"/>
+    <attribute name="desc" path="/str_arr" value="A character(5)='abc' variable written as byte array"/>
+
+    <attribute name="units" path="/abc/me/" value="m/s"/>
+    <attribute name="units1" path="/abc/me" value="m/s"/>
+    <attribute name="timestep1" path="/" var="istep1"/>
+    <attribute name="timestep2" path="/abc" var="istep2"/>
+    <attribute name="timestep3" path="/abc/" var="istep3"/>
+  </adios-group>
+
+  <method method="MPI" group="restart"/>
+
+  <buffer size-MB="5" allocate-time="now"/>
+
+</adios-config>

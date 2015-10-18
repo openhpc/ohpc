@@ -1,0 +1,33 @@
+#Uncomment the following line to enable OpenMP
+USE_OPENMP = TRUE
+
+FFTW_INCL = -I/usr/common/usg/fftw/3.2.2/include
+  FFTW_LIBS  = -L/usr/common/usg/fftw/3.2.2/lib -lfftw3_threads -lfftw3
+BLAS_LIBS =
+SCALAPACK_LIBS = $(MKL) -L$(MKL_LIBDIR) -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64
+
+DFLAGS = -D__PGI
+
+CC = mpicc 
+CFLAGS = 
+
+FC = mpif90 
+FFLAGS = -fast -Mcache_align -r8 -Mpreprocess
+
+LD = mpif90
+LDFLAGS = 
+
+ifeq ($(USE_OPENMP), TRUE)
+
+  #note that this overrides the earlier definition of FFTW_LIBS
+  FFTW_LIBS  = -L/opt/fftw/3.3.0.1/x86_64/lib -lfftw3_threads -lfftw3 -lm
+  FFTW_LIBS  = -L/usr/common/usg/fftw/3.2.2/lib -lfftw3_threads -lfftw3
+
+  DFLAGS    += 
+
+  FFLAGS    += -mp
+  LDFLAGS   += -mp
+
+endif
+
+include Makefile.base

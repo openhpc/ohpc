@@ -1,0 +1,35 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV         || exit 1
+source ./common/functions || exit 1
+
+cd compilers || exit 1
+export BATS_JUNIT_CLASS=Compilers
+
+# bootstrap the local autotools project
+
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+
+    echo " "
+    echo " "
+    echo "-------------------------------------------------------"
+    echo "User Environment: Compiler tests: $compiler"
+    echo "-------------------------------------------------------"
+
+    module purge || exit 1
+    module load $compiler || exit 1
+
+    ./configure      || exit 1
+    make clean       || exit 1
+    make -j 4 check  || exit 1
+
+    save_logs_compiler_family tests $compiler
+
+    make distclean
+done

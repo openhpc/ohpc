@@ -1,0 +1,8 @@
+test
+test_static
+test*.o
+test*.log
+test*.trs
+test*.txt
+test*.dat
+test-suite.log.orig
