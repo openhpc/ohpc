@@ -17,6 +17,7 @@ Summary:        OpenHPC Test Suite
 License:        BSD-3-Clause
 Group:          ohpc/admin
 Source0:        test-suite%{PROJ_DELIM}.tar
+BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
 
 %define debug_package %{nil}
