@@ -21,7 +21,7 @@ if [ "$num_computes" -lt 0 ];then
 fi
 
 @test "[BOS] OS distribution matches $BOS_RELEASE ($num_computes active computes) " {
-
+    skip "disable BOS_RELEASE check"
     koomie_cf -x "c[0-9]+\b" ls -l /etc/$BOS_RELEASE | awk '{print $10}' >& .cmd_output || exit 1
     local num_matches=`grep $BOS_RELEASE .cmd_output | wc -l` || exit 1
 
@@ -31,7 +31,7 @@ fi
 }
 
 @test "[BOS] consistent kernel ($num_computes active computes) " {
-
+    skip "superceded kernel consistency check by clck"
     koomie_cf -x "c[0-9]+\b" ls -l /etc/$BOS_RELEASE | awk '{print $10}' >& .cmd_output || exit 1
 
     local count=0
