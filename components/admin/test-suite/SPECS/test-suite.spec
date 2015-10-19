@@ -35,6 +35,7 @@ Standalone test suite for integration testing of OpenHPC components.
 %setup -n test-suite%{PROJ_DELIM}
 
 %build
+export PATH=/opt/ohpc/pub/autotools/bin:$PATH
 ./bootstrap
 
 %install
