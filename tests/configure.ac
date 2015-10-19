@@ -298,7 +298,6 @@ AM_CONDITIONAL(USERENV_ENABLED,test "x$enable_munge" = "xyes" )
 #------------------------------------------------------------------------------------------
 
 AC_OUTPUT( Makefile 
-	   provisioning/Makefile 
 	   user-env/Makefile 
 	   bos/Makefile
 	   perf-tools/intel-itac/Makefile
@@ -306,7 +305,6 @@ AC_OUTPUT( Makefile
 	   perf-tools/intel-advisor/Makefile
 	   perf-tools/intel-advisor/tests/Makefile
            perf-tools/tau/Makefile
-	   hardware/Makefile
 	   oob/Makefile
 	   clck/Makefile
 	   lustre/Makefile
