@@ -122,6 +122,9 @@ Patch3:     slurmdbd.service.patch
 Patch4:     slurmd.service.patch
 Patch5:     slurm_pmix.patch
 
+BuildRequires: pmix
+Requires:      pmix
+
 # 8/15/14 karl.w.schulz@intel.com - include prereq
 %if 0%{?sles_version} || 0%{?suse_version}
 PreReq: %{insserv_prereq} %{fillup_prereq}
