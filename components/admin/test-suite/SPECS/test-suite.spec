@@ -42,7 +42,7 @@ export PATH=/opt/ohpc/pub/autotools/bin:$PATH
 
 rm -rf $RPM_BUILD_ROOT
 
-%{__mkdir_p} %{installPath}
+%{__mkdir_p} %{buildroot}/%{installPath}
 cp -a * %{buildroot}/%{installPath}
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
