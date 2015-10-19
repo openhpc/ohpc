@@ -120,6 +120,7 @@ Patch1:     %{pname}.initd.patch
 Patch2:     slurmctld.service.patch
 Patch3:     slurmdbd.service.patch
 Patch4:     slurmd.service.patch
+Patch5:     slurm_pmix.patch
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -200,6 +201,10 @@ BuildRequires: gtk2-devel
 BuildRequires: glib2-devel
 BuildRequires: pkgconfig
 %endif
+
+# autogen.sh looks for AC macros in these
+BuildRequires: gtk2-devel
+BuildRequires: glib2-devel
 
 %ifnos aix5.3
 # FIXME: AIX can't seem to find this even though this is in existance there.
@@ -467,9 +472,16 @@ Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 ### patch2
 ### patch3
 %patch4
+%patch5 -p1
 
 %build
+ACLOCAL_FLAGS='--system-acdir /usr/share/aclocal' \
+	./autogen.sh
+
+#cp ./src/common/mpi.h ./src/common/slurm_mpi.h
+
 %configure \
+	--with-pmix=/usr \
 	%{?slurm_with_debug:--enable-debug} \
 	%{?slurm_with_partial_attach:--enable-partial-attach} \
 	%{?slurm_with_sun_const:--enable-sun-const} \
@@ -998,6 +1010,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/slurm/mpi_pmi2.so
 %endif
 %{_libdir}/slurm/mpi_none.so
+%{_libdir}/slurm/mpi_pmix.so
 %{_libdir}/slurm/preempt_job_prio.so
 %{_libdir}/slurm/preempt_none.so
 %{_libdir}/slurm/preempt_partition_prio.so
