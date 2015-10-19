@@ -52,6 +52,6 @@ cp -a * %{buildroot}/%{installPath}
 %defattr(-,root,root)
 %dir %{OHPC_HOME}
 %{OHPC_PUB}
-%doc docs/LICENSE
+%doc LICENSE
 
 %changelog
