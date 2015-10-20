@@ -302,6 +302,7 @@ example configuration.
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # add new cluster key to base image
+[master](*\#*) wwinit ssh_keys
 [master](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # add NFS client mounts of /home and /opt/ohpc/pub to base image
