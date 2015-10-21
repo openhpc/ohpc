@@ -8,6 +8,7 @@ source ./LOCAL_ENV                  || exit 1
 
 FORMAT="%-15s: %s\n"
 
+#/opt/ohpc/pub/autotools/bin/autoconf
 #/opt/ohpc/pub/autotools/bin/autoheader
 #/opt/ohpc/pub/autotools/bin/autom4te
 #/opt/ohpc/pub/autotools/bin/autoreconf
@@ -17,6 +18,9 @@ FORMAT="%-15s: %s\n"
 
 #/opt/ohpc/pub/autotools/bin/aclocal
 #/opt/ohpc/pub/autotools/bin/automake
+
+#/opt/ohpc/pub/autotools/bin/libtool
+#/opt/ohpc/pub/autotools/bin/libtoolize
 
 @test "[$TEST_DIR] autoconf: verify autoconf${DELIM} provided autoconf executable" {
     EXE=$(which autoconf)    && printf "$FORMAT" "executable" "$EXE"
@@ -108,6 +112,28 @@ FORMAT="%-15s: %s\n"
 
 @test "[$TEST_DIR] automake: verify autoconf${DELIM} provided automake executable" {
     EXE=$(which automake)    && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] libtool:  verify libtool${DELIM} provided libtool executable" {
+    EXE=$(which libtool)     && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] libtool:  verify libtool${DELIM} provided libtoolize executable" {
+    EXE=$(which libtoolize)  && printf "$FORMAT" "executable" "$EXE"
     RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
 
     if echo "$RPM" | grep -q -- "$DELIM"; then

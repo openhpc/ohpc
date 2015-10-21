@@ -18,10 +18,14 @@ FORMAT="%-15s: %s\n"
 
 #/opt/ohpc/pub/autotools/bin/aclocal
 #/opt/ohpc/pub/autotools/bin/automake
-#
+
+#/opt/ohpc/pub/autotools/bin/libtool
+#/opt/ohpc/pub/autotools/bin/libtoolize
+
 setup () {
 	export MAKE_VER="$(rpm --qf '%{VERSION}' -q automake${DELIM})"
 	export CONF_VER="$(rpm --qf '%{VERSION}' -q autoconf${DELIM})"
+	export LIBT_VER="$(rpm --qf '%{VERSION}' -q libtool${DELIM})"
 }
 
 @test "[$TEST_DIR] autoconf: verify autoconf executable is version $CONF_VER" {
@@ -67,5 +71,15 @@ setup () {
 @test "[$TEST_DIR] automake: verify automake executable is version $CONF_VER" {
     EXEC_VER=$(automake --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
     [[ "$MAKE_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] libtool:  verify libtool executable is version $LIBT_VER" {
+    EXEC_VER=$(libtool --version | grep -o '(GNU libtool) .*' | sed 's#(GNU libtool) ##')
+    [[ "$LIBT_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] libtool:  verify libtoolize executable is version $LIBT_VER" {
+    EXEC_VER=$(libtoolize --version | grep -o '(GNU libtool) .*' | sed 's#(GNU libtool) ##')
+    [[ "$LIBT_VER" == "$EXEC_VER" ]]
 }
 
