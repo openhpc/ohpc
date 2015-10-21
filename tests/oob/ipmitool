@@ -117,8 +117,8 @@ fi
         fi
     done
     
-    # verify sel log availability
-    run timeout 10s ipmitool -E -I lanplus -H $my_bmc_ip -U root sel elist
+    # verify sel log availability (query 1st record)
+    run timeout 10s ipmitool -E -I lanplus -H $my_bmc_ip -U root sel get 1
     assert_success
 
     rm -f .cmd_output
