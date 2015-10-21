@@ -4,15 +4,15 @@
 source ./common/test_helper_functions.bash || exit 1
 source ./common/functions || exit 1
 
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
 PKG=OPENBLAS
 module=openblas
 testname=libs/OpenBLAS
 library=libopenblas
 rpm=openblas-$LMOD_FAMILY_COMPILER${DELIM}
-
-if [ -s ./TEST_ENV ];then
-    source ./TEST_ENV
-fi
 
 check_rms
 
