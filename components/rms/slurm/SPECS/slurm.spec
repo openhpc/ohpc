@@ -123,9 +123,7 @@ Patch4:     slurmd.service.patch
 Patch5:     slurm_pmix.patch
 
 BuildRequires: pmix
-BuildRequires: libevent-devel
 Requires:      pmix
-Requires:      libevent
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
 %if 0%{?sles_version} || 0%{?suse_version}
