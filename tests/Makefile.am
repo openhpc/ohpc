@@ -171,6 +171,10 @@ if TAU_ENABLED
    TESTS += perf-tools/tau/ohpc-tests/test_tau
 endif
 
+if AUTOTOOLS_ENABLED
+   TESTS += dev-tools/autotools/run
+endif
+
 if TBB_ENABLED
    TESTS += dev-tools/tbb/ohpc-tests/test_tbb
 endif
