@@ -221,8 +221,8 @@ Version: 1.0.0
 Release: 1%{?dist}
 License: BSD
 Group: Development/Libraries
-#Source: https://www.open-mpi.org/software/pmix/v1.0/downloads/pmix-1.0.0.tar.bz2
-Source: pmix-v1.0.0-213-g8ff7a29.tar.bz2
+Source: https://www.open-mpi.org/software/pmix/v1.0/downloads/pmix-1.0.0.tar.bz2
+Patch1: pmix_master.patch
 Packager: %{?_packager:%{_packager}}%{!?_packager:%{_vendor}}
 Vendor: %{?_vendorinfo:%{_vendorinfo}}%{!?_vendorinfo:%{_vendor}}
 Distribution: %{?_distribution:%{_distribution}}%{!?_distribution:%{_vendor}}
@@ -274,9 +274,9 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 # there that are not meant to be packaged.
 rm -rf $RPM_BUILD_ROOT
 
-%setup -q -n pmix-v1.0.0-213-g8ff7a29
-#%patch1 -p1
-#./autogen.sh
+%setup -q -n pmix-%{version}
+%patch1 -p1
+./autogen.sh
 
 #############################################################################
 #
