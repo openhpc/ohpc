@@ -1,3 +1,1 @@
-TESTS = init.sh
-
-TESTS  += EasyBuild
+TESTS  = EasyBuild
