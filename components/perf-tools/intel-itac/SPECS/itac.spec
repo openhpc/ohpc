@@ -8,7 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname itac
 
 Summary:   Intel(R) Trace Analyzer and Collector
@@ -29,8 +31,6 @@ AutoReq:   no
 %if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 Requires: libpng12
 %endif
-
-%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true

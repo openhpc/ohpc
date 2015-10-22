@@ -13,9 +13,9 @@
 %define wwpkgdir /srv/
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname warewulf-common
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering

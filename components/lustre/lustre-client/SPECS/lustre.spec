@@ -13,8 +13,8 @@
 %if 0%{?OHPC_BUILD}
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 %define debug_package %{nil}
 
 %if 0%{?suse_version} == 1110

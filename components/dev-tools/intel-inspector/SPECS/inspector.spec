@@ -8,7 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname inspector
 
 Summary:   Intel(R) Inspector XE
@@ -28,8 +30,6 @@ AutoReq:   no
 %if 0%{?sles_version} || 0%{?suse_version}
 requires:  libpng12-0
 %endif
-
-%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true

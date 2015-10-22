@@ -9,9 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname prun
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Convenience utility for parallel job launch
 Name:      %{pname}%{PROJ_DELIM}

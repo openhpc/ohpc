@@ -9,16 +9,15 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname gnu-compilers
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 # Define subcomponent versions required for build
 
 %define gmp_version 6.0.0
 %define mpc_version 1.0.3
 %define mpfr_version 3.1.3
-
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}

@@ -9,12 +9,11 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname ndoutils
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-
 
 Name:               %{pname}%{PROJ_DELIM}
 Version:            2.0.0

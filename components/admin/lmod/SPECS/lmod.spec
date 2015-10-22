@@ -9,9 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname lmod
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 %if 0%{?suse_version} <= 1220
 %define luaver 5.1

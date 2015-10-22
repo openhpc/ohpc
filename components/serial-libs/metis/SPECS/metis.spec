@@ -11,6 +11,7 @@
 # Serial metis build dependent on compiler toolchain
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 #-ohpc-header-comp-begin-----------------------------
 
@@ -19,7 +20,6 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils

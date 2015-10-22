@@ -8,8 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define compiler_family intel
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
 Summary:   Intel(R) MPI Library for Linux* OS
 Name:      intel-mpi%{PROJ_DELIM}
@@ -28,8 +30,6 @@ AutoReq:   no
 Requires:  prun%{PROJ_DELIM}
 
 %define pstudio_ver 2016.0.109 
-
-%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true

@@ -8,8 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname lua-bit
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 %if 0%{?suse_version} <= 1220
 %define luaver 5.1

@@ -9,9 +9,10 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname munge
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 %define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}

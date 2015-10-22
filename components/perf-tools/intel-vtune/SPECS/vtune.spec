@@ -8,8 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define compiler_family intel
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
 Summary:   Intel(R) VTune(TM) Amplifier XE
 Name:      intel-vtune%{PROJ_DELIM}
@@ -25,8 +27,6 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 #AutoReqProv: no
-
-%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true

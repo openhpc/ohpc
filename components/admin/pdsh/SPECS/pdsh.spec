@@ -9,9 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname pdsh
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}

@@ -1,3 +1,4 @@
+
 #----------------------------------------------------------------------------bh-
 # This RPM .spec file is part of the OpenHPC project.
 #
@@ -13,8 +14,9 @@
 # Copyright (c) 2012 Andy Cress
 #
 
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname ipmiutil
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 2.9.6

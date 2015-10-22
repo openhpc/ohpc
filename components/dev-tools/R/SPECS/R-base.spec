@@ -32,9 +32,9 @@
 # compiler_family variable via rpmbuild or other
 # mechanisms.
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-%{!?compiler_family:	%define compiler_family gnu}
-%{!?PROJ_DELIM:		%define PROJ_DELIM   %{nil}}
+%{!?compiler_family: %define compiler_family gnu}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}

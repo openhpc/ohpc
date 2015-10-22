@@ -12,7 +12,7 @@
 # %global __strip /bin/true
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname nagios-plugins

@@ -9,11 +9,13 @@
 #----------------------------------------------------------------------------eh-
 
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
+
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define debug_package %{nil}
 
 %define pname warewulf-vnfs
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary: Warewulf VNFS Module
 Name:    %{pname}%{PROJ_DELIM}
