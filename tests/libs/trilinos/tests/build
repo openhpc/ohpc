@@ -7,6 +7,6 @@ source ../../../common/functions || exit 1
 @test "[Trilinos] build Trilinos executables ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 
     make -f Makefile.ohpc clean >& /dev/null
-    make -f Makefile.ohpc      #>& /dev/null
+    make -f Makefile.ohpc -j 4  >& /dev/null
 
 }

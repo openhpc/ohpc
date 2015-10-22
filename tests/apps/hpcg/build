@@ -16,7 +16,7 @@ fi
 
     # build exe
     make -f Makefile.ohpc clean
-    make -f Makefile.ohpc
+    make -f Makefile.ohpc -j 4
 
     if [ ! -s $TEST_EXE ];then
         flunk "failed to create $TEST_EXE"

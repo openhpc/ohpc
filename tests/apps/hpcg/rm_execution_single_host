@@ -17,7 +17,7 @@ rm=$RESOURCE_MANAGER
 nx=32
 ny=$nx
 nz=$nx
-nt=30
+nt=10
 
 NODES=1
 TASKS=$((NODES*TEST_NUM_RANKS))
