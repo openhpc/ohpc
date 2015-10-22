@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname losf
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+%{!?PROJ_DELIM:%define PROJ_DELIM -ohpc}
 
 Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
