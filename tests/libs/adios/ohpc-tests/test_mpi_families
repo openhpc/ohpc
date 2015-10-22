@@ -11,6 +11,11 @@ export BATS_JUNIT_CLASS=$TEST_DIR
 source ./common/TEST_ENV  || exit 1
 source ./common/functions || exit 1
 
+echo " "
+echo " "
+echo "-------------------------------------------------------"
+echo "Libraries: ADIOS tests bootstrap"
+echo "-------------------------------------------------------"
 module load autotools || exit 1
 ./bootstrap           || exit 1
 
@@ -20,7 +25,7 @@ for compiler in $COMPILER_FAMILIES ; do
 	echo " "
 	echo " "
 	echo "-------------------------------------------------------"
-	echo "Libraries: $BATS_JUNIT_CLASS tests: $compiler-$mpi"
+	echo "Libraries: ADIOS tests: $compiler-$mpi"
 	echo "-------------------------------------------------------"
 
 	module purge          
