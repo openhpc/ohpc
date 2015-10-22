@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -17,7 +16,8 @@
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family:      %define mpi_family openmpi}
+%{!?mpi_family: %define mpi_family openmpi}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
@@ -118,9 +118,11 @@ module load pdtoolkit
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
+export OMP_LIB=gomp
 %endif
 %if %{compiler_family} == intel
 export fcomp=mpiifort
+export OMP_LIB=iomp
 %endif
 
 %if %{mpi_family} == impi
@@ -152,7 +154,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -lgomp -L/tmp%{install_path}/lib" 
+	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -l$OMP_LIB -L/tmp%{install_path}/lib" 
 
 
 make install
