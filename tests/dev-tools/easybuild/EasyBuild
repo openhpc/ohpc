@@ -1,4 +1,4 @@
-#!../common/bats/bin/bats
+#!./common/bats/bin/bats
 # -*-sh-*-
 
 load ./common/test_helper_functions || exit 1
