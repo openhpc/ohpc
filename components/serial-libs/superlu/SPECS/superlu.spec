@@ -42,6 +42,7 @@ BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+Requires:      openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -125,9 +126,11 @@ popd
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the SuperLU_dist library built with the %{compiler_family} compiler"
+puts stderr "This module loads the SuperLU library built with the %{compiler_family} compiler"
 puts stderr "toolchain."
 puts stderr " "
+puts stderr "Note that this build of SuperLU leverages the OpenBLAS linear algebra libraries."
+puts stderr "Consequently, openblas is loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
 
@@ -139,6 +142,15 @@ module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
 set     version                     %{version}
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { [is-loaded gnu] } {
+        if { ![is-loaded openblas]  } {
+          module load openblas
+        }
+    }
+}
+
 
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
