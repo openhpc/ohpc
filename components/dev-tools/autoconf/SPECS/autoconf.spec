@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname autoconf
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+%{!?PROJ_DELIM:%define PROJ_DELIM -ohpc}
 
 Summary:   A GNU tool for automatically configuring source code
 Name:      %{pname}%{PROJ_DELIM}
