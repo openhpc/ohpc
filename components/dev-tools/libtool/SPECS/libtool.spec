@@ -9,9 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM:%define PROJ_DELIM -ohpc}
 
 %define pname libtool
-%{!?PROJ_DELIM:%define PROJ_DELIM -ohpc}
 
 Summary:   The GNU Portable Library Tool
 Name:      %{pname}%{PROJ_DELIM}
