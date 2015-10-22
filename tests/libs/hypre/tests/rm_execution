@@ -55,10 +55,6 @@ ARGS=8
     assert_success
 }
 
-NODES=4
-TASKS=8
-ARGS=8
-
 @test "[libs/HYPRE] 2 PE FORTRAN PCG with PFMG preconditioner binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex12f ];then
 	flunk "ex12f binary does not exit"
@@ -68,7 +64,7 @@ ARGS=8
     assert_success
 }
 
-@test "[libs/HYPRE] 4 PE -Delta u = 1 binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[libs/HYPRE] 2 PE -Delta u = 1 binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex3 ];then
 	flunk "ex3 binary does not exit"
     fi
@@ -77,7 +73,7 @@ ARGS=8
     assert_success
 }
 
-@test "[libs/HYPRE] 4 PE convection-reaction-diffusion binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[libs/HYPRE] 2 PE convection-reaction-diffusion binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex4 ];then
 	flunk "ex4 binary does not exit"
     fi
@@ -86,7 +82,7 @@ ARGS=8
     assert_success
 }
 
-@test "[libs/HYPRE] 4 PE FORTRAN 2-D Laplacian binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[libs/HYPRE] 2 PE FORTRAN 2-D Laplacian binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex5f ];then
 	flunk "ex5f binary does not exit"
     fi
@@ -95,7 +91,7 @@ ARGS=8
     assert_success
 }
 
-@test "[libs/HYPRE] 4 PE Semi-Structured convection binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[libs/HYPRE] 2 PE Semi-Structured convection binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex7 ];then
 	flunk "ex7 binary does not exit"
     fi
@@ -104,7 +100,7 @@ ARGS=8
     assert_success
 }
 
-@test "[libs/HYPRE] 4 PE biharmonic binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[libs/HYPRE] 2 PE biharmonic binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex9 ];then
 	flunk "ex9 binary does not exit"
     fi
@@ -113,7 +109,7 @@ ARGS=8
     assert_success
 }
 
-@test "[libs/HYPRE] 4 PE C++ Finite Element Interface binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[libs/HYPRE] 2 PE C++ Finite Element Interface binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex10 ];then
 	flunk "ex10 binary does not exit"
     fi
@@ -122,7 +118,7 @@ ARGS=8
     assert_success
 }
 
-@test "[libs/HYPRE] 4 PE 2-D Laplacian eigenvalue binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[libs/HYPRE] 2 PE 2-D Laplacian eigenvalue binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex11 ];then
 	flunk "ex11 binary does not exit"
     fi
