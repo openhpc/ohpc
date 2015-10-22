@@ -272,6 +272,12 @@ AC_ARG_ENABLE([tau],
    [AX_OPTION_DEFAULT(type=long,enable_tau,yes)])
 AM_CONDITIONAL(TAU_ENABLED,test "x$enable_tau" = "xyes" )
 #------------------------------------------------------------------------------------------
+# Autotools
+AC_ARG_ENABLE([autotools],
+   [AS_HELP_STRING([--enable-autotools],[Enable autotools tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_autotools,yes)])
+AM_CONDITIONAL(AUTOTOOLS_ENABLED,test "x$enable_autotools" = "xyes" )
+#------------------------------------------------------------------------------------------
 # TBB
 AC_ARG_ENABLE([tbb],
    [AS_HELP_STRING([--enable-tbb],[Enable tbb tests (default=yes)])],[],
@@ -408,6 +414,12 @@ echo    User Environment:
     fi
 
 echo    Dev Tools:
+
+    if test "x$enable_autotools" = "xyes"; then
+       echo '    'Autotools................. : enabled
+    else
+       echo '    'Autotools................. : disabled
+    fi
 
     if test "x$enable_easybuild" = "xyes"; then
        echo '    'EasyBuild................. : enabled
