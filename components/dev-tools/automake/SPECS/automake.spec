@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname automake
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+%{!?PROJ_DELIM:%define PROJ_DELIM -ohpc}
 
 Summary:   A GNU tool for automatically creating Makefiles
 Name:      %{pname}%{PROJ_DELIM}
