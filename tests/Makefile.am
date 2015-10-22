@@ -25,6 +25,10 @@ endif
 
 else # non root tests
 
+if EASYBUILD_ENABLED
+   SUBDIRS += dev-tools/easybuild
+endif
+
 if MODULES_ENABLED
    SUBDIRS += modules 
 endif

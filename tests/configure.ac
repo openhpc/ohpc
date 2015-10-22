@@ -188,6 +188,12 @@ AC_ARG_ENABLE([boost-mpi],
    [AX_OPTION_DEFAULT(type=long,enable_boost_mpi,yes)])
 AM_CONDITIONAL(BOOST_MPI_ENABLED,test "x$enable_boost_mpi" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# EasyBuild
+AC_ARG_ENABLE([easybuild],
+   [AS_HELP_STRING([--enable-easybuild],[Enable EasyBuild tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_easybuild,yes)])
+AM_CONDITIONAL(EASEBUILD_ENABLED,test "x$enable_easybuild" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # HYPRE
 AC_ARG_ENABLE([hypre],
    [AS_HELP_STRING([--enable-hypre],[Enable HYPRE tests (default=yes)])],[],
