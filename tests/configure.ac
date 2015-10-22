@@ -316,19 +316,20 @@ AC_OUTPUT( Makefile
 	   perf-tools/intel-itac/tests/Makefile
 	   perf-tools/intel-advisor/Makefile
 	   perf-tools/intel-advisor/tests/Makefile
-           perf-tools/tau/Makefile
+       perf-tools/tau/Makefile
 	   oob/Makefile
 	   clck/Makefile
 	   lustre/Makefile
-           dev-tools/numpy/Makefile
-           dev-tools/numpy/tests/Makefile
-           dev-tools/scipy/Makefile
-           dev-tools/scipy/tests/Makefile
-           dev-tools/tbb/Makefile
-           dev-tools/tbb/tests/Makefile
-           dev-tools/cilk/Makefile
-           dev-tools/R-base/Makefile
-           modules/Makefile)
+       dev-tools/easybuild/Makefile
+       dev-tools/numpy/Makefile
+       dev-tools/numpy/tests/Makefile
+       dev-tools/scipy/Makefile
+       dev-tools/scipy/tests/Makefile
+       dev-tools/tbb/Makefile
+       dev-tools/tbb/tests/Makefile
+       dev-tools/cilk/Makefile
+       dev-tools/R-base/Makefile
+       modules/Makefile)
 
 echo
 echo '--------------------------------------------- SUMMARY ---------------------------------------------'
