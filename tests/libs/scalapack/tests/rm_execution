@@ -15,7 +15,7 @@ else
     exit 1
 fi
 
-testname="libs/scalapack"
+testname="libs/ScaLAPACK"
 
 NODES=2
 TASKS=8
