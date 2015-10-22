@@ -165,8 +165,6 @@ puts stderr " "
 puts stderr "This module loads the PETSc library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of PETSc leverages the Intel MKL and parallel HDF libraries."
-puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
 
@@ -186,6 +184,9 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
         module load phdf5
     }
     if { [is-loaded gnu] } {
+        if { ![is-loaded openblas]  } {
+          module load openblas
+        }
         if { ![is-loaded scalapack]  } {
           module load scalapack
         }
