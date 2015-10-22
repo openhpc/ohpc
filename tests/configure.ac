@@ -266,6 +266,12 @@ AC_ARG_ENABLE([scipy],
    [AX_OPTION_DEFAULT(type=long,enable_scipy,yes)])
 AM_CONDITIONAL(SCIPY_ENABLED,test "x$enable_scipy" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# SuperLU
+AC_ARG_ENABLE([superlu],
+   [AS_HELP_STRING([--enable-superlu],[Enable superlu tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_superlu,yes)])
+AM_CONDITIONAL(SUPERLU_ENABLED,test "x$enable_superlu" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # SuperLU_dist
 AC_ARG_ENABLE([superlu_dist],
    [AS_HELP_STRING([--enable-superlu_dist],[Enable superlu_dist tests (default=yes)])],[],
@@ -604,6 +610,12 @@ echo    Libraries:
        echo '    'Scipy..................... : enabled
     else
        echo '    'Scipy..................... : disabled
+    fi
+
+    if test "x$enable_superlu" = "xyes"; then
+       echo '    'Superlu................... : enabled
+    else
+       echo '    'Superlu................... : disabled
     fi
 
     if test "x$enable_superlu_dist" = "xyes"; then

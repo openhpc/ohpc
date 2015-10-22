@@ -23,7 +23,7 @@ fi
 # test compilers
 
 AC_PROG_CC
-AC_PROG_FC
+AC_PROG_F77
 AC_PROG_CXX
 # Add the suffix to CC for shared linking.  Can't just set as an option
 # because it must be first.
@@ -36,6 +36,7 @@ AC_C_CONST
 # Define include path and library linkage from environment variables
 # which should be provided via module loads. 
 CFLAGS="-I${SUPERLU_INC} ${CFLAGS}"
+FFLAGS="-I${SUPERLU_INC} ${FFLAGS}"
 LDFLAGS="-L${SUPERLU_LIB} -lsuperlu -L${OPENBLAS_LIB} -lopenblas ${LDFLAGS}"
 
 # Set subdirectories
@@ -53,11 +54,11 @@ echo OHPC MPI toolchain............. : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
 echo C++ compiler.................. : `which $CXX`
-echo Fortran compiler ............. : `which $FC`
+echo Fortran compiler ............. : `which $F77`
 echo 
 echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
-echo Fortran compiler flags........ : $FCFLAGS
+echo Fortran compiler flags........ : $FFLAGS
 echo LDFLAGS linker flags.......... : $LDFLAGS
 echo 
 echo '-------------------------------------------------------------------------------------------------------------'

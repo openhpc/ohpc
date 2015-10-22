@@ -30,3 +30,13 @@ ARGS=null
     run_serial_binary $EXE
     assert_success
 }
+
+@test "[$testname] F77 test runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    EXE=./superlu
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_serial_binary "$EXE < g20.rua"
+    assert_success
+}

@@ -167,6 +167,10 @@ if SCIPY_ENABLED
    TESTS += dev-tools/scipy/ohpc-tests/test_scipy
 endif
 
+if SUPERLU_ENABLED
+   TESTS += libs/superlu/ohpc-tests/test_superlu
+endif
+
 if SUPERLU_DIST_ENABLED
    TESTS += libs/superlu_dist/ohpc-tests/test_superlu_dist
 endif
