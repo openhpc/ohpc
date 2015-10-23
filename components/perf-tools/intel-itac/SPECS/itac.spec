@@ -83,7 +83,7 @@ EOF
 # Parse shell script to derive module settings
 
 %{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/bin/mpsvars.sh >> %{buildroot}/%{OHPC_ADMIN}/modulefiles/clck/%{version}
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/bin/mpsvars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 ###setenv          ITAC_DIR        %{package_target}
 ###setenv          ITAC_BIN        %{package_target}/bin
