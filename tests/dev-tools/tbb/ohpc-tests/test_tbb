@@ -33,7 +33,7 @@ for compiler in $COMPILER_FAMILIES ; do
     make clean >& /dev/null || exit 1
     make check              || exit 1
 
-    save_logs_compiler_family tests $compiler
+    save_logs_compiler_family tests/test_all $compiler
 
     make clean >& /dev/null
 done
