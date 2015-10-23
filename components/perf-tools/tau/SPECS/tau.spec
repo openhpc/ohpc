@@ -122,7 +122,7 @@ export OMP_LIB=gomp
 %endif
 %if %{compiler_family} == intel
 export fcomp=mpiifort
-export OMP_LIB=iomp
+export OMP_LIB=iomp5
 %endif
 
 %if %{mpi_family} == impi
