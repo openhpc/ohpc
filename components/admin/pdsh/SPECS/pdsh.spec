@@ -53,7 +53,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #
 #  Definition of default packages to build on various platforms:
 # 
-%define _defaults ssh exec readline pam slurm
+%define _defaults ssh exec readline pam slurm mrsh
 
 #   LLNL system defaults
 %if 0%{?chaos}
