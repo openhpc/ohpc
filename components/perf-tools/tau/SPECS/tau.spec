@@ -118,11 +118,9 @@ module load pdtoolkit
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
-export OMP_LIB=gomp
 %endif
 %if %{compiler_family} == intel
 export fcomp=mpiifort
-export OMP_LIB=iomp
 %endif
 
 %if %{mpi_family} == impi
@@ -154,7 +152,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -l$OMP_LIB -L/tmp%{install_path}/lib" 
+	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
 
 
 make install
