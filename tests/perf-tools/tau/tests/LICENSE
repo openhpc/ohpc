@@ -1,0 +1,30 @@
+*****************************************************************************
+**			Tuning and Analysis Utilities			   **
+**			http://tau.uoregon.edu                             **
+*****************************************************************************
+**    Copyright 1997-2011						   **
+**    Department of Computer and Information Science, University of Oregon **
+**    Research Center Juelich, ZAM Germany		  		   **
+**    Advanced Computing Laboratory, Los Alamos National Laboratory        **
+*****************************************************************************
+**	
+**  Permission to use, copy, modify, and distribute this software and its
+**  documentation for any purpose and without fee is hereby granted,
+**  provided that the above copyright notice appear in all copies and that
+**  both that copyright notice and this permission notice appear in
+**  supporting documentation, and that the name of University of Oregon (UO)
+**  Research Center Juelich, (ZAM) and Los Alamos National Laboratory (LANL) 
+**  not be used in advertising or publicity pertaining to distribution of
+**  the software without specific, written prior permission.  The
+**  University of Oregon, ZAM and LANL make no representations about the
+**  suitability of this software for any purpose.  It is provided "as is"
+**  without express or implied warranty.
+**
+**  UO, ZAM AND LANL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, 
+**  INCLUDING , AND ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, 
+**  IN NO EVENT SHALL THE UNIVERSITY OF OREGON, ZAM OR LANL BE LIABLE FOR
+**  ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
+**  RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
+**  CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+**  CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*****************************************************************************
