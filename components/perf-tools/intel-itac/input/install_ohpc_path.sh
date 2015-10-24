@@ -45,7 +45,7 @@ for rpm in `ls $input_dir/rpm/*.rpm`; do
 done
 
 if [ $TARBALL -eq 1 ];then
-    tar cfz intel-itac-%{delim}-$version.tar.gz ${pubdir}/itac/$version
+    tar cfz intel-itac-${delim}-$version.tar.gz ${pubdir}/itac/$version
 fi
 
 if [ $POST_UNINSTALL -eq 1 ];then
