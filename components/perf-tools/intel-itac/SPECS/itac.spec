@@ -91,9 +91,11 @@ EOF
 echo "before"
 printenv
 
-. %{buildroot}/%{package_target}/bin/itacvars.sh
+chroot %{buildroot}
+. %{package_target}/bin/itacvars.sh
 echo "after"
 printenv
+exit
 
 %{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/bin/itacvars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version} || cat %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 %{__sed} -i 's!%{buildroot}!!g' %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
