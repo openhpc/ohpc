@@ -91,8 +91,8 @@ EOF
 echo "before"
 printenv
 
-chroot %{buildroot}
-. %{package_target}/bin/itacvars.sh
+ls %{buildroot}/%{package_target}/bin/itacvars.sh
+. %{buildroot}/%{package_target}/bin/itacvars.sh
 echo "after"
 printenv
 exit
