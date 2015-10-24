@@ -91,7 +91,7 @@ EOF
 echo "before"
 printenv
 
-. %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+. %{buildroot}/%{package_target}/bin/itacvars.sh
 echo "after"
 printenv
 
