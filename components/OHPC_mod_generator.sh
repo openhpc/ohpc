@@ -62,22 +62,28 @@ done
 echo " "
 echo "# machine generated from `basename $inFile`"
 echo " "
-for var in `cat $OUTFILE`; do 
+
+while read var ; do 
     varName=`echo $var | awk -F = '{print $1}'` || exit 1
     varDef=`echo $var | awk -F = '{print $2}'`  || exit 1
 
-    echo $varName | grep -q PATH
+    echo $varName | egrep -q "PATH"
 
     if [ $? -eq 0 ];then
         printf "%-13s %-${maxLen}s %s\n" "prepend-path" $varName $varDef
     else
-        printf "%-13s %-${maxLen}s %s\n" "setenv" $varName $varDef
+        # check if this variable needs extra quoting (say because it includes spaces)
+
+        echo "$varDef" | egrep -q '\s'
+        if [ $? -eq 0 ];then
+            printf "%-13s %-${maxLen}s \"%s\"\n" "setenv" $varName "$varDef"
+        else
+            printf "%-13s %-${maxLen}s %s\n" "setenv" $varName "$varDef"
+        fi
     fi
-done
+done < $OUTFILE
 
 echo " "
 echo "# end of machine generated"
 echo " "
 
-rm $TMPFILE
-rm $OUTFILE
