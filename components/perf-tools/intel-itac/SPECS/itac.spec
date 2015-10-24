@@ -78,6 +78,10 @@ module-whatis "URL: https://software.intel.com/en-us/intel-trace-analyzer"
 
 set     version                 %{version}
 
+setenv          ITAC_DIR        %{package_target}
+setenv          ITAC_BIN        %{package_target}/bin
+setenv          ITAC_LIB        %{package_target}/lib
+
 EOF
 
 # Parse shell script to derive module settings
@@ -85,9 +89,7 @@ EOF
 %{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
 %{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/bin/mpsvars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
-###setenv          ITAC_DIR        %{package_target}
-###setenv          ITAC_BIN        %{package_target}/bin
-###setenv          ITAC_LIB        %{package_target}/lib
+
 ###prepend-path    PATH            %{package_target}/bin
 ###prepend-path    MANPATH         %{package_target}/man
 ###prepend-path    LD_LIBRARY_PATH %{package_target}/mic/slib:%{package_target}/intel64/slib:%{package_target}/lib
