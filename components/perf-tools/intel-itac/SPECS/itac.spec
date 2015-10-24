@@ -88,7 +88,7 @@ EOF
 
 %{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
 %{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/bin/mpsvars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
-%{__sed} 's!%{buildroot}!!g' %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+%{__sed} -i 's!%{buildroot}!!g' %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 
 ###prepend-path    PATH            %{package_target}/bin
