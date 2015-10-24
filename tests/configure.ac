@@ -107,7 +107,7 @@ AM_CONDITIONAL(INSPECTOR_ENABLED,test "x$enable_inspector" = "xyes" )
 # Intel-ITAC
 AC_ARG_ENABLE([itac],
    [AS_HELP_STRING([--enable-itac],[Enable Intel Trace Analyzer/Collector tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_itac,yes)])
+   [AX_OPTION_DEFAULT(type=short,enable_itac,yes)])
 AM_CONDITIONAL(ITAC_ENABLED,test "x$enable_itac" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Intel-Vtune

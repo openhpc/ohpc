@@ -61,7 +61,6 @@ setup() {
 }
 
 @test "[$testname] Verify availability/execution of mps binary" {
-    skip "Unable to get valid license wihout setting environment variable"
     run which mps
     assert_success
 
