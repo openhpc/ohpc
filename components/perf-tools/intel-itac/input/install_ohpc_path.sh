@@ -4,6 +4,7 @@
 
 delim=ohpc
 pubdir=/opt/${delim}/pub
+modscanner=../../../OHPC_mod_generator.sh
 
 version=9.1.1.017
 
@@ -43,6 +44,8 @@ for rpm in `ls $input_dir/rpm/*.rpm`; do
     fi
 
 done
+
+$modscanner ${pubdir}/itac/$version/bin/itacvars.sh > modfile-$delim.input
 
 if [ $TARBALL -eq 1 ];then
     tar cfz intel-itac-${delim}-$version.tar.gz ${pubdir}/itac/$version
