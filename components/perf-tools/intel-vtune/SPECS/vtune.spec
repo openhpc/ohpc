@@ -79,12 +79,13 @@ set     version                 %{version}
 prepend-path    VTUNE_DIR       %{package_target}
 prepend-path    VTUNE_BIN       %{package_target}/bin64
 prepend-path    VTUNE_LIB       %{package_target}/lib64
-prepend-path    PATH            %{package_target}/bin64
-prepend-path    MANPATH         %{package_target}/man/
 
+prepend-path    MANPATH         %{package_target}/man/
 setenv          LC_ALL C
-setenv          VTUNE_AMPLIFIER_XE_2015_DIR %{package_target}
 EOF
+
+# Append with machine-generated contribution for modulefile settings
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/vtune/.version.%{version}
 #%Module1.0#####################################################################

@@ -1,0 +1,8 @@
+ 
+# machine generated from amplxe-vars.sh
+ 
+setenv        VTUNE_AMPLIFIER_XE_2016_DIR  /opt/ohpc/pub/vtune_amplifier/16.1.0.424694
+prepend-path  PATH                         /opt/ohpc/pub/vtune_amplifier/16.1.0.424694/bin64
+ 
+# end of machine generated
+ 
