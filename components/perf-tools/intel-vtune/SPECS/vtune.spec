@@ -11,12 +11,12 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-%define compiler_family intel
+%define pname vtune
 
 Summary:   Intel(R) VTune(TM) Amplifier XE
-Name:      intel-vtune%{PROJ_DELIM}
+Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   16.1.0.424694
-Source0:   intel-vtune-amplifier%{PROJ_DELIM}-%{version}.tar.gz
+Source0:   intel-%{pname}-amplifier%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   modfile-ohpc.input
 Release:   1
@@ -54,8 +54,8 @@ cd %{buildroot}
 cd -
 
 # OpenHPC module file for Intel Vtune
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/vtune
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/vtune/%{version}
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -88,7 +88,7 @@ EOF
 # Append with machine-generated contribution for modulefile settings
 %{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/vtune/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
 EOF
