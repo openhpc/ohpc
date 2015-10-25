@@ -11,7 +11,7 @@ release=advisor_xe_2016
 relocate_ver=advisor_xe_20$version
 
 match_keys='intel-advisor-xe'
-skip_keys='i486.rpm$'
+skip_keys='i486.rpm$|pset'
 INSTALL=1
 POST_UNINSTALL=1
 TAR=1
@@ -42,7 +42,7 @@ for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do
 done
 
 # generate relevant module file input
-$modscanner ${pubdir}/itac/$version/bin/itacvars.sh > modfile-$delim.input
+$modscanner ${pubdir}/advisor/$version/advixe-vars.sh > modfile-$delim.input
 
 if [ $TAR -eq 1 ];then
     tar cfz intel-advisor-${delim}-$version.tar.gz ${pubdir}/advisor/$version
