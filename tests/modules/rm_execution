@@ -41,7 +41,7 @@ fi
     assert_success
 }
 
-@test "[module] module commands available ($rm)" {
+@test "[modules] module commands available in RMS job ($rm)" {
     module purge || exit 1
     export MODULEPATH=./example-modules:$MODULEPATH
 
@@ -49,7 +49,7 @@ fi
     assert_success
 }
 
-@test "[module] module load propagates thru RMS ($rm)" {
+@test "[modules] module load propagates thru RMS ($rm)" {
 
     module purge || exit 1
     export MODULEPATH=./example-modules:$MODULEPATH
@@ -66,3 +66,4 @@ fi
     assert_success
 
 }
+
