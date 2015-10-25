@@ -281,8 +281,8 @@ be updated with a copy of the configuration as follows:
 # Add Network Time Protocol (NTP) support
 [master](*\#*) (*\chrootinstall*) ntp
 
-# Include OpenHPC default modules user environment
-[master](*\#*) (*\chrootinstall*) lmod-defaults-intel-ohpc
+# Include modules user environment
+[master](*\#*) (*\chrootinstall*) lmod-ohpc
 
 # Enable ssh access 
 [master](*\#*) chroot $CHROOT systemctl enable sshd.service
