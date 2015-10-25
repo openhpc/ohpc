@@ -101,7 +101,7 @@ AM_CONDITIONAL(VALGRIND_ENABLED,test "x$enable_valgrind" = "xyes" )
 # Intel-inspector
 AC_ARG_ENABLE([inspector],
    [AS_HELP_STRING([--enable-inspector],[Enable Intel Inspector tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_inspector,yes)])
+   [AX_OPTION_DEFAULT(type=short,enable_inspector,yes)])
 AM_CONDITIONAL(INSPECTOR_ENABLED,test "x$enable_inspector" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Intel-ITAC
