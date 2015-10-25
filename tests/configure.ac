@@ -396,12 +396,6 @@ echo    User Environment:
        echo '    'Munge..................... : disabled
     fi
 
-    if test "x$enable_apps" = "xyes"; then
-       echo '    'Apps...................... : enabled
-    else
-       echo '    'Apps...................... : disabled
-    fi
-
     if test "x$enable_compilers" = "xyes"; then
        echo '    'Compilers................. : enabled
     else
@@ -628,6 +622,14 @@ echo    Libraries:
        echo '    'Trilinos ................. : enabled
     else
        echo '    'Trilinos.................. : disabled
+    fi
+
+echo    Apps:
+
+    if test "x$enable_apps" = "xyes"; then
+       echo '    'Apps...................... : enabled
+    else
+       echo '    'Apps...................... : disabled
     fi
 
 fi
