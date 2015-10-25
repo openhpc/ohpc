@@ -233,7 +233,7 @@ foreach my $category (@ohpcCategories) {
  	    }
  	    
  	    print OUT "\\\\ \\hline \n";
- 	    print OUT "% <-- end entry for %name_base\n\n";
+ 	    print OUT "% <-- end entry for $name_base\n\n";
  	}
 
 	$i++;
