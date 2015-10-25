@@ -18,6 +18,7 @@ Name:      intel-vtune%{PROJ_DELIM}
 Version:   16.1.0.424694
 Source0:   intel-vtune-amplifier%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
+Source2:   modfile-ohpc.input
 Release:   1
 License:   Copyright (C) 2011-2015 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
