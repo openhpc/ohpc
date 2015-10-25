@@ -1,0 +1,42 @@
+\small
+\begin{tabularx}{\textwidth}{c|X|X}
+\toprule
+{\bf Command} & {\bf PBS} & {\bf SLURM}  \\
+\midrule
+
+Batch job submission &
+qsub [job script] &
+sbatch [job script]
+\\ \hline
+
+Interactive job launch &
+qsub -I &
+salloc + srun
+\\ \hline
+
+Job deletion &
+qdel [job id] &
+scancel [job id]
+\\ \hline
+
+Queue status &
+qstat -q &
+sinfo
+\\ \hline
+
+Job Status &
+qstat -f [job id] &
+scontrol show job [job id]
+\\ \hline
+
+Node Status &
+pbsnodes [node name] &
+scontrol show node [node id]
+\\ \hline
+
+\bottomrule
+\end{tabularx}
+
+
+%\end{table}
+
