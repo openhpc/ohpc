@@ -176,9 +176,9 @@ run_serial_binary () {
 
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
 	if [ -n "$output_file" ];then
-	    salloc -n 1 -N 1 -t $timeout $EXE "$@" >& $output_file
+	    srun -n 1 -N 1 -t $timeout $EXE "$@" >& $output_file
 	else
-	    salloc -n 1 -N 1 -t $timeout $EXE "$@"
+	    srun -n 1 -N 1 -t $timeout $EXE "$@"
 	fi
 	return $?
     else
