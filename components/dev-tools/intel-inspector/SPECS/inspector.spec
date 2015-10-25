@@ -18,6 +18,7 @@ Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   16.1.0.423441
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
+Source2:   modfile-ohpc.input
 Release:   1
 License:   Copyright (C) 2014 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
@@ -81,10 +82,11 @@ setenv          INSPECTOR_DIR   %{package_target}
 setenv          INSPECTOR_BIN   %{package_target}/bin64
 setenv          INSPECTOR_LIB   %{package_target}/lib64
 prepend-path    MANPATH         %{package_target}/man 
-prepend-path    PATH            %{package_target}/bin64
-prepend-path    LD_LIBRARY_PATH %{package_target}/lib64
-
 EOF
+
+# Append with machine-generated contribution for modulefile settings
+
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
