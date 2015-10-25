@@ -140,7 +140,7 @@ rtxt=./survey.txt
     assert_success
 
     # launch data collection
-    run run_serial_binary -t $CMD_TIMEOUT inspxe-cl -collect mi3 -result-dir $rdir $exe
+    run timeout 20s inspxe-cl -collect mi3 -result-dir $rdir $exe
     assert_success
 
     # verify tracing file
@@ -148,7 +148,7 @@ rtxt=./survey.txt
     assert_success
 
     # generate report
-    run run_serial_binary -t $CMD_TIMEOUT inspxe-cl -report=summary -r=$rdir -report-output=$rtxt
+    run timeout 20s inspxe-cl -report=summary -r=$rdir -report-output=$rtxt
     assert_success
 
     # verify report file
