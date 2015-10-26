@@ -110,7 +110,7 @@ EOF
 # Parse shell script to derive module settings
 
 %{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}}/compilers_and_libraries_%{psutio_ver}/linux/mpi/bin64/mpivars.sh >> %{buildroot}/%{OHPC_MODULEFILES}/intel/impi/%{version}
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/bin64/mpivars.sh >> %{buildroot}/%{OHPC_MODULEFILES}/intel/impi/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi/.version.%{version}
 #%Module1.0#####################################################################
