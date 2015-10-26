@@ -31,3 +31,33 @@ application interactively through the resource manager, execute the following:
     --> Process #   3 of   8 is alive. -> c1
     --> Process #   7 of   8 is alive. -> c2
 \end{lstlisting}
+
+Alternatively, a simple batch script can be written and submitted to the
+scheduler using sbatch to run when nodes become available. 
+
+\begin{lstlisting}[language=bash,keywords={}]
+[test@master ~]$ cat hello.script
+#!/bin/bash
+#SBATCH -J hi # Job name
+#SBATCH -o job.%j.out # Name of stdout output file (%j expands to jobId)
+#SBATCH -N 2 # Total number of nodes requested (16 cores/node)
+#SBATCH -n 8 # Total number of mpi tasks requested
+#SBATCH -t 01:30:00 # Run time (hh:mm:ss) - 1.5 hours
+
+prun ./hello
+[test@master ~]$ sbatch hello.script
+Submitted batch job 339
+[test@master ~]$ cat job.339.out
+[prun] Master compute host = c1
+[prun] Launch cmd = mpiexec.hydra -bootstrap slurm hostname
+ Hello, world (8 procs total)
+    --> Process #   0 of   8 is alive. -> c1
+    --> Process #   4 of   8 is alive. -> c2
+    --> Process #   1 of   8 is alive. -> c1
+    --> Process #   5 of   8 is alive. -> c2
+    --> Process #   2 of   8 is alive. -> c1
+    --> Process #   6 of   8 is alive. -> c2
+    --> Process #   3 of   8 is alive. -> c1
+    --> Process #   7 of   8 is alive. -> c2
+\end{lstlisting}
+
