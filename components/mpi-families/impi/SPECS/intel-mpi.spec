@@ -18,7 +18,7 @@ Name:      intel-mpi%{PROJ_DELIM}
 Version:   5.1.1.109
 Source0:   intel-impi%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_mod_generator.sh
+Source2:   modfile-ohpc.input
 Release:   1
 License:   Intel
 URL:       https://software.intel.com/en-us/intel-mpi-library
@@ -95,7 +95,6 @@ module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
 module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
 set     version                 %{version}
-
 setenv          MPI_DIR         %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/intel-impi
 
@@ -107,9 +106,8 @@ prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstu
 family "MPI"
 EOF
 
-# Parse shell script to derive module settings
-%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/bin64/mpivars.sh >> %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi/%{version}
+# Append with machine-generated contribution for modulefile settings
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULEFILES}/intel/impi/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi/.version.%{version}
 #%Module1.0#####################################################################
@@ -141,16 +139,15 @@ module-whatis "Category: library, runtime support"
 module-whatis "Description: Intel MPI Library (C/C++/Fortran for x86_64)"
 module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
-set     version                 %{version}
-
+set             version         %{version}
 setenv          MPI_DIR         %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
 
 family "MPI"
 EOF
 
-# Parse shell script to derive module settings
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/bin64/mpivars.sh >> %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi/%{version}
+# Append with machine-generated contribution for modulefile settings
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULEFILES}/intel/impi/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi/.version.%{version}
 #%Module1.0#####################################################################

@@ -4,20 +4,21 @@
 
 delim=ohpc
 pubdir=/opt/${delim}/pub
+modscanner=../../../OHPC_mod_generator.sh
 
 version=5.1.1.109
 input_dir=l_mpi_p_5.1.1.109
 
 INSTALL=1
-TARBALL=1
+TARBALL=0
 POST_UNINSTALL=1
-DEVEL=1
+DEVEL=0
 
 installed_RPMS=""
 
 match_keys='intel-mpi'
 skip_keys='i486.rpm$'
-runtime_keys='intel-mpi-rt|intel-mpirt'
+runtime_keys='intel-mpi-rt|intel-mpirt|pset'
 
 for rpm in `ls $input_dir/rpm/*.rpm`; do
 
@@ -60,6 +61,9 @@ for rpm in `ls $input_dir/rpm/*.rpm`; do
     fi
 
 done
+
+input=`find ${pubdir}/compiler/intel/ -name mpivars.sh`
+$modscanner $input > modfile-$delim.input
 
 if [ $TARBALL -eq 1 ];then
     if [ $DEVEL -eq 1 ];then

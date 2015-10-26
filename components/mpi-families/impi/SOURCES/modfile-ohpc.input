@@ -1,0 +1,10 @@
+ 
+# machine generated from mpivars.sh
+ 
+prepend-path  MANPATH          /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.0.109/linux/mpi/man:/usr/local/share/man:/usr/share/man
+prepend-path  LD_LIBRARY_PATH  /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.0.109/linux/mpi/intel64/lib
+prepend-path  PATH             /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.0.109/linux/mpi/intel64/bin
+setenv        I_MPI_ROOT       /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.0.109/linux/mpi
+ 
+# end of machine generated
+ 
