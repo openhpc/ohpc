@@ -108,9 +108,8 @@ family "MPI"
 EOF
 
 # Parse shell script to derive module settings
-
 %{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/bin64/mpivars.sh >> %{buildroot}/%{OHPC_MODULEFILES}/intel/impi/%{version}
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/bin64/mpivars.sh >> %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi/.version.%{version}
 #%Module1.0#####################################################################
@@ -144,16 +143,14 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
 set     version                 %{version}
 
-setenv          I_MPI_ROOT      %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi
 setenv          MPI_DIR         %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64
-prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin
-prepend-path    MANPATH         %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/man
-prepend-path    LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/lib
-
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
 
 family "MPI"
 EOF
+
+# Parse shell script to derive module settings
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/bin64/mpivars.sh >> %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi/.version.%{version}
 #%Module1.0#####################################################################
