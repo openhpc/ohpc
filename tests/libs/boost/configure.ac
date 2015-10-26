@@ -39,7 +39,7 @@ AC_CONFIG_FILES(Makefile tests/Makefile \
                          tests/multi_array/test/Makefile \
                          tests/accumulators/test/Makefile \
                          tests/random/test/Makefile \
-                         tests/mkl-ublas/test/Makefile \
+                         tests/numeric/test/Makefile \
                          )
 
 # Configure
