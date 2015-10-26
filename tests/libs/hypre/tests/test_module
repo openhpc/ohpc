@@ -8,6 +8,13 @@ if [ -s ./TEST_ENV ];then
     source ./TEST_ENV
 fi
 
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
 PKG=HYPRE
 module=hypre
 testname=libs/HYPRE
@@ -21,7 +28,7 @@ fi
 
 check_rms
 
-@test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     module list $module | grep "1) $module" >& .cmd_output || exit 1
     run grep $module .cmd_output 
     assert_success
@@ -34,7 +41,7 @@ check_rms
     rm -f .cmd_output
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     DIR=${PKG}_DIR
     if [ -z ${!DIR} ];then
         flunk "${PKG}_DIR directory not defined"
@@ -45,7 +52,7 @@ check_rms
     fi 
 }
 
-@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     BIN=${PKG}_BIN
     if [ -z ${!BIN} ];then
         flunk "${PKG}_BIN directory not defined"
@@ -61,7 +68,7 @@ check_rms
 # Lib Tests
 # ----------
 
-@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
@@ -73,7 +80,7 @@ check_rms
     fi 
 }
 
-@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
@@ -85,7 +92,7 @@ check_rms
     fi 
 }
 
-@test "[$testname] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
@@ -101,7 +108,7 @@ check_rms
 # Include Tests
 # --------------
 
-@test "[$testname] Verify module ${PKG}_INC is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify module ${PKG}_INC is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     INC=${PKG}_INC
 
     if [ -z ${!INC} ];then
@@ -113,7 +120,7 @@ check_rms
     fi 
 }
 
-@test "[$testname] Verify header file is present in ${PKG}_INC ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify header file is present in ${PKG}_INC ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     INC=${PKG}_INC
 
     if [ -z ${!INC} ];then
@@ -125,7 +132,7 @@ check_rms
     fi 
 }
 
-@test "[$testname] Sample job ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Sample job ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -x "ex1" ];then
         flunk "ex1 binary not available"
     fi
@@ -133,4 +140,3 @@ check_rms
     run_mpi_binary ./ex1 "atest" 1 1
     assert_success
 }
-
