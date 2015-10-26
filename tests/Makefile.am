@@ -56,10 +56,19 @@ if RMS_HARNESS_ENABLED
    TESTS += rms-harness/ohpc-tests/test_mpi_families
 endif
 
-if APPS_ENABLED
+if MINIFE_ENABLED
    TESTS += apps/miniFE/ohpc-tests/test_miniFE
+endif
+
+if MINIDFT_ENABLED
    TESTS += apps/miniDFT/ohpc-tests/test_miniDFT
+endif
+
+if HPCG_ENABLED
    TESTS += apps/hpcg/run
+endif
+
+if PRK_ENABLED
    TESTS += apps/prk/ohpc-tests/test_PRK
 endif
 

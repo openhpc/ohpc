@@ -128,12 +128,6 @@ AC_ARG_ENABLE([mpi],
    [AX_OPTION_DEFAULT(type=short,enable_mpi,yes)])
 AM_CONDITIONAL(MPI_ENABLED,test "x$enable_mpi" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# Apps
-AC_ARG_ENABLE([apps],
-   [AS_HELP_STRING([--enable-apps],[Enable application oriented tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_apps,yes)])
-AM_CONDITIONAL(APPS_ENABLED,test "x$enable_apps" = "xyes" ) 
-#------------------------------------------------------------------------------------------
 # NetCDF
 AC_ARG_ENABLE([netcdf],
    [AS_HELP_STRING([--enable-netcdf],[Enable NetCDF tests (default=yes)])],[],
@@ -313,6 +307,30 @@ AC_ARG_ENABLE([munge],
    [AS_HELP_STRING([--enable-munge],[Enable munge authentication tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=short,enable_munge,yes)])
 AM_CONDITIONAL(USERENV_ENABLED,test "x$enable_munge" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# MiniFE
+AC_ARG_ENABLE([minife],
+   [AS_HELP_STRING([--enable-minife],[Enable MiniFE tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_minife,yes)])
+AM_CONDITIONAL(MINIFE_ENABLED,test "x$enable_minife" = "xyes" )
+#------------------------------------------------------------------------------------------
+# MiniDFT
+AC_ARG_ENABLE([minidft],
+   [AS_HELP_STRING([--enable-minidft],[Enable MiniDFT tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_minidft,yes)])
+AM_CONDITIONAL(MINIDFT_ENABLED,test "x$enable_minidft" = "xyes" )
+#------------------------------------------------------------------------------------------
+# HPCG
+AC_ARG_ENABLE([hpcg],
+   [AS_HELP_STRING([--enable-hpcg],[Enable HPCG tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_hpcg,yes)])
+AM_CONDITIONAL(HPCG_ENABLED,test "x$enable_hpcg" = "xyes" )
+#------------------------------------------------------------------------------------------
+# PRK
+AC_ARG_ENABLE([prk],
+   [AS_HELP_STRING([--enable-prk],[Enable PRK tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_prk,yes)])
+AM_CONDITIONAL(PRK_ENABLED,test "x$enable_prk" = "xyes" )
 #------------------------------------------------------------------------------------------
 
 AC_OUTPUT( Makefile 
@@ -626,10 +644,28 @@ echo    Libraries:
 
 echo    Apps:
 
-    if test "x$enable_apps" = "xyes"; then
-       echo '    'Apps...................... : enabled
+    if test "x$enable_minife" = "xyes"; then
+       echo '    'MiniFE.................... : enabled
     else
-       echo '    'Apps...................... : disabled
+       echo '    'MiniFE.................... : disabled
+    fi
+
+    if test "x$enable_minidft" = "xyes"; then
+       echo '    'MiniDFT................... : enabled
+    else
+       echo '    'MiniDFT................... : disabled
+    fi
+
+    if test "x$enable_hpcg" = "xyes"; then
+       echo '    'HPCG...................... : enabled
+    else
+       echo '    'HPCG...................... : disabled
+    fi
+
+    if test "x$enable_prk" = "xyes"; then
+       echo '    'PRK....................... : enabled
+    else
+       echo '    'PRK....................... : disabled
     fi
 
 fi
