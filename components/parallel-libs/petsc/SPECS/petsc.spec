@@ -61,7 +61,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
-License:        MIT
+License:        BSD-2
 Group:          ohpc/parallel-libs
 Version:        3.6.1
 Release:        0
