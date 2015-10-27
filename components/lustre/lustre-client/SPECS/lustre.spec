@@ -156,7 +156,7 @@ Name: %{lustre_name}%{PROJ_DELIM}
 Version: %{version}
 Release: %{fullrelease}
 License: GPL
-Group: fsp/lustre
+Group:   ohpc/lustre
 #Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
 Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
