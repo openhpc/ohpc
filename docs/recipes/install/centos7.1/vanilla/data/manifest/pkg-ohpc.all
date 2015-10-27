@@ -224,7 +224,6 @@ lmod-defaults-gnu-openmpi-ohpc 1.2 None ohpc/admin OpenHPC default login environ
 lmod-defaults-intel-impi-ohpc 1.2 None ohpc/admin OpenHPC default login environments
 lmod-defaults-intel-mvapich2-ohpc 1.2 None ohpc/admin OpenHPC default login environments
 lmod-defaults-intel-openmpi-ohpc 1.2 None ohpc/admin OpenHPC default login environments
-lustre-client-ohpc 2.7.0 https://wiki.hpdd.intel.com/ ohpc/lustre Lustre File System
 nagios-devel-ohpc 4.1.1 http://www.nagios.org/ Applications/System Provides include files that Nagios-related applications may compile against
 nagios-plugins-apt-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_apt
 nagios-plugins-dbi-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_dbi
