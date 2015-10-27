@@ -17,7 +17,7 @@ Summary:   The GNU Portable Library Tool
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2.4.6
 Release:   1
-License:   GPLv2+ and LGPLv2+ and GFDL
+License:   GPLv2
 Group:     ohpc/dev-tools
 URL:       http://www.gnu.org/software/libtool/
 DocDir:    %{OHPC_PUB}/doc/contrib

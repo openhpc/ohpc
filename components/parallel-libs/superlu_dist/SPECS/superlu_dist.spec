@@ -81,7 +81,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        4.1
 Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
-License:        LGPL-2.1
+License:        BSD-3-Clause
 Group:          ohpc/parallel-libs
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Patch0:         superlu_dist-4.1-sequence-point.patch

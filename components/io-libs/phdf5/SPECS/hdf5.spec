@@ -80,7 +80,7 @@ Summary:   A general purpose library and file format for storing scientific data
 Name:      p%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.8.15
 Release:   1
-License:   BSD-style
+License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     ohpc/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib

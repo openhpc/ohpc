@@ -59,7 +59,7 @@ This package holds the commandline tools for mxml.
 %package -n %library_name
 #
 Summary:        Shared library for mxml
-License:        LGPL-2.1+
+License:        Mini-XML License
 Group:          System/Libraries
 
 %description -n %library_name

@@ -22,7 +22,7 @@ Name:    %{pname}%{PROJ_DELIM}
 Version: 2.9.6
 Release: 1%{?dist}
 Summary:   Easy-to-use IPMI server management utilities
-License:   BSD
+License:   BSD 3-clause
 Group:     ohpc/distro-packages
 Source:    %{pname}-%{version}.tar.gz
 URL:       http://ipmiutil.sourceforge.net

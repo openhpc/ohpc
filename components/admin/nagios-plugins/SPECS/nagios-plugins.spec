@@ -27,7 +27,7 @@ Summary: Host/service/network monitoring program plugins for Nagios
 DocDir:  %{OHPC_PUB}/doc/contrib
 Group: ohpc/admin
 
-License: GPLv2+
+License: GPLv3
 URL: https://www.nagios-plugins.org/
 Source0: http://www.nagios-plugins.org/download/nagios-plugins-%{version}.tar.gz
 Source1: nagios-plugins.README.Fedora

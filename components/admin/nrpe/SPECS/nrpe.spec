@@ -26,7 +26,7 @@ Release: 2%{?dist}
 Summary: Host/service/network monitoring agent for Nagios
 
 Group: Applications/System
-License: GPLv2
+License: GPLv2+
 URL: http://www.nagios.org
 DocDir: %{OHPC_PUB}/doc/contrib
 Source0: http://downloads.sourceforge.net/nagios/nrpe-%{version}.tar.gz
