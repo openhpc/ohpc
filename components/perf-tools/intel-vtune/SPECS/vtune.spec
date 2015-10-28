@@ -87,7 +87,7 @@ EOF
 
 # Append with machine-generated contribution for modulefile settings
 %{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
-
+                       
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
