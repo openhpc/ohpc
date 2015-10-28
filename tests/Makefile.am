@@ -57,11 +57,11 @@ if RMS_HARNESS_ENABLED
 endif
 
 if MINIFE_ENABLED
-   TESTS += apps/miniFE/ohpc-tests/test_miniFE
+   TESTS += apps/miniFE/ohpc-tests/test_mpi_families
 endif
 
 if MINIDFT_ENABLED
-   TESTS += apps/miniDFT/ohpc-tests/test_miniDFT
+   TESTS += apps/miniDFT/ohpc-tests/test_mpi_families
 endif
 
 if HPCG_ENABLED
@@ -69,7 +69,7 @@ if HPCG_ENABLED
 endif
 
 if PRK_ENABLED
-   TESTS += apps/prk/ohpc-tests/test_PRK
+   TESTS += apps/prk/ohpc-tests/test_mpi_families
 endif
 
 if COMPILERS_ENABLED
@@ -85,7 +85,7 @@ if R_ENABLED
 endif
 
 if MPIP_ENABLED
-   TESTS += perf-tools/mpiP/ohpc-tests/test_mpiP
+   TESTS += perf-tools/mpiP/ohpc-tests/test_mpi_families
 endif
 
 if VTUNE_ENABLED
@@ -109,15 +109,15 @@ if BOOST_MPI_ENABLED
 endif
 
 if GSL_ENABLED
-   TESTS += libs/gsl/ohpc-tests/test_gsl
+   TESTS += libs/gsl/ohpc-tests/test_compiler_families
 endif
 
 if IMB_ENABLED
-   TESTS += libs/imb/ohpc-tests/test_imb
+   TESTS += libs/imb/ohpc-tests/test_mpi_families
 endif
 
 if HDF5_ENABLED
-   TESTS += libs/hdf5/ohpc-tests/test_hdf5
+   TESTS += libs/hdf5/ohpc-tests/test_compiler_families
 endif
 
 if PHDF5_ENABLED
@@ -125,11 +125,11 @@ if PHDF5_ENABLED
 endif
 
 if HYPRE_ENABLED
-   TESTS += libs/hypre/ohpc-tests/test_hypre
+   TESTS += libs/hypre/ohpc-tests/test_mpi_families
 endif
 
 if INSPECTOR_ENABLED
-   TESTS += dev-tools/intel-inspector/ohpc-tests/test_inspector
+   TESTS += dev-tools/intel-inspector/ohpc-tests/test_compiler_families
 endif
 
 if METIS_ENABLED
@@ -137,7 +137,7 @@ if METIS_ENABLED
 endif
 
 if MUMPS_ENABLED
-   TESTS += libs/mumps/ohpc-tests/test_mumps
+   TESTS += libs/mumps/ohpc-tests/test_mpi_families
 endif
 
 if NETCDF_ENABLED
@@ -145,7 +145,7 @@ if NETCDF_ENABLED
 endif
 
 if OPENBLAS_ENABLED
-   TESTS += libs/openblas/ohpc-tests/test_openblas
+   TESTS += libs/openblas/ohpc-tests/test_compiler_families
 endif
 
 if OOM_ENABLED
@@ -157,7 +157,7 @@ if PAPI_ENABLED
 endif
 
 if PETSC_ENABLED
-   TESTS += libs/petsc/ohpc-tests/test_petsc
+   TESTS += libs/petsc/ohpc-tests/test_mpi_families
 endif
 
 if MPI_ENABLED
@@ -165,27 +165,27 @@ if MPI_ENABLED
 endif
 
 if NUMPY_ENABLED
-   TESTS += dev-tools/numpy/ohpc-tests/test_numpy
+   TESTS += dev-tools/numpy/ohpc-tests/test_mpi_families
 endif
 
 if SCALAPACK_ENABLED
-   TESTS += libs/scalapack/ohpc-tests/test_scalapack
+   TESTS += libs/scalapack/ohpc-tests/test_mpi_families
 endif
 
 if SCIPY_ENABLED
-   TESTS += dev-tools/scipy/ohpc-tests/test_scipy
+   TESTS += dev-tools/scipy/ohpc-tests/test_mpi_families
 endif
 
 if SUPERLU_ENABLED
-   TESTS += libs/superlu/ohpc-tests/test_superlu
+   TESTS += libs/superlu/ohpc-tests/test_compiler_families
 endif
 
 if SUPERLU_DIST_ENABLED
-   TESTS += libs/superlu_dist/ohpc-tests/test_superlu_dist
+   TESTS += libs/superlu_dist/ohpc-tests/test_mpi_families
 endif
 
 if TAU_ENABLED
-   TESTS += perf-tools/tau/ohpc-tests/test_tau
+   TESTS += perf-tools/tau/ohpc-tests/test_mpi_families
 endif
 
 if AUTOTOOLS_ENABLED
@@ -193,15 +193,15 @@ if AUTOTOOLS_ENABLED
 endif
 
 if TBB_ENABLED
-   TESTS += dev-tools/tbb/ohpc-tests/test_tbb
+   TESTS += dev-tools/tbb/ohpc-tests/test_compiler_families
 endif
 
 if CILK_ENABLED
-   TESTS += dev-tools/cilk/ohpc-tests/test_cilk
+   TESTS += dev-tools/cilk/ohpc-tests/test_compiler_families
 endif
 
 if TRILINOS_ENABLED
-   TESTS += libs/trilinos/ohpc-tests/test_trilinos
+   TESTS += libs/trilinos/ohpc-tests/test_mpi_families
 endif
 
 endif
