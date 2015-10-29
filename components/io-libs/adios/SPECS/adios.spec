@@ -158,6 +158,9 @@ export MPICXX=mpicxx
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
+
+rpm -ql libmxml1
+
 ./configure --prefix=%{install_path} \
 	--with-mxml=/usr \
 	--with-lustre=/usr/include/lustre \
