@@ -73,7 +73,7 @@ Source1: OHPC_macros
 Source2: OHPC_setup_compiler
 
 # Minimum Build Requires - our mxml build included devel headers in libmxml1
-BuildRequires: libmxml1 cmake zlib-devel glib2-devel
+BuildRequires: libmxml1 mxml-devel cmake zlib-devel glib2-devel
 Requires:      libmxml1
 
 # libm.a from CMakeLists
@@ -158,8 +158,6 @@ export MPICXX=mpicxx
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
-
-rpm -ql libmxml1
 
 ./configure --prefix=%{install_path} \
 	--with-mxml=/usr \
