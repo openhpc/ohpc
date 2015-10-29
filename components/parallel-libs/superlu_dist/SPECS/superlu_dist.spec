@@ -83,6 +83,7 @@ Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          ohpc/parallel-libs
+URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Patch0:         superlu_dist-4.1-sequence-point.patch
 Patch1:         superlu_dist-4.1-make.patch
