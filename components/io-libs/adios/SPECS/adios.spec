@@ -73,8 +73,8 @@ Source1: OHPC_macros
 Source2: OHPC_setup_compiler
 
 # Minimum Build Requires - our mxml build included devel headers in libmxml1
-BuildRequires: libmxml1 mxml-devel cmake zlib-devel glib2-devel
-Requires:      libmxml1
+BuildRequires: libmxml1 mxml-devel cmake zlib-devel glib2-devel bzip2-devel
+Requires:      libmxml1 mxml-devel bzip2 zlib
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
@@ -121,7 +121,7 @@ LIBSUFF=64
 %endif
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
-pushd /home/abuild/rpmbuild/SOURCES
+pushd %{_sourcedir}
 cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
 popd
 
@@ -163,7 +163,8 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-mxml=/usr \
 	--with-lustre=/usr/include/lustre \
 	--with-phdf5="$HDF5_DIR" \
-	--with-zlib=/usr/include \
+	--with-zlib=/usr \
+	--with-bzip2=/usr \
 	--with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
 
 # modify libtool script to not hardcode library paths
