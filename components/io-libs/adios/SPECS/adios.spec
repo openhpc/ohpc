@@ -35,6 +35,13 @@ BuildRequires: intel_licenses
 %endif
 %endif
 
+# Special dependencies: gnu builds leveraging MKL, therefore pull in intel runtime
+
+%if %{compiler_family} == gnu
+BuildRequires: intel-ompilers%{PROJ_DELIM}
+Requires:      intel-compilers%{PROJ_DELIM}
+%endif
+
 # MPI dependencies
 %if %{mpi_family} == impi
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
