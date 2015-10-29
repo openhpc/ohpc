@@ -194,11 +194,6 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
-# gnu builds need MKL -- can this dependency be removed?
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
 # this is clearly generated someway and shouldn't be static
 export PPATH="/lib64/python2.7/site-packages"
 export PATH=$(pwd):$PATH
