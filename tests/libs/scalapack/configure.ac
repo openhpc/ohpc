@@ -38,6 +38,7 @@ AC_PROG_CXX
 AC_LANG([C])
 AC_SEARCH_LIBS([cos],[m],[],[AC_MSG_ERROR([no cos available])])
 
+
 # Define include path and library linkage from environment variables
 # which should be provided via module loads. 
 
@@ -46,6 +47,9 @@ AC_SEARCH_LIBS([cos],[m],[],[AC_MSG_ERROR([no cos available])])
 #FCFLAGS="-I${SCALAPACK_INC} ${FCFLAGS}"
 LDFLAGS="-L${SCALAPACK_LIB} -L${OPENBLAS_LIB}"
 LIBS="-lscalapack -lopenblas $LIBS"
+
+# Test if BLAS library is enabled by default
+AC_CHECK_LIB([openblas],[dgemm_],[],[AC_MSG_ERROR([no dgemm_ available])])
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile)
