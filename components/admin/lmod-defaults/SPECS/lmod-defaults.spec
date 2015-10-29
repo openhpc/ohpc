@@ -20,6 +20,7 @@ Version:   1.2
 Release:   1
 License:   BSD
 Group:     ohpc/admin
+URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
 Source0:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
