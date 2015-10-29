@@ -17,6 +17,7 @@ Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
 Group:          ohpc/admin
+URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
