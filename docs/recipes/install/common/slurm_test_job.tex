@@ -1,10 +1,18 @@
 With the resource manager enabled for production usage, users should now be
 able to run jobs.  Recall that we added a ``test'' user on the {\em master}
-host in \S\ref{sec:add_rm} that can now be used to run an example test job.
+host in \S\ref{sec:add_rm} that can now be used to run an example job.
 \OHPC{} includes a simple ``hello-world'' MPI application in the
 \texttt{/opt/ohpc/pub/examples} directory that can be used for this quick
-compilation and execution.  To use the test account to compile and execute the
-application interactively through the resource manager, execute the following:
+compilation and execution. \OHPC{} also provides a companion job-launch
+script named \texttt{prun} that is installed in concert with the pre-packaged
+MPI toolchains. At present, \OHPC{} is unable to include the PMI process management
+server normally included within SLURM which implies that \texttt{srun} cannot be
+use for MPI job launch. Instead, native job launch mechanisms provided by the
+MPI stacks are utilized and \texttt{prun} abstracts this process for the various
+stacks to retain a single launch command. To use the test account to compile and execute the
+application interactively through the resource manager, execute the following
+(note the use of \texttt{prun} and the indication of the underlying native job
+launch mechanism):
 
 \begin{lstlisting}[language=bash,keywords={}]
 # switch to "test" user
