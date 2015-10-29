@@ -167,7 +167,7 @@ export MPICXX=mpicxx
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 ./configure --prefix=%{install_path} \
-	--with-mxml=/usr/include \
+	--with-mxml=/usr \
 	--with-lustre=/usr/include/lustre \
 	--with-phdf5="$HDF5_DIR" \
 	--with-zlib=/usr/include \
