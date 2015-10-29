@@ -141,7 +141,7 @@ to enable user access.
 [master](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules /etc/udev/rules.d/
 
 # Load IB drivers
-[master](*\#*) service rdma start
+[master](*\#*) systemctl start rdma
 \end{lstlisting}
 % end_ohpc_run
 
@@ -207,11 +207,11 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [master](*\#*) ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
-[master](*\#*) service xinetd restart
+[master](*\#*) systemctl restart xinetd
 [master](*\#*) systemctl enable mysql.service
-[master](*\#*) service mysql restart                          
+[master](*\#*) systemctl restart mysql
 [master](*\#*) systemctl enable apache2.service
-[master](*\#*) service apache2 restart
+[master](*\#*) systemctl restart apache2
 \end{lstlisting}
 %\end{verbatim}
 % end_ohpc_run
@@ -327,7 +327,7 @@ example configuration.
 [master](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
 [master](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [master](*\#*) exportfs -a
-[master](*\#*) service nfsserver restart
+[master](*\#*) systemctl restart nfsserver
 
 # Enable NTP time service on computes and identify master host as local NTP server
 [master](*\#*) chroot $CHROOT systemctl enable ntpd
@@ -493,14 +493,14 @@ host as follows:
 %% [FSP-469] [master](*\#*) odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
 %% [FSP-469] 
 %% [FSP-469] # Initialize postgres
-%% [FSP-469] [master](*\#*) service postgresql start   
+%% [FSP-469] [master](*\#*) systemctl start postgresql
 %% [FSP-469] 
 %% [FSP-469] # Update postgres configuration files using ORCM templates
 %% [FSP-469] [master](*\#*) cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
 %% [FSP-469] [master](*\#*) cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 %% [FSP-469] 
 %% [FSP-469] # Restart postgres
-%% [FSP-469] [master](*\#*) service postgresql restart 
+%% [FSP-469] [master](*\#*) systemctl restart postgresql
 %% [FSP-469] 
 %% [FSP-469] # Create ORCM DB
 %% [FSP-469] [master](*\#*) sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
@@ -601,7 +601,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 \clearpage
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
-[master](*\#*) service dhcpd restart
+[master](*\#*) systemctl restart dhcpd
 [master](*\#*) wwsh pxe update
 \end{lstlisting}
 % end_ohpc_run

@@ -137,7 +137,7 @@ to the chosen {\em master} host.
 [master](*\#*) (*\install*) infinipath-psm
 
 # Load IB drivers
-[master](*\#*) service rdma start
+[master](*\#*) systemctl start rdma
 \end{lstlisting}
 % end_ohpc_run
 
@@ -487,7 +487,7 @@ host as follows:
 %% [FSP-469] [master](*\#*) cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 %% [FSP-469] 
 %% [FSP-469] # Restart postgres
-%% [FSP-469] [master](*\#*) service postgresql start
+%% [FSP-469] [master](*\#*) systemctl start postgresql
 %% [FSP-469] 
 %% [FSP-469] # Create ORCM DB
 %% [FSP-469] [master](*\#*) sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
@@ -587,7 +587,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
-[master](*\#*) service dhcpd restart
+[master](*\#*) systemctl restart dhcpd
 [master](*\#*) wwsh pxe update
 \end{lstlisting}
 % end_ohpc_run

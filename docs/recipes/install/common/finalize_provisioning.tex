@@ -77,7 +77,7 @@ that were imported in \S\ref{sec:file_import}.
 %%% [master](*\#*) wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 %%% 
 %%% # Restart dhcp / update PXE
-%%% [master](*\#*) service dhcpd restart
+%%% [master](*\#*) sytemctl restart dhcpd
 %%% [master](*\#*) wwsh pxe update
 %%% \end{lstlisting}
 %%% % end_ohpc_run
