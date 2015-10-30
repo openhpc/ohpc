@@ -10,7 +10,7 @@ provisioning tools, resource management, I/O clients, development
 tools, and a plethora of scientific libraries.
 
 The compatible OS versions for this release and the total number of
-FSP-packaged RPMs for each variant is as follows:
+OHPC-packaged RPMs for each variant is as follows:
 
 	CentOS 7.1 - 166 RPMs
 
