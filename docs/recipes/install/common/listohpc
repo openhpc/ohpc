@@ -9,7 +9,8 @@ if [ -e /etc/redhat-release ];then
     for pkg in `yum list \*-ohpc`; do
         name=`echo $pkg | grep -e -ohpc | awk '{print $1}'`
         if [ "${name}" != "" ]; then
-	    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
+#	    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
+	    info=`repoquery -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
 	    echo ${info} >>${logfile}.all
         fi
     done
@@ -31,12 +32,14 @@ fi
 
 echo
 echo ++++ list of OpenHPC package groups
-groups=`grep -o 'ohpc/[^ ]*' pkg-ohpc.all | sort -u | cut -c5-`
+#groups=`grep -o 'ohpc/[^ ]*' pkg-ohpc.all | sort -u | cut -c5-`
+groups=`grep -o 'ohpc/[^ ]*' pkg-ohpc.all | sort -u | cut -d '/' -f 2`
+
 echo $groups
 echo
 
 for grp in ${groups}; do
     echo ++++ list of ohpc/${grp} packages installed
-    grep "ohpc/${grp}" ${logfile}.all 2>&1 | tee ${logfile}.${grp}
+    grep "ohpc/${grp}" ${logfile}.all | sort -u 2>&1 | tee ${logfile}.${grp}
     echo 
 done
