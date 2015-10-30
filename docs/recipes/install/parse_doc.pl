@@ -3,7 +3,8 @@
 # Simple parser to cull command-line instructions from documentation for
 # validation.
 # 
-# karl.w.schulz@intel.com
+# v1.0 karl.w.schulz@intel.com
+# v2.0 john.a.westlund@intel.com
 #------------------------------------------------------------------------
 
 use warnings;
