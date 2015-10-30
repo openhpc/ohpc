@@ -115,7 +115,8 @@ open( IN, "<$tmpfile_aggr_steps" ) || die __LINE__ . ": Cannot open file -> $fil
 
 my $begin_delim   = "% begin_ohpc_run";
 my $end_delim     = "% end_ohpc_run";
-my $prompt        = "\[master\]\(\*\\\#\*\)";
+my $prompt        = quotemeta "\[master\]\(\*\\\#\*\)";
+my $psql_prompt   = quotemeta "\[postgres\]\$";
 my $disable_delim = "^%%";
 my $indent        = 0;
 
@@ -149,7 +150,7 @@ while( <IN> ) {
 	    print $fh ' ' x $indent . "$cmd\n";
 
         # if line starts a HERE document: prompt$ command <<HERE > /tmp/foo
-	} elsif( $_ =~ /\[master\]\(\*\\\#\*\) (.+ <<([^ ]+).*)$/ ) {
+	} elsif( $_ =~ /$prompt (.+ <<([^ ]+).*)$/ ) {
 	    my $cmd  = update_cmd($1);
 	    my $here = $2;
 
@@ -167,7 +168,7 @@ while( <IN> ) {
 	     } while( $next_line !~ /^$here/ );
 
         # handle commands line line continuation: prompt$ command \
-	} elsif( $_ =~ /\[master\]\(\*\\\#\*\) (.+) \\$/ ) {
+	} elsif( $_ =~ /$prompt (.+) \\$/ ) {
 	    my $cmd = update_cmd( $1 );
 
 	    # commands that begin with a % are for CI only
@@ -184,7 +185,7 @@ while( <IN> ) {
             } while( $next_line =~ / \\$/ );
 
         # special treatment for do loops
-	} elsif ($_ =~ /\[master\]\(\*\\\#\*\) (.+[ ]*;[ ]*do)$/) {
+	} elsif( $_ =~ /$prompt (.+[ ]*;[ ]*do)$/) {
 	    my $cmd = update_cmd($1);
 	    
 	    print $fh ' ' x $indent . "$cmd\n";
@@ -200,14 +201,14 @@ while( <IN> ) {
 	    } while( $next_line !~ m/[^#]*done/ ); # loop until we see an uncommented done
 
         # normal single line command
-	} elsif( $_ =~ /\[master\]\(\*\\\#\*\) (.+)$/ ) {
+	} elsif( $_ =~ /$prompt (.+)$/ ) {
 	    my $cmd = update_cmd($1);
 	    # commands that begin with a % are for CI only
 	    next if( $_ =~ /^%/ && !$ci_run );
 	    print $fh ' ' x $indent . "$cmd\n";
 
         # postgres command
-	} elsif( $_ =~ /\[postgres\]\$ (.+)$/ ) {
+	} elsif( $_ =~ /$psql_prompt (.+)$/ ) {
 	    my $cmd = update_cmd( $1 );
 	    # commands that begin with a % are for CI only
 	    next if( $_ =~ /^%/ && !$ci_run );
