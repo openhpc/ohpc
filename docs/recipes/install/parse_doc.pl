@@ -43,16 +43,16 @@ my $groupChrootInstall = "";
 open(IN,"<$basename.tex")  || die __LINE__ . ": Cannot open file -> $file\n";
 while(my $line = <IN>) {
     chomp($line);
-    if($line =~ /\\newcommand{\\install}{(.+)}/ ) {
+    if($line =~ /\\newcommand\{\\install\}\{(.+)\}/ ) {
 	$Install = $1;
     } 
-    elsif ($line =~ /\\newcommand{\\chrootinstall}{(.+)}/ ) {
+    elsif ($line =~ /\\newcommand\{\\chrootinstall\}\{(.+)\}/ ) {
 	$chrootInstall = $1;
     }
-    elsif ($line =~ /\\newcommand{\\groupinstall}{(.+)}/ ) {
+    elsif ($line =~ /\\newcommand\{\\groupinstall\}\{(.+)\}/ ) {
 	$groupInstall = $1;
     }
-    elsif ($line =~ /\\newcommand{\\groupchrootinstall}{(.+)}/ ) {
+    elsif ($line =~ /\\newcommand\{\\groupchrootinstall\}\{(.+)\}/ ) {
 	$groupChrootInstall = $1;
     }
 }
@@ -77,7 +77,7 @@ close(IN);
 sub check_for_section_replacement {
     my $comment = shift;
 
-    if ($comment =~ /\\ref{sec:(\S+)}/) {
+    if ($comment =~ /\\ref\{sec:(\S+)\}/) {
 	my $secname = $1;
 	my $replacementText="";
 	
@@ -95,7 +95,7 @@ sub check_for_section_replacement {
 	    $replacementText="(Section $secnum)";
 	}
 
-	$comment =~ s/\\ref{sec:(\S+)/$replacementText/g;
+	$comment =~ s/\\ref\{sec:(\S+)/$replacementText/g;
     }
 
     return($comment);
@@ -123,7 +123,7 @@ open(IN,"<$basename.tex")  || die __LINE__ . ": Cannot open file -> $file\n";
 while(my $line = <IN>) {
 
     # Check for include 
-    if( $line =~ /\\input{(\S+)}/ ) {
+    if( $line =~ /\\input\{(\S+)\}/ ) {
 
 	my $inputFile = $1;
 	# verify input file has .tex extension or add it
@@ -135,7 +135,7 @@ while(my $line = <IN>) {
 	open(IN2,"<$inputFile") || die __LINE__ . ": Cannot open embedded input file $inputFile for parsing";
 
 	while(my $line_embed = <IN2>) {
-	    if( $line_embed =~ /\\input{\S+}/ ) {
+	    if( $line_embed =~ /\\input\{\S+\}/ ) {
 		print "Error: nested \\input{} file parsing not supported\n";
 		exit 1;
 	    } elsif ($line !~ /^%/) {
