@@ -234,9 +234,16 @@ sub check_for_section_replacement {
 	
 	# We can only replace section information if latex document was built - otherwise we remove the section info
 	if( -e "$inputDir/$basename.aux" ) { 
-	    my $secnum=`grep {sec:$secname} $inputDir/$basename.aux  | awk -v FS="{{|})" '{print \$2}' | awk -F '}' '{print \$1}'`;
-	    
-	    chomp( $secnum );
+            open( FH, "$inputDir/$basename.aux" ) || die __LINE__ . ": Cannot open file -> $inputDir/$basename.aux\n$!";
+	    my $secnum;
+            while( <FH> ) {
+                if( /\{sec:$secname\}\{\{([^\}]+)/ ) {
+                    if( defined $secnum ) { die __LINE__ . ": found duplicate section name $secname ($secnum vs $1)"; }
+                    $secnum = $1;
+                }
+            }
+            close( FH );
+            chomp( $secnum );
 	    
 	    if( $secnum eq "" ) {
 		die __LINE__ . ": Unable to query section number, verify latex build is up to date"
