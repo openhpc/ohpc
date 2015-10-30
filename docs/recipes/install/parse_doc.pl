@@ -29,6 +29,7 @@ my $file         = shift;
 
 my $inputDir = dirname(File::Spec->rel2abs($file));
 my $basename = basename($file,".tex");
+chdir $inputDir;
 
 # Determine BaseOS and define package manager commands
 
@@ -39,7 +40,7 @@ my $groupChrootInstall = "";
 
 # parse package command macro's from input file
 
-open(IN,"<$file")  || die "Cannot open file -> $file\n";
+open(IN,"<$basename.tex")  || die __LINE__ . ": Cannot open file -> $file\n";
 while(my $line = <IN>) {
     chomp($line);
     if($line =~ /\\newcommand{\\install}{(.+)}/ ) {
@@ -88,7 +89,7 @@ sub check_for_section_replacement {
 	    chomp($secnum);
 	    
 	    if ($secnum eq "") {
-		die "Unable to query section number, verify latex build is up to date"
+		die __LINE__ . ": Unable to query section number, verify latex build is up to date"
 	    }
 	    
 	    $replacementText="(Section $secnum)";
@@ -117,7 +118,7 @@ sub update_cmd {
 
 (my $fh_raw, my $tmpfile_raw ) = tempfile();
 
-open(IN,"<$file")  || die "Cannot open file -> $file\n";
+open(IN,"<$basename.tex")  || die __LINE__ . ": Cannot open file -> $file\n";
 
 while(my $line = <IN>) {
 
@@ -131,7 +132,7 @@ while(my $line = <IN>) {
 	    $inputFile = $inputFile . ".tex";
 	}
 
-	open(IN2,"<$inputFile") || die "Cannot open embedded input file $inputFile for parsing";
+	open(IN2,"<$inputFile") || die __LINE__ . ": Cannot open embedded input file $inputFile for parsing";
 
 	while(my $line_embed = <IN2>) {
 	    if( $line_embed =~ /\\input{\S+}/ ) {
@@ -154,7 +155,7 @@ close($fh_raw);
 
 (my $fh,my $tmpfile) = tempfile();
 
-open(IN,"<$tmpfile_raw")  || die "Cannot open file -> $file\n";
+open(IN,"<$tmpfile_raw")  || die __LINE__ . ": Cannot open file -> $file\n";
 
 my $begin_delim   = "% begin_ohpc_run";
 my $end_delim     = "% end_ohpc_run";
@@ -264,7 +265,7 @@ close(IN);
 close($fh);
 
 # Echo commands
-open(IN,"<$tmpfile")  || die "Cannot open file -> $tmpfile\n";
+open(IN,"<$tmpfile")  || die __LINE__ . ": Cannot open file -> $tmpfile\n";
 while ( <IN> ) {
     print;
 }
