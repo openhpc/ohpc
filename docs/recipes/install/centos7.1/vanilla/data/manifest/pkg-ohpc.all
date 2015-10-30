@@ -50,7 +50,7 @@ intel-mpi-devel-ohpc 5.1.1.109 https://software.intel.com/en-us/intel-mpi-librar
 intel-mpi-ohpc 5.1.1.109 https://software.intel.com/en-us/intel-mpi-library ohpc/mpi-families Intel(R) MPI Library for Linux* OS
 intel-vtune-ohpc 16.1.0.424694 http://www.intel.com/software/products/ ohpc/perf-tools Intel(R) VTune(TM) Amplifier XE
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
-lmod-defaults-gnu-mvapich2-ohpc 1.2 None ohpc/admin OpenHPC default login environments
+lmod-defaults-gnu-mvapich2-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-ohpc 6.0.10 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
 losf-ohpc 0.53.0 https://github.com/hpcsi/losf ohpc/admin A Linux operating system framework for managing HPC clusters
 lua-bit-ohpc 1.0.2 http://bitop.luajit.org ohpc/distro-packages Module for Lua which adds bitwise operations on numbers
@@ -147,7 +147,6 @@ netcdf-intel-mvapich2-ohpc 4.3.3.1 http://www.unidata.ucar.edu/software/netcdf/ 
 netcdf-intel-openmpi-ohpc 4.3.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 nrpe-ohpc 2.15 http://www.nagios.org Applications/System Host/service/network monitoring agent for Nagios
 openblas-gnu-ohpc 0.2.14 http://www.openblas.net Productivity/Scientific/Math An optimized BLAS library based on GotoBLAS2
-
 openmpi-gnu-ohpc 1.8.8 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi-intel-ohpc 1.8.8 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 papi-ohpc 5.4.1 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
@@ -212,11 +211,11 @@ warewulf-provision-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf 
 warewulf-provision-server-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - Server
 warewulf-vnfs-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf VNFS Module
 ganglia-devel-ohpc 3.7.2 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Library
-lmod-defaults-gnu-impi-ohpc 1.2 None ohpc/admin OpenHPC default login environments
-lmod-defaults-gnu-openmpi-ohpc 1.2 None ohpc/admin OpenHPC default login environments
-lmod-defaults-intel-impi-ohpc 1.2 None ohpc/admin OpenHPC default login environments
-lmod-defaults-intel-mvapich2-ohpc 1.2 None ohpc/admin OpenHPC default login environments
-lmod-defaults-intel-openmpi-ohpc 1.2 None ohpc/admin OpenHPC default login environments
+lmod-defaults-gnu-impi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-gnu-openmpi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-intel-impi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-intel-mvapich2-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-intel-openmpi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 nagios-devel-ohpc 4.1.1 http://www.nagios.org/ Applications/System Provides include files that Nagios-related applications may compile against
 nagios-plugins-apt-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_apt
 nagios-plugins-dbi-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_dbi
