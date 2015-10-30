@@ -147,14 +147,17 @@ while( <IN> ) {
 	} elsif($_ =~ /% ohpc_command (.+)/ ) {
 	    my $cmd = update_cmd( $1 );
 	    print $fh ' ' x $indent . "$cmd\n";
+
+        # if line starts a HERE document: prompt$ command <<HERE > /tmp/foo
 	} elsif( $_ =~ /\[master\]\(\*\\\#\*\) (.+ <<([^ ]+).*)$/ ) {
 	    my $cmd  = update_cmd($1);
 	    my $here = $2;
 
-	    if( $_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
+	    # commands that begin with a % are for CI only
+	    next if( $_ =~ /^%/ && !$ci_run );
 
             print $fh ' ' x $indent . "$cmd\n";
-	    my $next_line;
+            my $next_line;
 	    do {
 	        $next_line = <IN>;
 	        # trim leading and trailing space
@@ -163,49 +166,53 @@ while( <IN> ) {
 	        print $fh "$next_line\n";
 	     } while( $next_line !~ /^$here/ );
 
+        # handle commands line line continuation: prompt$ command \
 	} elsif( $_ =~ /\[master\]\(\*\\\#\*\) (.+) \\$/ ) {
 	    my $cmd = update_cmd( $1 );
 
-	    if( $_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
+	    # commands that begin with a % are for CI only
+	    next if( $_ =~ /^%/ && !$ci_run );
 
 	    print $fh ' ' x $indent . "$cmd";
-	    my $next_line = <IN>;
+	    my $next_line;
+            do {
+                $next_line = <IN>;
+	        # trim leading and trailing space
+	        $next_line =~ s/^\s+|\s+$//g;
 
-	    # trim leading and trailing space
-	    $next_line =~ s/^\s+|\s+$//g;
+                print $fh " $next_line\n";
+            } while( $next_line =~ / \\$/ );
 
-	    print $fh " $next_line\n";
-
-	    # TODO - add loop to accomodate multi-line continuation
+        # special treatment for do loops
 	} elsif ($_ =~ /\[master\]\(\*\\\#\*\) (.+[ ]*;[ ]*do)$/) {
-	    # special treatment for do loops
 	    my $cmd = update_cmd($1);
 	    
 	    print $fh ' ' x $indent . "$cmd\n";
-	    my $next_line;
-
-	    while ( $next_line = <IN> ) {
-		last if $next_line =~ m/\s+done/;
-
+            my $next_line;
+            my $local_indent = $indent + 3; # further indent contents of loop
+	    do {
+                $next_line = <IN>;
 		# trim leading and trailing space
 		$next_line =~ s/^\s+|\s+$//g;
+                # reset indent to previous value for the last line
+                $local_indent = $indent if( $next_line =~ m/[^#]*done/ );
+		printf $fh ' ' x $local_indent . "%s\n",$next_line;
+	    } while( $next_line !~ m/[^#]*done/ ); # loop until we see an uncommented done
 
-		printf $fh ' ' x $indent . "   %s\n",$next_line;
-	    }
-
-	    # trim leading and trailing space
-	    $next_line =~ s/^\s+|\s+$//g;
-
-	    print $fh ' ' x $indent . "$next_line\n";
+        # normal single line command
 	} elsif( $_ =~ /\[master\]\(\*\\\#\*\) (.+)$/ ) {
 	    my $cmd = update_cmd($1);
-
-	    if( $_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
-
+	    # commands that begin with a % are for CI only
+	    next if( $_ =~ /^%/ && !$ci_run );
 	    print $fh ' ' x $indent . "$cmd\n";
+
+        # postgres command
 	} elsif( $_ =~ /\[postgres\]\$ (.+)$/ ) {
 	    my $cmd = update_cmd( $1 );
+	    # commands that begin with a % are for CI only
+	    next if( $_ =~ /^%/ && !$ci_run );
 	    print $fh ' ' x $indent . "$cmd\n";
+
 	}
 
     }
