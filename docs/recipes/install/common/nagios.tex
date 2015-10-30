@@ -14,112 +14,108 @@ provisioned {\em compute} nodes.
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Nagios base, Remote Plugin Engine, and Plugins on Master
 [master](*\#*) (*\groupinstall*) ohpc-nagios
+
+# Also install in compute node image
+[master](*\#*) (*\groupchrootinstall*) ohpc-nagios
+
+# Enable NRPE on compute image, and configure
+[master](*\#*) chroot $CHROOT systemctl enable nrpe
+[master](*\#*) chroot $CHROOT perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" /etc/nagios/nrpe.cfg
+[master](*\#*) echo "nrpe 5666/tcp # NRPE" >> $CHROOT/etc/services
+[master](*\#*) echo "nrpe : nagiosserver : ALLOW" >> $CHROOT/etc/hosts.allow
+[master](*\#*) echo "nrpe : ALL : DENY" >> $CHROOT/etc/hosts.allow
+[master](*\#*) echo "${master_ip}    nagiosserver" >> $CHROOT/etc/hosts
+[master](*\#*) chroot $CHROOT /usr/sbin/useradd -c "NRPE user for the NRPE service" -d /var/run/nrpe \
+        -r -g nrpe -s /sbin/nologin nrpe
+[master](*\#*) chroot $CHROOT /usr/sbin/groupadd -r nrpe
+
+# Enable Nagios on master, and configure
+[master](*\#*) chkconfig nagios on
+[master](*\#*) systemctl start nagios
+[master](*\#*) chmod u+s `which ping`
+
+# Configure remote services to test on compute nodes
+[master](*\#*) cat <<SERVICES > /etc/nagios/conf.d/services.cfg
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     CPU Load
+        check_command           check_nrpe!check_load
+        }
+
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     Total Processes
+        check_command           check_nrpe!check_total_procs
+        }
+
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     Current Users
+        check_command           check_nrpe!check_users
+        }
+
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     SSH Monitoring
+        check_command           check_nrpe!check_ssh
+        }
+SERVICES
+
+# Define compute nodes as hosts to monitor
+[master](*\#*) cat <<HOSTS > /etc/nagios/conf.d/hosts.cfg
+## Linux Host Template ##
+define host{
+name                            linux-box     ; Name of this template
+use                             generic-host  ; Inherit default values
+check_period                    24x7
+check_interval                  5
+retry_interval                  1
+max_check_attempts              10
+check_command                   check-host-alive
+notification_period             24x7
+notification_interval           30
+notification_options            d,r
+contact_groups                  admins
+register                        0             ; DONT REGISTER THIS - ITS A TEMPLATE
+}
+
+define hostgroup {
+hostgroup_name                  compute
+alias                           compute nodes
+members                         ${c_name[0]},${c_name[1]},${c_name[2]},${c_name[3]}
+}
+
+define host{
+use                             linux-box     ; Inherit default values from a template
+host_name                       ${c_name[0]}  ; The name we're giving to this server
+alias                           ${c_name[0]}  ; A longer name for the server
+address                         ${c_ip[0]}    ; IP address of Remote Linux host
+}
+define host{
+use                             linux-box     ; Inherit default values from a template
+host_name                       ${c_name[1]}  ; The name we're giving to this server
+alias                           ${c_name[1]}  ; A longer name for the server
+address                         ${c_ip[1]}    ; IP address of Remote Linux host
+}
+define host{
+use                             linux-box     ; Inherit default values from a template
+host_name                       ${c_name[2]}  ; The name we're giving to this server
+alias                           ${c_name[2]}  ; A longer name for the server
+address                         ${c_ip[2]}    ; IP address of Remote Linux host
+}
+define host{
+use                             linux-box     ; Inherit default values from a template
+host_name                       ${c_name[3]}  ; The name we're giving to this server
+alias                           ${c_name[3]}  ; A longer name for the server
+address                         ${c_ip[3]}    ; IP address of Remote Linux host
+}
+HOSTS
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run
-
-%%% # Also install in compute node image
-%%% [master](*\#*) (*\groupchrootinstall*) ohpc-nagios
-%%% 
-%%% # Enable NRPE on compute image, and configure
-%%% [master](*\#*) chroot $CHROOT systemctl enable nrpe
-%%% [master](*\#*) chroot $CHROOT perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" /etc/nagios/nrpe.cfg
-%%% [master](*\#*) echo "nrpe 5666/tcp # NRPE" >> $CHROOT/etc/services
-%%% [master](*\#*) echo "nrpe : nagiosserver : ALLOW" >> $CHROOT/etc/hosts.allow
-%%% [master](*\#*) echo "nrpe : ALL : DENY" >> $CHROOT/etc/hosts.allow
-%%% [master](*\#*) echo "${master_ip}    nagiosserver" >> $CHROOT/etc/hosts
-%%% [master](*\#*) chroot $CHROOT /usr/sbin/useradd -c "NRPE user for the NRPE service" -d /var/run/nrpe \
-%%%         -r -g nrpe -s /sbin/nologin nrpe
-%%% [master](*\#*) chroot $CHROOT /usr/sbin/groupadd -r nrpe
-%%% 
-%%% # Enable Nagios on master, and configure
-%%% [master](*\#*) chkconfig nagios on
-%%% [master](*\#*) systemctl start nagios
-%%% [master](*\#*) chmod u+s `which ping`
-%%% 
-%%% # Configure remote services to test on compute nodes
-%%% [master](*\#*) cat <<SERVICES > /etc/nagios/conf.d/services.cfg
-%%% define service{
-%%%         use                     generic-service
-%%%         hostgroup_name          compute
-%%%         service_description     CPU Load
-%%%         check_command           check_nrpe!check_load
-%%%         }
-%%% 
-%%% define service{
-%%%         use                     generic-service
-%%%         hostgroup_name          compute
-%%%         service_description     Total Processes
-%%%         check_command           check_nrpe!check_total_procs
-%%%         }
-%%% 
-%%% define service{
-%%%         use                     generic-service
-%%%         hostgroup_name          compute
-%%%         service_description     Current Users
-%%%         check_command           check_nrpe!check_users
-%%%         }
-%%% 
-%%% define service{
-%%%         use                     generic-service
-%%%         hostgroup_name          compute
-%%%         service_description     SSH Monitoring
-%%%         check_command           check_nrpe!check_ssh
-%%%         }
-%%% SERVICES
-%%% 
-%%% # Define compute nodes as hosts to monitor
-%%% [master](*\#*) cat <<HOSTS > /etc/nagios/conf.d/hosts.cfg
-%%% ## Linux Host Template ##
-%%% define host{
-%%% name                            linux-box     ; Name of this template
-%%% use                             generic-host  ; Inherit default values
-%%% check_period                    24x7
-%%% check_interval                  5
-%%% retry_interval                  1
-%%% max_check_attempts              10
-%%% check_command                   check-host-alive
-%%% notification_period             24x7
-%%% notification_interval           30
-%%% notification_options            d,r
-%%% contact_groups                  admins
-%%% register                        0             ; DONT REGISTER THIS - ITS A TEMPLATE
-%%% }
-%%% 
-%%% define hostgroup {
-%%% hostgroup_name                  compute
-%%% alias                           compute nodes
-%%% members                         ${c_name[0]},${c_name[1]},${c_name[2]},${c_name[3]}
-%%% }
-%%% 
-%%% define host{
-%%% use                             linux-box     ; Inherit default values from a template
-%%% host_name                       ${c_name[0]}  ; The name we're giving to this server
-%%% alias                           ${c_name[0]}  ; A longer name for the server
-%%% address                         ${c_ip[0]}    ; IP address of Remote Linux host
-%%% }
-%%% define host{
-%%% use                             linux-box     ; Inherit default values from a template
-%%% host_name                       ${c_name[1]}  ; The name we're giving to this server
-%%% alias                           ${c_name[1]}  ; A longer name for the server
-%%% address                         ${c_ip[1]}    ; IP address of Remote Linux host
-%%% }
-%%% define host{
-%%% use                             linux-box     ; Inherit default values from a template
-%%% host_name                       ${c_name[2]}  ; The name we're giving to this server
-%%% alias                           ${c_name[2]}  ; A longer name for the server
-%%% address                         ${c_ip[2]}    ; IP address of Remote Linux host
-%%% }
-%%% define host{
-%%% use                             linux-box     ; Inherit default values from a template
-%%% host_name                       ${c_name[3]}  ; The name we're giving to this server
-%%% alias                           ${c_name[3]}  ; A longer name for the server
-%%% address                         ${c_ip[3]}    ; IP address of Remote Linux host
-%%% }
-%%% HOSTS
-%%% \end{lstlisting}
-%%% % ohpc_indent 0
-%%% % ohpc_command fi
-%%% % end_ohpc_run
 
