@@ -36,7 +36,10 @@ Source6: nagios.upgrade_to_v3.sh
 Source10: printer.png
 Source11: router.png
 Source12: switch.png
-
+# Example configuration files
+Source13: hosts.cfg.example
+Source14: services.cfg.example
+t
 # looks fixed in 4.1.1
 #Patch1: nagios-0001-from-rpm.patch
 Patch2: nagios-0002-SELinux-relabeling.patch
@@ -261,6 +264,8 @@ install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
 # remove static library that is build in 4.1.1
 rm -v    %{buildroot}%{_libdir}/%{pname}/libnagios.a
 
+install -D -p -m 0640 %{SOURCE13} %{SOURCE14} %{buildroot}/%{_sysconfdir}/%{pname}/conf.d/
+
 
 %clean
 rm -rf %{buildroot}
@@ -331,6 +336,8 @@ fi
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/private
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/objects
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/conf.d
+%attr(0640,root,nagios) %{_sysconfdir}/%{pname}/conf.d/hosts.cfg.example
+%attr(0640,root,nagios) %{_sysconfdir}/%{pname}/conf.d/services.cfg.example
 %attr(0640,root,nagios) %config(noreplace) %{_sysconfdir}/%{pname}/private/resource.cfg
 %if 0%{?sles_version} || 0%{?suse_version}
 %attr(0640,root,www) %config(noreplace) %{_sysconfdir}/%{pname}/passwd
