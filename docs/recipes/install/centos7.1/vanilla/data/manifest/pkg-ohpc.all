@@ -15,8 +15,8 @@ boost-intel-impi-ohpc 1.59.0 http://www.boost.org ohpc/parallel-libs Boost free 
 boost-intel-mvapich2-ohpc 1.59.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-openmpi-ohpc 1.59.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 conman-ohpc 0.2.7 http://conman.googlecode.com/ ohpc/admin ConMan: The Console Manager
-docs-ohpc 1.0 None ohpc/admin OpenHPC documentation
-examples-ohpc 1.2 None ohpc/admin Example source code and templates for use within OpenHPC environment.
+docs-ohpc 1.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+examples-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 fftw-gnu-mvapich2-ohpc 3.3.4 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu-openmpi-ohpc 3.3.4 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 ganglia-gmetad-ohpc 3.7.2 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Metadata collection daemon
@@ -147,7 +147,7 @@ netcdf-intel-mvapich2-ohpc 4.3.3.1 http://www.unidata.ucar.edu/software/netcdf/ 
 netcdf-intel-openmpi-ohpc 4.3.3.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 nrpe-ohpc 2.15 http://www.nagios.org Applications/System Host/service/network monitoring agent for Nagios
 openblas-gnu-ohpc 0.2.14 http://www.openblas.net Productivity/Scientific/Math An optimized BLAS library based on GotoBLAS2
-openblas-intel-ohpc 0.2.14 http://www.openblas.net Productivity/Scientific/Math An optimized BLAS library based on GotoBLAS2
+
 openmpi-gnu-ohpc 1.8.8 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi-intel-ohpc 1.8.8 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 papi-ohpc 5.4.1 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
@@ -166,7 +166,7 @@ phdf5-gnu-openmpi-ohpc 1.8.15 http://www.hdfgroup.org/HDF5 ohpc/io-libs A genera
 phdf5-intel-impi-ohpc 1.8.15 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-intel-mvapich2-ohpc 1.8.15 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-intel-openmpi-ohpc 1.8.15 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
-prun-ohpc 0.1.0 None ohpc/admin Convenience utility for parallel job launch
+prun-ohpc 1.0 https://github.com/openhpc/ohpc ohpc/admin Convenience utility for parallel job launch
 python-numpy-gnu-ohpc 1.9.2 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python-numpy-intel-ohpc 1.9.2 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python-scipy-gnu-mvapich2-ohpc 0.15.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
@@ -211,13 +211,6 @@ warewulf-common-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning A suite of t
 warewulf-provision-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module
 warewulf-provision-server-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - Server
 warewulf-vnfs-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf VNFS Module
-adios-gnu-impi-ohpc 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ ohpc/io-libs The Adaptable IO System (ADIOS)
-adios-gnu-mvapich2-ohpc 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ ohpc/io-libs The Adaptable IO System (ADIOS)
-adios-gnu-openmpi-ohpc 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ ohpc/io-libs The Adaptable IO System (ADIOS)
-adios-intel-impi-ohpc 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ ohpc/io-libs The Adaptable IO System (ADIOS)
-adios-intel-mvapich2-ohpc 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ ohpc/io-libs The Adaptable IO System (ADIOS)
-adios-intel-openmpi-ohpc 1.8.0 http://www.olcf.ornl.gov/center-projects/adios/ ohpc/io-libs The Adaptable IO System (ADIOS)
-docs-ohpc 1.0 None ohpc/admin OpenHPC documentation
 ganglia-devel-ohpc 3.7.2 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Library
 lmod-defaults-gnu-impi-ohpc 1.2 None ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu-openmpi-ohpc 1.2 None ohpc/admin OpenHPC default login environments

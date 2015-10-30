@@ -1,6 +1,6 @@
 conman-ohpc 0.2.7 http://conman.googlecode.com/ ohpc/admin ConMan: The Console Manager
-docs-ohpc 1.0 None ohpc/admin OpenHPC documentation
-examples-ohpc 1.2 None ohpc/admin Example source code and templates for use within OpenHPC environment.
+docs-ohpc 1.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+examples-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 ganglia-ohpc 3.7.2 http://ganglia.sourceforge.net/ ohpc/admin Distributed Monitoring System
 intel-clck-ohpc 3.0.1 https://clusterready.intel.com/intel-cluster-checker/ ohpc/admin Intel(R) Cluster Checker
 lmod-defaults-gnu-impi-ohpc 1.2 None ohpc/admin OpenHPC default login environments
@@ -14,4 +14,4 @@ losf-ohpc 0.53.0 https://github.com/hpcsi/losf ohpc/admin A Linux operating syst
 nagios-ohpc 4.1.1 http://www.nagios.org/ ohpc/admin Nagios monitors hosts and services and yells if somethings breaks
 nagios-plugins-ohpc 2.1.1 https://www.nagios-plugins.org/ ohpc/admin Host/service/network monitoring program plugins for Nagios
 pdsh-ohpc 2.31 http://sourceforge.net/projects/pdsh ohpc/admin Parallel remote shell program
-prun-ohpc 0.1.0 None ohpc/admin Convenience utility for parallel job launch
+prun-ohpc 1.0 https://github.com/openhpc/ohpc ohpc/admin Convenience utility for parallel job launch
