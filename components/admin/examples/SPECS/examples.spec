@@ -65,4 +65,3 @@ rm -rf $RPM_BUILD_ROOT
 %{OHPC_PUB}
 
 %changelog
-
