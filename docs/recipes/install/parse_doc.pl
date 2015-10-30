@@ -223,7 +223,7 @@ while(<IN>) {
 	    print $fh " $next_line\n";
 
 	    # TODO - add loop to accomodate multi-line continuation
-	} elsif ($_ =~ /\[master\]\(\*\\\#\*\) (.+ ; do)$/) {
+	} elsif ($_ =~ /\[master\]\(\*\\\#\*\) (.+[ ]*;[ ]*do)$/) {
 	    # special treatment for do loops
 
 	    my $cmd = update_cmd($1);
