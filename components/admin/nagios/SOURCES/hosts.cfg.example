@@ -17,34 +17,34 @@ define host{
 define hostgroup {
 	hostgroup_name compute
 	alias compute nodes
-	members HOST1,HOST2,HOST3,HOST4
+	members HOSTNAME1,HOSTNAME2,HOSTNAME3,HOSTNAME4
 }
 
 # example configuration of 4 remote linux systems
 define host{
 	use linux-box      ; Inherit default values from a template
-	host_name HOST1    ; The name we're giving to this server
-	alias HOST1        ; A longer name for the server
+	host_name HOSTNAME1    ; The name we're giving to this server
+	alias HOSTNAME1        ; A longer name for the server
 	address HOST1_IP   ; IP address of Remote Linux host
 }
 
 define host{
 	use linux-box      ; Inherit default values from a template
-	host_name HOST2    ; The name we're giving to this server
-	alias HOST2        ; A longer name for the server
+	host_name HOSTNAME2    ; The name we're giving to this server
+	alias HOSTNAME2        ; A longer name for the server
 	address HOST2_IP   ; IP address of Remote Linux host
 }
 
 define host{
 	use linux-box      ; Inherit default values from a template
-	host_name HOST3    ; The name we're giving to this server
-	alias HOST3        ; A longer name for the server
+	host_name HOSTNAME3    ; The name we're giving to this server
+	alias HOSTNAME3        ; A longer name for the server
 	address HOST3_IP   ; IP address of Remote Linux host
 }
 
 define host{
 	use linux-box      ; Inherit default values from a template
-	host_name HOST4    ; The name we're giving to this server
-	alias HOST4        ; A longer name for the server
+	host_name HOSTNAME4    ; The name we're giving to this server
+	alias HOSTNAME4        ; A longer name for the server
 	address HOST4_IP   ; IP address of Remote Linux host
 }
