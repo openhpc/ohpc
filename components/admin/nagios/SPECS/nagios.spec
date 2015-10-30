@@ -39,7 +39,7 @@ Source12: switch.png
 # Example configuration files
 Source13: hosts.cfg.example
 Source14: services.cfg.example
-t
+
 # looks fixed in 4.1.1
 #Patch1: nagios-0001-from-rpm.patch
 Patch2: nagios-0002-SELinux-relabeling.patch
