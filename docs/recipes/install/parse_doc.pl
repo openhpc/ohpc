@@ -192,6 +192,22 @@ while(<IN>) {
 	} elsif ($_ =~ /% ohpc_command (.+)/) {
 	    my $cmd = update_cmd($1);
 	    print $fh ' ' x $indent . "$cmd\n";
+	} elsif ($_ =~ /\[master\]\(\*\\\#\*\) (.+ <<([^ ]+).*)$/) {
+	    my $cmd  = update_cmd($1);
+	    my $here = $2;
+
+	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
+
+            print $fh ' ' x $indent . "$cmd\n";
+	    my $next_line;
+	    do {
+	        $next_line = <IN>;
+	        # trim leading and trailing space
+	        $next_line =~ s/^\s+|\s+$//g;
+	      
+	        print $fh "$next_line\n";
+	     } while( $next_line !~ /^$here/ );
+
 	} elsif ($_ =~ /\[master\]\(\*\\\#\*\) (.+) \\$/) {
 
 	    my $cmd = update_cmd($1);
