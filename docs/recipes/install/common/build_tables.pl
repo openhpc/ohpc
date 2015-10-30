@@ -8,19 +8,17 @@ my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-package
 my @compiler_familes = ("gnu","intel");
 my @mpi_families     = ("mvapich2","openmpi","impi");
 
-#my @single_package_exceptions = ("lmod-defaults-intel-ohpc","mkl-blacs-gnu-openmpi-ohpc");
 my @single_package_exceptions = ();
 
 # Define any asymmetric compiler packages
 
 my %compiler_exceptions = ();
 $compiler_exceptions{"gsl"} = 1;
-$compiler_exceptions{"lmod-defaults"} = 1;
 
 # Define any asymmetric MPI packages
 my %mpi_exceptions = ();
-$mpi_exceptions{"python-scipy"} = 3;
-$mpi_exceptions{"fftw"} = 3;
+$mpi_exceptions{"python-scipy"} = 2;
+$mpi_exceptions{"fftw"} = 2;
 $mpi_exceptions{"mkl-blacs"} = 1;
 
 my $longSummaryLine = 60;
