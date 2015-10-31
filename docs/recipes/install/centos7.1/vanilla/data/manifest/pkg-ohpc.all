@@ -186,12 +186,12 @@ slurm-slurmdbd-ohpc 15.08.1 http://slurm.schedmd.com/ ohpc/rms Slurm database da
 slurm-sql-ohpc 15.08.1 http://slurm.schedmd.com/ ohpc/rms Slurm SQL support
 superlu-gnu-ohpc 4.3 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-intel-ohpc 4.3 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
-superlu_dist-gnu-impi-ohpc 4.1 None ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-gnu-mvapich2-ohpc 4.1 None ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-gnu-openmpi-ohpc 4.1 None ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-intel-impi-ohpc 4.1 None ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-intel-mvapich2-ohpc 4.1 None ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-superlu_dist-intel-openmpi-ohpc 4.1 None ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu-impi-ohpc 4.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu-mvapich2-ohpc 4.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-gnu-openmpi-ohpc 4.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-impi-ohpc 4.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-mvapich2-ohpc 4.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
+superlu_dist-intel-openmpi-ohpc 4.1 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 tau-gnu-impi-ohpc 2.24.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu-mvapich2-ohpc 2.24.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu-openmpi-ohpc 2.24.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
