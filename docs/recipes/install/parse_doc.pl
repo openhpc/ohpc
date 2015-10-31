@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
-# 
+#
 # Simple parser to cull command-line instructions from documentation for
 # validation.
-# 
+#
 # v1.0 karl.w.schulz@intel.com
 # v2.0 john.a.westlund@intel.com
 #------------------------------------------------------------------------
@@ -19,13 +19,13 @@ my $repo   = "";
 my $ci_run = 0;
 
 GetOptions ('repo=s' => \$repo,
-	    'ci_run' => \$ci_run);
+            'ci_run' => \$ci_run);
 
 if ( $#ARGV < 0 ) {
 print "$repo $ci_run\n";
     print STDERR "Usage: parse_doc [--repo=<reponame>] [--ci_run] <filename>\n";
-    print STDERR "  --repo	Use a different repo for install commands\n";
-    print STDERR "  --ci_run	run additional 'CI only' commands\n";
+    print STDERR "  --repo     Use a different repo for install commands\n";
+    print STDERR "  --ci_run   run additional 'CI only' commands\n";
     exit 1;
 }
 
@@ -45,16 +45,16 @@ open( IN, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!"
 while( my $line = <IN> ) {
     chomp( $line );
     if( $line =~ /\\newcommand\{\\install\}\{(.+)\}/ ) {
-	$Install = $1;
-    } 
+        $Install = $1;
+    }
     elsif( $line =~ /\\newcommand\{\\chrootinstall\}\{(.+)\}/ ) {
-	$chrootInstall = $1;
+        $chrootInstall = $1;
     }
     elsif( $line =~ /\\newcommand\{\\groupinstall\}\{(.+)\}/ ) {
-	$groupInstall = $1;
+        $groupInstall = $1;
     }
     elsif( $line =~ /\\newcommand\{\\groupchrootinstall\}\{(.+)\}/ ) {
-	$groupChrootInstall = $1;
+        $groupChrootInstall = $1;
     }
 }
 close( IN );
@@ -81,28 +81,28 @@ if( $Install eq "" || $chrootInstall eq "" || $groupInstall eq "" || $groupChroo
 open( IN, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
 
 while( my $line = <IN> ) {
-    # Check for include 
+    # Check for include
     if( $line =~ /\\input\{(\S+)\}/ ) {
-	my $inputFile = $1;
+    my $inputFile = $1;
 
-	# verify input file has .tex extension or add it
-	if( $inputFile !~ /(\S+).tex/ ) {
-	    $inputFile = $inputFile . ".tex";
-	}
+    # verify input file has .tex extension or add it
+    if( $inputFile !~ /(\S+).tex/ ) {
+        $inputFile = $inputFile . ".tex";
+    }
 
-	open( IN2,"<$inputFile" ) || die __LINE__ . ": Cannot open embedded input file $inputFile for parsing\n$!";
+    open( IN2,"<$inputFile" ) || die __LINE__ . ": Cannot open embedded input file $inputFile for parsing\n$!";
 
-	while( my $line_embed = <IN2> ) {
-	    if( $line_embed =~ /\\input\{\S+\}/ ) {
-		print "Error: nested \\input{} file parsing not supported\n";
-		exit 1;
-	    } elsif( $line !~ /^%/ ) {
-		print $TMPFH_AGGR_STEPS $line_embed;
-	    }
-	}		
-	close( IN2 );
+    while( my $line_embed = <IN2> ) {
+        if( $line_embed =~ /\\input\{\S+\}/ ) {
+            print "Error: nested \\input{} file parsing not supported\n";
+            exit 1;
+        } elsif( $line !~ /^%/ ) {
+            print $TMPFH_AGGR_STEPS $line_embed;
+        }
+    }
+    close( IN2 );
     } else {
-	print $TMPFH_AGGR_STEPS $line;
+        print $TMPFH_AGGR_STEPS $line;
     }
 }
 
@@ -124,99 +124,99 @@ my $indent        = 0;
 print $fh "#!/bin/bash\n";
 
 while( <IN> ) {
-    if( $_ =~ /$disable_delim/ ) {
-	next;
-    }
-    if( /$begin_delim/../$end_delim/ ) {
-	if( $_ =~ /% ohpc_validation_newline/ ) {
-	    print $fh "\n";
-	} elsif( $_ =~ /% ohpc_ci_comment (.+)/ ) {
-	    if ( !$ci_run ) { next; }
-	    print $fh "# $1 (CI only)\n";
-	} elsif ( $_ =~ /% ohpc_comment_header (.+)/ ) {
-	    my $comment = check_for_section_replacement( $1 );
-	    my $strlen  = length $comment;
+    next if( $_ =~ /$disable_delim/ );
 
-	    printf $fh "\n";
-	    printf $fh "# %s\n", '-' x $strlen;
-	    print  $fh "# $comment\n";
-	    printf $fh "# %s\n", '-' x $strlen;
-	} elsif( $_ =~ /% ohpc_validation_comment (.+)/ ) {
-	    my $comment = check_for_section_replacement( $1 );
-	    print $fh ' ' x $indent . "# $comment\n";
-	} elsif( $_ =~ /% ohpc_indent (\d+)/ ) {
-	    $indent = $1;
-	} elsif($_ =~ /% ohpc_command (.+)/ ) {
-	    my $cmd = update_cmd( $1 );
-	    print $fh ' ' x $indent . "$cmd\n";
+    if( /$begin_delim/../$end_delim/ ) {
+        if( $_ =~ /% ohpc_validation_newline/ ) {
+            print $fh "\n";
+        } elsif( $_ =~ /% ohpc_ci_comment (.+)/ ) {
+            next if ( !$ci_run );
+            print $fh "# $1 (CI only)\n";
+        } elsif( $_ =~ /% ohpc_comment_header (.+)/ ) {
+            my $comment = check_for_section_replacement( $1 );
+            my $strlen  = length $comment;
+
+            printf $fh "\n";
+            printf $fh "# %s\n", '-' x $strlen;
+            print  $fh "# $comment\n";
+            printf $fh "# %s\n", '-' x $strlen;
+        } elsif( $_ =~ /% ohpc_validation_comment (.+)/ ) {
+            my $comment = check_for_section_replacement( $1 );
+            print $fh ' ' x $indent . "# $comment\n";
+        } elsif( $_ =~ /% ohpc_indent (\d+)/ ) {
+            $indent = $1;
+        } elsif($_ =~ /% ohpc_command (.+)/ ) {
+            my $cmd = update_cmd( $1 );
+            print $fh ' ' x $indent . "$cmd\n";
 
         # if line starts a HERE document: prompt$ command <<HERE > /tmp/foo
-	} elsif( $_ =~ /$prompt (.+ <<([^ ]+).*)$/ ) {
-	    my $cmd  = update_cmd($1);
-	    my $here = $2;
+        } elsif( $_ =~ /$prompt (.+ <<([^ ]+).*)$/ ) {
+            my $cmd  = update_cmd($1);
+            my $here = $2;
 
-	    # commands that begin with a % are for CI only
-	    next if( $_ =~ /^%/ && !$ci_run );
+            # commands that begin with a % are for CI only
+            next if( $_ =~ /^%/ && !$ci_run );
 
             print $fh ' ' x $indent . "$cmd\n";
             my $next_line;
-	    do {
-	        $next_line = <IN>;
-	        # trim leading and trailing space
-	        $next_line =~ s/^\s+|\s+$//g;
-	      
-	        print $fh "$next_line\n";
-	     } while( $next_line !~ /^$here/ );
+        do {
+            $next_line = <IN>;
+            # trim leading and trailing space
+            $next_line =~ s/^\s+|\s+$//g;
+
+            print $fh "$next_line\n";
+        } while( $next_line !~ /^$here/ );
 
         # handle commands line line continuation: prompt$ command \
-	} elsif( $_ =~ /$prompt (.+) \\$/ ) {
-	    my $cmd = update_cmd( $1 );
+        } elsif( $_ =~ /$prompt (.+) \\$/ ) {
+            my $cmd = update_cmd( $1 );
 
-	    # commands that begin with a % are for CI only
-	    next if( $_ =~ /^%/ && !$ci_run );
+            # commands that begin with a % are for CI only
+            next if( $_ =~ /^%/ && !$ci_run );
 
-	    print $fh ' ' x $indent . "$cmd";
-	    my $next_line;
+            print $fh ' ' x $indent . "$cmd";
+            my $next_line;
             do {
                 $next_line = <IN>;
-	        # trim leading and trailing space
-	        $next_line =~ s/^\s+|\s+$//g;
+                # trim leading and trailing space
+                $next_line =~ s/^\s+|\s+$//g;
 
                 print $fh " $next_line\n";
             } while( $next_line =~ / \\$/ );
 
         # special treatment for do loops
-	} elsif( $_ =~ /$prompt (.+[ ]*;[ ]*do)$/) {
-	    my $cmd = update_cmd($1);
-	    
-	    print $fh ' ' x $indent . "$cmd\n";
+        } elsif( $_ =~ /$prompt (.+[ ]*;[ ]*do)$/) {
+            my $cmd = update_cmd($1);
+
+            print $fh ' ' x $indent . "$cmd\n";
             my $next_line;
             my $local_indent = $indent + 3; # further indent contents of loop
-	    do {
-                $next_line = <IN>;
-		# trim leading and trailing space
-		$next_line =~ s/^\s+|\s+$//g;
-                # reset indent to previous value for the last line
-                $local_indent = $indent if( $next_line =~ m/[^#]*done/ );
-		printf $fh ' ' x $local_indent . "%s\n",$next_line;
-	    } while( $next_line !~ m/[^#]*done/ ); # loop until we see an uncommented done
+        do {
+            $next_line = <IN>;
+            # trim leading and trailing space
+            $next_line =~ s/^\s+|\s+$//g;
+
+            # reset indent to previous value for the last line
+            $local_indent = $indent if( $next_line =~ m/[^#]*done/ );
+
+            printf $fh ' ' x $local_indent . "%s\n",$next_line;
+        } while( $next_line !~ m/[^#]*done/ ); # loop until we see an uncommented done
 
         # normal single line command
-	} elsif( $_ =~ /$prompt (.+)$/ ) {
-	    my $cmd = update_cmd($1);
-	    # commands that begin with a % are for CI only
-	    next if( $_ =~ /^%/ && !$ci_run );
-	    print $fh ' ' x $indent . "$cmd\n";
+        } elsif( $_ =~ /$prompt (.+)$/ ) {
+            my $cmd = update_cmd($1);
+            # commands that begin with a % are for CI only
+            next if( $_ =~ /^%/ && !$ci_run );
+            print $fh ' ' x $indent . "$cmd\n";
 
         # postgres command
-	} elsif( $_ =~ /$psql_prompt (.+)$/ ) {
-	    my $cmd = update_cmd( $1 );
-	    # commands that begin with a % are for CI only
-	    next if( $_ =~ /^%/ && !$ci_run );
-	    print $fh ' ' x $indent . "$cmd\n";
+        } elsif( $_ =~ /$psql_prompt (.+)$/ ) {
+            my $cmd = update_cmd( $1 );
+            # commands that begin with a % are for CI only
+            next if( $_ =~ /^%/ && !$ci_run );
+            print $fh ' ' x $indent . "$cmd\n";
 
-	}
-
+        }
     }
 }
 
@@ -238,13 +238,13 @@ sub check_for_section_replacement {
     my $comment = shift;
 
     if( $comment =~ /\\ref\{sec:(\S+)\}/ ) {
-	my $secname = $1;
-	my $replacementText = "";
-	
-	# We can only replace section information if latex document was built - otherwise we remove the section info
-	if( -e "$inputDir/$basename.aux" ) { 
+    my $secname = $1;
+    my $replacementText = "";
+
+    # We can only replace section information if latex document was built - otherwise we remove the section info
+    if( -e "$inputDir/$basename.aux" ) {
             open( FH, "$inputDir/$basename.aux" ) || die __LINE__ . ": Cannot open file -> $inputDir/$basename.aux\n$!";
-	    my $secnum;
+        my $secnum;
             while( <FH> ) {
                 if( /\{sec:$secname\}\{\{([^\}]+)/ ) {
                     if( defined $secnum ) { die __LINE__ . ": found duplicate section name $secname ($secnum vs $1)"; }
@@ -253,15 +253,15 @@ sub check_for_section_replacement {
             }
             close( FH );
             chomp( $secnum );
-	    
-	    if( $secnum eq "" ) {
-		die __LINE__ . ": Unable to query section number, verify latex build is up to date"
-	    }
 
-	    $replacementText = "(Section $secnum)";
-	}
+        if( $secnum eq "" ) {
+        die __LINE__ . ": Unable to query section number, verify latex build is up to date"
+        }
 
-	$comment =~ s/\\ref\{sec:(\S+)/$replacementText/g;
+        $replacementText = "(Section $secnum)";
+    }
+
+    $comment =~ s/\\ref\{sec:(\S+)/$replacementText/g;
     }
 
     return( $comment );
