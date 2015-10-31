@@ -78,39 +78,13 @@ if( $Install eq "" || $chrootInstall eq "" || $groupInstall eq "" || $groupChroo
 # an aggregate copy of all the tex commands.
 
 ( my $TMPFH_AGGR_STEPS, my $tmpfile_aggr_steps ) = tempfile();
-open( IN, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
-
-while( my $line = <IN> ) {
-    # Check for include
-    if( $line =~ /\\input\{(\S+)\}/ ) {
-    my $inputFile = $1;
-
-    # verify input file has .tex extension or add it
-    if( $inputFile !~ /(\S+).tex/ ) {
-        $inputFile = $inputFile . ".tex";
-    }
-
-    open( IN2,"<$inputFile" ) || die __LINE__ . ": Cannot open embedded input file $inputFile for parsing\n$!";
-
-    while( my $line_embed = <IN2> ) {
-        if( $line_embed =~ /\\input\{\S+\}/ ) {
-            print "Error: nested \\input{} file parsing not supported\n";
-            exit 1;
-        } elsif( $line !~ /^%/ ) {
-            print $TMPFH_AGGR_STEPS $line_embed;
-        }
-    }
-    close( IN2 );
-    } else {
-        print $TMPFH_AGGR_STEPS $line;
-    }
-}
-
-close( IN );
+open( my $INPUT_FH, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
+parse_includes( $TMPFH_AGGR_STEPS, $INPUT_FH );
+close( $INPUT_FH );
 close( $TMPFH_AGGR_STEPS );
 
 # Next, parse the raw file and look for commands to execute based on delimiter
-( my $fh,my $tmpfile ) = tempfile();
+( my $fh, my $tmpfile ) = tempfile();
 
 open( IN, "<$tmpfile_aggr_steps" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
 
@@ -276,4 +250,30 @@ sub update_cmd {
     $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
 
     return( $cmd );
-}
+} # end update_cmd
+
+sub parse_includes {
+    # OUTFILE is a filehandle all aggregated latex goes to
+    # INFILE is the latex filehandle to be read
+    my ( $OUTFILE, $INFILE ) = @_;
+
+    while( my $line = <$INFILE> ) {
+        # Check for include of another latex file
+        if( $line =~ /\\input\{(\S+)\}/ ) {
+            next if( $line =~ /^%%/ );
+            my $include_file = $1;
+
+            # verify input file has .tex extension or add it
+            if( $include_file !~ /(\S+).tex/ ) {
+                $include_file = $include_file . ".tex";
+            }
+            # open the new latex file and pass it back to this function again with the same outfile
+            open( my $INCLUDE_FILE, "<$include_file" ) || die __LINE__ . ": Cannot open file -> $include_file\n$!";
+            parse_includes( $OUTFILE, $INCLUDE_FILE );
+            close( $INCLUDE_FILE);
+
+        } elsif( $line !~ /^%%/ ) {
+            print {$OUTFILE} $line;
+        }
+    }
+} # end parse_includes
