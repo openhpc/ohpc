@@ -15,7 +15,7 @@
 
 Summary:   Intel(R) VTune(TM) Amplifier XE
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   16.1.0.424694
+Version:   16.1.1.434111
 Source0:   intel-%{pname}-amplifier%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   modfile-ohpc.input
