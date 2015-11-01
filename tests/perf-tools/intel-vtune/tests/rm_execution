@@ -38,14 +38,17 @@ module=vtune
 
     rm -f .job.vtune
 
-    # verify we got the tracing file for task 8
-    run ls vtune_result.7/data.0
+    # verify we got the tracing file for a task
+
+    run ls -ld vtune_result.*/data.0
     assert_success
+
+    resultDir=`ls -d vtune_result.* | head -1`
 
     # generate report
     rm -f vtune_result.txt
 
-    run amplxe-cl -r vtune_result.7 -report hotspots -quiet -format text -search-dir=src -report-output vtune_result.txt
+    run amplxe-cl -r $resultDir -report hotspots -quiet -format text -search-dir=src -report-output vtune_result.txt
     assert_success
 
     run ls vtune_result.txt
