@@ -16,7 +16,7 @@ export BATS_JUNIT_CLASS=FFTW
 ./bootstrap || exit 1
 
 for compiler in gnu ; do
-    for mpi in $MPI_FAMILIES ; do
+    for mpi in mvapich2 openmpi ; do
 
 	echo " "
 	echo " "
