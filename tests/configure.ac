@@ -113,7 +113,7 @@ AM_CONDITIONAL(ITAC_ENABLED,test "x$enable_itac" = "xyes" )
 # Intel-Vtune
 AC_ARG_ENABLE([vtune],
    [AS_HELP_STRING([--enable-vtune],[Enable Intel Vtune Amplifier XE tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_vtune,yes)])
+   [AX_OPTION_DEFAULT(type=short,enable_vtune,yes)])
 AM_CONDITIONAL(VTUNE_ENABLED,test "x$enable_vtune" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Intel-Advisor
