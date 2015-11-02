@@ -20,6 +20,12 @@ can be used to enable  \Ganglia{} on the {\em master} node.
 [master](*\#*) systemctl start gmond
 [master](*\#*) systemctl start gmetad
 [master](*\#*) chroot $CHROOT systemctl enable gmond
+
+[master](*\#*) for I in httpd apache; do
+              if [ -d /etc/$I ]; then
+                 perl -pi -e "s/Require local/Require all granted/" /etc/$I/conf.d/ganglia-ohpc.conf
+              fi
+           done 
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
