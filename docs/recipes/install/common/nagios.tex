@@ -42,6 +42,10 @@ provisioned {\em compute} nodes.
               perl -pi -e "s/HOSTNAME$(($I+1))/${c_name[$I]}/ || s/HOST$(($I+1))_IP/${c_ip[$I]}/" \
               /etc/nagios/conf.d/hosts.cfg
            done
+
+# Add check_ssh command for remote hosts
+[master](*\#*) echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost \
+        >> $CHROOT/etc/nagios/nrpe.conf
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
