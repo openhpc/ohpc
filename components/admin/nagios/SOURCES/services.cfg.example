@@ -26,3 +26,10 @@ define service{
         service_description     SSH Monitoring
         check_command           check_nrpe!check_ssh
         }
+
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     SSH Monitoring
+        check_command           check_nrpe!check_zombie_procs
+        }
