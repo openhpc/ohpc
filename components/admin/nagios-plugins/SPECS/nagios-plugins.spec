@@ -132,7 +132,9 @@ Requires:  nagios-plugins-mrtg%{PROJ_DELIM}
 Requires:  nagios-plugins-mrtgtraf%{PROJ_DELIM}
 Requires:  nagios-plugins-mysql%{PROJ_DELIM}
 Requires:  nagios-plugins-nagios%{PROJ_DELIM}
+# NRPE plugin comes from the nrpe build, but it is a plugin so including it here
 Requires:  nagios-plugins-nrpe%{PROJ_DELIM}
+# The perl version of these plugins are iffy -- we're not build this one, so don't include
 #Requires:  nagios-plugins-ntp-perl%{PROJ_DELIM}
 Requires:  nagios-plugins-ntp%{PROJ_DELIM}
 Requires:  nagios-plugins-nt%{PROJ_DELIM}
