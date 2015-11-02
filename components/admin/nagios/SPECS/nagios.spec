@@ -331,8 +331,6 @@ fi
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/private
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/objects
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/conf.d
-%attr(0640,root,nagios) %{_sysconfdir}/%{pname}/conf.d/hosts.cfg.example
-%attr(0640,root,nagios) %{_sysconfdir}/%{pname}/conf.d/services.cfg.example
 %attr(0640,root,nagios) %config(noreplace) %{_sysconfdir}/%{pname}/private/resource.cfg
 %if 0%{?sles_version} || 0%{?suse_version}
 %attr(0640,root,www) %config(noreplace) %{_sysconfdir}/%{pname}/passwd
