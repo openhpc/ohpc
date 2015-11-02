@@ -73,8 +73,11 @@ Source1: OHPC_macros
 Source2: OHPC_setup_compiler
 
 # Minimum Build Requires - our mxml build included devel headers in libmxml1
-BuildRequires: libmxml1 cmake zlib-devel glib2-devel bzip2-devel
-Requires:      libmxml1 bzip2 zlib
+BuildRequires: libmxml1 cmake zlib-devel glib2-devel
+Requires:      libmxml1 zlib
+#bzip support confuses the CMtests
+#Requires:      bzip2
+#BuildRequires: bzip2-devel
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
@@ -164,8 +167,9 @@ export CFLAGS="-fp-model strict $CFLAGS"
 	--with-lustre=/usr/include/lustre \
 	--with-phdf5="$HDF5_DIR" \
 	--with-zlib=/usr \
-	--with-bzip2=/usr \
 	--with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
+# bzip2 support is confusing CMtests
+#	--with-bzip2=/usr \
 
 # modify libtool script to not hardcode library paths
 sed -i -r -e 's/(hardcode_into_libs)=.*$/\1=no/' \
