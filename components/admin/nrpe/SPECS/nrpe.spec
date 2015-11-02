@@ -165,6 +165,7 @@ install -D -p -m 0755 init-script %{buildroot}/%{_initrddir}/nrpe
 install -D -m 0644 -p %{SOURCE3} %{buildroot}%{_unitdir}/%{pname}.service
 %endif
 install -D -p -m 0644 sample-config/nrpe.cfg %{buildroot}/%{_sysconfdir}/nagios/%{pname}.cfg
+mkdir -p %{buildroot}/%{_sysconfdir}/nagios/conf.d # install -D.... this should be your job
 install -D -p -m 0640 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}/%{_sysconfdir}/nagios/conf.d
 install -D -p -m 0755 src/nrpe %{buildroot}/%{_sbindir}/nrpe
 install -D -p -m 0755 src/check_nrpe %{buildroot}/%{_libdir}/nagios/plugins/check_nrpe
