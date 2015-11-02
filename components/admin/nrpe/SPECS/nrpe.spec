@@ -213,8 +213,11 @@ if [ "$1" -ge "1" ]; then
 fi
 %else
 #%systemd_postun_with_restart nrpe.service
-/usr/bin/systemctl disable nrpe.service
-/usr/bin/systemctl reload-or-try-restart nrpe.service
+if [ "$1" -ge "1" ]; then
+	/usr/bin/systemctl reload-or-try-restart nrpe.service
+else
+	/usr/bin/systemctl disable nrpe.service
+fi
 %endif
 
 %files
