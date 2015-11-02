@@ -12,7 +12,7 @@ tools, and a plethora of scientific libraries.
 The compatible OS versions for this release and the total number of
 OHPC-packaged RPMs for each variant is as follows:
 
-	CentOS 7.1 - 166 RPMs
+	CentOS 7.1 - 255 RPMs
 
 Note that a detailed list of all available components is available in
 the "Package Manifest" appendix located in the companion Install
