@@ -36,9 +36,6 @@ Source6: nagios.upgrade_to_v3.sh
 Source10: printer.png
 Source11: router.png
 Source12: switch.png
-# Example configuration files
-Source13: hosts.cfg.example
-Source14: services.cfg.example
 
 # looks fixed in 4.1.1
 #Patch1: nagios-0001-from-rpm.patch
@@ -263,8 +260,6 @@ install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
 
 # remove static library that is build in 4.1.1
 rm -v    %{buildroot}%{_libdir}/%{pname}/libnagios.a
-
-install -D -p -m 0640 %{SOURCE13} %{SOURCE14} %{buildroot}/%{_sysconfdir}/%{pname}/conf.d/
 
 
 %clean

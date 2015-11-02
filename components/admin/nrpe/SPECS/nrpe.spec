@@ -34,6 +34,8 @@ Source1: nrpe.sysconfig
 Source2: nrpe-tmpfiles.conf
 Source3: nrpe.service
 Source4: commands.cfg
+Source5: hosts.cfg.example
+Source6: services.cfg.example
 Patch1: nrpe-0001-Add-reload-target-to-the-init-script.patch
 Patch2: nrpe-0002-Read-extra-configuration-from-etc-sysconfig-nrpe.patch
 Patch3: nrpe-0003-Include-etc-npre.d-config-directory.patch
@@ -163,7 +165,7 @@ install -D -p -m 0755 init-script %{buildroot}/%{_initrddir}/nrpe
 install -D -m 0644 -p %{SOURCE3} %{buildroot}%{_unitdir}/%{pname}.service
 %endif
 install -D -p -m 0644 sample-config/nrpe.cfg %{buildroot}/%{_sysconfdir}/nagios/%{pname}.cfg
-install -D -p -m 0640 %{SOURCE4} %{buildroot}/%{_sysconfdir}/nagios/conf.d/
+install -D -p -m 0640 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}/%{_sysconfdir}/nagios/conf.d/
 install -D -p -m 0755 src/nrpe %{buildroot}/%{_sbindir}/nrpe
 install -D -p -m 0755 src/check_nrpe %{buildroot}/%{_libdir}/nagios/plugins/check_nrpe
 install -D -p -m 0644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/sysconfig/%{pname}
@@ -222,6 +224,8 @@ fi
 %dir %{_sysconfdir}/nrpe.d
 %config(noreplace) %{_sysconfdir}/nagios/nrpe.cfg
 %config(noreplace) %{_sysconfdir}/nagios/conf.d/commands.cfg
+%{_sysconfdir}/nagios/conf.d/hosts.cfg.example
+%{_sysconfdir}/nagios/conf.d/services.cfg.example
 %config(noreplace) %{_sysconfdir}/sysconfig/%{pname}
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
 %config(noreplace) %{_tmpfilesdir}/%{pname}.conf
