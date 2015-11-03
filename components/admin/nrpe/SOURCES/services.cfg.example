@@ -30,6 +30,6 @@ define service{
 define service{
         use                     generic-service
         hostgroup_name          compute
-        service_description     SSH Monitoring
+        service_description     Zombie Processes
         check_command           check_nrpe!check_zombie_procs
         }
