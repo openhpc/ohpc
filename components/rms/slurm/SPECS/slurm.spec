@@ -358,7 +358,7 @@ with which Slurm can be configured. Note that some system specific plugins
 are in other packages
 
 %package -n %{pname}-torque%{PROJ_DELIM}
-Summary: Torque/PBS wrappers for transitition from Torque/PBS to Slurm
+Summary: Torque/PBS wrappers for transition from Torque/PBS to Slurm
 Group: ohpc/rms
 Requires: slurm-perlapi
 %description -n %{pname}-torque%{PROJ_DELIM}
