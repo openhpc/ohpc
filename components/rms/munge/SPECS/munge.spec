@@ -22,7 +22,7 @@ Release:	1%{?dist}
 Summary:	MUNGE authentication service
 Group:		ohpc/rms
 License:	GPLv3+ and LGPLv3+
-URL:		https://munge.googlecode.com/
+URL:		http://dun.github.io/munge/
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
 
 %if 0%{?suse_version} >= 1100
