@@ -28,11 +28,6 @@ provisioned {\em compute} nodes.
         -r -g nrpe -s /sbin/nologin nrpe
 [master](*\#*) chroot $CHROOT /usr/sbin/groupadd -r nrpe
 
-# Enable Nagios on master, and configure
-[master](*\#*) chkconfig nagios on
-[master](*\#*) systemctl start nagios
-[master](*\#*) chmod u+s `which ping`
-
 # Configure remote services to test on compute nodes
 [master](*\#*) mv /etc/nagios/conf.d/services.cfg.example /etc/nagios/conf.d/services.cfg
 
@@ -46,6 +41,11 @@ provisioned {\em compute} nodes.
 # Add check_ssh command for remote hosts
 [master](*\#*) echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost \
         >> $CHROOT/etc/nagios/nrpe.cfg
+
+# Enable Nagios on master, and configure
+[master](*\#*) chkconfig nagios on
+[master](*\#*) systemctl start nagios
+[master](*\#*) chmod u+s `which ping`
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
