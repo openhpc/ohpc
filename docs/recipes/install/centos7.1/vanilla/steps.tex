@@ -310,9 +310,6 @@ example configuration.
 [master](*\#*) echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
 [master](*\#*) echo "${master_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
-# Identify resource manager server IP in SLURM configuration file on computes
-[master](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
-
 # Identify resource manager hostname on master host
 [master](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
@@ -519,6 +516,7 @@ import local file-based credentials, issue the following:
 [master](*\#*) wwsh file import /etc/passwd                                                                                                       
 [master](*\#*) wwsh file import /etc/group
 [master](*\#*) wwsh file import /etc/shadow 
+[master](*\#*) wwsh file import /etc/slurm/slurm.conf
 \end{lstlisting}
 % \end_ohpc_run
 
@@ -567,7 +565,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 
 # Define provisioning image for hosts
 [master](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
-     --files=dynamic_hosts,passwd,group,shadow,munge.key 
+     --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key 
 \end{lstlisting}
 
 % ohpc_validation_newline
