@@ -229,7 +229,7 @@ fi
 %{_sbindir}/nrpe
 %dir %{_sysconfdir}/nrpe.d
 %config(noreplace) %{_sysconfdir}/nagios/nrpe.cfg
-%config(noreplace) %{_sysconfdir}/nagios/conf.d/commands.cfg
+%attr( 640, root, nagios ) %config(noreplace) %{_sysconfdir}/nagios/conf.d/commands.cfg
 %attr( 640, root, nagios ) %{_sysconfdir}/nagios/conf.d/hosts.cfg.example
 %attr( 640, root, nagios ) %{_sysconfdir}/nagios/conf.d/services.cfg.example
 %config(noreplace) %{_sysconfdir}/sysconfig/%{pname}
