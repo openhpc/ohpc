@@ -230,8 +230,8 @@ fi
 %dir %{_sysconfdir}/nrpe.d
 %config(noreplace) %{_sysconfdir}/nagios/nrpe.cfg
 %config(noreplace) %{_sysconfdir}/nagios/conf.d/commands.cfg
-%{_sysconfdir}/nagios/conf.d/hosts.cfg.example
-%{_sysconfdir}/nagios/conf.d/services.cfg.example
+%attr( 640, root, nagios ) %{_sysconfdir}/nagios/conf.d/hosts.cfg.example
+%attr( 640, root, nagios ) %{_sysconfdir}/nagios/conf.d/services.cfg.example
 %config(noreplace) %{_sysconfdir}/sysconfig/%{pname}
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
 %config(noreplace) %{_tmpfilesdir}/%{pname}.conf
