@@ -22,7 +22,7 @@ Source2:   modfile-ohpc.input
 Release:   1
 License:   Copyright (C) 2003-2015 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
-URL:       http://www.intel.com/software/products/
+URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     ohpc/perf-tools
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
