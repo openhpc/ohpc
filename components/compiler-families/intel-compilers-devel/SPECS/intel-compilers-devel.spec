@@ -18,7 +18,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   16.0.109
 Release:   1
 License:   Intel(R)
-URL:       http://www.intel.com/software/products
+URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     ohpc/compiler-families
 BuildArch: x86_64
 Source0:   intel-compilers-devel%{PROJ_DELIM}-16.0.0-109.tar.gz

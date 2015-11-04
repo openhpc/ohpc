@@ -123,8 +123,9 @@ while( <IN> ) {
             my $cmd = update_cmd( $1 );
             print $fh ' ' x $indent . "$cmd\n";
 
-        # if line starts a HERE document: prompt$ command <<HERE > /tmp/foo
-        } elsif( $_ =~ /$prompt (.+ <<([^ ]+).*)$/ ) {
+        # if line starts a HERE document: prompt$ command <<- HERE > /tmp/foo
+        # <<- indicates the HERE document will ignore leadings tabs (not spaces)
+        } elsif( $_ =~ /$prompt (.+ <<-[ ]*([^ ]+).*)$/ ) {
             my $cmd  = update_cmd($1);
             my $here = $2;
 

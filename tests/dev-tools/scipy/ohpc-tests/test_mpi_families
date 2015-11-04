@@ -9,9 +9,10 @@ source ./common/functions || exit 1
 
 cd dev-tools/scipy || exit 1
 export BATS_JUNIT_CLASS=SciPy
+export MPI_FAMILIES="mvapich2 openmpi"
 
 for compiler in gnu ; do
-    for mpi in "mvapich2 openmpi" ; do
+    for mpi in $MPI_FAMILIES ; do
 
         echo " "
         echo " "
