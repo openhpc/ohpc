@@ -58,7 +58,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname adios
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+%define PNAME %(tr [a-z] [A-Z] <<< %{pname})
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
