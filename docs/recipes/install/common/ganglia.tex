@@ -12,7 +12,7 @@ can be used to enable  \Ganglia{} on the {\em master} node.
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Ganglia
 [master](*\#*) (*\groupinstall*) ohpc-ganglia
-[master](*\#*) (*\groupchrootinstall*) ganglia-gmond-ohpc
+[master](*\#*) (*\chrootinstall*) ganglia-gmond-ohpc
 
 # Start and Enable Ganglia services
 [master](*\#*) systemctl enable gmond
