@@ -133,7 +133,7 @@ to the chosen {\em master} host.
 \end{lstlisting}
 % end_ohpc_run
 
-With the \InfiniBand{} drivers included, you can also enable IPoIB functionality
+With the \InfiniBand{} drivers included, you can also enable (optional) IPoIB functionality
 which provides a mechanism to send IP packets over the IB network. If you plan
 to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_client}
 for additional details), then having IPoIB enabled is a requirement for the
@@ -208,7 +208,7 @@ customize a system image that can subsequently be used to provision one or more
 The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support for
 \baseOS{}. The following steps illustrate the process to build a minimal, default
 image for use with \Warewulf{}.  We begin by creating a directory structure on the 
-{\em master} that will represent the root filesystem of the compute node. The 
+{\em master} host that will represent the root filesystem of the compute node. The 
 default location for this example is in
 \path{/opt/ohpc/admin/images/centos7.1}. Note that \Warewulf{} assumes access to
 an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
@@ -725,17 +725,16 @@ offerings within \OHPC{}, issue the following:
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{../../common/slurm_startup}
 
-\begin{center}
-\begin{tcolorbox}[]
-\small
-While most resource managers provide similar functionality, the syntax of
-specific commands can vary substantially. The following table highlights some
-common examples of those differences.
-\vspace*{0.2cm}
-
-\input{../../common/rms_equivalence_table}
-\end{tcolorbox}
-\end{center}
+%% \begin{center}
+%% \begin{tcolorbox}[]
+%% \small
+%% While most resource managers provide similar functionality, the syntax of
+%% specific commands can vary substantially. The following table highlights some
+%% common examples of those differences.
+%% \vspace*{0.2cm}
+%% \input{../../common/rms_equivalence_table}
+%% \end{tcolorbox}
+%% \end{center}
 
 
 \clearpage
