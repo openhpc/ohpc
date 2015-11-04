@@ -565,6 +565,12 @@ template file for \Warewulf{} that can optionally be imported and used later to 
      --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network 
 \end{lstlisting}
 
+% ohpc_command if [ ${enable_ganglia} -eq 1 ];then
+% ohpc_validation_newline
+% ohpc_validation_comment Restart ganglia services to pick up hostfile changes
+% ohpc_command   systemctl restart gmond
+% ohpc_command   systemctl restart gmetad
+% ohpc_command fi
 % ohpc_validation_newline
 % ohpc_validation_comment Optionally, define IPoIB network settings (required if planning to mount Lustre over IB)
 % ohpc_command if [ ${enable_ipoib} -eq 1 ];then
