@@ -25,7 +25,7 @@ ARGS="$nx $ny $nz $nt"
 EXE=$TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
 
 # set global env settings
-export OMP_NUM_THREADS=$TEST_NUM_THREADS
+# export OMP_NUM_THREADS=$TEST_NUM_THREADS
 if [ $LMOD_FAMILY_MPI == "mvapich2" ];then
     export MV2_ENABLE_AFFINITY=0
     export IPATH_NO_CPUAFFINITY=1
