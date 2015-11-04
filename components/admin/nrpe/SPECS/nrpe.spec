@@ -13,7 +13,7 @@
 
 # Base package name
 %define pname nrpe
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+%define PNAME %(tr [a-z] [A-Z] <<< %{pname})
 
 %if 0%{?fedora} > 19
 %global _hardened_build 1
