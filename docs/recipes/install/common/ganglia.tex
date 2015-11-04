@@ -15,6 +15,7 @@ can be used to enable  \Ganglia{} on the {\em master} node.
 [master](*\#*) (*\chrootinstall*) ganglia-gmond-ohpc
 
 # Start and Enable Ganglia services
+# If you add nodes through WareWulf, restart these to pick up the hostnames rather than the IPs
 [master](*\#*) systemctl enable gmond
 [master](*\#*) systemctl enable gmetad
 [master](*\#*) systemctl start gmond
