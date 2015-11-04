@@ -73,15 +73,6 @@
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_ohpc_repo}
 
-\begin{lstlisting}[language=bash,keywords={},literate={VER}{\OHPCVersion{}}1]
-[master](*\#*) ohpc_repo=http://52.88.216.145//OpenHPC:/VER/CentOS_7.1:/OpenHPC:VER.repo
-
-\end{lstlisting}
-
-If outside of Intel, the repository location should be set to match the path to
-a locally accessibly copy of the \OHPC{} repository. Once set, the repository can be
-enabled via the following: 
-
 % begin_ohpc_run
 % ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
