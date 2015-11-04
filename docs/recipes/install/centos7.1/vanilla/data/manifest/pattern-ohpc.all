@@ -4,7 +4,7 @@ ohpc-base OpenHPC base packages
 ohpc-boost OpenHPC Boost library builds for various compiler/MPI combinations
 ohpc-fftw OpenHPC FFTW library builds for various compiler/MPI combinations
 ohpc-ganglia FSP Ganglia monitoring and metrics packages
-ohpc-gsl ForestPeak GSL library builds for various compiler combinations
+ohpc-gsl OpenHPC GSL library builds for various compiler combinations
 ohpc-hdf5 OpenHPC HDF5 library builds for various compiler combinations
 ohpc-hypre OpenHPC Hypre library builds for various compiler/MPI combinations
 ohpc-imb OpenHPC builds for Intel IMB MPI benchmarks
@@ -12,8 +12,7 @@ ohpc-mpiP OpenHPC mpiP profiling library builds for various compiler/MPI combina
 ohpc-mumps OpenHPC Mumps library builds for various compiler/MPI combinations
 ohpc-nagios FSP Nagios monitoring and metrics packages
 ohpc-netcdf FSP NetCDF library builds for various compiler/MPI combinations
-ohpc-numpy ForestPeak Numpy python module builds for various compiler combinations
-ohpc-openblas ForestPeak OpenBLAS library builds for various compiler combinations
+ohpc-numpy OpenHPC Numpy python module builds for various compiler combinations
 ohpc-petsc OpenHPC PETSC library builds for various compiler/MPI combinations
 ohpc-scalapack OpenHPC ScaLAPACK library builds for various compiler/MPI combinations
 ohpc-scipy OpenHPC Scientific Python library builds for various compiler/MPI combinations
@@ -21,7 +20,8 @@ ohpc-slurm-server OpenHPC server packages for SLURM
 ohpc-tau OpenHPC TAU library builds for various compiler/MPI combinations
 ohpc-trilinos OpenHPC Trilinos library builds for various compiler/MPI combinations
 ohpc-warewulf Base packages for Warewulf provisioning
-ohpc-metis ForestPeak METIS library builds for various compiler combinations
+ohpc-metis OpenHPC METIS library builds for various compiler combinations
+ohpc-openblas OpenHPC OpenBLAS library builds for various compiler combinations
 ohpc-phdf5 OpenHPC HDF5 parallel library builds for various compiler/MPI combinations
 ohpc-slurm-client OpenHPC client packages for SLURM
 ohpc-superlu_dist OpenHPC Superlu_dist library builds for various compiler/MPI combinations

@@ -14,7 +14,7 @@ boost-gnu-openmpi-ohpc 1.59.0 http://www.boost.org ohpc/parallel-libs Boost free
 boost-intel-impi-ohpc 1.59.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-mvapich2-ohpc 1.59.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-openmpi-ohpc 1.59.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-conman-ohpc 0.2.7 http://conman.googlecode.com/ ohpc/admin ConMan: The Console Manager
+conman-ohpc 0.2.7 http://dun.github.io/conman/ ohpc/admin ConMan: The Console Manager
 docs-ohpc 1.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 examples-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 fftw-gnu-mvapich2-ohpc 3.3.4 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
@@ -40,15 +40,15 @@ imb-gnu-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-ben
 imb-intel-impi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-intel-mvapich2-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-intel-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
-intel-advisor-ohpc 16.1.0.423501 http://www.intel.com/software/products/ ohpc/perf-tools Intel(R) Advisor XE
+intel-advisor-ohpc 16.1.0.423501 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/perf-tools Intel(R) Advisor XE
 intel-clck-ohpc 3.0.1 https://clusterready.intel.com/intel-cluster-checker/ ohpc/admin Intel(R) Cluster Checker
-intel-compilers-devel-ohpc 16.0.109 http://www.intel.com/software/products ohpc/compiler-families Intel(R) Parallel Studio XE
-intel-compilers-ohpc 16.0.109 http://www.intel.com/software/products ohpc/compiler-families Intel(R) Parallel Studio XE
-intel-inspector-ohpc 16.1.0.423441 http://www.intel.com/software/products/ ohpc/dev-tools Intel(R) Inspector XE
-intel-itac-ohpc 9.1.1.017 http://www.intel.com/software/products/ ohpc/perf-tools Intel(R) Trace Analyzer and Collector
+intel-compilers-devel-ohpc 16.0.109 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/compiler-families Intel(R) Parallel Studio XE
+intel-compilers-ohpc 16.0.109 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/compiler-families Intel(R) Parallel Studio XE
+intel-inspector-ohpc 16.1.0.423441 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/dev-tools Intel(R) Inspector XE
+intel-itac-ohpc 9.1.1.017 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/perf-tools Intel(R) Trace Analyzer and Collector
 intel-mpi-devel-ohpc 5.1.1.109 https://software.intel.com/en-us/intel-mpi-library ohpc/mpi-families Intel(R) MPI Library for Linux* OS
 intel-mpi-ohpc 5.1.1.109 https://software.intel.com/en-us/intel-mpi-library ohpc/mpi-families Intel(R) MPI Library for Linux* OS
-intel-vtune-ohpc 16.1.0.424694 http://www.intel.com/software/products/ ohpc/perf-tools Intel(R) VTune(TM) Amplifier XE
+intel-vtune-ohpc 16.1.1.434111 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/perf-tools Intel(R) VTune(TM) Amplifier XE
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
 lmod-defaults-gnu-mvapich2-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-ohpc 6.0.10 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
@@ -71,15 +71,14 @@ mumps-gnu-openmpi-ohpc 5.0.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUlt
 mumps-intel-impi-ohpc 5.0.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-intel-mvapich2-ohpc 5.0.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-intel-openmpi-ohpc 5.0.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
-munge-devel-ohpc 0.5.11 https://munge.googlecode.com/ Development/Libraries Headers and libraries for developing applications using MUNGE
-munge-libs-ohpc 0.5.11 https://munge.googlecode.com/ System Environment/Libraries Libraries for applications using MUNGE
-munge-ohpc 0.5.11 https://munge.googlecode.com/ ohpc/rms MUNGE authentication service
+munge-devel-ohpc 0.5.11 http://dun.github.io/munge/ Development/Libraries Headers and libraries for developing applications using MUNGE
+munge-libs-ohpc 0.5.11 http://dun.github.io/munge/ System Environment/Libraries Libraries for applications using MUNGE
+munge-ohpc 0.5.11 http://dun.github.io/munge/ ohpc/rms MUNGE authentication service
 mvapich2-gnu-ohpc 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-intel-ohpc 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 nagios-common-ohpc 4.1.1 http://www.nagios.org/ Applications/System Provides common directories, uid and gid among nagios-related packages.
 nagios-ohpc 4.1.1 http://www.nagios.org/ ohpc/admin Nagios monitors hosts and services and yells if somethings breaks
 nagios-plugins-all-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugins - All plugins
-nagios-plugins-breeze-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_breeze
 nagios-plugins-by_ssh-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_by_ssh
 nagios-plugins-cluster-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_cluster
 nagios-plugins-dhcp-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_dhcp
@@ -105,6 +104,7 @@ nagios-plugins-mrtg-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/Syst
 nagios-plugins-mrtgtraf-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_mrtgtraf
 nagios-plugins-mysql-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_mysql
 nagios-plugins-nagios-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_nagios
+nagios-plugins-nrpe-ohpc 2.15 http://www.nagios.org Applications/System Provides nrpe plugin for Nagios
 nagios-plugins-nt-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_nt
 nagios-plugins-ntp-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ntp
 nagios-plugins-nwstat-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_nwstat
@@ -218,17 +218,17 @@ lmod-defaults-intel-mvapich2-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin
 lmod-defaults-intel-openmpi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 nagios-devel-ohpc 4.1.1 http://www.nagios.org/ Applications/System Provides include files that Nagios-related applications may compile against
 nagios-plugins-apt-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_apt
+nagios-plugins-breeze-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_breeze
 nagios-plugins-dbi-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_dbi
 nagios-plugins-ifoperstatus-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ifoperstatus
 nagios-plugins-ifstatus-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_ifstatus
-nagios-plugins-nrpe-ohpc 2.15 http://www.nagios.org Applications/System Provides nrpe plugin for Nagios
 nagios-plugins-radius-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/System Nagios Plugin - check_radius
 nagios-plugins-uptime-ohpc 2.1.1 https://www.nagios-plugins.org/ Applications/Systems Nagios Plugin - check_uptime
 ndoutils-ohpc 2.0.0 http://www.nagios.org/download/addons/ Applications/System Stores all configuration and event data from Nagios in a database
 slurm-pam_slurm-ohpc 15.08.1 http://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
 slurm-sjobexit-ohpc 15.08.1 http://slurm.schedmd.com/ ohpc/rms Slurm job exit code management tools
 slurm-sjstat-ohpc 15.08.1 http://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
-slurm-torque-ohpc 15.08.1 http://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transitition from Torque/PBS to Slurm
+slurm-torque-ohpc 15.08.1 http://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
 warewulf-cluster-node-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Tools used for clustering with Warewulf
 warewulf-ipmi-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning IPMI Module for Warewulf
 warewulf-nhc-ohpc 1.4.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf Node Health Check System
