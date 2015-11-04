@@ -22,7 +22,7 @@ $mpi_exceptions{"fftw"} = 2;
 $mpi_exceptions{"mkl-blacs"} = 1;
 
 my $longSummaryLine = 60;
-my $urlColor="blue";
+my $urlColor="logoblue";
 my $REMOVE_HTTP=0;
 my $FIXD_WIDTH=1;
 
@@ -198,7 +198,7 @@ foreach my $category (@ohpcCategories) {
 		    if($sumLength <= $longSummaryLine || $delta > 2) {
 			print OUT "\\newline";
 		    }
-		    print OUT " {\\color{$urlColor} $urlData[$k]}} \\\\ \n";
+		    print OUT " {\\color{$urlColor} \\url{$urlData[$k]}}} \\\\ \n";
 		} else {
 		    print OUT "& \\\\ \n";
 	        }
@@ -224,7 +224,7 @@ foreach my $category (@ohpcCategories) {
 		if($sumLength <= $longSummaryLine) {
 		    print OUT "\\newline";
 		}
- 		print OUT " { \\color{$urlColor} $urlData[$i]} \n"
+ 		print OUT " { \\color{$urlColor} \\url{$urlData[$i]}} \n"
  	    } else {
  		print OUT "\\multirow{2}{*}{$summaryData[$i]} \\\\\n";
  		print OUT "& & \n";
