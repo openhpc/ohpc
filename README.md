@@ -27,4 +27,4 @@ xpdf /opt/ohpc/pub/doc/Install_guide.pdf
 ```
 ## Questions, Comments, or Bug Reports?
 
-Please direct to: karl.w.schulz@intel.com
+Please direct to: openhpc+users@groups.io
