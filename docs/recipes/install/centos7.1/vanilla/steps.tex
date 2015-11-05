@@ -317,6 +317,18 @@ example configuration.
 \end{lstlisting}
 % end_ohpc_run
 
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+Slurm requires three explicit configuration parameters to define the allocation of
+user threads to a particular hardware resource: Sockets, CoresPerSocket, and
+ThreadsPerCore. The default configuration file assumes dual-socket, 8 cores per
+socket, and two threads per core. Make sure that these values in
+/etc/slurm/slurm.conf match your particular hardware.
+\end{tcolorbox}
+\end{center}
+
 % Additional commands when additional computes are requested
 
 % begin_ohpc_run
