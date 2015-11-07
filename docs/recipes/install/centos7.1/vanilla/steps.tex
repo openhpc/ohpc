@@ -74,16 +74,20 @@
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_ohpc_repo}
 
-% begin_ohpc_run
-% ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
 [master](*\#*) wget -P /etc/yum.repos.d ${ohpc_repo}
 \end{lstlisting}
-% end_ohpc_run
 
-% master]$ export OpenHPC_mirror=http://tcgsw-obs.pdx.intel.com:82/ForestPeak:
-% master]$ wget -P /etc/yum.repos.d
-% ${rsp_repo}/15.31:/Factory/CentOS-7.1_Intel/ForestPeak:15.31:Factory.repo
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
+% ohpc_validation_newline
+% ohpc_command yum repolist | grep -q OpenHPC
+% ohpc_command if [ $? -ne 0 ];then
+% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
+% ohpc_command    exit 1
+% ohpc_command fi
+% end_ohpc_run
 
 In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
