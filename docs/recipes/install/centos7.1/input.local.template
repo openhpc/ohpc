@@ -10,7 +10,7 @@
 # ---------------------------
 
 # URL for OpenHPC repository
-ohpc_repo="${ohpc_repo:-http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/1.0/CentOS-7.1_Intel/OpenHPC:1.0.repo}"
+ohpc_repo="${ohpc_repo:-http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.1/OpenHPC:1.0.repo}"
 
 # Hostname for master server (SMS)
 master_name="${master_name:-sms}"
