@@ -22,7 +22,7 @@ provisioned {\em compute} nodes.
 [sms](*\#*) chroot $CHROOT systemctl enable nrpe
 [sms](*\#*) chroot $CHROOT perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" /etc/nagios/nrpe.cfg
 [sms](*\#*) echo "nrpe 5666/tcp # NRPE"         >> $CHROOT/etc/services
-[sms](*\#*) echo "nrpe : ${master_ip}  : ALLOW" >> $CHROOT/etc/hosts.allow
+[sms](*\#*) echo "nrpe : ${sms_ip}  : ALLOW"    >> $CHROOT/etc/hosts.allow
 [sms](*\#*) echo "nrpe : ALL : DENY"            >> $CHROOT/etc/hosts.allow
 [sms](*\#*) chroot $CHROOT /usr/sbin/useradd -c "NRPE user for the NRPE service" -d /var/run/nrpe \
         -r -g nrpe -s /sbin/nologin nrpe

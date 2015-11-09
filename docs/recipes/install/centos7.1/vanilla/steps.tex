@@ -189,7 +189,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Enable internal interface for provisioning
-[sms](*\#*) ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
+[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl restart xinetd 
@@ -304,11 +304,11 @@ example configuration.
 [sms](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # add NFS client mounts of /home and /opt/ohpc/pub to base image
-[sms](*\#*) echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
-[sms](*\#*) echo "${master_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
 # Identify resource manager hostname on master host
-[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
+[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 
 # Export /home and OpenHPC public packages from master server to cluster compute nodes
 [sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
@@ -318,7 +318,7 @@ example configuration.
 
 # Enable NTP time service on computes and identify master host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
-[sms](*\#*) echo "server ${master_ip}" >> $CHROOT/etc/ntp.conf
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
 % end_ohpc_run
 
@@ -474,7 +474,7 @@ host as follows:
 %% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 %% [FSP-469] # Set master host as data aggregator
 %% [FSP-469] [sms](*\#*) perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
-%% [FSP-469] [sms](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${master_ip}/" /etc/orcmdb_psql.ini
+%% [FSP-469] [sms](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${sms_ip}/" /etc/orcmdb_psql.ini
 %% [FSP-469] 
 %% [FSP-469] # Update BMC credentials to match local values
 %% [FSP-469] 

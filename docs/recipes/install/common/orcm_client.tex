@@ -8,7 +8,7 @@ be added to the compute image as follows:
 [sms](*\#*) (*\groupchrootinstall*) ohpc-orcm-client
 
 # Set master host as data aggregator
-[sms](*\#*) perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/opt/open-rcm/etc/orcm-site.xml
+[sms](*\#*) perl -pi -e "s/aggregator_hostname/<sms_ip>/" $CHROOT/opt/open-rcm/etc/orcm-site.xml
 
 # Enable orcmd client daemon on boot
 [sms](*\#*) chroot $CHROOT systemctl enable orcmd

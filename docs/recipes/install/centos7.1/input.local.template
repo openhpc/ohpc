@@ -13,10 +13,10 @@
 ohpc_repo="${ohpc_repo:-http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.1/OpenHPC:1.0.repo}"
 
 # Hostname for master server (SMS)
-master_name="${master_name:-sms}"
+sms_name="${sms_name:-sms}"
                               
 # Local (internal) IP address on SMS
-master_ip="${master_ip:-172.16.0.1}"
+sms_ip="${sms_ip:-172.16.0.1}"
 
 # Internal ethernet interface on SMS
 sms_eth_internal="${sms_eth_internal:-eth1}"
