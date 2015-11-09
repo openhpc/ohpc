@@ -4,7 +4,7 @@ host that can be used to run an example job.
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-[master](*\#*) useradd -m test
+[sms](*\#*) useradd -m test
 \end{lstlisting}
 % end_ohpc_run
 
@@ -16,10 +16,10 @@ shadow files, and since we are impatient we will trigger the compute node pull.
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
 # update master warewulf database
-[master](*\#*) wwsh file sync passwd shadow group
+[sms](*\#*) wwsh file sync passwd shadow group
 
 # manually pull changes on compute nodes
-[master](*\#*) pdsh -w c[1-4] /warewulf/bin/wwgetfiles 
+[sms](*\#*) pdsh -w c[1-4] /warewulf/bin/wwgetfiles 
 \end{lstlisting}
 % end_ohpc_run
 
@@ -38,7 +38,7 @@ launch mechanism):
 
 \begin{lstlisting}[language=bash,keywords={}]
 # switch to "test" user
-[master](*\#*) su - test
+[sms](*\#*) su - test
 
 # Compile MPI "hello world" example
 [test@master ~]$ mpicc -o hello -O3 /opt/ohpc/pub/examples/mpi/hello.c

@@ -9,11 +9,11 @@ forward their logs to the SMS, and to allow the SMS to accept these log requests
 % ohpc_comment_header Add Cluster Checker to SMS and computes \ref{sec:add_clck}
 \begin{lstlisting}[language=bash,keywords={}]
 # Configure SMS to receive messages and reload rsyslog configuration
-[master](*\#*) echo "$ModLoad imudp" >> /etc/rsyslog.conf
-[master](*\#*) echo "$UDPServerRun 514" >> /etc/rsyslog.conf
-[master](*\#*) systemctl kill -s HUP rsyslog
+[sms](*\#*) echo "$ModLoad imudp" >> /etc/rsyslog.conf
+[sms](*\#*) echo "$UDPServerRun 514" >> /etc/rsyslog.conf
+[sms](*\#*) systemctl kill -s HUP rsyslog
 
 # Define compute node forwarding destination
-[master](*\#*) echo "*.* @${sms_eth_internal}:514" >> $CHROOT/etc/rsyslog.conf
+[sms](*\#*) echo "*.* @${sms_eth_internal}:514" >> $CHROOT/etc/rsyslog.conf
 \end{lstlisting}
 % end_ohpc_run

@@ -13,39 +13,39 @@ provisioned {\em compute} nodes.
 % ohpc_validation_comment Install Nagios on master and vnfs image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Nagios base, Remote Plugin Engine, and Plugins on Master
-[master](*\#*) (*\groupinstall*) ohpc-nagios
+[sms](*\#*) (*\groupinstall*) ohpc-nagios
 
 # Also install in compute node image
-[master](*\#*) (*\groupchrootinstall*) ohpc-nagios
+[sms](*\#*) (*\groupchrootinstall*) ohpc-nagios
 
 # Enable NRPE on compute image, and configure
-[master](*\#*) chroot $CHROOT systemctl enable nrpe
-[master](*\#*) chroot $CHROOT perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" /etc/nagios/nrpe.cfg
-[master](*\#*) echo "nrpe 5666/tcp # NRPE"         >> $CHROOT/etc/services
-[master](*\#*) echo "nrpe : ${master_ip}  : ALLOW" >> $CHROOT/etc/hosts.allow
-[master](*\#*) echo "nrpe : ALL : DENY"            >> $CHROOT/etc/hosts.allow
-[master](*\#*) chroot $CHROOT /usr/sbin/useradd -c "NRPE user for the NRPE service" -d /var/run/nrpe \
+[sms](*\#*) chroot $CHROOT systemctl enable nrpe
+[sms](*\#*) chroot $CHROOT perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" /etc/nagios/nrpe.cfg
+[sms](*\#*) echo "nrpe 5666/tcp # NRPE"         >> $CHROOT/etc/services
+[sms](*\#*) echo "nrpe : ${master_ip}  : ALLOW" >> $CHROOT/etc/hosts.allow
+[sms](*\#*) echo "nrpe : ALL : DENY"            >> $CHROOT/etc/hosts.allow
+[sms](*\#*) chroot $CHROOT /usr/sbin/useradd -c "NRPE user for the NRPE service" -d /var/run/nrpe \
         -r -g nrpe -s /sbin/nologin nrpe
-[master](*\#*) chroot $CHROOT /usr/sbin/groupadd -r nrpe
+[sms](*\#*) chroot $CHROOT /usr/sbin/groupadd -r nrpe
 
 # Configure remote services to test on compute nodes
-[master](*\#*) mv /etc/nagios/conf.d/services.cfg.example /etc/nagios/conf.d/services.cfg
+[sms](*\#*) mv /etc/nagios/conf.d/services.cfg.example /etc/nagios/conf.d/services.cfg
 
 # Define compute nodes as hosts to monitor
-[master](*\#*) mv /etc/nagios/conf.d/hosts.cfg.example /etc/nagios/conf.d/hosts.cfg
-[master](*\#*) for I in {0..3}; do
+[sms](*\#*) mv /etc/nagios/conf.d/hosts.cfg.example /etc/nagios/conf.d/hosts.cfg
+[sms](*\#*) for I in {0..3}; do
               perl -pi -e "s/HOSTNAME$(($I+1))/${c_name[$I]}/ || s/HOST$(($I+1))_IP/${c_ip[$I]}/" \
               /etc/nagios/conf.d/hosts.cfg
            done
 
 # Add check_ssh command for remote hosts
-[master](*\#*) echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost \
+[sms](*\#*) echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost \
         >> $CHROOT/etc/nagios/nrpe.cfg
 
 # Enable Nagios on master, and configure
-[master](*\#*) chkconfig nagios on
-[master](*\#*) systemctl start nagios
-[master](*\#*) chmod u+s `which ping`
+[sms](*\#*) chkconfig nagios on
+[sms](*\#*) systemctl start nagios
+[sms](*\#*) chmod u+s `which ping`
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi

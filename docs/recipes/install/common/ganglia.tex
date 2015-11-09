@@ -11,23 +11,23 @@ can be used to enable  \Ganglia{} on the {\em master} node.
 % ohpc_validation_comment Install Ganglia on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install Ganglia
-[master](*\#*) (*\groupinstall*) ohpc-ganglia
-[master](*\#*) (*\chrootinstall*) ganglia-gmond-ohpc
+[sms](*\#*) (*\groupinstall*) ohpc-ganglia
+[sms](*\#*) (*\chrootinstall*) ganglia-gmond-ohpc
 
 # Start and Enable Ganglia services
 # If you add nodes through WareWulf, restart these to pick up the hostnames rather than the IPs
-[master](*\#*) systemctl enable gmond
-[master](*\#*) systemctl enable gmetad
-[master](*\#*) systemctl start gmond
-[master](*\#*) systemctl start gmetad
-[master](*\#*) chroot $CHROOT systemctl enable gmond
+[sms](*\#*) systemctl enable gmond
+[sms](*\#*) systemctl enable gmetad
+[sms](*\#*) systemctl start gmond
+[sms](*\#*) systemctl start gmetad
+[sms](*\#*) chroot $CHROOT systemctl enable gmond
 
-[master](*\#*) for I in httpd apache2; do
+[sms](*\#*) for I in httpd apache2; do
               if [ -d /etc/$I ]; then
                  perl -pi -e "s/Require local/Require all granted/" /etc/$I/conf.d/ganglia-ohpc.conf
               fi
            done 
-[master](*\#*) systemctl try-restart httpd
+[sms](*\#*) systemctl try-restart httpd
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
