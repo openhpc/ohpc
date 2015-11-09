@@ -4,3 +4,14 @@ approach, insert the \baseOS{} DVD, power cycle the host, and follow the distro
 provided directions to install the BOS on your chosen {\em master} host.
 Alternatively, if choosing to use a pre-installed server, please verify that it
 is provisioned with the required \baseOS{} distribution.
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+While it is theoretically possible to provision a Warewulf cluster with SELinux
+enabled, doing so is beyond the scope of this document. Even the use of
+permissive mode can be problematic and we therefore recommend disabling SELinux on the {\em
+master} SMS host.
+
+\end{tcolorbox}
+\end{center}
