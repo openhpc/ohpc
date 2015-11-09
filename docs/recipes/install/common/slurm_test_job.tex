@@ -1,5 +1,5 @@
 With the resource manager enabled for production usage, users should now be
-able to run jobs.  We will add a ``test'' user on the {\em master}
+able to run jobs.  To demonstrate this, we will add a ``test'' user on the {\em master}
 host that can be used to run an example job.
 
 % begin_ohpc_run
@@ -9,19 +9,36 @@ host that can be used to run an example job.
 % end_ohpc_run
 
 \Warewulf{} installs a utility on the compute nodes to automatically 
-synchronize files from the SMS database every five minutes. 
-We must first update the database with the change we just made to passwd and 
-shadow files, and since we are impatient we will trigger the compute node pull.
+synchronize known files from the provisioning server at five minute intervals. In this
+recipe, recall that we previously registered credential files with Warewulf (e.g. passwd,
+group, and shadow) so that these files would be propagated during compute node
+imaging. However, with the addition of a new ``test'' user above, the files
+have been outdated and we need to update the Warewulf database to incorporate
+the additions. This resync process can be accomplished as follows:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-# update master warewulf database
-[sms](*\#*) wwsh file sync passwd shadow group
+[sms](*\#*) wwsh file resync passwd shadow group
+\end{lstlisting}
+% end_ohpc_run
 
-# manually pull changes on compute nodes
+\begin{center}
+\begin{tcolorbox}[]
+\small
+After resyncing to notify Warewulf of file modifications made on the {\em
+master} host, it should take approximately 5 minutes for the changes to
+propagate. However, you can also manually pull the changes from compute nodes
+via the following:
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) pdsh -w c[1-4] /warewulf/bin/wwgetfiles 
 \end{lstlisting}
 % end_ohpc_run
+\end{tcolorbox}
+\end{center}
+
+%We must first update the database with the change we just made to passwd and 
+%shadow files, and since we are impatient we will trigger the compute node pull.
 
 \OHPC{} includes a simple ``hello-world'' MPI application in the
 \texttt{/opt/ohpc/pub/examples} directory that can be used for this quick
