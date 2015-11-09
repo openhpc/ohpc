@@ -76,7 +76,7 @@
 \input{../../common/enable_ohpc_repo}
 
 \begin{lstlisting}[language=bash,keywords={},literate={VER}{\OHPCVersion{}}1]
-[master](*\#*) ohpc_repo=http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/VER/SLE_12_Intel/OpenHPC:VER.repo
+[sms](*\#*) ohpc_repo=http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/VER/SLE_12_Intel/OpenHPC:VER.repo
 \end{lstlisting}
 
 
@@ -87,13 +87,13 @@ enabled via the following:
 % begin_ohpc_run
 % ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
 \begin{lstlisting}[language=bash,keywords={}]
-[master](*\#*) zypper addrepo ${ohpc_repo}
-[master](*\#*) zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
+[sms](*\#*) zypper addrepo ${ohpc_repo}
+[sms](*\#*) zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_ohpc_run
 
 % Dev testing for Factory
-%[master](*\#*) zypper addrepo $OpenHPC_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
+%[sms](*\#*) zypper addrepo $OpenHPC_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
 
 
 In addition to the \OHPC{} package repository, the {\em master} host also
@@ -115,8 +115,8 @@ both the base and SDK repositories:
 % begin_ohpc_run
 % ohpc_validation_comment Disable firewall 
 \begin{lstlisting}[language=bash,keywords={}]
-[master](*\#*) systemctl disable SuSEfirewall2
-[master](*\#*) systemctl stop SuSEfirewall2
+[sms](*\#*) systemctl disable SuSEfirewall2
+[sms](*\#*) systemctl stop SuSEfirewall2
 \end{lstlisting}
 % end_ohpc_run
 
@@ -134,14 +134,14 @@ to enable user access.
 % begin_ohpc_run
 % ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
-[master](*\#*) (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
-[master](*\#*) (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
+[sms](*\#*) (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
+[sms](*\#*) (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
-[master](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules /etc/udev/rules.d/
+[sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules /etc/udev/rules.d/
 
 # Load IB drivers
-[master](*\#*) systemctl start rdma
+[sms](*\#*) systemctl start rdma
 \end{lstlisting}
 % end_ohpc_run
 
@@ -161,14 +161,14 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % ohpc_indent 5
 % ohpc_validation_comment Enable ib0
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master](*\#*) cp /opt/ohpc/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
+[sms](*\#*) cp /opt/ohpc/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
 
 # Define local IPoIB address and netmask
-[master](*\#*) perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network/ifcfg-ib0
-[master](*\#*) perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network/ifcfg-ib0
+[sms](*\#*) perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network/ifcfg-ib0
+[sms](*\#*) perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network/ifcfg-ib0
 
 # Initiate ib0
-[master](*\#*) ifup ib0
+[sms](*\#*) ifup ib0
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -183,35 +183,35 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Configure Warewulf provisioning to use desired internal interface
-[master](*\#*) perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
+[sms](*\#*) perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
 
 # Configure DHCP server to use desired internal interface
-[master](*\#*) perl -pi -e "s/^DHCPD_INTERFACE=\S+/DHCPD_INTERFACE=${sms_eth_internal}/" /etc/sysconfig/dhcpd
+[sms](*\#*) perl -pi -e "s/^DHCPD_INTERFACE=\S+/DHCPD_INTERFACE=${sms_eth_internal}/" /etc/sysconfig/dhcpd
 
 # Enable tftp service for compute node image distribution
-[master](*\#*) perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
+[sms](*\#*) perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
 
 # Configure Warewulf to use the default SLES tftp location
-[master](*\#*) perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv/#" /etc/warewulf/provision.conf
+[sms](*\#*) perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv/#" /etc/warewulf/provision.conf
 
 # Update Warewulf http configuration to use the SLES version of mod_perl
-[master](*\#*) export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
-[master](*\#*) perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
+[sms](*\#*) export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
+[sms](*\#*) perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
 
 # Enable http access for Warewulf cgi-bin directory to support newer apache syntax
-[master](*\#*) perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
-[master](*\#*) perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
-[master](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
+[sms](*\#*) perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
+[sms](*\#*) perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
+[sms](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Enable internal interface for provisioning
-[master](*\#*) ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
+[sms](*\#*) ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
-[master](*\#*) systemctl restart xinetd
-[master](*\#*) systemctl enable mysql.service
-[master](*\#*) systemctl restart mysql
-[master](*\#*) systemctl enable apache2.service
-[master](*\#*) systemctl restart apache2
+[sms](*\#*) systemctl restart xinetd
+[sms](*\#*) systemctl enable mysql.service
+[sms](*\#*) systemctl restart mysql
+[sms](*\#*) systemctl enable apache2.service
+[sms](*\#*) systemctl restart apache2
 \end{lstlisting}
 %\end{verbatim}
 % end_ohpc_run
@@ -234,13 +234,13 @@ default location for this example is in \path{/opt/ohpc/admin/images/sles12}.
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location for SLES 
-[master](*\#*) export CHROOT=/opt/ohpc/admin/images/sles12
+[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/sles12
 
 # Build initial chroot image
-[master](*\#*) mkdir -p -m 755 $CHROOT                        # create chroot housing dir
-[master](*\#*) mkdir -m 755 $CHROOT/dev                       # create chroot /dev dir
-[master](*\#*) mknod -m 666 $CHROOT/dev/zero c 1 5            # create /dev/zero device
-[master](*\#*) wwmkchroot sles-12 $CHROOT                     # create base image
+[sms](*\#*) mkdir -p -m 755 $CHROOT                        # create chroot housing dir
+[sms](*\#*) mkdir -m 755 $CHROOT/dev                       # create chroot /dev dir
+[sms](*\#*) mknod -m 666 $CHROOT/dev/zero c 1 5            # create /dev/zero device
+[sms](*\#*) wwmkchroot sles-12 $CHROOT                     # create base image
 \end{lstlisting}
 % end_ohpc_run
 
@@ -260,7 +260,7 @@ be updated with a copy of the configuration as follows:
 % begin_ohpc_run
 % ohpc_comment_header Add OpenHPC components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master](*\#*) cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
+[sms](*\#*) cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
 \end{lstlisting}
 % end_ohpc_run
 
@@ -268,29 +268,29 @@ be updated with a copy of the configuration as follows:
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Import GPG keys for chroot repository usage
-[master](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
+[sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 
 # Add SLURM client support
-[master](*\#*) (*\groupchrootinstall*) ohpc-slurm-client
+[sms](*\#*) (*\groupchrootinstall*) ohpc-slurm-client
 
 # Add IB support
-[master](*\#*) (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
-[master](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
+[sms](*\#*) (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
+[sms](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
-[master](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
+[sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
 
 # Add Network Time Protocol (NTP) support
-[master](*\#*) (*\chrootinstall*) ntp
+[sms](*\#*) (*\chrootinstall*) ntp
 
 # Include modules user environment
-[master](*\#*) (*\chrootinstall*) lmod-ohpc
+[sms](*\#*) (*\chrootinstall*) lmod-ohpc
 
 # Enable ssh access 
-[master](*\#*) chroot $CHROOT systemctl enable sshd.service
+[sms](*\#*) chroot $CHROOT systemctl enable sshd.service
 
 # Remove default hostname to allow WW to provision network names
-[master](*\#*) mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
+[sms](*\#*) mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
 \end{lstlisting}
 % end_ohpc_run
 
@@ -311,27 +311,27 @@ example configuration.
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # add new cluster key to base image
-[master](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
+[sms](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # add NFS client mounts of /home and /opt/ohpc/pub to base image
-[master](*\#*) echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
-[master](*\#*) echo "${master_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${master_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
 # Identify resource manager server IP in SLURM configuration file on computes
-[master](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
+[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
 
 # Identify resource manager hostname on master host
-[master](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
+[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
 
 # Export /home and OpenHPC public packages from master server
-[master](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
-[master](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
-[master](*\#*) exportfs -a
-[master](*\#*) systemctl restart nfsserver
+[sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[sms](*\#*) exportfs -a
+[sms](*\#*) systemctl restart nfsserver
 
 # Enable NTP time service on computes and identify master host as local NTP server
-[master](*\#*) chroot $CHROOT systemctl enable ntpd
-[master](*\#*) echo "server ${master_ip}" >> $CHROOT/etc/ntp.conf
+[sms](*\#*) chroot $CHROOT systemctl enable ntpd
+[sms](*\#*) echo "server ${master_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
 % end_ohpc_run
 
@@ -373,17 +373,17 @@ discussed further in the following sections.
 % ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Update memlock settings on master
-[master](*\#*) echo "* soft memlock unlimited" >> /etc/security/limits.conf
-[master](*\#*) echo "* hard memlock unlimited" >> /etc/security/limits.conf
+[sms](*\#*) echo "* soft memlock unlimited" >> /etc/security/limits.conf
+[sms](*\#*) echo "* hard memlock unlimited" >> /etc/security/limits.conf
 
 # Update memlock settings within compute image
-[master](*\#*) echo "* soft memlock unlimited" >> $CHROOT/etc/security/limits.conf
-[master](*\#*) echo "* hard memlock unlimited" >> $CHROOT/etc/security/limits.conf
+[sms](*\#*) echo "* soft memlock unlimited" >> $CHROOT/etc/security/limits.conf
+[sms](*\#*) echo "* hard memlock unlimited" >> $CHROOT/etc/security/limits.conf
 \end{lstlisting}
 % end_ohpc_run
 
 %# Enable larger locked memory limits for SLURM daemon
-%[master](*\#*) echo "ulimit -l unlimited" >> $CHROOT/etc/sysconfig/slurm
+%[sms](*\#*) echo "ulimit -l unlimited" >> $CHROOT/etc/sysconfig/slurm
 
 \paragraph{Enable ssh control via resource manager} 
 
@@ -392,7 +392,7 @@ discussed further in the following sections.
 % begin_ohpc_run
 % ohpc_validation_comment Enable slurm pam module
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master](*\#*) echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
+[sms](*\#*) echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
 \end{lstlisting}
 % end_ohpc_run
 
@@ -416,10 +416,10 @@ file to allow loading of the necessary modules.
 % ohpc_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
-[master](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
+[sms](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
 
 # Update configuration to allow Lustre modules to be loaded on master host
-[master](*\#*) perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
+[sms](*\#*) perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      /etc/modprobe.d/10-unsupported-modules.conf
 \end{lstlisting}
 % end_ohpc_run
@@ -429,15 +429,15 @@ file to allow loading of the necessary modules.
 % ohpc_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
-[master](*\#*) (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
+[sms](*\#*) (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
 
 # Update configuration to allow Lustre modules to be loaded on compute hosts
-[master](*\#*) perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
+[sms](*\#*) perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
      $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
 
 # Include mount point and file system mount in compute image
-[master](*\#*) mkdir $CHROOT/mnt/lustre
-[master](*\#*) echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) mkdir $CHROOT/mnt/lustre
+[sms](*\#*) echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
 \end{lstlisting}
 % end_ohpc_run
 
@@ -454,8 +454,8 @@ attached to \texttt{ib0}. Note that these modifications are made to both the
 % begin_ohpc_run
 % ohpc_validation_comment Enable o2ib for Lustre
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master](*\#*) echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
-[master](*\#*) echo "options lnet networks=o2ib(ib0)" >> $CHROOT/etc/modprobe.d/lustre.conf
+[sms](*\#*) echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
+[sms](*\#*) echo "options lnet networks=o2ib(ib0)" >> $CHROOT/etc/modprobe.d/lustre.conf
 \end{lstlisting}
 % end_ohpc_run
 
@@ -464,8 +464,8 @@ host as follows:
 % begin_ohpc_run
 % ohpc_validation_comment mount Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master](*\#*) mkdir /mnt/lustre
-[master](*\#*) mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
+[sms](*\#*) mkdir /mnt/lustre
+[sms](*\#*) mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -480,36 +480,36 @@ host as follows:
 %% [FSP-469] % ohpc_validation_comment Configure ORCM aggregator and DB
 %% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 %% [FSP-469] # Set master host as data aggregator
-%% [FSP-469] [master](*\#*) perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
-%% [FSP-469] [master](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${master_ip}/" /etc/orcmdb_psql.ini
+%% [FSP-469] [sms](*\#*) perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
+%% [FSP-469] [sms](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${master_ip}/" /etc/orcmdb_psql.ini
 %% [FSP-469] 
 %% [FSP-469] # Update BMC credentials to match local values
 %% [FSP-469] 
-%% [FSP-469] [master](*\#*) perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
-%% [FSP-469] [master](*\#*) perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+%% [FSP-469] [sms](*\#*) perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
+%% [FSP-469] [sms](*\#*) perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
 %% [FSP-469] 
 %% [FSP-469] # Initialize postgres DB driver
-%% [FSP-469] [master](*\#*) odbcinst -i -d -f /etc/psql_odbc_driver.ini
-%% [FSP-469] [master](*\#*) odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
+%% [FSP-469] [sms](*\#*) odbcinst -i -d -f /etc/psql_odbc_driver.ini
+%% [FSP-469] [sms](*\#*) odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
 %% [FSP-469] 
 %% [FSP-469] # Initialize postgres
-%% [FSP-469] [master](*\#*) systemctl start postgresql
+%% [FSP-469] [sms](*\#*) systemctl start postgresql
 %% [FSP-469] 
 %% [FSP-469] # Update postgres configuration files using ORCM templates
-%% [FSP-469] [master](*\#*) cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
-%% [FSP-469] [master](*\#*) cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
+%% [FSP-469] [sms](*\#*) cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
+%% [FSP-469] [sms](*\#*) cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
 %% [FSP-469] 
 %% [FSP-469] # Restart postgres
-%% [FSP-469] [master](*\#*) systemctl restart postgresql
+%% [FSP-469] [sms](*\#*) systemctl restart postgresql
 %% [FSP-469] 
 %% [FSP-469] # Create ORCM DB
-%% [FSP-469] [master](*\#*) sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
-%% [FSP-469] [master](*\#*) sudo -u postgres createdb -O orcmuser orcmdb
-%% [FSP-469] [master](*\#*) sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
+%% [FSP-469] [sms](*\#*) sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
+%% [FSP-469] [sms](*\#*) sudo -u postgres createdb -O orcmuser orcmdb
+%% [FSP-469] [sms](*\#*) sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 %% [FSP-469] 
 %% [FSP-469] # Start ORCM on master host (requires both orcmsched and orcmd)
-%% [FSP-469] [master](*\#*) systemctl start orcmsched
-%% [FSP-469] [master](*\#*) systemctl start orcmd
+%% [FSP-469] [sms](*\#*) systemctl start orcmsched
+%% [FSP-469] [sms](*\#*) systemctl start orcmd
 %% [FSP-469] \end{lstlisting}
 %% [FSP-469] % end_ohpc_run
 %% [FSP-469] 
@@ -529,9 +529,9 @@ import local file-based credentials, issue the following:
 % begin_ohpc_run
 % ohpc_comment_header Import files \ref{sec:file_import}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master](*\#*) wwsh file import /etc/passwd                                                          
-[master](*\#*) wwsh file import /etc/group
-[master](*\#*) wwsh file import /etc/shadow 
+[sms](*\#*) wwsh file import /etc/passwd                                                          
+[sms](*\#*) wwsh file import /etc/group
+[sms](*\#*) wwsh file import /etc/shadow 
 \end{lstlisting}
 % \end_ohpc_run
 
@@ -541,7 +541,7 @@ pool, issue the following:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master](*\#*) wwsh file import /etc/munge/munge.key
+[sms](*\#*) wwsh file import /etc/munge/munge.key
 \end{lstlisting}
 % \end_ohpc_run
 
@@ -554,8 +554,8 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % ohpc_command if [ ${enable_ipoib} -eq 1 ];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master](*\#*) wwsh file import /opt/ohpc/pub/examples/network/sles/ifcfg-ib0.ww
-[master](*\#*) wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network/ifcfg-ib0
+[sms](*\#*) wwsh file import /opt/ohpc/pub/examples/network/sles/ifcfg-ib0.ww
+[sms](*\#*) wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network/ifcfg-ib0
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -568,18 +568,18 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define four compute nodes and network settings 
-[master](*\#*) wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
-[master](*\#*) wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
-[master](*\#*) wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
-[master](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+[sms](*\#*) wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
+[sms](*\#*) wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
+[sms](*\#*) wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
+[sms](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
 
 # Optionally register additional compute nodes
-[master](*\#*) for ((i=4; i<$num_computes; i++)) ; do
+[sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
               wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
            done
 
 # Define provisioning image for hosts
-[master](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12 --bootstrap=`uname -r` \
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 \end{lstlisting}
 
@@ -589,10 +589,10 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
-[master](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
               wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
            done
-[master](*\#*) wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -601,8 +601,8 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 \clearpage
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
-[master](*\#*) systemctl restart dhcpd
-[master](*\#*) wwsh pxe update
+[sms](*\#*) systemctl restart dhcpd
+[sms](*\#*) wwsh pxe update
 \end{lstlisting}
 % end_ohpc_run
 
@@ -627,13 +627,13 @@ order to work interactively.
 % ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[0]} -U ${bmc_username} chassis power reset   # power cycle c1
-[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[1]} -U ${bmc_username} chassis power reset   # power cycle c2
-[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[2]} -U ${bmc_username} chassis power reset   # power cycle c3
-[master](*\#*) ipmitool -E -I lanplus -H ${c_bmc[3]} -U ${bmc_username} chassis power reset   # power cycle c4
+[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[0]} -U ${bmc_username} chassis power reset   # power cycle c1
+[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[1]} -U ${bmc_username} chassis power reset   # power cycle c2
+[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[2]} -U ${bmc_username} chassis power reset   # power cycle c3
+[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[3]} -U ${bmc_username} chassis power reset   # power cycle c4
 
 # Optionally boot additional compute nodes
-[master](*\#*) for ((i=4; i<$num_computes; i++)) ; do
+[sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
               ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
            done
 \end{lstlisting} 
@@ -644,7 +644,7 @@ ssh, or via parallel ssh tools to multiple hosts. For example, to run a command
 on the newly imaged compute hosts using \texttt{pdsh}, execute the following:
 
 \begin{lstlisting}[language=bash]
-[master](*\#*) pdsh -w c[1-4] uptime
+[sms](*\#*) pdsh -w c[1-4] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
 c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
 c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
@@ -711,7 +711,7 @@ pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
 \begin{lstlisting}[language=bash]
-[master](*\#*) zypper search -t package fftw-gnu-*-ohpc
+[sms](*\#*) zypper search -t package fftw-gnu-*-ohpc
 Loading repository data...
 Reading installed packages...
 
