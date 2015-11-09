@@ -566,7 +566,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 # Set provisioning interface as the default networking device
 [sms](*\#*) echo "GATEWAYDEV=${eth_provision}" > /tmp/network.$$
 [sms](*\#*) wwsh -y file import /tmp/network.$$ --name network
-[sms](*\#*) wwsh -y set network --path /etc/sysconfig/network --mode=0644 --uid=0
+[sms](*\#*) wwsh -y file set network --path /etc/sysconfig/network --mode=0644 --uid=0
 
 # Define four compute nodes and network settings 
 [sms](*\#*) wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
