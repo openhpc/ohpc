@@ -13,5 +13,12 @@ enabled, doing so is beyond the scope of this document. Even the use of
 permissive mode can be problematic and we therefore recommend disabling SELinux on the {\em
 master} SMS host.
 
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) if [ -f /etc/selinux/config ]; then
+                perl -pi -e "s/SELINUX=(enforcing|permissive)/SELINUX=disabled/" /etc/selinux/config
+            fi
+[sms](*\#*) shutdown -r now
+\end{lstlisting}
+
 \end{tcolorbox}
 \end{center}
