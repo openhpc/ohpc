@@ -202,8 +202,8 @@ fi
 /sbin/chkconfig --add %{pname} || :
 %else
 #%systemd_post nrpe.service
-/usr/bin/systemctl enable nrpe.service
-/usr/bin/systemctl start nrpe.service
+/usr/bin/systemctl enable nrpe.service > /dev/null 2>&1 || :
+/usr/bin/systemctl start nrpe.service  > /dev/null 2>&1 || :
 %endif
 
 %postun
