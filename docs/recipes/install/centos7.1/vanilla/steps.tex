@@ -698,7 +698,9 @@ tools and libraries used by HPC applications and developers. For
 example, \OHPC{} provides builds for \FFTW{} and \hdffive{} (including serial and parallel
 I/O support), and the \GNU{} Scientific Library (GSL). Again, multiple builds of
 each package are available in the \OHPC{} repository to support multiple compiler
-and MPI family combinations where appropriate. The general naming convention
+and MPI family combinations where appropriate. Note, however, that not all
+combinatorial permutations may be available for components where there are known
+license incompatibilities. The general naming convention
 for builds provided by \OHPC{} is to append the compiler and MPI family name that
 the library was built against directly into the package name. For example,
 libraries that do not require MPI as part of the build process adopt the
@@ -707,26 +709,26 @@ following RPM name: \\
 \noindent
 \texttt{package-<compiler\_family>-ohpc-<package\_version>-<release>.rpm} \\
 
-\noindent Packages that require MPI as part of the build expand upon this convention to
+\noindent Packages that do require MPI as part of the build expand upon this convention to
 additionally include the MPI family name as follows: \\
 
 \noindent
 \texttt{package-<compiler\_family>-<mpi\_family>-ohpc-<package\_version>-<release>.rpm} \\
 
 To illustrate this further, the command below queries the locally configured
-repositories to identify all of the available \FFTW{} packages that were built
+repositories to identify all of the available PETSc packages that were built
 with the \GNU{} toolchain. The resulting output that is included shows that
 pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
 
-\begin{lstlisting}[language=bash]
-[sms](*\#*) yum search fftw-gnu ohpc
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) yum search petsc-gnu ohpc
 Loaded plugins: fastestmirror
 Loading mirror speeds from cached hostfile
-=========================== N/S matched: fftw-gnu, ohpc ===========================
-fftw-gnu-impi-ohpc.x86_64 : A Fast Fourier Transform library
-fftw-gnu-mvapich2-ohpc.x86_64 : A Fast Fourier Transform library
-fftw-gnu-openmpi-ohpc.x86_64 : A Fast Fourier Transform library
+=========================== N/S matched: petsc-gnu, ohpc ===========================
+petsc-gnu-impi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-mvapich2-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
 \end{lstlisting}
 
 \begin{center}
@@ -735,7 +737,7 @@ fftw-gnu-openmpi-ohpc.x86_64 : A Fast Fourier Transform library
 \OHPC{}-provided 3rd party builds are configured to be installed
 into a common top-level repository so that they can be easily exported to
 desired hosts within the cluster. This common top-level path
-(\texttt{/opt/ohpc/pub}) was previously configured to be mounted on {\em
+(\path{/opt/ohpc/pub}) was previously configured to be mounted on {\em
   compute} nodes in \S\ref{sec:master_customization}, so the packages will be
 immediately available for use on the cluster after installation on the {\em
   master} host.
