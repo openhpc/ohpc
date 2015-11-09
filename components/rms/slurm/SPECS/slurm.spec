@@ -518,6 +518,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install-contrib
 # 6/16/15 karl.w.schulz@intel.com - do not package Slurm's version of libpmi with OpenHPC.
 %if 0%{?OHPC_BUILD}
    rm -f $RPM_BUILD_ROOT/%{_libdir}/libpmi*
+   rm -f $RPM_BUILD_ROOT/%{_libdir}/mpi_pmi2*
 %endif
 
 # Do not package Slurm's version of libpmi on Cray systems with ALPS.
@@ -995,7 +996,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/slurm/mpi_mpichmx.so
 %{_libdir}/slurm/mpi_mvapich.so
 %{_libdir}/slurm/mpi_openmpi.so
+%if ! 0%{?OHPC_BUILD}
 %{_libdir}/slurm/mpi_pmi2.so
+%endif
 %endif
 %{_libdir}/slurm/mpi_none.so
 %{_libdir}/slurm/preempt_job_prio.so
