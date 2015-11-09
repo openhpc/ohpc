@@ -92,7 +92,7 @@
 In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
 necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base OS and EPEL repositories (mirrors freely available online):
+both the base OS and EPEL repositories for which mirrors are freely available online:
 
 \begin{itemize*}
 \item CentOS-7 - Base 7.1.1503
@@ -144,7 +144,7 @@ to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_clien
 for additional details), then having IPoIB enabled is a requirement for the
 \Lustre{} client. \OHPC{} provides a template configuration file to aid in setting up
 an {\em ib0} interface on the {\em master} host. To use, copy the template
-provided and update the \texttt{\$\{master\_ipoib\}} and
+provided and update the \texttt{\$\{sms\_ipoib\}} and
 \texttt{\$\{ipoib\_netmask\}} entries to match local desired settings (alter ib0
 naming as appropriate if system contains dual-ported or multiple HCAs). 
 
@@ -221,7 +221,7 @@ process which requires external network connectivity on your chosen {\em
   master} host. If this is not available, or if you prefer to access a locally cached
 mirror, the steps below include an example to update the OS mirror used by
 \texttt{wwmkchroot} to use an alternate location defined by a
-\texttt{BOS\_MIRROR} environment variable.
+\texttt{\$\{BOS\_MIRROR\}} environment variable.
 
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
@@ -229,8 +229,8 @@ mirror, the steps below include an example to update the OS mirror used by
 # Define chroot location 
 [sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.1
 
-# Override default OS repository (optional) - set BOS_MIRROR variable to desired location
-[sms](*\#*) perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=$BOS_MIRROR#" \
+# Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
+[sms](*\#*) perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
      /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
 
 # Build initial chroot image
@@ -325,12 +325,14 @@ example configuration.
 
 \begin{center}
 \begin{tcolorbox}[]
-\small
-Slurm requires three explicit configuration parameters to define the allocation of
-user threads to a particular hardware resource: Sockets, CoresPerSocket, and
-ThreadsPerCore. The default configuration file assumes dual-socket, 8 cores per
-socket, and two threads per core. Make sure that these values in
-/etc/slurm/slurm.conf match your particular hardware.
+  \small Slurm requires enumeration of the physical hardware characteristics
+  for compute nodes under its control. In particular, three configuration
+  parameters combine to define consumable compute resources: {\em Sockets},
+  {\em CoresPerSocket}, and {\em ThreadsPerCore}. The default configuration
+  file provided via \OHPC{} assumes dual-socket, 8 cores per socket, and two
+  threads per core for this 4-node example. If this does not reflect your local
+  hardware config, please update the configuration file at
+  \path{/etc/slurm/slurm.conf} accordingly to match your particular hardware.
 \end{tcolorbox}
 \end{center}
 
@@ -432,7 +434,7 @@ The default underlying network type used by \Lustre{} is {\em tcp}. If your
 external \Lustre{} file system is to be mounted using a network type other than
 {\em tcp}, additional configuration files are necessary to identify the desired
 network type. The example below illustrates creation of modprobe configuration files
-instructing \Lustre{} to use an \InfiniBand{} network with the {\em o2ib} LNET driver
+instructing \Lustre{} to use an \InfiniBand{} network with the \textbf{o2ib} LNET driver
 attached to \texttt{ib0}. Note that these modifications are made to both the
 {\em master} host and {\em compute} image.
 
@@ -775,7 +777,7 @@ offerings within \OHPC{}, issue the following:
 {\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
 
 \addcontentsline{toc}{section}{Appendices}
-\renewcommand{\thesubsection}{\Alph{subsection}:}
+\renewcommand{\thesubsection}{\Alph{subsection}}
 
 \input{../../common/automation_appendix}
 \input{manifest}
