@@ -90,7 +90,7 @@ open( IN, "<$tmpfile_aggr_steps" ) || die __LINE__ . ": Cannot open file -> $fil
 
 my $begin_delim   = "% begin_ohpc_run";
 my $end_delim     = "% end_ohpc_run";
-my $prompt        = quotemeta "\[master\]\(\*\\\#\*\)";
+my $prompt        = quotemeta "\[sms\]\(\*\\\#\*\)";
 my $psql_prompt   = quotemeta "\[postgres\]\$";
 my $disable_delim = "^%%";
 my $indent        = 0;
