@@ -14,6 +14,6 @@ forward their logs to the SMS, and to allow the SMS to accept these log requests
 [sms](*\#*) systemctl kill -s HUP rsyslog
 
 # Define compute node forwarding destination
-[sms](*\#*) echo "*.* @${sms_eth_internal}:514" >> $CHROOT/etc/rsyslog.conf
+[sms](*\#*) echo "*.* @${sms_ip}:514" >> $CHROOT/etc/rsyslog.conf
 \end{lstlisting}
 % end_ohpc_run
