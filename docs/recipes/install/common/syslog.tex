@@ -6,7 +6,7 @@ forward their logs to the SMS, and to allow the SMS to accept these log requests
 
 
 % begin_ohpc_run
-% ohpc_comment_header Add Cluster Checker to SMS and computes \ref{sec:add_clck}
+% ohpc_comment_header Configure Rsyslog on SMS and computes \ref{sec:add_clck}
 \begin{lstlisting}[language=bash,keywords={}]
 # Configure SMS to receive messages and reload rsyslog configuration
 [sms](*\#*) perl -pi -e "s/\\#\\\$ModLoad imudp/\\\$ModLoad imudp/" /etc/rsyslog.conf
