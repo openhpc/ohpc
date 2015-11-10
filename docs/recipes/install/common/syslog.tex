@@ -16,7 +16,7 @@ forward their logs to the SMS, and to allow the SMS to accept these log requests
 # Define compute node forwarding destination
 [sms](*\#*) echo "*.* @${sms_ip}:514" >> $CHROOT/etc/rsyslog.conf
 
-# Disable most local logging on computes. Emergency and boot logs will remain on the copmute nodes
+# Disable most local logging on computes. Emergency and boot logs will remain on the compute nodes
 [sms](*\#*) perl -pi -e "s/^\*\.info/\\#\*\.info/" $CHROOT/etc/rsyslog.conf
 [sms](*\#*) perl -pi -e "s/^authpriv/\\#authpriv/" $CHROOT/etc/rsyslog.conf
 [sms](*\#*) perl -pi -e "s/^mail/\\#mail/" $CHROOT/etc/rsyslog.conf
