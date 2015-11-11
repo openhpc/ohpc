@@ -94,10 +94,10 @@ execution using the same executable referenced in the previous interactive examp
 
 \begin{lstlisting}[language=bash,keywords={}]
 # copy example job script
-[test@master ~]$ cp /opt/ohpc/pub/examples/slurm/job.mpi .
+[test@sms ~]$ cp /opt/ohpc/pub/examples/slurm/job.mpi .
 
 # examine contents (and edit to set desired job sizing characteristics)
-[test@master ~]$ cat job.mpi
+[test@sms ~]$ cat job.mpi
 #!/bin/bash
 
 #SBATCH -J test               # Job name
@@ -111,7 +111,7 @@ execution using the same executable referenced in the previous interactive examp
 prun ./a.out
 
 # Submit job for batch execution
-[test@master ~]$ sbatch job.mpi
+[test@sms ~]$ sbatch job.mpi
 Submitted batch job 339
 
 \end{lstlisting}
@@ -126,7 +126,7 @@ this example).
 \end{tcolorbox}
 \end{center}
 
-%% [test@master ~]$ cat job.339.out
+%% [test@sms ~]$ cat job.339.out
 %% [prun] Master compute host = c1
 %% [prun] Launch cmd = mpiexec.hydra -bootstrap slurm hostname
 %%  Hello, world (8 procs total)
@@ -147,9 +147,9 @@ this example).
 %% #SBATCH -t 01:30:00 # Run time (hh:mm:ss) - 1.5 hours
 
 %% prun ./hello
-%% [test@master ~]$ sbatch hello.script
+%% [test@sms ~]$ sbatch hello.script
 %% Submitted batch job 339
-%% [test@master ~]$ cat job.339.out
+%% [test@sms ~]$ cat job.339.out
 %% [prun] Master compute host = c1
 %% [prun] Launch cmd = mpiexec.hydra -bootstrap slurm hostname
 %%  Hello, world (8 procs total)
