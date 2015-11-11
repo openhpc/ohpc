@@ -11,7 +11,7 @@ forward their logs to the SMS, and to allow the SMS to accept these log requests
 # Configure SMS to receive messages and reload rsyslog configuration
 [sms](*\#*) perl -pi -e "s/\\#\\\$ModLoad imudp/\\\$ModLoad imudp/" /etc/rsyslog.conf
 [sms](*\#*) perl -pi -e "s/\\#\\\$UDPServerRun 514/\\\$UDPServerRun 514/" /etc/rsyslog.conf
-[sms](*\#*) systemctl kill -s HUP rsyslog
+[sms](*\#*) systemctl restart rsyslog
 
 # Define compute node forwarding destination
 [sms](*\#*) echo "*.* @${sms_ip}:514" >> $CHROOT/etc/rsyslog.conf
