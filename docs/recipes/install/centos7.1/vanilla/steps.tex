@@ -264,7 +264,7 @@ Now, we can include additional components to the compute instance using
 % begin_ohpc_run
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Add SLURM client support
+# Add Slurm client support
 [sms](*\#*) (*\groupchrootinstall*) ohpc-slurm-client
 
 # Add IB support and enable
@@ -385,7 +385,7 @@ discussed further in the following sections.
 \end{lstlisting}
 % end_ohpc_run
 
-%# Enable larger locked memory limits for SLURM daemon
+%# Enable larger locked memory limits for Slurm daemon
 %[sms](*\#*) echo "ulimit -l unlimited" >> $CHROOT/etc/sysconfig/slurm
 
 \paragraph{Enable ssh control via resource manager} 

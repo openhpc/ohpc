@@ -45,7 +45,7 @@ via the following:
 compilation and execution. \OHPC{} also provides a companion job-launch script
 named \texttt{prun} that is installed in concert with the pre-packaged MPI
 toolchains. At present, \OHPC{} is unable to include the PMI process management
-server normally included within SLURM which implies that \texttt{srun} cannot
+server normally included within \SLURM{} which implies that \texttt{srun} cannot
 be use for MPI job launch. Instead, native job launch mechanisms provided by
 the MPI stacks are utilized and \texttt{prun} abstracts this process for the
 various stacks to retain a single launch command.
@@ -121,7 +121,7 @@ Submitted batch job 339
 \small
 The use of the \texttt{\%j} option in the example batch job script shown is a convenient
 way to track application output on an individual job basis. The \texttt{\%j} token
-is replaced with the SLURM job allocation number once assigned (job \#339 in
+is replaced with the \SLURM{} job allocation number once assigned (job~\#339 in
 this example).
 \end{tcolorbox}
 \end{center}
