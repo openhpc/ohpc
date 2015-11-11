@@ -61,10 +61,10 @@ the underlying native job launch mechanism being used):
 [sms](*\#*) su - test
 
 # Compile MPI "hello world" example
-[test@master ~]$ mpicc -O3 /opt/ohpc/pub/examples/mpi/hello.c
+[test@sms ~]$ mpicc -O3 /opt/ohpc/pub/examples/mpi/hello.c
 
 # Submit interactive job request and use prun to launch executable
-[test@master ~]$ srun -n 8 -N 2 --pty /bin/bash
+[test@sms ~]$ srun -n 8 -N 2 --pty /bin/bash
 
 [test@c1 ~]$ prun ./a.out
 
