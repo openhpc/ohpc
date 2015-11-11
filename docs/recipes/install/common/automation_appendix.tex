@@ -1,7 +1,7 @@
 \subsection{Installation Template}  \label{appendix:template_script}
 
 This appendix highlights the availability of a companion installation script
-that is included with \OHPC{} documentation.  This script, when combined with
+that is included with \OHPC{} documentation. This script, when combined with
 local site inputs, can be used to implement a starting recipe for
 bare-metal system installation and configuration. This template script is used
 during validation efforts to test cluster installations and is provided as a
@@ -9,13 +9,13 @@ convenience for administrators as a starting point for potential site
 customization. 
 
 The template script relies on the use of a simple text file to define local
-site variables that were outlined in \S\ref{sec:inputs}.  By default, the
+site variables that were outlined in \S\ref{sec:inputs}. By default, the
 template install script attempts to use local variable settings sourced from
 the \path{/opt/ohpc/pub/doc/recipes/vanilla/input.local} file, however, this
 choice can be overridden by the use of the \texttt{\$\{OHPC\_INPUT\_LOCAL\}}
 environment variable. The template install script is intended for execution on
 the SMS {\em master} host and is installed as part of the \texttt{docs-ohpc}
-package into \path{/opt/ohpc/pub/doc/recipes/vanilla/recipe.sh}.  After
+package into \path{/opt/ohpc/pub/doc/recipes/vanilla/recipe.sh}. After
 enabling the \OHPC{} repository and reviewing the guide for additional
 information on the intent of the commands, the general starting approach for
 using this template is as follows:
@@ -30,7 +30,7 @@ using this template is as follows:
 \item Copy the provided template input file to use as a starting point to
   define local site settings:
 \begin{lstlisting}
-[sms](*\#*) cp  /opt/ohpc/pub/doc/recipes/vanilla/input.local input.local
+[sms](*\#*) cp /opt/ohpc/pub/doc/recipes/vanilla/input.local input.local
 \end{lstlisting}
 
 \item Update \path{input.local} with desired settings

@@ -226,7 +226,7 @@ customize a system image that can subsequently be used to provision one or more
 
 The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support for
 \baseOS{}. The following steps illustrate the process to build a minimal, default
-image for use with \Warewulf{}.  We begin by creating a directory structure on the 
+image for use with \Warewulf{}. We begin by creating a directory structure on the 
 {\em master} that will represent the root filesystem of the compute node. The 
 default location for this example is in \path{/opt/ohpc/admin/images/sles12}.
 
@@ -249,7 +249,7 @@ default location for this example is in \path{/opt/ohpc/admin/images/sles12}.
 The \texttt{wwmkchroot} process used in the previous step is designed to
 provide a minimal \baseOS{} configuration. Next, we add additional components to
 include resource management client services, \InfiniBand{} drivers, and other
-additional packages to support the default \OHPC{} environment.  This process uses
+additional packages to support the default \OHPC{} environment. This process uses
 the \texttt{chroot} command to augment the base provisioning image and will
 access the BOS and \OHPC{} repositories to resolve package install requests. To
 access the remote repositories by hostname (and not IP addresses), the chroot
@@ -298,12 +298,12 @@ be updated with a copy of the configuration as follows:
 
 Prior to assembling the image, it is advantageous to perform any additional
 customizations within the chroot environment created for the desired {\em
-  compute} instance. The following steps document the process to add a local
+ compute} instance. The following steps document the process to add a local
 {\em ssh} key created by \Warewulf{} to support remote access, identify the
 resource manager server, configure NTP for compute resources, and enable \NFS{}
 mounting of a \$HOME file system and the public \OHPC{} install path
 (\texttt{/opt/ohpc/pub}) that will be hosted by the {\em master} host in this
-example configuration.  
+example configuration.
 %The \NFS{} exporting options use an address/netmask
 %combination to limit the export scope to the defined compute nodes.
 
@@ -529,7 +529,7 @@ import local file-based credentials, issue the following:
 % begin_ohpc_run
 % ohpc_comment_header Import files \ref{sec:file_import}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wwsh file import /etc/passwd                                                          
+[sms](*\#*) wwsh file import /etc/passwd
 [sms](*\#*) wwsh file import /etc/group
 [sms](*\#*) wwsh file import /etc/shadow 
 \end{lstlisting}
@@ -658,7 +658,7 @@ c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 The install procedure outlined in \S\ref{sec:basic_install}
 highlighted the steps necessary to install a {\em master} host,
 assemble and customize a {\em compute} image, and provision several
-compute hosts from bare-metal.  With these steps completed, 
+compute hosts from bare-metal. With these steps completed, 
 %a {\em compute} Once the completion of the
 %basic install procedure outlined in Section~\ref{sec:basic_install} is
 %complete, 
@@ -729,13 +729,13 @@ S | Name                  | Summary                          | Type
 into a common top-level repository so that they can be easily exported to
 desired hosts within the cluster. This common top-level path
 (\texttt{/opt/ohpc/pub}) was previously configured to be mounted on {\em
-  compute} nodes in \S\ref{sec:master_customization}, so the packages will be
+ compute} nodes in \S\ref{sec:master_customization}, so the packages will be
 immediately available for use on the cluster after installation on the {\em
-  master} host.
+ master} host.
 \end{tcolorbox}
 \end{center}
 
-  For convenience, \OHPC{} provides package aliases for these 3rd
+For convenience, \OHPC{} provides package aliases for these 3rd
 party libraries and utilities that can be used to install all of the available
 compiler/MPI family permutations. To install all of the available package
 offerings within \OHPC{}, issue the following:

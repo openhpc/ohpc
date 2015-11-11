@@ -196,7 +196,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) systemctl enable mariadb.service 
 [sms](*\#*) systemctl restart mariadb 
 [sms](*\#*) systemctl enable httpd.service 
-[sms](*\#*) systemctl restart httpd   
+[sms](*\#*) systemctl restart httpd 
 \end{lstlisting}
 %\end{verbatim}
 % end_ohpc_run
@@ -212,13 +212,13 @@ customize a system image that can subsequently be used to provision one or more
 
 The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support for
 \baseOS{}. The following steps illustrate the process to build a minimal, default
-image for use with \Warewulf{}.  We begin by creating a directory structure on the 
+image for use with \Warewulf{}. We begin by creating a directory structure on the 
 {\em master} host that will represent the root filesystem of the compute node. The 
 default location for this example is in
 \path{/opt/ohpc/admin/images/centos7.1}. Note that \Warewulf{} assumes access to
 an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
 process which requires external network connectivity on your chosen {\em
-  master} host. If this is not available, or if you prefer to access a locally cached
+ master} host. If this is not available, or if you prefer to access a locally cached
 mirror, the steps below include an example to update the OS mirror used by
 \texttt{wwmkchroot} to use an alternate location defined by a
 \texttt{\$\{BOS\_MIRROR\}} environment variable.
@@ -243,7 +243,7 @@ mirror, the steps below include an example to update the OS mirror used by
 The \texttt{wwmkchroot} process used in the previous step is designed to
 provide a minimal \baseOS{} configuration. Next, we add additional components to
 include resource management client services, \InfiniBand{} drivers, and other
-additional packages to support the default \OHPC{} environment.  This process uses
+additional packages to support the default \OHPC{} environment. This process uses
 the \texttt{chroot} command to augment the base provisioning image and will
 access the BOS and \OHPC{} repositories to resolve package install requests. To
 access the remote repositories by hostname (and not IP addresses), the chroot
@@ -287,12 +287,12 @@ Now, we can include additional components to the compute instance using
 
 Prior to assembling the image, it is advantageous to perform any additional
 customizations within the chroot environment created for the desired {\em
-  compute} instance. The following steps document the process to add a local
+ compute} instance. The following steps document the process to add a local
 {\em ssh} key created by \Warewulf{} to support remote access, identify the
 resource manager server, configure NTP for compute resources, and enable \NFS{}
 mounting of a \$HOME file system and the public \OHPC{} install path
 (\texttt{/opt/ohpc/pub}) that will be hosted by the {\em master} host in this
-example configuration.  
+example configuration.
 %The \NFS{} exporting options use an address/netmask
 %combination to limit the export scope to the defined compute nodes.
 
@@ -526,7 +526,7 @@ following:
 % begin_ohpc_run
 % ohpc_comment_header Import files \ref{sec:file_import}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wwsh file import /etc/passwd                                                                                                       
+[sms](*\#*) wwsh file import /etc/passwd
 [sms](*\#*) wwsh file import /etc/group
 [sms](*\#*) wwsh file import /etc/shadow 
 
@@ -666,7 +666,7 @@ c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 The install procedure outlined in \S\ref{sec:basic_install}
 highlighted the steps necessary to install a {\em master} host,
 assemble and customize a {\em compute} image, and provision several
-compute hosts from bare-metal.  With these steps completed, 
+compute hosts from bare-metal. With these steps completed, 
 %a {\em compute} Once the completion of the
 %basic install procedure outlined in Section~\ref{sec:basic_install} is
 %complete, 
@@ -741,9 +741,9 @@ petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Compu
 into a common top-level repository so that they can be easily exported to
 desired hosts within the cluster. This common top-level path
 (\path{/opt/ohpc/pub}) was previously configured to be mounted on {\em
-  compute} nodes in \S\ref{sec:master_customization}, so the packages will be
+ compute} nodes in \S\ref{sec:master_customization}, so the packages will be
 immediately available for use on the cluster after installation on the {\em
-  master} host.
+ master} host.
 \end{tcolorbox}
 \end{center}
 

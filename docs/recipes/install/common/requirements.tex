@@ -1,7 +1,7 @@
 %\noindent {\bf Requirements/Assumptions}: 
 \subsection{Requirements/Assumptions}
 This installation recipe assumes the availability of a single head node {\em
-  master}, and four {\em compute} nodes. The {\em master} node serves as the
+ master}, and four {\em compute} nodes. The {\em master} node serves as the
 overall system management server (SMS) and is provisioned with \baseOS{} and is
 subsequently configured to provision the remaining {\em compute} nodes with
 \Warewulf{} in a stateless configuration. The terms {\em master} and SMS are
@@ -27,7 +27,7 @@ configuration. The {\em master} host requires at least two Ethernet interfaces
 with {\em eth0} connected to the local data center network and {\em eth1} used
 to provision and manage the cluster backend (note that these interface names
 are examples and may be different depending on local settings and OS
-conventions).  Two logical IP interfaces are expected to each compute node: the
+conventions). Two logical IP interfaces are expected to each compute node: the
 first is the standard Ethernet interface that will be used for provisioning and
 resource management. The second is used to connect to each host's BMC and is
 used for power management and remote console access. Physical connectivity for
