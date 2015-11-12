@@ -1,6 +1,6 @@
 ---
 
-### OpenHPC: Community building blocks for HPC systems. [![Build Status](http://build.openhpc.community:8080/badge/badge-1.0-CentOS_7.1.png)](https://build.openhpc.community/project/show/OpenHPC:1.0:Factory)
+### OpenHPC: Community building blocks for HPC systems.
 
 ---
 
