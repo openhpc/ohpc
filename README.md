@@ -12,13 +12,13 @@ provisioning tools, resource management, I/O clients, development
 tools, and a variety of scientific libraries.
 
 The compatible OS versions for this release and the total number of
-OHPC-packaged RPMs available is as follows:
+OpenHPC-packaged RPMs available is as follows:
 
 	CentOS 7.1 - 255 RPMs
 
 Note that a detailed list of all available components is available in
-the "Package Manifest" appendix located in the companion Install
-Guide document. 
+the "Package Manifest" appendix located in the companion install
+guide document. 
 
 #### Getting started
 
@@ -26,9 +26,9 @@ OpenHPC provides pre-built binaries in repository form for use with
 standard Linux package manager tools (e.g. ```yum```). Package
 repositories are housed at https://build.openhpc.community - to get
 started, the companion install guide provides details on how to
-configure a repository for use localy along with with example
+configure a repository for use locally along with with example
 instructions for installation.  A copy of the install guide is
-available here with the release notes.
+available in the downloads section of the release notes.
 
 #### Questions, Comments, or Bug Reports?
 
