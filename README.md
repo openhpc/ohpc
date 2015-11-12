@@ -30,6 +30,8 @@ configure a repository for use locally along with with example
 instructions for installation.  A copy of the install guide is
 available in the downloads section of the release notes.
 
+[Install-guide-CentOS7.1](releases/download/v1.0.0.GA/Install_guide-CentOS7.1-1.0.pdf)
+
 #### Questions, Comments, or Bug Reports?
 
 Subscribe to the users email list at : https://groups.io/g/openhpc-users or see
