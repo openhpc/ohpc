@@ -11,8 +11,8 @@ required to deploy and manage an HPC Linux cluster including
 provisioning tools, resource management, I/O clients, development
 tools, and a variety of scientific libraries.
 
-The compatible OS versions for this release and the total number of
-OpenHPC-packaged RPMs available is as follows:
+The compatible OS version for this release and the total number of
+pre-packaged RPMs available is as follows:
 
 	CentOS 7.1 - 255 RPMs
 
