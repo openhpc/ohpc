@@ -22,15 +22,15 @@ guide document.
 
 #### Getting started
 
-OpenHPC provides pre-built binaries via repositories for use with
-standard Linux package manager tools (e.g. ```yum```). Package
-repositories are housed at https://build.openhpc.community - to get
-started, the companion install guide provides details on how to
-configure a repository for use locally along with with example
-instructions for installation.  A copy of the install guide is
-available in the downloads section of the release notes.
+OpenHPC provides pre-built binaries via repositories for use with standard
+Linux package manager tools (e.g. ```yum```). Package repositories are housed
+at https://build.openhpc.community - to get started, the companion install
+guide provides details on how to configure a repository for use locally along
+with with example instructions for installation.  A copy of the install guide
+is available in the downloads section of the
+[release](https://github.com/openhpc/ohpc/releases/tag/v1.0.GA).
 
-[Install-guide-CentOS7.1](https://github.com/openhpc/ohpc/releases/tag/v1.0.GA)
+* [CentOS 7.1 Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.0.GA/Install_guide-CentOS7.1-1.0.pdf)
 
 #### Questions, Comments, or Bug Reports?
 
