@@ -30,7 +30,7 @@ configure a repository for use locally along with with example
 instructions for installation.  A copy of the install guide is
 available in the downloads section of the release notes.
 
-[Install-guide-CentOS7.1](Install_guide-CentOS7.1-1.0.pdf)
+[Install-guide-CentOS7.1](releases/download)
 
 #### Questions, Comments, or Bug Reports?
 
