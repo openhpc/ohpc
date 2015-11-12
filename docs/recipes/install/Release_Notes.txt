@@ -1,5 +1,5 @@
 OpenHPC Software Stack
-Version 1.0 (19 November 2015) 
+Version 1.0 (12 November 2015) 
 
 Introduction:
 
@@ -20,5 +20,5 @@ Introduction:
 
 Questions, Comments, or Bug Reports?
    
-    Please direct to: openhpc+users@groups.io
+    Please direct to: openhpc-users@groups.io
 
