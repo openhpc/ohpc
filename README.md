@@ -2,6 +2,8 @@
 
 ### OpenHPC: Community building blocks for HPC systems. [![Build Status](http://build.openhpc.community:8080/badge/badge-1.0-CentOS_7.1.png)](https://build.openhpc.community/project/show/OpenHPC:1.0:Factory)
 
+![logo](docs/recipes/install/common/figures/ohpc_logo_blue.pdf "OpenHPC")
+
 #### Introduction
 
 This stack provides a variety of common, pre-built ingredients
