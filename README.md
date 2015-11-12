@@ -33,5 +33,5 @@ available in the downloads section of the release notes.
 #### Questions, Comments, or Bug Reports?
 
 Subscribe to the users email list at : https://groups.io/g/openhpc-users or see
-the http://openhpc.community page for more info.
+the http://openhpc.community page for more pointers.
 
