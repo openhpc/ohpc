@@ -128,7 +128,7 @@ The following command adds OFED and PSM support using base distro-provided drive
 to the chosen {\em master} host.
 
 % begin_ohpc_run
-% ohpc_comment_header Add InfiniBand support services on {\em master} node \ref{sec:add_ofed}
+% ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) (*\groupinstall*) "InfiniBand Support"
 [sms](*\#*) (*\install*) infinipath-psm
@@ -171,7 +171,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 \input{../../common/warewulf_setup}
 
 % begin_ohpc_run
-% ohpc_comment_header Complete basic Warewulf setup for {\em master} node \ref{sec:setup_ww}
+% ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
 %\begin{verbatim}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
@@ -309,7 +309,12 @@ example configuration.
 
 # Identify resource manager hostname on {\em master} host
 [sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
+\end{lstlisting}
+% end_ohpc_run
 
+\clearpage
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Export /home and OpenHPC public packages from {\em master} server to cluster compute nodes
 [sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
 [sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
@@ -576,7 +581,10 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 [sms](*\#*) wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
 [sms](*\#*) wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
 [sms](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+\end{lstlisting}
 
+\clearpage
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
 # Optionally register additional compute nodes
 [sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
               wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
@@ -772,7 +780,7 @@ offerings within \OHPC{}, issue the following:
 %% \end{center}
 
 
-\clearpage
+%\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
