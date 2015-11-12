@@ -4,15 +4,20 @@ Version 1.0 (November 2015)
       * initial community release
       * base OS support for CentOS 7.1
       * enabled GitHub integration for OBS build system
-      * updated naming scheme (fsp -> ohpc) - documentation and install paths updated accordingly
+      * updated naming scheme (fsp -> ohpc) - documentation and install paths
+        updated accordingly
       * fixes for various Perl warnings observed with Warewulf
-      * adopt use of URLs for input component tarballs in RPM .spec files
-      * expanded integration tests: introduced delineation of shorter vs longer running tests
+      * adopted use of URLs for input component tarballs in RPM .spec files
+      * expanded integration tests: introduced delineation of shorter vs longer
+        running tests
       * variety of documentation improvements
 
    [Known Issues]
-      * the currently packaged version of OpenMPI was observed to intermittently hang during repeated job execution on
-        True Scale fabrics. For True Scale fabrics, we suggest setting the following environment variables:
+
+      * the currently packaged version of OpenMPI was observed to
+        intermittently hang during repeated job execution on True Scale
+        fabrics. If using on True Scale fabrics, we suggest setting the following
+        environment variables:
 
 	export OMPI_MCA_pml=cm
 	export OMPI_MCA_mtl=psm
