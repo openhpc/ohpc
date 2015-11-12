@@ -22,7 +22,7 @@ guide document.
 
 #### Getting started
 
-OpenHPC provides pre-built binaries in repository form for use with
+OpenHPC provides pre-built binaries via a repository for use with
 standard Linux package manager tools (e.g. ```yum```). Package
 repositories are housed at https://build.openhpc.community - to get
 started, the companion install guide provides details on how to
