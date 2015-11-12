@@ -45,16 +45,6 @@ Version 1.0 (November 2015)
       * slurm-sjstat-ohpc                             (v15.08.1)
       * slurm-torque-ohpc                             (v15.08.1)
 
-   [Component Removals]
-      * fftw-gnu-impi-ohpc                            (v3.3.4)
-      * fftw-intel-impi-ohpc                          (v3.3.4)
-      * fftw-intel-mvapich2-ohpc                      (v3.3.4)
-      * fftw-intel-openmpi-ohpc                       (v3.3.4)
-      * mkl-blacs-gnu-openmpi-ohpc                    (v11.3)
-      * python-scipy-gnu-impi-ohpc                    (v0.15.1)
-      * sigar-devel-ohpc                              (v1.6.5)
-      * sigar-ohpc                                    (v1.6.5)
-
    [Component Version Changes]
       * R_base-ohpc                                   (v3.2.0 -> v3.2.2)
       * boost-gnu-impi-ohpc                           (v1.58.0 -> v1.59.0)
