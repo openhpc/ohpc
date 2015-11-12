@@ -1,8 +1,8 @@
-## [OpenHPC](http://openhpc.community) [![Build Status](http://build.openhpc.community:8080/badge/badge-1.0-CentOS_7.1.png)](https://build.openhpc.community/project/show/OpenHPC:1.0:Factory)
+# [OpenHPC](http://openhpc.community) [![Build Status](http://build.openhpc.community:8080/badge/badge-1.0-CentOS_7.1.png)](https://build.openhpc.community/project/show/OpenHPC:1.0:Factory)
 
-OpenHPC: Community building blocks for HPC systems.
+## OpenHPC: Community building blocks for HPC systems.
 
-### Introduction
+#### Introduction
 
 This stack provides a variety of common, pre-built ingredients
 required to deploy and manage an HPC Linux cluster including
@@ -18,7 +18,7 @@ Note that a detailed list of all available components is available in
 the "Package Manifest" appendix located in the companion Install
 Guide document. 
 
-### Getting started
+#### Getting started
 
 OpenHPC provides pre-built binaries in repository form for use with
 standard Linux package manager tools (e.g. ```yum```). Package
@@ -28,11 +28,6 @@ configure a repository for use localy along with with example
 instructions for installation.  A copy of the install guide is
 available here with the release notes.
 
-```sh
-wget -P /etc/yum.repos.d http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.1:/OpenHPC:1.0.repo
-yum -y install docs-ohpc
-xpdf /opt/ohpc/pub/doc/Install_guide.pdf
-```
-## Questions, Comments, or Bug Reports?
+#### Questions, Comments, or Bug Reports?
 
 Please direct to: openhpc-users@groups.io
