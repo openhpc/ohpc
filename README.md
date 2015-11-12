@@ -12,7 +12,7 @@ provisioning tools, resource management, I/O clients, development
 tools, and a variety of scientific libraries.
 
 The compatible OS version for this release and the total number of
-pre-packaged RPMs available is as follows:
+pre-packaged RPMs available are as follows:
 
 	CentOS 7.1 - 255 RPMs
 
