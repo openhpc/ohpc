@@ -23,6 +23,7 @@ Group:		ohpc/rms
 License:	GPLv3+ and LGPLv3+
 URL:		https://munge.googlecode.com/
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
+Provides:       %{pname} = %{version}-%{release}
 
 %if 0%{?suse_version} >= 1100
 BuildRequires:	libbz2-devel
@@ -68,6 +69,7 @@ Requires(pre):	shadow-utils
 Summary:	Headers and libraries for developing applications using MUNGE
 Group:		Development/Libraries
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
+Provides:       %{pname}-devel = %{version}-%{release}
 %if 0%{?suse_version}
 BuildRequires:	pkg-config
 %else
@@ -79,6 +81,7 @@ Conflicts: %{pname}-devel
 Summary:	Libraries for applications using MUNGE
 Group:		System Environment/Libraries
 Requires:	%{pname}%{PROJ_DELIM} = %{version}-%{release}
+Requires:	%{pname}-libs = %{version}-%{release}
 Conflicts: %{pname}-libs
 
 %description
