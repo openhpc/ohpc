@@ -21,7 +21,8 @@ License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
 DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     ohpc/admin
-Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
+Source0:   %{pname}-%{version}.tar.gz
+#Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
@@ -53,14 +54,14 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #
 #  Definition of default packages to build on various platforms:
 # 
-%define _defaults ssh exec readline pam slurm
+%define _defaults ssh exec readline pam slurm mrsh genders
 
 #   LLNL system defaults
 %if 0%{?chaos}
 %define _default_with %{_defaults} mrsh nodeupdown genders slurm 
 %else
 #   All other defaults
-%define _default_with %{_defaults} dshgroups netgroup machines 
+#%define _default_with %{_defaults} dshgroups netgroup machines 
 %endif
 
 #
@@ -128,7 +129,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %endif
 
 
-%{?_with_mrsh:BuildRequires: munge-devel}
+%{?_with_mrsh:BuildRequires: munge-devel%{PROJ_DELIM}}
 %{?_with_qshell:BuildRequires: qsnetlibs}
 %{?_with_mqshell:BuildRequires: qsnetlibs}
 %{?_with_readline:BuildRequires: readline-devel}
@@ -353,7 +354,8 @@ from an allocated Torque job.
     %{?_with_dshgroups}     \
     %{?_without_dshgroups}  \
     %{?_with_netgroup}      \
-    %{?_without_netgroup} 
+    %{?_without_netgroup} \
+    --with-rcmd-rank-list="ssh mrsh rsh krb4 qsh mqsh exec xcpu"
     
            
 # FIXME: build fails when trying to build with _smp_mflags if qsnet is enabled
