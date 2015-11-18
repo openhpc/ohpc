@@ -60,10 +60,19 @@ make
 rm -rf $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
 
-#%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_bindir}
-#ln -sf %{_prefix}/bin/mrcp ${RPM_BUILD_ROOT}/%{_bindir}
-#ln -sf %{_prefix}/bin/mrsh ${RPM_BUILD_ROOT}/%{_bindir}
-#ln -sf %{_prefix}/bin/mrlogin ${RPM_BUILD_ROOT}/%{_bindir}
+%{__mkdir_p} ${RPM_BUILD_ROOT}/usr/bin
+ln -sf %{_prefix}/bin/mrcp ${RPM_BUILD_ROOT}/usr/bin/
+ln -sf %{_prefix}/bin/mrsh ${RPM_BUILD_ROOT}/usr/bin/
+ln -sf %{_prefix}/bin/mrlogin ${RPM_BUILD_ROOT}/usr/bin/
+
+ln -sf %{_prefix}/bin/rcp ${RPM_BUILD_ROOT}/usr/bin/
+ln -sf %{_prefix}/bin/rsh ${RPM_BUILD_ROOT}/usr/bin/
+ln -sf %{_prefix}/bin/rlogin ${RPM_BUILD_ROOT}/usr/bin/
+
+sed -i 's#/usr/sbin/in.mrshd#/opt/ohpc/admin/mrsh/sbin/in.mrshd#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
+sed -i 's#/usr/sbin/in.mrlogind#/opt/ohpc/admin/mrsh/sbin/in.mrlogind#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrlogind
+sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrlogind
+sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 
 %files
 %defattr(-,root,root)
@@ -74,6 +83,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_bindir}/mrcp
 %{_bindir}/mrsh
 %{_bindir}/mrlogin
+/usr/bin/mr*
 
 %files -n %{pname}-server%{PROJ_DELIM}
 %defattr(-,root,root)
@@ -101,6 +111,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_bindir}/rcp
 %{_bindir}/rsh
 %{_bindir}/rlogin
+/usr/bin/r*
 
 %post -n %{pname}-server%{PROJ_DELIM}
 if ! grep "^mshell" /etc/services > /dev/null; then
@@ -109,9 +120,19 @@ fi
 if ! grep "^mlogin" /etc/services > /dev/null; then
         echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
 fi
+if ! grep "^mrsh" /etc/securetty > /dev/null; then
+        echo "mrsh" >> /etc/securetty
+fi
+if ! grep "^mrlogin" /etc/securetty > /dev/null; then
+        echo "mrlogin" >> /etc/securetty
+fi
 # 'condrestart' is not portable
 if [ -x /etc/init.d/xinetd ]; then
     if /etc/init.d/xinetd status | grep -q running; then
        /etc/init.d/xinetd restart
     fi
+elif [ -x /bin/systemctl ]; then
+    if /bin/systemctl status xinetd | grep -q running; then
+       /bin/systemctl restart xinetd
+    fi 
 fi
