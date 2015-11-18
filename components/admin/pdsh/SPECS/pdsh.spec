@@ -9,9 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname pdsh
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}
@@ -54,21 +54,21 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #
 #  Definition of default packages to build on various platforms:
 # 
-%define _defaults ssh exec readline pam slurm mrsh genders
+%define _defaults ssh exec readline pam
 
 #   LLNL system defaults
-%if 0%{?chaos}
-%define _default_with %{_defaults} mrsh nodeupdown genders slurm 
-%else
+#%if 0%{?chaos}
+#%define _default_with %{_defaults} mrsh nodeupdown genders slurm 
+#%else
 #   All other defaults
-#%define _default_with %{_defaults} dshgroups netgroup machines 
-%endif
+%define _default_with %{_defaults} mrsh genders nodeattr slurm
+#%endif
 
 #
 #   Environment variables can be used to override defaults above:
 #
-%define _env_without ${PDSH_WITHOUT_OPTIONS}
-%define _env_with    ${PDSH_WITH_OPTIONS} 
+#%define _env_without ${PDSH_WITHOUT_OPTIONS}
+#%define _env_with    ${PDSH_WITH_OPTIONS} 
 
 #   Shortcut for % global expansion
 %define dstr "%%%%"global
