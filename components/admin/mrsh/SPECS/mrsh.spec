@@ -25,6 +25,7 @@ Source:    https://github.com/chaos/mrsh/archive/mrsh-2-7-1.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}
 BuildRequires: ncurses-devel pam-devel munge-devel-ohpc
 Requires: munge-ohpc >= 0.1-0
+Provides: mrsh
 
 #%define _prefix %{OHPC_HOME}/admin/%{pname}
 
