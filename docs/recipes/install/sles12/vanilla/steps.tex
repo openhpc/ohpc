@@ -11,6 +11,7 @@
 
 % Define Base OS and other local macros
 \newcommand{\baseOS}{SLES12}
+\newcommand{\OSRepo}{SLES12}
 \newcommand{\IMAGE}{sles12}
 \newcommand{\install}{zypper -n install}
 \newcommand{\chrootinstall}{zypper -n --root \$CHROOT install}
@@ -74,15 +75,6 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_ohpc_repo}
-
-\begin{lstlisting}[language=bash,keywords={},literate={VER}{\OHPCVersion{}}1]
-[sms](*\#*) ohpc_repo=http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/VER/SLE_12_Intel/OpenHPC:VER.repo
-\end{lstlisting}
-
-
-If outside of Intel, the repository location should be set to match the path to
-a locally accessibly copy of the \OHPC{} repository. Once set, the repository can be
-enabled via the following: 
 
 % begin_ohpc_run
 % ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
