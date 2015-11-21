@@ -100,8 +100,8 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 
-Version: 15.08.1
-%define ver_exp 15-08-1-1
+Version: 15.08.4
+%define ver_exp 15-08-4-1
 
 Release:   %{?dist}
 Summary:   Slurm Workload Manager
