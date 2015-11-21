@@ -1,0 +1,1 @@
+TESTS            = test_module

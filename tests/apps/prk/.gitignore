@@ -1,0 +1,9 @@
+*~
+*.o
+*.log
+*.trs
+family-*/
+compile
+test-driver
+test-suite.log.orig
+job.*.out

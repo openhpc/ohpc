@@ -1,0 +1,8 @@
+warewulf-cluster-node-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Tools used for clustering with Warewulf
+warewulf-cluster-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Tools used for clustering with Warewulf
+warewulf-common-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning A suite of tools for clustering
+warewulf-ipmi-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning IPMI Module for Warewulf
+warewulf-nhc-ohpc 1.4.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf Node Health Check System
+warewulf-provision-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module
+warewulf-provision-server-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - Server
+warewulf-vnfs-ohpc 3.6 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf VNFS Module

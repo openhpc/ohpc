@@ -9,9 +9,10 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname munge
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 %define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
@@ -21,7 +22,7 @@ Release:	1%{?dist}
 Summary:	MUNGE authentication service
 Group:		ohpc/rms
 License:	GPLv3+ and LGPLv3+
-URL:		https://munge.googlecode.com/
+URL:		http://dun.github.io/munge/
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
 Provides:       %{pname} = %{version}-%{release}
 

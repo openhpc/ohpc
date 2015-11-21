@@ -9,9 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname slurm
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
 # $Id$
 #
@@ -368,7 +368,7 @@ with which Slurm can be configured. Note that some system specific plugins
 are in other packages
 
 %package -n %{pname}-torque%{PROJ_DELIM}
-Summary: Torque/PBS wrappers for transitition from Torque/PBS to Slurm
+Summary: Torque/PBS wrappers for transition from Torque/PBS to Slurm
 Group: ohpc/rms
 Requires: slurm-perlapi
 %description -n %{pname}-torque%{PROJ_DELIM}
@@ -535,6 +535,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install-contrib
 # 6/16/15 karl.w.schulz@intel.com - do not package Slurm's version of libpmi with OpenHPC.
 %if 0%{?OHPC_BUILD}
    rm -f $RPM_BUILD_ROOT/%{_libdir}/libpmi*
+   rm -f $RPM_BUILD_ROOT/%{_libdir}/mpi_pmi2*
 %endif
 
 # Do not package Slurm's version of libpmi on Cray systems with ALPS.
@@ -1012,7 +1013,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/slurm/mpi_mpichmx.so
 %{_libdir}/slurm/mpi_mvapich.so
 %{_libdir}/slurm/mpi_openmpi.so
+%if ! 0%{?OHPC_BUILD}
 %{_libdir}/slurm/mpi_pmi2.so
+%endif
 %endif
 %{_libdir}/slurm/mpi_none.so
 %{_libdir}/slurm/mpi_pmix.so

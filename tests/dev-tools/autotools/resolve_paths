@@ -1,0 +1,145 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions           || exit 1
+source ./common/TEST_ENV            || exit 1
+source ./LOCAL_ENV                  || exit 1
+
+FORMAT="%-15s: %s\n"
+
+#/opt/ohpc/pub/autotools/bin/autoconf
+#/opt/ohpc/pub/autotools/bin/autoheader
+#/opt/ohpc/pub/autotools/bin/autom4te
+#/opt/ohpc/pub/autotools/bin/autoreconf
+#/opt/ohpc/pub/autotools/bin/autoscan
+#/opt/ohpc/pub/autotools/bin/autoupdate
+#/opt/ohpc/pub/autotools/bin/ifnames
+
+#/opt/ohpc/pub/autotools/bin/aclocal
+#/opt/ohpc/pub/autotools/bin/automake
+
+#/opt/ohpc/pub/autotools/bin/libtool
+#/opt/ohpc/pub/autotools/bin/libtoolize
+
+@test "[$TEST_DIR] autoconf: verify autoconf${DELIM} provided autoconf executable" {
+    EXE=$(which autoconf)    && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] autoconf: verify autoconf${DELIM} provided autoheader executable" {
+    EXE=$(which autoheader)  && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] autoconf: verify autoconf${DELIM} provided autom4te executable" {
+    EXE=$(which autom4te)    && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] autoconf: verify autoconf${DELIM} provided autoreconf executable" {
+    EXE=$(which autoreconf)  && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] autoconf: verify autoconf${DELIM} provided autoscan executable" {
+    EXE=$(which autoscan)    && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] autoconf: verify autoconf${DELIM} provided autoupdate executable" {
+    EXE=$(which autoupdate)  && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] autoconf: verify autoconf${DELIM} provided ifnames executable" {
+    EXE=$(which ifnames)     && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] automake: verify automake${DELIM} provided aclocal executable" {
+    EXE=$(which aclocal)     && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] automake: verify autoconf${DELIM} provided automake executable" {
+    EXE=$(which automake)    && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] libtool:  verify libtool${DELIM} provided libtool executable" {
+    EXE=$(which libtool)     && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+
+@test "[$TEST_DIR] libtool:  verify libtool${DELIM} provided libtoolize executable" {
+    EXE=$(which libtoolize)  && printf "$FORMAT" "executable" "$EXE"
+    RPM=$(rpm -qf $EXE)      && printf "$FORMAT" "owned by"   "$RPM"
+
+    if echo "$RPM" | grep -q -- "$DELIM"; then
+        printf "$FORMAT" "$DELIM package" "TRUE"
+    else
+        printf "$FORMAT" "$DELIM package" "FALSE" && return 1
+    fi
+}
+

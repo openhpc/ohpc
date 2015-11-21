@@ -1,0 +1,19 @@
+#PBS -N genarray
+#PBS -A STF006
+#PBS -V
+#PBS -l nodes=32:ppn=2
+#PBS -l walltime=0:15:00
+#PBS -j eo
+
+NPX=4
+NPY=4
+NPZ=4
+NDX=100
+NDY=100
+NDZ=100
+
+cd $PBS_O_WORKDIR
+
+let "NPROC=NPX*NPY*NPZ"
+FN="g_${NPX}x${NPY}x${NPZ}_${NDX}x${NDY}x${NDZ}.bp"
+mpirun -n $NPROC ./genarray $FN $NPX $NPY $NPZ $NDX $NDY $NDZ >& genarray.out

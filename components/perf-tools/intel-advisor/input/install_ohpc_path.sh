@@ -4,15 +4,14 @@
 
 delim=ohpc
 pubdir=/opt/${delim}/pub
+modscanner=../../../OHPC_mod_generator.sh
 
 version=16.1.0.423501
 release=advisor_xe_2016
 relocate_ver=advisor_xe_20$version
 
-input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
-
 match_keys='intel-advisor-xe'
-skip_keys='i486.rpm$'
+skip_keys='i486.rpm$|pset'
 INSTALL=1
 POST_UNINSTALL=1
 TAR=1
@@ -20,8 +19,6 @@ TAR=1
 installed_RPMS=""
 
 for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do 
-
-#for rpm in `ls $input_dir/rpm/*.rpm`; do
 
     name=`basename $rpm`
 
@@ -44,10 +41,12 @@ for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do
     fi
 done
 
+# generate relevant module file input
+$modscanner ${pubdir}/advisor/$version/advixe-vars.sh > modfile-$delim.input
+
 if [ $TAR -eq 1 ];then
     tar cfz intel-advisor-${delim}-$version.tar.gz ${pubdir}/advisor/$version
 fi
-
 
 if [ $POST_UNINSTALL -eq 1 ];then
     echo " "

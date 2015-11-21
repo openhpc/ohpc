@@ -1,0 +1,10 @@
+NUMPROCS=2 
+NUMTHREADS=2 
+NUMITERS=10 
+SEPLINE="===============================================================" 
+MPIRUN=mpirun 
+ 
+$MPIRUN -np $NUMPROCS MPIOPENMP/Nstream/nstream       $NUMTHREADS $NUMITERS 2000000 0;  echo $SEPLINE                                                                                 
+$MPIRUN -np $NUMPROCS MPIOPENMP/Stencil/stencil       $NUMTHREADS $NUMITERS 1000;       echo $SEPLINE 
+$MPIRUN -np $NUMPROCS MPIOPENMP/Transpose/transpose   $NUMTHREADS $NUMITERS 2000 64;    echo $SEPLINE
+$MPIRUN -np $NUMPROCS MPIOPENMP/Synch_p2p/p2p         $NUMTHREADS $NUMITERS 1000 1000;  echo $SEPLINE

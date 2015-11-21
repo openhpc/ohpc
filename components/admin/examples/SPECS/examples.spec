@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 Summary: Example source code and templates for use within OpenHPC environment.
 Name:    examples%{PROJ_DELIM}
@@ -17,6 +17,7 @@ Version: 1.2
 Release: 1
 License: BSD-3
 Group:   ohpc/admin
+URL:     https://github.com/openhpc/ohpc
 Source0: OHPC_macros
 Source1: hello.c
 Source2: ifcfg-ib0

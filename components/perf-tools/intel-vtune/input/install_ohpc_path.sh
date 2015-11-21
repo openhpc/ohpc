@@ -4,11 +4,11 @@
 
 delim=ohpc
 pubdir=/opt/${delim}/pub
+modscanner=../../../OHPC_mod_generator.sh
 
-release=vtune_amplifier_xe_2016  # 15.44
+version=16.1.1.434111 # 1.0
+release=vtune_amplifier_xe_2016_update1
 relocate_ver=vtune_amplifier_xe_20$version
-
-input_dir=../../../compiler-families/intel-compilers/input/update2/parallel_studio_xe_2016_beta
 
 skip_arch=i486.rpm
 INSTALL=1
@@ -16,14 +16,11 @@ POST_UNINSTALL=1
 TARBALL=1
 
 match_keys='intel-vtune'
-skip_keys='i486.rpm$|CLI_Install/rpm/intel-vtune-amplifier-xe-2016-common-pset-16.1-424694.noarch.rpm'
-#skip_dup='CLI_Install/rpm/intel-vtune-amplifier-xe-2016-common-pset-16.1-424694.noarch.rpm'
+skip_keys='i486.rpm$|-common-pset-'
 
 installed_RPMS=""
 
 for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do 
-
-#for rpm in `ls $input_dir/rpm/*.rpm`; do
 
     name=`basename $rpm`
 
@@ -49,9 +46,11 @@ for rpm in `ls $release/rpm/*.rpm` `ls $release/CLI_Install/rpm/*.rpm`; do
 
 done
 
+# generate relevant module file input
+$modscanner ${pubdir}/vtune_amplifier/$version/amplxe-vars.sh > modfile-$delim.input
 
 if [ $TARBALL -eq 1 ];then
-    tar cfz intel-vtune-amplifier-%{delim}-$version.tar.gz ${pubdir}/vtune_amplifier/$version
+    tar cfz intel-vtune-amplifier-${delim}-$version.tar.gz ${pubdir}/vtune_amplifier/$version
 fi
 
 if [ $POST_UNINSTALL -eq 1 ];then

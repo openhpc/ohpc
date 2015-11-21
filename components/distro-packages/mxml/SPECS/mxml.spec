@@ -29,8 +29,7 @@
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
-
-%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 #-ohpc-header-comp-end------------------------------------------------
 
@@ -60,7 +59,7 @@ This package holds the commandline tools for mxml.
 %package -n %library_name
 #
 Summary:        Shared library for mxml
-License:        LGPL-2.1+
+License:        Mini-XML License
 Group:          System/Libraries
 
 %description -n %library_name
@@ -69,20 +68,6 @@ and XML-like data files in your application without requiring large
 nonstandard libraries.
 
 This package holds the shared library for mxml.
-
-%package devel
-Requires:       %{library_name} = %{version}
-#
-Summary:        Development files for mxml
-License:        GPL-2.0+
-Group:          Development/Libraries/C and C++
-
-%description devel
-Mini-XML is a small XML parsing library that you can use to read XML
-and XML-like data files in your application without requiring large
-nonstandard libraries.
-
-This package holds the development files for mxml.
 
 %prep
 %setup
@@ -113,9 +98,6 @@ make DESTDIR=%{buildroot} install DSTROOT=%{buildroot}
 %files -n %{library_name}
 %defattr(-,root,root)
 %{_libdir}/libmxml.so.1*
-
-%files devel
-%defattr(-,root,root)
 %{_includedir}/mxml.h
 %{_libdir}/libmxml.so
 %{_libdir}/pkgconfig/mxml.pc

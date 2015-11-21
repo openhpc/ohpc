@@ -1,0 +1,45 @@
+CFLAGS=$(OPTFLAGS) $(PROG_ENV)
+INCLUDEPATHSPLUS=$(INCLUDEPATHS) -I../../include
+COMMON=../../common
+ 
+usage:
+	@echo "Usage: type \"make $(PROGRAM)\" to build executable"
+	@echo "            \"make clean\" to remove objects and executables"
+
+ 
+ifeq ($(PROG_ENV),-DCHARM++)
+$(PROGRAM).C: $(PROGRAM).decl.h
+endif 
+
+$(PROGRAM):$(OBJS)
+	$(CLINKER) -o $(PROGRAM) $(LIBPATHS)  $(CFLAGS) $(OBJS) $(EXTOBJS) $(LIBS)
+
+
+ifeq ($(PROG_ENV),-DCHARM++)
+$(PROGRAM).decl.h: $(PROGRAM).ci
+		   $(CITRANSLATOR) $(PROGRAM).ci
+endif
+
+wtime.o:$(COMMON)/wtime.c
+	$(CCOMPILER) $(CFLAGS) $(TUNEFLAGS) $(INCLUDEPATHSPLUS) -c $<
+ 
+MPI_bail_out.o:$(COMMON)/MPI_bail_out.c
+	$(CCOMPILER) $(CFLAGS) $(TUNEFLAGS) $(INCLUDEPATHSPLUS) -c $<
+ 
+SHMEM_bail_out.o:$(COMMON)/SHMEM_bail_out.c
+	$(CCOMPILER) $(CFLAGS) $(TUNEFLAGS) $(INCLUDEPATHSPLUS) -c $<
+ 
+OPENMP_bail_out.o:$(COMMON)/OPENMP_bail_out.c
+	$(CCOMPILER) $(CFLAGS) $(TUNEFLAGS) $(INCLUDEPATHSPLUS) -c $<
+ 
+.c.o:
+	$(CCOMPILER) $(CFLAGS) $(TUNEFLAGS) $(INCLUDEPATHSPLUS) -c $<
+ 
+.cpp.o:
+	$(CCOMPILER) $(CFLAGS) $(TUNEFLAGS) $(INCLUDEPATHSPLUS) -c $<
+ 
+.C.o: $(CHARMDEP)
+	$(CCOMPILER) $(CFLAGS) $(TUNEFLAGS) $(INCLUDEPATHSPLUS) -c $<
+ 
+clean:
+	rm -f $(OBJS)  $(PROGRAM) *.optrpt *~ charmrun $(PROGRAM).decl.h $(PROGRAM).def.h

@@ -1,0 +1,32 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV         || exit 1
+source ./common/functions || exit 1
+
+cd dev-tools/numpy        || exit 1
+export BATS_JUNIT_CLASS=Numpy
+
+for compiler in $COMPILER_FAMILIES ; do
+
+    echo " "
+    echo " "
+    echo "----------------------------------------------------------"
+    echo "Dev tools: Numpy tests: $compiler"
+    echo "----------------------------------------------------------"
+
+    module purge                || exit 1
+    module load $compiler       || exit 1
+    module load numpy           || exit 1
+
+    make clean >& /dev/null     || exit 1
+    make -k check               || exit 1
+
+    save_logs_compiler_family tests $compiler
+
+    make clean >& /dev/null
+
+done

@@ -1,0 +1,10 @@
+*~
+*.a
+*.o
+*.mod
+*.log
+*.trs
+fortrandemo
+survey.txt
+result
+user

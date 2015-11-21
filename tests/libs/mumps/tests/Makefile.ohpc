@@ -1,0 +1,48 @@
+#
+#  This file is part of MUMPS 5.0.0, released
+#  on Fri Feb 20 08:19:56 UTC 2015
+#
+topdir = $(MUMPS_DIR)
+libdir = $(topdir)/lib
+
+default: all
+
+.PHONY: default all s d c z clean
+.SECONDEXPANSION:
+
+all:	c z s d
+
+c:	csimpletest
+z:	zsimpletest
+s:	ssimpletest
+d:	dsimpletest c_example
+
+
+include $(topdir)/etc/Makefile.inc
+LIBEXT = ".so"
+
+ssimpletest: $$@.o
+	$(FL) -o $@ $(OPTL) $@.o -L$(MUMPS_DIR)/lib -lmumps_common -lsmumps $(LORDERINGS) $(LIBS) $(LIBOTHERS)
+
+dsimpletest: $$@.o 
+	$(FL) -o $@ $(OPTL) $@.o -L$(MUMPS_DIR)/lib -lmumps_common -ldmumps $(LORDERINGS) $(LIBS) $(LIBOTHERS)
+
+csimpletest: $$@.o
+	$(FL) -o $@ $(OPTL) $@.o -L$(MUMPS_DIR)/lib -lmumps_common -lcmumps $(LORDERINGS) $(LIBS) $(LIBOTHERS)
+
+zsimpletest: $$@.o
+	$(FL) -o $@ $(OPTL) $@.o -L$(MUMPS_DIR)/lib -lmumps_common -lzmumps $(LORDERINGS) $(LIBS) $(LIBOTHERS)
+
+
+c_example:	$$@.o
+	$(FL) -o $@ $(OPTL) $@.o -L$(MUMPS_DIR)/lib -lmumps_common -ldmumps $(LORDERINGS) $(LIBS) $(LIBOTHERS)
+
+
+.SUFFIXES: .c .F .o
+.F.o:
+	$(FC) -g -fPIC $(OPTF) $(INCS) -I. -I$(topdir)/include -c $*.F $(OUTF)$*.o
+.c.o:
+	$(CC) -g -fPIC $(OPTC) $(INCS) $(CDEFS) -I. -I$(topdir)/include -c $*.c $(OUTC)$*.o
+
+clean:
+	$(RM) *.o [sdcz]simpletest c_example

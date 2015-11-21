@@ -1,0 +1,17 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions
+source ../../../common/functions || exit 1
+
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+module load numpy
+module load scipy
+
+@test "[dev-tools/scipy] Coupled Spring-Mass System ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    run python springs.py
+    [[ "${lines[249]}" =~ "10.0" ]]
+}

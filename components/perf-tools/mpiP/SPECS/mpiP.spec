@@ -12,6 +12,7 @@
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -20,7 +21,6 @@
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family:      %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM %{nil}}
 
 # Compiler dependencies 
 
@@ -55,7 +55,7 @@ Summary:   mpiP: a lightweight profiling library for MPI applications.
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.4.1
 Release:   1
-License:   GPLv2+
+License:   BSD-3
 Group:     ohpc/perf-tools
 URL:       http://mpip.sourceforge.net/
 Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{version}.tar.gz

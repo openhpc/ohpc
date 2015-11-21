@@ -1,0 +1,14 @@
+#%Module1.0#####################################################################
+# Test module environment
+#############################################################################
+
+proc ModulesHelp { } {
+puts stderr "Help message from test3 module"
+}
+
+module-whatis "whatis: test2-module"
+
+setenv 	      TEST_MODULE	"ford prefect"
+prepend-path  PATH        	/my/test3-module-path
+append-path   MANPATH           /my/test3-manpath
+

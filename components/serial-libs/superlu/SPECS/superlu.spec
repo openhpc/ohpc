@@ -28,6 +28,7 @@
 #-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -35,16 +36,13 @@
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
+Requires:      openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -104,11 +102,6 @@ Docu can be found on http://www.netlib.org.
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-# Enable MKL linkage for blas/lapack with gnu builds
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
 make lib
 
 mkdir tmp 
@@ -133,9 +126,11 @@ popd
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the SuperLU_dist library built with the %{compiler_family} compiler"
+puts stderr "This module loads the SuperLU library built with the %{compiler_family} compiler"
 puts stderr "toolchain."
 puts stderr " "
+puts stderr "Note that this build of SuperLU leverages the OpenBLAS linear algebra libraries."
+puts stderr "Consequently, openblas is loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
 
@@ -147,6 +142,15 @@ module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
 set     version                     %{version}
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { [is-loaded gnu] } {
+        if { ![is-loaded openblas]  } {
+          module load openblas
+        }
+    }
+}
+
 
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib

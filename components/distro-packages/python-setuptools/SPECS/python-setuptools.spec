@@ -31,7 +31,7 @@ Version:        18.0.1
 Release:        62.1
 Url:            http://pypi.python.org/pypi/setuptools
 Summary:        Easily download, build, install, upgrade, and uninstall Python packages
-License:        Python-2.0 or ZPL-2.0
+License:        Python Software Foundation License
 Group:          Development/Languages/Python
 Source:         https://pypi.python.org/packages/source/s/setuptools/setuptools-%{version}.tar.gz
 Source1:        psfl.txt

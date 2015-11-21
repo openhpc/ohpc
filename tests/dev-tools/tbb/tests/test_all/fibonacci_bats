@@ -1,0 +1,15 @@
+#!../../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../../common/test_helper_functions
+source ../../../../common/functions || exit 1
+
+if [ -s ../../../../TEST_ENV ];then
+    source ../../../../TEST_ENV
+fi
+
+PKG="dev-tools/tbb"
+
+@test "[$PKG] TBB Test - fibonacci" {
+    run fibonacci
+}

@@ -1,0 +1,186 @@
+####################################################
+High Performance Conjugate Gradient Benchmark (HPCG)
+####################################################
+
+:Author: Jack Dongarra and Michael Heroux and Piotr Luszczek
+:Revision: 2.4
+:Date: June 3, 2014
+
+===================
+Download and Unpack
+===================
+
+Retrieve the tar-gzip file, then uncompress it with::
+
+    gunzip hpcg.tar.gz; tar -xvf hpcg.tar
+
+this  will create  an ``hpcg`` directory, that  we call  the top-level directory
+in the text below.
+
+=============
+Configuration
+=============
+
+HPCG uses a make-compatible file for configuring the compilers, linkers, and
+their command line flags.
+
+Create a file ``Make.<arch>`` in the ``setup`` directory right under the
+top-level  directory. Suffix ``<arch>`` should be a name that you choose for
+your system.  To make the process easier, you may want to re-use one of the
+example files contained already in the ``setup`` directory.  The
+``Make.<arch>`` file contains the command names of the compilers and linkers
+together with their options for using special directories and linking with
+libraries as well as their paths that are to be used for building the binary.
+
+The most important variables that need to be set in ``Make.<arch>`` are:
+
+* ``MPdir`` specifies the path to where the MPI installation resides. For some
+  MPI implementations, using the MPI-enabled compiler (such as ``mpicxx``) is
+  sufficient and it is not required specified any MPI installation paths. This
+  variable can be used to setup the ``MPinc`` and ``MPlib`` variables.
+
+* ``MPinc`` specifies the path to include directories with MPI header files. A
+  common setting here would be ``MPinc = $(MPdir)/include``, provided that the
+  ``MPdir`` variable was set properly.
+
+* ``MPlib`` specifies the path to directories with MPI library files. A common
+  setting here would be ``MPlib = $(MPdir)/lib``, provided that the ``MPdir``
+  variable was set properly.
+
+* ``HPCG_OPTS`` specifies additional compiler options for compiling the HPCG
+  source files. These options might include optimization, debugging, or tuning
+  flags.
+
+* ``CXX`` specifies the name of the C++ compiler for compiling the code. It
+  should be a C++ that supports a subset of STL that is used in HPCG as well as
+  the subset of constructs used in the MPI standard.
+
+* ``CXXFLAGS`` specifies the flags to be used when invoking the C++ compiler.
+  These might include optimization and profiling options.
+
+* ``LINKER`` specifies the linker capable of linking C++ programs that include
+  MPI calls.
+
+* ``LINKERFLAGS`` specifies the flags passed to the linker that might indicate
+  directories where to look for standard C++ and MPI libraries.
+
+HPCG supports in-source and out-of-source builds. In the case of the former,
+the object files and the binary reside in the same directory structure as the
+source files. There is no need for a seperate configuation step and the reader
+may skip the the Build section.
+
+In the latter case, a seperate directory is created to hold the object and
+binary executable files.  For example, create a custom directory, ``build`` in
+this example, for the results of compilation and linking::
+
+    mkdir build
+
+Next, go this new directory and use the ``configure`` script to create the
+build infrastructure:
+
+    cd build
+    /path/to/hpcg/configure /path/to/setup/file
+
+Notice that you have to give a absolute or relative path to the ``configure``
+shell script so that the location of the source files can be discovered
+automatically. Sample setup files are found in the hpcg/setup directory.
+
+=====
+Build
+=====
+
+For the in-source builds, while in the top-level directory, simply type::
+
+    make path/to/setup/file
+
+For the out-of-source builds, go to the ``build`` directory and type ``make``.
+
+In both cases, the executable called ``xhpcg`` should be created in the ``bin``
+directory.
+
+=============
+Example Build
+=============
+
+As an example, let's use a Linux cluster and create a file called
+``Make.Linux`` in the ``setup`` directory right under the top-level directory.
+
+For in-source build, we type ``make setup/Make.Linux`` which creates the executable
+file called ``bin/xhpcg``.
+
+For out-of-source build, we create the build directory called ``build_Linux``
+and go to that direcotry::
+
+    mkdir build_Linux
+    cd build_Linux
+
+Then, while in the ``build_Linux`` directory we type::
+
+    /path/to/hpcg/configure ../setup/Make.Linux
+    make
+
+This creates the executable file ``bin/xhpcg``.
+
+====
+Test
+====
+
+For a quick check, go to the ``bin`` directory and run the HPCG executable as
+follows::
+
+    mpirun -np 8 xhpcg
+
+Note that this will use the default ``hpcg.dat`` file. If you'd like to change
+the size of local dimensions of the problem to NX=32, NY=24, NZ=16 then run the
+following::
+
+    mpirun -np 8 xhpcg 32 24 16
+
+======
+Tuning
+======
+
+Most of the performance  parameters can be tuned by modifying the input file
+``hpcg.dat``. See the file ``TUNING`` in the top-level directory.
+
+
+====================
+Compile Time Options
+====================
+
+At the end of the "model" ``Make.<arch>``, the  user  is given the opportunity to
+compile the software with some specific compile options.  The list of this
+options and their meaning are:
+
+* Compile with modest debugging turned on::
+
+    -DHPCG_DEBUG
+
+* Compile with voluminous debugging information turned on::
+
+    -DHPCG_DETAILED_DEBUG
+
+* Compile without MPI enabled::
+
+    -DHPCG_NOMPI
+
+* Compile without OpenMP enabled::
+
+    -DHPCG_NOOPENMP
+
+* Enable detail timers::
+
+    -DHPCG_DETAILED_TIMING
+
+
+By default HPCG will:
+
+* Turn on MPI support.
+* Turn on OpenMP support.
+* not display detailed timing information.
+
+===================
+Further information
+===================
+ 
+Check out  the website  http://software.sandia.gov/hpcg for the latest information.

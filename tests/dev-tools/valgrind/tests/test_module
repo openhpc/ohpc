@@ -1,0 +1,133 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions                  || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+PKG=VALGRIND
+testname=Valgrind
+module=valgrind
+header=valgrind/valgrind.h
+rpm=valgrind${DELIM}
+
+# Query local compiler family
+check_compiler_family CC CXX FC
+
+@test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+}
+
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
+    DIR=${PKG}_DIR
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+    
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify availability of $module binary ($LMOD_FAMILY_COMPILER)" {
+    run which valgrind
+    assert_success
+}
+
+# ----------
+# Man pages
+# ----------
+
+@test "[$testname] Verify availability of man page ($LMOD_FAMILY_COMPILER)" {
+    DIR=${PKG}_DIR
+
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+    
+    run man -w $module
+    assert_success
+    assert_output "${!DIR}/share/man/man1/valgrind.1"
+}
+# --------------
+# Include Tests
+# --------------
+
+@test "[$testname] Verify module ${PKG}_INC is defined and exists ($LMOD_FAMILY_COMPILER)" {
+    INC=${PKG}_INC
+
+    if [ -z ${!INC} ];then
+        flunk "${PKG}_INC directory not defined"
+    fi
+    
+    if [ ! -d ${!INC} ];then
+        flunk "directory ${!INC} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify header file is present in ${PKG}_INC ($LMOD_FAMILY_COMPILER)" {
+    INC=${PKG}_INC
+
+    if [ -z ${!INC} ];then
+        flunk "${PKG}_INC directory not defined"
+    fi
+    
+    if [ ! -s ${!INC}/${header} ];then
+        flunk "directory $header file does not exist"
+    fi 
+}
+
+# Execution Test(s)
+
+@test "[$testname] Callgrind compile/test ($LMOD_FAMILY_COMPILER)" {
+    INC=${PKG}_INC
+
+    if [ -z ${!INC} ];then
+        flunk "${PKG}_INC directory not defined"
+    fi
+
+    rm -f callgrind.out*
+
+    $CC -I${!INC} -o simwork simwork.c
+    assert_success
+    
+    run valgrind --tool=callgrind ./simwork
+    run ls -l callgrind.out*
+    assert_success
+}
+
+@test "[$testname] Memcheck compile/test ($LMOD_FAMILY_COMPILER)" {
+
+    # Clean program that should run without incident
+    $CC -o hello hello.c
+    assert_success
+    run valgrind -q --error-exitcode=1 ./hello
+    assert_success
+
+    # Program with memory error that valgrind should detect
+    $CC -o badfree badfree.c
+    assert_success
+    run valgrind -q --error-exitcode=1 ./badfree
+    assert_failure
+
+#    rm ./badfree
+#    rm ./hello
+}
+
+rm -f .cmd_output
+rm -f callgrind.out*
+

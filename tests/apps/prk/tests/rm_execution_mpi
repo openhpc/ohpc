@@ -1,0 +1,82 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+   . ./TEST_ENV
+else
+    ERROR "TEST_ENV does not exist"
+fi
+
+app="App/PRK"
+mode=MPI
+rm=$RESOURCE_MANAGER
+NUMITERS=$TEST_NUM_ITERS
+NODES=$((NUM_COMPUTES < TEST_MAX_COMPUTES ? NUM_COMPUTES : TEST_MAX_COMPUTES))
+TASKS=$((NODES * TEST_NUM_RANKS))
+
+@test "[$app] $mode/Branch run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Branch/branch"
+    for type in vector_go vector_stop no_vector ins_heavy; do
+        run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 1000 $type" $NODES $TASKS
+        assert_success
+    done
+}
+
+@test "[$app] $mode/DGEMM run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/DGEMM/dgemm"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 500 32 1" $NODES $TASKS
+    assert_success
+}
+
+@test "[$app] $mode/Nstream run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Nstream/nstream"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 2000000 0" $NODES $TASKS
+    assert_success
+}
+
+@test "[$app] $mode/Random run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Random/random"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "20 16" $NODES $TASKS
+    assert_success
+}
+
+# temporary workaround pending investigation on mvapich2 issue related to IB registration cache:
+# vector_length reduced from 2000k to 200k
+@test "[$app] $mode/Reduce run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Reduce/reduce"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 200000" $NODES $TASKS
+    assert_success
+}
+
+@test "[$app] $mode/Sparse run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Sparse/sparse"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 10 4" $NODES $TASKS
+    assert_success
+}
+
+@test "[$app] $mode/Stencil run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Stencil/stencil"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 1000" $NODES $TASKS
+    assert_success
+}
+
+@test "[$app] $mode/Synch_global run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Synch_global/global"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 1000" $NODES $TASKS
+    assert_success
+}
+
+@test "[$app] $mode/Synch_p2p run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Synch_p2p/p2p"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 1000 100" $NODES $TASKS
+    assert_success
+}
+
+@test "[$app] $mode/Transpose run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Transpose/transpose"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 2000 64" $NODES $TASKS
+    assert_success
+}

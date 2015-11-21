@@ -11,14 +11,14 @@
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM}
@@ -58,7 +58,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname adios
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+%define PNAME %(tr [a-z] [A-Z] <<< %{pname})
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -72,9 +72,12 @@ Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
 Source1: OHPC_macros
 Source2: OHPC_setup_compiler
 
-# Minimum Build Requires
-BuildRequires: libmxml1 mxml-devel cmake zlib-devel glib2-devel
-Requires:      libmxml1
+# Minimum Build Requires - our mxml build included devel headers in libmxml1
+BuildRequires: libmxml1 cmake zlib-devel glib2-devel
+Requires:      libmxml1 zlib
+#bzip support confuses the CMtests
+#Requires:      bzip2
+#BuildRequires: bzip2-devel
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
@@ -121,7 +124,7 @@ LIBSUFF=64
 %endif
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
-pushd /home/abuild/rpmbuild/SOURCES
+pushd %{_sourcedir}
 cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
 popd
 
@@ -158,12 +161,15 @@ export MPICXX=mpicxx
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
+
 ./configure --prefix=%{install_path} \
-	--with-mxml=/usr/include \
+	--with-mxml=/usr \
 	--with-lustre=/usr/include/lustre \
 	--with-phdf5="$HDF5_DIR" \
-	--with-zlib=/usr/include \
+	--with-zlib=/usr \
 	--with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
+# bzip2 support is confusing CMtests
+#	--with-bzip2=/usr \
 
 # modify libtool script to not hardcode library paths
 sed -i -r -e 's/(hardcode_into_libs)=.*$/\1=no/' \
@@ -186,15 +192,13 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
-# gnu builds need MKL -- can this dependency be removed?
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
 # this is clearly generated someway and shouldn't be static
 export PPATH="/lib64/python2.7/site-packages"
 export PATH=$(pwd):$PATH
 
+%if %{compiler_family} == gnu
+module load openblas
+%endif
 module load numpy
 export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy

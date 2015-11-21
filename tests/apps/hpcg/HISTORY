@@ -1,0 +1,176 @@
+####################################################
+High Performance Conjugate Gradient Benchmark (HPCG)
+####################################################
+
+:Author: Jack Dongarra and Michael Heroux and Piotr Luszczek
+:Revision: 2.4
+:Date: June 3, 2014
+
+===============
+History of HPCG
+===============
+
+-----------
+Version 2.4
+-----------
+
+* Fixed (again) the FLOP count for DDOT and WAXPBY.  We forgot that the 
+  preamble is called many times.
+
+-----------
+Version 2.3
+-----------
+
+* Fixed the FLOP count for DDOT and WAXPBY.  The operations in the preamble were
+  not being accounted for.
+
+-----------
+Version 2.2
+-----------
+
+* Reduced the penalty for optimization overhead by a factor of 10 (amortized over 10
+  sets of 50 reference iterations.
+* Fixed a bug that did not account for increased iterations that can occur with
+  multicoloring reorderings.
+* Fixed numerous other small bugs reported by HPCG users.
+
+-----------
+Version 2.1
+-----------
+
+* Fixed a small but important bug in ComputeProlongation_ref.cpp (- sign should be + sign).
+
+-----------
+Version 2.0
+-----------
+
+* Added support for a synthetic multigrid V cycle.  Parameters include
+  the number of levels in the the grid hierarchy, number of pre and
+  post smoother steps.
+* Refactored data classes to support needs for recursion in V cycle.
+* Made simple modifications to make compilation on MS Windows easier.
+  This includes changing the format of output files to remove colons.
+
+-----------
+Version 1.1
+-----------
+
+* Added a simple code for users remove in order to indicate whether
+optimization was done for dot-product, SPMV, SYMGS, or WAXPBY.
+* Fixed a problem with computing the variance of results from multiple runs.
+
+-----------
+Version 1.0
+-----------
+
+* Changed the diagonal entry from 27 to 26 to influence convergence rate.
+* Changed license file (COPYRIGHT) from 4-clause BSD (original BSD) to 3-clause
+BSD (modified BSD)
+* Added a line to the input file (hpcg.dat) that allows to specify time to run
+the benchmark.
+
+-----------
+Version 0.5
+-----------
+
+* Improved the formula used for scaling of departure of symmetry
+
+-----------
+Version 0.4
+-----------
+
+* Fixed bugs in integer computations where intermediate 32-bit
+  integer computations resulted in values that exceeded the
+  32-bit range and gave incorrect results.
+* Fixed the computation of the number of CG set runs to take
+  into account varying timing results across MPI processes.
+
+-----------
+Version 0.3
+-----------
+
+* Given out to friendly testers.
+* Includes Doxygen output.
+* Numerous small changes.
+* Substantially improved output.
+* Tested on large systems.
+
+-----------
+Version 0.2
+-----------
+* Given out to "friends".
+* Numerous small changes.
+
+
+-----------
+Version 0.1
+-----------
+
+* Added local symmetric Gauss-Seidel preconditioning.
+* Changed global geometry to be true 3D.  Previously was a beam (subdomains
+  were stacked only in the z dimension).
+* Introduced three global/local index modes: 32/32, 64/32, 64/64 to handle all
+  problem sizes.
+* Changed execution strategy to perform multiple runs with just a few
+  iterations per run.
+* Added infrastructure and rules for user adaptation of kernels for performance
+  optimization.
+* Added benchmark modification and reporting rules.
+* Changed directory and file layout to mimic HPL layouts where appropriate.
+
+================
+History of HPCCG
+================
+
+--------------------------
+NAME CHANGE: HPCCG to HPCG
+--------------------------
+
+* The name was changed from HPCCG to HPCG without any code changes.
+
+-----------
+Version 1.0
+-----------
+
+* Released as part of Mantevo Suite 1.0, December 2012.
+
+-----------
+Version 0.5
+-----------
+
+* Added timing for Allreduce calls in MPI mode, printing min/max/avg times.
+* Set the solver tolerance to zero to make all solves take ``max_iter``
+  iterations.
+* Changed accumulator to a local variable for ``ddot``.  It seems to help
+  dual-core performance.
+
+-----------
+Version 0.4
+-----------
+
+- Made total_nnz a "long long" so that MFLOP numbers were valid
+  when the nonzero count is  more than 2^31.
+
+-----------
+Version 0.3
+-----------
+
+* Fixed a performance bug in ``make_local_matrix.cpp`` that was very noticeable
+  when the fraction of off-processor grid points was large.
+
+-----------
+Version 0.2
+-----------
+
+* Fixed bugs related to turning MPI compilation off.
+* Added more text to README to improve understanding.
+* Added new ``Makfile.x86linux.gcc`` for non-opteron systems.
+* Made ``MPI_Wtime`` the default timer when in MPI mode.
+
+-----------
+Version 0.1
+-----------
+
+HPCCG (Original version) was written as a teaching code for illustrating the
+anatomy of a distributed memory parallel sparse iterative solver for new
+research students and junior staff members.  March 2000.

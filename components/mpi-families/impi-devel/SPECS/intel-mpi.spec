@@ -8,8 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define compiler_family intel
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
 Summary:   Intel(R) MPI Library for Linux* OS
 Name:      intel-mpi-devel%{PROJ_DELIM}
@@ -27,8 +29,6 @@ AutoReq:   no
 
 # 09/16/15 karl.w.schulz@intel.com - patch to enable gfortran 5.2.x MPI module support
 Source2:   gfortran_support_fix.patch
-
-%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true

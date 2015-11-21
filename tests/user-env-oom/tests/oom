@@ -1,0 +1,26 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ../../common/test_helper_functions || exit 1
+source ../../common/functions || exit 1
+
+if [ -s ../../TEST_ENV ]; then
+	source ../../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ]; then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+@test "[oom] Test job OOM condition ($LMOD_FAMILY_COMPILER)" {
+    skip "disable to invistigate disk fillup"
+    if [ ! -s oom_check ]; then
+        flunk "oom_check binary does no exists"
+    fi
+
+    run_serial_binary ./oom_check
+    assert_success
+}

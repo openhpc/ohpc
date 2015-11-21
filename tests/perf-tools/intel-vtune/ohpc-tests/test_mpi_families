@@ -1,0 +1,41 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV         || exit 1
+source ./common/functions || exit 1
+
+cd perf-tools/intel-vtune || exit 1
+export BATS_JUNIT_CLASS=Vtune
+
+# bootstrap the local autotools project
+
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+    for mpi in $MPI_FAMILIES ; do
+
+	echo " "
+	echo " "
+	echo "-------------------------------------------------------"
+	echo "Intel Vtune tests: $compiler-$mpi"
+	echo "-------------------------------------------------------"
+
+	module purge          || exit 1
+        module load prun      || exit 1
+        module load vtune     || exit 1
+	module load $compiler || exit 1
+	module load $mpi      || exit 1
+
+	./configure           || exit 1
+	make clean            || exit 1
+	make -k check
+
+        save_logs_mpi_family tests $compiler $mpi
+
+	make distclean
+    done
+done
+

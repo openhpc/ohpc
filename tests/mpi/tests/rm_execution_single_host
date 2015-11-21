@@ -1,0 +1,42 @@
+#!../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../common/test_helper_functions || exit 1
+source ../../common/functions || exit 1
+
+if [ -s ../../TEST_ENV ];then
+    source ../../TEST_ENV
+fi
+
+check_rms
+
+NODES=1
+TASKS=2
+ARGS=2
+
+@test "[MPI] C binary runs on single node under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s C_test ];then
+	flunk "C_test binary does not exist"
+    fi
+    
+    run run_mpi_binary ./C_test $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[MPI] C++ binary runs on single node under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s CXX_test ];then
+	flunk "CXX_test binary does not exist"
+    fi
+
+    run run_mpi_binary ./CXX_test $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[MPI] F90 binary runs on single node under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s F90_test ];then
+	flunk "F90_test binary does not exist"
+    fi
+
+    run run_mpi_binary ./F90_test $ARGS $NODES $TASKS
+    assert_success
+}

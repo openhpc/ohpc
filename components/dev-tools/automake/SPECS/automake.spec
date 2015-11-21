@@ -9,15 +9,15 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname automake
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   A GNU tool for automatically creating Makefiles
 Name:      %{pname}%{PROJ_DELIM}
 Version:   1.15
 Release:   1
-License:   GPLv2+ and GFDL
+License:   GNU GPL
 Group:     ohpc/dev-tools
 URL:       http://www.gnu.org/software/automake/
 DocDir:    %{OHPC_PUB}/doc/contrib

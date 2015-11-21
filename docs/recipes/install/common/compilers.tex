@@ -1,6 +1,6 @@
-\OHPC{} presently packages two compiler families ({\GNU{}} and {\Intel{}
+\OHPC{} presently packages two compiler families ({\GNU{}} and {\IntelR{}
   Parallel Studio}) that are integrated within the underlying
-modules-environment system in a hierarchical fashion. End users of a \OHPC{}
+modules-environment system in a hierarchical fashion. End users of an \OHPC{}
 system can choose to access one compiler at a time and will be presented with
 additional compiler-dependent software as a function of which compiler
 toolchain is currently loaded. Each compiler toolchain can be installed
@@ -10,6 +10,6 @@ with any necessary dependencies:
 % begin_ohpc_run
 % ohpc_comment_header Install Compilers \ref{sec:install_compilers}
 \begin{lstlisting}[language=bash]
-[master]# (*\install*) gnu-compilers-ohpc intel-compilers-devel-ohpc
+[sms](*\#*) (*\install*) gnu-compilers-ohpc intel-compilers-devel-ohpc
 \end{lstlisting}
 % end_ohpc_run

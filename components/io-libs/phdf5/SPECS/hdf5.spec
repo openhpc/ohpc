@@ -30,6 +30,7 @@
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -37,8 +38,7 @@
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
@@ -80,7 +80,7 @@ Summary:   A general purpose library and file format for storing scientific data
 Name:      p%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.8.15
 Release:   1
-License:   BSD-style
+License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     ohpc/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib

@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname conman
@@ -23,7 +23,7 @@ Release:	1%{?dist}
 Summary:	ConMan: The Console Manager
 Group:		ohpc/admin
 License:	GPLv3+
-URL:		http://conman.googlecode.com/
+URL:		http://dun.github.io/conman/
 DocDir:         %{OHPC_PUB}/doc/contrib
 
 Requires:	expect

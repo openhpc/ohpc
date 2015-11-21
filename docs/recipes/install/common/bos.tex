@@ -4,3 +4,25 @@ approach, insert the \baseOS{} DVD, power cycle the host, and follow the distro
 provided directions to install the BOS on your chosen {\em master} host.
 Alternatively, if choosing to use a pre-installed server, please verify that it
 is provisioned with the required \baseOS{} distribution.
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+While it is theoretically possible to provision a Warewulf cluster with SELinux
+enabled, doing so is beyond the scope of this document. Even the use of
+permissive mode can be problematic and we therefore recommend disabling SELinux on the {\em
+master} SMS host. If SELinux components are installed locally,
+the \texttt{selinuxenabled} command can be used to determine if SELinux is
+currently enabled. If enabled, consult the distro documentation for information
+on how to disable.
+%(note that a host reboot is typically required).
+
+%% \begin{lstlisting}[language=bash,keywords={}]
+%% [sms](*\#*) if [ -f /etc/selinux/config ]; then
+%%                 perl -pi -e "s/SELINUX=(enforcing|permissive)/SELINUX=disabled/" /etc/selinux/config
+%%             fi
+%% [sms](*\#*) shutdown -r now
+%% \end{lstlisting}
+
+\end{tcolorbox}
+\end{center}

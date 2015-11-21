@@ -1,0 +1,25 @@
+#-----------------------------------------------------------------------
+
+MINIFE_TYPES =  \
+	-DMINIFE_SCALAR=double   \
+	-DMINIFE_LOCAL_ORDINAL=int      \
+	-DMINIFE_GLOBAL_ORDINAL=int
+
+#-----------------------------------------------------------------------
+
+
+CFLAGS = -g
+CXXFLAGS = -g
+CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES)
+
+CXX=g++
+CC=gcc
+
+# Change 'quantify' to 'purify' to do memory checking instead of performance profiling, or
+# comment this out to do no instrumentation:
+
+INSTRUMENT=/usr/local/rational/rational7/releases/PurifyPlus.7.0.0.0-012/i386_linux2/bin/purify -always-use-cache-dir -cache-dir=/var/scratch2/william/purify-cache
+
+include make_targets
+include ./optional/make_targets
+

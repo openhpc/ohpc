@@ -9,15 +9,15 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname autoconf
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   A GNU tool for automatically configuring source code
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2.69
 Release:   1
-License:   GPLv3+ and GFDL
+License:   GNU GPL
 Group:     ohpc/dev-tools
 DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/

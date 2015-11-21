@@ -8,7 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname inspector
 
 Summary:   Intel(R) Inspector XE
@@ -16,10 +18,11 @@ Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   16.1.0.423441
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
+Source2:   modfile-ohpc.input
 Release:   1
 License:   Copyright (C) 2014 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
-URL:       http://www.intel.com/software/products/
+URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     ohpc/dev-tools
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -28,8 +31,6 @@ AutoReq:   no
 %if 0%{?sles_version} || 0%{?suse_version}
 requires:  libpng12-0
 %endif
-
-%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
@@ -81,10 +82,11 @@ setenv          INSPECTOR_DIR   %{package_target}
 setenv          INSPECTOR_BIN   %{package_target}/bin64
 setenv          INSPECTOR_LIB   %{package_target}/lib64
 prepend-path    MANPATH         %{package_target}/man 
-prepend-path    PATH            %{package_target}/bin64
-prepend-path    LD_LIBRARY_PATH %{package_target}/lib64
-
 EOF
+
+# Append with machine-generated contribution for modulefile settings
+
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################

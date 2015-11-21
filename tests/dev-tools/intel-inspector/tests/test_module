@@ -1,0 +1,162 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions                  || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+PKG=INSPECTOR
+testname="Intel Inspector"
+module=inspector
+header=
+library=libmemchkr
+rpm=intel-inspector${DELIM}
+
+setup() {
+    module purge
+    module load ohpc
+    module load $module
+}
+
+
+@test "[$testname] Verify $module module is loaded and matches rpm version" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+}
+
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists" {
+    DIR=${PKG}_DIR
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+    
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+}
+
+# ----------
+# Binaries
+# ----------
+
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
+    BIN=${PKG}_BIN
+    if [ -z ${!BIN} ];then
+        flunk "${PKG}_BIN directory not defined"
+    fi
+    
+    if [ ! -d ${!BIN} || -z "${!BIN}" ];then
+        flunk "directory ${!BIN} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify availability/execution of inspxe-cl binary" {
+    run which inspxe-cl
+    assert_success
+
+    run inspxe-cl  --version
+    assert_success
+}
+
+@test "[$testname] Verify availability of inspxe-gui binary" {
+    run which inspxe-gui
+    assert_success
+}
+
+# ----------
+# Man pages
+# ----------
+
+@test "[$testname] Verify availability of man page for inspxe-cl" {
+    DIR=${PKG}_DIR
+
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+    
+    run man -w inspxe-cl
+    assert_success
+    assert_output "${!DIR}/man/man1/inspxe-cl.1"
+}
+
+# ----------
+# Lib Tests
+# ----------
+
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+ 
+    if [ ! -d ${!LIB} ];then
+        flunk "directory ${!LIB} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify dynamic library available in ${PKG}_LIB" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -s ${!LIB}/${library}.so ];then
+        flunk "${library}.so does not exist"
+    fi 
+}
+
+# ----------
+# Tracing
+# ----------
+
+exe=./fortrandemo
+rdir=./result
+rtxt=./survey.txt
+
+@test "[$testname] Sample test application" {
+
+    rm -rf $rdir $rtxt
+
+    if [ ! -x $exe ];then
+        flunk "$exe executable not available"
+    fi
+
+    run mkdir $rdir
+    assert_success
+
+    # launch data collection
+    run timeout 20s inspxe-cl -collect mi3 -result-dir $rdir $exe
+    assert_success
+
+    # verify tracing file
+    run ls $rdir/data.0
+    assert_success
+
+    # generate report
+    run timeout 20s inspxe-cl -report=summary -r=$rdir -report-output=$rtxt
+    assert_success
+
+    # verify report file
+    run ls $rtxt
+    assert_success
+
+    rm -rf $rdir $rtxt user
+
+}
+
+rm -f .cmd_output

@@ -1,14 +1,14 @@
 t_old="obs/ForestPeak_15.16_Factory"
 t_new="obs/ForestPeak_15.31_Factory"
 
-f_all=pkg-fsp.all
-f_add=pkg-fsp.chglog-add
-f_del=pkg-fsp.chglog-del
-f_upd=pkg-fsp.chglog-upd
+f_all=pkg-ohpc.all
+f_add=pkg-ohpc.chglog-add
+f_del=pkg-ohpc.chglog-del
+f_upd=pkg-ohpc.chglog-upd
 
-f_dif=pkg-fsp.dif
-f_old=pkg-fsp.old
-f_new=pkg-fsp.new
+f_dif=pkg-ohpc.dif
+f_old=pkg-ohpc.old
+f_new=pkg-ohpc.new
 
 rm -f ${f_add} ${f_del} ${f_upd}
 rm -f ${f_dif} ${f_old} ${f_new}

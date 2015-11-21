@@ -1,0 +1,7 @@
+C*_test
+CXX*_test
+F90*_test
+*.o
+*.log
+*.trs
+test-suite.log.orig

@@ -9,16 +9,16 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname intel-compilers
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
 Version:   16.0.109
 Release:   1
 License:   Intel(R)
-URL:       http://www.intel.com/software/products
+URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     ohpc/compiler-families
 BuildArch: x86_64
 Source0:   intel-compilers%{PROJ_DELIM}-16.0.0-109.tar.gz
@@ -100,6 +100,7 @@ setenv          MPM_LAUNCHER        %{package_target}/debugger_2016/mpm/mic/bin/
 setenv          TBBROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb
 setenv          TBB_INC             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/include
 setenv          TBB_LIB             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4
+prepend-path    CPATH               %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/include
 
 family "compiler"
 EOF

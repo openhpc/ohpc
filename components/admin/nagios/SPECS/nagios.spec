@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname nagios
@@ -68,6 +68,7 @@ BuildRequires: perl(Test::Harness)
 #%endif
 BuildRequires: perl(Test::More)
 BuildRequires: perl(Test::Simple)
+BuildRequires: unzip
 
 %if 0%{?sles_version} || 0%{?suse_version}
 #!BuildIgnore: brp-check-suse

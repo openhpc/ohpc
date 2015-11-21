@@ -5,29 +5,20 @@ the corresponding compute image in a subsequent step.
 % begin_ohpc_run
 % ohpc_comment_header Add resource management services on master node \ref{sec:add_rm}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]# (*\groupinstall*) ohpc-slurm-server
+[sms](*\#*) (*\groupinstall*) ohpc-slurm-server
 \end{lstlisting}
 % end_ohpc_run
 
 \SLURM{} requires the designation of a system user that runs the underlying
 resource management daemons. The default configuration file that is supplied
 with the \OHPC{} build of \SLURM{} identifies this \texttt{SlurmUser} to be a
-dedicated user named \texttt{slurm} and this user must exist. 
+dedicated user named ``slurm'' and this user must exist. 
 The following command can be used to add this user to the {\em
   master} server:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-[master]# useradd slurm
-\end{lstlisting}
-% end_ohpc_run
-
-To facilitate running test jobs later on under the auspices of a resource
-manager, we also add a dedicated ``test'' user as follows:
-
-% begin_ohpc_run
-\begin{lstlisting}[language=bash,keywords={}]
-[master]# useradd -m test
+[sms](*\#*) useradd slurm
 \end{lstlisting}
 % end_ohpc_run
 

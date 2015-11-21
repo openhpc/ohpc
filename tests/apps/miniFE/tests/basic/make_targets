@@ -1,0 +1,52 @@
+
+OBJS = \
+	BoxPartition.o \
+	YAML_Doc.o \
+	YAML_Element.o \
+	TBBNode.o
+
+UTIL_OBJS = \
+	param_utils.o \
+	utils.o \
+	mytimer.o
+
+MAIN_OBJ = \
+	main.o
+
+UTEST_OBJS = \
+	utest.o
+
+MINIFE_INFO = 1
+MINIFE_KERNELS = 0
+
+vpath %.cpp ../utils
+
+all:common_files generate_info miniFE.x
+
+utest.x:common_files $(OBJS) $(OPTIONAL_OBJS) $(UTIL_OBJS) $(UTEST_OBJS) *.hpp
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(UTEST_OBJS) $(OBJS) $(UTIL_OBJS) -o utest.x $(LDFLAGS) $(OPTIONAL_LIBS) $(LIBS)
+
+miniFE.x:common_files $(MAIN_OBJ) $(OBJS) $(UTIL_OBJS) $(OPTIONAL_OBJS) *.hpp generate_info
+	$(INSTRUMENT) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(MAIN_OBJ) $(OBJS) $(UTIL_OBJS) $(OPTIONAL_OBJS) -o miniFE.x $(LDFLAGS) $(OPTIONAL_LIBS) $(LIBS)
+
+common_files:
+	./get_common_files
+
+generate_info:
+	./generate_info_header "$(CXX)" "$(CXXFLAGS)" "miniFE" "MINIFE"
+
+verify:all
+	./run_tests
+
+%.o:%.cpp *.hpp
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -DMINIFE_INFO=$(MINIFE_INFO) -DMINIFE_KERNELS=$(MINIFE_KERNELS) -c $<
+
+%.o:%.c *.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
+
+clean:
+	rm -f *.o *.a *.x *.linkinfo miniFE_info.hpp
+
+realclean: clean
+	rm -f gmon.out gprof.* *~ *.yaml *.TVD.* *.mtx* *.vec* run_utest_* minife_debug*
+

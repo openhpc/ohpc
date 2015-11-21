@@ -9,9 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname ganglia
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 %global gangver     3.7.2
 %global webver      3.7.1

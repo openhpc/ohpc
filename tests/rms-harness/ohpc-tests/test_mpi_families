@@ -1,0 +1,40 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV         || exit 1
+source ./common/functions || exit 1
+
+cd rms-harness || exit 1
+export BATS_JUNIT_CLASS=rms-harness
+
+# bootstrap the local autotools project
+
+./bootstrap || exit 1
+
+for compiler in gnu ; do
+    for mpi in $MPI_FAMILIES ; do
+
+	echo " "
+	echo " "
+	echo "-------------------------------------------------------"
+	echo "User Environment: RMS Harness tests: $compiler-$mpi"
+	echo "-------------------------------------------------------"
+
+	module purge          || exit 1
+        module load prun      || exit 1
+	module load $compiler || exit 1
+	module load $mpi      || exit 1
+
+	make distclean
+	./configure           || exit 1
+	make -k check 
+
+        save_logs_mpi_family tests $compiler $mpi
+
+	make distclean 
+    done
+done
+

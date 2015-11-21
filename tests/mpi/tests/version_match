@@ -1,0 +1,77 @@
+#!../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../common/test_helper_functions || exit 1
+source ../../common/functions || exit 1
+
+if [ "$LMOD_FAMILY_MPI" = "mvapich2" ];then
+    family=mvapich2
+elif [ "$LMOD_FAMILY_MPI" = "openmpi" ];then
+    family=openmpi
+elif [ "$LMOD_FAMILY_MPI" = "impi" ];then
+    family=impi
+else
+    ERROR "Unsupported or unknown MPI family"
+fi
+
+@test "[MPI] MPI module loaded ($LMOD_FAMILY_COMPILER/$family)" {
+    module list $family >& .cmd_output || exit 1
+    local my_module=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1`
+    echo "$my_module" | grep -q "1) $family/"
+    assert_success
+}
+
+@test "[MPI] MPI module version available ($LMOD_FAMILY_COMPILER/$family)" {
+    module list $family >& .cmd_output || exit 1
+    local my_version=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
+
+    if [ -z "$my_version" ];then
+	flunk "ERROR: unable to ascertain module version ($my_version)"
+    fi
+    rm -f .cmd_output
+}
+
+@test "[MPI] mpicc, mpicxx, and mpif90 versions match module ($LMOD_FAMILY_COMPILER/$family)" {
+    module list $family >& .cmd_output || exit 1
+    local my_mod_version=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
+
+    local mpi_version=""
+
+    if [ $family == "openmpi" ];then
+        run which ompi_info
+        assert_success 
+
+        ompi_info -V | head -1 | awk -F v '{print $2}' >& .cmd_output || exit 1
+        mpi_version=`cat .cmd_output`
+    elif [ $family == "mvapich2" ];then
+        run which mpichversion
+        assert_success
+
+        mpichversion | grep "MVAPICH2 Version" | awk '{print $3}' >& .cmd_output || exit 1
+        mpi_version=`cat .cmd_output`
+    elif [ $family == "impi" ];then
+        run which mpicc
+        assert_success
+        
+        mpicc -v 2>1 | head -1 | awk '{print $7}' >& .cmd_output
+        mpi_version=`cat .cmd_output`
+    else
+        ERROR "Unsupported or unknown MPI family"
+    fi
+
+    # Verify runtime version matches module declaration. openmpi and
+    # mvapich2 provide very specific version designations via runtime
+    # queries. impi is less specific so the queries below differ
+    # slightly
+
+    if [ $family == "impi" ];then
+        run $BASH -c "echo $my_mod_version | grep $mpi_version"
+        assert_success
+    else
+        assert_equal "$my_mod_version" "$mpi_version"
+    fi
+
+    rm -f .cmd_output
+}
+
+

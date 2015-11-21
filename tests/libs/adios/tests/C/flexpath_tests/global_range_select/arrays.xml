@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+<adios-group name="temperature" coordination-communicator="comm" stats="On">
+    <var name="NX" type="integer"/>
+    <var name="NY" type="integer"/>
+    <var name="size" type="integer"/>
+    <var name="rank" type="integer"/>
+    <var name="test_scalar" type="integer"/>
+    <global-bounds dimensions="size,NX" offsets="rank,0">
+        <var name="var_2d_array" gwrite="t" type="double" dimensions="NY,NX"/>
+    </global-bounds>
+</adios-group>
+
+<method group="temperature"  method="FLEXPATH">QUEUE_SIZE=4;</method>
+
+<buffer size-MB="20" allocate-time="now"/>
+
+</adios-config>
+

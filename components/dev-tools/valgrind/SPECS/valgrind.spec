@@ -9,11 +9,10 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname valgrind
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Valgrind Memory Debugger
 Name:      %{pname}%{PROJ_DELIM}

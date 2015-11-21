@@ -17,7 +17,7 @@
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
@@ -152,7 +152,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -lgomp -L/tmp%{install_path}/lib" 
+	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
 
 
 make install

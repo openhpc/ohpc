@@ -1,0 +1,27 @@
+It is often desirable to consolidate system logging information for the cluster in a
+central location, both to provide easy access to the data, and to reduce the
+impact of storing data inside the stateless compute node's memory footprint. The
+following commands highlight the steps necessary to configure compute nodes to
+forward their logs to the SMS, and to allow the SMS to accept these log requests.
+
+
+% begin_ohpc_run
+% ohpc_comment_header Configure rsyslog on SMS and computes \ref{sec:add_syslog}
+\begin{lstlisting}[language=bash,keywords={}]
+# Configure SMS to receive messages and reload rsyslog configuration
+[sms](*\#*) perl -pi -e "s/\\#\\\$ModLoad imudp/\\\$ModLoad imudp/" /etc/rsyslog.conf
+[sms](*\#*) perl -pi -e "s/\\#\\\$UDPServerRun 514/\\\$UDPServerRun 514/" /etc/rsyslog.conf
+[sms](*\#*) systemctl restart rsyslog
+
+# Define compute node forwarding destination
+[sms](*\#*) echo "*.* @${sms_ip}:514" >> $CHROOT/etc/rsyslog.conf
+
+# Disable most local logging on computes. Emergency and boot logs will remain on the compute nodes
+[sms](*\#*) perl -pi -e "s/^\*\.info/\\#\*\.info/" $CHROOT/etc/rsyslog.conf
+[sms](*\#*) perl -pi -e "s/^authpriv/\\#authpriv/" $CHROOT/etc/rsyslog.conf
+[sms](*\#*) perl -pi -e "s/^mail/\\#mail/" $CHROOT/etc/rsyslog.conf
+[sms](*\#*) perl -pi -e "s/^cron/\\#cron/" $CHROOT/etc/rsyslog.conf
+[sms](*\#*) perl -pi -e "s/^uucp/\\#uucp/" $CHROOT/etc/rsyslog.conf
+
+\end{lstlisting}
+% end_ohpc_run

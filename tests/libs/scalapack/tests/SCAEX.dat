@@ -1,0 +1,9 @@
+'ScaLAPACK Tutorial, Example input file'
+'PARA95, ScaLAPACK Example, August 1995.'
+'SCAEX.out'		output file name (if any)
+6			device out
+6 			value of N
+1 			value of NRHS
+2 			values of NB
+2			values of NPROW
+2 			values of NPCOL

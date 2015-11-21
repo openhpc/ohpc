@@ -11,6 +11,7 @@
 # Serial metis build dependent on compiler toolchain
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 #-ohpc-header-comp-begin-----------------------------
 
@@ -19,7 +20,6 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
@@ -45,7 +45,7 @@ Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
 Version: 5.1.0
 Release: 1
-License: BSD-like
+License: Apache License 2.0
 Group:   ohpc/serial-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
 Source0: http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-%{version}.tar.gz

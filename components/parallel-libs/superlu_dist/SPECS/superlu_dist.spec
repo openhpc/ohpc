@@ -28,6 +28,7 @@
 #-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -35,8 +36,7 @@
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
@@ -81,8 +81,9 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        4.1
 Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
-License:        LGPL-2.1
+License:        BSD-3-Clause
 Group:          ohpc/parallel-libs
+URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Patch0:         superlu_dist-4.1-sequence-point.patch
 Patch1:         superlu_dist-4.1-make.patch

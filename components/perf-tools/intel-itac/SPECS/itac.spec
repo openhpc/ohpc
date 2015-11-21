@@ -8,7 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname itac
 
 Summary:   Intel(R) Trace Analyzer and Collector
@@ -16,10 +18,11 @@ Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   9.1.1.017
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
+Source2:   modfile-ohpc.input
 Release:   1
 License:   Copyright (C) 2003-2015 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
-URL:       http://www.intel.com/software/products/
+URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     ohpc/perf-tools
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -29,8 +32,6 @@ AutoReq:   no
 %if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 Requires: libpng12
 %endif
-
-%include %{_sourcedir}/OHPC_macros
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
@@ -81,18 +82,26 @@ set     version                 %{version}
 setenv          ITAC_DIR        %{package_target}
 setenv          ITAC_BIN        %{package_target}/bin
 setenv          ITAC_LIB        %{package_target}/lib
-prepend-path    PATH            %{package_target}/bin
-prepend-path    MANPATH         %{package_target}/man
-prepend-path    LD_LIBRARY_PATH %{package_target}/mic/slib:%{package_target}/intel64/slib:%{package_target}/lib
-prepend-path    CLASSPATH       %{package_target}/intel64/lib
-
-setenv          VT_ADD_LIBS     "-ldwarf -lelf -lvtunwind -lnsl -lm -ldl -lpthread"
-setenv          VT_LIB_DIR      %{package_target}/intel64/lib
-setenv          VT_ROOT         %{package_target}
-setenv          VT_ARCH         intel64
-setenv          VT_SLIB_DIR     %{package_target}/intel64/slib
 
 EOF
+
+# Append with machine-generated contribution for modulefile settings
+
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+
+
+###prepend-path    PATH            %{package_target}/bin
+###prepend-path    MANPATH         %{package_target}/man
+###prepend-path    LD_LIBRARY_PATH %{package_target}/mic/slib:%{package_target}/intel64/slib:%{package_target}/lib
+###prepend-path    CLASSPATH       %{package_target}/intel64/lib
+###
+###setenv          VT_ADD_LIBS     "-ldwarf -lelf -lvtunwind -lnsl -lm -ldl -lpthread"
+###setenv          VT_LIB_DIR      %{package_target}/intel64/lib
+###setenv          VT_ROOT         %{package_target}
+###setenv          VT_ARCH         intel64
+###setenv          VT_SLIB_DIR     %{package_target}/intel64/slib
+###
+###EOF
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################

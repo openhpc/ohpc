@@ -1,0 +1,52 @@
+NOTE: The instructions in this file assume you are working with a version
+      of the software from the HPCG repository, or have already unpacked
+      the hpcg distribution tar file. We assume you are in the main hpcg 
+      directory.
+
+1) Review the collection of setup files in hpcg/setup.  Determine which of
+   these files is usable for your system, or create a new file of your own
+   with appropriate parameters, starting from an existing file if you like.
+   Note the suffix of the file Make.suffix (e.g., Make.MPI_GCC_OpenMP has the
+   suffix MPI_GCC_OpenMP).
+
+   Example commands: 
+      ls setup
+      cp setup/Make.MPI_GCC_OMP setup/Make.My_MPI_OMP
+      vi setup/Make.My_MPI_OMP
+
+2) Create a build directory under the main hpcg directory (or somewhere else on
+   your system).  Give the directory a meaningful name such as MPI_GCC_OpenMP.
+
+   Example command:
+      mkdir My_MPI_OMP_BUILD
+
+3) 'cd' to your build directory, and run the configure command located in the
+   main hpcg directory, defining the path and file argument to be the location
+   of the setup file defined in step 1.  Then run 'make'.
+
+   Example commands:
+      cd My_MPI_OMP_BUILD
+      ../configure ../setup/Make.My_MPI_OMP
+      make
+
+4) If make is successful, you will have a bin directory containing the files
+   hpcg.dat and xhpcg.  'cd' to the bin directory and run the benchmark.
+
+   Example commands:
+      cd bin
+      export OMP_NUM_THREADS 4
+      mpiexec -np 64 ./xhpcg
+
+5) The benchmark has completed execution. This should take a few minutes
+   when running in evaluation mode, and take more than 5 hours in official
+   benchmark mode. When the run is complete, you will see a file called 
+   'benchmark-hpcg-[version]_[timestamp].yaml'.  You will also see a log file
+   called 'hpcg_log_[timestamp].txt.  The official results from your run are
+   in the .yaml file.  The final two lines of the file declare whether or not
+   the results are valid, and explain how to report them.
+
+   Example commands:
+      less HPCG-Benchmark-1.1_2014:01:22-22:46:06.yaml
+      mail hpcg-results@software.sandia.gov < HPCG-Benchmark-1.1_2014:01:22-22:46:06.yaml
+
+6) If results are not valid, do not submit them.

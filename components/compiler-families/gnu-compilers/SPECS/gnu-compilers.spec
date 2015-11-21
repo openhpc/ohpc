@@ -9,9 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname gnu-compilers
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 # Define subcomponent versions required for build
 
@@ -19,19 +19,19 @@
 %define mpc_version 1.0.3
 %define mpfr_version 3.1.3
 
-
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
 Version:   5.2.0
 Release:   1
-License:   GPL-3.0+
+License:   GNU GPL
 Group:     ohpc/compiler-families
 URL:       http://gcc.gnu.org/
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.bz2
 Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}a.tar.bz2
 Source2:   ftp://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
-Source3:   http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.gz
+#Source3:   http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.gz
+Source3:   http://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
 Source4:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 

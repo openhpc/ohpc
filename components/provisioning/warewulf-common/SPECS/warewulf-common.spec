@@ -13,9 +13,9 @@
 %define wwpkgdir /srv/
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname warewulf-common
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
@@ -47,6 +47,7 @@ Requires: mysql perl-DBD-mysql
 # 07/23/14 travis.post@intel.com - alternate package names for RHEL7
 %if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 Requires: mariadb-server perl-DBD-MySQL
+Requires: perl-Term-ReadLine-Gnu
 %else
 %if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 Requires: mysql-server perl-DBD-mysql

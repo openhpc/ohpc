@@ -1,0 +1,50 @@
+## Linux Host Template ##
+define host{
+	name linux-box ; Name of this template
+	use generic-host ; Inherit default values
+	check_period 24x7
+	check_interval 5
+	retry_interval 1
+	max_check_attempts 10
+	check_command check-host-alive
+	notification_period 24x7
+	notification_interval 30
+	notification_options d,r
+	contact_groups admins
+	register 0 ; DONT REGISTER THIS - ITS A TEMPLATE
+}
+
+define hostgroup {
+	hostgroup_name compute
+	alias compute nodes
+	members HOSTNAME1,HOSTNAME2,HOSTNAME3,HOSTNAME4
+}
+
+# example configuration of 4 remote linux systems
+define host{
+	use linux-box      ; Inherit default values from a template
+	host_name HOSTNAME1    ; The name we're giving to this server
+	alias HOSTNAME1        ; A longer name for the server
+	address HOST1_IP   ; IP address of Remote Linux host
+}
+
+define host{
+	use linux-box      ; Inherit default values from a template
+	host_name HOSTNAME2    ; The name we're giving to this server
+	alias HOSTNAME2        ; A longer name for the server
+	address HOST2_IP   ; IP address of Remote Linux host
+}
+
+define host{
+	use linux-box      ; Inherit default values from a template
+	host_name HOSTNAME3    ; The name we're giving to this server
+	alias HOSTNAME3        ; A longer name for the server
+	address HOST3_IP   ; IP address of Remote Linux host
+}
+
+define host{
+	use linux-box      ; Inherit default values from a template
+	host_name HOSTNAME4    ; The name we're giving to this server
+	alias HOSTNAME4        ; A longer name for the server
+	address HOST4_IP   ; IP address of Remote Linux host
+}

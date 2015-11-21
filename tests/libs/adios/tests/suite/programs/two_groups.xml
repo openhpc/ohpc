@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+
+    <adios-group name="g1" coordination-communicator="comm" time-index="tidx">
+        <var name="a0"  type="integer"/>
+        <var name="c0"  type="integer"/>
+        <attribute name="attr1int" path="" var="a0" />
+        <attribute name="attr1str" path="" type="string" value="a" />
+    </adios-group>
+
+    <adios-group name="g2" coordination-communicator="comm" time-index="tidx">
+        <var name="b0"  type="integer"/>
+        <attribute name="attr2int" path="" var="b0" />
+        <attribute name="attr2str" path="" type="string" value="b" />
+    </adios-group>
+
+<method group="g1" method="MPI"/>
+<method group="g2" method="MPI"/>
+
+<buffer size-MB="20" allocate-time="now"/>
+
+</adios-config>
+

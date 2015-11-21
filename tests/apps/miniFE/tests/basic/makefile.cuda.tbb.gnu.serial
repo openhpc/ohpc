@@ -1,0 +1,37 @@
+#-----------------------------------------------------------------------
+#  DEFINES, INCLUDES, OBJECTS, and LIBRARIES
+#  for the CUDA option *AND* for the TBB option.
+
+TBB_DIR=/sierra/Sntools/extras/compilers/intel/Compiler/11.1/064/tbb
+CUDA_DIR=/usr/local/cuda/3.0/cuda
+
+DEVICE_EMULATION=--device-emulation
+DEVICE_EMULATION=
+CUDAFLAGS = -arch=sm_13 -O3 $(DEVICE_EMULATION)
+
+OPTIONAL_DEFS = -DMINIFE_HAVE_TBB -DMINIFE_HAVE_CUDA
+OPTIONAL_INCS = -I$(CUDA_DIR)/include -I./optional/cuda -I$(TBB_DIR)/include
+OPTIONAL_OBJS = CudaNode.o CudaVector.o CudaMatrix.o
+OPTIONAL_LIBS = -L$(TBB_DIR)/intel64/cc4.1.0_libc2.4_kernel2.6.16.21/lib -ltbb -ltbbmalloc -L$(CUDA_DIR)/lib64 -lcublas -lcudart
+
+#-----------------------------------------------------------------------
+
+MINIFE_TYPES =	\
+	-DMINIFE_SCALAR=float	\
+	-DMINIFE_LOCAL_ORDINAL=int	\
+	-DMINIFE_GLOBAL_ORDINAL=int
+
+#-----------------------------------------------------------------------
+
+CFLAGS = -O3
+CXXFLAGS = -O3
+CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES) $(OPTIONAL_INCS) $(OPTIONAL_DEFS)
+LDFLAGS =
+LIBS =
+
+CXX=g++
+CC=gcc
+
+include make_targets
+include ./optional/make_targets
+

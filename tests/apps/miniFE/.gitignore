@@ -1,0 +1,8 @@
+*~
+*.yaml
+log.miniFE
+family-*/
+compile
+test-driver
+test-suite.log.orig
+job.*.out

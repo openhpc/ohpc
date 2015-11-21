@@ -1,5 +1,35 @@
 \Ganglia{} is a scalable distributed system monitoring tool for high-performance
 computing systems such as clusters and grids. It allows the user to remotely
 view live or historical statistics (such as CPU load averages or network
-utilization) for all machines that are being monitored.  The following commands
-can be used to enable  \Ganglia{} on the {\em master} node.
+utilization) for all machines that are being monitored. The following commands
+can be used to enable \Ganglia{} on the {\em master} node.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [ ${enable_ganglia} -eq 1 ];then
+% ohpc_indent 5
+% ohpc_validation_comment Install Ganglia on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install Ganglia
+[sms](*\#*) (*\groupinstall*) ohpc-ganglia
+[sms](*\#*) (*\chrootinstall*) ganglia-gmond-ohpc
+
+# Start and Enable Ganglia services
+# If you add nodes through WareWulf, restart these to pick up the hostnames rather than the IPs
+[sms](*\#*) systemctl enable gmond
+[sms](*\#*) systemctl enable gmetad
+[sms](*\#*) systemctl start gmond
+[sms](*\#*) systemctl start gmetad
+[sms](*\#*) chroot $CHROOT systemctl enable gmond
+
+[sms](*\#*) for I in httpd apache2; do
+              if [ -d /etc/$I ]; then
+                 perl -pi -e "s/Require local/Require all granted/" /etc/$I/conf.d/ganglia-ohpc.conf
+              fi
+           done 
+[sms](*\#*) systemctl try-restart httpd
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+

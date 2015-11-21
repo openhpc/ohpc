@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+
+    <adios-group name="abc" coordination-communicator="comm" time-index="tidx">
+        <!-- dimension variables (scalars) -->
+        <var name="gdim1" type="integer"/>
+        <var name="gdim2" type="integer"/>
+        <var name="gdim3" type="integer"/>
+        <var name="ldim1" type="integer"/>
+        <var name="ldim2" type="integer"/>
+        <var name="ldim3" type="integer"/>
+        <var name="offs1" type="integer"/>
+        <var name="offs2" type="integer"/>
+        <var name="offs3" type="integer"/>
+
+        <!-- Scalars -->
+        <var name="a0"  type="integer"/>
+        <var name="b0"  type="integer"/>
+        <var name="c0"  type="integer"/>
+
+        <!-- Scalars over time -->
+        <var name="at0" dimensions="tidx" type="integer"/>
+        <var name="bt0" dimensions="tidx" type="integer"/>
+        <var name="ct0" dimensions="tidx" type="integer"/>
+
+        <!-- 1D Arrays -->
+        <global-bounds dimensions="gdim1" offsets="offs1">
+            <var name="a1" dimensions="ldim1" type="integer"/>
+            <var name="b1" dimensions="ldim1" type="integer"/>
+            <var name="c1" dimensions="ldim1" type="integer"/>
+        </global-bounds>
+
+        <!-- 1D Arrays over time -->
+        <global-bounds dimensions="gdim1" offsets="offs1">
+            <var name="at1" dimensions="tidx,ldim1" type="integer"/>
+            <var name="bt1" dimensions="tidx,ldim1" type="integer"/>
+            <var name="ct1" dimensions="tidx,ldim1" type="integer"/>
+        </global-bounds>
+
+        <!-- 2D Arrays -->
+        <global-bounds dimensions="gdim1,gdim2" offsets="offs1,offs2">
+            <var name="a2" dimensions="ldim1,ldim2" type="integer"/>
+            <var name="b2" dimensions="ldim1,ldim2" type="integer"/>
+            <var name="c2" dimensions="ldim1,ldim2" type="integer"/>
+        </global-bounds>
+
+        <!-- 3D Arrays -->
+        <global-bounds dimensions="gdim1,gdim2,gdim3" offsets="offs1,offs2,offs3">
+            <var name="a3" dimensions="ldim1,ldim2,ldim3" type="integer"/>
+            <var name="b3" dimensions="ldim1,ldim2,ldim3" type="integer"/>
+            <var name="c3" dimensions="ldim1,ldim2,ldim3" type="integer"/>
+        </global-bounds>
+
+    </adios-group>
+
+<method group="abc" method="MPI"/>
+
+<buffer size-MB="20" allocate-time="now"/>
+
+</adios-config>
+

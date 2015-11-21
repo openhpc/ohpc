@@ -9,17 +9,18 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname prun
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Convenience utility for parallel job launch
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.1.0
+Version:   1.0
 Release:   1
 License:   BSD
 Group:     ohpc/admin
 BuildArch: noarch
+URL:       https://github.com/openhpc/ohpc
 Source0:   %{pname}
 Source1:   OHPC_macros
 Source2:   LICENSE      
@@ -31,7 +32,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 %description
 
-prun provides a script-based wrapper for launching parallel jobs
+prun provides a unified, script-based wrapper for launching parallel jobs
 within a resource manager for a variety of MPI families.
 
 %prep

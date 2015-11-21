@@ -1,6 +1,6 @@
 #!/bin/bash
 
-../../../../common/listfsp
+../../../../common/listohpc
 ../../../../common/listpatterns
 ../../../../common/listchanges
 

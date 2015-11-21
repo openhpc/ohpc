@@ -13,8 +13,8 @@
 %if 0%{?OHPC_BUILD}
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 %define debug_package %{nil}
 
 %if 0%{?suse_version} == 1110
@@ -156,8 +156,9 @@ Name: %{lustre_name}%{PROJ_DELIM}
 Version: %{version}
 Release: %{fullrelease}
 License: GPL
-Group: fsp/lustre
-Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
+Group:   ohpc/lustre
+#Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
+Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
@@ -360,7 +361,7 @@ clients in order to run
 %endif
 %prep
 
-%setup -qn lustre-release-%{sha_short}
+%setup -qn lustre-%{version}
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
@@ -368,7 +369,9 @@ ln lnet/ChangeLog ChangeLog-lnet
 %build
 
 # Set an explicit path to our Linux tree, if we can.
+
 cd $RPM_BUILD_DIR/lustre-%{version}
+
 # override %optflags so that the vendor's overzealous flags don't create
 # build failures
 %define optflags -g -O2 -Werror
@@ -960,3 +963,4 @@ fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+

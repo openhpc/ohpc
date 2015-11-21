@@ -1,0 +1,67 @@
+Copyright (c) 2013, Intel Corporation
+
+Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions 
+are met:
+
+    * Redistributions of source code must retain the above copyright 
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above 
+      copyright notice, this list of conditions and the following 
+      disclaimer in the documentation and/or other materials provided 
+      with the distribution.
+    * Neither the name of Intel Corporation nor the names of its 
+      contributors may be used to endorse or promote products 
+      derived from this software without specific prior written 
+      permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
+COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, 
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, 
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER 
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN 
+ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+POSSIBILITY OF SUCH DAMAGE.
+
+******************************************************************
+
+This files contains instructions for building and running PRKs using
+the Charm++, OpenSHMEM, Grappa, or Fine-Grain MPI runtimes.
+
+These runtimes need to be  installed, and you need to specify in file
+PRKROOT/common/make.defs where they are located. Note that if Charm++,
+OpenSHMEM or Grappa are built on top of MPI, MPI does need to be
+installed, even if it is not called directly.
+
+Grappa
+------
+This runtime requires cmake to install. Compile and link flags
+depend on the particulars of the installation and cannot be specified
+uniformly. Hence, it may be necessary to obtain them from the Grappa
+installation, after building it, from GRAPPAROOT/util/grappa.mk and
+insert 	      them into the required Makefile associated with each PRK.
+The run script grappa(s)_run may not give the desired result. If
+Grappa is built to use MPI, the code can be run in most cases by using
+mpiexec.hydra, with the usual command line parameters.
+
+Charm++
+-------
+The run script charmrun may not give the desired result. If Charm++
+is built to use MPI, the code can be run in most cases by using
+mpiexec.hydra, with the usual command line parameters.
+
+Fine-Grain MPI
+--------------
+Care must be taken to use the specific MPI version supporting this
+runtime, which must be built explicitly. Codes are run using the
+Fine-Grain MPI version of mpiexec.hydra. This name may well clash
+with the version of mpiexec.hydra supporting standard MPI. Such a
+conflict may be avoided by starting a sub-shell for FG_MPI runs and
+changing path variables only inside that shell. Scripts in the
+PRKROOT/Run directory employ this technique automatically and do
+not need to be modified for proper execution.

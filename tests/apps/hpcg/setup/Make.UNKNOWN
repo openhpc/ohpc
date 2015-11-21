@@ -1,0 +1,23 @@
+# -*- Makefile -*-
+
+arch=UNKNOWN
+
+VERSION = 2.0
+
+UNKNOWN:
+	@echo
+	@echo Please specify "'"arch"'" variable, for example:
+	@echo 1. Create file "'"Make.Unix"'" in the "'"setup"'" directory
+	@echo 2. Type: "'"make arch=Unix"'"
+	@echo
+
+GNUTAR = gnutar # or "gtar" on Linux
+
+dist:
+	@echo Packaging for version $(VERSION)
+	ln -s -f . hpcg-$(VERSION)
+	grep :0: /etc/group | sed -e 's/:.*//' | xargs -I '{}' $(GNUTAR) --owner=root --group='{}' -cvhof hpcg-$(VERSION).tar hpcg-$(VERSION)/src/*.[ch]pp hpcg-$(VERSION)/testing/*.[ch]pp hpcg-$(VERSION)/[BCHIQRTV]* hpcg-$(VERSION)/bin/hpcg.dat hpcg-$(VERSION)/setup/Make.* hpcg-$(VERSION)/configure hpcg-$(VERSION)/Makefile hpcg-$(VERSION)/Makefile.ext hpcg-$(VERSION)/tools/hpcg.dox
+	gzip -v --best hpcg-$(VERSION).tar
+	rm -f hpcg-$(VERSION)
+
+.PHONY: UNKNOWN dist

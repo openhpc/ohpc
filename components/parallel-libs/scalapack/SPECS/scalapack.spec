@@ -28,6 +28,7 @@
 #-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -35,8 +36,7 @@
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
@@ -76,7 +76,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        A subset of LAPACK routines redesigned for heterogenous computing
-License:        BSD
+License:        netlib ScaLAPACK License
 Group:          Development/Libraries/Parallel
 Version:        2.0.2
 Release:        13.1
@@ -172,10 +172,8 @@ module-whatis "%{url}"
 set     version                     %{version}
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { [is-loaded gnu] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
-        }
+    if { ![is-loaded openblas]  } {
+      module load openblas
     }
 }
 

@@ -1,0 +1,79 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+   . ./TEST_ENV
+else
+    ERROR "TEST_ENV does not exist"
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+# init run options
+tdir=./test
+sample="Si_333"
+ifile=$sample.in
+ofile=$sample.out
+rfile=QE_$sample.out.ref
+rtext="!    total energy"
+
+NODES=1
+TASKS=$((NODES*TEST_NUM_RANKS))
+ARGS="-in $ifile"
+EXE=$TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
+
+# set global env settings
+export OMP_NUM_THREADS=$TEST_NUM_THREADS
+if [ $LMOD_FAMILY_MPI == "mvapich2" ];then
+    export MV2_ENABLE_AFFINITY=0
+    export IPATH_NO_CPUAFFINITY=1
+fi
+
+@test "[Apps/miniDFT] run miniDFT on single node under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    rm -f $tdir/$ofile
+
+    if [ ! -x $EXE ];then
+        flunk "missing $EXE"
+    fi
+
+    if [ ! -s $tdir/$ifile ];then
+        flunk "missing $ifile"
+    fi
+
+    pushd $tdir >& /dev/null
+    run_mpi_binary -t $CMD_TIMEOUT -o $ofile ../$EXE "$ARGS" $NODES $TASKS
+    assert_success
+    popd >& /dev/null
+}
+
+if [ "$TEST_VERIFY"=="1" ];then
+@test "[Apps/miniDFT] validate miniDFT single node output ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    diff <(grep "$rtext" $tdir/$rfile) <(grep "$rtext" $tdir/$ofile)
+    assert_success
+}
+fi
+
+@test "[Apps/miniDFT] log miniDFT single node results ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    run_tag=miniDFT.${sample}.P${TASKS}
+    wfile=$run_tag.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI.out
+    mv $tdir/$ofile $tdir/$wfile || exit 1
+
+    str="Benchmark_Time"
+    ref_time=`grep $str $tdir/ref/$wfile | sed 's/.*CPU \(.*\)s WALL.*/\1/'`
+    cur_time=`grep $str $tdir/$wfile     | sed 's/.*CPU \(.*\)s WALL.*/\1/'`
+
+    if [ -z $ref_time ];then
+        ref_time="?"
+    fi
+
+    if [ -z $cur_time ];then
+        cur_time="?"
+    fi
+
+    fmt="%-24s %-10s %-10s %16s %16s\n"
+    printf "$fmt" $run_tag $LMOD_FAMILY_COMPILER $LMOD_FAMILY_MPI $ref_time $cur_time >>$TEST_PERFLOG
+}

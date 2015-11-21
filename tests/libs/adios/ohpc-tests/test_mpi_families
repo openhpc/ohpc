@@ -1,0 +1,64 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+cd "$(dirname "$0")/.."      || exit 1
+
+source ./LOCAL_ENV        || exit 1
+export BATS_JUNIT_CLASS=$TEST_DIR
+source ./common/TEST_ENV  || exit 1
+source ./common/functions || exit 1
+
+echo " "
+echo " "
+echo "-------------------------------------------------------"
+echo "Libraries: ADIOS tests bootstrap"
+echo "-------------------------------------------------------"
+module load autotools || exit 1
+./bootstrap           || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+    for mpi in $MPI_FAMILIES ; do
+
+	echo " "
+	echo " "
+	echo "-------------------------------------------------------"
+	echo "Libraries: ADIOS tests: $compiler-$mpi"
+	echo "-------------------------------------------------------"
+
+	module purge          
+        module load prun      
+	module load $compiler 
+	module load $mpi      
+	module load adios
+        module load netcdf
+        module load phdf5
+#        if [ "$compiler" = "gnu" ]; then
+#	   module load mkl
+#	fi
+
+	export LIBS='-ladios -lhdf5 -lz -llustreapi'
+	export CPPFLAGS="-I$ADIOS_INC -I$NETCDF_INC -I$HDF5_INC"
+	export LDFLAGS="-L$ADIOS_LIB -L$NETCDF_LIB -L$HDF5_LIB"
+        if [ "$mpi" = "mvapich2" ]; then
+	   export LIBS="$LIBS -lpthread"
+	fi
+
+	./configure > /dev/null  2>&1
+	pushd tests
+	    find -type f -name 'Makefile' -exec sed -i 's#top_builddir)/src#ADIOS_LIB)#g' {} \;
+	    ./run
+        popd
+
+        for dir in . suite/programs; do
+            save_logs_mpi_family tests/$dir $compiler $mpi
+        done
+
+	pushd tests
+	    make distclean > /dev/null 2>&1
+	popd
+    done
+done
+

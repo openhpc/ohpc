@@ -1,0 +1,128 @@
+Flexpath Testing
+================
+
+Possible Test Setups
+--------------------
+
+1. Program which directly calls adios_flexpath functions and checks returns.
+2. Program which forks readers and writers, which dump to file and checks file contents.
+
+Existing Directories
+--------------------
+
+* global_range_select - runs tests using the global range selectors. Current tests are listed below:
+	- 1 to 1 all to all
+
+* scalar - read/write a scalar with (XML API)
+
+* 1D_arr_global - read/write a 1D array of doubles (XML API)
+
+* 1D_arr_global_noxml - read/write a 1D array of doubles but no XML API (analogous
+  to 1D_arr_global)
+  
+* maya_noxml - inspired by maya; same variables written multiple times (doesn't work with Flexpath)
+
+* maya_append - inspired by maya; testing the append mode (doesn't work with Flexpath)
+  
+How to build and clean the build 
+--------------------------------
+# build
+$ make 
+# clean
+$ make clean
+
+How to run regression tests (might be outdated 2013-09-04)
+----------------------------
+# be sure that appropriate paths for openmpi, mxml, and evpath are
+# set appropriately
+ 
+module list
+Currently Loaded Modules:
+  1) openmpi/1.6.3    2) mxml/2.7    3) evpath
+
+There is a convenience bash script 
+
+./run_tests.sh
+
+Run it without options to see how to run all tests.
+
+# to run test
+# in one terminal run writers
+./run_tests.sh -flx-w
+# in the second terminal run readers
+./run_tests.sh -flx-r
+
+Notes
+------
+There are directories that are used to most of the tests (2013-09-04)
+
+include
+common
+
+If you want to copy the individual regression test, then
+copy the include and common directory and the test directory as well.
+
+
+Recent tests
+------------
+
+MPI transport (2013-09-04) - my laptop
+
+TEST_PASSED scalar: rank 0
+TEST_PASSED scalar: rank 1
+TEST_PASSED 1D_arr_global: rank 0
+TEST_PASSED 1D_arr_global: rank 1
+TEST_PASSED 1D_arr_global_noxml: rank 0
+TEST_PASSED 1D_arr_global_noxml: rank 1
+TEST_PASSED maya_append: rank 0
+TEST_PASSED maya_noxml: rank 0
+
+FLEXPATH transport (2013-09-04) - my laptop
+
+TEST_PASSED scalar: rank 0
+TEST_PASSED scalar: rank 1
+TEST_PASSED 1D_arr_global: rank 0
+TEST_PASSED 1D_arr_global: rank 1
+TEST_PASSED 1D_arr_global_noxml: rank 0
+TEST_PASSED 1D_arr_global_noxml: rank 1
+
+maya_append and maya_noxml tests failed
+
+Some tests produced message
+
+1D_arr_global_noxml
+
+mpirun -np 2 ./writer -t flx
+Rank=1 adios_group_size(): adios_groupsize=100, adios_totalsize=558, retval=0
+Rank=1 committed write
+Rank=0 adios_group_size(): adios_groupsize=100, adios_totalsize=558, retval=0
+Rank=0 committed write
+No event handler with takeable buffer executing on this CM.
+No event handler with takeable buffer executing on this CM.
+Event 2ad30c000b60 not found in taken events list
+Event 2b3260000b60 not found in taken events list
+No event handler with takeable buffer executing on this CM.
+No event handler with takeable buffer executing on this CM.
+Event 2b3260001b90 not found in taken events list
+Event 2ad30c001b90 not found in taken events list
+No event handler with takeable buffer executing on this CM.
+No event handler with takeable buffer executing on this CM.
+No event handler with takeable buffer executing on this CM.
+Event 2ad30c03f200 not found in taken events list
+No event handler with takeable buffer executing on this CM.
+Event 2b326003f200 not found in taken events list
+No event handler with takeable buffer executing on this CM.
+Event 2ad30c03fad0 not found in taken events list
+No event handler with takeable buffer executing on this CM.
+Event 2b326003fad0 not found in taken events list
+make[1]: Leaving directory `/rock/synchrobox/proj/w-ecl/2013-06-17-adios/tests/C/flexpath_tests/1D_arr_global_noxml'
+
+1D_arr_global_noxml'
+mpirun -np 2 ./reader -t flx
+DEBUG: DEBUG: matched overlap type 1
+matched overlap type 1
+TEST_PASSED 1D_arr_global_noxml: rank 1
+TEST_PASSED 1D_arr_global_noxml: rank 0
+DEBUG: adios_read_finalize_method completed
+DEBUG: adios_read_finalize_method completed
+make[1]: Leaving directory `/rock/synchrobox/proj/w-ecl/2013-06-17-adios/tests/C/flexpath_tests/1D_arr_global_noxml'

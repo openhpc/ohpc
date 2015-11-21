@@ -1,0 +1,50 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV         || exit 1
+source ./common/functions || exit 1
+
+cd apps/prk || exit 1
+export BATS_JUNIT_CLASS=PRK
+
+# bootstrap the local autotools project
+
+./bootstrap || exit 1
+
+make_check_failure=0
+
+for compiler in $COMPILER_FAMILIES ; do
+    for mpi in $MPI_FAMILIES ; do
+
+	echo " "
+	echo " "
+	echo "-------------------------------------------------------"
+	echo "Apps: PRK tests: $compiler-$mpi"
+	echo "-------------------------------------------------------"
+
+	rm -f tests/job.*.out >& /dev/null
+
+	module purge          || exit 1
+	module load prun      || exit 1
+	module load $compiler || exit 1
+	module load $mpi      || exit 1
+
+	./configure           || exit 1
+	make clean            || exit 1
+
+	make -k check
+	if [ $? != 0 ] ; then
+	    make_check_failure=1
+	fi
+
+	save_logs_mpi_family tests $compiler $mpi
+	mv -f tests/job.*.out tests/family-$compiler-$mpi
+
+	make distclean
+    done
+done
+
+exit $make_check_failure

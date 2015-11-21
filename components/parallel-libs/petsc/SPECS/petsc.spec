@@ -13,6 +13,7 @@
 #-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -20,8 +21,7 @@
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
 # Compiler dependencies
 BuildRequires: lmod%{PROJ_DELIM} coreutils
@@ -61,7 +61,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
-License:        MIT
+License:        2-clause BSD
 Group:          ohpc/parallel-libs
 Version:        3.6.1
 Release:        0
@@ -165,8 +165,6 @@ puts stderr " "
 puts stderr "This module loads the PETSc library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of PETSc leverages the Intel MKL and parallel HDF libraries."
-puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
 
@@ -186,6 +184,9 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
         module load phdf5
     }
     if { [is-loaded gnu] } {
+        if { ![is-loaded openblas]  } {
+          module load openblas
+        }
         if { ![is-loaded scalapack]  } {
           module load scalapack
         }
