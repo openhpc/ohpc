@@ -82,7 +82,7 @@ Conflicts: %{pname}-devel
 Summary:	Libraries for applications using MUNGE
 Group:		System Environment/Libraries
 Requires:	%{pname}%{PROJ_DELIM} = %{version}-%{release}
-Requires:	%{pname}-libs = %{version}-%{release}
+Provides:	%{pname}-libs = %{version}-%{release}
 Conflicts: %{pname}-libs
 
 %description
