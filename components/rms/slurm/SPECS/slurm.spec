@@ -360,7 +360,7 @@ are in other packages
 %package -n %{pname}-torque%{PROJ_DELIM}
 Summary: Torque/PBS wrappers for transition from Torque/PBS to Slurm
 Group: ohpc/rms
-Requires: slurm-perlapi
+Requires: slurm-perlapi%{PROJ_DELIM}
 %description -n %{pname}-torque%{PROJ_DELIM}
 Torque wrapper scripts used for helping migrate from Torque/PBS to Slurm
 
