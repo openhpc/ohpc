@@ -43,7 +43,7 @@ BuildRequires: intel_licenses
 
 Summary:   GNU Scientific Library (GSL)
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.16
+Version:   2.1
 Release:   1
 License:   GPL
 Group:     ohpc/serial-libs
