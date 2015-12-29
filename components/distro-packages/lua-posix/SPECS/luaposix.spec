@@ -39,8 +39,8 @@ BuildRequires:  lua-bit%{PROJ_DELIM}
 Requires:       lua-bit%{PROJ_DELIM}
 %endif
 Requires:       lua >= %{luaver}
-BuildRequires:  autoconf%{PROJ_DELIM}
-BuildRequires:  automake%{PROJ_DELIM}
+BuildRequires:  autoconf
+BuildRequires:  automake
 
 # 02/27/15 karl.w.schulz@intel.com - introduce patch to allow for non-hardcoded path install
 Patch1:  install_path.patch
