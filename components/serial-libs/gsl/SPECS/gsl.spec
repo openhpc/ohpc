@@ -22,7 +22,7 @@
 %{!?compiler_family: %define compiler_family gnu}
 
 # Compiler dependencies
-BuildRequires: lmod
+BuildRequires: lmod%{PROJ_DELIM}
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
