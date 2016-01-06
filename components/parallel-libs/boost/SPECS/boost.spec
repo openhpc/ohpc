@@ -80,9 +80,9 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.59.0
+Version:        1.60.0
 
-%define version_exp 1_59_0
+%define version_exp 1_60_0
 
 Release:        0
 License:        BSL-1.0
