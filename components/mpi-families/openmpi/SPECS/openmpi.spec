@@ -52,7 +52,7 @@ License:   BSD-3-Clause
 Group:     ohpc/mpi-families
 URL:       http://www.open-mpi.org
 DocDir:    %{OHPC_PUB}/doc/contrib
-Source0:   http://www.open-mpi.org/software/ompi/v1.8/downloads/%{pname}-%{version}.tar.bz2
+Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 #Patch1:    %{pname}-no_date_and_time.patch
