@@ -21,8 +21,12 @@
 
 %{!?compiler_family: %define compiler_family gnu}
 
+# Lmod dependency
+%if ! 0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM} 
 Requires:      gnu-compilers%{PROJ_DELIM}
