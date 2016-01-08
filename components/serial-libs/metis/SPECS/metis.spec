@@ -21,8 +21,9 @@
 
 %{!?compiler_family: %define compiler_family gnu}
 
-# Lmod dependency
-%if !0%{?OHPC_BUILD}
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency.
+%if !0%{?opensue_bs}
 BuildRequires: lmod%{PROJ_DELIM}
 %endif
 # Compiler dependencies
