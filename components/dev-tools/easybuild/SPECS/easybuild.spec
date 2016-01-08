@@ -33,12 +33,17 @@ Source4:   bootstrap_eb.py
 Source5:   easybuild-sles12.patch
 Source6:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: lmod%{PROJ_DELIM}
 BuildRequires: patch
 BuildRequires: python
 BuildRequires: python-setuptools
 Requires: python
 #!BuildIgnore: post-build-checks
+
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency.
+%if !0%{?opensuse_bs}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 
 %define debug_package %{nil}
 

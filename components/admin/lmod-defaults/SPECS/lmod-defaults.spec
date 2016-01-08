@@ -25,8 +25,12 @@ BuildArch: noarch
 Source0:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
-# OpenHPC dependencies
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency.
+%if !0%{?opensuse_bs}
 requires: lmod%{PROJ_DELIM}
+%endif
+
 
 %description
 
