@@ -22,7 +22,7 @@
 %{!?compiler_family: %define compiler_family gnu}
 
 # Lmod dependency
-%if ! 0%{?OHPC_BUILD}
+%if %{undefined OHPC_BUILD}
 BuildRequires: lmod%{PROJ_DELIM}
 %endif
 # Compiler dependencies
