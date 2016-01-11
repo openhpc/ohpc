@@ -651,6 +651,16 @@ c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
 c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 \end{lstlisting}
 
+\begin{center}
+\begin{tcolorbox}[]
+\small
+While the \texttt{pxelinux.0} that ships with \texttt{warewulf-provision-ohpc}
+support a wide range of hardware some hosts may boot more reliably or faster
+using the BOS provided \texttt{pxelinux.0} that comes from
+\texttt{syslinux}. Replace the \texttt{pxelinux.0} from 
+\texttt{warewulf-provision-ohpc} version if necessary.
+\end{tcolorbox}
+\end{center}
 
 
 \section{Install \OHPC{} Development Components}
