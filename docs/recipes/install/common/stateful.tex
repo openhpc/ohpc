@@ -8,10 +8,10 @@ node definition in the warewulf data store.
 % fsp_validation_comment Add stateful provisioning support
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add GRUB2 Bootloader
-[master]# (*\chrootinstall*) grub2
+[sms]# (*\chrootinstall*) grub2
 
 # Re-assemble VNFS image
-[master]# wwvnfs  -y --chroot $CHROOT
+[sms]# wwvnfs  -y --chroot $CHROOT
 \end{lstlisting}
 % end_fsp_run 
 
@@ -25,10 +25,10 @@ provision statefully.
 % fsp_validation_comment Add stateful node object parameters
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Update node object parameters
-[master]# export filesystems="mountpoint=/boot:dev=sda1:type=ext3:size=500," \
+[sms]# export filesystems="mountpoint=/boot:dev=sda1:type=ext3:size=500," \
               "dev=sda2:type=swap:size=32768," \
               "mountpoint=/:dev=sda3:type=ext3:size=fill"
-[master]# for ((i=0; i<$num_computes; i++)) ; do 
+[sms]# for ((i=0; i<$num_computes; i++)) ; do 
               wwsh -y object modify -s bootloader=sda ${c_name[$i]};
               wwsh -y object modify -s diskpartition=sda ${c_name[$i]};
               wwsh -y object modify -s diskformat=sda1,sda2,sda3 ${c_name[$i]};
@@ -39,7 +39,7 @@ provision statefully.
 
 Upon the node's next reboot, Warewulf will partition and format the disk. It
 will also run grub2-mkconfig and grub2-install to place grub in the proscribed
-boot sector, and it will install the VNFS locally. In order to insure this 
+boot sector, and it will install the VNFS locally. In order to ensure this 
 process happens only once per node we must instruct warewulf to next boot from 
 the local storage.
 
@@ -47,7 +47,7 @@ the local storage.
 % fsp_validation_comment Add bootlocal node object parameters
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Update node object parameters
-[master]# for ((i=0; i<$num_computes; i++)) ; do 
+[sms]# for ((i=0; i<$num_computes; i++)) ; do 
               wwsh -y object modify -s bootlocal=EXIT ${c_name[$i]};
            done
 \end{lstlisting}
