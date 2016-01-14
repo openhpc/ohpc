@@ -308,7 +308,7 @@ example configuration.
 [sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
 [sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
-# Identify resource manager hostname on {\em master} host
+# Identify resource manager hostname on master host
 [sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 \end{lstlisting}
 % end_ohpc_run
@@ -316,13 +316,13 @@ example configuration.
 \clearpage
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Export /home and OpenHPC public packages from {\em master} server to cluster compute nodes
+# Export /home and OpenHPC public packages from master server to cluster compute nodes
 [sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
 [sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [sms](*\#*) exportfs -a
 [sms](*\#*) systemctl restart nfs
 
-# Enable NTP time service on computes and identify {\em master} host as local NTP server
+# Enable NTP time service on computes and identify master host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
@@ -381,7 +381,7 @@ discussed further in the following sections.
 % begin_ohpc_run
 % ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Update memlock settings on {\em master}
+# Update memlock settings on master
 [sms](*\#*) echo "* soft memlock unlimited" >> /etc/security/limits.conf
 [sms](*\#*) echo "* hard memlock unlimited" >> /etc/security/limits.conf
 
@@ -419,7 +419,7 @@ discussed further in the following sections.
 
 % ohpc_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Add Lustre client software to {\em master} host
+# Add Lustre client software to master host
 [sms](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
 \end{lstlisting}
 % end_ohpc_run
@@ -480,7 +480,7 @@ host as follows:
 %% [FSP-469] % begin_ohpc_run
 %% [FSP-469] % ohpc_validation_comment Configure ORCM aggregator and DB
 %% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-%% [FSP-469] # Set {\em master} host as data aggregator
+%% [FSP-469] # Set master host as data aggregator
 %% [FSP-469] [sms](*\#*) perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
 %% [FSP-469] [sms](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${sms_ip}/" /etc/orcmdb_psql.ini
 %% [FSP-469] 
@@ -508,7 +508,7 @@ host as follows:
 %% [FSP-469] [sms](*\#*) sudo -u postgres createdb -O orcmuser orcmdb
 %% [FSP-469] [sms](*\#*) sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 %% [FSP-469] 
-%% [FSP-469] # Start ORCM on {\em master} host (requires both orcmsched and orcmd)
+%% [FSP-469] # Start ORCM on master host (requires both orcmsched and orcmd)
 %% [FSP-469] [sms](*\#*) systemctl start orcmsched
 %% [FSP-469] [sms](*\#*) systemctl start orcmd
 %% [FSP-469] \end{lstlisting}
