@@ -61,12 +61,12 @@ BuildRequires: net-snmp-devel
 %endif
 BuildRequires: systemd
 
-%package devel
+%package -n %{pname}-devel%{PROJ_DELIM}
 Requires: %{name} = %{version}-%{release}
 Summary: Headers and libraries for developing applications using PowerMan
 Group: Development/Libraries
 
-%package libs
+%package -n %{pname}-libs%{PROJ_DELIM}
 Requires: %{name} = %{version}-%{release}
 Summary: Libraries for applications using PowerMan
 Group: System Environment/Libraries
