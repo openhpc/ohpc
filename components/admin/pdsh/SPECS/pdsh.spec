@@ -61,7 +61,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #%define _default_with %{_defaults} mrsh nodeupdown genders slurm 
 #%else
 #   All other defaults
-%define _default_with %{_defaults} mrsh genders nodeattr slurm
+%define _default_with %{_defaults} mrsh genders slurm
 #%endif
 
 #
