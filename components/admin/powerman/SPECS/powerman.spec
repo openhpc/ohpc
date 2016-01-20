@@ -76,10 +76,10 @@ PowerMan is a tool for manipulating remote power control (RPC) devices from a
 central location. Several RPC varieties are supported natively by PowerMan and 
 Expect-like configurability simplifies the addition of new devices.
 
-%description %{pname}-devel%{PROJ_DELIM}
+%description -n %{pname}-devel%{PROJ_DELIM}
 A header file and static library for developing applications using PowerMan.
 
-%description %{pname}-libs%{PROJ_DELIM}
+%description -n %{pname}-libs%{PROJ_DELIM}
 A shared library for applications using PowerMan.
 
 %prep
