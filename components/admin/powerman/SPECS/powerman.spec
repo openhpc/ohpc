@@ -76,10 +76,10 @@ PowerMan is a tool for manipulating remote power control (RPC) devices from a
 central location. Several RPC varieties are supported natively by PowerMan and 
 Expect-like configurability simplifies the addition of new devices.
 
-%description devel
+%description %{pname}-devel%{PROJ_DELIM}
 A header file and static library for developing applications using PowerMan.
 
-%description libs
+%description %{pname}-libs%{PROJ_DELIM}
 A shared library for applications using PowerMan.
 
 %prep
@@ -148,7 +148,7 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %{_unitdir}/powerman.service
 %dir %attr(0755,daemon,root) %config %{_localstatedir}/run/powerman
 
-%files devel
+%files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %{_includedir}/*
 %{_libdir}/*.la
@@ -159,7 +159,7 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %{_libdir}/pkgconfig/*
 %endif
 
-%files libs
+%files -n %{pname}-libs%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %ifnos aix5.3 aix5.2 aix5.1 aix5.0 aix4.3
 %{_libdir}/*.so.*
