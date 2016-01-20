@@ -78,6 +78,7 @@ rm -rf $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install 
 
 export NO_BRP_CHECK_RPATH true
+bash -x /usr/lib/rpm/brp-suse.d/brp-35-rpath
 
 %files
 %defattr(-,root,root)
