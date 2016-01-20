@@ -145,6 +145,9 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %{_mandir}/*5/*
 %{_mandir}/*8/*
 %{_libdir}/stonith/plugins/external/powerman
+%dir %attr(0755,daemon,root) %{_libdir}/stonith
+%dir %attr(0755,daemon,root) %{_libdir}/stonith/plugins
+%dir %attr(0755,daemon,root) %{_libdir}/stonith/plugins/external
 %{_unitdir}/powerman.service
 %dir %attr(0755,daemon,root) %config %{_localstatedir}/run/powerman
 
