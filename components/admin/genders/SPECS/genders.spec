@@ -23,6 +23,7 @@ Requires: perl
 DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     ohpc/admin
 URL: https://github.com/chaos/genders
+BuildRequires: gcc-c++
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: python
