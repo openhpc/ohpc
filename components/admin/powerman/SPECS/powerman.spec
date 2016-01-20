@@ -104,7 +104,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /bin/systemctl enable powerman > /dev/null 2>&1 || :
 
-%post libs
+%post -n %{pname}-libs%{PROJ_DELIM}
 if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 
 %preun
@@ -118,7 +118,7 @@ if [ "$1" -ge 1 ]; then
   systemctl try-restart powerman >/dev/null 2>&1 || :
 fi
 
-%postun libs
+%postun -n %{pname}-libs%{PROJ_DELIM}
 if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 
 %files
