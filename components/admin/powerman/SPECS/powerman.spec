@@ -51,7 +51,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: tcp_wrappers-devel
 %endif
 %if 0%{?_with_genders}
-BuildRequires: genders
+BuildRequires: genders%{PROJ_DELIM}
 %endif
 %if 0%{?_with_httppower}
 BuildRequires: curl-devel
