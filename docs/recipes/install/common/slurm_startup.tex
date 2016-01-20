@@ -21,7 +21,9 @@ resource management under \SLURM{}.
 % ohpc_comment_header Resource Manager Startup \ref{sec:rms_startup}
 \begin{lstlisting}[language=bash]
 # start munge and slurm controller on {\em master} host
+[sms](*\#*) systemctl enable munge
 [sms](*\#*) systemctl start munge
+[sms](*\#*) systemctl enable slurmctld
 [sms](*\#*) systemctl start slurmctld
 
 # start munge and slurm clients on compute hosts
