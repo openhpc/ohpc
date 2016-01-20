@@ -71,7 +71,6 @@ umask 0077
 %clean
 test "$RPM_BUILD_ROOT" != "/" && %{__rm} -rf $RPM_BUILD_ROOT
 
-
 %files
 %defattr(-, root, root)
 %doc COPYING ChangeLog LICENSE
