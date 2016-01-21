@@ -32,7 +32,7 @@ Requires: coreutils
 # Default library install path
 # relocation still needs some work
 # %define install_path %{OHPC_HOME}/admin/%{pname}
-%define install_path %{nil}
+%define install_path /usr
 
 %description
 Spack is a package management tool designed to support multiple versions and configurations of software on a wide variety of platforms and environments. It was designed for large supercomputing centers, where many users and application teams share common installations of software on clusters with exotic architectures, using libraries that do not have a standard ABI. Spack is non-destructive: installing a new version does not break existing installations, so many configurations can coexist on the same system.
@@ -46,7 +46,7 @@ Most importantly, Spack is simple. It offers a simple spec syntax so that users 
 %install
 mkdir -p %{buildroot}%{install_path}
 rsync -av --exclude=.gitignore {bin,lib,var} %{buildroot}%{install_path}
-#rsync -av --exclude=.gitignore bin %{buildroot}
+#./bin/spack bootstrap %{buildroot}%{install_path}
 mkdir -vp %{buildroot}/etc/profile.d
 mv share/spack/setup-env.sh  share/spack/spack-env.sh
 mv share/spack/setup-env.csh share/spack/spack-env.csh
