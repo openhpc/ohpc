@@ -84,13 +84,16 @@ set     version			    %{version}
 # update module path hierarchy
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/intel
 
-setenv          MKLROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/mkl
 prepend-path    PATH                %{package_target}/compilers_and_libraries_20%{version}/linux/bin/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mpirt/bin/intel64_lin:%{package_target}/debugger_2016/gdb/intel64_mic/bin
 prepend-path    MANPATH             %{package_target}/documentation_2016/en/man/common/:%{package_target}/documentation_2016/en/debugger/gdb-ia/man/:%{package_target}/documentation_2016/en/debugger/gdb-mic/man/:%{package_target}/documentation_2016/en/debugger/gdb-igfx/man/:
 
+setenv          MKLROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/mkl
+prepend-path    CPATH               %{package_target}/compilers_and_libraries_20%{version}/linux/mkl/include:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/include/intel64/lp64
+prepend-path    NLSPATH             %{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64/locale/en_US
+ 
 prepend-path    LIBRARY_PATH        %{package_target}/compilers_and_libraries_20%{version}/linux/ipp/../compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../tbb/lib/intel64_lin/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../compiler/lib/intel64_lin
 prepend-path    LD_LIBRARY_PATH     %{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mpirt/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/../compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4:%{package_target}/debugger_2016/libipt/intel64/lib:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../tbb/lib/intel64_lin/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../compiler/lib/intel64_lin
- 
+
 prepend-path    MIC_LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/mic
 
 setenv          GDBSERVER_MIC       %{package_target}/debugger_2016/gdb/targets/mic/bin/gdbserver
