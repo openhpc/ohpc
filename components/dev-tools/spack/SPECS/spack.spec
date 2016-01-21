@@ -65,6 +65,7 @@ cp -prv share/spack/* %{buildroot}/etc/profile.d
 %{install_path}/lib/spack/spack/*
 %dir /etc/profile.d
 /etc/profile.d/*
+%dir %{install_path}/var
 %dir %{install_path}/var/spack
 %dir %{install_path}/var/spack/mock_configs
 %{install_path}/var/spack/mock_configs/*
