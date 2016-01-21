@@ -16,7 +16,7 @@
 Name:		  %{pname}%{PROJ_DELIM}
 Version:	0.8.17
 Release:	1%{?dist}
-Summary:	package management tool designed to support multiple versions and configurations of software
+Summary:	HPC software package management
 
 Group:		System/Configuration
 License:	LGPL
