@@ -68,7 +68,7 @@
 
 # These options are only here to force there to be these on the build.
 # If they are not set they will still be compiled if the packages exist.
-%slurm_without_opt mysql
+#%slurm_without_opt mysql
 %slurm_without_opt blcr
 %slurm_without_opt openssl
 
@@ -101,8 +101,8 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 
-Version: 15.08.5
-%define ver_exp 15-08-4-1
+Version: 15.08.7
+%define ver_exp 15-08-7-1
 
 Release:   %{?dist}
 Summary:   Slurm Workload Manager
