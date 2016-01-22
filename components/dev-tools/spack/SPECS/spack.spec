@@ -22,6 +22,7 @@ Group:		System/Configuration
 License:	LGPL
 URL:		  https://github.com/LLNL/spack
 Source0:	https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz
+Patch0:   spack.patch
 
 BuildArch: noarch
 BuildRequires:	rsync
@@ -42,6 +43,7 @@ Most importantly, Spack is simple. It offers a simple spec syntax so that users 
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch0 -p0
 
 %install
 mkdir -p %{buildroot}%{install_path}
