@@ -68,7 +68,7 @@
 
 # These options are only here to force there to be these on the build.
 # If they are not set they will still be compiled if the packages exist.
-#%slurm_without_opt mysql
+%slurm_without_opt mysql
 %slurm_without_opt blcr
 %slurm_without_opt openssl
 
