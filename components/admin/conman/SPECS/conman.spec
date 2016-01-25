@@ -115,7 +115,6 @@ if ! grep "^SERVER" /etc/conman.conf > /dev/null; then
 HERE
 fi
 
-
 %preun
 if [ "$1" = 0 ]; then
   INITRDDIR=%{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}
