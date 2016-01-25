@@ -34,7 +34,7 @@ Collection of OpenHPC release files including package repository definition.
 
 %install
 
-%{mkdir} %{buildroot}/etc
+%{__mkdir} %{buildroot}/etc
 
 cat >> %{buildroot}/etc/ohpc-release <<EOF
 OpenHPC release %{version} 
