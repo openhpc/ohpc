@@ -34,11 +34,38 @@ Collection of OpenHPC release files including package repository definition.
 
 %install
 
-%{__mkdir} %{buildroot}/etc
+%{__mkdir} %{RPM_BUILD_ROOT}/etc
 
-cat >> %{buildroot}/etc/ohpc-release <<EOF
+# /etc/ohpc-release
+
+cat >> %{RPM_BUILD_ROOT}/etc/ohpc-release <<EOF
 OpenHPC release %{version} 
 EOF
+
+# package repository definitions
+
+%if 0%{?sles_version} || 0%{?suse_version}
+%define __repodir /etc/zypp/repos.d
+%else
+%define __repodir /etc/yum.repos.d
+%endif
+
+%{__mkdir_p} %{RPM_BUILD_ROOT}/%{__repodir}
+
+cat >> %{RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
+[OpenHPC]
+name=OpenHPC-1 - Base
+baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/%{_repository}
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+
+[OpenHPC-updates]
+name=OpenHPC-1 - Updates
+baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/updates/%{_repository}
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+EOF
+
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
@@ -49,6 +76,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 /etc/ohpc-release
+/etc/%{__repodir}/OpenHPC.repo
 
 %changelog
 
