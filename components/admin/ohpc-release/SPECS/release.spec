@@ -18,6 +18,7 @@ Release:  1
 License:  BSD-3
 Group:    ohpc/admin
 URL:      https://github.com/openhpc/ohpc
+Source1:  RPM-GPG-KEY-OpenHPC-1
 
 Provides: ohpc-release = %{version}
 
@@ -66,6 +67,9 @@ gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 EOF
 
+# repository GPG key
+
+install -D -m 0644 %SOURCE1 %{RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
@@ -77,6 +81,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 /etc/ohpc-release
 %{__repodir}/OpenHPC.repo
+/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
 %changelog
 
