@@ -35,7 +35,7 @@ Collection of OpenHPC release files including package repository definition.
 %install
 
 cat >> %{buildroot}/etc/ohpc-release <<EOF
-OpenHPC release %{minor_version} 
+OpenHPC release %{version} 
 EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
@@ -47,7 +47,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 /etc/ohpc-release
-%doc LICENSE
 
 %changelog
 
