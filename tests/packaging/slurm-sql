@@ -20,7 +20,6 @@ containsElement () {
         # /usr/lib64/slurm
         # /usr/lib64/slurm/accounting_storage_mysql.so
         # /usr/lib64/slurm/jobcomp_mysql.so
-      touch /tmp/drffasdd
         run bash -c "/bin/repoquery --list slurm-sql-ohpc 2>&1 | /bin/tee /tmp/pack-slurm-sql.$$"
         cat /tmp/pack-slurm-sql.$$
 #        [[ ${lines[1]} =~ "accounting_storage_mysql.so" ]]
