@@ -69,7 +69,7 @@ EOF
 
 # repository GPG key
 
-install -D -m 0644 %SOURCE1 %{RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+install -D -m 0644 %SOURCE1 ${RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
