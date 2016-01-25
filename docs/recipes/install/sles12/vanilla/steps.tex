@@ -599,7 +599,26 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 [sms](*\#*) wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
 [sms](*\#*) wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
 [sms](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+% end_ohpc_run
 
+\begin{center}
+\begin{tcolorbox}[]
+\small
+\Warewulf{} ships with a utility to automatically register new compute nodes.
+Nodes will be added to the \Warewulf{} database in the order in which their
+DHCP requests are received by the master, so care must be taken to boot nodes
+in the order one wishes to see preserved in the warewulf databse. The IP
+address provided will be incremented after each node is found, and the utility
+will exit after all specified nodes have been found.
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
+[sms](*\#*) wwnodescan --netdev=${eth_provision} --ipaddr=${c_ip[0]} --netmask=${internal_netmask} \
+    --vnfs=sles12 --bootstrap=`uname -r` ${c_name[0]}-${c_name[3]}
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}
+
+% begin_ohpc_run
+% ohpc_validation_comment Add hosts to cluster (Cont.)
 # Optionally register additional compute nodes
 [sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
               wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
