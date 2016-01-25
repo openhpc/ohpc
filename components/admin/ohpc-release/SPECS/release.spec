@@ -34,11 +34,11 @@ Collection of OpenHPC release files including package repository definition.
 
 %install
 
-%{__mkdir} %{RPM_BUILD_ROOT}/etc
+%{__mkdir} ${RPM_BUILD_ROOT}/etc
 
 # /etc/ohpc-release
 
-cat >> %{RPM_BUILD_ROOT}/etc/ohpc-release <<EOF
+cat >> ${RPM_BUILD_ROOT}/etc/ohpc-release <<EOF
 OpenHPC release %{version} 
 EOF
 
@@ -50,9 +50,9 @@ EOF
 %define __repodir /etc/yum.repos.d
 %endif
 
-%{__mkdir_p} %{RPM_BUILD_ROOT}/%{__repodir}
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{__repodir}
 
-cat >> %{RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
+cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
 name=OpenHPC-1 - Base
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/%{_repository}
