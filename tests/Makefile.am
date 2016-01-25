@@ -25,6 +25,10 @@ endif
 
 else # non root tests
 
+if PACKAGING_ENABLED
+   TESTS += packaging/run
+endif
+
 if EASYBUILD_ENABLED
    SUBDIRS += dev-tools/easybuild
 endif

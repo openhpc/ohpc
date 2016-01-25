@@ -332,6 +332,12 @@ AC_ARG_ENABLE([prk],
    [AX_OPTION_DEFAULT(type=long,enable_prk,yes)])
 AM_CONDITIONAL(PRK_ENABLED,test "x$enable_prk" = "xyes" )
 #------------------------------------------------------------------------------------------
+# PACKAGING
+AC_ARG_ENABLE([packaging],
+   [AS_HELP_STRING([--enable-packaging],[Enable Packaging tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_packaging,yes)])
+AM_CONDITIONAL(PACKAGING_ENABLED,test "x$enable_packaging" = "xyes" )
+#------------------------------------------------------------------------------------------
 
 AC_OUTPUT( Makefile 
 	   user-env/Makefile 
@@ -402,6 +408,12 @@ if test "x$ROOT_ENABLED" = "x1" ; then
 else
 
 echo    User Environment:
+    if test "x$enable_packaging" = "xyes"; then
+       echo '    'Packaging tests........... : enabled 
+    else   
+       echo '    'Packaging tests........... : disabled 
+    fi
+
     if test "x$enable_rms_harness" = "xyes"; then
        echo '    'RMS test harness.......... : enabled 
     else   
