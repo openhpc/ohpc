@@ -40,7 +40,10 @@ Collection of OpenHPC release files including package repository definition.
 # /etc/ohpc-release
 
 cat >> ${RPM_BUILD_ROOT}/etc/ohpc-release <<EOF
-OpenHPC release %{version} 
+OpenHPC release %{version}
+HOME_URL="http://openhpc.community"
+BUG_REPORT_URL="https://github.com/openhpc/ohpc/issues"
+REPOSITORY="%{_repository}"
 EOF
 
 # package repository definitions
