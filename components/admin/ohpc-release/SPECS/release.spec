@@ -76,7 +76,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 /etc/ohpc-release
-/etc/%{__repodir}/OpenHPC.repo
+%{__repodir}/OpenHPC.repo
 
 %changelog
 
