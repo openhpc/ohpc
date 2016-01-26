@@ -655,8 +655,8 @@ will exit after all specified nodes have been found.
 
 # Note your IPMI password is required for console access to work via conman
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-              echo -n 'CONSOLE name="${c_name[$i]}" dev="ipmi:${c_bmc[$i]}" '
-              echo    'ipmiopts="U:${bmc_username},P:${IPMI_PASSWORD},W:solpayloadsize"'
+              echo -n 'CONSOLE name="'${c_name[$i]}'" dev="ipmi:'${c_bmc[$i]}'" '
+              echo    'ipmiopts="'U:${bmc_username},P:${IPMI_PASSWORD},W:solpayloadsize'"'
            done >> /etc/conman.conf
 
 # Enable and start conman
