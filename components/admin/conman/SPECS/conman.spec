@@ -100,17 +100,17 @@ fi
 
 if ! grep "^SERVER" /etc/conman.conf > /dev/null; then
     cat <<-HERE >> /etc/conman.conf
-  SERVER keepalive=ON
-  SERVER logdir="/var/log/conman"
-  SERVER logfile="/var/log/conman.log"
-  SERVER loopback=ON
-  SERVER pidfile="/var/run/conman.pid"
-  SERVER resetcmd="powerman -0 %N; sleep 3; powerman -1 %N"
-  SERVER tcpwrappers=ON
-  SERVER timestamp=1h
-  GLOBAL seropts="115200,8n1"
-  GLOBAL log="console.%N"
-  GLOBAL logopts="sanitize,timestamp"
+SERVER keepalive=ON
+SERVER logdir="/var/log/conman"
+SERVER logfile="/var/log/conman.log"
+SERVER loopback=ON
+SERVER pidfile="/var/run/conman.pid"
+SERVER resetcmd="powerman -0 %N; sleep 3; powerman -1 %N"
+SERVER tcpwrappers=ON
+SERVER timestamp=1h
+GLOBAL seropts="115200,8n1"
+GLOBAL log="console.%N"
+GLOBAL logopts="sanitize,timestamp"
 
 HERE
 fi
