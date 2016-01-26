@@ -14,7 +14,7 @@
 Summary:  OpenHPC release files
 Name:     ohpc-release
 Version:  %{ohpc_version}
-Release:  2
+Release:  1
 License:  BSD-3
 Group:    ohpc/admin
 URL:      https://github.com/openhpc/ohpc
