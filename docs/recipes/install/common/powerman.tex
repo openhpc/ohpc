@@ -15,8 +15,8 @@ as configured by this recipe.
 # Create a basic powerman.conf
 [sms](*\#*) cp /etc/powerman/powerman.conf{.example,}
 
-[sms](*\#*) perl -pi -e "s/^\#tcpwrappers yes/tcpwrappers yes/" /etc/powerman/powerman.conf
-[sms](*\#*) perl -pi -e 's/^\#include "\/etc\/powerman\/ipmipower\.dev"/include "\/etc\/powerman\/ipmipower.dev"/' \
+[sms](*\#*) perl -pi -e 's/^\#(tcpwrappers yes)/$1/' /etc/powerman/powerman.conf
+[sms](*\#*) perl -pi -e 's/^\#(include "\/etc\/powerman\/ipmipower\.dev")/$1/' \
               /etc/powerman/powerman.conf
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
               perl -pi -e 'print "device \"ipmi'$i'\" \"ipmipower\" \"/usr/sbin/ipmipower -h ".
