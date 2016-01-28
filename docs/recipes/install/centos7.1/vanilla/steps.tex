@@ -230,10 +230,10 @@ defined by a \texttt{\$\{BOS\_MIRROR\}} environment variable.
 [sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.1
 
 # Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
-[sms](*\#*) if [ ! -z ${BOS_MIRROR+x} ]; then
-                perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
-                    /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
-            fi
+% ohpc_command if [ ! -z ${BOS_MIRROR+x} ]; then
+% ohpc_command     perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
+% ohpc_command     /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
+% ohpc_command fi
 
 # Build initial chroot image
 [sms](*\#*) wwmkchroot centos-7 $CHROOT
