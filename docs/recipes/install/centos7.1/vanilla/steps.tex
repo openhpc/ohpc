@@ -218,10 +218,10 @@ default location for this example is in
 \path{/opt/ohpc/admin/images/centos7.1}. Note that \Warewulf{} assumes access to
 an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
 process which requires external network connectivity on your chosen {\em
- master} host. If this is not available, or if you prefer to access a locally cached
-mirror, the steps below include an example to update the OS mirror used by
-\texttt{wwmkchroot} to use an alternate location defined by a
-\texttt{\$\{BOS\_MIRROR\}} environment variable.
+ master} host. If the master host cannot reach the public CentOS mirrors, or if 
+you prefer to access a locally cached mirror, the steps below include an example 
+to update the OS mirror used by \texttt{wwmkchroot} to use an alternate location 
+defined by a \texttt{\$\{BOS\_MIRROR\}} environment variable.
 
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
@@ -230,8 +230,10 @@ mirror, the steps below include an example to update the OS mirror used by
 [sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.1
 
 # Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
-[sms](*\#*) perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
-     /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
+[sms](*\#*) if [ ! -z ${BOS_MIRROR+x} ]; then
+                perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
+                    /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
+            fi
 
 # Build initial chroot image
 [sms](*\#*) wwmkchroot centos-7 $CHROOT
