@@ -14,6 +14,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+#%define PROJ_DELIM -ohpc
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
@@ -72,7 +73,8 @@ Release:   1
 License:   BSD
 Group:     ohpc/runtimes
 URL:       https://xstack.exascale-tech.com/wiki
-Source0:   https://xstack.exascale-tech.com/git/public?p=ocr.git;a=snapshot;h=OCRv%{version}_ohpc;sf=tbz2
+#Source0:   OCR.tbz2 
+#Source0: https://xstack.exascale-tech.com/git/public?p=ocr.git;a=snapshot;h=OCRv%{version}_ohpc;sf=tbz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -137,9 +139,11 @@ This version is for clusters using MPI.
 %define debug_package %{nil}
 
 %prep
-%setup -q -n %{pname}-%{version}
+
+%setup -q -n %{pname}
 
 %build
+cd ocr/build
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
@@ -148,22 +152,24 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-OCR_TYPE=x86 make %{?_smp_mflags}
+OCR_TYPE=x86 make %{?_smp_mflags} all
 %if %{ocr_with mpi}
-OCR_TYPE=x86-mpi make %{?_smp_mflags}
+OCR_TYPE=x86-mpi make %{?_smp_mflags} all
 %endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %install
+cd ocr/build
 # OpenHPC compiler designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-OCR_TYPE=x86 OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} make %{?_smp_mflags} install
+mkdir -p $RPM_BUILD_ROOT/%{install_path}
+make OCR_TYPE=x86 OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} %{?_smp_mflags} install
 %if %{ocr_with mpi}
-OCR_TYPE=x86-mpi OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} make %{?_smp_mflags} install
+make OCR_TYPE=x86-mpi OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} %{?_smp_mflags} install
 %endif
 # Remove static libraries
 find "%buildroot" -type f -name "*.la" -print0 | xargs -0 rm -f
@@ -201,7 +207,6 @@ setenv          OCR_TYPE            x86
 
 EOF
 
-%if %{ocr_with mpi}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
@@ -210,6 +215,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%if %{ocr_with mpi}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/%{version}
 #%Module1.0#####################################################################
 
@@ -265,6 +271,8 @@ rm -rf $RPM_BUILD_ROOT
 %{install_path}/bin/ocrrun_mpi
 %{install_path}/lib/libocr_mpi.*
 %config %{install_path}/share/ocr/config/x86-mpi
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/.version.%{version}
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/%{version}
 %endif
 
 %files
@@ -272,5 +280,7 @@ rm -rf $RPM_BUILD_ROOT
 %{install_path}/bin/ocrrun_x86
 %{install_path}/lib/libocr_x86.*
 %config %{install_path}/share/ocr/config/x86
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 
 %changelog
