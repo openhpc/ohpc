@@ -1,4 +1,35 @@
-Version 1.0 (November 2015)
+--------------------------------
+Version 1.0.1 (05 February 2016)
+--------------------------------
+
+   [General]
+      * 1.0.1 is the first micro update release against 1.0
+      * variety of clarifications in recipe documentation and bug fixes including:
+         - https://github.com/openhpc/ohpc/issues/155 - missing mysql in slurm
+         - https://github.com/openhpc/ohpc/issues/135 - file conflict with NHC tool
+	 - https://github.com/openhpc/ohpc/issues/111 - update SLURM version for minor security issue
+	 - https://github.com/openhpc/ohpc/issues/167 - interaction with wwsh and BASH_ENV
+
+   [Component Additions]
+      * ohpc-release                             (v1.0)
+
+   [Component Version Changes]
+      * slurm-devel-ohpc                         (v15.08.1 -> v15.08.6)
+      * slurm-munge-ohpc                         (v15.08.1 -> v15.08.6)
+      * slurm-ohpc                               (v15.08.1 -> v15.08.6)
+      * slurm-pam_slurm-ohpc                     (v15.08.1 -> v15.08.6)
+      * slurm-perlapi-ohpc                       (v15.08.1 -> v15.08.6)
+      * slurm-plugins-ohpc                       (v15.08.1 -> v15.08.6)
+      * slurm-sjobexit-ohpc                      (v15.08.1 -> v15.08.6)
+      * slurm-sjstat-ohpc                        (v15.08.1 -> v15.08.6)
+      * slurm-slurmdb-direct-ohpc                (v15.08.1 -> v15.08.6)
+      * slurm-slurmdbd-ohpc                      (v15.08.1 -> v15.08.6)
+      * slurm-sql-ohpc                           (v15.08.1 -> v15.08.6)
+      * slurm-torque-ohpc                        (v15.08.1 -> v15.08.6)
+
+--------------------------------
+Version 1.0 (10 November 2015)
+--------------------------------
 
    [General]
       * initial community release
