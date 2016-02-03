@@ -9,6 +9,7 @@ Version 1.0.1 (05 February 2016)
          - https://github.com/openhpc/ohpc/issues/135 - file conflict with NHC tool
 	 - https://github.com/openhpc/ohpc/issues/111 - update SLURM version for minor security issue
 	 - https://github.com/openhpc/ohpc/issues/167 - interaction with wwsh and BASH_ENV
+	 - interaction with wwsh and BASH_ENV (#167)
 
    [Component Additions]
       * ohpc-release                             (v1.0)
