@@ -277,7 +277,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %setup -q -n releases-%{version}
 #%patch1 -p1
-#./autogen.sh
+./autogen.sh
 
 #############################################################################
 #
