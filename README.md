@@ -28,13 +28,12 @@ at https://build.openhpc.community. To get started, you can enable an OpenHPC
 repository locally through installation of an ```ohpc-release``` RPM which
 includes gpg keys for package signing and defines the URL locations for [base]
 and [update] package repositories. A copy of the ```ohpc-release``` file is
-provided below for convenience.
-
-A companion install guide with example instructions for installation is also
-available below or in in the downloads section of the latest
+provided below for convenience. A companion install guide with example
+instructions for installation is also available below or in in the downloads
+section of the latest
 [release](https://github.com/openhpc/ohpc/releases/tag/v1.0.GA).
 
-[CentOS 7.1]
+###### [CentOS 7.1]
 * [ohpc-release.x86_64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.0.1.GA/ohpc-release-1.0-1.x86_64.rpm)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.0.1.GA/Install_guide-CentOS7.1-1.0.1.pdf)
 
