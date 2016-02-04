@@ -80,9 +80,9 @@
 # type: bool (0/1)
 %{!?install_modulefile: %define install_modulefile 1}
 # type: string (root path to install modulefiles)
-%{!?modulefile_path: %define modulefile_path /usr/share/Modules/modulefiles}
+%{!?modulefile_path: %define modulefile_path /opt/ohpc/pub/modulefiles/}
 # type: string (subdir to install modulefile)
-%{!?modulefile_subdir: %define modulefile_subdir %{name}}
+%{!?modulefile_subdir: %define modulefile_subdir %{pname}}
 # type: string (name of modulefile)
 %{!?modulefile_name: %define modulefile_name %{version}}
 
@@ -525,15 +525,22 @@ test "x$RPM_BUILD_ROOT" != "x" && rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root, -)
-%{_prefix}/include/*
+%dir %{_prefix}
+%dir %{_prefix}/include
 %{_prefix}/lib64/*
-%{_prefix}/share/*
-%{_prefix}/bin/*
-# # If the sysconfdir is not under the prefix, then list it explicitly.
-# %if !%{sysconfdir_in_prefix}
-# %{_sysconfdir}
-# %endif
-# If %{install_in_opt}, then we're instaling OMPI to
+%{_prefix}/include/*
+%dir %{_prefix}/share
+%dir %{_prefix}/share/man
+%dir %{_prefix}/share/man/man3
+%{_prefix}/share/man/man3/*
+%dir %{_prefix}/share/man/man7
+%{_prefix}/share/man/man7/*
+%{_prefix}/share/pmix
+# If the sysconfdir is not under the prefix, then list it explicitly.
+#%if !%{sysconfdir_in_prefix}
+#%{_sysconfdir}
+#%endif
+# If %{install_in_opt}, then we're installing PMIx to
 # /opt/pmix/<version>.  But be sure to also explicitly mention
 # /opt/pmix so that it can be removed by RPM when everything under
 # there is also removed.
