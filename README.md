@@ -34,7 +34,7 @@ section of the latest
 [release](https://github.com/openhpc/ohpc/releases/tag/v1.0.GA).
 
 ###### [CentOS 7.1]
-* [ohpc-release.x86_64.rpm (8dbaed1bea6245c04cf201131df74bc3)] (https://github.com/openhpc/ohpc/releases/download/v1.0.1.GA/ohpc-release-1.0-1.x86_64.rpm)
+* [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.0.1.GA/ohpc-release-1.0-1.x86_64.rpm) (md5sum=8dbaed1bea6245c04cf201131df74bc3)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.0.1.GA/Install_guide-CentOS7.1-1.0.1.pdf)
 
 #### Questions, Comments, or Bug Reports?
