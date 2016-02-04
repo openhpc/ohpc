@@ -1,5 +1,5 @@
 OpenHPC Software Stack
-Version 1.0 (12 November 2015) 
+Version 1.0.1 Update Release (05 February 2015) 
 
 Introduction:
 
@@ -9,9 +9,9 @@ Introduction:
    tools, and a variety of scientific libraries.
    
    The compatible OS versions for this release and the total number of
-   FSP-packaged RPMs for each variant is as follows: 
+   OHPC-packaged RPMs for each variant is as follows: 
    
-     CentOS 7.1 - 255 RPMs
+     CentOS 7.1 - 255 RPMs (Base) / 17 RPMs (Updates)
    
    Note that a detailed list of all available components is available in
    the "Package Manifest" appendix located in the companion Install
