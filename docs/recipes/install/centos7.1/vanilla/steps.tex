@@ -223,6 +223,7 @@ you prefer to access a locally cached mirror, the steps below include an example
 to update the OS mirror used by \texttt{wwmkchroot} to use an alternate location 
 defined by a \texttt{\$\{BOS\_MIRROR\}} environment variable.
 
+\clearpage
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
@@ -298,6 +299,7 @@ example configuration.
 %The \NFS{} exporting options use an address/netmask
 %combination to limit the export scope to the defined compute nodes.
 
+\clearpage
 % begin_ohpc_run
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
@@ -314,7 +316,6 @@ example configuration.
 \end{lstlisting}
 % end_ohpc_run
 
-\clearpage
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Export /home and OpenHPC public packages from {\em master} server to cluster compute nodes
@@ -470,6 +471,7 @@ host as follows:
 \paragraph{Add \Nagios{} monitoring}
 \input{../../common/nagios}
 
+\clearpage
 \paragraph{Add \Ganglia{} monitoring}
 \input{../../common/ganglia}
 
@@ -585,7 +587,6 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 [sms](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
 \end{lstlisting}
 
-\clearpage
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
 # Optionally register additional compute nodes
 [sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
@@ -663,6 +664,7 @@ BIOS post times) and you can verify that the compute hosts are available via
 ssh, or via parallel ssh tools to multiple hosts. For example, to run a command
 on the newly imaged compute hosts using \texttt{pdsh}, execute the following:
 
+\clearpage
 \begin{lstlisting}[language=bash]
 [sms](*\#*) pdsh -w c[1-4] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
@@ -704,6 +706,7 @@ the necessary licenses in order to use the Intel proprietary software.
 \input{../../common/default_dev}
 
 
+\vspace*{0.2cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 
 \OHPC{} provides pre-packaged builds for a number of popular open-source
@@ -782,7 +785,6 @@ offerings within \OHPC{}, issue the following:
 %% \end{center}
 
 
-%\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
