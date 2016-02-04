@@ -231,9 +231,9 @@ defined by a \texttt{\$\{BOS\_MIRROR\}} environment variable.
 
 # Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
 [sms](*\#*) if [ ! -z ${BOS_MIRROR+x} ]; then
-                perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
-                    /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
-            fi
+           perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
+               /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
+       fi
 
 # Build initial chroot image
 [sms](*\#*) wwmkchroot centos-7 $CHROOT
