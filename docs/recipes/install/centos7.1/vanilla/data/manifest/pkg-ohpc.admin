@@ -13,5 +13,6 @@ lmod-ohpc 6.0.10 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod
 losf-ohpc 0.53.0 https://github.com/hpcsi/losf ohpc/admin A Linux operating system framework for managing HPC clusters
 nagios-ohpc 4.1.1 http://www.nagios.org/ ohpc/admin Nagios monitors hosts and services and yells if somethings breaks
 nagios-plugins-ohpc 2.1.1 https://www.nagios-plugins.org/ ohpc/admin Host/service/network monitoring program plugins for Nagios
+ohpc-release 1.0 https://github.com/openhpc/ohpc ohpc/admin OpenHPC release files
 pdsh-ohpc 2.31 http://sourceforge.net/projects/pdsh ohpc/admin Parallel remote shell program
 prun-ohpc 1.0 https://github.com/openhpc/ohpc ohpc/admin Convenience utility for parallel job launch

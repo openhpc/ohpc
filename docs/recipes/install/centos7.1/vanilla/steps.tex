@@ -74,11 +74,6 @@
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_ohpc_repo}
 
-
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) wget -P /etc/yum.repos.d ${ohpc_repo}
-\end{lstlisting}
-
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
@@ -97,8 +92,8 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 
 \begin{itemize*}
 \item CentOS-7 - Base 7.1.1503
-  (e.g. \href{http://mirror.centos.org/centos/7.1.1503/os/x86\_64}
-             {\color{blue}{http://mirror.centos.org/centos/7.1.1503/os/x86\_64}} )
+  (e.g. \href{http://vault.centos.org/centos/7.1.1503/os/x86\_64}
+             {\color{blue}{http://vault.centos.org/centos/7.1.1503/os/x86\_64}} )
 \item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
                         {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
 \end{itemize*}
@@ -168,6 +163,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % ohpc_command fi
 % end_ohpc_run
 
+\vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{../../common/warewulf_setup}
 
@@ -213,16 +209,36 @@ customize a system image that can subsequently be used to provision one or more
 
 The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support for
 \baseOS{}. The following steps illustrate the process to build a minimal, default
-image for use with \Warewulf{}. We begin by creating a directory structure on the 
+image for use with \Warewulf{}. We begin by defining a directory structure on the 
 {\em master} host that will represent the root filesystem of the compute node. The 
 default location for this example is in
-\path{/opt/ohpc/admin/images/centos7.1}. Note that \Warewulf{} assumes access to
-an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
-process which requires external network connectivity on your chosen {\em
- master} host. If this is not available, or if you prefer to access a locally cached
-mirror, the steps below include an example to update the OS mirror used by
-\texttt{wwmkchroot} to use an alternate location defined by a
-\texttt{\$\{BOS\_MIRROR\}} environment variable.
+\path{/opt/ohpc/admin/images/centos7.1}.
+
+\begin{center}
+  \begin{tcolorbox}[]
+    \small Note that \Warewulf{} is configured by default to access an external repository
+    (vault.centos.org) during the \texttt{wwmkchroot} process.
+    If the master host cannot reach the public CentOS mirrors, or if you
+    prefer to access a locally cached mirror, set the
+    \texttt{\$\{BOS\_MIRROR\}} environment variable to your desired repo
+    location and update the template file 
+    {\em prior} to running the \texttt{wwmkchroot} command below. For
+    example:
+
+% begin_ohpc_run
+% ohpc_command if [ ! -z ${BOS_MIRROR+x} ]; then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={}]
+# Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
+[sms](*\#*) perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
+   /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\end{tcolorbox}
+\end{center}
 
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
@@ -230,14 +246,12 @@ mirror, the steps below include an example to update the OS mirror used by
 # Define chroot location 
 [sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.1
 
-# Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
-[sms](*\#*) perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
-     /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
-
 # Build initial chroot image
 [sms](*\#*) wwmkchroot centos-7 $CHROOT
 \end{lstlisting}
 % end_ohpc_run
+
+
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 
@@ -472,6 +486,7 @@ host as follows:
 \paragraph{Add \Nagios{} monitoring}
 \input{../../common/nagios}
 
+\clearpage
 \paragraph{Add \Ganglia{} monitoring}
 \input{../../common/ganglia}
 
@@ -620,6 +635,7 @@ will exit after all specified nodes have been found.
 
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster (Cont.)
+
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
 # Optionally register additional compute nodes
 [sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
@@ -715,6 +731,7 @@ BIOS post times) and you can verify that the compute hosts are available via
 ssh, or via parallel ssh tools to multiple hosts. For example, to run a command
 on the newly imaged compute hosts using \texttt{pdsh}, execute the following:
 
+\clearpage
 \begin{lstlisting}[language=bash]
 [sms](*\#*) pdsh -w c[1-4] uptime
 c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
@@ -725,12 +742,12 @@ c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 
 \begin{center}
 \begin{tcolorbox}[]
-\small
-While the \texttt{[l]pxelinux.0} that ships with \texttt{warewulf-provision-ohpc}
-support a wide range of hardware some hosts may boot more reliably or faster
-using the BOS provided \texttt{[l]pxelinux.0} that comes from
-\texttt{syslinux-tftpboot}. Replace the \texttt{[l]pxelinux.0} from 
-\texttt{warewulf-provision-ohpc} version if necessary.
+\small While the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files that ship
+with Warewulf to enable network boot support a wide range of hardware, some
+hosts may boot more reliably or faster using the BOS versions provided via the
+\texttt{syslinux-tftpboot} package. If you encounter PXE issues, consider
+replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
+\texttt{warewulf-provision-ohpc} with versions from \texttt{syslinux-tftpboot}.
 \end{tcolorbox}
 \end{center}
 
@@ -767,6 +784,7 @@ the necessary licenses in order to use the Intel proprietary software.
 \input{../../common/default_dev}
 
 
+\vspace*{0.2cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 
 \OHPC{} provides pre-packaged builds for a number of popular open-source
@@ -845,7 +863,6 @@ offerings within \OHPC{}, issue the following:
 %% \end{center}
 
 
-%\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 

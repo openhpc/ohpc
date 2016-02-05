@@ -1,1 +1,18 @@
    [Component Additions]
+      * ohpc-release                             (v1.0)
+
+   [Component Version Changes]
+      * slurm-devel-ohpc                         (v15.08.1 -> v15.08.6)
+      * slurm-munge-ohpc                         (v15.08.1 -> v15.08.6)
+      * slurm-ohpc                               (v15.08.1 -> v15.08.6)
+      * slurm-pam_slurm-ohpc                     (v15.08.1 -> v15.08.6)
+      * slurm-perlapi-ohpc                       (v15.08.1 -> v15.08.6)
+      * slurm-plugins-ohpc                       (v15.08.1 -> v15.08.6)
+      * slurm-sjobexit-ohpc                      (v15.08.1 -> v15.08.6)
+      * slurm-sjstat-ohpc                        (v15.08.1 -> v15.08.6)
+      * slurm-slurmdb-direct-ohpc                (v15.08.1 -> v15.08.6)
+      * slurm-slurmdbd-ohpc                      (v15.08.1 -> v15.08.6)
+      * slurm-sql-ohpc                           (v15.08.1 -> v15.08.6)
+      * slurm-torque-ohpc                        (v15.08.1 -> v15.08.6)
+
+   [Components Deprecated]

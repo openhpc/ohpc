@@ -15,12 +15,10 @@ within the resource management pool.
 The following commands can be used to startup the necessary services to support
 resource management under \SLURM{}.
 
-
-\newpage
 % begin_ohpc_run
 % ohpc_comment_header Resource Manager Startup \ref{sec:rms_startup}
-\begin{lstlisting}[language=bash]
-# Start and enable munge and slurm controller on master host
+\begin{lstlisting}[language=bash,keywords={}]
+# start munge and slurm controller on master host
 [sms](*\#*) systemctl enable munge
 [sms](*\#*) systemctl enable slurmctld
 [sms](*\#*) systemctl start munge

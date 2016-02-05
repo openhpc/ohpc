@@ -40,6 +40,8 @@ BuildRoot: %{?_tmppath}/%{pname}-%{version}-%{release}-root
 Patch1: warewulf-common.system.patch
 # 09/10/14 charles.r.baird@intel.com - patch to add mariadb as a datastore
 Patch2: warewulf-common.mariadb.patch
+# 02/03/16 charles.r.baird@intel.com - patch to add mariadb as a datastore
+Patch3: warewulf-common.file_env.patch
 # 05/23/14 charles.r.baird@intel.com - alternate package names for SuSE
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
@@ -68,6 +70,7 @@ supporting libs.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 
 %build

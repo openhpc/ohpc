@@ -8,6 +8,17 @@ during validation efforts to test cluster installations and is provided as a
 convenience for administrators as a starting point for potential site
 customization. 
 
+\vspace*{0.1cm}
+
+\begin{center}
+\begin{tcolorbox}[]
+\small Note that the template script provided is intended for use during
+initial installation and is not designed for repeated execution.  If
+modifications are required after using the script initially, we recommend
+running the relevant subset of commands interactively.
+\end{tcolorbox}
+\end{center}
+
 The template script relies on the use of a simple text file to define local
 site variables that were outlined in \S\ref{sec:inputs}. By default, the
 template install script attempts to use local variable settings sourced from
@@ -52,14 +63,3 @@ using this template is as follows:
 [sms](*\#*) ./recipe.sh
 \end{lstlisting}
 \end{enumerate}
-
-\vspace*{0.1cm}
-
-\begin{center}
-\begin{tcolorbox}[]
-\small Note that the template script provided is intended for use during
-initial installation and is not designed for repeated execution.  If
-modifications are required after using the script initially, we recommend
-running the relevant subset of commands interactively.
-\end{tcolorbox}
-\end{center}
