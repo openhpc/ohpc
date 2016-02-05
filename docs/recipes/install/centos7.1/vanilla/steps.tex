@@ -216,18 +216,7 @@ The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support
 image for use with \Warewulf{}. We begin by defining a directory structure on the 
 {\em master} host that will represent the root filesystem of the compute node. The 
 default location for this example is in
-\path{/opt/ohpc/admin/images/centos7.1}. 
-
-% begin_ohpc_run
-% ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-# Define chroot location 
-[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.1
-
-# Build initial chroot image
-[sms](*\#*) wwmkchroot centos-7 $CHROOT
-\end{lstlisting}
-% end_ohpc_run
+\path{/opt/ohpc/admin/images/centos7.1}.
 
 \begin{center}
   \begin{tcolorbox}[]
@@ -237,7 +226,7 @@ default location for this example is in
     prefer to access a locally cached mirror, set the
     \texttt{\$\{BOS\_MIRROR\}} environment variable to your desired repo
     location and update the template file 
-    {\em prior} to running the \texttt{wwmkchroot} command above. For
+    {\em prior} to running the \texttt{wwmkchroot} command below. For
     example:
 
 % begin_ohpc_run
@@ -255,7 +244,18 @@ default location for this example is in
 \end{tcolorbox}
 \end{center}
 
-%       fi
+% begin_ohpc_run
+% ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+# Define chroot location 
+[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.1
+
+# Build initial chroot image
+[sms](*\#*) wwmkchroot centos-7 $CHROOT
+\end{lstlisting}
+% end_ohpc_run
+
+
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 
