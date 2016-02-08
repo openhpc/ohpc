@@ -96,8 +96,8 @@ HPCG_LIBS     =
 #
 # - Compile time options -----------------------------------------------
 #
-# -DHPCG_NOMPI		Define to disable MPI
-# -DHPCG_NOOPENMP	Define to disable OPENMP
+# -DHPCG_NO_MPI	        Define to enable MPI
+# -DHPCG_NO_OPENMP	Define to disable OPENMP
 # -DHPCG_DEBUG       	Define to enable debugging output
 # -DHPCG_DETAILED_DEBUG Define to enable very detailed debugging output
 #

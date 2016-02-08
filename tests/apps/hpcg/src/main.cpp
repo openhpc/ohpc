@@ -21,8 +21,8 @@
 // Main routine of a program that calls the HPCG conjugate gradient
 // solver to solve the problem, and then prints results.
 
-#ifndef HPCG_NOMPI
-#include <mpi.h> // If this routine is not compiled with HPCG_NOMPI
+#ifndef HPCG_NO_MPI
+#include <mpi.h>
 #endif
 
 #include <fstream>
@@ -37,10 +37,12 @@ using std::endl;
 
 #include "hpcg.hpp"
 
+#include "CheckAspectRatio.hpp"
 #include "GenerateGeometry.hpp"
 #include "GenerateProblem.hpp"
 #include "GenerateCoarseProblem.hpp"
 #include "SetupHalo.hpp"
+#include "CheckProblem.hpp"
 #include "ExchangeHalo.hpp"
 #include "OptimizeProblem.hpp"
 #include "WriteProblem.hpp"
@@ -70,13 +72,17 @@ using std::endl;
 */
 int main(int argc, char * argv[]) {
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   MPI_Init(&argc, &argv);
 #endif
 
   HPCG_Params params;
 
   HPCG_Init(&argc, &argv, params);
+
+  // Check if QuickPath option is enabled.
+  // If the running time is set to zero, we minimize all paths through the program
+  bool quickPath = (params.runningTime==0);
 
   int size = params.comm_size, rank = params.comm_rank; // Number of MPI processes, My process ID
 
@@ -88,7 +94,7 @@ int main(int argc, char * argv[]) {
     std::cout << "Press key to continue"<< std::endl;
     std::cin.get(c);
   }
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   MPI_Barrier(MPI_COMM_WORLD);
 #endif
 #endif
@@ -99,7 +105,11 @@ int main(int argc, char * argv[]) {
   nz = (local_int_t)params.nz;
   int ierr = 0;  // Used to check return codes on function calls
 
-  // //////////////////////
+  ierr = CheckAspectRatio(0.125, nx, ny, nz, "local problem", rank==0);
+  if (ierr)
+    return ierr;
+
+  /////////////////////////
   // Problem setup Phase //
   /////////////////////////
 
@@ -110,6 +120,15 @@ int main(int argc, char * argv[]) {
   // Construct the geometry and linear system
   Geometry * geom = new Geometry;
   GenerateGeometry(size, rank, params.numThreads, nx, ny, nz, geom);
+
+  ierr = CheckAspectRatio(0.125, geom->npx, geom->npy, geom->npz, "process grid", rank==0);
+  if (ierr)
+    return ierr;
+
+  // Use this array for collecting timing information
+  std::vector< double > times(10,0.0);
+
+  double setup_time = mytimer();
 
   SparseMatrix A;
   InitializeSparseMatrix(A, geom);
@@ -124,51 +143,30 @@ int main(int argc, char * argv[]) {
 	  curLevelMatrix = curLevelMatrix->Ac; // Make the just-constructed coarse grid the next level
   }
 
+  setup_time = mytimer() - setup_time; // Capture total time of setup
+  times[9] = setup_time; // Save it for reporting
+
+  curLevelMatrix = &A;
+  Vector * curb = &b;
+  Vector * curx = &x;
+  Vector * curxexact = &xexact;
+  for (int level = 0; level< numberOfMgLevels; ++level) {
+     CheckProblem(*curLevelMatrix, curb, curx, curxexact);
+     curLevelMatrix = curLevelMatrix->Ac; // Make the nextcoarse grid the next level
+     curb = 0; // No vectors after the top level
+     curx = 0;
+     curxexact = 0;
+  }
+
 
   CGData data;
   InitializeSparseCGData(A, data);
 
 
-  // Use this array for collecting timing information
-  std::vector< double > times(9,0.0);
 
-  // Call user-tunable set up function.
-  double t7 = mytimer(); OptimizeProblem(A, data, b, x, xexact); t7 = mytimer() - t7;
-  times[7] = t7;
-#ifdef HPCG_DEBUG
-  if (rank==0) HPCG_fout << "Total problem setup time in main (sec) = " << mytimer() - t1 << endl;
-#endif
-
-#ifdef HPCG_DETAILED_DEBUG
-  if (geom->size == 1) WriteProblem(*geom, A, b, x, xexact);
-#endif
-
-
-  //////////////////////////////
-  // Validation Testing Phase //
-  //////////////////////////////
-
-#ifdef HPCG_DEBUG
-  t1 = mytimer();
-#endif
-  TestCGData testcg_data;
-  testcg_data.count_pass = testcg_data.count_fail = 0;
-  TestCG(A, data, b, x, testcg_data);
-
-  TestSymmetryData testsymmetry_data;
-  TestSymmetry(A, b, xexact, testsymmetry_data);
-
-#ifdef HPCG_DEBUG
-  if (rank==0) HPCG_fout << "Total validation (TestCG and TestSymmetry) execution time in main (sec) = " << mytimer() - t1 << endl;
-#endif
-
-#ifdef HPCG_DEBUG
-  t1 = mytimer();
-#endif
-
-  ///////////////////////////////////////
+  ////////////////////////////////////
   // Reference SpMV+MG Timing Phase //
-  ///////////////////////////////////////
+  ////////////////////////////////////
 
   // Call Reference SpMV and MG. Compute Optimization time as ratio of times in these routines
 
@@ -185,6 +183,7 @@ int main(int argc, char * argv[]) {
   FillRandomVector(x_overlap);
 
   int numberOfCalls = 10;
+  if (quickPath) numberOfCalls = 1; //QuickPath means we do on one call of each block of repetitive code
   double t_begin = mytimer();
   for (int i=0; i< numberOfCalls; ++i) {
     ierr = ComputeSPMV_ref(A, x_overlap, b_computed); // b_computed = A*x_overlap
@@ -226,6 +225,42 @@ int main(int argc, char * argv[]) {
   if (rank == 0 && err_count) HPCG_fout << err_count << " error(s) in call(s) to reference CG." << endl;
   double refTolerance = normr / normr0;
 
+  // Call user-tunable set up function.
+  double t7 = mytimer();
+  OptimizeProblem(A, data, b, x, xexact);
+  t7 = mytimer() - t7;
+  times[7] = t7;
+#ifdef HPCG_DEBUG
+  if (rank==0) HPCG_fout << "Total problem setup time in main (sec) = " << mytimer() - t1 << endl;
+#endif
+
+#ifdef HPCG_DETAILED_DEBUG
+  if (geom->size == 1) WriteProblem(*geom, A, b, x, xexact);
+#endif
+
+
+  //////////////////////////////
+  // Validation Testing Phase //
+  //////////////////////////////
+
+#ifdef HPCG_DEBUG
+  t1 = mytimer();
+#endif
+  TestCGData testcg_data;
+  testcg_data.count_pass = testcg_data.count_fail = 0;
+  TestCG(A, data, b, x, testcg_data);
+
+  TestSymmetryData testsymmetry_data;
+  TestSymmetry(A, b, xexact, testsymmetry_data);
+
+#ifdef HPCG_DEBUG
+  if (rank==0) HPCG_fout << "Total validation (TestCG and TestSymmetry) execution time in main (sec) = " << mytimer() - t1 << endl;
+#endif
+
+#ifdef HPCG_DEBUG
+  t1 = mytimer();
+#endif
+
   //////////////////////////////
   // Optimized CG Setup Phase //
   //////////////////////////////
@@ -237,7 +272,7 @@ int main(int argc, char * argv[]) {
   int tolerance_failures = 0;
 
   int optMaxIters = 10*refMaxIters;
-  int optNiters = 0;
+  int optNiters = refMaxIters;
   double opt_worst_time = 0.0;
 
   std::vector< double > opt_times(9,0.0);
@@ -257,7 +292,7 @@ int main(int argc, char * argv[]) {
     if (current_time > opt_worst_time) opt_worst_time = current_time;
   }
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
 // Get the absolute worst time across all MPI ranks (time in CG can be different)
   double local_opt_worst_time = opt_worst_time;
   MPI_Allreduce(&local_opt_worst_time, &opt_worst_time, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
@@ -321,7 +356,7 @@ int main(int argc, char * argv[]) {
   ////////////////////
 
   // Report results to YAML file
-  ReportResults(A, numberOfMgLevels, numberOfCgSets, refMaxIters, optMaxIters, &times[0], testcg_data, testsymmetry_data, testnorms_data, global_failure);
+  ReportResults(A, numberOfMgLevels, numberOfCgSets, refMaxIters, optMaxIters, &times[0], testcg_data, testsymmetry_data, testnorms_data, global_failure, quickPath);
 
   // Clean up
   DeleteMatrix(A); // This delete will recursively delete all coarse grid data
@@ -338,8 +373,8 @@ int main(int argc, char * argv[]) {
   HPCG_Finalize();
 
   // Finish up
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   MPI_Finalize();
 #endif
-  return 0 ;
+  return 0;
 }

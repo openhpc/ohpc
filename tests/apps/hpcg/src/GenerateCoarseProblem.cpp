@@ -18,7 +18,7 @@
  HPCG routine
  */
 
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
 #include <omp.h>
 #endif
 
@@ -52,11 +52,11 @@ void GenerateCoarseProblem(const SparseMatrix & Af) {
   local_int_t * f2cOperator = new local_int_t[Af.localNumberOfRows];
   local_int_t localNumberOfRows = nxc*nyc*nzc; // This is the size of our subblock
   // If this assert fails, it most likely means that the local_int_t is set to int and should be set to long long
-  assert(localNumberOfRows>0); // Throw an exception of the number of rows is less than zero (can happen if int overflow)
+  assert(localNumberOfRows>0); // Throw an exception of the number of rows is less than zero (can happen if "int" overflows)
 
   // Use a parallel loop to do initial assignment:
   // distributes the physical placement of arrays of pointers across the memory system
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
   #pragma omp parallel for
 #endif
   for (local_int_t i=0; i< localNumberOfRows; ++i) {
@@ -65,7 +65,7 @@ void GenerateCoarseProblem(const SparseMatrix & Af) {
 
 
   // TODO:  This triply nested loop could be flattened or use nested parallelism
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
   #pragma omp parallel for
 #endif
   for (local_int_t izc=0; izc<nzc; ++izc) {

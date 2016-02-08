@@ -12,11 +12,10 @@
 // ***************************************************
 //@HEADER
 
-#ifndef COMPUTESYMGS_HPP
-#define COMPUTESYMGS_HPP
+#ifndef GENERATEPROBLEM_REF_HPP
+#define GENERATEPROBLEM_REF_HPP
 #include "SparseMatrix.hpp"
 #include "Vector.hpp"
 
-int ComputeSYMGS( const SparseMatrix  & A, const Vector & r, Vector & x);
-
-#endif // COMPUTESYMGS_HPP
+void GenerateProblem_ref(SparseMatrix & A, Vector * b, Vector * x, Vector * xexact);
+#endif // GENERATEPROBLEM_REF_HPP

@@ -17,11 +17,11 @@
 
  HPCG routine
  */
-#ifndef HPCG_NOMPI
-#include <mpi.h> // If this routine is not compiled with HPCG_NOMPI
+#ifndef HPCG_NO_MPI
+#include <mpi.h>
 #endif
-#ifndef HPCG_NOOPENMP
-#include <omp.h> // If this routine is not compiled with HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
+#include <omp.h>
 #endif
 
 #include "Vector.hpp"
@@ -52,7 +52,7 @@ int ComputeResidual(const local_int_t n, const Vector & v1, const Vector & v2, d
   double * v2v = v2.values;
   double local_residual = 0.0;
 
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
   #pragma omp parallel default(none) shared(local_residual, v1v, v2v)
   {
     double threadlocal_residual = 0.0;
@@ -76,7 +76,7 @@ int ComputeResidual(const local_int_t n, const Vector & v1, const Vector & v2, d
   }
 #endif
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   // Use MPI's reduce function to collect all partial sums
   double global_residual = 0;
   MPI_Allreduce(&local_residual, &global_residual, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
@@ -85,5 +85,5 @@ int ComputeResidual(const local_int_t n, const Vector & v1, const Vector & v2, d
   residual = local_residual;
 #endif
 
-  return(0);
+  return 0;
 }

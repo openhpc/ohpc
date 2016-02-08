@@ -19,7 +19,7 @@
  */
 
 #include "ComputeWAXPBY_ref.hpp"
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
 #include <omp.h>
 #endif
 #include <cassert>
@@ -49,21 +49,21 @@ int ComputeWAXPBY_ref(const local_int_t n, const double alpha, const Vector & x,
 	const double * const yv = y.values;
 	double * const wv = w.values;
   if (alpha==1.0) {
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
     #pragma omp parallel for
 #endif
     for (local_int_t i=0; i<n; i++) wv[i] = xv[i] + beta * yv[i];
   } else if (beta==1.0) {
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
     #pragma omp parallel for
 #endif
     for (local_int_t i=0; i<n; i++) wv[i] = alpha * xv[i] + yv[i];
   } else  {
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
     #pragma omp parallel for
 #endif
     for (local_int_t i=0; i<n; i++) wv[i] = alpha * xv[i] + beta * yv[i];
   }
 
-  return(0);
+  return 0;
 }

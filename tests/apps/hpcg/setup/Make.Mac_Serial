@@ -96,7 +96,7 @@ HPCG_LIBS     =
 #
 # - Compile time options -----------------------------------------------
 #
-# -DHPCG_NO_MPI	        Define to disable MPI
+# -DHPCG_NO_MPI		Define to disable MPI
 # -DHPCG_NO_OPENMP	Define to disable OPENMP
 # -DHPCG_DEBUG       	Define to enable debugging output
 # -DHPCG_DETAILED_DEBUG Define to enable very detailed debugging output
@@ -106,7 +106,7 @@ HPCG_LIBS     =
 #    *) Build with OpenMP enabled.
 #    *) Not generate debugging output.
 #
-HPCG_OPTS     = -DHPCG_NO_OPENMP
+HPCG_OPTS     = -DHPCG_NO_MPI -DHPCG_NO_OPENMP
 #
 # ----------------------------------------------------------------------
 #
@@ -116,9 +116,8 @@ HPCG_DEFS     = $(HPCG_OPTS) $(HPCG_INCLUDES)
 # - Compilers / linkers - Optimization flags ---------------------------
 # ----------------------------------------------------------------------
 #
-CXX          = mpicxx
-#CXXFLAGS     = $(HPCG_DEFS) -fomit-frame-pointer -O3 -funroll-loops -W -Wall
-CXXFLAGS     = $(HPCG_DEFS) -O3 -ffast-math -ftree-vectorize -ftree-vectorizer-verbose=0
+CXX          = /usr/bin/c++
+CXXFLAGS     = $(HPCG_DEFS) -fomit-frame-pointer -O3 -funroll-loops -W -Wall -pedantic -std=c++11
 #
 LINKER       = $(CXX)
 LINKFLAGS    = $(CXXFLAGS)

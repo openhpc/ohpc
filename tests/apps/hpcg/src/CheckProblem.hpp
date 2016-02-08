@@ -12,11 +12,10 @@
 // ***************************************************
 //@HEADER
 
-#ifndef COMPUTESYMGS_HPP
-#define COMPUTESYMGS_HPP
+#ifndef CHECKPROBLEM_HPP
+#define CHECKPROBLEM_HPP
 #include "SparseMatrix.hpp"
 #include "Vector.hpp"
 
-int ComputeSYMGS( const SparseMatrix  & A, const Vector & r, Vector & x);
-
-#endif // COMPUTESYMGS_HPP
+void CheckProblem(const SparseMatrix & A, Vector * b, Vector * x, Vector * xexact);
+#endif // CHECKPROBLEM_HPP

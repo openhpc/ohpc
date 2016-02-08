@@ -12,11 +12,8 @@
 // ***************************************************
 //@HEADER
 
-#ifndef COMPUTESYMGS_HPP
-#define COMPUTESYMGS_HPP
-#include "SparseMatrix.hpp"
-#include "Vector.hpp"
+#ifndef CHECKASPECTRATIO_HPP
+#define CHECKASPECTRATIO_HPP
+extern int CheckAspectRatio(double smallest_ratio, int x, int y, int z, const char *what, bool DoIo);
+#endif // CHECKASPECTRATIO_HPP
 
-int ComputeSYMGS( const SparseMatrix  & A, const Vector & r, Vector & x);
-
-#endif // COMPUTESYMGS_HPP

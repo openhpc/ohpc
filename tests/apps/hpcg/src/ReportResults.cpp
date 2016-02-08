@@ -18,13 +18,15 @@
  HPCG routine
  */
 
-#ifndef HPCG_NOMPI
-#include <mpi.h> // If this routine is not compiled with HPCG_NOMPI
+#ifndef HPCG_NO_MPI
+#include <mpi.h>
 #endif
 
+#include <vector>
 #include "ReportResults.hpp"
 #include "YAML_Element.hpp"
 #include "YAML_Doc.hpp"
+#include "OptimizeProblem.hpp"
 
 #ifdef HPCG_DEBUG
 #include <fstream>
@@ -32,6 +34,7 @@ using std::endl;
 
 #include "hpcg.hpp"
 #endif
+
 
 /*!
  Creates a YAML file and writes the information about the HPCG run, its results, and validity.
@@ -50,11 +53,11 @@ using std::endl;
   @see YAML_Doc
 */
 void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgSets, int refMaxIters,int optMaxIters, double times[],
-		const TestCGData & testcg_data, const TestSymmetryData & testsymmetry_data, const TestNormsData & testnorms_data, int global_failure) {
+		const TestCGData & testcg_data, const TestSymmetryData & testsymmetry_data, const TestNormsData & testnorms_data, int global_failure, bool quickPath) {
 
-  double minOfficialTime = 3600; // Any official benchmark result much run at least this many seconds
+  double minOfficialTime = 1800; // Any official benchmark result much run at least this many seconds
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   double t4 = times[4];
   double t4min = 0.0;
   double t4max = 0.0;
@@ -69,7 +72,11 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
 
   if (A.geom->rank==0) { // Only PE 0 needs to compute and report timing results
 
-    double fNumberOfCgSets = numberOfCgSets;
+// TODO: Put the FLOP count, Memory BW and Memory Usage models into separate functions
+
+	  // ======================== FLOP count model =======================================
+
+	double fNumberOfCgSets = numberOfCgSets;
     double fniters = fNumberOfCgSets * (double) optMaxIters;
     double fnrow = A.totalNumberOfRows;
     double fnnz = A.totalNumberOfNonzeros;
@@ -93,10 +100,121 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
 
     fnops_precond += fniters*4.0*((double) Af->totalNumberOfNonzeros); // One symmetric GS sweep at the coarsest level
     double fnops = fnops_ddot+fnops_waxpby+fnops_sparsemv+fnops_precond;
-    double reffnops = fnops * ((double) refMaxIters)/((double) optMaxIters);
+    double frefnops = fnops * ((double) refMaxIters)/((double) optMaxIters);
 
-    YAML_Doc doc("HPCG-Benchmark", "2.4");
-    doc.add("HPCG Benchmark","Version 2.4 June 3, 2014");
+    // ======================== Memory bandwidth model =======================================
+
+    // Read/Write counts come from implementation of CG in CG.cpp (include 1 extra for the CG preamble ops)
+    double fnreads_ddot = (3.0*fniters+fNumberOfCgSets)*2.0*fnrow*sizeof(double); // 3 ddots with 2 nrow reads
+    double fnwrites_ddot = (3.0*fniters+fNumberOfCgSets)*sizeof(double); // 3 ddots with 1 write
+    double fnreads_waxpby = (3.0*fniters+fNumberOfCgSets)*2.0*fnrow*sizeof(double); // 3 WAXPBYs with nrow adds and nrow mults
+    double fnwrites_waxpby = (3.0*fniters+fNumberOfCgSets)*fnrow*sizeof(double); // 3 WAXPBYs with nrow adds and nrow mults
+    double fnreads_sparsemv = (fniters+fNumberOfCgSets)*(fnnz*(sizeof(double)+sizeof(local_int_t)) + fnrow*sizeof(double));// 1 SpMV with nnz reads of values, nnz reads indices,
+                                                                                                                           // plus nrow reads of x
+    double fnwrites_sparsemv = (fniters+fNumberOfCgSets)*fnrow*sizeof(double); // 1 SpMV nrow writes
+    // Op counts from the multigrid preconditioners
+    double fnreads_precond = 0.0;
+    double fnwrites_precond = 0.0;
+    Af = &A;
+    for (int i=1; i<numberOfMgLevels; ++i) {
+        double fnnz_Af = Af->totalNumberOfNonzeros;
+        double fnrow_Af = Af->totalNumberOfRows;
+        double fnumberOfPresmootherSteps = Af->mgData->numberOfPresmootherSteps;
+        double fnumberOfPostsmootherSteps = Af->mgData->numberOfPostsmootherSteps;
+        fnreads_precond += fnumberOfPresmootherSteps*fniters*(2.0*fnnz_Af*(sizeof(double)+sizeof(local_int_t)) + fnrow_Af*sizeof(double)); // number of presmoother reads
+        fnwrites_precond += fnumberOfPresmootherSteps*fniters*fnrow_Af*sizeof(double); // number of presmoother writes
+        fnreads_precond += fniters*(fnnz_Af*(sizeof(double)+sizeof(local_int_t)) + fnrow_Af*sizeof(double)); // Number of reads for fine grid residual calculation
+        fnwrites_precond += fniters*fnnz_Af*sizeof(double); // Number of writes for fine grid residual calculation
+        fnreads_precond += fnumberOfPostsmootherSteps*fniters*(2.0*fnnz_Af*(sizeof(double)+sizeof(local_int_t)) + fnrow_Af*sizeof(double));  // number of postsmoother reads
+        fnwrites_precond += fnumberOfPostsmootherSteps*fniters*fnnz_Af*sizeof(double);  // number of postsmoother writes
+    	Af = Af->Ac; // Go to next coarse level
+    }
+
+    double fnnz_Af = Af->totalNumberOfNonzeros;
+    double fnrow_Af = Af->totalNumberOfRows;
+    fnreads_precond += fniters*(2.0*fnnz_Af*(sizeof(double)+sizeof(local_int_t)) + fnrow_Af*sizeof(double));; // One symmetric GS sweep at the coarsest level
+    fnwrites_precond += fniters*fnrow_Af*sizeof(double); // One symmetric GS sweep at the coarsest level
+    double fnreads = fnreads_ddot+fnreads_waxpby+fnreads_sparsemv+fnreads_precond;
+    double fnwrites = fnwrites_ddot+fnwrites_waxpby+fnwrites_sparsemv+fnwrites_precond;
+    double frefnreads = fnreads * ((double) refMaxIters)/((double) optMaxIters);
+    double frefnwrites = fnwrites * ((double) refMaxIters)/((double) optMaxIters);
+
+
+    // ======================== Memory usage model =======================================
+
+    // Data in GenerateProblem_ref
+
+    double numberOfNonzerosPerRow = 27.0; // We are approximating a 27-point finite element/volume/difference 3D stencil
+    double size = ((double) A.geom->size); // Needed for estimating size of halo
+
+    double fnbytes = ((double) sizeof(Geometry));      // Geometry struct in main.cpp
+    fnbytes += ((double) sizeof(double)*fNumberOfCgSets); // testnorms_data in main.cpp
+
+    // Model for GenerateProblem_ref.cpp
+    fnbytes += fnrow*sizeof(char);      // array nonzerosInRow
+    fnbytes += fnrow*((double) sizeof(global_int_t*)); // mtxIndG
+    fnbytes += fnrow*((double) sizeof(local_int_t*));  // mtxIndL
+    fnbytes += fnrow*((double) sizeof(double*));      // matrixValues
+    fnbytes += fnrow*((double) sizeof(double*));      // matrixDiagonal
+    fnbytes += fnrow*numberOfNonzerosPerRow*((double) sizeof(local_int_t));  // mtxIndL[1..nrows]
+    fnbytes += fnrow*numberOfNonzerosPerRow*((double) sizeof(double));       // matrixValues[1..nrows]
+    fnbytes += fnrow*numberOfNonzerosPerRow*((double) sizeof(global_int_t)); // mtxIndG[1..nrows]
+    fnbytes += fnrow*((double) 3*sizeof(double)); // x, b, xexact
+
+    // Model for CGData.hpp
+    double fncol = ((global_int_t) A.localNumberOfColumns) * size; // Estimate of the global number of columns using the value from rank 0
+    fnbytes += fnrow*((double) 2*sizeof(double)); // r, Ap
+    fnbytes += fncol*((double) 2*sizeof(double)); // z, p
+
+    std::vector<double> fnbytesPerLevel(numberOfMgLevels); // Count byte usage per level (level 0 is main CG level)
+    fnbytesPerLevel[0] = fnbytes;
+
+    // Benchmarker-provided model for OptimizeProblem.cpp
+    double fnbytes_OptimizedProblem = OptimizeProblemMemoryUse(A);
+    fnbytes += fnbytes_OptimizedProblem;
+
+    Af = A.Ac;
+    for (int i=1; i<numberOfMgLevels; ++i) {
+        double fnrow_Af = Af->totalNumberOfRows;
+        double fncol_Af = ((global_int_t) Af->localNumberOfColumns) * size; // Estimate of the global number of columns using the value from rank 0
+        double fnbytes_Af = 0.0;
+        // Model for GenerateCoarseProblem.cpp
+        fnbytes_Af += fnrow_Af*((double) sizeof(local_int_t)); // f2cOperator
+        fnbytes_Af += fnrow_Af*((double) sizeof(double)); // rc
+        fnbytes_Af += 2.0*fncol_Af*((double) sizeof(double)); // xc, Axf are estimated based on the size of these arrays on rank 0
+        fnbytes_Af += ((double) (sizeof(Geometry)+sizeof(SparseMatrix)+3*sizeof(Vector)+sizeof(MGData))); // Account for structs geomc, Ac, rc, xc, Axf - (minor)
+
+        // Model for GenerateProblem.cpp (called within GenerateCoarseProblem.cpp)
+        fnbytes_Af += fnrow_Af*sizeof(char);      // array nonzerosInRow
+        fnbytes_Af += fnrow_Af*((double) sizeof(global_int_t*)); // mtxIndG
+        fnbytes_Af += fnrow_Af*((double) sizeof(local_int_t*));  // mtxIndL
+        fnbytes_Af += fnrow_Af*((double) sizeof(double*));      // matrixValues
+        fnbytes_Af += fnrow_Af*((double) sizeof(double*));      // matrixDiagonal
+        fnbytes_Af += fnrow_Af*numberOfNonzerosPerRow*((double) sizeof(local_int_t));  // mtxIndL[1..nrows]
+        fnbytes_Af += fnrow_Af*numberOfNonzerosPerRow*((double) sizeof(double));       // matrixValues[1..nrows]
+        fnbytes_Af += fnrow_Af*numberOfNonzerosPerRow*((double) sizeof(global_int_t)); // mtxIndG[1..nrows]
+
+        // Model for SetupHalo_ref.cpp
+#ifndef HPCG_NO_MPI
+        fnbytes_Af += ((double) sizeof(double)*Af->totalToBeSent); //sendBuffer
+        fnbytes_Af += ((double) sizeof(local_int_t)*Af->totalToBeSent); // elementsToSend
+        fnbytes_Af += ((double) sizeof(int)*Af->numberOfSendNeighbors); // neighbors
+        fnbytes_Af += ((double) sizeof(local_int_t)*Af->numberOfSendNeighbors); // receiveLength, sendLength
+#endif
+        fnbytesPerLevel[i] = fnbytes_Af;
+        fnbytes += fnbytes_Af; // Running sum
+    	Af = Af->Ac; // Go to next coarse level
+    }
+
+    assert(Af==0); // Make sure we got to the lowest grid level
+
+    // Count number of bytes used per equation
+    double fnbytesPerEquation = fnbytes/fnrow;
+
+
+    // Instantiate YAML document
+    YAML_Doc doc("HPCG-Benchmark", "3.0");
+    doc.add("Release date", "November 11, 2015");
 
     doc.add("Machine Summary","");
     doc.get("Machine Summary")->add("Distributed Processes",A.geom->size);
@@ -117,7 +235,10 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
     doc.get("Local Domain Dimensions")->add("ny",A.geom->ny);
     doc.get("Local Domain Dimensions")->add("nz",A.geom->nz);
 
-    doc.add("********** Problem Summary  ***********","");
+    doc.add("########## Problem Summary  ##########","");
+
+    doc.add("Setup Information","");
+    doc.get("Setup Information")->add("Setup Time",times[9]);
 
     doc.add("Linear System Information","");
     doc.get("Linear System Information")->add("Number of Equations",A.totalNumberOfRows);
@@ -136,7 +257,22 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
     	Af = Af->Ac;
     }
 
-    doc.add("********** Validation Testing Summary  ***********","");
+    doc.add("########## Memory Use Summary  ##########","");
+
+    doc.add("Memory Use Information","");
+    doc.get("Memory Use Information")->add("Total memory used for data (Gbytes)",fnbytes/1000000000.0);
+    doc.get("Memory Use Information")->add("Memory used for OptimizeProblem data (Gbytes)",fnbytes_OptimizedProblem/1000000000.0);
+    doc.get("Memory Use Information")->add("Bytes per equation (Total memory / Number of Equations)",fnbytesPerEquation);
+
+    doc.get("Memory Use Information")->add("Memory used for linear system and CG (Gbytes)",fnbytesPerLevel[0]/1000000000.0);
+
+    doc.get("Memory Use Information")->add("Coarse Grids","");
+    for (int i=1; i<numberOfMgLevels; ++i) {
+        doc.get("Memory Use Information")->get("Coarse Grids")->add("Grid Level",i);
+        doc.get("Memory Use Information")->get("Coarse Grids")->add("Memory used",fnbytesPerLevel[i]/1000000000.0);
+    }
+
+    doc.add("########## V&V Testing Summary  ##########","");
     doc.add("Spectral Convergence Tests","");
     if (testcg_data.count_fail==0)
       doc.get("Spectral Convergence Tests")->add("Result", "PASSED");
@@ -158,7 +294,7 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
     doc.get(DepartureFromSymmetry)->add("Departure for SpMV", testsymmetry_data.depsym_spmv);
     doc.get(DepartureFromSymmetry)->add("Departure for MG", testsymmetry_data.depsym_mg);
 
-    doc.add("********** Iterations Summary  ***********","");
+    doc.add("########## Iterations Summary  ##########","");
     doc.add("Iteration Count Information","");
     if (!global_failure)
       doc.get("Iteration Count Information")->add("Result", "PASSED");
@@ -169,7 +305,7 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
     doc.get("Iteration Count Information")->add("Total number of reference iterations", refMaxIters*numberOfCgSets);
     doc.get("Iteration Count Information")->add("Total number of optimized iterations", optMaxIters*numberOfCgSets);
 
-    doc.add("********** Reproducibility Summary  ***********","");
+    doc.add("########## Reproducibility Summary  ##########","");
     doc.add("Reproducibility Information","");
     if (testnorms_data.pass)
       doc.get("Reproducibility Information")->add("Result", "PASSED");
@@ -178,7 +314,7 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
     doc.get("Reproducibility Information")->add("Scaled residual mean", testnorms_data.mean);
     doc.get("Reproducibility Information")->add("Scaled residual variance", testnorms_data.variance);
 
-    doc.add("********** Performance Summary (times in sec) ***********","");
+    doc.add("########## Performance Summary (times in sec) ##########","");
 
     doc.add("Benchmark Time Summary","");
     doc.get("Benchmark Time Summary")->add("Optimization phase",times[7]);
@@ -194,7 +330,14 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
     doc.get("Floating Point Operations Summary")->add("Raw SpMV",fnops_sparsemv);
     doc.get("Floating Point Operations Summary")->add("Raw MG",fnops_precond);
     doc.get("Floating Point Operations Summary")->add("Total",fnops);
-    doc.get("Floating Point Operations Summary")->add("Total with convergence overhead",reffnops);
+    doc.get("Floating Point Operations Summary")->add("Total with convergence overhead",frefnops);
+
+    doc.add("GB/s Summary","");
+    doc.get("GB/s Summary")->add("Raw Read B/W",fnreads/times[0]/1.0E9);
+    doc.get("GB/s Summary")->add("Raw Write B/W",fnwrites/times[0]/1.0E9);
+    doc.get("GB/s Summary")->add("Raw Total B/W",(fnreads+fnwrites)/(times[0])/1.0E9);
+    doc.get("GB/s Summary")->add("Total with convergence and optimization phase overhead",(frefnreads+frefnwrites)/(times[0]+fNumberOfCgSets*(times[7]/10.0+times[9]/10.0))/1.0E9);
+
 
     doc.add("GFLOP/s Summary","");
     doc.get("GFLOP/s Summary")->add("Raw DDOT",fnops_ddot/times[1]/1.0E9);
@@ -202,21 +345,17 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
     doc.get("GFLOP/s Summary")->add("Raw SpMV",fnops_sparsemv/(times[3])/1.0E9);
     doc.get("GFLOP/s Summary")->add("Raw MG",fnops_precond/(times[5])/1.0E9);
     doc.get("GFLOP/s Summary")->add("Raw Total",fnops/times[0]/1.0E9);
-    doc.get("GFLOP/s Summary")->add("Total with convergence overhead",reffnops/times[0]/1.0E9);
-    // This final GFLOP/s rating includes the overhead of optimizing the data structures vs ten sets of 50 iterations of CG
-    double totalGflops = reffnops/(times[0]+fNumberOfCgSets*times[7]/10.0)/1.0E9;
+    doc.get("GFLOP/s Summary")->add("Total with convergence overhead",frefnops/times[0]/1.0E9);
+    // This final GFLOP/s rating includes the overhead of problem setup and optimizing the data structures vs ten sets of 50 iterations of CG
+    double totalGflops = frefnops/(times[0]+fNumberOfCgSets*(times[7]/10.0+times[9]/10.0))/1.0E9;
+    double totalGflops24 = frefnops/(times[0]+fNumberOfCgSets*times[7]/10.0)/1.0E9;
     doc.get("GFLOP/s Summary")->add("Total with convergence and optimization phase overhead",totalGflops);
 
-    //double totalSparseMVTime = times[3] + times[6];
-    //doc.add("Sparse Operations Overheads","");
-    //doc.get("Sparse Operations Overheads")->add("SpMV GFLOP/s with overhead",fnops_sparsemv/(totalSparseMVTime)/1.0E9);
-    //doc.get("Sparse Operations Overheads")->add("Overhead time (sec)", (times[7]+times[6]));
-    //doc.get("Sparse Operations Overheads")->add("Overhead as percentage of time", (times[7]+times[6])/totalSparseMVTime*100.0);
     doc.add("User Optimization Overheads","");
     doc.get("User Optimization Overheads")->add("Optimization phase time (sec)", (times[7]));
     doc.get("User Optimization Overheads")->add("Optimization phase time vs reference SpMV+MG time", times[7]/times[8]);
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
     doc.add("DDOT Timing Variations","");
     doc.get("DDOT Timing Variations")->add("Min DDOT MPI_Allreduce time",t4min);
     doc.get("DDOT Timing Variations")->add("Max DDOT MPI_Allreduce time",t4max);
@@ -225,36 +364,43 @@ void ReportResults(const SparseMatrix & A, int numberOfMgLevels, int numberOfCgS
     //doc.get("Sparse Operations Overheads")->add("Halo exchange time (sec)", (times[6]));
     //doc.get("Sparse Operations Overheads")->add("Halo exchange as percentage of SpMV time", (times[6])/totalSparseMVTime*100.0);
 #endif
-    doc.add("********** Final Summary **********","");
+    doc.add("__________ Final Summary __________","");
     bool isValidRun = (testcg_data.count_fail==0) && (testsymmetry_data.count_fail==0) && (testnorms_data.pass) && (!global_failure);
     if (isValidRun) {
-      doc.get("********** Final Summary **********")->add("HPCG result is VALID with a GFLOP/s rating of", totalGflops);
+        doc.get("__________ Final Summary __________")->add("HPCG result is VALID with a GFLOP/s rating of", totalGflops);
+        doc.get("__________ Final Summary __________")->add("    HPCG 2.4 Rating (for historical value) is", totalGflops24);
       if (!A.isDotProductOptimized) {
-        doc.get("********** Final Summary **********")->add("Reference version of ComputeDotProduct used","Performance results are most likely suboptimal");
+        doc.get("__________ Final Summary __________")->add("Reference version of ComputeDotProduct used","Performance results are most likely suboptimal");
       }
       if (!A.isSpmvOptimized) {
-        doc.get("********** Final Summary **********")->add("Reference version of ComputeSPMV used","Performance results are most likely suboptimal");
+        doc.get("__________ Final Summary __________")->add("Reference version of ComputeSPMV used","Performance results are most likely suboptimal");
       }
       if (!A.isMgOptimized) {
         if (A.geom->numThreads>1)
-          doc.get("********** Final Summary **********")->add("Reference version of ComputeMG used and number of threads greater than 1","Performance results are severely suboptimal");
+          doc.get("__________ Final Summary __________")->add("Reference version of ComputeMG used and number of threads greater than 1","Performance results are severely suboptimal");
         else // numThreads ==1
-          doc.get("********** Final Summary **********")->add("Reference version of ComputeMG used","Performance results are most likely suboptimal");
+          doc.get("__________ Final Summary __________")->add("Reference version of ComputeMG used","Performance results are most likely suboptimal");
       }
       if (!A.isWaxpbyOptimized) {
-        doc.get("********** Final Summary **********")->add("Reference version of ComputeWAXPBY used","Performance results are most likely suboptimal");
+        doc.get("__________ Final Summary __________")->add("Reference version of ComputeWAXPBY used","Performance results are most likely suboptimal");
       }
       if (times[0]>=minOfficialTime) {
-    	  doc.get("********** Final Summary **********")->add("Please send the YAML file contents to","HPCG-Results@software.sandia.gov");
+        doc.get("__________ Final Summary __________")->add("Please upload results from the YAML file contents to","http://hpcg-benchmark.org");
       }
       else {
-          doc.get("********** Final Summary **********")->add("Results are valid but execution time (sec) is",times[0]);
-          doc.get("********** Final Summary **********")->add("Official results execution time (sec) must be at least",minOfficialTime);
+          doc.get("__________ Final Summary __________")->add("Results are valid but execution time (sec) is",times[0]);
+          if (quickPath) {
+        	  doc.get("__________ Final Summary __________")->add("     You have selected the QuickPath option", "Results are official for legacy installed systems with confirmation from the HPCG Benchmark leaders.");
+              doc.get("__________ Final Summary __________")->add("     After confirmation please upload results from the YAML file contents to","http://hpcg-benchmark.org");
 
+          }
+          else {
+        	  doc.get("__________ Final Summary __________")->add("     Official results execution time (sec) must be at least",minOfficialTime);
+          }
       }
     } else {
-      doc.get("********** Final Summary **********")->add("HPCG result is","INVALID.");
-      doc.get("********** Final Summary **********")->add("Please review the YAML file contents","You may NOT submit these results for consideration.");
+      doc.get("__________ Final Summary __________")->add("HPCG result is","INVALID.");
+      doc.get("__________ Final Summary __________")->add("Please review the YAML file contents","You may NOT submit these results for consideration.");
     }
 
     std::string yaml = doc.generateYAML();

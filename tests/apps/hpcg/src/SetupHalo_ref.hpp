@@ -12,11 +12,10 @@
 // ***************************************************
 //@HEADER
 
-#ifndef COMPUTESYMGS_HPP
-#define COMPUTESYMGS_HPP
+#ifndef SETUPHALO_REF_HPP
+#define SETUPHALO_REF_HPP
 #include "SparseMatrix.hpp"
-#include "Vector.hpp"
 
-int ComputeSYMGS( const SparseMatrix  & A, const Vector & r, Vector & x);
+void SetupHalo_ref(SparseMatrix & A);
 
-#endif // COMPUTESYMGS_HPP
+#endif // SETUPHALO_REF_HPP

@@ -46,8 +46,9 @@ YAML_Doc::~YAML_Doc(void) {
 */
 string YAML_Doc::generateYAML() {
   string yaml;
-  yaml =  yaml + miniAppName + "\n";
-  yaml =  yaml +  miniAppVersion + "\n";
+
+  yaml =  yaml + miniAppName + " version: " + miniAppVersion + "\n";
+
   for (size_t i=0; i<children.size(); i++) {
     yaml = yaml + children[i]->printYAML("");
   }

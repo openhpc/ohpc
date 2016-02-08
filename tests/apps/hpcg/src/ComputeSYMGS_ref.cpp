@@ -18,7 +18,7 @@
  HPCG routine
  */
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
 #include "ExchangeHalo.hpp"
 #endif
 #include "ComputeSYMGS_ref.hpp"
@@ -55,7 +55,7 @@ int ComputeSYMGS_ref( const SparseMatrix & A, const Vector & r, Vector & x) {
 
   assert(x.localLength==A.localNumberOfColumns); // Make sure x contain space for halo values
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   ExchangeHalo(A,x);
 #endif
 
@@ -99,6 +99,6 @@ int ComputeSYMGS_ref( const SparseMatrix & A, const Vector & r, Vector & x) {
     xv[i] = sum/currentDiagonal;
   }
 
-  return(0);
+  return 0;
 }
 
