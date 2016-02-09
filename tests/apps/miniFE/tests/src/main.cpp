@@ -34,7 +34,10 @@
 #include <miniFE_version.h>
 
 #include <outstream.hpp>
+
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 
 #ifdef HAVE_MPI
 #include <mpi.h>
@@ -221,6 +224,12 @@ void add_configuration_to_yaml(YAML_Doc& doc, int numprocs, int numthreads)
   std::string using_mpi("no");
 #ifdef HAVE_MPI
   using_mpi = "yes";
+#endif
+
+#ifdef _OPENMP
+  doc.get("Build")->add("using OpenMP", "yes");
+#else
+  doc.get("Build")->add("using OpenMP", "no");
 #endif
   doc.get("Build")->add("using MPI",using_mpi);
 }

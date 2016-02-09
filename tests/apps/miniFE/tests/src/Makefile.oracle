@@ -1,3 +1,4 @@
+
 #-----------------------------------------------------------------------
 # This file compiles for OpenMP and MPI hybrid operations using the GNU
 # compile chain.
@@ -12,16 +13,16 @@ MINIFE_MATRIX_TYPE = -DMINIFE_CSR_MATRIX
 
 #-----------------------------------------------------------------------
 
-# If -mavx fails replace with -msse4
-CFLAGS = -O3 -fopenmp -mavx
+CFLAGS = -fast -xopenmp -xvector —xarch=avx
 CXXFLAGS = $(CFLAGS) 
 
 CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES) \
 	$(MINIFE_MATRIX_TYPE) \
-	-DMINIFE_RESTRICT=__restrict__ \
-	-DHAVE_MPI -DMPICH_IGNORE_CXX_SEEK
+	-DMINIFE_RESTRICT= \
+	-DHAVE_MPI -DMPICH_IGNORE_CXX_SEEK \
+	-DMINIFE_IGNORE_RESERVE_TRY
 
-LDFLAGS=$(CFLAGS)
+LDFLAGS=-fast -xopenmp
 LIBS=
 
 # The MPICH_IGNORE_CXX_SEEK macro is required for some mpich versions,
@@ -29,8 +30,5 @@ LIBS=
 
 CXX=mpicxx
 CC=mpicc
-
-#CXX=g++
-#CC=g++
 
 include make_targets
