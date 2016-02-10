@@ -83,6 +83,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 /etc/ohpc-release
 %{__repodir}/OpenHPC.repo
+/etc/pki/rpm-gpg
 /etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
 %changelog
