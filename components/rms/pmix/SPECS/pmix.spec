@@ -242,6 +242,7 @@ Requires: %{mpi_selector_rpm_name}
 %endif
 
 BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: libevent-devel
 Requires: libevent
 
