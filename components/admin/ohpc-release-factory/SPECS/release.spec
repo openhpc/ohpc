@@ -110,6 +110,10 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %config /etc/ohpc-release
 
+%if 0%{?sles_version} || 0%{?suse_version}
+%dir /etc/zypp
+%endif
+
 %{__repodir}
 /etc/pki
 
