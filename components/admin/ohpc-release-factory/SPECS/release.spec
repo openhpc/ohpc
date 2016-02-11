@@ -108,7 +108,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-/etc/ohpc-release
+%dir /etc/pki
+%dir %{__repodir}
+%config /etc/ohpc-release
 %{__repodir}/OpenHPC.repo
 /etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
