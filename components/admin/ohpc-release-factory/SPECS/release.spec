@@ -108,11 +108,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir /etc/pki
-%dir %{__repodir}
 %config /etc/ohpc-release
-%{__repodir}/OpenHPC.repo
-/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+
+%{__repodir}
+/etc/pki
 
 %changelog
 
