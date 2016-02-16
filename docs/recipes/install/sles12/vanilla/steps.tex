@@ -629,7 +629,7 @@ will exit after all specified nodes have been found.
 
 # Define provisioning image for hosts
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12 --bootstrap=`uname -r` \
-     --files=dynamic_hosts,passwd,group,shadow,munge.key 
+     --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key
 \end{lstlisting}
 
 % ohpc_validation_newline
