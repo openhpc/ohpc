@@ -78,13 +78,13 @@
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_ohpc_repo}
 
-% begin_ohpc_run
-% ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) zypper addrepo ${ohpc_repo}
-[sms](*\#*) zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
-\end{lstlisting}
-% end_ohpc_run
+%%% % begin_ohpc_run
+%%% % ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
+%%% \begin{lstlisting}[language=bash,keywords={}]
+%%% [sms](*\#*) zypper addrepo ${ohpc_repo}
+%%% [sms](*\#*) zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
+%%% \end{lstlisting}
+%%% % end_ohpc_run
 
 % Dev testing for Factory
 %[sms](*\#*) zypper addrepo $OpenHPC_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
