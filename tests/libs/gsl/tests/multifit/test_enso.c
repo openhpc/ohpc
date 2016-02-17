@@ -1,23 +1,14 @@
-const size_t enso_N = 168;
-const size_t enso_P = 9;
+#define enso_N       168
+#define enso_P       9
 
-double enso_x0[9] = { 10.0, 3.0, 0.5, 44.0, -1.5, 0.5, 26.0, 0.1, 1.5 };
+#define enso_NTRIES  1
 
-double enso_x[9] = {
-  1.0510749193E+01, 
-  3.0762128085E+00,
-  5.3280138227E-01,
-  4.4311088700E+01,
- -1.6231428586E+00,
-  5.2554493756E-01,
-  2.6887614440E+01,
-  2.1232288488E-01,
-  1.4966870418E+00
-};
+static double enso_x0[enso_P] = { 10.0, 3.0, 0.5, 44.0, -1.5, 0.5, 26.0, 0.1, 1.5 };
 
-double enso_sumsq = 7.8853978668E+02;
 
-double enso_sigma[9] = {
+static double enso_epsrel = 1.0e-3;
+
+static double enso_sigma[enso_P] = {
  1.7488832467E-01,
  2.4310052139E-01,
  2.4354686618E-01,
@@ -29,7 +20,7 @@ double enso_sigma[9] = {
  2.5434468893E-01
 };
 
-double enso_F[168] = {
+static double enso_F[enso_N] = {
     12.90000, 
     11.30000, 
     10.60000, 
@@ -200,19 +191,41 @@ double enso_F[168] = {
     14.80000
 };
 
+static void
+enso_checksol(const double x[], const double sumsq,
+              const double epsrel, const char *sname,
+              const char *pname)
+{
+  size_t i;
+  const double sumsq_exact = 7.8853978668E+02;
+  const double enso_x[enso_P] = {
+    1.0510749193E+01, 3.0762128085E+00, 5.3280138227E-01,
+    4.4311088700E+01, -1.6231428586E+00, 5.2554493756E-01,
+    2.6887614440E+01, 2.1232288488E-01, 1.4966870418E+00 };
 
-int
+  gsl_test_rel(sumsq, sumsq_exact, epsrel, "%s/%s sumsq",
+               sname, pname);
+
+  for (i = 0; i < enso_P; ++i)
+    {
+      gsl_test_rel(x[i], enso_x[i], epsrel, "%s/%s i=%zu",
+                   sname, pname, i);
+    }
+}
+
+
+static int
 enso_f (const gsl_vector * x, void *params, gsl_vector * f)
 {
-  double b[9];
+  double b[enso_P];
   size_t i;
 
-  for (i = 0; i < 9; i++)
+  for (i = 0; i < enso_P; i++)
     {
       b[i] = gsl_vector_get(x, i);
     }
 
-  for (i = 0; i < 168; i++)
+  for (i = 0; i < enso_N; i++)
     {
       double t = (i + 1.0);
       double y;
@@ -230,18 +243,18 @@ enso_f (const gsl_vector * x, void *params, gsl_vector * f)
   return GSL_SUCCESS;
 }
 
-int
+static int
 enso_df (const gsl_vector * x, void *params, gsl_matrix * df)
 {
-  double b[9];
+  double b[enso_P];
   size_t i;
 
-  for (i = 0; i < 9; i++)
+  for (i = 0; i < enso_P; i++)
     {
       b[i] = gsl_vector_get(x, i);
     }
 
-  for (i = 0; i < 168; i++)
+  for (i = 0; i < enso_N; i++)
     {
       double t = (i + 1.0);
 
@@ -263,17 +276,25 @@ enso_df (const gsl_vector * x, void *params, gsl_matrix * df)
   return GSL_SUCCESS;
 }
 
-int
-enso_fdf (const gsl_vector * x, void *params,
-           gsl_vector * f, gsl_matrix * df)
+static gsl_multifit_function_fdf enso_func =
 {
-  enso_f (x, params, f);
-  enso_df (x, params, df);
+  &enso_f,
+  &enso_df,
+  NULL,
+  enso_N,
+  enso_P,
+  NULL,
+  0,
+  0
+};
 
-  return GSL_SUCCESS;
-}
-
-
-
-
-
+static test_fdf_problem enso_problem =
+{
+  "nist-ENSO",
+  enso_x0,
+  enso_sigma,
+  &enso_epsrel,
+  enso_NTRIES,
+  &enso_checksol,
+  &enso_func
+};

@@ -43,10 +43,10 @@ int
 main (void)
 {
   gsl_function F_sin, F_cos, F_func1, F_func2, F_func3, F_func4,
-    F_func5, F_func6;
+	  F_func5, F_func6;
   
   gsl_function_fdf FDF_sin, FDF_cos, FDF_func1, FDF_func2, FDF_func3, FDF_func4,
-    FDF_func5, FDF_func6;
+	  FDF_func5, FDF_func6, FDF_func7;
 
   const gsl_root_fsolver_type * fsolver[4] ;
   const gsl_root_fdfsolver_type * fdfsolver[4] ;
@@ -83,6 +83,7 @@ main (void)
   FDF_func4 = create_fdf (func4, func4_df, func4_fdf) ;
   FDF_func5 = create_fdf (func5, func5_df, func5_fdf) ;
   FDF_func6 = create_fdf (func6, func6_df, func6_fdf) ;
+  FDF_func7 = create_fdf(func7, func7_df, func7_fdf) ;
 
   gsl_set_error_handler (&my_error_handler);
 
@@ -118,7 +119,8 @@ main (void)
       test_fdf (*S,"x exp(-x) {-2}", &FDF_func4, -2.0, 0.0);
       test_fdf_e (*S,"max iterations x -> +Inf, x exp(-x) {2}", &FDF_func4, 2.0, 0.0);
       test_fdf_e (*S,"max iterations x -> -Inf, 1/(1 + exp(-x)) {0}", &FDF_func5, 0.0, 0.0);
-    }
+	  test_fdf(*S, "-pi * x + e {1.5}", &FDF_func7, 1.5, M_E / M_PI);
+  }
 
   test_fdf (gsl_root_fdfsolver_steffenson,
             "(x - 1)^7 {0.9}", &FDF_func6, 0.9, 1.0);    

@@ -1,21 +1,15 @@
-const size_t kirby2_N = 151;
-const size_t kirby2_P = 5;
+#define kirby2_N       151
+#define kirby2_P       5
 
-/* double kirby2_x0[5] = { 2, -0.1, 0.003, -0.001, 0.00001 }; */
+#define kirby2_NTRIES  1
 
-double kirby2_x0[5] = { 1.5, -0.15, 0.0025, -0.0015, 0.00002 }; 
+/* double kirby2_x0[kirby2_P] = { 2, -0.1, 0.003, -0.001, 0.00001 }; */
 
-double kirby2_x[5] = {
-  1.6745063063E+00,
-  -1.3927397867E-01,
-  2.5961181191E-03,
-  -1.7241811870E-03,
-  2.1664802578E-05
-};
+static double kirby2_x0[kirby2_P] = { 1.5, -0.15, 0.0025, -0.0015, 0.00002 }; 
 
-double kirby2_sumsq = 3.9050739624E+00;
+static double kirby2_epsrel = 1.0e-5;
 
-double kirby2_sigma[5] = {
+static double kirby2_sigma[kirby2_P] = {
   8.7989634338E-02,
   4.1182041386E-03,
   4.1856520458E-05,
@@ -23,7 +17,7 @@ double kirby2_sigma[5] = {
   2.0129761919E-07
 };
 
-double kirby2_F1[151] = {
+static double kirby2_F1[kirby2_N] = {
        0.0082E0,
        0.0112E0,
        0.0149E0,
@@ -178,7 +172,7 @@ double kirby2_F1[151] = {
 };
 
 
-double kirby2_F0[151] = {
+static double kirby2_F0[kirby2_N] = {
     9.65E0,
    10.74E0,
    11.81E0,
@@ -332,19 +326,39 @@ double kirby2_F0[151] = {
   371.30E0
 };
 
+static void
+kirby2_checksol(const double x[], const double sumsq,
+                const double epsrel, const char *sname,
+                const char *pname)
+{
+  size_t i;
+  const double sumsq_exact = 3.9050739624E+00;
+  const double kirby2_x[kirby2_P] = {
+    1.6745063063E+00, -1.3927397867E-01, 2.5961181191E-03,
+   -1.7241811870E-03, 2.1664802578E-05 };
 
-int
+  gsl_test_rel(sumsq, sumsq_exact, epsrel, "%s/%s sumsq",
+               sname, pname);
+
+  for (i = 0; i < kirby2_P; ++i)
+    {
+      gsl_test_rel(x[i], kirby2_x[i], epsrel, "%s/%s i=%zu",
+                   sname, pname, i);
+    }
+}
+
+static int
 kirby2_f (const gsl_vector * x, void *params, gsl_vector * f)
 {
-  double b[5];
+  double b[kirby2_P];
   size_t i;
 
-  for (i = 0; i < 5; i++)
+  for (i = 0; i < kirby2_P; i++)
     {
       b[i] = gsl_vector_get(x, i);
     }
 
-  for (i = 0; i < 151; i++)
+  for (i = 0; i < kirby2_N; i++)
     {
       double x = kirby2_F0[i];
       double y = ((b[0] + x* (b[1]  + x * b[2]))
@@ -355,18 +369,18 @@ kirby2_f (const gsl_vector * x, void *params, gsl_vector * f)
   return GSL_SUCCESS;
 }
 
-int
+static int
 kirby2_df (const gsl_vector * x, void *params, gsl_matrix * df)
 {
-  double b[5];
+  double b[kirby2_P];
   size_t i;
 
-  for (i = 0; i < 5; i++)
+  for (i = 0; i < kirby2_P; i++)
     {
       b[i] = gsl_vector_get(x, i);
     }
 
-  for (i = 0; i < 151; i++)
+  for (i = 0; i < kirby2_N; i++)
     {
       double x = kirby2_F0[i];
       double u = (b[0] + x*(b[1] + x*b[2]));
@@ -381,12 +395,25 @@ kirby2_df (const gsl_vector * x, void *params, gsl_matrix * df)
   return GSL_SUCCESS;
 }
 
-int
-kirby2_fdf (const gsl_vector * x, void *params,
-           gsl_vector * f, gsl_matrix * df)
+static gsl_multifit_function_fdf kirby2_func =
 {
-  kirby2_f (x, params, f);
-  kirby2_df (x, params, df);
+  &kirby2_f,
+  &kirby2_df,
+  NULL,
+  kirby2_N,
+  kirby2_P,
+  NULL,
+  0,
+  0
+};
 
-  return GSL_SUCCESS;
-}
+static test_fdf_problem kirby2_problem =
+{
+  "nist-kirby2",
+  kirby2_x0,
+  kirby2_sigma,
+  &kirby2_epsrel,
+  kirby2_NTRIES,
+  &kirby2_checksol,
+  &kirby2_func
+};

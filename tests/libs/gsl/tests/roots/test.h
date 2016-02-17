@@ -127,3 +127,12 @@ double
 
 void
   cos_fdf (double x, void * p, double *y, double *yprime);
+
+double
+func7(double x, void * p);
+
+double
+func7_df(double x, void * p);
+
+void
+func7_fdf(double x, void * p, double *y, double *yprime);

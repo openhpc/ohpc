@@ -418,7 +418,6 @@ void
 FUNCTION (test, ops) (const size_t M, const size_t N)
 {
   size_t i, j;
-  size_t k = 0;
   
   TYPE (gsl_matrix) * a = FUNCTION (gsl_matrix, calloc) (M, N);
   TYPE (gsl_matrix) * b = FUNCTION (gsl_matrix, calloc) (M, N);
@@ -581,7 +580,7 @@ FUNCTION (test, ops) (const size_t M, const size_t N)
           {
             BASE r = FUNCTION(gsl_matrix,get) (m,i,j);
             BASE x = FUNCTION(gsl_matrix,get) (a,i,j);
-            BASE y = (i == j) ? (x + 5.0) : x;
+            BASE y = (i == j) ? (x + (ATOMIC) 5.0) : x;
             if (fabs(r - y) > 2 * GSL_FLT_EPSILON * fabs(y))
               status = 1;
           }
@@ -623,8 +622,16 @@ FUNCTION (test, text) (const size_t M, const size_t N)
   size_t i, j;
   int k = 0;
 
+  char filename[] = "test.XXXXXX";
+#if !defined( _WIN32 )
+  int fd = mkstemp(filename);
+#else
+  char * fd = _mktemp(filename);
+# define fdopen fopen
+#endif
+
   {
-    FILE *f = fopen ("test.txt", "w");
+    FILE *f = fdopen(fd, "w");
 
     for (i = 0; i < M; i++)
       {
@@ -640,7 +647,7 @@ FUNCTION (test, text) (const size_t M, const size_t N)
   }
 
   {
-    FILE *f = fopen ("test.txt", "r");
+    FILE *f = fopen (filename, "r");
     TYPE (gsl_matrix) * mm = FUNCTION (gsl_matrix, alloc) (M, N);
     status = 0;
 
@@ -662,6 +669,8 @@ FUNCTION (test, text) (const size_t M, const size_t N)
     FUNCTION (gsl_matrix, free) (mm);
   }
 
+  unlink(filename);
+
   FUNCTION (gsl_matrix, free) (m);
 }
 #endif
@@ -674,8 +683,16 @@ FUNCTION (test, binary) (const size_t M, const size_t N)
   size_t i, j;
   size_t k = 0;
 
+  char filename[] = "test.XXXXXX";
+#if !defined( _WIN32 )
+  int fd = mkstemp(filename);
+#else
+  char * fd = _mktemp(filename);
+# define fdopen fopen
+#endif
+
   {
-    FILE *f = fopen ("test.dat", "wb");
+    FILE *f = fdopen(fd, "wb");
     k = 0;
     for (i = 0; i < M; i++)
       {
@@ -691,7 +708,7 @@ FUNCTION (test, binary) (const size_t M, const size_t N)
   }
 
   {
-    FILE *f = fopen ("test.dat", "rb");
+    FILE *f = fopen (filename, "rb");
     TYPE (gsl_matrix) * mm = FUNCTION (gsl_matrix, alloc) (M, N);
     status = 0;
 
@@ -713,6 +730,8 @@ FUNCTION (test, binary) (const size_t M, const size_t N)
     FUNCTION (gsl_matrix, free) (mm);
   }
 
+  unlink(filename);
+
   FUNCTION (gsl_matrix, free) (m);
 }
 
@@ -725,8 +744,16 @@ FUNCTION (test, binary_noncontiguous) (const size_t M, const size_t N)
   size_t i, j;
   size_t k = 0;
 
+  char filename[] = "test.XXXXXX";
+#if !defined( _WIN32 )
+  int fd = mkstemp(filename);
+#else
+  char * fd = _mktemp(filename);
+# define fdopen fopen
+#endif
+
   {
-    FILE *f = fopen ("test.dat", "wb");
+    FILE *f = fdopen(fd, "wb");
     k = 0;
     for (i = 0; i < M; i++)
       {
@@ -742,7 +769,7 @@ FUNCTION (test, binary_noncontiguous) (const size_t M, const size_t N)
   }
 
   {
-    FILE *f = fopen ("test.dat", "rb");
+    FILE *f = fopen (filename, "rb");
     TYPE (gsl_matrix) * ll = FUNCTION (gsl_matrix, alloc) (M+1, N+1);
     VIEW (gsl_matrix, view) mm = FUNCTION (gsl_matrix, submatrix) (ll, 0, 0, M, N);
     status = 0;
@@ -764,6 +791,8 @@ FUNCTION (test, binary_noncontiguous) (const size_t M, const size_t N)
     fclose (f);
     FUNCTION (gsl_matrix, free) (ll);
   }
+
+  unlink(filename);
 
   FUNCTION (gsl_matrix, free) (l);
 }

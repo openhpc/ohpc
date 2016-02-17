@@ -200,18 +200,3 @@ nelson_df (const gsl_vector * x, void *params, gsl_matrix * df)
 
   return GSL_SUCCESS;
 }
-
-int
-nelson_fdf (const gsl_vector * x, void *params,
-           gsl_vector * f, gsl_matrix * df)
-{
-  nelson_f (x, params, f);
-  nelson_df (x, params, df);
-
-  return GSL_SUCCESS;
-}
-
-
-
-
-

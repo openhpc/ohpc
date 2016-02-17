@@ -563,7 +563,7 @@ main (void)
     s = gsl_isnan (-inf);
     gsl_test_int (s, 0, "gsl_isnan(-inf)");
 
-    s = gsl_isnan (nan);
+    s = gsl_isnan (nan) != 0;
     gsl_test_int (s, 1, "gsl_isnan(nan)");
 
 

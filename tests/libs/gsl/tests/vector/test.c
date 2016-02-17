@@ -19,12 +19,18 @@
 
 #include <config.h>
 
+#if defined( _MSC_VER ) && defined( GSL_DLL )
+#undef inline
+#define inline __forceinline 
+#endif
+
 #if (!GSL_RANGE_CHECK) && defined(HAVE_INLINE)
 #undef GSL_RANGE_CHECK
 #define GSL_RANGE_CHECK 1
 #endif
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <gsl/gsl_math.h>

@@ -111,7 +111,6 @@ test_longley ()
                        &diag.vector, &exp_sd.vector,
                        1.0, 1.0, 1.0);
 
-
   /* test weighted least squares */
   {
     size_t i, j;

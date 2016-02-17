@@ -2288,7 +2288,7 @@ int test_LQ_update(void)
   gsl_test(f, "  LQ_update m(3,5)");
   s += f;
 
-  f = test_LQ_update_dim(m53, 2 * 512.0 * GSL_DBL_EPSILON);
+  f = test_LQ_update_dim(m53, 2 * 2048.0 * GSL_DBL_EPSILON);
   gsl_test(f, "  LQ_update m(5,3)");
   s += f;
 

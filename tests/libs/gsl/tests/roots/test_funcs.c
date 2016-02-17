@@ -227,3 +227,22 @@ cos_fdf (double x, void * p, double *y, double *yprime)
   *y = cos (x);
   *yprime = -sin (x);
 }
+
+/* linear function to test that solvers exit correctly 
+   when entered with an exact root */
+
+double func7(double x, void * p)
+{
+	return -M_PI * x + M_E;
+}
+
+double func7_df(double x, void * p)
+{
+	return -M_PI;
+}
+
+void func7_fdf(double x, void * p, double *f, double *df)
+{
+	*f = func7(x, p);
+	*df = func7_df(x, p);
+}

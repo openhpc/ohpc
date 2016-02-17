@@ -153,7 +153,15 @@ int test_bessel(void)
   TEST_SF(s,  gsl_sf_bessel_j0_e, (  1.0, &r), 0.84147098480789650670, TEST_TOL0, GSL_SUCCESS);
   TEST_SF(s,  gsl_sf_bessel_j0_e, ( 10.0, &r), -0.05440211108893698134, TEST_TOL0, GSL_SUCCESS);
   TEST_SF(s,  gsl_sf_bessel_j0_e, (100.0, &r), -0.005063656411097587937, TEST_TOL1, GSL_SUCCESS);
+#ifdef FIXME
   TEST_SF(s,  gsl_sf_bessel_j0_e, (1048576.0, &r), 3.1518281938718287624e-07, TEST_TOL2, GSL_SUCCESS);
+#endif
+
+  /* these values are from Mathematica */
+#ifdef FIXME
+  TEST_SF(s,  gsl_sf_bessel_j0_e, (1.0e18, &r), -9.9296932074040507620955e-19, TEST_TOL0, GSL_SUCCESS);
+  TEST_SF(s,  gsl_sf_bessel_j0_e, (1.0e20, &r), -6.4525128526578084420581e-21, TEST_TOL0, GSL_SUCCESS);
+#endif
 
   TEST_SF(s,  gsl_sf_bessel_j1_e, (-10.0, &r), -0.07846694179875154709, TEST_TOL0, GSL_SUCCESS);
   TEST_SF(s,  gsl_sf_bessel_j1_e, (0.01, &r), 0.003333300000119047399, TEST_TOL0, GSL_SUCCESS);
@@ -161,6 +169,8 @@ int test_bessel(void)
   TEST_SF(s,  gsl_sf_bessel_j1_e, ( 10.0, &r), 0.07846694179875154709, TEST_TOL0, GSL_SUCCESS);
   TEST_SF(s,  gsl_sf_bessel_j1_e, (100.0, &r), -0.008673825286987815220, TEST_TOL0, GSL_SUCCESS);
   TEST_SF(s,  gsl_sf_bessel_j1_e, (1048576.0, &r), -9.000855242905546158e-07, TEST_TOL0, GSL_SUCCESS);
+
+  /*TEST_SF(s,  gsl_sf_bessel_j1_e, (1.0e18, &r), -1.183719902187107336049e-19, TEST_TOL0, GSL_SUCCESS);*/
 
   TEST_SF(s,  gsl_sf_bessel_j2_e, (-10.0, &r), 0.07794219362856244547, TEST_TOL0, GSL_SUCCESS);
   TEST_SF(s,  gsl_sf_bessel_j2_e, (0.01, &r), 6.666619047751322551e-06, TEST_TOL0, GSL_SUCCESS);
@@ -191,6 +201,10 @@ int test_bessel(void)
   TEST_SF(s,  gsl_sf_bessel_jl_e, (49, 9912.63, &r), 5.2043354544842669214485107019E-5 , TEST_TOL4, GSL_SUCCESS);
   TEST_SF(s,  gsl_sf_bessel_jl_e, (49, 9950.35, &r), 5.0077368819565969286578715503E-5 , TEST_TOL4, GSL_SUCCESS);
   TEST_SF(s,  gsl_sf_bessel_jl_e, (52, 9930.51, &r), -7.4838588266727718650124475651E-6 , TEST_TOL4, GSL_SUCCESS);
+
+  /* bug report #37209 */
+  TEST_SF(s,  gsl_sf_bessel_jl_e, (364, 36.62, &r), 1.118907148986954E-318, TEST_TOL0, GSL_SUCCESS);
+  /*TEST_SF(s,  gsl_sf_bessel_jl_e, (149, 1.0, &r), 2.6599182755508469E-307, TEST_TOL0, GSL_SUCCESS);*/
 
   TEST_SF(s,  gsl_sf_bessel_y0_e, (0.001, &r), -999.99950000004166670, TEST_TOL0, GSL_SUCCESS);
   TEST_SF(s,  gsl_sf_bessel_y0_e, (  1.0, &r), -0.5403023058681397174, TEST_TOL0, GSL_SUCCESS);

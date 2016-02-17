@@ -3,7 +3,7 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT([gsl], [1.16], [karl.w.schulz@intel.com])
+AC_INIT([gsl], [2.1], [karl.w.schulz@intel.com])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_HEADERS([config.h])
@@ -72,7 +72,8 @@ tests/cblas/Makefile tests/linalg/Makefile tests/eigen/Makefile \
 tests/permutation/Makefile tests/combination/Makefile tests/multiset/Makefile \
 tests/sort/Makefile tests/complex/Makefile tests/diff/Makefile \
 tests/deriv/Makefile tests/cheb/Makefile tests/cdf/Makefile \
-tests/wavelet/Makefile)
+tests/wavelet/Makefile tests/multilarge/Makefile tests/rstat/Makefile \
+tests/spblas/Makefile tests/splinalg/Makefile tests/spmatrix/Makefile)
 
 # Configure
 AC_OUTPUT()
