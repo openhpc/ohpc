@@ -320,13 +320,6 @@ example configuration.
 
 # Identify resource manager hostname on master host
 [sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
-\end{lstlisting}
-% end_ohpc_run
-
-% begin_ohpc_run
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Identify resource manager hostname on master host
-[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 
 # Export /home and OpenHPC public packages from master server
 [sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
