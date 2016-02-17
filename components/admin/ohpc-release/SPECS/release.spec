@@ -51,6 +51,7 @@ EOF
 %define __repodir /etc/zypp/repos.d
 %else
 %define __repodir /etc/yum.repos.d
+Requires: epel-release
 %endif
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{__repodir}
