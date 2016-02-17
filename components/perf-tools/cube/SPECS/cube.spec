@@ -71,7 +71,7 @@ export BUILDROOT=%buildroot%{install_path}
     -prefix=/tmp/%{install_path} \
 
 make install
-make exports
+#make exports
 
 
 rm -rf %buildroot
