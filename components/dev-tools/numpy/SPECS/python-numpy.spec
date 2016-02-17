@@ -56,11 +56,10 @@ DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          ohpc/dev-tools
-Source0:        http://sourceforge.net/projects/numpy/files/NumPy/1.9.2/numpy-1.9.2.tar.gz
+Source0:        http://sourceforge.net/projects/numpy/files/NumPy/1.10.2/numpy-1.10.2.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
 Patch1:         numpy-buildfix.patch
-Patch2:         numpy-intelc.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  python-devel
 Requires:       python >= %{py_ver}
@@ -94,7 +93,6 @@ basic linear algebra and random number generation.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
-%patch2 -p1
 
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
