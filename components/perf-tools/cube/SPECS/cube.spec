@@ -111,7 +111,7 @@ proc ModulesHelp { } {
 }
 module-whatis "Name: %{pname}"
 module-whatis "Version: %{version}"
-module-whatis "Category: performance tool"
+module-whatis "Category: performance tools"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
