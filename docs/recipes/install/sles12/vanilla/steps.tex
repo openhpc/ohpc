@@ -334,7 +334,7 @@ example configuration.
 [sms](*\#*) exportfs -a
 [sms](*\#*) systemctl restart nfsserver
 
-# Enable NTP time service on computes and identify {\em master} host as local NTP server
+# Enable NTP time service on computes and identify master host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
