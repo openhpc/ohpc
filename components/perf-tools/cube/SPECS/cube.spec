@@ -17,7 +17,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name: %{pname}%{PROJ_DELIM}
 
 Version:   4.3.3
 Release:   1%{?dist}
@@ -98,21 +98,20 @@ popd
 
 
 # OpenHPC module file
-%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
     puts stderr " "
-    puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-    puts stderr "toolchain and the %{mpi_family} MPI stack."
+    puts stderr "This module loads the %{pname} tool"
     puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Name: %{pname}"
 module-whatis "Version: %{version}"
-module-whatis "Category: runtime library"
+module-whatis "Category: performance tool"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
@@ -129,22 +128,9 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded papi]  } {
-        module load papi
-    }
-    if {  ![is-loaded pdtoolkit]  } {
-        module load pdtoolkit
-    }
-}
-
-if [ module-info mode remove ] {
-    module unload pdtoolkit
-}
-
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -158,6 +144,6 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_HOME}
 %{OHPC_PUB}
-%doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
+%doc ChangeLog AUTHORS COPYING INSTALL README*
 
 %changelog
