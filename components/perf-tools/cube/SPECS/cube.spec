@@ -34,13 +34,13 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 
 BuildRequires: qt4-devel
-Requires: qt4
-BuildRequires: qt4-devel zlib-devel
+Requires: qt qt-x11
+BuildRequires: qt4-devel zlib-devel dbus-devel
 
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{pname}/%version
+%define install_path %{OHPC_PUB}/%{pname}/%version
 
 %description
  Cube, which is used as performance report explorer for Scalasca and Score-P,
