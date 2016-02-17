@@ -105,7 +105,7 @@ popd
 proc ModulesHelp { } {
 
     puts stderr " "
-    puts stderr "This module loads the %{pname} tool"
+    puts stderr "This module loads the Cube performance reporter tool."
     puts stderr "\nVersion %{version}\n"
 
 }
@@ -121,6 +121,7 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    CLASSPATH           %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
