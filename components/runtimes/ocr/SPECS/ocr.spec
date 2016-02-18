@@ -277,10 +277,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{install_path}/bin/ocrrun_x86
-%{install_path}/lib/libocr_x86.*
-%config %{install_path}/share/ocr/config/x86
-%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
-%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{OHPC_HOME}
+#%{install_path}/bin/ocrrun_x86
+#%{install_path}/lib/libocr_x86.*
+#%config %{install_path}/share/ocr/config/x86
+#%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+#%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 
 %changelog
