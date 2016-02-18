@@ -28,7 +28,7 @@ Group:     ohpc/compiler-families
 URL:       http://gcc.gnu.org/
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.bz2
-Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}a.tar.bz2
+Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Source2:   ftp://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
 #Source3:   http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.gz
 Source3:   http://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
