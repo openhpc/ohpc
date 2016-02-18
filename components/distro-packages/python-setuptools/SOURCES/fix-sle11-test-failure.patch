@@ -1,12 +1,6 @@
-This fixes a test failure on SLE11SP3:
-Error is:
-AssertionError: error: must supply either home or prefix/exec-prefix -- not both
-
-Index: setuptools-15.0/setuptools/tests/test_egg_info.py
-===================================================================
---- setuptools-15.0.orig/setuptools/tests/test_egg_info.py
-+++ setuptools-15.0/setuptools/tests/test_egg_info.py
-@@ -61,7 +61,7 @@ class TestEggInfo:
+--- setuptools-18.8/setuptools/tests/test_egg_info.py	2015-11-30 08:24:31.000000000 -0800
++++ setuptools-18.8.patch/setuptools/tests/test_egg_info.py	2016-02-18 10:35:52.538524800 -0800
+@@ -62,7 +62,7 @@
          )
          cmd = [
              'install',

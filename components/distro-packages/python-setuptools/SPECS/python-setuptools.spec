@@ -27,7 +27,7 @@
 
 
 Name:           python-setuptools
-Version:        18.0.1
+Version:        18.8
 Release:        62.1
 Url:            http://pypi.python.org/pypi/setuptools
 Summary:        Easily download, build, install, upgrade, and uninstall Python packages

@@ -1,8 +1,6 @@
-Index: setuptools-15.0/setuptools/command/easy_install.py
-===================================================================
---- setuptools-15.0.orig/setuptools/command/easy_install.py
-+++ setuptools-15.0/setuptools/command/easy_install.py
-@@ -415,6 +415,13 @@ class easy_install(Command):
+--- setuptools-18.8/setuptools/command/easy_install.py	2015-12-01 19:00:35.000000000 -0800
++++ setuptools-18.8.patch/setuptools/command/easy_install.py	2016-02-18 10:36:17.433544800 -0800
+@@ -425,6 +425,13 @@
          instdir = normalize_path(self.install_dir)
          pth_file = os.path.join(instdir, 'easy-install.pth')
  
