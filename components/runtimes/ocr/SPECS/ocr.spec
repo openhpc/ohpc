@@ -74,7 +74,7 @@ Release:   1
 License:   BSD
 Group:     ohpc/runtimes
 URL:       https://xstack.exascale-tech.com/wiki
-Source0:   https://xstack.exascale-tech.com/git/public/snapshots/ocr-OCRv%{version}_ohpc.tbz2
+Source0:   https://xstack.exascale-tech.com/git/public/snapshots/ocr-refs/tags/OCRv%{version}_ohpc.tbz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -140,7 +140,7 @@ This version is for clusters using MPI.
 
 %prep
 
-%setup -q -n %{pname}
+%setup -q -n ocr-OCRv%{version}_ohpc
 
 %build
 cd ocr/build
