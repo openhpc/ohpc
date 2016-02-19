@@ -28,11 +28,17 @@ for compiler in gnu ; do
     module load gsl             || exit 1
 
     ./configure                 || exit 1
-    make clean >& /dev/null     || exit 1
-    make -k check               
+    make clean     >& /dev/null || exit 1
+    pushd tests    >& /dev/null || exit 1
+    ./run
 
-    save_logs_compiler_family tests/ohpc_module $compiler
+    for tdir in *; do
+	if [ -d "$tdir" ]; then
+	    save_logs_compiler_family $tdir $compiler
+	fi
+    done
 
+    popd           >& /dev/null || exit 1
     make distclean >& /dev/null
 
 done

@@ -1,0 +1,18 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+testname="libs/GSL"
+
+@test "[$testname] build GSL test executables ($LMOD_FAMILY_COMPILER)" {
+
+    make clean           >& /dev/null
+    make -k check TESTS= >& /dev/null
+
+}
