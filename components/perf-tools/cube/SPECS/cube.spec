@@ -32,10 +32,14 @@ Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-
-BuildRequires: qt4-devel
-Requires: qt qt-x11
+#Multiplaform
+%if 0%{?suse_version}
+BuildRequires: libqt4-devel dbus-1-devel
+Requires: libqt4
+%else
 BuildRequires: qt4-devel zlib-devel dbus-devel
+Requires: qt qt-x11
+%endif
 
 %define debug_package %{nil}
 
