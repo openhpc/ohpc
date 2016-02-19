@@ -46,24 +46,10 @@ BuildRequires: intel_licenses
 %define pname ocr
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-#
-# build options      .rpmmacros options      change to default action
-# ===============    ====================    ========================
-# --with mpi         %_with_mpi         1    build MPI OCR version
-#
-#  Allow defining --with and --without build options or %_with and %without in .rpmmacros
-#    ocr_with    builds option by default unless --without is specified
-#    ocr_without builds option iff --with specified
-#  
-%define ocr_with_opt() %{expand:%%{!?_without_%{1}:%%global ocr_with_%{1} 1}}
-%define ocr_without_opt() %{expand:%%{?_with_%{1}:%%global ocr_with_%{1} 1}}
-#  
-#  with helper macro to test for ocr_with_*
-#
-%define ocr_with() %{expand:%%{?ocr_with_%{1}:1}%%{!?ocr_with_%{1}:0}}
-   
-#  Options that are off by default (enable with --with <opt>)
-%ocr_without_opt mpi
+# Build options
+
+# --with mpi (enabled by default)
+%bcond_without mpi
 
 Summary:   Open Community Runtime (OCR) for shared memory
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -105,7 +91,7 @@ Group:   ohpc/runtimes
 OCR support files and scripts. This package is needed to both build and run
 OCR applications. The scripts are installed in <prefix>/share/ocr/scripts
 
-%if %{ocr_with mpi}
+%if %{with mpi}
 %package -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 # MPI stuff for MPI version
 # MPI dependencies
@@ -133,7 +119,7 @@ efficiency, programmability, and reliability of their work
 while maintaining app performance.
 
 This version is for clusters using MPI.
-%endif # End of %{ocr_with mpi}
+%endif # End of {with mpi}
 %define debug_package %{nil}
 
 %prep
@@ -151,7 +137,7 @@ export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
 OCR_TYPE=x86 make %{?_smp_mflags} all
-%if %{ocr_with mpi}
+%if %{with mpi}
 OCR_TYPE=x86-mpi make %{?_smp_mflags} all
 %endif
 
@@ -166,7 +152,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 
 mkdir -p $RPM_BUILD_ROOT/%{install_path}
 make OCR_TYPE=x86 OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} %{?_smp_mflags} install
-%if %{ocr_with mpi}
+%if %{with mpi}
 make OCR_TYPE=x86-mpi OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} %{?_smp_mflags} install
 %endif
 # Remove static libraries
@@ -213,7 +199,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%if %{ocr_with mpi}
+%if %{with mpi}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/%{version}
 #%Module1.0#####################################################################
 
@@ -270,7 +256,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{install_path}/share/ocr/scripts
 
-%if %{ocr_with mpi}
+%if %{with mpi}
 %files -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %defattr(-,root,root,-)
 %{install_path}/bin/ocrrun_mpi
