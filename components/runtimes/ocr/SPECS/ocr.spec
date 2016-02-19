@@ -13,16 +13,14 @@
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
-#%define PROJ_DELIM -ohpc
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 
-%{!?compiler_family: %define compiler_family gnu}
-# define compiler_family gnu
-%{!?mpi_family:      %define mpi_family none}
+%{!?compiler_family: %global compiler_family gnu}
+%{!?mpi_family:      %global mpi_family none}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency.
@@ -146,10 +144,8 @@ This version is for clusters using MPI.
 cd ocr/build
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
-echo $OHPC_COMPILER_FAMILY
 . %{_sourcedir}/OHPC_setup_compiler
 
-%{compiler_family}
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
