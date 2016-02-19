@@ -48,8 +48,8 @@ BuildRequires: intel_licenses
 
 # Build options
 
-# --with mpi (enabled by default)
-%bcond_without mpi
+# --with mpi (disbled by default)
+%bcond_with mpi
 
 Summary:   Open Community Runtime (OCR) for shared memory
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
