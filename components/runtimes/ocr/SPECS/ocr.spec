@@ -21,7 +21,7 @@
 # compiler_family and mpi_family variables via rpmbuild or other
 
 %{!?compiler_family: %define compiler_family gnu}
-%define compiler_family gnu
+# define compiler_family gnu
 %{!?mpi_family:      %define mpi_family none}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
