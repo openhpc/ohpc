@@ -146,6 +146,7 @@ This version is for clusters using MPI.
 cd ocr/build
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
+echo $OHPC_COMPILER_FAMILY
 . %{_sourcedir}/OHPC_setup_compiler
 
 %{compiler_family}
