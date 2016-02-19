@@ -20,7 +20,7 @@
 # compiler_family and mpi_family variables via rpmbuild or other
 
 %{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family:      %global mpi_family none}
+%{!?mpi_family:      %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency.
