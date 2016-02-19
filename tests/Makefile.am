@@ -148,6 +148,10 @@ if NETCDF_ENABLED
    TESTS += libs/netcdf/ohpc-tests/test_mpi_families
 endif
 
+if OCR_ENABLED
+   TESTS += runtimes/ocr/ohpc-tests/test_compiler_families
+endif
+
 if OPENBLAS_ENABLED
    TESTS += libs/openblas/ohpc-tests/test_compiler_families
 endif

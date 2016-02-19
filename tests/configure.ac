@@ -224,6 +224,12 @@ AC_ARG_ENABLE([oom],
    [AX_OPTION_DEFAULT(type=short,enable_oom,yes)])
 AM_CONDITIONAL(OOM_ENABLED,test "x$enable_oom" = "xyes" )
 #------------------------------------------------------------------------------------------
+# OCR
+AC_ARG_ENABLE([ocr],
+   [AS_HELP_STRING([--enable-ocr],[Enable OCR tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_ocr,yes)])
+AM_CONDITIONAL(OCR_ENABLED,test "x$enable_ocr" = "xyes" )
+#------------------------------------------------------------------------------------------
 # OPENBLAS
 AC_ARG_ENABLE([openblas],
    [AS_HELP_STRING([--enable-openblas],[Enable OPENBLAS tests (default=yes)])],[],
@@ -604,6 +610,12 @@ echo    Libraries:
        echo '    'Numpy..................... : enabled
     else
        echo '    'Numpy..................... : disabled
+    fi
+
+    if test "x$enable_ocr" = "xyes"; then
+       echo '    'OCR....................... : enabled
+    else
+       echo '    'OCR....................... : disabled
     fi
 
     if test "x$enable_openblas" = "xyes"; then
