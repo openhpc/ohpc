@@ -106,7 +106,7 @@ OCR support files and scripts. This package is needed to both build and run
 OCR applications. The scripts are installed in <prefix>/share/ocr/scripts
 
 %if %{ocr_with mpi}
-%package -n %{pname}_mpi-%{compiler_family}-%{mpi-family}%{PROJ_DELIM}
+%package -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 # MPI stuff for MPI version
 # MPI dependencies
 %if %{mpi_family} == impi
@@ -124,7 +124,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires: %{pname}-support%{PROJ_DELIM}
 Summary:   Open Community Runtime (OCR) for clusters using MPI
 Group:   ohpc/runtimes
-%description -n %{pname}_mpi-%{compiler_family}-%{mpi-family}%{PROJ_DELIM}
+%description -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 The Open Community Runtime project is creating an application
 building framework that explores new methods of high-core-count
 programming. The initial focus is on HPC applications. Its goal
@@ -271,7 +271,7 @@ rm -rf $RPM_BUILD_ROOT
 %{install_path}/share/ocr/scripts
 
 %if %{ocr_with mpi}
-%files -n %{pname}_mpi-%{compiler_family}-%{mpi-family}%{PROJ_DELIM}
+%files -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %defattr(-,root,root,-)
 %{install_path}/bin/ocrrun_mpi
 %{install_path}/lib/libocr_mpi.*
