@@ -73,7 +73,8 @@ tests/permutation/Makefile tests/combination/Makefile tests/multiset/Makefile \
 tests/sort/Makefile tests/complex/Makefile tests/diff/Makefile \
 tests/deriv/Makefile tests/cheb/Makefile tests/cdf/Makefile \
 tests/wavelet/Makefile tests/multilarge/Makefile tests/rstat/Makefile \
-tests/spblas/Makefile tests/splinalg/Makefile tests/spmatrix/Makefile)
+tests/spblas/Makefile tests/splinalg/Makefile tests/spmatrix/Makefile \
+tests/test_gsl_histogram/Makefile )
 
 # Configure
 AC_OUTPUT()
