@@ -18,7 +18,8 @@ Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   9.1.2.024
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_mod_generator.sh
+#Source2:   OHPC_mod_generator.sh
+Source2:   modfile-ohpc.input
 Release:   1
 License:   Copyright (C) 2003-2016 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
@@ -86,10 +87,14 @@ setenv          ITAC_LIB        %{package_target}/lib
 EOF
 
 # Parse shell script to derive module settings
+ 
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
-%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
-ls %{buildroot}/%{package_target}/intel64/bin/itacvars.sh
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/intel64/bin/itacvars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+
+# Parse shell script to derive module settings
+
+# %%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
+# %%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/intel64/bin/itacvars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
