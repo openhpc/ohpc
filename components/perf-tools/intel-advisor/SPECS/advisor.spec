@@ -15,7 +15,7 @@
 
 Summary:   Intel(R) Advisor XE
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   16.1.0.423501
+Version:   16.1.30.450722
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   modfile-ohpc.input
