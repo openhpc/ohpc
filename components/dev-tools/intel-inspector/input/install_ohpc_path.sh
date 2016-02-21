@@ -7,7 +7,9 @@ pubdir=/opt/${delim}/pub
 modscanner=../../../OHPC_mod_generator.sh
 
 version=16.1.0.423441   # 1.0
-release=inspector_xe_2016
+version=16.1.2.450824   # 1.1
+
+release=inspector_xe_2016_update2
 relocate_ver=inspector_xe_20$version
 
 match_keys=intel-inspector
