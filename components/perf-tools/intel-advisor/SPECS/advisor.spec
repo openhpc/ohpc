@@ -20,7 +20,7 @@ Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
 Source2:   OHPC_mod_generator.sh
 Release:   1
-License:   Copyright (C) 2015 Intel Corporation. All rights reserved.
+License:   Copyright (C) 2016 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
 URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     ohpc/perf-tools

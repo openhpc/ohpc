@@ -18,9 +18,10 @@ Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   9.1.2.024
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_mod_generator.sh
+#Source2:   OHPC_mod_generator.sh
+Source2:   modfile-ohpc.input
 Release:   1
-License:   Copyright (C) 2003-2015 Intel Corporation. All rights reserved.
+License:   Copyright (C) 2003-2016 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
 URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     ohpc/perf-tools
@@ -84,6 +85,11 @@ setenv          ITAC_BIN        %{package_target}/bin
 setenv          ITAC_LIB        %{package_target}/lib
 
 EOF
+
+# Parse shell script to derive module settings
+ 
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+
 
 # Parse shell script to derive module settings
 
