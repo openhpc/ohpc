@@ -6,8 +6,10 @@ delim=ohpc
 pubdir=/opt/${delim}/pub
 modscanner=../../../OHPC_mod_generator.sh
 
-version=16.1.1.434111 # 1.0
-release=vtune_amplifier_xe_2016_update1
+#version=16.1.1.434111 # 1.0
+version=16.2.0.444464 # 1.1
+
+release=vtune_amplifier_xe_2016_update2
 relocate_ver=vtune_amplifier_xe_20$version
 
 skip_arch=i486.rpm
