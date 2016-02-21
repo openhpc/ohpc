@@ -6,8 +6,8 @@ delim=ohpc
 pubdir=/opt/${delim}/pub
 modscanner=../../../OHPC_mod_generator.sh
 
-version=16.1.0.423501
-release=advisor_xe_2016
+version=16.1.30.450722
+release=advisor_xe_2016_update3
 relocate_ver=advisor_xe_20$version
 
 match_keys='intel-advisor-xe'
