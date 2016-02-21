@@ -18,7 +18,7 @@ Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   16.1.30.450722
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   modfile-ohpc.input
+Source2:   OHPC_mod_generator.sh
 Release:   1
 License:   Copyright (C) 2015 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
@@ -39,7 +39,7 @@ AutoReq:   no
 
 %description
 
-OpenHPC collection of the Intel(R) Adviser XE toolset for treading design and prototyping.
+OpenHPC collection of the Intel(R) Adviser XE toolset for threading design and prototyping.
 
 %prep
 
@@ -79,9 +79,10 @@ setenv          ADVISOR_LIB         %{package_target}/lib64
 prepend-path    MANPATH             %{package_target}/man
 EOF
 
-# Append with machine-generated contribution for modulefile settings
+# Parse shell script to derive module settings
 
-%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/advixe-vars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
