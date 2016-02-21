@@ -15,10 +15,10 @@
 
 Summary:   Intel(R) Trace Analyzer and Collector
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   9.1.1.017
+Version:   9.1.2.024
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   modfile-ohpc.input
+Source2:   OHPC_mod_generator.sh
 Release:   1
 License:   Copyright (C) 2003-2015 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
@@ -85,23 +85,10 @@ setenv          ITAC_LIB        %{package_target}/lib
 
 EOF
 
-# Append with machine-generated contribution for modulefile settings
+# Parse shell script to derive module settings
 
-%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
-
-
-###prepend-path    PATH            %{package_target}/bin
-###prepend-path    MANPATH         %{package_target}/man
-###prepend-path    LD_LIBRARY_PATH %{package_target}/mic/slib:%{package_target}/intel64/slib:%{package_target}/lib
-###prepend-path    CLASSPATH       %{package_target}/intel64/lib
-###
-###setenv          VT_ADD_LIBS     "-ldwarf -lelf -lvtunwind -lnsl -lm -ldl -lpthread"
-###setenv          VT_LIB_DIR      %{package_target}/intel64/lib
-###setenv          VT_ROOT         %{package_target}
-###setenv          VT_ARCH         intel64
-###setenv          VT_SLIB_DIR     %{package_target}/intel64/slib
-###
-###EOF
+%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/itacvars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
