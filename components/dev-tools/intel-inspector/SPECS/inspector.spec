@@ -15,7 +15,6 @@
 
 Summary:   Intel(R) Inspector XE
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   16.1.0.423441
 Version:   16.1.2.450824
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
