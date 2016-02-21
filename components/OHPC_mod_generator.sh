@@ -15,7 +15,7 @@ ignoreVars="^SHLVL=|^INTEL_LICENSE_FILE=|^PWD=|^_="
 
 inFile=$1
 shift
-remainArgs="$@"
+export remainArgs="$@"
 
 if [ ! -s $inFile ];then
     echo "$inFile not available locally"
@@ -32,7 +32,8 @@ unset LIBRARY_PATH
 
 MYPATH=\${PATH}
 
-source $inFile "$remainArgs" >& /dev/null
+#source $inFile "$remainArgs" >& /dev/null
+source $inFile ${remainArgs}
 
 /usr/bin/printenv | sed s!:\${MYPATH}!!
 EOF
