@@ -15,10 +15,10 @@
 
 Summary:   Intel(R) VTune(TM) Amplifier XE
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   16.1.1.434111
+Version:   16.2.0.444464
 Source0:   intel-%{pname}-amplifier%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   modfile-ohpc.input
+Source2:   OHPC_mod_generator.sh
 Release:   1
 License:   Copyright (C) 2011-2015 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
@@ -85,10 +85,11 @@ prepend-path    MANPATH         %{package_target}/man/
 setenv          LC_ALL C
 EOF
 
-# Append with machine-generated contribution for modulefile settings
-%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+# Parse shell script to derive module settings
 
-                       
+%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/amplxe-vars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
