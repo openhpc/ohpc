@@ -16,11 +16,12 @@
 Summary:   Intel(R) Inspector XE
 Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   16.1.0.423441
+Version:   16.1.2.450824
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   modfile-ohpc.input
+Source2:   OHPC_mod_generator.sh
 Release:   1
-License:   Copyright (C) 2014 Intel Corporation. All rights reserved.
+License:   Copyright (C) 2011-2016 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
 URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     ohpc/dev-tools
@@ -84,9 +85,10 @@ setenv          INSPECTOR_LIB   %{package_target}/lib64
 prepend-path    MANPATH         %{package_target}/man 
 EOF
 
-# Append with machine-generated contribution for modulefile settings
+# Parse shell script to derive module settings
 
-%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/inspxe-vars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
