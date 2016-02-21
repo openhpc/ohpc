@@ -2,21 +2,22 @@
 # machine generated from itacvars.sh
  
 setenv        MPS_INTEL_LIBITTNOTIFY64      libmps_nopapi.so
-prepend-path  MANPATH                       /opt/ohpc/pub/itac/9.1.1.017/man:/usr/local/share/man:/usr/share/man
+prepend-path  MANPATH                       /opt/ohpc/pub/itac/9.1.2.024/man:/usr/local/share/man:/usr/share/man
 setenv        VT_MPI                        impi4
 setenv        MPS_LD_PRELOAD                libmps_nopapi.so
 setenv        MPS_I_MPI_STATS_FILE          stats.txt
-prepend-path  LD_LIBRARY_PATH               /opt/ohpc/pub/itac/9.1.1.017/mic/slib:/opt/ohpc/pub/itac/9.1.1.017/intel64/slib:/opt/ohpc/pub/itac/9.1.1.017/mic/slib:/opt/ohpc/pub/itac/9.1.1.017/intel64/slib
+prepend-path  LD_LIBRARY_PATH               /opt/ohpc/pub/itac/9.1.2.024/mic/slib:/opt/ohpc/pub/itac/9.1.2.024/intel64/slib:/opt/ohpc/pub/itac/9.1.2.024/mic/slib:/opt/ohpc/pub/itac/9.1.2.024/intel64/slib
 setenv        VT_ADD_LIBS                   "-ldwarf -lelf -lvtunwind -lnsl -lm -ldl -lpthread"
-prepend-path  PATH                          /opt/ohpc/pub/itac/9.1.1.017/intel64/bin:/opt/ohpc/pub/itac/9.1.1.017/intel64/bin
+prepend-path  PATH                          /opt/ohpc/pub/itac/9.1.2.024/intel64/bin:/opt/ohpc/pub/itac/9.1.2.024/intel64/bin
 setenv        MPS_KMP_FORKJOIN_FRAMES_MODE  3
-setenv        VT_LIB_DIR                    /opt/ohpc/pub/itac/9.1.1.017/intel64/lib
-setenv        VT_ROOT                       /opt/ohpc/pub/itac/9.1.1.017
-setenv        MPS_TOOL_ROOT                 /opt/ohpc/pub/itac/9.1.1.017
-setenv        VT_SLIB_DIR                   /opt/ohpc/pub/itac/9.1.1.017/intel64/slib
+setenv        VT_LIB_DIR                    /opt/ohpc/pub/itac/9.1.2.024/intel64/lib
+setenv        VT_ROOT                       /opt/ohpc/pub/itac/9.1.2.024
+setenv        MPS_TOOL_ROOT                 /opt/ohpc/pub/itac/9.1.2.024
+setenv        VT_SLIB_DIR                   /opt/ohpc/pub/itac/9.1.2.024/intel64/slib
 setenv        VT_ARCH                       intel64
 setenv        MPS_I_MPI_STATS               20
-prepend-path  CLASSPATH                     /opt/ohpc/pub/itac/9.1.1.017/intel64/lib
+setenv        MPS_FILE_POSTFIX              _%D-%T
+prepend-path  CLASSPATH                     /opt/ohpc/pub/itac/9.1.2.024/intel64/lib
  
 # end of machine generated
  
