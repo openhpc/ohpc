@@ -88,6 +88,7 @@ EOF
 # Parse shell script to derive module settings
 
 %{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
+ls %{buildroot}/%{package_target}/intel64/bin/itacvars.sh
 %{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/intel64/bin/itacvars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
