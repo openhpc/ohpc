@@ -1,8 +1,8 @@
  
 # machine generated from advixe-vars.sh
- 
-prepend-path  PATH                 /opt/ohpc/pub/advisor/16.1.0.423501/bin64
-setenv        ADVISOR_XE_2016_DIR  /opt/ohpc/pub/advisor/16.1.0.423501
+
+prepend-path  PATH                 /opt/ohpc/pub/advisor/16.1.30.450722/bin64
+setenv        ADVISOR_XE_2016_DIR  /opt/ohpc/pub/advisor/16.1.30.450722
  
 # end of machine generated
  
