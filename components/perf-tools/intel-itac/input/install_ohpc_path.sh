@@ -6,9 +6,10 @@ delim=ohpc
 pubdir=/opt/${delim}/pub
 modscanner=../../../OHPC_mod_generator.sh
 
-version=9.1.1.017
+version=9.1.1.017  # 1.0
+version=9.1.2.024  # 1.1
 
-input_dir=l_itac_p_9.1.1.017
+input_dir=l_itac_p_${version}
 
 skip_arch=i486.rpm
 INSTALL=1
@@ -16,7 +17,7 @@ POST_UNINSTALL=1
 TARBALL=1
 
 match_keys='intel-itac|intel-ta|intel-tc'
-skip_keys='i486.rpm$'
+skip_keys='i486.rpm$|pset'
 
 installed_RPMS=""
 
@@ -31,7 +32,7 @@ for rpm in `ls $input_dir/rpm/*.rpm`; do
 
     echo $rpm | egrep -q "$match_keys" 
     if [ $? -eq 0 ];then
-        echo "detected VTUNE $rpm..."
+        echo "detected ITAC $rpm..."
     else
         continue
     fi
