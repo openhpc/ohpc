@@ -90,7 +90,7 @@ EOF
 
 # Append machine-generated module settings
  
-%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/.version.%{module_version}
 #%Module1.0#####################################################################
