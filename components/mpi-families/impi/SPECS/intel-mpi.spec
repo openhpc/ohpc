@@ -29,7 +29,7 @@ AutoReq:   no
 
 Requires:  prun%{PROJ_DELIM}
 
-%define pstudio_ver 2016.0.109 
+%define pstudio_ver 2016.2.181
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
