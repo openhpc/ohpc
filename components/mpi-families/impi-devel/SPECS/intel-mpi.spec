@@ -15,11 +15,11 @@
 
 Summary:   Intel(R) MPI Library for Linux* OS
 Name:      intel-mpi-devel%{PROJ_DELIM}
-Version:   5.1.1.109
+Version:   5.1.3.181
 Source0:   intel-impi-devel%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
 Release:   1
-License:   Intel
+License:   Intel Copyright 1999-2016
 URL:       https://software.intel.com/en-us/intel-mpi-library
 Group:     ohpc/mpi-families
 BuildArch: x86_64
