@@ -15,13 +15,13 @@
 
 Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
-Version:   16.0.109
+Version:   16.2.181
 Release:   1
 License:   Intel(R)
 URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     ohpc/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-devel%{PROJ_DELIM}-16.0.0-109.tar.gz
+Source0:   intel-compilers-devel%{PROJ_DELIM}-16.0.2-181.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
