@@ -6,8 +6,10 @@ delim=ohpc
 pubdir=/opt/${delim}/pub
 modscanner=../../../OHPC_mod_generator.sh
 
-version=5.1.1.109
-input_dir=l_mpi_p_5.1.1.109
+version=5.1.1.109  # 1.1
+version=5.1.3.181  # 1.1
+
+input_dir=l_mpi_p_${version}
 
 INSTALL=1
 TARBALL=0
@@ -37,7 +39,7 @@ for rpm in `ls $input_dir/rpm/*.rpm`; do
         continue
     fi
 
-    echo $rpm | egrep -q $runtime_keys
+    echo $rpm | egrep  $runtime_keys
     if [ $? -eq 0 ];then
         if [ $DEVEL -eq 0 ];then
             echo "  --> (runtime) $name found"
@@ -68,10 +70,10 @@ $modscanner $input > modfile-$delim.input
 if [ $TARBALL -eq 1 ];then
     if [ $DEVEL -eq 1 ];then
         echo "Building devel tarball...."
-        tar cfz intel-impi-devel-${delim}-$version.tar.gz ${OHPC_PUB}/compiler/intel
+        tar cfz intel-impi-devel-${delim}-$version.tar.gz ${pubdir}/compiler/intel
     else
         echo "Building runtime tarball...."
-        tar cfz intel-impi-${delim}-$version.tar.gz ${OHPC_PUB}/pub/compiler/intel
+        tar cfz intel-impi-${delim}-$version.tar.gz ${pubdir}/compiler/intel
     fi
 fi
 
