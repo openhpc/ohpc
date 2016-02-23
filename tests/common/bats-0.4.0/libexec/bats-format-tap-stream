@@ -135,7 +135,6 @@ finish() {
   fi
 }
 
-
 trap finish EXIT
 
 while IFS= read -r line; do

@@ -119,12 +119,12 @@ if [ "${#arguments[@]}" -eq 0 ]; then
   exit 1
 fi
 
-if [ "x$BATS_JUNIT_FORMAT" == "x1" ];then
-    xml="1"
+if [ "x$BATS_JUNIT_FORMAT" == "x1" ]; then
+  xml="1"
 fi
 
 if [ "x$BATS_USE_MKTEMP" == "x1" ]; then
-   mktemp="1"
+  mktemp="1"
 fi
 
 filenames=()
@@ -158,42 +158,42 @@ if [ -n "$xml" ]; then
   extended_syntax_flag=""
   formatter="tap-to-junit-xml"
 else
-	if [ -n "$pretty" ]; then
-	  extended_syntax_flag="-x"
-	  formatter="bats-format-tap-stream"
-	else
-	  extended_syntax_flag=""
-	  formatter="cat"
-	fi
+  if [ -n "$pretty" ]; then
+    extended_syntax_flag="-x"
+    formatter="bats-format-tap-stream"
+  else
+    extended_syntax_flag=""
+    formatter="cat"
+  fi
 fi
 
 set -o pipefail execfail
 
-if [ "$formatter" == "tap-to-junit-xml" ];then
-    if [ "x$BATS_JUNIT_GROUP" != "x" ];then
-        JUNIT_GROUP=$BATS_JUNIT_GROUP
-    else
-        JUNIT_GROUP="CMT"
-    fi
+if [ "$formatter" == "tap-to-junit-xml" ]; then
+  if [ "x$BATS_JUNIT_GROUP" != "x" ]; then
+    JUNIT_GROUP=$BATS_JUNIT_GROUP
+  else
+    JUNIT_GROUP="CMT"
+  fi
 
-    if [ "${#filenames[@]}" -eq 1 ];then
-        baseName=`basename ${filenames[@]}`
-        # john.a.westlund@intel.com
-        # if there is an error in the test execution continue processing this script so that timing data can be inserted
-        # also, add mktemp_flag
-        set +e
-        exec "$command" $count_flag $extended_syntax_flag "${filenames[@]}" | tee >(cat >&2) | tee "${baseName}.log" | "$formatter" --cmt $JUNIT_GROUP --output "${baseName}.log.xml"
-        set -e
-        # john.a.westlund@intel.com
-        # If timing is enabled fix the JUNIT xml output to include timing data
-        if [ -n "$BATS_ENABLE_TIMING" ]; then
-            fix-timings.pl -i "${baseName}.log.xml"
-        fi
-    else
-        echo "Error: Junit parsing incompatible with multiple files"
-        exit 1
+  if [ "${#filenames[@]}" -eq 1 ]; then
+    baseName=`basename ${filenames[@]}`
+    # john.a.westlund@intel.com
+    # if there is an error in the test execution continue processing this script so that timing data can be inserted
+    # also, add mktemp_flag
+    set +e
+    exec "$command" $count_flag $extended_syntax_flag "${filenames[@]}" | tee >(cat >&2) | tee "${baseName}.log" | "$formatter" --cmt $JUNIT_GROUP --output "${baseName}.log.xml"
+    set -e
+    # john.a.westlund@intel.com
+    # If timing is enabled fix the JUNIT xml output to include timing data
+    if [ -n "$BATS_ENABLE_TIMING" ]; then
+      fix-timings.pl -i "${baseName}.log.xml"
     fi
-      
+  else
+    echo "Error: Junit parsing incompatible with multiple files"
+    exit 1
+  fi
+
 else
-    exec "$command" $count_flag $extended_syntax_flag "${filenames[@]}" | "$formatter"
+  exec "$command" $count_flag $extended_syntax_flag "${filenames[@]}" | "$formatter"
 fi
