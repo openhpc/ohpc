@@ -23,8 +23,13 @@
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency.
+%if !0%{?opensuse_bs}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -61,7 +66,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        12.2.1
+Version:        12.4.2
 Release:        0
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0

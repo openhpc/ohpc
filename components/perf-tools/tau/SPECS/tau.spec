@@ -19,8 +19,13 @@
 %{!?mpi_family: %define mpi_family openmpi}
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency.
+%if !0%{?opensuse_bs}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}

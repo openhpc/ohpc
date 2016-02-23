@@ -3,14 +3,23 @@ High Performance Conjugate Gradient Benchmark (HPCG)
 ####################################################
 
 :Author: Jack Dongarra and Michael Heroux and Piotr Luszczek
-:Revision: 2.4
-:Date: June 3, 2014
+:Revision: 3.0
+:Date: November 11, 2015
+
+=================
+Clone from GitHub
+=================
+The official HPCG repository is on GitHub.com.  You may fork the repository from here:
+
+https://github.com/hpcg-benchmark/hpcg
 
 ===================
-Download and Unpack
+Download and Unpack (only if you did not clone from GitHub.com)
 ===================
 
-Retrieve the tar-gzip file, then uncompress it with::
+Retrieve the tar-gzip file, from http://hpcg-benchmark.org
+
+then uncompress it with:
 
     gunzip hpcg.tar.gz; tar -xvf hpcg.tar
 
@@ -66,7 +75,7 @@ The most important variables that need to be set in ``Make.<arch>`` are:
 
 HPCG supports in-source and out-of-source builds. In the case of the former,
 the object files and the binary reside in the same directory structure as the
-source files. There is no need for a seperate configuation step and the reader
+source files. There is no need for a seperate configuration step and the reader
 may skip the the Build section.
 
 In the latter case, a seperate directory is created to hold the object and
@@ -79,17 +88,20 @@ Next, go this new directory and use the ``configure`` script to create the
 build infrastructure:
 
     cd build
-    /path/to/hpcg/configure /path/to/setup/file
+    /path/to/hpcg/configure <arch>
 
 Notice that you have to give a absolute or relative path to the ``configure``
 shell script so that the location of the source files can be discovered
-automatically. Sample setup files are found in the hpcg/setup directory.
+automatically. 
+
+<arch> is the suffix of the setup file you created in the directory hpcg/setup.
+Sample setup files are found in the hpcg/setup directory.
 
 =====
 Build
 =====
 
-For the in-source builds, while in the top-level directory, simply type::
+For in-source builds, while in the top-level directory, simply type::
 
     make path/to/setup/file
 
@@ -116,7 +128,7 @@ and go to that direcotry::
 
 Then, while in the ``build_Linux`` directory we type::
 
-    /path/to/hpcg/configure ../setup/Make.Linux
+    /path/to/hpcg/configure Linux
     make
 
 This creates the executable file ``bin/xhpcg``.
@@ -135,6 +147,13 @@ the size of local dimensions of the problem to NX=32, NY=24, NZ=16 then run the
 following::
 
     mpirun -np 8 xhpcg 32 24 16
+
+You can also specific size and runtime parameters using --nx, --ny, --nz, --rt.
+For example, for specifying the local grid dimensions to be NX=NY=NZ=16, and
+the timed phase execution limit of 30 minutes (1800 seconds) you can use
+
+    mpirun -np 4 xhpcg --nx=16 --rt=1800
+
 
 ======
 Tuning
@@ -160,13 +179,13 @@ options and their meaning are:
 
     -DHPCG_DETAILED_DEBUG
 
-* Compile without MPI enabled::
+* Compile with MPI disabled::
 
-    -DHPCG_NOMPI
+    -DHPCG_NO_MPI
 
 * Compile without OpenMP enabled::
 
-    -DHPCG_NOOPENMP
+    -DHPCG_NO_OPENMP
 
 * Enable detail timers::
 
@@ -183,4 +202,4 @@ By default HPCG will:
 Further information
 ===================
  
-Check out  the website  http://software.sandia.gov/hpcg for the latest information.
+Check out  the website  http://hpcg-benchmark.org/ for the latest information.

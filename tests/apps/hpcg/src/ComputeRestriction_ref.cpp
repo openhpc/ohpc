@@ -19,8 +19,8 @@
  */
 
 
-#ifndef HPCG_NOOPENMP
-#include <omp.h> // If this routine is not compiled with HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
+#include <omp.h>
 #endif
 
 #include "ComputeRestriction_ref.hpp"
@@ -45,10 +45,10 @@ int ComputeRestriction_ref(const SparseMatrix & A, const Vector & rf) {
   local_int_t * f2c = A.mgData->f2cOperator;
   local_int_t nc = A.mgData->rc->localLength;
 
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
 #pragma omp parallel for
 #endif
   for (local_int_t i=0; i<nc; ++i) rcv[i] = rfv[f2c[i]] - Axfv[f2c[i]];
 
-  return(0);
+  return 0;
 }

@@ -3,12 +3,43 @@ High Performance Conjugate Gradient Benchmark (HPCG)
 ####################################################
 
 :Author: Jack Dongarra and Michael Heroux and Piotr Luszczek
-:Revision: 2.4
-:Date: June 3, 2014
+:Revision: 3.0
+:Date: November 11, 2015
 
 ===============
 History of HPCG
 ===============
+
+-----------
+Version 3.0
+-----------
+
+* Added problem generation as a timed portion of the benchmark.  This time is now
+  added to any time spent optimizing data structures and counted as overhead when
+  computing the official GFLOP/s rating.  The total overhead time is divided by 500
+  to amortize its cost over 500 iterations.
+
+* Added memory usage counting and reporting.
+
+* Added memory bandwidth measurement and reporting.
+
+* Added a "Quick Path" option to make obtaining results on production systems easier.
+  With this option, obtaining a rating will take only a few minutes.  This option also
+  makes profiling and debugging easier.  The Quick Path option is invoked by setting the
+  run time to zero, either in hpcg.dat or by using the --rt=0 option.
+
+* Added a command line option (--rt=) to specify the run time.
+
+* Made a few small changes to support easier builds on MS Windows.
+
+* Changed the way the residual variance is computed to make sure it is zero if all
+  residual values are identical.
+
+* Changed the order of array allocation in the reference code in order to improve 
+  performance.
+
+* Set the minimum iteration count for the optimized run to be the same as what is 
+  used in the reference run.
 
 -----------
 Version 2.4
@@ -56,7 +87,8 @@ Version 1.1
 -----------
 
 * Added a simple code for users remove in order to indicate whether
-optimization was done for dot-product, SPMV, SYMGS, or WAXPBY.
+  optimization was done for dot-product, SPMV, SYMGS, or WAXPBY.
+
 * Fixed a problem with computing the variance of results from multiple runs.
 
 -----------
@@ -64,10 +96,12 @@ Version 1.0
 -----------
 
 * Changed the diagonal entry from 27 to 26 to influence convergence rate.
+
 * Changed license file (COPYRIGHT) from 4-clause BSD (original BSD) to 3-clause
-BSD (modified BSD)
+  BSD (modified BSD)
+
 * Added a line to the input file (hpcg.dat) that allows to specify time to run
-the benchmark.
+  the benchmark.
 
 -----------
 Version 0.5
@@ -82,6 +116,7 @@ Version 0.4
 * Fixed bugs in integer computations where intermediate 32-bit
   integer computations resulted in values that exceeded the
   32-bit range and gave incorrect results.
+
 * Fixed the computation of the number of CG set runs to take
   into account varying timing results across MPI processes.
 
@@ -90,15 +125,20 @@ Version 0.3
 -----------
 
 * Given out to friendly testers.
+
 * Includes Doxygen output.
+
 * Numerous small changes.
+
 * Substantially improved output.
+
 * Tested on large systems.
 
 -----------
 Version 0.2
 -----------
 * Given out to "friends".
+
 * Numerous small changes.
 
 
@@ -107,15 +147,21 @@ Version 0.1
 -----------
 
 * Added local symmetric Gauss-Seidel preconditioning.
+
 * Changed global geometry to be true 3D.  Previously was a beam (subdomains
   were stacked only in the z dimension).
+
 * Introduced three global/local index modes: 32/32, 64/32, 64/64 to handle all
   problem sizes.
+
 * Changed execution strategy to perform multiple runs with just a few
   iterations per run.
+
 * Added infrastructure and rules for user adaptation of kernels for performance
   optimization.
+
 * Added benchmark modification and reporting rules.
+
 * Changed directory and file layout to mimic HPL layouts where appropriate.
 
 ================
@@ -139,8 +185,10 @@ Version 0.5
 -----------
 
 * Added timing for Allreduce calls in MPI mode, printing min/max/avg times.
+
 * Set the solver tolerance to zero to make all solves take ``max_iter``
   iterations.
+
 * Changed accumulator to a local variable for ``ddot``.  It seems to help
   dual-core performance.
 
@@ -148,7 +196,7 @@ Version 0.5
 Version 0.4
 -----------
 
-- Made total_nnz a "long long" so that MFLOP numbers were valid
+* Made total_nnz a "long long" so that MFLOP numbers were valid
   when the nonzero count is  more than 2^31.
 
 -----------
@@ -163,8 +211,11 @@ Version 0.2
 -----------
 
 * Fixed bugs related to turning MPI compilation off.
+
 * Added more text to README to improve understanding.
+
 * Added new ``Makfile.x86linux.gcc`` for non-opteron systems.
+
 * Made ``MPI_Wtime`` the default timer when in MPI mode.
 
 -----------

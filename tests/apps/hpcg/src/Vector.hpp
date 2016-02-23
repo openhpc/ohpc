@@ -28,7 +28,7 @@ struct Vector_STRUCT {
   local_int_t localLength;  //!< length of local portion of the vector
   double * values;          //!< array of values
   /*!
-   This is for storing optimized data structres created in OptimizeProblem and
+   This is for storing optimized data structures created in OptimizeProblem and
    used inside optimized ComputeSPMV().
    */
   void * optimizationData;

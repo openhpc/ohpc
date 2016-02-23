@@ -272,7 +272,7 @@ void create_map_id_to_row(int global_nx, int global_ny, int global_nz,
 
   for(size_t i=1; i<all_ids.size(); ++i) {
     if (all_ids[i] != all_ids[i-1]+1) {
-      id_to_row.insert(std::make_pair(all_ids[i], my_first_row+i));
+      id_to_row.insert(std::make_pair(all_ids[i], (MINIFE_GLOBAL_ORDINAL) (my_first_row+i)));
     }
   }
 
@@ -302,7 +302,7 @@ void create_map_id_to_row(int global_nx, int global_ny, int global_nz,
     }
     for(size_t j=1; j<all_ids.size(); ++j) {
       if (all_ids[j] != all_ids[j-1]+1) {
-        id_to_row.insert(std::make_pair(all_ids[j], first_row+j));
+        id_to_row.insert(std::make_pair(all_ids[j], (MINIFE_GLOBAL_ORDINAL) (first_row+j)));
       }
     }
   }

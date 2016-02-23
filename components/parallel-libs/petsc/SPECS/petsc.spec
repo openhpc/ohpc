@@ -23,8 +23,13 @@
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency.
+%if !0%{?opensuse_bs}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -63,7 +68,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          ohpc/parallel-libs
-Version:        3.6.1
+Version:        3.6.3
 Release:        0
 
 Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz

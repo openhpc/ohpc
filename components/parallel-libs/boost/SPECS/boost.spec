@@ -39,8 +39,13 @@
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency.
+%if !0%{?opensuse_bs}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 %define toolset gcc
 BuildRequires: gnu-compilers%{PROJ_DELIM}
@@ -80,9 +85,9 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.59.0
+Version:        1.60.0
 
-%define version_exp 1_59_0
+%define version_exp 1_60_0
 
 Release:        0
 License:        BSL-1.0

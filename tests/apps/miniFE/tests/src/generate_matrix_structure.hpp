@@ -55,7 +55,10 @@ generate_matrix_structure(const simple_mesh_description<typename MatrixType::Glo
 #endif
 
   int threw_exc = 0;
+
+#ifndef MINIFE_IGNORE_RESERVE_TRY
   try {
+#endif
 
   typedef typename MatrixType::GlobalOrdinalType GlobalOrdinal;
   typedef typename MatrixType::LocalOrdinalType LocalOrdinal;
@@ -77,6 +80,10 @@ generate_matrix_structure(const simple_mesh_description<typename MatrixType::Glo
   global_nrows *= global_nodes_y*global_nodes_z;
 
   GlobalOrdinal nrows = get_num_ids<GlobalOrdinal>(box);
+
+#ifdef MINIFE_IGNORE_RESERVE_TRY
+    A.reserve_space(nrows, 27);
+#else
   try {
     A.reserve_space(nrows, 27);
   }
@@ -87,6 +94,7 @@ generate_matrix_structure(const simple_mesh_description<typename MatrixType::Glo
     std::string str1 = osstr.str();
     throw std::runtime_error(str1);
   }
+#endif
 
   std::vector<GlobalOrdinal> rows(nrows);
   std::vector<LocalOrdinal> row_offsets(nrows+1);
@@ -142,11 +150,14 @@ get_id<GlobalOrdinal>(global_nodes_x, global_nodes_y, global_nodes_z,
 
   init_matrix(A, rows, row_offsets, row_coords,
               global_nodes_x, global_nodes_y, global_nodes_z, global_nrows, mesh);
+#ifndef MINIFE_IGNORE_RESERVE_TRY
   }
   catch(...) {
     std::cout << "proc " << myproc << " threw an exception in generate_matrix_structure, probably due to running out of memory." << std::endl;
     threw_exc = 1;
   }
+#endif
+
 #ifdef HAVE_MPI
   int global_throw = 0;
   MPI_Allreduce(&threw_exc, &global_throw, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);

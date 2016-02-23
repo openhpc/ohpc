@@ -74,6 +74,7 @@ test "$RPM_BUILD_ROOT" != "/" && %{__rm} -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%{OHPC_PUB}
 %doc COPYING ChangeLog LICENSE
 %dir %{_sysconfdir}/%{sname}/
 %dir %{_localstatedir}/lib/%{sname}/

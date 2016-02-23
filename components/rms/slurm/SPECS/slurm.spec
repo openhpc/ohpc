@@ -9,6 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%include %{_sourcedir}/rpmmacros
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname slurm
@@ -100,8 +101,8 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 
-Version: 15.08.6
-%define ver_exp 15-08-6-1
+Version: 15.08.7
+%define ver_exp 15-08-7-1
 
 Release:   %{?dist}
 Summary:   Slurm Workload Manager

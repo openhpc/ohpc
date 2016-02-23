@@ -1,0 +1,57 @@
+In addition to running the VNFS image from memory, Warewulf can also partition
+and format persistent storage on a node and maintain the VNFS state across
+reboots. This requires installing additional packages in the VNFS image to
+support a boot loader (GRUB), and it also requires some modifictation to the
+node definition in the warewulf data store. 
+
+% begin_fsp_run
+% fsp_validation_comment Add stateful provisioning support
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add GRUB2 Bootloader
+[sms]# (*\chrootinstall*) grub2
+
+# Re-assemble VNFS image
+[sms]# wwvnfs  -y --chroot $CHROOT
+\end{lstlisting}
+% end_fsp_run 
+
+Stateful nodes require addition parameters in the Warewulf configuration. In
+particular, we instruct Warewulf where to install the GRUB bootloader, which
+disk to partition, which partition to format, and what the filesystem layout
+will look like. These changes are necessary for each compute node we wish to
+provision statefully.
+
+% begin_fsp_run
+% fsp_validation_comment Add stateful node object parameters
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Update node object parameters
+[sms]# export filesystems="mountpoint=/boot:dev=sda1:type=ext3:size=500," \
+              "dev=sda2:type=swap:size=32768," \
+              "mountpoint=/:dev=sda3:type=ext3:size=fill"
+[sms]# for ((i=0; i<$num_computes; i++)) ; do 
+              wwsh -y object modify -s bootloader=sda ${c_name[$i]};
+              wwsh -y object modify -s diskpartition=sda ${c_name[$i]};
+              wwsh -y object modify -s diskformat=sda1,sda2,sda3 ${c_name[$i]};
+              wwsh -y object modify -s filesystems="$filesystems" ${c_name[$i]};
+           done
+\end{lstlisting}
+% end_fsp_run 
+
+Upon the node's next reboot, Warewulf will partition and format the disk. It
+will also run grub2-mkconfig and grub2-install to place grub in the proscribed
+boot sector, and it will install the VNFS locally. In order to ensure this 
+process happens only once per node we must instruct warewulf to next boot from 
+the local storage.
+
+% begin_fsp_run
+% fsp_validation_comment Add bootlocal node object parameters
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Update node object parameters
+[sms]# for ((i=0; i<$num_computes; i++)) ; do 
+              wwsh -y object modify -s bootlocal=EXIT ${c_name[$i]};
+           done
+\end{lstlisting}
+% end_fsp_run 
+
+Deleting the bootlocal object parameter will cause Warewulf once againg to
+re-partion and format the local storage.

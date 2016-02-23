@@ -74,10 +74,6 @@
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_ohpc_repo}
 
-%%% \begin{lstlisting}[language=bash,keywords={}]
-%%% [sms](*\#*) wget -P /etc/yum.repos.d ${ohpc_repo}
-%%% \end{lstlisting}
-
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
@@ -193,11 +189,11 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
-[sms](*\#*) systemctl restart xinetd 
-[sms](*\#*) systemctl enable mariadb.service 
-[sms](*\#*) systemctl restart mariadb 
-[sms](*\#*) systemctl enable httpd.service 
-[sms](*\#*) systemctl restart httpd 
+[sms](*\#*) systemctl restart xinetd
+[sms](*\#*) systemctl enable mariadb.service
+[sms](*\#*) systemctl restart mariadb
+[sms](*\#*) systemctl enable httpd.service
+[sms](*\#*) systemctl restart httpd
 \end{lstlisting}
 %\end{verbatim}
 % end_ohpc_run
@@ -326,7 +322,7 @@ example configuration.
 [sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
 [sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
-# Identify resource manager hostname on {\em master} host
+# Identify resource manager hostname on master host
 [sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 \end{lstlisting}
 % end_ohpc_run
@@ -334,13 +330,13 @@ example configuration.
 \clearpage
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Export /home and OpenHPC public packages from {\em master} server to cluster compute nodes
+# Export /home and OpenHPC public packages from master server to cluster compute nodes
 [sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
 [sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [sms](*\#*) exportfs -a
 [sms](*\#*) systemctl restart nfs
 
-# Enable NTP time service on computes and identify {\em master} host as local NTP server
+# Enable NTP time service on computes and identify master host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
@@ -387,6 +383,9 @@ local cluster environment. These customizations include:
 \item Add \Lustre{} client
 \item Add \Nagios{} monitoring
 \item Add \Ganglia{} monitoring
+\item Add \mrsh{}
+\item Add \powerman{}
+\item Configure \genders{}
 \end{itemize*}
 
 \noindent Details on the steps required for each of these customizations are
@@ -399,7 +398,7 @@ discussed further in the following sections.
 % begin_ohpc_run
 % ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Update memlock settings on {\em master}
+# Update memlock settings on master
 [sms](*\#*) echo "* soft memlock unlimited" >> /etc/security/limits.conf
 [sms](*\#*) echo "* hard memlock unlimited" >> /etc/security/limits.conf
 
@@ -437,7 +436,7 @@ discussed further in the following sections.
 
 % ohpc_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Add Lustre client software to {\em master} host
+# Add Lustre client software to master host
 [sms](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
 \end{lstlisting}
 % end_ohpc_run
@@ -491,6 +490,15 @@ host as follows:
 \paragraph{Add \Ganglia{} monitoring}
 \input{../../common/ganglia}
 
+\paragraph{Add \mrsh{}}
+\input{../../common/mrsh}
+
+\paragraph{Add \powerman{}}
+\input{../../common/powerman}
+
+\paragraph{Configure \genders{}}
+\input{../../common/genders}
+
 %% [FSP-469]: disabling ORCM
 
 %% [FSP-469] \paragraph{Enable ORCM RAS subsystem} 
@@ -499,7 +507,7 @@ host as follows:
 %% [FSP-469] % begin_ohpc_run
 %% [FSP-469] % ohpc_validation_comment Configure ORCM aggregator and DB
 %% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-%% [FSP-469] # Set {\em master} host as data aggregator
+%% [FSP-469] # Set master host as data aggregator
 %% [FSP-469] [sms](*\#*) perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
 %% [FSP-469] [sms](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${sms_ip}/" /etc/orcmdb_psql.ini
 %% [FSP-469] 
@@ -527,7 +535,7 @@ host as follows:
 %% [FSP-469] [sms](*\#*) sudo -u postgres createdb -O orcmuser orcmdb
 %% [FSP-469] [sms](*\#*) sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 %% [FSP-469] 
-%% [FSP-469] # Start ORCM on {\em master} host (requires both orcmsched and orcmd)
+%% [FSP-469] # Start ORCM on master host (requires both orcmsched and orcmd)
 %% [FSP-469] [sms](*\#*) systemctl start orcmsched
 %% [FSP-469] [sms](*\#*) systemctl start orcmd
 %% [FSP-469] \end{lstlisting}
@@ -535,9 +543,14 @@ host as follows:
 %% [FSP-469] 
 %% [FSP-469] \input{../../common/orcm_client}
 
+\paragraph{Add stateful provisioning support}
+
+\input{../../common/stateful}
+
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 
 \input{../../common/syslog}
+
 
 \subsubsection{Import files} \label{sec:file_import}
 
@@ -602,6 +615,26 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 [sms](*\#*) wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
 [sms](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
 \end{lstlisting}
+% end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+\Warewulf{} ships with a utility to automatically register new compute nodes. 
+Nodes will be added to the \Warewulf{} database in the order in which their 
+DHCP requests are received by the master, so care must be taken to boot nodes 
+in the order one wishes to see preserved in the warewulf databse. The IP 
+address provided will be incremented after each node is found, and the utility 
+will exit after all specified nodes have been found.
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
+[sms](*\#*) wwnodescan --netdev=${eth_provision} --ipaddr=${c_ip[0]} --netmask=${internal_netmask} \
+    --vnfs=centos7.1 --bootstrap=`uname -r` ${c_name[0]}-${c_name[3]}
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}
+
+% begin_ohpc_run
+% ohpc_validation_comment Add hosts to cluster (Cont.)
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
 # Optionally register additional compute nodes
@@ -611,9 +644,13 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 
 # Define provisioning image for hosts
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
-     --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network 
+    --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network 
 \end{lstlisting}
 
+% ohpc_validation_comment Optionally, add arguments to bootstrap kernel
+% ohpc_command if [ ${enable_kargs} ]; then
+% ohpc_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
+% ohpc_command fi
 % ohpc_command if [ ${enable_ganglia} -eq 1 ];then
 % ohpc_validation_newline
 % ohpc_validation_comment Restart ganglia services to pick up hostfile changes
@@ -634,21 +671,35 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 % ohpc_indent 0
 % ohpc_command fi
 % ohpc_validation_newline
+% ohpc_validation_comment Optionally, define diskless node kernel arguments to support SOL console
+% ohpc_command if [ ${enable_ipmisol} -eq 1 ];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Optionally, define diskless node kernel arguments to support SOL console
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --kargs "${kargs} console=ttyS1,115200"
+
+# Install conman to provide a front-end to compute consoles and log output
+[sms](*\#*) (*\install*) conman-ohpc
+
+# Note your IPMI password is required for console access to work via conman
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+              echo -n 'CONSOLE name="'${c_name[$i]}'" dev="ipmi:'${c_bmc[$i]}'" '
+              echo    'ipmiopts="'U:${bmc_username},P:${IPMI_PASSWORD},W:solpayloadsize'"'
+           done >> /etc/conman.conf
+
+# Enable and start conman
+[sms](*\#*) systemctl enable conman
+[sms](*\#*) systemctl start conman
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% ohpc_validation_newline
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
 [sms](*\#*) systemctl restart dhcpd
 [sms](*\#*) wwsh pxe update
 \end{lstlisting}
-% end_ohpc_run
-
-% begin_ohpc_run
-
-% ohpc_validation_comment Optionally, add arguments to bootstrap kernel
-% ohpc_command if [ ${enable_kargs} ]; then
-% ohpc_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
-% ohpc_command fi
-
 % end_ohpc_run
 
 
@@ -697,9 +748,6 @@ hosts may boot more reliably or faster using the BOS versions provided via the
 \texttt{syslinux-tftpboot} package. If you encounter PXE issues, consider
 replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \texttt{warewulf-provision-ohpc} with versions from \texttt{syslinux-tftpboot}.
-
-%       Replace the \texttt{[l]pxelinux.0} from 
-%\texttt{warewulf-provision-ohpc} version if necessary.
 \end{tcolorbox}
 \end{center}
 
@@ -726,11 +774,11 @@ the necessary licenses in order to use the Intel proprietary software.
 \subsection{Compilers} \label{sec:install_compilers}
 \input{../../common/compilers}
 
-\subsection{Performance Tools} \label{sec:install_perf_tools}
-\input{../../common/perf_tools}
-
 \subsection{MPI Stacks} \label{sec:mpi}
 \input{../../common/mpi}
+
+\subsection{Performance Tools} \label{sec:install_perf_tools}
+\input{../../common/perf_tools}
 
 \subsection{Setup default development environment}
 \input{../../common/default_dev}

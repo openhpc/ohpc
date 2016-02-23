@@ -59,7 +59,7 @@ Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 %if 0%{?sles_version} || 0%{?suse_version}
 Requires: apache2 apache2-mod_perl tftp dhcp-server
 %else
-Requires: mod_perl httpd tftp-server dhcp
+Requires: mod_perl httpd tftp-server dhcp xinetd
 %endif
 
 # charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf

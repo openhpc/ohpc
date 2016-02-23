@@ -74,7 +74,7 @@ fi
 }
 
 @test "[BOS] syslog forwarding " {
-    test_string=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 8 | head -n 1)
+    test_string=$(head /dev/urandom | tr -dc 'a-z' | fold -w 8 | head -n 1)
     koomie_cf -x "c[0-9]+\b" logger $test_string
     if [ grep $test_string /var/log/messages | wc -l != $num_computes ];then
         for n in `seq 1 $num_computes`; do

@@ -18,15 +18,16 @@
  HPCG routine
  */
 
+// The MPI include must be first for Windows platforms
+#ifndef HPCG_NO_MPI
+#include <mpi.h>
+#endif
 #include <fstream>
 #include <iostream>
 #include <cfloat>
 using std::endl;
 #include <vector>
 #include <cmath>
-#ifndef HPCG_NOMPI
-#include <mpi.h> // If this routine is not compiled with -DHPCG_NOMPI then include mpi.h
-#endif
 
 #include "hpcg.hpp"
 

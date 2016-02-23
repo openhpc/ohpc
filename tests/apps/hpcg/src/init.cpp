@@ -12,12 +12,18 @@
 // ***************************************************
 //@HEADER
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
 #include <mpi.h>
 #endif
 
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
 #include <omp.h>
+#endif
+
+#ifdef _WIN32
+const char* NULLDEVICE="nul";
+#else
+const char* NULLDEVICE="/dev/null";
 #endif
 
 #include <ctime>
@@ -42,9 +48,9 @@ startswith(const char * s, const char * prefix) {
 }
 
 /*!
-  Initializes an HPCG run by obtaining problem parameters (from a file on
+  Initializes an HPCG run by obtaining problem parameters (from a file or
   command line) and then broadcasts them to all nodes. It also initializes
-  loggin I/O streams that are used throughout the HPCG run. Only MPI rank 0
+  login I/O streams that are used throughout the HPCG run. Only MPI rank 0
   performs I/O operations.
 
   The function assumes that MPI has already been initialized for MPI runs.
@@ -63,9 +69,12 @@ HPCG_Init(int * argc_p, char ** *argv_p, HPCG_Params & params) {
   char ** argv = *argv_p;
   char fname[80];
   int i, j, iparams[4];
-  char cparams[4][6] = {"--nx=", "--ny=", "--nz=", "--nt="};
+  char cparams[4][6] = {"--nx=", "--ny=", "--nz=", "--rt="};
   time_t rawtime;
   tm * ptm;
+
+  // Initialize iparams
+  for (i = 0; i < 4; ++i) iparams[i] = 0;
 
   /* for sequential and some MPI implementations it's OK to read first three args */
   for (i = 0; i < 4; ++i)
@@ -73,14 +82,19 @@ HPCG_Init(int * argc_p, char ** *argv_p, HPCG_Params & params) {
 
   /* for some MPI environments, command line arguments may get complicated so we need a prefix */
   for (i = 1; i <= argc && argv[i]; ++i)
-    for (j = 0; j < 3; ++j)
+    for (j = 0; j < 4; ++j)
       if (startswith(argv[i], cparams[j]))
         if (sscanf(argv[i]+strlen(cparams[j]), "%d", iparams+j) != 1 || iparams[j] < 10) iparams[j] = 0;
 
+  // Check if --rt was specified on the command line
+  int * rt  = iparams+3;  // Assume runtime was not specified and will be read from the hpcg.dat file
+  if (! iparams[3]) rt = 0; // If --rt was specified, we already have the runtime, so don't read it from file
   if (! iparams[0] && ! iparams[1] && ! iparams[2]) { /* no geometry arguments on the command line */
-    ReadHpcgDat(iparams, iparams+3);
+    ReadHpcgDat(iparams, rt);
   }
 
+  // Check for small or unspecified nx, ny, nz values
+  // If any dimension is less than 16, make it the max over the other two dimensions, or 16, whichever is largest
   for (i = 0; i < 3; ++i) {
     if (iparams[i] < 16)
       for (j = 1; j <= 2; ++j)
@@ -90,7 +104,8 @@ HPCG_Init(int * argc_p, char ** *argv_p, HPCG_Params & params) {
       iparams[i] = 16;
   }
 
-#ifndef HPCG_NOMPI
+// Broadcast values of iparams to all MPI processes
+#ifndef HPCG_NO_MPI
   MPI_Bcast( iparams, 4, MPI_INT, 0, MPI_COMM_WORLD );
 #endif
 
@@ -100,15 +115,15 @@ HPCG_Init(int * argc_p, char ** *argv_p, HPCG_Params & params) {
 
   params.runningTime = iparams[3];
 
-#ifdef HPCG_NOMPI
-  params.comm_rank = 0;
-  params.comm_size = 1;
-#else
+#ifndef HPCG_NO_MPI
   MPI_Comm_rank( MPI_COMM_WORLD, &params.comm_rank );
   MPI_Comm_size( MPI_COMM_WORLD, &params.comm_size );
+#else
+  params.comm_rank = 0;
+  params.comm_size = 1;
 #endif
 
-#ifdef HPCG_NOOPENMP
+#ifdef HPCG_NO_OPENMP
   params.numThreads = 1;
 #else
   #pragma omp parallel
@@ -130,7 +145,7 @@ HPCG_Init(int * argc_p, char ** *argv_p, HPCG_Params & params) {
         1900 + ptm->tm_year, ptm->tm_mon+1, ptm->tm_mday, ptm->tm_hour, ptm->tm_min, ptm->tm_sec );
     HPCG_fout.open(fname);
 #else
-    HPCG_fout.open("/dev/null");
+    HPCG_fout.open(NULLDEVICE);
 #endif
   }
 

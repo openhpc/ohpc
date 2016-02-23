@@ -1,0 +1,2 @@
+addFilter("shlib-policy-name-error");
+addFilter("devel-file-in-non-devel-package");
