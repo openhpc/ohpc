@@ -18,6 +18,9 @@ setup() {
     fi
     module purge        || exit 1
     module load $module || exit 1
+
+    # define shared temp_dir
+    export CLCK_SHARED_TEMP_DIR=`pwd`
 }
 
 @test "[$testname] Verify $PKG module is loaded and matches rpm version" {
