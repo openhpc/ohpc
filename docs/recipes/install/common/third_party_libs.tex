@@ -1,21 +1,22 @@
 % begin_ohpc_run
 % ohpc_comment_header Install 3rd Party Libraries and Tools \ref{sec:3rdparty}
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-[sms](*\#*) (*\groupinstall*) ohpc-adios        
-[sms](*\#*) (*\groupinstall*) ohpc-boost        
-[sms](*\#*) (*\groupinstall*) ohpc-fftw         
-[sms](*\#*) (*\groupinstall*) ohpc-gsl          
-[sms](*\#*) (*\groupinstall*) ohpc-hdf5         
-[sms](*\#*) (*\groupinstall*) ohpc-hypre        
-[sms](*\#*) (*\groupinstall*) ohpc-metis        
-[sms](*\#*) (*\groupinstall*) ohpc-mumps        
-[sms](*\#*) (*\groupinstall*) ohpc-netcdf       
-[sms](*\#*) (*\groupinstall*) ohpc-numpy        
-[sms](*\#*) (*\groupinstall*) ohpc-openblas     
-[sms](*\#*) (*\groupinstall*) ohpc-petsc        
-[sms](*\#*) (*\groupinstall*) ohpc-phdf5        
-[sms](*\#*) (*\groupinstall*) ohpc-scalapack    
-[sms](*\#*) (*\groupinstall*) ohpc-scipy        
-[sms](*\#*) (*\groupinstall*) ohpc-trilinos     
+[master]$ (*\groupinstall*) fsp-boost        # adds available Boost packages
+[master]$ (*\groupinstall*) fsp-fftw         # adds available FFTW packages
+[master]$ (*\groupinstall*) fsp-gsl          # adds available GSL packages
+[master]$ (*\groupinstall*) fsp-hdf5         # adds available HDF5 packages
+[master]$ (*\groupinstall*) fsp-hypre        # adds available Hypre packages
+[master]$ (*\groupinstall*) fsp-metis        # adds available METIS packages
+[master]$ (*\groupinstall*) fsp-mpiP         # adds available mpiP packages
+[master]$ (*\groupinstall*) fsp-mumps        # adds available MUMPS packages
+[master]$ (*\groupinstall*) fsp-netcdf       # adds available NetCDF packages
+[master]$ (*\groupinstall*) fsp-numpy        # adds available numerical Python packages
+[master]$ (*\groupinstall*) fsp-petsc        # adds available PETSC packages
+[master]$ (*\groupinstall*) fsp-phdf5        # adds available (parallel) HDF5 packages
+[master]$ (*\groupinstall*) fsp-scalapack    # adds available ScaLAPACK packages
+[master]$ (*\groupinstall*) fsp-scipy        # adds available scientific Python packages
+[master]$ (*\groupinstall*) fsp-trilinos     # adds available Trilinos packages
+[master]$ (*\groupinstall*) fsp-adios        # adds available Adios packages
+[master]$ (*\install*) R_base-fsp            # adds R
 \end{lstlisting}
 % end_ohpc_run
