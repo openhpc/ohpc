@@ -13,33 +13,29 @@
 #-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
-%define pname cube
+%define pname cubew
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.3.3
+Version:   4.4
 Release:   1%{?dist}
-Summary:   Score-P and Scalasca performance report explorer
+Summary:   High-Performance Score-P and Scalasca performance report writing library
 License:   BSD-style license
 Group:     ohpc/perf-tools
 Url:       http://www.scalasca.org/software/cube-4.x/download.html
-Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.3/dist/cube-%{version}.tar.gz
+Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.4/dist/cubew-%{version}.tar.gz
 Provides:  lib%PNAME.so()(64bit)
-Provides:  cube
+Provides:  cubew
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-#Multiplaform
-%if 0%{?suse_version}
-BuildRequires: libqt4-devel dbus-1-devel
-Requires: libqt4
-%else
-BuildRequires: qt4-devel zlib-devel dbus-devel
-Requires: qt qt-x11
-%endif
+
+BuildRequires: zlib-devel
+Requires: 
+BuildRequires: zlib-devel
 
 %define debug_package %{nil}
 
@@ -47,20 +43,8 @@ Requires: qt qt-x11
 %define install_path %{OHPC_PUB}/%{pname}/%version
 
 %description
- Cube, which is used as performance report explorer for Scalasca and Score-P,
-is a generic tool for displaying a multi-dimensional performance space consisting
-of the dimensions (i) performance metric, (ii) call path, and (iii) system
-resource. Each dimension can be represented as a tree, where non-leaf nodes
-of the tree can be collapsed or expanded to achieve the desired level of
-granularity. In addition, Cube can display multi-dimensional Cartesian
-process topologies.
-
-The Cube 4.x series report explorer and the associated Cube4 data format is
-provided for Cube files produced with the Score-P performance instrumentation
-and measurement infrastructure or the Scalasca version 2.x trace analyzer
-(and other compatible tools). However, for backwards compatibility,
-Cube 4.x can also read and display Cube 3.x data.
-
+Lightweigt high performance library to create Scalsca and Score-P performance 
+report. 
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -109,7 +93,7 @@ popd
 proc ModulesHelp { } {
 
     puts stderr " "
-    puts stderr "This module loads the Cube performance reporter tool."
+    puts stderr "This module loads the Cube performance reporter c-writer library."
     puts stderr "\nVersion %{version}\n"
 
 }
@@ -124,7 +108,6 @@ set     version                     %{version}
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-prepend-path    CLASSPATH           %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin

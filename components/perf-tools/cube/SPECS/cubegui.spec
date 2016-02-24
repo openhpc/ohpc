@@ -13,33 +13,29 @@
 #-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
-%define pname cube
+%define pname cubegui
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.3.3
+Version:   4.4
 Release:   1%{?dist}
 Summary:   Score-P and Scalasca performance report explorer
 License:   BSD-style license
 Group:     ohpc/perf-tools
 Url:       http://www.scalasca.org/software/cube-4.x/download.html
-Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.3/dist/cube-%{version}.tar.gz
+Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.4/dist/cubegui-%{version}.tar.gz
 Provides:  lib%PNAME.so()(64bit)
-Provides:  cube
+Provides:  cube 
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-#Multiplaform
-%if 0%{?suse_version}
-BuildRequires: libqt4-devel dbus-1-devel
-Requires: libqt4
-%else
-BuildRequires: qt4-devel zlib-devel dbus-devel
-Requires: qt qt-x11
-%endif
+
+BuildRequires: cubelib qt qt-devel dbus-devel
+Requires: cubelib
+BuildRequires: cubelib qt qt-devel dbus-devel
 
 %define debug_package %{nil}
 
