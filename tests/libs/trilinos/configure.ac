@@ -3,7 +3,7 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT(trilinos, 11.14.3, karl.w.schulz@intel.com)
+AC_INIT(trilinos, 12.4.2, karl.w.schulz@intel.com)
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
