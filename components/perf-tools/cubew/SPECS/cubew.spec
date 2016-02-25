@@ -67,6 +67,7 @@ export tmp_path=%{install_path}
 mv ${tmp_path#*/} %buildroot%{install_path}/..
 popd
 pushd %{buildroot}%{install_path}/bin
+# ks note: following line errors 
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 popd
 
