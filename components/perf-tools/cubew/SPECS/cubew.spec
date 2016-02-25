@@ -34,8 +34,6 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 
 BuildRequires: zlib-devel
-Requires: 
-BuildRequires: zlib-devel
 
 %define debug_package %{nil}
 
