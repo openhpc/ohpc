@@ -67,7 +67,7 @@ Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
 Group:     ohpc/perf-tools
 Url:       http://www.cs.uoregon.edu/research/scorep/home.php
-Scource0:  http://www.vi-hps.org/upload/packages/scorep/scorep-%{version}.tar.gz
+Source0:   http://www.vi-hps.org/upload/packages/scorep/scorep-%{version}.tar.gz
 Provides:  lib%PNAME.so()(64bit)
 Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
