@@ -67,20 +67,20 @@ Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          ohpc/serial-libs
-Version:        4.3
+Version:        5.1
 Release:        0
 Source:         http://crd-legacy.lbl.gov/%7Exiaoye/SuperLU/%{pname}_%{version}.tar.gz
-# PATCH-FEATURE-OPENSUSE superlu-4.3-make.patch : add compiler and build flags in make.inc
-Patch:          superlu-4.3-make.patch
+# PATCH-FEATURE-OPENSUSE superlu-5.1-make.patch : add compiler and build flags in make.inc
+Patch:          superlu-5.1-make.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
 Patch1:         superlu-4.3-include.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-dont-opt-away.diff
 Patch2:         superlu-4.3-dont-opt-away.diff
-# PATCH-FIX-OPENSUSE superlu-4.3-remove-hsl.patch [bnc#796236] 
+# PATCH-FIX-OPENSUSE superlu-5.1-remove-hsl.patch [bnc#796236] 
 # The Harwell Subroutine Library (HSL) routine m64ad.c have been removed
 # from the original sources for legal reasons. This patch disables the inclusion of
 # this routine in the library which, however, remains fully functionnal
-Patch3:         superlu-4.3-disable-hsl.patch
+Patch3:         superlu-5.1-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
 BuildRequires:  tcsh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
