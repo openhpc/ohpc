@@ -19,13 +19,13 @@
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.4-TP1
+Version:   4.4
 Release:   1%{?dist}
 Summary:   High-Performance Score-P and Scalasca performance report writing library
 License:   BSD-style license
 Group:     ohpc/perf-tools
 Url:       http://www.scalasca.org/software/cube-4.x/download.html
-Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.4/dist/cubew-%{version}.tar.gz
+Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.4/dist/cubew-%{version}-TP1.tar.gz
 Provides:  lib%PNAME.so()(64bit)
 Provides:  cubew
 Conflicts: lib%pname < %version-%release
