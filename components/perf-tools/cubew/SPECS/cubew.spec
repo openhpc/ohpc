@@ -45,7 +45,7 @@ Lightweigt high performance library to create Scalsca and Score-P performance
 report. 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}-TP1
 
 
 %build
