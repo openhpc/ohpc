@@ -33,9 +33,9 @@ Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 
-BuildRequires: zlib-devel Rscript Rcpp Rinsign
-Requires: 
-BuildRequires: zlib-devel Rscript Rcpp Rinsign
+BuildRequires: zlib-devel
+Requires: zlib
+#BuildRequires: zlib-devel Rscript Rcpp Rinsign
 
 %define debug_package %{nil}
 
