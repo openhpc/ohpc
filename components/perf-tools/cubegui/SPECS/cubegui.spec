@@ -19,14 +19,14 @@
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.4-TP1
+Version:   4.4
 Release:   1%{?dist}
 Summary:   Score-P and Scalasca performance report explorer
 License:   BSD-style license
 Group:     ohpc/perf-tools
 Url:       http://www.scalasca.org/software/cube-4.x/download.html
 #Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.4/dist/cubegui-%{version}.tar.gz
-Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.4/dist/cubegui-%{version}.tar.gz
+Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.4/dist/cubegui-%{version}-TP1.tar.gz
 Provides:  lib%PNAME.so()(64bit)
 Provides:  cube 
 Conflicts: lib%pname < %version-%release
@@ -34,8 +34,7 @@ Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 
-BuildRequires: cubelib qt qt-devel dbus-devel
-Requires: cubelib
+Requires: cubelib qt
 BuildRequires: cubelib qt qt-devel dbus-devel
 
 %define debug_package %{nil}
@@ -60,7 +59,7 @@ Cube 4.x can also read and display Cube 3.x data.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}-TP1
 
 
 %build
