@@ -70,7 +70,8 @@ export tmp_path=%{install_path}
 mv ${tmp_path#*/} %buildroot%{install_path}/..
 popd
 pushd %{buildroot}%{install_path}/bin
-sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+# ks 2/25/16 - following line breaks, commenting out.
+# sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 popd
 
 
