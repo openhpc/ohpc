@@ -48,7 +48,7 @@ Score-P's profiles.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}-TP1
 
 
 %build
