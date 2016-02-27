@@ -1,7 +1,7 @@
 # machine generated from compilervars.sh
  
 setenv        MKLROOT              /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/mkl
-prepend-path  MANPATH              /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/man/en_US:/opt/ohpc/pub/compiler/intel/documentation_2016/en/debugger//gdb-ia/man/:/opt/ohpc/pub/compiler/intel/documentation_2016/en/debugger//gdb-mic/man/:/opt/ohpc/pub/compiler/intel/documentation_2016/en/debugger//gdb-igfx/man/
+prepend-path  MANPATH              /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/documentation/en/man/common/:/opt/ohpc/pub/compiler/intel/documentation_2016/en/debugger//gdb-ia/man/:/opt/ohpc/pub/compiler/intel/documentation_2016/en/debugger//gdb-mic/man/:/opt/ohpc/pub/compiler/intel/documentation_2016/en/debugger//gdb-igfx/man/
 setenv        IPPROOT              /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/ipp
 setenv        GDBSERVER_MIC        /opt/ohpc/pub/compiler/intel/debugger_2016/gdb/targets/mic/bin/gdbserver
 prepend-path  LIBRARY_PATH         /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/ipp/lib/intel64:/opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/compiler/lib/intel64:/opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/mkl/lib/intel64:/opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/tbb/lib/intel64/gcc4.4:/opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/daal/lib/intel64_lin:/opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/daal/../tbb/lib/intel64_lin/gcc4.4:/opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.2.181/linux/daal/../compiler/lib/intel64_lin
