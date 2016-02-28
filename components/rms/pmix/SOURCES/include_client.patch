@@ -1,0 +1,11 @@
+--- test/Makefile.am	2016-01-16 09:56:36.000000000 -0800
++++ test/Makefile.am	2016-02-28 10:39:12.273716569 -0800
+@@ -25,6 +25,6 @@
+ 
+ AM_CPPFLAGS = -I$(top_builddir)/src -I$(top_builddir)/src/include -I$(top_builddir)/src/api
+ 
+-noinst_PROGRAMS = pmix_test pmix_client pmi_client pmi2_client pmix_regex
++bin_PROGRAMS = pmix_test pmix_client pmi_client pmi2_client pmix_regex
+ 
+ pmix_test_SOURCES = $(headers) \
+         pmix_test.c test_common.c cli_stages.c server_callbacks.c utils.c
