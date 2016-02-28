@@ -242,6 +242,7 @@ Requires: %{mpi_selector_rpm_name}
 %endif
 
 # karl.w.schulz@intel.com (02/28/16) - include patch to install test clients
+%global _default_patch_fuzz 1
 Patch1: include_client.patch
 
 BuildRequires: autoconf
