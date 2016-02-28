@@ -241,6 +241,9 @@ Requires: %{modules_rpm_name}
 Requires: %{mpi_selector_rpm_name}
 %endif
 
+# karl.w.schulz@intel.com (02/28/16) - include patch to install test clients
+Patch1: include_client.patch
+
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
@@ -279,7 +282,10 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 rm -rf $RPM_BUILD_ROOT
 
 %setup -q -n releases-%{version}
-#%patch1 -p1
+
+# OHPC patches
+%patch1 
+
 ./autogen.sh
 
 #############################################################################
