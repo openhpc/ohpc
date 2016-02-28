@@ -539,6 +539,8 @@ test "x$RPM_BUILD_ROOT" != "x" && rm -rf $RPM_BUILD_ROOT
 %dir %{_prefix}/include
 %{_prefix}/lib64/*
 %{_prefix}/include/*
+# karl.w.schulz@intel.com (02/28/16) - include bin/ subdir
+%{_prefix}/bin/*
 %dir %{_prefix}/share
 %dir %{_prefix}/share/man
 %dir %{_prefix}/share/man/man3
