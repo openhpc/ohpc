@@ -20,6 +20,7 @@ BuildArch:     noarch
 %endif
 
 BuildRequires: python-devel python-setuptools
+#!BuildIgnore: post-build-checks
 
 %description
 Tools and event-based Python library to execute commands on cluster nodes in
