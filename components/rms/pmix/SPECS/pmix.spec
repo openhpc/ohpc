@@ -222,7 +222,7 @@ Release: pre-1%{?dist}
 License: BSD
 Group: Development/Libraries
 #Source: https://www.open-mpi.org/software/pmix/v1.0/downloads/pmix-1.0.0.tar.bz2
-Source: pmix-v1.1.1.4pre.tar.bz2
+Source: pmix-1.1.1.4pre.tar.bz2
 #Source: https://github.com/pmix/releases/archive/v%{version}.tar.gz
 Packager: %{?_packager:%{_packager}}%{!?_packager:%{_vendor}}
 Vendor: %{?_vendorinfo:%{_vendorinfo}}%{!?_vendorinfo:%{_vendor}}
