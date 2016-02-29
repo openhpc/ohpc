@@ -51,7 +51,7 @@ rm -rf %{buildroot}
 # config files
 install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
 install -p -m 0644 conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
-install -p -m 0644 conf/groups.conf.d/README conf/groups.conf.d/*.conf.example %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
+install -p -m 0644 conf/groups.conf.d/*.conf.example %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
 
 # man pages
 install -d %{buildroot}/%{_mandir}/{man1,man5}
@@ -74,7 +74,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc README ChangeLog Licence_CeCILL-C_V1-en.txt Licence_CeCILL-C_V1-fr.txt
+%doc ChangeLog Licence_CeCILL-C_V1-en.txt Licence_CeCILL-C_V1-fr.txt
 %doc doc/examples
 %{_mandir}/man1/clubak.1*
 %{_mandir}/man1/clush.1*
@@ -85,7 +85,6 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/clustershell/clush.conf
 %config(noreplace) %{_sysconfdir}/clustershell/groups.conf
 %dir %{_sysconfdir}/clustershell/groups.conf.d
-%doc %{_sysconfdir}/clustershell/groups.conf.d/README
 %doc %{_sysconfdir}/clustershell/groups.conf.d/*.conf.example
 %{python_sitelib}/ClusterShell/
 %{python_sitelib}/ClusterShell-*-py?.?.egg-info
