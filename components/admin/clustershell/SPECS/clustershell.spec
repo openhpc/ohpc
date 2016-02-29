@@ -82,7 +82,7 @@ rm -rf %{buildroot}
 %{_mandir}/man1/nodeset.1*
 %{_mandir}/man5/clush.conf.5*
 %{_mandir}/man5/groups.conf.5*
-%dir %{_sysconfdir}/clustershell
+%dir /usr%{_sysconfdir}/clustershell
 %{_sysconfdir}/clustershell/clush.conf
 %{_sysconfdir}/clustershell/groups.conf
 %config(noreplace) /usr%{_sysconfdir}/clustershell/clush.conf
