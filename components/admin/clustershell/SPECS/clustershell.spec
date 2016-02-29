@@ -50,6 +50,7 @@ rm -rf %{buildroot}
 
 # config files
 install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
+install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.d
 install -p -m 0644 conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
 install -p -m 0644 conf/groups.conf.d/*.conf.example %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
 
@@ -85,6 +86,7 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/clustershell/clush.conf
 %config(noreplace) %{_sysconfdir}/clustershell/groups.conf
 %dir %{_sysconfdir}/clustershell/groups.conf.d
+%dir %{_sysconfdir}/clustershell/groups.d
 %doc %{_sysconfdir}/clustershell/groups.conf.d/*.conf.example
 %{python_sitelib}/ClusterShell/
 %{python_sitelib}/ClusterShell-*-py?.?.egg-info
