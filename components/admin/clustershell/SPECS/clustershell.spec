@@ -85,13 +85,8 @@ rm -rf %{buildroot}
 %dir %{_sysconfdir}/clustershell
 %{_sysconfdir}/clustershell/clush.conf
 %{_sysconfdir}/clustershell/groups.conf
-%{_sysconfdir}/clustershell/groups.conf.d/README
 %{_sysconfdir}/clustershell/groups.conf.d/genders.conf.example
 %{_sysconfdir}/clustershell/groups.conf.d/slurm.conf.example
-%{_sysconfdir}/clustershell/groups.d/README
-%{_sysconfdir}/clustershell/groups.d/cluster.yaml.example
-%{_sysconfdir}/clustershell/groups.d/local.cfg
-%{_sysconfdir}/clustershell/topology.conf.example
 %config(noreplace) %{_sysconfdir}/clustershell/clush.conf
 %config(noreplace) %{_sysconfdir}/clustershell/groups.conf
 %dir %{_sysconfdir}/clustershell/groups.conf.d
