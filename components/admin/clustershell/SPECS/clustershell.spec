@@ -85,13 +85,11 @@ rm -rf %{buildroot}
 %dir %{_sysconfdir}/clustershell
 %{_sysconfdir}/clustershell/clush.conf
 %{_sysconfdir}/clustershell/groups.conf
-%{_sysconfdir}/clustershell/groups.conf.d/genders.conf.example
-%{_sysconfdir}/clustershell/groups.conf.d/slurm.conf.example
-%config(noreplace) %{_sysconfdir}/clustershell/clush.conf
-%config(noreplace) %{_sysconfdir}/clustershell/groups.conf
-%dir %{_sysconfdir}/clustershell/groups.conf.d
-%dir %{_sysconfdir}/clustershell/groups.d
-%doc %{_sysconfdir}/clustershell/groups.conf.d/*.conf.example
+%config(noreplace) /usr%{_sysconfdir}/clustershell/clush.conf
+%config(noreplace) /usr%{_sysconfdir}/clustershell/groups.conf
+%dir /usr%{_sysconfdir}/clustershell/groups.conf.d
+%dir /usr%{_sysconfdir}/clustershell/groups.d
+%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/*.conf.example
 %{python_sitelib}/ClusterShell/
 %{python_sitelib}/ClusterShell-*-py?.?.egg-info
 %{_bindir}/clubak
