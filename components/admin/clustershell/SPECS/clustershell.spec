@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name:          clustershell
-Version:       1.6
+Version:       1.7
 Release:       6%{?dist}
 Summary:       Python framework for efficient cluster administration
 
