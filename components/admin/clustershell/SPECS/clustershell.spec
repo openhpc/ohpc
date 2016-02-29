@@ -91,6 +91,7 @@ rm -rf %{buildroot}
 %dir /usr%{_sysconfdir}/clustershell/groups.conf.d
 %dir /usr%{_sysconfdir}/clustershell/groups.d
 %doc /usr%{_sysconfdir}/clustershell/groups.d/README
+%doc /usr%{_sysconfdir}/clustershell/groups.d/*.example
 %doc /usr%{_sysconfdir}/clustershell/groups.conf.d/README
 %doc /usr%{_sysconfdir}/clustershell/groups.conf.d/*.example
 %doc /usr%{_sysconfdir}/clustershell/*.example
