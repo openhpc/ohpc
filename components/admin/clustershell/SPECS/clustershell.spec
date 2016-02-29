@@ -52,7 +52,7 @@ rm -rf %{buildroot}
 install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
 install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.d
 install -p -m 0644 conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
-install -p -m 0644 conf/groups.conf.d/*.conf.example %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
+install -p -m 0644 conf/groups.conf.d/*.conf.example %{buildroot}/usr%{_sysconfdir}/clustershell/groups.conf.d
 
 # man pages
 install -d %{buildroot}/%{_mandir}/{man1,man5}
@@ -87,6 +87,7 @@ rm -rf %{buildroot}
 %{_sysconfdir}/clustershell/groups.conf
 %config(noreplace) /usr%{_sysconfdir}/clustershell/clush.conf
 %config(noreplace) /usr%{_sysconfdir}/clustershell/groups.conf
+%config(noreplace) /usr%{_sysconfdir}/clustershell/groups.d/local.cfg
 %dir /usr%{_sysconfdir}/clustershell/groups.conf.d
 %dir /usr%{_sysconfdir}/clustershell/groups.d
 %doc /usr%{_sysconfdir}/clustershell/groups.conf.d/*.conf.example
