@@ -50,7 +50,7 @@ rm -rf %{buildroot}
 
 # config files
 install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
-install -p -m 0644 conf/*.conf conf/groups %{buildroot}/%{_sysconfdir}/clustershell/
+install -p -m 0644 conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
 install -p -m 0644 conf/groups.conf.d/README conf/groups.conf.d/*.conf.example %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
 
 # man pages
