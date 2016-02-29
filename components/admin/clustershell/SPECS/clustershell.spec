@@ -90,7 +90,10 @@ rm -rf %{buildroot}
 %config(noreplace) /usr%{_sysconfdir}/clustershell/groups.d/local.cfg
 %dir /usr%{_sysconfdir}/clustershell/groups.conf.d
 %dir /usr%{_sysconfdir}/clustershell/groups.d
-%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/*.conf.example
+%doc /usr%{_sysconfdir}/clustershell/groups.d/README
+%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/README
+%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/*.example
+%doc /usr%{_sysconfdir}/clustershell/*.example
 %{python_sitelib}/ClusterShell/
 %{python_sitelib}/ClusterShell-*-py?.?.egg-info
 %{_bindir}/clubak
