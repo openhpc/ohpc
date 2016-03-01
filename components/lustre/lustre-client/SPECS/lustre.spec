@@ -38,7 +38,7 @@
 #%define kobjdir /lib/modules/2.6.32-431.el6.x86_64/build/
 #%endif
 
-%if 0%{?centos_version} == 700
+#%if 0%{?centos_version} == 700
 # 7.1 kernel version
 # %define centos_kernel 3.10.0-229.el7
 
@@ -53,7 +53,7 @@
 #%endif
 
 %if 0%{?centos_version}
-BuildRequires: kernel
+#BuildRequires: kernel
 BuildRequires: kernel-devel
 %endif
 
@@ -62,8 +62,8 @@ BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
 %endif
 
-%define kdir /lib/modules/$(uname -r).x86/source/
-%define kobjdir /lib/modules/$(uname -r).x86/build/
+#%define kdir /lib/modules/$(uname -r).x86/source/
+#%define kobjdir /lib/modules/$(uname -r).x86/build/
 
 BuildRequires:	-post-build-checks
 
@@ -212,8 +212,7 @@ AutoReqProv: no
 %if %{_vendor}=="redhat" || %{_vendor}=="fedora"
 # for RHEL we need to require the specific kernel still since weak-modules
 # support on RH is, well, weak, to be punny about it
-#Requires: kernel = %{krequires}
-Requires: kernel
+Requires: kernel = %{krequires}
 %if %{with lnet_dlc}
 Requires: libyaml
 BuildRequires: libyaml-devel
