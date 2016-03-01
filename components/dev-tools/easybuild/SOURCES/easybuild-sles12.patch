@@ -1,12 +1,14 @@
---- software/EasyBuild/2.1.1/lib/python2.7/site-packages/easybuild_framework-2.1.1-py2.7.egg/easybuild/tools/systemtools.py	2015-07-28 14:01:06.000000000 -0700
-+++ software.patch/EasyBuild/2.1.1/lib/python2.7/site-packages/easybuild_framework-2.1.1-py2.7.egg/easybuild/tools/systemtools.py	2015-08-12 08:07:22.000000000 -0700
-@@ -335,6 +335,9 @@
-                     ('2.6.32', '_SP1'),
+--- software/EasyBuild/2.5.0/lib/python2.7/site-packages/easybuild_framework-2.5.0-py2.7.egg/easybuild/tools/systemtools.py	2015-07-28 14:01:06.000000000 -0700
++++ software.patch/EasyBuild/2.5.0/lib/python2.7/site-packages/easybuild_framework-2.5.0-py2.7.egg/easybuild/tools/systemtools.py	2015-08-12 08:07:22.000000000 -0700
+@@ -343,9 +343,9 @@
                      ('3.0', '_SP2'),
                  ],
-+                "12": [
+
+-                # Once SLES 12 SP1 comes out we'll need to make this stricter
+                 "12": [
+-                    ('3.12', ''),
 +                    ('3.12.28', ''),
-+                ],
++                    ('3.12.49', '_SP1'),
+                 ],
              }
- 
-             # append suitable suffix to system version
+
