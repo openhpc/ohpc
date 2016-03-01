@@ -60,8 +60,8 @@ BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
 %endif
 
-#%define kdir /lib/modules/$(uname -r).x86/source/
-#%define kobjdir /lib/modules/$(uname -r).x86/build/
+%define kdir /lib/modules/$(uname -r).x86/source/
+%define kobjdir /lib/modules/$(uname -r).x86/build/
 
 %endif
 
@@ -212,8 +212,7 @@ AutoReqProv: no
 %if %{_vendor}=="redhat" || %{_vendor}=="fedora"
 # for RHEL we need to require the specific kernel still since weak-modules
 # support on RH is, well, weak, to be punny about it
-#Requires: kernel = %{krequires}
-Requires: kernel = $(uname -r)
+Requires: kernel = %{krequires}
 %if %{with lnet_dlc}
 Requires: libyaml
 BuildRequires: libyaml-devel
