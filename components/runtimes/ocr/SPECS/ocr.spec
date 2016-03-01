@@ -62,7 +62,6 @@ Source0:   https://xstack.exascale-tech.com/git/public/snapshots/ocr-refs/tags/O
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-Requires:  %{pname}-support%{PROJ_DELIM}
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %description
@@ -76,20 +75,6 @@ while maintaining app performance.
 This version is for shared memory systems.
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
-
-%package -n %{pname}-devel%{PROJ_DELIM}
-Summary: Header files and other development tools needed for developing OCR applications
-Group:   ohpc/runtimes
-%description -n %{pname}-devel%{PROJ_DELIM}
-OCR headers and development tools. You only need to install this package if you
-want to develop applications using OCR.
-
-%package -n %{pname}-support%{PROJ_DELIM}
-Summary: Support files needed to run OCR applications.
-Group:   ohpc/runtimes
-%description -n %{pname}-support%{PROJ_DELIM}
-OCR support files and scripts. This package is needed to both build and run
-OCR applications. The scripts are installed in <prefix>/share/ocr/scripts
 
 %if %{with mpi}
 %package -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -107,7 +92,6 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
-Requires: %{pname}-support%{PROJ_DELIM}
 Summary:   Open Community Runtime (OCR) for clusters using MPI
 Group:   ohpc/runtimes
 %description -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -245,24 +229,20 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%exclude %{install_path}/include
-%exclude %{install_path}/share/ocr/scripts
-
-%files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root,-)
-%{install_path}/include
-
-%files -n %{pname}-support%{PROJ_DELIM}
-%defattr(-,root,root,-)
-%{install_path}/share/ocr/scripts
+%exclude %{install_path}/bin/ocrrun_mpi
+%exclude %{install_path}/lib/libocr_mpi.*
+%exclude %{install_path}/share/ocr/config/x86-mpi
+%exclude %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/.version.%{version}
+%exclude %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/%{version}
 
 %if %{with mpi}
 %files -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %defattr(-,root,root,-)
-%{install_path}/bin/ocrrun_mpi
-%{install_path}/lib/libocr_mpi.*
-%config %{install_path}/share/ocr/config/x86-mpi
-%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/.version.%{version}
-%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/%{version}
+%{OHPC_HOME}
+%exclude %{install_path}/bin/ocrrun_x86
+%exclude %{install_path}/lib/libocr_x86.*
+%exclude %{install_path}/share/ocr/config/x86
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 %endif
 %changelog
