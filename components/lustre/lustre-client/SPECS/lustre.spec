@@ -50,8 +50,6 @@
 #%define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
 #%endif
 
-#%endif
-
 %if 0%{?centos_version}
 #BuildRequires: kernel
 BuildRequires: kernel-devel
@@ -64,6 +62,8 @@ BuildRequires: kernel-default-devel
 
 #%define kdir /lib/modules/$(uname -r).x86/source/
 #%define kobjdir /lib/modules/$(uname -r).x86/build/
+
+%endif
 
 BuildRequires:	-post-build-checks
 
