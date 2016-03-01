@@ -62,7 +62,7 @@ BuildRequires: kernel-default-devel
 
 %define kdir /lib/modules/$(uname -r).x86/source/
 %define kobjdir /lib/modules/$(uname -r).x86/build/
-%define kver $(uname -r)
+%define kversion $(uname -r)
 
 %endif
 
