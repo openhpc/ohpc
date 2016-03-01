@@ -51,7 +51,7 @@
 #%endif
 
 %if 0%{?centos_version}
-#BuildRequires: kernel
+BuildRequires: kernel
 BuildRequires: kernel-devel
 %endif
 
