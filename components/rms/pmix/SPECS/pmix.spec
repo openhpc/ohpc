@@ -502,13 +502,21 @@ test "x$RPM_BUILD_ROOT" != "x" && rm -rf $RPM_BUILD_ROOT
 # Post Install Section
 #
 #############################################################################
-%if %{use_mpi_selector}
 %post
+/sbin/ldconfig || exit 1
+%if %{use_mpi_selector}
 %{mpi_selector} \
 	--register %{pname}-%{version} \
 	--source-dir %{shell_scripts_path} \
         --yes
 %endif
+
+#############################################################################
+#
+# Postun Install Section
+#
+#############################################################################
+%postun -p /sbin/ldconfig
 
 #############################################################################
 #
