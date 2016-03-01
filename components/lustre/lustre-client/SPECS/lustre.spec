@@ -17,40 +17,50 @@
 
 %define debug_package %{nil}
 
-%if 0%{?suse_version} == 1110
-BuildRequires: kernel-source = 3.0.76-0.11.1
-BuildRequires: kernel-default-devel = 3.0.76-0.11.1
-%define kdir /lib/modules/3.0.76-0.11-default/source/
-%define kobjdir /lib/modules/3.0.76-0.11-default/build/
-%endif
+#%if 0%{?suse_version} == 1110
+#BuildRequires: kernel-source = 3.0.76-0.11.1
+#BuildRequires: kernel-default-devel = 3.0.76-0.11.1
+#%define kdir /lib/modules/3.0.76-0.11-default/source/
+#%define kobjdir /lib/modules/3.0.76-0.11-default/build/
+#%endif
 
-%if 0%{?suse_version} == 1315
-BuildRequires: kernel-source = 3.12.49-11.1
-BuildRequires: kernel-default-devel = 3.12.49-11.1
-%define kdir /lib/modules/3.12.49-11.1-default/source/
-%define kobjdir /lib/modules/3.12.49-11.1-default/build/
-%endif
+#%if 0%{?suse_version} == 1315
+#BuildRequires: kernel-source = 3.12.49-11.1
+#BuildRequires: kernel-default-devel = 3.12.49-11.1
+#%define kdir /lib/modules/3.12.49-11.1-default/source/
+#%define kobjdir /lib/modules/3.12.49-11.1-default/build/
+#%endif
 
-%if 0%{?centos_version} == 600
-BuildRequires: kernel = 2.6.32-431.el6
-BuildRequires: kernel-devel = 2.6.32-431.el6
-%define kdir /lib/modules/2.6.32-431.el6.x86_64/source/
-%define kobjdir /lib/modules/2.6.32-431.el6.x86_64/build/
-%endif
+#%if 0%{?centos_version} == 600
+#BuildRequires: kernel = 2.6.32-431.el6
+#BuildRequires: kernel-devel = 2.6.32-431.el6
+#%define kdir /lib/modules/2.6.32-431.el6.x86_64/source/
+#%define kobjdir /lib/modules/2.6.32-431.el6.x86_64/build/
+#%endif
 
 %if 0%{?centos_version} == 700
 # 7.1 kernel version
 # %define centos_kernel 3.10.0-229.el7
 
 # 7.2 kernel version
-%define centos_kernel 3.10.0-327.el7
-BuildRequires: kernel = %{centos_kernel}
-BuildRequires: kernel-devel = %{centos_kernel}
-%define kdir /lib/modules/%{centos_kernel}.x86_64/source/
-%define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
+#%define centos_kernel 3.10.0-327.el7
+#BuildRequires: kernel = %{centos_kernel}
+#BuildRequires: kernel-devel = %{centos_kernel}
+#%define kdir /lib/modules/%{centos_kernel}.x86_64/source/
+#%define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
+#%endif
+
+#%endif
+
+%if 0%{?centos_version}
+BuildRequires: kernel-devel
 %endif
 
+%if 0%{?suse_version}
+BuildRequires: kernel-source
+BuildRequires: kernel-default-devel
 %endif
+
 BuildRequires:	-post-build-checks
 
 # Declare rpmbuild --with/--without parameters
@@ -378,7 +388,8 @@ cd $RPM_BUILD_DIR/lustre-%{version}
 %define optflags -g -O2 -Werror
 
 %if 0%{?OHPC_BUILD}
-CONFIGURE_ARGS="%{?configure_args} --with-release=3.0.76-0.11-default --disable-ldiskfs --disable-server"
+#CONFIGURE_ARGS="%{?configure_args} --with-release=3.0.76-0.11-default --disable-ldiskfs --disable-server"
+CONFIGURE_ARGS="%{?configure_args} --with-release=%release --disable-ldiskfs --disable-server"
 %else
 CONFIGURE_ARGS="%{?configure_args} --with-release=%release"
 %endif
