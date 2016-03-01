@@ -212,7 +212,8 @@ AutoReqProv: no
 %if %{_vendor}=="redhat" || %{_vendor}=="fedora"
 # for RHEL we need to require the specific kernel still since weak-modules
 # support on RH is, well, weak, to be punny about it
-Requires: kernel = %{krequires}
+#Requires: kernel = %{krequires}
+Requires: kernel = $(uname -r)
 %if %{with lnet_dlc}
 Requires: libyaml
 BuildRequires: libyaml-devel
