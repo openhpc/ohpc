@@ -61,6 +61,8 @@ BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
 %endif
 
+%define kobjdir /lib/modules/$(uname -r).x86/build/
+
 BuildRequires:	-post-build-checks
 
 # Declare rpmbuild --with/--without parameters
