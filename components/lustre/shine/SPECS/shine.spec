@@ -13,6 +13,7 @@ Vendor:    CEA
 Url:       http://lustre-shine.sourceforge.net/
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
+BuildRequires: python
 Requires:  clustershell >= 1.5.1
 Provides:  %{pname} = %{version}
 
