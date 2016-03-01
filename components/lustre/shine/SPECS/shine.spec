@@ -5,7 +5,8 @@ Name:      %{pname}%{?PROJ_DELIM}
 Summary:   Lustre administration utility
 Version:   1.4
 Release:   1%{?dist}
-Source0:   http://downloads.sourceforge.net/lustre-shine/%{pname}/%{version}/%{pname}-%{version}.tar.gz
+#Source0:   http://downloads.sourceforge.net/lustre-shine/%{pname}/%{version}/%{pname}-%{version}.tar.gz
+Source0:   http://build.openhpc.community/badge/shine-1.4.tar.gz
 License:   GPLv2
 Group:     Applications/System
 Vendor:    CEA
