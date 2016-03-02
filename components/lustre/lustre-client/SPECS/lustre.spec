@@ -589,7 +589,7 @@ find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} \
 %files modules
 %defattr(-,root,root)
 %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/*
-%conf /etc/modprobe.d/k02iblnd.conf
+%config /etc/modprobe.d/k02iblnd.conf
 %if %{with lustre_tests}
 %exclude %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/kernel/fs/lustre/llog_test.ko
 %endif
