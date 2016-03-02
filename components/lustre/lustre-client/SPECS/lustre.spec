@@ -50,10 +50,6 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
 %endif
 
-%define kdir /lib/modules/$(uname -r).x86/source/
-%define kobjdir /lib/modules/$(uname -r).x86/build/
-%define kversion $(uname -r)
-
 %endif
 
 BuildRequires:	-post-build-checks
