@@ -48,6 +48,8 @@ BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.x86_64/source/
 %define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
+
+BuildRequires: python-docutils
 %endif
 
 %endif
