@@ -165,7 +165,7 @@ Group:   ohpc/lustre
 #Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
 Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
-Patch1: lustre-2.8.0RC4.metafile.patch
+#Patch1: lustre-2.8.0RC4.metafile.patch
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
@@ -368,7 +368,7 @@ clients in order to run
 %prep
 
 %setup -qn lustre-%{version}
-%patch1 -p1
+#patch1 -p1
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
