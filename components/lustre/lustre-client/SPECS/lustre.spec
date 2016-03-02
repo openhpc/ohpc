@@ -27,8 +27,8 @@ BuildRequires: kernel-default-devel = 3.0.76-0.11.1
 %if 0%{?suse_version} == 1315
 BuildRequires: kernel-source = 3.12.49-11.1
 BuildRequires: kernel-default-devel = 3.12.49-11.1
-%define kdir /lib/modules/3.12.49-11.1-default/source/
-%define kobjdir /lib/modules/3.12.49-11.1-default/build/
+%define kdir /lib/modules/3.12.49-11-default/source/
+%define kobjdir /lib/modules/3.12.49-11-default/build/
 %endif
 
 %if 0%{?centos_version} == 600
