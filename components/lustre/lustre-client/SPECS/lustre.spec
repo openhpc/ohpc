@@ -162,8 +162,7 @@ Release: %{fullrelease}
 License: GPL
 Group:   ohpc/lustre
 #Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
-#Source: lustre-%{version}.tar.gz
-Source: lustre-2.8.0RC4.tar.gz
+Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
@@ -366,7 +365,7 @@ clients in order to run
 %endif
 %prep
 
-%setup -qn lustre-%{version}RC4
+%setup -qn lustre-%{version}
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
@@ -375,7 +374,7 @@ ln lnet/ChangeLog ChangeLog-lnet
 
 # Set an explicit path to our Linux tree, if we can.
 
-cd $RPM_BUILD_DIR/lustre-%{version}RC4
+cd $RPM_BUILD_DIR/lustre-%{version}
 
 # override %optflags so that the vendor's overzealous flags don't create
 # build failures
@@ -441,7 +440,7 @@ CONFIGURE_ARGS=$(echo $CONFIGURE_ARGS | sed -e 's/"\?--with-kmp-moddir=[^ ][^ ]*
 %define eval_configure %(echo '%configure' | sed -e 's#\./configure#eval ./configure#' -e 's/--\\(build\\|host\\|target\\)=[^ ][^ ]* //g')
 
 # karl.w.schulz@intel.com (03/02/16) - init autotools with RC release
-. ./autogen.sh
+# . ./autogen.sh
 
 %eval_configure \
 	%{?kdir: --with-linux=%kdir} %{?kobjdir: --with-linux-obj=%kobjdir} \
@@ -474,7 +473,7 @@ if [ -f $RPM_BUILD_ROOT%{_sysconfdir}/init.d/lnet ]; then
 fi
 
 # Create the pristine source directory.
-cd $RPM_BUILD_DIR/lustre-%{version}RC4
+cd $RPM_BUILD_DIR/lustre-%{version}
 mkdir -p $RPM_BUILD_ROOT%{_prefix}/src
 rm -f lustre-source
 ln -s $RPM_BUILD_ROOT%{_prefix}/src lustre-source
