@@ -373,7 +373,7 @@ ln lnet/ChangeLog ChangeLog-lnet
 
 # Set an explicit path to our Linux tree, if we can.
 
-cd RPM_BUILD_DIR/lustre-%{version}RC4
+cd $RPM_BUILD_DIR/lustre-%{version}RC4
 
 # override %optflags so that the vendor's overzealous flags don't create
 # build failures
