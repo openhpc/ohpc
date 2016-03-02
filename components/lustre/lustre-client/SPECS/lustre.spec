@@ -39,10 +39,10 @@ BuildRequires: kernel-devel = 2.6.32-431.el6
 %endif
 
 %if 0%{?centos_version} == 700
- 7.1 kernel version
- %define centos_kernel 3.10.0-229.el7
+# 7.1 kernel version
+# %define centos_kernel 3.10.0-229.el7
 
- 7.2 kernel version
+# 7.2 kernel version
 %define centos_kernel 3.10.0-327.el7
 BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
