@@ -49,8 +49,9 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.x86_64/source/
 %define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
 
-BuildRequires: python-docutils
 %endif
+
+BuildRequires: python-docutils
 
 %endif
 
@@ -164,6 +165,7 @@ Group:   ohpc/lustre
 #Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
 Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
+Patch1: lustre-2.8.0RC4.metafile.patch
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
@@ -366,6 +368,7 @@ clients in order to run
 %prep
 
 %setup -qn lustre-%{version}
+%patch1 -p1
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
@@ -578,11 +581,15 @@ find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} \
 %{_datadir}/lustre
 %{_sysconfdir}/udev/rules.d/99-lustre.rules
 %config(noreplace) %{_sysconfdir}/ldev.conf
+%if 0%{?cenotos_version}
+/etc/init.d/lsvcgss
+%endif
 
 %if %{with lustre_modules}
 %files modules
 %defattr(-,root,root)
 %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/*
+%conf /etc/modprobe.d/k02iblnd.conf
 %if %{with lustre_tests}
 %exclude %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/kernel/fs/lustre/llog_test.ko
 %endif
