@@ -373,7 +373,7 @@ ln lnet/ChangeLog ChangeLog-lnet
 
 # Set an explicit path to our Linux tree, if we can.
 
-cd $RPM_BUILD_DIR/lustre-%{version}
+cd RPM_BUILD_DIR/lustre-%{version}RC4
 
 # override %optflags so that the vendor's overzealous flags don't create
 # build failures
@@ -469,7 +469,7 @@ if [ -f $RPM_BUILD_ROOT%{_sysconfdir}/init.d/lnet ]; then
 fi
 
 # Create the pristine source directory.
-cd $RPM_BUILD_DIR/lustre-%{version}
+cd $RPM_BUILD_DIR/lustre-%{version}RC4
 mkdir -p $RPM_BUILD_ROOT%{_prefix}/src
 rm -f lustre-source
 ln -s $RPM_BUILD_ROOT%{_prefix}/src lustre-source
