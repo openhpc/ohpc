@@ -581,16 +581,16 @@ find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} \
 %endif
 %{_datadir}/lustre
 %{_sysconfdir}/udev/rules.d/99-lustre.rules
-%{_sysconfdir}/modprobe.d/k02iblnd.conf
 %config(noreplace) %{_sysconfdir}/ldev.conf
 %if 0%{?cenotos_version}
-%{_sysconfdir}/init.d/lsvcgss
+%{?rootdir}/%{_sysconfdir}/init.d/lsvcgss
 %endif
 
 %if %{with lustre_modules}
 %files modules
 %defattr(-,root,root)
 %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/*
+%{?rootdir}/%{_sysconfdir}/modprobe.d/k02iblnd.conf
 %if %{with lustre_tests}
 %exclude %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/kernel/fs/lustre/llog_test.ko
 %endif
