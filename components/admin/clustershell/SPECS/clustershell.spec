@@ -17,7 +17,7 @@ Source0:       http://downloads.sourceforge.net/%{pname}/%{pname}-%{version}.tar
 BuildRoot:     %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{pname}/%version
 
 %if 0%{?suse_version} == 1110
 BuildArch:     x86_64
