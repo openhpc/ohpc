@@ -1,6 +1,9 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
-Name:          clustershell
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
+Name:          clustershell%{PROJ_DELIM}
 Version:       1.7
 Release:       6%{?dist}
 Summary:       Python framework for efficient cluster administration
@@ -9,6 +12,7 @@ Group:         System Environment/Base
 License:       CeCILL-C
 URL:           http://clustershell.sourceforge.net/
 Source0:       http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source:        OHPC_macros
 BuildRoot:     %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # Default library install path
