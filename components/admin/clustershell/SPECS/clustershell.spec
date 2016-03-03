@@ -12,7 +12,6 @@ Group:         System Environment/Base
 License:       CeCILL-C
 URL:           http://clustershell.sourceforge.net/
 Source0:       http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-Source:        OHPC_macros
 BuildRoot:     %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 # Default library install path
