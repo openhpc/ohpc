@@ -101,8 +101,8 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
 prepend-path    MANPATH             %{install_path}/man
 
-setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_BIN        %{install_path}/bin
+setenv          %{pname}_DIR        %{install_path}
+setenv          %{pname}_BIN        %{install_path}/bin
 
 EOF
 
