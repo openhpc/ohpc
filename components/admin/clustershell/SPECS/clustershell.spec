@@ -11,6 +11,8 @@ URL:           http://clustershell.sourceforge.net/
 Source0:       http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 BuildRoot:     %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
+# Default library install path
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %if 0%{?suse_version} == 1110
 BuildArch:     x86_64
@@ -47,24 +49,24 @@ Syntax highlighting in the VIM editor for ClusterShell configuration files.
 
 %install
 rm -rf %{buildroot}
-%{__python} setup.py install -O1 --prefix=%{_prefix} --skip-build --root %{buildroot}
+%{__python} setup.py install -O1 --prefix=%{install_path} --skip-build --root %{buildroot}
 
 # config files
-install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
-install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.d
-install -p -m 0644 conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
-install -p -m 0644 conf/groups.conf.d/*.conf.example %{buildroot}/usr%{_sysconfdir}/clustershell/groups.conf.d
+#install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
+#install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.d
+#install -p -m 0644 conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
+#install -p -m 0644 conf/groups.conf.d/*.conf.example %{buildroot}/usr%{_sysconfdir}/clustershell/groups.conf.d
 
 # man pages
-install -d %{buildroot}/%{_mandir}/{man1,man5}
-install -p -m 0644 doc/man/man1/clubak.1 %{buildroot}/%{_mandir}/man1/
-install -p -m 0644 doc/man/man1/clush.1 %{buildroot}/%{_mandir}/man1/
-install -p -m 0644 doc/man/man1/nodeset.1 %{buildroot}/%{_mandir}/man1/
-install -p -m 0644 doc/man/man5/clush.conf.5 %{buildroot}/%{_mandir}/man5/
-install -p -m 0644 doc/man/man5/groups.conf.5 %{buildroot}/%{_mandir}/man5/
+#install -d %{buildroot}/%{_mandir}/{man1,man5}
+#install -p -m 0644 doc/man/man1/clubak.1 %{buildroot}/%{_mandir}/man1/
+#install -p -m 0644 doc/man/man1/clush.1 %{buildroot}/%{_mandir}/man1/
+#install -p -m 0644 doc/man/man1/nodeset.1 %{buildroot}/%{_mandir}/man1/
+#install -p -m 0644 doc/man/man5/clush.conf.5 %{buildroot}/%{_mandir}/man5/
+#install -p -m 0644 doc/man/man5/groups.conf.5 %{buildroot}/%{_mandir}/man5/
 
 # vim addons
-%define vimdatadir %{_datadir}/vim/vimfiles
+%define vimdatadir %{install_path}/share/vim/vimfiles
 install -d %{buildroot}/%{vimdatadir}/{ftdetect,syntax}
 install -p -m 0644 doc/extras/vim/ftdetect/clustershell.vim %{buildroot}/%{vimdatadir}/ftdetect/
 install -p -m 0644 doc/extras/vim/syntax/clushconf.vim %{buildroot}/%{vimdatadir}/syntax/
@@ -78,33 +80,36 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc ChangeLog Licence_CeCILL-C_V1-en.txt Licence_CeCILL-C_V1-fr.txt
 %doc doc/examples
-%{_mandir}/man1/clubak.1*
-%{_mandir}/man1/clush.1*
-%{_mandir}/man1/nodeset.1*
-%{_mandir}/man5/clush.conf.5*
-%{_mandir}/man5/groups.conf.5*
-%dir /usr%{_sysconfdir}/clustershell
-%{_sysconfdir}/clustershell/clush.conf
-%{_sysconfdir}/clustershell/groups.conf
-%config(noreplace) /usr%{_sysconfdir}/clustershell/clush.conf
-%config(noreplace) /usr%{_sysconfdir}/clustershell/groups.conf
-%config(noreplace) /usr%{_sysconfdir}/clustershell/groups.d/local.cfg
-%dir /usr%{_sysconfdir}/clustershell/groups.conf.d
-%dir /usr%{_sysconfdir}/clustershell/groups.d
-%doc /usr%{_sysconfdir}/clustershell/groups.d/README
-%doc /usr%{_sysconfdir}/clustershell/groups.d/*.example
-%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/README
-%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/*.example
-%doc /usr%{_sysconfdir}/clustershell/*.example
-%{python_sitelib}/ClusterShell/
-%{python_sitelib}/ClusterShell-*-py?.?.egg-info
-%{_bindir}/clubak
-%{_bindir}/clush
-%{_bindir}/nodeset
+%{OHPC_HOME}
+%exclude %{vimdatadir}
+%exclude %{install_path}/share/vim/
+#%{_mandir}/man1/clubak.1*
+#%{_mandir}/man1/clush.1*
+#%{_mandir}/man1/nodeset.1*
+#%{_mandir}/man5/clush.conf.5*
+#%{_mandir}/man5/groups.conf.5*
+#%dir /usr%{_sysconfdir}/clustershell
+#%{_sysconfdir}/clustershell/clush.conf
+#%{_sysconfdir}/clustershell/groups.conf
+#%config(noreplace) /usr%{_sysconfdir}/clustershell/clush.conf
+#%config(noreplace) /usr%{_sysconfdir}/clustershell/groups.conf
+#%config(noreplace) /usr%{_sysconfdir}/clustershell/groups.d/local.cfg
+#%dir /usr%{_sysconfdir}/clustershell/groups.conf.d
+#%dir /usr%{_sysconfdir}/clustershell/groups.d
+#%doc /usr%{_sysconfdir}/clustershell/groups.d/README
+#%doc /usr%{_sysconfdir}/clustershell/groups.d/*.example
+#%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/README
+#%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/*.example
+#%doc /usr%{_sysconfdir}/clustershell/*.example
+#%{python_sitelib}/ClusterShell/
+#%{python_sitelib}/ClusterShell-*-py?.?.egg-info
+#%{_bindir}/clubak
+#%{_bindir}/clush
+#%{_bindir}/nodeset
 
 %files -n vim-%{name}
 %defattr(-,root,root,-)
-%dir %{_datadir}/vim/
+%dir %{install_path}/share/vim/
 %dir %{vimdatadir}
 %dir %{vimdatadir}/ftdetect
 %dir %{vimdatadir}/syntax
