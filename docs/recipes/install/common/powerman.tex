@@ -20,7 +20,7 @@ as configured by this recipe.
               /etc/powerman/powerman.conf
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
               perl -pi -e 'print "device \"ipmi'$i'\" \"ipmipower\" \"/usr/sbin/ipmipower -h ".
-                "'${c_bmc[$i]}' -u '$bmc_username' -p '$bmc_password'|&\"\n" if(/^\#device "ipmi1"/);' \
+                "'${c_bmc[$i]}' -u '$bmc_username' -p '${IPMI_PASSWORD:-undefined}'|&\"\n" if(/^\#device "ipmi1"/);' \
                 /etc/powerman/powerman.conf
            done
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
