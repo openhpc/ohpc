@@ -6,14 +6,14 @@
 %define pname clustershell
 
 Name:          clustershell%{PROJ_DELIM}
-Version:       1.7
+Version:       1.7.1
 Release:       6%{?dist}
 Summary:       Python framework for efficient cluster administration
 
 Group:         System Environment/Base
 License:       CeCILL-C
 URL:           http://clustershell.sourceforge.net/
-Source0:       http://downloads.sourceforge.net/%{pname}/%{pname}-%{version}.tar.gz
+Source0:       http://https://github.com/cea-hpc/${pname}/archive/v${version}.tar.gz
 BuildRoot:     %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 
 # Default library install path
