@@ -47,7 +47,7 @@ Syntax highlighting in the VIM editor for ClusterShell configuration files.
 
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 
 %build
 %{__python} setup.py build
