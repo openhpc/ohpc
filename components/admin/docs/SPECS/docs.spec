@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 Name:           docs%{PROJ_DELIM}
-Version:        1.0.1
+Version:        1.1
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
@@ -51,7 +51,7 @@ from the OpenHPC software stack.
 %define source_path docs/recipes/install/sles12/vanilla
 %else
 %if 0%{?rhel_version} || 0%{?centos_version}
-%define source_path docs/recipes/install/centos7.1/vanilla
+%define source_path docs/recipes/install/centos7.2/vanilla
 %endif
 %endif
 
@@ -60,7 +60,7 @@ make
 
 # Include convenience recipe script(s)
 
-../../parse_doc.pl steps.tex > fsp_vanilla_recipe.sh
+../../parse_doc.pl steps.tex > vanilla_recipe.sh
 
 
 %install
@@ -70,7 +70,7 @@ make
 install -m 0644 -p docs/recipes/install/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/recipes/install/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
 install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/Install_guide.pdf 
-install -m 0755 -p %{source_path}/fsp_vanilla_recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe.sh
+install -m 0755 -p %{source_path}/vanilla_recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe.sh
 
 install -m 0644 -p %{source_path}/../input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/input.local
 
