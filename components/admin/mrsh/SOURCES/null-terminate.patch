@@ -1,0 +1,12 @@
+diff -Nuir a/mrshd/mrshd.c b/mrshd/mrshd.c
+--- a/mrshd/mrshd.c	2015-11-24 00:39:03.000000000 -0800
++++ b/mrshd/mrshd.c	2015-11-24 00:36:34.000000000 -0800
+@@ -615,7 +615,7 @@
+ 	 */
+ 	for (ifd = getdtablesize()-1; ifd > 2; ifd--) close(ifd);
+ 
+-	execl(theshell, shellname, "-c", cmdbuf, 0);
++	execl(theshell, shellname, "-c", cmdbuf, (char *)NULL);
+ 	perror(theshell);
+ 	exit(1);
+ }

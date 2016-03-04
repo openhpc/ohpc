@@ -22,6 +22,7 @@ Summary: Remote shell program that uses munge authentication
 License: none
 Group: ohpc/admin
 Source:    https://github.com/chaos/mrsh/archive/mrsh-2-7-1.tar.gz
+Patch: null-terminate.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}
 BuildRequires: ncurses-devel pam-devel munge-devel-ohpc
 Requires: munge-ohpc >= 0.1-0
@@ -56,6 +57,7 @@ rsh compatability package for mrcp/mrlogin/mrsh
 %prep
 %setup -q -n mrsh-mrsh-2-7-1
 ./autogen.sh
+%patch -p1
 
 %build
 %configure %{?_without_pam} 
