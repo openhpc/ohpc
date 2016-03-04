@@ -29,7 +29,6 @@ Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-provision/warewulf-
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
-Requires: pigz
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel
 Conflicts: warewulf < 3
