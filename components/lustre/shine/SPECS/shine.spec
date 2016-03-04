@@ -1,7 +1,7 @@
 # Base package name
 %define pname shine
 
-Name:      %{pname}%{?PROJ_DELIM}
+Name:      %{pname}%{PROJ_DELIM}
 Summary:   Lustre administration utility
 Version:   1.4
 Release:   1%{?dist}
@@ -14,7 +14,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 BuildRequires: python
 #!BuildIgnore: post-build-checks
-Requires:  clustershell >= 1.5.1
+Requires:  clustershell%{PROJ_DELIM} >= 1.5.1
 Provides:  %{pname} = %{version}
 
 %description
