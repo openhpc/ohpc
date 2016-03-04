@@ -1,0 +1,11 @@
+--- warewulf-vnfs-3.6/etc/vnfs.conf	2014-05-21 11:13:14.000000000 -0700
++++ warewulf-vnfs-3.6.patch/etc/vnfs.conf	2016-03-04 13:58:32.989491400 -0800
+@@ -12,7 +12,7 @@
+ # below.
+ #
+ 
+-gzip command = gzip -9
++gzip command = /usr/bin/pigz -9
+ 
+ 
+ 
