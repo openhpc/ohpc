@@ -27,6 +27,11 @@ BuildRequires: ncurses-devel pam-devel munge-devel-ohpc
 Requires: munge-ohpc >= 0.1-0
 Provides: mrsh
 
+# support re-run of autogen
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+
 #%define _prefix %{OHPC_HOME}/admin/%{pname}
 
 %description
