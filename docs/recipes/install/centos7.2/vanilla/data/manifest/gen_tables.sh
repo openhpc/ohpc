@@ -1,1 +1,5 @@
-../../../../common/gen_tables.sh
+#!/bin/bash
+
+../../../../common/build_tables.pl
+../../../../common/build_patterns.pl
+../../../../common/build_changelog.pl
