@@ -91,6 +91,11 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %{_bindir}/mrsh
 %{_bindir}/mrlogin
 /usr/bin/mr*
+%dir /opt/ohpc/admin/mrsh
+%dir /opt/ohpc/admin/mrsh/bin
+%dir /opt/ohpc/admin/mrsh/share
+%dir /opt/ohpc/admin/mrsh/share/man
+%dir /opt/ohpc/admin/mrsh/share/man/man1
 
 %files -n %{pname}-server%{PROJ_DELIM}
 %defattr(-,root,root)
@@ -105,6 +110,11 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %{_mandir}/man8/mrlogind.8*
 %{_mandir}/man8/mrshd.8*
 %{_sbindir}/*
+%dir /opt/ohpc/admin/mrsh
+%dir /opt/ohpc/admin/mrsh/sbin
+%dir /opt/ohpc/admin/mrsh/share
+%dir /opt/ohpc/admin/mrsh/share/man
+%dir /opt/ohpc/admin/mrsh/share/man/man8
 
 %files -n %{pname}-rsh-compat%{PROJ_DELIM}
 %defattr(-,root,root)
@@ -119,6 +129,7 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %{_bindir}/rsh
 %{_bindir}/rlogin
 /usr/bin/r*
+%dir /opt/ohpc/admin/mrsh/share/man/man8
 
 %post -n %{pname}-server%{PROJ_DELIM}
 if ! grep "^mshell" /etc/services > /dev/null; then
