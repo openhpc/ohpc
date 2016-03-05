@@ -37,7 +37,7 @@ python setup.py build
 %install
 export SHINEVERSION=%{version}
 #python setup.py install --root=%{buildroot} --record=INSTALLED_FILES
-python setup.py install --root=%{buildroot} --prefix=%{install_path} --exec-prefix=%{install_path}/bin --record=INSTALLED_FILES
+python setup.py install --root=%{buildroot} --prefix=%{install_path}
 mkdir -p %{buildroot}%{install_path}/%{_sysconfdir}/shine/models
 cp conf/*.conf* %{buildroot}%{install_path}/%{_sysconfdir}/shine
 cp conf/models/* %{buildroot}%{install_path}/%{_sysconfdir}/shine/models
@@ -49,7 +49,7 @@ gzip -c doc/shine.conf.5 >%{buildroot}%{install_path}/%{_mandir}/man5/shine.conf
 %clean
 rm -rf %{buildroot}
 
-%files -f INSTALLED_FILES
+%files
 %defattr(-,root,root)
 %doc LICENSE README ChangeLog
 %{OHPC_HOME}
