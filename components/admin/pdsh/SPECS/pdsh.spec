@@ -318,6 +318,7 @@ from an allocated Torque job.
 %build
 
 ./configure --prefix=%{install_path} \
+    --with-rcmd-rank-list="ssh mrsh rsh krb4 qsh mqsh exec xcpu" \
     %{?_enable_debug}       \
     %{?_with_pam}           \
     %{?_without_pam}        \
@@ -345,8 +346,8 @@ from an allocated Torque job.
     %{?_without_mrsh}       \
     %{?_with_mqshell}       \
     %{?_without_mqshell}    \
-    %{?_with_xcpu}       \
-    %{?_without_xcpu}    \
+    %{?_with_xcpu}          \
+    %{?_without_xcpu}       \
     %{?_with_slurm}         \
     %{?_without_slurm}      \
     %{?_with_torque}        \
@@ -354,8 +355,7 @@ from an allocated Torque job.
     %{?_with_dshgroups}     \
     %{?_without_dshgroups}  \
     %{?_with_netgroup}      \
-    %{?_without_netgroup} \
-    --with-rcmd-rank-list="ssh mrsh rsh krb4 qsh mqsh exec xcpu"
+    %{?_without_netgroup}
     
            
 # FIXME: build fails when trying to build with _smp_mflags if qsnet is enabled
@@ -389,6 +389,8 @@ ln -sf %{install_path}/bin/pdsh ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/dshbak ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/pdcp ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/rpdcp ${RPM_BUILD_ROOT}/%{_bindir}
+
+find ${RPM_BUILD_ROOT}
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
