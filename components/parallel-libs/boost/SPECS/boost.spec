@@ -111,6 +111,11 @@ BuildRequires:  python-devel
 BuildRequires:  xorg-x11-devel
 BuildRequires:  zlib-devel
 
+# (Tron: 3/4/16) Add libicu dependency for SLES12sp1 as the distro does not seem to have it by default and some tests are failing
+%if 0%{?suse_version}
+Requires: libicu-devel >= 4.4
+%endif
+
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
