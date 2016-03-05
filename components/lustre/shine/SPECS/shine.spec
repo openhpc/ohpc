@@ -43,6 +43,7 @@ cp conf/*.conf* %{buildroot}%{install_path}/%{_sysconfdir}/shine
 cp conf/models/* %{buildroot}%{install_path}/%{_sysconfdir}/shine/models
 # relocate the unrelocateable
 mv %{buildroot}/usr/sbin/shine %{buildroot}%{install_path}/sbin
+mkdir -p %{buildroot}%{install_path}/share
 mv %{buildroot}/usr/share/shine %{buildroot}%{install_path}/share/.
 mv %{buildroot}/usr/share/vim %{buildroot}%{install_path}/share/.
 rm %{buildroot}/var/cache/shine/conf/README
