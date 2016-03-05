@@ -50,8 +50,8 @@ mv %{buildroot}/usr/share/vim %{buildroot}%{install_path}/share/.
 rm %{buildroot}/var/cache/shine/conf/README
 # man pages
 mkdir -p %{buildroot}%{install_path}/share/man/{man1,man5}
-gzip -c doc/shine.1 >%{buildroot}%{install_path}/%{_mandir}/man1/shine.1.gz
-gzip -c doc/shine.conf.5 >%{buildroot}%{install_path}/%{_mandir}/man5/shine.conf.5.gz
+gzip -c doc/shine.1 >%{buildroot}%{install_path}/share/man/man1/shine.1.gz
+gzip -c doc/shine.conf.5 >%{buildroot}%{install_path}/share/man/man5/shine.conf.5.gz
 
 %clean
 rm -rf %{buildroot}
