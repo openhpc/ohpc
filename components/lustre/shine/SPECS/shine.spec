@@ -41,6 +41,11 @@ python setup.py install --root=%{buildroot} --prefix=%{install_path}
 mkdir -p %{buildroot}%{install_path}/%{_sysconfdir}/shine/models
 cp conf/*.conf* %{buildroot}%{install_path}/%{_sysconfdir}/shine
 cp conf/models/* %{buildroot}%{install_path}/%{_sysconfdir}/shine/models
+# relocate the unrelocateable
+mv /usr/sbin/shine %{buildroot}%{install_path}/sbin
+mv /usr/share/shine %{buildroot}%{install_path}/share/.
+mv /usr/share/vim %{buildroot}%{install_path}/share/.
+rm /var/cache/shine/conf/README
 # man pages
 mkdir -p %{buildroot}%{install_path}/%{_mandir}/{man1,man5}
 gzip -c doc/shine.1 >%{buildroot}%{install_path}/%{_mandir}/man1/shine.1.gz
