@@ -10,17 +10,14 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 # verify we have necessary environment variables set
 
-CHECK_ENV([TBB_INC],[tbb])
-CHECK_ENV([TBB_LIB],[tbb])
-
 OHPC_COMPILER_FAMILY
 
 # Define include path and library linkage from environment variables
 # which should be provided via module loads. 
 
-CFLAGS="-I${TBB_INC} ${CFLAGS}"
-CXXFLAGS="-I${TBB_INC} ${CXXFLAGS}"
-LDFLAGS="-L${TBB_LIB} ${LDFLAGS}"
+CFLAGS="-I${TBBROOT}/include ${CFLAGS}"
+CXXFLAGS="-I${TBBROOT}/include ${CXXFLAGS}"
+LDFLAGS="-L${TBBROOT}/lib ${LDFLAGS}"
 LIBS="-tbb -pthread ${LIBS}"
 
 # test compilers
