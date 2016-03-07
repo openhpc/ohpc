@@ -28,7 +28,6 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: sudo
 BuildRequires: yum-utils
-BuidlRequires: pigz
 BuildRequires: warewulf-cluster%{PROJ_DELIM}
 BuildRequires: warewulf-vnfs%{PROJ_DELIM}
 
