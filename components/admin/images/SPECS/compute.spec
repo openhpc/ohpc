@@ -26,7 +26,6 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define installPath %{OHPC_ADMIN}/images/centos7
 
-BuildRequires: losf%{PROJ_DELIM}
 BuildRequires: warewulf-vnfs%{PROJ_DELIM}
 
 %define __spec_install_post %{nil}
