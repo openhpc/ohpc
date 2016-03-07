@@ -19,9 +19,7 @@ rm -f tests/test/miniDFT.*.out tests/log.miniDFT >& /dev/null
 make_check_failure=0
 
 for compiler in $COMPILER_FAMILIES ; do
-    # for mpi in $MPI_FAMILIES ; do
-    # skip openmpi temporarily - need libmkl_blacs_openmpi_*.so
-    for mpi in ${MPI_FAMILIES//openmpi} ; do
+    for mpi in $MPI_FAMILIES ; do
 	echo " "
 	echo " "
 	echo "-------------------------------------------------------"
