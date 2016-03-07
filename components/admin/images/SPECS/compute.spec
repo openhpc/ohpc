@@ -26,6 +26,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define installPath %{OHPC_ADMIN}/images/centos7
 
+BuildRequires: sudo
 BuildRequires: yum-utils
 BuildRequires: warewulf-cluster%{PROJ_DELIM}
 BuildRequires: warewulf-vnfs%{PROJ_DELIM}
@@ -48,6 +49,7 @@ imported into the Warewulf provisioning system.
 rm -rf $RPM_BUILD_ROOT
 %{__mkdir_p} %{buildroot}/%{installPath}
 
+sudo su - whoami
 wwmkchroot centos-7 %{buildroot}/%{installPath}
 
 
