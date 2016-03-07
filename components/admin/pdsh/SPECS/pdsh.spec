@@ -129,8 +129,8 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %endif
 
 
-#%{?_with_mrsh:BuildRequires: munge-devel%{PROJ_DELIM}}
-BuildRequires: munge-devel%{PROJ_DELIM}
+%{?_with_mrsh:BuildRequires: munge-devel%{PROJ_DELIM}}
+#BuildRequires: munge-devel%{PROJ_DELIM}
 %{?_with_qshell:BuildRequires: qsnetlibs}
 %{?_with_mqshell:BuildRequires: qsnetlibs}
 %{?_with_readline:BuildRequires: readline-devel}
