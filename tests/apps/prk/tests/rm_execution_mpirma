@@ -23,9 +23,8 @@ TASKS=$((NODES * TEST_NUM_RANKS))
     assert_success
 }
 
-# disabled pending investigation - test hang (impi, 1 node, 2 ranks/node, 4 threads)
-#@test "[$app] $mode/Synch_p2p run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-#    exe="$mode/Synch_p2p/p2p"
-#    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 1000 100" $NODES $TASKS
-#    assert_success
-#}
+@test "[$app] $mode/Synch_p2p run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Synch_p2p/p2p"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 1000 100" $NODES $TASKS
+    assert_success
+}
