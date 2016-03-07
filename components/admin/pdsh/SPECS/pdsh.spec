@@ -137,7 +137,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %{?_with_readline:BuildRequires: ncurses-devel}
 %{?_with_nodeupdown:BuildRequires: whatsup}
 #%{?_with_genders:BuildRequires: genders > 1.0}
-BuildRequires: genders > 1.0
+#BuildRequires: genders > 1.0
 %{?_with_pam:BuildRequires: pam-devel}
 %{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
 %{?_with_torque:BuildRequires: torque-devel}
