@@ -17,7 +17,7 @@ OHPC_COMPILER_FAMILY
 # Define include path and library linkage from environment variables
 # which should be provided via module loads. 
 
-CFLAGS="-I${TBBROOT} ${CFLAGS}"
+CFLAGS="-I${TBBROOT}/include ${CFLAGS}"
 CXXFLAGS="-I${TBBROOT}/include ${CXXFLAGS}"
 LDFLAGS="-L${TBBROOT}/lib ${LDFLAGS}"
 LIBS="-ltbb ${LIBS}"
