@@ -24,7 +24,8 @@ URL:       https://github.com/openhpc/ohpc
 Source1:   OHPC_macros
 Source2:   config.machines
 Source3:   config.default
-Source4:   packages.config
+Source4:   packages-os.config
+Source5:   packages-custom.config
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -47,6 +48,7 @@ rm -rf $RPM_BUILD_ROOT
 install -D -p -m 0640 %{SOURCE2} %{buildroot}/%{installPath}/config.machines
 install -D -p -m 0640 %{SOURCE3} %{buildroot}/%{installPath}/config.default
 install -D -p -m 0640 %{SOURCE4} %{buildroot}/%{installPath}/os-packages/default/packages.config
+install -D -p -m 0640 %{SOURCE5} %{buildroot}/%{installPath}/custom-packages/default/packages.config
 
 %clean
 rm -rf $RPM_BUILD_ROOT
