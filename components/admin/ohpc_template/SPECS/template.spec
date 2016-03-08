@@ -46,6 +46,7 @@ and OpenHPC.
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__mkdir_p} %{buildroot}/%{installPath}
+%{__mkdir_p} %{buildroot}/%{installPath}/const_files/default
 install -D -p -m 0640 %{SOURCE2} %{buildroot}/%{installPath}/config.machines
 install -D -p -m 0640 %{SOURCE3} %{buildroot}/%{installPath}/config.default
 install -D -p -m 0640 %{SOURCE3} %{buildroot}/%{installPath}/notify_header
