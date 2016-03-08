@@ -1,0 +1,9 @@
+#------------------------------------------------------------------------------
+# Note: this file is managed via LosF
+#
+# You should, in general, not edit this file directly as you will 
+# *lose* the contents during the next sync process. Instead, 
+# edit the template file in your local config directory:
+# 
+# @losf_synced_file_location@
+#------------------------------------------------------------------------------
