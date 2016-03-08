@@ -15,7 +15,7 @@
 
 Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
-Version:   1.0
+Version:   1.1
 Release:   1
 License:   BSD-3
 Group:     ohpc/admin
@@ -23,7 +23,8 @@ BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc
 Source1:   OHPC_macros
 Source2:   config.machines
-Source3:   packages.config
+Source3:   config.default
+Source4:   packages.config
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -44,7 +45,8 @@ and OpenHPC.
 rm -rf $RPM_BUILD_ROOT
 %{__mkdir_p} %{buildroot}/%{installPath}
 install -D -p -m 0640 %{SOURCE2} %{buildroot}/%{installPath}/config.machines
-install -D -p -m 0640 %{SOURCE3} %{buildroot}/%{installPath}/os-packages/default/packages.config
+install -D -p -m 0640 %{SOURCE3} %{buildroot}/%{installPath}/config.default
+install -D -p -m 0640 %{SOURCE4} %{buildroot}/%{installPath}/os-packages/default/packages.config
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -52,6 +54,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{installPath}
-
+%dir %{OHPC_PUB}/examples
 
 

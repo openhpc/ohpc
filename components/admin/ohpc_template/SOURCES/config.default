@@ -1,0 +1,109 @@
+# -*-ini-*-
+#---------------------------------------------------------------------
+# Configuration File Syncing
+#
+# Define specific configuration files that should be synced across the
+# cluster; if a file is defined, a corresponding reference 'template'
+# file should be maintained in:
+#
+# ${config_dir}/const_files/[Cluster Name]/[Node Type]
+#---------------------------------------------------------------------
+
+[ConfigFiles]
+
+#---------------------------------------------------------------------
+# Partial Configuration File Syncing
+#
+# Define specific configuration files that should be partially synced
+# (the contents between an losf defined delimiter). These files can be
+# defined on a per-appliance basis for maximum configuration
+# flexibility.
+#
+# A corresponding reference 'template' file should be maintained in:
+#
+# ${config_dir}/const_files/[Cluster Name]/[Node Type]
+#---------------------------------------------------------------------
+
+[PartialConfigFiles]
+
+#---------------------------------------------------------------------
+# Variable Substitution
+#
+# Define any desired variables for substitution during the syncing
+# process for configuration files. Delimiters are used to callout
+# desired variables to replace. 
+#
+# variable = desired-value
+# 
+# With default delimiters, any presence of @variable@ inside a 
+# template configuration file will be updated with desired-value.
+#---------------------------------------------------------------------
+
+[VarSub]
+
+
+#---------------------------------------------------------------------
+# Soft Link creation/maintenance
+#
+# Define soft links to maintain along with the target path (the target
+# path can be maintained sepearately in the [ConfigFiles] section
+# above if desired. The format for soft links is:
+#
+# file symlink = target
+#---------------------------------------------------------------------
+
+[SoftLinks]
+
+#---------------------------------------------------------------------
+# Runlevel Services Syncing
+#
+# Define specific services to run or disable across the cluster.
+#
+# Settings defined in the [Services] section are applied to all
+# defined node types by default.  However, node-specific
+# customizations can be defined in a [Services/<Node Type>] section
+# which take precedence over global settings.
+#---------------------------------------------------------------------
+
+[Services]
+
+#---------------------------------------------------------------------
+# Directory/File Permissions
+#
+# Provide and sync specific permissions across the cluster.
+#---------------------------------------------------------------------
+
+[Permissions]
+
+#--------------------
+# Network Interfaces
+#--------------------
+
+[Network]
+
+assign_ips_from_file = yes
+
+#-------------------------------------------
+# Provisioning Settings 
+#-------------------------------------------
+
+[Provisioning]
+mode = Warewulf
+
+[Warewulf]
+
+[Warewulf/bootstraps]
+
+[Kickstarts]
+
+[Profiles]
+
+[DNS-Enable]
+
+[Name-Servers]
+
+[Name-Servers-Search]
+
+[Kernel-Boot-Options]
+
+[Kernel-Boot-Options-Post]
