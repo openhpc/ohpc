@@ -1,0 +1,38 @@
+# -*-sh-*-
+
+#-----------------------------------------------
+# Cluster Definitions
+# 
+# Define a name for each cluster you
+# wish to manage (name are space delineated).
+#-----------------------------------------------
+
+[Cluster-Names]
+
+clusters = FOO
+
+#-----------------------------------------------
+# Node Types/Cluster Config
+#
+# Delineate the different types of nodes in 
+# each cluster.  Note that the software on each
+# node type can be managed separately.
+#
+# Regular expression patterns can be used to
+# map individual hostnames to a give node type.
+# 
+#-----------------------------------------------
+
+[FOO]
+
+# Define unique domainname for this cluster
+
+domainname = yourdomain.org
+
+# Define unique node types via hostname regular expressions
+
+master = default
+
+# Define location to store RPM packages 
+
+rpm_dir = default

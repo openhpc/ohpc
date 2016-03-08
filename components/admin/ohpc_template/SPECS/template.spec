@@ -22,7 +22,8 @@ Group:     ohpc/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc
 Source1:   OHPC_macros
-Source2:   packages.config
+Source2:   config.machines
+Source3:   packages.config
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -42,7 +43,8 @@ and OpenHPC.
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__mkdir_p} %{buildroot}/%{installPath}
-install -D -p -m 0640 %{SOURCE2} %{buildroot}/%{installPath}/os-packages/default/packages.config
+install -D -p -m 0640 %{SOURCE2} %{buildroot}/%{installPath}/config.machines
+install -D -p -m 0640 %{SOURCE3} %{buildroot}/%{installPath}/os-packages/default/packages.config
 
 %clean
 rm -rf $RPM_BUILD_ROOT
