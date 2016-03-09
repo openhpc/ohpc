@@ -6,7 +6,7 @@ rm -f ${logfile}.*
 echo ++++ search and log OpenHPC packages
 
 if [ -e /etc/redhat-release ];then
-    for pkg in `yum list \*-ohpc`; do
+    for pkg in `yum list \*-ohpc` ; do
         name=`echo $pkg | grep -e -ohpc | awk '{print $1}'`
         if [ "${name}" != "" ]; then
 #	    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
@@ -15,14 +15,20 @@ if [ -e /etc/redhat-release ];then
         fi
     done
 
+    info=`repoquery -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
+    echo ${info} >>${logfile}.all
+
 elif [ -e /etc/SuSE-release ];then
-    for pkg in `zypper search -i *-ohpc`; do
+    for pkg in `zypper search -i *-ohpc` ; do
         name=`echo $pkg | grep -e -ohpc | cut -d '|' -f 2 | tr -d ' '`
         if [ "${name}" != "" ]; then
 	    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
 	    echo ${info} >>${logfile}.all
         fi
     done
+
+    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
+    echo ${info} >>${logfile}.all
 
 else
     echo "ERROR: unknown distro type"
