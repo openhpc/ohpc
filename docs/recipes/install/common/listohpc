@@ -6,14 +6,9 @@ rm -f ${logfile}.*
 echo ++++ search and log OpenHPC packages
 
 if [ -e /etc/redhat-release ];then
-    for pkg in `yum list \*-ohpc` ; do
-        name=`echo $pkg | grep -e -ohpc | awk '{print $1}'`
-        if [ "${name}" != "" ]; then
-#	    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
-	    info=`repoquery -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
-	    echo ${info} >>${logfile}.all
-        fi
-    done
+
+    # query repo for ohpc packages
+    repoquery -qa --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" >> ${logfile}.all
 
     info=`repoquery -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
     echo ${info} >>${logfile}.all
