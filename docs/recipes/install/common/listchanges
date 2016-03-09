@@ -1,5 +1,7 @@
-t_old="obs/ForestPeak_15.16_Factory"
-t_new="obs/ForestPeak_15.31_Factory"
+#!/bin/bash
+
+t_old="obs/OpenHPC_1.0.1_Factory"
+t_new="obs/OpenHPC_1.1_Factory"
 
 f_all=pkg-ohpc.all
 f_add=pkg-ohpc.chglog-add
@@ -16,7 +18,7 @@ rm -f ${f_dif} ${f_old} ${f_new}
 #git diff ${t_old} ${t_new} ${f_all} >${f_dif}
 
 # updated to account for path rename (ks 7/30/15)
-git diff $t_old:docs/recipes/install/centos7/vanilla/data/manifest/${f_all}  -- ${f_all} > ${f_dif}
+git diff $t_old:docs/recipes/install/centos7.1/vanilla/data/manifest/${f_all}  -- ${f_all} > ${f_dif}
 if [ $? -ne 0 ]; then
    echo "ERROR: git diff failed!"
    exit
@@ -29,12 +31,44 @@ echo "*** Old release: ${t_old}"
 echo "*** New release: ${t_new}"
 echo
 echo "*** Packages Deleted:"
-join -v 1 ${f_old} ${f_new} | tee ${f_del}
+join -v 1 ${f_old} ${f_new} > ${f_del}
 echo
 echo "*** Packages Added:"
-join -v 2 ${f_old} ${f_new} | tee ${f_add}
+join -v 2 ${f_old} ${f_new} >  ${f_add}
 echo
 echo "*** Pakages Updated:"
-join      ${f_old} ${f_new} | tee ${f_upd}
+join      ${f_old} ${f_new} > ${f_upd}
+
+
+
+
+while read entry; do
+      name=`echo ${entry} | awk '{print $1}'`
+      version=`echo ${entry} | awk '{print $2}'`
+
+      printf "  * %-36s     (%s)\n" ${name} ${version}
+
+done < ${f_add}
+
+echo " "
+echo "[Component Version Changes]"
+while read entry; do
+      name=`echo ${entry} | awk '{print $1}'`
+      oldversion=`echo ${entry} | awk '{print $2}'`
+      newversion=`echo ${entry} | awk '{print $3}'`
+
+      if [ "x$oldversion" != "x$newversion" ];then
+          printf "  * %-36s     (%s)\n" ${name} "${oldversion} -> ${newversion}"
+      fi
+
+done < ${f_upd}
+
+oldversion=3.6
+newversion=3.6
+
+if [ "x$oldverson" == "x$newversion" ];then
+   echo "we have a match"
+   exit 0
+fi
 
 rm -f ${f_dif} ${f_old} ${f_new}
