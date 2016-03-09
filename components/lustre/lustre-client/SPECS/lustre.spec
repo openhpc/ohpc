@@ -1,4 +1,4 @@
-#----------------------------------------------------------------------------bh-
+#---------------------------------------------------------------------------bh-
 # This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
@@ -163,9 +163,8 @@ Release: %{fullrelease}
 License: GPL
 Group:   ohpc/lustre
 #Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
-Source: lustre-%{version}.tar.gz
+Source: lustre-%{version}RC5.tar.gz
 Source1: OHPC_macros
-#Patch1: lustre-2.8.0RC4.metafile.patch
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
@@ -441,9 +440,6 @@ CONFIGURE_ARGS=$(echo $CONFIGURE_ARGS | sed -e 's/"\?--with-kmp-moddir=[^ ][^ ]*
 # also remove (build|host|target) options because they will be specified
 # inside $CONFIGURE_ARGS
 %define eval_configure %(echo '%configure' | sed -e 's#\./configure#eval ./configure#' -e 's/--\\(build\\|host\\|target\\)=[^ ][^ ]* //g')
-
-# karl.w.schulz@intel.com (03/02/16) - init autotools with RC release
-. ./autogen.sh
 
 %eval_configure \
 	%{?kdir: --with-linux=%kdir} %{?kobjdir: --with-linux-obj=%kobjdir} \
