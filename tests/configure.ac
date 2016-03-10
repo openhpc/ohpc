@@ -69,8 +69,8 @@ AM_CONDITIONAL(LUSTRE_ENABLED,test "x$enable_lustre" = "xyes" )
 #------------------------------------------------------------------------------------------
 # spack
 AC_ARG_ENABLE([spack],
-   [AS_HELP_STRING([--enable-spack],[Enable spack tests (default=yes, root only)])],[],
-   [],[enable_spack,yes])
+	 [AS_HELP_STRING([--enable-spack],[Enable spack tests (default=yes, root only)])],
+	 [],[enable_spack=yes])
 AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" ) 
 
 #-----------------
