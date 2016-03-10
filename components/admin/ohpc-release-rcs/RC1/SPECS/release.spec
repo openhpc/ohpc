@@ -119,8 +119,5 @@ rm -rf $RPM_BUILD_ROOT
 %{__repodir}
 /etc/pki
 
-%files -n ohpc-release-RC1
-%config
-
 %changelog
 
