@@ -18,9 +18,11 @@ endif
 if CLCK_ENABLED
    SUBDIRS += clck
 endif
-
 if LUSTRE_ENABLED
    SUBDIRS += lustre
+endif
+if SPACK_ENABLED
+   SUBDIRS += dev-tools/spack
 endif
 
 else # non root tests

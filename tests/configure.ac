@@ -66,6 +66,12 @@ AC_ARG_ENABLE([lustre],
 	 [AS_HELP_STRING([--enable-lustre],[Enable Lustre utility tests (default=no, root only)])],
 	 [],[enable_lustre=no])
 AM_CONDITIONAL(LUSTRE_ENABLED,test "x$enable_lustre" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# spack
+AC_ARG_ENABLE([spack],
+   [AS_HELP_STRING([--enable-spack],[Enable spack tests (default=yes, root only)])],[],
+   [],[enable_spack,yes])
+AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" ) 
 
 #-----------------
 # User level tests
@@ -357,6 +363,7 @@ AC_OUTPUT( Makefile
 	   clck/Makefile
 	   lustre/Makefile
        dev-tools/easybuild/Makefile
+       dev-tools/spack/Makefile
        dev-tools/numpy/Makefile
        dev-tools/numpy/tests/Makefile
        dev-tools/scipy/Makefile
@@ -409,6 +416,11 @@ if test "x$ROOT_ENABLED" = "x1" ; then
        echo '    'Lustre client............. : enabled
     else
        echo '    'Lustre client............. : disabled
+    fi
+    if test "x$enable_spack" = "xyes"; then
+       echo '    'spack..................... : enabled
+    else
+       echo '    'spack..................... : disabled
     fi
 
 else
