@@ -31,6 +31,7 @@ Requires: bash
 Requires: coreutils
 Requires: subversion
 Requires: hg
+Requires: patch
 
 # Default library install path
 # relocation still needs some work
