@@ -29,6 +29,8 @@ BuildRequires:	rsync
 Requires:	python >= 2.6
 Requires: bash
 Requires: coreutils
+Requires: subversion
+Requires: hg
 
 # Default library install path
 # relocation still needs some work
