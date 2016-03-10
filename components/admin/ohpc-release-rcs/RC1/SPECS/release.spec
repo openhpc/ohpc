@@ -27,6 +27,15 @@ Provides: ohpc-release = %{version}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
+# package repository definitions
+
+%if 0%{?sles_version} || 0%{?suse_version}
+%define __repodir /etc/zypp/repos.d
+%else
+%define __repodir /etc/yum.repos.d
+Requires: epel-release
+%endif
+
 %description
 
 Collection of OpenHPC release files including package repository
@@ -47,15 +56,6 @@ OpenHPC release %{version} (%{_repository})
 HOME_URL="http://openhpc.community"
 BUG_REPORT_URL="https://github.com/openhpc/ohpc/issues"
 EOF
-
-# package repository definitions
-
-%if 0%{?sles_version} || 0%{?suse_version}
-%define __repodir /etc/zypp/repos.d
-%else
-%define __repodir /etc/yum.repos.d
-Requires: epel-release
-%endif
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{__repodir}
 
