@@ -80,7 +80,6 @@ BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 %define         debug_package %{nil}
 
 BuildRequires:  cairo-devel
-BuildRequires:  gcc-fortran
 BuildRequires:  libjpeg-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
