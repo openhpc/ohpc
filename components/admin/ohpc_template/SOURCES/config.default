@@ -10,6 +10,9 @@
 #---------------------------------------------------------------------
 
 [ConfigFiles]
+/etc/warewulf/provision.conf          = yes
+/etc/xinetd.d/tftp                    = yes
+/etc/httpd/conf.d/warewulf-httpd.conf = yes
 
 #---------------------------------------------------------------------
 # Partial Configuration File Syncing
@@ -66,6 +69,22 @@
 #---------------------------------------------------------------------
 
 [Services]
+
+ntpd = on
+rdma = on
+munge = on
+
+[Services/master]
+
+mariadb = on
+httpd = on
+slurmctld = on
+firewalld = off
+
+[Services/compute]
+
+slurmd = on
+
 
 #---------------------------------------------------------------------
 # Directory/File Permissions

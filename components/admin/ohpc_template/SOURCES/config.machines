@@ -31,7 +31,8 @@ domainname = yourdomain.org
 
 # Define unique node types via hostname regular expressions
 
-master = default
+master  = default
+compute = c[1-4]
 
 # Define location to store RPM packages 
 
