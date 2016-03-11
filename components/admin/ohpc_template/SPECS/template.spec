@@ -30,6 +30,8 @@ Source6:   packages-custom.config
 Source7:   provision.conf.master
 Source8:   tftp.master
 Source9:   warewulf-httpd.conf.master
+Source10:  limits.conf.master
+Source11:  limits.conf.compute
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -57,9 +59,11 @@ install -D -p -m 0640 %{SOURCE5} %{buildroot}/%{installPath}/os-packages/default
 install -D -p -m 0640 %{SOURCE6} %{buildroot}/%{installPath}/custom-packages/default/packages.config
 
 # config file templates
-install -D -p -m 0600 %{SOURCE7} %{buildroot}/%{installPath}/const_files/default/master/provision.conf
-install -D -p -m 0600 %{SOURCE8} %{buildroot}/%{installPath}/const_files/default/master/tftp
-install -D -p -m 0600 %{SOURCE9} %{buildroot}/%{installPath}/const_files/default/master/warewulf-httpd.conf
+install -D -p -m 0600 %{SOURCE7}  %{buildroot}/%{installPath}/const_files/default/master/provision.conf
+install -D -p -m 0600 %{SOURCE8}  %{buildroot}/%{installPath}/const_files/default/master/tftp
+install -D -p -m 0600 %{SOURCE9}  %{buildroot}/%{installPath}/const_files/default/master/warewulf-httpd.conf
+install -D -p -m 0600 %{SOURCE10} %{buildroot}/%{installPath}/const_files/default/master/limits.conf
+install -D -p -m 0600 %{SOURCE11} %{buildroot}/%{installPath}/const_files/default/compute/limits.conf
 
 
 %clean
