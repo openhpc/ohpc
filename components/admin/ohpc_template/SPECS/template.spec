@@ -28,6 +28,8 @@ Source4:   notify_header
 Source5:   packages-os.config
 Source6:   packages-custom.config
 Source7:   provision.conf.master
+Source8:   tftp.master
+Source9:   warewulf-httpd.conf.master
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -56,6 +58,8 @@ install -D -p -m 0640 %{SOURCE6} %{buildroot}/%{installPath}/custom-packages/def
 
 # config file templates
 install -D -p -m 0600 %{SOURCE7} %{buildroot}/%{installPath}/const_files/default/master/provision.conf
+install -D -p -m 0600 %{SOURCE8} %{buildroot}/%{installPath}/const_files/default/master/tftp
+install -D -p -m 0600 %{SOURCE9} %{buildroot}/%{installPath}/const_files/default/master/warewulf-httpd.conf
 
 
 %clean
