@@ -27,7 +27,7 @@ Source3:   config.default
 Source4:   notify_header
 Source5:   packages-os.config
 Source6:   packages-custom.config
-Source7:   const_files/master/provision.conf
+Source7:   provision.conf.master
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -55,7 +55,7 @@ install -D -p -m 0640 %{SOURCE5} %{buildroot}/%{installPath}/os-packages/default
 install -D -p -m 0640 %{SOURCE6} %{buildroot}/%{installPath}/custom-packages/default/packages.config
 
 # config file templates
-install -D -p -m 0600 %{SOURCE7} %{buildroot}/%{installPath}/const_files/default/master
+install -D -p -m 0600 %{SOURCE7} %{buildroot}/%{installPath}/const_files/default/master/provision.conf
 
 
 %clean
