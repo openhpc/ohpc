@@ -1,3 +1,5 @@
+# @losf_synced_file_notice@
+
 LoadModule perl_module modules/mod_perl.so
 PerlSwitches -w
 PerlSwitches -T

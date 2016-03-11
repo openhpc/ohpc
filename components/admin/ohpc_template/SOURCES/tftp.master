@@ -1,3 +1,5 @@
+# @losf_synced_file_notice@
+
 # default: off
 # description: The tftp server serves files using the trivial file transfer \
 # protocol.  The tftp protocol is often used to boot diskless \

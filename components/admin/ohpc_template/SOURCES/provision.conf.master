@@ -1,3 +1,5 @@
+# @losf_synced_file_notice@
+
 # What is the default network device that the master will use to
 # communicate with the nodes?
 network device = <<<sms_eth_internal>>>
