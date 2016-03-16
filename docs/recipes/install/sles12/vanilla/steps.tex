@@ -12,7 +12,7 @@
 % Define Base OS and other local macros
 \newcommand{\baseOS}{SLES12}
 \newcommand{\OSRepo}{SLES12}
-\newcommand{\IMAGE}{sles12}
+\newcommand{\baseos}{sles12}
 \newcommand{\install}{zypper -n install}
 \newcommand{\chrootinstall}{zypper -n --root \$CHROOT install}
 \newcommand{\groupinstall}{zypper -n install -t pattern}
@@ -222,13 +222,31 @@ The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support
 image for use with \Warewulf{}. We begin by creating a directory structure on the 
 {\em master} host that will represent the root filesystem of the compute node. The 
 default location for this example is in
-\path{/opt/ohpc/admin/images/sles12}. Note that \Warewulf{} assumes access to
-an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
-process which requires external network connectivity on your chosen {\em
- master} host. If this is not available, or if you prefer to access a locally cached
-mirror, the steps below include an example to update the OS mirror used by
-\texttt{wwmkchroot} to use an alternate location defined by a
-\texttt{\$\{BOS\_MIRROR\}} environment variable.
+\texttt{/opt/ohpc/admin/images/\baseos{}}.
+
+\begin{center}
+  \begin{tcolorbox}[]
+    \small Note that \Warewulf{} requires access to a zypper repository during the 
+    \texttt{wwmkchroot} process. The easiest way to provide this is to mount 
+    the SUSE-SLE-12-SP1-Server ISO image on a web server that can communicate 
+    with the {\em master} host, set the \texttt{\$\{BOS\_MIRROR\}} environment 
+    variable to that URL, and update the template file {\em prior} to running 
+    the \texttt{wwmkchroot} command below. For example:
+
+% begin_ohpc_run
+% ohpc_command if [ ! -z ${BOS_MIRROR+x} ]; then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={}]
+# Override default OS repository - set BOS_MIRROR variable to desired repo location
+[sms](*\#*) perl -pi -e "s#^ZYP_MIRROR=(\S+)#ZYP_MIRROR=${BOS_MIRROR}#" \
+   /usr/libexec/warewulf/wwmkchroot/sles-12.tmpl
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\end{tcolorbox}
+\end{center}
 
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
