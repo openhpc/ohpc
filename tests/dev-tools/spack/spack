@@ -13,5 +13,5 @@ fi
 }
 
 @test "[spack] test executable" {
-    spack test
+    EMAIL=foo@intel.com spack test
 }
