@@ -40,7 +40,7 @@ shell scripts to benefit some useful features offered by the library.
 %package -n vim-%{name}
 Summary:       VIM files for ClusterShell
 Group:         System Environment/Base
-Requires:      clustershell = %{version}-%{release}, vim-common
+Requires:      clustershell%{PROJ_DELIM} = %{version}-%{release}, vim-common
 
 %description -n vim-%{name}
 Syntax highlighting in the VIM editor for ClusterShell configuration files.
