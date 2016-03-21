@@ -142,6 +142,9 @@ make OCR_TYPE=x86-mpi OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} %{?_smp_mflags
 # Remove static libraries
 find "%buildroot" -type f -name "*.la" -print0 | xargs -0 rm -f
 find "%buildroot" -type f -name "*.a" -print0 | xargs -0 rm -f
+# Add the spec
+mkdir -p $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
+cp ../spec/ocr-1.0.1.pdf $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
 
 
 # OpenHPC module file
@@ -229,6 +232,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
+%doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
 %exclude %{install_path}/bin/ocrrun_mpi
 %exclude %{install_path}/lib/libocr_mpi.*
 %exclude %{install_path}/share/ocr/config/x86-mpi
@@ -239,6 +243,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %defattr(-,root,root,-)
 %{OHPC_HOME}
+%doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
 %exclude %{install_path}/bin/ocrrun_x86
 %exclude %{install_path}/lib/libocr_x86.*
 %exclude %{install_path}/share/ocr/config/x86
