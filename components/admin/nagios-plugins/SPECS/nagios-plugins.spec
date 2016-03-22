@@ -586,7 +586,7 @@ Requires: %{name} = %{version}-%{release}
 Requires: %{_sbindir}/rpcinfo
 %else
 Requires: /sbin/rpcinfo
-%endif`
+%endif
 Provides: %{pname}-rpc
 
 %description -n %{pname}-rpc%{PROJ_DELIM}
