@@ -28,7 +28,7 @@ endif
 else # non root tests
 
 if ADMIN_ENABLED
-   SUBDIRS += user-env
+   SUBDIRS += admin
 endif
 
 if PACKAGING_ENABLED
