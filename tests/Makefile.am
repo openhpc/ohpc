@@ -27,6 +27,10 @@ endif
 
 else # non root tests
 
+if ADMIN_ENABLED
+   SUBDIRS += user-env
+endif
+
 if PACKAGING_ENABLED
    TESTS += packaging/run
 endif

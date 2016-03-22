@@ -80,6 +80,12 @@ AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" )
 
 
 #------------------------------------------------------------------------------------------
+# Administrator Environment
+AC_ARG_ENABLE([admin],
+   [AS_HELP_STRING([--enable-admin],[Enable administrator environment tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_admin,yes)])
+AM_CONDITIONAL(USERENV_ENABLED,test "x$enable_admin" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # Compilers
 AC_ARG_ENABLE([compilers],
    [AS_HELP_STRING([--enable-compilers],[Enable compiler toolchain tests (default=yes)])],[],
@@ -352,6 +358,7 @@ AM_CONDITIONAL(PACKAGING_ENABLED,test "x$enable_packaging" = "xyes" )
 #------------------------------------------------------------------------------------------
 
 AC_OUTPUT( Makefile 
+	   admin/Makefile 
 	   user-env/Makefile 
 	   bos/Makefile
 	   perf-tools/intel-itac/Makefile
