@@ -582,11 +582,12 @@ Provides check_real (rtsp) support for Nagios.
 Summary: Nagios Plugin - check_rpc
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
-%if 0%{?fedora} || 0%{?rhel}
-Requires: %{_sbindir}/rpcinfo
-%else
-Requires: /sbin/rpcinfo
-%endif
+#%if 0%{?fedora} || 0%{?rhel}
+#Requires: %{_sbindir}/rpcinfo
+#%else
+#Requires: /sbin/rpcinfo
+#%endif
+Requires: rpcbind
 Provides: %{pname}-rpc
 
 %description -n %{pname}-rpc%{PROJ_DELIM}
