@@ -84,7 +84,7 @@ AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" )
 AC_ARG_ENABLE([admin],
    [AS_HELP_STRING([--enable-admin],[Enable administrator environment tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=short,enable_admin,yes)])
-AM_CONDITIONAL(USERENV_ENABLED,test "x$enable_admin" = "xyes" ) 
+AM_CONDITIONAL(ADMIN_ENABLED,test "x$enable_admin" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Compilers
 AC_ARG_ENABLE([compilers],
