@@ -163,7 +163,7 @@ Release: %{fullrelease}
 License: GPL
 Group:   ohpc/lustre
 #Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
-Source: lustre-%{version}RC5.tar.gz
+Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
