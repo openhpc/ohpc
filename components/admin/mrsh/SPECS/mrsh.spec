@@ -24,8 +24,8 @@ Group: ohpc/admin
 Source:    https://github.com/chaos/mrsh/archive/mrsh-2-7-1.tar.gz
 Patch: null-terminate.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}
-BuildRequires: ncurses-devel pam-devel munge-devel-ohpc
-Requires: munge-ohpc >= 0.1-0
+BuildRequires: ncurses-devel pam-devel munge-devel%{PROJ_DELIM}
+Requires: munge%{PROJ_DELIM} >= 0.1-0
 Provides: mrsh
 
 # support re-run of autogen
