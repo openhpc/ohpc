@@ -132,7 +132,7 @@ if ( \$?SLURM_NODELIST ) then
 
 
     if ( \`id -u\` == "0" ) then
-       setenv MODULEPATH "%{OHPC_ADMIN}/modulefiles"
+       setenv MODULEPATH "%{OHPC_ADMIN}/modulefiles:%{OHPC_MODULES}"
     else   
        setenv MODULEPATH "%{OHPC_MODULES}"
     endif
