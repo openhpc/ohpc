@@ -54,8 +54,8 @@ gzip -c doc/shine.1 >%{buildroot}%{install_path}/share/man/man1/shine.1.gz
 gzip -c doc/shine.conf.5 >%{buildroot}%{install_path}/share/man/man5/shine.conf.5.gz
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}%{OHPC_ADMIN}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_ADMIN}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}%{OHPC_ADMIN}/modulefiles/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_ADMIN}/modulefiles/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
