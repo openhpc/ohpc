@@ -53,6 +53,34 @@ mkdir -p %{buildroot}%{install_path}/share/man/{man1,man5}
 gzip -c doc/shine.1 >%{buildroot}%{install_path}/share/man/man1/shine.1.gz
 gzip -c doc/shine.conf.5 >%{buildroot}%{install_path}/share/man/man5/shine.conf.5.gz
 
+# OpenHPC module file
+%{__mkdir_p} %{buildroot}%{OHPC_ADMIN}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_ADMIN}/%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+        puts stderr " "
+        puts stderr "This module loads the %{pname} utility"
+        puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname}"
+module-whatis "Version: %{version}"
+module-whatis "Category: python module"
+module-whatis "Description: %{summary}"
+module-whatis "URL %{url}"
+
+set     version             %{version}
+
+prepend-path    PATH                %{install_path}/sbin
+prepend-path    PYTHONPATH          %{install_path}/lib/python2.7/site-packages
+prepend-path    MANPATH             %{install_path}/share/man
+
+setenv          %{pname}_DIR        %{install_path}
+
+EOF
+
 %clean
 rm -rf %{buildroot}
 
