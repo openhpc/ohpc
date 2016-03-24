@@ -40,6 +40,7 @@ Patch2: warewulf-provision.httpdconfdir.patch
 Patch3: warewulf-provision.dhcpd.patch
 Patch4: warewulf-provision.wwnodescan.patch
 Patch5: update_file_delay.patch
+Patch6: warewulf-provision.mkbootable.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -108,6 +109,7 @@ available the included GPL software.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %build
 %configure --localstatedir=%{wwpkgdir}
