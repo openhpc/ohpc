@@ -9,6 +9,9 @@ TESTS            =
 
 if ROOT_ENABLED
 
+if ADMIN_ENABLED
+   SUBDIRS += admin
+endif
 if BOS_ENABLED
    SUBDIRS += bos
 endif
@@ -26,10 +29,6 @@ if SPACK_ENABLED
 endif
 
 else # non root tests
-
-if ADMIN_ENABLED
-   SUBDIRS += admin
-endif
 
 if PACKAGING_ENABLED
    TESTS += packaging/run

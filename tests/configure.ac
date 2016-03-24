@@ -43,6 +43,12 @@ fi
 #-----------------
 
 #------------------------------------------------------------------------------------------
+# Administrator Environment
+AC_ARG_ENABLE([admin],
+   [AS_HELP_STRING([--enable-admin],[Enable administrator environment tests (default=yes, root only)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_admin,yes)])
+AM_CONDITIONAL(ADMIN_ENABLED,test "x$enable_admin" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # Base operating system 
 AC_ARG_ENABLE([bos],
 	 [AS_HELP_STRING([--enable-bos],[Enable bos tests (default=yes, root only)])],
@@ -79,12 +85,6 @@ AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" )
 
 
 
-#------------------------------------------------------------------------------------------
-# Administrator Environment
-AC_ARG_ENABLE([admin],
-   [AS_HELP_STRING([--enable-admin],[Enable administrator environment tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_admin,yes)])
-AM_CONDITIONAL(ADMIN_ENABLED,test "x$enable_admin" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Compilers
 AC_ARG_ENABLE([compilers],
