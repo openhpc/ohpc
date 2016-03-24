@@ -98,7 +98,7 @@ module-whatis "URL %{url}"
 set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib/python2.7/site-packages
 prepend-path    MANPATH             %{install_path}/man
 
 setenv          %{pname}_DIR        %{install_path}
