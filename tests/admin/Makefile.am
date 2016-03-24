@@ -4,4 +4,5 @@ TESTS = init.sh
 
 TESTS  += ganglia
 TESTS  += nagios
-
+# there is an unsatisfied requirement for python-nose needed to run these tests
+# TESTS += clustershell
