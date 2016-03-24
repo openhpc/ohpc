@@ -20,8 +20,8 @@
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency.
-%if !0%{?opensuse_bs}
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
 BuildRequires: lmod%{PROJ_DELIM}
 %endif
 # Compiler dependencies
