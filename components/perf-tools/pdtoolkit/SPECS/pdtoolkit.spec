@@ -23,6 +23,7 @@
 # environment; if building outside, lmod remains a formal build dependency).
 %if !0%{?OHPC_BUILD}
 BuildRequires: lmod%{PROJ_DELIM}
+#!BuildIgnore: post-build-checks
 %endif
 # Compiler dependencies
 BuildRequires: coreutils
