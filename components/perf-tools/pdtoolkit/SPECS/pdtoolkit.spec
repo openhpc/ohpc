@@ -23,7 +23,6 @@
 # environment; if building outside, lmod remains a formal build dependency).
 %if !0%{?OHPC_BUILD}
 BuildRequires: lmod%{PROJ_DELIM}
-BuildRequires: -post-build-checks
 %endif
 # Compiler dependencies
 BuildRequires: coreutils
@@ -59,6 +58,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{OHPC_PUB}/doc/contrib
 
 %define debug_package %{nil}
+#!BuildIgnore: post-build-checks
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
