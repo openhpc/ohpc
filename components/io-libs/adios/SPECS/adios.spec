@@ -193,6 +193,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
+export NO_BRP_CHECK_RPATH=true
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
