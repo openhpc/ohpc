@@ -117,6 +117,7 @@ ln -s  ../../contrib/pebil/pebil/pebil.static
 rm -f roseparse
 ln -s  ../../contrib/rose/roseparse/roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
+rm -f ../../contrib/rose/rose-header-gen/config*
 rm -f smaqao
 ln -s  ../../contrib/maqao/maqao/smaqao
 popd
