@@ -1,6 +1,16 @@
 --- warewulf-provision-3.6/initramfs/capabilities/setup-filesystems/80-mkbootable	2014-05-21 11:13:01.000000000 -0700
-+++ warewulf-provision-3.6.patch/initramfs/capabilities/setup-filesystems/80-mkbootable	2016-03-24 07:26:29.000000000 -0700
-@@ -29,10 +29,48 @@
++++ warewulf-provision-3.6.patch/initramfs/capabilities/setup-filesystems/80-mkbootable	2016-03-26 10:41:57.000000000 -0700
+@@ -20,6 +20,9 @@
+             if [ -x "$NEWROOT/sbin/dracut" ]; then
+                 chroot $NEWROOT /sbin/dracut --force '' $KERNELVERSION
+                 INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
++            elif [ -x "$NEWROOT/usr/bin/dracut" ]; then
++                chroot $NEWROOT /usr/bin/dracut --force '' $KERNELVERSION
++                INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
+             elif [ -x "$NEWROOT/sbin/mkinitrd" ]; then
+                 INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
+                 if [ -n "$INITRD" ]; then
+@@ -29,10 +32,48 @@
                  chroot $NEWROOT /sbin/mkinitrd -f $INITRD $KERNELVERSION
                  umount $NEWROOT/sys
              fi
@@ -51,7 +61,7 @@
                  if [ -n "$INITRD" -a -n "$KERNEL" ]; then
                      if [ -f "$NEWROOT/etc/redhat-release" ]; then
                          OSVERSION=`sed -e 's@ (.*@@' $NEWROOT/etc/redhat-release`
-@@ -47,21 +85,22 @@
+@@ -47,21 +88,22 @@
                              KERNEL=${KERNEL##boot/}
                          fi
                      fi
