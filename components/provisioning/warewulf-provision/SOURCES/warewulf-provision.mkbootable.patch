@@ -10,7 +10,7 @@
              elif [ -x "$NEWROOT/sbin/mkinitrd" ]; then
                  INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
                  if [ -n "$INITRD" ]; then
-@@ -29,10 +32,48 @@
+@@ -29,10 +32,51 @@
                  chroot $NEWROOT /sbin/mkinitrd -f $INITRD $KERNELVERSION
                  umount $NEWROOT/sys
              fi
