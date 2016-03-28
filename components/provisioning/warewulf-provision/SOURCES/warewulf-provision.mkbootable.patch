@@ -55,6 +55,9 @@
  
 +                if chroot $NEWROOT /usr/sbin/grub2-install $WWBOOTLOADER >/dev/null; then
 +                    exit 0
++                else
++                    echo "grub2-install failed."
++                    exit 255
 +                fi
 +            elif [ -x "$NEWROOT/sbin/grub-install" ]; then
 +                ROOTDEV=`cat /tmp/rootdev`
