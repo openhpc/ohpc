@@ -65,13 +65,13 @@ Requires: epel-release
 
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
-name=OpenHPC-1 - Base
+name=OpenHPC-%{ohpc_version} - Base
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
 [OpenHPC-updates]
-name=OpenHPC-1 - Updates
+name=OpenHPC-%{ohpc_version} - Updates
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}:/Update%{ohpc_micro_update}:/Factory/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
@@ -81,13 +81,13 @@ EOF
 
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
-name=OpenHPC-1 - Base
+name=OpenHPC-%{ohpc_version} - Base
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}:/Factory/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
 [OpenHPC-updates]
-name=OpenHPC-1 - Updates
+name=OpenHPC-%{ohpc_version} - Updates
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/updates/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
