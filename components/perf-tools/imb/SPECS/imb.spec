@@ -67,7 +67,7 @@ Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   4.1
 Release:   1
 License:   CPL
-Group:     ohpc/perf-tools
+Group:     %{PROJ_NAME}/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
 Source0:   %{PNAME}_%{version}.tgz
 Source1:   OHPC_macros

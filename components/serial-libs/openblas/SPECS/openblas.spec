@@ -67,7 +67,7 @@ Version:        0.2.15
 Release:        1
 Summary:        An optimized BLAS library based on GotoBLAS2
 License:        BSD-3-Clause
-Group:          Productivity/Scientific/Math
+Group:          %{PROJ_NAME}/serial-libs
 Url:            http://www.openblas.net
 Source0:        https://github.com/xianyi/OpenBLAS/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Patch0:         openblas-libs.patch

@@ -18,7 +18,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   2.4.6
 Release:   1
 License:   GPLv2
-Group:     ohpc/dev-tools
+Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/libtool/
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://ftp.gnu.org/gnu/libtool/%{pname}-%{version}.tar.gz

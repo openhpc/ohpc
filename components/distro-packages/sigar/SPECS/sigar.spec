@@ -63,7 +63,7 @@ API to access this information regardless of the underlying platform.
 
 %package -n %{pname}-devel%{PROJ_DELIM}
 License:	ASL 2.0
-Group:		ohpc/distro-packages
+Group:		%{PROJ_NAME}/distro-packages
 Summary:	SIGAR Development package - System Information Gatherer And Reporter
 Requires:	%{name} = %{version}-%{release}
 Provides:       %{pname}-devel

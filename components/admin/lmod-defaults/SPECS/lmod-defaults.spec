@@ -19,7 +19,7 @@ Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.2
 Release:   1
 License:   BSD
-Group:     ohpc/admin
+Group:     %{PROJ_NAME}/admin
 URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
 Source0:   OHPC_macros

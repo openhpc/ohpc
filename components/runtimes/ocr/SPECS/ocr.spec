@@ -56,7 +56,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.0.1
 Release:   1
 License:   BSD
-Group:     ohpc/runtimes
+Group:     %{PROJ_NAME}/runtimes
 URL:       https://xstack.exascale-tech.com/wiki
 Source0:   https://xstack.exascale-tech.com/git/public/snapshots/ocr-refs/tags/OCRv%{version}_ohpc.tbz2
 Source1:   OHPC_macros
@@ -93,7 +93,7 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 Summary:   Open Community Runtime (OCR) for clusters using MPI
-Group:   ohpc/runtimes
+Group:   %{PROJ_NAME}/runtimes
 %description -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 The Open Community Runtime project is creating an application
 building framework that explores new methods of high-core-count

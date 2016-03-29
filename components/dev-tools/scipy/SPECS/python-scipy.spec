@@ -83,7 +83,7 @@ Version:        0.16.1
 Release:        1
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
-Group:          ohpc/dev-tools
+Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.scipy.org
 DocDir:         %{OHPC_PUB}/doc/contrib
 Source0:        http://sourceforge.net/projects/scipy/files/scipy/%{version}/scipy-%{version}.tar.gz

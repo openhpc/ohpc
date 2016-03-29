@@ -51,7 +51,7 @@ Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
 Version: 5.1.0
 Release: 1
 License: Apache License 2.0
-Group:   ohpc/serial-libs
+Group:   %{PROJ_NAME}/serial-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
 Source0: http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-%{version}.tar.gz
 Source1: OHPC_macros

@@ -65,7 +65,7 @@ Version:   2.25
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
-Group:     ohpc/perf-tools
+Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
 Provides:  lib%PNAME.so()(64bit)

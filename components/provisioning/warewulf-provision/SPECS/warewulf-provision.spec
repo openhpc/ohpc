@@ -23,7 +23,7 @@ Summary: Warewulf - Provisioning Module
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group:   ohpc/provisioning
+Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-provision/warewulf-provision-%{version}.tar.gz
 Source1: OHPC_macros
@@ -55,7 +55,7 @@ administrative tools.  To actually provision systems, the
 
 %package -n %{pname}-server%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module - Server
-Group: ohpc/provisioning
+Group: %{PROJ_NAME}/provisioning
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS

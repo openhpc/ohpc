@@ -23,7 +23,7 @@ Release:   1
 License:   Copyright (C) 2011-2016 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
 URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
-Group:     ohpc/dev-tools
+Group:     %{PROJ_NAME}/dev-tools
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no

@@ -16,7 +16,7 @@ Name:    examples%{PROJ_DELIM}
 Version: 1.2
 Release: 1
 License: BSD-3
-Group:   ohpc/admin
+Group:   %{PROJ_NAME}/admin
 URL:     https://github.com/openhpc/ohpc
 Source0: OHPC_macros
 Source1: hello.c

@@ -22,7 +22,7 @@ Name:    %{pname}%{PROJ_DELIM}
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group:   ohpc/provisioning
+Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source:  http://warewulf.lbl.gov/downloads/releases/warewulf-vnfs/warewulf-vnfs-%{version}.tar.gz
 ExclusiveOS: linux

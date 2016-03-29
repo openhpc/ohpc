@@ -50,7 +50,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   2.1
 Release:   1
 License:   GPL
-Group:     ohpc/serial-libs
+Group:     %{PROJ_NAME}/serial-libs
 URL:       http://www.gnu.org/software/gsl
 Source0:   https://ftp.gnu.org/gnu/%{pname}/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros

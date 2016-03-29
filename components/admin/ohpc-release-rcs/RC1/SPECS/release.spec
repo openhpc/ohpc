@@ -18,7 +18,7 @@ Name:     ohpc-release-RC%{RC_VER}
 Version:  %{ohpc_version}
 Release:  1
 License:  BSD-3
-Group:    ohpc/admin
+Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc
 Source1:  RPM-GPG-KEY-OpenHPC-1
 

@@ -22,7 +22,7 @@ Summary: A suite of tools for clustering
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group:   ohpc/provisioning
+Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-common/warewulf-common-%{version}.tar.gz
 Source1: OHPC_macros

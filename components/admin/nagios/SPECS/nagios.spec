@@ -21,7 +21,7 @@ Name:    %{pname}%{PROJ_DELIM}
 Version: 4.1.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program
-Group:   ohpc/admin
+Group:   %{PROJ_NAME}/admin
 License: GPLv2
 URL: http://www.nagios.org/
 DocDir:  %{OHPC_PUB}/doc/contrib

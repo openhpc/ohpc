@@ -20,7 +20,7 @@ Summary: Tools used for clustering with Warewulf
 Version: 3.6
 Release: %{_rel}
 License: US Dept. of Energy (BSD-like)
-Group:   ohpc/provisioning
+Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-cluster/warewulf-cluster-%{version}.tar.gz
 Source1: OHPC_macros
@@ -60,7 +60,7 @@ with Warewulf.
 %if %{disable_node_package}
 %package -n %{pname}-node%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
-Group: ohpc/provisioning
+Group: %{PROJ_NAME}/provisioning
 Requires: /sbin/sfdisk
 %if 0%{?sles_version} || 0%{?suse_version}
 PreReq: %{insserv_prereq} %{fillup_prereq}

@@ -18,7 +18,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   1.0
 Release:   1
 License:   BSD
-Group:     ohpc/admin
+Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc
 Source0:   %{pname}

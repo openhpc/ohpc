@@ -21,7 +21,7 @@ Version:	0.2.7
 Release:	1%{?dist}
 
 Summary:	ConMan: The Console Manager
-Group:		ohpc/admin
+Group:		%{PROJ_NAME}/admin
 License:	GPLv3+
 URL:		http://dun.github.io/conman/
 DocDir:         %{OHPC_PUB}/doc/contrib

@@ -67,7 +67,7 @@ Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.3.4
 Release:   1
 License:   GPLv2+
-Group:     ohpc/parallel-libs
+Group:     %{PROJ_NAME}/parallel-libs
 URL:       http://www.fftw.org
 Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
 Source1:   OHPC_macros

@@ -23,7 +23,7 @@ Version:   4.3.3
 Release:   1%{?dist}
 Summary:   Score-P and Scalasca performance report explorer
 License:   BSD-style license
-Group:     ohpc/perf-tools
+Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.scalasca.org/software/cube-4.x/download.html
 Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.3/dist/cube-%{version}.tar.gz
 Provides:  lib%PNAME.so()(64bit)

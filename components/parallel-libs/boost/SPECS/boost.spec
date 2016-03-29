@@ -91,7 +91,7 @@ Version:        1.60.0
 
 Release:        0
 License:        BSL-1.0
-Group:		ohpc/parallel-libs
+Group:		%{PROJ_NAME}/parallel-libs
 Url:            http://www.boost.org
 Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boost_%{version_exp}.tar.gz
 Source1:        boost-rpmlintrc

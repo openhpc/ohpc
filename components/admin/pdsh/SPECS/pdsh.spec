@@ -20,7 +20,7 @@ Release:   %{_rel}
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
 DocDir:    %{OHPC_PUB}/doc/contrib
-Group:     ohpc/admin
+Group:     %{PROJ_NAME}/admin
 #Source0:   %{pname}-%{version}.tar.gz
 Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root

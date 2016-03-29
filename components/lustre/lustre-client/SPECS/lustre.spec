@@ -161,8 +161,7 @@ Name: %{lustre_name}%{PROJ_DELIM}
 Version: %{version}
 Release: %{fullrelease}
 License: GPL
-Group:   ohpc/lustre
-#Source: http://git.whamcloud.com/fs/lustre-release.git/snapshot/%{sha_full}.tar.gz
+Group:   %{PROJ_NAME}/lustre
 Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
 URL: https://wiki.hpdd.intel.com/

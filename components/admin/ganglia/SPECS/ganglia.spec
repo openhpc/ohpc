@@ -23,7 +23,7 @@ Name:               %{pname}%{PROJ_DELIM}
 Version:            %{gangver}
 Release:            1%{?dist}
 Summary:            Distributed Monitoring System
-Group:              ohpc/admin
+Group:              %{PROJ_NAME}/admin
 License:            BSD-3-Clause
 URL:                http://ganglia.sourceforge.net/
 DocDir:             %{OHPC_PUB}/doc/contrib

@@ -60,7 +60,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   2.1
 Release:   1
 License:   BSD
-Group:     ohpc/mpi-families
+Group:     %{PROJ_NAME}/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz

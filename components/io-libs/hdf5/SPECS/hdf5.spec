@@ -66,7 +66,7 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.8.16
 Release:   1
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
-Group:     ohpc/io-libs
+Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   http://www.hdfgroup.org/ftp/HDF5/releases/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2

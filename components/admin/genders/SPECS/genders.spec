@@ -21,7 +21,7 @@ License: GPL
 Source: https://github.com/chaos/genders/releases/download/genders-1-22-1/%{pname}-%{version}.tar.gz
 Requires: perl
 DocDir:    %{OHPC_PUB}/doc/contrib
-Group:     ohpc/admin
+Group:     %{PROJ_NAME}/admin
 URL: https://github.com/chaos/genders
 BuildRequires: gcc-c++
 BuildRequires: bison flex

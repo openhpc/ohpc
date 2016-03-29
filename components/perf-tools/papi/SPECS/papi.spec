@@ -20,7 +20,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   5.4.1
 Release:   1%{?dist}
 License:   BSD
-Group:     ohpc/perf-tools
+Group:     %{PROJ_NAME}/perf-tools
 URL:       http://icl.cs.utk.edu/papi/
 Source0:   http://icl.cs.utk.edu/projects/papi/downloads/papi-%{version}.tar.gz
 Patch1:    papi.ldconfig.patch

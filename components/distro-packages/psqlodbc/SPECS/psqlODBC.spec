@@ -51,7 +51,7 @@ Url:            http://pgfoundry.org/projects/psqlodbc
 
 Summary:        ODBC Driver for PostgreSQL
 License:        LGPL-2.1+
-Group:          ohpc/distro-packages
+Group:          %{PROJ_NAME}/distro-packages
 Version:        09.03.0400
 Release:        33.1
 Source0:        %tarname-%{version}.tar.gz

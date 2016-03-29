@@ -69,7 +69,7 @@ Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 1.9.0
 Release: 1
 License: BSD-3-Clause
-Group:   ohpc/io-libs
+Group:   %{PROJ_NAME}/io-libs
 DocDir:  %{OHPC_PUB}/doc/contrib
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz 
