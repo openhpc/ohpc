@@ -75,6 +75,7 @@ Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz 
 Source1: OHPC_macros
 Source2: OHPC_setup_compiler
+AutoReq: no
 
 # Minimum Build Requires - our mxml build included devel headers in libmxml1
 BuildRequires: libmxml1 cmake zlib-devel glib2-devel
