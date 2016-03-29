@@ -27,13 +27,16 @@ Provides: ohpc-release = %{version}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
+%if 0%{?centos_version} || 0%{?rhel_version}
+Requires: epel-release
+%endif
+
 # package repository definitions
 
 %if 0%{?sles_version} || 0%{?suse_version}
 %define __repodir /etc/zypp/repos.d
 %else
 %define __repodir /etc/yum.repos.d
-Requires: epel-release
 %endif
 
 %description
@@ -67,13 +70,13 @@ EOF
 
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
-name=OpenHPC-1 - Base
+name=OpenHPC-%{ohpc_version} - Base
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
 [OpenHPC-updates]
-name=OpenHPC-1 - Updates
+name=OpenHPC-%{ohpc_version} - Updates
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}:/Update%{ohpc_micro_update}:/Factory/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
@@ -84,13 +87,13 @@ EOF
 
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
-name=OpenHPC-1 - Base
+name=OpenHPC-%{ohpc_version} - Base
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}:/RC%{RC_VER}/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
 [OpenHPC-updates]
-name=OpenHPC-1 - Updates
+name=OpenHPC-%{ohpc_version} - Updates
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/updates/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
