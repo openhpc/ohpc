@@ -25,6 +25,10 @@ Provides: ohpc-release = %{version}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
+%if 0%{?centos_version} || 0%{?rhel_version}
+Requires: epel-release
+%endif
+
 %description
 
 Collection of OpenHPC release files including package repository
@@ -52,7 +56,6 @@ EOF
 %define __repodir /etc/zypp/repos.d
 %else
 %define __repodir /etc/yum.repos.d
-Requires: epel-release
 %endif
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{__repodir}
