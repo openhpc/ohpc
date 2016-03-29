@@ -13,8 +13,9 @@ follows.
 \end{lstlisting}
 
 \item Download and install the source RPM 
-\begin{lstlisting}
-[sms](*\#*) wget http://build.openhpc.community/OpenHPC:/1.1:/Factory/OSREPO/src/openmpi-gnu-ohpc-1.10.1-8.1.src.rpm
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
+    literate={VER}{\OHPCVersion{}}1 {OSREPO}{\OSRepo{}}1 {-}{-}1]
+[sms](*\#*) wget http://build.openhpc.community/OpenHPC:/VER:/Factory/OSREPO/src/openmpi-gnu-ohpc-1.10.1-8.1.src.rpm
 [sms](*\#*) rpm -i openmpi-gnu-ohpc-1.10.1-8.1.src.rpm
 \end{lstlisting}
 
