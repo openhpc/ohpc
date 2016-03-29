@@ -117,6 +117,8 @@ ln -s  ../../contrib/pebil/pebil/pebil.static
 rm -f roseparse
 ln -s  ../../contrib/rose/roseparse/roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
+sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
+sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
 rm -f ../../contrib/rose/rose-header-gen/config.log
 rm -f ../../contrib/rose/rose-header-gen/config.status
 rm -f smaqao
