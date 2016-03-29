@@ -1,0 +1,49 @@
+\subsection{RPM Rebuild}  \label{appendix:rpmbuild}
+
+Users of OpenHPC may find it necessary to rebuild one of the packages to satisfy
+local requirements. A simple way to accomplish this is to install the provided
+source RPM, modify the specfile, and rebuild the binary RPM. A brief example
+follows.
+
+\begin{enumerate}
+\item Install the \texttt{rpm-build} package
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) (*\install*) rpm-build
+\end{lstlisting}
+
+\item Download and install the source RPM 
+\begin{lstlisting}
+[sms](*\#*) wget http://build.openhpc.community/OpenHPC:/1.1:/Factory/CentOS_7.2/src/openmpi-gnu-ohpc-1.10.1-8.1.src.rpm
+[sms](*\#*) rpm -i openmpi-gnu-ohpc-1.10.1-8.1.src.rpm
+\end{lstlisting}
+
+\item Modify spec file to reflect any desired changes
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) cd ~/rpmbuild/SPECS
+[sms](*\#*) perl -pi -e "s/BASEFLAGS=\"--prefix/BASEFLAGS=\"--enable-mpi-thread-multiple --prefix/" openmpi.spec
+\end{lstlisting}
+
+\item Copy necessary OpenHPC macro files (\texttt{OHPC\_macros}, 
+\texttt{OHPC\_setup\_compiler}, etc.) to source directory
+
+\begin{lstlisting}
+[sms](*\#*) cd ~/rpmbuild/SOURCES
+[sms](*\#*) wget https://raw.githubusercontent.com/openhpc/ohpc/obs/OpenHPC_1.0.1_Factory/components/OHPC_macros
+[sms](*\#*) wget https://raw.githubusercontent.com/openhpc/ohpc/obs/OpenHPC_1.0.1_Factory/components/OHPC_setup_compiler
+\end{lstlisting}
+
+\item Provided the package's build dependencies are satisfied, rebuild the
+package
+
+\begin{lstlisting}
+[sms](*\#*) rpmbuild -ba ~/rpmbuild/SPECS/openmpi.spec
+\end{lstlisting}
+
+\item Install the new package
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) (*\install*) rpmbuild/RPMS/openmpi-gnu-ohpc
+\end{lstlisting}
+\end{enumerate}
