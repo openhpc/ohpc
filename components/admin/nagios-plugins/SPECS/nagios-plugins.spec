@@ -38,7 +38,6 @@ Patch2: nagios-plugins-0002-Remove-assignment-of-not-parsed-to-jitter.patch
 # https://bugzilla.redhat.com/512559
 Patch5: nagios-plugins-0005-Prevent-check_swap-from-returning-OK-if-no-swap-acti.patch
 Patch7: nagios-plugins-0007-Fix-the-use-lib-statement-and-the-external-ntp-comma.patch
-AutoReq: no
 
 %if 0%{?fedora} || 0%{?rhel}
 BuildRequires:  qstat
@@ -294,6 +293,7 @@ Summary: Nagios Plugin - check_flexlm
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-flexlm
+AutoReq: no
 
 %description -n %{pname}-flexlm%{PROJ_DELIM}
 Provides check_flexlm support for Nagios.
