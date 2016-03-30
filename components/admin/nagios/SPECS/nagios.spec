@@ -282,6 +282,7 @@ fi
 %post
 %if 0%{?sles_version} || 0%{?suse_version}
 /usr/sbin/a2enmod php5
+/usr/sbin/a2enmod version
 %{_sbindir}/usermod -a -G %{pname} wwwrun || :
 /usr/bin/systemctl try-restart apache2 > /dev/null 2>&1 || :
 %else
