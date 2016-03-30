@@ -18,7 +18,7 @@ Name:      intel-%{pname}%{PROJ_DELIM}
 Version:   16.2.0.444464
 Source0:   intel-%{pname}-amplifier%{PROJ_DELIM}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_mod_generator.sh
+Source2:   modfile-ohpc.input
 Release:   1
 License:   Copyright (C) 2011-2016 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
@@ -27,7 +27,6 @@ Group:     %{PROJ_NAME}/perf-tools
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
-#AutoReqProv: no
 
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
@@ -85,10 +84,8 @@ prepend-path    MANPATH         %{package_target}/man/
 setenv          LC_ALL C
 EOF
 
-# Parse shell script to derive module settings
-
-%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/amplxe-vars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+# Append with machine-generated contribution for modulefile settings
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
