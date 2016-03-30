@@ -38,6 +38,7 @@ Patch2: nagios-plugins-0002-Remove-assignment-of-not-parsed-to-jitter.patch
 # https://bugzilla.redhat.com/512559
 Patch5: nagios-plugins-0005-Prevent-check_swap-from-returning-OK-if-no-swap-acti.patch
 Patch7: nagios-plugins-0007-Fix-the-use-lib-statement-and-the-external-ntp-comma.patch
+AutoReq: no
 
 %if 0%{?fedora} || 0%{?rhel}
 BuildRequires:  qstat
@@ -212,6 +213,7 @@ Provides check_cluster support for Nagios.
 Summary: Nagios Plugin - check_dbi
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+Requires: libdbi
 Provides: %{pname}-dbi
 
 %description -n %{pname}-dbi%{PROJ_DELIM}
@@ -334,6 +336,8 @@ Provides check_hpjd support for Nagios.
 Summary: Nagios Plugin - check_http
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+Requires: libcrypto
+Requires: libssl
 Provides: %{pname}-http
 
 %description -n %{pname}-http%{PROJ_DELIM}
@@ -392,6 +396,8 @@ Provides check_ircd support for Nagios.
 Summary: Nagios Plugin - check_ldap
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+Requires: liblbr
+Requires: libldap
 Provides: %{pname}-ldap
 
 %description -n %{pname}-ldap%{PROJ_DELIM}
@@ -449,6 +455,10 @@ Provides check_mrtgtraf support for Nagios.
 Summary: Nagios Plugin - check_mysql
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+Requires: libcrypto
+Requires: libmysqlclient
+Requires: libssl
+Requires: libz
 Provides: %{pname}-mysql
 
 %description -n %{pname}-mysql%{PROJ_DELIM}
@@ -534,6 +544,7 @@ utils.pm
 Summary: Nagios Plugin - check_pgsql
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+Requires: libpq
 Provides: %{pname}-pgsql
 
 %description -n %{pname}-pgsql%{PROJ_DELIM}
@@ -611,6 +622,7 @@ Provides check_sensors support for Nagios.
 Summary: Nagios Plugin - check_smtp
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+Requires: libcrypto libssl
 Provides: %{pname}-smtp
 
 %description -n %{pname}-smtp%{PROJ_DELIM}
@@ -654,6 +666,7 @@ Provides check_swap support for Nagios.
 Summary: Nagios Plugin - check_tcp
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+Requires: libcrypto libssl
 Provides: nagios-plugins-ftp = %{version}-%{release}
 Provides: nagios-plugins-imap = %{version}-%{release}
 Provides: nagios-plugins-jabber = %{version}-%{release}
