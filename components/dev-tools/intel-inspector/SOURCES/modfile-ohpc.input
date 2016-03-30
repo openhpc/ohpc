@@ -1,8 +1,9 @@
- 
+
 # machine generated from inspxe-vars.sh
- 
-setenv        INSPECTOR_2016_DIR  /opt/ohpc/pub/inspector/16.1.0.423441
-prepend-path  PATH                /opt/ohpc/pub/inspector/16.1.0.423441/bin64
- 
+
+setenv        INSPECTOR_2016_DIR  /opt/ohpc/pub/inspector/16.1.2.450824
+prepend-path  PATH                /opt/ohpc/pub/inspector/16.1.2.450824/bin64
+
 # end of machine generated
- 
+
+
