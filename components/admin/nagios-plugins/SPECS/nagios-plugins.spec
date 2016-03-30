@@ -593,6 +593,7 @@ Requires: %{name} = %{version}-%{release}
 Requires: perl
 Requires: rpcbind
 Provides: %{pname}-rpc
+AutoReq: no
 
 %description -n %{pname}-rpc%{PROJ_DELIM}
 Provides check_rpc support for Nagios.
