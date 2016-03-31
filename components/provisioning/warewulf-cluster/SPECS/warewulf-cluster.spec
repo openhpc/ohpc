@@ -40,14 +40,18 @@ DocDir: %{OHPC_PUB}/doc/contrib
 
 # 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
 Patch1: warewulf-cluster.wwinit.patch
+# 03/30/16 karl.w.schulz@intel.com - add support for ecdsa host keys
+Patch2: warewulf-cluster.ecdsa.patch
 # 06/14/14 karl.w.schulz@intel.com - OpenHPC flag used to disable inclusion of node package
 %if %{OHPC_BUILD}
 %define disable_node_package 1
 %endif
 
-# 07/21/14 karl.w.schulz@intel.com - excplictly document libcom32 and libutil as being provided
+# 07/21/14 karl.w.schulz@intel.com - explicitly document libcom32 and libutil as being provided
 provides: libcom32.c32
 provides: libutil.c32
+
+
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -78,7 +82,7 @@ provisioned nodes.
 %setup -n %{pname}-%{version}
 
 %patch1 -p1
-
+%patch2 -p0
 
 %build
 %configure

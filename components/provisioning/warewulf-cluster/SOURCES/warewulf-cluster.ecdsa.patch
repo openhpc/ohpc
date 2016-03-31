@@ -1,0 +1,18 @@
+--- libexec/wwinit/50-ssh_keys.init	2014-05-21 13:12:10.000000000 -0500
++++ libexec/wwinit/50-ssh_keys.init	2016-03-30 19:53:33.000000000 -0500
+@@ -87,4 +87,15 @@
+     RETVAL=0
+ fi
+ 
++wwprint "Checking for default ECDSA host key for nodes"
++if ! wwtest test -f "$WAREWULF_SYSCONFDIR/warewulf/vnfs/ssh/ssh_host_ecdsa_key"; then
++    install -d -m 700 $WAREWULF_SYSCONFDIR/warewulf/vnfs/ssh
++    wwprint "Creating default node ssh_host_ecdsa_key:\n"
++    if ! wwrun ssh-keygen -q -t ecdsa -f $WAREWULF_SYSCONFDIR/warewulf/vnfs/ssh/ssh_host_ecdsa_key -C '' -N ''; then
++        exit 255
++    fi
++    RETVAL=0
++fi
++
++
+ exit $RETVAL
