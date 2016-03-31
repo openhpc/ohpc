@@ -5,46 +5,23 @@ local requirements. A simple way to accomplish this is to install the provided
 source RPM, modify the specfile, and rebuild the binary RPM. A brief example
 follows.
 
-\begin{enumerate}
-\item Install the \texttt{rpm-build} package
-
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) (*\install*) rpm-build
-\end{lstlisting}
-
-\item Download and install the source RPM 
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
     literate={VER}{\OHPCVersion{}}1 {OSREPO}{\OSRepo{}}1 {-}{-}1]
-[sms](*\#*) wget http://build.openhpc.community/OpenHPC:/VER:/Factory/OSREPO/src/openmpi-gnu-ohpc-1.10.1-8.1.src.rpm
-[sms](*\#*) rpm -i openmpi-gnu-ohpc-1.10.1-8.1.src.rpm
+# Install rpm-build package from base OS distro
+[test@sms ~]$ (*\install*) rpm-build
+
+# Download SRPM from OpenHPC repository and install locally
+[test@sms ~]$ wget \
+  http://build.openhpc.community/OpenHPC:/VER:/Factory/OSREPO/src/fftw-gnu-openmpi-ohpc-3.3.4-4.1.src.rpm
+[test@sms ~]$ rpm -i fftw-gnu-openmpi-ohpc-3.3.4-4.1.src.rpm
+
+# Modify spec file as desired
+[test@sms ~]$ cd ~/rpmbuild/SPECS
+[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/enable-static=no/enable-static=yes/" fftw.spec
+
+# Rebuild binary RPM. Note that additional directives can be specified to modify build
+[test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "compiler_family intel" fftw.spec
+
+# As privileged user, install the new package
+[sms](*\#*) (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-intel-openmpi-ohpc-3.3.4-4.1.rpm
 \end{lstlisting}
-
-\item Modify spec file to reflect any desired changes
-
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) cd ~/rpmbuild/SPECS
-[sms](*\#*) perl -pi -e "s/BASEFLAGS=\"--prefix/BASEFLAGS=\"--enable-mpi-thread-multiple --prefix/" openmpi.spec
-\end{lstlisting}
-
-\item Copy necessary OpenHPC macro files (\texttt{OHPC\_macros}, 
-\texttt{OHPC\_setup\_compiler}, etc.) to source directory
-
-\begin{lstlisting}
-[sms](*\#*) cd ~/rpmbuild/SOURCES
-[sms](*\#*) wget https://raw.githubusercontent.com/openhpc/ohpc/obs/OpenHPC_1.0.1_Factory/components/OHPC_macros
-[sms](*\#*) wget https://raw.githubusercontent.com/openhpc/ohpc/obs/OpenHPC_1.0.1_Factory/components/OHPC_setup_compiler
-\end{lstlisting}
-
-\item Provided the package's build dependencies are satisfied, rebuild the
-package
-
-\begin{lstlisting}
-[sms](*\#*) rpmbuild -ba ~/rpmbuild/SPECS/openmpi.spec
-\end{lstlisting}
-
-\item Install the new package
-
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) (*\install*) rpmbuild/RPMS/openmpi-gnu-ohpc-1.10.1-8.1.x86_64
-\end{lstlisting}
-\end{enumerate}
