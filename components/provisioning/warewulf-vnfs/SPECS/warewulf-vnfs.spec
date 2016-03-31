@@ -53,6 +53,8 @@ Source1: centos-7.tmpl
 # 03/13/15 karl.w.schulz@intel.com - honor local proxy setting if defined (rhel)
 Patch5: rhel-proxy.patch
 Patch6: warewulf-vnfs.pigz.patch
+# 03/30/16 karl.w.schulz@intel.com - add support for ecdsa host keys
+Patch7: warewulf-vnfs.ecdsa.patch
 
 
 %description
@@ -74,6 +76,7 @@ Virtual Node FileSystem objects.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p3
 
 
 %build

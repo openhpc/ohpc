@@ -1,0 +1,16 @@
+Index: trunk/vnfs/libexec/wwmkchroot/functions
+===================================================================
+--- a/trunk/vnfs/libexec/wwmkchroot/functions
++++ b/trunk/vnfs/libexec/wwmkchroot/functions
+@@ -148,4 +148,11 @@
+     fi
+ 
++    # This should fail silently as ECDSA isn't supported on older platforms.
++    if [ -f "$WAREWULF_SYSCONFDIR/warewulf/vnfs/ssh/ssh_host_ecdsa_key" ]; then
++        /bin/cp -a $WAREWULF_SYSCONFDIR/warewulf/vnfs/ssh/ssh_host_ecdsa_key* $CHROOTDIR/etc/ssh/
++    elif [ ! -f "$CHROOTDIR/etc/ssh/ssh_host_ecdsa_key" ]; then
++        /usr/bin/ssh-keygen -q -t ecdsa -f $CHROOTDIR/etc/ssh/ssh_host_ecdsa_key -C '' -N '' 2> /dev/null
++    fi
++
+     mkdir -m 0700 -p $CHROOTDIR/root/.ssh 2>/dev/null
+     > $CHROOTDIR/root/.ssh/authorized_keys
