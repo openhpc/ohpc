@@ -1,72 +1,73 @@
 /*********************************************************************
- *   Copyright 1996, UCAR/Unidata
+ *   Copyright 1993, UCAR/Unidata
  *   See netcdf/COPYRIGHT file for copying and redistribution conditions.
- *   $Id: error.c,v 1.7 2007/05/15 01:36:57 ed Exp $
+ *   $Header: /upc/share/CVS/netcdf-3/nctest/error.c,v 1.8 2004/11/16 21:33:07 russ Exp $
  *********************************************************************/
 
-/* #include <config.h> */
-#include <stddef.h>	/* because gcc 2.7.2.2 doesn't define size_t */
-			/* in <stdio.h> and it cannot hurt */
 #include <stdio.h>
-#include <stdarg.h>
 
+#ifndef NO_STDARG
+#include <stdarg.h>
+#else
+#include <varargs.h>
+#endif
+
+#include <netcdf.h>
 #include "error.h"
-#include "tests.h"
+static int	error_count = 0;
 
 /*
- * Use for logging error conditions
+ * Use for logging error conditions.
  */
+#ifndef NO_STDARG
 void
 error(const char *fmt, ...)
-{
-    va_list args ;
-
-    va_start(args, fmt) ;
-    if (nfails <= max_nmpt)
-	(void) vfprintf(stderr,fmt,args) ;
-    va_end(args) ;
-}
-
-/*
- * Use for general printing (other than error conditions)
- * This also currently goes to stderr, but this could change
- */
+#else
+/*VARARGS1*/
 void
-print(const char *fmt, ...)
+error(fmt, va_alist)
+     const char *fmt ;
+     va_dcl
+#endif
 {
     va_list args ;
 
+    (void) fprintf(stderr,"*** ");
+
+#ifndef NO_STDARG
     va_start(args, fmt) ;
+#else
+    va_start(args) ;
+#endif
     (void) vfprintf(stderr,fmt,args) ;
     va_end(args) ;
+
+    (void) fprintf(stderr, "\n") ;
+    error_count++;
 }
+
 
 /*
- * Called by macro IF
- */
-int
-ifFail(const int expr, const int line, const char *file)
-{
-    if (expr) {
-	++nfails;
-	error("\n\tFAILURE at line %d of %s: ", line, file);
-    }
-    return expr;
-}
-
-/* TODO:
- * This diagnostic doesn't fit very well with the diagnostic message 
- * "architecture" of this program.
+ * Turn off netCDF library handling of errors.  Caller must check all error
+ * returns after calling this, until on_errs() is called.
  */
 void
-print_n_size_t(size_t nelems, const size_t *array)
+off_errs()
 {
-	fprintf(stderr, "[");
-	while(nelems-- > 0)
-	{
-		fprintf(stderr, "%ld", (long)*array++);
-		if(nelems > 0)
-			fprintf(stderr, " ");
-	}
-	fprintf(stderr, "]");
+    extern int ncopts;		/* error options */
+    ncopts &= ~NC_FATAL;	/* make errors nonfatal */
+    ncopts &= ~NC_VERBOSE;	/* turn off error messages */
+}
+
+
+/*
+ * Let netCDF library handle subsequent errors.  Callers don't need to check
+ * error returns after this.  (This is the initial default.)
+ */
+void
+on_errs()
+{
+    extern int ncopts;		/* error options */
+    ncopts |= NC_FATAL;		/* make errors fatal */
+    ncopts |= NC_VERBOSE;	/* library prints error messages */
 }

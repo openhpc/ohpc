@@ -1,8 +1,11 @@
 TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
-check_PROGRAMS    = C_test
-C_test_SOURCES    = nc_test.c error.c test_get.c test_put.c test_read.c test_write.c util.c error.h tests.h
-C_test_LDFLAGS    = $(C_LDFLAGS)
+check_PROGRAMS    = nctest
+nctest_SOURCES    = add.c add.h atttests.c cdftests.c dimtests.c driver.c \
+		    emalloc.c emalloc.h error.c error.h misctest.c rec.c slabs.c testcdf.h \
+		    tests.h val.c val.h vardef.c varget.c vargetg.c varput.c varputg.c \
+		    vartests.c vputget.c vputgetg.c
+nctest_LDFLAGS    = $(C_LDFLAGS)
 
 check_PROGRAMS   += C_write
 C_write_SOURCES   = C_simple_wr.c
@@ -31,5 +34,6 @@ CXX_read_LDFLAGS  = $(CXX_LDFLAGS)
 TESTS             = test_C_module
 TESTS            += test_CXX_module
 TESTS            += test_Fortran_module
-TESTS            += C_test
+TESTS            += nctest
+TESTS            += compare_test_files.sh
 TESTS            += test_netcdf

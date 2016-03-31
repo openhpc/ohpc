@@ -4,30 +4,39 @@
  *   $Header $
  *********************************************************************/
 
+#undef PROTO
+#ifndef NO_HAVE_PROTOTYPES 
+#   define	PROTO(x)	x
+#else
+#   define	PROTO(x)	()
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Print error message to stderr, don't exit */
-extern void	error (const char *fmt, ...)
-#ifdef _GNUC_
-__attribute__ ((format (printf, 1, 2)))
-#endif
-;
+extern void	error		PROTO((
+				       const char *fmt,
+				       ...
+				       ));
 
-void print(const char *fmt, ...)
-#ifdef _GNUC_
-__attribute__ ((format (printf, 1, 2)))
-#endif
-;
+/*
+ * Turn off netCDF library handling of errors.  Caller must check all error
+ * returns after calling this, until on_errs() is called.
+ */
+extern void	off_errs	PROTO((
+				       void
+				       ));
 
-extern int ifFail(const int expr, const int line, const char *file);
-
-extern void
-print_n_size_t(size_t nelems, const size_t *array);
+/*
+ * Let netCDF library handle subsequent errors.  Callers don't need to check
+ * error returns after this.  (This is the initial default.)
+ */
+extern void	on_errs		PROTO((
+				       void
+				       ));
 
 #ifdef __cplusplus
 }
 #endif
-
-#define IF(EXPR) if (ifFail(EXPR, __LINE__, __FILE__))
