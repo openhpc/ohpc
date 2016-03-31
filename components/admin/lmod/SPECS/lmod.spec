@@ -43,6 +43,8 @@ BuildRequires: lua-posix%{PROJ_DELIM}
 BuildRequires: rsync
 BuildRequires: tcl
 
+Conflicts: environment-modules
+
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch
 Patch2: lmod.site.patch
