@@ -101,6 +101,7 @@ BuildRequires: python-devel
 # BuildRequires: liblustre-devel
 BuildRequires: lustre-lite
 BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
+Requires: lustre-client%{PROJ_DELIM}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
