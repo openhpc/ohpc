@@ -57,9 +57,9 @@ rm -rf %{buildroot}
 %{__python} setup.py install -O1 --prefix=%{install_path} --skip-build --root %{buildroot}
 
 # config files
-install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
-install -d %{buildroot}/%{_sysconfdir}/clustershell/groups.d
-install -p -m 0644 conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
+mv  %{buildroot}/%{install_path}/etc/clustershell/groups.conf.d
+install -d %{buildroot}/%{install_path}/etc/clustershell/groups.d
+install -p -m 0644 conf/*.conf %{buildroot}/%{_sysconfdir}/etc/clustershell/
 install -p -m 0644 conf/groups.conf.d/*.conf.example %{buildroot}/usr%{_sysconfdir}/clustershell/groups.conf.d
 
 # man pages
