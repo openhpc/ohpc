@@ -101,7 +101,7 @@ export LMOD_COLORIZE=no
 export LMOD_PREPEND_BLOCK=normal
 
 if [ \$EUID -eq 0 ]; then
-    export MODULEPATH=%{OHPC_ADMIN}/modulefiles
+    export MODULEPATH=%{OHPC_ADMIN}/modulefiles:%{OHPC_MODULES}
 else
     export MODULEPATH=%{OHPC_MODULES}
 fi
