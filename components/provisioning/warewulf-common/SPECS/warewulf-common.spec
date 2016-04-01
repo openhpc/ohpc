@@ -43,7 +43,7 @@ Patch2: warewulf-common.mariadb.patch
 # 02/03/16 charles.r.baird@intel.com - patch to add mariadb as a datastore
 Patch3: warewulf-common.file_env.patch
 # 04/01/16 karl.w.schulz@intel.com - patch to enable DB transaction handling from WW trunk
-Patch 4: mysql.r1978.patch
+Patch4: mysql.r1978.patch
 # 05/23/14 charles.r.baird@intel.com - alternate package names for SuSE
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
