@@ -12,7 +12,7 @@ across cluster nodes.
 # Setup node definitions
 [sms](*\#*) cd /etc/clustershell/groups.d
 [sms](*\#*) mv local.cfg local.cfg.orig
-[sms](*\#*) if true then
+[sms](*\#*) if true ; then
     cat << EOF > local.cfg
     adm: ${sms_name}
     compute: c[1-${num_computes}]
