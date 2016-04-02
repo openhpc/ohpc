@@ -3,7 +3,6 @@ across cluster nodes.
 
 % begin_ohpc_run
 % ohpc_validation_newline
-% ohpc_command if [ ${enable_mrsh} -eq 1 ];then
 % ohpc_indent 5
 % ohpc_validation_comment Install clustershell
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -13,13 +12,14 @@ across cluster nodes.
 # Setup node definitions
 [sms](*\#*) cd /etc/clustershell/groups.d
 [sms](*\#*) mv local.cfg local.cfg.orig
-[sms](*\#*) cat << EOF > local.cfg
-adm: ${sms_name}
-compute: c[1-${num_computes}]
-all: @adm,@compute
-EOF
+[sms](*\#*) if true then
+    cat << EOF > local.cfg
+    adm: ${sms_name}
+    compute: c[1-${num_computes}]
+    all: @adm,@compute
+    EOF
+fi
 \end{lstlisting}
 % ohpc_indent 0
-% ohpc_command fi
 % end_ohpc_run
 
