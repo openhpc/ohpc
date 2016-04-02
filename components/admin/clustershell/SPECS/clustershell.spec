@@ -146,7 +146,7 @@ rm -rf %{buildroot}
 %doc %{_sysconfdir}/clustershell/groups.d/*.example
 %doc %{_sysconfdir}/clustershell/groups.conf.d/README
 %doc %{_sysconfdir}/clustershell/groups.conf.d/*.example
-%doc %{_sysconfdir}/clustershell/*.example
+#%doc %{_sysconfdir}/clustershell/*.example
 #%{python_sitelib}/ClusterShell/
 #%{python_sitelib}/ClusterShell-*-py?.?.egg-info
 #%{_bindir}/clubak
