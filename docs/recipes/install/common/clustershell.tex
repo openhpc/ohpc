@@ -12,13 +12,9 @@ across cluster nodes.
 # Setup node definitions
 [sms](*\#*) cd /etc/clustershell/groups.d
 [sms](*\#*) mv local.cfg local.cfg.orig
-[sms](*\#*) if true ; then
-    cat << EOF > local.cfg
-    adm: ${sms_name}
-    compute: c[1-${num_computes}]
-    all: @adm,@compute
-    EOF
-fi
+[sms](*\#*) echo "adm: ${sms_name}" > local.cfg
+[sms](*\#*) echo "compute: c[1-${num_computes}]" >> local.cfg
+[sms](*\#*) echo "all: @adm,@compute" >> local.cfg
 \end{lstlisting}
 % ohpc_indent 0
 % end_ohpc_run
