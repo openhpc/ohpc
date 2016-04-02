@@ -5,7 +5,7 @@
          my $db_pass = $config->get("database password");
  
 +        # Use the DB's transaction handling
-+        my %attr = ( AutoCommit => 0, );
++        my %attr = ( AutoCommit => 1, );
 +
          if ($config_root->get("database user")) {
              $db_user = $config_root->get("database user");
