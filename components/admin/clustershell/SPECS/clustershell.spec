@@ -134,19 +134,19 @@ rm -rf %{buildroot}
 #%{_mandir}/man1/nodeset.1*
 #%{_mandir}/man5/clush.conf.5*
 #%{_mandir}/man5/groups.conf.5*
-%dir /usr%{_sysconfdir}/clustershell
+%dir %{_sysconfdir}/clustershell
 %{_sysconfdir}/clustershell/clush.conf
 %{_sysconfdir}/clustershell/groups.conf
-%config(noreplace) /usr%{_sysconfdir}/clustershell/clush.conf
-%config(noreplace) /usr%{_sysconfdir}/clustershell/groups.conf
-%config(noreplace) /usr%{_sysconfdir}/clustershell/groups.d/local.cfg
-%dir /usr%{_sysconfdir}/clustershell/groups.conf.d
-%dir /usr%{_sysconfdir}/clustershell/groups.d
-%doc /usr%{_sysconfdir}/clustershell/groups.d/README
-%doc /usr%{_sysconfdir}/clustershell/groups.d/*.example
-%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/README
-%doc /usr%{_sysconfdir}/clustershell/groups.conf.d/*.example
-%doc /usr%{_sysconfdir}/clustershell/*.example
+%config(noreplace) %{_sysconfdir}/clustershell/clush.conf
+%config(noreplace) %{_sysconfdir}/clustershell/groups.conf
+%config(noreplace) %{_sysconfdir}/clustershell/groups.d/local.cfg
+%dir %{_sysconfdir}/clustershell/groups.conf.d
+%dir %{_sysconfdir}/clustershell/groups.d
+%doc %{_sysconfdir}/clustershell/groups.d/README
+%doc %{_sysconfdir}/clustershell/groups.d/*.example
+%doc %{_sysconfdir}/clustershell/groups.conf.d/README
+%doc %{_sysconfdir}/clustershell/groups.conf.d/*.example
+%doc %{_sysconfdir}/clustershell/*.example
 #%{python_sitelib}/ClusterShell/
 #%{python_sitelib}/ClusterShell-*-py?.?.egg-info
 #%{_bindir}/clubak
