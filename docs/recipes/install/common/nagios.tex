@@ -38,6 +38,12 @@ provisioned {\em compute} nodes.
               /etc/nagios/conf.d/hosts.cfg
            done
 
+# Update lcoation of mail binary for alert commands
+[sms](*\#*) perl -pi -e "s/ \/bin\/mail/ \/usr\/bin\/mailx/g" /etc/nagios/objects/commands.cfg
+
+# Update email address of contact for alerts
+[sms](*\#*) perl -pi -e "s/nagios\@localhost/root\@localhost/" /etc/nagios/objects/contacts.cfg
+
 # Add check_ssh command for remote hosts
 [sms](*\#*) echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost \
         >> $CHROOT/etc/nagios/nrpe.cfg
