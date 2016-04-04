@@ -11,9 +11,8 @@ follows.
 [test@sms ~]$ (*\install*) rpm-build
 
 # Download SRPM from OpenHPC repository and install locally
-[test@sms ~]$ wget \
+[test@sms ~]$ rpm -i \
   http://build.openhpc.community/OpenHPC:/VER:/Factory/OSREPO/src/fftw-gnu-openmpi-ohpc-3.3.4-4.1.src.rpm
-[test@sms ~]$ rpm -i fftw-gnu-openmpi-ohpc-3.3.4-4.1.src.rpm
 
 # Modify spec file as desired
 [test@sms ~]$ cd ~/rpmbuild/SPECS
