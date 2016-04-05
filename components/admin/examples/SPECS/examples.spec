@@ -13,7 +13,7 @@
 
 Summary: Example source code and templates for use within OpenHPC environment.
 Name:    examples%{PROJ_DELIM}
-Version: 1.2
+Version: 1.3
 Release: 1
 License: BSD-3
 Group:   %{PROJ_NAME}/admin
@@ -25,7 +25,9 @@ Source3: ifcfg-ib0.sles.ww
 Source4: ifcfg-ib0.centos.ww
 Source5: job.mpi
 Source6: 60-ipath.rules
-Source7: LICENSE
+Source7: gmond.conf
+Source8: LICENSE
+
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
@@ -37,7 +39,7 @@ OpenHPC development environment.
 
 %prep
 
-%{__cp} %SOURCE7 .
+%{__cp} %SOURCE8 .
 
 %build
 
@@ -51,6 +53,7 @@ install -D -m 0644 %SOURCE3 %{buildroot}%{OHPC_HOME}/pub/examples/network/sles/i
 install -D -m 0644 %SOURCE4 %{buildroot}%{OHPC_HOME}/pub/examples/network/centos/ifcfg-ib0.ww
 install -D -m 0644 %SOURCE5 %{buildroot}%{OHPC_HOME}/pub/examples/slurm/job.mpi
 install -D -m 0644 %SOURCE6 %{buildroot}%{OHPC_HOME}/pub/examples/udev/60-ipath.rules
+install -D -m 0644 %SOURCE8 %{buildroot}%{OHPC_HOME}/pub/examples/ganglia/gmond.conf
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
