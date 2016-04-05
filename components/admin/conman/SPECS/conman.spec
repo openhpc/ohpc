@@ -40,6 +40,7 @@ BuildRequires:	freeipmi-devel
 #!BuildIgnore: post-build-checks
 
 Source0:	https://github.com/dun/conman/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.bz2
+Source1:    %{pname}.service
 Patch1:         conman.init.patch
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
@@ -74,13 +75,8 @@ make %{?_smp_mflags}
 rm -rf "%{buildroot}"
 %{__mkdir_p} "%{buildroot}"
 make install DESTDIR="%{buildroot}"
-#
-%if 0%{?_initrddir:1}
-if [ "%{_sysconfdir}/init.d" != "%{_initrddir}" ]; then
-  mkdir -p "%{buildroot}%{_initrddir}"
-  mv "%{buildroot}%{_sysconfdir}/init.d"/* "%{buildroot}%{_initrddir}/"
-fi
-%endif
+
+install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/%{name}.service
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
@@ -88,15 +84,9 @@ fi
 rm -rf "%{buildroot}"
 
 %post
-%if 0%{?suse_version}
-%{fillup_and_insserv -f}
-%else
-if [ -x /sbin/chkconfig ]; then
-  /sbin/chkconfig --add conman
-elif [ -x /usr/lib/lsb/install initd ]; then
-  /usr/lib/lsb/install initd %{_initdir}/conman
+if [ $1 -eq 1 ] ; then
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
-%endif
 
 if ! grep "^SERVER" /etc/conman.conf > /dev/null; then
     cat <<-HERE >> /etc/conman.conf
@@ -116,20 +106,15 @@ HERE
 fi
 
 %preun
-if [ "$1" = 0 ]; then
-  INITRDDIR=%{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}
-  $INITRDDIR/conman stop >/dev/null 2>&1 || :
-  if [ -x /sbin/chkconfig ]; then
-     /sbin/chkconfig --del conman
-  elif [ -x /usr/lib/lsb/remove initd ]; then
-    /usr/lib/lsb/remove initd %{_initdir}/conman
-  fi
+if [ $1 -eq 0 ] ; then
+    /bin/systemctl --no-reload disable conman.service > /dev/null 2>&1 || :
+    /bin/systemctl stop conman.service > /dev/null 2>&1 || :
 fi
 
 %postun
-if [ "$1" -ge 1 ]; then
-  INITRDDIR=%{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}
-  $INITRDDIR/conman condrestart >/dev/null 2>&1 || :
+f [ $1 -ge 1 ] ; then
+    # Package upgrade, not uninstall
+    /bin/systemctl try-restart conman.service >/dev/null 2>&1 || :
 fi
 
 %if %{?insserv_cleanup:1}0

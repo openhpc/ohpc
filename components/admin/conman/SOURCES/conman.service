@@ -1,0 +1,10 @@
+[Unit]
+Description=ConMan Console Management Daemon
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/conmand -c /etc/conman.conf 
+
+[Install]
+WantedBy=multi-user.target
