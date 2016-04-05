@@ -17,7 +17,10 @@ can be used to enable \Ganglia{} on the {\em master} node.
 # Use example configuration script to enable unicast receiver on master host
 [sms](*\#*) cp /opt/ohpc/pub/examples/ganglia/gmond.conf /etc/ganglia/gmond.conf
 [sms](*\#*) perl -pi -e "s/<sms>/${sms_name}/" /etc/ganglia/gmond.conf
+
+# Add config to compute image and name the local 
 [sms](*\#*) cp /etc/ganglia/gmond.conf $ $CHROOT/etc/ganglia/gmond.conf
+[sms](*\#*) echo "gridname MySite" >> /etc/ganglia/gmetad.conf
 
 # Start and Enable Ganglia services
 # If you add nodes through WareWulf, restart these to pick up the hostnames rather than the IPs
