@@ -19,7 +19,7 @@ can be used to enable \Ganglia{} on the {\em master} node.
 [sms](*\#*) perl -pi -e "s/<sms>/${sms_name}/" /etc/ganglia/gmond.conf
 
 # Add config to compute image and name the local 
-[sms](*\#*) cp /etc/ganglia/gmond.conf $ $CHROOT/etc/ganglia/gmond.conf
+[sms](*\#*) cp /etc/ganglia/gmond.conf $CHROOT/etc/ganglia/gmond.conf
 [sms](*\#*) echo "gridname MySite" >> /etc/ganglia/gmetad.conf
 
 # Start and Enable Ganglia services
