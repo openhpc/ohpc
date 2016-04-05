@@ -75,6 +75,8 @@ Patch0:         openblas-libs.patch
 Patch1:         c_xerbla_no-void-return.patch
 # PATCH-FIX-UPSTREAM openblas-noexecstack.patch
 Patch2:         openblas-noexecstack.patch
+# PATCH-FIX-UPSTREAM openblas-gemv.patch
+Patch3:         openblas-gemv.patch
 BuildRoot:      %{_tmppath}/%{pname}-%{version}-build
 ExclusiveArch:  %ix86 ia64 ppc ppc64 x86_64 aarch64
 DocDir:        %{OHPC_PUB}/doc/contrib
