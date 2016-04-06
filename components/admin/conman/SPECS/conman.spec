@@ -32,11 +32,10 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if 0%{?suse_version}
 BuildRequires:	tcpd-devel
-BuildRequires:	OpenIPMI
 %else
 BuildRequires:	tcp_wrappers-devel
-BuildRequires:	freeipmi-devel
 %endif
+BuildRequires:	freeipmi-devel
 #!BuildIgnore: post-build-checks
 
 Source0:	https://github.com/dun/conman/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.bz2
@@ -68,7 +67,7 @@ Its features include:
 %patch1 -p1
 
 %build
-%configure --with-tcp-wrappers
+%configure --with-tcp-wrappers --with-freeipmi
 make %{?_smp_mflags}
 
 %install
