@@ -13,7 +13,7 @@ fi
     assert_success
 }
 
-@test "[conman] start and check gmond" {
+@test "[conman] query conmand conman" {
     run conman -q
     assert_success
 }
