@@ -134,7 +134,7 @@ fi
 %{OHPC_PUB}
 %config(noreplace) %{_sysconfdir}/conman.conf
 %config(noreplace) %{_sysconfdir}/[dls]*/conman
-%{_unitdir}/%{name}.service
+%{_unitdir}/%{pname}.service
 %{_bindir}/*
 %{_sbindir}/*
 %{_prefix}/lib/*
