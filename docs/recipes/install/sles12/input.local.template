@@ -39,6 +39,11 @@ enable_kargs="${enable_kargs:-0}"
 enable_nagios="${enable_nagios:-0}"
 enable_ganglia="${enable_ganglia:-0}"
 
+enable_genders="${enable_genders:-0}"
+enable_mrsh="${enable_mrsh:-0}"
+enable_powerman="${enable_powerman:-0}"
+enable_ipmisol="${enable_ipmisol:-0}"
+
 # -------------------------
 # compute node settings
 # -------------------------
