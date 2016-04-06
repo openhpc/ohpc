@@ -14,6 +14,10 @@ access on systems using the same \MUNGE{} key without having to track
 # Install mrsh
 [sms](*\#*) (*\install*) mrsh-ohpc mrsh-rsh-compat-ohpc
 [sms](*\#*) (*\chrootinstall*) mrsh-ohpc mrsh-rsh-compat-ohpc mrsh-server-ohpc
+
+# Identify mshell and mlogin in services file
+[sms](*\#*) echo "mshell          21212/tcp                  # mrshd" >> /etc/services
+[sms](*\#*) echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
