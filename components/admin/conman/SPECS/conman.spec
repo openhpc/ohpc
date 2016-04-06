@@ -77,6 +77,7 @@ rm -rf "%{buildroot}"
 make install DESTDIR="%{buildroot}"
 
 install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/%{name}.service
+rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
@@ -134,7 +135,7 @@ fi
 %{OHPC_PUB}
 %config(noreplace) %{_sysconfdir}/conman.conf
 %config(noreplace) %{_sysconfdir}/[dls]*/conman
-%{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}/conman
+%{_unitdir}/%{name}.service
 %{_bindir}/*
 %{_sbindir}/*
 %{_prefix}/lib/*
