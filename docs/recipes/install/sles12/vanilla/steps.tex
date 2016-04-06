@@ -10,9 +10,9 @@
 
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{SLES12}
+\newcommand{\baseOS}{SLES12SP1}
 \newcommand{\OSRepo}{SLE\_12\_SP1}
-\newcommand{\baseos}{sles12}
+\newcommand{\baseos}{sles12sp1}
 \newcommand{\install}{zypper -n install}
 \newcommand{\chrootinstall}{zypper -n --root \$CHROOT install}
 \newcommand{\groupinstall}{zypper -n install -t pattern}
@@ -95,8 +95,8 @@ necessary dependencies. For \baseOS{}, the requirements are to have access to
 both the base and SDK repositories:
 
 \begin{itemize*}
-\item SLES12-12-0
-\item SLES12-12-sdk
+\item SLES12-SP1-12.1-0
+\item SLES12-SP1-SDK-12.1-0
 \end{itemize*}
 
 \input{../../common/automation}
@@ -252,7 +252,7 @@ default location for this example is in
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location
-[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/sles12
+[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/sles12sp1
 
 # Build initial chroot image
 [sms](*\#*) mkdir -p -m 755 $CHROOT                        # create chroot housing dir
@@ -650,7 +650,7 @@ address provided will be incremented after each node is found, and the utility
 will exit after all specified nodes have been found.
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
 [sms](*\#*) wwnodescan --netdev=${eth_provision} --ipaddr=${c_ip[0]} --netmask=${internal_netmask} \
-    --vnfs=sles12 --bootstrap=`uname -r` ${c_name[0]}-${c_name[3]}
+    --vnfs=sles12sp1 --bootstrap=`uname -r` ${c_name[0]}-${c_name[3]}
 \end{lstlisting}
 \end{tcolorbox}
 \end{center}
@@ -664,7 +664,7 @@ will exit after all specified nodes have been found.
            done
 
 # Define provisioning image for hosts
-[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12 --bootstrap=`uname -r` \
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12sp1 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key
 \end{lstlisting}
 
