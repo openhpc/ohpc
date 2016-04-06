@@ -76,7 +76,7 @@ rm -rf "%{buildroot}"
 %{__mkdir_p} "%{buildroot}"
 make install DESTDIR="%{buildroot}"
 
-install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/%{name}.service
+install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/%{pname}.service
 rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
@@ -114,7 +114,6 @@ fi
 
 %postun
 f [ $1 -ge 1 ] ; then
-    # Package upgrade, not uninstall
     /bin/systemctl try-restart conman.service >/dev/null 2>&1 || :
 fi
 
