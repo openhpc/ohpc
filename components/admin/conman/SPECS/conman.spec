@@ -68,7 +68,7 @@ Its features include:
 %patch1 -p1
 
 %build
-%configure
+%configure --with-tcp-wrappers
 make %{?_smp_mflags}
 
 %install
