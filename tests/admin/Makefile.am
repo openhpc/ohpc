@@ -5,4 +5,5 @@ TESTS = init.sh
 TESTS  += clustershell
 TESTS  += conman
 TESTS  += ganglia
+TESTS  += mrsh
 TESTS  += nagios
