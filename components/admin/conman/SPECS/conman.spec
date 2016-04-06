@@ -31,7 +31,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 
 %if 0%{?suse_version}
-BuildRequires:	tcpd
+BuildRequires:	tcpd-devel
 BuildRequires:	OpenIPMI
 %else
 BuildRequires:	tcp_wrappers-devel
