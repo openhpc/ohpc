@@ -18,6 +18,9 @@ access on systems using the same \MUNGE{} key without having to track
 # Identify mshell and mlogin in services file
 [sms](*\#*) echo "mshell          21212/tcp                  # mrshd" >> /etc/services
 [sms](*\#*) echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
+
+# Enable xinetd in compute node image
+[sms](*\#*) chroot $CHROOT systemctl enable xinetd
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
