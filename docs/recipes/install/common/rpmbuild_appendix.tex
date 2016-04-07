@@ -1,9 +1,16 @@
 \subsection{RPM Rebuild}  \label{appendix:rpmbuild}
 
-Users of OpenHPC may find it necessary to rebuild one of the packages to satisfy
-local requirements. A simple way to accomplish this is to install the provided
-source RPM, modify the specfile, and rebuild the binary RPM. A brief example
-follows.
+Users of OpenHPC may find it desirable to rebuild one of the supplied packages
+to apply build customizations or satisfy local requirements. One way to
+accomplish this is to install the appropriate source RPM, modify the specfile
+as needed, and rebuild to obtain an updated binary RPM. A brief example using
+the FFTW library is highlighted below.  Note that the source RPMs can be downloaded from the
+community build server at \href{https://build.openhpc.community}
+{\color{blue}{https://build.openhpc.community}} via a web browser or directly
+via \texttt{rpm} as highlighted below. The OpenHPC build system design
+leverages several keywords to control the choice of compiler and MPI families
+for relevant development libraries and the \texttt{rpmbuild} example
+illustrates how to override the default compiler\_family.
 
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
     literate={VER}{\OHPCVersion{}}1 {OSREPO}{\OSRepo{}}1 {-}{-}1]
