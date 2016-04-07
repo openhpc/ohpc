@@ -1,0 +1,20 @@
+--- mrsh-mrsh-2-7-1/etc/pam/mrlogin	2015-05-18 21:28:00.000000000 -0700
++++ mrsh-mrsh-2-7-1.patch/etc/pam/mrlogin	2016-04-06 20:10:10.000000000 -0700
+@@ -5,5 +5,5 @@
+ auth       required     pam_localuser.so
+ auth       required     pam_shells.so
+ auth       required     pam_securetty.so
+-account    include      system-auth
+-session    include      system-auth
++account    include      common-account
++session    include      common-session
+--- mrsh-mrsh-2-7-1/etc/pam/mrsh	2015-05-18 21:28:00.000000000 -0700
++++ mrsh-mrsh-2-7-1.patch/etc/pam/mrsh	2016-04-06 20:10:30.000000000 -0700
+@@ -5,5 +5,5 @@
+ auth       required     pam_localuser.so
+ auth       required     pam_shells.so
+ auth       required     pam_securetty.so
+-account    include      system-auth
+-session    include      system-auth
++account    include      common-account
++session    include      common-session
