@@ -32,7 +32,6 @@ Source1:            http://downloads.sourceforge.net/ganglia/ganglia-web-%{webve
 Source2:            gmond.service
 Source3:            gmetad.service
 Source4:            ganglia-httpd24.conf.d
-Source5:            ganglia-httpd.conf.d
 Source6:            conf.php
 Patch0:             ganglia-web-3.5.7-statedir.patch
 #Patch1:             ganglia-3.7.1-py-syntax.patch
