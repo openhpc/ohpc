@@ -33,8 +33,8 @@ provisioned {\em compute} nodes.
 
 # Define compute nodes as hosts to monitor
 [sms](*\#*) mv /etc/nagios/conf.d/hosts.cfg.example /etc/nagios/conf.d/hosts.cfg
-[sms](*\#*) for I in {0..3}; do
-              perl -pi -e "s/HOSTNAME$(($I+1))/${c_name[$I]}/ || s/HOST$(($I+1))_IP/${c_ip[$I]}/" \
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+              perl -pi -e "s/HOSTNAME$(($i+1))/${c_name[$i]}/ || s/HOST$(($i+1))_IP/${c_ip[$i]}/" \
               /etc/nagios/conf.d/hosts.cfg
            done
 
