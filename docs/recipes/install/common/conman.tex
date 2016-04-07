@@ -6,7 +6,7 @@ serial-over-lan.
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Optionally, define diskless node kernel arguments to support SOL console
-% ohpc_command if [ ${enable_ipmisol} -eq 1 ];then
+% ohpc_command if [[ ${enable_ipmisol} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install conman to provide a front-end to compute consoles and log output
