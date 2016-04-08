@@ -38,7 +38,7 @@ provisioned {\em compute} nodes.
               /etc/nagios/conf.d/hosts.cfg
            done
 
-# Update lcoation of mail binary for alert commands
+# Update location of mail binary for alert commands
 [sms](*\#*) perl -pi -e "s/ \/bin\/mail/ \/usr\/bin\/mailx/g" /etc/nagios/objects/commands.cfg
 
 # Update email address of contact for alerts
