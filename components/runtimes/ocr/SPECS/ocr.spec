@@ -106,6 +106,7 @@ while maintaining app performance.
 This version is for clusters using MPI.
 %endif # End of {with mpi}
 %define debug_package %{nil}
+#!BuildIgnore: post-build-checks
 
 %prep
 
@@ -252,7 +253,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{install_path}/share/ocr/doc/ocr-1.1.0.pdf
 %exclude %{install_path}/bin/ocrrun_x86-mpi
 %exclude %{install_path}/lib/libocr_x86-mpi.*
-%exclude %{install_path}/share/ocr/config/x86
+%exclude %{install_path}/share/ocr/config/x86-mpi
 %exclude %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi
 
 %if %{with mpi}
@@ -262,7 +263,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{install_path}/share/ocr/doc/ocr-1.1.0.pdf
 %exclude %{install_path}/bin/ocrrun_x86
 %exclude %{install_path}/lib/libocr_x86.*
-%exclude %{install_path}/share/ocr/config/x86-mpi
+%exclude %{install_path}/share/ocr/config/x86
 %exclude %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 %endif
 %changelog
