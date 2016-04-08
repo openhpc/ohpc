@@ -38,9 +38,3 @@ compute} hosts.
 % end_ohpc_run
 
 
-%%[sms](*\#*) for I in httpd apache2; do
-%%              if [ -d /etc/$I ]; then
-%%                 perl -pi -e "s/Require local/Require all granted/" /etc/$I/conf.d/ganglia-ohpc.conf
-%%              fi
-%%           done 
-%%
