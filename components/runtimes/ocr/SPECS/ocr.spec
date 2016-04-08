@@ -161,6 +161,8 @@ find "%buildroot" -type f -name "*.a" -print0 | xargs -0 rm -f
 # Add the spec
 mkdir -p $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
 cp ../spec/ocr-1.1.0.pdf $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
+mkdir -p $RPM_BUILD_ROOT/%{install_path}/share/ocr/config/x86
+cp machine-configs/x86/machine-configs/x86/jenkins-common-8w-lockableDB.cfg $RPM_BUILD_ROOT/%{install_path}/share/ocr/config/x86
 
 
 # OpenHPC module file
