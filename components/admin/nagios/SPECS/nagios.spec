@@ -103,7 +103,7 @@ Requires: %{pname}-common%{PROJ_DELIM}
 #Requires(pre): group(nagios)
 
 
-Summary: Nagios monitors hosts and services and yells if somethings breaks
+Summary: Nagios monitors hosts and services and yells if something breaks
 Summary(de): Nagios überwacht Dienste und Rechner und meldet Ihnen Ausfälle
 
 %description
