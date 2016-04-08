@@ -76,7 +76,7 @@ while maintaining app performance.
 This version is for shared memory systems.
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
-%define __spec_install_post /usr/lib/rpm/brp-suse /bin/true
+%define __spec_install_post /usr/lib/rpm/brp-suse.d/brp-25-symlink /bin/true
 
 %if %{with mpi}
 %package -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
