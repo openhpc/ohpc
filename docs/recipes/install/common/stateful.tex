@@ -1,57 +1,49 @@
-In addition to running the VNFS image from memory, Warewulf can also partition
-and format persistent storage on a node and maintain the VNFS state across
-reboots. This requires installing additional packages in the VNFS image to
-support a boot loader (GRUB), and it also requires some modification to the
-node definition in the warewulf data store. 
+\paragraph{Add stateful provisioning support}
 
-% begin_fsp_run
-% fsp_validation_comment Add stateful provisioning support
+Warewulf normally defaults to running the assembled VNFS image out of system
+memory in a {\em stateless} configuration. Alternatively, Warewulf can also be
+used to partition and format persistent storage such that the VNFS image can be
+installed locally to disk in a {\em stateful} manner.  This does, however,
+require that a boot loader (GRUB) be added to the image as follows:
+
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Add GRUB2 Bootloader
-[sms]# (*\chrootinstall*) grub2
-
-# Re-assemble VNFS image
-[sms]# wwvnfs  -y --chroot $CHROOT
+# Add GRUB2 bootloader and re-assemble VNFS image
+[sms](*\#*) (*\chrootinstall*) grub2
+[sms](*\#*) wwvnfs  -y --chroot $CHROOT
 \end{lstlisting}
-% end_fsp_run 
 
-Stateful nodes require addition parameters in the Warewulf configuration. In
-particular, we instruct Warewulf where to install the GRUB bootloader, which
-disk to partition, which partition to format, and what the filesystem layout
-will look like. These changes are necessary for each compute node we wish to
-provision statefully.
+\noindent Enabling stateful nodes also requires additional site-specific, disk-related
+parameters in the Warewulf configuration. In the example that follows, the
+compute node configuration is updated to define where to install the GRUB
+bootloader, which disk to partition, which partition to format, and what the
+filesystem layout will look like.
 
-% begin_fsp_run
-% fsp_validation_comment Add stateful node object parameters
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Update node object parameters
-[sms]# export filesystems="mountpoint=/boot:dev=sda1:type=ext3:size=500," \
+[sms](*\#*) export filesystems="mountpoint=/boot:dev=sda1:type=ext3:size=500," \
               "dev=sda2:type=swap:size=32768," \
               "mountpoint=/:dev=sda3:type=ext3:size=fill"
-[sms]# for ((i=0; i<$num_computes; i++)) ; do 
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do 
               wwsh -y object modify -s bootloader=sda ${c_name[$i]};
               wwsh -y object modify -s diskpartition=sda ${c_name[$i]};
               wwsh -y object modify -s diskformat=sda1,sda2,sda3 ${c_name[$i]};
               wwsh -y object modify -s filesystems="$filesystems" ${c_name[$i]};
-           done
+        done
 \end{lstlisting}
-% end_fsp_run 
 
-Upon the node's next reboot, Warewulf will partition and format the disk. It
-will also run grub2-mkconfig and grub2-install to place grub in the proscribed
-boot sector, and it will install the VNFS locally. In order to ensure this 
-process happens only once per node we must instruct warewulf to next boot from 
-the local storage.
+\noindent Upon subsequent reboot of the modified nodes, Warewulf will partition
+and format the disk to host the desired VNFS image.  Once installed to disk,
+Warewulf can be instructed to subsequently boot from local storage
+(alternatively, the BIOS boot option order could be updated to reflect a desire
+to boot from disk):
 
-% begin_fsp_run
-% fsp_validation_comment Add bootlocal node object parameters
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Update node object parameters
-[sms]# for ((i=0; i<$num_computes; i++)) ; do 
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do 
               wwsh -y object modify -s bootlocal=EXIT ${c_name[$i]};
-           done
+        done
 \end{lstlisting}
-% end_fsp_run 
 
-Deleting the bootlocal object parameter will cause Warewulf once again to
-re-partition and format the local storage.
+
+\noindent Deleting the bootlocal object parameter will cause Warewulf to once
+again reformat and re-install to local storage upon a new PXE boot request.
