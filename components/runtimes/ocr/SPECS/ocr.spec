@@ -202,14 +202,15 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %if %{with mpi}
-%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/%{version}
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler toolchain for clusters using MPI"
+puts stderr "This module loads the %{PNAME} library built with the %{compiler_family} compiler"
+puts stderr "toolchain and the %{mpi_family} MPI stack"
 puts stderr "\nVersion %{version}\n"
 
 }
@@ -232,7 +233,7 @@ setenv          OCR_TYPE            x86-mpi
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-mpi-%{version}
@@ -252,7 +253,7 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{install_path}/bin/ocrrun_x86-mpi
 %exclude %{install_path}/lib/libocr_x86-mpi.*
 %exclude %{install_path}/share/ocr/config/x86-mpi
-%exclude %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi
+%exclude %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi
 
 %if %{with mpi}
 %files -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
