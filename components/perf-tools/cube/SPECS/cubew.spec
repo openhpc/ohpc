@@ -19,7 +19,7 @@
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.4
+Version:   4.4-TP2
 Release:   1%{?dist}
 Summary:   High-Performance Score-P and Scalasca performance report writing library
 License:   BSD-style license
@@ -34,7 +34,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 
 BuildRequires: zlib-devel
-Requires: 
+Requires:
 BuildRequires: zlib-devel
 
 %define debug_package %{nil}
@@ -43,8 +43,8 @@ BuildRequires: zlib-devel
 %define install_path %{OHPC_PUB}/%{pname}/%version
 
 %description
-Lightweigt high performance library to create Scalsca and Score-P performance 
-report. 
+Lightweigt high performance library to create Scalsca and Score-P performance
+report.
 
 %prep
 %setup -q -n %{pname}-%{version}

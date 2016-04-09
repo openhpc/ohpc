@@ -19,7 +19,7 @@
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.3.3
+Version:   4.3.4
 Release:   1%{?dist}
 Summary:   Score-P and Scalasca performance report reader written in native Java
 License:   BSD-style license
@@ -34,7 +34,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 
 BuildRequires: javac jar
-Requires: java 
+Requires: java
 BuildRequires: javac jar
 
 %define debug_package %{nil}

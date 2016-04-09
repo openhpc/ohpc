@@ -19,7 +19,7 @@
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.4
+Version:   4.4-TP2
 Release:   1%{?dist}
 Summary:   General purpose C++ library for Score-P and Scalasca performance profiling.
 License:   BSD-style license
@@ -34,7 +34,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 
 BuildRequires: zlib-devel Rscript Rcpp Rinsign
-Requires: 
+Requires:
 BuildRequires: zlib-devel Rscript Rcpp Rinsign
 
 %define debug_package %{nil}
@@ -43,7 +43,7 @@ BuildRequires: zlib-devel Rscript Rcpp Rinsign
 %define install_path %{OHPC_PUB}/%{pname}/%version
 
 %description
-General purpose library written in C++ to generate and to real Scalasca's and 
+General purpose library written in C++ to generate and to real Scalasca's and
 Score-P's profiles.
 
 
