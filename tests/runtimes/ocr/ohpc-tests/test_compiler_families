@@ -31,7 +31,7 @@ for compiler in $COMPILER_FAMILIES ; do
     make clean >& /dev/null     || exit 1
     make -k check               
 
-    save_logs_compiler_family tests/ohpc_module $compiler
+    save_logs_compiler_family tests $compiler
 
     make distclean >& /dev/null
 
