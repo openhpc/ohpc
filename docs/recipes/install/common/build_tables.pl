@@ -14,6 +14,7 @@ my @single_package_exceptions = ();
 
 my %compiler_exceptions = ();
 $compiler_exceptions{"gsl"} = 1;
+$compiler_exceptions{"openblas"} = 1;
 
 # Define any asymmetric MPI packages
 my %mpi_exceptions = ();
