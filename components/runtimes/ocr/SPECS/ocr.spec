@@ -53,7 +53,7 @@ BuildRequires: intel_licenses
 
 Summary:   Open Community Runtime (OCR) for shared memory
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.0.1
+Version:   1.1.0
 Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/runtimes
@@ -124,6 +124,13 @@ export CFLAGS="-fp-model strict $CFLAGS"
 OCR_TYPE=x86 make %{?_smp_mflags} all
 
 %if %{with mpi}
+export OHPC_MPI_FAMILY=%{mpi_family}
+# Clear whatever was set by OHPC_setup_compiler because
+# OCR build uses these variables.
+unset CC
+unset CXX
+. %{_sourcedir}/OHPC_setup_mpi
+
 OCR_TYPE=x86-mpi make %{?_smp_mflags} all
 %endif
 
@@ -152,7 +159,9 @@ find "%buildroot" -type f -name "*.la" -print0 | xargs -0 rm -f
 find "%buildroot" -type f -name "*.a" -print0 | xargs -0 rm -f
 # Add the spec
 mkdir -p $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
-cp ../spec/ocr-1.0.1.pdf $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
+cp ../spec/ocr-1.1.0.pdf $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
+mkdir -p $RPM_BUILD_ROOT/%{install_path}/share/ocr/config/x86
+touch $RPM_BUILD_ROOT/%{install_path}/share/ocr/config/x86/jenkins-common-8w-lockableDB.cfg
 
 
 # OpenHPC module file
@@ -242,7 +251,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
+%doc %{install_path}/share/ocr/doc/ocr-1.1.0.pdf
 %exclude %{install_path}/bin/ocrrun_x86-mpi
 %exclude %{install_path}/lib/libocr_x86-mpi.*
 %exclude %{install_path}/share/ocr/config/x86-mpi
@@ -252,7 +261,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
+%doc %{install_path}/share/ocr/doc/ocr-1.1.0.pdf
 %exclude %{install_path}/bin/ocrrun_x86
 %exclude %{install_path}/lib/libocr_x86.*
 %exclude %{install_path}/share/ocr/config/x86
