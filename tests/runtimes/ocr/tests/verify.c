@@ -125,20 +125,20 @@ ocrGuid_t setUpVerify(ocrGuid_t inDB, ocrGuid_t XrealDB, ocrGuid_t XimagDB, u64 
     // OCR demands the second parameter be non-null
     float *X;
 
-    ocrDbCreate(&XrealVDB, (void**)&X, sizeof(float)*N, 0, NULL_HINT, NO_ALLOC);
-    ocrDbCreate(&XimagVDB, (void**)&X, sizeof(float)*N, 0, NULL_HINT, NO_ALLOC);
+    ocrDbCreate(&XrealVDB, (void**)&X, sizeof(float)*N, 0, NULL_GUID, NO_ALLOC);
+    ocrDbCreate(&XimagVDB, (void**)&X, sizeof(float)*N, 0, NULL_GUID, NO_ALLOC);
 
-    if(IS_GUID_NULL(XimagDB)) {
+    if(XimagDB == NULL_GUID) {
         ocrGuid_t verifyDependencies[4] = { inDB, XrealVDB, XimagVDB, trigger };
 
         ocrEdtCreate(&vGuid, vTemp, EDT_PARAM_DEF, &N, 4, verifyDependencies,
-                     EDT_PROP_NONE, NULL_HINT, &vEventGuid);
+                     EDT_PROP_NONE, NULL_GUID, &vEventGuid);
     } else {
         ocrGuid_t verifyDependencies[6] = { inDB, XrealDB, XimagDB, XrealVDB,
                                             XimagVDB, trigger };
 
         ocrEdtCreate(&vGuid, vTemp, EDT_PARAM_DEF, &N, 6, verifyDependencies,
-                     EDT_PROP_NONE, NULL_HINT, &vEventGuid);
+                     EDT_PROP_NONE, NULL_GUID, &vEventGuid);
     }
     ocrEdtTemplateDestroy(vTemp);
 

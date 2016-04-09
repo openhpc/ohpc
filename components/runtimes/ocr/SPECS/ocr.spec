@@ -53,13 +53,12 @@ BuildRequires: intel_licenses
 
 Summary:   Open Community Runtime (OCR) for shared memory
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.1.0
+Version:   1.0.1
 Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://xstack.exascale-tech.com/wiki
-Source0:   https://xstack.exascale-tech.com/git/public/snapshots/ocr-refs/tags/OCRv%{version}.tbz2
-#Source0:   OCRv%{version}.tbz2
+Source0:   https://xstack.exascale-tech.com/git/public/snapshots/ocr-refs/tags/OCRv%{version}_ohpc.tbz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -109,7 +108,7 @@ This version is for clusters using MPI.
 
 %prep
 
-%setup -q -n ocr-OCRv%{version}
+%setup -q -n ocr-OCRv%{version}_ohpc
 
 %build
 cd ocr/build
@@ -122,15 +121,7 @@ export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
 OCR_TYPE=x86 make %{?_smp_mflags} all
-
 %if %{with mpi}
-export OHPC_MPI_FAMILY=%{mpi_family}
-# Clear whatever was set by OHPC_setup_compiler because
-# OCR build uses these variables.
-unset CC
-unset CXX
-. %{_sourcedir}/OHPC_setup_mpi
-
 OCR_TYPE=x86-mpi make %{?_smp_mflags} all
 %endif
 
@@ -145,13 +136,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 
 mkdir -p $RPM_BUILD_ROOT/%{install_path}
 make OCR_TYPE=x86 OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} %{?_smp_mflags} install
-
 %if %{with mpi}
-export OHPC_MPI_FAMILY=%{mpi_family}
-unset CC
-unset CXX
-. %{_sourcedir}/OHPC_setup_mpi
-
 make OCR_TYPE=x86-mpi OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} %{?_smp_mflags} install
 %endif
 # Remove static libraries
@@ -159,9 +144,7 @@ find "%buildroot" -type f -name "*.la" -print0 | xargs -0 rm -f
 find "%buildroot" -type f -name "*.a" -print0 | xargs -0 rm -f
 # Add the spec
 mkdir -p $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
-cp ../spec/ocr-1.1.0.pdf $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
-mkdir -p $RPM_BUILD_ROOT/%{install_path}/share/ocr/config/x86
-touch $RPM_BUILD_ROOT/%{install_path}/share/ocr/config/x86/jenkins-common-8w-lockableDB.cfg
+cp ../spec/ocr-1.0.1.pdf $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
 
 
 # OpenHPC module file
@@ -204,8 +187,12 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %if %{with mpi}
+<<<<<<< HEAD
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi/%{version}
+=======
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/%{version}
+>>>>>>> parent of 482cf7c... Update OCR to v1.1.0
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -216,7 +203,7 @@ puts stderr "toolchain and the %{mpi_family} MPI stack"
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{PNAME} for clusters using MPI %{mpi_family} built with %{compiler_family} toolchain"
+module-whatis "Name: %{PNAME} for clusters using MPI built with %{compiler_family} toolchain"
 module-whatis "Version: %{version}"
 module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
@@ -251,20 +238,22 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%doc %{install_path}/share/ocr/doc/ocr-1.1.0.pdf
-%exclude %{install_path}/bin/ocrrun_x86-mpi
-%exclude %{install_path}/lib/libocr_x86-mpi.*
+%doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
+%exclude %{install_path}/bin/ocrrun_mpi
+%exclude %{install_path}/lib/libocr_mpi.*
 %exclude %{install_path}/share/ocr/config/x86-mpi
-%exclude %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi
+%exclude %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/.version.%{version}
+%exclude %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/%{version}
 
 %if %{with mpi}
 %files -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%doc %{install_path}/share/ocr/doc/ocr-1.1.0.pdf
+%doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
 %exclude %{install_path}/bin/ocrrun_x86
 %exclude %{install_path}/lib/libocr_x86.*
 %exclude %{install_path}/share/ocr/config/x86
-%exclude %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 %endif
 %changelog

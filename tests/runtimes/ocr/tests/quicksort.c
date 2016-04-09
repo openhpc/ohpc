@@ -1,21 +1,11 @@
 #include <ocr.h>
-#include "macros.h"
+
 
 #define CACHE_LINE_SIZE 64
 //Size of array to be sorted
 #define ARRAY_SIZE 1000
 //Range of numbers to be sorted.
 #define RANGE 1000000
-
-typedef struct{
-    u64 low;
-    u64 high;
-    ocrGuid_t qsortTemplate;
-} qsortPRM_t;
-
-typedef struct{
-    u64 arraySize;
-} finishPRM_t;
 
 //Pseudo-RNG.  Gets rid of C stdlib dependence
 int getRandNum(int seed){
@@ -71,13 +61,10 @@ void sortSerial(u64 *data, u64 low, u64 high)
 ocrGuid_t qsortTask( u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[])
 {
     u64 i;
-
-    qsortPRM_t *qsortParamvIn = (qsortPRM_t *)paramv;
-
-    u64 low = qsortParamvIn->low;
-    u64 high = qsortParamvIn->high;
-    ocrGuid_t qsortTemplate = qsortParamvIn->qsortTemplate;
+    u64 low = paramv[0];
+    u64 high = paramv[1];
     u64 size = high - low + 1;
+    ocrGuid_t qsortTemplate = paramv[2];
     u64 *data = depv[0].ptr;
     if(size * sizeof(u64) <= CACHE_LINE_SIZE)
         sortSerial(data, low, high);
@@ -122,22 +109,23 @@ ocrGuid_t qsortTask( u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[])
         ocrGuid_t qsortLowEdt, qsortHighEdt;
         ocrGuid_t qsortLowDataEvt, qsortHighDataEvt;
 
-        ocrEventCreate(&qsortLowDataEvt, OCR_EVENT_ONCE_T, EVT_PROP_TAKES_ARG);
-        ocrEventCreate(&qsortHighDataEvt, OCR_EVENT_ONCE_T, EVT_PROP_TAKES_ARG);
+        ocrEventCreate(&qsortLowDataEvt, OCR_EVENT_ONCE_T, EVT_PROP_NONE);
+        ocrEventCreate(&qsortHighDataEvt, OCR_EVENT_ONCE_T, EVT_PROP_NONE);
 
-        qsortPRM_t qsortLowParamv;
-        qsortLowParamv.low = low;
-        qsortLowParamv.high = pivotIndex-1;
-        qsortLowParamv.qsortTemplate = qsortTemplate;
-        ocrEdtCreate(&qsortLowEdt, qsortTemplate, EDT_PARAM_DEF, (u64 *)&qsortLowParamv,
-                 EDT_PARAM_DEF, &qsortLowDataEvt, EDT_PROP_FINISH, NULL_HINT, NULL);
+//DSS: removed unnecessary if test
+//        if(pivotIndex <=1){
+//            u64 qsortLowParamv[3] = {low, pivotIndex+1, qsortTemplate};
+//            ocrEdtCreate(&qsortLowEdt, qsortTemplate, EDT_PARAM_DEF, qsortLowParamv,
+//                 EDT_PARAM_DEF, &qsortLowDataEvt, EDT_PROP_FINISH, NULL_GUID, NULL);
+//        }else{
+        u64 qsortLowParamv[3] = {low, pivotIndex-1, qsortTemplate};
+        ocrEdtCreate(&qsortLowEdt, qsortTemplate, EDT_PARAM_DEF, qsortLowParamv,
+                 EDT_PARAM_DEF, &qsortLowDataEvt, EDT_PROP_FINISH, NULL_GUID, NULL);
 
-        qsortPRM_t qsortHighParamv;
-        qsortHighParamv.low = pivotIndex+1;
-        qsortHighParamv.high = high;
-        qsortHighParamv.qsortTemplate = qsortTemplate;
-        ocrEdtCreate(&qsortHighEdt, qsortTemplate, EDT_PARAM_DEF, (u64 *)&qsortHighParamv,
-                 EDT_PARAM_DEF, &qsortHighDataEvt, EDT_PROP_FINISH, NULL_HINT, NULL);
+ //       }
+        u64 qsortHighParamv[3] = {pivotIndex+1, high, qsortTemplate};
+        ocrEdtCreate(&qsortHighEdt, qsortTemplate, EDT_PARAM_DEF, qsortHighParamv,
+                 EDT_PARAM_DEF, &qsortHighDataEvt, EDT_PROP_FINISH, NULL_GUID, NULL);
 
         ocrEventSatisfy(qsortLowDataEvt, depv[0].guid);
         ocrEventSatisfy(qsortHighDataEvt, depv[0].guid);
@@ -169,34 +157,24 @@ ocrGuid_t mainEdt( u32 paramc, u64* paramv, u32 depc, ocrEdtDep_t depv[])
     ocrGuid_t dataDb;
     ocrGuid_t outEvt;
     u64 *data;
-
-    qsortPRM_t  qsortParamv;
-    finishPRM_t finishParamv;
-
-    ocrEdtTemplateCreate(&qsortTemplate, qsortTask, PRMNUM(qsort), 1);
+    ocrEdtTemplateCreate(&qsortTemplate, qsortTask, 3, 1);
 
     ocrDbCreate(&dataDb, (void**)&data, sizeof(u64) * (ARRAY_SIZE),
-        /*flags=*/0, /*location=*/NULL_HINT, NO_ALLOC);
+        /*flags=*/0, /*location=*/NULL_GUID, NO_ALLOC);
 
     u64 i;
     for(i = 0; i < ARRAY_SIZE; i++)
         data[i] = getRandNum(i) % RANGE;
 
-    qsortParamv.low = 0;
-    qsortParamv.high = ARRAY_SIZE-1;
-    qsortParamv.qsortTemplate = qsortTemplate;
-
-    ocrEdtCreate(&qsortEdt, qsortTemplate, EDT_PARAM_DEF, (u64 *)&qsortParamv,
-        EDT_PARAM_DEF, &dataDb, EDT_PROP_FINISH, NULL_HINT, &outEvt);
+    u64 qsortParamv[3] = {0, ARRAY_SIZE-1, qsortTemplate};
+    ocrEdtCreate(&qsortEdt, qsortTemplate, EDT_PARAM_DEF, qsortParamv,
+        EDT_PARAM_DEF, &dataDb, EDT_PROP_FINISH, NULL_GUID, &outEvt);
 
     ocrGuid_t finishTemplate;
     ocrGuid_t finishEdt;
-
-    finishParamv.arraySize = ARRAY_SIZE;
-
-    ocrGuid_t finishDepv[2] = {dataDb, outEvt};
-    ocrEdtTemplateCreate(&finishTemplate, finishTask, PRMNUM(finish), 2);
-    ocrEdtCreate(&finishEdt, finishTemplate, EDT_PARAM_DEF, (u64 *)&finishParamv,
-        EDT_PARAM_DEF, finishDepv, 0, NULL_HINT, NULL);
-    return NULL_GUID;
+    u64 finishParamv = ARRAY_SIZE;
+    u64 finishDepv[2] = {dataDb, outEvt};
+    ocrEdtTemplateCreate(&finishTemplate, finishTask, 1, 2);
+    ocrEdtCreate(&finishEdt, finishTemplate, EDT_PARAM_DEF, &finishParamv,
+        EDT_PARAM_DEF, finishDepv, 0, NULL_GUID, NULL);
 }
