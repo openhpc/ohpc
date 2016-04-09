@@ -9,7 +9,7 @@ fi
 
 PKG=OCR
 module=ocr
-library=libocr_x86
+library=libocr
 header=ocr.h
 rpm=ocr-$LMOD_FAMILY_COMPILER${DELIM}
 
