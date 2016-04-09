@@ -8,6 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname lua-posix
@@ -26,7 +27,7 @@ Version:        33.2.1
 Release:        %{?dist}
 Summary:        POSIX library for Lua
 
-Group:          Development/Libraries
+Group:          %{PROJ_NAME}/distro-packages
 License:        MIT
 Url:            https://github.com/luaposix/luaposix
 Source0:        https://github.com/luaposix/luaposix/archive/release-v%{version}.tar.gz
