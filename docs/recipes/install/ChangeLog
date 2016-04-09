@@ -1,19 +1,29 @@
-Version 1.1 (In Progress)
+Version 1.1 (10 April 2016)
+
+[General]
+
+  * introduced support for multiple Base OS versions:
+     - CentOS 7.2
+     - SLES12 SP1
+  * enable support in Warewulf for ECDSA ssh host keys (Issue https://github.com/openhpc/ohpc/issues/202)
+  * updated OpenMPI configuration to support Grid Engine (Issue https://github.com/openhpc/ohpc/issues/192)
+  * modified recipe test logic for enable_<feature> options (Issue https://github.com/openhpc/ohpc/issues/147)
+  * variety of clarifications and expansions in recipe documentation including:
+      - configuration examples for new component additions
+      - availability of wwnodescan
+      - example diskfull configuration for CentOS7.2 (not applicable for SLES)
+      - addition of new Appendix to highlight process of rebuilding packages from source
 
 [Component Additions]
 
   * clustershell-ohpc                        (1.7.1)
   * genders-compat-ohpc                      (1.22)
   * genders-ohpc                             (1.22)
-  * lustre-client-ohpc-modules               (2.8.0)
-  * lustre-client-ohpc-source                (2.8.0)
-  * lustre-client-ohpc-tests                 (2.8.0)
   * mrsh-ohpc                                (2.7)
   * mrsh-rsh-compat-ohpc                     (2.7)
   * mrsh-server-ohpc                         (2.7)
   * ocr-gnu-ohpc                             (1.0.1)
   * ocr-intel-ohpc                           (1.0.1)
-  * pmix-ohpc                                (1.1.4)
   * powerman-devel-ohpc                      (2.3.24)
   * powerman-libs-ohpc                       (2.3.24)
   * powerman-ohpc                            (2.3.24)

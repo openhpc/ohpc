@@ -1,5 +1,5 @@
 OpenHPC Software Stack
-Version 1.0.1 Update Release (05 February 2015) 
+Version 1.1 Minor Release (10 April 2015) 
 
 Introduction:
 
