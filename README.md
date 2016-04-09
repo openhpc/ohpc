@@ -14,8 +14,8 @@ tools, and a variety of scientific libraries.
 The compatible OS version for this release and the total number of
 pre-packaged RPMs available are as follows:
 
-        CentOS 7.2 - 271 RPMs (Base)
-        SuSE SLE 12 SP1 - 296 RPMs (Base)
+        CentOS 7.2 - 272 RPMs (Base)
+        SuSE SLE 12 SP1 - 269 RPMs (Base)
 
 Note that a detailed list of all available components is available in
 the "Package Manifest" appendix located in the companion install
@@ -32,12 +32,17 @@ and [update] package repositories. A copy of the ```ohpc-release``` file is
 provided below for convenience. A companion install guide with example
 instructions for installation is also available below or in in the downloads
 section of the latest
-[release](https://github.com/openhpc/ohpc/releases/tag/v1.0.1.GA).
+[release](https://github.com/openhpc/ohpc/releases/tag/v1.1.GA).
 
-###### [CentOS 7.1]
-* [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.0.1.GA/ohpc-release-1.0-1.x86_64.rpm) (md5sum=8dbaed1bea6245c04cf201131df74bc3)
-* [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.0.1.GA/Install_guide-CentOS7.1-1.0.1.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.1/iso/OpenHPC-1.0-CentOS_7.1.iso) mirror of Yum repository (md5sum=e57db7c5dd712c7b9fa48e4ebd43c517)
+###### [CentOS 7.2]
+* [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.1.GA/centos/ohpc-release-1.1.x86_64.rpm) (md5sum=8dbaed1bea6245c04cf201131df74bc3)
+* [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.1.GA/Install_guide-CentOS7.2-1.1.pdf)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.2/iso/OpenHPC-1.1-CentOS_7.2.iso) mirror of Yum repository (md5sum=e57db7c5dd712c7b9fa48e4ebd43c517)
+
+###### [SLE 12 SP1]
+* [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.1.GA/sles/ohpc-release-1.1.x86_64.rpm) (md5sum=8dbaed1bea6245c04cf201131df74bc3)
+* [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.1.GA/Install_guide-SLES_12-1.1.pdf)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.1/SLES_12_SP1/iso/OpenHPC-1.1-SLES_12_SP1.iso) mirror of Yum repository (md5sum=e57db7c5dd712c7b9fa48e4ebd43c517)
 
 #### Questions, Comments, or Bug Reports?
 
