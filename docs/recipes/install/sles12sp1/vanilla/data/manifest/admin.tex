@@ -6,71 +6,120 @@
 {\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
 \midrule
 
-% <-- begin entry for conman-fsp
-\multirow{2}{*}{conman-fsp} & 
+% <-- begin entry for conman-ohpc
+\multirow{2}{*}{conman-ohpc} & 
 \multirow{2}{*}{0.2.7} & 
-ConMan: The Console Manager. \newline { \color{blue} http://conman.googlecode.com} 
+ConMan: The Console Manager. \newline { \color{logoblue} \url{http://dun.github.io/conman}} 
 \\ \hline 
-% <-- end entry for %name_base
+% <-- end entry for conman-ohpc
 
-% <-- begin entry for docs-fsp
-\multirow{2}{*}{docs-fsp} & 
-\multirow{2}{*}{15.31} & 
-\multirow{2}{*}{Forest Peak documentation.} \\
-& & 
+% <-- begin entry for docs-ohpc
+\multirow{2}{*}{docs-ohpc} & 
+\multirow{2}{*}{1.1} & 
+OpenHPC documentation. \newline { \color{logoblue} \url{https://github.com/openhpc/ohpc}} 
 \\ \hline 
-% <-- end entry for %name_base
+% <-- end entry for docs-ohpc
 
-% <-- begin entry for examples-fsp
-\multirow{2}{*}{examples-fsp} & 
-\multirow{2}{*}{1.2} & 
-\multirow{2}{*}{Example source code and templates for use within FSP environment.} \\
-& & 
+% <-- begin entry for examples-ohpc
+\multirow{2}{*}{examples-ohpc} & 
+\multirow{2}{*}{1.3} & 
+Example source code and templates for use within OpenHPC environment.  { \color{logoblue} \url{https://github.com/openhpc/ohpc}} 
 \\ \hline 
-% <-- end entry for %name_base
+% <-- end entry for examples-ohpc
 
-% <-- begin entry for intel-clck-fsp
-\multirow{2}{*}{intel-clck-fsp} & 
-\multirow{2}{*}{2.2.2} & 
-Intel(R) Cluster Checker. \newline { \color{blue} http://intel.com/go/cluster} 
+% <-- begin entry for ganglia-ohpc
+\multirow{2}{*}{ganglia-ohpc} & 
+\multirow{2}{*}{3.7.2} & 
+Distributed Monitoring System. \newline { \color{logoblue} \url{http://ganglia.sourceforge.net}} 
 \\ \hline 
-% <-- end entry for %name_base
+% <-- end entry for ganglia-ohpc
+
+% <-- begin entry for genders-ohpc
+\multirow{2}{*}{genders-ohpc} & 
+\multirow{2}{*}{1.22} & 
+Static cluster configuration database. \newline { \color{logoblue} \url{https://github.com/chaos/genders}} 
+\\ \hline 
+% <-- end entry for genders-ohpc
+
+% <-- begin entry for intel-clck-ohpc
+\multirow{2}{*}{intel-clck-ohpc} & 
+\multirow{2}{*}{3.1.2} & 
+Intel(R) Cluster Checker. \newline { \color{logoblue} \url{https://clusterready.intel.com/intel-cluster-checker}} 
+\\ \hline 
+% <-- end entry for intel-clck-ohpc
 
 % <-- begin entry for lmod-defaults
-lmod-defaults-intel-fsp & 
-\multirow{1}{*}{1.1} & 
-\multirow{1}{\linewidth}{FSP default login environment.} \\ 
+lmod-defaults-gnu-impi-ohpc & 
+\multirow{6}{*}{1.2} & 
+\multirow{6}{\linewidth}{OpenHPC default login environments. \newline {\color{logoblue} \url{https://github.com/openhpc/ohpc}}} \\ 
+lmod-defaults-gnu-mvapich2-ohpc & 
+& \\ 
+lmod-defaults-gnu-openmpi-ohpc & 
+& \\ 
+lmod-defaults-intel-impi-ohpc & 
+& \\ 
+lmod-defaults-intel-mvapich2-ohpc & 
+& \\ 
+lmod-defaults-intel-openmpi-ohpc & 
+& \\ 
 \hline
 % <-- end entry for lmod-defaults
 
-% <-- begin entry for lmod-fsp
-\multirow{2}{*}{lmod-fsp} & 
-\multirow{2}{*}{5.9.3} & 
-Lua based Modules (lmod). \newline { \color{blue} https://github.com/TACC/Lmod} 
+% <-- begin entry for lmod-ohpc
+\multirow{2}{*}{lmod-ohpc} & 
+\multirow{2}{*}{6.0.24} & 
+Lua based Modules (lmod). \newline { \color{logoblue} \url{https://github.com/TACC/Lmod}} 
 \\ \hline 
-% <-- end entry for %name_base
+% <-- end entry for lmod-ohpc
 
-% <-- begin entry for losf-fsp
-\multirow{2}{*}{losf-fsp} & 
-\multirow{2}{*}{0.52.0} & 
-A Linux operating system framework for managing HPC clusters.  { \color{blue} https://github.com/hpcsi/losf} 
+% <-- begin entry for losf-ohpc
+\multirow{2}{*}{losf-ohpc} & 
+\multirow{2}{*}{0.53.0} & 
+A Linux operating system framework for managing HPC clusters.  { \color{logoblue} \url{https://github.com/hpcsi/losf}} 
 \\ \hline 
-% <-- end entry for %name_base
+% <-- end entry for losf-ohpc
 
-% <-- begin entry for pdsh-fsp
-\multirow{2}{*}{pdsh-fsp} & 
+% <-- begin entry for mrsh-ohpc
+\multirow{2}{*}{mrsh-ohpc} & 
+\multirow{2}{*}{2.7} & 
+Remote shell program that uses munge authentication. \newline { \color{logoblue} \url{None}} 
+\\ \hline 
+% <-- end entry for mrsh-ohpc
+
+% <-- begin entry for nagios-ohpc
+\multirow{2}{*}{nagios-ohpc} & 
+\multirow{2}{*}{4.1.1} & 
+Nagios monitors hosts and services and yells if something breaks.  { \color{logoblue} \url{http://www.nagios.org}} 
+\\ \hline 
+% <-- end entry for nagios-ohpc
+
+% <-- begin entry for nagios-plugins-ohpc
+\multirow{2}{*}{nagios-plugins-ohpc} & 
+\multirow{2}{*}{2.1.1} & 
+Host/service/network monitoring program plugins for Nagios. \newline { \color{logoblue} \url{https://www.nagios-plugins.org}} 
+\\ \hline 
+% <-- end entry for nagios-plugins-ohpc
+
+% <-- begin entry for pdsh-ohpc
+\multirow{2}{*}{pdsh-ohpc} & 
 \multirow{2}{*}{2.31} & 
-Parallel remote shell program. \newline { \color{blue} http://sourceforge.net/projects/pdsh} 
+Parallel remote shell program. \newline { \color{logoblue} \url{http://sourceforge.net/projects/pdsh}} 
 \\ \hline 
-% <-- end entry for %name_base
+% <-- end entry for pdsh-ohpc
 
-% <-- begin entry for prun-fsp
-\multirow{2}{*}{prun-fsp} & 
-\multirow{2}{*}{0.1.0} & 
-\multirow{2}{*}{Convenience utility for parallel job launch.} \\
-& & 
+% <-- begin entry for powerman-ohpc
+\multirow{2}{*}{powerman-ohpc} & 
+\multirow{2}{*}{2.3.24} & 
+PowerMan - centralized power control for clusters. \newline { \color{logoblue} \url{http://code.google.com/p/powerman}} 
 \\ \hline 
-% <-- end entry for %name_base
+% <-- end entry for powerman-ohpc
+
+% <-- begin entry for prun-ohpc
+\multirow{2}{*}{prun-ohpc} & 
+\multirow{2}{*}{1.0} & 
+Convenience utility for parallel job launch. \newline { \color{logoblue} \url{https://github.com/openhpc/ohpc}} 
+\\ \hline 
+% <-- end entry for prun-ohpc
 
 \bottomrule
 \end{tabularx}
