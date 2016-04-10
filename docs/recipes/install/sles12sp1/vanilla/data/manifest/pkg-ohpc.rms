@@ -1,0 +1,13 @@
+munge-ohpc 0.5.11 http://dun.github.io/munge/ ohpc/rms MUNGE authentication service
+slurm-devel-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Development package for Slurm
+slurm-munge-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Slurm authentication and crypto implementation using Munge
+slurm-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
+slurm-pam_slurm-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
+slurm-perlapi-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
+slurm-plugins-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Slurm plugins (loadable shared objects)
+slurm-sjobexit-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Slurm job exit code management tools
+slurm-sjstat-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
+slurm-slurmdb-direct-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Wrappers to write directly to the slurmdb
+slurm-slurmdbd-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Slurm database daemon
+slurm-sql-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Slurm SQL support
+slurm-torque-ohpc 15.08.7 http://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm

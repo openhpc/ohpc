@@ -1,0 +1,6 @@
+intel-mpi-devel-ohpc 5.1.3.181 https://software.intel.com/en-us/intel-mpi-library ohpc/mpi-families Intel(R) MPI Library for Linux* OS
+intel-mpi-ohpc 5.1.3.181 https://software.intel.com/en-us/intel-mpi-library ohpc/mpi-families Intel(R) MPI Library for Linux* OS
+mvapich2-gnu-ohpc 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
+mvapich2-intel-ohpc 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
+openmpi-gnu-ohpc 1.10.1 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi-intel-ohpc 1.10.1 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI

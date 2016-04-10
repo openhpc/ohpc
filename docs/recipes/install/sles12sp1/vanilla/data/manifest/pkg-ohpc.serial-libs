@@ -1,0 +1,6 @@
+gsl-gnu-ohpc 2.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
+metis-gnu-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
+metis-intel-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
+openblas-gnu-ohpc 0.2.15 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
+superlu-gnu-ohpc 5.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
+superlu-intel-ohpc 5.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
