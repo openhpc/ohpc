@@ -348,7 +348,7 @@ example configuration.
 # Enable NTP time service on computes and identify master host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
-[sms](*\#*) cp /etc/ntp.keys $CHROOT/etc/ntp.conf
+[sms](*\#*) cp /etc/ntp.keys $CHROOT/etc/ntp.keys
 
 \end{lstlisting}
 % end_ohpc_run
