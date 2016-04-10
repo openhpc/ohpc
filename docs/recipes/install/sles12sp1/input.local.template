@@ -2,15 +2,12 @@
 # ------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------
 # Template input file to define local variable settings for use with
-# an openHPC installation recipe.
+# an OpenHPC installation recipe.
 # ------------------------------------------------------------------------------------------------
 
 # ---------------------------
 # SMS (master) node settings
 # ---------------------------
-
-# URL for OpenHPC repository
-ohpc_repo="${ohpc_repo:-http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/1.0/SLE_12_Intel/OpenHPC:1.0.repo}"
 
 # Hostname for master server (SMS)
 sms_name="${sms_name:-sms}"
@@ -26,6 +23,9 @@ internal_netmask="${internal_netmask:-255.255.0.0}"
 
 # Provisioning interface used by compute hosts
 eth_provision="${eth_provision:-eth0}"
+
+# Local ntp server for time synchronization
+ntp_server="${ntp_server:-0.us.pool.ntp.org}"
 
 # BMC user credentials for use by IPMI
 bmc_username="${bmc_username:-unknown}"
