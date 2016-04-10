@@ -9,9 +9,6 @@
 # SMS (master) node settings
 # ---------------------------
 
-# URL for OpenHPC repository
-ohpc_repo="${ohpc_repo:-http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.1/OpenHPC:1.0.repo}"
-
 # Hostname for master server (SMS)
 sms_name="${sms_name:-sms}"
                               
