@@ -32,6 +32,7 @@ for compiler in $COMPILER_FAMILIES ; do
     make -k check               
 
     save_logs_compiler_family tests $compiler
+    save_logs_compiler_family tests/ohpc_module $compiler
 
     make distclean >& /dev/null
 
