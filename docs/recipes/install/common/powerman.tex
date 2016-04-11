@@ -17,16 +17,16 @@ as configured by this recipe.
 
 [sms](*\#*) perl -pi -e 's/^\#(tcpwrappers yes)/$1/' /etc/powerman/powerman.conf
 [sms](*\#*) perl -pi -e 's/^\#(include "\/etc\/powerman\/ipmipower\.dev")/$1/' \
-              /etc/powerman/powerman.conf
+            /etc/powerman/powerman.conf
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-              perl -pi -e 'print "device \"ipmi'$i'\" \"ipmipower\" \"/usr/sbin/ipmipower -h ".
+            perl -pi -e 'print "device \"ipmi'$i'\" \"ipmipower\" \"/usr/sbin/ipmipower -h ".
                 "'${c_bmc[$i]}' -u '$bmc_username' -p ".
                 "'${IPMI_PASSWORD:-undefined}'|&\"\n" if(/^\#device "ipmi1"/);' /etc/powerman/powerman.conf
-           done
+        done
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-              perl -pi -e 'print "node \"'${c_name[$i]}'\" \"ipmi'$i'\" \"'${c_bmc[$i]}'\"\n"
+            perl -pi -e 'print "node \"'${c_name[$i]}'\" \"ipmi'$i'\" \"'${c_bmc[$i]}'\"\n"
                 if(/^\#node "t1"/);' /etc/powerman/powerman.conf
-           done
+        done
 
 # Enable and start powerman
 [sms](*\#*) systemctl enable powerman
