@@ -1,0 +1,27 @@
+\OHPC{} provides pre-packaged builds for a number of popular open-source
+tools and libraries used by HPC applications and developers. For
+example, \OHPC{} provides builds for \FFTW{} and \hdffive{} (including serial and parallel
+I/O support), and the \GNU{} Scientific Library (GSL). Again, multiple builds of
+each package are available in the \OHPC{} repository to support multiple compiler
+and MPI family combinations where appropriate. Note, however, that not all
+combinatorial permutations may be available for components where there are known
+license incompatibilities. The general naming convention
+for builds provided by \OHPC{} is to append the compiler and MPI family name that
+the library was built against directly into the package name. For example,
+libraries that do not require MPI as part of the build process adopt the
+following RPM name: \\
+
+\noindent
+\texttt{package-<compiler\_family>-ohpc-<package\_version>-<release>.rpm} \\
+
+\noindent Packages that do require MPI as part of the build expand upon this convention to
+additionally include the MPI family name as follows: \\
+
+\noindent
+\texttt{package-<compiler\_family>-<mpi\_family>-ohpc-<package\_version>-<release>.rpm} \\
+
+To illustrate this further, the command below queries the locally configured
+repositories to identify all of the available PETSc packages that were built
+with the \GNU{} toolchain. The resulting output that is included shows that
+pre-built versions are available for each of the supported MPI families
+presented in \S\ref{sec:mpi}.
