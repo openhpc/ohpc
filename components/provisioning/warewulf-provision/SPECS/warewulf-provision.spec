@@ -60,7 +60,7 @@ Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
-Requires: apache2 apache2-mod_perl tftp dhcp-server
+Requires: apache2 apache2-mod_perl tftp dhcp-server xinetd
 %else
 Requires: mod_perl httpd tftp-server dhcp xinetd
 %endif
