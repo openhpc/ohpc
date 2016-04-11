@@ -394,15 +394,7 @@ discussed further in the following sections.
 \input{../../common/memlimits} 
 
 \paragraph{Enable ssh control via resource manager} 
-
 \input{../../common/slurm_pam}
-
-% begin_ohpc_run
-% ohpc_validation_comment Enable slurm pam module
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
-[sms](*\#*) echo "account    required     pam_slurm.so" >> $CHROOT/etc/pam.d/sshd
-\end{lstlisting}
-% end_ohpc_run
 
 \paragraph{Add Cluster Checker} \label{sec:add_clck}
 \input{../../common/cluster_checker}
