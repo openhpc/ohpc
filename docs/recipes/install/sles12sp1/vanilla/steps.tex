@@ -493,37 +493,11 @@ host as follows:
 
 
 \subsubsection{Import files} \label{sec:file_import}
+\input{../../common/import_ww_files}
 
-The \Warewulf{} system includes functionality to import arbitrary files from
-the provisioning server for distribution to managed hosts. This is one way to
-distribute user credentials to {\em compute} hosts. It also provides a
-convenient mechanism to provide necessary global configuration files required
-by services such as Slurm. To import local file-based credentials, issue the
-following:
-
-% begin_ohpc_run
-% ohpc_comment_header Import files \ref{sec:file_import}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wwsh file import /etc/passwd
-[sms](*\#*) wwsh file import /etc/group
-[sms](*\#*) wwsh file import /etc/shadow 
-\end{lstlisting}
-% \end_ohpc_run
-
-Similarly, to import the global Slurm configuration file and the cryptographic
-key that is required by the {\em munge} authentication library to be available
-on every host in the resource management pool, issue the following:
-
-% begin_ohpc_run
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wwsh file import /etc/slurm/slurm.conf
-[sms](*\#*) wwsh file import /etc/munge/munge.key
-\end{lstlisting}
-% \end_ohpc_run
-
-Finally, to add support for controlling IPoIB interfaces, \OHPC{} includes a
-template file for \Warewulf{} that can optionally be imported and used later to provision
-\texttt{ib0} network settings.
+%----------------
+% SLES specific
+%----------------
 
 % begin_ohpc_run
 % ohpc_validation_newline
@@ -603,49 +577,20 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 
 
 \subsection{Boot compute nodes} \label{sec:boot_computes}
+\input{../../common/reset_computes}
 
-\input{../../common/reset_computes} 
-The following commands use the \texttt{ipmitool} utility to initiate power
-resets on each of the four compute hosts. Note that the utility requires that
-the \texttt{IPMI\_PASSWORD} environment variable be set with the local BMC password in
-order to work interactively.
-
-% begin_ohpc_run
-% ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
-[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[0]} -U ${bmc_username} chassis power reset   # power cycle c1
-[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[1]} -U ${bmc_username} chassis power reset   # power cycle c2
-[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[2]} -U ${bmc_username} chassis power reset   # power cycle c3
-[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[3]} -U ${bmc_username} chassis power reset   # power cycle c4
-
-# Optionally boot additional compute nodes
-[sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
-              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
-           done
-\end{lstlisting} 
-% end_ohpc_run
-
-Once kicked off, the boot process should take less than 5 minutes (depending on
-BIOS post times) and you can verify that the compute hosts are available via
-ssh, or via parallel ssh tools to multiple hosts. For example, to run a command
-on the newly imaged compute hosts using \texttt{pdsh}, execute the following:
-
-\begin{lstlisting}[language=bash]
-[sms](*\#*) pdsh -w c[1-4] uptime
-c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
-c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
-c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
-c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
-\end{lstlisting}
+%----------------
+% SLES specific
+%----------------
 
 \begin{center}
 \begin{tcolorbox}[]
-\small
-While the \texttt{[l]pxelinux.0} that ships with \texttt{warewulf-provision-ohpc}
-support a wide range of hardware some hosts may boot more reliably or faster
-using the BOS provided \texttt{[l]pxelinux.0} that comes from
-\texttt{syslinux-tftpboot}. Replace the \texttt{[l]pxelinux.0} from 
-\texttt{warewulf-provision-ohpc} version if necessary.
+\small While the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files that ship
+with Warewulf to enable network boot support a wide range of hardware, some
+hosts may boot more reliably or faster using the BOS versions provided via the
+\texttt{syslinux} package. If you encounter PXE issues, consider
+replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
+\texttt{warewulf-provision-ohpc} with versions from \texttt{syslinux}.
 \end{tcolorbox}
 \end{center}
 
