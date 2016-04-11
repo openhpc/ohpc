@@ -24,8 +24,7 @@ resource management under \SLURM{}.
 [sms](*\#*) systemctl start munge
 [sms](*\#*) systemctl start slurmctld
 
-# start munge and slurm clients on compute hosts
-[sms](*\#*) pdsh -w c[1-4] systemctl start munge
+# start slurm clients on compute hosts
 [sms](*\#*) pdsh -w c[1-4] systemctl start slurmd
 \end{lstlisting}
 % end_ohpc_run
@@ -47,7 +46,7 @@ eligible to schedule user jobs, issue the following:
 % ohpc_validation_newline
 % ohpc_validation_comment Startup slurm on additional computes if defined
 % ohpc_command if [ ${num_computes} -gt 4 ];then
-% ohpc_command    pdsh -w c[5-$num_computes] systemctl start munge
 % ohpc_command    pdsh -w c[5-$num_computes] systemctl start slurmd
+% ohpc_command    scontrol update nodename=c[5-$num_computes] state=idle
 % ohpc_command fi
 % end_ohpc_run
