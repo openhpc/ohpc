@@ -400,7 +400,6 @@ discussed further in the following sections.
 \input{../../common/cluster_checker}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
-
 \input{../../common/lustre-client}
 % SLES-specific addition
 Additionally, note that a default \baseOS{} environment may not allow loading of
@@ -440,8 +439,6 @@ file to allow loading of the necessary modules.
 [sms](*\#*) echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
 \end{lstlisting}
 % end_ohpc_run
-
-
 
 The default underlying network type used by \Lustre{} is {\em tcp}. If your
 external \Lustre{} file system is to be mounted using a network type other than
@@ -490,53 +487,6 @@ host as follows:
 
 \paragraph{Add \powerman{}}
 \input{../../common/powerman}
-
-%% [FSP-469]: disabling ORCM
-
-%% [FSP-469] \paragraph{Enable ORCM RAS subsystem} 
-%% [FSP-469] \input{../../common/orcm}
-%% [FSP-469] 
-%% [FSP-469] % begin_ohpc_run
-%% [FSP-469] % ohpc_validation_comment Configure ORCM aggregator and DB
-%% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-%% [FSP-469] # Set {\em master} host as data aggregator
-%% [FSP-469] [sms](*\#*) perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
-%% [FSP-469] [sms](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${sms_ip}/" /etc/orcmdb_psql.ini
-%% [FSP-469] 
-%% [FSP-469] # Update BMC credentials to match local values
-%% [FSP-469] 
-%% [FSP-469] [sms](*\#*) perl -pi -e "s/your-bmc-username/<bmc_username>/" /opt/open-rcm/etc/openmpi-mca-params.conf
-%% [FSP-469] [sms](*\#*) perl -pi -e "s/your-bmc-password/<bmc_password>/" /opt/open-rcm/etc/openmpi-mca-params.conf
-%% [FSP-469] 
-%% [FSP-469] # Initialize postgres DB driver
-%% [FSP-469] [sms](*\#*) odbcinst -i -d -f /etc/psql_odbc_driver.ini
-%% [FSP-469] [sms](*\#*) odbcinst -i -s -h -f /etc/orcmdb_psql.ini 
-%% [FSP-469] 
-%% [FSP-469] # Initialize postgres
-%% [FSP-469] [sms](*\#*) systemctl start postgresql
-%% [FSP-469] 
-%% [FSP-469] # Update postgres configuration files using ORCM templates
-%% [FSP-469] [sms](*\#*) cp /etc/postgresql.orcm.conf /var/lib/pgsql/data/postgresql.conf
-%% [FSP-469] [sms](*\#*) cp /etc/pg_hba.orcm.conf /var/lib/pgsql/data/pg_hba.conf
-%% [FSP-469] 
-%% [FSP-469] # Restart postgres
-%% [FSP-469] [sms](*\#*) systemctl restart postgresql
-%% [FSP-469] 
-%% [FSP-469] # Create ORCM DB
-%% [FSP-469] [sms](*\#*) sudo -u postgres psql --command "CREATE USER orcmuser WITH SUPERUSER PASSWORD 'orcmpassword';"
-%% [FSP-469] [sms](*\#*) sudo -u postgres createdb -O orcmuser orcmdb
-%% [FSP-469] [sms](*\#*) sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
-%% [FSP-469] 
-%% [FSP-469] # Start ORCM on {\em master} host (requires both orcmsched and orcmd)
-%% [FSP-469] [sms](*\#*) systemctl start orcmsched
-%% [FSP-469] [sms](*\#*) systemctl start orcmd
-%% [FSP-469] \end{lstlisting}
-%% [FSP-469] % end_ohpc_run
-%% [FSP-469] 
-%% [FSP-469] \input{../../common/orcm_client}
-
-%\paragraph{Add stateful provisioning support}
-%\input{../../common/stateful}
 
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 
