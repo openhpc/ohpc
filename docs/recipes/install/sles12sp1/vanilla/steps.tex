@@ -595,21 +595,7 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \end{center}
 
 \section{Install \OHPC{} Development Components}
-
-The install procedure outlined in \S\ref{sec:basic_install}
-highlighted the steps necessary to install a {\em master} host,
-assemble and customize a {\em compute} image, and provision several
-compute hosts from bare-metal. With these steps completed, 
-%a {\em compute} Once the completion of the
-%basic install procedure outlined in Section~\ref{sec:basic_install} is
-%complete, 
-additional \OHPC{}-provided packages can now be added to support a flexible HPC
-development environment including development tools, C/C++/Fortran compilers,
-MPI stacks, and a variety of 3rd party libraries. The following subsections
-highlight the additional software installation procedures, including the
-addition of Intel licensed software (e.g. Composer compiler suite, \Intel{}
-MPI). It is assumed that the end-site administrator will procure and install
-the necessary licenses in order to use the Intel proprietary software.
+\input{../../common/dev_intro.tex}
 
 \subsection{Development Tools} \label{sec:install_dev_tools}
 \input{../../common/dev_tools}
