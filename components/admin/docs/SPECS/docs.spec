@@ -33,6 +33,10 @@ BuildRequires:  latexmk
 BuildRequires:  git
 Requires:       make
 
+%if 0%{?rhel_version} || 0%{?centos_version}
+Requires:       net-tools
+%endif
+
 %define debug_package %{nil}
 
 BuildRoot:     %{_tmppath}/%{name}-%{version}-build
