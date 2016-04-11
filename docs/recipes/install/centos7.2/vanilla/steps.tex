@@ -616,26 +616,7 @@ petsc-gnu-mvapich2-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Comp
 petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
 \end{lstlisting}
 
-\begin{center}
-\begin{tcolorbox}[]
-\small
-\OHPC{}-provided 3rd party builds are configured to be installed
-into a common top-level repository so that they can be easily exported to
-desired hosts within the cluster. This common top-level path
-(\path{/opt/ohpc/pub}) was previously configured to be mounted on {\em
- compute} nodes in \S\ref{sec:master_customization}, so the packages will be
-immediately available for use on the cluster after installation on the {\em
- master} host.
-\end{tcolorbox}
-\end{center}
-
-For convenience, \OHPC{} provides package aliases for these 3rd
-party libraries and utilities that can be used to install all of the available
-compiler/MPI family permutations. To install all of the available package
-offerings within \OHPC{}, issue the following:
-
 \input{../../common/third_party_libs}
-
 
 \vspace*{0.2cm}
 
