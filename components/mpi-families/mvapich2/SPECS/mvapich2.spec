@@ -86,6 +86,7 @@ Requires: prun%{PROJ_DELIM}
 
 BuildRequires: bison
 BuildRequires: libibmad-devel libibverbs-devel
+BuildRequires: librdmacm-devel
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{name}/%version
