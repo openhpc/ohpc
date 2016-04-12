@@ -18,15 +18,15 @@ filesystem layout will look like.
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Update node object parameters
-[sms](*\#*) export filesystems="mountpoint=/boot:dev=sda1:type=ext3:size=500," \
-              "dev=sda2:type=swap:size=32768," \
-              "mountpoint=/:dev=sda3:type=ext3:size=fill"
+[sms](*\#*) export sda1="mountpoint=/boot:dev=sda1:type=ext3:size=500"
+[sms](*\#*) export sda2="dev=sda2:type=swap:size=32768"
+[sms](*\#*) export sda3="mountpoint=/:dev=sda3:type=ext3:size=fill"
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do 
               wwsh -y object modify -s bootloader=sda ${c_name[$i]};
               wwsh -y object modify -s diskpartition=sda ${c_name[$i]};
               wwsh -y object modify -s diskformat=sda1,sda2,sda3 ${c_name[$i]};
-              wwsh -y object modify -s filesystems="$filesystems" ${c_name[$i]};
-        done
+              wwsh -y object modify -s filesystems="$sda1,$sda2,$sda3" ${c_name[$i]};
+      done
 \end{lstlisting}
 
 \noindent Upon subsequent reboot of the modified nodes, Warewulf will partition
