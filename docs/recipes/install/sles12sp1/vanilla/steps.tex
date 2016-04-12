@@ -517,11 +517,10 @@ host as follows:
 % ohpc_validation_comment Add hosts to cluster
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Define four compute nodes and network settings 
-[sms](*\#*) wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
-[sms](*\#*) wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
-[sms](*\#*) wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
-[sms](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+# Add nodes to warewulf datastore
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+                wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
+        done
 \end{lstlisting}
 % end_ohpc_run
 
@@ -534,7 +533,7 @@ host as follows:
 # Optionally register additional compute nodes
 [sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
               wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
-           done
+        done
 
 # Define provisioning image for hosts
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12sp1 --bootstrap=`uname -r` \
