@@ -25,9 +25,12 @@ illustrates how to override the default compiler\_family.
 [test@sms ~]$ cd ~/rpmbuild/SPECS
 [test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/enable-static=no/enable-static=yes/" fftw.spec
 
+# Increment RPM release so package manager will see an update
+[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   4.1/Release:   5.1/" fftw.spec
+
 # Rebuild binary RPM. Note that additional directives can be specified to modify build
 [test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "compiler_family intel" fftw.spec
 
 # As privileged user, install the new package
-[sms](*\#*) (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-intel-openmpi-ohpc-3.3.4-4.1.rpm
+[sms](*\#*) (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-intel-openmpi-ohpc-3.3.4-5.1.rpm
 \end{lstlisting}
