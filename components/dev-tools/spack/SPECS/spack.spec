@@ -26,6 +26,7 @@ Patch0:   spack.patch
 
 BuildArch: noarch
 BuildRequires:	rsync
+BuildRequires:	python
 Requires:	python >= 2.6
 Requires: bash
 Requires: coreutils
