@@ -503,7 +503,7 @@ host as follows:
 [sms](*\#*) wwsh -y file set network --path /etc/sysconfig/network --mode=0644 --uid=0
 
 # Add nodes to warewulf datastore
-[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+[sms](*\#*) for ((i=0; i<4; i++)) ; do
                 wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
         done
 \end{lstlisting}

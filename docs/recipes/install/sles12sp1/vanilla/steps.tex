@@ -518,7 +518,7 @@ host as follows:
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Add nodes to warewulf datastore
-[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+[sms](*\#*) for ((i=0; i<4; i++)) ; do
                 wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
         done
 \end{lstlisting}
