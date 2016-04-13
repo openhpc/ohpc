@@ -33,10 +33,7 @@ Requires: subversion
 Requires: hg
 Requires: patch
 
-# Default library install path
-# relocation still needs some work
-# %define install_path %{OHPC_HOME}/admin/%{pname}
-%define install_path /usr
+%define install_path %{OHPC_HOME}/admin/%{pname}
 
 %description
 Spack is a package management tool designed to support multiple versions and configurations of software on a wide variety of platforms and environments. It was designed for large supercomputing centers, where many users and application teams share common installations of software on clusters with exotic architectures, using libraries that do not have a standard ABI. Spack is non-destructive: installing a new version does not break existing installations, so many configurations can coexist on the same system.
@@ -54,11 +51,11 @@ mkdir -p %{buildroot}%{install_path}
 sed -i "/^ *'directory_layout',$/d" lib/spack/spack/test/__init__.py
 rsync -av --exclude=.gitignore {bin,lib,var} %{buildroot}%{install_path}
 
-#./bin/spack bootstrap %{buildroot}%{install_path}
-mkdir -vp %{buildroot}/etc/profile.d
-mv share/spack/setup-env.sh  share/spack/spack-env.sh
-mv share/spack/setup-env.csh share/spack/spack-env.csh
-cp -prv share/spack/* %{buildroot}/etc/profile.d
+./bin/spack bootstrap %{buildroot}%{install_path}
+#mkdir -vp %{buildroot}/etc/profile.d
+#mv share/spack/setup-env.sh  share/spack/spack-env.sh
+#mv share/spack/setup-env.csh share/spack/spack-env.csh
+#cp -prv share/spack/* %{buildroot}/etc/profile.d
 
 %files
 %doc LICENSE README.md
@@ -71,8 +68,8 @@ cp -prv share/spack/* %{buildroot}/etc/profile.d
 %{install_path}/lib/spack/llnl
 %dir %{install_path}/lib/spack/spack
 %{install_path}/lib/spack/spack/*
-%dir /etc/profile.d
-/etc/profile.d/*
+#%dir /etc/profile.d
+#/etc/profile.d/*
 %dir %{install_path}/var
 %dir %{install_path}/var/spack
 %dir %{install_path}/var/spack/mock_configs
