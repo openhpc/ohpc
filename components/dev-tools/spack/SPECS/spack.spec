@@ -22,7 +22,6 @@ Group:		System/Configuration
 License:	LGPL
 URL:		  https://github.com/LLNL/spack
 Source0:	https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz
-Patch0:   spack.patch
 
 BuildArch: noarch
 BuildRequires:	rsync
@@ -33,6 +32,7 @@ Requires: coreutils
 Requires: subversion
 Requires: hg
 Requires: patch
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define install_path %{OHPC_HOME}/admin/%{pname}
 
@@ -44,38 +44,18 @@ Most importantly, Spack is simple. It offers a simple spec syntax so that users 
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p0
 
 %install
 mkdir -p %{buildroot}%{install_path}
-# the directory layout test is dependend of LLNL systype working correctly.
-sed -i "/^ *'directory_layout',$/d" lib/spack/spack/test/__init__.py
 rsync -av --exclude=.gitignore {bin,lib,var} %{buildroot}%{install_path}
 
 ./bin/spack bootstrap %{buildroot}%{install_path}
-#mkdir -vp %{buildroot}/etc/profile.d
-#mv share/spack/setup-env.sh  share/spack/spack-env.sh
-#mv share/spack/setup-env.csh share/spack/spack-env.csh
-#cp -prv share/spack/* %{buildroot}/etc/profile.d
 
 %files
+%defattr(-,root,root,-)
+%{OHPC_HOME}
+
+%{OHPC_PUB}
 %doc LICENSE README.md
-%{install_path}/bin/*
-%dir %{install_path}/lib/spack
-%dir %{install_path}/lib/spack/docs
-%{install_path}/lib/spack/docs/*
-%{install_path}/lib/spack/env
-%{install_path}/lib/spack/external
-%{install_path}/lib/spack/llnl
-%dir %{install_path}/lib/spack/spack
-%{install_path}/lib/spack/spack/*
-#%dir /etc/profile.d
-#/etc/profile.d/*
-%dir %{install_path}/var
-%dir %{install_path}/var/spack
-%dir %{install_path}/var/spack/mock_configs
-%{install_path}/var/spack/mock_configs/*
-%dir %{install_path}/var/spack/mock_packages
-%{install_path}/var/spack/mock_packages/*
-%dir %{install_path}/var/spack/packages
-%{install_path}/var/spack/packages/*
+
+%changelog
