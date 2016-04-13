@@ -35,7 +35,13 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: qt4-devel
 Requires: qt qt-x11
-BuildRequires: qt4-devel zlib-devel dbus-devel
+BuildRequires: qt4-devel zlib-devel
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+BuildRequires: dbus-devel
+%else
+BuildRequires: dbus-1-devel
+%endif
+
 
 %define debug_package %{nil}
 
