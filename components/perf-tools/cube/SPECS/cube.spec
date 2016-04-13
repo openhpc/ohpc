@@ -33,15 +33,16 @@ Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 
-BuildRequires: qt4-devel
 Requires: qt qt-x11
-BuildRequires: qt4-devel zlib-devel
+BuildRequires: zlib-devel
 %if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+BuildRequires: qt4-devel
 BuildRequires: dbus-devel
+BuildRequires: gcc-c++
 %else
 BuildRequires: dbus-1-devel
+BuildRequires: libqt4-devel
 %endif
-
 
 %define debug_package %{nil}
 
