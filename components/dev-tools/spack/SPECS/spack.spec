@@ -49,7 +49,6 @@ Most importantly, Spack is simple. It offers a simple spec syntax so that users 
 mkdir -p %{buildroot}%{install_path}
 rsync -av --exclude=.gitignore {bin,lib,var} %{buildroot}%{install_path}
 
-./bin/spack bootstrap %{buildroot}%{install_path}
 
 %files
 %defattr(-,root,root,-)
