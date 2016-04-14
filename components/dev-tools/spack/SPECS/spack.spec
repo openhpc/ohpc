@@ -13,15 +13,16 @@
 
 %define pname spack
 
-Name:		  %{pname}%{PROJ_DELIM}
+Name:		%{pname}%{PROJ_DELIM}
 Version:	0.8.17
 Release:	1%{?dist}
 Summary:	HPC software package management
 
 Group:		System/Configuration
 License:	LGPL
-URL:		  https://github.com/LLNL/spack
+URL:		https://github.com/LLNL/spack
 Source0:	https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz
+Source1:    OHPC_mod_generator.sh
 
 BuildArch: noarch
 BuildRequires:	rsync
@@ -34,7 +35,7 @@ Requires: hg
 Requires: patch
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-%define install_path %{OHPC_LIBS}/%{pname}/%version
+%define install_path %{OHPC_ADMIN}/%{pname}/%version
 
 %description
 Spack is a package management tool designed to support multiple versions and configurations of software on a wide variety of platforms and environments. It was designed for large supercomputing centers, where many users and application teams share common installations of software on clusters with exotic architectures, using libraries that do not have a standard ABI. Spack is non-destructive: installing a new version does not break existing installations, so many configurations can coexist on the same system.
@@ -49,8 +50,28 @@ Most importantly, Spack is simple. It offers a simple spec syntax so that users 
 mkdir -p %{buildroot}%{install_path}
 rsync -av --exclude=.gitignore {bin,lib,var} %{buildroot}%{install_path}
 
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack
+%{__cat} << EOF > %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack/%{version}
+#%Module1.0#####################################################################
+
+module-whatis "Name: Spack"
+module-whatis "Version: %{version}"
+module-whatis "Category: System/Configuration"
+module-whatis "Description: Spack package management"
+module-whatis "URL: https://github.com/LLNL/spack/"
+
+set     version             %{version}
+set     SPACK_ROOT          %{install_path}
+
+EOF
+
+%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh
+%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{install_path}/share/spack/setup-env.sh >> %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack/%{version}
 %{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
 
+%clean
+rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
