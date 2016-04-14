@@ -1,0 +1,390 @@
+# -*-sh-*-
+
+#-------------------------------------
+# OHPC common test functions
+#-------------------------------------
+
+# Error message with exit
+ERROR () {
+    echo "[OHPC-TEST:ERROR]: $1" >&2
+    exit 1
+}
+
+# Error message with return
+ERROR_RETURN () {
+    echo "[OHPC-TEST:ERROR]: $1" >&2
+    return 1
+}
+
+# Check if specific RPM package is installed
+check_if_rpm_installed () {
+    $(rpm -q --quiet $1) || ERROR "RPM $1 is not installed locally"
+}
+
+# Check if we have a known/supported resource manager
+check_rms(){
+    if [ "$RESOURCE_MANAGER" = "slurm" ];then
+	export RMS=slurm
+    else
+	ERROR "Unsupported or unknown resource manager"
+	exit 1
+    fi
+}
+
+# Check for valid executable
+check_exe() {
+    type "$1" >& /dev/null
+    if [ $? -ne 0 ];then
+	ERROR_RETURN "$1 is not available for execution"
+    fi
+}
+
+save_logs_compiler_family()
+{
+    if [ $# -lt 2 ];then
+	ERROR "insufficient input provided to save_logs_compiler_family()"
+    fi
+
+    local __testDir=$1
+    local __compiler=$2
+
+    local __saveDir="family-$__compiler"
+
+    cd $__testDir || ERROR "unable to cd to $_testDir"
+
+    if [ -d "$__saveDir" ];then
+	rm -rf "$__saveDir"
+    fi
+
+    mkdir "$__saveDir"
+
+    shopt -s nullglob
+
+    # Cache .log files
+
+    for i in *.log; do 
+	mv $i "$__saveDir" || ERROR "Unable to move file -> $i";
+    done
+
+    # Also cache log.xml files (for JUnit parsing)
+
+    for i in *.log.xml; do 
+	mv $i "$__saveDir" || ERROR "Unable to move file -> $i";
+    done
+
+    cd - > /dev/null
+
+} # end of save_logs_compiler_family()
+
+save_logs_mpi_family()
+{
+    if [ $# -lt 3 ];then
+	ERROR "insufficient input provided to save_logs_mpi_family()"
+    fi
+
+    local __testDir=$1
+    local __compiler=$2
+    local __mpi=$3
+
+    local __saveDir="family-$__compiler-$__mpi"
+
+    cd $__testDir || ERROR "unable to cd to $_testDir"
+
+    if [ -d "$__saveDir" ];then
+	rm -rf "$__saveDir"
+    fi
+
+    mkdir "$__saveDir"
+
+    shopt -s nullglob
+
+    # Cache .log files
+    for i in *.log; do 
+	mv $i "$__saveDir" || ERROR "Unable to move file -> $i";
+    done
+
+    # Also cache log.xml files (for JUnit parsing)
+
+    for i in *.log.xml; do 
+	mv $i "$__saveDir" || ERROR "Unable to move file -> $i";
+	done
+    cd - > /dev/null
+
+} # end of save_logs_mpi_family()
+
+# Check if we have a known/supported compiler family 
+# and set relevant compiler variables
+check_compiler_family()
+{
+    local __CC=$1
+    local __CXX=$2
+    local __FC=$3
+
+    local myCC=""
+    local myCXX=""
+    local myFC=""
+    
+    if [ $LMOD_FAMILY_COMPILER == "intel" ];then
+	myCC=icc
+	myCXX=icpc
+	myFC=ifort
+    elif [ $LMOD_FAMILY_COMPILER == "gnu" ];then
+	myCC=gcc
+	myCXX=g++
+	myFC=gfortran
+    else
+	ERROR "Unknown compiler family"
+	exit 1
+    fi
+
+    eval $__CC="'$myCC'"
+    eval $__CXX="'$myCXX'"
+    eval $__FC="'$myFC'"
+}
+
+# Run serial binary through resource manager
+run_serial_binary () {
+
+    # Parse optional arguments
+    output_file=""
+    timeout=1		# default job timeout (in minutes)
+
+    local OPTIND=1
+    while getopts "o:t:" opt; do
+	case "$opt" in
+	    o)	output_file="$OPTARG"
+		;;
+	    t)	timeout="$OPTARG"
+		;;
+	    '?')
+		echo "Unknown option given to run_serial_binary" >&2
+		exit 1
+		;;
+	esac
+    done
+
+    shift "$((OPTIND-1))" # Shift off the options and optional --.
+
+    EXE=$1
+    shift
+
+    check_exe $EXE
+    
+    if [ -z "$RESOURCE_MANAGER" ];then
+	ERROR_RETURN "OHPC resource manager is not defined - please set via RESOURCE_MANAGER variable"
+    fi
+
+    if [ "$RESOURCE_MANAGER" = "slurm" ];then
+	if [ -n "$output_file" ];then
+	    srun -n 1 -N 1 -t $timeout $EXE "$@" >& $output_file
+	else
+	    srun -n 1 -N 1 -t $timeout $EXE "$@"
+	fi
+	return $?
+    else
+	ERROR_RETURN "Unsupported resource manager"
+    fi
+}
+
+# Run MPI binary through resource manager
+run_mpi_binary () {
+
+    # Parse optional arguments
+    input_file=""
+    output_file=""
+    timeout=1		# default job timeout (in minutes)
+
+    local OPTIND=1
+    while getopts "i:o:t:" opt; do
+    case "$opt" in
+	i)  input_file="$OPTARG"
+	    ;;
+	o)  output_file="$OPTARG"
+	    ;;
+	t)  timeout="$OPTARG"
+	    ;;
+	'?')
+	    echo "Unknown option given to run_mpi_binary" >&2
+	    exit 1
+	    ;;
+	esac
+    done
+
+    shift "$((OPTIND-1))" # Shift off the options and optional --.
+    
+    EXE=$1
+    ARGS=$2
+    NNODES=$3
+    NTASKS=$4
+
+    check_exe $EXE
+
+    if [ -z "$RESOURCE_MANAGER" ];then
+	ERROR_RETURN "Resource manager is not defined - please set via RESOURCE_MANAGER variable"
+    fi
+
+    if [ -z "$LMOD_FAMILY_MPI" ];then
+	ERROR_RETURN "MPI toolchain s not loaded - please load MPI stack first"
+    fi
+    
+    if [ "$RESOURCE_MANAGER" = "slurm" ];then
+	if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" -o "$LMOD_FAMILY_MPI" = "openmpi" ];then
+
+	    jobScript=/tmp/job.$USER.$RANDOM
+
+	    echo "#!/bin/bash"		  > $jobScript
+	    echo "#SBATCH -J CMT-test"   >> $jobScript
+	    echo "#SBATCH -N $NNODES"    >> $jobScript
+	    echo "#SBATCH -n $NTASKS"    >> $jobScript
+	    echo "#SBATCH -t $timeout"   >> $jobScript
+	    echo "#SBATCH -o job.%j.out" >> $jobScript
+	    
+	    if [ -n "$input_file" ];then
+		echo "prun $EXE $ARGS < $input_file" >> $jobScript
+	    else
+		echo "prun $EXE $ARGS"		     >> $jobScript
+	    fi
+
+	    # Submit batch job
+
+	    tmpState=/tmp/submitId.$RANDOM
+
+	    sbatch $jobScript >& $tmpState
+	    echo "job script = $jobScript"
+
+	    head -1 $tmpState | grep -q "Submitted batch job" || ERROR "Unable to submit batch job"
+	    jobId=`head -1 $tmpState | awk '{print $4}'`
+	    if [ $jobId -le 0 ];then
+		ERROR "Invalid jobID"
+	    fi
+	    rm $tmpState
+
+	    echo "Batch job $jobId submitted"
+	    rc=1
+
+	    for i in `seq 1 3000`; do
+		if ! tmpState=$(scontrol show job $jobId | grep JobState) ; then
+		    ERROR_RETURN "Error querying job"
+		fi
+
+		if echo	 "$tmpState" | egrep -q "JobState=COMPLETED" ; then
+		    echo "Job completed..."
+		    rc=0
+		    break
+
+		elif echo "$tmpState" | egrep -q "JobState=FAILED" ; then
+		    local tmpReason=$(scontrol show job $jobId | grep Reason | awk '{print $2}')
+		    echo " "
+		    echo "Job $jobId failed..."
+		    echo "$tmpReason"
+		    break
+
+		elif echo "$tmpState" | egrep -q "JobState=TIMEOUT" ; then
+		    local tmpReason=$(scontrol show job $jobId | grep Reason | awk '{print $2}')
+		    echo " "
+		    echo "Job $jobId encountered timeout..."
+		    echo "$tmpReason"
+		    break
+
+		elif echo "$tmpState" | egrep -q "JobState=CANCELLED" ; then
+		    echo " "
+		    echo "Job $jobId cancelled..."
+		    break
+
+		else
+		    sleep 1
+		fi
+	    done
+
+	    # Look for evidence of failure in job output
+
+	    echo " "
+	    cat job.$jobId.out
+
+	    if egrep -q "$jobId FAILED|$jobId CANCELLED|exited on signal|command not found|failed to start|Unable to access executable|Error in init phase" job.$jobId.out ; then
+		rc=1
+	    fi
+
+	    if [ -n "$output_file" ];then
+		mv job.$jobId.out $output_file
+	    fi
+
+	    rm $jobScript
+	    return $rc
+
+	else
+	    ERROR_RETURN "Unsupported MPI family"
+	fi
+    else
+	ERROR_RETURN "Unsupported resource manager"
+    fi
+
+} # end run_mpi_binary()
+
+run_mpi_binary_orig () {
+
+    # Parse optional arguments
+    output_file=""
+    timeout=1		# default job timeout (in minutes)
+
+    local OPTIND=1
+    while getopts "o:t:" opt; do
+	case "$opt" in
+	    o)	output_file="$OPTARG"
+		;;
+	    t)	timeout="$OPTARG"
+		;;
+	    '?')
+		echo "Unknown option given to run_mpi_binary" >&2
+		exit 1
+		;;
+	esac
+    done
+
+    shift "$((OPTIND-1))" # Shift off the options and optional --.
+    
+    EXE=$1
+    ARGS=$2
+    NNODES=$3
+    NTASKS=$4
+
+    if [ ! -x $EXE ];then
+	ERROR_RETURN "$EXE is not available or not executable"
+    fi
+
+    if [ -z "$RESOURCE_MANAGER" ];then
+	ERROR_RETURN "Resource manager is not defined - please set via RESOURCE_MANAGER variable"
+    fi
+
+    if [ -z "$LMOD_FAMILY_MPI" ];then
+	ERROR_RETURN "MPI toolchain s not loaded - please load MPI stack first"
+    fi
+    
+    if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" ];then
+	if [ -n "$output_file" ];then
+##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout srun $EXE $ARGS >& $output_file
+	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS >& $output_file
+	else
+##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout srun $EXE $ARGS
+	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS
+	fi
+	return $?
+    elif [ "$LMOD_FAMILY_MPI" = "openmpi" ];then
+	if [ -n "$output_file" ];then
+##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout mpiexec $EXE $ARGS >& $output_file
+	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS >& $output_file
+	else
+##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout mpiexec $EXE $ARGS
+	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS
+	fi
+	return $?
+    else
+	ERROR_RETURN "Unsupported MPI family"
+    fi
+    else
+	ERROR_RETURN "Unsupported resource manager"
+    fi
+
+} # end run_mpi_binary_orig()
+	  
