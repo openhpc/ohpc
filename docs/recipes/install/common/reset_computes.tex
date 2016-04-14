@@ -10,15 +10,14 @@ order to work interactively.
 % begin_ohpc_run
 % ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[0]} -U ${bmc_username} chassis power reset   # power cycle c1
-[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[1]} -U ${bmc_username} chassis power reset   # power cycle c2
-[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[2]} -U ${bmc_username} chassis power reset   # power cycle c3
-[sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[3]} -U ${bmc_username} chassis power reset   # power cycle c4
+[sms](*\#*) for ((i=0; i<4; i++)) ; do
+              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
+        done
 
 # Optionally boot additional compute nodes
 [sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
               ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
-           done
+        done
 \end{lstlisting} 
 % end_ohpc_run
 
