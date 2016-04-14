@@ -48,7 +48,7 @@ Most importantly, Spack is simple. It offers a simple spec syntax so that users 
 
 %install
 mkdir -p %{buildroot}%{install_path}
-rsync -av --exclude=.gitignore {bin,lib,var} %{buildroot}%{install_path}
+rsync -av --exclude=.gitignore {bin,lib,var,share} %{buildroot}%{install_path}
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack
