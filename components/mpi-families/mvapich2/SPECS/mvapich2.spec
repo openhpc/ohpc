@@ -70,6 +70,8 @@ Source2:   OHPC_setup_compiler
 # karl.w.schulz@intel.com (09/08/2015)
 %global _default_patch_fuzz 2
 Patch0:    winfree.patch
+# karl.w.schulz@intel.com (04/13/2016)
+Patch1:    minit.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -103,6 +105,7 @@ across multiple networks.
 
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
+%patch1 -p0
 
 %build
 

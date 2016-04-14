@@ -1,0 +1,28 @@
+--- ./src/mpid/ch3/channels/common/src/memory/mem_hooks.c	2016-04-13 20:47:17.000000000 -0700
++++ ./src/mpid/ch3/channels/common/src/memory/mem_hooks.c	2016-04-13 20:50:47.000000000 -0700
+@@ -149,6 +149,12 @@
+     }
+      }
+
++/* disable compiler optimization for minit() to avoid optimizing out memset */
++#ifdef __GNUC__
++#pragma GCC push_options
++#pragma GCC optimize ("O0")
++#endif
++
+ int mvapich2_minit()
+  {
+       void *ptr_malloc = NULL;
+       @@ -214,6 +220,11 @@
+            return 0;
+	     }
+
++/* return to default optimization mode */
++#ifdef __GNUC__
++#pragma GCC pop_options
++#endif
++
+ void mvapich2_mfin()
+  {
+       if (mem_hook_init) {
+       
