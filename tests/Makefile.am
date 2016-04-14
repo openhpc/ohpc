@@ -25,7 +25,7 @@ if LUSTRE_ENABLED
    SUBDIRS += lustre
 endif
 if SPACK_ENABLED
-   SUBDIRS += dev-tools/spack
+   SUBDIRS += admin/spack
 endif
 
 else # non root tests

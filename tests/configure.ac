@@ -370,7 +370,7 @@ AC_OUTPUT( Makefile
 	   clck/Makefile
 	   lustre/Makefile
        dev-tools/easybuild/Makefile
-       dev-tools/spack/Makefile
+       admin/spack/Makefile
        dev-tools/numpy/Makefile
        dev-tools/numpy/tests/Makefile
        dev-tools/scipy/Makefile
