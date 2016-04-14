@@ -1,18 +1,1 @@
-DELIM="-ohpc"
-CMD_TIMEOUT="20s"
-RESOURCE_MANAGER=slurm
-COMPILER_FAMILIES="gnu intel"
-MPI_FAMILIES="mvapich2 openmpi impi"
-LUSTRE_TEST_PATH="/mnt/lustre/jenkins"
-NUM_COMPUTES=4
-export INTEL_LICENSE_FILE=/opt/intel/licenses/intel.lic
-export BATS_USE_MKTEMP=1
-#
-#------------------------
-# TAU profiling options
-#------------------------
-#
-TAU_TRACE=0,
-TAU_CALLPATH=0,
-TAU_PROFILE=1,
-TAU_METRICS=GET_TIME_OF_DAY:PAPI_L1_DCM:PAPI_LD_INS
+../../TEST_ENV
