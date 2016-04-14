@@ -22,7 +22,6 @@ Group:		System/Configuration
 License:	LGPL
 URL:		https://github.com/LLNL/spack
 Source0:	https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz
-Source1:    OHPC_mod_generator.sh
 
 BuildArch: noarch
 BuildRequires:	rsync
@@ -64,10 +63,11 @@ module-whatis "URL: https://github.com/LLNL/spack/"
 set     version             %{version}
 set     SPACK_ROOT          %{install_path}
 
+prepend-path   PATH         %{install_path}/bin
+prepend-path   MODULEPATH   %{install_path}/modules
+
 EOF
 
-%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh
-%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{install_path}/share/spack/setup-env.sh >> %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack/%{version}
 %{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
 
 %clean
