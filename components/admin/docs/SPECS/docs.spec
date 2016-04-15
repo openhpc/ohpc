@@ -71,8 +71,8 @@ make
 
 %{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc
 %{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc/recipes/vanilla
-install -m 0644 -p ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
-install -m 0644 -p docs/recipes/install/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
+install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
+install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
 install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/Install_guide.pdf 
 install -m 0755 -p %{source_path}/vanilla_recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe.sh
 
