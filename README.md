@@ -35,7 +35,7 @@ in the downloads section of the latest
 [release](https://github.com/openhpc/ohpc/releases/tag/v1.1.GA).
 
 ###### [CentOS 7.2]
-* [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.1.GA/centos/ohpc-release-centos7.2-1.1.x86_64.rpm) (md5sum=f9349b2c2b117a4e3efdac8cd59cc327)
+* [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.1.GA/ohpc-release-centos7.2-1.1.x86_64.rpm) (md5sum=f9349b2c2b117a4e3efdac8cd59cc327)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.1.GA/Install_guide-CentOS7.2-1.1.pdf)
 * [ISO image](http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.2/iso/OpenHPC-1.1-CentOS_7.2.iso) mirror of Yum repository (md5sum=e57db7c5dd712c7b9fa48e4ebd43c517)
 
