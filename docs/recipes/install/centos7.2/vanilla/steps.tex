@@ -320,7 +320,6 @@ example configuration.
 \end{lstlisting}
 % end_ohpc_run
 
-\clearpage
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Export /home and OpenHPC public packages from master server to cluster compute nodes
@@ -363,6 +362,7 @@ example configuration.
 % ohpc_command fi
 % end_ohpc_run
 
+\clearpage
 \subsubsection{Additional Customizations ({\em optional})} \label{sec:addl_customizations}
 \input{../../common/compute_customizations_intro}
 
@@ -433,7 +433,7 @@ host as follows:
 % ohpc_validation_newline
 % end_ohpc_run
 
-
+\clearpage
 \paragraph{Add \Nagios{} monitoring}
 \input{../../common/nagios}
 
@@ -480,6 +480,7 @@ host as follows:
 
 \input{../../common/finalize_provisioning}
 
+\clearpage
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster
 
@@ -568,16 +569,19 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \end{tcolorbox}
 \end{center}
 
+\vspace*{-0.50cm}
 \section{Install \OHPC{} Development Components}
 \input{../../common/dev_intro.tex}
 
+\vspace*{-0.15cm}
 \subsection{Development Tools} \label{sec:install_dev_tools}
 \input{../../common/dev_tools}
 
+\vspace*{-0.15cm}
 \subsection{Compilers} \label{sec:install_compilers}
 \input{../../common/compilers}
 
-\clearpage
+%\clearpage
 \subsection{MPI Stacks} \label{sec:mpi}
 \input{../../common/mpi}
 
