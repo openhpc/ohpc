@@ -140,7 +140,7 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %{_sbindir}/plmpower
 %dir %config %{_sysconfdir}/powerman
 %{_sysconfdir}/powerman/*.dev
-%attr(0600,root,root) %{_sysconfdir}/powerman/powerman.conf.example
+%{_sysconfdir}/powerman/powerman.conf.example
 %{_mandir}/*1/*
 %{_mandir}/*5/*
 %{_mandir}/*8/*
