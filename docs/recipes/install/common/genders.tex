@@ -19,7 +19,7 @@ two {genders}: {\em compute} and {\em bmc}.
 [sms](*\#*) echo -e "${sms_name}\tsms" > /etc/genders
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
               echo -e "${c_name[$i]}\tcompute,bmc=${c_bmc[$i]}"
-           done >> /etc/genders
+        done >> /etc/genders
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
