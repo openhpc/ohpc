@@ -480,6 +480,7 @@ host as follows:
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{../../common/conman}
 
+\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{../../common/syslog}
 
@@ -504,7 +505,7 @@ host as follows:
 
 \input{../../common/finalize_provisioning}
 
-\clearpage
+%\clearpage
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
@@ -561,7 +562,7 @@ host as follows:
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{../../common/conman_post}
 
-\clearpage
+%\clearpage
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{../../common/reset_computes}
 
@@ -589,6 +590,7 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \subsection{Compilers} \label{sec:install_compilers}
 \input{../../common/compilers}
 
+\clearpage
 \subsection{MPI Stacks} \label{sec:mpi}
 \input{../../common/mpi}
 
@@ -598,7 +600,6 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \subsection{Setup default development environment}
 \input{../../common/default_dev}
 
-\vspace*{-0.45cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{../../common/third_party_libs_intro}
 
@@ -635,13 +636,12 @@ i | petsc-gnu-openmpi-ohpc  | Portable Extensible Toolkit for Scientific Computa
 %% \end{center}
 
 
-%\clearpage
+\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
 \clearpage
 \appendix
-%\section*{Appendices}
 {\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
 
 \addcontentsline{toc}{section}{Appendices}

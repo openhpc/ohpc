@@ -51,6 +51,7 @@ the MPI stacks are utilized and \texttt{prun} abstracts this process for the
 various stacks to retain a single launch command.
 
 \nottoggle{isCentOS}{\clearpage}
+
   
 \subsection{Interactive execution}
 To use the newly created ``test'' account to compile and execute the
@@ -84,10 +85,10 @@ the underlying native job launch mechanism being used):
     --> Process #   7 of   8 is alive. -> c2
 \end{lstlisting}
 
-\nottoggle{isCentOS}{
-  \clearpage
-  }
-  
+\nottoggle{isCentOS}{\clearpage}
+
+\iftoggle{isCentOS}{\clearpage}
+
 \subsection{Batch execution}
 
 For batch execution, \OHPC{} provides a simple job script for reference (also

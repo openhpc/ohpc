@@ -456,6 +456,7 @@ host as follows:
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{../../common/conman}
 
+\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{../../common/syslog}
 
@@ -480,7 +481,7 @@ host as follows:
 
 \input{../../common/finalize_provisioning}
 
-\clearpage
+%\clearpage
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster
 
@@ -611,22 +612,8 @@ petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Compu
 
 \input{../../common/third_party_libs}
 
-\vspace*{0.2cm}
-
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{../../common/slurm_startup}
-
-%% \begin{center}
-%% \begin{tcolorbox}[]
-%% \small
-%% While most resource managers provide similar functionality, the syntax of
-%% specific commands can vary substantially. The following table highlights some
-%% common examples of those differences.
-%% \vspace*{0.2cm}
-%% \input{../../common/rms_equivalence_table}
-%% \end{tcolorbox}
-%% \end{center}
-
 
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
