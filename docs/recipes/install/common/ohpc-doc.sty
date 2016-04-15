@@ -16,6 +16,7 @@
 \usepackage{colortbl}
 \usepackage{tcolorbox}
 \usepackage{multicol}
+\usepackage{etoolbox}
 %%%\usepackage[T1]{fontenc}
 \tcbuselibrary{skins}
 
@@ -31,6 +32,8 @@
 
 % ---------------------------------------------------------
 
+% Booleans for os-specific latex formatting
+\newtoggle{isCentOS}
 
 \pagestyle{fancy}
 \setlength\headheight{59pt}
