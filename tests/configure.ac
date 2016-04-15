@@ -425,9 +425,9 @@ if test "x$ROOT_ENABLED" = "x1" ; then
        echo '    'Lustre client............. : disabled
     fi
     if test "x$enable_spack" = "xyes"; then
-       echo '    'spack..................... : enabled
+       echo '    'Spack..................... : enabled
     else
-       echo '    'spack..................... : disabled
+       echo '    'Spack..................... : disabled
     fi
 
 else
