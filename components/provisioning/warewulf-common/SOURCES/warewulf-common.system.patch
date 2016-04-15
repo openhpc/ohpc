@@ -201,18 +201,8 @@
 +
 +
 +1;
---- warewulf-common-3.6/lib/Warewulf/ParallelCmd.pm	2014-05-21 11:14:43.000000000 -0700
-+++ warewulf-common-3.6.patch/lib/Warewulf/ParallelCmd.pm	2014-11-03 12:50:24.866164100 -0800
-@@ -319,6 +319,7 @@
-         # Securely pass $command intact to shell
-         close(STDERR);
-         open(STDERR, ">&STDOUT");
-+        delete $ENV{'ENV'};
-         exec("/bin/sh", "-c", $command);
-         die("Unable to execute $command -- $!");
-     }
---- warewulf-common-3.6/lib/Warewulf/System/Rhel.pm     2014-05-21 11:14:43.000000000 -0700
-+++ warewulf-common-3.6.patch/lib/Warewulf/System/Rhel.pm       2015-11-05 07:42:17.000000000 -0800
+--- warewulf-common-3.6/lib/Warewulf/System/Rhel.pm	2014-05-21 11:14:43.000000000 -0700
++++ warewulf-common-3.6.patch/lib/Warewulf/System/Rhel.pm	2016-04-14 17:57:41.000000000 -0700
 @@ -5,7 +5,7 @@
  # required approvals from the U.S. Dept. of Energy).  All rights reserved.
  #
@@ -220,16 +210,12 @@
 -# $Id: Rhel.pm 1680 2014-05-21 18:14:43Z gmk $
 +# $Id$
  #
-
+ 
  package Warewulf::System::Rhel;
-@@ -65,10 +65,13 @@
- service($$$)
- {
-     my ($self, $service, $command) = @_;
-+    delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
-
+@@ -68,7 +68,9 @@
+ 
      &dprint("Running service command: $service, $command\n");
-
+ 
 -    if (-x "/etc/init.d/$service") {
 +    if ( -x "/bin/systemctl" ) {
 +        system("/bin/systemctl $command $service.service");
@@ -237,7 +223,7 @@
          $self->{"OUTPUT"} = ();
          open(SERVICE, "/etc/init.d/$service $command 2>&1|");
          while(<SERVICE>) {
-@@ -82,10 +85,21 @@
+@@ -82,10 +84,21 @@
              &dprint("Error running: /etc/init.d/$service $command\n");
          }
      }
@@ -253,19 +239,17 @@
 +    }
 +    return(1);
  }
-
-
+ 
+ 
 +
 +
  =item chkconfig($name, $command)
-
+ 
  Enable a service script to be enabled or disabled at boot (e.g.
-@@ -97,8 +111,11 @@
- chkconfig($$$)
+@@ -98,7 +111,9 @@
  {
      my ($self, $service, $command) = @_;
-+    delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
-
+ 
 -    if (-x "/sbin/chkconfig") {
 +    if ( -x "/bin/systemctl" ) {
 +        system("/bin/systemctl enable $service.service");
@@ -273,21 +257,21 @@
          open(CHKCONFIG, "/sbin/chkconfig $service $command 2>&1|");
          while(<CHKCONFIG>) {
              $self->{"OUTPUT"} .= $_;
-@@ -113,7 +130,7 @@
+@@ -113,7 +128,7 @@
              &dprint("Error running: /sbin/chkconfig $service $command\n");
          }
      }
 -    return();
 +    return(1);
  }
-
-
-@@ -128,7 +145,7 @@
+ 
+ 
+@@ -128,7 +143,7 @@
  {
      my $self = shift;
-
+ 
 -    return(defined($self->{"OUTPUT"}) ? $self->{"OUTPUT"} : undef);
 +    return(defined($self->{"OUTPUT"}) ? $self->{"OUTPUT"} : "");
  }
-
-
+ 
+ 
