@@ -1,0 +1,17 @@
+If you chose to enable \conman{} in \S\ref{sec:add_conman}, additional
+boot-time kernel arguments are needed to enable serial console
+redirection. An example provisioning setting which adds to any other kernel arguments defined
+in \texttt{\$\{kargs\}} is as follows:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, enable console redirection 
+% ohpc_command if [[ ${enable_ipmisol} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Define node kernel arguments to support SOL console
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --kargs "${kargs} console=ttyS1,115200"
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
