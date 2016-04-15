@@ -55,6 +55,8 @@ Patch5: rhel-proxy.patch
 Patch6: warewulf-vnfs.pigz.patch
 # 03/30/16 karl.w.schulz@intel.com - add support for ecdsa host keys
 Patch7: warewulf-vnfs.ecdsa.patch
+# 04/14/16 karl.w.schulz@intel.com - add init class
+Patch8: warewulf-vnfs.init.patch
 
 
 %description

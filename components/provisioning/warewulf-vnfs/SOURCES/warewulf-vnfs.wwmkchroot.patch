@@ -249,17 +249,6 @@
  MAINTAINERCLEANFILES = Makefile.in
  all: all-am
  
---- warewulf-vnfs-3.6/bin/wwbootstrap	2014-05-21 11:13:14.000000000 -0700
-+++ warewulf-vnfs-3.6.patch/bin/wwbootstrap	2014-10-22 10:41:34.007775700 -0700
-@@ -20,6 +20,8 @@
- &set_log_level("NOTICE");
- 
- $ENV{"PATH"} = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
-+delete $ENV{"BASH_ENV"};
-+delete $ENV{"ENV"};
- 
- my $randstring = &rand_string("12");
- my $tmpdir = "/var/tmp/wwinitrd.$randstring";
 --- warewulf-vnfs-3.6/bin/wwbootstrap     2015-11-02 13:53:51.337557568 -0800
 +++ warewulf-vnfs-3.6.patch/bin/wwbootstrap 2015-11-02 13:54:51.684878692 -0800
 @@ -232,6 +232,11 @@
@@ -274,17 +263,6 @@
      if ($module_count > 0) {
          &nprint("Number of drivers included in bootstrap: $module_count\n");
          &dprint("Running depmod\n");
---- warewulf-vnfs-3.6/bin/wwvnfs	2014-05-21 11:13:14.000000000 -0700
-+++ warewulf-vnfs-3.6.patch/bin/wwvnfs	2014-10-22 10:41:33.994773100 -0700
-@@ -265,6 +265,8 @@
- 
- &dprint("Sanitizing the PATH environment variable\n");
- $ENV{"PATH"} = "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin";
-+delete $ENV{"BASH_ENV"};
-+delete $ENV{"ENV"};
- 
- 
- # Checking gzip command
 --- /dev/null	2014-11-04 13:58:13.352043839 -0500
 +++ warewulf-vnfs-3.6.patch/libexec/wwmkchroot/centos-7.tmpl	2014-11-04 17:56:31.879873659 -0500
 @@ -0,0 +1,24 @@

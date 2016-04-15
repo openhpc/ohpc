@@ -1,0 +1,20 @@
+--- warewulf-vnfs-3.6/bin/wwbootstrap	2014-05-21 11:13:14.000000000 -0700
++++ warewulf-vnfs-3.6.patch/bin/wwbootstrap	2016-04-14 18:19:00.000000000 -0700
+@@ -8,6 +8,7 @@
+ #
+ 
+ 
++use Warewulf::Init;
+ use Warewulf::Config;
+ use Warewulf::Logger;
+ use Warewulf::Util;
+--- warewulf-vnfs-3.6/bin/wwvnfs	2014-05-21 11:13:14.000000000 -0700
++++ warewulf-vnfs-3.6.patch/bin/wwvnfs	2016-04-14 18:19:13.000000000 -0700
+@@ -7,6 +7,7 @@
+ # required approvals from the U.S. Dept. of Energy).  All rights reserved.
+ #
+ 
++use Warewulf::Init;
+ use Warewulf::ACVars;
+ use Warewulf::Util;
+ use Warewulf::Logger;
