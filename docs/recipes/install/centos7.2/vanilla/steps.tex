@@ -524,9 +524,11 @@ host as follows:
 % ohpc_indent 0
 % ohpc_command fi
 % ohpc_validation_newline
+% end_ohpc_run
 
 \input{../../common/wwnodescan}
 
+% begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
 [sms](*\#*) systemctl restart dhcpd
