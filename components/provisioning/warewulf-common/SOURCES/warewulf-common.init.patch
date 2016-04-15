@@ -75,3 +75,14 @@
  use Warewulf::Logger;
  use Warewulf::Util;
  use Warewulf::Config;
+--- warewulf-common-3.6/lib/Warewulf/Makefile.in	2014-05-28 11:03:09.000000000 -0700
++++ warewulf-common-3.6.patch/lib/Warewulf/Makefile.in	2016-04-14 18:47:32.000000000 -0700
+@@ -184,7 +184,7 @@
+ top_srcdir = @top_srcdir@
+ SUBDIRS = HTML DataStore Module DSO Event System
+ perlmodsdir = ${PERL_VENDORLIB}/Warewulf
+-dist_perlmods_SCRIPTS = ACVars.pm Config.pm Daemon.pm DataStore.pm Logger.pm Object.pm ObjectSet.pm Util.pm Module.pm ModuleLoader.pm Term.pm Event.pm EventHandler.pm Network.pm DSO.pm System.pm SystemFactory.pm ParallelCmd.pm Node.pm File.pm RetVal.pm
++dist_perlmods_SCRIPTS = ACVars.pm Config.pm Daemon.pm DataStore.pm Init.pm Logger.pm Object.pm ObjectSet.pm Util.pm Module.pm ModuleLoader.pm Term.pm Event.pm EventHandler.pm Network.pm DSO.pm System.pm SystemFactory.pm ParallelCmd.pm Node.pm File.pm RetVal.pm
+ MAINTAINERCLEANFILES = Makefile.in
+ all: all-recursive
+ 
