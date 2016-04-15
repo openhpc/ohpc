@@ -12,13 +12,13 @@ provisioned {\em compute} nodes.
 % ohpc_indent 5
 % ohpc_validation_comment Install Nagios on master and vnfs image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Install Nagios base, Remote Plugin Engine, and Plugins on Master
+# Install Nagios base, Remote Plugin Engine, and Plugins on master host
 [sms](*\#*) (*\groupinstall*) ohpc-nagios
 
 # Also install in compute node image
 [sms](*\#*) (*\groupchrootinstall*) ohpc-nagios
 
-# Enable NRPE on compute image, and configure
+# Enable and configure NRPE in compute image
 [sms](*\#*) chroot $CHROOT systemctl enable nrpe
 [sms](*\#*) perl -pi -e "s/^allowed_hosts=/# allowed_hosts=/" $CHROOT/etc/nagios/nrpe.cfg
 [sms](*\#*) echo "nrpe 5666/tcp # NRPE"         >> $CHROOT/etc/services
