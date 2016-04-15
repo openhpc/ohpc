@@ -16,6 +16,7 @@ as configured by this recipe.
 [sms](*\#*) cp /etc/powerman/powerman.conf{.example,}
 
 [sms](*\#*) perl -pi -e 's/^\#(tcpwrappers yes)/$1/' /etc/powerman/powerman.conf
+[sms](*\#*) perl -pi -e 's/^\#(listen "0.0.0.0:10101")/$1/' /etc/powerman/powerman.conf
 [sms](*\#*) perl -pi -e 's/^\#(include "\/etc\/powerman\/ipmipower\.dev")/$1/' \
             /etc/powerman/powerman.conf
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
