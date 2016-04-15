@@ -29,8 +29,7 @@ as configured by this recipe.
                 if(/^\#node "t1"/);' /etc/powerman/powerman.conf
         done
 
-# Enable and start powerman
-[sms](*\#*) systemctl enable powerman
+# Start powerman
 [sms](*\#*) systemctl start powerman
 
 # Check power status
