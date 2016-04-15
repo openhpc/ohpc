@@ -50,11 +50,17 @@ be use for MPI job launch. Instead, native job launch mechanisms provided by
 the MPI stacks are utilized and \texttt{prun} abstracts this process for the
 various stacks to retain a single launch command.
 
+
+  
 \subsection{Interactive execution}
 To use the newly created ``test'' account to compile and execute the
 application {\em interactively} through the resource manager, execute the
 following (note the use of \texttt{prun} for parallel job launch which summarizes
 the underlying native job launch mechanism being used):
+
+\nottoggle{isCentOS}{
+  \clearpage
+  }
 
 \begin{lstlisting}[language=bash,keywords={}]
 # switch to "test" user
@@ -82,7 +88,10 @@ the underlying native job launch mechanism being used):
     --> Process #   7 of   8 is alive. -> c2
 \end{lstlisting}
 
-\clearpage
+\nottoggle{isCentOS}{
+  \clearpage
+  }
+  
 \subsection{Batch execution}
 
 For batch execution, \OHPC{} provides a simple job script for reference (also
@@ -114,7 +123,6 @@ prun ./a.out
 # Submit job for batch execution
 [test@sms ~]$ sbatch job.mpi
 Submitted batch job 339
-
 \end{lstlisting}
 
 \begin{center}
@@ -127,40 +135,4 @@ this example).
 \end{tcolorbox}
 \end{center}
 
-%% [test@sms ~]$ cat job.339.out
-%% [prun] Master compute host = c1
-%% [prun] Launch cmd = mpiexec.hydra -bootstrap slurm hostname
-%%  Hello, world (8 procs total)
-%%     --> Process #   0 of   8 is alive. -> c1
-%%     --> Process #   4 of   8 is alive. -> c2
-%%     --> Process #   1 of   8 is alive. -> c1
-%%     --> Process #   5 of   8 is alive. -> c2
-%%     --> Process #   2 of   8 is alive. -> c1
-%%     --> Process #   6 of   8 is alive. -> c2
-%%     --> Process #   3 of   8 is alive. -> c1
-%%     --> Process #   7 of   8 is alive. -> c2
-
-%% #!/bin/bash
-%% #SBATCH -J hi # Job name
-%% #SBATCH -o job.%j.out # Name of stdout output file (%j expands to jobId)
-%% #SBATCH -N 2 # Total number of nodes requested (16 cores/node)
-%% #SBATCH -n 8 # Total number of mpi tasks requested
-%% #SBATCH -t 01:30:00 # Run time (hh:mm:ss) - 1.5 hours
-
-%% prun ./hello
-%% [test@sms ~]$ sbatch hello.script
-%% Submitted batch job 339
-%% [test@sms ~]$ cat job.339.out
-%% [prun] Master compute host = c1
-%% [prun] Launch cmd = mpiexec.hydra -bootstrap slurm hostname
-%%  Hello, world (8 procs total)
-%%     --> Process #   0 of   8 is alive. -> c1
-%%     --> Process #   4 of   8 is alive. -> c2
-%%     --> Process #   1 of   8 is alive. -> c1
-%%     --> Process #   5 of   8 is alive. -> c2
-%%     --> Process #   2 of   8 is alive. -> c1
-%%     --> Process #   6 of   8 is alive. -> c2
-%%     --> Process #   3 of   8 is alive. -> c1
-%%     --> Process #   7 of   8 is alive. -> c2
-%% \end{lstlisting}
 

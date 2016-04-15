@@ -16,6 +16,9 @@
 \newcommand{\groupinstall}{yum -y groupinstall}
 \newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
 
+% boolean for os-specific formatting
+\toggletrue{isCentOS}
+
 \begin{document}
 \graphicspath{{../../common/figures/}}
 \thispagestyle{empty}
@@ -430,7 +433,7 @@ host as follows:
 \paragraph{Add \Nagios{} monitoring}
 \input{../../common/nagios}
 
-%\clearpage
+\clearpage
 \paragraph{Add \Ganglia{} monitoring}
 \input{../../common/ganglia}
 
@@ -482,21 +485,15 @@ host as follows:
 [sms](*\#*) wwsh -y file import /tmp/network.$$ --name network
 [sms](*\#*) wwsh -y file set network --path /etc/sysconfig/network --mode=0644 --uid=0
 
-# Add nodes to warewulf datastore
+# Add nodes to Warewulf datastore
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
                 wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
         done
 \end{lstlisting}
 % end_ohpc_run
 
-%\subsubsection{Optionally configure stateful provisioning}
-%\input{../../common/stateful}
-
-
-
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster (Cont.)
-
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
 # Define provisioning image for hosts
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.2 --bootstrap=`uname -r` \
@@ -543,7 +540,7 @@ host as follows:
 \subsubsection{Optionally configure stateful provisioning}
 \input{../../common/stateful}
 
-
+\vspace*{-0.1cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{../../common/reset_computes} 
 
@@ -571,6 +568,7 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \subsection{Compilers} \label{sec:install_compilers}
 \input{../../common/compilers}
 
+\clearpage
 \subsection{MPI Stacks} \label{sec:mpi}
 \input{../../common/mpi}
 
@@ -580,8 +578,7 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \subsection{Setup default development environment}
 \input{../../common/default_dev}
 
-
-\vspace*{0.2cm}
+%\vspace*{0.2cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{../../common/third_party_libs_intro}
 
