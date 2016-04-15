@@ -8,4 +8,3 @@ TESTS  += ganglia
 TESTS  += genders
 TESTS  += mrsh
 TESTS  += nagios
-TESTS  += spack
