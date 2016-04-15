@@ -100,8 +100,8 @@ both the base OS and EPEL repositories for which mirrors are freely available on
                         {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
 \end{itemize*}
 
-The public EPEL repository will be automatically enabled upon installation of the 
-\texttt{ohpc-release} package. Do note that this requires the CentOS Extras
+\noindent The public EPEL repository will be enabled automatically upon installation of the 
+\texttt{ohpc-release} package. Note that this requires the CentOS Extras
 repository, which is shipped with CentOS and is enabled by default.
 
 \input{../../common/automation}
@@ -449,7 +449,7 @@ host as follows:
 \paragraph{Add \Nagios{} monitoring}
 \input{../../common/nagios}
 
-\clearpage
+%\clearpage
 \paragraph{Add \Ganglia{} monitoring}
 \input{../../common/ganglia}
 
@@ -464,6 +464,9 @@ host as follows:
 
 \paragraph{Add \powerman{}}
 \input{../../common/powerman}
+
+\paragraph{Add \conman{}} \label{sec:add_conman}
+\input{../../common/conman}
 
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{../../common/syslog}
@@ -500,26 +503,21 @@ host as follows:
 [sms](*\#*) wwsh -y file set network --path /etc/sysconfig/network --mode=0644 --uid=0
 
 # Add nodes to warewulf datastore
-[sms](*\#*) for ((i=0; i<4; i++)) ; do
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
                 wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
         done
 \end{lstlisting}
 % end_ohpc_run
 
-\subsubsection{Optionally configure stateful provisioning}
-\input{../../common/stateful}
+%\subsubsection{Optionally configure stateful provisioning}
+%\input{../../common/stateful}
 
-\input{../../common/wwnodescan}
+
 
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster (Cont.)
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
-# Optionally register additional compute nodes
-[sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
-              wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
-        done
-
 # Define provisioning image for hosts
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.2 --bootstrap=`uname -r` \
     --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network 
@@ -550,7 +548,7 @@ host as follows:
 % ohpc_command fi
 % ohpc_validation_newline
 
-\input{../../common/conman}
+\input{../../common/wwnodescan}
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
@@ -558,6 +556,29 @@ host as follows:
 [sms](*\#*) wwsh pxe update
 \end{lstlisting}
 % end_ohpc_run
+
+\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
+
+If you chose to enable \conman{} in \S\ref{sec:add_conman}, additional
+boot-time kernel arguments are needed to enable serial console
+redirection. An example provisioning setting which adds to any other kernel arguments defined
+in \texttt{\$\{kargs\}} is as follows:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, enable console redirection 
+% ohpc_command if [[ ${enable_ipmisol} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Define node kernel arguments to support SOL console
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --kargs "${kargs} console=ttyS1,115200"
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\subsubsection{Optionally configure stateful provisioning}
+\input{../../common/stateful}
 
 
 \subsection{Boot compute nodes} \label{sec:boot_computes}
