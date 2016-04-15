@@ -98,6 +98,9 @@ make
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT 
 
+#drop local state dir to avoid making systemd angry when it creates the statedir on start
+rm -rf $RPM_BUILD_ROOT/%{_localstatedir}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -149,7 +152,6 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %dir %attr(0755,daemon,root) %{_libdir}/stonith/plugins
 %dir %attr(0755,daemon,root) %{_libdir}/stonith/plugins/external
 %attr(0644,root,root) %{_unitdir}/powerman.service
-%dir %attr(0755,daemon,root) %config %{_localstatedir}/run/powerman
 
 %files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root,0755)
