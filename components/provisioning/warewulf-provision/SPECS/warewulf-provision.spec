@@ -38,7 +38,7 @@ DocDir: %{OHPC_PUB}/doc/contrib
 Patch1: warewulf-provision.busybox.patch.bz2
 Patch2: warewulf-provision.httpdconfdir.patch
 Patch3: warewulf-provision.dhcpd.patch
-Patch4: warewulf-provision.wwnodescan.patch
+Patch4: warewulf-provision.init.patch
 Patch5: update_file_delay.patch
 Patch6: warewulf-provision.mkbootable.patch
 

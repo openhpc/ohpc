@@ -1,0 +1,20 @@
+--- warewulf-provision-3.6/bin/wwlivesync	2014-05-21 11:13:01.000000000 -0700
++++ warewulf-provision-3.6.patch/bin/wwlivesync	2016-04-14 18:07:45.000000000 -0700
+@@ -7,6 +7,7 @@
+ # required approvals from the U.S. Dept. of Energy).  All rights reserved.
+ #
+ 
++use Warewulf::Init;
+ use Warewulf::Util;
+ use Warewulf::Logger;
+ use Warewulf::Config;
+--- warewulf-provision-3.6/bin/wwnodescan	2014-05-21 11:13:01.000000000 -0700
++++ warewulf-provision-3.6.patch/bin/wwnodescan	2016-04-14 18:08:56.000000000 -0700
+@@ -8,6 +8,7 @@
+ #
+ 
+ use Getopt::Long;
++use Warewulf::Init;
+ use Warewulf::Logger;
+ use Warewulf::DataStore;
+ use Warewulf::Util;
