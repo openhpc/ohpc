@@ -469,9 +469,11 @@ host as follows:
 \paragraph{Add \powerman{}}
 \input{../../common/powerman}
 
+\paragraph{Add \conman{}} \label{sec:add_conman}
+\input{../../common/conman}
+
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{../../common/syslog}
-
 
 \subsubsection{Import files} \label{sec:file_import}
 \input{../../common/import_ww_files}
@@ -536,8 +538,6 @@ host as follows:
 % ohpc_command fi
 % ohpc_validation_newline
 
-\input{../../common/conman}
-
 \clearpage
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Restart dhcp / update PXE
@@ -554,6 +554,9 @@ host as follows:
 % ohpc_command fi
 
 % end_ohpc_run
+
+\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
+\input{../../common/conman_post}
 
 
 \subsection{Boot compute nodes} \label{sec:boot_computes}
