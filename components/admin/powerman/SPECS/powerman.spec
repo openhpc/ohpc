@@ -140,7 +140,7 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %{_sbindir}/plmpower
 %dir %config %{_sysconfdir}/powerman
 %{_sysconfdir}/powerman/*.dev
-%{_sysconfdir}/powerman/powerman.conf.example
+%attr(0600,root,root) %{_sysconfdir}/powerman/powerman.conf.example
 %{_mandir}/*1/*
 %{_mandir}/*5/*
 %{_mandir}/*8/*
@@ -148,7 +148,7 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %dir %attr(0755,daemon,root) %{_libdir}/stonith
 %dir %attr(0755,daemon,root) %{_libdir}/stonith/plugins
 %dir %attr(0755,daemon,root) %{_libdir}/stonith/plugins/external
-%{_unitdir}/powerman.service
+%attr(0644,root,root) %{_unitdir}/powerman.service
 %dir %attr(0755,daemon,root) %config %{_localstatedir}/run/powerman
 
 %files -n %{pname}-devel%{PROJ_DELIM}
