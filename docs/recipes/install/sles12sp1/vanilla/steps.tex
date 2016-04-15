@@ -394,6 +394,8 @@ file to allow loading of the necessary modules.
 
 % begin_ohpc_run
 % ohpc_validation_newline
+% ohpc_validation_comment Enable Optional packages
+% ohpc_validation_newline
 % ohpc_command if [[ ${enable_lustre_client} -eq 1 ]];then
 % ohpc_indent 5
 
@@ -547,7 +549,7 @@ host as follows:
 % end_ohpc_run
 
 % begin_ohpc_run
-
+% ohpc_validation_newline
 % ohpc_validation_comment Optionally, add arguments to bootstrap kernel
 % ohpc_command if [[ ${enable_kargs} ]]; then
 % ohpc_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
