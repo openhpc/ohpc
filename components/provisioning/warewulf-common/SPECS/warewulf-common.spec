@@ -59,6 +59,7 @@ BuildRequires: db4-utils
 %endif
 %endif
 %endif
+Provides: perl(Warewulf::Init)
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
