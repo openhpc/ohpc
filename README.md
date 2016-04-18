@@ -37,12 +37,12 @@ in the downloads section of the latest
 ###### [CentOS 7.2]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.1.GA/ohpc-release-centos7.2-1.1-1.x86_64.rpm) (md5sum=f9349b2c2b117a4e3efdac8cd59cc327)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.1.GA/Install_guide-CentOS7.2-1.1.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.2/iso/OpenHPC-1.1-CentOS_7.2.iso) mirror of yum repository (md5sum=e57db7c5dd712c7b9fa48e4ebd43c517)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.1/CentOS_7.2/iso/OpenHPC_1.1_CentOS_7.2.iso) mirror of yum repository (md5sum=d09fdd3d935d7f8d628cacbce3015c5c)
 
 ###### [SLE 12 SP1]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.1.GA/ohpc-release-sles12sp1-1.1-1.x86_64.rpm) (md5sum=a99904b08c90548faaedf7201d60e101)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.1.GA/Install_guide-SLES12SP1-1.1.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.1/SLES_12_SP1/iso/OpenHPC-1.1-SLES_12_SP1.iso) mirror of zypper repository (md5sum=e57db7c5dd712c7b9fa48e4ebd43c517)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.1/SLE_12_SP1/iso/OpenHPC-1.1_SLE_12_SP1.iso) mirror of zypper repository (md5sum=bac52eae6a9a02c85029903834eb5660)
 
 #### Questions, Comments, or Bug Reports?
 
