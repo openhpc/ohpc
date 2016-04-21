@@ -79,6 +79,7 @@ Virtual Node FileSystem objects.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p3
+%patch8 -p1
 
 
 %build
