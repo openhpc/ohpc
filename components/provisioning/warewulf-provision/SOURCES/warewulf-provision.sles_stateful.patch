@@ -1,0 +1,13 @@
+--- warewulf-provision-3.6/initramfs/capabilities/setup-filesystems/80-mkbootable	2014-05-21 11:13:01.000000000 -0700
++++ warewulf-provision-3.6.patch/initramfs/capabilities/setup-filesystems/80-mkbootable	2016-04-20 12:22:13.000000000 -0700
+@@ -7,6 +7,10 @@
+ # required approvals from the U.S. Dept. of Energy).  All rights reserved.
+ #
+ 
++# SLES requires /proc in the chroot
++if [ ! -f $NEWROOT/proc/self/mountinfo ] 
++    mount --bind /proc $NEWROOT/proc
++fi
+ 
+ # Install a bootloader if $WWBOOTLOADER is set and the root device is known
+ if [ -n "$WWBOOTLOADER" -a -f "/tmp/rootdev" ]; then
