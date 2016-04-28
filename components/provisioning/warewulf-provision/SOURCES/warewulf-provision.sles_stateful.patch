@@ -17,7 +17,7 @@
  fi
  
 +# Clean up SLES /proc in the chroot
-+if [ $PROCMOUNT ]; then
++if [ $PROCMOUNT -eq 1 ]; then
 +    umount $NEWROOT/proc
 +fi
 +
