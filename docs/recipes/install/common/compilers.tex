@@ -1,23 +1,11 @@
-\OHPC{} presently packages two compiler families ({\GNU{}} and {\IntelR{}
-  Parallel Studio}) that are integrated within the underlying
-modules-environment system in a hierarchical fashion. End users of an \OHPC{}
-system can choose to access one compiler at a time and will be presented with
-additional compiler-dependent software as a function of which compiler
-toolchain is currently loaded. Each compiler toolchain can be installed
-separately and the following commands illustrate the installation of both along
-with any necessary dependencies:
+\OHPC{} presently packages the {\GNU{}} compiler toolchain integrated with the 
+underlying modules-environment system in a hierarchical fashion. The modules
+system will conditionally present compiler-dependent software based on the
+toolchain currently loaded. 
 
 % begin_ohpc_run
 % ohpc_comment_header Install Compilers \ref{sec:install_compilers}
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) gnu-compilers-ohpc intel-compilers-devel-ohpc
+[sms](*\#*) (*\install*) gnu-compilers-ohpc
 \end{lstlisting}
 % end_ohpc_run
-
-\begin{center}
-\begin{tcolorbox}[]
-\small
-\OHPC{} provides the \IntelR{} compiler development and runtime environment as a convenience, but a valid license
-is necessary to enable the compilers for local compilations. Please refer to \S\ref{sec:byol} for more details.
-\end{tcolorbox}
-\end{center}
