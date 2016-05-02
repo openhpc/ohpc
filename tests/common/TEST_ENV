@@ -1,11 +1,10 @@
 DELIM="-ohpc"
 CMD_TIMEOUT="20s"
 RESOURCE_MANAGER=slurm
-COMPILER_FAMILIES="gnu intel"
-MPI_FAMILIES="mvapich2 openmpi impi"
+COMPILER_FAMILIES="gnu"
+MPI_FAMILIES="mvapich2 openmpi"
 LUSTRE_TEST_PATH="/mnt/lustre/jenkins"
 NUM_COMPUTES=4
-export INTEL_LICENSE_FILE=/opt/intel/licenses/intel.lic
 export BATS_USE_MKTEMP=1
 #
 #------------------------
