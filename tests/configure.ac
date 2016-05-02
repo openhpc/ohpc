@@ -61,12 +61,6 @@ AC_ARG_ENABLE([oob],
 	 [],[enable_oob=yes])
 AM_CONDITIONAL(OOB_ENABLED,test "x$enable_oob" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# Cluster checker
-AC_ARG_ENABLE([clck],
-	 [AS_HELP_STRING([--enable-clck],[Enable clck tests (default=yes, root only)])],
-	 [],[enable_clck=yes])
-AM_CONDITIONAL(CLCK_ENABLED,test "x$enable_clck" = "xyes" ) 
-#------------------------------------------------------------------------------------------
 # Lustre
 AC_ARG_ENABLE([lustre],
 	 [AS_HELP_STRING([--enable-lustre],[Enable Lustre utility tests (default=no, root only)])],
@@ -367,7 +361,6 @@ AC_OUTPUT( Makefile
 	   perf-tools/intel-advisor/tests/Makefile
        perf-tools/tau/Makefile
 	   oob/Makefile
-	   clck/Makefile
 	   lustre/Makefile
        dev-tools/easybuild/Makefile
        admin/spack/Makefile
@@ -413,11 +406,6 @@ if test "x$ROOT_ENABLED" = "x1" ; then
        echo '    'Hardware benchmarks....... : enabled	
     else 
        echo '    'Hardware benchmarks....... : disabled
-    fi
-    if test "x$enable_clck" = "xyes"; then
-       echo '    'Cluster checker........... : enabled
-    else 
-       echo '    'Cluster checker........... : disabled
     fi
     if test "x$enable_lustre" = "xyes"; then
        echo '    'Lustre client............. : enabled

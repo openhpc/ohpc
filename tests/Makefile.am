@@ -18,9 +18,6 @@ endif
 if OOB_ENABLED
    SUBDIRS += oob
 endif
-if CLCK_ENABLED
-   SUBDIRS += clck
-endif
 if LUSTRE_ENABLED
    SUBDIRS += lustre
 endif
