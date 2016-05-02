@@ -5,8 +5,8 @@ use strict;
 
 my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
                         "lustre","parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
-my @compiler_familes = ("gnu","intel");
-my @mpi_families     = ("mvapich2","openmpi","impi");
+my @compiler_familes = ("gnu");
+my @mpi_families     = ("mvapich2","openmpi");
 
 my @single_package_exceptions = ();
 
