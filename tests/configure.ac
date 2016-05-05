@@ -106,20 +106,20 @@ AM_CONDITIONAL(VALGRIND_ENABLED,test "x$enable_valgrind" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Intel-inspector
 AC_ARG_ENABLE([inspector],
-   [AS_HELP_STRING([--enable-inspector],[Enable Intel Inspector tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_inspector,yes)])
+   [AS_HELP_STRING([--enable-inspector],[Enable Intel Inspector tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_inspector,no)])
 AM_CONDITIONAL(INSPECTOR_ENABLED,test "x$enable_inspector" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Intel-ITAC
 AC_ARG_ENABLE([itac],
-   [AS_HELP_STRING([--enable-itac],[Enable Intel Trace Analyzer/Collector tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_itac,yes)])
+   [AS_HELP_STRING([--enable-itac],[Enable Intel Trace Analyzer/Collector tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_itac,no)])
 AM_CONDITIONAL(ITAC_ENABLED,test "x$enable_itac" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Intel-Vtune
 AC_ARG_ENABLE([vtune],
-   [AS_HELP_STRING([--enable-vtune],[Enable Intel Vtune Amplifier XE tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_vtune,yes)])
+   [AS_HELP_STRING([--enable-vtune],[Enable Intel Vtune Amplifier XE tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_vtune,no)])
 AM_CONDITIONAL(VTUNE_ENABLED,test "x$enable_vtune" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Intel-Advisor
