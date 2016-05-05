@@ -124,8 +124,8 @@ AM_CONDITIONAL(VTUNE_ENABLED,test "x$enable_vtune" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Intel-Advisor
 AC_ARG_ENABLE([advisor],
-   [AS_HELP_STRING([--enable-advisor],[Enable Intel Advisor XE tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_advisor,yes)])
+   [AS_HELP_STRING([--enable-advisor],[Enable Intel Advisor XE tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_advisor,no)])
 AM_CONDITIONAL(ADVISOR_ENABLED,test "x$enable_advisor" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # MPI
