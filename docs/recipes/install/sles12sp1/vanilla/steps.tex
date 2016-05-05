@@ -43,9 +43,6 @@
 
 \vspace*{4in}
 
-
-%\noindent{\normalsize \color{black} Intel Cluster Makers} \vspace*{0.1cm} \\
-%{\normalsize \color{logodarkgrey} Copyright~{\small\copyright}~2014-2015 Intel Corporation} \vspace*{0.1cm} \\ 
 \noindent{\small \color{black} Document Last Update: \VCDateISO} \vspace*{0.1cm} \\ 
 {\small \color{black} Document Revision: \VCRevision} \\ \vspace*{0.1cm}
 
@@ -79,17 +76,6 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_ohpc_repo}
-
-%%% % begin_ohpc_run
-%%% % ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
-%%% \begin{lstlisting}[language=bash,keywords={}]
-%%% [sms](*\#*) zypper addrepo ${ohpc_repo}
-%%% [sms](*\#*) zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
-%%% \end{lstlisting}
-%%% % end_ohpc_run
-
-% Dev testing for Factory
-%[sms](*\#*) zypper addrepo $OpenHPC_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
 
 In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard distro repositories in order to resolve
