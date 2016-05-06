@@ -152,6 +152,9 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTPL_ENABLE_BLAS:BOOL=ON                                       \
         -DBLAS_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                      \
         -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
+        -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
+        -DLAPACK_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                    \
+        -DLAPACK_LIBRARY_NAMES:STRING="openblas"                        \
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
 %endif
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
