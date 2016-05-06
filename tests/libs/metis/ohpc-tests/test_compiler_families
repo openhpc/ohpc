@@ -3,6 +3,7 @@
 
 TEST_LOGS=""
 MAKEFLAGS=""
+status=0
 
 source ./TEST_ENV         || exit 1
 source ./common/functions || exit 1
@@ -29,10 +30,12 @@ for compiler in $COMPILER_FAMILIES ; do
 
     ./configure                 || exit 1
     make clean                  || exit 1
-    make -k check               || exit 1
+    make -k check               || status=0
 
     save_logs_compiler_family tests $compiler
 
     make distclean
 
 done
+
+exit ${status}

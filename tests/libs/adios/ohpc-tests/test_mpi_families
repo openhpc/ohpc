@@ -3,6 +3,7 @@
 
 TEST_LOGS=""
 MAKEFLAGS=""
+status=0
 
 cd "$(dirname "$0")/.."      || exit 1
 
@@ -35,9 +36,6 @@ for compiler in $COMPILER_FAMILIES ; do
 	module load adios
         module load netcdf
         module load phdf5
-#        if [ "$compiler" = "gnu" ]; then
-#	   module load mkl
-#	fi
 
 	export LIBS='-ladios -lhdf5 -lz -llustreapi'
 	export CPPFLAGS="-I$ADIOS_INC -I$NETCDF_INC -I$HDF5_INC"
