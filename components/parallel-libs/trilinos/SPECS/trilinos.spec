@@ -86,6 +86,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  openblas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -121,6 +122,7 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 module load phdf5
 module load netcdf
 module load boost
+module load openblas
 
 mkdir tmp
 cd tmp
@@ -150,8 +152,9 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 %endif
 %if %{compiler_family} == gnu
         -DTPL_ENABLE_BLAS:BOOL=OFF                                      \
-        -DTrilinos_ENABLE_Phalanx:BOOL=OFF                               \
-        -DTrilinos_ENABLE_Stokhos:BOOL=OFF                              \
+        -DBLAS_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                      \
+        -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
+        -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
 %endif
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
         -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
