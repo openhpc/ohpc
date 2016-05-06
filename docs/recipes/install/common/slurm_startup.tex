@@ -31,13 +31,13 @@ resource management under \SLURM{}.
 \end{lstlisting}
 % end_ohpc_run
 
-In the default configuration, the {\em compute} hosts will be initialized in an
-{\em unknown} state. To place the hosts into production such that they are
-eligible to schedule user jobs, issue the following:
+%%% In the default configuration, the {\em compute} hosts will be initialized in an
+%%% {\em unknown} state. To place the hosts into production such that they are
+%%% eligible to schedule user jobs, issue the following:
 
-% begin_ohpc_run
-\begin{lstlisting}[language=bash]
-[sms](*\#*) scontrol update partition=normal state=idle
-\end{lstlisting}
-% end_ohpc_run
+%%% % begin_ohpc_run
+%%% \begin{lstlisting}[language=bash]
+%%% [sms](*\#*) scontrol update partition=normal state=idle
+%%% \end{lstlisting}
+%%% % end_ohpc_run
 
