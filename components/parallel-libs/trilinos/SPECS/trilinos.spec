@@ -86,8 +86,6 @@ BuildRequires:  zlib-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
-BuildRequires:  scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -141,8 +139,10 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
         -DMKL_LIBRARY_DIRS:FILEPATH="${MKLROOT}/lib/intel64"            \
         -DMKL_LIBRARY_NAMES:STRING="mkl_rt"                             \
+        -DTPL_ENABLE_BLAS:BOOL=ON                                       \
         -DBLAS_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"               \
         -DBLAS_LIBRARY_NAMES:STRING="mkl_rt"                            \
+        -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
         -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
         -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
 %endif
@@ -165,8 +165,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DMPI_C_COMPILER:FILEPATH=mpicc                                 \
         -DMPI_CXX_COMPILER:FILEPATH=mpicxx                              \
         -DMPI_FORTRAN_COMPILER:FILEPATH=mpif90                          \
-        -DTPL_ENABLE_BLAS:BOOL=ON                                       \
-        -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
         -DTPL_ENABLE_Netcdf:BOOL=ON                                     \
         -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC}"                      \
         -DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB}"                      \
