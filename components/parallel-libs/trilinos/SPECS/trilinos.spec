@@ -241,6 +241,15 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
 
+# Autoload openblas for gnu builds
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { [is-loaded gnu] } {
+        if { ![is-loaded openblas]  } {
+          module load openblas
+        }
+    }
+}
+
 EOF
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
