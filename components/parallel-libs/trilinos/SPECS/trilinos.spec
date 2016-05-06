@@ -146,6 +146,9 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
         -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
 %endif
+%if %{compiler_family} == gnu
+        -DTPL_ENABLE_BLAS:BOOL=OFF                                      \
+%endif
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
