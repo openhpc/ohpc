@@ -3,7 +3,7 @@
 
 TEST_LOGS=""
 MAKEFLAGS=""
-
+status=0
 
 source ./TEST_ENV         || exit 1
 source ./common/functions || exit 1
@@ -28,7 +28,6 @@ for compiler in gnu ; do
     module load R_base    || exit 1
     
     if [ "$compiler" = "intel" ]; then
-       # module load mkl || exit 1
        echo "Need to prepend libgfortran.so path to LD_LIBRARY_PATH when using the $compiler toolchain"
        export LD_LIBRARY_PATH=/opt/ohpc/pub/compiler/gcc/4.9.2/lib64/:$LD_LIBRARY_PATH
     fi
@@ -36,10 +35,11 @@ for compiler in gnu ; do
 
     ./configure   || exit 1
     make clean    || exit 1
-    make -k check || exit 1
+    make -k check || status=1
 
     save_logs_compiler_family tests $compiler
 
     make distclean
 done
 
+exit ${status}

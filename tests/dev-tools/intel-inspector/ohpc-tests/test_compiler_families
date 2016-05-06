@@ -3,6 +3,7 @@
 
 TEST_LOGS=""
 MAKEFLAGS=""
+status=0
 
 source ./TEST_ENV            || exit 1
 source ./common/functions    || exit 1
@@ -26,12 +27,14 @@ for compiler in "intel"; do
     module load $compiler || exit 1
     module load inspector || exit 1
     
-    ./configure   || exit 1
-    make clean    || exit 1
-    make -k check 
+    ./configure           || exit 1
+    make clean            || exit 1
+    make -k check         || status=1
 
     save_logs_compiler_family tests $compiler
     
     make distclean
 done
+
+exit ${status}
 
