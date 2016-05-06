@@ -17,6 +17,37 @@ else
    AC_MSG_RESULT([yes])
 fi
 
+if test "x$LMOD_FAMILY_COMPILER" = "xgnu"; then
+
+AC_MSG_CHECKING([for OPENBLAS environment variable])
+if test "x$OPENBLAS_DIR" = "x"; then
+   AC_MSG_RESULT([no])
+   echo
+   AC_ERROR([OPENBLAS_DIR not defined - please load openblas environment.])
+else
+   AC_MSG_RESULT([yes])
+fi
+
+AC_MSG_CHECKING([for Parallel HDF5 environment variable])
+if test "x$HDF5_DIR" = "x"; then
+   AC_MSG_RESULT([no])
+   echo
+   AC_ERROR([HDF5_DIR not defined - please load phdf5 environment.])
+else
+   AC_MSG_RESULT([yes])
+fi
+
+AC_MSG_CHECKING([for NETCDF environment variable])
+if test "x$NETCDF_DIR" = "x"; then
+   AC_MSG_RESULT([no])
+   echo
+   AC_ERROR([NETCDF_DIR not defined - please load netcdf environment.])
+else
+   AC_MSG_RESULT([yes])
+fi
+
+fi
+
 # set compilers to use MPI toolchain 
 CC=mpicc
 CXX=mpicxx
