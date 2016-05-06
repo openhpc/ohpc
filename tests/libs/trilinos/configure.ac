@@ -14,7 +14,7 @@ if test "x$TRILINOS_DIR" = "x"; then
    echo
    AC_ERROR([TRILINOS_DIR not defined - please load trilinos environment.])
 else
-   AC_MSG_RESULT([no])
+   AC_MSG_RESULT([yes])
 fi
 
 # set compilers to use MPI toolchain 
