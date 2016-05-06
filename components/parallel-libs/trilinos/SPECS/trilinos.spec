@@ -33,9 +33,6 @@ BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -119,9 +116,6 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
-%if %{compiler_family} == gnu
-module load mkl
-%endif
 module load phdf5
 module load netcdf
 module load boost
@@ -139,6 +133,14 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
 %if %{compiler_family} == intel
         -DTrilinos_ENABLE_MueLu:BOOL=OFF                                \
+        -DTPL_ENABLE_MKL:BOOL=ON                                        \
+        -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
+        -DMKL_LIBRARY_DIRS:FILEPATH="${MKLROOT}/lib/intel64"            \
+        -DMKL_LIBRARY_NAMES:STRING="mkl_rt"                             \
+        -DBLAS_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"               \
+        -DBLAS_LIBRARY_NAMES:STRING="mkl_rt"                            \
+        -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
+        -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
 %endif
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
@@ -159,16 +161,8 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DMPI_C_COMPILER:FILEPATH=mpicc                                 \
         -DMPI_CXX_COMPILER:FILEPATH=mpicxx                              \
         -DMPI_FORTRAN_COMPILER:FILEPATH=mpif90                          \
-        -DTPL_ENABLE_MKL:BOOL=ON                                        \
-        -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
-        -DMKL_LIBRARY_DIRS:FILEPATH="${MKLROOT}/lib/intel64"            \
-        -DMKL_LIBRARY_NAMES:STRING="mkl_rt"                             \
         -DTPL_ENABLE_BLAS:BOOL=ON                                       \
-        -DBLAS_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"               \
-        -DBLAS_LIBRARY_NAMES:STRING="mkl_rt"                            \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
-        -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
-        -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
         -DTPL_ENABLE_Netcdf:BOOL=ON                                     \
         -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC}"                      \
         -DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB}"                      \
