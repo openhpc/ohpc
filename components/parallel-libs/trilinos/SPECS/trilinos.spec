@@ -147,8 +147,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
         -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
         -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
-        -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
-        -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
 %endif
 %if %{compiler_family} == gnu
         -DTPL_ENABLE_BLAS:BOOL=OFF                                      \
@@ -156,6 +154,8 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
 %endif
+        -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
+        -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
         -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
         -DTrilinos_ENABLE_PyTrilinos:BOOL=OFF                           \
