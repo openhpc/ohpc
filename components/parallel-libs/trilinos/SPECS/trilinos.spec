@@ -149,7 +149,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
 %endif
 %if %{compiler_family} == gnu
-        -DTPL_ENABLE_BLAS:BOOL=ON
+        -DTPL_ENABLE_BLAS:BOOL=ON                                       \
         -DBLAS_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                      \
         -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
