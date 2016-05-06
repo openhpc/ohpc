@@ -180,8 +180,8 @@ puts stderr " "
 puts stderr "This module loads the SuperLU_dist library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of SuperLU_dist leverages the metis and MKL libraries."
-puts stderr "Consequently, these packages are loaded automatically with this module."
+puts stderr "Note that this build of SuperLU_dist leverages the metis library."
+puts stderr "Consequently, this package is loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
 
