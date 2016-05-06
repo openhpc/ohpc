@@ -107,7 +107,8 @@ C++ using object-oriented techniques. All packages are self-contained, with the
 Trilinos top layer providing a common look-and-feel and infrastructure.
 
 %prep
-%setup -q -n %{pname}-%{version}-Source
+#%setup -q -n %{pname}-%{version}-Source
+%setup -q -n  Trilinos-trilinos-release-12-4-2
 %patch0 -p1
 
 %build
