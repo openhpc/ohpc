@@ -177,15 +177,6 @@ EOF
 
 %install
 
-# (TRon: Apr 23, 2015) Installing the fixed mkl header files. Source https://software.intel.com/en-us/articles/how-to-use-boost-ublas-with-intel-mkl
-# (TRon: Apr 7, 2015) Defer the installation of the mkl header files due to inconsistent results in the number of iterations to 
-#                     converged in computing the norm in the mkl example sylvester matrix test program.
-#                     This will be added when this issue has been resolved. 
-# Copy intel-MKL uBLAS header files
-install -D -m 0644 %SOURCE2 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_gemm.hpp
-install -D -m 0644 %SOURCE3 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_matrix_prod.hpp
-
-
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
@@ -232,13 +223,6 @@ module-whatis "%{url}"
 
 set             version             %{version}
  
-## module load mkl ... now that the mkl header files are included
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded intel]  } {
-        module load mkl
-    }
-}
-
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
