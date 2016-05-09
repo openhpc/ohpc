@@ -30,10 +30,17 @@ AC_PROG_CXX
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
+if test "$LMOD_FAMILY_COMPILER" = "intel"; then
 CFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} -I ${MKLROOT}/include ${CFLAGS}"
 CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} -I ${MKLROOT}/include ${CXXFLAGS} -fopenmp"
 FFLAGS="-I ${HYPRE_INC} -I ${MKLROOT}/include ${FFLAGS}"
 LDFLAGS="-L${HYPRE_LIB} -lHYPRE -L$MKLROOT/lib/intel64 -lmkl_rt -lm ${LDFLAGS}"
+else
+CFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CFLAGS}"
+CXXFLAGS="-DHYPRE_TIMING -I ${HYPRE_INC} ${CXXFLAGS} -fopenmp"
+FFLAGS="-I ${HYPRE_INC} ${FFLAGS}"
+LDFLAGS="-L${HYPRE_LIB} -lHYPRE -L$OPENBLAS_LIB -lopenblas ${LDFLAGS}"
+fi
 
 
 # Set subdirectories
