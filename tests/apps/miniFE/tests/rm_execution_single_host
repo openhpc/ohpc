@@ -10,6 +10,14 @@ else
     ERROR "TEST_ENV does not exist"
 fi
 
+CMD_TIMEOUT="5:00"
+TEST_EXE="./src/miniFE.x"
+TEST_MAX_COMPUTES=1024
+TEST_NUM_RANKS=8
+TEST_NUM_THREADS=4
+TEST_VERIFY=1
+TEST_PERFLOG=./log.miniFE
+
 rm=$RESOURCE_MANAGER
 
 # init run options
