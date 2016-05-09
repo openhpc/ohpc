@@ -7,6 +7,10 @@ if [ -s ./TEST_ENV ];then
     source ./TEST_ENV
 fi
 
+CMD_TIMEOUT="10:00"
+TEST_NUM_RANKS=8
+TEST_NUM_THREADS=4
+
 PKG=IMB
 module=imb
 family=$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI
