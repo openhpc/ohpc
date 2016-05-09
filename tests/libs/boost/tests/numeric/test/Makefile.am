@@ -3,8 +3,13 @@ AM_CXXFLAGS                = -I$(BOOST_ROOT) -I$(BOOST_INC) -I$(BOOST_INC)/boost
 
 # Test compilations/execution
 
+if GCC
+TESTS                      = bench1_ublas
+check_PROGRAMS             = bench1_ublas
+else 
 TESTS                      = bench1_mkl bench1_ublas
 check_PROGRAMS             = bench1_mkl bench1_ublas
+endif
 bench1_mkl_SOURCES        = bench1.cpp bench11.cpp bench12.cpp bench13.cpp
 bench1_ublas_SOURCES      = bench1.cpp bench11.cpp bench12.cpp bench13.cpp
 
