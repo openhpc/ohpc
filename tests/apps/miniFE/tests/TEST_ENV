@@ -1,11 +1,1 @@
-if [ -s ../../../TEST_ENV ];then
-    source ../../../TEST_ENV
-fi
-
-CMD_TIMEOUT="5:00"
-TEST_EXE="./src/miniFE.x"
-TEST_MAX_COMPUTES=1024
-TEST_NUM_RANKS=8
-TEST_NUM_THREADS=4
-TEST_VERIFY=1
-TEST_PERFLOG=./log.miniFE
+../../../TEST_ENV
