@@ -23,8 +23,10 @@ PKG="Boost/MKL ublas header"
 #    ARGS="100 400 600"
     CMD_TIMEOUT=30
     echo $test 
-    if [ ! -x $test ];then
-        flunk "$test does not exist"
+    if [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
+      if [ ! -x $test ];then
+          flunk "$test does not exist"
+      fi
     fi
 
     rm -f $test.results
