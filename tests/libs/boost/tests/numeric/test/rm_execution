@@ -18,7 +18,6 @@ fi
 PKG="Boost/MKL ublas header"
 
 
-if [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
 @test "[$PKG] bench1_mkl test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     test="bench1_mkl"
 #    ARGS="100 400 600"
@@ -31,8 +30,11 @@ if [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
     rm -f $test.results
 
     run run_serial_binary -o $test.results ./$test #$ARGS 
-    assert_success
-fi
+    if [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
+      assert_success
+    else
+      assert_failure
+    fi
 
 #   Verify a timing was recorded
 #    run grep "Total time" $test.results 
