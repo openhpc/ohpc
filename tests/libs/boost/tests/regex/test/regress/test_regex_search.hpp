@@ -16,6 +16,7 @@
   *   DESCRIPTION: Declares tests for regex search and iteration.
   */
 
+#include <boost/regex.hpp>
 #ifndef BOOST_REGEX_REGRESS_REGEX_SEARCH_HPP
 #define BOOST_REGEX_REGRESS_REGEX_SEARCH_HPP
 #include "info.hpp"
