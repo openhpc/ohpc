@@ -10,13 +10,13 @@ else
     ERROR "missing TEST_ENV"
 fi
 
-CMD_TIMEOUT="15:00"
-TEST_EXE="./src/mini_dft"
-TEST_MAX_COMPUTES=4
-TEST_NUM_RANKS=4
-TEST_NUM_THREADS=2
+CMD_TIMEOUT="5:00"
+TEST_EXE="./src/miniFE.x"
+TEST_MAX_COMPUTES=1024
+TEST_NUM_RANKS=8
+TEST_NUM_THREADS=4
 TEST_VERIFY=1
-TEST_PERFLOG=./log.miniDFT
+TEST_PERFLOG=./log.miniFE
 
 @test "[Apps/miniFE] build MiniFE executable ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     # force delete exe
