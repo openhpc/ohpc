@@ -30,10 +30,17 @@ AC_PROG_RANLIB
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
+if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
 CFLAGS="-I ${SUPERLU_DIST_INC} -I ${MKLROOT}/include ${CFLAGS}"
 CXXFLAGS="-I ${SUPERLU_DIST_INC} -I ${MKLROOT}/include ${CXXFLAGS} -fopenmp"
 FFLAGS="-I ${SUPERLU_DIST_INC} -I ${MKLROOT}/include ${FFLAGS}"
 LDFLAGS="-L${METIS_LIB} -L${SUPERLU_DIST_LIB} -lmetis -lsuperlu_dist -L$MKLROOT/lib/intel64 -lmkl_rt -lm ${LDFLAGS}"
+else
+CFLAGS="-I ${SUPERLU_DIST_INC} ${CFLAGS}"
+CXXFLAGS="-I ${SUPERLU_DIST_INC} ${CXXFLAGS}"
+FFLAGS="-I ${SUPERLU_DIST_INC} ${FFLAGS}"
+LDFLAGS="-L${METIS_LIB} -L${SUPERLU_DIST_LIB} -lmetis -lsuperlu_dist -lm ${LDFLAGS}"
+fi
 
 
 # Set subdirectories
