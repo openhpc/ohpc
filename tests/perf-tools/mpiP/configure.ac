@@ -18,8 +18,6 @@ else
    AC_MSG_RESULT([yes])
 fi
 
-AM_CONDITIONAL(USE_GNU_COMPILER, test "$LMOD_FAMILY_COMPILER" = "gnu")
-AM_COND_IF(USE_GNU_COMPILER, LDFLAGS="${LDFLAGS} -lm")
 
 CXX=mpicxx
 CC=mpicc

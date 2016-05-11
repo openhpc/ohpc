@@ -9,7 +9,7 @@ CXX_test_SOURCES  = CXX_test.cpp
 check_PROGRAMS   += F90_test
 F90_test_SOURCES  = F90_test.f90
 
-LIBS=-L${MPIP_LIB} -lmpiP -lbfd -ldl 
+LIBS=-L${MPIP_LIB} -lmpiP -lbfd -ldl -lm
 
 TESTS             = test_mpiP
 
