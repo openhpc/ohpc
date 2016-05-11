@@ -59,8 +59,10 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
-#Patch1:    %{pname}-no_date_and_time.patch
-#Patch2:    %{pname}-no_network_in_build.patch
+
+# 05/11/16 - karl.w.schulz@intel.com (patch to fix singleton execution with PSM)
+Patch1:    pr.1156.patch 
+
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
@@ -132,6 +134,10 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
 %if %{with_lustre}
   BASEFLAGS="$BASEFLAGS --with-io-romio-flags=--with-file-system=testfs+ufs+nfs+lustre"
 %endif
+
+# Apply patches
+
+%patch1 -p1
 
 ./configure ${BASEFLAGS}
 
