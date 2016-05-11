@@ -61,7 +61,7 @@ Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 
 # 05/11/16 - karl.w.schulz@intel.com (patch to fix singleton execution with PSM)
-Patch1:    pr.1156.patch 
+Patch0:    pr.1156.patch 
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
@@ -118,6 +118,10 @@ Open MPI jobs.
 
 %setup -q -n %{pname}-%{version}
 
+# Apply local patches
+
+%patch0 -p1
+
 %build
 
 # OpenHPC compiler designation
@@ -135,9 +139,7 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
   BASEFLAGS="$BASEFLAGS --with-io-romio-flags=--with-file-system=testfs+ufs+nfs+lustre"
 %endif
 
-# Apply patches
 
-%patch1 -p1
 
 ./configure ${BASEFLAGS}
 
