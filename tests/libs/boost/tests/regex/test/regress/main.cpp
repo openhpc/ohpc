@@ -19,6 +19,8 @@
 #include "test.hpp"
 #include "test_locale.hpp"
 #include <stdarg.h>
+#include <iostream>
+#include <iomanip>
 
 #ifdef BOOST_HAS_ICU
 #include <unicode/uloc.h>
@@ -50,8 +52,6 @@ int error_count = 0;
 void run_tests()
 {
    RUN_TESTS(basic_tests);
-   RUN_TESTS(test_grep);
-#if 0
    RUN_TESTS(test_simple_repeats);
    RUN_TESTS(test_alt);
    RUN_TESTS(test_sets);
@@ -61,6 +61,7 @@ void run_tests()
    RUN_TESTS(test_character_escapes);
    RUN_TESTS(test_assertion_escapes);
    RUN_TESTS(test_tricky_cases);
+   RUN_TESTS(test_grep);
    RUN_TESTS(test_replace);
    RUN_TESTS(test_non_greedy_repeats);
    RUN_TESTS(test_non_marking_paren);
@@ -83,7 +84,7 @@ void run_tests()
    RUN_TESTS(test_pocessive_repeats);
    RUN_TESTS(test_mark_resets);
    RUN_TESTS(test_recursion);
-#endif
+   RUN_TESTS(test_verbs);
 }
 
 int cpp_main(int /*argc*/, char * /*argv*/[])
@@ -161,6 +162,7 @@ const int* make_array(int first, ...)
 #else
    static int data[200];
 #endif
+   std::fill_n(data, 200, -2);
    va_list ap;
    va_start(ap, first);
    //
@@ -232,6 +234,6 @@ int main(int argc, char * argv[])
 
 #else
 
-#include <boost/test/included/prg_exec_monitor.hpp>
+#include <boost/detail/lightweight_main.hpp>
 
 #endif
