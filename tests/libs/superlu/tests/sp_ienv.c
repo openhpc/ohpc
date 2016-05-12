@@ -1,23 +1,13 @@
-/*! @file sp_ienv.c
- * \brief Chooses machine-dependent parameters for the local
- * environment.
- *
- * -- SuperLU routine (version 4.1) --
- * Univ. of California Berkeley, Xerox Palo Alto Research Center,
- * and Lawrence Berkeley National Lab.
- * November, 2010
- *
-*/
-
 /*
  * File name:		sp_ienv.c
  * History:             Modified from lapack routine ILAENV
  */
 #include "slu_Cnames.h"
 
-/*! \brief
-
- <pre>
+int
+sp_ienv(int ispec)
+{
+/*
     Purpose   
     =======   
 
@@ -41,39 +31,29 @@
             = 2: the relaxation parameter relax; if the number of
 	         nodes (columns) in a subtree of the elimination tree is less
 		 than relax, this subtree is considered as one supernode,
-		 regardless of their row structures.
-            = 3: the maximum size for a supernode in complete LU;
+		 regardless of the their row structures.
+            = 3: the maximum size for a supernode;
 	    = 4: the minimum row dimension for 2-D blocking to be used;
 	    = 5: the minimum column dimension for 2-D blocking to be used;
 	    = 6: the estimated fills factor for L and U, compared with A;
-	    = 7: the maximum size for a supernode in ILU.
 	    
    (SP_IENV) (output) int
             >= 0: the value of the parameter specified by ISPEC   
             < 0:  if SP_IENV = -k, the k-th argument had an illegal value. 
   
     ===================================================================== 
-</pre>
 */
-int
-sp_ienv(int ispec)
-{
-    int i;
 
     switch (ispec) {
-	case 1: return (12);
-	case 2: return (1);
-	case 3: return (100);
-	case 4: return (200);
-	case 5: return (60);
-        case 6: return (20);
-        case 7: return (10);
+	case 1: return (3);
+	case 2: return (2);
+	case 3: return (10);
+	case 4: return (20);
+	case 5: return (10);
+        case 6: return (2);
     }
 
     /* Invalid value for ISPEC */
-    i = 1;
-    xerbla_("sp_ienv", &i);
-    return 0;
+    return (-1);
 
 } /* sp_ienv_ */
-
