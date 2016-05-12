@@ -55,7 +55,6 @@ void run_tests()
    RUN_TESTS(test_grep);
    RUN_TESTS(test_non_marking_paren);
    RUN_TESTS(test_partial_match);
-   RUN_TESTS(test_options2);
 #ifndef TEST_THREADS
    RUN_TESTS(test_en_locale);
 #endif
