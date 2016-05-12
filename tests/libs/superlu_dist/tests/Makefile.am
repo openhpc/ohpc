@@ -8,7 +8,6 @@ superlupara_FCFLAGS           = -c
 
 check_PROGRAMS               += superlu_mod
 superlu_mod_SOURCES           = superlu_mod.f90
-superlu_mod_FCFLAGS           = -c
 
 check_PROGRAMS               += pddrive
 pddrive_SOURCES               = pddrive.c dcreate_matrix.c
