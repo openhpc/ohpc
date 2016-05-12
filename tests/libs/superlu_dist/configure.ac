@@ -39,7 +39,7 @@ else
 CFLAGS="-I ${SUPERLU_DIST_INC} ${CFLAGS}"
 CXXFLAGS="-I ${SUPERLU_DIST_INC} ${CXXFLAGS}"
 FFLAGS="-I ${SUPERLU_DIST_INC} ${FFLAGS}"
-LDFLAGS="-L${METIS_LIB} -L${SUPERLU_DIST_LIB} -lmetis -lsuperlu_dist -lopenblas ${LDFLAGS}"
+LDFLAGS="-L${METIS_LIB} -L${SUPERLU_DIST_LIB} -L ${OPENBLAS_LIB} -lmetis -lsuperlu_dist -lopenblas ${LDFLAGS}"
 fi
 
 
