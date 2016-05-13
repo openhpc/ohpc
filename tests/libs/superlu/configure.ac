@@ -35,9 +35,15 @@ AC_C_CONST
 
 # Define include path and library linkage from environment variables
 # which should be provided via module loads. 
+if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
+CFLAGS="-I${SUPERLU_INC} ${CFLAGS} -I ${MKLROOT}/include"
+FFLAGS="-I${SUPERLU_INC} ${FFLAGS} -I ${MKLROOT}/include"
+LDFLAGS="-L${SUPERLU_LIB} -lsuperlu -L$MKLROOT/lib/intel64 -lmkl_rt -lm ${LDFLAGS}"
+else
 CFLAGS="-I${SUPERLU_INC} ${CFLAGS}"
 FFLAGS="-I${SUPERLU_INC} ${FFLAGS}"
 LDFLAGS="-L${SUPERLU_LIB} -lsuperlu -L${OPENBLAS_LIB} -lopenblas ${LDFLAGS}"
+fi
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile)
