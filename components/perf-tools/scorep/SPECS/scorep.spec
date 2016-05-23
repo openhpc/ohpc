@@ -142,7 +142,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     -prefix=/tmp/%{install_path} \
     -exec-prefix= \
-	--with-frontend-compiler-suite=$compiler_suite \
+	--with-nocross-compiler-suite=$compiler_suite \
 	--with-mpi
 
 
