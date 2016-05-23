@@ -61,7 +61,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   1.4.2
+Version:   2.0.1
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
