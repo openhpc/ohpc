@@ -83,10 +83,8 @@ BuildRequires: libgomp
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
-BuildRequires: papi%{PROJ_DELIM}
-BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
-Requires: papi%{PROJ_DELIM}
-Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: cube%{PROJ_DELIM}
+Requires: cube%{PROJ_DELIM}
 
 %define debug_package %{nil}
 
