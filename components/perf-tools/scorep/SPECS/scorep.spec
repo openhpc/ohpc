@@ -129,12 +129,19 @@ export compiler_suite=intel
 
 %if %{mpi_family} == impi
 export mpi_suite=intel3
+export MPI_DIR=$I_MPI_ROOT
+export MPI_INCLUDE_DIR=$MPI_DIR/include64
+export MPI_LIB_DIR=$MPI_DIR/lib64
 %endif
 %if %{mpi_family} == mvapich2
 export mpi_suite=mpich2
+export MPI_INCLUDE_DIR=$MPI_DIR/include
+export MPI_LIB_DIR=$MPI_DIR/lib
 %endif
 %if %{mpi_family} == openmpi
 export mpi_suite=openmpi
+export MPI_INCLUDE_DIR=$MPI_DIR/include
+export MPI_LIB_DIR=$MPI_DIR/lib
 %endif
 
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
