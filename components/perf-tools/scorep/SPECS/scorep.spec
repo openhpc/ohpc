@@ -116,8 +116,6 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
-module load papi
-module load pdtoolkit
 module load cube
 
 %if %{compiler_family} == gnu
