@@ -112,10 +112,6 @@ Score-P is available under the New BSD Open Source license.
 %prep
 %setup -q -n %{pname}-%{version}
 
-%ifarch x86_64
-sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
-%endif
-
 %build
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
