@@ -44,5 +44,5 @@ int ComputeWAXPBY(const local_int_t n, const double alpha, const Vector & x,
 
   // This line and the next two lines should be removed and your version of ComputeWAXPBY should be used.
   isOptimized = false;
-  return(ComputeWAXPBY_ref(n, alpha, x, beta, y, w));
+  return ComputeWAXPBY_ref(n, alpha, x, beta, y, w);
 }

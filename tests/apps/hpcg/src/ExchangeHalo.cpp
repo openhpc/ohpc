@@ -18,7 +18,8 @@
  HPCG routine
  */
 
-#ifndef HPCG_NOMPI  // Compile this routine only if running in parallel
+// Compile this routine only if running with MPI
+#ifndef HPCG_NO_MPI
 #include <mpi.h>
 #include "Geometry.hpp"
 #include "ExchangeHalo.hpp"
@@ -107,4 +108,5 @@ void ExchangeHalo(const SparseMatrix & A, Vector & x) {
 
   return;
 }
-#endif // ifndef HPCG_NOMPI
+#endif
+// ifndef HPCG_NO_MPI

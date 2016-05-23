@@ -43,11 +43,13 @@
 
   @return returns 0 upon success and non-zero otherwise
 
+  @warning Early versions of this kernel (Version 1.1 and earlier) had the r and x arguments in reverse order, and out of sync with other kernels.
+
   @see ComputeSYMGS_ref
 */
-int ComputeSYMGS( const SparseMatrix & A, const Vector & x, Vector & y) {
+int ComputeSYMGS( const SparseMatrix & A, const Vector & r, Vector & x) {
 
   // This line and the next two lines should be removed and your version of ComputeSYMGS should be used.
-  return(ComputeSYMGS_ref(A, x, y));
+  return ComputeSYMGS_ref(A, r, x);
 
 }

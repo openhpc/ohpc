@@ -65,7 +65,7 @@ EOF
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
 name=OpenHPC-1 - Base
-baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}:/Factory/%{_repository}
+baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
@@ -81,7 +81,7 @@ EOF
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
 name=OpenHPC-1 - Base
-baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/%{_repository}
+baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}:/Factory/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
 
@@ -108,9 +108,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-/etc/ohpc-release
-%{__repodir}/OpenHPC.repo
-/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+%config /etc/ohpc-release
+
+%if 0%{?sles_version} || 0%{?suse_version}
+%dir /etc/zypp
+%endif
+
+%{__repodir}
+/etc/pki
 
 %changelog
 

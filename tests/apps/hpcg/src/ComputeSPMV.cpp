@@ -41,5 +41,5 @@ int ComputeSPMV( const SparseMatrix & A, Vector & x, Vector & y) {
 
   // This line and the next two lines should be removed and your version of ComputeSPMV should be used.
   A.isSpmvOptimized = false;
-  return(ComputeSPMV_ref(A, x, y));
+  return ComputeSPMV_ref(A, x, y);
 }

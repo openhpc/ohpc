@@ -2,14 +2,15 @@
 Performance tuning and setting up the input data file hpcg.dat
 ==============================================================
  
-Current as of release HPCG - 2.4 - June 3, 2014
+Current as of release HPCG - 3.0 - November 11, 2015
 
-Check  the  website  http://software.sandia.gov/hpcg  for  the latest
+Check  the  website  http://hpcg-benchmark.org/ for  the latest
 information.
 
-After  building  the executable hpcg/bin/xhpcg, one  may want  to  modify the
+After  building  the executable hpcg_build/bin/xhpcg, (where hpcg_build is your
+build directory for HPCG) one  may want  to  modify the
 input  data  file  hpcg.dat.  This file should  reside  in  the  same directory
-as  the  executable hpcg/bin/xhpcg.   An  example  hpcg.dat  file is provided
+as  the  executable hpcg_build/bin/xhpcg.   An  example  hpcg.dat  file is provided
 by default.  This  file  contains  information about the problem sizes,
 machine configuration,  and  algorithm features to be used by the executable.
 It is 4 lines long. All the selected parameters  will  be  printed in the

@@ -25,7 +25,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   6.0.10
+Version:   6.0.24
 Release:   1
 License:   MIT
 Group:     ohpc/admin

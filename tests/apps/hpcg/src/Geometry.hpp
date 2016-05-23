@@ -81,7 +81,7 @@ inline int ComputeRankOfMatrixRow(const Geometry & geom, global_int_t index) {
   global_int_t ipy = iy/geom.ny;
   global_int_t ipx = ix/geom.nx;
   int rank = ipx+ipy*geom.npx+ipz*geom.npy*geom.npx;
-  return(rank);
+  return rank;
 }
 
 

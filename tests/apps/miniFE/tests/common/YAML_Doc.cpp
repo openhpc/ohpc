@@ -10,6 +10,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #endif
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 #include "YAML_Doc.hpp"
 using namespace std;
 
@@ -43,8 +46,13 @@ string YAML_Doc::generateYAML(){
   ptm = localtime(&rawtime);
   char sdate[25];
   //use tm_mon+1 because tm_mon is 0 .. 11 instead of 1 .. 12
+#ifdef _OPENMP
+  sprintf (sdate,"%04d:%02d:%02d-%02d:%02d:%02d:OMP%04d",ptm->tm_year + 1900, ptm->tm_mon+1,
+    ptm->tm_mday, ptm->tm_hour, ptm->tm_min,ptm->tm_sec, omp_get_max_threads());
+#else
   sprintf (sdate,"%04d:%02d:%02d-%02d:%02d:%02d",ptm->tm_year + 1900, ptm->tm_mon+1,
     ptm->tm_mday, ptm->tm_hour, ptm->tm_min,ptm->tm_sec);
+#endif
 
   string filename;
   if (destinationFileName=="") 

@@ -1,0 +1,21 @@
+\mrsh{} is a secure remote shell utility, like {\em ssh}, which uses
+\MUNGE{} for authentication and encryption. By using the \MUNGE{}
+installation used by \SLURM{}, \mrsh{} provides passwordless shell
+access on systems using the same \MUNGE{} key without having to track
+{\em ssh} keys. Like {\em ssh}, \mrsh{} provides a remote copy command,
+{\em mrcp}, and can be used as a {\em rcmd} by {\em pdsh}.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [ ${enable_mrsh} -eq 1 ];then
+% ohpc_indent 5
+% ohpc_validation_comment Install mrsh
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install mrsh
+[sms](*\#*) (*\install*) mrsh-ohpc mrsh-rsh-compat-ohpc
+[sms](*\#*) (*\chrootinstall*) mrsh-ohpc mrsh-rsh-compat-ohpc mrsh-server-ohpc
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
