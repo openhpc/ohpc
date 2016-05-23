@@ -144,7 +144,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
     -prefix=/tmp/%{install_path} \
     -exec-prefix= \
 	--with-nocross-compiler-suite=$compiler_suite \
-	--with-mpi=$mpi_suite
+	--with-mpi=$mpi_suite || echo config.log
 
 
 make install
