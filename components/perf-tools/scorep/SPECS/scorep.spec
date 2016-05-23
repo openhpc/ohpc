@@ -120,12 +120,15 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 module load papi
 module load pdtoolkit
+module load cube
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
+export compiler_suite=gcc
 %endif
 %if %{compiler_family} == intel
 export fcomp=mpiifort
+export compiler_suite=intel
 %endif
 
 %if %{mpi_family} == impi
@@ -143,21 +146,8 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     -prefix=/tmp/%{install_path} \
     -exec-prefix= \
-	-c++=mpicxx \
-	-cc=mpicc \
-	-fortran=$fcomp \
-	-iowrapper \
-	-mpi \
-	-mpiinc=$MPI_INCLUDE_DIR \
-	-mpilib=$MPI_LIB_DIR \
-	-slog2 \
-	-PROFILEPARAM \
-    -papi=$PAPI_DIR \
-	-pdt=$PDTOOLKIT_DIR \
-	-CPUTIME \
-	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
-	-openmp \
-	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib"
+	--with-frontend-compiler-suite=$compiler_suite \
+	--with-mpi
 
 
 make install
