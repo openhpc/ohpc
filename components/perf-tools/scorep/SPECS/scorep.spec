@@ -128,12 +128,13 @@ export compiler_suite=intel
 %endif
 
 %if %{mpi_family} == impi
-export MPI_DIR=$I_MPI_ROOT
-export MPI_INCLUDE_DIR=$MPI_DIR/include64
-export MPI_LIB_DIR=$MPI_DIR/lib64
-%else
-export MPI_INCLUDE_DIR=$MPI_DIR/include
-export MPI_LIB_DIR=$MPI_DIR/lib
+export mpi_suite=intel3
+%endif
+%if %{mpi_family} == mvapich2
+export mpi_suite=mpich2
+%endif
+%if %{mpi_family} == openmpi
+export mpi_suite=openmpi
 %endif
 
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
@@ -143,7 +144,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
     -prefix=/tmp/%{install_path} \
     -exec-prefix= \
 	--with-nocross-compiler-suite=$compiler_suite \
-	--with-mpi
+	--with-mpi=$mpi_suite
 
 
 make install
@@ -213,16 +214,9 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded papi]  } {
-        module load papi
+    if {  ![is-loaded cube]  } {
+        module load cube
     }
-    if {  ![is-loaded pdtoolkit]  } {
-        module load pdtoolkit
-    }
-}
-
-if [ module-info mode remove ] {
-    module unload pdtoolkit
 }
 
 EOF
