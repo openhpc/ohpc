@@ -148,8 +148,7 @@ export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
 export BUILDROOT=%buildroot%{install_path}
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
-    -prefix=/tmp/%{install_path} \
-    -exec-prefix= \
+    -prefix=%{install_path} \
 	--with-nocross-compiler-suite=$compiler_suite \
 	--with-mpi=$mpi_suite || cat build-mpi/config.log
 
@@ -160,19 +159,9 @@ make exports
 
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
-pushd /tmp
-export tmp_path=%{install_path}
-mv ${tmp_path#*/} %buildroot%{install_path}/..
-popd
 pushd %{buildroot}%{install_path}/bin
-sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 rm -f scorep_java
 popd
-
-sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
-sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile
-#sed -i 's|/home/abuild/rpmbuild/BUILD/scorep-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
-#sed -i 's|/home/abuild/rpmbuild/BUILD/scorep-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 
 rm -rf %{install_path}/examples
 rm -rf %buildroot%{install_path}/examples
@@ -183,7 +172,6 @@ rm -f %{install_path}/.active_stub*
 
 # clean libs
 pushd %buildroot%{install_path}/lib
-sed -i 's|/tmp||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 rm -f libjogl*
 popd
 
