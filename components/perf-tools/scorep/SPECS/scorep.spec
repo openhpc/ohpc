@@ -150,7 +150,9 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     -prefix=%{install_path} \
 	--with-nocross-compiler-suite=$compiler_suite \
-	--with-mpi=$mpi_suite || cat build-mpi/config.log
+	--with-mpi=$mpi_suite \
+    --without-opari2 \
+    --without-otf2 
 
 
 make install
