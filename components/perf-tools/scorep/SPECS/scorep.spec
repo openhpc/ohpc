@@ -77,7 +77,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 %if 0%{?suse_version}
 BuildRequires: libgomp1
 %else
-BuildRequires: libgomp
+BuildRequires: libgomp opari2 otf2
 %endif
 
 BuildRequires: postgresql-devel binutils-devel
@@ -150,9 +150,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     -prefix=%{install_path} \
 	--with-nocross-compiler-suite=$compiler_suite \
-	--with-mpi=$mpi_suite \
-    --without-opari2 \
-    --without-otf2 
+	--with-mpi=$mpi_suite 
 
 
 make install
