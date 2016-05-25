@@ -87,6 +87,9 @@ popd
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 popd
+pushd %{buildroot}%{install_path}/share/cube
+sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+popd
 
 
 rm -rf %{install_path}/examples
