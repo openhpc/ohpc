@@ -149,6 +149,8 @@ export BUILDROOT=%buildroot%{install_path}
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     --prefix=%buildroot%{install_path} \
+    --enable-shared \
+    --disable-static \
 	--with-nocross-compiler-suite=$compiler_suite \
 	--with-mpi=$mpi_suite 
 
