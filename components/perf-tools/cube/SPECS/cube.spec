@@ -72,7 +72,7 @@ Cube 4.x can also read and display Cube 3.x data.
 
 export BUILDROOT=%buildroot%{install_path}
 ./configure \
-    -prefix=%{install_path} \
+    -prefix=/tmp/%{install_path} \
 
 make install
 #make exports
@@ -80,6 +80,13 @@ make install
 
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
+pushd /tmp
+export tmp_path=%{install_path}
+mv ${tmp_path#*/} %buildroot%{install_path}/..
+popd
+pushd %{buildroot}%{install_path}/bin
+sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+popd
 
 
 rm -rf %{install_path}/examples
