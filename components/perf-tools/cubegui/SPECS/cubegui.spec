@@ -34,8 +34,8 @@ Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 
-Requires: cubelib qt
-BuildRequires: cubelib qt qt-devel dbus-devel
+Requires: cubelib%{PROJ_DELIM} qt
+BuildRequires: cubelib%{PROJ_DELIM} qt qt-devel dbus-devel
 
 %define debug_package %{nil}
 
@@ -65,6 +65,7 @@ Cube 4.x can also read and display Cube 3.x data.
 %build
 
 # module load qt
+module load cubelib
 
 export BUILDROOT=%buildroot%{install_path}
 ./configure \
