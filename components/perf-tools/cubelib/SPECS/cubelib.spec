@@ -69,6 +69,12 @@ pushd /tmp
 export tmp_path=%{install_path}
 mv ${tmp_path#*/} %buildroot%{install_path}/..
 popd
+pushd %{buildroot}%{install_path}/lib
+sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+popd
+pushd %{buildroot}%{install_path}/share/example
+sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+popd
 pushd %{buildroot}%{install_path}/share/cubelib
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 popd
