@@ -57,27 +57,27 @@ Score-P's profiles.
 
 export BUILDROOT=%buildroot%{install_path}
 ./configure \
-    -prefix=/tmp/%{install_path} \
+    -prefix=%{install_path} \
 
-make install
+make install DESTDIR=$RPM_BUILD_ROOT/%{install_path}
 #make exports
 
 
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
-pushd /tmp
-export tmp_path=%{install_path}
-mv ${tmp_path#*/} %buildroot%{install_path}/..
-popd
-pushd %{buildroot}%{install_path}/lib
-sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-popd
-pushd %{buildroot}%{install_path}/share/doc/cubelib/example
-sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-popd
-pushd %{buildroot}%{install_path}/share/cubelib
-sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-popd
+#pushd /tmp
+#export tmp_path=%{install_path}
+#mv ${tmp_path#*/} %buildroot%{install_path}/..
+#popd
+#pushd %{buildroot}%{install_path}/lib
+#sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+#popd
+#pushd %{buildroot}%{install_path}/share/doc/cubelib/example
+#sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+#popd
+#pushd %{buildroot}%{install_path}/share/cubelib
+#sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+#popd
 
 
 rm -rf %{install_path}/examples
