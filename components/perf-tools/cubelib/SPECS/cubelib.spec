@@ -63,8 +63,6 @@ make install DESTDIR=$RPM_BUILD_ROOT/%{install_path}
 #make exports
 
 
-rm -rf %buildroot
-mkdir -p %buildroot%{install_path}
 #pushd /tmp
 #export tmp_path=%{install_path}
 #mv ${tmp_path#*/} %buildroot%{install_path}/..
@@ -88,8 +86,8 @@ rm -f %{install_path}/.active_stub*
 
 
 # clean libs
-pushd %buildroot%{install_path}/lib
-popd
+#pushd %buildroot%{install_path}/lib
+#popd
 
 
 # OpenHPC module file
@@ -132,6 +130,9 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
