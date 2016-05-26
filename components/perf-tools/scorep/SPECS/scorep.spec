@@ -151,12 +151,12 @@ export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
 export BUILDROOT=%buildroot%{install_path}
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
-    --prefix=%buildroot%{install_path} \
+    --prefix=%{install_path} \
 	--with-nocross-compiler-suite=$compiler_suite \
-	--with-mpi=$mpi_suite 
+	--with-mpi=$mpi_suite
 
 
-make install
+make install DESTDIR=$RPM_BUILD_ROOT
 make exports
 
 
