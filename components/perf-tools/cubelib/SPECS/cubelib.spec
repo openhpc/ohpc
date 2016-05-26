@@ -53,9 +53,6 @@ Score-P's profiles.
 
 %build
 
-# module load qt
-
-#export BUILDROOT=%buildroot%{install_path}
 ./configure \
     --prefix=%{install_path}
 
@@ -63,31 +60,12 @@ make install DESTDIR=$RPM_BUILD_ROOT
 #make exports
 
 
-#pushd /tmp
-#export tmp_path=%{install_path}
-#mv ${tmp_path#*/} %buildroot%{install_path}/..
-#popd
-#pushd %{buildroot}%{install_path}/lib
-#sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-#popd
-#pushd %{buildroot}%{install_path}/share/doc/cubelib/example
-#sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-#popd
-#pushd %{buildroot}%{install_path}/share/cubelib
-#sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-#popd
-
 
 rm -rf %{install_path}/examples
 rm -rf %buildroot%{install_path}/examples
 rm -f %{install_path}/.last_config
 rm -f %{install_path}/.all_configs
 rm -f %{install_path}/.active_stub*
-
-
-# clean libs
-#pushd %buildroot%{install_path}/lib
-#popd
 
 
 # OpenHPC module file
