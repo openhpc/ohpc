@@ -84,7 +84,9 @@ BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
 BuildRequires: cube%{PROJ_DELIM}
+BuildRequires: cubelib%{PROJ_DELIM}
 Requires: cube%{PROJ_DELIM}
+Requires: cubelib%{PROJ_DELIM}
 
 %define debug_package %{nil}
 
@@ -117,6 +119,7 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 module load cube
+module load cubelib
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
