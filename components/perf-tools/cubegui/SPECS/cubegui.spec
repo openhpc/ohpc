@@ -34,8 +34,15 @@ Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 
-Requires: cubelib%{PROJ_DELIM} qt
-BuildRequires: cubelib%{PROJ_DELIM} qt qt-devel dbus-devel
+%if 0%{?suse_version}
+BuildRequires: libqt4-devel dbus-1-devel
+Requires: libqt4
+%else
+BuildRequires: qt4-devel zlib-devel dbus-devel
+Requires: qt qt-x11
+%endif
+BuildRequires: cubelib%{PROJ_DELIM}
+Requires: cubelib%{PROJ_DELIM}
 
 %define debug_package %{nil}
 
