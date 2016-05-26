@@ -55,7 +55,7 @@ Score-P's profiles.
 
 # module load qt
 
-export BUILDROOT=%buildroot%{install_path}
+#export BUILDROOT=%buildroot%{install_path}
 ./configure \
     -prefix=%{install_path} \
 
