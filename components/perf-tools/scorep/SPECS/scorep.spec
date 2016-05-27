@@ -85,6 +85,10 @@ Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
 BuildRequires: cube-%{compiler_family}%{PROJ_DELIM}
 Requires: cube-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: papi%{PROJ_DELIM}
+Requires: papi%{PROJ_DELIM}
+BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
 %define debug_package %{nil}
 
