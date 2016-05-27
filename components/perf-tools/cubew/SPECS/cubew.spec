@@ -33,7 +33,7 @@ Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 
-BuildRequires: zlib-devel
+BuildRequires: zlib-devel gcc-c++
 
 %define debug_package %{nil}
 
