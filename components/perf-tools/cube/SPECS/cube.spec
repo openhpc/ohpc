@@ -72,7 +72,7 @@ Requires: qt qt-x11
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{OHPC_PUB}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
  Cube, which is used as performance report explorer for Scalasca and Score-P,
@@ -114,8 +114,8 @@ rm -f %{install_path}/.active_stub*
 
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family/}%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -145,7 +145,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
