@@ -83,10 +83,8 @@ BuildRequires: libgomp
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
-BuildRequires: cube%{PROJ_DELIM}
-BuildRequires: cubelib%{PROJ_DELIM}
-Requires: cube%{PROJ_DELIM}
-Requires: cubelib%{PROJ_DELIM}
+BuildRequires: cube-%{compiler_family}%{PROJ_DELIM}
+Requires: cube-%{compiler_family}%{PROJ_DELIM}
 
 %define debug_package %{nil}
 
