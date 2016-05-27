@@ -157,8 +157,8 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
     --prefix=%{install_path} \
 	--with-nocross-compiler-suite=$compiler_suite \
 	--with-mpi=$mpi_suite \
-    --with-papi-header=$PAPI_INC/papi.h
-    --with-papi-lib=$PAPI_LIB
+    --with-papi-header=$PAPI_INC/papi.h \
+    --with-papi-lib=$PAPI_LIB \
     --with-pdt=$PDTOOLKIT_DIR/x86_64/bin \
     --disable-static \
     --enable-shared
