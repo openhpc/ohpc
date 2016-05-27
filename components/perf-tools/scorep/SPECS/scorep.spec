@@ -154,7 +154,6 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 
 
 make install DESTDIR=$RPM_BUILD_ROOT
-make exports
 
 
 rm -rf %buildroot
