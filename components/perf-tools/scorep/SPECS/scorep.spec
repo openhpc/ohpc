@@ -160,7 +160,6 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
     --with-papi-header=$PAPI_INC/papi.h \
     --with-papi-lib=$PAPI_LIB \
     --with-pdt=$PDTOOLKIT_DIR/x86_64/bin \
-    --disable-static \
     --enable-shared
 
 
@@ -169,6 +168,10 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 pushd %{buildroot}%{install_path}/bin
 rm -f scorep_java
+popd
+
+pushd %{buildroot}%{install_path}/lib
+rm -f *la
 popd
 
 rm -rf %{install_path}/examples
