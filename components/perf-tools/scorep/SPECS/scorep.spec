@@ -117,6 +117,8 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 module load cube
+module load papi
+module load pdtoolkit
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
@@ -150,7 +152,12 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     --prefix=%{install_path} \
 	--with-nocross-compiler-suite=$compiler_suite \
-	--with-mpi=$mpi_suite
+	--with-mpi=$mpi_suite \
+    --with-papi-header=$PAPI_INC/papi.h
+    --with-papi-lib=$PAPI_LIB
+    --with-pdt=$PDTOOLKIT_DIR/x86_64/bin \
+    --disable-static \
+    --enable-shared
 
 
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -208,6 +215,12 @@ setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded cube]  } {
         module load cube
+    }
+    if {  ![is-loaded papi]  } {
+        module load papi
+    }
+    if {  ![is-loaded pdtoolkit]  } {
+        module load pdtoolkit
     }
 }
 
