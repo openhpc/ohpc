@@ -10,6 +10,34 @@
 
 %include %{_sourcedir}/OHPC_macros
 
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
+# MPI family; however, these can be overridden by specifing the
+# compiler_family variable via rpmbuild or other
+# mechanisms.
+
+%{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family: %define mpi_family openmpi}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency.
+%if !0%{?opensuse_bs}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
+# Compiler dependencies
+BuildRequires: coreutils
+%if %{compiler_family} == gnu
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
+%endif
+%if %{compiler_family} == intel
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+%if 0%{?OHPC_BUILD}
+BuildRequires: intel_licenses
+%endif
+%endif
+
 #-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
@@ -17,7 +45,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
-Name: %{pname}%{PROJ_DELIM}
+Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
 
 Version:   4.3.4
 Release:   1%{?dist}
@@ -67,8 +95,9 @@ Cube 4.x can also read and display Cube 3.x data.
 
 
 %build
-
-# module load qt
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
 ./configure \
     -prefix=%{install_path} \
