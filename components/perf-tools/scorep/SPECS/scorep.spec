@@ -156,8 +156,6 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 make install DESTDIR=$RPM_BUILD_ROOT
 
 
-rm -rf %buildroot
-mkdir -p %buildroot%{install_path}
 pushd %{buildroot}%{install_path}/bin
 rm -f scorep_java
 popd
