@@ -6,7 +6,7 @@ delim=ohpc
 pubdir=/opt/${delim}/pub
 modscanner=../../../OHPC_mod_generator.sh
 
-version=5.1.1.109  # 1.1
+version=5.1.1.109  # 1.0
 version=5.1.3.181  # 1.1
 
 input_dir=l_mpi_p_${version}
