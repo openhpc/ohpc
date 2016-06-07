@@ -1,0 +1,45 @@
+Sequential tests
+================
+They should be put into ./programs and built/run by make check.
+Note that MPI codes cannot run on supercomputer login nodes, even if you have
+a single process (i.e. adios write API must be tested in parallel).
+
+- Put your source and extra input into ./programs
+- Edit the ./programs/Makefile.am to build your code. Follow the instructions
+  in Makefile.am
+- make check
+  will build all codes defined in check_PROGRAMS, and runs those that are 
+  defined in TESTS in the Makefile.am
+
+Parallel tests
+==============
+test.sh runs all .sh script found in ./tests, so you need to make your new 
+shell script in ./tests.
+
+The script has no arguments but a few environment variables are set:
+  MPIRUN        Run command
+  MPIRUN_NP     Run commands option to set number of processes
+  MAXPROCS      Max number of processes allowed
+  HAVE_FORTRAN  yes or no. If no, do not try to use the Fortran examples...
+  SRCDIR        Test source dir where the test.sh is executed from.
+                Your script is in $1/tests (== `dirname $0`)
+                $1/references should store the data to which you compare
+                  the test run
+                $1/programs should contain the binaries you use and are 
+                  built with "make check"
+  TRUNKDIR      ADIOS trunk dir
+                all sources, tests and examples are accessible from this dir
+
+Your parallel test program should be executed as 
+$MPIRUN $MPIRUN_NP <yourcode>
+
+The test.sh creates a ./work.testname/ subdirectory, enters it and runs your
+script from there.
+All stdout and stderr of your script goes into ../log.<testname>
+
+Your script should exit normally (exit 0) if everything is fine, and exit 1 
+on error (or any non-zero). exit 77 means skipping this test (a'la automake).
+Print useful error logs to stdout/stderr to help find the tester what went 
+wrong. 
+
+

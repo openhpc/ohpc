@@ -1,0 +1,224 @@
+
+LIBS = $(FFTW_LIBS) $(SCALAPACK_LIBS) $(BLAS_LIBS)
+
+DFLAGS +=  -D__FFTW3 -D__MPI -D__SCALAPACK
+
+CFLAGS += $(DFLAGS)
+
+FFLAGS +=  $(FFTW_INCL) $(DFLAGS)
+
+OBJECTS = \
+	kind.o \
+	constants.o \
+	radial_grids.o \
+	atom.o \
+	io_global.o \
+	parallel_include.o \
+	mp.o \
+	mp_global.o \
+	parser.o \
+	parameters.o \
+	input_parameters.o \
+	io_files.o \
+	control_flags.o \
+	cell_base.o \
+	check_stop.o \
+	clocks.o \
+	fft_types.o \
+	fft_base.o \
+	random_numbers.o \
+	ions_base.o \
+	descriptors.o \
+	electrons_base.o \
+	version.o \
+	environment.o \
+	error_handler.o \
+	fft_scalar.o \
+	fft_custom.o \
+	fft_parallel.o \
+	fft_interfaces.o \
+	wrappers.o \
+	recvec.o \
+	funct.o \
+	griddim.o \
+	image_io_routines.o \
+	mp_base.o \
+	mp_image_global_module.o \
+	pseudo_types.o \
+	zhpev_drv.o \
+	ptoolkit.o \
+	read_cards.o \
+	read_namelists.o \
+	uspp.o \
+	upf_nml.o \
+	upf.o \
+	upf_to_internal.o \
+	read_pseudo.o \
+	recvec_subs.o \
+	run_info.o \
+	set_signal.o \
+	splinelib.o \
+	stick_base.o \
+	stick_set.o \
+	wavefunctions.o \
+	\
+	c_mkdir.o \
+	cptimer.o \
+	customize_signals.o \
+	eval_infix.o \
+	fft_stick.o \
+	md5.o \
+	md5_from_file.o \
+	memstat.o \
+	stack.o \
+	\
+	atomic_number.o \
+	capital.o \
+	cryst_to_car.o \
+	date_and_tim.o \
+	distools.o \
+	dylmr2.o \
+	erf.o \
+	find_free_unit.o \
+	flush_unit.o \
+	functionals.o \
+	inpfile.o \
+	int_to_char.o \
+	invmat.o \
+	latgen.o \
+	lsda_functionals.o \
+	matches.o \
+	recips.o \
+	remove_tot_torque.o \
+	rgen.o \
+	simpsn.o \
+	sort.o \
+	sph_bes.o \
+	trimcheck.o \
+	volume.o \
+	ylmr2.o \
+	\
+	pwcom.o \
+	symm_base.o \
+	start_k.o \
+	scf_mod.o \
+	a2fmod.o \
+	buffers.o \
+	input.o \
+	becmod.o \
+	add_vuspsi.o \
+	allocate_fft.o \
+	allocate_locpot.o \
+	allocate_nlpot.o \
+	allocate_wfc.o \
+	atomic_rho.o \
+	atomic_wfc.o \
+	g_psi_mod.o \
+	c_bands.o \
+	ccgdiagg.o \
+	cdiaghg.o \
+	cegterg.o \
+	symme.o \
+	close_files.o \
+	coset.o \
+	data_structure.o \
+	deriv_drhoc.o \
+	divide.o \
+	divide_et_impera.o \
+	drhoc.o \
+	dvloc_of_g.o \
+	clean_pw.o \
+	compute_deff.o \
+	newd.o \
+	electrons.o \
+	eqvect.o \
+	ewald.o \
+	force_cc.o \
+	force_corr.o \
+	force_ew.o \
+	force_lc.o \
+	force_us.o \
+	forces.o \
+	g2_kin.o \
+	g_psi.o \
+	gen_us_dj.o \
+	gen_us_dy.o \
+	gk_sort.o \
+	gradcorr.o \
+	h_1psi.o \
+	h_psi.o \
+	hinit0.o \
+	init_at_1.o \
+	openfil.o \
+	init_run.o \
+	init_us_1.o \
+	init_us_2.o \
+	init_vloc.o \
+	interpolate.o \
+	irrek.o \
+	iweights.o \
+	kpoint_grid.o \
+	lchk_tauxk.o \
+	memory_report.o \
+	mix_rho.o \
+	multable.o \
+	n_plane_waves.o \
+	para.o \
+	potinit.o \
+	print_clock_pw.o \
+	print_ks_energies.o \
+	punch.o \
+	read_input.o \
+	pwscf.o \
+	remove_atomic_rho.o \
+	rotate_wfc.o \
+	rotate_wfc_k.o \
+	s_1psi.o \
+	s_psi.o \
+	save_in_cbands.o \
+	save_in_electrons.o \
+	save_in_ions.o \
+	set_kup_and_kdw.o \
+	set_rhoc.o \
+	set_vrs.o \
+	setlocal.o \
+	setup.o \
+	stop_run.o \
+	stres_cc.o \
+	stres_ewa.o \
+	stres_gradcorr.o \
+	stres_har.o \
+	stres_knl.o \
+	stres_loc.o \
+	stres_us.o \
+	stress.o \
+	struct_fact.o \
+	sum_band.o \
+	summary.o \
+	usnldiag.o \
+	v_of_rho.o \
+	vloc_of_g.o \
+	vloc_psi.o \
+	weights.o \
+	wfcinit.o 
+
+
+all: mini_dft $(if $(USE_HPCTK), mini_dft.hpcstruct)
+
+%.o : %.f90 
+	$(FC) $(FFLAGS) -c $<
+
+mini_dft: $(OBJECTS)
+	 $(LD) $(LDFLAGS) -o $@ $(OBJECTS) $(LIBS) $(IPM)
+	 -rm -f mini_dft.hpcstruct
+
+mini_dft.hpcstruct: mini_dft
+	 hpcstruct $<
+
+.PHONY = clean
+clean:
+	-rm -f *~ *.o *.mod mini_dft
+
+.PHONY = tarball
+tarball:
+	tar -czf mini_dft.tar.gz Makefile *.UPF *.UPF.nml *.h *.c *.f *.f90

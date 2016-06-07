@@ -1,36 +1,33 @@
-% begin_fsp_run
-% fsp_validation_comment -----------------------------------------------------------------------------------------
-% fsp_validation_comment  Example Installation Script Template
-% fsp_validation_comment  
-% fsp_validation_comment  This convenience script encapsulates command-line instructions highlighted in
-% fsp_validation_comment  the FSP Install Guide that can be used as a starting point to perform a local
-% fsp_validation_comment  cluster install beginning with bare-metal. Necessary inputs that describe local
-% fsp_validation_comment  hardware characteristics, desired network settings, and other customizations
-% fsp_validation_comment  are controlled via a companion input file that is used to initialize variables 
-% fsp_validation_comment  within this script.  
-% fsp_validation_comment   
-% fsp_validation_comment  Please see the FSP Install Guide for more information regarding the
-% fsp_validation_comment  procedure. Note that the section numbering included in this script refers to
-% fsp_validation_comment  corresponding sections from the install guide.
-% fsp_validation_comment  
-% fsp_validation_comment  FSP 15.31
-% fsp_validation_comment -----------------------------------------------------------------------------------------
-% fsp_validation_newline
+% begin_ohpc_run
+% ohpc_validation_comment -----------------------------------------------------------------------------------------
+% ohpc_validation_comment  Example Installation Script Template
+% ohpc_validation_comment  
+% ohpc_validation_comment  This convenience script encapsulates command-line instructions highlighted in
+% ohpc_validation_comment  the OpenHPC Install Guide that can be used as a starting point to perform a local
+% ohpc_validation_comment  cluster install beginning with bare-metal. Necessary inputs that describe local
+% ohpc_validation_comment  hardware characteristics, desired network settings, and other customizations
+% ohpc_validation_comment  are controlled via a companion input file that is used to initialize variables 
+% ohpc_validation_comment  within this script.
+% ohpc_validation_comment   
+% ohpc_validation_comment  Please see the OpenHPC Install Guide for more information regarding the
+% ohpc_validation_comment  procedure. Note that the section numbering included in this script refers to
+% ohpc_validation_comment  corresponding sections from the install guide.
+% ohpc_validation_comment -----------------------------------------------------------------------------------------
+% ohpc_validation_newline
 
-% fsp_command inputFile=${FSP_INPUT_LOCAL:-/opt/fsp/pub/doc/recipes/vanilla/input.local}
-% fsp_validation_newline
-% fsp_command if [ ! -e ${inputFile} ];then
-% fsp_command    echo "Error: Unable to access local input file -> ${inputFile}"
-% fsp_command    exit 1
-% fsp_command else
-% fsp_command    . ${inputFile} || { echo "Error sourcing ${inputFile}"; exit 1; }
-% fsp_command fi
+% ohpc_command inputFile=${OHPC_INPUT_LOCAL:-/opt/ohpc/pub/doc/recipes/vanilla/input.local}
+% ohpc_validation_newline
+% ohpc_command if [ ! -e ${inputFile} ];then
+% ohpc_command    echo "Error: Unable to access local input file -> ${inputFile}"
+% ohpc_command    exit 1
+% ohpc_command else
+% ohpc_command    . ${inputFile} || { echo "Error sourcing ${inputFile}"; exit 1; }
+% ohpc_command fi
 
-% fsp_validation_newline
-% fsp_validation_comment ------------------------------ Begin FSP Recipe -----------------------------------------
-% fsp_validation_comment Commands below are extracted from an FSP install guide recipe and are intended for 
-% fsp_validation_comment execution on the master SMS host.
-% fsp_validation_comment -----------------------------------------------------------------------------------------
+% ohpc_validation_newline
+% ohpc_validation_comment ---------------------------- Begin OpenHPC Recipe ---------------------------------------
+% ohpc_validation_comment Commands below are extracted from an OpenHPC install guide recipe and are intended for 
+% ohpc_validation_comment execution on the master SMS host.
+% ohpc_validation_comment -----------------------------------------------------------------------------------------
 
-
-% end_fsp_run
+% end_ohpc_run

@@ -1,0 +1,35 @@
+# example of remote services to check
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     CPU Load
+        check_command           check_nrpe!check_load
+        }
+
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     Total Processes
+        check_command           check_nrpe!check_total_procs
+        }
+
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     Current Users
+        check_command           check_nrpe!check_users
+        }
+
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     SSH Monitoring
+        check_command           check_nrpe!check_ssh
+        }
+
+define service{
+        use                     generic-service
+        hostgroup_name          compute
+        service_description     Zombie Processes
+        check_command           check_nrpe!check_zombie_procs
+        }

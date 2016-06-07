@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd "$(dirname "$0")" || exit 1
+
+pushd ohpc_module
+./test_module
+popd
+
+./build
+./rm_execution

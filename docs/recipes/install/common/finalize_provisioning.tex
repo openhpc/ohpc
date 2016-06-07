@@ -8,21 +8,22 @@ desired compute nodes.
 
 \subsubsection{Assemble bootstrap image}
 
-The bootstrap image includes the runtime kernel and associated modules. The
+The bootstrap image includes the runtime kernel and associated modules, as well
+as some simple scripts to complete the provisioning process. The
 following commands highlight the inclusion of additional drivers and creation
 of the bootstrap image based on the running kernel.
 
-% begin_fsp_run
-% fsp_comment_header Assemble bootstrap image \ref{sec:assemble_bootstrap}
+% begin_ohpc_run
+% ohpc_comment_header Assemble bootstrap image \ref{sec:assemble_bootstrap}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # (Optional) Include Lustre drivers; needed if enabling Lustre client on computes
-[master]$ export WW_CONF=/etc/warewulf/bootstrap.conf
-[master]$ echo "drivers += updates/kernel/" >> $WW_CONF
+[sms](*\#*) export WW_CONF=/etc/warewulf/bootstrap.conf
+[sms](*\#*) echo "drivers += updates/kernel/" >> $WW_CONF
 
 # Build bootstrap image
-[master]$ wwbootstrap `uname -r`
+[sms](*\#*) wwbootstrap `uname -r`
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \subsubsection{Assemble Virtual Node File System (VNFS) image}
 
@@ -30,12 +31,12 @@ With the local site customizations in place, the following step uses the
 \texttt{wwvnfs} command to assemble a VNFS capsule from the chroot environment
 defined for the {\em compute} instance. 
 
-% begin_fsp_run
-% fsp_validation_comment Assemble VNFS
+% begin_ohpc_run
+% ohpc_validation_comment Assemble VNFS
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ wwvnfs -y --chroot $CHROOT
+[sms](*\#*) wwvnfs -y --chroot $CHROOT
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \subsubsection{Register nodes for provisioning}
 
@@ -46,39 +47,39 @@ desired compute hostnames, node IPs, and MAC addresses which should be modified 
 accommodate local settings and hardware. Included in these steps are commands
 to enable \Warewulf{} to manage IPoIB settings and corresponding definitions of
 IPoIB addresses for the compute nodes. This is typically optional unless you
-are planning to include a \Lustre{} client mount over \InfiniBand{}.  The final step
+are planning to include a \Lustre{} client mount over \InfiniBand{}. The final step
 in this process associates the VNFS image assembled in previous steps with the
 newly defined compute nodes, utilizing the user credential files and munge key
 that were imported in \S\ref{sec:file_import}.
 
-%%% % begin_fsp_run
-%%% % fsp_validation_comment Add hosts to cluster
+%%% % begin_ohpc_run
+%%% % ohpc_validation_comment Add hosts to cluster
 %%% 
 %%% \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
 %%% # Define four compute nodes and network settings 
-%%% [master]$ wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
-%%% [master]$ wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
-%%% [master]$ wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
-%%% [master]$ wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+%%% [sms](*\#*) wwsh -y node new ${c_name[0]} --ipaddr=${c_ip[0]} --hwaddr=${c_mac[0]} -D ${eth_provision}
+%%% [sms](*\#*) wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
+%%% [sms](*\#*) wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
+%%% [sms](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
 %%% 
 %%% # Optionally register additional compute nodes
-%%% [master]$ for ((i=4; i<$num_computes; i++)) ; do
+%%% [sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
 %%%               wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
 %%%            done
 %%% 
 %%% # Define provisioning image for hosts
-%%% [master]$ wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
+%%% [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.1 --bootstrap=`uname -r` \
 %%%      --files=dynamic_hosts,passwd,group,shadow,munge.key 
 %%% 
 %%% # Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
-%%% [master]$ for ((i=0; i<$num_computes; i++)) ; do
+%%% [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
 %%%               wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
 %%%            done
-%%% [master]$ wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
+%%% [sms](*\#*) wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 %%% 
 %%% # Restart dhcp / update PXE
-%%% [master]$ service dhcpd restart
-%%% [master]$ wwsh pxe update
+%%% [sms](*\#*) sytemctl restart dhcpd
+%%% [sms](*\#*) wwsh pxe update
 %%% \end{lstlisting}
-%%% % end_fsp_run
+%%% % end_ohpc_run
 

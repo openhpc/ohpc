@@ -1,0 +1,19 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+@test "[conman] check for RPM" {
+    run check_if_rpm_installed "conman${DELIM}"
+    assert_success
+}
+
+@test "[conman] query conmand conman" {
+    run conman -q
+    assert_success
+}

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,8 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname sigar
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 %define debug_package %{nil}
 
 Name:		%{pname}%{PROJ_DELIM}
@@ -62,7 +63,7 @@ API to access this information regardless of the underlying platform.
 
 %package -n %{pname}-devel%{PROJ_DELIM}
 License:	ASL 2.0
-Group:		fsp/distro-packages
+Group:		%{PROJ_NAME}/distro-packages
 Summary:	SIGAR Development package - System Information Gatherer And Reporter
 Requires:	%{name} = %{version}-%{release}
 Provides:       %{pname}-devel

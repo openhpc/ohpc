@@ -1,0 +1,60 @@
+#!/bin/bash
+
+if [ $# != 4 ]; then
+echo "usage: run_one_test <np> <nx> <ny> <nz>"
+exit 1
+fi
+
+np=$1
+nx=$2
+ny=$3
+nz=$4
+
+echo " "
+echo "running miniFE test for np=${np}, nx=${nx} ny=${ny} nz=${nz}..."
+
+if [ ! -x miniFE.x ]; then
+echo "miniFE.x doesn't exist or isn't executable. Aborting."
+exit -1
+fi
+
+mpirun -np ${np} miniFE.x nx=${nx} ny=${ny} nz=${nz} >& miniFE_run.out
+rm miniFE_run.out
+
+if [ ! -f A.mtx.${np}.0 ]; then
+echo "matrix file A.mtx.${np}.0 doesn't exist. build miniFE with -DMINIFE_DEBUG."
+fi
+
+p=0
+while [ $p -lt ${np} ]; do
+diff A.mtx.${np}.$p gold_files/1x1x2_A.mtx.${np}.$p >& diff.A.$p.txt
+diff b.vec.${np}.$p gold_files/1x1x2_b.vec.${np}.$p >& diff.b.$p.txt
+diff x.vec.${np}.$p gold_files/1x1x2_x.vec.${np}.$p >& diff.x.$p.txt
+
+test_result="passed"
+if [ -s diff.A.$p.txt ]; then
+echo "TEST FAILED: see diff.A.${p}.txt"
+test_result="failed"
+fi
+
+if [ -s diff.b.$p.txt ]; then
+echo "TEST FAILED: see diff.b.${p}.txt"
+test_result="failed"
+fi
+
+if [ -s diff.x.$p.txt ]; then
+echo "TEST FAILED: see diff.x.${p}.txt"
+test_result="failed"
+fi
+
+if [ $test_result != "passed" ]; then
+echo "test failed"
+exit 1
+fi
+
+let p=p+1
+rm diff.*.txt
+done
+
+echo "tests passed"
+

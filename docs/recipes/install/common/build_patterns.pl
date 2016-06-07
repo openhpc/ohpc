@@ -9,7 +9,7 @@ my $urlColor="blue";
 my $REMOVE_HTTP=0;
 my $FIXD_WIDTH=1;
 
-my $filein="pattern-fsp.all";
+my $filein="pattern-ohpc.all";
 open(IN,"<$filein")  || die "Cannot open file -> $filein\n";
 
 my $fileout="patterns.tex";
@@ -38,7 +38,7 @@ my @summaryData = ();
 while(<IN>) {
     
     # example format
-    # fsp-autotools Collection of GNU autotools packages
+    # ohpc-autotools Collection of GNU autotools packages
 
     if($_ =~ /^(\S+) (.+)$/) {
 	my $name=$1;

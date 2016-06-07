@@ -1,0 +1,17 @@
+#!/bin/bash
+
+export MODULEPATH=./example-modules:$MODULEPATH
+module load test-module || exit 1
+if [ "$TEST_MODULE" != "beeblebrox" ]; then
+   exit 1
+fi
+
+# unload and make sure env variable is removed
+
+module del test-module || exit 1
+
+if [ "x$TEST_MODULE" != "x" ]; then
+   exit 1
+fi
+
+

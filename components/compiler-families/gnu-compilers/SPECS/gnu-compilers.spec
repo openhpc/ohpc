@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,31 +8,31 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname gnu-compilers
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 # Define subcomponent versions required for build
 
-%define gmp_version 6.0.0
+%define gmp_version 6.1.0
 %define mpc_version 1.0.3
-%define mpfr_version 3.1.2
-
+%define mpfr_version 3.1.3
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
-Version:   4.9.2
+Version:   5.3.0
 Release:   1
-License:   GPL-3.0+
-Group:     fsp/compiler-families
+License:   GNU GPL
+Group:     %{PROJ_NAME}/compiler-families
 URL:       http://gcc.gnu.org/
-DocDir:    %{FSP_PUB}/doc/contrib
-Source0:   gcc-%{version}.tar.bz2
-Source1:   gmp-%{gmp_version}a.tar.bz2
-Source2:   mpc-%{mpc_version}.tar.gz
-Source3:   mpfr-%{mpfr_version}.tar.bz2
-Source4:   FSP_macros
+DocDir:    %{OHPC_PUB}/doc/contrib
+Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.bz2
+Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
+Source2:   ftp://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
+#Source3:   http://www.mpfr.org/mpfr-current/mpfr-%{mpfr_version}.tar.gz
+Source3:   http://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
+Source4:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
@@ -53,7 +53,7 @@ BuildRequires:  fdupes
 %endif
 
 
-%define install_path %{FSP_COMPILERS}/gcc/%{version}
+%define install_path %{OHPC_COMPILERS}/gcc/%{version}
 
 %description
 
@@ -88,9 +88,9 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/share
 %endif
 
-# FSP module file
-%{__mkdir_p} %{buildroot}/%{FSP_MODULES}/gnu
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/gnu/%{version}
+# OpenHPC module file
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/gnu
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/gnu/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -117,12 +117,12 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib64
-prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/gnu
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/gnu
 
 family "compiler"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/gnu/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/gnu/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -145,8 +145,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc COPYING
 %doc COPYING3
 %doc NEWS

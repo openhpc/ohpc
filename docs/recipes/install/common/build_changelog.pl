@@ -6,10 +6,10 @@ use strict;
 my @compiler_familes = ("gnu","intel");
 my @mpi_families     = ("mvapich2","openmpi","impi");
 
-my $delim="fsp";
+my $delim="ohpc";
 my $merge_package_families = 0;
 
-my @single_package_exceptions = ("lmod-defaults-intel-fsp");
+my @single_package_exceptions = ("lmod-defaults-intel-ohpc");
 
 sub parse_changes {
     my $infile     = shift;
@@ -70,25 +70,25 @@ sub parse_changes {
 my $fileout="ChangeLog";
 open(OUT,">$fileout")  || die "Cannot open file -> $fileout\n";
 
-#parse_changes("pkg-fsp.chglog-add","        * [NEW] component added   - ");
-#parse_changes("pkg-fsp.chglog-upd","        * [UPD] component updated - ");
-#parse_changes("pkg-fsp.chglog-del","        * [DEL] component removed - ");
+#parse_changes("pkg-ohpc.chglog-add","        * [NEW] component added   - ");
+#parse_changes("pkg-ohpc.chglog-upd","        * [UPD] component updated - ");
+#parse_changes("pkg-ohpc.chglog-del","        * [DEL] component removed - ");
 
-### parse_changes("pkg-fsp.chglog-add","* [NEW] component added   - ");
-### parse_changes("pkg-fsp.chglog-upd","* [UPD] component updated - ");
-### parse_changes("pkg-fsp.chglog-del","* [DEL] component removed - ");
+### parse_changes("pkg-ohpc.chglog-add","* [NEW] component added   - ");
+### parse_changes("pkg-ohpc.chglog-upd","* [UPD] component updated - ");
+### parse_changes("pkg-ohpc.chglog-del","* [DEL] component removed - ");
 ### 
 ### print OUT "   [Component Changes]\n";
-### parse_changes("pkg-fsp.chglog-add","      * added   - ");
-### parse_changes("pkg-fsp.chglog-upd","      * updated - ");
-### parse_changes("pkg-fsp.chglog-del","      * removed - ");
+### parse_changes("pkg-ohpc.chglog-add","      * added   - ");
+### parse_changes("pkg-ohpc.chglog-upd","      * updated - ");
+### parse_changes("pkg-ohpc.chglog-del","      * removed - ");
 
 print OUT "   [Component Additions]\n";
-parse_changes("pkg-fsp.chglog-add","      * ");
+parse_changes("pkg-ohpc.chglog-add","      * ");
 print OUT "\n   [Component Version Changes]\n";
-parse_changes("pkg-fsp.chglog-upd","      * ");
+parse_changes("pkg-ohpc.chglog-upd","      * ");
 print OUT "\n   [Components Deprecated]\n";
-parse_changes("pkg-fsp.chglog-del","      * ");
+parse_changes("pkg-ohpc.chglog-del","      * ");
 
 close(OUT);
 

@@ -1,0 +1,34 @@
+#Uncomment the following line to enable OpenMP
+#USE_OPENMP = TRUE
+
+FFTW_INCL = -I/opt/fftw/3.3.0.1/x86_64/include
+FFTW_LIBS = -L/opt/fftw/3.3.0.1/x86_64/lib -lfftw3
+BLAS_LIBS =
+SCALAPACK_LIBS = 
+
+DFLAGS = -D__INTEL
+#DFLAGS += -D__IPM
+
+CC = cc 
+CFLAGS = -O2 
+
+FC = ftn 
+FFLAGS = -fpp -O2
+
+LD = ftn
+LDFLAGS =
+
+ifeq ($(USE_OPENMP), TRUE)
+
+  #note that this overrides the earlier definition of FFTW_LIBS
+  FFTW_LIBS  = -L/opt/fftw/3.3.0.1/x86_64/lib -lfftw3_threads -lfftw3 -lm
+
+  #ifort -openmp defines _OPENMP instead of__OPENMP
+  DFLAGS    += -D__OPENMP
+
+  FFLAGS    += -openmp
+  LDFLAGS   += -openmp
+
+endif
+
+include Makefile.base

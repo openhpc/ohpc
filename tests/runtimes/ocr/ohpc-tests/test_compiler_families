@@ -1,0 +1,39 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV         || exit 1
+source ./common/functions || exit 1
+
+cd runtimes/ocr           || exit 1
+
+export BATS_JUNIT_CLASS=OCR
+
+# bootstrap the local autotools project
+
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+
+    echo " "
+    echo " "
+    echo "----------------------------------------------------------"
+    echo "User Libraries: OCR tests: $compiler"
+    echo "----------------------------------------------------------"
+
+    module purge                || exit 1
+    module load $compiler       || exit 1
+    module load ocr             || exit 1
+
+    ./configure                 || exit 1
+    make clean >& /dev/null     || exit 1
+    make -k check               
+
+    save_logs_compiler_family tests $compiler
+    save_logs_compiler_family tests/ohpc_module $compiler
+
+    make distclean >& /dev/null
+
+done

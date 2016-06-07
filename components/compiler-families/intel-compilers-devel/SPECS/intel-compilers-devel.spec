@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,21 +8,21 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname intel-compilers-devel
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
-Version:   16.0.069
+Version:   16.2.181
 Release:   1
 License:   Intel(R)
-URL:       http://www.intel.com/software/products
-Group:     fsp/compiler-families
+URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
+Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-devel-fsp-16.0.0-069.tar.gz
-Source1:   FSP_macros
+Source0:   intel-compilers-devel%{PROJ_DELIM}-16.0.2-181.tar.gz
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
@@ -37,13 +37,13 @@ requires: intel-compilers%{PROJ_DELIM}
 %define debug_package %{nil}
 
 %define composer_release compilers_and_libraries_20%{version}
-%define package_target %{FSP_COMPILERS}/intel
+%define package_target %{OHPC_COMPILERS}/intel
 
 %define package_version %{version}
 
 %description
 
-FSP collection of development packages for Intel(R) Parallel Studio
+OpenHPC collection of development packages for Intel(R) Parallel Studio
 compiler suite (including compilers for C,C++, and Fortran).
 
 %prep
@@ -64,7 +64,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 
 %changelog
 

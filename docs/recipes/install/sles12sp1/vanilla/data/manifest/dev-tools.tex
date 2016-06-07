@@ -1,0 +1,70 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for R_base-ohpc
+\multirow{2}{*}{R\_base-ohpc} & 
+\multirow{2}{*}{3.2.3} & 
+R is a language and environment for statistical computing and graphics (S-Plus like).  { \color{logoblue} \url{http://www.r-project.org}} 
+\\ \hline 
+% <-- end entry for R_base-ohpc
+
+% <-- begin entry for autoconf-ohpc
+\multirow{2}{*}{autoconf-ohpc} & 
+\multirow{2}{*}{2.69} & 
+A GNU tool for automatically configuring source code. \newline { \color{logoblue} \url{http://www.gnu.org/software/autoconf}} 
+\\ \hline 
+% <-- end entry for autoconf-ohpc
+
+% <-- begin entry for automake-ohpc
+\multirow{2}{*}{automake-ohpc} & 
+\multirow{2}{*}{1.15} & 
+A GNU tool for automatically creating Makefiles. \newline { \color{logoblue} \url{http://www.gnu.org/software/automake}} 
+\\ \hline 
+% <-- end entry for automake-ohpc
+
+% <-- begin entry for intel-inspector-ohpc
+\multirow{2}{*}{intel-inspector-ohpc} & 
+\multirow{2}{*}{16.1.2.450824} & 
+Intel(R) Inspector XE. \newline { \color{logoblue} \url{https://software.intel.com/en-us/intel-parallel-studio-xe}} 
+\\ \hline 
+% <-- end entry for intel-inspector-ohpc
+
+% <-- begin entry for libtool-ohpc
+\multirow{2}{*}{libtool-ohpc} & 
+\multirow{2}{*}{2.4.6} & 
+The GNU Portable Library Tool. \newline { \color{logoblue} \url{http://www.gnu.org/software/libtool}} 
+\\ \hline 
+% <-- end entry for libtool-ohpc
+
+% <-- begin entry for python-numpy
+python-numpy-gnu-ohpc & 
+\multirow{2}{*}{1.10.2} & 
+\multirow{2}{\linewidth}{NumPy array processing for numbers, strings, records and objects.  {\color{logoblue} \url{http://sourceforge.net/projects/numpy}}} \\ 
+python-numpy-intel-ohpc & 
+& \\ 
+\hline
+% <-- end entry for python-numpy
+
+% <-- begin entry for python-scipy
+python-scipy-gnu-mvapich2-ohpc & 
+\multirow{2}{*}{0.16.1} & 
+\multirow{2}{\linewidth}{Scientific Tools for Python. \newline {\color{logoblue} \url{http://www.scipy.org}}} \\ 
+python-scipy-gnu-openmpi-ohpc & 
+& \\ 
+\hline
+% <-- end entry for python-scipy
+
+% <-- begin entry for valgrind-ohpc
+\multirow{2}{*}{valgrind-ohpc} & 
+\multirow{2}{*}{3.10.1} & 
+Valgrind Memory Debugger. \newline { \color{logoblue} \url{http://www.valgrind.org}} 
+\\ \hline 
+% <-- end entry for valgrind-ohpc
+
+\bottomrule
+\end{tabularx}

@@ -1,0 +1,28 @@
+TBB_BASE_DIR=/home/william/packages/tbb21_20080605oss
+
+OPTIONAL_DEFS=-DMINIFE_HAVE_TBB
+OPTIONAL_INCS=-I$(TBB_BASE_DIR)/include
+OPTIONAL_LIBS=-L$(TBB_BASE_DIR)/em64t/cc3.4.3_libc2.3.4_kernel2.6.9/lib	\
+	-ltbb -ltbbmalloc -lpthread
+
+#-----------------------------------------------------------------------
+
+MINIFE_TYPES =  \
+	-DMINIFE_SCALAR=float   \
+	-DMINIFE_LOCAL_ORDINAL=int      \
+	-DMINIFE_GLOBAL_ORDINAL=int
+
+#-----------------------------------------------------------------------
+
+CFLAGS = -O3
+CXXFLAGS = -O3
+CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES) $(OPTIONAL_INCS) $(OPTIONAL_DEFS)
+LDFLAGS =
+LIBS =
+
+CXX=g++
+CC=gcc
+
+include make_targets
+include ./optional/make_targets
+

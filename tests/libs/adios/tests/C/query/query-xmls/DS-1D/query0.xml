@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<query num="2" from-timestep="0" num-timesteps="1" batchsize="1024">
+
+    <output type="ADIOS_SELECTION_BOUNDINGBOX" dim="1" start="0" count="16"/>
+
+    <entry var="temp" op=">=" constraint="-1000.0"> 
+    </entry>
+    <entry var="temp" op="<=" constraint="1000.0"> 
+    </entry>
+
+    <combine op="AND"/>
+</query>

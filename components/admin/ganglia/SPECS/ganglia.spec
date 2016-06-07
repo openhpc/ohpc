@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,13 +8,13 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname ganglia
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
-%global gangver     3.7.1
-%global webver      3.6.2
+%global gangver     3.7.2
+%global webver      3.7.1
 
 %global systemd         1
 %global _hardened_build 1
@@ -23,20 +23,20 @@ Name:               %{pname}%{PROJ_DELIM}
 Version:            %{gangver}
 Release:            1%{?dist}
 Summary:            Distributed Monitoring System
-Group:              fsp/admin
+Group:              %{PROJ_NAME}/admin
 License:            BSD-3-Clause
 URL:                http://ganglia.sourceforge.net/
-DocDir:             %{FSP_PUB}/doc/contrib
-Source0:            ganglia-%{version}.tar.gz
-Source1:            ganglia-web-%{webver}.tar.gz
+DocDir:             %{OHPC_PUB}/doc/contrib
+Source0:            http://downloads.sourceforge.net/ganglia/ganglia-%{version}.tar.gz
+Source1:            http://downloads.sourceforge.net/ganglia/ganglia-web-%{webver}.tar.gz
 Source2:            gmond.service
 Source3:            gmetad.service
 Source4:            ganglia-httpd24.conf.d
-Source5:            ganglia-httpd.conf.d
 Source6:            conf.php
 Patch0:             ganglia-web-3.5.7-statedir.patch
-Patch1:             ganglia-3.7.1-py-syntax.patch
+#Patch1:             ganglia-3.7.1-py-syntax.patch
 Patch2:             ganglia-no-private-apr.patch
+Patch3:             ganglia-3.7.2-apache.patch
 %if 0%{?systemd}
 BuildRequires:      systemd
 %endif
@@ -60,6 +60,9 @@ BuildRequires:      apr-devel >= 1
 BuildRequires:      expat-devel
 BuildRequires:      libmemcached-devel
 %endif
+%if 0%{?suse_version} >= 1210
+BuildRequires: systemd-rpm-macros
+%endif
 
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
@@ -78,6 +81,9 @@ Requires:           php
 Requires:           php-gd
 Requires:           php-ZendFramework
 Requires:           %{pname}-gmetad%{PROJ_DELIM} = %{gangver}-%{release}
+%if 0%{?suse_version} >= 1210
+Requires:           apache2-mod_php5
+%endif
 
 %description -n %{pname}-web%{PROJ_DELIM}
 This package provides a web frontend to display the XML tree published by
@@ -158,9 +164,11 @@ programmers can use to build scalable cluster or grid applications
 install -m 0644 %{SOURCE2} gmond/gmond.service.in
 install -m 0644 %{SOURCE3} gmetad/gmetad.service.in
 
+%patch3 -p0
+
 # web part
 %setup -n ganglia-%{gangver} -q -T -D -a 1
-%patch1 -p1
+#%patch1 -p1
 mv ganglia-web-%{webver} web
 cd web
 %patch0 -p1
@@ -229,10 +237,10 @@ install -p -m 0644 %{SOURCE6} %{buildroot}%{_sysconfdir}/ganglia/conf.php
 ln -s ../../..%{_sysconfdir}/%{pname}/conf.php \
     $RPM_BUILD_ROOT%{_datadir}/%{name}/conf.php
 
-%if 0%{?fedora} >= 18
-install -Dp -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
+%if 0%{?sles_version} || 0%{?suse_version}
+install -Dp -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/apache2/conf.d/%{name}.conf
 %else
-install -Dp -m 0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
+install -Dp -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 %endif
 
 ## Various clean up after install:
@@ -256,7 +264,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 
 ## Use system php-ZendFramework
 rm -rf $RPM_BUILD_ROOT/usr/share/%{name}/lib/Zend
-ln -nsf /usr/share/php/Zend $RPM_BUILD_ROOT/usr/share/%{name}/lib/Zend
 
 # Remove execute bit
 chmod 0644 $RPM_BUILD_ROOT%{_datadir}/%{name}/header.php
@@ -269,33 +276,57 @@ sed -i '1{\@^#!@d}' $RPM_BUILD_ROOT%{_libdir}/%{pname}/python_modules/*.py
 
 %pre
 ## Add the "ganglia" user
-/usr/sbin/useradd -c "Ganglia Monitoring System" \
+/usr/sbin/useradd -U -c "Ganglia Monitoring System" \
         -s /sbin/nologin -r -d %{_localstatedir}/lib/%{pname} ganglia 2> /dev/null || :
-/sbin/ldconfig
+#/sbin/ldconfig -- this is already in post and postun, no reason to run it before
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %if 0%{?systemd}
 %post -n %{pname}-gmond%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_add_post gmond.service
+%else
 %systemd_post gmond.service
+%endif
 
 %preun -n %{pname}-gmond%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_del_preun gmond.service
+%else
 %systemd_preun gmond.service
+%endif
 
 %postun -n %{pname}-gmond%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_del_postun gmond.service
+%else
 %systemd_postun_with_restart gmond.service
+%endif
 
 %post -n %{pname}-gmetad%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_add_post gmetad.service
+%else
 %systemd_post gmetad.service
+%endif
 
 %preun -n %{pname}-gmetad%{PROJ_DELIM}
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_del_preun gmetad.service
+%else
 %systemd_preun gmetad.service
+%endif
 
 %postun -n %{pname}-gmetad%{PROJ_DELIM}
-%systemd_postun_with_restart gmetad.service
-
+%if 0%{?sles_version} || 0%{?suse_version}
+%service_del_postun gmetad.service
 %else 
+%systemd_postun_with_restart gmetad.service
+%endif
+
+%else
 
 %post -n %{pname}-gmond%{PROJ_DELIM}
 /sbin/chkconfig --add gmond
@@ -321,9 +352,15 @@ fi
 %postun -n %{pname}-devel%{PROJ_DELIM} -p /sbin/ldconfig
 
 %post -n %{pname}-web%{PROJ_DELIM}
-if [ ! -L /usr/share/ganglia/lib/Zend ]; then
-  ln -s /usr/share/php/Zend /usr/share/%{name}/lib/Zend
+if [ ! -L /usr/share/%{name}/lib/Zend ]; then
+  /usr/bin/ln -s /usr/share/php/Zend /usr/share/%{name}/lib/Zend
 fi
+%if 0%{?sles_version} || 0%{?suse_version}
+/usr/sbin/a2enmod php5
+/usr/bin/systemctl try-restart apache2.service
+%else
+/usr/bin/systemctl try-restart httpd.service
+%endif
 
 %files
 %doc AUTHORS COPYING NEWS README ChangeLog
@@ -380,9 +417,20 @@ fi
 %files -n %{pname}-web%{PROJ_DELIM}
 %doc web/AUTHORS web/COPYING web/README web/TODO
 %config(noreplace) %{_sysconfdir}/%{pname}/conf.php
+%if 0%{?sles_version} || 0%{?suse_version}
+%config(noreplace) %{_sysconfdir}/apache2/conf.d/%{name}.conf
+%else
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
+%endif
 %{_datadir}/%{name}
+%if 0%{?sles_version} || 0%{?suse_version}
+%dir %attr(0755,wwwrun,www) %{_localstatedir}/lib/%{pname}/conf
+%dir %attr(0755,wwwrun,www) %{_localstatedir}/lib/%{pname}/dwoo
+%dir %attr(0755,wwwrun,www) %{_localstatedir}/lib/%{pname}/dwoo/cache
+%dir %attr(0755,wwwrun,www) %{_localstatedir}/lib/%{pname}/dwoo/compiled
+%else
 %dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/conf
 %dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/dwoo
 %dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/dwoo/cache
 %dir %attr(0755,apache,apache) %{_localstatedir}/lib/%{pname}/dwoo/compiled
+%endif

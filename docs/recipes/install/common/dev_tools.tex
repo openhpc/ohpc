@@ -1,10 +1,13 @@
-To aid in general development efforts, \FSP{} provides recent versions of the \GNU{}
-autotools collection and the Valgrind memory debugger. These can be installed as follows:
+To aid in general development efforts, \OHPC{} provides recent versions of the \GNU{}
+autotools collection, the Valgrind memory debugger, EasyBuild, Spack, and R. These can be installed as follows:
 
-% begin_fsp_run
-% fsp_comment_header Install Development Tools \ref{sec:install_dev_tools}
+% begin_ohpc_run
+% ohpc_comment_header Install Development Tools \ref{sec:install_dev_tools}
 \begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
-[master]$ (*\groupinstall*) fsp-autotools
-[master]$ (*\install*) valgrind-fsp
+[sms](*\#*) (*\groupinstall*) ohpc-autotools
+[sms](*\#*) (*\install*) valgrind-ohpc
+[sms](*\#*) (*\install*) EasyBuild-ohpc
+[sms](*\#*) (*\install*) spack-ohpc
+[sms](*\#*) (*\install*) R_base-ohpc            
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run

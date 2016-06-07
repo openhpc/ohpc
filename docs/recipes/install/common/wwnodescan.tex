@@ -1,0 +1,17 @@
+\begin{center}
+\begin{tcolorbox}[]
+\small \Warewulf{} includes a utility named \texttt{wwnodescan} 
+to automatically register new compute nodes versus the outlined node-addition approach
+which requires hardware MAC addresses to be gathered in advance.  With
+\texttt{wwnodescan}, nodes will be added to the \Warewulf{} database in the
+order in which their DHCP requests are received by the master, so care must be
+taken to boot nodes in the order one wishes to see preserved in the Warewulf
+database. The IP address provided will be incremented after each node is found,
+and the utility will exit after all specified nodes have been found. Example
+usage is highlighted below:
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+[sms](*\#*) wwnodescan --netdev=${eth_provision} --ipaddr=${c_ip[0]} --netmask=${internal_netmask} \
+    --vnfs=BOSVER --bootstrap=`uname -r` ${c_name[0]}-${c_name[3]}
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}

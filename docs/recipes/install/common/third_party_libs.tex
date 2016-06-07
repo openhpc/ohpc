@@ -1,22 +1,43 @@
-% begin_fsp_run
-% fsp_comment_header Install 3rd Party Libraries and Tools \ref{sec:3rdparty}
+\begin{center}
+\begin{tcolorbox}[]
+\small
+\OHPC{}-provided 3rd party builds are configured to be installed
+into a common top-level repository so that they can be easily exported to
+desired hosts within the cluster. This common top-level path
+(\path{/opt/ohpc/pub}) was previously configured to be mounted on {\em
+ compute} nodes in \S\ref{sec:master_customization}, so the packages will be
+immediately available for use on the cluster after installation on the {\em
+ master} host.
+\end{tcolorbox}
+\end{center}
+
+%\iftoggle{isCentOS}{\clearpage}
+\nottoggle{isCentOS}{\clearpage}
+
+For convenience, \OHPC{} provides package aliases for these 3rd
+party libraries and utilities that can be used to install all of the available
+compiler/MPI family permutations. To install all of the available package
+offerings within \OHPC{}, issue the following:
+
+% begin_ohpc_run
+% ohpc_comment_header Install 3rd Party Libraries and Tools \ref{sec:3rdparty}
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-[master]$ (*\groupinstall*) fsp-boost        # adds available Boost packages
-[master]$ (*\groupinstall*) fsp-fftw         # adds available FFTW packages
-[master]$ (*\groupinstall*) fsp-gsl          # adds available GSL packages
-[master]$ (*\groupinstall*) fsp-hdf5         # adds available HDF5 packages
-[master]$ (*\groupinstall*) fsp-hypre        # adds available Hypre packages
-[master]$ (*\groupinstall*) fsp-metis        # adds available METIS packages
-[master]$ (*\groupinstall*) fsp-mpiP         # adds available mpiP packages
-[master]$ (*\groupinstall*) fsp-mumps        # adds available MUMPS packages
-[master]$ (*\groupinstall*) fsp-netcdf       # adds available NetCDF packages
-[master]$ (*\groupinstall*) fsp-numpy        # adds available numerical Python packages
-[master]$ (*\groupinstall*) fsp-petsc        # adds available PETSC packages
-[master]$ (*\groupinstall*) fsp-phdf5        # adds available (parallel) HDF5 packages
-[master]$ (*\groupinstall*) fsp-scalapack    # adds available ScaLAPACK packages
-[master]$ (*\groupinstall*) fsp-scipy        # adds available scientific Python packages
-[master]$ (*\groupinstall*) fsp-trilinos     # adds available Trilinos packages
-[master]$ (*\groupinstall*) fsp-adios        # adds available Adios packages
-[master]$ (*\install*) R_base-fsp            # adds R
+[sms](*\#*) (*\groupinstall*) ohpc-adios        
+[sms](*\#*) (*\groupinstall*) ohpc-boost        
+[sms](*\#*) (*\groupinstall*) ohpc-fftw         
+[sms](*\#*) (*\groupinstall*) ohpc-gsl          
+[sms](*\#*) (*\groupinstall*) ohpc-hdf5         
+[sms](*\#*) (*\groupinstall*) ohpc-hypre        
+[sms](*\#*) (*\groupinstall*) ohpc-metis        
+[sms](*\#*) (*\groupinstall*) ohpc-mumps        
+[sms](*\#*) (*\groupinstall*) ohpc-netcdf       
+[sms](*\#*) (*\groupinstall*) ohpc-numpy        
+[sms](*\#*) (*\groupinstall*) ohpc-ocr
+[sms](*\#*) (*\groupinstall*) ohpc-openblas     
+[sms](*\#*) (*\groupinstall*) ohpc-petsc        
+[sms](*\#*) (*\groupinstall*) ohpc-phdf5        
+[sms](*\#*) (*\groupinstall*) ohpc-scalapack    
+[sms](*\#*) (*\groupinstall*) ohpc-scipy        
+[sms](*\#*) (*\groupinstall*) ohpc-trilinos     
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run

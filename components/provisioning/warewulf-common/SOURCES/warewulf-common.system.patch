@@ -201,18 +201,8 @@
 +
 +
 +1;
---- warewulf-common-3.6/lib/Warewulf/ParallelCmd.pm	2014-05-21 11:14:43.000000000 -0700
-+++ warewulf-common-3.6.patch/lib/Warewulf/ParallelCmd.pm	2014-11-03 12:50:24.866164100 -0800
-@@ -319,6 +319,7 @@
-         # Securely pass $command intact to shell
-         close(STDERR);
-         open(STDERR, ">&STDOUT");
-+        delete $ENV{'ENV'};
-         exec("/bin/sh", "-c", $command);
-         die("Unable to execute $command -- $!");
-     }
 --- warewulf-common-3.6/lib/Warewulf/System/Rhel.pm	2014-05-21 11:14:43.000000000 -0700
-+++ warewulf-common-3.6.patch/lib/Warewulf/System/Rhel.pm	2015-06-03 09:37:34.000000000 -0700
++++ warewulf-common-3.6.patch/lib/Warewulf/System/Rhel.pm	2016-04-14 17:57:41.000000000 -0700
 @@ -5,7 +5,7 @@
  # required approvals from the U.S. Dept. of Energy).  All rights reserved.
  #

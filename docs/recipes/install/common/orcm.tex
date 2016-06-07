@@ -1,9 +1,9 @@
-\FSP{} includes a monitoring capability that can optionally be installed to
+\OHPC{} includes a monitoring capability that can optionally be installed to
 support unified data collection across the cluster. This monitoring system is
 based on \ORCM{}, the open resilient cluster manager project, and provides a
 convenient way to aggregate key node metrics including environmental sensors,
 processor power, and resource utilization into a centralized database for
-historical logging and analysis.  In a typical HPC configuration, \ORCM{} data
+historical logging and analysis. In a typical HPC configuration, \ORCM{} data
 collection relies on having IPMI access to the baseboard management controller
 (BMC) on each back-end compute resource. The data collection itself can either
 be performed using {\em in-band} methods where a daemon is instantiated on each
@@ -11,12 +11,12 @@ compute resource or via {\em out-of-band} methods using external IPMI access on
 a management network. To include all the components necessary to enable an \ORCM{}
 server running on the {\em master} host, issue the following:
 
-% begin_fsp_run
-% fsp_validation_comment Install ORCM server
+% begin_ohpc_run
+% ohpc_validation_comment Install ORCM server
 \begin{lstlisting}[language=bash]
-[master]$ (*\groupinstall*) fsp-orcm-server
+[sms](*\#*) (*\groupinstall*) ohpc-orcm-server
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 In order to coalesce sensor data into a central repository, \ORCM{} requires
 data {\em aggregators} that are responsible for collecting data from one or
@@ -25,7 +25,7 @@ have a single aggregator defined and, in this example, we choose the {\em master
 as the data aggregator. In order to store historical logging data, \ORCM{}
 includes support to store aggregated data into a centralized database. In this
 example, we will create an \ORCM{} database using {\em postgres} on the chosen
-master host. The necessary configuration file changes and commands to create the
+{\em master} host. The necessary configuration file changes and commands to create the
 underlying database for \ORCM{} are highlighted below. Note that a generic DB
 password of ``orcmpassword'' is used; this should be altered locally to a
 site-specific credential. If the DB password is changed, a corresponding update

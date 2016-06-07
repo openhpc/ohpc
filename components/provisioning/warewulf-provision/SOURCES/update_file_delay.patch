@@ -1,0 +1,32 @@
+--- warewulf-provision-3.6/initramfs/capabilities/provision-vnfs/60-runtimesupport	2016-03-10 08:45:24.000000000 -0600
++++ warewulf-provision-3.6/initramfs/capabilities/provision-vnfs/60-runtimesupport	2016-03-10 08:47:31.000000000 -0600
+@@ -63,6 +63,6 @@
+     echo "WWFQDN=$WWFQDN" >> $NEWROOT/warewulf/config
+     echo "export WWFQDN" >> $NEWROOT/warewulf/config
+ 
+-    echo "0,5,10,15,20,25,30,35,40,45,50,55 * * * * root /warewulf/bin/wwgetfiles >/var/log/wwgetfiles.log 2>&1" > $NEWROOT/etc/cron.d/wwupdatefiles
++    echo "0,5,10,15,20,25,30,35,40,45,50,55 * * * * root export WWGETFILES_INTERVAL=180; /warewulf/bin/wwgetfiles >/var/log/wwgetfiles.log 2>&1" > $NEWROOT/etc/cron.d/wwupdatefiles
+     echo "0,5,10,15,20,25,30,35,40,45,50,55 * * * * root . /warewulf/config; /warewulf/bin/wwgetscript runtime 2>/var/log/wwgetfiles.log | /bin/sh" > $NEWROOT/etc/cron.d/wwrunscript
+ fi
+--- warewulf-provision-3.6/initramfs/capabilities/transport-http/wwgetfiles	2016-03-10 10:22:53.000000000 -0600
++++ warewulf-provision-3.6/initramfs/capabilities/transport-http/wwgetfiles	2016-03-10 10:23:23.000000000 -0600
+@@ -16,13 +16,15 @@
+     exit
+ fi
+ 
+-WWGETFILES_INTERVAL=${WWGETFILES_INTERVAL:-180}
++WWGETFILES_INTERVAL=${WWGETFILES_INTERVAL:-0}
+ 
+ if [ -n "$SLEEPTIME" ]; then
+     sleep $SLEEPTIME
+-elif [ -n "$RANDOM" -a ! -f "/init" ]; then
+-    SLEEPTIME=`expr $RANDOM % $WWGETFILES_INTERVAL`
+-    sleep $SLEEPTIME
++elif [ $WWGETFILES_INTERVAL -gt 0 ];then
++    if [ -n "$RANDOM" -a ! -f "/init" ]; then
++       SLEEPTIME=`expr $RANDOM % $WWGETFILES_INTERVAL`
++       sleep $SLEEPTIME
++    fi
+ fi
+ 
+ TIMESTAMP_FILE="$NEWROOT/tmp/.wwgetfiles_timestamp"

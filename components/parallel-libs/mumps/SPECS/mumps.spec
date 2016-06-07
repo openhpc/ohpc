@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -25,32 +25,36 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-fsp-header-comp-begin-----------------------------
+#-ohpc-header-comp-begin-----------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
+BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -67,34 +71,30 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %if %{mpi_family} == openmpi
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%if %{compiler_family} == gnu
-BuildRequires: mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-ohpc-header-comp-end-------------------------------
 
 # Base package name
 %define pname mumps
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        5.0.0
+Version:        5.0.1
 Release:        0
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
-Group:          fsp/parallel-libs
+Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://mumps.enseeiht.fr/
-Source0:        %{pname}-%{version}.tar.gz
-Source1:        Makefile.mkl.gnu.openmpi.inc
-Source2:        Makefile.mkl.gnu.impi.inc
+Source0:        http://mumps.enseeiht.fr/MUMPS_%{version}.tar.gz
+Source1:        Makefile.gnu.openmpi.inc
+Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
-Patch0:         mumps-5.0.0-shared-mumps.patch
+Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -107,7 +107,7 @@ Provides:      libpord.so.%{version}()(64bit)
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 MUMPS implements a direct solver for large sparse linear systems, with a
@@ -116,20 +116,20 @@ operate on distributed matrices e.g. over a cluster.  It has Fortran and
 C interfaces, and can interface with ordering tools such as Scotch.
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n MUMPS_%{version}
 %patch0 -p1
 %patch1 -p1
 
 %build
 
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
-# Enable MKL linkage for blas/lapack with gnu builds
+# Enable scalapack linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load scalapack openblas
 %endif
 
 # Select appropriate Makefile.inc with MKL
@@ -164,7 +164,7 @@ cp -f %{S:4} Makefile.inc
 %endif 
 
 #export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
-make MUMPS_MPI=$FSP_MPI_FAMILY \
+make MUMPS_MPI=$OHPC_MPI_FAMILY \
      FC=mpif77 \
      MUMPS_LIBF77="$LIBS" \
      OPTC="$RPM_OPT_FLAGS" all
@@ -173,10 +173,10 @@ make MUMPS_MPI=$FSP_MPI_FAMILY \
 
 %install
 
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 %{__mkdir} -p %{buildroot}%{install_path}/lib
 %{__mkdir} -p %{buildroot}%{install_path}/include
@@ -193,9 +193,9 @@ install -m 644 include/* %{buildroot}%{install_path}/include
 install -m 644 Makefile.inc %{buildroot}%{install_path}/etc
 
 
-# FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -204,8 +204,6 @@ puts stderr " "
 puts stderr "This module loads the mumps library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of mumps leverages and MKL libraries. Consequently,"
-puts stderr "this package is loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
 
@@ -218,12 +216,10 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require mkl for gnu compiler families
-
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if { [is-loaded gnu] } {
-        if { ![is-loaded mkl]  } {
-          module load mkl
+        if { ![is-loaded scalapack]  } {
+          module load scalapack
         }
     }
 }
@@ -240,7 +236,7 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -255,8 +251,8 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc ChangeLog CREDITS INSTALL LICENSE README VERSION
 
 %changelog

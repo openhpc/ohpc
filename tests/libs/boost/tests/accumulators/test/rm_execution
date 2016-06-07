@@ -1,0 +1,55 @@
+#!.//common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+PKG="Boost/Accumulators"
+
+@test "[$PKG] min-test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=min
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] max-test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=max
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] skewness-test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=skewness
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] variance-test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=variance
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+

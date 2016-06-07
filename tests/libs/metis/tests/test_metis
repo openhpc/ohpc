@@ -1,0 +1,75 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+check_rms
+
+testname="libs/Metis"
+
+@test "[$testname] Graph partition ($LMOD_FAMILY_COMPILER)" {
+    run gpmetis mdual.graph 32
+    assert_success
+    rm mdual.graph.part.32
+}
+
+## @test "[$testname] Mesh partition ($LMOD_FAMILY_COMPILER)" {
+##     run mpmetis metis.mesh 32
+##     assert_success
+##     rm metis.mesh.epart.32
+##     rm metis.mesh.npart.32
+## }
+
+@test "[$testname] Fill-reducing ordering ($LMOD_FAMILY_COMPILER)" {
+    run ndmetis mdual.graph
+    assert_success
+    rm mdual.graph.iperm
+}
+
+@test "[$testname] Mesh to graph conversion ($LMOD_FAMILY_COMPILER)" {
+    run m2gmetis metis.mesh out.graph
+    assert_success
+    rm out.graph
+}
+
+@test "[$testname] C API mesh partitioning ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER)" {
+
+    if [ ! -x C_test ];then
+        flunk "C_test binary not available"
+    fi
+
+    run ls metis.mesh
+    assert_success
+
+    rm -f C_test.out
+
+    run run_serial_binary ./C_test
+    assert_success
+
+    run ls C_test.out
+    assert_success
+
+    # Verify results against standalone binary version
+
+    rm -f metis.mesh.npart.4
+    rm -f metis.mesh.epart.4
+
+    run run_serial_binary mpmetis metis.mesh 4
+    assert_success
+
+    run ls metis.mesh.epart.4
+    assert_success
+
+    run diff C_test.out metis.mesh.epart.4
+    assert_success
+
+    rm -f C_test.out
+    rm -f metis.mesh.npart.4
+    rm -f metis.mesh.epart.4
+}
+

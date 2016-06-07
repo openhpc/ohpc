@@ -1,0 +1,5 @@
+compile
+test-driver
+*.tap
+test*.log
+test*.trs

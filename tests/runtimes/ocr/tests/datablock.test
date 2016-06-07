@@ -1,0 +1,2 @@
+#!/bin/bash
+./datablock -ocr:cfg ${OCR_INSTALL}/share/ocr/config/${OCR_TYPE}/default.cfg

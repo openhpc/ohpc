@@ -1,0 +1,1 @@
+SUBDIRS = module mpi/test

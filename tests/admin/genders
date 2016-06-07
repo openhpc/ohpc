@@ -1,0 +1,19 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+@test "[genders] check for RPM" {
+    run check_if_rpm_installed "genders${DELIM}"
+    assert_success
+}
+
+@test "[genders] check node attributes" {
+    run nodeattr -l c1
+    assert_success
+}

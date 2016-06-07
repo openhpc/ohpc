@@ -1,16 +1,16 @@
-With the \FSP{} repository enabled, we can now begin adding desired components onto the
+With the \OHPC{} repository enabled, we can now begin adding desired components onto the
 {\em master} server. This repository provides a number of aliases that group
 logical components together in order to help aid in this process. For
 reference, a complete list of available group aliases and RPM packages available
-via \FSP{} are provided in Appendix~\ref{appendix:manifest}.  To add
+via \OHPC{} are provided in Appendix~\ref{appendix:manifest}. To add
 support for provisioning services, the following commands illustrate addition
 of a common base package followed by the Warewulf provisioning system.
 
-% begin_fsp_run
-% fsp_comment_header Add baseline FSP and provisioning services \ref{sec:add_provisioning}
+% begin_ohpc_run
+% ohpc_comment_header Add baseline OpenHPC and provisioning services \ref{sec:add_provisioning}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ (*\groupinstall*) fsp-base
-[master]$ (*\groupinstall*) fsp-warewulf
+[sms](*\#*) (*\groupinstall*) ohpc-base
+[sms](*\#*) (*\groupinstall*) ohpc-warewulf
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 

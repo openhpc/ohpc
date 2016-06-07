@@ -1,0 +1,14 @@
+--- opt/ohpc/admin/clck/3.0.1/etc/clck.xml	2015-09-16 12:29:31.000000000 -0700
++++ opt/ohpc/admin/clck/3.0.1/etc/clck.xml	2015-09-16 12:30:59.000000000 -0700
+@@ -28,6 +28,11 @@
+   <!-- Knowledge Base Configuration -->
+   <config>
+ 
++    <!-- add env-variable to known blacklist -->
++    <environment-blacklist>
++      <entry>XDG_SESSION_ID</entry>
++    </environment-blacklist>
++
+     <!-- <clck-mode>health</clck-mode> -->
+ 
+     <clck-checks>

@@ -1,0 +1,20 @@
+include_directories(${PROJECT_SOURCE_DIR}/tests/C)
+include_directories(${PROJECT_SOURCE_DIR}/src/public)
+include_directories(${PROJECT_SOURCE_DIR}/src)
+link_directories(${PROJECT_BINARY_DIR}/src)
+link_directories(${MXML_INCLUDE_DIR}/../lib)
+
+add_executable(adios_test_c adios_test_c.c)
+target_link_libraries(adios_test_c adios ${ADIOSLIB_LDADD} ${MPI_C_LIBRARIES}) 
+set(adios_test_c_CPPFLAGS "${ADIOSLIB_CPPFLAGS}")
+set(adios_test_c_CFLAGS "${ADIOSLIB_CFLAGS}")
+set_target_properties(adios_test_c PROPERTIES COMPILE_FLAGS "${adios_test_c_CFLAGS} ${adios_test_c_CPPFLAGS} ${MPI_C_COMPILE_FLAGS}")
+if(MPI_LINK_FLAGS)
+   set_target_properties(adios_test_c PROPERTIES LINK_FLAGS "${MPI_C_LINK_FLAGS}")
+endif()
+
+file(COPY config_c.xml DESTINATION ${PROJECT_BINARY_DIR}/tests/C)
+
+add_subdirectory(flexpath_tests)
+add_subdirectory(fgr_tests)
+add_subdirectory(query)

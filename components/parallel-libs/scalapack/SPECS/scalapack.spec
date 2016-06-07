@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -25,32 +25,36 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-fsp-header-comp-begin-----------------------------
+#-ohpc-header-comp-begin-----------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
+BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
+Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -67,13 +71,9 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %if %{mpi_family} == openmpi
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%if %{compiler_family} == gnu
-BuildRequires: mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-ohpc-header-comp-end-------------------------------
 
 # Base package name
 %define pname scalapack
@@ -81,7 +81,7 @@ Requires:      mkl-blacs-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        A subset of LAPACK routines redesigned for heterogenous computing
-License:        BSD
+License:        netlib ScaLAPACK License
 Group:          Development/Libraries/Parallel
 Version:        2.0.2
 Release:        13.1
@@ -90,8 +90,9 @@ Url:            http://www.netlib.org/lapack-dev/
 Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
 Patch0:         scalapack-2.0.2-shared-lib.patch
-BuildRequires:  blas-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+DocDir:         %{OHPC_PUB}/doc/contrib
+Provides:       libscalapack.so.2()(64bit)
 
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset 
@@ -122,7 +123,7 @@ routines resemble their LAPACK equivalents as much as possible.
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -130,22 +131,71 @@ routines resemble their LAPACK equivalents as much as possible.
 cp SLmake.inc.example SLmake.inc
 
 %build
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
+%if %{compiler_family} == gnu
+module load openblas
+%endif
 
 make lib
 
 %install
-%{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/%{_libdir}
-install -m 644 *so* ${RPM_BUILD_ROOT}%{install_path}/%{_libdir}
+%{__mkdir} -p %{buildroot}/%{_docdir}
+%{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/etc
+%{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/lib
+install -m 644 SLmake.inc ${RPM_BUILD_ROOT}%{install_path}/etc
+install -m 644 *so* ${RPM_BUILD_ROOT}%{install_path}/lib
 
-pushd ${RPM_BUILD_ROOT}%{install_path}/%{_libdir}
+pushd ${RPM_BUILD_ROOT}%{install_path}/lib
 ln -fs libscalapack.so.2.0.2 libscalapack.so.2
 ln -s libscalapack.so.2.0.2 libscalapack.so
 popd
 
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "This module loads the ScaLAPACK library built with the %{compiler_family} compiler"
+puts stderr "toolchain and the %{mpi_family} MPI stack."
+puts stderr " "
+
+puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "%{url}"
+
+set     version                     %{version}
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { ![is-loaded openblas]  } {
+      module load openblas
+    }
+}
+
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_LIB        %{install_path}/lib
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
 
 %clean
 rm -fr ${RPM_BUILD_ROOT}
@@ -156,6 +206,8 @@ rm -fr ${RPM_BUILD_ROOT}
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
+%{OHPC_PUB}
+%doc README LICENSE
 
 %changelog

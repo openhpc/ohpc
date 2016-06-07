@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -25,30 +25,34 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu compiler family;
+# OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# hack to install MKL for the moment
-BuildRequires: intel-compilers%{PROJ_DELIM}
+BuildRequires: openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -67,7 +71,7 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-ohpc-header-comp-end-------------------------------
 
 # Base package name
 %define pname scipy
@@ -75,14 +79,14 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        0.15.1
+Version:        0.16.1
 Release:        1
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
-Group:          fsp/dev-tools
+Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.scipy.org
-DocDir:         %{FSP_PUB}/doc/contrib
-Source0:        %{pname}-%{version}.tar.gz
+DocDir:         %{OHPC_PUB}/doc/contrib
+Source0:        http://sourceforge.net/projects/scipy/files/scipy/%{version}/scipy-%{version}.tar.gz
 BuildRequires:  blas-devel
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
@@ -105,7 +109,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 Scipy is open-source software for mathematics, science, and
@@ -122,15 +126,11 @@ leading scientists and engineers.
 %setup -q -n %{pname}-%{version}
 find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
-# Enable MKL linkage for blas/lapack with gnu builds
-%if %{compiler_family} == gnu
-module load mkl
-%endif
-
+%if %{compiler_family} == intel
 cat > site.cfg << EOF
 [mkl]
 library_dirs = $MKLROOT/lib/intel64
@@ -138,19 +138,28 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
+%endif
 
+%if %{compiler_family} == gnu
+module load openblas
+cat > site.cfg << EOF
+[openblas]
+libraries = openblas
+library_dirs = $OPENBLAS_LIB
+include_dirs = $OPENBLAS_INC
+EOF
+%endif
 
 %build
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_mpi
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load openblas
 %endif
 
 module load numpy
@@ -167,16 +176,15 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 %endif
 
 %install
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_mpi
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load openblas
 %endif
 
 module load numpy
@@ -193,9 +201,9 @@ find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/arff/arffread.py
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py
 
-# FSP module file
-%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -225,10 +233,8 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded numpy]  } {
         module load numpy
     }
-    if { [is-loaded gnu] } {
-        if { ![is-loaded mkl]  } {
-          module load mkl
-        }
+    if {  ![is-loaded openblas]  } {
+        module load openblas
     }
 }
 
@@ -238,7 +244,7 @@ if [ module-info mode remove ] {
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -250,8 +256,8 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc THANKS.txt
 %doc LICENSE.txt
 

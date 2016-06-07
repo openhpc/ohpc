@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+
+    <adios-group name="pathtest">
+        <!-- dimension variables (scalars) with different possible paths -->
+        <var name="gdim1" path="dir1" type="integer"/>
+        <var name="gdim2" path="/dir1" type="integer"/>
+        <var name="gdim3" path="dir1/" type="integer"/>
+        <var name="gdim4" path="/dir1/dir2" type="integer"/>
+        <var name="gdim5" path="/" type="integer"/>
+        <var name="gdim6" path="" type="integer"/>
+        <var name="gdim7" type="integer"/>
+
+        <var name="ldim1" path="dir1" type="integer"/>
+        <var name="ldim2" path="/dir1" type="integer"/>
+        <var name="ldim3" path="dir1/" type="integer"/>
+        <var name="ldim4" path="/dir1/dir2" type="integer"/>
+        <var name="ldim5" path="/" type="integer"/>
+        <var name="ldim6" path="" type="integer"/>
+        <var name="ldim7" type="integer"/>
+
+ 
+        <var name="offs1" path="dir1" type="integer"/>
+        <var name="offs2" path="/dir1" type="integer"/>
+        <var name="offs3" path="dir1/" type="integer"/>
+        <var name="offs4" path="/dir1/dir2" type="integer"/>
+        <var name="offs5" path="/" type="integer"/>
+        <var name="offs6" path="" type="integer"/>
+        <var name="offs7" type="integer"/>
+
+        <!-- 1D Arrays -->
+        <global-bounds dimensions="dir1/gdim1" offsets="dir1/offs1">
+            <var name="a1"  path="dir1" type="integer" dimensions="dir1/ldim1"/>
+        </global-bounds>
+
+        <global-bounds dimensions="/dir1/gdim2" offsets="/dir1/offs2">
+            <var name="a2"  path="/dir1" type="integer" dimensions="/dir1/ldim2"/>
+        </global-bounds>
+
+        <global-bounds dimensions="dir1/gdim3" offsets="dir1/offs3">
+            <var name="a3"  path="dir1/" type="integer" dimensions="dir1/ldim3"/>
+        </global-bounds>
+
+        <global-bounds dimensions="/dir1/dir2/gdim4" offsets="/dir1/dir2/offs4">
+            <var name="a4"  path="/dir1/dir2" type="integer" dimensions="/dir1/dir2/ldim4"/>
+        </global-bounds>
+
+        <global-bounds dimensions="/gdim5" offsets="/offs5">
+            <var name="a5"  path="/" type="integer" dimensions="/ldim5"/>
+        </global-bounds>
+
+        <global-bounds dimensions="gdim6" offsets="offs6">
+            <var name="a6"  path="" type="integer" dimensions="ldim6"/>
+        </global-bounds>
+
+        <global-bounds dimensions="gdim7" offsets="offs7">
+            <var name="a7"  path="" type="integer" dimensions="ldim7"/>
+        </global-bounds>
+
+    </adios-group>
+
+<method group="pathtest" method="MPI">verbose=4</method>
+
+<buffer size-MB="20" allocate-time="now"/>
+
+</adios-config>
+

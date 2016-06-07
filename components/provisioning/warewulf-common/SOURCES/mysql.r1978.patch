@@ -1,0 +1,21 @@
+--- lib/Warewulf/DataStore/SQL/MySQL.pm.orig	2016-04-01 18:45:23.000000000 -0500
++++ lib/Warewulf/DataStore/SQL/MySQL.pm	2016-04-01 18:46:27.000000000 -0500
+@@ -111,6 +111,9 @@
+         my $db_user = $config->get("database user");
+         my $db_pass = $config->get("database password");
+ 
++        # Use the DB's transaction handling
++        my %attr = ( AutoCommit => 1, );
++
+         if ($config_root->get("database user")) {
+             $db_user = $config_root->get("database user");
+             $db_pass = $config_root->get("database password");
+@@ -138,7 +141,7 @@
+                 return undef;
+             }
+ 
+-            if ($self->{"DBH"} = DBI->connect_cached("DBI:mysql:database=$db_name;host=$db_server", $db_user, $db_pass)) {
++            if ($self->{"DBH"} = DBI->connect_cached("DBI:mysql:database=$db_name;host=$db_server", $db_user, $db_pass, \%attr)) {
+                 &iprint("Successfully connected to database!\n");
+                 $self->{"DBH"}->{"mysql_auto_reconnect"} = 1;
+             } else {

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+  <adios-group name="restart" coordination-communicator="comm" time-index="time">
+<!--
+    <var name="mype" path="/" type="integer"/>
+    <var name="mype" path="/test" type="integer"/>
+
+    <var name="zion1" type="real" dimensions="10,time" path="/abc/me"/>
+
+    <var name="zionsize2" type="integer"/>
+    <attribute name="attr_dim" path="/abc/" type="integer" value="2"/>
+    <var name="zion2" type="real" dimensions="zionsize2,attr_dim"/>
+
+    <var name="zionsize3" type="integer"/>
+    <attribute name="attr_dim2" path="/abc" var="zionsize3"/>
+    <var name="zion3" type="real" dimensions="attr_dim,attr_dim2"/>
+
+    <var name="node-attr" type="integer"/>
+    <attribute name="node" path="/" var="node-attr"/>
+
+    <attribute name="units1" path="/abc/me/" value="m/s"/>
+    <attribute name="units2" path="/abc/me" value="m/s"/>
+    <attribute name="timestep1" path="/" value="1"/>
+    <attribute name="timestep2" path="/abc" value="1"/>
+-->
+
+    <var name="byte_test_length" type="long"/>
+
+    <var name="byte_test" type="byte" dimensions="byte_test_length"/>
+  
+  </adios-group>
+
+<!--
+  <transport group="restart" method="ADAPTIVE">max_storage_targets=672;max_stripe_count=160;files_number=16;overlap_factor= 0;min_stripe_count=3;split_target_count=3;split_files_count=max</transport>
+-->
+  <transport group="restart" method="MPI">max_storage_targets=144;max_stripe_count=144;files_number=1;overlap_factor= 0;min_stripe_count=1;split_target_count=1;split_files_count=max</transport>
+
+  <buffer size-MB="1000" allocate-time="now"/>
+
+</adios-config>

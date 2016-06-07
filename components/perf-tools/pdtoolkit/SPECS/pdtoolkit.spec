@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,19 +8,24 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family variable via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -28,35 +33,35 @@ Requires:      gnu-compilers%{PROJ_DELIM}
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname pdtoolkit
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-
 Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        3.20
+Version:        3.21
 Release:        1
 License:        Program Database Toolkit License
 Summary:        PDT is a framework for analyzing source code
 Url:            http://www.cs.uoregon.edu/Research/pdt
-Group:          fsp/perf-tools
-Source:         %{pname}-%{version}.tar.gz
+Group:          %{PROJ_NAME}/perf-tools
+Source:         https://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/pdtoolkit-%{version}.tar.gz
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 %define debug_package %{nil}
+#!BuildIgnore: post-build-checks
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 
 %description
@@ -67,9 +72,9 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 
 
 %build
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
 ./configure -prefix=%buildroot%{install_path} \
 %if %{compiler_family} == intel 
@@ -112,6 +117,10 @@ ln -s  ../../contrib/pebil/pebil/pebil.static
 rm -f roseparse
 ln -s  ../../contrib/rose/roseparse/roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
+sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
+sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
+rm -f ../../contrib/rose/rose-header-gen/config.log
+rm -f ../../contrib/rose/rose-header-gen/config.status
 rm -f smaqao
 ln -s  ../../contrib/maqao/maqao/smaqao
 popd
@@ -123,9 +132,9 @@ install -d %buildroot%{install_path}/include
 install -d %buildroot%{install_path}/lib
 install -d %buildroot%{install_path}/man
 
-# FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -156,7 +165,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -175,8 +184,8 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc CREDITS LICENSE README
 
 %changelog

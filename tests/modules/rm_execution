@@ -1,0 +1,69 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+if [ -x /usr/bin/env ];then
+    env_cmd=/usr/bin/env
+elif [ -x /bin/env ];then
+    env_cmd=/bin/env
+else
+    env_cmd=env
+fi
+
+@test "[modules] env variable passes through ($rm)" {
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+    module load test-module || exit 1
+
+    run run_serial_binary ./test_env
+    assert_success
+}
+
+@test "[modules] loaded module passes through ($rm)" {
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+    module load test-module || exit 1
+
+    run run_serial_binary ./test_mod_passthrough
+    assert_success
+}
+
+@test "[modules] module commands available in RMS job ($rm)" {
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+
+    run run_serial_binary ./test_mod_cmd
+    assert_success
+}
+
+@test "[modules] module load propagates thru RMS ($rm)" {
+
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+
+    module load test2-module || exit 1
+    $env_cmd | grep LOADEDMODULES >& .cmd_output
+
+    run_serial_binary -o .cmd_output.rm "$env_cmd"
+    grep LOADEDMODULES .cmd_output.rm > .cmd_output.rm.out
+    run diff .cmd_output .cmd_output.rm.out
+    assert_success
+
+    run rm -f .cmd_output .cmd_output.rm .cmd_output.rm.out
+    assert_success
+
+}
+

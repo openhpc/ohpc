@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -11,8 +11,8 @@
 # Turn off strip'ng of binaries
 # %global __strip /bin/true
 
-%include %{_sourcedir}/FSP_macros
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname nagios-plugins
@@ -21,19 +21,20 @@
 %global _hardened_build 1
 
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.0.1
+Version: 2.1.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program plugins for Nagios
-DocDir:  %{FSP_PUB}/doc/contrib
-Group: fsp/admin
+DocDir:  %{OHPC_PUB}/doc/contrib
+Group: %{PROJ_NAME}/admin
 
-License: GPLv2+
+License: GPLv3
 URL: https://www.nagios-plugins.org/
-Source0: %{pname}-%{version}.tar.gz
+Source0: http://www.nagios-plugins.org/download/nagios-plugins-%{version}.tar.gz
 Source1: nagios-plugins.README.Fedora
 Patch2: nagios-plugins-0002-Remove-assignment-of-not-parsed-to-jitter.patch
-Patch3: nagios-plugins-0003-Fedora-specific-fixes-for-searching-for-diff-and-tai.patch
-Patch4: nagios-plugins-0004-Fedora-specific-patch-for-not-to-fixing-fully-qualif.patch
+# 3 & 4 appear to no longer be necessary in 2.1.1
+#Patch3: nagios-plugins-0003-Fedora-specific-fixes-for-searching-for-diff-and-tai.patch
+#Patch4: nagios-plugins-0004-Fedora-specific-patch-for-not-to-fixing-fully-qualif.patch
 # https://bugzilla.redhat.com/512559
 Patch5: nagios-plugins-0005-Prevent-check_swap-from-returning-OK-if-no-swap-acti.patch
 Patch7: nagios-plugins-0007-Fix-the-use-lib-statement-and-the-external-ntp-comma.patch
@@ -58,11 +59,6 @@ BuildRequires: samba-client
 BuildRequires: postgresql-devel
 BuildRequires: gettext
 #BuildRequires: %{_bindir}/ssh
-%if 0%{?suse_version}
-BuildRequires: openssh
-%else
-BuildRequires: openssh-clients
-%endif
 BuildRequires: bind-utils
 BuildRequires: ntp
 #BuildRequires: %{_bindir}/mailq
@@ -112,7 +108,53 @@ contains those plugins.
 %package -n %{pname}-all%{PROJ_DELIM}
 Summary: Nagios Plugins - All plugins
 Group: Applications/System
-Requires: nagios-plugins-breeze, nagios-plugins-by_ssh, nagios-plugins-dhcp, nagios-plugins-dig, nagios-plugins-disk, nagios-plugins-disk_smb, nagios-plugins-dns, nagios-plugins-dummy, nagios-plugins-file_age, nagios-plugins-flexlm, nagios-plugins-fping, nagios-plugins-hpjd, nagios-plugins-http, nagios-plugins-icmp, nagios-plugins-ide_smart, nagios-plugins-ircd, nagios-plugins-ldap, nagios-plugins-load, nagios-plugins-log, nagios-plugins-mailq, nagios-plugins-mrtg, nagios-plugins-mrtgtraf, nagios-plugins-mysql, nagios-plugins-nagios, nagios-plugins-nt, nagios-plugins-ntp, nagios-plugins-ntp-perl, nagios-plugins-nwstat, nagios-plugins-oracle, nagios-plugins-overcr, nagios-plugins-pgsql, nagios-plugins-ping, nagios-plugins-procs, nagios-plugins-real, nagios-plugins-rpc, nagios-plugins-smtp, nagios-plugins-snmp, nagios-plugins-ssh, nagios-plugins-swap, nagios-plugins-tcp, nagios-plugins-time, nagios-plugins-ups, nagios-plugins-users, nagios-plugins-wave, nagios-plugins-cluster
+Requires:  nagios-plugins-by_ssh%{PROJ_DELIM}
+Requires:  nagios-plugins-cluster%{PROJ_DELIM}
+Requires:  nagios-plugins-dhcp%{PROJ_DELIM}
+Requires:  nagios-plugins-dig%{PROJ_DELIM}
+Requires:  nagios-plugins-disk%{PROJ_DELIM}
+Requires:  nagios-plugins-disk_smb%{PROJ_DELIM}
+Requires:  nagios-plugins-dns%{PROJ_DELIM}
+Requires:  nagios-plugins-dummy%{PROJ_DELIM}
+Requires:  nagios-plugins-file_age%{PROJ_DELIM}
+Requires:  nagios-plugins-flexlm%{PROJ_DELIM}
+Requires:  nagios-plugins-fping%{PROJ_DELIM}
+Requires:  nagios-plugins-hpjd%{PROJ_DELIM}
+Requires:  nagios-plugins-http%{PROJ_DELIM}
+Requires:  nagios-plugins-icmp%{PROJ_DELIM}
+Requires:  nagios-plugins-ide_smart%{PROJ_DELIM}
+Requires:  nagios-plugins-ircd%{PROJ_DELIM}
+Requires:  nagios-plugins-ldap%{PROJ_DELIM}
+Requires:  nagios-plugins-load%{PROJ_DELIM}
+Requires:  nagios-plugins-log%{PROJ_DELIM}
+Requires:  nagios-plugins-mailq%{PROJ_DELIM}
+Requires:  nagios-plugins-mrtg%{PROJ_DELIM}
+Requires:  nagios-plugins-mrtgtraf%{PROJ_DELIM}
+Requires:  nagios-plugins-mysql%{PROJ_DELIM}
+Requires:  nagios-plugins-nagios%{PROJ_DELIM}
+# NRPE plugin comes from the nrpe build, but it is a plugin so including it here
+Requires:  nagios-plugins-nrpe%{PROJ_DELIM}
+# The perl version of these plugins are iffy -- we're not build this one, so don't include
+#Requires:  nagios-plugins-ntp-perl%{PROJ_DELIM}
+Requires:  nagios-plugins-ntp%{PROJ_DELIM}
+Requires:  nagios-plugins-nt%{PROJ_DELIM}
+Requires:  nagios-plugins-nwstat%{PROJ_DELIM}
+Requires:  nagios-plugins-oracle%{PROJ_DELIM}
+Requires:  nagios-plugins-overcr%{PROJ_DELIM}
+Requires:  nagios-plugins-pgsql%{PROJ_DELIM}
+Requires:  nagios-plugins-ping%{PROJ_DELIM}
+Requires:  nagios-plugins-procs%{PROJ_DELIM}
+Requires:  nagios-plugins-real%{PROJ_DELIM}
+Requires:  nagios-plugins-rpc%{PROJ_DELIM}
+Requires:  nagios-plugins-smtp%{PROJ_DELIM}
+Requires:  nagios-plugins-snmp%{PROJ_DELIM}
+Requires:  nagios-plugins-ssh%{PROJ_DELIM}
+Requires:  nagios-plugins-swap%{PROJ_DELIM}
+Requires:  nagios-plugins-tcp%{PROJ_DELIM}
+Requires:  nagios-plugins-time%{PROJ_DELIM}
+Requires:  nagios-plugins-ups%{PROJ_DELIM}
+Requires:  nagios-plugins-users%{PROJ_DELIM}
+Requires:  nagios-plugins-wave%{PROJ_DELIM}
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
 Requires: nagios-plugins-game
 %endif
@@ -147,7 +189,11 @@ Summary: Nagios Plugin - check_by_ssh
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
 #Requires: %{_bindir}/ssh
-Requires: openssh-clients
+%if 0%{?suse_version}
+BuildRequires: openssh
+%else
+BuildRequires: openssh-clients
+%endif
 Provides: %{pname}-by_ssh
 
 %description -n %{pname}-by_ssh%{PROJ_DELIM}
@@ -246,6 +292,7 @@ Summary: Nagios Plugin - check_flexlm
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-flexlm
+AutoReq: no
 
 %description -n %{pname}-flexlm%{PROJ_DELIM}
 Provides check_flexlm support for Nagios.
@@ -320,6 +367,7 @@ Summary: Nagios Plugin - check_ifoperstatus
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-ifoperstatus
+AutoReq: no
 
 %description -n %{pname}-ifoperstatus%{PROJ_DELIM}
 Provides check_ifoperstatus support for Nagios to monitor network interfaces.
@@ -329,6 +377,7 @@ Summary: Nagios Plugin - check_ifstatus
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
 Provides: %{pname}-ifstatus
+AutoReq: no
 
 %description -n %{pname}-ifstatus%{PROJ_DELIM}
 Provides check_ifstatus support for Nagios to monitor network interfaces.
@@ -435,16 +484,17 @@ Provides: %{pname}-ntp
 %description -n %{pname}-ntp%{PROJ_DELIM}
 Provides check_ntp support for Nagios.
 
-%package -n %{pname}-ntp-perl%{PROJ_DELIM}
-Summary: Nagios Plugin - check_ntp.pl
-Group: Applications/System
-Requires: %{name} = %{version}-%{release}
-Requires: %{_sbindir}/ntpdate
-Requires: %{_sbindir}/ntpq
-Provides: %{pname}-ntp-perl
-
-%description -n %{pname}-ntp-perl%{PROJ_DELIM}
-Provides check_ntp.pl support for Nagios.
+# perl scripts aren't getting substitutions done in 2.1.1, Makefile issue?
+#%package -n %{pname}-ntp-perl%{PROJ_DELIM}
+#Summary: Nagios Plugin - check_ntp.pl
+#Group: Applications/System
+#Requires: %{name} = %{version}-%{release}
+#Requires: %{_sbindir}/ntpdate
+#Requires: %{_sbindir}/ntpq
+#Provides: %{pname}-ntp-perl
+#
+#%description -n %{pname}-ntp-perl%{PROJ_DELIM}
+#Provides check_ntp.pl support for Nagios.
 
 %package -n %{pname}-nwstat%{PROJ_DELIM}
 Summary: Nagios Plugin - check_nwstat
@@ -535,8 +585,15 @@ Provides check_real (rtsp) support for Nagios.
 Summary: Nagios Plugin - check_rpc
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
-Requires: %{_sbindir}/rpcinfo
+#%if 0%{?fedora} || 0%{?rhel}
+#Requires: %{_sbindir}/rpcinfo
+#%else
+#Requires: /sbin/rpcinfo
+#%endif
+Requires: perl
+Requires: rpcbind
 Provides: %{pname}-rpc
+AutoReq: no
 
 %description -n %{pname}-rpc%{PROJ_DELIM}
 Provides check_rpc support for Nagios.
@@ -578,6 +635,11 @@ Provides check_snmp support for Nagios.
 Summary: Nagios Plugin - check_ssh
 Group: Applications/System
 Requires: %{name} = %{version}-%{release}
+%if 0%{?suse_version}
+BuildRequires: openssh
+%else
+BuildRequires: openssh-clients
+%endif
 Provides: %{pname}-ssh
 
 %description -n %{pname}-ssh%{PROJ_DELIM}
@@ -664,8 +726,8 @@ Provides check_wave support for Nagios.
 %setup -q -n %{pname}-%{version}
 
 %patch2 -p1 -b .not_parsed
-%patch3 -p1 -b .proper_paths
-%patch4 -p1 -b .no_need_fo_fix_paths
+#%patch3 -p1 -b .proper_paths
+#%patch4 -p1 -b .no_need_fo_fix_paths
 %patch5 -p1 -b .fix_missing_swap
 %patch7 -p1 -b .ext_ntp_cmds
 
@@ -705,8 +767,9 @@ make check_pgsql
 
 cd ..
 
-mv plugins-scripts/check_ntp.pl plugins-scripts/check_ntp.pl.in
-gawk -f plugins-scripts/subst plugins-scripts/check_ntp.pl.in > plugins-scripts/check_ntp.pl
+# perl scripts aren't getting substitutions done in 2.1.1, Makefile issue?
+#mv plugins-scripts/check_ntp.pl plugins-scripts/check_ntp.pl.in
+#gawk -f plugins-scripts/subst plugins-scripts/check_ntp.pl.in > plugins-scripts/check_ntp.pl
 
 cp %{SOURCE1} ./README.Fedora
 
@@ -717,7 +780,8 @@ install -m 0755 plugins-root/check_icmp %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins-root/check_dhcp %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins/check_ide_smart %{buildroot}/%{_libdir}/nagios/plugins
 install -m 0755 plugins/check_ldap %{buildroot}/%{_libdir}/nagios/plugins
-install -m 0755 plugins-scripts/check_ntp.pl %{buildroot}/%{_libdir}/nagios/plugins
+# perl scripts aren't getting substitutions done in 2.1.1, Makefile issue?
+#install -m 0755 plugins-scripts/check_ntp.pl %{buildroot}/%{_libdir}/nagios/plugins
 %if 0%{?fedora} || 0%{?rhel}
 install -m 0755 plugins/check_radius %{buildroot}/%{_libdir}/nagios/plugins
 %endif
@@ -861,8 +925,9 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %{_libdir}/nagios/plugins/check_ntp_peer
 %{_libdir}/nagios/plugins/check_ntp_time
 
-%files -n %{pname}-ntp-perl%{PROJ_DELIM}
-%{_libdir}/nagios/plugins/check_ntp.pl
+# perl scripts aren't getting substitutions done in 2.1.1, Makefile issue?
+#%files -n %{pname}-ntp-perl%{PROJ_DELIM}
+#%{_libdir}/nagios/plugins/check_ntp.pl
 
 %files -n %{pname}-nwstat%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_nwstat

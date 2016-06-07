@@ -1,0 +1,13 @@
+%global OHPC_BUILD 1
+%global PROJ_NAME       ohpc
+%global OHPC_HOME       /opt/%{PROJ_NAME}
+%global OHPC_ADMIN      %{OHPC_HOME}/admin
+%global OHPC_PUB        %{OHPC_HOME}/pub
+%global OHPC_COMPILERS  %{OHPC_PUB}/compiler
+%global OHPC_MPI_STACKS %{OHPC_PUB}/mpi
+%global OHPC_APPS       %{OHPC_PUB}/apps
+%global OHPC_LIBS       %{OHPC_PUB}/libs
+%global OHPC_MODULES    %{OHPC_PUB}/modulefiles
+%global OHPC_MODULEDEPS %{OHPC_PUB}/moduledeps
+%global debug_package   %{nil}
+

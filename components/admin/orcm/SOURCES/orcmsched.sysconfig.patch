@@ -1,8 +1,0 @@
---- orcm-0.7.0/contrib/dist/linux/orcmsched.sysconfig.orig	2015-02-11 21:01:57.000000000 -0800
-+++ orcm-0.7.0/contrib/dist/linux/orcmsched.sysconfig	2015-04-06 15:30:44.000000000 -0700
-@@ -13,4 +13,4 @@
- #
- # Options for orcmsched
- #
--ORCMSCHED_OPTS="--omca mca_base_verbose syslog"
-+ORCMSCHED_OPTS="--omca mca_base_verbose syslog,syslogpri:info"

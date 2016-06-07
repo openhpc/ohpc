@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -26,21 +26,26 @@
 
 # Boost C++ library that is is dependent on compiler toolchain and MPI
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 %define toolset gcc
 BuildRequires: gnu-compilers%{PROJ_DELIM}
@@ -50,7 +55,7 @@ Requires:      gnu-compilers%{PROJ_DELIM}
 %define toolset intel-linux
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -69,16 +74,10 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 %define _unpackaged_files_terminate_build 0
 %define build_mpi 1
-
-#Added FSP build convention
-%define debug_package %{nil}
-
-#%define bversion 1_57_0
-%define bversion %(echo %{version} | tr . _)
 
 # Base package name
 %define pname boost
@@ -86,21 +85,24 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.58.0
+Version:        1.60.0
+
+%define version_exp 1_60_0
+
 Release:        0
 License:        BSL-1.0
-Group:		fsp/parallel-libs
+Group:		%{PROJ_NAME}/parallel-libs
 Url:            http://www.boost.org
-Source0:	%{pname}_%{bversion}.tar.gz 
+Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boost_%{version_exp}.tar.gz
 Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
-Source101:	FSP_macros
-Source102:	FSP_setup_compiler
-Source103:	FSP_setup_mpi
+Source101:	OHPC_macros
+Source102:	OHPC_setup_compiler
+Source103:	OHPC_setup_mpi
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
@@ -109,10 +111,15 @@ BuildRequires:  python-devel
 BuildRequires:  xorg-x11-devel
 BuildRequires:  zlib-devel
 
+# (Tron: 3/4/16) Add libicu dependency for SLES12sp1 as the distro does not seem to have it by default and some tests are failing
+%if 0%{?suse_version}
+Requires: libicu-devel >= 4.4
+%endif
+
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 Boost provides free peer-reviewed portable C++ source libraries. The
@@ -134,17 +141,17 @@ see the boost-doc package.
 
 
 %prep
-%setup -q -n %{pname}_%{bversion} 
+%setup -q -n %{pname}_%{version_exp} 
 
 %build
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
 
 %if %build_mpi
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_mpi
 export CC=mpicc
 export CXX=mpicxx
 export F77=mpif77
@@ -153,7 +160,6 @@ export MPICC=mpicc
 export MPIFC=mpifc
 export MPICXX=mpicxx
 %endif
-# End FSP #####################
 
 
 LIBRARIES_FLAGS=--with-libraries=all
@@ -180,14 +186,14 @@ install -D -m 0644 %SOURCE2 %{buildroot}%{install_path}/include/boost/intel-mkl/
 install -D -m 0644 %SOURCE3 %{buildroot}%{install_path}/include/boost/intel-mkl/mkl_boost_ublas_matrix_prod.hpp
 
 
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
 
 %if %build_mpi
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_mpi
 export CC=mpicc
 export CXX=mpicxx
 export F77=mpif77
@@ -200,13 +206,13 @@ export MPICXX=mpicxx
 ./b2 %{?_smp_mflags} install threading=multi link=shared --prefix=%{buildroot}/%{install_path} --user-config=./user-config.jam
 
 
-# FSP module file
+# OpenHPC module file
 %if %build_mpi
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 %else
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 %endif
 #%Module1.0#####################################################################
 
@@ -247,7 +253,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 family "boost"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -267,8 +273,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc INSTALL LICENSE_1_0.txt
 
 %changelog

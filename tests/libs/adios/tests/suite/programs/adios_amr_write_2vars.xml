@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<adios-config host-language="C">
+    <adios-group name="temperature" coordination-communicator="comm" stats="On">
+    <var name="g1" type="integer"/>
+    <var name="g2" type="integer"/>
+    <var name="o1" type="integer"/>
+    <var name="o2" type="integer"/>
+    <var name="l1" type="integer"/>
+    <var name="l2" type="integer"/>
+    <global-bounds dimensions="g1,g2" offsets="o1,o2">
+       <var name="temperature" gwrite="t" type="double" dimensions="l1,l2"/>
+       <var name="pressure" gwrite="p" type="integer" dimensions="l1,l2"/>
+    </global-bounds>
+    <attribute name="description" path="/temperature" value="Global array written from 'size' processes" type="string"/>
+</adios-group>
+
+<!-- <method group="temperature" method="MPI_AMR">stripe_count=1;stripe_size=10485760;num_aggregators=8;merging_pgs=0</method> -->
+<method group="temperature" method="POSIX"/>
+
+<buffer size-MB="100" allocate-time="now"/>
+
+</adios-config>
+

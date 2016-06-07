@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,10 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname pdsh
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}
@@ -19,9 +19,10 @@ Version:   2.31
 Release:   %{_rel}
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
-DocDir:    %{FSP_PUB}/doc/contrib
-Group:     fsp/admin
-Source0:   pdsh-%{version}.tar.bz2
+DocDir:    %{OHPC_PUB}/doc/contrib
+Group:     %{PROJ_NAME}/admin
+#Source0:   %{pname}-%{version}.tar.gz
+Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
@@ -30,7 +31,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 ### Requires: pdsh-rcmd
 
 # Default library install path
-%define install_path %{FSP_HOME}/admin/%{pname}
+%define install_path %{OHPC_HOME}/admin/%{pname}
 
 #
 # Enabling and disabling pdsh options
@@ -53,21 +54,21 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #
 #  Definition of default packages to build on various platforms:
 # 
-%define _defaults ssh exec readline pam slurm
+%define _defaults ssh exec readline pam
 
 #   LLNL system defaults
-%if 0%{?chaos}
-%define _default_with %{_defaults} mrsh nodeupdown genders slurm 
-%else
+#%if 0%{?chaos}
+#%define _default_with %{_defaults} mrsh nodeupdown genders slurm 
+#%else
 #   All other defaults
-%define _default_with %{_defaults} dshgroups netgroup machines 
-%endif
+%define _default_with %{_defaults} mrsh genders slurm
+#%endif
 
 #
 #   Environment variables can be used to override defaults above:
 #
-%define _env_without ${PDSH_WITHOUT_OPTIONS}
-%define _env_with    ${PDSH_WITH_OPTIONS} 
+#%define _env_without ${PDSH_WITHOUT_OPTIONS}
+#%define _env_with    ${PDSH_WITH_OPTIONS} 
 
 #   Shortcut for % global expansion
 %define dstr "%%%%"global
@@ -128,13 +129,15 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 %endif
 
 
-%{?_with_mrsh:BuildRequires: munge-devel}
+#%{?_with_mrsh:BuildRequires: munge-devel%{PROJ_DELIM}}
+#BuildRequires: munge-devel%{PROJ_DELIM}
 %{?_with_qshell:BuildRequires: qsnetlibs}
 %{?_with_mqshell:BuildRequires: qsnetlibs}
 %{?_with_readline:BuildRequires: readline-devel}
 %{?_with_readline:BuildRequires: ncurses-devel}
 %{?_with_nodeupdown:BuildRequires: whatsup}
-%{?_with_genders:BuildRequires: genders > 1.0}
+#%{?_with_genders:BuildRequires: genders > 1.0}
+#BuildRequires: genders > 1.0
 %{?_with_pam:BuildRequires: pam-devel}
 %{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
 %{?_with_torque:BuildRequires: torque-devel}
@@ -311,12 +314,13 @@ from an allocated Torque job.
 ##############################################################################
 
 %prep
-%setup  -q -n %{pname}-%{version}
+%setup  -q -n %{pname}-%{pname}-%{version}
 ##############################################################################
 
 %build
 
 ./configure --prefix=%{install_path} \
+    --with-rcmd-rank-list="ssh mrsh rsh krb4 qsh mqsh exec xcpu" \
     %{?_enable_debug}       \
     %{?_with_pam}           \
     %{?_without_pam}        \
@@ -344,8 +348,8 @@ from an allocated Torque job.
     %{?_without_mrsh}       \
     %{?_with_mqshell}       \
     %{?_without_mqshell}    \
-    %{?_with_xcpu}       \
-    %{?_without_xcpu}    \
+    %{?_with_xcpu}          \
+    %{?_without_xcpu}       \
     %{?_with_slurm}         \
     %{?_without_slurm}      \
     %{?_with_torque}        \
@@ -353,7 +357,7 @@ from an allocated Torque job.
     %{?_with_dshgroups}     \
     %{?_without_dshgroups}  \
     %{?_with_netgroup}      \
-    %{?_without_netgroup} 
+    %{?_without_netgroup}
     
            
 # FIXME: build fails when trying to build with _smp_mflags if qsnet is enabled
@@ -372,7 +376,7 @@ if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.mqshd ]; then
    install -D -m644 etc/mqshell.xinetd $RPM_BUILD_ROOT/%{_sysconfdir}/xinetd.d/mqshell
 fi
 
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 # install_doc_files
 %endif
 
@@ -388,6 +392,8 @@ ln -sf %{install_path}/bin/dshbak ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/pdcp ${RPM_BUILD_ROOT}/%{_bindir}
 ln -sf %{install_path}/bin/rpdcp ${RPM_BUILD_ROOT}/%{_bindir}
 
+find ${RPM_BUILD_ROOT}
+
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 ##############################################################################
@@ -400,16 +406,16 @@ rm -rf "$RPM_BUILD_ROOT"
 %defattr(-,root,root)
 %doc COPYING README NEWS DISCLAIMER 
 %doc README.KRB4 README.modules README.QsNet
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %{_bindir}/pdsh
 %{_bindir}/dshbak
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
 
-%if 0%{?FSP_BUILD}
-# dir %{FSP_PUB}/share/doc
-# {FSP_PUB}/share/doc/%{pname}
+%if 0%{?OHPC_BUILD}
+# dir %{OHPC_PUB}/share/doc
+# {OHPC_PUB}/share/doc/%{pname}
 %doc AUTHORS
 
 %endif

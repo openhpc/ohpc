@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,19 +8,23 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname itac
 
 Summary:   Intel(R) Trace Analyzer and Collector
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   9.1.0.010
+Version:   9.1.2.024
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
+#Source2:   OHPC_mod_generator.sh
+Source2:   modfile-ohpc.input
 Release:   1
-License:   Copyright (C) 2003-2014 Intel Corporation. All rights reserved.
+License:   Copyright (C) 2003-2016 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
-URL:       http://www.intel.com/software/products/
-Group:     fsp/perf-tools
+URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
+Group:     %{PROJ_NAME}/perf-tools
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
@@ -30,8 +34,6 @@ AutoReq:   no
 Requires: libpng12
 %endif
 
-%include %{_sourcedir}/FSP_macros
-
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
@@ -39,11 +41,11 @@ Requires: libpng12
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
-%define package_target /opt/fsp/pub/%{pname}/%{version}
+%define package_target %{OHPC_PUB}/%{pname}/%{version}
 
 %description
 
-FSP collection of the Intel(R) Trace Analyzer and Collector for Linux* OS.
+OpenHPC collection of the Intel(R) Trace Analyzer and Collector for Linux* OS.
 
 %prep
 
@@ -56,9 +58,9 @@ cd %{buildroot}
 %{__tar} xfz %{SOURCE0}
 cd -
 
-# FSP module file
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -81,20 +83,20 @@ set     version                 %{version}
 setenv          ITAC_DIR        %{package_target}
 setenv          ITAC_BIN        %{package_target}/bin
 setenv          ITAC_LIB        %{package_target}/lib
-prepend-path    PATH            %{package_target}/bin
-prepend-path    MANPATH         %{package_target}/man
-prepend-path    LD_LIBRARY_PATH %{package_target}/mic/slib:%{package_target}/intel64/slib:%{package_target}/lib
-prepend-path    CLASSPATH       %{package_target}/intel64/lib
-
-setenv          VT_ADD_LIBS     "-ldwarf -lelf -lvtunwind -lnsl -lm -ldl -lpthread"
-setenv          VT_LIB_DIR      %{package_target}/intel64/lib
-setenv          VT_ROOT         %{package_target}
-setenv          VT_ARCH         intel64
-setenv          VT_SLIB_DIR     %{package_target}/intel64/slib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+# Parse shell script to derive module settings
+ 
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+
+
+# Parse shell script to derive module settings
+
+# %%{__chmod} 700 %{_sourcedir}/OHPC_mod_generator.sh 
+# %%{_sourcedir}/OHPC_mod_generator.sh %{buildroot}/%{package_target}/intel64/bin/itacvars.sh >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
 EOF
@@ -104,7 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 
 %changelog
 

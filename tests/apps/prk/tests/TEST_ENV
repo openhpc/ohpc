@@ -1,0 +1,9 @@
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+CMD_TIMEOUT="5:00"
+TEST_MAX_COMPUTES=1024
+TEST_NUM_RANKS=2
+TEST_NUM_THREADS=4
+TEST_NUM_ITERS=10

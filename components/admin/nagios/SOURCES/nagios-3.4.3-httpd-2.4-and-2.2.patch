@@ -1,72 +1,72 @@
 diff -ruN nagios/sample-config/httpd.conf.in nagios-modified/sample-config/httpd.conf.in
 --- nagios/sample-config/httpd.conf.in	2012-12-05 13:07:31.076014408 +0000
 +++ nagios-modified/sample-config/httpd.conf.in	2012-12-05 13:10:07.261019793 +0000
-@@ -12,15 +12,28 @@
+@@ -10,7 +10,6 @@
+ <Directory "@cgidir@">
  #  SSLRequireSSL
     Options ExecCGI
-    AllowOverride None
--   Order allow,deny
--   Allow from all
--#  Order deny,allow
--#  Deny from all
--#  Allow from 127.0.0.1
+-   AllowOverride None
+    <IfVersion >= 2.3>
+       <RequireAll>
+          Require all granted
+@@ -19,7 +18,24 @@
+          AuthName "Nagios Access"
+          AuthType Basic
+          AuthUserFile @sysconfdir@/passwd
+-         Require valid-user
 +
-    AuthName "Nagios Access"
-    AuthType Basic
-    AuthUserFile @sysconfdir@/passwd
--   Require valid-user
-+
-+   <IfModule mod_authz_core.c>
-+      # Apache 2.4
-+      <RequireAll>
-+         Require all granted
-+         # Require local
-+         Require valid-user
-+      </RequireAll>
-+   </IfModule>
-+   <IfModule !mod_authz_core.c>
-+      # Apache 2.2
-+      Order allow,deny
-+      Allow from all
-+      #  Order deny,allow
-+      #  Deny from all
-+      #  Allow from 127.0.0.1
-+      Require valid-user
-+   </IfModule>
- </Directory>
- 
- Alias @htmurl@ "@datadir@"
-@@ -29,14 +42,27 @@
++        <IfModule mod_authz_core.c>
++           # Apache 2.4
++           <RequireAll>
++              Require all granted
++              # Require local
++              Require valid-user
++           </RequireAll>
++        </IfModule>
++        <IfModule !mod_authz_core.c>
++           # Apache 2.2
++           Order allow,deny
++           Allow from all
++           #  Order deny,allow
++           #  Deny from all
++           #  Allow from 127.0.0.1
++           Require valid-user
++        </IfModule>
+       </RequireAll>
+    </IfVersion>
+    <IfVersion < 2.3>
+@@ -41,16 +57,31 @@
+ <Directory "@datadir@">
  #  SSLRequireSSL
     Options None
-    AllowOverride None
--   Order allow,deny
--   Allow from all
--#  Order deny,allow
--#  Deny from all
--#  Allow from 127.0.0.1
-+
-    AuthName "Nagios Access"
-    AuthType Basic
-    AuthUserFile @sysconfdir@/passwd
--   Require valid-user
-+
-+   <IfModule mod_authz_core.c>
-+      # Apache 2.4
-+      <RequireAll>
-+         Require all granted
-+         # Require local
-+         Require valid-user
-+      </RequireAll>
-+   </IfModule>
-+   <IfModule !mod_authz_core.c>
-+      # Apache 2.2
-+      Order allow,deny
-+      Allow from all
-+      #  Order deny,allow
-+      #  Deny from all
-+      #  Allow from 127.0.0.1
-+      Require valid-user
-+   </IfModule>
- </Directory>
+-   AllowOverride None
+    <IfVersion >= 2.3>
+       <RequireAll>
+          Require all granted
+-#        Require host 127.0.0.1
  
+          AuthName "Nagios Access"
+          AuthType Basic
+          AuthUserFile @sysconfdir@/passwd
+-         Require valid-user
++     
++         <IfModule mod_authz_core.c>
++           # Apache 2.4
++           <RequireAll>
++              Require all granted
++              # Require local
++              Require valid-user
++           </RequireAll>
++        </IfModule>
++        <IfModule !mod_authz_core.c>
++           # Apache 2.2
++           Order allow,deny
++           Allow from all
++           #  Order deny,allow
++           #  Deny from all
++           #  Allow from 127.0.0.1
++           Require valid-user
++        </IfModule>
+       </RequireAll>
+    </IfVersion>
+    <IfVersion < 2.3>

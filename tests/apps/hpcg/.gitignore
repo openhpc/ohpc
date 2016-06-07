@@ -1,0 +1,12 @@
+*~
+*.o
+*.yaml
+hpcg_log_*.txt
+log.HPCG
+xhpcg
+xhpcg.*
+family-*/
+compile
+test-driver
+test-suite.log.orig
+job.*.out

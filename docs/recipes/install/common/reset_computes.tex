@@ -1,4 +1,32 @@
 At this point, the {\em master} server should be able to boot the newly defined
-compute nodes. Assuming that the compute node BIOS settings are configured
-to boot over PXE, all that is required to initiate the provisioning process is to power
-cycle each of the desired hosts using IPMI access.
+compute nodes. Assuming that the compute node BIOS settings are configured to
+boot over PXE, all that is required to initiate the provisioning process is to
+power cycle each of the desired hosts using IPMI access.
+The following commands use the \texttt{ipmitool} utility to initiate power
+resets on each of the four compute hosts. Note that the utility requires that
+the \texttt{IPMI\_PASSWORD} environment variable be set with the local BMC password in
+order to work interactively.
+
+% begin_ohpc_run
+% ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) for ((i=0; i<${num_computes}; i++)) ; do
+              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
+        done
+\end{lstlisting} 
+% end_ohpc_run
+
+Once kicked off, the boot process should take less than 5 minutes (depending on
+BIOS post times) and you can verify that the compute hosts are available via
+ssh, or via parallel ssh tools to multiple hosts. For example, to run a command
+on the newly imaged compute hosts using \texttt{pdsh}, execute the following:
+
+%\iftoggle{isCentOS}{\clearpage}
+  
+\begin{lstlisting}[language=bash]
+[sms](*\#*) pdsh -w c[1-4] uptime
+c1  05:03am  up   0:02,  0 users,  load average: 0.20, 0.13, 0.05
+c2  05:03am  up   0:02,  0 users,  load average: 0.20, 0.14, 0.06
+c3  05:03am  up   0:02,  0 users,  load average: 0.19, 0.15, 0.06
+c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
+\end{lstlisting}

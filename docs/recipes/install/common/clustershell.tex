@@ -1,0 +1,24 @@
+\clustershell{} is an event-based Python library to execute commands in parallel
+across cluster nodes. Installation and basic configuration defining three node
+groups ({\em adm}, {\em compute}, and {\em all}) is as follows:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_clustershell} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_validation_comment Install clustershell
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install ClusterShell
+[sms](*\#*) (*\install*) clustershell-ohpc
+
+# Setup node definitions
+[sms](*\#*) cd /etc/clustershell/groups.d
+[sms](*\#*) mv local.cfg local.cfg.orig
+[sms](*\#*) echo "adm: ${sms_name}" > local.cfg
+[sms](*\#*) echo "compute: c[1-${num_computes}]" >> local.cfg
+[sms](*\#*) echo "all: @adm,@compute" >> local.cfg
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+

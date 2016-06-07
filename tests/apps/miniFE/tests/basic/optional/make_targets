@@ -1,0 +1,54 @@
+#-----------------------------------------------------------------------
+
+TPI.o : ./optional/ThreadPool/src/TPI.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $<
+
+#-----------------------------------------------------------------------
+
+CudaNode.o : ./optional/cuda/CudaNode.cpp ./optional/cuda/*.hpp ./optional/cuda/*.h
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $<
+
+CudaVector.o : ./optional/cuda/Vector.cu ./optional/cuda/*.cuh
+	nvcc $(CUDAFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+CudaMatrix.o : ./optional/cuda/Matrix.cu ./optional/cuda/*.cuh
+	nvcc $(CUDAFLAGS) $(CPPFLAGS) -c -o $@ $<
+
+#-----------------------------------------------------------------------
+# Recursive make to create the object files in this directory,
+# generate the archive, and then remove the object files.
+
+libstk.a :
+	cd ./optional ; \
+	$(MAKE) "CC=$(CC)" "CXX=$(CXX)" "CPPFLAGS=$(CPPFLAGS)" "CFLAGS=$(CFLAGS)" "CXXFLAGS=$(CXXFLAGS)" -f make_targets stk_library
+
+STK_SOURCE =	\
+	./shards/src/*.cpp	\
+	./stk_util/util/*.cpp	\
+	./stk_util/environment/*.cpp	\
+	./stk_util/parallel/*.cpp	\
+	./stk_mesh/base/*.cpp	\
+	./stk_mesh/baseImpl/*.cpp	\
+	./stk_mesh/fem/*.cpp	\
+	stk_helpers.cpp
+
+STK_INCLUDES =	\
+	./shards/src/*.hpp	\
+	./shards/src/*.h	\
+	./stk_util/util/*.hpp	\
+	./stk_util/environment/*.hpp	\
+	./stk_util/parallel/*.hpp	\
+	./stk_mesh/base/*.hpp	\
+	./stk_mesh/fem/*.hpp
+
+STK_INC = -I${PWD}/ThreadPool -I${PWD}/shards
+
+stk_library : $(STK_SOURCE) $(STK_INCLUDES)
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(STK_INC) -c $(STK_SOURCE)
+	ar -qc ../libstk.a *.o
+	ranlib ../libstk.a
+	rm *.o
+
+#-----------------------------------------------------------------------
+
+

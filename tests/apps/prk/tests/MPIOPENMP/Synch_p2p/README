@@ -1,0 +1,3 @@
+Use "mpiexec.hydra -np procs -f hostfile -ppn threads ./p2p threads iters xsize ysize"
+or try the run script runp2p instead. This script puts all threads of only one rank 
+on each node, so may be suboptimal.

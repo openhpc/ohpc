@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -25,32 +25,36 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-fsp-header-comp-begin-----------------------------
+#-ohpc-header-comp-begin-----------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
+BuildRequires: openblas-gnu%{PROJ_DELIM}
+Requires:      openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -69,21 +73,20 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-ohpc-header-comp-end-------------------------------
 
 # Base package name
 %define pname hypre
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        2.10.0b
+Version:        2.10.1
 Release:        0
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
-Group:          fsp/parallel-libs
+Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
-Source:         %{pname}-%{version}.tar.gz
-#Patch0:         hypre-2.8.0b-no-date-and-time-fix.patch
+Source:         https://computation.llnl.gov/project/linear_solvers/download/hypre-%{version}.tar.gz
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -104,12 +107,12 @@ BuildRequires:  libxml2-python
 %endif
 BuildRequires:  xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 The goal of the Scalable Linear Solvers project is to develop scalable
@@ -122,49 +125,51 @@ phenomena in the defense, environmental, energy, and biological sciences.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#%patch0 -p1
 
 %build
 
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
 module load superlu_dist
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load scalapack
 %endif
 
-#export includedir=%{_includedir}
 
-#FLAGS="%optflags -fPIC -I%{_includedir}/numpy"
 FLAGS="%optflags -fPIC"
 cd src
 ./configure \
-        --prefix=%{install_path} \
+    --prefix=%{install_path} \
     --without-examples \
     --with-MPI \
     --with-MPI-include=$MPI_DIR/include \
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
     --with-timing \
     --without-openmp \
+%if %{compiler_family} == intel
     --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
     --with-blas-lib-dirs=$MKLROOT/intel64/lib \
-        --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-        --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
-    --with-lapack \
+    --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+    --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
+%else
+    --with-blas-libs=openblas \
+    --with-blas-lib-dirs=$OPENBLAS_LIB \
+    --with-lapack-libs=openblas \
+    --with-lapack-lib-dirs=$OPENBLAS_LIB \
+%endif
     --with-mli \
     --with-fei \
-        --with-superlu \
-        --with-superlu_dist \
+    --with-superlu \
+    --with-superlu_dist \
     CC="mpicc $FLAGS" \
     CXX="mpicxx $FLAGS" \
     F77="mpif77 $FLAGS"
-#    MPI_PREFIX=%{_libdir}/mpi/gcc/$mpi
+
 mkdir -p hypre/lib
 pushd FEI_mv/femli
 make %{?_smp_mflags} all CC="mpicc $FLAGS" \
@@ -178,17 +183,16 @@ cd ..
 
 %install
 
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
 module load superlu_dist
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load scalapack
 %endif
 
 # %%makeinstall macro does not work with hypre
@@ -229,9 +233,9 @@ popd
 rm -rf tmp
 rm libHYPRE.a
 
-# FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -254,7 +258,7 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 and fftw (and mkl for gnu compiler families)
+# Require superlu (and scalapack for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded superlu]  } {
@@ -264,8 +268,8 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
         module load superlu_dist
     }
     if { [is-loaded gnu] } {
-        if { ![is-loaded mkl]  } {
-          module load mkl
+        if { ![is-loaded scalapack]  } {
+          module load scalapack
         }
     }
 }
@@ -282,7 +286,7 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -297,8 +301,8 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
 
 %changelog

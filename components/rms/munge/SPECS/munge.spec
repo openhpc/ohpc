@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,10 +8,11 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname munge
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+
 %define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
@@ -19,10 +20,11 @@ Version:	0.5.11
 Release:	1%{?dist}
 
 Summary:	MUNGE authentication service
-Group:		fsp/rms
+Group:		%{PROJ_NAME}/rms
 License:	GPLv3+ and LGPLv3+
-URL:		https://munge.googlecode.com/
+URL:		http://dun.github.io/munge/
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
+Provides:       %{pname} = %{version}-%{release}
 
 %if 0%{?suse_version} >= 1100
 BuildRequires:	libbz2-devel
@@ -40,13 +42,13 @@ BuildRequires:	zlib-devel
 %endif
 %endif
 BuildRoot:	%{_tmppath}/%{pname}-%{version}
-DocDir:     %{FSP_PUB}/doc/contrib
+DocDir:     %{OHPC_PUB}/doc/contrib
 BuildConflicts: post-build-checks
 
 Conflicts: munge 
 
-Source0:	%{pname}-%{version}.tar.bz2
-Source1:   FSP_macros
+Source0:   https://github.com/dun/munge/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.bz2
+Source1:   OHPC_macros
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
 Patch1:     %{pname}.logdir.patch
 # 6/12/14 karl.w.schulz@intel.com - define default runlevel
@@ -68,6 +70,7 @@ Requires(pre):	shadow-utils
 Summary:	Headers and libraries for developing applications using MUNGE
 Group:		Development/Libraries
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
+Provides:       %{pname}-devel = %{version}-%{release}
 %if 0%{?suse_version}
 BuildRequires:	pkg-config
 %else
@@ -79,6 +82,7 @@ Conflicts: %{pname}-devel
 Summary:	Libraries for applications using MUNGE
 Group:		System Environment/Libraries
 Requires:	%{pname}%{PROJ_DELIM} = %{version}-%{release}
+Provides:	%{pname}-libs = %{version}-%{release}
 Conflicts: %{pname}-libs
 
 %description
@@ -100,7 +104,7 @@ A shared library for applications using MUNGE.
 %prep
 %setup -n %{pname}-%{version}
 
-# Intel FSP patches
+# OpenHPC patches
 %patch1
 %patch2
 %patch3
@@ -217,7 +221,7 @@ fi
 %attr(0600,munge,munge) %config(noreplace) %ghost %{_sysconfdir}/munge/munge.key
 %config(noreplace) %{_sysconfdir}/sysconfig/munge
 
-# FSP mods - systemd 
+# OpenHPC mods - systemd 
 %if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 %{_prefix}/lib/systemd/system/munge.service
 %else
@@ -251,3 +255,4 @@ fi
 %files -n %{pname}-libs%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %{_libdir}/*.so.*
+

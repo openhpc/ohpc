@@ -11,24 +11,39 @@ diff --git a/sample-config/httpd.conf.in b/sample-config/httpd.conf.in
 index 1b1e693..0a32781 100644
 --- a/sample-config/httpd.conf.in
 +++ b/sample-config/httpd.conf.in
-@@ -19,7 +19,7 @@ ScriptAlias @cgiurl@ "@cgidir@"
- #  Allow from 127.0.0.1
-    AuthName "Nagios Access"
-    AuthType Basic
--   AuthUserFile @sysconfdir@/htpasswd.users
-+   AuthUserFile @sysconfdir@/passwd
-    Require valid-user
- </Directory>
+@@ -18,7 +18,7 @@
  
-@@ -36,7 +36,7 @@ Alias @htmurl@ "@datadir@"
- #  Allow from 127.0.0.1
-    AuthName "Nagios Access"
-    AuthType Basic
--   AuthUserFile @sysconfdir@/htpasswd.users
-+   AuthUserFile @sysconfdir@/passwd
-    Require valid-user
- </Directory>
+          AuthName "Nagios Access"
+          AuthType Basic
+-         AuthUserFile @sysconfdir@/htpasswd.users
++         AuthUserFile @sysconfdir@/passwd
+          Require valid-user
+       </RequireAll>
+    </IfVersion>
+@@ -31,7 +31,7 @@
  
--- 
-1.7.3.5
-
+       AuthName "Nagios Access"
+       AuthType Basic
+-      AuthUserFile @sysconfdir@/htpasswd.users
++      AuthUserFile @sysconfdir@/passwd
+       Require valid-user
+    </IfVersion>
+ </Directory>
+@@ -49,7 +49,7 @@
+ 
+          AuthName "Nagios Access"
+          AuthType Basic
+-         AuthUserFile @sysconfdir@/htpasswd.users
++         AuthUserFile @sysconfdir@/passwd
+          Require valid-user
+       </RequireAll>
+    </IfVersion>
+@@ -62,7 +62,7 @@
+ 
+       AuthName "Nagios Access"
+       AuthType Basic
+-      AuthUserFile @sysconfdir@/htpasswd.users
++      AuthUserFile @sysconfdir@/passwd
+       Require valid-user
+    </IfVersion>
+ </Directory>

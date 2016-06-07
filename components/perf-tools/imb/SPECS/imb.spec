@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -10,21 +10,26 @@
 
 # FFTW library that is is dependent on compiler toolchain and MPI
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -32,7 +37,7 @@ Requires:      gnu-compilers%{PROJ_DELIM}
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -51,7 +56,7 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname imb
@@ -59,25 +64,25 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   4.0.2
+Version:   4.1
 Release:   1
 License:   CPL
-Group:     fsp/perf-tools
+Group:     %{PROJ_NAME}/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
 Source0:   %{PNAME}_%{version}.tgz
-Source1:   FSP_macros
-Source2:   FSP_setup_compiler
-Source3:   FSP_setup_mpi
+Source1:   OHPC_macros
+Source2:   OHPC_setup_compiler
+Source3:   OHPC_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define debug_package %{nil}
 
-# Include FSP patches
+# OpenHPC patches
 Patch1: imb.cc.patch
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 The Intel MPI Benchmarks (IMB) perform a set of MPI performance
@@ -87,16 +92,16 @@ a range of message sizes.
 %prep
 %setup -n imb
 
-# Intel FSP patches
+# OpenHPC patches
 %patch1 -p0
 
 %build
 
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_mpi
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_mpi
 
 cd src
 make all
@@ -104,11 +109,11 @@ cd -
 
 %install
 
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+# OpenHPC compiler designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 %{__mkdir} -p %{buildroot}%{install_path}/bin
 cd src
@@ -121,9 +126,9 @@ cd -
 
 
 
-# FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -148,7 +153,7 @@ setenv          %{PNAME}_DIR        %{install_path}
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -163,12 +168,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc license/license.txt license/use-of-trademark-license.txt ReadMe_IMB.txt
 
 
 %changelog
+* Tue Aug 17 2015  <karl.w.schulz@intel.com> -
+- Update to version 4.1
+
 * Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
 - Initial build.
-

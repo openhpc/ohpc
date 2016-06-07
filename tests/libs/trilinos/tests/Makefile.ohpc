@@ -1,0 +1,26 @@
+include Makefile.export.Trilinos
+
+CXX=$(Trilinos_CXX_COMPILER)
+CC=$(Trilinos_C_COMPILER)
+FORT=$(Trilinos_Fortran_COMPILER)
+
+CXX_FLAGS=$(Trilinos_CXX_COMPILER_FLAGS) $(USER_CXX_FLAGS)
+C_FLAGS=$(Trilinos_C_COMPILER_FLAGS) $(USERC_FLAGS)
+FORT_FLAGS=$(Trilinos_Fortran_COMPILER_FLAGS) $(USER_FORT_FLAGS)
+
+INCLUDE_DIRS=$(Trilinos_INCLUDE_DIRS) $(Trilinos_TPL_INCLUDE_DIRS)
+LIBRARY_DIRS=$(Trilinos_LIBRARY_DIRS) $(Trilinos_TPL_LIBRARY_DIRS)
+LIBRARIES=$(Trilinos_LIBRARIES) $(Trilinos_TPL_LIBRARIES)
+
+LINK_FLAGS=$(Trilinos_EXTRA_LD_FLAGS)
+
+all: lesson_kokkos_memspace.exe lesson_tpetra_init.exe lesson_tpetra_dataredist.exe lesson_epetra_dataredist.exe lesson_epetra_galeri.exe lesson_epetra_ifpack.exe lesson_teuchos_pl.exe lesson_teuchos_sdm.exe lesson_teuchos_blas.exe lesson_teuchos_lapack.exe
+
+%.exe : %.o
+	$(CXX) $(CXX_FLAGS) $< -o $@ $(LINK_FLAGS) $(LIBRARY_DIRS) $(LIBRARIES)
+
+%.o : %.cpp
+	$(CXX) -c -o $@ $(CXX_FLAGS) $(INCLUDE_DIRS) $<
+
+clean:
+	rm -f *.o *.exe 

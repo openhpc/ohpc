@@ -1,0 +1,14 @@
+#%Module1.0#####################################################################
+# Test module environment
+#############################################################################
+
+proc ModulesHelp { } {
+puts stderr "Help message from test2 module"
+}
+
+module-whatis "whatis: test2-module"
+
+setenv 	      TEST_MODULE	zaphod
+prepend-path  PATH        	/my/test2-module-path
+append-path   MANPATH           /my/test2-manpath
+family                      	test_family

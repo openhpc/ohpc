@@ -1,0 +1,44 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+@test "[memlock] check increased soft limit" {
+
+    srun -N 4 prlimit -l -o SOFT | grep -v SOFT >& .cmd_output || exit 1
+
+    for limit in `cat .cmd_output`; do
+        if [ "$limit" != "unlimited" ];then
+            flunk $limit
+        fi
+    done
+
+    rm -f .cmd_output
+
+}
+
+@test "[memlock] check increased hard limit" {
+    
+    srun -N 4 prlimit -l -o HARD | grep -v HARD >& .cmd_output || exit 1
+
+    for limit in `cat .cmd_output`; do
+        if [ "$limit" != "unlimited" ];then
+            flunk $limit
+        fi
+    done
+
+    rm -f .cmd_output
+
+}

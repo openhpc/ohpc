@@ -1,0 +1,81 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+PKG=OPENBLAS
+module=openblas
+testname=libs/OpenBLAS
+library=libopenblas
+rpm=openblas-$LMOD_FAMILY_COMPILER${DELIM}
+
+check_rms
+
+@test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+
+    rm -f .cmd_output
+}
+
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
+    DIR=${PKG}_DIR
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+    
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+}
+
+# ----------
+# Lib Tests
+# ----------
+
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+ 
+    if [ ! -d ${!LIB} ];then
+        flunk "directory ${!LIB} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -s ${!LIB}/${library}.so ];then
+        flunk "${library}.so does not exist"
+    fi 
+}
+
+@test "[$testname] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ -e ${!LIB}/${library}.a ];then
+        flunk "${library}.a exists when not expecting it"
+    fi 
+}

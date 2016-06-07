@@ -1,5 +1,5 @@
---- numpy-1.9.1/numpy/distutils/command/install.py	2014-10-26 07:36:14.000000000 -0700
-+++ numpy-1.9.1.patch/numpy/distutils/command/install.py	2014-11-17 14:59:39.327433700 -0800
+--- numpy-1.10.2/numpy/distutils/command/install.py	2015-08-11 10:03:43.000000000 -0700
++++ numpy-1.10.2.patch/numpy/distutils/command/install.py	2016-02-17 14:40:48.314582100 -0800
 @@ -69,7 +69,7 @@
              need_rewrite = False
              for l in f:
@@ -9,9 +9,9 @@
                      need_rewrite = True
                      l = '"%s"' % (l)
                  lines.append(l)
---- numpy-1.9.1/numpy/distutils/command/autodist.py	2014-10-26 07:36:14.000000000 -0700
-+++ numpy-1.9.1.patch/numpy/distutils/command/autodist.py	2014-11-17 14:59:39.337935800 -0800
-@@ -32,7 +32,7 @@
+--- numpy-1.10.2/numpy/distutils/command/autodist.py	2015-10-12 07:29:01.000000000 -0700
++++ numpy-1.10.2.patch/numpy/distutils/command/autodist.py	2016-02-17 14:40:48.320083200 -0800
+@@ -49,7 +49,7 @@
      """Return True if the C compiler is GCC 4.x."""
      cmd._check_compiler()
      body = """

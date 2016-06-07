@@ -1,0 +1,22 @@
+File info:
+  of groups:     1
+  of variables:  13
+  of attributes: 0
+  of meshes:     0
+  time steps:    0 - 0
+  bp version:    2
+  statistics:    Min / Max / Avg / Std_dev
+
+  byte                var_byte            scalar = -4 
+  short               var_short           scalar = -3 
+  integer             var_int             scalar = -2 
+  long long           var_long            scalar = -1 
+  unsigned byte       var_ubyte           scalar = 1 
+  unsigned short      var_ushort          scalar = 2 
+  unsigned integer    var_uint            scalar = 3 
+  unsigned long long  var_ulong           scalar = 4 
+  real                var_real            scalar = 5 
+  double              var_double          scalar = 6 
+  string              var_string          scalar = "ADIOS example"
+  complex             var_complex         scalar = (8,i9) 
+  double complex      var_double_complex  scalar = (10,i11)

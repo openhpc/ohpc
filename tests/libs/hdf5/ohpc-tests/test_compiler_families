@@ -1,0 +1,75 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV         || exit 1
+source ./common/functions || exit 1
+
+# HDF5 tests using h5cc, h5c++, h5fc
+
+cd libs/hdf5/test-h5-wrappers/ || exit 1
+
+export BATS_JUNIT_CLASS=HDF5
+
+# bootstrap the local autotools project
+
+./bootstrap || exit 1
+
+
+for compiler in $COMPILER_FAMILIES ; do
+
+    echo " "
+    echo " "
+    echo "-------------------------------------------------------"
+    echo "User Libraries: HDF5 tests using h5 wrappers: $compiler"
+    echo "-------------------------------------------------------"
+
+    module purge || exit 1
+    module load autotools || exit 1
+    module load $compiler || exit 1
+    module load hdf5 || exit 1
+
+    ./configure      || exit 1
+    make clean       || exit 1
+    make -j 4 check  || exit 1
+
+#    save_logs_compiler_family ohpc_module $compiler
+
+    make distclean
+
+done
+
+cd -
+
+# HDF5 tests using module environment variables
+
+cd libs/hdf5/test-env-variables || exit 1
+
+# bootstrap the local autotools project
+
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+
+    echo " "
+    echo " "
+    echo "----------------------------------------------------------"
+    echo "User Libraries: HDF5 tests using env variables: $compiler"
+    echo "----------------------------------------------------------"
+
+    module purge          || exit 1
+    module load autotools || exit 1
+    module load $compiler || exit 1
+    module load hdf5      || exit 1
+
+    ./configure           || exit 1
+    make clean            || exit 1
+    make -j 4 check       || exit 1
+
+    save_logs_compiler_family ohpc_module $compiler
+
+    make distclean
+
+done

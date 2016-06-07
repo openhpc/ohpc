@@ -1,0 +1,34 @@
+#-----------------------------------------------------------------------
+# ATTENTION:
+#
+# This file does not enable MPI in the binary, this is just OpenMP
+# only. To enable MPI calls add -DHAVE_MPI to CPPFLAGS
+#
+#-----------------------------------------------------------------------
+
+MINIFE_TYPES =  \
+        -DMINIFE_SCALAR=double   \
+        -DMINIFE_LOCAL_ORDINAL=int      \
+        -DMINIFE_GLOBAL_ORDINAL=int
+
+MINIFE_MATRIX_TYPE = -DMINIFE_CSR_MATRIX
+# MINIFE_MATRIX_TYPE = -DMINIFE_ELL_MATRIX
+
+#-----------------------------------------------------------------------
+
+OPENMP=-openmp
+CFLAGS = -O3 $(OPENMP) -restrict -mavx
+CXXFLAGS = $(CFLAGS)
+
+CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES) $(MINIFE_MATRIX_TYPE) \
+	-DMINIFE_RESTRICT=restrict
+
+LDFLAGS=$(CFLAGS)
+LIBS=
+
+CXX=icpc
+CC=icc
+
+#-----------------------------------------------------------------------
+
+include make_targets

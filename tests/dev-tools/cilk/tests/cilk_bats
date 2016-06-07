@@ -1,0 +1,31 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions
+source ../../../common/functions || exit 1
+
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+PKG="dev-tools/cilk"
+
+@test "[$PKG] CILK Test - linear_recurrence" {
+    run linear_recurrence
+}
+
+@test "[$PKG] CILK Test - matrix" {
+    run matrix
+}
+
+@test "[$PKG] CILK Test - matrix_multiply" {
+    run matrix_multiply
+}
+
+@test "[$PKG] CILK Test - qsort" {
+    run qsort
+}
+
+@test "[$PKG] CILK Test - qsort_mutex" {
+    run qsort_mutex
+}

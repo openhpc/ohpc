@@ -1,11 +1,11 @@
---- petsc-3.5.3/config/BuildSystem/config/setCompilers.py	2015-01-30 22:23:51.000000000 -0800
-+++ petsc-3.5.3.patch/config/BuildSystem/config/setCompilers.py	2015-02-23 06:34:53.000000000 -0800
-@@ -1328,7 +1328,7 @@
+--- petsc-3.6.1/config/BuildSystem/config/setCompilers.py	2015-07-22 08:22:46.000000000 -0700
++++ petsc-3.6.1.patch/config/BuildSystem/config/setCompilers.py	2015-08-24 09:46:24.000000000 -0700
+@@ -1339,7 +1339,7 @@
        self.pushLanguage(language)
        # test '-R' before '-rpath' as sun compilers [c,fortran] don't give proper errors with wrong options.
        if not Configure.isDarwin():
 -        testFlags = ['-Wl,-rpath,', '-R','-rpath ' , '-Wl,-R,']
 +        testFlags = []
        else:
-         testFlags = []
+         testFlags = ['-Wl,-rpath,']
        # test '-R' before '-Wl,-rpath' for SUN compilers [as cc on linux accepts -Wl,-rpath, but  f90 & CC do not.

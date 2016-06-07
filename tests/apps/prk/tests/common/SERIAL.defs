@@ -1,0 +1,5 @@
+include ../../common/make.defs
+CCOMPILER =$(CC)
+CLINKER   = $(CCOMPILER)
+COMOBJS   = wtime.o
+PROG_ENV  = -DSERIAL

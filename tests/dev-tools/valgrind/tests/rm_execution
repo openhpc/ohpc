@@ -1,0 +1,54 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions                  || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+PKG="Valgrind"
+
+@test "[$PKG] Callgrind execution under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    test=simwork
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+
+    rm -f callgrind.out*
+
+    run run_serial_binary valgrind -q --error-exitcode=1 --tool=callgrind ./$test
+    assert_success
+
+    # verify callgrind output was generated
+    run ls -l callgrind.out*
+    assert_success
+}
+
+@test "[$PKG] Memcheck execution under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+
+    # Clean program that should run without incident
+    if [ ! -x ./hello ];then
+        flunk "./hello does not exist"
+    fi
+
+    run run_serial_binary valgrind -q --error-exitcode=1 ./hello
+    assert_success
+
+    # Program with memory error that valgrind should detect
+    if [ ! -x ./badfree ];then
+        flunk "./badfree does not exist"
+    fi
+
+    run run_serial_binary valgrind -q --error-exitcode=1 ./badfree
+    assert_failure
+}
+

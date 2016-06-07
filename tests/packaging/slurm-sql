@@ -1,0 +1,45 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+source ./common/TEST_ENV
+
+# $ID will be set to sles or centos
+source /etc/os-release
+
+containsElement () {
+  local e
+  for e in "${@:2}"; do [[ "$e" =~ "$1" ]] && return 0; done
+  return 1
+}
+
+@test "[$TEST_DIR] verify contents of slurm-sql exist" {
+    if [ "x$ID" = "xcentos" ]; then
+        # [root@master4-centos71 tests]# repoquery --list slurm-sql-ohpc
+        # /usr/lib64/slurm
+        # /usr/lib64/slurm/accounting_storage_mysql.so
+        # /usr/lib64/slurm/jobcomp_mysql.so
+        run bash -c "/bin/repoquery --list slurm-sql-ohpc 2>&1 | /bin/tee /tmp/pack-slurm-sql.$$"
+        cat /tmp/pack-slurm-sql.$$
+#        [[ ${lines[1]} =~ "accounting_storage_mysql.so" ]]
+#        [[ ${lines[2]} =~ "jobcomp_mysql.so" ]]
+        containsElement "accounting_storage_mysql.so" "${lines[@]}"
+        containsElement "jobcomp_mysql.so" "${lines[@]}"
+    elif [ "x$ID" = "xsles" ]; then
+        export XDG_CACHE_HOME="/tmp/cmt.$$"
+        pushd /tmp && rm -rf cmt.$$ && popd
+        # Fetch the files without installing:
+        zypper download slurm-sql-ohpc
+        # List the files in an uninstalled package:
+        # /tmp/zypp/packages/ForestPeak_15.42_Factory/x86_64/slurm-sql-ohpc-15.08.7-4.1.x86_64.rpm
+        run bash -c "rpm -qlp $XDG_CACHE_HOME/zypp/packages/*/x86_64/slurm-sql-*.rpm 2>&1 | /usr/bin/tee /tmp/pack-slurm-sql.$$"
+        cat /tmp/pack-slurm-sql.$$
+#        [[ ${lines[1]} =~ "accounting_storage_mysql.so" ]]
+#        [[ ${lines[2]} =~ "jobcomp_mysql.so" ]]
+        containsElement "accounting_storage_mysql.so" "${lines[@]}"
+        containsElement "jobcomp_mysql.so" "${lines[@]}"
+    else
+        flunk "test designed for centos or sles."
+    fi
+}

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"      || exit 1
+
+export BATS_JUNIT_CLASS=$TEST_DIR
+source ./common/TEST_ENV  || exit 1
+source ./common/functions || exit 1
+
+
+for i in "$@"; do
+    case $i in
+        -c=*|--compiler=*)
+        COMPILER_FAMILIES="${i#*=}"
+        shift
+        ;;
+        -m=*|--mpi=*)
+        MPI_FAMILIES="${i#*=}"
+        shift
+        ;;
+        -t|--tap)
+        BATS_OPTS="$BATS_OPTS -t"
+        shift
+        ;;
+        -x|--xml)
+        BATS_OPTS="$BATS_OPTS -x"
+        shift
+        ;;
+        *)
+            echo "$0: Unknown option - $*"
+            # unknown option
+        ;;
+    esac
+done
+
+echo " "
+echo " "
+echo "-------------------------------------------------------"
+echo "Packages: content tests"
+echo "-------------------------------------------------------"
+
+./slurm-sql $BATS_OPTS

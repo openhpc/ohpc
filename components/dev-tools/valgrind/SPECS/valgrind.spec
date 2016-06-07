@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -7,12 +7,12 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-%include %{_sourcedir}/FSP_macros
+
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname valgrind
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Valgrind Memory Debugger
 Name:      %{pname}%{PROJ_DELIM}
@@ -20,15 +20,14 @@ Version:   3.10.1
 Release:   1
 License:   GPL
 URL:       http://www.valgrind.org/
-DocDir:    %{FSP_PUB}/doc/contrib
-Group:     fsp/dev-tools
-Source:    valgrind-%{version}.tar.bz2
-Source1:   FSP_macros
+DocDir:    %{OHPC_PUB}/doc/contrib
+Group:     %{PROJ_NAME}/dev-tools
+Source:    http://valgrind.org/downloads/%{pname}-%{version}.tar.bz2
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%{!?FSP_PUB: %define FSP_PUB /opt/fsp/pub}
-%define install_path %{FSP_PUB}/%{pname}/%version
+%define install_path %{OHPC_PUB}/%{pname}/%version
 
 %description 
 
@@ -43,7 +42,7 @@ AMD64/MacOSX.
 %setup -q -n %{pname}-%{version}
 
 %build
-./configure --prefix=%{install_path} || cat config.log
+./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 make %{?_smp_mflags}
 
 %install
@@ -51,11 +50,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 
 # modulefile
 
-%{__mkdir_p} %{buildroot}/%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
-# FSP %{pname} environment
-#############################################################################
 
 proc ModulesHelp { } {
 puts stderr "This module loads the %{pname} package for performing dynamic analysis."
@@ -78,7 +75,7 @@ setenv          %{PNAME}_LIB     %{install_path}/lib/valgrind
 setenv          %{PNAME}_INC     %{install_path}/include
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -90,8 +87,8 @@ EOF
 
 %files
 %defattr(-,root,root)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc AUTHORS
 %doc README_DEVELOPERS
 %doc README

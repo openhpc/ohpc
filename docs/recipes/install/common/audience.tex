@@ -2,13 +2,25 @@
 
 This guide is targeted at experienced \Linux{} system administrators for HPC
 environments. Knowledge of software package management, system networking, and
-PXE booting is assumed.  Command-line input examples are highlighted throughout
+PXE booting is assumed. Command-line input examples are highlighted throughout
 this guide via the following syntax:
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[master]$ echo "FSP hello world"
+[sms](*\#*) echo "OpenHPC hello world"
 \end{lstlisting}
 
 Unless specified otherwise, the examples presented are executed with
 elevated (root) privileges. The examples also presume use of the BASH login
 shell, though the equivalent commands in other shells can be substituted.
+In addition to specific command-line instructions called out in this guide, an
+alternate convention is used to highlight potentially useful tips or optional
+configuration options. These tips are highlighted via the following format:
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+I love deadlines. I like the {\em whooshing} sound they make as they fly by.
+--Douglas Adams 
+\end{tcolorbox}
+\end{center}
+

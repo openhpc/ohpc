@@ -1,0 +1,199 @@
+************************************************************************
+* Build and Install HDF5 Examples with CMake                           *
+************************************************************************
+
+Notes: This short instruction is written for users who want to quickly build 
+       HDF5 Examples from the HDF5 source code package using the CMake tools.
+       
+       More information about using CMake can be found at the KitWare 
+       site, www.cmake.org.
+         
+       CMake uses the command line; however, the visual CMake tool is 
+       available for the configuration step. The steps are similar for
+       all of the operating systems supported by CMake.
+       
+       NOTES:
+         1. Using CMake for building and using HDF5 is under active 
+            development. While we have attempted to provide error-free 
+            files, please understand that development with CMake has not 
+            been extensively tested outside of HDF. The CMake specific 
+            files may change before the next release.
+            
+         2. CMake for HDF5 development should be usable on any system 
+            where CMake is supported. Please send us any comments on how 
+            CMake support can be improved on any system. 
+            
+
+========================================================================
+I. Preconditions                                                           
+========================================================================
+
+   1. We suggest you obtain the latest CMake for windows from the Kitware
+      web site. The HDF5 1.8.x product requires a minimum CMake version 
+      of 2.8.10.                     
+                                                                         
+   2. You have installed the HDF5 library built with CMake, by executing 
+      the HDF Install Utility (the *.exe file in the binary package for 
+      Windows). If you are using a Windows platform, you can obtain a 
+      pre-built Windows binary from The HDF Group's website at 
+      www.hdfgroup.org.
+
+   3. Set the environment variable HDF5_DIR to the installed location of 
+      the config files for HDF5. On Windows: 
+            HDF5_DIR=C:/Program Files/HDF_Group/HDF5/1.8.x/cmake/hdf5
+      
+      (Note there are no quote characters used on Windows and all platforms
+      use forward slashes)
+
+   4. Created separate source and build directories.
+      (CMake commands are executed in the build directory)
+
+
+
+========================================================================
+II. Building HDF5 Examples with CMake
+========================================================================
+
+Go through these steps to build HDF5 applications with CMake.
+
+   1. Run CMake
+   2. Configure the cache settings
+   3. Build HDF5 Examples
+   4. Test HDF5 Examples.
+
+These steps are described in more detail below.
+
+
+
+   1. Run CMake
+
+      The visual CMake executable is named "cmake-gui.exe" on Windows and should be
+      available in your Start menu. For Linux, UNIX, and Mac users the
+      executable is named "cmake-gui" and can be found where CMake was 
+      installed. 
+      
+      Specify the source and build directories. Make the build and source 
+      directories different. For example on Windows, if the source is at 
+      c:\MyHDFstuff\hdf5, then use c:\MyHDFstuff\hdf5\build or 
+      c:\MyHDFstuff\build\hdf5 for the build directory. 
+      
+      PREFERRED:
+        Users can perform the configuration step without using the visual 
+        cmake-gui program. The following is an example command line 
+        configuration step executed within the build directory:
+        
+        cmake -G "<generator>"  [-D<options>]  <sourcepath>
+        
+        Where <generator> is    
+            * Borland Makefiles
+            * MSYS Makefiles
+            * MinGW Makefiles
+            * NMake Makefiles
+            * Unix Makefiles
+            * Visual Studio 11
+            * Visual Studio 11 Win64
+            * Visual Studio 10
+            * Visual Studio 10 Win64
+            * Visual Studio 6
+            * Visual Studio 7
+            * Visual Studio 7 .NET 2003
+            * Visual Studio 8 2005
+            * Visual Studio 8 2005 Win64
+            * Visual Studio 9 2008
+            * Visual Studio 9 2008 Win64
+
+        <options> is:
+            * BUILD_TESTING:BOOL=ON
+            * USE_SHARED_LIBS:BOOL=[ON | OFF]
+            * HDF_BUILD_FORTRAN:BOOL=[ON | OFF]
+
+   2. Configure the cache settings
+
+      2.1  Visual CMake users, click the Configure button. If this is the first time you are 
+           running cmake-gui in this directory, you will be prompted for the 
+           generator you wish to use (for example on Windows, Visual Studio 10). 
+           CMake will read in the CMakeLists.txt files from the source directory and 
+           display options for the HDF5 project. After the first configure you 
+           can adjust the cache settings and/or specify locations of other programs.
+      
+           Any conflicts or new values will be highlighted by the configure
+           process in red. Once you are happy with all the settings and there are no 
+           more values in red, click the Generate button to produce the appropriate 
+           build files. 
+      
+           On Windows, if you are using a Visual Studio generator, the solution and 
+           project files will be created in the build folder.
+      
+           On linux, if you are using the Unix Makefiles generator, the Makefiles will
+           be created in the build folder.
+
+      2.2  Alternative command line example on Windows in c:\MyHDFstuff\hdf5\build directory:
+      
+           cmake -G "Visual Studio 10" -DBUILD_TESTING:BOOL=ON -DUSE_SHARED_LIBS:BOOL=ON ..
+
+   3. Build HDF5 examples
+   
+      On Windows, you can build HDF5 applications using either the Visual Studio Environment 
+      or the command line. The command line is normally used on linux, Unix, and Mac.
+
+      To build from the command line, navigate to your build directory and
+      execute the following:
+          
+              cmake --build . --config {Debug | Release}     
+              
+      NOTE: "--config {Debug | Release}" may be optional on your platform. We
+            recommend choosing either Debug or Release on Windows. If you are
+            using the pre-built binaries from HDF, use Release.                                                                                     
+             
+      3.1  If you wish to use the Visual Studio environment, open the solution 
+           file in your build directory. Be sure to select either Debug or 
+           Release and build the solution.
+             
+   4. Test HDF5 Examples.
+
+      To test the build, navigate to your build directory and execute:
+      
+              ctest . -C {Debug | Release}
+              
+      NOTE: "-C {Debug | Release}" may be optional on your platform. We
+            recommend choosing either Debug or Release to match the build
+            step on Windows.                                                                                      
+
+   5. The files that support building with CMake are all of the files in the 
+      config/cmake folder, the CMakeLists.txt files in each source folder, and 
+      CTestConfig.cmake. CTestConfig.cmake is specific to the internal testing 
+      performed by The HDF Group. It should be altered for the user's 
+      installation and needs. The cacheinit.cmake file settings are used by
+      The HDF Group for daily testing. It should be altered/ignored for the user's 
+      installation and needs. 
+
+
+
+========================================================================
+III. Using HDF5 Libraries with Visual Studio 2008
+========================================================================
+
+   8. Set up path for external libraries and headers
+
+      Invoke Microsoft Visual Studio and go to "Tools" and select "Options", 
+      find "Projects", and then "VC++ Directories".
+      
+      8.1 If you are building on 64-bit Windows, find the "Platform" dropdown
+          and select "x64".
+
+      8.2 Find the box "Show directories for", choose "Include files", add the 
+          header path (i.e. c:\Program Files\HDF Group\HDF5\hdf5-1.8.x\include)
+          to the included directories.
+
+      8.3 Find the box "Show directories for", choose "Library files", add the
+          library path (i.e. c:\Program Files\HDF Group\HDF5\hdf5-1.8.x\lib)
+          to the library directories.
+          
+      8.4 If using Fortran libraries, you will also need to setup the path
+          for the Intel Fortran compiler.
+
+
+************************************************************************
+
+Need further assistance, send email to help@hdfgroup.org
+

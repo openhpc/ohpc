@@ -1,0 +1,92 @@
+#!../../../../../common/bats/bin/bats 
+# -*-sh-*-
+
+source ../../../../../common/test_helper_functions.bash || exit 1
+source ../../../../../common/functions || exit 1
+
+if [ -s ../../../../../TEST_ENV ];then
+    source ../../../../../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+PKG="Boost/MPI"
+
+@test "[$PKG] all_gather_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=all_gather_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_mpi_binary ./$test atest 2 16
+    assert_success
+}
+
+@test "[$PKG] all_reduce_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=all_reduce_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_mpi_binary ./$test atest 2 16
+    assert_success
+}
+
+@test "[$PKG] all_to_all_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=all_to_all_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_mpi_binary ./$test atest 2 16
+    assert_success
+}
+
+@test "[$PKG] groups_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=groups_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_mpi_binary ./$test atest 2 16
+    assert_success
+}
+
+@test "[$PKG] broadcast_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=broadcast_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_mpi_binary ./$test atest 2 16
+    assert_success
+}
+
+@test "[$PKG] ring_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=ring_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_mpi_binary ./$test atest 2 16
+    assert_success
+}
+
+@test "[$PKG] pointer_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=pointer_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_mpi_binary ./$test atest 2 16
+    assert_success
+}
+
+@test "[$PKG] nonblocking_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test=nonblocking_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_mpi_binary ./$test atest 2 16
+    assert_success
+}
+
+

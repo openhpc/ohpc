@@ -1,0 +1,47 @@
+--- SuperLU_5.1/SRC/Makefile	2015-12-03 17:06:38.000000000 -0800
++++ SuperLU_5.1.patch/SRC/Makefile	2016-02-25 10:10:26.123948600 -0800
+@@ -38,7 +38,7 @@
+ 	  sp_coletree.o sp_preorder.o sp_ienv.o relax_snode.o \
+ 	  heap_relax_snode.o colamd.o \
+ 	  ilu_relax_snode.o ilu_heap_relax_snode.o mark_relax.o \
+-	  mc64ad.o qselect.o input_error.o smach.o dmach.o
++	  qselect.o input_error.o smach.o dmach.o
+ 
+ SLUSRC = \
+ 	sgssv.o sgssvx.o \
+@@ -50,7 +50,7 @@
+ 	sreadhb.o sreadrb.o sreadtriple.o \
+ 	scolumn_dfs.o scolumn_bmod.o spivotL.o spruneL.o \
+ 	smemory.o sutil.o smyblas2.o \
+-	sgsisx.o sgsitrf.o sldperm.o \
++	sgsitrf.o \
+ 	ilu_sdrop_row.o ilu_ssnode_dfs.o \
+ 	ilu_scolumn_dfs.o ilu_spanel_dfs.o ilu_scopy_to_ucol.o \
+ 	ilu_spivotL.o sdiagonal.o slacon2.o
+@@ -64,7 +64,7 @@
+ 	dreadhb.o dreadrb.o dreadtriple.o \
+ 	dcolumn_dfs.o dcolumn_bmod.o dpivotL.o dpruneL.o \
+ 	dmemory.o dutil.o dmyblas2.o \
+-	dgsisx.o dgsitrf.o dldperm.o \
++	dgsitrf.o \
+ 	ilu_ddrop_row.o ilu_dsnode_dfs.o \
+ 	ilu_dcolumn_dfs.o ilu_dpanel_dfs.o ilu_dcopy_to_ucol.o \
+ 	ilu_dpivotL.o ddiagonal.o dlacon2.o
+@@ -79,7 +79,7 @@
+ 	creadhb.o creadrb.o creadtriple.o \
+ 	ccolumn_dfs.o ccolumn_bmod.o cpivotL.o cpruneL.o \
+ 	cmemory.o cutil.o cmyblas2.o \
+-	cgsisx.o cgsitrf.o cldperm.o \
++	cgsitrf.o \
+ 	ilu_cdrop_row.o ilu_csnode_dfs.o \
+ 	ilu_ccolumn_dfs.o ilu_cpanel_dfs.o ilu_ccopy_to_ucol.o \
+ 	ilu_cpivotL.o cdiagonal.o clacon2.o scsum1.o icmax1.o
+@@ -93,7 +93,7 @@
+ 	zreadhb.o zreadrb.o zreadtriple.o \
+ 	zcolumn_dfs.o zcolumn_bmod.o zpivotL.o zpruneL.o \
+ 	zmemory.o zutil.o zmyblas2.o \
+-	zgsisx.o zgsitrf.o zldperm.o \
++	zgsitrf.o \
+ 	ilu_zdrop_row.o ilu_zsnode_dfs.o \
+ 	ilu_zcolumn_dfs.o ilu_zpanel_dfs.o ilu_zcopy_to_ucol.o \
+ 	ilu_zpivotL.o zdiagonal.o zlacon2.o dzsum1.o izmax1.o

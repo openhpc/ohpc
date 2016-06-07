@@ -1,0 +1,100 @@
+\ProvidesPackage{ohpc-doc}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{graphicx}
+\usepackage{mdwlist}
+\usepackage{listings}
+\usepackage{textcomp}
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{colortbl}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{etoolbox}
+%%%\usepackage[T1]{fontenc}
+\tcbuselibrary{skins}
+
+% for non-released DRAFT - comment out for GA release
+%\usepackage[firstpage]{draftwatermark}
+%%% \usepackage{draftwatermark}
+%%% \SetWatermarkText{DRAFT / PRE-RELEASE}
+%%% \SetWatermarkScale{1.45}
+
+% ----------- Variables to change per release -------------
+
+\newcommand{\OHPCVersion}{1.1}
+
+% ---------------------------------------------------------
+
+% Booleans for os-specific latex formatting
+\newtoggle{isCentOS}
+
+\pagestyle{fancy}
+\setlength\headheight{59pt}
+\addtolength{\topmargin}{-1\baselineskip}
+\addtolength{\textheight}{-4\baselineskip}
+\rhead{\includegraphics[width=0.67in]{ohpc_wordmark_color.pdf}}
+%\fancyfoot[CO,CE]{\small \thepage \\ \vspace *{0.7cm} [~Community release~]}
+%\fancyfoot[RE,RO]{\small Last Update: \VCDateISO~(Rev: \VCRevision)}
+\fancyfoot[RE,RO]{Rev: \VCRevision}
+
+% custom colors
+
+\definecolor{grey}{rgb}{0.96,0.96,0.96}
+\definecolor{logoblue}{RGB}{96,170,210}
+\definecolor{logodarkgrey}{RGB}{119,120,119}
+\definecolor{logolightgrey}{RGB}{166,167,159}
+
+% tipbox settings
+
+\tcbset{enhanced,width=(\linewidth-0cm),colback=white,title=Tip,colframe=logoblue}
+
+% commandbox settings
+
+\lstset{basicstyle=\footnotesize\ttfamily,
+  frame=single,
+  backgroundcolor=\color{grey},
+  showstringspaces=false,
+  commentstyle=\color{blue},
+  captionpos=b,
+%  columns=fullflexible,
+  columns=flexible,
+  belowskip=0.3cm,
+  escapeinside={(*}{*)},
+  aboveskip=0.4cm,
+  xleftmargin=4pt,
+  xrightmargin=4pt,
+  keywordstyle=\color{blue}
+}
+
+
+
+%\newcommand{\Intel}{{Intel\raisebox{0.39ex}{\scriptsize{\textregistered}}}}
+\newcommand{\clustershell}{ClusterShell}
+\newcommand{\conman}{ConMan}
+\newcommand{\FFTW}{FFTW}
+\newcommand{\Ganglia}{Ganglia}
+\newcommand{\genders}{\emph{genders}}
+\newcommand{\GNU}{GNU}
+\newcommand{\hdffive}{HDF5}
+\newcommand{\InfiniBand}{InfiniBand}
+\newcommand{\Intel}{Intel}
+\newcommand{\IntelR}{Intel\raisebox{0.39ex}{\scriptsize{\textregistered}}}
+\newcommand{\Linux}{Linux}
+\newcommand{\LosF}{\emph{LosF*}}
+\newcommand{\Lustre}{Lustre}
+\newcommand{\mrsh}{\emph{mrsh}}
+\newcommand{\MUNGE}{\emph{munge}}
+\newcommand{\Nagios}{Nagios}
+\newcommand{\NFS}{NFS}
+\newcommand{\OHPC}{OpenHPC}
+\newcommand{\ORCM}{ORCM}
+\newcommand{\powerman}{\emph{powerman}}
+\newcommand{\SLURM}{Slurm}
+\newcommand{\Warewulf}{Warewulf}

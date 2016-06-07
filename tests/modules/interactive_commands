@@ -1,0 +1,125 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions
+
+@test "[modules] module purge" {
+    run module purge
+    assert_success
+}
+
+@test "[modules] module list" {
+    module purge || exit 1
+    run module list
+    assert_success
+    assert_output "No modules loaded"
+}
+
+@test "[modules] module help" {
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+    module help test-module >& .cmd_output || exit 1
+    local my_output=`cat .cmd_output | sed '/^$/d' | tail -1`
+    assert_equal "Help message from test module" "$my_output"
+}
+
+@test "[modules] module load/unload" {
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+
+    # verify env variable is not set prior to load
+
+    if [ ! -z "$TEST_MODULE" ]; then
+	exit 1
+    fi
+
+    # load test-module and verify load works 
+    module load test-module || exit 1
+    module list >& .cmd_output || exit 1
+    local my_output=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1`
+    assert_equal "1) test-module" "$my_output"
+
+    # verify env variable was added correctly
+    assert_equal "beeblebrox" "$TEST_MODULE"
+
+    # reload same module and verify no error
+    run module load test-module
+    assert_success
+
+    # verify load of non-existent module generates error
+    run module load test-module-it-should-no-workie
+    assert_failure
+
+    # remove test-module and verify 
+    module unload test-module || exit 1
+    run module list
+    assert_success
+    assert_output "No modules loaded"
+
+    # verify environment variable was removed
+
+    [ -z "$TEST_MODULE" ]; assert_success
+}
+
+@test "[modules] module whatis" {
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+    module whatis test-module >& .cmd_output || exit 1
+    local my_output=`cat .cmd_output | sed '/^$/d' | sed 's/ \+//' | sed 's/ *$//'`
+    assert_equal "test-module: whatis: test-module" "$my_output"
+}
+
+@test "[modules] module swap" {
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+    module load test-module || exit 1
+
+    # verify family conflict 
+    run module load test2-module
+    assert_failure
+
+    module swap test-module test2-module || exit 1
+
+    # verify correct env variable loaded after swap
+    assert_equal "zaphod" "$TEST_MODULE"
+
+    # swap back and verify env variable
+    module swap test2-module test-module || exit 1
+    assert_equal "beeblebrox" "$TEST_MODULE"
+}
+
+@test "[modules] path updated" {
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+    local orig_path="$PATH"
+    local orig_manpath="$MANPATH"
+
+    # verify path after module load
+    module load test-module || exit 1
+    assert_equal "/my/test-module-path:$orig_path" "$PATH"
+
+    # verify path after load of same module
+    module load test-module || exit 1
+    assert_equal "/my/test-module-path:$orig_path" "$PATH"
+
+    # verify path after swap to new module
+    module swap test-module test2-module || exit 1
+    assert_equal "/my/test2-module-path:$orig_path" "$PATH"
+    assert_equal "$orig_manpath:/my/test2-manpath"  $MANPATH
+
+    # verify path after addition of a new module
+    module load test3-module || exit 1
+    assert_equal "/my/test3-module-path:/my/test2-module-path:$orig_path" "$PATH"
+    assert_equal "$orig_manpath:/my/test2-manpath:/my/test3-manpath"      $MANPATH
+
+    # verify path after removal of test modules
+    module delete test2-module || exit 1
+    assert_equal "/my/test3-module-path:$orig_path" "$PATH"
+    module remove test3-module || exit 1
+    assert_equal "$orig_path"    "$PATH"
+    assert_equal "$orig_manpath" $MANPATH
+}
+
+rm -f .cmd_output
+
+

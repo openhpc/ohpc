@@ -1,0 +1,31 @@
+01-June-2013   v1.06 B. Austin <brianmaustin @nospam@ gmail.com>
+        * README: removed 10k MPI task constraint for capability run
+
+28-May-2013    v1.05 B. Austin <brianmaustin @nospam@ gmail.com>
+	* src/init_run.f90: force stop if npool != nkpoint
+	* src/c_bands.f90 hinit0.f90 init_run.f90 openfil.f90
+	    version.f90 wfcinit.f90: added ifdef to override new force stop
+	* README: updated to describe force stop behavior.
+        * src/pwscf.f90: renamed IPM regions
+	
+25-April-2013  v1.04 B. Austin <brianmaustin @nospam@ gmail.com>
+        * README: described capability improvement experiment
+        * benchmark/*.out.ref: moved to sample_outputs/*.out.ref, and updated
+	* benchmark/*.in and espresso/benchmark/*.in:
+	    renamed single-node.in and large.in
+	* Added benchmark/*.pbs - sample queue scripts
+
+18-April-2013  v1.03 B. Austin <brianmaustin @nospam@ gmail.com>
+	* src/pwscf.f90: added IPM regions (ifdef protected)
+	* src/Makefile.hopper.*: added optional (default=off) IPM defines
+	* benchmark/magnesia_10_130.out.ref: updated reference output
+
+27-March-2013  v1.02 B. Austin <brianmaustin @nospam@ gmail.com>
+	* README: define concurrency for MPI-only tests.
+	* Added ChangeLog
+
+22-March-2013  v1.01 B. Austin <brianmaustin @nospam@ gmail.com>
+	* src/*.UPF src/*.nml: removed pseudopotential files from src directory
+
+02-March-2013  v1.0  B. Austin <brianmaustin @nospam@ gmail.com>
+	* Initial check-in

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,19 +8,22 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname inspector
 
 Summary:   Intel(R) Inspector XE
 Name:      intel-%{pname}%{PROJ_DELIM}
-Version:   16.0.1.407184
+Version:   16.1.2.450824
 Source0:   intel-%{pname}%{PROJ_DELIM}-%{version}.tar.gz
-Source1:   FSP_macros
+Source1:   OHPC_macros
+Source2:   modfile-ohpc.input
 Release:   1
-License:   Copyright (C) 2014 Intel Corporation. All rights reserved.
+License:   Copyright (C) 2011-2016 Intel Corporation. All rights reserved.
 Vendor:    Intel Corporation
-URL:       http://www.intel.com/software/products/
-Group:     fsp/dev-tools
+URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
+Group:     %{PROJ_NAME}/dev-tools
 BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
@@ -29,8 +32,6 @@ AutoReq:   no
 requires:  libpng12-0
 %endif
 
-%include %{_sourcedir}/FSP_macros
-
 %define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
 %define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
@@ -38,11 +39,11 @@ requires:  libpng12-0
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
-%define package_target /opt/fsp/pub/%{pname}/%{version}
+%define package_target %{OHPC_PUB}/%{pname}/%{version}
 
 %description
 
-FSP collection of the Intel(R) Inspector memory and thread debugging tools.
+OpenHPC collection of the Intel(R) Inspector memory and thread debugging tools.
 
 %prep
 
@@ -55,9 +56,9 @@ cd %{buildroot}
 %{__tar} xfz %{SOURCE0}
 cd -
 
-# FSP module file
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -81,12 +82,12 @@ setenv          INSPECTOR_DIR   %{package_target}
 setenv          INSPECTOR_BIN   %{package_target}/bin64
 setenv          INSPECTOR_LIB   %{package_target}/lib64
 prepend-path    MANPATH         %{package_target}/man 
-prepend-path    PATH            %{package_target}/bin64
-prepend-path    LD_LIBRARY_PATH %{package_target}/lib64
-
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+# Append with machine-generated contribution for modulefile settings
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
 EOF
@@ -96,7 +97,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 
 %changelog
 

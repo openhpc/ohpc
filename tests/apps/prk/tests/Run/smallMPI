@@ -1,0 +1,19 @@
+NUMPROCS=4
+NUMITERS=10
+SEPLINE="==============================================================="
+MPIRUN=mpirun
+
+for type in vector_go vector_stop no_vector ins_heavy; do
+  $MPIRUN -np $NUMPROCS MPI/Branch/branch           $NUMITERS 1000 $type; echo $SEPLINE
+done
+$MPIRUN -np $NUMPROCS MPI/DGEMM/dgemm               $NUMITERS 500 32 1;   echo $SEPLINE
+$MPIRUN -np $NUMPROCS MPI/Nstream/nstream           $NUMITERS 2000000 0;  echo $SEPLINE
+$MPIRUN -np $NUMPROCS MPI/Random/random             20 16;                echo $SEPLINE
+$MPIRUN -np $NUMPROCS MPI/Reduce/reduce             $NUMITERS 2000000;    echo $SEPLINE
+$MPIRUN -np $NUMPROCS MPI/Sparse/sparse             $NUMITERS 10 4;       echo $SEPLINE
+$MPIRUN -np $NUMPROCS MPI/Stencil/stencil           $NUMITERS 1000;       echo $SEPLINE
+$MPIRUN -np $NUMPROCS MPI/Synch_global/global       $NUMITERS 10000;      echo $SEPLINE
+$MPIRUN -np $NUMPROCS MPI/Synch_p2p/p2p             $NUMITERS 1000 100;   echo $SEPLINE
+$MPIRUN -np $NUMPROCS MPI/Transpose/transpose       $NUMITERS 2000 64;    echo $SEPLINE
+
+

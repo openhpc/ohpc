@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -27,30 +27,36 @@
 #-------------------------------------------------------------------------------
 
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family variable via rpmbuild or other
 # mechanisms.
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-%{!?compiler_family:	%define compiler_family gnu}
-%{!?PROJ_DELIM:		%define PROJ_DELIM   %{nil}}
+%{!?compiler_family: %define compiler_family gnu}
 
-# Compiler dependencies
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
 BuildRequires: lmod%{PROJ_DELIM}
+%endif
+# Compiler dependencies
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+BuildRequires: openblas-gnu%{PROJ_DELIM}
+Requires:      openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 
 %define 	pname R_base
@@ -59,22 +65,21 @@ BuildRequires: intel_licenses
 
 Name:		%{pname}%{PROJ_DELIM}
 Release:	1%{?dist}
-Version:        3.2.0
-Source:         R-%{version}.tar.gz
+Version:        3.2.3
+Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Patch:          tre.patch
 Url:            http://www.r-project.org/
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
-Group:          fsp/dev-tools
+Group:          %{PROJ_NAME}/dev-tools
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%define         install_path %{FSP_LIBS}/%{compiler_family}/%{pname}/%version
+%define         install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 %define         debug_package %{nil}
 
 BuildRequires:  cairo-devel
-BuildRequires:  gcc-fortran
 BuildRequires:  libjpeg-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
@@ -165,43 +170,47 @@ classical statistical tests, time-series analysis, classification, clustering, â
 and graphical techniques, and is highly extensible.
 
 %prep 
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
 %setup -n R-%{version}
 %patch -p1
 
 %build 
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
+%if %{compiler_family} == gnu
+module load openblas
+BLAS="-L${OPENBLAS_LIB} -lopenblas"
+%else
 MKL_LIB_PATH=$MKLROOT/lib/intel64
-MKL="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
+BLAS="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
 echo "MKL options flag .... $MKL "
+%endif
 
 ./configure  \
-            --with-lapack \
+            --with-lapack="$BLAS" \
+            --with-blas="$BLAS" \
             --enable-R-shlib  \
-            --enable-BLAS-shlib \
             --prefix=%{install_path} \
             --without-system-zlib \
             --without-system-bzlib \
             --without-x \
               LIBnn=lib64 
 
-# --with-blas="$MKL" \
 
 make %{?_smp_mflags}
 
 
 %install 
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
 make DESTDIR=%{buildroot} install
 
@@ -214,10 +223,10 @@ cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
 %{_libdir}/R/lib
 EOF
 
-# FSP module file
+# OpenHPC module file
 
-%{__mkdir_p}  %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir_p}  %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 
 #%Module1.0#####################################################################
 
@@ -249,9 +258,17 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_SHARE      %{install_path}/share
 
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { [is-loaded gnu] } {
+        if { ![is-loaded openblas]  } {
+          module load openblas
+        }
+    }
+}
+
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -271,7 +288,7 @@ export NO_BRP_CHECK_RPATH true
 
 %files
 %defattr(-,root,root)
-%{FSP_HOME}
+%{OHPC_HOME}
 %doc ChangeLog
 %doc COPYING
 %doc README

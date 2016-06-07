@@ -1,0 +1,89 @@
+mainmodule p2p {
+  readonly CProxy_Main mainProxy;
+  readonly int n;
+  readonly int m;
+  readonly int overdecomposition;
+  readonly int maxiterations;
+  readonly int grp;
+
+  readonly int num_chares;
+  readonly double startTime;
+  readonly double endTime;
+
+  message ghostMsg {
+    double gp[];
+  };
+
+  message cornerMsg {
+    double gp[];
+  };
+
+  mainchare Main {
+    entry Main(CkArgMsg *m);
+    entry void report(double);
+  };
+
+  array [1D] P2p {
+    entry P2p(void);
+    entry void pass_baton(void);
+    entry void sendCorner(void);
+    entry void receiveGhost(ghostMsg *msg);
+    entry void receiveCorner(cornerMsg *msg);
+    entry void processGhost(ghostMsg *msg);
+    entry void processCorner(cornerMsg *msg);
+    entry [reductiontarget] void barrier_stop(void);
+    entry [reductiontarget] void barrier_start(void);
+
+    entry void run() {
+      for (iterations=0; iterations<=maxiterations; iterations++) {
+        if (iterations == 1) {
+          serial "start the timer" {
+            // implement a barrier by doing an empty collective; then start the timer          
+            CkCallback cb(CkReductionTarget(P2p, barrier_start), thisProxy);     
+            contribute(0, NULL, CkReduction::nop, cb);
+          }
+          when barrier_start(void) serial "barrier_start" {
+            if (thisIndex == 0) startTime = CkWallTimer();
+          }
+        }
+        for (j=1; j<n; j+=grp) {
+          if (thisIndex > 0) {
+            when receiveGhost[j+iterations*(n-1)](ghostMsg *msg)
+              serial "processGhost" {
+                processGhost(msg);
+            }
+          }
+          serial "compute line segment" {
+            compute();
+          }
+          serial "pass_baton" {
+            pass_baton();
+          }
+        }
+        if (thisIndex == num_chares-1) {
+          serial "send corner" {
+            sendCorner();
+          }
+        }
+        if (thisIndex == 0) {
+          when receiveCorner[iterations](cornerMsg *msg)
+            serial "processCorner" {
+              processCorner(msg);
+          }
+        }
+
+      }
+      serial "stop the timer" {
+        // implement a barrier by doing an empty collective; then stop the timer          
+        CkCallback cb(CkReductionTarget(P2p, barrier_stop), thisProxy);     
+        contribute(0, NULL, CkReduction::nop, cb);
+      }    
+      when barrier_stop(void) serial "barrier_stop" {
+        if (thisIndex == 0) endTime = CkWallTimer();
+      }
+      serial "report solution norm" {
+        if (thisIndex==num_chares-1) mainProxy.report(ARRAY(iend-istart,n-1));
+      }
+    };
+  };
+};

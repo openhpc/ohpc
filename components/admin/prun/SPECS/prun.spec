@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,30 +8,31 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname prun
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   Convenience utility for parallel job launch
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.1.0
+Version:   1.0
 Release:   1
 License:   BSD
-Group:     fsp/admin
+Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
+URL:       https://github.com/openhpc/ohpc
 Source0:   %{pname}
-Source1:   FSP_macros
+Source1:   OHPC_macros
 Source2:   LICENSE      
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
-%define package_target %{FSP_PUB}/%{pname}/%{version}
+%define package_target %{OHPC_PUB}/%{pname}/%{version}
 
 %description
 
-prun provides a script-based wrapper for launching parallel jobs
+prun provides a unified, script-based wrapper for launching parallel jobs
 within a resource manager for a variety of MPI families.
 
 %prep
@@ -49,10 +50,10 @@ rm -rf $RPM_BUILD_ROOT
 %{__mkdir} -p %{buildroot}/%{package_target}
 install -D -m 0755 %SOURCE0 %{buildroot}/%{package_target}
 
-# FSP moduelfile
+# OpenHPC modulefile
 
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -75,7 +76,7 @@ prepend-path    PATH            %{package_target}
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{version}"
 EOF
@@ -92,9 +93,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_HOME}
+%dir %{OHPC_HOME}
 %doc LICENSE
-%{FSP_HOME}
+%{OHPC_HOME}
 
 
 

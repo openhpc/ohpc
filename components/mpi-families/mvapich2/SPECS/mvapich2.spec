@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -13,17 +13,23 @@
 %define with_slurm 0
 %define with_psm 0
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
-# FSP convention: the default assumes the gnu compiler family;
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
+# OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
 
-# Compiler dependencies
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
 BuildRequires: lmod%{PROJ_DELIM}
+%endif
+# Compiler dependencies
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -31,12 +37,12 @@ Requires:      gnu-compilers%{PROJ_DELIM}
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{FSP_BUILD}
+%if 0%{OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
@@ -46,8 +52,6 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
-%include %{_sourcedir}/FSP_macros
-
 # Base package name
 %define pname mvapich2
 
@@ -56,12 +60,19 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   2.1
 Release:   1
 License:   BSD
-Group:     fsp/mpi-families
+Group:     %{PROJ_NAME}/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
-DocDir:    %{FSP_PUB}/doc/contrib
-Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_macros
-Source2:   FSP_setup_compiler
+DocDir:    %{OHPC_PUB}/doc/contrib
+Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
+Source1:   OHPC_macros
+Source2:   OHPC_setup_compiler
+
+# karl.w.schulz@intel.com (09/08/2015)
+%global _default_patch_fuzz 2
+Patch0:    winfree.patch
+# karl.w.schulz@intel.com (04/13/2016)
+Patch1:    minit.patch
+
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define debug_package %{nil}
@@ -77,9 +88,10 @@ Requires: prun%{PROJ_DELIM}
 
 BuildRequires: bison
 BuildRequires: libibmad-devel libibverbs-devel
+BuildRequires: librdmacm-devel
 
 # Default library install path
-%define install_path %{FSP_MPI_STACKS}/%{name}/%version
+%define install_path %{OHPC_MPI_STACKS}/%{name}/%version
 
 %description 
 
@@ -92,12 +104,14 @@ across multiple networks.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch0 -p1
+%patch1 -p0
 
 %build
 
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
 ./configure --prefix=%{install_path} \
 	    --enable-cxx \
@@ -109,13 +123,13 @@ export FSP_COMPILER_FAMILY=%{compiler_family}
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
-	    --enable-fast=O3 || cat config.log
+	    --enable-fast=O3 || { cat config.log && exit 1; }
 
 %install
 
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/FSP_setup_compiler
+# OpenHPC compiler designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+. %{_sourcedir}/OHPC_setup_compiler
 
 #make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
@@ -127,9 +141,9 @@ make DESTDIR=$RPM_BUILD_ROOT install
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
 
-# FSP module file
-%{__mkdir_p} %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -150,14 +164,14 @@ set     version			    %{version}
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/man
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
-prepend-path    MODULEPATH          %{FSP_MODULEDEPS}/%{compiler_family}-%{pname}
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{pname}
 prepend-path    MPI_DIR             %{install_path}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 family "MPI"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -177,7 +191,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 %doc README.envvar
 %doc COPYRIGHT
 %doc CHANGELOG
@@ -188,4 +202,3 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
 - Initial build.
-

@@ -3,35 +3,34 @@
 use warnings;
 use strict;
 
-my @fspCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
-                        "lustre","parallel-libs","serial-libs","perf-tools","provisioning","rms");
+my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
+                        "lustre","parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
 my @compiler_familes = ("gnu","intel");
 my @mpi_families     = ("mvapich2","openmpi","impi");
 
-#my @single_package_exceptions = ("lmod-defaults-intel-fsp","mkl-blacs-gnu-openmpi-fsp");
 my @single_package_exceptions = ();
 
 # Define any asymmetric compiler packages
 
 my %compiler_exceptions = ();
 $compiler_exceptions{"gsl"} = 1;
-$compiler_exceptions{"lmod-defaults"} = 1;
+$compiler_exceptions{"openblas"} = 1;
 
 # Define any asymmetric MPI packages
 my %mpi_exceptions = ();
-$mpi_exceptions{"python-scipy"} = 3;
-$mpi_exceptions{"fftw"} = 3;
+$mpi_exceptions{"python-scipy"} = 2;
+$mpi_exceptions{"fftw"} = 2;
 $mpi_exceptions{"mkl-blacs"} = 1;
 
 my $longSummaryLine = 60;
-my $urlColor="blue";
+my $urlColor="logoblue";
 my $REMOVE_HTTP=0;
 my $FIXD_WIDTH=1;
 
-foreach my $category (@fspCategories) {
+foreach my $category (@ohpcCategories) {
     print "Building latex table for packages in the $category category...\n";
 
-    my $filein="pkg-fsp.$category";
+    my $filein="pkg-ohpc.$category";
     open(IN,"<$filein")  || die "Cannot open file -> $filein\n";
 
     my $fileout="$category.tex";
@@ -62,8 +61,8 @@ foreach my $category (@fspCategories) {
     while(<IN>) {
 
 	# example format
-	# pdsh-fsp 2.31 http://sourceforge.net/projects/pdsh fsp/admin Parallel remote shell program
-	if($_ =~ /^(\S+) (\S+) (\S+) (fsp\/\S+) (.+)$/) {
+	# pdsh-ohpc 2.31 http://sourceforge.net/projects/pdsh ohpc/admin Parallel remote shell program
+	if($_ =~ /^(\S+) (\S+) (\S+) (ohpc\/\S+) (.+)$/) {
 	    my $name=$1;
 	    my $version=$2;
 	    my $url_raw=$3;
@@ -118,11 +117,11 @@ foreach my $category (@fspCategories) {
 
 	foreach my $compiler (@compiler_familes) {
 	    foreach my $mpi (@mpi_families) {
-		if($name =~ /(\S+)-$compiler-fsp/) {
+		if($name =~ /(\S+)-$compiler-ohpc/) {
 		    die "unknown package family for compiler" unless ($mpi_package == 0);
 		    $compiler_package = 1;
 		    $name_base = $1;
-		} elsif ($name =~ /(\S+)-$compiler-$mpi-fsp/) {
+		} elsif ($name =~ /(\S+)-$compiler-$mpi-ohpc/) {
 		    die "unknown package family for MPI" unless ($compiler_package == 0);
 		    $mpi_package = 1;
 		    $name_base = $1;
@@ -154,9 +153,9 @@ foreach my $category (@fspCategories) {
 
 	    # Find out how many packages in this family
 	    for my $j ($i .. $#nameData) {
-		if( $compiler_package && $nameData[$j] =~ /$name_base-(\S+)-fsp$/) { 
+		if( $compiler_package && $nameData[$j] =~ /$name_base-(\S+)-ohpc$/) { 
 		    $end_index = $j;
-		} elsif ($mpi_package && $nameData[$j] =~ /$name_base-(\S+)-(\S+)-fsp$/) {
+		} elsif ($mpi_package && $nameData[$j] =~ /$name_base-(\S+)-(\S+)-ohpc$/) {
 		    $end_index = $j;
 		} else {
 		    last;
@@ -200,7 +199,7 @@ foreach my $category (@fspCategories) {
 		    if($sumLength <= $longSummaryLine || $delta > 2) {
 			print OUT "\\newline";
 		    }
-		    print OUT " {\\color{$urlColor} $urlData[$k]}} \\\\ \n";
+		    print OUT " {\\color{$urlColor} \\url{$urlData[$k]}}} \\\\ \n";
 		} else {
 		    print OUT "& \\\\ \n";
 	        }
@@ -226,14 +225,14 @@ foreach my $category (@fspCategories) {
 		if($sumLength <= $longSummaryLine) {
 		    print OUT "\\newline";
 		}
- 		print OUT " { \\color{$urlColor} $urlData[$i]} \n"
+ 		print OUT " { \\color{$urlColor} \\url{$urlData[$i]}} \n"
  	    } else {
  		print OUT "\\multirow{2}{*}{$summaryData[$i]} \\\\\n";
  		print OUT "& & \n";
  	    }
  	    
  	    print OUT "\\\\ \\hline \n";
- 	    print OUT "% <-- end entry for %name_base\n\n";
+ 	    print OUT "% <-- end entry for $name_base\n\n";
  	}
 
 	$i++;

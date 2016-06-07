@@ -1,0 +1,44 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV         || exit 1
+source ./common/functions || exit 1
+
+cd libs/gsl               || exit 1
+
+export BATS_JUNIT_CLASS=GSL
+
+# bootstrap the local autotools project
+
+./bootstrap || exit 1
+
+for compiler in gnu ; do
+
+    echo " "
+    echo " "
+    echo "----------------------------------------------------------"
+    echo "User Libraries: GSL tests: $compiler"
+    echo "----------------------------------------------------------"
+
+    module purge                || exit 1
+    module load $compiler       || exit 1
+    module load gsl             || exit 1
+
+    ./configure                 || exit 1
+    make clean     >& /dev/null || exit 1
+    pushd tests    >& /dev/null || exit 1
+    ./run
+
+    for tdir in *; do
+	if [ -d "$tdir" ]; then
+	    save_logs_compiler_family $tdir $compiler
+	fi
+    done
+
+    popd           >& /dev/null || exit 1
+    make distclean >& /dev/null
+
+done

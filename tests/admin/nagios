@@ -1,0 +1,26 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+@test "[nagios] check for RPM" {
+    run check_if_rpm_installed "nagios${DELIM}"
+    assert_success
+}
+
+@test "[nagios] test check_http" {
+    run /usr/lib64/nagios/plugins/check_http -I proxy-chain.intel.com -p 911 -u http://openhpc.community
+    assert_success
+}

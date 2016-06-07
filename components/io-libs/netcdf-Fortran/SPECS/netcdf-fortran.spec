@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -27,21 +27,25 @@
 # netcdf-fortran spec file 
 # netcdf-fortran library build that is dependent on compiler toolchain
 #
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family:      %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM %{nil}}
 
-# Compiler dependencies
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
 BuildRequires: lmod%{PROJ_DELIM}
+%endif
+# Compiler dependencies
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -49,7 +53,7 @@ Requires:      gnu-compilers%{PROJ_DELIM}
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -68,7 +72,7 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 
 # Base package name
@@ -79,15 +83,15 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
-Group:          fsp/io-libs
-Version:        4.4.2
+Group:          %{PROJ_NAME}/io-libs
+Version:        4.4.3
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
-DocDir:         %{FSP_PUB}/doc/contrib
-Source0:	%{pname}-%{version}.tar.gz
-Source101:	FSP_macros
-Source102:	FSP_setup_compiler
-Source103:	FSP_setup_mpi
+DocDir:         %{OHPC_PUB}/doc/contrib
+Source0:	https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
+Source101:	OHPC_macros
+Source102:	OHPC_setup_compiler
+Source103:	OHPC_setup_mpi
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -101,7 +105,7 @@ Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 NetCDF (network Common Data Form) is an interface for array-oriented
@@ -139,11 +143,11 @@ NetCDF data is:
 %setup -q -n %{pname}-%{version}
 
 %build
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family} 
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family} 
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 module load netcdf
@@ -159,14 +163,14 @@ export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
     --enable-ncgen4 \
     --with-pic \
     --disable-doxygen \
-    --disable-static || cat config.log
+    --disable-static || { cat config.log && exit 1; }
 
 %install
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family} 
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family} 
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 module load netcdf
@@ -176,9 +180,9 @@ export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
-# FSP module file
-%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -224,7 +228,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -244,8 +248,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc COPYRIGHT
 %doc F03Interfaces_LICENSE
 %doc README.md

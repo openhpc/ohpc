@@ -1,5 +1,5 @@
-#----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+#---------------------------------------------------------------------------bh-
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -10,11 +10,11 @@
 
 # lustre.spec
 
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 %define debug_package %{nil}
 
 %if 0%{?suse_version} == 1110
@@ -25,10 +25,10 @@ BuildRequires: kernel-default-devel = 3.0.76-0.11.1
 %endif
 
 %if 0%{?suse_version} == 1315
-BuildRequires: kernel-source = 3.12.28-4.6
-BuildRequires: kernel-default-devel = 3.12.28-4.6
-%define kdir /lib/modules/3.12.28-4-default/source/
-%define kobjdir /lib/modules/3.12.28-4-default/build/
+BuildRequires: kernel-source = 3.12.49-11.1
+BuildRequires: kernel-default-devel = 3.12.49-11.1
+%define kdir /lib/modules/3.12.49-11-default/source/
+%define kobjdir /lib/modules/3.12.49-11-default/build/
 %endif
 
 %if 0%{?centos_version} == 600
@@ -39,21 +39,26 @@ BuildRequires: kernel-devel = 2.6.32-431.el6
 %endif
 
 %if 0%{?centos_version} == 700
-#BuildRequires: kernel = 3.10.0-123.el7
-#BuildRequires: kernel-devel = 3.10.0-123.el7
-BuildRequires: kernel = 3.10.0-229.el7
-BuildRequires: kernel-devel = 3.10.0-229.el7
-#%define kdir /lib/modules/3.10.0-123.el7.x86_64/source/
-#%define kobjdir /lib/modules/3.10.0-123.el7.x86_64/build/
-%define kdir /lib/modules/3.10.0-229.el7.x86_64/source/
-%define kobjdir /lib/modules/3.10.0-229.el7.x86_64/build/
-%endif
+# 7.1 kernel version
+# %define centos_kernel 3.10.0-229.el7
+
+# 7.2 kernel version
+%define centos_kernel 3.10.0-327.el7
+BuildRequires: kernel = %{centos_kernel}
+BuildRequires: kernel-devel = %{centos_kernel}
+%define kdir /lib/modules/%{centos_kernel}.x86_64/source/
+%define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
 
 %endif
+
+BuildRequires: python-docutils
+
+%endif
+
 BuildRequires:	-post-build-checks
 
 # Declare rpmbuild --with/--without parameters
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 %bcond_with servers
 %else
 %bcond_without servers
@@ -73,7 +78,10 @@ BuildRequires:	-post-build-checks
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.7.0}
+%define sha_full  8eb26594344887fabc4b81245abd12b1aeefbccb
+%define sha_short 8eb2659
+%{!?version: %global version 2.8.0}
+
 %{!?kver: %global kver ""}
 %{!?kdir: %global kdir %(dir=$(echo "%configure_args" | sed -ne 's/.*--with-linux=\\([^ ][^ ]*\\).*$/\\1/p'); if [ -n "$dir" ]; then echo "$dir"; else if [ -n "%kver" ]; then kversion="%kver"; else kversion="$(uname -r)"; fi; echo "/lib/modules/$kversion/source"; fi)}
 
@@ -153,11 +161,11 @@ Name: %{lustre_name}%{PROJ_DELIM}
 Version: %{version}
 Release: %{fullrelease}
 License: GPL
-Group: fsp/lustre
+Group:   %{PROJ_NAME}/lustre
 Source: lustre-%{version}.tar.gz
-Source1: FSP_macros
+Source1: OHPC_macros
 URL: https://wiki.hpdd.intel.com/
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
 Obsoletes: lustre-lite, lustre-lite-utils, lustre-ldap nfs-utils-lustre
 Provides: lustre-lite = %{version}, lustre-lite-utils = %{version}
@@ -356,7 +364,9 @@ clients in order to run
 %debug_package
 %endif
 %prep
+
 %setup -qn lustre-%{version}
+#patch1 -p1
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
@@ -364,13 +374,16 @@ ln lnet/ChangeLog ChangeLog-lnet
 %build
 
 # Set an explicit path to our Linux tree, if we can.
+
 cd $RPM_BUILD_DIR/lustre-%{version}
+
 # override %optflags so that the vendor's overzealous flags don't create
 # build failures
 %define optflags -g -O2 -Werror
 
-%if 0%{?FSP_BUILD}
-CONFIGURE_ARGS="%{?configure_args} --with-release=3.0.76-0.11-default --disable-ldiskfs --disable-server"
+%if 0%{?OHPC_BUILD}
+#CONFIGURE_ARGS="%{?configure_args} --with-release=3.0.76-0.11-default --disable-ldiskfs --disable-server"
+CONFIGURE_ARGS="%{?configure_args} --with-release=%release --disable-ldiskfs --disable-server"
 %else
 CONFIGURE_ARGS="%{?configure_args} --with-release=%release"
 %endif
@@ -563,11 +576,15 @@ find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} \
 %{_datadir}/lustre
 %{_sysconfdir}/udev/rules.d/99-lustre.rules
 %config(noreplace) %{_sysconfdir}/ldev.conf
+%if 0%{?centos_version}
+/etc/init.d/lsvcgss
+%endif
 
 %if %{with lustre_modules}
 %files modules
 %defattr(-,root,root)
 %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/*
+%config /etc/modprobe.d/ko2iblnd.conf
 %if %{with lustre_tests}
 %exclude %{?rootdir}/lib/modules/%{kversion}/%{kmoddir}/kernel/fs/lustre/llog_test.ko
 %endif
@@ -584,7 +601,7 @@ find $RPM_BUILD_ROOT%{?rootdir}/lib/modules/%{kversion}/%{kmoddir} \
 %doc COPYING
 %doc ChangeLog-lustre
 %doc ChangeLog-lnet
-%{FSP_PUB}
+%{OHPC_PUB}
 
 %if %{with ldiskfs}
 %files osd-ldiskfs
@@ -956,3 +973,4 @@ fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+

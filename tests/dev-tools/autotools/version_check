@@ -1,0 +1,85 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions           || exit 1
+source ./common/TEST_ENV            || exit 1
+source ./LOCAL_ENV                  || exit 1
+
+FORMAT="%-15s: %s\n"
+
+#/opt/ohpc/pub/autotools/bin/autoconf
+#/opt/ohpc/pub/autotools/bin/autoheader
+#/opt/ohpc/pub/autotools/bin/autom4te
+#/opt/ohpc/pub/autotools/bin/autoreconf
+#/opt/ohpc/pub/autotools/bin/autoscan
+#/opt/ohpc/pub/autotools/bin/autoupdate
+#/opt/ohpc/pub/autotools/bin/ifnames
+
+#/opt/ohpc/pub/autotools/bin/aclocal
+#/opt/ohpc/pub/autotools/bin/automake
+
+#/opt/ohpc/pub/autotools/bin/libtool
+#/opt/ohpc/pub/autotools/bin/libtoolize
+
+setup () {
+	export MAKE_VER="$(rpm --qf '%{VERSION}' -q automake${DELIM})"
+	export CONF_VER="$(rpm --qf '%{VERSION}' -q autoconf${DELIM})"
+	export LIBT_VER="$(rpm --qf '%{VERSION}' -q libtool${DELIM})"
+}
+
+@test "[$TEST_DIR] autoconf: verify autoconf executable is version $CONF_VER" {
+    EXEC_VER=$(autoconf --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
+    [[ "$CONF_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] autoconf: verify autoheader executable is version $CONF_VER" {
+    EXEC_VER=$(autoheader --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
+    [[ "$CONF_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] autoconf: verify autom4te executable is version $CONF_VER" {
+    EXEC_VER=$(autom4te --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
+    [[ "$CONF_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] autoconf: verify autoreconf executable is version $CONF_VER" {
+    EXEC_VER=$(autoreconf --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
+    [[ "$CONF_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] autoconf: verify autoscan executable is version $CONF_VER" {
+    EXEC_VER=$(autoscan --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
+    [[ "$CONF_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] autoconf: verify autoupdate executable is version $CONF_VER" {
+    EXEC_VER=$(autoupdate --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
+    [[ "$CONF_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] autoconf: verify ifnames executable is version $CONF_VER" {
+    EXEC_VER=$(ifnames --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
+    [[ "$CONF_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] automake: verify aclocal executable is version $CONF_VER" {
+    EXEC_VER=$(aclocal --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
+    [[ "$MAKE_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] automake: verify automake executable is version $CONF_VER" {
+    EXEC_VER=$(automake --version | grep -o '(GNU [Aa]uto\(conf\|make\)) .*' | sed 's#(GNU [Aa]uto\(conf\|make\)) ##')
+    [[ "$MAKE_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] libtool:  verify libtool executable is version $LIBT_VER" {
+    EXEC_VER=$(libtool --version | grep -o '(GNU libtool) .*' | sed 's#(GNU libtool) ##')
+    [[ "$LIBT_VER" == "$EXEC_VER" ]]
+}
+
+@test "[$TEST_DIR] libtool:  verify libtoolize executable is version $LIBT_VER" {
+    EXEC_VER=$(libtoolize --version | grep -o '(GNU libtool) .*' | sed 's#(GNU libtool) ##')
+    [[ "$LIBT_VER" == "$EXEC_VER" ]]
+}
+

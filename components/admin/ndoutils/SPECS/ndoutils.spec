@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,18 +8,17 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname ndoutils
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-
 Name:               %{pname}%{PROJ_DELIM}
 Version:            2.0.0
 Release:            7%{?dist}
-DocDir:             %{FSP_PUB}/doc/contrib
+DocDir:             %{OHPC_PUB}/doc/contrib
 
 Summary:            Stores all configuration and event data from Nagios in a database
 Group:              Applications/System
@@ -29,7 +28,7 @@ License:            GPLv2 and BSD
 URL:                http://www.nagios.org/download/addons/
 BuildRoot:          %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Source0:            %{pname}-%{version}.tar.gz
+Source0:            http://downloads.sourceforge.net/nagios/ndoutils-%{version}.tar.gz
 Source1:            README.Fedora
 Source2:            ndo2db.service
 Source3:            ndo2db.init

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -9,25 +9,30 @@
 #----------------------------------------------------------------------------eh-
 
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family:      %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM %{nil}}
+
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 
 # Compiler dependencies 
 
 # Note: this package is slightly non-standard in that we always use
 # gnu compilers undernead in order to support call-site demangling
 
-BuildRequires: lmod%{PROJ_DELIM}
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
 
@@ -45,7 +50,7 @@ BuildRequires: openmpi-gnu%{PROJ_DELIM}
 Requires:      openmpi-gnu%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname mpiP
@@ -55,15 +60,15 @@ Summary:   mpiP: a lightweight profiling library for MPI applications.
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.4.1
 Release:   1
-License:   GPLv2+
-Group:     fsp/perf-tools
+License:   BSD-3
+Group:     %{PROJ_NAME}/perf-tools
 URL:       http://mpip.sourceforge.net/
-Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_macros
-Source2:   FSP_setup_compiler
-Source3:   FSP_setup_mpi
+Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{version}.tar.gz
+Source1:   OHPC_macros
+Source2:   OHPC_setup_compiler
+Source3:   OHPC_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: binutils-devel
 BuildRequires: python
@@ -71,7 +76,7 @@ BuildRequires: python
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description 
 
@@ -89,13 +94,13 @@ file.
 
 %build
 
-# FSP compiler/mpi designation
+# OpenHPC compiler/mpi designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-export FSP_COMPILER_FAMILY=gnu
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_COMPILER_FAMILY=gnu
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 CC=mpicc
 CXX=mpicxx
@@ -103,24 +108,24 @@ FC=mpif90
 
 
 
-./configure --prefix=%{install_path} --enable-demangling --disable-libunwind || cat config.log
+./configure --prefix=%{install_path} --enable-demangling --disable-libunwind || { cat config.log && exit 1; }
 
 %install
 
-# FSP compiler designation
+# OpenHPC compiler designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-export FSP_COMPILER_FAMILY=gnu
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+export OHPC_COMPILER_FAMILY=gnu
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 make %{?_smp_mflags} 
 make DESTDIR=$RPM_BUILD_ROOT install
 
-# FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -146,7 +151,7 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -161,6 +166,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc ChangeLog doc/PORTING.txt doc/README doc/UserGuide.txt

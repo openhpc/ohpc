@@ -1,0 +1,11 @@
+--- setuptools-18.8/setuptools/tests/test_egg_info.py	2015-11-30 08:24:31.000000000 -0800
++++ setuptools-18.8.patch/setuptools/tests/test_egg_info.py	2016-02-18 10:35:52.538524800 -0800
+@@ -62,7 +62,7 @@
+         )
+         cmd = [
+             'install',
+-            '--home', env.paths['home'],
++            '--prefix', env.paths['home'],
+             '--install-lib', env.paths['lib'],
+             '--install-scripts', env.paths['scripts'],
+             '--install-data', env.paths['data'],

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,8 +8,8 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname conman
@@ -21,25 +21,25 @@ Version:	0.2.7
 Release:	1%{?dist}
 
 Summary:	ConMan: The Console Manager
-Group:		fsp/admin
+Group:		%{PROJ_NAME}/admin
 License:	GPLv3+
-URL:		http://conman.googlecode.com/
-DocDir:         %{FSP_PUB}/doc/contrib
+URL:		http://dun.github.io/conman/
+DocDir:         %{OHPC_PUB}/doc/contrib
 
 Requires:	expect
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 
 %if 0%{?suse_version}
-BuildRequires:	tcpd
-BuildRequires:	OpenIPMI
+BuildRequires:	tcpd-devel
 %else
 BuildRequires:	tcp_wrappers-devel
-BuildRequires:	freeipmi-devel
 %endif
+BuildRequires:	freeipmi-devel
 #!BuildIgnore: post-build-checks
 
-Source0:	%{pname}-%{version}.tar.bz2
+Source0:	https://github.com/dun/conman/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.bz2
+Source1:    %{pname}.service
 Patch1:         conman.init.patch
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
@@ -67,20 +67,16 @@ Its features include:
 %patch1 -p1
 
 %build
-%configure
+%configure --with-tcp-wrappers --with-freeipmi
 make %{?_smp_mflags}
 
 %install
 rm -rf "%{buildroot}"
 %{__mkdir_p} "%{buildroot}"
 make install DESTDIR="%{buildroot}"
-#
-%if 0%{?_initrddir:1}
-if [ "%{_sysconfdir}/init.d" != "%{_initrddir}" ]; then
-  mkdir -p "%{buildroot}%{_initrddir}"
-  mv "%{buildroot}%{_sysconfdir}/init.d"/* "%{buildroot}%{_initrddir}/"
-fi
-%endif
+
+install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/%{pname}.service
+rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
@@ -88,33 +84,36 @@ fi
 rm -rf "%{buildroot}"
 
 %post
-
-%if 0%{?suse_version}
-%{fillup_and_insserv -f}
-%else
-if [ -x /sbin/chkconfig ]; then
-  /sbin/chkconfig --add conman
-elif [ -x /usr/lib/lsb/install initd ]; then
-  /usr/lib/lsb/install initd %{_initdir}/conman
+if [ $1 -eq 1 ] ; then
+    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
-%endif
 
+if ! grep "^SERVER" /etc/conman.conf > /dev/null; then
+    cat <<-HERE >> /etc/conman.conf
+SERVER keepalive=ON
+SERVER logdir="/var/log/conman"
+SERVER logfile="/var/log/conman.log"
+SERVER loopback=ON
+SERVER pidfile="/var/run/conman.pid"
+SERVER resetcmd="powerman -0 %N; sleep 3; powerman -1 %N"
+SERVER tcpwrappers=ON
+SERVER timestamp=1h
+GLOBAL seropts="115200,8n1"
+GLOBAL log="console.%N"
+GLOBAL logopts="sanitize,timestamp"
+
+HERE
+fi
 
 %preun
-if [ "$1" = 0 ]; then
-  INITRDDIR=%{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}
-  $INITRDDIR/conman stop >/dev/null 2>&1 || :
-  if [ -x /sbin/chkconfig ]; then
-     /sbin/chkconfig --del conman
-  elif [ -x /usr/lib/lsb/remove initd ]; then
-    /usr/lib/lsb/remove initd %{_initdir}/conman
-  fi
+if [ $1 -eq 0 ] ; then
+    /bin/systemctl --no-reload disable conman.service > /dev/null 2>&1 || :
+    /bin/systemctl stop conman.service > /dev/null 2>&1 || :
 fi
 
 %postun
-if [ "$1" -ge 1 ]; then
-  INITRDDIR=%{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}
-  $INITRDDIR/conman condrestart >/dev/null 2>&1 || :
+f [ $1 -ge 1 ] ; then
+    /bin/systemctl try-restart conman.service >/dev/null 2>&1 || :
 fi
 
 %if %{?insserv_cleanup:1}0
@@ -131,10 +130,10 @@ fi
 %doc NEWS
 %doc README
 %doc THANKS
-%{FSP_PUB}
+%{OHPC_PUB}
 %config(noreplace) %{_sysconfdir}/conman.conf
 %config(noreplace) %{_sysconfdir}/[dls]*/conman
-%{?_initrddir:%{_initrddir}}%{!?_initrddir:%{_sysconfdir}/init.d}/conman
+%{_unitdir}/%{pname}.service
 %{_bindir}/*
 %{_sbindir}/*
 %{_prefix}/lib/*

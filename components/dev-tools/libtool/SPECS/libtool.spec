@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,27 +8,27 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname libtool
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   The GNU Portable Library Tool
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2.4.6
 Release:   1
-License:   GPLv2+ and LGPLv2+ and GFDL
-Group:     fsp/dev-tools
+License:   GPLv2
+Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/libtool/
-DocDir:    %{FSP_PUB}/doc/contrib
-Source0:   libtool-%{version}.tar.gz
-Source1:   FSP_macros
+DocDir:    %{OHPC_PUB}/doc/contrib
+Source0:   https://ftp.gnu.org/gnu/libtool/%{pname}-%{version}.tar.gz
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 %define debug_package %{nil}
-%define install_path %{FSP_PUB}/autotools
+%define install_path %{OHPC_PUB}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
 Requires:      automake%{PROJ_DELIM} >= 1.14.1
@@ -67,14 +67,12 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
 # modulefile
 
-%{__mkdir_p} %{buildroot}/%{FSP_MODULES}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/autotools
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/autotools
 #%Module1.0#####################################################################
-# FSP Autotools environment
-#############################################################################
 
 proc ModulesHelp { } {
-puts stderr "This module loads the FSP autotools collection to provide recent"
+puts stderr "This module loads the autotools collection to provide recent"
 puts stderr "versions of autoconf, automake, and libtool."
 puts stderr " "
 }
@@ -96,10 +94,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{FSP_PUB}
-%dir %{FSP_MODULES}
-%{FSP_PUB}
-%{FSP_MODULES}/autotools
+%dir %{OHPC_PUB}
+%dir %{OHPC_MODULES}
+%{OHPC_PUB}
+%{OHPC_MODULES}/autotools
 %doc AUTHORS
 %doc ChangeLog
 %doc COPYING

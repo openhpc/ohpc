@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -9,7 +9,10 @@
 #----------------------------------------------------------------------------eh-
 
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-%include %{_sourcedir}/FSP_macros
+
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname warewulf-ipmi
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
@@ -24,19 +27,18 @@ Name: %{rpmname}
 Summary: IPMI Module for Warewulf
 Version: 3.6
 Release: %{_rel}%{?dist}
-#Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group: fsp/provisioning
+Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
-Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
+Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-ipmi/warewulf-ipmi-%{version}.tar.gz
+Source1: OHPC_macros
 ExclusiveOS: linux
-Requires: warewulf-common-fsp
-BuildRequires: warewulf-common-fsp
+Requires: warewulf-common%{PROJ_DELIM}
+BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -66,7 +68,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO
 %{wwpkgdir}/*
 %{_libexecdir}/warewulf/ipmitool

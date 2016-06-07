@@ -1,0 +1,45 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+
+source ./TEST_ENV || exit 1
+cd user-env-oom   || exit 1
+
+# bootstrap the local autotools project if necessary
+
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+
+    echo " "
+    echo " "
+    echo "----------------------------------------------------------"
+    echo "User Environment: OOM tests: $compiler"
+    echo "----------------------------------------------------------"
+
+    module purge                || exit 1
+    module load $compiler       || exit 1
+    module load metis           || exit 1
+
+    ./configure                 || exit 1
+    make clean                  || exit 1
+    make -k check               || exit 1
+
+    # save .tap files for potential integration with CI
+
+    for i in `find tests -type f \( -iname "*.log" -not -iname "test-suite.log" \) `; do 
+        name=`basename $i .log`
+        dir=`dirname $i`
+        
+        # test for presence of TAP header
+        head -1 $i | grep -q "^1..[0-9]*$"
+        if [ $? -eq 0 ];then
+            mv $i $dir/$name-$compiler.tap
+        fi   
+    done
+
+    make distclean
+
+done

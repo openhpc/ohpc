@@ -1,0 +1,4 @@
+makefile
+makefile.in
+.deps
+*.mod

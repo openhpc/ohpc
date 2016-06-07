@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,12 +8,12 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname nrpe
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+%define PNAME %(tr [a-z] [A-Z] <<< %{pname})
 
 %if 0%{?fedora} > 19
 %global _hardened_build 1
@@ -26,13 +26,16 @@ Release: 2%{?dist}
 Summary: Host/service/network monitoring agent for Nagios
 
 Group: Applications/System
-License: GPLv2
+License: GPLv2+
 URL: http://www.nagios.org
-DocDir: %{FSP_PUB}/doc/contrib
-Source0: %{pname}-%{version}.tar.gz
+DocDir: %{OHPC_PUB}/doc/contrib
+Source0: http://downloads.sourceforge.net/nagios/nrpe-%{version}.tar.gz
 Source1: nrpe.sysconfig
 Source2: nrpe-tmpfiles.conf
 Source3: nrpe.service
+Source4: commands.cfg
+Source5: hosts.cfg.example
+Source6: services.cfg.example
 Patch1: nrpe-0001-Add-reload-target-to-the-init-script.patch
 Patch2: nrpe-0002-Read-extra-configuration-from-etc-sysconfig-nrpe.patch
 Patch3: nrpe-0003-Include-etc-npre.d-config-directory.patch
@@ -162,6 +165,10 @@ install -D -p -m 0755 init-script %{buildroot}/%{_initrddir}/nrpe
 install -D -m 0644 -p %{SOURCE3} %{buildroot}%{_unitdir}/%{pname}.service
 %endif
 install -D -p -m 0644 sample-config/nrpe.cfg %{buildroot}/%{_sysconfdir}/nagios/%{pname}.cfg
+mkdir -p %{buildroot}/%{_sysconfdir}/nagios/conf.d # install -D... this should be your job
+install -D -p -m 0640 %{SOURCE4} %{buildroot}/%{_sysconfdir}/nagios/conf.d/commands.cfg
+install -D -p -m 0640 %{SOURCE5} %{buildroot}/%{_sysconfdir}/nagios/conf.d/hosts.cfg.example
+install -D -p -m 0640 %{SOURCE6} %{buildroot}/%{_sysconfdir}/nagios/conf.d/services.cfg.example
 install -D -p -m 0755 src/nrpe %{buildroot}/%{_sbindir}/nrpe
 install -D -p -m 0755 src/check_nrpe %{buildroot}/%{_libdir}/nagios/plugins/check_nrpe
 install -D -p -m 0644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/sysconfig/%{pname}
@@ -195,8 +202,8 @@ fi
 /sbin/chkconfig --add %{pname} || :
 %else
 #%systemd_post nrpe.service
-/usr/bin/systemctl enable nrpe.service
-/usr/bin/systemctl start nrpe.service
+/usr/bin/systemctl enable nrpe.service > /dev/null 2>&1 || :
+/usr/bin/systemctl start nrpe.service  > /dev/null 2>&1 || :
 %endif
 
 %postun
@@ -206,8 +213,11 @@ if [ "$1" -ge "1" ]; then
 fi
 %else
 #%systemd_postun_with_restart nrpe.service
-/usr/bin/systemctl disable nrpe.service
-/usr/bin/systemctl reload-or-try-restart nrpe.service
+if [ "$1" -ge "1" ]; then
+	/usr/bin/systemctl reload-or-try-restart nrpe.service
+else
+	/usr/bin/systemctl disable nrpe.service
+fi
 %endif
 
 %files
@@ -219,6 +229,9 @@ fi
 %{_sbindir}/nrpe
 %dir %{_sysconfdir}/nrpe.d
 %config(noreplace) %{_sysconfdir}/nagios/nrpe.cfg
+%attr( 640, root, nagios ) %config(noreplace) %{_sysconfdir}/nagios/conf.d/commands.cfg
+%attr( 640, root, nagios ) %{_sysconfdir}/nagios/conf.d/hosts.cfg.example
+%attr( 640, root, nagios ) %{_sysconfdir}/nagios/conf.d/services.cfg.example
 %config(noreplace) %{_sysconfdir}/sysconfig/%{pname}
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
 %config(noreplace) %{_tmpfilesdir}/%{pname}.conf

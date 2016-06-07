@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#PBS -N MiniDFT_lg
+#PBS -q regular
+#PBS -l mppwidth=10000
+#PBS -l mppnppn=16
+#PBS -l walltime=0:30:00
+#PBS -V
+#PBS -j oe
+
+cd $PBS_O_WORKDIR
+
+export OMP_NUM_THREADS=1
+
+CMD="aprun -n 10000 -N 16 ../src/mini_dft -ntg 5 -in large.in > large.out"
+echo $CMD; $CMD; echo
+

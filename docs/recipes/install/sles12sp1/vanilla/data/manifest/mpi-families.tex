@@ -1,0 +1,42 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for intel-mpi-devel-ohpc
+\multirow{2}{*}{intel-mpi-devel-ohpc} & 
+\multirow{2}{*}{5.1.3.181} & 
+Intel(R) MPI Library for Linux* OS. \newline { \color{logoblue} \url{https://software.intel.com/en-us/intel-mpi-library}} 
+\\ \hline 
+% <-- end entry for intel-mpi-devel-ohpc
+
+% <-- begin entry for intel-mpi-ohpc
+\multirow{2}{*}{intel-mpi-ohpc} & 
+\multirow{2}{*}{5.1.3.181} & 
+Intel(R) MPI Library for Linux* OS. \newline { \color{logoblue} \url{https://software.intel.com/en-us/intel-mpi-library}} 
+\\ \hline 
+% <-- end entry for intel-mpi-ohpc
+
+% <-- begin entry for mvapich2
+mvapich2-gnu-ohpc & 
+\multirow{2}{*}{2.1} & 
+\multirow{2}{\linewidth}{OSU MVAPICH2 MPI implementation. \newline {\color{logoblue} \url{http://mvapich.cse.ohio-state.edu/overview/mvapich2}}} \\ 
+mvapich2-intel-ohpc & 
+& \\ 
+\hline
+% <-- end entry for mvapich2
+
+% <-- begin entry for openmpi
+openmpi-gnu-ohpc & 
+\multirow{2}{*}{1.10.1} & 
+\multirow{2}{\linewidth}{A powerful implementation of MPI. \newline {\color{logoblue} \url{http://www.open-mpi.org}}} \\ 
+openmpi-intel-ohpc & 
+& \\ 
+\hline
+% <-- end entry for openmpi
+
+\bottomrule
+\end{tabularx}

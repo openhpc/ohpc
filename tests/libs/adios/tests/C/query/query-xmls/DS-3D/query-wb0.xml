@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<query num="2"  from-timestep="0" num-timesteps="2" batchsize="1024">
+
+    <output type="ADIOS_SELECTION_BOUNDINGBOX" dim="3" start="0,0,0" count="2,2,2"/>
+
+    <entry var="temp" op=">=" constraint="0.5"> 
+        <selection type="ADIOS_SELECTION_WRITEBLOCK" index="0"/>
+    </entry>
+
+    <entry var="temp" op="<=" constraint="-0.5"> 
+        <selection type="ADIOS_SELECTION_WRITEBLOCK"  index="0"/>
+    </entry>
+    
+    <combine op="OR"/>
+
+</query>

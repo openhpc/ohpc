@@ -1,0 +1,51 @@
+--- SuperLU_DIST_4.2/make.inc	2015-09-25 11:36:37.000000000 -0700
++++ SuperLU_DIST_4.2.patch/make.inc	2016-01-11 08:19:51.665026400 -0800
+@@ -31,13 +31,13 @@
+ #
+ ############################################################################
+ ## parmetis 4.x.x, 32-bit integer
+- PARMETIS_DIR	:= ${HOME}/Edison/lib/parmetis-4.0.3
++# PARMETIS_DIR	:= ${HOME}/Edison/lib/parmetis-4.0.3
+ ## parmetis 4.x.x, 64-bit integer
+ # PARMETIS_DIR	:= ${HOME}/Edison/lib/parmetis-4.0.3_64
+ 
+-METISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libmetis -lmetis
+-PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
+-I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
++#METISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libmetis -lmetis
++#PARMETISLIB := -L${PARMETIS_DIR}/build/Linux-x86_64/libparmetis -lparmetis
++#I_PARMETIS := -I${PARMETIS_DIR}/include -I${PARMETIS_DIR}/metis/include
+ ############################################################################
+ 
+ # Define the required Fortran libraries, if you use C compiler to link
+@@ -57,24 +57,23 @@
+ 
+ ############################################################################
+ # C compiler setup
+-CC           	= cc
++CC           	= mpicc
+ # CFLAGS should be set to be the C flags that include optimization
+-CFLAGS          = -fast -m64 -std=c99 -Wall -openmp \
+-		$(I_PARMETIS) -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0 \
++CFLAGS          = -std=c99 -Wall -fPIC -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0
+ # uncomment the following to use 64-bit integer
+ # CFLAGS 		+= -D_LONGINT
+ 
+ # NOOPTS should be set to be the C flags that turn off any optimization
+-NOOPTS		= -O0 -std=c99
++NOOPTS		= -Os -fPIC
+ ############################################################################
+ # FORTRAN compiler setup
+-FORTRAN         = ftn
+-F90FLAGS	= -fast #-Mipa=fast,safe
++FORTRAN         = mpif90
++F90FLAGS	= -fPIC
+ # uncomment the following to use 64-bit integer
+ # F90FLAGS	+= -i8
+ ############################################################################
+ LOADER	        = $(CC)
+-LOADOPTS	= -openmp
++LOADOPTS	= -fPIC
+ ############################################################################
+ #  C preprocessor defs for compilation (-DNoChange, -DAdd_, or -DUpCase)
+ #

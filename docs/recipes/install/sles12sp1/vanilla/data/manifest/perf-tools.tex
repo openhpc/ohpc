@@ -1,0 +1,98 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for imb
+imb-gnu-impi-ohpc & 
+\multirow{6}{*}{4.1} & 
+\multirow{6}{\linewidth}{Intel MPI Benchmarks (IMB). \newline {\color{logoblue} \url{https://software.intel.com/en-us/articles/intel-mpi-benchmarks}}} \\ 
+imb-gnu-mvapich2-ohpc & 
+& \\ 
+imb-gnu-openmpi-ohpc & 
+& \\ 
+imb-intel-impi-ohpc & 
+& \\ 
+imb-intel-mvapich2-ohpc & 
+& \\ 
+imb-intel-openmpi-ohpc & 
+& \\ 
+\hline
+% <-- end entry for imb
+
+% <-- begin entry for intel-advisor-ohpc
+\multirow{2}{*}{intel-advisor-ohpc} & 
+\multirow{2}{*}{16.1.30.450722} & 
+Intel(R) Advisor XE. \newline { \color{logoblue} \url{https://software.intel.com/en-us/intel-parallel-studio-xe}} 
+\\ \hline 
+% <-- end entry for intel-advisor-ohpc
+
+% <-- begin entry for intel-itac-ohpc
+\multirow{2}{*}{intel-itac-ohpc} & 
+\multirow{2}{*}{9.1.2.024} & 
+Intel(R) Trace Analyzer and Collector. \newline { \color{logoblue} \url{https://software.intel.com/en-us/intel-parallel-studio-xe}} 
+\\ \hline 
+% <-- end entry for intel-itac-ohpc
+
+% <-- begin entry for intel-vtune-ohpc
+\multirow{2}{*}{intel-vtune-ohpc} & 
+\multirow{2}{*}{16.2.0.444464} & 
+Intel(R) VTune(TM) Amplifier XE. \newline { \color{logoblue} \url{https://software.intel.com/en-us/intel-parallel-studio-xe}} 
+\\ \hline 
+% <-- end entry for intel-vtune-ohpc
+
+% <-- begin entry for mpiP
+mpiP-gnu-impi-ohpc & 
+\multirow{6}{*}{3.4.1} & 
+\multirow{6}{\linewidth}{mpiP: a lightweight profiling library for MPI applications. \newline {\color{logoblue} \url{http://mpip.sourceforge.net}}} \\ 
+mpiP-gnu-mvapich2-ohpc & 
+& \\ 
+mpiP-gnu-openmpi-ohpc & 
+& \\ 
+mpiP-intel-impi-ohpc & 
+& \\ 
+mpiP-intel-mvapich2-ohpc & 
+& \\ 
+mpiP-intel-openmpi-ohpc & 
+& \\ 
+\hline
+% <-- end entry for mpiP
+
+% <-- begin entry for papi-ohpc
+\multirow{2}{*}{papi-ohpc} & 
+\multirow{2}{*}{5.4.1} & 
+Performance Application Programming Interface. \newline { \color{logoblue} \url{http://icl.cs.utk.edu/papi}} 
+\\ \hline 
+% <-- end entry for papi-ohpc
+
+% <-- begin entry for pdtoolkit
+pdtoolkit-gnu-ohpc & 
+\multirow{2}{*}{3.21} & 
+\multirow{2}{\linewidth}{PDT is a framework for analyzing source code. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/Research/pdt}}} \\ 
+pdtoolkit-intel-ohpc & 
+& \\ 
+\hline
+% <-- end entry for pdtoolkit
+
+% <-- begin entry for tau
+tau-gnu-impi-ohpc & 
+\multirow{6}{*}{2.25} & 
+\multirow{6}{\linewidth}{Tuning and Analysis Utilities Profiling Package. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/research/tau/home.php}}} \\ 
+tau-gnu-mvapich2-ohpc & 
+& \\ 
+tau-gnu-openmpi-ohpc & 
+& \\ 
+tau-intel-impi-ohpc & 
+& \\ 
+tau-intel-mvapich2-ohpc & 
+& \\ 
+tau-intel-openmpi-ohpc & 
+& \\ 
+\hline
+% <-- end entry for tau
+
+\bottomrule
+\end{tabularx}

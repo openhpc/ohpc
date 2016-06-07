@@ -2,44 +2,24 @@ The following command adds the \SLURM{} workload manager server components to th
 chosen {\em master} host. Note that client-side components will be added to
 the corresponding compute image in a subsequent step.
 
-% begin_fsp_run
-% fsp_comment_header Add resource management services on master node \ref{sec:add_rm}
+% begin_ohpc_run
+% ohpc_comment_header Add resource management services on master node \ref{sec:add_rm}
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ (*\groupinstall*) fsp-slurm-server
+[sms](*\#*) (*\groupinstall*) ohpc-slurm-server
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
 \SLURM{} requires the designation of a system user that runs the underlying
 resource management daemons. The default configuration file that is supplied
-with the \FSP{} build of \SLURM{} identifies this \texttt{SlurmUser} to be a
-dedicated user named \texttt{slurm} and this user must exist. 
+with the \OHPC{} build of \SLURM{} identifies this \texttt{SlurmUser} to be a
+dedicated user named ``slurm'' and this user must exist. 
 The following command can be used to add this user to the {\em
   master} server:
 
-% begin_fsp_run
+% begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-[master]$ useradd slurm
+[sms](*\#*) useradd slurm
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run
 
-To facilitate running test jobs later on under the auspices of a resource
-manager, we also add a dedicated ``test'' user as follows:
 
-% begin_fsp_run
-\begin{lstlisting}[language=bash,keywords={}]
-[master]$ useradd -m test
-\end{lstlisting}
-% end_fsp_run
-
-% todo - decide on this, karl disabling for now...it was not being run in CI
-
-%% In order for \SLURM{} to terminate after a job completes rather then waiting
-%% for the job timeout to occur the \texttt{Waittime} needs to be set to
-%% less than infinite.
-%% 
-%% % begin_fsp_run
-%% % fsp_validation_comment Reduce Waittime value
-%% \begin{lstlisting}[language=bash,keywords={}]
-%% [master]$ perl -pi -e "s/^Waittime=0/Waittime=30/" /etc/slurm/slurm.conf
-%% \end{lstlisting}
-%% % end_fsp_run

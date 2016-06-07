@@ -1,0 +1,636 @@
+\documentclass[letterpaper]{article}
+\usepackage{../../common/ohpc-doc}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+% Include git variables
+\input{vc.tex}
+
+% Define Base OS and other local macros
+\newcommand{\baseOS}{CentOS7.2}
+\newcommand{\OSRepo}{CentOS\_7.2}
+\newcommand{\baseos}{centos7.2}
+
+\newcommand{\install}{yum -y install}
+\newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
+\newcommand{\groupinstall}{yum -y groupinstall}
+\newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
+
+% boolean for os-specific formatting
+\toggletrue{isCentOS}
+
+\begin{document}
+\graphicspath{{../../common/figures/}}
+\thispagestyle{empty}
+
+% Title Page
+
+\lhead{ \small {\color{logodarkgrey}\fontfamily{phv}\selectfont { Install Guide} - {\baseOS{} Version} (v\OHPCVersion{}) } \vspace*{0pt} }
+
+{\hspace*{4in} \includegraphics[width=1.7in]{ohpc_logo_blue.pdf}}
+
+\vspace*{2cm}
+\noindent {\LARGE \color{logodarkgrey} \fontfamily{phv}\selectfont OpenHPC (v\OHPCVersion{})} \vspace*{0.1cm} \\
+\noindent {\LARGE \color{logodarkgrey} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
+
+{\color{logoblue}\noindent\rule{6.15in}{1.2pt}} \\ \vspace{0.2cm}
+
+\noindent {\Large \color{logodarkgrey} \fontfamily{phv}\selectfont \baseOS{} Base OS} \vspace{0.2cm}
+
+\noindent {\large \color{logodarkgrey} \fontfamily{phv}\selectfont {\em Base Linux* Edition }}
+
+\vspace*{4in}
+
+
+%\noindent{\normalsize \color{black} Intel Cluster Makers} \vspace*{0.1cm} \\
+%{\normalsize \color{logodarkgrey} Copyright~{\small\copyright}~2014-2015 Intel Corporation} \vspace*{0.1cm} \\ 
+\noindent{\small \color{black} Document Last Update: \VCDateISO} \vspace*{0.1cm} \\ 
+{\small \color{black} Document Revision: \VCRevision} \\ \vspace*{0.1cm}
+
+% Disclaimer  ----------------------------------------------------
+\input{../../common/legal} 
+
+\newpage
+\tableofcontents
+\newpage
+
+% Introduction  --------------------------------------------------
+
+\section{Introduction} \label{sec:introduction}
+\input{../../common/install_header}
+\input{../../common/intro} \\
+
+\input{../../common/base_edition/edition}
+\input{../../common/audience}
+\input{../../common/requirements}
+\input{../../common/byol}
+\input{../../common/inputs}
+
+% Base Operating System --------------------------------------------
+
+\section{Install Base Operating System (BOS)}
+\input{../../common/bos}
+
+% ------------------------------------------------------------------
+
+\section{Install \OHPC{} Components} \label{sec:basic_install}
+\input{../../common/install_ohpc_components_intro.tex}
+
+\subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
+\input{../../common/enable_ohpc_repo}
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
+% ohpc_validation_newline
+% ohpc_command yum repolist | grep -q OpenHPC
+% ohpc_command if [ $? -ne 0 ];then
+% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
+% ohpc_command    exit 1
+% ohpc_command fi
+% end_ohpc_run
+
+In addition to the \OHPC{} package repository, the {\em master} host also
+requires access to the standard base OS distro repositories in order to resolve
+necessary dependencies. For \baseOS{}, the requirements are to have access to
+both the base OS and EPEL repositories for which mirrors are freely available online:
+
+\begin{itemize*}
+\item CentOS-7 - Base 7.2.1511
+  (e.g. \href{http://mirror.centos.org/centos-7/7.2.1511/os/x86\_64}
+             {\color{blue}{http://mirror.centos.org/centos-7/7.2.1511/os/x86\_64}} )
+\item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
+                        {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
+\end{itemize*}
+
+\noindent The public EPEL repository will be enabled automatically upon installation of the 
+\texttt{ohpc-release} package. Note that this requires the CentOS Extras
+repository, which is shipped with CentOS and is enabled by default.
+
+\input{../../common/automation}
+
+
+\subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
+\input{../../common/install_provisioning_intro}
+\input{../../common/firewall}
+
+% begin_ohpc_run
+% ohpc_validation_comment Disable firewall 
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) systemctl disable firewalld
+[sms](*\#*) systemctl stop firewalld
+\end{lstlisting}
+% end_ohpc_run
+
+\input{../../common/enable_pxe}
+
+\input{../../common/time}
+
+\subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
+\input{../../common/install_slurm}
+
+\subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+
+The following command adds OFED and PSM support using base distro-provided drivers
+to the chosen {\em master} host.
+
+% begin_ohpc_run
+% ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) (*\groupinstall*) "InfiniBand Support"
+[sms](*\#*) (*\install*) infinipath-psm
+
+# Load IB drivers
+[sms](*\#*) systemctl start rdma
+\end{lstlisting}
+% end_ohpc_run
+
+With the \InfiniBand{} drivers included, you can also enable (optional) IPoIB functionality
+which provides a mechanism to send IP packets over the IB network. If you plan
+to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_client}
+for additional details), then having IPoIB enabled is a requirement for the
+\Lustre{} client. \OHPC{} provides a template configuration file to aid in setting up
+an {\em ib0} interface on the {\em master} host. To use, copy the template
+provided and update the \texttt{\$\{sms\_ipoib\}} and
+\texttt{\$\{ipoib\_netmask\}} entries to match local desired settings (alter ib0
+naming as appropriate if system contains dual-ported or multiple HCAs). 
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_validation_comment Enable ib0
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) cp /opt/ohpc/pub/examples/network/centos/ifcfg-ib0 /etc/sysconfig/network-scripts
+
+# Define local IPoIB address and netmask
+[sms](*\#*) perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network-scripts/ifcfg-ib0
+[sms](*\#*) perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network-scripts/ifcfg-ib0
+
+# Initiate ib0
+[sms](*\#*) ifup ib0
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\vspace*{-0.15cm}
+\subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
+\input{../../common/warewulf_setup}
+
+% begin_ohpc_run
+% ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
+%\begin{verbatim}
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+# Configure Warewulf provisioning to use desired internal interface
+[sms](*\#*) perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
+
+# Enable tftp service for compute node image distribution
+[sms](*\#*) perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
+
+# Enable http access for Warewulf cgi-bin directory to support newer apache syntax
+[sms](*\#*) export MODFILE=/etc/httpd/conf.d/warewulf-httpd.conf
+[sms](*\#*) perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
+
+[sms](*\#*) perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
+[sms](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
+
+# Enable internal interface for provisioning
+[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
+
+# Restart/enable relevant services to support provisioning
+[sms](*\#*) systemctl restart xinetd
+[sms](*\#*) systemctl enable mariadb.service
+[sms](*\#*) systemctl restart mariadb
+[sms](*\#*) systemctl enable httpd.service
+[sms](*\#*) systemctl restart httpd
+\end{lstlisting}
+%\end{verbatim}
+% end_ohpc_run
+
+
+\subsection{Define {\em compute} image for provisioning}
+
+With the provisioning services enabled, the next step is to define and
+customize a system image that can subsequently be used to provision one or more
+{\em compute} nodes. The following subsections highlight this process.
+
+\subsubsection{Build initial BOS image} \label{sec:assemble_bos}
+
+The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support for
+\baseOS{}. The following steps illustrate the process to build a minimal, default
+image for use with \Warewulf{}. We begin by defining a directory structure on the 
+{\em master} host that will represent the root filesystem of the compute node. The 
+default location for this example is in
+\texttt{/opt/ohpc/admin/images/\baseos{}}.
+
+\begin{center}
+  \begin{tcolorbox}[]
+    \small Note that \Warewulf{} is configured by default to access an external repository
+    (vault.centos.org) during the \texttt{wwmkchroot} process.
+    If the master host cannot reach the public CentOS mirrors, or if you
+    prefer to access a locally cached mirror, set the
+    \texttt{\$\{BOS\_MIRROR\}} environment variable to your desired repo
+    location and update the template file 
+    {\em prior} to running the \texttt{wwmkchroot} command below. For
+    example:
+
+% begin_ohpc_run
+% ohpc_command if [ ! -z ${BOS_MIRROR+x} ]; then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={}]
+# Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
+[sms](*\#*) perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
+   /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\end{tcolorbox}
+\end{center}
+
+% begin_ohpc_run
+% ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+# Define chroot location 
+[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.2
+
+# Build initial chroot image
+[sms](*\#*) wwmkchroot centos-7 $CHROOT
+\end{lstlisting}
+% end_ohpc_run
+
+\subsubsection{Add \OHPC{} components} \label{sec:add_components}
+
+\input{../../common/add_to_compute_chroot_intro}
+
+\noindent Now, we can include additional components to the compute instance using
+\texttt{yum} to install into the chroot location defined previously:
+
+% begin_ohpc_run
+% ohpc_validation_comment Add OpenHPC components to compute instance
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add Slurm client support
+[sms](*\#*) (*\groupchrootinstall*) ohpc-slurm-client
+
+# Add IB support and enable
+[sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
+[sms](*\#*) (*\chrootinstall*) infinipath-psm
+[sms](*\#*) chroot $CHROOT systemctl enable rdma
+
+# Add Network Time Protocol (NTP) support
+[sms](*\#*) (*\chrootinstall*) ntp
+
+# Add kernel drivers
+[sms](*\#*) (*\chrootinstall*) kernel
+
+# Include modules user environment
+[sms](*\#*) (*\chrootinstall*) lmod-ohpc
+\end{lstlisting}
+% end_ohpc_run
+
+\subsubsection{Customize system configuration} \label{sec:master_customization}
+
+Prior to assembling the image, it is advantageous to perform any additional
+customizations within the chroot environment created for the desired {\em
+ compute} instance. The following steps document the process to add a local
+{\em ssh} key created by \Warewulf{} to support remote access, identify the
+resource manager server, configure NTP for compute resources, and enable \NFS{}
+mounting of a \$HOME file system and the public \OHPC{} install path
+(\texttt{/opt/ohpc/pub}) that will be hosted by the {\em master} host in this
+example configuration.
+%The \NFS{} exporting options use an address/netmask
+%combination to limit the export scope to the defined compute nodes.
+
+% begin_ohpc_run
+% ohpc_comment_header Customize system configuration \ref{sec:master_customization}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# add new cluster key to base image
+[sms](*\#*) wwinit ssh_keys
+[sms](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
+
+# add NFS client mounts of /home and /opt/ohpc/pub to base image
+[sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+
+# Identify resource manager hostname on master host
+[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
+\end{lstlisting}
+% end_ohpc_run
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Export /home and OpenHPC public packages from master server to cluster compute nodes
+[sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[sms](*\#*) exportfs -a
+[sms](*\#*) systemctl restart nfs
+
+# Enable NTP time service on computes and identify master host as local NTP server
+[sms](*\#*) chroot $CHROOT systemctl enable ntpd
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
+\end{lstlisting}
+% end_ohpc_run
+
+
+\begin{center}
+\begin{tcolorbox}[]
+  \small Slurm requires enumeration of the physical hardware characteristics
+  for compute nodes under its control. In particular, three configuration
+  parameters combine to define consumable compute resources: {\em Sockets},
+  {\em CoresPerSocket}, and {\em ThreadsPerCore}. The default configuration
+  file provided via \OHPC{} assumes dual-socket, 8 cores per socket, and two
+  threads per core for this 4-node example. If this does not reflect your local
+  hardware, please update the configuration file at
+  \path{/etc/slurm/slurm.conf} accordingly to match your particular hardware.
+\end{tcolorbox}
+\end{center}
+
+% Additional commands when additional computes are requested
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Update basic slurm configuration if additional computes defined
+% ohpc_command if [ ${num_computes} -gt 4 ];then
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command fi
+% end_ohpc_run
+
+\clearpage
+\subsubsection{Additional Customizations ({\em optional})} \label{sec:addl_customizations}
+\input{../../common/compute_customizations_intro}
+
+\paragraph{Increase locked memory limits}
+\input{../../common/memlimits}
+
+\paragraph{Enable ssh control via resource manager} 
+\input{../../common/slurm_pam}
+
+\paragraph{Add Cluster Checker} \label{sec:add_clck}
+\input{../../common/cluster_checker}
+
+\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+\input{../../common/lustre-client}
+
+% begin_ohpc_run
+% ohpc_validation_newline 
+% ohpc_validation_comment Enable Optional packages
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_lustre_client} -eq 1 ]];then
+% ohpc_indent 5
+
+% ohpc_validation_comment Install Lustre client on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Add Lustre client software to master host
+[sms](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
+\end{lstlisting}
+% end_ohpc_run
+
+% begin_ohpc_run
+% ohpc_validation_comment Enable lustre in WW compute image
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Include Lustre client software in compute image
+[sms](*\#*) (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
+
+# Include mount point and file system mount in compute image
+[sms](*\#*) mkdir $CHROOT/mnt/lustre
+[sms](*\#*) echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
+\end{lstlisting}
+% end_ohpc_run
+
+The default underlying network type used by \Lustre{} is {\em tcp}. If your
+external \Lustre{} file system is to be mounted using a network type other than
+{\em tcp}, additional configuration files are necessary to identify the desired
+network type. The example below illustrates creation of modprobe configuration files
+instructing \Lustre{} to use an \InfiniBand{} network with the \textbf{o2ib} LNET driver
+attached to \texttt{ib0}. Note that these modifications are made to both the
+{\em master} host and {\em compute} image.
+
+% begin_ohpc_run
+% ohpc_validation_comment Enable o2ib for Lustre
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
+[sms](*\#*) echo "options lnet networks=o2ib(ib0)" >> $CHROOT/etc/modprobe.d/lustre.conf
+\end{lstlisting}
+% end_ohpc_run
+
+With the \Lustre{} configuration complete, the client can be mounted on the {\em master}
+host as follows:
+% begin_ohpc_run
+% ohpc_validation_comment mount Lustre client on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) mkdir /mnt/lustre
+[sms](*\#*) mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% ohpc_validation_newline
+% end_ohpc_run
+
+\clearpage
+\paragraph{Add \Nagios{} monitoring}
+\input{../../common/nagios}
+
+\clearpage
+\paragraph{Add \Ganglia{} monitoring}
+\input{../../common/ganglia}
+
+\paragraph{Add \clustershell{}}
+\input{../../common/clustershell}
+
+\paragraph{Add \mrsh{}}
+\input{../../common/mrsh}
+
+\paragraph{Add \genders{}}
+\input{../../common/genders}
+
+%% \paragraph{Add \powerman{}}
+%% \input{../../common/powerman}
+
+\paragraph{Add \conman{}} \label{sec:add_conman}
+\input{../../common/conman}
+
+\clearpage
+\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
+\input{../../common/syslog}
+
+\subsubsection{Import files} \label{sec:file_import}
+\input{../../common/import_ww_files}
+
+%----------------
+% CentOS specific
+%----------------
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) wwsh file import /opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww
+[sms](*\#*) wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network-scripts/ifcfg-ib0
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% \end_ohpc_run
+
+\input{../../common/finalize_provisioning}
+
+%\clearpage
+% begin_ohpc_run
+% ohpc_validation_comment Add hosts to cluster
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
+# Set provisioning interface as the default networking device
+[sms](*\#*) echo "GATEWAYDEV=${eth_provision}" > /tmp/network.$$
+[sms](*\#*) wwsh -y file import /tmp/network.$$ --name network
+[sms](*\#*) wwsh -y file set network --path /etc/sysconfig/network --mode=0644 --uid=0
+
+# Add nodes to Warewulf datastore
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+                wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
+        done
+\end{lstlisting}
+% end_ohpc_run
+
+% begin_ohpc_run
+% ohpc_validation_comment Add hosts to cluster (Cont.)
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+# Define provisioning image for hosts
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.2 --bootstrap=`uname -r` \
+    --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network 
+\end{lstlisting}
+
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, add arguments to bootstrap kernel
+% ohpc_command if [[ ${enable_kargs} ]]; then
+% ohpc_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
+% ohpc_command fi
+
+% ohpc_validation_newline
+% ohpc_validation_comment Restart ganglia services to pick up hostfile changes
+% ohpc_command if [[ ${enable_ganglia} -eq 1 ]];then
+% ohpc_command   systemctl restart gmond
+% ohpc_command   systemctl restart gmetad
+% ohpc_command fi
+
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, define IPoIB network settings (required if planning to mount Lustre over IB)
+% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+              wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
+        done
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% ohpc_validation_newline
+% end_ohpc_run
+
+\input{../../common/wwnodescan}
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Restart dhcp / update PXE
+[sms](*\#*) systemctl restart dhcpd
+[sms](*\#*) wwsh pxe update
+\end{lstlisting}
+% end_ohpc_run
+
+\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
+\input{../../common/conman_post}
+
+\subsubsection{Optionally configure stateful provisioning}
+\input{../../common/stateful}
+
+\vspace*{-0.1cm}
+\subsection{Boot compute nodes} \label{sec:boot_computes}
+\input{../../common/reset_computes} 
+
+%----------------
+% CentOS specific
+%----------------
+
+\begin{center}
+\begin{tcolorbox}[]
+\small While the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files that ship
+with Warewulf to enable network boot support a wide range of hardware, some
+hosts may boot more reliably or faster using the BOS versions provided via the
+\texttt{syslinux-tftpboot} package. If you encounter PXE issues, consider
+replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
+\texttt{warewulf-provision-ohpc} with versions from \texttt{syslinux-tftpboot}.
+\end{tcolorbox}
+\end{center}
+
+\vspace*{-0.50cm}
+\section{Install \OHPC{} Development Components}
+\input{../../common/dev_intro.tex}
+
+\vspace*{-0.15cm}
+\subsection{Development Tools} \label{sec:install_dev_tools}
+\input{../../common/dev_tools}
+
+\vspace*{-0.15cm}
+\subsection{Compilers} \label{sec:install_compilers}
+\input{../../common/compilers}
+
+%\clearpage
+\subsection{MPI Stacks} \label{sec:mpi}
+\input{../../common/mpi}
+
+\subsection{Performance Tools} \label{sec:install_perf_tools}
+\input{../../common/perf_tools}
+
+\subsection{Setup default development environment}
+\input{../../common/default_dev}
+
+%\vspace*{0.2cm}
+\subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
+\input{../../common/third_party_libs_intro}
+
+%----------------
+% CentOS specific
+%----------------
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) yum search petsc-gnu ohpc
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+=========================== N/S matched: petsc-gnu, ohpc ===========================
+petsc-gnu-impi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-mvapich2-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+\end{lstlisting}
+
+\input{../../common/third_party_libs}
+
+\section{Resource Manager Startup} \label{sec:rms_startup}
+\input{../../common/slurm_startup}
+
+\section{Run a Test Job} \label{sec:test_job}
+\input{../../common/slurm_test_job}
+
+\clearpage
+\appendix
+%\section*{Appendices}
+{\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
+
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\input{../../common/automation_appendix}
+\input{../../common/rpmbuild_appendix}
+\input{manifest}
+\input{../../common/signature}
+
+
+\end{document}
+

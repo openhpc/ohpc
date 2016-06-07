@@ -1,25 +1,78 @@
 With the resource manager enabled for production usage, users should now be
-able to run jobs.  Recall that we added a ``test'' user on the {\em master}
-host in \S\ref{sec:add_rm} that can now be used to run an example test job.
-\FSP{} includes a simple ``hello-world'' MPI application in the
-\texttt{/opt/fsp/pub/examples} directory that can be used for this quick
-compilation and execution.  To use the test account to compile and execute the
-application interactively through the resource manager, execute the following:
+able to run jobs. To demonstrate this, we will add a ``test'' user on the {\em master}
+host that can be used to run an example job.
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) useradd -m test
+\end{lstlisting}
+% end_ohpc_run
+
+\Warewulf{} installs a utility on the compute nodes to automatically 
+synchronize known files from the provisioning server at five minute intervals. In this
+recipe, recall that we previously registered credential files with Warewulf (e.g. passwd,
+group, and shadow) so that these files would be propagated during compute node
+imaging. However, with the addition of a new ``test'' user above, the files
+have been outdated and we need to update the Warewulf database to incorporate
+the additions. This resync process can be accomplished as follows:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) wwsh file resync passwd shadow group
+\end{lstlisting}
+% end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+After resyncing to notify Warewulf of file modifications made on the {\em
+master} host, it should take approximately 5 minutes for the changes to
+propagate. However, you can also manually pull the changes from compute nodes
+via the following:
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) pdsh -w c[1-4] /warewulf/bin/wwgetfiles 
+\end{lstlisting}
+% end_ohpc_run
+\end{tcolorbox}
+\end{center}
+
+%We must first update the database with the change we just made to passwd and 
+%shadow files, and since we are impatient we will trigger the compute node pull.
+
+\OHPC{} includes a simple ``hello-world'' MPI application in the
+\path{/opt/ohpc/pub/examples} directory that can be used for this quick
+compilation and execution. \OHPC{} also provides a companion job-launch script
+named \texttt{prun} that is installed in concert with the pre-packaged MPI
+toolchains. At present, \OHPC{} is unable to include the PMI process management
+server normally included within \SLURM{} which implies that \texttt{srun} cannot
+be use for MPI job launch. Instead, native job launch mechanisms provided by
+the MPI stacks are utilized and \texttt{prun} abstracts this process for the
+various stacks to retain a single launch command.
+
+\nottoggle{isCentOS}{\clearpage}
+
+  
+\subsection{Interactive execution}
+To use the newly created ``test'' account to compile and execute the
+application {\em interactively} through the resource manager, execute the
+following (note the use of \texttt{prun} for parallel job launch which summarizes
+the underlying native job launch mechanism being used):
 
 \begin{lstlisting}[language=bash,keywords={}]
 # switch to "test" user
-[master]$ su - test
+[sms](*\#*) su - test
 
 # Compile MPI "hello world" example
-[test@master ~]$ mpicc -o hello -O3 /opt/fsp/pub/examples/mpi/hello.c
+[test@sms ~]$ mpicc -O3 /opt/ohpc/pub/examples/mpi/hello.c
 
 # Submit interactive job request and use prun to launch executable
-[test@master ~]$ srun -n 8 -N 2 --pty /bin/bash
+[test@sms ~]$ srun -n 8 -N 2 --pty /bin/bash
 
-[test@c1 ~]$ prun ./hello
+[test@c1 ~]$ prun ./a.out
 
 [prun] Master compute host = c1
-[prun] Launch cmd = mpiexec.hydra -bootstrap slurm ./hello
+[prun] Launch cmd = mpiexec.hydra -bootstrap slurm ./a.out
 
  Hello, world (8 procs total)
     --> Process #   0 of   8 is alive. -> c1
@@ -31,3 +84,52 @@ application interactively through the resource manager, execute the following:
     --> Process #   3 of   8 is alive. -> c1
     --> Process #   7 of   8 is alive. -> c2
 \end{lstlisting}
+
+\nottoggle{isCentOS}{\clearpage}
+
+\iftoggle{isCentOS}{\clearpage}
+
+\subsection{Batch execution}
+
+For batch execution, \OHPC{} provides a simple job script for reference (also
+housed in the \path{/opt/ohpc/pub/examples} directory. This example script can
+be used as a starting point for submitting batch jobs to the resource manager
+and the example below illustrates use of the script to submit a batch job for
+execution using the same executable referenced in the previous interactive example.
+%Alternatively, a simple batch script can be written and submitted to the
+%scheduler using sbatch to run when nodes become available. 
+
+\begin{lstlisting}[language=bash,keywords={}]
+# copy example job script
+[test@sms ~]$ cp /opt/ohpc/pub/examples/slurm/job.mpi .
+
+# examine contents (and edit to set desired job sizing characteristics)
+[test@sms ~]$ cat job.mpi
+#!/bin/bash
+
+#SBATCH -J test               # Job name
+#SBATCH -o job.%j.out         # Name of stdout output file (%j expands to %jobId)
+#SBATCH -N 2                  # Total number of nodes requested
+#SBATCH -n 16                 # Total number of mpi tasks #requested
+#SBATCH -t 01:30:00           # Run time (hh:mm:ss) - 1.5 hours
+
+# Launch MPI-based executable
+
+prun ./a.out
+
+# Submit job for batch execution
+[test@sms ~]$ sbatch job.mpi
+Submitted batch job 339
+\end{lstlisting}
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+The use of the \texttt{\%j} option in the example batch job script shown is a convenient
+way to track application output on an individual job basis. The \texttt{\%j} token
+is replaced with the \SLURM{} job allocation number once assigned (job~\#339 in
+this example).
+\end{tcolorbox}
+\end{center}
+
+

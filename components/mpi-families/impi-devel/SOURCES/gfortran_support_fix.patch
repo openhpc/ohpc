@@ -1,0 +1,20 @@
+--- /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.0.109/linux/mpi/intel64/bin/mpif90	2015-09-16 15:51:48.073711000 +0400
++++ /opt/ohpc/pub/compiler/intel/compilers_and_libraries_2016.0.109/linux/mpi/intel64/bin/mpif90	2015-09-16 15:52:05.746945000 +0400
+@@ -610,7 +610,7 @@
+     		    gver="/4.9.0"
+ 		    ;;
+ 		* )
+-    		    gver=""
++    		    gver="/4.9.0"
+ 		    ;;
+ 	    esac
+ 	    ;;
+@@ -620,7 +620,7 @@
+     		    gver="/5.1.0"
+ 		    ;;
+ 		* )
+-    		    gver=""
++    		    gver="/5.1.0"
+ 		    ;;
+ 	    esac
+ 	    ;;

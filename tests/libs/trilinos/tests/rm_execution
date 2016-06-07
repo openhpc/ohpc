@@ -1,0 +1,112 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+testname="libs/Trilinos"
+
+NODES=2
+TASKS=4
+ARGS=null
+
+@test "[$testname] Kokkos-MemorySpace runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./lesson_kokkos_memspace.exe
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Tpetra-InitMPI runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./lesson_tpetra_init.exe
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Tpetra-DataRedistribution runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./lesson_tpetra_dataredist.exe
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Epetra-DataRedistribution runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./lesson_epetra_dataredist.exe
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Epetra-Galeri runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./lesson_epetra_galeri.exe
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Epetra-Ifpack runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./lesson_epetra_ifpack.exe
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Teuchos-ParameterList runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./lesson_teuchos_pl.exe
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Teuchos-LAPACK runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./lesson_teuchos_lapack.exe
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Teuchos-BLAS runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./lesson_teuchos_blas.exe
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}

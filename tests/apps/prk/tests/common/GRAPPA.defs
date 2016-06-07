@@ -1,0 +1,5 @@
+include ../../common/make.defs
+CCOMPILER=$(CXX)
+CLINKER=$(CCOMPILER) 
+COMOBJS=
+PROG_ENV=-DGRAPPA

@@ -1,0 +1,19 @@
+#-----------------------------------------------------------------------
+
+MINIFE_TYPES =  \
+	-DMINIFE_SCALAR=double   \
+	-DMINIFE_LOCAL_ORDINAL=int      \
+	-DMINIFE_GLOBAL_ORDINAL=int
+
+#-----------------------------------------------------------------------
+
+CFLAGS = -g
+CXXFLAGS = -g
+CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES)
+
+CXX=icpc
+CC=icc
+
+include make_targets
+include ./optional/make_targets
+

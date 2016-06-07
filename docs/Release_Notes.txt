@@ -1,0 +1,25 @@
+OpenHPC Software Stack
+Version 1.1 Minor Release (18 April 2015) 
+
+Introduction:
+
+   This release provides a variety of common, pre-built ingredients
+   required to deploy and manage an HPC Linux cluster including
+   provisioning tools, resource management, I/O clients, development
+   tools, and a variety of scientific libraries.
+   
+   The compatible OS versions for this release and the total number of
+   OHPC-packaged RPMs for each variant is as follows: 
+   
+     CentOS 7.1       - 270 RPMs (Base)
+     SuSE SLES 12 SP1 - 267 RPMs (Base)
+   
+   Note that a detailed list of all available components is available in
+   the "Package Manifest" appendix located in the companion Install
+   Guide documents.
+
+
+Questions, Comments, or Bug Reports?
+   
+    Please direct to: openhpc-users@groups.io
+

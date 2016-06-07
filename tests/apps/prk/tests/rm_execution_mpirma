@@ -1,0 +1,30 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+   . ./TEST_ENV
+else
+    ERROR "TEST_ENV does not exist"
+fi
+
+app="App/PRK"
+mode=MPIRMA
+rm=$RESOURCE_MANAGER
+NUMITERS=$TEST_NUM_ITERS
+NODES=$((NUM_COMPUTES < TEST_MAX_COMPUTES ? NUM_COMPUTES : TEST_MAX_COMPUTES))
+TASKS=$((NODES * TEST_NUM_RANKS))
+
+@test "[$app] $mode/Stencil run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Stencil/stencil"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 1000" $NODES $TASKS
+    assert_success
+}
+
+@test "[$app] $mode/Synch_p2p run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Synch_p2p/p2p"
+    run_mpi_binary -t $CMD_TIMEOUT $exe "$NUMITERS 1000 100" $NODES $TASKS
+    assert_success
+}

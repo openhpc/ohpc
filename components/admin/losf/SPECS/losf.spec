@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,26 +8,26 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname losf
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.52.0
+Version:   0.53.0
 Release:   1
 License:   GPL-2
-Group:     fsp/admin
+Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/hpcsi/losf 
-Source0:   %{pname}-%{version}.tar.gz
-Source1:   FSP_macros
+Source0:   https://github.com/hpcsi/losf/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
-%if 0%{?FSP_BUILD}
-%{!?prefix: %define prefix %{FSP_ADMIN}}
+%if 0%{?OHPC_BUILD}
+%{!?prefix: %define prefix %{OHPC_ADMIN}}
 %else
 %{!?prefix: %define prefix /opt}
 %endif
@@ -107,8 +107,8 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%if 0%{?FSP_BUILD}
-%dir %{FSP_HOME}
+%if 0%{?OHPC_BUILD}
+%dir %{OHPC_HOME}
 %dir %{prefix}
 
 %endif
@@ -116,6 +116,6 @@ fi
 %{installPath}
 %{_bindir}/*
 
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc LICENSE COPYING CHANGES README
 

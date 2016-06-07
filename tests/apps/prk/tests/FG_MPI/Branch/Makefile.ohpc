@@ -1,0 +1,50 @@
+ifndef NUMBER_OF_FUNCTIONS
+  NUMBER_OF_FUNCTIONS=40
+endif
+
+ifndef MATRIX_RANK
+  MATRIX_RANK=10
+endif
+
+include ../../common/FG_MPI.defs
+##### User configurable options #####
+
+OPTFLAGS     = $(DEFAULT_OPT_FLAGS) 
+#description: change above into something that is a decent optimization on you system
+
+#uncomment any of the following flags (and change values) to change defaults
+
+#RESTRICTFLAG = -DRESTRICT_KEYWORD
+#description: the "restrict" keyword can be used on IA platforms to disambiguate  
+#             data accessed through pointers (requires -restrict compiler flag)
+
+#DEBUGFLAG    = -DVERBOSE
+#description: default diagnostic style is silent
+
+USERFLAGS     = 
+#description: parameter to specify optional flags
+
+EXTOBJS      = 
+LIBS         =
+LIBPATHS     = 
+INCLUDEPATHS = 
+
+### End User configurable options ###
+
+TUNEFLAGS   = $(RESTRICTFLAG) $(DEBUGFLAG) $(USERFLAGS)
+PROGRAM     = branch
+OBJS        = $(PROGRAM).o func.o $(COMOBJS)
+
+default: usage
+	@echo "            \"make veryclean\" to remove custom built files as well"
+
+include ../../common/make.common
+
+func.c:
+	@echo "##########################################################"
+	@echo "##### No file func.c -- invoke func_gen to create it #####"
+	@echo "##########################################################"
+	./func_gen ${MATRIX_RANK} ${NUMBER_OF_FUNCTIONS}
+
+veryclean:
+	rm -f func.c ___*; make clean  

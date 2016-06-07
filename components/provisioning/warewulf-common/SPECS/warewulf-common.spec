@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -12,22 +12,22 @@
 
 %define wwpkgdir /srv/
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname warewulf-common
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group:   fsp/provisioning
+Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
+Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-common/warewulf-common-%{version}.tar.gz
+Source1: OHPC_macros
 ExclusiveOS: linux
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -40,6 +40,10 @@ BuildRoot: %{?_tmppath}/%{pname}-%{version}-%{release}-root
 Patch1: warewulf-common.system.patch
 # 09/10/14 charles.r.baird@intel.com - patch to add mariadb as a datastore
 Patch2: warewulf-common.mariadb.patch
+# 04/14/16 charles.r.baird@intel.com - patch to add init module
+Patch3: warewulf-common.init.patch
+# 04/01/16 karl.w.schulz@intel.com - patch to enable DB transaction handling from WW trunk
+Patch4: mysql.r1978.patch
 # 05/23/14 charles.r.baird@intel.com - alternate package names for SuSE
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
@@ -47,6 +51,7 @@ Requires: mysql perl-DBD-mysql
 # 07/23/14 travis.post@intel.com - alternate package names for RHEL7
 %if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 Requires: mariadb-server perl-DBD-MySQL
+Requires: perl-Term-ReadLine-Gnu
 %else
 %if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 Requires: mysql-server perl-DBD-mysql
@@ -67,6 +72,8 @@ supporting libs.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p0
 
 
 %build
@@ -97,8 +104,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/defaults/

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,8 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname lua-bit
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 %if 0%{?suse_version} <= 1220
 %define luaver 5.1
@@ -24,10 +26,10 @@ Name:           %{pname}%{PROJ_DELIM}
 Version:        1.0.2
 Release:        1%{?dist}
 Summary:        Module for Lua which adds bitwise operations on numbers
-Group:          fsp/distro-packages
+Group:          %{PROJ_NAME}/distro-packages
 License:        MIT
 Url:            http://bitop.luajit.org
-Source0:        LuaBitOp-%{version}.tar.gz
+Source0:        http://bitop.luajit.org/download/LuaBitOp-%{version}.tar.gz
 Patch0:         Makefile.patch
 BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
 

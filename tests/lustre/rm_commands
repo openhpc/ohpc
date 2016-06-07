@@ -1,0 +1,58 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+if [ -z $LUSTRE_TEST_PATH ];then
+    ERROR "Lustre Test Path not defined (LUSTRE_TEST_PATH)"
+    exit 1
+elif [ ! -d $LUSTRE_TEST_PATH ];then
+    ERROR "Lustre Test Path:$LUSTRE_TEST_PATH does not exist)"
+    exit 1
+else
+    export LUSTRE_TEST_PATH
+fi
+
+@test "[Lustre] lfs find - $LUSTRE_TEST_PATH ($RESOURCE_MANAGER)" {
+    run_serial_binary lfs find $LUSTRE_TEST_PATH
+    assert_success
+}
+
+@test "[Lustre] lfs getstripe -d - $LUSTRE_TEST_PATH ($RESOURCE_MANAGER)" {
+    run_serial_binary lfs getstripe -d $LUSTRE_TEST_PATH
+    assert_success
+}
+
+@test "[Lustre] set stripe count=2 test - $LUSTRE_TEST_PATH ($RESOURCE_MANAGER)" {
+    local testdir="tempdir-$RANDOM"
+
+    run run_serial_binary mkdir $LUSTRE_TEST_PATH/$testdir
+    assert_success
+
+    run run_serial_binary lfs setstripe -c 2 -S 1m $LUSTRE_TEST_PATH/$testdir
+    assert_success
+
+    # Generate file in new directory
+    run_serial_binary echo "atest" > $LUSTRE_TEST_PATH/$testdir/afile
+    run ls $LUSTRE_TEST_PATH/$testdir/afile
+    assert_success
+
+    # verify correct stripe settings for directory
+    run lfs getstripe -d $LUSTRE_TEST_PATH/$testdir
+    assert_output "stripe_count:   2 stripe_size:    1048576 stripe_offset:  -1"
+
+    # verify correct stripe settings for file in directory
+    lfs getstripe $LUSTRE_TEST_PATH/$testdir/afile | head -3 >& .cmd_output
+    run cat .cmd_output
+    assert_output "$LUSTRE_TEST_PATH/$testdir/afile
+lmm_stripe_count:   2
+lmm_stripe_size:    1048576"
+
+    rm -rf $LUSTRE_TEST_PATH/$testdir
+
+}

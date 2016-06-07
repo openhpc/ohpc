@@ -1,0 +1,43 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+testname="ConMan"
+rpm=conman${DELIM}
+
+if [ -n "$IPMI_PASSWORD" ];then
+    export IPMI_PASSWORD
+fi
+
+@test "[$testname] Verify conman binary available" {
+    run which conman
+    assert_success
+
+    run conman -V
+    assert_success
+}
+
+@test "[$testname] Verify rpm version matches binary" {
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+
+    conman -V | awk -F 'conman-' '{print $2}' >& .version_output
+    grep -q "^$version$" .version_output
+    assert_success
+
+    rm -f .version_output
+}
+
+@test "[$testname] Verify man page availability" {
+    run man -w conman
+    assert_success
+    assert_output "/usr/share/man/man1/conman.1.gz"
+}
+
+

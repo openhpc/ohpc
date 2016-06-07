@@ -1,0 +1,70 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+source ./common/TEST_ENV
+
+if [ -s ./LOCAL_ENV ];then
+   . ./LOCAL_ENV
+else
+    ERROR "LOCAL_ENV does not exist"
+fi
+
+rm=$RESOURCE_MANAGER
+
+# init run options
+nx=32
+ny=$nx
+nz=$nx
+nt=10
+
+NODES=$((NUM_COMPUTES < TEST_MAX_COMPUTES ? NUM_COMPUTES : TEST_MAX_COMPUTES))
+TASKS=$((NODES * TEST_NUM_RANKS))
+ARGS="$nx $ny $nz $nt"
+EXE=$TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
+
+# set global env settings
+export OMP_NUM_THREADS=$TEST_NUM_THREADS
+if [ $LMOD_FAMILY_MPI == "mvapich2" ];then
+    export MV2_ENABLE_AFFINITY=0
+    export IPATH_NO_CPUAFFINITY=1
+fi
+
+@test "[$TEST_DIR] check if resource manager is defined" {
+    if [ "x$rm" = "x" ]; then
+        flunk "missing resource manager"
+    fi
+}
+
+@test "[$TEST_DIR] run HPCG on multi nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -x $EXE ];then
+        flunk "missing $EXE"
+    fi
+
+    run_mpi_binary -t $CMD_TIMEOUT $EXE "$ARGS" $NODES $TASKS
+}
+
+@test "[$TEST_DIR] log HPCG multi node results ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    run_tag=HPCG.${nx}x${ny}x${nz}.P${TASKS}
+    echo "Finding latest HPCG-Bencmark-*.yaml in $(pwd)"
+    run_yaml=`ls -t HPCG-Benchmark-*.yaml | head -n 1`
+    wrk_yaml=$run_tag.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI.yaml
+    echo "Moving $run_yaml to $wrk_yaml"
+    mv $run_yaml $wrk_yaml
+
+    str="HPCG result is VALID"
+    ref_perf=`grep "$str" ref/$wrk_yaml | cut -d ' ' -f12`
+    cur_perf=`grep "$str"     $wrk_yaml | cut -d ' ' -f12`
+
+    if [ -z $ref_perf ];then
+        ref_perf="?"
+    fi
+
+    if [ -z $cur_perf ];then
+        cur_perf="?"
+    fi
+
+    fmt="%-24s %-10s %-10s %16s %16s\n"
+    printf "$fmt" $run_tag $LMOD_FAMILY_COMPILER $LMOD_FAMILY_MPI $ref_perf $cur_perf >>$TEST_PERFLOG
+}

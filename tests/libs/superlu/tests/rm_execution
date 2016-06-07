@@ -1,0 +1,42 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+testname="libs/SuperLU"
+
+NODES=1
+TASKS=4
+ARGS=null
+
+@test "[$testname] C test runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    EXE=./superlu
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_serial_binary $EXE
+    assert_success
+}
+
+@test "[$testname] F77 test runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    EXE=./superlu
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_serial_binary "$EXE < g20.rua"
+    assert_success
+}

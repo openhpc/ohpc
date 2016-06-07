@@ -1,0 +1,31 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for gnu-compilers-ohpc
+\multirow{2}{*}{gnu-compilers-ohpc} & 
+\multirow{2}{*}{5.3.0} & 
+The GNU C Compiler and Support Files. \newline { \color{logoblue} \url{http://gcc.gnu.org}} 
+\\ \hline 
+% <-- end entry for gnu-compilers-ohpc
+
+% <-- begin entry for intel-compilers-devel-ohpc
+\multirow{2}{*}{intel-compilers-devel-ohpc} & 
+\multirow{2}{*}{16.2.181} & 
+Intel(R) Parallel Studio XE. \newline { \color{logoblue} \url{https://software.intel.com/en-us/intel-parallel-studio-xe}} 
+\\ \hline 
+% <-- end entry for intel-compilers-devel-ohpc
+
+% <-- begin entry for intel-compilers-ohpc
+\multirow{2}{*}{intel-compilers-ohpc} & 
+\multirow{2}{*}{16.2.181} & 
+Intel(R) Parallel Studio XE. \newline { \color{logoblue} \url{https://software.intel.com/en-us/intel-parallel-studio-xe}} 
+\\ \hline 
+% <-- end entry for intel-compilers-ohpc
+
+\bottomrule
+\end{tabularx}

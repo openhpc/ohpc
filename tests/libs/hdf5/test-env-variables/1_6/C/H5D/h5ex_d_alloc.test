@@ -1,0 +1,49 @@
+*******************************
+*  Output of example program  *
+*******************************
+
+Creating datasets...
+DS1 has allocation time H5D_ALLOC_TIME_LATE
+DS2 has allocation time H5D_ALLOC_TIME_EARLY
+
+Space for DS1 has not been allocated.
+Storage size for DS1 is: 0 bytes.
+Space for DS2 has been allocated.
+Storage size for DS2 is: 112 bytes.
+
+Writing data...
+
+Space for DS1 has been allocated.
+Storage size for DS1 is: 112 bytes.
+Space for DS2 has been allocated.
+Storage size for DS2 is: 112 bytes.
+
+
+**********************
+*  Output of h5dump  *
+**********************
+
+HDF5 "h5ex_d_alloc.h5" {
+GROUP "/" {
+   DATASET "DS1" {
+      DATATYPE  H5T_STD_I32LE
+      DATASPACE  SIMPLE { ( 4, 7 ) / ( 4, 7 ) }
+      DATA {
+      (0,0): 0, -1, -2, -3, -4, -5, -6,
+      (1,0): 0, 0, 0, 0, 0, 0, 0,
+      (2,0): 0, 1, 2, 3, 4, 5, 6,
+      (3,0): 0, 2, 4, 6, 8, 10, 12
+      }
+   }
+   DATASET "DS2" {
+      DATATYPE  H5T_STD_I32LE
+      DATASPACE  SIMPLE { ( 4, 7 ) / ( 4, 7 ) }
+      DATA {
+      (0,0): 0, -1, -2, -3, -4, -5, -6,
+      (1,0): 0, 0, 0, 0, 0, 0, 0,
+      (2,0): 0, 1, 2, 3, 4, 5, 6,
+      (3,0): 0, 2, 4, 6, 8, 10, 12
+      }
+   }
+}
+}

@@ -1,0 +1,49 @@
+#!../../../common/bats/bin/bats 
+# -*-sh-*-
+
+source ../../../common/test_helper_functions.bash || exit 1
+
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+PKG=SCIPY
+module=scipy
+testname=Scipy
+rpm=python-scipy-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
+
+
+@test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+
+    rm -f .cmd_output
+}
+
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
+    DIR=${PKG}_DIR
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+    
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+}
+
+
+# --------------
+# Python Path
+# --------------
+
+@test "[$testname] Verify PYTHONPATH is defined and exists ($LMOD_FAMILY_COMPILER)" {
+    if [ -z ${PYTHONPATH} ];then
+        flunk "PYTHONPATH directory not defined"
+    fi
+}

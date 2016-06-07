@@ -1,0 +1,13 @@
+byte        v1  = -4
+short       v2  = -3
+integer     v3  = -2
+long        v4  = -1
+uns.byte    v5  = 1
+uns.short   v6  = 2
+uns.int     v7  = 3
+uns.long    v8  = 4
+float       v9  = 5
+double      v10 = 6
+string      v11 = ADIOS example
+complex     v12 = (8, i9)
+dbl-complex v13 = (10, i11)

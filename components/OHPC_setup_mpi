@@ -1,0 +1,23 @@
+if [ -z "$OHPC_MPI_FAMILY" ]; then
+    echo "Unknown OHPC_MPI_FAMILY"
+    exit 1
+fi
+
+if [ -z "$MODULEPATH" ]; then
+    echo "MODULEPATH not defined"
+    exit 1
+fi
+
+if [ "$OHPC_MPI_FAMILY" = "openmpi" ]; then
+    module load openmpi
+elif [ "$OHPC_MPI_FAMILY" = "impi" ]; then
+    module load impi
+elif [ "$OHPC_MPI_FAMILY" = "mvapich2" ]; then
+    module load mvapich2
+else
+    echo "Unsupported OHPC_MPI_FAMILY -> $OHPC_MPI_FAMILY"
+    exit 1
+fi
+
+
+

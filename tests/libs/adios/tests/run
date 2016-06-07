@@ -1,0 +1,17 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load   ./common/test_helper_functions || exit 1
+source ./common/functions             || exit 1
+source ./common/TEST_ENV              || exit 1
+pushd .. > /dev/null 2>&1
+source ./LOCAL_ENV                    || exit 1
+popd     > /dev/null 2>&1
+
+@test "[$TEST_DIR] clean testing directory ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    make clean
+}
+
+@test "[$TEST_DIR] check adios functionality ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    make -k check
+}

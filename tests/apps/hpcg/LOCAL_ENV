@@ -1,0 +1,9 @@
+TEST_DIR=$(pwd | sed "s#$(cd $(readlink common); cd ..; pwd)##")
+
+CMD_TIMEOUT="5:00"
+TEST_EXE="./bin/xhpcg"
+TEST_MAX_COMPUTES=1024
+TEST_NUM_RANKS=8
+TEST_NUM_THREADS=4
+TEST_VERIFY=1
+TEST_PERFLOG=./log.HPCG

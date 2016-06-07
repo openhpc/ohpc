@@ -34,9 +34,14 @@ RM=slurm
 function usage () {
 
     echo " "
+    echo "This utility can be use to launch parallel (MPI) applications within "
+    echo "a supported resource manager."
+    echo " "
     echo "Usage: $DELIM <options> executable [arguments]"
     echo " "
-    echo "Submit parallel (MPI) application to resource manager for execution."
+    echo "where available options are as follows:"
+    echo " "
+    echo "  -h        generate help message and exit"
     echo " "
     exit 1
 }
@@ -97,35 +102,14 @@ function launch_impi () {
 function launch_mvapich2 () {
     if [ $MODE == "native" ];then
 
-###        LAUNCHER="mpirun_rsh"
-###        HOSTFILE=/tmp/hostfile.$USER.$RANDOM
-
         LAUNCHER="mpiexec.hydra"
         verify_launcher_avail $LAUNCHER
-
-###         _debug "Temporary hostfile = $HOSTFILE"
-### 
-###         scontrol show hostnames > $HOSTFILE || _error "Unable to create hostfile ($LMOD_FAMILY_MPI)"
-###         if [ ! -s $HOSTFILE ];then
-###             _error "Hostfile does not exist or empty -> $HOSTFILE"
-###             exit 1
-###         fi
-### 
-###         if [ -z $SLURM_NPROCS ];then
-###             _error "SLURM_NPROCS env variable not set ($LMOD_FAMILY_MPI)"
-###             exit 1
-###         fi
-### 
-###        cmd="$LAUNCHER -export -n $SLURM_NPROCS -hostfile $HOSTFILE $@"
 
         cmd="$LAUNCHER -bootstrap slurm $@"
         _info "Launch cmd = $cmd"
         $cmd
 
         local _status=$?
-
-###         _debug "Removing hostfile  = $HOSTFILE"
-###         rm -f $HOSTFILE
 
         return $_status
     fi
@@ -142,14 +126,28 @@ function launch_openmpi () {
     fi
 }
 
-
-parse_config_file
-
 DELIM=prun
+
+# Parse command-line args
+
+while getopts ":h" opt; do
+    case $opt in
+	h)
+	    usage
+	    ;;
+	\?)
+	    echo "Invalid option: -$OPTARG" >&2
+	    exit 1
+	    ;;
+    esac
+done
 
 if [ $# -lt 1 ];then
     usage
 fi
+
+
+parse_config_file
 
 EXEC=$1
 shift

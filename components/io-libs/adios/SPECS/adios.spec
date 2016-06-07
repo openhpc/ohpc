@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,20 +8,24 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#-fsp-header-comp-begin----------------------------------------------
+#-ohpc-header-comp-begin----------------------------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu compiler family;
+# OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM   %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
-# Compiler dependencies
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
 BuildRequires: lmod%{PROJ_DELIM}
+%endif
+# Compiler dependencies
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -29,7 +33,7 @@ Requires:      gnu-compilers%{PROJ_DELIM}
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{FSP_BUILD}
+%if 0%{OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -48,7 +52,7 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 # not generating a debug package, CentOS build breaks without this if no debug package defined
 %define debug_package %{nil}
@@ -58,22 +62,27 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname adios
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+%define PNAME %(tr [a-z] [A-Z] <<< %{pname})
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 1.8.0
+Version: 1.9.0
 Release: 1
 License: BSD-3-Clause
-Group:   fsp/io-libs
-DocDir:  %{FSP_PUB}/doc/contrib
+Group:   %{PROJ_NAME}/io-libs
+DocDir:  %{OHPC_PUB}/doc/contrib
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
-Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
-Source2: FSP_setup_compiler
+Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz 
+Source1: OHPC_macros
+Source2: OHPC_setup_compiler
+AutoReq: no
 
-# Minimum Build Requires
+# Minimum Build Requires - our mxml build included devel headers in libmxml1
 BuildRequires: libmxml1 cmake zlib-devel glib2-devel
+Requires:      libmxml1 zlib
+#bzip support confuses the CMtests
+#Requires:      bzip2
+#BuildRequires: bzip2-devel
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
@@ -92,6 +101,7 @@ BuildRequires: python-devel
 # BuildRequires: liblustre-devel
 BuildRequires: lustre-lite
 BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
+Requires: lustre-client%{PROJ_DELIM}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
@@ -99,7 +109,7 @@ BuildRequires: fdupes
 %endif
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 The Adaptable IO System (ADIOS) provides a simple, flexible way for
@@ -120,15 +130,15 @@ LIBSUFF=64
 %endif
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
-pushd /home/abuild/rpmbuild/SOURCES
+pushd %{_sourcedir}
 cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
 popd
 
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
@@ -157,12 +167,21 @@ export MPICXX=mpicxx
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
+
 ./configure --prefix=%{install_path} \
-	--with-mxml=/usr/include \
+	--with-mxml=/usr \
 	--with-lustre=/usr/include/lustre \
 	--with-phdf5="$HDF5_DIR" \
-	--with-zlib=/usr/include \
-	--with-netcdf="$NETCDF_DIR" || cat config.log
+	--with-zlib=/usr \
+        --without-atl \
+        --without-cercs_env \
+        --without-dill \
+        --without-evpath \
+        --without-fastbit \
+        --without-ffs \
+	--with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
+# bzip2 support is confusing CMtests
+#	--with-bzip2=/usr \
 
 # modify libtool script to not hardcode library paths
 sed -i -r -e 's/(hardcode_into_libs)=.*$/\1=no/' \
@@ -177,23 +196,22 @@ make VERBOSE=1
 chmod +x adios_config
 
 %install
-# FSP compiler designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+# OpenHPC compiler designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
+export NO_BRP_CHECK_RPATH=true
 
 make DESTDIR=$RPM_BUILD_ROOT install
-
-# gnu builds need MKL -- can this dependency be removed?
-%if %{compiler_family} == gnu
-module load mkl
-%endif
 
 # this is clearly generated someway and shouldn't be static
 export PPATH="/lib64/python2.7/site-packages"
 export PATH=$(pwd):$PATH
 
+%if %{compiler_family} == gnu
+module load openblas
+%endif
 module load numpy
 export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
@@ -221,9 +239,9 @@ cp -fR examples %buildroot%{install_path}/lib
 
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
 
-# FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -256,7 +274,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -273,7 +291,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 %doc AUTHORS
 %doc COPYING
 %doc ChangeLog

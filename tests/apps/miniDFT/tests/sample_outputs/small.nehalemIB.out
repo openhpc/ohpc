@@ -1,0 +1,433 @@
+
+     Program MiniDFT v.1.0      starts on 25Apr2013 at 11:32:42 
+
+     This is mini-DFT, a mini-application for plane-wave density functional
+     theory calculations. Mini-DFT was extracted from
+     the open-source Quantum ESPRESSO suite by B. Austin (2013). 
+
+     To acknowledge Quantum ESPRESSO, please cite
+         P. Giannozzi et al., J. Phys.:Condens. Matter 21 395502 (2009);
+         URL http://www.quantum-espresso.org
+
+     Parallel version (MPI), running on    40 processors
+     R & G space division:  proc/pool =   40
+     wavefunctions fft division:  fft/group =    5
+
+     Current dimensions of program MiniDFT are:
+     Max number of different atomic species (ntypx) = 10
+     Max number of k-points (npk) =  40000
+     Max angular momentum in pseudopotentials (lmaxx) =  3
+     Reading input from single-node.in
+
+     Subspace diagonalization in iterative solution of the eigenvalue problem:
+     scalapack distributed-memory algorithm (size of sub-group:  4*  4 procs)
+
+     Found symmetry operation: I + (  0.0000  0.0000  0.3333)
+     This is a supercell, fractional translations are disabled
+
+   Task Groups are in USE
+   groups and procs/group :     5    8
+ 
+     Parallelization info
+     --------------------
+     sticks:   dense  smooth     PW     G-vecs:    dense   smooth      PW
+     Min         660     660    172                51580    51580    6900
+     Max         661     661    173                51583    51583    6903
+     Sum       26429   26429   6909              2063233  2063233  276071
+ 
+
+
+     bravais-lattice index     =            0
+     lattice parameter (alat)  =       8.7671  a.u.
+     unit-cell volume          =   11618.5625 (a.u.)^3
+     number of atoms/cell      =          162
+     number of atomic types    =            2
+     number of electrons       =      1296.00
+     number of Kohn-Sham states=          648
+     kinetic-energy cutoff     =     120.0000  Ry
+     charge density cutoff     =     480.0000  Ry
+     convergence threshold     =      1.0E-04
+     mixing beta               =       0.7000
+     number of iterations used =            8  plain     mixing
+     Exchange-correlation      = PBE ( 1 4 3 4 0)
+
+     celldm(1)=   8.767100  celldm(2)=   0.000000  celldm(3)=   0.000000
+     celldm(4)=   0.000000  celldm(5)=   0.000000  celldm(6)=   0.000000
+
+     crystal axes: (cart. coord. in units of alat)
+               a(1) = (   3.000000   0.000000   0.000000 )  
+               a(2) = (   0.000000   3.000000   0.000000 )  
+               a(3) = (   0.000000   0.000000   1.915764 )  
+
+     reciprocal axes: (cart. coord. in units 2 pi/alat)
+               b(1) = (  0.333333  0.000000  0.000000 )  
+               b(2) = (  0.000000  0.333333  0.000000 )  
+               b(3) = (  0.000000  0.000000  0.521985 )  
+
+
+     PseudoPot. # 1 for Ti read from file:
+     ./Ti.pbe.nml
+     MD5 check sum: 6ed49f7d399b24f59f924a2d8bad0db9
+     Pseudo is Norm-conserving, Zval = 12.0
+     Generated using "atomic" code by A. Dal Corso  (Quantum ESPRESSO distribution)
+     Using radial grid of 1177 points,  2 beta functions with: 
+                l(1) =   1
+                l(2) =   2
+
+     PseudoPot. # 2 for  O read from file:
+     ./O.pbe.nml
+     MD5 check sum: 198e56c2ed007f5cae81829e0da21478
+     Pseudo is Norm-conserving, Zval =  6.0
+     Generated using "atomic" code by A. Dal Corso  (Quantum ESPRESSO distribution)
+     Using radial grid of 1095 points,  1 beta functions with: 
+                l(1) =   0
+
+     atomic species   valence    mass     pseudopotential
+        Ti            12.00    47.86700     Ti( 1.00)
+        O              6.00    15.99940      O( 1.00)
+
+      8 Sym. Ops., with inversion, found
+
+
+
+   Cartesian axes
+
+     site n.     atom                  positions (alat units)
+         1           Ti  tau(   1) = (   0.0000000   0.0000000   0.0000000  )
+         2           Ti  tau(   2) = (   0.5000000   0.5000000   0.3192940  )
+         3           O   tau(   3) = (   0.3050877   0.3050877   0.0000000  )
+         4           O   tau(   4) = (  -0.3050877  -0.3050877   0.0000000  )
+         5           O   tau(   5) = (   0.8050877   0.1949123   0.3192940  )
+         6           O   tau(   6) = (   0.1949123   0.8050877   0.3192940  )
+         7           Ti  tau(   7) = (   0.0000000   0.0000000   0.6385880  )
+         8           Ti  tau(   8) = (   0.5000000   0.5000000   0.9578820  )
+         9           O   tau(   9) = (   0.3050877   0.3050877   0.6385880  )
+        10           O   tau(  10) = (  -0.3050877  -0.3050877   0.6385880  )
+        11           O   tau(  11) = (   0.8050877   0.1949123   0.9578820  )
+        12           O   tau(  12) = (   0.1949123   0.8050877   0.9578820  )
+        13           Ti  tau(  13) = (   0.0000000   0.0000000   1.2771760  )
+        14           Ti  tau(  14) = (   0.5000000   0.5000000   1.5964700  )
+        15           O   tau(  15) = (   0.3050877   0.3050877   1.2771760  )
+        16           O   tau(  16) = (  -0.3050877  -0.3050877   1.2771760  )
+        17           O   tau(  17) = (   0.8050877   0.1949123   1.5964700  )
+        18           O   tau(  18) = (   0.1949123   0.8050877   1.5964700  )
+        19           Ti  tau(  19) = (   0.0000000   1.0000000   0.0000000  )
+        20           Ti  tau(  20) = (   0.5000000   1.5000000   0.3192940  )
+        21           O   tau(  21) = (   0.3050877   1.3050877   0.0000000  )
+        22           O   tau(  22) = (  -0.3050877   0.6949123   0.0000000  )
+        23           O   tau(  23) = (   0.8050877   1.1949123   0.3192940  )
+        24           O   tau(  24) = (   0.1949123   1.8050877   0.3192940  )
+        25           Ti  tau(  25) = (   0.0000000   1.0000000   0.6385880  )
+        26           Ti  tau(  26) = (   0.5000000   1.5000000   0.9578820  )
+        27           O   tau(  27) = (   0.3050877   1.3050877   0.6385880  )
+        28           O   tau(  28) = (  -0.3050877   0.6949123   0.6385880  )
+        29           O   tau(  29) = (   0.8050877   1.1949123   0.9578820  )
+        30           O   tau(  30) = (   0.1949123   1.8050877   0.9578820  )
+        31           Ti  tau(  31) = (   0.0000000   1.0000000   1.2771760  )
+        32           Ti  tau(  32) = (   0.5000000   1.5000000   1.5964700  )
+        33           O   tau(  33) = (   0.3050877   1.3050877   1.2771760  )
+        34           O   tau(  34) = (  -0.3050877   0.6949123   1.2771760  )
+        35           O   tau(  35) = (   0.8050877   1.1949123   1.5964700  )
+        36           O   tau(  36) = (   0.1949123   1.8050877   1.5964700  )
+        37           Ti  tau(  37) = (   0.0000000   2.0000000   0.0000000  )
+        38           Ti  tau(  38) = (   0.5000000   2.5000000   0.3192940  )
+        39           O   tau(  39) = (   0.3050877   2.3050877   0.0000000  )
+        40           O   tau(  40) = (  -0.3050877   1.6949123   0.0000000  )
+        41           O   tau(  41) = (   0.8050877   2.1949123   0.3192940  )
+        42           O   tau(  42) = (   0.1949123   2.8050877   0.3192940  )
+        43           Ti  tau(  43) = (   0.0000000   2.0000000   0.6385880  )
+        44           Ti  tau(  44) = (   0.5000000   2.5000000   0.9578820  )
+        45           O   tau(  45) = (   0.3050877   2.3050877   0.6385880  )
+        46           O   tau(  46) = (  -0.3050877   1.6949123   0.6385880  )
+        47           O   tau(  47) = (   0.8050877   2.1949123   0.9578820  )
+        48           O   tau(  48) = (   0.1949123   2.8050877   0.9578820  )
+        49           Ti  tau(  49) = (   0.0000000   2.0000000   1.2771760  )
+        50           Ti  tau(  50) = (   0.5000000   2.5000000   1.5964700  )
+        51           O   tau(  51) = (   0.3050877   2.3050877   1.2771760  )
+        52           O   tau(  52) = (  -0.3050877   1.6949123   1.2771760  )
+        53           O   tau(  53) = (   0.8050877   2.1949123   1.5964700  )
+        54           O   tau(  54) = (   0.1949123   2.8050877   1.5964700  )
+        55           Ti  tau(  55) = (   1.0000000   0.0000000   0.0000000  )
+        56           Ti  tau(  56) = (   1.5000000   0.5000000   0.3192940  )
+        57           O   tau(  57) = (   1.3050877   0.3050877   0.0000000  )
+        58           O   tau(  58) = (   0.6949123  -0.3050877   0.0000000  )
+        59           O   tau(  59) = (   1.8050877   0.1949123   0.3192940  )
+        60           O   tau(  60) = (   1.1949123   0.8050877   0.3192940  )
+        61           Ti  tau(  61) = (   1.0000000   0.0000000   0.6385880  )
+        62           Ti  tau(  62) = (   1.5000000   0.5000000   0.9578820  )
+        63           O   tau(  63) = (   1.3050877   0.3050877   0.6385880  )
+        64           O   tau(  64) = (   0.6949123  -0.3050877   0.6385880  )
+        65           O   tau(  65) = (   1.8050877   0.1949123   0.9578820  )
+        66           O   tau(  66) = (   1.1949123   0.8050877   0.9578820  )
+        67           Ti  tau(  67) = (   1.0000000   0.0000000   1.2771760  )
+        68           Ti  tau(  68) = (   1.5000000   0.5000000   1.5964700  )
+        69           O   tau(  69) = (   1.3050877   0.3050877   1.2771760  )
+        70           O   tau(  70) = (   0.6949123  -0.3050877   1.2771760  )
+        71           O   tau(  71) = (   1.8050877   0.1949123   1.5964700  )
+        72           O   tau(  72) = (   1.1949123   0.8050877   1.5964700  )
+        73           Ti  tau(  73) = (   1.0000000   1.0000000   0.0000000  )
+        74           Ti  tau(  74) = (   1.5000000   1.5000000   0.3192940  )
+        75           O   tau(  75) = (   1.3050877   1.3050877   0.0000000  )
+        76           O   tau(  76) = (   0.6949123   0.6949123   0.0000000  )
+        77           O   tau(  77) = (   1.8050877   1.1949123   0.3192940  )
+        78           O   tau(  78) = (   1.1949123   1.8050877   0.3192940  )
+        79           Ti  tau(  79) = (   1.0000000   1.0000000   0.6385880  )
+        80           Ti  tau(  80) = (   1.5000000   1.5000000   0.9578820  )
+        81           O   tau(  81) = (   1.3050877   1.3050877   0.6385880  )
+        82           O   tau(  82) = (   0.6949123   0.6949123   0.6385880  )
+        83           O   tau(  83) = (   1.8050877   1.1949123   0.9578820  )
+        84           O   tau(  84) = (   1.1949123   1.8050877   0.9578820  )
+        85           Ti  tau(  85) = (   1.0000000   1.0000000   1.2771760  )
+        86           Ti  tau(  86) = (   1.5000000   1.5000000   1.5964700  )
+        87           O   tau(  87) = (   1.3050877   1.3050877   1.2771760  )
+        88           O   tau(  88) = (   0.6949123   0.6949123   1.2771760  )
+        89           O   tau(  89) = (   1.8050877   1.1949123   1.5964700  )
+        90           O   tau(  90) = (   1.1949123   1.8050877   1.5964700  )
+        91           Ti  tau(  91) = (   1.0000000   2.0000000   0.0000000  )
+        92           Ti  tau(  92) = (   1.5000000   2.5000000   0.3192940  )
+        93           O   tau(  93) = (   1.3050877   2.3050877   0.0000000  )
+        94           O   tau(  94) = (   0.6949123   1.6949123   0.0000000  )
+        95           O   tau(  95) = (   1.8050877   2.1949123   0.3192940  )
+        96           O   tau(  96) = (   1.1949123   2.8050877   0.3192940  )
+        97           Ti  tau(  97) = (   1.0000000   2.0000000   0.6385880  )
+        98           Ti  tau(  98) = (   1.5000000   2.5000000   0.9578820  )
+        99           O   tau(  99) = (   1.3050877   2.3050877   0.6385880  )
+       100           O   tau( 100) = (   0.6949123   1.6949123   0.6385880  )
+       101           O   tau( 101) = (   1.8050877   2.1949123   0.9578820  )
+       102           O   tau( 102) = (   1.1949123   2.8050877   0.9578820  )
+       103           Ti  tau( 103) = (   1.0000000   2.0000000   1.2771760  )
+       104           Ti  tau( 104) = (   1.5000000   2.5000000   1.5964700  )
+       105           O   tau( 105) = (   1.3050877   2.3050877   1.2771760  )
+       106           O   tau( 106) = (   0.6949123   1.6949123   1.2771760  )
+       107           O   tau( 107) = (   1.8050877   2.1949123   1.5964700  )
+       108           O   tau( 108) = (   1.1949123   2.8050877   1.5964700  )
+       109           Ti  tau( 109) = (   2.0000000   0.0000000   0.0000000  )
+       110           Ti  tau( 110) = (   2.5000000   0.5000000   0.3192940  )
+       111           O   tau( 111) = (   2.3050877   0.3050877   0.0000000  )
+       112           O   tau( 112) = (   1.6949123  -0.3050877   0.0000000  )
+       113           O   tau( 113) = (   2.8050877   0.1949123   0.3192940  )
+       114           O   tau( 114) = (   2.1949123   0.8050877   0.3192940  )
+       115           Ti  tau( 115) = (   2.0000000   0.0000000   0.6385880  )
+       116           Ti  tau( 116) = (   2.5000000   0.5000000   0.9578820  )
+       117           O   tau( 117) = (   2.3050877   0.3050877   0.6385880  )
+       118           O   tau( 118) = (   1.6949123  -0.3050877   0.6385880  )
+       119           O   tau( 119) = (   2.8050877   0.1949123   0.9578820  )
+       120           O   tau( 120) = (   2.1949123   0.8050877   0.9578820  )
+       121           Ti  tau( 121) = (   2.0000000   0.0000000   1.2771760  )
+       122           Ti  tau( 122) = (   2.5000000   0.5000000   1.5964700  )
+       123           O   tau( 123) = (   2.3050877   0.3050877   1.2771760  )
+       124           O   tau( 124) = (   1.6949123  -0.3050877   1.2771760  )
+       125           O   tau( 125) = (   2.8050877   0.1949123   1.5964700  )
+       126           O   tau( 126) = (   2.1949123   0.8050877   1.5964700  )
+       127           Ti  tau( 127) = (   2.0000000   1.0000000   0.0000000  )
+       128           Ti  tau( 128) = (   2.5000000   1.5000000   0.3192940  )
+       129           O   tau( 129) = (   2.3050877   1.3050877   0.0000000  )
+       130           O   tau( 130) = (   1.6949123   0.6949123   0.0000000  )
+       131           O   tau( 131) = (   2.8050877   1.1949123   0.3192940  )
+       132           O   tau( 132) = (   2.1949123   1.8050877   0.3192940  )
+       133           Ti  tau( 133) = (   2.0000000   1.0000000   0.6385880  )
+       134           Ti  tau( 134) = (   2.5000000   1.5000000   0.9578820  )
+       135           O   tau( 135) = (   2.3050877   1.3050877   0.6385880  )
+       136           O   tau( 136) = (   1.6949123   0.6949123   0.6385880  )
+       137           O   tau( 137) = (   2.8050877   1.1949123   0.9578820  )
+       138           O   tau( 138) = (   2.1949123   1.8050877   0.9578820  )
+       139           Ti  tau( 139) = (   2.0000000   1.0000000   1.2771760  )
+       140           Ti  tau( 140) = (   2.5000000   1.5000000   1.5964700  )
+       141           O   tau( 141) = (   2.3050877   1.3050877   1.2771760  )
+       142           O   tau( 142) = (   1.6949123   0.6949123   1.2771760  )
+       143           O   tau( 143) = (   2.8050877   1.1949123   1.5964700  )
+       144           O   tau( 144) = (   2.1949123   1.8050877   1.5964700  )
+       145           Ti  tau( 145) = (   2.0000000   2.0000000   0.0000000  )
+       146           Ti  tau( 146) = (   2.5000000   2.5000000   0.3192940  )
+       147           O   tau( 147) = (   2.3050877   2.3050877   0.0000000  )
+       148           O   tau( 148) = (   1.6949123   1.6949123   0.0000000  )
+       149           O   tau( 149) = (   2.8050877   2.1949123   0.3192940  )
+       150           O   tau( 150) = (   2.1949123   2.8050877   0.3192940  )
+       151           Ti  tau( 151) = (   2.0000000   2.0000000   0.6385880  )
+       152           Ti  tau( 152) = (   2.5000000   2.5000000   0.9578820  )
+       153           O   tau( 153) = (   2.3050877   2.3050877   0.6385880  )
+       154           O   tau( 154) = (   1.6949123   1.6949123   0.6385880  )
+       155           O   tau( 155) = (   2.8050877   2.1949123   0.9578820  )
+       156           O   tau( 156) = (   2.1949123   2.8050877   0.9578820  )
+       157           Ti  tau( 157) = (   2.0000000   2.0000000   1.2771760  )
+       158           Ti  tau( 158) = (   2.5000000   2.5000000   1.5964700  )
+       159           O   tau( 159) = (   2.3050877   2.3050877   1.2771760  )
+       160           O   tau( 160) = (   1.6949123   1.6949123   1.2771760  )
+       161           O   tau( 161) = (   2.8050877   2.1949123   1.5964700  )
+       162           O   tau( 162) = (   2.1949123   2.8050877   1.5964700  )
+
+     number of k points=     1
+                       cart. coord. in units 2pi/alat
+        k(    1) = (  -0.1666667  -0.1666667  -0.2609925), wk =   2.0000000
+
+     Dense  grid:  2063233 G-vectors     FFT dimensions: ( 192, 192, 120)
+
+     Largest allocated arrays     est. size (Mb)     dimensions
+        Kohn-Sham Wavefunctions        63.82 Mb     (   6454,  648)
+        NL pseudopotentials            53.18 Mb     (   6454,  540)
+        Each V/rho on FFT grid          1.69 Mb     ( 110592)
+        Each G-vector array             0.39 Mb     (  51583)
+        G-vector shells                 0.17 Mb     (  22937)
+     Largest temporary arrays     est. size (Mb)     dimensions
+        Auxiliary wavefunctions       255.26 Mb     (   6454, 2592)
+        Each subspace H/S matrix        6.41 Mb     ( 648, 648)
+        Each <psi_i|beta_j> matrix      5.34 Mb     (    540,  648)
+        Arrays for rho mixing          13.50 Mb     ( 110592,   8)
+
+     Initial potential from superposition of free atoms
+
+     starting charge 1079.99984, renormalised to 1296.00000
+     Starting wfc are  918 atomic wfcs
+
+     total cpu time spent up to now is       39.4 secs
+
+     Self-consistent Calculation
+
+     iteration #  1     ecut=   120.00 Ry     beta=0.70
+     Davidson diagonalization with overlap
+     ethr =  1.00E-02,  avg # of iterations =  2.0
+
+     total cpu time spent up to now is      156.9 secs
+
+     total energy              =   -9738.99021176 Ry
+     Harris-Foulkes estimate   =   -9812.90797112 Ry
+     estimated scf accuracy    <     104.84528289 Ry
+
+     End of self-consistent calculation
+
+     convergence NOT achieved after   1 iterations: stopping
+ 
+     init_run       :     36.49s CPU     39.33s WALL (       1 calls)
+     electrons      :    111.08s CPU    117.48s WALL (       1 calls)
+
+     Called by init_run:
+     wfcinit        :     33.20s CPU     35.72s WALL (       1 calls)
+     potinit        :      1.43s CPU      1.51s WALL (       1 calls)
+
+     Called by electrons:
+     c_bands        :    103.87s CPU    109.29s WALL (       1 calls)
+     sum_band       :      6.81s CPU      7.70s WALL (       1 calls)
+     v_of_rho       :      0.64s CPU      0.77s WALL (       2 calls)
+     mix_rho        :      0.05s CPU      0.06s WALL (       1 calls)
+
+     Called by c_bands:
+     init_us_2      :      0.09s CPU      0.11s WALL (       3 calls)
+     cegterg        :    103.72s CPU    109.14s WALL (       1 calls)
+
+     Called by *egterg:
+     h_psi          :     71.64s CPU     78.82s WALL (       4 calls)
+     g_psi          :      0.12s CPU      0.12s WALL (       2 calls)
+     cdiaghg        :     10.69s CPU     10.83s WALL (       3 calls)
+
+     Called by h_psi:
+     add_vuspsi     :      8.15s CPU      8.17s WALL (       4 calls)
+
+     General routines
+     calbec         :      8.21s CPU      8.22s WALL (       4 calls)
+     fft            :      0.77s CPU      0.97s WALL (      22 calls)
+     fftw           :     55.31s CPU     63.27s WALL (    1278 calls)
+ 
+     Parallel routines
+     fft_scatter    :     21.49s CPU     25.49s WALL (    1300 calls)
+     ALLTOALL       :      7.81s CPU      8.24s WALL (    1278 calls)
+     EXX routines
+ 
+     MiniDFT        :  2m27.63s CPU     2m36.89s WALL
+
+ 
+   This run was terminated on:  11:35:19  25Apr2013            
+
+=------------------------------------------------------------------------------=
+     JOB DONE.
+     Benchmark_Time :    111.08s CPU    117.48s WALL (       1 calls)
+=------------------------------------------------------------------------------=
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+    1

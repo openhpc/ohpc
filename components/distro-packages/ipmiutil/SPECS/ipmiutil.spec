@@ -1,5 +1,6 @@
+
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -13,15 +14,16 @@
 # Copyright (c) 2012 Andy Cress
 #
 
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname ipmiutil
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 2.9.5
+Version: 2.9.6
 Release: 1%{?dist}
 Summary:   Easy-to-use IPMI server management utilities
-License:   BSD
-Group:     fsp/distro-packages
+License:   BSD 3-clause
+Group:     %{PROJ_NAME}/distro-packages
 Source:    %{pname}-%{version}.tar.gz
 URL:       http://ipmiutil.sourceforge.net
 BuildRoot: %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)

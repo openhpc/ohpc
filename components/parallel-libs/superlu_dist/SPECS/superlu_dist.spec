@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -25,32 +25,36 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-fsp-header-comp-begin-----------------------------
+#-ohpc-header-comp-begin-----------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
+BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -69,7 +73,7 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-ohpc-header-comp-end-------------------------------
 
 # Base package name
 %define pname superlu_dist
@@ -79,32 +83,28 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        4.0
+Version:        4.2
 Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
-License:        LGPL-2.1
-Group:          fsp/parallel-libs
-Url:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
-Source0:        %{pname}-%{version}.tar.gz
-# PATCH-FIX-UPSTREAM superlu_dist-3.1-sequence-point.patch
-Patch0:         superlu_dist-3.1-sequence-point.patch
-# PATCH-FIX-OPENSUSE superlu_dist-4.0-make.patch
-Patch1:         superlu_dist-4.0-make.patch
-# PATCH-FIX-UPSTREAM superlu_dist-3.2-example-no-return-in-non-void.patch
-Patch2:         superlu_dist-3.2-example-no-return-in-non-void.patch
-# PATCH-FIX-FSP superlu_dist-4.0-parmetis.patch
-Patch3:         superlu_dist-4.0-parmetis.patch
+License:        BSD-3-Clause
+Group:          %{PROJ_NAME}/parallel-libs
+URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
+Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
+Patch0:         superlu_dist-4.1-sequence-point.patch
+Patch1:         superlu_dist-4.2-make.patch
+Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
+Patch3:         superlu_dist-4.1-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 #!BuildIgnore: post-build-checks
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 SuperLU is a general purpose library for the direct solution of large, sparse,
@@ -122,24 +122,23 @@ calculate the relative backward error, and estimate error bounds for the refined
 solutions. 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n SuperLU_DIST_%{version}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 
 %build
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 module load metis
 
-# Enable MKL linkage for blas/lapack with gnu builds
 %if %{compiler_family} == gnu
-module load mkl
+module load scalapack
 %endif
 
 make superlulib DSuperLUroot=$PWD 
@@ -170,9 +169,9 @@ ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
 
-# FSP module file
-%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -195,16 +194,11 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require metis and (and mkl for gnu compiler families)
+# Require metis
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded metis]  } {
         module load metis
-    }
-    if { [is-loaded gnu] } {
-        if { ![is-loaded mkl]  } {
-          module load mkl
-        }
     }
 }
 
@@ -218,7 +212,7 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -237,8 +231,8 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc README
 
 %changelog

@@ -1,0 +1,11 @@
+\begin{center}
+\begin{tcolorbox}[]
+\small Many server BIOS configurations have PXE network booting configured
+as the primary option in the boot order by default. If your compute nodes have
+a different device as the first in the sequence, the \texttt{ipmitool} utility
+can be used to enable PXE.
+\begin{lstlisting}[language=bash]
+[sms](*\#*) ipmitool -E -I lanplus -H ${bmc_ipaddr} -U root chassis bootdev pxe options=persistent
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}

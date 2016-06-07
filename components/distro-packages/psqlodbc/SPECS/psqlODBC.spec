@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -25,9 +25,10 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname   psqlODBC
 %define tarname psqlodbc
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 %define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
@@ -50,7 +51,7 @@ Url:            http://pgfoundry.org/projects/psqlodbc
 
 Summary:        ODBC Driver for PostgreSQL
 License:        LGPL-2.1+
-Group:          fsp/distro-packages
+Group:          %{PROJ_NAME}/distro-packages
 Version:        09.03.0400
 Release:        33.1
 Source0:        %tarname-%{version}.tar.gz
@@ -88,7 +89,7 @@ autoreconf -fi
 # they don't ship configure.in, so we have to patch configure :(
 sed -i '/LDFLAGS=/s/\$pg_libs//' configure
 export CFLAGS="%optflags -fno-strict-aliasing -I/usr/include/pgsql"
-%configure --with-unixodbc || cat config.log
+%configure --with-unixodbc || { cat config.log && exit 1; }
 
 %install
 make DESTDIR=%buildroot install

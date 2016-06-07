@@ -1,0 +1,50 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+@test "[cluster-install] verify ${num_computes} nodes provisioned" {
+
+    run which koomie_cf
+    assert_success
+
+    [ ${num_computes} -ge 4 ] ; assert_success
+
+    rm -f /tmp/hosts
+    koomie_cf -x "c\d+" uptime | grep average > /tmp/hosts
+    [ -s /tmp/hosts ]; assert_success
+
+    num_hosts=$(wc -l /tmp/hosts | awk '{print $1}') || exit 1
+
+    [ ${num_hosts} -eq ${num_computes} ]; assert_success
+}
+
+@test "[cluster-install] verify ${num_computes} uptimes are reasonable" {
+
+    run which koomie_cf
+    assert_success
+    
+    rm -f /tmp/hosts
+    koomie_cf -x "c\d+" cat /proc/uptime > /tmp/hosts
+    [ -s /tmp/hosts ]; assert_success
+
+    THRESHOLD=720     # time in (seconds)
+
+    while read entry; do
+        host=$(echo $entry | awk '{print $1}')
+        seconds=$(echo $entry | awk '{print $2}' | awk -F . '{print $1}')
+
+        if [ ${seconds} -gt ${THRESHOLD} ]; then
+	    ERROR "Host $host up longer than $THRESHOLD seconds"
+	    fi
+
+    done < /tmp/hosts
+
+}
+
+

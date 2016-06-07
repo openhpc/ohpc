@@ -1,0 +1,152 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions                  || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+check_rms
+
+PKG=ADVISOR
+testname="Intel Advisor"
+module=advisor
+header=
+library="libadvixe_reporter_core_*.so"
+rpm=intel-advisor${DELIM}
+
+setup() {
+    module purge
+    module load intel impi $module
+}
+
+@test "[$testname] Verify $module module is loaded and matches rpm version" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+}
+
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists" {
+    DIR=${PKG}_DIR
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+    
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+}
+
+# ----------
+# Binaries
+# ----------
+
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
+    BIN=${PKG}_BIN
+    if [ -z ${!BIN} ];then
+        flunk "${PKG}_BIN directory not defined"
+    fi
+    
+    if [ ! -d ${!BIN} || -z "${!BIN}" ];then
+        flunk "directory ${!BIN} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify availability/execution of advixe-cl binary" {
+    run which advixe-cl
+    assert_success
+
+    run advixe-cl --version
+    assert_success
+}
+
+# ----------
+# Man pages
+# ----------
+
+@test "[$testname] Verify availability of man page for advixe-cl" {
+    DIR=${PKG}_DIR
+
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+    
+    run man -w advixe-cl
+    assert_success
+    assert_output "${!DIR}/man/man1/advixe-cl.1"
+}
+
+# ----------
+# Lib Tests
+# ----------
+
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+ 
+    if [ ! -d ${!LIB} ];then
+        flunk "directory ${!LIB} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify reporter library available in ${PKG}_LIB" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -s ${!LIB}/${library} ];then
+        flunk "${library} does not exist"
+    fi 
+}
+
+# ----------
+# Tracing
+# ----------
+
+@test "[$testname] Build and sample nqueens appliction" {
+    rm -rf ./advisor
+
+    run icpc -O2 -g src/nqueens_serial.cpp -o nqueens_serial
+    assert_success
+
+    run ls nqueens_serial
+    assert_success
+
+    run advixe-cl --collect survey --project-dir ./advisor --search-dir src:r=./src -- ./nqueens_serial
+    assert_success
+
+    run ls advisor/advisor.advixeproj
+    assert_success
+
+    run advixe-cl --report survey --project-dir ./advisor/ --search-dir src:r=./src --format=text --report-output survey.txt
+    assert_success
+
+    run ls survey.txt
+    assert_success
+
+    run grep "nqueens_serial.cpp:116]" survey.txt 
+    assert_success
+
+    rm -rf ./advisor
+    rm -f survey.txt
+    rm -f nqueens_serial
+}
+
+rm -f .cmd_output
+

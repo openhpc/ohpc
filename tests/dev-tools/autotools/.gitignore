@@ -1,0 +1,5 @@
+test/config.h
+test/config.h.in
+test/src/helloworld
+test/src/helloworld.o
+test/stamp-h1

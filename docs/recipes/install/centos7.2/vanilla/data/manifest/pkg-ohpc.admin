@@ -1,0 +1,20 @@
+conman-ohpc 0.2.7 http://dun.github.io/conman/ ohpc/admin ConMan: The Console Manager
+docs-ohpc 1.1 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+examples-ohpc 1.3 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
+ganglia-ohpc 3.7.2 http://ganglia.sourceforge.net/ ohpc/admin Distributed Monitoring System
+genders-ohpc 1.22 https://github.com/chaos/genders ohpc/admin Static cluster configuration database
+intel-clck-ohpc 3.1.2 https://clusterready.intel.com/intel-cluster-checker/ ohpc/admin Intel(R) Cluster Checker
+lmod-defaults-gnu-impi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-gnu-mvapich2-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-gnu-openmpi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-intel-impi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-intel-mvapich2-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-defaults-intel-openmpi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
+lmod-ohpc 6.0.24 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
+losf-ohpc 0.53.0 https://github.com/hpcsi/losf ohpc/admin A Linux operating system framework for managing HPC clusters
+mrsh-ohpc 2.7 None ohpc/admin Remote shell program that uses munge authentication
+nagios-ohpc 4.1.1 http://www.nagios.org/ ohpc/admin Nagios monitors hosts and services and yells if something breaks
+nagios-plugins-ohpc 2.1.1 https://www.nagios-plugins.org/ ohpc/admin Host/service/network monitoring program plugins for Nagios
+pdsh-ohpc 2.31 http://sourceforge.net/projects/pdsh ohpc/admin Parallel remote shell program
+powerman-ohpc 2.3.24 http://code.google.com/p/powerman/ ohpc/admin PowerMan - centralized power control for clusters
+prun-ohpc 1.0 https://github.com/openhpc/ohpc ohpc/admin Convenience utility for parallel job launch

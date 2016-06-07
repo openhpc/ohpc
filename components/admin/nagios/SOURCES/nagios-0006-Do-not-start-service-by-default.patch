@@ -14,12 +14,11 @@ index ecd072a..5e52637 100644
 +++ b/daemon-init.in
 @@ -1,6 +1,6 @@
  #!/bin/sh
- # 
+ #
 -# chkconfig: 345 99 01
 +# chkconfig: - 99 01
  # description: Nagios network monitor
- #
+ # processname: nagios
  # File : nagios
 -- 
 1.7.3.5
-

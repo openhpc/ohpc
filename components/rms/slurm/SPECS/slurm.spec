@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,10 +8,11 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%include %{_sourcedir}/rpmmacros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname slurm
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
 # $Id$
 #
@@ -99,18 +100,21 @@
 %endif
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 14.11.5
-Release: %{?dist}
 
-Summary: Slurm Workload Manager
+Version: 15.08.7
+%define ver_exp 15-08-7-1
 
-License: GPL
-Group: fsp/rms
-Source: %{pname}-%{version}.tar.bz2
-Source1:   FSP_macros
+Release:   %{?dist}
+Summary:   Slurm Workload Manager
+
+License:   GPL
+Group:     %{PROJ_NAME}/rms
+Source:    https://github.com/SchedMD/slurm/archive/%{pname}-%{ver_exp}.tar.gz
+#Source:    http://www.schedmd.com/download/archive/%{pname}-%{version}.tar.bz2
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
-DocDir: %{FSP_PUB}/doc/contrib
-URL: http://slurm.schedmd.com/
+DocDir:    %{OHPC_PUB}/doc/contrib
+URL:       http://slurm.schedmd.com/
 
 # 8/11/14 karl.w.schulz@intel.com - update default runlevels
 Patch1:     %{pname}.initd.patch
@@ -164,13 +168,21 @@ BuildRequires: openssl-devel >= 0.9.6 openssl >= 0.9.6
 %endif
 %endif
 
-%if %{slurm_with mysql}
+#%if %{slurm_with mysql}
 %if 0%{?suse_version}
+%if 0%{?suse_version} >= 1200
+BuildRequires: libmysqlclient-devel
+%else
 BuildRequires: libmysql5
+%endif
+%else
+%if 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
+BuildRequires: mariadb-devel >= 5.0.0
 %else
 BuildRequires: mysql-devel >= 5.0.0
 %endif
 %endif
+#%endif
 
 %if %{slurm_with cray_alps}
 BuildRequires: mysql-devel
@@ -268,7 +280,7 @@ scheduling and accounting modules
 
 %package -n %{pname}-perlapi%{PROJ_DELIM}
 Summary: Perl API to Slurm
-Group: fsp/rms
+Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM}
 %description -n %{pname}-perlapi%{PROJ_DELIM}
 Perl API package for Slurm.  This package includes the perl API to provide a
@@ -276,7 +288,7 @@ helpful interface to Slurm through Perl
 
 %package -n %{pname}-devel%{PROJ_DELIM}
 Summary: Development package for Slurm
-Group: fsp/rms
+Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires:  pkg-config
@@ -291,7 +303,7 @@ and static libraries for the Slurm API
 %if %{slurm_with auth_none}
 %package -n %{pname}-auth-none%{PROJ_DELIM}
 Summary: Slurm auth NULL implementation (no authentication)
-Group: fsp/rms
+Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM}
 %description -n %{pname}-auth-none%{PROJ_DELIM}
 Slurm NULL authentication module
@@ -300,7 +312,7 @@ Slurm NULL authentication module
 %if %{slurm_with authd}
 %package -n %{pname}-auth-authd%{PROJ_DELIM}
 Summary: Slurm auth implementation using Brent Chun's authd
-Group: fsp/rms
+Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM} authd
 %description -n %{pname}-auth-authd%{PROJ_DELIM}
 Slurm authentication module for Brent Chun's authd. Used to
@@ -312,7 +324,7 @@ authenticate user originating an RPC
 %if %{slurm_with munge}
 %package -n %{pname}-munge%{PROJ_DELIM}
 Summary: Slurm authentication and crypto implementation using Munge
-Group: fsp/rms
+Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM} munge%{PROJ_DELIM}
 BuildRequires: munge-devel%{PROJ_DELIM} munge-libs%{PROJ_DELIM}
 Obsoletes: slurm-auth-munge
@@ -324,29 +336,29 @@ authenticate user originating an RPC, digitally sign and/or encrypt messages
 %if %{slurm_with bluegene}
 %package bluegene
 Summary: Slurm interfaces to IBM Blue Gene system
-Group: fsp/rms
-Requires: slurm
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM}
 %description bluegene
 Slurm plugin interfaces to IBM Blue Gene system
 %endif
 
 %package -n %{pname}-slurmdbd%{PROJ_DELIM}
 Summary: Slurm database daemon
-Group: fsp/rms
-Requires: slurm-plugins%{PROJ_DELIM} slurm-sql%{PROJ_DELIM}
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}-plugins%{PROJ_DELIM} %{pname}-sql%{PROJ_DELIM}
 %description -n %{pname}-slurmdbd%{PROJ_DELIM}
 Slurm database daemon. Used to accept and process database RPCs and upload
 database changes to slurmctld daemons on each cluster
 
 %package -n %{pname}-sql%{PROJ_DELIM}
 Summary: Slurm SQL support
-Group: fsp/rms
+Group: %{PROJ_NAME}/rms
 %description -n %{pname}-sql%{PROJ_DELIM}
 Slurm SQL support. Contains interfaces to MySQL.
 
 %package -n %{pname}-plugins%{PROJ_DELIM}
 Summary: Slurm plugins (loadable shared objects)
-Group: fsp/rms
+Group: %{PROJ_NAME}/rms
 Requires: munge-libs%{PROJ_DELIM}
 %description -n %{pname}-plugins%{PROJ_DELIM}
 Slurm plugins (loadable shared objects) supporting a wide variety of
@@ -355,32 +367,32 @@ with which Slurm can be configured. Note that some system specific plugins
 are in other packages
 
 %package -n %{pname}-torque%{PROJ_DELIM}
-Summary: Torque/PBS wrappers for transitition from Torque/PBS to Slurm
-Group: fsp/rms
-Requires: slurm-perlapi
+Summary: Torque/PBS wrappers for transition from Torque/PBS to Slurm
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}-perlapi%{PROJ_DELIM}
 %description -n %{pname}-torque%{PROJ_DELIM}
 Torque wrapper scripts used for helping migrate from Torque/PBS to Slurm
 
 %package -n %{pname}-sjobexit%{PROJ_DELIM}
 Summary: Slurm job exit code management tools
-Group: fsp/rms
-Requires: slurm-perlapi%{PROJ_DELIM}
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}-perlapi%{PROJ_DELIM}
 %description -n %{pname}-sjobexit%{PROJ_DELIM}
 Slurm job exit code management tools. Enables users to alter job exit code
 information for completed jobs
 
 %package -n %{pname}-slurmdb-direct%{PROJ_DELIM}
 Summary: Wrappers to write directly to the slurmdb
-Group: fsp/rms
-Requires: slurm-perlapi%{PROJ_DELIM}
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}-perlapi%{PROJ_DELIM}
 %description -n %{pname}-slurmdb-direct%{PROJ_DELIM}
 Wrappers to write directly to the slurmdb
 
 %if %{slurm_with aix}
 %package aix
 Summary: Slurm interfaces to IBM AIX
-Group: fsp/rms
-Requires: slurm
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}{PROJ_DELIM}
 BuildRequires: proctrack >= 3
 Obsoletes: slurm-aix-federation
 %description aix
@@ -390,8 +402,8 @@ Slurm interfaces for IBM AIX systems
 %if %{slurm_with percs}
 %package percs
 Summary: Slurm plugins to run on an IBM PERCS system
-Group: fsp/rms
-Requires: slurm nrt
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM} nrt
 BuildRequires: nrt
 %description percs
 Slurm plugins to run on an IBM PERCS system, POE interface and NRT switch plugin
@@ -401,8 +413,8 @@ Slurm plugins to run on an IBM PERCS system, POE interface and NRT switch plugin
 %if %{slurm_with sgijob}
 %package proctrack-sgi-job
 Summary: Slurm process tracking plugin for SGI job containers
-Group: fsp/rms
-Requires: slurm
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM}
 BuildRequires: job
 %description proctrack-sgi-job
 Slurm process tracking plugin for SGI job containers
@@ -412,8 +424,8 @@ Slurm process tracking plugin for SGI job containers
 %if %{slurm_with lua}
 %package -n %{pname}-lua%{PROJ_DELIM}
 Summary: Slurm lua bindings
-Group: fsp/rms
-Requires: slurm%{PROJ_DELIM} lua
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM} lua
 BuildRequires: lua-devel
 %description -n %{pname}-lua%{PROJ_DELIM}
 Slurm lua bindings
@@ -422,8 +434,8 @@ Includes the Slurm proctrack/lua and job_submit/lua plugin
 
 %package -n %{pname}-sjstat%{PROJ_DELIM}
 Summary: Perl tool to print Slurm job state information
-Group: fsp/rms
-Requires: slurm%{PROJ_DELIM}
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM}
 %description -n %{pname}-sjstat%{PROJ_DELIM}
 Perl tool to print Slurm job state information. The output is designed to give
 information on the resource usage and availablilty, as well as information
@@ -434,8 +446,8 @@ utilites will provide more information and greater depth of understanding
 %if %{slurm_with pam}
 %package -n %{pname}-pam_slurm%{PROJ_DELIM}
 Summary: PAM module for restricting access to compute nodes via Slurm
-Group: fsp/rms
-Requires: slurm%{PROJ_DELIM} slurm-devel%{PROJ_DELIM}
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM} %{pname}-devel%{PROJ_DELIM}
 BuildRequires: pam-devel
 Obsoletes: pam_slurm
 %description -n %{pname}-pam_slurm%{PROJ_DELIM}
@@ -448,8 +460,8 @@ according to the Slurm
 %if %{slurm_with blcr}
 %package -n %{pname}-blcr%{PROJ_DELIM}
 Summary: Allows Slurm to use Berkeley Lab Checkpoint/Restart
-Group: fsp/rms
-Requires: slurm%{PROJ_DELIM}
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM}
 %description -n %{pname}-blcr%{PROJ_DELIM}
 Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 %endif
@@ -457,13 +469,13 @@ Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 #############################################################################
 
 %prep
-%setup -n slurm-%{version}
+%setup -n slurm-slurm-%{ver_exp}
 
-# Intel FSP patches
-%patch1
-%patch2
-%patch3
-%patch4
+# OpenHPC patches
+### patch1
+### patch2
+### patch3
+### patch4
 
 %build
 %configure \
@@ -512,9 +524,10 @@ DESTDIR="$RPM_BUILD_ROOT" make install-contrib
    fi
 %endif
 
-# 6/16/15 karl.w.schulz@intel.com - do not package Slurm's version of libpmi with FSP.
-%if 0%{?FSP_BUILD}
+# 6/16/15 karl.w.schulz@intel.com - do not package Slurm's version of libpmi with OpenHPC.
+%if 0%{?OHPC_BUILD}
    rm -f $RPM_BUILD_ROOT/%{_libdir}/libpmi*
+   rm -f $RPM_BUILD_ROOT/%{_libdir}/mpi_pmi2*
 %endif
 
 # Do not package Slurm's version of libpmi on Cray systems with ALPS.
@@ -546,9 +559,9 @@ install -D -m755 contribs/sgather/sgather ${RPM_BUILD_ROOT}%{_bindir}/sgather
 install -D -m755 contribs/sjstat ${RPM_BUILD_ROOT}%{_bindir}/sjstat
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-echo "# FSP default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
+echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "SlurmdLogFile=/var/log/slurm.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "SlurmctldLogFile=/var/log/slurmctld.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
@@ -557,7 +570,7 @@ echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN"
 echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 
 # 9/17/14 karl.w.schulz@intel.com - Add option to drop VM cache during epilog
-sed -i '/^# No other SLURM jobs,/i \\n# Drop clean caches (FSP)\necho 3 > /proc/sys/vm/drop_caches\n\n#' $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.epilog.clean
+sed -i '/^# No other SLURM jobs,/i \\n# Drop clean caches (OpenHPC)\necho 3 > /proc/sys/vm/drop_caches\n\n#' $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.epilog.clean
 
 %endif
 
@@ -846,11 +859,11 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %config %{_sysconfdir}/slurm.conf.example
 
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS BUILD.NOTES ChangeLog COPYING DISCLAIMER INSTALL LICENSE.OpenSSL NEWS README.rst RELEASE_NOTES
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 %config %{_sysconfdir}/slurm.conf
 %endif
 
@@ -992,7 +1005,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/slurm/mpi_mpichmx.so
 %{_libdir}/slurm/mpi_mvapich.so
 %{_libdir}/slurm/mpi_openmpi.so
+%if ! 0%{?OHPC_BUILD}
 %{_libdir}/slurm/mpi_pmi2.so
+%endif
 %endif
 %{_libdir}/slurm/mpi_none.so
 %{_libdir}/slurm/preempt_job_prio.so

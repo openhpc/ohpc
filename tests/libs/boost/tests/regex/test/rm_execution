@@ -1,0 +1,46 @@
+#!../../../../../common/bats/bin/bats 
+# -*-sh-*-
+
+source ../../../../../common/test_helper_functions.bash || exit 1
+source ../../../../../common/functions || exit 1
+
+if [ -s ../../../../../TEST_ENV ];then
+    source ../../../../../TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+PKG="Boost"
+
+@test "[$PKG] bad_expression_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    test=bad_expression_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] named_subexpressions_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    test=named_subexpressions_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test
+    assert_success
+}
+
+@test "[$PKG] recursion_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    test=recursion_test
+    if [ ! -x $test ];then
+        flunk "$test does not exist"
+    fi
+    run_serial_binary ./$test config_test.cfg 
+    assert_success
+}
+

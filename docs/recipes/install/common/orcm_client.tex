@@ -2,15 +2,15 @@ To use the {\em in-band} method of collecting data from compute resources, the
 \ORCM{} client daemon is required to be available on each compute node. This can
 be added to the compute image as follows:
 
-% begin_fsp_run
-% fsp_validation_comment Install ORCM client on compute image
+% begin_ohpc_run
+% ohpc_validation_comment Install ORCM client on compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[master]$ (*\groupchrootinstall*) fsp-orcm-client
+[sms](*\#*) (*\groupchrootinstall*) ohpc-orcm-client
 
 # Set master host as data aggregator
-[master]$ perl -pi -e "s/aggregator_hostname/<master_ip>/" $CHROOT/opt/open-rcm/etc/orcm-site.xml
+[sms](*\#*) perl -pi -e "s/aggregator_hostname/<sms_ip>/" $CHROOT/opt/open-rcm/etc/orcm-site.xml
 
 # Enable orcmd client daemon on boot
-[master]$ chroot $CHROOT systemctl enable orcmd
+[sms](*\#*) chroot $CHROOT systemctl enable orcmd
 \end{lstlisting}
-% end_fsp_run
+% end_ohpc_run

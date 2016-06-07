@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ -f ./YAML_Doc.cpp ] ; then
+  exit 0;
+fi
+
+dir=../common
+
+cp ${dir}/YAML_Doc.cpp .
+cp ${dir}/YAML_Doc.hpp .
+cp ${dir}/YAML_Element.cpp .
+cp ${dir}/YAML_Element.hpp .
+
+cp ${dir}/generate_info_header .
+

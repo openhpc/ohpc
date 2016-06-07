@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,19 +8,24 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family variable via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -28,7 +33,7 @@ Requires:      gnu-compilers%{PROJ_DELIM}
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -47,7 +52,7 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end------------------------------------------------
+#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname tau
@@ -55,20 +60,19 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 2.24
-Release: 1%{?dist}
-Summary: Tuning and Analysis Utilities Profiling Package
-License: Tuning and Analysis Utilities License
-Group: fsp/perf-tools
-Url: http://www.cs.uoregon.edu/research/tau/home.php
-Source0: %{pname}-%{version}.tar.gz
+
+Version:   2.25
+Release:   1%{?dist}
+Summary:   Tuning and Analysis Utilities Profiling Package
+License:   Tuning and Analysis Utilities License
+Group:     %{PROJ_NAME}/perf-tools
+Url:       http://www.cs.uoregon.edu/research/tau/home.php
+Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
 Provides:  lib%PNAME.so()(64bit)
 Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
-# 03/31/15 charles.r.baird@intel.com - add return value that rpmlint complained about
-Patch1: tau.papilayer.patch
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -79,15 +83,15 @@ BuildRequires: libgomp
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
-BuildRequires: papi-fsp
-BuildRequires: pdtoolkit-%{compiler_family}-fsp
-Requires: papi-fsp
-Requires: pdtoolkit-%{compiler_family}-fsp
+BuildRequires: papi%{PROJ_DELIM}
+BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+Requires: papi%{PROJ_DELIM}
+Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 TAU is a program and performance analysis tool framework being developed for
@@ -104,19 +108,16 @@ automatic instrumentation tool.
 %prep
 %setup -q -n %{pname}-%{version}
 
-# Intel FSP patches
-%patch1 -p1
-
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 %endif
 
 %build
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 module load papi
 module load pdtoolkit
 
@@ -156,7 +157,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -lgomp -L/tmp%{install_path}/lib" 
+	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
 
 
 make install
@@ -166,7 +167,8 @@ make exports
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
 pushd /tmp
-mv opt/fsp/pub/libs/%{compiler_family}/%{mpi_family}/%{pname}/%version %buildroot%{install_path}/..
+export tmp_path=%{install_path}
+mv ${tmp_path#*/} %buildroot%{install_path}/..
 popd
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
@@ -178,8 +180,8 @@ sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile
 #sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
 #sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 
-rm -f %{install_path}/examples/gpu/cuda/unifmem/Makefile~
-rm -f %buildroot%{install_path}/examples/gpu/cuda/unifmem/Makefile~
+rm -rf %{install_path}/examples
+rm -rf %buildroot%{install_path}/examples
 rm -f %{install_path}/.last_config
 rm -f %{install_path}/.all_configs
 rm -f %{install_path}/.active_stub*
@@ -192,9 +194,9 @@ rm -f libjogl*
 popd
 
 
-# FSP module file
-%{__mkdir} -p %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -239,7 +241,7 @@ if [ module-info mode remove ] {
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -251,8 +253,8 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
+%{OHPC_HOME}
+%{OHPC_PUB}
 %doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
 
 %changelog

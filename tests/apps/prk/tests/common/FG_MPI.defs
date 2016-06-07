@@ -1,0 +1,6 @@
+include ../../common/make.defs
+CCOMPILER=$(FGMPICC)
+CLINKER=$(CCOMPILER) 
+PATH:=$(FGMPITOP)/bin:$(PATH)
+COMOBJS=MPI_bail_out.o wtime.o
+PROG_ENV=-DFG_MPI

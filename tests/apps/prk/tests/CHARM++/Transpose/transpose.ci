@@ -1,0 +1,82 @@
+mainmodule transpose {
+  readonly CProxy_Main mainProxy;
+  readonly int         order;
+  readonly int         num_chares;
+  readonly int         overdecomposition;
+  readonly int         maxiterations;
+  readonly int         Block_order;
+  readonly int         Tile_order;
+  readonly int         tiling;
+  readonly int         Colblock_size;
+  readonly int         Block_size;
+  readonly double      startTime;
+  readonly double      endTime;
+  readonly long        bytes;
+
+  message blockMsg {
+    double blockData[];
+  };
+
+  mainchare Main {
+    entry Main(CkArgMsg *m);
+    entry void report(double);
+  };
+
+  array [1D] Transpose {
+    entry Transpose(void);
+    entry void receiveBlock(blockMsg *msg);
+    entry void diagonal_transpose();
+    entry void nondiagonal_transpose(int send_to);
+    entry void sendBlock(int send_to);
+    entry void processBlock(blockMsg *msg);
+    entry [reductiontarget] void global_error(double result);
+    entry [reductiontarget] void barrier_stop(void);
+    entry [reductiontarget] void barrier_start(void);
+    entry void run() {
+      for (iterations=0; iterations<=maxiterations; iterations++) {
+        if (iterations == 1) {
+          serial "start the timer" {
+            // implement a barrier by doing an empty collective; then start the timer          
+            CkCallback cb(CkReductionTarget(Transpose, barrier_start), thisProxy);     
+            contribute(0, NULL, CkReduction::nop, cb);
+          }
+          when barrier_start(void) serial "barrier_start" {
+            if (thisIndex == 0) startTime = CkWallTimer();
+          }
+        }
+        serial "transpose diagonal block" {
+            diagonal_transpose();
+        }
+                           
+        for (phase=1; phase<num_chares; phase++) {
+          
+          serial "transpose block before sending" {
+            send_to   = (thisIndex - phase + num_chares)%num_chares;
+            nondiagonal_transpose(send_to);
+            sendBlock(send_to);
+          }
+          when receiveBlock[phase+iterations*num_chares](blockMsg *msg)
+            serial "processBlock" {
+              processBlock(msg);
+          }
+        }
+      }
+      serial "stop the timer" {
+        // implement a barrier by doing an empty collective; then stop the timer          
+        CkCallback cb(CkReductionTarget(Transpose, barrier_stop), thisProxy);     
+        contribute(0, NULL, CkReduction::nop, cb);
+      }    
+      when barrier_stop(void) serial "barrier_stop" {
+        if (thisIndex == 0) endTime = CkWallTimer();
+      }
+      serial "compute solution error" {
+        compute_local_error();
+        CkCallback cb(CkReductionTarget(Transpose, global_error), thisProxy);     
+        contribute(sizeof(double), &local_error, CkReduction::sum_double, cb);
+      }
+      when global_error(double result) serial "report solution error" {
+        if (thisIndex==0) mainProxy.report(result);
+      }
+    };
+  };
+};

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -10,21 +10,26 @@
 
 # spec file for package trilinos
 
-#-fsp-header-comp-begin-----------------------------
+#-ohpc-header-comp-begin-----------------------------
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# FSP convention: the default assumes the gnu toolchain and openmpi
+# OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
 %{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family:      %define mpi_family      openmpi}
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%{!?mpi_family:      %define mpi_family openmpi}
 
+# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
+# environment; if building outside, lmod remains a formal build dependency).
+%if !0%{?OHPC_BUILD}
+BuildRequires: lmod%{PROJ_DELIM}
+%endif
 # Compiler dependencies
-BuildRequires: lmod%{PROJ_DELIM} coreutils
+BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -35,7 +40,7 @@ Requires:      intel-compilers%{PROJ_DELIM}
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?FSP_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 %endif
 %endif
@@ -54,22 +59,21 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-fsp-header-comp-end-------------------------------
+#-ohpc-header-comp-end-------------------------------
 
 # Base package name
 %define pname trilinos
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        11.14.3
+Version:        12.4.2
 Release:        0
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
-Group:          fsp/parallel-libs
+Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
-Source0:        %{pname}-%{version}.tar.gz
+Source0:        http://trilinos.csbsju.edu/download/files/trilinos-%{version}-Source.tar.bz2
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
-Patch1:         trilinos-11.14.3-no_rpath.patch
 BuildRequires:  cmake >= 2.8
 #BuildRequires:  cppunit-devel
 BuildRequires:  doxygen
@@ -88,14 +92,14 @@ BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{FSP_PUB}/doc/contrib
+DocDir:         %{OHPC_PUB}/doc/contrib
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
 #!BuildIgnore: post-build-checks
 %define debug_package %{nil}
 
 # Default library install path
-%define install_path %{FSP_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 Trilinos is a collection of compatible software packages that support parallel
@@ -105,16 +109,15 @@ C++ using object-oriented techniques. All packages are self-contained, with the
 Trilinos top layer providing a common look-and-feel and infrastructure.
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}-Source
 %patch0 -p1
-%patch1 -p1
 
 %build
-# FSP compiler/mpi designation
-export FSP_COMPILER_FAMILY=%{compiler_family}
-export FSP_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/FSP_setup_compiler
-. %{_sourcedir}/FSP_setup_mpi
+# OpenHPC compiler/mpi designation
+export OHPC_COMPILER_FAMILY=%{compiler_family}
+export OHPC_MPI_FAMILY=%{mpi_family}
+. %{_sourcedir}/OHPC_setup_compiler
+. %{_sourcedir}/OHPC_setup_mpi
 
 %if %{compiler_family} == gnu
 module load mkl
@@ -133,7 +136,10 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON                              \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
-        -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=ON                          \
+        -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
+%if %{compiler_family} == intel
+        -DTrilinos_ENABLE_MueLu:BOOL=OFF                                \
+%endif
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
@@ -188,18 +194,18 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 #       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
 #       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
 #       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
-make VERBOSE=1
-make %{?_smp_mflags}
+
+make %{?_smp_mflags} VERBOSE=1
 cd ..
 
 %install
 cd tmp
-make DESTDIR=%{buildroot} install INSTALL='install -p'
+make %{?_smp_mflags} DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
 
-# FSP module file
-%{__mkdir_p} %{buildroot}%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+# OpenHPC module file
+%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -229,7 +235,7 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -247,8 +253,8 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
-%{FSP_PUB}
-%doc CHANGELOG Copyright.txt INSTALL LICENSE README RELEASE_NOTES
+%{OHPC_HOME}
+%{OHPC_PUB}
+%doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 
 %changelog

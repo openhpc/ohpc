@@ -1,0 +1,113 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions                  || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+check_rms
+
+PKG=VTUNE
+testname="Intel Vtune"
+module=vtune
+header=
+library="libamplxe_reporter_core_*.so"
+rpm=intel-vtune${DELIM}
+
+@test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+}
+
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    DIR=${PKG}_DIR
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+    
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+}
+
+# ----------
+# Binaries
+# ----------
+
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    BIN=${PKG}_BIN
+    if [ -z ${!BIN} ];then
+        flunk "${PKG}_BIN directory not defined"
+    fi
+    
+    if [ ! -d ${!BIN} || -z "${!BIN}" ];then
+        flunk "directory ${!BIN} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify availability/execution of amplxe-cl binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    run which amplxe-cl
+    assert_success
+
+    run amplxe-cl --version
+    assert_success
+}
+
+# ----------
+# Man pages
+# ----------
+
+@test "[$testname] Verify availability of man page for amplxe-cl ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    DIR=${PKG}_DIR
+
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+    
+    run man -w amplxe-cl
+    assert_success
+}
+
+# ----------
+# Lib Tests
+# ----------
+
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+ 
+    if [ ! -d ${!LIB} ];then
+        flunk "directory ${!LIB} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify amplxe_reporter_core library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -s ${!LIB}/${library} ];then
+        flunk "${library} does not exist"
+    fi 
+}
+
+rm -f .cmd_output
+

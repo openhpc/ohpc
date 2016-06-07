@@ -1,0 +1,94 @@
+##############################################################################
+#
+# Make variables for use by Trilinos clients. 
+#
+# Do not edit: This file was generated automatically by CMake.
+#
+##############################################################################
+
+
+## ---------------------------------------------------------------------------
+## Compilers used by Trilinos build
+## ---------------------------------------------------------------------------
+
+Trilinos_CXX_COMPILER=mpicxx
+
+Trilinos_C_COMPILER=mpicc
+
+Trilinos_Fortran_COMPILER=mpif90
+
+
+## ---------------------------------------------------------------------------
+## Compiler flags used by Trilinos build
+## ---------------------------------------------------------------------------
+
+ifeq ($(LMOD_FAMILY_COMPILER),intel)
+  OMP_FLAG= -openmp
+else
+  OMP_FLAG= -fopenmp
+endif
+
+Trilinos_CXX_COMPILER_FLAGS= -std=c++11 $(OMP_FLAG) -O3 -DNDEBUG
+Trilinos_C_COMPILER_FLAGS= $(OMP_FLAG) -O3 -DNDEBUG
+Trilinos_Fortran_COMPILER_FLAGS= $(OMP_FLAG) -O3
+
+## Extra link flags (e.g., specification of fortran libraries)
+Trilinos_EXTRA_LD_FLAGS=
+
+## This is the command-line entry used for setting rpaths. In a build
+## with static libraries it will be empty. 
+Trilinos_SHARED_LIB_RPATH_COMMAND=-Wl,-rpath,$(TRILINOS_LIB)
+Trilinos_BUILD_SHARED_LIBS=ON
+
+Trilinos_LINKER=/bin/ld
+Trilinos_AR=/bin/ar
+
+
+## ---------------------------------------------------------------------------
+## Set library specifications and paths 
+## ---------------------------------------------------------------------------
+
+## The project version number
+Trilinos_VERSION=12.2.1
+
+## The project include file directories.
+Trilinos_INCLUDE_DIRS= -I$(TRILINOS_INC)
+
+## The project library directories.
+Trilinos_LIBRARY_DIRS= -L$(TRILINOS_LIB)
+
+## The project libraries.
+Trilinos_LIBRARIES= -ltrilinoscouplings -lctrilinos -lstokhos_ifpack2 -lstokhos_amesos2 -lstokhos_tpetra -lstokhos_sacado -lstokhos -llocathyra -llocaepetra -llocalapack -lloca -lnoxepetra -lnoxlapack -lnox -lphalanx -lintrepid -lteko -lstratimikos -lstratimikosbelos -lstratimikosaztecoo -lstratimikosamesos -lstratimikosml -lstratimikosifpack -lifpack2-adapters -lifpack2 -lzoltan2 -lanasazitpetra -lModeLaplace -lanasaziepetra -lanasazi -lbelostpetra -lbelosepetra -lbelos -lml -lifpack -lpamgen_extras -lpamgen -lamesos2 -lamesos -lgaleri-xpetra -lgaleri -laztecoo -ldpliris -lisorropia -lthyratpetra -lthyraepetraext -lthyraepetra -lthyracore -lthyratpetra -lthyraepetraext -lthyraepetra -lthyracore -lxpetra-sup -lxpetra -lepetraext -ltpetraext -ltpetrainout -ltpetra -lkokkostsqr -ltpetrakernels -ltpetraclassiclinalg -ltpetraclassicnodeapi -ltpetraclassic -ltpetraext -ltpetrainout -ltpetra -lkokkostsqr -ltpetrakernels -ltpetraclassiclinalg -ltpetraclassicnodeapi -ltpetraclassic -ltriutils -lshards -lzoltan -lepetra -lsacado -lrtop -lteuchoskokkoscomm -lteuchoskokkoscompat -lteuchosremainder -lteuchosnumerics -lteuchoscomm -lteuchosparameterlist -lteuchoscore -lteuchoskokkoscomm -lteuchoskokkoscompat -lteuchosremainder -lteuchosnumerics -lteuchoscomm -lteuchosparameterlist -lteuchoscore -lkokkosalgorithms -lkokkoscontainers -lkokkoscore -lkokkosalgorithms -lkokkoscontainers -lkokkoscore -lgtest
+
+## The project tpl include paths
+Trilinos_TPL_INCLUDE_DIRS= -I/usr/include -I$(NETCDF_INC) -I$(HDF5_INC) -I$(BOOST_INC) -I$(MKLROOT)/include
+
+## The project tpl library paths
+Trilinos_TPL_LIBRARY_DIRS=
+
+## The project tpl libraries
+Trilinos_TPL_LIBRARIES= $(NETCDF_LIB)/libnetcdf.so $(HDF5_LIB)/libhdf5.so /usr/lib64/libz.so $(MKLROOT)/lib/intel64/libmkl_rt.so
+
+## ---------------------------------------------------------------------------
+## MPI specific variables
+##   These variables are provided to make it easier to get the mpi libraries
+##   and includes on systems that do not use the mpi wrappers for compiling
+## ---------------------------------------------------------------------------
+
+Trilinos_MPI_LIBRARIES=
+Trilinos_MPI_LIBRARY_DIRS=
+Trilinos_MPI_INCLUDE_DIRS=
+Trilinos_MPI_EXEC=$(MPI_DIR)/bin/mpiexec
+Trilinos_MPI_EXEC_MAX_NUMPROCS=4
+Trilinos_MPI_EXEC_NUMPROCS_FLAG=-np
+
+## ---------------------------------------------------------------------------
+## Set useful general variables 
+## ---------------------------------------------------------------------------
+
+## The packages enabled for this project
+Trilinos_PACKAGE_LIST= TrilinosCouplings Didasko CTrilinos Stokhos NOX Phalanx Intrepid Teko Stratimikos Ifpack2 Zoltan2 Anasazi Belos ML Ifpack Pamgen Amesos2 Amesos Galeri AztecOO Pliris Isorropia Thyra ThyraTpetraAdapters ThyraEpetraExtAdapters ThyraEpetraAdapters ThyraCore Xpetra EpetraExt Tpetra TpetraCore TpetraTSQR TpetraKernels TpetraClassic Triutils Shards Zoltan Epetra Sacado RTOp Teuchos TeuchosKokkosComm TeuchosKokkosCompat TeuchosRemainder TeuchosNumerics TeuchosComm TeuchosParameterList TeuchosCore Kokkos KokkosAlgorithms KokkosContainers KokkosCore ThreadPool Gtest
+
+## The TPLs enabled for this project
+Trilinos_TPL_LIST= X11 Netcdf HDF5 Zlib Boost LAPACK BLAS MPI Pthread MKL
+

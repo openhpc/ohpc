@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,8 +8,8 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
-%{!?PROJ_DELIM:      %define PROJ_DELIM      %{nil}}
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname nagios
@@ -18,14 +18,14 @@
 %global _hardened_build 1
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.5.1
+Version: 4.1.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program
-Group:   fsp/admin
+Group:   %{PROJ_NAME}/admin
 License: GPLv2
 URL: http://www.nagios.org/
-DocDir:  %{FSP_PUB}/doc/contrib
-Source0: %{pname}-%{version}.tar.gz
+DocDir:  %{OHPC_PUB}/doc/contrib
+Source0: https://assets.nagios.com/downloads/nagioscore/releases/nagios-%{version}.tar.gz
 Source1: nagios.logrotate
 Source2: nagios.htaccess
 Source3: nagios.internet.cfg
@@ -37,7 +37,8 @@ Source10: printer.png
 Source11: router.png
 Source12: switch.png
 
-Patch1: nagios-0001-from-rpm.patch
+# looks fixed in 4.1.1
+#Patch1: nagios-0001-from-rpm.patch
 Patch2: nagios-0002-SELinux-relabeling.patch
 # Sent upstream
 Patch3: nagios-0003-Fix-etc-init.d-nagios-status.patch
@@ -67,6 +68,7 @@ BuildRequires: perl(Test::Harness)
 #%endif
 BuildRequires: perl(Test::More)
 BuildRequires: perl(Test::Simple)
+BuildRequires: unzip
 
 %if 0%{?sles_version} || 0%{?suse_version}
 #!BuildIgnore: brp-check-suse
@@ -74,18 +76,23 @@ BuildRequires: -post-build-checks
 %endif
 
 Requires: httpd
-Requires: php
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires: mailx
+
+%if 0%{?suse_version} >= 1210
+Requires:           apache2-mod_php5
+%endif
 
 %if 0%{?fedora} || 0%{?rhel}
 Requires(preun): initscripts, chkconfig
 Requires(post): initscripts, chkconfig
 Requires(postun): initscripts
+Requires: php
 %else
 Requires(preun): wicked-service,aaa_base
 Requires(post): wicked-service,aaa_base
 Requires(postun): wicked-service
+Requires: php5
 %endif
 
 Requires: %{pname}-common%{PROJ_DELIM}
@@ -96,7 +103,7 @@ Requires: %{pname}-common%{PROJ_DELIM}
 #Requires(pre): group(nagios)
 
 
-Summary: Nagios monitors hosts and services and yells if somethings breaks
+Summary: Nagios monitors hosts and services and yells if something breaks
 Summary(de): Nagios überwacht Dienste und Rechner und meldet Ihnen Ausfälle
 
 %description
@@ -164,8 +171,9 @@ may compile against.
 
 
 %prep
-%setup -q -n %{pname}
-%patch1 -p1 -b .fedora
+%setup -q -n %{pname}-%{version}
+# appears to be corrected in 4.1.1
+#%patch1 -p1 -b .fedora
 %patch2 -p1 -b .selinux_relabel
 %patch3 -p1 -b .fix_status_retcode
 %patch4 -p1 -b .fix_httpd_conf_d
@@ -205,12 +213,18 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
     --with-perlcache \
     --with-template-objects \
     --with-template-extinfo \
+    %if 0%{?sles_version} || 0%{?suse_version}
+    --with-httpd-conf=/etc/apache2/conf.d \
+    %else
+    --with-httpd-conf=/etc/httpd/conf.d \
+    %endif
     STRIP=/bin/true
 make %{?_smp_mflags} all
 
-sed -i -e "s| package Embed::Persistent;|#\!%{_bindir}/perl\npackage Embed::Persistent;|" p1.pl
+#sed -i -e "s| package Embed::Persistent;|#\!%{_bindir}/perl\npackage Embed::Persistent;|" p1.pl
 sed -i -e "s|NagiosCmd=/var/log/nagios/rw/nagios.cmd|NagiosCmd=%{_localstatedir}/spool/%{pname}/cmd/nagios.cmd|" daemon-init
 sed -i -e "s|resource.cfg|private/resource.cfg|" \
+     -e "s|#query_socket=/var/log/nagios/rw/nagios.qh|query_socket=%{_localstatedir}/log/%{pname}/nagios.qh|" \
      -e "s|command_file=/var/log/nagios/rw/nagios.cmd|command_file=%{_localstatedir}/spool/%{pname}/cmd/nagios.cmd|" sample-config/nagios.cfg 
 sed -e "s|/usr/lib/|%{_libdir}/|" %{SOURCE2} > %{pname}.htaccess
 cp -f %{SOURCE3} internet.cfg
@@ -244,6 +258,9 @@ install -d -m 0755 %{buildroot}%{_libdir}/%{pname}/plugins/eventhandlers
 
 install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
 
+# remove static library that is build in 4.1.1
+rm -v    %{buildroot}%{_libdir}/%{pname}/libnagios.a
+
 
 %clean
 rm -rf %{buildroot}
@@ -263,14 +280,24 @@ fi
 
 
 %post
+%if 0%{?sles_version} || 0%{?suse_version}
+/usr/sbin/a2enmod php5
+/usr/sbin/a2enmod version
+%{_sbindir}/usermod -a -G %{pname} wwwrun || :
+/usr/bin/systemctl try-restart apache2 > /dev/null 2>&1 || :
+%else
 %{_sbindir}/usermod -a -G %{pname} apache || :
+/usr/bin/systemctl try-restart httpd > /dev/null 2>&1 || :
+%endif
 /sbin/chkconfig --add %{pname} || :
-/sbin/service httpd condrestart > /dev/null 2>&1 || :
 
 
 %postun
-/sbin/service httpd condrestart > /dev/null 2>&1 || :
-
+%if 0%{?sles_version} || 0%{?suse_version}
+/usr/bin/systemctl try-restart apache2 > /dev/null 2>&1 || :
+%else
+/usr/bin/systemctl try-restart httpd > /dev/null 2>&1 || :
+%endif
 
 # missing buildrequires
 #%check
@@ -278,6 +305,7 @@ fi
 
 
 %files
+%defattr(-,root,root,-)
 %dir %{_libdir}/%{pname}/plugins/eventhandlers
 %dir %{_libdir}/%{pname}/cgi-bin
 %dir %{_datadir}/%{pname}
@@ -286,11 +314,18 @@ fi
 %doc Changelog INSTALLING LICENSE README UPGRADING UpgradeToVersion3.ReadMe UpgradeToVersion3.sh
 %doc internet.cfg
 %{_datadir}/%{pname}/html/[^d]*
+# d3 javascript appears to be new for 4.1.1, include directory and files
+%dir %{_datadir}/%{pname}/html/d3
+%{_datadir}/%{pname}/html/d3/*
 %{_sbindir}/*
 %{_bindir}/*
 %{_libdir}/%{pname}/cgi-bin/*cgi
 %{_initrddir}/nagios
+%if 0%{?sles_version} || 0%{?suse_version}
+%config(noreplace) %{_sysconfdir}/apache2/conf.d/nagios.conf
+%else
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/nagios.conf
+%endif
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{pname}
 %config(noreplace) %{_sysconfdir}/%{pname}/*cfg
 %config(noreplace) %{_sysconfdir}/%{pname}/objects/*cfg
@@ -298,8 +333,13 @@ fi
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/objects
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/conf.d
 %attr(0640,root,nagios) %config(noreplace) %{_sysconfdir}/%{pname}/private/resource.cfg
+%if 0%{?sles_version} || 0%{?suse_version}
+%attr(0640,root,www) %config(noreplace) %{_sysconfdir}/%{pname}/passwd
+%attr(0640,root,www) %config(noreplace) %{_datadir}/%{pname}/html/config.inc.php
+%else
 %attr(0640,root,apache) %config(noreplace) %{_sysconfdir}/%{pname}/passwd
 %attr(0640,root,apache) %config(noreplace) %{_datadir}/%{pname}/html/config.inc.php
+%endif
 %attr(2775,nagios,nagios) %dir %{_localstatedir}/spool/%{pname}/cmd
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}/archives

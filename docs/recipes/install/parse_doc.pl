@@ -1,9 +1,10 @@
 #!/usr/bin/env perl
-# 
+#
 # Simple parser to cull command-line instructions from documentation for
 # validation.
-# 
-# karl.w.schulz@intel.com
+#
+# v1.0 karl.w.schulz@intel.com
+# v2.0 john.a.westlund@intel.com
 #------------------------------------------------------------------------
 
 use warnings;
@@ -18,46 +19,47 @@ my $repo   = "";
 my $ci_run = 0;
 
 GetOptions ('repo=s' => \$repo,
-	    'ci_run' => \$ci_run);
+            'ci_run' => \$ci_run);
 
-if ( $#ARGV < 0) {
-    print STDERR "Usage: parse_doc <filename>\n";
+if ( $#ARGV < 0 ) {
+print "$repo $ci_run\n";
+    print STDERR "Usage: parse_doc [--repo=<reponame>] [--ci_run] <filename>\n";
+    print STDERR "  --repo     Use a different repo for install commands\n";
+    print STDERR "  --ci_run   run additional 'CI only' commands\n";
     exit 1;
 }
 
-my $file         = shift;
-
-my $inputDir = dirname(File::Spec->rel2abs($file));
-my $basename = basename($file,".tex");
+my $file        = shift;
+my $inputDir    = dirname(File::Spec->rel2abs($file));
+my $basename    = basename($file,".tex");
+chdir $inputDir;
 
 # Determine BaseOS and define package manager commands
-
 my $Install            = "";
 my $chrootInstall      = "";
 my $groupInstall       = "";
 my $groupChrootInstall = "";
 
 # parse package command macro's from input file
-
-open(IN,"<$file")  || die "Cannot open file -> $file\n";
-while(my $line = <IN>) {
-    chomp($line);
-    if($line =~ /\\newcommand{\\install}{(.+)}/ ) {
-	$Install = $1;
-    } 
-    elsif ($line =~ /\\newcommand{\\chrootinstall}{(.+)}/ ) {
-	$chrootInstall = $1;
+open( IN, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
+while( my $line = <IN> ) {
+    chomp( $line );
+    if( $line =~ /\\newcommand\{\\install\}\{(.+)\}/ ) {
+        $Install = $1;
     }
-    elsif ($line =~ /\\newcommand{\\groupinstall}{(.+)}/ ) {
-	$groupInstall = $1;
+    elsif( $line =~ /\\newcommand\{\\chrootinstall\}\{(.+)\}/ ) {
+        $chrootInstall = $1;
     }
-    elsif ($line =~ /\\newcommand{\\groupchrootinstall}{(.+)}/ ) {
-	$groupChrootInstall = $1;
+    elsif( $line =~ /\\newcommand\{\\groupinstall\}\{(.+)\}/ ) {
+        $groupInstall = $1;
+    }
+    elsif( $line =~ /\\newcommand\{\\groupchrootinstall\}\{(.+)\}/ ) {
+        $groupChrootInstall = $1;
     }
 }
+close( IN );
 
 # Strip escape \ from latex macro
-
 $chrootInstall      =~ s/\\\$/\$/;
 $groupChrootInstall =~ s/\\\$/\$/;
 
@@ -66,38 +68,178 @@ $groupChrootInstall =~ s/\\\$/\$/;
 # print "groupInstall        = $groupInstall\n";
 # print "groupChrootInstall  = $groupChrootInstall\n";
 
-if ($Install eq "" || $chrootInstall eq "" || $groupInstall eq "" || $groupChrootInstall eq "") {
+if( $Install eq "" || $chrootInstall eq "" || $groupInstall eq "" || $groupChrootInstall eq "" ) {
     print "Error: package manager macros not defined\n";
     exit 1;
 }
 
-close(IN);
+# The input .tex file likely includes other input files via \input{foo}.  Do a
+# first pass through the input file and accumulate a temp file which includes
+# an aggregate copy of all the tex commands.
+
+( my $TMPFH_AGGR_STEPS, my $tmpfile_aggr_steps ) = tempfile();
+open( my $INPUT_FH, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
+parse_includes( $TMPFH_AGGR_STEPS, $INPUT_FH );
+close( $INPUT_FH );
+close( $TMPFH_AGGR_STEPS );
+
+# Next, parse the raw file and look for commands to execute based on delimiter
+( my $fh, my $tmpfile ) = tempfile();
+
+open( IN, "<$tmpfile_aggr_steps" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
+
+my $begin_delim   = "% begin_ohpc_run";
+my $end_delim     = "% end_ohpc_run";
+my $prompt        = quotemeta "\[sms\]\(\*\\\#\*\)";
+my $psql_prompt   = quotemeta "\[postgres\]\$";
+my $disable_delim = "^%%";
+my $indent        = 0;
+
+print $fh "#!/bin/bash\n";
+
+while( <IN> ) {
+    next if( $_ =~ /$disable_delim/ );
+
+    if( /$begin_delim/../$end_delim/ ) {
+        if( $_ =~ /% ohpc_validation_newline/ ) {
+            print $fh "\n";
+        } elsif( $_ =~ /% ohpc_ci_comment (.+)/ ) {
+            next if ( !$ci_run );
+            print $fh "# $1 (CI only)\n";
+        } elsif( $_ =~ /% ohpc_comment_header (.+)/ ) {
+            my $comment = check_for_section_replacement( $1 );
+            my $strlen  = length $comment;
+
+            printf $fh "\n";
+            printf $fh "# %s\n", '-' x $strlen;
+            print  $fh "# $comment\n";
+            printf $fh "# %s\n", '-' x $strlen;
+        } elsif( $_ =~ /% ohpc_validation_comment (.+)/ ) {
+            my $comment = check_for_section_replacement( $1 );
+            print $fh ' ' x $indent . "# $comment\n";
+        } elsif( $_ =~ /% ohpc_indent (\d+)/ ) {
+            $indent = $1;
+        } elsif($_ =~ /% ohpc_command (.+)/ ) {
+            my $cmd = update_cmd( $1 );
+            print $fh ' ' x $indent . "$cmd\n";
+
+        # if line starts a HERE document: prompt$ command <<- HERE > /tmp/foo
+        # <<- indicates the HERE document will ignore leadings tabs (not spaces)
+        } elsif( $_ =~ /$prompt (.+ <<-[ ]*([^ ]+).*)$/ ) {
+            my $cmd  = update_cmd($1);
+            my $here = $2;
+
+            # commands that begin with a % are for CI only
+            next if( $_ =~ /^%/ && !$ci_run );
+
+            print $fh ' ' x $indent . "$cmd\n";
+            my $next_line;
+        do {
+            $next_line = <IN>;
+            # trim leading and trailing space
+            $next_line =~ s/^\s+|\s+$//g;
+
+            print $fh "$next_line\n";
+        } while( $next_line !~ /^$here/ );
+
+        # handle commands line line continuation: prompt$ command \
+        } elsif( $_ =~ /$prompt (.+) \\$/ ) {
+            my $cmd = update_cmd( $1 );
+
+            # commands that begin with a % are for CI only
+            next if( $_ =~ /^%/ && !$ci_run );
+
+            print $fh ' ' x $indent . "$cmd";
+            my $next_line;
+            do {
+                $next_line = <IN>;
+                # trim leading and trailing space
+                $next_line =~ s/^\s+|\s+$//g;
+
+                print $fh " $next_line\n";
+            } while( $next_line =~ / \\$/ );
+
+        # special treatment for do loops
+        } elsif( $_ =~ /$prompt (.+[ ]*;[ ]*do)$/) {
+            my $cmd = update_cmd($1);
+
+            print $fh ' ' x $indent . "$cmd\n";
+            my $next_line;
+            my $local_indent = $indent + 3; # further indent contents of loop
+        do {
+            $next_line = <IN>;
+            # trim leading and trailing space
+            $next_line =~ s/^\s+|\s+$//g;
+
+            # reset indent to previous value for the last line
+            $local_indent = $indent if( $next_line =~ m/[^#]*done/ );
+
+            printf $fh ' ' x $local_indent . "%s\n",$next_line;
+        } while( $next_line !~ m/[^#]*done/ ); # loop until we see an uncommented done
+
+        # normal single line command
+        } elsif( $_ =~ /$prompt (.+)$/ ) {
+            my $cmd = update_cmd($1);
+            # commands that begin with a % are for CI only
+            next if( $_ =~ /^%/ && !$ci_run );
+            print $fh ' ' x $indent . "$cmd\n";
+
+        # postgres command
+        } elsif( $_ =~ /$psql_prompt (.+)$/ ) {
+            my $cmd = update_cmd( $1 );
+            # commands that begin with a % are for CI only
+            next if( $_ =~ /^%/ && !$ci_run );
+            print $fh ' ' x $indent . "$cmd\n";
+
+        }
+    }
+}
+
+close( IN );
+close( $fh );
+
+# Echo commands
+open( IN, "<$tmpfile" ) || die __LINE__ . ": Cannot open file -> $tmpfile\n$!";
+while ( <IN> ) {
+    print;
+}
+
+unlink( $tmpfile ) || die "Unable to remove $tmpfile\n$!";
+
+
+
 
 sub check_for_section_replacement {
     my $comment = shift;
 
-    if ($comment =~ /\\ref{sec:(\S+)}/) {
-	my $secname = $1;
-	my $replacementText="";
-	
-	# We can only replace section information if latex document was built - otherwise we remove the section info
-	if ( -e "$inputDir/$basename.aux" ) { 
+    if( $comment =~ /\\ref\{sec:(\S+)\}/ ) {
+    my $secname = $1;
+    my $replacementText = "";
 
-	    my $secnum=`grep {sec:$secname} $inputDir/$basename.aux  | awk -v FS="{{|})" '{print \$2}' | awk -F '}' '{print \$1}'`;
-	    
-	    chomp($secnum);
-	    
-	    if ($secnum eq "") {
-		die "Unable to query section number, verify latex build is up to date"
-	    }
-	    
-	    $replacementText="(Section $secnum)";
-	}
+    # We can only replace section information if latex document was built - otherwise we remove the section info
+    if( -e "$inputDir/$basename.aux" ) {
+            open( FH, "$inputDir/$basename.aux" ) || die __LINE__ . ": Cannot open file -> $inputDir/$basename.aux\n$!";
+        my $secnum;
+            while( <FH> ) {
+                if( /\{sec:$secname\}\{\{([^\}]+)/ ) {
+                    if( defined $secnum ) { die __LINE__ . ": found duplicate section name $secname ($secnum vs $1)"; }
+                    $secnum = $1;
+                }
+            }
+            close( FH );
+            chomp( $secnum );
 
-	$comment =~ s/\\ref{sec:(\S+)/$replacementText/g;
+        if( $secnum eq "" ) {
+        die __LINE__ . ": Unable to query section number, verify latex build is up to date"
+        }
+
+        $replacementText = "(Section $secnum)";
     }
 
-    return($comment);
+    $comment =~ s/\\ref\{sec:(\S+)/$replacementText/g;
+    }
+
+    return( $comment );
 } # end check_for_section_replacement()
 
 sub update_cmd {
@@ -108,151 +250,31 @@ sub update_cmd {
     $cmd =~ s/\(\*\\groupinstall\*\)/$groupInstall/;
     $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
 
-    return($cmd);
-}
+    return( $cmd );
+} # end update_cmd
 
-# The input .tex file likely includes other input files via \input{foo}.  Do a
-# first pass through the input file and accumulate a temp file which includes
-# an aggregate copy of all the tex commands.
+sub parse_includes {
+    # OUTFILE is a filehandle all aggregated latex goes to
+    # INFILE is the latex filehandle to be read
+    my ( $OUTFILE, $INFILE ) = @_;
 
-(my $fh_raw, my $tmpfile_raw ) = tempfile();
+    while( my $line = <$INFILE> ) {
+        # Check for include of another latex file
+        if( $line =~ /\\input\{(\S+)\}/ ) {
+            next if( $line =~ /^%%/ );
+            my $include_file = $1;
 
-open(IN,"<$file")  || die "Cannot open file -> $file\n";
+            # verify input file has .tex extension or add it
+            if( $include_file !~ /(\S+).tex/ ) {
+                $include_file = $include_file . ".tex";
+            }
+            # open the new latex file and pass it back to this function again with the same outfile
+            open( my $INCLUDE_FILE, "<$include_file" ) || die __LINE__ . ": Cannot open file -> $include_file\n$!";
+            parse_includes( $OUTFILE, $INCLUDE_FILE );
+            close( $INCLUDE_FILE);
 
-while(my $line = <IN>) {
-
-    # Check for include 
-    if( $line =~ /\\input{(\S+)}/ ) {
-
-	my $inputFile = $1;
-	# verify input file has .tex extension or add it
-
-	if($inputFile !~ /(\S+).tex/ ) {
-	    $inputFile = $inputFile . ".tex";
-	}
-
-	open(IN2,"<$inputFile") || die "Cannot open embedded input file $inputFile for parsing";
-
-	while(my $line_embed = <IN2>) {
-	    if( $line_embed =~ /\\input{\S+}/ ) {
-		print "Error: nested \\input{} file parsing not supported\n";
-		exit 1;
-	    } elsif ($line !~ /^%/) {
-		print $fh_raw $line_embed;
-	    }
-	}		
-	close(IN2);
-    } else {
-	print $fh_raw $line;
+        } elsif( $line !~ /^%%/ ) {
+            print {$OUTFILE} $line;
+        }
     }
-}
-
-close(IN);
-close($fh_raw);
-
-# Next, parse the raw file and look for commands to execute based on delimiter
-
-(my $fh,my $tmpfile) = tempfile();
-
-open(IN,"<$tmpfile_raw")  || die "Cannot open file -> $file\n";
-
-my $begin_delim   = "% begin_fsp_run";
-my $end_delim     = "% end_fsp_run";
-my $prompt        = "\[master\]\$";
-my $disable_delim = "^%%";
-my $indent        = 0;
-
-print $fh "#!/bin/bash\n";
-
-while(<IN>) {
-    if( $_ =~ /$disable_delim/ ) {
-	next;
-    }
-    if(/$begin_delim/../$end_delim/) {
-	if ($_ =~ /% fsp_validation_newline/) {
-	    print $fh "\n";
-#	} elsif ($_ =~ /^\s*$/) {
-#	    print $fh "\n";
-	} elsif ($_ =~ /% fsp_ci_comment (.+)/) {
-	    if ( !$ci_run) {next;}
-	    print $fh "# $1 (CI only)\n";
-	} elsif ($_ =~ /% fsp_comment_header (.+)/) {
-
-	    my $comment = check_for_section_replacement($1);
-	    my $strlen  = length $comment;
-
-	    printf $fh "\n";
-	    printf $fh "# %s\n", '-' x $strlen;
-	    print  $fh "# $comment\n";
-	    printf $fh "# %s\n", '-' x $strlen;
-	    
-	} elsif ($_ =~ /% fsp_validation_comment (.+)/) {
-	    my $comment = check_for_section_replacement($1);
-	    print $fh ' ' x $indent . "# $comment\n";
-	} elsif ($_ =~ /% fsp_indent (\d+)/) {
-	    $indent = $1;
-	} elsif ($_ =~ /% fsp_command (.+)/) {
-	    my $cmd = update_cmd($1);
-	    print $fh ' ' x $indent . "$cmd\n";
-	} elsif ($_ =~ /\[master\]\$ (.+) \\$/) {
-
-	    my $cmd = update_cmd($1);
-
-	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
-
-	    print $fh ' ' x $indent . "$cmd";
-	    my $next_line = <IN>;
-
-	    # trim leading and trailing space
-	    $next_line =~ s/^\s+|\s+$//g;
-
-	    print $fh " $next_line\n";
-
-	    # TODO - add loop to accomodate multi-line continuation
-	} elsif ($_ =~ /\[master\]\$ (.+ ; do)$/) {
-	    # special treatment for do loops
-
-	    my $cmd = update_cmd($1);
-	    
-#	    print $fh "$cmd\n";
-	    print $fh ' ' x $indent . "$cmd\n";
-	    my $next_line;# = <IN>;
-
-	    while ( $next_line = <IN> ) {
-		last if $next_line =~ m/\s+done/;
-
-		# trim leading and trailing space
-		$next_line =~ s/^\s+|\s+$//g;
-
-#		printf $fh "   %s\n",$next_line;
-		printf $fh ' ' x $indent . "   %s\n",$next_line;
-	    }
-
-	    # trim leading and trailing space
-	    $next_line =~ s/^\s+|\s+$//g;
-
-	    print $fh ' ' x $indent . "$next_line\n";
-	} elsif ($_ =~ /\[master\]\$ (.+)$/) {
-	    my $cmd = update_cmd($1);
-
-	    if($_ =~ /^%/ && !$ci_run ) { next; } # commands that begin with a % are for CI only
-
-	    print $fh ' ' x $indent . "$cmd\n";
-	} elsif ($_ =~ /\[postgres\]\$ (.+)$/) {
-	    my $cmd = update_cmd($1);
-	    print $fh ' ' x $indent . "$cmd\n";
-	}
-
-    }
-}
-
-close(IN);
-close($fh);
-
-# Echo commands
-open(IN,"<$tmpfile")  || die "Cannot open file -> $tmpfile\n";
-while ( <IN> ) {
-    print;
-}
-
-unlink($tmpfile) || die("Unable to remove $tmpfile");
+} # end parse_includes

@@ -1,0 +1,25 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+setup() {
+    if [ -z "$MODULEPATH" ];then
+        . /etc/profile.d/lmod.sh || exit 1
+    fi
+    module purge        || exit 1
+    module load spack || exit 1
+}
+
+@test "[spack] check for RPM" {
+    check_if_rpm_installed "spack${DELIM}"
+}
+
+@test "[spack] test executable" {
+    EMAIL=foo@intel.com spack test
+}

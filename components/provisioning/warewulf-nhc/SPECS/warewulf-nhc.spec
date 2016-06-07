@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -9,12 +9,13 @@
 #----------------------------------------------------------------------------eh-
 
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1723" != "0000" && echo "1723" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-%include %{_sourcedir}/FSP_macros
+
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define pname warewulf-nhc
 %define sname nhc
 %define debug_package %{nil}
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
-
 
 %{!?nhc_script_dir:%global nhc_script_dir %{_sysconfdir}/%{sname}/scripts}
 %{!?nhc_helper_dir:%global nhc_helper_dir %{_libexecdir}/%{sname}}
@@ -24,18 +25,18 @@ Summary: Warewulf Node Health Check System
 Version: 1.4.1
 Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group: fsp/provisioning
-URL: http://warewulf.lbl.gov/
-Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
+Group:   %{PROJ_NAME}/provisioning
+URL:     http://warewulf.lbl.gov/
+Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-nhc/warewulf-nhc-%{version}.tar.gz
+Source1: OHPC_macros
 Packager: %{?_packager}%{!?_packager:Michael Jennings <mej@lbl.gov>}
-Vendor: %{?_vendorinfo}%{!?_vendorinfo:Warewulf Project (http://warewulf.lbl.gov/)}
+Vendor:  %{?_vendorinfo}%{!?_vendorinfo:Warewulf Project (http://warewulf.lbl.gov/)}
 Distribution: %{?_distribution:%{_distribution}}%{!?_distribution:%{_vendor}}
 Requires: bash
 BuildConflicts: post-build-checks
 BuildArch: noarch
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 
 %description
 This package contains the Warewulf Node Health Check system.
@@ -73,8 +74,8 @@ test "$RPM_BUILD_ROOT" != "/" && %{__rm} -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
-%{FSP_PUB}
-%doc COPYING ChangeLog LICENSE nhc.conf contrib/nhc.cron
+%{OHPC_PUB}
+%doc COPYING ChangeLog LICENSE
 %dir %{_sysconfdir}/%{sname}/
 %dir %{_localstatedir}/lib/%{sname}/
 %dir %{_localstatedir}/run/%{sname}/

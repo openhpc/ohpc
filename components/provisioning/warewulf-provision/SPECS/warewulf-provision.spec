@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -9,22 +9,24 @@
 #----------------------------------------------------------------------------eh-
 
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-%include %{_sourcedir}/FSP_macros
+
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
 
 %define pname warewulf-provision
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module
 Version: 3.6
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
-Group:   fsp/provisioning
+Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: %{pname}-%{version}.tar.gz
-Source1: FSP_macros
+Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-provision/warewulf-provision-%{version}.tar.gz
+Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 BuildRequires: warewulf-common%{PROJ_DELIM}
@@ -32,10 +34,13 @@ BuildRequires: libselinux-devel
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
-DocDir: %{FSP_PUB}/doc/contrib
+DocDir: %{OHPC_PUB}/doc/contrib
 Patch1: warewulf-provision.busybox.patch.bz2
 Patch2: warewulf-provision.httpdconfdir.patch
 Patch3: warewulf-provision.dhcpd.patch
+Patch4: warewulf-provision.init.patch
+Patch5: update_file_delay.patch
+Patch6: warewulf-provision.mkbootable.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -50,14 +55,14 @@ administrative tools.  To actually provision systems, the
 
 %package -n %{pname}-server%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module - Server
-Group: fsp/provisioning
+Group: %{PROJ_NAME}/provisioning
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
-Requires: apache2 apache2-mod_perl tftp dhcp-server
+Requires: apache2 apache2-mod_perl tftp dhcp-server xinetd
 %else
-Requires: mod_perl httpd tftp-server dhcp
+Requires: mod_perl httpd tftp-server dhcp xinetd
 %endif
 
 # charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf
@@ -102,7 +107,9 @@ available the included GPL software.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 %configure --localstatedir=%{wwpkgdir}
@@ -134,7 +141,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
-%{FSP_PUB}
+%{OHPC_PUB}
 %doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf

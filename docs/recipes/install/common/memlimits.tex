@@ -7,4 +7,17 @@ are submitted from the {\em master} host, and the following commands can be
 used to update the maximum locked memory settings on both the master host and
 the compute image:
 
+% begin_ohpc_run
+% ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Update memlock settings on master
+[sms](*\#*) echo "* soft memlock unlimited" >> /etc/security/limits.conf
+[sms](*\#*) echo "* hard memlock unlimited" >> /etc/security/limits.conf
+
+# Update memlock settings within compute image
+[sms](*\#*) echo "* soft memlock unlimited" >> $CHROOT/etc/security/limits.conf
+[sms](*\#*) echo "* hard memlock unlimited" >> $CHROOT/etc/security/limits.conf
+\end{lstlisting}
+% end_ohpc_run
+
 

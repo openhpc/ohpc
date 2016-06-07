@@ -1,0 +1,27 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+setup() {
+    if [ -z "$MODULEPATH" ];then
+        . /etc/profile.d/lmod.sh || exit 1
+    fi
+    module purge        || exit 1
+    module load clustershell || exit 1
+}
+
+@test "[clush] check for RPM" {
+    run check_if_rpm_installed "clustershell${DELIM}"
+    assert_success
+}
+
+@test "[clush] clush -aS" {
+    run clush -aS hostname
+    assert_success
+}

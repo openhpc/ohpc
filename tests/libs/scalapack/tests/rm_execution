@@ -1,0 +1,59 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+if [ "$RESOURCE_MANAGER" = "slurm" ];then
+    rm=slurm
+else
+    ERROR "Unsupported or unknown resource manager"
+    exit 1
+fi
+
+testname="libs/ScaLAPACK"
+
+NODES=2
+TASKS=8
+ARGS=0
+
+@test "[$testname/PCSCAEX] CPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s pcscaex ];then
+	flunk "pcscaex binary does not exit"
+    fi
+
+    run_mpi_binary ./pcscaex $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname/PDSCAEX] DPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s pdscaex ];then
+	flunk "pdscaex binary does not exit"
+    fi
+
+    run_mpi_binary ./pdscaex $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname/PSSCAEX] SPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s psscaex ];then
+	flunk "psscaex binary does not exit"
+    fi
+
+    run_mpi_binary ./psscaex $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname/PZSCAEX] ZPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s pzscaex ];then
+	flunk "pzscaex binary does not exit"
+    fi
+
+    run_mpi_binary ./pzscaex $ARGS $NODES $TASKS
+    assert_success
+}
+

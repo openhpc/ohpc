@@ -1,0 +1,88 @@
+--- /dev/null	2016-04-14 17:43:17.000000000 -0700
++++ warewulf-common-3.6.patch/lib/Warewulf/Init.pm	2016-04-14 17:39:30.000000000 -0700
+@@ -0,0 +1,43 @@
++# Copyright (c) 2001-2003 Gregory M. Kurtzer
++#
++# Copyright (c) 2003-2016, The Regents of the University of California,
++# through Lawrence Berkeley National Laboratory (subject to receipt of any
++# required approvals from the U.S. Dept. of Energy).  All rights reserved.
++#
++#
++# $Id: Config.pm 577 2011-08-11 23:41:04Z mej $
++#
++
++package Warewulf::Init;
++
++=head1 NAME
++
++Warewulf::Init - Warewulf base initialization and sanitization
++
++=head1 SYNOPSIS
++
++    use Warewulf::Init;
++
++=head1 DESCRIPTION
++
++This module simply runs any early Warewulf initialization and sanitization
++functions when the module loads.
++
++=cut
++
++
++delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
++
++
++=head1 COPYRIGHT
++
++Copyright (c) 2001-2003 Gregory M. Kurtzer
++
++Copyright (c) 2003-2011, The Regents of the University of California,
++through Lawrence Berkeley National Laboratory (subject to receipt of any
++required approvals from the U.S. Dept. of Energy).  All rights reserved.
++
++=cut
++
++
++1;
+--- warewulf-common-3.6/lib/Warewulf/Makefile.am	2014-05-21 11:12:17.000000000 -0700
++++ warewulf-common-3.6.patch/lib/Warewulf/Makefile.am	2016-04-14 17:44:18.000000000 -0700
+@@ -2,7 +2,7 @@
+ 
+ perlmodsdir = ${PERL_VENDORLIB}/Warewulf
+ 
+-dist_perlmods_SCRIPTS = ACVars.pm Config.pm Daemon.pm DataStore.pm Logger.pm Object.pm ObjectSet.pm Util.pm Module.pm ModuleLoader.pm Term.pm Event.pm EventHandler.pm Network.pm DSO.pm System.pm SystemFactory.pm ParallelCmd.pm Node.pm File.pm RetVal.pm
++dist_perlmods_SCRIPTS = ACVars.pm Config.pm Daemon.pm DataStore.pm Init.pm Logger.pm Object.pm ObjectSet.pm Util.pm Module.pm ModuleLoader.pm Term.pm Event.pm EventHandler.pm Network.pm DSO.pm System.pm SystemFactory.pm ParallelCmd.pm Node.pm File.pm RetVal.pm
+ 
+ MAINTAINERCLEANFILES = Makefile.in
+ 
+--- warewulf-common-3.6/bin/wwconfig	2014-05-21 11:14:43.000000000 -0700
++++ warewulf-common-3.6.patch/bin/wwconfig	2016-04-14 17:46:07.000000000 -0700
+@@ -9,6 +9,7 @@
+ # $Id: wwconfig 1680 2014-05-21 18:14:43Z gmk $
+ #
+ 
++use Warewulf::Init;
+ use Warewulf::ACVars;
+ use Getopt::Long;
+ 
+--- warewulf-common-3.6/bin/wwsh	2014-05-21 11:14:43.000000000 -0700
++++ warewulf-common-3.6.patch/bin/wwsh	2016-04-14 17:44:41.000000000 -0700
+@@ -13,6 +13,7 @@
+ use Term::ReadLine;
+ use File::Path;
+ use Text::ParseWords;
++use Warewulf::Init;
+ use Warewulf::Logger;
+ use Warewulf::Util;
+ use Warewulf::Config;
+--- warewulf-common-3.6/lib/Warewulf/Makefile.in	2014-05-28 11:03:09.000000000 -0700
++++ warewulf-common-3.6.patch/lib/Warewulf/Makefile.in	2016-04-14 18:47:32.000000000 -0700
+@@ -184,7 +184,7 @@
+ top_srcdir = @top_srcdir@
+ SUBDIRS = HTML DataStore Module DSO Event System
+ perlmodsdir = ${PERL_VENDORLIB}/Warewulf
+-dist_perlmods_SCRIPTS = ACVars.pm Config.pm Daemon.pm DataStore.pm Logger.pm Object.pm ObjectSet.pm Util.pm Module.pm ModuleLoader.pm Term.pm Event.pm EventHandler.pm Network.pm DSO.pm System.pm SystemFactory.pm ParallelCmd.pm Node.pm File.pm RetVal.pm
++dist_perlmods_SCRIPTS = ACVars.pm Config.pm Daemon.pm DataStore.pm Init.pm Logger.pm Object.pm ObjectSet.pm Util.pm Module.pm ModuleLoader.pm Term.pm Event.pm EventHandler.pm Network.pm DSO.pm System.pm SystemFactory.pm ParallelCmd.pm Node.pm File.pm RetVal.pm
+ MAINTAINERCLEANFILES = Makefile.in
+ all: all-recursive
+ 

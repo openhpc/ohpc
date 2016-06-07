@@ -1,0 +1,14 @@
+#%Module1.0#####################################################################
+# Test module environment
+#############################################################################
+
+proc ModulesHelp { } {
+puts stderr "Help message from test module"
+}
+
+module-whatis   "whatis: test-module"
+
+setenv          TEST_MODULE beeblebrox
+prepend-path    PATH        /my/test-module-path
+family          test_family
+

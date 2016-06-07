@@ -1,0 +1,15 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+@test "[BOS] OS distribution matches $BOS_RELEASE (local) " {
+    if [ ! -e /etc/$BOS_RELEASE ];then
+	flunk "Unexpected OS distribution detected - looking for $BOS_RELEASE"
+    fi
+}

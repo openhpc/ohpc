@@ -1,0 +1,45 @@
+USE_OPENMP = TRUE
+
+FFTW_INCL = -I${MKLROOT}/include/fftw
+
+ifeq ($(LMOD_FAMILY_COMPILER),gnu)
+    FFTW_LIBS = -L${MKLROOT}/lib/intel64 -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core -ldl
+    CFLAGS    = -O3
+    DFLAGS    = -D__GFORTRAN
+    FFLAGS    = -O3 -cpp -x f95-cpp-input
+    LDFLAGS   =
+else
+    FFTW_LIBS = -mkl
+    CFLAGS    = -O3
+    DFLAGS    = -D__INTEL
+    FFLAGS    = -fpp -O3
+    LDFLAGS   =
+endif
+
+ifeq ($(LMOD_FAMILY_MPI),openmpi)
+    BLAS_LIBS = -lmkl_blacs_openmpi_lp64
+else
+    BLAS_LIBS = -lmkl_blacs_intelmpi_lp64
+endif
+
+SCALAPACK_LIBS = -lmkl_scalapack_lp64
+
+CC = mpicc
+FC = mpif90
+LD = mpif90
+
+ifeq ($(USE_OPENMP), TRUE)
+    FFTW_LIBS += -lpthread -lm
+
+    ifeq ($(LMOD_FAMILY_COMPILER),gnu)
+        DFLAGS  +=
+        FFLAGS  += -fopenmp
+        LDFLAGS += -fopenmp
+    else
+        DFLAGS  += -D__OPENMP
+        FFLAGS  += -openmp
+        LDFLAGS += -openmp
+    endif
+endif
+
+include Makefile.base

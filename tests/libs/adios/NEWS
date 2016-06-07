@@ -1,0 +1,149 @@
+1.8.0 Release Dec 2014
+    - Query API 
+      - extends the read API with queries
+    - Staging over WAN (wide-area-network)
+      - ICEE method (requires FLEXPATH) 
+    - skeldump utility
+      - to generate info and code from output data to replay 
+        the I/O pattern
+    - bpmeta utility
+      - generates metadata file (.bp) separately after writing the 
+        data using MPI_AGGREGATE method with metadata writing turned off
+    - I/O timing statistics and timing events can be collected
+    - New stage writer code for staged I/O, where output data 
+      (list of variables and their sizes) is changing 
+      at every timestep. See examples/stage_write_varying
+    - fix: staging with multiple streams allowed
+    - fix: parallel build (make -j <n>) completes without breaking 
+        
+
+1.7.0 Release June 2014
+    - Support for more than 64k variables in a file 
+    - File system topology aware I/O method for Titan@OLCF
+    - DataSpaces staging 
+      - support for 64bit dimension sizes 
+      - support for more than three dimensions
+      - works on Bluegene/Q (DataSpaces+DIMES methods)
+      - can run as a service (dynamic connections)
+    - Additions to non-XML Write API: 
+      - Support for the visualization schema
+      - adios_set_transform() to choose the transformation
+        for a variable
+    - Usability improvements:
+      - CMake Module for find_package(ADIOS)
+      - adios_config -m to print available write/read methods
+
+
+1.6.0 Release Dec 2013
+    - Transformations of data supported in file-based I/O
+      - lossless compression (zlib, bzip, szip)
+      - lossless compression (ISOBAR)
+      - precision-level-of-detail encoding (APLOD)
+    - Changes to Write API:
+      - variables are identified by full path at writing
+      - fix: all int functions return 0 as OK and !=0 on error
+    - Changes to Read API:
+      - Read API extensions to get information about the 
+        visualization meshes defined in a file
+      - leading / in path names is not enforced
+    - New I/O method for Bluegene/Q called "BGQ"
+        configure with the option --with-bgq
+    - Removed performance bottleneck in metadata operations when 
+      writing/reading thousands of variables. 
+    - fix: one can build ADIOS separately from the source with automake
+
+
+1.5.0 Release June 2013
+    - Changes to Write API: 
+      - adios_init() and adios_init_noxml() has MPI_Comm argument
+      - adios_open() has MPI_comm argument instead of void * argument
+    - Changes to Read API:
+      - adios_read_open_stream() obsolete and now it's called
+        adios_read_open() indicating that it's used for both
+        files and staged data.
+    - New staging methods:
+      - DIMES
+      - FLEXPATH
+    - CMAKE build files (besides Automake files)
+    - New write method VAR_MERGE for spatial aggregation of 
+      small per-process-output into larger chunks. It improves both
+      write and read performance for such applications. 
+    - fix: segfault in adios_inq_var_blockinfo()
+    - fix: endianness independence (
+    - fix: in adios_inq_var_stat() for getting statistics (avg, std.dev)
+    - fix: backward compatibility in reading old BP files containing 
+           scalars over time (a 1D array)
+
+1.4.1 Release Dec 2012
+    - aggregated file reader method (from 1.3.1): 
+      use ADIOS_READ_METHOD_BP_AGGREGATE
+    - memory limitation specified by user for chunked reading 
+      now taken into account in file reading
+    - stage writer example code for staged I/O
+      see examples/stage_write
+    - code coupling example code for file-based/staged coupling
+      see examples/coupling
+    - bp2h5 supports converting complex and double complex types
+    - new adios_write_byid() function to write multiple-blocks of
+      the same global array from a process
+    - fix: F90 modules: adios_write, adios_schedule_read
+    - fix: invalid "out of bound" errors when reading multiple steps 
+           of multi-dimensional arrays
+    - fix: double-free bug in support of old read API in Fortran
+    - fix: backward compatibility of old read API to read multi-group 
+           files (fixed "invalid variable id..." errors)
+
+1.4.0 Release July 2012
+    - new read API for staging method with step-by-step processing, 
+       also with non-blocking and chunking APIs
+    - visualization schema added to ADIOS XML format
+    - skel: I/O skeleton generator and evaluation tools
+    - unified error/debug logging
+    - attributes written from only 1 processor to save on metadata
+    - ADIOS version identifier in ADIOS-BP format
+    - extra hidden attributes (version, create/update times) 
+    - Java and Python bindings
+    - F90 modules adios_write_mod and adios_read_mod 
+          to check syntax at compile time
+
+
+1.3.1 Released Nov 2011
+    - fix: non-compliant MPI collective calls
+    - fix: MPI_AMR method caused MPI_Finalize issues on some clusters
+    - fix: histogram calculation: freeing memory too early
+
+1.3 Released July 12, 2011
+    - New read method BP_STAGED for reading files with improved performance
+    - Changes in MPI_AMR and MPI_LUSTRE to support default parameters. 
+      Parameters for MPI_LUSTRE and MPI_AMR in XML file are not mandatory 
+      any more.
+
+1.2.1 Released Aug 25, 2010
+    - Bug fix in read API (arrays written every timestep but without time 
+      dimension caused aborts)
+    - DIMES method from Rutgers
+
+1.2 Released July 15, 2010
+    - XML and non-XML write APIs are available
+    - More statistics (min/max/avg/std.dev) available without
+      overhead in write performance
+    - Added MPI_AMR method for advanced mesh refinement codes and
+      for aggregated writing (N procs to P writers to M disks)
+    - Added support for subfiles
+      - POSIX method many-file output can be read as one file
+      - MPI_AMR method uses subfiles to improve write performance
+    - Added NetCDF-4 transport method
+    - Asynchronous, staging methods on Jaguar XT5 at ORNL
+      - DataTap from Georgia Tech
+      - DataSpaces from Rutgers
+      - NSSI from Sandia
+    - MPI_LUSTRE method for best performance on Lustre file system
+
+
+1.0.1  Released on Dec 9, 2009
+    - fix: builds read API on Mac (was broken at utils/bpdump)
+    - fix: Fortran written BP files are correctly read by Fortran readers
+    - added adios_mpi_stripe2 method for improved performance on Lustre 
+      file system
+
+1.0  Released on Nov 18, 2009

@@ -1,0 +1,29 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+else
+    ERROR "missing TEST_ENV"
+fi
+
+@test "[Apps/MiniDFT] build MiniDFT executable ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    # force delete exe
+    rm -f $TEST_EXE $TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI >& /dev/null
+
+    # build exe
+    pushd src                  >& /dev/null
+    make -f Makefile.ohpc clean >& /dev/null
+    make -f Makefile.ohpc       >& /dev/null
+    popd                       >& /dev/null
+
+    if [ ! -s $TEST_EXE ];then
+        flunk "failed to create $TEST_EXE"
+    fi
+
+    # rename exe
+    cp -f $TEST_EXE $TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
+}

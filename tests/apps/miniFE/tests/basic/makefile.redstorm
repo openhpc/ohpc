@@ -1,0 +1,21 @@
+#-----------------------------------------------------------------------
+
+MINIFE_TYPES =  \
+	-DMINIFE_SCALAR=double   \
+	-DMINIFE_LOCAL_ORDINAL=int      \
+	-DMINIFE_GLOBAL_ORDINAL=int
+
+#-----------------------------------------------------------------------
+
+CFLAGS = -O3
+CXXFLAGS = -O3
+CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES) -DHAVE_MPI -DMPICH_IGNORE_CXX_SEEK  -DREDSTORM
+
+# The MPICH_IGNORE_CXX_SEEK macro is required for some mpich versions,
+# such as the one on my cygwin machine.
+
+CXX=CC
+CC=cc
+
+include make_targets
+include ./optional/make_targets

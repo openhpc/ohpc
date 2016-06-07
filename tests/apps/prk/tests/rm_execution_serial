@@ -1,0 +1,72 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+   . ./TEST_ENV
+else
+    ERROR "TEST_ENV does not exist"
+fi
+
+app="App/PRK"
+mode=SERIAL
+rm=$RESOURCE_MANAGER
+NUMITERS=$TEST_NUM_ITERS
+
+@test "[$app] $mode/Branch run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Branch/branch"
+    for type in vector_go vector_stop no_vector ins_heavy; do
+	run_serial_binary -t $CMD_TIMEOUT $exe $NUMITERS 1000 $type
+	assert_success
+    done
+}
+
+@test "[$app] $mode/DGEMM run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/DGEMM/dgemm"
+    run_serial_binary -t $CMD_TIMEOUT $exe $NUMITERS 500 32
+    assert_success
+}
+
+@test "[$app] $mode/Nstream run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Nstream/nstream"
+    run_serial_binary -t $CMD_TIMEOUT $exe $NUMITERS 2000000 0
+    assert_success
+}
+
+@test "[$app] $mode/Random run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Random/random"
+    run_serial_binary -t $CMD_TIMEOUT $exe 20 16 4
+    assert_success
+}
+
+@test "[$app] $mode/Reduce run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Reduce/reduce"
+    run_serial_binary -t $CMD_TIMEOUT $exe $NUMITERS 2000000
+    assert_success
+}
+
+@test "[$app] $mode/Sparse run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Sparse/sparse"
+    run_serial_binary -t $CMD_TIMEOUT $exe $NUMITERS 10 4
+    assert_success
+}
+
+@test "[$app] $mode/Stencil run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Stencil/stencil"
+    run_serial_binary -t $CMD_TIMEOUT $exe $NUMITERS 1000
+    assert_success
+}
+
+@test "[$app] $mode/Synch_p2p run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Synch_p2p/p2p"
+    run_serial_binary -t $CMD_TIMEOUT $exe $NUMITERS 1000 100
+    assert_success
+}
+
+@test "[$app] $mode/Transpose run under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    exe="$mode/Transpose/transpose"
+    run_serial_binary -t $CMD_TIMEOUT $exe $NUMITERS 2000 64
+    assert_success
+}

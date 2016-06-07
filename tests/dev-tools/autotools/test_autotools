@@ -1,0 +1,35 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions           || exit 1
+
+if [ -s ./LOCAL_ENV ];then
+    source ./LOCAL_ENV
+else
+    ERROR "missing LOCAL_ENV"
+fi
+
+@test "[$TEST_DIR] running autoreconf" {
+    pushd test
+    autoreconf --verbose --force --install
+    popd
+}
+
+@test "[$TEST_DIR] run generated configure" {
+    pushd test
+    ./configure
+    popd
+}
+
+@test "[$TEST_DIR] run make on generated Makefile" {
+    pushd test
+    make
+    popd
+}
+
+@test "[$TEST_DIR] run compiled binary" {
+   pushd test/src
+   ./helloworld
+   popd
+}

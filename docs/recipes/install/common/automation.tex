@@ -3,64 +3,11 @@ The collection of command-line instructions that follow in this guide, when
 combined with local site inputs, can be used to implement a 
 bare-metal system installation and configuration. The format of these commands
 is intended to be usable via direct cut and paste (with variable substitution
-for site-specific settings). Alternatively, the \FSP{} documentation package
-includes a template script which includes a summary of all of the commands used
-herein. This script can be used in conjunction with a simple text file to
-define the local site variables defined in the previous section
-(\S~\ref{sec:inputs}) and is provided as a convenience for administrators.  For
-additional information on accessing this script, please see
+for site-specific settings). Alternatively, the \OHPC{} documentation package
+(\texttt{docs-ohpc}) includes a template script which includes a summary of all 
+of the commands used herein. This script can be used in conjunction with a 
+simple text file to define the local site variables defined in the previous 
+section (\S~\ref{sec:inputs}) and is provided as a convenience for 
+administrators. For additional information on accessing this script, please see
 Appendix~\ref{appendix:template_script}.
-
-%of this template scr
-
-%assembled into a script locally for 
-
-%% To aid in direct usage of the
-%% commands called out in this particular recipe, and to also allow for potential
-%% site customization, the \FSP{} documentation package includes a template script
-%% summarizing the commands used herein.  
-
-%% By default, the template install script attempts to use local variable settings
-%% sourced from the \path{/opt/fsp/pub/doc/recipes/vanilla/input.local} file,
-%% however, this choice can be overridden by the use of the
-%% \texttt{FSP\_INPUT\_LOCAL} environment variable. The template install script is
-%% intended for execution on the SMS {\em master} host and is installed as part of
-%% the \texttt{docs-fsp} package into \path{/opt/fsp/pub/doc/recipes/vanilla/recipe.sh}.
-%% After reviewing the guide for additional information on the intent of the
-%% commands, the general starting approach for using this template is as follows:
-
-%% \begin{enumerate}
-%% \item Install the \texttt{docs-fsp} package
-
-%% \begin{lstlisting}[language=bash,keywords={}]
-%% [master]$ (*\install*) docs-fsp
-%% \end{lstlisting}
-
-%% \item Copy the provided template input file to use as a starting point to
-%%   define local site settings:
-%% \begin{lstlisting}
-%% [master]$ cp /opt/fsp/pub/doc/recipes/input.local.template input.local
-%% \end{lstlisting}
-
-%% \item Update \path{input.local} with desired settings
-
-%% \item Copy the template installation script which contains comman-line
-%%   instructions culled from this guide.
-
-%% \begin{lstlisting}[language=bash,keywords={}]
-%% [master]$ cp -p /opt/fsp/pub/doc/recipes/vanilla/recipe.sh .
-%% \end{lstlisting}
-
-%% \item Review and edit \path{recipe.sh} to suite.
-
-%% \item Use environment variable to define local input file and execute
-%%   \path{recipe.sh} to perform a local installation.
-
-%% \begin{lstlisting}[language=bash,keywords={}]
-%% [master]$ export FSP_INPUT_LOCAL=./input.local
-%% [master]$ ./recipe.sh
-%% \end{lstlisting}
-%% \end{enumerate}
-
-
 

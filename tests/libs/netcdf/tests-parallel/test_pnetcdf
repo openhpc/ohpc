@@ -1,0 +1,56 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions
+source ./common/functions || exit 1
+
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
+fi
+
+check_rms
+
+testname="libs/NetCDF"
+delimiter="$RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
+
+
+@test "[$testname] C parallel I/O  ($delimiter)" {
+    if [ ! -x C_parallel ];then
+        flunk "C_parallel binary not available"
+    fi
+
+    rm -f tst_parallel.nc
+
+    run_mpi_binary ./C_parallel "atest" 2 4
+    assert_success
+
+    run ls tst_parallel.nc
+    assert_success
+
+    run cmp tst_parallel.nc tst_parallel.nc.ref 
+    assert_success
+
+    rm -f tst_parallel.nc
+}
+
+
+@test "[$testname] Fortran parallel I/O ($delimiter)" {
+    if [ ! -x F90_parallel ];then
+        flunk "F90_parallel binary not available"
+    fi
+
+    rm -f f90tst_parallel.nc
+
+    run_mpi_binary ./F90_parallel "atest" 2 4
+    assert_success
+
+    run ls f90tst_parallel.nc
+    assert_success
+
+    run cmp f90tst_parallel.nc f90tst_parallel.nc.ref 
+    assert_success
+
+    rm -f f90tst_parallel.nc
+}
+
+

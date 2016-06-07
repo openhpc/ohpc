@@ -1,0 +1,27 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./LOCAL_ENV ];then
+    source ./LOCAL_ENV
+else
+    ERROR "missing LOCAL_ENV"
+fi
+
+@test "[$TEST_DIR] build HPCG executable ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    # force delete exe
+    rm -f $TEST_EXE $TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
+
+    # build exe
+    make -f Makefile.ohpc clean
+    make -f Makefile.ohpc -j 4
+
+    if [ ! -s $TEST_EXE ];then
+        flunk "failed to create $TEST_EXE"
+    fi
+
+    # rename exe
+    cp -f $TEST_EXE $TEST_EXE.$LMOD_FAMILY_COMPILER.$LMOD_FAMILY_MPI
+}

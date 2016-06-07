@@ -1,0 +1,10 @@
+autoconf-ohpc 2.69 http://www.gnu.org/software/autoconf/ ohpc/dev-tools A GNU tool for automatically configuring source code
+automake-ohpc 1.15 http://www.gnu.org/software/automake/ ohpc/dev-tools A GNU tool for automatically creating Makefiles
+intel-inspector-ohpc 16.1.2.450824 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/dev-tools Intel(R) Inspector XE
+libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
+python-numpy-gnu-ohpc 1.10.2 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
+python-numpy-intel-ohpc 1.10.2 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
+python-scipy-gnu-mvapich2-ohpc 0.16.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python-scipy-gnu-openmpi-ohpc 0.16.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+R_base-ohpc 3.2.3 http://www.r-project.org/ ohpc/dev-tools R is a language and environment for statistical computing and graphics (S-Plus like).
+valgrind-ohpc 3.10.1 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------bh-
-# This RPM .spec file is part of the Performance Peak project.
+# This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
 # release package (if available) in order to apply patches, perform customized
@@ -8,21 +8,22 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/FSP_macros
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-%define pname intel-compilers
-%{!?PROJ_DELIM:%define PROJ_DELIM %{nil}}
+%global pname intel-compilers
 
 Summary:   Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
-Version:   16.0.069
+Version:   16.2.181
 Release:   1
 License:   Intel(R)
-URL:       http://www.intel.com/software/products
-Group:     fsp/compiler-families
+URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
+Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-fsp-16.0.0-069.tar.gz
-Source1:   FSP_macros
+Source0:   intel-compilers%{PROJ_DELIM}-16.0.2-181.tar.gz
+Source1:   OHPC_macros
+Source2:   modfile-ohpc.input
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
@@ -36,13 +37,13 @@ requires: gcc-c++
 %define debug_package %{nil}
 
 %define composer_release compilers_and_libraries_20%{version}
-%define package_target %{FSP_COMPILERS}/intel
+%define package_target %{OHPC_COMPILERS}/intel
 
-%define module_version  16.0.0.069
+%define module_version 16.0.2.181
 
 %description
 
-FSP collection of runtime packages for Intel(R) Parallel Studio
+OpenHPC collection of runtime packages for Intel(R) Parallel Studio
 compiler suite (including compilers for C,C++, and Fortran).
 
 
@@ -58,9 +59,9 @@ cd %{buildroot}
 
 cd -
 
-# FSP module file
-%{__mkdir} -p %{buildroot}/%{FSP_MODULES}/intel
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/%{module_version}
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -82,37 +83,24 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-compilers/"
 set     version			    %{version}
 
 # update module path hierarchy
-prepend-path    MODULEPATH          /opt/fsp/pub/moduledeps/intel
-
-setenv          MKLROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/mkl
-prepend-path    PATH                %{package_target}/compilers_and_libraries_20%{version}/linux/bin/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mpirt/bin/intel64_lin:%{package_target}/debugger_2016/gdb/intel64_mic/bin
-prepend-path    MANPATH             %{package_target}/documentation_2016/en/man/common/:%{package_target}/documentation_2016/en/debugger/gdb-ia/man/:%{package_target}/documentation_2016/en/debugger/gdb-mic/man/:%{package_target}/documentation_2016/en/debugger/gdb-igfx/man/:
-
-prepend-path    LIBRARY_PATH        %{package_target}/compilers_and_libraries_20%{version}/linux/ipp/../compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../tbb/lib/intel64_lin/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../compiler/lib/intel64_lin
-prepend-path    LD_LIBRARY_PATH     %{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mpirt/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/../compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/ipp/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4:%{package_target}/debugger_2016/libipt/intel64/lib:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/lib/intel64_lin:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../tbb/lib/intel64_lin/gcc4.4:%{package_target}/compilers_and_libraries_20%{version}/linux/daal/../compiler/lib/intel64_lin
- 
-prepend-path    MIC_LD_LIBRARY_PATH %{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/compiler/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/mic:%{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/mic
-
-setenv          GDBSERVER_MIC       %{package_target}/debugger_2016/gdb/targets/mic/bin/gdbserver
-setenv          GDB_CROSS           %{package_target}/debugger_2016/gdb/intel64_mic/bin/gdb-mic
-setenv          INTEL_PYTHONHOME    %{package_target}/debugger_2016/python/intel64/
-setenv          MPM_LAUNCHER        %{package_target}/debugger_2016/mpm/mic/bin/start_mpm.sh
-setenv          TBBROOT             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb
-setenv          TBB_INC             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/include
-setenv          TBB_LIB             %{package_target}/compilers_and_libraries_20%{version}/linux/tbb/lib/intel64/gcc4.4
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/intel
 
 family "compiler"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULES}/intel/.version.%{module_version}
+# Append machine-generated module settings
+ 
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/.version.%{module_version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "%{module_version}"
 EOF
 
 # Provide standalone module for use with GNU toolchain
 
-%{__mkdir} -p %{buildroot}/%{FSP_MODULEDEPS}/gnu/mkl
-%{__cat} << EOF > %{buildroot}/%{FSP_MODULEDEPS}/gnu/mkl/%{module_version}
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/mkl
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/mkl/%{module_version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -142,7 +130,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{FSP_HOME}
+%{OHPC_HOME}
 
 %changelog
 

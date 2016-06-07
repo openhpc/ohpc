@@ -1,0 +1,32 @@
+The \Warewulf{} system includes functionality to import arbitrary files from
+the provisioning server for distribution to managed hosts. This is one way to
+distribute user credentials to {\em compute} hosts. It also provides a
+convenient mechanism to provide necessary global configuration files required
+by services such as Slurm. To import local file-based credentials, issue the
+following:
+
+% begin_ohpc_run
+% ohpc_comment_header Import files \ref{sec:file_import}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) wwsh file import /etc/passwd
+[sms](*\#*) wwsh file import /etc/group
+[sms](*\#*) wwsh file import /etc/shadow 
+
+\end{lstlisting}
+% \end_ohpc_run
+
+\noindent Similarly, to import the global Slurm configuration file and the cryptographic
+key that is required by the {\em munge} authentication library to be available
+on every host in the resource management pool, issue the following:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) wwsh file import /etc/slurm/slurm.conf
+[sms](*\#*) wwsh file import /etc/munge/munge.key
+\end{lstlisting}
+% \end_ohpc_run
+
+\noindent Finally, to add {\em optional} support for controlling IPoIB
+interfaces (see \S\ref{sec:add_ofed}), \OHPC{} includes a
+template file for \Warewulf{} that can optionally be imported and used later to provision
+\texttt{ib0} network settings.

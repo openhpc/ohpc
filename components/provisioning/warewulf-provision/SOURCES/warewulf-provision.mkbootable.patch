@@ -1,0 +1,94 @@
+--- warewulf-provision-3.6/initramfs/capabilities/setup-filesystems/80-mkbootable	2014-05-21 11:13:01.000000000 -0700
++++ warewulf-provision-3.6.patch/initramfs/capabilities/setup-filesystems/80-mkbootable	2016-03-26 10:41:57.000000000 -0700
+@@ -20,6 +20,9 @@
+             if [ -x "$NEWROOT/sbin/dracut" ]; then
+                 chroot $NEWROOT /sbin/dracut --force '' $KERNELVERSION
+                 INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
++            elif [ -x "$NEWROOT/usr/bin/dracut" ]; then
++                chroot $NEWROOT /usr/bin/dracut --force '' $KERNELVERSION
++                INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
+             elif [ -x "$NEWROOT/sbin/mkinitrd" ]; then
+                 INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
+                 if [ -n "$INITRD" ]; then
+@@ -29,10 +32,51 @@
+                 chroot $NEWROOT /sbin/mkinitrd -f $INITRD $KERNELVERSION
+                 umount $NEWROOT/sys
+             fi
++            if [ -z "${WWKARGS}" ]; then
++                WWKARGS="quiet"
++            fi
++            if [ -n "${WWCONSOLE}" ]; then
++                # Parse the kernel console option for serial settings for grub
++                sed_serial() { echo $1 | sed -nr "s/.*ttyS([0-9]),([0-9]{4,6})([n,o,e])?([5-8])?(r)?.*/\\${2}/p"; }
++                SERIALUNIT=`sed_serial ${WWCONSOLE} 1`
++                SERIALSPEED=`sed_serial ${WWCONSOLE} 2`
++                if [ -z $SERIALSPEED ]; then
++                    SERIALSPEED=115200
++                fi
++                SERIALPARITY=`sed_serial ${WWCONSOLE} 3`
++                if [ -z $SERIALPARITY ] || [ "$SERIALPARITY" = "n" ]; then
++                    SERIALPARITY=no
++                elif [ $SERIALPARITY = "o" ]; then
++                    SERIALPARITY=odd
++                elif [ $SERIALPARITY = "e" ]; then
++                    SERIALPARITY=even
++                fi
++                SERIALWORD=`sed_serial ${WWCONSOLE} 4`
++                if [ -z $SERIALWORD ]; then
++                    SERIALWORD=8
++                fi
++            fi
+ 
+-            if [ -x "$NEWROOT/sbin/grub-install" ]; then
+-                ROOTDEV=`cat /tmp/rootdev`
++            if [ -x "$NEWROOT/usr/sbin/grub2-install" ]; then
++                if [ -n "${WWCONSOLE}" ]; then
++                    echo "GRUB_CMDLINE_LINUX='${WWKARGS} console=tty0 console=${WWCONSOLE}'" >> $NEWROOT/etc/default/grub
++                    if [ -n SERIALUNIT ]; then
++                        echo "GRUB_TERMINAL='console serial'" >> $NEWROOT/etc/default/grub
++                        echo "GRUB_SERIAL_COMMAND='serial --speed=${SERIALSPEED} --unit=${SERIALUNIT} --word=${SERIALWORD} --parity=${SERIALPARITY}'" >> $NEWROOT/etc/default/grub
++                    fi
++                else
++                    echo "GRUB_CMDLINE_LINUX='${WWKARGS}'" >> $NEWROOT/etc/default/grub
++                fi                    
++                chroot $NEWROOT /usr/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg >/dev/null
+ 
++                if chroot $NEWROOT /usr/sbin/grub2-install $WWBOOTLOADER >/dev/null; then
++                    exit 0
++                else
++                    echo "grub2-install failed."
++                    exit 255
++                fi
++            elif [ -x "$NEWROOT/sbin/grub-install" ]; then
++                ROOTDEV=`cat /tmp/rootdev`
+                 if [ -n "$INITRD" -a -n "$KERNEL" ]; then
+                     if [ -f "$NEWROOT/etc/redhat-release" ]; then
+                         OSVERSION=`sed -e 's@ (.*@@' $NEWROOT/etc/redhat-release`
+@@ -47,21 +88,22 @@
+                             KERNEL=${KERNEL##boot/}
+                         fi
+                     fi
+-                    if [ -z ${WWKARGS} ]; then
+-                        WWKARGS="quiet"
+-                    fi
+ 
+                     echo "# This file was written by Warewulf bootstrap (capability setup-filesystems)" > $NEWROOT/boot/grub/device.map
+                     echo "(hd0) $WWBOOTLOADER" >> $NEWROOT/boot/grub/device.map
+ 
+                     echo "# This file was written by Warewulf bootstrap (capability setup-filesystems)" > $NEWROOT/boot/grub/grub.conf
++                    if [ -n $SERIALUNIT ]; then
++                        echo "serial --speed=${SERIALSPEED} --unit=${SERIALUNIT} --word=${SERIALWORD} --parity=${SERIALPARITY}" >> $NEWROOT/boot/grub/grub.conf
++                        echo "terminal_input console serial; terminal_output console serial" >> $NEWROOT/boot/grub/grub.conf
++                    fi
+                     echo "default 0" >>$NEWROOT/boot/grub/grub.conf
+                     echo "timeout 10" >>$NEWROOT/boot/grub/grub.conf
+                     echo "root (hd0,0)" >>$NEWROOT/boot/grub/grub.conf
+                     echo "" >>$NEWROOT/boot/grub/grub.conf
+                     echo "title $OSVERSION - $KERNELVERSION" >>$NEWROOT/boot/grub/grub.conf
+-                    if [ -n $WWCONSOLE ]; then
+-                        echo "    kernel /$KERNEL ro root=$ROOTDEV rhgb ${WWKARGS} console=${WWCONSOLE}" >>$NEWROOT/boot/grub/grub.conf
++                    if [ -n "${WWCONSOLE}" ]; then
++                        echo "    kernel /$KERNEL ro root=$ROOTDEV rhgb ${WWKARGS} console=tty0 console=${WWCONSOLE}" >>$NEWROOT/boot/grub/grub.conf
+                     else
+                         echo "    kernel /$KERNEL ro root=$ROOTDEV rhgb ${WWKARGS}" >>$NEWROOT/boot/grub/grub.conf
+                     fi
