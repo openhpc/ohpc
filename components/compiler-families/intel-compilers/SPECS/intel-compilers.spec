@@ -32,6 +32,10 @@ AutoReq: no
 #%define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
 
 requires: gcc-c++
+requires: intel-ifort-l-ps-210
+requires: intel-ifort-l-ps-devel-210
+requires: intel-icc-l-all-vars-210
+
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
