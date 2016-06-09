@@ -13,12 +13,12 @@
 
 %define pname intel-compilers-devel
 
-%define major_ver 16
-%define update_num 3
-%define build_id 210
+%{!?major_ver:  %define major_ver 16}
+%{!?update_num: %define update_num 3}
+%{!?build_id:   %define build_id 210}
 
 Summary:   Intel(R) Parallel Studio XE compatability package for OpenHPC
-Name:      %{pname}-%{build_id}%{PROJ_DELIM}
+Name:      %{pname}%{PROJ_DELIM}
 Version:   %{major_ver}.%{update_num}.%{build_id}
 Release:   1
 License:   Apache-2.0
