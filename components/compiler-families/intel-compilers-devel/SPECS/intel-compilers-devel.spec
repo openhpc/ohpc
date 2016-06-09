@@ -26,6 +26,7 @@ URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
 Source1:   OHPC_macros
+Source2:   modfile-ohpc.input
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
