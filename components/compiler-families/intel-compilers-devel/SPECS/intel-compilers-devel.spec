@@ -55,6 +55,7 @@ Studio compiler suite.
 %install
 
 # Parse provided shell script to derive appropriate module settings
+%{__chmod} +x %{SOURCE3}
 %{SOURCE3} %{package_target}/%{composer_release}/linux/bin/compilervars.sh -arch intel64 -platform linux > modfile-ohpc.input
 
 # OpenHPC module file
