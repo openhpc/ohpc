@@ -13,38 +13,36 @@
 
 %define pname intel-compilers-devel
 
-Summary:   Intel(R) Parallel Studio XE
-Name:      %{pname}%{PROJ_DELIM}
-Version:   16.2.181
+%define major_ver 16
+%define update_num 3
+%define build_id 210
+
+Summary:   Intel(R) Parallel Studio XE compatability package for OpenHPC
+Name:      %{pname}-%{build_id}%{PROJ_DELIM}
+Version:   %{major_ver}.%{update_num}.%{build_id}
 Release:   1
-License:   Intel(R)
-URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
+License:   Apache-2.0
+URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers-devel%{PROJ_DELIM}-16.0.2-181.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
-%define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
-%define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
-%define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
-
 requires: gcc-c++
-requires: intel-compilers%{PROJ_DELIM}
-
-#!BuildIgnore: post-build-checks rpmlint-Factory
-%define debug_package %{nil}
+requires: intel-icc-l-all-%{build_id}
+requires: intel-ifort-l-ps-devel-%{build_id}
 
 %define composer_release compilers_and_libraries_20%{version}
-%define package_target %{OHPC_COMPILERS}/intel
+%define package_target /opt/intel
 
 %define package_version %{version}
+%define module_version %{major_ver}.0.%{update_num}.%{build_id}
 
 %description
 
-OpenHPC collection of development packages for Intel(R) Parallel Studio
-compiler suite (including compilers for C,C++, and Fortran).
+Provides OpenHPC-style compatible modules for use with the Intel(R) Parallel
+Studio compiler suite.
 
 %prep
 
@@ -52,12 +50,70 @@ compiler suite (including compilers for C,C++, and Fortran).
 
 %install
 
-%{__mkdir} -p %{buildroot}/
-cd %{buildroot}
-%{__tar} xfz %{SOURCE0}
-cd -
+# OpenHPC module file
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
+#%Module1.0#####################################################################
 
-export NO_BRP_CHECK_RPATH true
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "See the man pages for icc, icpc, and ifort for detailed information"
+puts stderr "on available compiler options and command-line syntax."
+
+puts stderr "\nVersion %{module_version}\n"
+
+}
+
+module-whatis "Name: Intel Compiler"
+module-whatis "Version: %{version}"
+module-whatis "Category: compiler, runtime support"
+module-whatis "Description: Intel Compiler Family (C/C++/Fortran for x86_64)"
+module-whatis "URL: http://software.intel.com/en-us/articles/intel-compilers/"
+
+set     version			    %{version}
+
+# update module path hierarchy
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/intel
+
+family "compiler"
+EOF
+
+# Append machine-generated module settings
+ 
+%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/.version.%{module_version}
+#%Module1.0#####################################################################
+set     ModulesVersion      "%{module_version}"
+EOF
+
+# Provide standalone module for use with GNU toolchain
+
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/mkl
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/mkl/%{module_version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "Sets MKLROOT environment variable"
+puts stderr " "
+puts stderr "%{module_version}"
+
+}
+
+module-whatis "Name: Intel Math Kernel Library"
+module-whatis "Version: %{version}"
+module-whatis "Category: library, runtime support"
+module-whatis "Description: Intel Math Kernel Library for C/C++ and Fortran"
+module-whatis "URL: https://software.intel.com/en-us/en-us/intel-mkl"
+
+setenv	        MKLROOT 	    %{package_target}/compilers_and_libraries_20%{version}/linux/mkl
+prepend-path    LD_LIBRARY_PATH     %{package_target}/compilers_and_libraries_20%{version}/linux/mkl/lib/intel64
+
+EOF
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
