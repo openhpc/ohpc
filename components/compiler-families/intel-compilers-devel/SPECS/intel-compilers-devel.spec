@@ -26,13 +26,16 @@ URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
 Source1:   OHPC_macros
-Source2:   modfile-ohpc.input
+#Source2:   modfile-ohpc.input
+Source3:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
-requires: gcc-c++
-requires: intel-icc-l-all-%{build_id}
-requires: intel-ifort-l-ps-devel-%{build_id}
+BuildRequires: intel-icc-l-all-%{build_id}
+
+Requires: gcc-c++
+Requires: intel-icc-l-all-%{build_id}
+Requires: intel-ifort-l-ps-devel-%{build_id}
 
 %define composer_release compilers_and_libraries_20%{version}
 %define package_target /opt/intel
@@ -50,6 +53,9 @@ Studio compiler suite.
 %build
 
 %install
+
+# Parse provided shell script to derive appropriate module settings
+%{SOURCE3} %{package_target}/%{compiler_release}/linux/bin/compilervars.sh -arch intel64 -platform linux > modfile-ohpc.input
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
@@ -82,7 +88,7 @@ EOF
 
 # Append machine-generated module settings
  
-%{__cat} %{SOURCE2} >> %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
+%{__cat} modfile-ohpc.input >> %{buildroot}/%{OHPC_MODULES}/intel/%{module_version}
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/intel/.version.%{module_version}
 #%Module1.0#####################################################################
