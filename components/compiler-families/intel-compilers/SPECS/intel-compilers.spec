@@ -15,7 +15,7 @@
 
 Summary:   Intel(R) Parallel Studio XE compatability packages for OpenHPC
 Name:      %{pname}%{PROJ_DELIM}
-Version:   16.2.181
+Version:   16.3.210
 Release:   1
 License:   Intel(R)
 URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
@@ -41,9 +41,9 @@ requires: intel-icc-l-all-vars-210
 %define debug_package %{nil}
 
 %define composer_release compilers_and_libraries_20%{version}
-%define package_target %{OHPC_COMPILERS}/intel
+%define package_target /opt/intel
 
-%define module_version 16.0.2.181
+%define module_version 16.0.3.210
 
 %description
 
