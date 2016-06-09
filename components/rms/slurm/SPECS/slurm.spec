@@ -568,7 +568,10 @@ echo "SlurmctldLogFile=/var/log/slurmctld.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}
 echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-
+# 5/31/16 nirmalasrjn@gmail.com - Adding FastSchedule Directive to starting config file
+#echo "FastSchedule=0" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
+# 6/3/16 nirmalasrjn@gmail.com - Adding ReturnToService Directive to starting config file
+echo "ReturnToService=1" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 # 9/17/14 karl.w.schulz@intel.com - Add option to drop VM cache during epilog
 sed -i '/^# No other SLURM jobs,/i \\n# Drop clean caches (OpenHPC)\necho 3 > /proc/sys/vm/drop_caches\n\n#' $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.epilog.clean
 
