@@ -35,6 +35,7 @@ requires: gcc-c++
 requires: intel-ifort-l-ps-210
 requires: intel-ifort-l-ps-devel-210
 requires: intel-icc-l-all-vars-210
+requires: intel-icc-l-all-210
 
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
