@@ -11,7 +11,7 @@ fi
 
 # environment variables to ignore
 
-ignoreVars="^SHLVL=|^INTEL_LICENSE_FILE=|^PWD=|^_=^WARNING:"
+ignoreVars="^SHLVL=|^INTEL_LICENSE_FILE=|^PWD=|^_=|^WARNING:"
 
 inFile=$1
 shift
