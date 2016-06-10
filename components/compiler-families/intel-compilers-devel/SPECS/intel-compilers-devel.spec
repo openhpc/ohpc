@@ -37,10 +37,12 @@ BuildRequires: intel-openmp-l-ps-devel-%{build_id}
 BuildRequires: intel-icc-l-all-%{build_id}
 BuildRequires: intel-comp-l-all-devel-%{build_id}
 BuildRequires: intel-comp-l-ps-devel-%{build_id}
+BuildRequires: intel-mkl-%{build_id}
 
 Requires: gcc-c++
 Requires: intel-icc-l-all-%{build_id}
 Requires: intel-ifort-l-ps-devel-%{build_id}
+Requires: intel-mkl-%{build_id}
 
 %define composer_release compilers_and_libraries_20%{version}
 %define package_target /opt/intel
