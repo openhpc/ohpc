@@ -26,14 +26,18 @@ Source2:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
+%{!?build_id: %define build_id 210}
+
 Requires: gcc-c++
 Requires: intel-compxe >= 2016
+%if 0%{?OHPC_BUILD}
+Requires: intel-icc-l-all-%{build_id}
+Requires: intel-ifort-l-ps-devel-%{build_id}
+Requires: intel-mkl-%{build_id}
+%endif
+
 
 %define composer_release compilers_and_libraries_20%{version}
-%define package_target /opt/intel
-
-%define package_version %{version}
-%define module_version %{major_ver}.0.%{update_num}.%{build_id}
 
 %description
 
