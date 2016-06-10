@@ -41,6 +41,7 @@ BuildRequires: intel-mkl-common-%{build_id}
 BuildRequires: intel-daal-common-%{build_id}
 BuildRequires: intel-tbb-devel-%{build_id}
 BuildRequires: intel-ipp-l-common-%{build_id}
+BuildRequires: intel-gdb-common
 
 Requires: gcc-c++
 Requires: intel-icc-l-all-%{build_id}
