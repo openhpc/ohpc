@@ -148,19 +148,6 @@ BuildRequires: intel-tbb-doc-jp
 BuildRequires: intel-tbb-libs-%{build_id}
 BuildRequires: intel-tbb-ps-common-%{build_id}
 
-##BuildRequires: intel-comp-l-all-vars-%{build_id}
-##BuildRequires: intel-openmp-l-all-devel-%{build_id}
-##BuildRequires: intel-openmp-l-ps-devel-%{build_id}
-##BuildRequires: intel-icc-l-all-%{build_id}
-##BuildRequires: intel-comp-l-all-devel-%{build_id}
-##BuildRequires: intel-comp-l-ps-devel-%{build_id}
-##BuildRequires: intel-mkl-%{build_id}
-##BuildRequires: intel-mkl-common-%{build_id}
-##BuildRequires: intel-daal-common-%{build_id}
-##BuildRequires: intel-tbb-devel-%{build_id}
-##BuildRequires: intel-ipp-l-common-%{build_id}
-##BuildRequires: intel-gdb-common
-
 Requires: gcc-c++
 Requires: intel-icc-l-all-%{build_id}
 Requires: intel-ifort-l-ps-devel-%{build_id}
