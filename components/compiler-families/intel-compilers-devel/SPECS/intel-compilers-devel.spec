@@ -26,7 +26,7 @@ URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
 Source1:   OHPC_macros
-Source3:   OHPC_mod_generator.sh
+Source2:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
@@ -171,8 +171,8 @@ Studio compiler suite.
 %install
 
 # Parse provided shell script to derive appropriate module settings
-%{__chmod} +x %{SOURCE3}
-%{SOURCE3} %{package_target}/%{composer_release}/linux/bin/compilervars.sh -arch intel64 -platform linux > modfile-ohpc.input
+%{__chmod} +x %{SOURCE2}
+%{SOURCE2} %{package_target}/%{composer_release}/linux/bin/compilervars.sh -arch intel64 -platform linux > modfile-ohpc.input
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
