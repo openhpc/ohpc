@@ -26,7 +26,6 @@ URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
 Source1:   OHPC_macros
-#Source2:   modfile-ohpc.input
 Source3:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
@@ -41,6 +40,7 @@ BuildRequires: intel-mkl-%{build_id}
 BuildRequires: intel-mkl-common-%{build_id}
 BuildRequires: intel-daal-common-%{build_id}
 BuildRequires: intel-tbb-devel-%{build_id}
+BuildRequires: intel-ipp-l-common-%{build_id}
 
 Requires: gcc-c++
 Requires: intel-icc-l-all-%{build_id}
