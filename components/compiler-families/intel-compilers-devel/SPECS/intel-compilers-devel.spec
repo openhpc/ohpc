@@ -31,11 +31,12 @@ Source3:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
-#BuildRequires: intel-icc-l-all-vars-%{build_id}
 BuildRequires: intel-comp-l-all-vars-%{build_id}
 BuildRequires: intel-openmp-l-all-devel-%{build_id}
+BuildRequires: intel-openmp-l-ps-devel-%{build_id}
 BuildRequires: intel-icc-l-all-%{build_id}
 BuildRequires: intel-comp-l-all-devel-%{build_id}
+BuildRequires: intel-comp-l-ps-devel-%{build_id}
 
 Requires: gcc-c++
 Requires: intel-icc-l-all-%{build_id}
