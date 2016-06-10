@@ -38,6 +38,8 @@ BuildRequires: intel-icc-l-all-%{build_id}
 BuildRequires: intel-comp-l-all-devel-%{build_id}
 BuildRequires: intel-comp-l-ps-devel-%{build_id}
 BuildRequires: intel-mkl-%{build_id}
+BuildRequires: intel-daal-common-%{build_id}
+BuildRequires: intel-tbb-devel-%{build_id}
 
 Requires: gcc-c++
 Requires: intel-icc-l-all-%{build_id}
