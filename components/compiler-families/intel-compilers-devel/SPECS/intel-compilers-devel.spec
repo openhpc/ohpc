@@ -46,8 +46,6 @@ Studio compiler suite.
 
 %install
 
-%install
-
 install -D -m755 %{SOURCE2}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
 
