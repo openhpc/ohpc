@@ -327,7 +327,7 @@ example configuration.
 [sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [sms](*\#*) exportfs -a
 [sms](*\#*) systemctl restart nfs
-
+[sms](*\#*) systemctl enable nfs
 # Enable NTP time service on computes and identify master host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
