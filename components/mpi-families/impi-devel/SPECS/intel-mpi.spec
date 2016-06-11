@@ -30,6 +30,18 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 
+BuildRequires: intel-comp-l-all-vars-223
+BuildRequires: intel-compxe-pset
+BuildRequires: intel-imb-223
+BuildRequires: intel-mpi-doc
+BuildRequires: intel-mpi-psxe-068
+BuildRequires: intel-mpi-rt-core-223
+BuildRequires: intel-mpi-rt-mic-223
+BuildRequires: intel-mpi-sdk-core-223
+BuildRequires: intel-mpi-sdk-mic-223
+BuildRequires: intel-psxe-common
+BuildRequires: intel-psxe-doc
+
 Requires: prun%{PROJ_DELIM}
 Requires: intel-psxe-common
 Requires: intel-mpi-doc
@@ -49,6 +61,8 @@ suite.
 %build
 
 %install
+
+%post
 
 ### # Parse provided shell script to derive appropriate module settings
 ### %{__chmod} +x %{SOURCE2}
