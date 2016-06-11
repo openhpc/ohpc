@@ -33,6 +33,7 @@ AutoReq:   no
 Requires: prun%{PROJ_DELIM}
 Requires: intel-psxe-common
 Requires: intel-mpi-doc
+Requires: intel-compilers-devel%{PROJ_DELIM}
 %if 0%{?OHPC_BUILD}
 Requires: intel-mpi-sdk-core-%{build_id}
 %endif
@@ -150,7 +151,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
+#%{OHPC_HOME}
 
 %changelog
 
