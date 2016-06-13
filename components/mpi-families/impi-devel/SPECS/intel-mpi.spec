@@ -174,7 +174,25 @@ mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
 ### #%Module1.0#####################################################################
 ### set     ModulesVersion      "%{version}"
 ### EOF
-### 
+###
+
+%postun
+if [ "$1" = 0 ]; then
+    topDir=`rpm -q --qf '%{FILENAMES}\n' intel-mpi-doc` || exit 1
+
+    if [ -d ${topDir} ];then
+	versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
+
+	for dir in ${versions}; do
+	    if [ -d ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc ];then
+		rm -rf ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
+	    fi
+	done
+    fi
+
+    find %{OHPC_MODULEDEPS}/intel/impi -type f -exec rm {} \;
+    find %{OHPC_MODULEDEPS}/intel/gnu  -type f -exec rm {} \;
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
