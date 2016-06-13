@@ -86,7 +86,9 @@ BuildRequires:  zlib-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%if %{compiler_family} == gnu
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
+%endif
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -122,7 +124,9 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 module load phdf5
 module load netcdf
 module load boost
+%if %{compiler_family} == gnu
 module load openblas
+%endif
 
 mkdir tmp
 cd tmp
