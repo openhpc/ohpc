@@ -66,6 +66,22 @@ if [ -d ${topDir} ];then
 	    fi
 	    
 	    echo "--> Installing OpenHPC-style modulefile for MPI version=${version}"
+
+	    # Create soft links for standard MPI wrapper usage
+
+	    ohpc_path=${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
+
+	    %{__mkdir} ${ohpc_path} || exit 1
+	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
+		%{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ${ohpc_path}/mpicc
+	    fi
+	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicpc ];then
+		%{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicpc ${ohpc_path}/mpicxx
+	    fi
+	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ];then
+		%{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif90
+		%{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif77
+	    fi
 	    
 	    # Module header
 
@@ -98,7 +114,7 @@ prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/intel-impi
 # Prefer bin_ohpc to allow developers to use standard mpicc, mpif90,
 # etc to access Intel toolchain.
  
-prepend-path    PATH            %{package_target}/compilers_and_libraries_%{pstudio_ver}/linux/mpi/intel64/bin_ohpc
+prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 
 family "MPI"
 EOF
@@ -111,12 +127,13 @@ EOF
 #%Module1.0#####################################################################
 set     ModulesVersion      "${version}"
 EOF
+	    
 	fi
     done
 fi
 
-### # OpenHPC module file for GNU compiler toolchain
-### mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
+# OpenHPC module file for GNU compiler toolchain
+mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
 ### %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi/%{version}
 ### #%Module1.0#####################################################################
 ### proc ModulesHelp { } {
