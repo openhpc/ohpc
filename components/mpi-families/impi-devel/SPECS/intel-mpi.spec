@@ -71,7 +71,7 @@ if [ -d ${topDir} ];then
 
 	    ohpc_path=${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 
-	    %{__mkdir} ${ohpc_path} || exit 1
+	    %{__mkdir_p} ${ohpc_path} || exit 1
 	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
 		%{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ${ohpc_path}/mpicc
 	    fi
