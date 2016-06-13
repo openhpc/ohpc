@@ -58,19 +58,15 @@ if [ -d ${topDir} ];then
     scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
     for dir in ${versions}; do
-	if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpivars.sh ];then
-	    if [ ! -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
-		echo "Error: mpiicc file not available locally"
-		exit 1
-	    fi
+	if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
 	    version=`grep "^MPIVERSION=" ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc | cut -d '"' -f2`
 	    if [ -z "${version}" ];then
 		echo "Error: unable to determine MPI version"
 		exit 1
 	    fi
-
+	    
 	    echo "--> Installing OpenHPC-style modulefile for MPI version=${version}"
-
+	    
 	    # Module header
 
 	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/${version}
@@ -118,7 +114,7 @@ EOF
 	fi
     done
 fi
- 
+
 ### # OpenHPC module file for GNU compiler toolchain
 ### mkdir -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
 ### %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi/%{version}
