@@ -172,6 +172,9 @@ prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
 family "MPI"
 EOF
 
+	    # Append with environment vars parsed directlry from mpivars.sh
+	    ${scanner} ${topDir}/${dir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/gnu/impi/${version} || exit 1
+
 	    # Version file
 	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/gnu/impi/.version.${version}
 #%Module1.0#####################################################################
