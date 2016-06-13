@@ -60,7 +60,7 @@ topDir=`rpm -q --qf '%{FILENAMES}\n' intel-compxe` || exit 1
 echo " "
 echo "Scanning top-level dir = $topDir"
 if [ -d ${topDir} ];then
-    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*/linux/mpi" -printf "%f "` || exit 1
+    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
 
     scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
