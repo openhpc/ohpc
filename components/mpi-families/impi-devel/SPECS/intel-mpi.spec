@@ -13,15 +13,10 @@
 
 %define compiler_family intel
 
-%{!?major_ver:  %define major_ver 16}
-%{!?update_num: %define update_num 3}
-%{!?build_id:   %define build_id 223}
-
 Summary:   OpenHPC compatability package for Intel(R) MPI Library
 Name:      intel-mpi-devel%{PROJ_DELIM}
 Version:   2016
 Source1:   OHPC_macros
-Source2:   OHPC_mod_generator.sh
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -30,27 +25,13 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 
-BuildRequires: intel-comp-l-all-vars-223
-BuildRequires: intel-compxe-pset
-BuildRequires: intel-imb-223
-BuildRequires: intel-mpi-doc
-BuildRequires: intel-mpi-psxe-068
-BuildRequires: intel-mpi-rt-core-223
-BuildRequires: intel-mpi-rt-mic-223
-BuildRequires: intel-mpi-sdk-core-223
-BuildRequires: intel-mpi-sdk-mic-223
-BuildRequires: intel-psxe-common
-BuildRequires: intel-psxe-doc
-
 Requires: prun%{PROJ_DELIM}
 Requires: intel-psxe-common
 Requires: intel-mpi-doc
 Requires: intel-compilers-devel%{PROJ_DELIM}
 %if 0%{?OHPC_BUILD}
-Requires: intel-mpi-sdk-core-%{build_id}
 BuildRequires: intel-compilers-devel%{PROJ_DELIM}
 %endif
-
 
 %description
 
