@@ -44,6 +44,7 @@ suite.
 
 %install
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
 
 %post
 
@@ -133,7 +134,6 @@ set     ModulesVersion      "${version}"
 EOF
 
 	    # OpenHPC module file for GNU compiler toolchain
-	    %{__mkdir_p} %{OHPC_MODULEDEPS}/gnu/impi
 	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/gnu/impi/${version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
