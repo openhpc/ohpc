@@ -190,8 +190,12 @@ if [ "$1" = 0 ]; then
 	done
     fi
 
-    find %{OHPC_MODULEDEPS}/intel/impi -type f -exec rm {} \;
-    find %{OHPC_MODULEDEPS}/intel/gnu  -type f -exec rm {} \;
+    if [ -d %{OHPC_MODULEDEPS}/intel/impi ];then
+	find %{OHPC_MODULEDEPS}/intel/impi -type f -exec rm {} \;
+    fi
+    if [ -d %{OHPC_MODULEDEPS}/intel/gnu ];then
+	find %{OHPC_MODULEDEPS}/intel/gnu  -type f -exec rm {} \;
+    fi
 fi
 
 %clean
