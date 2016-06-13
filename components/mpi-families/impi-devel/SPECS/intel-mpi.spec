@@ -110,17 +110,22 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 set     version                 ${version}
 
 prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/intel-impi
- 
-# Prefer bin_ohpc to allow developers to use standard mpicc, mpif90,
-# etc to access Intel toolchain.
- 
-prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 
 family "MPI"
 EOF
 
 	    # Append with environment vars parsed directlry from mpivars.sh
 	    ${scanner} ${topDir}/${dir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/intel/impi/${version} || exit 1
+
+	    # Prepend bin_ohpc
+	    %{__cat} << EOF >> %{OHPC_MODULEDEPS}/intel/impi/${version}
+#
+# Prefer bin_ohpc to allow developers to use standard mpicc, mpif90,
+# etc to access Intel toolchain.
+ 
+prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
+EOF
+
 	    
 	    # Version file
 	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/.version.${version}
