@@ -37,8 +37,6 @@ Requires: intel-mkl-%{build_id}
 %endif
 
 
-%define composer_release compilers_and_libraries_20%{version}
-
 %description
 
 Provides OpenHPC-style compatible modules for use with the Intel(R) Parallel
@@ -62,12 +60,12 @@ topDir=`rpm -q --qf '%{FILENAMES}\n' intel-compxe` || exit 1
 echo " "
 echo "Scanning top-level dir = $topDir"
 if [ -d ${topDir} ];then
-    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
+    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*/linux/mpi" -printf "%f "` || exit 1
 
     scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
     for dir in ${versions}; do
-	if [ -e ${topDir}/${dir}/linux/bin/compilervars.sh ];then
+	if [ -e ${topDir}/${dir}/linux/bin/intel64/icc ];then
 	    version=`echo ${dir} | awk -F 'compilers_and_libraries_' '{print $2}'`
 	    echo "--> Installing OpenHPC-style modulefile for version=${version}"
 
@@ -99,6 +97,10 @@ prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/intel
 family "compiler"
 EOF
 		# Append with environment vars parsed directly from compilervars.sh
+		if [ ! -e ${topDir}/${dir}/linux/bin/compilervars.sh ];then
+		    echo "Error: unable to access compilervars.sh (${dir})"
+		    exit 1
+		fi
 		${scanner} ${topDir}/${dir}/linux/bin/compilervars.sh -arch intel64 -platform linux >> %{OHPC_MODULES}/intel/${version} || exit 1
 
 		# .version file
