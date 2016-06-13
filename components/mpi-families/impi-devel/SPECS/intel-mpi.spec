@@ -74,14 +74,22 @@ if [ -d ${topDir} ];then
 
 	    %{__mkdir_p} ${ohpc_path} || exit 1
 	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
-		%{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ${ohpc_path}/mpicc
+		if [ ! -e ${ohpc_path}/mpicc ];then
+		    %{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ${ohpc_path}/mpicc
+		fi
 	    fi
 	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicpc ];then
-		%{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicpc ${ohpc_path}/mpicxx
+		if [ ! -e ${ohpc_path}/mpicxx ];then
+		    %{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicpc ${ohpc_path}/mpicxx
+		fi
 	    fi
 	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ];then
-		%{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif90
-		%{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif77
+		if [ ! -e ${ohpc_path}/mpif90 ];then
+		    %{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif90
+		fi
+		if [ ! -e ${ohpc_path}/mpif77 ];then
+		    %{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif77
+		fi
 	    fi
 	    
 	    # Module header
