@@ -78,7 +78,7 @@ if [ -d ${topDir} ];then
 
     for dir in ${versions}; do
 	if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpivars.sh ];then
-	    if [ ! -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc];then
+	    if [ ! -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
 		echo "Error: mpiicc file not available locally"
 		exit 1
 	    fi
