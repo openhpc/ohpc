@@ -29,14 +29,10 @@ AutoReq: no
 
 %{!?build_id: %define build_id 210}
 
+BuildRequires:-post-build-checks
+
 Requires: gcc-c++
 Requires: intel-compxe >= 2016
-#%if 0%{?OHPC_BUILD}
-#Requires: intel-icc-l-all-%{build_id}
-#Requires: intel-ifort-l-ps-devel-%{build_id}
-#Requires: intel-mkl-%{build_id}
-#%endif
-
 
 %description
 
