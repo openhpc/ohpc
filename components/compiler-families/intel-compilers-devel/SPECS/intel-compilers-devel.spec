@@ -25,6 +25,7 @@ Source1:   OHPC_macros
 Source2:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
+#!BuildIgnore: brp-check-suse
 
 %{!?build_id: %define build_id 210}
 
