@@ -25,6 +25,8 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 
+BuildRequires:-post-build-checks
+
 Requires: prun%{PROJ_DELIM}
 Requires: intel-psxe-common
 Requires: intel-mpi-doc
