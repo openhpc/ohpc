@@ -19,6 +19,10 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/admin
 URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
+
+%if 0%{?suse_version}
+BuildRequires:  libdtdc++6
+%endif
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
