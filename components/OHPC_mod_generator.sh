@@ -11,7 +11,7 @@ fi
 
 # environment variables to ignore
 
-ignoreVars="^SHLVL=|^INTEL_LICENSE_FILE=|^PWD=|^_="
+ignoreVars="^SHLVL=|^INTEL_LICENSE_FILE=|^PWD=|^_=|^WARNING:"
 
 inFile=$1
 shift
@@ -61,7 +61,7 @@ for var in `cat $OUTFILE`; do
 done
 
 echo " "
-echo "# machine generated from `basename $inFile`"
+echo "# OpenHPC machine generated from `basename $inFile`"
 echo " "
 
 while read var ; do 

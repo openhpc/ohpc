@@ -13,33 +13,38 @@
 
 %global pname intel-compilers
 
-Summary:   Intel(R) Parallel Studio XE
+Summary:   Intel(R) Parallel Studio XE compatability packages for OpenHPC
 Name:      %{pname}%{PROJ_DELIM}
-Version:   16.2.181
+Version:   16.3.210
 Release:   1
 License:   Intel(R)
 URL:       https://software.intel.com/en-us/intel-parallel-studio-xe
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
-Source0:   intel-compilers%{PROJ_DELIM}-16.0.2-181.tar.gz
+#Source0:   intel-compilers%{PROJ_DELIM}-16.0.2-181.tar.gz
 Source1:   OHPC_macros
 Source2:   modfile-ohpc.input
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq: no
 
-%define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
-%define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
-%define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
+#%define __spec_install_post /usr/lib/rpm/brp-strip-comment-note /bin/true
+#%define __spec_install_post /usr/lib/rpm/brp-compress /bin/true
+#%define __spec_install_post /usr/lib/rpm/brp-strip /bin/true
 
 requires: gcc-c++
+requires: intel-ifort-l-ps-210
+requires: intel-ifort-l-ps-devel-210
+requires: intel-icc-l-all-vars-210
+requires: intel-icc-l-all-210
+
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %define debug_package %{nil}
 
 %define composer_release compilers_and_libraries_20%{version}
-%define package_target %{OHPC_COMPILERS}/intel
+%define package_target /opt/intel
 
-%define module_version 16.0.2.181
+%define module_version 16.0.3.210
 
 %description
 
@@ -55,7 +60,7 @@ compiler suite (including compilers for C,C++, and Fortran).
 
 %{__mkdir} -p %{buildroot}/
 cd %{buildroot}
-%{__tar} xfz %{SOURCE0}
+#%{__tar} xfz %{SOURCE0}
 
 cd -
 
