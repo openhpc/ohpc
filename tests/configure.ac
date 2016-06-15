@@ -331,24 +331,20 @@ AC_OUTPUT( Makefile
 	   admin/Makefile 
 	   user-env/Makefile 
 	   bos/Makefile
-	   perf-tools/intel-itac/Makefile
-	   perf-tools/intel-itac/tests/Makefile
-	   perf-tools/intel-advisor/Makefile
-	   perf-tools/intel-advisor/tests/Makefile
-       perf-tools/tau/Makefile
+           perf-tools/tau/Makefile
 	   oob/Makefile
 	   lustre/Makefile
-       dev-tools/easybuild/Makefile
-       admin/spack/Makefile
-       dev-tools/numpy/Makefile
-       dev-tools/numpy/tests/Makefile
-       dev-tools/scipy/Makefile
-       dev-tools/scipy/tests/Makefile
-       dev-tools/tbb/Makefile
-       dev-tools/tbb/tests/Makefile
-       dev-tools/cilk/Makefile
-       dev-tools/R-base/Makefile
-       modules/Makefile)
+           dev-tools/easybuild/Makefile
+           admin/spack/Makefile
+           dev-tools/numpy/Makefile
+           dev-tools/numpy/tests/Makefile
+           dev-tools/scipy/Makefile
+           dev-tools/scipy/tests/Makefile
+           dev-tools/tbb/Makefile
+           dev-tools/tbb/tests/Makefile
+           dev-tools/cilk/Makefile
+           dev-tools/R-base/Makefile
+           modules/Makefile)
 
 echo
 echo '--------------------------------------------- SUMMARY ---------------------------------------------'
@@ -451,12 +447,6 @@ echo    Dev Tools:
        echo '    'EasyBuild................. : enabled
     else
        echo '    'EasyBuild................. : disabled
-    fi
-
-    if test "x$enable_inspector" = "xyes"; then
-       echo '    'Intel Inspector........... : enabled
-    else
-       echo '    'Intel Inspector........... : disabled
     fi
 
     if test "x$enable_valgrind" = "xyes"; then
