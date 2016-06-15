@@ -43,16 +43,6 @@ if USERENV_ENABLED
    SUBDIRS += user-env
 endif
 
-
-
-if ITAC_ENABLED
-   SUBDIRS += perf-tools/intel-itac
-endif
-
-if ADVISOR_ENABLED
-   SUBDIRS += perf-tools/intel-advisor
-endif
-
 #----------------------------------------------------------------------
 # run OHPC wrapper tests for embeded autotools project (e.g. those that
 # have compiler and/or mpi dependencies)
@@ -92,10 +82,6 @@ endif
 
 if MPIP_ENABLED
    TESTS += perf-tools/mpiP/ohpc-tests/test_mpi_families
-endif
-
-if VTUNE_ENABLED
-   TESTS += perf-tools/intel-vtune/ohpc-tests/test_mpi_families
 endif
 
 if FFTW_ENABLED

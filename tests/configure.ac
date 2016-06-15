@@ -104,30 +104,6 @@ AC_ARG_ENABLE([valgrind],
    [AX_OPTION_DEFAULT(type=short,enable_valgrind,yes)])
 AM_CONDITIONAL(VALGRIND_ENABLED,test "x$enable_valgrind" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# Intel-inspector
-AC_ARG_ENABLE([inspector],
-   [AS_HELP_STRING([--enable-inspector],[Enable Intel Inspector tests (default=no)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_inspector,no)])
-AM_CONDITIONAL(INSPECTOR_ENABLED,test "x$enable_inspector" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Intel-ITAC
-AC_ARG_ENABLE([itac],
-   [AS_HELP_STRING([--enable-itac],[Enable Intel Trace Analyzer/Collector tests (default=no)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_itac,no)])
-AM_CONDITIONAL(ITAC_ENABLED,test "x$enable_itac" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Intel-Vtune
-AC_ARG_ENABLE([vtune],
-   [AS_HELP_STRING([--enable-vtune],[Enable Intel Vtune Amplifier XE tests (default=no)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_vtune,no)])
-AM_CONDITIONAL(VTUNE_ENABLED,test "x$enable_vtune" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Intel-Advisor
-AC_ARG_ENABLE([advisor],
-   [AS_HELP_STRING([--enable-advisor],[Enable Intel Advisor XE tests (default=no)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_advisor,no)])
-AM_CONDITIONAL(ADVISOR_ENABLED,test "x$enable_advisor" = "xyes" ) 
-#------------------------------------------------------------------------------------------
 # MPI
 AC_ARG_ENABLE([mpi],
    [AS_HELP_STRING([--enable-mpi],[Enable MPI compilation/execution tests (default=yes)])],[],
@@ -513,24 +489,6 @@ echo    Performance Tools:
        echo '    'mpiP Profiler........ .... : enabled
     else
        echo '    'mpiP Profiler............. : disabled
-    fi
-
-    if test "x$enable_advisor" = "xyes"; then
-       echo '    'Intel Advisor XE.......... : enabled
-    else
-       echo '    'Intel Advisor XE.......... : disabled
-    fi
-
-    if test "x$enable_itac" = "xyes"; then
-       echo '    'Intel Trace Analyzer...... : enabled
-    else
-       echo '    'Intel Trace Analyzer...... : disabled
-    fi
-
-    if test "x$enable_vtune" = "xyes"; then
-       echo '    'Intel Vtune Amplifier..... : enabled
-    else
-       echo '    'Intel Vtune Amplifier..... : disabled
     fi
 
     if test "x$enable_papi" = "xyes"; then
