@@ -17,7 +17,7 @@ immediately available for use on the cluster after installation on the {\em
 For convenience, \OHPC{} provides package aliases for these 3rd party libraries
 and utilities that can be used to install all of the available libraries for
 use with the GNU compiler family toolchain (and associated MPI family
-permutations). To install available package offerings within \OHPC{},
+permutations when applicable). To install available package offerings within \OHPC{},
 issue the following:
 
 % begin_ohpc_run
@@ -26,6 +26,7 @@ issue the following:
 [sms](*\#*) (*\groupinstall*) ohpc-serial-libs-gnu
 [sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-gnu
 [sms](*\#*) (*\groupinstall*) ohpc-io-libs-gnu
+[sms](*\#*) (*\groupinstall*) ohpc-python-libs-gnu
 [sms](*\#*) (*\groupinstall*) ohpc-runtimes-gnu
 \end{lstlisting}
 % end_ohpc_run
