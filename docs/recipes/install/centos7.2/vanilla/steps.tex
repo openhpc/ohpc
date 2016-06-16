@@ -293,7 +293,7 @@ default location for this example is in
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 
 Prior to assembling the image, it is advantageous to perform any additional
-customizations within the chroot environment created for the desired {\em
+customization within the chroot environment created for the desired {\em
  compute} instance. The following steps document the process to add a local
 {\em ssh} key created by \Warewulf{} to support remote access, identify the
 resource manager server, configure NTP for compute resources, and enable \NFS{}
@@ -314,7 +314,7 @@ example configuration.
 [sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
 [sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
-# Identify resource manager hostname on master host
+# Identify resource manager host name on master host
 [sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 \end{lstlisting}
 % end_ohpc_run
@@ -362,7 +362,7 @@ example configuration.
 % end_ohpc_run
 
 %\clearpage
-\subsubsection{Additional Customizations ({\em optional})} \label{sec:addl_customizations}
+\subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{../../common/compute_customizations_intro}
 
 \paragraph{Increase locked memory limits}
@@ -487,7 +487,7 @@ host as follows:
 [sms](*\#*) wwsh -y file import /tmp/network.$$ --name network
 [sms](*\#*) wwsh -y file set network --path /etc/sysconfig/network --mode=0644 --uid=0
 
-# Add nodes to Warewulf datastore
+# Add nodes to Warewulf data store
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
                 wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
         done
