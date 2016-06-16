@@ -40,7 +40,7 @@ echo "-------------------------------------------------------"
 
 module purge          || exit 1
 module load autotools || exit 1
-module load gcc       || exit 1
+module load gnu       || exit 1
 
 ./resolve_paths  $BATS_OPTS
 ./version_check  $BATS_OPTS
