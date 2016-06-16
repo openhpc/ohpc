@@ -295,7 +295,7 @@ default location for this example is in
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 
 Prior to assembling the image, it is advantageous to perform any additional
-customizations within the chroot environment created for the desired {\em
+customization within the chroot environment created for the desired {\em
  compute} instance. The following steps document the process to add a local
 {\em ssh} key created by \Warewulf{} to support remote access, identify the
 resource manager server, configure NTP for compute resources, and enable \NFS{}
@@ -361,7 +361,7 @@ example configuration.
 % ohpc_command fi
 % end_ohpc_run
 
-\subsubsection{Additional Customizations ({\em optional})} \label{sec:addl_customizations}
+\subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{../../common/compute_customizations_intro}
 
 \paragraph{Increase locked memory limits}
@@ -494,7 +494,7 @@ host as follows:
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Add nodes to Warewulf datastore
+# Add nodes to Warewulf data store
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
                 wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
         done
