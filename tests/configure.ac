@@ -13,6 +13,8 @@ AM_CONDITIONAL(HAVE_SHARED_CONDITIONAL,test 0)
 AM_CONDITIONAL(DIRECT_VFD_CONDITIONAL,test 0)
 AM_CONDITIONAL(BUILD_ALL_CONDITIONAL,test 0)
 
+
+
 # Test user
 AX_CHECK_USER([root])
 
@@ -34,6 +36,23 @@ if test x$enable_long = xyes ;then
 else
    AC_MSG_RESULT([no])
 fi
+
+# Option for testing against multiple compiler/MPI families
+AC_MSG_CHECKING([if enable PXSE toolchain related tests])
+AC_ARG_ENABLE([pxse],
+	 [AS_HELP_STRING([--enable-pxse],[Enable development tool tests with PXSE toolchain (default=no]))],
+	 [],[enable_long=no])
+
+if test x$enable_pxse = xyes ;then
+   AC_MSG_RESULT([yes])
+   AC_SUBST(COMPILER_FAMILIES,["gnu intel"])       
+   AC_SUBST(MPI_FAMILIES,["mvapich2 openmpi impi"])
+else
+   AC_MSG_RESULT([no])
+   AC_SUBST(COMPILER_FAMILIES,[gnu])       
+   AC_SUBST(MPI_FAMILIES,["mvapich2 openmpi"])
+fi
+
 
 # Use customizable test driver
 #AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/test-driver-cmt'])
@@ -328,6 +347,7 @@ AM_CONDITIONAL(PACKAGING_ENABLED,test "x$enable_packaging" = "xyes" )
 #------------------------------------------------------------------------------------------
 
 AC_OUTPUT( Makefile 
+           common/TEST_ENV
 	   admin/Makefile 
 	   user-env/Makefile 
 	   bos/Makefile
@@ -344,7 +364,7 @@ AC_OUTPUT( Makefile
            dev-tools/tbb/tests/Makefile
            dev-tools/cilk/Makefile
            dev-tools/R-base/Makefile
-           modules/Makefile)
+           modules/Makefile )
 
 echo
 echo '--------------------------------------------- SUMMARY ---------------------------------------------'
