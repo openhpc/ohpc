@@ -14,7 +14,7 @@ recipe, recall that we previously registered credential files with Warewulf (e.g
 group, and shadow) so that these files would be propagated during compute node
 imaging. However, with the addition of a new ``test'' user above, the files
 have been outdated and we need to update the Warewulf database to incorporate
-the additions. This resync process can be accomplished as follows:
+the additions. This re-sync process can be accomplished as follows:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
@@ -25,7 +25,7 @@ the additions. This resync process can be accomplished as follows:
 \begin{center}
 \begin{tcolorbox}[]
 \small
-After resyncing to notify Warewulf of file modifications made on the {\em
+After re-syncing to notify Warewulf of file modifications made on the {\em
 master} host, it should take approximately 5 minutes for the changes to
 propagate. However, you can also manually pull the changes from compute nodes
 via the following:
