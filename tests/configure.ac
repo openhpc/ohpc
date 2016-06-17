@@ -41,7 +41,7 @@ fi
 AC_MSG_CHECKING([if enable PXSE toolchain related tests])
 AC_ARG_ENABLE([pxse],
 	 [AS_HELP_STRING([--enable-pxse],[Enable development tool tests with PXSE toolchain (default=no]))],
-	 [],[enable_long=no])
+	 [],[enable_pxse=no])
 
 if test x$enable_pxse = xyes ;then
    AC_MSG_RESULT([yes])
