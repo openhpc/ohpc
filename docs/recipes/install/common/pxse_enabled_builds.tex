@@ -18,7 +18,7 @@ projects. More information on this program can be found at:
        {\color{blue}{https://software.intel.com/en-us/qualify-for-free-software}}
 \end{center}
 
-To enable all 3rd party builds available in \OHPC{} that are compatible with
+\noindent To enable all 3rd party builds available in \OHPC{} that are compatible with
 \IntelR{}~Parallel Studio, issue the following:
 
 % begin_ohpc_run
@@ -30,12 +30,12 @@ To enable all 3rd party builds available in \OHPC{} that are compatible with
 [sms](*\#*) (*\install*) intel-compilers-devel-ohpc
 [sms](*\#*) (*\install*) intel-mpi-devel-ohpc
 
-# Install Intel-compiled 3rd party tools
-[sms](*\#*) (*\install*) ohpc-serial-libs-intel
-[sms](*\#*) (*\install*) ohpc-parallel-libs-intel
-[sms](*\#*) (*\install*) ohpc-io-libs-intel
-[sms](*\#*) (*\install*) ohpc-python-libs-intel
-[sms](*\#*) (*\install*) ohpc-runtimes-intel
+# Install 3rd party libraries/tools built with Intel toolchain
+[sms](*\#*) (*\groupinstall*) ohpc-serial-libs-intel
+[sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-intel
+[sms](*\#*) (*\groupinstall*) ohpc-io-libs-intel
+[sms](*\#*) (*\groupinstall*) ohpc-python-libs-intel
+[sms](*\#*) (*\groupinstall*) ohpc-runtimes-intel
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
