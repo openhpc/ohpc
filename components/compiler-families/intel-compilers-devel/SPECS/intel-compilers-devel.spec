@@ -43,7 +43,10 @@ Provides: libintlc.so.5()(64bit)
 Provides: libifcore.so.5()(64bit)
 Provides: libifport.so.5()(64bit)
 Provides: libiomp5.so(VERSION)(64bit)
-
+Provides: libmkl_core.so()(64bit)
+Provides: libmkl_sequential.so()(64bit)
+Provides: libmkl_intel_lp64.so()(64bit)
+Provides: libirc.so()(64bit)
 
 %description
 
