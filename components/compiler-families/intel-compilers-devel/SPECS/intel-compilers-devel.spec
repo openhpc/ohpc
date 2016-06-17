@@ -33,6 +33,10 @@ BuildRequires:-post-build-checks
 
 Requires: gcc-c++
 Requires: intel-compxe >= 2016
+Provides: libimf.so()(64bit)
+Provides: libsvml.so()(64bit)
+Provides: libiomp5.so()(64bit)
+
 
 %description
 
