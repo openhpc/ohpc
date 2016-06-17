@@ -78,7 +78,8 @@ if [ -d ${topDir} ];then
 
     for dir in ${versions}; do
 	if [ -e ${topDir}/${dir}/linux/bin/intel64/icc ];then
-	    version=`echo ${dir} | awk -F 'compilers_and_libraries_' '{print $2}'`
+	    #version=`echo ${dir} | awk -F 'compilers_and_libraries_' '{print $2}'`
+        version=`${topDir}/${dir}/linux/bin/intel64/icc -V 2>&1 | grep Version | awk -F 'Version' '{print $2}' | awk '{print $1}'`
 	    echo "--> Installing OpenHPC-style modulefile for version=${version}"
 
 	    # Module header
