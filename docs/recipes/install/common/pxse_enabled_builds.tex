@@ -18,6 +18,18 @@ projects. More information on this program can be found at:
        {\color{blue}{https://software.intel.com/en-us/qualify-for-free-software}}
 \end{center}
 
+\begin{center}
+\begin{tcolorbox}[]
+As noted in \S\ref{sec:master_customization}, the default installation path for
+OpenHPC (\texttt{/opt/ohpc/pub}) is exported over NFS from the {\em master} to the 
+compute nodes, but the Parallel Studio installer defaults to a path of 
+\texttt{/opt/intel}. To make the \IntelR{} compilers available to the compute 
+nodes one must either customize the Parallel Studio installation path to be 
+within \texttt{/opt/ohpc/pub}, or instead add an addition NFS export for 
+\texttt{/opt/intel}.
+\end{tcolorbox}
+\end{center}
+
 \noindent To enable all 3rd party builds available in \OHPC{} that are compatible with
 \IntelR{}~Parallel Studio, issue the following:
 
