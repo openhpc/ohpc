@@ -33,6 +33,7 @@ BuildRequires:-post-build-checks
 
 Requires: gcc-c++
 Requires: intel-compxe >= 2016
+
 Provides: libimf.so()(64bit)
 Provides: libsvml.so()(64bit)
 Provides: libiomp5.so()(64bit)
@@ -41,6 +42,7 @@ Provides: libifcoremt.so.5()(64bit)
 Provides: libintlc.so.5()(64bit)
 Provides: libifcore.so.5()(64bit)
 Provides: libifport.so.5()(64bit)
+Provides: libiomp5.so(VERSION)(64bit)
 
 
 %description
