@@ -36,6 +36,11 @@ Requires: intel-compxe >= 2016
 Provides: libimf.so()(64bit)
 Provides: libsvml.so()(64bit)
 Provides: libiomp5.so()(64bit)
+Provides: libirng.so()(64bit)
+Provides: libifcoremt.so.5()(64bit)
+Provides: libintlc.so.5()(64bit)
+Provides: libifcore.so.5()(64bit)
+Provides: libifport.so.5()(64bit)
 
 
 %description
