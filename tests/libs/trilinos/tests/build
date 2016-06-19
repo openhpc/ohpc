@@ -12,11 +12,16 @@ cp $TRILINOS_DIR/include/Makefile.export.Trilinos .
 run test ./Makefile.export.Trilinos
 assert_success
 
+# amend for intel family to remove hard-coded path
+
+run perl -pi -e 's/\S+libmkl(\S+).so//g' Makefile.export.Trilinos
+assert_success
+
 }
 
 @test "[Trilinos] build Trilinos executables ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 
     make -f Makefile.ohpc clean >& /dev/null
-    make -f Makefile.ohpc -j 4  >& /dev/null
+    make -f Makefile.ohpc -j 8  >& /dev/null
 
 }
