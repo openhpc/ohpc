@@ -32,7 +32,7 @@ bmc_username="${bmc_username:-unknown}"
 bmc_password="${bmc_password:-unknown}"
 
 # Additional time to wait for compute nodes to provision (seconds)
-provision_wait="${provision_wait:-120}"
+provision_wait="${provision_wait:-180}"
 
 # Flags for optional installation/configuration
 
