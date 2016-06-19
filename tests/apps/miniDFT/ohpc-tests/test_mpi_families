@@ -21,6 +21,11 @@ make_check_failure=0
 
 for compiler in $COMPILER_FAMILIES ; do
     for mpi in $MPI_FAMILIES ; do
+
+	if [[ "${compiler}" == "gnu" && "${mpi}" == "impi" ]];then
+	    continue
+	fi
+	
 	echo " "
 	echo " "
 	echo "-------------------------------------------------------"
