@@ -1,3 +1,25 @@
+Version 1.1.1 (19 June 2016)
+
+[General]
+
+  * 1.1.1 is the first micro update release against 1.1
+
+[Component Version Changes]
+
+  * docs-ohpc                                (1.1 -> 1.1.1)
+  * intel-compilers-devel-ohpc               (16.2.181 -> 2016)
+  * intel-mpi-devel-ohpc                     (5.1.3.181 -> 2016)
+  * openmpi-gnu-ohpc                         (1.10.1 -> 1.10.2)
+  * openmpi-intel-ohpc                       (1.10.1 -> 1.10.2)
+  * petsc-gnu-impi-ohpc                      (3.6.3 -> 3.7.0)
+  * petsc-gnu-mvapich2-ohpc                  (3.6.3 -> 3.7.0)
+  * petsc-gnu-openmpi-ohpc                   (3.6.3 -> 3.7.0)
+  * petsc-intel-impi-ohpc                    (3.6.3 -> 3.7.0)
+  * petsc-intel-mvapich2-ohpc                (3.6.3 -> 3.7.0)
+  * petsc-intel-openmpi-ohpc                 (3.6.3 -> 3.7.0)
+
+----------------------------------------------------------------------------------------------------------------------
+
 Version 1.1 (18 April 2016)
 
 [General]
