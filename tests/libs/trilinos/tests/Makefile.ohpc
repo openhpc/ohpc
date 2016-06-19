@@ -1,8 +1,8 @@
 include Makefile.export.Trilinos
 
-CXX=$(Trilinos_CXX_COMPILER)
-CC=$(Trilinos_C_COMPILER)
-FORT=$(Trilinos_Fortran_COMPILER)
+CXX=mpicxx
+CC=mpicc
+FORT=mpif90
 
 CXX_FLAGS=$(Trilinos_CXX_COMPILER_FLAGS) $(USER_CXX_FLAGS)
 C_FLAGS=$(Trilinos_C_COMPILER_FLAGS) $(USERC_FLAGS)
