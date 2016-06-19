@@ -14,8 +14,10 @@ assert_success
 
 # amend for intel family to remove hard-coded path
 
-run perl -pi -e 's/\S+libmkl(\S+).so//g' Makefile.export.Trilinos
-assert_success
+if [ "$LMOD_FAMILY_COMPILER" == "intel" ];then
+    run perl -pi -e 's/\S+libmkl(\S+).so//g' Makefile.export.Trilinos
+    assert_success
+fi
 
 }
 
