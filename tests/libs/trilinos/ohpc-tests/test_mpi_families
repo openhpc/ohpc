@@ -30,7 +30,11 @@ for compiler in $COMPILER_FAMILIES ; do
 	module load $mpi      || exit 1
 	module load netcdf    || exit 1
 	module load phdf5     || exit 1
-        module load openblas  || exit 1
+
+	if [[ "${compiler}" == "gnu" ]];then
+            module load openblas  || exit 1
+	fi
+	
 	module load trilinos  || exit 1
 
 	./configure           || exit 1
