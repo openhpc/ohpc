@@ -81,4 +81,5 @@ main(int argc, char *argv[])
     Destroy_SuperNode_Matrix(&L);
     Destroy_CompCol_Matrix(&U);
     StatFree(&stat);
+    return(0);
 }
