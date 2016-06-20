@@ -14,8 +14,8 @@ tools, and a variety of scientific libraries.
 The compatible OS version for this release and the total number of
 pre-packaged RPMs available are as follows:
 
-        CentOS 7.2       - 270 RPMs (Base)
-        SuSE SLES 12 SP1 - 267 RPMs (Base)
+        CentOS 7.2       - 270 RPMs (Base) / 40 RPMs (Updates)
+        SuSE SLES 12 SP1 - 267 RPMs (Base) / 40 RPMs (Updates)
 
 Note that a detailed list of all available components is available in
 the "Package Manifest" appendix located in the companion install
