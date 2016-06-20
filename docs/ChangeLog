@@ -1,9 +1,17 @@
-Version 1.1.1 (19 June 2016)
+Version 1.1.1 (20 June 2016)
 
 [General]
 
   * 1.1.1 is the first micro update release against 1.1
-
+  * updated Warewulf build/configuration:
+     - resolve shell errors with BASH_ENV (https://github.com/openhpc/ohpc/issues/219)
+     - include additional IB drivers by default in Warewulf bootstrap (https://github.com/openhpc/ohpc/issues/222)
+     - updated RPM dependency on tcpdump to support wwnodescan (https://github.com/openhpc/ohpc/issues/226)
+  * updated default SLURM config to include ReturnToService=1 option (https://github.com/openhpc/ohpc/pull/234)
+  * variety of clarifications and expansions in recipe documentation including:
+     - fix typo regarding use of $compute_regex (https://github.com/openhpc/ohpc/issues/233)
+     - include boot time enable for NFS server (https://github.com/openhpc/ohpc/pull/236)
+     
 [Component Version Changes]
 
   * docs-ohpc                                (1.1 -> 1.1.1)
