@@ -4,6 +4,9 @@ imb-gnu-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-ben
 imb-intel-impi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-intel-mvapich2-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-intel-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
+intel-advisor-ohpc 16.1.30.450722 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/perf-tools Intel(R) Advisor XE
+intel-itac-ohpc 9.1.2.024 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/perf-tools Intel(R) Trace Analyzer and Collector
+intel-vtune-ohpc 16.2.0.444464 https://software.intel.com/en-us/intel-parallel-studio-xe ohpc/perf-tools Intel(R) VTune(TM) Amplifier XE
 mpiP-gnu-impi-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-gnu-mvapich2-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-gnu-openmpi-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
