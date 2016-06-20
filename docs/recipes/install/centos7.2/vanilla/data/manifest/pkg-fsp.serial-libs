@@ -1,5 +1,0 @@
-gsl-gnu-fsp 1.16 http://www.gnu.org/software/gsl fsp/serial-libs GNU Scientific Library (GSL)
-metis-gnu-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
-metis-intel-fsp 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview fsp/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
-superlu-gnu-fsp 4.3 http://crd.lbl.gov/~xiaoye/SuperLU/ fsp/serial-libs A general purpose library for the direct solution of linear equations
-superlu-intel-fsp 4.3 http://crd.lbl.gov/~xiaoye/SuperLU/ fsp/serial-libs A general purpose library for the direct solution of linear equations
