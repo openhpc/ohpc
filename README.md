@@ -31,7 +31,7 @@ can enable an OpenHPC repository locally through installation of an
 the URL locations for [base] and [update] package repositories. Copies of the
 ```ohpc-release``` package are provided below for convenience. A companion install
 guide with example instructions for installation is also available below or in
-in the downloads section of the latest
+the downloads section of the latest
 [release](https://github.com/openhpc/ohpc/releases/tag/v1.1.GA).
 
 ###### [CentOS 7.2]
