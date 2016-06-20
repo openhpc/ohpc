@@ -11,7 +11,11 @@ Version 1.1.1 (20 June 2016)
   * variety of clarifications and expansions in recipe documentation including:
      - fix typo regarding use of $compute_regex (https://github.com/openhpc/ohpc/issues/233)
      - include boot time enable for NFS server (https://github.com/openhpc/ohpc/pull/236)
-     
+  * patched OpenMPI build to resolve job launch error outside of RMS (https://github.com/openhpc/ohpc/issues/229)
+  * deprecation of intel-compilers-ohpc and intel-mpi-ohpc in favor of
+    intel-compilers-devel-ohpc and intel-mpi-devel-ohpc which provide OpenHPC
+    module file compatibility for use with the Intel Parallel Studio toolchain
+
 [Component Version Changes]
 
   * docs-ohpc                                (1.1 -> 1.1.1)
