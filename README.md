@@ -32,7 +32,7 @@ the URL locations for [base] and [update] package repositories. Copies of the
 ```ohpc-release``` package are provided below for convenience. A companion install
 guide with example instructions for installation is also available below or in
 the downloads section of the latest
-[release](https://github.com/openhpc/ohpc/releases/tag/v1.1.GA).
+[release](https://github.com/openhpc/ohpc/releases/tag/v1.1.1.GA).
 
 ###### [CentOS 7.2]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.1.GA/ohpc-release-centos7.2-1.1-1.x86_64.rpm) (md5sum=f9349b2c2b117a4e3efdac8cd59cc327)
