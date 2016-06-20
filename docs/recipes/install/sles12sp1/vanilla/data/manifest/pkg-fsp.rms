@@ -1,9 +1,0 @@
-munge-fsp 0.5.11 https://munge.googlecode.com/ fsp/rms MUNGE authentication service
-slurm-devel-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Development package for Slurm
-slurm-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Slurm Workload Manager
-slurm-munge-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Slurm authentication and crypto implementation using Munge
-slurm-perlapi-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Perl API to Slurm
-slurm-plugins-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Slurm plugins (loadable shared objects)
-slurm-slurmdb-direct-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Wrappers to write directly to the slurmdb
-slurm-slurmdbd-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Slurm database daemon
-slurm-sql-fsp 14.11.5 http://slurm.schedmd.com/ fsp/rms Slurm SQL support
