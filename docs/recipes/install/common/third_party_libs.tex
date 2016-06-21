@@ -11,33 +11,23 @@ immediately available for use on the cluster after installation on the {\em
 \end{tcolorbox}
 \end{center}
 
-%\iftoggle{isCentOS}{\clearpage}
-\nottoggle{isCentOS}{\clearpage}
+\iftoggle{isCentOS}{\clearpage}
+%\nottoggle{isCentOS}{\clearpage}
 
-For convenience, \OHPC{} provides package aliases for these 3rd
-party libraries and utilities that can be used to install all of the available
-compiler/MPI family permutations. To install all of the available package
-offerings within \OHPC{}, issue the following:
+For convenience, \OHPC{} provides package aliases for these 3rd party libraries
+and utilities that can be used to install all of the available libraries for
+use with the GNU compiler family toolchain (and associated MPI family
+permutations when applicable). Please refer to Appendix~\ref{appendix:manifest}
+for a more detailed listing of all available packages in each of these functional
+areas. To install available package offerings within \OHPC{}, issue the following:
 
 % begin_ohpc_run
 % ohpc_comment_header Install 3rd Party Libraries and Tools \ref{sec:3rdparty}
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-[sms](*\#*) (*\groupinstall*) ohpc-adios        
-[sms](*\#*) (*\groupinstall*) ohpc-boost        
-[sms](*\#*) (*\groupinstall*) ohpc-fftw         
-[sms](*\#*) (*\groupinstall*) ohpc-gsl          
-[sms](*\#*) (*\groupinstall*) ohpc-hdf5         
-[sms](*\#*) (*\groupinstall*) ohpc-hypre        
-[sms](*\#*) (*\groupinstall*) ohpc-metis        
-[sms](*\#*) (*\groupinstall*) ohpc-mumps        
-[sms](*\#*) (*\groupinstall*) ohpc-netcdf       
-[sms](*\#*) (*\groupinstall*) ohpc-numpy        
-[sms](*\#*) (*\groupinstall*) ohpc-ocr
-[sms](*\#*) (*\groupinstall*) ohpc-openblas     
-[sms](*\#*) (*\groupinstall*) ohpc-petsc        
-[sms](*\#*) (*\groupinstall*) ohpc-phdf5        
-[sms](*\#*) (*\groupinstall*) ohpc-scalapack    
-[sms](*\#*) (*\groupinstall*) ohpc-scipy        
-[sms](*\#*) (*\groupinstall*) ohpc-trilinos     
+[sms](*\#*) (*\groupinstall*) ohpc-serial-libs-gnu
+[sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-gnu
+[sms](*\#*) (*\groupinstall*) ohpc-io-libs-gnu
+[sms](*\#*) (*\groupinstall*) ohpc-python-libs-gnu
+[sms](*\#*) (*\groupinstall*) ohpc-runtimes-gnu
 \end{lstlisting}
 % end_ohpc_run

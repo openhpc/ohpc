@@ -10,6 +10,14 @@ else
     ERROR "TEST_ENV does not exist"
 fi
 
+CMD_TIMEOUT="15:00"
+TEST_EXE="./src/mini_dft"
+TEST_MAX_COMPUTES=4
+TEST_NUM_RANKS=4
+TEST_NUM_THREADS=2
+TEST_VERIFY=1
+TEST_PERFLOG=./log.miniDFT
+
 rm=$RESOURCE_MANAGER
 
 # init run options

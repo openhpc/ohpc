@@ -1,2 +1,0 @@
-lua-bit-fsp 1.0.2 http://bitop.luajit.org fsp/distro-packages Module for Lua which adds bitwise operations on numbers
-lua-filesystem-fsp 1.6.3 http://keplerproject.github.com/luafilesystem fsp/distro-packages Lua library to Access Directories and Files

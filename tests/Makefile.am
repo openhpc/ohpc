@@ -18,9 +18,6 @@ endif
 if OOB_ENABLED
    SUBDIRS += oob
 endif
-if CLCK_ENABLED
-   SUBDIRS += clck
-endif
 if LUSTRE_ENABLED
    SUBDIRS += lustre
 endif
@@ -44,16 +41,6 @@ endif
 
 if USERENV_ENABLED
    SUBDIRS += user-env
-endif
-
-
-
-if ITAC_ENABLED
-   SUBDIRS += perf-tools/intel-itac
-endif
-
-if ADVISOR_ENABLED
-   SUBDIRS += perf-tools/intel-advisor
 endif
 
 #----------------------------------------------------------------------
@@ -97,10 +84,6 @@ if MPIP_ENABLED
    TESTS += perf-tools/mpiP/ohpc-tests/test_mpi_families
 endif
 
-if VTUNE_ENABLED
-   TESTS += perf-tools/intel-vtune/ohpc-tests/test_mpi_families
-endif
-
 if FFTW_ENABLED
    TESTS += libs/fftw/ohpc-tests/test_mpi_families
 endif
@@ -135,10 +118,6 @@ endif
 
 if HYPRE_ENABLED
    TESTS += libs/hypre/ohpc-tests/test_mpi_families
-endif
-
-if INSPECTOR_ENABLED
-   TESTS += dev-tools/intel-inspector/ohpc-tests/test_compiler_families
 endif
 
 if METIS_ENABLED

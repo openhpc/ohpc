@@ -1,0 +1,23 @@
+# machine generated from compilervars.sh
+ 
+setenv        MKLROOT              /opt/intel/compilers_and_libraries_2016.3.210/linux/mkl
+prepend-path  MANPATH              /opt/intel/compilers_and_libraries_2016.3.210/linux/documentation/en/man/common/:/opt/intel/documentation_2016/en/debugger//gdb-ia/man/:/opt/intel/documentation_2016/en/debugger//gdb-mic/man/:/opt/intel/documentation_2016/en/debugger//gdb-igfx/man/
+setenv        IPPROOT              /opt/intel/compilers_and_libraries_2016.3.210/linux/ipp
+setenv        GDBSERVER_MIC        /opt/intel/debugger_2016/gdb/targets/mic/bin/gdbserver
+prepend-path  LIBRARY_PATH         /opt/intel/compilers_and_libraries_2016.3.210/linux/ipp/lib/intel64:/opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/lib/intel64:/opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/lib/intel64:/opt/intel/compilers_and_libraries_2016.3.210/linux/tbb/lib/intel64/gcc4.4:/opt/intel/compilers_and_libraries_2016.3.210/linux/daal/lib/intel64_lin:/opt/intel/compilers_and_libraries_2016.3.210/linux/daal/../tbb/lib/intel64_lin/gcc4.4:/opt/intel/compilers_and_libraries_2016.3.210/linux/daal/../compiler/lib/intel64_lin
+prepend-path  MIC_LD_LIBRARY_PATH  /opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/lib/mic:/opt/intel/compilers_and_libraries_2016.3.210/linux/mpi/mic/lib:/opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/lib/mic:/opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/lib/mic:/opt/intel/compilers_and_libraries_2016.3.210/linux/tbb/lib/mic
+prepend-path  LD_LIBRARY_PATH      /opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/lib/intel64:/opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/lib/intel64_lin:/opt/intel/compilers_and_libraries_2016.3.210/linux/ipp/lib/intel64:/opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/lib/intel64:/opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/lib/intel64:/opt/intel/compilers_and_libraries_2016.3.210/linux/tbb/lib/intel64/gcc4.4:/opt/intel/debugger_2016/libipt/intel64/lib:/opt/intel/compilers_and_libraries_2016.3.210/linux/daal/lib/intel64_lin:/opt/intel/compilers_and_libraries_2016.3.210/linux/daal/../tbb/lib/intel64_lin/gcc4.4:/opt/intel/compilers_and_libraries_2016.3.210/linux/daal/../compiler/lib/intel64_lin
+prepend-path  MIC_LIBRARY_PATH     /opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/lib/mic:/opt/intel/compilers_and_libraries_2016.3.210/linux/mpi/mic/lib:/opt/intel/compilers_and_libraries_2016.3.210/linux/tbb/lib/mic
+prepend-path  CPATH                /opt/intel/compilers_and_libraries_2016.3.210/linux/ipp/include:/opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/include:/opt/intel/compilers_and_libraries_2016.3.210/linux/tbb/include:/opt/intel/compilers_and_libraries_2016.3.210/linux/daal/include
+prepend-path  NLSPATH              /opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/lib/intel64/locale/%l_%t/%N:/opt/intel/compilers_and_libraries_2016.3.210/linux/mkl/lib/intel64/locale/%l_%t/%N:/opt/intel/debugger_2016/gdb/intel64_mic/share/locale/%l_%t/%N:/opt/intel/debugger_2016/gdb/intel64/share/locale/%l_%t/%N
+prepend-path  PATH                 /opt/intel/compilers_and_libraries_2016.3.210/linux/bin/intel64:/opt/intel/debugger_2016/gdb/intel64_mic/bin
+setenv        TBBROOT              /opt/intel/compilers_and_libraries_2016.3.210/linux/tbb
+setenv        GDB_CROSS            /opt/intel/debugger_2016/gdb/intel64_mic/bin/gdb-mic
+setenv        DAALROOT             /opt/intel/compilers_and_libraries_2016.3.210/linux/daal
+setenv        MPM_LAUNCHER         /opt/intel/debugger_2016/mpm/mic/bin/start_mpm.sh
+setenv        INTEL_PYTHONHOME     /opt/intel/debugger_2016/python/intel64/
+prepend-path  CLASSPATH            /opt/intel/compilers_and_libraries_2016.3.210/linux/daal/lib/daal.jar
+prepend-path  INFOPATH             /opt/intel/documentation_2016/en/debugger//gdb-ia/info/:/opt/intel/documentation_2016/en/debugger//gdb-mic/info/:/opt/intel/documentation_2016/en/debugger//gdb-igfx/info/
+ 
+# end of machine generated
+ 

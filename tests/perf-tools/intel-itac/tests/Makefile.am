@@ -1,3 +1,0 @@
-TESTS_ENVIRONMENT = BATS_JUNIT_CLASS=Intel-ITAC
-
-TESTS = test_module

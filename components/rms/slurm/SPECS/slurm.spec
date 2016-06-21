@@ -560,7 +560,7 @@ install -D -m755 contribs/sjstat ${RPM_BUILD_ROOT}%{_bindir}/sjstat
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
-head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
+head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example | grep -v ReturnToService > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "SlurmdLogFile=/var/log/slurm.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
@@ -568,7 +568,8 @@ echo "SlurmctldLogFile=/var/log/slurmctld.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}
 echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
-
+# 6/3/16 nirmalasrjn@gmail.com - Adding ReturnToService Directive to starting config file (note removal of variable during above creation)
+echo "ReturnToService=1" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 # 9/17/14 karl.w.schulz@intel.com - Add option to drop VM cache during epilog
 sed -i '/^# No other SLURM jobs,/i \\n# Drop clean caches (OpenHPC)\necho 3 > /proc/sys/vm/drop_caches\n\n#' $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.epilog.clean
 

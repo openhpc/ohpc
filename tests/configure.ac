@@ -13,6 +13,8 @@ AM_CONDITIONAL(HAVE_SHARED_CONDITIONAL,test 0)
 AM_CONDITIONAL(DIRECT_VFD_CONDITIONAL,test 0)
 AM_CONDITIONAL(BUILD_ALL_CONDITIONAL,test 0)
 
+
+
 # Test user
 AX_CHECK_USER([root])
 
@@ -34,6 +36,23 @@ if test x$enable_long = xyes ;then
 else
    AC_MSG_RESULT([no])
 fi
+
+# Option for testing against multiple compiler/MPI families
+AC_MSG_CHECKING([if enable PXSE toolchain related tests])
+AC_ARG_ENABLE([pxse],
+	 [AS_HELP_STRING([--enable-pxse],[Enable development tool tests with PXSE toolchain (default=no]))],
+	 [],[enable_pxse=no])
+
+if test x$enable_pxse = xyes ;then
+   AC_MSG_RESULT([yes])
+   AC_SUBST(COMPILER_FAMILIES,["gnu intel"])       
+   AC_SUBST(MPI_FAMILIES,["mvapich2 openmpi impi"])
+else
+   AC_MSG_RESULT([no])
+   AC_SUBST(COMPILER_FAMILIES,[gnu])       
+   AC_SUBST(MPI_FAMILIES,["mvapich2 openmpi"])
+fi
+
 
 # Use customizable test driver
 #AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/test-driver-cmt'])
@@ -60,12 +79,6 @@ AC_ARG_ENABLE([oob],
 	 [AS_HELP_STRING([--enable-oob],[Enable oob tests (default=yes, root only)])],
 	 [],[enable_oob=yes])
 AM_CONDITIONAL(OOB_ENABLED,test "x$enable_oob" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Cluster checker
-AC_ARG_ENABLE([clck],
-	 [AS_HELP_STRING([--enable-clck],[Enable clck tests (default=yes, root only)])],
-	 [],[enable_clck=yes])
-AM_CONDITIONAL(CLCK_ENABLED,test "x$enable_clck" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Lustre
 AC_ARG_ENABLE([lustre],
@@ -109,30 +122,6 @@ AC_ARG_ENABLE([valgrind],
    [AS_HELP_STRING([--enable-valgrind],[Enable valgrind tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=short,enable_valgrind,yes)])
 AM_CONDITIONAL(VALGRIND_ENABLED,test "x$enable_valgrind" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Intel-inspector
-AC_ARG_ENABLE([inspector],
-   [AS_HELP_STRING([--enable-inspector],[Enable Intel Inspector tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_inspector,yes)])
-AM_CONDITIONAL(INSPECTOR_ENABLED,test "x$enable_inspector" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Intel-ITAC
-AC_ARG_ENABLE([itac],
-   [AS_HELP_STRING([--enable-itac],[Enable Intel Trace Analyzer/Collector tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_itac,yes)])
-AM_CONDITIONAL(ITAC_ENABLED,test "x$enable_itac" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Intel-Vtune
-AC_ARG_ENABLE([vtune],
-   [AS_HELP_STRING([--enable-vtune],[Enable Intel Vtune Amplifier XE tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_vtune,yes)])
-AM_CONDITIONAL(VTUNE_ENABLED,test "x$enable_vtune" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Intel-Advisor
-AC_ARG_ENABLE([advisor],
-   [AS_HELP_STRING([--enable-advisor],[Enable Intel Advisor XE tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_advisor,yes)])
-AM_CONDITIONAL(ADVISOR_ENABLED,test "x$enable_advisor" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # MPI
 AC_ARG_ENABLE([mpi],
@@ -358,28 +347,24 @@ AM_CONDITIONAL(PACKAGING_ENABLED,test "x$enable_packaging" = "xyes" )
 #------------------------------------------------------------------------------------------
 
 AC_OUTPUT( Makefile 
+           common/TEST_ENV
 	   admin/Makefile 
 	   user-env/Makefile 
 	   bos/Makefile
-	   perf-tools/intel-itac/Makefile
-	   perf-tools/intel-itac/tests/Makefile
-	   perf-tools/intel-advisor/Makefile
-	   perf-tools/intel-advisor/tests/Makefile
-       perf-tools/tau/Makefile
+           perf-tools/tau/Makefile
 	   oob/Makefile
-	   clck/Makefile
 	   lustre/Makefile
-       dev-tools/easybuild/Makefile
-       admin/spack/Makefile
-       dev-tools/numpy/Makefile
-       dev-tools/numpy/tests/Makefile
-       dev-tools/scipy/Makefile
-       dev-tools/scipy/tests/Makefile
-       dev-tools/tbb/Makefile
-       dev-tools/tbb/tests/Makefile
-       dev-tools/cilk/Makefile
-       dev-tools/R-base/Makefile
-       modules/Makefile)
+           dev-tools/easybuild/Makefile
+           admin/spack/Makefile
+           dev-tools/numpy/Makefile
+           dev-tools/numpy/tests/Makefile
+           dev-tools/scipy/Makefile
+           dev-tools/scipy/tests/Makefile
+           dev-tools/tbb/Makefile
+           dev-tools/tbb/tests/Makefile
+           dev-tools/cilk/Makefile
+           dev-tools/R-base/Makefile
+           modules/Makefile )
 
 echo
 echo '--------------------------------------------- SUMMARY ---------------------------------------------'
@@ -413,11 +398,6 @@ if test "x$ROOT_ENABLED" = "x1" ; then
        echo '    'Hardware benchmarks....... : enabled	
     else 
        echo '    'Hardware benchmarks....... : disabled
-    fi
-    if test "x$enable_clck" = "xyes"; then
-       echo '    'Cluster checker........... : enabled
-    else 
-       echo '    'Cluster checker........... : disabled
     fi
     if test "x$enable_lustre" = "xyes"; then
        echo '    'Lustre client............. : enabled
@@ -489,12 +469,6 @@ echo    Dev Tools:
        echo '    'EasyBuild................. : disabled
     fi
 
-    if test "x$enable_inspector" = "xyes"; then
-       echo '    'Intel Inspector........... : enabled
-    else
-       echo '    'Intel Inspector........... : disabled
-    fi
-
     if test "x$enable_valgrind" = "xyes"; then
        echo '    'Valgrind.................. : enabled
     else
@@ -525,24 +499,6 @@ echo    Performance Tools:
        echo '    'mpiP Profiler........ .... : enabled
     else
        echo '    'mpiP Profiler............. : disabled
-    fi
-
-    if test "x$enable_advisor" = "xyes"; then
-       echo '    'Intel Advisor XE.......... : enabled
-    else
-       echo '    'Intel Advisor XE.......... : disabled
-    fi
-
-    if test "x$enable_itac" = "xyes"; then
-       echo '    'Intel Trace Analyzer...... : enabled
-    else
-       echo '    'Intel Trace Analyzer...... : disabled
-    fi
-
-    if test "x$enable_vtune" = "xyes"; then
-       echo '    'Intel Vtune Amplifier..... : enabled
-    else
-       echo '    'Intel Vtune Amplifier..... : disabled
     fi
 
     if test "x$enable_papi" = "xyes"; then

@@ -1,10 +1,18 @@
---- warewulf-vnfs-3.6/etc/bootstrap.conf	2014-05-21 11:13:14.000000000 -0700
-+++ warewulf-vnfs-3.6.patch/etc/bootstrap.conf	2015-02-10 08:54:17.000000000 -0800
-@@ -30,3 +30,9 @@
+--- warewulf-vnfs-3.6/etc/bootstrap.conf	2016-04-27 16:01:28.000000000 -0500
++++ warewulf-vnfs-3.6/etc/bootstrap.conf	2016-04-27 15:55:32.000000000 -0500
+@@ -15,6 +15,7 @@
+ drivers += ib_ucm, ib_uverbs, ib_umad, ib_cm, ib_mad, iw_cm, ib_core
+ drivers += rdma_ucm, ib_sa, mlx4_en, mlx4_core
+ drivers += rds, rds_rdma, rds_tcp, mlx4_vnic, mlx4_vnic_helper
++drivers += ib_isert, xprtrdma
+ 
+ # Required for getting CPU frequency scaling to work right (SpeedStep/Turbo)
+ drivers += kernel/drivers/cpufreq/, kernel/arch/x86/kernel/cpu/cpufreq/
+@@ -30,3 +31,9 @@
  modprobe += xhci-hcd, sl811-hcd, sd_mod
  # modprobe += mlx4_core log_num_mtts=20 log_mtts_per_seg=6, ib_srp
  
-+#OpenHPC additions for SLES12
++# OpenHPC additions for SLES12
 +drivers += af_packet, dns_resolver, auth_rpcgss, lockd, sunrpc
 +drivers += dm_mod, dcdbas, dell_rbu, ipmi_msghandler, shpchp, ehci_pci
 +drivers += wmi, processor, button, sg, igb, i2c_algo_bit, dca, ptp

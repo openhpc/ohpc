@@ -72,8 +72,10 @@
       m       = 8
       n       = 7
       ione    = 1
-      call PetscOptionsGetInt(PETSC_NULL_CHARACTER,'-m',m,flg,ierr)
-      call PetscOptionsGetInt(PETSC_NULL_CHARACTER,'-n',n,flg,ierr)
+      call PetscOptionsGetInt(PETSC_NULL_OBJECT,PETSC_NULL_CHARACTER,    &
+     &                        '-m',m,flg,ierr)
+      call PetscOptionsGetInt(PETSC_NULL_OBJECT,PETSC_NULL_CHARACTER,    &
+     &                        '-n',n,flg,ierr)
       call MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr)
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

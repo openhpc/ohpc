@@ -31,6 +31,9 @@ ntp_server="${ntp_server:-0.centos.pool.ntp.org}"
 bmc_username="${bmc_username:-unknown}"
 bmc_password="${bmc_password:-unknown}"
 
+# Additional time to wait for compute nodes to provision (seconds)
+provision_wait="${provision_wait:-180}"
+
 # Flags for optional installation/configuration
 
 enable_clustershell="${enable_clustershell:-0}"
@@ -43,6 +46,7 @@ enable_lustre_client="${enable_lustre_client:-0}"
 enable_mrsh="${enable_mrsh:-0}"
 enable_nagios="${enable_nagios:-0}"
 enable_powerman="${enable_powerman:-0}"
+enable_intel_packages="${enable_intel_packages:-0}"
 
 # -------------------------
 # compute node settings
@@ -52,7 +56,7 @@ enable_powerman="${enable_powerman:-0}"
 num_computes="${num_computes:-4}"
 
 # regex that matches defined compute hostnames
-compute_regex="${compute_rexex:-c*}"
+compute_regex="${compute_regex:-c*}"
 
 # compute hostnames
 c_name[0]=c1

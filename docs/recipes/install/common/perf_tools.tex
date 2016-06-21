@@ -1,17 +1,11 @@
-To aid in application performance analysis, \OHPC{} provides a variety of
-open-source and Intel licensed software (see \S\ref{sec:byol} for more details
-regarding Intel software). These can be installed as follows:
+\OHPC{} provides a variety of open-source tools to aid in application 
+performance analysis (refer to Appendix~\ref{appendix:manifest} for a listing
+of available packages). This group of tools can be installed as follows:
 
 % begin_ohpc_run
 % ohpc_comment_header Install Performance Tools \ref{sec:install_perf_tools}
 \begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
-[sms](*\#*) (*\install*) papi-ohpc
-[sms](*\#*) (*\install*) intel-itac-ohpc
-[sms](*\#*) (*\install*) intel-vtune-ohpc
-[sms](*\#*) (*\install*) intel-advisor-ohpc
-[sms](*\#*) (*\install*) intel-inspector-ohpc
-[sms](*\#*) (*\groupinstall*) ohpc-mpiP
-[sms](*\#*) (*\groupinstall*) ohpc-tau
+[sms](*\#*) (*\groupinstall*) ohpc-perf-tools-gnu
 \end{lstlisting}
 % end_ohpc_run
 

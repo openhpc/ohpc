@@ -3,6 +3,7 @@
 
 TEST_LOGS=""
 MAKEFLAGS=""
+status=0
 
 source ./TEST_ENV         || exit 1
 source ./common/functions || exit 1
@@ -29,9 +30,9 @@ for compiler in $COMPILER_FAMILIES ; do
 	module load $mpi      || exit 1
 	module load tau       || exit 1
 
-	./configure    || exit 1
-	make clean     || exit 1
-	make -k check
+	./configure           || exit 1
+	make clean            || exit 1
+	make -k check         || status=1
 
         save_logs_mpi_family tests $compiler $mpi
 
@@ -39,3 +40,4 @@ for compiler in $COMPILER_FAMILIES ; do
     done
 done
 
+exit ${status}

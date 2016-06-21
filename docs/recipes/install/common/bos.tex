@@ -15,14 +15,6 @@ master} SMS host. If SELinux components are installed locally,
 the \texttt{selinuxenabled} command can be used to determine if SELinux is
 currently enabled. If enabled, consult the distro documentation for information
 on how to disable.
-%(note that a host reboot is typically required).
-
-%% \begin{lstlisting}[language=bash,keywords={}]
-%% [sms](*\#*) if [ -f /etc/selinux/config ]; then
-%%                 perl -pi -e "s/SELINUX=(enforcing|permissive)/SELINUX=disabled/" /etc/selinux/config
-%%             fi
-%% [sms](*\#*) shutdown -r now
-%% \end{lstlisting}
 
 \end{tcolorbox}
 \end{center}

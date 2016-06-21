@@ -4,7 +4,8 @@ This example employs a user-defined monitoring routine and optionally a user-def
 routine to check candidate iterates produced by line search routines.  This code also\n\
 demonstrates use of the macro __FUNCT__ to define routine names for use in error handling.\n\
 The command line options include:\n\
-  -check_iterates : activate checking of iterates\n\
+  -pre_check_iterates : activate checking of iterates\n\
+  -post_check_iterates : activate checking of iterates\n\
   -check_tol <tol>: set tolerance for iterate checking\n\n";
 
 /*T
@@ -104,7 +105,7 @@ int main(int argc,char **argv)
   PetscInitialize(&argc,&argv,(char*)0,help);
   ierr  = MPI_Comm_rank(PETSC_COMM_WORLD,&ctx.rank);CHKERRQ(ierr);
   ierr  = MPI_Comm_size(PETSC_COMM_WORLD,&ctx.size);CHKERRQ(ierr);
-  ierr  = PetscOptionsGetInt(NULL,"-n",&N,NULL);CHKERRQ(ierr);
+  ierr  = PetscOptionsGetInt(NULL,NULL,"-n",&N,NULL);CHKERRQ(ierr);
   ctx.h = 1.0/(N-1);
 
   /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -164,7 +165,7 @@ int main(int argc,char **argv)
   /*
      Optional allow user provided preconditioner
    */
-  ierr = PetscOptionsHasName(NULL,"-user_precond",&flg);CHKERRQ(ierr);
+  ierr = PetscOptionsHasName(NULL,NULL,"-user_precond",&flg);CHKERRQ(ierr);
   if (flg) {
     KSP ksp;
     PC  pc;
@@ -201,7 +202,7 @@ int main(int argc,char **argv)
      iterates that are determined by line search methods
   */
   ierr = SNESGetLineSearch(snes, &linesearch);CHKERRQ(ierr);
-  ierr = PetscOptionsHasName(NULL,"-post_check_iterates",&post_check);CHKERRQ(ierr);
+  ierr = PetscOptionsHasName(NULL,NULL,"-post_check_iterates",&post_check);CHKERRQ(ierr);
 
   if (post_check) {
     ierr = PetscPrintf(PETSC_COMM_WORLD,"Activating post step checking routine\n");CHKERRQ(ierr);
@@ -211,16 +212,16 @@ int main(int argc,char **argv)
     checkP.tolerance = 1.0;
     checkP.user      = &ctx;
 
-    ierr = PetscOptionsGetReal(NULL,"-check_tol",&checkP.tolerance,NULL);CHKERRQ(ierr);
+    ierr = PetscOptionsGetReal(NULL,NULL,"-check_tol",&checkP.tolerance,NULL);CHKERRQ(ierr);
   }
 
-  ierr = PetscOptionsHasName(NULL,"-post_setsubksp",&post_setsubksp);CHKERRQ(ierr);
+  ierr = PetscOptionsHasName(NULL,NULL,"-post_setsubksp",&post_setsubksp);CHKERRQ(ierr);
   if (post_setsubksp) {
     ierr = PetscPrintf(PETSC_COMM_WORLD,"Activating post setsubksp\n");CHKERRQ(ierr);
     ierr = SNESLineSearchSetPostCheck(linesearch,PostSetSubKSP,&checkP1);CHKERRQ(ierr);
   }
 
-  ierr = PetscOptionsHasName(NULL,"-pre_check_iterates",&pre_check);CHKERRQ(ierr);
+  ierr = PetscOptionsHasName(NULL,NULL,"-pre_check_iterates",&pre_check);CHKERRQ(ierr);
   if (pre_check) {
     ierr = PetscPrintf(PETSC_COMM_WORLD,"Activating pre step checking routine\n");CHKERRQ(ierr);
     ierr = SNESLineSearchSetPreCheck(linesearch,PreCheck,&checkP);CHKERRQ(ierr);
@@ -380,8 +381,7 @@ PetscErrorCode FormFunction(SNES snes,Vec x,Vec f,void *ctx)
        xs, xm  - starting grid index, width of local grid (no ghost points)
   */
   ierr = DMDAGetCorners(da,&xs,NULL,NULL,&xm,NULL,NULL);CHKERRQ(ierr);
-  ierr = DMDAGetInfo(da,NULL,&M,NULL,NULL,NULL,NULL,NULL,NULL,
-                     NULL,NULL,NULL,NULL,NULL);CHKERRQ(ierr);
+  ierr = DMDAGetInfo(da,NULL,&M,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);CHKERRQ(ierr);
 
   /*
      Set function values for boundary points; define local interior grid point range:
@@ -440,14 +440,13 @@ PetscErrorCode FormJacobian(SNES snes,Vec x,Mat jac,Mat B,void *ctx)
   /*
      Get pointer to vector data
   */
-  ierr = DMDAVecGetArray(da,x,&xx);CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayRead(da,x,&xx);CHKERRQ(ierr);
   ierr = DMDAGetCorners(da,&xs,NULL,NULL,&xm,NULL,NULL);CHKERRQ(ierr);
 
   /*
     Get range of locally owned matrix
   */
-  ierr = DMDAGetInfo(da,NULL,&M,NULL,NULL,NULL,NULL,NULL,NULL,
-                     NULL,NULL,NULL,NULL,NULL);CHKERRQ(ierr);
+  ierr = DMDAGetInfo(da,NULL,&M,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);CHKERRQ(ierr);
 
   /*
      Determine starting and ending local indices for interior grid points.
@@ -489,7 +488,7 @@ PetscErrorCode FormJacobian(SNES snes,Vec x,Mat jac,Mat B,void *ctx)
   */
 
   ierr = MatAssemblyBegin(jac,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
-  ierr = DMDAVecRestoreArray(da,x,&xx);CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArrayRead(da,x,&xx);CHKERRQ(ierr);
   ierr = MatAssemblyEnd(jac,MAT_FINAL_ASSEMBLY);CHKERRQ(ierr);
 
   PetscFunctionReturn(0);
@@ -587,7 +586,6 @@ PetscErrorCode PostCheck(SNESLineSearch linesearch,Vec xcurrent,Vec y,Vec x,Pets
   check = (StepCheckCtx*)ctx;
   user  = check->user;
   ierr  = SNESGetIterationNumber(snes,&iter);CHKERRQ(ierr);
-  ierr  = SNESLineSearchGetPreCheck(linesearch, NULL, (void**)&check);CHKERRQ(ierr);
 
   /* iteration 1 indicates we are working on the second iteration */
   if (iter > 0) {

@@ -15,7 +15,16 @@ within the resource management pool.
 The following commands can be used to startup the necessary services to support
 resource management under \SLURM{}.
 
-\iftoggle{isCentOS}{\clearpage}
+%\iftoggle{isCentOS}{\clearpage}
+
+% Allow for optional sleep to wait for nodes to provision when using install
+% script
+
+
+% begin_ohpc_run
+% ohpc_comment_header Allow for optional sleep to wait for provisioning to complete
+% ohpc_command sleep ${provision_wait}
+% end_ohpc_run
 
 % begin_ohpc_run
 % ohpc_comment_header Resource Manager Startup \ref{sec:rms_startup}
@@ -27,28 +36,17 @@ resource management under \SLURM{}.
 [sms](*\#*) systemctl start slurmctld
 
 # start slurm clients on compute hosts
-[sms](*\#*) pdsh -w c[1-4] systemctl start slurmd
+[sms](*\#*) pdsh -P normal systemctl start slurmd
 \end{lstlisting}
 % end_ohpc_run
 
-In the default configuration, the {\em compute} hosts will be initialized in an
-{\em unknown} state. To place the hosts into production such that they are
-eligible to schedule user jobs, issue the following:
+%%% In the default configuration, the {\em compute} hosts will be initialized in an
+%%% {\em unknown} state. To place the hosts into production such that they are
+%%% eligible to schedule user jobs, issue the following:
 
-% begin_ohpc_run
-\begin{lstlisting}[language=bash]
-[sms](*\#*) scontrol update nodename=c[1-4] state=idle
-\end{lstlisting}
-% end_ohpc_run
+%%% % begin_ohpc_run
+%%% \begin{lstlisting}[language=bash]
+%%% [sms](*\#*) scontrol update partition=normal state=idle
+%%% \end{lstlisting}
+%%% % end_ohpc_run
 
-
-% Additional recipe commands for additional computes.
-
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_validation_comment Startup slurm on additional computes if defined
-% ohpc_command if [ ${num_computes} -gt 4 ];then
-% ohpc_command    pdsh -w c[5-$num_computes] systemctl start slurmd
-% ohpc_command    scontrol update nodename=c[5-$num_computes] state=idle
-% ohpc_command fi
-% end_ohpc_run

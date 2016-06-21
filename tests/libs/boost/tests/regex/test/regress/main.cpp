@@ -19,6 +19,8 @@
 #include "test.hpp"
 #include "test_locale.hpp"
 #include <stdarg.h>
+#include <iostream>
+#include <iomanip>
 
 #ifdef BOOST_HAS_ICU
 #include <unicode/uloc.h>
@@ -51,38 +53,10 @@ void run_tests()
 {
    RUN_TESTS(basic_tests);
    RUN_TESTS(test_grep);
-#if 0
-   RUN_TESTS(test_simple_repeats);
-   RUN_TESTS(test_alt);
-   RUN_TESTS(test_sets);
-   RUN_TESTS(test_sets2);
-   RUN_TESTS(test_anchors);
-   RUN_TESTS(test_backrefs);
-   RUN_TESTS(test_character_escapes);
-   RUN_TESTS(test_assertion_escapes);
-   RUN_TESTS(test_tricky_cases);
-   RUN_TESTS(test_replace);
-   RUN_TESTS(test_non_greedy_repeats);
    RUN_TESTS(test_non_marking_paren);
    RUN_TESTS(test_partial_match);
-   RUN_TESTS(test_forward_lookahead_asserts);
-   RUN_TESTS(test_fast_repeats);
-   RUN_TESTS(test_fast_repeats2);
-   RUN_TESTS(test_independent_subs);
-   RUN_TESTS(test_nosubs);
-   RUN_TESTS(test_conditionals);
-   RUN_TESTS(test_options);
-   RUN_TESTS(test_options2);
 #ifndef TEST_THREADS
    RUN_TESTS(test_en_locale);
-#endif
-   RUN_TESTS(test_emacs);
-   RUN_TESTS(test_operators);
-   RUN_TESTS(test_overloads);
-   RUN_TESTS(test_unicode);
-   RUN_TESTS(test_pocessive_repeats);
-   RUN_TESTS(test_mark_resets);
-   RUN_TESTS(test_recursion);
 #endif
 }
 
@@ -161,6 +135,7 @@ const int* make_array(int first, ...)
 #else
    static int data[200];
 #endif
+   std::fill_n(data, 200, -2);
    va_list ap;
    va_start(ap, first);
    //
@@ -232,6 +207,6 @@ int main(int argc, char * argv[])
 
 #else
 
-#include <boost/test/included/prg_exec_monitor.hpp>
+#include <boost/detail/lightweight_main.hpp>
 
 #endif

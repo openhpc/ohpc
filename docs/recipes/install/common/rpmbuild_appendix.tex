@@ -10,16 +10,16 @@ community build server at \href{https://build.openhpc.community}
 via \texttt{rpm} as highlighted below. The OpenHPC build system design
 leverages several keywords to control the choice of compiler and MPI families
 for relevant development libraries and the \texttt{rpmbuild} example
-illustrates how to override the default compiler\_family.
+illustrates how to override the default mpi\_family.
 
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
-    literate={VER}{\OHPCVersion{}}1 {OSREPO}{\OSRepo{}}1 {-}{-}1]
+    literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSRepo{}}1 {-}{-}1]
 # Install rpm-build package from base OS distro
 [test@sms ~]$ (*\install*) rpm-build
 
 # Download SRPM from OpenHPC repository and install locally
 [test@sms ~]$ rpm -i \
-  http://build.openhpc.community/OpenHPC:/VER:/Factory/OSREPO/src/fftw-gnu-openmpi-ohpc-3.3.4-4.1.src.rpm
+  http://build.openhpc.community/OpenHPC:/VER/OSREPO/src/fftw-gnu-openmpi-ohpc-3.3.4-4.1.src.rpm
 
 # Modify spec file as desired
 [test@sms ~]$ cd ~/rpmbuild/SPECS
@@ -29,8 +29,8 @@ illustrates how to override the default compiler\_family.
 [test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   4.1/Release:   5.1/" fftw.spec
 
 # Rebuild binary RPM. Note that additional directives can be specified to modify build
-[test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "compiler_family intel" fftw.spec
+[test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "mpi_family mvapich2" fftw.spec
 
 # As privileged user, install the new package
-[sms](*\#*) (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-intel-openmpi-ohpc-3.3.4-5.1.rpm
+[sms](*\#*) (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-gnu-mvapich2-ohpc-3.3.4-5.1.rpm
 \end{lstlisting}

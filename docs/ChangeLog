@@ -1,3 +1,37 @@
+Version 1.1.1 (20 June 2016)
+
+[General]
+
+  * 1.1.1 is the first micro update release against 1.1
+  * updated Warewulf build/configuration:
+     - resolve shell errors with BASH_ENV (https://github.com/openhpc/ohpc/issues/219)
+     - include additional IB drivers by default in Warewulf bootstrap (https://github.com/openhpc/ohpc/issues/222)
+     - updated RPM dependency on tcpdump to support wwnodescan (https://github.com/openhpc/ohpc/issues/226)
+  * updated default SLURM config to include ReturnToService=1 option (https://github.com/openhpc/ohpc/pull/234)
+  * variety of clarifications and expansions in recipe documentation including:
+     - fix typo regarding use of $compute_regex (https://github.com/openhpc/ohpc/issues/233)
+     - include boot time enable for NFS server (https://github.com/openhpc/ohpc/pull/236)
+  * patched OpenMPI build to resolve job launch error outside of RMS (https://github.com/openhpc/ohpc/issues/229)
+  * deprecation of intel-compilers-ohpc and intel-mpi-ohpc in favor of
+    intel-compilers-devel-ohpc and intel-mpi-devel-ohpc which provide OpenHPC
+    module file compatibility for use with the Intel Parallel Studio toolchain
+
+[Component Version Changes]
+
+  * docs-ohpc                                (1.1 -> 1.1.1)
+  * intel-compilers-devel-ohpc               (16.2.181 -> 2016)
+  * intel-mpi-devel-ohpc                     (5.1.3.181 -> 2016)
+  * openmpi-gnu-ohpc                         (1.10.1 -> 1.10.2)
+  * openmpi-intel-ohpc                       (1.10.1 -> 1.10.2)
+  * petsc-gnu-impi-ohpc                      (3.6.3 -> 3.7.0)
+  * petsc-gnu-mvapich2-ohpc                  (3.6.3 -> 3.7.0)
+  * petsc-gnu-openmpi-ohpc                   (3.6.3 -> 3.7.0)
+  * petsc-intel-impi-ohpc                    (3.6.3 -> 3.7.0)
+  * petsc-intel-mvapich2-ohpc                (3.6.3 -> 3.7.0)
+  * petsc-intel-openmpi-ohpc                 (3.6.3 -> 3.7.0)
+
+----------------------------------------------------------------------------------------------------------------------
+
 Version 1.1 (18 April 2016)
 
 [General]

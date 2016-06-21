@@ -43,9 +43,6 @@
 
 \vspace*{4in}
 
-
-%\noindent{\normalsize \color{black} Intel Cluster Makers} \vspace*{0.1cm} \\
-%{\normalsize \color{logodarkgrey} Copyright~{\small\copyright}~2014-2015 Intel Corporation} \vspace*{0.1cm} \\ 
 \noindent{\small \color{black} Document Last Update: \VCDateISO} \vspace*{0.1cm} \\ 
 {\small \color{black} Document Revision: \VCRevision} \\ \vspace*{0.1cm}
 
@@ -65,7 +62,6 @@
 \input{../../common/base_edition/edition}
 \input{../../common/audience}
 \input{../../common/requirements}
-\input{../../common/byol}
 \input{../../common/inputs}
 
 % Base Operating System --------------------------------------------
@@ -80,17 +76,6 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_ohpc_repo}
-
-%%% % begin_ohpc_run
-%%% % ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
-%%% \begin{lstlisting}[language=bash,keywords={}]
-%%% [sms](*\#*) zypper addrepo ${ohpc_repo}
-%%% [sms](*\#*) zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
-%%% \end{lstlisting}
-%%% % end_ohpc_run
-
-% Dev testing for Factory
-%[sms](*\#*) zypper addrepo $OpenHPC_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
 
 In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard distro repositories in order to resolve
@@ -293,6 +278,9 @@ default location for this example is in
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) ntp
 
+# Add kernel drivers
+[sms](*\#*) (*\chrootinstall*) kernel-default
+
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
 
@@ -307,7 +295,7 @@ default location for this example is in
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 
 Prior to assembling the image, it is advantageous to perform any additional
-customizations within the chroot environment created for the desired {\em
+customization within the chroot environment created for the desired {\em
  compute} instance. The following steps document the process to add a local
 {\em ssh} key created by \Warewulf{} to support remote access, identify the
 resource manager server, configure NTP for compute resources, and enable \NFS{}
@@ -336,7 +324,7 @@ example configuration.
 [sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [sms](*\#*) exportfs -a
 [sms](*\#*) systemctl restart nfsserver
-
+[sms](*\#*) systemctl enable nfsserver
 # Enable NTP time service on computes and identify master host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
@@ -373,7 +361,7 @@ example configuration.
 % ohpc_command fi
 % end_ohpc_run
 
-\subsubsection{Additional Customizations ({\em optional})} \label{sec:addl_customizations}
+\subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{../../common/compute_customizations_intro}
 
 \paragraph{Increase locked memory limits}
@@ -381,9 +369,6 @@ example configuration.
 
 \paragraph{Enable ssh control via resource manager} 
 \input{../../common/slurm_pam}
-
-\paragraph{Add Cluster Checker} \label{sec:add_clck}
-\input{../../common/cluster_checker}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{../../common/lustre-client}
@@ -509,7 +494,7 @@ host as follows:
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Add nodes to Warewulf datastore
+# Add nodes to Warewulf data store
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
                 wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
         done
@@ -562,6 +547,9 @@ host as follows:
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{../../common/conman_post}
 
+\subsubsection{Optionally configure stateful provisioning}
+\input{../../common/stateful}
+
 %\clearpage
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{../../common/reset_computes}
@@ -590,7 +578,6 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \subsection{Compilers} \label{sec:install_compilers}
 \input{../../common/compilers}
 
-\clearpage
 \subsection{MPI Stacks} \label{sec:mpi}
 \input{../../common/mpi}
 
@@ -614,29 +601,19 @@ Reading installed packages...
 
 S | Name                    | Summary
 --+-------------------------+--------------------------------------------------------+--------
-i | petsc-gnu-impi-ohpc     | Portable Extensible Toolkit for Scientific Computation | package
 i | petsc-gnu-mvapich2-ohpc | Portable Extensible Toolkit for Scientific Computation | package
 i | petsc-gnu-openmpi-ohpc  | Portable Extensible Toolkit for Scientific Computation | package
 \end{lstlisting}
 
 \input{../../common/third_party_libs}
 
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
+\input{../../common/pxse_enabled_builds}
+
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{../../common/slurm_startup}
 
-%% \begin{center}
-%% \begin{tcolorbox}[]
-%% \small
-%% While most resource managers provide similar functionality, the syntax of
-%% specific commands can vary substantially. The following table highlights some
-%% common examples of those differences.
-%% \vspace*{0.2cm}
-%% \input{../../common/rms_equivalence_table}
-%% \end{tcolorbox}
-%% \end{center}
-
-
-\clearpage
+%\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 

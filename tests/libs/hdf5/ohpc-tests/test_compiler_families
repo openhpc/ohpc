@@ -3,6 +3,7 @@
 
 TEST_LOGS=""
 MAKEFLAGS=""
+status=0
 
 source ./TEST_ENV         || exit 1
 source ./common/functions || exit 1
@@ -26,14 +27,14 @@ for compiler in $COMPILER_FAMILIES ; do
     echo "User Libraries: HDF5 tests using h5 wrappers: $compiler"
     echo "-------------------------------------------------------"
 
-    module purge || exit 1
+    module purge          || exit 1
     module load autotools || exit 1
     module load $compiler || exit 1
-    module load hdf5 || exit 1
+    module load hdf5      || exit 1
 
-    ./configure      || exit 1
-    make clean       || exit 1
-    make -j 4 check  || exit 1
+    ./configure           || exit 1
+    make clean            || exit 1
+    make -j 4 check       || status=1
 
 #    save_logs_compiler_family ohpc_module $compiler
 
@@ -66,10 +67,12 @@ for compiler in $COMPILER_FAMILIES ; do
 
     ./configure           || exit 1
     make clean            || exit 1
-    make -j 4 check       || exit 1
+    make -j 4 check       || status=1
 
     save_logs_compiler_family ohpc_module $compiler
 
     make distclean
 
 done
+
+exit ${status}

@@ -33,9 +33,6 @@ BuildRequires: coreutils
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-# require Intel runtime for MKL
-BuildRequires: intel-compilers%{PROJ_DELIM}
-Requires:      intel-compilers%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -72,7 +69,8 @@ Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
-Source0:        http://trilinos.csbsju.edu/download/files/trilinos-%{version}-Source.tar.bz2
+#Source0:        http://trilinos.csbsju.edu/download/files/trilinos-%{version}-Source.tar.bz2
+Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-12-4-2.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 BuildRequires:  cmake >= 2.8
 #BuildRequires:  cppunit-devel
@@ -88,6 +86,9 @@ BuildRequires:  zlib-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%if %{compiler_family} == gnu
+BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
+%endif
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -109,7 +110,8 @@ C++ using object-oriented techniques. All packages are self-contained, with the
 Trilinos top layer providing a common look-and-feel and infrastructure.
 
 %prep
-%setup -q -n %{pname}-%{version}-Source
+#%setup -q -n %{pname}-%{version}-Source
+%setup -q -n  Trilinos-trilinos-release-12-4-2
 %patch0 -p1
 
 %build
@@ -119,12 +121,12 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
-%if %{compiler_family} == gnu
-module load mkl
-%endif
 module load phdf5
 module load netcdf
 module load boost
+%if %{compiler_family} == gnu
+module load openblas
+%endif
 
 mkdir tmp
 cd tmp
@@ -139,26 +141,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
 %if %{compiler_family} == intel
         -DTrilinos_ENABLE_MueLu:BOOL=OFF                                \
-%endif
-        -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
-        -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
-        -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
-        -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
-        -DTrilinos_ENABLE_PyTrilinos:BOOL=OFF                           \
-        -DTrilinos_ENABLE_CTrilinos:BOOL=ON                             \
-%if 0%{?suse_version} >= 1210
-        -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
-%endif
-        -DTrilinos_ENABLE_STK:BOOL=OFF                                  \
-        -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
-        -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
-        -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
-        -DTEUCHOS_ENABLE_libxml2:BOOL=ON                                \
-        -DTEUCHOS_ENABLE_gmp:BOOL=ON                                    \
-        -DTPL_ENABLE_MPI:BOOL=ON                                        \
-        -DMPI_C_COMPILER:FILEPATH=mpicc                                 \
-        -DMPI_CXX_COMPILER:FILEPATH=mpicxx                              \
-        -DMPI_FORTRAN_COMPILER:FILEPATH=mpif90                          \
         -DTPL_ENABLE_MKL:BOOL=ON                                        \
         -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
         -DMKL_LIBRARY_DIRS:FILEPATH="${MKLROOT}/lib/intel64"            \
@@ -169,6 +151,36 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
         -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
         -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
+%endif
+%if %{compiler_family} == gnu
+        -DTPL_ENABLE_BLAS:BOOL=ON                                       \
+        -DBLAS_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                      \
+        -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
+        -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
+        -DLAPACK_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                    \
+        -DLAPACK_LIBRARY_NAMES:STRING="openblas"                        \
+        -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
+%endif
+        -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
+        -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
+        -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
+        -DTrilinos_ENABLE_TrilinosCouplings:BOOL=ON                     \
+        -DTrilinos_ENABLE_PyTrilinos:BOOL=OFF                           \
+        -DTrilinos_ENABLE_CTrilinos:BOOL=ON                             \
+%if 0%{?suse_version} >= 1210
+        -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
+%endif
+        -DTrilinos_ENABLE_STK:BOOL=OFF                                  \
+        -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
+        -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
+        -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
+        -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
+        -DTEUCHOS_ENABLE_libxml2:BOOL=ON                                \
+        -DTEUCHOS_ENABLE_gmp:BOOL=ON                                    \
+        -DTPL_ENABLE_MPI:BOOL=ON                                        \
+        -DMPI_C_COMPILER:FILEPATH=mpicc                                 \
+        -DMPI_CXX_COMPILER:FILEPATH=mpicxx                              \
+        -DMPI_FORTRAN_COMPILER:FILEPATH=mpif90                          \
         -DTPL_ENABLE_Netcdf:BOOL=ON                                     \
         -DNetcdf_INCLUDE_DIRS:PATH="${NETCDF_INC}"                      \
         -DNetcdf_LIBRARY_DIRS:PATH="${NETCDF_LIB}"                      \
@@ -232,6 +244,15 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
+
+# Autoload openblas for gnu builds
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { [is-loaded gnu] } {
+        if { ![is-loaded openblas]  } {
+          module load openblas
+        }
+    }
+}
 
 EOF
 

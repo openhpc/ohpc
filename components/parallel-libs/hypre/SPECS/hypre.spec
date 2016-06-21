@@ -244,7 +244,7 @@ puts stderr " "
 puts stderr "This module loads the hypre library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of hypre leverages the superlu and MKL libraries."
+puts stderr "Note that this build of hypre leverages the superlu and scalapack (if necessary) libraries."
 puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
@@ -277,7 +277,6 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin

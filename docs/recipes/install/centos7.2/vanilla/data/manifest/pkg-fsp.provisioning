@@ -1,6 +1,0 @@
-warewulf-cluster-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used for clustering with Warewulf
-warewulf-cluster-node-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Tools used for clustering with Warewulf
-warewulf-common-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning A suite of tools for clustering
-warewulf-provision-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf - Provisioning Module
-warewulf-provision-server-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf - Provisioning Module - Server
-warewulf-vnfs-fsp 3.6 http://warewulf.lbl.gov/ fsp/provisioning Warewulf VNFS Module

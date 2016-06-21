@@ -1,0 +1,59 @@
+#!../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../common/test_helper_functions || exit 1
+source ../../common/functions || exit 1
+
+if [ -s ../../TEST_ENV ];then
+    source ../../TEST_ENV
+fi
+
+@test "[MPI] build/execute C binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    binary=C_test
+    if [ -e $binary ];then
+        rm $binary
+    fi
+
+    run mpicc -o $binary C_test.c
+    assert_success
+
+    run test -e $binary
+    assert_success
+
+    run ./$binary
+    assert_success
+
+}
+
+@test "[MPI] build/execute C++ binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    binary=CXX_test
+    if [ -e $binary ];then
+        rm $binary
+    fi
+
+    run mpicxx -o $binary CXX_test.cpp
+    assert_success
+
+    run ls $binary
+    assert_success
+
+    run ./$binary
+    assert_success
+}
+
+@test "[MPI] build/execute F90 binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    binary=F90_test
+    if [ -e $binary ];then
+        rm $binary
+    fi
+
+    run mpif90 -o $binary F90_test.f90
+    assert_success
+
+    run ls $binary
+    assert_success
+
+    run ./$binary
+    assert_success
+}
+

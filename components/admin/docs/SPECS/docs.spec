@@ -12,13 +12,17 @@
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 Name:           docs%{PROJ_DELIM}
-Version:        1.1
+Version:        1.1.1
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/admin
 URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
+
+%if 0%{?suse_version}
+BuildRequires:  libstdc++6
+%endif
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl

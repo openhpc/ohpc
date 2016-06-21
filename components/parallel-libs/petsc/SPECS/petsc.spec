@@ -68,7 +68,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.6.3
+Version:        3.7.0
 Release:        0
 
 Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
@@ -201,7 +201,6 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin

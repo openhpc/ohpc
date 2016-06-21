@@ -3,6 +3,7 @@
 
 TEST_LOGS=""
 MAKEFLAGS=""
+status=0
 
 source ./TEST_ENV         || exit 1
 source ./common/functions || exit 1
@@ -20,6 +21,11 @@ make_check_failure=0
 
 for compiler in $COMPILER_FAMILIES ; do
     for mpi in $MPI_FAMILIES ; do
+
+	if [[ "${compiler}" == "gnu" && "${mpi}" == "impi" ]];then
+	    continue
+	fi
+	
 	echo " "
 	echo " "
 	echo "-------------------------------------------------------"
@@ -30,17 +36,16 @@ for compiler in $COMPILER_FAMILIES ; do
 	module load prun      || exit 1
 	module load $compiler || exit 1
 	module load $mpi      || exit 1
-        if [ $compiler == "gnu" ];then
-            module load mkl   || exit 1
+
+        if test "x$LMOD_FAMILY_COMPILER" = "xgnu"; then
+            module load fftw      || exit 1
+            module load openblas  || exit 1
+            module load scalapack || exit 1
         fi
 
 	./configure           || exit 1
 	make clean            || exit 1
-
-	make -k check
-	if [ $? != 0 ] ; then
-	    make_check_failure=1
-	fi
+	make -k check         || status=1
 
         save_logs_mpi_family tests $compiler $mpi
 
@@ -57,4 +62,4 @@ printf "%-24s %-10s %-10s %16s %16s\n" \
 Run_ID Compiler MPI_Stack Reference_Time Current_Time
 cat tests/log.miniDFT
 
-exit $make_check_failure
+exit ${status}

@@ -1,6 +1,6 @@
 
 /*
- * -- SuperLU routine (version 3.0) --
+ * -- SuperLU routine (version 5.0) --
  * Univ. of California Berkeley, Xerox Palo Alto Research Center,
  * and Lawrence Berkeley National Lab.
  * October 15, 2003
@@ -10,9 +10,9 @@
 #include "slu_ddefs.h"
 
 #define HANDLE_SIZE  8
-/* kind of integer to hold a pointer.  Use int.
-   This might need to be changed on 64-bit systems. */
-typedef int fptr;  /* 32-bit by default */
+
+/* kind of integer to hold a pointer.  Use 64-bit. */
+typedef long long int fptr;
 
 typedef struct {
     SuperMatrix *L;
@@ -59,6 +59,9 @@ c_fortran_dgssv_(int *iopt, int *n, int *nnz, int *nrhs,
     superlu_options_t options;
     SuperLUStat_t stat;
     factors_t *LUfactors;
+    GlobalLU_t Glu;   /* Not needed on return. */
+    int    *rowind0;  /* counter 1-based indexing from Frotran arrays. */
+    int    *colptr0;  
 
     trans = NOTRANS;
 
@@ -70,11 +73,14 @@ c_fortran_dgssv_(int *iopt, int *n, int *nnz, int *nrhs,
 	/* Initialize the statistics variables. */
 	StatInit(&stat);
 
-	/* Adjust to 0-based indexing */
-	for (i = 0; i < *nnz; ++i) --rowind[i];
-	for (i = 0; i <= *n; ++i) --colptr[i];
 
-	dCreate_CompCol_Matrix(&A, *n, *n, *nnz, values, rowind, colptr,
+	/* Adjust to 0-based indexing */
+	if ( !(rowind0 = intMalloc(*nnz)) ) ABORT("Malloc fails for rowind0[].");
+	if ( !(colptr0 = intMalloc(*n+1)) ) ABORT("Malloc fails for colptr0[].");
+	for (i = 0; i < *nnz; ++i) rowind0[i] = rowind[i] - 1;
+	for (i = 0; i <= *n; ++i) colptr0[i] = colptr[i] - 1;
+
+	dCreate_CompCol_Matrix(&A, *n, *n, *nnz, values, rowind0, colptr0,
 			       SLU_NC, SLU_D, SLU_GE);
 	L = (SuperMatrix *) SUPERLU_MALLOC( sizeof(SuperMatrix) );
 	U = (SuperMatrix *) SUPERLU_MALLOC( sizeof(SuperMatrix) );
@@ -98,7 +104,7 @@ c_fortran_dgssv_(int *iopt, int *n, int *nnz, int *nrhs,
 	relax = sp_ienv(2);
 
 	dgstrf(&options, &AC, relax, panel_size, etree,
-                NULL, 0, perm_c, perm_r, L, U, &stat, info);
+                NULL, 0, perm_c, perm_r, L, U, &Glu, &stat, info);
 
 	if ( *info == 0 ) {
 	    Lstore = (SCformat *) L->Store;
@@ -118,10 +124,6 @@ c_fortran_dgssv_(int *iopt, int *n, int *nnz, int *nrhs,
 	    }
 	}
 	
-	/* Restore to 1-based indexing */
-	for (i = 0; i < *nnz; ++i) ++rowind[i];
-	for (i = 0; i <= *n; ++i) ++colptr[i];
-
 	/* Save the LU factors in the factors handle */
 	LUfactors = (factors_t*) SUPERLU_MALLOC(sizeof(factors_t));
 	LUfactors->L = L;
@@ -134,6 +136,8 @@ c_fortran_dgssv_(int *iopt, int *n, int *nnz, int *nrhs,
 	SUPERLU_FREE(etree);
 	Destroy_SuperMatrix_Store(&A);
 	Destroy_CompCol_Permuted(&AC);
+	SUPERLU_FREE(rowind0);
+	SUPERLU_FREE(colptr0);
 	StatFree(&stat);
 
     } else if ( *iopt == 2 ) { /* Triangular solve */

@@ -12,7 +12,7 @@ AC_MSG_CHECKING([for VALGRIND_DIR environment variable])
 if test "x$VALGRIND_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([VALGRIND_DIR not defined - please load boost environment.])
+   AC_ERROR([VALGRIND_DIR not defined - please load valgrind environment.])
 else
    AC_MSG_RESULT([yes])
 fi

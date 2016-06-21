@@ -1,9 +1,0 @@
-conman-fsp 0.2.7 http://conman.googlecode.com/ fsp/admin ConMan: The Console Manager
-docs-fsp 15.31 (none) fsp/admin Forest Peak documentation
-examples-fsp 1.2 (none) fsp/admin Example source code and templates for use within FSP environment.
-intel-clck-fsp 2.2.2 http://intel.com/go/cluster fsp/admin Intel(R) Cluster Checker
-lmod-defaults-intel-fsp 1.1 (none) fsp/admin FSP default login environment
-lmod-fsp 5.9.3 https://github.com/TACC/Lmod fsp/admin Lua based Modules (lmod)
-losf-fsp 0.52.0 https://github.com/hpcsi/losf fsp/admin A Linux operating system framework for managing HPC clusters
-pdsh-fsp 2.31 http://sourceforge.net/projects/pdsh fsp/admin Parallel remote shell program
-prun-fsp 0.1.0 (none) fsp/admin Convenience utility for parallel job launch

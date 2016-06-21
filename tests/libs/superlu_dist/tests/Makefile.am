@@ -41,7 +41,7 @@ check_PROGRAMS               += pddrive4_ABglobal
 pddrive4_ABglobal_SOURCES     = pddrive4_ABglobal.c
 
 check_PROGRAMS               += f_5x5
-f_5x5_SOURCES                 = f_5x5.f90 sp_ienv.c dcreate_dist_matrix.c superlu_c2f_dwrap.c
+f_5x5_SOURCES                 = f_5x5.f90 superlupara.f90 superlu_mod.f90 sp_ienv.c dcreate_dist_matrix.c superlu_c2f_dwrap.c
 
 TESTS               = test_module
 TESTS              += rm_execution

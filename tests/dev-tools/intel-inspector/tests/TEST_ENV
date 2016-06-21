@@ -1,5 +1,0 @@
-if [ -s ../../../TEST_ENV ];then
-    source ../../../TEST_ENV
-fi
-
-CMD_TIMEOUT="5:00"

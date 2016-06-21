@@ -1,0 +1,29 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions || exit 1
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+@test "[warewulf] check for RPMs" {
+    run check_if_rpm_installed "warewulf-cluster${DELIM}"
+    assert_success
+    run check_if_rpm_installed "warewulf-provision${DELIM}"
+    assert_success
+    run check_if_rpm_installed "warewulf-provision-server${DELIM}"
+    assert_success
+    run check_if_rpm_installed "warewulf-common${DELIM}"
+    assert_success
+    run check_if_rpm_installed "warewulf-vnfs${DELIM}"
+    assert_success
+}
+
+@test "[warewulf] Check binaries for tainted ENV" {
+    wwsh file import /etc/os-release
+    run wwsh file show os-release
+    assert_success
+    wwsh -y file delete os-release
+}

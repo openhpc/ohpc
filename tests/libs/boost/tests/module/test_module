@@ -126,14 +126,15 @@ rpm=boost-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
         flunk "Unknown compiler family"
     fi
 
-    run $CXX -o f_test -I${!INC} f_test.cpp -L${!LIB} -lboost_math_c99
+#    run $CXX -o f_test -I${!INC} f_test.cpp -L${!LIB} -lboost_math_c99
+    run $CXX -o f_test -I${!INC} f_test.cpp 
     assert_success
     run ./f_test
     assert_success
-    module del boost
-    assert_success
-    run ./f_test
-    assert_failure
+##    module del boost
+##    assert_success
+##    run ./f_test
+##    assert_failure
 
 }
 

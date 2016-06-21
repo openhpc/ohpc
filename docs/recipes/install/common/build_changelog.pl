@@ -3,13 +3,13 @@
 use warnings;
 use strict;
 
-my @compiler_familes = ("gnu","intel");
-my @mpi_families     = ("mvapich2","openmpi","impi");
+my @compiler_familes = ("gnu");
+my @mpi_families     = ("mvapich2","openmpi");
 
 my $delim="ohpc";
 my $merge_package_families = 0;
 
-my @single_package_exceptions = ("lmod-defaults-intel-ohpc");
+my @single_package_exceptions = ("");
 
 sub parse_changes {
     my $infile     = shift;

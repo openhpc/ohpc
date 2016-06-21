@@ -63,7 +63,6 @@
 \input{../../common/base_edition/edition}
 \input{../../common/audience}
 \input{../../common/requirements}
-\input{../../common/byol}
 \input{../../common/inputs}
 
 % Base Operating System --------------------------------------------
@@ -294,7 +293,7 @@ default location for this example is in
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 
 Prior to assembling the image, it is advantageous to perform any additional
-customizations within the chroot environment created for the desired {\em
+customization within the chroot environment created for the desired {\em
  compute} instance. The following steps document the process to add a local
 {\em ssh} key created by \Warewulf{} to support remote access, identify the
 resource manager server, configure NTP for compute resources, and enable \NFS{}
@@ -315,7 +314,7 @@ example configuration.
 [sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
 [sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
-# Identify resource manager hostname on master host
+# Identify resource manager host name on master host
 [sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 \end{lstlisting}
 % end_ohpc_run
@@ -327,7 +326,7 @@ example configuration.
 [sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
 [sms](*\#*) exportfs -a
 [sms](*\#*) systemctl restart nfs
-
+[sms](*\#*) systemctl enable nfs-server
 # Enable NTP time service on computes and identify master host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
@@ -362,8 +361,8 @@ example configuration.
 % ohpc_command fi
 % end_ohpc_run
 
-\clearpage
-\subsubsection{Additional Customizations ({\em optional})} \label{sec:addl_customizations}
+%\clearpage
+\subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{../../common/compute_customizations_intro}
 
 \paragraph{Increase locked memory limits}
@@ -371,9 +370,6 @@ example configuration.
 
 \paragraph{Enable ssh control via resource manager} 
 \input{../../common/slurm_pam}
-
-\paragraph{Add Cluster Checker} \label{sec:add_clck}
-\input{../../common/cluster_checker}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{../../common/lustre-client}
@@ -412,6 +408,7 @@ instructing \Lustre{} to use an \InfiniBand{} network with the \textbf{o2ib} LNE
 attached to \texttt{ib0}. Note that these modifications are made to both the
 {\em master} host and {\em compute} image.
 
+%x\clearpage
 % begin_ohpc_run
 % ohpc_validation_comment Enable o2ib for Lustre
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -433,7 +430,6 @@ host as follows:
 % ohpc_validation_newline
 % end_ohpc_run
 
-\clearpage
 \paragraph{Add \Nagios{} monitoring}
 \input{../../common/nagios}
 
@@ -491,7 +487,7 @@ host as follows:
 [sms](*\#*) wwsh -y file import /tmp/network.$$ --name network
 [sms](*\#*) wwsh -y file set network --path /etc/sysconfig/network --mode=0644 --uid=0
 
-# Add nodes to Warewulf datastore
+# Add nodes to Warewulf data store
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
                 wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
         done
@@ -605,12 +601,14 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 Loaded plugins: fastestmirror
 Loading mirror speeds from cached hostfile
 =========================== N/S matched: petsc-gnu, ohpc ===========================
-petsc-gnu-impi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
 petsc-gnu-mvapich2-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
 petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
 \end{lstlisting}
 
 \input{../../common/third_party_libs}
+
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
+\input{../../common/pxse_enabled_builds}
 
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{../../common/slurm_startup}

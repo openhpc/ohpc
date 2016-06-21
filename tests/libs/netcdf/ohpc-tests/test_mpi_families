@@ -3,6 +3,7 @@
 
 TEST_LOGS=""
 MAKEFLAGS=""
+status=0
 
 source ./TEST_ENV         || exit 1
 source ./common/functions || exit 1
@@ -33,7 +34,7 @@ for compiler in $COMPILER_FAMILIES ; do
         
         ./configure                 || exit 1
         make clean                  || exit 1
-        make -k check
+        make -k check               || status=1
 
         save_logs_mpi_family tests          $compiler $mpi
         save_logs_mpi_family tests-parallel $compiler $mpi
@@ -41,3 +42,5 @@ for compiler in $COMPILER_FAMILIES ; do
         make distclean
     done
 done
+
+exit ${status}

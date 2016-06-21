@@ -50,7 +50,7 @@ BuildRequires: intel_licenses
 
 Summary:   A powerful implementation of MPI
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.10.1
+Version:   1.10.2
 Release:   1
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
@@ -59,8 +59,10 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
-#Patch1:    %{pname}-no_date_and_time.patch
-#Patch2:    %{pname}-no_network_in_build.patch
+
+# 05/11/16 - karl.w.schulz@intel.com (patch to fix singleton execution with PSM)
+Patch0:    pr.1156.patch 
+
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
@@ -116,6 +118,10 @@ Open MPI jobs.
 
 %setup -q -n %{pname}-%{version}
 
+# Apply local patches
+
+%patch0 -p1
+
 %build
 
 # OpenHPC compiler designation
@@ -132,6 +138,8 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
 %if %{with_lustre}
   BASEFLAGS="$BASEFLAGS --with-io-romio-flags=--with-file-system=testfs+ufs+nfs+lustre"
 %endif
+
+
 
 ./configure ${BASEFLAGS}
 
