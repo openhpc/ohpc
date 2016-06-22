@@ -21,10 +21,10 @@ filesystem layout will look like.
 [sms](*\#*) export sda1="mountpoint=/boot:dev=sda1:type=ext3:size=500"
 [sms](*\#*) export sda2="dev=sda2:type=swap:size=32768"
 [sms](*\#*) export sda3="mountpoint=/:dev=sda3:type=ext3:size=fill"
-[sms](*\#*) wwsh -y object modify -s bootloader=sda -t node "${compute_regex}" 
-[sms](*\#*) wwsh -y object modify -s diskpartition=sda -t node "${compute_regex}" 
-[sms](*\#*) wwsh -y object modify -s diskformat=sda1,sda2,sda3 -t node "${compute_regex}" 
-[sms](*\#*) wwsh -y object modify -s filesystems="$sda1,$sda2,$sda3" -t node "${compute_regex}" 
+[sms](*\#*) wwsh -y object modify -s bootloader=sda -t node "${compute_regex}[1-${num_computes}]" 
+[sms](*\#*) wwsh -y object modify -s diskpartition=sda -t node "${compute_regex}[1-${num_computes}]" 
+[sms](*\#*) wwsh -y object modify -s diskformat=sda1,sda2,sda3 -t node "${compute_regex}[1-${num_computes}]" 
+[sms](*\#*) wwsh -y object modify -s filesystems="$sda1,$sda2,$sda3" -t node "${compute_regex}[1-${num_computes}]" 
 \end{lstlisting}
 
 \noindent Upon subsequent reboot of the modified nodes, Warewulf will partition
@@ -35,7 +35,7 @@ to boot from disk):
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Update node object parameters
-[sms](*\#*) wwsh -y object modify -s bootlocal=EXIT -t node "${compute_regex}"
+[sms](*\#*) wwsh -y object modify -s bootlocal=EXIT -t node "${compute_regex}[1-${num_computes}]"
 \end{lstlisting}
 
 

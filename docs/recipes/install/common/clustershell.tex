@@ -15,7 +15,7 @@ groups ({\em adm}, {\em compute}, and {\em all}) is as follows:
 [sms](*\#*) cd /etc/clustershell/groups.d
 [sms](*\#*) mv local.cfg local.cfg.orig
 [sms](*\#*) echo "adm: ${sms_name}" > local.cfg
-[sms](*\#*) echo "compute: c[1-${num_computes}]" >> local.cfg
+[sms](*\#*) echo "compute: ${compute_regex}[1-${num_computes}]" >> local.cfg
 [sms](*\#*) echo "all: @adm,@compute" >> local.cfg
 \end{lstlisting}
 % ohpc_indent 0
