@@ -36,7 +36,7 @@ section of the latest
 ###### [CentOS 7.1]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.0.1.GA/ohpc-release-1.0-1.x86_64.rpm) (md5sum=8dbaed1bea6245c04cf201131df74bc3)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.0.1.GA/Install_guide-CentOS7.1-1.0.1.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.1/iso/OpenHPC-1.0-CentOS_7.1.iso) mirror of Yum repository (md5sum=e57db7c5dd712c7b9fa48e4ebd43c517)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.0/CentOS_7.1/iso/OpenHPC-1.0-CentOS_7.1.iso) mirror of Yum repository (md5sum=e5672b5272d9c93ca323304331db1353)
 
 #### Questions, Comments, or Bug Reports?
 
