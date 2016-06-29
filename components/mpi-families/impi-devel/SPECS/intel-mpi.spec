@@ -13,7 +13,7 @@
 
 %define compiler_family intel
 
-Summary:   OpenHPC compatability package for Intel(R) MPI Library
+Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      intel-mpi-devel%{PROJ_DELIM}
 Version:   2016
 Source1:   OHPC_macros
