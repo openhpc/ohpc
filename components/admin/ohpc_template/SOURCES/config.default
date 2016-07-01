@@ -44,6 +44,19 @@
 
 [VarSub]
 
+img_chroot = /opt/ohpc/admin/images/centos7.2
+sms_name = sms
+sms_ip = 172.16.0.1
+sms_eth_internal = eth1
+internal_netmask=255.255.0.0
+
+[VarSub/Controls]
+
+delimiter_begin = "<<<"
+delimiter_end   = ">>>"
+
+
+
 
 #---------------------------------------------------------------------
 # Soft Link creation/maintenance
