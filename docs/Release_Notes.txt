@@ -12,7 +12,7 @@ Introduction:
    OHPC-packaged RPMs for each variant is as follows: 
    
      CentOS 7.1       - 270 RPMs (Base)
-     SuSE SLES 12 SP1 - 267 RPMs (Base)
+     SUSE SLES 12 SP1 - 267 RPMs (Base)
    
    Note that a detailed list of all available components is available in
    the "Package Manifest" appendix located in the companion Install
