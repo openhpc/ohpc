@@ -15,7 +15,7 @@ The compatible OS version for this release and the total number of
 pre-packaged RPMs available are as follows:
 
         CentOS 7.2       - 270 RPMs (Base) / 40 RPMs (Updates)
-        SuSE SLES 12 SP1 - 267 RPMs (Base) / 40 RPMs (Updates)
+        SUSE SLES 12 SP1 - 267 RPMs (Base) / 40 RPMs (Updates)
 
 Note that a detailed list of all available components is available in
 the "Package Manifest" appendix located in the companion install
@@ -39,7 +39,7 @@ the downloads section of the latest
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.1.1.GA/Install_guide-CentOS7.2-1.1.1.pdf)
 * [ISO image](http://build.openhpc.community/OpenHPC:/1.1/CentOS_7.2/iso/OpenHPC-1.1.1_CentOS_7.2.iso) mirror of yum repository (md5sum=68e977c06c3280ec2e3c135603755d9d)
 
-###### [SLE 12 SP1]
+###### [SLES 12 SP1]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.1.GA/ohpc-release-sles12sp1-1.1-1.x86_64.rpm) (md5sum=a99904b08c90548faaedf7201d60e101)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.1.1.GA/Install_guide-SLES12SP1-1.1.1.pdf)
 * [ISO image](http://build.openhpc.community/OpenHPC:/1.1/SLE_12_SP1/iso/OpenHPC-1.1.1_SLE_12_SP1.iso) mirror of zypper repository (md5sum=673b83d4189fc035a874329a5420f8d1)
