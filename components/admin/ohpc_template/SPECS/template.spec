@@ -17,7 +17,7 @@ Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
 Version:   1.1
 Release:   1
-License:   BSD-3
+License:   Apache-2.0
 Group:     ohpc/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc
