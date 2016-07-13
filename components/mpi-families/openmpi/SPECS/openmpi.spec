@@ -116,9 +116,6 @@ Open MPI jobs.
 
 %setup -q -n %{pname}-%{version}
 
-# Apply local patches
-
-%patch0 -p1
 
 %build
 
