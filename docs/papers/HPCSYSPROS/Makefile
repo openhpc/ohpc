@@ -9,6 +9,5 @@ all: $(PAPER)
 
 clean:
 	$(RM) $(foreach suf, ${TEX_SUFS}, $(PAPER:.pdf=${suf}))
-	$(RM) *pdf
 	$(RM) $(PAPER)
 
