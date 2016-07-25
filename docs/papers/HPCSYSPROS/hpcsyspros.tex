@@ -234,7 +234,40 @@ stack architecture, component selection, releases, and day-to-day project
 maintenance.
 
 \subsection{Conventions}
-RPM + module + test
+\subsubsection{Architecture}
+We have assembled a variety of common ingredients required to deploy and manage 
+an HPC Linux cluster including provisioning tools, resource management, I/O 
+libraires, development tools, and a variety of scientific libraries. The 
+delivery mechanism is via standard package managers (i.e., there are public 
+OpenHPC repositories)
+ - general use model starting from bare metal typically goes like:
+ 1. install BaseOS on administrative host (master)
+ 2. enable OpenHPC repo rpm/zypper install ohpc-release*.rpm
+ -
+ 3. use installation recipe (or provided scripts) to install desired packages to support back-end system and augment with desired development tools, resource manager, etc
+ of course, relevant bits can also be pulled into existing systems or other environments (e.g. cloud)
+
+ Packaging efforts have HPC in mind and include compatible modules (for use with Lmod) with development libraries/tools
+ • Endeavoring to provide hierarchical development environment that is cognizant of different compiler and MPI families
+ • Includecommonconventionsforenvvariables
+ • Development library install example:
+# yum install petsc-gnu-mvapich2-ohpc
+ • End user interaction example with above install: (assume we are a user wanting to build a PETSC hello world in C)
+ $ module load petsc
+ $ mpicc -I$PETSC_INC petsc_hello.c -L$PETSC_LIB –lpetsc
+
+\subsubsection{Build}
+
+\subsubsection{Test}
+ To facilitate global efforts in diagnostics/validation, we have devised a standalone integration test infrastructure
+ • Intent was to create families of tests that could be used during:
+ - initial install process (can we build a system?)
+ - post-install process (does it work?)
+ - developing tests that touch all of the major components (can we compile against 3rd party libraries, will they execute under resource manager, etc)
+ • Expectation is that each new component included will need corresponding integration test collateral
+ • These integration tests are included in GitHub repo
+
+
 
 \subsection{Infrastructure}
 Github + OBS + Jenkins
@@ -243,7 +276,16 @@ Github + OBS + Jenkins
 Yum install my cluster
 
 \section{Conclusions \& Future work}
-More Components + Optimizations + More Architectures
+Some known big ticket items on the horizon for the TSC
+- establishing a process and prioritization/selection process for including
+new software components
+- establish minimum integration test expectations
+- establish packaging conventions:
+• naming schemes
+• dependency hierarchy management • installation paths
+• upgrade/rollback? mechanisms
+- roadmap timeline for next release (and cadence strategy for future releases)
+- addition of public CI infrastructure, roll out of additional architecture builds
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
