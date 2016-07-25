@@ -353,11 +353,11 @@ example configuration.
 % ohpc_validation_newline
 % ohpc_validation_comment Update basic slurm configuration if additional computes defined
 % ohpc_command if [ ${num_computes} -gt 4 ];then
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_regex}[1-${num_computes}]/" /etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_regex}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
 
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_regex}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_regex}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
 % ohpc_command fi
 % end_ohpc_run
 
@@ -505,7 +505,7 @@ host as follows:
 % ohpc_validation_comment Add hosts to cluster (Cont.)
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define provisioning image for hosts
-[sms](*\#*) wwsh -y provision set "${compute_regex}[1-${num_computes}]" --vnfs=sles12sp1 --bootstrap=`uname -r` \
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12sp1 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key
 \end{lstlisting}
 
@@ -518,7 +518,7 @@ host as follows:
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
               wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
         done
-[sms](*\#*) wwsh -y provision set "${compute_regex}[1-${num_computes}]" --fileadd=ifcfg-ib0.ww
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -539,7 +539,7 @@ host as follows:
 % ohpc_validation_newline
 % ohpc_validation_comment Optionally, add arguments to bootstrap kernel
 % ohpc_command if [[ ${enable_kargs} ]]; then
-% ohpc_command    wwsh provision set "${compute_regex}[1-${num_computes}]" --kargs=${kargs}
+% ohpc_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
 % ohpc_command fi
 
 % end_ohpc_run
