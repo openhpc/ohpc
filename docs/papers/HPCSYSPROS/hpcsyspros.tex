@@ -245,11 +245,18 @@ OpenHPC repositories for both yum and zypper). OpenHPC currently supports CentOS
 operating systems. This multiple target model also extends to compiler
 toolchains and MPI runtime libraries. For some components that means a spec file
 can generate 12 different versions of a package. This complexity is masked by
-macros within the build system, and hierarchical Lmod environment modules are 
-provided for users.
+yum/zypper convenience groups, macros within the build system, and hierarchical 
+Lmod environment modules for users.
+
+Convenience groups are prefixed with the 'ohpc-' tag, and package names have a
+similar suffix. This allows for easy wildcarding with package managers, and
+provides the ability to install OpenHPC-provided versions of software packages
+along side of CentOS or SLE versions of the same packages.
 
 --example showing convenience group installation, package name convention, module
 load--
+
+ - repo layout description
 
 \subsubsection{Build}
 
