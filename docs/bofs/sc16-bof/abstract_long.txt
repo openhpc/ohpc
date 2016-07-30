@@ -8,8 +8,8 @@ perform provisioning, configuration management, software upgrades, and system
 diagnostics. Although the functionality is similar, the implementations across
 sites are often different which leads to duplication of effort.  To help
 address this duplication, OpenHPC was formed with the motivation to more
-efficiently build, test, and deliver integrated HPC software components and
-tools.
+efficiently build, test, deliver and configure integrated HPC software
+components and tools.
 
 Launched initially in November 2015, and formalized as a collaborative Linux
 Foundation project in June 2016, OpenHPC is currently comprised of over 25
@@ -18,11 +18,11 @@ software stack aggregates over 60 components ranging from administrative tools
 like bare-metal provisioning and resource management to end-user development
 libraries that span a range of scientific/numerical uses. OpenHPC adopts a
 familiar package repository delivery model and the BoF will begin with
-technical presentations from members of the newly formed OpenHPC Technical Steering
-Committee highlighting current status, major tenets of the effort, and
-near-term roadmaps. Open discussion will follow after the presentations and this
-BoF will provide an opportunity for attendees to interact with members of the
-OpenHPC Technical Steering Committee and other OpenHPC members to provide
+technical presentations from members of the newly formed OpenHPC Technical
+Steering Committee highlighting current status, major tenets of the effort, and
+near-term roadmaps. Open discussion will follow after the presentations and
+this BoF will provide an opportunity for attendees to interact with members of
+the OpenHPC Technical Steering Committee and other OpenHPC members to provide
 feedback on current conventions, ongoing packaging efforts, request additional
 desired components and configurations, and discuss general future trends.
 
