@@ -353,11 +353,11 @@ example configuration.
 % ohpc_validation_newline
 % ohpc_validation_comment Update basic slurm configuration if additional computes defined
 % ohpc_command if [ ${num_computes} -gt 4 ];then
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
 
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
 % ohpc_command fi
 % end_ohpc_run
 
