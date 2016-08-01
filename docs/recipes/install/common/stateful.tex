@@ -2,21 +2,21 @@ Warewulf normally defaults to running the assembled VNFS image out of system
 memory in a {\em stateless} configuration. Alternatively, Warewulf can also be
 used to partition and format persistent storage such that the VNFS image can be
 installed locally to disk in a {\em stateful} manner.  This does, however,
-require that a boot loader (GRUB) be added to the image as follows:
+require that a boot loader (GRUB) be added to the image. Enabling stateful nodes
+also requires additional site-specific, disk-related parameters in the Warewulf
+configuration. In the example that follows, the compute node configuration is
+updated to define where to install the GRUB bootloader, which disk to partition,
+which partition to format, and what the filesystem layout will look like.
 
+% begin_ohpc_run
+% ohpc_command if [[ ${enable_stateful_provisioning} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_validation_comment Add GRUB2 bootloader and update node object parameters
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add GRUB2 bootloader and re-assemble VNFS image
 [sms](*\#*) (*\chrootinstall*) grub2
 [sms](*\#*) wwvnfs  -y --chroot $CHROOT
-\end{lstlisting}
 
-\noindent Enabling stateful nodes also requires additional site-specific, disk-related
-parameters in the Warewulf configuration. In the example that follows, the
-compute node configuration is updated to define where to install the GRUB
-bootloader, which disk to partition, which partition to format, and what the
-filesystem layout will look like.
-
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Update node object parameters
 [sms](*\#*) export sda1="mountpoint=/boot:dev=sda1:type=ext3:size=500"
 [sms](*\#*) export sda2="dev=sda2:type=swap:size=32768"
@@ -25,19 +25,17 @@ filesystem layout will look like.
 [sms](*\#*) wwsh -y object modify -s diskpartition=sda -t node "${compute_regex}" 
 [sms](*\#*) wwsh -y object modify -s diskformat=sda1,sda2,sda3 -t node "${compute_regex}" 
 [sms](*\#*) wwsh -y object modify -s filesystems="$sda1,$sda2,$sda3" -t node "${compute_regex}" 
+
+# Update node object parameters
+[sms](*\#*) wwsh -y object modify -s bootlocal=EXIT -t node "${compute_regex}"
 \end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
 
 \noindent Upon subsequent reboot of the modified nodes, Warewulf will partition
 and format the disk to host the desired VNFS image.  Once installed to disk,
 Warewulf can be instructed to subsequently boot from local storage
 (alternatively, the BIOS boot option order could be updated to reflect a desire
-to boot from disk):
-
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Update node object parameters
-[sms](*\#*) wwsh -y object modify -s bootlocal=EXIT -t node "${compute_regex}"
-\end{lstlisting}
-
-
-\noindent Deleting the bootlocal object parameter will cause Warewulf to once
+to boot from disk): Deleting the bootlocal object parameter will cause Warewulf to once
 again reformat and re-install to local storage upon a new PXE boot request.
