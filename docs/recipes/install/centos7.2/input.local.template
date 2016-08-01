@@ -47,7 +47,7 @@ enable_mrsh="${enable_mrsh:-0}"
 enable_nagios="${enable_nagios:-0}"
 enable_powerman="${enable_powerman:-0}"
 enable_intel_packages="${enable_intel_packages:-0}"
-
+enable_stateful_provisioning="${enable_stateful_provisioning:-0}"
 # -------------------------
 # compute node settings
 # -------------------------
