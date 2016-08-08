@@ -49,6 +49,7 @@ sms_name = sms
 sms_ip = 172.16.0.1
 sms_eth_internal = eth1
 internal_netmask=255.255.0.0
+num_computes=4
 
 [VarSub/Controls]
 
@@ -123,6 +124,7 @@ assign_ips_from_file = yes
 mode = Warewulf
 
 [Warewulf]
+compute=/opt/ohpc/admin/images/centos7.2
 
 [Warewulf/bootstraps]
 
