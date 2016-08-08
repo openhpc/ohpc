@@ -32,6 +32,7 @@ Source8:   tftp.master
 Source9:   warewulf-httpd.conf.master
 Source10:  limits.conf.master
 Source11:  limits.conf.compute
+Source12:  update.default
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -64,6 +65,8 @@ install -D -p -m 0600 %{SOURCE8}  %{buildroot}/%{installPath}/const_files/defaul
 install -D -p -m 0600 %{SOURCE9}  %{buildroot}/%{installPath}/const_files/default/master/warewulf-httpd.conf
 install -D -p -m 0600 %{SOURCE10} %{buildroot}/%{installPath}/const_files/default/master/limits.conf
 install -D -p -m 0600 %{SOURCE11} %{buildroot}/%{installPath}/const_files/default/compute/limits.conf
+# custom post-update script
+install -D -p -m 0700 %{SOURCE12} %{buildroot}/%{installPath}/update.default
 
 
 %clean
