@@ -1,0 +1,121 @@
+#!/bin/bash
+
+# Error message with exit
+ERROR () {
+
+    echo "[ERROR]: $1" >&2
+    exit 1
+}
+
+# simple command wrapper
+runCmd () {
+       eval "$@" || ERROR "unable to run command: $@"
+}
+
+#------------------------------------------
+# Provisioning-related configurations (sms)
+#------------------------------------------
+
+delim=provisioning
+
+if [ ! -e /etc/warewulf/vnfs/ssh/ssh_host_key ];then
+   echo "[$delim]: Initializing Warewulf"
+   wwinit ssh_keys
+   if [ ! -e  /etc/warewulf/vnfs/ssh/ssh_host_key ];then
+       ERROR "Failure detected with wwinit ssh_keys"
+   fi
+fi
+
+sync_files="/etc/passwd /etc/group /etc/shadow /etc/slurm/slurm.conf /etc/munge/munge.key"
+
+for file in $sync_files; do
+    if [ -e $file ];then
+	wwsh file list `basename $file` &> /dev/null
+	if [ $? -ne 0 ];then
+	    echo "[$delim]: Importing $file into Warewulf database"
+	    wwsh file import $file || ERROR "Failure importing sync file ($file)"
+	fi
+    fi
+done
+
+#------------------------------------------
+# Network-related configurations (sms)
+#------------------------------------------
+
+delim=network
+
+if [ -n "${LOSF_VARSUB_sms_eth_internal}" ];then
+    ifconfig | egrep -q "\b${LOSF_VARSUB_sms_eth_internal}: "
+    if [ $? -ne 0 ];then
+	echo "[$delim]: Enabling ${LOSF_VARSUB_sms_eth_internal} interface"
+	ifconfig ${LOSF_VARSUB_sms_eth_internal} ${LOSF_VARSUB_sms_ip} netmask ${LOSF_VARSUB_internal_netmask} up
+    fi
+fi
+
+#------------------------------------------
+# Compute image creation
+#------------------------------------------
+
+delim=compute
+use_proxy=1
+proxy=http://proxy.ra.intel.com:911
+build_vnfs=0
+
+if [ -n "${LOSF_VARSUB_img_chroot}" ];then
+    if [ ! -s ${LOSF_VARSUB_img_chroot}/etc/os-release ];then
+	echo "[$delim]: Creating initial chroot image"
+	if [ $use_proxy -eq 1 ];then
+	    export http_proxy=$proxy
+	fi
+	wwmkchroot centos-7 ${LOSF_VARSUB_img_chroot}
+	build_vnfs=1
+	
+    fi
+
+    if [ ! -s ${LOSF_VARSUB_img_chroot}/etc/resolv.conf ];then
+	echo "[$delim]: Copying resolv.conf from SMS into compute image"
+	cp -p /etc/resolv.conf ${LOSF_VARSUB_img_chroot}/etc/resolv.conf || ERROR "Unable to cp /etc/resolv.conf"
+    fi
+
+    # bootstrap image
+
+    wwsh bootstrap list 2> /dev/null | grep -q `uname -r`
+    if [ $? -ne 0 ];then
+	echo "[$delim]: Creating bootstrap image using SMS kernel -> `uname -r`"
+	wwbootstrap `uname -r` || ERROR "Unable to create boostrap kernel"
+    fi
+    
+    # NFS mounts from SMS
+
+    grep -q /home ${LOSF_VARSUB_img_chroot}/etc/fstab
+    if [ $? -ne 0 ];then
+	echo "[$delim]: Adding NFS mount of /home into ${LOSF_VARSUB_img_chroot}/etc/fstab"
+	echo "${LOSF_VARSUB_sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> ${LOSF_VARSUB_img_chroot}/etc/fstab
+    fi
+
+    grep -q /opt/ohpc/pub ${LOSF_VARSUB_img_chroot}/etc/fstab
+    if [ $? -ne 0 ];then
+	echo "[$delim]: Adding NFS mount of /opt/ohpc/pub into ${LOSF_VARSUB_img_chroot}/etc/fstab"
+	echo "${LOSF_VARSUB_sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> ${LOSF_VARSUB_img_chroot}/etc/fstab 
+    fi
+
+    grep -q /home /etc/exports
+    if [ $? -ne 0 ];then
+	echo "[$delim]: Adding NFS export of /home to /etc/exports on SMS"
+	echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports || ERROR "Unable to add /home to /etc/exports"
+	exportfs -a
+    fi
+
+    grep -q /opt/ohpc/pub /etc/exports
+    if [ $? -ne 0 ];then
+	echo "[$delim]: Adding NFS export of /opt/ohpc/pub to /etc/exports on SMS"
+	echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports || ERROR "Unable to add /opt/ohpc/pub to /etc/exports"
+	exportfs -a
+    fi
+
+    if [ $build_vnfs -eq 1 ];then
+	echo "[$delim]: Assembling VNFS image n SMS"
+	wwvnfs -y --chroot ${LOSF_VARSUB_img_chroot} || ERROR "Unable to create vnfs image"
+    fi
+
+fi
