@@ -61,7 +61,7 @@ Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 
 # 05/11/16 - karl.w.schulz@intel.com (patch to fix singleton execution with PSM)
-Patch0:    pr.1156.patch 
+# Patch0:    pr.1156.patch 
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
@@ -120,7 +120,7 @@ Open MPI jobs.
 
 # Apply local patches
 
-%patch0 -p1
+### %patch0 -p1
 
 %build
 
