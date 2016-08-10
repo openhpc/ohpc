@@ -45,6 +45,7 @@ BuildRequires: intel_licenses
 %define pname openmpi
 %define with_openib 1
 %define with_psm 1
+%define with_psm2 1
 %define with_lustre 0
 %define with_slurm 1
 
@@ -100,6 +101,10 @@ BuildRequires:  libibverbs-devel
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
+%if %{with_psm2}
+BuildRequires:  hfi1-psm hfi1-psm-devel
+%endif
+
 Requires:       prun%{PROJ_DELIM}
 
 # Default library install path
@@ -131,6 +136,9 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge"
 %if %{with_psm}
   BASEFLAGS="$BASEFLAGS --with-psm"
+  %endif
+%if %{with_psm2}
+  BASEFLAGS="$BASEFLAGS --with-psm2"
 %endif
 %if %{with_openib}
   BASEFLAGS="$BASEFLAGS --with-verbs"
