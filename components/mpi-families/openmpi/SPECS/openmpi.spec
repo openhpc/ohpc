@@ -46,6 +46,7 @@ BuildRequires: intel_licenses
 %define with_openib 1
 %define with_psm 1
 %define with_psm2 1
+%define with_libfabric 1
 %define with_lustre 0
 %define with_slurm 1
 
@@ -105,6 +106,10 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 BuildRequires:  hfi1-psm hfi1-psm-devel
 %endif
 
+%if %{with_libfabric}
+BuildRequires:  libfabric libfabric-devel
+%endif
+
 Requires:       prun%{PROJ_DELIM}
 
 # Default library install path
@@ -139,6 +144,9 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
   %endif
 %if %{with_psm2}
   BASEFLAGS="$BASEFLAGS --with-psm2"
+  %endif
+%if %{with_libfabric}
+  BASEFLAGS="$BASEFLAGS --with-libfabric"
 %endif
 %if %{with_openib}
   BASEFLAGS="$BASEFLAGS --with-verbs"
