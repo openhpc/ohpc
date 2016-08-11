@@ -119,7 +119,7 @@ BuildRequires:  libfabric libfabric-devel
 Requires:       prun%{PROJ_DELIM}
 
 # Default library install path
-%define install_path %{OHPC_MPI_STACKS}/%{name}/%version
+%define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
 %description 
 
