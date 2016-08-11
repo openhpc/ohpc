@@ -41,17 +41,23 @@ BuildRequires: intel_licenses
 
 #-ohpc-header-comp-end------------------------------------------------
 
-# Base package name
+# Base package name/config
 %define pname openmpi
 %define with_openib 1
 %define with_psm 1
-%define with_psm2 1
+%define with_psm2 0
 %define with_libfabric 0
 %define with_lustre 0
 %define with_slurm 1
+# Default build is without psm2, but can be overridden
+%{!?with_psm2: %define with_psm2 0}
 
 Summary:   A powerful implementation of MPI
+%if 0%{with_psm2}
+Name:      %{pname}-psm2-%{compiler_family}%{PROJ_DELIM}
+%else
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
 Version:   1.10.3
 Release:   1
 License:   BSD-3-Clause
@@ -104,6 +110,7 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 
 %if %{with_psm2}
 BuildRequires:  hfi1-psm hfi1-psm-devel
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 %if %{with_libfabric}
