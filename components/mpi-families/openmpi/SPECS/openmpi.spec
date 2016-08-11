@@ -45,7 +45,6 @@ BuildRequires: intel_licenses
 %define pname openmpi
 %define with_openib 1
 %define with_psm 1
-%define with_psm2 0
 %define with_libfabric 0
 %define with_lustre 0
 %define with_slurm 1
