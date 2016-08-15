@@ -53,12 +53,17 @@ BuildRequires: intel_licenses
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %endif
 
-%if %{with_psm}
+%if 0%{with_psm}
 BuildRequires:  infinipath-psm infinipath-psm-devel
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 Summary:   OSU MVAPICH2 MPI implementation
+%if 0%{with_psm}
+Name:      %{pname}-psm-%{compiler_family}%{PROJ_DELIM}
+%else
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
 Version:   2.2rc2
 Release:   1
 License:   BSD
