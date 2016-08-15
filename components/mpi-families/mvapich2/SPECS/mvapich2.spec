@@ -10,8 +10,7 @@
 
 # MVAPICH2 MPI stack that is dependent on compiler toolchain
 
-%define with_slurm 0
-%define with_psm 0
+
 
 #-ohpc-header-comp-begin----------------------------------------------
 
@@ -44,6 +43,12 @@ BuildRequires: intel_licenses
 
 #-ohpc-header-comp-end------------------------------------------------
 
+# Base package name/config
+%define pname mvapich2
+%define with_slurm 0
+# Default build is without psm, but can be overridden
+%{!?with_psm: %define with_psm 0}
+
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %endif
@@ -51,9 +56,6 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %if %{with_psm}
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
-
-# Base package name
-%define pname mvapich2
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -91,7 +93,7 @@ BuildRequires: libibmad-devel libibverbs-devel
 BuildRequires: librdmacm-devel
 
 # Default library install path
-%define install_path %{OHPC_MPI_STACKS}/%{name}/%version
+%define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
 %description 
 
