@@ -57,7 +57,7 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   2.1
+Version:   2.2rc2
 Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
