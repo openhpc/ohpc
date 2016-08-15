@@ -55,6 +55,7 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 
 %if 0%{with_psm}
 BuildRequires:  infinipath-psm infinipath-psm-devel
+BuildRequires:  hfi1-psm hfi1-psm-devel
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
