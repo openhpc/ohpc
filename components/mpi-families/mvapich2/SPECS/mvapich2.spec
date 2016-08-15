@@ -48,6 +48,7 @@ BuildRequires: intel_licenses
 %define with_slurm 0
 # Default build is without psm, but can be overridden
 %{!?with_psm: %define with_psm 0}
+%{!?with_psm: %define with_psm2 0}
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
@@ -55,13 +56,17 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 
 %if 0%{with_psm}
 BuildRequires:  infinipath-psm infinipath-psm-devel
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
+
+%if 0%{with_psm2}
 BuildRequires:  hfi1-psm hfi1-psm-devel
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 Summary:   OSU MVAPICH2 MPI implementation
-%if 0%{with_psm}
-Name:      %{pname}-psm-%{compiler_family}%{PROJ_DELIM}
+%if 0%{with_psm2}
+Name:      %{pname}-psm2-%{compiler_family}%{PROJ_DELIM}
 %else
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -125,7 +130,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 	    --enable-cxx \
 	    --enable-g=dbg \
             --with-device=ch3:mrail \
-%if %{with_psm}
+%if 0%{?with_pwm} || 0%{?with_psm2}
             --with-device=ch3:psm \
 %endif
 %if 0%{with_slurm}
