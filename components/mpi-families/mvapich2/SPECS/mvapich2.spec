@@ -48,7 +48,7 @@ BuildRequires: intel_licenses
 %define with_slurm 0
 # Default build is without psm, but can be overridden
 %{!?with_psm: %define with_psm 0}
-%{!?with_psm: %define with_psm2 0}
+%{!?with_psm2: %define with_psm2 0}
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
