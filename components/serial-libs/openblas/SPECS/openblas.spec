@@ -108,7 +108,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 %endif
 # Temporary fix, OpenBLAS does not autodetect aarch64
 %ifarch aarch64
-%define openblas_target TARGET=ARMV8
+%define openblas_target TARGET=ARMV8 NUM_THREADS=256
 %endif
 
 make    %{?openblas_target} USE_THREAD=1 USE_OPENMP=1 \
