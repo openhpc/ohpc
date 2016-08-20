@@ -95,6 +95,8 @@ if [ ! -z "\$SLURM_NODELIST" ];then
      return
 fi
 
+export LUA_CPATH="%{LUA_CPATH}"
+export LUA_PATH="%{LUA_PATH}"
 export LMOD_SETTARG_CMD=":"
 export LMOD_FULL_SETTARG_SUPPORT=no
 export LMOD_COLORIZE=no
@@ -127,6 +129,8 @@ EOF
 
 if ( \$?SLURM_NODELIST ) then
 
+    setenv LUA_CPATH "%{LUA_CPATH}"
+    setenv LUA_PATH "%{LUA_PATH}"
     setenv LMOD_SETTARG_CMD ":"
     setenv LMOD_FULL_SETTARG_SUPPORT "no"
     setenv LMOD_COLORIZE "no"
