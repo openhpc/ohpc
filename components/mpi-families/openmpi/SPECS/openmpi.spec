@@ -44,7 +44,13 @@ BuildRequires: intel_licenses
 # Base package name
 %define pname openmpi
 %define with_openib 1
+
+%ifarch aarch64
+%define with_psm 0
+%else
 %define with_psm 1
+%endif
+
 %define with_lustre 0
 %define with_slurm 1
 
