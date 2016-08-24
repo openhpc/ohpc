@@ -2,7 +2,7 @@ PAPER    := hpcsyspros.pdf
 TEX_SUFS := .aux .log .nav .out .snm .toc .vrb .fdb_latexmk .bbl .blg .fls
 
 
-%.pdf:%.tex hpcsyspros.tex
+%.pdf:%.tex abstract.tex hpcsyspros.tex hpcsyspros.bib
 	latexmk -pdf $<
 
 all: $(PAPER)
