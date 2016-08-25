@@ -225,7 +225,7 @@ and vendors. \\
 The remaining sections provide a further overview of the community project
 by highlighting related work (\S\ref{sec:related_work}), the technical governance
 structure (\S\ref{sec:governance}), repository enablement (\S\ref{sec:repo_enable}), packaging
-conventions, and test harness.
+conventions(\S\ref{sec:packaging}), and test procedures.
 
 \input{related_work}
 
@@ -351,8 +351,9 @@ are availble on the community GitHub site (or via the installable
 
 Once the OpenHPC repository is enabled locally, a range of packages are
 available and a typical install on the {\em master} hosts begins with the
-installation of desired system administration services. In the example that follows, the
-Warewulf provisoning system is installed using available convenience groups:
+installation of desired system administration services. In the example that
+follows, the Warewulf provisoning system~\cite{warewulf_url} is installed using
+available convenience groups:
 
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) yum -i groupinstall ohpc-warewulf
@@ -364,10 +365,10 @@ and install a collection of related packages. As an example, the
 \texttt{ohpc-warewulf} group expands to include all the packages needed to
 enable a Warewulf provisioning server. Similarly, the
 \texttt{ohpc-slurm-server} group includes the packages needed to stand up a
-SLURM control daemon for resource management across the cluster.  Although not
-shown here, a related \texttt{ohpc-slurm-client} group is also available to allow
-for installation of a smaller set of packages needed to enable a SLURM client
-(typically installed in compute node images).
+SLURM control daemon for resource management~\cite{Jette02slurm:simple} across
+the cluster.  Although not shown here, a related \texttt{ohpc-slurm-client}
+group is also available to allow for installation of a smaller set of packages
+needed to enable a SLURM client (typically installed in compute node images).
 
 Note that individual packages names provided via OpenHPC are appended with the
 ``ohpc'' suffix.
@@ -378,31 +379,95 @@ Finally, while the examples here continue to use the \texttt{yum} package
 manager, equivalent commands can be substituted using \texttt{zypper} when
 using SLES.  \\
 
-\noindent {\bf Development Libraries}:
-In addition to providing tools primarily targeted at system administrators, OpenHPC
-also provides pre-packaged builds for a number of popular open-source tools and
-libraries used by HPC applications and developers. For example, OpenHPC
-provides builds for FFTW and HDF5 (including serial and parallel I/O
-support), and the GNU Scientific Library (GSL). Again, multiple builds of
-each package are available in the OpenHPC repository to support multiple
-compiler and MPI family combinations where appropriate.
-%Note, however, that not
-%all combinatorial permutations may be available for components where there are
-%known license incompatibilities.
-The general naming convention for builds
-provided by OpenHPC is to append the compiler and MPI family name that the
+\noindent {\bf Development Libraries}: In addition to providing tools primarily
+targeted at system administrators, OpenHPC also provides pre-packaged builds
+for a number of popular open-source tools and libraries used by HPC
+applications and developers. For example, OpenHPC includes a variety of builds
+for FFTW~\cite{fftw_url} and HDF5~\cite{hdf5_url} (including serial and
+parallel I/O support), and the GNU Scientific Library (GSL). A number of other
+development tools and libraries are included and the installation recipe(s)
+contain a detailed package manifest highlighting what is available for a given
+release. Note also that the list is expected to evolve
+and expand over time as additional software components are integrated within
+future releases.
+
+General purpose HPC systems often rely on multiple compiler and MPI family
+toolchains~\cite{tacc_sc_best_practices:2011} and OpenHPC supports this
+strategy via the adoption of a hierarchical build configuration that is
+cognizant of the need to deliver unique builds of a given software package for
+each desired compiler/MPI permutation.
+% Additional discussion on the build procecure will be higlighted in OBS section.
+%%% Again, multiple builds of
+%%% each package are available in the OpenHPC repository to support multiple
+%%% compiler and MPI family combinations where appropriate.
+The general naming convention for builds that have these toolchain dependencies 
+%provided by OpenHPC
+is to append the compiler and MPI family name that the
 library was built against directly into the package name. For example,
 libraries that do not require MPI as part of the build process adopt the
-following RPM name: \\
+following RPM naming scheme: \\
 
 \noindent
-\texttt{package-<compiler\_family>-ohpc-<version>-<rel>.rpm} \\
+\texttt{package-<comp\_fam>-ohpc-<ver>-<rel>.rpm} \\
 
-\noindent Packages that do require MPI as part of the build expand upon this convention to
-additionally include the MPI family name as follows: \\
+\noindent where \texttt{<comp\_fam>} maps to the underlying compiler family and \texttt{<ver>}
+and \texttt{<rel>} correspondond to the individual software version and build
+release number, respectively.
+Expanding on this convention, packages that also require MPI as part of the build 
+additionally include the MPI family (\texttt{<mpi\_fam}>) name as follows: \\
 
-\subsection{Conventions}
-\subsubsection{Architecture}
+\noindent
+\texttt{package-<comp\_fam>-<mpi\_fam>-ohpc-<ver>-<rel>.rpm} \\
+
+\noindent
+Given the large number of installation permutations possible for software
+supporting multiple compiler/MPI toolchains, combined with the fact that HPC
+sites also tend to make multiple versions of a particular component available
+to their users, there is a clear need to support a flexible development environment for end
+users. A popular historical choice in this space over the years has been the
+use of Environment Modules~\cite{furlani_1996} to expose a \texttt{modules}
+command within a user's shell environment allowing them to load/unload desired
+software packages via management of key environment variables
+(e.g. \texttt{{PATH}} and \texttt{{LD\_LIBRARY\_PATH}}). Several
+implementations of the modules system have evolved and OpenHPC leverages a
+recent variant named {\em Lmod}~\cite{tacc_sc_best_practices:2011,lmod_url}
+which is a Lua-based implementation that has embedded support for managing the
+hierarhical software matrix adopted in OpenHPC.  In addition to providing a
+pre-packaged build of {\em Lmod}, development libraries and tools integrated
+within OpenHPC include the installation of companion module files.
+%for use with
+%{\em Lmod}.
+Consequently, once a desired package is installed, end users can then access
+and query the software through the underlying modules system. The packaging
+process includes a consistent set of environment variables for users to
+access a particular package's path for available header files and dynamic
+libraries. As an example, consider the following installation of the
+PETSc~\cite{PETSc_url} scientific toolkit built using the GNU compiler and
+MVAPICH2~\cite{MVAPICH_url} MPI toolchain.
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) yum install petsc-gnu-mvapich2-ohpc
+\end{lstlisting}
+
+\noindent
+Next, assume an end user has a simple C code example they wish to build against
+the installed PETSc version. This can be accomplished as follows by leveraging
+the environment variables enabled thru the provided modulefile:
+
+\begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
+joeuser (*\$*) module load petsc
+joesuer (*\$*) mpicc -I$PETSC_INC petsc_hello.c \
+          -L$PETSC_LIB -lpetsc
+\end{lstlisting}
+
+Owing to the hierarchical capabilities of {\em Lmod}, if multiple PETSc
+permutations were installed (e.g. for different MPI toolchains), the end user
+would also be able to swap toolchains and the underlying modules system will
+automatically update the user's environment accordingly to be consistent with
+the currently loaded MPI family.
+
+%\subsection{Conventions}
+%\subsubsection{Architecture}
 %%We have assembled a variety of common ingredients required to deploy and manage 
 %%an HPC Linux cluster including provisioning tools, resource management, I/O 
 %%libraries, development tools, and a variety of scientific libraries. The 
@@ -416,18 +481,17 @@ additionally include the MPI family name as follows: \\
 %%Lmod environment modules for users.
 
 
+%--example showing convenience group installation, package name convention, module
+%load--
 
---example showing convenience group installation, package name convention, module
-load--
+% - repo layout description
 
- - repo layout description
-
-\subsubsection{Build}
+\subsection{Build Infrastructure}
 
  - spec file conventions
  - git + OBS
  
-\subsubsection{Test}
+\subsection{Integration Testing}
  To facilitate global efforts in diagnostics/validation, we have devised a standalone integration test infrastructure
  • Intent was to create families of tests that could be used during:
  - initial install process (can we build a system?)
