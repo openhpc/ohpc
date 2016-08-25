@@ -339,32 +339,83 @@ epel                 Extra Packages for Enterprise...
 
 %epel             Extra Packages for Enterprise Linux 7 - x86_64
 
-%% The
-%% example which follows illustrates installation of the \texttt{ohpc-release}
-%package directly from the OpenHPC build server.
+\subsection{Packaging} \label{sec:packaging}
 
+%Being building-block oriented in nature,
+To highlight several aspects of the current packaging conventions, we next
+present several installation examples. Note that this
+discussion does not endeavor to replicate an entire install procedure, and
+interested readers are invited to consult the latest installation recipe(s) that
+are availble on the community GitHub site (or via the installable
+\texttt{docs-ohpc} RPM) for more detailed instructions.
 
+Once the OpenHPC repository is enabled locally, a range of packages are
+available and a typical install on the {\em master} hosts begins with the
+installation of desired system administration services. In the example that follows, the
+Warewulf provisoning system is installed using available convenience groups:
 
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) yum -i groupinstall ohpc-warewulf
+[sms](*\#*) yum -i groupinstall ohpc-slurm-server
+\end{lstlisting}
+  
+Convenience groups like the examples above are prefixed with the ``ohpc-'' tag
+and install a collection of related packages. As an example, the
+\texttt{ohpc-warewulf} group expands to include all the packages needed to
+enable a Warewulf provisioning server. Similarly, the
+\texttt{ohpc-slurm-server} group includes the packages needed to stand up a
+SLURM control daemon for resource management across the cluster.  Although not
+shown here, a related \texttt{ohpc-slurm-client} group is also available to allow
+for installation of a smaller set of packages needed to enable a SLURM client
+(typically installed in compute node images).
 
+Note that individual packages names provided via OpenHPC are appended with the
+``ohpc'' suffix.
+The motivation for this convention was to  allow for easy wild-carding queries with package managers, and
+to also provide the ability to install OpenHPC-provided versions of software packages
+along side alternate distro versions of the same packages (if available).
+Finally, while the examples here continue to use the \texttt{yum} package
+manager, equivalent commands can be substituted using \texttt{zypper} when
+using SLES.  \\
+
+\noindent {\bf Development Libraries}:
+In addition to providing tools primarily targeted at system administrators, OpenHPC
+also provides pre-packaged builds for a number of popular open-source tools and
+libraries used by HPC applications and developers. For example, OpenHPC
+provides builds for FFTW and HDF5 (including serial and parallel I/O
+support), and the GNU Scientific Library (GSL). Again, multiple builds of
+each package are available in the OpenHPC repository to support multiple
+compiler and MPI family combinations where appropriate.
+%Note, however, that not
+%all combinatorial permutations may be available for components where there are
+%known license incompatibilities.
+The general naming convention for builds
+provided by OpenHPC is to append the compiler and MPI family name that the
+library was built against directly into the package name. For example,
+libraries that do not require MPI as part of the build process adopt the
+following RPM name: \\
+
+\noindent
+\texttt{package-<compiler\_family>-ohpc-<version>-<rel>.rpm} \\
+
+\noindent Packages that do require MPI as part of the build expand upon this convention to
+additionally include the MPI family name as follows: \\
 
 \subsection{Conventions}
 \subsubsection{Architecture}
-We have assembled a variety of common ingredients required to deploy and manage 
-an HPC Linux cluster including provisioning tools, resource management, I/O 
-libraries, development tools, and a variety of scientific libraries. The 
-delivery mechanism is via standard package managers (i.e., there are public 
-OpenHPC repositories for both yum and zypper). OpenHPC currently supports CentOS
-7 and SUSE's SLE 12. A single RPM spec file generates packages for both base
-operating systems. This multiple target model also extends to compiler
-toolchains and MPI runtime libraries. For some components that means a spec file
-can generate 12 different versions of a package. This complexity is masked by
-yum/zypper convenience groups, macros within the build system, and hierarchical 
-Lmod environment modules for users.
+%%We have assembled a variety of common ingredients required to deploy and manage 
+%%an HPC Linux cluster including provisioning tools, resource management, I/O 
+%%libraries, development tools, and a variety of scientific libraries. The 
+%%delivery mechanism is via standard package managers (i.e., there are public 
+%%OpenHPC repositories for both yum and zypper). OpenHPC currently supports CentOS
+%%7 and SUSE's SLE 12. A single RPM spec file generates packages for both base
+%%operating systems. This multiple target model also extends to compiler
+%%toolchains and MPI runtime libraries. For some components that means a spec file
+%%can generate 12 different versions of a package. This complexity is masked by
+%%yum/zypper convenience groups, macros within the build system, and hierarchical 
+%%Lmod environment modules for users.
 
-Convenience groups are prefixed with the 'ohpc-' tag, and package names have a
-similar suffix. This allows for easy wild-carding with package managers, and
-provides the ability to install OpenHPC-provided versions of software packages
-along side of CentOS or SLE versions of the same packages.
+
 
 --example showing convenience group installation, package name convention, module
 load--
