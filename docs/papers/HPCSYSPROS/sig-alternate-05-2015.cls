@@ -54,7 +54,18 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{amsfonts}
+%
 \usepackage{hyperref}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{listings}
+\definecolor{grey}{rgb}{0.96,0.96,0.96}
+\lstset{basicstyle=\footnotesize\ttfamily,
+  frame=single,
+  showstringspaces=false,
+  escapeinside={(*}{*)},
+  columns=flexible,
+  backgroundcolor=\color{grey},
+  }
 % Need this for accents in Arial/Helvetica
 %\usepackage[T1]{fontenc}  % Gerry March 12, 2007 - causes Type 3 problems (body text)
 %\usepackage{textcomp}
