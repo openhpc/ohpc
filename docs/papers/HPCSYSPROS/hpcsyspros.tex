@@ -245,7 +245,7 @@ the {\em component development representative(s)} are included to represent the
 upstream development communities for software projects that might be integrated
 with the OpenHPC packaging collection. In contrast, the {\em end-user/site
   representative(s)} are downstream recipients of OpenHPC integration efforts
-and represent administrators and users of HPC systems that might leverage
+and serve the interest of administrators and users of HPC systems that might leverage
 OpenHPC collateral.  At present, there are nearly 20 community volunteers
 serving on the TSC~\cite{TSC_url} with representation from academia, industry,
 and government R\&D laboratories.
@@ -256,6 +256,95 @@ and government R\&D laboratories.
   \caption{Identified roles within the OpenHPC Technical Steering Committee (TSC).}
   \label{fig:tsc_governance}
 \end{figure}
+
+\subsection{Installation/Repository Overview}
+
+As mentioned previously, OpenHPC endeavors to adopt a repository-based delivery
+model similar to the underlying OS distributions commonly used as the basis for HPC
+Linux clusters.  At present, OpenHPC is providing builds targeted against two
+supported OS distributions: CentOS7 and SLES12. The underlying package
+managers for these two distributions are {\bf \texttt yum} and {\bf \texttt zypper},
+respectively, and OpenHPC provides public repositories that are compatible with
+these RPM-based package managers.
+
+The installation procedure oulined in current OpenHPC recipes targets
+bare-metal systems and assumes that one of the supported base operating systems
+is first installed on a chosen {\em master} host. This is typically done
+leveraging bootable media from ISO images provided by the base OS and once
+installed, OpenHPC recipes highlight steps to install additional software and
+perform configurations to use the {\em master} host to provision the remaining
+cluster.
+
+An overview of the physical infrastructure expected for use with
+current OpenHPC recipes is shown in
+Figure~\ref{fig:cluster_arch} and highlights the high-level networking
+configuration. The {\em master} host requires at least two Ethernet interfaces
+with {\em eth0} connected to the local data center network and {\em eth1} used
+to provision and manage the cluster backend (note that these interface names
+are examples and may be different depending on local settings and OS
+conventions). Two logical IP interfaces are expected to each compute node: the
+first is the standard Ethernet interface that will be used for provisioning and
+resource management. The second is used to connect to each host's BMC and is
+used for power management and remote console access. Physical connectivity for
+these two logical IP networks is often accommodated via separate cabling and
+switching infrastructure; however, an alternate configuration can also be
+accommodated via the use of a shared NIC.
+%, which runs a packet filter to divert
+%management packets between the host and BMC.
+For power management, we assume that the compute node baseboard management
+controllers (BMCs) are available via IPMI from the chosen master host. For file
+systems, the current recipe(s) document setting up the chosen master
+host as an NFS file system that is made available to the compute
+nodes. Installation information is also discussed to optionally include a
+Lustre~\cite{Lustre_url} file system mount.
+
+\begin{figure}[h]
+  \includegraphics[width=0.95\linewidth]{figures/ohpc-arch-small.pdf}
+  \caption{Overview of physical cluster infrastructure expected with OpenHPC
+    installation recipes.}
+  \label{fig:cluster_arch}
+\end{figure}
+
+\noindent{\bf Community Repo:}  In cases where external network connectivity is
+available on the {\em master} host, OpenHPC provides an \texttt{ohpc-release} package
+that includes GPG keys for package signing and repository enablement.  This
+package can be downloaded from the OpenHPC GitHub community site directly
+(\url{https://github.com/openhpc/ohpc}). Note that additional repositories may
+be required to resolve package dependencies and, in the case of CentOS, the EPEL~\cite{epel_url}
+repo is currently required.
+
+The most recent release branch for OpenHPC is version~1.1 and the output in
+Figure~\ref{fig:repolist} highlights the typical repository setup after
+installation of the \texttt{openhpc-release-1.1} RPM in a CentOS
+environment. Following OS distro conventions, note that two OpenHPC
+repositories are enabled by default: a { \bf base} repo corresponding to the
+original 1.1 release and an {\bf updates} repo that provides rolling fixes and
+enhancements against the 1.1 tree.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=bash,keywords={}]
+(*\#*) yum repolist
+repo id              repo name
+OpenHPC              OpenHPC-1.1 - Base
+OpenHPC-updates      OpenHPC-1.1 - Updates
+base                 CentOS-7 - Base
+epel                 Extra Packages for Enterprise...
+\end{lstlisting}
+\vspace*{-0.3cm}
+  \caption{Typical package repository configuration after enabling OpenHPC
+    (CentOS example).}
+    \label{fig:repolist}
+\end{figure}
+
+%epel             Extra Packages for Enterprise Linux 7 - x86_64
+
+%% The
+%% example which follows illustrates installation of the \texttt{ohpc-release}
+%package directly from the OpenHPC build server.
+
+
+
+
 
 \subsection{Conventions}
 \subsubsection{Architecture}
