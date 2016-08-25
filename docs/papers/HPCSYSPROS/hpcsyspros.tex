@@ -223,8 +223,8 @@ and vendors. \\
 %%% practices.
 
 The remaining sections provide a further overview of the community project
-highlighting related work (\S\ref{sec:related_work}), the technical governance
-structure (\S\ref{sec:governance}), repository enablement, packaging
+by highlighting related work (\S\ref{sec:related_work}), the technical governance
+structure (\S\ref{sec:governance}), repository enablement (\S\ref{sec:repo_enable}), packaging
 conventions, and test harness.
 
 \input{related_work}
@@ -258,6 +258,7 @@ and government R\&D laboratories.
 \end{figure}
 
 \subsection{Installation/Repository Overview}
+\label{sec:repo_enable}
 
 As mentioned previously, OpenHPC endeavors to adopt a repository-based delivery
 model similar to the underlying OS distributions commonly used as the basis for HPC
@@ -305,18 +306,18 @@ Lustre~\cite{Lustre_url} file system mount.
   \label{fig:cluster_arch}
 \end{figure}
 
-\noindent{\bf Community Repo:}  In cases where external network connectivity is
-available on the {\em master} host, OpenHPC provides an \texttt{ohpc-release} package
-that includes GPG keys for package signing and repository enablement.  This
-package can be downloaded from the OpenHPC GitHub community site directly
+\noindent{\bf Community Repo:} In cases where external network connectivity is
+available on the {\em master} host, OpenHPC provides an \texttt{ohpc-release}
+package that includes GPG keys for package signing and repository enablement.
+This package can be downloaded from the OpenHPC GitHub community site directly
 (\url{https://github.com/openhpc/ohpc}). Note that additional repositories may
-be required to resolve package dependencies and, in the case of CentOS, the EPEL~\cite{epel_url}
-repo is currently required.
+be required to resolve package dependencies and, in the case of CentOS, access
+to the EPEL~\cite{epel_url} repo is currently required.
 
 The most recent release branch for OpenHPC is version~1.1 and the output in
 Figure~\ref{fig:repolist} highlights the typical repository setup after
 installation of the \texttt{openhpc-release-1.1} RPM in a CentOS
-environment. Following OS distro conventions, note that two OpenHPC
+environment. Following typical OS distro conventions, note that two OpenHPC
 repositories are enabled by default: a { \bf base} repo corresponding to the
 original 1.1 release and an {\bf updates} repo that provides rolling fixes and
 enhancements against the 1.1 tree.
