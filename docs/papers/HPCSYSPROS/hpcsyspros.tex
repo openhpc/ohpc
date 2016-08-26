@@ -468,7 +468,8 @@ to decide on underlying build and installation requirements chosen to match the
 desired runtime.
 
 \begin{figure}[h]
-\begin{lstlisting}[language=bash,keywords={},basicstyle=\scriptsize\ttfamily,keepspaces]
+%  \begin{lstlisting}[language=bash,keywords={},basicstyle=\scriptsize\ttfamily,keepspaces]
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontsize{7.8}{10}\ttfamily,keepspaces]
 %{!?compiler_family: %define compiler_family gnu}
 
 (*\#*) Compiler dependencies
@@ -503,9 +504,9 @@ simply redefine the \texttt{compiler\_family} and \texttt{mpi\_family} variables
 the top of the .spec file.  This linkage provides a convenient mechanism to
 extend the hierarchical runtime family approach to the underlying build system.
 
-\begin{lstlisting}[language=bash,keywords={},basicstyle=\scriptsize\ttfamily,keepspaces]
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontsize{7.8}{10}\ttfamily,keepspaces]
 (*\#*) cat petsc-gnu-mvapich2/_link
-<link project='OpenHPC:1.1:Factory' package='petsc-gnu-openmpi'>
+<link project='OpenHPC:1.1' package='petsc-gnu-openmpi'>
 <patches>
 <topadd>%define compiler_family gnu</topadd>
 <topadd>%define mpi_family mvapich2</topadd>
