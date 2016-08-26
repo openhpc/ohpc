@@ -442,13 +442,28 @@ the currently loaded MPI family.
  - git + OBS
  
 \subsection{Integration Testing}
- To facilitate global efforts in diagnostics/validation, we have devised a standalone integration test infrastructure
- • Intent was to create families of tests that could be used during:
- - initial install process (can we build a system?)
- - post-install process (does it work?)
- - developing tests that touch all of the major components (can we compile against 3rd party libraries, will they execute under resource manager, etc)
- • Expectation is that each new component included will need corresponding integration test collateral
- • These integration tests are included in GitHub repo
+To facilitate validation of the OpenHPC distribution as a whole, we have 
+devised a standalone integration test infrastructure. In order to exercise the
+entire scope of the distribution, we first provision a cluster according to the
+OpenHPC install guide. Once the cluster is up and running, we launch a suite of 
+tests targeting the funcitonality and performance of each componnet. These tests 
+are generally pulled from component source distributions and aim to insure 
+development toolchains are functioning correctly and to ensure jobs perform 
+under the resource manager.
+
+A Jenkins continuous integreation server~\cite{jenkins_url} manages a set of 
+nodes in our test infrastructure. Jenkins periodically kickstarts a cluster 
+master node using out-of-the-box base OS repositories, and this master is then 
+customized according to the OpenHPC install guide. The \LaTeX\ source for the 
+install guide contains markup that is used to generate a \texttt{{bash}} script 
+containing each command necessary to configure the cluster and install OpenHPC
+components. Jenkins then launches the component test suite.
+
+The component test suite is based on a custom autotools-based framework. The
+framework allows us to build and test multiple binaries of a particular
+component for each compiler toolchain and MPI runtime if applicable.
+We utilize the Bash Auotomated Testing System (BATS)~\cite{bats_url} 
+framework to run tests on the cluster and report results back to Jenkins.
 
 
 \section{Conclusions \& Future work}
