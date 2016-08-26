@@ -218,7 +218,7 @@ managers for these two distributions are {\bf \texttt yum} and {\bf \texttt zypp
 respectively, and OpenHPC provides public repositories that are compatible with
 these RPM-based package managers.
 
-The installation procedure oulined in current OpenHPC recipes targets
+The installation procedure outlined in current OpenHPC recipes targets
 bare-metal systems and assumes that one of the supported base operating systems
 is first installed on a chosen {\em master} host. This is typically done
 leveraging bootable media from ISO images provided by the base OS and once
@@ -296,13 +296,13 @@ To highlight several aspects of the current packaging conventions, we next
 present several installation examples. Note that this
 discussion does not endeavor to replicate an entire install procedure, and
 interested readers are invited to consult the latest installation recipe(s) that
-are availble on the community GitHub site (or via the installable
+are available on the community GitHub site (or via the installable
 \texttt{docs-ohpc} RPM) for more detailed instructions.
 
 Once the OpenHPC repository is enabled locally, a range of packages are
 available and a typical install on the {\em master} hosts begins with the
 installation of desired system administration services. In the example that
-follows, the Warewulf provisoning system~\cite{warewulf_url} is installed using
+follows, the Warewulf provisioning system~\cite{warewulf_url} is installed using
 available convenience groups:
 
 \begin{lstlisting}[language=bash,keywords={}]
@@ -361,7 +361,7 @@ following RPM naming scheme: \\
 \texttt{package-<comp\_fam>-ohpc-<ver>-<rel>.rpm} \\
 
 \noindent where \texttt{<comp\_fam>} maps to the underlying compiler family and \texttt{<ver>}
-and \texttt{<rel>} correspondond to the individual software version and build
+and \texttt{<rel>} correspond to the individual software version and build
 release number, respectively.
 Expanding on this convention, packages that also require MPI as part of the build 
 additionally include the MPI family (\texttt{<mpi\_fam}>) name as follows: \\
@@ -382,7 +382,7 @@ software packages via management of key environment variables
 implementations of the modules system have evolved and OpenHPC leverages a
 recent variant named {\em Lmod}~\cite{tacc_sc_best_practices:2011,lmod_url}
 which is a Lua-based implementation that has embedded support for managing the
-hierarhical software matrix adopted in OpenHPC.  In addition to providing a
+hierarchical software matrix adopted in OpenHPC.  In addition to providing a
 pre-packaged build of {\em Lmod}, development libraries and tools integrated
 within OpenHPC include the installation of companion module files.
 %for use with
@@ -402,7 +402,7 @@ MVAPICH2~\cite{MVAPICH_url} MPI toolchain.
 \noindent
 Next, assume an end user has a simple C code example they wish to build against
 the installed PETSc version. This can be accomplished as follows by leveraging
-the environment variables enabled thru the provided modulefile:
+the environment variables enabled thru the provided module file:
 
 \begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
 joeuser (*\$*) module load petsc
@@ -446,24 +446,66 @@ To facilitate validation of the OpenHPC distribution as a whole, we have
 devised a standalone integration test infrastructure. In order to exercise the
 entire scope of the distribution, we first provision a cluster according to the
 OpenHPC install guide. Once the cluster is up and running, we launch a suite of 
-tests targeting the funcitonality and performance of each componnet. These tests 
+tests targeting the functionality and performance of each component. These tests 
 are generally pulled from component source distributions and aim to insure 
 development toolchains are functioning correctly and to ensure jobs perform 
-under the resource manager.
+under the resource manager. The intent is not to replicate a particular 
+component's own validation tests, but rather to ensure all of OpenHPC is
+functionally integrated. The testing framework is publicly available in the
+OpenHPC GitHub repository.
 
-A Jenkins continuous integreation server~\cite{jenkins_url} manages a set of 
-nodes in our test infrastructure. Jenkins periodically kickstarts a cluster 
+A Jenkins continuous integration server~\cite{jenkins_url} manages a set of 
+physical servers in our test infrastructure. Jenkins periodically kickstarts a cluster 
 master node using out-of-the-box base OS repositories, and this master is then 
 customized according to the OpenHPC install guide. The \LaTeX\ source for the 
 install guide contains markup that is used to generate a \texttt{{bash}} script 
-containing each command necessary to configure the cluster and install OpenHPC
-components. Jenkins then launches the component test suite.
+containing each command necessary to provision and configure the cluster and install OpenHPC
+components. Jenkins executes this script, then launches the component test suite.
 
-The component test suite is based on a custom autotools-based framework. The
-framework allows us to build and test multiple binaries of a particular
-component for each compiler toolchain and MPI runtime if applicable.
-We utilize the Bash Auotomated Testing System (BATS)~\cite{bats_url} 
-framework to run tests on the cluster and report results back to Jenkins.
+The component test suite relies on a custom autotools-based framework.
+Individual runs of the test suite are customizable using familiar autoconf
+syntax, and \texttt{{make check}} does what one might expect. The framework also
+allows us to build and test multiple binaries of a 
+particular component for each permutation of compiler toolchain and MPI runtime if applicable.
+We utilize the Bash Automated Testing System (BATS)~\cite{bats_url} 
+framework to run tests on the cluster and report results back to Jenkins. An
+example test driver script follows:
+
+\begin{lstlisting}[language=bash,keywords={}]
+#!/bin/bash
+
+status=0
+cd libs/scalapack || exit 1
+export BATS_JUNIT_CLASS=PETSc
+
+# bootstrap the local autotools project 
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+    for mpi in $MPI_FAMILIES ; do
+
+    echo "--------------------------------------"
+    echo "Libraries: PETSc tests: $compiler-$mpi"
+    echo "--------------------------------------"
+
+    module purge          || exit 1
+    module load prun      || exit 1
+    module load $compiler || exit 1
+    module load $mpi      || exit 1
+    module load petsc     || exit 1
+
+    ./configure           || exit 1
+    make clean            || exit 1
+    make -k check         || status=1
+
+    save_logs_mpi_family tests $compiler $mpi
+
+    make distclean
+    done
+done
+
+exit ${status}
+\end{lstlisting}
 
 
 \section{Conclusions \& Future work}
