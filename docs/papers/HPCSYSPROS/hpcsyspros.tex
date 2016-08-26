@@ -405,7 +405,7 @@ the environment variables enabled thru loading of the provided module file:
 
 \begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
 joeuser (*\$*) module load petsc
-joesuer (*\$*) mpicc -I$PETSC_INC petsc_hello.c \
+joeuser (*\$*) mpicc -I$PETSC_INC petsc_hello.c \
              -L$PETSC_LIB -lpetsc
 \end{lstlisting}
 
@@ -437,8 +437,59 @@ the currently loaded MPI family.
 
 \subsection{Build Infrastructure}
 
- - spec file conventions
- - git + OBS
+To provide the public package repositories highlighted previously in
+\S\ref{sec:repo_enable}, OpenHPC utilizes a set of standalone resources
+running the Open Build Service (OBS)~\cite{OBS_url}.  OBS is an open-source
+distribution development platform written in Perl that provides a transparent
+infrastructure for the development of Linux distributions and is the underlying
+build system for openSUSE.  The public OBS instance for OpenHPC is available at
+\url{https://build.openhpc.community}.
+
+While OpenHPC does not, by itself, provide a complete Linux distribution, it
+does have in common many of the same packaging requirements and targets a
+delivery mechanism that adopts Linux sysadmin familiarity.  OBS aids in this
+process by driving builds for multiple OS distributions (e.g. CentOS and SLES)
+and performs dependency analysis amongst components, triggering downstream
+builds as necessary based on upstream changes. Each build is carried out in a
+chroot environment for repeatability, and OBS manages publication of the resulting
+builds into package repositories compatabile with {\texttt yum} and {\texttt
+  zypper}. Both binary and source RPMs are made available as part of this process.
+
+The primary inputs for OBS are the instructions necessary to build a particular
+package, typically housed in an RPM .spec file. These .spec files are version controlled in the
+community GitHub repository and are templated in a way to have a single input
+drive multiple compiler/MPI family combinations.  To highlight this approach,
+the code in Figure~\ref{fig:metis_spec} highlights a small portion from the .spec file used to build
+METIS~\cite{Karypis:1998}, a popular domain decomposition library. The primary
+item of note is the the use of a \texttt{compiler\_family} macro which defaults
+to the gnu compiler family if not specified otherwise.  This variable is then used
+to decide on underlying build and installation requirements chosen to match the
+desired runtime.
+
+\begin{figure}[h]
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\scriptsize\ttfamily,keepspaces]
+%{!?compiler_family: %define compiler_family gnu}
+
+(*\#*) Compiler dependencies
+BuildRequires: lmod%{PROJ_DELIM}
+%if %{compiler_family} == gnu
+BuildRequires: gnu-compilers%{PROJ_DELIM}
+Requires:      gnu-compilers%{PROJ_DELIM}
+%endif
+%if %{compiler_family} == intel
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+%endif
+\end{lstlisting}
+\vspace*{-0.3cm}
+  \caption{Snippet from METIS .spec file highlighting compiler hierarchy
+    template used during the build process.}
+    \label{fig:metis_spec}
+\end{figure}
+
+
+% - spec file conventions
+% - git + OBS
  
 \subsection{Integration Testing} \label{sec:integ_testing}
 To facilitate validation of the OpenHPC distribution as a whole, we have
@@ -474,13 +525,13 @@ requires MPI linkage and the script highlights the fact that multiple tests are
 performed for each supported compiler and MPI toolchain.
 
 \begin{lstlisting}[language=bash,keywords={},keepspaces]
-#!/bin/bash
+(*\#*)!/bin/bash
 
 status=0
 cd libs/petsc || exit 1
 export BATS_JUNIT_CLASS=PETSc
 
-# bootstrap the local autotools project 
+(*\#*) bootstrap the local autotools project 
 ./bootstrap || exit 1
 
 for compiler in $COMPILER_FAMILIES ; do
