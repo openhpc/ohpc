@@ -175,7 +175,7 @@ and vendors. \\
 The remaining sections provide a further overview of the community project
 by highlighting related work (\S\ref{sec:related_work}), the technical governance
 structure (\S\ref{sec:governance}), repository enablement (\S\ref{sec:repo_enable}), packaging
-conventions(\S\ref{sec:packaging}), and test procedures.
+conventions~(\S\ref{sec:packaging}), and integration testing~(\S\ref{sec:integ_testing}).
 
 \input{related_work}
 
@@ -300,7 +300,7 @@ are available on the community GitHub site (or via the installable
 \texttt{docs-ohpc} RPM) for more detailed instructions.
 
 Once the OpenHPC repository is enabled locally, a range of packages are
-available and a typical install on the {\em master} hosts begins with the
+available and a typical install on the {\em master} host begins with the
 installation of desired system administration services. In the example that
 follows, the Warewulf provisioning system~\cite{warewulf_url} is installed using
 available convenience groups:
@@ -320,20 +320,19 @@ the cluster.  Although not shown here, a related \texttt{ohpc-slurm-client}
 group is also available to allow for installation of a smaller set of packages
 needed to enable a SLURM client (typically installed in compute node images).
 
-Note that individual packages names provided via OpenHPC are appended with the
-``ohpc'' suffix.
-The motivation for this convention was to  allow for easy wild-carding queries with package managers, and
-to also provide the ability to install OpenHPC-provided versions of software packages
-along side alternate distro versions of the same packages (if available).
-Finally, while the examples here continue to use the \texttt{yum} package
-manager, equivalent commands can be substituted using \texttt{zypper} when
-using SLES.  \\
+Note that individual packages provided via OpenHPC have their names appended
+with the ``ohpc'' suffix.  The motivation for this convention was to allow for
+easy wild-carding queries with package managers, and to also provide the
+ability to install OpenHPC-packaged versions of software along side alternate
+distro versions of the same packages (if available).  Finally, while the
+examples here continue to use the \texttt{yum} package manager, equivalent
+commands can be substituted using \texttt{zypper} when using SLES.  \\
 
 \noindent {\bf Development Libraries}: In addition to providing tools primarily
 targeted at system administrators, OpenHPC also provides pre-packaged builds
 for a number of popular open-source tools and libraries used by HPC
 applications and developers. For example, OpenHPC includes a variety of builds
-for FFTW~\cite{fftw_url} and HDF5~\cite{hdf5_url} (including serial and
+for FFTW~\cite{FFTW05} and HDF5~\cite{hdf5_url} (including serial and
 parallel I/O support), and the GNU Scientific Library (GSL). A number of other
 development tools and libraries are included and the installation recipe(s)
 contain a detailed package manifest highlighting what is available for a given
@@ -402,12 +401,12 @@ MVAPICH2~\cite{MVAPICH_url} MPI toolchain.
 \noindent
 Next, assume an end user has a simple C code example they wish to build against
 the installed PETSc version. This can be accomplished as follows by leveraging
-the environment variables enabled thru the provided module file:
+the environment variables enabled thru loading of the provided module file:
 
 \begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
 joeuser (*\$*) module load petsc
 joesuer (*\$*) mpicc -I$PETSC_INC petsc_hello.c \
-          -L$PETSC_LIB -lpetsc
+             -L$PETSC_LIB -lpetsc
 \end{lstlisting}
 
 Owing to the hierarchical capabilities of {\em Lmod}, if multiple PETSc
@@ -441,7 +440,7 @@ the currently loaded MPI family.
  - spec file conventions
  - git + OBS
  
-\subsection{Integration Testing}
+\subsection{Integration Testing} \label{sec:integ_testing}
 To facilitate validation of the OpenHPC distribution as a whole, we have 
 devised a standalone integration test infrastructure. In order to exercise the
 entire scope of the distribution, we first provision a cluster according to the
