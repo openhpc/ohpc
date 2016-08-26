@@ -162,8 +162,8 @@ modern HPC methods and tools.
 \noindent {\bf Vision:} OpenHPC components and best practices will enable and
 accelerate innovation and discoveries by broadening access to state-of-the-art,
 open source HPC methods and tools in a consistent environment, supported by a
-collaborative, worldwide community of HPC users, developers, administrators,
-and vendors. \\
+collaborative, worldwide community of HPC users, developers, researchers,
+administrators, and vendors. \\
 
 %%% OpenHPC
 %%% is focused on lowering the barrier to entry for HPC by providing a collection
@@ -325,7 +325,7 @@ needed to enable a SLURM client (typically installed in compute node images).
 Note that individual packages provided via OpenHPC have their names appended
 with the ``ohpc'' suffix.  The motivation for this convention was to allow for
 easy wild-carding queries with package managers, and to also provide the
-ability to install OpenHPC-packaged versions of software along side alternate
+ability to install OpenHPC-packaged versions of software alongside of alternate
 distro versions of the same packages (if available).  Finally, while the
 examples here continue to use the \texttt{yum} package manager, equivalent
 commands can be substituted using \texttt{zypper} when using SLES.  \\
@@ -403,7 +403,7 @@ MVAPICH2~\cite{MVAPICH_url} MPI toolchain.
 \noindent
 Next, assume an end user has a simple C code example they wish to build against
 the installed PETSc version. This can be accomplished as follows by leveraging
-the environment variables enabled thru loading of the provided module file:
+the environment variables enabled through loading of the provided module file:
 
 \begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
 joeuser (*\$*) module load petsc
@@ -451,7 +451,7 @@ While OpenHPC does not, by itself, provide a complete Linux distribution, it
 does have in common many of the same packaging requirements and targets a
 delivery mechanism that adopts Linux sysadmin familiarity.  OBS aids in this
 process by driving builds for multiple OS distributions (e.g. CentOS and SLES)
-and performs dependency analysis amongst components, triggering downstream
+and performs dependency analysis among components, triggering downstream
 builds as necessary based on upstream changes. Each build is carried out in a
 chroot environment for repeatability, and OBS manages publication of the resulting
 builds into package repositories compatible with {\texttt yum} and {\texttt
