@@ -11,7 +11,7 @@ combined bundle of an underlying CentOS distribution with additional software
 components covering the different administrative needs of a cluster, 
 and offers a GUI to help administrators walk thru
 different steps of the installation procedure.  All cluster services and tools
-are installed and configured during the initial installation of the frontend
+are installed and configured during the initial installation of the front-end
 with no need to download and %manual
 configure other external
 packages. Furthermore, with the use of Rolls \cite{rolls2004}, the
@@ -36,7 +36,7 @@ performance cluster computing.
 %The fundamental function of OSCAR is to build
 %and maintain clusters.
 OSCAR follows a different methodology than Rocks; once
-the frontend is installed and booted, the cluster building components are
+the front-end is installed and booted, the cluster building components are
 downloaded and installed through tools that try to simplify the complexity of
 the different administrative tasks.  There have been some variations of OSCAR
 based on the same framework to cover different types of cluster environments
@@ -53,7 +53,7 @@ version 6.1.1 was released in 2011.
 %information, a parallel distributed “shell” tool set called C3 and an
 %environment management facility called Env-Switcher.
 
-A common issue that arises in the design of system management toolkits is the
+A common issue that arises in the design of system management tool kits is the
 inevitable trade-off between ease-of-use and customization flexibility. Rocks
 has adopted a more turn-key approach which necessitates the need for some level
 of embedded configuration management and Rocks leverages a hierarchical XML
@@ -69,3 +69,12 @@ a community effort, OpenHPC is supported and maintained by a group of vendors,
 research centers and laboratories that share a common goal to minimize
 duplicated effort and sharing of best practices.
 
+Other efforts to mitigate the complexity of HPC and scientific software
+management include EasyBuild~\site{easybuild_url} and Spack~\site{spack_url}.
+Both of these systems provide convenient methods for building and installing
+many common HPC software packages. With similar goals, OpenHPC differs in scope 
+and process. We aim to provide a complete cluster software stack capable of
+provisioning and administering a system in addition to user-space development
+libraries. OpenHPC also seeks to leverage standard Linux tools and practices to
+install and maintain software. Both EasyBuild and Spack are included in the
+OpenHPC distribution.
