@@ -175,7 +175,8 @@ and vendors. \\
 The remaining sections provide a further overview of the community project
 by highlighting related work (\S\ref{sec:related_work}), the technical governance
 structure (\S\ref{sec:governance}), repository enablement (\S\ref{sec:repo_enable}), packaging
-conventions~(\S\ref{sec:packaging}), and integration testing~(\S\ref{sec:integ_testing}).
+conventions~(\S\ref{sec:packaging}), underlying build
+infrastructure~(\S\ref{sec:build_infra}), and integration testing~(\S\ref{sec:integ_testing}).
 
 \input{related_work}
 
@@ -435,7 +436,7 @@ the currently loaded MPI family.
 
 % - repo layout description
 
-\subsection{Build Infrastructure}
+\subsection{Build Infrastructure} \label{sec:build_infra}
 
 To provide the public package repositories highlighted previously in
 \S\ref{sec:repo_enable}, OpenHPC utilizes a set of standalone resources
@@ -487,10 +488,31 @@ Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
     \label{fig:metis_spec}
 \end{figure}
 
+For builds that require MPI linkage, a companion .spec template is used which
+adds an \texttt{mpi\_family} variable that defaults to the
+OpenMPI~\cite{gabriel04:openmpi} stack unless specified otherwise.  To
+maintain the concept of having a single maintainer commit drive multiple
+builds, our OBS configuration leverages the ability to {\em link} related software
+packages together. To illustrate this process, the following highlights the underlying
+OBS package configuration syntax for the PETSc toolkit built against
+MVAPICH2. The top line indicates that the MVAPICH2-based build is simply a link
+to the parent (default) package configuration that is OpenMPI based.  What
+follows after that are stanzas that tell OBS to apply patches to the resulting
+.spec file prior to doing a build. In this case, the patches are trivial and
+simply redefine the \texttt{compiler\_family} and \texttt{mpi\_family} variables at
+the top of the .spec file.  This linkage provides a convenient mechanism to
+extend the hierarchical runtime family approach to the underlying build system.
 
-% - spec file conventions
-% - git + OBS
- 
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\scriptsize\ttfamily,keepspaces]
+(*\#*) cat petsc-gnu-mvapich2/_link
+<link project='OpenHPC:1.1:Factory' package='petsc-gnu-openmpi'>
+<patches>
+<topadd>%define compiler_family gnu</topadd>
+<topadd>%define mpi_family mvapich2</topadd>
+</patches>
+</link>
+\end{lstlisting}
+
 \subsection{Integration Testing} \label{sec:integ_testing}
 To facilitate validation of the OpenHPC distribution as a whole, we have
 devised a standalone integration test infrastructure. In order to exercise the
