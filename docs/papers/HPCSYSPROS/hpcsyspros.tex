@@ -289,8 +289,6 @@ epel                 Extra Packages for Enterprise...
     \label{fig:repolist}
 \end{figure}
 
-%epel             Extra Packages for Enterprise Linux 7 - x86_64
-
 \subsection{Packaging} \label{sec:packaging}
 
 %Being building-block oriented in nature,
@@ -495,7 +493,8 @@ adds an \texttt{mpi\_family} variable that defaults to the
 OpenMPI~\cite{gabriel04:openmpi} stack unless specified otherwise.  To
 maintain the concept of having a single maintainer commit drive multiple
 builds, our OBS configuration leverages the ability to {\em link} related software
-packages together. To illustrate this process, the following highlights the underlying
+packages together. To illustrate this process, the text in
+Figure~\ref{fig:obs_link} highlights the underlying
 OBS package configuration syntax for the PETSc toolkit built against
 MVAPICH2. The top line indicates that the MVAPICH2-based build is simply a link
 to the parent (default) package configuration that is OpenMPI based.  What
@@ -505,6 +504,7 @@ simply redefine the \texttt{compiler\_family} and \texttt{mpi\_family} variables
 the top of the .spec file.  This linkage provides a convenient mechanism to
 extend the hierarchical runtime family approach to the underlying build system.
 
+\begin{figure}[h]
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontsize{7.8}{10}\ttfamily,keepspaces]
 (*\#*) cat petsc-gnu-mvapich2/_link
 <link project='OpenHPC:1.1' package='petsc-gnu-openmpi'>
@@ -514,6 +514,11 @@ extend the hierarchical runtime family approach to the underlying build system.
 </patches>
 </link>
 \end{lstlisting}
+\vspace*{-0.3cm}
+\caption{Underlying OBS package config highlighting linkage between builds
+  using different runtime hierarchies.}
+\label{fig:obs_link}
+\end{figure}
 
 \subsection{Integration Testing} \label{sec:integ_testing}
 To facilitate validation of the OpenHPC distribution as a whole, we have
@@ -544,10 +549,11 @@ also allows us to build and test multiple binaries of a particular component
 for each permutation of compiler toolchain and MPI runtime if applicable.  We
 utilize the Bash Automated Testing System (BATS)~\cite{bats_url} framework to
 run tests on the cluster and report results back to Jenkins. An example test
-driver shell script for the PETSc toolkit follows below. Recall that this package
+driver shell script for the PETSc toolkit is highlighted in Figure~\ref{fig:test_loop}. Recall that this package
 requires MPI linkage and the script highlights the fact that multiple tests are
 performed for each supported compiler and MPI toolchain.
 
+\begin{figure}[t]
 \begin{lstlisting}[language=bash,keywords={},keepspaces]
 (*\#*)!/bin/bash
 
@@ -583,6 +589,10 @@ done
 
 exit ${status}
 \end{lstlisting}
+\vspace*{-0.3cm}
+\caption{Example test driver script for PETSc.}
+\label{fig:test_loop}
+\end{figure}
 
 As the test suite has grown over time to accommodate a growing set of integrated
 components, the current test harness has both {\em short} and {\em long}
@@ -606,10 +616,11 @@ can request inclusion of additional software. Currently, OpenHPC provides simple
 configuration recipes for HPC clusters, but future efforts will focus on 
 providing automatization for more advanced configuration and tuning to address
 scalability, power management, and high availability concerns. We hope to
-continue driving standardization across the HPC landscape, including developing
-package dependency conventions with EasyBuild and Spack. Also on the horizon is the
-expansion of public continuous integration infrastructure, and corresponding
-builds and releases for the ARM architecture (aarch64). 
+expand community cooperation between complementary efforts by 
+%continue driving standardization across the HPC landscape,
+developing package dependency conventions with EasyBuild and Spack. Finally, we
+are working to deploy public continuous integration infrastructure, and
+enable corresponding builds and releases for the ARM architecture (aarch64).
 
 %ACKNOWLEDGMENTS are optional
 %\section{Acknowledgments}
