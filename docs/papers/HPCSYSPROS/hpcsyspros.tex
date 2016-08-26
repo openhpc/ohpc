@@ -441,17 +441,18 @@ the currently loaded MPI family.
  - git + OBS
  
 \subsection{Integration Testing} \label{sec:integ_testing}
-To facilitate validation of the OpenHPC distribution as a whole, we have 
+To facilitate validation of the OpenHPC distribution as a whole, we have
 devised a standalone integration test infrastructure. In order to exercise the
-entire scope of the distribution, we first provision a cluster according to the
-OpenHPC install guide. Once the cluster is up and running, we launch a suite of 
-tests targeting the functionality and performance of each component. These tests 
-are generally pulled from component source distributions and aim to insure 
-development toolchains are functioning correctly and to ensure jobs perform 
-under the resource manager. The intent is not to replicate a particular 
-component's own validation tests, but rather to ensure all of OpenHPC is
-functionally integrated. The testing framework is publicly available in the
-OpenHPC GitHub repository.
+entire scope of the distribution, we first provision a cluster from bare-metal
+using installation scripts provided as part of the OpenHPC documentation. Once
+the cluster is up and running, we launch a suite of tests targeting the
+functionality and performance of each component. These tests are generally
+pulled from component source distributions and aim to insure development
+toolchains are functioning correctly and to ensure jobs perform under the
+resource manager. The intent is not to replicate a particular component's own
+validation tests, but rather to ensure all of OpenHPC is functionally
+integrated. The testing framework is publicly available in the OpenHPC GitHub
+repository.
 
 A Jenkins continuous integration server~\cite{jenkins_url} manages a set of 
 physical servers in our test infrastructure. Jenkins periodically kickstarts a cluster 
@@ -463,18 +464,20 @@ components. Jenkins executes this script, then launches the component test suite
 
 The component test suite relies on a custom autotools-based framework.
 Individual runs of the test suite are customizable using familiar autoconf
-syntax, and \texttt{{make check}} does what one might expect. The framework also
-allows us to build and test multiple binaries of a 
-particular component for each permutation of compiler toolchain and MPI runtime if applicable.
-We utilize the Bash Automated Testing System (BATS)~\cite{bats_url} 
-framework to run tests on the cluster and report results back to Jenkins. An
-example test driver script follows:
+syntax, and \texttt{{make check}} does what one might expect. The framework
+also allows us to build and test multiple binaries of a particular component
+for each permutation of compiler toolchain and MPI runtime if applicable.  We
+utilize the Bash Automated Testing System (BATS)~\cite{bats_url} framework to
+run tests on the cluster and report results back to Jenkins. An example test
+driver shell script for the PETSc toolkit follows below. Recall that this package
+requires MPI linkage and the script highlights the fact that multiple tests are
+performed for each supported compiler and MPI toolchain.
 
-\begin{lstlisting}[language=bash,keywords={}]
+\begin{lstlisting}[language=bash,keywords={},keepspaces]
 #!/bin/bash
 
 status=0
-cd libs/scalapack || exit 1
+cd libs/petsc || exit 1
 export BATS_JUNIT_CLASS=PETSc
 
 # bootstrap the local autotools project 
