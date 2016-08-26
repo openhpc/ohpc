@@ -18,26 +18,32 @@ packages. Furthermore, with the use of Rolls \cite{rolls2004}, the
 administrator can customize the base installation
 %of packages
 with additional
-optional software that integrates seamlessly and automatically into the management and
+optional software that integrates seamlessly
+%and automatically
+into the management and
 packaging mechanisms of the base software.
 %It makes use of Kickstart and RPM to manage the distribution of node file
 %system and provides component based configuration method to realize module
 %reuse.
 The most recent version of Rocks, version 6.2, was released in May 2015 and is
-based upon CentOS~(v6.6).
+based on CentOS~(v6.6).
 
 OSCAR \cite{oscar2001,oscar_url} (Open Source Cluster Application Resources) is
-fully integrated and easy to install software bundle designed for high
-performance cluster computing. The fundamental function of OSCAR is to build
-and maintain clusters.  OSCAR follows a different methodology than Rocks; once
+a fully integrated and easy to install software bundle designed for high
+performance cluster computing.
+%The fundamental function of OSCAR is to build
+%and maintain clusters.
+OSCAR follows a different methodology than Rocks; once
 the frontend is installed and booted, the cluster building components are
 downloaded and installed through tools that try to simplify the complexity of
 the different administrative tasks.  There have been some variations of OSCAR
 based on the same framework to cover different types of cluster environments
-such as Thin-Oscar for diskless platforms and HA-Oscar to support High
-Availability. OSCAR is supported upon various Linux distributions such as
-CentOS and Debian. However, even if OSCAR and its variations are still being
-used in production, the project is no longer actively maintained and the latest
+such as Thin-Oscar for diskless platforms, and HA-Oscar to support High
+Availability. OSCAR has previously been supported on multiple Linux distributions such as
+CentOS and Debian. However,
+%even if OSCAR and its variations are still being
+%used in production,
+the project is no longer actively maintained and the latest
 version 6.1.1 was released in 2011.
 %OSCAR also provides a GUI for installation and configuration purposes.  OSCAR
 %is based upon a virtual image of the target machine using System Installation
@@ -45,10 +51,18 @@ version 6.1.1 was released in 2011.
 %information, a parallel distributed “shell” tool set called C3 and an
 %environment management facility called Env-Switcher.
 
-OpenHPC is much less automated than Rocks, does not provide a GUI interface,
-expects a certain expertise from the administrator, but it offers a greater
-choice of software components, promoting flexibility, for each level of the
-software stack. Furthermore OpenHPC is supported and maintained by a group of
-vendors, research centers and laboratories that have as common goal
-standardization through sharing of best practices.
+A common issue that arises in the design of system management toolkits is the
+inevitable trade-off between ease-of-use and customization flexibility. Rocks
+has adopted a more turn-key approach which necessitates the need for some level
+of embedded configuration management and Rocks leverages a hierarchical XML
+schema. As will be discussed further in \S\ref{sec:repo_enable}, OpenHPC is
+providing an HPC focused software repository and adopts a more building-block
+approach. Consequently, it expects a certain level of expertise from the
+administrator, but is intended to offer a greater choice of software
+components, promote flexibility for use in a variety of system environments
+and scales, be compatible with multiple Linux distributions, and be
+interoperable with multiple configuration management systems.  Furthermore, as
+a community effort, OpenHPC is supported and maintained by a group of vendors,
+research centers and laboratories that share a common goal to minimize
+duplicated effort and sharing of best practices.
 
