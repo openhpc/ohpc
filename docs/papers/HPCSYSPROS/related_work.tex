@@ -1,25 +1,30 @@
 \subsection{Related Work} \label{sec:related_work}
 
-The installation, deployment and configuration of High Performance Computing
-clusters is a rather tedious work.  There are various open source and
-proprietary cluster management tools that attempt to provide a complete
-solution to this problem.  In the open-source world the most widely known
-solutions are Rocks and OSCAR.  Rocks \cite{rocks2003,rocks_url}, an open
-source Linux-based cluster solution package, can significantly reduce the
-complexity of building HPC clusters.  It provides a specific bundle of software
-components covering the different administrative needs of a cluster and offers
-an easy to use GUI for the different steps of the installation procedure.  All
-cluster services and tools are installed and configured during the initial
-installation of the frontend with no need to download and manual configure
-other external packages. Furthermore, with the use of Rolls \cite{rolls2004}
-the administrator can customize the base installation of packages with
-additional software that integrate seamlessly and automatically into the
-management and packaging mechanisms of the base software.
+As highlighted in the previous section, the installation, deployment and
+configuration of HPC clusters can be tedious work.  Consequently, a variety of
+open source and proprietary cluster management tools have been created that
+provide different approaches to help address this problem.  In the open-source
+arena, two widely known solutions have been Rocks and OSCAR.  Rocks
+\cite{rocks2003,rocks_url} is an open source Linux-based clustering solution
+that aims to reduce the complexity of building HPC clusters.  It provides a
+combined bundle of an underlying CentOS distribution with additional software
+components covering the different administrative needs of a cluster, 
+and offers a GUI to help administrators walk thru
+different steps of the installation procedure.  All cluster services and tools
+are installed and configured during the initial installation of the frontend
+with no need to download and %manual
+configure other external
+packages. Furthermore, with the use of Rolls \cite{rolls2004}, the
+administrator can customize the base installation
+%of packages
+with additional
+optional software that integrates seamlessly and automatically into the management and
+packaging mechanisms of the base software.
 %It makes use of Kickstart and RPM to manage the distribution of node file
 %system and provides component based configuration method to realize module
 %reuse.
-The latest and current stable version of Rocks, version 6.2, is based upon
-CentOS 6.6.
+The most recent version of Rocks, version 6.2, was released in May 2015 and is
+based upon CentOS~(v6.6).
 
 OSCAR \cite{oscar2001,oscar_url} (Open Source Cluster Application Resources) is
 fully integrated and easy to install software bundle designed for high
