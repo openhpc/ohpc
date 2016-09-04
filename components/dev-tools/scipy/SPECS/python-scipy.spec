@@ -35,7 +35,7 @@
 # variable via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
+%{!?mpi_family: %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -196,7 +196,7 @@ find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type
 %fdupes %{buildroot}%{install_path}/lib64/python2.7/site-packages
 %endif
 %{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
+%{!?mpi_family: %global mpi_family openmpi}
 # fix executability issue
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/arff/arffread.py
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py
