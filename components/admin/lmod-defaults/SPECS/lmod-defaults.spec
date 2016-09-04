@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
 
 Summary:   OpenHPC default login environments

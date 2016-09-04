@@ -15,7 +15,7 @@
 # compiler_family variable via rpmbuild or other
 # mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 

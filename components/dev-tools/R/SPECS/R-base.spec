@@ -34,7 +34,7 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
