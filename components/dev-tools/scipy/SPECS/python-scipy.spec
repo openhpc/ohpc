@@ -34,7 +34,7 @@
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
@@ -195,7 +195,7 @@ find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes %{buildroot}%{install_path}/lib64/python2.7/site-packages
 %endif
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
 # fix executability issue
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/arff/arffread.py
