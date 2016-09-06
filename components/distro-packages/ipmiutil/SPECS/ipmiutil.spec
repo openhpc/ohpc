@@ -14,7 +14,7 @@
 # Copyright (c) 2012 Andy Cress
 #
 
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname ipmiutil
 
