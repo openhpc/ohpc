@@ -138,7 +138,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+%{__mkdir} -p %{buildroot}/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
