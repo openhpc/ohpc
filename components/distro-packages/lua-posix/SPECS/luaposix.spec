@@ -13,13 +13,21 @@
 
 %define pname lua-posix
 
-%if 0%{?suse_version} <= 1220
-%define luaver 5.1
+%if 0%{!?lua_version:1}
+%define luaver %lua_version
 %else
 %define luaver 5.2
 %endif
+%if 0%{!?lua_archdir:1}
 %define lualibdir %{_libdir}/lua/%{luaver}
+%else
+%define lualibdir %lua_archdir
+%endif
+%if 0%{!?lua_noarchdir:1}
 %define luapkgdir %{_datadir}/lua/%{luaver}
+%else
+%define luapkgdir %lua_noarchdir
+%endif
 %define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
