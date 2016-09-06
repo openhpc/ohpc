@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname sigar
 %define debug_package %{nil}

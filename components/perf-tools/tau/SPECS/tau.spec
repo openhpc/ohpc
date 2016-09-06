@@ -17,7 +17,7 @@
 
 %{!?compiler_family: %define compiler_family gnu}
 %{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).

@@ -25,7 +25,7 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname   psqlODBC
 %define tarname psqlodbc
