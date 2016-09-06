@@ -13,7 +13,7 @@
 %if 0%{?OHPC_BUILD}
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define debug_package %{nil}
 

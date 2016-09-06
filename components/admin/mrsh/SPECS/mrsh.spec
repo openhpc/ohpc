@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname mrsh
-%{!?PROJ_DELIM:%define PROJ_DELIM  -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 
 Name:    %{pname}%{PROJ_DELIM}
