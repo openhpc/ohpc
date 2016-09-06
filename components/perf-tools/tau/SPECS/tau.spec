@@ -16,7 +16,7 @@
 # mechanisms.
 
 %{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
+%{!?mpi_family: %global mpi_family openmpi}
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
