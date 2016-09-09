@@ -124,6 +124,9 @@ module load scalapack openblas
         --FFLAGS="-fPIC" \
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
+        --CFLAGS="-fPIC -DPIC" \
+        --CXXFLAGS="-fPIC -DPIC" \
+        --FFLAGS="-fPIC" \
         --with-blas-lapack-lib=$OPENBLAS_LIB/libopenblas.so \
         --with-scalapack-dir=$SCALAPACK_DIR \
 %endif
