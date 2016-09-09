@@ -43,6 +43,10 @@ BuildRequires: lua-posix%{PROJ_DELIM}
 BuildRequires: rsync
 BuildRequires: tcl
 
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequiqures: procps
+%endif
+   
 Conflicts: environment-modules
 
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
