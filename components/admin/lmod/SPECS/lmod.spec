@@ -44,7 +44,7 @@ BuildRequires: rsync
 BuildRequires: tcl
 
 %if 0%{?sles_version} || 0%{?suse_version}
-BuildRequiqures: procps
+BuildRequires: procps
 %endif
    
 Conflicts: environment-modules
