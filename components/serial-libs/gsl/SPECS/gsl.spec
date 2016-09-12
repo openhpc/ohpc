@@ -47,7 +47,7 @@ BuildRequires: intel_licenses
 
 Summary:   GNU Scientific Library (GSL)
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   2.1
+Version:   2.2.1
 Release:   1
 License:   GPL
 Group:     %{PROJ_NAME}/serial-libs
