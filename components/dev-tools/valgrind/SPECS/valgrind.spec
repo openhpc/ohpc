@@ -16,7 +16,7 @@
 
 Summary:   Valgrind Memory Debugger
 Name:      %{pname}%{PROJ_DELIM}
-Version:   3.10.1
+Version:   3.11.0
 Release:   1
 License:   GPL
 URL:       http://www.valgrind.org/
