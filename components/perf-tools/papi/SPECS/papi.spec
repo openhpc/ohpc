@@ -17,8 +17,8 @@
 
 Summary:   Performance Application Programming Interface
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.4.1
-Release:   1%{?dist}
+Version:   5.4.3
+Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://icl.cs.utk.edu/papi/
