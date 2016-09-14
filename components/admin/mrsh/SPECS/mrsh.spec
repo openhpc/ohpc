@@ -15,8 +15,8 @@
 
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 2.7
-Release: 1%{?dist}
+Version: 2.12
+Release: 1
 Epoch: 3
 Summary: Remote shell program that uses munge authentication
 License: none
