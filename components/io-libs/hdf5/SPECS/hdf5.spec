@@ -100,6 +100,11 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 
 %build
 
+# override with newer config.guess for aarch64
+%ifarch aarch64
+cp /usr/lib/rpm/config.guess bin
+%endif
+
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler

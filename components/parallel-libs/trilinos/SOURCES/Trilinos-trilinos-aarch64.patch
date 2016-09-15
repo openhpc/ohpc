@@ -1,0 +1,12 @@
+diff -ruN Trilinos-trilinos-release-12-4-2.old/packages/kokkos/core/src/Kokkos_Macros.hpp Trilinos-trilinos-release-12-4-2/packages/kokkos/core/src/Kokkos_Macros.hpp
+--- Trilinos-trilinos-release-12-4-2.old/packages/kokkos/core/src/Kokkos_Macros.hpp	2015-11-12 15:57:46.000000000 +0000
++++ Trilinos-trilinos-release-12-4-2/packages/kokkos/core/src/Kokkos_Macros.hpp	2016-09-10 19:40:37.762848897 +0100
+@@ -330,6 +330,8 @@
+           defined(__POWERPC__) || \
+           defined(__ppc__) || \
+           defined(__ppc64__) || \
++          defined(__AArch64__) || \
++          defined(__aarch64__) || \
+           defined(__PGIC__) )
+     #define KOKKOS_ENABLE_ASM 1
+   #endif

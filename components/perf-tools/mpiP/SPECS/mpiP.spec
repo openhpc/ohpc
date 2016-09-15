@@ -94,6 +94,11 @@ file.
 
 %build
 
+# override with newer config.guess for aarch64
+%ifarch aarch64
+cp /usr/lib/rpm/config.guess bin
+%endif
+
 # OpenHPC compiler/mpi designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu

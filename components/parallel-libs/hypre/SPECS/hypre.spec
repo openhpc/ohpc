@@ -128,6 +128,11 @@ phenomena in the defense, environmental, energy, and biological sciences.
 
 %build
 
+# override with newer config.guess for aarch64
+%ifarch aarch64
+cp /usr/lib/rpm/config.guess src/config
+%endif
+
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
