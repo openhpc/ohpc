@@ -72,6 +72,7 @@ Source2:   OHPC_setup_compiler
 Patch0:    winfree.patch
 # karl.w.schulz@intel.com (04/13/2016)
 Patch1:    minit.patch
+Patch2:    mvapich2-2.1-get_cycles-aarch64.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
@@ -106,6 +107,7 @@ across multiple networks.
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p0
+%patch2 -p1
 
 %build
 

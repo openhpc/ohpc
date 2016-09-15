@@ -1,0 +1,25 @@
+From 63d4fcdecd40cb9eee8228680521ff93a80a8e11 Mon Sep 17 00:00:00 2001
+From: Eric Van Hensbergen <eric.vanhensbergen@arm.com>
+Date: Tue, 23 Aug 2016 11:29:27 -0500
+Subject: [PATCH] fix-arm64-cpuid-return
+
+---
+ cpuid_arm64.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cpuid_arm64.c b/cpuid_arm64.c
+index c7a27f8..95fc708 100644
+--- a/cpuid_arm64.c
++++ b/cpuid_arm64.c
+@@ -59,7 +59,7 @@ int get_feature(char *search)
+   	fclose(infile);
+ 
+ 
+-	if( p == NULL ) return;
++	if( p == NULL ) return(0);
+ 
+ 	t = strtok(p," ");
+ 	while( t = strtok(NULL," "))
+-- 
+2.7.4
+
