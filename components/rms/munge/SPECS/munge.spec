@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname munge
 
@@ -30,6 +30,9 @@ Provides:       %{pname} = %{version}-%{release}
 BuildRequires:	libbz2-devel
 BuildRequires:	libopenssl-devel
 BuildRequires:	zlib-devel
+%if 0%{?suse_version} >= 1230
+BuildRequires:	systemd
+%endif
 %else
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:	bzip2
@@ -239,7 +242,7 @@ fi
 %{_mandir}/*[^3]/*
 
 
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 %{_prefix}/lib/tmpfiles.d/munge.conf
 %endif
 

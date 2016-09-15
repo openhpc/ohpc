@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname spack
 
@@ -68,7 +68,7 @@ prepend-path   MODULEPATH   %{install_path}/modules
 
 EOF
 
-%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+%{__mkdir} -p %{buildroot}/%{_docdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
