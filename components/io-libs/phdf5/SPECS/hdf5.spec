@@ -83,7 +83,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      p%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.8.16
+Version:   1.8.17
 Release:   1
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
