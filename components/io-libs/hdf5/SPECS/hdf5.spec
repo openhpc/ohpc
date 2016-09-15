@@ -63,7 +63,7 @@ BuildRequires: intel_licenses
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.8.16
+Version:   1.8.17
 Release:   1
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
