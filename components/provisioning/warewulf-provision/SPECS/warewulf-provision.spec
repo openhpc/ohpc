@@ -42,6 +42,7 @@ Patch4: warewulf-provision.init.patch
 Patch5: update_file_delay.patch
 Patch6: warewulf-provision.mkbootable.patch
 Patch7: warewulf-provision.sles_stateful.patch
+Patch8: warewulf-provision.config_guess.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -112,6 +113,9 @@ available the included GPL software.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%ifarch aarch64
+%patch8 -p1
+%endif
 
 %build
 %configure --localstatedir=%{wwpkgdir}
