@@ -65,7 +65,7 @@ BuildRequires: intel_licenses
 
 Name:		%{pname}%{PROJ_DELIM}
 Release:	1%{?dist}
-Version:        3.2.3
+Version:        3.3.1
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Patch:          tre.patch
 Url:            http://www.r-project.org/
