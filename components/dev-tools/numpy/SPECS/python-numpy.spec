@@ -61,7 +61,7 @@ Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
 Patch1:         numpy-buildfix.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  python-devel
+BuildRequires:  python-devel python-setuptools
 Requires:       python >= %{py_ver}
 Provides:       numpy = %{version}
 %if 0%{?suse_version}
