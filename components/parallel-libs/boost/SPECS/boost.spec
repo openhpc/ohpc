@@ -85,7 +85,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.60.0
+Version:        1.61.0
 
 %define version_exp 1_60_0
 
