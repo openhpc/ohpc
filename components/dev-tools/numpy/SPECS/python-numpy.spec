@@ -49,7 +49,7 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.10.2
+Version:        1.11.1
 Release:        1
 Url:            http://sourceforge.net/projects/numpy
 DocDir:         %{OHPC_PUB}/doc/contrib
