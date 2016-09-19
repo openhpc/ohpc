@@ -97,7 +97,8 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+# karl.w.schulz@intel.com (9/19/16) - disabling patch3 for v0.2.19
+#%patch3 -p1
 %patch4 -p1
 
 %build
