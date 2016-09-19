@@ -86,7 +86,7 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.scipy.org
 DocDir:         %{OHPC_PUB}/doc/contrib
-Source0:        http://sourceforge.net/projects/scipy/files/scipy/%{version}/scipy-%{version}.tar.gz
+Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 BuildRequires:  blas-devel
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
