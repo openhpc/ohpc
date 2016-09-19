@@ -63,7 +63,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        12.4.2
+Version:        12.6.4
 Release:        0
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
