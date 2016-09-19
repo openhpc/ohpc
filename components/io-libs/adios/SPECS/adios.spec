@@ -66,7 +66,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 1.9.0
+Version: 1.10.0
 Release: 1
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
