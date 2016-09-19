@@ -105,8 +105,10 @@ across multiple networks.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
-%patch1 -p0
+# disabled on 09/19/16
+# %patch0 -p1
+# disabled on 09/19/16, patch was upstreamed in v2.2
+# %patch1 -p0
 %patch2 -p1
 
 %build
