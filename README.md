@@ -46,6 +46,11 @@ the downloads section of the latest
 
 #### Questions, Comments, or Bug Reports?
 
-Subscribe to the users email list at : https://groups.io/g/openhpc-users or see
+Subscribe to the users email list at https://groups.io/g/openhpc-users or see
 the http://openhpc.community page for more pointers.
 
+#### Additional Software Requests?
+
+Please see the companion submission page at
+https://github.com/openhpc/submissions for more information regarding new
+software component requests.
