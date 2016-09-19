@@ -79,7 +79,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        0.16.1
+Version:        0.18.0
 Release:        1
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
