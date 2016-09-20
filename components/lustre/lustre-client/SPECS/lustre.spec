@@ -43,11 +43,19 @@ BuildRequires: kernel-devel = 2.6.32-431.el6
 # %define centos_kernel 3.10.0-229.el7
 
 # 7.2 kernel version
+%ifarch aarch64
+%define centos_kernel 4.2.0-0.21.el7
+BuildRequires: kernel = %{centos_kernel}
+BuildRequires: kernel-devel = %{centos_kernel}
+%define kdir /lib/modules/%{centos_kernel}.aarch64/source/
+%define kobjdir /lib/modules/%{centos_kernel}.aarch64/build/
+%else
 %define centos_kernel 3.10.0-327.el7
 BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.x86_64/source/
 %define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
+%endif
 
 %endif
 
@@ -164,6 +172,7 @@ License: GPL
 Group:   %{PROJ_NAME}/lustre
 Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
+Patch0: lustre-centos.patch
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
@@ -367,6 +376,9 @@ clients in order to run
 
 %setup -qn lustre-%{version}
 #patch1 -p1
+%if 0%{?centos_version}
+%patch0 -p1
+%endif
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
@@ -433,6 +445,10 @@ fi
 # remove --with-kmp-moddir from configure arguments,
 # it will be set --with-kmp-moddir=%%kmoddir
 CONFIGURE_ARGS=$(echo $CONFIGURE_ARGS | sed -e 's/"\?--with-kmp-moddir=[^ ][^ ]* \?//')
+
+%ifarch aarch64
+CONFIGURE_ARGS="$CONFIGURE_ARGS LDFLAGS=\"\""
+%endif
 
 # we need to eval "configure" because $CONFIGURE_ARGS could have a quoted
 # string in it which we don't want word splitted by the shell
