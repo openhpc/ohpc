@@ -173,6 +173,32 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % ohpc_command fi
 % end_ohpc_run
 
+Each infiniband network requires a subnet manager. It is possible to have more
+than one, in which case, one will act as master, and any other subnet managers 
+will act as slaves that will take over should the master subnet manager fail.
+
+There are two types of subnet managers, software based and hardware based.
+Hardware based subnet managers are typically part of the firmware of the attached
+Infiniband switch. A software subnet manager is not necessary if a hardware based
+subnet manager is active.
+
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+The default opensm package which is available as an optional package in the
+package group "InfiniBand Support" can be installed using the command,
+\begin{lstlisting}[language=bash]
+[sms](*\#*) yum install `repoquery -g -l --grouppkgs=all "Infiniband Support"`
+[sms](*\#*) yum -y --installroot=/opt/ohpc/admin/images/centos7.2 install `repoquery -g -l --grouppkgs=all "Infiniband Support"`
+\end{lstlisting}
+Once the opensm package is installed on master node and at the chroot
+environment,the opensm service can be started and enabled at boot time on the 
+designated node(s) inside of the cluster.  
+
+\end{tcolorbox}
+\end{center}
+
 \vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{../../common/warewulf_setup}
