@@ -174,7 +174,8 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 %setup -n R-%{version}
-%patch -p1
+# disabling patch - 9/21/16 karl.w.schulz@intel.com
+#%patch -p1
 
 %build 
 # OpenHPC compiler designation
