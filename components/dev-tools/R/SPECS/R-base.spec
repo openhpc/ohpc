@@ -96,6 +96,7 @@ BuildRequires:  xdg-utils
 BuildRequires:  pango-devel
 BuildRequires:  tcl-devel
 BuildRequires:  xz-devel
+BuildRequires:  pcre-devel  
 ### Moved to CENTOS only until SLES has a newer texinfo version
 ###BuildRequires:  texinfo >= 5.1 
 BuildRequires:  tk-devel
