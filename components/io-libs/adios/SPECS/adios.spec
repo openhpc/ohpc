@@ -297,7 +297,7 @@ EOF
 %doc ChangeLog
 %doc KNOWN_BUGS
 %doc NEWS
-%doc README
+%doc README.md
 %doc TODO
 
 %changelog
