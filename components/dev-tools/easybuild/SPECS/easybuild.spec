@@ -27,7 +27,7 @@ URL:       http://hpcugent.github.com/easybuild
 
 Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
 Source1:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
-Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-${version}.tar.gz
+Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
 Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.tar.gz
 Source4:   bootstrap_eb.py
 Source5:   easybuild-sles12.patch
