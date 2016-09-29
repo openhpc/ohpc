@@ -19,7 +19,7 @@
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.4-TP2
+Version:   4.4-TP3
 Release:   1%{?dist}
 Summary:   Score-P and Scalasca performance report explorer
 License:   BSD-style license
@@ -27,7 +27,7 @@ Group:     ohpc/perf-tools
 Url:       http://www.scalasca.org/software/cube-4.x/download.html
 Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.4/dist/cubegui-%{version}.tar.gz
 Provides:  lib%PNAME.so()(64bit)
-Provides:  cube 
+Provides:  cube
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib

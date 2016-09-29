@@ -19,7 +19,7 @@
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.4-TP2
+Version:   4.4-TP3
 Release:   1%{?dist}
 Summary:   High-Performance Score-P and Scalasca performance report writing library
 License:   BSD-style license

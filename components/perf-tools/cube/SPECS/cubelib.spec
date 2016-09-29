@@ -19,7 +19,7 @@
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.4-TP2
+Version:   4.4-TP3
 Release:   1%{?dist}
 Summary:   General purpose C++ library for Score-P and Scalasca performance profiling.
 License:   BSD-style license
