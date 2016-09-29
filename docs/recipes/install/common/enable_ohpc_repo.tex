@@ -2,10 +2,12 @@ To begin, enable use of the \OHPC{} repository by adding it to the local list
 of available package repositories. Note that this requires network access from
 your {\em master} server to the \OHPC{} repository, or alternatively, that
 the \OHPC{} repository be mirrored locally.  In cases where network external
-connectivity is available, \OHPC{} provides an \texttt{ohpc-release} package
-that includes GPG keys for package signing and repository enablement.  The
-example which follows illustrates installation of the \texttt{ohpc-release}
-package directly from the \OHPC{} build server.
+connectivity is available, \OHPC{} repository can be enabled either through
+installation of an \texttt{ohpc-release} RPM that includes GPG keys for package
+signing and repository enablement or by installing from the ISO image that 
+contains the \OHPC{} packages.  The example which follows illustrates 
+installation of the \texttt{ohpc-release} package directly from the \OHPC{}
+build server.
 
 %the addition of the \OHPC{} repository using
 %the \texttt{\$\{ohpc\_repo\}} variable.
@@ -17,8 +19,15 @@ package directly from the \OHPC{} build server.
 
 %\noindent Once set, the repository can be enabled via the following: 
 
+When installing from the ISO repo, yum should be configured with the online 
+\OHPC{} updates repo enabled.  To download the ISO directly from the \OHPC{} 
+build server,
 
+%the addition of the \OHPC{} repository using ISO image
 
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
+        literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSRepo{}}1 {-}{-}1]
+[sms](*\#*) wget -O /tmp/OpenHPC-VER_OSREPO.iso http://build.openhpc.community/OpenHPC:/VER/OSREPO/iso/OpenHPC-VER_OSREPO.iso
+\end{lstlisting}
 
-
-
+%\noindent
