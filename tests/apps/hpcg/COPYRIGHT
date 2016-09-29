@@ -1,9 +1,9 @@
 ======================================================================
- -- High Performance Conjugate Gradient Benchmark (HPCG)
-    HPCG - 2.4 - June 3, 2014
+ -- High Performance Conjugate Gradients (HPCG) Benchmark 
+    HPCG - 3.0 - November 11, 2015
 
     Michael A. Heroux
-    Scalable Algorithms Group, Computing Research Center
+    Scalable Algorithms Group, Center for Computing Research 
     Sandia National Laboratories, Albuquerque, NM
 
     Piotr Luszczek

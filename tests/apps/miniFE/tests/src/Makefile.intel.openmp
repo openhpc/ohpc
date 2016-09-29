@@ -16,13 +16,14 @@ MINIFE_MATRIX_TYPE = -DMINIFE_CSR_MATRIX
 
 #-----------------------------------------------------------------------
 
-CFLAGS = -O3 -openmp -restrict -mavx
+OPENMP=-openmp
+CFLAGS = -O3 $(OPENMP) -restrict -mavx
 CXXFLAGS = $(CFLAGS)
 
 CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES) $(MINIFE_MATRIX_TYPE) \
 	-DMINIFE_RESTRICT=restrict
 
-LDFLAGS=
+LDFLAGS=$(CFLAGS)
 LIBS=
 
 CXX=icpc

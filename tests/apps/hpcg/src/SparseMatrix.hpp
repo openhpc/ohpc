@@ -55,7 +55,7 @@ struct SparseMatrix_STRUCT {
   mutable MGData * mgData; // Pointer to the coarse level data for this fine matrix
   void * optimizationData;  // pointer that can be used to store implementation-specific data
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   local_int_t numberOfExternalValues; //!< number of entries that are external to this process
   int numberOfSendNeighbors; //!< number of neighboring processes that will be send local data
   local_int_t totalToBeSent; //!< total number of entries to be sent
@@ -94,7 +94,7 @@ inline void InitializeSparseMatrix(SparseMatrix & A, Geometry * geom) {
   A.isMgOptimized      = true;
   A.isWaxpbyOptimized     = true;
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   A.numberOfExternalValues = 0;
   A.numberOfSendNeighbors = 0;
   A.totalToBeSent = 0;
@@ -155,7 +155,7 @@ inline void DeleteMatrix(SparseMatrix & A) {
   if (A.matrixValues) delete [] A.matrixValues;
   if (A.matrixDiagonal)           delete [] A.matrixDiagonal;
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   if (A.elementsToSend)       delete [] A.elementsToSend;
   if (A.neighbors)              delete [] A.neighbors;
   if (A.receiveLength)            delete [] A.receiveLength;

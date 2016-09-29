@@ -20,18 +20,19 @@
 
 /////////////////////////////////////////////////////////////////////////
 
-#ifndef HPCG_NOMPI
-#include <mpi.h> // If this routine is not compiled with HPCG_NOMPI then use MPI
+#ifndef HPCG_NO_MPI
+#include <mpi.h>
 
 double mytimer(void) {
-  return(MPI_Wtime());
+  return MPI_Wtime();
 }
 
-#elif !defined(HPCG_NOOPENMP)
+#elif !defined(HPCG_NO_OPENMP)
 
-#include <omp.h> // If this routine is compiled with HPCG_NOMPI and not compiled with HPCG_NOOPENMP then use OpenMP timer
+// If this routine is compiled with HPCG_NO_MPI defined and not compiled with HPCG_NO_OPENMP then use the OpenMP timer
+#include <omp.h>
 double mytimer(void) {
-  return(omp_get_wtime());
+  return omp_get_wtime();
 }
 #else
 
@@ -45,10 +46,10 @@ double mytimer(void) {
     gettimeofday(&tp, NULL);
     start = tp.tv_sec;
     startu = tp.tv_usec;
-    return(0.0);
+    return 0.0;
   }
   gettimeofday(&tp, NULL);
-  return( ((double) (tp.tv_sec - start)) + (tp.tv_usec-startu)/1000000.0 );
+  return ((double) (tp.tv_sec - start)) + (tp.tv_usec-startu)/1000000.0 ;
 }
 
 #endif

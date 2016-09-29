@@ -81,9 +81,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-/etc/ohpc-release
-%{__repodir}/OpenHPC.repo
-/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+%config /etc/ohpc-release
+
+%if 0%{?sles_version} || 0%{?suse_version}
+%dir /etc/zypp
+%endif
+
+%{__repodir}
+/etc/pki
 
 %changelog
 

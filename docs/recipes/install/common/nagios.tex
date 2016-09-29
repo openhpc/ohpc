@@ -42,7 +42,7 @@ provisioned {\em compute} nodes.
 [sms](*\#*) echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost \
         >> $CHROOT/etc/nagios/nrpe.cfg
 
-# Enable Nagios on {\em master}, and configure
+# Enable Nagios on master, and configure
 [sms](*\#*) chkconfig nagios on
 [sms](*\#*) systemctl start nagios
 [sms](*\#*) chmod u+s `which ping`

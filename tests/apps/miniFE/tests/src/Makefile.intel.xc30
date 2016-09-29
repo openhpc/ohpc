@@ -1,0 +1,33 @@
+#-----------------------------------------------------------------------
+# This file compiles for OpenMP and MPI hybrid operations using the GNU
+# compile chain.
+
+MINIFE_TYPES =  \
+        -DMINIFE_SCALAR=double \
+        -DMINIFE_LOCAL_ORDINAL=int      \
+        -DMINIFE_GLOBAL_ORDINAL=int
+
+MINIFE_MATRIX_TYPE = -DMINIFE_CSR_MATRIX
+#MINIFE_MATRIX_TYPE = -DMINIFE_ELL_MATRIX
+
+#-----------------------------------------------------------------------
+
+CFLAGS = -O3 -fopenmp -restrict -mavx
+CXXFLAGS = $(CFLAGS) -I /opt/cray/mpt/6.0.1/gni/mpich2-intel/130/include
+
+CPPFLAGS = -I. -I../utils -I../fem $(MINIFE_TYPES) \
+	$(MINIFE_MATRIX_TYPE) \
+	-DMINIFE_RESTRICT=restrict \
+	-DHAVE_MPI -DMPICH_IGNORE_CXX_SEEK
+
+LDFLAGS=$(CFLAGS)
+LIBS=-L/opt/cray/mpt/6.0.1/gni/mpich2-intel/130/lib \
+	-lmpichcxx_intel
+
+# The MPICH_IGNORE_CXX_SEEK macro is required for some mpich versions,
+# such as the one on my cygwin machine.
+
+CXX=icpc
+CC=icc
+
+include make_targets

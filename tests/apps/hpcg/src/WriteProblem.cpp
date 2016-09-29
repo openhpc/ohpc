@@ -20,7 +20,6 @@
 
 #include <cstdio>
 #include "WriteProblem.hpp"
-#include "Geometry.hpp"
 
 
 /*!
@@ -53,7 +52,7 @@
 int WriteProblem( const Geometry & geom, const SparseMatrix & A,
     const Vector b, const Vector x, const Vector xexact) {
 
-  if (geom.size!=1) return(-1); //TODO Only works on one processor.  Need better error handler
+  if (geom.size!=1) return -1; //TODO Only works on one processor.  Need better error handler
   const global_int_t nrow = A.totalNumberOfRows;
 
   FILE * fA = 0, * fx = 0, * fxexact = 0, * fb = 0;
@@ -89,5 +88,5 @@ int WriteProblem( const Geometry & geom, const SparseMatrix & A,
   fclose(fx);
   fclose(fxexact);
   fclose(fb);
-  return(0);
+  return 0;
 }

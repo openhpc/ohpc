@@ -18,11 +18,11 @@
  HPCG routine
  */
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
 #include <mpi.h>
 #include "mytimer.hpp"
 #endif
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
 #include <omp.h>
 #endif
 #include <cassert>
@@ -52,18 +52,18 @@ int ComputeDotProduct_ref(const local_int_t n, const Vector & x, const Vector & 
   double * xv = x.values;
   double * yv = y.values;
   if (yv==xv) {
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
     #pragma omp parallel for reduction (+:local_result)
 #endif
     for (local_int_t i=0; i<n; i++) local_result += xv[i]*xv[i];
   } else {
-#ifndef HPCG_NOOPENMP
+#ifndef HPCG_NO_OPENMP
     #pragma omp parallel for reduction (+:local_result)
 #endif
     for (local_int_t i=0; i<n; i++) local_result += xv[i]*yv[i];
   }
 
-#ifndef HPCG_NOMPI
+#ifndef HPCG_NO_MPI
   // Use MPI's reduce function to collect all partial sums
   double t0 = mytimer();
   double global_result = 0.0;
@@ -72,8 +72,9 @@ int ComputeDotProduct_ref(const local_int_t n, const Vector & x, const Vector & 
   result = global_result;
   time_allreduce += mytimer() - t0;
 #else
+  time_allreduce += 0.0;
   result = local_result;
 #endif
 
-  return(0);
+  return 0;
 }

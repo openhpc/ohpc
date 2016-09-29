@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([miniFE], [0.10.0], [karl.w.schulz@intel.com])
+AC_INIT([miniFE], [2.0.1], [karl.w.schulz@intel.com])
 AM_INIT_AUTOMAKE
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 

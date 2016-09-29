@@ -14,7 +14,6 @@
 
 #ifndef GENERATEPROBLEM_HPP
 #define GENERATEPROBLEM_HPP
-#include "Geometry.hpp"
 #include "SparseMatrix.hpp"
 #include "Vector.hpp"
 

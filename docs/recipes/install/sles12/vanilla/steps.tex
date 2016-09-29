@@ -11,6 +11,7 @@
 
 % Define Base OS and other local macros
 \newcommand{\baseOS}{SLES12}
+\newcommand{\OSRepo}{SLES12}
 \newcommand{\IMAGE}{sles12}
 \newcommand{\install}{zypper -n install}
 \newcommand{\chrootinstall}{zypper -n --root \$CHROOT install}
@@ -23,26 +24,27 @@
 
 % Title Page
 
-\lhead{ \small {\color{logodarkgrey}\fontfamily{phv}\selectfont { Install
-      Guide} - {\baseOS{} Version} (v\OHPCVersion{}) } \vspace*{0pt} }
+\lhead{ \small {\color{logodarkgrey}\fontfamily{phv}\selectfont { Install Guide} - {\baseOS{} Version} (v\OHPCVersion{}) } \vspace*{0pt} }
 
-{\hspace*{4in} \includegraphics[width=1.8in]{ohpc_logo_blue.pdf}}
+{\hspace*{4in} \includegraphics[width=1.7in]{ohpc_logo_blue.pdf}}
 
 \vspace*{2cm}
-\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont OpenHPC (v\OHPCVersion{})} \vspace*{0.1cm} \\
-\noindent {\LARGE \color{RoyalBlue} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
-\noindent\rule{6in}{0.4pt} \\
+\noindent {\LARGE \color{logodarkgrey} \fontfamily{phv}\selectfont OpenHPC (v\OHPCVersion{})} \vspace*{0.1cm} \\
+\noindent {\LARGE \color{logodarkgrey} \fontfamily{phv}\selectfont Cluster Building Recipes} \\ 
 
-\noindent {\Large \baseOS{}* Base OS} \\ \vspace{0.2cm}
+{\color{logoblue}\noindent\rule{6.15in}{1.2pt}} \\ \vspace{0.2cm}
 
-\noindent {\large {\em Base Linux* Edition }}
+\noindent {\Large \color{logodarkgrey} \fontfamily{phv}\selectfont \baseOS{} Base OS} \vspace{0.2cm}
 
-\vspace*{3in}
+\noindent {\large \color{logodarkgrey} \fontfamily{phv}\selectfont {\em Base Linux* Edition }}
 
-\noindent{\normalsize Intel Cluster Makers} \vspace*{0.1cm} \\
-{\normalsize Copyright~{\small\copyright}~2014-2015 Intel Corporation} \vspace*{0.1cm} \\ 
-{\normalsize Document Last Update: \VCDateISO} \vspace*{0.1cm} \\ 
-{\normalsize Document Revision: \VCRevision} \\ \vspace*{0.1cm}
+\vspace*{4in}
+
+
+%\noindent{\normalsize \color{black} Intel Cluster Makers} \vspace*{0.1cm} \\
+%{\normalsize \color{logodarkgrey} Copyright~{\small\copyright}~2014-2015 Intel Corporation} \vspace*{0.1cm} \\ 
+\noindent{\small \color{black} Document Last Update: \VCDateISO} \vspace*{0.1cm} \\ 
+{\small \color{black} Document Revision: \VCRevision} \\ \vspace*{0.1cm}
 
 % Disclaimer  ----------------------------------------------------
 \input{../../common/legal} 
@@ -60,6 +62,7 @@
 \input{../../common/base_edition/edition}
 \input{../../common/audience}
 \input{../../common/requirements}
+\input{../../common/byol}
 \input{../../common/inputs}
 
 % Base Operating System --------------------------------------------
@@ -75,26 +78,16 @@
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{../../common/enable_ohpc_repo}
 
-\begin{lstlisting}[language=bash,keywords={},literate={VER}{\OHPCVersion{}}1]
-[sms](*\#*) ohpc_repo=http://tcgsw-obs.pdx.intel.com:82/OpenHPC:/VER/SLE_12_Intel/OpenHPC:VER.repo
-\end{lstlisting}
-
-
-If outside of Intel, the repository location should be set to match the path to
-a locally accessibly copy of the \OHPC{} repository. Once set, the repository can be
-enabled via the following: 
-
-% begin_ohpc_run
-% ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) zypper addrepo ${ohpc_repo}
-[sms](*\#*) zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
-\end{lstlisting}
-% end_ohpc_run
+%%% % begin_ohpc_run
+%%% % ohpc_comment_header Enable OpenHPC repository for local use \ref{sec:enable_repo}
+%%% \begin{lstlisting}[language=bash,keywords={}]
+%%% [sms](*\#*) zypper addrepo ${ohpc_repo}
+%%% [sms](*\#*) zypper -n --no-gpg-checks --gpg-auto-import-keys refresh
+%%% \end{lstlisting}
+%%% % end_ohpc_run
 
 % Dev testing for Factory
 %[sms](*\#*) zypper addrepo $OpenHPC_mirror/ForestPeak:/15.16/SLE_12_Intel/ForestPeak:15.16.repo
-
 
 In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard distro repositories in order to resolve
@@ -120,16 +113,15 @@ both the base and SDK repositories:
 \end{lstlisting}
 % end_ohpc_run
 
+\input{../../common/time}
+
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{../../common/install_slurm}
 
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
-The following commands add OFED and PSM support using base distro-provided drivers to the
-chosen {\em master} host. Note that the default permission for InfiniPath
-devices under \baseOS{} are not directly accessible by users. Consequently, the commands
-below include the addition of \texttt{udev} rules that are provided by \OHPC{}
-to enable user access.
+The following command adds OFED and PSM support using base distro-provided drivers
+to the chosen {\em master} host.
 
 % begin_ohpc_run
 % ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
@@ -145,13 +137,13 @@ to enable user access.
 \end{lstlisting}
 % end_ohpc_run
 
-With the \InfiniBand{} drivers included, you can also enable IPoIB functionality
+With the \InfiniBand{} drivers included, you can also enable (optional) IPoIB functionality
 which provides a mechanism to send IP packets over the IB network. If you plan
 to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_client}
 for additional details), then having IPoIB enabled is a requirement for the
 \Lustre{} client. \OHPC{} provides a template configuration file to aid in setting up
 an {\em ib0} interface on the {\em master} host. To use, copy the template
-provided and update the \texttt{\$\{master\_ipoib\}} and
+provided and update the \texttt{\$\{sms\_ipoib\}} and
 \texttt{\$\{ipoib\_netmask\}} entries to match local desired settings (alter ib0
 naming as appropriate if system contains dual-ported or multiple HCAs). 
 
@@ -204,7 +196,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Enable internal interface for provisioning
-[sms](*\#*) ifconfig ${sms_eth_internal} ${master_ip} netmask ${internal_netmask} up
+[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl restart xinetd
@@ -215,6 +207,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 \end{lstlisting}
 %\end{verbatim}
 % end_ohpc_run
+
 
 \subsection{Define {\em compute} image for provisioning}
 
@@ -227,13 +220,20 @@ customize a system image that can subsequently be used to provision one or more
 The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support for
 \baseOS{}. The following steps illustrate the process to build a minimal, default
 image for use with \Warewulf{}. We begin by creating a directory structure on the 
-{\em master} that will represent the root filesystem of the compute node. The 
-default location for this example is in \path{/opt/ohpc/admin/images/sles12}.
+{\em master}host that will represent the root filesystem of the compute node. The 
+default location for this example is in
+\path{/opt/ohpc/admin/images/sles12}. Note that \Warewulf{} assumes access to
+an external repository (mirror.centos.org) during the \texttt{wwmkchroot}
+process which requires external network connectivity on your chosen {\em
+ master} host. If this is not available, or if you prefer to access a locally cached
+mirror, the steps below include an example to update the OS mirror used by
+\texttt{wwmkchroot} to use an alternate location defined by a
+\texttt{\$\{BOS\_MIRROR\}} environment variable.
 
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-# Define chroot location for SLES 
+# Define chroot location
 [sms](*\#*) export CHROOT=/opt/ohpc/admin/images/sles12
 
 # Build initial chroot image
@@ -311,17 +311,22 @@ example configuration.
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # add new cluster key to base image
+[sms](*\#*) wwinit ssh_keys
 [sms](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # add NFS client mounts of /home and /opt/ohpc/pub to base image
-[sms](*\#*) echo "${master_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
-[sms](*\#*) echo "${master_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
-# Identify resource manager server IP in SLURM configuration file on computes
-[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_ip}/" $CHROOT/etc/slurm/slurm.conf
+# Identify resource manager hostname on {\em master} host
+[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
+\end{lstlisting}
+% end_ohpc_run
 
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Identify resource manager hostname on master host
-[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${master_name}/" /etc/slurm/slurm.conf
+[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 
 # Export /home and OpenHPC public packages from master server
 [sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
@@ -329,11 +334,25 @@ example configuration.
 [sms](*\#*) exportfs -a
 [sms](*\#*) systemctl restart nfsserver
 
-# Enable NTP time service on computes and identify master host as local NTP server
+# Enable NTP time service on computes and identify {\em master} host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
-[sms](*\#*) echo "server ${master_ip}" >> $CHROOT/etc/ntp.conf
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
 \end{lstlisting}
 % end_ohpc_run
+
+
+\begin{center}
+\begin{tcolorbox}[]
+  \small Slurm requires enumeration of the physical hardware characteristics
+  for compute nodes under its control. In particular, three configuration
+  parameters combine to define consumable compute resources: {\em Sockets},
+  {\em CoresPerSocket}, and {\em ThreadsPerCore}. The default configuration
+  file provided via \OHPC{} assumes dual-socket, 8 cores per socket, and two
+  threads per core for this 4-node example. If this does not reflect your local
+  hardware, please update the configuration file at
+  \path{/etc/slurm/slurm.conf} accordingly to match your particular hardware.
+\end{tcolorbox}
+\end{center}
 
 % Additional commands when additional computes are requested
 
@@ -372,7 +391,7 @@ discussed further in the following sections.
 % begin_ohpc_run
 % ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Update memlock settings on master
+# Update memlock settings on {\em master}
 [sms](*\#*) echo "* soft memlock unlimited" >> /etc/security/limits.conf
 [sms](*\#*) echo "* hard memlock unlimited" >> /etc/security/limits.conf
 
@@ -382,7 +401,7 @@ discussed further in the following sections.
 \end{lstlisting}
 % end_ohpc_run
 
-%# Enable larger locked memory limits for SLURM daemon
+%# Enable larger locked memory limits for Slurm daemon
 %[sms](*\#*) echo "ulimit -l unlimited" >> $CHROOT/etc/sysconfig/slurm
 
 \paragraph{Enable ssh control via resource manager} 
@@ -415,7 +434,7 @@ file to allow loading of the necessary modules.
 
 % ohpc_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Add Lustre client software to master host
+# Add Lustre client software to {\em master} host
 [sms](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
 
 # Update configuration to allow Lustre modules to be loaded on master host
@@ -445,9 +464,9 @@ file to allow loading of the necessary modules.
 
 The default underlying network type used by \Lustre{} is {\em tcp}. If your
 external \Lustre{} file system is to be mounted using a network type other than
-tcp, additional configuration files are necessary to identify the desired
+{\em tcp}, additional configuration files are necessary to identify the desired
 network type. The example below illustrates creation of modprobe configuration files
-instructing \Lustre{} to use an \InfiniBand{} network with the {\em o2ib} LNET driver
+instructing \Lustre{} to use an \InfiniBand{} network with the \textbf{o2ib} LNET driver
 attached to \texttt{ib0}. Note that these modifications are made to both the
 {\em master} host and {\em compute} image.
 
@@ -469,6 +488,7 @@ host as follows:
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
+% ohpc_validation_newline
 % end_ohpc_run
 
 %% [FSP-469]: disabling ORCM
@@ -479,9 +499,9 @@ host as follows:
 %% [FSP-469] % begin_ohpc_run
 %% [FSP-469] % ohpc_validation_comment Configure ORCM aggregator and DB
 %% [FSP-469] \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-%% [FSP-469] # Set master host as data aggregator
+%% [FSP-469] # Set {\em master} host as data aggregator
 %% [FSP-469] [sms](*\#*) perl -pi -e "s/aggregator_hostname/localhost/" /opt/open-rcm/etc/orcm-site.xml
-%% [FSP-469] [sms](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${master_ip}/" /etc/orcmdb_psql.ini
+%% [FSP-469] [sms](*\#*) perl -pi -e "s/Servername = (<.+>)/Servername = ${sms_ip}/" /etc/orcmdb_psql.ini
 %% [FSP-469] 
 %% [FSP-469] # Update BMC credentials to match local values
 %% [FSP-469] 
@@ -507,7 +527,7 @@ host as follows:
 %% [FSP-469] [sms](*\#*) sudo -u postgres createdb -O orcmuser orcmdb
 %% [FSP-469] [sms](*\#*) sudo -u postgres psql --username=orcmuser --dbname=orcmdb -f /etc/orcmdb_psql.sql
 %% [FSP-469] 
-%% [FSP-469] # Start ORCM on master host (requires both orcmsched and orcmd)
+%% [FSP-469] # Start ORCM on {\em master} host (requires both orcmsched and orcmd)
 %% [FSP-469] [sms](*\#*) systemctl start orcmsched
 %% [FSP-469] [sms](*\#*) systemctl start orcmd
 %% [FSP-469] \end{lstlisting}
@@ -515,16 +535,23 @@ host as follows:
 %% [FSP-469] 
 %% [FSP-469] \input{../../common/orcm_client}
 
-\paragraph{Enable forwarding of system logs}
+\paragraph{Add stateful provisioning support}
+
+\input{../../common/stateful}
+
+\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 
 \input{../../common/syslog}
 
+
 \subsubsection{Import files} \label{sec:file_import}
 
-The \Warewulf{} system includes functionality to import arbitrary files from the
-provisioning server for distribution to managed hosts. This is one way
-to distribute user credentials to {\em compute} hosts. To
-import local file-based credentials, issue the following:
+The \Warewulf{} system includes functionality to import arbitrary files from
+the provisioning server for distribution to managed hosts. This is one way to
+distribute user credentials to {\em compute} hosts. It also provides a
+convenient mechanism to provide necessary global configuration files required
+by services such as Slurm. To import local file-based credentials, issue the
+following:
 
 % begin_ohpc_run
 % ohpc_comment_header Import files \ref{sec:file_import}
@@ -535,12 +562,13 @@ import local file-based credentials, issue the following:
 \end{lstlisting}
 % \end_ohpc_run
 
-Similarly, to import the cryptographic key that is required by the {\em munge}
-authentication library to be available on every host in the resource management
-pool, issue the following:
+Similarly, to import the global Slurm configuration file and the cryptographic
+key that is required by the {\em munge} authentication library to be available
+on every host in the resource management pool, issue the following:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) wwsh file import /etc/slurm/slurm.conf
 [sms](*\#*) wwsh file import /etc/munge/munge.key
 \end{lstlisting}
 % \end_ohpc_run
@@ -572,7 +600,28 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 [sms](*\#*) wwsh -y node new ${c_name[1]} --ipaddr=${c_ip[1]} --hwaddr=${c_mac[1]} -D ${eth_provision}
 [sms](*\#*) wwsh -y node new ${c_name[2]} --ipaddr=${c_ip[2]} --hwaddr=${c_mac[2]} -D ${eth_provision}
 [sms](*\#*) wwsh -y node new ${c_name[3]} --ipaddr=${c_ip[3]} --hwaddr=${c_mac[3]} -D ${eth_provision}
+\end{lstlisting}
+% end_ohpc_run
 
+\begin{center}
+\begin{tcolorbox}[]
+\small
+\Warewulf{} ships with a utility to automatically register new compute nodes.
+Nodes will be added to the \Warewulf{} database in the order in which their
+DHCP requests are received by the master, so care must be taken to boot nodes
+in the order one wishes to see preserved in the warewulf databse. The IP
+address provided will be incremented after each node is found, and the utility
+will exit after all specified nodes have been found.
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
+[sms](*\#*) wwnodescan --netdev=${eth_provision} --ipaddr=${c_ip[0]} --netmask=${internal_netmask} \
+    --vnfs=sles12 --bootstrap=`uname -r` ${c_name[0]}-${c_name[3]}
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}
+
+% begin_ohpc_run
+% ohpc_validation_comment Add hosts to cluster (Cont.)
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Optionally register additional compute nodes
 [sms](*\#*) for ((i=4; i<$num_computes; i++)) ; do
               wwsh -y node new ${c_name[$i]} --ipaddr=${c_ip[$i]} --hwaddr=${c_mac[$i]} -D ${eth_provision}
@@ -580,7 +629,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 
 # Define provisioning image for hosts
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12 --bootstrap=`uname -r` \
-     --files=dynamic_hosts,passwd,group,shadow,munge.key 
+     --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key
 \end{lstlisting}
 
 % ohpc_validation_newline
@@ -615,6 +664,7 @@ template file for \Warewulf{} that can optionally be imported and used later to 
 
 % end_ohpc_run
 
+
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 
 \input{../../common/reset_computes} 
@@ -625,7 +675,6 @@ order to work interactively.
 
 % begin_ohpc_run
 % ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
-
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[0]} -U ${bmc_username} chassis power reset   # power cycle c1
 [sms](*\#*) ipmitool -E -I lanplus -H ${c_bmc[1]} -U ${bmc_username} chassis power reset   # power cycle c2
@@ -637,6 +686,7 @@ order to work interactively.
               ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
            done
 \end{lstlisting} 
+% end_ohpc_run
 
 Once kicked off, the boot process should take less than 5 minutes (depending on
 BIOS post times) and you can verify that the compute hosts are available via
@@ -654,14 +704,13 @@ c4  05:03am  up   0:02,  0 users,  load average: 0.15, 0.12, 0.05
 \begin{center}
 \begin{tcolorbox}[]
 \small
-While the \texttt{pxelinux.0} that ships with \texttt{warewulf-provision-ohpc}
+While the \texttt{[l]pxelinux.0} that ships with \texttt{warewulf-provision-ohpc}
 support a wide range of hardware some hosts may boot more reliably or faster
-using the BOS provided \texttt{pxelinux.0} that comes from
-\texttt{syslinux}. Replace the \texttt{pxelinux.0} from 
+using the BOS provided \texttt{[l]pxelinux.0} that comes from
+\texttt{syslinux-tftpboot}. Replace the \texttt{[l]pxelinux.0} from 
 \texttt{warewulf-provision-ohpc} version if necessary.
 \end{tcolorbox}
 \end{center}
-
 
 \section{Install \OHPC{} Development Components}
 
@@ -686,11 +735,14 @@ the necessary licenses in order to use the Intel proprietary software.
 \subsection{Compilers} \label{sec:install_compilers}
 \input{../../common/compilers}
 
+\subsection{MPI Stacks} \label{sec:mpi}
+\input{../../common/mpi}
+
 \subsection{Performance Tools} \label{sec:install_perf_tools}
 \input{../../common/perf_tools}
 
-\subsection{MPI Stacks} \label{sec:mpi}
-\input{../../common/mpi}
+\subsection{Setup default development environment}
+\input{../../common/default_dev}
 
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 
@@ -699,7 +751,9 @@ tools and libraries used by HPC applications and developers. For
 example, \OHPC{} provides builds for \FFTW{} and \hdffive{} (including serial and parallel
 I/O support), and the \GNU{} Scientific Library (GSL). Again, multiple builds of
 each package are available in the \OHPC{} repository to support multiple compiler
-and MPI family combinations where appropriate. The general naming convention
+and MPI family combinations where appropriate. Note, however, that not all
+combinatorial permutations may be available for components where there are known
+license incompatibilities. The general naming convention
 for builds provided by \OHPC{} is to append the compiler and MPI family name that
 the library was built against directly into the package name. For example,
 libraries that do not require MPI as part of the build process adopt the
@@ -708,7 +762,7 @@ following RPM name: \\
 \noindent
 \texttt{package-<compiler\_family>-ohpc-<package\_version>-<release>.rpm} \\
 
-\noindent Packages that require MPI as part of the build expand upon this convention to
+\noindent Packages that do require MPI as part of the build expand upon this convention to
 additionally include the MPI family name as follows: \\
 
 \noindent
@@ -738,7 +792,7 @@ S | Name                  | Summary                          | Type
 \OHPC{}-provided 3rd party builds are configured to be installed
 into a common top-level repository so that they can be easily exported to
 desired hosts within the cluster. This common top-level path
-(\texttt{/opt/ohpc/pub}) was previously configured to be mounted on {\em
+(\path{/opt/ohpc/pub}) was previously configured to be mounted on {\em
  compute} nodes in \S\ref{sec:master_customization}, so the packages will be
 immediately available for use on the cluster after installation on the {\em
  master} host.
@@ -752,34 +806,40 @@ offerings within \OHPC{}, issue the following:
 
 \input{../../common/third_party_libs}
 
+
+\vspace*{0.2cm}
+
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{../../common/slurm_startup}
 
-\begin{center}
-\begin{tcolorbox}[]
-\small
-While most resource managers provide similar functionality, the syntax of
-specific commands can vary substantially. The following table highlights some
-common examples of those differences.
-\vspace*{0.2cm}
+%% \begin{center}
+%% \begin{tcolorbox}[]
+%% \small
+%% While most resource managers provide similar functionality, the syntax of
+%% specific commands can vary substantially. The following table highlights some
+%% common examples of those differences.
+%% \vspace*{0.2cm}
+%% \input{../../common/rms_equivalence_table}
+%% \end{tcolorbox}
+%% \end{center}
 
-\input{../../common/rms_equivalence_table}
-\end{tcolorbox}
-\end{center}
 
-
+%\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{../../common/slurm_test_job}
 
 \clearpage
 \appendix
-\section*{Appendices}
+%\section*{Appendices}
+{\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
+
 \addcontentsline{toc}{section}{Appendices}
 \renewcommand{\thesubsection}{\Alph{subsection}}
 
 \input{../../common/automation_appendix}
 \input{manifest}
 \input{../../common/signature}
+
 
 \end{document}
 
