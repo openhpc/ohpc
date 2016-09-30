@@ -53,9 +53,9 @@ running programs.
 %build
 
 cd src
-./configure --with-static-lib=no --with-shared-lib=yes --with-shlib --prefix=%{install_path}
+CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" ./configure --with-static-lib=yes --with-shared-lib=yes --with-shlib --prefix=%{install_path}
 #DBG workaround to make sure libpfm just uses the normal CFLAGS
-DBG="" make
+DBG="" CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" make
 
 %install
 
@@ -105,9 +105,10 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-# Remove the static libraries. Static libraries are undesirable:
+# Static libraries are undesirable:
 # https://fedoraproject.org/wiki/Packaging/Guidelines#Packaging_Static_Libraries
-rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
+# Unfortunately, 'tau' explicitly requires libpapi.a
+rm -rf $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %{__mkdir_p} $RPM_BUILD_ROOT/%{_docdir}
 
