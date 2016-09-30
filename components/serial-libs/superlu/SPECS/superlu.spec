@@ -54,6 +54,7 @@ BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
+%include %{_sourcedir}/OHPC_pxse_compiler
 %endif
 %endif
 

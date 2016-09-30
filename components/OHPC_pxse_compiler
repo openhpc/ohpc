@@ -1,0 +1,6 @@
+BuildRequires: intel-ifort-l-ps-devel-210
+BuildRequires: intel-icc-l-all-210
+BuildRequires: intel-comp-l-all-vars-223
+BuildRequires: intel-compxe-pset
+BuildRequires: intel-mkl-210
+BuildRequires: intel-mkl-common-210
