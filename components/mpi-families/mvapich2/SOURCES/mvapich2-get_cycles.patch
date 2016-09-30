@@ -1,0 +1,28 @@
+diff -ruN mvapich2-2.1.old/src/mpid/ch3/channels/common/include/mv2_clock.h mvapich2-2.1/src/mpid/ch3/channels/common/include/mv2_clock.h
+--- mvapich2-2.1.old/src/mpid/ch3/channels/common/include/mv2_clock.h	2015-04-02 22:00:25.000000000 +0100
++++ mvapich2-2.1/src/mpid/ch3/channels/common/include/mv2_clock.h	2016-09-01 12:02:46.815596938 +0100
+@@ -83,8 +83,22 @@
+ }
+ 
+ #else
+-#warning get_cycles not implemented for this architecture: attempt asm/timex.h
+-#include <asm/timex.h>
++#warning get_cycles not implemented for this architecture: using gettimeofday() fallback
++#include <stddef.h>
++#include <sys/time.h>
++
++typedef unsigned long long cycles_t;
++static inline cycles_t get_cycles()
++{
++    cycles_t ret;
++    struct timeval tv = { 0 };
++
++    if (gettimeofday(&tv, NULL) != 0)
++        return 0;
++    ret = ((((cycles_t)(tv.tv_sec)) * 1000000ULL) + ((cycles_t)(tv.tv_usec)));
++    return ret;
++}
++
+ #endif
+ 
+ extern double get_cpu_mhz(void);

@@ -32,6 +32,8 @@ Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.t
 Source4:   bootstrap_eb.py
 Source5:   easybuild-sles12.patch
 Source6:   OHPC_macros
+Source7:   easybuild-easyblocks_non-x86.patch
+Source8:   bootstrap_eb.py-apply-patch.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch
 BuildRequires: python
@@ -62,6 +64,9 @@ mkdir %{buildroot}
 
 cd %{buildroot}
 cp %{_sourcedir}/*py .
+%ifnarch x86_64
+patch -p0 < %{_sourcedir}/bootstrap_eb.py-apply-patch.patch
+%endif
 
 export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}

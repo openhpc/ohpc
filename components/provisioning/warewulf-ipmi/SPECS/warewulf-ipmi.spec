@@ -32,6 +32,7 @@ Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
 Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-ipmi/warewulf-ipmi-%{version}.tar.gz
 Source1: OHPC_macros
+Patch0: warewulf-ipmi-3.6-config_guess.patch
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 BuildRequires: warewulf-common%{PROJ_DELIM}
@@ -50,7 +51,9 @@ adding IPMI functionality.
 
 %prep
 %setup -n %{pname}-%{version}
-
+%ifarch aarch64
+%patch0 -p1
+%endif
 
 %build
 %configure --localstatedir=%{wwpkgdir}

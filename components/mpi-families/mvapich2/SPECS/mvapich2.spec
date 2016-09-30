@@ -72,7 +72,7 @@ Source2:   OHPC_setup_compiler
 Patch0:    winfree.patch
 # karl.w.schulz@intel.com (04/13/2016)
 Patch1:    minit.patch
-Patch2:    mvapich2-2.1-get_cycles-aarch64.patch
+Patch2:    mvapich2-get_cycles.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
