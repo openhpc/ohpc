@@ -106,7 +106,7 @@ A header file and static library for developing applications using MUNGE.
 A shared library for applications using MUNGE.
 
 %prep
-%setup -n %{pname}-%{version}
+%setup -n %{pname}-%{pname}-%{version}
 
 # OpenHPC patches
 %patch1
