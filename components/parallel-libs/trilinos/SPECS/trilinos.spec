@@ -61,6 +61,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 # Base package name
 %define pname trilinos
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+%ddefine ver_exp 12_6_4
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        12.6.4
@@ -69,8 +70,7 @@ Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
-#Source0:        http://trilinos.csbsju.edu/download/files/trilinos-%{version}-Source.tar.bz2
-Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-12-6-4.tar.gz
+Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         Trilinos-trilinos-aarch64.patch
 BuildRequires:  cmake >= 2.8
@@ -111,8 +111,7 @@ C++ using object-oriented techniques. All packages are self-contained, with the
 Trilinos top layer providing a common look-and-feel and infrastructure.
 
 %prep
-#%setup -q -n %{pname}-%{version}-Source
-%setup -q -n  Trilinos-trilinos-release-12-4-2
+%setup -q -n  Trilinos-trilinos-release-%{ver_exp}
 %patch0 -p1
 %patch1 -p1
 
