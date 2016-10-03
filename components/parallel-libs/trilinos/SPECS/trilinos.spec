@@ -70,7 +70,7 @@ License:        LGPL-2.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
 #Source0:        http://trilinos.csbsju.edu/download/files/trilinos-%{version}-Source.tar.bz2
-Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-12-4-2.tar.gz
+Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-12-6-4.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         Trilinos-trilinos-aarch64.patch
 BuildRequires:  cmake >= 2.8
