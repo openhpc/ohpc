@@ -94,15 +94,9 @@ BuildRequires:  fdupes
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  lapack-devel
 BuildRequires:  python-devel
+BuildRequires:  python-setuptools
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
-#%if 0%{?suse_version} > 1140
-#BuildRequires:  suitesparse-devel-static
-#%endif
-# FIXME: atlas is broken right now, do not use
-# %if 0%{?suse_version} <= 1210
-# BuildRequires:  libatlas3-devel
-# %endif
 Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
