@@ -158,6 +158,7 @@ cmake  \
 #ln -s %{libname}.so.%{version} %{libname}.so
 #popd
 
+make install
 
 %install
 
