@@ -133,38 +133,49 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load metis
+module load parmetis
 
 %if %{compiler_family} == gnu
 module load scalapack
 %endif
 
-make superlulib DSuperLUroot=$PWD 
+cmake  \
+    -DTPL_PARMETIS_INCLUDE_DIRS="${PARMETIS_ROOT}/include;${PARMETIS_ROOT}/metis/include" \
+    -DTPL_PARMETIS_LIBRARIES="${PARMETIS_BUILD_DIR}/libparmetis/libparmetis.so;${PARMETIS_BUILD_DIR}/libmetis/libmetis.so" \
+    -DCMAKE_C_COMPILER=mpicc \
+    -DCMAKE_C_FLAGS="-std=c99 -Wall -fPIC -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0" \
+    -DCMAKE_NOOPTS="-Os -fPIC" \
+    -DCMAKE_Fortran_COMPILER=mpif90 \
+    -DCMAKE_Fortran_FLAGS="-fPIC" \
+    -Denable_blaslib=ON \
+    -DCMAKE_EXE_LINKER_FLAGS="-shared" \
+    -DCMAKE_INSTALL_PREFIX=%{install_path}
 
-mkdir tmp
-(cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
-pushd lib
-ln -s %{libname}.so.%{version} %{libname}.so
-popd
+#mkdir tmp
+#(cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
+#mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
+#pushd lib
+#ln -s %{libname}.so.%{version} %{libname}.so
+#popd
 
 
 %install
 
-%{__mkdir_p} %{buildroot}%{install_path}/etc
-install -m644 make.inc %{buildroot}%{install_path}/etc
+#%{__mkdir_p} %{buildroot}%{install_path}/etc
+#install -m644 make.inc %{buildroot}%{install_path}/etc
 
-%{__mkdir_p} %{buildroot}%{install_path}/include
-install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
-              SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
-              SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
-              %{buildroot}%{install_path}/include/
+#%{__mkdir_p} %{buildroot}%{install_path}/include
+#install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
+              #SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
+              #SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
+              #%{buildroot}%{install_path}/include/
 
-%{__mkdir_p} %{buildroot}%{install_path}/lib
-install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
-pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
-popd
+#%{__mkdir_p} %{buildroot}%{install_path}/lib
+#install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
+#pushd %{buildroot}%{install_path}/lib
+#ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
+#ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
+#popd
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
