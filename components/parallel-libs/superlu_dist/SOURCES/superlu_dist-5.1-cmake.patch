@@ -1,0 +1,11 @@
+--- CMakeLists.txt  2016-05-15 22:16:44.000000000 -0700
++++ CMakeLists.txt.patch    2016-10-04 14:20:15.000000000 -0700
+@@ -5,7 +5,7 @@
+ ######################################################################
+ 
+ # Required version
+-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
++cmake_minimum_required(VERSION 2.8.11 FATAL_ERROR)
+ 
+ # Project version numbers
+ project(SuperLU_DIST NONE)
