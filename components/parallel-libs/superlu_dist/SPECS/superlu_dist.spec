@@ -133,20 +133,18 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load metis
-module load parmetis
 
 %if %{compiler_family} == gnu
 module load scalapack
 %endif
 
 cmake  \
-    -DTPL_PARMETIS_INCLUDE_DIRS="${PARMETIS_ROOT}/include;${PARMETIS_ROOT}/metis/include" \
-    -DTPL_PARMETIS_LIBRARIES="${PARMETIS_BUILD_DIR}/libparmetis/libparmetis.so;${PARMETIS_BUILD_DIR}/libmetis/libmetis.so" \
     -DCMAKE_C_COMPILER=mpicc \
     -DCMAKE_C_FLAGS="-std=c99 -Wall -fPIC -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0" \
     -DCMAKE_NOOPTS="-Os -fPIC" \
     -DCMAKE_Fortran_COMPILER=mpif90 \
     -DCMAKE_Fortran_FLAGS="-fPIC" \
+    -Denable_parmetislib=OFF \
     -Denable_blaslib=ON \
     -DCMAKE_EXE_LINKER_FLAGS="-shared" \
     -DCMAKE_INSTALL_PREFIX=%{install_path}
