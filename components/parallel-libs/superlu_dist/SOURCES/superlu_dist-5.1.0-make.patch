@@ -70,7 +70,7 @@
 +# C compiler setup
 +CC           	= mpicc
 +# CFLAGS should be set to be the C flags that include optimization
-+CFLAGS          = ${CUDA_FLAGS} ${INCS} -std=c99 -O3 -Wall -w2 -openmp -fPIC \
++CFLAGS          = ${CUDA_FLAGS} ${INCS} -std=c99 -O3 -Wall -openmp -fPIC \
 +		-DDEBUGlevel=0 -DPRNTlevel=1 -DPROFlevel=0 \
 +#		-D_LONGINT 
 +#	-Wunused-variable 
