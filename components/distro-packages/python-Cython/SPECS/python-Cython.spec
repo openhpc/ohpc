@@ -42,8 +42,8 @@ BuildRequires:  fdupes
 BuildRequires:  python-xml
 Requires:       python-xml
 %else
-BuildRequires:  PyXML
-Requires:       PyXML
+BuildRequires:  libxml2-python
+Requires:       libxml2-python
 %endif
 BuildRequires:  gcc-c++
 BuildRequires:  python-devel
