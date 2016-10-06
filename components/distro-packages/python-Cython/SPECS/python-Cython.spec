@@ -41,6 +41,8 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  fdupes
 BuildRequires:  python-xml
 Requires:       python-xml
+Requires(post): update-alternatives
+Requires(postun): update-alternatives
 %else
 BuildRequires:  libxml2-python
 Requires:       libxml2-python
@@ -48,8 +50,6 @@ Requires:       libxml2-python
 BuildRequires:  gcc-c++
 BuildRequires:  python-devel
 Requires:       python-devel
-Requires(post): update-alternatives
-Requires(postun): update-alternatives
 Provides:       python-cython = %{version}
 Obsoletes:      python-cython < %{version}
 %if 0%{?suse_version} && 0%{?suse_version} <= 1110
