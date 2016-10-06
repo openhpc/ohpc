@@ -57,6 +57,7 @@ Provides:       %{name} = %{version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{OHPC_PUB}/doc/contrib
 
+%define _unpackaged_files_terminate_build      0
 %define debug_package %{nil}
 #!BuildIgnore: post-build-checks
 
