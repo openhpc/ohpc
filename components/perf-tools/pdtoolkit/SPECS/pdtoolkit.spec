@@ -107,44 +107,44 @@ rm -f %buildroot%{install_path}/.last_config
 
 pushd %buildroot%{install_path}/%{arch_dir}/bin
 sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
-#rm -f edg33-upcparse
-#%ifarch x86_64
-#ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
-#%endif
-#rm -f edg44-c-roseparse
-#%ifnarch aarch64
-#ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
-#%endif
-#rm -f edg44-cxx-roseparse
-#%ifnarch aarch64
-#ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
-#%endif
-#rm -f edg44-upcparse
-#%ifnarch aarch64
-#ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
-#%endif
-#rm -f pebil.static
-#ln -s  ../../contrib/pebil/pebil/pebil.static
-#rm -f roseparse
-#%ifarch x86_64
-#ln -s  ../../contrib/rose/roseparse/roseparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
-#%endif
-#sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
-#sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
-#rm -f ../../contrib/rose/rose-header-gen/config.log
-#rm -f ../../contrib/rose/rose-header-gen/config.status
-#rm -f smaqao
-#ln -s  ../../contrib/maqao/maqao/smaqao
+rm -f edg33-upcparse
+%ifarch x86_64
+ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
+sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
+%endif
+rm -f edg44-c-roseparse
+%ifnarch aarch64
+ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
+%endif
+rm -f edg44-cxx-roseparse
+%ifnarch aarch64
+ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
+%endif
+rm -f edg44-upcparse
+%ifnarch aarch64
+ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
+%endif
+rm -f pebil.static
+ln -s  ../../contrib/pebil/pebil/pebil.static
+rm -f roseparse
+%ifarch x86_64
+ln -s  ../../contrib/rose/roseparse/roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
+%endif
+sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
+sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
+rm -f ../../contrib/rose/rose-header-gen/config.log
+rm -f ../../contrib/rose/rose-header-gen/config.status
+rm -f smaqao
+ln -s  ../../contrib/maqao/maqao/smaqao
 popd
-#pushd %buildroot%{install_path}/%{arch_dir}
-#rm -f include
-#ln -s ../include
-#popd
+pushd %buildroot%{install_path}/%{arch_dir}
+rm -f include
+ln -s ../include
+popd
 install -d %buildroot%{install_path}/include
 install -d %buildroot%{install_path}/lib
 install -d %buildroot%{install_path}/man
