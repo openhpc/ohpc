@@ -1,0 +1,11 @@
+--- Cython/Compiler/PyrexTypes.py.orig  2016-01-28 12:06:29.060198431 +0000
++++ Cython/Compiler/PyrexTypes.py   2016-01-28 12:07:24.296842892 +0000
+@@ -1930,7 +1930,7 @@
+     #define __Pyx_CIMAG(z) ((z).imag)
+ #endif
+ 
+-#if (defined(_WIN32) || defined(__clang__)) && defined(__cplusplus) && CYTHON_CCOMPLEX
++#if defined(__cplusplus) && (defined(_WIN32) || defined(__clang__) || __cplusplus >= 201103L) && CYTHON_CCOMPLEX
+     #define __Pyx_SET_CREAL(z,x) ((z).real(x))
+     #define __Pyx_SET_CIMAG(z,y) ((z).imag(y))
+ #else
