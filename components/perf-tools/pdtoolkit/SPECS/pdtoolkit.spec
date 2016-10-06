@@ -76,8 +76,7 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-#./configure -prefix=%buildroot%{install_path} \
-./configure -prefix=%{install_path} \
+./configure -prefix=%buildroot%{install_path} \
 %if %{compiler_family} == intel 
         -icpc
 %else
@@ -89,16 +88,16 @@ make %{?_smp_mflags}
 export DONT_STRIP=1
 make %{?_smp_mflags} install
 
-#rm -f %buildroot%{install_path}/craycnl
-#rm -f %buildroot%{install_path}/mic_linux
-#rm -f %buildroot%{install_path}/sparc64fx
-#rm -f %buildroot%{install_path}/xt3
-#rm -f %buildroot%{install_path}/contrib/rose/roseparse/config.log
-#rm -f %buildroot%{install_path}/contrib/rose/roseparse/config.status
-#rm -f %buildroot%{install_path}/contrib/rose/edg44/x86_64/roseparse/config.log
-#rm -f %buildroot%{install_path}/contrib/rose/edg44/x86_64/roseparse/config.status
-#rm -f %buildroot%{install_path}/.all_configs
-#rm -f %buildroot%{install_path}/.last_config
+rm -f %buildroot%{install_path}/craycnl
+rm -f %buildroot%{install_path}/mic_linux
+rm -f %buildroot%{install_path}/sparc64fx
+rm -f %buildroot%{install_path}/xt3
+rm -f %buildroot%{install_path}/contrib/rose/roseparse/config.log
+rm -f %buildroot%{install_path}/contrib/rose/roseparse/config.status
+rm -f %buildroot%{install_path}/contrib/rose/edg44/x86_64/roseparse/config.log
+rm -f %buildroot%{install_path}/contrib/rose/edg44/x86_64/roseparse/config.status
+rm -f %buildroot%{install_path}/.all_configs
+rm -f %buildroot%{install_path}/.last_config
 
 %ifarch aarch64
 %define arch_dir arm64_linux
@@ -106,49 +105,49 @@ make %{?_smp_mflags} install
 %define arch_dir x86_64
 %endif
 
-#pushd %buildroot%{install_path}/%{arch_dir}/bin
-#sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
-#rm -f edg33-upcparse
-#%ifarch x86_64
-#ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
-#%endif
-#rm -f edg44-c-roseparse
-#%ifnarch aarch64
-#ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
-#%endif
-#rm -f edg44-cxx-roseparse
-#%ifnarch aarch64
-#ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
-#%endif
-#rm -f edg44-upcparse
-#%ifnarch aarch64
-#ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
-#%endif
-#rm -f pebil.static
-#ln -s  ../../contrib/pebil/pebil/pebil.static
-#rm -f roseparse
-#%ifarch x86_64
-#ln -s  ../../contrib/rose/roseparse/roseparse
-#sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
-#%endif
-#sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
-#sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
-#rm -f ../../contrib/rose/rose-header-gen/config.log
-#rm -f ../../contrib/rose/rose-header-gen/config.status
-#rm -f smaqao
-#ln -s  ../../contrib/maqao/maqao/smaqao
-#popd
-#pushd %buildroot%{install_path}/%{arch_dir}
-#rm -f include
-#ln -s ../include
-#popd
-#install -d %buildroot%{install_path}/include
-#install -d %buildroot%{install_path}/lib
-#install -d %buildroot%{install_path}/man
+pushd %buildroot%{install_path}/%{arch_dir}/bin
+sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
+rm -f edg33-upcparse
+%ifarch x86_64
+ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
+sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
+%endif
+rm -f edg44-c-roseparse
+%ifnarch aarch64
+ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
+%endif
+rm -f edg44-cxx-roseparse
+%ifnarch aarch64
+ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
+%endif
+rm -f edg44-upcparse
+%ifnarch aarch64
+ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
+%endif
+rm -f pebil.static
+ln -s  ../../contrib/pebil/pebil/pebil.static
+rm -f roseparse
+%ifarch x86_64
+ln -s  ../../contrib/rose/roseparse/roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
+%endif
+sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
+sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
+rm -f ../../contrib/rose/rose-header-gen/config.log
+rm -f ../../contrib/rose/rose-header-gen/config.status
+rm -f smaqao
+ln -s  ../../contrib/maqao/maqao/smaqao
+popd
+pushd %buildroot%{install_path}/%{arch_dir}
+rm -f include
+ln -s ../include
+popd
+install -d %buildroot%{install_path}/include
+install -d %buildroot%{install_path}/lib
+install -d %buildroot%{install_path}/man
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
