@@ -94,7 +94,9 @@ for p in cython cythonize cygdb ; do
     touch %{buildroot}%{_sysconfdir}/alternatives/$p
 done
 
+%if 0%{?sles_version} || 0%{?suse_version}
 %fdupes -s %{buildroot}%{python_sitearch} %{buildroot}%{_docdir}
+%endif
 rm -rf %{buildroot}%{python_sitearch}/__pycache__/
 
 %post
