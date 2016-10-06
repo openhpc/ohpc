@@ -156,6 +156,9 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 module load openblas
 %endif
 
+# hack to avoid Cython dependency - crb
+touch PKG-INFO
+
 module load numpy
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 ATLAS=%{_libdir}/atlas \
