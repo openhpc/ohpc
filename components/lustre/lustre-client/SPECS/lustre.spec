@@ -129,7 +129,7 @@ BuildRequires:	-post-build-checks
 
 # for those uses that don't want the -smp/-bigsmp (or the .arch) on the end
 # of %kversion
-%define krequires %(bash -c "echo %{kversion} | sed -e 's/\.x86_64$//' -e 's/\.i[3456]86$//' -e 's/-smp$//' -e 's/-bigsmp$//' -e 's/-ppc64$//' -e 's/-default$//'")
+%define krequires %(bash -c "echo %{kversion} | sed -e 's/\.x86_64$//' -e 's/\.i[3456]86$//' -e 's/-smp$//' -e 's/-bigsmp$//' -e 's/-ppc64$//' -e 's/.aarch64$//' -e 's/-default$//'")
 
 # Set the package name prefix
 %if %{undefined lustre_name}
@@ -189,7 +189,7 @@ Requires: %{cross_requires}
 AutoReqProv: no
 %else
 # GSS requires this: BuildRequires: pkgconfig, libgssapi-devel >= 0.10
-%if %{_vendor}=="redhat" || %{_vendor}=="fedora"
+%if %{_vendor}=="redhat" || %{_vendor}=="fedora" || 0%{?centos_version}
 #suse don't support selinux
 BuildRequires: libselinux-devel
 Requires: libselinux
@@ -207,7 +207,7 @@ Requires: %{cross_requires}
 AutoReqProv: no
 %else
 # for SLES11, we need nothing here
-%if %{_vendor}=="redhat" || %{_vendor}=="fedora"
+%if %{_vendor}=="redhat" || %{_vendor}=="fedora" || 0%{?centos_version}
 # for RHEL we need to require the specific kernel still since weak-modules
 # support on RH is, well, weak, to be punny about it
 Requires: kernel = %{krequires}
