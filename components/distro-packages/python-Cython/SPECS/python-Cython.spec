@@ -37,12 +37,17 @@ Source:         http://pypi.python.org/packages/source/C/Cython/Cython-%{version
 Source1:        python-Cython-rpmlintrc
 Patch1:         python-Cython-c++11.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+%if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
+BuildRequires:  python-xml
+Requires:       python-xml
+%else
+BuildRequires:  PyXML
+Requires:       PyXML
+%endif
 BuildRequires:  gcc-c++
 BuildRequires:  python-devel
-BuildRequires:  python-xml
 Requires:       python-devel
-Requires:       python-xml
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
 Provides:       python-cython = %{version}
