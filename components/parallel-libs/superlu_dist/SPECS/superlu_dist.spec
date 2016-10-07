@@ -92,7 +92,7 @@ URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Patch0:         superlu_dist-4.1-sequence-point.patch
 Patch1:         superlu_dist-5.1-parmetis.patch
-#Patch1:         superlu_dist-5.1.0-make.patch
+Patch2:         superlu_dist-5.1-cmake.patch
 #Patch1:         superlu_dist-4.1-example-no-return-in-non-void.patch
 #Patch1:         superlu_dist-4.1-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
@@ -127,6 +127,7 @@ solutions.
 %setup -q -n SuperLU_DIST_%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # OpenHPC compiler/mpi designation
