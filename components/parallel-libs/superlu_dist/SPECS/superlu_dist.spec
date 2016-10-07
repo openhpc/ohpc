@@ -145,7 +145,6 @@ module load scalapack
 cmake  \
      -DCMAKE_C_COMPILER=mpicc \
      -DCMAKE_C_FLAGS="-std=c99 -Wall -fPIC -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0" \
-     -DCMAKE_NOOPTS="-Os -fPIC" \
      -DCMAKE_Fortran_COMPILER=mpif90 \
      -DCMAKE_Fortran_FLAGS="-fPIC" \
      -Denable_parmetislib=OFF \
@@ -153,7 +152,7 @@ cmake  \
      -DCMAKE_EXE_LINKER_FLAGS="-shared" \
      -DCMAKE_INSTALL_PREFIX=%{install_path}
 
-make superlulib DSuperLUroot=$PWD 
+make DSuperLUroot=$PWD 
 
 mkdir tmp
 (cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
