@@ -152,14 +152,14 @@ cmake  \
      -DCMAKE_EXE_LINKER_FLAGS="-shared" \
      -DCMAKE_INSTALL_PREFIX=%{install_path}
 
-make DSuperLUroot=$PWD 
+make install DSuperLUroot=$PWD 
 
-mkdir tmp
-(cd tmp; ar x %{buildroot}/lib/libsuperlu_dist_%{version}.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
-pushd lib
-ln -s %{libname}.so.%{version} %{libname}.so
-popd
+#mkdir tmp
+#(cd tmp; ar x %{buildroot}/lib/libsuperlu_dist_%{version}.a)
+#mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
+#pushd lib
+#ln -s %{libname}.so.%{version} %{libname}.so
+#popd
 
 
 %install
@@ -176,7 +176,7 @@ install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
 %{__mkdir_p} %{buildroot}%{install_path}/lib
 install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
+ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.5
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
 
