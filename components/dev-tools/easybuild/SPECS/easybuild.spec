@@ -76,7 +76,7 @@ export EASYBUILD_INSTALLPATH=%{install_path}
 export PATH=${LMOD_DIR}:${PATH}
 export PYTHON_VERSION=`python -c 'print ".".join(map(str, __import__("sys").version_info[:2]))'`
 
-python ./bootstrap_eb.py %{buildroot}/%{install_path}
+python ./bootstrap_eb.py %{buildroot}/%{install_path} || cat "/tmp/eb*/easybuild-EasyBuild-*log"
 
 rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
 rm bootstrap_eb.py
