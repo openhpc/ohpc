@@ -16,6 +16,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %define vsc_base_ver 2.5.4
+%define vsc_install_ver 0.10.15
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
@@ -29,11 +30,12 @@ Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easy
 Source1:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
 Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
 Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.tar.gz
-Source4:   bootstrap_eb.py
-Source5:   easybuild-sles12.patch
-Source6:   OHPC_macros
-Source7:   easybuild-easyblocks_non-x86.patch
-Source8:   bootstrap_eb.py-apply-patch.patch
+Source4:   https://pypi.io/packages/source/v/vsc-install/vsc-install-%{vsc_install_ver}.tar.gz
+Source5:   bootstrap_eb.py
+Source6:   easybuild-sles12.patch
+Source7:   OHPC_macros
+Source8:   easybuild-easyblocks_non-x86.patch
+Source9:   bootstrap_eb.py-apply-patch.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch
 BuildRequires: python
