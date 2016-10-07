@@ -91,8 +91,8 @@ Group:          %{PROJ_NAME}/parallel-libs
 URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Patch0:         superlu_dist-4.1-sequence-point.patch
-Patch1:         superlu_dist-5.1.0-make.patch
-Patch2:         superlu_dist-5.1-parmetis.patch
+Patch1:         superlu_dist-5.1-parmetis.patch
+#Patch1:         superlu_dist-5.1.0-make.patch
 #Patch1:         superlu_dist-4.1-example-no-return-in-non-void.patch
 #Patch1:         superlu_dist-4.1-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
@@ -127,7 +127,6 @@ solutions.
 %setup -q -n SuperLU_DIST_%{version}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -141,6 +140,17 @@ module load metis
 %if %{compiler_family} == gnu
 module load scalapack
 %endif
+
+cmake  \
+     -DCMAKE_C_COMPILER=mpicc \
+     -DCMAKE_C_FLAGS="-std=c99 -Wall -fPIC -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0" \
+     -DCMAKE_NOOPTS="-Os -fPIC" \
+     -DCMAKE_Fortran_COMPILER=mpif90 \
+     -DCMAKE_Fortran_FLAGS="-fPIC" \
+     -Denable_parmetislib=OFF \
+     -Denable_blaslib=ON \
+     -DCMAKE_EXE_LINKER_FLAGS="-shared" \
+     -DCMAKE_INSTALL_PREFIX=%{install_path}
 
 make superlulib DSuperLUroot=$PWD 
 
