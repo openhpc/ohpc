@@ -55,7 +55,7 @@ PYPI_SOURCE_URL = 'https://pypi.python.org/packages/source'
 
 VSC_BASE = 'vsc-base'
 VSC_INSTALL = 'vsc-install'
-EASYBUILD_PACKAGES = [VSC_BASE, VSC_INSTALL, 'easybuild-framework', 'easybuild-easyblocks', 'easybuild-easyconfigs']
+EASYBUILD_PACKAGES = [VSC_INSTALL, VSC_BASE, 'easybuild-framework', 'easybuild-easyblocks', 'easybuild-easyconfigs']
 
 # set print_debug to True for detailed progress info
 print_debug = os.environ.pop('EASYBUILD_BOOTSTRAP_DEBUG', False)
