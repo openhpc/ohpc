@@ -9,3 +9,13 @@
  	  static_schedule.o xerr_dist.o smach_dist.o dmach_dist.o
  
  ifeq "${ACC}" "GPU"
+--- SuperLU_DIST_5.1.0/SRC/CMakeLists.txt	2016-05-15 22:16:44.000000000 -0700
++++ SuperLU_DIST_5.1.0.patch/SRC/CMakeLists.txt	2016-10-07 11:57:26.000000000 -0700
+@@ -26,7 +26,6 @@
+   symbfact.c
+   psymbfact.c
+   psymbfact_util.c
+-  get_perm_c_parmetis.c
+   mc64ad_dist.c
+   static_schedule.c
+   xerr_dist.c
