@@ -127,6 +127,7 @@ solutions.
 %setup -q -n SuperLU_DIST_%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 # OpenHPC compiler/mpi designation
