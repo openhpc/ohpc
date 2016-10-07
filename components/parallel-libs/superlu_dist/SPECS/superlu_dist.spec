@@ -150,9 +150,9 @@ cmake  \
      -Denable_parmetislib=OFF \
      -Denable_blaslib=ON \
      -DCMAKE_EXE_LINKER_FLAGS="-shared" \
-     -DCMAKE_INSTALL_PREFIX=%{install_path}
+     -DCMAKE_INSTALL_PREFIX=%{buildroot}%{install_path}
 
-make DSuperLUroot=$PWD 
+make install
 
 #mkdir tmp
 #(cd tmp; ar x %{buildroot}/lib/libsuperlu_dist_%{version}.a)
