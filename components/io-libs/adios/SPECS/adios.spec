@@ -144,6 +144,7 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
+module load autotools
 module load phdf5
 module load netcdf
 
