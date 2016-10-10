@@ -100,7 +100,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
 [mkl]
-extra_compile_args = -xS
+extra_compile_args = -mavx
 include_dirs = $MKLROOT/include
 library_dirs = $MKLROOT/lib/intel64
 mkl_libs = mkl_rt
