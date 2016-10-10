@@ -240,6 +240,7 @@ install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
+find %buildroot%{install_path}/python -name \*pyc f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
