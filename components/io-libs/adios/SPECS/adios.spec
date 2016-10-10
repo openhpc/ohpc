@@ -87,6 +87,7 @@ Requires:      libmxml1 zlib
 # libm.a from CMakeLists
 BuildRequires: glibc-static
 
+BuildRequires: autoconf%{PROJ_DELIM}
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
