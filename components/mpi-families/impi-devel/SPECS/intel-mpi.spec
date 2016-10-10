@@ -35,6 +35,8 @@ Requires: intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: intel-compilers-devel%{PROJ_DELIM}
 %endif
 
+Provides: libmpi.so.12()(64bit)
+
 %description
 
 Provides OpenHPC-style compatible modules for use with the Intel(R) MPI Library
