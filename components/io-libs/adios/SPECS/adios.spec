@@ -147,6 +147,7 @@ export CFLAGS="-fp-model strict $CFLAGS"
 module load autotools
 module load phdf5
 module load netcdf
+module load numpy
 
 TOPDIR=$PWD
 
