@@ -36,6 +36,7 @@ BuildRequires: intel-compilers-devel%{PROJ_DELIM}
 %endif
 
 Provides: libmpi.so.12()(64bit)
+Provides: libmpifort.so.12()(64bit) 
 
 %description
 
