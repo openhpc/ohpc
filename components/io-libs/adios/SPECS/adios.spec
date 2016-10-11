@@ -171,6 +171,11 @@ export MPICXX=mpicxx
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
+# work around old config.guess on aarch64 systems
+%ifarch aarch64
+cp /usr/lib/rpm/config.guess config
+%endif
+
 ./configure --prefix=%{install_path} \
 	--with-mxml=/usr \
 	--with-lustre=/usr/include/lustre \
