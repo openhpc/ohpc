@@ -26,8 +26,13 @@
 +#
 +#  The name of the libraries to be created/linked to
 +#
+<<<<<<< HEAD
 +DSuperLUroot 	= ${HOME}/Release_Codes/SuperLU_DIST_5.1.0
 +DSUPERLULIB   	= $(DSuperLUroot)/lib/libsuperlu_dist_5.1.0.a
+=======
++DSuperLUroot 	= ${HOME}/Release_Codes/SuperLU_DIST_4.2
++DSUPERLULIB   	= $(DSuperLUroot)/lib/libsuperlu_dist_4.2.a
+>>>>>>> afea5469dc53be6d694e789e06abb3c4ce9b62dd
 +#
 +BLASDEF	     	= -DUSE_VENDOR_BLAS
 +BLASLIB	        = ${MKL}
