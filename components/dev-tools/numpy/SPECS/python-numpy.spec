@@ -103,7 +103,7 @@ cat > site.cfg << EOF
 include_dirs = $MKLROOT/include
 library_dirs = $MKLROOT/lib/intel64
 mkl_libs = mkl_rt
-lapack_libs =
+lapack_libs = mkl_rt
 EOF
 export PATH=/opt/ohpc/pub/compiler/gcc/5.4.0/bin:${PATH}
 %endif
