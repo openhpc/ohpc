@@ -35,6 +35,7 @@ BuildRequires: openblas-gnu%{PROJ_DELIM}
 Requires:      openblas-gnu%{PROJ_DELIM}
 %endif
 %if %{compiler_family} == intel
+BuildRequires: gnu-compilers%{PROJ_DELIM}
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{?OHPC_BUILD}
