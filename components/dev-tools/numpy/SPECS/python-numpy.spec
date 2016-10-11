@@ -100,12 +100,12 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
 [mkl]
-extra_compile_args = -gcc-version=540
 include_dirs = $MKLROOT/include
 library_dirs = $MKLROOT/lib/intel64
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
+export PATH=/opt/ohpc/pub/compiler/gcc/5.4.0/bin:${PATH}
 %endif
 
 %if %{compiler_family} == gnu
