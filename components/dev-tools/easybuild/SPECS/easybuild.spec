@@ -32,10 +32,9 @@ Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-frame
 Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.tar.gz
 Source4:   https://pypi.io/packages/source/v/vsc-install/vsc-install-%{vsc_install_ver}.tar.gz
 Source5:   bootstrap_eb.py
-Source6:   easybuild-sles12.patch
-Source7:   OHPC_macros
-Source8:   easybuild-easyblocks_non-x86.patch
-Source9:   bootstrap_eb.py-apply-patch.patch
+Source6:   OHPC_macros
+Source7:   easybuild-easyblocks_non-x86.patch
+Source8:   bootstrap_eb.py-apply-patch.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: patch
 BuildRequires: python
@@ -71,21 +70,15 @@ patch -p0 < %{_sourcedir}/bootstrap_eb.py-apply-patch.patch
 %endif
 
 export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
-export EASYBUILD_BOOTSTRAP_DEBUG=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export EASYBUILD_INSTALLPATH=%{install_path}
 export PATH=${LMOD_DIR}:${PATH}
 export PYTHON_VERSION=`python -c 'print ".".join(map(str, __import__("sys").version_info[:2]))'`
 
-python ./bootstrap_eb.py %{buildroot}/%{install_path} || cat "/tmp/eb*/easybuild-EasyBuild-*log"
+python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
 rm bootstrap_eb.py
-
-# Patch to add SLES 12 kernel version
-cd %{buildroot}%{install_path}/software/EasyBuild/%{version}/lib/python$PYTHON_VERSION/site-packages/easybuild_framework-%{version}-py$PYTHON_VERSION.egg/easybuild/tools
-patch -p9 < %{_sourcedir}/easybuild-sles12.patch
-cd -
 
 
 # OHPC module file
