@@ -386,7 +386,7 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
     f = open(ebfile, "w")
     templates.update({
         'source_urls': '\n'.join(["'%s/%s/%s'," % (PYPI_SOURCE_URL, pkg[0], pkg) for pkg in EASYBUILD_PACKAGES]),
-        'sources': "%(vsc-base)s%(easybuild-framework)s%(easybuild-easyblocks)s%(easybuild-easyconfigs)s" % templates,
+        'sources': "%(vsc-install)s%(vsc-base)s%(easybuild-framework)s%(easybuild-easyblocks)s%(easybuild-easyconfigs)s" % templates,
         'pythonpath': distribute_egg_dir,
     })
     f.write(EASYBUILD_EASYCONFIG_TEMPLATE % templates)
