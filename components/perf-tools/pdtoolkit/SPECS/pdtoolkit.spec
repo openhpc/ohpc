@@ -59,7 +59,8 @@ DocDir:         %{OHPC_PUB}/doc/contrib
 
 %define _unpackaged_files_terminate_build      0
 %define debug_package %{nil}
-#!BuildIgnore: post-build-checks
+
+BuildConflicts: post-build-checks
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
