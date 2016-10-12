@@ -30,9 +30,7 @@ Requires: warewulf-common%{PROJ_DELIM}
 Requires: pigz
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildArch: x86_64
-%else
+%if 0%{!?sles_version} && 0%{!?suse_version}
 BuildArch: noarch
 %endif
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
