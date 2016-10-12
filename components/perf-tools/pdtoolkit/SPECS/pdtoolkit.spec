@@ -58,9 +58,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{OHPC_PUB}/doc/contrib
 
 %define _unpackaged_files_terminate_build      0
+%define __check_files /bin/true
 %define debug_package %{nil}
 
-BuildConflicts: post-build-checks
+
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
