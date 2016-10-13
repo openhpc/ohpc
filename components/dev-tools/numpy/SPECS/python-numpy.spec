@@ -130,7 +130,7 @@ module load openblas
 %endif
 
 %if %{compiler_family} == intel
-COMPILER_FLAG="--compiler=intelew"
+COMPILER_FLAG="--compiler=intelem"
 %endif
 #CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
 python setup.py build $COMPILER_FLAG
@@ -141,7 +141,7 @@ python setup.py build $COMPILER_FLAG
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+python setup.py install --root="%{buildroot}" --prefix="%{install_path}" $COMPILER_FLAG
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
 %endif
