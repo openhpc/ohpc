@@ -165,19 +165,6 @@ popd
 %{__mkdir_p} %{buildroot}%{install_path}/etc
 install -m644 make.inc %{buildroot}%{install_path}/etc
 
-#%{__mkdir_p} %{buildroot}%{install_path}/include
-#install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
-              #SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
-              #SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
-              #%{buildroot}%{install_path}/include/
-
-#%{__mkdir_p} %{buildroot}%{install_path}/lib
-install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
-pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.5
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
-popd
-
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
