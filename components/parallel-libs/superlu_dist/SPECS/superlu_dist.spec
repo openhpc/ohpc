@@ -163,6 +163,7 @@ popd
 %install
 
 %{__mkdir_p} %{buildroot}%{install_path}/etc
+sed -i 's|%{buildroot}||g' make.inc
 install -m644 make.inc %{buildroot}%{install_path}/etc
 
 # OpenHPC module file
