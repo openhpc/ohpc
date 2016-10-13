@@ -153,7 +153,7 @@ cmake  \
 make install
 
 mkdir tmp
-(cd tmp; ar x %{buildroot}%{install_path}/lib/libsuperlu_dist_%{version}.a)
+(cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
 mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
 pushd lib
 ln -s %{libname}.so.%{version} %{libname}.so
