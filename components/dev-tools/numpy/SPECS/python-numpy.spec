@@ -130,7 +130,7 @@ module load openblas
 %endif
 
 %if %{compiler_family} == intel
-COMPILER_FLAG="--compiler=intelem"
+COMPILER_FLAG="--compiler=intelew"
 %endif
 #CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
 python setup.py build $COMPILER_FLAG
