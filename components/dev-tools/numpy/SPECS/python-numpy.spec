@@ -141,10 +141,7 @@ python setup.py build $COMPILER_FLAG
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-%if %{compiler_family} == intel
-COMPILER_FLAG="--compiler=intelem"
-%endif
-python setup.py install --root="%{buildroot}" --prefix="%{install_path}" $COMPILER_FLAG
+python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
 %endif
