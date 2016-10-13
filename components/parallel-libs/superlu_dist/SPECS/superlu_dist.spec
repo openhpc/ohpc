@@ -79,7 +79,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define pname superlu_dist
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define major   4
+%define major   5
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -93,8 +93,6 @@ Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version
 Patch0:         superlu_dist-4.1-sequence-point.patch
 Patch1:         superlu_dist-5.1-parmetis.patch
 Patch2:         superlu_dist-5.1-cmake.patch
-#Patch1:         superlu_dist-4.1-example-no-return-in-non-void.patch
-#Patch1:         superlu_dist-4.1-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  cmake
@@ -154,18 +152,18 @@ cmake  \
 
 make install
 
-#mkdir tmp
-#(cd tmp; ar x %{buildroot}/lib/libsuperlu_dist_%{version}.a)
-#mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
-#pushd lib
-#ln -s %{libname}.so.%{version} %{libname}.so
-#popd
+mkdir tmp
+(cd tmp; ar x %{buildroot}/lib/libsuperlu_dist_%{version}.a)
+mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
+pushd lib
+ln -s %{libname}.so.%{version} %{libname}.so
+popd
 
 
 %install
 
-#%{__mkdir_p} %{buildroot}%{install_path}/etc
-#install -m644 make.inc %{buildroot}%{install_path}/etc
+%{__mkdir_p} %{buildroot}%{install_path}/etc
+install -m644 make.inc %{buildroot}%{install_path}/etc
 
 #%{__mkdir_p} %{buildroot}%{install_path}/include
 #install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
@@ -175,10 +173,10 @@ make install
 
 #%{__mkdir_p} %{buildroot}%{install_path}/lib
 #install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
-#pushd %{buildroot}%{install_path}/lib
-#ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.5
-#ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
-#popd
+pushd %{buildroot}%{install_path}/lib
+ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.5
+ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
+popd
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
