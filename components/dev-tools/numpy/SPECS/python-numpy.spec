@@ -60,7 +60,7 @@ Source0:        http://sourceforge.net/projects/numpy/files/NumPy/%{version}/num
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
 Patch1:         numpy-buildfix.patch
-Patch2:         numpy-intelccomp.patch
+#Patch2:         numpy-intelccomp.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  python-devel python-setuptools
 Requires:       python >= %{py_ver}
@@ -94,7 +94,7 @@ basic linear algebra and random number generation.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
-%patch2 -p1
+#%patch2 -p1
 
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
