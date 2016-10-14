@@ -190,9 +190,9 @@ EOF
 %defattr(-,root,root)
 %{OHPC_HOME}
 %{OHPC_PUB}
-%doc INSTALL.rst.txt
-%doc LICENSE.txt
-%doc PKG-INFO
-%doc THANKS.txt
+#%doc INSTALL.rst.txt
+#%doc LICENSE.txt
+#%doc PKG-INFO
+#%doc THANKS.txt
 
 %changelog
