@@ -1,19 +1,20 @@
---- bootstrap_eb.py.old	2016-09-06 20:44:41.000000000 +0100
-+++ bootstrap_eb.py	2016-09-06 20:45:42.000000000 +0100
-@@ -68,6 +68,7 @@
+--- bootstrap_eb.py.old	2016-10-12 18:18:06.000000000 +0100
++++ bootstrap_eb.py	2016-10-13 11:44:18.000000000 +0100
+@@ -69,6 +69,8 @@
  
  EASYBUILD_BOOTSTRAP_SOURCEPATH = os.environ.pop('EASYBUILD_BOOTSTRAP_SOURCEPATH', None)
  EASYBUILD_BOOTSTRAP_SKIP_STAGE0 = os.environ.pop('EASYBUILD_BOOTSTRAP_SKIP_STAGE0', False)
++EASYBUILD_VERSION = os.environ.pop('EASYBUILD_VERSION', None)
 +PYTHON_VERSION = os.environ.pop('PYTHON_VERSION', None)
  
  # keep track of original environment (after clearing PYTHONPATH)
  orig_os_environ = copy.deepcopy(os.environ)
-@@ -488,6 +489,9 @@
+@@ -489,6 +491,9 @@
      # STAGE 1: install EasyBuild using easy_install to tmp dir
      templates = stage1(tmpdir, sourcepath)
  
 +    # Apply 'non-x86' patch
-+    os.system("cd %s/eb_stage1/lib/python%s/site-packages/easybuild_easyblocks-2.5.0-py%s.egg/easybuild/easyblocks; patch -p3 < %s/easybuild-easyblocks_non-x86.patch" % (tmpdir, PYTHON_VERSION, PYTHON_VERSION, sourcepath))
++    os.system("cd %s/eb_stage1/lib/python%s/site-packages/easybuild_easyblocks-%s-py%s.egg/easybuild/easyblocks; patch -p3 < %s/easybuild-easyblocks_non-x86.patch" % (tmpdir, PYTHON_VERSION, EASYBUILD_VERSION, PYTHON_VERSION, sourcepath))
 +
      # STAGE 2: install EasyBuild using EasyBuild (to final target installation dir)
      stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath)
