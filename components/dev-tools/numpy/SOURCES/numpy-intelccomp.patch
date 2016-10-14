@@ -20,7 +20,7 @@
 @@ -18,7 +17,7 @@
      def __init__(self, verbose=0, dry_run=0, force=0):
          UnixCCompiler.__init__(self, verbose, dry_run, force)
-         self.cc_exe = ('icc -fPIC -fp-model strict -O3 '
+         self.cc_exe = ('icc -fPIC -fp-model strict -O1 '
 -                       '-fomit-frame-pointer -openmp')
 +                       '-fomit-frame-pointer -qopenmp ' + environ.get('CFLAGS', '').strip())
          compiler = self.cc_exe
@@ -44,7 +44,7 @@
  
      def __init__(self, verbose=0, dry_run=0, force=0):
          UnixCCompiler.__init__(self, verbose, dry_run, force)
-         self.cc_exe = ('icc -m64 -fPIC -fp-model strict -O3 '
+         self.cc_exe = ('icc -m64 -fPIC -fp-model strict -O1 '
 -                       '-fomit-frame-pointer -openmp')
 +                       '-fomit-frame-pointer -qopenmp {} {}'.format(environ.get('ARCH_FLAGS', '-xSSE4.2 -axCORE-AVX2,CORE-AVX512'), environ.get('CFLAGS', '').strip()))
          compiler = self.cc_exe
@@ -69,7 +69,7 @@
              self.lib = self.find_exe('xilib')
 -            self.linker = self.find_exe('xilink')
 +            self.linker = self.find_exe("xilink")
-             self.compile_options = ['/nologo', '/O3', '/MD', '/W3',
+             self.compile_options = ['/nologo', '/O1', '/MD', '/W3',
 -                                    '/Qstd=c99']
 +                                    '/Qstd=c99', '/fp:strict'] + environ.get('ARCH_FLAGS', '/QxSSE4.2 /QaxCORE-AVX2,CORE-AVX512').strip().split()
              self.compile_options_debug = ['/nologo', '/Od', '/MDd', '/W3',
