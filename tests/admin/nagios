@@ -21,6 +21,10 @@ fi
 }
 
 @test "[nagios] test check_http" {
-    run /usr/lib64/nagios/plugins/check_http -I proxy-chain.intel.com -p 911 -u http://openhpc.community
+    if [ $use_proxy -eq 0];then
+	run /usr/lib64/nagios/plugins/check_http -I ${proxy_host} -p ${proxy_port} -u http://openhpc.community
+    else	
+	run /usr/lib64/nagios/plugins/check_http  -H openhpc.community
+    fi
     assert_success
 }
