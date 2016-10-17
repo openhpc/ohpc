@@ -162,7 +162,11 @@ BuildRequires: readline-devel
 
 %if %{slurm_with openssl}
 %if 0%{?suse_version}
+%ifarch aarch64
+BuildRequires: compat-openssl098
+%else
 BuildRequires: libopenssl0_9_8
+%endif
 %else
 BuildRequires: openssl-devel >= 0.9.6 openssl >= 0.9.6
 %endif
