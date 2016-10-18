@@ -62,7 +62,6 @@ Source2:        OHPC_setup_compiler
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
-Patch4:         numpy-cpuinfo.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  python-devel python-setuptools
 Requires:       python >= %{py_ver}
@@ -98,7 +97,6 @@ basic linear algebra and random number generation.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
