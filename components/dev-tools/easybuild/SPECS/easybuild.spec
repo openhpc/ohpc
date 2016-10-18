@@ -78,7 +78,7 @@ export PYTHON_VERSION=`python -c 'print ".".join(map(str, __import__("sys").vers
 
 python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
-rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
+#rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
 rm bootstrap_eb.py*
 
 
