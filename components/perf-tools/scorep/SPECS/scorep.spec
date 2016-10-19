@@ -116,11 +116,11 @@ module load papi
 module load pdtoolkit
 
 %if %{compiler_family} == intel
-$CONFIGURE_OPTIONS = "--with-nocross-compiler-suite=intel "
+CONFIGURE_OPTIONS = "--with-nocross-compiler-suite=intel "
 %endif
 
 %if %{mpi_family} == intel
-$CONFIGURE_OPTIONS = "$CONFIGURE_OPTIONS --with-mpi=intel "
+CONFIGURE_OPTIONS = "$CONFIGURE_OPTIONS --with-mpi=intel "
 %endif
 
 ./configure --prefix=%{install_path} $CONFIGURE_OPTIONS
