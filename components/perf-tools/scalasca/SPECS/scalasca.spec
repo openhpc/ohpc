@@ -119,7 +119,15 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 
 module load scorep
 
-./configure --prefix=%{install_path}
+%if %{compiler_family} == intel
+CONFIGURE_OPTIONS="--with-nocross-compiler-suite=intel "
+%endif
+
+%if %{mpi_family} == intel
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=intel "
+%endif
+
+./configure --prefix=%{install_path} $CONFIGURE_OPTIONS
 
 %install
 
