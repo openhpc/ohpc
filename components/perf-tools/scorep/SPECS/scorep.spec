@@ -116,7 +116,7 @@ module load papi
 module load pdtoolkit
 
 %if %{compiler_family} == intel
-$CONFIGURE_OPTIONS = "--with-frontend-compiler-suite=intel "
+$CONFIGURE_OPTIONS = "--with-nocross-compiler-suite=intel "
 %endif
 
 %if %{mpi_family} == intel
