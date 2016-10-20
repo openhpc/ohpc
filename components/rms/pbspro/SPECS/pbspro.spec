@@ -51,6 +51,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   14.1.0
 Release:   0
 Source0:   https://github.com/PBSPro/pbspro/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
+Patch1:    systemd.patch
 License:   AGPLv3 with exceptions
 URL:       https://github.com/pbspro/pbspro
 Prefix:    %{pbs_prefix}
@@ -196,7 +197,11 @@ the PBS Professional user commands.
 %prep
 %setup -n %{pname}-%{version}
 
+# karl.w.schulz@intel.com (enable systemd startup - patches from pbs master branch)
+%patch1 -p1
+
 %build
+
 [ -d build ] && rm -rf build
 mkdir build
 cd build
