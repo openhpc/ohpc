@@ -226,19 +226,19 @@ cd build
 cd build
 %make_install
 
-%post %{pbs_server}
+%post %{pbs_server}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall server \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} %{pbs_dbuser}
 
-%post %{pbs_execution}
+%post %{pbs_execution}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall execution \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home}
 
-%post %{pbs_client}
+%post %{pbs_client}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall client \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}
 
-%preun %{pbs_server}
+%preun %{pbs_server}%{PROJ_DELIM}
 if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
 	out=`/sbin/chkconfig --list pbs 2>/dev/null`
 	if [ $? -eq 0 ]; then
@@ -269,7 +269,7 @@ if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 fi
 rm -f /etc/init.d/pbs
 
-%preun %{pbs_execution}
+%preun %{pbs_execution}%{PROJ_DELIM}
 if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
 	out=`/sbin/chkconfig --list pbs 2>/dev/null`
 	if [ $? -eq 0 ]; then
@@ -299,7 +299,7 @@ if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 fi
 rm -f /etc/init.d/pbs
 
-%preun %{pbs_client}
+%preun %{pbs_client}%{PROJ_DELIM}
 if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 	top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
 	if [ -h $top_level/default ]; then
@@ -308,22 +308,22 @@ if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 	fi
 fi
 
-%postun %{pbs_server}
+%postun %{pbs_server}%{PROJ_DELIM}
 echo
 echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
 echo
 
-%postun %{pbs_execution}
+%postun %{pbs_execution}%{PROJ_DELIM}
 echo
 echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
 echo
 
-%postun %{pbs_client}
+%postun %{pbs_client}%{PROJ_DELIM}
 echo
 echo "NOTE: /etc/pbs.conf must be deleted manually"
 echo
 
-%files %{pbs_server}
+%files %{pbs_server}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
@@ -338,7 +338,7 @@ echo
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
-%files %{pbs_execution}
+%files %{pbs_execution}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
@@ -371,7 +371,7 @@ echo
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
-%files %{pbs_client}
+%files %{pbs_client}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
