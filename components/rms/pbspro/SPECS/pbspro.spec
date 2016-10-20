@@ -194,7 +194,7 @@ the PBS Professional user commands.
 %endif
 
 %prep
-%setup
+%setup -n %{pname}-%{version}
 
 %build
 [ -d build ] && rm -rf build
