@@ -98,7 +98,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-#make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # Remove .la files detected by rpm
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
