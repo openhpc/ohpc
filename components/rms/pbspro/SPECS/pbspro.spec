@@ -44,6 +44,8 @@
 %define have_systemd 1
 %endif
 
+%define pname pbspro
+
 Summary:   PBS Professional
 Name:      %{pname}%{PROJ_DELIM}
 Version:   14.1.0
