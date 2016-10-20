@@ -102,13 +102,13 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 %if %{compiler_family} == intel
-cat > site.cfg << EOF
-[mkl]
-include_dirs = $MKLROOT/include
-library_dirs = $MKLROOT/lib/intel64
-mkl_libs = mkl_rt
-lapack_libs = mkl_rt
-EOF
+#cat > site.cfg << EOF
+#[mkl]
+#include_dirs = $MKLROOT/include
+#library_dirs = $MKLROOT/lib/intel64
+#mkl_libs = mkl_rt
+#lapack_libs = mkl_rt
+#EOF
 %endif
 
 %if %{compiler_family} == gnu
