@@ -163,5 +163,5 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Thurs Sept  1 2016  <raffenet@mcs.anl.gov>
+* Thu Sep  1 2016  <raffenet@mcs.anl.gov>
 - Initial build.
