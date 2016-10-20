@@ -336,7 +336,7 @@ AM_CONDITIONAL(HPCG_ENABLED,test "x$enable_hpcg" = "xyes" )
 # PRK
 AC_ARG_ENABLE([prk],
    [AS_HELP_STRING([--enable-prk],[Enable PRK tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_prk,yes)])
+   [AX_OPTION_DEFAULT(type=long,enable_prk,no)])
 AM_CONDITIONAL(PRK_ENABLED,test "x$enable_prk" = "xyes" )
 #------------------------------------------------------------------------------------------
 # PACKAGING
