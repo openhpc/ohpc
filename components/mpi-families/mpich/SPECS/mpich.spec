@@ -157,9 +157,9 @@ rm -rf $RPM_BUILD_ROOT
 %{OHPC_HOME}
 %doc README.envvar
 %doc COPYRIGHT
-%doc CHANGELOG
 %doc CHANGES
 %doc README
+%doc RELEASE_NOTES
 
 
 %changelog
