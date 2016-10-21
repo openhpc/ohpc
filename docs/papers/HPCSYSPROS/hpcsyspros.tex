@@ -240,6 +240,7 @@ installed, OpenHPC recipes highlight steps to install additional software and
 perform configurations to use the {\em master} host to provision the remaining
 cluster.
 
+\newpage
 An overview of the physical infrastructure expected for use with
 current OpenHPC recipes is shown in
 Figure~\ref{fig:cluster_arch} and highlights the high-level networking
@@ -517,6 +518,13 @@ Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
     \label{fig:metis_spec}
 \end{figure}
 
+To link the underlying source and build infrastructure together, OpenHPC's public OBS
+instance is integrated with the associated GitHub repository. A benefit of
+this integration is that whenever commits are made on key git branches,
+OBS automatically triggers corresponding package rebuilds. OBS also analyzes
+inter-package dependencies and downstream packages are rebuilt as well with
+updated packages published after all builds are completed.
+
 For builds that require MPI linkage, a companion .spec template is used which
 adds an \texttt{mpi\_family} variable that defaults to the
 OpenMPI~\cite{gabriel04:openmpi} stack unless specified otherwise.  To
@@ -647,14 +655,15 @@ providing automatization for more advanced configuration and tuning to address
 scalability, power management, and high availability concerns. We also hope to
 expand community cooperation between complementary efforts by 
 %continue driving standardization across the HPC landscape,
-developing package dependency conventions with EasyBuild and Spack. Finally, we
-are working to deploy public continuous integration infrastructure, and
-enable corresponding builds and releases for the ARM architecture (aarch64).
+developing package dependency conventions with EasyBuild and Spack.
+%Finally, we
+%are working to deploy public continuous integration infrastructure, and
+%enable corresponding builds and releases for the ARM architecture (aarch64).
 
 %ACKNOWLEDGMENTS are optional
 \section{Acknowledgments}
 
-We would like to acknowledge the Linux Foundation and associated members of the
+We would like to thank the Linux Foundation and associated members of the
 OpenHPC collaborative project for supporting this community effort.  We are
 particularly grateful to the additional members of the Technical Steering
 Committee including Pavan Balaji, Todd Gamblin, Craig Gardner, Balazs Gerofi,
