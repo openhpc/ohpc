@@ -214,10 +214,10 @@ OpenHPC collateral.  At present, there are nearly 20 community volunteers
 serving on the TSC~\cite{TSC_url} with representation from academia, industry,
 and government R\&D laboratories.
 
-Public mailing lists for community interaction and support are available at 
-http://groups.io/openhpc, and there is a set of openHPC Slack channels as well
-(http://openhpc.slack.com). We also welcome bug reports and patches at
-http://github.com/openhpc.
+%%Public mailing lists for community interaction and support are available at 
+%%http://groups.io/openhpc, and there is a set of openHPC Slack channels as well
+%%(http://openhpc.slack.com). We also welcome bug reports and patches at
+%%http://github.com/openhpc.
 
 \begin{figure}
   \includegraphics[width=1.0\linewidth]{figures/governance}
@@ -486,7 +486,7 @@ process by driving simultaneous builds for multiple OS distributions (e.g.
 CentOS and SLES), multiple target architectures (e.g. x86\_64 and aarch64),
 and by performing dependency analysis among components, triggering downstream
 builds as necessary based on upstream changes. Each build is carried out in a
-Qemu-KVM environment for repeatability, and OBS manages publication of the resulting
+chroot or KVM environment for repeatability, and OBS manages publication of the resulting
 builds into package repositories compatible with {\texttt yum} and {\texttt
   zypper}. Both binary and source RPMs are made available as part of this process.
 
