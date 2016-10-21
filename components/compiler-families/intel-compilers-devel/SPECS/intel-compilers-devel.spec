@@ -12,10 +12,11 @@
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 %define pname intel-compilers-devel
+%define year 2017
 
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
-Name:      %{pname}%{PROJ_DELIM}
-Version:   2017
+Name:      %{pname}-%{year}%{PROJ_DELIM}
+Version:   %{year}
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -34,6 +35,7 @@ BuildRequires:-post-build-checks
 Requires: gcc-c++
 Requires: intel-compxe-doc >= 2016
 
+Provides: %{pname}%{PROJ_DELIM}
 # Provides: libimf.so()(64bit)
 # Provides: libsvml.so()(64bit)
 # Provides: libiomp5.so()(64bit)
