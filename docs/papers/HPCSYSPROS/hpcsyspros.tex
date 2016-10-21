@@ -161,20 +161,20 @@ Many HPC sites spend considerable effort aggregating a large suite of
 open-source components to provide a capable HPC environment for their users.
 This is frequently motivated by the necessity to build and deploy HPC focused
 packages that are either absent or outdated in popular Linux
-distributions. Further, local packaging or customization frequently tries to
+distributions. Further, local packaging or customization typically tries to
 give software versioning access to users (e.g. via environment modules or
 similar equivalent).  With this background motivation in mind, combined with a
 desire to minimize duplication and share best practices across sites, the OpenHPC community
 project was formed with the following mission and vision principles: \\
 
 \noindent {\bf Mission:} to 
-provide a reference collection of open source HPC software components and
+provide a reference collection of open-source HPC software components and
 best practices, lowering barriers to deployment, advancement, and use of
 modern HPC methods and tools.
 
 \noindent {\bf Vision:} OpenHPC components and best practices will enable and
 accelerate innovation and discoveries by broadening access to state-of-the-art,
-open source HPC methods and tools in a consistent environment, supported by a
+open-source HPC methods and tools in a consistent environment, supported by a
 collaborative, worldwide community of HPC users, developers, researchers,
 administrators, and vendors. \\
 
@@ -399,7 +399,7 @@ software packages via management of key environment variables
 (e.g. \texttt{{PATH}} and \texttt{{LD\_LIBRARY\_PATH}}). Several
 implementations of the modules system have evolved and OpenHPC leverages a
 recent variant named {\em Lmod}~\cite{tacc_sc_best_practices:2011,lmod_url}
-which is a Lua-based implementation that has embedded support for managing the
+which is Lua-based, and has embedded support for managing the
 hierarchical software matrix adopted in OpenHPC.  In addition to providing a
 pre-packaged build of {\em Lmod}, development libraries and tools integrated
 within OpenHPC include the installation of companion module files.
@@ -478,17 +478,18 @@ build system for openSUSE.  The public OBS instance for OpenHPC is available at
 While OpenHPC does not, by itself, provide a complete Linux distribution, it
 does have in common many of the same packaging requirements and targets a
 delivery mechanism that adopts Linux sysadmin familiarity.  OBS aids in this
-process by driving builds for multiple OS distributions (e.g. CentOS and SLES)
-and performs dependency analysis among components, triggering downstream
+process by driving simultaneous builds for multiple OS distributions (e.g. 
+CentOS and SLES), multiple target architectures (e.g. x86_64 and aarch64),
+and by performing dependency analysis among components, triggering downstream
 builds as necessary based on upstream changes. Each build is carried out in a
-chroot environment for repeatability, and OBS manages publication of the resulting
+Qemu-KVM environment for repeatability, and OBS manages publication of the resulting
 builds into package repositories compatible with {\texttt yum} and {\texttt
   zypper}. Both binary and source RPMs are made available as part of this process.
 
 The primary inputs for OBS are the instructions necessary to build a particular
 package, typically housed in an RPM .spec file. These .spec files are version controlled in the
 community GitHub repository and are templated in a way to have a single input
-drive multiple compiler/MPI family combinations.  To highlight this approach,
+drive multiple compiler/MPI family combinations.  To illustrate this approach,
 the code in Figure~\ref{fig:metis_spec} highlights a small portion from the .spec file used to build
 METIS~\cite{Karypis:1998}, a popular domain decomposition library. The primary
 item of note is the the use of a \texttt{compiler\_family} macro which defaults
@@ -531,7 +532,7 @@ OpenMPI~\cite{gabriel04:openmpi} stack unless specified otherwise.  To
 maintain the concept of having a single maintainer commit drive multiple
 builds, our OBS configuration leverages the ability to {\em link} related software
 packages together. To illustrate this process, the text in
-Figure~\ref{fig:obs_link} highlights the underlying
+Figure~\ref{fig:obs_link} contains the underlying
 OBS package configuration syntax for the PETSc toolkit built against
 MVAPICH2. The top line indicates that the MVAPICH2-based build is simply a link
 to the parent (default) package configuration that is OpenMPI based.  What
@@ -651,7 +652,7 @@ Future work by the OpenHPC Technical Steering Committee (TSC) is focused on
 formalizing and publishing a component selection process by which the community
 can request inclusion of additional software. Currently, OpenHPC provides simple
 configuration recipes for HPC clusters, but future efforts will focus on 
-providing automatization for more advanced configuration and tuning to address
+providing automation for more advanced configuration and tuning to address
 scalability, power management, and high availability concerns. We also hope to
 expand community cooperation between complementary efforts by 
 %continue driving standardization across the HPC landscape,
