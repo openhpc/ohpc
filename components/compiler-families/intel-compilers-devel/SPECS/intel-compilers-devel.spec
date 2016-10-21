@@ -14,8 +14,8 @@
 %define pname intel-compilers-devel
 
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
-Name:      %{pname}%{PROJ_DELIM}
-Version:   2016
+Name:      %{pname}-2017%{PROJ_DELIM}
+Version:   2017
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -32,23 +32,23 @@ AutoReq: no
 BuildRequires:-post-build-checks
 
 Requires: gcc-c++
-Requires: intel-compxe >= 2016
+Requires: intel-compxe-doc >= 2016
 
-Provides: libimf.so()(64bit)
-Provides: libsvml.so()(64bit)
-Provides: libiomp5.so()(64bit)
-Provides: libirng.so()(64bit)
-Provides: libifcoremt.so.5()(64bit)
-Provides: libintlc.so.5()(64bit)
-Provides: libifcore.so.5()(64bit)
-Provides: libifport.so.5()(64bit)
-Provides: libiomp5.so(VERSION)(64bit)
-Provides: libmkl_core.so()(64bit)
-Provides: libmkl_sequential.so()(64bit)
-Provides: libmkl_intel_lp64.so()(64bit)
-Provides: libirc.so()(64bit)
-Provides: libmkl_rt.so()(64bit)
-
+# Provides: libimf.so()(64bit)
+# Provides: libsvml.so()(64bit)
+# Provides: libiomp5.so()(64bit)
+# Provides: libirng.so()(64bit)
+# Provides: libifcoremt.so.5()(64bit)
+# Provides: libintlc.so.5()(64bit)
+# Provides: libifcore.so.5()(64bit)
+# Provides: libifport.so.5()(64bit)
+# Provides: libiomp5.so(VERSION)(64bit)
+# Provides: libmkl_core.so()(64bit)
+# Provides: libmkl_sequential.so()(64bit)
+# Provides: libmkl_intel_lp64.so()(64bit)
+# Provides: libirc.so()(64bit)
+# Provides: libmkl_rt.so()(64bit)
+# 
 %description
 
 Provides OpenHPC-style compatible modules for use with the Intel(R) Parallel
