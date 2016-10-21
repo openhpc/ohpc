@@ -14,7 +14,7 @@
 %define pname intel-compilers-devel
 
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
-Name:      %{pname}-2017%{PROJ_DELIM}
+Name:      %{pname}%{PROJ_DELIM}
 Version:   2017
 Release:   1
 License:   Apache-2.0
