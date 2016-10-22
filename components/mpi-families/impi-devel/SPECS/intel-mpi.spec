@@ -11,11 +11,12 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-%define compiler_family intel
+%define pname intel-mpi-devel
+%define year 2017
 
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
-Name:      intel-mpi-devel%{PROJ_DELIM}
-Version:   2016
+Name:      %{pname}-%{year}%{PROJ_DELIM}
+Version:   %{year}
 Source1:   OHPC_macros
 Release:   1
 License:   Apache-2.0
@@ -28,12 +29,9 @@ AutoReq:   no
 BuildRequires:-post-build-checks
 
 Requires: prun%{PROJ_DELIM}
-Requires: intel-psxe-common
-Requires: intel-mpi-doc
-Requires: intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel-compilers-devel%{PROJ_DELIM}
-%endif
+#Requires: intel-psxe-common
+Requires: intel-mpi-doc > %{year}
+Requires: intel-compilers-devel-%{year}%{PROJ_DELIM}
 
 %description
 
