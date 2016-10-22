@@ -54,7 +54,7 @@ echo " "
 echo "Scanning top-level dir = $topDir"
 
 if [ -d ${topDir} ];then
-    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
+    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*.*" -printf "%f "` || exit 1
 
     scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
