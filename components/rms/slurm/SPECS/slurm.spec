@@ -120,12 +120,6 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
 DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://slurm.schedmd.com/
 
-# 8/11/14 karl.w.schulz@intel.com - update default runlevels
-Patch1:     %{pname}.initd.patch
-Patch2:     slurmctld.service.patch
-Patch3:     slurmdbd.service.patch
-Patch4:     slurmd.service.patch
-
 # 8/15/14 karl.w.schulz@intel.com - include prereq
 %if 0%{?sles_version} || 0%{?suse_version}
 PreReq: %{insserv_prereq} %{fillup_prereq}
@@ -467,12 +461,6 @@ Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 
 %prep
 %setup -n slurm-slurm-%{ver_exp}
-
-# OpenHPC patches
-### patch1
-### patch2
-### patch3
-### patch4
 
 %build
 %configure \
