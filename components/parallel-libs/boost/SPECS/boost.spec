@@ -73,6 +73,10 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
+%endif
 
 #-ohpc-header-comp-end------------------------------------------------
 
