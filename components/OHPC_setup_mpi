@@ -15,7 +15,7 @@ elif [ "$OHPC_MPI_FAMILY" = "impi" ]; then
 elif [ "$OHPC_MPI_FAMILY" = "mvapich2" ]; then
     module load mvapich2
 elif [ "$OHPC_MPI_FAMILY" = "mpich" ]; then
-    module load mvapich2
+    module load mpich
 else
     echo "Unsupported OHPC_MPI_FAMILY -> $OHPC_MPI_FAMILY"
     exit 1
