@@ -147,6 +147,15 @@ cp -f %{S:3} Makefile.inc
 %endif
 %endif 
 
+%if %{mpi_family} == mpich2
+export LIBS="-L$MPI_DIR/lib -lmpi"
+%if %{compiler_family} == gnu
+cp -f %{S:2} Makefile.inc
+%endif
+%if %{compiler_family} == intel
+cp -f %{S:3} Makefile.inc
+%endif
+%endif 
 %if %{mpi_family} == mvapich2
 export LIBS="-L$MPI_DIR/lib -lmpi"
 %if %{compiler_family} == gnu
