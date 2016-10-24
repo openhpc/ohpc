@@ -1,0 +1,19 @@
+ohpc-base OpenHPC base packages
+ohpc-slurm-server OpenHPC server packages for SLURM
+ohpc-warewulf Collection of base packages for Warewulf provisioning
+ohpc-autotools Collection of GNU autotools packages
+ohpc-ganglia Collection of Ganglia monitoring and metrics packages
+ohpc-io-libs-gnu OpenHPC IO library builds for use with GNU compiler toolchain
+ohpc-io-libs-intel OpenHPC IO library builds for use with Intel Parallel Studio toolchain
+ohpc-nagios Collection of Nagios monitoring and metrics packages
+ohpc-parallel-libs-gnu OpenHPC parallel library builds for use with GNU compiler toolchain
+ohpc-parallel-libs-intel OpenHPC parallel library builds for use with Intel Parallel Studio toolchain
+ohpc-perf-tools-gnu OpenHPC performance tool builds for use with GNU compiler toolchain
+ohpc-perf-tools-intel OpenHPC performance tool builds for use with Intel Parallel Studio toolchain
+ohpc-python-libs-gnu OpenHPC python related library builds for use with GNU compiler toolchain
+ohpc-python-libs-intel OpenHPC python related library builds for use with Intel Parallel Studio toolchain
+ohpc-runtimes-gnu OpenHPC runtimes for use with GNU compiler toolchain
+ohpc-runtimes-intel OpenHPC runtimes for use with Intel Parallel Studio toolchain
+ohpc-serial-libs-gnu OpenHPC serial library builds for use with GNU compiler toolchain
+ohpc-serial-libs-intel OpenHPC serial library builds for use with Intel Parallel Studio toolchain
+ohpc-slurm-client OpenHPC client packages for SLURM
