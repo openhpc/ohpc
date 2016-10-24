@@ -10,7 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 %include %{_sourcedir}/rpmmacros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname slurm
 
