@@ -66,12 +66,12 @@ from the OpenHPC software stack.
 # warewulf/slurm
 cd %{source_path}/warewulf/slurm
 make
-../parse_doc.pl steps.tex > recipe.sh
+../../../parse_doc.pl steps.tex > recipe.sh
 
 # warewulf/pbspro
 cd %{source_path}/warewulf/pbspro
 make
-../parse_doc.pl steps.tex > recipe.sh
+../../../parse_doc.pl steps.tex > recipe.sh
 
 
 %install
