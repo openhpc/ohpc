@@ -1,0 +1,3 @@
+lua-bit-ohpc 1.0.2 http://bitop.luajit.org ohpc/distro-packages Module for Lua which adds bitwise operations on numbers
+lua-filesystem-ohpc 1.6.3 http://keplerproject.github.com/luafilesystem ohpc/distro-packages Lua library to Access Directories and Files
+lua-posix-ohpc 33.2.1 https://github.com/luaposix/luaposix ohpc/distro-packages POSIX library for Lua
