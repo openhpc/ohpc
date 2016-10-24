@@ -70,7 +70,7 @@ make
 popd
 
 # warewulf/pbspro
-pushd cd %{source_path}/warewulf/pbspro
+pushd %{source_path}/warewulf/pbspro
 make
 ../../../parse_doc.pl steps.tex > recipe.sh
 popd
