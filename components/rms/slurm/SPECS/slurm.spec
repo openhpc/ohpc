@@ -908,7 +908,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 #############################################################################
 
-%files -f devel.files -n %{pname}-devel%{PROJ_DELIM}
+%files -n %{pname}-devel%{PROJ_DELIM}
 %defattr(-,root,root)
 %dir %attr(0755,root,root)
 %dir %{_prefix}/include/slurm
