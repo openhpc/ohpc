@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name:           docs%{PROJ_DELIM}
-Version:        1.1.1
+Version:        1.2
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
@@ -59,16 +59,19 @@ from the OpenHPC software stack.
 %define source_path docs/recipes/install/sles12sp1/vanilla
 %else
 %if 0%{?rhel_version} || 0%{?centos_version}
-%define source_path docs/recipes/install/centos7.2/vanilla
+%define source_path docs/recipes/install/centos7.2
 %endif
 %endif
 
-cd %{source_path}
+# warewulf/slurm
+cd %{source_path}/warewulf/slurm
 make
+../parse_doc.pl steps.tex > recipe.sh
 
-# Include convenience recipe script(s)
-
-../../parse_doc.pl steps.tex > vanilla_recipe.sh
+# warewulf/pbspro
+cd %{source_path}/warewulf/pbspro
+make
+../parse_doc.pl steps.tex > recipe.sh
 
 
 %install
@@ -78,9 +81,11 @@ make
 install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
 install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/Install_guide.pdf 
-install -m 0755 -p %{source_path}/vanilla_recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe.sh
 
-install -m 0644 -p %{source_path}/../input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/input.local
+install -m 0755 -p %{source_path}/warewulf/slurm/recipe.sh  %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe_warewulf_slurm.sh
+install -m 0755 -p %{source_path}/warewulf/pbspro/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe_warewulf_pbspro.sh
+
+install -m 0644 -p %{source_path}/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/input.local
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
