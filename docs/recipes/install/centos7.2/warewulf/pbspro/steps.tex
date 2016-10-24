@@ -41,13 +41,10 @@
 
 \noindent{\Large\color{logodarkgrey}\fontfamily{phv}\selectfont{\provisioner{}/\rms{} Edition for Linux*}} \\
 
-{\color{logoblue}\noindent\rule{6.15in}{1.2pt}} \\ \vspace{0.2cm}  
+{\color{logoblue}\noindent\rule{6.15in}{1.2pt}} \\ 
 
-\vspace*{4in}
+\vspace*{2in}
 
-
-%\noindent{\normalsize \color{black} Intel Cluster Makers} \vspace*{0.1cm} \\
-%{\normalsize \color{logodarkgrey} Copyright~{\small\copyright}~2014-2015 Intel Corporation} \vspace*{0.1cm} \\ 
 \noindent{\small \color{black} Document Last Update: \VCDateISO} \vspace*{0.1cm} \\ 
 {\small \color{black} Document Revision: \VCRevision} \\ \vspace*{0.1cm}
 
@@ -130,7 +127,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/time}
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
-\input{common/install_slurm}
+\input{common/install_pbs}
 
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
@@ -275,8 +272,12 @@ default location for this example is in
 % begin_ohpc_run
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Add Slurm client support
-[sms](*\#*) (*\groupchrootinstall*) ohpc-slurm-client
+# Add PBS Professional client support
+[sms](*\#*) (*\chrootinstall*) pbspro-execution-ohopc
+[sms](*\#*) perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_hostname}/" $CHROOT/etc/pbs.conf
+[sms](*\#*) chroot $CHROOT opt/ohpc/pub/pbs/etc/pbs_habitat
+[sms](*\#*) echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
+[sms](*\#*) echo "PBS_SCP=/usr/bin/scp" >> $CHROOT/etc/pbs.conf
 
 # Add IB support and enable
 [sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
@@ -318,8 +319,6 @@ example configuration.
 [sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
 [sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
-# Identify resource manager host name on master host
-[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 \end{lstlisting}
 % end_ohpc_run
 
@@ -337,19 +336,6 @@ example configuration.
 \end{lstlisting}
 % end_ohpc_run
 
-
-\begin{center}
-\begin{tcolorbox}[]
-  \small Slurm requires enumeration of the physical hardware characteristics
-  for compute nodes under its control. In particular, three configuration
-  parameters combine to define consumable compute resources: {\em Sockets},
-  {\em CoresPerSocket}, and {\em ThreadsPerCore}. The default configuration
-  file provided via \OHPC{} assumes dual-socket, 8 cores per socket, and two
-  threads per core for this 4-node example. If this does not reflect your local
-  hardware, please update the configuration file at
-  \path{/etc/slurm/slurm.conf} accordingly to match your particular hardware.
-\end{tcolorbox}
-\end{center}
 
 % Additional commands when additional computes are requested
 
