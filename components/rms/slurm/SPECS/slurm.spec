@@ -946,7 +946,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 #############################################################################
 
-%files -f perlapi.files -n %{pname}-perlapi%PROJ_DELIM
+%files -n %{pname}-perlapi%PROJ_DELIM
 %defattr(-,root,root)
 %{_perldir}/Slurm.pm
 %{_perldir}/Slurm/Bitstr.pm
