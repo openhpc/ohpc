@@ -64,15 +64,16 @@ from the OpenHPC software stack.
 %endif
 
 # warewulf/slurm
-cd %{source_path}/warewulf/slurm
+pushd %{source_path}/warewulf/slurm
 make
 ../../../parse_doc.pl steps.tex > recipe.sh
+popd
 
 # warewulf/pbspro
-cd %{source_path}/warewulf/pbspro
+pushd cd %{source_path}/warewulf/pbspro
 make
 ../../../parse_doc.pl steps.tex > recipe.sh
-
+popd
 
 %install
 
