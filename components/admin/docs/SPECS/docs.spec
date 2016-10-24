@@ -81,7 +81,9 @@ popd
 %{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc/recipes/vanilla
 install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
-install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/Install_guide.pdf 
+
+install -m 0644 -p %{source_path}/warewulf/slurm/steps.pdf  %{buildroot}/%{OHPC_PUB}/doc/warewulf/slurm/Install_guide.pdf
+install -m 0644 -p %{source_path}/warewulf/pbspro/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/warewulf/pbspro/Install_guide.pdf 
 
 install -m 0755 -p %{source_path}/warewulf/slurm/recipe.sh  %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe_warewulf_slurm.sh
 install -m 0755 -p %{source_path}/warewulf/pbspro/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe_warewulf_pbspro.sh
