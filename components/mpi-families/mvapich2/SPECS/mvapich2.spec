@@ -47,18 +47,7 @@ BuildRequires: intel_licenses
 %{!?with_slurm: %global with_slurm 0}
 %{!?with_pbs: %global with_pbs 0}
 %{!?with_psm: %global with_psm 0}
-
-%global RMS_DELIM %{nil}
-
-%if 0%{with_slurm}
-BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
-Provides:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-%global RMS_DELIM -slurm
-%endif
-
-%if 0%{with_psm}
-BuildRequires:  infinipath-psm infinipath-psm-devel
-%endif
+%{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
 # Base package name
 %define pname mvapich2
@@ -85,6 +74,16 @@ Patch2:    mvapich2-get_cycles.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define debug_package %{nil}
+
+%if 0%{with_slurm}
+BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
+Provides:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
+
+%if 0%{with_psm}
+BuildRequires:  infinipath-psm infinipath-psm-devel
+%endif
+
 
 %if 0%{?sles_version} || 0%{?suse_version}
 Buildrequires: ofed 
