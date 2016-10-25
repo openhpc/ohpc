@@ -10,9 +10,6 @@
 
 # MVAPICH2 MPI stack that is dependent on compiler toolchain
 
-%define with_slurm 0
-%define with_psm 0
-
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
@@ -44,8 +41,18 @@ BuildRequires: intel_licenses
 
 #-ohpc-header-comp-end------------------------------------------------
 
+# Multiple permutations for each MPI stack are possible depending
+# on the desired underlying resource manager support. 
+
+%{!?with_slurm: %global with_slurm 0}
+%{!?with_slurm: %global with_pbs 0}
+
+%global RMS_DELIM %{nil}
+
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
+Provides:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+%global RMS_DELIM -slurm
 %endif
 
 %if %{with_psm}
@@ -56,7 +63,7 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 %define pname mvapich2
 
 Summary:   OSU MVAPICH2 MPI implementation
-Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:      %{pname}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
 Version:   2.2
 Release:   1
 License:   BSD
@@ -77,6 +84,7 @@ Patch2:    mvapich2-get_cycles.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define debug_package %{nil}
+%define with_psm 0
 
 %if 0%{?sles_version} || 0%{?suse_version}
 Buildrequires: ofed 
