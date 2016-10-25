@@ -63,6 +63,10 @@ BuildRequires: intel_licenses
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
+%endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
