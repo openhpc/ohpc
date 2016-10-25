@@ -129,7 +129,7 @@ Open MPI jobs.
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx""
+BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 %if %{with_psm}
   BASEFLAGS="$BASEFLAGS --with-psm"
 %endif
