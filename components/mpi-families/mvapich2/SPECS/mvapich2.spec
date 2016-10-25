@@ -55,7 +55,7 @@ Provides:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 %global RMS_DELIM -slurm
 %endif
 
-%if %{with_psm}
+%if 0%{with_psm}
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
