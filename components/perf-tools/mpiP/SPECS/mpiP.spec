@@ -41,6 +41,10 @@ Requires:      gnu-compilers%{PROJ_DELIM}
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-gnu%{PROJ_DELIM}
+Requires:      mpich-gnu%{PROJ_DELIM}
+%endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-gnu%{PROJ_DELIM}
 Requires:      mvapich2-gnu%{PROJ_DELIM}
