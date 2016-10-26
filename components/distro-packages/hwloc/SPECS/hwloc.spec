@@ -188,7 +188,7 @@ autoreconf --force --install
 %files data
 %defattr(-, root, root, -)
 %dir %{_datadir}/%{name}
-%{_datadir}/%{name}/applications/lstopo.desktop
+%{_datadir}/applications/lstopo.desktop
 %{_datadir}/%{name}/%{name}.dtd
 %{_datadir}/%{name}/%{name}-dump-hwdata.service
 %{_datadir}/%{name}/%{name}-valgrind.supp
