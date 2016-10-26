@@ -1,4 +1,3 @@
-addFilter("pbs_iff permissions-file-setuid-bit")
-addFilter("pbs_rcp permissions-file-setuid-bit")
-addFilter("pbs_iff non-position-independent-executable")
-addFilter("pbs_rcp non-position-independent-executable")
+addFilter("permissions-file-setuid-bit")
+addFilter("non-position-independent-executable")
+addFilter("devel-file-in-non-devel-package")
