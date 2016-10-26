@@ -19,13 +19,13 @@
 %global lname libhwloc5
 
 Name:           hwloc
-Version:        1.11.2
+Version:        1.11.4
 Release:        2%{?dist}
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          Productivity/Clustering/Computing
 Url:            http://www.open-mpi.org/projects/hwloc/
-Source0:        http://www.open-mpi.org/software/hwloc/v%{version}/downloads/%{name}-%{version}.tar.bz2
+Source0:        http://www.open-mpi.org/software/hwloc/v1.11/downloads/%{name}-%{version}.tar.bz2
 Requires:       %{lname} = %{version}-%{release}
 
 BuildRequires:  autoconf
