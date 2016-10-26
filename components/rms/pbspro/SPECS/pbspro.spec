@@ -97,6 +97,7 @@ BuildRequires: openssl-devel
 BuildRequires: libXext
 BuildRequires: libXft
 %endif
+#!BuildIgnore: post-build-checks
 
 # Pure python extensions use the 32 bit library path
 %{!?py_site_pkg_32: %global py_site_pkg_32 %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(0)")}
