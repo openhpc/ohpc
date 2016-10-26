@@ -64,6 +64,7 @@ BuildRequires:  w3m
 BuildRequires:  libnuma-devel
 %endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+#!BuildIgnore: post-build-checks rpmlint-Factory
 
 %description
 The Portable Hardware Locality (hwloc) software package provides 
