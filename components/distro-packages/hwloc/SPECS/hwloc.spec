@@ -164,7 +164,9 @@ autoreconf --force --install
 %defattr(-, root, root, -)
 %doc AUTHORS COPYING NEWS README VERSION
 %attr(0755,root,root) %{_bindir}/%{name}*
+%ifarch x86_64
 %attr(0755,root,root) %{_sbindir}/%{name}*
+%endif
 %doc %{_mandir}/man1/%{name}*
 
 %files lstopo
