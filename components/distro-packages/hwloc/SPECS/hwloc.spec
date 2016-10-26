@@ -65,6 +65,7 @@ BuildRequires:  libnuma-devel
 %endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 #!BuildIgnore: post-build-checks rpmlint-Factory
+#!BuildIgnore: #!BuildIgnore: brp-check-suse
 
 %description
 The Portable Hardware Locality (hwloc) software package provides 
