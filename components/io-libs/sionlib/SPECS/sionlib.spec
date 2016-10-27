@@ -118,7 +118,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel "
 
 # remove ARM incompatible cflag
 %ifnarch x86_64
-sed -i 's|-m$(PREC)||g' Makefile.defs
+sed -i 's|-m$(PREC)||g' build-*/Makefile.defs
 %endif
 
 
