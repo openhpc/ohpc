@@ -114,13 +114,10 @@ CONFIGURE_OPTIONS="--compiler=intel "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel "
 %endif
 
-%ifnarch x86_64
-%endif
-
 ./configure --prefix=%{buildroot}%{install_path} $CONFIGURE_OPTIONS
 
 # remove ARM incompatible cflag
-%ifnarch
+%ifnarch x86_64
 sed -i 's|-m$(PREC)||g' Makefile.defs
 %endif
 
