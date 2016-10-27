@@ -115,7 +115,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel "
 %endif
 
 %ifnarch x86_64
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --force-basic "
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --force-32 "
 %endif
 
 ./configure --prefix=%{buildroot}%{install_path} $CONFIGURE_OPTIONS
