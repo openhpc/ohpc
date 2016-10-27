@@ -95,7 +95,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}
 
 %build
 
