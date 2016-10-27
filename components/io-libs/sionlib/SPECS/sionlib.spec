@@ -118,7 +118,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --force-basic "
 %endif
 
-./configure --prefix=%{install_path} $CONFIGURE_OPTIONS
+./configure --prefix=%{buildroot}%{install_path} $CONFIGURE_OPTIONS
 
 %install
 
