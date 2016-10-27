@@ -115,10 +115,15 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel "
 %endif
 
 %ifnarch x86_64
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --force-32 "
 %endif
 
 ./configure --prefix=%{buildroot}%{install_path} $CONFIGURE_OPTIONS
+
+# remove ARM incompatible cflag
+%ifnarch
+sed -i 's|-m$(PREC)||g' Makefile.defs
+%endif
+
 
 %install
 
