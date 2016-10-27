@@ -110,7 +110,7 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 CONFIGURE_OPTIONS="--compiler=intel "
 %endif
 
-%if %{mpi_family} == intel
+%if %{mpi_family} == impi
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel "
 %endif
 
