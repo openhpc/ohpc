@@ -132,7 +132,11 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 # don't package static libs
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*la
-
+    
+# clean buildroot
+sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/bin/sionconfig
+sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/examples/simple/Makefile.defs
+sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/examples/mp2c/Makefile.defs
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
