@@ -84,6 +84,8 @@ BuildRequires: papi%{PROJ_DELIM}
 Requires:      papi%{PROJ_DELIM}
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires     : pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires     : sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires: zlib-devel
 %endif
@@ -118,6 +120,7 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 
 module load papi
 module load pdtoolkit
+module load sionlib
 
 %if %{compiler_family} == intel
 CONFIGURE_OPTIONS="--with-nocross-compiler-suite=intel "
