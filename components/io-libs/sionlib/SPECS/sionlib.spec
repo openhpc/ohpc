@@ -114,6 +114,10 @@ CONFIGURE_OPTIONS="--compiler=intel "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel "
 %endif
 
+%ifnarch x86_64
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --force-basic "
+%endif
+
 ./configure --prefix=%{install_path} $CONFIGURE_OPTIONS
 
 %install
