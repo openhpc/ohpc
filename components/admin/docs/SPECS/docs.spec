@@ -56,7 +56,7 @@ from the OpenHPC software stack.
 
 %build
 %if 0%{?suse_version}
-%define source_path docs/recipes/install/sles12sp1/vanilla
+%define source_path docs/recipes/install/sles12sp1
 %else
 %if 0%{?rhel_version} || 0%{?centos_version}
 %define source_path docs/recipes/install/centos7.2
