@@ -7,15 +7,28 @@ that includes GPG keys for package signing and repository enablement.  The
 example which follows illustrates installation of the \texttt{ohpc-release}
 package directly from the \OHPC{} build server.
 
-%the addition of the \OHPC{} repository using
-%the \texttt{\$\{ohpc\_repo\}} variable.
+% thank you internet 
+\newcommand{\iftoggleverb}[1]{%
+  \ifcsdef{etb@tgl@#1}
+      {\csname etb@tgl@#1\endcsname\iftrue\iffalse}
+          {\etb@noglobal\etb@err@notoggle{#1}\iffalse}%
+}
 
+\iftoggleverb{isCentOS}
+% CentOS
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.9}{10}\ttfamily,
+%\begin{lstlisting}[language=bash,keywords={},basicstyle=\ttfamily\fontsize{7.5}{10}\ttfamily,
+	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSRepo{}}1 {-}{-}1]
+[sms](*\#*) yum install http://build.openhpc.community/OpenHPC:/VER/OSREPO/x86_64/ohpc-release-VER-1.x86_64.rpm
+\end{lstlisting}
+\else
+% non-CentOS
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
 	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSRepo{}}1 {-}{-}1]
 [sms](*\#*) rpm -ivh http://build.openhpc.community/OpenHPC:/VER/OSREPO/x86_64/ohpc-release-VER-1.x86_64.rpm
 \end{lstlisting}
+\fi
 
-%\noindent Once set, the repository can be enabled via the following: 
 
 
 
