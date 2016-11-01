@@ -305,7 +305,7 @@ if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 fi
 rm -f /etc/init.d/pbs
 
-%preun %{pbs_client}%{PROJ_DELIM}
+%preun -n %{pbs_client}%{PROJ_DELIM}
 if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 	top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
 	if [ -h $top_level/default ]; then
