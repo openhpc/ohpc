@@ -109,7 +109,7 @@ job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
 
-%package %{pbs_server}%{PROJ_DELIM}
+%package -n %{pbs_server}%{PROJ_DELIM}
 Summary: PBS Professional for a server host
 Group:  %{PROJ_NAME}/rms
 Conflicts: pbspro-execution
@@ -142,7 +142,7 @@ HPC clusters, clouds and supercomputers.
 This package is intended for a server host. It includes all
 PBS Professional components.
 
-%package %{pbs_execution}%{PROJ_DELIM}
+%package -n %{pbs_execution}%{PROJ_DELIM}
 Summary: PBS Professional for an execution host
 Group:   %{PROJ_NAME}/rms
 Conflicts: pbspro-server
@@ -165,7 +165,7 @@ This package is intended for an execution host. It does not
 include the scheduler, server, or communication agent. It
 does include the PBS Professional user commands.
 
-%package %{pbs_client}%{PROJ_DELIM}
+%package -n %{pbs_client}%{PROJ_DELIM}
 Summary: PBS Professional for a client host
 Group: System/Base
 Group: %{PROJ_NAME}/rms
