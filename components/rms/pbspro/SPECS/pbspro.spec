@@ -109,7 +109,7 @@ job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
 
-%package -n %{pbs_server}%{PROJ_DELIM}
+%package -n %{pname}-%{pbs_server}%{PROJ_DELIM}
 Summary: PBS Professional for a server host
 Group:  %{PROJ_NAME}/rms
 Conflicts: pbspro-execution
@@ -133,7 +133,7 @@ Requires: libical
 %endif
 Autoreq: 1
 
-%description -n %{pbs_server}%{PROJ_DELIM}
+%description -n %{pname}-%{pbs_server}%{PROJ_DELIM}
 PBS Professional® is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
@@ -142,7 +142,7 @@ HPC clusters, clouds and supercomputers.
 This package is intended for a server host. It includes all
 PBS Professional components.
 
-%package -n %{pbs_execution}%{PROJ_DELIM}
+%package -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
 Summary: PBS Professional for an execution host
 Group:   %{PROJ_NAME}/rms
 Conflicts: pbspro-server
@@ -155,7 +155,7 @@ Requires: python >= 2.6
 Requires: python < 3.0
 Autoreq: 1
 
-%description -n %{pbs_execution}%{PROJ_DELIM}
+%description -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
 PBS Professional® is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
@@ -165,7 +165,7 @@ This package is intended for an execution host. It does not
 include the scheduler, server, or communication agent. It
 does include the PBS Professional user commands.
 
-%package -n %{pbs_client}%{PROJ_DELIM}
+%package -n %{pname}-%{pbs_client}%{PROJ_DELIM}
 Summary: PBS Professional for a client host
 Group: System/Base
 Group: %{PROJ_NAME}/rms
@@ -178,7 +178,7 @@ Requires: python >= 2.6
 Requires: python < 3.0
 Autoreq: 1
 
-%description -n %{pbs_client}%{PROJ_DELIM}
+%description -n %{pname}-%{pbs_client}%{PROJ_DELIM}
 PBS Professional® is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
@@ -232,19 +232,19 @@ cd build
 cd build
 %make_install
 
-%post -n %{pbs_server}%{PROJ_DELIM}
+%post -n %{pname}-%{pbs_server}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall server \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} %{pbs_dbuser}
 
-%post -n %{pbs_execution}%{PROJ_DELIM}
+%post -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall execution \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home}
 
-%post -n %{pbs_client}%{PROJ_DELIM}
+%post -n %{pname}-%{pbs_client}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall client \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}
 
-%preun -n %{pbs_server}%{PROJ_DELIM}
+%preun -n %{pname}-%{pbs_server}%{PROJ_DELIM}
 if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
 	out=`/sbin/chkconfig --list pbs 2>/dev/null`
 	if [ $? -eq 0 ]; then
@@ -275,7 +275,7 @@ if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 fi
 rm -f /etc/init.d/pbs
 
-%preun -n %{pbs_execution}%{PROJ_DELIM}
+%preun -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
 if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
 	out=`/sbin/chkconfig --list pbs 2>/dev/null`
 	if [ $? -eq 0 ]; then
@@ -305,7 +305,7 @@ if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 fi
 rm -f /etc/init.d/pbs
 
-%preun -n %{pbs_client}%{PROJ_DELIM}
+%preun -n %{pname}-%{pbs_client}%{PROJ_DELIM}
 if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 	top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
 	if [ -h $top_level/default ]; then
@@ -314,22 +314,22 @@ if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 	fi
 fi
 
-%postun -n %{pbs_server}%{PROJ_DELIM}
+%postun -n %{pname}-%{pbs_server}%{PROJ_DELIM}
 echo
 echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
 echo
 
-%postun -n %{pbs_execution}%{PROJ_DELIM}
+%postun -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
 echo
 echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
 echo
 
-%postun -n %{pbs_client}%{PROJ_DELIM}
+%postun -n %{pname}-%{pbs_client}%{PROJ_DELIM}
 echo
 echo "NOTE: /etc/pbs.conf must be deleted manually"
 echo
 
-%files -n %{pbs_server}%{PROJ_DELIM}
+%files -n %{pname}-%{pbs_server}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
@@ -344,7 +344,7 @@ echo
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
-%files -n %{pbs_execution}%{PROJ_DELIM}
+%files -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
@@ -377,7 +377,7 @@ echo
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
-%files -n %{pbs_client}%{PROJ_DELIM}
+%files -n %{pname}-%{pbs_client}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
