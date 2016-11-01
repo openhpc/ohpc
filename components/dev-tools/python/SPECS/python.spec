@@ -252,7 +252,7 @@ find . -name '*.py' -type f | grep -vE "^./Parser/|^./Python/" \
 ########################################
 # install it
 ########################################
-make install OPT="%{optflags} -fPIC"
+make DESTDIR=$RPM_BUILD_ROOT install OPT="%{optflags} -fPIC"
 mkdir -p %{buildroot}%{install_path}/bin
 mkdir -p %{buildroot}%{install_path}/include
 mkdir -p %{buildroot}%{install_path}/share/man/man1
