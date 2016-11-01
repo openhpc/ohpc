@@ -63,8 +63,8 @@ Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  python-devel python-setuptools
-Requires:       python >= %{py_ver}
+BuildRequires:  python-%{compiler_family}%{PROJ_DELIM} python-setuptools
+Requires:       python-%{compiler_family}%{PROJ_DELIM}
 Provides:       numpy = %{version}
 %if 0%{?suse_version}
 BuildRequires:  fdupes
@@ -101,6 +101,8 @@ basic linear algebra and random number generation.
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
+module load python
+
 %if %{compiler_family} == intel
 #cat > site.cfg << EOF
 #[mkl]
@@ -127,6 +129,8 @@ EOF
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
+module load python
+
 %if %{compiler_family} == gnu
 module load openblas
 %endif
@@ -142,6 +146,8 @@ python setup.py build $COMPILER_FLAG
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
+
+module load python
 
 python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 %if 0%{?suse_version}
@@ -169,6 +175,12 @@ module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
 set     version             %{version}
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { ![is-loaded python]  } {
+      module load python
+    }
+}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
