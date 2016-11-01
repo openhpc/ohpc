@@ -329,7 +329,7 @@ echo
 echo "NOTE: /etc/pbs.conf must be deleted manually"
 echo
 
-%files %{pbs_server}%{PROJ_DELIM}
+%files -n %{pbs_server}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
@@ -344,7 +344,7 @@ echo
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
-%files %{pbs_execution}%{PROJ_DELIM}
+%files -n %{pbs_execution}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
@@ -377,7 +377,7 @@ echo
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
-%files %{pbs_client}%{PROJ_DELIM}
+%files -n %{pbs_client}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
