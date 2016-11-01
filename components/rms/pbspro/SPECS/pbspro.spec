@@ -133,7 +133,7 @@ Requires: libical
 %endif
 Autoreq: 1
 
-%description %{pbs_server}%{PROJ_DELIM}
+%description -n %{pbs_server}%{PROJ_DELIM}
 PBS Professional® is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
@@ -155,7 +155,7 @@ Requires: python >= 2.6
 Requires: python < 3.0
 Autoreq: 1
 
-%description %{pbs_execution}%{PROJ_DELIM}
+%description -n %{pbs_execution}%{PROJ_DELIM}
 PBS Professional® is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
@@ -178,7 +178,7 @@ Requires: python >= 2.6
 Requires: python < 3.0
 Autoreq: 1
 
-%description %{pbs_client}%{PROJ_DELIM}
+%description -n %{pbs_client}%{PROJ_DELIM}
 PBS Professional® is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
