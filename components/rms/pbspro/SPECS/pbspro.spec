@@ -232,19 +232,19 @@ cd build
 cd build
 %make_install
 
-%post %{pbs_server}%{PROJ_DELIM}
+%post -n %{pbs_server}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall server \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} %{pbs_dbuser}
 
-%post %{pbs_execution}%{PROJ_DELIM}
+%post -n %{pbs_execution}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall execution \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home}
 
-%post %{pbs_client}%{PROJ_DELIM}
+%post -n %{pbs_client}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall client \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}
 
-%preun %{pbs_server}%{PROJ_DELIM}
+%preun -n %{pbs_server}%{PROJ_DELIM}
 if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
 	out=`/sbin/chkconfig --list pbs 2>/dev/null`
 	if [ $? -eq 0 ]; then
@@ -275,7 +275,7 @@ if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 fi
 rm -f /etc/init.d/pbs
 
-%preun %{pbs_execution}%{PROJ_DELIM}
+%preun -n %{pbs_execution}%{PROJ_DELIM}
 if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
 	out=`/sbin/chkconfig --list pbs 2>/dev/null`
 	if [ $? -eq 0 ]; then
@@ -314,17 +314,17 @@ if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
 	fi
 fi
 
-%postun %{pbs_server}%{PROJ_DELIM}
+%postun -n %{pbs_server}%{PROJ_DELIM}
 echo
 echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
 echo
 
-%postun %{pbs_execution}%{PROJ_DELIM}
+%postun -n %{pbs_execution}%{PROJ_DELIM}
 echo
 echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
 echo
 
-%postun %{pbs_client}%{PROJ_DELIM}
+%postun -n %{pbs_client}%{PROJ_DELIM}
 echo
 echo "NOTE: /etc/pbs.conf must be deleted manually"
 echo
