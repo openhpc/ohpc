@@ -17,6 +17,7 @@
 \usepackage{tcolorbox}
 \usepackage{multicol}
 \usepackage{etoolbox}
+\usepackage{fix-cm}
 %%%\usepackage[T1]{fontenc}
 \tcbuselibrary{skins}
 
@@ -24,7 +25,7 @@
 \usepackage[firstpage]{draftwatermark}
 \usepackage{draftwatermark}
 \SetWatermarkText{DRAFT / PRE-RELEASE}
-\SetWatermarkScale{1.45}
+\SetWatermarkScale{0.45}
 
 % ----------- Variables to change per release -------------
 
@@ -35,6 +36,12 @@
 
 % Booleans for os-specific latex formatting
 \newtoggle{isCentOS}
+% utility to check os-specific settings
+\newcommand{\iftoggleverb}[1]{%
+  \ifcsdef{etb@tgl@#1}
+	  {\csname etb@tgl@#1\endcsname\iftrue\iffalse}
+          {\etb@noglobal\etb@err@notoggle{#1}\iffalse}%
+}
 
 \pagestyle{fancy}
 \setlength\headheight{59pt}
