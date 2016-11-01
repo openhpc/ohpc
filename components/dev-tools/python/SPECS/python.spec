@@ -235,7 +235,7 @@ EXCLUDE="$EXCLUDE test_uuid"
 if test $(ulimit -v) = unlimited || test $(ulimit -v) -gt 10000000; then
   ulimit -v 10000000 || :
 fi
-make test TESTOPTS="-l -x $EXCLUDE" TESTPYTHONOPTS="-R"
+# make test TESTOPTS="-l -x $EXCLUDE" TESTPYTHONOPTS="-R"
 # use network, be verbose:
 #make test TESTOPTS="-l -u network -v"
 %endif
@@ -252,7 +252,7 @@ find . -name '*.py' -type f | grep -vE "^./Parser/|^./Python/" \
 ########################################
 # install it
 ########################################
-%make_install OPT="%{optflags} -fPIC"
+make install OPT="%{optflags} -fPIC"
 mkdir -p %{buildroot}%{install_path}/bin
 mkdir -p %{buildroot}%{install_path}/include
 mkdir -p %{buildroot}%{install_path}/share/man/man1
