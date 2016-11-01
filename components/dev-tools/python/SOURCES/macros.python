@@ -1,0 +1,20 @@
+%py_ver			%(python -c "import sys; v=sys.version_info[:2]; print '%%d.%%d'%%v" 2>/dev/null || echo PYTHON-NOT-FOUND)
+%py_prefix		%(python -c "import sys; print sys.prefix" 2>/dev/null || echo PYTHON-NOT-FOUND)
+%py_libdir		%{py_prefix}/%{_lib}/python%{py_ver}
+%py_incdir		%{py_prefix}/include/python%{py_ver}
+%py_sitedir		%{py_libdir}/site-packages
+%__python2              /usr/bin/python2
+
+%py_compile(O)	\
+find %1 -name '*.pyc' -exec rm -f {} \\; \
+python -c "import sys, os, compileall; br='%{buildroot}'; compileall.compile_dir(sys.argv[1], ddir=br and (sys.argv[1][len(os.path.abspath(br)):]+'/') or None)" %1 \
+%{-O: \
+find %1 -name '*.pyo' -exec rm -f {} \\; \
+python -O -c "import sys, os, compileall; br='%{buildroot}'; compileall.compile_dir(sys.argv[1], ddir=br and (sys.argv[1][len(os.path.abspath(br)):]+'/') or None)" %1 \
+}
+%py_requires(d) \
+BuildRequires: /usr/bin/python %{-d:python-devel} \
+PreReq: python = %{py_ver}
+
+%python_sitelib %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib();")
+%python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(True);")

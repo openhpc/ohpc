@@ -1,0 +1,16 @@
+Index: Lib/gettext.py
+===================================================================
+--- a/Lib/gettext.py.orig
++++ b/Lib/gettext.py
+@@ -311,8 +311,9 @@ class GNUTranslations(NullTranslations):
+                         self._charset = v.split('charset=')[1]
+                     elif k == 'plural-forms':
+                         v = v.split(';')
+-                        plural = v[1].split('plural=')[1]
+-                        self.plural = c2py(plural)
++                        if len(v) > 1:
++                            plural = v[1].split('plural=')[1]
++                            self.plural = c2py(plural)
+             # Note: we unconditionally convert both msgids and msgstrs to
+             # Unicode using the character encoding specified in the charset
+             # parameter of the Content-Type header.  The gettext documentation

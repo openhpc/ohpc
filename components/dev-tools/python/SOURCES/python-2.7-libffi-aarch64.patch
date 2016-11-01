@@ -1,0 +1,13 @@
+Index: Python-2.7.9/Modules/_ctypes/libffi/src/aarch64/ffi.c
+===================================================================
+--- Python-2.7.9.orig/Modules/_ctypes/libffi/src/aarch64/ffi.c
++++ Python-2.7.9/Modules/_ctypes/libffi/src/aarch64/ffi.c
+@@ -728,7 +728,7 @@ aarch64_prep_args (struct call_context *
+ 	      state.ngrn = N_X_ARG_REG;
+ 
+ 	      memcpy (allocate_to_stack (&state, stack, ty->alignment,
+-					 ty->size), ecif->avalue + i, ty->size);
++					 ty->size), ecif->avalue[i], ty->size);
+ 	    }
+ 	  break;
+ 

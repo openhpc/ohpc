@@ -1,0 +1,23 @@
+Index: Python-2.7.3/Lib/gettext.py
+===================================================================
+--- Python-2.7.3.orig/Lib/gettext.py
++++ Python-2.7.3/Lib/gettext.py
+@@ -56,6 +56,7 @@ __all__ = ['NullTranslations', 'GNUTrans
+            ]
+ 
+ _default_localedir = os.path.join(sys.prefix, 'share', 'locale')
++_default_bundlelocaledir = os.path.join(sys.prefix, 'share', 'locale-bundle')
+ 
+ 
+ def test(condition, true, false):
+@@ -420,6 +421,10 @@ class GNUTranslations(NullTranslations):
+ 
+ # Locate a .mo file using the gettext strategy
+ def find(domain, localedir=None, languages=None, all=0):
++    if localedir in [None, _default_localedir]:
++        bundle = find(domain, localedir=_default_bundlelocaledir, languages=languages, all=all)
++        if bundle:
++            return bundle
+     # Get some reasonable defaults for arguments that were not supplied
+     if localedir is None:
+         localedir = _default_localedir

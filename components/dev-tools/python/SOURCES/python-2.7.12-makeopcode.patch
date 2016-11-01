@@ -1,0 +1,13 @@
+Index: Python-2.7.12/Makefile.pre.in
+===================================================================
+--- Python-2.7.12.orig/Makefile.pre.in
++++ Python-2.7.12/Makefile.pre.in
+@@ -319,7 +319,7 @@ OPCODETARGETS_H= \
+ 		$(srcdir)/Python/opcode_targets.h
+ 		
+ OPCODETARGETGEN= \
+-		$(srcdir)/Python/makeopcodetargets.py
++		./python $(srcdir)/Python/makeopcodetargets.py
+ 
+ OPCODETARGETGEN_FILES= \
+ 		$(OPCODETARGETGEN) $(srcdir)/Lib/opcode.py
