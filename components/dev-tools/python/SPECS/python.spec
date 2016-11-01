@@ -114,7 +114,7 @@ BuildRequires:  zlib-devel
 Requires:       glibc-devel
 # for the test suite
 # explicitly, see bnc#697251:
-Requires:       libpython2_7-1_0 = %{version}
+# Requires:       libpython2_7-1_0 = %{version}
 Provides:       %{name} = %{python_version}
 # bug437293
 %ifarch ppc64
