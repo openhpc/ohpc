@@ -140,6 +140,7 @@ of Python in the documentation and tutorials included in the python-doc
 This package contains all of stand-alone Python files, minus binary
 modules that would pull in extra dependencies.
 
+
 %prep
 %setup -q -n %{tarname}
 # patching
