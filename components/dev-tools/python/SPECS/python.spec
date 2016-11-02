@@ -321,7 +321,7 @@ module-whatis "%{url}"
 set             version         %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib/python2.7:%{install_path}/lib/python2.7/lib-dynload:/usr/lib/python2.7/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib/python2.7:%{install_path}/lib/python2.7/lib-dynload:/usr/lib64/python2.7/site-packages:/usr/lib/python2.7/site-packages
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
