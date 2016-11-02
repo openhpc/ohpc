@@ -109,7 +109,7 @@ EOF
 # https://fedoraproject.org/wiki/Packaging/Guidelines#Packaging_Static_Libraries
 # Unfortunately, 'tau' explicitly requires libpapi.a
 %ifarch x86_64
-rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
+rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
 %endif
 rm -rf $RPM_BUILD_ROOT%{_libdir}/*.la
 
