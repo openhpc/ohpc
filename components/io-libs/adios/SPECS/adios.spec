@@ -99,7 +99,7 @@ BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 #BuildRequires: libmpe2-devel
 #BuildRequires: python-modules-xml
-BuildRequires: python-devel
+BuildRequires: python-%{compiler_family}%{PROJ_DELIM}
 #BuildRequires: bzlib-devel
 #BuildRequires: libsz2-devel
 # This is the legacy name for lustre-lite
@@ -151,6 +151,7 @@ export CFLAGS="-fp-model strict $CFLAGS"
 module load autotools
 module load phdf5
 module load netcdf
+module load python
 module load numpy
 
 TOPDIR=$PWD
@@ -224,6 +225,7 @@ export PATH=$(pwd):$PATH
 %if %{compiler_family} == gnu
 module load openblas
 %endif
+module load python
 module load numpy
 export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
