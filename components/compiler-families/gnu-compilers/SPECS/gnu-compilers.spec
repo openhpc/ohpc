@@ -35,6 +35,7 @@ Source4:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}
+#!BuildIgnore: post-build-checks
 
 BuildRequires:  bison
 BuildRequires:  flex
