@@ -23,12 +23,6 @@ fi
 
 OHPC_COMPILER_FAMILY
 
-CC=mpicc
-CXX=mpicxx
-FC=mpif90
-F77=mpif90
-
-
 
 # test compilers
 
@@ -46,6 +40,11 @@ AC_C_CONST
 
 # Define include path and library linkage from environment variables
 # which should be provided via module loads. 
+
+CC='score mpicc'
+CXX='score mpicxx'
+FC='score mpif90'
+F77='score mpif90'
 
 CFLAGS="${CFLAGS} -fopenmp"
 CXXFLAGS="${CXXFLAGS} -fopenmp"

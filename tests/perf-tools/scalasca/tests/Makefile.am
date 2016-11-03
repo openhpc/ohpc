@@ -1,9 +1,5 @@
 TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
-check_CC                = scorep mpicc
-check_CXX               = scorep mpic++
-check_FC                = scorep mpif77
-
 check_PROGRAMS          = CXX_mpi_test
 CXX_mpi_test_LDFLAGS    = $(LDFLAGS)
 CXX_mpi_test_SOURCES    = CXX_mpi_test.cpp
