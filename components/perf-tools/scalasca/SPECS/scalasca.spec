@@ -146,7 +146,7 @@ module load scorep
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # don't package static libs
-rm -f $RPM_BUILD_ROOT%{install_path}/lib/*la
+rm -rf $RPM_BUILD_ROOT%{install_path}/lib
 
 
 # OpenHPC module file
@@ -178,12 +178,8 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    INCLUDE             %{install_path}/include
-prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_LIB        %{install_path}/lib
-setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 

@@ -10,11 +10,11 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 # verify we have necessary scalasca environment variables set
 
-AC_MSG_CHECKING([for SCALASCA_BIN environment variable])
-if test "x$SCALASCA_BIN" = "x"; then
+AC_MSG_CHECKING([for SCALASCA_DIR environment variable])
+if test "x$SCALASCA_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([SCALASCA_BIN not defined - please load scalasca environment.])
+   AC_ERROR([SCALASCA_DIR not defined - please load scalasca environment.])
 else
    AC_MSG_RESULT([yes])
 fi
