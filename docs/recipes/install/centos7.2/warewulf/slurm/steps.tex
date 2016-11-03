@@ -176,7 +176,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Enable internal interface for provisioning
-[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
+[sms](*\#*) ip addr add ${sms_ip}/${internal_netmask} dev ${sms_eth_internal}
+[sms](*\#*) ip link set ${sms_eth_internal} up
 
 # Restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl restart xinetd
