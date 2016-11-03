@@ -236,7 +236,7 @@ run_mpi_binary () {
     fi
     
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
-	if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" -o "$LMOD_FAMILY_MPI" = "openmpi" ];then
+	if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" -o "$LMOD_FAMILY_MPI" = "openmpi" -o "$LMOD_FAMILY_MPI" = "mpich" ];then
 
 	    jobScript=/tmp/job.$USER.$RANDOM
 
