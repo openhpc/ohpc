@@ -5,17 +5,6 @@ the corresponding compute image in a subsequent step.
 % begin_ohpc_run
 % ohpc_comment_header Add resource management services on master node \ref{sec:add_rm}
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) (*\groupinstall*) ohpc-pbspro-server
+[sms](*\#*) (*\install*) pbspro-server-ohpc
 \end{lstlisting}
 % end_ohpc_run
-
-To avoid starting the \rms{} execution daemon on the master host,
-modify the path/etc/pbs.conf before starting the service.
-
-% begin_ohpc_run
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) perl -pi -e "s/PBS_START_MOM=\S+/PBS_START_MOM=0/" /etc/pbs.conf
-\end{lstlisting}
-% end_ohpc_run
-
-

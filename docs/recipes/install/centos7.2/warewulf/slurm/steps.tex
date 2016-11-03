@@ -176,7 +176,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Enable internal interface for provisioning
-[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
+[sms](*\#*) ip addr add ${sms_ip}/${internal_netmask} dev ${sms_eth_internal}
+[sms](*\#*) ip link set ${sms_eth_internal} up
 
 # Restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl restart xinetd
@@ -438,23 +439,10 @@ host as follows:
 
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
+\input{common/import_ww_files_slurm}
 
-%----------------
 % CentOS specific
-%----------------
-
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wwsh file import /opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww
-[sms](*\#*) wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network-scripts/ifcfg-ib0
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% \end_ohpc_run
-
+\input{common/import_ww_files_ib_centos}
 \input{common/finalize_provisioning}
 
 %\clearpage

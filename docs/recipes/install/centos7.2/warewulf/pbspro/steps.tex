@@ -176,7 +176,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
 
 # Enable internal interface for provisioning
-[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
+[sms](*\#*) ip addr add ${sms_ip}/${internal_netmask} dev ${sms_eth_internal}
+[sms](*\#*) ip link set ${sms_eth_internal} up
 
 # Restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl restart xinetd
@@ -252,11 +253,12 @@ default location for this example is in
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add PBS Professional client support
-[sms](*\#*) (*\chrootinstall*) pbspro-execution-ohopc
+[sms](*\#*) (*\chrootinstall*) pbspro-execution-ohpc
 [sms](*\#*) perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_hostname}/" $CHROOT/etc/pbs.conf
-[sms](*\#*) chroot $CHROOT opt/ohpc/pub/pbs/etc/pbs_habitat
+[sms](*\#*) chroot $CHROOT opt/pbs/libexec/pbs_habitat
+[sms](*\#*) perl -pi -e "s/\$clienthost \S+/\$clienthost ${sms_hostname}/" $CHROOT/var/spool/pbs/mom_priv/config
 [sms](*\#*) echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
-[sms](*\#*) echo "PBS_SCP=/usr/bin/scp" >> $CHROOT/etc/pbs.conf
+[sms](*\#*) chroot $CHROOT systemctl enable pbs
 
 # Add IB support and enable
 [sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
@@ -337,8 +339,9 @@ example configuration.
 \paragraph{Increase locked memory limits}
 \input{common/memlimits}
 
-\paragraph{Enable ssh control via resource manager} 
-\input{common/slurm_pam}
+% Not compatible with PBS Professional.
+% \paragraph{Enable ssh control via resource manager} 
+% \input{common/slurm_pam}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
@@ -409,8 +412,9 @@ host as follows:
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
-\paragraph{Add \mrsh{}}
-\input{common/mrsh}
+% Not compatible with PBS Professional
+%\paragraph{Add \mrsh{}}
+%\input{common/mrsh}
 
 \paragraph{Add \genders{}}
 \input{common/genders}
@@ -428,21 +432,8 @@ host as follows:
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
 
-%----------------
 % CentOS specific
-%----------------
-
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wwsh file import /opt/ohpc/pub/examples/network/centos/ifcfg-ib0.ww
-[sms](*\#*) wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network-scripts/ifcfg-ib0
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% \end_ohpc_run
+\input{common/import_ww_files_ib_centos}
 
 \input{common/finalize_provisioning}
 
@@ -465,10 +456,11 @@ host as follows:
 
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster (Cont.)
+% Removed slurm.conf,munge.key from the list of files because it is NOT compatible with PBS Professional. 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
 # Define provisioning image for hosts
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.2 --bootstrap=`uname -r` \
-    --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network 
+    --files=dynamic_hosts,passwd,group,shadow,network 
 \end{lstlisting}
 
 % ohpc_validation_newline
@@ -580,10 +572,10 @@ petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Compu
 \input{common/pxse_enabled_builds}
 
 \section{Resource Manager Startup} \label{sec:rms_startup}
-\input{common/slurm_startup}
+\input{common/pbspro_startup}
 
 \section{Run a Test Job} \label{sec:test_job}
-\input{common/slurm_test_job}
+\input{common/pbspro_test_job}
 
 \clearpage
 \appendix
