@@ -10,20 +10,11 @@ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 # verify we have necessary scalasca environment variables set
 
-AC_MSG_CHECKING([for SCALASCA_LIB environment variable])
-if test "x$SCALASCA_LIB" = "x"; then
+AC_MSG_CHECKING([for SCALASCA_BIN environment variable])
+if test "x$SCALASCA_BIN" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([SCALASCA_LIB not defined - please load scalasca environment.])
-else
-   AC_MSG_RESULT([yes])
-fi
-
-AC_MSG_CHECKING([for SCALASCA_INC environment variable])
-if test "x$SCALASCA_INC" = "x"; then
-   AC_MSG_RESULT([no])
-   echo
-   AC_ERROR([SCALASCA_INC not defined - please load scalasca environment.])
+   AC_ERROR([SCALASCA_BIN not defined - please load scalasca environment.])
 else
    AC_MSG_RESULT([yes])
 fi
@@ -56,11 +47,11 @@ AC_C_CONST
 # Define include path and library linkage from environment variables
 # which should be provided via module loads. 
 
-CFLAGS="-I${SCALASCA_INC} ${CFLAGS} -fopenmp"
-CXXFLAGS="-I${SCALASCA_INC} ${CXXFLAGS} -fopenmp"
-FCFLAGS="-I${SCALASCA_INC} ${FCLAGS}"
-FFLAGS="-I${SCALASCA_INC} ${FCLAGS}"
-LDFLAGS="-L${SCALASCA_LIB} -lscalasca ${LDFLAGS}"
+CFLAGS="${CFLAGS} -fopenmp"
+CXXFLAGS="${CXXFLAGS} -fopenmp"
+FCFLAGS="${FCLAGS}"
+FFLAGS="${FCLAGS}"
+LDFLAGS="${LDFLAGS}"
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel" ; then
    if test "x$LMOD_FAMILY_MPI" = "xmvapich2" ;then
