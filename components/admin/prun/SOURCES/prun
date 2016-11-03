@@ -99,6 +99,22 @@ function launch_impi () {
     fi
 }
 
+function launch_mpich () {
+    if [ $MODE == "native" ];then
+
+        LAUNCHER="mpiexec.hydra"
+        verify_launcher_avail $LAUNCHER
+
+        cmd="$LAUNCHER -bootstrap slurm $@"
+        _info "Launch cmd = $cmd"
+        $cmd
+
+        local _status=$?
+
+        return $_status
+    fi
+}
+
 function launch_mvapich2 () {
     if [ $MODE == "native" ];then
 
@@ -170,6 +186,8 @@ _info "Master compute host = $masterHost"
 
 if [ $LMOD_FAMILY_MPI == "impi" ];then
     launch_impi $EXEC $ARGS
+elif [ $LMOD_FAMILY_MPI == "mpich" ];then
+    launch_mpich $EXEC $ARGS
 elif [ $LMOD_FAMILY_MPI == "mvapich2" ];then
     launch_mvapich2 $EXEC $ARGS
 elif [ $LMOD_FAMILY_MPI == "openmpi" ];then
