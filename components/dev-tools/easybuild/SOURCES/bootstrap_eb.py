@@ -428,7 +428,8 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
 
     # install EasyBuild with EasyBuild
     from easybuild.main import main as easybuild_main
-    easybuild_main()
+    if not easybuild_main():
+        error("easybuild_main failed")
 
 def main():
     """Main script: bootstrap EasyBuild in stages."""
