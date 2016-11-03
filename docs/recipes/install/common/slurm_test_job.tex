@@ -31,7 +31,7 @@ propagate. However, you can also manually pull the changes from compute nodes
 via the following:
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) pdsh -P normal /warewulf/bin/wwgetfiles 
+[sms](*\#*) pdsh -w c[1-4] /warewulf/bin/wwgetfiles 
 \end{lstlisting}
 % end_ohpc_run
 \end{tcolorbox}
