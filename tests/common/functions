@@ -201,6 +201,8 @@ run_mpi_binary () {
 	    ;;
 	o)  output_file="$OPTARG"
 	    ;;
+	s)  scalasca="$OPTARG"
+	    ;;
 	t)  timeout="$OPTARG"
 	    ;;
 	'?')
@@ -209,6 +211,12 @@ run_mpi_binary () {
 	    ;;
 	esac
     done
+
+    if [ -z "$scalasca" ];then
+    mpi_launcher="prun"
+    else
+    mpi_launcher="scalasca prun"
+    fi
 
     shift "$((OPTIND-1))" # Shift off the options and optional --.
     
@@ -240,9 +248,9 @@ run_mpi_binary () {
 	    echo "#SBATCH -o job.%j.out" >> $jobScript
 	    
 	    if [ -n "$input_file" ];then
-		echo "prun $EXE $ARGS < $input_file" >> $jobScript
+		echo "$mpi_launcher $EXE $ARGS < $input_file" >> $jobScript
 	    else
-		echo "prun $EXE $ARGS"		     >> $jobScript
+		echo "$mpi_launcher $EXE $ARGS"		     >> $jobScript
 	    fi
 
 	    # Submit batch job
