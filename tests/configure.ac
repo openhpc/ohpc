@@ -279,6 +279,12 @@ AC_ARG_ENABLE([superlu_dist],
    [AX_OPTION_DEFAULT(type=long,enable_superlu_dist,yes)])
 AM_CONDITIONAL(SUPERLU_DIST_ENABLED,test "x$enable_superlu_dist" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Scalasca
+AC_ARG_ENABLE([scalasca],
+   [AS_HELP_STRING([--enable-scalasca],[Enable scalasca tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_scalasca,yes)])
+AM_CONDITIONAL(SCALASCA_ENABLED,test "x$enable_scalasca" = "xyes" )
+#------------------------------------------------------------------------------------------
 # TAU
 AC_ARG_ENABLE([tau],
    [AS_HELP_STRING([--enable-tau],[Enable tau tests (default=yes)])],[],
@@ -347,24 +353,25 @@ AM_CONDITIONAL(PACKAGING_ENABLED,test "x$enable_packaging" = "xyes" )
 #------------------------------------------------------------------------------------------
 
 AC_OUTPUT( Makefile 
-           common/TEST_ENV
+       common/TEST_ENV
 	   admin/Makefile 
 	   user-env/Makefile 
 	   bos/Makefile
-           perf-tools/tau/Makefile
+       perf-tools/scalasca/Makefile
+       perf-tools/tau/Makefile
 	   oob/Makefile
 	   lustre/Makefile
-           dev-tools/easybuild/Makefile
-           admin/spack/Makefile
-           dev-tools/numpy/Makefile
-           dev-tools/numpy/tests/Makefile
-           dev-tools/scipy/Makefile
-           dev-tools/scipy/tests/Makefile
-           dev-tools/tbb/Makefile
-           dev-tools/tbb/tests/Makefile
-           dev-tools/cilk/Makefile
-           dev-tools/R-base/Makefile
-           modules/Makefile )
+       dev-tools/easybuild/Makefile
+       admin/spack/Makefile
+       dev-tools/numpy/Makefile
+       dev-tools/numpy/tests/Makefile
+       dev-tools/scipy/Makefile
+       dev-tools/scipy/tests/Makefile
+       dev-tools/tbb/Makefile
+       dev-tools/tbb/tests/Makefile
+       dev-tools/cilk/Makefile
+       dev-tools/R-base/Makefile
+       modules/Makefile )
 
 echo
 echo '--------------------------------------------- SUMMARY ---------------------------------------------'
@@ -505,6 +512,12 @@ echo    Performance Tools:
        echo '    'Papi...................... : enabled
     else
        echo '    'Papi...................... : disabled
+    fi
+
+    if test "x$enable_scalasca" = "xyes"; then
+       echo '    'Scalasca.................. : enabled
+    else
+       echo '    'Scalasca.................. : disabled
     fi
 
     if test "x$enable_tau" = "xyes"; then
