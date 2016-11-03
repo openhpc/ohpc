@@ -215,7 +215,7 @@ run_mpi_binary () {
     if [ -z "$scalasca" ];then
     mpi_launcher="prun"
     else
-    mpi_launcher="scalasca prun"
+    mpi_launcher="scalasca -analyze prun"
     fi
 
     shift "$((OPTIND-1))" # Shift off the options and optional --.
