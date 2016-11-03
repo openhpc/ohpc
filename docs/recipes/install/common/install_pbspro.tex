@@ -1,10 +1,3 @@
-Recall the assumption that the {\em master} host has a working DNS configuration. To be 
-sure, let's add the {\em master} IP address and hostname to the (\texttt{/etc/hosts}) file. 
-
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) echo "${sms_ip} 	${sms_name}" >> /etc/hosts
-\end{lstlisting}
-
 The following command adds the \rms{} workload manager server components to the
 chosen {\em master} host. Note that client-side components will be added to
 the corresponding compute image in a subsequent step.
