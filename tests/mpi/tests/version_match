@@ -4,15 +4,7 @@
 load ../../common/test_helper_functions || exit 1
 source ../../common/functions || exit 1
 
-if [ "$LMOD_FAMILY_MPI" = "mvapich2" ];then
-    family=mvapich2
-elif [ "$LMOD_FAMILY_MPI" = "openmpi" ];then
-    family=openmpi
-elif [ "$LMOD_FAMILY_MPI" = "impi" ];then
-    family=impi
-else
-    ERROR "Unsupported or unknown MPI family"
-fi
+family=${LMOD_FAMILY_MPI}
 
 @test "[MPI] MPI module loaded ($LMOD_FAMILY_COMPILER/$family)" {
     module list $family >& .cmd_output || exit 1
@@ -48,6 +40,12 @@ fi
         assert_success
 
         mpichversion | grep "MVAPICH2 Version" | awk '{print $3}' >& .cmd_output || exit 1
+        mpi_version=`cat .cmd_output`
+    elif [ $family == "mpich" ];then
+        run which mpichversion
+        assert_success
+
+        mpichversion | grep "MPICH Version" | awk '{print $3}' >& .cmd_output || exit 1
         mpi_version=`cat .cmd_output`
     elif [ $family == "impi" ];then
         run which mpicc

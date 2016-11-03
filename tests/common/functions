@@ -215,7 +215,7 @@ run_mpi_binary () {
     if [ -z "$scalasca" ];then
     mpi_launcher="prun"
     else
-    mpi_launcher="scalasca prun"
+    mpi_launcher="scalasca -analyze prun"
     fi
 
     shift "$((OPTIND-1))" # Shift off the options and optional --.
@@ -236,7 +236,7 @@ run_mpi_binary () {
     fi
     
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
-	if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" -o "$LMOD_FAMILY_MPI" = "openmpi" ];then
+	if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" -o "$LMOD_FAMILY_MPI" = "openmpi" -o "$LMOD_FAMILY_MPI" = "mpich" ];then
 
 	    jobScript=/tmp/job.$USER.$RANDOM
 
@@ -329,70 +329,3 @@ run_mpi_binary () {
 
 } # end run_mpi_binary()
 
-run_mpi_binary_orig () {
-
-    # Parse optional arguments
-    output_file=""
-    timeout=1		# default job timeout (in minutes)
-
-    local OPTIND=1
-    while getopts "o:t:" opt; do
-	case "$opt" in
-	    o)	output_file="$OPTARG"
-		;;
-	    t)	timeout="$OPTARG"
-		;;
-	    '?')
-		echo "Unknown option given to run_mpi_binary" >&2
-		exit 1
-		;;
-	esac
-    done
-
-    shift "$((OPTIND-1))" # Shift off the options and optional --.
-    
-    EXE=$1
-    ARGS=$2
-    NNODES=$3
-    NTASKS=$4
-
-    if [ ! -x $EXE ];then
-	ERROR_RETURN "$EXE is not available or not executable"
-    fi
-
-    if [ -z "$RESOURCE_MANAGER" ];then
-	ERROR_RETURN "Resource manager is not defined - please set via RESOURCE_MANAGER variable"
-    fi
-
-    if [ -z "$LMOD_FAMILY_MPI" ];then
-	ERROR_RETURN "MPI toolchain s not loaded - please load MPI stack first"
-    fi
-    
-    if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" ];then
-	if [ -n "$output_file" ];then
-##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout srun $EXE $ARGS >& $output_file
-	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS >& $output_file
-	else
-##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout srun $EXE $ARGS
-	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS
-	fi
-	return $?
-    elif [ "$LMOD_FAMILY_MPI" = "openmpi" ];then
-	if [ -n "$output_file" ];then
-##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout mpiexec $EXE $ARGS >& $output_file
-	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS >& $output_file
-	else
-##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout mpiexec $EXE $ARGS
-	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS
-	fi
-	return $?
-    else
-	ERROR_RETURN "Unsupported MPI family"
-    fi
-    else
-	ERROR_RETURN "Unsupported resource manager"
-    fi
-
-} # end run_mpi_binary_orig()
-	  

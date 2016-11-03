@@ -15,9 +15,9 @@
 
 Summary:   Convenience utility for parallel job launch
 Name:      %{pname}%{PROJ_DELIM}
-Version:   1.0
+Version:   1.1
 Release:   1
-License:   BSD
+License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc

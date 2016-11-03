@@ -46,11 +46,11 @@ AC_ARG_ENABLE([pxse],
 if test x$enable_pxse = xyes ;then
    AC_MSG_RESULT([yes])
    AC_SUBST(COMPILER_FAMILIES,["gnu intel"])       
-   AC_SUBST(MPI_FAMILIES,["mvapich2 openmpi impi"])
+   AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi impi"])
 else
    AC_MSG_RESULT([no])
    AC_SUBST(COMPILER_FAMILIES,[gnu])       
-   AC_SUBST(MPI_FAMILIES,["mvapich2 openmpi"])
+   AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi"])
 fi
 
 
