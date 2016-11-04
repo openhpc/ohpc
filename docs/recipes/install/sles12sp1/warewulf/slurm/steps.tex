@@ -453,21 +453,10 @@ host as follows:
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
 
-%----------------
-% SLES specific
-%----------------
+\input{common/import_ww_files_slurm}
 
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wwsh file import /opt/ohpc/pub/examples/network/sles/ifcfg-ib0.ww
-[sms](*\#*) wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network/ifcfg-ib0
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% \end_ohpc_run
+% CentOS specific
+\input{common/import_ww_files_ib_sles}
 
 \input{common/finalize_provisioning}
 

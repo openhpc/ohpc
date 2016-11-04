@@ -1,0 +1,16 @@
+\noindent Finally, to add {\em optional} support for controlling IPoIB
+interfaces (see \S\ref{sec:add_ofed}), \OHPC{} includes a
+template file for \Warewulf{} that can optionally be imported and used later to provision
+\texttt{ib0} network settings.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) wwsh file import /opt/ohpc/pub/examples/network/sles/ifcfg-ib0.ww
+[sms](*\#*) wwsh -y file set ifcfg-ib0.ww --path=/etc/sysconfig/network/ifcfg-ib0
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% \end_ohpc_run
