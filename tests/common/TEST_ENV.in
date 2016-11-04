@@ -15,3 +15,9 @@ TAU_TRACE=0,
 TAU_CALLPATH=0,
 TAU_PROFILE=1,
 TAU_METRICS=GET_TIME_OF_DAY:PAPI_L1_DCM:PAPI_LD_INS
+#
+#------------------------
+# Scalasca profiling options
+#------------------------
+#
+SCAN_MPI_LAUNCHER=prun
