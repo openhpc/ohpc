@@ -8,7 +8,7 @@ status=0
 source ./TEST_ENV         || exit 1
 source ./common/functions || exit 1
 
-cd perf-tools/tau || exit 1
+cd perf-tools/scalasca || exit 1
 export BATS_JUNIT_CLASS=Scalasca
 export SCAN_MPI_LAUNCHER=prun
 
