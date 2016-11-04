@@ -316,31 +316,12 @@ example configuration.
 \end{lstlisting}
 % end_ohpc_run
 
-
-% Additional commands when additional computes are requested
-
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_validation_comment Update basic slurm configuration if additional computes defined
-% ohpc_command if [ ${num_computes} -gt 4 ];then
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
-
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% ohpc_command fi
-% end_ohpc_run
-
 %\clearpage
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
 \paragraph{Increase locked memory limits}
 \input{common/memlimits}
-
-% Not compatible with PBS Professional.
-% \paragraph{Enable ssh control via resource manager} 
-% \input{common/slurm_pam}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
