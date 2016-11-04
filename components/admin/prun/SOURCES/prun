@@ -14,7 +14,6 @@
 CONFIG=/etc/sysconfig/prun
 MODE=native
 LOGLEVEL=2     # 0=error,1=warn,2=info,3=debug
-RM=slurm
 
 function usage () {
 
@@ -90,7 +89,13 @@ function launch_mpich () {
         LAUNCHER="mpiexec.hydra"
         verify_launcher_avail $LAUNCHER
 
-        cmd="$LAUNCHER -bootstrap slurm $@"
+	if [ ${RM} == "slurm" ];then
+            cmd="$LAUNCHER -bootstrap slurm $@"
+	elif [ ${RM} == "pbspro" ];then
+	    cmd="$LAUNCHER -rmk pbs $@"
+	else
+            _error "Unknown resource manager -> ${RM}"
+	fi
         _info "Launch cmd = $cmd"
         $cmd
 
@@ -105,8 +110,15 @@ function launch_mvapich2 () {
 
         LAUNCHER="mpiexec.hydra"
         verify_launcher_avail $LAUNCHER
+	
+	if [ ${RM} == "slurm" ];then
+            cmd="$LAUNCHER -bootstrap slurm $@"
+	elif [ ${RM} == "pbspro" ];then
+	    cmd="$LAUNCHER -rmk pbs $@"
+	else
+            _error "Unknown resource manager -> ${RM}"
+	fi
 
-        cmd="$LAUNCHER -bootstrap slurm $@"
         _info "Launch cmd = $cmd"
         $cmd
 
@@ -118,10 +130,17 @@ function launch_mvapich2 () {
 
 function launch_openmpi () {
     if [ $MODE == "native" ];then
-        LAUNCHER="mpirun"
-        verify_launcher_avail $LAUNCHER
 
-        cmd="mpirun $@"
+	if [ ${RM} == "slurm" ];then
+            verify_launcher_avail mpirun
+            cmd="mpirun $@"
+	elif [ ${RM} == "pbspro" ];then
+            verify_launcher_avail mpiexec
+	    cmd="mpiexec --hostfile ${PBS_NODEFILE} $@"
+	else
+            _error "Unknown resource manager -> ${RM}"
+	fi
+
         _info "Launch cmd = $cmd"
         $cmd
     fi
@@ -154,6 +173,15 @@ EXEC=$1
 shift
 ARGS=$@
 
+# Resource manager detection. If not specified from the config file, determine
+# from locally installed packages. Like Highlander, we assume there can be only one.
+
+if [ -z "$RM" ];then
+    [[ -s /etc/pbs.conf ]]   && RM=pbspro
+    [[ -s /etc/slurm.conf ]] && RM=slurm
+fi
+
+
 if ! [ -x "$(command -v $EXEC)" ];then
     if [ ! -x $EXEC ];then
         _error "Unable to access executable -> $EXEC"
@@ -168,6 +196,7 @@ fi
 
 masterHost=`hostname -s`
 _info "Master compute host = $masterHost"
+_info "Resource manager = $RM"
 
 if [ $LMOD_FAMILY_MPI == "impi" ];then
     launch_impi $EXEC $ARGS
