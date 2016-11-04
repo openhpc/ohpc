@@ -7,19 +7,17 @@ CXX_mpi_test_SOURCES    = CXX_mpi_test.cpp
 check_PROGRAMS         += F_test
 F_test_LDFLAGS          = $(LDFLAGS)
 F_test_SOURCES          = F90_mpi_test.f90
-TESTS                   = F_test
 
 check_PROGRAMS         += C_mpi_test
 C_mpi_test_LDFLAGS      = $(LDFLAGS)
 C_mpi_test_SOURCES      = C_mpi_test.c
-TESTS                  += C_mpi_test
 
 #check_PROGRAMS         += C_omp_test
 #C_omp_test_LDFLAGS      = $(LDFLAGS)
 #C_omp_test_SOURCES      = C_omp_test.c
 #TESTS                  += C_omp_test
 
-TESTS                  += test_module
+TESTS                   = test_module
 TESTS                  += rm_execution
 
 
