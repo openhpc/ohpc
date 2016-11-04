@@ -21,12 +21,12 @@ the \rms{} resource manager. To add the {\em compute} hosts, execute
 the following for-loop:
 
 % begin_ohpc_run
-% ohpc_comment_header Resource Manager Startup \ref{sec:rms_startup}
 \begin{lstlisting}[language=bash,keywords={}]
-# configure compute hosts with pbspro
-[sms](*\#*) for I in {1..4}; do
-           qmgr -c "create node c${I}"
+# initialize path
+[sms](*\#*) . /etc/profile.d/pbs.sh 
+# register compute hosts with pbspro
+[sms](*\#*) for host in {1..4}; do
+           qmgr -c "create node c${host}"
         done
-
 \end{lstlisting}
 % end_ohpc_run
