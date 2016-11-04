@@ -23,7 +23,10 @@ check_if_rpm_installed () {
 
 # Check if we have a known/supported resource manager
 check_rms(){
-    if [ "$RESOURCE_MANAGER" = "slurm" ];then
+
+    if [ -s /etc/pbs.conf ]; then
+	export RMS=pbspro
+    elif [ -s /etc/slurm/slurm.conf ]; then
 	export RMS=slurm
     else
 	ERROR "Unsupported or unknown resource manager"
@@ -181,6 +184,18 @@ run_serial_binary () {
 	    srun -n 1 -N 1 -t $timeout $EXE "$@"
 	fi
 	return $?
+   elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
+        if [ -n "$output_file" ];then
+            qsub -k oe -W block=true -l select=1 -l walltime=00:$timeout:00 -- $EXE "$@" > .job_in
+	    JOB=`cat .job_in | awk -F . '{print $1}'`
+	    [[ -e ${HOME}/STDIN.o${JOB} ]] || exit 1
+	    mv ${HOME}/STDIN.o${JOB} $output_file
+	    cat $output_file
+        else
+#	    local fullPath=`readlink -f $EXE`
+#	    echo "fullPath = $fullPath"
+            qsub -k n -W block=true -l select=1 -l walltime=00:$timeout:00 -- $PWD/$EXE "$@"
+        fi
     else
 	ERROR_RETURN "Unsupported resource manager"
     fi
