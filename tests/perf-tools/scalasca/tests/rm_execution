@@ -18,7 +18,6 @@ fi
 NODES=16
 TASKS=16
 ARGS=16
-export SCAN_MPI_LAUNCHER=prun
 
 @test "[perf-tools/Scalasca] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_mpi_test ];then
@@ -62,12 +61,12 @@ export SCAN_MPI_LAUNCHER=prun
 #    rm -rf scorep_C_omp_test_16_sum
 #}
 
-@test "[perf-tools/Scalasca] Serial FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[perf-tools/Scalasca] MPI FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s F_test ];then
 	flunk "F_test binary does not exit"
     fi
 
-    run_serial_binary ./F_test
+    run_mpi_binary -s ./F_test
     assert_success
 
     run scalasca -examine -s scorep_F_test_16_sum
