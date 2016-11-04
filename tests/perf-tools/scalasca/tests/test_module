@@ -9,7 +9,7 @@ if [ -s ../../../TEST_ENV ];then
 fi
 
 PKG=SCALASCA
-testname="Tuning and Analysis Utilities"
+testname="Scalasca"
 module=scalasca
 rpm=scalasca-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
@@ -72,7 +72,7 @@ setup() {
 
 @test "[$testname] Verify availability of user guide for scalasca" {
 
-    run 'ls ${SCALASCA_DIR}/share/doc/scalasca/manual/UserGuide.pdf'
+    run "ls ${SCALASCA_DIR}/share/doc/scalasca/manual/UserGuide.pdf"
     assert_success
 }
 
