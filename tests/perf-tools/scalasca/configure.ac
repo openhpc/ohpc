@@ -41,10 +41,10 @@ AC_C_CONST
 # Define include path and library linkage from environment variables
 # which should be provided via module loads. 
 
-CC='score mpicc'
-CXX='score mpicxx'
-FC='score mpif90'
-F77='score mpif90'
+CC='scorep mpicc'
+CXX='scorep mpicxx'
+FC='scorep mpif90'
+F77='scorep mpif90'
 
 CFLAGS="${CFLAGS} -fopenmp"
 CXXFLAGS="${CXXFLAGS} -fopenmp"
