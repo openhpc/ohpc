@@ -15,9 +15,9 @@ else
     exit 1
 fi
 
-NODES=4
-TASKS=8
-ARGS=8
+NODES=16
+TASKS=16
+ARGS=16
 SCAN_MPI_LAUNCHER=prun
 
 @test "[perf-tools/Scalasca] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -28,10 +28,10 @@ SCAN_MPI_LAUNCHER=prun
     run_mpi_binary -s 1 ./C_mpi_test $ARGS $NODES $TASKS
     assert_success
 
-    run scalasca -examine -s scorep_C_mpi_test_0_sum
+    run scalasca -examine -s scorep_C_mpi_test_16_sum
     assert_success
 
-    rm -rf scorep_C_mpi_test_0_sum
+    rm -rf scorep_C_mpi_test_16_sum
 }
 
 @test "[perf-tools/Scalasca] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -42,10 +42,10 @@ SCAN_MPI_LAUNCHER=prun
     run_mpi_binary -s 1 ./run_CXX_mpi_test.sh $ARGS $NODES $TASKS
     assert_success
 
-    run scalasca -examine -s scorep_CXX_mpi_test_0_sum
+    run scalasca -examine -s scorep_CXX_mpi_test_16_sum
     assert_success
 
-    rm -rf scorep_CXX_mpi_test_0_sum
+    rm -rf scorep_CXX_mpi_test_16_sum
 }
 
 #@test "[perf-tools/Scalasca] Serial C OpenMP binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -56,10 +56,10 @@ SCAN_MPI_LAUNCHER=prun
 #    run_serial_binary ./C_omp_test
 #    assert_success
 #
-#    run scalasca -examine -s scorep_C_omp_test_0_sum
+#    run scalasca -examine -s scorep_C_omp_test_16_sum
 #    assert_success
 #
-#    rm -rf scorep_C_omp_test_0_sum
+#    rm -rf scorep_C_omp_test_16_sum
 #}
 
 @test "[perf-tools/Scalasca] Serial FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -70,8 +70,8 @@ SCAN_MPI_LAUNCHER=prun
     run_serial_binary ./F_test
     assert_success
 
-    run scalasca -examine -s scorep_F_test_0_sum
+    run scalasca -examine -s scorep_F_test_16_sum
     assert_success
 
-    rm -rf scorep_F_test_0_sum
+    rm -rf scorep_F_test_16_sum
 }
