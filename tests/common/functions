@@ -195,7 +195,7 @@ run_mpi_binary () {
     timeout=1		# default job timeout (in minutes)
 
     local OPTIND=1
-    while getopts "i:o:t:" opt; do
+    while getopts "i:o:s:t:" opt; do
     case "$opt" in
 	i)  input_file="$OPTARG"
 	    ;;
