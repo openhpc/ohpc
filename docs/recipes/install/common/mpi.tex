@@ -1,12 +1,17 @@
 For MPI development support, \OHPC{} presently provides pre-packaged builds for
-three MPI families: 
+the following MPI families and transport layers: 
 
-\begin{itemize*}
-\item MPICH
-\item MVAPICH2
-\item OpenMPI
-
-\end{itemize*}
+\begin{table}[]
+\centering
+\begin{tabular}{llll}
+             & Ethernet (TCP)        & Infiniband            & OmniPath              \\
+MPICH        & \multicolumn{1}{c}{x} &                       &                       \\
+MVAPICH2     &                       & \multicolumn{1}{c}{x} &                       \\
+MVAPICH2-psm &                       &                       & \multicolumn{1}{c}{x} \\
+OpenMPI      & \multicolumn{1}{c}{x} & \multicolumn{1}{c}{x} &                       \\
+OpenMPI-psm  &                       &                       & \multicolumn{1}{c}{x}
+\end{tabular}
+\end{table}
 
 % begin_ohpc_run
 % ohpc_comment_header Install MPI Stacks \ref{sec:mpi}
