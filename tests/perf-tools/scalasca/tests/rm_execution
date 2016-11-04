@@ -38,7 +38,7 @@ ARGS=16
 	flunk "CXX_mpi_test binary does not exit"
     fi
 
-    run_mpi_binary -s 1 ./run_CXX_mpi_test.sh $ARGS $NODES $TASKS
+    run_mpi_binary -s 1 ./CXX_mpi_test $ARGS $NODES $TASKS
     assert_success
 
     run scalasca -examine -s scorep_CXX_mpi_test_16_sum
