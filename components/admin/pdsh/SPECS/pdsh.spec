@@ -61,7 +61,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #%define _default_with %{_defaults} mrsh nodeupdown genders slurm 
 #%else
 #   All other defaults
-%define _default_with %{_defaults} mrsh genders slurm
+%define _default_with %{_defaults} mrsh genders
 #%endif
 
 #
@@ -296,6 +296,7 @@ Provides -g groupname and -X groupname options to pdsh.
 %package   mod-slurm
 Summary:   Provides support for running pdsh under SLURM allocations
 Group:     System Environment/Base
+Requires:  slurm
 %description mod-slurm
 Pdsh module providing support for gathering the list of target nodes
 from an allocated SLURM job.
