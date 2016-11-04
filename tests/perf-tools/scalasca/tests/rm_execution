@@ -18,7 +18,7 @@ fi
 NODES=16
 TASKS=16
 ARGS=16
-SCAN_MPI_LAUNCHER=prun
+export SCAN_MPI_LAUNCHER=prun
 
 @test "[perf-tools/Scalasca] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_mpi_test ];then
