@@ -77,7 +77,7 @@ export EASYBUILD_VERSION=%{version}
 export PATH=${LMOD_DIR}:${PATH}
 export PYTHON_VERSION=`python -c 'print ".".join(map(str, __import__("sys").version_info[:2]))'`
 
-python ./bootstrap_eb.py %{buildroot}/%{install_path}
+MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 %ifarch aarch64
 rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
