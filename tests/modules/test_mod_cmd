@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# pbs hack
+[[ -n ${PBS_O_WORKDIR} ]] && cd ${PBS_O_WORKDIR}
+
 export MODULEPATH=./example-modules:$MODULEPATH
 module load test-module || exit 1
 if [ "$TEST_MODULE" != "beeblebrox" ]; then
