@@ -178,7 +178,7 @@ ARGS=$@
 
 if [ -z "$RM" ];then
     [[ -s /etc/pbs.conf ]]   && RM=pbspro
-    [[ -s /etc/slurm.conf ]] && RM=slurm
+    [[ -s /etc/slurm/slurm.conf ]] && RM=slurm
 fi
 
 
