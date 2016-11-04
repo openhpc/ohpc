@@ -48,19 +48,19 @@ SCAN_MPI_LAUNCHER=prun
     rm -rf scorep_CXX_mpi_test_0_sum
 }
 
-@test "[perf-tools/Scalasca] Serial C OpenMP binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s C_omp_test ];then
-	flunk "C_omp_test binary does not exit"
-    fi
-
-    run_serial_binary ./C_omp_test
-    assert_success
-
-    run scalasca -examine -s scorep_C_omp_test_0_sum
-    assert_success
-
-    rm -rf scorep_C_omp_test_0_sum
-}
+#@test "[perf-tools/Scalasca] Serial C OpenMP binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+#    if [ ! -s C_omp_test ];then
+#	flunk "C_omp_test binary does not exit"
+#    fi
+#
+#    run_serial_binary ./C_omp_test
+#    assert_success
+#
+#    run scalasca -examine -s scorep_C_omp_test_0_sum
+#    assert_success
+#
+#    rm -rf scorep_C_omp_test_0_sum
+#}
 
 @test "[perf-tools/Scalasca] Serial FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s F_test ];then
