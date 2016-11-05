@@ -72,7 +72,7 @@ setup() {
 
 @test "[$testname] Verify availability of user guide for scalasca" {
 
-    run "ls ${SCALASCA_DIR}/share/doc/scalasca/manual/UserGuide.pdf"
+    run ls ${SCALASCA_DIR}/share/doc/scalasca/manual/UserGuide.pdf
     assert_success
 }
 
