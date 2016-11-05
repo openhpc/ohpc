@@ -10,7 +10,7 @@ fi
 
 check_rms
 rm=$RESOURCE_MANAGER
-RM=$RESOURCE_MANAGER
+export SCAN_MPI_LAUNCHER=prun
 
 NODES=4
 TASKS=8
@@ -24,10 +24,10 @@ ARGS=8
     run_mpi_binary -s 1 ./C_mpi_test $ARGS $NODES $TASKS
     assert_success
 
-    run scalasca -examine -s scorep_C_mpi_test_16_sum
+    run scalasca -examine -s scorep_C_mpi_test_*
     assert_success
 
-    rm -rf scorep_C_mpi_test_16_sum
+    rm -rf scorep_C_mpi_test_*
 }
 
 @test "[perf-tools/Scalasca] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -38,10 +38,10 @@ ARGS=8
     run_mpi_binary -s 1 ./CXX_mpi_test $ARGS $NODES $TASKS
     assert_success
 
-    run scalasca -examine -s scorep_CXX_mpi_test_16_sum
+    run scalasca -examine -s scorep_CXX_mpi_test_*
     assert_success
 
-    rm -rf scorep_CXX_mpi_test_16_sum
+    rm -rf scorep_CXX_mpi_test_*
 }
 
 #@test "[perf-tools/Scalasca] Serial C OpenMP binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -66,8 +66,8 @@ ARGS=8
     run_mpi_binary -s ./F_test
     assert_success
 
-    run scalasca -examine -s scorep_F_test_16_sum
+    run scalasca -examine -s scorep_F_test_*
     assert_success
 
-    rm -rf scorep_F_test_16_sum
+    rm -rf scorep_F_test_*
 }
