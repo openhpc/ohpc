@@ -10,9 +10,9 @@ qsub [job script] &
 sbatch [job script]
 \\ \hline
 
-Submit {\em interactive} job &
-qsub -I &
-salloc + srun
+Request {\em interactive} shell &
+qsub -I /bin/bash &
+srun --pty /bin/bash
 \\ \hline
 
 Delete job &
