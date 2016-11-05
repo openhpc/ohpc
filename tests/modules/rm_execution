@@ -8,12 +8,7 @@ if [ -s ../TEST_ENV ];then
     source ../TEST_ENV
 fi
 
-if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    rm=slurm
-else
-    ERROR "Unsupported or unknown resource manager"
-    exit 1
-fi
+check_rms
 
 if [ -x /usr/bin/env ];then
     env_cmd=/usr/bin/env
