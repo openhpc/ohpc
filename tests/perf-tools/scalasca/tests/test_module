@@ -9,7 +9,7 @@ if [ -s ../../../TEST_ENV ];then
 fi
 
 PKG=SCALASCA
-testname="Scalasca"
+testname="perf-tools/Scalasca"
 module=scalasca
 rpm=scalasca-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
