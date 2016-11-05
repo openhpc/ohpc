@@ -9,10 +9,8 @@ if [ -s ../../TEST_ENV ]; then
 fi
 
 check_rms
-rm=$RESOURCE_MANAGER
 
-
-@test "[oom] Test job OOM condition ($LMOD_FAMILY_COMPILER)" {
+@test "[oom] Test job OOM condition ($LMOD_FAMILY_COMPILER/$RESOURCE_MANAGER)" {
     skip "disable to invistigate disk fillup"
     if [ ! -s oom_check ]; then
         flunk "oom_check binary does no exists"
