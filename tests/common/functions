@@ -25,9 +25,9 @@ check_if_rpm_installed () {
 check_rms(){
 
     if [ -s /etc/pbs.conf ]; then
-	export RMS=pbspro
+	export RESOURCE_MANAGER=pbspro
     elif [ -s /etc/slurm/slurm.conf ]; then
-	export RMS=slurm
+	export RESOURCE_MANAGER=slurm
     else
 	ERROR "Unsupported or unknown resource manager"
 	exit 1
@@ -185,16 +185,20 @@ run_serial_binary () {
 	fi
 	return $?
    elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
+
+	# pbs presently won't search PATH and doesn't run out of cwd;cull out full path to $EXE
+	local myPath=`command -v $EXE`
+	myPath=`readlink -f $myPath`
+
         if [ -n "$output_file" ];then
-            qsub -k oe -W block=true -l select=1 -l walltime=00:$timeout:00 -- $EXE "$@" > .job_in
+            qsub -k oe -W block=true -l select=1 -l walltime=00:$timeout:00 -- $myPath "$@" > .job_in
 	    JOB=`cat .job_in | awk -F . '{print $1}'`
 	    [[ -e ${HOME}/STDIN.o${JOB} ]] || exit 1
 	    mv ${HOME}/STDIN.o${JOB} $output_file
 	    cat $output_file
         else
-#	    local fullPath=`readlink -f $EXE`
-#	    echo "fullPath = $fullPath"
-            qsub -k n -W block=true -l select=1 -l walltime=00:$timeout:00 -- $PWD/$EXE "$@"
+
+            qsub -k n -W block=true -l select=1 -l walltime=00:$timeout:00 -- ${myPath} "$@"
         fi
     else
 	ERROR_RETURN "Unsupported resource manager"
