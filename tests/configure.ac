@@ -13,8 +13,6 @@ AM_CONDITIONAL(HAVE_SHARED_CONDITIONAL,test 0)
 AM_CONDITIONAL(DIRECT_VFD_CONDITIONAL,test 0)
 AM_CONDITIONAL(BUILD_ALL_CONDITIONAL,test 0)
 
-
-
 # Test user
 AX_CHECK_USER([root])
 
@@ -36,6 +34,10 @@ if test x$enable_long = xyes ;then
 else
    AC_MSG_RESULT([no])
 fi
+
+# RMS test
+AC_CHECK_FILE(/etc/pbs.conf,[enable_pbs=yes],[enable_slurm=yes])
+AM_CONDITIONAL(SLURM_ENABLED,test "x$enable_slurm" = "xyes" )
 
 # Option for testing against multiple compiler/MPI families
 AC_MSG_CHECKING([if enable PXSE toolchain related tests])
@@ -382,6 +384,12 @@ echo Build user.................... : $USER
 echo Build host.................... : ${ac_hostname}
 echo Configure date................ : `date +'%F %H:%M'`
 echo Build architecture............ : ${host}
+if test "x$enable_slurm" = "xyes" ; then
+   echo Resource manager ............. : SLURM
+fi
+if test "x$enable_pbs" = "xyes" ; then
+   echo Resource manager ............. : PBS Pro
+fi
 if test "x$enable_long" = "xyes" ; then
    echo Test suite configuration...... : long
 else
