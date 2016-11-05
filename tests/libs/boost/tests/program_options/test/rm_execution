@@ -8,12 +8,8 @@ if [ -s ../../../../../TEST_ENV ];then
     source ../../../../../TEST_ENV
 fi
 
-if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    rm=slurm
-else
-    ERROR "Unsupported or unknown resource manager"
-    exit 1
-fi
+check_rms
+rm=$RESOURCE_MANAGER
 
 PKG="Boost/Program Options"
 
