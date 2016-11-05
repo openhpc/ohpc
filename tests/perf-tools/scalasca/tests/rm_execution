@@ -12,9 +12,9 @@ check_rms
 rm=$RESOURCE_MANAGER
 RM=$RESOURCE_MANAGER
 
-NODES=16
-TASKS=16
-ARGS=16
+NODES=4
+TASKS=8
+ARGS=8
 
 @test "[perf-tools/Scalasca] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_mpi_test ];then
