@@ -61,11 +61,19 @@
 In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard distro repositories in order to resolve
 necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base and SDK repositories:
+both the base and SDK repositories. In addition, add-on modules are needed to
+resolve dependencies for certain monitoring components. A summary of these 
+requirements is as follows:
 
 \begin{itemize*}
 \item SLES12-SP1-12.1-0
 \item SLES12-SP1-SDK-12.1-0
+\item
+  \href{https://www.suse.com/products/server/features/modules/}{\color{blue}{Web
+      and Scripting Module}} (*only required for nagios/ganglia)
+\item
+  \href{http://download.opensuse.org/repositories/server:/monitoring/SLE_12_SP1/}
+       {\color{blue}{Server Monitoring Software}} (*only required for nagios/ganglia)
 \end{itemize*}
 
 \input{common/automation}
