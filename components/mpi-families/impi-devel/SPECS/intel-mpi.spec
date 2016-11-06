@@ -29,7 +29,7 @@ AutoReq:   no
 BuildRequires:-post-build-checks
 
 Requires: prun%{PROJ_DELIM}
-Requires: intel-mpi-doc > %{year}
+Requires: intel-mpi-doc >= %{year}
 Requires: intel-compilers-devel-%{year}%{PROJ_DELIM}
 Provides: %{pname}%{PROJ_DELIM}
 
