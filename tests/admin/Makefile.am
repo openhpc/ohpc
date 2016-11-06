@@ -6,6 +6,9 @@ TESTS  += clustershell
 TESTS  += conman
 TESTS  += ganglia
 TESTS  += genders
-TESTS  += mrsh
 TESTS  += nagios
 TESTS  += warewulf
+
+if SLURM_ENABLED
+TESTS  += mrsh
+endif
