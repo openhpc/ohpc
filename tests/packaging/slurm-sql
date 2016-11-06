@@ -14,7 +14,7 @@ containsElement () {
   return 1
 }
 
-@test "[$TEST_DIR] verify contents of slurm-sql exist" {
+@test "[packaging/slurm] verify contents of slurm-sql exist" {
     if [ "x$ID" = "xcentos" ]; then
         # [root@master4-centos71 tests]# repoquery --list slurm-sql-ohpc
         # /usr/lib64/slurm
