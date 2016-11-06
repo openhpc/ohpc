@@ -154,11 +154,11 @@ cmake  \
      -DCMAKE_EXE_LINKER_FLAGS="-shared" \
      -DCMAKE_INSTALL_PREFIX=%{buildroot}%{install_path}
 
-make install
+make superlulib DSuperLUroot=$PWD 
 
 mkdir tmp
 (cd tmp; ar x %{buildroot}%{install_path}/lib/libsuperlu_dist.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o ../lib/%{libname}.so.%{version} tmp/*.o
+mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
 pushd %{buildroot}%{install_path}/lib
 ln -s %{libname}.so.%{version} %{libname}.so
 popd
