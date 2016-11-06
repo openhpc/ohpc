@@ -345,10 +345,6 @@ example configuration.
 \paragraph{Increase locked memory limits}
 \input{common/memlimits} 
 
-% Not compatible with PBS Professional.
-% \paragraph{Enable ssh control via resource manager} 
-% \input{common/slurm_pam}
-
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
 % SLES-specific addition
@@ -466,7 +462,6 @@ host as follows:
 
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster (Cont.)
-% Removed slurm.conf,munge.key from the list of files because it is NOT compatible with PBS Professional. 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define provisioning image for hosts
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12sp1 --bootstrap=`uname -r` \
