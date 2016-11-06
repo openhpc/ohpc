@@ -154,7 +154,7 @@ cmake  \
      -DCMAKE_EXE_LINKER_FLAGS="-shared" \
      -DCMAKE_INSTALL_PREFIX=%{buildroot}%{install_path}
 
-make superlulib DSuperLUroot=$PWD 
+make
 
 mkdir tmp
 (cd tmp; ar x %{buildroot}%{install_path}/lib/libsuperlu_dist.a)
