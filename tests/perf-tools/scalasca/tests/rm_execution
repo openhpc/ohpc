@@ -12,7 +12,7 @@ check_rms
 rm=$RESOURCE_MANAGER
 export SCAN_MPI_LAUNCHER=prun
 
-NODES=4
+NODES=2
 TASKS=8
 ARGS=8
 

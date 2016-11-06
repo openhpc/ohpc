@@ -11,7 +11,7 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 
-NODES=4
+NODES=2
 TASKS=8
 ARGS="$LUSTRE_TEST_PATH/phdf_test.out"
 

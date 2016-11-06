@@ -17,7 +17,7 @@ TEST_NUM_THREADS=4
 check_rms
 rm=$RESOURCE_MANAGER
 
-NODES=4
+NODES=2
 TASKS=$((NODES*TEST_NUM_RANKS))
 
 # set global env settings
