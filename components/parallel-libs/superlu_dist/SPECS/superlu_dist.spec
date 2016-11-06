@@ -158,7 +158,7 @@ make install
 
 mkdir tmp
 (cd tmp; ar x %{buildroot}%{install_path}/lib/libsuperlu_dist.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o %{buildroot}%{install_path}/lib/%{libname}.so.%{version} tmp/*.o
+mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{version} -o %{buildroot}%{install_path}/lib/%{libname}.so.%{version} tmp/*.o
 pushd %{buildroot}%{install_path}/lib
 ln -s %{libname}.so.%{version} %{libname}.so
 popd
@@ -179,7 +179,7 @@ install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
 %{__mkdir_p} %{buildroot}%{install_path}/lib
 install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.5
+ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.%{major}
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
 
