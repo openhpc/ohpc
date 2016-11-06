@@ -197,8 +197,18 @@ run_serial_binary () {
 	    mv ${HOME}/STDIN.o${JOB} $output_file
 	    cat $output_file
         else
+	    # Generate script with commands so we can execute out of submission directory
+	    jobScript=".job.$RANDOM"
+	    echo "#!/bin/bash" > $jobScript
+	    echo "cd \${PBS_O_WORKDIR}" >> $jobScript
+	    echo $EXE "$@" >> $jobScript
+	    chmod 700 $jobScript
 
-            qsub -k n -W block=true -l select=1 -l walltime=00:$timeout:00 -- ${myPath} "$@"
+            qsub -k n -W block=true -l select=1 -l walltime=00:$timeout:00 -- `readlink -f $jobScript`
+
+	    local statusCode=$?
+	    rm -f $jobScript
+	    return $statusCode
         fi
     else
 	ERROR_RETURN "Unsupported resource manager"
@@ -259,17 +269,17 @@ run_mpi_binary () {
 
 	    jobScript=/tmp/job.$USER.$RANDOM
 
-	    echo "#!/bin/bash"		  > $jobScript
-	    echo "#SBATCH -J CMT-test"   >> $jobScript
-	    echo "#SBATCH -N $NNODES"    >> $jobScript
-	    echo "#SBATCH -n $NTASKS"    >> $jobScript
-	    echo "#SBATCH -t $timeout"   >> $jobScript
-	    echo "#SBATCH -o job.%j.out" >> $jobScript
+	    echo "#!/bin/bash"		    > $jobScript
+	    echo "#SBATCH -J OpenHPC-test" >> $jobScript
+	    echo "#SBATCH -N $NNODES"      >> $jobScript
+	    echo "#SBATCH -n $NTASKS"      >> $jobScript
+	    echo "#SBATCH -t $timeout"     >> $jobScript
+	    echo "#SBATCH -o job.%j.out"   >> $jobScript
 	    
 	    if [ -n "$input_file" ];then
 		echo "$mpi_launcher $EXE $ARGS < $input_file" >> $jobScript
 	    else
-		echo "$mpi_launcher $EXE $ARGS"		     >> $jobScript
+		echo "$mpi_launcher $EXE $ARGS"		      >> $jobScript
 	    fi
 
 	    # Submit batch job
@@ -342,6 +352,33 @@ run_mpi_binary () {
 	else
 	    ERROR_RETURN "Unsupported MPI family"
 	fi
+    elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
+	jobScript=/tmp/job.$USER.$RANDOM
+
+	# infer tasks/node from total tasks
+	let tasksPerNode="$NTASKS / $NNODES"
+
+	echo "#!/bin/bash"		                      > $jobScript
+	echo "#PBS -N OpenHPC-test"                          >> $jobScript
+	echo "#PBS -l select=$NNODES:mpiprocs=$tasksPerNode" >> $jobScript
+	echo "#PBS -l walltime=00:$timeout:00"               >> $jobScript
+	echo "#PBS -o job.out"                              >> $jobScript
+	echo "cd \$PBS_O_WORKDIR"                            >> $jobScript
+
+	if [ -n "$input_file" ];then
+	    echo "$mpi_launcher $EXE $ARGS < $input_file" >> $jobScript
+	else
+	    echo "$mpi_launcher $EXE $ARGS"		  >> $jobScript
+	fi
+
+	# Submit batch job
+	qsub -W block=true $jobScript
+	rc=$?
+
+	if [ -n "$output_file" ];then
+	    mv job.out $output_file
+	fi
+	return $rc
     else
 	ERROR_RETURN "Unsupported resource manager"
     fi
