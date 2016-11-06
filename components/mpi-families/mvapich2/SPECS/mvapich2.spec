@@ -41,19 +41,21 @@ BuildRequires: intel_licenses
 
 #-ohpc-header-comp-end------------------------------------------------
 
-# Multiple permutations for each MPI stack are possible depending
-# on the desired underlying resource manager support. 
+# Multiple permutations for this MPI stack are possible depending
+# on the desired underlying resource manager and comm library support. 
 
 %{!?with_slurm: %global with_slurm 0}
 %{!?with_pbs: %global with_pbs 0}
 %{!?with_psm: %global with_psm 0}
+%{!?with_psm2: %global with_psm2 0}
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
+%{!?COMM_DELIM: %global COMM_DELIM %{nil}}
 
-# Base package name
+# Base package name/config
 %define pname mvapich2
 
 Summary:   OSU MVAPICH2 MPI implementation
-Name:      %{pname}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
+Name:      %{pname}%{COMM_DELIM}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
 Version:   2.2
 Release:   1
 License:   BSD
@@ -82,8 +84,13 @@ Provides:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 
 %if 0%{with_psm}
 BuildRequires:  infinipath-psm infinipath-psm-devel
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
+%if 0%{with_psm2}
+BuildRequires:  hfi1-psm hfi1-psm-devel
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
 Buildrequires: ofed 
@@ -99,7 +106,7 @@ BuildRequires: libibmad-devel libibverbs-devel
 BuildRequires: librdmacm-devel
 
 # Default library install path
-%define install_path %{OHPC_MPI_STACKS}/%{name}/%version
+%define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
 %description 
 
@@ -128,7 +135,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 	    --enable-cxx \
 	    --enable-g=dbg \
             --with-device=ch3:mrail \
-%if %{with_psm}
+%if 0%{?with_pwm} || 0%{?with_psm2}
             --with-device=ch3:psm \
 %endif
 %if 0%{with_slurm}

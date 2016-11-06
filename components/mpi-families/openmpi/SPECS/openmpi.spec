@@ -41,7 +41,7 @@ BuildRequires: intel_licenses
 
 #-ohpc-header-comp-end------------------------------------------------
 
-# Base package name
+# Base package name/config
 %define pname openmpi
 %define with_openib 1
 
@@ -54,8 +54,17 @@ BuildRequires: intel_licenses
 %define with_lustre 0
 %define with_slurm 1
 
+# Default build is without psm2, but can be overridden
+%{!?with_psm2: %define with_psm2 0}
+
 Summary:   A powerful implementation of MPI
+
+%if 0%{with_psm2}
+Name:      %{pname}-psm2-%{compiler_family}%{PROJ_DELIM}
+%else
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
+
 Version:   1.10.4
 Release:   1
 License:   BSD-3-Clause
@@ -66,7 +75,6 @@ Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{vers
 #Source0:   http://www.open-mpi.org/software/ompi/v2.0/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
-
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
@@ -105,10 +113,15 @@ BuildRequires:  libibverbs-devel
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
-Requires:       prun%{PROJ_DELIM}
+%if %{with_psm2}
+BuildRequires:  hfi1-psm hfi1-psm-devel
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
+
+Requires: prun%{PROJ_DELIM}
 
 # Default library install path
-%define install_path %{OHPC_MPI_STACKS}/%{name}/%version
+%define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
 %description 
 
@@ -123,7 +136,6 @@ Open MPI jobs.
 
 %setup -q -n %{pname}-%{version}
 
-
 %build
 
 # OpenHPC compiler designation
@@ -133,7 +145,10 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 %if %{with_psm}
   BASEFLAGS="$BASEFLAGS --with-psm"
-%endif
+  %endif
+%if %{with_psm2}
+  BASEFLAGS="$BASEFLAGS --with-psm2"
+  %endif
 %if %{with_openib}
   BASEFLAGS="$BASEFLAGS --with-verbs"
 %endif
