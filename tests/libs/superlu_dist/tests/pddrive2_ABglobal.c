@@ -1,12 +1,23 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 
 
 /*! @file 
  * \brief Driver program for pdgssvx_ABglobal example
  *
  * <pre>
- * -- Distributed SuperLU routine (version 1.0) --
+ * -- Distributed SuperLU routine (version 4.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * September 1, 1999
+ * April 5, 2015
  * </pre>
  */
 
@@ -36,7 +47,7 @@
 
 int main(int argc, char *argv[])
 {
-    superlu_options_t options;
+    superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
     ScalePermstruct_t ScalePermstruct;
@@ -53,6 +64,10 @@ int main(int argc, char *argv[])
     FILE *fp, *fopen();
     extern int cpp_defs();
 
+    /* prototypes */
+    extern void LUstructInit(const int_t, LUstruct_t *);
+    extern void LUstructFree(LUstruct_t *);
+    extern void Destroy_LU(int_t, gridinfo_t *, LUstruct_t *);
 
     nprow = 1;  /* Default process rows.      */
     npcol = 1;  /* Default process columns.   */
@@ -115,7 +130,7 @@ int main(int argc, char *argv[])
 	
 	printf("Input matrix file: %s\n", *cpp);
 	printf("\tDimension\t%dx%d\t # nonzeros %d\n", m, n, nnz);
-	printf("\tProcess grid\t%d X %d\n", grid.nprow, grid.npcol);
+	printf("\tProcess grid\t%d X %d\n", (int) grid.nprow, (int) grid.npcol);
 
 	/* Broadcast matrix A to the other PEs. */
 	MPI_Bcast( &m,   1,   mpi_int_t,  0, grid.comm );
