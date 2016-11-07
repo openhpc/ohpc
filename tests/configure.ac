@@ -347,12 +347,6 @@ AC_ARG_ENABLE([prk],
    [AX_OPTION_DEFAULT(type=long,enable_prk,no)])
 AM_CONDITIONAL(PRK_ENABLED,test "x$enable_prk" = "xyes" )
 #------------------------------------------------------------------------------------------
-# PACKAGING
-AC_ARG_ENABLE([packaging],
-   [AS_HELP_STRING([--enable-packaging],[Enable Packaging tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_packaging,yes)])
-AM_CONDITIONAL(PACKAGING_ENABLED,test "x$enable_packaging" = "xyes" )
-#------------------------------------------------------------------------------------------
 
 AC_OUTPUT( Makefile 
        common/TEST_ENV
