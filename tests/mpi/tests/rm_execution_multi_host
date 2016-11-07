@@ -9,6 +9,7 @@ if [ -s ../../TEST_ENV ];then
 fi
 
 check_rms
+RMS=$RESOURCE_MANAGER
 
 NODES=2
 TASKS=8
