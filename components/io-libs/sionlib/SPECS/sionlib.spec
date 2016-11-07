@@ -111,7 +111,7 @@ CONFIGURE_OPTIONS="--compiler=intel "
 %endif
 
 %if %{mpi_family} == impi
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel3 "
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel2 "
 %endif
 
 %if %{mpi_family} == mpich
