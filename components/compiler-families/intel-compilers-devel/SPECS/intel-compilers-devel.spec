@@ -15,7 +15,7 @@
 %define year 2017
 
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
-Name:      %{pname}-%{year}%{PROJ_DELIM}
+Name:      %{pname}-%{PROJ_DELIM}
 Version:   %{year}
 Release:   1
 License:   Apache-2.0
@@ -33,6 +33,7 @@ AutoReq: no
 BuildRequires:-post-build-checks
 
 Requires: gcc-c++
+Requires: grep
 Requires: intel-compxe-doc >= 2016
 
 Provides: %{pname}%{PROJ_DELIM}
