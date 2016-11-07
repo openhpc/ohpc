@@ -158,7 +158,8 @@ make DSuperLUroot=$PWD
 
 mkdir tmp
 (cd tmp; ar x ../SRC/libsuperlu_dist.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
+mkdir %{buildroot}%{install_path}/lib
+mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o %{buildroot}%{install_path}/lib/%{libname}.so.%{version} tmp/*.o
 pushd %{buildroot}%{install_path}/lib
 ln -s %{libname}.so.%{version} %{libname}.so
 popd
