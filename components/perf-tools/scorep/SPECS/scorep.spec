@@ -123,23 +123,23 @@ module load pdtoolkit
 module load sionlib
 
 %if %{compiler_family} == intel
-CONFIGURE_OPTIONS="--with-nocross-compiler-suite=intel "
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-nocross-compiler-suite=intel "
 %endif
 
 %if %{mpi_family} == impi
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel3 "
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=intel3 "
 %endif
 
 %if %{mpi_family} == mpich
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
 %endif
 
 %if %{mpi_family} == mvapich2
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
 %endif
 
 %if %{mpi_family} == openmpi
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
 ./configure --prefix=%{install_path} $CONFIGURE_OPTIONS
