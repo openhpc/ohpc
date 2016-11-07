@@ -15,7 +15,7 @@
 %define year 2017
 
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
-Name:      %{pname}-%{year}%{PROJ_DELIM}
+Name:      %{pname}%{PROJ_DELIM}
 Version:   %{year}
 Source1:   OHPC_macros
 Release:   1
@@ -30,7 +30,7 @@ BuildRequires:-post-build-checks
 
 Requires: prun%{PROJ_DELIM}
 Requires: intel-mpi-doc >= %{year}
-Requires: intel-compilers-devel-%{year}%{PROJ_DELIM}
+Requires: intel-compilers-devel%{PROJ_DELIM}
 Provides: %{pname}%{PROJ_DELIM}
 
 Provides: libmpi.so.12()(64bit)
