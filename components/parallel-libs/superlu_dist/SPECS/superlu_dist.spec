@@ -158,11 +158,10 @@ make DSuperLUroot=$PWD
 
 mkdir tmp
 (cd tmp; ar x ../SRC/libsuperlu_dist.a)
-mkdir %{buildroot}%{install_path}/lib
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o %{buildroot}%{install_path}/lib/%{libname}.so.%{version} tmp/*.o
-pushd %{buildroot}%{install_path}/lib
-ln -s %{libname}.so.%{version} %{libname}.so
-popd
+mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o SRC/%{libname}.so.%{version} tmp/*.o
+#pushd %{buildroot}%{install_path}/lib
+#ln -s %{libname}.so.%{version} %{libname}.so
+#popd
 
 
 %install
@@ -178,7 +177,7 @@ install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
               %{buildroot}%{install_path}/include/
 
 %{__mkdir_p} %{buildroot}%{install_path}/lib
-install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
+install -m 755 SRC/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.%{major}
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
