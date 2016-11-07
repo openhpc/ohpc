@@ -180,6 +180,9 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if { ![is-loaded python]  } {
       module load python
     }
+  if { [is-loaded gnu] && ![is-loaded openblas] } {
+      module load openblas
+    }
 }
 
 prepend-path    PATH                %{install_path}/bin
