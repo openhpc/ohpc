@@ -1,3 +1,8 @@
+% begin_ohpc_run
+% ohpc_comment_header Allow for optional sleep to wait for provisioning to complete
+% ohpc_command sleep ${provision_wait}
+% end_ohpc_run
+
 In section \S\ref{sec:basic_install}, the \rms{} workload manager was installed
 and configured for use on both the {\em master} host and {\em compute} node
 instances. With the cluster nodes up and functional, we can now startup the
@@ -32,3 +37,4 @@ the following for-loop:
         done
 \end{lstlisting}
 % end_ohpc_run
+
