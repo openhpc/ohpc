@@ -111,7 +111,19 @@ CONFIGURE_OPTIONS="--compiler=intel "
 %endif
 
 %if %{mpi_family} == impi
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel2 "
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel3 "
+%endif
+
+%if %{mpi_family} == mpich
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
+%endif
+
+%if %{mpi_family} == mvapich2
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
+%endif
+
+%if %{mpi_family} == openmpi
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 
 ./configure --prefix=%{buildroot}%{install_path} $CONFIGURE_OPTIONS
