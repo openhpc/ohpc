@@ -157,7 +157,7 @@ cmake  \
 make DSuperLUroot=$PWD 
 
 mkdir tmp
-(cd tmp; ar x ../lib/libsuperlu_dist.%{version}.a)
+(cd tmp; ar x ../SRC/libsuperlu_dist.%{version}.a)
 mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
 pushd %{buildroot}%{install_path}/lib
 ln -s %{libname}.so.%{version} %{libname}.so
