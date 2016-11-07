@@ -182,16 +182,18 @@ cp /usr/lib/rpm/config.guess config
 %endif
 
 ./configure --prefix=%{install_path} \
+    --enable-shared=yes \
+    --enable-static=no \
 	--with-mxml=/usr \
 	--with-lustre=/usr/include/lustre \
 	--with-phdf5="$HDF5_DIR" \
 	--with-zlib=/usr \
-        --without-atl \
-        --without-cercs_env \
-        --without-dill \
-        --without-evpath \
-        --without-fastbit \
-        --without-ffs \
+    --without-atl \
+    --without-cercs_env \
+    --without-dill \
+    --without-evpath \
+    --without-fastbit \
+    --without-ffs \
 	--with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
 # bzip2 support is confusing CMtests
 #	--with-bzip2=/usr \
