@@ -28,15 +28,15 @@
 #-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
-%{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family:      %global mpi_family openmpi}
+%{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family:      %define mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -64,6 +64,10 @@ BuildRequires: intel_licenses
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
+%endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
@@ -72,10 +76,6 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
 
 #-ohpc-header-comp-end-------------------------------
 
@@ -83,11 +83,11 @@ Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %define pname superlu_dist
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define major   5
+%define major   4
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        5.1.0
+Version:        4.2
 Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
@@ -95,11 +95,11 @@ Group:          %{PROJ_NAME}/parallel-libs
 URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Patch0:         superlu_dist-4.1-sequence-point.patch
-Patch1:         superlu_dist-5.1-parmetis.patch
-Patch2:         superlu_dist-5.1-cmake.patch
+Patch1:         superlu_dist-4.2-make.patch
+Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
+Patch3:         superlu_dist-4.1-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
-BuildRequires:  cmake
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{OHPC_PUB}/doc/contrib
 
@@ -129,7 +129,8 @@ solutions.
 %setup -q -n SuperLU_DIST_%{version}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p0
+%patch2 -p1
+%patch3 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -144,30 +145,19 @@ module load metis
 module load scalapack
 %endif
 
-cmake  \
-     -DCMAKE_C_COMPILER=mpicc \
-     -DCMAKE_C_FLAGS="-std=c99 -Wall -fPIC -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0" \
-     -DCMAKE_Fortran_COMPILER=mpif90 \
-     -DCMAKE_Fortran_FLAGS="-fPIC" \
-     -Denable_parmetislib=OFF \
-     -Denable_blaslib=ON \
-     -DCMAKE_EXE_LINKER_FLAGS="-shared" \
-     -DCMAKE_INSTALL_PREFIX=%{buildroot}%{install_path}
-
-make DSuperLUroot=$PWD 
+make superlulib DSuperLUroot=$PWD 
 
 mkdir tmp
-(cd tmp; ar x ../SRC/libsuperlu_dist.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o SRC/%{libname}.so.%{version} tmp/*.o
-#pushd %{buildroot}%{install_path}/lib
-#ln -s %{libname}.so.%{version} %{libname}.so
-#popd
+(cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
+mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
+pushd lib
+ln -s %{libname}.so.%{version} %{libname}.so
+popd
 
 
 %install
 
 %{__mkdir_p} %{buildroot}%{install_path}/etc
-sed -i 's|%{buildroot}||g' make.inc
 install -m644 make.inc %{buildroot}%{install_path}/etc
 
 %{__mkdir_p} %{buildroot}%{install_path}/include
@@ -177,9 +167,9 @@ install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
               %{buildroot}%{install_path}/include/
 
 %{__mkdir_p} %{buildroot}%{install_path}/lib
-install -m 755 SRC/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
+install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.%{major}
+ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
 
@@ -194,8 +184,8 @@ puts stderr " "
 puts stderr "This module loads the SuperLU_dist library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of SuperLU_dist leverages the metis library."
-puts stderr "Consequently, this package is loaded automatically with this module."
+puts stderr "Note that this build of SuperLU_dist leverages the metis and MKL libraries."
+puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
 
@@ -250,3 +240,4 @@ rm -rf %{buildroot}
 %doc README
 
 %changelog
+
