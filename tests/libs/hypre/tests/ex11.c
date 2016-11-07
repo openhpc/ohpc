@@ -44,8 +44,6 @@ int main (int argc, char *argv[])
 
    int vis;
 
-   double h, h2;
-
    HYPRE_IJMatrix A;
    HYPRE_ParCSRMatrix parcsr_A;
    HYPRE_IJVector b;
@@ -122,8 +120,6 @@ int main (int argc, char *argv[])
    /* Preliminaries: want at least one processor per row */
    if (n*n < num_procs) n = sqrt(num_procs) + 1;
    N = n*n; /* global number of rows */
-   h = 1.0/(n+1); /* mesh size*/
-   h2 = h*h;
 
    /* Each processor knows only of its own rows - the range is denoted by ilower
       and iupper.  Here we partition the rows. We account for the fact that
@@ -272,7 +268,7 @@ int main (int argc, char *argv[])
 
       /* eigenvectors - get a pointer */
       {
-         mv_TempMultiVector* tmp = mv_MultiVectorGetData(eigenvectors);
+		  mv_TempMultiVector* tmp = (mv_TempMultiVector*) mv_MultiVectorGetData(eigenvectors);
          pvx = (HYPRE_ParVector*)(tmp -> vector);
       }
 

@@ -434,7 +434,7 @@ int main (int argc, char *argv[])
       HYPRE_StructVectorInitialize(b);
       HYPRE_StructVectorInitialize(x);
 
-      values = calloc((n*n), sizeof(double));
+      values = (double*) calloc((n*n), sizeof(double));
 
       /* Set the values of b in left-to-right, bottom-to-top order */
       for (k = 0, j = 0; j < n; j++)
@@ -471,7 +471,7 @@ int main (int argc, char *argv[])
                                                       to the offsets */
          double *values;
 
-         values = calloc(5*(n*n), sizeof(double));
+         values = (double*) calloc(5*(n*n), sizeof(double));
 
          /* The order is left-to-right, bottom-to-top */
          for (k = 0, j = 0; j < n; j++)
@@ -502,7 +502,7 @@ int main (int argc, char *argv[])
          int stencil_indices[3] = {0, 1, 2};
          double *values;
 
-         values = calloc(3*(n*n), sizeof(double));
+         values = (double*) calloc(3*(n*n), sizeof(double));
 
          /* The order is left-to-right, bottom-to-top */
          for (k = 0, j = 0; j < n; j++)
@@ -538,8 +538,8 @@ int main (int argc, char *argv[])
       else
          nentries = 3;
 
-      values  = calloc(nentries*n, sizeof(double));
-      bvalues = calloc(n, sizeof(double));
+      values  = (double*) calloc(nentries*n, sizeof(double));
+      bvalues = (double*) calloc(n, sizeof(double));
 
       /* The stencil at the boundary nodes is 1-0-0-0-0. Because
          we have I x_b = u_0; */
@@ -1111,7 +1111,7 @@ int main (int argc, char *argv[])
       char filename[255];
 
       int nvalues = n*n;
-      double *values = calloc(nvalues, sizeof(double));
+      double *values =  (double*) calloc(nvalues, sizeof(double));
 
       /* get the local solution */
       HYPRE_StructVectorGetBoxValues(x, ilower, iupper, values);
