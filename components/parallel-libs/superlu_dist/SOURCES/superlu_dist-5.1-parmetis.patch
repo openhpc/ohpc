@@ -19,3 +19,18 @@
    mc64ad_dist.c
    static_schedule.c
    xerr_dist.c
+--- SuperLU_DIST_5.1.0/SRC/superlu_defs.h	2016-05-15 22:16:44.000000000 -0700
++++ SuperLU_DIST_5.1.0.patch/SRC/superlu_defs.h	2016-11-06 21:09:51.000000000 -0800
+@@ -683,10 +683,10 @@
+ (int,  int, SuperMatrix *, int_t *, int_t *,  int_t *, int_t *,
+  Pslu_freeable_t *, MPI_Comm *, MPI_Comm *,  superlu_dist_mem_usage_t *);
+ 
+-/* Get the column permutation using parmetis */
++/* Get the column permutation using parmetis
+ extern float get_perm_c_parmetis 
+ (SuperMatrix *, int_t *, int_t *, int, int, 
+- int_t **, int_t **, gridinfo_t *, MPI_Comm *);
++ int_t **, int_t **, gridinfo_t *, MPI_Comm *); */
+ 
+ /* Auxiliary routines for memory expansions used during
+    the parallel symbolic factorization routine */

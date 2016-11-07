@@ -128,7 +128,7 @@ solutions.
 %prep
 %setup -q -n SuperLU_DIST_%{version}
 %patch0 -p1
-#%patch1 -p1
+%patch1 -p1
 %patch2 -p0
 
 %build
