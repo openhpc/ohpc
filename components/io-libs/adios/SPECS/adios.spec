@@ -186,7 +186,6 @@ cp /usr/lib/rpm/config.guess config
 ./configure --prefix=%{install_path} \
     --enable-shared=yes \
     --enable-static=no \
-#    --with-mxml=/usr \
 %if 0%{with_lustre}
     --with-lustre=/usr/include/lustre \
 %endif
@@ -200,7 +199,8 @@ cp /usr/lib/rpm/config.guess config
     --without-ffs \
     --with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
 # bzip2 support is confusing CMtests
-#	--with-bzip2=/usr \
+    #	--with-bzip2=/usr \
+    #    --with-mxml=/usr \
 
 # modify libtool script to not hardcode library paths
 sed -i -r -e 's/(hardcode_into_libs)=.*$/\1=no/' \
