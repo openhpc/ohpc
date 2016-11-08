@@ -72,6 +72,7 @@ patch -p0 < %{_sourcedir}/bootstrap_eb.py-apply-patch.patch
 export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export EASYBUILD_BOOTSTRAP_DEBUG=1
+export DEBUG_EASYBUILD_OPTIONS=1
 export EASYBUILD_INSTALLPATH=%{install_path}
 export EASYBUILD_VERSION=%{version}
 export PATH=${LMOD_DIR}:${PATH}
