@@ -205,7 +205,6 @@ EOF
 
 %files
 %defattr(-,root,root)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc INSTALL.rst.txt
 %doc LICENSE.txt
