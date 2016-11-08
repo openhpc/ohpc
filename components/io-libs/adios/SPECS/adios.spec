@@ -63,9 +63,6 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 # not generating a debug package, CentOS build breaks without this if no debug package defined
 %define debug_package %{nil}
 
-#define somver 0
-#define sover %somver.0.0
-
 # Base package name
 %define pname adios
 %define PNAME %(tr [a-z] [A-Z] <<< %{pname})
@@ -83,12 +80,8 @@ Source1: OHPC_macros
 Source2: OHPC_setup_compiler
 AutoReq: no
 
-# Minimum Build Requires - our mxml build included devel headers in libmxml1
-#BuildRequires: libmxml1 cmake zlib-devel glib2-devel
-#Requires:      libmxml1 zlib
 BuildRequires: zlib-devel glib2-devel
 Requires:      zlib
-
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
@@ -280,6 +273,12 @@ module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
 set             version             %{version}
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { ![is-loaded phdf5]  } {
+      module load phdf5
+    }
+}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
