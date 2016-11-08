@@ -124,7 +124,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %setup -q -n MUMPS_%{version}
 %patch0 -p1
 %patch1 -p1
-%patch1 -p2
+%patch2 -p2
 
 %build
 
