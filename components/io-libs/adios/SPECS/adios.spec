@@ -58,11 +58,13 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 #-ohpc-header-comp-end------------------------------------------------
 
+%{!?with_lustre: %global with_lustre 0}
+
 # not generating a debug package, CentOS build breaks without this if no debug package defined
 %define debug_package %{nil}
 
-%define somver 0
-%define sover %somver.0.0
+#define somver 0
+#define sover %somver.0.0
 
 # Base package name
 %define pname adios
@@ -97,16 +99,16 @@ Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-#BuildRequires: libmpe2-devel
-#BuildRequires: python-modules-xml
 BuildRequires: python-%{compiler_family}%{PROJ_DELIM}
-#BuildRequires: bzlib-devel
-#BuildRequires: libsz2-devel
+
+%if 0%{with_lustre}
 # This is the legacy name for lustre-lite
 # BuildRequires: liblustre-devel
 BuildRequires: lustre-lite
-BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 Requires: lustre-client%{PROJ_DELIM}
+%endif
+BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
+
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
@@ -184,17 +186,19 @@ cp /usr/lib/rpm/config.guess config
 ./configure --prefix=%{install_path} \
     --enable-shared=yes \
     --enable-static=no \
-	--with-mxml=/usr \
-	--with-lustre=/usr/include/lustre \
-	--with-phdf5="$HDF5_DIR" \
-	--with-zlib=/usr \
+    --with-mxml=/usr \
+%if 0%{with_slurm}
+    --with-lustre=/usr/include/lustre \
+%endif
+    --with-phdf5="$HDF5_DIR" \
+    --with-zlib=/usr \
     --without-atl \
     --without-cercs_env \
     --without-dill \
     --without-evpath \
     --without-fastbit \
     --without-ffs \
-	--with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
+    --with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
 # bzip2 support is confusing CMtests
 #	--with-bzip2=/usr \
 
