@@ -114,7 +114,8 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
 %if %{with_psm2}
-BuildRequires:  libpsm2 libpsm2-devel
+BuildRequires:  libpsm2-devel >= 10.2.0
+Requires:       libpsm2 >= 10.2.0
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
