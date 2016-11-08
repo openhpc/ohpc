@@ -28,15 +28,15 @@
 #-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
-%{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family:      %global mpi_family openmpi}
+%{!?compiler_family: %define compiler_family gnu}
+%{!?mpi_family:      %define mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -84,11 +84,11 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        2.11.1
+Version:        2.10.1
 Release:        0
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
-Group:          %{PROJ_NAME}/parallel-libs
+Group:          ohpc/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         https://computation.llnl.gov/project/linear_solvers/download/hypre-%{version}.tar.gz
 %if 0%{?suse_version} <= 1110
@@ -99,6 +99,8 @@ Source:         https://computation.llnl.gov/project/linear_solvers/download/hyp
 #BuildRequires:  libltdl-devel
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:  superlu-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 BuildRequires:  python-devel
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
@@ -130,20 +132,16 @@ phenomena in the defense, environmental, energy, and biological sciences.
 
 %build
 
-# override with newer config.guess for aarch64
-%ifarch aarch64
-cp /usr/lib/rpm/config.guess src/config
-%endif
-
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
+module load superlu_dist
 
 %if %{compiler_family} == gnu
-module load openblas
+module load scalapack
 %endif
 
 
@@ -151,6 +149,7 @@ FLAGS="%optflags -fPIC"
 cd src
 ./configure \
     --prefix=%{install_path} \
+    --without-examples \
     --with-MPI \
     --with-MPI-include=$MPI_DIR/include \
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
@@ -170,21 +169,21 @@ cd src
     --with-mli \
     --with-fei \
     --with-superlu \
+    --with-superlu_dist \
     CC="mpicc $FLAGS" \
     CXX="mpicxx $FLAGS" \
     F77="mpif77 $FLAGS"
 
-#mkdir -p hypre/lib
-#pushd FEI_mv/femli
-#make %{?_smp_mflags} all CC="mpicc $FLAGS" \
-#                         CXX="mpicxx $FLAGS" \
-#                         F77="mpif77 $FLAGS"
-#popd
+mkdir -p hypre/lib
+pushd FEI_mv/femli
 make %{?_smp_mflags} all CC="mpicc $FLAGS" \
                          CXX="mpicxx $FLAGS" \
                          F77="mpif77 $FLAGS"
-#cd ..
-
+popd
+make %{?_smp_mflags} all CC="mpicc $FLAGS" \
+                         CXX="mpicxx $FLAGS" \
+                         F77="mpif77 $FLAGS"
+cd ..
 
 %install
 
@@ -194,9 +193,10 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
+module load superlu_dist
 
 %if %{compiler_family} == gnu
-module load openblas
+module load scalapack
 %endif
 
 # %%makeinstall macro does not work with hypre
@@ -205,7 +205,6 @@ make install HYPRE_INSTALL_DIR=%{buildroot}%{install_path} \
              HYPRE_LIB_INSTALL=%{buildroot}%{install_path}/lib \
              HYPRE_INC_INSTALL=%{buildroot}%{install_path}/include
 install -m644 hypre/lib/* %{buildroot}%{install_path}/lib
-install -m644 lapack/hypre_lapack.h %{buildroot}%{install_path}/include
 
 # install LLNL FEI headers
 mkdir %{buildroot}%{install_path}/include/FEI_mv
@@ -249,7 +248,7 @@ puts stderr " "
 puts stderr "This module loads the hypre library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of hypre leverages the superlu and openblas (if necessary) libraries."
+puts stderr "Note that this build of hypre leverages the superlu and MKL libraries."
 puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
@@ -263,15 +262,18 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require superlu (and openblas for gnu compiler families)
+# Require superlu (and scalapack for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded superlu]  } {
         module load superlu
     }
+    if {  ![is-loaded superlu_dist]  } {
+        module load superlu_dist
+    }
     if { [is-loaded gnu] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
+        if { ![is-loaded scalapack]  } {
+          module load scalapack
         }
     }
 }
@@ -279,6 +281,7 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
@@ -307,4 +310,5 @@ EOF
 %doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
 
 %changelog
+
 
