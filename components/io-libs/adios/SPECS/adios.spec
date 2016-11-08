@@ -187,7 +187,7 @@ cp /usr/lib/rpm/config.guess config
     --enable-shared=yes \
     --enable-static=no \
     --with-mxml=/usr \
-%if 0%{with_slurm}
+%if 0%{with_lustre}
     --with-lustre=/usr/include/lustre \
 %endif
     --with-phdf5="$HDF5_DIR" \
