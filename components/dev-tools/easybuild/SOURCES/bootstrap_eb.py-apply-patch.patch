@@ -4,7 +4,7 @@
  
  EASYBUILD_BOOTSTRAP_SOURCEPATH = os.environ.pop('EASYBUILD_BOOTSTRAP_SOURCEPATH', None)
  EASYBUILD_BOOTSTRAP_SKIP_STAGE0 = os.environ.pop('EASYBUILD_BOOTSTRAP_SKIP_STAGE0', False)
-+EASYBUILD_VERSION = os.environ.pop('EASYBUILD_VERSION', None)
++EB_VERSION = os.environ.pop('EB_VERSION', None)
 +PYTHON_VERSION = os.environ.pop('PYTHON_VERSION', None)
  
  # keep track of original environment (after clearing PYTHONPATH)
@@ -14,7 +14,7 @@
      templates = stage1(tmpdir, sourcepath)
  
 +    # Apply 'non-x86' patch
-+    os.system("cd %s/eb_stage1/lib/python%s/site-packages/easybuild_easyblocks-%s-py%s.egg/easybuild/easyblocks; patch -p3 < %s/easybuild-easyblocks_non-x86.patch" % (tmpdir, PYTHON_VERSION, EASYBUILD_VERSION, PYTHON_VERSION, sourcepath))
++    os.system("cd %s/eb_stage1/lib/python%s/site-packages/easybuild_easyblocks-%s-py%s.egg/easybuild/easyblocks; patch -p3 < %s/easybuild-easyblocks_non-x86.patch" % (tmpdir, PYTHON_VERSION, EB_VERSION, PYTHON_VERSION, sourcepath))
 +
      # STAGE 2: install EasyBuild using EasyBuild (to final target installation dir)
      stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath)

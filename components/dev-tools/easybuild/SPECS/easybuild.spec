@@ -74,6 +74,7 @@ export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export EASYBUILD_BOOTSTRAP_DEBUG=1
 export DEBUG_EASYBUILD_OPTIONS=1
 export EASYBUILD_INSTALLPATH=%{install_path}
+export EB_VERSION=%{version}
 export PATH=${LMOD_DIR}:${PATH}
 export PYTHON_VERSION=`python -c 'print ".".join(map(str, __import__("sys").version_info[:2]))'`
 
