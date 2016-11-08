@@ -84,11 +84,11 @@ Source2: OHPC_setup_compiler
 AutoReq: no
 
 # Minimum Build Requires - our mxml build included devel headers in libmxml1
-BuildRequires: libmxml1 cmake zlib-devel glib2-devel
-Requires:      libmxml1 zlib
-#bzip support confuses the CMtests
-#Requires:      bzip2
-#BuildRequires: bzip2-devel
+#BuildRequires: libmxml1 cmake zlib-devel glib2-devel
+#Requires:      libmxml1 zlib
+BuildRequires: zlib-devel glib2-devel
+Requires:      zlib
+
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
@@ -186,7 +186,7 @@ cp /usr/lib/rpm/config.guess config
 ./configure --prefix=%{install_path} \
     --enable-shared=yes \
     --enable-static=no \
-    --with-mxml=/usr \
+#    --with-mxml=/usr \
 %if 0%{with_lustre}
     --with-lustre=/usr/include/lustre \
 %endif
