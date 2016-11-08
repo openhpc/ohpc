@@ -74,8 +74,9 @@ export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export EASYBUILD_BOOTSTRAP_DEBUG=1
 export DEBUG_EASYBUILD_OPTIONS=1
 export EASYBUILD_INSTALLPATH=%{install_path}
-export EB_VERSION=%{version}
 export PATH=${LMOD_DIR}:${PATH}
+# note: $EB_VERSION and $PYTHON_VERSION are only required because of bootstrap_eb.py-apply-patch.patch
+export EB_VERSION=%{version}
 export PYTHON_VERSION=`python -c 'print ".".join(map(str, __import__("sys").version_info[:2]))'`
 
 MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
