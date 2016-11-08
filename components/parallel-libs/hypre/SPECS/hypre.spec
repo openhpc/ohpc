@@ -64,6 +64,10 @@ BuildRequires: intel_licenses
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
+%endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
@@ -71,10 +75,6 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %if %{mpi_family} == openmpi
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 #-ohpc-header-comp-end-------------------------------
@@ -99,8 +99,6 @@ Source:         https://computation.llnl.gov/project/linear_solvers/download/hyp
 #BuildRequires:  libltdl-devel
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:  superlu-%{compiler_family}%{PROJ_DELIM}
-BuildRequires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 BuildRequires:  python-devel
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
@@ -143,10 +141,9 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
-module load superlu_dist
 
 %if %{compiler_family} == gnu
-module load scalapack
+module load openblas
 %endif
 
 
@@ -154,7 +151,6 @@ FLAGS="%optflags -fPIC"
 cd src
 ./configure \
     --prefix=%{install_path} \
-    --without-examples \
     --with-MPI \
     --with-MPI-include=$MPI_DIR/include \
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
@@ -174,21 +170,21 @@ cd src
     --with-mli \
     --with-fei \
     --with-superlu \
-    --with-superlu_dist \
     CC="mpicc $FLAGS" \
     CXX="mpicxx $FLAGS" \
     F77="mpif77 $FLAGS"
 
-mkdir -p hypre/lib
-pushd FEI_mv/femli
+#mkdir -p hypre/lib
+#pushd FEI_mv/femli
+#make %{?_smp_mflags} all CC="mpicc $FLAGS" \
+#                         CXX="mpicxx $FLAGS" \
+#                         F77="mpif77 $FLAGS"
+#popd
 make %{?_smp_mflags} all CC="mpicc $FLAGS" \
                          CXX="mpicxx $FLAGS" \
                          F77="mpif77 $FLAGS"
-popd
-make %{?_smp_mflags} all CC="mpicc $FLAGS" \
-                         CXX="mpicxx $FLAGS" \
-                         F77="mpif77 $FLAGS"
-cd ..
+#cd ..
+
 
 %install
 
@@ -198,10 +194,9 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
-module load superlu_dist
 
 %if %{compiler_family} == gnu
-module load scalapack
+module load openblas
 %endif
 
 # %%makeinstall macro does not work with hypre
@@ -254,7 +249,7 @@ puts stderr " "
 puts stderr "This module loads the hypre library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of hypre leverages the superlu and scalapack (if necessary) libraries."
+puts stderr "Note that this build of hypre leverages the superlu and openblas (if necessary) libraries."
 puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
@@ -268,18 +263,15 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require superlu (and scalapack for gnu compiler families)
+# Require superlu (and openblas for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded superlu]  } {
         module load superlu
     }
-    if {  ![is-loaded superlu_dist]  } {
-        module load superlu_dist
-    }
     if { [is-loaded gnu] } {
-        if { ![is-loaded scalapack]  } {
-          module load scalapack
+        if { ![is-loaded openblas]  } {
+          module load openblas
         }
     }
 }
