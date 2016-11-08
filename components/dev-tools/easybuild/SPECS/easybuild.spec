@@ -71,8 +71,6 @@ patch -p0 < %{_sourcedir}/bootstrap_eb.py-apply-patch.patch
 
 export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
-export EASYBUILD_BOOTSTRAP_DEBUG=1
-export DEBUG_EASYBUILD_OPTIONS=1
 export EASYBUILD_INSTALLPATH=%{install_path}
 export PATH=${LMOD_DIR}:${PATH}
 # note: $EB_VERSION and $PYTHON_VERSION are only required because of bootstrap_eb.py-apply-patch.patch
@@ -85,7 +83,10 @@ MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
 rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
 %endif
 rm bootstrap_eb.py*
-
+pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
+rm 2.9.0
+ln -s ../../all/EasyBuild/2.9.0 .
+popd
 
 # OHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULES}/EasyBuild
