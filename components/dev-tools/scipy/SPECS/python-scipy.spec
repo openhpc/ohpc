@@ -97,7 +97,7 @@ BuildRequires:  fdupes
 %endif
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  lapack-devel
-BuildRequires:  python-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  python-Cython
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}

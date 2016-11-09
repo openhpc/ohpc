@@ -63,8 +63,8 @@ Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  python-%{compiler_family}%{PROJ_DELIM} python-setuptools
-Requires:       python-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  python-devel python-setuptools
+Requires:       python
 Provides:       numpy = %{version}
 %if 0%{?suse_version}
 BuildRequires:  fdupes

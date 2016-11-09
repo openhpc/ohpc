@@ -92,7 +92,7 @@ Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: python-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: python-devel
 
 %if 0%{with_lustre}
 # This is the legacy name for lustre-lite
