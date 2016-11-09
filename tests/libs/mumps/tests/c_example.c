@@ -13,6 +13,7 @@
 #include <string.h>
 #include "mpi.h"
 #include "dmumps_c.h"
+#include "assert.h"
 #define JOB_INIT -1
 #define JOB_END -2
 #define USE_COMM_WORLD -987654
@@ -76,6 +77,12 @@ int main(int argc, char ** argv)
   if (myid == 0) {
     printf("Solution is : (%8.2f  %8.2f)\n", rhs[0],rhs[1]);
   }
+
+  if(myid == 0) {
+    assert( rhs[1] > 1.99999 );
+    assert( rhs[1] < 2.00001 );
+  }
+
   ierr = MPI_Finalize();
   return 0;
 }

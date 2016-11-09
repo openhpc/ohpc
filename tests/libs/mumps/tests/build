@@ -6,7 +6,9 @@ source ../../../common/functions || exit 1
 
 @test "[Mumps] build Mumps executables ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 
-    make -f Makefile.ohpc clean >& /dev/null
-    make -f Makefile.ohpc all   >& /dev/null
+    run make -f Makefile.ohpc clean 
+    assert_success
+    run make -f Makefile.ohpc all
+    assert_success
 
 }
