@@ -161,7 +161,6 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 module load openblas
 %endif
 
-module load python
 module load numpy
 
 CFLAGS="%{optflags} -fno-strict-aliasing" \
@@ -188,7 +187,6 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 module load openblas
 %endif
 
-module load python
 module load numpy
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
 find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
@@ -231,9 +229,6 @@ setenv          %{PNAME}_DIR        %{install_path}
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded fftw]  } {
         module load fftw
-    }
-    if {  ![is-loaded python]  } {
-        module load python
     }
     if {  ![is-loaded numpy]  } {
         module load numpy

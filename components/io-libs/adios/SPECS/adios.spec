@@ -146,7 +146,6 @@ export CFLAGS="-fp-model strict $CFLAGS"
 module load autotools
 module load phdf5
 module load netcdf
-module load python
 module load numpy
 
 TOPDIR=$PWD
@@ -224,7 +223,6 @@ export PATH=$(pwd):$PATH
 %if %{compiler_family} == gnu
 module load openblas
 %endif
-module load python
 module load numpy
 export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy

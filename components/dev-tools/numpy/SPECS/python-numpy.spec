@@ -101,8 +101,6 @@ basic linear algebra and random number generation.
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-module load python
-
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
 [mkl]
@@ -129,8 +127,6 @@ EOF
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-module load python
-
 %if %{compiler_family} == gnu
 module load openblas
 %endif
@@ -146,8 +142,6 @@ python setup.py build $COMPILER_FLAG
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
-
-module load python
 
 python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 %if 0%{?suse_version}
@@ -177,9 +171,6 @@ module-whatis "URL %{url}"
 set     version             %{version}
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded python]  } {
-      module load python
-    }
   if { [is-loaded gnu] && ![is-loaded openblas] } {
       module load openblas
     }
