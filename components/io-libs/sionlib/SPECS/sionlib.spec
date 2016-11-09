@@ -107,7 +107,7 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
 %if %{compiler_family} == intel
-CONFIGURE_OPTIONS="--compiler=intel "
+CONFIGURE_OPTIONS="--compiler=intel --disable-parutils "
 %endif
 
 %if %{mpi_family} == impi
