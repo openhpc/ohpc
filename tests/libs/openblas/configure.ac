@@ -5,7 +5,6 @@
 AC_PREREQ(2.59)
 AC_INIT([openblas], 0.2.14, karl.w.schulz@intel.com)
 AM_INIT_AUTOMAKE([foreign])
-AC_CONFIG_MACRO_DIR([m4])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 # verify we have necessary openblas environment variables set
