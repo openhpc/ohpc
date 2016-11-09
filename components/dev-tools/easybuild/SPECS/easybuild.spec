@@ -80,11 +80,11 @@ export PYTHON_VERSION=`python -c 'print ".".join(map(str, __import__("sys").vers
 
 MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
-%ifarch aarch64
-rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
-$else
+#%ifarch aarch64
+#rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
+#$else
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/modules/all/EasyBuild/2.9.0
-%endif
+#%endif
 rm bootstrap_eb.py*
 pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
 rm 2.9.0
