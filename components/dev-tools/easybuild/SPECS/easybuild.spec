@@ -82,9 +82,10 @@ MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 %ifarch aarch64
 rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
+$else
+sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/modules/all/EasyBuild/2.9.0
 %endif
 rm bootstrap_eb.py*
-sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/modules/all/EasyBuild/2.9.0
 pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
 rm 2.9.0
 ln -s ../../all/EasyBuild/2.9.0 .
