@@ -10,8 +10,8 @@ else
     ERROR "TEST_ENV does not exist"
 fi
 
-CMD_TIMEOUT="10:00"
-TEST_NUM_RANKS=8
+CMD_TIMEOUT="2:00"
+TEST_NUM_RANKS=4
 TEST_NUM_THREADS=4
 
 check_rms
