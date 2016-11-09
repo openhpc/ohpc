@@ -170,6 +170,9 @@ cd src
     --with-fei \
     --with-superlu \
     --with-superlu_dist \
+%ifarch aarch64
+    --build=aarch64 \
+%endif
     CC="mpicc $FLAGS" \
     CXX="mpicxx $FLAGS" \
     F77="mpif77 $FLAGS"
