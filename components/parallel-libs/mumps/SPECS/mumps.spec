@@ -184,7 +184,7 @@ cp -f %{S:4} Makefile.inc
 make MUMPS_MPI=$OHPC_MPI_FAMILY \
      FC=mpif77 \
      MUMPS_LIBF77="$LIBS" \
-     OPTC="$RPM_OPT_FLAGS" alllib
+     OPTC="$RPM_OPT_FLAGS" all
 
 
 
