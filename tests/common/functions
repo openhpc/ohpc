@@ -187,23 +187,25 @@ run_serial_binary () {
    elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
 
 	# pbs presently won't search PATH and doesn't run out of cwd;cull out full path to $EXE
+	echo "EXE = $EXE"
 	local myPath=`command -v $EXE`
 	myPath=`readlink -f $myPath`
+	echo "mypath = $myPath"
 
+	# Generate script with commands so we can execute out of submission directory
+	jobScript=".job.$RANDOM"
+	echo "#!/bin/bash" > $jobScript
+	echo "cd \${PBS_O_WORKDIR}" >> $jobScript
+	echo $EXE "$@" >> $jobScript
+	chmod 700 $jobScript
+	
         if [ -n "$output_file" ];then
-            qsub -k oe -W block=true -l select=1 -l walltime=00:$timeout:00 -- $myPath "$@" > .job_in
+            qsub -k oe -W block=true -l select=1 -l walltime=00:$timeout:00 -- `readlink -f $jobScript` > .job_in
 	    JOB=`cat .job_in | awk -F . '{print $1}'`
 	    [[ -e ${HOME}/STDIN.o${JOB} ]] || exit 1
 	    mv ${HOME}/STDIN.o${JOB} $output_file
 	    cat $output_file
         else
-	    # Generate script with commands so we can execute out of submission directory
-	    jobScript=".job.$RANDOM"
-	    echo "#!/bin/bash" > $jobScript
-	    echo "cd \${PBS_O_WORKDIR}" >> $jobScript
-	    echo $EXE "$@" >> $jobScript
-	    chmod 700 $jobScript
-
             qsub -k n -W block=true -l select=1 -l walltime=00:$timeout:00 -- `readlink -f $jobScript`
 
 	    local statusCode=$?
