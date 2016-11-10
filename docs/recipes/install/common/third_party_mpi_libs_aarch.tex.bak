@@ -1,18 +1,17 @@
 
 % begin_ohpc_run
+% ohpc_comment_header Install 3rd Party Libraries and Tools \ref{sec:3rdparty}
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-# Install parallel libs for all available MPI toolchains
+[sms](*\#*) (*\groupinstall*) ohpc-serial-libs-gnu
+[sms](*\#*) (*\groupinstall*) ohpc-io-libs-gnu
+[sms](*\#*) (*\groupinstall*) ohpc-python-libs-gnu
+[sms](*\#*) (*\groupinstall*) ohpc-runtimes-gnu
+# Install parallel libs for all available MPI toolcains
 [sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-gnu-mpich
-[sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-gnu-mvapich2
 [sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-gnu-openmpi
 \end{lstlisting}
-% ohpc_indent 0
-% ohpc_command elif [[ ${enable_mpi_opa} -eq 1 ]];then
-% ohpc_indent 5
-% ohpc_command (*\groupinstall*) ohpc-parallel-libs-gnu-mvapich2
-% ohpc_command (*\groupinstall*) ohpc-parallel-libs-gnu-openmpi
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run

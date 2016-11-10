@@ -3,7 +3,7 @@
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-# Install parallel libs for all available MPI toolchains
+# Install parallel libs for all available MPI toolcains
 [sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-gnu-mpich
 [sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-gnu-mvapich2
 [sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-gnu-openmpi
