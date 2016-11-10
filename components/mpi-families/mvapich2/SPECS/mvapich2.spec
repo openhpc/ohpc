@@ -90,6 +90,7 @@ Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %if 0%{with_psm2}
 BuildRequires:  hfi1-psm hfi1-psm-devel
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
