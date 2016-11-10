@@ -11,43 +11,11 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 
-PKG="Boost/MKL ublas header"
+PKG="Boost/ublas"
 
+@test "[$PKG] bench1_ublas binary under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test="bench1_ublas "
 
-@test "[$PKG] bench1_mkl test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    test="bench1_mkl"
-#    ARGS="100 400 600"
-    CMD_TIMEOUT=30
-    echo $test 
-    if [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
-      if [ ! -x $test ];then
-          flunk "$test does not exist"
-      fi
-    fi
-
-    rm -f $test.results
-
-    run run_serial_binary -o $test.results ./$test #$ARGS 
-    if [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
-      assert_success
-    else
-      assert_failure
-    fi
-}
-
-@test "[$PKG] bench1_ublas test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    test="bench1_ublas"
-#    ARGS="100 400 600"
-    CMD_TIMEOUT=30
-    echo $test 
-    if [ ! -x $test ];then
-        flunk "$test does not exist"
-    fi
-
-    rm -f $test.results
-
-    run run_serial_binary -o $test.results ./$test #$ARGS 
+    run run_serial_binary ./$test
     assert_success
-
 }
-
