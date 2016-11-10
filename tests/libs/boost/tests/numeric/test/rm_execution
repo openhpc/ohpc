@@ -33,15 +33,6 @@ PKG="Boost/MKL ublas header"
     else
       assert_failure
     fi
-
-#   Verify a timing was recorded
-#    run grep "Total time" $test.results 
-#    assert_success
-
-#    run grep "Iterations" $test.results 
-#    assert_success
-
-#    mkl_iter_arr=($(grep Iterations $test.results | sed s/\ /\\n/g))
 }
 
 @test "[$PKG] bench1_ublas test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -58,13 +49,5 @@ PKG="Boost/MKL ublas header"
     run run_serial_binary -o $test.results ./$test #$ARGS 
     assert_success
 
-#   Verify a timing was recorded
-#    run grep "Total time" $test.results 
-#    assert_success
-
-#    run grep "Iterations" $test.results 
-#    assert_success
-
-#    ublas_iter_arr=($(grep Iterations $test.results | sed s/\ /\\n/g))
 }
 
