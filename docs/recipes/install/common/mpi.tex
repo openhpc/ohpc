@@ -3,14 +3,13 @@ the following MPI families and transport layers:
 
 \begin{table}[h]
 \centering
-\begin{tabular}{|l|l|l|l|}
-\hline
-             & Ethernet (TCP)         & Infiniband             & OmniPath               \\ \hline
-MPICH        & \multicolumn{1}{c|}{x} &                        &                        \\ \hline
-MVAPICH2     &                        & \multicolumn{1}{c|}{x} &                        \\ \hline
-MVAPICH2-psm &                        &                        & \multicolumn{1}{c|}{x} \\ \hline
-OpenMPI      & \multicolumn{1}{c|}{x} & \multicolumn{1}{c|}{x} &                        \\ \hline
-OpenMPI-psm  &                        &                        & \multicolumn{1}{c|}{x} \\ \hline
+\begin{tabular}{@{} *5l @{}}    \toprule
+             & Ethernet (TCP)         & Infiniband             & OmniPath               \\ \midrule
+\rowcolor{black!10} MPICH        & \multicolumn{1}{c}{\Checkmark}  &                        &                        \\
+MVAPICH2     &                        & \multicolumn{1}{c}{\Checkmark}  &                        \\
+\rowcolor{black!10} MVAPICH2-psm &                        &                        & \multicolumn{1}{c}{\Checkmark}  \\
+OpenMPI      & \multicolumn{1}{c}{\Checkmark}  & \multicolumn{1}{c}{\Checkmark}  &                        \\
+\rowcolor{black!10} OpenMPI-psm  &                        &                        & \multicolumn{1}{c}{\Checkmark}  \\ \bottomrule
 \end{tabular}
 \end{table}
 
