@@ -58,17 +58,7 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{common/enable_ohpc_repo}
-
-In addition to the \OHPC{} package repository, the {\em master} host also
-requires access to the standard distro repositories in order to resolve
-necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base and SDK repositories:
-
-\begin{itemize*}
-\item SLES12-SP1-12.1-0
-\item SLES12-SP1-SDK-12.1-0
-\end{itemize*}
-
+\input{common/sles_os_repos}
 \input{common/automation}
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
