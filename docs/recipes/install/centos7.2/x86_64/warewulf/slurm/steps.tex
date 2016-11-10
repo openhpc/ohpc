@@ -125,14 +125,7 @@ to the chosen {\em master} host.
 \end{lstlisting}
 % end_ohpc_run
 
-\begin{center}
-  \begin{tcolorbox}[]
-InfiniBand networks require a subnet management service that can be run either
-on a {\em master} node, or on the IB switch itself. The optimal placement of the
-subnet manager is beyond the scope of this document, but \baseOS{} provides the
-\texttt{opensm} package should you chose to run it on the {\em master} node.
-\end{tcolorbox}
-\end{center}
+\input{common/opensm}
 
 With the \InfiniBand{} drivers included, you can also enable (optional) IPoIB functionality
 which provides a mechanism to send IP packets over the IB network. If you plan
