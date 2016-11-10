@@ -35,7 +35,7 @@ fi
         flunk "missing $EXE"
     fi
 
-    run_mpi_binary -t $CMD_TIMEOUT -o log.imb-mpi1 $EXE "$ARGS" $NODES $TASKS
+    run_mpi_binary -t $CMD_TIMEOUT $EXE "$ARGS" $NODES $TASKS
     assert_success
 }
 
