@@ -45,6 +45,7 @@ AC_ARG_ENABLE([pxse],
 	 [AS_HELP_STRING([--enable-pxse],[Enable development tool tests with PXSE toolchain (default=no]))],
 	 [],[enable_pxse=no])
 
+# Default MPI families to test
 if test x$enable_pxse = xyes ;then
    AC_MSG_RESULT([yes])
    AC_SUBST(COMPILER_FAMILIES,["gnu intel"])       
@@ -55,7 +56,11 @@ else
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi"])
 fi
 
-
+# MPI families can be overriden by user
+AC_ARG_WITH(mpi-families,
+	[AS_HELP_STRING([--with-mpi-families=[MPI]],[Override desired MPI families])],
+	[MPI_FAMILIES=$withval])
+		      
 # Use customizable test driver
 #AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/test-driver-cmt'])
 
@@ -350,13 +355,13 @@ AM_CONDITIONAL(PRK_ENABLED,test "x$enable_prk" = "xyes" )
 
 AC_OUTPUT( Makefile 
        common/TEST_ENV
-	   admin/Makefile 
-	   user-env/Makefile 
-	   bos/Makefile
+       admin/Makefile 
+       user-env/Makefile 
+       bos/Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
-	   oob/Makefile
-	   lustre/Makefile
+       oob/Makefile
+       lustre/Makefile
        dev-tools/easybuild/Makefile
        admin/spack/Makefile
        dev-tools/numpy/Makefile
@@ -378,6 +383,7 @@ echo Build user.................... : $USER
 echo Build host.................... : ${ac_hostname}
 echo Configure date................ : `date +'%F %H:%M'`
 echo Build architecture............ : ${host}
+echo MPI Families.................. : ${MPI_FAMILIES}
 if test "x$enable_slurm" = "xyes" ; then
    echo Resource manager ............. : SLURM
 fi
