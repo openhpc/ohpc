@@ -223,7 +223,11 @@ run_mpi_binary () {
     # Parse optional arguments
     input_file=""
     output_file=""
-    timeout=1		# default job timeout (in minutes)
+    if [ "$RESOURCE_MANAGER" = "slurm" ];then
+	timeout=1		# default job timeout (in minutes)
+    else
+	timeout="00:01:00"
+    fi
 
     local OPTIND=1
     while getopts "i:o:s:t:" opt; do
@@ -363,7 +367,7 @@ run_mpi_binary () {
 	echo "#!/bin/bash"		                      > $jobScript
 	echo "#PBS -N OpenHPC-test"                          >> $jobScript
 	echo "#PBS -l select=$NNODES:mpiprocs=$tasksPerNode" >> $jobScript
-	echo "#PBS -l walltime=00:$timeout:00"               >> $jobScript
+	echo "#PBS -l walltime=$timeout"                     >> $jobScript
 	echo "#PBS -o job.out"                               >> $jobScript
 	echo "cd \$PBS_O_WORKDIR"                            >> $jobScript
 
