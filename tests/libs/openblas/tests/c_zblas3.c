@@ -564,6 +564,7 @@ void F77_ztrsm(int *order, char *rtlf, char *uplow, char *transp, char *diagn,
 }
 
 
+#ifndef OPENBLAS_ARCH_ARM64
 void F77_zgemm3m(int *order, char *transpa, char *transpb, int *m, int *n,
      int *k, CBLAS_TEST_ZOMPLEX *alpha, CBLAS_TEST_ZOMPLEX *a, int *lda,
      CBLAS_TEST_ZOMPLEX *b, int *ldb, CBLAS_TEST_ZOMPLEX *beta,
@@ -640,4 +641,5 @@ void F77_zgemm3m(int *order, char *transpa, char *transpb, int *m, int *n,
      cblas_zgemm3m( UNDEFINED, transa, transb, *m, *n, *k, alpha, a, *lda,
                   b, *ldb, beta, c, *ldc );
 }
+#endif
 
