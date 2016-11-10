@@ -14,12 +14,16 @@ recipe, recall that we previously registered credential files with Warewulf (e.g
 group, and shadow) so that these files would be propagated during compute node
 imaging. However, with the addition of a new ``test'' user above, the files
 have been outdated and we need to update the Warewulf database to incorporate
-the additions. This resync process can be accomplished as follows:
+the additions. This re-sync process can be accomplished as follows:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) wwsh file resync passwd shadow group
 \end{lstlisting}
+% end_ohpc_run
+
+% begin_ohpc_run
+% ohpc_command sleep 2
 % end_ohpc_run
 
 \begin{center}
