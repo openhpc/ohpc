@@ -14,8 +14,6 @@ rm=$RESOURCE_MANAGER
 
 testname="libs/openblas"
 
-NODES=1
-TASKS=1
 ARGS=0
 
 @test "[$testname/xscblat1] xscblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
@@ -23,7 +21,7 @@ ARGS=0
 	flunk "xscblat1 binary does not exit"
     fi
 
-    run_serial_binary ./xscblat1 $ARGS $NODES $TASKS
+    run_serial_binary ./xscblat1 $ARGS
     assert_success
 }
 
@@ -32,7 +30,7 @@ ARGS=0
 	flunk "xdcblat1 binary does not exit"
     fi
 
-    run_serial_binary ./xdcblat1 $ARGS $NODES $TASKS
+    run_serial_binary ./xdcblat1 $ARGS
     assert_success
 }
 
@@ -41,7 +39,7 @@ ARGS=0
 	flunk "xccblat1 binary does not exit"
     fi
 
-    run_serial_binary ./xccblat1 $ARGS $NODES $TASKS
+    run_serial_binary ./xccblat1 $ARGS
     assert_success
 }
 
@@ -50,7 +48,7 @@ ARGS=0
 	flunk "xzcblat1 binary does not exit"
     fi
 
-    run_serial_binary ./xzcblat1 $ARGS $NODES $TASKS
+    run_serial_binary ./xzcblat1 $ARGS
     assert_success
 }
 
@@ -59,7 +57,7 @@ ARGS=0
 	flunk "xscblat2 binary does not exit"
     fi
 
-    run_serial_binary ./xscblat2 "$ARGS < sin2" $NODES $TASKS
+    run_serial_binary ./xscblat2 "$ARGS < sin2"
     assert_success
 }
 
@@ -68,7 +66,7 @@ ARGS=0
 	flunk "xdcblat2 binary does not exit"
     fi
 
-    run_serial_binary ./xdcblat2 "$ARGS < din2" $NODES $TASKS
+    run_serial_binary ./xdcblat2 "$ARGS < din2"
     assert_success
 }
 
@@ -77,7 +75,7 @@ ARGS=0
 	flunk "xccblat2 binary does not exit"
     fi
 
-    run_serial_binary ./xccblat2 "$ARGS < cin2" $NODES $TASKS
+    run_serial_binary ./xccblat2 "$ARGS < cin2"
     assert_success
 }
 
@@ -86,7 +84,7 @@ ARGS=0
 	flunk "xzcblat2 binary does not exit"
     fi
 
-    run_serial_binary ./xzcblat2 "$ARGS < zin2" $NODES $TASKS
+    run_serial_binary ./xzcblat2 "$ARGS < zin2"
     assert_success
 }
 
@@ -95,7 +93,7 @@ ARGS=0
 	flunk "xscblat3 binary does not exit"
     fi
 
-    run_serial_binary ./xscblat3 "$ARGS < sin3" $NODES $TASKS
+    run_serial_binary ./xscblat3 "$ARGS < sin3"
     assert_success
 }
 
@@ -104,7 +102,7 @@ ARGS=0
 	flunk "xdcblat3 binary does not exit"
     fi
 
-    run_serial_binary ./xdcblat3 "$ARGS < din3" $NODES $TASKS
+    run_serial_binary ./xdcblat3 "$ARGS < din3"
     assert_success
 }
 
@@ -113,7 +111,7 @@ ARGS=0
 	flunk "xccblat3 binary does not exit"
     fi
 
-    run_serial_binary ./xccblat3 "$ARGS < cin3" $NODES $TASKS
+    run_serial_binary ./xccblat3 "$ARGS < cin3"
     assert_success
 }
 
@@ -122,6 +120,6 @@ ARGS=0
 	flunk "xzcblat3 binary does not exit"
     fi
 
-    run_serial_binary ./xzcblat3 "$ARGS < zin3" $NODES $TASKS
+    run_serial_binary ./xzcblat3 "$ARGS < zin3"
     assert_success
 }
