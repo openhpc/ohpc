@@ -15,7 +15,7 @@ bench1_ublas_SOURCES      = bench1.cpp bench11.cpp bench12.cpp bench13.cpp
 
 if GCC
 $(info ************  GNU VERSION with MKL ************)
-bench1_mkl_CPPFLAGS        = -fopenmp -m64 -DMKL_ILP64 -DMKL -DNDEBUG -I${MKLROOT}/include
+bench1_mkl_CPPFLAGS        = -fopenmp -DMKL_ILP64 -DMKL -DNDEBUG -I${MKLROOT}/include
 bench1_mkl_LDFLAGS         = -Wl,--no-as-needed -L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_core -lmkl_gnu_thread -lgomp -ldl -lpthread -lm
 else 
 $(info ************  INTEL VERSION with MKL ************)
@@ -25,7 +25,7 @@ endif
 
 if GCC
 $(info ************  GNU VERSION with ublas ************)
-bench1_ublas_CPPFLAGS        = -fopenmp -m64 -DNDEBUG 
+bench1_ublas_CPPFLAGS        = -fopenmp -DNDEBUG 
 bench1_ublas_LDFLAGS         = -lgomp -lpthread -lm
 else 
 $(info ************  INTEL VERSION with ublas ************)
