@@ -36,6 +36,9 @@
 
 % Booleans for os-specific latex formatting
 \newtoggle{isCentOS}
+% Booleans for arch-specific latex formatting
+\newtoggle{isx86}
+
 % utility to check os-specific settings
 \newcommand{\iftoggleverb}[1]{%
   \ifcsdef{etb@tgl@#1}
