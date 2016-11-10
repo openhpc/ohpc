@@ -178,10 +178,12 @@ run_serial_binary () {
     fi
 
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
+
 	if [ -n "$output_file" ];then
 	    srun -n 1 -N 1 -t $timeout $EXE "$@" >& $output_file
 	else
-	    srun -n 1 -N 1 -t $timeout $EXE "$@"
+	    # srun -n 1 -N 1 -t $timeout $EXE "$@"
+	    eval srun -n 1 -N 1 -t $timeout $EXE "$@"
 	fi
 	return $?
    elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
