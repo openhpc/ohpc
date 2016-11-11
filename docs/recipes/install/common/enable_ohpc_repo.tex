@@ -11,13 +11,13 @@ package directly from the \OHPC{} build server.
 % CentOS
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.9}{10}\ttfamily,
 	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSRepo{}}1 {ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*) yum install http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.x86_64.rpm
+[sms](*\#*) yum install http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.ARCH.rpm
 \end{lstlisting}
 \else
 % non-CentOS
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
 	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSRepo{}}1 {ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*) rpm -ivh http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.x86_64.rpm
+[sms](*\#*) rpm -ivh http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.ARCH.rpm
 \end{lstlisting}
 \fi
 
