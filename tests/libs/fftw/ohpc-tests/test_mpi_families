@@ -12,7 +12,7 @@ cd libs/fftw              || exit 1
 
 export BATS_JUNIT_CLASS=FFTW
 
-MPIs_local=`echo $MPI_FAMILIES | sed 's/impi//'
+MPIs_local=`echo $MPI_FAMILIES | sed 's/impi//'`
 
 # bootstrap the local autotools project if necessary
 
