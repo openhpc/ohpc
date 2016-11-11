@@ -40,7 +40,14 @@ for \texttt{/opt/intel} that is mounted on desired compute nodes.
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # Install OpenHPC compatibility packages (requires prior installation of Parallel Studio)
 [sms](*\#*) (*\install*) intel-compilers-devel-ohpc
-[sms](*\#*) (*\install*) intel-mpi-devel-ohpc
+[sms](*\#*) (*\install*) intel-mpi-devel-ohpc xxx
+
+# Optionally, choose OPA enabled MPI builds
+[sms](*\#*) if [[ ${enable_mpi_opa} -eq 1 ]];then
+     abcd
+        (*\install*) openmpi-psm2-intel-ohpc mvapich2-psm2-intel-ohpc
+	efg
+fi
 
 # Install 3rd party libraries/tools built with Intel toolchain
 [sms](*\#*) (*\groupinstall*) ohpc-serial-libs-intel

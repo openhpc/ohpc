@@ -21,9 +21,10 @@ resource management under \rms{}.
 \end{lstlisting}
 % end_ohpc_run
 
-In the default configuration, the {\em compute} hosts have not been added to 
-the \rms{} resource manager. To add the {\em compute} hosts, execute 
-the following for-loop:
+In the default configuration, the {\em compute} hosts have not been added to
+the \rms{} resource manager. To add the {\em compute} hosts, execute the
+following to register each host and apply several key global configuration
+options.
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
@@ -31,6 +32,8 @@ the following for-loop:
 [sms](*\#*) . /etc/profile.d/pbs.sh
 # enable user environment propagation (needed for modules support)
 [sms](*\#*) qmgr -c "set server default_qsub_arguments= -V"
+# enable uniform multi-node MPI task distribution
+[sms](*\#*) qmgr -c "set server resources_default.place=scatter"
 # register compute hosts with pbspro
 [sms](*\#*) for host in "${c_name[@]}"; do
            qmgr -c "create node $host"
