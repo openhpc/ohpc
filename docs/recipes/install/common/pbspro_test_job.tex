@@ -61,23 +61,27 @@ the underlying native job launch mechanism being used):
 # switch to "test" user
 [sms](*\#*) su - test
 
-# Compile MPI "hello world" example. 
+# Compile MPI "hello world" example
 [test@sms ~]$ mpicc -O3 /opt/ohpc/pub/examples/mpi/hello.c
 
 # Submit interactive job request and use prun to launch executable
-[test@sms ~]$ qsub -I -l select=2:ncpus=4:mpiprocs=4
+[test@sms ~]$ qsub -I -l nodes=2:ppn=4
 
-[test@c1 ~]$ mpiexec --hostfile $PBS_NODEFILE ./a.out
+[test@c1 ~]$ prun ./a.out
+
+[prun] Master compute host = c1
+[prun] Resource manager = pbspro
+[prun] Launch cmd = mpiexec.hydra -rmk pbs ./a.out
 
  Hello, world (8 procs total)
-    --> Process #   0 of   8 is alive. -> c1
-    --> Process #   4 of   8 is alive. -> c2
-    --> Process #   1 of   8 is alive. -> c1
-    --> Process #   5 of   8 is alive. -> c2
-    --> Process #   2 of   8 is alive. -> c1
-    --> Process #   6 of   8 is alive. -> c2
-    --> Process #   3 of   8 is alive. -> c1
-    --> Process #   7 of   8 is alive. -> c2
+     --> Process #   0 of   8 is alive. -> c1
+     --> Process #   1 of   8 is alive. -> c1
+     --> Process #   2 of   8 is alive. -> c1
+     --> Process #   3 of   8 is alive. -> c1
+     --> Process #   4 of   8 is alive. -> c2
+     --> Process #   5 of   8 is alive. -> c2
+     --> Process #   6 of   8 is alive. -> c2
+     --> Process #   7 of   8 is alive. -> c2
 \end{lstlisting}
 
 
