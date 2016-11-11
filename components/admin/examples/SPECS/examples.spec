@@ -39,7 +39,7 @@ OpenHPC development environment.
 
 %prep
 
-%{__cp} %SOURCE1 .
+%{__cp} %SOURCE0 .
 
 %build
 
