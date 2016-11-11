@@ -337,7 +337,7 @@ AM_CONDITIONAL(MINIFE_ENABLED,test "x$enable_minife" = "xyes" )
 # MiniDFT
 AC_ARG_ENABLE([minidft],
    [AS_HELP_STRING([--enable-minidft],[Enable MiniDFT tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_minidft,yes)])
+   [AX_OPTION_DEFAULT(type=long,enable_minidft,no)])
 AM_CONDITIONAL(MINIDFT_ENABLED,test "x$enable_minidft" = "xyes" )
 #------------------------------------------------------------------------------------------
 # HPCG
