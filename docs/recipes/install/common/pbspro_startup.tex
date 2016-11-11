@@ -27,13 +27,13 @@ the following for-loop:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-# initialize path
+# initialize PBS path
 [sms](*\#*) . /etc/profile.d/pbs.sh
 # enable user environment propagation (needed for modules support)
 [sms](*\#*) qmgr -c "set server default_qsub_arguments= -V"
 # register compute hosts with pbspro
-[sms](*\#*) for host in {1..4}; do
-           qmgr -c "create node c${host}"
+[sms](*\#*) for host in "${c_name[@]}"; do
+           qmgr -c "create node $host"
         done
 \end{lstlisting}
 % end_ohpc_run
