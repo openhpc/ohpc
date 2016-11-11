@@ -100,7 +100,6 @@ munge-devel-ohpc 0.5.12 http://dun.github.io/munge/ Development/Libraries Header
 munge-libs-ohpc 0.5.12 http://dun.github.io/munge/ System Environment/Libraries Libraries for applications using MUNGE
 munge-ohpc 0.5.12 http://dun.github.io/munge/ ohpc/rms MUNGE authentication service
 mvapich2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-gnu-slurm-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-intel-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-intel-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation

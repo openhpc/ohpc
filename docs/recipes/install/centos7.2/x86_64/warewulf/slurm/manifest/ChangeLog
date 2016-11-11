@@ -16,7 +16,6 @@
       * mpich-intel-ohpc                         (v3.2)
       * mumps-gnu-mpich-ohpc                     (v5.0.2)
       * mumps-intel-mpich-ohpc                   (v5.0.2)
-      * mvapich2-gnu-slurm-ohpc                  (v2.2)
       * mvapich2-psm2-gnu-ohpc                   (v2.2)
       * mvapich2-psm2-intel-ohpc                 (v2.2)
       * netcdf-cxx-gnu-mpich-ohpc                (v4.2.1)
@@ -165,4 +164,3 @@
       * trilinos-intel-openmpi-ohpc              (v12.4.2 -> v12.6.4)
       * valgrind-ohpc                            (v3.10.1 -> v3.11.0)
       * vim-clustershell-ohpc                    (v1.7.1 -> v1.7.2)
-
