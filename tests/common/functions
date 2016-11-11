@@ -368,7 +368,7 @@ run_mpi_binary () {
 
 	echo "#!/bin/bash"		                      > $jobScript
 	echo "#PBS -N OpenHPC-test"                          >> $jobScript
-	echo "#PBS -l select=$NNODES:mpiprocs=$tasksPerNode" >> $jobScript
+	echo "#PBS -lnodes=$NNODES:ppn=$tasksPerNode"        >> $jobScript
 	echo "#PBS -l walltime=$timeout"                     >> $jobScript
 	echo "#PBS -o job.out"                               >> $jobScript
 	echo "cd \$PBS_O_WORKDIR"                            >> $jobScript
