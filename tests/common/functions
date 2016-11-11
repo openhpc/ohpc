@@ -192,7 +192,7 @@ run_serial_binary () {
 	echo "EXE = $EXE"
 	local myPath=`command -v $EXE`
 	myPath=`readlink -f $myPath`
-	echo "mypath = $myPath"
+#	echo "mypath = $myPath"
 
 	# Generate script with commands so we can execute out of submission directory
 	jobScript=".job.$RANDOM"
@@ -202,13 +202,13 @@ run_serial_binary () {
 	chmod 700 $jobScript
 	
         if [ -n "$output_file" ];then
-            qsub -k oe -W block=true -l select=1 -l walltime=00:$timeout:00 -- `readlink -f $jobScript` > .job_in
+            qsub -k oe -W block=true -l select=1 -l walltime=$timeout -- `readlink -f $jobScript` > .job_in
 	    JOB=`cat .job_in | awk -F . '{print $1}'`
 	    [[ -e ${HOME}/STDIN.o${JOB} ]] || exit 1
 	    mv ${HOME}/STDIN.o${JOB} $output_file
 	    cat $output_file
         else
-            qsub -k n -W block=true -l select=1 -l walltime=00:$timeout:00 -- `readlink -f $jobScript`
+            qsub -k n -W block=true -l select=1 -l walltime=$timeout -- `readlink -f $jobScript`
 
 	    local statusCode=$?
 	    rm -f $jobScript
