@@ -45,9 +45,9 @@ the downloads section of the latest
 * [ISO image](http://build.openhpc.community/OpenHPC:/1.2/SLE_12_SP1/iso/OpenHPC-1.2_SLE_12_SP1.iso) mirror of zypper repository (md5sum=)
 
 ###### [Arm aarch64 SLES 12 SP1 Technology Preview]
-* [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-sles12sp-aarch641-1.2-1.x86_64.rpm) (md5sum=)
+* [ohpc-release.aarch64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-sles12sp1-aarch64-1.2-1.x86_64.rpm) (md5sum=)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-SLES12SP1-aarch64-1.2.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/SLE_12_SP1/iso/OpenHPC-1.2_SLE_12_SP-aarch641.iso) mirror of zypper repository (md5sum=)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/SLE_12_SP1/iso/OpenHPC-1.2_SLE_12_SP1-aarch64.iso) mirror of zypper repository (md5sum=)
 
 
 #### Questions, Comments, or Bug Reports?
