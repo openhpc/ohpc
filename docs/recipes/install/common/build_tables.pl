@@ -6,7 +6,7 @@ use strict;
 my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
                         "lustre","parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
 my @compiler_familes = ("gnu","intel");
-my @mpi_families     = ("mvapich2","openmpi","impi");
+my @mpi_families     = ("mvapich2","openmpi","impi","mpich");
 
 my @single_package_exceptions = ();
 
@@ -15,13 +15,13 @@ my @single_package_exceptions = ();
 my %compiler_exceptions = ();
 $compiler_exceptions{"gsl"} = 1;
 $compiler_exceptions{"openblas"} = 1;
-$compiler_exceptions{"mvapich2"} = 5;
+$compiler_exceptions{"mvapich2"} = 4;
 $compiler_exceptions{"openmpi"} = 4;
 
 # Define any asymmetric MPI packages
 my %mpi_exceptions = ();
-$mpi_exceptions{"python-scipy"} = 2;
-$mpi_exceptions{"fftw"} = 2;
+$mpi_exceptions{"python-scipy"} = 3;
+$mpi_exceptions{"fftw"} = 3;
 $mpi_exceptions{"mkl-blacs"} = 1;
 
 
