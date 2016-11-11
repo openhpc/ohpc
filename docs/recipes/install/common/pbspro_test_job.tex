@@ -98,27 +98,39 @@ and SLURM:
 %\clearpage
 \subsection{Batch execution}
 
-For batch execution, this example script can be used as a starting point for 
-submitting batch jobs to the resource manager and the example below illustrates
-use of the script to submit a batch job for execution using the same executable 
-referenced in the previous interactive example.
-%Alternatively, a simple batch script can be written and submitted to the
-%scheduler using sbatch to run when nodes become available. 
+For batch execution, \OHPC{} provides a simple job script for reference (also
+housed in the \path{/opt/ohpc/pub/examples} directory. This example script can
+be used as a starting point for submitting batch jobs to the resource manager
+and the example below illustrates use of the script to submit a batch job for
+execution using the same executable referenced in the previous interactive
+example.
 
 \begin{lstlisting}[language=bash,keywords={}]
+# copy example job script
+[test@sms ~]$ cp /opt/ohpc/pub/examples/pbspro/job.mpi .
+
 # examine contents (and edit to set desired job sizing characteristics)
 [test@sms ~]$ cat job.mpi
 #!/bin/bash
-
+#----------------------------------------------------------
+# Job name
 #PBS -N test
-#PBS -l walltime=01:30:00
-#PBS -l select=2:ncpus=4:mpiprocs=4
-# select   => number of chunks, here we want #chunks==#nodes
-# ncpus   => number of cores per chunk set to the number of cores per node (4)
-# mpiprocs =>  number of MPI processes per chunk (4)
 
-# Launch MPI-based executable assuming mpiexec is in your PATH
-mpiexec --hostfile $PBS_NODEFILE ./a.out
+# Name of stdout output file
+#PBS -o job.out
+
+# Total number of nodes and MPI tasks/node requested
+#PBS -l nodes=2:ppn=4
+
+# Run time (hh:mm:ss) - 1.5 hours
+#PBS -l walltime=01:30:00
+#----------------------------------------------------------
+
+# Change to submission directory
+cd $PBS_O_WORKDIR
+
+# Launch MPI-based executable
+prun ./a.out
 
 # Submit job for batch execution
 [test@sms ~]$ qsub job.mpi
