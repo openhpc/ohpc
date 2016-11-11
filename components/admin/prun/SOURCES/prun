@@ -136,7 +136,7 @@ function launch_openmpi () {
             cmd="mpirun $@"
 	elif [ ${RM} == "pbspro" ];then
             verify_launcher_avail mpiexec
-	    cmd="mpiexec --hostfile ${PBS_NODEFILE} $@"
+	    cmd="${MPI_DIR}/bin/mpiexec --hostfile ${PBS_NODEFILE} $@"
 	else
             _error "Unknown resource manager -> ${RM}"
 	fi
