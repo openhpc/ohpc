@@ -13,12 +13,12 @@
 
 Summary: Example source code and templates for use within OpenHPC environment.
 Name:    examples%{PROJ_DELIM}
-Version: 1.3
+Version: 1.4
 Release: 1
-License: BSD-3
+License: Apache-2.0
 Group:   %{PROJ_NAME}/admin
 URL:     https://github.com/openhpc/ohpc
-Source0: OHPC_macros
+Source0: LICENSE
 Source1: hello.c
 Source2: ifcfg-ib0
 Source3: ifcfg-ib0.sles.ww
@@ -26,7 +26,7 @@ Source4: ifcfg-ib0.centos.ww
 Source5: job.mpi
 Source6: 60-ipath.rules
 Source7: gmond.conf
-Source8: LICENSE
+Source8: job.pbs.mpi
 
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -39,7 +39,7 @@ OpenHPC development environment.
 
 %prep
 
-%{__cp} %SOURCE8 .
+%{__cp} %SOURCE1 .
 
 %build
 
@@ -54,6 +54,7 @@ install -D -m 0644 %SOURCE4 %{buildroot}%{OHPC_HOME}/pub/examples/network/centos
 install -D -m 0644 %SOURCE5 %{buildroot}%{OHPC_HOME}/pub/examples/slurm/job.mpi
 install -D -m 0644 %SOURCE6 %{buildroot}%{OHPC_HOME}/pub/examples/udev/60-ipath.rules
 install -D -m 0644 %SOURCE7 %{buildroot}%{OHPC_HOME}/pub/examples/ganglia/gmond.conf
+install -D -m 0644 %SOURCE8 %{buildroot}%{OHPC_HOME}/pub/examples/pbs/job.mpi
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
