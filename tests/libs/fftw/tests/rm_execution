@@ -15,12 +15,14 @@ NODES=2
 TASKS=8
 ARGS=8
 
+TIMEOUT="00:05:00"
+
 @test "[libs/FFTW] Serial C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_test ];then
 	flunk "C_test binary does not exit"
     fi
     
-    run_serial_binary ./C_test
+    run_serial_binary -t ${TIMEOUT} ./C_test
     assert_success
 }
 
@@ -29,7 +31,7 @@ ARGS=8
 	flunk "C_mpi_test binary does not exit"
     fi
 
-    run_mpi_binary ./C_mpi_test $ARGS $NODES $TASKS
+    run_mpi_binary -t ${TIMEOUT} ./C_mpi_test $ARGS $NODES $TASKS
     assert_success
 }
 
@@ -38,7 +40,7 @@ ARGS=8
 	flunk "F_test binary does not exit"
     fi
 
-    run_serial_binary ./F_test
+    run_serial_binary -t ${TIMEOUT} ./F_test
     assert_success
 }
 
