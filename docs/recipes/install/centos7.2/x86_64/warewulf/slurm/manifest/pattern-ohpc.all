@@ -4,12 +4,12 @@ ohpc-ganglia Collection of Ganglia monitoring and metrics packages
 ohpc-io-libs-gnu OpenHPC IO library builds for use with GNU compiler toolchain
 ohpc-io-libs-intel OpenHPC IO library builds for use with Intel parallel studio toolchain
 ohpc-nagios Collection of Nagios monitoring and metrics packages
-ohpc-parallel-libs-gnu-mpich OpenHPC parallel library builds for use with GNU compiler toolchain and the mpich runtime
-ohpc-parallel-libs-gnu-mvapich2 OpenHPC parallel library builds for use with GNU compiler toolchain and the mvapich2 runtime
+ohpc-parallel-libs-gnu-mpich OpenHPC parallel library builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-parallel-libs-gnu-mvapich2 OpenHPC parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
 ohpc-parallel-libs-gnu-openmpi OpenHPC parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 ohpc-parallel-libs-intel-impi OpenHPC parallel library builds for use with Intel Parallel Studio toolchain and the Intel MPI runtime
-ohpc-parallel-libs-intel-mpich OpenHPC parallel library builds for use with Intel Parallel Studio toolchain and the mpich runtime
-ohpc-parallel-libs-intel-mvapich2 OpenHPC parallel library builds for use with Intel Parallel Studio toolchain and the mvapich2 runtime
+ohpc-parallel-libs-intel-mpich OpenHPC parallel library builds for use with Intel Parallel Studio toolchain and the MPICH runtime
+ohpc-parallel-libs-intel-mvapich2 OpenHPC parallel library builds for use with Intel Parallel Studio toolchain and the MVAPICH2 runtime
 ohpc-parallel-libs-intel-openmpi OpenHPC parallel library builds for use with Intel Parallel Studio toolchain and the OpenMPI runtime
 ohpc-perf-tools-gnu OpenHPC performance tool builds for use with GNU compiler toolchain
 ohpc-perf-tools-intel OpenHPC performance tool builds for use with Intel Parallel Studio toolchain
