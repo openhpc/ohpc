@@ -43,12 +43,12 @@ the downloads section of the latest
 ###### [CentOS 7.2]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-centos7.2-1.2-1.x86_64.rpm) (md5sum=2e33939e87e2fb5daf97d7875015a6ca)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-CentOS7.2-1.2.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/CentOS_7.2/iso/OpenHPC-1.2_CentOS_7.2.iso) mirror of yum repository (md5sum=)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/CentOS_7.2/iso/OpenHPC-1.2_CentOS_7.2_x86_64.iso) mirror of yum repository (md5sum=b4546edebf1da36c9ef613e00e458ef6)
 
 ###### [SLES 12 SP1]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-sles12sp1-1.2-1.x86_64.rpm) (md5sum=58acd4320af0eceefcb8bcbc5f8a5a74)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-SLES12SP1-1.2.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/SLE_12_SP1/iso/OpenHPC-1.2_SLE_12_SP1.iso) mirror of zypper repository (md5sum=)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/SLE_12_SP1/iso/OpenHPC-1.2_SLE_12_SP1_x86_64.iso) mirror of zypper repository (md5sum=935182c3082ee027341e97605ade629b)
 
 ---
 
@@ -59,12 +59,12 @@ Note that ARM-based builds in this release are being provided as a **Technology 
 ###### [CentOS 7.2]
 * [ohpc-release.aarch64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-centos7.2-1.2-1.aarch64.rpm) (md5sum=c29859ab4cdcf38021e20cde80fc0eb3)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-CentOS7.2-aarch64-1.2.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/CentOS_7.2/iso/OpenHPC-1.2_CentOS_7.2-aarch64.iso) mirror of yum repository (md5sum=)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/CentOS_7.2/iso/OpenHPC-1.2_CentOS_7.2_aarch64.iso) mirror of yum repository (md5sum=9f9410e7499de563ca2a2936ce661975)
 
 ###### [SLES 12 SP1]
 * [ohpc-release.aarch64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-sles12sp1-aarch64-1.2-1.x86_64.rpm) (md5sum=fe25f8badffad78f805eb41cee8fff7c)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-SLES12SP1-aarch64-1.2.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/SLE_12_SP1/iso/OpenHPC-1.2_SLE_12_SP1-aarch64.iso) mirror of zypper repository (md5sum=)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/SLE_12_SP1/iso/OpenHPC-1.2_SLE_12_SP1_aarch64.iso) mirror of zypper repository (md5sum=9bf0403810a6938409279d3386bd731a)
 
 ---
 
