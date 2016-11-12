@@ -171,7 +171,8 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
 %endif
 
 %if %{with_tm}
-export PATH="%{_sourcedir}/:$PATH"
+cp %{SOURCE3} .
+export PATH="./:$PATH"
 %endif
 
 ./configure ${BASEFLAGS}
