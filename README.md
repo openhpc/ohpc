@@ -66,6 +66,7 @@ Note that ARM-based builds in this release are being provided as a Technology pr
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-SLES12SP1-aarch64-1.2.pdf)
 * [ISO image](http://build.openhpc.community/OpenHPC:/1.2/SLE_12_SP1/iso/OpenHPC-1.2_SLE_12_SP1-aarch64.iso) mirror of zypper repository (md5sum=)
 
+---
 
 #### Questions, Comments, or Bug Reports?
 
