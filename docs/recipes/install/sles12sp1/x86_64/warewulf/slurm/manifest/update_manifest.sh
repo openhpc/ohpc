@@ -1,1 +1,1 @@
-../../../../common/update_manifest.sh
+../common/update_manifest.sh
