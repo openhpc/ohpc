@@ -3,7 +3,7 @@ Version 1.2 (12 November 2016)
 [General]
   * introduction of aarch64 ARM builds (Tech Preview)
   * added additional MPI family support (MPICH)
-  * additional resource manager added (PBS Professional) with expanded number of available installation recipes.
+  * added additional resource manager option (PBS Professional) and corresponding recipe guide
   * updated compatibility modules for Intel Parallel Studio toolchain (https://github.com/openhpc/ohpc/issues/254)
   * additional MPI build variants enabled to support Intel Omni Path interconnect
   * variety of component version updates and other additions
