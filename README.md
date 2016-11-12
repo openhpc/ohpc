@@ -6,16 +6,13 @@
 
 #### Introduction
 
-This stack provides a variety of common, pre-built ingredients
-required to deploy and manage an HPC Linux cluster including
-provisioning tools, resource management, I/O clients, development
-tools, and a variety of scientific libraries.
+This stack provides a variety of common, pre-built ingredients required to
+deploy and manage an HPC Linux cluster including provisioning tools, resource
+management, I/O clients, runtimes, development tools, and a variety of
+scientific libraries.
 
 The compatible OS version(s) for this release and the total number of
 pre-packaged RPMs available per architecture type are as follows:
-
-        CentOS 7.2       - 310 x86_64 RPMs, 198 aarch64 RPMs, 43 noarch RPMs
-        SUSE SLES 12 SP1 - 312 x86_64 RPMs, 205 aarch64 RPMs, 43 noarch RPMs
 
 Base OS     | x86_64 | aarch64 | noarch
 :---:       | :---:  | :---:   | :---:
