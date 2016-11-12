@@ -31,8 +31,8 @@ repositories are housed at https://build.openhpc.community. To get started, you
 can enable an OpenHPC repository locally through installation of an
 ```ohpc-release``` RPM which includes gpg keys for package signing and defines
 the URL locations for [base] and [update] package repositories. Copies of the
-```ohpc-release``` package are provided below for convenience. A companion install
-guide with example instructions for installation is also available below or in
+```ohpc-release``` package are provided below for convenience. Installtion guides 
+taylored for each supported resource manager are also available below or in
 the downloads section of the latest
 [release](https://github.com/openhpc/ohpc/releases/tag/v1.2.GA).
 
@@ -77,6 +77,6 @@ the http://openhpc.community page for more pointers.
 
 #### Additional Software Requests?
 
-Please see the companion submission page at
+Please see the component submission page at
 https://github.com/openhpc/submissions for more information regarding new
-software component requests.
+software inclusion requests.
