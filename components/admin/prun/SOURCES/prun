@@ -77,7 +77,12 @@ function launch_impi () {
         LAUNCHER="mpiexec.hydra"
         verify_launcher_avail $LAUNCHER
 
-        cmd="$LAUNCHER -bootstrap slurm $@"
+	if [ ${RM} == "slurm" ];then
+            cmd="$LAUNCHER -bootstrap slurm $@"
+	elif [ ${RM} == "pbspro" ];then
+	    cmd="$LAUNCHER -rmk pbs $@"
+	fi
+
         _info "Launch cmd = $cmd"
         $cmd
     fi
