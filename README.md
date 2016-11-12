@@ -38,7 +38,8 @@ the downloads section of the latest
 
 ---
 
-#### (x86_64) Architecture 
+#### Architecture = (x86_64)
+
 ###### [CentOS 7.2]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-centos7.2-1.2-1.x86_64.rpm) (md5sum=2e33939e87e2fb5daf97d7875015a6ca)
 * [Install Guide](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-CentOS7.2-1.2.pdf)
@@ -51,9 +52,9 @@ the downloads section of the latest
 
 ---
 
-#### (aarch64) Architecture
+#### Architecture = (aarch64)
 
-Note that ARM-based builds in this release are being provided as a [Technology Preview](https://github.com/openhpc/ohpc/wiki/ARM-Tech-Preview).
+Note that ARM-based builds in this release are being provided as a Technology preview. See [here](https://github.com/openhpc/ohpc/wiki/ARM-Tech-Preview) latest info.
 
 ###### [CentOS 7.2]
 * [ohpc-release.aarch64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-centos7.2-1.2-1.aarch64.rpm) (md5sum=c29859ab4cdcf38021e20cde80fc0eb3)
