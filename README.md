@@ -14,8 +14,8 @@ tools, and a variety of scientific libraries.
 The compatible OS version for this release and the total number of
 pre-packaged RPMs available are as follows:
 
-        CentOS 7.2       - 310 x96_64 RPMs, 205 aarch64 RPMs, 43 noarch RPMs
-        SUSE SLES 12 SP1 - 312 x96_64 RPMs, 210 aarch64 RPMs, 43 noarch RPMs
+        CentOS 7.2       - 310 x96_64 RPMs, 198 aarch64 RPMs, 43 noarch RPMs
+        SUSE SLES 12 SP1 - 312 x96_64 RPMs, 205 aarch64 RPMs, 43 noarch RPMs
 
 Note that a detailed list of all available components is available in
 the "Package Manifest" appendix located in the companion install
