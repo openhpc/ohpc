@@ -18,7 +18,7 @@ pre-packaged RPMs available per architecture type are as follows:
         SUSE SLES 12 SP1 - 312 x86_64 RPMs, 205 aarch64 RPMs, 43 noarch RPMs
 
 Base OS     | x86_64 | aarch64 | noarch
----         | :---:  | :---:   | :---:
+:---:       | :---:  | :---:   | :---:
 CentOS 7.2  | 310    | 198     | 43
 SLES 12 SP1 | 312    | 205     | 43
 
