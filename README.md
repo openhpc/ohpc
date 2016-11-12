@@ -22,6 +22,13 @@ Base OS     | x86_64 | aarch64 | noarch
 CentOS 7.2  | 310    | 198     | 43
 SLES 12 SP1 | 312    | 205     | 43
 
+<center>
+Base OS     | x86_64 | aarch64 | noarch
+:---:       | :---:  | :---:   | :---:
+CentOS 7.2  | 310    | 198     | 43
+SLES 12 SP1 | 312    | 205     | 43
+</center>
+
 Note that a detailed list of all available components is available in
 the "Package Manifest" appendix located in each of the companion install
 guide documents. 
