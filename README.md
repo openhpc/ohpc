@@ -54,7 +54,7 @@ the downloads section of the latest
 
 #### Architecture = (aarch64)
 
-Note that ARM-based builds in this release are being provided as a *Technology Preview*. See [here](https://github.com/openhpc/ohpc/wiki/ARM-Tech-Preview) for latest info.
+Note that ARM-based builds in this release are being provided as a **Technology Preview**. See [here](https://github.com/openhpc/ohpc/wiki/ARM-Tech-Preview) for latest info.
 
 ###### [CentOS 7.2]
 * [ohpc-release.aarch64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-centos7.2-1.2-1.aarch64.rpm) (md5sum=c29859ab4cdcf38021e20cde80fc0eb3)
