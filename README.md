@@ -11,14 +11,19 @@ required to deploy and manage an HPC Linux cluster including
 provisioning tools, resource management, I/O clients, development
 tools, and a variety of scientific libraries.
 
-The compatible OS version for this release and the total number of
-pre-packaged RPMs available are as follows:
+The compatible OS version(s) for this release and the total number of
+pre-packaged RPMs available per architecture type are as follows:
 
         CentOS 7.2       - 310 x86_64 RPMs, 198 aarch64 RPMs, 43 noarch RPMs
         SUSE SLES 12 SP1 - 312 x86_64 RPMs, 205 aarch64 RPMs, 43 noarch RPMs
 
+Base OS     | x86_64 | aarch64 | noarch
+---         | ---    | ---     | ---
+CentOS 7.2  | 310    | 198     | 43
+SLES 12 SP1 | 312    | 205     | 43
+
 Note that a detailed list of all available components is available in
-the "Package Manifest" appendix located in the companion install
+the "Package Manifest" appendix located in each of the companion install
 guide documents. 
 
 #### Getting started
