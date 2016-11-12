@@ -1,6 +1,9 @@
 For MPI development support, \OHPC{} presently provides pre-packaged builds for
 the following MPI families and transport layers: 
 
+\iftoggleverb{isx86}
+% x86_64
+
 \begin{table}[h]
 \centering
 \begin{tabular}{@{\hspace*{0.2cm}} *5l @{}}    \toprule
@@ -12,6 +15,20 @@ OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolum
 \rowcolor{black!10} OpenMPI-psm2  & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\ \bottomrule
 \end{tabular}
 \end{table}
+
+\else
+% aarch64
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{\hspace*{0.2cm}} *5l @{}}    \toprule
+                                  & Ethernet (TCP)                 & \InfiniBand{}                              \\ \midrule
+\rowcolor{black!10} MPICH         & \multicolumn{1}{c}{\checkmark} &                                            \\
+\rowcolor{black!10} OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\
+\end{tabular}
+\end{table}
+\fi
+
 
 % begin_ohpc_run
 % ohpc_comment_header Install MPI Stacks \ref{sec:mpi}
