@@ -1,0 +1,44 @@
+ohpc-adios OpenHPC adios IO library builds for various compiler/MPI combinations
+ohpc-autotools Collection of GNU autotools packages
+ohpc-base OpenHPC base packages
+ohpc-boost OpenHPC Boost library builds for various compiler/MPI combinations
+ohpc-fftw OpenHPC FFTW library builds for various compiler/MPI combinations
+ohpc-ganglia Collection of Ganglia monitoring and metrics packages
+ohpc-gsl OpenHPC GSL library builds for various compiler combinations
+ohpc-hdf5 OpenHPC HDF5 library builds for various compiler combinations
+ohpc-hypre OpenHPC Hypre library builds for various compiler/MPI combinations
+ohpc-imb OpenHPC builds for Intel IMB MPI benchmarks
+ohpc-io-libs-gnu OpenHPC IO library builds for use with GNU compiler toolchain
+ohpc-io-libs-intel OpenHPC IO library builds for use with Intel parallel studio toolchain
+ohpc-metis OpenHPC METIS library builds for various compiler combinations
+ohpc-mpiP OpenHPC mpiP profiling library builds for various compiler/MPI combinations
+ohpc-mumps OpenHPC Mumps library builds for various compiler/MPI combinations
+ohpc-nagios Collection of Nagios monitoring and metrics packages
+ohpc-netcdf OpenHPC NetCDF library builds for various compiler/MPI combinations
+ohpc-numpy OpenHPC Numpy python module builds for various compiler combinations
+ohpc-ocr Open Compute Runtime builds for various compiler combinations
+ohpc-openblas OpenHPC OpenBLAS library builds for various compiler combinations
+ohpc-parallel-libs-gnu OpenHPC parallel library builds for use with GNU compiler toolchain
+ohpc-parallel-libs-gnu-mpich OpenHPC parallel library builds for use with GNU compiler toolchain and the mpich runtime
+ohpc-parallel-libs-gnu-mvapich2 OpenHPC parallel library builds for use with GNU compiler toolchain and the mvapich2 runtime
+ohpc-parallel-libs-gnu-openmpi OpenHPC parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
+ohpc-parallel-libs-intel OpenHPC parallel library builds for use with Intel Parallel Studio toolchain and the Intel MPI runtime
+ohpc-perf-tools-gnu OpenHPC performance tool builds for use with GNU compiler toolchain
+ohpc-perf-tools-intel OpenHPC performance tool builds for use with Intel Parallel Studio toolchain
+ohpc-petsc OpenHPC PETSC library builds for various compiler/MPI combinations
+ohpc-phdf5 OpenHPC HDF5 parallel library builds for various compiler/MPI combinations
+ohpc-python-libs-gnu OpenHPC python related library builds for use with GNU compiler toolchain
+ohpc-python-libs-intel OpenHPC python related library builds for use with Intel Parallel Studio toolchain
+ohpc-runtimes-gnu OpenHPC runtimes for use with GNU compiler toolchain
+ohpc-runtimes-intel OpenHPC runtimes for use with Intel Parallel Studio toolchain
+ohpc-scalapack OpenHPC ScaLAPACK library builds for various compiler/MPI combinations
+ohpc-scalasca OpenHPC Scalasca library builds for various compiler/MPI combinations
+ohpc-scipy OpenHPC Scientific Python library builds for various compiler/MPI combinations
+ohpc-serial-libs-gnu OpenHPC serial library builds for use with GNU compiler toolchain
+ohpc-serial-libs-intel OpenHPC serial library builds for use with Intel Parallel Studio toolchain
+ohpc-slurm-client OpenHPC client packages for SLURM
+ohpc-slurm-server OpenHPC server packages for SLURM
+ohpc-superlu_dist OpenHPC Superlu_dist library builds for various compiler/MPI combinations
+ohpc-tau OpenHPC TAU library builds for various compiler/MPI combinations
+ohpc-trilinos OpenHPC Trilinos library builds for various compiler/MPI combinations
+ohpc-warewulf Collection of base packages for Warewulf provisioning
