@@ -77,6 +77,7 @@ Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-%{versi
 #Source0:   http://www.open-mpi.org/software/ompi/v2.0/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
+Source3:   pbs-config
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
@@ -170,7 +171,7 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
 %endif
 
 %if %{with_tm}
-  export PATH="./:$PATH"
+export PATH="%{_sourcedir}/:$PATH"
 %endif
 
 ./configure ${BASEFLAGS}
