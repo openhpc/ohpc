@@ -1,0 +1,2 @@
+mpich-gnu-ohpc 3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+openmpi-gnu-ohpc 1.10.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
