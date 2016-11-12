@@ -6,23 +6,23 @@ a {\bf Tech Preview} release initially, as there are some known issues around
 provisioning and a subset of development packages.
 %will be highlighted below.
 
-This guide follows the general installation steps layed out in other companion
+This guide follows the general installation steps laid out in other companion
 \OHPC{} recipes.  However, the provisioning steps as outlined with Warewulf
 (most of the steps in \S~\ref{sec:add_provisioning} thru
 \ref{sec:boot_computes}) are not directly usable without additional
 modification to the PXE boot process.  Consequently, users interested in
 leveraging packages from this Tech Preview are encouraged to enable the repo
 (see \S~\ref{sec:enable_repo}) and install desired {\bf development}
-compontents (\S~\ref{sec:install_dev}) on top of systems were the underlying
-base OS is preinstalled. In addition, if multiple nodes are available, the
-\rms{} resource manager can be used to schedule resoruces. Future \OHPC{} releases
+components (\S~\ref{sec:install_dev}) on top of systems were the underlying
+base OS is pre-installed. In addition, if multiple nodes are available, the
+\rms{} resource manager can be used to schedule resources. Future \OHPC{} releases
 will expand on this tech preview to include validated recipes for a bare-metal
 cluster install. \\
 
 \noindent Specific Known Package Issues: 
 \begin{itemize*}
 \item GSL: a small subset of tests performed with the GSL library failed
-  precision releated tests. This is currently attributed to the fact that the
+  precision related tests. This is currently attributed to the fact that the
   tests included in GSL are tuned for x86 which does 80-bit extended precision.
   \item PAPI: hardware counter availability may not be available depending on
     the underlying ARM platform
