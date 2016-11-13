@@ -1,0 +1,144 @@
+With the resource manager enabled for production usage, users should now be
+able to run jobs. To demonstrate this, we will add a ``test'' user on the {\em master}
+host that can be used to run an example job.
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) useradd -m test
+\end{lstlisting}
+% end_ohpc_run
+
+\Warewulf{} installs a utility on the compute nodes to automatically 
+synchronize known files from the provisioning server at five minute intervals. In this
+recipe, recall that we previously registered credential files with Warewulf (e.g. passwd,
+group, and shadow) so that these files would be propagated during compute node
+imaging. However, with the addition of a new ``test'' user above, the files
+have been outdated and we need to update the Warewulf database to incorporate
+the additions. This re-sync process can be accomplished as follows:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) wwsh file resync passwd shadow group
+\end{lstlisting}
+% end_ohpc_run
+
+% begin_ohpc_run
+% ohpc_command sleep 2
+% end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+After re-syncing to notify Warewulf of file modifications made on the {\em
+master} host, it should take approximately 5 minutes for the changes to
+propagate. However, you can also manually pull the changes from compute nodes
+via the following:
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) pdsh -w c[1-4] /warewulf/bin/wwgetfiles 
+\end{lstlisting}
+% end_ohpc_run
+\end{tcolorbox}
+\end{center}
+
+%We must first update the database with the change we just made to passwd and 
+%shadow files, and since we are impatient we will trigger the compute node pull.
+
+\OHPC{} includes a simple ``hello-world'' MPI application in the
+\path{/opt/ohpc/pub/examples} directory that can be used for this quick
+compilation and execution. \OHPC{} also provides a companion job-launch script
+named \texttt{prun} that is installed in concert with the pre-packaged MPI
+toolchains. Native job launch mechanisms provided by the MPI stacks are 
+utilized, \texttt{mpiexec}.
+
+\iftoggle{isSLES_ww_pbs_x86}{\clearpage}
+
+\subsection{Interactive execution}
+To use the newly created ``test'' account to compile and execute the
+application {\em interactively} through the resource manager, execute the
+following (note the use of \texttt{mpiexec} for parallel job launch which summarizes
+the underlying native job launch mechanism being used):
+
+\begin{lstlisting}[language=bash,keywords={}]
+# switch to "test" user
+[sms](*\#*) su - test
+
+# Compile MPI "hello world" example
+[test@sms ~]$ mpicc -O3 /opt/ohpc/pub/examples/mpi/hello.c
+
+# Submit interactive job request and use prun to launch executable
+[test@sms ~]$ qsub -I -l select=2:mpiprocs=4
+
+[test@c1 ~]$ prun ./a.out
+
+[prun] Master compute host = c1
+[prun] Resource manager = pbspro
+[prun] Launch cmd = mpiexec.hydra -rmk pbs ./a.out
+
+ Hello, world (8 procs total)
+     --> Process #   0 of   8 is alive. -> c1
+     --> Process #   1 of   8 is alive. -> c1
+     --> Process #   2 of   8 is alive. -> c1
+     --> Process #   3 of   8 is alive. -> c1
+     --> Process #   4 of   8 is alive. -> c2
+     --> Process #   5 of   8 is alive. -> c2
+     --> Process #   6 of   8 is alive. -> c2
+     --> Process #   7 of   8 is alive. -> c2
+\end{lstlisting}
+
+
+\begin{center}
+\begin{tcolorbox}[]
+The following table provides approximate command equivalences between PBS Pro
+and SLURM:
+
+\vspace*{0.15cm}
+\input common/rms_equivalence_table
+\end{tcolorbox}
+\end{center}
+
+\iftoggle{isCentOS_ww_pbs_x86}{\clearpage}
+
+\iftoggle{isSLES_ww_pbs_x86}{\clearpage}
+
+\subsection{Batch execution}
+
+For batch execution, \OHPC{} provides a simple job script for reference (also
+housed in the \path{/opt/ohpc/pub/examples} directory. This example script can
+be used as a starting point for submitting batch jobs to the resource manager
+and the example below illustrates use of the script to submit a batch job for
+execution using the same executable referenced in the previous interactive
+example.
+
+\begin{lstlisting}[language=bash,keywords={}]
+# copy example job script
+[test@sms ~]$ cp /opt/ohpc/pub/examples/pbspro/job.mpi .
+
+# examine contents (and edit to set desired job sizing characteristics)
+[test@sms ~]$ cat job.mpi
+#!/bin/bash
+#----------------------------------------------------------
+# Job name
+#PBS -N test
+
+# Name of stdout output file
+#PBS -o job.out
+
+# Total number of nodes and MPI tasks/node requested
+#PBS -l select=2:mpiprocs=4
+
+# Run time (hh:mm:ss) - 1.5 hours
+#PBS -l walltime=01:30:00
+#----------------------------------------------------------
+
+# Change to submission directory
+cd $PBS_O_WORKDIR
+
+# Launch MPI-based executable
+prun ./a.out
+
+# Submit job for batch execution
+[test@sms ~]$ qsub job.mpi
+5.master
+
+\end{lstlisting}

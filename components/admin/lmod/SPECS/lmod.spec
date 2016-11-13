@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname lmod
 
@@ -25,7 +25,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   6.0.24
+Version:   6.5.11
 Release:   1
 License:   MIT
 Group:     %{PROJ_NAME}/admin
@@ -43,6 +43,10 @@ BuildRequires: lua-posix%{PROJ_DELIM}
 BuildRequires: rsync
 BuildRequires: tcl
 
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires: procps
+%endif
+   
 Conflicts: environment-modules
 
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
@@ -95,6 +99,10 @@ if [ ! -z "\$SLURM_NODELIST" ];then
      return
 fi
 
+if [ ! -z "\$PBS_NODEFILE" ];then
+    return
+fi
+
 export LMOD_SETTARG_CMD=":"
 export LMOD_FULL_SETTARG_SUPPORT=no
 export LMOD_COLORIZE=no
@@ -126,26 +134,31 @@ EOF
 ########################################################################
 
 if ( \$?SLURM_NODELIST ) then
-
-    setenv LMOD_SETTARG_CMD ":"
-    setenv LMOD_FULL_SETTARG_SUPPORT "no"
-    setenv LMOD_COLORIZE "no"
-    setenv LMOD_PREPEND_BLOCK "normal"
-
-
-    if ( \`id -u\` == "0" ) then
-       setenv MODULEPATH "%{OHPC_ADMIN}/modulefiles:%{OHPC_MODULES}"
-    else   
-       setenv MODULEPATH "%{OHPC_MODULES}"
-    endif
-
-    # Initialize modules system
-    source %{OHPC_ADMIN}/lmod/lmod/init/csh >/dev/null
-
-    # Load baseline OpenHPC environment
-    module try-add ohpc 
-
+    exit 0
 endif
+
+if ( \$?PBS_NODEFILE ) then
+    exit 0
+endif
+
+setenv LMOD_SETTARG_CMD ":"
+setenv LMOD_FULL_SETTARG_SUPPORT "no"
+setenv LMOD_COLORIZE "no"
+setenv LMOD_PREPEND_BLOCK "normal"
+
+
+if ( \`id -u\` == "0" ) then
+   setenv MODULEPATH "%{OHPC_ADMIN}/modulefiles:%{OHPC_MODULES}"
+else   
+   setenv MODULEPATH "%{OHPC_MODULES}"
+endif
+
+# Initialize modules system
+source %{OHPC_ADMIN}/lmod/lmod/init/csh >/dev/null
+
+# Load baseline OpenHPC environment
+module try-add ohpc 
+
 EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}

@@ -9,14 +9,14 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname valgrind
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Valgrind Memory Debugger
 Name:      %{pname}%{PROJ_DELIM}
-Version:   3.10.1
+Version:   3.11.0
 Release:   1
 License:   GPL
 URL:       http://www.valgrind.org/

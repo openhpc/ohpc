@@ -41,17 +41,30 @@ for \texttt{/opt/intel} that is mounted on desired compute nodes.
 # Install OpenHPC compatibility packages (requires prior installation of Parallel Studio)
 [sms](*\#*) (*\install*) intel-compilers-devel-ohpc
 [sms](*\#*) (*\install*) intel-mpi-devel-ohpc
+\end{lstlisting}
 
+% ohpc_command if [[ ${enable_mpi_opa} -eq 1 ]];then
+% ohpc_indent 10
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Optionally, choose Omni-Path enabled MPI builds. Otherwise, skip to retain default MPI stacks
+[sms](*\#*) (*\install*) openmpi-psm2-intel-ohpc mvapich2-psm2-intel-ohpc
+\end{lstlisting}
+% ohpc_indent 5
+% ohpc_command fi
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # Install 3rd party libraries/tools built with Intel toolchain
 [sms](*\#*) (*\groupinstall*) ohpc-serial-libs-intel
-[sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-intel
 [sms](*\#*) (*\groupinstall*) ohpc-io-libs-intel
 [sms](*\#*) (*\groupinstall*) ohpc-perf-tools-intel
 [sms](*\#*) (*\groupinstall*) ohpc-python-libs-intel
 [sms](*\#*) (*\groupinstall*) ohpc-runtimes-intel
+[sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-intel-mpich
+[sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-intel-mvapich2
+[sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-intel-openmpi
+[sms](*\#*) (*\groupinstall*) ohpc-parallel-libs-intel-impi
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run
-
 

@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 ##
-# Copyright 2013-2015 Ghent University
+# Copyright 2013-2016 Ghent University
 #
 # This file is part of EasyBuild,
 # originally created by the HPC team of Ghent University (http://ugent.be/hpc/en),
 # with support of Ghent University (http://ugent.be/hpc),
-# the Flemish Supercomputer Centre (VSC) (https://vscentrum.be/nl/en),
-# the Hercules foundation (http://www.herculesstichting.be/in_English)
+# the Flemish Supercomputer Centre (VSC) (https://www.vscentrum.be),
+# Flemish Research Foundation (FWO) (http://www.fwo.be/en)
 # and the Department of Economy, Science and Innovation (EWI) (http://www.ewi-vlaanderen.be/en).
 #
 # http://github.com/hpcugent/easybuild
@@ -29,12 +29,11 @@ Bootstrap script for EasyBuild
 
 Installs distribute with included (patched) distribute_setup.py script to obtain easy_install,
 and then performs a staged install of EasyBuild:
+ * stage 0: install setuptools (which provides easy_install), unless already available
  * stage 1: install EasyBuild with easy_install to a temporary directory
- * stage 2: install EasyBuild with EasyBuild from stage 1 to a temporary directory
- * stage 3: install EasyBuild with EasyBuild from stage 2 to intended install directory
-   (default or $EASYBUILD_INSTALLPATH)
+ * stage 2: install EasyBuild with EasyBuild from stage 1 to specified install directory
 
-Authors: Kenneth Hoste (UGent), Stijn Deweirdt (UGent)
+Authors: Kenneth Hoste (UGent), Stijn Deweirdt (UGent), Ward Poelmans (UGent)
 License: GPLv2
 
 inspired by https://bitbucket.org/pdubroy/pip/raw/tip/getpip.py
@@ -49,15 +48,32 @@ import shutil
 import site
 import sys
 import tempfile
+import traceback
 from distutils.version import LooseVersion
+from hashlib import md5
+
+
+EB_BOOTSTRAP_VERSION = '20161104.01'
+
+# argparse preferrred, optparse deprecated >=2.7
+HAVE_ARGPARSE = False
+try:
+    import argparse
+    HAVE_ARGPARSE = True
+except ImportError:
+    import optparse
 
 PYPI_SOURCE_URL = 'https://pypi.python.org/packages/source'
 
 VSC_BASE = 'vsc-base'
-EASYBUILD_PACKAGES = [VSC_BASE, 'easybuild-framework', 'easybuild-easyblocks', 'easybuild-easyconfigs']
+VSC_INSTALL = 'vsc-install'
+EASYBUILD_PACKAGES = [VSC_INSTALL, VSC_BASE, 'easybuild-framework', 'easybuild-easyblocks', 'easybuild-easyconfigs']
 
 # set print_debug to True for detailed progress info
 print_debug = os.environ.pop('EASYBUILD_BOOTSTRAP_DEBUG', False)
+
+# install with --force in stage2?
+forced_install = os.environ.pop('EASYBUILD_BOOTSTRAP_FORCED', False)
 
 # don't add user site directory to sys.path (equivalent to python -s), see https://www.python.org/dev/peps/pep-0370/
 os.environ['PYTHONNOUSERSITE'] = '1'
@@ -72,7 +88,9 @@ EASYBUILD_BOOTSTRAP_SKIP_STAGE0 = os.environ.pop('EASYBUILD_BOOTSTRAP_SKIP_STAGE
 # keep track of original environment (after clearing PYTHONPATH)
 orig_os_environ = copy.deepcopy(os.environ)
 
-easybuild_modules_tool = None
+# If the modules tool is specified, use it
+easybuild_modules_tool = os.environ.get('EASYBUILD_MODULES_TOOL', None)
+
 
 #
 # Utility functions
@@ -81,18 +99,49 @@ def debug(msg):
     """Print debug message."""
 
     if print_debug:
-        print "[[DEBUG]]", msg
+        print("[[DEBUG]] " + msg)
+
 
 def info(msg):
     """Print info message."""
 
-    print "[[INFO]]", msg
+    print("[[INFO]] " + msg)
+
 
 def error(msg, exit=True):
     """Print error message and exit."""
 
-    print "[[ERROR]]", msg
+    print("[[ERROR]] " + msg)
     sys.exit(1)
+
+
+def mock_stdout_stderr():
+    """Mock stdout/stderr channels"""
+    # cStringIO is only available in Python 2
+    from cStringIO import StringIO
+    orig_stdout, orig_stderr = sys.stdout, sys.stderr
+    sys.stdout.flush()
+    sys.stdout = StringIO()
+    sys.stderr.flush()
+    sys.stderr = StringIO()
+
+    return orig_stdout, orig_stderr
+
+
+def restore_stdout_stderr(orig_stdout, orig_stderr):
+    """Restore stdout/stderr channels after mocking"""
+    # collect output
+    sys.stdout.flush()
+    stdout = sys.stdout.getvalue()
+    sys.stderr.flush()
+    stderr = sys.stderr.getvalue()
+
+    # restore original stdout/stderr
+    sys.stdout = orig_stdout
+    sys.stderr = orig_stderr
+
+    return stdout, stderr
+
 
 def det_lib_path(libdir):
     """Determine relative path of Python library dir."""
@@ -100,6 +149,7 @@ def det_lib_path(libdir):
         libdir = 'lib'
     pyver = '.'.join([str(x) for x in sys.version_info[:2]])
     return os.path.join(libdir, 'python%s' % pyver, 'site-packages')
+
 
 def find_egg_dir_for(path, pkg):
     """Find full path of egg dir for given package."""
@@ -118,6 +168,7 @@ def find_egg_dir_for(path, pkg):
     debug("Failed to determine egg dir path for %s in %s (subdirs: %s)" % (pkg, path, subdirs))
     return None
 
+
 def prep(path):
     """Prepare for installing a Python package in the specified path."""
 
@@ -130,6 +181,8 @@ def prep(path):
     # update PATH
     os.environ['PATH'] = os.pathsep.join([os.path.join(path, 'bin')] +
                                          [x for x in os.environ.get('PATH', '').split(os.pathsep) if len(x) > 0])
+    debug("$PATH: %s" % os.environ['PATH'])
+
     # update actual Python search path
     sys.path.insert(0, path)
 
@@ -143,52 +196,173 @@ def prep(path):
         pythonpaths = [x for x in os.environ.get('PYTHONPATH', '').split(os.pathsep) if len(x) > 0]
         os.environ['PYTHONPATH'] = os.pathsep.join([full_libpath] + pythonpaths)
 
+    debug("$PYTHONPATH: %s" % os.environ['PYTHONPATH'])
+
     os.environ['EASYBUILD_MODULES_TOOL'] = easybuild_modules_tool
     debug("$EASYBUILD_MODULES_TOOL set to %s" % os.environ['EASYBUILD_MODULES_TOOL'])
 
+
 def check_module_command(tmpdir):
     """Check which module command is available, and prepare for using it."""
+    global easybuild_modules_tool
 
-    # order matters, so we can't use the keys from modules_tools which are unordered
-    known_module_commands = ['modulecmd', 'lmod', 'modulecmd.tcl']
-    modules_tools = {
-        'modulecmd': 'EnvironmentModulesC',
-        'lmod': 'Lmod',
-        'modulecmd.tcl': 'EnvironmentModulesTcl',
-    }
-    out = os.path.join(tmpdir, 'module_command.out')
-    modtool = None
-    for modcmd in known_module_commands:
+    if easybuild_modules_tool is not None:
+        info("Using modules tool specified by $EASYBUILD_MODULES_TOOL: %s" % easybuild_modules_tool)
+        return easybuild_modules_tool
+
+    def check_cmd_help(modcmd):
+        """Check 'help' output for specified command."""
+        modcmd_re = re.compile(r'module\s.*command\s')
         cmd = "%s python help" % modcmd
         os.system("%s > %s 2>&1" % (cmd, out))
-        modcmd_re = re.compile('module\s.*command\s')
-        txt = open(out, "r").read()
+        txt = open(out, 'r').read()
         debug("Output from %s: %s" % (cmd, txt))
-        if modcmd_re.search(txt):
-            modtool = modules_tools[modcmd]
-            global easybuild_modules_tool
+        return modcmd_re.search(txt)
+
+    # order matters, which is why we don't use a dict
+    known_module_commands = [
+        ('modulecmd', 'EnvironmentModulesC'),
+        ('lmod', 'Lmod'),
+        ('modulecmd.tcl', 'EnvironmentModulesTcl'),
+    ]
+    out = os.path.join(tmpdir, 'module_command.out')
+    modtool = None
+    for modcmd, modtool in known_module_commands:
+        if check_cmd_help(modcmd):
             easybuild_modules_tool = modtool
             info("Found module command '%s' (%s), so using it." % (modcmd, modtool))
             break
+        elif modcmd == 'lmod':
+            # check value of $LMOD_CMD as fallback
+            modcmd = os.environ.get('LMOD_CMD')
+            if modcmd and check_cmd_help(modcmd):
+                easybuild_modules_tool = modtool
+                info("Found module command '%s' via $LMOD_CMD (%s), so using it." % (modcmd, modtool))
+                break
 
-    if modtool is None:
+    if easybuild_modules_tool is None:
+        mod_cmds = [m for (m, _) in known_module_commands]
         msg = [
             "Could not find any module command, make sure one available in your $PATH.",
-            "Known module commands are checked in order, and include: %s" % ', '.join(known_module_commands),
+            "Known module commands are checked in order, and include: %s" % ', '.join(mod_cmds),
             "Check the output of 'type module' to determine the location of the module command you are using.",
         ]
         error('\n'.join(msg))
 
     return modtool
 
+
+def check_setuptools():
+    """Check whether a suitable setuptools installation is already available."""
+
+    debug("Checking whether suitable setuptools installation is available...")
+    res = None
+
+    _, outfile = tempfile.mkstemp()
+
+    # note: we need to be very careful here, because switching to a different setuptools installation (e.g. in stage0)
+    #       after the setuptools module was imported is very tricky...
+    #       So, we'll check things by running commands through os.system rather than importing setuptools directly.
+    cmd_tmpl = "%s -c '%%s' > %s 2>&1" % (sys.executable, outfile)
+
+    # check setuptools version
+    try:
+        os.system(cmd_tmpl % "import setuptools; print setuptools.__version__")
+        setuptools_version = LooseVersion(open(outfile).read().strip())
+        debug("Found setuptools version %s" % setuptools_version)
+
+        min_setuptools_version = '0.6c11'
+        if setuptools_version < LooseVersion(min_setuptools_version):
+            debug("Minimal setuptools version %s not satisfied, found '%s'" % (min_setuptools_version, setuptools_version))
+            res = False
+    except Exception as err:
+        debug("Failed to check setuptools version: %s" % err)
+        res = False
+
+    os.system(cmd_tmpl % "from setuptools.command import easy_install; print easy_install.__file__")
+    out = open(outfile).read().strip()
+    debug("Location of setuptools' easy_install module: %s" % out)
+    if 'setuptools/command/easy_install' not in out:
+        debug("Module 'setuptools.command.easy_install not found")
+        res = False
+
+    if res is None:
+        os.system(cmd_tmpl % "import setuptools; print setuptools.__file__")
+        setuptools_loc = open(outfile).read().strip()
+        res = os.path.dirname(os.path.dirname(setuptools_loc))
+        debug("Location of setuptools installation: %s" % res)
+
+    try:
+        os.remove(outfile)
+    except Exception:
+        pass
+
+    return res
+
+
+def run_easy_install(args):
+    """Run easy_install with specified list of arguments"""
+    import setuptools
+    debug("Active setuptools installation: %s" % setuptools.__file__)
+    from setuptools.command import easy_install
+
+    orig_stdout, orig_stderr = mock_stdout_stderr()
+    try:
+        easy_install.main(args)
+        easy_install_stdout, easy_install_stderr = restore_stdout_stderr(orig_stdout, orig_stderr)
+    except Exception as err:
+        easy_install_stdout, easy_install_stderr = restore_stdout_stderr(orig_stdout, orig_stderr)
+        error("Running 'easy_install %s' failed: %s\n%s" % (' '.join(args), err, traceback.format_exc()))
+
+    debug("stdout for 'easy_install %s':\n%s" % (' '.join(args), easy_install_stdout))
+    debug("stderr for 'easy_install %s':\n%s" % (' '.join(args), easy_install_stderr))
+
+
+def check_easy_install_cmd():
+    """Try to make sure available 'easy_install' command matches active 'setuptools' installation."""
+
+    debug("Checking whether available 'easy_install' command matches active 'setuptools' installation...")
+
+    _, outfile = tempfile.mkstemp()
+
+    import setuptools
+    debug("Location of active setuptools installation: %s" % setuptools.__file__)
+
+    easy_install_regex = re.compile('^(setuptools|distribute) %s' % setuptools.__version__)
+    debug("Pattern for 'easy_install --version': %s" % easy_install_regex.pattern)
+
+    for path in os.getenv('PATH', '').split(os.pathsep):
+        easy_install = os.path.join(path, 'easy_install')
+        debug("Checking %s..." % easy_install)
+        res = False
+        if os.path.exists(easy_install):
+            cmd = "PYTHONPATH='%s' %s --version" % (os.getenv('PYTHONPATH', ''), easy_install)
+            os.system("%s > %s 2>&1" % (cmd, outfile))
+            outtxt = open(outfile).read().strip()
+            debug("Output of '%s':\n%s" % (cmd, outtxt))
+            res = bool(easy_install_regex.match(outtxt))
+            debug("Result for %s: %s" % (easy_install, res))
+        else:
+            debug("%s does not exist" % easy_install)
+
+        if res:
+            debug("Found right 'easy_install' command in %s" % path)
+            curr_path = os.environ.get('PATH', '').split(os.pathsep)
+            os.environ['PATH'] = os.pathsep.join([path] + curr_path)
+            debug("$PATH: %s" % os.environ['PATH'])
+            return
+
+    error("Failed to find right 'easy_install' command!")
+
+
 #
 # Stage functions
 #
-
 def stage0(tmpdir):
     """STAGE 0: Prepare and install distribute via included (patched) distribute_setup.py script."""
 
-    info("\n\n+++ STAGE 0: installing distribute via included (patched) distribute_setup.py...\n\n")
+    print('\n')
+    info("+++ STAGE 0: installing distribute via included (patched) distribute_setup.py...\n")
 
     txt = DISTRIBUTE_SETUP_PY
     if not print_debug:
@@ -216,7 +390,11 @@ def stage0(tmpdir):
     from distribute_setup import main as distribute_setup_main
     orig_sys_argv = sys.argv[:]  # make a copy
     sys.argv.append('--prefix=%s' % tmpdir)
-    distribute_setup_main()
+    # We download a custom version of distribute: it uses a newer version of markerlib to avoid a bug (#1099)
+    # It's is the source of distribute 0.6.49 with the file _markerlib/markers.py replaced by the 0.6 version of
+    # markerlib which can be found at https://pypi.python.org/pypi/markerlib/0.6.0
+    sys.argv.append('--download-base=http://hpcugent.github.io/easybuild/files/')
+    distribute_setup_main(version="0.6.49-patched1")
     sys.argv = orig_sys_argv
 
     # sanity check
@@ -234,18 +412,24 @@ def stage0(tmpdir):
 
     # make sure we're getting the setuptools we expect
     import setuptools
-    if not tmpdir in setuptools.__file__:
-        error("Found another setuptools than expected: %s" % setuptools.__file__)
-    else:
-        debug("Found setuptools in expected path, good!")
+    from setuptools.command import easy_install
+
+    for mod, path in [('setuptools', setuptools.__file__), ('easy_install', easy_install.__file__)]:
+        if tmpdir not in path:
+            error("Found another %s module than expected: %s" % (mod, path))
+        else:
+            debug("Found %s in expected path, good!" % mod)
+
+    info("Installed setuptools version %s (%s)" % (setuptools.__version__, setuptools.__file__))
 
     return distribute_egg_dir
 
 
-def stage1(tmpdir, sourcepath):
+def stage1(tmpdir, sourcepath, distribute_egg_dir):
     """STAGE 1: temporary install EasyBuild using distribute's easy_install."""
 
-    info("\n\n+++ STAGE 1: installing EasyBuild in temporary dir with easy_install...\n\n")
+    print('\n')
+    info("+++ STAGE 1: installing EasyBuild in temporary dir with easy_install...\n")
 
     # determine locations of source tarballs, if sources path is specified
     source_tarballs = {}
@@ -257,41 +441,72 @@ def stage1(tmpdir, sourcepath):
             if len(pkg_tarball_paths) > 1:
                 error("Multiple tarballs found for %s: %s" % (pkg, pkg_tarball_paths))
             elif len(pkg_tarball_paths) == 0:
-                if pkg != VSC_BASE:
+                if pkg not in [VSC_BASE, VSC_INSTALL]:
                     # vsc-base package is not strictly required
                     # it's only a dependency since EasyBuild v2.0;
-                    # with EasyBuild v2.0, it will be pulled in from PyPI when installing easybuild-framework
+                    # with EasyBuild v2.0, it will be pulled in from PyPI when installing easybuild-framework;
+                    # vsc-install is an optional dependency, only required to run unit tests
                     error("Missing source tarball: %s" % pkg_tarball_glob)
             else:
                 info("Found %s for %s package" % (pkg_tarball_paths[0], pkg))
                 source_tarballs.update({pkg: pkg_tarball_paths[0]})
 
-    from setuptools.command import easy_install
+    if print_debug:
+        debug("$ easy_install --help")
+        run_easy_install(['--help'])
 
     # prepare install dir
     targetdir_stage1 = os.path.join(tmpdir, 'eb_stage1')
     prep(targetdir_stage1)  # set PATH, Python search path
 
     # install latest EasyBuild with easy_install from PyPi
-    cmd = []
-    cmd.append('--upgrade')  # make sure the latest version is pulled from PyPi
-    cmd.append('--prefix=%s' % targetdir_stage1)
+    cmd = [
+        '--upgrade',  # make sure the latest version is pulled from PyPi
+        '--prefix=%s' % targetdir_stage1,
+    ]
 
+    post_vsc_base = []
     if source_tarballs:
         # install provided source tarballs (order matters)
         cmd.extend([source_tarballs[pkg] for pkg in EASYBUILD_PACKAGES if pkg in source_tarballs])
+        # add vsc-base again at the end, to avoid that the one available on the system is used instead
+        if VSC_BASE in source_tarballs:
+            cmd.append(source_tarballs[VSC_BASE])
     else:
         # install meta-package easybuild from PyPI
         cmd.append('easybuild')
 
+        # install vsc-base again at the end, to avoid that the one available on the system is used instead
+        post_vsc_base = cmd[:]
+        post_vsc_base[-1] = VSC_BASE
+
     if not print_debug:
         cmd.insert(0, '--quiet')
+
     info("installing EasyBuild with 'easy_install %s'" % (' '.join(cmd)))
-    easy_install.main(cmd)
+    run_easy_install(cmd)
+
+    if post_vsc_base:
+        info("running post install command 'easy_install %s'" % (' '.join(post_vsc_base)))
+        run_easy_install(post_vsc_base)
+
+        pkg_egg_dir = find_egg_dir_for(targetdir_stage1, VSC_BASE)
+        if pkg_egg_dir is None:
+            # if vsc-base available on system is the same version as the one being installed,
+            # the .egg directory may not get installed...
+            # in that case, try to have it *copied* by also including --always-copy;
+            # using --always-copy should be used as a last resort, since it can result in all kinds of problems
+            info(".egg dir for vsc-base not found, trying again with --always-copy...")
+            post_vsc_base.insert(0, '--always-copy')
+            info("running post install command 'easy_install %s'" % (' '.join(post_vsc_base)))
+            run_easy_install(post_vsc_base)
 
     # clear the Python search path, we only want the individual eggs dirs to be in the PYTHONPATH (see below)
     # this is needed to avoid easy-install.pth controlling what Python packages are actually used
-    os.environ['PYTHONPATH'] = ''
+    if distribute_egg_dir is not None:
+        os.environ['PYTHONPATH'] = distribute_egg_dir
+    else:
+        del os.environ['PYTHONPATH']
 
     # template string to inject in template easyconfig
     templates = {}
@@ -301,7 +516,7 @@ def stage1(tmpdir, sourcepath):
 
         pkg_egg_dir = find_egg_dir_for(targetdir_stage1, pkg)
         if pkg_egg_dir is None:
-            if pkg == VSC_BASE:
+            if pkg in [VSC_BASE, VSC_INSTALL]:
                 # vsc-base is optional in older EasyBuild versions
                 continue
 
@@ -309,6 +524,7 @@ def stage1(tmpdir, sourcepath):
         sys.path.insert(0, pkg_egg_dir)
         pythonpaths = [x for x in os.environ.get('PYTHONPATH', '').split(os.pathsep) if len(x) > 0]
         os.environ['PYTHONPATH'] = os.pathsep.join([pkg_egg_dir] + pythonpaths)
+        debug("$PYTHONPATH: %s" % os.environ['PYTHONPATH'])
 
         if source_tarballs:
             if pkg in source_tarballs:
@@ -331,8 +547,8 @@ def stage1(tmpdir, sourcepath):
     pattern = "This is EasyBuild (?P<version>%(v)s) \(framework: %(v)s, easyblocks: %(v)s\)" % {'v': '[0-9.]*[a-z0-9]*'}
     version_re = re.compile(pattern)
     version_out_file = os.path.join(tmpdir, 'eb_version.out')
-    eb_version_cmd = 'from easybuild.tools.version import this_is_easybuild; print this_is_easybuild()'
-    cmd = "python -c '%s' > %s 2>&1" % (eb_version_cmd, version_out_file)
+    eb_version_cmd = 'from easybuild.tools.version import this_is_easybuild; print(this_is_easybuild())'
+    cmd = "%s -c '%s' > %s 2>&1" % (sys.executable, eb_version_cmd, version_out_file)
     debug("Determining EasyBuild version using command '%s'" % cmd)
     os.system(cmd)
     txt = open(version_out_file, "r").read()
@@ -351,53 +567,63 @@ def stage1(tmpdir, sourcepath):
 
     # make sure we're getting the expected EasyBuild packages
     import easybuild.framework
-    if not tmpdir in easybuild.framework.__file__:
-        error("Found another easybuild-framework than expected: %s" % easybuild.framework.__file__)
-    else:
-        debug("Found easybuild-framework in expected path, good!")
-
     import easybuild.easyblocks
-    if not tmpdir in easybuild.easyblocks.__file__:
-        error("Found another easybuild-easyblocks than expected: %s" % easybuild.easyblocks.__file__)
-    else:
-        debug("Found easybuild-easyblocks in expected path, good!")
+    import vsc.utils.fancylogger
+    for pkg in [easybuild.framework, easybuild.easyblocks, vsc.utils.fancylogger]:
+        if tmpdir not in pkg.__file__:
+            error("Found another %s than expected: %s" % (pkg.__name__, pkg.__file__))
+        else:
+            debug("Found %s in expected path, good!" % pkg.__name__)
 
     debug("templates: %s" % templates)
     return templates
 
+
 def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
     """STAGE 2: install EasyBuild to temporary dir with EasyBuild from stage 1."""
 
-    info("\n\n+++ STAGE 2: installing EasyBuild in %s with EasyBuild from stage 1...\n\n" % install_path)
+    print('\n')
+    info("+++ STAGE 2: installing EasyBuild in %s with EasyBuild from stage 1...\n" % install_path)
 
-    # inject path to distribute installed in stage 1 into $PYTHONPATH via preinstallopts
-    # other approaches are not reliable, since EasyBuildMeta easyblock unsets $PYTHONPATH
-    if distribute_egg_dir is None:
-        preinstallopts = ''
+    preinstallopts = ''
+
+    if distribute_egg_dir is not None:
+        # ensure that (latest) setuptools is installed as well alongside EasyBuild,
+        # since it is a required runtime dependency for recent vsc-base and EasyBuild versions
+        # this is necessary since we provide our own distribute installation during the bootstrap (cfr. stage0)
+        preinstallopts += "easy_install -U --prefix %(installdir)s setuptools && "
+
+    # vsc-install is a runtime dependency for the EasyBuild unit test suite,
+    # and is easily picked up from stage1 rather than being actually installed, so force it
+    vsc_install_tarball_paths = glob.glob(os.path.join(sourcepath, 'vsc-install*.tar.gz'))
+    if len(vsc_install_tarball_paths) == 1:
+        vsc_install = vsc_install_tarball_paths[0]
     else:
-        preinstallopts = 'PYTHONPATH=%s:$PYTHONPATH' % distribute_egg_dir
+        vsc_install = 'vsc-install'
+    preinstallopts += "easy_install -U --prefix %%(installdir)s %s && " % vsc_install
+
     templates.update({
         'preinstallopts': preinstallopts,
     })
 
     # create easyconfig file
     ebfile = os.path.join(tmpdir, 'EasyBuild-%s.eb' % templates['version'])
-    f = open(ebfile, "w")
+    handle = open(ebfile, 'w')
     templates.update({
         'source_urls': '\n'.join(["'%s/%s/%s'," % (PYPI_SOURCE_URL, pkg[0], pkg) for pkg in EASYBUILD_PACKAGES]),
-        'sources': "%(vsc-base)s%(easybuild-framework)s%(easybuild-easyblocks)s%(easybuild-easyconfigs)s" % templates,
+        'sources': "%(vsc-install)s%(vsc-base)s%(easybuild-framework)s%(easybuild-easyblocks)s%(easybuild-easyconfigs)s" % templates,
         'pythonpath': distribute_egg_dir,
     })
-    f.write(EASYBUILD_EASYCONFIG_TEMPLATE % templates)
-    f.close()
-
-    # unset $MODULEPATH, we don't care about already installed modules
-    os.environ['MODULEPATH'] = ''
+    handle.write(EASYBUILD_EASYCONFIG_TEMPLATE % templates)
+    handle.close()
 
     # set command line arguments for eb
     eb_args = ['eb', ebfile, '--allow-modules-tool-mismatch']
     if print_debug:
         eb_args.extend(['--debug', '--logtostdout'])
+    if forced_install:
+        info("Performing FORCED installation, as requested...")
+        eb_args.append('--force')
 
     # make sure we don't leave any stuff behind in default path $HOME/.local/easybuild
     # and set build and install path explicitely
@@ -429,18 +655,42 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
     from easybuild.main import main as easybuild_main
     easybuild_main()
 
+
 def main():
     """Main script: bootstrap EasyBuild in stages."""
+
+    self_txt = open(__file__).read()
+    info("EasyBuild bootstrap script (version %s, MD5: %s)" % (EB_BOOTSTRAP_VERSION, md5(self_txt).hexdigest()))
+    info("Found Python %s\n" % '; '.join(sys.version.split('\n')))
 
     # disallow running as root, since stage 2 will fail
     if os.getuid() == 0:
         error("Don't run the EasyBuild bootstrap script as root, "
               "since stage 2 (installing EasyBuild with EasyBuild) will fail.")
 
-    # see if an install dir was specified
-    if not len(sys.argv) == 2:
-        error("Usage: %s <install path>" % sys.argv[0])
-    install_path = os.path.abspath(sys.argv[1])
+    # general option/argument parser
+    if HAVE_ARGPARSE:
+        bs_argparser = argparse.ArgumentParser()
+        bs_argparser.add_argument("prefix", help="Installation prefix directory",
+                                  type=str)
+        bs_args = bs_argparser.parse_args()
+
+        # prefix specification
+        install_path = os.path.abspath(bs_args.prefix)
+    else:
+        bs_argparser = optparse.OptionParser(usage="usage: %prog [options] prefix")
+        (bs_opts, bs_args) = bs_argparser.parse_args()
+
+        # poor method, but should prefer argparse module for better pos arg support.
+        if len(bs_args) < 1:
+            error("Too few arguments\n" + bs_argparser.get_usage())
+        elif len(bs_args) > 1:
+            error("Too many arguments\n" + bs_argparser.get_usage())
+
+        # prefix specification
+        install_path = os.path.abspath(str(bs_args[0]))
+
+    info("Installation prefix %s" % install_path)
 
     sourcepath = EASYBUILD_BOOTSTRAP_SOURCEPATH
     if sourcepath is not None:
@@ -479,14 +729,28 @@ def main():
     # install EasyBuild in stages
 
     # STAGE 0: install distribute, which delivers easy_install
+    distribute_egg_dir = None
     if EASYBUILD_BOOTSTRAP_SKIP_STAGE0:
-        distribute_egg_dir = None
-        info("Skipping stage0, using local distribute/setuptools providing easy_install")
+        info("Skipping stage 0, using local distribute/setuptools providing easy_install")
     else:
-        distribute_egg_dir = stage0(tmpdir)
+        setuptools_loc = check_setuptools()
+        if setuptools_loc:
+            info("Suitable setuptools installation already found, skipping stage 0...")
+            sys.path.insert(0, setuptools_loc)
+        else:
+            info("No suitable setuptools installation found, proceeding with stage 0...")
+            distribute_egg_dir = stage0(tmpdir)
 
     # STAGE 1: install EasyBuild using easy_install to tmp dir
-    templates = stage1(tmpdir, sourcepath)
+    templates = stage1(tmpdir, sourcepath, distribute_egg_dir)
+
+    # add location to easy_install provided through stage0 to $PATH
+    # this must be done *after* stage1, since $PATH is reset during stage1
+    if distribute_egg_dir:
+        prep(tmpdir)
+
+    # make sure the active 'easy_install' is the right one (i.e. it matches the active setuptools installation)
+    check_easy_install_cmd()
 
     # STAGE 2: install EasyBuild using EasyBuild (to final target installation dir)
     stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath)
@@ -495,21 +759,21 @@ def main():
     debug("Cleaning up %s..." % tmpdir)
     shutil.rmtree(tmpdir)
 
-    info('Done!')
+    print('')
+    info('Bootstrapping EasyBuild completed!\n')
 
-    info('')
     if install_path is not None:
-        info('EasyBuild v%s was installed to %s, so make sure your $MODULEPATH includes %s' % \
+        info('EasyBuild v%s was installed to %s, so make sure your $MODULEPATH includes %s' %
              (templates['version'], install_path, os.path.join(install_path, 'modules', 'all')))
     else:
-        info('EasyBuild v%s was installed to configured install path, make sure your $MODULEPATH is set correctly.' % \
+        info('EasyBuild v%s was installed to configured install path, make sure your $MODULEPATH is set correctly.' %
              templates['version'])
         info('(default config => add "$HOME/.local/easybuild/modules/all" in $MODULEPATH)')
 
-    info('')
+    print('')
     info("Run 'module load EasyBuild', and run 'eb --help' to get help on using EasyBuild.")
     info("Set $EASYBUILD_MODULES_TOOL to '%s' to use the same modules tool as was used now." % modtool)
-    info('')
+    print('')
     info("By default, EasyBuild will install software to $HOME/.local/easybuild.")
     info("To install software with EasyBuild to %s, make sure $EASYBUILD_INSTALLPATH is set accordingly." % install_path)
     info("See http://easybuild.readthedocs.org/en/latest/Configuration.html for details on configuring EasyBuild.")
@@ -536,121 +800,152 @@ sources = [%(sources)s]
 allow_system_deps = [('Python', SYS_PYTHON_VERSION)]
 
 preinstallopts = '%(preinstallopts)s'
+
+pyshortver = '.'.join(SYS_PYTHON_VERSION.split('.')[:2])
+sanity_check_paths = {
+    'files': ['bin/eb'],
+    'dirs': [('lib/python%%s/site-packages' %% pyshortver, 'lib64/python%%s/site-packages' %% pyshortver)],
+}
+
+moduleclass = 'tools'
 """
+
+# check Python version
+if sys.version_info[0] != 2 or sys.version_info[1] < 6:
+    pyver = sys.version.split(' ')[0]
+    sys.stderr.write("ERROR: Incompatible Python version: %s (should be Python 2 >= 2.6)\n" % pyver)
+    sys.stderr.write("Please try again using 'python2 %s <prefix>'\n" % os.path.basename(__file__))
+    sys.exit(1)
 
 # distribute_setup.py script (https://pypi.python.org/pypi/distribute)
 #
-# A compressed copy of a patched distribute_setup.py (version 0.6.34), generated like so:
+# A compressed copy of a patched distribute_setup.py (version 0.6.49), generated like so:
 # >>> import base64
 # >>> import zlib
 # >>> base64.b64encode(zlib.compress(open("distribute_setup.py").read()))
 # compressed copy below is for setuptools 0.6c11, after applying patch:
-#$ diff -u distribute_setup.py.orig distribute_setup.py
-#--- distribute_setup.py.orig    2013-02-07 23:27:01.000000000 +0100
-#+++ distribute_setup.py 2013-02-07 23:27:32.000000000 +0100
-#@@ -518,6 +518,8 @@
-#             log.warn("--user requires Python 2.6 or later")
-#             raise SystemExit(1)
-#         install_args.append('--user')
-#+    if options.prefix_install:
-#+        install_args.append('--prefix=%s' % options.prefix_install)
-#     return install_args
 #
-# def _parse_args():
-#@@ -529,6 +531,8 @@
-#         '--user', dest='user_install', action='store_true', default=False,
-#         help='install in user site package (requires Python 2.6 or later)')
-#     parser.add_option(
-#+        '--prefix', dest='prefix_install', metavar="PATH", help='install in prefix')
-#+    parser.add_option(
-#         '--download-base', dest='download_base', metavar="URL",
-#         default=DEFAULT_URL,
-#         help='alternative URL from where to download the distribute package')
+# --- distribute_setup.py.orig	2013-07-05 03:50:13.000000000 +0200
+# +++ distribute_setup.py	2015-11-27 12:20:12.040032041 +0100
+# @@ -528,6 +528,8 @@
+#              log.warn("--user requires Python 2.6 or later")
+#              raise SystemExit(1)
+#          install_args.append('--user')
+# +    if options.prefix_install:
+# +        install_args.append('--prefix=%s' % options.prefix_install)
+#      return install_args
+#
+#  def _parse_args():
+# @@ -539,6 +541,8 @@
+#          '--user', dest='user_install', action='store_true', default=False,
+#          help='install in user site package (requires Python 2.6 or later)')
+#      parser.add_option(
+# +        '--prefix', dest='prefix_install', metavar="PATH", help='install in prefix')
+# +    parser.add_option(
+#          '--download-base', dest='download_base', metavar="URL",
+#          default=DEFAULT_URL,
+#          help='alternative URL from where to download the distribute package')
+# @@ -549,7 +553,7 @@
+#  def main(version=DEFAULT_VERSION):
+#      """Install or upgrade setuptools and EasyInstall"""
+#      options = _parse_args()
+# -    tarball = download_setuptools(download_base=options.download_base)
+# +    tarball = download_setuptools(version=version, download_base=options.download_base)
+#      return _install(tarball, _build_install_args(options))
+#
+#  if __name__ == '__main__':
+#
 DISTRIBUTE_SETUP_PY = """
-eJztPGtz2ziS3/UrcHK5SOUk+jFzc1eu01RlJs6sa7OJy3Z2PyQuGSIhiWO+BiQta3/9deMNkpKdy+yH
-qzrvji0RjUaj390Ac/Rv1a7ZlMVoPB7/UpZN3XBakSSFv+mybRhJi7qhWUabFIBGVyuyK1uypUVDmpK0
-NSM1a9qqKcusBlgc5aSi8SNds6CWg1G1m5Lf27oBgDhrE0aaTVqPVmmG6OELIKE5g1U5i5uS78g2bTYk
-baaEFgmhSSIm4III25QVKVdyJY3/4mI0IvCz4mXuUL8Q4yTNq5I3SO3CUivg/UfhpLdDzv5ogSxCSV2x
-OF2lMXlivAZmIA126hQ/A1RSbouspMkoTzkv+ZSUXHCJFoRmDeMFBZ5qILvjqVg0BqikJHVJljtSt1WV
-7dJiPcJN06riZcVTnF5WKAzBj4eH7g4eHqLR6A7ZJfgbi4URIyO8hc81biXmaSW2p6QrqKzWnCauPCNU
-ipFiXlnrT/WmbdLMfNuZgSbNmf68KnLaxBszxPIK6THfKXe/wo4qyms2GhkB4hq1llxWrkejhu8urJDr
-FJVTDn++vbxZ3F7dXY7Yc8xgZ1fi+SVKQE4xEGROPpYFc7DpfbRL4HDM6lpqUsJWZCFtYxHnSfiG8nU9
-kVPwB78CshD2H7FnFrcNXWZsOiH/LoYMHAd28sJBH8XA8FBgI/M5OR3tJfoI7ABkA5IDISdkBUKSBJHz
-6Ic/lcgj8kdbNqBr+LjNWdEA61ewfAGqasHgEWKqwBsAMTmSHwDMD+eBXVKThQgZbnPijyk8AfwPbB/G
-+8MO24LxcT0OyDEC9uAUTHdIbfqLpUCwDj6oFev7rnTKOqorCkYZwqfrxT/eXt1NSYdp5I0rs3eX799+
-/nC3+Pvlze3Vp4+w3vg0+in64cexGfp88wEfb5qmujg5qXZVGklRRSVfnygfWZ/U4MdidpKcWLd1Mh7d
-Xt59vr779OnD7eL9279evussFJ+djUcu0PVff1tcfXz/CcfH46+jv7GGJrShs79Lb3VBzqLT0UdwsxeO
-hY/M6HE9um3znIJVkGf4Gf2lzNmsAgrF99HbFijn7ucZy2mayScf0pgVtQJ9x6R/EXjxARAEEty3o9Fo
-JNRYuaIQXMMS/k61b1og2+fhZKKNgj1DjIqFtopwIOHFYJNX4FKBB9rfRPljgp/Bs+M4+JFoS3kRBpcW
-CSjFcR1M1WQJWGbJYpsAItCHNWvibaIwGLchoMCYNzAndKcKKCqIkE4uKitW6G1ZmIXah9qzNzmKs7Jm
-GI6sha5LRSxu2gQOAwAORm4diKpos4l+B3hF2BQfZqBeDq1fTu8n/Y1ILHbAMuxjuSXbkj+6HNPQDpVK
-aBi2+jiuzCB5Z5Q9mLj+pSgbz6MFOsLDcoFCDh/fuMrR8TB2vVvQYcgcYLktuDSy5SV8TFquVcfNbSKH
-jg4WxgQ0Q89McnDhYBWELssn1p2Eypk2cQlhVLvucw9A+Rv5cJUWsPqQPkn1s7hlyI143nDGjLYpw1m2
-KYCz9TqE/6bE2E9TLhDs/83m/4DZCBmK+FsQkOIAol8MhGM7CGsFIeVtObXPjGZ/4O8lxhtUG/Foht/g
-F3cQ/SlKKvcn9V7rHmd1mzW+agEhElg5AS0PMKi6qcWwpYHTFHLqq08iWQqDX8s2S8QswUdpres1Wqey
-kQS2pJLuUOXvU5OGL5a0ZnrbzuOEZXSnVkVGd5VEwQc2cM+O61m1O04i+D9ydjC1gZ9jYqnANEN9gRi4
-KkHDBh6e3U9ezx5lNECw2YtTIuzZ/z5aOz97uGS17gV3JABFFonkgwdmvAlPp8TKX+XjfqHmVCVLXabq
-lGEhCoK5MBwp705RpHY87yRtHQ7MncRtkBtyB3M0gJYPMGF+9h9TEM5iRR/Z/I63zPjenAoHULdQSW5F
-Oi90lC7rMkMzRl6M7BKOpgEI/g1d7m1pvZBcYuhrg+pxvQCTEnlkLdJq5G9eJm3GaiztvprdBJYrXcC+
-n/a+OKLx1vMBpHJuaE2bhoceIBjKInGi/mBZgLMVB4frAjHkl+xdEOUcbDVlIPYVWmamjM7f4y32M89j
-RqT6CuHYsuTn+RjqMrXeZICw7j58jCqV/7UsVlkaN/7iDPRE1jOx8CfhBDxKV3SuXvW5j9MhFEIWFG05
-FN9hD2J8J3y72FjitkmcdlL48/wYiqi0FqKmT1BCiOrqazHu48PuT0yLoMFEShk7YN5usLMhWkKqkwGf
-eFtgfInIdcZAQIP4dLeDkrzkSGqMaaEmdJXyupmCcQKawekBIN5pp0Nmn519BdEA/NfiaxH+2nIOq2Q7
-iZgc8wkg9yIAizCLxcyir8xSaGkTnvtjLKsHLAR0kHSMzrHwLx1PcY9TMDaLXlT5uK/A/hZ7eFUU2Wcz
-g3ptsh1Y9WPZvC/bIvlus32RzCESe6nQIYe1iDmjDev6qwVuTligybJExDoQqL83bImfgdilQpZyxFCk
-v7NtSWOvIrSa5icYX1bGol4SrVnF+bSR3caC5kxmjQ+K9gfICkVytsQW6hPNUg+7Nr2izZeMg0lTYcvG
-LQhc2LIUWbFo45jeKaiBmMLIg8ePB4KNlxCcRLzRq7MikZET+8qUBCfBJCIPkicPuKJXHICDYZzpLNJU
-cnoVlkRyj4KDZrrag+gKx2WRiP5sRTHWL9kK/Q22YuOmpZntEov9NVhqNZEWw78kZ/DCkRBqy6ESX4pA
-xLA1r3rkPMO6a+SY42C4dFCcD81t1v9coDpgP8rLjyOs09b/RA+opC8b8dxLV1GQEAw1FpkC0icGLN2T
-hWtQlWDyGNHBvlS/1zHXTuos0U4ukOdvn8oUtbpC000MOTbJ6UV1U78Y6xFOvh5PcUu+z5ZEKS6FveEj
-csNociKCK8EIA/kZkE6WYHKPUzwV2KISYjiUvgU0OS45B3chrK+DDHYrtFrbS4rnMw0T8FqF9Q92CjFD
-4DHoA006SZVkoyBaMmtKxtvluAek8gJEZsd6TlNJAtYayDGAAF3Dd+AB/0C8g0VdeNvOFRKGvWTCEpSM
-dTUIDrsG97Usn8NVW8TozpQXFMPuuGj6TsmbN4/byYHMWB5J2BpFTdeW8U67llv5/FDS3IXFvBlK7aGE
-Gal9SkvZwOo1/92fitZ1b6C7UoTrgKT7z80ir8BhYAHT/nkVng6J8gULpVekNnbCewoAr87pu/P2y1Ap
-j9YIT/QvqrNapk/3YQYNimAwrRuGdLXe1Vut6YKsBXqHEA1hCg4DfEDR2KD/DxHdaPzYVsJfrGRuzQq5
-JYjtOiSttBNATBMVIcCFgsNbKLQAsXI9yMqzTmBTf8Jck2RZdwTeD5HsNFcH2mFvfQi3EavYYdXEzrpG
-aKwSIj0BEk2MGgvhJuzGvL2CBW6DoTCqHJ7m6XCSuBryUELpR454YD3X7TgjxmvhGbnm26A0v1tAirgD
-QtK09LgmKSjYVkd9fAoRPIg+fXgXHdd4hofnwxH+6rWVbxCdDJyYNYl2ptyhxqj6y1g449dwaFSRrx9a
-WvPyCRJxMLqF2/EPq4zGbANmxHSXvJMhpDX2OftgPvGfi0eIsd5hAuR0ahPO3P0KusKaxvNsmOnq+xFO
-E3qYFKBaHbdH6m+Ic6dut+cN9iNnWHh0A4levOeHl6Anjy5bVn7pZTlg+6+iOnDvELjrdhgw6ijB38on
-VAGWMXkAXbYNZtPolLZ0Z01WV1DdTNBhzpRIy1HEd+Sp5jt8sEFCGR4QvfBgpTV5kak3SbpZNWNKBk5n
-VU9d8bMXMywvwA5o18NNiU/NoCodAeYtyVgT1ATV3vj0Lj+Nmil+o6aFbntw2mksqsMDvHeBHx3uaQyH
-5KFgvLO+bg9bgXTqaNfV9LD0c4UhrQSfLA8FgK2aWMWJPS364NbeakqcBkTQ2Ynvzvd5mq5z3wdnXD1d
-QaJuTsSRAMUVJwAiiLm/Y3rixkgs87EQAgx4IAcePc+BikW5/D00x6mTSDfSKyg2oaKTkfGlBobn2xTh
-3zLHc7kuvaCUA3XaS254QNyaO7pn0XdBglW7J8EkMDoVqMJXn8nIYtNuVIVyx47UkVBt/SAs8NXTunDf
-1YippO0b3F6HlJ4H1Lzsu8BB3yPBD3ierg//FeUvA3lvlp87mVzF+EuTZKmU/rJ4SnlZoLF18nq36MZy
-eAPlHakYz9O61jfjZBl9jB3Qx7SqgKbxgW306VO53aATFwD78zwprsYkdvvF5ehJBBOCbl7UYWezcaRq
-Oagev5SmemQ4jcCuzry8v5fMvOPvXuVORhO/ZjER2GaXRyquQTiMH1GrU/w2VCvstRWZzV/+9tsMJYnx
-DKQqP3+DraS9bPxg0N8XoF4b5K2eOoF+T+ECxOePhm/+o4OsmLzgZV7k3CGL/tNMy2GFV0IpbRmuotSg
-vTAj2rEmvPZC6y+yXbs3tg6cQSrMoie9qDhbpc+hjjo20JmIK8KUOn6lfP100fFHNhlXlxk14Bf9AUJ2
-wp6dGA611tnFvcnqxPBUX3pkRZszTuV1SLdHhKDyOrHM/2YzDruVN0LkNrrlAmwDcESwKm9q7KejHs8x
-qEk8Aw2opqyUcMTMKkubMMB15sHky6xzDukwQTPQXUzh6h6GSaqwUJVUDB4uZ6Cc8g7nz5I/w70yj9z6
-i4BE7vbp/FZaLZXA3rZmPBCnKPZysjoWxY71YG9qaBUze8A6pFb21LWr8LcxFYenzhmrvp46ZMB7rwEc
-6sUdkS0LwKpiIGEg6XDybVBJ54ZTUjLJlJqxHAO7exTcb/uIr1s0Gb94UXewkA39DTnhCDNlmLytI8wi
-/TNuH+ONPOjG9CQSl9c71RNnItTj+Fy4bV9nvVTnblexHr+wGeuclb29vvpXEmyps0VqdxlQT1813Xtu
-7osgbskk2wbDgjoiCWuYuk+I8RzvIJigiHqbdDNsc/4475IX6aGudrsvqDhFmVwadF03awZWUbwQpynS
-N6J6Ct+YPgtiK14+pQlL5Lsq6UrBu2/F1E5rJFFXEfOpPc3RjVa3HvJDyRBlw1JQ2ICh0y7BgEgeAg1d
-wu37Nnk/H2jZQHW0v4LyMjOwUSnH2r3IqLY0sImIFYkKIuK+3J5NFTN5z9EKz6MDrX1/l29QqnqyIg1w
-DPnbgaaPcxV2P0n7kqgBUg7nVIrEcF9Kijrnd0u+IS3dm5ce6K13eOPP63fXXd0wZ5Zo1uJgXXpIccjt
-eP+CdUXrFwTfK88+vRCT8gqIZM6hQEbbIt7YzM4+6QbPGzXibRyjnSxLxTtkEkL0JPRLRhKqSiuSU/6I
-NxlKQsXxM7UTlu1aFU95cobvtASz2L8ID4kEXivK2Ey1JmbsWbxmBgn0LKcFxPAkuDdIzvch4SwuuYZU
-7/mIhPPih3tMWCQF4EqGBs6dUKqHT+9NHwTbhW4y+8V/s+Yekis9baRxiDtPgy9NGZE4F8Frlq3kicF8
-HEGdnzO8i1HPMVrZoy51eV2crSsIeXAr7lVwEKGUF36N5bUtfXdb78/eEUFvj6/8ldsCK/m8TPDlQBlZ
-8IxDALg9CXsIqpGkoN6i0weKlNQRecANBOauDb6pB0hXTBDSu7oOhCoOwEeYrHYUoI+XSTDNBBE5vnkp
-7t8APwXJovWp8eDZgrIPiE7LHVmzRuEKJ/6lFJX4xWW1c79D1Qe1hbpnKRkqr/BrAMV4exnT5QDow73J
-OLRYepmGHsCon61Gps6BlYSnhVilQLwyXQ2rzn/H4x1pwjx61B2hmq4YSpV1bkpYyIhWUO4moVrDd5Ka
-rrngVoS/DgLiHT3sFf3443/JtChOc5CfqM+AwNP/PD11sr9sFSnZa6RS+026csPQHTBSI/tdml37dpuZ
-5L9JeD4lPzosQiPD+YyHgOFsinjOJ4N1SZxXAibCloQEjOy5XJdviDSUmIcBuKQ+HDp16SF6ZLu51sAI
-b1CA/iLNARIQTDARF9jkjWzNIEgKxeUZwGVM2Jgt6q6QB2aJXeZ1tM4Z94gU55+DTRQtcZ9BvesIQsrx
-BoizMlZ4J33AVpyrvgIw3sDODgDq5qtjsv+Lq8RSRXFyBtzPoOA+6xfb4qJ2p5AfuvohkC2S5ToEJRwr
-34KvLOIlMtZ5D8p9MSxUb0rbECD+/mJeErFvu4I3DdTLtTpmEdOtKfXbQ6YYU+Wx7x2dlaVXU8xQVERY
-8Wv6PC+1xxh/2pehjWX3QN+1rsm1fi34JwzRkI8y3rmeJS/F3+7qhuWXGFvPnKTJIVw7Nd2gmHQ3IQuJ
-gW0MI5Hgc3muMozD61u4aEw/GKxXyrMjyGsckeFanmtBMCuY09SqPXCBSFyUVK+bR58ElEDDlbeRQBFN
-koXEYUtqzRO8O1s388CVJzyk4trQPKgb7C424G0E5Iq2meoA2Ou5G5ZVc52BoRsR8hTvtCvVIuEh6U6C
-11CrOniaXp/tAaZJDX2ifD6+fnv3F0ibelTpFuAr1tL3DGd4ddMs6V3odFf8fPNhbNmhuTR4lVlSpf/1
-BMzR8IKvyDPURd3S3nIctlO1A6UUU52Iqh25Cqbz8hJkoVIo4yMoNoXXBUg3cVVWq5rQ1pyCn99zcdtq
-79Whf3ZBhKBLWu8UlFZf/c8+zH2TkO2sg298+ffFtRV6Tz0j7L+Lfci5ggNOxa1JLD0Xoru5WCAfFgv1
-7wKYhF5wByb8D1XCC1U=
+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
+7lwukTHLpfpLDH2GT+yCCf8D2cp1xw==
 
 """.decode("base64").decode("zlib")
 

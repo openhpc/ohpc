@@ -8,67 +8,14 @@ if [ -s ./TEST_ENV ];then
     source ./TEST_ENV
 fi
 
-if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    rm=slurm
-else
-    ERROR "Unsupported or unknown resource manager"
-    exit 1
-fi
+check_rms
+rm=$RESOURCE_MANAGER
 
-PKG="Boost/MKL ublas header"
+PKG="Boost/ublas"
 
+@test "[$PKG] bench1_ublas binary under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    test="bench1_ublas "
 
-@test "[$PKG] bench1_mkl test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    test="bench1_mkl"
-#    ARGS="100 400 600"
-    CMD_TIMEOUT=30
-    echo $test 
-    if [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
-      if [ ! -x $test ];then
-          flunk "$test does not exist"
-      fi
-    fi
-
-    rm -f $test.results
-
-    run run_serial_binary -o $test.results ./$test #$ARGS 
-    if [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
-      assert_success
-    else
-      assert_failure
-    fi
-
-#   Verify a timing was recorded
-#    run grep "Total time" $test.results 
-#    assert_success
-
-#    run grep "Iterations" $test.results 
-#    assert_success
-
-#    mkl_iter_arr=($(grep Iterations $test.results | sed s/\ /\\n/g))
-}
-
-@test "[$PKG] bench1_ublas test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    test="bench1_ublas"
-#    ARGS="100 400 600"
-    CMD_TIMEOUT=30
-    echo $test 
-    if [ ! -x $test ];then
-        flunk "$test does not exist"
-    fi
-
-    rm -f $test.results
-
-    run run_serial_binary -o $test.results ./$test #$ARGS 
+    run run_serial_binary ./$test
     assert_success
-
-#   Verify a timing was recorded
-#    run grep "Total time" $test.results 
-#    assert_success
-
-#    run grep "Iterations" $test.results 
-#    assert_success
-
-#    ublas_iter_arr=($(grep Iterations $test.results | sed s/\ /\\n/g))
 }
-

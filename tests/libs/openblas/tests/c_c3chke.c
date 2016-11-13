@@ -49,6 +49,7 @@ void  F77_c3chke(char *  rout) {
    if (strncmp( sf,"cblas_cgemm3m"   ,13)==0) {
       cblas_rout = "cblas_cgemm3"   ;
 
+#ifndef OPENBLAS_ARCH_ARM64
       cblas_info = 1;
       cblas_cgemm3m( INVALID,  CblasNoTrans, CblasNoTrans, 0, 0, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
@@ -273,6 +274,7 @@ void  F77_c3chke(char *  rout) {
       cblas_cgemm3m( CblasRowMajor,  CblasTrans, CblasTrans, 0, 2, 0,
                    ALPHA, A, 1, B, 1, BETA, C, 1 );
       chkxer();
+#endif
 
    } else if (strncmp( sf,"cblas_cgemm"   ,11)==0) {
             cblas_rout = "cblas_cgemm"   ;

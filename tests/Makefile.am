@@ -27,10 +27,6 @@ endif
 
 else # non root tests
 
-if PACKAGING_ENABLED
-   TESTS += packaging/run
-endif
-
 if EASYBUILD_ENABLED
    SUBDIRS += dev-tools/easybuild
 endif
@@ -174,6 +170,10 @@ endif
 
 if SUPERLU_DIST_ENABLED
    TESTS += libs/superlu_dist/ohpc-tests/test_mpi_families
+endif
+
+if SCALASCA_ENABLED
+   TESTS += perf-tools/scalasca/ohpc-tests/test_mpi_families
 endif
 
 if TAU_ENABLED

@@ -1,0 +1,214 @@
+diff --git a/configure.ac b/configure.ac
+index 4e26a2b..9b1e257 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -336,6 +336,7 @@ AC_CONFIG_FILES([
+ 	src/cmds/scripts/pbs_init.d
+ 	src/cmds/scripts/pbs_poerun
+ 	src/cmds/scripts/pbs_postinstall
++	src/cmds/scripts/pbs.service
+ 	src/cmds/scripts/pbsrun.poe
+ 	src/iff/Makefile
+ 	src/include/Makefile
+diff --git a/src/cmds/scripts/Makefile.am b/src/cmds/scripts/Makefile.am
+index 096ff82..f4316a0 100644
+--- a/src/cmds/scripts/Makefile.am
++++ b/src/cmds/scripts/Makefile.am
+@@ -72,6 +72,11 @@ dist_sysprofile_DATA = \
+ 	pbs.csh \
+ 	pbs.sh
+ 
++unitfiledir = /usr/lib/systemd/system
++
++dist_unitfile_DATA = \
++	pbs.service
++
+ dist_libexec_SCRIPTS = \
+ 	au-nodeupdate \
+ 	install_db \
+diff --git a/src/cmds/scripts/pbs.service.in b/src/cmds/scripts/pbs.service.in
+new file mode 100644
+index 0000000..f8f9dd2
+--- /dev/null
++++ b/src/cmds/scripts/pbs.service.in
+@@ -0,0 +1,65 @@
++# Copyright (C) 1994-2016 Altair Engineering, Inc.
++# For more information, contact Altair at www.altair.com.
++#
++# This file is part of the PBS Professional ("PBS Pro") software.
++#
++# Open Source License Information:
++#
++# PBS Pro is free software. You can redistribute it and/or modify it under the
++# terms of the GNU Affero General Public License as published by the Free
++# Software Foundation, either version 3 of the License, or (at your option) any
++# later version.
++#
++# PBS Pro is distributed in the hope that it will be useful, but WITHOUT ANY
++# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
++# PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
++#
++# You should have received a copy of the GNU Affero General Public License along
++# with this program.  If not, see <http://www.gnu.org/licenses/>.
++#
++# Commercial License Information:
++#
++# The PBS Pro software is licensed under the terms of the GNU Affero General
++# Public License agreement ("AGPL"), except where a separate commercial license
++# agreement for PBS Pro version 14 or later has been executed in writing with Altair.
++#
++# Altair’s dual-license business model allows companies, individuals, and
++# organizations to create proprietary derivative works of PBS Pro and distribute
++# them - whether embedded or bundled with other software - under a commercial
++# license agreement.
++#
++# Use of Altair’s trademarks, including but not limited to "PBS™",
++# "PBS Professional®", and "PBS Pro™" and Altair’s logos is subject to Altair's
++# trademark licensing policies.
++
++
++
++# It's not recommended to modify this file in-place, because it will be
++# overwritten during package upgrades.  If you want to customize, the
++# best way is to create a file "/etc/systemd/system/pbs.service",
++# containing
++#       .include /lib/systemd/system/pbs.service
++#       ...make your changes here...
++# For more info about custom unit files, see -
++# http://fedoraproject.org/wiki/Systemd#How_do_I_customize_a_unit_file.2F_add_a_custom_unit_file.3F
++
++
++[Unit]
++Documentation=man:pbs(8)
++SourcePath=@prefix@/libexec/pbs_init.d
++Description=Portable Batch System
++After=network-online.target remote-fs.target nss-lookup.target
++Wants=network-online.target
++DefaultDependencies=true
++
++[Service]
++Type=forking
++Restart=no
++TimeoutSec=5min
++IgnoreSIGPIPE=no
++GuessMainPID=no
++ExecStart=@prefix@/libexec/pbs_init.d start
++ExecStop=@prefix@/libexec/pbs_init.d stop
++
++[Install]
++WantedBy=multi-user.target
+diff --git a/src/cmds/scripts/pbs_postinstall.in b/src/cmds/scripts/pbs_postinstall.in
+index 1f47a8e..a24506a 100755
+--- a/src/cmds/scripts/pbs_postinstall.in
++++ b/src/cmds/scripts/pbs_postinstall.in
+@@ -478,6 +478,11 @@ elif [ $INSTALL_PACKAGE != client ] ; then
+ 			[ -f /etc/profile.d/pbs.csh ] || cp ${PBS_EXEC}/etc/pbs.csh /etc/profile.d
+ 			[ -f /etc/profile.d/pbs.sh ] || cp ${PBS_EXEC}/etc/pbs.sh /etc/profile.d
+ 		fi
++		unitfilepath="/usr/lib/systemd/system/"
++		if [ -d $unitfilepath ]; then
++			[ -f $unitfilepath/pbs.service ] || cp ${PBS_EXEC}/libexec/pbs.service $unitfilepath
++			chmod 644 $unitfilepath/pbs.service
++		fi
+ 		;;
+ 	AIX)
+ 		initscript="/etc/rc.d/rc2.d/S90pbs"
+diff --git a/test/tests/pbs_systemd.py b/test/tests/pbs_systemd.py
+new file mode 100755
+index 0000000..8c7d5c4
+--- /dev/null
++++ b/test/tests/pbs_systemd.py
+@@ -0,0 +1,93 @@
++# coding: utf-8
++
++# Copyright (C) 1994-2016 Altair Engineering, Inc.
++# For more information, contact Altair at www.altair.com.
++#
++# This file is part of the PBS Professional ("PBS Pro") software.
++#
++# Open Source License Information:
++#
++# PBS Pro is free software. You can redistribute it and/or modify it under the
++# terms of the GNU Affero General Public License as published by the Free
++# Software Foundation, either version 3 of the License, or (at your option) any
++# later version.
++#
++# PBS Pro is distributed in the hope that it will be useful, but WITHOUT ANY
++# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
++# PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
++#
++# You should have received a copy of the GNU Affero General Public License along
++# with this program.  If not, see <http://www.gnu.org/licenses/>.
++#
++# Commercial License Information:
++#
++# The PBS Pro software is licensed under the terms of the GNU Affero General
++# Public License agreement ("AGPL"), except where a separate commercial license
++# agreement for PBS Pro version 14 or later has been executed in writing with Altair.
++#
++# Altair’s dual-license business model allows companies, individuals, and
++# organizations to create proprietary derivative works of PBS Pro and distribute
++# them - whether embedded or bundled with other software - under a commercial
++# license agreement.
++#
++# Use of Altair’s trademarks, including but not limited to "PBS™",
++# "PBS Professional®", and "PBS Pro™" and Altair’s logos is subject to Altair's
++# trademark licensing policies.
++
++from ptl.utils.pbs_testsuite import *
++import socket
++
++class Test_systemd(PBSTestSuite):
++    """
++    Test whether you are able to control pbs using systemd
++    """
++    def shutdown_all(self):
++	if self.server.isUp():
++		self.server.stop()
++	if self.scheduler.isUp():
++		self.scheduler.stop()
++	if self.comm.isUp():
++		self.comm.stop()
++	if self.mom.isUp():
++		self.mom.stop()
++
++    def start_using_systemd(self):
++	cmd = "systemctl start pbs"
++	self.du.run_cmd(self.hostname,cmd,True)
++	if '1' == self.server.pbs_conf['PBS_START_SERVER'] and not self.server.isUp():
++		return False
++	if '1' == self.server.pbs_conf['PBS_START_SCHED'] and not self.scheduler.isUp():
++                return False
++	if '1' == self.server.pbs_conf['PBS_START_COMM'] and not self.comm.isUp():
++                return False
++	if '1' == self.server.pbs_conf['PBS_START_MOM'] and not self.mom.isUp():
++                return False
++	return True
++
++    def stop_using_systemd(self):
++        cmd = "systemctl stop pbs"
++        self.du.run_cmd(self.hostname,cmd,True)
++	if '1' == self.server.pbs_conf['PBS_START_SERVER'] and self.server.isUp():
++                return False
++        if '1' == self.server.pbs_conf['PBS_START_SCHED'] and self.scheduler.isUp():
++                return False
++        if '1' == self.server.pbs_conf['PBS_START_COMM'] and self.comm.isUp():
++                return False
++        if '1' == self.server.pbs_conf['PBS_START_MOM'] and self.mom.isUp():
++                return False
++        return True 
++
++    def test_systemd(self):
++        """
++        Test whether you are able to control pbs using systemd
++        """
++	self.hostname = socket.gethostname()
++	cmd = "systemctl daemon-reload"
++	out=self.du.run_cmd(self.hostname,cmd,True)
++	self.shutdown_all()
++	rv = self.start_using_systemd()
++        self.assertTrue(rv)
++	rv = self.stop_using_systemd()
++        self.assertTrue(rv)
++	rv = self.start_using_systemd()
++	

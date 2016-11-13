@@ -1,0 +1,54 @@
+*****************************************************************************
+**			Program Database Toolkit (PDT)                     **
+**			http://www.cs.uoregon.edu/research/pdt             **
+*****************************************************************************
+**    Copyright 1997-2009						   **
+**    University of Oregon                                                 **
+**    Research Center Juelich, FZJ Germany		  		   **
+**    Edison Design Group, Inc.                                            **
+*****************************************************************************
+**	
+**  Permission to use, copy, modify, and distribute this software and its
+**  documentation for any purpose and without fee is hereby granted,
+**  provided that the above copyright notice appear in all copies and that
+**  both that copyright notice and this permission notice appear in
+**  supporting documentation, and that the name of University of Oregon (UO)
+**  Research Center Juelich (FZJ) and Edison Design Group, Inc. (EDG)
+**  not be used in advertising or publicity pertaining to distribution of
+**  the software without specific, written prior permission.  The
+**  University of Oregon, FZJ and EDG make no representations about the
+**  suitability of this software for any purpose.  It is provided "as is"
+**  without express or implied warranty.
+**
+**  UO, FZJ AND EDG DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, 
+**  INCLUDING , AND ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, 
+**  IN NO EVENT SHALL THE UNIVERSITY OF OREGON, FZJ OR EDG BE LIABLE FOR
+**  ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
+**  RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
+**  CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+**  CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+*****************************************************************************
+
+
+ NOTE: The following applies to the EDG code (edgcpfe and taucpdisp tools) in 
+ PDT:
+
+ U.S. GOVERNMENT RESTRICTED RIGHTS LEGEND.  Use, duplication, or
+ disclosure of this software by the Government is subject to
+ restrictions as set forth in FAR 52.227-19(c)(2) or subparagraph (c)(1)
+ (ii) of the Rights in Technical Data and Computer Software clause at
+ DFARS 252.227-7013 and/or in similar or successor clauses in the FAR,
+ or the DOD or NASA FAR Supplement. Unpublished rights are reserved
+ under the Copyright Laws of the United States.
+
+ NOTE: PDT includes a modified gfortran parser in binary form. The gfortran
+ software is covered by the GNU Public License. These binaries are used by
+ the gfparse script which invokes the <arch>/bin/gfortran/[cc1,f951,gfortran]
+ executables. These enhancements to gfortran allow it to produce PDB files
+ that contain program information for Fortran programs. We have made modified
+ source available at the following webpage:
+ http://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/gfortran-pdt.tar.gz
+
+ Gfortran and the associated binaries are covered by the GPL license.
+ The GPL license is provided in the accompanying gfortran-license.txt file.
+

@@ -1,0 +1,85 @@
+Index: Python-2.7.7/Python/sysmodule.c
+===================================================================
+--- Python-2.7.7.orig/Python/sysmodule.c	2014-06-20 14:33:06.696228064 +0200
++++ Python-2.7.7/Python/sysmodule.c	2014-06-20 14:33:10.960250497 +0200
+@@ -1624,7 +1624,20 @@
+         char *p = NULL;
+         Py_ssize_t n = 0;
+         PyObject *a;
+-#ifdef HAVE_READLINK
++#ifdef HAVE_CANONICALIZE_FILE_NAME
++        int errnum;
++
++        if (argc > 0 && argv0 != NULL && strcmp(argv0, "-c") != 0) {
++            argv0 = canonicalize_file_name(argv0);
++            if (argv0 == NULL) argv0 = strdup(argv[0]);
++        }
++#elif defined(HAVE_REALPATH)
++        if (argc > 0 && argv0 != NULL && strcmp(argv0, "-c") != 0) {
++            if (realpath(argv0, fullpath)) {
++                argv0 = fullpath;
++            }
++        }
++#elif defined(HAVE_READLINK)
+         char link[MAXPATHLEN+1];
+         char argv0copy[2*MAXPATHLEN+1];
+         int nr = 0;
+@@ -1651,7 +1664,8 @@
+                 }
+             }
+         }
+-#endif /* HAVE_READLINK */
++#endif /* resolve method selection */
++        
+ #if SEP == '\\' /* Special case for MS filename syntax */
+         if (argc > 0 && argv0 != NULL && strcmp(argv0, "-c") != 0) {
+             char *q;
+@@ -1680,11 +1694,6 @@
+         }
+ #else /* All other filename syntaxes */
+         if (argc > 0 && argv0 != NULL && strcmp(argv0, "-c") != 0) {
+-#if defined(HAVE_REALPATH)
+-            if (realpath(argv0, fullpath)) {
+-                argv0 = fullpath;
+-            }
+-#endif
+             p = strrchr(argv0, SEP);
+         }
+         if (p != NULL) {
+@@ -1702,6 +1711,9 @@
+         a = PyString_FromStringAndSize(argv0, n);
+         if (a == NULL)
+             Py_FatalError("no mem for sys.path insertion");
++#ifdef HAVE_CANONICALIZE_FILE_NAME
++        if (argc > 0 && argv0 != NULL && strcmp(argv0, "-c") != 0) free(argv0);
++#endif /* HAVE_CANONICALIZE_FILE_NAME */
+         if (PyList_Insert(path, 0, a) < 0)
+             Py_FatalError("sys.path.insert(0) failed");
+         Py_DECREF(a);
+Index: Python-2.7.7/pyconfig.h.in
+===================================================================
+--- Python-2.7.7.orig/pyconfig.h.in	2014-05-31 20:58:40.000000000 +0200
++++ Python-2.7.7/pyconfig.h.in	2014-06-20 14:33:10.961250502 +0200
+@@ -109,6 +109,9 @@
+ /* Define to 1 if you have the 'chflags' function. */
+ #undef HAVE_CHFLAGS
+ 
++/* Define to 1 if you have the `canonicalize_file_name' function. */
++#undef HAVE_CANONICALIZE_FILE_NAME
++
+ /* Define to 1 if you have the `chown' function. */
+ #undef HAVE_CHOWN
+ 
+Index: Python-2.7.7/configure.ac
+===================================================================
+--- Python-2.7.7.orig/configure.ac	2014-06-20 14:33:06.694228054 +0200
++++ Python-2.7.7/configure.ac	2014-06-20 14:33:10.961250502 +0200
+@@ -2935,7 +2935,7 @@
+  getpriority getresuid getresgid getpwent getspnam getspent getsid getwd \
+  initgroups kill killpg lchmod lchown lstat mkfifo mknod mktime mmap \
+  mremap nice pathconf pause plock poll pthread_init \
+- putenv readlink realpath \
++ putenv readlink realpath canonicalize_file_name \
+  select sem_open sem_timedwait sem_getvalue sem_unlink setegid seteuid \
+  setgid \
+  setlocale setregid setreuid setsid setpgid setpgrp setuid setvbuf snprintf \

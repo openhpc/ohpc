@@ -1,0 +1,12 @@
+ohpc-autotools
+ohpc-base
+ohpc-ganglia
+ohpc-io-libs-gnu
+ohpc-nagios
+ohpc-parallel-libs-gnu-mpich
+ohpc-perf-tools-gnu
+ohpc-python-libs-gnu
+ohpc-runtimes-gnu
+ohpc-serial-libs-gnu
+ohpc-slurm-server
+ohpc-warewulf

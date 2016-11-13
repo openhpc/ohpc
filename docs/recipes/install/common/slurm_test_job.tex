@@ -22,6 +22,10 @@ the additions. This re-sync process can be accomplished as follows:
 \end{lstlisting}
 % end_ohpc_run
 
+% begin_ohpc_run
+% ohpc_command sleep 2
+% end_ohpc_run
+
 \begin{center}
 \begin{tcolorbox}[]
 \small
@@ -31,7 +35,7 @@ propagate. However, you can also manually pull the changes from compute nodes
 via the following:
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) pdsh -P normal /warewulf/bin/wwgetfiles 
+[sms](*\#*) pdsh -w c[1-4] /warewulf/bin/wwgetfiles 
 \end{lstlisting}
 % end_ohpc_run
 \end{tcolorbox}
@@ -50,7 +54,9 @@ be use for MPI job launch. Instead, native job launch mechanisms provided by
 the MPI stacks are utilized and \texttt{prun} abstracts this process for the
 various stacks to retain a single launch command.
 
-\nottoggle{isCentOS}{\clearpage}
+\iftoggle{isSLES_ww_slurm_x86}{\clearpage}
+
+\iftoggle{isCentOS_ww_slurm_x86}{\clearpage}
 
   
 \subsection{Interactive execution}
@@ -72,6 +78,7 @@ the underlying native job launch mechanism being used):
 [test@c1 ~]$ prun ./a.out
 
 [prun] Master compute host = c1
+[prun] Resource manager = slurm
 [prun] Launch cmd = mpiexec.hydra -bootstrap slurm ./a.out
 
  Hello, world (8 procs total)
@@ -85,6 +92,15 @@ the underlying native job launch mechanism being used):
     --> Process #   7 of   8 is alive. -> c2
 \end{lstlisting}
 
+\begin{center}
+\begin{tcolorbox}[]
+The following table provides approximate command equivalences between SLURM and
+PBS Pro:
+
+\vspace*{0.15cm}
+\input common/rms_equivalence_table
+\end{tcolorbox}
+\end{center}
 \nottoggle{isCentOS}{\clearpage}
 
 \iftoggle{isCentOS}{\clearpage}
@@ -96,8 +112,6 @@ housed in the \path{/opt/ohpc/pub/examples} directory. This example script can
 be used as a starting point for submitting batch jobs to the resource manager
 and the example below illustrates use of the script to submit a batch job for
 execution using the same executable referenced in the previous interactive example.
-%Alternatively, a simple batch script can be written and submitted to the
-%scheduler using sbatch to run when nodes become available. 
 
 \begin{lstlisting}[language=bash,keywords={}]
 # copy example job script

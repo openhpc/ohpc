@@ -23,8 +23,11 @@ check_if_rpm_installed () {
 
 # Check if we have a known/supported resource manager
 check_rms(){
-    if [ "$RESOURCE_MANAGER" = "slurm" ];then
-	export RMS=slurm
+
+    if [ -s /etc/pbs.conf ]; then
+	export RESOURCE_MANAGER=pbspro
+    elif [ -s /etc/slurm/slurm.conf ]; then
+	export RESOURCE_MANAGER=slurm
     else
 	ERROR "Unsupported or unknown resource manager"
 	exit 1
@@ -175,12 +178,42 @@ run_serial_binary () {
     fi
 
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
+
 	if [ -n "$output_file" ];then
 	    srun -n 1 -N 1 -t $timeout $EXE "$@" >& $output_file
 	else
-	    srun -n 1 -N 1 -t $timeout $EXE "$@"
+	    # srun -n 1 -N 1 -t $timeout $EXE "$@"
+	    eval srun -n 1 -N 1 -t $timeout $EXE "$@"
 	fi
 	return $?
+   elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
+
+	# pbs presently won't search PATH and doesn't run out of cwd;cull out full path to $EXE
+	echo "EXE = $EXE"
+	local myPath=`command -v $EXE`
+	myPath=`readlink -f $myPath`
+#	echo "mypath = $myPath"
+
+	# Generate script with commands so we can execute out of submission directory
+	jobScript=".job.$RANDOM"
+	echo "#!/bin/bash" > $jobScript
+	echo "cd \${PBS_O_WORKDIR}" >> $jobScript
+	echo $EXE "$@" >> $jobScript
+	chmod 700 $jobScript
+	
+        if [ -n "$output_file" ];then
+            qsub -k oe -W block=true -l select=1 -l walltime=$timeout -- `readlink -f $jobScript` > .job_in
+	    JOB=`cat .job_in | awk -F . '{print $1}'`
+	    [[ -e ${HOME}/STDIN.o${JOB} ]] || exit 1
+	    mv ${HOME}/STDIN.o${JOB} $output_file
+	    cat $output_file
+        else
+            qsub -k n -W block=true -l select=1 -l walltime=$timeout -- `readlink -f $jobScript`
+
+	    local statusCode=$?
+	    rm -f $jobScript
+	    return $statusCode
+        fi
     else
 	ERROR_RETURN "Unsupported resource manager"
     fi
@@ -192,14 +225,20 @@ run_mpi_binary () {
     # Parse optional arguments
     input_file=""
     output_file=""
-    timeout=1		# default job timeout (in minutes)
+    if [ "$RESOURCE_MANAGER" = "slurm" ];then
+	timeout=1		# default job timeout (in minutes)
+    else
+	timeout="00:01:00"
+    fi
 
     local OPTIND=1
-    while getopts "i:o:t:" opt; do
+    while getopts "i:o:s:t:" opt; do
     case "$opt" in
 	i)  input_file="$OPTARG"
 	    ;;
 	o)  output_file="$OPTARG"
+	    ;;
+	s)  scalasca="$OPTARG"
 	    ;;
 	t)  timeout="$OPTARG"
 	    ;;
@@ -209,6 +248,12 @@ run_mpi_binary () {
 	    ;;
 	esac
     done
+
+    if [ -z "$scalasca" ];then
+    mpi_launcher="prun"
+    else
+    mpi_launcher="scalasca -analyze prun"
+    fi
 
     shift "$((OPTIND-1))" # Shift off the options and optional --.
     
@@ -228,21 +273,21 @@ run_mpi_binary () {
     fi
     
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
-	if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" -o "$LMOD_FAMILY_MPI" = "openmpi" ];then
+	if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" -o "$LMOD_FAMILY_MPI" = "openmpi" -o "$LMOD_FAMILY_MPI" = "mpich" ];then
 
 	    jobScript=/tmp/job.$USER.$RANDOM
 
-	    echo "#!/bin/bash"		  > $jobScript
-	    echo "#SBATCH -J CMT-test"   >> $jobScript
-	    echo "#SBATCH -N $NNODES"    >> $jobScript
-	    echo "#SBATCH -n $NTASKS"    >> $jobScript
-	    echo "#SBATCH -t $timeout"   >> $jobScript
-	    echo "#SBATCH -o job.%j.out" >> $jobScript
+	    echo "#!/bin/bash"		    > $jobScript
+	    echo "#SBATCH -J OpenHPC-test" >> $jobScript
+	    echo "#SBATCH -N $NNODES"      >> $jobScript
+	    echo "#SBATCH -n $NTASKS"      >> $jobScript
+	    echo "#SBATCH -t $timeout"     >> $jobScript
+	    echo "#SBATCH -o job.%j.out"   >> $jobScript
 	    
 	    if [ -n "$input_file" ];then
-		echo "prun $EXE $ARGS < $input_file" >> $jobScript
+		echo "$mpi_launcher $EXE $ARGS < $input_file" >> $jobScript
 	    else
-		echo "prun $EXE $ARGS"		     >> $jobScript
+		echo "$mpi_launcher $EXE $ARGS"		      >> $jobScript
 	    fi
 
 	    # Submit batch job
@@ -315,76 +360,37 @@ run_mpi_binary () {
 	else
 	    ERROR_RETURN "Unsupported MPI family"
 	fi
+    elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
+	jobScript=/tmp/job.$USER.$RANDOM
+
+	# infer tasks/node from total tasks
+	let tasksPerNode="$NTASKS / $NNODES"
+
+	echo "#!/bin/bash"		                      > $jobScript
+	echo "#PBS -N OpenHPC-test"                          >> $jobScript
+	#	echo "#PBS -lnodes=$NNODES:ppn=$tasksPerNode"        >> $jobScript
+	echo "#PBS -l select=$NNODES:mpiprocs=$tasksPerNode -l place=scatter" >> $jobScript
+	echo "#PBS -l walltime=$timeout"                     >> $jobScript
+	echo "#PBS -o job.out"                               >> $jobScript
+	echo "cd \$PBS_O_WORKDIR"                            >> $jobScript
+
+	if [ -n "$input_file" ];then
+	    echo "$mpi_launcher $EXE $ARGS < $input_file" >> $jobScript
+	else
+	    echo "$mpi_launcher $EXE $ARGS"		  >> $jobScript
+	fi
+
+	# Submit batch job
+	qsub -W block=true $jobScript
+	rc=$?
+
+	if [ -n "$output_file" ];then
+	    mv job.out $output_file
+	fi
+	return $rc
     else
 	ERROR_RETURN "Unsupported resource manager"
     fi
 
 } # end run_mpi_binary()
 
-run_mpi_binary_orig () {
-
-    # Parse optional arguments
-    output_file=""
-    timeout=1		# default job timeout (in minutes)
-
-    local OPTIND=1
-    while getopts "o:t:" opt; do
-	case "$opt" in
-	    o)	output_file="$OPTARG"
-		;;
-	    t)	timeout="$OPTARG"
-		;;
-	    '?')
-		echo "Unknown option given to run_mpi_binary" >&2
-		exit 1
-		;;
-	esac
-    done
-
-    shift "$((OPTIND-1))" # Shift off the options and optional --.
-    
-    EXE=$1
-    ARGS=$2
-    NNODES=$3
-    NTASKS=$4
-
-    if [ ! -x $EXE ];then
-	ERROR_RETURN "$EXE is not available or not executable"
-    fi
-
-    if [ -z "$RESOURCE_MANAGER" ];then
-	ERROR_RETURN "Resource manager is not defined - please set via RESOURCE_MANAGER variable"
-    fi
-
-    if [ -z "$LMOD_FAMILY_MPI" ];then
-	ERROR_RETURN "MPI toolchain s not loaded - please load MPI stack first"
-    fi
-    
-    if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" ];then
-	if [ -n "$output_file" ];then
-##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout srun $EXE $ARGS >& $output_file
-	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS >& $output_file
-	else
-##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout srun $EXE $ARGS
-	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS
-	fi
-	return $?
-    elif [ "$LMOD_FAMILY_MPI" = "openmpi" ];then
-	if [ -n "$output_file" ];then
-##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout mpiexec $EXE $ARGS >& $output_file
-	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS >& $output_file
-	else
-##	salloc -n $NTASKS -N $NNODES -K1 -t $timeout mpiexec $EXE $ARGS
-	salloc -n $NTASKS -N $NNODES -K1 -t $timeout prun $EXE $ARGS
-	fi
-	return $?
-    else
-	ERROR_RETURN "Unsupported MPI family"
-    fi
-    else
-	ERROR_RETURN "Unsupported resource manager"
-    fi
-
-} # end run_mpi_binary_orig()
-	  

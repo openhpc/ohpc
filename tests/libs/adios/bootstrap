@@ -1,11 +1,9 @@
-#!./common/bats/bin/bats
-# -*-sh-*-
+#! /bin/sh
+# --------------------------------------------------------------------------
+# bootstrapping utility for autotools -> now just uses autoreconf
+# -------------------------------------------------------------------------- 
 
-load   ./common/test_helper_functions || exit 1
-source ./common/functions             || exit 1
-source ./common/TEST_ENV              || exit 1
-source ./LOCAL_ENV                    || true
+cmd="autoreconf -f -i -Wno-portability"
+echo "Bootstrapping using $cmd ..."
 
-@test "[$TEST_DIR] bootstrap" {
-	./common/../bootstrap
-}
+$cmd

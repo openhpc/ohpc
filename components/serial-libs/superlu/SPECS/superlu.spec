@@ -28,14 +28,14 @@
 #-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -67,11 +67,11 @@ Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
-Version:        5.1
+Version:        5.2.1
 Release:        0
 Source:         http://crd-legacy.lbl.gov/%7Exiaoye/SuperLU/%{pname}_%{version}.tar.gz
 # PATCH-FEATURE-OPENSUSE superlu-5.1-make.patch : add compiler and build flags in make.inc
-Patch:          superlu-5.1-make.patch
+Patch:          superlu-5.2-make.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
 Patch1:         superlu-4.3-include.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-dont-opt-away.diff
@@ -109,8 +109,8 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 
 make lib
 
-mkdir tmp 
-(cd tmp; ar -x ../lib/libsuperlu_%{version}.a)
+mkdir tmp
+(cd tmp; ar -x ../SRC/libsuperlu.a)
 $FC -shared -Wl,-soname,libsuperlu.so.4 -o lib/libsuperlu.so tmp/*.o
 
 %install

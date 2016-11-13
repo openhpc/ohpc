@@ -1,0 +1,20 @@
+#!/bin/bash
+#----------------------------------------------------------
+# Job name
+#PBS -N test 
+
+# Name of stdout output file
+#PBS -o job.out
+
+# Total number of nodes and MPI tasks/node requested
+#PBS -l select=2:mpiprocs=4
+
+# Run time (hh:mm:ss) - 1.5 hours
+#PBS -l walltime=01:30:00
+#----------------------------------------------------------
+
+# Change to submission directory
+cd $PBS_O_WORKDIR
+
+# Launch MPI-based executable
+prun ./a.out

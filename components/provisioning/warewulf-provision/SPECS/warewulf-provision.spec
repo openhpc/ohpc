@@ -11,7 +11,7 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
@@ -42,6 +42,7 @@ Patch4: warewulf-provision.init.patch
 Patch5: update_file_delay.patch
 Patch6: warewulf-provision.mkbootable.patch
 Patch7: warewulf-provision.sles_stateful.patch
+Patch8: warewulf-provision.config_guess.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -112,6 +113,9 @@ available the included GPL software.
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%ifarch aarch64
+%patch8 -p1
+%endif
 
 %build
 %configure --localstatedir=%{wwpkgdir}

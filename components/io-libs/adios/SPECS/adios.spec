@@ -11,14 +11,14 @@
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family:      %define mpi_family openmpi}
+%{!?compiler_family: %global compiler_family gnu}
+%{!?mpi_family:      %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -43,6 +43,10 @@ BuildRequires: intel_licenses
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
+%endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
@@ -54,11 +58,10 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 #-ohpc-header-comp-end------------------------------------------------
 
+%{!?with_lustre: %global with_lustre 0}
+
 # not generating a debug package, CentOS build breaks without this if no debug package defined
 %define debug_package %{nil}
-
-%define somver 0
-%define sover %somver.0.0
 
 # Base package name
 %define pname adios
@@ -66,7 +69,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 1.9.0
+Version: 1.10.0
 Release: 1
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
@@ -77,31 +80,28 @@ Source1: OHPC_macros
 Source2: OHPC_setup_compiler
 AutoReq: no
 
-# Minimum Build Requires - our mxml build included devel headers in libmxml1
-BuildRequires: libmxml1 cmake zlib-devel glib2-devel
-Requires:      libmxml1 zlib
-#bzip support confuses the CMtests
-#Requires:      bzip2
-#BuildRequires: bzip2-devel
+BuildRequires: zlib-devel glib2-devel
+Requires:      zlib
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
 
+BuildRequires: libtool%{PROJ_DELIM}
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-#BuildRequires: libmpe2-devel
-#BuildRequires: python-modules-xml
 BuildRequires: python-devel
-#BuildRequires: bzlib-devel
-#BuildRequires: libsz2-devel
+
+%if 0%{with_lustre}
 # This is the legacy name for lustre-lite
 # BuildRequires: liblustre-devel
 BuildRequires: lustre-lite
-BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 Requires: lustre-client%{PROJ_DELIM}
+%endif
+BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
+
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
@@ -143,8 +143,10 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
+module load autotools
 module load phdf5
 module load netcdf
+module load numpy
 
 TOPDIR=$PWD
 
@@ -168,20 +170,29 @@ export MPICXX=mpicxx
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
+# work around old config.guess on aarch64 systems
+%ifarch aarch64
+cp /usr/lib/rpm/config.guess config
+%endif
+
 ./configure --prefix=%{install_path} \
-	--with-mxml=/usr \
-	--with-lustre=/usr/include/lustre \
-	--with-phdf5="$HDF5_DIR" \
-	--with-zlib=/usr \
-        --without-atl \
-        --without-cercs_env \
-        --without-dill \
-        --without-evpath \
-        --without-fastbit \
-        --without-ffs \
-	--with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
+    --enable-shared=yes \
+    --enable-static=no \
+%if 0%{with_lustre}
+    --with-lustre=/usr/include/lustre \
+%endif
+    --with-phdf5="$HDF5_DIR" \
+    --with-zlib=/usr \
+    --without-atl \
+    --without-cercs_env \
+    --without-dill \
+    --without-evpath \
+    --without-fastbit \
+    --without-ffs \
+    --with-netcdf="$NETCDF_DIR" || { cat config.log && exit 1; }
 # bzip2 support is confusing CMtests
-#	--with-bzip2=/usr \
+    #	--with-bzip2=/usr \
+    #    --with-mxml=/usr \
 
 # modify libtool script to not hardcode library paths
 sed -i -r -e 's/(hardcode_into_libs)=.*$/\1=no/' \
@@ -238,6 +249,7 @@ install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
+find %buildroot%{install_path}/python -name \*pyc -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -259,6 +271,12 @@ module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
 set             version             %{version}
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { ![is-loaded phdf5]  } {
+      module load phdf5
+    }
+}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
@@ -297,7 +315,7 @@ EOF
 %doc ChangeLog
 %doc KNOWN_BUGS
 %doc NEWS
-%doc README
+%doc README.md
 %doc TODO
 
 %changelog

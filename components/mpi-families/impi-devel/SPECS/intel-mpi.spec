@@ -9,13 +9,14 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-%define compiler_family intel
+%define pname intel-mpi-devel
+%define year 2017
 
-Summary:   OpenHPC compatability package for Intel(R) MPI Library
-Name:      intel-mpi-devel%{PROJ_DELIM}
-Version:   2016
+Summary:   OpenHPC compatibility package for Intel(R) MPI Library
+Name:      %{pname}%{PROJ_DELIM}
+Version:   %{year}
 Source1:   OHPC_macros
 Release:   1
 License:   Apache-2.0
@@ -28,12 +29,13 @@ AutoReq:   no
 BuildRequires:-post-build-checks
 
 Requires: prun%{PROJ_DELIM}
-Requires: intel-psxe-common
-Requires: intel-mpi-doc
+Requires: intel-mpi-doc >= %{year}
 Requires: intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel-compilers-devel%{PROJ_DELIM}
-%endif
+Provides: %{pname}%{PROJ_DELIM}
+
+Provides: libmpi.so.12()(64bit)
+Provides: libmpifort.so.12()(64bit)
+Provides: libmpicxx.so.12()(64bit) 
 
 %description
 
@@ -56,7 +58,7 @@ echo " "
 echo "Scanning top-level dir = $topDir"
 
 if [ -d ${topDir} ];then
-    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
+    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*.*" -printf "%f "` || exit 1
 
     scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 

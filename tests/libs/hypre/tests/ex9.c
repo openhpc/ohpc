@@ -302,7 +302,7 @@ int main (int argc, char *argv[])
          /*  First the u-u connections */
          nentries = 5;
          nvalues = nentries*n*n;
-         u_values = calloc(nvalues, sizeof(double));
+         u_values = (double*) calloc(nvalues, sizeof(double));
 
          for (i = 0; i < nvalues; i += nentries)
          {
@@ -319,7 +319,7 @@ int main (int argc, char *argv[])
          /* Next the u-v connections */
          nentries = 1;
          nvalues = nentries*n*n;
-         u_values = calloc(nvalues, sizeof(double));
+         u_values = (double*) calloc(nvalues, sizeof(double));
 
          for (i = 0; i < nvalues; i++)
          {
@@ -344,7 +344,7 @@ int main (int argc, char *argv[])
          /* the v-v connections */
          nentries = 5;
          nvalues = nentries*n*n;
-         v_values = calloc(nvalues, sizeof(double));
+         v_values = (double*) calloc(nvalues, sizeof(double));
 
          for (i = 0; i < nvalues; i += nentries)
          {
@@ -378,7 +378,7 @@ int main (int argc, char *argv[])
 
       int part = 0;
 
-      values = calloc(nvalues, sizeof(double));
+      values = (double*) calloc(nvalues, sizeof(double));
       for (j = 0; j < nvalues; j++)
             values[j] = 0.0;
 
@@ -490,7 +490,7 @@ int main (int argc, char *argv[])
       int part = 0;
       int var;
 
-      values = calloc(nvalues, sizeof(double));
+      values = (double*) calloc(nvalues, sizeof(double));
 
       /* Create an empty vector object */
       HYPRE_SStructVectorCreate(MPI_COMM_WORLD, grid, &b);
@@ -699,7 +699,7 @@ int main (int argc, char *argv[])
 
          int k, part = 0, var;
          int nvalues = n*n;
-         double *values = calloc(nvalues, sizeof(double));
+         double *values = (double*) calloc(nvalues, sizeof(double));
 
          /* save local solution for variable u */
          var = 0;

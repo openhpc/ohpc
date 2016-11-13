@@ -28,14 +28,14 @@
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
+%{!?compiler_family: %global compiler_family gnu}
+%{!?mpi_family: %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -62,6 +62,10 @@ BuildRequires: intel_licenses
 BuildRequires: intel-mpi%{PROJ_DELIM}
 Requires:      intel-mpi%{PROJ_DELIM}
 %endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
+%endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
@@ -79,14 +83,14 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        0.16.1
+Version:        0.18.0
 Release:        1
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.scipy.org
 DocDir:         %{OHPC_PUB}/doc/contrib
-Source0:        http://sourceforge.net/projects/scipy/files/scipy/%{version}/scipy-%{version}.tar.gz
+Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 BuildRequires:  blas-devel
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
@@ -94,15 +98,10 @@ BuildRequires:  fdupes
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  lapack-devel
 BuildRequires:  python-devel
+BuildRequires:  python-setuptools
+BuildRequires:  python-Cython
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
-#%if 0%{?suse_version} > 1140
-#BuildRequires:  suitesparse-devel-static
-#%endif
-# FIXME: atlas is broken right now, do not use
-# %if 0%{?suse_version} <= 1210
-# BuildRequires:  libatlas3-devel
-# %endif
 Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
@@ -163,6 +162,7 @@ module load openblas
 %endif
 
 module load numpy
+
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 ATLAS=%{_libdir}/atlas \
 FFTW=%{_libdir}
@@ -195,8 +195,8 @@ find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes %{buildroot}%{install_path}/lib64/python2.7/site-packages
 %endif
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
+%{!?compiler_family: %global compiler_family gnu}
+%{!?mpi_family: %global mpi_family openmpi}
 # fix executability issue
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/arff/arffread.py
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py

@@ -1,0 +1,51 @@
+Index: Python-2.7.6/Makefile.pre.in
+===================================================================
+--- Python-2.7.6.orig/Makefile.pre.in	2013-11-19 17:36:56.968106247 +0100
++++ Python-2.7.6/Makefile.pre.in	2013-11-19 17:36:56.972106270 +0100
+@@ -438,7 +438,7 @@
+ 
+ 
+ # Build the interpreter
+-$(BUILDPYTHON):	Modules/python.o $(LIBRARY) $(LDLIBRARY)
++$(BUILDPYTHON):	Modules/python.o $(LDLIBRARY)
+ 		$(LINKCC) $(LDFLAGS) $(LINKFORSHARED) -o $@ \
+ 			Modules/python.o \
+ 			$(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
+@@ -465,18 +465,6 @@
+ 		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
+ 		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
+ 
+-# Build static library
+-# avoid long command lines, same as LIBRARY_OBJS
+-$(LIBRARY): $(LIBRARY_OBJS)
+-	-rm -f $@
+-	$(AR) $(ARFLAGS) $@ Modules/getbuildinfo.o
+-	$(AR) $(ARFLAGS) $@ $(PARSER_OBJS)
+-	$(AR) $(ARFLAGS) $@ $(OBJECT_OBJS)
+-	$(AR) $(ARFLAGS) $@ $(PYTHON_OBJS)
+-	$(AR) $(ARFLAGS) $@ $(MODULE_OBJS) $(SIGNAL_OBJS)
+-	$(AR) $(ARFLAGS) $@ $(MODOBJS)
+-	$(RANLIB) $@
+-
+ libpython$(VERSION).so: $(LIBRARY_OBJS)
+ 	if test $(INSTSONAME) != $(LDLIBRARY); then \
+ 		$(BLDSHARED) -Wl,-h$(INSTSONAME) -o $(INSTSONAME) $(LIBRARY_OBJS) $(MODLIBS) $(SHLIBS) $(LIBC) $(LIBM) $(LDLAST); \
+@@ -1094,18 +1082,6 @@
+ 		else	true; \
+ 		fi; \
+ 	done
+-	@if test -d $(LIBRARY); then :; else \
+-		if test "$(PYTHONFRAMEWORKDIR)" = no-framework; then \
+-			if test "$(SO)" = .dll; then \
+-				$(INSTALL_DATA) $(LDLIBRARY) $(DESTDIR)$(LIBPL) ; \
+-			else \
+-				$(INSTALL_DATA) $(LIBRARY) $(DESTDIR)$(LIBPL)/$(LIBRARY) ; \
+-				$(RANLIB) $(DESTDIR)$(LIBPL)/$(LIBRARY) ; \
+-			fi; \
+-		else \
+-			echo Skip install of $(LIBRARY) - use make frameworkinstall; \
+-		fi; \
+-	fi
+ 	$(INSTALL_DATA) Modules/config.c $(DESTDIR)$(LIBPL)/config.c
+ 	$(INSTALL_DATA) Modules/python.o $(DESTDIR)$(LIBPL)/python.o
+ 	$(INSTALL_DATA) $(srcdir)/Modules/config.c.in $(DESTDIR)$(LIBPL)/config.c.in

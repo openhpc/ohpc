@@ -1,0 +1,825 @@
+#
+# spec file for package python
+#
+# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
+#
+# All modifications and additions to the file contributed by third parties
+# remain the property of their copyright owners, unless otherwise agreed
+# upon. The license for this file, and modifications and additions to the
+# file, is the same license as for the pristine package itself (unless the
+# license for the pristine package is not an Open Source License, in which
+# case the license is the MIT License). An "Open Source License" is a
+# license that conforms to the Open Source Definition (Version 1.9)
+# published by the Open Source Initiative.
+
+# Please submit bugfixes or comments via http://bugs.opensuse.org/
+#
+
+
+Name:           python
+Version:        2.7.12
+Release:        70.1
+Summary:        Python Interpreter
+License:        Python-2.0
+Group:          Development/Languages/Python
+Url:            http://www.python.org/
+%define         tarversion %{version}
+%define         tarname Python-%{tarversion}
+Source0:        http://www.python.org/ftp/python/%{version}/%{tarname}.tar.xz
+Source4:        http://www.python.org/ftp/python/%{version}/%{tarname}.tar.xz.asc
+Source6:        python.keyring
+Source1:        macros.python
+Source2:        baselibs.conf
+Source5:        local.pth
+# COMMON-PATCH-BEGIN
+Patch1:         python-2.7-dirs.patch
+Patch2:         python-distutils-rpm-8.patch
+Patch3:         python-2.7.5-multilib.patch
+Patch4:         python-2.5.1-sqlite.patch
+Patch5:         python-2.7.4-canonicalize2.patch
+Patch7:         python-2.6-gettext-plurals.patch
+Patch8:         python-2.6b3-curses-panel.patch
+Patch10:        sparc_longdouble.patch
+Patch13:        python-2.7.2-fix_date_time_compiler.patch
+Patch17:        remove-static-libpython.diff
+# PATCH-FEATURE-OPENSUSE python-bundle-lang.patch bnc#617751 dimstar@opensuse.org -- gettext: when looking in default_localedir also check in locale-bundle.
+Patch20:        python-bundle-lang.patch
+# PATCH-FIX-UPSTREAM Fix argument passing in libffi for aarch64
+Patch22:        python-2.7-libffi-aarch64.patch
+Patch24:        python-bsddb6.diff
+# PATCH-FIX-UPSTREAM accept directory-based CA paths as well
+Patch33:        python-2.7.9-ssl_ca_path.patch
+# PATCH-FEATURE-SLE disable SSL verification-by-default in http clients
+Patch34:        python-2.7.9-sles-disable-verification-by-default.patch
+# PATCH-FIX-UPSTREAM python-ncurses-6.0-accessors.patch dimstar@opensuse.org -- Fix build with NCurses 6.0 and OPAQUE_WINDOW set to 1
+Patch35:        python-ncurses-6.0-accessors.patch
+Patch36:        python-2.7.10-overflow_check.patch
+Patch37:        python-2.7.12-makeopcode.patch
+# COMMON-PATCH-END
+%define         python_version    %(echo %{tarversion} | head -c 3)
+BuildRequires:  automake
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires:  fdupes
+BuildRequires:  netcfg
+%endif
+BuildRequires:  libbz2-devel
+BuildRequires:  pkg-config
+BuildRequires:  xz
+BuildRequires:  zlib-devel
+# for the test suite
+# explicitly, see bnc#697251:
+Requires:       libpython2_7-1_0 = %{version}
+Provides:       %{name} = %{python_version}
+# bug437293
+%ifarch ppc64
+Obsoletes:      python-64bit
+%endif
+Provides:       python-ctypes = 1.1.0
+Obsoletes:      python-ctypes < 1.1.0
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+#!BuildIgnore:  post-build-checks
+%global _python_bytecompile_errors_terminate_build 0
+
+%description
+Python is an interpreted, object-oriented programming language, and is
+often compared to Tcl, Perl, Scheme, or Java.  You can find an overview
+of Python in the documentation and tutorials included in the python-doc
+(HTML) or python-doc-pdf (PDF) packages.
+
+This package contains all of stand-alone Python files, minus binary
+modules that would pull in extra dependencies.
+
+%package -n python-devel
+Summary:        Include Files and Libraries Mandatory for Building Python Modules
+Group:          Development/Languages/Python
+Requires:       glibc-devel
+Requires:       python = %{version}-%{release}
+
+%description -n python-devel
+The Python programming language's interpreter can be extended with
+dynamically loaded extensions and can be embedded in other programs.
+
+This package contains header files, a static library, and development
+tools for building Python modules, extending the Python interpreter or
+embedding Python in applications.
+
+%package -n python-xml
+Summary:        A Python XML Interface
+Group:          Development/Libraries/Python
+Requires:       python = %{version}-%{release}
+# pyxml used to live out of tree
+Provides:       pyxml = 0.8.5
+Obsoletes:      pyxml < 0.8.5
+
+%description -n python-xml
+The expat module is a Python interface to the expat XML parser. Since
+Python2.x, it is part of the core Python distribution.
+
+%package -n libpython2_7-1_0
+Summary:        Python Interpreter shared library
+Group:          Development/Languages/Python
+
+%description -n libpython2_7-1_0
+Python is an interpreted, object-oriented programming language, and is
+often compared to Tcl, Perl, Scheme, or Java.  You can find an overview
+of Python in the documentation and tutorials included in the python-doc
+(HTML) or python-doc-pdf (PDF) packages.
+
+This package contains libpython2.7 shared library for embedding in
+other applications.
+
+%prep
+%setup -q -n %{tarname}
+# patching
+# COMMON-PREP-BEGIN
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch7 -p1
+%patch8 -p1
+%patch10 -p1
+%patch13 -p1
+%patch17 -p1
+%patch20 -p1
+%patch22 -p1
+%patch24 -p1
+%patch33 -p1
+# %if %{suse_version} == 1315 && !0%{?is_opensuse}
+# %patch34 -p1
+# %endif
+%patch35 -p1
+%patch36
+%patch37 -p1
+
+# drop Autoconf version requirement
+sed -i 's/^version_required/dnl version_required/' configure.ac
+# COMMON-PREP-END
+
+%build
+export OPT="%{optflags} -DOPENSSL_LOAD_CONF"
+
+autoreconf -f -i . # Modules/_ctypes/libffi
+
+# provide a stable timestamp
+touch -r %{SOURCE0} Makefile.pre.in
+
+# prevent make from trying to rebuild asdl stuff, which requires existing
+# python installation
+touch Parser/asdl* Python/Python-ast.c Include/Python-ast.h
+
+%configure \
+    --docdir=%{_docdir}/python \
+    --with-fpectl \
+    --enable-ipv6 \
+    --enable-shared \
+    --enable-unicode=ucs4
+
+%if 0%{?do_profiling}
+target=profile-opt
+%else
+target=all
+%endif
+LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH \
+    make %{?_smp_mflags} $target
+
+%check
+# on hppa, the threading of glibc is quite broken. The tests just stop
+# at some point, and the machine does not build anything more until a
+# timeout several hours later.
+%ifnarch hppa
+# test_file(2k) fails in autobuild env - "stdin.seek(-1)" wrongly succeeds. probably an issue with autobuild's stdin
+# test_urllib2 relies on being able to resolve local address, which is notoriously impossible in autobuild
+EXCLUDE="test_urllib2 test_file test_file2k"
+# test_nis and test_threading are AWFULLY slow.
+EXCLUDE="$EXCLUDE test_nis test_threading"
+# test_gdb fails if gdb with (different) python support is part of the buildsystem
+EXCLUDE="$EXCLUDE test_gdb"
+%ifarch ia64
+# test_smtplib's testSend is known to be broken and on ia64 it actually fails most of the time, preventing the build.
+EXCLUDE="$EXCLUDE test_smtplib"
+%endif
+# test_unicode fails in Factory
+EXCLUDE="$EXCLUDE test_unicode"
+%if 0%{?qemu_user_space_build}
+# test_asyncore fails because of unimplemented sockopt
+EXCLUDE="$EXCLUDE test_asyncore test_mmap"
+# emulation is unreliable
+EXCLUDE="$EXCLUDE test_multiprocessing test_thread"
+# qemu bug (siginterrupt handling)
+EXCLUDE="$EXCLUDE test_signal"
+%endif
+
+# This test (part of test_uuid) requires real network interfaces
+# so that ifconfig output has "HWaddr <something>".  Some kvm instances
+# don't have any such interface breaking the uuid module test.
+EXCLUDE="$EXCLUDE test_uuid"
+
+# Limit virtual memory to avoid spurious failures
+if test $(ulimit -v) = unlimited || test $(ulimit -v) -gt 10000000; then
+  ulimit -v 10000000 || :
+fi
+make test TESTOPTS="-l -x $EXCLUDE" TESTPYTHONOPTS="-R"
+# use network, be verbose:
+#make test TESTOPTS="-l -u network -v"
+%endif
+
+%install
+# replace rest of /usr/local/bin/python or /usr/bin/python2.5 with /usr/bin/python
+find . -name '*.py' -type f | grep -vE "^./Parser/|^./Python/" \
+  | xargs grep -lE '^#! *(/usr/.*bin/(env +)?)?python' \
+  | xargs sed -r -i -e '1s@^#![[:space:]]*(/usr/(local/)?bin/(env +)?)?python([0-9]+\.[0-9]+)?@#!/usr/bin/python@'
+# the grep inbetween makes it much faster
+########################################
+# install it
+########################################
+%make_install OPT="%{optflags} -fPIC"
+install -m 644 %{SOURCE5} %{buildroot}%{_libdir}/python%{python_version}/site-packages/_local.pth
+install -d -m 755 %{buildroot}%{_sysconfdir}/rpm
+install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/rpm
+# make sure /usr/lib/python/site-packages exists even on lib64 machines
+mkdir -p %{buildroot}%{_prefix}/lib/python%{python_version}/site-packages
+########################################
+# some cleanups
+########################################
+# remove hard links and replace them with symlinks
+for dir in bin include %{_lib} ; do
+    rm -f %{buildroot}/%{_prefix}/$dir/python
+    ln -s python%{python_version} %{buildroot}/%{_prefix}/$dir/python
+done
+CLEANUP_DIR="%{buildroot}%{_libdir}/python%{python_version}"
+# don't distribute precompiled windows installers (duh)
+rm -f $CLEANUP_DIR/distutils/command/*.exe
+# kill imageop.so - it used to be insecure and it is deprecated anyway
+rm -f $CLEANUP_DIR/lib-dynload/imageop.so
+# link shared library instead of static library that tools expect
+ln -s ../../libpython%{python_version}.so %{buildroot}%{_libdir}/python%{python_version}/config/libpython%{python_version}.so
+# remove various things that don't need to be in python
+rm %{buildroot}%{_bindir}/idle
+rm -rf $CLEANUP_DIR/{curses,bsddb,idlelib,lib-tk,sqlite3}
+rm $CLEANUP_DIR/ssl.py*
+#        does not work without _ssl.so anyway
+%if 0%{?sles_version} || 0%{?suse_version}
+# replace duplicate .pyo/.pyc with hardlinks
+%fdupes %{buildroot}/%{_libdir}/python%{python_version}
+%endif
+########################################
+# documentation
+########################################
+export PDOCS=%{buildroot}%{_docdir}/%{name}
+install -d -m 755 $PDOCS
+install -c -m 644 LICENSE                           $PDOCS/
+install -c -m 644 README                            $PDOCS/
+ln -s python%{python_version}.1.gz %{buildroot}%{_mandir}/man1/python.1.gz
+########################################
+# devel
+########################################
+# install Makefile.pre.in and Makefile.pre
+cp Makefile Makefile.pre.in Makefile.pre %{buildroot}%{_libdir}/python%{python_version}/config/
+
+%post -n libpython2_7-1_0 -p /sbin/ldconfig
+%postun -n libpython2_7-1_0 -p /sbin/ldconfig
+
+%files -n python-devel
+%defattr(-, root, root)
+%{_libdir}/python%{python_version}/config/*
+%exclude %{_libdir}/python%{python_version}/config/Setup
+%exclude %{_libdir}/python%{python_version}/config/Makefile
+%defattr(644, root, root, 755)
+%{_libdir}/libpython*.so
+%{_libdir}/pkgconfig/python-%{python_version}.pc
+%{_libdir}/pkgconfig/python.pc
+%{_libdir}/pkgconfig/python2.pc
+%{_includedir}/python*
+%exclude %{_includedir}/python%{python_version}/pyconfig.h
+%{_libdir}/python%{python_version}/test
+%defattr(755, root, root)
+%{_bindir}/python-config
+%{_bindir}/python2-config
+%{_bindir}/python%{python_version}-config
+
+%files -n python-xml
+%defattr(644, root, root, 755)
+%{_libdir}/python%{python_version}/xml
+%{_libdir}/python%{python_version}/lib-dynload/pyexpat.so
+
+%files -n libpython2_7-1_0
+%defattr(644, root, root)
+%{_libdir}/libpython*.so.*
+
+%files
+%defattr(644, root, root, 755)
+%config %{_sysconfdir}/rpm/macros.python
+%dir %{_docdir}/%{name}
+%doc %{_docdir}/%{name}/README
+%doc %{_docdir}/%{name}/LICENSE
+%doc %{_mandir}/man1/python.1*
+%doc %{_mandir}/man1/python2.1*
+%doc %{_mandir}/man1/python%{python_version}.1*
+%dir %{_includedir}/python%{python_version}
+%{_includedir}/python%{python_version}/pyconfig.h
+%{_libdir}/python
+%dir %{_prefix}/lib/python%{python_version}
+%dir %{_prefix}/lib/python%{python_version}/site-packages
+%dir %{_libdir}/python%{python_version}
+%dir %{_libdir}/python%{python_version}/config
+%{_libdir}/python%{python_version}/config/Setup
+%{_libdir}/python%{python_version}/config/Makefile
+%{_libdir}/python%{python_version}/*.*
+%{_libdir}/python%{python_version}/compiler
+%{_libdir}/python%{python_version}/ctypes
+%{_libdir}/python%{python_version}/distutils
+%{_libdir}/python%{python_version}/email
+%{_libdir}/python%{python_version}/encodings
+%{_libdir}/python%{python_version}/ensurepip
+%{_libdir}/python%{python_version}/hotshot
+%{_libdir}/python%{python_version}/importlib
+%{_libdir}/python%{python_version}/json
+%{_libdir}/python%{python_version}/lib2to3
+%{_libdir}/python%{python_version}/logging
+%{_libdir}/python%{python_version}/multiprocessing
+%{_libdir}/python%{python_version}/plat-*
+%{_libdir}/python%{python_version}/pydoc_data
+%{_libdir}/python%{python_version}/unittest
+%{_libdir}/python%{python_version}/wsgiref
+%dir %{_libdir}/python%{python_version}/site-packages
+%{_libdir}/python%{python_version}/site-packages/README
+%{_libdir}/python%{python_version}/site-packages/_local.pth
+%dir %{_libdir}/python%{python_version}/lib-dynload
+%if 0%{?rhel_version} || 0%{?centos_version} 
+%{_libdir}/python%{python_version}/lib-dynload/_curses.so
+%{_libdir}/python%{python_version}/lib-dynload/_curses_panel.so
+%ifnarch aarch64
+%{_libdir}/python%{python_version}/lib-dynload/_bsddb.so
+%{_libdir}/python%{python_version}/lib-dynload/dbm.so
+%{_libdir}/python%{python_version}/lib-dynload/gdbm.so
+%endif
+%endif
+%{_libdir}/python%{python_version}/lib-dynload/_bisect.so
+#%%{_libdir}/python%%{python_version}/lib-dynload/_bytesio.so
+%{_libdir}/python%{python_version}/lib-dynload/_csv.so
+%{_libdir}/python%{python_version}/lib-dynload/_collections.so
+%{_libdir}/python%{python_version}/lib-dynload/_ctypes.so
+%{_libdir}/python%{python_version}/lib-dynload/_ctypes_test.so
+%{_libdir}/python%{python_version}/lib-dynload/_elementtree.so
+#%%{_libdir}/python%%{python_version}/lib-dynload/_fileio.so
+%{_libdir}/python%{python_version}/lib-dynload/_functools.so
+%{_libdir}/python%{python_version}/lib-dynload/_heapq.so
+%{_libdir}/python%{python_version}/lib-dynload/_hotshot.so
+%{_libdir}/python%{python_version}/lib-dynload/_io.so
+%{_libdir}/python%{python_version}/lib-dynload/_json.so
+%{_libdir}/python%{python_version}/lib-dynload/_locale.so
+%{_libdir}/python%{python_version}/lib-dynload/_lsprof.so
+%{_libdir}/python%{python_version}/lib-dynload/_md5.so
+%{_libdir}/python%{python_version}/lib-dynload/_multiprocessing.so
+%{_libdir}/python%{python_version}/lib-dynload/_random.so
+%{_libdir}/python%{python_version}/lib-dynload/_sha.so
+%{_libdir}/python%{python_version}/lib-dynload/_sha256.so
+%{_libdir}/python%{python_version}/lib-dynload/_sha512.so
+%{_libdir}/python%{python_version}/lib-dynload/_socket.so
+%{_libdir}/python%{python_version}/lib-dynload/_struct.so
+%{_libdir}/python%{python_version}/lib-dynload/_testcapi.so
+%{_libdir}/python%{python_version}/lib-dynload/array.so
+%{_libdir}/python%{python_version}/lib-dynload/audioop.so
+%{_libdir}/python%{python_version}/lib-dynload/binascii.so
+%{_libdir}/python%{python_version}/lib-dynload/bz2.so
+%{_libdir}/python%{python_version}/lib-dynload/cPickle.so
+%{_libdir}/python%{python_version}/lib-dynload/cStringIO.so
+%{_libdir}/python%{python_version}/lib-dynload/cmath.so
+%{_libdir}/python%{python_version}/lib-dynload/crypt.so
+%{_libdir}/python%{python_version}/lib-dynload/datetime.so
+%{_libdir}/python%{python_version}/lib-dynload/fcntl.so
+%{_libdir}/python%{python_version}/lib-dynload/future_builtins.so
+%{_libdir}/python%{python_version}/lib-dynload/grp.so
+%{_libdir}/python%{python_version}/lib-dynload/itertools.so
+%{_libdir}/python%{python_version}/lib-dynload/linuxaudiodev.so
+%{_libdir}/python%{python_version}/lib-dynload/math.so
+%{_libdir}/python%{python_version}/lib-dynload/mmap.so
+%{_libdir}/python%{python_version}/lib-dynload/nis.so
+%{_libdir}/python%{python_version}/lib-dynload/operator.so
+%{_libdir}/python%{python_version}/lib-dynload/ossaudiodev.so
+%{_libdir}/python%{python_version}/lib-dynload/parser.so
+%{_libdir}/python%{python_version}/lib-dynload/resource.so
+%{_libdir}/python%{python_version}/lib-dynload/select.so
+%{_libdir}/python%{python_version}/lib-dynload/spwd.so
+%{_libdir}/python%{python_version}/lib-dynload/strop.so
+%{_libdir}/python%{python_version}/lib-dynload/syslog.so
+%{_libdir}/python%{python_version}/lib-dynload/termios.so
+%{_libdir}/python%{python_version}/lib-dynload/time.so
+%{_libdir}/python%{python_version}/lib-dynload/unicodedata.so
+%{_libdir}/python%{python_version}/lib-dynload/zlib.so
+%{_libdir}/python%{python_version}/lib-dynload/_codecs*.so
+%{_libdir}/python%{python_version}/lib-dynload/_multibytecodec.so
+%{_libdir}/python%{python_version}/lib-dynload/Python-%{tarversion}-py%{python_version}.egg-info
+# these modules don't support 64-bit arches (disabled by setup.py)
+%ifnarch alpha ia64 x86_64 s390x ppc64 ppc64le sparc64 aarch64
+# requires sizeof(int) == sizeof(long) == sizeof(char*)
+%{_libdir}/python%{python_version}/lib-dynload/dl.so
+%endif
+%attr(755, root, root) %{_bindir}/pydoc
+%attr(755, root, root) %{_bindir}/python
+%attr(755, root, root) %{_bindir}/python%{python_version}
+%attr(755, root, root) %{_bindir}/smtpd.py
+%{_bindir}/python2
+%exclude %{_bindir}/2to3
+
+%changelog
+* Thu Jun 30 2016 jmatejek@suse.com
+- update to 2.7.12
+  * dozens of bugfixes, see NEWS for details
+  * fixes multiple security issues:
+    CVE-2016-0772 TLS stripping attack on smtplib (bsc#984751)
+    CVE-2016-5636 zipimporter heap overflow (bsc#985177)
+    CVE-2016-5699 httplib header injection (bsc#985348)
+    (this one is actually fixed since 2.7.10)
+- removed upstreamed python-2.7.7-mhlib-linkcount.patch
+- refreshed multilib patch
+- python-2.7.12-makeopcode.patch - run newly-built python interpreter
+  to make opcodes, in order not to require pre-built python
+- update LD_LIBRARY_PATH to use $PWD instead of "." because the test
+  process escapes to its own directory
+- modify shebang-fixing scriptlet to ignore makeopcodetargets.py
+* Fri Jan 29 2016 rguenther@suse.com
+- Add python-2.7.10-overflow_check.patch to fix broken overflow checks.
+  [bnc#964182]
+* Mon Sep 14 2015 jmatejek@suse.com
+- copy strict-tls-checks subpackage from SLE to retain future compatibility
+  (not built in openSUSE)
+- do this properly to fix bnc#945401
+* Wed Sep  9 2015 dimstar@opensuse.org
+- Add python-ncurses-6.0-accessors.patch: Fix build with
+  NCurses 6.0 and OPAQUE_WINDOW set to 1.
+* Wed Jun 10 2015 dmueller@suse.com
+- add __python2 compatibility macro (used by Fedora)
+* Sun May 24 2015 michael@stroeder.com
+- update to 2.7.10
+- removed obsolete python-2.7-urllib2-localnet-ssl.patch
+* Tue May 19 2015 schwab@suse.de
+- Reenable test_posix on aarch64
+* Sun Dec 21 2014 schwab@suse.de
+- python-2.7.4-aarch64.patch: Remove obsolete patch
+- python-2.7-libffi-aarch64.patch: Fix argument passing in libffi for
+  aarch64
+* Fri Dec 12 2014 jmatejek@suse.com
+- update to 2.7.9
+  * contains full backport of ssl module from Python 3.4 (PEP466)
+  * HTTPS certificate validation enabled by default (PEP476)
+  * SSLv3 disabled by default (bnc#901715)
+  * backported ensurepip module (PEP477)
+  * fixes several missing CVEs from last release: CVE-2013-1752,
+    CVE-2013-1753
+  * dozens of minor bugfixes
+- dropped upstreamed patches: python-2.7.6-poplib.patch,
+  smtplib_maxline-2.7.patch, xmlrpc_gzip_27.patch
+- dropped patch python-2.7.3-ssl_ca_path.patch because we don't need it
+  with ssl module from Python 3
+- libffi was upgraded upstream, seems to contain our changes,
+  so dropping libffi-ppc64le.diff as well
+- python-2.7-urllib2-localnet-ssl.patch - properly remove unconditional
+  "import ssl" from test_urllib2_localnet that caused it to fail without ssl
+* Wed Oct 22 2014 dmueller@suse.com
+- skip test_thread in qemu_linux_user mode
+* Tue Sep 30 2014 jmatejek@suse.com
+- update to 2.7.8
+  * bugfix-only release, dozens of bugs fixed
+  * fixes CVE-2014-4650 directory traversal in CGIHTTPServer
+  * fixes CVE-2014-7185 (bnc#898572) potential buffer overflow in buffer()
+- dropped upstreamed CVE-2014-4650-CGIHTTPserver-traversal.patch
+* Wed Jul 23 2014 jmatejek@suse.com
+- CVE-2014-4650-CGIHTTPServer-traversal.patch: CGIHTTPServer file
+  disclosure and directory traversal through URL-encoded characters
+  (CVE-2014-4650, bnc#885882)
+- python-2.7.7-mhlib-linkcount.patch: remove link count optimizations
+  that are incorrect on btrfs (and possibly other filesystems)
+* Fri Jun 20 2014 jmatejek@suse.com
+- update to 2.7.7
+  * bugfix-only release, over a hundred bugs fixed
+  * backported hmac.compare_digest from python3, first step of PEP 466
+- drop upstreamed patches:
+  * CVE-2014-1912-recvfrom_into.patch
+  * python-2.7.4-no-REUSEPORT.patch
+  * python-2.7.6-bdist-rpm.patch
+  * python-2.7.6-imaplib.patch
+  * python-2.7.6-sqlite-3.8.4-tests.patch
+- refresh patches:
+  * python-2.7.3-ssl_ca_path.patch
+  * python-2.7.4-canonicalize2.patch
+  * xmlrpc_gzip_27.patch
+- added python keyring and signature for the main tarball
+* Sat Mar 15 2014 schwab@suse.de
+- Use profile-opt only when profiling is enabled
+- python-2.7.2-disable-tests-in-test_io.patch: removed, no longer needed
+- update testsuite exclusion list:
+  * test_signal and test_posix fail due to qemu bugs
+* Fri Mar 14 2014 andreas.stieger@gmx.de
+- Fix build with SQLite 3.8.4 [bnc#867887], fixing SQLite tests,
+  adding python-2.7.6-sqlite-3.8.4-tests.patch
+* Mon Feb 10 2014 jmatejek@suse.com
+- added patches for CVE-2013-1752 (bnc#856836) issues that are
+  missing in 2.7.6:
+  python-2.7.6-imaplib.patch
+  python-2.7.6-poplib.patch
+  smtplib_maxline-2.7.patch
+- CVE-2013-1753 (bnc#856835) gzip decompression bomb in xmlrpc client:
+  xmlrpc_gzip_27.patch
+- python-2.7.6-bdist-rpm.patch: fix broken "setup.py bdist_rpm" command
+  (bnc#857470, issue18045)
+- multilib patch: add "~/.local/lib64" paths to search path
+  (bnc#637176)
+- CVE-2014-1912-recvfrom_into.patch: fix potential buffer overflow
+  in socket.recvfrom_into (CVE-2014-1912, bnc#863741)
+* Tue Dec 10 2013 uweigand@de.ibm.com
+- Add Obsoletes/Provides for python-ctypes.
+* Sat Dec  7 2013 matz@suse.de
+- Ignore uuid testcase in the testsuite, it relies on unreliable
+  ifconfig output.
+* Tue Dec  3 2013 mls@suse.de
+- adapt python-2.7.5-multilib.patch for ppc64le
+* Tue Dec  3 2013 dvaleev@suse.com
+- adjust %%files for ppc64le
+* Tue Dec  3 2013 matz@suse.de
+- Support for ppc64le in _ctypes libffi copy.
+- added patches:
+  * libffi-ppc64le.diff
+* Tue Dec  3 2013 adrian@suse.de
+- add ppc64le rules
+- avoid errors from source-validator
+* Thu Nov 21 2013 jmatejek@suse.com
+- update to 2.7.6
+  * bugfix-only release
+  * SSL-related fixes
+  * upstream fix for CVE-2013-4238
+  * upstream fixes for CVE-2013-1752
+- removed upstreamed patch CVE-2013-4238_py27.patch
+- reintroduce audioop.so as the problems with it seem to be fixed
+  (bnc#831442)
+* Thu Oct 10 2013 dmueller@suse.com
+- exclude test_mmap under qemu_linux_user - emulation fails here
+  as the tests mmap address conflicts with qemu
+* Tue Jul  9 2013 jengelh@inai.de
+- Add python-bsddb6.diff to support building against libdb-6.0
+* Sat Jul  6 2013 coolo@suse.com
+- have python-devel require python:
+  http://lists.opensuse.org/opensuse-factory/2013-06/msg00622.html
+* Sun Jun 30 2013 schwab@suse.de
+- Disable test_multiprocessing in QEmu build
+* Wed Jun  5 2013 schwab@suse.de
+- Disable test_asyncore in QEmu build
+- Reenable testsuite on arm
+* Thu May 30 2013 jmatejek@suse.com
+- python-2.7.4-aarch64.patch: add missing bits of aarch64 support
+- python-2.7.4-no-REUSEPORT.patch: disable test of
+  missing kernel functionality
+- drop unnecessary patch: python-2.7.1-distutils_test_path.patch
+- switch to xz archive
+* Tue May 28 2013 speilicke@suse.com
+- Update to version 2.7.5:
+  + bugfix-only release
+  + fixes several important regressions introduced in 2.7.4
+  + Issue #15535: Fixed regression in the pickling of named tuples by
+    removing the __dict__ property introduced in 2.7.4.
+  + Issue #17857: Prevent build failures with pre-3.5.0 versions of sqlite3,
+    such as was shipped with Centos 5 and Mac OS X 10.4.
+  + Issue #17703: Fix a regression where an illegal use of Py_DECREF() after
+    interpreter finalization can cause a crash.
+  + Issue #16447: Fixed potential segmentation fault when setting __name__ on a
+    class.
+  + Issue #17610: Don't rely on non-standard behavior of the C qsort() function. 12
+  See http://hg.python.org/cpython/file/ab05e7dd2788/Misc/NEWS for more
+- Drop upstreamed patches:
+  + python-2.7.3-fix-dbm-64bit-bigendian.patch
+  + python-test_structmembers.patch
+- Rebased other patches
+* Mon May 13 2013 dmueller@suse.com
+- add aarch64 to the list of 64-bit platforms
+* Thu May  9 2013 jmatejek@suse.com
+- update to 2.7.4
+  * bugfix-only release
+- drop upstreamed patches:
+    pypirc-secure.diff
+    python-2.7.3-multiprocessing-join.patch
+    ctypes-libffi-aarch64.patch
+- drop python-2.7rc2-configure.patch as it doesn't seem necessary anymore
+* Fri Apr  5 2013 idonmez@suse.com
+- Add Source URL, see https://en.opensuse.org/SourceUrls
+* Wed Feb 27 2013 schwab@suse.de
+- Add aarch64 to the list of lib64 platforms
+* Sat Feb  9 2013 schwab@suse.de
+- Add ctypes-libffi-aarch64.patch: import aarch64 support for libffi in
+  _ctypes module
+* Fri Feb  8 2013 jmatejek@suse.com
+- multiprocessing: thread joining itself (bnc#747794)
+- gettext: fix cases where no bundle is found (bnc#794139)
+* Thu Oct 25 2012 coolo@suse.com
+- add explicit buildrequire on libbz2-devel
+* Mon Oct 15 2012 coolo@suse.com
+- buildrequire explicitly netcfg for the test suite
+* Mon Oct  8 2012 jmatejek@suse.com
+- remove distutils.cfg (bnc#658604)
+  * this changes default prefix for distutils to /usr
+  * see ML for details:
+  http://lists.opensuse.org/opensuse-packaging/2012-09/msg00254.html
+* Fri Aug  3 2012 dimstar@opensuse.org
+- Add python-bundle-lang.patch: gettext: If bindtextdomain is
+  instructed to look in the default location of translations, we
+  check additionally in locale-bundle. Fixes issues like bnc#617751
+* Tue Jul 31 2012 jmatejek@suse.com
+- all subpackages require python-base=%%{version}-%%{release} explicitly
+  (fixes bnc#766778 bug and similar that might arise in the future)
+* Tue Jun 26 2012 dvaleev@suse.com
+- Fix failing test_dbm on ppc64
+* Thu May 17 2012 jfunk@funktronics.ca
+- Support directory-based certificate stores with the ca_certs parameter of SSL
+  functions [bnc#761501]
+* Sat Apr 14 2012 dmueller@suse.com
+- update to 2.7.3:
+  * no change
+- remove static libpython.a from build to avoid packages
+  linking it statically
+* Wed Mar 28 2012 jmatejek@suse.com
+- update to 2.7.3rc2
+  * fixes several security issues:
+  * CVE-2012-0845, bnc#747125
+  * CVE-2012-1150, bnc#751718
+  * CVE-2011-4944, bnc#754447
+  * CVE-2011-3389
+- fix for insecure .pypirc (CVE-2011-4944, bnc#754447)
+  !!important!!
+- disabled test_unicode which segfaults on 64bits.
+  this should not happen, revisit in next RC!
+  !!important!!
+* Thu Feb 16 2012 dvaleev@suse.com
+- skip broken test_io test on ppc
+* Mon Dec 12 2011 toddrme2178@gmail.com
+- Exclude /usr/bin/2to3 to prevent conflicts with python3-2to3
+* Thu Dec  8 2011 jmatejek@suse.com
+- %%python_version now correctly refers to %%tarversion
+* Mon Nov 28 2011 saschpe@suse.de
+- Spec file cleanup:
+  * Run spec-cleaner
+  * Remove outdated %%clean section, AutoReqProv and authors from descr.
+- Fix license to Python-2.0 (also SPDX style)
+* Fri Sep 30 2011 adrian@suse.de
+- fix build for arm by removing an old hack for arm, bz2.so is built now
+* Fri Aug 19 2011 dmueller@suse.de
+- update to 2.7.2:
+  * Bug fix only release, see
+  http://hg.python.org/cpython/raw-file/eb3c9b74884c/Misc/NEWS
+  for details
+- introduce a pre_checkin.sh file that synchronizes
+  patches between python and python-base
+- rediff patches for 2.7.2
+- replace kernel3 patch with the upstream solution
+* Fri Jul 22 2011 idonmez@novell.com
+- Copy Lib/plat-linux2 to Lix/plat-linux3 so that DLFCN module
+  is also available for linux3 systems  bnc#707667
+* Sun Jul 10 2011 ro@suse.de
+- fix build on factory: setup reports linux3 not linux2 now,
+  adapt checks
+* Tue May 31 2011 jmatejek@novell.com
+- added explicit requires to libpython-%%version-%%release
+  to prevent bugs like bnc#697251 reappearing
+* Tue May 24 2011 jmatejek@novell.com
+- update to 2.7.1
+  * bugfix-only release, see NEWS for details
+- refreshed patches, dropped the upstreamed ones
+- dropped acrequire patch, replacing it with build-time sed
+- improved fix to bnc#673071 by defining the constants
+  only for files that require it (as is done in python3)
+* Mon May  2 2011 jmatejek@novell.com
+- fixed a security flaw where malicious sites could redirect
+  Python application from http to a local file
+  (CVE-2011-1521, bnc#682554)
+- fixed race condition in Makefile which randomly failed
+  parallel builds ( http://bugs.python.org/issue10013 )
+* Thu Feb 17 2011 pth@suse.de
+- Prefix DATE and TIME with PY_BUILD_ and COMPILER with PYTHON_ as
+  to not break external code (bnc#673071).
+* Mon Jan 17 2011 coolo@novell.com
+- provide pyxml to avoid touching tons of packages
+* Thu Nov 18 2010 coolo@novell.com
+- add patch from http://psf.upfronthosting.co.za/roundup/tracker/issue9960
+  to fix build on ppc64
+* Fri Oct  1 2010 jmatejek@novell.com
+- moved unittest to python-base (it is a testing framework, not a
+  testsuite, so it clearly belongs into stdlib)
+- fixed smtpd.py DoS (bnc#638233, CVE probably not assigned)
+* Tue Sep 21 2010 coolo@novell.com
+- fix baselibs.conf
+* Thu Aug 26 2010 suse-tux@gmx.de
+- fix for urllib2 (http://bugs.python.org/issue9639)
+* Thu Aug 26 2010 jmatejek@novell.com
+- fixed distutils test
+- dropped autoconf version requirement (it builds just fine with other versions)
+* Thu Aug 26 2010 jmatejek@novell.com
+- update to version 2.7
+  * improved handling of numeric types
+  * deprecation warnings are now silent by default
+  * new argparse module for command line arguments
+  * many new features, see http://docs.python.org/dev/whatsnew/2.7.html
+    for complete list
+  * ** 2.7 is supposed to be the last version from the 2.x series,
+  so its (upstream) maintenance period will probably be longer than usual.
+  However, upstream development now focuses on 3.x series.
+- cleaned up spec and patches
+* Fri Jul  2 2010 jengelh@medozas.de
+- add patch from http://bugs.python.org/issue6029
+- use %%_smp_mflags
+* Mon May 17 2010 matejcik@suse.cz
+- dropped audioop.so because of security vulnerabilities
+  (bnc#603255)
+* Wed Apr  7 2010 matejcik@suse.cz
+- update to 2.6.5 (rpm version 2.6.5)
+- patched test_distutils to work
+* Thu Mar 11 2010 matejcik@suse.cz
+- update to 2.6.5rc2 (rpm version is 2.6.4.92)
+  * bugfix-only release
+- removed fwrapv patch - no longer needed
+- removed expat patches (this version also fixes expat vulnerabilities
+  from bnc#581765 )
+- removed readline spacing patch - no longer needed
+- removed https_proxy patch - no longer needed
+- removed test_distutils patch - no longer needed
+- disabled test_distutils because of spurious failure,
+  * TODO reenable at release
+* Thu Feb  4 2010 matejcik@suse.cz
+- removed precompiled exe files (as noted in bnc#577032)
+* Fri Jan 29 2010 matejcik@suse.cz
+- enabled ipv6 in configure (bnc#572673)
+* Wed Dec 23 2009 aj@suse.de
+- Apply patches with fuzz=0
+* Mon Dec 14 2009 jengelh@medozas.de
+- add baselibs.conf as source
+* Wed Oct 28 2009 crrodriguez@opensuse.org
+- python-devel Requires glibc-devel
+* Fri Sep  4 2009 matejcik@suse.cz
+- fixed potential DoS in python's copy of expat (bnc#534721)
+* Sun Aug  2 2009 jansimon.moeller@opensuse.org
+- fix files section for ARM, as bz2.so isn't built on ARM.
+* Fri Jul 31 2009 matejcik@suse.cz
+- added /usr/lib/python2.6{,/site-packages} to the package even if
+  it is on lib64 arch
+- added %%python_sitelib and %%python_sitearch for fedora compatibility
+* Thu Jul 30 2009 matejcik@suse.cz
+- fixed test in test_distutils suite that would generate a warning
+  when the log threshold was set too low by preceding tests
+* Wed Jul 29 2009 matejcik@suse.cz
+- support noarch python packages (modified multilib patch
+  to differentiate between purelib and platlib, added /usr/lib
+  to search path in all cases
+* Thu Jul 16 2009 coolo@novell.com
+- disable as-needed to fix build
+* Mon Apr 27 2009 matejcik@suse.cz
+- update to 2.6.2
+  * bugfix-only release for 2.6 series
+* Fri Feb  6 2009 matejcik@suse.cz
+- excluded pyconfig.h and Makefile and Setup from -devel subpackage
+  to prevent file conflicts of python-base and python-devel
+* Thu Jan 15 2009 matejcik@suse.cz
+- fixed gettext.py problem with empty plurals line (bnc#462375)
+* Wed Jan  7 2009 olh@suse.de
+- obsolete old -XXbit packages (bnc#437293)
+* Mon Dec 15 2008 matejcik@suse.cz
+- removed bsddb directory from python-base, reenabled in python
+* Mon Oct 20 2008 matejcik@suse.cz
+- added libpython and python-base to baselibs.conf (bnc#432677)
+- disabled test_smtplib for ia64 so that the package actually
+  gets built (bnc#436966)
+* Thu Oct  9 2008 matejcik@suse.cz
+- update to 2.6 final (version name is 2.6.0 to make upgrade from
+  2.6rc2 possible)
+- replaced site.py hack with a .pth file to do the same thing
+  (cleaner solution that doesn't mess up documented behavior
+  and also fixes virtualenv, bnc#430761)
+- enabled profile optimized build
+- fixed %%py_requires macro (bnc#346490)
+- provide %%name = 2.6
+* Fri Sep 19 2008 matejcik@suse.cz
+- moved tests to %%check section
+- update to 2.6rc2
+- included patch for https proxy support that resolves bnc#214983
+  (in a proper way) and bnc#298378
+* Wed Sep 17 2008 matejcik@suse.cz
+- included /etc/rpm/macros.python to fix the split-caused breakage
+* Tue Sep 16 2008 matejcik@suse.cz
+- applied bug-no-proxy patch from python#3879, which should improve
+  backwards compatibility (important i.e. for bzr)
+- moved python-xml to a subpackage of this (brings no additional
+  dependencies, so it can as well stay)
+- moved Makefile and pyconfig.h to python-base, removing the need
+  to have python-devel for installation
+- improved compatibility with older distros for 11.0
+- moved ssl.py and sqlite3 module to python package - they won't work
+  without their respective binary modules anyway
+* Mon Sep 15 2008 matejcik@suse.cz
+- updated to 2.6rc1 - bugfix-only pre-stable release
+- renamed python-base-devel to python-devel as it should be
+- removed macros from libpython package name
+* Fri Sep 12 2008 matejcik@suse.cz
+- moved python-devel to a subpackage of this
+- created libpython subpackage
+- moved essential files from -devel to -base, so that distutils
+  should now be able to install without -devel package
+* Tue Sep  9 2008 matejcik@suse.cz
+- initial release of python-base

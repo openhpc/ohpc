@@ -11,7 +11,7 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define debug_package %{nil}
 
@@ -30,9 +30,7 @@ Requires: warewulf-common%{PROJ_DELIM}
 Requires: pigz
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildArch: x86_64
-%else
+%if 0%{!?sles_version} && 0%{!?suse_version}
 BuildArch: noarch
 %endif
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root

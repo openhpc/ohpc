@@ -13,15 +13,15 @@
 #-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family:      %define mpi_family openmpi}
+%{!?compiler_family: %global compiler_family gnu}
+%{!?mpi_family:      %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -56,6 +56,10 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %if %{mpi_family} == openmpi
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 #-ohpc-header-comp-end-------------------------------
@@ -124,6 +128,9 @@ module load scalapack openblas
         --FFLAGS="-fPIC" \
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
+        --CFLAGS="-fPIC -DPIC" \
+        --CXXFLAGS="-fPIC -DPIC" \
+        --FFLAGS="-fPIC" \
         --with-blas-lapack-lib=$OPENBLAS_LIB/libopenblas.so \
         --with-scalapack-dir=$SCALAPACK_DIR \
 %endif

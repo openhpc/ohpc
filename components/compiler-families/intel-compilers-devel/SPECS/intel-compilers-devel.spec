@@ -9,13 +9,14 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname intel-compilers-devel
+%define year 2017
 
-Summary:   OpenHPC compatability package for Intel(R) Parallel Studio XE
+Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2016
+Version:   %{year}
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -32,23 +33,25 @@ AutoReq: no
 BuildRequires:-post-build-checks
 
 Requires: gcc-c++
-Requires: intel-compxe >= 2016
+Requires: grep
+Requires: intel-compxe-doc >= 2016
 
-Provides: libimf.so()(64bit)
-Provides: libsvml.so()(64bit)
-Provides: libiomp5.so()(64bit)
-Provides: libirng.so()(64bit)
-Provides: libifcoremt.so.5()(64bit)
-Provides: libintlc.so.5()(64bit)
-Provides: libifcore.so.5()(64bit)
-Provides: libifport.so.5()(64bit)
-Provides: libiomp5.so(VERSION)(64bit)
-Provides: libmkl_core.so()(64bit)
-Provides: libmkl_sequential.so()(64bit)
-Provides: libmkl_intel_lp64.so()(64bit)
-Provides: libirc.so()(64bit)
-Provides: libmkl_rt.so()(64bit)
-
+Provides: %{pname}%{PROJ_DELIM}
+# Provides: libimf.so()(64bit)
+# Provides: libsvml.so()(64bit)
+# Provides: libiomp5.so()(64bit)
+# Provides: libirng.so()(64bit)
+# Provides: libifcoremt.so.5()(64bit)
+# Provides: libintlc.so.5()(64bit)
+# Provides: libifcore.so.5()(64bit)
+# Provides: libifport.so.5()(64bit)
+# Provides: libiomp5.so(VERSION)(64bit)
+# Provides: libmkl_core.so()(64bit)
+# Provides: libmkl_sequential.so()(64bit)
+# Provides: libmkl_intel_lp64.so()(64bit)
+# Provides: libirc.so()(64bit)
+# Provides: libmkl_rt.so()(64bit)
+# 
 %description
 
 Provides OpenHPC-style compatible modules for use with the Intel(R) Parallel
@@ -67,12 +70,12 @@ install -D -m755 %{SOURCE2}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_
 
 %post
 
-topDir=`rpm -q --qf '%{FILENAMES}\n' intel-compxe` || exit 1
+topDir=`rpm -q --qf '%{FILENAMES}\n' intel-compxe-doc` || exit 1
 
 echo " "
 echo "Scanning top-level dir = $topDir"
 if [ -d ${topDir} ];then
-    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_????.*" -printf "%f "` || exit 1
+    versions=`find -L ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_????.*" -printf "%f "` || exit 1
 
     scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 

@@ -11,7 +11,7 @@
 %{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname warewulf-ipmi
 %define debug_package %{nil}
@@ -32,6 +32,7 @@ Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
 Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-ipmi/warewulf-ipmi-%{version}.tar.gz
 Source1: OHPC_macros
+Patch0: warewulf-ipmi-3.6-config_guess.patch
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 BuildRequires: warewulf-common%{PROJ_DELIM}
@@ -50,7 +51,9 @@ adding IPMI functionality.
 
 %prep
 %setup -n %{pname}-%{version}
-
+%ifarch aarch64
+%patch0 -p1
+%endif
 
 %build
 %configure --localstatedir=%{wwpkgdir}

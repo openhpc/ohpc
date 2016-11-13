@@ -1,0 +1,1 @@
+import site; import sys; site.addsitedir("/usr/local/" + sys.lib + "/python"+sys.version[:3]+"/site-packages", set()); sys.lib != "lib" and site.addsitedir("/usr/local/lib/python"+sys.version[:3]+"/site-packages", set())

@@ -1,0 +1,15 @@
+--- configure.orig	2016-09-01 18:30:27.000000000 -0700
++++ configure	2016-11-12 20:45:06.402865542 -0800
+@@ -134250,8 +134250,10 @@
+            LIBS_save="$LIBS"
+ 
+            CPPFLAGS="$CPPFLAGS $ess_tm_CPPFLAGS"
+-           LIBS="$LIBS $ess_tm_LIBS"
+-           LDFLAGS="$LDFLAGS $ess_tm_LDFLAGS"
++#           LIBS="$LIBS $ess_tm_LIBS"
++#           LDFLAGS="$LDFLAGS $ess_tm_LDFLAGS"
++
++           LIBS="$LIBS /opt/pbs/lib/libpbs.a -lpthread"
+ 
+            ac_fn_c_check_header_mongrel "$LINENO" "tm.h" "ac_cv_header_tm_h" "$ac_includes_default"
+ if test "x$ac_cv_header_tm_h" = xyes; then :

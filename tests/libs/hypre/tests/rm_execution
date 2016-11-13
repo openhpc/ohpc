@@ -8,12 +8,8 @@ if [ -s ../../../TEST_ENV ];then
     source ../../../TEST_ENV
 fi
 
-if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    rm=slurm
-else
-    ERROR "Unsupported or unknown resource manager"
-    exit 1
-fi
+check_rms
+rm=$RESOURCE_MANAGER
 
 NODES=2
 TASKS=4
@@ -60,7 +56,7 @@ ARGS=8
 	flunk "ex12f binary does not exit"
     fi
     
-    run_mpi_binary ./ex12f "" 2 2
+    run_mpi_binary ./ex12f "" 1 2
     assert_success
 }
 

@@ -1,0 +1,168 @@
+--- ./Objects/bytearrayobject.c.orig	2016-01-29 13:58:55.414941897 +0100
++++ ./Objects/bytearrayobject.c	2016-01-29 14:00:18.383902058 +0100
+@@ -1903,12 +1903,12 @@
+ 
+     /* Check for overflow */
+     /*    result_len = self_len + count * (to_len-from_len) */
+-    product = count * (to_len-from_len);
++    product = (size_t)count * (to_len-from_len);
+     if (product / (to_len-from_len) != count) {
+         PyErr_SetString(PyExc_OverflowError, "replace bytes is too long");
+         return NULL;
+     }
+-    result_len = self_len + product;
++    result_len = (size_t)self_len + product;
+     if (result_len < 0) {
+         PyErr_SetString(PyExc_OverflowError, "replace bytes is too long");
+         return NULL;
+--- ./Objects/stringobject.c.orig	2016-01-29 14:00:30.904046945 +0100
++++ ./Objects/stringobject.c	2016-01-29 14:01:14.120547063 +0100
+@@ -2693,12 +2693,12 @@
+ 
+     /* Check for overflow */
+     /*    result_len = self_len + count * (to_len-from_len) */
+-    product = count * (to_len-from_len);
++    product = (size_t)count * (to_len-from_len);
+     if (product / (to_len-from_len) != count) {
+         PyErr_SetString(PyExc_OverflowError, "replace string is too long");
+         return NULL;
+     }
+-    result_len = self_len + product;
++    result_len = (size_t)self_len + product;
+     if (result_len < 0) {
+         PyErr_SetString(PyExc_OverflowError, "replace string is too long");
+         return NULL;
+--- Objects/bytearrayobject.c.orig	2016-01-29 14:14:36.713834152 +0100
++++ Objects/bytearrayobject.c	2016-01-29 14:17:50.880080712 +0100
+@@ -357,7 +357,7 @@
+     if (count < 0)
+         count = 0;
+     mysize = Py_SIZE(self);
+-    size = mysize * count;
++    size = (size_t)mysize * count;
+     if (count != 0 && size / count != mysize)
+         return PyErr_NoMemory();
+     result = (PyByteArrayObject *)PyByteArray_FromStringAndSize(NULL, size);
+@@ -382,7 +382,7 @@
+     if (count < 0)
+         count = 0;
+     mysize = Py_SIZE(self);
+-    size = mysize * count;
++    size = (size_t)mysize * count;
+     if (count != 0 && size / count != mysize)
+         return PyErr_NoMemory();
+     if (size < self->ob_alloc) {
+@@ -1578,13 +1578,13 @@
+ 
+     /* Check for overflow */
+     /*   result_len = count * to_len + self_len; */
+-    product = count * to_len;
++    product = (size_t)count * to_len;
+     if (product / to_len != count) {
+         PyErr_SetString(PyExc_OverflowError,
+                         "replace string is too long");
+         return NULL;
+     }
+-    result_len = product + self_len;
++    result_len = (size_t)product + self_len;
+     if (result_len < 0) {
+         PyErr_SetString(PyExc_OverflowError,
+                         "replace string is too long");
+@@ -1833,12 +1833,12 @@
+ 
+     /* use the difference between current and new, hence the "-1" */
+     /*   result_len = self_len + count * (to_len-1)  */
+-    product = count * (to_len-1);
++    product = (size_t)count * (to_len-1);
+     if (product / (to_len-1) != count) {
+         PyErr_SetString(PyExc_OverflowError, "replace bytes is too long");
+         return NULL;
+     }
+-    result_len = self_len + product;
++    result_len = (size_t)self_len + product;
+     if (result_len < 0) {
+             PyErr_SetString(PyExc_OverflowError, "replace bytes is too long");
+             return NULL;
+--- ./Objects/stringobject.c.orig	2016-01-29 14:18:21.392433741 +0100
++++ ./Objects/stringobject.c	2016-01-29 14:20:23.669848479 +0100
+@@ -1084,7 +1084,7 @@
+     /* watch out for overflows:  the size can overflow int,
+      * and the # of bytes needed can overflow size_t
+      */
+-    size = Py_SIZE(a) * n;
++    size = (size_t)Py_SIZE(a) * n;
+     if (n && size / n != Py_SIZE(a)) {
+         PyErr_SetString(PyExc_OverflowError,
+             "repeated string is too long");
+@@ -1644,9 +1644,9 @@
+             Py_DECREF(seq);
+             return NULL;
+         }
+-        sz += PyString_GET_SIZE(item);
++        sz += (size_t)PyString_GET_SIZE(item);
+         if (i != 0)
+-            sz += seplen;
++            sz += (size_t)seplen;
+         if (sz < old_sz || sz > PY_SSIZE_T_MAX) {
+             PyErr_SetString(PyExc_OverflowError,
+                 "join() result is too long for a Python string");
+@@ -2370,13 +2370,13 @@
+ 
+     /* Check for overflow */
+     /*   result_len = count * to_len + self_len; */
+-    product = count * to_len;
++    product = (size_t)count * to_len;
+     if (product / to_len != count) {
+         PyErr_SetString(PyExc_OverflowError,
+                         "replace string is too long");
+         return NULL;
+     }
+-    result_len = product + self_len;
++    result_len = (size_t)product + self_len;
+     if (result_len < 0) {
+         PyErr_SetString(PyExc_OverflowError,
+                         "replace string is too long");
+@@ -2624,12 +2624,12 @@
+ 
+     /* use the difference between current and new, hence the "-1" */
+     /*   result_len = self_len + count * (to_len-1)  */
+-    product = count * (to_len-1);
++    product = (size_t)count * (to_len-1);
+     if (product / (to_len-1) != count) {
+         PyErr_SetString(PyExc_OverflowError, "replace string is too long");
+         return NULL;
+     }
+-    result_len = self_len + product;
++    result_len = (size_t)self_len + product;
+     if (result_len < 0) {
+         PyErr_SetString(PyExc_OverflowError, "replace string is too long");
+         return NULL;
+--- Objects/tupleobject.c.orig	2016-01-29 14:38:23.334287970 +0100
++++ Objects/tupleobject.c	2016-01-29 14:39:46.175240404 +0100
+@@ -79,7 +79,7 @@
+     else
+ #endif
+     {
+-        Py_ssize_t nbytes = size * sizeof(PyObject *);
++        Py_ssize_t nbytes = (size_t)size * sizeof(PyObject *);
+         /* Check for overflow */
+         if (nbytes / sizeof(PyObject *) != (size_t)size ||
+             (nbytes > PY_SSIZE_T_MAX - sizeof(PyTupleObject) - sizeof(PyObject *)))
+@@ -446,7 +446,7 @@
+         return NULL;
+     }
+ #define b ((PyTupleObject *)bb)
+-    size = Py_SIZE(a) + Py_SIZE(b);
++    size = (size_t)Py_SIZE(a) + Py_SIZE(b);
+     if (size < 0)
+         return PyErr_NoMemory();
+     np = (PyTupleObject *) PyTuple_New(size);
+@@ -490,7 +490,7 @@
+         if (Py_SIZE(a) == 0)
+             return PyTuple_New(0);
+     }
+-    size = Py_SIZE(a) * n;
++    size = (size_t)Py_SIZE(a) * n;
+     if (size/Py_SIZE(a) != n)
+         return PyErr_NoMemory();
+     np = (PyTupleObject *) PyTuple_New(size);

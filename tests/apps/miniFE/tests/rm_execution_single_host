@@ -18,6 +18,7 @@ TEST_NUM_THREADS=4
 TEST_VERIFY=1
 TEST_PERFLOG=./log.miniFE
 
+check_rms
 rm=$RESOURCE_MANAGER
 
 # init run options

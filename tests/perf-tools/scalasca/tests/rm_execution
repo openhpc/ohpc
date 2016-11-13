@@ -1,0 +1,73 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../../common/test_helper_functions || exit 1
+source ../../../common/functions || exit 1
+
+if [ -s ../../../TEST_ENV ];then
+    source ../../../TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+export SCAN_MPI_LAUNCHER=prun
+
+NODES=2
+TASKS=8
+ARGS=8
+
+@test "[perf-tools/Scalasca] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s C_mpi_test ];then
+	flunk "C_mpi_test binary does not exit"
+    fi
+
+    run_mpi_binary -s 1 ./C_mpi_test $ARGS $NODES $TASKS
+    assert_success
+
+    run scalasca -examine -s scorep_C_mpi_test_*
+    assert_success
+
+    rm -rf scorep_C_mpi_test_*
+}
+
+@test "[perf-tools/Scalasca] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s CXX_mpi_test ];then
+	flunk "CXX_mpi_test binary does not exit"
+    fi
+
+    run_mpi_binary -s 1 ./CXX_mpi_test $ARGS $NODES $TASKS
+    assert_success
+
+    run scalasca -examine -s scorep_CXX_mpi_test_*
+    assert_success
+
+    rm -rf scorep_CXX_mpi_test_*
+}
+
+#@test "[perf-tools/Scalasca] Serial C OpenMP binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+#    if [ ! -s C_omp_test ];then
+#	flunk "C_omp_test binary does not exit"
+#    fi
+#
+#    run_serial_binary ./C_omp_test
+#    assert_success
+#
+#    run scalasca -examine -s scorep_C_omp_test_16_sum
+#    assert_success
+#
+#    rm -rf scorep_C_omp_test_16_sum
+#}
+
+@test "[perf-tools/Scalasca] MPI FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s F_test ];then
+	flunk "F_test binary does not exit"
+    fi
+
+    run_mpi_binary -s 1 ./F_test $ARGS $NODES $TASKS
+    assert_success
+
+    run scalasca -examine -s scorep_F_test_*
+    assert_success
+
+    rm -rf scorep_F_test_*
+}

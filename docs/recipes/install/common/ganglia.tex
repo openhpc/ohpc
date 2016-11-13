@@ -19,7 +19,7 @@ commands can be used to enable \Ganglia{} to monitor both the {\em master} and
 [sms](*\#*) cp /opt/ohpc/pub/examples/ganglia/gmond.conf /etc/ganglia/gmond.conf
 [sms](*\#*) perl -pi -e "s/<sms>/${sms_name}/" /etc/ganglia/gmond.conf
 
-# Add config to compute image and provide gridname 
+# Add configuration to compute image and provide gridname 
 [sms](*\#*) cp /etc/ganglia/gmond.conf $CHROOT/etc/ganglia/gmond.conf
 [sms](*\#*) echo "gridname MySite" >> /etc/ganglia/gmetad.conf
 

@@ -1,0 +1,21 @@
+Index: Python-2.7.9/Lib/ssl.py
+===================================================================
+--- Python-2.7.9.orig/Lib/ssl.py	2014-12-10 16:59:40.000000000 +0100
++++ Python-2.7.9/Lib/ssl.py	2015-02-25 17:28:19.538808314 +0100
+@@ -504,7 +504,15 @@
+             self._context = SSLContext(ssl_version)
+             self._context.verify_mode = cert_reqs
+             if ca_certs:
+-                self._context.load_verify_locations(ca_certs)
++                capath = None
++                cafile = None
++                if os.path.isdir(ca_certs):
++                    capath = ca_certs
++                else:
++                    cafile = ca_certs
++                self._context.load_verify_locations(cafile=cafile, capath=capath)
++            elif cert_reqs != CERT_NONE:
++                self._context.set_default_verify_paths()
+             if certfile:
+                 self._context.load_cert_chain(certfile, keyfile)
+             if npn_protocols:

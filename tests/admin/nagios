@@ -8,12 +8,8 @@ if [ -s ../TEST_ENV ];then
     source ../TEST_ENV
 fi
 
-if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    rm=slurm
-else
-    ERROR "Unsupported or unknown resource manager"
-    exit 1
-fi
+check_rms
+rm=$RESOURCE_MANAGER
 
 @test "[nagios] check for RPM" {
     run check_if_rpm_installed "nagios${DELIM}"
@@ -21,6 +17,10 @@ fi
 }
 
 @test "[nagios] test check_http" {
-    run /usr/lib64/nagios/plugins/check_http -I proxy-chain.intel.com -p 911 -u http://openhpc.community
+    if [ $use_proxy -eq 0];then
+	run /usr/lib64/nagios/plugins/check_http -I ${proxy_host} -p ${proxy_port} -u http://openhpc.community
+    else	
+	run /usr/lib64/nagios/plugins/check_http  -H openhpc.community
+    fi
     assert_success
 }

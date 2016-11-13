@@ -56,7 +56,8 @@ c     the following is from HYPRE.c
       integer    num_iterations
       double precision final_res_norm, tol
 
-      integer*8  mpi_comm
+      integer    mpi_comm
+
       integer*8  parcsr_A
       integer*8  A
       integer*8  b
@@ -84,7 +85,7 @@ c   Default problem parameters
 c   The input section not implemented yet.
 
 c   Preliminaries: want at least one processor per row
-      if ( n*n .lt. num_procs) then
+      if ( n*n .lt. num_procs ) then
          n = int(sqrt(real(num_procs))) + 1
       endif
 c     ng = global no. rows, h = mesh size      
@@ -111,15 +112,15 @@ c     How many rows do I have?
 c     Create the matrix.
 c     Note that this is a square matrix, so we indicate the row partition
 c     size twice (since number of rows = number of cols)
-      call HYPRE_IJMatrixCreate( mpi_comm, ilower,
-     1     iupper, ilower, iupper, A, ierr )
+      call HYPRE_IJMatrixCreate(mpi_comm, ilower,
+     1     iupper, ilower, iupper, A, ierr)
 
 
 c     Choose a parallel csr format storage (see the User's Manual)
-      call HYPRE_IJMatrixSetObjectType( A, HYPRE_PARCSR, ierr)
+      call HYPRE_IJMatrixSetObjectType(A, HYPRE_PARCSR, ierr)
 
 c     Initialize before setting coefficients
-      call HYPRE_IJMatrixInitialize( A, ierr)
+      call HYPRE_IJMatrixInitialize(A, ierr)
 
 
 c     Now go through my local rows and set the matrix entries.
@@ -163,7 +164,7 @@ c        The right -1: position i+1
          endif
 
 c        The right identity block:position i+n
-         if ((i+n) .lt. ng ) then
+         if ( (i+n) .lt. ng ) then
             cols(nnz) = i+n
             values(nnz) = -1.0d0
             nnz = nnz + 1
@@ -177,20 +178,20 @@ c        Set the values for row i
 
 
 c     Assemble after setting the coefficients
-      call HYPRE_IJMatrixAssemble( A, ierr)
+      call HYPRE_IJMatrixAssemble(A, ierr)
 
 c     Get parcsr matrix object
-      call HYPRE_IJMatrixGetObject( A, parcsr_A, ierr)
+      call HYPRE_IJMatrixGetObject(A, parcsr_A, ierr)
 
 
 c     Create the rhs and solution
       call HYPRE_IJVectorCreate(mpi_comm,
-     1     ilower, iupper, b, ierr )
+     1     ilower, iupper, b, ierr)
       call HYPRE_IJVectorSetObjectType(b, HYPRE_PARCSR, ierr)
       call HYPRE_IJVectorInitialize(b, ierr)
   
       call HYPRE_IJVectorCreate(mpi_comm,
-     1     ilower, iupper, x, ierr )
+     1     ilower, iupper, x, ierr)
       call HYPRE_IJVectorSetObjectType(x, HYPRE_PARCSR, ierr)
       call HYPRE_IJVectorInitialize(x, ierr)
 
@@ -202,18 +203,18 @@ c     Set the rhs values to h^2 and the solution to zero
          rows(i) = ilower + i -1
       enddo
       call HYPRE_IJVectorSetValues(
-     1     b, local_size, rows, rhs_values, ierr )
+     1     b, local_size, rows, rhs_values, ierr)
       call HYPRE_IJVectorSetValues(
      1     x, local_size, rows, x_values, ierr)
 
 
-      call HYPRE_IJVectorAssemble( b, ierr)
-      call HYPRE_IJVectorAssemble( x, ierr)
+      call HYPRE_IJVectorAssemble(b, ierr)
+      call HYPRE_IJVectorAssemble(x, ierr)
 
 c get the x and b objects
 
-      call HYPRE_IJVectorGetObject( b, par_b, ierr)
-      call HYPRE_IJVectorGetObject( x, par_x, ierr)
+      call HYPRE_IJVectorGetObject(b, par_b, ierr)
+      call HYPRE_IJVectorGetObject(x, par_x, ierr)
 
 
 c     Choose a solver and solve the system
@@ -242,9 +243,9 @@ c        conv. tolerance
 
 c        Now setup and solve!
          call HYPRE_BoomerAMGSetup(
-     1        solver, parcsr_A, par_b, par_x, ierr )
+     1        solver, parcsr_A, par_b, par_x, ierr)
          call HYPRE_BoomerAMGSolve(
-     1        solver, parcsr_A, par_b, par_x, ierr )
+     1        solver, parcsr_A, par_b, par_x, ierr)
 
 
 c        Run info - needed logging turned on 
@@ -254,7 +255,7 @@ c        Run info - needed logging turned on
      1        ierr)
 
 
-         if (myid .eq. 0) then
+         if ( myid .eq. 0 ) then
             print *
             print '(A,I2)', " Iterations = ", num_iterations
             print '(A,ES16.8)',
@@ -263,10 +264,10 @@ c        Run info - needed logging turned on
          endif
          
 c        Destroy solver
-         call HYPRE_BoomerAMGDestroy( solver, ierr )
+         call HYPRE_BoomerAMGDestroy(solver, ierr)
 
 c     PCG (with DS)
-      elseif (solver_id .eq. 50) then  
+      elseif ( solver_id .eq. 50 ) then  
          
 
 c        Create solver
@@ -300,7 +301,7 @@ c        Run info - needed logging turned on
         call HYPRE_ParCSRPCGGetFinalRelative(solver, final_res_norm,
      &                                       ierr)
 
-       if (myid .eq. 0) then
+       if ( myid .eq. 0 ) then
             print *
             print *, "Iterations = ", num_iterations
             print *, "Final Relative Residual Norm = ", final_res_norm
@@ -312,7 +313,7 @@ c       Destroy solver
 
 
 c     PCG with AMG preconditioner
-      elseif (solver_id == 1) then
+      elseif ( solver_id == 1 ) then
      
 c        Create solver
          call HYPRE_ParCSRPCGCreate(MPI_COMM_WORLD, solver, ierr)
@@ -364,7 +365,7 @@ c        Run info - needed logging turned on
         call HYPRE_ParCSRPCGGetFinalRelative(solver, final_res_norm,
      1                                       ierr)
 
-       if (myid .eq. 0) then
+       if ( myid .eq. 0 ) then
             print *
             print *, "Iterations = ", num_iterations
             print *, "Final Relative Residual Norm = ", final_res_norm
@@ -373,11 +374,11 @@ c        Run info - needed logging turned on
 
 c       Destroy precond and solver
 
-        call HYPRE_BoomerAMGDestroy(precond, ierr )
+        call HYPRE_BoomerAMGDestroy(precond, ierr)
         call HYPRE_ParCSRPCGDestroy(solver, ierr)
 
 c     PCG with ParaSails
-      elseif (solver_id .eq. 8) then
+      elseif ( solver_id .eq. 8 ) then
 
 c        Create solver
          call HYPRE_ParCSRPCGCreate(MPI_COMM_WORLD, solver, ierr)
@@ -416,7 +417,7 @@ c        Run info - needed logging turned on
         call HYPRE_ParCSRPCGGetFinalRelative(solver, final_res_norm,
      1                                       ierr)
 
-       if (myid .eq. 0) then
+       if ( myid .eq. 0 ) then
             print *
             print *, "Iterations = ", num_iterations
             print *, "Final Relative Residual Norm = ", final_res_norm
@@ -425,11 +426,11 @@ c        Run info - needed logging turned on
 
 c       Destroy precond and solver
 
-        call HYPRE_ParaSailsDestroy(precond, ierr )
+        call HYPRE_ParaSailsDestroy(precond, ierr)
         call HYPRE_ParCSRPCGDestroy(solver, ierr)
 
       else
-         if (myid .eq. 0) then 
+         if ( myid .eq. 0 ) then 
            print *,'Invalid solver id specified'
            stop
          endif  
@@ -439,7 +440,7 @@ c       Destroy precond and solver
 
 c     Print the solution
       if ( print_solution .ne. 0 ) then
-         call HYPRE_IJVectorPrint( x, "ij.out.x", ierr)
+         call HYPRE_IJVectorPrint(x, "ij.out.x", ierr)
       endif
 
 c     Clean up

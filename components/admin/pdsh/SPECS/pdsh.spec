@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname pdsh
 
@@ -61,7 +61,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #%define _default_with %{_defaults} mrsh nodeupdown genders slurm 
 #%else
 #   All other defaults
-%define _default_with %{_defaults} mrsh genders slurm
+%define _default_with %{_defaults} mrsh genders
 #%endif
 
 #
@@ -318,6 +318,11 @@ from an allocated Torque job.
 ##############################################################################
 
 %build
+
+# work around old config.guess on aarch64 systems
+%ifarch aarch64
+cp /usr/lib/rpm/config.guess config
+%endif
 
 ./configure --prefix=%{install_path} \
     --with-rcmd-rank-list="ssh mrsh rsh krb4 qsh mqsh exec xcpu" \

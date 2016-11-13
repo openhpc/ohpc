@@ -1,0 +1,43 @@
+% begin_ohpc_run
+% ohpc_comment_header Allow for optional sleep to wait for provisioning to complete
+% ohpc_command sleep ${provision_wait}
+% end_ohpc_run
+
+In section \S\ref{sec:basic_install}, the \rms{} workload manager was installed
+and configured for use on both the {\em master} host and {\em compute} node
+instances. With the cluster nodes up and functional, we can now startup the
+resource manager services on the {\em master} host in preparation for running 
+user jobs.
+
+The following command can be used to startup the necessary services to support
+resource management under \rms{}.
+
+% begin_ohpc_run
+% ohpc_comment_header Resource Manager Startup \ref{sec:rms_startup}
+\begin{lstlisting}[language=bash,keywords={}]
+# start pbspro daemons on master host
+[sms](*\#*) systemctl enable pbs
+[sms](*\#*) systemctl start pbs
+\end{lstlisting}
+% end_ohpc_run
+
+In the default configuration, the {\em compute} hosts have not been added to
+the \rms{} resource manager. To add the {\em compute} hosts, execute the
+following to register each host and apply several key global configuration
+options.
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+# initialize PBS path
+[sms](*\#*) . /etc/profile.d/pbs.sh
+# enable user environment propagation (needed for modules support)
+[sms](*\#*) qmgr -c "set server default_qsub_arguments= -V"
+# enable uniform multi-node MPI task distribution
+[sms](*\#*) qmgr -c "set server resources_default.place=scatter"
+# register compute hosts with pbspro
+[sms](*\#*) for host in "${c_name[@]}"; do
+           qmgr -c "create node $host"
+        done
+\end{lstlisting}
+% end_ohpc_run
+

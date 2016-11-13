@@ -198,7 +198,7 @@ int main (int argc, char *argv[])
       /* Indicate that the matrix coefficients are ready to be set */
       HYPRE_StructMatrixInitialize(A);
 
-      values = calloc(nvalues, sizeof(double));
+      values = (double*) calloc(nvalues, sizeof(double));
 
       for (j = 0; j < nentries; j++)
          stencil_indices[j] = j;
@@ -230,7 +230,7 @@ int main (int argc, char *argv[])
       double *values;
       int stencil_indices[1];
 
-      values = calloc(nvalues, sizeof(double));
+      values = (double*) calloc(nvalues, sizeof(double));
       for (j = 0; j < nvalues; j++)
          values[j] = 0.0;
 
@@ -307,7 +307,7 @@ int main (int argc, char *argv[])
       int    nvalues = n*n;
       double *values;
 
-      values = calloc(nvalues, sizeof(double));
+      values = (double*) calloc(nvalues, sizeof(double));
 
       /* Create an empty vector object */
       HYPRE_StructVectorCreate(MPI_COMM_WORLD, grid, &b);
@@ -400,7 +400,7 @@ int main (int argc, char *argv[])
       char filename[255];
 
       int nvalues = n*n;
-      double *values = calloc(nvalues, sizeof(double));
+      double *values = (double*) calloc(nvalues, sizeof(double));
 
       /* get the local solution */
       HYPRE_StructVectorGetBoxValues(x, ilower, iupper, values);

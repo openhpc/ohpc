@@ -1,20 +1,21 @@
 \small
-\begin{tabularx}{\textwidth}{c|X|X}
+{\renewcommand{\arraystretch}{1.2}%
+\begin{tabularx}{\textwidth}{r|X|X}
 \toprule
-{\bf Command} & {\bf PBS} & {\bf SLURM}  \\
+{\bf Command} & {\bf PBS Pro} & {\bf SLURM}  \\
 \midrule
 
-Batch job submission &
+Submit {\em batch} job &
 qsub [job script] &
 sbatch [job script]
 \\ \hline
 
-Interactive job launch &
-qsub -I &
-salloc + srun
+Request {\em interactive} shell &
+qsub -I /bin/bash &
+srun --pty /bin/bash
 \\ \hline
 
-Job deletion &
+Delete job &
 qdel [job id] &
 scancel [job id]
 \\ \hline
@@ -24,18 +25,18 @@ qstat -q &
 sinfo
 \\ \hline
 
-Job Status &
-qstat -f [job id] &
+Job status &
+qstat -f [job id]  &
 scontrol show job [job id]
 \\ \hline
 
-Node Status &
+Node status &
 pbsnodes [node name] &
 scontrol show node [node id]
 \\ \hline
 
 \bottomrule
-\end{tabularx}
+\end{tabularx}}
 
 
 %\end{table}

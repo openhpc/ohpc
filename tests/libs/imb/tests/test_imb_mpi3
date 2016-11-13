@@ -10,13 +10,14 @@ else
     ERROR "TEST_ENV does not exist"
 fi
 
-CMD_TIMEOUT="10:00"
-TEST_NUM_RANKS=8
+CMD_TIMEOUT="00:06:00"
+TEST_NUM_RANKS=4
 TEST_NUM_THREADS=4
 
+check_rms
 rm=$RESOURCE_MANAGER
 
-NODES=4
+NODES=2
 TASKS=$((NODES*TEST_NUM_RANKS))
 
 # set global env settings
@@ -34,7 +35,7 @@ fi
         flunk "missing $EXE"
     fi
 
-    run_mpi_binary -t $CMD_TIMEOUT -o log.imb-nbc $EXE "$ARGS" $NODES $TASKS
+    run_mpi_binary -t $CMD_TIMEOUT $EXE "$ARGS" $NODES $TASKS
     assert_success
 }
 
@@ -46,6 +47,6 @@ fi
         flunk "missing $EXE"
     fi
 
-    run_mpi_binary -t $CMD_TIMEOUT -o log.imb-rma $EXE "$ARGS" $NODES $TASKS
+    run_mpi_binary -t $CMD_TIMEOUT $EXE "$ARGS" $NODES $TASKS
     assert_success
 }

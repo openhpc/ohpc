@@ -13,7 +13,7 @@
 %if 0%{?OHPC_BUILD}
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define debug_package %{nil}
 
@@ -43,11 +43,19 @@ BuildRequires: kernel-devel = 2.6.32-431.el6
 # %define centos_kernel 3.10.0-229.el7
 
 # 7.2 kernel version
+%ifarch aarch64
+%define centos_kernel 4.2.0-0.21.el7
+BuildRequires: kernel = %{centos_kernel}
+BuildRequires: kernel-devel = %{centos_kernel}
+%define kdir /lib/modules/%{centos_kernel}.aarch64/source/
+%define kobjdir /lib/modules/%{centos_kernel}.aarch64/build/
+%else
 %define centos_kernel 3.10.0-327.el7
 BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.x86_64/source/
 %define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
+%endif
 
 %endif
 
@@ -121,7 +129,7 @@ BuildRequires:	-post-build-checks
 
 # for those uses that don't want the -smp/-bigsmp (or the .arch) on the end
 # of %kversion
-%define krequires %(bash -c "echo %{kversion} | sed -e 's/\.x86_64$//' -e 's/\.i[3456]86$//' -e 's/-smp$//' -e 's/-bigsmp$//' -e 's/-ppc64$//' -e 's/-default$//'")
+%define krequires %(bash -c "echo %{kversion} | sed -e 's/\.x86_64$//' -e 's/\.i[3456]86$//' -e 's/-smp$//' -e 's/-bigsmp$//' -e 's/-ppc64$//' -e 's/.aarch64$//' -e 's/-default$//'")
 
 # Set the package name prefix
 %if %{undefined lustre_name}
@@ -164,6 +172,7 @@ License: GPL
 Group:   %{PROJ_NAME}/lustre
 Source: lustre-%{version}.tar.gz
 Source1: OHPC_macros
+Patch0: lustre-centos.patch
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
@@ -180,7 +189,7 @@ Requires: %{cross_requires}
 AutoReqProv: no
 %else
 # GSS requires this: BuildRequires: pkgconfig, libgssapi-devel >= 0.10
-%if %{_vendor}=="redhat" || %{_vendor}=="fedora"
+%if %{_vendor}=="redhat" || %{_vendor}=="fedora" || 0%{?centos_version}
 #suse don't support selinux
 BuildRequires: libselinux-devel
 Requires: libselinux
@@ -198,7 +207,7 @@ Requires: %{cross_requires}
 AutoReqProv: no
 %else
 # for SLES11, we need nothing here
-%if %{_vendor}=="redhat" || %{_vendor}=="fedora"
+%if %{_vendor}=="redhat" || %{_vendor}=="fedora" || 0%{?centos_version}
 # for RHEL we need to require the specific kernel still since weak-modules
 # support on RH is, well, weak, to be punny about it
 Requires: kernel = %{krequires}
@@ -367,6 +376,9 @@ clients in order to run
 
 %setup -qn lustre-%{version}
 #patch1 -p1
+%if 0%{?centos_version}
+%patch0 -p1
+%endif
 
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
@@ -433,6 +445,10 @@ fi
 # remove --with-kmp-moddir from configure arguments,
 # it will be set --with-kmp-moddir=%%kmoddir
 CONFIGURE_ARGS=$(echo $CONFIGURE_ARGS | sed -e 's/"\?--with-kmp-moddir=[^ ][^ ]* \?//')
+
+%ifarch aarch64
+CONFIGURE_ARGS="$CONFIGURE_ARGS LDFLAGS=\"\""
+%endif
 
 # we need to eval "configure" because $CONFIGURE_ARGS could have a quoted
 # string in it which we don't want word splitted by the shell

@@ -17,24 +17,44 @@
 \usepackage{tcolorbox}
 \usepackage{multicol}
 \usepackage{etoolbox}
+\usepackage{fix-cm}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{amsfonts}
 %%%\usepackage[T1]{fontenc}
 \tcbuselibrary{skins}
 
 % for non-released DRAFT - comment out for GA release
-%\usepackage[firstpage]{draftwatermark}
-%%% \usepackage{draftwatermark}
-%%% \SetWatermarkText{DRAFT / PRE-RELEASE}
-%%% \SetWatermarkScale{1.45}
+%% \usepackage[firstpage]{draftwatermark}
+%% \usepackage{draftwatermark}
+%% \SetWatermarkText{Tech Preview}
+%% \SetWatermarkScale{0.45}
 
 % ----------- Variables to change per release -------------
 
-\newcommand{\OHPCVersion}{1.1.1}
-\newcommand{\OHPCVerTree}{1.1}
+\newcommand{\OHPCVersion}{1.2}
+\newcommand{\OHPCVerTree}{1.2}
 
 % ---------------------------------------------------------
 
-% Booleans for os-specific latex formatting
+% Booleans for recipe-specific latex formatting
 \newtoggle{isCentOS}
+\newtoggle{isx86}
+\newtoggle{isaarch}
+\newtoggle{ispbs}
+\newtoggle{isCentOS_ww_slurm_x86}
+\newtoggle{isCentOS_ww_pbs_x86}
+\newtoggle{isSLES_ww_slurm_x86}
+\newtoggle{isSLES_ww_pbs_x86}
+\newtoggle{isCentOS_ww_slurm_aarch}
+\newtoggle{isSLES_ww_slurm_aarch}
+
+% utility to check os-specific settings
+\newcommand{\iftoggleverb}[1]{%
+  \ifcsdef{etb@tgl@#1}
+	  {\csname etb@tgl@#1\endcsname\iftrue\iffalse}
+          {\etb@noglobal\etb@err@notoggle{#1}\iffalse}%
+}
 
 \pagestyle{fancy}
 \setlength\headheight{59pt}

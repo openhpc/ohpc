@@ -1,5 +1,0 @@
-intel-mpi-devel-ohpc 2016 https://github.com/openhpc/ohpc ohpc/mpi-families OpenHPC compatability package for Intel(R) MPI Library
-mvapich2-gnu-ohpc 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-intel-ohpc 2.1 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-openmpi-gnu-ohpc 1.10.2 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-intel-ohpc 1.10.2 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI

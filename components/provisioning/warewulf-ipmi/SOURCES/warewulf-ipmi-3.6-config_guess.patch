@@ -1,0 +1,24 @@
+diff -ruN warewulf-ipmi-3.6.old/initramfs/Makefile.am warewulf-ipmi-3.6/initramfs/Makefile.am
+--- warewulf-ipmi-3.6.old/initramfs/Makefile.am	2014-05-21 19:12:32.000000000 +0100
++++ warewulf-ipmi-3.6/initramfs/Makefile.am	2016-10-14 21:27:06.000000000 +0100
+@@ -13,6 +13,8 @@
+ 	fi
+ 	@ if [ ! -f "_work/ipmitool/ipmitool-$(IPMITOOL_VERSION)/src/ipmitool" ]; then \
+ 	    echo "Building ipmitool" ;\
++	    cp /usr/lib/rpm/config.guess _work/ipmitool/ipmitool-$(IPMITOOL_VERSION) ;\
++	    cp /usr/lib/rpm/config.sub _work/ipmitool/ipmitool-$(IPMITOOL_VERSION) ;\
+ 	    cd _work/ipmitool/ipmitool-$(IPMITOOL_VERSION) ;\
+ 	    ./configure --enable-static --disable-ipmishell ;\
+ 	    make LDFLAGS=-static ;\
+diff -ruN warewulf-ipmi-3.6.old/initramfs/Makefile.in warewulf-ipmi-3.6/initramfs/Makefile.in
+--- warewulf-ipmi-3.6.old/initramfs/Makefile.in	2014-05-28 19:04:14.000000000 +0100
++++ warewulf-ipmi-3.6/initramfs/Makefile.in	2016-10-14 21:26:54.000000000 +0100
+@@ -312,6 +312,8 @@
+ 	fi
+ 	@ if [ ! -f "_work/ipmitool/ipmitool-$(IPMITOOL_VERSION)/src/ipmitool" ]; then \
+ 	    echo "Building ipmitool" ;\
++	    cp /usr/lib/rpm/config.guess _work/ipmitool/ipmitool-$(IPMITOOL_VERSION) ;\
++	    cp /usr/lib/rpm/config.sub _work/ipmitool/ipmitool-$(IPMITOOL_VERSION) ;\
+ 	    cd _work/ipmitool/ipmitool-$(IPMITOOL_VERSION) ;\
+ 	    ./configure --enable-static --disable-ipmishell ;\
+ 	    make LDFLAGS=-static ;\

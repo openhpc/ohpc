@@ -10,10 +10,11 @@ source ./common/functions || exit 1
 
 cd dev-tools/scipy || exit 1
 export BATS_JUNIT_CLASS=SciPy
-export MPI_FAMILIES="mvapich2 openmpi"
+
+MPIs_local=`echo $MPI_FAMILIES | sed 's/impi//'`
 
 for compiler in gnu ; do
-    for mpi in $MPI_FAMILIES ; do
+    for mpi in $MPIs_local ; do
 
         echo " "
         echo " "

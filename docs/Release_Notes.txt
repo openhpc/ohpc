@@ -1,5 +1,5 @@
 OpenHPC Software Stack
-Version 1.1 Minor Release (18 April 2015) 
+Version 1.2 (12 November 2016) 
 
 Introduction:
 
@@ -8,15 +8,8 @@ Introduction:
    provisioning tools, resource management, I/O clients, development
    tools, and a variety of scientific libraries.
    
-   The compatible OS versions for this release and the total number of
-   OHPC-packaged RPMs for each variant is as follows: 
-   
-     CentOS 7.1       - 270 RPMs (Base)
-     SuSE SLES 12 SP1 - 267 RPMs (Base)
-   
-   Note that a detailed list of all available components is available in
-   the "Package Manifest" appendix located in the companion Install
-   Guide documents.
+   Please see https://github.com/openhpc/ohpc/releases/tag/v1.2.GA for specific
+   release notes.
 
 
 Questions, Comments, or Bug Reports?

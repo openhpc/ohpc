@@ -10,19 +10,16 @@
 
 # MVAPICH2 MPI stack that is dependent on compiler toolchain
 
-%define with_slurm 0
-%define with_psm 0
-
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -44,20 +41,22 @@ BuildRequires: intel_licenses
 
 #-ohpc-header-comp-end------------------------------------------------
 
-%if 0%{with_slurm}
-BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
-%endif
+# Multiple permutations for this MPI stack are possible depending
+# on the desired underlying resource manager and comm library support. 
 
-%if %{with_psm}
-BuildRequires:  infinipath-psm infinipath-psm-devel
-%endif
+%{!?with_slurm: %global with_slurm 0}
+%{!?with_pbs: %global with_pbs 0}
+%{!?with_psm: %global with_psm 0}
+%{!?with_psm2: %global with_psm2 0}
+%{!?RMS_DELIM: %global RMS_DELIM %{nil}}
+%{!?COMM_DELIM: %global COMM_DELIM %{nil}}
 
-# Base package name
+# Base package name/config
 %define pname mvapich2
 
 Summary:   OSU MVAPICH2 MPI implementation
-Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   2.1
+Name:      %{pname}%{COMM_DELIM}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
+Version:   2.2
 Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
@@ -72,10 +71,27 @@ Source2:   OHPC_setup_compiler
 Patch0:    winfree.patch
 # karl.w.schulz@intel.com (04/13/2016)
 Patch1:    minit.patch
+Patch2:    mvapich2-get_cycles.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 %define debug_package %{nil}
+
+%if 0%{with_slurm}
+BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
+Provides:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
+
+%if 0%{with_psm}
+BuildRequires:  infinipath-psm infinipath-psm-devel
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
+
+%if 0%{with_psm2}
+BuildRequires:  hfi1-psm hfi1-psm-devel
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
 Buildrequires: ofed 
@@ -91,7 +107,7 @@ BuildRequires: libibmad-devel libibverbs-devel
 BuildRequires: librdmacm-devel
 
 # Default library install path
-%define install_path %{OHPC_MPI_STACKS}/%{name}/%version
+%define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
 %description 
 
@@ -104,8 +120,11 @@ across multiple networks.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
-%patch1 -p0
+# disabled on 09/19/16
+# %patch0 -p1
+# disabled on 09/19/16, patch was upstreamed in v2.2
+# %patch1 -p0
+%patch2 -p1
 
 %build
 
@@ -117,7 +136,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 	    --enable-cxx \
 	    --enable-g=dbg \
             --with-device=ch3:mrail \
-%if %{with_psm}
+%if 0%{?with_pwm} || 0%{?with_psm2}
             --with-device=ch3:psm \
 %endif
 %if 0%{with_slurm}

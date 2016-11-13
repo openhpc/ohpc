@@ -28,15 +28,15 @@
 #-ohpc-header-comp-begin-----------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family and mpi_family variables via rpmbuild or other
 # mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family:      %define mpi_family openmpi}
+%{!?compiler_family: %global compiler_family gnu}
+%{!?mpi_family:      %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -72,6 +72,10 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
+%endif
 
 #-ohpc-header-comp-end-------------------------------
 
@@ -80,7 +84,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        5.0.1
+Version:        5.0.2
 Release:        0
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
@@ -93,6 +97,7 @@ Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
+Patch2:         mumps-5.0.2-psxe2017.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{OHPC_PUB}/doc/contrib
 
@@ -119,6 +124,9 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %setup -q -n MUMPS_%{version}
 %patch0 -p1
 %patch1 -p1
+%if %{compiler_family} == intel
+%patch2 -p2
+%endif
 
 %build
 
@@ -143,6 +151,15 @@ cp -f %{S:3} Makefile.inc
 %endif
 %endif 
 
+%if %{mpi_family} == mpich
+export LIBS="-L$MPI_DIR/lib -lmpi"
+%if %{compiler_family} == gnu
+cp -f %{S:2} Makefile.inc
+%endif
+%if %{compiler_family} == intel
+cp -f %{S:3} Makefile.inc
+%endif
+%endif 
 %if %{mpi_family} == mvapich2
 export LIBS="-L$MPI_DIR/lib -lmpi"
 %if %{compiler_family} == gnu

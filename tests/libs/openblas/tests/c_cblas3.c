@@ -567,6 +567,7 @@ void F77_ctrsm(int *order, char *rtlf, char *uplow, char *transp, char *diagn,
 
 
 
+#ifndef OPENBLAS_ARCH_ARM64
 void F77_cgemm3m(int *order, char *transpa, char *transpb, int *m, int *n,
      int *k, CBLAS_TEST_COMPLEX *alpha, CBLAS_TEST_COMPLEX *a, int *lda,
      CBLAS_TEST_COMPLEX *b, int *ldb, CBLAS_TEST_COMPLEX *beta,
@@ -643,5 +644,6 @@ void F77_cgemm3m(int *order, char *transpa, char *transpb, int *m, int *n,
      cblas_cgemm3m( UNDEFINED, transa, transb, *m, *n, *k, alpha, a, *lda,
                   b, *ldb, beta, c, *ldc );
 }
+#endif
 
 

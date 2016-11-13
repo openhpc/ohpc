@@ -13,11 +13,16 @@ fi
 CMD_TIMEOUT="15:00"
 TEST_EXE="./src/mini_dft"
 TEST_MAX_COMPUTES=4
-TEST_NUM_RANKS=4
+if [ $LMOD_FAMILY_MPI == "impi" ];then
+    TEST_NUM_RANKS=2
+else
+    TEST_NUM_RANKS=4
+fi
 TEST_NUM_THREADS=2
 TEST_VERIFY=1
 TEST_PERFLOG=./log.miniDFT
 
+check_rms
 rm=$RESOURCE_MANAGER
 
 # init run options

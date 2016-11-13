@@ -1,7 +1,0 @@
-  integer  NX                       13*scalar = 10 / 10 / 10 / 0 
-  integer  NY                       13*scalar = 1 / 1 / 1 / 0 
-  integer  size                     13*scalar = 9 / 9 / 9 / 0 
-  integer  rank                     13*scalar = 0 / 8 / 4 / 2.58199 
-  double   temperature              13*{9, 10} = 100 / 1389 / 744.5 / 375.067 
-  double   pressure                 13*{9, 1} = 1000 / 13008 / 7004 / 3741.66 
-  string   temperature/description  attr   = "Global array written from 'size' processes over several timesteps"

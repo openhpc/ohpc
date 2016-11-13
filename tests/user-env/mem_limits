@@ -8,18 +8,13 @@ if [ -s ../TEST_ENV ];then
     source ../TEST_ENV
 fi
 
-if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    rm=slurm
-else
-    ERROR "Unsupported or unknown resource manager"
-    exit 1
-fi
+check_rms
 
 @test "[memlock] check increased soft limit" {
 
-    srun -N 4 prlimit -l -o SOFT | grep -v SOFT >& .cmd_output || exit 1
+    run_serial_binary -o .cmd_output prlimit -l -o SOFT
 
-    for limit in `cat .cmd_output`; do
+    for limit in `cat .cmd_output | grep -v SOFT`; do
         if [ "$limit" != "unlimited" ];then
             flunk $limit
         fi
@@ -30,10 +25,10 @@ fi
 }
 
 @test "[memlock] check increased hard limit" {
-    
-    srun -N 4 prlimit -l -o HARD | grep -v HARD >& .cmd_output || exit 1
 
-    for limit in `cat .cmd_output`; do
+    run_serial_binary -o .cmd_output prlimit -l -o HARD
+
+    for limit in `cat .cmd_output | grep -v HARD`; do
         if [ "$limit" != "unlimited" ];then
             flunk $limit
         fi

@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname papi
@@ -17,8 +17,8 @@
 
 Summary:   Performance Application Programming Interface
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.4.1
-Release:   1%{?dist}
+Version:   5.4.3
+Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://icl.cs.utk.edu/papi/
@@ -53,9 +53,9 @@ running programs.
 %build
 
 cd src
-./configure --with-static-lib=no --with-shared-lib=yes --with-shlib --prefix=%{install_path}
+CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" ./configure --with-static-lib=yes --with-shared-lib=yes --with-shlib --prefix=%{install_path}
 #DBG workaround to make sure libpfm just uses the normal CFLAGS
-DBG="" make
+DBG="" CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" make
 
 %install
 
@@ -105,9 +105,13 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-# Remove the static libraries. Static libraries are undesirable:
+# Static libraries are undesirable:
 # https://fedoraproject.org/wiki/Packaging/Guidelines#Packaging_Static_Libraries
-rm -rf $RPM_BUILD_ROOT%{_libdir}/*.a
+# Unfortunately, 'tau' explicitly requires libpapi.a
+%ifarch x86_64
+rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
+%endif
+rm -rf $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %{__mkdir_p} $RPM_BUILD_ROOT/%{_docdir}
 

@@ -1,0 +1,18 @@
+--- a/Makefile.pre.in
++++ b/Makefile.pre.in
+@@ -573,8 +573,15 @@
+ 	      -DHGVERSION="\"`LC_ALL=C $(HGVERSION)`\"" \
+ 	      -DHGTAG="\"`LC_ALL=C $(HGTAG)`\"" \
+ 	      -DHGBRANCH="\"`LC_ALL=C $(HGBRANCH)`\"" \
++	      -DDATE="\"`LC_ALL=C date -u -r Makefile.pre.in +"%b %d %Y"`\"" \
++	      -DTIME="\"`LC_ALL=C date -u -r Makefile.pre.in +"%T"`\"" \
+ 	      -o $@ $(srcdir)/Modules/getbuildinfo.c
+ 
++Python/getcompiler.o: $(srcdir)/Python/getcompiler.c Makefile
++	$(CC) -c $(PY_CFLAGS) \
++		-DCOMPILER='"[GCC]"' \
++		-o $@ $(srcdir)/Python/getcompiler.c
++
+ Modules/getpath.o: $(srcdir)/Modules/getpath.c Makefile
+ 	$(CC) -c $(PY_CFLAGS) -DPYTHONPATH='"$(PYTHONPATH)"' \
+ 		-DPREFIX='"$(prefix)"' \

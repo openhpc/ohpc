@@ -1,15 +1,61 @@
-For MPI development support, \OHPC{} presently provides pre-packaged builds for
-two MPI families: 
+For MPI development support, \OHPC{} provides pre-packaged builds for
+a variety of MPI families and transport layers. Currently available options and
+their applicability to various network transports are summarized in
+Table \ref{table:mpi}.
+The command that follows installs a default set of MPI families that
+provide support for ethernet and InfiniBand environments. If installing on a
+system with an \IntelR{} Omni-Path fabric, use the {psm2} variants for
+OpenMPI and MVAPICH instead (e.g. \texttt{openmpi-psm2-gnu-ohpc}
+and \texttt{mvapich2-psm2-gnu-ohpc}, respectively).
 
-\begin{itemize*}
-\item MVAPICH2
-\item OpenMPI
 
-\end{itemize*}
+\iftoggleverb{isx86}
+% x86_64
+
+\begin{table}[h]
+\caption{Available MPI builds} \label{table:mpi}
+\centering
+\begin{tabular}{@{\hspace*{0.2cm}} *5l @{}}    \toprule
+                                  & Ethernet (TCP)                 & \InfiniBand{}                  & \IntelR{} Omni-Path            \\ \midrule
+\rowcolor{black!10} MPICH         & \multicolumn{1}{c}{\checkmark} &                                &                                \\
+MVAPICH2                          &                                & \multicolumn{1}{c}{\checkmark} &                                \\
+\rowcolor{black!10} MVAPICH2 (psm2) &                                &                                & \multicolumn{1}{c}{\checkmark} \\
+OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} &                                \\
+\rowcolor{black!10} OpenMPI (psm2)  & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\else
+% aarch64
+
+\begin{table}[h]
+\caption{Available MPI builds} \label{table:mpi}
+\centering
+\begin{tabular}{@{\hspace*{0.2cm}} *5l @{}}    \toprule
+                                  & Ethernet (TCP)                 & \InfiniBand{}                              \\ \midrule
+\rowcolor{black!10} MPICH         & \multicolumn{1}{c}{\checkmark} &                                            \\
+\rowcolor{black!10} OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\
+\end{tabular}
+\end{table}
+
+\fi
+
 
 % begin_ohpc_run
 % ohpc_comment_header Install MPI Stacks \ref{sec:mpi}
+% ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
+% ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) openmpi-gnu-ohpc mvapich2-gnu-ohpc
+[sms](*\#*) (*\install*) openmpi-gnu-ohpc mvapich2-gnu-ohpc mpich-gnu-ohpc
 \end{lstlisting}
+% ohpc_indent 0
+% ohpc_command elif [[ ${enable_mpi_opa} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_command (*\install*) openmpi-psm2-gnu-ohpc mvapich2-psm2-gnu-ohpc
+% ohpc_indent 0
+% ohpc_command fi
 % end_ohpc_run
+
+% TODO add tooltip about existence of OPA stacks
+
+

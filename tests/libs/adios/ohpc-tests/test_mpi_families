@@ -5,20 +5,15 @@ TEST_LOGS=""
 MAKEFLAGS=""
 status=0
 
-cd "$(dirname "$0")/.."      || exit 1
-
-source ./LOCAL_ENV        || exit 1
-export BATS_JUNIT_CLASS=$TEST_DIR
-source ./common/TEST_ENV  || exit 1
+source ./TEST_ENV  || exit 1
 source ./common/functions || exit 1
 
-echo " "
-echo " "
-echo "-------------------------------------------------------"
-echo "Libraries: ADIOS tests bootstrap"
-echo "-------------------------------------------------------"
-module load autotools || exit 1
-./bootstrap           || exit 1
+cd libs/adios || exit 1
+export BATS_JUNIT_CLASS=Adios
+
+# bootstrap the local autotools project if necessary
+
+./bootstrap || exit 1
 
 for compiler in $COMPILER_FAMILIES ; do
     for mpi in $MPI_FAMILIES ; do
@@ -29,34 +24,19 @@ for compiler in $COMPILER_FAMILIES ; do
 	echo "Libraries: ADIOS tests: $compiler-$mpi"
 	echo "-------------------------------------------------------"
 
-	module purge          
-        module load prun      
-	module load $compiler 
-	module load $mpi      
-	module load adios
-        module load netcdf
-        module load phdf5
+	module purge          || exit 1 
+        module load prun      || exit 1
+	module load $compiler || exit 1
+	module load $mpi      || exit 1
+	module load adios     || exit 1
 
-	export LIBS='-ladios -lhdf5 -lz -llustreapi'
-	export CPPFLAGS="-I$ADIOS_INC -I$NETCDF_INC -I$HDF5_INC"
-	export LDFLAGS="-L$ADIOS_LIB -L$NETCDF_LIB -L$HDF5_LIB"
-        if [ "$mpi" = "mvapich2" ]; then
-	   export LIBS="$LIBS -lpthread"
-	fi
+	./configure           || exit 1
+	make clean            || exit 1
+	make -k check         || status=1
 
-	./configure > /dev/null  2>&1
-	pushd tests
-	    find -type f -name 'Makefile' -exec sed -i 's#top_builddir)/src#ADIOS_LIB)#g' {} \;
-	    ./run
-        popd
-
-        for dir in . suite/programs; do
-            save_logs_mpi_family tests/$dir $compiler $mpi
-        done
-
-	pushd tests
-	    make distclean > /dev/null 2>&1
-	popd
+        save_logs_mpi_family tests $compiler $mpi
+	make distclean
     done
 done
 
+exit ${status}

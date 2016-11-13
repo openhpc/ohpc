@@ -1,19 +1,15 @@
 #!../../../common/bats/bin/bats
 # -*-sh-*-
 
-load ../../../common/test_helper_functions || exit 1
-source ../../../common/functions || exit 1
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
 
-if [ -s ../../../TEST_ENV ];then
-    source ../../../TEST_ENV
+if [ -s ./TEST_ENV ];then
+    source ./TEST_ENV
 fi
 
-if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    rm=slurm
-else
-    ERROR "Unsupported or unknown resource manager"
-    exit 1
-fi
+check_rms
+rm=$RESOURCE_MANAGER
 
 testname="libs/Mumps"
 
@@ -21,48 +17,8 @@ NODES=2
 TASKS=4
 ARGS=null
 
-@test "[$testname] ssimpletest runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./ssimpletest
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
-    fi
-
-    run_mpi_binary -i ./input_simpletest_real $EXE $ARGS $NODES $TASKS
-    assert_success
-}
-
-@test "[$testname] dsimpletest runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./dsimpletest
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
-    fi
-
-    run_mpi_binary -i ./input_simpletest_real $EXE $ARGS $NODES $TASKS
-    assert_success
-}
-
-@test "[$testname] csimpletest runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./csimpletest
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
-    fi
-
-    run_mpi_binary -i ./input_simpletest_cmplx $EXE $ARGS $NODES $TASKS
-    assert_success
-}
-
-@test "[$testname] zsimpletest runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./zsimpletest
-    if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
-    fi
-
-    run_mpi_binary -i input_simpletest_cmplx $EXE $ARGS $NODES $TASKS
-    assert_success
-}
-
-@test "[$testname] c_example runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    EXE=./c_example
+@test "[$testname] C (double precision) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./C_double
     if [ ! -s $EXE ];then
         flunk "$EXE binary does not exit"
     fi
@@ -70,3 +26,44 @@ ARGS=null
     run_mpi_binary $EXE $ARGS $NODES $TASKS
     assert_success
 }
+
+@test "[$testname] Fortran (single precision) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./F_single
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Fortran (double precision) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./F_double
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Fortran (complex) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./F_complex
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+
+@test "[$testname] Fortran (double complex) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=./F_doublecomplex
+    if [ ! -s $EXE ];then
+        flunk "$EXE binary does not exit"
+    fi
+
+    run_mpi_binary $EXE $ARGS $NODES $TASKS
+    assert_success
+}
+

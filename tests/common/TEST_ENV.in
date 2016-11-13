@@ -1,10 +1,9 @@
 DELIM="-ohpc"
 CMD_TIMEOUT="20s"
-RESOURCE_MANAGER=slurm
 COMPILER_FAMILIES="@COMPILER_FAMILIES@"
 MPI_FAMILIES="@MPI_FAMILIES@"
 LUSTRE_TEST_PATH="/mnt/lustre/jenkins"
-NUM_COMPUTES=4
+NUM_COMPUTES=2
 export BATS_USE_MKTEMP=1
 #
 #------------------------
@@ -15,3 +14,9 @@ TAU_TRACE=0,
 TAU_CALLPATH=0,
 TAU_PROFILE=1,
 TAU_METRICS=GET_TIME_OF_DAY:PAPI_L1_DCM:PAPI_LD_INS
+#
+#------------------------
+# Scalasca profiling options
+#------------------------
+#
+SCAN_MPI_LAUNCHER=prun

@@ -11,6 +11,7 @@ else
     ERROR "LOCAL_ENV does not exist"
 fi
 
+check_rms
 rm=$RESOURCE_MANAGER
 
 # init run options

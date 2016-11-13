@@ -13,13 +13,13 @@
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -41,27 +41,43 @@ BuildRequires: intel_licenses
 
 #-ohpc-header-comp-end------------------------------------------------
 
-# Base package name
+# Base package name/config
 %define pname openmpi
 %define with_openib 1
+
+%ifarch aarch64
+%define with_psm 0
+%else
 %define with_psm 1
+%endif
+
 %define with_lustre 0
 %define with_slurm 1
 
+# Default build is without psm2, but can be overridden
+%{!?with_psm2: %define with_psm2 0}
+%{!?with_tm: %define with_tm 1}
+
 Summary:   A powerful implementation of MPI
+
+%if 0%{with_psm2}
+Name:      %{pname}-psm2-%{compiler_family}%{PROJ_DELIM}
+%else
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.10.2
+%endif
+
+Version:   1.10.4
 Release:   1
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{version}.tar.bz2
+#Source0:   http://www.open-mpi.org/software/ompi/v2.0/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
-
-# 05/11/16 - karl.w.schulz@intel.com (patch to fix singleton execution with PSM)
-Patch0:    pr.1156.patch 
+Source3:   pbs-config
+Patch0:    config.pbs.patch 
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
@@ -100,10 +116,23 @@ BuildRequires:  libibverbs-devel
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
-Requires:       prun%{PROJ_DELIM}
+%if %{with_tm}
+BuildRequires:  pbspro-server%{PROJ_DELIM}
+BuildRequires:  openssl-devel
+%endif
+%global __requires_exclude ^libpbs.so.*$
+
+%if %{with_psm2}
+BuildRequires:  libpsm2-devel >= 10.2.0
+Requires:       libpsm2 >= 10.2.0
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
+
+Requires: prun%{PROJ_DELIM}
 
 # Default library install path
-%define install_path %{OHPC_MPI_STACKS}/%{name}/%version
+%define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
 %description 
 
@@ -117,10 +146,7 @@ Open MPI jobs.
 %prep
 
 %setup -q -n %{pname}-%{version}
-
-# Apply local patches
-
-%patch0 -p1
+%patch0 -p0
 
 %build
 
@@ -128,9 +154,15 @@ Open MPI jobs.
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
-BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge"
+BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 %if %{with_psm}
   BASEFLAGS="$BASEFLAGS --with-psm"
+%endif
+%if %{with_psm2}
+  BASEFLAGS="$BASEFLAGS --with-psm2"
+%endif
+%if %{with_tm}
+  BASEFLAGS="$BASEFLAGS --with-tm=/opt/pbs/"
 %endif
 %if %{with_openib}
   BASEFLAGS="$BASEFLAGS --with-verbs"
@@ -139,7 +171,11 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
   BASEFLAGS="$BASEFLAGS --with-io-romio-flags=--with-file-system=testfs+ufs+nfs+lustre"
 %endif
 
-
+%if %{with_tm}
+cp %{SOURCE3} .
+%{__chmod} 700 pbs-config
+export PATH="./:$PATH"
+%endif
 
 ./configure ${BASEFLAGS}
 

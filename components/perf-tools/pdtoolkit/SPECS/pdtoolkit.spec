@@ -9,15 +9,15 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu toolchain and openmpi
 # MPI family; however, these can be overridden by specifing the
 # compiler_family variable via rpmbuild or other
 # mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family:      %define mpi_family openmpi}
+%{!?compiler_family: %global compiler_family gnu}
+%{!?mpi_family:      %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -45,7 +45,7 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        3.21
+Version:        3.22
 Release:        1
 License:        Program Database Toolkit License
 Summary:        PDT is a framework for analyzing source code
@@ -57,8 +57,10 @@ Provides:       %{name} = %{version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{OHPC_PUB}/doc/contrib
 
+#define _unpackaged_files_terminate_build      0
+#define __check_files /bin/true
 %define debug_package %{nil}
-#!BuildIgnore: post-build-checks
+
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -98,25 +100,42 @@ rm -f %buildroot%{install_path}/contrib/rose/edg44/x86_64/roseparse/config.log
 rm -f %buildroot%{install_path}/contrib/rose/edg44/x86_64/roseparse/config.status
 rm -f %buildroot%{install_path}/.all_configs
 rm -f %buildroot%{install_path}/.last_config
-pushd %buildroot%{install_path}/x86_64/bin
+
+%ifarch aarch64
+%define arch_dir arm64_linux
+%else
+%define arch_dir x86_64
+%endif
+
+pushd %buildroot%{install_path}/%{arch_dir}/bin
 sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
 rm -f edg33-upcparse
+%ifarch x86_64
 ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
+%endif
 rm -f edg44-c-roseparse
-ln -s  ../../contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
-sed -i 's|%buildroot||g' ../../contrib/rose/edg44/x86_64/roseparse/edg44-c-roseparse
+%ifnarch aarch64
+ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
+%endif
 rm -f edg44-cxx-roseparse
-ln -s  ../../contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
-sed -i 's|%buildroot||g' ../../contrib/rose/edg44/x86_64/roseparse/edg44-cxx-roseparse
+%ifnarch aarch64
+ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
+%endif
 rm -f edg44-upcparse
-ln -s  ../../contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
-sed -i 's|%buildroot||g' ../../contrib/rose/edg44/x86_64/roseparse/edg44-upcparse
+%ifnarch aarch64
+ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
+sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
+%endif
 rm -f pebil.static
 ln -s  ../../contrib/pebil/pebil/pebil.static
 rm -f roseparse
+%ifarch x86_64
 ln -s  ../../contrib/rose/roseparse/roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
+%endif
 sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
 sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
 rm -f ../../contrib/rose/rose-header-gen/config.log
@@ -124,7 +143,7 @@ rm -f ../../contrib/rose/rose-header-gen/config.status
 rm -f smaqao
 ln -s  ../../contrib/maqao/maqao/smaqao
 popd
-pushd %buildroot%{install_path}/x86_64
+pushd %buildroot%{install_path}/%{arch_dir}
 rm -f include
 ln -s ../include
 popd
@@ -153,13 +172,13 @@ module-whatis "URL %{url}"
 
 set     version                     %{version}
 
-prepend-path    PATH                %{install_path}/x86_64/bin
+prepend-path    PATH                %{install_path}/%{arch_dir}/bin
 prepend-path    MANPATH             %{install_path}/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_BIN        %{install_path}/x86_64/bin
+setenv          %{PNAME}_BIN        %{install_path}/%{arch_dir}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
@@ -184,7 +203,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc CREDITS LICENSE README
 

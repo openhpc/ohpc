@@ -11,12 +11,12 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname mrsh
-%{!?PROJ_DELIM:%define PROJ_DELIM  -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 2.7
-Release: 1%{?dist}
+Version: 2.12
+Release: 1
 Epoch: 3
 Summary: Remote shell program that uses munge authentication
 License: none

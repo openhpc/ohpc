@@ -21,6 +21,7 @@ TESTS                  += C_mpi_test
 
 check_PROGRAMS         += C_omp_test
 #C_omp_test_CFLAGS       = "-O0 -g "
+C_omp_test_CC           = "taucc -fopenmp"
 C_omp_test_LDFLAGS      = $(LDFLAGS)
 C_omp_test_SOURCES      = C_omp_test.c
 TESTS                  += C_omp_test

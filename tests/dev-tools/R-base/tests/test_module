@@ -23,7 +23,7 @@ check_compiler_family CC CXX FC
     
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
     DIR=${PKG}_DIR
     if [ -z ${!DIR} ];then
         flunk "${PKG}_DIR directory not defined"
@@ -34,13 +34,13 @@ check_compiler_family CC CXX FC
     fi 
 }
 
-@test "[$testname] Verify availability of $module R ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify availability of $module executable -> R ($LMOD_FAMILY_COMPILER)" {
     run which R
     assert_success
 }
 
 
-@test "[$testname] Verify availability of $module Rscript ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify availability of $module executable -> Rscript ($LMOD_FAMILY_COMPILER)" {
     run which Rscript
     assert_success
 }
@@ -70,28 +70,18 @@ check_compiler_family CC CXX FC
     assert_success
 }
 
-@test "[$testname] Running benchmark-25-noSuppDist.R with no SuppDist library test" {
+@test "[$testname] Verify ability to compile C code for R and execute" {
 
-    ### Rscript outputs to stdout
-    #run Rscript ./R-benchmark-25-noSuppDist.R
-    ### Batch mode with output written to file .results 
-    run  R CMD BATCH --quiet --no-restore --no-save ./R-benchmark-25-noSuppDist.R R-benchmark-25-noSuppDist.results
-    ### run R CMD BATCH ./R-benchmark-25-noSuppDist.R R-benchmark-25-noSuppDist.results
+    # Compile C code
+    rm -f foo.so 
+
+    run R CMD SHLIB foo.c
+    assert_success
+    run ls -l foo.so
+    assert_success
+
+    # Verify execution
+    run Rscript ./test_foo.R
     assert_success
 }
 
-
-@test "[$testname] Library (SuppDist lib) install test" {
-
-    run R CMD INSTALL -l . SuppDists_1.1-9.1.tar.gz || exit 1
-    assert_success
-    ###echo "SuppDist libarary install test success"
-}
-
-@test "[$testname] Run benchmark-25.R with newly installed SuppDist lib test" {
-    export R_LIBS="."
-    run R CMD BATCH --quiet --no-restore --no-save ./R-benchmark-25.R R-benchmark-25.results
-    ### run R CMD BATCH ./R-benchmark-25.R R-benchmark-25.results
-    assert_success
-    ###echo "Running benchmark-25 with SuppDist library done!"
-}

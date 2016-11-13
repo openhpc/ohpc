@@ -9,14 +9,14 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname munge
 
 %define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:	0.5.11
+Version:	0.5.12
 Release:	1%{?dist}
 
 Summary:	MUNGE authentication service
@@ -30,6 +30,9 @@ Provides:       %{pname} = %{version}-%{release}
 BuildRequires:	libbz2-devel
 BuildRequires:	libopenssl-devel
 BuildRequires:	zlib-devel
+%if 0%{?suse_version} >= 1230
+BuildRequires:	systemd
+%endif
 %else
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:	bzip2
@@ -47,7 +50,8 @@ BuildConflicts: post-build-checks
 
 Conflicts: munge 
 
-Source0:   https://github.com/dun/munge/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.bz2
+#Source0:   https://github.com/dun/munge/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
+Source0:   https://github.com/dun/munge/archive/munge-%{version}.tar.gz
 Source1:   OHPC_macros
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
 Patch1:     %{pname}.logdir.patch
@@ -102,7 +106,7 @@ A header file and static library for developing applications using MUNGE.
 A shared library for applications using MUNGE.
 
 %prep
-%setup -n %{pname}-%{version}
+%setup -n %{pname}-%{pname}-%{version}
 
 # OpenHPC patches
 %patch1
@@ -239,7 +243,7 @@ fi
 %{_mandir}/*[^3]/*
 
 
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 %{_prefix}/lib/tmpfiles.d/munge.conf
 %endif
 

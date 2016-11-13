@@ -32,9 +32,9 @@
 # compiler_family variable via rpmbuild or other
 # mechanisms.
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -65,7 +65,7 @@ BuildRequires: intel_licenses
 
 Name:		%{pname}%{PROJ_DELIM}
 Release:	1%{?dist}
-Version:        3.2.3
+Version:        3.3.1
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Patch:          tre.patch
 Url:            http://www.r-project.org/
@@ -95,6 +95,9 @@ BuildRequires:  xdg-utils
 %endif
 BuildRequires:  pango-devel
 BuildRequires:  tcl-devel
+BuildRequires:  xz-devel
+BuildRequires:  pcre-devel
+BuildRequires:  libcurl-devel
 ### Moved to CENTOS only until SLES has a newer texinfo version
 ###BuildRequires:  texinfo >= 5.1 
 BuildRequires:  tk-devel
@@ -174,7 +177,8 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 %setup -n R-%{version}
-%patch -p1
+# disabling patch - 9/21/16 karl.w.schulz@intel.com
+#%patch -p1
 
 %build 
 # OpenHPC compiler designation
@@ -276,7 +280,7 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%{__mkdir} -p %{RPM_BUILD_ROOT}/%{_docdir}
+%{__mkdir} -p %{buildroot}/%{_docdir}
 
 export NO_BRP_CHECK_RPATH true
 

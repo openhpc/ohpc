@@ -1,0 +1,70 @@
+--- SuperLU_DIST_5.1.0/SRC/superlu_defs.h	2016-05-15 22:16:44.000000000 -0700
++++ SuperLU_DIST_5.1.0.patch/SRC/superlu_defs.h	2016-11-06 21:09:51.000000000 -0800
+@@ -683,10 +683,10 @@
+ (int,  int, SuperMatrix *, int_t *, int_t *,  int_t *, int_t *,
+  Pslu_freeable_t *, MPI_Comm *, MPI_Comm *,  superlu_dist_mem_usage_t *);
+ 
+-/* Get the column permutation using parmetis */
++/* Get the column permutation using parmetis
+ extern float get_perm_c_parmetis 
+ (SuperMatrix *, int_t *, int_t *, int, int, 
+- int_t **, int_t **, gridinfo_t *, MPI_Comm *);
++ int_t **, int_t **, gridinfo_t *, MPI_Comm *); */
+ 
+ /* Auxiliary routines for memory expansions used during
+    the parallel symbolic factorization routine */
+--- SuperLU_DIST_5.1.0/SRC/CMakeLists.txt	2016-05-15 22:16:44.000000000 -0700
++++ SuperLU_DIST_5.1.0.patch/SRC/CMakeLists.txt	2016-11-07 09:11:08.000000000 -0800
+@@ -26,7 +26,6 @@
+   symbfact.c
+   psymbfact.c
+   psymbfact_util.c
+-  get_perm_c_parmetis.c
+   mc64ad_dist.c
+   static_schedule.c
+   xerr_dist.c
+@@ -47,7 +46,6 @@
+     dmyblas2_dist.c
+     dsp_blas2_dist.c
+     dsp_blas3_dist.c
+-    pdgssvx.c
+     pdgssvx_ABglobal.c
+     dreadhb.c
+     dreadrb.c
+@@ -88,7 +86,6 @@
+     zmyblas2_dist.c
+     zsp_blas2_dist.c
+     zsp_blas3_dist.c
+-    pzgssvx.c
+     pzgssvx_ABglobal.c
+     zreadhb.c
+     zreadrb.c
+--- SuperLU_DIST_5.1.0/SRC/Makefile	2016-05-15 22:16:44.000000000 -0700
++++ SuperLU_DIST_5.1.0.patch/SRC/Makefile	2016-11-07 10:15:57.000000000 -0800
+@@ -32,7 +32,7 @@
+ ALLAUX 	= sp_ienv.o etree.o sp_colorder.o get_perm_c.o \
+ 	  mmd.o comm.o memory.o util.o superlu_grid.o \
+ 	  pxerr_dist.o superlu_timer.o symbfact.o \
+-	  psymbfact.o psymbfact_util.o get_perm_c_parmetis.o mc64ad_dist.o \
++	  psymbfact.o psymbfact_util.o mc64ad_dist.o \
+ 	  static_schedule.o xerr_dist.o smach_dist.o dmach_dist.o
+ 
+ ifeq "${ACC}" "GPU"
+@@ -50,7 +50,7 @@
+ 
+ #
+ # Routines for double precision parallel SuperLU
+-DPLUSRC = pdgssvx.o pdgssvx_ABglobal.o \
++DPLUSRC = pdgssvx_ABglobal.o \
+ 	  dreadhb.o dreadrb.o dreadtriple.o dreadMM.o \
+ 	  pdgsequ.o pdlaqgs.o dldperm_dist.o pdlangs.o pdutil.o \
+ 	  pdsymbfact_distdata.o ddistribute.o pddistribute.o \
+@@ -60,7 +60,7 @@
+ 
+ #
+ # Routines for double complex parallel SuperLU
+-ZPLUSRC = pzgssvx.o pzgssvx_ABglobal.o \
++ZPLUSRC = pzgssvx_ABglobal.o \
+ 	  zreadhb.o zreadrb.o zreadtriple.o zreadMM.o \
+ 	  pzgsequ.o pzlaqgs.o zldperm_dist.o pzlangs.o pzutil.o \
+ 	  pzsymbfact_distdata.o zdistribute.o pzdistribute.o \

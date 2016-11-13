@@ -13,13 +13,13 @@
 #-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -49,20 +49,22 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.10.2
+Version:        1.11.1
 Release:        1
 Url:            http://sourceforge.net/projects/numpy
 DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
-Source0:        http://sourceforge.net/projects/numpy/files/NumPy/1.10.2/numpy-1.10.2.tar.gz
+Source0:        http://sourceforge.net/projects/numpy/files/NumPy/%{version}/numpy-%{version}.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
 Patch1:         numpy-buildfix.patch
+Patch2:         numpy-intelccomp.patch
+Patch3:         numpy-intelfcomp.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  python-devel
-Requires:       python >= %{py_ver}
+BuildRequires:  python-devel python-setuptools
+Requires:       python
 Provides:       numpy = %{version}
 %if 0%{?suse_version}
 BuildRequires:  fdupes
@@ -93,6 +95,8 @@ basic linear algebra and random number generation.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
@@ -100,10 +104,10 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
 [mkl]
-library_dirs = $MKLROOT/lib/intel64
 include_dirs = $MKLROOT/include
+library_dirs = $MKLROOT/lib/intel64
 mkl_libs = mkl_rt
-lapack_libs =
+lapack_libs = mkl_rt
 EOF
 %endif
 
@@ -145,7 +149,7 @@ python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 %endif
 
 # OpenHPC module file
-%{!?compiler_family: %define compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu}
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
@@ -165,6 +169,12 @@ module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
 set     version             %{version}
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+  if { [is-loaded gnu] && ![is-loaded openblas] } {
+      module load openblas
+    }
+}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
@@ -186,11 +196,10 @@ EOF
 
 %files
 %defattr(-,root,root)
-%{OHPC_HOME}
 %{OHPC_PUB}
-%doc DEV_README.txt
-%doc THANKS.txt
+%doc INSTALL.rst.txt
 %doc LICENSE.txt
-%doc README.txt
+%doc PKG-INFO
+%doc THANKS.txt
 
 %changelog

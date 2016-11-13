@@ -9,10 +9,10 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name:           docs%{PROJ_DELIM}
-Version:        1.1.1
+Version:        1.2
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
@@ -33,6 +33,7 @@ BuildRequires:  texlive-draftwatermark
 BuildRequires:  texlive-tcolorbox
 BuildRequires:  texlive-environ
 BuildRequires:  texlive-trimspaces
+BuildRequires:  texlive-amsmath
 BuildRequires:  latexmk
 BuildRequires:  git
 Requires:       make
@@ -56,31 +57,58 @@ from the OpenHPC software stack.
 
 %build
 %if 0%{?suse_version}
-%define source_path docs/recipes/install/sles12sp1/vanilla
+%define source_path docs/recipes/install/sles12sp1
 %else
 %if 0%{?rhel_version} || 0%{?centos_version}
-%define source_path docs/recipes/install/centos7.2/vanilla
+%define source_path docs/recipes/install/centos7.2
 %endif
 %endif
 
-cd %{source_path}
-make
+%define parser ../../../../parse_doc.pl
 
-# Include convenience recipe script(s)
+#----------------------
+# x86_64-based recipes
+#----------------------
 
-../../parse_doc.pl steps.tex > vanilla_recipe.sh
+pushd docs/recipes/install/centos7.2/x86_64/warewulf/slurm
+make ; %{parser} steps.tex > recipe.sh ; popd
+
+pushd docs/recipes/install/centos7.2/x86_64/warewulf/pbspro
+make ; %{parser} steps.tex > recipe.sh ; popd
+
+pushd docs/recipes/install/sles12sp1/x86_64/warewulf/slurm
+make ; %{parser} steps.tex > recipe.sh ; popd
+
+pushd docs/recipes/install/sles12sp1/x86_64/warewulf/pbspro
+make ; %{parser} steps.tex > recipe.sh ; popd
+
 
 
 %install
 
 %{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc
-%{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc/recipes/vanilla
+
 install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
-install -m 0644 -p %{source_path}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/Install_guide.pdf 
-install -m 0755 -p %{source_path}/vanilla_recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/recipe.sh
 
-install -m 0644 -p %{source_path}/../input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/vanilla/input.local
+%define lpath centos7.2/x86_64/warewulf/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
+%define lpath centos7.2/x86_64/warewulf/pbspro
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
+%define lpath sles12sp1/x86_64/warewulf/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
+%define lpath sles12sp1/x86_64/warewulf/pbspro
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
+install -m 0644 -p docs/recipes/install/centos7.2/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/centos7.2/input.local
+install -m 0644 -p docs/recipes/install/sles12sp1/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/sles12sp1/input.local
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 

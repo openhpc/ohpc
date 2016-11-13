@@ -1,8 +1,0 @@
-rank 0: attr: double temperature/mean value = 4.500000e+00
-rank 0: attr: integer temperature/number of levels = 1
-rank 0: attr: string temperature/date of coding = Nov, 2009
-rank 0: attr: string temperature/description = Global array written from 'size' processes
-rank 1: attr: double temperature/mean value = 4.500000e+00
-rank 1: attr: integer temperature/number of levels = 1
-rank 1: attr: string temperature/date of coding = Nov, 2009
-rank 1: attr: string temperature/description = Global array written from 'size' processes

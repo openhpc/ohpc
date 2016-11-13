@@ -36,8 +36,11 @@ provision_wait="${provision_wait:-180}"
 
 # Flags for optional installation/configuration
 
+enable_mpi_defaults="${enable_mpi_defaults:-1}"
+enable_mpi_opa="${enable_mpi_opa:-0}"
 enable_clustershell="${enable_clustershell:-0}"
 enable_ipmisol="${enable_ipmisol:-0}"
+enable_opensm="${enable_opensm:-0}"
 enable_ipoib="${enable_ipoib:-0}"
 enable_ganglia="${enable_ganglia:-0}"
 enable_genders="${enable_genders:-0}"

@@ -15,9 +15,9 @@
 # compiler_family variable via rpmbuild or other
 # mechanisms.
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family: %define mpi_family openmpi}
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%{!?compiler_family: %global compiler_family gnu}
+%{!?mpi_family: %global mpi_family openmpi}
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -26,6 +26,7 @@ BuildRequires: lmod%{PROJ_DELIM}
 %endif
 # Compiler dependencies
 BuildRequires: coreutils
+BuildRequires: wget
 %if %{compiler_family} == gnu
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -42,6 +43,10 @@ BuildRequires: intel_licenses
 %if %{mpi_family} == impi
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
+%endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
@@ -61,7 +66,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.25
+Version:   2.25.2
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
@@ -89,6 +94,7 @@ Requires: papi%{PROJ_DELIM}
 Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
 %define debug_package %{nil}
+#!BuildIgnore: post-build-checks
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version

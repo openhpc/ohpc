@@ -8,19 +8,15 @@ if [ -s ./TEST_ENV ];then
     source ./TEST_ENV
 fi
 
-if [ "$RESOURCE_MANAGER" = "slurm" ];then
-    rm=slurm
-else
-    ERROR "Unsupported or unknown resource manager"
-    exit 1
-fi
+check_rms
+rm=$RESOURCE_MANAGER
 
 PKG="R_base"
 
 
 @test "[$PKG] Running Rscript bench.R under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     test="bench"
-    CMD_TIMEOUT=30
+
     echo $test.R 
     if [ ! -e $test.R ];then
         flunk "$test.R does not exist"
@@ -28,7 +24,7 @@ PKG="R_base"
 
     rm -f $test.results
 
-    run run_serial_binary -o $test.results Rscript ./$test.R 
+    run run_serial_binary -t "00:04:00" -o $test.results Rscript ./$test.R 
     assert_success
 
     # Verify a timing was recorded

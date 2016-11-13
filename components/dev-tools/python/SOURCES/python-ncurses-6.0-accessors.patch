@@ -1,0 +1,40 @@
+Index: Python-2.7.10/Modules/_cursesmodule.c
+===================================================================
+--- Python-2.7.10.orig/Modules/_cursesmodule.c
++++ Python-2.7.10/Modules/_cursesmodule.c
+@@ -807,7 +807,7 @@ PyCursesWindow_EchoChar(PyCursesWindowOb
+     }
+ 
+ #ifdef WINDOW_HAS_FLAGS
+-    if (self->win->_flags & _ISPAD)
++    if (is_pad(self->win))
+         return PyCursesCheckERR(pechochar(self->win, ch | attr),
+                                 "echochar");
+     else
+@@ -1237,7 +1237,7 @@ PyCursesWindow_NoOutRefresh(PyCursesWind
+ #ifndef WINDOW_HAS_FLAGS
+     if (0)
+ #else
+-        if (self->win->_flags & _ISPAD)
++        if (is_pad(self->win))
+ #endif
+         {
+             switch(PyTuple_Size(args)) {
+@@ -1380,7 +1380,7 @@ PyCursesWindow_Refresh(PyCursesWindowObj
+ #ifndef WINDOW_HAS_FLAGS
+     if (0)
+ #else
+-        if (self->win->_flags & _ISPAD)
++        if (is_pad(self->win))
+ #endif
+         {
+             switch(PyTuple_Size(args)) {
+@@ -1447,7 +1447,7 @@ PyCursesWindow_SubWin(PyCursesWindowObje
+ 
+     /* printf("Subwin: %i %i %i %i   \n", nlines, ncols, begin_y, begin_x); */
+ #ifdef WINDOW_HAS_FLAGS
+-    if (self->win->_flags & _ISPAD)
++    if (is_pad(self->win))
+         win = subpad(self->win, nlines, ncols, begin_y, begin_x);
+     else
+ #endif

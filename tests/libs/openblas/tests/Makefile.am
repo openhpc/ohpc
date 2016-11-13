@@ -43,6 +43,6 @@ check_PROGRAMS         += xzcblat3
 xzcblat3_SOURCES        = c_zblas3.c c_zblat3.f c_z3chke.c c_xerbla.c auxiliary.c constant.c
 
 
-TESTS                   = test_module
+TESTS                  += test_module
 TESTS                  += rm_execution
 

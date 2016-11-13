@@ -8,14 +8,9 @@ if [ -s ../../TEST_ENV ]; then
 	source ../../TEST_ENV
 fi
 
-if [ "$RESOURCE_MANAGER" = "slurm" ]; then
-    rm=slurm
-else
-    ERROR "Unsupported or unknown resource manager"
-    exit 1
-fi
+check_rms
 
-@test "[oom] Test job OOM condition ($LMOD_FAMILY_COMPILER)" {
+@test "[oom] Test job OOM condition ($LMOD_FAMILY_COMPILER/$RESOURCE_MANAGER)" {
     skip "disable to invistigate disk fillup"
     if [ ! -s oom_check ]; then
         flunk "oom_check binary does no exists"

@@ -108,6 +108,8 @@ check_compiler_family CC CXX FC
     run valgrind --tool=callgrind ./simwork
     run ls -l callgrind.out*
     assert_success
+
+    rm -f callgrind.out*
 }
 
 @test "[$testname] Memcheck compile/test ($LMOD_FAMILY_COMPILER)" {
@@ -128,6 +130,4 @@ check_compiler_family CC CXX FC
 #    rm ./hello
 }
 
-rm -f .cmd_output
-rm -f callgrind.out*
 

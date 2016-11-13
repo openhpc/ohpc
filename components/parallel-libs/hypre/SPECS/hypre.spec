@@ -64,6 +64,10 @@ BuildRequires: intel_licenses
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
+%if %{mpi_family} == mpich
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
+%endif
 %if %{mpi_family} == mvapich2
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
@@ -84,7 +88,7 @@ Version:        2.10.1
 Release:        0
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
-Group:          %{PROJ_NAME}/parallel-libs
+Group:          ohpc/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         https://computation.llnl.gov/project/linear_solvers/download/hypre-%{version}.tar.gz
 %if 0%{?suse_version} <= 1110
@@ -127,6 +131,10 @@ phenomena in the defense, environmental, energy, and biological sciences.
 %setup -q -n %{pname}-%{version}
 
 %build
+
+%ifarch aarch64
+cp /usr/lib/rpm/config.guess src/config
+%endif
 
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
@@ -244,7 +252,7 @@ puts stderr " "
 puts stderr "This module loads the hypre library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
-puts stderr "Note that this build of hypre leverages the superlu and scalapack (if necessary) libraries."
+puts stderr "Note that this build of hypre leverages the superlu and MKL libraries."
 puts stderr "Consequently, these packages are loaded automatically with this module."
 
 puts stderr "\nVersion %{version}\n"
@@ -277,6 +285,7 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
@@ -305,4 +314,5 @@ EOF
 %doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
 
 %changelog
+
 

@@ -25,17 +25,18 @@ C  for L U factorization (sym = 0, with working host)
       END IF
 C  Define problem on the host (processor 0)
       IF ( mumps_par%MYID .eq. 0 ) THEN
-        READ(5,*) mumps_par%N
-        READ(5,*) mumps_par%NZ
+        open(unit=10,file='input_simpletest_real',status='old');
+        READ(10,*) mumps_par%N
+        READ(10,*) mumps_par%NZ
         ALLOCATE( mumps_par%IRN ( mumps_par%NZ ) )
         ALLOCATE( mumps_par%JCN ( mumps_par%NZ ) )
         ALLOCATE( mumps_par%A( mumps_par%NZ ) )
         ALLOCATE( mumps_par%RHS ( mumps_par%N  ) )
         DO I = 1, mumps_par%NZ
-          READ(5,*) mumps_par%IRN(I),mumps_par%JCN(I),mumps_par%A(I)
+          READ(10,*) mumps_par%IRN(I),mumps_par%JCN(I),mumps_par%A(I)
         END DO
         DO I = 1, mumps_par%N
-          READ(5,*) mumps_par%RHS(I)
+          READ(10,*) mumps_par%RHS(I)
         END DO
       END IF
 C  Call package for solution

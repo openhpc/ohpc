@@ -6,7 +6,7 @@ use strict;
 my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
                         "lustre","parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
 my @compiler_familes = ("gnu","intel");
-my @mpi_families     = ("mvapich2","openmpi","impi");
+my @mpi_families     = ("mvapich2","openmpi","impi","mpich");
 
 my @single_package_exceptions = ();
 
@@ -16,16 +16,23 @@ my %compiler_exceptions = ();
 $compiler_exceptions{"gsl"} = 1;
 $compiler_exceptions{"openblas"} = 1;
 
+$compiler_exceptions{"mvapich2"} = 4;
+$compiler_exceptions{"openmpi"} = 4;
+
 # Define any asymmetric MPI packages
 my %mpi_exceptions = ();
-$mpi_exceptions{"python-scipy"} = 2;
-$mpi_exceptions{"fftw"} = 2;
+$mpi_exceptions{"python-scipy"} = 3;
+$mpi_exceptions{"fftw"} = 3;
 $mpi_exceptions{"mkl-blacs"} = 1;
+
 
 my $longSummaryLine = 60;
 my $urlColor="logoblue";
 my $REMOVE_HTTP=0;
 my $FIXD_WIDTH=1;
+
+my $numCompiler_permute = 1;
+my $numMPI_permute = 3;
 
 foreach my $category (@ohpcCategories) {
     print "Building latex table for packages in the $category category...\n";
@@ -169,7 +176,7 @@ foreach my $category (@ohpcCategories) {
                 if( exists $compiler_exceptions{$name_base} ) {
                     die "unexpected # of compiler families for exception -> $name_base" if ($delta != $compiler_exceptions{$name_base});
                 } else {
-                    die "unexpected # of compiler families for $name_base" if ( $delta != 2) ;
+                    die "unexpected # of compiler families for $name_base" if ( $delta != $numCompiler_permute) ;
                 }
             }
 
@@ -178,7 +185,7 @@ foreach my $category (@ohpcCategories) {
                 if( exists $mpi_exceptions{$name_base} ) {
                     die "unexpected # of mpi families for exception -> $name_base" if ($delta != $mpi_exceptions{$name_base});
                 } else {
-                    die "unexpected # of mpi families for $name_base" if ( $delta != 6 );
+                    die "unexpected # of mpi families for $name_base" if ( $delta != $numMPI_permute );
                 }
             }
 

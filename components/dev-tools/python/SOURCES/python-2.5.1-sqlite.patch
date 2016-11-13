@@ -1,0 +1,12 @@
+--- a/Modules/_sqlite/cursor.c
++++ b/Modules/_sqlite/cursor.c
+@@ -837,6 +837,9 @@
+             goto error;
+         }
+ 
++        if (! statement)
++            break;
++
+         /* execute statement, and ignore results of SELECT statements */
+         rc = SQLITE_ROW;
+         while (rc == SQLITE_ROW) {

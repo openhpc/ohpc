@@ -63,6 +63,9 @@ FFLAGS="-I${TAU_INC} ${FCLAGS}"
 LDFLAGS="-L${TAU_LIB} -lTAU ${LDFLAGS}"
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel" ; then
+   if test "x$LMOD_FAMILY_MPI" = "xmpich" ;then
+      LDFLAGS="$LDFLAGS -lfmpich"
+   fi
    if test "x$LMOD_FAMILY_MPI" = "xmvapich2" ;then
       LDFLAGS="$LDFLAGS -lfmpich"
    fi
