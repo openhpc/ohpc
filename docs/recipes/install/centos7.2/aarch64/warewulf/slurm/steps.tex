@@ -31,6 +31,8 @@
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
+\toggletrue{isaarch}
+\toggletrue{isCentOS_ww_slurm_aarch}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -155,13 +157,14 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % ohpc_command fi
 % end_ohpc_run
 
-\vspace*{-0.15cm}
+%\vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
 
 % begin_ohpc_run
 % ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
 %\begin{verbatim}
+
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Configure Warewulf provisioning to use desired internal interface

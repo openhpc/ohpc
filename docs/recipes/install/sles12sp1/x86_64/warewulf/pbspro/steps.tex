@@ -21,6 +21,8 @@
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
+\toggletrue{isx86}
+\toggletrue{isSLES_ww_pbs_x86}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -233,7 +235,7 @@ default location for this example is in
 \noindent Now, we can include additional components to the compute instance using
 \texttt{zypper} to install into the chroot location defined previously:
 
-\clearpage
+%\clearpage
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Import GPG keys for chroot repository usage
@@ -271,6 +273,7 @@ default location for this example is in
 \end{lstlisting}
 % end_ohpc_run
 
+\vspace*{0.2cm}
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 
 Prior to assembling the image, it is advantageous to perform any additional
@@ -410,9 +413,11 @@ host as follows:
 \paragraph{Add \Ganglia{} monitoring}
 \input{common/ganglia}
 
+\vspace*{0.25cm}
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
+\vspace*{0.25cm}
 \paragraph{Add \genders{}}
 \input{common/genders}
 
@@ -422,7 +427,7 @@ host as follows:
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
-\clearpage
+%\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 

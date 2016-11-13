@@ -31,6 +31,8 @@
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
+\toggletrue{isaarch}
+\toggletrue{isSLES_ww_slurm_aarch}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -70,17 +72,7 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{common/enable_ohpc_repo}
-
-In addition to the \OHPC{} package repository, the {\em master} host also
-requires access to the standard distro repositories in order to resolve
-necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base and SDK repositories:
-
-\begin{itemize*}
-\item SLES12-SP1-12.1-0
-\item SLES12-SP1-SDK-12.1-0
-\end{itemize*}
-
+\input{common/sles_os_repos}
 \input{common/automation}
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
@@ -570,7 +562,33 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \input{common/perf_tools}
 
 \subsection{Setup default development environment}
-\input{common/default_dev}
+
+System users often find it convenient to have a default development environment
+in place so that compilation can be performed directly for parallel programs
+requiring MPI. This setup can be conveniently enabled via modules and the \OHPC{}
+modules environment is pre-configured to load an \texttt{ohpc} module on login
+(if present). The following package install provides a default
+environment that enables autotools, the \GNU{} compiler toolchain, and the
+OpenMPI MPI stack.
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash]
+[sms](*\#*) (*\install*) lmod-defaults-gnu-openmpi-ohpc
+\end{lstlisting}
+% end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+If you want to change the default environment from the suggestion above, \OHPC{}
+also provides the \GNU{} compiler toolchain with the MPICH stack:
+\begin{itemize*}
+
+\item lmod-defaults-gnu-mpich-ohpc
+\end{itemize*}
+\end{tcolorbox}
+\end{center}
+
 
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
@@ -609,7 +627,7 @@ i | petsc-gnu-openmpi-ohpc  | Portable Extensible Toolkit for Scientific Computa
 
 \input{common/automation_appendix}
 \input{common/rpmbuild_appendix}
-%%%\input{manifest}
+\input{manifest}
 \input{common/signature}
 
 

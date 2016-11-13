@@ -21,6 +21,8 @@
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
+\toggletrue{isx86}
+\toggletrue{isSLES_ww_slurm_x86}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -137,6 +139,7 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
 %\begin{verbatim}
 
+\vspace*{0.15cm}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Configure Warewulf provisioning to use desired internal interface
 [sms](*\#*) perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
@@ -233,7 +236,6 @@ default location for this example is in
 \noindent Now, we can include additional components to the compute instance using
 \texttt{zypper} to install into the chroot location defined previously:
 
-\clearpage
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Import GPG keys for chroot repository usage
@@ -279,6 +281,7 @@ example configuration.
 %The \NFS{} exporting options use an address/netmask
 %combination to limit the export scope to the defined compute nodes.
 
+\vspace*{0.15cm}
 % begin_ohpc_run
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
@@ -310,7 +313,7 @@ example configuration.
 
 \begin{center}
 \begin{tcolorbox}[]
-  \small Slurm requires enumeration of the physical hardware characteristics
+  \small SLURM requires enumeration of the physical hardware characteristics
   for compute nodes under its control. In particular, three configuration
   parameters combine to define consumable compute resources: {\em Sockets},
   {\em CoresPerSocket}, and {\em ThreadsPerCore}. The default configuration

@@ -22,6 +22,8 @@
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
 \toggletrue{isx86}
+\toggletrue{ispbs}
+\toggletrue{isCentOS_ww_pbs_x86}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -156,6 +158,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run
+
+\input{common/opensm}
 
 \vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
@@ -396,6 +400,7 @@ host as follows:
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
+\clearpage
 \paragraph{Add \genders{}}
 \input{common/genders}
 
@@ -405,7 +410,7 @@ host as follows:
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
-\clearpage
+%\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
