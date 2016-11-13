@@ -15,6 +15,7 @@ my @single_package_exceptions = ();
 my %compiler_exceptions = ();
 $compiler_exceptions{"gsl"} = 1;
 $compiler_exceptions{"openblas"} = 1;
+
 $compiler_exceptions{"mvapich2"} = 4;
 $compiler_exceptions{"openmpi"} = 4;
 
@@ -30,7 +31,8 @@ my $urlColor="logoblue";
 my $REMOVE_HTTP=0;
 my $FIXD_WIDTH=1;
 
-my $numMPI_permute = 8;
+my $numCompiler_permute = 1;
+my $numMPI_permute = 3;
 
 foreach my $category (@ohpcCategories) {
     print "Building latex table for packages in the $category category...\n";
@@ -174,7 +176,7 @@ foreach my $category (@ohpcCategories) {
                 if( exists $compiler_exceptions{$name_base} ) {
                     die "unexpected # of compiler families for exception -> $name_base" if ($delta != $compiler_exceptions{$name_base});
                 } else {
-                    die "unexpected # of compiler families for $name_base" if ( $delta != 2) ;
+                    die "unexpected # of compiler families for $name_base" if ( $delta != $numCompiler_permute) ;
                 }
             }
 
