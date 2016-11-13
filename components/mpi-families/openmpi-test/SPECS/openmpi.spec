@@ -55,7 +55,7 @@ BuildRequires: intel_licenses
 %define with_slurm 1
 
 # Default build is without psm2, but can be overridden
-%{!?with_psm2: %define with_psm2 0}
+%{!?with_psm2: %define with_psm2 1}
 %{!?with_tm: %define with_tm 1}
 
 Summary:   A powerful implementation of MPI
