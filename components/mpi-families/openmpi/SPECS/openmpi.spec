@@ -56,6 +56,7 @@ BuildRequires: intel_licenses
 
 # Default build is without psm2, but can be overridden
 %{!?with_psm2: %define with_psm2 0}
+%{!?with_tm: %define with_tm 1}
 
 Summary:   A powerful implementation of MPI
 
@@ -75,6 +76,8 @@ Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{vers
 #Source0:   http://www.open-mpi.org/software/ompi/v2.0/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
+Source3:   pbs-config
+Patch0:    config.pbs.patch 
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
@@ -113,6 +116,12 @@ BuildRequires:  libibverbs-devel
 BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
+%if %{with_tm}
+BuildRequires:  pbspro-server%{PROJ_DELIM}
+BuildRequires:  openssl-devel
+%endif
+%global __requires_exclude ^libpbs.so.*$
+
 %if %{with_psm2}
 BuildRequires:  libpsm2-devel >= 10.2.0
 Requires:       libpsm2 >= 10.2.0
@@ -137,6 +146,7 @@ Open MPI jobs.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch0 -p0
 
 %build
 
@@ -147,10 +157,13 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 %if %{with_psm}
   BASEFLAGS="$BASEFLAGS --with-psm"
-  %endif
+%endif
 %if %{with_psm2}
   BASEFLAGS="$BASEFLAGS --with-psm2"
-  %endif
+%endif
+%if %{with_tm}
+  BASEFLAGS="$BASEFLAGS --with-tm=/opt/pbs/"
+%endif
 %if %{with_openib}
   BASEFLAGS="$BASEFLAGS --with-verbs"
 %endif
@@ -158,7 +171,11 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
   BASEFLAGS="$BASEFLAGS --with-io-romio-flags=--with-file-system=testfs+ufs+nfs+lustre"
 %endif
 
-
+%if %{with_tm}
+cp %{SOURCE3} .
+%{__chmod} 700 pbs-config
+export PATH="./:$PATH"
+%endif
 
 ./configure ${BASEFLAGS}
 
