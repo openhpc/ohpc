@@ -78,6 +78,7 @@ Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-%{versi
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 Source3:   pbs-config
+Patch0:    config.pbs.patch 
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
@@ -147,6 +148,7 @@ Open MPI jobs.
 %prep
 
 %setup -q -n openmpi-%{version}
+%patch0 -p0
 
 %build
 
