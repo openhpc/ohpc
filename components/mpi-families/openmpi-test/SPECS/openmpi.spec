@@ -172,6 +172,7 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
 
 %if %{with_tm}
 cp %{SOURCE3} .
+%{__chmod} 700 pbs-config
 export PATH="./:$PATH"
 %endif
 
