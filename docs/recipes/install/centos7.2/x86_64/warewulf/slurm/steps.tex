@@ -21,6 +21,7 @@
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
+\toggletrue{isx86}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -125,8 +126,6 @@ to the chosen {\em master} host.
 \end{lstlisting}
 % end_ohpc_run
 
-\input{common/opensm}
-
 With the \InfiniBand{} drivers included, you can also enable (optional) IPoIB functionality
 which provides a mechanism to send IP packets over the IB network. If you plan
 to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_client}
@@ -155,6 +154,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run
+
+\input{common/opensm}
 
 \vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
@@ -251,6 +252,7 @@ default location for this example is in
 \noindent Now, we can include additional components to the compute instance using
 \texttt{yum} to install into the chroot location defined previously:
 
+\newpage
 % begin_ohpc_run
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
@@ -316,10 +318,9 @@ example configuration.
 \end{lstlisting}
 % end_ohpc_run
 
-
 \begin{center}
 \begin{tcolorbox}[]
-  \small Slurm requires enumeration of the physical hardware characteristics
+  \small SLURM requires enumeration of the physical hardware characteristics
   for compute nodes under its control. In particular, three configuration
   parameters combine to define consumable compute resources: {\em Sockets},
   {\em CoresPerSocket}, and {\em ThreadsPerCore}. The default configuration
@@ -416,10 +417,11 @@ host as follows:
 \paragraph{Add \Nagios{} monitoring}
 \input{common/nagios}
 
-\clearpage
+
 \paragraph{Add \Ganglia{} monitoring}
 \input{common/ganglia}
 
+\clearpage
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
@@ -435,7 +437,7 @@ host as follows:
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
-\clearpage
+%\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
@@ -565,7 +567,7 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 %----------------
 % CentOS specific
 %----------------
-
+\clearpage 
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) yum search petsc-gnu ohpc
 Loaded plugins: fastestmirror
