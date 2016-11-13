@@ -121,7 +121,7 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 BuildRequires:  pbspro-server%{PROJ_DELIM}
 BuildRequires:  openssl-devel
 %endif
-%global __requires _exclude ^libpbs.so
+%global __requires _exclude ^libpbs.so.*$
 
 %if %{with_psm2}
 BuildRequires:  libpsm2-devel >= 10.2.0
@@ -245,7 +245,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc NEWS
 %doc README
