@@ -1,11 +1,19 @@
 For MPI development support, \OHPC{} provides pre-packaged builds for
 a variety of MPI families and transport layers. Currently available options and
-their applicability to various network transports are summarized below: 
+their applicability to various network transports are summarized in
+Table \ref{table:mpi}.
+The command that follows install a default set of MPI families that
+provide support for ethernet and InfiniBand environments. If installing on a
+system with an \IntelR{} Omni-Path fabric, use the {psm2} variants for
+OpenMPI and MVAPICH instead (e.g. \texttt{openmpi-psm2-gnu-ohpc}
+and \texttt{mvapich2-psm2-gnu-ohpc}, respectively).
+
 
 \iftoggleverb{isx86}
 % x86_64
 
 \begin{table}[h]
+\caption{Available MPI builds} \label{table:mpi}
 \centering
 \begin{tabular}{@{\hspace*{0.2cm}} *5l @{}}    \toprule
                                   & Ethernet (TCP)                 & \InfiniBand{}                  & \IntelR{} Omni-Path            \\ \midrule
@@ -21,6 +29,7 @@ OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolum
 % aarch64
 
 \begin{table}[h]
+\caption{Available MPI builds} \label{table:mpi}
 \centering
 \begin{tabular}{@{\hspace*{0.2cm}} *5l @{}}    \toprule
                                   & Ethernet (TCP)                 & \InfiniBand{}                              \\ \midrule
@@ -28,13 +37,9 @@ OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolum
 \rowcolor{black!10} OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\
 \end{tabular}
 \end{table}
+
 \fi
 
-\noindent The commands that follow install a default set of MPI families that
-provide support for ethernet and InfiniBand environments. If installing on a
-system with an \IntelR{} Omni-Path fabric, use the {psm2} variants for
-OpenMPI and MVAPICH instead (e.g. \texttt{openmpi-psm2-gnu-ohpc}
-and \texttt{mvapich2-psm2-gnu-ohpc}, respectively).
 
 % begin_ohpc_run
 % ohpc_comment_header Install MPI Stacks \ref{sec:mpi}
