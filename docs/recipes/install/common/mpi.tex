@@ -1,5 +1,6 @@
-For MPI development support, \OHPC{} presently provides pre-packaged builds for
-the following MPI families and transport layers: 
+For MPI development support, \OHPC{} provides pre-packaged builds for
+a variety of MPI families and transport layers. Currently available options and
+their applicability to various network transports are summarized below: 
 
 \iftoggleverb{isx86}
 % x86_64
@@ -10,9 +11,9 @@ the following MPI families and transport layers:
                                   & Ethernet (TCP)                 & \InfiniBand{}                  & \IntelR{} Omni-Path            \\ \midrule
 \rowcolor{black!10} MPICH         & \multicolumn{1}{c}{\checkmark} &                                &                                \\
 MVAPICH2                          &                                & \multicolumn{1}{c}{\checkmark} &                                \\
-\rowcolor{black!10} MVAPICH2-psm2 &                                &                                & \multicolumn{1}{c}{\checkmark} \\
+\rowcolor{black!10} MVAPICH2 (psm2) &                                &                                & \multicolumn{1}{c}{\checkmark} \\
 OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} &                                \\
-\rowcolor{black!10} OpenMPI-psm2  & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\ \bottomrule
+\rowcolor{black!10} OpenMPI (psm2)  & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\ \bottomrule
 \end{tabular}
 \end{table}
 
@@ -29,6 +30,11 @@ OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolum
 \end{table}
 \fi
 
+\noindent The commands that follow install a default set of MPI families that
+provide support for ethernet and InfiniBand environments. If installing on a
+system with an \IntelR{} Omni-Path fabric, use the {psm2} variants for
+OpenMPI and MVAPICH instead (e.g. \texttt{openmpi-psm2-gnu-ohpc}
+and \texttt{mvapich2-psm2-gnu-ohpc}, respectively).
 
 % begin_ohpc_run
 % ohpc_comment_header Install MPI Stacks \ref{sec:mpi}
