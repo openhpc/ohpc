@@ -3,7 +3,6 @@ docs-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 examples-ohpc 1.4 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 ganglia-ohpc 3.7.2 http://ganglia.sourceforge.net/ ohpc/admin Distributed Monitoring System
 genders-ohpc 1.22 https://github.com/chaos/genders ohpc/admin Static cluster configuration database
-lmod-defaults-gnu-impi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu-mpich-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu-openmpi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-ohpc 6.5.11 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)

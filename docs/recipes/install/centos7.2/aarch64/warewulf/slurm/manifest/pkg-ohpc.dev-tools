@@ -3,7 +3,6 @@ automake-ohpc 1.15 http://www.gnu.org/software/automake/ ohpc/dev-tools A GNU to
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
 python-numpy-gnu-ohpc 1.11.1 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python-scipy-gnu-mpich-ohpc 0.18.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
-python-scipy-gnu-mvapich2-ohpc 0.18.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu-openmpi-ohpc 0.18.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 R_base-ohpc 3.3.1 http://www.r-project.org/ ohpc/dev-tools R is a language and environment for statistical computing and graphics (S-Plus like).
 valgrind-ohpc 3.11.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger
