@@ -37,10 +37,17 @@
 
 % ---------------------------------------------------------
 
-% Booleans for os-specific latex formatting
+% Booleans for recipe-specific latex formatting
 \newtoggle{isCentOS}
-% Booleans for arch-specific latex formatting
 \newtoggle{isx86}
+\newtoggle{isaarch}
+\newtoggle{ispbs}
+\newtoggle{isCentOS_ww_slurm_x86}
+\newtoggle{isCentOS_ww_pbs_x86}
+\newtoggle{isSLES_ww_slurm_x86}
+\newtoggle{isSLES_ww_pbs_x86}
+\newtoggle{isCentOS_ww_slurm_aarch}
+\newtoggle{isSLES_ww_slurm_aarch}
 
 % utility to check os-specific settings
 \newcommand{\iftoggleverb}[1]{%

@@ -51,6 +51,8 @@ named \texttt{prun} that is installed in concert with the pre-packaged MPI
 toolchains. Native job launch mechanisms provided by the MPI stacks are 
 utilized, \texttt{mpiexec}.
 
+\iftoggle{isSLES_ww_pbs_x86}{\clearpage}
+
 \subsection{Interactive execution}
 To use the newly created ``test'' account to compile and execute the
 application {\em interactively} through the resource manager, execute the
@@ -95,7 +97,10 @@ and SLURM:
 \end{tcolorbox}
 \end{center}
 
-%\clearpage
+\iftoggle{isCentOS_ww_pbs_x86}{\clearpage}
+
+\iftoggle{isSLES_ww_pbs_x86}{\clearpage}
+
 \subsection{Batch execution}
 
 For batch execution, \OHPC{} provides a simple job script for reference (also
@@ -120,7 +125,7 @@ example.
 #PBS -o job.out
 
 # Total number of nodes and MPI tasks/node requested
-#PBS -l nodes=2:ppn=4
+#PBS -l select=2:mpiprocs=4
 
 # Run time (hh:mm:ss) - 1.5 hours
 #PBS -l walltime=01:30:00
