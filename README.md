@@ -83,6 +83,8 @@ software inclusion requests.
 
 #### Register your system
 
-If you are using elements of OpenHPC, we have an optional system registration form below:
+If you are using elements of OpenHPC, please consider registering your
+system(s) using the [System Registration
+Form](https://drive.google.com/open?id=1KvFM5DONJigVhOlmDpafNTDDRNTYVdolaYYzfrHkOWI).
 
-[System Registry](https://drive.google.com/open?id=1KvFM5DONJigVhOlmDpafNTDDRNTYVdolaYYzfrHkOWI)
+
