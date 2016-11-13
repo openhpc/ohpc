@@ -65,7 +65,7 @@ the underlying native job launch mechanism being used):
 [test@sms ~]$ mpicc -O3 /opt/ohpc/pub/examples/mpi/hello.c
 
 # Submit interactive job request and use prun to launch executable
-[test@sms ~]$ qsub -I -l nodes=2:ppn=4
+[test@sms ~]$ qsub -I -l select=2:mpiprocs=4
 
 [test@c1 ~]$ prun ./a.out
 
