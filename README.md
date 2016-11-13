@@ -80,3 +80,9 @@ the http://openhpc.community page for more pointers.
 Please see the component submission page at
 https://github.com/openhpc/submissions for more information regarding new
 software inclusion requests.
+
+#### Register your system
+
+If you are using elements of OpenHPC, we have an optional system registration form below:
+
+[System Registry](https://drive.google.com/open?id=1KvFM5DONJigVhOlmDpafNTDDRNTYVdolaYYzfrHkOWI)
