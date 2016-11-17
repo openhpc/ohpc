@@ -138,6 +138,12 @@ function launch_openmpi () {
 
 	if [ ${RM} == "slurm" ];then
             verify_launcher_avail mpirun
+
+	    # no tm module avail when using slurm
+	    export OMPI_MCA_ras=^tm
+	    export OMPI_MCA_ess=^tm
+	    export OMPI_MCA_plm=^tm
+	    
             cmd="mpirun $@"
 	elif [ ${RM} == "pbspro" ];then
             verify_launcher_avail mpiexec
