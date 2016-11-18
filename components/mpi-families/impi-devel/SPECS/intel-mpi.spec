@@ -64,7 +64,7 @@ if [ -d ${topDir} ];then
 
     for dir in ${versions}; do
 	if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
-	    version=`grep "^MPIVERSION=" ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc | cut -d '"' -f2`
+	    version=`grep "^MPIVERSION=" ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc | cut -d '"' -f2 | sed 's| Update |\.|'`
 	    if [ -z "${version}" ];then
 		echo "Error: unable to determine MPI version"
 		exit 1

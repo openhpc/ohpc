@@ -1,0 +1,9 @@
+There is a growing sense within the HPC community for the need to have an open
+community effort to more efficiently build, test, and deliver integrated HPC
+software components and tools.  Formed initially in November 2015 and
+formalized as a Linux Foundation project in June 2016, OpenHPC is endeavoring
+to address this need.  At this BoF, speakers from the OpenHPC Technical
+Steering committee will provide a technical overview of the project and
+near-term roadmaps.  We then invite open discussion giving attendees an
+opportunity to provide feedback on current conventions, packaging, request
+additional components and configurations, and discuss general future trends.
