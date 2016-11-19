@@ -18,7 +18,7 @@ Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
 Version:   %{year}
 Source1:   OHPC_macros
-Release:   1
+Release:   15
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/mpi-families
