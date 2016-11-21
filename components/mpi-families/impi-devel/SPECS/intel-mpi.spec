@@ -184,7 +184,11 @@ EOF
 #%Module1.0#####################################################################
 set     ModulesVersion      "${version}"
 EOF
-	    
+	  # Inventory for later removal
+      echo "%{OHPC_MODULEDEPS}/intel/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+      echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
+      echo "%{OHPC_MODULEDEPS}/gnu/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+      echo "%{OHPC_MODULEDEPS}/gnu/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
 	fi
     done
 fi
@@ -205,12 +209,10 @@ if [ "$1" = 0 ]; then
 	done
     fi
 
-    if [ -d %{OHPC_MODULEDEPS}/intel/impi ];then
-	find %{OHPC_MODULEDEPS}/intel/impi -type f -exec rm {} \;
-    fi
-    if [ -d %{OHPC_MODULEDEPS}/intel/gnu ];then
-	find %{OHPC_MODULEDEPS}/intel/gnu  -type f -exec rm {} \;
-    fi
+    for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
+        rm $file
+    done
+    rm %{OHPC_MODULEDEPS}/intel/impi/.manifest
 fi
 
 %clean
