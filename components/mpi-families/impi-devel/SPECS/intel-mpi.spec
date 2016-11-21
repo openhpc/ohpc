@@ -212,7 +212,7 @@ if [ "$1" = 0 ]; then
     for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
         rm $file
     done
-    rm %{OHPC_MODULEDEPS}/intel/impi/.manifest
+    rm -f %{OHPC_MODULEDEPS}/intel/impi/.manifest
 fi
 
 %clean
