@@ -162,6 +162,7 @@ fi
 for file in `cat %{OHPC_MODULES}/intel/.manifest`; do
         rm $file
     done
+rm %{OHPC_MODULES}/intel/.manifest
 
 
 
