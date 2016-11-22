@@ -13,7 +13,7 @@
 
 %define pname intel-compilers-devel
 
-Summary:   OpenHPC compatability package for Intel(R) Parallel Studio XE
+Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2016
 Release:   1
