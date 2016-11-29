@@ -35,6 +35,9 @@ BuildRequires: lmod%{PROJ_DELIM}
 
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
+%if %{compiler_family} == intel
+Requires:      intel-compilers-devel%{PROJ_DELIM}
+%endif
 
 # MPI dependencies
 %if %{mpi_family} == impi
