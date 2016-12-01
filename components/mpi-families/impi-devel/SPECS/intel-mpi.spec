@@ -58,7 +58,7 @@ echo " "
 echo "Scanning top-level dir = $topDir"
 
 if [ -d ${topDir} ];then
-    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*.*" -printf "%f "` || exit 1
+    versions=`find -L ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*.*" -printf "%f "` || exit 1
 
     scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
@@ -200,7 +200,7 @@ if [ "$1" = 0 ]; then
     topDir=`rpm -q --qf '%{FILENAMES}\n' intel-mpi-doc` || exit 1
 
     if [ -d ${topDir} ];then
-	versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
+	versions=`find -L ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
 
 	for dir in ${versions}; do
 	    if [ -d ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc ];then
