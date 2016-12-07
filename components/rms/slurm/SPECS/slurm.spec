@@ -1135,6 +1135,8 @@ rm -rf $RPM_BUILD_ROOT
 #############################################################################
 
 %pre
+/usr/sbin/useradd -U -c "SLURM resource manager" \
+    -s /sbin/nologin -r -d %{_sysconfdir} slurm 2> /dev/null || :
 #if [ -x /etc/init.d/slurm ]; then
 #    if /etc/init.d/slurm status | grep -q running; then
 #        /etc/init.d/slurm stop
