@@ -1147,7 +1147,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 getent passwd slurm >/dev/null || \
     /usr/sbin/useradd -U -c "SLURM resource manager" \
-    -s /sbin/nologin -r -d %{_sysconfdir}/slurm slurm
+    -s /sbin/nologin -r -d %{_sysconfdir} slurm
 exit 0
 
 %post
