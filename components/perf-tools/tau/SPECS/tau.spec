@@ -186,6 +186,7 @@ TOPDIR=$PWD
 make install TOPDIR=$TOPDIR
 make exports TOPDIR=$TOPDIR
 
+install -d %buildroot%{install_path}
 
 rm -rf %buildroot
 #mkdir -p %buildroot%{install_path}
