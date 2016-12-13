@@ -171,6 +171,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 #	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
 #    -prefix=/tmp/%{install_path} \
 
+mkdir -p %buildroot%{install_path}
 sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%buildroot%{install_path}|' \
 include/Makefile utils/Makefile
 TOPDIR=$PWD
