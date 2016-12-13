@@ -167,9 +167,12 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 #    -prefix=/tmp/%{install_path} \
 #    -exec-prefix= \
 
+sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%buildroot%{install_path}|' \
+include/Makefile utils/Makefile
+TOPDIR=$PWD
 
-make install
-make exports
+make install TOPDIR=$TOPDIR
+make exports TOPDIR=$TOPDIR
 
 
 rm -rf %buildroot
@@ -201,6 +204,8 @@ rm -rf %buildroot
 #rm -f libjogl*
 #popd
 
+sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
+egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
