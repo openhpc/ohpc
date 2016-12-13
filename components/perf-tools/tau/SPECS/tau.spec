@@ -186,10 +186,6 @@ TOPDIR=$PWD
 make install TOPDIR=$TOPDIR
 make exports TOPDIR=$TOPDIR
 
-pushd utils
-%make_build tau2profile TOPDIR=$TOPDIR
-install -m755 tau2profile %buildroot%_bindir
-popd
 
 rm -rf %buildroot
 #mkdir -p %buildroot%{install_path}
