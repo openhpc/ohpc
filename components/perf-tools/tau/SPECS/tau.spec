@@ -144,7 +144,7 @@ export MPI_LIB_DIR=$MPI_DIR/lib
 %endif
 
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
-#export BUILDROOT=%buildroot%{install_path}
+export BUILDROOT=%buildroot
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     -prefix=%{install_path} \
