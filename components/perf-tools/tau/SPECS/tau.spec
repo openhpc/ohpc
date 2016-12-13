@@ -118,7 +118,7 @@ automatic instrumentation tool.
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 %endif
 
-%build
+%install
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
