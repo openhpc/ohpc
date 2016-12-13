@@ -90,8 +90,10 @@ Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
 BuildRequires: papi%{PROJ_DELIM}
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires: papi%{PROJ_DELIM}
 Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+Requires: scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 %define debug_package %{nil}
 #!BuildIgnore: post-build-checks
@@ -126,6 +128,7 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 module load papi
 module load pdtoolkit
+module load scalasca
 
 %if %{compiler_family} == gnu
 export fcomp=gfortran
@@ -148,6 +151,7 @@ export BUILDROOT=%buildroot
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     -prefix=%{install_path} \
+    -exec-prefix= \
 	-c++=mpicxx \
 	-cc=mpicc \
 	-fortran=$fcomp \
@@ -159,13 +163,13 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-PROFILEPARAM \
     -papi=$PAPI_DIR \
 	-pdt=$PDTOOLKIT_DIR \
+	-scalasca=$SCALASCA_DIR \
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
 	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L%{install_path}/lib" 
 #	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
 #    -prefix=/tmp/%{install_path} \
-#    -exec-prefix= \
 
 sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%buildroot%{install_path}|' \
 include/Makefile utils/Makefile
@@ -246,10 +250,9 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded pdtoolkit]  } {
         module load pdtoolkit
     }
-}
-
-if [ module-info mode remove ] {
-    module unload pdtoolkit
+    if {  ![is-loaded scalasca]  } {
+        module load scalasca
+    }
 }
 
 EOF
