@@ -160,17 +160,25 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-mpiinc=$MPI_INCLUDE_DIR \
 	-mpilib=$MPI_LIB_DIR \
 	-slog2 \
+	-CPUTIME \
+    -MULTIPLECOUNTERS \
+    -PROFILE \ 
+    -PROFILECALLPATH \
 	-PROFILEPARAM \
     -papi=$PAPI_DIR \
 	-pdt=$PDTOOLKIT_DIR \
 	-scalasca=$SCALASCA_DIR \
-	-CPUTIME \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
 	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L%{install_path}/lib" 
 #	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
 #    -prefix=/tmp/%{install_path} \
 
+export BUILDROOTLIB=%buildroot%{install_path}/lib
+export BUILDROOT=%buildroot
+%ifarch x86_64
+export LIBSUFF=64
+%endif
 mkdir -p %buildroot%{install_path}
 sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%buildroot%{install_path}|' \
 include/Makefile utils/Makefile
