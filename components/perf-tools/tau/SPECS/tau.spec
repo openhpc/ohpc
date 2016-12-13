@@ -66,7 +66,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.25.2
+Version:   2.26
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
@@ -182,9 +182,9 @@ rm -f tau_java
 popd
 
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
-sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile
-#sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
-#sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
+sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
+sed -i 's|%buildroot|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
+sed -i 's|%buildroot|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
 
 rm -rf %{install_path}/examples
 rm -rf %buildroot%{install_path}/examples
