@@ -186,10 +186,10 @@ TOPDIR=$PWD
 make install TOPDIR=$TOPDIR
 make exports TOPDIR=$TOPDIR
 
-install -d %buildroot%{install_path}/lib
-install -d %buildroot%{install_path}/bin
+#install -d %buildroot%{install_path}/lib
+#install -d %buildroot%{install_path}/bin
 
-rm -rf %buildroot
+#rm -rf %buildroot
 #mkdir -p %buildroot%{install_path}
 #pushd /tmp
 #export tmp_path=%{install_path}
