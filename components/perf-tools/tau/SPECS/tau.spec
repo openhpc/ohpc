@@ -148,8 +148,6 @@ export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
     -prefix=%{install_path} \
-#    -prefix=/tmp/%{install_path} \
-#    -exec-prefix= \
 	-c++=mpicxx \
 	-cc=mpicc \
 	-fortran=$fcomp \
@@ -164,8 +162,10 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-CPUTIME \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-#	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
 	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L%{install_path}/lib" 
+#	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
+#    -prefix=/tmp/%{install_path} \
+#    -exec-prefix= \
 
 
 make install
