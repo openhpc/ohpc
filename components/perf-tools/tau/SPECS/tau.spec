@@ -161,7 +161,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-mpilib=$MPI_LIB_DIR \
 	-slog2 \
 	-CPUTIME \
-    -PROFILE \ 
+    -PROFILE \
     -PROFILECALLPATH \
 	-PROFILEPARAM \
     -papi=$PAPI_DIR \
