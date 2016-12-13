@@ -180,7 +180,7 @@ export LIBSUFF=64
 %endif
 mkdir -p %buildroot%{install_path}
 sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%buildroot%{install_path}|' \
-include/Makefile utils/Makefile
+include/Makefile utils/include/Makefile
 TOPDIR=$PWD
 
 make install TOPDIR=$TOPDIR
