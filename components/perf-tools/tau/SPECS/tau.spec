@@ -187,8 +187,8 @@ make install TOPDIR=$TOPDIR
 make exports TOPDIR=$TOPDIR
 
 pushd src/Profile
-%make clean
-%make TOPDIR=$TOPDIR
+make clean
+make TOPDIR=$TOPDIR
 cp -f libTAU* %buildroot%%{install_path}/lib/
 popd
 
