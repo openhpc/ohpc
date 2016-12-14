@@ -202,7 +202,7 @@ make exports TOPDIR=$TOPDIR
 
 #sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
 #sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
-sed -i 's|%buildroot||g' %buildroot%{install_path}/include/Makefile*
+sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*h
 sed -i 's|%buildroot||g' %buildroot%{install_path}/lib/Makefile*
 
 #rm -rf %{install_path}/examples
