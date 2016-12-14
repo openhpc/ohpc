@@ -186,6 +186,7 @@ TOPDIR=$PWD
 make install TOPDIR=$TOPDIR
 make exports TOPDIR=$TOPDIR
 
+cp -r %buildroot%_includedir %buildroot%{install_path}
 #install -d %buildroot%{install_path}/lib
 #install -d %buildroot%{install_path}/bin
 
@@ -202,7 +203,7 @@ make exports TOPDIR=$TOPDIR
 
 #sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
 #sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
-#sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*h
+sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*h
 sed -i 's|%buildroot||g' %buildroot%{install_path}/lib/Makefile*
 
 #rm -rf %{install_path}/examples
