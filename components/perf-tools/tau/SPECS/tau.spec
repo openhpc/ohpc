@@ -167,7 +167,6 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
     -papi=$PAPI_DIR \
 	-pdt=$PDTOOLKIT_DIR \
 	-scalasca=$SCALASCA_DIR \
-	-scorep=$SCOREP_DIR \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
 	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L%{install_path}/lib" 
