@@ -167,6 +167,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
     -papi=$PAPI_DIR \
 	-pdt=$PDTOOLKIT_DIR \
 	-scalasca=$SCALASCA_DIR \
+	-scorep=$SCOREP_DIR \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
 	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L%{install_path}/lib" 
@@ -189,7 +190,7 @@ make exports TOPDIR=$TOPDIR
 pushd src/Profile
 make clean
 make TOPDIR=$TOPDIR
-cp -f Profile/libTAU* %buildroot%{install_path}/lib/
+cp /home/abuild/rpmbuild/BUILD/tau-2.26/src/Profile/libTAU* %buildroot%{install_path}/lib/
 popd
 
 cp -r include %buildroot%{install_path}
