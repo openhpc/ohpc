@@ -206,6 +206,7 @@ sed -i 's|/tmp||g' %buildroot%{install_path}/lib/Makefile*
 #popd
 
 sed -i 's|/tmp||g' $(egrep -R '%buildroot' ./ |\
+egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
 sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
 egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
 
