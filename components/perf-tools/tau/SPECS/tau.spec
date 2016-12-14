@@ -189,7 +189,7 @@ make exports TOPDIR=$TOPDIR
 pushd src/Profile
 make clean
 make TOPDIR=$TOPDIR
-cp -f src/Profile/libTAU* %buildroot%%{install_path}/lib/
+cp -f Profile/libTAU* %buildroot%{install_path}/lib/
 popd
 
 cp -r include %buildroot%{install_path}
