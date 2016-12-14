@@ -190,13 +190,6 @@ sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
 sed -i 's|/tmp||g' %buildroot%{install_path}/lib/Makefile*
 
-#rm -rf %{install_path}/examples
-#rm -rf %buildroot%{install_path}/examples
-#rm -f %{install_path}/.last_config
-#rm -f %{install_path}/.all_configs
-#rm -f %{install_path}/.active_stub*
-
-
 # clean libs
 #pushd %buildroot%{install_path}/lib
 #sed -i 's|/tmp||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
