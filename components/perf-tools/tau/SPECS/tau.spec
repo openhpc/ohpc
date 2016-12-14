@@ -200,11 +200,12 @@ sed -i 's|/tmp||g' %buildroot%{install_path}/lib/Makefile*
 
 
 # clean libs
-pushd %buildroot%{install_path}/lib
-sed -i 's|/tmp||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-rm -f libjogl*
-popd
+#pushd %buildroot%{install_path}/lib
+#sed -i 's|/tmp||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+#rm -f libjogl*
+#popd
 
+sed -i 's|/tmp||g' $(egrep -R '%buildroot' ./ |\
 sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
 egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
 
