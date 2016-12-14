@@ -150,7 +150,7 @@ export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
 export BUILDROOT=%buildroot
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 ./configure \
-    -prefix=%{install_path} \
+    -prefix=/tmp/%{install_path} \
     -exec-prefix= \
 	-c++=mpicxx \
 	-cc=mpicc \
@@ -169,50 +169,28 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-scalasca=$SCALASCA_DIR \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L%{install_path}/lib" 
-#	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
-#    -prefix=/tmp/%{install_path} \
+	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp/%{install_path}/lib" 
 
 export BUILDROOTLIB=%buildroot%{install_path}/lib
 export BUILDROOT=%buildroot
-%ifarch x86_64
-export LIBSUFF=64
-%endif
+
+make install
+make exports
+
+rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
-sed -i 's|^\(TAU_PREFIX_INSTALL_DIR\).*|\1=%buildroot%{install_path}|' \
-include/Makefile utils/include/Makefile
-TOPDIR=$PWD
-
-make install TOPDIR=$TOPDIR
-make exports TOPDIR=$TOPDIR
-
-pushd src/Profile
-make clean
-make TOPDIR=$TOPDIR
-cp /home/abuild/rpmbuild/BUILD/tau-2.26/src/Profile/libTAU* %buildroot%{install_path}/lib/
+pushd /tmp
+export tmp_path=%{install_path}
+mv ${tmp_path#*/} %buildroot%{install_path}/..
+popd
+pushd %{buildroot}%{install_path}/bin
+sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+rm -f tau_java
 popd
 
-cp -r include %buildroot%{install_path}
-cp -r man %buildroot%{install_path}
-#install -d %buildroot%{install_path}/lib
-#install -d %buildroot%{install_path}/bin
-
-#rm -rf %buildroot
-#mkdir -p %buildroot%{install_path}
-#pushd /tmp
-#export tmp_path=%{install_path}
-#mv ${tmp_path#*/} %buildroot%{install_path}/..
-#popd
-#pushd %{buildroot}%{install_path}/bin
-#sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-#rm -f tau_java
-#popd
-
-#sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
-#sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
-sed -i 's|%buildroot||g' %buildroot%{install_path}/include/*.h
-sed -i 's|%buildroot||g' %buildroot%{install_path}/include/Makefile*
-sed -i 's|%buildroot||g' %buildroot%{install_path}/lib/Makefile*
+sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
+sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
+sed -i 's|/tmp||g' %buildroot%{install_path}/lib/Makefile*
 
 #rm -rf %{install_path}/examples
 #rm -rf %buildroot%{install_path}/examples
@@ -222,10 +200,10 @@ sed -i 's|%buildroot||g' %buildroot%{install_path}/lib/Makefile*
 
 
 # clean libs
-#pushd %buildroot%{install_path}/lib
-#sed -i 's|/tmp||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-#rm -f libjogl*
-#popd
+pushd %buildroot%{install_path}/lib
+sed -i 's|/tmp||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+rm -f libjogl*
+popd
 
 sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
 egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
