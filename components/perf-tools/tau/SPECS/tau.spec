@@ -149,6 +149,7 @@ export MPI_LIB_DIR=$MPI_DIR/lib
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
 export BUILDROOT=%buildroot
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
+./utils/FixMakefile FORCESHARED
 ./configure \
     -prefix=/tmp/%{install_path} \
     -exec-prefix= \
