@@ -187,6 +187,7 @@ make install TOPDIR=$TOPDIR
 make exports TOPDIR=$TOPDIR
 
 cp -r include %buildroot%{install_path}
+cp -r man %buildroot%{install_path}
 #install -d %buildroot%{install_path}/lib
 #install -d %buildroot%{install_path}/bin
 
