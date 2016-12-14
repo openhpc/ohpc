@@ -175,6 +175,7 @@ export BUILDROOTLIB=%buildroot%{install_path}/lib
 export BUILDROOT=%buildroot
 
 ./utils/FixMakefile FORCESHARED
+./utils/FixMakefile.sed
 make install
 make exports
 
