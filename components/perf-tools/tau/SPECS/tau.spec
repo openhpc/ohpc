@@ -78,6 +78,7 @@ Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
+Patch1:    tau-2.26.forceshared.patch
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -115,6 +116,7 @@ automatic instrumentation tool.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
@@ -174,8 +176,6 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 export BUILDROOTLIB=%buildroot%{install_path}/lib
 export BUILDROOT=%buildroot
 
-./utils/FixMakefile FORCESHARED
-sed -f ./utils/FixMakefile.sed
 make install
 make exports
 
