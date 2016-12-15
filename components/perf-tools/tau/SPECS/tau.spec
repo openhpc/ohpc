@@ -173,26 +173,21 @@ export TAUROOT=`pwd`
 make install
 make exports
 
+# move from tmp install dir to %install_path
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
 pushd /tmp
 export tmp_path=%{install_path}
 mv ${tmp_path#*/} %buildroot%{install_path}/..
 popd
+
+# clean up
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 popd
-
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
 sed -i 's|/tmp||g' %buildroot%{install_path}/lib/Makefile*
-
-# clean libs
-#pushd %buildroot%{install_path}/lib
-#sed -i 's|/tmp||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-#rm -f libjogl*
-#popd
-
 sed -i 's|/tmp||g' $(egrep -R '%buildroot' ./ |\
 egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
 sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
