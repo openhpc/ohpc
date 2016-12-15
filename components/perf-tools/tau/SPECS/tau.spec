@@ -197,7 +197,7 @@ sed -i 's|/tmp||g' $(egrep -R '%buildroot' ./ |\
 egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
 sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
 egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
-sed -i 's|${TAUROOT}|%{install_path}|g' $(egrep -IR "$TAUROOT" ./|awk -F : '{print $1}')
+sed -i "s|$TAUROOT|%{install_path}|g" $(egrep -IR "$TAUROOT" ./|awk -F : '{print $1}')
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
