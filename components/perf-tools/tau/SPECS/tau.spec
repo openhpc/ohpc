@@ -148,8 +148,9 @@ export MPI_LIB_DIR=$MPI_DIR/lib
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
 export BUILDROOT=%buildroot
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
+sed -i 's|tauprefix=unknown|tauprefix=/tmp%{install_path}|g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
 ./configure \
-    -tauprefix=%{install_path} \
+    -prefix=/tmp%{install_path} \
     -exec-prefix= \
 	-c++=mpicxx \
 	-cc=mpicc \
