@@ -194,6 +194,9 @@ sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
 egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
 sed -i "s|$TAUROOT|%{install_path}|g" $(egrep -IR "$TAUROOT" %buildroot%{install_path}|awk -F : '{print $1}')
 
+# fix tau lib arch location
+sed -i "s|/x86_64/lib|/lib|g" $(egrep -IR "/x86_64/lib" %buildroot%{install_path}|awk -F : '{print $1}')
+
 # replace hard MPI paths with env var
 sed -i "s|$MPI_DIR|\$\{MPI_DIR\}|g" $(egrep -IR "$MPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
 
