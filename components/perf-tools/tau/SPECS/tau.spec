@@ -181,6 +181,12 @@ export tmp_path=%{install_path}
 mv ${tmp_path#*/} %buildroot%{install_path}/..
 popd
 
+%if %{compiler_family} == gnu
+pushd %{buildroot}%{install_path}/lib
+ln -s libTAU.so libTAU-gomp.so
+popd
+%endif
+
 # clean up
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
