@@ -168,7 +168,7 @@ export TAUROOT=`pwd`
 	-pdt=$PDTOOLKIT_DIR \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp/%{install_path}/lib" 
+	-extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp/%{install_path}/lib" 
 
 make install
 make exports
@@ -180,12 +180,6 @@ pushd /tmp
 export tmp_path=%{install_path}
 mv ${tmp_path#*/} %buildroot%{install_path}/..
 popd
-
-%if %{compiler_family} == gnu
-pushd %{buildroot}%{install_path}/lib
-ln -s libTAU.so libTAU-gomp.so
-popd
-%endif
 
 # clean up
 pushd %{buildroot}%{install_path}/bin
