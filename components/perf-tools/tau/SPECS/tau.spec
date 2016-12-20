@@ -231,6 +231,7 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
+setenv          %{PNAME}_OPTIONS    "-optRevert -optShared -optNoTrackGOMP"
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded papi]  } {
