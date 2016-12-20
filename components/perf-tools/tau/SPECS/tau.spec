@@ -189,7 +189,7 @@ popd
 
 # clean up
 pushd %{buildroot}%{install_path}/bin
-sed -i 's|/tmp||g' $(egrep -IR '/tmp' ./|awk -F : '{print $1}')
+sed -i 's|/tmp/opt|/opt|g' $(egrep -IR '/tmp/opt' ./|awk -F : '{print $1}')
 popd
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
