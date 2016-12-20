@@ -28,12 +28,21 @@ else
    AC_MSG_RESULT([yes])
 fi
 
+AC_MSG_CHECKING([for TAU_MAKEFILE environment variable])
+if test "x$TAU_MAKEFILE" = "x"; then
+   AC_MSG_RESULT([no])
+   echo
+   AC_ERROR([TAU_MAKEFILE not defined - please load tau environment.])
+else
+   AC_MSG_RESULT([yes])
+fi
+
 # set compilers to use MPI toolchain 
 
 OHPC_COMPILER_FAMILY
 
-CC=mpicc
-CXX=mpicxx
+CC=tau_cc.sh
+CXX=tau_cxx.sh
 FC=mpif90
 F77=mpif90
 

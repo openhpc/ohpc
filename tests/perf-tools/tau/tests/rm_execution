@@ -20,7 +20,7 @@ ARGS=8
 	flunk "C_mpi_test binary does not exit"
     fi
 
-    run_mpi_binary ./C_mpi_test $ARGS $NODES $TASKS
+    run_mpi_binary "tau_exec ./C_mpi_test" $ARGS $NODES $TASKS
     assert_success
 }
 
@@ -38,7 +38,7 @@ ARGS=8
 	flunk "C_omp_test binary does not exit"
     fi
 
-    run_serial_binary ./C_omp_test
+    run_serial_binary "tau_exec ./C_omp_test"
     assert_success
 }
 
@@ -47,6 +47,6 @@ ARGS=8
 	flunk "F_test binary does not exit"
     fi
 
-    run_serial_binary ./F_test
+    run_serial_binary "tau_exec ./F_test"
     assert_success
 }
