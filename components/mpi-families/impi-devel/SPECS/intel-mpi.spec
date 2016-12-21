@@ -137,6 +137,9 @@ EOF
 # etc to access Intel toolchain.
  
 prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
+
+# set compatibility MPI_DIR
+setenv          MPI_DIR         ${I_MPI_ROOT}/intel64
 EOF
 
 	    # Version file
