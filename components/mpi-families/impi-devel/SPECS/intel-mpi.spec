@@ -139,7 +139,7 @@ EOF
 prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 
 # set compatibility MPI_DIR
-setenv          MPI_DIR         ${I_MPI_ROOT}/intel64
+setenv          MPI_DIR         \$I_MPI_ROOT/intel64
 EOF
 
 	    # Version file
@@ -181,6 +181,11 @@ EOF
 
 	    # Append with environment vars parsed directlry from mpivars.sh
 	    ${scanner} ${topDir}/${dir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/gnu/impi/${version} || exit 1
+
+	    %{__cat} << EOF >> %{OHPC_MODULEDEPS}/gnu/impi/${version}
+# set compatibility MPI_DIR
+setenv          MPI_DIR         \$I_MPI_ROOT/intel64
+EOF
 
 	    # Version file
 	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/gnu/impi/.version.${version}
