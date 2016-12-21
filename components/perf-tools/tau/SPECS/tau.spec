@@ -207,7 +207,11 @@ sed -i "s|$PDTOOLKIT_DIR|\$\{PDTOOLKIT_DIR\}|g" $(egrep -IR "$PDTOOLKIT_DIR" %bu
 
 # link other bindings
 pushd %{buildroot}%{install_path}/lib
+%if %{compiler_family} == intel
+ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
+%else
 ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi
+%endif
 popd
 
 # OpenHPC module file
