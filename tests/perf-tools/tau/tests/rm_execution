@@ -17,36 +17,58 @@ ARGS=8
 
 @test "[libs/TAU] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_mpi_test ];then
-	flunk "C_mpi_test binary does not exit"
+    flunk "C_mpi_test binary does not exit"
     fi
 
     run_mpi_binary "tau_exec ./C_mpi_test" $ARGS $NODES $TASKS
     assert_success
+
+    ls MULTI__GET_TIME_OF_DAY/profile.7.0.0
+    assert_success
+
+    rm -rf MULTI__*
 }
 
 @test "[libs/TAU] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s CXX_mpi_test ];then
-	flunk "CXX_mpi_test binary does not exit"
+    flunk "CXX_mpi_test binary does not exit"
     fi
 
     run_mpi_binary ./run_CXX_mpi_test.sh $ARGS $NODES $TASKS
     assert_success
+
+    ls MULTI__PAPI_LD_INS/profile.7.0.0
+    assert_success
+
+    rm -rf MULTI__*
 }
 
 @test "[libs/TAU] Serial C OpenMP binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_omp_test ];then
-	flunk "C_omp_test binary does not exit"
+    flunk "C_omp_test binary does not exit"
     fi
 
     run_serial_binary "tau_exec ./C_omp_test"
     assert_success
+
+    ls MULTI__PAPI_L1_DCM/profile.0.0.87
+    assert_success
+
+    rm -rf MULTI__*
 }
 
 @test "[libs/TAU] Serial FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    export TAU_TRACE=1 TAU_PROFILE=0
     if [ ! -s F_test ];then
-	flunk "F_test binary does not exit"
+    flunk "F_test binary does not exit"
     fi
 
     run_serial_binary "tau_exec ./F_test"
     assert_success
+
+    ls tautrace.0.0.0.trc
+    assert_success
+
+    rm -f events.0.edf
+    rm -f tautrace.0.0.0.trc
 }
