@@ -137,9 +137,8 @@ export fcomp=mpiifort
 %endif
 
 %if %{mpi_family} == impi
-export MPI_DIR=$I_MPI_ROOT
-export MPI_INCLUDE_DIR=$MPI_DIR/include64
-export MPI_LIB_DIR=$MPI_DIR/lib64
+export MPI_INCLUDE_DIR=$I_MPI_ROOT/include64
+export MPI_LIB_DIR=$I_MPI_ROOT/lib64
 %else
 export MPI_INCLUDE_DIR=$MPI_DIR/include
 export MPI_LIB_DIR=$MPI_DIR/lib
@@ -198,7 +197,7 @@ sed -i "s|$TAUROOT|%{install_path}|g" $(egrep -IR "$TAUROOT" %buildroot%{install
 sed -i "s|/x86_64/lib|/lib|g" $(egrep -IR "/x86_64/lib" %buildroot%{install_path}|awk -F : '{print $1}')
 
 # replace hard paths with env vars
-%if %{compiler_family} == intel
+%if %{mpi_family} == impi
 sed -i "s|$I_MPI_ROOT|\$\{I_MPI_ROOT\}|g" $(egrep -IR "$I_MPI_ROOT" %buildroot%{install_path}|awk -F : '{print $1}')
 %else
 sed -i "s|$MPI_DIR|\$\{MPI_DIR\}|g" $(egrep -IR "$MPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
