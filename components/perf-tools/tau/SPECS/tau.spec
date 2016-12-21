@@ -198,7 +198,11 @@ sed -i "s|$TAUROOT|%{install_path}|g" $(egrep -IR "$TAUROOT" %buildroot%{install
 sed -i "s|/x86_64/lib|/lib|g" $(egrep -IR "/x86_64/lib" %buildroot%{install_path}|awk -F : '{print $1}')
 
 # replace hard paths with env vars
+%if %{compiler_family} == intel
+sed -i "s|$I_MPI_ROOT|\$\{I_MPI_ROOT\}|g" $(egrep -IR "$I_MPI_ROOT" %buildroot%{install_path}|awk -F : '{print $1}')
+%else
 sed -i "s|$MPI_DIR|\$\{MPI_DIR\}|g" $(egrep -IR "$MPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
+%endif
 sed -i "s|$PAPI_DIR|\$\{PAPI_DIR\}|g" $(egrep -IR "$PAPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
 sed -i "s|$PDTOOLKIT_DIR|\$\{PDTOOLKIT_DIR\}|g" $(egrep -IR "$PDTOOLKIT_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
 
