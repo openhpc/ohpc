@@ -184,6 +184,9 @@ popd
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|/tmp/opt|/opt|g' $(egrep -IR '/tmp/opt' ./|awk -F : '{print $1}')
 popd
+pushd %{buildroot}%{install_path}/lib
+rm -f libjogl*
+popd
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
 sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
 sed -i 's|/tmp||g' %buildroot%{install_path}/lib/Makefile*
