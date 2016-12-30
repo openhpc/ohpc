@@ -52,7 +52,7 @@ unset OMP_NUM_THREADS
     flunk "C_omp_test binary does not exit"
     fi
 
-    run_serial_binary "tau_exec ./C_omp_test"
+    run_serial_binary ./run_C_omp_test.sh
     assert_success
 
     ls MULTI__PAPI_L1_DCM/profile.0.0.87
