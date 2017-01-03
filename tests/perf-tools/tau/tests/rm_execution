@@ -17,6 +17,8 @@ ARGS=8
 
 export TAU_TRACE=0 TAU_CALLPATH=0 TAU_PROFILE=1 TAU_METRICS=GET_TIME_OF_DAY:PAPI_L1_DCM:PAPI_LD_INS
 unset OMP_NUM_THREADS
+export TAU_TEST_MAX_THREADS=`./get_max_threads`
+export TAU_TEST_LAST_THREAD_INDEX=`echo "$TAU_TEST_MAX_THREADS -1" | bc`
 
 
 @test "[libs/TAU] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -55,7 +57,7 @@ unset OMP_NUM_THREADS
     run_serial_binary ./run_C_omp_test.sh
     assert_success
 
-    ls MULTI__PAPI_L1_DCM/profile.0.0.87
+    ls MULTI__PAPI_L1_DCM/profile.0.0.$TAU_TEST_LAST_THREAD_INDEX
     assert_success
 
     rm -rf MULTI__*
