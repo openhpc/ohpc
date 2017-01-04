@@ -14,11 +14,12 @@ rm=$RESOURCE_MANAGER
 NODES=2
 TASKS=8
 ARGS=8
+MAX_THREADS=`./get_max_threads`
+LAST_THREAD_INDEX=`echo "$TAU_TEST_MAX_THREADS -1" | bc`
+LAST_TASK_INDEX=`echo "$TASKS -1" | bc`
 
 export TAU_TRACE=0 TAU_CALLPATH=0 TAU_PROFILE=1 TAU_METRICS=GET_TIME_OF_DAY:PAPI_L1_DCM:PAPI_LD_INS
 unset OMP_NUM_THREADS
-export TAU_TEST_MAX_THREADS=`./get_max_threads`
-export TAU_TEST_LAST_THREAD_INDEX=`echo "$TAU_TEST_MAX_THREADS -1" | bc`
 
 
 @test "[libs/TAU] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -29,7 +30,7 @@ export TAU_TEST_LAST_THREAD_INDEX=`echo "$TAU_TEST_MAX_THREADS -1" | bc`
     run_mpi_binary "tau_exec ./C_mpi_test" $ARGS $NODES $TASKS
     assert_success
 
-    ls MULTI__GET_TIME_OF_DAY/profile.7.0.0
+    ls MULTI__GET_TIME_OF_DAY/profile.$LAST_TASK_INDEX.0.0
     assert_success
 
     rm -rf MULTI__*
@@ -43,7 +44,7 @@ export TAU_TEST_LAST_THREAD_INDEX=`echo "$TAU_TEST_MAX_THREADS -1" | bc`
     run_mpi_binary ./run_CXX_mpi_test.sh $ARGS $NODES $TASKS
     assert_success
 
-    ls MULTI__PAPI_LD_INS/profile.7.0.0
+    ls MULTI__PAPI_LD_INS/profile.$LAST_TASK_INDEX.0.0
     assert_success
 
     rm -rf MULTI__*
@@ -57,7 +58,7 @@ export TAU_TEST_LAST_THREAD_INDEX=`echo "$TAU_TEST_MAX_THREADS -1" | bc`
     run_serial_binary ./run_C_omp_test.sh
     assert_success
 
-    ls MULTI__PAPI_L1_DCM/profile.0.0.$TAU_TEST_LAST_THREAD_INDEX
+    ls MULTI__PAPI_L1_DCM/profile.0.0.$LAST_THREAD_INDEX
     assert_success
 
     rm -rf MULTI__*
