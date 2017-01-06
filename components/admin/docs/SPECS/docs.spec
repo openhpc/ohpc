@@ -36,7 +36,6 @@ BuildRequires:  texlive-trimspaces
 BuildRequires:  texlive-amsmath
 BuildRequires:  latexmk
 BuildRequires:  git
-Requires:       make
 
 %if 0%{?rhel_version} || 0%{?centos_version}
 Requires:       net-tools
