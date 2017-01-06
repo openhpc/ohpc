@@ -1,19 +1,22 @@
-In an external setting, installing the desired BOS on a {\em master} SMS host
-typically involves booting from a DVD ISO image on a new server. With this
-approach, insert the \baseOS{} DVD, power cycle the host, and follow the distro
-provided directions to install the BOS on your chosen {\em master} host.
-Alternatively, if choosing to use a pre-installed server, please verify that it
-is provisioned with the required \baseOS{} distribution. \\
+In an external setting, installing the desired BOS on a
+{\em master} SMS host typically involves booting from a DVD ISO image on a new
+server. With this approach, insert the \baseOS{} DVD, power cycle the host, and
+follow the distro provided directions to install the BOS on your chosen {\em
+master} host.  Alternatively, if choosing to use a pre-installed server, please
+verify that it is provisioned with the required \baseOS{} distribution. \\
 
-The remaining installation recipe assumes that your SMS host name is
-resolvable locally. Depending on the manner in which you installed the OS,
-there may be an adequate entry already defined in \path{/etc/hosts}. If not,
-the following addition can be used to identify your SMS host.
+Prior to beginning the installation process of \OHPC{} components, several additional
+considerations are noted here for the local host configuration. First, 
+the remaining installation recipe instructions herein assume that
+your SMS host name is resolvable locally. Depending on the manner in which you
+installed the BOS, there may be an adequate entry already defined
+in \path{/etc/hosts}. If not, the following addition can be used to identify
+your SMS host.
 \begin{lstlisting}[language=bash]
 [sms](*\#*) echo ${sms_ip} ${sms_name} >> /etc/hosts
 \end{lstlisting}
 
-While it is theoretically possible to provision a Warewulf cluster with SELinux
+Next, while it is theoretically possible to provision a Warewulf cluster with SELinux
 enabled, doing so is beyond the scope of this document. Even the use of
 permissive mode can be problematic and we therefore recommend disabling SELinux on the {\em
 master} SMS host. If SELinux components are installed locally,
@@ -21,8 +24,8 @@ the \texttt{selinuxenabled} command can be used to determine if SELinux is
 currently enabled. If enabled, consult the distro documentation for information
 on how to disable. \\
 
-Provisioning services with Warewulf rely on DHCP, TFTP, and HTTP network protocols.
-Depending on the local Base OS configuration on the SMS host, default firewall
+Finally, provisioning services rely on DHCP, TFTP, and HTTP network protocols.
+Depending on the local BOS configuration on the SMS host, default firewall
 rules may prohibit these services. Consequently, this recipe assumes that the local
 firewall running on the SMS host is disabled. If installed, the default
 firewall service can be disabled as follows:
