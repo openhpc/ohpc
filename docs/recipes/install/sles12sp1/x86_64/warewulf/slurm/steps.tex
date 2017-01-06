@@ -53,6 +53,14 @@
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
+% begin_ohpc_run
+% ohpc_validation_comment Disable firewall 
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) systemctl disable SuSEfirewall2
+[sms](*\#*) systemctl stop SuSEfirewall2
+\end{lstlisting}
+% end_ohpc_run
+
 % ------------------------------------------------------------------
 
 \section{Install \OHPC{} Components} \label{sec:basic_install}
@@ -65,15 +73,6 @@
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{common/install_provisioning_intro}
-\input{common/firewall}
-
-% begin_ohpc_run
-% ohpc_validation_comment Disable firewall 
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) systemctl disable SuSEfirewall2
-[sms](*\#*) systemctl stop SuSEfirewall2
-\end{lstlisting}
-% end_ohpc_run
 
 \input{common/enable_pxe}
 
