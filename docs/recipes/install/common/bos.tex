@@ -14,7 +14,15 @@ permissive mode can be problematic and we therefore recommend disabling SELinux 
 master} SMS host. If SELinux components are installed locally,
 the \texttt{selinuxenabled} command can be used to determine if SELinux is
 currently enabled. If enabled, consult the distro documentation for information
-on how to disable.
+on how to disable. \\
 
+\small The remaining installation recipe assumes that your SMS host name is
+resolvable locally. Depending on the manner in which you installed the OS,
+there may be an adequate entry already defined in \path{/etc/hosts}. If not,
+the following addition can be used to identify your SMS host.
+\begin{lstlisting}[language=bash]
+[sms](*\#*) echo ${sms_ip} ${sms_name} >> /etc/hosts
+\end{lstlisting}
 \end{tcolorbox}
 \end{center}
+
