@@ -1,3 +1,28 @@
+Version 1.2.1 (09 January 2017)
+
+[General]
+  * 1.2.1 is the first micro update release against 1.2
+  * updated SLURM packaging to include creation of slurm user (https://github.com/openhpc/ohpc/issues/337)
+  * introduce $compute_prefix variable for use in template recipes (https://github.com/openhpc/ohpc/issues/239)
+  * update nagios package installation for compute image (https://github.com/openhpc/ohpc/issues/248)
+  * removal of hard-coded paths in Makefiles installed with TAU (https://github.com/openhpc/ohpc/issues/355)
+  * document need for resolvable SMS hostname (https://github.com/openhpc/ohpc/pull/250)
+  * updated modulefile compatibility packaging for Intel Parallel Studio toolchain
+    - support "2017 Update 1" version string (https://github.com/openhpc/ohpc/pull/342)
+    - support installation target that is a soft link (https://github.com/openhpc/ohpc/issues/347)
+
+[Component Version Changes]
+  * docs-ohpc                                (v1.2 -> v1.2.1)
+  * tau-gnu-impi-ohpc                        (v2.25.2 -> v2.26)
+  * tau-gnu-mpich-ohpc                       (v2.25.2 -> v2.26)
+  * tau-gnu-mvapich2-ohpc                    (v2.25.2 -> v2.26)
+  * tau-gnu-openmpi-ohpc                     (v2.25.2 -> v2.26)
+  * tau-intel-impi-ohpc                      (v2.25.2 -> v2.26)
+  * tau-intel-mpich-ohpc                     (v2.25.2 -> v2.26)
+  * tau-intel-mvapich2-ohpc                  (v2.25.2 -> v2.26)
+  * tau-intel-openmpi-ohpc                   (v2.25.2 -> v2.26)  
+
+----------------------------------------------------------------------------------------------------------------------
 Version 1.2 (12 November 2016)
 
 [General]
