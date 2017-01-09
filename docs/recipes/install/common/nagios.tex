@@ -15,7 +15,7 @@ provisioned {\em compute} nodes.
 [sms](*\#*) (*\groupinstall*) ohpc-nagios
 
 # Also install in compute node image
-[sms](*\#*) (*\groupchrootinstall*) ohpc-nagios
+[sms](*\#*) (*\chrootinstall*) nagios-plugins-all-ohpc nrpe-ohpc
 
 # Enable and configure NRPE in compute image
 [sms](*\#*) chroot $CHROOT systemctl enable nrpe
