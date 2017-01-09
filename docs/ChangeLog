@@ -7,6 +7,7 @@ Version 1.2.1 (09 January 2017)
   * update nagios package installation for compute image (https://github.com/openhpc/ohpc/issues/248)
   * removal of hard-coded paths in Makefiles installed with TAU (https://github.com/openhpc/ohpc/issues/355)
   * document need for resolvable SMS hostname (https://github.com/openhpc/ohpc/pull/250)
+  * updated Requires stanza for mpiP packaging (https://github.com/openhpc/ohpc/issues/344)
   * updated modulefile compatibility packaging for Intel Parallel Studio toolchain
     - support "2017 Update 1" version string (https://github.com/openhpc/ohpc/pull/342)
     - support installation target that is a soft link (https://github.com/openhpc/ohpc/issues/347)
