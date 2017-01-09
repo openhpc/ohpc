@@ -14,5 +14,7 @@ with a copy of the configuration as follows:
 % ohpc_comment_header Add OpenHPC components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [sms](*\#*) cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
+[sms](*\#*) echo "search ${sms_name}" >> $CHROOT/etc/resolv.conf
+[sms](*\#*) echo "nameserver ${sms_ip}" >> $CHROOT/etc/resolv.conf
 \end{lstlisting}
 % end_ohpc_run
