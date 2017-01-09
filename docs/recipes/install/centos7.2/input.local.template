@@ -58,7 +58,7 @@ enable_intel_packages="${enable_intel_packages:-0}"
 # total number of computes
 num_computes="${num_computes:-4}"
 
-# regex that matches defined compute hostnames
+# regex and starting prefix that matches defined compute hostnames
 compute_regex="${compute_regex:-c*}"
 compute_prefix="${compute_prefix:-c}"
 
