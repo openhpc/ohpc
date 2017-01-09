@@ -31,8 +31,14 @@ my $urlColor="logoblue";
 my $REMOVE_HTTP=0;
 my $FIXD_WIDTH=1;
 
+
+# Settings for aarch64
 my $numCompiler_permute = 1;
 my $numMPI_permute = 3;
+
+# Settings for x86_64
+my $numCompiler_permute = 2;
+my $numMPI_permute = 8;
 
 foreach my $category (@ohpcCategories) {
     print "Building latex table for packages in the $category category...\n";
