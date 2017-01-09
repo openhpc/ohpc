@@ -149,16 +149,21 @@ setenv        MKLROOT     ${topDir}/${dir}/linux/mkl
 prepend-path    LD_LIBRARY_PATH     ${topDir}/${dir}/linux/mkl/lib/intel64
 
 EOF
+        # Inventory for later removal
+        echo "%{OHPC_MODULES}/intel/${version}" >> %{OHPC_MODULES}/intel/.manifest
+        echo "%{OHPC_MODULES}/intel/.version.${version}" >> %{OHPC_MODULES}/intel/.manifest
+        echo "%{OHPC_MODULEDEPS}/gnu/mkl/${version}" >> %{OHPC_MODULES}/intel/.manifest
 	fi
     done
 fi
 
 
 %postun
-if [ "$1" = 0 ]; then
-    find %{OHPC_MODULES}/intel -type f -exec rm {} \;
-    find %{OHPC_MODULEDEPS}/gnu/mkl -type f -exec rm {} \;
-fi
+for file in `cat %{OHPC_MODULES}/intel/.manifest`; do
+        rm $file
+    done
+rm -f %{OHPC_MODULES}/intel/.manifest
+
 
 
 %clean

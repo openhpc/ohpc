@@ -1,0 +1,33 @@
+This BoF aims to bring together contributors, system administrators,
+architects, and developers using or interested in the OpenHPC community project
+(http://openhpc.community). Today, many sites spend considerable effort
+aggregating a large suite of open-source projects on top of their chosen base
+Linux distribution in order to provide a capable HPC environment for their
+users. They also frequently leverage a mix of external and in-house tools to
+perform provisioning, configuration management, software upgrades, and system
+diagnostics. Although the functionality is similar, the implementations across
+sites are often different which leads to duplication of effort.  To help
+address this duplication, OpenHPC was formed with the motivation to more
+efficiently build, test, deliver and configure integrated HPC software
+components and tools.
+
+Launched initially in November 2015, and formalized as a collaborative Linux
+Foundation project in June 2016, OpenHPC is currently comprised of over 25
+members from academia, research labs, and industry. To date, the OpenHPC
+software stack aggregates over 60 components ranging from administrative tools
+like bare-metal provisioning and resource management to end-user development
+libraries that span a range of scientific/numerical uses. OpenHPC adopts a
+familiar package repository delivery model and the BoF will begin with
+technical presentations from members of the newly formed OpenHPC Technical
+Steering Committee highlighting current status, major tenets of the effort, and
+near-term roadmaps. Open discussion will follow after the presentations and
+this BoF will provide an opportunity for attendees to interact with members of
+the OpenHPC Technical Steering Committee and other OpenHPC members to provide
+feedback on current conventions, ongoing packaging efforts, request additional
+desired components and configurations, and discuss general future trends.
+
+This BoF proposal is a follow-on to two previously successful OpenHPC-related
+BoFs at SC'15 and ISC'16. Both of these BoFs were well attended with the
+meeting spaces at or near capacity (estimate >150 attendees at SC'15 BoF and
+~70 attendees at ISC'16 BoF).
+

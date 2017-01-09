@@ -1,0 +1,86 @@
+\subsection{Related Work} \label{sec:related_work}
+
+As highlighted in the previous section, the installation, deployment and
+configuration of HPC clusters can be tedious work.  Consequently, a variety of
+open-source and proprietary cluster management tools have been created that
+provide different approaches to help address this problem.  In the open-source
+arena, two widely known solutions have been Rocks and OSCAR.  Rocks
+\cite{rocks2003,rocks_url} is an open-source Linux-based clustering solution
+that aims to reduce the complexity of building HPC clusters.  It provides a
+combined bundle of an underlying CentOS distribution with additional software
+components covering the different administrative needs of a cluster, 
+and offers a GUI to help administrators walk through
+different steps of the installation procedure.  All cluster services and tools
+are installed and configured during the initial installation of the front-end
+with no need to download and %manual
+configure other external
+packages. Furthermore, with the use of Rolls \cite{rolls2004}, the
+administrator can customize the base installation
+%of packages
+with additional
+optional software that integrates seamlessly
+%and automatically
+into the management and
+packaging mechanisms of the base software.
+%It makes use of Kickstart and RPM to manage the distribution of node file
+%system and provides component based configuration method to realize module
+%reuse.
+Rolls
+%appliances
+exist to deploy Rocks in alternative environments
+%large-scale environments different 
+%than HPC
+such as sensor networks \cite{rolls_sensors2012} and clouds \cite{rolls_cloud2011}.
+The most recent version of Rocks, version 6.2, was released in May 2015 and is
+based on CentOS~(v6.6).
+
+OSCAR \cite{oscar2001,oscar_url} (Open Source Cluster Application Resources) is
+a fully integrated and easy to install software bundle designed for high
+performance cluster computing.
+%The fundamental function of OSCAR is to build
+%and maintain clusters.
+OSCAR follows a different methodology than Rocks; once
+the front-end is installed and booted, the cluster building components are
+downloaded and installed through tools that try to simplify the complexity of
+the different administrative tasks.  There have been some variations of OSCAR
+based on the same framework to cover different types of cluster environments
+such as Thin-Oscar for diskless platforms, and HA-Oscar to support High
+Availability. OSCAR has previously been supported on multiple Linux distributions such as
+CentOS and Debian. However,
+%even if OSCAR and its variations are still being
+%used in production,
+the project is no longer actively maintained and the latest
+version 6.1.1 was released in 2011.
+%OSCAR also provides a GUI for installation and configuration purposes.  OSCAR
+%is based upon a virtual image of the target machine using System Installation
+%Suite (SIS). There is also an OSCAR database (ODA) that stores cluster
+%information, a parallel distributed “shell” tool set called C3 and an
+%environment management facility called Env-Switcher.
+
+A common issue that arises in the design of system management tool kits is the
+inevitable trade-off between ease-of-use and customization flexibility. Rocks
+has adopted a more turn-key approach which necessitates the need for some level
+of embedded configuration management and Rocks leverages a hierarchical XML
+schema. As will be discussed further in \S\ref{sec:repo_enable}, OpenHPC is
+providing an HPC focused software repository and adopts a more building-block
+approach. Consequently, it expects a certain level of expertise from the
+administrator, but is intended to offer a greater choice of software
+components, promote flexibility for use in a variety of system environments
+and scales, be compatible with multiple Linux distributions, and be
+interoperable with standalone configuration management systems.
+%It is currently focused only on HPC environments.
+Furthermore, as
+a community effort, OpenHPC is supported and maintained by a group of vendors,
+research centers and laboratories that share common goals of minimizing
+duplicated effort and sharing of best practices.
+
+Several end-user oriented projects also exist to mitigate the complexity of HPC
+and scientific software management including EasyBuild~\cite{easybuild2012} and
+Spack~\cite{spack2015}.  Both of these systems provide convenient methods for
+building and installing many common HPC software packages. With similar goals,
+OpenHPC differs in scope and process. We aim to provide a complete cluster
+software stack capable of provisioning and administering a system in addition
+to user-space development libraries. OpenHPC also seeks to leverage standard
+Linux tools and practices to install and maintain software. Both EasyBuild and
+Spack are currently packaged in the OpenHPC distribution to allow users to
+further extend and customize their environment.

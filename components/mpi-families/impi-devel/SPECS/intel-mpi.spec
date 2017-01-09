@@ -18,7 +18,7 @@ Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
 Version:   %{year}
 Source1:   OHPC_macros
-Release:   1
+Release:   15
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/mpi-families
@@ -58,13 +58,13 @@ echo " "
 echo "Scanning top-level dir = $topDir"
 
 if [ -d ${topDir} ];then
-    versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*.*" -printf "%f "` || exit 1
+    versions=`find -L ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*.*" -printf "%f "` || exit 1
 
     scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
     for dir in ${versions}; do
 	if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
-	    version=`grep "^MPIVERSION=" ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc | cut -d '"' -f2`
+	    version=`grep "^MPIVERSION=" ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc | cut -d '"' -f2 | sed 's| Update |\.|'`
 	    if [ -z "${version}" ];then
 		echo "Error: unable to determine MPI version"
 		exit 1
@@ -184,7 +184,11 @@ EOF
 #%Module1.0#####################################################################
 set     ModulesVersion      "${version}"
 EOF
-	    
+	  # Inventory for later removal
+      echo "%{OHPC_MODULEDEPS}/intel/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+      echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
+      echo "%{OHPC_MODULEDEPS}/gnu/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+      echo "%{OHPC_MODULEDEPS}/gnu/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
 	fi
     done
 fi
@@ -196,7 +200,7 @@ if [ "$1" = 0 ]; then
     topDir=`rpm -q --qf '%{FILENAMES}\n' intel-mpi-doc` || exit 1
 
     if [ -d ${topDir} ];then
-	versions=`find ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
+	versions=`find -L ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
 
 	for dir in ${versions}; do
 	    if [ -d ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc ];then
@@ -205,12 +209,10 @@ if [ "$1" = 0 ]; then
 	done
     fi
 
-    if [ -d %{OHPC_MODULEDEPS}/intel/impi ];then
-	find %{OHPC_MODULEDEPS}/intel/impi -type f -exec rm {} \;
-    fi
-    if [ -d %{OHPC_MODULEDEPS}/intel/gnu ];then
-	find %{OHPC_MODULEDEPS}/intel/gnu  -type f -exec rm {} \;
-    fi
+    for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
+        rm $file
+    done
+    rm -f %{OHPC_MODULEDEPS}/intel/impi/.manifest
 fi
 
 %clean
