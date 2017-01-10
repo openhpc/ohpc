@@ -37,15 +37,14 @@ else
    AC_MSG_RESULT([yes])
 fi
 
-# set compilers to use MPI toolchain 
+# set compilers to use Tau wrappers
 
 OHPC_COMPILER_FAMILY
 
 CC=tau_cc.sh
 CXX=tau_cxx.sh
-FC=mpif90
-F77=mpif90
-
+FC=tau_f90.sh
+F77=tau_f77.sh
 
 
 # test compilers

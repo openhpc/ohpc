@@ -6,25 +6,25 @@ cc-----------------------------------------------------------------------------
 
       subroutine HELLOWORLD(iVal)
         integer iVal
-        integer profiler(2) / 0, 0 /
-        save    profiler
+        integer profile(2) / 0, 0 /
+        save    profile
 
-        call TAU_PROFILE_TIMER(profiler,'HelloWorld()')
-        call TAU_PROFILE_START(profiler)
+        call TAU_PROFILE_TIMER(profile,'HelloWorld()')
+        call TAU_PROFILE_START(profile)
 cc Do something here...
  	print *, "Iteration = ", iVal
-        call TAU_PROFILE_STOP(profiler)
+        call TAU_PROFILE_STOP(profile)
 cc       HelloWorld = iVal
       end
 
       program main
         integer i
-        integer profiler(2) / 0, 0 /
-        save    profiler
+        integer profile(2) / 0, 0 /
+        save    profile
 
         call TAU_PROFILE_INIT()
-        call TAU_PROFILE_TIMER(profiler, 'main()')
-        call TAU_PROFILE_START(profiler)
+        call TAU_PROFILE_TIMER(profile, 'main()')
+        call TAU_PROFILE_START(profile)
         call TAU_PROFILE_SET_NODE(0)
 
       print *, "test program"
@@ -32,6 +32,6 @@ cc       HelloWorld = iVal
         do 10, i = 1, 10
         call HELLOWORLD(i)
 10      continue
-        call TAU_PROFILE_STOP(profiler)
+        call TAU_PROFILE_STOP(profile)
       end
 
