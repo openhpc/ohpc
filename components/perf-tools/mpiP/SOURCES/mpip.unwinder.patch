@@ -1,0 +1,29 @@
+diff -ruN mpiP-3.4.1.old/Defs.mak.in mpiP-3.4.1/Defs.mak.in
+--- mpiP-3.4.1.old/Defs.mak.in	2014-03-13 19:46:07.000000000 +0000
++++ mpiP-3.4.1/Defs.mak.in	2017-01-10 07:51:53.771837043 +0000
+@@ -63,6 +63,9 @@
+ endif
+ 
+ ifeq ($(OS),Linux)
++  ifeq ($(ARCH), aarch64)
++    CPPFLAGS += -DAARCH64
++  endif
+   ifeq ($(ARCH),i686)
+     CPPFLAGS += -DIA32
+   endif
+diff -ruN mpiP-3.4.1.old/mpiPi.h.in mpiP-3.4.1/mpiPi.h.in
+--- mpiP-3.4.1.old/mpiPi.h.in	2014-03-13 19:46:07.000000000 +0000
++++ mpiP-3.4.1/mpiPi.h.in	2017-01-10 07:52:48.783447707 +0000
+@@ -276,6 +276,12 @@
+ #define FramePC(fp) ((void *) *(long *) (((long) fp) + (2 * sizeof (void *))))
+ #define NextFP(fp) ((void *) *(long *) fp)
+ 
++/*  AArch64 Linux  */
++#elif defined(Linux) && defined(AARCH64)
++#define ParentFP(jb) ((void*) jb[0].__jmpbuf[10])
++#define FramePC(fp) ((void*)(((void**)fp)[1]))
++#define NextFP(fp) ((void*)((void**)fp)[0])
++
+ /*  IA32 Linux  */
+ #elif defined(Linux) && defined(IA32)
+ #define ParentFP(jb) ((void*) jb[0].__jmpbuf[3])

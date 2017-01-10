@@ -74,6 +74,7 @@ Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{ver
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
+Patch1:    mpip.unwinder.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -98,6 +99,7 @@ file.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 %build
 
@@ -118,9 +120,11 @@ CC=mpicc
 CXX=mpicxx
 FC=mpif90
 
-
-
+%ifarch aarch64
+./configure --prefix=%{install_path} --enable-demangling --disable-libunwind --enable-setjmp || { cat config.log && exit 1; }
+%else
 ./configure --prefix=%{install_path} --enable-demangling --disable-libunwind || { cat config.log && exit 1; }
+%endif
 
 %install
 
