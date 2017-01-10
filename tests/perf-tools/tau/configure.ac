@@ -28,7 +28,16 @@ else
    AC_MSG_RESULT([yes])
 fi
 
-# set compilers to use Tau toolchain 
+AC_MSG_CHECKING([for TAU_MAKEFILE environment variable])
+if test "x$TAU_MAKEFILE" = "x"; then
+   AC_MSG_RESULT([no])
+   echo
+   AC_ERROR([TAU_MAKEFILE not defined - please load tau environment.])
+else
+   AC_MSG_RESULT([yes])
+fi
+
+# set compilers to use Tau wrappers
 
 OHPC_COMPILER_FAMILY
 
@@ -36,7 +45,6 @@ CC=tau_cc.sh
 CXX=tau_cxx.sh
 FC=tau_f90.sh
 F77=tau_f77.sh
-
 
 
 # test compilers

@@ -10,19 +10,6 @@ the corresponding compute image in a subsequent step.
 \end{lstlisting}
 % end_ohpc_run
 
-\SLURM{} requires the designation of a system user that runs the underlying
-resource management daemons. The default configuration file that is supplied
-with the \OHPC{} build of \SLURM{} identifies this \texttt{SlurmUser} to be a
-dedicated user named ``slurm'' and this user must exist. 
-The following command can be used to add this user to the {\em
-  master} server:
-
-% begin_ohpc_run
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) useradd slurm
-\end{lstlisting}
-% end_ohpc_run
- 
  Other versions of this guide are available that describe installation of other 
  resource management systems, and they can be found in the \texttt{docs-ohpc}
  package.

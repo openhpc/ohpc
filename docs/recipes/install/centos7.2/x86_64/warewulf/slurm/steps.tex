@@ -48,19 +48,6 @@
 \input{common/requirements}
 \input{common/inputs}
 
-% Base Operating System --------------------------------------------
-
-\section{Install Base Operating System (BOS)}
-\input{common/bos}
-
-% ------------------------------------------------------------------
-
-\section{Install \OHPC{} Components} \label{sec:basic_install}
-\input{common/install_ohpc_components_intro.tex}
-
-\subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
-\input{common/enable_ohpc_repo}
-
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
@@ -71,6 +58,29 @@
 % ohpc_command    exit 1
 % ohpc_command fi
 % end_ohpc_run
+
+% Base Operating System --------------------------------------------
+
+\section{Install Base Operating System (BOS)}
+\input{common/bos}
+
+\clearpage 
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Disable firewall 
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) systemctl disable firewalld
+[sms](*\#*) systemctl stop firewalld
+\end{lstlisting}
+% end_ohpc_run
+
+% ------------------------------------------------------------------
+
+\section{Install \OHPC{} Components} \label{sec:basic_install}
+\input{common/install_ohpc_components_intro.tex}
+
+\subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
+\input{common/enable_ohpc_repo}
 
 In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
@@ -94,15 +104,6 @@ repository, which is shipped with CentOS and is enabled by default.
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{common/install_provisioning_intro}
-\input{common/firewall}
-
-% begin_ohpc_run
-% ohpc_validation_comment Disable firewall 
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) systemctl disable firewalld
-[sms](*\#*) systemctl stop firewalld
-\end{lstlisting}
-% end_ohpc_run
 
 \input{common/enable_pxe}
 
@@ -338,11 +339,11 @@ example configuration.
 % ohpc_validation_newline
 % ohpc_validation_comment Update basic slurm configuration if additional computes defined
 % ohpc_command if [ ${num_computes} -gt 4 ];then
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
 
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
 % ohpc_command fi
 % end_ohpc_run
 

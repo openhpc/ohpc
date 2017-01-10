@@ -14,8 +14,8 @@ provisioned {\em compute} nodes.
 # Install Nagios base, Remote Plugin Engine, and Plugins on master host
 [sms](*\#*) (*\groupinstall*) ohpc-nagios
 
-# Also install in compute node image
-[sms](*\#*) (*\groupchrootinstall*) ohpc-nagios
+# Install plugins into compute node image
+[sms](*\#*) (*\chrootinstall*) nagios-plugins-all-ohpc nrpe-ohpc
 
 # Enable and configure NRPE in compute image
 [sms](*\#*) chroot $CHROOT systemctl enable nrpe

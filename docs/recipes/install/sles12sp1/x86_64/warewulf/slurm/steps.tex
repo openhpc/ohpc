@@ -53,6 +53,16 @@
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
+\clearpage
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Disable firewall 
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) systemctl disable SuSEfirewall2
+[sms](*\#*) systemctl stop SuSEfirewall2
+\end{lstlisting}
+% end_ohpc_run
+
 % ------------------------------------------------------------------
 
 \section{Install \OHPC{} Components} \label{sec:basic_install}
@@ -65,15 +75,6 @@
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{common/install_provisioning_intro}
-\input{common/firewall}
-
-% begin_ohpc_run
-% ohpc_validation_comment Disable firewall 
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) systemctl disable SuSEfirewall2
-[sms](*\#*) systemctl stop SuSEfirewall2
-\end{lstlisting}
-% end_ohpc_run
 
 \input{common/enable_pxe}
 
@@ -330,11 +331,11 @@ example configuration.
 % ohpc_validation_newline
 % ohpc_validation_comment Update basic slurm configuration if additional computes defined
 % ohpc_command if [ ${num_computes} -gt 4 ];then
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" /etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
 
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=c[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
 % ohpc_command fi
 % end_ohpc_run
 

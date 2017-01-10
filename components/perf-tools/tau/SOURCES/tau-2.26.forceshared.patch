@@ -1,0 +1,11 @@
+--- tau-2.26/configure	2016-11-07 19:56:48.000000000 -0800
++++ tau-2.26.patch/configure	2016-12-14 13:26:50.000000000 -0800
+@@ -871,7 +871,7 @@
+ upnetwork=unknown
+ upc=no
+ upc_compiler=default
+-forceshared=no
++forceshared=yes
+ opari_region=no
+ opari_construct=no
+ boost=no

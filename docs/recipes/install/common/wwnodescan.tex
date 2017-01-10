@@ -11,7 +11,7 @@ and the utility will exit after all specified nodes have been found. Example
 usage is highlighted below:
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
 [sms](*\#*) wwnodescan --netdev=${eth_provision} --ipaddr=${c_ip[0]} --netmask=${internal_netmask} \
-    --vnfs=BOSVER --bootstrap=`uname -r` ${c_name[0]}-${c_name[3]}
+    --vnfs=BOSVER --bootstrap=`uname -r` --listen=${sms_eth_internal} ${c_name[0]}-${c_name[3]}
 \end{lstlisting}
 \end{tcolorbox}
 \end{center}

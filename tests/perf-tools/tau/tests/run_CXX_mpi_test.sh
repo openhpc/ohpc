@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./CXX_mpi_test 500 500 2 4 4
+tau_exec ./CXX_mpi_test 500 500 2 4 4

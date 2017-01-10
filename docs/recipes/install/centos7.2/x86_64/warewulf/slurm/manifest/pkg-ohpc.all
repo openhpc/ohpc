@@ -20,7 +20,7 @@ boost-intel-mvapich2-ohpc 1.61.0 http://www.boost.org ohpc/parallel-libs Boost f
 boost-intel-openmpi-ohpc 1.61.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 clustershell-ohpc 1.7.2 http://clustershell.sourceforge.net/ System Environment/Base Python framework for efficient cluster administration
 conman-ohpc 0.2.7 http://dun.github.io/conman/ ohpc/admin ConMan: The Console Manager
-docs-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+docs-ohpc 1.2.1 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 examples-ohpc 1.4 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 fftw-gnu-mpich-ohpc 3.3.4 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu-mvapich2-ohpc 3.3.4 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
@@ -280,14 +280,14 @@ superlu_dist-intel-impi-ohpc 4.2 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc
 superlu_dist-intel-mpich-ohpc 4.2 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-intel-mvapich2-ohpc 4.2 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-intel-openmpi-ohpc 4.2 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-tau-gnu-impi-ohpc 2.25.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-tau-gnu-mpich-ohpc 2.25.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-tau-gnu-mvapich2-ohpc 2.25.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-tau-gnu-openmpi-ohpc 2.25.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-tau-intel-impi-ohpc 2.25.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-tau-intel-mpich-ohpc 2.25.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-tau-intel-mvapich2-ohpc 2.25.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-tau-intel-openmpi-ohpc 2.25.2 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-gnu-impi-ohpc 2.26 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-gnu-mpich-ohpc 2.26 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-gnu-mvapich2-ohpc 2.26 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-gnu-openmpi-ohpc 2.26 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-intel-impi-ohpc 2.26 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-intel-mpich-ohpc 2.26 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-intel-mvapich2-ohpc 2.26 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-intel-openmpi-ohpc 2.26 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 trilinos-gnu-impi-ohpc 12.6.4 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu-mpich-ohpc 12.6.4 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu-mvapich2-ohpc 12.6.4 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms

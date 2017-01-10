@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name:           docs%{PROJ_DELIM}
-Version:        1.2
+Version:        1.2.1
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
@@ -36,11 +36,6 @@ BuildRequires:  texlive-trimspaces
 BuildRequires:  texlive-amsmath
 BuildRequires:  latexmk
 BuildRequires:  git
-Requires:       make
-
-%if 0%{?rhel_version} || 0%{?centos_version}
-Requires:       net-tools
-%endif
 
 %define debug_package %{nil}
 
@@ -116,6 +111,5 @@ install -m 0644 -p docs/recipes/install/sles12sp1/input.local.template %{buildro
 %defattr(-,root,root)
 %dir %{OHPC_HOME}
 %{OHPC_PUB}
-%doc docs/LICENSE
 
 %changelog

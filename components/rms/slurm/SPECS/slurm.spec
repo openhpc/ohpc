@@ -218,6 +218,16 @@ BuildRequires: pkgconfig
 BuildRequires: perl(ExtUtils::MakeMaker)
 %endif
 
+%if 0%{?suse_version} >= 1230
+Requires(pre):  shadow
+%else
+%if 0%{?suse_version}
+Requires(pre):  pwdutils
+%else
+Requires(pre):  shadow-utils
+%endif
+%endif
+
 %description
 Slurm is an open source, fault-tolerant, and highly
 scalable cluster management and job scheduling system for Linux clusters.
@@ -1135,16 +1145,10 @@ rm -rf $RPM_BUILD_ROOT
 #############################################################################
 
 %pre
-#if [ -x /etc/init.d/slurm ]; then
-#    if /etc/init.d/slurm status | grep -q running; then
-#        /etc/init.d/slurm stop
-#    fi
-#fi
-#if [ -x /etc/init.d/slurmdbd ]; then
-#    if /etc/init.d/slurmdbd status | grep -q running; then
-#        /etc/init.d/slurmdbd stop
-#    fi
-#fi
+getent passwd slurm >/dev/null || \
+    /usr/sbin/useradd -U -c "SLURM resource manager" \
+    -s /sbin/nologin -r -d %{_sysconfdir} slurm
+exit 0
 
 %post
 # 8/15/14 karl.w.schulz@intel.com - use insserv macro for init.d on suse

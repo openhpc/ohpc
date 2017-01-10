@@ -66,7 +66,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.25.2
+Version:   2.26
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
@@ -79,6 +79,7 @@ Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
 DocDir:    %{OHPC_PUB}/doc/contrib
+Patch1:    tau-2.26.forceshared.patch
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -120,7 +121,7 @@ automatic instrumentation tool.
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 %endif
 
-%build
+%install
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
@@ -137,19 +138,19 @@ export fcomp=mpiifort
 %endif
 
 %if %{mpi_family} == impi
-export MPI_DIR=$I_MPI_ROOT
-export MPI_INCLUDE_DIR=$MPI_DIR/include64
-export MPI_LIB_DIR=$MPI_DIR/lib64
+export MPI_INCLUDE_DIR=$I_MPI_ROOT/include64
+export MPI_LIB_DIR=$I_MPI_ROOT/lib64
 %else
 export MPI_INCLUDE_DIR=$MPI_DIR/include
 export MPI_LIB_DIR=$MPI_DIR/lib
 %endif
 
 export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
-export BUILDROOT=%buildroot%{install_path}
+export BUILDROOT=%buildroot
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
+export TAUROOT=`pwd`
 ./configure \
-    -prefix=/tmp/%{install_path} \
+    -prefix=/tmp%{install_path} \
     -exec-prefix= \
 	-c++=mpicxx \
 	-cc=mpicc \
@@ -159,48 +160,63 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 	-mpiinc=$MPI_INCLUDE_DIR \
 	-mpilib=$MPI_LIB_DIR \
 	-slog2 \
+	-CPUTIME \
+    -PROFILE \
+    -PROFILECALLPATH \
 	-PROFILEPARAM \
     -papi=$PAPI_DIR \
 	-pdt=$PDTOOLKIT_DIR \
-	-CPUTIME \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
-
+	-extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp/%{install_path}/lib" 
 
 make install
 make exports
 
-
+# move from tmp install dir to %install_path
 rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
 pushd /tmp
 export tmp_path=%{install_path}
 mv ${tmp_path#*/} %buildroot%{install_path}/..
 popd
+
+# clean up
 pushd %{buildroot}%{install_path}/bin
-sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
-rm -f tau_java
+sed -i 's|/tmp/opt|/opt|g' $(egrep -IR '/tmp/opt' ./|awk -F : '{print $1}')
 popd
-
-sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
-sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile
-#sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/include/Makefile*
-#sed -i 's|/home/abuild/rpmbuild/BUILD/tau-2.24|%{install_path}|g' %buildroot%{install_path}/lib/Makefile*
-
-rm -rf %{install_path}/examples
-rm -rf %buildroot%{install_path}/examples
-rm -f %{install_path}/.last_config
-rm -f %{install_path}/.all_configs
-rm -f %{install_path}/.active_stub*
-
-
-# clean libs
-pushd %buildroot%{install_path}/lib
-sed -i 's|/tmp||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
+pushd %{buildroot}%{install_path}/lib
 rm -f libjogl*
 popd
+sed -i 's|/tmp||g' %buildroot%{install_path}/include/*.h
+sed -i 's|/tmp||g' %buildroot%{install_path}/include/Makefile*
+sed -i 's|/tmp||g' %buildroot%{install_path}/lib/Makefile*
+sed -i 's|/tmp||g' $(egrep -R '%buildroot' ./ |\
+egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
+sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
+egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
+sed -i "s|$TAUROOT|%{install_path}|g" $(egrep -IR "$TAUROOT" %buildroot%{install_path}|awk -F : '{print $1}')
 
+# fix tau lib arch location
+sed -i "s|/x86_64/lib|/lib|g" $(egrep -IR "/x86_64/lib" %buildroot%{install_path}|awk -F : '{print $1}')
+
+# replace hard paths with env vars
+%if %{mpi_family} == impi
+sed -i "s|$I_MPI_ROOT|\$\{I_MPI_ROOT\}|g" $(egrep -IR "$I_MPI_ROOT" %buildroot%{install_path}|awk -F : '{print $1}')
+%else
+sed -i "s|$MPI_DIR|\$\{MPI_DIR\}|g" $(egrep -IR "$MPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
+%endif
+sed -i "s|$PAPI_DIR|\$\{PAPI_DIR\}|g" $(egrep -IR "$PAPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
+sed -i "s|$PDTOOLKIT_DIR|\$\{PDTOOLKIT_DIR\}|g" $(egrep -IR "$PDTOOLKIT_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
+
+# link other bindings
+pushd %{buildroot}%{install_path}/lib
+%if %{compiler_family} == intel
+ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
+%else
+ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi
+%endif
+popd
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -233,6 +249,7 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
+setenv          %{PNAME}_OPTIONS    "-optRevert -optShared -optNoTrackGOMP"
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded papi]  } {
@@ -241,10 +258,6 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded pdtoolkit]  } {
         module load pdtoolkit
     }
-}
-
-if [ module-info mode remove ] {
-    module unload pdtoolkit
 }
 
 EOF
