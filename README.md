@@ -1,6 +1,6 @@
 ---
 
-### OpenHPC: Community building blocks for HPC systems. (v1.2)
+### OpenHPC: Community building blocks for HPC systems. (v1.2.1)
 
 ---
 
@@ -14,14 +14,15 @@ scientific libraries.
 The compatible OS version(s) for this release and the total number of
 pre-packaged RPMs available per architecture type are summarized as follows:
 
-Base OS     | x86_64 | aarch64 | noarch
-:---:       | :---:  | :---:   | :---:
-CentOS 7.2  | 310    | 198     | 43
-SLES 12 SP1 | 312    | 205     | 43
+Base OS     | x86_64             | aarch64            | noarch
+:---:       | :---:              | :---:              | :---:
+CentOS 7.2  | 310 (+ 31 Updates) | 198 (+ 17 Updates) | 43
+SLES 12 SP1 | 312 (+ 31 Updates) | 205 (+ 18 Updates) | 43
 
-Note that a detailed list of all available components is available in
+A detailed list of all available components is available in
 the "Package Manifest" appendix located in each of the companion install
-guide documents. 
+guide documents, and a list of updated packages can be found in the
+[release notes](https://github.com/openhpc/ohpc/releases/tag/v1.2.1.GA). 
 
 #### Getting started
 
@@ -34,7 +35,7 @@ the URL locations for [base] and [update] package repositories. Copies of the
 ```ohpc-release``` package are provided below for convenience. Installtion guides 
 taylored for each supported resource manager are also available below or in
 the downloads section of the latest
-[release](https://github.com/openhpc/ohpc/releases/tag/v1.2.GA).
+[release](https://github.com/openhpc/ohpc/releases/tag/v1.2.1.GA).
 
 ---
 
@@ -42,13 +43,13 @@ the downloads section of the latest
 
 ###### [CentOS 7.2]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-centos7.2-1.2-1.x86_64.rpm) (md5sum=2e33939e87e2fb5daf97d7875015a6ca)
-* [Install Guide (with PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-CentOS7.2-PBSPro-1.2-x86_64.pdf)
-* [Install Guide (with Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-CentOS7.2-SLURM-1.2-x86_64.pdf)
-* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/CentOS_7.2/iso/OpenHPC-1.2_CentOS_7.2_x86_64.iso) mirror of yum repository (md5sum=88676007e68888b6499134837aa5fde6)
+* [Install Guide (with PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.2.1.GA/Install_guide-CentOS7.2-PBSPro-1.2.1-x86_64.pdf)
+* [Install Guide (with Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.2.1.GA/Install_guide-CentOS7.2-SLURM-1.2.1-x86_64.pdf)
+* [ISO image](http://build.openhpc.community/OpenHPC:/1.2/CentOS_7.2/iso/OpenHPC-1.2.1_CentOS_7.2_x86_64.iso) mirror of yum repository (md5sum=)
 
 ###### [SLES 12 SP1]
 * [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.2.GA/ohpc-release-sles12sp1-1.2-1.x86_64.rpm) (md5sum=58acd4320af0eceefcb8bcbc5f8a5a74)
-* [Install Guide (with PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-SLE_12_SP1-PBSPro-1.2-x86_64.pdf)
+* [Install Guide (with PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.2.1.GA/Install_guide-SLE_12_SP1-PBSPro-1.2.1-x86_64.pdf)
 * [Install Guide (with Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.2.GA/Install_guide-SLE_12_SP1-SLURM-1.2-x86_64.pdf)
 * [ISO image](http://build.openhpc.community/OpenHPC:/1.2/SLE_12_SP1/iso/OpenHPC-1.2_SLE_12_SP1_x86_64.iso) mirror of zypper repository (md5sum=1b06b3c32cd53051c26dcda285699639)
 
