@@ -1,2 +1,2 @@
 addFilter("devel-file-in-non-devel-package")
-addFilter("suse-filelist-forbidden-backup-file")
+addFilter("suse-filelist-forbidden")
