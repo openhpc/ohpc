@@ -24,7 +24,6 @@ Group:		%{PROJ_NAME}/rms
 License:	GPLv3+ and LGPLv3+
 URL:		http://dun.github.io/munge/
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
-Provides:       %{pname} = %{version}-%{release}
 
 %if 0%{?suse_version} >= 1100
 BuildRequires:	libbz2-devel
@@ -50,7 +49,6 @@ BuildConflicts: post-build-checks
 
 Conflicts: munge 
 
-#Source0:   https://github.com/dun/munge/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
 Source0:   https://github.com/dun/munge/archive/munge-%{version}.tar.gz
 Source1:   OHPC_macros
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
@@ -74,7 +72,6 @@ Requires(pre):	shadow-utils
 Summary:	Headers and libraries for developing applications using MUNGE
 Group:		Development/Libraries
 Requires:	%{pname}-libs%{PROJ_DELIM} = %{version}-%{release}
-Provides:       %{pname}-devel = %{version}-%{release}
 %if 0%{?suse_version}
 BuildRequires:	pkg-config
 %else
@@ -86,7 +83,6 @@ Conflicts: %{pname}-devel
 Summary:	Libraries for applications using MUNGE
 Group:		System Environment/Libraries
 Requires:	%{pname}%{PROJ_DELIM} = %{version}-%{release}
-Provides:	%{pname}-libs = %{version}-%{release}
 Conflicts: %{pname}-libs
 
 %description
