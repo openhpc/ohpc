@@ -70,7 +70,7 @@ install -D -m755 %{SOURCE2}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_
 
 %post
 
-topDir=`rpm -q --qf '%{FILENAMES}\n' intel-compxe-doc` || exit 1
+topDir=`rpm -q --qf '%{FILENAMES}\n' intel-compxe-doc | head -1` || exit 1
 
 echo " "
 echo "Scanning top-level dir = $topDir"
