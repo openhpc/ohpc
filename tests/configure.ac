@@ -8,6 +8,7 @@ AM_INIT_AUTOMAKE([1.14])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AC_CANONICAL_HOST
+AC_SUBST(ARCH,[$host_cpu])
 
 AM_CONDITIONAL(HAVE_SHARED_CONDITIONAL,test 0)
 AM_CONDITIONAL(DIRECT_VFD_CONDITIONAL,test 0)
@@ -382,7 +383,7 @@ echo
 echo Build user.................... : $USER
 echo Build host.................... : ${ac_hostname}
 echo Configure date................ : `date +'%F %H:%M'`
-echo Build architecture............ : ${host}
+echo Build architecture............ : ${host_cpu}
 echo MPI Families.................. : ${MPI_FAMILIES}
 if test "x$enable_slurm" = "xyes" ; then
    echo Resource manager ............. : SLURM
