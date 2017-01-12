@@ -261,6 +261,11 @@ tx2=test_static
 }
 
 @test "[$tname] run multifit under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+
+    # karl.w.schulz@intel.com (1/12/17) - disable test on aarch64 as precision assumptions
+    # within GSL are tuned for x86 and 80-bit extended precision
+    [[ "$ARCH" == "aarch64" ]] && skip "Skipping multifit test for ARCH=$ARCH"
+
     pushd multifit
     if [ ! -s $tx1 ];then
         flunk "$tx1 binary does not exit"
@@ -441,6 +446,11 @@ tx2=test_static
 }
 
 @test "[$tname] run specfunc under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+
+    # karl.w.schulz@intel.com (1/12/17) - disable test on aarch64 as precision assumptions
+    # within GSL are tuned for x86 and 80-bit extended precision
+    [[ "$ARCH" == "aarch64" ]] && skip "Skipping specfun test for ARCH=$ARCH"
+
     pushd specfunc
     if [ ! -s $tx1 ];then
         flunk "$tx1 binary does not exit"
