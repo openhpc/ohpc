@@ -52,7 +52,7 @@ suite.
 
 %post
 
-topDir=`rpm -q --qf '%{FILENAMES}\n' intel-mpi-doc` || exit 1
+topDir=`rpm -q --qf '%{FILENAMES}\n' intel-mpi-doc | head -1` || exit 1
 
 echo " "
 echo "Scanning top-level dir = $topDir"
