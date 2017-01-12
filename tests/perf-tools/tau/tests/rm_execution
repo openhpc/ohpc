@@ -18,7 +18,7 @@ MAX_THREADS=`./get_max_threads`
 LAST_THREAD_INDEX=`echo "$MAX_THREADS -1" | bc`
 LAST_TASK_INDEX=`echo "$TASKS -1" | bc`
 
-export TAU_TRACE=0 TAU_CALLPATH=0 TAU_PROFILE=1 TAU_METRICS=GET_TIME_OF_DAY:PAPI_L1_DCM:PAPI_LD_INS
+export TAU_TRACE=0 TAU_CALLPATH=0 TAU_PROFILE=1 TAU_METRICS=GET_TIME_OF_DAY
 unset OMP_NUM_THREADS
 
 
@@ -30,13 +30,16 @@ unset OMP_NUM_THREADS
     run_mpi_binary "tau_exec ./C_mpi_test" $ARGS $NODES $TASKS
     assert_success
 
-    ls MULTI__GET_TIME_OF_DAY/profile.$LAST_TASK_INDEX.0.0
+    ls profile.$LAST_TASK_INDEX.0.0
     assert_success
 
-    rm -rf MULTI__*
+    rm -rf profile*
 }
 
 @test "[libs/TAU] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ "x$ARCH" == "xx86_64" ];then
+    TAU_METRICS=PAPI_LD_INS
+    fi
     if [ ! -s CXX_mpi_test ];then
     flunk "CXX_mpi_test binary does not exit"
     fi
@@ -44,13 +47,16 @@ unset OMP_NUM_THREADS
     run_mpi_binary ./run_CXX_mpi_test.sh $ARGS $NODES $TASKS
     assert_success
 
-    ls MULTI__PAPI_LD_INS/profile.$LAST_TASK_INDEX.0.0
+    ls profile.$LAST_TASK_INDEX.0.0
     assert_success
 
-    rm -rf MULTI__*
+    rm -rf profile*
 }
 
 @test "[libs/TAU] Serial C OpenMP binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ "x$ARCH" == "xx86_64" ];then
+    TAU_METRICS=PAPI_L1_DCM
+    fi
     if [ ! -s C_omp_test ];then
     flunk "C_omp_test binary does not exit"
     fi
@@ -58,10 +64,10 @@ unset OMP_NUM_THREADS
     run_serial_binary ./run_C_omp_test.sh
     assert_success
 
-    ls MULTI__PAPI_L1_DCM/profile.0.0.$LAST_THREAD_INDEX
+    ls profile.0.0.$LAST_THREAD_INDEX
     assert_success
 
-    rm -rf MULTI__*
+    rm -rf profile*
 }
 
 @test "[libs/TAU] Serial FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
