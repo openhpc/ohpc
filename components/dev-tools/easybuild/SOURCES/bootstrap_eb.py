@@ -53,7 +53,7 @@ from distutils.version import LooseVersion
 from hashlib import md5
 
 
-EB_BOOTSTRAP_VERSION = '20161104.01'
+EB_BOOTSTRAP_VERSION = '20161109.01'
 
 # argparse preferrred, optparse deprecated >=2.7
 HAVE_ARGPARSE = False
@@ -90,6 +90,7 @@ orig_os_environ = copy.deepcopy(os.environ)
 
 # If the modules tool is specified, use it
 easybuild_modules_tool = os.environ.get('EASYBUILD_MODULES_TOOL', None)
+easybuild_module_syntax = os.environ.get('EASYBUILD_MODULE_SYNTAX', None)
 
 
 #
@@ -200,6 +201,17 @@ def prep(path):
 
     os.environ['EASYBUILD_MODULES_TOOL'] = easybuild_modules_tool
     debug("$EASYBUILD_MODULES_TOOL set to %s" % os.environ['EASYBUILD_MODULES_TOOL'])
+
+    if easybuild_module_syntax:
+        # if module syntax is specified, use it
+        os.environ['EASYBUILD_MODULE_SYNTAX'] = easybuild_module_syntax
+        debug("Using specified module syntax: %s" % os.environ['EASYBUILD_MODULE_SYNTAX'])
+    elif easybuild_modules_tool != 'Lmod':
+        # Lua is the default module syntax, but that requires Lmod
+        # if Lmod is not being used, use Tcl module syntax
+        os.environ['EASYBUILD_MODULE_SYNTAX'] = 'Tcl'
+        debug("$EASYBUILD_MODULE_SYNTAX set to %s" % os.environ['EASYBUILD_MODULE_SYNTAX'])
+
 
 
 def check_module_command(tmpdir):
@@ -336,7 +348,7 @@ def check_easy_install_cmd():
         debug("Checking %s..." % easy_install)
         res = False
         if os.path.exists(easy_install):
-            cmd = "PYTHONPATH='%s' %s --version" % (os.getenv('PYTHONPATH', ''), easy_install)
+            cmd = "PYTHONPATH='%s' %s %s --version" % (os.getenv('PYTHONPATH', ''), sys.executable, easy_install)
             os.system("%s > %s 2>&1" % (cmd, outfile))
             outtxt = open(outfile).read().strip()
             debug("Output of '%s':\n%s" % (cmd, outtxt))
@@ -588,19 +600,24 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
     preinstallopts = ''
 
     if distribute_egg_dir is not None:
+        # inject path to distribute installed in stage 1 into $PYTHONPATH via preinstallopts
+        # other approaches are not reliable, since EasyBuildMeta easyblock unsets $PYTHONPATH;
+        # this is required for the easy_install from stage 1 to work
+        preinstallopts += "export PYTHONPATH=%s:$PYTHONPATH && " % distribute_egg_dir
+
         # ensure that (latest) setuptools is installed as well alongside EasyBuild,
         # since it is a required runtime dependency for recent vsc-base and EasyBuild versions
         # this is necessary since we provide our own distribute installation during the bootstrap (cfr. stage0)
-        preinstallopts += "easy_install -U --prefix %(installdir)s setuptools && "
+        preinstallopts += "%s $(which easy_install) -U --prefix %%(installdir)s setuptools && " % sys.executable
 
     # vsc-install is a runtime dependency for the EasyBuild unit test suite,
     # and is easily picked up from stage1 rather than being actually installed, so force it
-    vsc_install_tarball_paths = glob.glob(os.path.join(sourcepath, 'vsc-install*.tar.gz'))
-    if len(vsc_install_tarball_paths) == 1:
-        vsc_install = vsc_install_tarball_paths[0]
-    else:
-        vsc_install = 'vsc-install'
-    preinstallopts += "easy_install -U --prefix %%(installdir)s %s && " % vsc_install
+    vsc_install = 'vsc-install'
+    if sourcepath:
+        vsc_install_tarball_paths = glob.glob(os.path.join(sourcepath, 'vsc-install*.tar.gz'))
+        if len(vsc_install_tarball_paths) == 1:
+            vsc_install = vsc_install_tarball_paths[0]
+    preinstallopts += "%s $(which easy_install) -U --prefix %%(installdir)s %s && " % (sys.executable, vsc_install)
 
     templates.update({
         'preinstallopts': preinstallopts,
