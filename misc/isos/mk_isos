@@ -42,8 +42,6 @@ GetOptions('skip-assembly' => \$skipAssembly,
 usage() if ($help);
 
 
-exit 0;
-
 # query expected environment variables
 my $release;
 my $overwrite=0;
