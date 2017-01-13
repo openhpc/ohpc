@@ -1,5 +1,5 @@
 [OpenHPC-local-updates]
 name=OpenHPC-@VERSION_MICRO@ - Updates
-baseurl=http://build.openhpc.community/
+baseurl=file://@PATH@
 gpgcheck=1
 gpgkey=file:///@PATH@/RPM-GPG-KEY-OpenHPC-1

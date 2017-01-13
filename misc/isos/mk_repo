@@ -1,11 +1,10 @@
 #!/bin/bash
 
+
 # determine standard repodir
 repodir=""
 
 if [ -s "/etc/os-release" ];then
-    echo "Checking /etc/os-release"
-
     [[ `grep "CentOS"  /etc/os-release` ]] && repodir=/etc/yum.repos.d
     [[ `grep "Red Hat" /etc/os-release` ]] && repodir=/etc/yum.repos.d
     [[ `grep "SLES"    /etc/os-release` ]] && repodir=/etc/zypp/repos.d
@@ -19,18 +18,30 @@ if [ ! -d "${repodir}" ];then
     exit 1
 fi
 
-# Setup local OpenHPC repo using downloaded repodata
-localRepoDir=`dirname $0`
-localRepoFile=OpenHPC-local.repo
-pushd ${localRepoDir}
+# sufficient credentials?
+if [ "$EUID" -ne 0 ]; then
+  echo "Error: Elevated credentials required to create files in ${repodir}"
+  exit 1
+fi
 
-echo "--> Creating repofile in $repodir"
+# setup local OpenHPC repo using downloaded repodata
+localRepoDir=`dirname $0`
+localRepoDir=$(dirname $(readlink -f $0) )
+#dirname $(readlink -f relative/path/to/file)
+localRepoFile=OpenHPC-local.repo
+
+echo "--> Creating $localRepoFile file in $repodir"
+echo "--> Local repodata stored in $localRepoDir"
+
+pushd ${localRepoDir} >& /dev/null
 
 if [ -s ${localRepoFile} ];then
-    cp -p ${localRepoFile} $localRepoDir
+    cp -p ${localRepoFile} $repodir
+    # Update file path(s)
+    sed -i "s!@PATH@!${localRepoDir}!" ${repodir}/${localRepoFile}
 else
     echo "Error: expected ${localRepoFile} missing"
     exit 1
 fi
 
-popd
+popd >& /dev/null
