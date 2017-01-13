@@ -187,6 +187,7 @@ foreach my $distro (@distros) {
     }
 
     print "dist for $distro:src -- \n";
+    print "tar command -> tar $tar_args\n";
     system("tar $tar_args");
     
     my $md5sum;
