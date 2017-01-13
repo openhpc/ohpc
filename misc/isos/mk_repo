@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# determine standard repodir
+repodir=""
+
+if [ -s "/etc/os-release" ];then
+    echo "Checking /etc/os-release"
+
+    [[ `grep "CentOS"  /etc/os-release` ]] && repodir=/etc/yum.repos.d
+    [[ `grep "Red Hat" /etc/os-release` ]] && repodir=/etc/yum.repos.d
+    [[ `grep "SLES"    /etc/os-release` ]] && repodir=/etc/zypp/repos.d
+else
+    echo "Error: no /etc/os-release file found"
+    exit 1
+fi
+
+if [ ! -d "${repodir}" ];then
+    echo "Error: unable to fine local repodir (expected ${repodir})"
+    exit 1
+fi
+
+# Setup local OpenHPC repo using downloaded repodata
+localRepoDir=`dirname $0`
+localRepoFile=OpenHPC-local.repo
+pushd ${localRepoDir}
+
+echo "--> Creating repofile in $repodir"
+
+if [ -s ${localRepoFile} ];then
+    cp -p ${localRepoFile} $localRepoDir
+else
+    echo "Error: expected ${localRepoFile} missing"
+    exit 1
+fi
+
+popd

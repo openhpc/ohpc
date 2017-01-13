@@ -1,0 +1,6 @@
+[OpenHPC-local]
+name=OpenHPC-@VERSION_MINOR@ - Base
+baseurl=http://build.openhpc.community/
+gpgcheck=1
+gpgkey=file:///@PATH@/RPM-GPG-KEY-OpenHPC-1
+
