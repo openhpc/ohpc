@@ -1,0 +1,96 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use File::Path;
+use File::Copy::Recursive "dircopy";
+
+my @arches = ('aarch64', 'x86_64');
+my @distros = ('CentOS_7.2', 'SLE_12_SP1');
+my $base_repo_path = "/srv/obs/repos/OpenHPC:";
+my $dest_dir = "/srv/www/isos";
+my $release = "1.2.1";
+my $tmp_dir = "/srv/tmp/mk_isos.$$";
+
+#getopts+usage
+
+# parse release
+my ($major, $minor, $micro) = split(/\./, $release);
+my $base_release = "$major.$minor";
+
+# stage repo in tmp
+unless(mkdir $tmp_dir) {
+    die "Unable to create $tmp_dir: $!\n";
+}
+unless(dircopy("$base_repo_path/$base_release", $tmp_dir)) {
+    die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
+}
+
+# build update repo
+if ($micro) {
+    #TODO: support update repo merge
+    print "copying updates\n";
+    unlink "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
+    rmtree "$tmp_dir/empty" || warn "Unable to remove empty dir: $!";
+    dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
+        die "Unable to copy update repo: $!";
+}
+
+# build isos + TODO: md5s
+foreach my $distro (@distros) {
+    if ($micro) {
+        symlink("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
+    }
+    my @n_distros = grep { $_ ne $distro } @distros;
+    # generate binary isos
+    foreach my $arch (@arches) {
+        my $mkisofs_args = "-R -l -f \\\n";
+
+        # exclude other arches, iso and src dirs
+        my @n_arches = grep { $_ ne $arch } @arches;
+        for my $n_arch (@n_arches) {
+            $mkisofs_args .= "-x $tmp_dir/$distro/$n_arch \\\n";
+        }
+        $mkisofs_args .= "-x $tmp_dir/$distro/iso \\\n";
+        $mkisofs_args .= "-x $tmp_dir/$distro/src \\\n";
+
+        # exclude any other distro updates
+        if ($micro) {
+            for my $n_distro (@n_distros) {
+                $mkisofs_args .= "-x $tmp_dir/$distro/updates/$n_distro \\\n";
+            }
+        }
+
+        $mkisofs_args .= "-o $dest_dir/OpenHPC-$release.$distro\_$arch.iso $tmp_dir/$distro";
+
+        print "iso for $distro:$arch -- \n";
+        system("mkisofs $mkisofs_args");
+    }
+
+    # generate src iso
+    my $mkisofs_args = "-R -l -f \\\n";
+    for my $arch (@arches) {
+        $mkisofs_args .= "-x $tmp_dir/$distro/$arch \\\n";
+    }
+    # exclude any other distro/arch updates
+    if ($micro) {
+        for my $arch (@arches) {
+            $mkisofs_args .= "-x $tmp_dir/$distro/updates/$arch \\\n";
+        }
+        for my $n_distro (@n_distros) {
+            $mkisofs_args .= "-x $tmp_dir/$distro/updates/$n_distro \\\n";
+        }
+    }
+    $mkisofs_args .= "-x $tmp_dir/$distro/iso \\\n";
+    $mkisofs_args .= "-o $dest_dir/OpenHPC-$release.$distro.src.iso $tmp_dir/$distro";
+    print "iso for $distro:src -- \n";
+    system("mkisofs $mkisofs_args");
+}
+
+TODO: write sed script for repo files
+
+unless(rmtree $tmp_dir) {
+    die "Unable to remove $tmp_dir: $!\n";
+}
+
+# vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 
