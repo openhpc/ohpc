@@ -6,6 +6,9 @@ use Digest::MD5 qw(md5_hex);
 use File::Path qw(make_path);
 use File::Copy::Recursive qw(dircopy);
 use Getopt::Long;
+use File::Temp qw(tempfile);
+
+
 
 #my @arches = ('aarch64', 'x86_64');
 #my @distros = ('CentOS_7.2', 'SLE_12_SP1');
@@ -15,7 +18,7 @@ my @distros = ('CentOS_7.2');
 
 my $base_repo_path = "/srv/obs/repos/OpenHPC:";
 my $dest_dir = "/srv/www/dist";
-my $tmp_dir = "/srv/tmp/dist/mk_dist.$$";
+my $tmp_path = "/srv/tmp/dist";
 
 # basic usage
 sub usage { 
@@ -73,8 +76,16 @@ my ($major, $minor, $micro) = split(/\./, $release);
 my $base_release = "$major.$minor";
 
 # stage repo in tmp
+
+if (! -d $tmp_path) {
+    make_path($tmp_path) || die("Unable to create $tmp_path\n");
+}
+
+my $tmp_dir = File::Temp::tempdir(CLEANUP => 1, DIR=> $tmp_path) || MYERROR("Unable to create temporary directory");
+
 print "\nStaging dist creation in $tmp_dir...\n";
-make_path($tmp_dir) || die("Unable to create $tmp_dir: $!\n");
+
+#make_path($tmp_dir) || die("Unable to create $tmp_dir: $!\n");
 #die "Unable to create $tmp_dir: $!\n" unless(mkdir $tmp_dir);
 
 if( !$skipCopy) {
