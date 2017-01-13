@@ -56,6 +56,10 @@ if(defined $ENV{'OverWritePrevoius'} ) {
     if ($ENV{'OverWritePrevious'} eq "true") { $overwrite=1; }
 } 
 
+if ( ! -d $dest_dir ) {
+    make_path($dest_dir) || die("Unable to create $dest_dir\n");
+}
+
 print "OpenHPC dist creation utility\n";
 print "--> Requested release version = $release\n";
 print "--> Overwrite existing dists  = $overwrite\n";
