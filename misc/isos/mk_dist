@@ -20,7 +20,7 @@ my $tmp_dir = "/srv/tmp/dist/mk_dist.$$";
 # basic usage
 sub usage { 
     print "\n";
-    print "Usage: mk_isos [OPTIONS]\n\n";
+    print "Usage: mk_dist [OPTIONS]\n\n";
     print "OPTIONS:\n";
     print "  --skip-assembly       skip reassembly of repo tarball\n";
     print "  --help                generate help message and exit\n";
