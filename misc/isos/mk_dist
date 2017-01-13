@@ -10,11 +10,11 @@ use File::Temp qw(tempfile);
 
 
 
-#my @arches = ('aarch64', 'x86_64');
-#my @distros = ('CentOS_7.2', 'SLE_12_SP1');
+my @arches = ('aarch64', 'x86_64');
+my @distros = ('CentOS_7.2', 'SLE_12_SP1');
 # debug for testing...
-my @arches = ('x86_64');
-my @distros = ('CentOS_7.2');
+#my @arches = ('x86_64');
+#my @distros = ('CentOS_7.2');
 
 my $base_repo_path = "/srv/obs/repos/OpenHPC:";
 my $dest_dir = "/srv/www/dist";
