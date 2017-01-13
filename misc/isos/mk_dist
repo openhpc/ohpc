@@ -22,7 +22,7 @@ sub usage {
     print "\n";
     print "Usage: mk_dist [OPTIONS]\n\n";
     print "OPTIONS:\n";
-    print "  --skip-assembly       skip reassembly of repo tarball\n";
+    print "  --skip-copy           skip copying of repo data (for debug only)\n";
     print "  --help                generate help message and exit\n";
     print "\n";
     exit 0;
@@ -32,10 +32,10 @@ sub usage {
 $| = 1;
 
 # Command-line parsing
-my $skipAssembly = 0;
+my $skipCopy = 0;
 my $help = 0;
 
-GetOptions('skip-assembly' => \$skipAssembly,
+GetOptions('skip-copy' => \$skipCopy,
 	   "h"             => \$help,
            "help"          => \$help);
 
@@ -64,11 +64,11 @@ print "--> Overwrite existing dists  = $overwrite\n";
 my ($major, $minor, $micro) = split(/\./, $release);
 my $base_release = "$major.$minor";
 
-if( !$skipAssembly) {
+# stage repo in tmp
+print "\nStaging dist creation in $tmp_dir...\n";
+die "Unable to create $tmp_dir: $!\n" unless(mkdir $tmp_dir);
 
-    # stage repo in tmp
-    print "\nStaging dist creation in $tmp_dir...\n";
-    die "Unable to create $tmp_dir: $!\n" unless(mkdir $tmp_dir);
+if( !$skipCopy) {
 
     # copy base repo contents
     print "\nCopying base repo contents from OBS...\n";
@@ -86,90 +86,101 @@ if( !$skipAssembly) {
         ("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
             die "Unable to copy update repo: $!";
     }
+}
 
-    # build dist + TODO: md5s
+# build dist + TODO: md5s
 
-    my $md5sum_file = "$dest_dir/OpenHPC:$release.md5s";
-    open (MD5, ">", $md5sum_file) ||
-        die "Couldn't open $md5sum_file: $!";
+my $md5sum_file = "$dest_dir/OpenHPC:$release.md5s";
+open (MD5, ">", $md5sum_file) ||
+    die "Couldn't open $md5sum_file: $!";
 
-    foreach my $distro (@distros) {
-        if ($micro) {
-            symlink("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
-        }
-        my @n_distros = grep { $_ ne $distro } @distros;
-        # generate binary tarballs
-        foreach my $arch (@arches) {
-            my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
-            my $tar_args = "-cvf $dist_filename \\\n";
-	    
-            # exclude other arches, iso and src dirs
-            my @n_arches = grep { $_ ne $arch } @arches;
-	    for my $n_arch (@n_arches) {
-		$tar_args .= "--exclude $tmp_dir/$distro/$n_arch \\\n";
-	    }
-	    $tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
-	    $tar_args .= "--exclude $tmp_dir/$distro/src \\\n";
-	    
-	    # exclude any other distro updates
-	    if ($micro) {
-		for my $n_distro (@n_distros) {
-		    $tar_args .= "--exclude $tmp_dir/$distro/updates/$n_distro \\\n";
-		}
-	    }
-	    
-	    $tar_args .= " $tmp_dir/$distro";
-	    print "\nCreating dist for $distro:$arch -- \n";
-	    system("tar $tar_args");
-	    
-	    my $md5sum;
-	    open (DIST, "<", $dist_filename) ||
-		die "Unable to open $dist_filename: $!";
-	    binmode DIST;
-	    my $data = <DIST>;
-	    close DIST;
-	    $md5sum = md5_hex($data);
-	    printf MD5 "%s  %s\n", $dist_filename, $md5sum;
-	}
+foreach my $distro (@distros) {
+    if ($micro) {
+	symlink("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
+    }
+    my @n_distros = grep { $_ ne $distro } @distros;
+    # generate binary tarballs
+    foreach my $arch (@arches) {
+	my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
+	my $tar_args = "-cvf $dist_filename \\\n";
 	
-	# generate src tarball
-	my $src_filename = "$dest_dir/OpenHPC-$release.$distro\_src.tar";
-	my $tar_args = "-cvf $src_filename \\\n";
-	for my $arch (@arches) {
-	    $tar_args .= "--exclude $tmp_dir/$distro/$arch \\\n";
+	# exclude other arches, iso and src dirs
+	my @n_arches = grep { $_ ne $arch } @arches;
+	for my $n_arch (@n_arches) {
+	    $tar_args .= "--exclude $tmp_dir/$distro/$n_arch \\\n";
 	}
-	# exclude any other distro/arch updates
+	$tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
+	$tar_args .= "--exclude $tmp_dir/$distro/src \\\n";
+	
+	# exclude any other distro updates
 	if ($micro) {
-	    for my $arch (@arches) {
-		$tar_args .= "--exclude $tmp_dir/$distro/updates/$arch \\\n";
-	    }
 	    for my $n_distro (@n_distros) {
 		$tar_args .= "--exclude $tmp_dir/$distro/updates/$n_distro \\\n";
 	    }
 	}
-	$tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
+	
 	$tar_args .= " $tmp_dir/$distro";
-	print "dist for $distro:src -- \n";
+	print "\nCreating dist for $distro:$arch -- \n";
 	system("tar $tar_args");
 	
 	my $md5sum;
-	open (DIST, "<", $src_filename) ||
-	    die "Unable to open $src_filename: $!";
+	open (DIST, "<", $dist_filename) ||
+	    die "Unable to open $dist_filename: $!";
 	binmode DIST;
 	my $data = <DIST>;
 	close DIST;
 	$md5sum = md5_hex($data);
-	printf MD5 "%s  %s\n", $src_filename, $md5sum;
+	printf MD5 "%s  %s\n", $dist_filename, $md5sum;
     }
     
-    close(MD5);
+    # generate src tarball
+    my $src_filename = "$dest_dir/OpenHPC-$release.$distro\_src.tar";
+    my $tar_args = "-cvf $src_filename \\\n";
+    for my $arch (@arches) {
+	$tar_args .= "--exclude $tmp_dir/$distro/$arch \\\n";
+    }
+    # exclude any other distro/arch updates
+    if ($micro) {
+	for my $arch (@arches) {
+	    $tar_args .= "--exclude $tmp_dir/$distro/updates/$arch \\\n";
+	}
+	for my $n_distro (@n_distros) {
+	    $tar_args .= "--exclude $tmp_dir/$distro/updates/$n_distro \\\n";
+	}
+    }
+    $tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
+    $tar_args .= " $tmp_dir/$distro";
 
-    unless(rmtree $tmp_dir) {
-	die "Unable to remove $tmp_dir: $!\n";
+    # add .repo file(s)
+
+    print "Adding [base] repofile contents\n";
+    copy("repo.base.in","$tmp_dir/$distro/OpenHPC.local.repo") || die "Unable to copy repo.base.in\n";
+    if($micro) {
+	print "Adding [update] repofile contents\n";
+	open (BASE, ">>","$tmp_dir/$distro/OpenHPC.local.repo") || die "Unable to append to repo file\n";
+	open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
+	print BASE <UPDATE>;
+	close BASE;
+	close UPDATE;
     }
 
-# TODO: write sed script for repo files
+    print "dist for $distro:src -- \n";
+    system("tar $tar_args");
+    
+    my $md5sum;
+    open (DIST, "<", $src_filename) ||
+	die "Unable to open $src_filename: $!";
+    binmode DIST;
+    my $data = <DIST>;
+    close DIST;
+    $md5sum = md5_hex($data);
+    printf MD5 "%s  %s\n", $src_filename, $md5sum;
+}
 
+close(MD5);
+
+unless(rmtree $tmp_dir) {
+    die "Unable to remove $tmp_dir: $!\n";
 }
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 
