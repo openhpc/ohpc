@@ -100,7 +100,11 @@ foreach my $distro (@distros) {
         my $md5_sum;
         open (DIST, "<", $dist_filename) ||
             die "Unable to open $dist_filename: $!";
-        
+        binmode DIST;
+        my $data = <DIST>;
+        close DIST;
+        $md5sum = md5_hex($data);
+        printf MD5 "%s  %s\n", $dist_filename, $md5sum;
     }
 
     # generate src tarball
@@ -121,6 +125,15 @@ foreach my $distro (@distros) {
     $tar_args .= " $tmp_dir/$distro";
     print "dist for $distro:src -- \n";
     system("tar $tar_args");
+
+    my $md5_sum;
+    open (DIST, "<", $dist_filename) ||
+        die "Unable to open $dist_filename: $!";
+    binmode DIST;
+    my $data = <DIST>;
+    close DIST;
+    $md5sum = md5_hex($data);
+    printf MD5 "%s  %s\n", $dist_filename, $md5sum;
 }
 
 close(MD5);
