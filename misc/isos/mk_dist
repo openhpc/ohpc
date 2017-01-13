@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Digest::MD5 qw(md5_hex); 
-use File::Path;
+use File::Path qw(make_path);
 use File::Copy::Recursive qw(dircopy);
 use Getopt::Long;
 
@@ -63,8 +63,9 @@ if ( ! -d $dest_dir ) {
 print "OpenHPC dist creation utility\n";
 print "--> Requested release version = $release\n";
 print "--> Overwrite existing dists  = $overwrite\n";
+
 if($skipCopy) {
-    print "--> Debug skipCopy option enabled\n";
+    print "--> Debug skipCopy option     = 1\n";
 }
 
 # parse release
