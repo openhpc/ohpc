@@ -97,7 +97,7 @@ foreach my $distro (@distros) {
         print "\nCreating dist for $distro:$arch -- \n";
         system("tar $tar_args");
 
-        my $md5_sum;
+        my $md5sum;
         open (DIST, "<", $dist_filename) ||
             die "Unable to open $dist_filename: $!";
         binmode DIST;
@@ -108,7 +108,8 @@ foreach my $distro (@distros) {
     }
 
     # generate src tarball
-    my $tar_args = "-cvf \\\n";
+    my $src_filename = "$dest_dir/OpenHPC-$release.$distro\_src.tar";
+    my $tar_args = "-cvf $src_filename\\\n";
     for my $arch (@arches) {
         $tar_args .= "--exclude $tmp_dir/$distro/$arch \\\n";
     }
@@ -126,14 +127,14 @@ foreach my $distro (@distros) {
     print "dist for $distro:src -- \n";
     system("tar $tar_args");
 
-    my $md5_sum;
-    open (DIST, "<", $dist_filename) ||
-        die "Unable to open $dist_filename: $!";
+    my $md5sum;
+    open (DIST, "<", $src_filename) ||
+        die "Unable to open $src_filename: $!";
     binmode DIST;
     my $data = <DIST>;
     close DIST;
     $md5sum = md5_hex($data);
-    printf MD5 "%s  %s\n", $dist_filename, $md5sum;
+    printf MD5 "%s  %s\n", $src_filename, $md5sum;
 }
 
 close(MD5);
