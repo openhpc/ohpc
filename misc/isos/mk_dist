@@ -112,6 +112,7 @@ foreach my $distro (@distros) {
     foreach my $arch (@arches) {
 	my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
 	my $tar_args = "-cvf $dist_filename \\\n";
+	$tar_args .= "--cd $tmp_dir \\\n";
 	
 	# exclude other arches, iso and src dirs
 	my @n_arches = grep { $_ ne $arch } @arches;
@@ -145,6 +146,7 @@ foreach my $distro (@distros) {
     # generate src tarball
     my $src_filename = "$dest_dir/OpenHPC-$release.$distro\_src.tar";
     my $tar_args = "-cvf $src_filename \\\n";
+    $tar_args .= "--cd $tmp_dir \\\n";
     for my $arch (@arches) {
 	$tar_args .= "--exclude $tmp_dir/$distro/$arch \\\n";
     }
