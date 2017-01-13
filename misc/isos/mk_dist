@@ -90,9 +90,9 @@ if( !$skipCopy) {
     if ($micro) {
         #TODO: support update repo merge
         print "\nCopying updates\n";
-         "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
-         "$tmp_dir/empty" || warn "Unable to remove empty dir: $!";
-        ("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
+        unlink "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
+        rmtree "$tmp_dir/empty" || warn "Unable to remove empty dir: $!";
+        dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
             die "Unable to copy update repo: $!";
     }
 }
