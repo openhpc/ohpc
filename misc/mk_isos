@@ -2,8 +2,9 @@
 
 use strict;
 use warnings;
+use Digest::MD5 qw(md5); 
 use File::Path;
-use File::Copy::Recursive "dircopy";
+use File::Copy::Recursive qw(dircopy);
 
 #my @arches = ('aarch64', 'x86_64');
 #my @distros = ('CentOS_7.2', 'SLE_12_SP1');
@@ -12,8 +13,8 @@ my @arches = ('x86_64');
 my @distros = ('CentOS_7.2');
 
 my $base_repo_path = "/srv/obs/repos/OpenHPC:";
-my $dest_dir = "/srv/www/isos";
-my $tmp_dir = "/srv/tmp/isos/mk_isos.$$";
+my $dest_dir = "/srv/www/dist";
+my $tmp_dir = "/srv/tmp/dist/mk_dist.$$";
 
 # enable autoflush
 $| = 1;
@@ -32,18 +33,16 @@ if(defined $ENV{'OverWritePrevoius'} ) {
     if ($ENV{'OverWritePrevious'} eq "true") { $overwrite=1; }
 } 
 
-print "OpenHPC ISO creation utility\n";
+print "OpenHPC dist creation utility\n";
 print "--> Requested release version = $release\n";
-print "--> Overwrite existing isos   = $overwrite\n";
-
-#getopts+usage
+print "--> Overwrite existing dists  = $overwrite\n";
 
 # parse release
 my ($major, $minor, $micro) = split(/\./, $release);
 my $base_release = "$major.$minor";
 
 # stage repo in tmp
-print "\nStaging iso creation in $tmp_dir...\n";
+print "\nStaging dist creation in $tmp_dir...\n";
 die "Unable to create $tmp_dir: $!\n" unless(mkdir $tmp_dir);
 
 # copy base repo contents
@@ -63,56 +62,68 @@ if ($micro) {
         die "Unable to copy update repo: $!";
 }
 
-# build isos + TODO: md5s
+# build dist + TODO: md5s
+
+my $md5sum_file = "$dest_dir/OpenHPC:$release.md5s";
+open (MD5, ">", $md5sum_file) ||
+    die "Couldn't open $md5sum_file: $!";
+
 foreach my $distro (@distros) {
     if ($micro) {
         symlink("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
     }
     my @n_distros = grep { $_ ne $distro } @distros;
-    # generate binary isos
+    # generate binary tarballs
     foreach my $arch (@arches) {
-        my $mkisofs_args = "-R -l -f \\\n";
+        my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
+        my $tar_args = "-cvf $dist_filename \\\n";
 
         # exclude other arches, iso and src dirs
         my @n_arches = grep { $_ ne $arch } @arches;
         for my $n_arch (@n_arches) {
-            $mkisofs_args .= "-x $tmp_dir/$distro/$n_arch \\\n";
+            $tar_args .= "--exclude $tmp_dir/$distro/$n_arch \\\n";
         }
-        $mkisofs_args .= "-x $tmp_dir/$distro/iso \\\n";
-        $mkisofs_args .= "-x $tmp_dir/$distro/src \\\n";
+        $tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
+        $tar_args .= "--exclude $tmp_dir/$distro/src \\\n";
 
         # exclude any other distro updates
         if ($micro) {
             for my $n_distro (@n_distros) {
-                $mkisofs_args .= "-x $tmp_dir/$distro/updates/$n_distro \\\n";
+                $tar_args .= "--exclude $tmp_dir/$distro/updates/$n_distro \\\n";
             }
         }
 
-        $mkisofs_args .= "-o $dest_dir/OpenHPC-$release.$distro\_$arch.iso $tmp_dir/$distro";
+        $tar_args .= " $tmp_dir/$distro";
+        print "\nCreating dist for $distro:$arch -- \n";
+        system("tar $tar_args");
 
-        print "\nCreating ISO for $distro:$arch -- \n";
-        system("mkisofs $mkisofs_args");
+        my $md5_sum;
+        open (DIST, "<", $dist_filename) ||
+            die "Unable to open $dist_filename: $!";
+        
     }
 
-    # generate src iso
-    my $mkisofs_args = "-R -l -f \\\n";
+    # generate src tarball
+    my $tar_args = "-cvf \\\n";
     for my $arch (@arches) {
-        $mkisofs_args .= "-x $tmp_dir/$distro/$arch \\\n";
+        $tar_args .= "--exclude $tmp_dir/$distro/$arch \\\n";
     }
     # exclude any other distro/arch updates
     if ($micro) {
         for my $arch (@arches) {
-            $mkisofs_args .= "-x $tmp_dir/$distro/updates/$arch \\\n";
+            $tar_args .= "--exclude $tmp_dir/$distro/updates/$arch \\\n";
         }
         for my $n_distro (@n_distros) {
-            $mkisofs_args .= "-x $tmp_dir/$distro/updates/$n_distro \\\n";
+            $tar_args .= "--exclude $tmp_dir/$distro/updates/$n_distro \\\n";
         }
     }
-    $mkisofs_args .= "-x $tmp_dir/$distro/iso \\\n";
-    $mkisofs_args .= "-o $dest_dir/OpenHPC-$release.$distro.src.iso $tmp_dir/$distro";
-    print "iso for $distro:src -- \n";
-    system("mkisofs $mkisofs_args");
+    $tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
+    $tar_args .= " $tmp_dir/$distro";
+    print "dist for $distro:src -- \n";
+    system("tar $tar_args");
 }
+
+close(MD5);
 
 # TODO: write sed script for repo files
 
