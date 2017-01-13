@@ -63,6 +63,9 @@ if ( ! -d $dest_dir ) {
 print "OpenHPC dist creation utility\n";
 print "--> Requested release version = $release\n";
 print "--> Overwrite existing dists  = $overwrite\n";
+if($skipCopy) {
+    print "--> Debug skipCopy option enabled\n";
+}
 
 # parse release
 my ($major, $minor, $micro) = split(/\./, $release);
@@ -70,7 +73,8 @@ my $base_release = "$major.$minor";
 
 # stage repo in tmp
 print "\nStaging dist creation in $tmp_dir...\n";
-die "Unable to create $tmp_dir: $!\n" unless(mkdir $tmp_dir);
+make_path($tmp_dir) || die("Unable to create $tmp_dir: $!\n");
+#die "Unable to create $tmp_dir: $!\n" unless(mkdir $tmp_dir);
 
 if( !$skipCopy) {
 
