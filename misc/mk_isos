@@ -5,12 +5,34 @@ use warnings;
 use File::Path;
 use File::Copy::Recursive "dircopy";
 
-my @arches = ('aarch64', 'x86_64');
-my @distros = ('CentOS_7.2', 'SLE_12_SP1');
+#my @arches = ('aarch64', 'x86_64');
+#my @distros = ('CentOS_7.2', 'SLE_12_SP1');
+# debug for testing...
+my @arches = ('x86_64');
+my @distros = ('CentOS_7.2');
+
 my $base_repo_path = "/srv/obs/repos/OpenHPC:";
 my $dest_dir = "/srv/www/isos";
-my $release = "1.2.1";
-my $tmp_dir = "/srv/tmp/mk_isos.$$";
+#my $dest_dir = "/srv/tmp/isos/isos";
+my $tmp_dir = "/srv/tmp/isos/mk_isos.$$";
+
+# query expected environment variables
+my $release;
+my $overwrite=0;
+
+if(defined $ENV{'Version'}) {
+    $release = $ENV{'Version'};
+} else {
+    die "Version environment variable not set!\n";
+}
+
+if(defined $ENV{'OverWritePrevoius'} ) {
+    if ($ENV{'OverWritePrevious'} eq "true") { $overwrite=1; }
+} 
+
+print "OpenHPC ISO creation utility\n";
+print "--> Requested release version = $release\n";
+print "--> Overwrite existing isos   = $overwrite\n";
 
 #getopts+usage
 
@@ -19,12 +41,15 @@ my ($major, $minor, $micro) = split(/\./, $release);
 my $base_release = "$major.$minor";
 
 # stage repo in tmp
-unless(mkdir $tmp_dir) {
-    die "Unable to create $tmp_dir: $!\n";
-}
+print "\nStaging iso creation in $tmp_dir...\n";
+die "Unable to create $tmp_dir: $!\n" unless(mkdir $tmp_dir);
+
+# copy base repo contents
+print "\nCopying base repo contents from OBS...\n";
 unless(dircopy("$base_repo_path/$base_release", $tmp_dir)) {
     die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
 }
+print "--> base repo copy complete\n";
 
 # build update repo
 if ($micro) {
@@ -87,7 +112,7 @@ foreach my $distro (@distros) {
     system("mkisofs $mkisofs_args");
 }
 
-TODO: write sed script for repo files
+# TODO: write sed script for repo files
 
 unless(rmtree $tmp_dir) {
     die "Unable to remove $tmp_dir: $!\n";
