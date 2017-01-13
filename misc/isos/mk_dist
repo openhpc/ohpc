@@ -142,6 +142,7 @@ foreach my $distro (@distros) {
 	
 	$tar_args .= " $tmp_dir/$distro";
 	print "\nCreating dist for $distro:$arch -- \n";
+	print "tar command -> tar $tar_args\n";
 	system("tar $tar_args");
 	
 	my $md5sum;
