@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Digest::MD5 qw(md5); 
+use Digest::MD5 qw(md5_hex); 
 use File::Path;
 use File::Copy::Recursive qw(dircopy);
 use Getopt::Long;
@@ -73,38 +73,38 @@ if( !$skipAssembly) {
     # copy base repo contents
     print "\nCopying base repo contents from OBS...\n";
     unless(dircopy("$base_repo_path/$base_release", $tmp_dir)) {
-	die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
+        die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
     }
     print "--> base repo copy complete\n";
 
    # build update repo
     if ($micro) {
-	#TODO: support update repo merge
-	print "\nCopying updates\n";
-	unlink "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
-	rmtree "$tmp_dir/empty" || warn "Unable to remove empty dir: $!";
-	dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
-	    die "Unable to copy update repo: $!";
+        #TODO: support update repo merge
+        print "\nCopying updates\n";
+         "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
+         "$tmp_dir/empty" || warn "Unable to remove empty dir: $!";
+        ("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
+            die "Unable to copy update repo: $!";
     }
 
     # build dist + TODO: md5s
 
     my $md5sum_file = "$dest_dir/OpenHPC:$release.md5s";
     open (MD5, ">", $md5sum_file) ||
-	die "Couldn't open $md5sum_file: $!";
+        die "Couldn't open $md5sum_file: $!";
 
     foreach my $distro (@distros) {
-	if ($micro) {
-	    symlink("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
-	}
-	my @n_distros = grep { $_ ne $distro } @distros;
-	# generate binary tarballs
-	foreach my $arch (@arches) {
-	    my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
-	    my $tar_args = "-cvf $dist_filename \\\n";
+        if ($micro) {
+            symlink("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
+        }
+        my @n_distros = grep { $_ ne $distro } @distros;
+        # generate binary tarballs
+        foreach my $arch (@arches) {
+            my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
+            my $tar_args = "-cvf $dist_filename \\\n";
 	    
-	    # exclude other arches, iso and src dirs
-	    my @n_arches = grep { $_ ne $arch } @arches;
+            # exclude other arches, iso and src dirs
+            my @n_arches = grep { $_ ne $arch } @arches;
 	    for my $n_arch (@n_arches) {
 		$tar_args .= "--exclude $tmp_dir/$distro/$n_arch \\\n";
 	    }
@@ -134,7 +134,7 @@ if( !$skipAssembly) {
 	
 	# generate src tarball
 	my $src_filename = "$dest_dir/OpenHPC-$release.$distro\_src.tar";
-	my $tar_args = "-cvf $src_filename\\\n";
+	my $tar_args = "-cvf $src_filename \\\n";
 	for my $arch (@arches) {
 	    $tar_args .= "--exclude $tmp_dir/$distro/$arch \\\n";
 	}
