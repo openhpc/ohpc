@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Digest::MD5 qw(md5_hex); 
-use File::Path qw(make_path);
+use File::Path;
 use File::Copy::Recursive qw(dircopy);
 use Getopt::Long;
 use File::Temp qw(tempfile);
@@ -60,7 +60,7 @@ if(defined $ENV{'OverWritePrevoius'} ) {
 } 
 
 if ( ! -d $dest_dir ) {
-    make_path($dest_dir) || die("Unable to create $dest_dir\n");
+    File::Path::make_path($dest_dir) || die("Unable to create $dest_dir\n");
 }
 
 print "OpenHPC dist creation utility\n";
