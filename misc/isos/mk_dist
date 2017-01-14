@@ -170,7 +170,7 @@ foreach my $distro (@distros) {
 #	$tar_args .= " $tmp_dir/$distro";
 	$tar_args .= " $distro";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
-	print "tar command -> tar $tar_args\n";
+	print "tar command -> tar $tar_args\n\n";
 	system("tar $tar_args");
 	
 	my $md5sum;
@@ -186,7 +186,7 @@ foreach my $distro (@distros) {
     # generate src tarball
     my $src_filename = "$dest_dir/OpenHPC-$release.$distro\_src.tar";
     my $tar_args = "-cvf $src_filename \\\n";
-    $tar_args .= "--cd $tmp_dir \\\n";
+
     for my $arch (@arches) {
 	$tar_args .= "--exclude $tmp_dir/$distro/$arch \\\n";
     }
@@ -200,12 +200,11 @@ foreach my $distro (@distros) {
 	}
     }
     $tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
-    $tar_args .= " $tmp_dir/$distro";
-
-
+    $tar_args .= "-C $tmp_dir \\\n";
+    $tar_args .= " $distro";
 
     print "dist for $distro:src -- \n";
-    print "tar command -> tar $tar_args\n";
+    print "tar command -> tar $tar_args\n\n";
     system("tar $tar_args");
     
     my $md5sum;
