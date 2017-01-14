@@ -126,13 +126,13 @@ foreach my $distro (@distros) {
 	for my $n_arch (@n_arches) {
 	    $tar_args .= "--exclude $tmp_dir/$distro/$n_arch \\\n";
 	}
-	$tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
-	$tar_args .= "--exclude $tmp_dir/$distro/src \\\n";
+	$tar_args .= "--exclude $distro/iso \\\n";
+	$tar_args .= "--exclude $distro/src \\\n";
 	
 	# exclude any other distro updates
 	if ($micro) {
 	    for my $n_distro (@n_distros) {
-		$tar_args .= "--exclude $tmp_dir/$distro/updates/$n_distro \\\n";
+		$tar_args .= "--exclude $distro/updates/$n_distro \\\n";
 	    }
 	}
 
@@ -187,18 +187,18 @@ foreach my $distro (@distros) {
     my $tar_args = "-cvf $src_filename \\\n";
 
     for my $arch (@arches) {
-	$tar_args .= "--exclude $tmp_dir/$distro/$arch \\\n";
+	$tar_args .= "--exclude $distro/$arch \\\n";
     }
     # exclude any other distro/arch updates
     if ($micro) {
 	for my $arch (@arches) {
-	    $tar_args .= "--exclude $tmp_dir/$distro/updates/$arch \\\n";
+	    $tar_args .= "--exclude $distro/updates/$arch \\\n";
 	}
 	for my $n_distro (@n_distros) {
-	    $tar_args .= "--exclude $tmp_dir/$distro/updates/$n_distro \\\n";
+	    $tar_args .= "--exclude $distro/updates/$n_distro \\\n";
 	}
     }
-    $tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
+    $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
     $tar_args .= "$distro";
 
