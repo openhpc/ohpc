@@ -7,8 +7,7 @@ use File::Path;
 use File::Copy::Recursive qw(dircopy);
 use Getopt::Long;
 use File::Temp qw(tempfile);
-
-
+use Path::Tiny qw(path);
 
 #my @arches = ('aarch64', 'x86_64');
 #my @distros = ('CentOS_7.2', 'SLE_12_SP1');
@@ -140,22 +139,32 @@ foreach my $distro (@distros) {
 	    }
 	}
 
-	# add .repo file(s)
+	# add .repo file
+
+	my $repoFile="$tmp_dir/$distro/OpenHPC.local.repo";
 
 	if($skipCopy) {
 	    File::Path::make_path("$tmp_dir/$distro") || die("Unable to create $tmp_dir/$distro\n");
 	}
-	print "Adding [base] repofile contents -> $tmp_dir/$distro/OpenHPC.local.repo\n";
+	print "Adding [base] repofile contents -> $repoFile\n";
 
-	File::Copy::copy("repo.base.in","$tmp_dir/$distro/OpenHPC.local.repo") || die "Unable to copy repo.base.in\n";
+	File::Copy::copy("repo.base.in","$repoFile") || die "Unable to copy repo.base.in\n";
 	if($micro) {
 	    print "Adding [update] repofile contents\n";
-	    open (BASE, ">>","$tmp_dir/$distro/OpenHPC.local.repo") || die "Unable to append to repo file\n";
+	    open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
 	    open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
 	    print BASE <UPDATE>;
 	    close BASE;
 	    close UPDATE;
 	}
+
+	# Update version strings in .repo file
+
+	my $file_update = path($repoFile);
+	my $contents    = $file_update->slurp_utf8;
+	$contents       =~ s/\@VERSION_MINOR\@/$base_release/g;
+	$contents       =~ s/\@VERSION_MICRO\@/$release/g;
+	$file_update->spew_utf8( $contents );
 	
 	$tar_args .= " $tmp_dir/$distro";
 	print "\nCreating dist for $distro:$arch -- \n";
