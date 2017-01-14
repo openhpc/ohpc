@@ -168,7 +168,7 @@ foreach my $distro (@distros) {
 	
 	# Assemble final tarball
 #	$tar_args .= " $tmp_dir/$distro";
-	$tar_args .= " /$distro";
+	$tar_args .= " $distro";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "tar command -> tar $tar_args\n";
 	system("tar $tar_args");
