@@ -80,7 +80,7 @@ if (! -d $tmp_path) {
     File::Path::make_path($tmp_path) || die("Unable to create $tmp_path\n");
 }
 
-my $tmp_dir = File::Temp::tempdir(CLEANUP => 0, DIR=> $tmp_path) || MYERROR("Unable to create temporary directory");
+my $tmp_dir = File::Temp::tempdir(CLEANUP => 1, DIR=> $tmp_path) || MYERROR("Unable to create temporary directory");
 
 print "\nStaging dist creation in $tmp_dir...\n";
 
@@ -167,7 +167,6 @@ foreach my $distro (@distros) {
 	$file_update->spew_utf8( $contents );
 	
 	# Assemble final tarball
-#	$tar_args .= " $tmp_dir/$distro";
 	$tar_args .= "$distro";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "\ntar command -> tar $tar_args\n\n";
