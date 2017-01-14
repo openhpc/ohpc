@@ -78,7 +78,7 @@ my $base_release = "$major.$minor";
 # stage repo in tmp
 
 if (! -d $tmp_path) {
-    make_path($tmp_path) || die("Unable to create $tmp_path\n");
+    File::Path::make_path($tmp_path) || die("Unable to create $tmp_path\n");
 }
 
 my $tmp_dir = File::Temp::tempdir(CLEANUP => 0, DIR=> $tmp_path) || MYERROR("Unable to create temporary directory");
@@ -143,7 +143,7 @@ foreach my $distro (@distros) {
 	# add .repo file(s)
 
 	if($skipCopy) {
-	    make_path("$tmp_dir/$distro") || die("Unable to create $tmp_dir/$distro\n");
+	    File::Path::make_path("$tmp_dir/$distro") || die("Unable to create $tmp_dir/$distro\n");
 	}
 	print "Adding [base] repofile contents -> $tmp_dir/$distro/OpenHPC.local.repo\n";
 
