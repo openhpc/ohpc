@@ -168,9 +168,9 @@ foreach my $distro (@distros) {
 	
 	# Assemble final tarball
 #	$tar_args .= " $tmp_dir/$distro";
-	$tar_args .= " $distro";
+	$tar_args .= "$distro";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
-	print "tar command -> tar $tar_args\n\n";
+	print "\ntar command -> tar $tar_args\n\n";
 	system("tar $tar_args");
 	
 	my $md5sum;
@@ -201,10 +201,10 @@ foreach my $distro (@distros) {
     }
     $tar_args .= "--exclude $tmp_dir/$distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
-    $tar_args .= " $distro";
+    $tar_args .= "$distro";
 
     print "dist for $distro:src -- \n";
-    print "tar command -> tar $tar_args\n\n";
+    print "\ntar command -> tar $tar_args\n\n";
     system("tar $tar_args");
     
     my $md5sum;
