@@ -143,7 +143,7 @@ foreach my $distro (@distros) {
 	# add .repo file(s)
 
 	print "Adding [base] repofile contents\n";
-	copy("repo.base.in","$tmp_dir/$distro/OpenHPC.local.repo") || die "Unable to copy repo.base.in\n";
+	File::copy("repo.base.in","$tmp_dir/$distro/OpenHPC.local.repo") || die "Unable to copy repo.base.in\n";
 	if($micro) {
 	    print "Adding [update] repofile contents\n";
 	    open (BASE, ">>","$tmp_dir/$distro/OpenHPC.local.repo") || die "Unable to append to repo file\n";
