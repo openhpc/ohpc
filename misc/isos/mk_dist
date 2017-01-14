@@ -84,9 +84,6 @@ my $tmp_dir = File::Temp::tempdir(CLEANUP => 0, DIR=> $tmp_path) || MYERROR("Una
 
 print "\nStaging dist creation in $tmp_dir...\n";
 
-#make_path($tmp_dir) || die("Unable to create $tmp_dir: $!\n");
-#die "Unable to create $tmp_dir: $!\n" unless(mkdir $tmp_dir);
-
 if( !$skipCopy) {
 
     # copy base repo contents
@@ -122,7 +119,7 @@ foreach my $distro (@distros) {
     foreach my $arch (@arches) {
 	my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
 	my $tar_args = "-cvf $dist_filename \\\n";
-	$tar_args .= "--cd $tmp_dir \\\n";
+
 	
 	# exclude other arches, iso and src dirs
 	my @n_arches = grep { $_ ne $arch } @arches;
@@ -139,6 +136,9 @@ foreach my $distro (@distros) {
 	    }
 	}
 
+	# cd to $tmp_dir
+	$tar_args .= "-C $tmp_dir \\\n";
+
 	# add .repo file
 
 	my $repoFile="$tmp_dir/$distro/OpenHPC.local.repo";
@@ -150,7 +150,7 @@ foreach my $distro (@distros) {
 
 	File::Copy::copy("repo.base.in","$repoFile") || die "Unable to copy repo.base.in\n";
 	if($micro) {
-	    print "Adding [update] repofile contents\n";
+	    print "Appending [update] repo\n";
 	    open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
 	    open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
 	    print BASE <UPDATE>;
@@ -166,8 +166,10 @@ foreach my $distro (@distros) {
 	$contents       =~ s/\@VERSION_MICRO\@/$release/g;
 	$file_update->spew_utf8( $contents );
 	
-	$tar_args .= " $tmp_dir/$distro";
-	print "\nCreating dist for $distro:$arch -- \n";
+	# Assemble final tarball
+#	$tar_args .= " $tmp_dir/$distro";
+	$tar_args .= " /$distro";
+	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "tar command -> tar $tar_args\n";
 	system("tar $tar_args");
 	
