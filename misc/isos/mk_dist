@@ -143,7 +143,7 @@ foreach my $distro (@distros) {
 	# add .repo file(s)
 
 	if($skipCopy) {
-	    make_path($tmp_dir/$distro) || die("Unable to create $tmp_dir/$distro\n");
+	    make_path("$tmp_dir/$distro") || die("Unable to create $tmp_dir/$distro\n");
 	}
 	print "Adding [base] repofile contents -> $tmp_dir/$distro/OpenHPC.local.repo\n";
 
