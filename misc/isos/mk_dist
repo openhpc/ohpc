@@ -142,10 +142,11 @@ foreach my $distro (@distros) {
 
 	# add .repo file(s)
 
-	print "Adding [base] repofile contents\n";
+	print "Adding [base] repofile contents -> $tmp_dir/$distro/OpenHPC.local.repo\n";
 	if ( ! -s "repo.base.in" ) {
 	    print "missing repo.base.in\n";
 	}
+
 	File::Copy::copy("repo.base.in","$tmp_dir/$distro/OpenHPC.local.repo") || die "Unable to copy repo.base.in\n";
 	if($micro) {
 	    print "Adding [update] repofile contents\n";
