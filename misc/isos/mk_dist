@@ -203,7 +203,7 @@ foreach my $distro (@distros) {
     $tar_args .= "-C $tmp_dir \\\n";
     $tar_args .= "$distro";
 
-    print "dist for $distro:src -- \n";
+    print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
     system("tar $tar_args");
     
