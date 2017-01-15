@@ -112,7 +112,7 @@ open (MD5, ">", $md5sum_file) ||
 
 foreach my $distro (@distros) {
     if ($micro) {
-	symlink("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
+	dircopy("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
     }
     my @n_distros = grep { $_ ne $distro } @distros;
     # generate binary tarballs
