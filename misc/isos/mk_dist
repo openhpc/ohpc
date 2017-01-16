@@ -121,7 +121,7 @@ foreach my $distro (@distros) {
 	# exclude other arches, iso and src dirs
 	my @n_arches = grep { $_ ne $arch } @arches;
 	for my $n_arch (@n_arches) {
-	    $tar_args .= "--exclude $tmp_dir/$distro/$n_arch \\\n";
+	    $tar_args .= "--exclude $distro/$n_arch \\\n";
 	}
 	$tar_args .= "--exclude $distro/iso \\\n";
 	$tar_args .= "--exclude $distro/src \\\n";
