@@ -14,7 +14,7 @@ else
 fi
 
 if [ ! -d "${repodir}" ];then
-    echo "Error: unable to fine local repodir (expected ${repodir})"
+    echo "Error: unable to find local repodir (expected ${repodir})"
     exit 1
 fi
 
