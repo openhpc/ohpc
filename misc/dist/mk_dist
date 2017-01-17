@@ -133,6 +133,9 @@ foreach my $distro (@distros) {
 	    }
 	}
 
+	# exclude OBS created .repo file
+	$tar_args .= "--exclude $distro/OpenHPC:$release.repo"
+
 	# cd to $tmp_dir
 	$tar_args .= "-C $tmp_dir \\\n";
 
@@ -166,7 +169,8 @@ foreach my $distro (@distros) {
 	# Copy mk_repo utility
 	print "Adding mk_repo utility\n";
 	File::Copy::copy("mk_repo","$tmp_dir") || die "Unable to copy mk_repo\n";
-	
+	chmod 0700, "/tmp_dir/mk_repo" || die "Unable to set perms for mk_repo\n";
+
 	# Assemble final tarball
 	$tar_args .= "$distro mk_repo";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
@@ -199,6 +203,10 @@ foreach my $distro (@distros) {
 	    $tar_args .= "--exclude $distro/updates/$n_distro \\\n";
 	}
     }
+
+    # exclude OBS created .repo file
+    $tar_args .= "--exclude $distro/OpenHPC:$release.repo"
+	
     $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
     $tar_args .= "$distro mk_repo";
