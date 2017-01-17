@@ -182,7 +182,7 @@ foreach my $distro (@distros) {
 	$tar_args .= "$distro make_repo.sh OpenHPC.local.repo README.in";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "\ntar command -> tar $tar_args\n\n";
-	system("tar $tar_args");
+	system("tar $tar_args") || die "Unable to execute tar command: $!";
 
 	`pwd`;
 	`ls`;
@@ -225,7 +225,7 @@ foreach my $distro (@distros) {
 
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
-    system("tar $tar_args");
+    system("tar $tar_args") || die "Unable to execute tar command: $!";
     
     my $md5sum;
     #local $/ = undef;
