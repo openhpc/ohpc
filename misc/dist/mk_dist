@@ -171,7 +171,7 @@ foreach my $distro (@distros) {
 	# Copy mk_repo utility
 	print "Adding mk_repo utility\n";
 	File::Copy::copy("mk_repo","$tmp_dir") || die "Unable to copy mk_repo\n";
-	chmod 0700, "/tmp_dir/mk_repo" || die "Unable to set perms for mk_repo\n";
+	chmod 0700, "$tmp_dir/mk_repo" || die "Unable to set perms for mk_repo\n";
 
 	# Assemble final tarball
 	$tar_args .= "$distro mk_repo OpenHPC.local.repo";
