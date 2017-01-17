@@ -206,8 +206,9 @@ foreach my $distro (@distros) {
 	}
     }
 
-    # exclude OBS created .repo file
-    $tar_args .= "--exclude $distro/OpenHPC:$release.repo"
+    # exclude any OBS created .repo files
+    $tar_args .= "--exclude $distro/OpenHPC*.repo";
+    $tar_args .= "--exclude $distro/updates/OpenHPC*.repo";
 	
     $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
