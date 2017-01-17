@@ -168,13 +168,17 @@ foreach my $distro (@distros) {
 	$contents       =~ s/\@DISTRO\@/$distro/g;
 	$file_update->spew_utf8( $contents );
 
-	# Copy mk_repo utility
-	print "Adding mk_repo utility\n";
-	File::Copy::copy("mk_repo","$tmp_dir") || die "Unable to copy mk_repo\n";
-	chmod 0700, "$tmp_dir/mk_repo" || die "Unable to set perms for mk_repo\n";
+	# Copy make_repo.sh utility
+	print "Adding make_repo.sh utility\n";
+	File::Copy::copy("make_repo.sh","$tmp_dir") || die "Unable to copy make_repo.sh\n";
+	chmod 0700, "$tmp_dir/make_repo.sh" || die "Unable to set perms for make_repo.sh\n";
+
+	# Copy in README
+	print "Adding README\n";
+	File::Copy::copy("README","$tmp_dir") || die "Unable to copy README\n";
 
 	# Assemble final tarball
-	$tar_args .= "$distro mk_repo OpenHPC.local.repo";
+	$tar_args .= "$distro make_repo.sh OpenHPC.local.repo README";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "\ntar command -> tar $tar_args\n\n";
 	system("tar $tar_args");
@@ -212,7 +216,7 @@ foreach my $distro (@distros) {
 	
     $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
-    $tar_args .= "$distro mk_repo";
+    $tar_args .= "$distro make_repo.sh README";
 
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
