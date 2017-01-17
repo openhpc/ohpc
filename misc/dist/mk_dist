@@ -228,7 +228,7 @@ foreach my $distro (@distros) {
     system("tar $tar_args") || die "Unable to execute tar command: $!";
     
     my $md5sum;
-    #local $/ = undef;
+    local $/ = undef;
     open DIST, "$src_filename" ||
 	die "Unable to open $src_filename: $!";
     my $data = <DIST>;
