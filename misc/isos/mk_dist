@@ -101,9 +101,9 @@ if( !$skipCopy) {
     }
 }
 
-# build dist + TODO: md5s
+# build dist + md5s
 
-my $md5sum_file = "$dest_dir/OpenHPC:$release.md5s";
+my $md5sum_file = "$dest_dir/OpenHPC-$release.md5s";
 open (MD5, ">", $md5sum_file) ||
     die "Couldn't open $md5sum_file: $!";
 
@@ -168,15 +168,15 @@ foreach my $distro (@distros) {
 	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "\ntar command -> tar $tar_args\n\n";
 	system("tar $tar_args");
-	
+
 	my $md5sum;
-	open (DIST, "<", $dist_filename) ||
+        local $/ = undef;
+	open DIST, "$dist_filename" ||
 	    die "Unable to open $dist_filename: $!";
-	binmode DIST;
 	my $data = <DIST>;
 	close DIST;
 	$md5sum = md5_hex($data);
-	printf MD5 "%s  %s\n", $dist_filename, $md5sum;
+	printf MD5 "%s  OpenHPC-%s.%s_%s.tar\n", $md5sum, $release, $distro, $arch;
     }
     
     # generate src tarball
@@ -204,13 +204,13 @@ foreach my $distro (@distros) {
     system("tar $tar_args");
     
     my $md5sum;
-    open (DIST, "<", $src_filename) ||
+    local $/ = undef;
+    open DIST, "$src_filename" ||
 	die "Unable to open $src_filename: $!";
-    binmode DIST;
     my $data = <DIST>;
     close DIST;
     $md5sum = md5_hex($data);
-    printf MD5 "%s  %s\n", $src_filename, $md5sum;
+    printf MD5 "%s  OpenHPC-%s.%s_src.tar\n", $md5sum, $release, $distro;
 }
 
 close(MD5);
