@@ -165,7 +165,7 @@ foreach my $distro (@distros) {
 	my $contents    = $file_update->slurp_utf8;
 	$contents       =~ s/\@VERSION_MINOR\@/$base_release/g;
 	$contents       =~ s/\@VERSION_MICRO\@/$release/g;
-	$contents       =~ s/\@DIST\@/$distro/g;
+	$contents       =~ s/\@DISTRO\@/$distro/g;
 	$file_update->spew_utf8( $contents );
 
 	# Copy mk_repo utility
