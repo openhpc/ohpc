@@ -235,8 +235,8 @@ foreach my $distro (@distros) {
 
 close(MD5);
 
-unless(rmtree $tmp_dir) {
-    die "Unable to remove $tmp_dir: $!\n";
-}
+###unless(rmtree $tmp_dir) {
+###    die "Unable to remove $tmp_dir: $!\n";
+###}
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 
