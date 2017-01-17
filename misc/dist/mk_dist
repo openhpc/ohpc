@@ -184,6 +184,10 @@ foreach my $distro (@distros) {
 	print "\ntar command -> tar $tar_args\n\n";
 	system("tar $tar_args");
 
+	`pwd`;
+	`ls`;
+	    
+
 	my $md5sum;
         local $/ = undef;
 	open DIST, "$dist_filename" ||
@@ -192,7 +196,7 @@ foreach my $distro (@distros) {
 	close DIST;
 	$md5sum = md5_hex($data);
 	printf MD5 "%s  OpenHPC-%s.%s_%s.tar\n", $md5sum, $release, $distro, $arch;
-    }
+    } # end loop over @arches
     
     # generate src tarball
     my $src_filename = "$dest_dir/OpenHPC-$release.$distro\_src.tar";
