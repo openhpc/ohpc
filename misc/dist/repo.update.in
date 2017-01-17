@@ -1,5 +1,5 @@
 [OpenHPC-local-updates]
 name=OpenHPC-@VERSION_MICRO@ - Updates
-baseurl=file://@PATH@
+baseurl=file://@PATH@/@DISTRO@/updates
 gpgcheck=1
-gpgkey=file:///@PATH@/RPM-GPG-KEY-OpenHPC-1
+gpgkey=file:///@PATH@/@DISTRO@/updates/repodata/repomd.xml.key

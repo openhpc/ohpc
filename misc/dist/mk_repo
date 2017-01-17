@@ -28,7 +28,7 @@ fi
 localRepoDir=`dirname $0`
 localRepoDir=$(dirname $(readlink -f $0) )
 #dirname $(readlink -f relative/path/to/file)
-localRepoFile=OpenHPC-local.repo
+localRepoFile=OpenHPC.local.repo
 
 echo "--> Creating $localRepoFile file in $repodir"
 echo "--> Local repodata stored in $localRepoDir"

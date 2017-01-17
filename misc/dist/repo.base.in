@@ -1,6 +1,6 @@
 [OpenHPC-local]
 name=OpenHPC-@VERSION_MINOR@ - Base
-baseurl=file://@PATH@
+baseurl=file://@PATH@/@DISTRO@
 gpgcheck=1
-gpgkey=file://@PATH@/RPM-GPG-KEY-OpenHPC-1
+gpgkey=file://@PATH@/@DISTRO@/repodata/repomd.xml.key
 
