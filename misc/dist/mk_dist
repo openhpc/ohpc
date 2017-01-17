@@ -164,10 +164,11 @@ foreach my $distro (@distros) {
 	$file_update->spew_utf8( $contents );
 
 	# Copy mk_repo utility
+	print "Adding mk_repo utility\n";
 	File::Copy::copy("mk_repo","$tmp_dir") || die "Unable to copy mk_repo\n";
 	
 	# Assemble final tarball
-	$tar_args .= "$distro";
+	$tar_args .= "$distro mk_repo";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "\ntar command -> tar $tar_args\n\n";
 	system("tar $tar_args");
