@@ -162,6 +162,9 @@ foreach my $distro (@distros) {
 	$contents       =~ s/\@VERSION_MINOR\@/$base_release/g;
 	$contents       =~ s/\@VERSION_MICRO\@/$release/g;
 	$file_update->spew_utf8( $contents );
+
+	# Copy mk_repo utility
+	File::Copy::copy("mk_repo","$tmp_dir") || die "Unable to copy mk_repo\n";
 	
 	# Assemble final tarball
 	$tar_args .= "$distro";
@@ -197,7 +200,7 @@ foreach my $distro (@distros) {
     }
     $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
-    $tar_args .= "$distro";
+    $tar_args .= "$distro mk_repo";
 
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
