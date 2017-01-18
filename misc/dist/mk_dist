@@ -82,7 +82,7 @@ sub add_readme_file {
         $package_manager_dir = "/etc/zypp/repos.d";
     }
 
-    File::Copy::copy("README.in","README") || die "Unable to copy README.in\n";
+    File::Copy::copy("README.in","$tmp_dir/README") || die "Unable to copy README.in\n";
     my $file_update = path("README");
     my $contents    = $file_update->slurp_utf8;
     $contents       =~ s/\@ARCH\@/$arch/g;
@@ -92,8 +92,11 @@ sub add_readme_file {
     $contents       =~ s/\@VERSION\@/$release/g;
     $file_update->spew_utf8( $contents );
 
+    #append new OpenHPC.local.repo 
     my $repo = path($repoFile);
-    $file_update->append_utf8($repo->slurp_utf8);
+    my $repo_contents = $repo->slurp_utf8;
+    $repo_contents    =~ s/\@PATH\@/"\/opt\/ohpc\/repos"/g;
+    $file_update->append_utf8($repo_contents);
 }
 # enable autoflush
 $| = 1;
