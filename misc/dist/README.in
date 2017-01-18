@@ -1,15 +1,15 @@
-Many sites will find it useful to maintain a local copy of the OpenHPC
-repositories. To facilitate this, we provide Tar archives-- one containing a 
-repository of binary packages as well as any available updates, and one 
-containing a repository of source RPMS. The tar file also contains a small bash
-script to configure @PACKAGE_MANAGER@ to use the local repository. Simply unpack
-the tarball where you would like to host the local repository and execute the
-make_repo script.
+Many sites may find it useful or necessary to maintain a local copy of the
+OpenHPC repositories. To facilitate this need, we provide downloadable tar
+archives -- one containing a repository of binary packages as well as any
+available updates, and one containing a repository of source RPMS. The tar file
+also contains a small bash script to configure @PACKAGE_MANAGER@ to use the
+local repository after download. To use, simply unpack the tarball where you
+would like to host the local repository and execute the make_repo.sh script.
 
 # ls /opt/ohpc/repos
 @DISTRO@  mk_repo  OpenHPC-@VERSION@.@DISTRO@_@ARCH@.tar OpenHPC.local.repo
 
-# ./mk_repo 
+# ./make_repo.sh
 --> Creating OpenHPC.local.repo file in @PACKAGE_MANAGER_DIR@
 --> Local repodata stored in /opt/ohpc/repos
 
