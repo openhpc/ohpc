@@ -240,12 +240,14 @@ foreach my $distro (@distros) {
     for my $arch (@arches) {
 	$tar_args .= "--exclude $distro/$arch \\\n";
     }
+	$tar_args .= "--exclude $distro/noarch \\\n";
 
     # exclude any other distro/arch updates
     if ($micro) {
 	for my $arch (@arches) {
 	    $tar_args .= "--exclude $distro/updates/$arch \\\n";
 	}
+	$tar_args .= "--exclude $distro/updates/noarch \\\n";
 	for my $n_distro (@n_distros) {
 	    $tar_args .= "--exclude $distro/updates/$n_distro \\\n";
 	}
