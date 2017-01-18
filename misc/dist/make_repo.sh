@@ -13,6 +13,12 @@ else
     exit 1
 fi
 
+if [ -z "${repodor}" ];then
+    echo "Error: unknown or unsupported OS distro."
+    echo "Please confirm local host matches an OpenHPC supported distro."
+    exit 1
+fi
+
 if [ ! -d "${repodir}" ];then
     echo "Error: unable to find local repodir (expected ${repodir})"
     exit 1
