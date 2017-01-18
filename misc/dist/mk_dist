@@ -68,6 +68,7 @@ sub add_readme_file {
     my $micro               = shift;
     my $release             = shift;
     my $repoFile            = shift;
+    my $tmp_dir             = shift;
     my $package_manager     = "";
     my $package_manager_dir = "";
 
@@ -217,7 +218,7 @@ foreach my $distro (@distros) {
 	add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
 
 	# add README file
-	add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo");
+	add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo", $tmp_dir);
 
 	# Copy make_repo.sh utility
 	print "Adding make_repo.sh utility\n";
@@ -260,7 +261,7 @@ foreach my $distro (@distros) {
     
 	# add README file
     my $arch = "src";
-	add_readme_file($arch, $distro, $micro, $release, "OpenHPC.local.repo");
+	add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo", $tmp_dir);
 
     $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
