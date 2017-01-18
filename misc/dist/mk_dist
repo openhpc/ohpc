@@ -29,6 +29,7 @@ sub usage {
 
 sub add_repo_file {
     my $repoFile     = shift;
+    my $micro        = shift;
     my $base_release = shift;
     my $release      = shift;
     my $distro       = shift;
@@ -178,7 +179,7 @@ foreach my $distro (@distros) {
 
 	# add binary .repo file
 	my $isSrcRepo=0;
-	add_repo_file("$tmp_dir/OpenHPC.local.repo",$base_release,$release,$distro,$isSrcRepo);
+	add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
 
 ###	my $repoFile="$tmp_dir/OpenHPC.local.repo";
 ###
@@ -243,7 +244,7 @@ foreach my $distro (@distros) {
     $tar_args .= "--exclude $distro/updates/OpenHPC*.repo \\\n";
 
     # add sources .repo file
-    $isSrcRepo=1;
+    my $isSrcRepo=1;
     add_repo_file("$tmp_dir/OpenHPC.local.repo",$base_release,$release,$distro,$isSrcRepo);
     
     $tar_args .= "--exclude $distro/iso \\\n";
