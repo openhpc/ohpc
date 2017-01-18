@@ -256,6 +256,7 @@ foreach my $distro (@distros) {
     add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
     
 	# add README file
+    my $arch = "src";
 	add_readme_file($arch, $distro, $micro, $release, "OpenHPC.local.repo");
 
     $tar_args .= "--exclude $distro/iso \\\n";
