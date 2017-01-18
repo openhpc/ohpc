@@ -84,7 +84,7 @@ sub add_readme_file {
     }
 
     File::Copy::copy("README.in","$tmp_dir/README") || die "Unable to copy README.in\n";
-    my $file_update = path("README");
+    my $file_update = path("$tmp_dir/README");
     my $contents    = $file_update->slurp_utf8;
     $contents       =~ s/\@ARCH\@/$arch/g;
     $contents       =~ s/\@DISTRO\@/$distro/g;
