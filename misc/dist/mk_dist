@@ -2,10 +2,10 @@
 
 use strict;
 use warnings;
-use File::Path;
 use File::Copy::Recursive qw(dircopy);
-use Getopt::Long;
+use File::Path;
 use File::Temp qw(tempfile);
+use Getopt::Long;
 use Path::Tiny qw(path);
 
 my @arches = ('aarch64', 'x86_64');
@@ -62,6 +62,39 @@ sub add_repo_file {
 	
 }
 
+sub add_readme_file {
+    my $arch                = shift;
+    my $distro              = shift;
+    my $micro               = shift;
+    my $release             = shift;
+    my $repoFile            = shift;
+    my $package_manager     = "";
+    my $package_manager_dir = "";
+
+	print "Adding README\n";
+
+    if ($distro =~ m/CentOS*/) {
+        $package_manager = "yum";
+        $package_manager_dir = "/etc/yum.repos.d";
+    }
+    if ($distro =~ m/SLE_*/) {
+        $package_manager = "zypper";
+        $package_manager_dir = "/etc/zypp/repos.d";
+    }
+
+    File::Copy::copy("README.in","README") || die "Unable to copy README.in\n";
+    my $file_update = path("README");
+    my $contents    = $file_update->slurp_utf8;
+    $contents       =~ s/\@ARCH\@/$arch/g;
+    $contents       =~ s/\@DISTRO\@/$distro/g;
+    $contents       =~ s/\@PACKAGE_MANAGER\@/$package_manager/g;
+    $contents       =~ s/\@PACKAGE_MANAGER_DIR\@/$package_manager_dir/g;
+    $contents       =~ s/\@VERSION\@/$release/g;
+    $file_update->spew_utf8( $contents );
+
+    my $repo = path($repoFile);
+    $file_update->append_utf8($repo->slurp_utf8);
+}
 # enable autoflush
 $| = 1;
 
@@ -180,6 +213,9 @@ foreach my $distro (@distros) {
 	my $isSrcRepo=0;
 	add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
 
+	# add README file
+	add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo");
+
 ###	my $repoFile="$tmp_dir/OpenHPC.local.repo";
 ###
 ###	print "Adding [base] repofile contents -> $repoFile\n";
@@ -208,12 +244,8 @@ foreach my $distro (@distros) {
 	File::Copy::copy("make_repo.sh","$tmp_dir") || die "Unable to copy make_repo.sh\n";
 	chmod 0700, "$tmp_dir/make_repo.sh" || die "Unable to set perms for make_repo.sh\n";
 
-	# Copy in README
-	print "Adding README\n";
-	File::Copy::copy("README.in","$tmp_dir") || die "Unable to copy README\n";
-
 	# Assemble final tarball
-	$tar_args .= "$distro make_repo.sh OpenHPC.local.repo README.in";
+	$tar_args .= "$distro make_repo.sh OpenHPC.local.repo README";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "\ntar command -> tar $tar_args\n\n";
 	system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
@@ -246,9 +278,12 @@ foreach my $distro (@distros) {
     my $isSrcRepo=1;
     add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
     
+	# add README file
+	add_readme_file($arch, $distro, $micro, $release, "OpenHPC.local.repo");
+
     $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
-    $tar_args .= "$distro make_repo.sh OpenHPC.local.repo README.in";
+    $tar_args .= "$distro make_repo.sh OpenHPC.local.repo README";
 
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
