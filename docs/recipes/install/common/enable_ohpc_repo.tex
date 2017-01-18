@@ -21,9 +21,16 @@ package directly from the \OHPC{} build server.
 \end{lstlisting}
 \fi
 
-
-
-
-
-
-
+\begin{center}
+\begin{tcolorbox}[]
+\small Many sites may find it useful or necessary to maintain a local copy of the
+OpenHPC repositories. To facilitate this need, we provide downloadable tar
+archives -- one containing a repository of binary packages as well as any
+available updates, and one containing a repository of source RPMS. The tar file
+also contains a small bash script to configure the package manager to use the
+local repository after download. To use, simply unpack the tarball where you
+would like to host the local repository and execute the make\_repo.sh script.
+Tar files for this release can be found at \href{http://build.openhpc.community/dist/}
+        {\color{blue}http://build.openhpc.community/dist/}
+\end{tcolorbox}
+\end{center}
