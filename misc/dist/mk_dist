@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-use Digest::MD5 qw(md5_hex); 
 use File::Path;
 use File::Copy::Recursive qw(dircopy);
 use Getopt::Long;
@@ -102,11 +101,7 @@ if( !$skipCopy) {
     }
 }
 
-# build dist + md5s
-
-my $md5sum_file = "$dest_dir/OpenHPC-$release.md5s";
-open (MD5, ">", $md5sum_file) ||
-    die "Couldn't open $md5sum_file: $!";
+# build dist
 
 foreach my $distro (@distros) {
     if ($micro) {
@@ -188,14 +183,6 @@ foreach my $distro (@distros) {
 	`ls`;
 	    
 
-	my $md5sum;
-        local $/ = undef;
-	open DIST, "$dist_filename" ||
-	    die "Unable to open $dist_filename: $!";
-	my $data = <DIST>;
-	close DIST;
-	$md5sum = md5_hex($data);
-	printf MD5 "%s  OpenHPC-%s.%s_%s.tar\n", $md5sum, $release, $distro, $arch;
     } # end loop over @arches
     
     # generate src tarball
@@ -227,17 +214,7 @@ foreach my $distro (@distros) {
     print "\ntar command -> tar $tar_args\n\n";
     system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
     
-    my $md5sum;
-    local $/ = undef;
-    open DIST, "$src_filename" ||
-	die "Unable to open $src_filename: $!";
-    my $data = <DIST>;
-    close DIST;
-    $md5sum = md5_hex($data);
-    printf MD5 "%s  OpenHPC-%s.%s_src.tar\n", $md5sum, $release, $distro;
 }
-
-close(MD5);
 
 ###unless(rmtree $tmp_dir) {
 ###    die "Unable to remove $tmp_dir: $!\n";
