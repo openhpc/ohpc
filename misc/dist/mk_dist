@@ -8,11 +8,25 @@ use File::Temp qw(tempfile);
 use Getopt::Long;
 use Path::Tiny qw(path);
 
+# query expected environment variables
+my $release;
+my $overwrite=0;
+
+if(defined $ENV{'Version'}) {
+    $release = $ENV{'Version'};
+} else {
+    die "Version environment variable not set!\n";
+}
+
+if(defined $ENV{'OverWritePrevoius'} ) {
+    if ($ENV{'OverWritePrevious'} eq "true") { $overwrite=1; }
+} 
+
 my @arches = ('aarch64', 'x86_64');
 my @distros = ('SLE_12_SP1','CentOS_7.2');
 
 my $base_repo_path = "/srv/obs/repos/OpenHPC:";
-my $dest_dir = "/srv/www/dist";
+my $dest_dir = "/srv/www/dist/$release";
 my $tmp_path = "/srv/tmp/dist";
 
 # basic usage
@@ -99,6 +113,8 @@ sub add_readme_file {
     $repo_contents    =~ s/\@PATH\@/"\/opt\/ohpc\/repos"/g;
     $file_update->append_utf8($repo_contents);
 }
+
+
 # enable autoflush
 $| = 1;
 
@@ -112,20 +128,6 @@ GetOptions('skip-copy' => \$skipCopy,
 
 usage() if ($help);
 
-
-# query expected environment variables
-my $release;
-my $overwrite=0;
-
-if(defined $ENV{'Version'}) {
-    $release = $ENV{'Version'};
-} else {
-    die "Version environment variable not set!\n";
-}
-
-if(defined $ENV{'OverWritePrevoius'} ) {
-    if ($ENV{'OverWritePrevious'} eq "true") { $overwrite=1; }
-} 
 
 if ( ! -d $dest_dir ) {
     File::Path::make_path($dest_dir) || die("Unable to create $dest_dir\n");
