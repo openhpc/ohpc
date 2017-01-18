@@ -225,7 +225,7 @@ foreach my $distro (@distros) {
 
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
-    system("tar $tar_args") || die "Unable to execute tar command: $!";
+    system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
     
     my $md5sum;
     local $/ = undef;
