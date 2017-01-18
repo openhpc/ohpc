@@ -77,7 +77,7 @@ if (! -d $tmp_path) {
     File::Path::make_path($tmp_path) || die("Unable to create $tmp_path\n");
 }
 
-my $tmp_dir = File::Temp::tempdir(CLEANUP => 0, DIR=> $tmp_path) || MYERROR("Unable to create temporary directory");
+my $tmp_dir = File::Temp::tempdir(CLEANUP => 1, DIR=> $tmp_path) || MYERROR("Unable to create temporary directory");
 
 print "\nStaging dist creation in $tmp_dir...\n";
 
@@ -179,10 +179,6 @@ foreach my $distro (@distros) {
 	print "\ntar command -> tar $tar_args\n\n";
 	system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
 
-	`pwd`;
-	`ls`;
-	    
-
     } # end loop over @arches
     
     # generate src tarball
@@ -215,9 +211,5 @@ foreach my $distro (@distros) {
     system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
     
 }
-
-###unless(rmtree $tmp_dir) {
-###    die "Unable to remove $tmp_dir: $!\n";
-###}
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 
