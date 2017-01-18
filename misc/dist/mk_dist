@@ -27,6 +27,41 @@ sub usage {
     exit 0;
 }
 
+sub add_repo_file {
+    my $repoFile     = shift;
+    my $base_release = shift;
+    my $release      = shift;
+    my $distro       = shift;
+    my $isSrcRepo    = shift;
+    
+    print "Adding [base] repofile contents -> $repoFile\n";
+
+    File::Copy::copy("repo.base.in","$repoFile") || die "Unable to copy repo.base.in\n";
+    if($micro) {
+	print "Appending [update] repo\n";
+	open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
+	open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
+	print BASE <UPDATE>;
+	close BASE;
+	close UPDATE;
+    }
+
+    # Update version strings in .repo file
+
+    my $file_update = path($repoFile);
+    my $contents    = $file_update->slurp_utf8;
+    $contents       =~ s/\@VERSION_MINOR\@/$base_release/g;
+    $contents       =~ s/\@VERSION_MICRO\@/$release/g;
+    $contents       =~ s/\@DISTRO\@/$distro/g;
+    if( $isSrcRepo ) {
+	$contents   =~ s/- Base/- Base Sources/g;
+	$contents   =~ s/- Updates/- Updates Sources/g;
+    }
+    $file_update->spew_utf8( $contents );
+
+	
+}
+
 # enable autoflush
 $| = 1;
 
@@ -136,33 +171,37 @@ foreach my $distro (@distros) {
 	# cd to $tmp_dir
 	$tar_args .= "-C $tmp_dir \\\n";
 
-	# add .repo file
-
-	my $repoFile="$tmp_dir/OpenHPC.local.repo";
-
+	# verify path exists
 	if($skipCopy) {
 	    File::Path::make_path("$tmp_dir/$distro") || die("Unable to create $tmp_dir/$distro\n");
 	}
-	print "Adding [base] repofile contents -> $repoFile\n";
 
-	File::Copy::copy("repo.base.in","$repoFile") || die "Unable to copy repo.base.in\n";
-	if($micro) {
-	    print "Appending [update] repo\n";
-	    open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
-	    open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
-	    print BASE <UPDATE>;
-	    close BASE;
-	    close UPDATE;
-	}
+	# add binary .repo file
+	my $isSrcRepo=0;
+	add_repo_file("$tmp_dir/OpenHPC.local.repo",$base_release,$release,$distro,$isSrcRepo);
 
+###	my $repoFile="$tmp_dir/OpenHPC.local.repo";
+###
+###	print "Adding [base] repofile contents -> $repoFile\n";
+###
+###	File::Copy::copy("repo.base.in","$repoFile") || die "Unable to copy repo.base.in\n";
+###	if($micro) {
+###	    print "Appending [update] repo\n";
+###	    open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
+###	    open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
+###	    print BASE <UPDATE>;
+###	    close BASE;
+###	    close UPDATE;
+###	}
+###
 	# Update version strings in .repo file
 
-	my $file_update = path($repoFile);
-	my $contents    = $file_update->slurp_utf8;
-	$contents       =~ s/\@VERSION_MINOR\@/$base_release/g;
-	$contents       =~ s/\@VERSION_MICRO\@/$release/g;
-	$contents       =~ s/\@DISTRO\@/$distro/g;
-	$file_update->spew_utf8( $contents );
+###	my $file_update = path($repoFile);
+###	my $contents    = $file_update->slurp_utf8;
+###	$contents       =~ s/\@VERSION_MINOR\@/$base_release/g;
+###	$contents       =~ s/\@VERSION_MICRO\@/$release/g;
+###	$contents       =~ s/\@DISTRO\@/$distro/g;
+###	$file_update->spew_utf8( $contents );
 
 	# Copy make_repo.sh utility
 	print "Adding make_repo.sh utility\n";
@@ -188,6 +227,7 @@ foreach my $distro (@distros) {
     for my $arch (@arches) {
 	$tar_args .= "--exclude $distro/$arch \\\n";
     }
+
     # exclude any other distro/arch updates
     if ($micro) {
 	for my $arch (@arches) {
@@ -201,15 +241,19 @@ foreach my $distro (@distros) {
     # exclude any OBS created .repo files
     $tar_args .= "--exclude $distro/OpenHPC*.repo \\\n";
     $tar_args .= "--exclude $distro/updates/OpenHPC*.repo \\\n";
-	
+
+    # add sources .repo file
+    $isSrcRepo=1;
+    add_repo_file("$tmp_dir/OpenHPC.local.repo",$base_release,$release,$distro,$isSrcRepo);
+    
     $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
-    $tar_args .= "$distro make_repo.sh README.in";
+    $tar_args .= "$distro make_repo.sh OpenHPC.local.repo README.in";
 
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
     system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
     
-}
+} # end loop over @distros
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 
