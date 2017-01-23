@@ -77,7 +77,15 @@ make ; %{parser} steps.tex > recipe.sh ; popd
 pushd docs/recipes/install/sles12sp1/x86_64/warewulf/pbspro
 make ; %{parser} steps.tex > recipe.sh ; popd
 
+#----------------------
+# aarch64-based recipes
+#----------------------
 
+pushd docs/recipes/install/centos7.2/aarch64/warewulf/slurm
+make ; %{parser} steps.tex > recipe.sh ; popd
+
+pushd docs/recipes/install/sles12sp1/aarch64/warewulf/slurm
+make ; %{parser} steps.tex > recipe.sh ; popd
 
 %install
 
@@ -85,6 +93,8 @@ make ; %{parser} steps.tex > recipe.sh ; popd
 
 install -m 0644 -p docs/ChangeLog %{buildroot}/%{OHPC_PUB}/doc/ChangeLog
 install -m 0644 -p docs/Release_Notes.txt %{buildroot}/%{OHPC_PUB}/doc/Release_Notes.txt
+
+# x86_64 guides
 
 %define lpath centos7.2/x86_64/warewulf/slurm
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
@@ -102,6 +112,17 @@ install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHP
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
+# aarch64 guides
+
+%define lpath centos7.2/aarch64/warewulf/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
+%define lpath sles12sp1/aarch64/warewulf/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
+# input file templates
 install -m 0644 -p docs/recipes/install/centos7.2/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/centos7.2/input.local
 install -m 0644 -p docs/recipes/install/sles12sp1/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/sles12sp1/input.local
 
