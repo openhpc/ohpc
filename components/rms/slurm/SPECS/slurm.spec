@@ -105,8 +105,8 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 
-Version: 16.05.5
-%define ver_exp 16-05-5-1
+Version: 16.05.8
+%define ver_exp 16-05-8-1
 
 Release:   %{?dist}
 Summary:   Slurm Workload Manager
@@ -784,7 +784,9 @@ test -f $RPM_BUILD_ROOT/%{_libdir}/slurm/launch_aprun.so             &&
 test -f $RPM_BUILD_ROOT/%{_libdir}/slurm/mpi_mvapich.so              &&
    echo %{_libdir}/slurm/mpi_mvapich.so              >> $LIST
 test -f $RPM_BUILD_ROOT/%{_libdir}/slurm/node_features_knl_cray.so   &&
-   echo %{_libdir}/slurm/node_features_knl_cray.so   >> $LIST
+    echo %{_libdir}/slurm/node_features_knl_cray.so   >> $LIST
+test -f $RPM_BUILD_ROOT/%{_libdir}/slurm/node_features_knl_generic.so &&
+    echo %{_libdir}/slurm/node_features_knl_generic.so >> $LIST 
 test -f $RPM_BUILD_ROOT/%{_libdir}/slurm/power_cray.so               &&
    echo %{_libdir}/slurm/power_cray.so               >> $LIST
 test -f $RPM_BUILD_ROOT/%{_libdir}/slurm/select_bluegene.so          &&
@@ -862,7 +864,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man5/nonstop.*
 %{_mandir}/man5/slurm.*
 %{_mandir}/man5/topology.*
-%{_mandir}/man5/wiki.*
 %{_mandir}/man8/slurmctld.*
 %{_mandir}/man8/slurmd.*
 %{_mandir}/man8/slurmstepd*
