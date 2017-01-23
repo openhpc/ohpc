@@ -10,6 +10,7 @@ Version 1.2.1 (23 January 2017)
   * updated Requires stanza for mpiP packaging (https://github.com/openhpc/ohpc/issues/344)
   * added 'make_repo.sh' utility for inclusion with stand-alone tarballs (https://github.com/openhpc/ohpc/issues/363)
   * updated patches for mpiP to enable usage on aarch64 (https://github.com/openhpc/ohpc/pull/358)
+  * fix erroneous self-conflicts for munge packaging (https://github.com/openhpc/ohpc/issues/359)
   * updated modulefile compatibility packaging for Intel Parallel Studio toolchain
     - support "2017 Update 1" version string (https://github.com/openhpc/ohpc/pull/342)
     - support installation target that is a soft link (https://github.com/openhpc/ohpc/issues/347)
