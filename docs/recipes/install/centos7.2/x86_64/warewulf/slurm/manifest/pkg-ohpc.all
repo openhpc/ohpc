@@ -257,18 +257,18 @@ sionlib-intel-impi-ohpc 1.7.0 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Supp
 sionlib-intel-mpich-ohpc 1.7.0 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 sionlib-intel-mvapich2-ohpc 1.7.0 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 sionlib-intel-openmpi-ohpc 1.7.0 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
-slurm-devel-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Development package for Slurm
-slurm-munge-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Slurm authentication and crypto implementation using Munge
-slurm-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
-slurm-pam_slurm-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
-slurm-perlapi-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
-slurm-plugins-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Slurm plugins (loadable shared objects)
-slurm-sjobexit-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Slurm job exit code management tools
-slurm-sjstat-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
-slurm-slurmdb-direct-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Wrappers to write directly to the slurmdb
-slurm-slurmdbd-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Slurm database daemon
-slurm-sql-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Slurm SQL support
-slurm-torque-ohpc 16.05.5 http://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
+slurm-devel-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Development package for Slurm
+slurm-munge-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Slurm authentication and crypto implementation using Munge
+slurm-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
+slurm-pam_slurm-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
+slurm-perlapi-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
+slurm-plugins-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Slurm plugins (loadable shared objects)
+slurm-sjobexit-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Slurm job exit code management tools
+slurm-sjstat-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
+slurm-slurmdb-direct-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Wrappers to write directly to the slurmdb
+slurm-slurmdbd-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Slurm database daemon
+slurm-sql-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Slurm SQL support
+slurm-torque-ohpc 16.05.8 http://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
 spack-ohpc 0.8.17 https://github.com/LLNL/spack System/Configuration HPC software package management
 superlu-gnu-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
 superlu-intel-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
