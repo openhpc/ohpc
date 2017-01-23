@@ -1,0 +1,17 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for lustre-client-ohpc
+\multirow{2}{*}{lustre-client-ohpc} & 
+\multirow{2}{*}{2.8.0} & 
+Lustre File System. \newline { \color{logoblue} \url{https://wiki.hpdd.intel.com}} 
+\\ \hline 
+% <-- end entry for lustre-client-ohpc
+
+\bottomrule
+\end{tabularx}
