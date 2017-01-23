@@ -58,6 +58,7 @@ while(<IN>) {
         print "name = $name\n";
 
 	print OUT "$name & $summary \\\\ \n";
+	print OUT "\\hline\n";
 
     }
 }
