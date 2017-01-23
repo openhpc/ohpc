@@ -110,7 +110,7 @@ sub add_readme_file {
     #append new OpenHPC.local.repo 
     my $repo = path($repoFile);
     my $repo_contents = $repo->slurp_utf8;
-    $repo_contents    =~ s/\@PATH\@/"\/opt\/ohpc\/repos"/g;
+    $repo_contents    =~ s/\@PATH\@/\/opt\/ohpc\/repos/g;
     $file_update->append_utf8($repo_contents);
 }
 
