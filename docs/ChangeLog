@@ -1,4 +1,4 @@
-Version 1.2.1 (09 January 2017)
+Version 1.2.1 (23 January 2017)
 
 [General]
   * 1.2.1 is the first micro update release against 1.2
@@ -8,9 +8,12 @@ Version 1.2.1 (09 January 2017)
   * removal of hard-coded paths in Makefiles installed with TAU (https://github.com/openhpc/ohpc/issues/355)
   * document need for resolvable SMS hostname (https://github.com/openhpc/ohpc/pull/250)
   * updated Requires stanza for mpiP packaging (https://github.com/openhpc/ohpc/issues/344)
+  * added 'make_repo.sh' utility for inclusion with stand-alone tarballs (https://github.com/openhpc/ohpc/issues/363)
+  * updated patches for mpiP to enable usage on aarch64 (https://github.com/openhpc/ohpc/pull/358)
   * updated modulefile compatibility packaging for Intel Parallel Studio toolchain
     - support "2017 Update 1" version string (https://github.com/openhpc/ohpc/pull/342)
     - support installation target that is a soft link (https://github.com/openhpc/ohpc/issues/347)
+    - reenable detection of multiply installed versions (https://github.com/openhpc/ohpc/issues/361)
 
 [Component Version Changes]
   * docs-ohpc                                (v1.2 -> v1.2.1)
