@@ -16,8 +16,8 @@ pre-packaged RPMs available per architecture type are summarized as follows:
 
 Base OS     | x86_64             | aarch64            | noarch
 :---:       | :---:              | :---:              | :---:
-CentOS 7.2  | 310 (+31 Updates) | 198 (+17 Updates) | 43
-SLES 12 SP1 | 312 (+31 Updates) | 205 (+18 Updates) | 43
+CentOS 7.2  | 310 (+34 Updates) | 198 (+20 Updates) | 43
+SLES 12 SP1 | 312 (+34 Updates) | 205 (+21 Updates) | 43
 
 A detailed list of all available components is available in
 the "Package Manifest" appendix located in each of the companion install
