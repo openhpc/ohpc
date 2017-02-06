@@ -1,25 +1,20 @@
 #DESC: A clone of Red Hat Enterprise Linux 7
-
 # The general RHEL include has all of the necessary functions, but requires
 # some basic variables specific to each chroot type to be defined.
 . include-rhel
-
-
-
 # Define the location of the YUM repository
-# YUM_MIRROR="http://mirror.centos.org/centos-7/7/os/\$basearch/"
-YUM_MIRROR="http://mirror.centos.org/centos-7/7.2.1511/os/\$basearch/"
-
+if [ -z "$YUM_MIRROR" ]; then
+    if [ -z "$YUM_MIRROR_BASE" ]; then
+        YUM_MIRROR_BASE="http://mirror.centos.org/centos-7"
+    fi
+    YUM_MIRROR="${YUM_MIRROR_BASE}/7/os/\$basearch/"
+fi
 # Install only what is necessary/specific for this distribution
-PKGLIST="SysVinit basesystem bash redhat-release chkconfig coreutils e2fsprogs \
-    ethtool filesystem findutils gawk grep initscripts iproute iputils \
-    mingetty mktemp net-tools nfs-utils pam portmap procps psmisc rdate rsync \
-    sed setup shadow-utils rsyslog tcp_wrappers tzdata util-linux words zlib \
-    tar less gzip which util-linux module-init-tools udev openssh-clients \
-    openssh-server dhclient pciutils vim-minimal shadow-utils strace cronie \
-    crontabs cpuspeed cpufrequtils cpio wget yum numactl libicu"
-
-
-
-
+PKGLIST="basesystem bash chkconfig coreutils e2fsprogs ethtool
+    filesystem findutils gawk grep initscripts iproute iputils
+    net-tools nfs-utils pam psmisc rdate rsync sed setup
+    shadow-utils rsyslog tcp_wrappers tzdata util-linux words
+    zlib tar less gzip which util-linux openssh-clients
+    openssh-server dhclient pciutils vim-minimal shadow-utils
+    strace cronie crontabs cpio wget centos-release numactl"
 # vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:
