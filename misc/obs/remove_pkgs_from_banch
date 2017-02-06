@@ -1,0 +1,42 @@
+#!/bin/bash
+#--------------------------------------------------------------------
+# Script to use osc command line to remove all packages from a
+# target project in OBS.
+#
+# Originally: 9/7/2016 - karl.w.schulz@intel.com
+#--------------------------------------------------------------------
+
+if [ "$#" -lt 1 ];then
+    echo "usage: `basename $0` [target-project]"
+    exit 1
+fi
+
+export branchCurrent=$1
+
+ENABLE_CMDS=1
+
+run_cmd () {
+    local cmd="$@"
+
+    if [[ ${ENABLE_CMDS} -eq 0 ]];then
+	echo "   [would have run]: $cmd"
+    else
+	echo "running $cmd"
+	eval $cmd
+    fi
+}
+
+echo "Project = $branchCurrent"
+
+for PKG in `osc ls $branchCurrent`; do 
+
+	if [[ ${PKG} == "_pattern" ]];then
+	    echo "Skipping _pattern..."
+	    continue
+	fi
+
+	cmd="osc rdelete -m \"remov_pkgs_from_branch utility deleting $PKG\" ${branchCurrent} $PKG"
+
+	run_cmd "$cmd"
+
+done
