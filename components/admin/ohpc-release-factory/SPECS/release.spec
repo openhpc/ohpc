@@ -17,7 +17,7 @@
 
 %if 0%{?sles_version} || 0%{?suse_version}
 %if 0%{?suse_version} == 1315
-%define disttag sles%{sles_version}
+%define disttag sles12
 %endif
 %endif
 
