@@ -25,7 +25,7 @@
 Summary:  OpenHPC release files
 Name:     ohpc-release-factory
 Version:  %{ohpc_version}
-Release:  1.%{?disttag}
+Release:  1%{?disttag}
 License:  BSD-3
 Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc
