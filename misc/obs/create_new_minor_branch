@@ -102,8 +102,6 @@ update_pkg_if_link () {
 	perl -pi -e 's/project=\'\S+\'/project=\'${branchNew}\'/ ${localdir}/_link || ERROR "unable to update parent in _link for $1"
     fi
 
-    osc ci ${localdir} -m "committing updated _link file for $1"
-
     cd -
 } # end update_pkg_if_link()
 
@@ -192,5 +190,8 @@ done
 
 if [[ $found_link -eq 1 ]];then
     echo " "
-    echo "At least 1 _link file updated. cd to $TMPDIR and commit changes once OBS has published binaries..."
+    echo "At least 1 _link file updated. committing staged changes in $TMPDIR..."
+    cd $TMPDIR
+    osc ci -m "committing updated _link files"
+    cd -
 fi
