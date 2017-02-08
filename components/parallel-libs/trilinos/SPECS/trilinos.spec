@@ -84,7 +84,11 @@ BuildRequires:  expat
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
 BuildRequires:  perl
+%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
+BuildRequires:  qt-devel
+%else
 BuildRequires:  libqt4-devel
+%endif
 BuildRequires:  swig > 2.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel

@@ -106,9 +106,12 @@ BuildRequires:  automake
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 BuildRequires:  netcfg
-%endif
 BuildRequires:  libbz2-devel
 BuildRequires:  pkg-config
+%else
+BuildRequires:  bzip2-devel
+BuildRequires:  pkgconfig
+%endif
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 Requires:       glibc-devel

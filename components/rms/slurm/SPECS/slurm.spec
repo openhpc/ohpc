@@ -116,6 +116,7 @@ Group:     %{PROJ_NAME}/rms
 Source:    https://github.com/SchedMD/slurm/archive/%{pname}-%{ver_exp}.tar.gz
 #Source:    http://www.schedmd.com/download/archive/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
+Source2:   rpmmacros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
 DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://slurm.schedmd.com/

@@ -27,6 +27,14 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 Requires: m4
 
+%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
+BuildRequires: m4
+BuildRequires: perl-macros
+BuildRequires: perl(Data::Dumper)
+# from f19, Text::ParseWords is not the part of 'perl' package
+BuildRequires: perl(Text::ParseWords)
+%endif
+
 %define install_path %{OHPC_PUB}/autotools
 
 %description
@@ -82,6 +90,9 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
 
 %changelog
+* Wed Feb 08 2017 Adrian Reber <adrian@lisas.de> - 2.69-1
+- fix building on CentOS 7.3
+
 * Mon Sep 15 2014  <karl.w.schulz@intel.com> - 
 - Initial build.
 

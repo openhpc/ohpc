@@ -16,6 +16,7 @@
 %define pname cube
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name: %{pname}%{PROJ_DELIM}
 
@@ -35,7 +36,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 Requires: qt qt-x11
 BuildRequires: zlib-devel
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
 BuildRequires: qt4-devel
 BuildRequires: dbus-devel
 BuildRequires: gcc-c++

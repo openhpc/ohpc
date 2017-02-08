@@ -97,6 +97,9 @@ BuildRequires: openssl-devel
 BuildRequires: libXext
 BuildRequires: libXft
 %endif
+%if %{defined have_systemd}
+BuildRequires: systemd
+%endif
 #!BuildIgnore: post-build-checks
 
 # Pure python extensions use the 32 bit library path
@@ -167,7 +170,6 @@ does include the PBS Professional user commands.
 
 %package -n %{pname}-%{pbs_client}%{PROJ_DELIM}
 Summary: PBS Professional for a client host
-Group: System/Base
 Group: %{PROJ_NAME}/rms
 Conflicts: pbspro-server
 Conflicts: pbspro-execution

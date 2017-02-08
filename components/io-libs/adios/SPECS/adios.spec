@@ -224,15 +224,11 @@ export PATH=$(pwd):$PATH
 module load openblas
 %endif
 module load numpy
-export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
+export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
 make MPI=y python
 python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
-
-%if 0%{?rhel_version} || 0%{?centos_version}
-	find $RPM_BUILD_ROOT -type f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
-%endif
 
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \

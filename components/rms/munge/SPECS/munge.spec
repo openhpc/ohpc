@@ -41,6 +41,7 @@ BuildRequires:	zlib-devel
 BuildRequires:	bzip2-devel
 BuildRequires:	openssl-devel
 BuildRequires:	zlib-devel
+BuildRequires:	systemd
 %endif
 %endif
 BuildRoot:	%{_tmppath}/%{pname}-%{version}
@@ -133,7 +134,7 @@ touch "$RPM_BUILD_ROOT"/%{_localstatedir}/run/munge/munged.pid
 %if 0%{?suse_version} >= 1230
 rm "$RPM_BUILD_ROOT"/etc/init.d/munge
 %endif
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
 rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 %endif
 
@@ -171,7 +172,7 @@ if [ -f /var/lock/subsys/munged ]; then
   /bin/mv /var/lock/subsys/munged /var/lock/subsys/munge
 fi
 ##
-%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
    /bin/systemctl enable munge.service >/dev/null 2>&1 || :
 %else
    if [ -x /sbin/chkconfig ]; then /sbin/chkconfig --add munge; fi
@@ -182,7 +183,7 @@ fi
 
 %preun
 if [ $1 -eq 0 ]; then
-   %if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+   %if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
    /bin/systemctl disable munge.service >/dev/null 2>&1 || :
    /bin/systemctl stop munge.service >/dev/null 2>&1 || :
    %else
@@ -193,7 +194,7 @@ fi
 
 %postun
 if [ $1 -ge 1 ]; then
-   %if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+   %if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
       service munge condrestart  >/dev/null 2>&1 || :
    %else
       %{_sysconfdir}/init.d/munge try-restart >/dev/null 2>&1 || :
@@ -222,7 +223,7 @@ fi
 %config(noreplace) %{_sysconfdir}/sysconfig/munge
 
 # OpenHPC mods - systemd 
-%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
 %{_prefix}/lib/systemd/system/munge.service
 %else
 %{?_initddir:%{_initddir}}%{!?_initddir:%{_initrddir}}/munge
@@ -239,7 +240,7 @@ fi
 %{_mandir}/*[^3]/*
 
 
-%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?suse_version} >= 1230 || 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
 %{_prefix}/lib/tmpfiles.d/munge.conf
 %endif
 

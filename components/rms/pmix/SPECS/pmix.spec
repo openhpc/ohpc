@@ -40,9 +40,9 @@
 ############################################################################
 
 %include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname pmix
-%{!?PROJ_DELIM: %define PROJ_DELIM %{nil}}
 
 #############################################################################
 #
