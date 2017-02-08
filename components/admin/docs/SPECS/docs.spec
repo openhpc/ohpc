@@ -52,10 +52,10 @@ from the OpenHPC software stack.
 
 %build
 %if 0%{?suse_version}
-%define source_path docs/recipes/install/sles12sp1
+%define source_path docs/recipes/install/sles12
 %else
 %if 0%{?rhel_version} || 0%{?centos_version}
-%define source_path docs/recipes/install/centos7.2
+%define source_path docs/recipes/install/centos7
 %endif
 %endif
 
@@ -65,26 +65,26 @@ from the OpenHPC software stack.
 # x86_64-based recipes
 #----------------------
 
-pushd docs/recipes/install/centos7.2/x86_64/warewulf/slurm
+pushd docs/recipes/install/centos7/x86_64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
-pushd docs/recipes/install/centos7.2/x86_64/warewulf/pbspro
+pushd docs/recipes/install/centos7/x86_64/warewulf/pbspro
 make ; %{parser} steps.tex > recipe.sh ; popd
 
-pushd docs/recipes/install/sles12sp1/x86_64/warewulf/slurm
+pushd docs/recipes/install/sles12/x86_64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
-pushd docs/recipes/install/sles12sp1/x86_64/warewulf/pbspro
+pushd docs/recipes/install/sles12/x86_64/warewulf/pbspro
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 #----------------------
 # aarch64-based recipes
 #----------------------
 
-pushd docs/recipes/install/centos7.2/aarch64/warewulf/slurm
+pushd docs/recipes/install/centos/aarch64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
-pushd docs/recipes/install/sles12sp1/aarch64/warewulf/slurm
+pushd docs/recipes/install/sles12/aarch64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 %install
@@ -123,8 +123,8 @@ install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHP
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
 # input file templates
-install -m 0644 -p docs/recipes/install/centos7.2/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/centos7.2/input.local
-install -m 0644 -p docs/recipes/install/sles12sp1/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/sles12sp1/input.local
+install -m 0644 -p docs/recipes/install/centos7/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/centos7/input.local
+install -m 0644 -p docs/recipes/install/sles12/input.local.template %{buildroot}/%{OHPC_PUB}/doc/recipes/sles12/input.local
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
