@@ -81,7 +81,7 @@ make ; %{parser} steps.tex > recipe.sh ; popd
 # aarch64-based recipes
 #----------------------
 
-pushd docs/recipes/install/centos/aarch64/warewulf/slurm
+pushd docs/recipes/install/centos7/aarch64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 pushd docs/recipes/install/sles12/aarch64/warewulf/slurm
