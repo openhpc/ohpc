@@ -51,6 +51,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   14.1.0
 Release:   0
 Source0:   https://github.com/PBSPro/pbspro/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
+Source1:   OHPC_macros
 Patch1:    systemd.patch
 License:   AGPLv3 with exceptions
 URL:       https://github.com/pbspro/pbspro

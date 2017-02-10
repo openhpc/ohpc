@@ -187,12 +187,8 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %if %{with mpi}
-<<<<<<< HEAD
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}-mpi/%{version}
-=======
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}-mpi/%{version}
->>>>>>> parent of 482cf7c... Update OCR to v1.1.0
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {

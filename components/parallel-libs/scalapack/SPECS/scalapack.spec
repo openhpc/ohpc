@@ -93,6 +93,9 @@ Release:        13.1
 Url:            http://www.netlib.org/lapack-dev/
 Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
+Source2:        OHPC_macros
+Source3:        OHPC_setup_compiler
+Source4:        OHPC_setup_mpi
 Patch0:         scalapack-2.0.2-shared-lib.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{OHPC_PUB}/doc/contrib

@@ -67,6 +67,8 @@ Name:		%{pname}%{PROJ_DELIM}
 Release:	1%{?dist}
 Version:        3.3.1
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
+Source1:        OHPC_macros
+Source2:        OHPC_setup_compiler
 Patch:          tre.patch
 Url:            http://www.r-project.org/
 DocDir:         %{OHPC_PUB}/doc/contrib

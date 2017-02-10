@@ -91,6 +91,9 @@ License:        LGPL-2.1
 Group:          ohpc/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         https://computation.llnl.gov/project/linear_solvers/download/hypre-%{version}.tar.gz
+Source1:        OHPC_macros
+Source2:        OHPC_setup_compiler
+Source3:        OHPC_setup_mpi
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif

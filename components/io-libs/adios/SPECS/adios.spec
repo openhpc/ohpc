@@ -78,6 +78,7 @@ Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz 
 Source1: OHPC_macros
 Source2: OHPC_setup_compiler
+Source3: OHPC_setup_mpi
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
@@ -130,7 +131,7 @@ LIBSUFF=64
 %endif
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
-pushd %{_sourcedir}
+pushd %{_specdir}
 cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
 popd
 

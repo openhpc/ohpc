@@ -9,6 +9,7 @@ Summary:   Lustre administration utility
 Version:   1.4
 Release:   1%{?dist}
 Source0:   https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
+Source1:   OHPC_macros
 License:   GPLv2
 Group:     Applications/System
 Vendor:    CEA

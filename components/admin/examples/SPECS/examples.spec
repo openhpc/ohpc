@@ -27,6 +27,7 @@ Source5: job.mpi
 Source6: 60-ipath.rules
 Source7: gmond.conf
 Source8: job.pbs.mpi
+Source9: OHPC_macros
 
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root

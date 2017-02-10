@@ -25,6 +25,7 @@ License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source:  http://warewulf.lbl.gov/downloads/releases/warewulf-vnfs/warewulf-vnfs-%{version}.tar.gz
+Source2: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: pigz

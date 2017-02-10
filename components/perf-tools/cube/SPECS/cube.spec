@@ -27,6 +27,7 @@ License:   BSD-style license
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.scalasca.org/software/cube-4.x/download.html
 Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.3/dist/cube-%{version}.tar.gz
+Source1:   OHPC_macros
 Provides:  lib%PNAME.so()(64bit)
 Provides:  cube
 Conflicts: lib%pname < %version-%release

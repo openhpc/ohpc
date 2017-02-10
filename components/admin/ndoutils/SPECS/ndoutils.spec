@@ -34,6 +34,7 @@ Source2:            ndo2db.service
 Source3:            ndo2db.init
 Source4:            ndoutils.conf
 Source5:            gpl-2.0.txt
+Source6:            OHPC_macros
 # Fedora 21+: https://fedoraproject.org/wiki/Format-Security-FAQ
 Patch0:             %{pname}-2.0.0-format-security.patch
 # Better align with Fedora/Nagios places for temporary files

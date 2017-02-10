@@ -95,6 +95,9 @@ Source1:        Makefile.gnu.openmpi.inc
 Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
+Source5:        OHPC_macros
+Source6:        OHPC_setup_compiler
+Source7:        OHPC_setup_mpi
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Patch2:         mumps-5.0.2-psxe2017.patch

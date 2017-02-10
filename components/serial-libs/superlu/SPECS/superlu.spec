@@ -70,6 +70,8 @@ Group:          %{PROJ_NAME}/serial-libs
 Version:        5.2.1
 Release:        0
 Source:         http://crd-legacy.lbl.gov/%7Exiaoye/SuperLU/%{pname}_%{version}.tar.gz
+Source1:        OHPC_macros
+Source2:        OHPC_setup_compiler
 # PATCH-FEATURE-OPENSUSE superlu-5.1-make.patch : add compiler and build flags in make.inc
 Patch:          superlu-5.2-make.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
