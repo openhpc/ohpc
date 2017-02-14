@@ -7,9 +7,9 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{SLES12SP1}
-\newcommand{\OSRepo}{SLE\_12\_SP1}
-\newcommand{\baseos}{sles12sp1}
+\newcommand{\baseOS}{SLES12SP2}
+\newcommand{\OSRepo}{SLE\_12\_SP2}
+\newcommand{\baseos}{sles12sp2}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\rms}{SLURM}
 \newcommand{\arch}{x86\_64}
@@ -196,7 +196,7 @@ default location for this example is in
   \begin{tcolorbox}[]
     \small Note that \Warewulf{} requires access to a zypper repository during the 
     \texttt{wwmkchroot} process. The easiest way to provide this is to mount 
-    the SUSE-SLE-12-SP1-Server ISO image on a web server that can communicate 
+    the SUSE-SLE-12-SP2-Server ISO image on a web server that can communicate 
     with the {\em master} host, set the \texttt{\$\{BOS\_MIRROR\}} environment 
     variable to that URL, and update the template file {\em prior} to running 
     the \texttt{wwmkchroot} command below. For example:
@@ -220,7 +220,7 @@ default location for this example is in
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location
-[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/sles12sp1
+[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/sles12sp2
 
 # Build initial chroot image
 [sms](*\#*) mkdir -p -m 755 $CHROOT                        # create chroot housing dir
@@ -472,7 +472,7 @@ host as follows:
 % ohpc_validation_comment Add hosts to cluster (Cont.)
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define provisioning image for hosts
-[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12sp1 --bootstrap=`uname -r` \
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12sp2 --bootstrap=`uname -r` \
      --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key
 \end{lstlisting}
 
