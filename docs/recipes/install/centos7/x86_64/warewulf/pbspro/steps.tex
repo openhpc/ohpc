@@ -7,9 +7,9 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{CentOS7.2}
-\newcommand{\OSRepo}{CentOS\_7.2}
-\newcommand{\baseos}{centos7.2}
+\newcommand{\baseOS}{CentOS7.3}
+\newcommand{\OSRepo}{CentOS\_7.3}
+\newcommand{\baseos}{centos7.3}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\rms}{PBS Professional}
 \newcommand{\arch}{x86\_64}
@@ -89,9 +89,9 @@ necessary dependencies. For \baseOS{}, the requirements are to have access to
 both the base OS and EPEL repositories for which mirrors are freely available online:
 
 \begin{itemize*}
-\item CentOS-7 - Base 7.2.1511
-  (e.g. \href{http://mirror.centos.org/centos-7/7.2.1511/os/x86\_64}
-             {\color{blue}{http://mirror.centos.org/centos-7/7.2.1511/os/x86\_64}} )
+\item CentOS-7 - Base 7.3.1611
+  (e.g. \href{http://mirror.centos.org/centos-7/7/os/x86\_64}
+             {\color{blue}{http://mirror.centos.org/centos-7/7/os/x86\_64}} )
 \item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
                         {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
 \end{itemize*}
@@ -243,7 +243,7 @@ default location for this example is in
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Define chroot location 
-[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.2
+[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.3
 
 # Build initial chroot image
 [sms](*\#*) wwmkchroot centos-7 $CHROOT
@@ -445,7 +445,7 @@ host as follows:
 % Removed slurm.conf,munge.key from the list of files because it is NOT compatible with PBS Professional. 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
 # Define provisioning image for hosts
-[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.2 --bootstrap=`uname -r` \
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.3 --bootstrap=`uname -r` \
     --files=dynamic_hosts,passwd,group,shadow,network 
 \end{lstlisting}
 
