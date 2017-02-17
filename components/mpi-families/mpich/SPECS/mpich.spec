@@ -12,36 +12,9 @@
 
 %define with_slurm 0
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
 
-# OpenHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %define compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
+%ohpc_compiler
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
@@ -53,18 +26,12 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 Summary:   MPICH MPI implementation
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   3.2
-Release:   1
+Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_setup_compiler
-
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-
-%define debug_package %{nil}
 
 Requires: prun%{PROJ_DELIM}
 
@@ -81,10 +48,8 @@ Message Passing Interface (MPI) standard.
 %setup -q -n %{pname}-%{version}
 
 %build
-
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 ./configure --prefix=%{install_path} \
 %if 0%{with_slurm}
@@ -92,12 +57,11 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 %endif
     || { cat config.log && exit 1; }
 
+make %{?_smp_mflags}
+
 %install
-
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
+%ohpc_setup_compiler
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # Remove .la files detected by rpm
@@ -147,11 +111,6 @@ EOF
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-/sbin/ldconfig || exit 1
-
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -163,5 +122,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 3.2-1
+- Switching to %%ohpc_compiler macro
+
 * Thu Sep  1 2016  <raffenet@mcs.anl.gov>
 - Initial build.

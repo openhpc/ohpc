@@ -10,39 +10,12 @@
 
 # MVAPICH2 MPI stack that is dependent on compiler toolchain
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-# OpenHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
+%ohpc_compiler
 
 # Multiple permutations for this MPI stack are possible depending
-# on the desired underlying resource manager and comm library support. 
+# on the desired underlying resource manager and comm library support.
 
 %{!?with_slurm: %global with_slurm 0}
 %{!?with_pbs: %global with_pbs 0}
@@ -57,14 +30,12 @@ BuildRequires: intel_licenses
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}%{COMM_DELIM}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
 Version:   2.2
-Release:   1
+Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_setup_compiler
 
 # karl.w.schulz@intel.com (09/08/2015)
 %global _default_patch_fuzz 2
@@ -72,10 +43,6 @@ Patch0:    winfree.patch
 # karl.w.schulz@intel.com (04/13/2016)
 Patch1:    minit.patch
 Patch2:    mvapich2-get_cycles.patch
-
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-
-%define debug_package %{nil}
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
@@ -94,7 +61,7 @@ Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
-Buildrequires: ofed 
+Buildrequires: ofed
 %endif
 %if 0%{?rhel_version} || 0%{?centos_version}
 Buildrequires: rdma
@@ -109,7 +76,7 @@ BuildRequires: librdmacm-devel
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
-%description 
+%description
 
 MVAPICH2 is a high performance MPI-2 implementation (with initial
 support for MPI-3) for InfiniBand, 10GigE/iWARP and RoCE.  MVAPICH2
@@ -127,11 +94,7 @@ across multiple networks.
 %patch2 -p1
 
 %build
-
-# OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
+%ohpc_setup_compiler
 ./configure --prefix=%{install_path} \
 	    --enable-cxx \
 	    --enable-g=dbg \
@@ -144,19 +107,16 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 %endif
 	    --enable-fast=O3 || { cat config.log && exit 1; }
 
+make
+
 %install
-
-# OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
-#make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+%ohpc_setup_compiler
 
 # 06/04/15 - karl.w.schulz@intel.com; run serial build for fortran deps
 make DESTDIR=$RPM_BUILD_ROOT install
 
-# Remove .la files detected by rpm
 
+# Remove .la files detected by rpm
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
 
@@ -203,11 +163,6 @@ EOF
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-/sbin/ldconfig || exit 1
-
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -219,5 +174,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
+* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 2.2-1
+- Switching to %%ohpc_compiler macro
+
+* Tue Aug  5 2014  <karl.w.schulz@intel.com>
 - Initial build.

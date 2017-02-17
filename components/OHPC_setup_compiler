@@ -1,3 +1,7 @@
+if [ "$#" = "1" ]; then
+    OHPC_COMPILER_FAMILY=$1
+fi
+
 if [ -z "$OHPC_COMPILER_FAMILY" ]; then
     echo "Unknown OHPC_COMPILER_FAMILY"
     exit 1

@@ -10,36 +10,9 @@
 
 # OpenMPI stack that is dependent on compiler toolchain
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-# OpenHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
+%ohpc_compiler
 
 # Base package name/config
 %define pname openmpi
@@ -55,8 +28,8 @@ BuildRequires: intel_licenses
 %define with_slurm 1
 
 # Default build is without psm2, but can be overridden
-%{!?with_psm2: %define with_psm2 0}
-%{!?with_tm: %define with_tm 1}
+%{!?with_psm2: %global with_psm2 0}
+%{!?with_tm: %global with_tm 1}
 
 Summary:   A powerful implementation of MPI
 
@@ -67,21 +40,14 @@ Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 Version:   1.10.6
-Release:   1
+Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{version}.tar.bz2
-#Source0:   http://www.open-mpi.org/software/ompi/v2.0/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
-Source2:   OHPC_setup_compiler
 Source3:   pbs-config
-Patch0:    config.pbs.patch 
-
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-
-%define debug_package %{nil}
+Patch0:    config.pbs.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -134,7 +100,7 @@ Requires: prun%{PROJ_DELIM}
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
-%description 
+%description
 
 Open MPI is a project combining technologies and resources from several
 other projects (FT-MPI, LA-MPI, LAM/MPI, and PACX-MPI) in order to
@@ -149,10 +115,9 @@ Open MPI jobs.
 %patch0 -p0
 
 %build
-
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
+
 
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 %if %{with_psm}
@@ -179,12 +144,11 @@ export PATH="./:$PATH"
 
 ./configure ${BASEFLAGS}
 
+make %{?_smp_mflags}
+
 %install
-
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
+%ohpc_setup_compiler
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # Remove .la files detected by rpm
@@ -235,11 +199,6 @@ EOF
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-/sbin/ldconfig || exit 1
-
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -251,6 +210,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.JAVA.txt
 
 %changelog
-* Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
-- Initial build.
+* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 1.10.6-1
+- Switching to %%ohpc_compiler macro
 
+* Tue Aug  5 2014  <karl.w.schulz@intel.com>
+- Initial build.
