@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 # OpenMPI stack that is dependent on compiler toolchain
-
 %include %{_sourcedir}/OHPC_macros
 
 %ohpc_compiler
@@ -39,7 +38,7 @@ Name:      %{pname}-psm2-%{compiler_family}%{PROJ_DELIM}
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-Version:   1.10.6
+Version:   1.10.4
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
@@ -136,6 +135,8 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
   BASEFLAGS="$BASEFLAGS --with-io-romio-flags=--with-file-system=testfs+ufs+nfs+lustre"
 %endif
 
+export BASEFLAGS
+
 %if %{with_tm}
 cp %{SOURCE3} .
 %{__chmod} 700 pbs-config
@@ -150,7 +151,6 @@ make %{?_smp_mflags}
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
-
 # Remove .la files detected by rpm
 
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la

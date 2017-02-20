@@ -108,10 +108,8 @@ across multiple networks.
 	    --enable-fast=O3 || { cat config.log && exit 1; }
 
 make
-
 %install
 %ohpc_setup_compiler
-
 # 06/04/15 - karl.w.schulz@intel.com; run serial build for fortran deps
 make DESTDIR=$RPM_BUILD_ROOT install
 

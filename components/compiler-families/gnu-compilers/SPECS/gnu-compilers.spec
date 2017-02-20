@@ -9,33 +9,48 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-%define pname gnu-compilers
+%if "%{compiler_family}" == "gnu7"
+%global gnu_version 7.1.0
+%global gnu_release 1
+%global pname gnu-7-compilers
+%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.bz2
+%global source_directory gcc-%{version}
+%else
+%if "%{compiler_family}" == "dts6"
+%global gnu_version 6
+%global gnu_release 0
+%global pname gnu-dts6-compilers
+%global source_directory %{nil}
+%else
+%global gnu_version 5.4.0
+%global gnu_release 1
+%global pname gnu-compilers
+%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.bz2
+%global source_directory gcc-%{version}
+%endif
+%endif
 
 # Define subcomponent versions required for build
 
-%define gmp_version 6.1.1
-%define mpc_version 1.0.3
-%define mpfr_version 3.1.4
+%global gmp_version 6.1.1
+%global mpc_version 1.0.3
+%global mpfr_version 3.1.4
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.4.0
-Release:   1
+Version:   %{gnu_version}
+Release:   %{gnu_release}%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://gcc.gnu.org/
-DocDir:    %{OHPC_PUB}/doc/contrib
-Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.bz2
+%if "%{compiler_family}" != "dts6"
+Source0:   %{source}
 Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Source2:   ftp://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
 Source3:   http://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
+%endif
 Source4:   OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-
-%define debug_package %{nil}
-#!BuildIgnore: post-build-checks
 
 BuildRequires:  bison
 BuildRequires:  flex
@@ -53,7 +68,11 @@ BuildRequires:  fdupes
 %endif
 
 
+%if "%{compiler_family}" == "dts6"
+%define install_path /opt/rh/devtoolset-6/root/usr
+%else
 %define install_path %{OHPC_COMPILERS}/gcc/%{version}
+%endif
 
 %description
 
@@ -61,10 +80,8 @@ Core package for the GNU Compiler Collection, including the C language
 frontend.
 
 %prep
-%setup -n gcc-%{version}
-%setup -n gcc-%{version} -T -D -a 1
-%setup -n gcc-%{version} -T -D -a 2
-%setup -n gcc-%{version} -T -D -a 3
+%if "%{compiler_family}" != "dts6"
+%setup -q -n %{source_directory} -a1 -a2 -a3
 
 ln -s gmp-%{gmp_version} gmp
 ln -s mpc-%{mpc_version} mpc
@@ -75,10 +92,11 @@ ln -s mpfr-%{mpfr_version} mpfr
 %{__mkdir} obj
 cd obj
 ../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path}
-
+make %{?_smp_mflags}
+%endif
 %install
+%if "%{compiler_family}" != "dts6"
 cd obj
-make %{?_smp_mflags} 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -87,6 +105,8 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/install-tools
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/share
 %endif
+%endif
+
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/gnu
@@ -117,7 +137,7 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib64
-prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/gnu
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}
 
 family "compiler"
 EOF
@@ -132,33 +152,28 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%post
-/sbin/ldconfig
-
-%postun
-/sbin/ldconfig
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
-%{OHPC_PUB}
+%{OHPC_MODULES}/gnu/
+%if "%{compiler_family}" != "dts6"
+%{install_path}
 %doc COPYING
 %doc COPYING3
-%doc NEWS
 %doc COPYING3.LIB
 %doc README
 %doc ChangeLog.tree-ssa
 %doc ChangeLog
 %doc COPYING.LIB
 %doc COPYING.RUNTIME
-
+%if "%{compiler_family}" != "gnu7"
+%doc NEWS
+%endif
+%endif
 
 %changelog
-* Tue Aug  5 2014  <karl.w.schulz@intel.com> - 
-- Initial build.
+* Fri Feb 17 2017 Adrian Reber <areber@redhat.com>
+- Added support to build gnu-compilers (5.4.0) and
+  gnu-7-compilers from same SPEC file
 
+* Tue Aug  5 2014  <karl.w.schulz@intel.com> -
+- Initial build.

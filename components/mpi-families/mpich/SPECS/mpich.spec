@@ -58,12 +58,10 @@ Message Passing Interface (MPI) standard.
     || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
-
 %install
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
-
 # Remove .la files detected by rpm
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
