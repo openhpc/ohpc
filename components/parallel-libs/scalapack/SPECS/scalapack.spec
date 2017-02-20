@@ -25,38 +25,14 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-ohpc-header-comp-begin-----------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family:      %global mpi_family openmpi}
 
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
+%if "%{compiler_family}" != "intel"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
 %endif
 
 # MPI dependencies
@@ -77,8 +53,6 @@ BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
 Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end-------------------------------
-
 # Base package name
 %define pname scalapack
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -88,46 +62,40 @@ Summary:        A subset of LAPACK routines redesigned for heterogenous computin
 License:        netlib ScaLAPACK License
 Group:          Development/Libraries/Parallel
 Version:        2.0.2
-Release:        13.1
+Release:        13.1%{?dist}
 # This is freely distributable without any restrictions.
 Url:            http://www.netlib.org/lapack-dev/
 Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
 Source2:        OHPC_macros
-Source3:        OHPC_setup_compiler
 Source4:        OHPC_setup_mpi
 Patch0:         scalapack-2.0.2-shared-lib.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{OHPC_PUB}/doc/contrib
-Provides:       libscalapack.so.2()(64bit)
 
 %description
-The ScaLAPACK (or Scalable LAPACK) library includes a subset 
-of LAPACK routines redesigned for distributed memory MIMD 
-parallel computers. It is currently written in a 
-Single-Program-Multiple-Data style using explicit message 
-passing for interprocessor communication. It assumes 
-matrices are laid out in a two-dimensional block cyclic 
+The ScaLAPACK (or Scalable LAPACK) library includes a subset
+of LAPACK routines redesigned for distributed memory MIMD
+parallel computers. It is currently written in a
+Single-Program-Multiple-Data style using explicit message
+passing for interprocessor communication. It assumes
+matrices are laid out in a two-dimensional block cyclic
 decomposition.
 
-ScaLAPACK is designed for heterogeneous computing and is 
+ScaLAPACK is designed for heterogeneous computing and is
 portable on any computer that supports MPI or PVM.
 
-Like LAPACK, the ScaLAPACK routines are based on 
-block-partitioned algorithms in order to minimize the frequency 
-of data movement between different levels of the memory hierarchy. 
-(For such machines, the memory hierarchy includes the off-processor 
-memory of other processors, in addition to the hierarchy of registers, 
-cache, and local memory on each processor.) The fundamental building 
-blocks of the ScaLAPACK library are distributed memory versions (PBLAS) 
-of the Level 1, 2 and 3 BLAS, and a set of Basic Linear Algebra 
-Communication Subprograms (BLACS) for communication tasks that arise 
-frequently in parallel linear algebra computations. In the ScaLAPACK 
-routines, all interprocessor communication occurs within the PBLAS and the 
-BLACS. One of the design goals of ScaLAPACK was to have the ScaLAPACK 
-routines resemble their LAPACK equivalents as much as possible. 
-
-%define debug_package %{nil}
+Like LAPACK, the ScaLAPACK routines are based on
+block-partitioned algorithms in order to minimize the frequency
+of data movement between different levels of the memory hierarchy.
+(For such machines, the memory hierarchy includes the off-processor
+memory of other processors, in addition to the hierarchy of registers,
+cache, and local memory on each processor.) The fundamental building
+blocks of the ScaLAPACK library are distributed memory versions (PBLAS)
+of the Level 1, 2 and 3 BLAS, and a set of Basic Linear Algebra
+Communication Subprograms (BLACS) for communication tasks that arise
+frequently in parallel linear algebra computations. In the ScaLAPACK
+routines, all interprocessor communication occurs within the PBLAS and the
+BLACS. One of the design goals of ScaLAPACK was to have the ScaLAPACK
+routines resemble their LAPACK equivalents as much as possible.
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -138,11 +106,10 @@ routines resemble their LAPACK equivalents as much as possible.
 cp SLmake.inc.example SLmake.inc
 
 %build
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load openblas
 %endif
 
@@ -153,7 +120,7 @@ make lib
 %{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/etc
 %{__mkdir} -p ${RPM_BUILD_ROOT}%{install_path}/lib
 install -m 644 SLmake.inc ${RPM_BUILD_ROOT}%{install_path}/etc
-install -m 644 *so* ${RPM_BUILD_ROOT}%{install_path}/lib
+install -m 755 *so* ${RPM_BUILD_ROOT}%{install_path}/lib
 
 pushd ${RPM_BUILD_ROOT}%{install_path}/lib
 ln -fs libscalapack.so.2.0.2 libscalapack.so.2
@@ -204,13 +171,6 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%clean
-rm -fr ${RPM_BUILD_ROOT}
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -218,3 +178,5 @@ rm -fr ${RPM_BUILD_ROOT}
 %doc README LICENSE
 
 %changelog
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 2.0.2-13.1
+- Switching to %%ohpc_compiler macro

@@ -25,38 +25,14 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-ohpc-header-comp-begin-----------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
+%{!?mpi_family:      %global mpi_family openmpi}
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family:      %define mpi_family openmpi}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-BuildRequires: openblas-gnu%{PROJ_DELIM}
-Requires:      openblas-gnu%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
+%if "%{compiler_family}" != "intel"
+BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
+Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # MPI dependencies
@@ -77,22 +53,19 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end-------------------------------
-
 # Base package name
 %define pname hypre
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        2.11.1
-Release:        0
+Release:        0%{?dist}
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
 Group:          ohpc/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         https://computation.llnl.gov/project/linear_solvers/download/hypre-%{version}.tar.gz
 Source1:        OHPC_macros
-Source2:        OHPC_setup_compiler
 Source3:        OHPC_setup_mpi
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
@@ -111,10 +84,6 @@ BuildRequires:  python-xml
 BuildRequires:  libxml2-python
 %endif
 BuildRequires:  xz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{OHPC_PUB}/doc/contrib
-
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -137,14 +106,13 @@ phenomena in the defense, environmental, energy, and biological sciences.
 cp /usr/lib/rpm/config.guess src/config
 %endif
 
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
 
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load openblas
 %endif
 
@@ -158,7 +126,7 @@ cd src
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
     --with-timing \
     --without-openmp \
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
     --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
     --with-blas-lib-dirs=$MKLROOT/intel64/lib \
     --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
@@ -186,15 +154,13 @@ make %{?_smp_mflags} all CC="mpicc $FLAGS" \
 cd ..
 
 %install
-
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
 
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load openblas
 %endif
 
@@ -296,9 +262,6 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -306,5 +269,5 @@ EOF
 %doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
 
 %changelog
-
-
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 2.11.1-0
+- Switching to %%ohpc_compiler macro

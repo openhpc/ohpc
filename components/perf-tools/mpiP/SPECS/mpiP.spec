@@ -9,34 +9,18 @@
 #----------------------------------------------------------------------------eh-
 
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family:      %global mpi_family openmpi}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-
-# Compiler dependencies 
 
 # Note: this package is slightly non-standard in that we always use
 # gnu compilers undernead in order to support call-site demangling
-
+%if "%{compiler_family}" == "intel"
+Requires:      intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
-%if %{compiler_family} == intel
-Requires:      intel-compilers-devel%{PROJ_DELIM}
+%global compiler_family gnu
 %endif
 
 # MPI dependencies
@@ -45,19 +29,17 @@ BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == mpich
-BuildRequires: mpich-gnu%{PROJ_DELIM}
-Requires:      mpich-gnu%{PROJ_DELIM}
+BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-gnu%{PROJ_DELIM}
-Requires:      mvapich2-gnu%{PROJ_DELIM}
+BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
+Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == openmpi
-BuildRequires: openmpi-gnu%{PROJ_DELIM}
-Requires:      openmpi-gnu%{PROJ_DELIM}
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
-
-#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define pname mpiP
@@ -66,27 +48,22 @@ Requires:      openmpi-gnu%{PROJ_DELIM}
 Summary:   mpiP: a lightweight profiling library for MPI applications.
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.4.1
-Release:   1
+Release:   1%{?dist}
 License:   BSD-3
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://mpip.sourceforge.net/
 Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
 Patch1:    mpip.unwinder.patch
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: binutils-devel
 BuildRequires: python
 
-%define debug_package %{nil}
-
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
-%description 
+%description
 
 mpiP is a lightweight profiling library for MPI applications. Because
 it only collects statistical information about MPI functions, mpiP
@@ -111,9 +88,9 @@ cp /usr/lib/rpm/config.guess bin
 # OpenHPC compiler/mpi designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-export OHPC_COMPILER_FAMILY=gnu
+# see above where compiler_family is changed
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 CC=mpicc
@@ -131,9 +108,9 @@ FC=mpif90
 # OpenHPC compiler designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-export OHPC_COMPILER_FAMILY=gnu
+# see above where compiler_family is changed
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 make %{?_smp_mflags} shared
@@ -180,11 +157,12 @@ EOF
 # Remove static libs
 rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
 %{OHPC_PUB}
 %doc ChangeLog doc/PORTING.txt doc/README doc/UserGuide.txt
+
+%changelog
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.4.1-1
+- Switching to %%ohpc_compiler macro

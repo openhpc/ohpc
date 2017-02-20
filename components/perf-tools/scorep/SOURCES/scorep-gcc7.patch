@@ -1,0 +1,25 @@
+--- a/src/adapters/compiler/gcc-plugin/scorep_plugin_inst_descriptor.inc.c	2016-09-15 11:18:25.155032658 -0400
++++ b/src/adapters/compiler/gcc-plugin/scorep_plugin_inst_descriptor.inc.c	2017-02-22 14:25:04.482098291 -0500
+@@ -194,7 +194,7 @@
+                                         TREE_TYPE( region_descr_value ) );
+ 
+     /* Align the struct generously, so that it works for 32 and 64 bit */
+-    DECL_ALIGN( region_descr_var )      = 64 * BITS_PER_UNIT;
++    SET_DECL_ALIGN( region_descr_var, 64 * BITS_PER_UNIT);
+     DECL_USER_ALIGN( region_descr_var ) = 1;
+ 
+     /* The struct is 64 bytes, because of reserved entries */
+--- a/src/adapters/compiler/gcc-plugin/scorep_plugin_tree-flow.h	2016-09-15 11:18:25.151032708 -0400
++++ b/src/adapters/compiler/gcc-plugin/scorep_plugin_tree-flow.h	2017-02-22 14:25:04.482098291 -0500
+@@ -20,6 +20,11 @@
+ /* Test for GCC >= 4.9.0 */
+ #if SCOREP_GCC_PLUGIN_TARGET_VERSION >= 4009
+ 
++#if BUILDING_GCC_VERSION >= 7000
++#include "memmodel.h"
++#include "tree-vrp.h"
++#endif
++
+ #include "stringpool.h"
+ #include "basic-block.h"
+ #include "tree-ssa-alias.h"

@@ -25,38 +25,14 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-ohpc-header-comp-begin-----------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %define PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
+%{!?mpi_family:      %global mpi_family openmpi}
 
-%{!?compiler_family: %define compiler_family gnu}
-%{!?mpi_family:      %define mpi_family openmpi}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
+%if "%{compiler_family}" != "intel"
 BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
 %endif
 
 # MPI dependencies
@@ -77,8 +53,6 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end-------------------------------
-
 # Base package name
 %define pname superlu_dist
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -88,14 +62,13 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        4.2
-Release:        0
+Release:        0%{?dist}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/parallel-libs
 URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Source1:        OHPC_macros
-Source2:        OHPC_setup_compiler
 Source3:        OHPC_setup_mpi
 Patch0:         superlu_dist-4.1-sequence-point.patch
 Patch1:         superlu_dist-4.2-make.patch
@@ -103,30 +76,26 @@ Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
 Patch3:         superlu_dist-4.1-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{OHPC_PUB}/doc/contrib
 
-%include %{_sourcedir}/OHPC_macros
 #!BuildIgnore: post-build-checks
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 SuperLU is a general purpose library for the direct solution of large, sparse,
-nonsymmetric systems of linear equations on high performance machines. The 
+nonsymmetric systems of linear equations on high performance machines. The
 library is written in C and is callable from either C or Fortran. The library
 routines will perform an LU decomposition with partial pivoting and triangular
 system solves through forward and back substitution. The LU factorization routines
 can handle non-square matrices but the triangular solves are performed only for
 square matrices. The matrix columns may be preordered (before factorization)
-either through library or user supplied routines. This preordering for sparsity 
+either through library or user supplied routines. This preordering for sparsity
 is completely separate from the factorization. Working precision iterative
 refinement subroutines are provided for improved backward stability. Routines
 are also provided to equilibrate the system, estimate the condition number,
 calculate the relative backward error, and estimate error bounds for the refined
-solutions. 
+solutions.
 
 %prep
 %setup -q -n SuperLU_DIST_%{version}
@@ -137,18 +106,17 @@ solutions.
 
 %build
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load metis
 
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load scalapack
 %endif
 
-make superlulib DSuperLUroot=$PWD 
+make superlulib DSuperLUroot=$PWD
 
 mkdir tmp
 (cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
@@ -229,13 +197,6 @@ EOF
 
 %{__mkdir_p} %{buildroot}/%_docdir
 
-%clean
-rm -rf %{buildroot}
-
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -243,4 +204,5 @@ rm -rf %{buildroot}
 %doc README
 
 %changelog
-
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 4.2-0
+- Switching to %%ohpc_compiler macro

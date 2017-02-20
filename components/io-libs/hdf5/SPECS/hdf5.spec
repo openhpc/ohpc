@@ -26,36 +26,8 @@
 
 # Serial HDF5 library build that is dependent on compiler toolchain
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
-
-# OpenHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
+%ohpc_compiler
 
 # Base package name
 %define pname hdf5
@@ -64,22 +36,17 @@ BuildRequires: intel_licenses
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:   1.8.17
-Release:   1
+Release:   1%{?dist}
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   http://www.hdfgroup.org/ftp/HDF5/releases/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
-Source2:   OHPC_setup_compiler
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 BuildRequires: zlib-devel
 Requires:      zlib-devel
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
-
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -106,8 +73,7 @@ cp /usr/lib/rpm/config.guess bin
 %endif
 
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 ./configure --prefix=%{install_path} \
 	    --enable-fortran         \
@@ -116,11 +82,12 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 	    --enable-cxx             \
 	    --enable-fortran2003    || { cat config.log && exit 1; }
 
+make %{?_smp_mflags}
+
 %install
 
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 export NO_BRP_CHECK_RPATH=true
 
@@ -184,5 +151,5 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.txt
 
 %changelog
-
-
+* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.8.17-1
+- Switching to %%ohpc_compiler macro

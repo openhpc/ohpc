@@ -8,39 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# spec file for package trilinos
-
-#-ohpc-header-comp-begin-----------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family:      %global mpi_family openmpi}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
 
 # MPI dependencies
 %if %{mpi_family} == impi
@@ -60,8 +31,6 @@ BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
 Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end-------------------------------
-
 # Base package name
 %define pname trilinos
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -69,14 +38,13 @@ Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        12.10.1
-Release:        0
+Release:        0%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Source1:        OHPC_macros
-Source2:        OHPC_setup_compiler
 Source3:        OHPC_setup_mpi
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         Trilinos-trilinos-aarch64.patch
@@ -97,18 +65,14 @@ BuildRequires:  zlib-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != intel
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{OHPC_PUB}/doc/contrib
 
-%include %{_sourcedir}/OHPC_macros
 #!BuildIgnore: post-build-checks
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -127,15 +91,14 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 
 %build
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 module load netcdf
 module load boost
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load openblas
 %endif
 
@@ -150,7 +113,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
         -DTrilinos_ENABLE_MueLu:BOOL=OFF                                \
         -DTPL_ENABLE_MKL:BOOL=ON                                        \
         -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
@@ -162,8 +125,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
         -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
         -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
-%endif
-%if %{compiler_family} == gnu
+%else
         -DTPL_ENABLE_BLAS:BOOL=ON                                       \
         -DBLAS_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                      \
         -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
@@ -222,6 +184,7 @@ make %{?_smp_mflags} VERBOSE=1
 cd ..
 
 %install
+%ohpc_setup_compiler
 cd tmp
 make %{?_smp_mflags} DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
@@ -277,12 +240,6 @@ EOF
 
 %{__mkdir_p} %{buildroot}/%_docdir
 
-%clean
-rm -rf %{buildroot}
-
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -290,3 +247,5 @@ rm -rf %{buildroot}
 %doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 
 %changelog
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 12.10.1-0
+- Switching to %%ohpc_compiler macro

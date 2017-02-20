@@ -7,6 +7,7 @@ if [ -z "$OHPC_COMPILER_FAMILY" ]; then
     exit 1
 fi
 
+export toolset=gcc
 if [ "$OHPC_COMPILER_FAMILY" = "gnu" ]; then
     export CC=gcc
     export CXX=g++
@@ -22,6 +23,7 @@ elif [ "$OHPC_COMPILER_FAMILY" = "gnu7" ]; then
     module purge
     module load gnu/7.1.0
 elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
+    export toolset=intel-linux
     export CC=icc
     export CXX=icpc
     export FC=ifort
@@ -42,6 +44,3 @@ else
     echo "Unsupported OHPC_COMPILER_FAMILY -> $OHPC_COMPILER_FAMILY"
     exit 1
 fi
-
-
-

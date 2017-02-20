@@ -24,38 +24,8 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
-
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
+%ohpc_compiler
 
 # Base package name
 %define pname python
@@ -63,7 +33,7 @@ BuildRequires: intel_licenses
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        2.7.12
-Release:        70.1
+Release:        70.1%{?dist}
 Summary:        Python Interpreter
 License:        Python-2.0
 Group:          Development/Languages/Python
@@ -77,7 +47,6 @@ Source1:        macros.python
 Source2:        baselibs.conf
 Source5:        local.pth
 Source7:        OHPC_macros
-Source8:        OHPC_setup_compiler
 # COMMON-PATCH-BEGIN
 Patch1:         python-2.7-dirs.patch
 Patch2:         python-distutils-rpm-8.patch
@@ -127,11 +96,8 @@ Obsoletes:      python-64bit
 %endif
 Provides:       python-ctypes = 1.1.0
 Obsoletes:      python-ctypes < 1.1.0
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 #!BuildIgnore:  post-build-checks
-%define debug_package %{nil}
 %global _python_bytecompile_errors_terminate_build 0
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -177,8 +143,7 @@ sed -i 's/^version_required/dnl version_required/' configure.ac
 
 %build
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 export OPT="%{optflags} -DOPENSSL_LOAD_CONF"
 
 autoreconf -f -i . # Modules/_ctypes/libffi
@@ -248,8 +213,7 @@ fi
 
 %install
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 # replace rest of /usr/local/bin/python or /usr/bin/python2.5 with /usr/bin/python
 find . -name '*.py' -type f | grep -vE "^./Parser/|^./Python/" \
   | xargs grep -lE '^#! *(/usr/.*bin/(env +)?)?python' \
@@ -348,12 +312,13 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-, root, root, -)
 %{OHPC_HOME}
 
 %{OHPC_PUB}
 %doc LICENSE README
+
+%changelog
+* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 2.7.12-70.1
+- Switching to %%ohpc_compiler macro
