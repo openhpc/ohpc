@@ -219,7 +219,7 @@
 +
 +# Install only what is necessary/specific for this distribution
 +PKGLIST="systemd-sysvinit aaa_base bash dracut sles-release coreutils e2fsprogs ethtool \
-+    filesystem findutils gawk grep iproute2 iputils mingetty net-tools \
++    filesystem findutils gawk grep iproute2 iputils kernel-default mingetty net-tools \
 +    nfs-kernel-server pam rpcbind procps psmisc shadow rsync sed rsyslog tcpd \
 +    timezone util-linux words libz1 tar less gzip kmod-compat udev openssh \
 +    dhcp-client pciutils vim strace cron cpupower cpio wget zypper libstdc++6 libgcc_s1 libicu52_1"
