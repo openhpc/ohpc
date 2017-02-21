@@ -1,0 +1,91 @@
+--- warewulf-provision-3.6/cgi-bin/file.pl	2014-05-21 11:13:01.000000000 -0700
++++ warewulf-provision-3.6.patch/cgi-bin/file.pl	2017-02-21 13:10:26.000000000 -0800
+@@ -11,7 +11,8 @@
+ use CGI;
+ use Digest::MD5 ('md5_hex');
+ use File::Path;
+-use IPC::Open2;
++use Apache2::SubProcess ();
++use IO::Select;
+ use Warewulf::DataStore;
+ use Warewulf::Logger;
+ use Warewulf::Daemon;
+@@ -20,9 +21,19 @@
+ use Warewulf::DSO::File;
+ use Warewulf::Util;
+ 
+-&daemonized(1);
++# For taint checks
++delete @ENV{("IFS", "CDPATH", "ENV", "BASH_ENV")};
++$ENV{"PATH"} = "/bin:/usr/bin:/sbin:/usr/sbin";
++foreach my $shell ("/bin/bash", "/usr/bin/ksh", "/bin/ksh", "/bin/sh", "/sbin/sh") {
++    if (-f $shell) {
++        $ENV{"SHELL"} = $shell;
++        last;
++    }
++}
++
+ &set_log_level("WARNING");
+ 
++my $r = shift;
+ my $q = CGI->new();
+ my $db = Warewulf::DataStore->new();
+ 
+@@ -72,11 +83,14 @@
+                         if ($timestamp and $timestamp >= $obj_timestamp) {
+                             next;
+                         }
+-                        $metadata{$obj_timestamp} .= sprintf("%s %s %s %s %04o %s %s\n",
++
++                        my $obj_ftype = $obj->filetypestring();
++                        $metadata{$obj_timestamp} .= sprintf("%s %s %s %s %s%04o %s %s\n",
+                             $obj->id() || "NULL",
+                             $obj->name() || "NULL",
+                             $obj->uid() || "0",
+                             $obj->gid() || "0",
++                            (($obj_ftype eq '-') ? (' ') : ($obj_ftype)),
+                             $obj->mode() || "0000",
+                             $obj_timestamp,
+                             $obj->path() || "NULL"
+@@ -159,25 +173,23 @@
+ 
+                         if ($fileObj->interpreter()) {
+                             my $interpreter = $fileObj->interpreter();
+-                            my $pipe_in;
+-                            my $pipe_out;
+-                            eval {
+-                                local $SIG{ALRM} = sub { die "FileID ($fileid) timeout on running intrepreter '$interpreter'\n" };
+-                                alarm 1;
+-                                my $pid = open2($pipe_out, $pipe_in, "$interpreter");
+-                                if ($pid) {
+-                                    print $pipe_in $read_buffer;
+-                                    close $pipe_in;
+-                                    while(my $line = <$pipe_out>) {
+-                                        $send_buffer .= $line;
+-                                    }
+-                                    close $pipe_out;
++                            my ($in_fh, $out_fh, $err_fh);
++                            my $err_str = "";
++
++                                sub read_data {
++                                    my ($fh) = @_;
++                                    my $data;
++                                    $data = join('', <$fh>);
++                                    return ((defined($data)) ? ($data) : (""));
+                                 }
+-                                alarm 0;
+-                            };
+-                            if ($@) {
+-                                &eprint("FileID ($fileid) failed running interpreter '$intrepreter'\n");
+-                                $send_buffer = undef;
++
++                                ($in_fh, $out_fh, $err_fh) = $r->spawn_proc_prog($interpreter);
++                                print $in_fh $read_buffer;
++                                close $in_fh;
++                                $send_buffer = read_data($out_fh);
++                                $err_str = read_data($err_fh);
++                            if ($err_str) {
++                                &eprint("FileID ($fileid) interpreter '$interpreter':  $err_str\n");
+                             }
+                         } elsif ($read_buffer) {
+                             $send_buffer = $read_buffer;
