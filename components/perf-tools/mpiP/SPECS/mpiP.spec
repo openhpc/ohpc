@@ -177,6 +177,9 @@ EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
+# Remove static libs
+rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
