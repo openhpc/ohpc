@@ -16,6 +16,7 @@
 %define debug_package %{nil}
 
 %define pname warewulf-vnfs
+%define dname vnfs
 
 Summary: Warewulf VNFS Module
 Name:    %{pname}%{PROJ_DELIM}
@@ -24,8 +25,7 @@ Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-#Source:  http://warewulf.lbl.gov/downloads/releases/warewulf-vnfs/warewulf-vnfs-%{version}.tar.gz
-Source:  http://build.openhpc.community/badge/warewulf-vnfs-%{version}.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: pigz
@@ -53,15 +53,16 @@ Virtual Node FileSystem objects.
 
 
 %prep
-%setup -n %{pname}-%{version}
+%setup -n warewulf3-3.7pre
 
 # OpenHPC patches
-
+cd %{dname}
 %patch1 -p1
 %patch2 -p1
 
 
 %build
+cd %{dname}
 ./autogen.sh
 %configure
 %{__make} %{?mflags}

@@ -16,6 +16,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname warewulf-common
+%define dname common
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
@@ -24,8 +25,7 @@ Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-#Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-common/warewulf-common-%{version}.tar.gz
-Source0: http://build.openhpc.community/badge/warewulf-common-%{version}.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 DocDir: %{OHPC_PUB}/doc/contrib
@@ -64,12 +64,14 @@ supporting libs.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n warewulf3-3.7pre
+cd %{dname}
 %patch1 -p1
 %patch2 -p1
 
 
 %build
+cd %{dname}
 ./autogen.sh
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}

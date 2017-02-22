@@ -17,6 +17,7 @@
 %define wwpkgdir /srv/warewulf
 
 %define pname warewulf-provision
+%define dname provision
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module
@@ -25,8 +26,7 @@ Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-#Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-provision/warewulf-provision-%{version}.tar.gz
-Source0: http://build.openhpc.community/badge/warewulf-provision-%{version}.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -100,11 +100,13 @@ available the included GPL software.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n warewulf3-3.7pre
+cd %{dname}
 %patch1 -p1
 %patch2 -p1
 
 %build
+cd %{dname}
 ./autogen.sh
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}

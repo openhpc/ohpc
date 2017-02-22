@@ -14,6 +14,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname warewulf-ipmi
+%define dname ipmi
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
 
@@ -30,8 +31,7 @@ Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
-#Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-ipmi/warewulf-ipmi-%{version}.tar.gz
-Source0: http://build.openhpc.community/badge/warewulf-ipmi-%{version}.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
 Source1: OHPC_macros
 Patch0: warewulf-ipmi-3.6-config_guess.patch
 ExclusiveOS: linux
@@ -51,12 +51,14 @@ adding IPMI functionality.
 
 
 %prep
-%setup -n %{pname}-%{version}
+%setup -n warewulf3-3.7pre
 %ifarch aarch64
+cd %{dname}
 %patch0 -p1
 %endif
 
 %build
+cd %{dname}
 ./autogen.sh
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
