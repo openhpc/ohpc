@@ -105,6 +105,7 @@ available the included GPL software.
 %patch2 -p1
 
 %build
+./autogen.sh
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
 

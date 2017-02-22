@@ -83,6 +83,7 @@ provisioned nodes.
 %patch1 -p1
 
 %build
+./autogen.sh
 %configure
 %{__make} %{?mflags}
 
