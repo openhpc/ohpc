@@ -136,7 +136,7 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
-make %{?_smp_mflags} 
+make %{?_smp_mflags} shared
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # OpenHPC module file
