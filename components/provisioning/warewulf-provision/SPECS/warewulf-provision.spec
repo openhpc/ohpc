@@ -20,12 +20,13 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module
-Version: 3.6
+Version: 3.7
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-provision/warewulf-provision-%{version}.tar.gz
+#Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-provision/warewulf-provision-%{version}.tar.gz
+Source0: http://build.openhpc.community/badge/warewulf-provision-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
