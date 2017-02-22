@@ -25,12 +25,13 @@
 
 Name: %{rpmname}
 Summary: IPMI Module for Warewulf
-Version: 3.6
+Version: 3.7
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
-Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-ipmi/warewulf-ipmi-%{version}.tar.gz
+#Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-ipmi/warewulf-ipmi-%{version}.tar.gz
+Source0: http://build.openhpc.community/badge/warewulf-ipmi-%{version}.tar.gz
 Source1: OHPC_macros
 Patch0: warewulf-ipmi-3.6-config_guess.patch
 ExclusiveOS: linux
@@ -56,6 +57,7 @@ adding IPMI functionality.
 %endif
 
 %build
+./autogen.sh
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
 
