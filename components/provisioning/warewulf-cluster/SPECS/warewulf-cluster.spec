@@ -17,12 +17,13 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
-Version: 3.6
+Version: 3.7
 Release: %{_rel}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-cluster/warewulf-cluster-%{version}.tar.gz
+#Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-cluster/warewulf-cluster-%{version}.tar.gz
+Source0: http://build.openhpc.community/badge/warewulf-cluster-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
@@ -40,8 +41,6 @@ DocDir: %{OHPC_PUB}/doc/contrib
 
 # 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
 Patch1: warewulf-cluster.wwinit.patch
-# 03/30/16 karl.w.schulz@intel.com - add support for ecdsa host keys
-Patch2: warewulf-cluster.ecdsa.patch
 # 06/14/14 karl.w.schulz@intel.com - OpenHPC flag used to disable inclusion of node package
 %if %{OHPC_BUILD}
 %define disable_node_package 1
@@ -82,7 +81,6 @@ provisioned nodes.
 %setup -n %{pname}-%{version}
 
 %patch1 -p1
-%patch2 -p0
 
 %build
 %configure
