@@ -104,12 +104,12 @@ available the included GPL software.
 %prep
 %setup -q -n warewulf3-3.7pre
 cd %{dname}
+./autogen.sh
 %patch1 -p1
 %patch2 -p1
 
 %build
 cd %{dname}
-./autogen.sh
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
 
