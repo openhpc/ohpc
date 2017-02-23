@@ -43,6 +43,7 @@ Group:          Development/Libraries/C and C++
 
 Source:         http://www.msweet.org/files/project3/mxml-%{version}.tar.gz
 Source1:        baselibs.conf
+Source2:        OHPC_macros
 Patch:          mxml-2.3-nobinstrip.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  pkgconfig

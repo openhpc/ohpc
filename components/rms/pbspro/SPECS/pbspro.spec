@@ -51,6 +51,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   14.1.0
 Release:   0
 Source0:   https://github.com/PBSPro/pbspro/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
+Source1:   OHPC_macros
 Patch1:    systemd.patch
 License:   AGPLv3 with exceptions
 URL:       https://github.com/pbspro/pbspro
@@ -96,6 +97,9 @@ BuildRequires: expat-devel
 BuildRequires: openssl-devel
 BuildRequires: libXext
 BuildRequires: libXft
+%endif
+%if %{defined have_systemd}
+BuildRequires: systemd
 %endif
 #!BuildIgnore: post-build-checks
 
@@ -167,7 +171,6 @@ does include the PBS Professional user commands.
 
 %package -n %{pname}-%{pbs_client}%{PROJ_DELIM}
 Summary: PBS Professional for a client host
-Group: System/Base
 Group: %{PROJ_NAME}/rms
 Conflicts: pbspro-server
 Conflicts: pbspro-execution

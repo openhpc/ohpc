@@ -15,7 +15,7 @@
 
 Name:  %{pname}%{PROJ_DELIM}
 Version: 2.3.24
-Release: %{_rel}
+Release: 1
 
 Summary: PowerMan - centralized power control for clusters
 License: GPL
@@ -23,7 +23,8 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/admin
 Url: http://code.google.com/p/powerman/
 #Source0: %{pname}-%{version}.tar.gz
-Source0: https://github.com/chaos/%{pname}/releases/download/%{version}/%{pname}-%{version}.tar.gz#%{pname}-%{version}.tar.gz
+Source0: https://github.com/chaos/%{pname}/releases/download/%{version}/%{pname}-%{version}.tar.gz
+Source1: OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if 0%{?rhel}

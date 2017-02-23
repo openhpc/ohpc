@@ -19,6 +19,7 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/admin
 URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
+Source1:        OHPC_macros
 
 %if 0%{?suse_version}
 BuildRequires:  libstdc++6
@@ -34,6 +35,16 @@ BuildRequires:  texlive-tcolorbox
 BuildRequires:  texlive-environ
 BuildRequires:  texlive-trimspaces
 BuildRequires:  texlive-amsmath
+%if 0%{?rhel}
+BuildRequires:  texlive-texconfig
+BuildRequires:  texlive-metafont
+BuildRequires:  texlive-cm
+BuildRequires:  texlive-pdftex-def
+BuildRequires:  texlive-helvetic
+BuildRequires:  texlive-ec
+BuildRequires:  texlive-cm-super
+BuildRequires:  texlive-dvips
+%endif
 BuildRequires:  latexmk
 BuildRequires:  git
 

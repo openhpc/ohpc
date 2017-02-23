@@ -178,7 +178,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Tue Aug 17 2015  <karl.w.schulz@intel.com> -
+* Mon Aug 17 2015  <karl.w.schulz@intel.com> -
 - Update to version 4.1
 
 * Tue Aug  5 2014  <karl.w.schulz@intel.com> - 

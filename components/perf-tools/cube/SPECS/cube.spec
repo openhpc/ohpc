@@ -16,6 +16,7 @@
 %define pname cube
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name: %{pname}%{PROJ_DELIM}
 
@@ -26,6 +27,7 @@ License:   BSD-style license
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.scalasca.org/software/cube-4.x/download.html
 Source0:   http://apps.fz-juelich.de/scalasca/releases/cube/4.3/dist/cube-%{version}.tar.gz
+Source1:   OHPC_macros
 Provides:  lib%PNAME.so()(64bit)
 Provides:  cube
 Conflicts: lib%pname < %version-%release
@@ -35,7 +37,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 Requires: qt qt-x11
 BuildRequires: zlib-devel
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600 || 0%{?rhel}
 BuildRequires: qt4-devel
 BuildRequires: dbus-devel
 BuildRequires: gcc-c++

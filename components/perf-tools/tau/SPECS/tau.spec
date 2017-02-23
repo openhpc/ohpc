@@ -73,6 +73,9 @@ License:   Tuning and Analysis Utilities License
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
+Source1:   OHPC_macros
+Source2:   OHPC_setup_compiler
+Source3:   OHPC_setup_mpi
 Patch1:    tau-2.26.forceshared.patch
 Patch2:    tau-add-explicit-linking-option.patch
 

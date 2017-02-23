@@ -14,6 +14,7 @@ Group:         System Environment/Base
 License:       CeCILL-C
 URL:           http://clustershell.sourceforge.net/
 Source0:       https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
+Source1:       OHPC_macros
 BuildRoot:     %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 
 # Default library install path

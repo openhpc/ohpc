@@ -36,6 +36,7 @@ Source3: nrpe.service
 Source4: commands.cfg
 Source5: hosts.cfg.example
 Source6: services.cfg.example
+Source7: OHPC_macros
 Patch1: nrpe-0001-Add-reload-target-to-the-init-script.patch
 Patch2: nrpe-0002-Read-extra-configuration-from-etc-sysconfig-nrpe.patch
 Patch3: nrpe-0003-Include-etc-npre.d-config-directory.patch

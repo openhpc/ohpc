@@ -24,13 +24,14 @@
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:        33.2.1
-Release:        %{?dist}
+Release:        1%{?dist}
 Summary:        POSIX library for Lua
 
 Group:          %{PROJ_NAME}/distro-packages
 License:        MIT
 Url:            https://github.com/luaposix/luaposix
 Source0:        https://github.com/luaposix/luaposix/archive/release-v%{version}.tar.gz
+Source1:        OHPC_macros
 BuildRoot:      %{_tmppath}/luaposix-%{version}-%{release}-root-
 
 BuildRequires:  lua >= %{luaver}, lua-devel >= %{luaver}

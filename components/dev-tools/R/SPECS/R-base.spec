@@ -67,6 +67,8 @@ Name:		%{pname}%{PROJ_DELIM}
 Release:	1%{?dist}
 Version:        3.3.1
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
+Source1:        OHPC_macros
+Source2:        OHPC_setup_compiler
 Patch:          tre.patch
 Url:            http://www.r-project.org/
 DocDir:         %{OHPC_PUB}/doc/contrib
@@ -108,9 +110,7 @@ BuildRequires:  tk-devel
 %else
 BuildRequires:  libXt-devel
 BuildRequires:  texinfo >= 5.1 
-#BuildRequires:  bzip2
-#BuildRequires:  bzip2-devel
-#BuildRequires:  bzip2-libs
+BuildRequires:  bzip2-devel
 %endif
 Requires:       cairo >= 1.2
 Requires:       fontconfig
@@ -300,6 +300,6 @@ export NO_BRP_CHECK_RPATH true
 # ld.so.conf
 %config /etc/ld.so.conf.d/R.conf
 
-
-
 %changelog
+* Wed Feb 08 2017 Adrian Reber <adrian@lisas.de> - 3.3.1
+- fix building on CentOS 7.3

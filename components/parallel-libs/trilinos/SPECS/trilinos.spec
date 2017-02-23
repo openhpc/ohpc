@@ -75,6 +75,9 @@ License:        LGPL-2.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
+Source1:        OHPC_macros
+Source2:        OHPC_setup_compiler
+Source3:        OHPC_setup_mpi
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         Trilinos-trilinos-aarch64.patch
 BuildRequires:  cmake >= 2.8
@@ -84,7 +87,11 @@ BuildRequires:  expat
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
 BuildRequires:  perl
+%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
+BuildRequires:  qt-devel
+%else
 BuildRequires:  libqt4-devel
+%endif
 BuildRequires:  swig > 2.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel

@@ -36,6 +36,7 @@ Source6: nagios.upgrade_to_v3.sh
 Source10: printer.png
 Source11: router.png
 Source12: switch.png
+Source13: OHPC_macros
 
 # looks fixed in 4.1.1
 #Patch1: nagios-0001-from-rpm.patch
@@ -103,7 +104,6 @@ Requires: %{pname}-common%{PROJ_DELIM}
 #Requires(pre): group(nagios)
 
 
-Summary: Nagios monitors hosts and services and yells if something breaks
 Summary(de): Nagios überwacht Dienste und Rechner und meldet Ihnen Ausfälle
 
 %description

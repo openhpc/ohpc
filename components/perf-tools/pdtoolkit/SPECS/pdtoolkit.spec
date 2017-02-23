@@ -52,6 +52,9 @@ Summary:        PDT is a framework for analyzing source code
 Url:            http://www.cs.uoregon.edu/Research/pdt
 Group:          %{PROJ_NAME}/perf-tools
 Source:         https://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/pdtoolkit-%{version}.tar.gz
+Source1:        OHPC_macros
+Source2:        OHPC_setup_compiler
+Source3:        OHPC_setup_mpi
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build

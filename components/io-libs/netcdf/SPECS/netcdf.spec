@@ -102,6 +102,7 @@ Source103:	OHPC_setup_mpi
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  zlib-devel >= 1.2.5
+BuildRequires:  m4
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 

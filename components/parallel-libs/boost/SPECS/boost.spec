@@ -108,11 +108,17 @@ Source103:	OHPC_setup_mpi
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:         %{OHPC_PUB}/doc/contrib
 
+%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
+BuildRequires:  bzip2-devel
+BuildRequires:  expat-devel
+BuildRequires:  xorg-x11-server-devel
+%else
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
+BuildRequires:  xorg-x11-devel
+%endif
 BuildRequires:  libicu-devel >= 4.4
 BuildRequires:  python-devel
-BuildRequires:  xorg-x11-devel
 BuildRequires:  zlib-devel
 
 # (Tron: 3/4/16) Add libicu dependency for SLES12sp1 as the distro does not seem to have it by default and some tests are failing
