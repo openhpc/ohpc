@@ -139,7 +139,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-cd %{dname}
 %defattr(-, root, root)
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE

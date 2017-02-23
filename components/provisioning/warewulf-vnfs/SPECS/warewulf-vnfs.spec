@@ -84,7 +84,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-cd %{dname}
 %defattr(-,root,root)
 %{OHPC_HOME}
 %{OHPC_PUB}
