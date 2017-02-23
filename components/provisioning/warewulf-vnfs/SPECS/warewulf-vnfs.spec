@@ -43,7 +43,10 @@ DocDir: %{OHPC_PUB}/doc/contrib
 Obsoletes: warewulf-vnfs < 3.2-0
 # 03/13/15 karl.w.schulz@intel.com - honor local proxy setting if defined (rhel)
 Patch1: rhel-proxy.patch
+# 02/23/17 reese.baird@intel.com - default to pigz for vnfs compression
 Patch2: warewulf-vnfs.pigz.patch
+# 02/23/17 reese.baird@intel.com - fixes for zypper in wwmkchroot
+Patch3: warewulf-vnfs.wwmkchroot.patch
 
 
 %description
@@ -61,6 +64,7 @@ Virtual Node FileSystem objects.
 cd %{dname}
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 
 %build
