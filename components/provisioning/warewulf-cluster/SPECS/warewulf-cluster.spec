@@ -115,11 +115,10 @@ rm -rf $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/wwfirstboot/*
 rm -rf $RPM_BUILD_ROOT
 
 %files
-cd %{dname}
 %defattr(-, root, root)
 %{OHPC_HOME}
 %{OHPC_PUB}
-%doc AUTHORS COPYING ChangeLog INSTALL LICENSE NEWS README README.node TODO
+%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/LICENSE %{dname}/NEWS %{dname}/README %{dname}/README.node %{dname}/TODO
 %{_sysconfdir}/profile.d/*
 %{_bindir}/*
 %{_libexecdir}/warewulf/wwinit/*
