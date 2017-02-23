@@ -90,7 +90,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.4.1
+Version:        4.4.1.1
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 DocDir:         %{OHPC_PUB}/doc/contrib
