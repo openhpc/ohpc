@@ -131,10 +131,6 @@ LIBSUFF=64
 %endif
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
-pushd %{_specdir}
-cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
-popd
-
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 export OHPC_MPI_FAMILY=%{mpi_family}
