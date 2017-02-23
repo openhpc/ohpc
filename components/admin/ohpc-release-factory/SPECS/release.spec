@@ -11,10 +11,21 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
+%if 0%{?centos_version} || 0%{?rhel_version}
+%define disttag %{dist}
+%endif
+
+%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?suse_version} == 1315
+%define disttag .sle12
+%endif
+%endif
+
+
 Summary:  OpenHPC release files
 Name:     ohpc-release-factory
 Version:  %{ohpc_version}
-Release:  1
+Release:  1%{?disttag}
 License:  BSD-3
 Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc

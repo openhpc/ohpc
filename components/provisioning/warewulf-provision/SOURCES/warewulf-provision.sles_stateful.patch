@@ -1,5 +1,5 @@
---- warewulf-provision-3.6/initramfs/capabilities/setup-filesystems/80-mkbootable	2014-05-21 11:13:01.000000000 -0700
-+++ warewulf-provision-3.6.patch/initramfs/capabilities/setup-filesystems/80-mkbootable	2016-04-27 15:52:27.000000000 -0700
+--- warewulf-provision-3.7/initramfs/capabilities/setup-filesystems/80-mkbootable	2017-02-22 09:32:02.000000000 -0800
++++ warewulf-provision-3.7.patch/initramfs/capabilities/setup-filesystems/80-mkbootable	2017-02-22 13:12:08.000000000 -0800
 @@ -7,6 +7,11 @@
  # required approvals from the U.S. Dept. of Energy).  All rights reserved.
  #
@@ -12,7 +12,17 @@
  
  # Install a bootloader if $WWBOOTLOADER is set and the root device is known
  if [ -n "$WWBOOTLOADER" -a -f "/tmp/rootdev" ]; then
-@@ -120,5 +125,10 @@
+@@ -20,6 +25,9 @@
+             if [ -x "$NEWROOT/sbin/dracut" ]; then
+                 chroot $NEWROOT /sbin/dracut --force '' $KERNELVERSION
+                 INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
++            elif [ -x "$NEWROOT/usr/bin/dracut" ]; then
++                chroot $NEWROOT /usr/bin/dracut --force '' $KERNELVERSION
++                INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
+             elif [ -x "$NEWROOT/sbin/mkinitrd" ]; then
+                 INITRD=`cd $NEWROOT; find boot/initr*-${KERNELVERSION}.img* 2>/dev/null | tail -n 1`
+                 if [ -n "$INITRD" ]; then
+@@ -162,5 +170,10 @@
      exit 1
  fi
  

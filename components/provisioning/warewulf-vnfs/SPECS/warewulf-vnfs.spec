@@ -16,19 +16,23 @@
 %define debug_package %{nil}
 
 %define pname warewulf-vnfs
+%define dname vnfs
 
 Summary: Warewulf VNFS Module
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.6
+Version: 3.7
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source:  http://warewulf.lbl.gov/downloads/releases/warewulf-vnfs/warewulf-vnfs-%{version}.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
 Source2: OHPC_macros
+
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: pigz
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 %if 0%{!?sles_version} && 0%{!?suse_version}
@@ -39,23 +43,12 @@ DocDir: %{OHPC_PUB}/doc/contrib
 # Previous version had an architecture in its release. This is necessary for
 # YUM to properly update a package of a different BuildArch...
 Obsoletes: warewulf-vnfs < 3.2-0
-# 06/18/14 charles.r.baird@intel.com - wwmkchroot patch for SLES
-Patch1: warewulf-vnfs.wwmkchroot.patch
-# 09/10/14 charles.r.baird@intel.com - special chars in vnfs filenames
-Patch2: warewulf-vnfs.utf8.patch
-# 09/19/14 karl.w.schulz@intel.com - include yum/numactl in centos6 default image
-Patch3: centos-add-pkgs.patch
-# 02/10/15 charles.r.baird@intel.com - add drivers to bootstrap image
-Patch4: warewulf-vnfs.bootstrap.patch
-# 03/11/15 karl.w.schulz@intel.com - add in centos7 template (culled from ww trunk)
-Source1: centos-7.tmpl
 # 03/13/15 karl.w.schulz@intel.com - honor local proxy setting if defined (rhel)
-Patch5: rhel-proxy.patch
-Patch6: warewulf-vnfs.pigz.patch
-# 03/30/16 karl.w.schulz@intel.com - add support for ecdsa host keys
-Patch7: warewulf-vnfs.ecdsa.patch
-# 04/14/16 karl.w.schulz@intel.com - add init class
-Patch8: warewulf-vnfs.init.patch
+Patch1: rhel-proxy.patch
+# 02/23/17 reese.baird@intel.com - default to pigz for vnfs compression
+Patch2: warewulf-vnfs.pigz.patch
+# 02/23/17 reese.baird@intel.com - fixes for zypper in wwmkchroot
+Patch3: warewulf-vnfs.wwmkchroot.patch
 
 
 %description
@@ -67,30 +60,25 @@ Virtual Node FileSystem objects.
 
 
 %prep
-%setup -n %{pname}-%{version}
+%setup -n warewulf3-3.7pre
 
 # OpenHPC patches
-
+cd %{dname}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p3
-%patch8 -p1
 
 
 %build
+cd %{dname}
+./autogen.sh
 %configure
 %{__make} %{?mflags}
 
 
 %install
+cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
-
-# 03/11/15 karl.w.schulz@intel.com - add in centos7 template (culled from ww trunk)
-install -D -m 0644 %SOURCE1 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/centos-7.tmpl
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
@@ -102,7 +90,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{OHPC_HOME}
 %{OHPC_PUB}
-%doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
+%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/vnfs.conf
 %config(noreplace) %{_sysconfdir}/warewulf/bootstrap.conf
 %{_libexecdir}/warewulf/*

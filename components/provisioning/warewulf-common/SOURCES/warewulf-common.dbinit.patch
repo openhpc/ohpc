@@ -1,0 +1,11 @@
+--- warewulf-common-3.7/libexec/wwinit/10-database.init	2017-02-22 09:32:02.000000000 -0800
++++ warewulf-common-3.7.patch/libexec/wwinit/10-database.init	2017-02-22 21:35:08.000000000 -0800
+@@ -69,6 +69,8 @@
+         wwservice_activate mysqld mysql
+     elif wwpackage_check mariadb-server; then
+         wwservice_activate mariadb
++    elif wwpackage_check mariadb; then
++        wwservice_activate mysql
+     else
+         wwprint "No database package seems to exist for mysql!\n" error
+         exit 255

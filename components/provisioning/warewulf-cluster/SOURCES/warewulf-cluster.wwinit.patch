@@ -1,57 +1,13 @@
---- warewulf-cluster-3.6/libexec/wwinit/50-nfsd.init	2014-05-21 14:12:10.000000000 -0400
-+++ warewulf-cluster-3.6.patch/libexec/wwinit/50-nfsd.init	2014-11-04 16:15:59.751816370 -0500
-@@ -23,10 +23,14 @@
- 
- if [ -x "/etc/rc.d/init.d/nfs" ]; then
-     SERVICE_NAME="nfs"
-+elif [ -x "/etc/init.d/nfs" ]; then
-+    SERVICE_NAME="nfs"
- elif [ -x "/etc/rc.d/init.d/nfsd" ]; then
-     SERVICE_NAME="nfsd"
- elif [ -x "/etc/init.d/nfs-kernel-server" ]; then
-     SERVICE_NAME="nfs-kernel-server"
-+elif [ -f "/usr/lib/systemd/system/nfs-server.service" ]; then
-+    SERVICE_NAME="nfs-server"
- else
-     wwprint " ! ERROR: NFS service not detected" error;
-     reply_error;
---- warewulf-cluster-3.6/libexec/wwinit/50-ntpd.init	2014-05-21 14:12:10.000000000 -0400
-+++ warewulf-cluster-3.6.patch/libexec/wwinit/50-ntpd.init	2014-11-04 16:15:59.751816370 -0500
-@@ -24,6 +24,8 @@
-     SERVICE_NAME="ntpd"
- elif [ -x "/etc/init.d/ntp" ]; then
-     SERVICE_NAME="ntp"
-+elif [ -f "/usr/lib/systemd/system/ntpd.service" ]; then
-+    SERVICE_NAME="ntpd"
- else
-     wwprint " ! ERROR: NTP client not found" error;
-     reply_error;
-@@ -41,6 +43,12 @@
-     wwprint "Backed up current NTP config to /etc/ntp.conf-orig\n"
- fi
- 
-+if [ -f "/etc/ntp.keys" ]; then
-+    KEY_FILE="/etc/ntp.keys"
-+elif [ -f "/etc/ntp/keys" ]; then
-+    KEY_FILE="/etc/ntp/keys"
-+fi
-+
- cat <<EOF > /etc/ntp.conf
- # This file was created by Warewulf/wwinit
- #
-@@ -72,13 +80,13 @@
- 
- # Key file containing the keys and key identifiers used when operating
- # with symmetric key cryptography.
--keys /etc/ntp/keys
-+keys $KEY_FILE
+--- warewulf-cluster-3.7/libexec/wwinit/50-ntpd.init	2017-02-22 09:32:01.000000000 -0800
++++ warewulf-cluster-3.7.patch/libexec/wwinit/50-ntpd.init	2017-02-22 13:38:12.000000000 -0800
+@@ -75,9 +75,11 @@
  
  # Specify the key identifiers which are trusted.
--#trustedkey 4 8 42
+ #trustedkey 4 8 42
 +trustedkey 1
  
  # Specify the key identifier to use with the ntpdc utility.
--#requestkey 8
+ #requestkey 8
 +requestkey 1
  
  # Specify the key identifier to use with the ntpq utility.

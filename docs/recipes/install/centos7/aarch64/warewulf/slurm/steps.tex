@@ -1,5 +1,15 @@
+
+
 \documentclass[letterpaper]{article}
 \usepackage{common/ohpc-doc}
+
+%% \usepackage[firstpage]{draftwatermark}
+%% \SetWatermarkText{[~Tech Preview~] }
+%% \SetWatermarkScale{0.45}
+%% \SetWatermarkAngle{0.0}
+%% \SetWatermarkVerCenter{.63\paperheight}
+%% \SetWatermarkColor[rgb]{.7,.7,.7}
+%% 
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
 
@@ -11,8 +21,8 @@
 \newcommand{\OSRepo}{CentOS\_7.2}
 \newcommand{\baseos}{centos7.2}
 \newcommand{\provisioner}{Warewulf}
-\newcommand{\rms}{PBS Professional}
-\newcommand{\arch}{x86\_64}
+\newcommand{\rms}{SLURM}
+\newcommand{\arch}{aarch64}
 
 \newcommand{\install}{yum -y install}
 \newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
@@ -21,16 +31,15 @@
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
-\toggletrue{isx86}
-\toggletrue{ispbs}
-\toggletrue{isCentOS_ww_pbs_x86}
+\toggletrue{isaarch}
+\toggletrue{isCentOS_ww_slurm_aarch}
 
 \begin{document}
 \graphicspath{{common/figures/}}
 \thispagestyle{empty}
 
-% Title Page
-\input{common/title}
+% Title Page --------------------------------------------------------
+\input{common/title_preview}
 % Disclaimer
 \input{common/legal} 
 
@@ -38,7 +47,9 @@
 \tableofcontents
 \newpage
 
-% Introduction  --------------------------------------------------
+% Introduction  ----------------------------------------------------
+
+\input{common/tech_preview}
 
 \section{Introduction} \label{sec:introduction}
 \input{common/install_header}
@@ -49,23 +60,11 @@
 \input{common/requirements}
 \input{common/inputs}
 
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
-% ohpc_validation_newline
-% ohpc_command yum repolist | grep -q OpenHPC
-% ohpc_command if [ $? -ne 0 ];then
-% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
-% ohpc_command    exit 1
-% ohpc_command fi
-% end_ohpc_run
-
 % Base Operating System --------------------------------------------
 
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
-\clearpage
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall 
@@ -86,22 +85,20 @@
 In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
 necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base OS and EPEL repositories for which mirrors are freely available online:
+both the base OS and EPEL repositories for which mirrors. Note that for this
+Tech Preview, an altarch variation of the CentOS 7.2 release was used.
+Additional info and a pointer to available ISO images is available at the
+links below:
 
 \begin{itemize*}
-\item CentOS-7 - Base 7.2.1511
-  (e.g. \href{http://mirror.centos.org/centos-7/7.2.1511/os/x86\_64}
-             {\color{blue}{http://mirror.centos.org/centos-7/7.2.1511/os/x86\_64}} )
-\item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
-                        {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
+\item CentOS Alt Arch Info 
+  \href{https://wiki.centos.org/SpecialInterestGroup/AltArch/AArch64}{\color{blue}{(aarch64)}}
+\item Repository/ISO images
+    \href{http://mirror.centos.org/altarch/7.2.1511/os/aarch64/}{\color{blue}{(7.2.1511)}}
 \end{itemize*}
 
-\noindent The public EPEL repository will be enabled automatically upon installation of the 
-\texttt{ohpc-release} package. Note that this requires the CentOS Extras
-repository, which is shipped with CentOS and is enabled by default.
 
 \input{common/automation}
-
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{common/install_provisioning_intro}
@@ -111,7 +108,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/time}
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
-\input{common/install_pbspro}
+\input{common/install_slurm}
 
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 
@@ -160,15 +157,14 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 % ohpc_command fi
 % end_ohpc_run
 
-\input{common/opensm}
-
-\vspace*{-0.15cm}
+%\vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
 
 % begin_ohpc_run
 % ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
 %\begin{verbatim}
+
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Configure Warewulf provisioning to use desired internal interface
@@ -260,13 +256,8 @@ default location for this example is in
 % begin_ohpc_run
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Add PBS Professional client support
-[sms](*\#*) (*\chrootinstall*) pbspro-execution-ohpc
-[sms](*\#*) perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
-[sms](*\#*) chroot $CHROOT opt/pbs/libexec/pbs_habitat
-[sms](*\#*) perl -pi -e "s/\$clienthost \S+/\$clienthost ${sms_name}/" $CHROOT/var/spool/pbs/mom_priv/config
-[sms](*\#*) echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
-[sms](*\#*) chroot $CHROOT systemctl enable pbs
+# Add Slurm client support
+[sms](*\#*) (*\groupchrootinstall*) ohpc-slurm-client
 
 # Add IB support and enable
 [sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
@@ -300,7 +291,8 @@ example configuration.
 % begin_ohpc_run
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# add new cluster key to base image
+# initialize warewulf database and add new cluster key to base image
+[sms](*\#*) wwinit database
 [sms](*\#*) wwinit ssh_keys
 [sms](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
@@ -308,6 +300,8 @@ example configuration.
 [sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
 [sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
+# Identify resource manager host name on master host
+[sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 \end{lstlisting}
 % end_ohpc_run
 
@@ -325,12 +319,43 @@ example configuration.
 \end{lstlisting}
 % end_ohpc_run
 
+
+\begin{center}
+\begin{tcolorbox}[]
+  \small SLURM requires enumeration of the physical hardware characteristics
+  for compute nodes under its control. In particular, three configuration
+  parameters combine to define consumable compute resources: {\em Sockets},
+  {\em CoresPerSocket}, and {\em ThreadsPerCore}. The default configuration
+  file provided via \OHPC{} assumes dual-socket, 8 cores per socket, and two
+  threads per core for this 4-node example. If this does not reflect your local
+  hardware, please update the configuration file at
+  \path{/etc/slurm/slurm.conf} accordingly to match your particular hardware.
+\end{tcolorbox}
+\end{center}
+
+% Additional commands when additional computes are requested
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Update basic slurm configuration if additional computes defined
+% ohpc_command if [ ${num_computes} -gt 4 ];then
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command fi
+% end_ohpc_run
+
 %\clearpage
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
 \paragraph{Increase locked memory limits}
 \input{common/memlimits}
+
+\paragraph{Enable ssh control via resource manager} 
+\input{common/slurm_pam}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
@@ -394,14 +419,16 @@ host as follows:
 \paragraph{Add \Nagios{} monitoring}
 \input{common/nagios}
 
-%\clearpage
+\clearpage
 \paragraph{Add \Ganglia{} monitoring}
 \input{common/ganglia}
 
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
-\clearpage
+\paragraph{Add \mrsh{}}
+\input{common/mrsh}
+
 \paragraph{Add \genders{}}
 \input{common/genders}
 
@@ -411,16 +438,16 @@ host as follows:
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
-%\clearpage
+\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
+\input{common/import_ww_files_slurm}
 
 % CentOS specific
 \input{common/import_ww_files_ib_centos}
-
 \input{common/finalize_provisioning}
 
 %\clearpage
@@ -442,11 +469,10 @@ host as follows:
 
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster (Cont.)
-% Removed slurm.conf,munge.key from the list of files because it is NOT compatible with PBS Professional. 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
 # Define provisioning image for hosts
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.2 --bootstrap=`uname -r` \
-    --files=dynamic_hosts,passwd,group,shadow,network 
+    --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network 
 \end{lstlisting}
 
 % ohpc_validation_newline
@@ -514,7 +540,7 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 \end{center}
 
 \vspace*{-0.50cm}
-\section{Install \OHPC{} Development Components}
+\section{Install \OHPC{} Development Components} \label{sec:install_dev}
 \input{common/dev_intro.tex}
 
 \vspace*{-0.15cm}
@@ -527,7 +553,7 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 
 %\clearpage
 \subsection{MPI Stacks} \label{sec:mpi}
-\input{common/mpi}
+\input{common/mpi_aarch}
 
 \subsection{Performance Tools} \label{sec:install_perf_tools}
 \input{common/perf_tools}
@@ -548,23 +574,18 @@ replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
 Loaded plugins: fastestmirror
 Loading mirror speeds from cached hostfile
 =========================== N/S matched: petsc-gnu, ohpc ===========================
-petsc-gnu-impi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
-petsc-gnu-mpich-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
-petsc-gnu-mvapich2-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
-petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-mpich2-ohpc.aarch64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-openmpi-ohpc.aarch64 : Portable Extensible Toolkit for Scientific Computation
 \end{lstlisting}
 
 \input{common/third_party_libs}
-\input{common/third_party_mpi_libs_x86}
-
-\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
-\input{common/pxse_enabled_builds}
+\input{common/third_party_mpi_libs_aarch}
 
 \section{Resource Manager Startup} \label{sec:rms_startup}
-\input{common/pbspro_startup}
+\input{common/slurm_startup}
 
 \section{Run a Test Job} \label{sec:test_job}
-\input{common/pbspro_test_job}
+\input{common/slurm_test_job}
 
 \clearpage
 \appendix

@@ -296,7 +296,8 @@ example configuration.
 % begin_ohpc_run
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# add new cluster key to base image
+# initialize warewulf database and add new cluster key to base image
+[sms](*\#*) wwinit database
 [sms](*\#*) wwinit ssh_keys
 [sms](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 

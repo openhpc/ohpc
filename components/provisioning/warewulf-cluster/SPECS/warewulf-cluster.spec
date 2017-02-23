@@ -14,18 +14,21 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname warewulf-cluster
+%define dname cluster
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
-Version: 3.6
+Version: 3.7pre
 Release: %{_rel}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-cluster/warewulf-cluster-%{version}.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 BuildRoot: %_tmppath}%{pname}-%{version}-%{release}-root
@@ -40,8 +43,6 @@ DocDir: %{OHPC_PUB}/doc/contrib
 
 # 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
 Patch1: warewulf-cluster.wwinit.patch
-# 03/30/16 karl.w.schulz@intel.com - add support for ecdsa host keys
-Patch2: warewulf-cluster.ecdsa.patch
 # 06/14/14 karl.w.schulz@intel.com - OpenHPC flag used to disable inclusion of node package
 %if %{OHPC_BUILD}
 %define disable_node_package 1
@@ -79,17 +80,19 @@ provisioned nodes.
 %endif
 
 %prep
-%setup -n %{pname}-%{version}
-
+%setup -n warewulf3-3.7pre
+cd %{dname}
 %patch1 -p1
-%patch2 -p0
 
 %build
+cd %{dname}
+./autogen.sh
 %configure
 %{__make} %{?mflags}
 
 
 %install
+cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 cp -r $RPM_BUILD_ROOT/etc/warewulf/vnfs/include/* $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT/etc/warewulf/vnfs
@@ -115,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-, root, root)
 %{OHPC_HOME}
 %{OHPC_PUB}
-%doc AUTHORS COPYING ChangeLog INSTALL LICENSE NEWS README README.node TODO
+%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/LICENSE %{dname}/NEWS %{dname}/README %{dname}/README.node %{dname}/TODO
 %{_sysconfdir}/profile.d/*
 %{_bindir}/*
 %{_libexecdir}/warewulf/wwinit/*

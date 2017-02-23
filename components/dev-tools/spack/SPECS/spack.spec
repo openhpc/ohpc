@@ -29,6 +29,7 @@ BuildRequires:	rsync
 BuildRequires:	python
 Requires:	python >= 2.6
 Requires: bash
+Requires: curl
 Requires: coreutils
 Requires: subversion
 Requires: hg

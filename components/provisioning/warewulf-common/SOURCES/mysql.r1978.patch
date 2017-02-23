@@ -1,5 +1,5 @@
---- lib/Warewulf/DataStore/SQL/MySQL.pm.orig	2016-04-01 18:45:23.000000000 -0500
-+++ lib/Warewulf/DataStore/SQL/MySQL.pm	2016-04-01 18:46:27.000000000 -0500
+--- warewulf-common-3.7/lib/Warewulf/DataStore/SQL/MySQL.pm	2017-02-22 09:32:01.000000000 -0800
++++ warewulf-common-3.7.patch/lib/Warewulf/DataStore/SQL/MySQL.pm	2017-02-22 13:47:35.000000000 -0800
 @@ -111,6 +111,9 @@
          my $db_user = $config->get("database user");
          my $db_pass = $config->get("database password");
@@ -10,9 +10,9 @@
          if ($config_root->get("database user")) {
              $db_user = $config_root->get("database user");
              $db_pass = $config_root->get("database password");
-@@ -138,7 +141,7 @@
-                 return undef;
-             }
+@@ -121,7 +124,7 @@
+             &dprint("DATABASE SERVER:    $db_server\n");
+             &dprint("DATABASE USER:      $db_user\n");
  
 -            if ($self->{"DBH"} = DBI->connect_cached("DBI:mysql:database=$db_name;host=$db_server", $db_user, $db_pass)) {
 +            if ($self->{"DBH"} = DBI->connect_cached("DBI:mysql:database=$db_name;host=$db_server", $db_user, $db_pass, \%attr)) {
