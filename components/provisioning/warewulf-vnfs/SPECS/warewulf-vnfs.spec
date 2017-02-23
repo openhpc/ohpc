@@ -29,8 +29,8 @@ Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: pigz
-BuildRequires: autoconf%{PROJ_DELIM}
-BuildRequires: automake%{PROJ_DELIM}
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 %if 0%{!?sles_version} && 0%{!?suse_version}

@@ -36,8 +36,8 @@ Source1: OHPC_macros
 Patch0: warewulf-ipmi-3.6-config_guess.patch
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
-BuildRequires: autoconf%{PROJ_DELIM}
-BuildRequires: automake%{PROJ_DELIM}
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
