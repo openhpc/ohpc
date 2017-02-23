@@ -49,6 +49,8 @@ Patch1: rhel-proxy.patch
 Patch2: warewulf-vnfs.pigz.patch
 # 02/23/17 reese.baird@intel.com - fixes for zypper in wwmkchroot
 Patch3: warewulf-vnfs.wwmkchroot.patch
+# 02/23/17 reese.baird@intel.com - fixes unicode in files inserted to vnfs
+Patch4: warewulf-vnfs.utf8.patch
 
 
 %description
@@ -67,6 +69,7 @@ cd %{dname}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 
 %build

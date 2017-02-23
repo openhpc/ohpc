@@ -1,0 +1,10 @@
+--- warewulf-vnfs-3.7/bin/wwvnfs	2017-02-22 09:32:02.000000000 -0800
++++ warewulf-vnfs-3.7.patch/bin/wwvnfs	2017-02-23 13:26:30.000000000 -0800
+@@ -27,6 +27,7 @@
+     require "sys/types.ph";
+     require "syscall.ph";
+ }
++use open OUT => ":utf8";
+ 
+ my $sysconfdir = Warewulf::ACVars::get('SYSCONFDIR');
+ my $config = Warewulf::Config->new("vnfs.conf");
