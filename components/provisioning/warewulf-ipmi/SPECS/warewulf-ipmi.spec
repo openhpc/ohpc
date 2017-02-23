@@ -80,7 +80,7 @@ rm -rf $RPM_BUILD_ROOT
 cd %{dname}
 %defattr(-,root,root)
 %{OHPC_PUB}
-%doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO
+%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO
 %{wwpkgdir}/*
 %{_libexecdir}/warewulf/ipmitool
 %{perl_vendorlib}/Warewulf/Ipmi.pm
