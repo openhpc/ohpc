@@ -71,6 +71,7 @@ cd %{dname}
 
 
 %install
+cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
 # 03/11/15 karl.w.schulz@intel.com - add in centos7 template (culled from ww trunk)

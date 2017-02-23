@@ -92,6 +92,7 @@ cd %{dname}
 
 
 %install
+cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 cp -r $RPM_BUILD_ROOT/etc/warewulf/vnfs/include/* $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT/etc/warewulf/vnfs
