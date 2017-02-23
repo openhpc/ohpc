@@ -65,7 +65,7 @@ BuildRequires: intel_licenses
 
 Name:		%{pname}%{PROJ_DELIM}
 Release:	1%{?dist}
-Version:        3.3.1
+Version:        3.3.2
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
