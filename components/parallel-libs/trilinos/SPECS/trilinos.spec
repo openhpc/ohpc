@@ -65,7 +65,7 @@ Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 # Base package name
 %define pname trilinos
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-%define ver_exp 12-6-4
+%define ver_exp 12-10-1
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        12.10.1
