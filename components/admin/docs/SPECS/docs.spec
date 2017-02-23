@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name:           docs%{PROJ_DELIM}
-Version:        1.2.1
+Version:        1.3
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
