@@ -74,9 +74,6 @@ cd %{dname}
 cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
-# 03/11/15 karl.w.schulz@intel.com - add in centos7 template (culled from ww trunk)
-install -D -m 0644 %SOURCE1 %{buildroot}/%{_libexecdir}/warewulf/wwmkchroot/centos-7.tmpl
-
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %clean
