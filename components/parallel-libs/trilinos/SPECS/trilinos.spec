@@ -68,7 +68,7 @@ Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %define ver_exp 12-6-4
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        12.6.4
+Version:        12.10.1
 Release:        0
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
@@ -81,7 +81,6 @@ Source3:        OHPC_setup_mpi
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         Trilinos-trilinos-aarch64.patch
 BuildRequires:  cmake >= 2.8
-#BuildRequires:  cppunit-devel
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
