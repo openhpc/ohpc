@@ -30,6 +30,8 @@ Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
+BuildRequires: autoconf%{PROJ_DELIM}
+BuildRequires: automake%{PROJ_DELIM}
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel
 Conflicts: warewulf < 3

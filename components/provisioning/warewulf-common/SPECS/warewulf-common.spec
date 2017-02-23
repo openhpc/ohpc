@@ -28,6 +28,8 @@ URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
+BuildRequires: autoconf%{PROJ_DELIM}
+BuildRequires: automake%{PROJ_DELIM}
 DocDir: %{OHPC_PUB}/doc/contrib
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
