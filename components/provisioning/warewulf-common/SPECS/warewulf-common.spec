@@ -41,7 +41,8 @@ BuildRoot: %{?_tmppath}/%{pname}-%{version}-%{release}-root
 Patch1: warewulf-common.system.patch
 # 04/01/16 karl.w.schulz@intel.com - patch to enable DB transaction handling from WW trunk
 Patch2: mysql.r1978.patch
-# 05/23/14 charles.r.baird@intel.com - alternate package names for SuSE
+# 02/22/17 charles.r.baird@intel.com - alternate package names for SuSE
+Patch3 : warewulf-common.dbinit.patch
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else
@@ -70,6 +71,7 @@ supporting libs.
 cd %{dname}
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 
 %build
