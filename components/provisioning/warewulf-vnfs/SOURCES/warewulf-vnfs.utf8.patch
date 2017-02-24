@@ -1,10 +1,19 @@
 --- warewulf-vnfs-3.7/bin/wwvnfs	2017-02-22 09:32:02.000000000 -0800
-+++ warewulf-vnfs-3.7.patch/bin/wwvnfs	2017-02-23 13:26:30.000000000 -0800
-@@ -27,6 +27,7 @@
-     require "sys/types.ph";
-     require "syscall.ph";
- }
-+use open OUT => ":utf8";
++++ warewulf-vnfs-3.7.patch/bin/wwvnfs	2017-02-23 20:44:05.000000000 -0800
+@@ -347,14 +347,13 @@
+ sub
+ vnfs_create_file($)
+ {
+-    my $path = decode_utf8($File::Find::name);
++    my $path = $File::Find::name;
  
- my $sysconfdir = Warewulf::ACVars::get('SYSCONFDIR');
- my $config = Warewulf::Config->new("vnfs.conf");
+     if ($path) {
+         if ($path =~ /^\Q$opt_chroot\E([[:print:]]*)$/) {
+             $path = $1;
+         } else {
+-            &eprint("Path '$path' did not pass untaint check, skipping.\n");
+-            return;
++            $path = encode_utf8($1);
+         }
+     }
+ 
