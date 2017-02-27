@@ -122,6 +122,10 @@ cd %{dname}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%_docdir
 
+%ifnarch x86_64
+rm %{buildroot}/%{_datadir}/warewulf/*
+%endif
+
 %post -n %{pname}-server%{PROJ_DELIM}
 # 07/22/14 karl.w.schulz@intel.com - specify alternate group per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -134,10 +138,6 @@ chkconfig httpd on >/dev/null 2>&1 || :
 chkconfig tftp on >/dev/null 2>&1 || :
 chkconfig xinetd on >/dev/null 2>&1 || :
 killall -1 xinetd || service xinetd restart >/dev/null 2>&1 || :
-
-%ifnarch x86_64
-rm %{buildroot}/%{_datadir}/warewulf/*
-%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
