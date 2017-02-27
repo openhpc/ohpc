@@ -8,12 +8,13 @@
  * $Id$
  */
 
+#define BOOST_TEST_MODULE random
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 #include <boost/random/random_device.hpp>
 
-#include <boost/test/test_tools.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
-
-int test_main(int, char**) {
+BOOST_AUTO_TEST_CASE( random_device_test )
+{
     boost::random_device rng;
     double entropy = rng.entropy();
     BOOST_CHECK_GE(entropy, 0);
@@ -25,5 +26,6 @@ int test_main(int, char**) {
 
     boost::uint32_t a[10];
     rng.generate(a, a + 10);
-    return 0;
-}
+
+    return;
+  }
