@@ -103,7 +103,7 @@ available the included GPL software.
 
 
 %prep
-%setup -q -n warewulf3-3.7pre
+%setup -q -n warewulf3-3.7pre1
 cd %{dname}
 ./autogen.sh
 %patch1 -p1
