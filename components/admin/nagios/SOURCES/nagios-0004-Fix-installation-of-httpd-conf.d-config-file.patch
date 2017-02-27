@@ -1,25 +1,10 @@
-From e35cd91bdb0cd3b7c1adfa942491778c3ba97b79 Mon Sep 17 00:00:00 2001
-From: Peter Lemenkov <lemenkov@gmail.com>
-Date: Thu, 23 Sep 2010 18:46:50 +0400
-Subject: [PATCH 04/11] Fix installation of httpd/conf.d config-file
-
-Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
----
- Makefile.in |    1 +
- 1 files changed, 1 insertions(+), 0 deletions(-)
-
-diff --git a/Makefile.in b/Makefile.in
-index a7f77ca..c6e823d 100644
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -264,6 +264,7 @@ install-config:
+--- nagios-4.3.1/Makefile.in	2017-02-23 12:00:40.000000000 -0800
++++ nagios-4.3.1.patch/Makefile.in	2017-02-27 15:02:59.000000000 -0800
+@@ -295,6 +295,7 @@
  	@echo ""
  
  install-webconf:
 +	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(DESTDIR)$(HTTPD_CONF)
  	$(INSTALL) -m 644 sample-config/httpd.conf $(DESTDIR)$(HTTPD_CONF)/nagios.conf
- 
- 	@echo ""
--- 
-1.7.3.5
-
+ 	if [ $(LN_HTTPD_SITES_ENABLED) -eq 1 ]; then \
+ 		$(LN_S) $(DESTDIR)$(HTTPD_CONF)/nagios.conf $(DESTDIR)/etc/apache2/sites-enabled/nagios.conf; \
