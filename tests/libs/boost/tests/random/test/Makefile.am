@@ -1,5 +1,5 @@
 TESTS_ENVIRONMENT          = BATS_NO_SUMMARY=1
-AM_CXXFLAGS                = -I$(BOOST_INC) -L$(BOOST_LIB) -lboost_random
+AM_CXXFLAGS                = -I$(BOOST_INC) -L$(BOOST_LIB) -lboost_random -lboost_unit_test_framework
 
 # Test compilations/execution
 
