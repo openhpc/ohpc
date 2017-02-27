@@ -18,12 +18,12 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
-Version: 3.7pre
+Version: 3.7pre2
 Release: %{_rel}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.tar.gz#/warewulf3-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
@@ -80,7 +80,7 @@ provisioned nodes.
 %endif
 
 %prep
-%setup -n warewulf3-3.7pre
+%setup -n warewulf3-%{version}
 cd %{dname}
 %patch1 -p1
 

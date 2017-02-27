@@ -20,12 +20,12 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
-Version: 3.7
+Version: 3.7pre2
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.tar.gz#/warewulf3-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 BuildRequires: autoconf
@@ -67,7 +67,7 @@ supporting libs.
 
 
 %prep
-%setup -q -n warewulf3-3.7pre
+%setup -q -n warewulf3-%{version}
 cd %{dname}
 %patch1 -p1
 %patch2 -p1

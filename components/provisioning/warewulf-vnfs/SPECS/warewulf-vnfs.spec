@@ -20,12 +20,12 @@
 
 Summary: Warewulf VNFS Module
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.7
+Version: 3.7pre2
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v3.7pre.tar.gz#/warewulf3-3.7pre.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.tar.gz#/warewulf3-%{version}.tar.gz
 Source2: OHPC_macros
 
 ExclusiveOS: linux
@@ -62,7 +62,7 @@ Virtual Node FileSystem objects.
 
 
 %prep
-%setup -n warewulf3-3.7pre
+%setup -n warewulf3-%{version}
 
 # OpenHPC patches
 cd %{dname}
