@@ -149,7 +149,9 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/warewulf/defaults/provision.conf
 %{_bindir}/*
 %{wwpkgdir}/*
+%ifarch x86_64
 %{_datadir}/warewulf/*
+%endif
 %{perl_vendorlib}/Warewulf/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Provision.pm
 %{perl_vendorlib}/Warewulf/Vnfs.pm
