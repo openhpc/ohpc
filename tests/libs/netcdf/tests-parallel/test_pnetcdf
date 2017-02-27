@@ -61,9 +61,22 @@ delimiter="$RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
     run ls f90tst_parallel.nc
     assert_success
 
-    run cmp f90tst_parallel.nc f90tst_parallel.nc.ref 
+    # Verify contents against reference file
+
+    ncdump -n test f90tst_parallel.nc.ref > .ref.data.ascii
+    ncdump -n test f90tst_parallel.nc     > .test.data.ascii
+
+    run ls .ref.data.ascii
     assert_success
 
+    run ls .test.data.ascii
+    assert_success
+
+    run diff .ref.data.ascii .test.data.ascii
+    assert_success
+
+    rm -f .ref.data.ascii
+    rm -f .test.data.ascii
     rm -f f90tst_parallel.nc
 }
 
