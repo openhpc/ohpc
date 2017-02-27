@@ -1,6 +1,6 @@
---- nagios-3.4.4/sample-config/template-object/templates.cfg.in	2007-10-03 22:43:14.000000000 +0100
-+++ nagios-3.4.4-modified/sample-config/template-object/templates.cfg.in	2013-01-13 03:12:00.791398046 +0000
-@@ -117,6 +117,7 @@
+--- nagios-4.3.1/sample-config/template-object/templates.cfg.in	2017-02-23 12:00:40.000000000 -0800
++++ nagios-4.3.1.patch/sample-config/template-object/templates.cfg.in	2017-02-27 15:15:49.000000000 -0800
+@@ -115,6 +115,7 @@
  	notification_interval	30		; Resend notifications every 30 minutes
  	notification_options	d,r		; Only send notifications for specific host states
  	contact_groups		admins		; Notifications get sent to the admins by default
@@ -8,7 +8,7 @@
  	register		0		; DONT REGISTER THIS - ITS JUST A TEMPLATE
  	}
  
-@@ -134,6 +135,15 @@
+@@ -132,6 +133,15 @@
  	notification_interval	30		; Resend notifications every 30 minutes
  	notification_options	d,r		; Only send notifications for specific host states
  	contact_groups		admins		; Notifications get sent to the admins by default
