@@ -1,18 +1,6 @@
-From adc53e77fd938fe350b0a7c3c9a24470679a6134 Mon Sep 17 00:00:00 2001
-From: Ricky Zhou <rzhou@redhat.com>
-Date: Thu, 25 Feb 2010 14:27:08 +0300
-Subject: [PATCH 03/11] Fix /etc/init.d/nagios status
-
-Fix status return code.
----
- daemon-init.in |    7 +++++--
- 1 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/daemon-init.in b/daemon-init.in
-index 75aa0b3..ecd072a 100644
---- a/daemon-init.in
-+++ b/daemon-init.in
-@@ -128,11 +128,14 @@
+--- nagios-4.3.1/daemon-init.in	2017-02-23 12:00:40.000000000 -0800
++++ nagios-4.3.1.patch/daemon-init.in	2017-02-27 14:58:21.000000000 -0800
+@@ -136,11 +136,14 @@
  
  printstatus_nagios ()
  {
@@ -28,7 +16,7 @@ index 75aa0b3..ecd072a 100644
  }
  
  killproc_nagios ()
-@@ -227,6 +230,7 @@
+@@ -235,6 +239,7 @@
  	status)
  		pid_nagios
  		printstatus_nagios
