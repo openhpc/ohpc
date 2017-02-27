@@ -1,23 +1,6 @@
-From 6b4fb54ca91a4c1954da50cb05956c8ec0e0acd0 Mon Sep 17 00:00:00 2001
-From: Peter Lemenkov <lemenkov@gmail.com>
-Date: Mon, 15 Nov 2010 15:07:49 +0300
-Subject: [PATCH 08/11] Fix path to CGI executables
-
-See rhbz #653291 for additional details:
-
-https://bugzilla.redhat.com/653291
-
-Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
----
- sample-config/httpd.conf.in |    4 ++--
- subst.in                    |    1 +
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/sample-config/httpd.conf.in b/sample-config/httpd.conf.in
-index 71d4fbb..1b1e693 100644
---- a/sample-config/httpd.conf.in
-+++ b/sample-config/httpd.conf.in
-@@ -6,9 +6,9 @@
+--- nagios-4.3.1/sample-config/httpd.conf.in	2017-02-23 12:00:40.000000000 -0800
++++ nagios-4.3.1.patch/sample-config/httpd.conf.in	2017-02-27 15:11:56.000000000 -0800
+@@ -5,9 +5,9 @@
  # configuration file.  Customize the paths, etc. as
  # needed to fit your system.
  
@@ -29,18 +12,13 @@ index 71d4fbb..1b1e693 100644
  #  SSLRequireSSL
     Options ExecCGI
     AllowOverride None
-diff --git a/subst.in b/subst.in
-index a8e2c06..bbffb3a 100755
---- a/subst.in
-+++ b/subst.in
-@@ -35,6 +35,7 @@ while ($f = shift @ARGV) {
-		s|\@datarootdir\@|@datarootdir@|g;
+--- nagios-4.3.1/subst.in	2017-02-23 12:00:40.000000000 -0800
++++ nagios-4.3.1.patch/subst.in	2017-02-27 15:11:56.000000000 -0800
+@@ -35,6 +35,7 @@
+ 		s|\@datarootdir\@|@datarootdir@|g;
  		s|\@sbindir\@|@sbindir@|g;
  		s|\@bindir\@|@bindir@|g;
 +		s|\@cgidir\@|@libdir@/cgi-bin/|g;
  		s|\@htmurl\@|@htmurl@|g;
  		s|\@cgiurl\@|@cgiurl@|g;
  		s|\@MAIL_PROG\@|@MAIL_PROG@|g;
--- 
-1.7.3.5
-
