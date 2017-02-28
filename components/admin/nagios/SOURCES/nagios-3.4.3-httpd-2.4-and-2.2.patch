@@ -1,18 +1,27 @@
 --- nagios-4.3.1/sample-config/httpd.conf.in	2017-02-23 12:00:40.000000000 -0800
-+++ nagios-4.3.1.patch/sample-config/httpd.conf.in	2017-02-28 12:50:06.000000000 -0800
-@@ -10,7 +10,6 @@
- <Directory "@sbindir@">
++++ nagios-4.3.1.patch/sample-config/httpd.conf.in	2017-02-28 13:10:36.000000000 -0800
+@@ -5,12 +5,11 @@
+ # configuration file.  Customize the paths, etc. as
+ # needed to fit your system.
+ 
+-ScriptAlias @cgiurl@ "@sbindir@"
++ScriptAlias @cgiurl@ "@cgidir@"
+ 
+-<Directory "@sbindir@">
++<Directory "@cgidir@">
  #  SSLRequireSSL
     Options ExecCGI
 -   AllowOverride None
     <IfVersion >= 2.3>
        <RequireAll>
           Require all granted
-@@ -19,7 +18,23 @@
+@@ -18,8 +17,24 @@
+ 
           AuthName "Nagios Access"
           AuthType Basic
-          AuthUserFile @sysconfdir@/htpasswd.users
+-         AuthUserFile @sysconfdir@/htpasswd.users
 -         Require valid-user
++         AuthUserFile @sysconfdir@/passwd
 +         <IfModule mod_authz_core.c>
 +            # Apache 2.4
 +            <RequireAll>
@@ -33,6 +42,15 @@
        </RequireAll>
     </IfVersion>
     <IfVersion < 2.3>
+@@ -31,7 +46,7 @@
+ 
+       AuthName "Nagios Access"
+       AuthType Basic
+-      AuthUserFile @sysconfdir@/htpasswd.users
++      AuthUserFile @sysconfdir@/passwd
+       Require valid-user
+    </IfVersion>
+ </Directory>
 @@ -41,16 +56,31 @@
  <Directory "@datadir@">
  #  SSLRequireSSL
@@ -45,8 +63,9 @@
  
           AuthName "Nagios Access"
           AuthType Basic
-          AuthUserFile @sysconfdir@/htpasswd.users
+-         AuthUserFile @sysconfdir@/htpasswd.users
 -         Require valid-user
++         AuthUserFile @sysconfdir@/passwd
 +
 +          <IfModule mod_authz_core.c>
 +            # Apache 2.4
@@ -68,3 +87,12 @@
        </RequireAll>
     </IfVersion>
     <IfVersion < 2.3>
+@@ -62,7 +92,7 @@
+ 
+       AuthName "Nagios Access"
+       AuthType Basic
+-      AuthUserFile @sysconfdir@/htpasswd.users
++      AuthUserFile @sysconfdir@/passwd
+       Require valid-user
+    </IfVersion>
+ </Directory>
