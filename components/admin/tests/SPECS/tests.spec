@@ -29,6 +29,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define testuser ohpctest
+%define debug_package %{nil}
 
 %description
 
@@ -42,12 +43,14 @@ is made available under an 'ohpctest' user account.
 
 %build
 
+export PATH=/opt/ohpc/pub/autotools/bin:$PATH
 ./bootstrap
-./configure --prefix=/home/%{testuser}
+
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT
 
+%{__mkdir_p} %{buildroot}/home/%{testuser}/tests
+cp -a * %{buildroot}/home/%{testuser}/tests
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -59,7 +62,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir /home/%{testuser}
+%dir /home/%{testuser}/tests
 
 
 
