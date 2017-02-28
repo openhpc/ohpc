@@ -180,7 +180,7 @@ may compile against.
 %patch5 -p1 -b .install_config
 %patch6 -p1 -b .dont_start_by_default
 %patch7 -p1 -b .return_2
-%patch8 -p1 -b .fix_path_to_cgi
+#%patch8 -p1 -b .fix_path_to_cgi
 #%patch9 -p1 -b .fix_path_to_passwd
 %patch10 -p1 -b .more_images
 %patch11 -p1 -b .fix_perms
