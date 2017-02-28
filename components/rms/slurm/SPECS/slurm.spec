@@ -228,6 +228,9 @@ Requires(pre):  shadow-utils
 %endif
 %endif
 
+#needed to enable jobcomp_elasticsearch plugin
+BuildRequires: curl-devel
+
 %description
 Slurm is an open source, fault-tolerant, and highly
 scalable cluster management and job scheduling system for Linux clusters.
