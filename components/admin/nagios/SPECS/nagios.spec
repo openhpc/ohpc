@@ -49,8 +49,6 @@ Patch5: nagios-0005-Install-config-files-too.patch
 Patch6: nagios-0006-Do-not-start-service-by-default.patch
 # Sent upstream
 Patch7: nagios-0007-The-init-script-should-return-2-in-case-of-unknown-c.patch
-#Patch8: nagios-0008-Fix-path-to-CGI-executables.patch
-#Patch9: nagios-0009-Fixed-path-to-passwd-file-in-Apache-s-config-file.patch
 Patch10: nagios-0010-Added-several-images-to-the-sample-config-revb.patch
 Patch11: nagios-0011-Fixed-strange-permissions.patch
 Patch12: nagios-3.4.3-httpd-2.4-and-2.2.patch
@@ -180,8 +178,6 @@ may compile against.
 %patch5 -p1 -b .install_config
 %patch6 -p1 -b .dont_start_by_default
 %patch7 -p1 -b .return_2
-#%patch8 -p1 -b .fix_path_to_cgi
-#%patch9 -p1 -b .fix_path_to_passwd
 %patch10 -p1 -b .more_images
 %patch11 -p1 -b .fix_perms
 %patch12 -p1 -b .httpd_conf
