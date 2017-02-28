@@ -44,13 +44,13 @@ is made available under an 'ohpctest' user account.
 %build
 
 export PATH=/opt/ohpc/pub/autotools/bin:$PATH
-cd tests-ohpc
+cd tests-ohpc/tests
 ./bootstrap
 
 
 %install
 
-cd tests-ohpc
+cd tests-ohpc/tests
 %{__mkdir_p} %{buildroot}/home/%{testuser}/tests
 cp -a * %{buildroot}/home/%{testuser}/tests
 
