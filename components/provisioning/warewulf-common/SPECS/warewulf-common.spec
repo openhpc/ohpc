@@ -20,7 +20,7 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
-Version: 3.7pre2
+Version: 3.7pre3
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
