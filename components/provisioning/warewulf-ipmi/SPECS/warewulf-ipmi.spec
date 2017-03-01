@@ -26,7 +26,7 @@
 
 Name: %{rpmname}
 Summary: IPMI Module for Warewulf
-Version: 3.7pre3
+Version: 3.7pre4
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
