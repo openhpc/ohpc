@@ -57,6 +57,12 @@ cp -a * %{buildroot}/home/%{testuser}/tests
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%pre
+getent passwd %{testuser} >/dev/null || \
+    /usr/sbin/useradd -U -c "OpenHPC integration test account" \
+    -s /bin/bash -r -d /home/%{testuser} %{testuser}
+exit 0
+
 %post
 
 %postun
