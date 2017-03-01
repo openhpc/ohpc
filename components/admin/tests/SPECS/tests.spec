@@ -64,7 +64,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir /home/%{testuser}/tests
+/home/%{testuser}/tests
 
 
 
