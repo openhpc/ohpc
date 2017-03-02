@@ -60,7 +60,7 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 getent passwd %{testuser} >/dev/null || \
     /usr/sbin/useradd -U -c "OpenHPC integration test account" \
-    -s /bin/bash -d /home/%{testuser} %{testuser}
+    -s /bin/bash -m -b /home %{testuser}
 exit 0
 
 %post
