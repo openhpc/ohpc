@@ -97,8 +97,9 @@ Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
 Source3:        OHPC_setup_mpi
+Source4:        make.inc
 Patch0:         superlu_dist-4.1-sequence-point.patch
-Patch1:         superlu_dist-4.2-make.patch
+#Patch1:         superlu_dist-4.2-make.patch
 Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
 Patch3:         superlu_dist-4.1-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
@@ -131,7 +132,7 @@ solutions.
 %prep
 %setup -q -n SuperLU_DIST_%{version}
 %patch0 -p1
-%patch1 -p1
+#%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 
@@ -148,6 +149,7 @@ module load metis
 module load scalapack
 %endif
 
+cp %SOURCE4 .
 make superlulib DSuperLUroot=$PWD 
 
 mkdir tmp
