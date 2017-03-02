@@ -169,11 +169,6 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
 [sms](*\#*) perl -pi -e "s#modules/mod_version.so\$#/usr/lib64/apache2/mod_version.so#" $MODFILE
 
-# Enable http access for Warewulf cgi-bin directory to support newer apache syntax
-[sms](*\#*) perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
-[sms](*\#*) perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
-[sms](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
-
 # Enable internal interface for provisioning
 [sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
 

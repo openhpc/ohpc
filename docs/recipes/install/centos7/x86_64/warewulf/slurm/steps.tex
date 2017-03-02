@@ -174,13 +174,6 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 # Enable tftp service for compute node image distribution
 [sms](*\#*) perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
 
-# Enable http access for Warewulf cgi-bin directory to support newer apache syntax
-[sms](*\#*) export MODFILE=/etc/httpd/conf.d/warewulf-httpd.conf
-[sms](*\#*) perl -pi -e "s/cgi-bin>\$/cgi-bin>\n Require all granted/" $MODFILE
-
-[sms](*\#*) perl -pi -e "s/Allow from all/Require all granted/" $MODFILE
-[sms](*\#*) perl -ni -e "print unless /^\s+Order allow,deny/" $MODFILE
-
 # Enable internal interface for provisioning
 [sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
 
