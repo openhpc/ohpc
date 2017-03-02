@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Summary:   Integration test stuie for OpenHPC
-Name:      tests%{PROJ_DELIM}
+Name:      test-suite%{PROJ_DELIM}
 Version:   1.3
 Release:   1
 License:   Apache-2.0
@@ -28,7 +28,7 @@ BuildRequires:  automake%{PROJ_DELIM}
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-%define testuser ohpctest
+%define testuser ohpc-test
 %define debug_package %{nil}
 
 %description
