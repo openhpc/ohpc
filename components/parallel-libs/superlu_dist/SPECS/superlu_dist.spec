@@ -152,6 +152,7 @@ module load scalapack
 %endif
 
 cp %SOURCE4 .
+mkdir lib
 make superlulib DSuperLUroot=$PWD 
 
 mkdir tmp
