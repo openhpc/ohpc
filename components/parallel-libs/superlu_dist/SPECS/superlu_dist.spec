@@ -153,7 +153,7 @@ module load scalapack
 
 cp %SOURCE4 .
 mkdir lib
-make superlulib DSuperLUroot=$PWD 
+make superlulib DSuperLUroot=$PWD/lib
 
 mkdir tmp
 (cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
