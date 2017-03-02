@@ -87,7 +87,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        4.2
+Version:        5.1.3
 Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
