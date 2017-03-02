@@ -59,7 +59,7 @@ RANLIB       	= ranlib
 # C compiler setup
 CC           	= mpicc
 # CFLAGS should be set to be the C flags that include optimization
-CFLAGS          = -fast -fPIC -m64 -std=c99 -Wall -openmp \
+CFLAGS          = -fPIC -m64 -std=c99 -Wall -openmp \
 		$(I_PARMETIS) -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0 \
 # uncomment the following to use 64-bit integer
 # CFLAGS 		+= -D_LONGINT
@@ -69,7 +69,7 @@ NOOPTS		= -O0 -std=c99 -fPIC
 ############################################################################
 # FORTRAN compiler setup
 FORTRAN         = mpif90
-F90FLAGS	= -fast -Mnomain -fPIC
+F90FLAGS	= -Mnomain -fPIC
 # uncomment the following to use 64-bit integer
 # F90FLAGS	+= -i8
 ############################################################################
