@@ -59,7 +59,7 @@ RANLIB       	= ranlib
 # C compiler setup
 CC           	= mpicc
 # CFLAGS should be set to be the C flags that include optimization
-CFLAGS          = -fPIC -m64 -std=c99 -Wall -openmp \
+CFLAGS          = -fPIC -m64 -std=c99 -Wall \
 		$(I_PARMETIS) -DDEBUGlevel=0 -DPRNTlevel=0 -DPROFlevel=0 \
 # uncomment the following to use 64-bit integer
 # CFLAGS 		+= -D_LONGINT
@@ -74,7 +74,7 @@ F90FLAGS	= -Mnomain -fPIC
 # F90FLAGS	+= -i8
 ############################################################################
 LOADER	        = mpicc
-LOADOPTS	= -openmp -fPIC
+LOADOPTS	= -fPIC
 ############################################################################
 #  C preprocessor defs for compilation (-DNoChange, -DAdd_, or -DUpCase)
 #
