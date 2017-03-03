@@ -19,7 +19,7 @@
 #
 ## edison at NERSC
 #PLAT		= _xc30
-#VERSION		= 5.0.0
+VERSION		= 5.1.3
 #
 #  The name of the libraries to be created/linked to
 #
