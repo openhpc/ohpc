@@ -1,21 +1,32 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 
 
 /*! @file 
  * \brief Driver program for PDGSSVX example
  *
  * <pre>
- * -- Distributed SuperLU routine (version 2.0) --
+ * -- Distributed SuperLU routine (version 4.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * March 15, 2003
+ * April 5, 2015
  * </pre>
  */
 
 #include <math.h>
 #include "superlu_ddefs.h"
 
-
-int main(int argc, char *argv[])
-/*
+/*! \brief
+ *
+ * <pre>
  * Purpose
  * =======
  *
@@ -29,12 +40,13 @@ int main(int argc, char *argv[])
  *        ScalePermstruct  : DiagScale, R, C, perm_r, perm_c
  *        LUstruct         : Glu_persist, Llu
  * 
- * On an IBM SP, the program may be run by typing:
- *    poe pddrive1 -r <proc rows> -c <proc columns> <input_matrix> -procs <p>
- *
+ * With MPICH,  program may be run by typing:
+ *    mpiexec -n <np> pddrive1 -r <proc rows> -c <proc columns> big.rua
+ * </pre>
  */
+int main(int argc, char *argv[])
 {
-    superlu_options_t options;
+    superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
     ScalePermstruct_t ScalePermstruct;
@@ -93,7 +105,7 @@ int main(int argc, char *argv[])
     if ( iam >= nprow * npcol )	goto out;
     if ( !iam ) {
 	printf("Input matrix file: %s\n", *cpp);
-        printf("\tProcess grid\t%d X %d\n", grid.nprow, grid.npcol);
+        printf("\tProcess grid\t%d X %d\n", (int)grid.nprow, (int)grid.npcol);
     }
 
 #if ( VAMPIR>=1 )
