@@ -4,7 +4,7 @@
 TEST_LOGS=""
 MAKEFLAGS=""
 
-source ./TEST_ENV         || exit 1
+source ./common/TEST_ENV  || exit 1
 source ./common/functions || exit 1
 
 cd libs/gsl               || exit 1

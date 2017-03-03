@@ -4,8 +4,8 @@
 source ./common/test_helper_functions.bash || exit 1
 source ./common/functions || exit 1
 
-if [ -s ./TEST_ENV ];then
-    source ./TEST_ENV
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
 fi
 
 PKG=PAPI

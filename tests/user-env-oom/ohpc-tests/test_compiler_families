@@ -5,8 +5,8 @@ TEST_LOGS=""
 MAKEFLAGS=""
 status=0
 
-source ./TEST_ENV || exit 1
-cd user-env-oom   || exit 1
+source ./common/TEST_ENV || exit 1
+cd user-env-oom          || exit 1
 
 # bootstrap the local autotools project if necessary
 
