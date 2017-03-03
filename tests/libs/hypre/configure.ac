@@ -3,7 +3,7 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT(hypre, 2.10.0b, karl.w.schulz@intel.com)
+AC_INIT(hypre, 2.10.0b, [https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 

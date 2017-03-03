@@ -3,7 +3,7 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT([openblas], 0.2.14, karl.w.schulz@intel.com)
+AC_INIT([openblas], 0.2.14,[https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 

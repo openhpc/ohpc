@@ -3,7 +3,7 @@
 #
 
 AC_PREREQ(2.59)
-AC_INIT(superlu_dist, 4.0, karl.w.schulz@intel.com)
+AC_INIT(superlu_dist, 4.0, [https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
