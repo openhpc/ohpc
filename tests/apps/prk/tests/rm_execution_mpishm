@@ -1,11 +1,11 @@
-#!../../../common/bats/bin/bats
+#!./common-test/bats/bin/bats
 # -*-sh-*-
 
-load ../../../common/test_helper_functions || exit 1
-source ../../../common/functions || exit 1
+load ./common-test/test_helper_functions || exit 1
+source ./common-test/functions || exit 1
 
-if [ -s ./TEST_ENV ];then
-   . ./TEST_ENV
+if [ -s ./common-test/TEST_ENV ];then
+   . ./common-test/TEST_ENV
 else
     ERROR "TEST_ENV does not exist"
 fi
