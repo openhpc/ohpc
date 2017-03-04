@@ -25,6 +25,10 @@ Source1:   OHPC_macros
 BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
 
+%if 0%{?suse_version} >= 1230
+Requires(pre):  shadow
+%endif
+
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
