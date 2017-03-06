@@ -57,6 +57,7 @@ cd tests
 cd tests
 %{__mkdir_p} %{buildroot}/home/%{testuser}/tests
 cp -a * %{buildroot}/home/%{testuser}/tests
+find %{buildroot}/home/%{testuser}/tests -name .gitignore  -exec rm {} \;
 
 %clean
 rm -rf $RPM_BUILD_ROOT
