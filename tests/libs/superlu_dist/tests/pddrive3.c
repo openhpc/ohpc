@@ -1,23 +1,12 @@
-/*! \file
-Copyright (c) 2003, The Regents of the University of California, through
-Lawrence Berkeley National Laboratory (subject to receipt of any required 
-approvals from U.S. Dept. of Energy) 
-
-All rights reserved. 
-
-The source code is distributed under BSD license, see the file License.txt
-at the top-level directory.
-*/
 
 
 /*! @file 
  * \brief Driver program for PDGSSVX example
  *
  * <pre>
- * -- Distributed SuperLU routine (version 4.1) --
+ * -- Distributed SuperLU routine (version 2.0) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * March 15, 2003
- * April 5, 2015
  * </pre>
  */
 
@@ -46,14 +35,14 @@ at the top-level directory.
  * although the numerical values are different. So 'Llu' is set up once
  * in the first call to PDGSSVX, and reused in the subsequent call.
  *
- * With MPICH,  program may be run by typing:
- *    mpiexec -n <np> pddrive3 -r <proc rows> -c <proc columns> big.rua
+ * On an IBM SP, the program may be run by typing:
+ *    poe pddrive3 -r <proc rows> -c <proc columns> <input_matrix> -procs <p>
  * </pre>
  */
 
 int main(int argc, char *argv[])
 {
-    superlu_dist_options_t options;
+    superlu_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
     NRformat_loc *Astore;
@@ -69,6 +58,7 @@ int main(int argc, char *argv[])
     int      iam, info, ldb, ldx, nrhs;
     char     **cpp, c;
     FILE *fp, *fopen();
+
 
     nprow = 1;  /* Default process rows.      */
     npcol = 1;  /* Default process columns.   */
@@ -114,7 +104,7 @@ int main(int argc, char *argv[])
     if ( iam >= nprow * npcol )	goto out;
     if ( !iam ) {
 	printf("Input matrix file: %s\n", *cpp);
-        printf("\tProcess grid\t%d X %d\n", (int) grid.nprow, (int) grid.npcol);
+        printf("\tProcess grid\t%d X %d\n", grid.nprow, grid.npcol);
     }
     
 #if ( DEBUGlevel>=1 )

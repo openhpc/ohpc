@@ -1,24 +1,13 @@
-/*! \file
-Copyright (c) 2003, The Regents of the University of California, through
-Lawrence Berkeley National Laboratory (subject to receipt of any required 
-approvals from U.S. Dept. of Energy) 
-
-All rights reserved. 
-
-The source code is distributed under BSD license, see the file License.txt
-at the top-level directory.
-*/
 
 
 /*! @file 
  * \brief Driver program for PDGSSVX example
  *
  * <pre>
- * -- Distributed SuperLU routine (version 4.1) --
+ * -- Distributed SuperLU routine (version 2.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * November 1, 2007
- * April 5, 2015
- * </pre>
+ *
  */
 
 #include <math.h>
@@ -42,14 +31,14 @@ at the top-level directory.
  *   4. Call pdgssvx
  *   5. Release the process grid and terminate the MPI environment
  *
- * With MPICH,  program may be run by typing:
- *    mpiexec -n <np> pddrive -r <proc rows> -c <proc columns> big.rua
+ * On an IBM SP, the program may be run by typing
+ *    poe pddrive -r <proc rows> -c <proc columns> <input_file> -procs <p>
  * </pre>
  */
 
 int main(int argc, char *argv[])
 {
-    superlu_dist_options_t options;
+    superlu_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
     ScalePermstruct_t ScalePermstruct;
@@ -82,8 +71,8 @@ int main(int argc, char *argv[])
 	    switch (c) {
 	      case 'h':
 		  printf("Options:\n");
-		  printf("\t-r <int>: process rows    (default %4d)\n", nprow);
-		  printf("\t-c <int>: process columns (default %4d)\n", npcol);
+		  printf("\t-r <int>: process rows    (default %d)\n", nprow);
+		  printf("\t-c <int>: process columns (default %d)\n", npcol);
 		  exit(0);
 		  break;
 	      case 'r': nprow = atoi(*cpp);
@@ -109,7 +98,7 @@ int main(int argc, char *argv[])
     if ( iam >= nprow * npcol )	goto out;
     if ( !iam ) {
 	printf("Input matrix file: %s\n", *cpp);
-        printf("\tProcess grid\t%d X %d\n", (int)grid.nprow, (int)grid.npcol);
+        printf("\tProcess grid\t%d X %d\n", grid.nprow, grid.npcol);
     }
 
 #if ( VAMPIR>=1 )
