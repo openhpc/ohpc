@@ -87,7 +87,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        5.1.3
+Version:        4.2
 Release:        0
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
@@ -97,10 +97,10 @@ Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
 Source3:        OHPC_setup_mpi
-Source4:        make.inc
 Patch0:         superlu_dist-4.1-sequence-point.patch
-Patch1:         superlu_dist-5.1-parmetis.patch
-
+Patch1:         superlu_dist-4.2-make.patch
+Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
+Patch3:         superlu_dist-4.1-parmetis.patch
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -132,6 +132,8 @@ solutions.
 %setup -q -n SuperLU_DIST_%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -146,8 +148,6 @@ module load metis
 module load scalapack
 %endif
 
-cp %SOURCE4 .
-mkdir lib
 make superlulib DSuperLUroot=$PWD 
 
 mkdir tmp
