@@ -1,1 +1,2 @@
 addFilter("devel-file-in-non-devel-package")
+addFilter("dir-or-file-in-home")
