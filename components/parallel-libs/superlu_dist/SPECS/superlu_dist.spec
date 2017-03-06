@@ -83,7 +83,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define pname superlu_dist
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define major   5
+%define major   4
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -172,7 +172,7 @@ install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
 %{__mkdir_p} %{buildroot}%{install_path}/lib
 install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.%{major}
+ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
 
