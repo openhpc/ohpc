@@ -101,9 +101,9 @@ Source3:        OHPC_setup_mpi
 #BuildRequires:  babel-devel
 #BuildRequires:  libltdl-devel
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
-Requires:  superlu-%{compiler_family}%{PROJ_DELIM}
-BuildRequires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
+Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 BuildRequires:  python-devel
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
@@ -145,10 +145,9 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
-module load superlu_dist
 
 %if %{compiler_family} == gnu
-module load scalapack
+module load openblas
 %endif
 
 
@@ -156,7 +155,6 @@ FLAGS="%optflags -fPIC"
 cd src
 ./configure \
     --prefix=%{install_path} \
-    --without-examples \
     --with-MPI \
     --with-MPI-include=$MPI_DIR/include \
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
@@ -176,7 +174,6 @@ cd src
     --with-mli \
     --with-fei \
     --with-superlu \
-    --with-superlu_dist \
     CC="mpicc $FLAGS" \
     CXX="mpicxx $FLAGS" \
     F77="mpif77 $FLAGS"
@@ -200,10 +197,9 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
-module load superlu_dist
 
 %if %{compiler_family} == gnu
-module load scalapack
+module load openblas
 %endif
 
 # %%makeinstall macro does not work with hypre
@@ -275,12 +271,9 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded superlu]  } {
         module load superlu
     }
-    if {  ![is-loaded superlu_dist]  } {
-        module load superlu_dist
-    }
     if { [is-loaded gnu] } {
-        if { ![is-loaded scalapack]  } {
-          module load scalapack
+        if { ![is-loaded openblas]  } {
+          module load openblas
         }
     }
 }
