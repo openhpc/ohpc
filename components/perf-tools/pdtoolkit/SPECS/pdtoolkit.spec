@@ -110,6 +110,12 @@ rm -f %buildroot%{install_path}/.last_config
 %define arch_dir x86_64
 %endif
 
+pushd %buildroot%{install_path}/lib
+ar x libpdb.a
+mpif90 -z muldefs -shared -o %{libname}.so *.o
+rm libpdb.a
+popd
+
 pushd %buildroot%{install_path}/%{arch_dir}/bin
 sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
 rm -f edg33-upcparse
