@@ -1,0 +1,17 @@
+--- hypre-2.11.1/src/configure	2016-06-09 07:56:18.000000000 -0700
++++ hypre-2.11.1.patch/src/configure	2017-03-06 21:43:40.000000000 -0800
+@@ -2308,10 +2308,10 @@
+ hypre_using_openmp=no
+ hypre_using_insure=no
+ 
+-hypre_blas_lib_old_style=no
+-hypre_blas_lib_dir_old_style=no
+-hypre_lapack_lib_old_style=no
+-hypre_lapack_lib_dir_old_style=no
++hypre_blas_lib_old_style=yes
++hypre_blas_lib_dir_old_style=yes
++hypre_lapack_lib_old_style=yes
++hypre_lapack_lib_dir_old_style=yes
+ 
+ if test "x$build_alias" = "x"
+ then
