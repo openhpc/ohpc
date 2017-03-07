@@ -102,8 +102,6 @@ Source3:        OHPC_setup_mpi
 #BuildRequires:  libltdl-devel
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
-BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
-Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 BuildRequires:  python-devel
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
