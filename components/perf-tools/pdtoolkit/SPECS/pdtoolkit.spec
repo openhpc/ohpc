@@ -45,7 +45,7 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        3.22
+Version:        3.23
 Release:        1
 License:        Program Database Toolkit License
 Summary:        PDT is a framework for analyzing source code
