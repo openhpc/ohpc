@@ -151,7 +151,7 @@ module load openblas
 %endif
 
 
-FLAGS="%optflags -fPIC"
+FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_"
 cd src
 ./configure \
     --prefix=%{install_path} \
