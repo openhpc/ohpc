@@ -17,7 +17,6 @@
 # mechanisms.
 
 %{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family:      %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -54,7 +53,6 @@ Group:          %{PROJ_NAME}/perf-tools
 Source:         https://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/pdtoolkit-%{version}.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
-Source3:        OHPC_setup_mpi
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
