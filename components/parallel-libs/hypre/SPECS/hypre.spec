@@ -166,10 +166,8 @@ cd src
     --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
     --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
 %else
-    --with-blas-libs=openblas \
-    --with-blas-lib-dirs=$OPENBLAS_LIB \
-    --with-lapack-libs=openblas \
-    --with-lapack-lib-dirs=$OPENBLAS_LIB \
+    --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
+    --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
 %endif
     --with-mli \
     --with-fei \
