@@ -111,7 +111,7 @@ rm -f %buildroot%{install_path}/.last_config
 
 pushd %buildroot%{install_path}/%{arch_dir}/lib
 ar x libpdb.a
-$CXX -z muldefs -shared -o %{libname}.so *.o
+$CXX -z muldefs -shared -o libpdb.so *.o
 rm libpdb.a
 popd
 
