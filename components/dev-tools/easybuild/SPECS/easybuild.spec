@@ -73,7 +73,7 @@ MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
 sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}%{install_path}/modules/all/EasyBuild' ./|awk -F : '{print $1}')
 rm bootstrap_eb.py
 pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
-rm %{version}
+rm -f %{version}
 ln -s ../../all/EasyBuild/%{version} .
 popd
 
