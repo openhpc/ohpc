@@ -74,7 +74,7 @@ sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}%{install_path}/modules/all/
 rm bootstrap_eb.py
 pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
 rm -f %{version}
-ln -s ../../all/EasyBuild/%{version} .
+ln -s %{install_path}/modules/all/EasyBuild/%{version} .
 popd
 
 # OHPC module file
