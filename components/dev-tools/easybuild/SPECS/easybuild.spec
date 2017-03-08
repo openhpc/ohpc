@@ -15,12 +15,12 @@
 %define pname easybuild
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define vsc_base_ver 2.5.5
-%define vsc_install_ver 0.10.21
+%define vsc_base_ver 2.5.7
+%define vsc_install_ver 0.10.25
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   3.0.2
+Version:   3.1.1
 Release:   1
 License:   GPLv2
 Group:     System/Configuration
@@ -66,7 +66,6 @@ cp %{_sourcedir}/*py .
 
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export EASYBUILD_INSTALLPATH=%{install_path}
-export EASYBUILD_MODULE_SYNTAX=Tcl
 export PATH=${LMOD_DIR}:${PATH}
 
 MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
