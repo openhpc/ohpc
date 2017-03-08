@@ -135,6 +135,7 @@ BuildConflicts: post-build-checks
 %ifos linux
 BuildRequires: python
 %endif
+BuildRequires: hwloc-devel
 
 %ifos solaris
 Requires:	SUNWgnome-base-libs
