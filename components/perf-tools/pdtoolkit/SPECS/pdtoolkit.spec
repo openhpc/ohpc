@@ -114,6 +114,7 @@ ar x libpdb.a
 $CXX -z muldefs -shared -o libpdb.so *.o
 rm libpdb.a *\.o
 popd
+mv %buildroot%{install_path}/%{arch_dir}/lib %buildroot%{install_path}/lib
 
 pushd %buildroot%{install_path}/%{arch_dir}/bin
 sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
