@@ -221,6 +221,13 @@ ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
 %else
 ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi
 %endif
+ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi
+ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-profile-trace.so 
+popd
+
+# remove static libs
+pushd %{buildroot}%{install_path}/lib
+rm -rf \.*a static-*
 popd
 
 # OpenHPC module file
