@@ -71,6 +71,7 @@ export PATH=${LMOD_DIR}:${PATH}
 
 MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
+rm bootstrap_eb.py*
 pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
 rm %version
 ln -s ../../all/EasyBuild/%version .
