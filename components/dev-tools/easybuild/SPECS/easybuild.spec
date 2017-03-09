@@ -66,15 +66,14 @@ cp %{_sourcedir}/*py .
 
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export EASYBUILD_INSTALLPATH=%{install_path}
+export EASYBUILD_MODULE_SYNTAX=Tcl
 export PATH=${LMOD_DIR}:${PATH}
 
 MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
-sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}%{install_path}/modules/all/EasyBuild' ./|awk -F : '{print $1}')
-rm bootstrap_eb.py
 pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
-rm -f %{version}
-ln -s %{install_path}/modules/all/EasyBuild/%{version} .
+rm %version
+ln -s ../../all/EasyBuild/%version .
 popd
 
 # OHPC module file
