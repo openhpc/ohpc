@@ -17,7 +17,6 @@
 # mechanisms.
 
 %{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family:      %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -54,7 +53,6 @@ Group:          %{PROJ_NAME}/perf-tools
 Source:         https://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/pdtoolkit-%{version}.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
-Source3:        OHPC_setup_mpi
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -82,6 +80,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 ./configure -prefix=%buildroot%{install_path} \
+        -useropt=-fPIC \
 %if %{compiler_family} == intel 
         -icpc
 %else
@@ -110,9 +109,9 @@ rm -f %buildroot%{install_path}/.last_config
 %define arch_dir x86_64
 %endif
 
-pushd %buildroot%{install_path}/lib
+pushd %buildroot%{install_path}/%{arch_dir}/lib
 ar x libpdb.a
-mpif90 -z muldefs -shared -o %{libname}.so *.o
+$CXX -z muldefs -shared -o libpdb.so *.o
 rm libpdb.a *\.o
 popd
 
