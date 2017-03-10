@@ -20,7 +20,9 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 Requires: ohpc-filesystem
 # All openHPC need ohpc-buildroot during build as it pulls in required
 # build depenencies and also provides the compiler and mpi setup scripts
+%if 0%{?ohpc_bootstrap} == 0
 BuildRequires: ohpc-buildroot
+%endif
 
 # Set the compiler to devtoolset-6 if it is on a RHEL 7 system
 %if 0%{?rhel} == 7
