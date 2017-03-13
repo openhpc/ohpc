@@ -17,7 +17,7 @@
 %define pname openmpi3
 %define with_openib 1
 
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 %define with_psm 0
 %define with_psm2 0
 %else

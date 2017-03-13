@@ -63,6 +63,7 @@ Patch5: warewulf-provision.bin-file.patch
 Patch6: warewulf-provision.sles_tftpboot.patch
 Patch7: warewulf-provision.ipxe-kargs.patch
 Patch8: warewulf-provision.parted_libdir.patch
+Patch9: warewulf-provision-ppc64le.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -138,6 +139,7 @@ fi
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p2
 
 %build
 cd %{dname}
@@ -228,7 +230,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %{_bindir}/*
+%ifnarch ppc64le
 %{_datadir}/warewulf/ipxe/*
+%endif
 %{perl_vendorlib}/Warewulf/Event/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Event/Dhcp.pm
 %{perl_vendorlib}/Warewulf/Event/Pxe.pm
