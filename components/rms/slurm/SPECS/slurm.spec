@@ -897,9 +897,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %if 0%{?suse_version} >= 1200 || 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
 
-%config /usr/lib/systemd/system/slurmctld.service
-%config /usr/lib/systemd/system/slurmd.service
-%config /usr/lib/systemd/system/slurmdbd.service
+/usr/lib/systemd/system/slurmctld.service
+/usr/lib/systemd/system/slurmd.service
+/usr/lib/systemd/system/slurmdbd.service
 
 %endif
 
