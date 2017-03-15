@@ -1158,10 +1158,6 @@ exit 0
 
 %if 0%{?suse_version}
 %{fillup_and_insserv -f}
-%else
-if [ $1 = 1 ]; then
-   [ -x /sbin/chkconfig ] && /sbin/chkconfig --add slurm
-fi
 %endif
 
 if [ -x /sbin/ldconfig ]; then
@@ -1196,9 +1192,7 @@ if [ "$1" = 0 ]; then
 fi
 
 %postun
-if [ "$1" -gt 1 ]; then
-    /etc/init.d/slurm condrestart
-elif [ "$1" -eq 0 ]; then
+if [ "$1" -eq 0 ]; then
     if [ -x /sbin/ldconfig ]; then
 	/sbin/ldconfig %{_libdir}
     fi
@@ -1208,9 +1202,6 @@ fi
 %endif
 
 %postun -n %{pname}-slurmdbd%{PROJ_DELIM}
-if [ "$1" -gt 1 ]; then
-    /etc/init.d/slurmdbd condrestart
-fi
 
 #############################################################################
 
