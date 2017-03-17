@@ -61,7 +61,7 @@ following (note the use of \texttt{mpiexec} for parallel job launch which summar
 the underlying native job launch mechanism being used):
 
 \begin{lstlisting}[language=bash,keywords={}]
-# switch to "test" user
+# Switch to "test" user
 [sms](*\#*) su - test
 
 # Compile MPI "hello world" example
@@ -112,10 +112,10 @@ execution using the same executable referenced in the previous interactive
 example.
 
 \begin{lstlisting}[language=bash,keywords={}]
-# copy example job script
+# Copy example job script
 [test@sms ~]$ cp /opt/ohpc/pub/examples/pbspro/job.mpi .
 
-# examine contents (and edit to set desired job sizing characteristics)
+# Examine contents (and edit to set desired job sizing characteristics)
 [test@sms ~]$ cat job.mpi
 #!/bin/bash
 #----------------------------------------------------------

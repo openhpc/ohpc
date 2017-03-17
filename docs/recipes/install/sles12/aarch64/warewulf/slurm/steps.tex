@@ -292,12 +292,12 @@ example configuration.
 % begin_ohpc_run
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# initialize warewulf database and add new cluster key to base image
+# Initialize warewulf database and add new cluster key to base image
 [sms](*\#*) wwinit database
 [sms](*\#*) wwinit ssh_keys
 [sms](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
-# add NFS client mounts of /home and /opt/ohpc/pub to base image
+# Add NFS client mounts of /home and /opt/ohpc/pub to base image
 [sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
 [sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
 
@@ -310,6 +310,7 @@ example configuration.
 [sms](*\#*) exportfs -a
 [sms](*\#*) systemctl restart nfsserver
 [sms](*\#*) systemctl enable nfsserver
+
 # Enable NTP time service on computes and identify master host as local NTP server
 [sms](*\#*) chroot $CHROOT systemctl enable ntpd
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
