@@ -20,7 +20,7 @@
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   3.1.1
+Version:   3.1.2
 Release:   1
 License:   GPLv2
 Group:     System/Configuration
