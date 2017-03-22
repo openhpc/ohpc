@@ -209,7 +209,7 @@ the PBS Professional user commands.
 [ -d build ] && rm -rf build
 mkdir build
 cd build
-../configure \
+../configure CFLAGS="-fPIC" \
 	PBS_VERSION=%{version} \
 	--prefix=%{pbs_prefix} \
 %if %{defined suse_version}
