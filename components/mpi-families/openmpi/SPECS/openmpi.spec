@@ -66,7 +66,7 @@ Name:      %{pname}-psm2-%{compiler_family}%{PROJ_DELIM}
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-Version:   1.10.4
+Version:   1.10.6
 Release:   1
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
