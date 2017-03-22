@@ -71,6 +71,7 @@ BuildRequires: rpm-build
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
+BuildRequires: libtool-ltdl-devel
 BuildRequires: hwloc-devel
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
