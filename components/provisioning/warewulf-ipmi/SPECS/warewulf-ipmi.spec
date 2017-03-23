@@ -26,7 +26,7 @@
 
 Name: %{rpmname}
 Summary: IPMI Module for Warewulf
-Version: 3.7-ohpc-1.3
+Version: 3.7.ohpc1.3
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
