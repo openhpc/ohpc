@@ -134,11 +134,11 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %endif
 
 Summary: Lustre File System
-Name: %{lustre_name}
+Name: %{lustre_name}%{PROJ_DELIM}
 Version: %{version}
 Release: 1%{?dist}
 License: GPL
-Group: Utilities/System
+Group:   %{PROJ_NAME}/lustre
 Source: lustre-%{version}.tar.gz
 Source1: kmp-lustre.preamble
 Source2: kmp-lustre.files
@@ -147,7 +147,9 @@ Source4: kmp-lustre-osd-ldiskfs.files
 Source5: kmp-lustre-osd-zfs.preamble
 Source6: kmp-lustre-osd-zfs.files
 Source7: kmp-lustre-tests.files
+Source8: OHPC_macros
 URL: https://wiki.hpdd.intel.com/
+DocDir: %{OHPC_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
 Obsoletes: lustre-lite, lustre-lite-utils, lustre-ldap nfs-utils-lustre
 Provides: lustre-lite = %{version}, lustre-lite-utils = %{version}
