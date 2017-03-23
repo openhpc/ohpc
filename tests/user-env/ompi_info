@@ -1,0 +1,33 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+# simple test to confirm that OpenMPI binaries to do
+# not have ld resolution complaints. Testing by confirming no
+# output generated to stdout
+
+@test "[openmpi] check for no output to stderr with ompi_info" {
+
+    module purge
+    module load gnu
+    module load openmpi
+
+    run which ompi_info
+    assert_success
+
+    rm -f .test.output
+    ompi_info > /dev/null 2> .test.output
+
+    run test -f .test.output
+    assert_success
+
+    run test -s .test.output
+    assert_failure
+
+}
+
+
+
+
