@@ -1,4 +1,23 @@
+#---------------------------------------------------------------------------bh-
+# This RPM .spec file is part of the OpenHPC project.
+#
+# It may have been modified from the default version supplied by the underlying
+# release package (if available) in order to apply patches, perform customized
+# build/install configurations, and supply additional files to support
+# desired integration conventions.
+#
+#----------------------------------------------------------------------------eh-
+
 # lustre.spec
+
+%if 0%{?OHPC_BUILD}
+
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+
+%if 0%{?centos_version} == 700
+BuildRequires kernel-devel
+%endif
 
 # Declare rpmbuild --with/--without parameters
 %bcond_without servers
