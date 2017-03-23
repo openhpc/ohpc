@@ -37,7 +37,11 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %endif
 
 # Declare rpmbuild --with/--without parameters
+%if 0%{?OHPC_BUILD}
+%bcond_with servers
+%else
 %bcond_without servers
+%endif
 %bcond_without ldiskfs
 %bcond_with zfs
 %bcond_without lustre_tests
