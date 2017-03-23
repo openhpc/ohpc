@@ -19,6 +19,8 @@
 BuildRequires: kernel-devel
 %endif
 
+%endif
+
 # Declare rpmbuild --with/--without parameters
 %bcond_without servers
 %bcond_without ldiskfs
