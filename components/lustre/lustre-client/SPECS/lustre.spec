@@ -16,7 +16,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %if 0%{?centos_version} == 700
-BuildRequires kernel-devel
+BuildRequires: kernel-devel
 %endif
 
 # Declare rpmbuild --with/--without parameters
