@@ -6,7 +6,7 @@ rm -f ${logfile}.*
 echo ++++ search and log OpenHPC patterns
 
 if [ -e /etc/redhat-release ];then
-    for pattern in `yum grouplist | grep -e "ohpc-"`; do
+    for pattern in `yum grouplist | grep -e "ohpc-" | sort`; do
         echo "parsing $pattern"
         info=`yum groupinfo $pattern | grep Description: | sed s/Description://`
 
