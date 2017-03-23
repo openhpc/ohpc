@@ -18,7 +18,7 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
-Version: 3.7pre
+Version: 3.7-ohpc-1.3
 Release: %{_rel}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
