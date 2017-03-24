@@ -32,9 +32,8 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
 %endif
 
-BuildRequires:	-post-build-checks
-
 %endif
+BuildRequires:	-post-build-checks
 
 %endif
 
