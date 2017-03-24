@@ -404,6 +404,10 @@ echo '%{_sbindir}/wirecheck' >>lustre-tests.files
 echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %endif
 
+echo "***"
+cat lustre.files
+echo "***"
+
 %files -f lustre.files
 %defattr(-,root,root)
 %{_sbindir}/*
