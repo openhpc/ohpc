@@ -133,6 +133,10 @@ BuildRequires: kernel-devel = %{centos_kernel}
 	%endif
 %endif
 
+%if 0%{?OHPC_BUILD}
+%global lustre_name %{lustre_name}%{PROJ_DELIM}
+%endif
+
 Summary: Lustre File System
 Name: %{lustre_name}%{PROJ_DELIM}
 Version: %{version}
@@ -403,10 +407,6 @@ echo '%{_bindir}/req_layout' >>lustre-tests.files
 echo '%{_sbindir}/wirecheck' >>lustre-tests.files
 echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %endif
-
-echo "***"
-cat lustre.files
-echo "***"
 
 %files -f lustre.files
 %defattr(-,root,root)
