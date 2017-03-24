@@ -116,6 +116,11 @@ BuildRequires: kernel-devel = %{centos_kernel}
     %endif
 %endif
 
+# karl.w.schulz@intel.com (3/24/17)
+%if 0%{?OHPC_BUILD}
+%global lustre_name %{lustre_name}%{PROJ_DELIM}
+%endif
+
 %global modules_fs_path /lib/modules/%{kversion}/%{kmoddir}
 
 %if %{_vendor}=="redhat" || %{_vendor}=="fedora"
@@ -133,9 +138,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 	%endif
 %endif
 
-%if 0%{?OHPC_BUILD}
-%global lustre_name %{lustre_name}%{PROJ_DELIM}
-%endif
+
 
 Summary: Lustre File System
 Name: %{lustre_name}
