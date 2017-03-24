@@ -10,10 +10,15 @@
 
 # lustre.spec
 
-%if 0%{?OHPC_BUILD}
-
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+
+%if 0%{?OHPC_BUILD}
+
+%if 0%{?suse_version}
+BuildRequires: kernel-source
+BuildRequires: kernel-default-devel
+%endif
 
 %if 0%{?centos_version} == 700
 
