@@ -40,7 +40,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 This package provides a suite of integration tests used by the OpenHPC project
 during continuous integration. Most components can be tested individually, but
 a default configuration is setup to enable collective testing. The test suite
-is made available under an 'ohpctest' user account.
+is made available under an '%{testuser}' user account.
 
 %prep
 %setup -n tests-ohpc
