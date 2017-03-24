@@ -1,9 +1,9 @@
 \subsection{Integration Test Suite}  \label{appendix:test_suite}
 
-This appendix details the installation and use of the OpenHPC validation test
-suite. Each OpenHPC component is equiped with a set of scripts and applications
-and the integration of these components is validated in a Jenkins CI 
-environment. To facilitate local customization and extension of OpenHPC, we 
+This appendix details the installation and use of the \OHPC validation test
+suite. Each \OHPC component is equipped with a set of scripts and applications
+to test the integration of these components in a Jenkins CI 
+environment. To facilitate local customization and extension of \OHPC, we 
 provide these tests in a standalone RPM. 
 
 \begin{lstlisting}
@@ -11,134 +11,63 @@ provide these tests in a standalone RPM.
 \end{lstlisting}
 
 The RPM creates a user called ohpc-test, and inside that user's home directory 
-are directories representing the functional areas of OpenHPC. GNU 
+are directories representing the functional areas of \OHPC. GNU 
 autotools-based configuration files control the building of the tests, and the
-BATS framework is used to execute them and collect results. Most components can
-be tested individually, but a default configuration is setup to enable 
-collective testing.
+BATS framework is used to execute them and collect results. 
 
-\begin{lstlisting}
-[sms](*\#*) ls /home/ohpc-test/tests/
-aclocal.m4      bootstrap  config.guess  COPYRIGHT   libs     Makefile.am  mpi runtimes         user-env-oom
-admin           bos        config.sub    dev-tools   LICENSE  Makefile.in  oob test-driver
-apps            common     configure     install     lustre   missing perf-tools   test-driver-cmt
-autom4te.cache  compilers  configure.ac  install-sh  m4       modules rms-harness  user-env
-\end{lstlisting}
-
-Some tests require priviledged execution, so a different set of tests will be
-enabled depending in which user executes the configure script. The tests are
-further devided in to a 'short' run and a 'long' run. The short run is a subset
+Some tests require privileged execution, so a different set of tests will be
+enabled depending in which user executes the configure script. Non-privileged
+tests are submitted as jobs through the \rms{} resource manager. The tests are
+further divided in to a 'short' run and a 'long' run. The short run is a subset
 of tests to demonstrate basic functionality and should complete in 10-20 
 minutes. The long run is comprehensive and can take an hour or more to complete.
-Results in Junit format are agregated to allow for ease of analysis.
+Results in JUnit format are aggregated to allow for ease of analysis.
 
+Most components can be tested individually, but a default configuration is setup 
+to enable collective testing. To test a single component, use the \texttt{configure}
+script to disable all tests, then re-enable the desired test to run. Some output
+is omitted for the sake of brevity.
 
-\begin{lstlisting}
+\begin{lstlisting}[literate={RMS}{\rms{}}1 {ARCH}{\arch{}}1]
 [sms](*\#*) su - ohpc-test
 [test@sms ~]$ cd tests
-[test@sms ~]$ ./configure
+[test@sms ~]$ ./configure --disable-all --enable-fftw
 checking for a BSD-compatible install... /bin/install -c
 checking whether build environment is sane... yes
-checking for a thread-safe mkdir -p... /bin/mkdir -p
-checking for gawk... gawk
-checking whether make sets $(MAKE)... yes
-checking whether make supports nested variables... yes
-checking whether make supports nested variables... (cached) yes
-checking build system type... x86_64-unknown-linux-gnu
-checking host system type... x86_64-unknown-linux-gnu
-checking for user root... no
-checking if requesting longer-running tests... yes
-checking for /etc/pbs.conf... no
-checking if enable PXSE toolchain related tests... yes
-checking that generated files are newer than configure... done
-configure: creating ./config.status
-config.status: creating Makefile
-config.status: creating common/TEST_ENV
-config.status: creating admin/Makefile
-config.status: creating user-env/Makefile
-config.status: creating bos/Makefile
-config.status: creating perf-tools/scalasca/Makefile
-config.status: creating perf-tools/tau/Makefile
-config.status: creating oob/Makefile
-config.status: creating lustre/Makefile
-config.status: creating dev-tools/easybuild/Makefile
-config.status: creating admin/spack/Makefile
-config.status: creating dev-tools/numpy/Makefile
-config.status: creating dev-tools/numpy/tests/Makefile
-config.status: creating dev-tools/scipy/Makefile
-config.status: creating dev-tools/scipy/tests/Makefile
-config.status: creating dev-tools/tbb/Makefile
-config.status: creating dev-tools/tbb/tests/Makefile
-config.status: creating dev-tools/cilk/Makefile
-config.status: creating dev-tools/R-base/Makefile
-config.status: creating modules/Makefile
-
---------------------------------------------- SUMMARY
----------------------------------------------
+...
+--------------------------------------------- SUMMARY ---------------------------------------------
 
 Package version............... : test-suite-1.3.0
 
 Build user.................... : ohpc-test
 Build host.................... : sms001
-Configure date................ : 2017-03-24 08:36
-Build architecture............ : x86_64
-MPI Families.................. : mpich mvapich2 openmpi impi
-Resource manager ............. : SLURM
-Test suite configuration...... : long
-
-Submodule Configuration:
-
-User Environment:
-    Packaging tests........... : disabled
-    RMS test harness.......... : enabled
-    Munge..................... : enabled
-    Compilers................. : enabled
-    MPI....................... : enabled
-    Modules................... : enabled
-    OOM....................... : enabled
-Dev Tools:
-    Autotools................. : enabled
-    EasyBuild................. : enabled
-    Valgrind.................. : enabled
-    R base package............ : enabled
-    TBB....................... : enabled
-    CILK...................... : enabled
-Performance Tools:
-    mpiP Profiler........ .... : enabled
-    Papi...................... : enabled
-    Scalasca.................. : enabled
-    TAU....................... : enabled
+Configure date................ : 2017-03-24 15:41
+Build architecture............ : ARCH
+Compiler Families............. : gnu
+MPI Families.................. : mpich mvapich2 openmpi
+Resource manager ............. : RMS
+Test suite configuration...... : short
+...
 Libraries:
-    Adios .................... : enabled
-    Boost .................... : enabled
-    Boost MPI................. : enabled
+    Adios .................... : disabled
+    Boost .................... : disabled
+    Boost MPI................. : disabled
     FFTW...................... : enabled
-    GSL....................... : enabled
-    HDF5...................... : enabled
-    HYPRE..................... : enabled
-    IMB....................... : enabled
-    Metis..................... : enabled
-    MUMPS..................... : enabled
-    NetCDF.................... : enabled
-    Numpy..................... : enabled
-    OCR....................... : enabled
-    OPENBLAS.................. : enabled
-    PETSc..................... : enabled
-    PHDF5..................... : enabled
-    ScaLAPACK................. : enabled
-    Scipy..................... : enabled
-    Superlu................... : enabled
-    Superlu_dist.............. : enabled
-    Trilinos ................. : enabled
-Apps:
-    MiniFE.................... : enabled
-    MiniDFT................... : disabled
-    HPCG...................... : enabled
-    PRK....................... : disabled
+    GSL....................... : disabled
+    HDF5...................... : disabled
+    HYPRE..................... : disabled
+...
+\end{lstlisting}
+
+Many \OHPC components exist in multiple flavors to support multiple compiler
+and MPI runtime permutations, and the test suite takes this in to account by
+iterating through these combinations by default. If \texttt{make check} is executed
+from the root test directory, all versions of a library will be exercised.
+
+\begin{lstlisting}[literate={RMS}{\rms{}}1]
 [test@sms ~]$ make check
-Making check in dev-tools/easybuild
-make  check-TESTS
-PASS: EasyBuild
+make --no-print-directory check-TESTS
+PASS: libs/fftw/ohpc-tests/test_mpi_families
 ============================================================================
 Testsuite summary for test-suite 1.3.0
 ============================================================================
@@ -150,92 +79,20 @@ Testsuite summary for test-suite 1.3.0
 # XPASS: 0
 # ERROR: 0
 ============================================================================
-Making check in modules
-make  check-TESTS
-PASS: init.sh
-PASS: lmod_installed
-PASS: interactive_commands
-PASS: rm_execution
-============================================================================
-Testsuite summary for test-suite 1.3.0
-============================================================================
-# TOTAL: 4
-# PASS:  4
-# SKIP:  0
-# XFAIL: 0
-# FAIL:  0
-# XPASS: 0
-# ERROR: 0
-============================================================================
-Making check in user-env
-make  check-TESTS
-PASS: init.sh
-PASS: mem_limits
-PASS: pdsh
-PASS: ompi_info
-PASS: munge
-============================================================================
-Testsuite summary for test-suite 1.3.0
-============================================================================
-# TOTAL: 5
-# PASS:  5
-# SKIP:  0
-# XFAIL: 0
-# FAIL:  0
-# XPASS: 0
-# ERROR: 0
-============================================================================
-make --no-print-directory check-TESTS
-PASS: rms-harness/ohpc-tests/test_mpi_families
-PASS: apps/miniFE/ohpc-tests/test_mpi_families
-PASS: apps/hpcg/run
-PASS: compilers/ohpc-tests/test_compiler_families
-PASS: dev-tools/valgrind/ohpc-tests/test_compiler_families
-PASS: dev-tools/R-base/ohpc-tests/test_compiler_families
-PASS: perf-tools/mpiP/ohpc-tests/test_mpi_families
-PASS: libs/fftw/ohpc-tests/test_mpi_families
-PASS: libs/adios/ohpc-tests/test_mpi_families
-PASS: libs/boost/ohpc-tests/test_mpi_families
-PASS: libs/boost-mpi/ohpc-tests/test_mpi_families
-PASS: libs/gsl/ohpc-tests/test_compiler_families
-PASS: libs/imb/ohpc-tests/test_mpi_families
-PASS: libs/hdf5/ohpc-tests/test_compiler_families
-PASS: libs/phdf5/ohpc-tests/test_mpi_families
-PASS: libs/hypre/ohpc-tests/test_mpi_families
-PASS: libs/metis/ohpc-tests/test_compiler_families
-PASS: libs/mumps/ohpc-tests/test_mpi_families
-PASS: libs/netcdf/ohpc-tests/test_mpi_families
-PASS: runtimes/ocr/ohpc-tests/test_compiler_families
-PASS: libs/openblas/ohpc-tests/test_compiler_families
-PASS: user-env-oom/ohpc-tests/test_compiler_families
-PASS: perf-tools/papi/ohpc-tests/test_compiler_families
-PASS: libs/petsc/ohpc-tests/test_mpi_families
-PASS: mpi/ohpc-tests/test_mpi_families
-PASS: dev-tools/numpy/ohpc-tests/test_mpi_families
-PASS: libs/scalapack/ohpc-tests/test_mpi_families
-PASS: dev-tools/scipy/ohpc-tests/test_mpi_families
-PASS: libs/superlu/ohpc-tests/test_compiler_families
-PASS: libs/superlu_dist/ohpc-tests/test_mpi_families
-PASS: perf-tools/scalasca/ohpc-tests/test_mpi_families
-PASS: perf-tools/tau/ohpc-tests/test_mpi_families
-PASS: dev-tools/autotools/run
-PASS: dev-tools/tbb/ohpc-tests/test_compiler_families
-PASS: dev-tools/cilk/ohpc-tests/test_compiler_families
-PASS: libs/trilinos/ohpc-tests/test_mpi_families
-============================================================================
-Testsuite summary for test-suite 1.3.0
-============================================================================
-# TOTAL: 36
-# PASS:  36
-# SKIP:  0
-# XFAIL: 0
-# FAIL:  0
-# XPASS: 0
-# ERROR: 0
-============================================================================
-
-real    108m52.037s
-user    55m18.016s
-sys 18m57.938s
-Install exit status = 0
+[test@sms ~]$ cat libs/fftw/tests/family-gnu-*/rm_execution.log 
+1..3
+ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu/mpich)
+ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu/mpich)
+ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu/mpich)
+PASS rm_execution (exit status: 0)
+1..3
+ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu/mvapich2)
+ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu/mvapich2)
+ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu/mvapich2)
+PASS rm_execution (exit status: 0)
+1..3
+ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu/openmpi)
+ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu/openmpi)
+ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu/openmpi)
+PASS rm_execution (exit status: 0)
 \end{lstlisting}
