@@ -138,7 +138,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %endif
 
 Summary: Lustre File System
-Name: %{lustre_name}%{PROJ_DELIM}
+Name: %{lustre_name}
 Version: %{version}
 Release: 1%{?dist}
 License: GPL
@@ -329,8 +329,8 @@ make install DESTDIR=$RPM_BUILD_ROOT
 # kernel_module_path macro.
 
 # karl.w.schulz@intel.com (3/23/17) - use %{name} for basemodpath
-# basemodpath=$RPM_BUILD_ROOT%{modules_fs_path}/%{lustre_name}
-basemodpath=$RPM_BUILD_ROOT%{modules_fs_path}/%{name}
+basemodpath=$RPM_BUILD_ROOT%{modules_fs_path}/%{lustre_name}
+#basemodpath=$RPM_BUILD_ROOT%{modules_fs_path}/%{name}
 %if %{with ldiskfs}
 mkdir -p $basemodpath-osd-ldiskfs/fs
 mv $basemodpath/fs/osd_ldiskfs.ko $basemodpath-osd-ldiskfs/fs/osd_ldiskfs.ko
