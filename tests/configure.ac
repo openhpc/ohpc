@@ -384,6 +384,7 @@ echo Build user.................... : $USER
 echo Build host.................... : ${ac_hostname}
 echo Configure date................ : `date +'%F %H:%M'`
 echo Build architecture............ : ${host_cpu}
+echo Compiler Families............. : ${COMPILER_FAMILIES}
 echo MPI Families.................. : ${MPI_FAMILIES}
 if test "x$enable_slurm" = "xyes" ; then
    echo Resource manager ............. : SLURM
