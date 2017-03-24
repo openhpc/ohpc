@@ -19,8 +19,13 @@ rm -f ${f_dif} ${f_old} ${f_new}
 
 # updated to account for path rename (ks 7/30/15)
 #git diff $t_old:docs/recipes/install/centos7.2/vanilla/data/manifest/${f_all}  -- ${f_all} > ${f_dif}
+
+# updated to account for path rename (ks 3/23/17)
+git diff $t_old:docs/recipes/install/centos7.2/x86_64/warewulf/slurm/manifest/${f_all}  -- ${f_all} > ${f_dif}
+
 # revert back to normal diff (ks 1/9/17)
-git diff ${t_old} ${t_new} ${f_all} >${f_dif}
+#git diff ${t_old} ${t_new} ${f_all} >${f_dif}
+
 
 if [ $? -ne 0 ]; then
    echo "ERROR: git diff failed!"
