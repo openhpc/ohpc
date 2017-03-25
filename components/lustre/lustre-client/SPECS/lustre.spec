@@ -12,14 +12,15 @@
 
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
-export BRP_PESIGN_FILES='*.ko'
-BuildRequires: pesign-obs-integration
+
+
 
 %if 0%{?OHPC_BUILD}
 
 %if 0%{?suse_version}
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
+BuildRequires: pesign-obs-integration
 %define sles_kernel 4.4.21-69-default
 %define kdir /lib/modules/%{sles_kernel}/source/
 %define kobjdir /lib/modules/%{sles_kernel}/build/
@@ -289,6 +290,8 @@ ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
 %build
+
+export BRP_PESIGN_FILES='*.ko'
 
 # Set an explicit path to our Linux tree, if we can.
 cd $RPM_BUILD_DIR/lustre-%{version}
