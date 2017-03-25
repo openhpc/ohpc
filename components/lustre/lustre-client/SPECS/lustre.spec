@@ -18,7 +18,7 @@
 %if 0%{?suse_version}
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
-%define sles_kernel 4.2.0-0.21.el7
+%define sles_kernel 4.4.21-69-default
 %define kdir /lib/modules/%{sles_kernel}/source/
 %define kobjdir /lib/modules/%{sles_kernel}/build/
 %endif
