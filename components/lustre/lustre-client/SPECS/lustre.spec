@@ -12,6 +12,8 @@
 
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+export BRP_PESIGN_FILES='*.ko'
+BuildRequires: pesign-obs-integration
 
 %if 0%{?OHPC_BUILD}
 
