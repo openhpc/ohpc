@@ -17,7 +17,7 @@ pre-packaged RPMs available per architecture type are summarized as follows:
 Base OS     | x86_64  | aarch64  | noarch
 :---:       | :---:   | :---:    | :---:
 CentOS 7.3  | 305     | 196      | 43
-SLES 12 SP2 | 307     | 203      | 43
+SLES 12 SP2 | 306     | 198      | 43
 
 A detailed list of all available components is available in
 the "Package Manifest" appendix located in each of the companion install
