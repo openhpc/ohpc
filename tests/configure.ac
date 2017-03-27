@@ -88,12 +88,7 @@ AC_ARG_ENABLE([oob],
 	 [],[enable_oob=yes])
 AM_CONDITIONAL(OOB_ENABLED,test "x$enable_oob" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# Lustre
-AC_ARG_ENABLE([lustre],
-	 [AS_HELP_STRING([--enable-lustre],[Enable Lustre utility tests (default=no, root only)])],
-	 [],[enable_lustre=no])
-AM_CONDITIONAL(LUSTRE_ENABLED,test "x$enable_lustre" = "xyes" ) 
-#------------------------------------------------------------------------------------------
+
 # spack
 AC_ARG_ENABLE([spack],
 	 [AS_HELP_STRING([--enable-spack],[Enable spack tests (default=yes, root only)])],
@@ -103,7 +98,6 @@ AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" )
 #-----------------
 # User level tests
 #-----------------
-
 
 
 #------------------------------------------------------------------------------------------
@@ -118,6 +112,12 @@ AC_ARG_ENABLE([R],
    [AS_HELP_STRING([--enable-R],[Enable R tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_R,yes)])
 AM_CONDITIONAL(R_ENABLED,test "x$enable_R" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# Lustre
+AC_ARG_ENABLE([lustre],
+   [AS_HELP_STRING([--enable-lustre],[Enable Lustre utility tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_lustre,no)])
+AM_CONDITIONAL(LUSTRE_ENABLED,test "x$enable_lustre" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # mpiP
 AC_ARG_ENABLE([mpiP],
@@ -416,11 +416,7 @@ if test "x$ROOT_ENABLED" = "x1" ; then
     else 
        echo '    'Hardware benchmarks....... : disabled
     fi
-    if test "x$enable_lustre" = "xyes"; then
-       echo '    'Lustre client............. : enabled
-    else
-       echo '    'Lustre client............. : disabled
-    fi
+
     if test "x$enable_spack" = "xyes"; then
        echo '    'Spack..................... : enabled
     else
@@ -464,6 +460,12 @@ echo    User Environment:
        echo '    'Modules................... : enabled
     else
        echo '    'Modules................... : disabled
+    fi
+
+    if test "x$enable_lustre" = "xyes"; then
+       echo '    'Lustre client............. : enabled
+    else
+       echo '    'Lustre client............. : disabled
     fi
 
     if test "x$enable_oom" = "xyes"; then
