@@ -1,0 +1,28 @@
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+    puts stderr " "
+    puts stderr "This module loads the example program"
+    puts stderr "toolchain."
+    puts stderr "\nVersion 1.0\n"
+
+}
+module-whatis "Name: example"
+module-whatis "Version: 1.0"
+module-whatis "Category: runtime library"
+module-whatis "Description: example independant module"
+module-whatis "URL http://www.google.com/"
+
+set     version                     1.0
+
+prepend-path    PATH                /opt/ohpc/pub/libs/example/1.0/bin
+prepend-path    MANPATH             /opt/ohpc/pub/libs/example/1.0/man
+prepend-path    INCLUDE             /opt/ohpc/pub/libs/example/1.0/include
+prepend-path    LD_LIBRARY_PATH     /opt/ohpc/pub/libs/example/1.0/lib
+
+setenv          EXAMPLE_DIR        /opt/ohpc/pub/libs/example/1.0
+setenv          EXAMPLE_BIN        /opt/ohpc/pub/libs/example/1.0/bin
+setenv          EXAMPLE_LIB        /opt/ohpc/pub/libs/example/1.0/lib
+setenv          EXAMPLE_INC        /opt/ohpc/pub/libs/example/1.0/include
+
