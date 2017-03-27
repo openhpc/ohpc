@@ -161,7 +161,7 @@ BuildRequires: readline-devel
 
 %if %{slurm_with openssl}
 %if 0%{?suse_version}
-BuildRequires: libopenssl0_9_8
+BuildRequires: libopenssl-devel openssl
 %else
 BuildRequires: openssl-devel >= 0.9.6 openssl >= 0.9.6
 %endif
