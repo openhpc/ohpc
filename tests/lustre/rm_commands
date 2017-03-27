@@ -18,6 +18,8 @@ else
     export LUSTRE_TEST_PATH
 fi
 
+check_rms
+
 @test "[Lustre] lfs find - $LUSTRE_TEST_PATH ($RESOURCE_MANAGER)" {
     run_serial_binary lfs find $LUSTRE_TEST_PATH
     assert_success
