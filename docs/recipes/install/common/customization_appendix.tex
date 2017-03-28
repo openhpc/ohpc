@@ -1,11 +1,11 @@
 \subsection{Customization} \label{appendix:customization}
 
-\subsubsection{Adding local Lmod modules to \OHPC{} hierachy} \label{appendix:modulefiles}
+\subsubsection{Adding local Lmod modules to \OHPC{} hierarchy} \label{appendix:modulefiles}
 Locally installed applications can easily be integrated in to \OHPC{} systems by
 following the Lmod convention laid out by the provided packages. Two sample
 module files are included in the \texttt{examples-ohpc} package\textemdash one
 representing an application with no compiler or MPI runtime dependencies, and
-one depenant on OpenMPI and the GNU toolchain. Simply copy these files to the
+one dependent on OpenMPI and the GNU toolchain. Simply copy these files to the
 prescribed locations, and the \texttt{lmod} application should pick them up
 automatically.
 
@@ -14,7 +14,7 @@ automatically.
 [sms](*\#*) cp /opt/ohpc/pub/examples/example.modulefile \
     /opt/ohpc/pub/modulefiles/example/1.0
 [sms](*\#*) mkdir /opt/ohpc/pub/moduledeps/gnu-openmpi/example
-[sms](*\#*) cp /opt/ohpc/pub/examples/example-mpi-dependant.modulefile \
+[sms](*\#*) cp /opt/ohpc/pub/examples/example-mpi-dependent.modulefile \
     /opt/ohpc/pub/moduledeps/gnu-openmpi/example/1.0
 [sms](*\#*) module avail
 

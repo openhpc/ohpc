@@ -29,7 +29,7 @@ Source7:  gmond.conf
 Source8:  job.pbs.mpi
 Source9:  OHPC_macros
 Source10: example.modulefile
-Source11: example-mpi-dependant.modulefile
+Source11: example-mpi-dependent.modulefile
 
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -59,7 +59,7 @@ install -D -m 0644 %SOURCE6 %{buildroot}%{OHPC_HOME}/pub/examples/udev/60-ipath.
 install -D -m 0644 %SOURCE7 %{buildroot}%{OHPC_HOME}/pub/examples/ganglia/gmond.conf
 install -D -m 0644 %SOURCE8 %{buildroot}%{OHPC_HOME}/pub/examples/pbspro/job.mpi
 install -D -m 0644 %SOURCE10 %{buildroot}%{OHPC_HOME}/pub/examples/example.modulefile
-install -D -m 0644 %SOURCE11 %{buildroot}%{OHPC_HOME}/pub/examples/example-mpi-dependant.modulefile
+install -D -m 0644 %SOURCE11 %{buildroot}%{OHPC_HOME}/pub/examples/example-mpi-dependent.modulefile
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
