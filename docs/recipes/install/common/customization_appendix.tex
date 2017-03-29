@@ -5,7 +5,7 @@ Locally installed applications can easily be integrated in to \OHPC{} systems by
 following the Lmod convention laid out by the provided packages. Two sample
 module files are included in the \texttt{examples-ohpc} package\textemdash one
 representing an application with no compiler or MPI runtime dependencies, and
-one dependent on OpenMPI and the GNU toolchain. Simply copy these files to the
+one dependent on OpenMPI and the \GNU{} toolchain. Simply copy these files to the
 prescribed locations, and the \texttt{lmod} application should pick them up
 automatically.
 
@@ -50,14 +50,14 @@ any of the "keys".
 
 \subsubsection{Rebuilding Packages from Source}  \label{appendix:rpmbuild}
 
-Users of OpenHPC may find it desirable to rebuild one of the supplied packages
+Users of \OHPC{} may find it desirable to rebuild one of the supplied packages
 to apply build customizations or satisfy local requirements. One way to
 accomplish this is to install the appropriate source RPM, modify the specfile
 as needed, and rebuild to obtain an updated binary RPM. A brief example using
 the FFTW library is highlighted below.  Note that the source RPMs can be downloaded from the
 community build server at \href{https://build.openhpc.community}
 {\color{blue}{https://build.openhpc.community}} via a web browser or directly
-via \texttt{rpm} as highlighted below. The OpenHPC build system design
+via \texttt{rpm} as highlighted below. The \OHPC{} build system design
 leverages several keywords to control the choice of compiler and MPI families
 for relevant development libraries and the \texttt{rpmbuild} example
 illustrates how to override the default mpi\_family.
