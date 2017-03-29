@@ -1,34 +1,44 @@
 \subsection{Integration Test Suite}  \label{appendix:test_suite}
 
-This appendix details the installation and use of the \OHPC{} validation test
-suite. Each \OHPC{} component is equipped with a set of scripts and applications
-to test the integration of these components in a Jenkins CI 
-environment. To facilitate local customization and extension of \OHPC{}, we 
+This appendix details the installation and basic use of the integration test
+suite used to support \OHPC{} releases. This suite is not intended to replace
+the validation performed by component development teams, but is instead,
+devised to confirm component builds are functional and interoperable within
+the modular \OHPC{} environment.
+The test suite is generally organized by components and the \OHPC{} CI workflow
+relies on running the full suite using \href{https://jenkins.io}{\color{blue}{Jenkins}} to test
+multiple OS configurations and installation recipes.
+%Each \OHPC{} component is equipped with a set of scripts and applications
+%to test the integration of these components in a Jenkins CI 
+%environment.
+To facilitate local customization and running of the test suite locally, we 
 provide these tests in a standalone RPM. 
 
 \begin{lstlisting}
 [sms](*\#*) (*\install*) test-suite-ohpc
 \end{lstlisting}
 
-The RPM creates a user called ohpc-test, and inside that user's home directory 
-are directories representing the functional areas of \OHPC{}. \GNU{}
-autotools-based configuration files control the building of the tests, and the
-BATS framework is used to execute them and collect results. 
-
-Some tests require privileged execution, so a different set of tests will be
-enabled depending in which user executes the configure script. Non-privileged
+The RPM installation creates a user named \texttt{ohpc-test} to house the test
+suite and provide an isolated environment for execution.
+Configuration of the test suite is done using standard \GNU{} 
+autotools semantics and the
+\href{https://jenkins.io}{\color{blue}{BATS}} shell-testing framework is used to execute and log a number of individual
+unit tests. 
+Some tests require privileged execution, so a different combination of tests will be
+enabled depending on which user executes the top-level \texttt{configure} script. Non-privileged
 tests are submitted as jobs through the \rms{} resource manager. The tests are
-further divided in to a 'short' run and a 'long' run. The short run is a subset
-of approximately 180 tests to demonstrate basic functionality and should 
-complete in 10-20 minutes. The long run (around 1000 tests) is comprehensive 
-and can take an hour or more to complete.  Results in JUnit format are 
-aggregated to allow for ease of analysis.
+further divided into ``short'' and ``long'' run categories. The short run is a subset
+of approximately 180 tests to demonstrate basic functionality of key components
+(e.g. MPI stacks) and should 
+complete in 10-20 minutes. The long run (around 1000 tests) is comprehensive
+and can take an hour or more to complete. 
 
-Most components can be tested individually, but a default configuration is setup 
-to enable collective testing. To test a single component, use the \texttt{configure}
-script to disable all tests, then re-enable the desired test to run. The
-\texttt{--help} option to \texttt{configure} will display all possible tests. Some 
-output is omitted for the sake of brevity.
+Most components can be tested individually, but a default configuration is
+setup to enable collective testing. To test an isolated component, use the
+\texttt{configure} option to disable all tests, then re-enable the desired test
+to run. The \texttt{--help} option to \texttt{configure} will display all
+possible tests. Example output is shown below (some output is omitted for the
+sake of brevity).
 
 \begin{lstlisting}[literate={RMS}{\rms{}}1 {ARCH}{\arch{}}1]
 [sms](*\#*) su - ohpc-test
@@ -37,7 +47,8 @@ output is omitted for the sake of brevity.
 checking for a BSD-compatible install... /bin/install -c
 checking whether build environment is sane... yes
 ...
---------------------------------------------- SUMMARY ---------------------------------------------
+---------------------------------------------- SUMMARY
+---------------------------------------------
 
 Package version............... : test-suite-1.3.0
 
@@ -63,8 +74,9 @@ Libraries:
 
 Many \OHPC{} components exist in multiple flavors to support multiple compiler
 and MPI runtime permutations, and the test suite takes this in to account by
-iterating through these combinations by default. If \texttt{make check} is executed
-from the root test directory, all versions of a library will be exercised.
+iterating through these combinations by default. If \texttt{make check} is
+executed from the top-level test directory, all configured compiler and MPI
+permutations of a library will be exercised.
 
 \begin{lstlisting}[literate={RMS}{\rms{}}1]
 [test@sms ~]$ make check
