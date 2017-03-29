@@ -11,19 +11,19 @@ one dependent on OpenMPI and the \GNU{} toolchain. Simply copy these files to th
 prescribed locations, and the \texttt{lmod} application should pick them up
 automatically.
 
-\begin{lstlisting}
-[sms](*\#*) mkdir /opt/ohpc/pub/modulefiles/example
+\begin{lstlisting}[alsoletter={/,.},morekeywords={example1/1.0, example2/1.0}]
+[sms](*\#*) mkdir /opt/ohpc/pub/modulefiles/example1
 [sms](*\#*) cp /opt/ohpc/pub/examples/example.modulefile \
-    /opt/ohpc/pub/modulefiles/example/1.0
-[sms](*\#*) mkdir /opt/ohpc/pub/moduledeps/gnu-openmpi/example
+    /opt/ohpc/pub/modulefiles/example1/1.0
+[sms](*\#*) mkdir /opt/ohpc/pub/moduledeps/gnu-openmpi/example2
 [sms](*\#*) cp /opt/ohpc/pub/examples/example-mpi-dependent.modulefile \
-    /opt/ohpc/pub/moduledeps/gnu-openmpi/example/1.0
+    /opt/ohpc/pub/moduledeps/gnu-openmpi/example2/1.0
 [sms](*\#*) module avail
 
 ------------------------------- /opt/ohpc/pub/moduledeps/gnu-openmpi -------------------------------
    adios/1.11.0        mpiP/3.4.1              phdf5/1.8.17 superlu_dist/4.2
    boost/1.63.0        mumps/5.0.2             scalapack/2.0.2    tau/2.26
-   example/1.0  (D)    netcdf/4.4.1.1          scalasca/2.3.1 trilinos/12.10.1
+   example2/1.0 (D)    netcdf/4.4.1.1          scalasca/2.3.1 trilinos/12.10.1
    fftw/3.3.4          netcdf-cxx/4.3.0        scipy/0.18.0
    hypre/2.11.1        netcdf-fortran/4.4.4    scorep/3.0
    imb/4.1             petsc/3.7.5             sionlib/1.7.0
@@ -37,7 +37,7 @@ automatically.
    spack/0.8.17
 
 ------------------------------------ /opt/ohpc/pub/modulefiles -------------------------------------
-   EasyBuild/3.1.2           example/1.0             ohpc       (L) valgrind/3.11.0
+   EasyBuild/3.1.2           example1/1.0             ohpc       (L) valgrind/3.11.0
    autotools          (L)    gnu/5.4.0        (L)    papi/5.4.3
    clustershell/1.7.2        intel/17.0.2.174        prun/1.1   (L)
 
