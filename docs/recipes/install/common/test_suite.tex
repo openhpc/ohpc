@@ -1,9 +1,9 @@
 \subsection{Integration Test Suite}  \label{appendix:test_suite}
 
-This appendix details the installation and use of the \OHPC validation test
-suite. Each \OHPC component is equipped with a set of scripts and applications
+This appendix details the installation and use of the \OHPC{} validation test
+suite. Each \OHPC{} component is equipped with a set of scripts and applications
 to test the integration of these components in a Jenkins CI 
-environment. To facilitate local customization and extension of \OHPC, we 
+environment. To facilitate local customization and extension of \OHPC{}, we 
 provide these tests in a standalone RPM. 
 
 \begin{lstlisting}
@@ -11,7 +11,7 @@ provide these tests in a standalone RPM.
 \end{lstlisting}
 
 The RPM creates a user called ohpc-test, and inside that user's home directory 
-are directories representing the functional areas of \OHPC. GNU 
+are directories representing the functional areas of \OHPC{}. GNU 
 autotools-based configuration files control the building of the tests, and the
 BATS framework is used to execute them and collect results. 
 
@@ -61,7 +61,7 @@ Libraries:
 ...
 \end{lstlisting}
 
-Many \OHPC components exist in multiple flavors to support multiple compiler
+Many \OHPC{} components exist in multiple flavors to support multiple compiler
 and MPI runtime permutations, and the test suite takes this in to account by
 iterating through these combinations by default. If \texttt{make check} is executed
 from the root test directory, all versions of a library will be exercised.
