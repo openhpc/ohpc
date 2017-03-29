@@ -19,9 +19,10 @@ Some tests require privileged execution, so a different set of tests will be
 enabled depending in which user executes the configure script. Non-privileged
 tests are submitted as jobs through the \rms{} resource manager. The tests are
 further divided in to a 'short' run and a 'long' run. The short run is a subset
-of tests to demonstrate basic functionality and should complete in 10-20 
-minutes. The long run is comprehensive and can take an hour or more to complete.
-Results in JUnit format are aggregated to allow for ease of analysis.
+of approximately 180 tests to demonstrate basic functionality and should 
+complete in 10-20 minutes. The long run (around 1000 tests) is comprehensive 
+and can take an hour or more to complete.  Results in JUnit format are 
+aggregated to allow for ease of analysis.
 
 Most components can be tested individually, but a default configuration is setup 
 to enable collective testing. To test a single component, use the \texttt{configure}
