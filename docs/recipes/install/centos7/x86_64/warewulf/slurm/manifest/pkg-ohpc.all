@@ -55,6 +55,8 @@ imb-intel-mvapich2-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-
 imb-intel-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 intel-compilers-devel-ohpc 2017 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Intel(R) Parallel Studio XE
 intel-mpi-devel-ohpc 2017 https://github.com/openhpc/ohpc ohpc/mpi-families OpenHPC compatibility package for Intel(R) MPI Library
+kmod-lustre-client-ohpc 2.9.0 https://wiki.hpdd.intel.com/ System Environment/Kernel lustre-client-ohpc kernel module(s)
+kmod-lustre-client-ohpc-tests 2.9.0 https://wiki.hpdd.intel.com/ System Environment/Kernel lustre-client-ohpc-tests kernel module(s)
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
 lmod-defaults-gnu-impi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu-mpich-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
@@ -69,10 +71,8 @@ losf-ohpc 0.53.0 https://github.com/hpcsi/losf ohpc/admin A Linux operating syst
 lua-bit-ohpc 1.0.2 http://bitop.luajit.org ohpc/distro-packages Module for Lua which adds bitwise operations on numbers
 lua-filesystem-ohpc 1.6.3 http://keplerproject.github.com/luafilesystem ohpc/distro-packages Lua library to Access Directories and Files
 lua-posix-ohpc 33.2.1 https://github.com/luaposix/luaposix ohpc/distro-packages POSIX library for Lua
-lustre-client-ohpc 2.8.0 https://wiki.hpdd.intel.com/ ohpc/lustre Lustre File System
-lustre-client-ohpc-modules 2.8.0 https://wiki.hpdd.intel.com/ Development/Kernel Kernel Lustre modules for Linux 3.10.0-327.el7.x86_64
-lustre-client-ohpc-source 2.8.0 https://wiki.hpdd.intel.com/ Development/Kernel Object-Based Disk storage driver source
-lustre-client-ohpc-tests 2.8.0 https://wiki.hpdd.intel.com/ Development/Kernel Lustre testing framework
+lustre-client-ohpc 2.9.0 https://wiki.hpdd.intel.com/ ohpc/lustre Lustre File System
+lustre-client-ohpc-tests 2.9.0 https://wiki.hpdd.intel.com/ Development/Kernel Lustre testing framework
 metis-gnu-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 metis-intel-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 mpiP-gnu-impi-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
@@ -195,7 +195,6 @@ openmpi-gnu-ohpc 1.10.6 http://www.open-mpi.org ohpc/mpi-families A powerful imp
 openmpi-intel-ohpc 1.10.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi-psm2-gnu-ohpc 1.10.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi-psm2-intel-ohpc 1.10.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpixx-psm2-intel-ohpc 1.10.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 papi-ohpc 5.4.3 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 pbspro-client-ohpc 14.1.0 https://github.com/pbspro/pbspro ohpc/rms PBS Professional for a client host
 pbspro-execution-ohpc 14.1.0 https://github.com/pbspro/pbspro ohpc/rms PBS Professional for an execution host
@@ -222,9 +221,9 @@ phdf5-intel-openmpi-ohpc 1.8.17 http://www.hdfgroup.org/HDF5 ohpc/io-libs A gene
 prun-ohpc 1.1 https://github.com/openhpc/ohpc ohpc/admin Convenience utility for parallel job launch
 python-numpy-gnu-ohpc 1.11.1 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python-numpy-intel-ohpc 1.11.1 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
-python-scipy-gnu-mpich-ohpc 0.18.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
-python-scipy-gnu-mvapich2-ohpc 0.18.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
-python-scipy-gnu-openmpi-ohpc 0.18.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python-scipy-gnu-mpich-ohpc 0.19.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python-scipy-gnu-mvapich2-ohpc 0.19.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python-scipy-gnu-openmpi-ohpc 0.19.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 scalapack-gnu-impi-ohpc 2.0.2 http://www.netlib.org/lapack-dev/ Development/Libraries/Parallel A subset of LAPACK routines redesigned for heterogenous computing
 scalapack-gnu-mpich-ohpc 2.0.2 http://www.netlib.org/lapack-dev/ Development/Libraries/Parallel A subset of LAPACK routines redesigned for heterogenous computing
 scalapack-gnu-mvapich2-ohpc 2.0.2 http://www.netlib.org/lapack-dev/ Development/Libraries/Parallel A subset of LAPACK routines redesigned for heterogenous computing
