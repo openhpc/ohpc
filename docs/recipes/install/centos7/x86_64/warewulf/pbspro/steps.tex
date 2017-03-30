@@ -226,7 +226,7 @@ default location for this example is in
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={}]
 # Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
-[sms](*\#*) perl -pi -e "s#^YUM_MIRROR_BASE=(\S+)#YUM_MIRROR_BASE=${BOS_MIRROR}#" \
+[sms](*\#*) perl -pi -e "s#YUM_MIRROR_BASE=(\S+)#YUM_MIRROR_BASE=${BOS_MIRROR}#" \
    /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
 \end{lstlisting}
 % ohpc_indent 0
