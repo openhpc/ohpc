@@ -1,0 +1,26 @@
+\subsection{Upgrading OpenHPC Packages}  \label{appendix:upgrade}
+
+
+As newer \OHPC{} releases are made available, users are encouraged to upgrade
+their locally installed packages against the latest repository versions to
+obtain access to bug fixes and newer component versions. This can be
+accomplished with the underlying package manager as \OHPC{} packaging maintains
+versioning state across releases. Also, package builds available from the
+\OHPC{} repositories have ``\texttt{-ohpc}'' appended to their names so
+wildcards can be used as a simple way to obtain updates. The following general
+procedure highlights a method for upgrading existing installations.  Note that
+when upgrading from a minor release older than v\OHPCVerTree{}, you will first
+need to update your local \OHPC{} repository configuration to point against the
+v\OHPCVerTree{} release (or update your locally hosted mirror). Refer to
+\S\ref{sec:enable_repo} for details on enabling the latest repository. Note
+that when upgrading between micro releases on the same branch (e.g. from
+v\OHPCVerTree{} to v\OHPCVerTree{}.1}), there is no need to adjust local
+  package manager configurations when using the public repository as rolling
+  updates are pre-configured.
+
+\begin{enumerate}
+\item Ensure repodata is current
+\item Upgrade master (SMS) node
+\item Upgrade packages in compute image
+\item Rebuild vnfs image
+\end{enumerate}
