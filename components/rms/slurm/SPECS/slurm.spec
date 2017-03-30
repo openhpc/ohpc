@@ -897,9 +897,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %if 0%{?suse_version} >= 1200 || 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
 
-%config /usr/lib/systemd/system/slurmctld.service
-%config /usr/lib/systemd/system/slurmd.service
-%config /usr/lib/systemd/system/slurmdbd.service
+/usr/lib/systemd/system/slurmctld.service
+/usr/lib/systemd/system/slurmd.service
+/usr/lib/systemd/system/slurmdbd.service
 
 %endif
 
@@ -1158,12 +1158,10 @@ exit 0
 
 %if 0%{?suse_version}
 %{fillup_and_insserv -f}
-%else
-if [ $1 = 1 ]; then
-   [ -x /sbin/chkconfig ] && /sbin/chkconfig --add slurm
-fi
 %endif
-
+%if 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
+%systemd_post slurmd.service
+%endif
 if [ -x /sbin/ldconfig ]; then
     /sbin/ldconfig %{_libdir}
 fi
@@ -1176,6 +1174,9 @@ fi
 %endif
 
 %preun
+%if 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
+%systemd_preun slurmd.service
+%endif
 if [ "$1" -eq 0 ]; then
     if [ -x /etc/init.d/slurm ]; then
 	[ -x /sbin/chkconfig ] && /sbin/chkconfig --del slurm
@@ -1196,9 +1197,7 @@ if [ "$1" = 0 ]; then
 fi
 
 %postun
-if [ "$1" -gt 1 ]; then
-    /etc/init.d/slurm condrestart
-elif [ "$1" -eq 0 ]; then
+if [ "$1" -eq 0 ]; then
     if [ -x /sbin/ldconfig ]; then
 	/sbin/ldconfig %{_libdir}
     fi
@@ -1206,11 +1205,14 @@ fi
 %if %{?insserv_cleanup:1}0
 %insserv_cleanup
 %endif
+%if 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
+%systemd_postun_with_restart systemd.service
+%endif
 
 %postun -n %{pname}-slurmdbd%{PROJ_DELIM}
-if [ "$1" -gt 1 ]; then
-    /etc/init.d/slurmdbd condrestart
-fi
+%if 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
+systemd_postun_with_restart slurmdbd.service
+%endif
 
 #############################################################################
 
