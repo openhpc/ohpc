@@ -209,22 +209,19 @@ default location for this example is in
 
 \begin{center}
   \begin{tcolorbox}[]
-    \small Note that \Warewulf{} is configured by default to access an external repository
-    (vault.centos.org) during the \texttt{wwmkchroot} process.
-    If the master host cannot reach the public CentOS mirrors, or if you
-    prefer to access a locally cached mirror, set the
-    \texttt{\$\{BOS\_MIRROR\}} environment variable to your desired repo
-    location and update the template file 
-    {\em prior} to running the \texttt{wwmkchroot} command below. For
-    example:
+    \small Note that \Warewulf{} is configured by default to access an external
+    repository (mirror.centos.org) during the \texttt{wwmkchroot} process.  If
+    the master host cannot reach the public CentOS mirrors, or if you prefer to
+    access a locally cached mirror, set the \texttt{\$\{YUM\_MIRROR\}}
+    environment variable to your desired repo location {\em prior} to running
+    the \texttt{wwmkchroot} command below. For example:
 
 % begin_ohpc_run
 % ohpc_command if [ ! -z ${BOS_MIRROR+x} ]; then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={}]
-# Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
-[sms](*\#*) perl -pi -e "s#YUM_MIRROR_BASE=(\S+)#YUM_MIRROR_BASE=${BOS_MIRROR}#" \
-   /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
+# Override default OS repository (optional) - set YUM_MIRROR variable to desired repo location
+[sms](*\#*) export YUM_MIRROR=${BOS_MIRROR}
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
