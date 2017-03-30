@@ -19,19 +19,19 @@ provide these tests in a standalone RPM.
 \end{lstlisting}
 
 The RPM installation creates a user named \texttt{ohpc-test} to house the test
-suite and provide an isolated environment for execution.
-Configuration of the test suite is done using standard \GNU{} 
-autotools semantics and the
-\href{https://jenkins.io}{\color{blue}{BATS}} shell-testing framework is used to execute and log a number of individual
-unit tests. 
-Some tests require privileged execution, so a different combination of tests will be
-enabled depending on which user executes the top-level \texttt{configure} script. Non-privileged
-tests are submitted as jobs through the \rms{} resource manager. The tests are
-further divided into ``short'' and ``long'' run categories. The short run is a subset
+suite and provide an isolated environment for execution.  Configuration of the
+test suite is done using standard \GNU{} autotools semantics and the
+\href{https://jenkins.io}{\color{blue}{BATS}} shell-testing framework is used
+to execute and log a number of individual unit tests.  Some tests require
+privileged execution, so a different combination of tests will be enabled
+depending on which user executes the top-level \texttt{configure}
+script. Non-privileged tests requiring execution on one or more compute nodes are
+submitted as jobs through the \rms{} resource manager. The tests are further
+divided into ``short'' and ``long'' run categories. The short run configuration
+is a subset
 of approximately 180 tests to demonstrate basic functionality of key components
-(e.g. MPI stacks) and should 
-complete in 10-20 minutes. The long run (around 1000 tests) is comprehensive
-and can take an hour or more to complete. 
+(e.g. MPI stacks) and should complete in 10-20 minutes. The long run (around
+1000 tests) is comprehensive and can take an hour or more to complete.
 
 Most components can be tested individually, but a default configuration is
 setup to enable collective testing. To test an isolated component, use the
@@ -76,7 +76,8 @@ Many \OHPC{} components exist in multiple flavors to support multiple compiler
 and MPI runtime permutations, and the test suite takes this in to account by
 iterating through these combinations by default. If \texttt{make check} is
 executed from the top-level test directory, all configured compiler and MPI
-permutations of a library will be exercised.
+permutations of a library will be exercised. The following highlights the
+execution of the FFTW related tests that were enabled in the previous step.
 
 \begin{lstlisting}[literate={RMS}{\rms{}}1]
 [test@sms ~]$ make check
