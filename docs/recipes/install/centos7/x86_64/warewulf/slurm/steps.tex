@@ -219,7 +219,7 @@ default location for this example is in
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={}]
 # Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
-[sms](*\#*) perl -pi -e "s#^YUM_MIRROR=(\S+)#YUM_MIRROR=${BOS_MIRROR}#" \
+[sms](*\#*) perl -pi -e "s#^YUM_MIRROR_BASE=(\S+)#YUM_MIRROR_BASE=${BOS_MIRROR}#" \
    /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
 \end{lstlisting}
 % ohpc_indent 0
@@ -597,6 +597,7 @@ petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Compu
 \renewcommand{\thesubsection}{\Alph{subsection}}
 
 \input{common/automation_appendix}
+%\input{common/upgrade}
 \input{common/test_suite}
 \input{common/customization_appendix}
 \input{manifest}
