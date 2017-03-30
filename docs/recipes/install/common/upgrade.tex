@@ -25,20 +25,20 @@ rolling updates are pre-configured.
   the following can be used to sync to the latest.
 
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*)  yum clean expire-cache
-[sms](*\#*)  yum --installroot=$CHROOT clean expire-cache
+[sms](*\#*)  (*\clean*)
+[sms](*\#*)  (*\chrootclean*)
 \end{lstlisting}
 
 \item Upgrade master (SMS) node
 
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*)  yum upgrade "*-ohpc"
+[sms](*\#*)  (*\upgrade*) "*-ohpc"
 \end{lstlisting}
   
 \item Upgrade packages in compute image
 
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*)  yum  --installroot=$CHROOT upgrade "*-ohpc"
+[sms](*\#*)  (*\chrootupgrade) "*-ohpc"
 \end{lstlisting}
   
 \item Rebuild VNFS image(s)
