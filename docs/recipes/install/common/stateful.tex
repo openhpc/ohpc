@@ -7,7 +7,7 @@ require that a boot loader (GRUB) be added to the image as follows:
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add GRUB2 bootloader and re-assemble VNFS image
 [sms](*\#*) (*\chrootinstall*) grub2
-[sms](*\#*) wwvnfs  -y --chroot $CHROOT
+[sms](*\#*) wwvnfs  --chroot $CHROOT
 \end{lstlisting}
 
 \noindent Enabling stateful nodes also requires additional site-specific, disk-related
