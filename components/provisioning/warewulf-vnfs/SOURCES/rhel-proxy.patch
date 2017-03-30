@@ -4,7 +4,7 @@
      echo "reposdir=0" >> $CHROOTDIR/$YUM_CONF
      echo "" >> $CHROOTDIR/$YUM_CONF
  
-+    03/13/15 karl.w.schulz@intel.com - honor proxy setting if configured on local host
++    # 03/13/15 karl.w.schulz@intel.com - honor proxy setting if configured on local host
 +    proxy_host=`grep "^proxy=" /etc/yum.conf`
 +    if [ $? -eq 0 ];then
 +        echo $proxy_host >> $CHROOTDIR/$YUM_CONF
