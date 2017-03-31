@@ -1,0 +1,18 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+@test "[slurm] check for working sacct" {
+    run which sacct
+    assert_success
+
+    run sacct
+    assert_success
+}
+
