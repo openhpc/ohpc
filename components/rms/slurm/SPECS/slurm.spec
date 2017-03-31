@@ -891,7 +891,7 @@ rm -rf $RPM_BUILD_ROOT
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
-%config %{_sysconfdir}/slurm.conf
+%config (noreplace) %{_sysconfdir}/slurm.conf
 %endif
 
 # 11/13/14 karl.w.schulz@intel.com - include systemd files 
