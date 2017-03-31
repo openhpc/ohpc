@@ -9,7 +9,7 @@ Version 1.3 (31 March 2017)
     releases. This addition came out of requests from the SC16 BoF session (https://github.com/openhpc/ohpc/issues/63)
   * adoption of a more generic repo path for publishing OpenHPC RPMs (https://github.com/openhpc/ohpc/issues/368)
   * enabled jobcomp_elasticsearch plugin in SLURM build (https://github.com/openhpc/ohpc/pull/382)
-  * Warewulf build now based on pre-release version of 3.7 branch in order to support UEFI PXE boot support with
+  * Warewulf build now based on pre-release version of 3.7 branch in order to enable UEFI PXE boot support with
     newer syslinux and other bug fixes (https://github.com/openhpc/ohpc/issues/372)
   * inclusion of example modulefiles that can be used as templates for integrating locally provided
     software (https://github.com/openhpc/ohpc/issues/397)
