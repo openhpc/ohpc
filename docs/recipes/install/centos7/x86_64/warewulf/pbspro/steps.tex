@@ -436,6 +436,13 @@ host as follows:
 \end{lstlisting}
 % end_ohpc_run
 
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Additional step required if desiring to use predictable network interface
+# naming schemes (e.g. en4s0f0). Skip if using eth# style names.
+[sms](*\#*) wwsh provision set "${compute_regex}" --kargs "net.ifnames=1,biosdevname=1"
+[sms](*\#*) wwsh provision set --postnetdown=1 "${compute_regex}"
+\end{lstlisting}
+
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster (Cont.)
 % Removed slurm.conf,munge.key from the list of files because it is NOT compatible with PBS Professional. 
