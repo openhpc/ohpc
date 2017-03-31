@@ -75,10 +75,10 @@ The most important variables that need to be set in ``Make.<arch>`` are:
 
 HPCG supports in-source and out-of-source builds. In the case of the former,
 the object files and the binary reside in the same directory structure as the
-source files. There is no need for a seperate configuration step and the reader
+source files. There is no need for a separate configuration step and the reader
 may skip the the Build section.
 
-In the latter case, a seperate directory is created to hold the object and
+In the latter case, a separate directory is created to hold the object and
 binary executable files.  For example, create a custom directory, ``build`` in
 this example, for the results of compilation and linking::
 
