@@ -43,8 +43,18 @@ defined for the {\em compute} instance.
 In preparation for provisioning, we can now define the desired network settings
 for four example compute nodes with the underlying provisioning system and
 restart the \texttt{dhcp} service. Note the use of variable names for the
-desired compute hostnames, node IPs, and MAC addresses which should be modified to
-accommodate local settings and hardware. Included in these steps are commands
+desired compute hostnames, node IPs, and MAC addresses which should be modified
+to accommodate local settings and hardware.  By default, \Warewulf{} uses
+network interface names of the \texttt{eth\#} variety and adds kernel boot
+arguments to maintain this scheme on newer kernels. Consequently, when specifying
+the desired provisioning interface via the \texttt{\$eth\_provision} variable,
+it should follow this convention. Alternatively, if you prefer to use the
+predictable network interface naming scheme (e.g. names like \texttt{en4s0f0}),
+additional steps are included to alter the default kernel boot arguments and take
+the \texttt{eth\#} named interface down after bootrapping so the normal init
+process can bring it up again using the desired name.
+
+Also included in these steps are commands
 to enable \Warewulf{} to manage IPoIB settings and corresponding definitions of
 IPoIB addresses for the compute nodes. This is typically optional unless you
 are planning to include a \Lustre{} client mount over \InfiniBand{}. The final step
