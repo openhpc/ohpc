@@ -42,13 +42,13 @@ the downloads section of the latest
 #### Architecture = (x86_64)
 
 ###### [CentOS 7.3]
-* [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm) (md5sum=d5139cf3aa83d095e6851628e8a684fa)
+* [ohpc-release.x86_64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm) (md5sum=d5139cf3aa83d095e6851628e8a684fa)
 * [Install Guide (with PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/Install_guide-CentOS7-PBSPro-1.3-x86_64.pdf)
 * [Install Guide (with Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/Install_guide-CentOS7-SLURM-1.3-x86_64.pdf)
 * [Tar Archive](http://build.openhpc.community/dist/1.3/OpenHPC-1.3.CentOS_7_x86_64.tar) mirror of yum repository (md5sum=ea0f3c47c9bac45c401dedee13bc2804)
 
 ###### [SLES 12 SP2]
-* [ohpc-release.x86_64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.x86_64.rpm) (md5sum=0a5954a9520e067aeb09e5377e9964a2)
+* [ohpc-release.x86_64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.x86_64.rpm) (md5sum=0a5954a9520e067aeb09e5377e9964a2)
 * [Install Guide (with PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/Install_guide-SLE_12-PBSPro-1.3-x86_64.pdf)
 * [Install Guide (with Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/Install_guide-SLE_12-SLURM-1.3-x86_64.pdf)
 * [Tar Archive](http://build.openhpc.community/dist/1.3/OpenHPC-1.3.SLE_12_x86_64.tar) mirror of zypper repository (md5sum=e9fb908fcf51a3034721996c0c97501f)
@@ -60,12 +60,12 @@ the downloads section of the latest
 Note that ARM-based builds in this release are being provided as a **Technology Preview**. See [here](https://github.com/openhpc/ohpc/wiki/ARM-Tech-Preview) for latest info.
 
 ###### [CentOS 7.3]
-* [ohpc-release.aarch64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
+* [ohpc-release.aarch64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
 * [Install Guide (with Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/Install_guide-CentOS7-SLURM-1.3-aarch64.pdf)
 * [Tar Archive](http://build.openhpc.community/dist/1.3/OpenHPC-1.3.CentOS_7_aarch64.tar) mirror of yum repository (md5sum=087123b5624349b0b56873b956a0faa0)
 
 ###### [SLES 12 SP2]
-* [ohpc-release.aarch64.rpm] (https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.aarch64.rpm) (md5sum=706a42f7785952f8b543c501eeec05da)
+* [ohpc-release.aarch64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.aarch64.rpm) (md5sum=706a42f7785952f8b543c501eeec05da)
 * [Install Guide (with Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/Install_guide-SLE_12-SLURM-1.3-aarch64.pdf)
 * [Tar Archive](http://build.openhpc.community/dist/1.3/OpenHPC-1.3.SLE_12_aarch64.tar) mirror of zypper repository (md5sum=e11d4bb93c91eff173a673e672b42c46)
 
