@@ -1,0 +1,85 @@
+\clearpage
+
+\subsection{Customization} \label{appendix:customization}
+
+\subsubsection{Adding local Lmod modules to \OHPC{} hierarchy} \label{appendix:modulefiles}
+Locally installed applications can easily be integrated in to \OHPC{} systems by
+following the Lmod convention laid out by the provided packages. Two sample
+module files are included in the \texttt{examples-ohpc} package\textemdash one
+representing an application with no compiler or MPI runtime dependencies, and
+one dependent on OpenMPI and the \GNU{} toolchain. Simply copy these files to the
+prescribed locations, and the \texttt{lmod} application should pick them up
+automatically.
+
+\begin{lstlisting}[alsoletter={/,.},morekeywords={example1/1.0, example2/1.0}]
+[sms](*\#*) mkdir /opt/ohpc/pub/modulefiles/example1
+[sms](*\#*) cp /opt/ohpc/pub/examples/example.modulefile \
+    /opt/ohpc/pub/modulefiles/example1/1.0
+[sms](*\#*) mkdir /opt/ohpc/pub/moduledeps/gnu-openmpi/example2
+[sms](*\#*) cp /opt/ohpc/pub/examples/example-mpi-dependent.modulefile \
+    /opt/ohpc/pub/moduledeps/gnu-openmpi/example2/1.0
+[sms](*\#*) module avail
+
+----------------------------- /opt/ohpc/pub/moduledeps/gnu-openmpi -----------------------------
+   adios/1.11.0    mpiP/3.4.1              phdf5/1.8.17       superlu_dist/4.2
+   boost/1.63.0    mumps/5.0.2             scalapack/2.0.2    tau/2.26
+   example2/1.0    netcdf/4.4.1.1          scalasca/2.3.1     trilinos/12.10.1
+   fftw/3.3.4      netcdf-cxx/4.3.0        scipy/0.19.0
+   hypre/2.11.1    netcdf-fortran/4.4.4    scorep/3.0
+   imb/4.1         petsc/3.7.5             sionlib/1.7.0
+
+--------------------------------- /opt/ohpc/pub/moduledeps/gnu ---------------------------------
+   R_base/3.3.2    metis/5.1.0     numpy/1.11.1       openmpi/1.10.6 (L)
+   gsl/2.2.1       mpich/3.2       ocr/1.0.1          pdtoolkit/3.23
+   hdf5/1.8.17     mvapich2/2.2    openblas/0.2.19    superlu/5.2.1
+
+---------------------------------- /opt/ohpc/pub/modulefiles -----------------------------------
+   EasyBuild/3.1.2           example1/1.0        papi/5.4.3
+   autotools          (L)    gnu/5.4.0    (L)    prun/1.1        (L)
+   clustershell/1.7.2        ohpc         (L)    valgrind/3.11.0
+
+  Where:
+   L:  Module is loaded
+   D:  Default Module
+
+Use "module spider" to find all possible modules.
+Use "module keyword key1 key2 ..." to search for all possible modules matching
+any of the "keys".
+\end{lstlisting}
+
+\subsubsection{Rebuilding Packages from Source}  \label{appendix:rpmbuild}
+
+Users of \OHPC{} may find it desirable to rebuild one of the supplied packages
+to apply build customizations or satisfy local requirements. One way to
+accomplish this is to install the appropriate source RPM, modify the specfile
+as needed, and rebuild to obtain an updated binary RPM. A brief example using
+the FFTW library is highlighted below.  Note that the source RPMs can be downloaded from the
+community build server at \href{https://build.openhpc.community}
+{\color{blue}{https://build.openhpc.community}} via a web browser or directly
+via \texttt{rpm} as highlighted below. The \OHPC{} build system design
+leverages several keywords to control the choice of compiler and MPI families
+for relevant development libraries and the \texttt{rpmbuild} example
+illustrates how to override the default mpi\_family.
+
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
+    literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSRepo{}}1 {-}{-}1]
+# Install rpm-build package from base OS distro
+[test@sms ~]$ (*\install*) rpm-build
+
+# Download SRPM from OpenHPC repository and install locally
+[test@sms ~]$ rpm -i \
+  http://build.openhpc.community/OpenHPC:/VER/OSREPO/src/fftw-gnu-openmpi-ohpc-3.3.4-4.1.src.rpm
+
+# Modify spec file as desired
+[test@sms ~]$ cd ~/rpmbuild/SPECS
+[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/enable-static=no/enable-static=yes/" fftw.spec
+
+# Increment RPM release so package manager will see an update
+[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   4.1/Release:   5.1/" fftw.spec
+
+# Rebuild binary RPM. Note that additional directives can be specified to modify build
+[test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "mpi_family mvapich2" fftw.spec
+
+# As privileged user, install the new package
+[sms](*\#*) (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-gnu-mvapich2-ohpc-3.3.4-5.1.rpm
+\end{lstlisting}
