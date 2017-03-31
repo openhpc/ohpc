@@ -193,8 +193,8 @@ ocr-intel-ohpc 1.0.1 https://xstack.exascale-tech.com/wiki ohpc/runtimes Open Co
 openblas-gnu-ohpc 0.2.19 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
 openmpi-gnu-ohpc 1.10.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi-intel-ohpc 1.10.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-psm2-gnu-ohpc 1.10.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-psm2-intel-ohpc 1.10.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi-psm2-gnu-ohpc 1.10.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi-psm2-intel-ohpc 1.10.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 papi-ohpc 5.4.3 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 pbspro-client-ohpc 14.1.0 https://github.com/pbspro/pbspro ohpc/rms PBS Professional for a client host
 pbspro-execution-ohpc 14.1.0 https://github.com/pbspro/pbspro ohpc/rms PBS Professional for an execution host
