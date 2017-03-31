@@ -565,6 +565,7 @@ echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.c
 echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "SlurmdLogFile=/var/log/slurm.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "SlurmctldLogFile=/var/log/slurmctld.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
+echo "AccountingStorageType=accounting_storage/filetxt" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
@@ -1163,6 +1164,12 @@ if [ $1 = 1 ]; then
    [ -x /sbin/chkconfig ] && /sbin/chkconfig --add slurm
 fi
 %endif
+
+# 3/31/17 karl.w.schulz@intel.com - fix perm for txt accounting file possibility
+if [ ! -f /var/log/slurm_jobacct.log ];then
+    touch /var/log/slurm_jobacct.log
+    chown slurm: /var/log/slurm_jobacct.log
+fi
 
 if [ -x /sbin/ldconfig ]; then
     /sbin/ldconfig %{_libdir}
