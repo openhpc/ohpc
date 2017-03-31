@@ -73,6 +73,9 @@ License:   Tuning and Analysis Utilities License
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
+Source1:   OHPC_macros
+Source2:   OHPC_setup_compiler
+Source3:   OHPC_setup_mpi
 Patch1:    tau-2.26.forceshared.patch
 Patch2:    tau-add-explicit-linking-option.patch
 
@@ -218,6 +221,13 @@ ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
 %else
 ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi
 %endif
+ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi
+ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-profile-trace.so 
+popd
+
+# remove static libs
+pushd %{buildroot}%{install_path}/lib
+rm -rf \.*a static-*
 popd
 
 # OpenHPC module file

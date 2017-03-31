@@ -1,0 +1,6 @@
+Requires:       %{requires_kmod_name} = %{requires_kmod_version}
+Requires:       ldiskfsprogs >= 1.42.7.wc1
+Requires:       %{name}-osd-ldiskfs-mount = %{version}
+Provides:       %{name}-osd = %{version}
+Obsoletes:      %{name}-ldiskfs < %{version}
+Obsoletes:      %{name}-osd-ldiskfs < %{version}

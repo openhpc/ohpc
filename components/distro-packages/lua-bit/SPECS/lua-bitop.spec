@@ -30,6 +30,7 @@ Group:          %{PROJ_NAME}/distro-packages
 License:        MIT
 Url:            http://bitop.luajit.org
 Source0:        http://bitop.luajit.org/download/LuaBitOp-%{version}.tar.gz
+Source1:        OHPC_macros
 Patch0:         Makefile.patch
 BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
 

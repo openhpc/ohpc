@@ -15,12 +15,12 @@
 %define pname easybuild
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define vsc_base_ver 2.5.5
-%define vsc_install_ver 0.10.15
+%define vsc_base_ver 2.5.7
+%define vsc_install_ver 0.10.25
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   2.9.0
+Version:   3.1.2
 Release:   1
 License:   GPLv2
 Group:     System/Configuration
@@ -33,10 +33,7 @@ Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.t
 Source4:   https://pypi.io/packages/source/v/vsc-install/vsc-install-%{vsc_install_ver}.tar.gz
 Source5:   bootstrap_eb.py
 Source6:   OHPC_macros
-Source7:   easybuild-easyblocks_non-x86.patch
-Source8:   bootstrap_eb.py-apply-patch.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: patch
 BuildRequires: python
 BuildRequires: python-setuptools
 Requires: python-setuptools
@@ -66,29 +63,18 @@ mkdir %{buildroot}
 
 cd %{buildroot}
 cp %{_sourcedir}/*py .
-%ifnarch x86_64
-patch -p0 < %{_sourcedir}/bootstrap_eb.py-apply-patch.patch
-%endif
 
-export EASYBUILD_BOOTSTRAP_SKIP_STAGE0=1
 export EASYBUILD_BOOTSTRAP_SOURCEPATH=%{_sourcedir}
 export EASYBUILD_INSTALLPATH=%{install_path}
+export EASYBUILD_MODULE_SYNTAX=Tcl
 export PATH=${LMOD_DIR}:${PATH}
-# note: $EB_VERSION and $PYTHON_VERSION are only required because of bootstrap_eb.py-apply-patch.patch
-export EB_VERSION=%{version}
-export PYTHON_VERSION=`python -c 'print ".".join(map(str, __import__("sys").version_info[:2]))'`
 
 MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
 
-#%ifarch aarch64
-#rm %{buildroot}%{install_path}/modules/base/EasyBuild/%{version}
-#$else
-sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/modules/all/EasyBuild/2.9.0
-#%endif
 rm bootstrap_eb.py*
 pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
-rm 2.9.0
-ln -s ../../all/EasyBuild/2.9.0 .
+rm %version
+ln -s ../../all/EasyBuild/%version .
 popd
 
 # OHPC module file
@@ -99,7 +85,7 @@ popd
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} toolchain."
+puts stderr "This module loads %{pname}"
 puts stderr "\nVersion %{version}\n"
 
 }
@@ -107,7 +93,7 @@ module-whatis "Name: %{pname}"
 module-whatis "Version: %{version}"
 module-whatis "Category: system tool"
 module-whatis "Description: %{summary}"
-module-whatis "URL: http://hpcugent.github.com/easybuild/"
+module-whatis "URL: http://hpcugent.github.io/easybuild/"
 
 set             version                 %{version}
 set             home                    \$::env(HOME)

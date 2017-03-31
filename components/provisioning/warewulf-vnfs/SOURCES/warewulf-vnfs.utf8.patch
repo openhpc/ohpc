@@ -1,28 +1,19 @@
---- warewulf-vnfs-3.6/bin/wwvnfs	2014-05-21 11:13:14.000000000 -0700
-+++ warewulf-vnfs-3.6.patch/bin/wwvnfs	2014-10-22 10:34:46.454781400 -0700
-@@ -24,6 +24,7 @@
-     require "sys/types.ph";
-     require "syscall.ph";
- }
-+use Encode;
- 
- my $sysconfdir = Warewulf::ACVars::get('SYSCONFDIR');
- my $config = Warewulf::Config->new("vnfs.conf");
-@@ -303,7 +304,7 @@
+--- warewulf-vnfs-3.7/bin/wwvnfs	2017-02-22 09:32:02.000000000 -0800
++++ warewulf-vnfs-3.7.patch/bin/wwvnfs	2017-02-23 20:44:05.000000000 -0800
+@@ -347,14 +347,13 @@
  sub
  vnfs_create_file($)
  {
--    my $path = $File::Find::name;
-+    my $path = decode_utf8($File::Find::name);
+-    my $path = decode_utf8($File::Find::name);
++    my $path = $File::Find::name;
  
      if ($path) {
          if ($path =~ /^\Q$opt_chroot\E([[:print:]]*)$/) {
-@@ -328,7 +329,7 @@
-         my ($dev, $ino, $mode, $nlink, $uid, $gid, $rdev, $size, $atime, $mtime) = lstat("$opt_chroot/$path");
+             $path = $1;
+         } else {
+-            &eprint("Path '$path' did not pass untaint check, skipping.\n");
+-            return;
++            $path = encode_utf8($1);
+         }
+     }
  
-         if (S_ISLNK($mode)) {
--            my $destination = readlink("$opt_chroot/$path");
-+            my $destination = decode_utf8(readlink("$opt_chroot/$path"));
-             &dprint("Creating symbolic link: $tmpdir/$path -> $destination\n");
-             if ($destination =~ /^([[:print:]]+)$/) {
-                 $destination = $1;

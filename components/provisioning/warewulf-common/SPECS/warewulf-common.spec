@@ -16,17 +16,20 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname warewulf-common
+%define dname common
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
-Version: 3.6
+Version: 3.7pre
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-common/warewulf-common-%{version}.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
+BuildRequires: autoconf
+BuildRequires: automake
 DocDir: %{OHPC_PUB}/doc/contrib
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
@@ -36,13 +39,10 @@ BuildArch: noarch
 BuildRoot: %{?_tmppath}/%{pname}-%{version}-%{release}-root
 # 09/10/14 charles.r.baird@intel.com - patch to add SuSE as a system type
 Patch1: warewulf-common.system.patch
-# 09/10/14 charles.r.baird@intel.com - patch to add mariadb as a datastore
-Patch2: warewulf-common.mariadb.patch
-# 04/14/16 charles.r.baird@intel.com - patch to add init module
-Patch3: warewulf-common.init.patch
 # 04/01/16 karl.w.schulz@intel.com - patch to enable DB transaction handling from WW trunk
-Patch4: mysql.r1978.patch
-# 05/23/14 charles.r.baird@intel.com - alternate package names for SuSE
+Patch2: mysql.r1978.patch
+# 02/22/17 charles.r.baird@intel.com - alternate package names for SuSE
+Patch3 : warewulf-common.dbinit.patch
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else
@@ -67,19 +67,22 @@ supporting libs.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n warewulf3-%{version}.ohpc1.3
+cd %{dname}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p0
 
 
 %build
+cd %{dname}
+./autogen.sh
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
 
 
 %install
+cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
@@ -102,9 +105,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
+%{_sysconfdir}/bash_completion.d/warewulf_completion
 %{OHPC_HOME}
 %{OHPC_PUB}
-%doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
+%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/defaults/
 %attr(0444, root, warewulf) %{_sysconfdir}/warewulf/functions

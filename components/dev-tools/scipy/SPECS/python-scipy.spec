@@ -83,7 +83,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        0.18.0
+Version:        0.19.0
 Release:        1
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
@@ -92,6 +92,9 @@ Url:            http://www.scipy.org
 DocDir:         %{OHPC_PUB}/doc/contrib
 Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 BuildRequires:  blas-devel
+Source1:        OHPC_macros
+Source2:        OHPC_setup_compiler
+Source3:        OHPC_setup_mpi
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif

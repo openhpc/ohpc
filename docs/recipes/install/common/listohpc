@@ -33,8 +33,7 @@ fi
 
 echo
 echo ++++ list of OpenHPC package groups
-#groups=`grep -o 'ohpc/[^ ]*' pkg-ohpc.all | sort -u | cut -c5-`
-groups=`grep -o 'ohpc/[^ ]*' pkg-ohpc.all | sort -u | cut -d '/' -f 2`
+groups=`grep -o '\sohpc/[^ ]*' pkg-ohpc.all | sort -u | cut -d '/' -f 2`
 
 echo $groups
 echo

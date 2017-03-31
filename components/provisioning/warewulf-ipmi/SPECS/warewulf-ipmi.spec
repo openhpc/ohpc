@@ -14,6 +14,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname warewulf-ipmi
+%define dname ipmi
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
 
@@ -25,16 +26,17 @@
 
 Name: %{rpmname}
 Summary: IPMI Module for Warewulf
-Version: 3.6
+Version: 3.7pre
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
-Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-ipmi/warewulf-ipmi-%{version}.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source1: OHPC_macros
-Patch0: warewulf-ipmi-3.6-config_guess.patch
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
@@ -50,17 +52,17 @@ adding IPMI functionality.
 
 
 %prep
-%setup -n %{pname}-%{version}
-%ifarch aarch64
-%patch0 -p1
-%endif
+%setup -n warewulf3-%{version}.ohpc1.3
 
 %build
+cd %{dname}
+./autogen.sh
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
 
 
 %install
+cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
@@ -72,7 +74,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %{OHPC_PUB}
-%doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO
+%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO
 %{wwpkgdir}/*
 %{_libexecdir}/warewulf/ipmitool
 %{perl_vendorlib}/Warewulf/Ipmi.pm

@@ -23,7 +23,7 @@ if(defined $ENV{'OverWritePrevoius'} ) {
 } 
 
 my @arches = ('aarch64', 'x86_64');
-my @distros = ('SLE_12_SP1','CentOS_7.2');
+my @distros = ('SLE_12','CentOS_7');
 
 my $base_repo_path = "/srv/obs/repos/OpenHPC:";
 my $dest_dir = "/srv/www/dist/$release";

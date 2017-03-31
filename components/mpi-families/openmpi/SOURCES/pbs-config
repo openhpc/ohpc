@@ -49,7 +49,8 @@ case "$1" in
 	libdir="$PBS_EXEC/lib"
 	[ -d "$libdir" ] || libdir="$PBS_EXEC/lib64"
 	[ -d "$libdir" ] || exit 1
-	echo "-L$libdir -lpbs -lpthread -lssl"
+#	echo "-L$libdir -lpbs -lpthread -lssl"
+	echo "$libdir/libpbs.a -lpthread"
 	;;
 *)
 	exit 1

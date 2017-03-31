@@ -5,7 +5,7 @@ TEST_LOGS=""
 MAKEFLAGS=""
 status=0
 
-source ./TEST_ENV         || exit 1
+source ./common/TEST_ENV  || exit 1
 source ./common/functions || exit 1
 
 cd dev-tools/valgrind || exit 1

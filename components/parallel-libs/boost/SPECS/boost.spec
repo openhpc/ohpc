@@ -89,9 +89,9 @@ Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.61.0
+Version:        1.63.0
 
-%define version_exp 1_61_0
+%define version_exp 1_63_0
 
 Release:        0
 License:        BSL-1.0
@@ -108,11 +108,17 @@ Source103:	OHPC_setup_mpi
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:         %{OHPC_PUB}/doc/contrib
 
+%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
+BuildRequires:  bzip2-devel
+BuildRequires:  expat-devel
+BuildRequires:  xorg-x11-server-devel
+%else
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
+BuildRequires:  xorg-x11-devel
+%endif
 BuildRequires:  libicu-devel >= 4.4
 BuildRequires:  python-devel
-BuildRequires:  xorg-x11-devel
 BuildRequires:  zlib-devel
 
 # (Tron: 3/4/16) Add libicu dependency for SLES12sp1 as the distro does not seem to have it by default and some tests are failing

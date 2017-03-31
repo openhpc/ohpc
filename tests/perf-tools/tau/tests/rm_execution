@@ -1,11 +1,11 @@
-#!../../../common/bats/bin/bats
+#!./common/bats/bin/bats
 # -*-sh-*-
 
-load ../../../common/test_helper_functions || exit 1
-source ../../../common/functions || exit 1
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
 
-if [ -s ../../../TEST_ENV ];then
-    source ../../../TEST_ENV
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
 fi
 
 check_rms
@@ -14,7 +14,7 @@ rm=$RESOURCE_MANAGER
 NODES=2
 TASKS=8
 ARGS=8
-MAX_THREADS=`./get_max_threads`
+MAX_THREADS=`tau_exec ./get_max_threads`
 LAST_THREAD_INDEX=`echo "$MAX_THREADS -1" | bc`
 LAST_TASK_INDEX=`echo "$TASKS -1" | bc`
 
@@ -30,7 +30,7 @@ unset OMP_NUM_THREADS
     run_mpi_binary "tau_exec ./C_mpi_test" $ARGS $NODES $TASKS
     assert_success
 
-    ls profile.$LAST_TASK_INDEX.0.0
+    run ls profile.$LAST_TASK_INDEX.0.0
     assert_success
 
     rm -rf profile*

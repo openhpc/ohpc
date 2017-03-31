@@ -1,10 +1,10 @@
-#!../../../../common/bats/bin/bats 
+#!./common/bats/bin/bats 
 # -*-sh-*-
 
-source ../../../../common/test_helper_functions.bash || exit 1
+source ./common/test_helper_functions.bash || exit 1
 
-if [ -s ../../../../TEST_ENV ];then
-    source ../../../../TEST_ENV
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
 fi
 
 PKG=FFTW
@@ -13,7 +13,7 @@ library=libfftw3
 header=fftw3.h
 rpm=fftw-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
-@test "[$PKG] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
+@test "[$PKG] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     module list $module | grep "1) $module" >& .cmd_output || exit 1
     run grep $module .cmd_output 
     assert_success
@@ -24,7 +24,7 @@ rpm=fftw-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
     assert_output "  1) $module/$version"
 }
 
-@test "[$PKG] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[$PKG] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     DIR=${PKG}_DIR
     if [ -z ${!DIR} ];then
         flunk "${PKG}_DIR directory not defined"
@@ -39,7 +39,7 @@ rpm=fftw-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 # Lib Tests
 # ----------
 
-@test "[$PKG] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[$PKG] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
@@ -51,7 +51,7 @@ rpm=fftw-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
     fi 
 }
 
-@test "[$PKG] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
+@test "[$PKG] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
@@ -63,7 +63,7 @@ rpm=fftw-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
     fi 
 }
 
-@test "[$PKG] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
+@test "[$PKG] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
@@ -79,7 +79,7 @@ rpm=fftw-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 # Include Tests
 # --------------
 
-@test "[$PKG] Verify module ${PKG}_INC is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[$PKG] Verify module ${PKG}_INC is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     INC=${PKG}_INC
 
     if [ -z ${!INC} ];then
@@ -91,7 +91,7 @@ rpm=fftw-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
     fi 
 }
 
-@test "[$PKG] Verify header file is present in ${PKG}_INC ($LMOD_FAMILY_COMPILER)" {
+@test "[$PKG] Verify header file is present in ${PKG}_INC ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     INC=${PKG}_INC
 
     if [ -z ${!INC} ];then

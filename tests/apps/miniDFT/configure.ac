@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([miniDFT], [0.10.0], [karl.w.schulz@intel.com])
+AC_INIT([miniDFT], [0.10.0], [https://github.com/openhpc/ohpc])
 AM_INIT_AUTOMAKE
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 

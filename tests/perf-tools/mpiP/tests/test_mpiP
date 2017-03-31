@@ -4,8 +4,8 @@
 source ./common/test_helper_functions.bash || exit 1
 source ./common/functions || exit 1
 
-if [ -s ./TEST_ENV ];then
-    source ./TEST_ENV
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
 fi
 
 check_rms
@@ -58,15 +58,27 @@ rpm=mpiP-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
     fi 
 }
 
-@test "[$testname] Verify static library is available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$testname] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
         flunk "${PKG}_LIB directory not defined"
     fi
 
-    if [ ! -e ${!LIB}/${library}.a ];then
-        flunk "${library}.a does not exist when expecting it"
+    if [ -e ${!LIB}/${library}.a ];then
+        flunk "${library}.a exists but not expecting it"
+    fi 
+}
+
+@test "[$testname] Verify dynamic library is available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -e ${!LIB}/${library}.so ];then
+        flunk "${library}.so does not exist when expecting it"
     fi 
 }
 

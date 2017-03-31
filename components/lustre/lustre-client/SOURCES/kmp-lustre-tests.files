@@ -1,0 +1,1 @@
+%{modules_fs_path}/%{lustre_name}-tests/fs/llog_test.ko

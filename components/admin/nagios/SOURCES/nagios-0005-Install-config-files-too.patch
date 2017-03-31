@@ -1,18 +1,6 @@
-From e0ddbf70a34c00f05d392bb85415163946623d63 Mon Sep 17 00:00:00 2001
-From: Peter Lemenkov <lemenkov@gmail.com>
-Date: Thu, 23 Sep 2010 21:21:28 +0400
-Subject: [PATCH 05/11] Install config-files too
-
-Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
----
- Makefile.in |    2 +-
- 1 files changed, 1 insertions(+), 1 deletions(-)
-
-diff --git a/Makefile.in b/Makefile.in
-index c6e823d..801a6fd 100644
---- a/Makefile.in
-+++ b/Makefile.in
-@@ -356,7 +356,7 @@ install-commandmode:
+--- nagios-4.3.1/Makefile.in	2017-02-23 12:00:40.000000000 -0800
++++ nagios-4.3.1.patch/Makefile.in	2017-02-27 15:05:49.000000000 -0800
+@@ -376,7 +377,7 @@
  	doxygen doxy.conf
  
  
@@ -21,6 +9,3 @@ index c6e823d..801a6fd 100644
  
  # Uninstall is too destructive if base install directory is /usr, etc.
  #uninstall:
--- 
-1.7.3.5
-

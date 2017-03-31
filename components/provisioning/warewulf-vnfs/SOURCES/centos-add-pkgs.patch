@@ -1,8 +1,0 @@
---- warewulf-vnfs-3.5/libexec/wwmkchroot/centos-6.tmpl	2014-09-19 10:35:13.000000000 -0700
-+++ warewulf-vnfs-3.5/libexec/wwmkchroot/centos-6.tmpl	2014-09-19 10:35:28.000000000 -0700
-@@ -16,7 +16,7 @@
-     sed setup shadow-utils rsyslog tcp_wrappers tzdata util-linux words zlib \
-     tar less gzip which util-linux module-init-tools udev openssh-clients \
-     openssh-server dhclient pciutils vim-minimal shadow-utils strace cronie \
--    crontabs cpuspeed cpufrequtils cpio wget"
-+    crontabs cpuspeed cpufrequtils cpio wget yum numactl"

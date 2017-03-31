@@ -90,7 +90,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.4.1
+Version:        4.4.1.1
 Release:        1
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 DocDir:         %{OHPC_PUB}/doc/contrib
@@ -102,6 +102,7 @@ Source103:	OHPC_setup_mpi
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  zlib-devel >= 1.2.5
+BuildRequires:  m4
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 

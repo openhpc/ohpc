@@ -1,7 +1,6 @@
-diff -ruN nagios/sample-config/nagios.cfg.in nagios-modified/sample-config/nagios.cfg.in
---- nagios/sample-config/nagios.cfg.in	2012-11-12 18:33:37.000000000 +0000
-+++ nagios-modified/sample-config/nagios.cfg.in	2013-04-24 00:59:54.380245378 +0100
-@@ -54,6 +54,8 @@
+--- nagios-4.3.1/sample-config/nagios.cfg.in	2017-02-23 12:00:40.000000000 -0800
++++ nagios-4.3.1.patch/sample-config/nagios.cfg.in	2017-02-28 12:51:59.000000000 -0800
+@@ -53,6 +53,8 @@
  #cfg_dir=@sysconfdir@/switches
  #cfg_dir=@sysconfdir@/routers
  

@@ -1,0 +1,3 @@
+%defattr(-,root,root)
+%{modules_fs_path}/%{lustre_name}-osd-ldiskfs/fs/ldiskfs.ko
+%{modules_fs_path}/%{lustre_name}-osd-ldiskfs/fs/osd_ldiskfs.ko

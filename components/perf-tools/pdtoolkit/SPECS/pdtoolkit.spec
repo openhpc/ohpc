@@ -17,7 +17,6 @@
 # mechanisms.
 
 %{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family:      %global mpi_family openmpi}
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
@@ -45,13 +44,15 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        3.22
+Version:        3.23
 Release:        1
 License:        Program Database Toolkit License
 Summary:        PDT is a framework for analyzing source code
 Url:            http://www.cs.uoregon.edu/Research/pdt
 Group:          %{PROJ_NAME}/perf-tools
 Source:         https://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/pdtoolkit-%{version}.tar.gz
+Source1:        OHPC_macros
+Source2:        OHPC_setup_compiler
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -79,6 +80,7 @@ export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
 
 ./configure -prefix=%buildroot%{install_path} \
+        -useropt=-fPIC \
 %if %{compiler_family} == intel 
         -icpc
 %else
@@ -106,6 +108,12 @@ rm -f %buildroot%{install_path}/.last_config
 %else
 %define arch_dir x86_64
 %endif
+
+pushd %buildroot%{install_path}/%{arch_dir}/lib
+ar x libpdb.a
+$CXX -z muldefs -shared -o libpdb.so *.o
+rm libpdb.a *\.o
+popd
 
 pushd %buildroot%{install_path}/%{arch_dir}/bin
 sed -i 's|%{buildroot}||g' $(egrep -IR '%{buildroot}' ./|awk -F : '{print $1}')
@@ -175,11 +183,11 @@ set     version                     %{version}
 prepend-path    PATH                %{install_path}/%{arch_dir}/bin
 prepend-path    MANPATH             %{install_path}/man
 prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    LD_LIBRARY_PATH     %{install_path}/%{arch_dir}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/%{arch_dir}/bin
-setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_LIB        %{install_path}/%{arch_dir}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF

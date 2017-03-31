@@ -105,8 +105,8 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 
-Version: 16.05.8
-%define ver_exp 16-05-8-1
+Version: 16.05.10
+%define ver_exp 16-05-10-1
 
 Release:   %{?dist}
 Summary:   Slurm Workload Manager
@@ -116,6 +116,7 @@ Group:     %{PROJ_NAME}/rms
 Source:    https://github.com/SchedMD/slurm/archive/%{pname}-%{ver_exp}.tar.gz
 #Source:    http://www.schedmd.com/download/archive/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
+Source2:   rpmmacros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
 DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://slurm.schedmd.com/
@@ -160,7 +161,7 @@ BuildRequires: readline-devel
 
 %if %{slurm_with openssl}
 %if 0%{?suse_version}
-BuildRequires: libopenssl0_9_8
+BuildRequires: libopenssl-devel openssl
 %else
 BuildRequires: openssl-devel >= 0.9.6 openssl >= 0.9.6
 %endif
@@ -227,6 +228,9 @@ Requires(pre):  pwdutils
 Requires(pre):  shadow-utils
 %endif
 %endif
+
+#needed to enable jobcomp_elasticsearch plugin
+BuildRequires: curl-devel
 
 %description
 Slurm is an open source, fault-tolerant, and highly
@@ -561,6 +565,7 @@ echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.c
 echo "PropagateResourceLimitsExcept=MEMLOCK" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "SlurmdLogFile=/var/log/slurm.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "SlurmctldLogFile=/var/log/slurmctld.log" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
+echo "AccountingStorageType=accounting_storage/filetxt" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
@@ -617,7 +622,6 @@ rm -f $RPM_BUILD_ROOT/lib64/security/pam_slurm_adopt.la
 rm -f $RPM_BUILD_ROOT/%{_libdir}/slurm/auth_none.so
 %endif
 %if ! %{slurm_with bluegene}
-rm -f $RPM_BUILD_ROOT/%{_libdir}/slurm/job_submit_cnode.so
 rm -f $RPM_BUILD_ROOT/%{_libdir}/slurm/libsched_if.so
 rm -f $RPM_BUILD_ROOT/%{_libdir}/slurm/libsched_if64.so
 rm -f $RPM_BUILD_ROOT/%{_libdir}/slurm/runjob_plugin.so
@@ -887,7 +891,7 @@ rm -rf $RPM_BUILD_ROOT
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
-%config %{_sysconfdir}/slurm.conf
+%config (noreplace) %{_sysconfdir}/slurm.conf
 %endif
 
 # 11/13/14 karl.w.schulz@intel.com - include systemd files 
@@ -952,7 +956,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/slurm_epilog
 %{_sbindir}/slurm_prolog
 %{_sbindir}/sfree
-%{_libdir}/slurm/job_submit_cnode.so
 %config %{_sysconfdir}/bluegene.conf.example
 %endif
 #############################################################################
@@ -1161,6 +1164,12 @@ if [ $1 = 1 ]; then
    [ -x /sbin/chkconfig ] && /sbin/chkconfig --add slurm
 fi
 %endif
+
+# 3/31/17 karl.w.schulz@intel.com - fix perm for txt accounting file possibility
+if [ ! -f /var/log/slurm_jobacct.log ];then
+    touch /var/log/slurm_jobacct.log
+    chown slurm: /var/log/slurm_jobacct.log
+fi
 
 if [ -x /sbin/ldconfig ]; then
     /sbin/ldconfig %{_libdir}

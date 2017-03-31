@@ -1,0 +1,62 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for adios
+adios-gnu-mpich-ohpc & 
+\multirow{2}{*}{1.11.0} & 
+\multirow{2}{\linewidth}{The Adaptable IO System (ADIOS). \newline {\color{logoblue} \url{http://www.olcf.ornl.gov/center-projects/adios}}} \\ 
+adios-gnu-openmpi-ohpc & 
+& \\ 
+\hline
+% <-- end entry for adios
+
+% <-- begin entry for hdf5
+\multirow{2}{*}{hdf5-gnu-ohpc} & 
+\multirow{2}{*}{1.8.17} & 
+A general purpose library and file format for storing scientific data.  {\color{logoblue} \url{http://www.hdfgroup.org/HDF5}} \\ 
+\hline
+% <-- end entry for hdf5
+
+% <-- begin entry for netcdf-cxx
+netcdf-cxx-gnu-mpich-ohpc & 
+\multirow{2}{*}{4.3.0} & 
+\multirow{2}{\linewidth}{C++ Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}} \\ 
+netcdf-cxx-gnu-openmpi-ohpc & 
+& \\ 
+\hline
+% <-- end entry for netcdf-cxx
+
+% <-- begin entry for netcdf-fortran
+netcdf-fortran-gnu-mpich-ohpc & 
+\multirow{2}{*}{4.4.4} & 
+\multirow{2}{\linewidth}{Fortran Libraries for the Unidata network Common Data Form. {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}} \\ 
+netcdf-fortran-gnu-openmpi-ohpc & 
+& \\ 
+\hline
+% <-- end entry for netcdf-fortran
+
+% <-- begin entry for netcdf
+netcdf-gnu-mpich-ohpc & 
+\multirow{2}{*}{4.4.1.1} & 
+\multirow{2}{\linewidth}{C Libraries for the Unidata network Common Data Form. \newline {\color{logoblue} \url{http://www.unidata.ucar.edu/software/netcdf}}} \\ 
+netcdf-gnu-openmpi-ohpc & 
+& \\ 
+\hline
+% <-- end entry for netcdf
+
+% <-- begin entry for phdf5
+phdf5-gnu-mpich-ohpc & 
+\multirow{2}{*}{1.8.17} & 
+\multirow{2}{\linewidth}{A general purpose library and file format for storing scientific data.  {\color{logoblue} \url{http://www.hdfgroup.org/HDF5}}} \\ 
+phdf5-gnu-openmpi-ohpc & 
+& \\ 
+\hline
+% <-- end entry for phdf5
+
+\bottomrule
+\end{tabularx}

@@ -1,25 +1,6 @@
-From b7e868f3de5dc612f8f6f6ba259a34696f7d6f28 Mon Sep 17 00:00:00 2001
-From: Peter Lemenkov <lemenkov@gmail.com>
-Date: Tue, 25 Jan 2011 14:47:44 +0300
-Subject: [PATCH 11/11] Fixed strange permissions
-
-The main executable binaries  have strange permissions - 774.
-This patch changes them to mmore sane 755.
-
-See rhbz #672074 for the details:
-
-https://bugzilla.redhat.com/672074
-
-Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
----
- base/Makefile.in |    4 ++--
- 1 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/base/Makefile.in b/base/Makefile.in
-index c4a20ba..fc1c9e3 100644
---- a/base/Makefile.in
-+++ b/base/Makefile.in
-@@ -203,8 +203,8 @@ install-unstripped:
+--- nagios-4.3.1/base/Makefile.in	2017-02-23 12:00:40.000000000 -0800
++++ nagios-4.3.1.patch/base/Makefile.in	2017-02-27 15:17:58.000000000 -0800
+@@ -181,8 +181,8 @@
  
  install-basic:
  	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(DESTDIR)$(BINDIR)
@@ -30,6 +11,3 @@ index c4a20ba..fc1c9e3 100644
  
  strip-post-install:
  	$(STRIP) $(DESTDIR)$(BINDIR)/@nagios_name@
--- 
-1.7.3.5
-

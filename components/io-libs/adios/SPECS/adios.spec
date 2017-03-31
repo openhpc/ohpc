@@ -69,7 +69,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 1.10.0
+Version: 1.11.0
 Release: 1
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
@@ -78,6 +78,7 @@ Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz 
 Source1: OHPC_macros
 Source2: OHPC_setup_compiler
+Source3: OHPC_setup_mpi
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
@@ -129,10 +130,6 @@ sed -i 's|@BUILDROOT@|%buildroot|' wrappers/numpy/setup*
 LIBSUFF=64
 %endif
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
-
-pushd %{_sourcedir}
-cp -p adios.spec %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}.spec
-popd
 
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
@@ -224,15 +221,11 @@ export PATH=$(pwd):$PATH
 module load openblas
 %endif
 module load numpy
-export CFLAGS="-I%buildroot%{install_path}/include -I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
+export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
 make MPI=y python
 python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
-
-%if 0%{?rhel_version} || 0%{?centos_version}
-	find $RPM_BUILD_ROOT -type f -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
-%endif
 
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \

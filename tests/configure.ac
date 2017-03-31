@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([test-suite], [1.0.0], [karl.w.schulz@intel.com])
+AC_INIT([test-suite], [1.3.0], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.14])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -88,12 +88,7 @@ AC_ARG_ENABLE([oob],
 	 [],[enable_oob=yes])
 AM_CONDITIONAL(OOB_ENABLED,test "x$enable_oob" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# Lustre
-AC_ARG_ENABLE([lustre],
-	 [AS_HELP_STRING([--enable-lustre],[Enable Lustre utility tests (default=no, root only)])],
-	 [],[enable_lustre=no])
-AM_CONDITIONAL(LUSTRE_ENABLED,test "x$enable_lustre" = "xyes" ) 
-#------------------------------------------------------------------------------------------
+
 # spack
 AC_ARG_ENABLE([spack],
 	 [AS_HELP_STRING([--enable-spack],[Enable spack tests (default=yes, root only)])],
@@ -103,7 +98,6 @@ AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" )
 #-----------------
 # User level tests
 #-----------------
-
 
 
 #------------------------------------------------------------------------------------------
@@ -118,6 +112,12 @@ AC_ARG_ENABLE([R],
    [AS_HELP_STRING([--enable-R],[Enable R tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_R,yes)])
 AM_CONDITIONAL(R_ENABLED,test "x$enable_R" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# Lustre
+AC_ARG_ENABLE([lustre],
+   [AS_HELP_STRING([--enable-lustre],[Enable Lustre utility tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_lustre,no)])
+AM_CONDITIONAL(LUSTRE_ENABLED,test "x$enable_lustre" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # mpiP
 AC_ARG_ENABLE([mpiP],
@@ -384,6 +384,7 @@ echo Build user.................... : $USER
 echo Build host.................... : ${ac_hostname}
 echo Configure date................ : `date +'%F %H:%M'`
 echo Build architecture............ : ${host_cpu}
+echo Compiler Families............. : ${COMPILER_FAMILIES}
 echo MPI Families.................. : ${MPI_FAMILIES}
 if test "x$enable_slurm" = "xyes" ; then
    echo Resource manager ............. : SLURM
@@ -415,11 +416,7 @@ if test "x$ROOT_ENABLED" = "x1" ; then
     else 
        echo '    'Hardware benchmarks....... : disabled
     fi
-    if test "x$enable_lustre" = "xyes"; then
-       echo '    'Lustre client............. : enabled
-    else
-       echo '    'Lustre client............. : disabled
-    fi
+
     if test "x$enable_spack" = "xyes"; then
        echo '    'Spack..................... : enabled
     else
@@ -463,6 +460,12 @@ echo    User Environment:
        echo '    'Modules................... : enabled
     else
        echo '    'Modules................... : disabled
+    fi
+
+    if test "x$enable_lustre" = "xyes"; then
+       echo '    'Lustre client............. : enabled
+    else
+       echo '    'Lustre client............. : disabled
     fi
 
     if test "x$enable_oom" = "xyes"; then

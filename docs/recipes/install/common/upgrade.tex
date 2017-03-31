@@ -1,0 +1,54 @@
+\subsection{Upgrading OpenHPC Packages}  \label{appendix:upgrade}
+
+
+As newer \OHPC{} releases are made available, users are encouraged to upgrade
+their locally installed packages against the latest repository versions to
+obtain access to bug fixes and newer component versions. This can be
+accomplished with the underlying package manager as \OHPC{} packaging maintains
+versioning state across releases. Also, package builds available from the
+\OHPC{} repositories have ``\texttt{-ohpc}'' appended to their names so
+wildcards can be used as a simple way to obtain updates. The following general
+procedure highlights a method for upgrading existing installations.  Note that
+when upgrading from a minor release older than v\OHPCVerTree{}, you will first
+need to update your local \OHPC{} repository configuration to point against the
+v\OHPCVerTree{} release (or update your locally hosted mirror). Refer to
+\S\ref{sec:enable_repo} for more details on enabling the latest
+repository. Alternatively, when upgrading between micro releases on the same
+branch (e.g. from v\OHPCVerTree{} to \OHPCVerTree{}.1), there is no need to
+adjust local package manager configurations when using the public repository as
+rolling updates are pre-configured.
+ 
+\begin{enumerate*}
+\item (Optional) Ensure repo metadata is current (on head node and in chroot
+  location(s)). Package managers will naturally do this on their own over time,
+  but if you are wanting to access updates immediately after a new release,
+  the following can be used to sync to the latest.
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*)  (*\clean*)
+[sms](*\#*)  (*\chrootclean*)
+\end{lstlisting}
+
+\item Upgrade master (SMS) node
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*)  (*\upgrade*) "*-ohpc"
+\end{lstlisting}
+  
+\item Upgrade packages in compute image
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*)  (*\chrootupgrade) "*-ohpc"
+\end{lstlisting}
+  
+\item Rebuild VNFS image(s)
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) wwvnfs --chroot $CHROOT
+\end{lstlisting}
+
+\end{enumerate*}
+
+\noindent In the case where packages were upgraded in the assembled VNFS compute image,
+you will need to reboot the compute nodes when convenient to enable the
+changes.

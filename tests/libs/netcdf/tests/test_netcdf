@@ -1,11 +1,11 @@
-#!../../../common/bats/bin/bats
+#!./common/bats/bin/bats
 # -*-sh-*-
 
 load ./common/test_helper_functions
 source ./common/functions || exit 1
 
-if [ -s ./TEST_ENV ];then
-    source ./TEST_ENV
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
 fi
 
 check_rms
@@ -58,8 +58,24 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
     run run_serial_binary ./C_read
     assert_success
 
-    run cmp simple_xy_nc4.nc simple_xy_nc4.nc.ref 
+    # Verify contents against C ref
+
+    ncdump -n test simple_xy_nc4.nc.ref > .c.data.ascii
+    ncdump -n test simple_xy_nc4.nc     > .test.data.ascii
+
+    run ls .c.data.ascii
     assert_success
+
+    run ls .test.data.ascii
+    assert_success
+
+    run diff .c.data.ascii .test.data.ascii
+    assert_success
+
+    rm -f .c.data.ascii
+    rm -f .test.data.ascii
+    rm -f simple_xy_nc4.nc
+
 }
 
 

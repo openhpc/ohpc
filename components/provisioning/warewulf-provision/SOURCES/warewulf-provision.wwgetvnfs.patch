@@ -1,0 +1,23 @@
+--- warewulf-provision-3.7/initramfs/capabilities/transport-http/wwgetvnfs	2017-02-22 09:32:02.000000000 -0800
++++ warewulf-provision-3.7.patch/initramfs/capabilities/transport-http/wwgetvnfs	2017-02-25 11:03:08.000000000 -0800
+@@ -27,12 +27,19 @@
+         fi
+ 
+         gunzip < /tmp/vnfs-download | bsdtar -pxf - &
++	WAIT_PID=$!
++	
+         #gunzip < /tmp/vnfs-download | tar -xf - &
+ 
+         wget -O /tmp/vnfs-download http://$master/WW/vnfs?hwaddr=$WWINIT_HWADDR 2>&1
+         WGETEXIT=$?
+ 
+-        wait
++	if [ $WGETEXIT -ne 0 ];then
++	    kill -9 $WAIT_PID
++	    continue
++	fi
++
++        wait $WAIT_PID
+         if [ -f "$NEWROOT/sbin/init" ]; then
+             echo
+             exit 0

@@ -5,6 +5,8 @@
 
 // Test case for skewness.hpp
 
+#define BOOST_TEST_MODULE accumulators
+#define BOOST_TEST_DYN_LINK
 #include <boost/random.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -14,7 +16,6 @@
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
 #include <boost/accumulators/statistics/skewness.hpp>
-#include <boost/test/included/unit_test.hpp>
 
 using namespace boost;
 using namespace unit_test;
@@ -56,15 +57,8 @@ void test_stat()
     BOOST_CHECK_CLOSE( skewness(acc2), 0.406040288214, 1e-6 );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// init_unit_test_suite
-//
-test_suite* init_unit_test_suite( int argc, char* argv[] )
+BOOST_AUTO_TEST_CASE( accumulate_skewness )
 {
-    test_suite *test = BOOST_TEST_SUITE("skewness test");
-
-    test->add(BOOST_TEST_CASE(&test_stat));
-
-    return test;
+  test_stat();
 }
 

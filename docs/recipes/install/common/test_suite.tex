@@ -1,0 +1,113 @@
+\clearpage
+\subsection{Integration Test Suite}  \label{appendix:test_suite}
+
+This appendix details the installation and basic use of the integration test
+suite used to support \OHPC{} releases. This suite is not intended to replace
+the validation performed by component development teams, but is instead,
+devised to confirm component builds are functional and interoperable within
+the modular \OHPC{} environment.
+The test suite is generally organized by components and the \OHPC{} CI workflow
+relies on running the full suite using \href{https://jenkins.io}{\color{blue}{Jenkins}} to test
+multiple OS configurations and installation recipes.
+%Each \OHPC{} component is equipped with a set of scripts and applications
+%to test the integration of these components in a Jenkins CI 
+%environment.
+To facilitate customization and running of the test suite locally, we 
+provide these tests in a standalone RPM. 
+
+\begin{lstlisting}
+[sms](*\#*) (*\install*) test-suite-ohpc
+\end{lstlisting}
+
+The RPM installation creates a user named \texttt{ohpc-test} to house the test
+suite and provide an isolated environment for execution.  Configuration of the
+test suite is done using standard \GNU{} autotools semantics and the
+\href{https://jenkins.io}{\color{blue}{BATS}} shell-testing framework is used
+to execute and log a number of individual unit tests.  Some tests require
+privileged execution, so a different combination of tests will be enabled
+depending on which user executes the top-level \texttt{configure}
+script. Non-privileged tests requiring execution on one or more compute nodes are
+submitted as jobs through the \rms{} resource manager. The tests are further
+divided into ``short'' and ``long'' run categories. The short run configuration
+is a subset
+of approximately 180 tests to demonstrate basic functionality of key components
+(e.g. MPI stacks) and should complete in 10-20 minutes. The long run (around
+1000 tests) is comprehensive and can take an hour or more to complete.
+
+Most components can be tested individually, but a default configuration is
+setup to enable collective testing. To test an isolated component, use the
+\texttt{configure} option to disable all tests, then re-enable the desired test
+to run. The \texttt{--help} option to \texttt{configure} will display all
+possible tests. Example output is shown below (some output is omitted for the
+sake of brevity).
+
+\begin{lstlisting}[literate={RMS}{\rms{}}1 {ARCH}{\arch{}}1]
+[sms](*\#*) su - ohpc-test
+[test@sms ~]$ cd tests
+[test@sms ~]$ ./configure --disable-all --enable-fftw
+checking for a BSD-compatible install... /bin/install -c
+checking whether build environment is sane... yes
+...
+---------------------------------------------- SUMMARY ---------------------------------------------
+
+Package version............... : test-suite-1.3.0
+
+Build user.................... : ohpc-test
+Build host.................... : sms001
+Configure date................ : 2017-03-24 15:41
+Build architecture............ : ARCH
+Compiler Families............. : gnu
+MPI Families.................. : mpich mvapich2 openmpi
+Resource manager ............. : RMS
+Test suite configuration...... : short
+...
+Libraries:
+    Adios .................... : disabled
+    Boost .................... : disabled
+    Boost MPI................. : disabled
+    FFTW...................... : enabled
+    GSL....................... : disabled
+    HDF5...................... : disabled
+    HYPRE..................... : disabled
+...
+\end{lstlisting}
+
+Many \OHPC{} components exist in multiple flavors to support multiple compiler
+and MPI runtime permutations, and the test suite takes this in to account by
+iterating through these combinations by default. If \texttt{make check} is
+executed from the top-level test directory, all configured compiler and MPI
+permutations of a library will be exercised. The following highlights the
+execution of the FFTW related tests that were enabled in the previous step.
+
+\begin{lstlisting}[literate={RMS}{\rms{}}1]
+[test@sms ~]$ make check
+make --no-print-directory check-TESTS
+PASS: libs/fftw/ohpc-tests/test_mpi_families
+============================================================================
+Testsuite summary for test-suite 1.3.0
+============================================================================
+# TOTAL: 1
+# PASS:  1
+# SKIP:  0
+# XFAIL: 0
+# FAIL:  0
+# XPASS: 0
+# ERROR: 0
+============================================================================
+[test@sms ~]$ cat libs/fftw/tests/family-gnu-*/rm_execution.log 
+1..3
+ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu/mpich)
+ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu/mpich)
+ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu/mpich)
+PASS rm_execution (exit status: 0)
+1..3
+ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu/mvapich2)
+ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu/mvapich2)
+ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu/mvapich2)
+PASS rm_execution (exit status: 0)
+1..3
+ok 1 [libs/FFTW] Serial C binary runs under resource manager (RMS/gnu/openmpi)
+ok 2 [libs/FFTW] MPI C binary runs under resource manager (RMS/gnu/openmpi)
+ok 3 [libs/FFTW] Serial Fortran binary runs under resource manager (RMS/gnu/openmpi)
+PASS rm_execution (exit status: 0)
+\end{lstlisting}

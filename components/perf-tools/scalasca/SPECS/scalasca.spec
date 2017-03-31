@@ -82,9 +82,7 @@ BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 DocDir:    %{OHPC_PUB}/doc/contrib
-%if 0%{?suse_version}
 BuildRequires: zlib-devel
-%endif
 
 %define debug_package %{nil}
 

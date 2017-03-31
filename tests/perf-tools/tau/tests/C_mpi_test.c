@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   MPI_Comm_size (MPI_COMM_WORLD, &proc);
   MPI_Comm_rank (MPI_COMM_WORLD, &me);
 
-  //func(me, proc);
+  func(me, proc);
     
   MPI_Finalize ();
 }

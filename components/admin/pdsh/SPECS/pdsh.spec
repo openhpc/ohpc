@@ -16,13 +16,14 @@
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2.31
-Release:   %{_rel}
+Release:   1
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
 DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/admin
 #Source0:   %{pname}-%{version}.tar.gz
 Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
+Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define debug_package %{nil}

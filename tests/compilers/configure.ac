@@ -1,5 +1,5 @@
 AC_PREREQ([2.63])
-AC_INIT([compiler-tests], [0.0.1], [karl.w.schulz@intel.com])
+AC_INIT([compiler-tests], [0.0.1], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])

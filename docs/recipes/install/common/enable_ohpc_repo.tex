@@ -10,21 +10,21 @@ package directly from the \OHPC{} build server.
 \iftoggleverb{isCentOS}
 % CentOS
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.75}{10}\ttfamily,
-	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSRepo{}}1 {ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*) yum install http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.ARCH.rpm
+	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) yum install http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.TAG.ARCH.rpm
 \end{lstlisting}
 \else
 % non-CentOS
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
-	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSRepo{}}1 {ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*) rpm -ivh http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.ARCH.rpm
+	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) rpm -ivh http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.TAG.ARCH.rpm
 \end{lstlisting}
 \fi
 
 \begin{center}
 \begin{tcolorbox}[]
 \small Many sites may find it useful or necessary to maintain a local copy of the
-OpenHPC repositories. To facilitate this need, standalone tar 
+\OHPC{} repositories. To facilitate this need, standalone tar 
 archives are provided -- one containing a repository of binary packages as well as any
 available updates, and one containing a repository of source RPMS. The tar files
 also contain a simple bash script to configure the package manager to use the

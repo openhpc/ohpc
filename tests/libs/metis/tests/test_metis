@@ -4,8 +4,8 @@
 load ./common/test_helper_functions
 source ./common/functions || exit 1
 
-if [ -s ./TEST_ENV ];then
-    source ./TEST_ENV
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
 fi
 
 check_rms
@@ -17,13 +17,6 @@ testname="libs/Metis"
     assert_success
     rm mdual.graph.part.32
 }
-
-## @test "[$testname] Mesh partition ($LMOD_FAMILY_COMPILER)" {
-##     run mpmetis metis.mesh 32
-##     assert_success
-##     rm metis.mesh.epart.32
-##     rm metis.mesh.npart.32
-## }
 
 @test "[$testname] Fill-reducing ordering ($LMOD_FAMILY_COMPILER)" {
     run ndmetis mdual.graph

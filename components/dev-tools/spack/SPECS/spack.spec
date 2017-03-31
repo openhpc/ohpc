@@ -22,12 +22,14 @@ Group:		System/Configuration
 License:	LGPL
 URL:		https://github.com/LLNL/spack
 Source0:	https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz
+Source1:	OHPC_macros
 
 BuildArch: noarch
 BuildRequires:	rsync
 BuildRequires:	python
 Requires:	python >= 2.6
 Requires: bash
+Requires: curl
 Requires: coreutils
 Requires: subversion
 Requires: hg

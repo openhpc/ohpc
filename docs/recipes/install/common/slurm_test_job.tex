@@ -56,7 +56,7 @@ various stacks to retain a single launch command.
 
 \iftoggle{isSLES_ww_slurm_x86}{\clearpage}
 
-\iftoggle{isCentOS_ww_slurm_x86}{\clearpage}
+%\iftoggle{isCentOS_ww_slurm_x86}{\clearpage}
 
   
 \subsection{Interactive execution}
@@ -66,7 +66,7 @@ following (note the use of \texttt{prun} for parallel job launch which summarize
 the underlying native job launch mechanism being used):
 
 \begin{lstlisting}[language=bash,keywords={}]
-# switch to "test" user
+# Switch to "test" user
 [sms](*\#*) su - test
 
 # Compile MPI "hello world" example
@@ -114,10 +114,10 @@ and the example below illustrates use of the script to submit a batch job for
 execution using the same executable referenced in the previous interactive example.
 
 \begin{lstlisting}[language=bash,keywords={}]
-# copy example job script
+# Copy example job script
 [test@sms ~]$ cp /opt/ohpc/pub/examples/slurm/job.mpi .
 
-# examine contents (and edit to set desired job sizing characteristics)
+# Examine contents (and edit to set desired job sizing characteristics)
 [test@sms ~]$ cat job.mpi
 #!/bin/bash
 

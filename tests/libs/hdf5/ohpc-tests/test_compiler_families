@@ -5,7 +5,7 @@ TEST_LOGS=""
 MAKEFLAGS=""
 status=0
 
-source ./TEST_ENV         || exit 1
+source ./common/TEST_ENV  || exit 1
 source ./common/functions || exit 1
 
 # HDF5 tests using h5cc, h5c++, h5fc

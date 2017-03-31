@@ -50,10 +50,10 @@ BuildRequires:  xorg-x11-libX11-devel
 #BuildRequires:  libXNVCtrl-devel
 BuildRequires:  ncurses-devel
 #BuildRequires:  texlive-latex
-%if 0%{?suse_version} <= 1220
+%if 0%{?suse_version} && 0%{?suse_version} <= 1220
 BuildRequires:  texlive-bin-latex
 %else
-BuildRequires:  texlive-makeindex-bin
+BuildRequires:  texlive-latex-bin
 %endif
 BuildRequires:  transfig
 BuildRequires:  w3m
@@ -61,7 +61,11 @@ BuildRequires:  w3m
 # BuildRequires:  libibverbs-devel
 # % endif
 %ifnarch s390 s390x i586 %{arm}
+%if 0%{?suse_version}
 BuildRequires:  libnuma-devel
+%else
+BuildRequires:  numactl-devel
+%endif
 %endif
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 #!BuildIgnore: post-build-checks rpmlint-Factory

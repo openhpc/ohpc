@@ -1,24 +1,15 @@
---- warewulf-vnfs-3.6/libexec/wwmkchroot/include-rhel	2015-03-13 06:07:12.000000000 -0700
-+++ warewulf-vnfs-3.6/libexec/wwmkchroot/include-rhel	2015-03-13 06:05:47.000000000 -0700
-@@ -56,6 +56,8 @@
+--- warewulf-vnfs-3.7/libexec/wwmkchroot/include-rhel	2017-02-22 09:32:02.000000000 -0800
++++ warewulf-vnfs-3.7.patch/libexec/wwmkchroot/include-rhel	2017-02-22 14:08:22.000000000 -0800
+@@ -58,6 +58,12 @@
      echo "reposdir=0" >> $CHROOTDIR/$YUM_CONF
      echo "" >> $CHROOTDIR/$YUM_CONF
- 
-+    
-+
-     if [ -z "$INSTALL_ISO" ]; then
-         echo "[$REPO_NAME]" >> $CHROOTDIR/$YUM_CONF
-         echo 'name=Linux $releasever - $basearch' >> $CHROOTDIR/$YUM_CONF
-@@ -85,6 +87,12 @@
-         YUM_MIRROR=$INSTALLDIRS
-     fi
  
 +    # 03/13/15 karl.w.schulz@intel.com - honor proxy setting if configured on local host
 +    proxy_host=`grep "^proxy=" /etc/yum.conf`
 +    if [ $? -eq 0 ];then
-+       echo $proxy_host >> $CHROOTDIR/$YUM_CONF
-+    fi
++        echo $proxy_host >> $CHROOTDIR/$YUM_CONF
++    fi   
 +
- }
- 
- buildchroot() {
+     if [ -z "$INSTALL_ISO" ]; then
+         echo "[$REPO_NAME]" >> $CHROOTDIR/$YUM_CONF
+         echo 'name=Linux $releasever - $basearch' >> $CHROOTDIR/$YUM_CONF

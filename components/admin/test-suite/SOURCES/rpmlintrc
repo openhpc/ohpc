@@ -1,0 +1,7 @@
+addFilter("devel-file-in-non-devel-package")
+addFilter("dir-or-file-in-home")
+addFilter("files-duplicate")
+addFilter("non-standard-uid")
+addFilter("non-standard-gid")
+addFilter("non-executable-script")
+addFilter("wrong-script-interpreter")

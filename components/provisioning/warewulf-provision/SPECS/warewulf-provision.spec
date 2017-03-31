@@ -17,32 +17,30 @@
 %define wwpkgdir /srv/warewulf
 
 %define pname warewulf-provision
+%define dname provision
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module
-Version: 3.6
+Version: 3.7pre
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: http://warewulf.lbl.gov/downloads/releases/warewulf-provision/warewulf-provision-%{version}.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel
 Conflicts: warewulf < 3
 BuildConflicts: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 DocDir: %{OHPC_PUB}/doc/contrib
-Patch1: warewulf-provision.busybox.patch.bz2
-Patch2: warewulf-provision.httpdconfdir.patch
-Patch3: warewulf-provision.dhcpd.patch
-Patch4: warewulf-provision.init.patch
-Patch5: update_file_delay.patch
-Patch6: warewulf-provision.mkbootable.patch
-Patch7: warewulf-provision.sles_stateful.patch
-Patch8: warewulf-provision.config_guess.patch
+Patch1: warewulf-provision.httpdconfdir.patch
+Patch2: warewulf-provision.sles_stateful.patch
+Patch3: warewulf-provision.wwgetvnfs.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -105,27 +103,28 @@ available the included GPL software.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n warewulf3-%{version}.ohpc1.3
+cd %{dname}
+./autogen.sh
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%ifarch aarch64
-%patch8 -p1
-%endif
 
 %build
+cd %{dname}
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
 
 
 %install
+cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%_docdir
+
+%ifnarch x86_64
+rm %{buildroot}/%{_datadir}/warewulf/*
+%endif
 
 %post -n %{pname}-server%{PROJ_DELIM}
 # 07/22/14 karl.w.schulz@intel.com - specify alternate group per Base OS
@@ -140,7 +139,6 @@ chkconfig tftp on >/dev/null 2>&1 || :
 chkconfig xinetd on >/dev/null 2>&1 || :
 killall -1 xinetd || service xinetd restart >/dev/null 2>&1 || :
 
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -148,13 +146,15 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root)
 %{OHPC_PUB}
-%doc AUTHORS COPYING ChangeLog INSTALL NEWS README TODO LICENSE
+%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf
 %config(noreplace) %{_sysconfdir}/warewulf/defaults/provision.conf
 %{_bindir}/*
 %{wwpkgdir}/*
+%ifarch x86_64
 %{_datadir}/warewulf/*
+%endif
 %{perl_vendorlib}/Warewulf/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Provision.pm
 %{perl_vendorlib}/Warewulf/Vnfs.pm
