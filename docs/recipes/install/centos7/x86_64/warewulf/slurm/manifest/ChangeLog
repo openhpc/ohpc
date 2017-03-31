@@ -58,6 +58,8 @@
   * ohpc-release                             (1.2 -> 1.3)
   * openmpi-gnu-ohpc                         (1.10.4 -> 1.10.6)
   * openmpi-intel-ohpc                       (1.10.4 -> 1.10.6)
+  * openmpi-psm2-gnu-ohpc                    (1.10.4 -> 1.10.6)
+  * openmpi-psm2-intel-ohpc                  (1.10.4 -> 1.10.6)
   * pdtoolkit-gnu-ohpc                       (3.22 -> 3.23)
   * pdtoolkit-intel-ohpc                     (3.22 -> 3.23)
   * petsc-gnu-impi-ohpc                      (3.7.0 -> 3.7.5)
