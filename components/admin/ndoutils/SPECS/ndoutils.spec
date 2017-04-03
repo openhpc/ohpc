@@ -21,7 +21,7 @@ Release:            7%{?dist}
 DocDir:             %{OHPC_PUB}/doc/contrib
 
 Summary:            Stores all configuration and event data from Nagios in a database
-Group:              Applications/System
+Group:              %{PROJ_NAME}/admin
 License:            GPLv2 and BSD
 # Bundled libpqueue header. It has been relicensed to BSD:
 # https://github.com/vy/libpqueue/commit/de6480009c60afff22d4c7edf4353ef87797e497
