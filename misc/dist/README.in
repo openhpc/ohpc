@@ -7,7 +7,7 @@ local repository after download. To use, simply unpack the tarball where you
 would like to host the local repository and execute the make_repo.sh script.
 
 # ls /opt/ohpc/repos
-@DISTRO@  mk_repo  OpenHPC-@VERSION@.@DISTRO@_@ARCH@.tar OpenHPC.local.repo
+@DISTRO@  mk_repo  OpenHPC-@VERSION@.@DISTRO@.@ARCH@.tar OpenHPC.local.repo
 
 # ./make_repo.sh
 --> Creating OpenHPC.local.repo file in @PACKAGE_MANAGER_DIR@
