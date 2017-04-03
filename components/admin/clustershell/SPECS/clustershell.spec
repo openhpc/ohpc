@@ -10,7 +10,7 @@ Version:       1.7.2
 Release:       1
 Summary:       Python framework for efficient cluster administration
 
-Group:         System Environment/Base
+Group:         %{PROJ_NAME}/admin
 License:       CeCILL-C
 URL:           http://clustershell.sourceforge.net/
 Source0:       https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
