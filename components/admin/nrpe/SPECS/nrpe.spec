@@ -25,7 +25,7 @@ Version: 2.15
 Release: 2%{?dist}
 Summary: Host/service/network monitoring agent for Nagios
 
-Group: Applications/System
+Group: %{PROJ_NAME}/admin
 License: GPLv2+
 URL: http://www.nagios.org
 DocDir: %{OHPC_PUB}/doc/contrib
