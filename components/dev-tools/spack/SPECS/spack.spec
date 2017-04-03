@@ -18,7 +18,7 @@ Version:	0.8.17
 Release:	1%{?dist}
 Summary:	HPC software package management
 
-Group:		System/Configuration
+Group:		%{PROJ_NAME}/dev-tools
 License:	LGPL
 URL:		https://github.com/LLNL/spack
 Source0:	https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz
