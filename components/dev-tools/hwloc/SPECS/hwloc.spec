@@ -1,3 +1,12 @@
+#----------------------------------------------------------------------------bh-
+# This RPM .spec file is part of the OpenHPC project.
+#
+# It may have been modified from the default version supplied by the underlying
+# release package (if available) in order to apply patches, perform customized
+# build/install configurations, and supply additional files to support
+# desired integration conventions.
+#
+#----------------------------------------------------------------------------eh-
 #
 # spec file for package hwloc
 #
@@ -15,18 +24,26 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+
+%define pname hwloc
 
 %global lname libhwloc5
 
-Name:           hwloc
-Version:        1.11.4
+Name:           %{pname}%{PROJ_DELIM}
+Version:        1.11.6
 Release:        2%{?dist}
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
-Group:          Productivity/Clustering/Computing
+Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
 Source0:        http://www.open-mpi.org/software/hwloc/v1.11/downloads/%{name}-%{version}.tar.bz2
-Requires:       %{lname} = %{version}-%{release}
+Source1:   OHPC_macros
+Source2:   LICENSE
+
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -71,6 +88,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 #!BuildIgnore: post-build-checks rpmlint-Factory
 #!BuildIgnore: #!BuildIgnore: brp-check-suse
 
+# Default library install path
+%define install_path %{OHPC_LIBS}/%{pname}/%version
+
 %description
 The Portable Hardware Locality (hwloc) software package provides 
 a portable abstraction (across OS, versions, architectures, ...) 
@@ -85,55 +105,15 @@ hwloc may display the topology in multiple convenient formats.
 It also offers a powerful programming interface (C API) to gather information 
 about the hardware, bind processes, and much more.
 
-%package lstopo
-Summary:        Shows the topology in various formats
-Group:          Productivity/Clustering/Computing
-
-%description lstopo
-Lstopo shows the topology of the system in various formats.
-
-
-%package devel
-Summary:        Headers and shared development libraries for hwloc
-Group:          Development/Libraries/C and C++
-Requires:       %{lname} = %{version}
-Provides:       lib%{name}-devel = %{version}-%{release}
-Obsoletes:      lib%{name}-devel <= 1.4.1
-
-%description devel
-Headers and shared object symbolic links for the hwloc.
-
-%package -n %{lname}
-Summary:        Run time libraries for the hwloc
-Group:          System/Libraries
-Requires:       %{name}-data
-
-%description -n %{lname}
-Run time libraries for the %{name}.
-
-%package data
-Summary:        Run time data for hwloc
-Group:          Development/Libraries/C and C++
-
-%description data
-Run time data for the hwloc.
-
-%package doc
-Summary:        Documentation for hwloc
-Group:          Documentation/Other
-
-%description doc
-Package contains documentation for %{name}.
-
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 
 %build
 %if 0%{?sles_version}
 sed -i 's/1.11 dist-bzip2 subdir-objects foreign tar-ustar parallel-tests -Wall -Werror/1.10 dist-bzip2 subdir-objects foreign tar-ustar -Wall -Werror/g' configure.ac
 %endif
 autoreconf --force --install
-%configure
+%configure --prefix=%{install_path}
 ##sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 ##sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %{__make} %{?_smp_mflags} V=1
@@ -155,10 +135,46 @@ autoreconf --force --install
 %fdupes -s %{buildroot}/%{_mandir}/man7
 %fdupes -s doc/
 
-%check
-#XXX: this is weird, but make check got broken by removing doxygen-doc/man above
-#     the only one fix is to install documentation by hand, or to ignore check error
-%{__make} check || :
+# OpenHPC module file
+%{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+        puts stderr " "
+        puts stderr "This module loads the %{pname} utility"
+        puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname}"
+module-whatis "Version: %{version}"
+module-whatis "Category: python module"
+module-whatis "Description: %{summary}"
+module-whatis "URL %{url}"
+
+set     version             %{version}
+
+prepend-path    PATH                %{install_path}/bin
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    MANPATH             %{install_path}/man
+
+setenv          %{pname}_DIR        %{install_path}
+setenv          %{pname}_BIN        %{install_path}/bin
+setenv          %{pname}_INC        %{install_path}/inc
+setenv          %{pname}_LIB        %{install_path}/lib
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
+
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %post -n %{lname} -p /sbin/ldconfig
 
@@ -167,42 +183,8 @@ autoreconf --force --install
 %files
 %defattr(-, root, root, -)
 %doc AUTHORS COPYING NEWS README VERSION
-%attr(0755,root,root) %{_bindir}/%{name}*
-%ifarch x86_64
-%attr(0755,root,root) %{_sbindir}/%{name}*
-%endif
-%doc %{_mandir}/man1/%{name}*
-
-%files lstopo
-%defattr(-,root,root)
-%attr(0755,root,root) %{_bindir}/lstopo*
-%doc %{_mandir}/man1/lstopo.1*
-%doc %{_mandir}/man1/lstopo-no-graphics.1.*
-
-%files devel
-%defattr(-, root, root, -)
-%doc %{_mandir}/man3/*
-%doc %{_mandir}/man7/%{name}*
-%{_includedir}/%{name}
-%{_includedir}/%{name}.h
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files -n %{lname}
-%defattr(-, root, root, -)
-%{_libdir}/libhwloc*so.*
-
-%files data
-%defattr(-, root, root, -)
-%dir %{_datadir}/%{name}
-%{_datadir}/applications/lstopo.desktop
-%{_datadir}/%{name}/%{name}.dtd
-%{_datadir}/%{name}/%{name}-dump-hwdata.service
-%{_datadir}/%{name}/%{name}-valgrind.supp
-
-%files doc
-%defattr(-, root, root, -)
-%doc doc/
+%{OHPC_HOME}
+%{OHPC_PUB}
 
 %changelog
 
