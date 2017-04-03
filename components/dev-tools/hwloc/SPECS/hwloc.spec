@@ -48,7 +48,9 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  doxygen
+%if 0%{?sles_version}
 BuildRequires:  fdupes
+%endif
 BuildRequires:  gcc-c++
 BuildRequires:  libtool
 %if 0%{?suse_version} <= 1220 && !0%{?suse_version}
@@ -130,10 +132,12 @@ autoreconf --force --install
 # documentation will be handled by % doc macro
 %{__rm} -rf %{buildroot}%{_datadir}/doc/ doc/doxygen-doc/man
 %{__rm} -rf doc/.deps
+%if 0%{?sles_version}
 %fdupes -s %{buildroot}/%{_mandir}/man1
 %fdupes -s %{buildroot}/%{_mandir}/man3
 %fdupes -s %{buildroot}/%{_mandir}/man7
 %fdupes -s doc/
+%endif
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
