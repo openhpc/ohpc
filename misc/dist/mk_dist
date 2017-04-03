@@ -184,7 +184,7 @@ foreach my $distro (@distros) {
     my @n_distros = grep { $_ ne $distro } @distros;
     # generate binary tarballs
     foreach my $arch (@arches) {
-	my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
+	my $dist_filename = "$dest_dir/OpenHPC-$release.$distro.$arch.tar";
 	my $tar_args = "-cvf $dist_filename \\\n";
 
 	
@@ -236,7 +236,7 @@ foreach my $distro (@distros) {
     } # end loop over @arches
     
     # generate src tarball
-    my $src_filename = "$dest_dir/OpenHPC-$release.$distro\_src.tar";
+    my $src_filename = "$dest_dir/OpenHPC-$release.$distro.src.tar";
     my $tar_args = "-cvf $src_filename \\\n";
 
     for my $arch (@arches) {
