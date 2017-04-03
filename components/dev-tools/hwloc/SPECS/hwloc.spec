@@ -180,9 +180,9 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%post -n %{lname} -p /sbin/ldconfig
+%post -p /sbin/ldconfig
 
-%postun -n %{lname} -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
 
 %files
 %defattr(-, root, root, -)
