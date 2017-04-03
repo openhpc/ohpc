@@ -23,7 +23,7 @@ Name:      EasyBuild%{PROJ_DELIM}
 Version:   3.1.2
 Release:   1
 License:   GPLv2
-Group:     System/Configuration
+Group:     %{PROJ_NAME}/dev-tools
 URL:       http://hpcugent.github.com/easybuild
 
 Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
