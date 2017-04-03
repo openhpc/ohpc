@@ -122,18 +122,18 @@ autoreconf --force --install
 %{__make} install DESTDIR=%{buildroot} INSTALL="%{__install} -p"
 
 #Fix wrong permition on file hwloc-assembler-remote => I have reported this to upstream already
-%{__chmod} 0755 %{buildroot}%{_bindir}/hwloc-assembler-remote
+%{__chmod} 0755 %{buildroot}%{install_path}/bin/hwloc-assembler-remote
 
 # We don't ship .la files.
-%{__rm} -rf %{buildroot}%{_libdir}/libhwloc.la
+%{__rm} -rf %{buildroot}%{install_path}/lib/libhwloc.la
 
 # documentation will be handled by % doc macro
-%{__rm} -rf %{buildroot}%{_datadir}/doc/ doc/doxygen-doc/man
+%{__rm} -rf %{buildroot}%{install_path}/doc/ doc/doxygen-doc/man
 %{__rm} -rf doc/.deps
 %if 0%{?sles_version}
-%fdupes -s %{buildroot}/%{_mandir}/man1
-%fdupes -s %{buildroot}/%{_mandir}/man3
-%fdupes -s %{buildroot}/%{_mandir}/man7
+%fdupes -s %{buildroot}/%{install_path}/share/man/man1
+%fdupes -s %{buildroot}/%{install_path}/share/man/man3
+%fdupes -s %{buildroot}/%{install_path}/share/man/man7
 %fdupes -s doc/
 %endif
 
