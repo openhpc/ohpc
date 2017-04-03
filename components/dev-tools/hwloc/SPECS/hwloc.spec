@@ -28,6 +28,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname hwloc
+%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:        1.11.6
@@ -161,10 +162,10 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path    MANPATH             %{install_path}/man
 
-setenv          %{pname}_DIR        %{install_path}
-setenv          %{pname}_BIN        %{install_path}/bin
-setenv          %{pname}_INC        %{install_path}/inc
-setenv          %{pname}_LIB        %{install_path}/lib
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
+setenv          %{PNAME}_INC        %{install_path}/include
+setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
