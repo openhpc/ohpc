@@ -116,10 +116,12 @@ This package provides the nrpe plugin for Nagios-related applications.
 # Allow building for aarch64
 # https://bugzilla.redhat.com/926244
 %if 0%{?fedora} > 17 || 0%{?rhel} > 6
+pushd build-aux
 mv config.sub config.sub.old
 mv config.guess config.guess.old
 cp /usr/share/libtool/config/config.guess .
 cp /usr/share/libtool/config/config.sub .
+popd
 %endif
 
 %build
