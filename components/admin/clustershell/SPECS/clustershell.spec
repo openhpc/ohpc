@@ -11,7 +11,7 @@ Release:       1
 Summary:       Python framework for efficient cluster administration
 
 Group:         %{PROJ_NAME}/admin
-License:       CeCILL-C
+License:       LGPLv2.1
 URL:           http://clustershell.sourceforge.net/
 Source0:       https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
 Source1:       OHPC_macros
@@ -124,7 +124,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc ChangeLog Licence_CeCILL-C_V1-en.txt Licence_CeCILL-C_V1-fr.txt
+%doc ChangeLog COPYING.LGPLv2.1
 %doc doc/examples
 %{OHPC_HOME}
 %{OHPC_PUB}
