@@ -6,7 +6,7 @@
 %define pname clustershell
 
 Name:          clustershell%{PROJ_DELIM}
-Version:       1.7.2
+Version:       1.7.3
 Release:       1
 Summary:       Python framework for efficient cluster administration
 
