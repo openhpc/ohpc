@@ -1,7 +1,6 @@
-diff -Naur ndoutils-2.0.0.old/configure ndoutils-2.0.0/configure
---- ndoutils-2.0.0.old/configure	2014-02-28 19:13:22.000000000 +0100
-+++ ndoutils-2.0.0/configure	2014-04-18 10:49:52.749318424 +0200
-@@ -7004,7 +7004,7 @@
+--- ndoutils-2.1.2/configure	2016-11-14 11:23:05.000000000 -0800
++++ ndoutils-2.1.2.patch/configure	2017-04-04 13:42:10.000000000 -0700
+@@ -6277,7 +6277,7 @@
  
  
  
@@ -10,31 +9,18 @@ diff -Naur ndoutils-2.0.0.old/configure ndoutils-2.0.0/configure
  
  
  
-diff -Naur ndoutils-2.0.0.old/configure.in ndoutils-2.0.0/configure.in
---- ndoutils-2.0.0.old/configure.in	2014-02-28 19:13:22.000000000 +0100
-+++ ndoutils-2.0.0/configure.in	2014-04-18 10:49:44.353381035 +0200
-@@ -263,7 +263,7 @@
- AC_ARG_WITH(ndo2db_group,AC_HELP_STRING([--with-ndo2db-group=<group>],[sets group name to run NDO2DB]),ndo2db_group=$withval,ndo2db_group=nagios)
- AC_SUBST(ndo2db_user)
- AC_SUBST(ndo2db_group)
--INSTALL_OPTS="-o $ndo2db_user -g $ndo2db_group"
-+INSTALL_OPTS=""
- AC_SUBST(INSTALL_OPTS)
- 
- 
-diff -Naur ndoutils-2.0.0.old/src/Makefile.in ndoutils-2.0.0/src/Makefile.in
---- ndoutils-2.0.0.old/src/Makefile.in	2014-02-28 19:13:22.000000000 +0100
-+++ ndoutils-2.0.0/src/Makefile.in	2014-04-18 10:49:23.510534175 +0200
-@@ -118,9 +118,9 @@
+--- ndoutils-2.1.2/src/Makefile.in	2016-11-14 11:23:05.000000000 -0800
++++ ndoutils-2.1.2.patch/src/Makefile.in	2017-04-04 13:43:51.000000000 -0700
+@@ -126,9 +126,9 @@
  devclean: distclean
  
  install: install-4x
--	$(INSTALL) -m 774 $(INSTALL_OPTS) file2sock $(DESTDIR)$(BINDIR)
--	$(INSTALL) -m 774 $(INSTALL_OPTS) log2ndo $(DESTDIR)$(BINDIR)
--	$(INSTALL) -m 774 $(INSTALL_OPTS) sockdebug $(DESTDIR)$(BINDIR)
-+	$(INSTALL) -m 755 $(INSTALL_OPTS) file2sock $(DESTDIR)$(BINDIR)
-+	$(INSTALL) -m 755 $(INSTALL_OPTS) log2ndo $(DESTDIR)$(BINDIR)
-+	$(INSTALL) -m 755 $(INSTALL_OPTS) sockdebug $(DESTDIR)$(BINDIR)
+-	$(INSTALL) -m 774 $(INSTALL_OPTS) file2sock $(BINDIR)
+-	$(INSTALL) -m 774 $(INSTALL_OPTS) log2ndo $(BINDIR)
+-	$(INSTALL) -m 774 $(INSTALL_OPTS) sockdebug $(BINDIR)
++	$(INSTALL) -m 755 $(INSTALL_OPTS) file2sock $(BINDIR)
++	$(INSTALL) -m 755 $(INSTALL_OPTS) log2ndo $(BINDIR)
++	$(INSTALL) -m 755 $(INSTALL_OPTS) sockdebug $(BINDIR)
  	@echo ""
  	@echo "  Hint: NDOUtils Installation against Nagios v4.x"
  	@echo "  completed."
