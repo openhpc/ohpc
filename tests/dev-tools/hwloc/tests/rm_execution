@@ -1,0 +1,30 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+@test "[dev-tools/hwloc] lstopo runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s $HWLOC_BIN/lstopo ];then
+    flunk "lstopo binary does not exit"
+    fi
+
+    run_serial_binary $HWLOC_BIN/lstopo
+    assert_success
+}
+
+@test "[dev-tools/hwloc] hwloc_hello runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s ./hwloc_hello ];then
+    flunk "hwloc_hello binary does not exit"
+    fi
+
+    run_serial_binary ./hwloc_hello
+    assert_success
+}
