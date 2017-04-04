@@ -99,7 +99,7 @@ mkdir -p %{buildroot}%{_localstatedir}/cache/ndoutils
 mkdir -p %{buildroot}%{_libdir}/nagios/brokers
 
 # Nagios 4 support + common components
-%make_install
+%make_install DESTDIR=%{?buildroot}
 
 # Nagios 2 support (override)
 %if 0%{?rhel} == 5
