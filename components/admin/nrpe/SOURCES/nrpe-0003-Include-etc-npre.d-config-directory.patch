@@ -1,19 +1,6 @@
-From f36f87ebddfa7156ab12af8020274331444403bd Mon Sep 17 00:00:00 2001
-From: Peter Lemenkov <lemenkov@gmail.com>
-Date: Fri, 18 Jun 2010 13:46:53 +0400
-Subject: [PATCH 3/8] Include /etc/npre.d config directory
-
-See this rhbz for the details:
-https://bugzilla.redhat.com/show_bug.cgi?id=515324
----
- sample-config/nrpe.cfg.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/sample-config/nrpe.cfg.in b/sample-config/nrpe.cfg.in
-index da6a280..1b72141 100644
---- a/sample-config/nrpe.cfg.in
-+++ b/sample-config/nrpe.cfg.in
-@@ -189,8 +189,7 @@ connection_timeout=300
+--- nrpe-3.0.1/sample-config/nrpe.cfg.in	2016-09-08 09:18:58.000000000 -0700
++++ nrpe-3.0.1.patch/sample-config/nrpe.cfg.in	2017-04-04 11:21:52.000000000 -0700
+@@ -257,8 +257,7 @@
  # This directive allows you to include definitions from config files (with a
  # .cfg extension) in one or more directories (with recursion).
  
@@ -23,6 +10,3 @@ index da6a280..1b72141 100644
  
  
  
--- 
-1.8.3.1
-

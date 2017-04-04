@@ -37,19 +37,7 @@ Source4: commands.cfg
 Source5: hosts.cfg.example
 Source6: services.cfg.example
 Source7: OHPC_macros
-Patch1: nrpe-0001-Add-reload-target-to-the-init-script.patch
-Patch2: nrpe-0002-Read-extra-configuration-from-etc-sysconfig-nrpe.patch
-Patch3: nrpe-0003-Include-etc-npre.d-config-directory.patch
-Patch4: nrpe-0004-Fix-initscript-return-codes.patch
-Patch5: nrpe-0005-Do-not-start-by-default.patch
-Patch6: nrpe-0006-Relocate-pid-file.patch
-Patch7: nrpe-0007-Add-condrestart-try-restart-target-to-initscript.patch
-Patch8:	nrpe-0008-Allow-user-to-override-all-defaults-even-command-def.patch
-# This should get removed whenever 2.16 is released, assuming it has the fix
-# included. http://seclists.org/oss-sec/2014/q2/129. There's not upstream
-# concensus that quoting arguments in a mode which is widely agreed upon to be
-# risky so track upstream discussions here, too.
-Patch9: nrpe-0009-CVE-2014-2913-nasty-metacharacters.patch
+Patch1: nrpe-0003-Include-etc-npre.d-config-directory.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -123,15 +111,7 @@ This package provides the nrpe plugin for Nagios-related applications.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1 -b .reload
-%patch2 -p1 -b .extra_config
-%patch3 -p1 -b .include_etc_npre_d
-%patch4 -p1 -b .initscript_return_codes
-%patch5 -p1 -b .do_not_start_by_default
-%patch6 -p1 -b .relocate_pid
-%patch7 -p1 -b .condrestart
-%patch8 -p1 -b .allow_override
-%patch9 -p1
+%patch1 -p1 -b .include_etc_npre_d
 
 # Allow building for aarch64
 # https://bugzilla.redhat.com/926244
