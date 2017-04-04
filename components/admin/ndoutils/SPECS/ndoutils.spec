@@ -36,11 +36,11 @@ Source4:            ndoutils.conf
 Source5:            gpl-2.0.txt
 Source6:            OHPC_macros
 # Fedora 21+: https://fedoraproject.org/wiki/Format-Security-FAQ
-Patch0:             %{pname}-2.0.0-format-security.patch
+Patch0:             %{pname}-2.1.2-format-security.patch
 # Better align with Fedora/Nagios places for temporary files
-Patch1:             %{pname}-2.0.0-var-files.patch
+Patch1:             %{pname}-2.1.2-var-files.patch
 # Set user/group in files section, fix permissions on install
-Patch2:             %{pname}-2.0.0-install.patch
+Patch2:             %{pname}-2.1.2-install.patch
 
 BuildRequires:      mysql-devel
 Provides:           %{pname}

@@ -1,5 +1,6 @@
---- ndoutils-2.1.2/src/queue.c	2016-11-14 11:23:05.000000000 -0800
-+++ ndoutils-2.1.2.patch/src/queue.c	2017-04-04 13:36:39.000000000 -0700
+diff -Naur ndoutils-2.1.2.old/src/queue.c ndoutils-2.1.2/src/queue.c
+--- ndoutils-2.1.2.old/src/queue.c	2016-11-14 20:23:05.000000000 +0100
++++ ndoutils-2.1.2/src/queue.c	2016-12-11 21:47:35.434613721 +0100
 @@ -99,7 +99,7 @@
  		if(msgctl(queue_id, IPC_STAT, &queue_stats)) {
  			sprintf(curstats, "Unable to determine current message queue usage: error reading IPC_STAT: %d", errno);

@@ -1,5 +1,6 @@
---- ndoutils-2.1.2/config/ndo2db.cfg-sample.in	2016-11-14 11:23:05.000000000 -0800
-+++ ndoutils-2.1.2.patch/config/ndo2db.cfg-sample.in	2017-04-04 13:53:02.000000000 -0700
+diff -Naur ndoutils-2.1.2.old/config/ndo2db.cfg-sample.in ndoutils-2.1.2/config/ndo2db.cfg-sample.in
+--- ndoutils-2.1.2.old/config/ndo2db.cfg-sample.in	2016-12-11 21:51:05.697696817 +0100
++++ ndoutils-2.1.2/config/ndo2db.cfg-sample.in	2016-12-11 21:52:02.646534189 +0100
 @@ -10,7 +10,7 @@
  # This is the lockfile that NDO2DB will use to store its PID number
  # in when it is running in daemon mode.
@@ -14,7 +15,7 @@
  # is "unix".
  
 -socket_name=@localstatedir@/ndo.sock
-+socket_name=@localstatedir@/run/ndoutils/ndo.sock
++socket_name=@localstatedir@/run/ndoutils/ndo2db.sock
  
  
  
@@ -27,8 +28,9 @@
  
  
  
---- ndoutils-2.1.2/config/ndomod.cfg-sample.in	2016-11-14 11:23:05.000000000 -0800
-+++ ndoutils-2.1.2.patch/config/ndomod.cfg-sample.in	2017-04-04 13:55:22.000000000 -0700
+diff -Naur ndoutils-2.1.2.old/config/ndomod.cfg-sample.in ndoutils-2.1.2/config/ndomod.cfg-sample.in
+--- ndoutils-2.1.2.old/config/ndomod.cfg-sample.in	2016-12-11 21:51:05.697696817 +0100
++++ ndoutils-2.1.2/config/ndomod.cfg-sample.in	2016-12-11 21:51:13.680813875 +0100
 @@ -35,9 +35,9 @@
  # of fully qualified domain name of the host that the module should
  # connect to for sending output.
