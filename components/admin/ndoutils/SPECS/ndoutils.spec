@@ -89,7 +89,7 @@ chmod 644 db/installdb db/prepsql db/upgradedb
 %configure \
     --bindir=%{_sbindir} \
     --sysconfdir=%{_sysconfdir}/nagios
-make %{?_smp_mflags}
+make %{?_smp_mflags} all DESTDIR=%{?buildroot}
 
 %install
 rm -rf %{buildroot}
@@ -99,7 +99,7 @@ mkdir -p %{buildroot}%{_localstatedir}/cache/ndoutils
 mkdir -p %{buildroot}%{_libdir}/nagios/brokers
 
 # Nagios 4 support + common components
-%make_install DESTDIR=%{?buildroot}
+%make_install
 
 # Nagios 2 support (override)
 %if 0%{?rhel} == 5
