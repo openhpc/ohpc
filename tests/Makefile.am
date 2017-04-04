@@ -78,6 +78,10 @@ if R_ENABLED
    TESTS += dev-tools/R-base/ohpc-tests/test_compiler_families
 endif
 
+if HWLOC_ENABLED
+   TESTS += dev-tools/hwloc/ohpc-tests/test_compiler_families
+endif
+
 if MPIP_ENABLED
    TESTS += perf-tools/mpiP/ohpc-tests/test_mpi_families
 endif

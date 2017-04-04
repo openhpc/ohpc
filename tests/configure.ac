@@ -131,6 +131,12 @@ AC_ARG_ENABLE([valgrind],
    [AX_OPTION_DEFAULT(type=short,enable_valgrind,yes)])
 AM_CONDITIONAL(VALGRIND_ENABLED,test "x$enable_valgrind" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# hwloc
+AC_ARG_ENABLE([hwloc],
+   [AS_HELP_STRING([--enable-hwloc],[Enable hwloc tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_hwloc,yes)])
+AM_CONDITIONAL(HWLOC_ENABLED,test "x$enable_hwloc" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # MPI
 AC_ARG_ENABLE([mpi],
    [AS_HELP_STRING([--enable-mpi],[Enable MPI compilation/execution tests (default=yes)])],[],
@@ -492,6 +498,12 @@ echo    Dev Tools:
        echo '    'Valgrind.................. : enabled
     else
        echo '    'Valgrind.................. : disabled
+    fi
+
+    if test "x$enable_hwloc" = "xyes"; then
+       echo '    'hwloc.................... : enabled
+    else
+       echo '    'hwloc.................... : disabled
     fi
 
     if test "x$enable_R" = "xyes"; then
