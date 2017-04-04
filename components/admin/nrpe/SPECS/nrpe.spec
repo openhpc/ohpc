@@ -21,7 +21,7 @@
 %define nsport 5666
 
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.15
+Version: 3.0.1
 Release: 2%{?dist}
 Summary: Host/service/network monitoring agent for Nagios
 
@@ -29,7 +29,7 @@ Group: %{PROJ_NAME}/admin
 License: GPLv2+
 URL: http://www.nagios.org
 DocDir: %{OHPC_PUB}/doc/contrib
-Source0: http://downloads.sourceforge.net/nagios/nrpe-%{version}.tar.gz
+Source0: https://github.com/NagiosEnterprises/nrpe/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1: nrpe.sysconfig
 Source2: nrpe-tmpfiles.conf
 Source3: nrpe.service
