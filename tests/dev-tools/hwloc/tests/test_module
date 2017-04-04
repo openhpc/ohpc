@@ -7,7 +7,7 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
-PKG=hwloc
+PKG=HWLOC
 module=hwloc
 library=libhwloc
 header=hwloc.h
