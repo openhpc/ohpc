@@ -47,9 +47,9 @@ Provides:           %{pname}
 
 # Nagios is required also for user and group
 %if 0%{?rhel} == 5
-Requires:           nagios%{PROJ_DELIM} < 3
+Requires:           nagios < 3
 %else
-Requires:           nagios%{PROJ_DELIM} >= 3
+Requires:           nagios >= 4
 %endif
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
@@ -89,7 +89,7 @@ chmod 644 db/installdb db/prepsql db/upgradedb
 %configure \
     --bindir=%{_sbindir} \
     --sysconfdir=%{_sysconfdir}/nagios
-make %{?_smp_mflags} all DESTDIR=%{?buildroot}
+make %{?_smp_mflags} all
 
 %install
 rm -rf %{buildroot}
@@ -99,19 +99,12 @@ mkdir -p %{buildroot}%{_localstatedir}/cache/ndoutils
 mkdir -p %{buildroot}%{_libdir}/nagios/brokers
 
 # Nagios 4 support + common components
-%make_install DESTDIR=%{?buildroot}
+%make_install
 
 # Nagios 2 support (override)
 %if 0%{?rhel} == 5
     pushd src
     make install-2x DESTDIR=%{?buildroot}
-    popd
-%endif
-
-# Nagios 3 support (override)
-%if 0%{?rhel} >= 6 || 0%{?fedora}
-    pushd src
-    make install-3x DESTDIR=%{?buildroot}
     popd
 %endif
 
