@@ -1,0 +1,1 @@
+addFilter("scotch.* devel-file-in-non-devel-package")
