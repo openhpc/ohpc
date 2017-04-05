@@ -128,7 +128,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %patch0 -p1
 %patch1 -p1
 %if %{compiler_family} == intel
-%patch2 -p1
+#%patch2 -p1
 %endif
 
 %build
