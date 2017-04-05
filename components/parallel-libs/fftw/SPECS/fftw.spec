@@ -73,7 +73,7 @@ Release:   1
 License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
 URL:       http://www.fftw.org
-Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
+Source0:   http://www.fftw.org/fftw-%{version}-pl2.tar.gz
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
@@ -102,7 +102,7 @@ data, and of arbitrary input size.
 
 %prep
 
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}-pl2
 
 %build
 
