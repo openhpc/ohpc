@@ -21,7 +21,7 @@
 %global _hardened_build 1
 
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.1.1
+Version: 2.2.0
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program plugins for Nagios
 DocDir:  %{OHPC_PUB}/doc/contrib
