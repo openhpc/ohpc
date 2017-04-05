@@ -68,7 +68,7 @@ Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 
 Summary:   A Fast Fourier Transform library
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   3.3.4
+Version:   3.3.6
 Release:   1
 License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
