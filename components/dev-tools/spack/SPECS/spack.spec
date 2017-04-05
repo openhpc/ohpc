@@ -34,6 +34,7 @@ Requires: coreutils
 Requires: subversion
 Requires: hg
 Requires: patch
+Requires: python2-mock
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define install_path %{OHPC_ADMIN}/%{pname}/%version
