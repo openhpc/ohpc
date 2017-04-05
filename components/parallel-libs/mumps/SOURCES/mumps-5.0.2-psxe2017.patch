@@ -1,16 +1,15 @@
-diff -Nuir a/MUMPS_5.0.1/src/cana_aux_par.F b/MUMPS_5.0.1/src/cana_aux_par.F
---- a/MUMPS_5.0.1/src/cana_aux_par.F    2015-07-23 17:08:53.000000000 +0000
-+++ b/MUMPS_5.0.1/src/cana_aux_par.F    2016-09-09 16:04:05.000000000 +0000
-@@ -13,7 +13,7 @@
-       MODULE CMUMPS_PARALLEL_ANALYSIS
+--- MUMPS_5.1.1/src/cana_aux_par.F	2017-03-20 07:35:05.000000000 -0700
++++ MUMPS_5.1.1.patch/src/cana_aux_par.F	2017-04-05 10:18:54.000000000 -0700
+@@ -14,7 +14,7 @@
        USE CMUMPS_STRUC_DEF
-       USE TOOLS_COMMON
+       USE MUMPS_MEMORY_MOD
+       USE MUMPS_ANA_ORD_WRAPPERS
 -      INCLUDE 'mpif.h'
 +C      INCLUDE 'mpif.h'
        PUBLIC CMUMPS_ANA_F_PAR
        INTERFACE CMUMPS_ANA_F_PAR
        MODULE PROCEDURE CMUMPS_ANA_F_PAR
-@@ -885,6 +885,7 @@
+@@ -833,6 +833,7 @@
        END SUBROUTINE CMUMPS_GET_SUBTREES
        SUBROUTINE CMUMPS_PARSYMFACT(id, ord, GPE, GNV, WORK)  
        IMPLICIT NONE
@@ -18,18 +17,15 @@ diff -Nuir a/MUMPS_5.0.1/src/cana_aux_par.F b/MUMPS_5.0.1/src/cana_aux_par.F
        TYPE(CMUMPS_STRUC)   :: id
        TYPE(ORD_TYPE)       :: ord
        INTEGER, POINTER     :: GPE(:), GNV(:)
-@@ -1862,8 +1863,9 @@
+@@ -1835,6 +1836,7 @@
        END SUBROUTINE CMUMPS_BUILD_LOC_GRAPH
        SUBROUTINE CMUMPS_SEND_BUF(APNT, PROC, NPROCS, BUFSIZE, IPE, PE,
       &     LENG, RCVBUF, MSGCNT, SNDCNT, COMM)
 +      USE MPI
        IMPLICIT NONE
--      INCLUDE 'mpif.h'
-+C     INCLUDE 'mpif.h'
        INTEGER                 :: NPROCS, PROC, COMM
        TYPE(ARRPNT)            :: APNT(:)
-       INTEGER                 :: BUFSIZE
-@@ -2005,6 +2007,7 @@
+@@ -1981,6 +1983,7 @@
        END SUBROUTINE CMUMPS_BUILD_TREE
        SUBROUTINE CMUMPS_GRAPH_DIST(id, ord, FIRST,
       &     LAST, BASE, NPROCS, WORK, TYPE)
@@ -37,63 +33,50 @@ diff -Nuir a/MUMPS_5.0.1/src/cana_aux_par.F b/MUMPS_5.0.1/src/cana_aux_par.F
        IMPLICIT NONE
        TYPE(CMUMPS_STRUC)   :: id
        TYPE(ORD_TYPE)       :: ord
-diff -Nuir a/MUMPS_5.0.1/src/dana_aux_par.F b/MUMPS_5.0.1/src/dana_aux_par.F
---- a/MUMPS_5.0.1/src/dana_aux_par.F    2015-07-23 17:08:52.000000000 +0000
-+++ b/MUMPS_5.0.1/src/dana_aux_par.F    2016-09-08 23:45:39.000000000 +0000
-@@ -13,7 +13,7 @@
-       MODULE DMUMPS_PARALLEL_ANALYSIS
+--- MUMPS_5.1.1/src/dana_aux_par.F	2017-03-20 07:35:03.000000000 -0700
++++ MUMPS_5.1.1.patch/src/dana_aux_par.F	2017-04-05 10:33:51.000000000 -0700
+@@ -14,7 +14,7 @@
        USE DMUMPS_STRUC_DEF
-       USE TOOLS_COMMON
+       USE MUMPS_MEMORY_MOD
+       USE MUMPS_ANA_ORD_WRAPPERS
 -      INCLUDE 'mpif.h'
-+C     USE MPI
++C      INCLUDE 'mpif.h'
        PUBLIC DMUMPS_ANA_F_PAR
        INTERFACE DMUMPS_ANA_F_PAR
        MODULE PROCEDURE DMUMPS_ANA_F_PAR
-@@ -884,7 +884,10 @@
-       RETURN
+@@ -833,6 +833,7 @@
        END SUBROUTINE DMUMPS_GET_SUBTREES
        SUBROUTINE DMUMPS_PARSYMFACT(id, ord, GPE, GNV, WORK)  
-+C      include 'mpif.h'
-+C      USE MPI
        IMPLICIT NONE
-+      include 'mpif.h'
++      INCLUDE 'mpif.h'
        TYPE(DMUMPS_STRUC)   :: id
        TYPE(ORD_TYPE)       :: ord
        INTEGER, POINTER     :: GPE(:), GNV(:)
-@@ -1037,7 +1040,7 @@
-          IF(MEMCNT .GT. MAXMEM) MAXMEM=MEMCNT
-       END IF
-       CALL MPI_GATHERV(MYNVAR(1), MYNROOTS, MPI_INTEGER, LVARPT(2), 
--     &     NROOTS(1), DISPLS(1), MPI_INTEGER, 0, id%COMM, IERR)
-+     &   NROOTS(1), DISPLS(1), MPI_INTEGER, 0, id%COMM, IERR)
-       IF(MYID .EQ. 0) THEN
-          DO I=1, NPROCS
-             RCVCNT(I) = sum(LVARPT(2+DISPLS(I):2+DISPLS(I)+NROOTS(I)-1))
-@@ -1389,6 +1392,7 @@
-       END SUBROUTINE DMUMPS_BUILD_TREETAB
-       SUBROUTINE DMUMPS_BUILD_SCOTCH_GRAPH(id, FIRST, LAST, IPE,
+@@ -1348,6 +1349,7 @@
+       SUBROUTINE DMUMPS_BUILD_DIST_GRAPH(id, FIRST, LAST, IPE,
       &     PE, WORK)
-+C      USE MPI
        IMPLICIT NONE
-       INCLUDE 'mpif.h'
++      INCLUDE 'mpif.h'
        TYPE(DMUMPS_STRUC)      :: id
-@@ -1586,6 +1590,7 @@
-       END SUBROUTINE DMUMPS_BUILD_SCOTCH_GRAPH
+       INTEGER(8), POINTER     :: IPE(:)
+       INTEGER, POINTER        :: FIRST(:), LAST(:), PE(:),
+@@ -1540,6 +1542,7 @@
        SUBROUTINE DMUMPS_BUILD_LOC_GRAPH(id, ord, GSIZE, IPE, PE, LENG,
       &     I_HALO_MAP, top_graph, WORK)
-+C     USE MPI
        IMPLICIT NONE
-       INCLUDE 'mpif.h'
++      INCLUDE 'mpif.h'
        TYPE(DMUMPS_STRUC)   :: id
-@@ -1862,6 +1867,7 @@
-       END SUBROUTINE DMUMPS_BUILD_LOC_GRAPH
+       TYPE(ORD_TYPE)       :: ord
+       TYPE(GRAPH_TYPE)     :: top_graph
+@@ -1836,6 +1839,7 @@
        SUBROUTINE DMUMPS_SEND_BUF(APNT, PROC, NPROCS, BUFSIZE, IPE, PE,
       &     LENG, RCVBUF, MSGCNT, SNDCNT, COMM)
-+C     USE MPI
        IMPLICIT NONE
-       INCLUDE 'mpif.h'
++      INCLUDE 'mpif.h'
        INTEGER                 :: NPROCS, PROC, COMM
-@@ -2005,6 +2011,7 @@
+       TYPE(ARRPNT)            :: APNT(:)
+       INTEGER                 :: BUFSIZE
+@@ -1981,6 +1985,7 @@
        END SUBROUTINE DMUMPS_BUILD_TREE
        SUBROUTINE DMUMPS_GRAPH_DIST(id, ord, FIRST,
       &     LAST, BASE, NPROCS, WORK, TYPE)
@@ -101,19 +84,18 @@ diff -Nuir a/MUMPS_5.0.1/src/dana_aux_par.F b/MUMPS_5.0.1/src/dana_aux_par.F
        IMPLICIT NONE
        TYPE(DMUMPS_STRUC)   :: id
        TYPE(ORD_TYPE)       :: ord
-diff -Nuir a/MUMPS_5.0.1/src/sana_aux_par.F b/MUMPS_5.0.1/src/sana_aux_par.F
---- a/MUMPS_5.0.1/src/sana_aux_par.F    2015-07-23 17:08:51.000000000 +0000
-+++ b/MUMPS_5.0.1/src/sana_aux_par.F    2016-09-09 16:17:39.000000000 +0000
-@@ -13,7 +13,7 @@
-       MODULE SMUMPS_PARALLEL_ANALYSIS
+--- MUMPS_5.1.1/src/sana_aux_par.F	2017-03-20 07:35:01.000000000 -0700
++++ MUMPS_5.1.1.patch/src/sana_aux_par.F	2017-04-05 10:31:24.000000000 -0700
+@@ -14,7 +14,7 @@
        USE SMUMPS_STRUC_DEF
-       USE TOOLS_COMMON
+       USE MUMPS_MEMORY_MOD
+       USE MUMPS_ANA_ORD_WRAPPERS
 -      INCLUDE 'mpif.h'
-+C     INCLUDE 'mpif.h'
++C      INCLUDE 'mpif.h'
        PUBLIC SMUMPS_ANA_F_PAR
        INTERFACE SMUMPS_ANA_F_PAR
        MODULE PROCEDURE SMUMPS_ANA_F_PAR
-@@ -885,6 +885,7 @@
+@@ -833,6 +833,7 @@
        END SUBROUTINE SMUMPS_GET_SUBTREES
        SUBROUTINE SMUMPS_PARSYMFACT(id, ord, GPE, GNV, WORK)  
        IMPLICIT NONE
@@ -121,7 +103,7 @@ diff -Nuir a/MUMPS_5.0.1/src/sana_aux_par.F b/MUMPS_5.0.1/src/sana_aux_par.F
        TYPE(SMUMPS_STRUC)   :: id
        TYPE(ORD_TYPE)       :: ord
        INTEGER, POINTER     :: GPE(:), GNV(:)
-@@ -2006,6 +2007,7 @@
+@@ -1982,6 +1983,7 @@
        SUBROUTINE SMUMPS_GRAPH_DIST(id, ord, FIRST,
       &     LAST, BASE, NPROCS, WORK, TYPE)
        IMPLICIT NONE
@@ -129,27 +111,26 @@ diff -Nuir a/MUMPS_5.0.1/src/sana_aux_par.F b/MUMPS_5.0.1/src/sana_aux_par.F
        TYPE(SMUMPS_STRUC)   :: id
        TYPE(ORD_TYPE)       :: ord
        INTEGER              :: FIRST(:), LAST(:), BASE, NPROCS, TYPE
-diff -Nuir a/MUMPS_5.0.1/src/zana_aux_par.F b/MUMPS_5.0.1/src/zana_aux_par.F
---- a/MUMPS_5.0.1/src/zana_aux_par.F    2015-07-23 17:08:55.000000000 +0000
-+++ b/MUMPS_5.0.1/src/zana_aux_par.F    2016-09-09 16:10:37.000000000 +0000
-@@ -13,7 +13,7 @@
-       MODULE ZMUMPS_PARALLEL_ANALYSIS
+--- MUMPS_5.1.1/src/zana_aux_par.F	2017-03-20 07:35:07.000000000 -0700
++++ MUMPS_5.1.1.patch/src/zana_aux_par.F	2017-04-05 10:33:06.000000000 -0700
+@@ -14,7 +14,7 @@
        USE ZMUMPS_STRUC_DEF
-       USE TOOLS_COMMON
+       USE MUMPS_MEMORY_MOD
+       USE MUMPS_ANA_ORD_WRAPPERS
 -      INCLUDE 'mpif.h'
-+C     INCLUDE 'mpif.h'
++C      INCLUDE 'mpif.h'
        PUBLIC ZMUMPS_ANA_F_PAR
        INTERFACE ZMUMPS_ANA_F_PAR
        MODULE PROCEDURE ZMUMPS_ANA_F_PAR
-@@ -885,6 +885,7 @@
-       END SUBROUTINE ZMUMPS_GET_SUBTREES
-       SUBROUTINE ZMUMPS_PARSYMFACT(id, ord, GPE, GNV, WORK)  
+@@ -703,6 +703,7 @@
+       END FUNCTION ZMUMPS_CNT_KIDS
+       SUBROUTINE ZMUMPS_GET_SUBTREES(ord, id)
        IMPLICIT NONE
 +      INCLUDE 'mpif.h'
-       TYPE(ZMUMPS_STRUC)   :: id
-       TYPE(ORD_TYPE)       :: ord
-       INTEGER, POINTER     :: GPE(:), GNV(:)
-@@ -2006,6 +2007,7 @@
+       TYPE(ORD_TYPE)     :: ord
+       TYPE(ZMUMPS_STRUC) :: id
+       INTEGER, ALLOCATABLE :: ALIST(:), AWEIGHTS(:), LIST(:), WORK(:)
+@@ -1982,6 +1983,7 @@
        SUBROUTINE ZMUMPS_GRAPH_DIST(id, ord, FIRST,
       &     LAST, BASE, NPROCS, WORK, TYPE)
        IMPLICIT NONE
@@ -157,4 +138,3 @@ diff -Nuir a/MUMPS_5.0.1/src/zana_aux_par.F b/MUMPS_5.0.1/src/zana_aux_par.F
        TYPE(ZMUMPS_STRUC)   :: id
        TYPE(ORD_TYPE)       :: ord
        INTEGER              :: FIRST(:), LAST(:), BASE, NPROCS, TYPE
-

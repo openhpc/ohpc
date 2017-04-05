@@ -1,5 +1,5 @@
---- mumps-5.0.1/src/Makefile	2015-07-23 10:08:29.000000000 -0700
-+++ mumps-5.0.1.patch/src/Makefile	2015-08-24 14:34:48.000000000 -0700
+--- MUMPS_5.1.1/src/Makefile	2017-03-20 07:34:33.000000000 -0700
++++ MUMPS_5.1.1.patch/src/Makefile	2017-04-05 10:09:32.000000000 -0700
 @@ -24,7 +24,9 @@
  include $(topdir)/Makefile.inc
  
@@ -10,8 +10,8 @@
 +              $(libdir)/lib$(ARITH)mumps$(PLAT).so
  
  OBJS_COMMON_MOD = \
-         ana_omp_m.o\
-@@ -158,10 +160,18 @@
+         lr_common.o \
+@@ -171,10 +173,18 @@
  	$(AR)$@ $?
  	$(RANLIB) $@
  
@@ -30,7 +30,7 @@
  # Dependencies between modules:
  $(ARITH)mumps_load.o:		$(ARITH)mumps_comm_buffer.o \
  				$(ARITH)mumps_struc_def.o \
-@@ -259,13 +269,13 @@
+@@ -290,13 +300,13 @@
  
  .SUFFIXES: .c .F .o
  .F.o:
