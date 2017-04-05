@@ -21,7 +21,7 @@
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
-Version:   6.3
+Version:   6.3.0
 Release:   1
 License:   GNU GPL
 Group:     %{PROJ_NAME}/compiler-families
