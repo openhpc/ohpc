@@ -38,7 +38,7 @@ BuildRequires:	tcp_wrappers-devel
 BuildRequires:	freeipmi-devel
 #!BuildIgnore: post-build-checks
 
-Source0:	https://github.com/dun/conman/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.bz2
+Source0:	https://github.com/dun/conman/archive/%pname-%{version}.tar.gz
 Source1:    %{pname}.service
 Source2:       OHPC_macros
 Patch1:         conman.init.patch
