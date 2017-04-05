@@ -1,5 +1,5 @@
---- mumps-5.0.0/PORD/lib/Makefile	2015-02-20 00:19:56.000000000 -0800
-+++ mumps-5.0.0.patch/PORD/lib/Makefile	2015-06-11 10:34:39.000000000 -0700
+--- MUMPS_5.1.1/PORD/lib/Makefile	2017-03-20 07:34:33.000000000 -0700
++++ MUMPS_5.1.1.patch/PORD/lib/Makefile	2017-04-05 10:06:15.000000000 -0700
 @@ -22,14 +22,18 @@
  # OUTC = -o
  
@@ -22,18 +22,18 @@
  realclean:
 -	rm -f *.o libpord.a
 +	rm -f *.o libpord*.a *.so
---- mumps-5.0.0/Makefile	2015-02-20 00:19:56.000000000 -0800
-+++ mumps-5.0.0.patch/Makefile	2015-06-11 10:40:13.000000000 -0700
-@@ -51,7 +51,7 @@
- dexamples:	d
- 	(cd examples ; $(MAKE) d)
+--- MUMPS_5.1.1/Makefile	2017-03-20 07:34:33.000000000 -0700
++++ MUMPS_5.1.1.patch/Makefile	2017-04-05 10:06:15.000000000 -0700
+@@ -54,7 +54,7 @@
+ multi_example:	s d c z
+ 	(cd examples ; $(MAKE) multi)
  
 -requiredobj: Makefile.inc $(LIBSEQNEEDED) $(libdir)/libpord$(PLAT)$(LIBEXT)
 +requiredobj: Makefile.inc $(LIBSEQNEEDED) $(libdir)/libpord$(PLAT)$(LIBEXT) $(libdir)/libpord$(PLAT).so
  
  # dummy MPI library (sequential version)
  
-@@ -65,13 +65,23 @@
+@@ -68,13 +68,23 @@
  	  $(MAKE) CC="$(CC)" CFLAGS="$(OPTC)" AR="$(AR)" RANLIB="$(RANLIB)" OUTC="$(OUTC)" LIBEXT=$(LIBEXT); \
  	fi;
  	if [ "$(LPORDDIR)" != "" ] ; then \
