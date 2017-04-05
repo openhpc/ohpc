@@ -20,6 +20,13 @@ setup() {
     check_if_rpm_installed "spack${DELIM}"
 }
 
-@test "[spack] test executable" {
-    EMAIL=foo@intel.com spack test
+@test "[spack] add compiler" {
+    ml gnu
+    spack compiler find
+    assert_success
+}
+
+@test "[spack] test build" {
+    spack install libelf
+    assert_success
 }
