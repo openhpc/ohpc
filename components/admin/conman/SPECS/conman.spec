@@ -64,7 +64,7 @@ Its features include:
   - broadcasting client output to multiple consoles
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{pname}-%{version}
 %patch1 -p1
 
 %build
