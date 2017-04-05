@@ -1,7 +1,7 @@
---- conman-0.2.7/etc/conman.init.in	2009-04-02 18:21:52.000000000 -0700
-+++ conman-0.2.7-patch/etc/conman.init.in	2014-08-05 15:46:00.624007900 -0700
+--- conman-conman-0.2.8/etc/conman.init.in	2016-11-22 13:31:04.000000000 -0800
++++ conman-conman-0.2.8.patch/etc/conman.init.in	2017-04-05 15:41:54.000000000 -0700
 @@ -18,6 +18,8 @@
- # Should-Stop:        $remote_fs $syslog $time
+ # Default-Stop:
  # Short-Description:  Start/Stop the ConMan (serial console manager) daemon.
  # Description:        Start/Stop the ConMan (serial console manager) daemon.
 +# Default-Start: 3 5
