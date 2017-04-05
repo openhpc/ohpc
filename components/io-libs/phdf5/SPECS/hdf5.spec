@@ -87,14 +87,14 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      p%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.8.17
+Version:   1.8.18
 Release:   1
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-Source0:   http://www.hdfgroup.org/ftp/HDF5/releases/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
+Source0:   https://support.hdfgroup.org/ftp/HDF5/current18/src/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
