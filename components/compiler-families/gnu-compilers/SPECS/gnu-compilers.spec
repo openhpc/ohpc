@@ -15,13 +15,13 @@
 
 # Define subcomponent versions required for build
 
-%define gmp_version 6.1.1
+%define gmp_version 6.1.2
 %define mpc_version 1.0.3
-%define mpfr_version 3.1.4
+%define mpfr_version 3.1.5
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.4.0
+Version:   6.3
 Release:   1
 License:   GNU GPL
 Group:     %{PROJ_NAME}/compiler-families
