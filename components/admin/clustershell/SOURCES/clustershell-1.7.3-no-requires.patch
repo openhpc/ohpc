@@ -1,0 +1,11 @@
+--- clustershell-1.7.3/setup.py	2016-12-20 13:32:36.000000000 -0800
++++ clustershell-1.7.3.patch/setup.py	2017-04-04 18:46:58.000000000 -0700
+@@ -33,7 +33,7 @@
+ VERSION = '1.7.3'
+ 
+ # Dependencies (for pip install)
+-REQUIRES = ['PyYAML']
++REQUIRES = []
+ 
+ setup(name='ClusterShell',
+       version=VERSION,

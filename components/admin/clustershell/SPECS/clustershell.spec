@@ -15,6 +15,7 @@ License:       LGPLv2.1
 URL:           http://clustershell.sourceforge.net/
 Source0:       https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
 Source1:       OHPC_macros
+Patch1:        clustershell-1.7.3-no-requires.patch
 BuildRoot:     %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 
 # Default library install path
@@ -49,6 +50,7 @@ Syntax highlighting in the VIM editor for ClusterShell configuration files.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1 
 
 %build
 %{__python} setup.py build
