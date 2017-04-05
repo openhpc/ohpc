@@ -68,7 +68,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.7.0
+Version:   1.7.1
 Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
