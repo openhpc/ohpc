@@ -41,7 +41,7 @@ Group: System Environment/Development
 Development files for Singularity
 
 %prep
-%setup
+%setup -q -n %{pname}-%{version}
 
 
 %build
