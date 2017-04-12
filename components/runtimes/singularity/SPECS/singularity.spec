@@ -24,9 +24,9 @@ Release: %{_rel}%{?dist}
 License: BSD-3-Clause-LBNL
 Group: System Environment/Base
 URL: http://singularity.lbl.gov/
-Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
 ExclusiveOS: linux
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{name}-%{version}-%{release}-root
+BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 
 %description
 Singularity provides functionality to build the smallest most minimal
