@@ -427,12 +427,17 @@ if test "x$ROOT_ENABLED" = "x1" ; then
     else 
        echo '    'Hardware benchmarks....... : disabled
     fi
-
     if test "x$enable_spack" = "xyes"; then
        echo '    'Spack..................... : enabled
     else
        echo '    'Spack..................... : disabled
     fi
+    if test "x$enable_singularity" = "xyes"; then
+       echo '    'Singularity............... : enabled
+    else
+       echo '    'Singularity............... : disabled
+    fi
+
 
 else
 
@@ -683,12 +688,6 @@ echo    Runtimes:
        echo '    'OCR....................... : enabled
     else
        echo '    'OCR....................... : disabled
-    fi
-
-    if test "x$enable_singularity" = "xyes"; then
-       echo '    'Singularity............... : enabled
-    else
-       echo '    'Singularity............... : disabled
     fi
 
 echo    Apps:
