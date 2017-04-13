@@ -23,6 +23,10 @@ if SPACK_ENABLED
    SUBDIRS += admin/spack
 endif
 
+if SINGULARITY_ENABLED
+   TESTS += runtimes/singularity/run
+endif
+
 else # non root tests
 
 if EASYBUILD_ENABLED
@@ -136,10 +140,6 @@ endif
 
 if OCR_ENABLED
    TESTS += runtimes/ocr/ohpc-tests/test_compiler_families
-endif
-
-if SINGULARITY_ENABLED
-   TESTS += runtimes/singularity/run
 endif
 
 if OPENBLAS_ENABLED
