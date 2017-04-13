@@ -96,7 +96,7 @@ AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Singularity
 AC_ARG_ENABLE([singularity],
-     [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes, root only)])],[],
+     [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes, root only)])],
 	 [],[enable_singularity=yes])
 AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
 
