@@ -138,6 +138,10 @@ if OCR_ENABLED
    TESTS += runtimes/ocr/ohpc-tests/test_compiler_families
 endif
 
+if SINGULARITY_ENABLED
+   TESTS += runtimes/singularity/run
+endif
+
 if OPENBLAS_ENABLED
    TESTS += libs/openblas/ohpc-tests/test_compiler_families
 endif

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"      || exit 1
+
+export BATS_JUNIT_CLASS=Singularity
+source ./common/TEST_ENV  || exit 1
+source ./common/functions || exit 1
+
+echo " "
+echo " "
+echo "-------------------------------------------------------"
+echo "Runtimes: Singularity"
+echo "-------------------------------------------------------"
+
+./image
+#./rm_execution

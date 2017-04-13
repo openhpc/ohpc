@@ -1,0 +1,30 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+@test "[singularity] check for RPM" {
+    check_if_rpm_installed "singularity${DELIM}"
+}
+
+@test "[singularity] create image" {
+    singularity create /tmp/centos.img
+    assert_success
+}
+
+@test "[singularity] bootstrap image" {
+    singularity bootstrap /tmp/centos.img /usr/share/doc/singularity-ohpc-2.2.1/examples/centos.def
+    assert_success
+}
+
+@test "[singularity] exec image" {
+    singularity exec /tmp/centos.img cat /etc/os-release
+    assert_success
+}
+
+rm -f /tmp/centos.img

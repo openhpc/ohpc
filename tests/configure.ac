@@ -281,6 +281,12 @@ AC_ARG_ENABLE([scipy],
    [AX_OPTION_DEFAULT(type=long,enable_scipy,yes)])
 AM_CONDITIONAL(SCIPY_ENABLED,test "x$enable_scipy" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Singularity
+AC_ARG_ENABLE([singularity],
+   [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_singularity,yes)])
+AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
+#------------------------------------------------------------------------------------------
 # SuperLU
 AC_ARG_ENABLE([superlu],
    [AS_HELP_STRING([--enable-superlu],[Enable superlu tests (default=yes)])],[],
@@ -624,12 +630,6 @@ echo    Libraries:
        echo '    'Numpy..................... : disabled
     fi
 
-    if test "x$enable_ocr" = "xyes"; then
-       echo '    'OCR....................... : enabled
-    else
-       echo '    'OCR....................... : disabled
-    fi
-
     if test "x$enable_openblas" = "xyes"; then
        echo '    'OPENBLAS.................. : enabled
     else
@@ -676,6 +676,20 @@ echo    Libraries:
        echo '    'Trilinos ................. : enabled
     else
        echo '    'Trilinos.................. : disabled
+    fi
+
+echo    Runtimes:
+
+    if test "x$enable_ocr" = "xyes"; then
+       echo '    'OCR....................... : enabled
+    else
+       echo '    'OCR....................... : disabled
+    fi
+
+    if test "x$enable_singularity" = "xyes"; then
+       echo '    'Singularity............... : enabled
+    else
+       echo '    'Singularity............... : disabled
     fi
 
 echo    Apps:
