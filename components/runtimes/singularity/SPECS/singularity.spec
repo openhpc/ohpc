@@ -52,6 +52,7 @@ Development files for Singularity
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 rm -f $RPM_BUILD_ROOT/%{_libdir}/lib*.la
+export NO_BRP_CHECK_RPATH=true
 
 
 %clean
