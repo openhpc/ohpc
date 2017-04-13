@@ -88,12 +88,17 @@ AC_ARG_ENABLE([oob],
 	 [],[enable_oob=yes])
 AM_CONDITIONAL(OOB_ENABLED,test "x$enable_oob" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-
 # spack
 AC_ARG_ENABLE([spack],
 	 [AS_HELP_STRING([--enable-spack],[Enable spack tests (default=yes, root only)])],
 	 [],[enable_spack=yes])
 AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# Singularity
+AC_ARG_ENABLE([singularity],
+     [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes, root only)])],[],
+	 [],[enable_singularity=yes])
+AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
 
 #-----------------
 # User level tests
@@ -280,12 +285,6 @@ AC_ARG_ENABLE([scipy],
    [AS_HELP_STRING([--enable-scipy],[Enable scipy tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_scipy,yes)])
 AM_CONDITIONAL(SCIPY_ENABLED,test "x$enable_scipy" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Singularity
-AC_ARG_ENABLE([singularity],
-   [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_singularity,yes)])
-AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
 #------------------------------------------------------------------------------------------
 # SuperLU
 AC_ARG_ENABLE([superlu],
