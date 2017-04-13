@@ -26,5 +26,3 @@ fi
     singularity exec /tmp/centos.img cat /etc/os-release
     assert_success
 }
-
-rm -f /tmp/centos.img
