@@ -45,7 +45,7 @@ Development files for Singularity
 
 
 %build
-%configure --disable-static --disable-suid --with-pic
+%configure --disable-static --with-pic
 %{__make} %{?mflags}
 
 
