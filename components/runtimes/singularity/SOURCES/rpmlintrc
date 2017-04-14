@@ -1,1 +1,1 @@
-addFilter("permissions-file-setuid-bit")
+setBadness("permissions-file-setuid-bit", 4)
