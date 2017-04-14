@@ -45,8 +45,6 @@ Development files for Singularity
 
 
 %build
-export CFLAGS="-fPIC $CFLAGS"
-export LDFLAGS="-fPIC $LDFLAGS"
 %configure --disable-static --with-pic
 %{__make} %{?mflags}
 
