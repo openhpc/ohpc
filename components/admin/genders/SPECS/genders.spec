@@ -16,7 +16,6 @@ Name:    %{pname}%{PROJ_DELIM}
 Version: 1.22
 Release: 1%{?dist}
 Summary: Static cluster configuration database
-Group: System Environment/Base
 License: GPL
 Source: https://github.com/chaos/genders/releases/download/genders-1-22-1/%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
