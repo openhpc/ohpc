@@ -87,14 +87,14 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      p%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.8.18
+Version:   1.10.0
 Release:   1
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-Source0:   https://support.hdfgroup.org/ftp/HDF5/current18/src/%{pname}-%{version}.tar.bz2
+Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/%{pname}-%{version}-patch1/src/%{pname}-%{version}-patch1.tar.bz2
 Source1:   OHPC_macros
 Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
@@ -119,7 +119,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 
 %prep
 
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}-patch1
 
 %build
 
