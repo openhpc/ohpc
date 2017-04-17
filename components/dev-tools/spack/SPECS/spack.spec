@@ -34,6 +34,9 @@ Requires: coreutils
 Requires: subversion
 Requires: hg
 Requires: patch
+%if 0%{?suse_version}
+Requires: python-mock
+%endif
 Requires: python2-mock
 DocDir:    %{OHPC_PUB}/doc/contrib
 
