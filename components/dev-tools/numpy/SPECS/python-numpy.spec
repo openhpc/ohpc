@@ -49,14 +49,14 @@ BuildRequires: intel_licenses
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.11.1
+Version:        1.12.1
 Release:        1
 Url:            http://sourceforge.net/projects/numpy
 DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
-Source0:        http://sourceforge.net/projects/numpy/files/NumPy/%{version}/numpy-%{version}.tar.gz
+Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/numpy-%{version}.tar.gz
 Source1:        OHPC_macros
 Source2:        OHPC_setup_compiler
 Patch1:         numpy-buildfix.patch
