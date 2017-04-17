@@ -20,8 +20,7 @@
 %if 0%{?suse_version}
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
-# needssslcertforbuild
-export BRP_PESIGN_FILES='*.ko'
+
 BuildRequires: pesign-obs-integration
 %define sles_kernel 4.4.21-69-default
 %define kdir /lib/modules/%{sles_kernel}/source/
@@ -337,6 +336,10 @@ fi
 make %{?_smp_mflags} -s %{?make_args}
 
 %install
+
+# needssslcertforbuild
+export BRP_PESIGN_FILES='*.ko'
+
 make install DESTDIR=$RPM_BUILD_ROOT
 
 # RHEL's kernel_module_path macro expects that all the modules
