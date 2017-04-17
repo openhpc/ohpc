@@ -291,6 +291,7 @@ ln lnet/ChangeLog ChangeLog-lnet
 
 %build
 
+# needssslcertforbuild
 export BRP_PESIGN_FILES='*.ko'
 
 # Set an explicit path to our Linux tree, if we can.
