@@ -1,5 +1,5 @@
---- numpy-1.11.1/numpy/distutils/fcompiler/intel.py	2016-06-18 09:15:37.000000000 -0700
-+++ numpy-1.11.1.patch/numpy/distutils/fcompiler/intel.py	2016-10-14 15:51:33.000000000 -0700
+--- numpy-1.12.1/numpy/distutils/fcompiler/intel.py	2017-03-12 14:36:42.000000000 -0700
++++ numpy-1.12.1.patch/numpy/distutils/fcompiler/intel.py	2017-04-17 11:45:23.000000000 -0700
 @@ -2,6 +2,7 @@
  from __future__ import division, absolute_import, print_function
  
@@ -44,7 +44,7 @@
      def get_flags_arch(self):
          return ["/arch:IA32", "/QaxSSE3"]
 @@ -205,7 +206,7 @@
-     version_match = simple_version_match(start='Intel\(R\).*?64,')
+     version_match = simple_version_match(start=r'Intel\(R\).*?64,')
  
      def get_flags_arch(self):
 -        return ['']
