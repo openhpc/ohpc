@@ -20,6 +20,8 @@
 %if 0%{?suse_version}
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
+# needssslcertforbuild
+export BRP_PESIGN_FILES='*.ko'
 BuildRequires: pesign-obs-integration
 %define sles_kernel 4.4.21-69-default
 %define kdir /lib/modules/%{sles_kernel}/source/
@@ -291,8 +293,7 @@ ln lnet/ChangeLog ChangeLog-lnet
 
 %build
 
-# needssslcertforbuild
-export BRP_PESIGN_FILES='*.ko'
+
 
 # Set an explicit path to our Linux tree, if we can.
 cd $RPM_BUILD_DIR/lustre-%{version}
