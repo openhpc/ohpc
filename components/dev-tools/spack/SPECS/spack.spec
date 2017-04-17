@@ -36,8 +36,9 @@ Requires: hg
 Requires: patch
 %if 0%{?suse_version}
 Requires: python-mock
-%endif
+%else
 Requires: python2-mock
+%endif
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define install_path %{OHPC_ADMIN}/%{pname}/%version
