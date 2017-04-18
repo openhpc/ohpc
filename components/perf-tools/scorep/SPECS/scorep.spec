@@ -206,6 +206,12 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     }
 }
 
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { ![is-loaded pdtoolkit]  } {
+      module load pdtoolkit
+    }
+}
+
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
