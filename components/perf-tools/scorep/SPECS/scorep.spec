@@ -234,7 +234,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{OHPC_HOME}
 %{OHPC_PUB}
-%doc ChangeLog COPYING INSTALL OPEN_ISSUES README
+%doc AUTHORS ChangeLog COPYING INSTALL OPEN_ISSUES README THANKS
 
 
 %changelog
