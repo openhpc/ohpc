@@ -140,7 +140,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
-./configure --prefix=%{install_path} $CONFIGURE_OPTIONS
+./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS
 
 %install
 
@@ -158,6 +158,9 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 # don't package static libs
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*la
+rm -f $RPM_BUILD_ROOT%{install_path}/lib/*a
+rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*la
+rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*o
 
 
 # OpenHPC module file
