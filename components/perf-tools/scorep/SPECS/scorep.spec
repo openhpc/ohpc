@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# Scalasca library that is is dependent on compiler toolchain and MPI
+# Score-p library that is is dependent on compiler toolchain and MPI
 
 #-ohpc-header-comp-begin----------------------------------------------
 
