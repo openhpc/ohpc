@@ -195,12 +195,6 @@ module-whatis "URL %{url}"
 set     version			    %{version}
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded sionlib]  } {
-      module load sionlib
-    }
-}
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if { ![is-loaded papi]  } {
       module load papi
     }
@@ -209,6 +203,12 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if { ![is-loaded pdtoolkit]  } {
       module load pdtoolkit
+    }
+}
+
+if [ expr [ module-info mode load ] || [module-info mode display ] ] {
+    if { ![is-loaded sionlib]  } {
+      module load sionlib
     }
 }
 
