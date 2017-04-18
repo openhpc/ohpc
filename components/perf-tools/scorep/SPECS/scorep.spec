@@ -70,7 +70,7 @@ Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.0
 Release:   1
-License:   BSD
+License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
 Source0:   http://www.vi-hps.org/upload/packages/scorep/scorep-%{version}.tar.gz
