@@ -126,9 +126,9 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 
-export CFLAGS='-fPIC ${CFLAGS}'
-export CXXFLAGS='-fPIC ${CXXFLAGS}'
-export FCFLAGS='-fPIC ${FCFLAGS}'
+export CFLAGS='-fPIC -fpic ${CFLAGS}'
+export CXXFLAGS='-fPIC -fpic ${CXXFLAGS}'
+export FCFLAGS='-fPIC -fpic ${FCFLAGS}'
 ./configure --prefix=%{buildroot}%{install_path} $CONFIGURE_OPTIONS
 
 # remove ARM incompatible cflag
