@@ -83,17 +83,17 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 BuildRequires:  fdupes
 %endif
 BuildRequires: automake
+BuildRequires: binutils-devel
+Requires     : binutils-devel
+BuildRequires: libunwind-devel
+Requires     : libunwind-devel
+BuildRequires: zlib-devel
 BuildRequires: papi%{PROJ_DELIM}
 Requires:      papi%{PROJ_DELIM}
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires     : pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires     : sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: binutils-devel
-Requires     : binutils-devel
-BuildRequires: libunwind-devel
-Requires     : libunwind-devel
-BuildRequires: zlib-devel
 
 %define debug_package %{nil}
 
