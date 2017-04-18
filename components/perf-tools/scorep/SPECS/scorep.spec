@@ -86,6 +86,8 @@ BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires     : pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires     : sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires: binutils-devel
+BuildRequires: libunwind-devel
 BuildRequires: zlib-devel
 
 %define debug_package %{nil}
