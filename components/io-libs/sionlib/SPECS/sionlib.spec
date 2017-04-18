@@ -71,7 +71,7 @@ Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.7.1
 Release:   1
 License:   BSD
-Group:     %{PROJ_NAME}/perf-tools
+Group:     %{PROJ_NAME}/io-tools
 URL:       http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html
 Source0:   http://apps.fz-juelich.de/jsc/sionlib/download.php?version=%{version}#/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
@@ -126,6 +126,9 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 
+export CFLAGS='-fPIC ${CFLAGS}'
+export CXXFLAGS='-fPIC ${CXXFLAGS}'
+export FCFLAGS='-fPIC ${FCFLAGS}'
 ./configure --prefix=%{buildroot}%{install_path} $CONFIGURE_OPTIONS
 
 # remove ARM incompatible cflag
@@ -167,7 +170,7 @@ puts stderr "\nVersion %{version}\n"
 }
 module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
 module-whatis "Version: %{version}"
-module-whatis "Category: performance tool"
+module-whatis "Category: IO Library"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
