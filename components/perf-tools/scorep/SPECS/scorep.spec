@@ -79,6 +79,9 @@ Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires:  fdupes
+%endif
 BuildRequires: automake
 BuildRequires: papi%{PROJ_DELIM}
 Requires:      papi%{PROJ_DELIM}
@@ -166,6 +169,9 @@ rm -f $RPM_BUILD_ROOT%{install_path}/lib/*a
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*la
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*o
 
+%if 0%{?suse_version}
+%fdupes -s %{buildroot}%{install_path}
+%endif
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
