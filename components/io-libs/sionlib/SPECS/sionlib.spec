@@ -126,14 +126,15 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 
-export CFLAGS='-fPIC -fpic ${CFLAGS}'
-export CXXFLAGS='-fPIC -fpic ${CXXFLAGS}'
-export FCFLAGS='-fPIC -fpic ${FCFLAGS}'
 ./configure --prefix=%{buildroot}%{install_path} $CONFIGURE_OPTIONS
 
 # remove ARM incompatible cflag
 %ifnarch x86_64
 sed -i 's|-m$(PREC)||g' build-*/Makefile.defs
+%endif
+
+%if %{compiler_family} == intel
+sed -i 's|-fPIC|-fpic|g' build-*/Makefile.defs
 %endif
 
 
