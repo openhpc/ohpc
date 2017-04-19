@@ -133,11 +133,6 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 sed -i 's|-m$(PREC)||g' build-*/Makefile.defs
 %endif
 
-%if %{compiler_family} == intel
-sed -i 's|-fPIC|-fpic|g' build-*/Makefile.defs
-%endif
-
-
 %install
 
 # OpenHPC compiler designation
@@ -146,6 +141,9 @@ export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
+%if %{compiler_family} == intel
+export OPTFLAGS="-fpic ${OPTFLAGS}"
+%endif
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # don't package static libs
