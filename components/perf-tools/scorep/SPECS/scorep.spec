@@ -164,10 +164,10 @@ module load papi
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # don't package static libs
-rm -f $RPM_BUILD_ROOT%{install_path}/lib/*la
-rm -f $RPM_BUILD_ROOT%{install_path}/lib/*a
-rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*la
-rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*o
+rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.la
+rm -f $RPM_BUILD_ROOT%{install_path}/lib/*.a
+rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*.la
+rm -f $RPM_BUILD_ROOT%{install_path}/lib/scorep/*.o
 
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
