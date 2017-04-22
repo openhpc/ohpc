@@ -13,15 +13,15 @@ use Path::Tiny qw(path);
 my $release;
 my $overwrite=0;
 
-if(defined $ENV{'Version'}) {
+if (defined $ENV{'Version'}) {
     $release = $ENV{'Version'};
 } else {
     die "Version environment variable not set!\n";
 }
 
-if(defined $ENV{'OverWritePrevoius'} ) {
+if (defined $ENV{'OverWritePrevoius'} ) {
     if ($ENV{'OverWritePrevious'} eq "true") { $overwrite=1; }
-} 
+}
 
 my @arches = ('aarch64', 'x86_64');
 my @distros = ('Leap_15','EL_9','openEuler_22.03');
@@ -31,7 +31,7 @@ my $dest_dir = "/repos/dist/$release";
 my $tmp_path = "/stage/dist/tmp";
 
 # basic usage
-sub usage { 
+sub usage {
     print "\n";
     print "Usage: mk_dist [OPTIONS]\n\n";
     print "OPTIONS:\n";
@@ -49,17 +49,17 @@ sub add_repo_file {
     my $release      = shift;
     my $distro       = shift;
     my $isSrcRepo    = shift;
-    
+
     print "Adding [base] repofile contents -> $repoFile\n";
 
     File::Copy::copy("repo.base.in","$repoFile") || die "Unable to copy repo.base.in\n";
-    if($minor > 0) {
-	print "Appending [update] repo\n";
-	open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
-	open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
-	print BASE <UPDATE>;
-	close BASE;
-	close UPDATE;
+    if ($minor > 0) {
+        print "Appending [update] repo\n";
+        open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
+        open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
+        print BASE <UPDATE>;
+        close BASE;
+        close UPDATE;
     }
 
     # Update version strings in .repo file
@@ -69,13 +69,11 @@ sub add_repo_file {
     $contents       =~ s/\@VERSION_MINOR\@/$base_release/g;
     $contents       =~ s/\@VERSION_MICRO\@/$release/g;
     $contents       =~ s/\@DISTRO\@/$distro/g;
-    if( $isSrcRepo ) {
-	$contents   =~ s/- Base/- Base Sources/g;
-	$contents   =~ s/- Updates/- Updates Sources/g;
+    if ( $isSrcRepo ) {
+        $contents   =~ s/- Base/- Base Sources/g;
+        $contents   =~ s/- Updates/- Updates Sources/g;
     }
     $file_update->spew_utf8( $contents );
-
-	
 }
 
 sub add_readme_file {
@@ -88,7 +86,7 @@ sub add_readme_file {
     my $package_manager     = "";
     my $package_manager_dir = "";
 
-	print "Adding README\n";
+    print "Adding README\n";
 
     if ($distro =~ m/CentOS*/) {
         $package_manager = "yum";
@@ -113,7 +111,7 @@ sub add_readme_file {
     $contents       =~ s/\@VERSION\@/$release/g;
     $file_update->spew_utf8( $contents );
 
-    #append new OpenHPC.local.repo 
+    #append new OpenHPC.local.repo
     my $repo = path($repoFile);
     my $repo_contents = $repo->slurp_utf8;
     $repo_contents    =~ s/\@PATH\@/\/opt\/ohpc\/repos/g;
@@ -145,11 +143,11 @@ print "OpenHPC dist creation utility\n";
 print "--> Requested release version = $release\n";
 print "--> Overwrite existing dists  = $overwrite\n";
 
-if($preRelease) {
+if ($preRelease) {
     print "--> Build from factory pre-release = 1\n";
 }
 
-if($skipCopy) {
+if ($skipCopy) {
     print "--> Debug skipCopy option     = 1\n";
 }
 
@@ -167,7 +165,7 @@ my $tmp_dir = File::Temp::tempdir(CLEANUP => 1, DIR=> $tmp_path) || MYERROR("Una
 
 print "\nStaging dist creation in $tmp_dir...\n";
 
-if( !$skipCopy) {
+if ( !$skipCopy ) {
     local $File::Copy::Recursive::CopyLink  = 0;
 
     # copy base repo contents
@@ -321,10 +319,10 @@ foreach my $distro (@distros) {
     # add sources .repo file
     my $isSrcRepo=1;
     add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
-    
-	# add README file
+
+    # add README file
     my $arch = "src";
-	add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo", $tmp_dir);
+        add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo", $tmp_dir);
 
     $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
@@ -333,7 +331,7 @@ foreach my $distro (@distros) {
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
     system("tar $tar_args") == 0 || die "Unable to execute $distro:src tar command: $!";
-    
+
 } # end loop over @distros
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 
