@@ -14,16 +14,16 @@ my $license_end_delim='----------eh-$';
 
 # Command-line parsing
 
-GetOptions("S=s@","c2f_comment","c2sh_comment")  || die "Error using GetOptions";
+GetOptions("S=s@","c2f_comment","c2sh_comment") || die "Error using GetOptions";
 
 if (@ARGV >= 2) {
-    $header_file = shift@ARGV;
+    $header_file = shift @ARGV;
 } else {
     print "\nUsage: update_license.pl HEADER-FILE SOURCE-FILES...\n\n";
     exit 0;
 }
 
-# Verify license file 
+# Verify license file
 # existence and cache contents.
 
 if ( ! -s $header_file ) {
@@ -41,7 +41,7 @@ close($HEAD);
 
 my $found_delim = 0;
 
-while (@ARGV) 
+while (@ARGV)
 {
     $found_delim = 0;
 
@@ -50,9 +50,9 @@ while (@ARGV)
     # autoconf support - look for ".in" version of the src file
 
     if ( -e "$infile_test.in" ) {
-	$infile = "$infile_test.in";
+        $infile = "$infile_test.in";
     } else {
-	$infile = "$infile_test";
+        $infile = "$infile_test";
     }
 
     open($IN, "<$infile") || die "Cannot open $infile\n";
@@ -64,35 +64,37 @@ while (@ARGV)
     # Let's punt if we cannot create tmp files locally
 
     if ( ! open ($TMPFILE,">$tmpfile") ) {
-	print "[header_tool]: Warning -> unable to create tmp file locally ($tmpfile) - aborting update.\n";
-	next;
+        print "[header_tool]: Warning -> unable to create tmp file locally ($tmpfile) - aborting update.\n";
+        next;
     }
 
     while (<$IN>) {
-	if(/$license_begin_delim/../$license_end_delim/) {
-	    $found_delim=1;
-		if (/$license_begin_delim/) {
-		print $TMPFILE @license_text;
-	    }
-	} else {
-	    print $TMPFILE $_;
-	}
+        if (/$license_begin_delim/../$license_end_delim/) {
+            $found_delim=1;
+            if (/$license_begin_delim/) {
+                print $TMPFILE @license_text;
+            }
+        } else {
+            print $TMPFILE $_;
+        }
     }
 
     close($IN);
     close($TMPFILE);
 
-    if( $found_delim ) {
-	if ( compare($infile,$tmpfile) != 0 )  {
-	    print "[header_tool]: updating license in file $infile\n";
-	        # cache perms of original file so we can mirror them
-	    my $mode_orig = (stat($infile))[2] & 0777;
-	    rename($tmpfile,$infile) || die "Cannot rename updated file\n";
-	    chmod($mode_orig,$infile) || die "Cannot chmod permissions to match original\n";
-	} else {
-	    unlink($tmpfile) || die "Unable to remove temporary file\n";
-	}
+    if ( $found_delim ) {
+        if ( compare($infile,$tmpfile) != 0 )  {
+            print "[header_tool]: updating license in file $infile\n";
+
+            # cache perms of original file so we can mirror them
+            my $mode_orig = (stat($infile))[2] & 0777;
+
+            rename($tmpfile,$infile) || die "Cannot rename updated file\n";
+            chmod($mode_orig,$infile) || die "Cannot chmod permissions to match original\n";
+        } else {
+            unlink($tmpfile) || die "Unable to remove temporary file\n";
+        }
     } else {
-	unlink($tmpfile) || die "Unable to remove temporary file\n";
+        unlink($tmpfile) || die "Unable to remove temporary file\n";
     }
 }
