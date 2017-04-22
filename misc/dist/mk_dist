@@ -12,15 +12,15 @@ use Path::Tiny qw(path);
 my $release;
 my $overwrite=0;
 
-if(defined $ENV{'Version'}) {
+if (defined $ENV{'Version'}) {
     $release = $ENV{'Version'};
 } else {
     die "Version environment variable not set!\n";
 }
 
-if(defined $ENV{'OverWritePrevoius'} ) {
+if (defined $ENV{'OverWritePrevoius'} ) {
     if ($ENV{'OverWritePrevious'} eq "true") { $overwrite=1; }
-} 
+}
 
 my @arches = ('aarch64', 'x86_64');
 my @distros = ('SLE_12','CentOS_7');
@@ -30,7 +30,7 @@ my $dest_dir = "/srv/www/dist/$release";
 my $tmp_path = "/srv/tmp/dist";
 
 # basic usage
-sub usage { 
+sub usage {
     print "\n";
     print "Usage: mk_dist [OPTIONS]\n\n";
     print "OPTIONS:\n";
@@ -47,17 +47,17 @@ sub add_repo_file {
     my $release      = shift;
     my $distro       = shift;
     my $isSrcRepo    = shift;
-    
+
     print "Adding [base] repofile contents -> $repoFile\n";
 
     File::Copy::copy("repo.base.in","$repoFile") || die "Unable to copy repo.base.in\n";
-    if($micro) {
-	print "Appending [update] repo\n";
-	open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
-	open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
-	print BASE <UPDATE>;
-	close BASE;
-	close UPDATE;
+    if ($micro) {
+        print "Appending [update] repo\n";
+        open (BASE, ">>","$repoFile") || die "Unable to append to repo file\n";
+        open (UPDATE,"<","repo.update.in") || die "Unable to access repo.update.in\n";
+        print BASE <UPDATE>;
+        close BASE;
+        close UPDATE;
     }
 
     # Update version strings in .repo file
@@ -67,13 +67,11 @@ sub add_repo_file {
     $contents       =~ s/\@VERSION_MINOR\@/$base_release/g;
     $contents       =~ s/\@VERSION_MICRO\@/$release/g;
     $contents       =~ s/\@DISTRO\@/$distro/g;
-    if( $isSrcRepo ) {
-	$contents   =~ s/- Base/- Base Sources/g;
-	$contents   =~ s/- Updates/- Updates Sources/g;
+    if ( $isSrcRepo ) {
+        $contents   =~ s/- Base/- Base Sources/g;
+        $contents   =~ s/- Updates/- Updates Sources/g;
     }
     $file_update->spew_utf8( $contents );
-
-	
 }
 
 sub add_readme_file {
@@ -86,7 +84,7 @@ sub add_readme_file {
     my $package_manager     = "";
     my $package_manager_dir = "";
 
-	print "Adding README\n";
+    print "Adding README\n";
 
     if ($distro =~ m/CentOS*/) {
         $package_manager = "yum";
@@ -107,7 +105,7 @@ sub add_readme_file {
     $contents       =~ s/\@VERSION\@/$release/g;
     $file_update->spew_utf8( $contents );
 
-    #append new OpenHPC.local.repo 
+    #append new OpenHPC.local.repo
     my $repo = path($repoFile);
     my $repo_contents = $repo->slurp_utf8;
     $repo_contents    =~ s/\@PATH\@/\/opt\/ohpc\/repos/g;
@@ -123,8 +121,8 @@ my $skipCopy = 0;
 my $help = 0;
 
 GetOptions('skip-copy' => \$skipCopy,
-	   "h"             => \$help,
-           "help"          => \$help);
+           "h"         => \$help,
+           "help"      => \$help);
 
 usage() if ($help);
 
@@ -137,7 +135,7 @@ print "OpenHPC dist creation utility\n";
 print "--> Requested release version = $release\n";
 print "--> Overwrite existing dists  = $overwrite\n";
 
-if($skipCopy) {
+if ($skipCopy) {
     print "--> Debug skipCopy option     = 1\n";
 }
 
@@ -155,7 +153,7 @@ my $tmp_dir = File::Temp::tempdir(CLEANUP => 1, DIR=> $tmp_path) || MYERROR("Una
 
 print "\nStaging dist creation in $tmp_dir...\n";
 
-if( !$skipCopy) {
+if ( !$skipCopy ) {
 
     # copy base repo contents
     print "\nCopying base repo contents from OBS...\n";
@@ -179,80 +177,79 @@ if( !$skipCopy) {
 
 foreach my $distro (@distros) {
     if ($micro) {
-	dircopy("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
+        dircopy("$tmp_dir/updates/$distro", "$tmp_dir/$distro/updates");
     }
     my @n_distros = grep { $_ ne $distro } @distros;
     # generate binary tarballs
     foreach my $arch (@arches) {
-	my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
-	my $tar_args = "-cvf $dist_filename \\\n";
+        my $dist_filename = "$dest_dir/OpenHPC-$release.$distro\_$arch.tar";
+        my $tar_args = "-cvf $dist_filename \\\n";
 
-	
-	# exclude other arches, iso and src dirs
-	my @n_arches = grep { $_ ne $arch } @arches;
-	for my $n_arch (@n_arches) {
-	    $tar_args .= "--exclude $distro/$n_arch \\\n";
-	}
-	$tar_args .= "--exclude $distro/iso \\\n";
-	$tar_args .= "--exclude $distro/src \\\n";
-	
+        # exclude other arches, iso and src dirs
+        my @n_arches = grep { $_ ne $arch } @arches;
+        for my $n_arch (@n_arches) {
+            $tar_args .= "--exclude $distro/$n_arch \\\n";
+        }
+        $tar_args .= "--exclude $distro/iso \\\n";
+        $tar_args .= "--exclude $distro/src \\\n";
+
 	# exclude any other distro updates
-	if ($micro) {
-	    for my $n_distro (@n_distros) {
-		$tar_args .= "--exclude $distro/updates/$n_distro \\\n";
-	    }
-	}
+        if ($micro) {
+            for my $n_distro (@n_distros) {
+                $tar_args .= "--exclude $distro/updates/$n_distro \\\n";
+            }
+        }
 
-	# exclude any OBS created .repo files
-	$tar_args .= "--exclude $distro/OpenHPC*.repo \\\n";
-	$tar_args .= "--exclude $distro/updates/OpenHPC*.repo \\\n";
+        # exclude any OBS created .repo files
+        $tar_args .= "--exclude $distro/OpenHPC*.repo \\\n";
+        $tar_args .= "--exclude $distro/updates/OpenHPC*.repo \\\n";
 
-	# cd to $tmp_dir
-	$tar_args .= "-C $tmp_dir \\\n";
+        # cd to $tmp_dir
+        $tar_args .= "-C $tmp_dir \\\n";
 
-	# verify path exists
-	if($skipCopy) {
-	    File::Path::make_path("$tmp_dir/$distro") || die("Unable to create $tmp_dir/$distro\n");
-	}
+        # verify path exists
+        if ($skipCopy) {
+            File::Path::make_path("$tmp_dir/$distro") || die("Unable to create $tmp_dir/$distro\n");
+        }
 
-	# add binary .repo file
-	my $isSrcRepo=0;
-	add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
+        # add binary .repo file
+        my $isSrcRepo=0;
+        add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
 
-	# add README file
-	add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo", $tmp_dir);
+        # add README file
+        add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo", $tmp_dir);
 
-	# Copy make_repo.sh utility
-	print "Adding make_repo.sh utility\n";
-	File::Copy::copy("make_repo.sh","$tmp_dir") || die "Unable to copy make_repo.sh\n";
-	chmod 0700, "$tmp_dir/make_repo.sh" || die "Unable to set perms for make_repo.sh\n";
+        # Copy make_repo.sh utility
+        print "Adding make_repo.sh utility\n";
+        File::Copy::copy("make_repo.sh","$tmp_dir") || die "Unable to copy make_repo.sh\n";
+        chmod 0700, "$tmp_dir/make_repo.sh" || die "Unable to set perms for make_repo.sh\n";
 
-	# Assemble final tarball
-	$tar_args .= "$distro make_repo.sh OpenHPC.local.repo README";
-	print "\nCreating dist tarball for $distro:$arch -- \n";
-	print "\ntar command -> tar $tar_args\n\n";
-	system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
+        # Assemble final tarball
+        $tar_args .= "$distro make_repo.sh OpenHPC.local.repo README";
+        print "\nCreating dist tarball for $distro:$arch -- \n";
+        print "\ntar command -> tar $tar_args\n\n";
+        system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
 
     } # end loop over @arches
-    
+
     # generate src tarball
     my $src_filename = "$dest_dir/OpenHPC-$release.$distro\_src.tar";
     my $tar_args = "-cvf $src_filename \\\n";
 
     for my $arch (@arches) {
-	$tar_args .= "--exclude $distro/$arch \\\n";
+        $tar_args .= "--exclude $distro/$arch \\\n";
     }
-	$tar_args .= "--exclude $distro/noarch \\\n";
+        $tar_args .= "--exclude $distro/noarch \\\n";
 
     # exclude any other distro/arch updates
     if ($micro) {
-	for my $arch (@arches) {
-	    $tar_args .= "--exclude $distro/updates/$arch \\\n";
-	}
-	$tar_args .= "--exclude $distro/updates/noarch \\\n";
-	for my $n_distro (@n_distros) {
-	    $tar_args .= "--exclude $distro/updates/$n_distro \\\n";
-	}
+        for my $arch (@arches) {
+            $tar_args .= "--exclude $distro/updates/$arch \\\n";
+        }
+        $tar_args .= "--exclude $distro/updates/noarch \\\n";
+        for my $n_distro (@n_distros) {
+            $tar_args .= "--exclude $distro/updates/$n_distro \\\n";
+        }
     }
 
     # exclude any OBS created .repo files
@@ -262,10 +259,10 @@ foreach my $distro (@distros) {
     # add sources .repo file
     my $isSrcRepo=1;
     add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
-    
-	# add README file
+
+    # add README file
     my $arch = "src";
-	add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo", $tmp_dir);
+        add_readme_file($arch, $distro, $micro, $release, "$tmp_dir/OpenHPC.local.repo", $tmp_dir);
 
     $tar_args .= "--exclude $distro/iso \\\n";
     $tar_args .= "-C $tmp_dir \\\n";
@@ -274,7 +271,7 @@ foreach my $distro (@distros) {
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
     system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
-    
+
 } # end loop over @distros
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4 
