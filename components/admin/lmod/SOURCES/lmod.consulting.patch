@@ -1,12 +1,10 @@
---- Lmod-5.8/src/MasterControl.lua	2014-11-04 10:46:44.000000000 -0800
-+++ Lmod-5.8.patch/src/MasterControl.lua	2014-11-19 13:08:14.098359300 -0800
-@@ -1018,8 +1018,7 @@
-          LmodError("You can only have one ",name," module loaded at a time.\n",
-                    "You already have ", oldName," loaded.\n",
-                    "To correct the situation, please enter the following command:\n\n",
--                   "  module swap ",oldName, " ", mFull,"\n\n",
--                   "Please submit a consulting ticket if you require additional assistance.\n")
-+                   "  module swap ",oldName, " ", mFull,"\n")
-       end
-    end
-    mt:setfamily(name,sn)
+--- Lmod-7.4.8/src/MessageT.lua.orig	2017-04-25 17:10:46.000000000 -0500
++++ Lmod-7.4.8/src/MessageT.lua	2017-04-25 17:11:26.000000000 -0500
+@@ -27,7 +27,6 @@
+ 
+   $  module swap %{oldName} %{fullName}
+ 
+-Please submit a consulting ticket if you require additional assistance.
+ ]==],
+    e_setStandardPaths = "Unknown Key: \"%{key}\" in setStandardPaths\n",
+    e_No_Matching_Mods = "No matching modules found\n",
