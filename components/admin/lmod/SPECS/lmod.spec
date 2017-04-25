@@ -52,6 +52,8 @@ Conflicts: environment-modules
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch
 Patch2: lmod.site.patch
+# 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
+%global _default_patch_fuzz 2
 
 # Known dependencies
 Requires: lua >= %{luaver}
