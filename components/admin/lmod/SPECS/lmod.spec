@@ -177,5 +177,5 @@ rm -rf $RPM_BUILD_ROOT
 %config %{_sysconfdir}/profile.d/lmod.sh
 %config %{_sysconfdir}/profile.d/lmod.csh
 %{OHPC_PUB}
-%doc License
-%doc README
+%doc License README.md README_lua_modulefiles.txt INSTALL
+
