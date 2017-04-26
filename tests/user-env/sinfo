@@ -14,17 +14,16 @@ rpm=slurm${DELIM}
 @test "[$RESOURCE_MANAGER] Verify SLURM RPM version matches sinfo binary" {
     # check version against rpm
     local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
-    rpm -q --queryformat='%{VERSION}\n' $rpm >& .version.rpm
 
     run which sinfo
     assert_success
 
     sinfo --version | awk '{print $2}' >& .version_binary
 
-    run diff .version.rpm .version_binary
+    run grep "^${version}" .version_binary
     assert_success
 
-    rm -f .version_output
+    rm -f .version_binary
 
 }
 
