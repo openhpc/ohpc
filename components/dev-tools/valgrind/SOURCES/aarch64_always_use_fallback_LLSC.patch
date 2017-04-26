@@ -1,0 +1,14 @@
+diff --git a/coregrind/m_translate.c b/coregrind/m_translate.c
+index f763a947b..cec8af4aa 100644
+--- a/coregrind/m_translate.c
++++ b/coregrind/m_translate.c
+@@ -1706,8 +1706,7 @@ Bool VG_(translate) ( ThreadId tid,
+ #  endif
+ 
+ #  if defined(VGP_arm64_linux)
+-   vex_abiinfo.guest__use_fallback_LLSC
+-      = SimHintiS(SimHint_fallback_llsc, VG_(clo_sim_hints));
++   vex_abiinfo.guest__use_fallback_LLSC = True;
+ #  endif
+ 
+    /* Set up closure args. */
