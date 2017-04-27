@@ -84,6 +84,7 @@ Url:            http://www.mcs.anl.gov/petsc/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 DocDir:         %{OHPC_PUB}/doc/contrib
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
 BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  xz
