@@ -109,7 +109,15 @@ update_pkg_if_service () {
 
     local localdir="${branchNew}/$1"
 
+    echo "${branchNew}" | grep -q ":Update" 
+
     local version=`echo $branchNew | awk -F : '{print $2}'`
+
+    if [ $? -eq 0 ];then
+	local update_ver=`echo $branchNew | awk -F : '{print $3}' | awk -F 'Update' '{print $2}'`
+	version="$version.$update_ver"
+    fi
+
     local revision="obs/OpenHPC_${version}_Factory"
 
     echo "--> _service file: revision = $revision"
