@@ -199,7 +199,11 @@ done
 if [[ $found_link -eq 1 ]];then
     echo " "
     echo "At least 1 _link file updated. committing staged changes in $TMPDIR..."
-    cd $TMPDIR
+    if [ $# -gt 2 ];then
+	cd $TMPDIR/$branchNew/$3
+    else
+	cd $TMPDIR
+    fi
     osc ci -m "committing updated _link files"
     cd -
 fi
