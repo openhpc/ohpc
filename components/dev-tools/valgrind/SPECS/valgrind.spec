@@ -24,6 +24,12 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/dev-tools
 Source:    http://valgrind.org/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
+%ifarch aarch64
+Patch1:    revVEX3352.patch
+Patch2:    rev16269.patch
+Patch3:    rev16309.patch
+Patch4:    aarch64_always_use_fallback_LLSC.patch
+%endif
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
@@ -40,6 +46,12 @@ AMD64/MacOSX.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%ifarch aarch64
+%patch1 -p0
+%patch2 -p0
+%patch3 -p0
+%patch4 -p1
+%endif
 
 %build
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
