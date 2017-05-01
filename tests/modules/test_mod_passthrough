@@ -1,7 +1,7 @@
 #!/bin/bash
 
 module list >& .cmd_output || exit 1
-my_output=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1`
+my_output=`cat .cmd_output | sed '/^\*$/d' | sed 's/^[ \t]*//' | tail -1`
 
 if [ "$my_output" != "1) test-module" ];then
     exit 1
