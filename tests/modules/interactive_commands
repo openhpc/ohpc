@@ -36,7 +36,7 @@ load ../common/test_helper_functions
     # load test-module and verify load works 
     module load test-module || exit 1
     module list >& .cmd_output || exit 1
-    local my_output=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1`
+    local my_output=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1`
     assert_equal "1) test-module" "$my_output"
 
     # verify env variable was added correctly
