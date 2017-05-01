@@ -8,14 +8,14 @@ family=${LMOD_FAMILY_MPI}
 
 @test "[MPI] MPI module loaded ($LMOD_FAMILY_COMPILER/$family)" {
     module list $family >& .cmd_output || exit 1
-    local my_module=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1`
+    local my_module=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1`
     echo "$my_module" | grep -q "1) $family/"
     assert_success
 }
 
 @test "[MPI] MPI module version available ($LMOD_FAMILY_COMPILER/$family)" {
     module list $family >& .cmd_output || exit 1
-    local my_version=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
+    local my_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
 
     if [ -z "$my_version" ];then
 	flunk "ERROR: unable to ascertain module version ($my_version)"
@@ -25,7 +25,7 @@ family=${LMOD_FAMILY_MPI}
 
 @test "[MPI] mpicc, mpicxx, and mpif90 versions match module ($LMOD_FAMILY_COMPILER/$family)" {
     module list $family >& .cmd_output || exit 1
-    local my_mod_version=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
+    local my_mod_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
 
     local mpi_version=""
 
