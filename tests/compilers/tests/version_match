@@ -14,13 +14,13 @@ fi
 
 @test "[Compilers] compiler module loaded ($family)" {
     module list $family >& .cmd_output || exit 1
-    local my_module=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1`
+    local my_module=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1`
     echo $my_module | grep -q "1) $family/" || exit 1
 }
 
 @test "[Compilers] compiler module version available ($family)" {
     module list $family >& .cmd_output || exit 1
-    local my_version=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
+    local my_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
 
     if [ -z "$my_version" ];then
 	flunk "ERROR: unable to ascertain module version ($my_version)"
@@ -30,7 +30,7 @@ fi
 
 @test "[Compilers] C, C++, and Fortran versions match module ($family)" {
     module list $family >& .cmd_output || exit 1
-    local my_mod_version=`cat .cmd_output | sed '/^$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
+    local my_mod_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
 
     if [ "$family" = "intel" ];then
 	version=`icc -V 2>&1 | grep Version | awk -F 'Version' '{print $2}' | awk '{print $1}'` || exit 1
