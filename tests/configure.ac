@@ -168,6 +168,12 @@ AC_ARG_ENABLE([netcdf],
    [AX_OPTION_DEFAULT(type=long,enable_netcdf,yes)])
 AM_CONDITIONAL(NETCDF_ENABLED,test "x$enable_netcdf" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# PNetCDF
+AC_ARG_ENABLE([pnetcdf],
+   [AS_HELP_STRING([--enable-pnetcdf],[Enable PNetCDF tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_pnetcdf,yes)])
+AM_CONDITIONAL(PNETCDF_ENABLED,test "x$enable_pnetcdf" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # HDF5
 AC_ARG_ENABLE([hdf5],
    [AS_HELP_STRING([--enable-hdf5],[Enable HDF5 tests (default=yes)])],[],
@@ -660,6 +666,12 @@ echo    Libraries:
        echo '    'NetCDF.................... : enabled
     else
        echo '    'NetCDF.................... : disabled
+    fi
+
+    if test "x$enable_pnetcdf" = "xyes"; then
+       echo '    'PNetCDF.................... : enabled
+    else
+       echo '    'PNetCDF.................... : disabled
     fi
 
     if test "x$enable_numpy" = "xyes"; then
