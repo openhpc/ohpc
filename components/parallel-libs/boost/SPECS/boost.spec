@@ -182,7 +182,7 @@ EOF
 %endif
 
 # perform the compilation
-./b2 %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam  || config.log
+./b2 %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam  || cat config.log
 
 
 %install
