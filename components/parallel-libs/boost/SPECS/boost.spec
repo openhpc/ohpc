@@ -101,6 +101,7 @@ Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boo
 Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
+Source4:        get_data.hpp
 Source100:      baselibs.conf
 Source101:	OHPC_macros
 Source102:	OHPC_setup_compiler
@@ -154,6 +155,10 @@ see the boost-doc package.
 %setup -q -n %{pname}_%{version_exp} 
 
 %build
+# reese.baird@intel.com - mitigate:
+# https://svn.boost.org/trac/boost/ticket/12723
+cp %{_sourcedir}/%SOURCE4 boost/serialization/detail/.
+
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
@@ -182,7 +187,7 @@ EOF
 %endif
 
 # perform the compilation
-./b2 %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam  || cat config.log
+./b2 %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam
 
 
 %install
