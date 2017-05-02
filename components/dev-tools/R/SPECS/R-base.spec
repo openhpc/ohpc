@@ -231,7 +231,6 @@ EOF
 
 %{__mkdir_p}  %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
-
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
