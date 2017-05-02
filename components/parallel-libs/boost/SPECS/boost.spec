@@ -89,9 +89,9 @@ Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.64.0
+Version:        1.63.0
 
-%define version_exp 1_64_0
+%define version_exp 1_63_0
 
 Release:        0
 License:        BSL-1.0
@@ -101,7 +101,6 @@ Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boo
 Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
-Source4:        get_data.hpp
 Source100:      baselibs.conf
 Source101:	OHPC_macros
 Source102:	OHPC_setup_compiler
@@ -155,10 +154,6 @@ see the boost-doc package.
 %setup -q -n %{pname}_%{version_exp} 
 
 %build
-# reese.baird@intel.com - mitigate:
-# https://svn.boost.org/trac/boost/ticket/12723
-cp %SOURCE4 boost/serialization/detail/.
-
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
 . %{_sourcedir}/OHPC_setup_compiler
