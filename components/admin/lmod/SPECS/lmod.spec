@@ -47,7 +47,11 @@ BuildRequires: tcl
 BuildRequires: procps
 %endif
    
+%if 0%{?sles_version} || 0%{?suse_version}
+Conflicts: Modules
+%else
 Conflicts: environment-modules
+%endif
 
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch
