@@ -157,7 +157,7 @@ see the boost-doc package.
 %build
 # reese.baird@intel.com - mitigate:
 # https://svn.boost.org/trac/boost/ticket/12723
-cp %{_sourcedir}/%SOURCE4 boost/serialization/detail/.
+cp %SOURCE4 boost/serialization/detail/.
 
 # OpenHPC compiler/mpi designation
 export OHPC_COMPILER_FAMILY=%{compiler_family}
