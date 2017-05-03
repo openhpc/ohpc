@@ -7,6 +7,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.14])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
+OHPC_DISTRO_FAMILY
 AC_CANONICAL_HOST
 AC_SUBST(ARCH,[$host_cpu])
 
@@ -395,6 +396,7 @@ echo Build user.................... : $USER
 echo Build host.................... : ${ac_hostname}
 echo Configure date................ : `date +'%F %H:%M'`
 echo Build architecture............ : ${host_cpu}
+echo Host operating system......... : ${DISTRO_FAMILY}
 echo Compiler Families............. : ${COMPILER_FAMILIES}
 echo MPI Families.................. : ${MPI_FAMILIES}
 if test "x$enable_slurm" = "xyes" ; then
