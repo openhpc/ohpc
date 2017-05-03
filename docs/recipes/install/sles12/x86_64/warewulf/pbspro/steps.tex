@@ -94,42 +94,7 @@
 
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
-
-% begin_ohpc_run
-% ohpc_comment_header Complete basic Warewulf setup for master node \ref{sec:setup_ww}
-%\begin{verbatim}
-
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-# Configure Warewulf provisioning to use desired internal interface
-[sms](*\#*) perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
-
-# Configure DHCP server to use desired internal interface
-[sms](*\#*) perl -pi -e "s/^DHCPD_INTERFACE=\S+/DHCPD_INTERFACE=${sms_eth_internal}/" /etc/sysconfig/dhcpd
-
-# Enable tftp service for compute node image distribution
-[sms](*\#*) perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
-
-# Configure Warewulf to use the default SLES tftp location
-[sms](*\#*) perl -pi -e "s#\#tftpdir = /var/lib/#tftpdir = /srv/#" /etc/warewulf/provision.conf
-
-# Update Warewulf http configuration to use the SLES version of Apache modules
-[sms](*\#*) export MODFILE=/etc/apache2/conf.d/warewulf-httpd.conf
-[sms](*\#*) perl -pi -e "s#modules/mod_perl.so\$#/usr/lib64/apache2/mod_perl.so#" $MODFILE
-[sms](*\#*) perl -pi -e "s#modules/mod_version.so\$#/usr/lib64/apache2/mod_version.so#" $MODFILE
-
-# Enable internal interface for provisioning
-[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
-
-# Restart/enable relevant services to support provisioning
-[sms](*\#*) systemctl restart xinetd
-[sms](*\#*) systemctl enable mysql.service
-[sms](*\#*) systemctl restart mysql
-[sms](*\#*) systemctl enable apache2.service
-[sms](*\#*) systemctl restart apache2
-\end{lstlisting}
-%\end{verbatim}
-% end_ohpc_run
-
+\input{common/warewulf_setup_sles}
 
 \subsection{Define {\em compute} image for provisioning}
 
