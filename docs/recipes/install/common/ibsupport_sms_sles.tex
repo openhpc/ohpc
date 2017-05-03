@@ -1,0 +1,37 @@
+The following command adds OFED and PSM support using base distro-provided drivers
+to the chosen {\em master} host.
+
+% begin_ohpc_run
+% ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
+[sms](*\#*) (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
+
+# Provide udev rules to enable /dev/ipath access for InfiniPath devices
+[sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules /etc/udev/rules.d/
+
+# Load IB drivers
+[sms](*\#*) systemctl start rdma
+\end{lstlisting}
+% end_ohpc_run
+
+\input{common/opensm}
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_validation_comment Enable ib0
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) cp /opt/ohpc/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
+
+# Define local IPoIB address and netmask
+[sms](*\#*) perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network/ifcfg-ib0
+[sms](*\#*) perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network/ifcfg-ib0
+
+# Initiate ib0
+[sms](*\#*) ifup ib0
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run

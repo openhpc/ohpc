@@ -81,63 +81,14 @@
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{common/install_provisioning_intro}
-
 \input{common/enable_pxe}
-
 \input{common/time}
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
-
-The following command adds OFED and PSM support using base distro-provided drivers
-to the chosen {\em master} host.
-
-% begin_ohpc_run
-% ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
-[sms](*\#*) (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
-
-# Provide udev rules to enable /dev/ipath access for InfiniPath devices
-[sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules /etc/udev/rules.d/
-
-# Load IB drivers
-[sms](*\#*) systemctl start rdma
-\end{lstlisting}
-% end_ohpc_run
-
-\input{common/opensm}
-
-With the \InfiniBand{} drivers included, you can also enable (optional) IPoIB functionality
-which provides a mechanism to send IP packets over the IB network. If you plan
-to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_client}
-for additional details), then having IPoIB enabled is a requirement for the
-\Lustre{} client. \OHPC{} provides a template configuration file to aid in setting up
-an {\em ib0} interface on the {\em master} host. To use, copy the template
-provided and update the \texttt{\$\{sms\_ipoib\}} and
-\texttt{\$\{ipoib\_netmask\}} entries to match local desired settings (alter ib0
-naming as appropriate if system contains dual-ported or multiple HCAs). 
-
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
-% ohpc_indent 5
-% ohpc_validation_comment Enable ib0
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) cp /opt/ohpc/pub/examples/network/sles/ifcfg-ib0 /etc/sysconfig/network
-
-# Define local IPoIB address and netmask
-[sms](*\#*) perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network/ifcfg-ib0
-[sms](*\#*) perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network/ifcfg-ib0
-
-# Initiate ib0
-[sms](*\#*) ifup ib0
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% end_ohpc_run
+\input{common/ibsupport_sms_sles}
 
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
