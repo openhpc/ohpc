@@ -49,8 +49,8 @@ Development files for Singularity
 
 
 %build
-cp $SOURCE1 libexec/bootstrap/modules-v2/.
-cp $SOURCE2 examples/.
+cp %SOURCE1 libexec/bootstrap/modules-v2/.
+cp %SOURCE2 examples/.
 %configure --disable-static --with-pic
 %{__make} %{?mflags}
 
