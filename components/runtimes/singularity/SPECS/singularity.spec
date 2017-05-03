@@ -25,6 +25,9 @@ License: BSD-3-Clause-LBNL
 Group: System Environment/Base
 URL: http://singularity.lbl.gov/
 Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
+Source1: build-zypper.sh
+Source2: sles.def
+Patch1:  singularity-makefile.patch
 ExclusiveOS: linux
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 
@@ -42,9 +45,12 @@ Development files for Singularity
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 
 %build
+cp $SOURCE1 libexec/bootstrap/modules-v2/.
+cp $SOURCE2 examples/.
 %configure --disable-static --with-pic
 %{__make} %{?mflags}
 

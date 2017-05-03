@@ -13,6 +13,6 @@ echo "Runtimes: Singularity"
 echo "-------------------------------------------------------"
 
 ./image
-#./rm_execution
 
 rm -f /tmp/centos.img
+rm -f /tmp/sles.img
