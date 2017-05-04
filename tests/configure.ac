@@ -374,7 +374,7 @@ AC_OUTPUT( Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
        oob/Makefile
-       singularity/Makefile
+       runtimes/singularity/Makefile
        lustre/Makefile
        dev-tools/easybuild/Makefile
        admin/spack/Makefile
