@@ -33,4 +33,5 @@ fi
 @test "[singularity] exec image" {
     singularity exec /tmp/${DISTRO}.img cat /etc/os-release
     assert_success
+    rm -rf /tmp/${DISTRO}.img
 }
