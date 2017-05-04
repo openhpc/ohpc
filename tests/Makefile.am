@@ -24,7 +24,7 @@ if SPACK_ENABLED
 endif
 
 if SINGULARITY_ENABLED
-   TESTS += runtimes/singularity/run
+   SUBDIRS += runtimes/singularity/run
 endif
 
 else # non root tests
