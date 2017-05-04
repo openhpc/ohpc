@@ -1,0 +1,50 @@
+With the provisioning services enabled, the next step is to define and
+customize a system image that can subsequently be used to provision one or more
+{\em compute} nodes. The following subsections highlight this process.
+
+\subsubsection{Build initial BOS image} \label{sec:assemble_bos}
+
+The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support for
+\baseOS{}. The following steps illustrate the process to build a minimal, default
+image for use with \Warewulf{}. We begin by creating a directory structure on the 
+{\em master} host that will represent the root filesystem of the compute node. The 
+default location for this example is in
+\texttt{/opt/ohpc/admin/images/\baseos{}}.
+
+\begin{center}
+  \begin{tcolorbox}[]
+    \small Note that \Warewulf{} requires access to a zypper repository during the 
+    \texttt{wwmkchroot} process. The easiest way to provide this is to mount 
+    the SUSE-SLE-12-SP2-Server ISO image on a web server that can communicate 
+    with the {\em master} host, set the \texttt{\$\{BOS\_MIRROR\}} environment 
+    variable to that URL, and update the template file {\em prior} to running 
+    the \texttt{wwmkchroot} command below. For example:
+
+% begin_ohpc_run
+% ohpc_command if [ ! -z ${BOS_MIRROR+x} ]; then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={}]
+# Override default OS repository - set BOS_MIRROR variable to desired repo location
+[sms](*\#*) perl -pi -e "s#^ZYP_MIRROR=(\S+)#ZYP_MIRROR=${BOS_MIRROR}#" \
+   /usr/lib/warewulf/wwmkchroot/sles-12.tmpl
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\end{tcolorbox}
+\end{center}
+
+% begin_ohpc_run
+% ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+# Define chroot location
+[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/sles12sp2
+
+# Build initial chroot image
+[sms](*\#*) mkdir -p -m 755 $CHROOT                        # create chroot housing dir
+[sms](*\#*) mkdir -m 755 $CHROOT/dev                       # create chroot /dev dir
+[sms](*\#*) mknod -m 666 $CHROOT/dev/zero c 1 5            # create /dev/zero device
+[sms](*\#*) wwmkchroot sles-12 $CHROOT                     # create base image
+\end{lstlisting}
+% end_ohpc_run

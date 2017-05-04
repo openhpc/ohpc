@@ -1,5 +1,3 @@
-
-
 \documentclass[letterpaper]{article}
 \usepackage{common/ohpc-doc}
 
@@ -26,6 +24,8 @@
 \newcommand{\rms}{SLURM}
 \newcommand{\arch}{aarch64}
 
+% Define package manager commands
+\newcommand{\pkgmgr}{yum}
 \newcommand{\clean}{yum clean expire-cache}
 \newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
 \newcommand{\install}{yum -y install}
@@ -123,63 +123,10 @@ links below:
 \input{common/warewulf_setup_centos}
 
 \subsection{Define {\em compute} image for provisioning}
-
-With the provisioning services enabled, the next step is to define and
-customize a system image that can subsequently be used to provision one or more
-{\em compute} nodes. The following subsections highlight this process.
-
-\subsubsection{Build initial BOS image} \label{sec:assemble_bos}
-
-The \OHPC{} build of \Warewulf{} includes specific enhancements enabling support for
-\baseOS{}. The following steps illustrate the process to build a minimal, default
-image for use with \Warewulf{}. We begin by defining a directory structure on the 
-{\em master} host that will represent the root filesystem of the compute node. The 
-default location for this example is in
-\texttt{/opt/ohpc/admin/images/\baseos{}}.
-
-\begin{center}
-  \begin{tcolorbox}[]
-    \small Note that \Warewulf{} is configured by default to access an external repository
-    (vault.centos.org) during the \texttt{wwmkchroot} process.
-    If the master host cannot reach the public CentOS mirrors, or if you
-    prefer to access a locally cached mirror, set the
-    \texttt{\$\{BOS\_MIRROR\}} environment variable to your desired repo
-    location and update the template file 
-    {\em prior} to running the \texttt{wwmkchroot} command below. For
-    example:
-
-% begin_ohpc_run
-% ohpc_command if [ ! -z ${BOS_MIRROR+x} ]; then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,keywords={}]
-# Override default OS repository (optional) - set BOS_MIRROR variable to desired repo location
-[sms](*\#*) perl -pi -e "s#YUM_MIRROR_BASE=(\S+)#YUM_MIRROR_BASE=${BOS_MIRROR}#" \
-   /usr/libexec/warewulf/wwmkchroot/centos-7.tmpl
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% end_ohpc_run
-
-\end{tcolorbox}
-\end{center}
-
-% begin_ohpc_run
-% ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
-# Define chroot location 
-[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/centos7.2
-
-# Build initial chroot image
-[sms](*\#*) wwmkchroot centos-7 $CHROOT
-\end{lstlisting}
-% end_ohpc_run
+\input{common/warewulf_mkchroot_centos}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
-
 \input{common/add_to_compute_chroot_intro}
-
-\noindent Now, we can include additional components to the compute instance using
-\texttt{yum} to install into the chroot location defined previously:
 
 % begin_ohpc_run
 % ohpc_validation_comment Add OpenHPC components to compute instance
