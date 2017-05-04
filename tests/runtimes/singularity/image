@@ -10,8 +10,10 @@ fi
 
 if [ "x$DISTRO_FAMILY" == "xCentOS" ];then
     export DISTRO=centos
+    export BOOTSTRAP_DEF=/usr/share/doc/singularity-ohpc-2.2.1/examples/${DISTRO}.def
 else
     export DISTRO=sles
+    export BOOTSTRAP_DEF=/usr/share/doc/packages/singularity-ohpc/examples/${DISTRO}.def
 fi
 
 @test "[singularity] check for RPM" {
@@ -24,7 +26,7 @@ fi
 }
 
 @test "[singularity] bootstrap image" {
-    singularity bootstrap /tmp/${DISTRO}.img /usr/share/doc/singularity-ohpc-2.2.1/examples/${DISTRO}.def
+    singularity bootstrap /tmp/${DISTRO}.img ${BOOTSTRAP_DEF}
     assert_success
 }
 
