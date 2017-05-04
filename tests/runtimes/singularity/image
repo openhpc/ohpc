@@ -8,7 +8,7 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
-if [ "x$DISTRO_FAMILY" == "xCentOS" ]
+if [ "x$DISTRO_FAMILY" == "xCentOS" ];then
     export DISTRO=centos
 else
     export DISTRO=sles
