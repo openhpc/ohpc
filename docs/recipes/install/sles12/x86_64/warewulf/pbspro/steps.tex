@@ -26,6 +26,7 @@
 \newcommand{\groupchrootinstall}{zypper -n --root \$CHROOT install}
 \newcommand{\upgrade}{zypper -n up}
 \newcommand{\chrootupgrade}{zypper -n --root \$CHROOT up}
+\newcommand{\tftppkg}{syslinux}
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
@@ -187,9 +188,6 @@
 \paragraph{Add \genders{}}
 \input{common/genders}
 
-%% \paragraph{Add \powerman{}}
-%% \input{common/powerman}
-
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
@@ -199,72 +197,9 @@
 
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
-
-% CentOS specific
 \input{common/import_ww_files_ib_sles}
-
 \input{common/finalize_provisioning}
-
-%\clearpage
-% begin_ohpc_run
-% ohpc_validation_comment Add hosts to cluster
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Add nodes to Warewulf data store
-[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-                wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
-        done
-\end{lstlisting}
-% end_ohpc_run
-
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Additional step required if desiring to use predictable network interface
-# naming schemes (e.g. en4s0f0). Skip if using eth# style names.
-[sms](*\#*) wwsh provision set "${compute_regex}" --kargs "net.ifnames=1,biosdevname=1"
-[sms](*\#*) wwsh provision set --postnetdown=1 "${compute_regex}"
-\end{lstlisting}
-
-% begin_ohpc_run
-% ohpc_validation_comment Add hosts to cluster (Cont.)
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Define provisioning image for hosts
-[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=sles12sp2 --bootstrap=`uname -r` \
-     --files=dynamic_hosts,passwd,group,shadow
-\end{lstlisting}
-
-% ohpc_validation_newline
-% ohpc_validation_comment Optionally, define IPoIB network settings (required if planning to mount Lustre over IB)
-% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Optionally define IPoIB network settings (required if planning to mount Lustre over IB)
-[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-              wwsh -y node set ${c_name[$i]} -D ib0 --ipaddr=${c_ipoib[$i]} --netmask=${ipoib_netmask}
-        done
-[sms](*\#*) wwsh -y provision set "${compute_regex}" --fileadd=ifcfg-ib0.ww
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% ohpc_validation_newline
-% end_ohpc_run
-
-\input{common/wwnodescan}
-
-% begin_ohpc_run
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
-# Restart dhcp / update PXE
-[sms](*\#*) systemctl restart dhcpd
-[sms](*\#*) wwsh pxe update
-\end{lstlisting}
-% end_ohpc_run
-
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_validation_comment Optionally, add arguments to bootstrap kernel
-% ohpc_command if [[ ${enable_kargs} ]]; then
-% ohpc_command    wwsh provision set "${compute_regex}" --kargs=${kargs}
-% ohpc_command fi
-
-% end_ohpc_run
+\input{common/add_ww_hosts_sles}
 
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
@@ -275,21 +210,6 @@
 %\clearpage
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes}
-
-%----------------
-% SLES specific
-%----------------
-
-\begin{center}
-\begin{tcolorbox}[]
-\small While the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files that ship
-with Warewulf to enable network boot support a wide range of hardware, some
-hosts may boot more reliably or faster using the BOS versions provided via the
-\texttt{syslinux} package. If you encounter PXE issues, consider
-replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
-\texttt{warewulf-provision-ohpc} with versions from \texttt{syslinux}.
-\end{tcolorbox}
-\end{center}
 
 \section{Install \OHPC{} Development Components}
 \input{common/dev_intro.tex}

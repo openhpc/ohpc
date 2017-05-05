@@ -34,6 +34,7 @@
 \newcommand{\groupchrootinstall}{zypper -n --root \$CHROOT install}
 \newcommand{\upgrade}{zypper -n up}
 \newcommand{\chrootupgrade}{zypper -n --root \$CHROOT up}
+\newcommand{\tftppkg}{syslinux}
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
@@ -195,9 +196,6 @@
 \paragraph{Add \genders{}}
 \input{common/genders}
 
-%% \paragraph{Add \powerman{}}
-%% \input{common/powerman}
-
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
@@ -278,21 +276,6 @@
 %\clearpage
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes}
-
-%----------------
-% SLES specific
-%----------------
-
-\begin{center}
-\begin{tcolorbox}[]
-\small While the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files that ship
-with Warewulf to enable network boot support a wide range of hardware, some
-hosts may boot more reliably or faster using the BOS versions provided via the
-\texttt{syslinux} package. If you encounter PXE issues, consider
-replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
-\texttt{warewulf-provision-ohpc} with versions from \texttt{syslinux}.
-\end{tcolorbox}
-\end{center}
 
 \section{Install \OHPC{} Development Components} \label{sec:install_dev}
 \input{common/dev_intro.tex}

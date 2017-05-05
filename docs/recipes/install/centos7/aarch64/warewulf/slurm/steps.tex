@@ -34,6 +34,7 @@
 \newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
 \newcommand{\upgrade}{yum -y upgrade}
 \newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
+\newcommand{\tftppkg}{syslinux-tftpboot}
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
@@ -198,9 +199,6 @@ links below:
 \paragraph{Add \genders{}}
 \input{common/genders}
 
-%% \paragraph{Add \powerman{}}
-%% \input{common/powerman}
-
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
@@ -289,21 +287,6 @@ links below:
 \vspace*{-0.1cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes} 
-
-%----------------
-% CentOS specific
-%----------------
-
-\begin{center}
-\begin{tcolorbox}[]
-\small While the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files that ship
-with Warewulf to enable network boot support a wide range of hardware, some
-hosts may boot more reliably or faster using the BOS versions provided via the
-\texttt{syslinux-tftpboot} package. If you encounter PXE issues, consider
-replacing the \texttt{pxelinux.0} and \texttt{lpxelinux.0} files supplied with
-\texttt{warewulf-provision-ohpc} with versions from \texttt{syslinux-tftpboot}.
-\end{tcolorbox}
-\end{center}
 
 \vspace*{-0.50cm}
 \section{Install \OHPC{} Development Components} \label{sec:install_dev}
