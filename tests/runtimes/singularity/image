@@ -1,6 +1,7 @@
 #!./common/bats/bin/bats
 # -*-sh-*-
 
+export BATS_JUNIT_CLASS=Singularity
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
 
