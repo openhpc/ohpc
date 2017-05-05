@@ -8,35 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family:      %global mpi_family openmpi}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
 
 # MPI dependencies
 %if %{mpi_family} == impi
@@ -56,12 +31,7 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end------------------------------------------------
-
 %{!?with_lustre: %global with_lustre 0}
-
-# not generating a debug package, CentOS build breaks without this if no debug package defined
-%define debug_package %{nil}
 
 # Base package name
 %define pname adios
@@ -70,14 +40,12 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 1.11.0
-Release: 1
+Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
-DocDir:  %{OHPC_PUB}/doc/contrib
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
-Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz 
+Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
 Source1: OHPC_macros
-Source2: OHPC_setup_compiler
 Source3: OHPC_setup_mpi
 AutoReq: no
 
@@ -132,13 +100,9 @@ LIBSUFF=64
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
-%if %{compiler_family} == intel
-export CFLAGS="-fp-model strict $CFLAGS"
-%endif
 
 module load autotools
 module load phdf5
@@ -150,7 +114,7 @@ TOPDIR=$PWD
 export CFLAGS="-fPIC -I$TOPDIR/src/public -I$MPI_DIR/include -I$NETCDF_INC -I$HDF5_INC -pthread -lpthread -L$NETCDF_LIB -lnetcdf -L$HDF5_LIB"
 
 # These lines break intel builds, but are required for gnu mvapich2
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 export LDFLAGS="-L$NETCDF_LIB -L$HDF5_LIB"
 export LIBS="-pthread -lpthread -lnetcdf"
 %endif
@@ -163,7 +127,7 @@ export MPICC=mpicc
 export MPIFC=mpif90
 export MPICXX=mpicxx
 
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
@@ -205,9 +169,8 @@ chmod +x adios_config
 
 %install
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 export NO_BRP_CHECK_RPATH=true
 
@@ -217,7 +180,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 export PPATH="/lib64/python2.7/site-packages"
 export PATH=$(pwd):$PATH
 
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load openblas
 %endif
 module load numpy
@@ -312,3 +275,5 @@ EOF
 %doc TODO
 
 %changelog
+* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.11.0-1
+- Switching to %%ohpc_compiler macro

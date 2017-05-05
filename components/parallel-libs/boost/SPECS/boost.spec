@@ -26,39 +26,10 @@
 
 # Boost C++ library that is is dependent on compiler toolchain and MPI
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family:      %global mpi_family openmpi}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-%define toolset gcc
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-%define toolset intel-linux
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
 
 # MPI dependencies
 %if %{mpi_family} == impi
@@ -93,7 +64,7 @@ Version:        1.63.0
 
 %define version_exp 1_63_0
 
-Release:        0
+Release:        0%{?dist}
 License:        BSL-1.0
 Group:		%{PROJ_NAME}/parallel-libs
 Url:            http://www.boost.org
@@ -103,10 +74,7 @@ Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
 Source101:	OHPC_macros
-Source102:	OHPC_setup_compiler
 Source103:	OHPC_setup_mpi
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:         %{OHPC_PUB}/doc/contrib
 
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  bzip2-devel
@@ -151,13 +119,11 @@ see the boost-doc package.
 
 
 %prep
-%setup -q -n %{pname}_%{version_exp} 
+%setup -q -n %{pname}_%{version_exp}
 
 %build
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
+%ohpc_setup_compiler
 
 %if %build_mpi
 export OHPC_MPI_FAMILY=%{mpi_family}
@@ -173,7 +139,7 @@ export MPICXX=mpicxx
 
 
 LIBRARIES_FLAGS=--with-libraries=all
-./bootstrap.sh $LIBRARIES_FLAGS --prefix=%{install_path} --with-toolset=%{toolset} || cat bootstrap.log
+./bootstrap.sh $LIBRARIES_FLAGS --prefix=%{install_path} --with-toolset=${toolset} || cat bootstrap.log
 
 %if %build_mpi
 cat << EOF >>user-config.jam
@@ -186,11 +152,8 @@ EOF
 
 
 %install
-
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
+%ohpc_setup_compiler
 
 %if %build_mpi
 export OHPC_MPI_FAMILY=%{mpi_family}
@@ -232,7 +195,7 @@ module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
 set             version             %{version}
- 
+
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
@@ -257,14 +220,6 @@ EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -272,3 +227,5 @@ rm -rf $RPM_BUILD_ROOT
 %doc INSTALL LICENSE_1_0.txt
 
 %changelog
+* Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 1.61.0-0
+- Switching to %%ohpc_compiler macro

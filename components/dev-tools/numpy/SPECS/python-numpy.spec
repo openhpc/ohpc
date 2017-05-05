@@ -10,39 +10,13 @@
 
 # Numpy python library build that is dependent on compiler toolchain
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
+%if "%{compiler_family}" != "intel"
+BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
+Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-BuildRequires: openblas-gnu%{PROJ_DELIM}
-Requires:      openblas-gnu%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end-------------------------------
 
 # Base package name
 %define pname numpy
@@ -50,19 +24,16 @@ BuildRequires: intel_licenses
 
 Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.11.1
-Release:        1
+Release:        1%{?dist}
 Url:            http://sourceforge.net/projects/numpy
-DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Source0:        http://sourceforge.net/projects/numpy/files/NumPy/%{version}/numpy-%{version}.tar.gz
 Source1:        OHPC_macros
-Source2:        OHPC_setup_compiler
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  python-devel python-setuptools
 Requires:       python
 Provides:       numpy = %{version}
@@ -74,8 +45,6 @@ BuildRequires:  fdupes
 Provides:       python-numeric = %{version}
 Obsoletes:      python-numeric < %{version}
 %endif
-
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -98,10 +67,7 @@ basic linear algebra and random number generation.
 %patch2 -p1
 %patch3 -p1
 
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 cat > site.cfg << EOF
 [mkl]
 include_dirs = $MKLROOT/include
@@ -109,11 +75,7 @@ library_dirs = $MKLROOT/lib/intel64
 mkl_libs = mkl_rt
 lapack_libs = mkl_rt
 EOF
-%endif
-
-%if %{compiler_family} == gnu
-module load openblas
-
+%else
 cat > site.cfg << EOF
 [openblas]
 libraries = openblas
@@ -124,15 +86,12 @@ EOF
 
 %build
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
-%if %{compiler_family} == gnu
-module load openblas
-%endif
-
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 COMPILER_FLAG="--compiler=intelem"
+%else
+module load openblas
 %endif
 #CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
 python setup.py build $COMPILER_FLAG
@@ -140,8 +99,7 @@ python setup.py build $COMPILER_FLAG
 
 %install
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 %if 0%{?suse_version}
@@ -203,3 +161,5 @@ EOF
 %doc THANKS.txt
 
 %changelog
+* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.11.1-1
+- Switching to %%ohpc_compiler macro
