@@ -32,25 +32,25 @@ not make sense.
 
 %package autotools
 Summary:   OpenHPC autotools
-Requires:  autoconf-ohpc
-Requires:  automake-ohpc
-Requires:  libtool-ohpc
+Requires:  autoconf%{PROJ_DELIM}
+Requires:  automake%{PROJ_DELIM}
+Requires:  libtool%{PROJ_DELIM}
 %description autotools
 OpenHPC collection of GNU autotools packages
 
 %package base
 Summary:   OpenHPC base
 Requires:  bc
-Requires:  conman-ohpc
+Requires:  conman%{PROJ_DELIM}
 Requires:  emacs-nox
-Requires:  examples-ohpc
+Requires:  examples%{PROJ_DELIM}
 Requires:  gdb
 Requires:  glibc-locale
 Requires:  ipmitool
 Requires:  libstdc++-devel
 Requires:  libmlx4-rdmav2
-Requires:  lmod-ohpc
-Requires:  losf-ohpc
+Requires:  lmod%{PROJ_DELIM}
+Requires:  losf%{PROJ_DELIM}
 Requires:  make
 Requires:  man
 Requires:  net-tools
@@ -58,7 +58,7 @@ Requires:  nfs-kernel-server
 Requires:  nfs-utils
 Requires:  ntp
 Requires:  OpenIPMI
-Requires:  pdsh-ohpc
+Requires:  pdsh%{PROJ_DELIM}
 Requires:  screen
 Requires:  sudo
 %if 0%{?centos_version} || 0%{?rhel_version}
@@ -79,328 +79,328 @@ OpenHPC compute node base packages
 
 %package ganglia
 Summary:   OpenHPC Ganglia monitoring
-Requires:  ganglia-ohpc
-Requires:  ganglia-gmetad-ohpc
-Requires:  ganglia-gmond-ohpc
-Requires:  ganglia-gmond-python-ohpc
-Requires:  ganglia-web-ohpc
+Requires:  ganglia%{PROJ_DELIM}
+Requires:  ganglia-gmetad%{PROJ_DELIM}
+Requires:  ganglia-gmond%{PROJ_DELIM}
+Requires:  ganglia-gmond-python%{PROJ_DELIM}
+Requires:  ganglia-web%{PROJ_DELIM}
 %description ganglia
 OpenHPC collection of Ganglia monitoring and metrics packages
 
 %package io-libs-gnu
 Summary:   OpenHPC IO libraries for GNU
-Requires:  adios-gnu-mpich-ohpc
-Requires:  adios-gnu-openmpi-ohpc
-Requires:  hdf5-gnu-ohpc
-Requires:  netcdf-cxx-gnu-mpich-ohpc
-Requires:  netcdf-cxx-gnu-openmpi-ohpc
-Requires:  netcdf-fortran-gnu-mpich-ohpc
-Requires:  netcdf-fortran-gnu-openmpi-ohpc
-Requires:  netcdf-gnu-mpich-ohpc
-Requires:  netcdf-gnu-openmpi-ohpc
-Requires:  phdf5-gnu-mpich-ohpc
-Requires:  phdf5-gnu-openmpi-ohpc
+Requires:  adios-gnu-mpich%{PROJ_DELIM}
+Requires:  adios-gnu-openmpi%{PROJ_DELIM}
+Requires:  hdf5-gnu%{PROJ_DELIM}
+Requires:  netcdf-cxx-gnu-mpich%{PROJ_DELIM}
+Requires:  netcdf-cxx-gnu-openmpi%{PROJ_DELIM}
+Requires:  netcdf-fortran-gnu-mpich%{PROJ_DELIM}
+Requires:  netcdf-fortran-gnu-openmpi%{PROJ_DELIM}
+Requires:  netcdf-gnu-mpich%{PROJ_DELIM}
+Requires:  netcdf-gnu-openmpi%{PROJ_DELIM}
+Requires:  phdf5-gnu-mpich%{PROJ_DELIM}
+Requires:  phdf5-gnu-openmpi%{PROJ_DELIM}
 %ifnarch aarch64 && !0%{?centos_version}
-Requires:  adios-gnu-mvapich2-ohpc
-Requires:  netcdf-cxx-gnu-mvapich2-ohpc
-Requires:  netcdf-fortran-gnu-mvapich2-ohpc
-Requires:  netcdf-gnu-mvapich2-ohpc
-Requires:  phdf5-gnu-mvapich2-ohpc
+Requires:  adios-gnu-mvapich2%{PROJ_DELIM}
+Requires:  netcdf-cxx-gnu-mvapich2%{PROJ_DELIM}
+Requires:  netcdf-fortran-gnu-mvapich2%{PROJ_DELIM}
+Requires:  netcdf-gnu-mvapich2%{PROJ_DELIM}
+Requires:  phdf5-gnu-mvapich2%{PROJ_DELIM}
 %endif
 %description io-libs-gnu
 OpenHPC IO library builds for use with GNU compiler toolchain
 
 %package io-libs-intel
 Summary:   OpenHPC IO libraries for Intel(R) Parallel Studio XE
-Requires:  adios-gnu-impi-ohpc
-Requires:  adios-intel-impi-ohpc
-Requires:  adios-intel-mpich-ohpc
-Requires:  adios-intel-mvapich2-ohpc
-Requires:  adios-intel-openmpi-ohpc
-Requires:  hdf5-intel-ohpc
-Requires:  netcdf-cxx-gnu-impi-ohpc
-Requires:  netcdf-cxx-intel-impi-ohpc
-Requires:  netcdf-cxx-intel-mpich-ohpc
-Requires:  netcdf-cxx-intel-mvapich2-ohpc
-Requires:  netcdf-cxx-intel-openmpi-ohpc
-Requires:  netcdf-fortran-gnu-impi-ohpc
-Requires:  netcdf-fortran-intel-impi-ohpc
-Requires:  netcdf-fortran-intel-mpich-ohpc
-Requires:  netcdf-fortran-intel-mvapich2-ohpc
-Requires:  netcdf-fortran-intel-openmpi-ohpc
-Requires:  netcdf-gnu-impi-ohpc
-Requires:  netcdf-intel-impi-ohpc
-Requires:  netcdf-intel-mpich-ohpc
-Requires:  netcdf-intel-mvapich2-ohpc
-Requires:  netcdf-intel-openmpi-ohpc
-Requires:  phdf5-gnu-impi-ohpc
-Requires:  phdf5-intel-impi-ohpc
-Requires:  phdf5-intel-mpich-ohpc
-Requires:  phdf5-intel-mvapich2-ohpc
-Requires:  phdf5-intel-openmpi-ohpc
+Requires:  adios-gnu-impi%{PROJ_DELIM}
+Requires:  adios-intel-impi%{PROJ_DELIM}
+Requires:  adios-intel-mpich%{PROJ_DELIM}
+Requires:  adios-intel-mvapich2%{PROJ_DELIM}
+Requires:  adios-intel-openmpi%{PROJ_DELIM}
+Requires:  hdf5-intel%{PROJ_DELIM}
+Requires:  netcdf-cxx-gnu-impi%{PROJ_DELIM}
+Requires:  netcdf-cxx-intel-impi%{PROJ_DELIM}
+Requires:  netcdf-cxx-intel-mpich%{PROJ_DELIM}
+Requires:  netcdf-cxx-intel-mvapich2%{PROJ_DELIM}
+Requires:  netcdf-cxx-intel-openmpi%{PROJ_DELIM}
+Requires:  netcdf-fortran-gnu-impi%{PROJ_DELIM}
+Requires:  netcdf-fortran-intel-impi%{PROJ_DELIM}
+Requires:  netcdf-fortran-intel-mpich%{PROJ_DELIM}
+Requires:  netcdf-fortran-intel-mvapich2%{PROJ_DELIM}
+Requires:  netcdf-fortran-intel-openmpi%{PROJ_DELIM}
+Requires:  netcdf-gnu-impi%{PROJ_DELIM}
+Requires:  netcdf-intel-impi%{PROJ_DELIM}
+Requires:  netcdf-intel-mpich%{PROJ_DELIM}
+Requires:  netcdf-intel-mvapich2%{PROJ_DELIM}
+Requires:  netcdf-intel-openmpi%{PROJ_DELIM}
+Requires:  phdf5-gnu-impi%{PROJ_DELIM}
+Requires:  phdf5-intel-impi%{PROJ_DELIM}
+Requires:  phdf5-intel-mpich%{PROJ_DELIM}
+Requires:  phdf5-intel-mvapich2%{PROJ_DELIM}
+Requires:  phdf5-intel-openmpi%{PROJ_DELIM}
 %description io-libs-intel
 OpenHPC IO library builds for use with Intel(R) Parallel Studio XE software suite
 
 %package nagios
 Summary:   OpenHPC Nagios monitoring
-Requires:  nagios-ohpc
-Requires:  nagios-plugins-allohpc
-Requires:  nrpe-ohpc
+Requires:  nagios%{PROJ_DELIM}
+Requires:  nagios-plugins-all%{PROJ_DELIM}
+Requires:  nrpe%{PROJ_DELIM}
 %description nagios
 OpenHPC collection of Nagios monitoring and metrics packages
 
 %package parallel-libs-gnu
 Summary:   OpenHPC parallel libraries for GNU
-Requires:  boost-gnu-mpich-ohpc
-Requires:  boost-gnu-openmpi-ohpc
-Requires:  fftw-gnu-mpich-ohpc
-Requires:  fftw-gnu-openmpi-ohpc
-Requires:  hypre-gnu-mpich-ohpc
-Requires:  hypre-gnu-openmpi-ohpc
-Requires:  mumps-gnu-mpich-ohpc
-Requires:  mumps-gnu-openmpi-ohpc
-Requires:  petsc-gnu-mpich-ohpc
-Requires:  petsc-gnu-openmpi-ohpc
-Requires:  scalapack-gnu-mpich-ohpc
-Requires:  scalapack-gnu-openmpi-ohpc
-Requires:  superlu_dist-gnu-mpich-ohpc
-Requires:  superlu_dist-gnu-openmpi-ohpc
-Requires:  trilinos-gnu-mpich-ohpc
-Requires:  trilinos-gnu-openmpi-ohpc
+Requires:  boost-gnu-mpich%{PROJ_DELIM}
+Requires:  boost-gnu-openmpi%{PROJ_DELIM}
+Requires:  fftw-gnu-mpich%{PROJ_DELIM}
+Requires:  fftw-gnu-openmpi%{PROJ_DELIM}
+Requires:  hypre-gnu-mpich%{PROJ_DELIM}
+Requires:  hypre-gnu-openmpi%{PROJ_DELIM}
+Requires:  mumps-gnu-mpich%{PROJ_DELIM}
+Requires:  mumps-gnu-openmpi%{PROJ_DELIM}
+Requires:  petsc-gnu-mpich%{PROJ_DELIM}
+Requires:  petsc-gnu-openmpi%{PROJ_DELIM}
+Requires:  scalapack-gnu-mpich%{PROJ_DELIM}
+Requires:  scalapack-gnu-openmpi%{PROJ_DELIM}
+Requires:  superlu_dist-gnu-mpich%{PROJ_DELIM}
+Requires:  superlu_dist-gnu-openmpi%{PROJ_DELIM}
+Requires:  trilinos-gnu-mpich%{PROJ_DELIM}
+Requires:  trilinos-gnu-openmpi%{PROJ_DELIM}
 %ifnarch aarch64 && !0%{?centos_version}
-Requires:  boost-gnu-mvapich2-ohpc
-Requires:  fftw-gnu-mvapich2-ohpc
-Requires:  hypre-gnu-mvapich2-ohpc
-Requires:  mumps-gnu-mvapich2-ohpc
-Requires:  petsc-gnu-mvapich2-ohpc
-Requires:  scalapack-gnu-mvapich2-ohpc
-Requires:  superlu_dist-gnu-mvapich2-ohpc
-Requires:  trilinos-gnu-mvapich2-ohpc
+Requires:  boost-gnu-mvapich2%{PROJ_DELIM}
+Requires:  fftw-gnu-mvapich2%{PROJ_DELIM}
+Requires:  hypre-gnu-mvapich2%{PROJ_DELIM}
+Requires:  mumps-gnu-mvapich2%{PROJ_DELIM}
+Requires:  petsc-gnu-mvapich2%{PROJ_DELIM}
+Requires:  scalapack-gnu-mvapich2%{PROJ_DELIM}
+Requires:  superlu_dist-gnu-mvapich2%{PROJ_DELIM}
+Requires:  trilinos-gnu-mvapich2%{PROJ_DELIM}
 %endif
 %description parallel-libs-gnu
 OpenHPC parallel library builds for use with GNU compiler toolchain
 
 %package parallel-libs-gnu-mpich
 Summary:   OpenHPC parallel libraries for GNU and MPICH
-Requires:  boost-gnu-mpich-ohpc
-Requires:  fftw-gnu-mpich-ohpc
-Requires:  hypre-gnu-mpich-ohpc
-Requires:  mumps-gnu-mpich-ohpc
-Requires:  petsc-gnu-mpich-ohpc
-Requires:  scalapack-gnu-mpich-ohpc
-Requires:  superlu_dist-gnu-mpich-ohpc
-Requires:  trilinos-gnu-mpich-ohpc
+Requires:  boost-gnu-mpich%{PROJ_DELIM}
+Requires:  fftw-gnu-mpich%{PROJ_DELIM}
+Requires:  hypre-gnu-mpich%{PROJ_DELIM}
+Requires:  mumps-gnu-mpich%{PROJ_DELIM}
+Requires:  petsc-gnu-mpich%{PROJ_DELIM}
+Requires:  scalapack-gnu-mpich%{PROJ_DELIM}
+Requires:  superlu_dist-gnu-mpich%{PROJ_DELIM}
+Requires:  trilinos-gnu-mpich%{PROJ_DELIM}
 %description parallel-libs-gnu-mpich
 OpenHPC parallel library builds for use with GNU compiler toolchain and the MPICH runtime
 
 %package parallel-libs-gnu-mvapich2
 Summary:   OpenHPC parallel libraries for GNU and MVAPICH2
-Requires:  boost-gnu-mvapich2-ohpc
-Requires:  fftw-gnu-mvapich2-ohpc
-Requires:  hypre-gnu-mvapich2-ohpc
-Requires:  mumps-gnu-mvapich2-ohpc
-Requires:  petsc-gnu-mvapich2-ohpc
-Requires:  scalapack-gnu-mvapich2-ohpc
-Requires:  superlu_dist-gnu-mvapich2-ohpc
-Requires:  trilinos-gnu-mvapich2-ohpc
+Requires:  boost-gnu-mvapich2%{PROJ_DELIM}
+Requires:  fftw-gnu-mvapich2%{PROJ_DELIM}
+Requires:  hypre-gnu-mvapich2%{PROJ_DELIM}
+Requires:  mumps-gnu-mvapich2%{PROJ_DELIM}
+Requires:  petsc-gnu-mvapich2%{PROJ_DELIM}
+Requires:  scalapack-gnu-mvapich2%{PROJ_DELIM}
+Requires:  superlu_dist-gnu-mvapich2%{PROJ_DELIM}
+Requires:  trilinos-gnu-mvapich2%{PROJ_DELIM}
 %description parallel-libs-gnu-mvapich2
 OpenHPC parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
 
 %package parallel-libs-gnu-openmpi
 Summary:   OpenHPC parallel libraries for GNU and OpenMPI
-Requires:  boost-gnu-openmpi-ohpc
-Requires:  fftw-gnu-openmpi-ohpc
-Requires:  hypre-gnu-openmpi-ohpc
-Requires:  mumps-gnu-openmpi-ohpc
-Requires:  petsc-gnu-openmpi-ohpc
-Requires:  scalapack-gnu-openmpi-ohpc
-Requires:  superlu_dist-gnu-openmpi-ohpc
-Requires:  trilinos-gnu-openmpi-ohpc
+Requires:  boost-gnu-openmpi%{PROJ_DELIM}
+Requires:  fftw-gnu-openmpi%{PROJ_DELIM}
+Requires:  hypre-gnu-openmpi%{PROJ_DELIM}
+Requires:  mumps-gnu-openmpi%{PROJ_DELIM}
+Requires:  petsc-gnu-openmpi%{PROJ_DELIM}
+Requires:  scalapack-gnu-openmpi%{PROJ_DELIM}
+Requires:  superlu_dist-gnu-openmpi%{PROJ_DELIM}
+Requires:  trilinos-gnu-openmpi%{PROJ_DELIM}
 %description parallel-libs-gnu-openmpi
 OpenHPC parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 
 %package parallel-libs-intel-impi
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and Intel(R) MPI Library
-Requires:  boost-gnu-impi-ohpc
-Requires:  boost-intel-impi-ohpc
-Requires:  hypre-gnu-impi-ohpc
-Requires:  hypre-intel-impi-ohpc
-Requires:  mumps-gnu-impi-ohpc
-Requires:  mumps-intel-impi-ohpc
-Requires:  petsc-gnu-impi-ohpc
-Requires:  petsc-intel-impi-ohpc
-Requires:  scalapack-gnu-impi-ohpc
-Requires:  scalapack-intel-impi-ohpc
-Requires:  superlu_dist-gnu-impi-ohpc
-Requires:  superlu_dist-intel-impi-ohpc
-Requires:  trilinos-gnu-impi-ohpc
-Requires:  trilinos-intel-impi-ohpc
+Requires:  boost-gnu-impi%{PROJ_DELIM}
+Requires:  boost-intel-impi%{PROJ_DELIM}
+Requires:  hypre-gnu-impi%{PROJ_DELIM}
+Requires:  hypre-intel-impi%{PROJ_DELIM}
+Requires:  mumps-gnu-impi%{PROJ_DELIM}
+Requires:  mumps-intel-impi%{PROJ_DELIM}
+Requires:  petsc-gnu-impi%{PROJ_DELIM}
+Requires:  petsc-intel-impi%{PROJ_DELIM}
+Requires:  scalapack-gnu-impi%{PROJ_DELIM}
+Requires:  scalapack-intel-impi%{PROJ_DELIM}
+Requires:  superlu_dist-gnu-impi%{PROJ_DELIM}
+Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
+Requires:  trilinos-gnu-impi%{PROJ_DELIM}
+Requires:  trilinos-intel-impi%{PROJ_DELIM}
 %description parallel-libs-intel-impi
 OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
 
 %package parallel-libs-intel-mpich
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
-Requires:  boost-intel-mpich-ohpc
-Requires:  hypre-intel-mpich-ohpc
-Requires:  mumps-intel-mpich-ohpc
-Requires:  petsc-intel-mpich-ohpc
-Requires:  scalapack-intel-mpich-ohpc
-Requires:  superlu_dist-intel-mpich-ohpc
-Requires:  trilinos-intel-mpich-ohpc
+Requires:  boost-intel-mpich%{PROJ_DELIM}
+Requires:  hypre-intel-mpich%{PROJ_DELIM}
+Requires:  mumps-intel-mpich%{PROJ_DELIM}
+Requires:  petsc-intel-mpich%{PROJ_DELIM}
+Requires:  scalapack-intel-mpich%{PROJ_DELIM}
+Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
+Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description parallel-libs-intel-mpich
 OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 
 %package parallel-libs-intel-mvapich2
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
-Requires:  boost-intel-mvapich2-ohpc
-Requires:  hypre-intel-mvapich2-ohpc
-Requires:  mumps-intel-mvapich2-ohpc
-Requires:  petsc-intel-mvapich2-ohpc
-Requires:  scalapack-intel-mvapich2-ohpc
-Requires:  superlu_dist-intel-mvapich2-ohpc
-Requires:  trilinos-intel-mvapich2-ohpc
+Requires:  boost-intel-mvapich2%{PROJ_DELIM}
+Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
+Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
+Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
+Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
+Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
+Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description parallel-libs-intel-mvapich2
 OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
 
 %package parallel-libs-intel-openmpi
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
-Requires:  boost-intel-openmpi-ohpc
-Requires:  hypre-intel-openmpi-ohpc
-Requires:  mumps-intel-openmpi-ohpc
-Requires:  petsc-intel-openmpi-ohpc
-Requires:  scalapack-intel-openmpi-ohpc
-Requires:  superlu_dist-intel-openmpi-ohpc
-Requires:  trilinos-intel-openmpi-ohpc
+Requires:  boost-intel-openmpi%{PROJ_DELIM}
+Requires:  hypre-intel-openmpi%{PROJ_DELIM}
+Requires:  mumps-intel-openmpi%{PROJ_DELIM}
+Requires:  petsc-intel-openmpi%{PROJ_DELIM}
+Requires:  scalapack-intel-openmpi%{PROJ_DELIM}
+Requires:  superlu_dist-intel-openmpi%{PROJ_DELIM}
+Requires:  trilinos-intel-openmpi%{PROJ_DELIM}
 %description parallel-libs-intel-openmpi
 OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 
 %package perf-tools-gnu
 Summary:   OpenHPC performance tools for GNU
-Requires:  imb-gnu-mpich-ohpc
-Requires:  imb-gnu-openmpi-ohpc
-Requires:  mpiP-gnu-mpich-ohpc
-Requires:  mpiP-gnu-openmpi-ohpc
-Requires:  papi-ohpc
-Requires:  tau-gnu-mpich-ohpc
-Requires:  tau-gnu-openmpi-ohpc
-Requires:  scalasca-gnu-mpich-ohpc
-Requires:  scalasca-gnu-openmpi-ohpc
+Requires:  imb-gnu-mpich%{PROJ_DELIM}
+Requires:  imb-gnu-openmpi%{PROJ_DELIM}
+Requires:  mpiP-gnu-mpich%{PROJ_DELIM}
+Requires:  mpiP-gnu-openmpi%{PROJ_DELIM}
+Requires:  papi%{PROJ_DELIM}
+Requires:  tau-gnu-mpich%{PROJ_DELIM}
+Requires:  tau-gnu-openmpi%{PROJ_DELIM}
+Requires:  scalasca-gnu-mpich%{PROJ_DELIM}
+Requires:  scalasca-gnu-openmpi%{PROJ_DELIM}
 %ifnarch aarch64 && !0%{?centos_version}
-Requires:  imb-gnu-mvapich2-ohpc
-Requires:  mpiP-gnu-mvapich2-ohpc
-Requires:  tau-gnu-mvapich2-ohpc
-Requires:  scalasca-gnu-mvapich2-ohpc
+Requires:  imb-gnu-mvapich2%{PROJ_DELIM}
+Requires:  mpiP-gnu-mvapich2%{PROJ_DELIM}
+Requires:  tau-gnu-mvapich2%{PROJ_DELIM}
+Requires:  scalasca-gnu-mvapich2%{PROJ_DELIM}
 %endif
 %description perf-tools-gnu
 OpenHPC performance tool builds for use with GNU compiler toolchain
 
 %package perf-tools-intel
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
-Requires:  imb-gnu-impi-ohpc
-Requires:  imb-intel-impi-ohpc
-Requires:  imb-intel-mpich-ohpc
-Requires:  imb-intel-mvapich2-ohpc
-Requires:  imb-intel-openmpi-ohpc
-Requires:  mpiP-gnu-impi-ohpc
-Requires:  mpiP-intel-impi-ohpc
-Requires:  mpiP-intel-mpich-ohpc
-Requires:  mpiP-intel-mvapich2-ohpc
-Requires:  mpiP-intel-openmpi-ohpc
-Requires:  papi-ohpc
-Requires:  tau-gnu-impi-ohpc
-Requires:  tau-intel-impi-ohpc
-Requires:  tau-intel-mpich-ohpc
-Requires:  tau-intel-mvapich2-ohpc
-Requires:  tau-intel-openmpi-ohpc
-Requires:  scalasca-gnu-impi-ohpc
-Requires:  scalasca-intel-impi-ohpc
-Requires:  scalasca-intel-mpich-ohpc
-Requires:  scalasca-intel-mvapich2-ohpc
-Requires:  scalasca-intel-openmpi-ohpc
+Requires:  imb-gnu-impi%{PROJ_DELIM}
+Requires:  imb-intel-impi%{PROJ_DELIM}
+Requires:  imb-intel-mpich%{PROJ_DELIM}
+Requires:  imb-intel-mvapich2%{PROJ_DELIM}
+Requires:  imb-intel-openmpi%{PROJ_DELIM}
+Requires:  mpiP-gnu-impi%{PROJ_DELIM}
+Requires:  mpiP-intel-impi%{PROJ_DELIM}
+Requires:  mpiP-intel-mpich%{PROJ_DELIM}
+Requires:  mpiP-intel-mvapich2%{PROJ_DELIM}
+Requires:  mpiP-intel-openmpi%{PROJ_DELIM}
+Requires:  papi%{PROJ_DELIM}
+Requires:  tau-gnu-impi%{PROJ_DELIM}
+Requires:  tau-intel-impi%{PROJ_DELIM}
+Requires:  tau-intel-mpich%{PROJ_DELIM}
+Requires:  tau-intel-mvapich2%{PROJ_DELIM}
+Requires:  tau-intel-openmpi%{PROJ_DELIM}
+Requires:  scalasca-gnu-impi%{PROJ_DELIM}
+Requires:  scalasca-intel-impi%{PROJ_DELIM}
+Requires:  scalasca-intel-mpich%{PROJ_DELIM}
+Requires:  scalasca-intel-mvapich2%{PROJ_DELIM}
+Requires:  scalasca-intel-openmpi%{PROJ_DELIM}
 %description perf-tools-intel
 OpenHPC performance tool builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package python-libs-gnu
 Summary:   OpenHPC python libraries for GNU
-Requires:  python-numpy-gnu-ohpc
-Requires:  python-scipy-gnu-mpich-ohpc
-Requires:  python-scipy-gnu-openmpi-ohpc
+Requires:  python-numpy-gnu%{PROJ_DELIM}
+Requires:  python-scipy-gnu-mpich%{PROJ_DELIM}
+Requires:  python-scipy-gnu-openmpi%{PROJ_DELIM}
 %ifnarch aarch64 && !0%{?centos_version}
-Requires:  python-scipy-gnu-mvapich2-ohpc
+Requires:  python-scipy-gnu-mvapich2%{PROJ_DELIM}
 %endif
 %description python-libs-gnu
 OpenHPC python related library builds for use with GNU compiler toolchain
 
 %package python-libs-intel
 Summary:   OpenHPC python libraries for Intel(R) Parallel Studio XE
-Requires:  python-numpy-intel-ohpc
+Requires:  python-numpy-intel%{PROJ_DELIM}
 %description python-libs-intel
 OpenHPC python related library builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package runtimes-gnu
 Summary:   OpenHPC runtimes for GNU
-Requires:  ocr-gnu-ohpc
-Requires:  singularity-ohpc
+Requires:  ocr-gnu%{PROJ_DELIM}
+Requires:  singularity%{PROJ_DELIM}
 %description runtimes-gnu
 OpenHPC runtimes for use with GNU compiler toolchain
 
 %package runtimes-intel
 Summary:   OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
-Requires:  ocr-gnu-ohpc
-Requires:  singularity-ohpc
+Requires:  ocr-gnu%{PROJ_DELIM}
+Requires:  singularity%{PROJ_DELIM}
 %description runtimes-intel
 OpenHPC runtimes for use with Intel(R) Parallel Studio XE toolchain
 
 %package serial-libs-gnu
 Summary:   OpenHPC serial libraries for GNU
-Requires:  gsl-gnu-ohpc
-Requires:  metis-gnu-ohpc
-Requires:  openblas-gnu-ohpc
-Requires:  superlu-gnu-ohpc
+Requires:  gsl-gnu%{PROJ_DELIM}
+Requires:  metis-gnu%{PROJ_DELIM}
+Requires:  openblas-gnu%{PROJ_DELIM}
+Requires:  superlu-gnu%{PROJ_DELIM}
 %description serial-libs-gnu
 OpenHPC serial library builds for use with GNU compiler toolchain
 
 %package serial-libs-intel
 Summary:   OpenHPC serial libraries for Intel(R) Parallel Studio XE
-Requires:  metis-intel-ohpc
-Requires:  superlu-intel-ohpc
+Requires:  metis-intel%{PROJ_DELIM}
+Requires:  superlu-intel%{PROJ_DELIM}
 %description serial-libs-intel
 OpenHPC serial library builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package slurm-client
 Summary:   OpenHPC client packages for SLURM
-Requires:  slurm-ohpc
-Requires:  slurm-munge-ohpc
-Requires:  slurm-plugins-ohpc
-Requires:  slurm-sjobexit-ohpc
-Requires:  slurm-pam_slurm-ohpc
-Requires:  munge-ohpc
+Requires:  slurm%{PROJ_DELIM}
+Requires:  slurm-munge%{PROJ_DELIM}
+Requires:  slurm-plugins%{PROJ_DELIM}
+Requires:  slurm-sjobexit%{PROJ_DELIM}
+Requires:  slurm-pam_slurm%{PROJ_DELIM}
+Requires:  munge%{PROJ_DELIM}
 %description slurm-client
 OpenHPC client packages for SLURM
 
 %package slurm-server
 Summary:   OpenHPC server packages for SLURM
-Requires:  slurm-ohpc
-Requires:  slurm-munge-ohpc
-Requires:  slurm-plugins-ohpc
-Requires:  slurm-perlapi-ohpc
-Requires:  slurm-devel-ohpc
-Requires:  slurm-slurmdbd-ohpc
-Requires:  slurm-sql-ohpc
-Requires:  slurm-slurmdb-direct-ohpc
-Requires:  munge-ohpc
-Requires:  munge-libs-ohpc
-Requires:  munge-devel-ohpc
+Requires:  slurm%{PROJ_DELIM}
+Requires:  slurm-munge%{PROJ_DELIM}
+Requires:  slurm-plugins%{PROJ_DELIM}
+Requires:  slurm-perlapi%{PROJ_DELIM}
+Requires:  slurm-devel%{PROJ_DELIM}
+Requires:  slurm-slurmdbd%{PROJ_DELIM}
+Requires:  slurm-sql%{PROJ_DELIM}
+Requires:  slurm-slurmdb-direct%{PROJ_DELIM}
+Requires:  munge%{PROJ_DELIM}
+Requires:  munge-libs%{PROJ_DELIM}
+Requires:  munge-devel%{PROJ_DELIM}
 %description slurm-server
 OpenHPC server packages for SLURM
 
 %package warewulf
 Summary:   OpenHPC base packages for Warewulf
-Requires:  warewulf-cluster-ohpc
-Requires:  warewulf-common-ohpc
-Requires:  warewulf-provision-ohpc
-Requires:  warewulf-provision-server-ohpc
-Requires:  warewulf-vnfs-ohpc
+Requires:  warewulf-cluster%{PROJ_DELIM}
+Requires:  warewulf-common%{PROJ_DELIM}
+Requires:  warewulf-provision%{PROJ_DELIM}
+Requires:  warewulf-provision-server%{PROJ_DELIM}
+Requires:  warewulf-vnfs%{PROJ_DELIM}
 %description warewulf
 OpenHPC collection of base packages for Warewulf provisioning
 
