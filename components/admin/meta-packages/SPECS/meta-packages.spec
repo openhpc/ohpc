@@ -35,7 +35,7 @@ Summary:   OpenHPC collection of GNU autotools packages
 Requires:  autoconf-ohpc
 Requires:  automake-ohpc
 Requires:  libtool-ohpc
-%description
+%description ohpc-autotools
 OpenHPC collection of GNU autotools packages
 
 %package ohpc-base
@@ -66,7 +66,7 @@ Requires:  binutils
 Requires:  binutils-devel
 Requires:  man-db
 %endif
-%description
+%description ohpc-base
 OpenHPC base packages
 
 %package ohpc-base-compute
@@ -74,7 +74,7 @@ Summary:   OpenHPC compute node base packages
 Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
-%description
+%description ohpc-base-compute
 OpenHPC compute node base packages
 
 %package ohpc-ganglia
@@ -84,7 +84,7 @@ Requires:  ganglia-gmetad-ohpc
 Requires:  ganglia-gmond-ohpc
 Requires:  ganglia-gmond-python-ohpc
 Requires:  ganglia-web-ohpc
-%description
+%description ohpc-ganglia
 OpenHPC collection of Ganglia monitoring and metrics packages
 
 %package ohpc-io-libs-gnu
@@ -107,7 +107,7 @@ Requires:  netcdf-fortran-gnu-mvapich2-ohpc
 Requires:  netcdf-gnu-mvapich2-ohpc
 Requires:  phdf5-gnu-mvapich2-ohpc
 %endif
-%description
+%description ohpc-io-libs-gnu
 OpenHPC IO library builds for use with GNU compiler toolchain
 
 %package ohpc-io-libs-intel
@@ -138,7 +138,7 @@ Requires:  phdf5-intel-impi-ohpc
 Requires:  phdf5-intel-mpich-ohpc
 Requires:  phdf5-intel-mvapich2-ohpc
 Requires:  phdf5-intel-openmpi-ohpc
-%description
+%description ohpc-io-libs-intel
 OpenHPC IO library builds for use with Intel(R) Parallel Studio XE software suite
 
 %package ohpc-nagios
@@ -146,7 +146,7 @@ Summary:   OpenHPC collection of Nagios monitoring and metrics packages
 Requires:  nagios-ohpc
 Requires:  nagios-plugins-allohpc
 Requires:  nrpe-ohpc
-%description
+%description ohpc-nagios
 OpenHPC collection of Nagios monitoring and metrics packages
 
 %package ohpc-parallel-libs-gnu
@@ -177,7 +177,7 @@ Requires:  scalapack-gnu-mvapich2-ohpc
 Requires:  superlu_dist-gnu-mvapich2-ohpc
 Requires:  trilinos-gnu-mvapich2-ohpc
 %endif
-%description
+%description ohpc-parallel-libs-gnu
 OpenHPC parallel library builds for use with GNU compiler toolchain
 
 %package ohpc-parallel-libs-gnu-mpich
@@ -190,7 +190,7 @@ Requires:  petsc-gnu-mpich-ohpc
 Requires:  scalapack-gnu-mpich-ohpc
 Requires:  superlu_dist-gnu-mpich-ohpc
 Requires:  trilinos-gnu-mpich-ohpc
-%description
+%description ohpc-parallel-libs-gnu-mpich
 OpenHPC parallel library builds for use with GNU compiler toolchain and the MPICH runtime
 
 %package ohpc-parallel-libs-gnu-mvapich2
@@ -203,7 +203,7 @@ Requires:  petsc-gnu-mvapich2-ohpc
 Requires:  scalapack-gnu-mvapich2-ohpc
 Requires:  superlu_dist-gnu-mvapich2-ohpc
 Requires:  trilinos-gnu-mvapich2-ohpc
-%description
+%description ohpc-parallel-libs-gnu-mvapich2
 OpenHPC parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
 
 %package ohpc-parallel-libs-gnu-openmpi
@@ -216,7 +216,7 @@ Requires:  petsc-gnu-openmpi-ohpc
 Requires:  scalapack-gnu-openmpi-ohpc
 Requires:  superlu_dist-gnu-openmpi-ohpc
 Requires:  trilinos-gnu-openmpi-ohpc
-%description
+%description ohpc-parallel-libs-gnu-openmpi
 OpenHPC parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 
 %package ohpc-parallel-libs-intel-impi
@@ -235,7 +235,7 @@ Requires:  superlu_dist-gnu-impi-ohpc
 Requires:  superlu_dist-intel-impi-ohpc
 Requires:  trilinos-gnu-impi-ohpc
 Requires:  trilinos-intel-impi-ohpc
-%description
+%description ohpc-parallel-libs-intel-impi
 OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
 
 %package ohpc-parallel-libs-intel-mpich
@@ -247,7 +247,7 @@ Requires:  petsc-intel-mpich-ohpc
 Requires:  scalapack-intel-mpich-ohpc
 Requires:  superlu_dist-intel-mpich-ohpc
 Requires:  trilinos-intel-mpich-ohpc
-%description
+%description ohpc-parallel-libs-intel-mpich
 OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 
 %package ohpc-parallel-libs-intel-mvapich2
@@ -259,7 +259,7 @@ Requires:  petsc-intel-mvapich2-ohpc
 Requires:  scalapack-intel-mvapich2-ohpc
 Requires:  superlu_dist-intel-mvapich2-ohpc
 Requires:  trilinos-intel-mvapich2-ohpc
-%description
+%description ohpc-parallel-libs-intel-mvapich2
 OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
 
 %package ohpc-parallel-libs-intel-openmpi
@@ -271,7 +271,7 @@ Requires:  petsc-intel-openmpi-ohpc
 Requires:  scalapack-intel-openmpi-ohpc
 Requires:  superlu_dist-intel-openmpi-ohpc
 Requires:  trilinos-intel-openmpi-ohpc
-%description
+%description ohpc-parallel-libs-intel-openmpi
 OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 
 %package ohpc-perf-tools-gnu
@@ -291,7 +291,7 @@ Requires:  mpiP-gnu-mvapich2-ohpc
 Requires:  tau-gnu-mvapich2-ohpc
 Requires:  scalasca-gnu-mvapich2-ohpc
 %endif
-%description
+%description ohpc-perf-tools-gnu
 OpenHPC performance tool builds for use with GNU compiler toolchain
 
 %package ohpc-perf-tools-intel
@@ -317,7 +317,7 @@ Requires:  scalasca-intel-impi-ohpc
 Requires:  scalasca-intel-mpich-ohpc
 Requires:  scalasca-intel-mvapich2-ohpc
 Requires:  scalasca-intel-openmpi-ohpc
-%description
+%description ohpc-perf-tools-intel
 OpenHPC performance tool builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package ohpc-python-libs-gnu
@@ -328,26 +328,27 @@ Requires:  python-scipy-gnu-openmpi-ohpc
 %ifnarch aarch64 && !0%{?centos_version}
 Requires:  python-scipy-gnu-mvapich2-ohpc
 %endif
-%description
+%description ohpc-python-libs-gnu
 OpenHPC python related library builds for use with GNU compiler toolchain
 
 %package ohpc-python-libs-intel
 Summary:   OpenHPC python related library builds for use with Intel(R) Parallel Studio XE toolchain
 Requires:  python-numpy-intel-ohpc
-%description
+%description ohpc-python-libs-intel
 OpenHPC python related library builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package ohpc-runtimes-gnu
 Summary:   OpenHPC runtimes for use with GNU compiler toolchain
 Requires:  ocr-gnu-ohpc
 Requires:  singularity-ohpc
-%description
+%description ohpc-runtimes-gnu
 OpenHPC runtimes for use with GNU compiler toolchain
+
 %package ohpc-runtimes-intel
 Summary:   OpenHPC runtimes for use with Intel(R) Parallel Studio XE toolchain
 Requires:  ocr-gnu-ohpc
 Requires:  singularity-ohpc
-%description
+%description ohpc-runtimes-intel
 OpenHPC runtimes for use with Intel(R) Parallel Studio XE toolchain
 
 %package ohpc-serial-libs-gnu
@@ -356,14 +357,14 @@ Requires:  gsl-gnu-ohpc
 Requires:  metis-gnu-ohpc
 Requires:  openblas-gnu-ohpc
 Requires:  superlu-gnu-ohpc
-%description
+%description ohpc-serial-libs-gnu
 OpenHPC serial library builds for use with GNU compiler toolchain
 
 %package ohpc-serial-libs-intel
 Summary:   OpenHPC serial library builds for use with Intel(R) Parallel Studio XE toolchain
 Requires:  metis-intel-ohpc
 Requires:  superlu-intel-ohpc
-%description
+%description ohpc-serial-libs-intel
 OpenHPC serial library builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package ohpc-slurm-client
@@ -374,7 +375,7 @@ Requires:  slurm-plugins-ohpc
 Requires:  slurm-sjobexit-ohpc
 Requires:  slurm-pam_slurm-ohpc
 Requires:  munge-ohpc
-%description
+%description ohpc-slurm-client
 OpenHPC client packages for SLURM
 
 %package ohpc-slurm-server
@@ -390,7 +391,7 @@ Requires:  slurm-slurmdb-direct-ohpc
 Requires:  munge-ohpc
 Requires:  munge-libs-ohpc
 Requires:  munge-devel-ohpc
-%description
+%description ohpc-slurm-server
 OpenHPC server packages for SLURM
 
 %package ohpc-warewulf
@@ -400,7 +401,7 @@ Requires:  warewulf-common-ohpc
 Requires:  warewulf-provision-ohpc
 Requires:  warewulf-provision-server-ohpc
 Requires:  warewulf-vnfs-ohpc
-%description
+%description ohpc-warewulf
 OpenHPC collection of base packages for Warewulf provisioning
 
 
