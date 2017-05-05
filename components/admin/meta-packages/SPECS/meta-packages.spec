@@ -417,12 +417,34 @@ OpenHPC collection of base packages for Warewulf provisioning
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-
 %files
-%defattr(-,root,root,-)
-%dir %{OHPC_HOME}
-%doc LICENSE
-%{OHPC_PUB}
+
+%files ohpc-autotools
+%files ohpc-base
+%files ohpc-base-compute
+%files ohpc-ganglia
+%files ohpc-io-libs-gnu
+%files ohpc-io-libs-intel
+%files ohpc-nagios
+%files ohpc-parallel-libs-gnu
+%files ohpc-parallel-libs-gnu-mpich
+%files ohpc-parallel-libs-gnu-mvapich2
+%files ohpc-parallel-libs-gnu-openmpi
+%files ohpc-parallel-libs-intel-impi
+%files ohpc-parallel-libs-intel-mpich
+%files ohpc-parallel-libs-intel-mvapich2
+%files ohpc-parallel-libs-intel-openmpi
+%files ohpc-perf-tools-gnu
+%files ohpc-perf-tools-intel
+%files ohpc-python-libs-gnu
+%files ohpc-python-libs-intel
+%files ohpc-runtimes-gnu
+%files ohpc-runtimes-intel
+%files ohpc-serial-libs-gnu
+%files ohpc-serial-libs-intel
+%files ohpc-slurm-client
+%files ohpc-slurm-server
+%files ohpc-warewulf
 
 %changelog
 
