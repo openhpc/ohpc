@@ -16,7 +16,7 @@ Name:    %{PROJ_NAME}
 Version: 1.3.1
 Release: 1
 License: Apache-2.0
-Group:   %{PROJ_NAME}/admin
+Group:   %{PROJ_NAME}/meta-package
 URL:     https://github.com/openhpc/ohpc
 Source0: LICENSE
 
