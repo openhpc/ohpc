@@ -158,7 +158,7 @@ repository, which is shipped with CentOS and is enabled by default.
 
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
-\input{common/warewulf_chroot_customize}
+\input{common/warewulf_chroot_customize_centos}
 
 % Additional commands when additional computes are requested
 
@@ -186,66 +186,11 @@ repository, which is shipped with CentOS and is enabled by default.
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
-
-% begin_ohpc_run
-% ohpc_validation_newline 
-% ohpc_validation_comment Enable Optional packages
-% ohpc_validation_newline
-% ohpc_command if [[ ${enable_lustre_client} -eq 1 ]];then
-% ohpc_indent 5
-
-% ohpc_validation_comment Install Lustre client on master
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Add Lustre client software to master host
-[sms](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
-\end{lstlisting}
-% end_ohpc_run
-
-% begin_ohpc_run
-% ohpc_validation_comment Enable lustre in WW compute image
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Include Lustre client software in compute image
-[sms](*\#*) (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
-
-# Include mount point and file system mount in compute image
-[sms](*\#*) mkdir $CHROOT/mnt/lustre
-[sms](*\#*) echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
-\end{lstlisting}
-% end_ohpc_run
-
-The default underlying network type used by \Lustre{} is {\em tcp}. If your
-external \Lustre{} file system is to be mounted using a network type other than
-{\em tcp}, additional configuration files are necessary to identify the desired
-network type. The example below illustrates creation of modprobe configuration files
-instructing \Lustre{} to use an \InfiniBand{} network with the \textbf{o2ib} LNET driver
-attached to \texttt{ib0}. Note that these modifications are made to both the
-{\em master} host and {\em compute} image.
-
-%x\clearpage
-% begin_ohpc_run
-% ohpc_validation_comment Enable o2ib for Lustre
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
-[sms](*\#*) echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
-[sms](*\#*) echo "options lnet networks=o2ib(ib0)" >> $CHROOT/etc/modprobe.d/lustre.conf
-\end{lstlisting}
-% end_ohpc_run
-
-With the \Lustre{} configuration complete, the client can be mounted on the {\em master}
-host as follows:
-% begin_ohpc_run
-% ohpc_validation_comment mount Lustre client on master
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
-[sms](*\#*) mkdir /mnt/lustre
-[sms](*\#*) mount -t lustre -o localflock ${mgs_fs_name} /mnt/lustre
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% ohpc_validation_newline
-% end_ohpc_run
+\input{common/lustre-client-centos}
+\input{common/lustre-client-post}
 
 \paragraph{Add \Nagios{} monitoring}
 \input{common/nagios}
-
 
 \paragraph{Add \Ganglia{} monitoring}
 \input{common/ganglia}

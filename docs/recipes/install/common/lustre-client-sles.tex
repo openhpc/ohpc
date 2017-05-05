@@ -1,0 +1,40 @@
+% SLES-specific addition
+Additionally, note that a default \baseOS{} environment may not allow loading of
+the necessary \Lustre{} kernel modules. Consequently, the example below includes
+steps which update the {\texttt /etc/modprobe.d/10-unsupported-modules.conf}
+file to allow loading of the necessary modules.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Enable Optional packages
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_lustre_client} -eq 1 ]];then
+% ohpc_indent 5
+
+% ohpc_validation_comment Install Lustre client on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Add Lustre client software to master host
+[sms](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
+
+# Update configuration to allow Lustre modules to be loaded on master host
+[sms](*\#*) perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
+     /etc/modprobe.d/10-unsupported-modules.conf
+\end{lstlisting}
+% end_ohpc_run
+
+
+% begin_ohpc_run
+% ohpc_validation_comment Enable lustre in WW compute image
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Include Lustre client software in compute image
+[sms](*\#*) (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
+
+# Update configuration to allow Lustre modules to be loaded on compute hosts
+[sms](*\#*) perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
+     $CHROOT/etc/modprobe.d/10-unsupported-modules.conf
+
+# Include mount point and file system mount in compute image
+[sms](*\#*) mkdir $CHROOT/mnt/lustre
+[sms](*\#*) echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock 0 0" >> $CHROOT/etc/fstab
+\end{lstlisting}
+% end_ohpc_run
