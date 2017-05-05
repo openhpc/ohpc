@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Summary: Meta-packages to ease installation.
-Name:    %{PROJ_DELIM}
+Name:    %{PROJ_NAME}
 Version: 1.3.1
 Release: 1
 License: Apache-2.0
