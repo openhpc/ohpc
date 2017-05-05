@@ -25,3 +25,27 @@ repositories to identify all of the available PETSc packages that were built
 with the \GNU{} toolchain. The resulting output that is included shows that
 pre-built versions are available for each of the supported MPI families
 presented in \S\ref{sec:mpi}.
+
+\iftoggleverb{isCentOS}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) yum search petsc-gnu ohpc
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+=========================== N/S matched: petsc-gnu, ohpc ===========================
+petsc-gnu-impi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-mpich-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-mvapich2-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu-openmpi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+\end{lstlisting}
+\else
+\begin{lstlisting}[language=bash,keepspaces=true,keywords={}]
+[sms](*\#*) zypper search -t package petsc-gnu-*-ohpc
+Loading repository data...
+Reading installed packages...
+
+S | Name                    | Summary
+--+-------------------------+--------------------------------------------------------+--------
+i | petsc-gnu-mvapich2-ohpc | Portable Extensible Toolkit for Scientific Computation | package
+i | petsc-gnu-openmpi-ohpc  | Portable Extensible Toolkit for Scientific Computation | package
+\end{lstlisting}
+\fi
