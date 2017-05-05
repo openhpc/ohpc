@@ -406,6 +406,7 @@ OpenHPC collection of base packages for Warewulf provisioning
 
 
 %prep
+%{__cp} %SOURCE0 .
 
 %build
 
