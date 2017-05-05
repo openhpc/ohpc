@@ -5,28 +5,12 @@ rm -f ${logfile}.*
 
 echo ++++ search and log OpenHPC patterns
 
-if [ -e /etc/redhat-release ];then
-    for pattern in `yum grouplist | grep -e "ohpc-" | sort`; do
-        echo "parsing $pattern"
-        info=`yum groupinfo $pattern | grep Description: | sed s/Description://`
+for meta_package in `rpm -qa | grep -e "ohpc-" | grep -v "release" | sort`; do
+        echo "parsing $meta_package"
+        info=`rpm -qi $meta_package | grep -A1 "Description :" | tail -1`
 
-        echo $pattern $info >> ${logfile}.all
-    done
-
-elif [ -e /etc/SuSE-release ];then
-
-    for pattern in `zypper search -t pattern ohpc-* | grep -e ohpc- | cut -d '|' -f 2`; do
-    
-        echo "parsing $pattern"
-        info=`zypper info -t pattern $pattern | grep -A1 ^Description: | tail -1`
-    
-        echo $pattern $info >> ${logfile}.all
-    done
-
-else
-    echo "ERROR: unknown distro type"
-    exit 1
-fi
+        echo $meta_package $info >> ${logfile}.all
+done
 
 #   | ohpc-autotools    | ohpc-autotools    | pattern
 #   | ohpc-base         | ohpc-base         | pattern
