@@ -48,7 +48,7 @@ Requires:  gdb
 Requires:  glibc-locale
 Requires:  ipmitool
 Requires:  libstdc++-devel
-Requires:  libxml4-rdmav2
+Requires:  libmlx4-rdmav2
 Requires:  lmod-ohpc
 Requires:  losf-ohpc
 Requires:  make
