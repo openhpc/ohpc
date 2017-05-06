@@ -98,7 +98,7 @@ cp /etc/zypp/zypp.conf $SINGULARITY_ROOTFS/$ZYPP_CONF
 echo 'cachedir=/var/cache/zypp-bootstrap' >> "$SINGULARITY_ROOTFS/$ZYPP_CONF"
 cp /etc/zypp/repos.d/* $SINGULARITY_ROOTFS/$ZYPP_CONF_DIRNAME/repos.d/.
 
-if ! eval "$INSTALL_CMD -c $SINGULARITY_ROOTFS/$ZYPP_CONF --root $SINGULARITY_ROOTFS --gpg-auto-import-keys -n install --auto-agree-with-licenses sles-release coreutils libstdc++-devel $INSTALLPKGS"; then
+if ! eval "$INSTALL_CMD -c $SINGULARITY_ROOTFS/$ZYPP_CONF --root $SINGULARITY_ROOTFS --gpg-auto-import-keys -n install --auto-agree-with-licenses sles-release coreutils libgcc_s1 libstdc++-devel $INSTALLPKGS"; then
     message ERROR "Bootstrap failed... exiting\n"
     ABORT 255
 fi
