@@ -1,5 +1,6 @@
 TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
-TESTS  = run
+TESTS  = init.sh
+TESTS += run
 
 CLEANFILES=$(wildcard *.xml)
