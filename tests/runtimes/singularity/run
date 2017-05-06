@@ -1,7 +1,5 @@
 #!./common/bats/bin/bats
 
-cd "$(dirname "$0")"      || exit 1
-
 export BATS_JUNIT_CLASS=Singularity
 source ./common/TEST_ENV  || exit 1
 load ./common/test_helper_functions || exit 1
