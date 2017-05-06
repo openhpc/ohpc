@@ -45,16 +45,13 @@ Requires:  conman%{PROJ_DELIM}
 Requires:  emacs-nox
 Requires:  examples%{PROJ_DELIM}
 Requires:  gdb
-Requires:  glibc-locale
 Requires:  ipmitool
 Requires:  libstdc++-devel
-Requires:  libmlx4-rdmav2
 Requires:  lmod%{PROJ_DELIM}
 Requires:  losf%{PROJ_DELIM}
 Requires:  make
 Requires:  man
 Requires:  net-tools
-Requires:  nfs-kernel-server
 Requires:  nfs-utils
 Requires:  ntp
 Requires:  OpenIPMI
@@ -65,6 +62,11 @@ Requires:  sudo
 Requires:  binutils
 Requires:  binutils-devel
 Requires:  man-db
+%endif
+%if 0%{?sles_version}
+Requires:  glibc-locale
+Requires:  libmlx4-rdmav2
+Requires:  nfs-kernel-server
 %endif
 %description base
 OpenHPC base packages
