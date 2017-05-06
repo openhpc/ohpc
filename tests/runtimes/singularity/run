@@ -1,4 +1,4 @@
-#!/bin/bash
+#!./common/bats/bin/bats
 
 cd "$(dirname "$0")"      || exit 1
 
