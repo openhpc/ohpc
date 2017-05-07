@@ -93,7 +93,7 @@ In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
 necessary dependencies. For \baseOS{}, the requirements are to have access to
 both the base OS and EPEL repositories for which mirrors. Note that for this
-Tech Preview, an altarch variation of the CentOS 7.2 release was used.
+Tech Preview, an altarch variation of the CentOS 7.3 release was used.
 Additional info and a pointer to available ISO images is available at the
 links below:
 
@@ -101,7 +101,7 @@ links below:
 \item CentOS Alt Arch Info 
   \href{https://wiki.centos.org/SpecialInterestGroup/AltArch/AArch64}{\color{blue}{(aarch64)}}
 \item Repository/ISO images
-    \href{http://mirror.centos.org/altarch/7.2.1511/os/aarch64/}{\color{blue}{(7.2.1511)}}
+    \href{http://mirror.centos.org/altarch/7.3.1611/os/aarch64/}{\color{blue}{(7.3.1611)}}
 \end{itemize*}
 
 
@@ -235,7 +235,7 @@ links below:
 % ohpc_validation_comment Add hosts to cluster (Cont.)
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
 # Define provisioning image for hosts
-[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.2 --bootstrap=`uname -r` \
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --vnfs=centos7.3 --bootstrap=`uname -r` \
     --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network 
 \end{lstlisting}
 
