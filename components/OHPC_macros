@@ -37,7 +37,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # installation path layout
 Requires: ohpc-filesystem
 
-# OpenHPC packages also require ohpc-buildroot to access macros used to defineduring build as it pulls in required
+# OpenHPC packages also require ohpc-buildroot to access macros used to define
 # compiler and MPI families
 %if 0%{?ohpc_bootstrap} == 0
 BuildRequires: ohpc-buildroot
