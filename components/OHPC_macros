@@ -45,14 +45,6 @@ Requires: ohpc-filesystem
 BuildRequires: ohpc-buildroot
 %endif
 
-# Set the compiler to devtoolset-6 if it is on a RHEL 7 system
-%if 0%{?rhel} == 7
-	%{!?compiler_family: %global compiler_family dts6}
-	# OBS define's rhel_version to 700 for RHEL, in case we are
-	# not running in OBS
-	%global rhel_version 700
-%endif
-
 # OpenHPC convention: the default assumes the gnu compiler family;
 # however, this can be overridden by specifing the compiler_family
 # variable via rpmbuild or other mechanisms.
