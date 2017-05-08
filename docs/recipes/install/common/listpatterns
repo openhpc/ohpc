@@ -5,7 +5,7 @@ rm -f ${logfile}.*
 
 echo ++++ search and log OpenHPC patterns
 
-for meta_package in `rpm -qa | grep -e "ohpc-" | grep -v "release" | sort`; do
+for meta_package in `rpm -qa | grep -e "ohpc-" | grep -v "ohpc-release" | grep -v "ohpc-filesystem | sort`; do
         echo "parsing $meta_package"
         info=`rpm -qi $meta_package | grep -A1 "Description :" | tail -1`
 
