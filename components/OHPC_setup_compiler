@@ -14,7 +14,7 @@ if [ "$OHPC_COMPILER_FAMILY" = "gnu" ]; then
     export FC=gfortran
     export F77=gfortran
     module purge
-    module load gnu/5.4.0
+    module load gnu
 elif [ "$OHPC_COMPILER_FAMILY" = "gnu7" ]; then
     export CC=gcc
     export CXX=g++
