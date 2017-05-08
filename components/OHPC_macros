@@ -16,10 +16,12 @@
 
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-# All openHPC package require ohpc-filesystem for the basic FS layout
+# OpenHPC packages require ohpc-filesystem which defines the basic
+# installation path layout
 Requires: ohpc-filesystem
-# All openHPC need ohpc-buildroot during build as it pulls in required
-# build depenencies and also provides the compiler and mpi setup scripts
+
+# OpenHPC packages also require ohpc-buildroot to access macros used to defineduring build as it pulls in required
+# compiler and MPI families
 %if 0%{?ohpc_bootstrap} == 0
 BuildRequires: ohpc-buildroot
 %endif
