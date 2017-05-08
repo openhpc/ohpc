@@ -36,7 +36,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # OpenHPC packages require ohpc-filesystem which defines the basic
 # installation path layout
 %if 0%{?ohpc_bootstrap} == 0
-Requires: ohpc-filesystem
+# Requires: ohpc-filesystem
 %endif
 
 # OpenHPC packages also require ohpc-buildroot to access macros used to define
