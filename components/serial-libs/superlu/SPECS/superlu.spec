@@ -25,39 +25,8 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-ohpc-header-comp-begin-----------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
-
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-Requires:      openblas-gnu%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end-------------------------------
+%ohpc_compiler
 
 # Base package name
 %define pname superlu
@@ -68,25 +37,22 @@ Summary:        A general purpose library for the direct solution of linear equa
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 Version:        5.2.1
-Release:        0
+Release:        0%{?dist}
 Source:         http://crd-legacy.lbl.gov/%7Exiaoye/SuperLU/%{pname}_%{version}.tar.gz
 Source1:        OHPC_macros
-Source2:        OHPC_setup_compiler
 # PATCH-FEATURE-OPENSUSE superlu-5.1-make.patch : add compiler and build flags in make.inc
 Patch:          superlu-5.2-make.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
 Patch1:         superlu-4.3-include.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-dont-opt-away.diff
 Patch2:         superlu-4.3-dont-opt-away.diff
-# PATCH-FIX-OPENSUSE superlu-5.1-remove-hsl.patch [bnc#796236] 
+# PATCH-FIX-OPENSUSE superlu-5.1-remove-hsl.patch [bnc#796236]
 # The Harwell Subroutine Library (HSL) routine m64ad.c have been removed
 # from the original sources for legal reasons. This patch disables the inclusion of
 # this routine in the library which, however, remains fully functionnal
 Patch3:         superlu-5.1-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
 BuildRequires:  tcsh
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{OHPC_PUB}/doc/contrib
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -106,8 +72,7 @@ Docu can be found on http://www.netlib.org.
 %patch3 -p1
 
 %build
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 make lib
 
@@ -178,10 +143,6 @@ EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -189,5 +150,5 @@ EOF
 %doc README
 
 %changelog
-
-
+* Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 5.2.1-0
+- Switching to %%ohpc_compiler macro

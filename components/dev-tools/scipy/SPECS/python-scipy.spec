@@ -25,36 +25,14 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family: %global mpi_family openmpi}
 
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-BuildRequires: openblas-gnu%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
+%if "%{compiler_family}" != "intel"
+BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
+Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # MPI dependencies
@@ -75,25 +53,21 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end-------------------------------
 
 # Base package name
 %define pname scipy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        0.19.0
-Release:        1
+Release:        1%{?dist}
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.scipy.org
-DocDir:         %{OHPC_PUB}/doc/contrib
 Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 BuildRequires:  blas-devel
 Source1:        OHPC_macros
-Source2:        OHPC_setup_compiler
 Source3:        OHPC_setup_mpi
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
@@ -106,9 +80,6 @@ BuildRequires:  python-Cython
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
 Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -128,10 +99,6 @@ leading scientists and engineers.
 %setup -q -n %{pname}-%{version}
 find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
-# OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
 [mkl]
@@ -140,10 +107,7 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
-%endif
-
-%if %{compiler_family} == gnu
-module load openblas
+%else
 cat > site.cfg << EOF
 [openblas]
 libraries = openblas
@@ -154,13 +118,12 @@ EOF
 
 %build
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
 
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load openblas
 %endif
 
@@ -171,7 +134,7 @@ ATLAS=%{_libdir}/atlas \
 FFTW=%{_libdir}
 BLAS=%{_libdir} \
 LAPACK=%{_libdir} \
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 LDSHARED="icc -shared" \
 python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
 %else
@@ -180,8 +143,7 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 
 %install
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
@@ -198,8 +160,7 @@ find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes %{buildroot}%{install_path}/lib64/python2.7/site-packages
 %endif
-%{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family: %global mpi_family openmpi}
+
 # fix executability issue
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/arff/arffread.py
 chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py
@@ -265,3 +226,5 @@ EOF
 %doc LICENSE.txt
 
 %changelog
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 0.19.0-1
+- Switching to %%ohpc_compiler macro

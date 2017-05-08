@@ -25,38 +25,14 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-#-ohpc-header-comp-begin-----------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family:      %global mpi_family openmpi}
 
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
+%if "%{compiler_family}" != "intel"
 BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
 %endif
 
 # MPI dependencies
@@ -77,15 +53,13 @@ BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
 Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end-------------------------------
-
 # Base package name
 %define pname mumps
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        5.1.1
-Release:        0
+Release:        0%{?dist}
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
 Group:          %{PROJ_NAME}/parallel-libs
@@ -96,23 +70,16 @@ Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
 Source5:        OHPC_macros
-Source6:        OHPC_setup_compiler
 Source7:        OHPC_setup_mpi
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Patch2:         mumps-5.0.2-psxe2017.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{OHPC_PUB}/doc/contrib
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
 %else
 BuildRequires: libgomp
 %endif
-
-Provides:      libpord.so.%{version}()(64bit)
-
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -127,76 +94,69 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %setup -q -n MUMPS_%{version}
 %patch0 -p1
 %patch1 -p1
+<<<<<<< HEAD
 %if %{compiler_family} == intel
 #%patch2 -p1
+=======
+%if "%{compiler_family}" == "intel"
+%patch2 -p2
+>>>>>>> adrianreber-gcc7
 %endif
 
 %build
-
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 # Enable scalapack linkage for blas/lapack with gnu builds
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load scalapack openblas
 %endif
 
 # Select appropriate Makefile.inc with MKL
-%if %{mpi_family} == impi
+%if "%{mpi_family}" == "impi"
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" == "gnu"
 cp -f %{S:2} Makefile.inc
 %endif
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%endif 
+%endif
 
-%if %{mpi_family} == mpich
+%if "%{mpi_family}" == "mpich"
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" == "intel"
+cp -f %{S:3} Makefile.inc
+%else
 cp -f %{S:2} Makefile.inc
 %endif
-%if %{compiler_family} == intel
-cp -f %{S:3} Makefile.inc
 %endif
-%endif 
-%if %{mpi_family} == mvapich2
+%if "%{mpi_family}" == "mvapich2"
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" == "intel"
+cp -f %{S:3} Makefile.inc
+%else
 cp -f %{S:2} Makefile.inc
 %endif
-%if %{compiler_family} == intel
-cp -f %{S:3} Makefile.inc
 %endif
-%endif 
 
-%if %{mpi_family} == openmpi
+%if "%{mpi_family}" == "openmpi"
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" == "intel"
+cp -f %{S:4} Makefile.inc
+%else
 cp -f %{S:1} Makefile.inc
 %endif
-%if %{compiler_family} == intel
-cp -f %{S:4} Makefile.inc
 %endif
-%endif 
 
-#export LD_LIBRARY_PATH=%{_libdir}/mpi/gcc/openmpi/%_lib
 make MUMPS_MPI=$OHPC_MPI_FAMILY \
      FC=mpif77 \
      MUMPS_LIBF77="$LIBS" \
      OPTC="$RPM_OPT_FLAGS" all
 
 
-
 %install
-
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/OHPC_setup_mpi
 
 %{__mkdir} -p %{buildroot}%{install_path}/lib
 %{__mkdir} -p %{buildroot}%{install_path}/include
@@ -208,7 +168,7 @@ rm PORD/lib/sort*
 mv PORD/lib/*so* lib/.
 mv PORD/include/* include/.
 
-install -m 644 lib/*so* %{buildroot}%{install_path}/lib
+install -m 755 lib/*so* %{buildroot}%{install_path}/lib
 install -m 644 include/* %{buildroot}%{install_path}/include
 install -m 644 Makefile.inc %{buildroot}%{install_path}/etc
 
@@ -265,9 +225,6 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -275,4 +232,5 @@ EOF
 %doc ChangeLog CREDITS INSTALL LICENSE README VERSION
 
 %changelog
-
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 5.0.2-0
+- Switching to %%ohpc_compiler macro

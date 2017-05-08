@@ -24,39 +24,14 @@
 #
 #-------------------------------------------------------------------------------
 #
-# netcdf spec file 
+# netcdf spec file
 # netcdf library build that is dependent on compiler toolchain
 #
-#-ohpc-header-comp-begin----------------------------------------------
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family:      %global mpi_family openmpi}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
 
 # MPI dependencies
 %if %{mpi_family} == impi
@@ -76,9 +51,6 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end------------------------------------------------
-
-
 # Base package name
 
 %define pname netcdf
@@ -91,24 +63,19 @@ Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
 Version:        4.4.1.1
-Release:        1
+Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
-DocDir:         %{OHPC_PUB}/doc/contrib
 Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
 Source101:	OHPC_macros
-Source102:	OHPC_setup_compiler
 Source103:	OHPC_setup_mpi
 
 
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  m4
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
-
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -150,16 +117,15 @@ NetCDF data is:
 
 %build
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family} 
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 export CPPFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
-export CC=mpicc 
+export CC=mpicc
 
 ./configure --prefix=%{install_path} \
     --enable-shared \
@@ -170,11 +136,12 @@ export CC=mpicc
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }
 
+make %{?_smp_mflags}
+
 %install
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family} 
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
@@ -240,14 +207,6 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -256,3 +215,5 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.md
 
 %changelog
+* Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 4.4.1.1-1
+- Switching to %%ohpc_compiler macro

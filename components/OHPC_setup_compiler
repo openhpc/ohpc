@@ -1,26 +1,46 @@
+if [ "$#" = "1" ]; then
+    OHPC_COMPILER_FAMILY=$1
+fi
+
 if [ -z "$OHPC_COMPILER_FAMILY" ]; then
     echo "Unknown OHPC_COMPILER_FAMILY"
     exit 1
 fi
 
+export toolset=gcc
 if [ "$OHPC_COMPILER_FAMILY" = "gnu" ]; then
     export CC=gcc
     export CXX=g++
     export FC=gfortran
     export F77=gfortran
     module purge
-    module load gnu
+    module load gnu/5.4.0
+elif [ "$OHPC_COMPILER_FAMILY" = "gnu7" ]; then
+    export CC=gcc
+    export CXX=g++
+    export FC=gfortran
+    export F77=gfortran
+    module purge
+    module load gnu/7.1.0
 elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
+    export toolset=intel-linux
     export CC=icc
     export CXX=icpc
     export FC=ifort
     export F77=ifort
     module purge
     module load intel
+elif [ "$OHPC_COMPILER_FAMILY" = "dts6" ]; then
+    # dts is the devtoolset-6 software collection
+    # on top of CentOS7/RHEL7 which brings gcc 6.2.1
+    # http://mirror.centos.org/centos/7/sclo/$basearch/rh/
+    export CC=gcc
+    export CXX=g++
+    export FC=gfortran
+    export F77=gfortran
+    module purge
+    module load gnu/6
 else
     echo "Unsupported OHPC_COMPILER_FAMILY -> $OHPC_COMPILER_FAMILY"
     exit 1
 fi
-
-
-

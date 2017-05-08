@@ -10,37 +10,10 @@
 
 # Scalasca library that is is dependent on compiler toolchain and MPI
 
-#-ohpc-header-comp-begin----------------------------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family:      %global mpi_family openmpi}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
 
 # MPI dependencies
 %if %{mpi_family} == impi
@@ -60,8 +33,6 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end------------------------------------------------
-
 # Base package name
 %define pname sionlib
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -69,26 +40,21 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.7.1
-Release:   1
+Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/io-tools
 URL:       http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html
 Source0:   http://apps.fz-juelich.de/jsc/sionlib/download.php?version=%{version}#/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
-
-%define debug_package %{nil}
-
+Patch0:    gcc-6-7.patch
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-SIONlib is a library for writing and reading binary data to/from several 
-thousands of processors into one or a small number of physical files. 
+SIONlib is a library for writing and reading binary data to/from several
+thousands of processors into one or a small number of physical files.
 
 This is the %{compiler_family}-%{mpi_family} version.
 
@@ -96,12 +62,12 @@ This is the %{compiler_family}-%{mpi_family} version.
 %prep
 
 %setup -q -n %{pname}
+%patch0 -p0
 
 %build
 
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 export OHPC_MPI_FAMILY=%{mpi_family}
 . %{_sourcedir}/OHPC_setup_mpi
@@ -133,23 +99,26 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 sed -i 's|-m$(PREC)||g' build-*/Makefile.defs
 %endif
 
+<<<<<<< HEAD
 %if %{compiler_family} == intel
 sed -i 's|-g|-g -fpic|g' build-*/Makefile.defs
 %endif
+=======
+make
+>>>>>>> adrianreber-gcc7
 
 %install
 
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # don't package static libs
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*la
-    
+
 # clean buildroot
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/bin/sionconfig
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/examples/simple/Makefile.defs
@@ -197,21 +166,12 @@ EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-%post
-/sbin/ldconfig || exit 1
-%postun -p /sbin/ldconfig
-
-%preun
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
 %{OHPC_PUB}
 %doc COPYRIGHT LICENSE README INSTALL RELEASE
 
-
 %changelog
-
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 1.7.0-1
+- Switching to %%ohpc_compiler macro

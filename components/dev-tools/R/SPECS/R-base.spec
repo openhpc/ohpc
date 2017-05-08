@@ -26,60 +26,30 @@
 #
 #-------------------------------------------------------------------------------
 
-
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family variable via rpmbuild or other
-# mechanisms.
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-%{!?compiler_family: %global compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
+%if "%{compiler_family}" != "intel"
+BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
+Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
-# Compiler dependencies
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-BuildRequires: openblas-gnu%{PROJ_DELIM}
-Requires:      openblas-gnu%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
-
 
 %define 	pname R_base
 %define 	PNAME %(echo %{pname} | tr [a-z] [A-Z])
-
 
 Name:		%{pname}%{PROJ_DELIM}
 Release:	1%{?dist}
 Version:        3.3.3
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Source1:        OHPC_macros
-Source2:        OHPC_setup_compiler
 Patch:          tre.patch
 Url:            http://www.r-project.org/
-DocDir:         %{OHPC_PUB}/doc/contrib
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
 Group:          %{PROJ_NAME}/dev-tools
-BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
 %define         install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
-%define         debug_package %{nil}
 
 BuildRequires:  cairo-devel
 BuildRequires:  libjpeg-devel
@@ -89,7 +59,7 @@ BuildRequires:  perl
 BuildRequires:  readline-devel
 %if 0%{?suse_version} > 1020
 %if 0%{?suse_version} < 1230
-%if 0%{?suse_version} > 1120 
+%if 0%{?suse_version} > 1120
 %endif
 %else
 BuildRequires:  xdg-utils
@@ -101,15 +71,15 @@ BuildRequires:  xz-devel
 BuildRequires:  pcre-devel
 BuildRequires:  libcurl-devel
 ### Moved to CENTOS only until SLES has a newer texinfo version
-###BuildRequires:  texinfo >= 5.1 
+###BuildRequires:  texinfo >= 5.1
 BuildRequires:  tk-devel
 # BuildRequires:  xorg-x11-devel
 # CentOS needs X11 headers/libs like Intrisic.h which suse provides
-%if 0%{?suse_version}  
+%if 0%{?suse_version}
 #BuildRequires:  texlive-fonts-extra
 %else
 BuildRequires:  libXt-devel
-BuildRequires:  texinfo >= 5.1 
+BuildRequires:  texinfo >= 5.1
 BuildRequires:  bzip2-devel
 %endif
 Requires:       cairo >= 1.2
@@ -118,7 +88,7 @@ Requires:       freetype2
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
-%if 0%{?suse_version}  
+%if 0%{?suse_version}
 BuildRequires:  libicu52_1
 Requires:	libicu52_1
 %else
@@ -160,35 +130,31 @@ Provides:       R-utils = %{version}
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 %description
-R is a language and environment for statistical computing and graphics. 
-It is a GNU project which is similar to the S language and environment 
-which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies) 
-by John Chambers and colleagues. 
+R is a language and environment for statistical computing and graphics.
+It is a GNU project which is similar to the S language and environment
+which was developed at Bell Laboratories (formerly AT&T, now Lucent Technologies)
+by John Chambers and colleagues.
 
-R can be considered as a different implementation of S.  There are some important 
+R can be considered as a different implementation of S.  There are some important
 differences, but much code written for S runs unaltered under R.
 
-R provides a wide variety of statistical (linear and nonlinear modelling, 
-classical statistical tests, time-series analysis, classification, clustering, …) 
+R provides a wide variety of statistical (linear and nonlinear modelling,
+classical statistical tests, time-series analysis, classification, clustering, …)
 and graphical techniques, and is highly extensible.
 
-%prep 
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
+%prep
 %setup -n R-%{version}
 # disabling patch - 9/21/16 karl.w.schulz@intel.com
 #%patch -p1
 
-%build 
+%build
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load openblas
 BLAS="-L${OPENBLAS_LIB} -lopenblas"
 %else
@@ -205,27 +171,17 @@ echo "MKL options flag .... $MKL "
             --without-system-zlib \
             --without-system-bzlib \
             --without-x \
-              LIBnn=lib64 
+              LIBnn=lib64
 
 
 make %{?_smp_mflags}
 
-
-%install 
+%install
 # OpenHPC compiler designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
-
+%ohpc_setup_compiler
 make DESTDIR=%{buildroot} install
-
 # there is a backup file in survival for 3.1.3
 %{__rm} -f %{buildroot}%{_libdir}/R/library/survival/NEWS.Rd.orig
-
-# Install ld.so.conf.d file to ensure other applications access the shared lib
-%{__mkdir_p} %{buildroot}/etc/ld.so.conf.d
-cat << EOF >%{buildroot}/etc/ld.so.conf.d/R.conf
-%{_libdir}/R/lib
-EOF
 
 # OpenHPC module file
 
@@ -281,14 +237,6 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
-export NO_BRP_CHECK_RPATH true
-
-%post
-/sbin/ldconfig
-
-%postun
-/sbin/ldconfig
-
 %files
 %defattr(-,root,root)
 %{OHPC_HOME}
@@ -296,9 +244,9 @@ export NO_BRP_CHECK_RPATH true
 %doc COPYING
 %doc README
 
-# ld.so.conf
-%config /etc/ld.so.conf.d/R.conf
-
 %changelog
+* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 3.3.1-1
+- Switching to %%ohpc_compiler macro
+
 * Wed Feb 08 2017 Adrian Reber <adrian@lisas.de> - 3.3.1
 - fix building on CentOS 7.3

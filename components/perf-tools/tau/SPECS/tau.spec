@@ -9,35 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family variable via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family: %global mpi_family openmpi}
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-BuildRequires: wget
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
 
 # MPI dependencies
 %if %{mpi_family} == impi
@@ -57,12 +31,9 @@ BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end------------------------------------------------
-
 # Base package name
 %define pname tau
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
@@ -74,7 +45,6 @@ Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
 Source1:   OHPC_macros
-Source2:   OHPC_setup_compiler
 Source3:   OHPC_setup_mpi
 Patch1:    tau-2.26.forceshared.patch
 Patch2:    tau-add-explicit-linking-option.patch
@@ -83,7 +53,6 @@ Provides:  lib%PNAME.so()(64bit)
 Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -99,7 +68,6 @@ BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires: papi%{PROJ_DELIM}
 Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
-%define debug_package %{nil}
 #!BuildIgnore: post-build-checks
 
 # Default library install path
@@ -107,7 +75,7 @@ Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
 %description
 TAU is a program and performance analysis tool framework being developed for
-the DOE and ASC program at University of Oregon. TAU provides a suite of 
+the DOE and ASC program at University of Oregon. TAU provides a suite of
 static and dynamic tools that provide graphical user
 interaction and interoperation to form an integrated analysis environment for
 parallel Fortran 95, C and C++ applications.  In particular, a robust
@@ -128,18 +96,16 @@ sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 
 %install
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 module load papi
 module load pdtoolkit
 
-%if %{compiler_family} == gnu
-export fcomp=gfortran
-%endif
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 export fcomp=mpiifort
+%else
+export fcomp=gfortran
 %endif
 
 %if %{mpi_family} == impi
@@ -221,8 +187,7 @@ ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
 %else
 ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi
 %endif
-ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi
-ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-profile-trace.so 
+ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-profile-trace.so
 popd
 
 # remove static libs
@@ -291,4 +256,5 @@ EOF
 %doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
 
 %changelog
-
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 2.26-1
+- Switching to %%ohpc_compiler macro

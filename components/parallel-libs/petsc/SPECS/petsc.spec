@@ -10,38 +10,14 @@
 
 # petsc library that is is dependent on compiler toolchain and MPI
 
-#-ohpc-header-comp-begin-----------------------------
-
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%ohpc_compiler
 
-# OpenHPC convention: the default assumes the gnu toolchain and openmpi
-# MPI family; however, these can be overridden by specifing the
-# compiler_family and mpi_family variables via rpmbuild or other
-# mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
 %{!?mpi_family:      %global mpi_family openmpi}
 
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-BuildRequires: coreutils
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
+%if "%{compiler_family}" != "intel"
 BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-%if 0%{?OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
 %endif
 
 # MPI dependencies
@@ -62,8 +38,6 @@ BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
 Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-#-ohpc-header-comp-end-------------------------------
-
 # Base package name
 %define pname petsc
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -73,16 +47,12 @@ Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
 Version:        3.7.6
-Release:        0
-
+Release:        0%{?dist}
 Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
 Source1:        OHPC_macros
-Source2:        OHPC_setup_compiler
 Source3:        OHPC_setup_mpi
 Patch1:         petsc.rpath.patch
 Url:            http://www.mcs.anl.gov/petsc/
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-DocDir:         %{OHPC_PUB}/doc/contrib
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
@@ -90,16 +60,14 @@ BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 
-%include %{_sourcedir}/OHPC_macros
 #!BuildIgnore: post-build-checks
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 PETSc is a suite of data structures and routines for the scalable
-(parallel) solution of scientific applications modeled by partial 
+(parallel) solution of scientific applications modeled by partial
 differential equations.
 
 %prep
@@ -109,15 +77,14 @@ differential equations.
 
 %build
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
+%ohpc_setup_compiler
 export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
 . %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 
 # Enable scalapack linkage for blas/lapack with gnu builds
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load scalapack openblas
 %endif
 
@@ -227,13 +194,6 @@ EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-
-
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
@@ -241,3 +201,5 @@ rm -rf $RPM_BUILD_ROOT
 %doc CONTRIBUTING LICENSE
 
 %changelog
+* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.7.5-0
+- Switching to %%ohpc_compiler macro

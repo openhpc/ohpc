@@ -8,6 +8,8 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%global ohpc_bootstrap 1
+
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
