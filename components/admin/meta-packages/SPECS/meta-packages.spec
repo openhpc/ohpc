@@ -348,7 +348,7 @@ OpenHPC runtimes for use with GNU compiler toolchain
 
 %package runtimes-intel
 Summary:   OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
-Requires:  ocr-gnu%{PROJ_DELIM}
+Requires:  ocr-intel%{PROJ_DELIM}
 Requires:  singularity%{PROJ_DELIM}
 %description runtimes-intel
 OpenHPC runtimes for use with Intel(R) Parallel Studio XE toolchain
