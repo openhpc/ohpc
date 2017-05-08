@@ -37,9 +37,9 @@ default location for this example is in
 
 % begin_ohpc_run
 % ohpc_comment_header Create compute image for Warewulf \ref{sec:assemble_bos}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
 # Define chroot location
-[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/sles12sp2
+[sms](*\#*) export CHROOT=/opt/ohpc/admin/images/BOSVER
 
 # Build initial chroot image
 [sms](*\#*) mkdir -p -m 755 $CHROOT                        # create chroot housing dir
