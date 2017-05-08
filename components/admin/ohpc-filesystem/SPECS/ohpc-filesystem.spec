@@ -1,7 +1,7 @@
 Name: ohpc-filesystem
-Version: 1
-Release: 2.ohpc
-Summary: Common openHPC directories
+Version: 1.3
+Release: 1.ohpc
+Summary: Common top-level OpenHPC directories
 
 Group: ohpc/admin
 License: ASL 2.0
@@ -11,17 +11,18 @@ Source1: OHPC_setup_mpi
 BuildArch: noarch
 
 %description
-This package own the top level common directories and should be required
-by every openHPC package.
+This administrative package is used to define top level OpenHPC installation
+directories and is utilized by most packages that do not install into system
+default paths.
 
 %package -n ohpc-buildroot
-Summary: Common scripts to build openHPC packages
+Summary: Common build scripts used in OpenHPC packaging
 Group: ohpc/admin
 Requires: lmod-ohpc
 Requires: ohpc-filesystem
 
 %description -n ohpc-buildroot
-Common scripts to build openHPC packages.
+Common compiler and MPI family convenience scripts used during OpenHPC builds.
 
 %install
 # The ohpc-filesystems owns all the common directories
@@ -48,5 +49,8 @@ install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 /opt/ohpc/admin/ohpc/OHPC_setup_mpi
 
 %changelog
+* Mon May  8 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.3
+- minor description updates
+
 * Wed Feb 08 2017 Adrian Reber <areber@redhat.com> - 1.2
 - Initial release
