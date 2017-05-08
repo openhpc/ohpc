@@ -35,6 +35,7 @@ my $basename    = basename($file,".tex");
 chdir $inputDir;
 
 # Determine BaseOS and define package manager commands
+my $BaseOS             = "";
 my $Install            = "";
 my $chrootInstall      = "";
 my $groupInstall       = "";
@@ -56,6 +57,9 @@ while( my $line = <IN> ) {
     elsif( $line =~ /\\newcommand\{\\groupchrootinstall\}\{(.+)\}/ ) {
         $groupChrootInstall = $1;
     }
+    elsif( $line =~ /\\newcommand\{\\baseos\}\{(.+)\}/ ) {
+        $BaseOS = $1;
+    }
 }
 close( IN );
 
@@ -67,6 +71,8 @@ $groupChrootInstall =~ s/\\\$/\$/;
 # print "chrootInstall       = $chrootInstall\n";
 # print "groupInstall        = $groupInstall\n";
 # print "groupChrootInstall  = $groupChrootInstall\n";
+# print "BaseOS              = $BaseOS\n";
+# exit(1);
 
 if( $Install eq "" || $chrootInstall eq "" || $groupInstall eq "" || $groupChrootInstall eq "" ) {
     print "Error: package manager macros not defined\n";
@@ -249,6 +255,7 @@ sub update_cmd {
     $cmd =~ s/\(\*\\chrootinstall\*\)/$chrootInstall/;
     $cmd =~ s/\(\*\\groupinstall\*\)/$groupInstall/;
     $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
+    $cmd =~ s/BOSVER/$BaseOS/;
 
     return( $cmd );
 } # end update_cmd
