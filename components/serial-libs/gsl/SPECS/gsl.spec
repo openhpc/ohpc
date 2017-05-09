@@ -9,9 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 # Serial GSL library build that is dependent on compiler toolchain
-
-BuildRequires: ohpc-buildroot
-%include /opt/ohpc/admin/ohpc/OHPC_macros
+%include %{_sourcedir}/OHPC_macros
 %ohpc_compiler
 
 # Base package name
