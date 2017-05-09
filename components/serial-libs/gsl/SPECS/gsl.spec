@@ -10,7 +10,7 @@
 
 # Serial GSL library build that is dependent on compiler toolchain
 
-%include %{_sourcedir}/OHPC_macros
+%include /opt/ohpc/admin/ohpc/OHPC_macros
 %ohpc_compiler
 
 # Base package name
