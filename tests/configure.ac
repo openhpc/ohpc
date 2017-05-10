@@ -375,7 +375,7 @@ AC_OUTPUT( Makefile
        perf-tools/tau/Makefile
        oob/Makefile
        runtimes/singularity/Makefile
-       lustre/Makefile
+       fs/lustre/Makefile
        dev-tools/easybuild/Makefile
        admin/spack/Makefile
        dev-tools/numpy/Makefile

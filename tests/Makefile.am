@@ -37,7 +37,7 @@ if EASYBUILD_ENABLED
 endif
 
 if LUSTRE_ENABLED
-   SUBDIRS += lustre
+   SUBDIRS += fs/lustre
 endif
 
 if MODULES_ENABLED
