@@ -46,7 +46,7 @@ BuildRequires:	systemd
 %endif
 BuildRoot:	%{_tmppath}/%{pname}-%{version}
 DocDir:     %{OHPC_PUB}/doc/contrib
-BuildConflicts: post-build-checks
+#!BuildIgnore: post-build-checks
 
 Conflicts: munge 
 
