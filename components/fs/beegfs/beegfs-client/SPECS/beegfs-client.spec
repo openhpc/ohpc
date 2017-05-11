@@ -1,4 +1,3 @@
-%define buildarch noarch
 %define KDIR /lib/modules/3.10.0-514.el7.x86_64/build /usr/src/linux-headers-3.10.0-514.el7.x86_64
 %define MAKE_CONCURRENCY 4
 %define BEEGFS_VERSION 17.5-git10
