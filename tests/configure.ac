@@ -420,31 +420,72 @@ if test "x$ROOT_ENABLED" = "x1" ; then
     else 
        echo '    'Base operating system..... : disabled
     fi
-    if test "x$enable_oob" = "xyes"; then
-       echo '    'Out of band tools......... : enabled
-    else 
-       echo '    'Out of band tools......... : disabled
-    fi
+
     if test "x$enable_hardware" = "xyes"; then
        echo '    'Hardware benchmarks....... : enabled	
     else 
        echo '    'Hardware benchmarks....... : disabled
     fi
-    if test "x$enable_spack" = "xyes"; then
-       echo '    'Spack..................... : enabled
-    else
-       echo '    'Spack..................... : disabled
+
+    if test "x$enable_oob" = "xyes"; then
+       echo '    'Out of band tools......... : enabled
+    else 
+       echo '    'Out of band tools......... : disabled
     fi
+    
     if test "x$enable_singularity" = "xyes"; then
        echo '    'Singularity............... : enabled
     else
        echo '    'Singularity............... : disabled
     fi
 
+    if test "x$enable_spack" = "xyes"; then
+       echo '    'Spack..................... : enabled
+    else
+       echo '    'Spack..................... : disabled
+    fi
+
 
 else
 
 echo    User Environment:
+
+    if test "x$enable_compilers" = "xyes"; then
+       echo '    'Compilers................. : enabled
+    else
+       echo '    'Compilers................. : disabled
+    fi
+
+    if test "x$enable_lustre" = "xyes"; then
+       echo '    'Lustre client............. : enabled
+    else
+       echo '    'Lustre client............. : disabled
+    fi
+
+    if test "x$enable_modules" = "xyes"; then
+       echo '    'Modules................... : enabled
+    else
+       echo '    'Modules................... : disabled
+    fi
+
+    if test "x$enable_mpi" = "xyes"; then
+       echo '    'MPI....................... : enabled
+    else
+       echo '    'MPI....................... : disabled
+    fi
+
+    if test "x$enable_munge" = "xyes"; then
+       echo '    'Munge..................... : enabled
+    else
+       echo '    'Munge..................... : disabled
+    fi
+
+    if test "x$enable_oom" = "xyes"; then
+       echo '    'OOM....................... : enabled
+    else
+       echo '    'OOM....................... : disabled
+    fi
+
     if test "x$enable_packaging" = "xyes"; then
        echo '    'Packaging tests........... : enabled 
     else   
@@ -457,42 +498,6 @@ echo    User Environment:
        echo '    'RMS test harness.......... : disabled 
     fi
 
-    if test "x$enable_munge" = "xyes"; then
-       echo '    'Munge..................... : enabled
-    else
-       echo '    'Munge..................... : disabled
-    fi
-
-    if test "x$enable_compilers" = "xyes"; then
-       echo '    'Compilers................. : enabled
-    else
-       echo '    'Compilers................. : disabled
-    fi
-
-    if test "x$enable_mpi" = "xyes"; then
-       echo '    'MPI....................... : enabled
-    else
-       echo '    'MPI....................... : disabled
-    fi
-
-    if test "x$enable_modules" = "xyes"; then
-       echo '    'Modules................... : enabled
-    else
-       echo '    'Modules................... : disabled
-    fi
-
-    if test "x$enable_lustre" = "xyes"; then
-       echo '    'Lustre client............. : enabled
-    else
-       echo '    'Lustre client............. : disabled
-    fi
-
-    if test "x$enable_oom" = "xyes"; then
-       echo '    'OOM....................... : enabled
-    else
-       echo '    'OOM....................... : disabled
-    fi
-
 echo    Dev Tools:
 
     if test "x$enable_autotools" = "xyes"; then
@@ -501,22 +506,22 @@ echo    Dev Tools:
        echo '    'Autotools................. : disabled
     fi
 
+    if test "x$enable_cilk" = "xyes"; then
+       echo '    'CILK...................... : enabled
+    else
+       echo '    'CILK...................... : disabled
+    fi
+
     if test "x$enable_easybuild" = "xyes"; then
        echo '    'EasyBuild................. : enabled
     else
        echo '    'EasyBuild................. : disabled
     fi
 
-    if test "x$enable_valgrind" = "xyes"; then
-       echo '    'Valgrind.................. : enabled
-    else
-       echo '    'Valgrind.................. : disabled
-    fi
-
     if test "x$enable_hwloc" = "xyes"; then
-       echo '    'hwloc.................... : enabled
+       echo '    'hwloc..................... : enabled
     else
-       echo '    'hwloc.................... : disabled
+       echo '    'hwloc..................... : disabled
     fi
 
     if test "x$enable_R" = "xyes"; then
@@ -531,10 +536,10 @@ echo    Dev Tools:
        echo '    'TBB....................... : disabled
     fi
 
-    if test "x$enable_cilk" = "xyes"; then
-       echo '    'CILK...................... : enabled
+    if test "x$enable_valgrind" = "xyes"; then
+       echo '    'Valgrind.................. : enabled
     else
-       echo '    'CILK...................... : disabled
+       echo '    'Valgrind.................. : disabled
     fi
 
 echo    Performance Tools:
@@ -695,10 +700,10 @@ echo    Runtimes:
 
 echo    Apps:
 
-    if test "x$enable_minife" = "xyes"; then
-       echo '    'MiniFE.................... : enabled
+    if test "x$enable_hpcg" = "xyes"; then
+       echo '    'HPCG...................... : enabled
     else
-       echo '    'MiniFE.................... : disabled
+       echo '    'HPCG...................... : disabled
     fi
 
     if test "x$enable_minidft" = "xyes"; then
@@ -707,10 +712,10 @@ echo    Apps:
        echo '    'MiniDFT................... : disabled
     fi
 
-    if test "x$enable_hpcg" = "xyes"; then
-       echo '    'HPCG...................... : enabled
+    if test "x$enable_minife" = "xyes"; then
+       echo '    'MiniFE.................... : enabled
     else
-       echo '    'HPCG...................... : disabled
+       echo '    'MiniFE.................... : disabled
     fi
 
     if test "x$enable_prk" = "xyes"; then
