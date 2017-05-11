@@ -27,7 +27,7 @@
 # Serial HDF5 library build that is dependent on compiler toolchain
 
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
+%define ohpc_compiler_dependent 1
 
 # Base package name
 %define pname hdf5
