@@ -1,0 +1,37 @@
+diff -Naur ndoutils-2.1.2.old/configure ndoutils-2.1.2/configure
+--- ndoutils-2.1.2.old/configure	2016-12-11 21:56:02.759137228 +0100
++++ ndoutils-2.1.2/configure	2016-12-11 21:57:31.047462050 +0100
+@@ -6277,7 +6277,7 @@
+ 
+ 
+ 
+-INSTALL_OPTS="-o $ndo2db_user -g $ndo2db_group"
++INSTALL_OPTS=""
+ 
+ 
+ 
+diff -Naur ndoutils-2.1.2.old/configure.ac ndoutils-2.1.2/configure.ac
+--- ndoutils-2.1.2.old/configure.ac	2016-12-11 21:56:02.759137228 +0100
++++ ndoutils-2.1.2/configure.ac	2016-12-11 21:56:29.099532482 +0100
+@@ -317,7 +317,7 @@
+ AC_ARG_WITH(ndo2db_group,AC_HELP_STRING([--with-ndo2db-group=<group>],[sets group name to run NDO2DB]),ndo2db_group=$withval,ndo2db_group=nagios)
+ AC_SUBST(ndo2db_user)
+ AC_SUBST(ndo2db_group)
+-INSTALL_OPTS="-o $ndo2db_user -g $ndo2db_group"
++INSTALL_OPTS=""
+ AC_SUBST(INSTALL_OPTS)
+ 
+ 
+diff -Naur ndoutils-2.1.2.old/Makefile.in ndoutils-2.1.2/Makefile.in
+--- ndoutils-2.1.2.old/Makefile.in	2016-12-11 21:56:02.757137198 +0100
++++ ndoutils-2.1.2/Makefile.in	2016-12-11 22:08:50.063651109 +0100
+@@ -140,7 +140,7 @@
+ 		if test $(INIT_TYPE) = newbsd; then\
+ 			if test $(DIST) = openbsd; then\
+ 				echo "# ndo2db@bsd_enable@=NO" >> /etc/rc.conf;\
+-				echo "ndo2db@bsd_enable@=\"-d -c $(CFGDIR)/ndo2db.cfg\"" >> /etc/rc.conf;\
++				echo "ndo2db@bsd_enable@=\"-d -c $(DESTDIR)$(CFGDIR)/ndo2db.cfg\"" >> /etc/rc.conf;\
+ 				echo "Make sure to enable the ndo2db daemon";\
+ 			else\
+ 				echo "ndo2db@bsd_enable@=YES" >> /etc/rc.conf;\
+ 

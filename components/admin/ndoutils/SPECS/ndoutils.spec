@@ -40,7 +40,7 @@ Patch0:             %{pname}-2.1.2-format-security.patch
 # Better align with Fedora/Nagios places for temporary files
 Patch1:             %{pname}-2.1.2-var-files.patch
 # Set user/group in files section, fix permissions on install
-Patch2:             %{pname}-2.1.2-install.patch
+Patch2:             %{pname}-2.1.3-install.patch
 
 BuildRequires:      mysql-devel
 Provides:           %{pname}
