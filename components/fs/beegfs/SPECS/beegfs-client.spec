@@ -84,7 +84,7 @@ rm -rf %{buildroot}
 %debug_package %{nil}
 
 %install
-cd beegfs_client_module/build
+cd v6*/beegfs_client_module/build
 echo "mkdir RPM_BUILD_ROOT (${RPM_BUILD_ROOT})"
 mkdir -p ${RPM_BUILD_ROOT}
 make    RELEASE_PATH=${RPM_BUILD_ROOT}/opt/beegfs/src/client		\
