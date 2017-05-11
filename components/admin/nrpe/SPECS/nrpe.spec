@@ -29,7 +29,7 @@ Group: %{PROJ_NAME}/admin
 License: GPLv2+
 URL: http://www.nagios.org
 DocDir: %{OHPC_PUB}/doc/contrib
-Source0: https://github.com/NagiosEnterprises/nrpe/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
+Source0: https://github.com/NagiosEnterprises/nrpe/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
 Source1: nrpe.sysconfig
 Source2: nrpe-tmpfiles.conf
 Source3: nrpe.service
