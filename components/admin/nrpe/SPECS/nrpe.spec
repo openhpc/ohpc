@@ -21,7 +21,7 @@
 %define nsport 5666
 
 Name: %{pname}%{PROJ_DELIM}
-Version: 3.0.1
+Version: 3.1.0
 Release: 2%{?dist}
 Summary: Host/service/network monitoring agent for Nagios
 
