@@ -49,7 +49,7 @@ Version: %{VER}
 Release: %{RELEASE}
 License: GPL v2
 Group: Software/Other
-Source: beegfs-client-%{BEEGFS_VERSION}.tgz
+Source: https://git.beegfs.com/pub/v6/repository/archive.tar.gz#/beegfs-client-%{BEEGFS_VERSION}.tgz
 URL: http://www.beegfs.com
 Vendor: Fraunhofer ITWM
 BuildRoot: %{_tmppath}/beegfs-client-root
