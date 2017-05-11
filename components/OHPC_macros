@@ -55,6 +55,7 @@ BuildRequires: ohpc-buildroot
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
+
 %if "%{compiler_family}" == "gnu" 
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
@@ -66,7 +67,7 @@ Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: intel_licenses
 %endif
 %endif
-if "%{compiler_family}" == "dts6"
+%if "%{compiler_family}" == "dts6"
 BuildRequires: devtoolset-6
 Requires:      devtoolset-6
 BuildRequires: gnu-dts6-compilers%{PROJ_DELIM}
@@ -76,6 +77,7 @@ Requires:      gnu-dts6-compilers%{PROJ_DELIM}
 BuildRequires: gnu-7-compilers%{PROJ_DELIM}
 Requires:      gnu-7-compilers%{PROJ_DELIM}
 %endif
+
 %endif
 
 # MPI dependencies
