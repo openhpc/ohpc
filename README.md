@@ -15,7 +15,7 @@ The compatible OS version(s) for this release and the total number of
 pre-packaged RPMs available per architecture type are summarized as follows:
 
 Base OS     | x86_64  | aarch64  | noarch
-:---:       | :---:   | :---:    | :---:
+---         | :---:   | :---:    | :---:
 CentOS 7.3  | 301     | 193      | 43
 SLES 12 SP2 | 306     | 198      | 43
 
