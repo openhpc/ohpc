@@ -237,12 +237,6 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
-%post
-/sbin/ldconfig
-
-%postun
-/sbin/ldconfig
-
 %files
 %defattr(-,root,root)
 %{OHPC_HOME}
