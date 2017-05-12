@@ -25,31 +25,9 @@
 #-------------------------------------------------------------------------------
 
 # Boost C++ library that is is dependent on compiler toolchain and MPI
-
+%define ohpc_compiler_dependent 1
+%define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
-
-%{!?mpi_family:      %global mpi_family openmpi}
-
-# MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi-devel%{PROJ_DELIM}
-Requires:      intel-mpi-devel%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
 
 %define _unpackaged_files_terminate_build 0
 %define build_mpi 1
