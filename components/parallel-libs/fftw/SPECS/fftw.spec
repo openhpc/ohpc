@@ -9,12 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 # FFTW library that is is dependent on compiler toolchain and MPI
-
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
-
-%{!?mpi_family:      %global mpi_family openmpi}
 
 # Base package name
 %define pname fftw
@@ -142,6 +139,9 @@ fi
 %doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.3.6-1
+- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
+
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.3.4-1
 - Switching to %%ohpc_compiler macro
 

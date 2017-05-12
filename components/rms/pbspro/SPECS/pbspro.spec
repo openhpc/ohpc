@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 #
 #  Copyright (C) 1994-2016 Altair Engineering, Inc.

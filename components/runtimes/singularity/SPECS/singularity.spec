@@ -10,7 +10,6 @@
 
 %{!?_rel:%{expand:%%global _rel 0.1}}
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname singularity

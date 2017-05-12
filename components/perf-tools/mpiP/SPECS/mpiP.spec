@@ -8,37 +8,18 @@
 #
 #----------------------------------------------------------------------------eh-
 
-
+# Build that is dependent on compiler/mpi toolchains
+%define ohpc_compiler_dependent 1
+%define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
-
-%{!?mpi_family:      %global mpi_family openmpi}
 
 # Note: this package is slightly non-standard in that we always use
-# gnu compilers undernead in order to support call-site demangling
+# gnu compilers underneath in order to support call-site demangling
 %if "%{compiler_family}" == "intel"
 Requires:      intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: gnu-compilers%{PROJ_DELIM}
 Requires:      gnu-compilers%{PROJ_DELIM}
 %global compiler_family gnu
-%endif
-
-# MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi-devel%{PROJ_DELIM}
-Requires:      intel-mpi-devel%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # Base package name
@@ -164,5 +145,8 @@ rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
 %doc ChangeLog doc/PORTING.txt doc/README doc/UserGuide.txt
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.4.1-1
+- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
+
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.4.1-1
 - Switching to %%ohpc_compiler macro

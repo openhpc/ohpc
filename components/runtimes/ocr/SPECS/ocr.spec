@@ -8,12 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# OCR build. This uses the compiler family defined by OHPC
-
+# Build that is is dependent on compiler toolchain
+%define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
-
-%{!?mpi_family:      %global mpi_family openmpi}
 
 # Base package name
 %define pname ocr
@@ -217,5 +214,8 @@ EOF
 %endif
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.0.1-1
+- switch to use of ohpc_compiler_dependent flag
+
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 1.0.1-1
 - Switching to %%ohpc_compiler macro

@@ -9,13 +9,10 @@
 #----------------------------------------------------------------------------eh-
 
 # MPICH MPI stack that is dependent on compiler toolchain
-
-%define with_slurm 0
-
+%define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%ohpc_compiler
-
+%define with_slurm 0
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %endif
@@ -120,6 +117,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.2-1
+- switch to ohpc_compiler_dependent flag
+
 * Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 3.2-1
 - Switching to %%ohpc_compiler macro
 

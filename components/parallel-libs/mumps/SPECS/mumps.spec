@@ -25,6 +25,7 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+# Build that is is dependent on compiler toolchain and MPI
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
@@ -208,5 +209,8 @@ EOF
 %doc ChangeLog CREDITS INSTALL LICENSE README VERSION
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 5.1.1-0
+- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
+
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 5.0.2-0
 - Switching to %%ohpc_compiler macro

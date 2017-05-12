@@ -9,9 +9,8 @@
 #----------------------------------------------------------------------------eh-
 
 # OpenMPI stack that is dependent on compiler toolchain
+%define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-
-%ohpc_compiler
 
 # Base package name/config
 %define pname openmpi
@@ -210,6 +209,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.JAVA.txt
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.10.4-1
+- switch to ohpc_compiler_dependent flag
+
 * Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 1.10.6-1
 - Switching to %%ohpc_compiler macro
 

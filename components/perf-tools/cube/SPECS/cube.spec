@@ -10,13 +10,9 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-#-ohpc-header-comp-end------------------------------------------------
-
 # Base package name
 %define pname cube
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name: %{pname}%{PROJ_DELIM}
 
