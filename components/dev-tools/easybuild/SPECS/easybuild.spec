@@ -15,12 +15,12 @@
 %define pname easybuild
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define vsc_base_ver 2.5.7
-%define vsc_install_ver 0.10.25
+%define vsc_base_ver 2.5.8
+%define vsc_install_ver 0.10.26
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   3.1.2
+Version:   3.2.1
 Release:   1
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
