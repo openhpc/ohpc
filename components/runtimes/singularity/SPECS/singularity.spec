@@ -21,7 +21,7 @@ Version: 2.2.1
 Release: %{_rel}%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
-Group: System Environment/Base
+Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
 Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
 Source1: build-zypper.sh
