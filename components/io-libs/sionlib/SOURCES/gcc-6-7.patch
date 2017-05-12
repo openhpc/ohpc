@@ -1,11 +1,11 @@
---- configure.org	2017-02-22 02:38:23.740476450 -0500
-+++ configure	2017-02-22 02:38:47.962057298 -0500
+--- configure.orig	2017-05-12 12:28:19.000000000 -0700
++++ configure	2017-05-12 12:27:34.000000000 -0700
 @@ -453,7 +453,7 @@
                    GFORTRAN=`which gfortran 2> /dev/null`
                    case ${COMPVER} in
                    4.0.*|4.1.*) ;;
--                  4.*|5.*)     MD=Makefile.defs.linux-gomp
-+                  4.*|5.*|6.*|7.*)     MD=Makefile.defs.linux-gomp
+-                  4.*|5.*|6.*) MD=Makefile.defs.linux-gomp
++                  4.*|5.*|6.*|7.*) MD=Makefile.defs.linux-gomp
                                 GFORTRAN="yes"
                                 ;;
                    esac
