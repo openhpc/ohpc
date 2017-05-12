@@ -10,8 +10,8 @@
 
 # Numpy python library build that is dependent on compiler toolchain
 
+%define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
 
 %if "%{compiler_family}" != "intel"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
