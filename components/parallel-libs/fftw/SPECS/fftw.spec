@@ -10,11 +10,10 @@
 
 # FFTW library that is is dependent on compiler toolchain and MPI
 
-%include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
-
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
+%include %{_sourcedir}/OHPC_macros
+
 %{!?mpi_family:      %global mpi_family openmpi}
 
 # Base package name
