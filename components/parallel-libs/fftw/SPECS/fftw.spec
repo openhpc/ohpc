@@ -13,25 +13,9 @@
 %include %{_sourcedir}/OHPC_macros
 %ohpc_compiler
 
+%define ohpc_compiler_dependent 1
+%define ohpc_mpi_dependent 1
 %{!?mpi_family:      %global mpi_family openmpi}
-
-# MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi-devel%{PROJ_DELIM}
-Requires:      intel-mpi-devel%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
 
 # Base package name
 %define pname fftw
@@ -68,12 +52,7 @@ data, and of arbitrary input size.
 
 
 %prep
-<<<<<<< HEAD
-
 %setup -q -n %{pname}-%{version}-pl2
-=======
-%setup -q -n %{pname}-%{version}
->>>>>>> adrianreber-gcc7
 
 %build
 # OpenHPC compiler/mpi designation
