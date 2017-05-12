@@ -70,13 +70,8 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %setup -q -n MUMPS_%{version}
 %patch0 -p1
 %patch1 -p1
-<<<<<<< HEAD
-%if %{compiler_family} == intel
-#%patch2 -p1
-=======
 %if "%{compiler_family}" == "intel"
 %patch2 -p2
->>>>>>> adrianreber-gcc7
 %endif
 
 %build
