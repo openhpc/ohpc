@@ -23,7 +23,7 @@
 %global pname gnu-dts6-compilers
 %global source_directory %{nil}
 %else
-%global gnu_version 6.3.0
+%global gnu_version 7.1.0
 %global gnu_release 1
 %global pname gnu-compilers
 %global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.bz2
