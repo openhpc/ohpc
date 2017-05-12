@@ -27,7 +27,6 @@
 #-------------------------------------------------------------------------------
 
 %define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" != "intel"
