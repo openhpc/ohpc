@@ -76,7 +76,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %patch0 -p1
 %patch1 -p1
 %if "%{compiler_family}" == "intel"
-%patch2 -p2
+#%patch2 -p2
 %endif
 
 %build
