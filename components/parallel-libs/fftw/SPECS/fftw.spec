@@ -127,7 +127,6 @@ EOF
 
 
 %post
-/sbin/ldconfig || exit 1
 /sbin/install-info --section="Math" %{_infodir}/%{pname}.info.gz %{_infodir}/dir  2>/dev/null || :
 exit 0
 
@@ -135,8 +134,6 @@ exit 0
 if [ "$1" = 0 ]; then
   /sbin/install-info --delete %{_infodir}/%{pname}.info.gz %{_infodir}/dir 2>/dev/null || :
 fi
-
-%postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
