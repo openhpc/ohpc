@@ -23,7 +23,7 @@ ARGS=null
         flunk "$EXE binary does not exit"
     fi
 
-    run_serial_binary $EXE
+    run_serial_binary -j "superlu-c $LMOD_FAMILY_COMPILER" $EXE
     assert_success
 }
 
@@ -33,6 +33,6 @@ ARGS=null
         flunk "$EXE binary does not exit"
     fi
 
-    run_serial_binary "$EXE < g20.rua"
+    run_serial_binary -j "superlu-f77 $LMOD_FAMILY_COMPILER" "$EXE < g20.rua"
     assert_success
 }
