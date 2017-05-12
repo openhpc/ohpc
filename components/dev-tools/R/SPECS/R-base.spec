@@ -26,8 +26,9 @@
 #
 #-------------------------------------------------------------------------------
 
+%define ohpc_compiler_dependent 1
+%define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
 
 %if "%{compiler_family}" != "intel"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
@@ -236,6 +237,12 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
+
+%post
+/sbin/ldconfig
+
+%postun
+/sbin/ldconfig
 
 %files
 %defattr(-,root,root)
