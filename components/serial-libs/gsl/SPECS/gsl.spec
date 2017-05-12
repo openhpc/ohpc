@@ -112,5 +112,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README THANKS TODO
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.3-1
+- switch to ohpc_compiler_dependent flag
+
 * Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 2.2.1-1
 - Switching to %%ohpc_compiler macro

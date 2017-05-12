@@ -8,30 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# Scalasca library that is is dependent on compiler toolchain and MPI
-
+# Build that is dependent on compiler/mpi toolchains
+%define ohpc_compiler_dependent 1
+%define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
-
-%{!?mpi_family:      %global mpi_family openmpi}
-
-# MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi-devel%{PROJ_DELIM}
-Requires:      intel-mpi-devel%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%endif
 
 # Base package name
 %define pname sionlib
@@ -173,5 +153,8 @@ EOF
 %doc COPYRIGHT LICENSE README INSTALL RELEASE
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.7.1-1
+- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
+
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 1.7.0-1
 - Switching to %%ohpc_compiler macro

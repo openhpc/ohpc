@@ -9,9 +9,8 @@
 #----------------------------------------------------------------------------eh-
 
 # Serial metis build dependent on compiler toolchain
-
+%define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
 
 # Base package name
 %define pname metis
@@ -130,5 +129,8 @@ EOF
 %doc BUILD.txt Changelog Install.txt LICENSE.txt
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 5.1.0-1
+- switch to ohpc_compiler_dependent flag
+
 * Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 5.1.0-1
 - Switching to %%ohpc_compiler macro

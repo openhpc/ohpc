@@ -25,8 +25,9 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+# scipy build that is dependent on compiler toolchain
+%define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
 
 %{!?mpi_family: %global mpi_family openmpi}
 
@@ -226,5 +227,8 @@ EOF
 %doc LICENSE.txt
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 0.19.0-1
+- switch to ohpc_compiler_dependent flag
+
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 0.19.0-1
 - Switching to %%ohpc_compiler macro

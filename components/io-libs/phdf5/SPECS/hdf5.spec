@@ -24,14 +24,10 @@
 #
 #-------------------------------------------------------------------------------
 
-# Parallel HDF5 library build that is dependent on compiler
-# toolchain and MPI
-
+# Build that is dependent on compiler/mpi toolchains
+%define ohpc_compiler_dependent 1
+%define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
-%ohpc_mpi_family
-
-#-ohpc-header-comp-end------------------------------------------------
 
 %define _unpackaged_files_terminate_build 0
 
@@ -162,5 +158,8 @@ EOF
 %doc README.txt
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.10.0-1
+- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
+
 * Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 1.8.17-1
 - Switching to %%ohpc_compiler macro

@@ -24,8 +24,9 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+# Python build that is dependent on compiler toolchain
+%define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
 
 # Base package name
 %define pname python
@@ -320,5 +321,8 @@ EOF
 %doc LICENSE README
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.7.12-70.1
+- switch to ohpc_compiler_dependent flag
+
 * Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 2.7.12-70.1
 - Switching to %%ohpc_compiler macro

@@ -25,6 +25,8 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
+# SuperLU library build that is dependent on compiler toolchain
+%define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 %ohpc_compiler
 
@@ -150,5 +152,8 @@ EOF
 %doc README
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 5.2.1-0
+- switch to ohpc_compiler_dependent flag
+
 * Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 5.2.1-0
 - Switching to %%ohpc_compiler macro

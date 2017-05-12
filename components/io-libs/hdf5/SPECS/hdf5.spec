@@ -25,7 +25,6 @@
 #-------------------------------------------------------------------------------
 
 # Serial HDF5 library build that is dependent on compiler toolchain
-
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
@@ -152,5 +151,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.txt
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.10.0-1
+- switch to ohpc_compiler_dependent flag
+
 * Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.8.17-1
 - Switching to %%ohpc_compiler macro

@@ -8,28 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
+# Build that is dependent on compiler/mpi toolchains
+%define ohpc_compiler_dependent 1
+%define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
-
-%{!?mpi_family:      %global mpi_family openmpi}
-
-# MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi-devel%{PROJ_DELIM}
-Requires:      intel-mpi-devel%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%endif
 
 %{!?with_lustre: %global with_lustre 0}
 
@@ -275,5 +257,8 @@ EOF
 %doc TODO
 
 %changelog
+* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.11.0-1
+- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
+
 * Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.11.0-1
 - Switching to %%ohpc_compiler macro
