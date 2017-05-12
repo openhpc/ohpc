@@ -2,4 +2,5 @@ addFilter("non-standard-uid")
 addFilter("shlib-policy-name-error")
 addFilter("suse-filelist-forbidden-sysconfig")
 addFilter("dir-or-file-in-var-run")
+addFilter("library-without-ldconfig-postin")
 

@@ -1,5 +1,4 @@
 addFilter("devel-file-in-non-devel-package")
 addFilter("suse-filelist-forbidden-backup-file")
 addFilter("buildroot")
-addFilter("library-without-ldconfig-postun")
 addFilter("library-without-ldconfig-postin")

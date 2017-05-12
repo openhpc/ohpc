@@ -1,3 +1,4 @@
 addFilter("suse-filelist-forbidden")
 addFilter("files-duplicated-waste")
 addFilter("devel-file-in-non-devel-package")
+addFilter("library-without-ldconfig-postin")
