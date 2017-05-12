@@ -79,13 +79,9 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 sed -i 's|-m$(PREC)||g' build-*/Makefile.defs
 %endif
 
-<<<<<<< HEAD
 %if %{compiler_family} == intel
 sed -i 's|-g|-g -fpic|g' build-*/Makefile.defs
 %endif
-=======
-make
->>>>>>> adrianreber-gcc7
 
 %install
 
