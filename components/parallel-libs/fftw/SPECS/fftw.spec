@@ -127,6 +127,7 @@ EOF
 
 
 %post
+/sbin/ldconfig || exit 1
 /sbin/install-info --section="Math" %{_infodir}/%{pname}.info.gz %{_infodir}/dir  2>/dev/null || :
 exit 0
 
@@ -135,23 +136,13 @@ if [ "$1" = 0 ]; then
   /sbin/install-info --delete %{_infodir}/%{pname}.info.gz %{_infodir}/dir 2>/dev/null || :
 fi
 
+%postun -p /sbin/ldconfig
+
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO
-
-
-%post
-/sbin/ldconfig || exit 1
-/sbin/install-info --section="Math" %{_infodir}/%{pname}.info.gz %{_infodir}/dir  2>/dev/null || :
-exit 0
-%postun -p /sbin/ldconfig
-
-%preun
-if [ "$1" = 0 ]; then
-    /sbin/install-info --delete %{_infodir}/%{pname}.info.gz %{_infodir}/dir 2>/dev/null || :
-fi
 
 %changelog
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.3.4-1
