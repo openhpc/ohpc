@@ -156,6 +156,7 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_MODULES}/gnu/
 %if "%{compiler_family}" != "dts6"
+%dir %{OHPC_COMPILERS}/gcc
 %{install_path}
 %doc COPYING
 %doc COPYING3
