@@ -42,6 +42,7 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
+BuildRequires: curl
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
