@@ -40,8 +40,8 @@ using this template is as follows:
 
 \item Copy the provided template input file to use as a starting point to
   define local site settings:
-\begin{lstlisting}
-[sms](*\#*) cp /opt/ohpc/pub/doc/recipes/vanilla/input.local input.local
+\begin{lstlisting}[language=bash,keywords={},literate={OSVER}{\baseosshort{}}1]
+[sms](*\#*) cp /opt/ohpc/pub/doc/recipes/OSVER/input.local input.local
 \end{lstlisting}
 
 \item Update \path{input.local} with desired settings
@@ -49,8 +49,10 @@ using this template is as follows:
 \item Copy the template installation script which contains command-line
   instructions culled from this guide.
 
-\begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) cp -p /opt/ohpc/pub/doc/recipes/vanilla/recipe.sh .
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,literate={OSVER}{\baseosshort{}}1
+    {ARCH}{\arch{}}1 {PROV}{\MakeLowercase{\provisioner{}}}1
+    {RMS}{\MakeLowercase{\rms{}}}1 {-}{-}1]
+[sms](*\#*) cp -p /opt/ohpc/pub/doc/recipes/OSVER/ARCH/PROV/RMS/recipe.sh .
 \end{lstlisting}
 
 \item Review and edit \path{recipe.sh} to suite.
