@@ -66,6 +66,7 @@ BuildRequires:  zlib-devel
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
+Requires: glibc-devel
 
 
 %if "%{compiler_family}" == "dts6"
