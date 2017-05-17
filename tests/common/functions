@@ -153,10 +153,8 @@ run_serial_binary () {
     timeout=1		# default job timeout (in minutes)
 
     local OPTIND=1
-    while getopts "j:o:t:" opt; do
+    while getopts "o:t:" opt; do
 	case "$opt" in
-	    j)	job_name="$OPTARG"
-		;;
 	    o)	output_file="$OPTARG"
 		;;
 	    t)	timeout="$OPTARG"
@@ -182,10 +180,10 @@ run_serial_binary () {
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
 
 	if [ -n "$output_file" ];then
-	    srun -n 1 -N 1 -J $job_name -t $timeout $EXE "$@" >& $output_file
+	    srun -n 1 -N 1 -t $timeout $EXE "$@" >& $output_file
 	else
 	    # srun -n 1 -N 1 -t $timeout $EXE "$@"
-	    eval srun -n 1 -N 1 -J $job_name -t $timeout $EXE "$@"
+	    eval srun -n 1 -N 1 -t $timeout $EXE "$@"
 	fi
 	return $?
    elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
@@ -199,7 +197,6 @@ run_serial_binary () {
 	# Generate script with commands so we can execute out of submission directory
 	jobScript=".job.$RANDOM"
 	echo "#!/bin/bash" > $jobScript
-    echo "#PBS -N $job_name" >> $jobscript
 	echo "cd \${PBS_O_WORKDIR}" >> $jobScript
 	echo $EXE "$@" >> $jobScript
 	chmod 700 $jobScript
