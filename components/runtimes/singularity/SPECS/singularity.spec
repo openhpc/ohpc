@@ -94,13 +94,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/singularity
 %{_bindir}/run-singularity
 %{_mandir}/man1/*
-%{_libdir}/lib*.so
+%{_libdir}/*
 %{_sysconfdir}/bash_completion.d/singularity
 
 
 %files devel
 %defattr(-, root, root)
-%{_libdir}/lib*.so
+#%{_libdir}/lib*.so
 #%{_libdir}/lib*.a
 %{_includedir}/*
 
