@@ -17,18 +17,23 @@
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.2.1
+Version: 2.3pre
 Release: %{_rel}%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
 Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
-Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
-Source1: build-zypper.sh
-Source2: sles.def
-Patch1:  singularity-makefile.patch
+#Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
+Source: https://github.com/crbaird/singularity/archive/%{version}.tar.gz
+#Source1: build-zypper.sh
+#Source2: sles.def
+#Patch1:  singularity-makefile.patch
 ExclusiveOS: linux
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+BuildRequires: python
 
 %description
 Singularity provides functionality to build the smallest most minimal
@@ -44,12 +49,13 @@ Development files for Singularity
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
+#%patch1 -p1
 
 
 %build
-cp %SOURCE1 libexec/bootstrap/modules-v2/.
-cp %SOURCE2 examples/.
+#cp %SOURCE1 libexec/bootstrap/modules-v2/.
+#cp %SOURCE2 examples/.
+./autogen.sh
 %configure --disable-static --with-pic
 %{__make} %{?mflags}
 
@@ -73,6 +79,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0755, root, root) %dir %{_sysconfdir}/singularity
 %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/singularity/*
 %dir %{_libexecdir}/singularity
+%dir %{_libexecdir}/singularity/defaults
 %attr(4755, root, root) %{_libexecdir}/singularity/sexec-suid
 %{_libexecdir}/singularity/bootstrap
 %{_libexecdir}/singularity/cli
@@ -82,14 +89,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libexecdir}/singularity/image-handler.sh
 %{_libexecdir}/singularity/sexec
 %{_libexecdir}/singularity/functions
-%{_libexecdir}/singularity/image-bind
-%{_libexecdir}/singularity/image-create
-%{_libexecdir}/singularity/image-expand
-%{_libexecdir}/singularity/image-mount
+%{_libexecdir}/singularity/simage
+%{_libexecdir}/singularity/defaults/*
 %{_bindir}/singularity
 %{_bindir}/run-singularity
 %{_mandir}/man1/*
-%{_libdir}/lib*.so.*
+%{_libdir}/lib*.so
 %{_sysconfdir}/bash_completion.d/singularity
 
 
@@ -97,7 +102,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-, root, root)
 %{_libdir}/lib*.so
 #%{_libdir}/lib*.a
-%{_includedir}/*.h
+%{_includedir}/*
 
 
 
