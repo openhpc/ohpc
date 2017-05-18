@@ -13,11 +13,10 @@ echo "-------------------------------------------------------"
 
 if [ "x$DISTRO_FAMILY" == "xCentOS" ];then
     export DISTRO=centos
-    export BOOTSTRAP_DEF=/usr/share/doc/singularity-ohpc-2.2.1/examples/${DISTRO}.def
 else
     export DISTRO=sles
-    export BOOTSTRAP_DEF=/usr/share/doc/packages/singularity-ohpc/examples/${DISTRO}.def
 fi
+export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc/examples/${DISTRO}.def
 
 @test "[singularity] check for RPM" {
     check_if_rpm_installed "singularity${DELIM}"
