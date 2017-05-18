@@ -31,6 +31,7 @@ Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.
 Source1:   OHPC_macros
 
 Requires: prun%{PROJ_DELIM}
+Requires: perl
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{name}/%version
