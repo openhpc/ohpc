@@ -27,7 +27,7 @@ Source1:   OHPC_macros
 Patch1:    revVEX3352.patch
 Patch2:    rev16269.patch
 Patch3:    rev16309.patch
-Patch4:    aarch64_always_use_fallback_LLSC.patch
+Patch4:    thunderx_always_use_fallback_LLSC.patch
 %endif
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
