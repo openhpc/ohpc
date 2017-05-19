@@ -1,0 +1,2 @@
+addFilter("library-without-ldconfig-postin")
+addFilter("library-without-ldconfig-postun")
