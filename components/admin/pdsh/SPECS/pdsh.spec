@@ -297,6 +297,7 @@ Provides -g groupname and -X groupname options to pdsh.
 Summary:   Provides support for running pdsh under SLURM allocations
 Group:     System Environment/Base
 Requires:  slurm
+BuildRequires: slurm-devel%{PROJ_DELIM}
 %description mod-slurm
 Pdsh module providing support for gathering the list of target nodes
 from an allocated SLURM job.
