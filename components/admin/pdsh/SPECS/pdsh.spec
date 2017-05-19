@@ -293,12 +293,12 @@ Group:     System Environment/Base
 Pdsh module providing support for targeting hosts based on netgroup.
 Provides -g groupname and -X groupname options to pdsh.
 
-%package   mod-slurm
+%package   -n pdsh-mod-slurm%{PROJ_DELIM}
 Summary:   Provides support for running pdsh under SLURM allocations
 Group:     System Environment/Base
 Requires:  slurm
 BuildRequires: slurm-devel%{PROJ_DELIM}
-%description mod-slurm
+%description -n pdsh-mod-slurm%{PROJ_DELIM}
 Pdsh module providing support for gathering the list of target nodes
 from an allocated SLURM job.
 
@@ -428,7 +428,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %endif
 
 %if %{?_with_slurm:1}%{!?_with_slurm:0}
-%files mod-slurm
+%files -n pdsh-mod-slurm%{PROJ_DELIM}
 %{install_path}/lib/pdsh/slurm.*
 %endif
 
