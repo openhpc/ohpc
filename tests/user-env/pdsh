@@ -20,16 +20,20 @@ check_rms
     assert_success
 }
 
-if [ x$RESOURCE_MANAGER = "xslurm" ];then
-    @test "[pdsh] check for pdsh-mod-slurm RPM" {
-        run check_if_rpm_installed "pdsh${DELIM}"
+@test "[pdsh] check for pdsh-mod-slurm RPM" {
+    run check_if_rpm_installed "pdsh-mod-slurm${DELIM}"
+    if [ x$RESOURCE_MANAGER = "xslurm" ];then
         assert_success
-    }
+    else
+        assert_failure
+    fi
+}
 
-    @test "[pdsh] run a shell command on -P normal" {
-        run pdsh -P normal 'grep . /proc/sys/kernel/ostype'
+@test "[pdsh] run a shell command on -P normal" {
+    run pdsh -P normal 'grep . /proc/sys/kernel/ostype'
+    if [ x$RESOURCE_MANAGER = "xslurm" ];then
         assert_success
-    }
-fi
-
-
+    else
+        assert_failure
+    fi
+}
