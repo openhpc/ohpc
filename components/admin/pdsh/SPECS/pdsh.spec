@@ -418,7 +418,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_bindir}/dshbak
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
-%exclude %{_libdir}/pdsh/slurm.*
+%exclude %{install_path}/lib/pdsh/slurm.*
 
 %if 0%{?OHPC_BUILD}
 # dir %{OHPC_PUB}/share/doc
@@ -429,7 +429,7 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %if %{?_with_slurm:1}%{!?_with_slurm:0}
 %files mod-slurm
-%{_libdir}/pdsh/slurm.*
+%{install_path}/lib/pdsh/slurm.*
 %endif
 
 %changelog
