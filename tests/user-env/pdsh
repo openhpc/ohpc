@@ -20,7 +20,7 @@ check_rms
     assert_success
 }
 
-if [ x$RESOURCE_MANAGER eq "xslurm" ]
+if [ x$RESOURCE_MANAGER = "xslurm" ];then
     @test "[pdsh] check for pdsh-mod-slurm RPM" {
         run check_if_rpm_installed "pdsh${DELIM}"
         assert_success
