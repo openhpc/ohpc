@@ -62,7 +62,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #%define _default_with %{_defaults} mrsh nodeupdown genders slurm 
 #%else
 #   All other defaults
-%define _default_with %{_defaults} mrsh genders
+%define _default_with %{_defaults} mrsh genders slurm
 #%endif
 
 #
@@ -147,7 +147,6 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires: ncurses-devel
 BuildRequires: readline-devel
 BuildRequires: pam-devel
-BuildRequires: slurm-devel%{PROJ_DELIM}
 
 
 ##############################################################################
@@ -418,12 +417,18 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_bindir}/dshbak
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
+%exclude %{_libdir}/pdsh/slurm.*
 
 %if 0%{?OHPC_BUILD}
 # dir %{OHPC_PUB}/share/doc
 # {OHPC_PUB}/share/doc/%{pname}
 %doc AUTHORS
 
+%endif
+
+%if %{?_with_slurm:1}%{!?_with_slurm:0}
+%files mod-slurm
+%{_libdir}/pdsh/slurm.*
 %endif
 
 %changelog
