@@ -28,7 +28,6 @@
 # SuperLU library build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%ohpc_compiler
 
 # Base package name
 %define pname superlu
