@@ -45,14 +45,14 @@ Singularity provides functionality to build the smallest most minimal
 possible containers, and running those containers as single application
 environments.
 
-%package devel
+%package -n singularity-devel%{PROJ_DELIM}
 Summary: Development libraries for Singularity
 
 %description devel
 Development files for Singularity
 
 %if %slurm
-%package slurm
+%package -n singularity-slurm%{PROJ_DELIM}
 Summary: Singularity plugin for SLURM
 Requires: singularity = %{version}-%{release}
 BuildRequires: slurm-devel%{proj_delim}
@@ -146,7 +146,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 
-%files devel
+%files -n singularity-devel-ohpc
 %defattr(-, root, root)
 %{_libdir}/singularity/lib*.so
 #%{_libdir}/singularity/lib*.a
@@ -154,7 +154,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %if %slurm
-%files slurm
+%files -n singularity-slurm-ohpc
 %defattr(-, root, root)
 %{_libdir}/slurm/singularity.so
 %endif
