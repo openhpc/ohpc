@@ -94,7 +94,7 @@ Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 Requires: prun%{PROJ_DELIM}
-BuildRequires: -post-build-checks
+#!BuildIgnore: post-build-checks
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
