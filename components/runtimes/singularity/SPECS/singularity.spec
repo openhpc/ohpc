@@ -84,6 +84,7 @@ fi
 
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+rm $RPM_BUILD_ROOT/%{_libdir}/singularity/*.la
 export NO_BRP_CHECK_RPATH=true
 
 
