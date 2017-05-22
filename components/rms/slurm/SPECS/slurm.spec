@@ -129,7 +129,7 @@ BuildRequires: klogd sysconfig
 %endif
 
 Requires: %{pname}-plugins%{PROJ_DELIM}
-BuildConflicts: post-build-checks
+#!BuildIgnore: post-build-checks
 
 %ifos linux
 BuildRequires: python
