@@ -48,7 +48,7 @@ environments.
 %package -n singularity-devel%{PROJ_DELIM}
 Summary: Development libraries for Singularity
 
-%description devel
+%description -n singularity-devel%{PROJ_DELIM}
 Development files for Singularity
 
 %if %slurm
@@ -57,7 +57,7 @@ Summary: Singularity plugin for SLURM
 Requires: singularity = %{version}-%{release}
 BuildRequires: slurm-devel%{proj_delim}
 
-%description slurm
+%description -n singularity-slurm%{PROJ_DELIM}
 The Singularity plugin for SLURM allows jobs to be started within
 a container.  This provides a simpler interface to the user (they
 don't have to be aware of the singularity executable) and doesn't
