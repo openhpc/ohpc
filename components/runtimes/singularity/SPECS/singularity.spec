@@ -74,7 +74,7 @@ if [ ! -f configure ]; then
   ./autogen.sh
 fi
 
-%configure \
+%configure --disable-static --with-pic \
 %if %slurm
   --with-slurm
 %else
