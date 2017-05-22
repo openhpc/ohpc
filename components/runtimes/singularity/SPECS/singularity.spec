@@ -15,6 +15,14 @@
 %define pname singularity
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
+# This allows us to pick up the default value from the configure
+%define with_slurm @with_slurm@
+%if "%{with_slurm}" == "yes"
+%global slurm 1
+%else
+%global slurm 0
+%endif
+
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
 Version: 2.3pre
@@ -25,9 +33,6 @@ Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
 #Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
 Source: https://github.com/crbaird/singularity/archive/%{version}.tar.gz
-#Source1: build-zypper.sh
-#Source2: sles.def
-#Patch1:  singularity-makefile.patch
 ExclusiveOS: linux
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 BuildRequires: autoconf
@@ -42,22 +47,39 @@ environments.
 
 %package devel
 Summary: Development libraries for Singularity
-Group: System Environment/Development
 
 %description devel
 Development files for Singularity
 
+%if %slurm
+%package slurm
+Summary: Singularity plugin for SLURM
+Requires: singularity = %{version}-%{release}
+BuildRequires: slurm-devel%{proj_delim}
+
+%description slurm
+The Singularity plugin for SLURM allows jobs to be started within
+a container.  This provides a simpler interface to the user (they
+don't have to be aware of the singularity executable) and doesn't
+require a setuid binary.
+%endif
+
+
 %prep
 %setup -q -n %{pname}-%{version}
-#%patch1 -p1
 
 
 %build
-#cp %SOURCE1 libexec/bootstrap/modules-v2/.
-#cp %SOURCE2 examples/.
-./autogen.sh
-%configure --disable-static --with-pic
-%{__make} %{?mflags}
+if [ ! -f configure ]; then
+  ./autogen.sh
+fi
+
+%configure \
+%if %slurm
+  --with-slurm
+%else
+  --without-slurm
+%endif
 
 
 %install
@@ -69,42 +91,73 @@ export NO_BRP_CHECK_RPATH=true
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+
 %post
 /sbin/ldconfig || exit 1
 %postun -p /sbin/ldconfig
 
+
 %files
 %defattr(-, root, root)
-%doc examples AUTHORS COPYING ChangeLog INSTALL NEWS README.md
+%doc examples AUTHORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
 %attr(0755, root, root) %dir %{_sysconfdir}/singularity
 %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/singularity/*
-%dir %{_libexecdir}/singularity
-%dir %{_libexecdir}/singularity/defaults
-%attr(4755, root, root) %{_libexecdir}/singularity/sexec-suid
-%{_libexecdir}/singularity/bootstrap
-%{_libexecdir}/singularity/cli
-%{_libexecdir}/singularity/helpers
-%{_libexecdir}/singularity/python
-%{_libexecdir}/singularity/get-section
-%{_libexecdir}/singularity/image-handler.sh
-%{_libexecdir}/singularity/sexec
-%{_libexecdir}/singularity/functions
-%{_libexecdir}/singularity/simage
-%{_libexecdir}/singularity/defaults/*
+%dir %{_localstatedir}/singularity
+%dir %{_localstatedir}/singularity/mnt
+%dir %{_localstatedir}/singularity/mnt/session
+%dir %{_localstatedir}/singularity/mnt/container
+%dir %{_localstatedir}/singularity/mnt/overlay
+
 %{_bindir}/singularity
 %{_bindir}/run-singularity
 %{_mandir}/man1/*
-%{_libdir}/*
+%{_libdir}/singularity/lib*.so.*
 %{_sysconfdir}/bash_completion.d/singularity
+
+#SUID programs
+%attr(4755, root, root) %{_libexecdir}/singularity/bin/action-suid
+%attr(4755, root, root) %{_libexecdir}/singularity/bin/create-suid
+%attr(4755, root, root) %{_libexecdir}/singularity/bin/copy-suid
+%attr(4755, root, root) %{_libexecdir}/singularity/bin/expand-suid
+%attr(4755, root, root) %{_libexecdir}/singularity/bin/export-suid
+%attr(4755, root, root) %{_libexecdir}/singularity/bin/import-suid
+%attr(4755, root, root) %{_libexecdir}/singularity/bin/mount-suid
+
+# Binaries
+%{_libexecdir}/singularity/bin/action
+%{_libexecdir}/singularity/bin/bootstrap
+%{_libexecdir}/singularity/bin/copy
+%{_libexecdir}/singularity/bin/cleanupd
+%{_libexecdir}/singularity/bin/create
+%{_libexecdir}/singularity/bin/expand
+%{_libexecdir}/singularity/bin/export
+%{_libexecdir}/singularity/bin/get-section
+%{_libexecdir}/singularity/bin/import
+%{_libexecdir}/singularity/bin/mount
+
+# Scripts
+%{_libexecdir}/singularity/functions
+%{_libexecdir}/singularity/image-handler.sh
+
+# Directories
+%{_libexecdir}/singularity/bootstrap-scripts
+%{_libexecdir}/singularity/cli
+%{_libexecdir}/singularity/python
+
 
 
 %files devel
 %defattr(-, root, root)
-#%{_libdir}/lib*.so
-#%{_libdir}/lib*.a
-%{_includedir}/*
+%{_libdir}/singularity/lib*.so
+%{_libdir}/singularity/lib*.a
+%{_includedir}/singularity/*.h
 
 
+%if %slurm
+%files slurm
+%defattr(-, root, root)
+%{_libdir}/slurm/singularity.so
+%endif
 
 %changelog
 
