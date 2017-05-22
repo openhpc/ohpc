@@ -16,7 +16,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 # This allows us to pick up the default value from the configure
-%define with_slurm @with_slurm@
+%{!?with_slurm: %global with_slurm yes}
 %if "%{with_slurm}" == "yes"
 %global slurm 1
 %else
@@ -55,7 +55,7 @@ Development files for Singularity
 %package -n singularity-slurm%{PROJ_DELIM}
 Summary: Singularity plugin for SLURM
 Requires: singularity = %{version}-%{release}
-BuildRequires: slurm-devel%{proj_delim}
+BuildRequires: slurm-devel%{PROJ_DELIM}
 
 %description -n singularity-slurm%{PROJ_DELIM}
 The Singularity plugin for SLURM allows jobs to be started within
