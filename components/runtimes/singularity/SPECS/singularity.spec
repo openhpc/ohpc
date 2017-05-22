@@ -148,7 +148,7 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(-, root, root)
 %{_libdir}/singularity/lib*.so
-%{_libdir}/singularity/lib*.a
+#%{_libdir}/singularity/lib*.a
 %{_includedir}/singularity/*.h
 
 
