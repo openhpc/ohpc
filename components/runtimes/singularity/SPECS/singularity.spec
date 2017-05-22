@@ -102,6 +102,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples AUTHORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
 %attr(0755, root, root) %dir %{_sysconfdir}/singularity
 %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/singularity/*
+%dir %{_libdir}/singularity
+%dir %{_libexecdir}/singularity
+%dir %{_libexecdir}/singularity/bin
 %dir %{_localstatedir}/singularity
 %dir %{_localstatedir}/singularity/mnt
 %dir %{_localstatedir}/singularity/mnt/session
@@ -148,6 +151,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n singularity-devel-ohpc
 %defattr(-, root, root)
+%dir %{_includedir}/singularity
+%dir %{_libdir}/singularity
 %{_libdir}/singularity/lib*.so
 #%{_libdir}/singularity/lib*.a
 %{_includedir}/singularity/*.h
