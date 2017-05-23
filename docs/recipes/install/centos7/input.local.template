@@ -36,6 +36,7 @@ provision_wait="${provision_wait:-180}"
 
 # Flags for optional installation/configuration
 
+enable_beegfs_client="${enable_beegfs_client:-0}"
 enable_mpi_defaults="${enable_mpi_defaults:-1}"
 enable_mpi_opa="${enable_mpi_opa:-0}"
 enable_clustershell="${enable_clustershell:-0}"
@@ -92,6 +93,12 @@ c_bmc[3]=10.16.1.4
 
 # additional arguments to enable optional arguments for bootstrap kernel
 kargs="${kargs:-acpi_pad.disable=1}"
+
+# BeeGFS repository URL
+beegfs_repo="${beegfs_repo:-https://www.beegfs.io/release/beegfs_6/dists/beegfs-rhel7.repo}"
+
+# BeeGFS sysMgmtdHost
+sysmgmtd_host="${sysmgmtd_host:-192.168.1.16}"
 
 # Lustre MGS mount name
 mgs_fs_name="${mgs_fs_name:-192.168.100.254@o2ib:/lustre1}"
