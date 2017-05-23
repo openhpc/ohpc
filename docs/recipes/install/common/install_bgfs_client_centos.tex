@@ -1,0 +1,22 @@
+To add {\em optional} support for mounting \beegfs{} file systems, an 
+additional \pkgmgr{} repository must be configured. In this recipe, it is
+assumed that the \beegfs{} file system is hosted by servers that are pre-existing
+and are not part of the install process. Once the client is configured to point 
+to the \beegfs{} system management server, starting the client should trigger file 
+system mounts.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_bgfs} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) cd /etc/yum.repos.d
+[sms](*\#*) wget https://www.beegfs.io/release/beegfs_6/dists/beegfs-rhel7.repo
+[sms](*\#*) (*\install*) beegfs-client
+
+[sms](*\#*) perl -pi -e "s/^sysMgmtdHost.*$/sysMgmtdHost                  = 192.168.1.16/" /etc/beegfs/beegfs-client.conf
+[sms](*\#*) /etc/init.d/beegfs-client start
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% \end_ohpc_run
