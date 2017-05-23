@@ -3,19 +3,19 @@
 % ohpc_validation_comment  Example Installation Script Template
 % ohpc_validation_comment  
 % ohpc_validation_comment  This convenience script encapsulates command-line instructions highlighted in
-% ohpc_validation_comment  the OpenHPC Install Guide that can be used as a starting point to perform a local
+% ohpc_validation_comment  an OpenHPC Install Guide that can be used as a starting point to perform a local
 % ohpc_validation_comment  cluster install beginning with bare-metal. Necessary inputs that describe local
 % ohpc_validation_comment  hardware characteristics, desired network settings, and other customizations
 % ohpc_validation_comment  are controlled via a companion input file that is used to initialize variables 
 % ohpc_validation_comment  within this script.
 % ohpc_validation_comment   
-% ohpc_validation_comment  Please see the OpenHPC Install Guide for more information regarding the
+% ohpc_validation_comment  Please see the OpenHPC Install Guide(s) for more information regarding the
 % ohpc_validation_comment  procedure. Note that the section numbering included in this script refers to
-% ohpc_validation_comment  corresponding sections from the install guide.
+% ohpc_validation_comment  corresponding sections from the companion install guide.
 % ohpc_validation_comment -----------------------------------------------------------------------------------------
 % ohpc_validation_newline
 
-% ohpc_command inputFile=${OHPC_INPUT_LOCAL:-/opt/ohpc/pub/doc/recipes/vanilla/input.local}
+% ohpc_command inputFile=${OHPC_INPUT_LOCAL:-/opt/ohpc/pub/doc/recipes/BOSSHORT/input.local}
 % ohpc_validation_newline
 % ohpc_command if [ ! -e ${inputFile} ];then
 % ohpc_command    echo "Error: Unable to access local input file -> ${inputFile}"

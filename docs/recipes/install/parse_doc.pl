@@ -36,6 +36,7 @@ chdir $inputDir;
 
 # Determine BaseOS and define package manager commands
 my $BaseOS             = "";
+my $BaseOSshort        = "";
 my $Install            = "";
 my $chrootInstall      = "";
 my $groupInstall       = "";
@@ -59,6 +60,9 @@ while( my $line = <IN> ) {
     }
     elsif( $line =~ /\\newcommand\{\\baseos\}\{(.+)\}/ ) {
         $BaseOS = $1;
+    }
+    elsif( $line =~ /\\newcommand\{\\baseosshort\}\{(.+)\}/ ) {
+        $BaseOSshort = $1;
     }
 }
 close( IN );
@@ -256,6 +260,7 @@ sub update_cmd {
     $cmd =~ s/\(\*\\groupinstall\*\)/$groupInstall/;
     $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
     $cmd =~ s/BOSVER/$BaseOS/;
+    $cmd =~ s/BOSSHORT/$BaseOSshort/;
 
     return( $cmd );
 } # end update_cmd
