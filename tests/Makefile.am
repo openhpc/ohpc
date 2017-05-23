@@ -81,6 +81,10 @@ if AUTOTOOLS_ENABLED
    TESTS += dev-tools/autotools/run
 endif
 
+if CMAKE_ENABLED
+   TESTS += dev-tools/cmake/run
+endif
+
 if CILK_ENABLED
    TESTS += dev-tools/cilk/ohpc-tests/test_compiler_families
 endif
