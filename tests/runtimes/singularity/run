@@ -15,9 +15,8 @@ if [ "x$DISTRO_FAMILY" == "xCentOS" ];then
     export DISTRO=centos
     export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc-2.3pre/examples/${DISTRO}/Singularity
 else
-    export DISTRO=sles
-    export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc/examples/${DISTRO}.def
-    export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc-2.3pre/examples/opensuse/Singularity
+    export DISTRO=opensuse
+    export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc/examples/${DISTRO}/Singularity
 fi
 
 @test "[singularity] check for RPM" {
