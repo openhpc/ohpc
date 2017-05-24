@@ -29,13 +29,12 @@ Requires:      gnu-compilers%{PROJ_DELIM}
 Summary:   mpiP: a lightweight profiling library for MPI applications.
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.4.1
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   BSD-3
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://mpip.sourceforge.net/
 Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{version}.tar.gz
 Source1:   OHPC_macros
-Source3:   OHPC_setup_mpi
 Patch1:    mpip.unwinder.patch
 
 BuildRequires: binutils-devel
@@ -71,8 +70,6 @@ cp /usr/lib/rpm/config.guess bin
 # note: in order to support call-site demangling, we compile mpiP with gnu
 # see above where compiler_family is changed
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 CC=mpicc
 CXX=mpicxx
@@ -91,8 +88,6 @@ FC=mpif90
 # note: in order to support call-site demangling, we compile mpiP with gnu
 # see above where compiler_family is changed
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 make %{?_smp_mflags} shared
 make DESTDIR=$RPM_BUILD_ROOT install
@@ -145,6 +140,9 @@ rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
 %doc ChangeLog doc/PORTING.txt doc/README doc/UserGuide.txt
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.4.1-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.4.1-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

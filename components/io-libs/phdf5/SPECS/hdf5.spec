@@ -38,14 +38,13 @@
 Summary:   A general purpose library and file format for storing scientific data
 Name:      p%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.10.0
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/%{pname}-%{version}-patch1/src/%{pname}-%{version}-patch1.tar.bz2
 Source1:   OHPC_macros
-Source3:   OHPC_setup_mpi
 BuildRequires: zlib-devel
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
@@ -75,8 +74,6 @@ cp /usr/lib/rpm/config.guess bin
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 export CC=mpicc
 export CXX=mpicxx
@@ -97,8 +94,6 @@ export MPICXX=mpicxx
 
 # OpenHPC compiler designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 export NO_BRP_CHECK_RPATH=true
 
@@ -157,6 +152,9 @@ EOF
 %doc README.txt
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 1.10.0-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.10.0-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

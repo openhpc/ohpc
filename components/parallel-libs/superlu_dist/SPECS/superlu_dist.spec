@@ -44,14 +44,13 @@ Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        4.2
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/parallel-libs
 URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Source1:        OHPC_macros
-Source3:        OHPC_setup_mpi
 Patch0:         superlu_dist-4.1-sequence-point.patch
 Patch1:         superlu_dist-4.2-make.patch
 Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
@@ -89,8 +88,6 @@ solutions.
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load metis
 
@@ -186,6 +183,9 @@ EOF
 %doc README
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 4.2-1
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 4.2-0
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

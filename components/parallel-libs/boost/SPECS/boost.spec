@@ -42,7 +42,7 @@ Version:        1.63.0
 
 %define version_exp 1_63_0
 
-Release:        0%{?dist}
+Release:        1%{?dist}
 License:        BSL-1.0
 Group:		%{PROJ_NAME}/parallel-libs
 Url:            http://www.boost.org
@@ -52,7 +52,6 @@ Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
 Source101:	OHPC_macros
-Source103:	OHPC_setup_mpi
 
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  bzip2-devel
@@ -104,8 +103,6 @@ see the boost-doc package.
 %ohpc_setup_compiler
 
 %if %build_mpi
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 export CC=mpicc
 export CXX=mpicxx
 export F77=mpif77
@@ -134,8 +131,6 @@ EOF
 %ohpc_setup_compiler
 
 %if %build_mpi
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 export CC=mpicc
 export CXX=mpicxx
 export F77=mpif77
@@ -205,6 +200,9 @@ EOF
 %doc INSTALL LICENSE_1_0.txt
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 1.63.0-1
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.63.0-0
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

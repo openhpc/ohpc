@@ -44,13 +44,12 @@ Summary:        A subset of LAPACK routines redesigned for heterogenous computin
 License:        netlib ScaLAPACK License
 Group:          Development/Libraries/Parallel
 Version:        2.0.2
-Release:        13.1%{?dist}
+Release:        13.2%{?dist}
 # This is freely distributable without any restrictions.
 Url:            http://www.netlib.org/lapack-dev/
 Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
 Source2:        OHPC_macros
-Source4:        OHPC_setup_mpi
 Patch0:         scalapack-2.0.2-shared-lib.patch
 
 %description
@@ -89,8 +88,6 @@ cp SLmake.inc.example SLmake.inc
 
 %build
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
@@ -160,6 +157,9 @@ EOF
 %doc README LICENSE
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.0.2-13.2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.0.2-13.1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

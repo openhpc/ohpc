@@ -20,14 +20,13 @@
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        12.10.1
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Source1:        OHPC_macros
-Source3:        OHPC_setup_mpi
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         Trilinos-trilinos-aarch64.patch
 BuildRequires:  cmake >= 2.8
@@ -74,8 +73,6 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 module load netcdf
@@ -229,6 +226,9 @@ EOF
 %doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 12.10.1-1
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 12.10.1-0
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

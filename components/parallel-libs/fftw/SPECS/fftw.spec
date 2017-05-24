@@ -20,13 +20,12 @@
 Summary:   A Fast Fourier Transform library
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.3.6
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
 URL:       http://www.fftw.org
 Source0:   http://www.fftw.org/fftw-%{version}-pl2.tar.gz
 Source1:   OHPC_macros
-Source3:   OHPC_setup_mpi
 
 %define openmp        1
 %define mpi           1
@@ -60,8 +59,6 @@ BASEFLAGS="$BASEFLAGS --enable-openmp"
 %endif
 %if %{mpi}
 BASEFLAGS="$BASEFLAGS --enable-mpi"
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 %endif
 
 ./configure --prefix=%{install_path} ${BASEFLAGS} --enable-static=no || { cat config.log && exit 1; }
@@ -71,8 +68,6 @@ make
 %install
 # OpenHPC compiler designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
@@ -139,6 +134,9 @@ fi
 %doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.3.6-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.3.6-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 
