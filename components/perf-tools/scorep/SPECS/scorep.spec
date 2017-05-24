@@ -20,13 +20,12 @@
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.0
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
 Source0:   http://www.vi-hps.org/upload/packages/scorep/scorep-%{version}.tar.gz
 Source1:   OHPC_macros
-Source3:   OHPC_setup_mpi
 Patch0:    scorep-gcc7.patch
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -66,9 +65,6 @@ This is the %{compiler_family}-%{mpi_family} version.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
-
 module load papi
 module load pdtoolkit
 module load sionlib
@@ -101,8 +97,6 @@ export NO_BRP_CHECK_RPATH=true
 
 # OpenHPC compiler designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load papi
 
@@ -184,6 +178,9 @@ EOF
 %doc AUTHORS ChangeLog COPYING INSTALL OPEN_ISSUES README THANKS
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.0-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.0-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

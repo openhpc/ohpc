@@ -20,13 +20,12 @@
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   4.1
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   CPL
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
 Source0:   %{PNAME}_%{version}.tgz
 Source1:   OHPC_macros
-Source3:   OHPC_setup_mpi
 
 # OpenHPC patches
 Patch1: imb.cc.patch
@@ -49,8 +48,6 @@ a range of message sizes.
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 cd src
 make all
@@ -60,8 +57,6 @@ cd -
 
 # OpenHPC compiler designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 %{__mkdir} -p %{buildroot}%{install_path}/bin
 cd src
@@ -119,6 +114,9 @@ EOF
 
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 4.1-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 4.1-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

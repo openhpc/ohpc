@@ -61,7 +61,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        0.19.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
@@ -69,7 +69,6 @@ Url:            http://www.scipy.org
 Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 BuildRequires:  blas-devel
 Source1:        OHPC_macros
-Source3:        OHPC_setup_mpi
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
@@ -121,9 +120,6 @@ EOF
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
-
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
@@ -145,9 +141,6 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 %if %{compiler_family} == gnu
 module load openblas
@@ -227,6 +220,9 @@ EOF
 %doc LICENSE.txt
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 0.19.0-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 0.19.0-1
 - switch to ohpc_compiler_dependent flag
 
