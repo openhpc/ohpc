@@ -1,0 +1,33 @@
+\subsection{Finalizing provisioning configuration} \label{sec:assemble_bootstrap}
+
+To finalize the \xCAT{} provisioning configuration, this section first highlights
+packing of the stateless image from the chroot environment followed by the
+registration of desired compute nodes. To assemble the final compute image use
+\texttt{packimage} as follows:
+
+% begin_ohpc_run
+% ohpc_validation_comment Pack compute image
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,
+    literate={-}{-}1 {BOSVER}{\baseos{}}1 {ARCH}{\arch{}}1]
+[sms](*\#*) packimage BOSVER-ARCH-netboot-compute
+\end{lstlisting}
+% end_ohpc_run
+
+%\subsubsection{Register nodes for provisioning}
+
+Next, we define the desired network settings for each desired compute node
+with the underlying provisioning system.  Note the use of variable names for
+the desired compute hostnames, node IPs, and MAC addresses which should be
+modified to accommodate local settings and hardware. These hosts are grouped
+logically into an \xCAT{} group named {\em compute} to facilitate group-level
+commands used later in the recipe.
+
+%%% Also included in these steps are commands
+%%% to enable \Warewulf{} to manage IPoIB settings and corresponding definitions of
+%%% IPoIB addresses for the compute nodes. This is typically optional unless you
+%%% are planning to include a \Lustre{} client mount over \InfiniBand{}. The final step
+%%% in this process associates the VNFS image assembled in previous steps with the
+%%% newly defined compute nodes, utilizing the user credential files and munge key
+%%% that were imported in \S\ref{sec:file_import}.
+
+

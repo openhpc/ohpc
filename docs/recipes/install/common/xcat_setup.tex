@@ -1,0 +1,18 @@
+At this point, all of the packages necessary to use \xCAT{} on the {\em master}
+host should be installed. Next, we enable support for local provisioning using
+a second private interface (refer to Figure~\ref{fig:physical_arch}) and
+register this network interface with \xCAT{}.
+
+% begin_ohpc_run
+% ohpc_comment_header Complete basic xCAT setup for master node \ref{sec:setup_xcat}
+%\begin{verbatim}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+# Enable internal interface for provisioning
+[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
+
+# Register internal provisioning interface with xCAT for DHCP
+[sms](*\#*) chdef -t site dhcpinterfaces="xcatmn|${sms_eth_internal}"
+
+\end{lstlisting}
+%\end{verbatim}
+% end_ohpc_run
