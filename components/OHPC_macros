@@ -83,6 +83,10 @@ Requires:      gnu-dts6-compilers%{PROJ_DELIM}
 BuildRequires: gnu-7-compilers%{PROJ_DELIM}
 Requires:      gnu-7-compilers%{PROJ_DELIM}
 %endif
+%if "%{compiler_family}" == "llvm"
+BuildRequires: llvm-compilers%{PROJ_DELIM}
+Requires:      llvm-compilers%{PROJ_DELIM}
+%endif
 
 %endif
 

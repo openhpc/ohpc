@@ -58,6 +58,14 @@ elif [ "$OHPC_COMPILER_FAMILY" = "dts6" ]; then
     export F77=gfortran
     module purge
     module load gnu/6
+elif [ "$OHPC_COMPILER_FAMILY" = "llvm" ]; then
+    export toolset=clang
+    export CC=clang
+    export CXX=clang++
+    export FC=flang
+    export F77=flang
+    module purge
+    module load llvm
 else
     echo "Unsupported OHPC_COMPILER_FAMILY -> $OHPC_COMPILER_FAMILY"
     exit 1
