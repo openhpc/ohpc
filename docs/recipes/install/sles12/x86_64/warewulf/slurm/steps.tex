@@ -20,6 +20,7 @@
 
 % Define package manager commands
 \newcommand{\pkgmgr}{zypper}
+\newcommand{\addrepo}{zypper ar}
 \newcommand{\clean}{zypper clean -a}
 \newcommand{\chrootclean}{zypper --root \$CHROOT clean}
 \newcommand{\install}{zypper -n install}
@@ -29,6 +30,7 @@
 \newcommand{\upgrade}{zypper -n up}
 \newcommand{\chrootupgrade}{zypper -n --root \$CHROOT up}
 \newcommand{\tftppkg}{syslinux}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs_6/dists/beegfs-suse12.repo}
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
@@ -189,7 +191,7 @@
 \input{common/conman}
 
 \paragraph{Add \beegfs{}} \label{sec:add_beegfs}
-\input{common/install_bgfs_client_sles}
+\input{common/install_beegfs_client_sles}
 
 \clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}

@@ -16,7 +16,7 @@ of the bootstrap image based on the running kernel.
 % begin_ohpc_run
 % ohpc_comment_header Assemble bootstrap image \ref{sec:assemble_bootstrap}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# (Optional) Include Lustre drivers; needed if enabling Lustre client on computes
+# (Optional) Include BeeGFS/Lustre drivers; needed if enabling additional kernel modules on computes
 [sms](*\#*) export WW_CONF=/etc/warewulf/bootstrap.conf
 [sms](*\#*) echo "drivers += updates/kernel/" >> $WW_CONF
 

@@ -1,0 +1,48 @@
+To add optional support for mounting \beegfs{} file systems, an 
+additional external \pkgmgr{} repository provided by the \beegfs{} project must be 
+configured.  In this recipe, it is
+assumed that the file system is hosted by servers that are pre-existing
+and are not part of the install process. The \texttt{\$\{sysmgmtd\_host\}} should
+point the server running the \beegfs{} Management Service. Starting the client service triggers
+a build of a kernel module, hence the kernel module development packages must be
+installed first.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_bgfs_client} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add BeeGFS client software to master host
+[sms](*\#*) (*\addrepo*) (*\beegfsrepo*)
+[sms](*\#*) (*\install*) kernel-devel gcc
+[sms](*\#*) (*\install*) beegfs-client beegfs-helperd beegfs-utils
+
+# Enable OFED support in client
+[sms](*\#*) perl -pi -e "s/^buildArgs=-j8/buildArgs=-j8 BEEGFS_OPENTK_IBVERBS=1/" \ 
+/etc/beegfs/beegfs-client-autobuild.conf
+
+# Define client's management host
+[sms](*\#*) /opt/beegfs/sbin/beegfs-setup-client -m ${sysmgmtd_host}
+
+[sms](*\#*) systemctl start beegfs-helperd
+# Build kernel and mount file system
+[sms](*\#*) systemctl start beegfs-client
+\end{lstlisting}
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add BeeGFS client software to compute node image
+[sms](*\#*) (*\chrootinstall*) beegfs-client beegfs-helperd beegfs-utils
+
+# Disable auto-build of kernel module in compute node
+[sms](*\#*) perl -pi -e "s/^buildEnabled=true/buildEnabled=false/" \ 
+$CHROOT/etc/beegfs/beegfs-client-autobuild.conf
+
+# Enable client daemons on compute nodes
+[sms](*\#*) chroot $CHROOT systemctl enable beegfs-helperd beegfs-client
+
+# Copy client config to compute nodes
+[sms](*\#*) cp /etc/beegfs/beegfs-client.conf $CHROOT/etc/beegfs/beegfs-client.conf
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% \end_ohpc_run
