@@ -1,0 +1,19 @@
+The \xCAT{} system includes functionality to import arbitrary files from the
+provisioning server for distribution to managed hosts. This is one way to
+distribute user credentials to {\em compute} nodes. To import local file-based
+credentials, issue the following to enable the {\em synclist} feature and
+register user credential files:
+
+% begin_ohpc_run
+% ohpc_comment_header Import files \ref{sec:file_import}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Define path for xCAT synclist file
+[sms](*\#*) mkdir -p /install/custom/netboot
+[sms](*\#*) chdef -t osimage -o centos7.3-x86_64-netboot-compute synclists="/install/custom/netboot/compute.synclist"
+# Add desired credential files to synclist
+[sms](*\#*) echo "/etc/passwd -> /etc/passwd" > /install/custom/netboot/compute.synclist
+[sms](*\#*) echo "/etc/group -> /etc/group" >> /install/custom/netboot/compute.synclist
+[sms](*\#*) echo "/etc/shadow -> /etc/shadow" >> /install/custom/netboot/compute.synclist
+
+\end{lstlisting}
+% \end_ohpc_run

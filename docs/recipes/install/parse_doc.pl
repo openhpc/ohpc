@@ -34,9 +34,10 @@ my $inputDir    = dirname(File::Spec->rel2abs($file));
 my $basename    = basename($file,".tex");
 chdir $inputDir;
 
-# Determine BaseOS and define package manager commands
+# Determine BaseOS, arch, and define package manager commands
 my $BaseOS             = "";
 my $BaseOSshort        = "";
+my $arch               = "";
 my $Install            = "";
 my $chrootInstall      = "";
 my $groupInstall       = "";
@@ -63,6 +64,10 @@ while( my $line = <IN> ) {
     }
     elsif( $line =~ /\\newcommand\{\\baseosshort\}\{(.+)\}/ ) {
         $BaseOSshort = $1;
+    elsif( $line =~ /\\newcommand\{\\arch\}\{(.+)\}/ ) {
+        $arch = $1;
+	# undo latex escape for x86
+	if ($arch eq "x86\\_64") { $arch = "x86_64";}
     }
 }
 close( IN );
@@ -261,6 +266,7 @@ sub update_cmd {
     $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
     $cmd =~ s/BOSVER/$BaseOS/;
     $cmd =~ s/BOSSHORT/$BaseOSshort/;
+    $cmd =~ s/ARCH/$arch/;
 
     return( $cmd );
 } # end update_cmd
@@ -272,7 +278,7 @@ sub parse_includes {
 
     while( my $line = <$INFILE> ) {
         # Check for include of another latex file
-        if( $line =~ /\\input\{(\S+)\}/ ) {
+        if( $line =~ /^\\input\{(\S+)\}/ ) {
             next if( $line =~ /^%%/ );
             my $include_file = $1;
 
