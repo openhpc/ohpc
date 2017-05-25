@@ -11,7 +11,7 @@
 
 # Hostname for master server (SMS)
 sms_name="${sms_name:-sms}"
-                              
+
 # Local (internal) IP address on SMS
 sms_ip="${sms_ip:-172.16.0.1}"
 
@@ -20,9 +20,6 @@ sms_eth_internal="${sms_eth_internal:-eth1}"
 
 # Subnet netmask for internal cluster network
 internal_netmask="${internal_netmask:-255.255.0.0}"
-
-# Provisioning interface used by compute hosts
-eth_provision="${eth_provision:-eth0}"
 
 # Local ntp server for time synchronization
 ntp_server="${ntp_server:-0.centos.pool.ntp.org}"
@@ -33,6 +30,15 @@ bmc_password="${bmc_password:-unknown}"
 
 # Additional time to wait for compute nodes to provision (seconds)
 provision_wait="${provision_wait:-180}"
+
+# Local domainname for cluster (xCAT recipe only)
+domain_name="${domain_name:-local}"
+
+# Path to copy of OS ISO image (xCAT recipe only)
+iso_path="${iso_path:-}"
+
+# Provisioning interface used by compute hosts (Warewulf recipe only)
+eth_provision="${eth_provision:-eth0}"
 
 # Flags for optional installation/configuration
 
