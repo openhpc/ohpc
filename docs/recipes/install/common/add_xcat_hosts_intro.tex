@@ -1,0 +1,11 @@
+% begin_ohpc_run
+% ohpc_validation_comment Add hosts to cluster
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
+# Register nodes for PXE provisioning 
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+		mkdef -t node ${c_name[i]} groups=compute,all ip=${c_ip[i]} mac=${c_mac[i]} netboot=pxe
+        done
+\end{lstlisting}
+% end_ohpc_run
+

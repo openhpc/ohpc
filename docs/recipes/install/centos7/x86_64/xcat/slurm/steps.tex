@@ -13,14 +13,13 @@
 \newcommand{\OSTag}{el7}
 \newcommand{\baseos}{centos7.3}
 \newcommand{\baseosshort}{centos7}
-\newcommand{\provisioner}{Warewulf}
+\newcommand{\provisioner}{xCAT}
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
 \newcommand{\arch}{x86\_64}
 
 % Define package manager commands
 \newcommand{\pkgmgr}{yum}
-\newcommand{\addrepo}{yum-config-manager --add-repo}
 \newcommand{\clean}{yum clean expire-cache}
 \newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
 \newcommand{\install}{yum -y install}
@@ -30,13 +29,12 @@
 \newcommand{\upgrade}{yum -y upgrade}
 \newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
 \newcommand{\tftppkg}{syslinux-tftpboot}
-\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_6/dists/beegfs-rhel7.repo}
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
 \toggletrue{isCentOS_ww_slurm_x86}
 \toggletrue{isx86}
-\toggletrue{isWarewulf}
+\toggletrue{isxCAT}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -95,8 +93,20 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{common/enable_ohpc_repo}
+\subsection{Enable \xCAT{} repository for local use} \label{sec:enable_xcat}
+\input{common/enable_xcat_repo}
 
-In addition to the \OHPC{} package repository, the {\em master} host also
+\noindent \xCAT{} has a number of dependencies that are required for
+installation that are housed in separate public repositories for various
+distros. To enable for local use, issue the following:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) wget -P /etc/yum.repos.d https://xcat.org/files/xcat/repos/yum/xcat-dep/rh7/ARCH/xCAT-dep.repo
+\end{lstlisting}
+% end_ohpc_run
+
+In addition to the \OHPC{} and \xCAT{} package repositories, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
 necessary dependencies. For \baseOS{}, the requirements are to have access to
 both the base OS and EPEL repositories for which mirrors are freely available online:
@@ -117,7 +127,7 @@ repository, which is shipped with CentOS and is enabled by default.
 
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
-\input{common/install_provisioning_intro}
+\input{common/install_provisioning_xcat_intro}
 \input{common/enable_pxe}
 \input{common/time}
 
@@ -128,16 +138,15 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/ibsupport_sms_centos}
 
 \vspace*{-0.15cm}
-\subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
-\input{common/warewulf_setup}
-\input{common/warewulf_setup_centos}
+\subsection{Complete basic \xCAT{} setup for {\em master} node} \label{sec:setup_xcat}
+\input{common/xcat_setup}
 
 
 \subsection{Define {\em compute} image for provisioning}
-\input{common/warewulf_mkchroot_centos}
+\input{common/xcat_mkchroot_centos}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
-\input{common/add_to_compute_chroot_intro}
+\input{common/add_to_compute_chroot_xcat_intro}
 
 %\newpage
 % begin_ohpc_run
@@ -164,7 +173,7 @@ repository, which is shipped with CentOS and is enabled by default.
 
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
-\input{common/warewulf_chroot_customize_centos}
+\input{common/xcat_chroot_customize_centos}
 
 % Additional commands when additional computes are requested
 
@@ -214,30 +223,25 @@ repository, which is shipped with CentOS and is enabled by default.
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
-\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
-\input{common/install_beegfs_client_centos}
-
-%\clearpage
-\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
-\input{common/syslog}
+%%%\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
+%%%\input{common/syslog}
 
 \subsubsection{Import files} \label{sec:file_import}
-\input{common/import_ww_files}
-\input{common/import_ww_files_slurm}
-\input{common/import_ww_files_ib_centos}
-\input{common/finalize_provisioning}
-\input{common/add_ww_hosts_intro}
-\input{common/add_ww_hosts_slurm}
-\input{common/add_ww_hosts_finalize}
+\input{common/import_xcat_files}
+\input{common/import_xcat_files_slurm}
+%\input{common/import_ww_files_ib_centos}
+\input{common/finalize_xcat_provisioning}
+\input{common/add_xcat_hosts_intro}
+\input{common/add_xcat_hosts_slurm}
+%\input{common/add_ww_hosts_finalize}
 
 \clearpage
-\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
-\input{common/conman_post}
+%%%\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
+%%%\input{common/conman_post}
 
-\subsubsection{Optionally configure stateful provisioning}
-\input{common/stateful}
+%%%\subsubsection{Optionally configure stateful provisioning}
+%%%\input{common/stateful}
 
-%\vspace*{-0.1cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes} 
 
@@ -278,7 +282,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/slurm_startup}
 
 \section{Run a Test Job} \label{sec:test_job}
-\input{common/slurm_test_job}
+\input{common/xcat_slurm_test_job}
 
 \clearpage
 \appendix
