@@ -42,6 +42,8 @@ my $Install            = "";
 my $chrootInstall      = "";
 my $groupInstall       = "";
 my $groupChrootInstall = "";
+my $addrepo = "";
+my $beegfsrepo = "";
 
 # parse package command macro's from input file
 open( IN, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
@@ -49,23 +51,23 @@ while( my $line = <IN> ) {
     chomp( $line );
     if( $line =~ /\\newcommand\{\\install\}\{(.+)\}/ ) {
         $Install = $1;
-    }
-    elsif( $line =~ /\\newcommand\{\\chrootinstall\}\{(.+)\}/ ) {
+    } elsif( $line =~ /\\newcommand\{\\chrootinstall\}\{(.+)\}/ ) {
         $chrootInstall = $1;
-    }
-    elsif( $line =~ /\\newcommand\{\\groupinstall\}\{(.+)\}/ ) {
+    } elsif( $line =~ /\\newcommand\{\\groupinstall\}\{(.+)\}/ ) {
         $groupInstall = $1;
-    }
-    elsif( $line =~ /\\newcommand\{\\groupchrootinstall\}\{(.+)\}/ ) {
+    } elsif( $line =~ /\\newcommand\{\\addrepo\}\{(.+)\}/ ) {
+        $addrepo = $1;
+    } elsif( $line =~ /\\newcommand\{\\beegfsrepo\}\{(.+)\}/ ) {
+        $beegfsrepo = $1;
+	# undo latex escape for underscore
+	$beegfsrepo =~ s/\\_/_/;
+    } elsif( $line =~ /\\newcommand\{\\groupchrootinstall\}\{(.+)\}/ ) {
         $groupChrootInstall = $1;
-    }
-    elsif( $line =~ /\\newcommand\{\\baseos\}\{(.+)\}/ ) {
+    } elsif( $line =~ /\\newcommand\{\\baseos\}\{(.+)\}/ ) {
         $BaseOS = $1;
-    }
-    elsif( $line =~ /\\newcommand\{\\baseosshort\}\{(.+)\}/ ) {
+    } elsif( $line =~ /\\newcommand\{\\baseosshort\}\{(.+)\}/ ) {
         $BaseOSshort = $1;
-    }
-    elsif( $line =~ /\\newcommand\{\\arch\}\{(.+)\}/ ) {
+    } elsif( $line =~ /\\newcommand\{\\arch\}\{(.+)\}/ ) {
         $arch = $1;
 	# undo latex escape for x86
 	if ($arch eq "x86\\_64") { $arch = "x86_64";}
@@ -265,6 +267,8 @@ sub update_cmd {
     $cmd =~ s/\(\*\\chrootinstall\*\)/$chrootInstall/;
     $cmd =~ s/\(\*\\groupinstall\*\)/$groupInstall/;
     $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
+    $cmd =~ s/\(\*\\addrepo\*\)/$addrepo/;
+    $cmd =~ s/\(\*\\beegfsrepo\*\)/$beegfsrepo/;
     $cmd =~ s/BOSVER/$BaseOS/;
     $cmd =~ s/BOSSHORT/$BaseOSshort/;
     $cmd =~ s/ARCH/$arch/;
