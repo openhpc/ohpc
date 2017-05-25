@@ -20,6 +20,7 @@
 
 % Define package manager commands
 \newcommand{\pkgmgr}{yum}
+\newcommand{\addrepo}{yum-config-manager --add-repo}
 \newcommand{\clean}{yum clean expire-cache}
 \newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
 \newcommand{\install}{yum -y install}
@@ -29,6 +30,7 @@
 \newcommand{\upgrade}{yum -y upgrade}
 \newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
 \newcommand{\tftppkg}{syslinux-tftpboot}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_6/dists/beegfs-rhel7.repo}
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
@@ -222,6 +224,9 @@ repository, which is shipped with CentOS and is enabled by default.
 
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
+
+\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
+\input{common/install_beegfs_client_centos}
 
 %%%\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 %%%\input{common/syslog}
