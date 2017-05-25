@@ -64,6 +64,7 @@ while( my $line = <IN> ) {
     }
     elsif( $line =~ /\\newcommand\{\\baseosshort\}\{(.+)\}/ ) {
         $BaseOSshort = $1;
+    }
     elsif( $line =~ /\\newcommand\{\\arch\}\{(.+)\}/ ) {
         $arch = $1;
 	# undo latex escape for x86
