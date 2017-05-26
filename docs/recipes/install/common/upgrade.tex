@@ -41,14 +41,23 @@ rolling updates are pre-configured.
 [sms](*\#*)  (*\chrootupgrade*) "*-ohpc"
 \end{lstlisting}
   
-\item Rebuild VNFS image(s)
+\item Rebuild image(s)
 
+\iftoggleverb{isWarewulf}
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) wwvnfs --chroot $CHROOT
 \end{lstlisting}
+\fi
+
+\iftoggleverb{isxCAT}
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,
+    literate={-}{-}1 {BOSVER}{\baseos{}}1 {ARCH}{\arch{}}1]
+[sms](*\#*) packimage centos7.3-x86_64-netboot-compute
+\end{lstlisting}
+\fi
 
 \end{enumerate*}
 
-\noindent In the case where packages were upgraded in the assembled VNFS compute image,
+\noindent In the case where packages were upgraded within the chroot compute image,
 you will need to reboot the compute nodes when convenient to enable the
 changes.
