@@ -62,6 +62,7 @@ Requires:  sudo
 Requires:  binutils
 Requires:  binutils-devel
 Requires:  man-db
+Requires:  yum-utils
 %endif
 %if 0%{?sles_version}
 Requires:  glibc-locale
