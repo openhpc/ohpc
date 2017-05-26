@@ -1,6 +1,7 @@
-The \xCAT{} system includes functionality to import arbitrary files from the
-provisioning server for distribution to managed hosts. This is one way to
-distribute user credentials to {\em compute} nodes. To import local file-based
+The \xCAT{} system includes functionality to synchronize files located on the
+SMS server for distribution to managed hosts. This is one way to
+distribute user credentials to {\em compute} nodes (alternatively, you may
+prefer to use a central authentication service like LDAP). To import local file-based
 credentials, issue the following to enable the {\em synclist} feature and
 register user credential files:
 
@@ -14,6 +15,5 @@ register user credential files:
 [sms](*\#*) echo "/etc/passwd -> /etc/passwd" > /install/custom/netboot/compute.synclist
 [sms](*\#*) echo "/etc/group -> /etc/group" >> /install/custom/netboot/compute.synclist
 [sms](*\#*) echo "/etc/shadow -> /etc/shadow" >> /install/custom/netboot/compute.synclist
-
 \end{lstlisting}
 % \end_ohpc_run

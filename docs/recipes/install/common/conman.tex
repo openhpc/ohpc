@@ -26,9 +26,10 @@ serial-over-lan. Installation and example configuration is outlined below.
 % ohpc_command fi
 % end_ohpc_run
 
+\iftoggleverb{isWarewulf}
 \noindent Note that an additional kernel boot option is typically necessary to
 enable serial console output. This option is highlighted in \S\ref{sec:optional_kargs} after
 compute nodes have been registered with the provisioning system.
+\fi
 
-% # Define node kernel arguments to support SOL console
-% [sms](*\#*) wwsh -y provision set "${compute_regex}" --kargs "${kargs} console=ttyS1,115200"
+
