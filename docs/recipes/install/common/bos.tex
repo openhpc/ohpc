@@ -16,8 +16,9 @@ your SMS host.
 [sms](*\#*) echo ${sms_ip} ${sms_name} >> /etc/hosts
 \end{lstlisting}
 
-Next, while it is theoretically possible to provision a \provisioner{} cluster with SELinux
-enabled, doing so is beyond the scope of this document. Even the use of
+While it is theoretically possible to enable SELinux on a cluster provisioned
+with \provisioner{}, 
+doing so is beyond the scope of this document. Even the use of
 permissive mode can be problematic and we therefore recommend disabling SELinux on the {\em
 master} SMS host. If SELinux components are installed locally,
 the \texttt{selinuxenabled} command can be used to determine if SELinux is
