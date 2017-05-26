@@ -41,6 +41,13 @@ fi
 AC_CHECK_FILE(/etc/pbs.conf,[enable_pbs=yes],[enable_slurm=yes])
 AM_CONDITIONAL(SLURM_ENABLED,test "x$enable_slurm" = "xyes" )
 
+# Provisioner test(s)
+AC_CHECK_FILE(/etc/warewulf/functions,[enable_warewulf=yes],[enable_warewulf=no])
+AM_CONDITIONAL(WAREWULF_ENABLED,test "x$enable_warewulf" = "xyes" )
+
+AC_CHECK_FILE(/etc/profile.d/xcat.sh,[enable_xcat=yes],[enable_cat=no])
+AM_CONDITIONAL(XCAT_ENABLED,test "x$enable_xcat" = "xyes" )
+
 # Option for testing against multiple compiler/MPI families
 AC_MSG_CHECKING([if enable PXSE toolchain related tests])
 AC_ARG_ENABLE([pxse],
@@ -405,6 +412,12 @@ if test "x$enable_slurm" = "xyes" ; then
 fi
 if test "x$enable_pbs" = "xyes" ; then
    echo Resource manager ............. : PBS Pro
+fi
+if test "x$enable_warewulf" = "xyes" ; then
+   echo Provisioner .................. : Warewulf
+fi
+if test "x$enable_xcat" = "xyes" ; then
+   echo Provisioner .................. : xCAT
 fi
 if test "x$enable_long" = "xyes" ; then
    echo Test suite configuration...... : long
