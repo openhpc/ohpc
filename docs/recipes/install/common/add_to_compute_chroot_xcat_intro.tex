@@ -10,7 +10,6 @@ the chroot.
 % begin_ohpc_run
 % ohpc_comment_header Enable repos in chroot \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) (*\install*) yum-utils
 [sms](*\#*) yum-config-manager --installroot=$CHROOT --enable base
 [sms](*\#*) cp /etc/yum.repos.d/OpenHPC.repo $CHROOT/etc/yum.repos.d
 \end{lstlisting}
