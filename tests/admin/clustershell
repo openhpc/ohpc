@@ -21,7 +21,7 @@ setup() {
     assert_success
 }
 
-@test "[clush] clush -aS" {
-    run clush -aS hostname
+@test "[clush] clush -Sg compute" {
+    run clush -Sg compute hostname
     assert_success
 }
