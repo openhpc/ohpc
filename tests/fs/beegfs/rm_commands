@@ -1,0 +1,55 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+if [ -z $BEEGFS_TEST_PATH ];then
+    ERROR "BeeGFS Test Path not defined (BEEGFS_TEST_PATH)"
+    exit 1
+elif [ ! -d $BEEGFS_TEST_PATH ];then
+    ERROR "BeeGFS Test Path:$BEEGFS_TEST_PATH does not exist)"
+    exit 1
+else
+    export BEEGFS_TEST_PATH
+fi
+
+check_rms
+
+@test "[BeeGFS] beegfs-df - $BEEGFS_TEST_PATH ($RESOURCE_MANAGER)" {
+    run_serial_binary /usr/bin/beegfs-df $BEEGFS_TEST_PATH
+    assert_success
+}
+
+@test "[BeeGFS] beegfs-ctl --getentryinfo - $BEEGFS_TEST_PATH ($RESOURCE_MANAGER)" {
+    run_serial_binary beegfs-ctl --getentryinfo $BEEGFS_TEST_PATH
+    assert_success
+}
+
+@test "[BeeGFS] set target count=2 test - $BEEGFS_TEST_PATH ($RESOURCE_MANAGER)" {
+    local testdir="tempdir-$RANDOM"
+
+    run run_serial_binary mkdir $BEEGFS_TEST_PATH/$testdir
+    assert_success
+
+    run run_serial_binary --setpattern --numtargets=2 --chunksize=1m $BEEGFS_TEST_PATH/$testdir
+    assert_success
+
+    # Generate file in new directory
+    run_serial_binary echo "atest" > $BEEGFS_TEST_PATH/$testdir/afile
+    run ls $BEEGFS_TEST_PATH/$testdir/afile
+    assert_success
+
+    # verify correct stripe settings for file in directory
+    beegfs-ctl --getentryinfo  $BEEGFS_TEST_PATH/$testdir/afile |tail -2 >& .cmd_output
+    run cat .cmd_output
+    assert_output "+ Chunksize: 1M
+    + Number of storage targets: desired: 2"
+
+    rm -rf $BEEGFS_TEST_PATH/$testdir
+
+}

@@ -126,6 +126,12 @@ AC_ARG_ENABLE([R],
    [AX_OPTION_DEFAULT(type=long,enable_R,yes)])
 AM_CONDITIONAL(R_ENABLED,test "x$enable_R" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# BeeGFS
+AC_ARG_ENABLE([beegfs],
+   [AS_HELP_STRING([--enable-beegfs],[Enable BeeGFS utility tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_beegfs,no)])
+AM_CONDITIONAL(BEEGFS_ENABLED,test "x$enable_beegfs" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # Lustre
 AC_ARG_ENABLE([lustre],
    [AS_HELP_STRING([--enable-lustre],[Enable Lustre utility tests (default=no)])],[],
@@ -382,6 +388,7 @@ AC_OUTPUT( Makefile
        perf-tools/tau/Makefile
        oob/Makefile
        runtimes/singularity/Makefile
+       fs/beegfs/Makefile
        fs/lustre/Makefile
        dev-tools/easybuild/Makefile
        admin/spack/Makefile
@@ -467,6 +474,12 @@ echo    User Environment:
        echo '    'Compilers................. : enabled
     else
        echo '    'Compilers................. : disabled
+    fi
+
+    if test "x$enable_beegfs" = "xyes"; then
+       echo '    'BeeGFS client............. : enabled
+    else
+       echo '    'BeeGFS client............. : disabled
     fi
 
     if test "x$enable_lustre" = "xyes"; then
