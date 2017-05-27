@@ -18,8 +18,7 @@ installed first.
 [sms](*\#*) (*\install*) beegfs-client beegfs-helperd beegfs-utils
 
 # Enable OFED support in client
-[sms](*\#*) perl -pi -e "s/^buildArgs=-j8/buildArgs=-j8 BEEGFS_OPENTK_IBVERBS=1/" \ 
-/etc/beegfs/beegfs-client-autobuild.conf
+[sms](*\#*) perl -pi -e "s/^buildArgs=-j8/buildArgs=-j8 BEEGFS_OPENTK_IBVERBS=1/" /etc/beegfs/beegfs-client-autobuild.conf
 
 # Define client's management host
 [sms](*\#*) /opt/beegfs/sbin/beegfs-setup-client -m ${sysmgmtd_host}
@@ -35,8 +34,7 @@ installed first.
 [sms](*\#*) (*\chrootinstall*) beegfs-client beegfs-helperd beegfs-utils
 
 # Disable auto-build of kernel module in compute node
-[sms](*\#*) perl -pi -e "s/^buildEnabled=true/buildEnabled=false/" \ 
-$CHROOT/etc/beegfs/beegfs-client-autobuild.conf
+[sms](*\#*) perl -pi -e "s/^buildEnabled=true/buildEnabled=false/" $CHROOT/etc/beegfs/beegfs-client-autobuild.conf
 
 # Enable client daemons on compute nodes
 [sms](*\#*) chroot $CHROOT systemctl enable beegfs-helperd beegfs-client
