@@ -10,7 +10,8 @@ latest \xCAT{} repo file.
 % ohpc_comment_header Enable xCAT repositories \ref{sec:enable_xcat}
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,
 	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*) wget -P /etc/yum.repos.d/ https://xcat.org/files/xcat/repos/yum/latest/xcat-core/xCAT-core.repo
+[sms](*\#*) (*\install*) yum-utils
+[sms](*\#*) (*\addrepo*) https://xcat.org/files/xcat/repos/yum/latest/xcat-core/xCAT-core.repo
 \end{lstlisting}
 % end_ohpc_run
 
