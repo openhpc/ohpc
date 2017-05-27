@@ -37,6 +37,7 @@ to allow loading of the necessary modules.
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add BeeGFS client software to compute node image
+[sms](*\#*) (*\chrootaddrepo*) (*\beegfsrepo*)
 [sms](*\#*) (*\chrootinstall*) beegfs-client beegfs-helperd beegfs-utils
 
 # Disable auto-build of kernel module in compute node

@@ -43,6 +43,7 @@ my $chrootInstall      = "";
 my $groupInstall       = "";
 my $groupChrootInstall = "";
 my $addrepo = "";
+my $chrootaddrepo = "";
 my $beegfsrepo = "";
 
 # parse package command macro's from input file
@@ -57,6 +58,8 @@ while( my $line = <IN> ) {
         $groupInstall = $1;
     } elsif( $line =~ /\\newcommand\{\\addrepo\}\{(.+)\}/ ) {
         $addrepo = $1;
+    } elsif( $line =~ /\\newcommand\{\\chrootaddrepo\}\{(.+)\}/ ) {
+        $chrootaddrepo = $1;
     } elsif( $line =~ /\\newcommand\{\\beegfsrepo\}\{(.+)\}/ ) {
         $beegfsrepo = $1;
 	# undo latex escape for underscore
@@ -268,6 +271,7 @@ sub update_cmd {
     $cmd =~ s/\(\*\\groupinstall\*\)/$groupInstall/;
     $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
     $cmd =~ s/\(\*\\addrepo\*\)/$addrepo/;
+    $cmd =~ s/\(\*\\chrootaddrepo\*\)/$chrootaddrepo/;
     $cmd =~ s/\(\*\\beegfsrepo\*\)/$beegfsrepo/;
     $cmd =~ s/BOSVER/$BaseOS/;
     $cmd =~ s/BOSSHORT/$BaseOSshort/;
