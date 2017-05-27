@@ -20,8 +20,8 @@
 
 % Define package manager commands
 \newcommand{\pkgmgr}{yum}
-\newcommand{\addrepo}{yum-config-manager --add-repo}
-\newcommand{\chrootaddrepo}{yum-config-manager --installroot=\$CHROOT --add-repo}
+\newcommand{\addrepo}{wget -P /etc/yum.repos.d}
+\newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
 \newcommand{\clean}{yum clean expire-cache}
 \newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
 \newcommand{\install}{yum -y install}
