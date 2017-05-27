@@ -79,6 +79,7 @@ while( my $line = <IN> ) {
 close( IN );
 
 # Strip escape \ from latex macro
+$chrootaddrepo      =~ s/\\\$/\$/;
 $chrootInstall      =~ s/\\\$/\$/;
 $groupChrootInstall =~ s/\\\$/\$/;
 
