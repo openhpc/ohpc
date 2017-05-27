@@ -106,6 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libexecdir}/singularity
 %dir %{_libexecdir}/singularity/bin
 %dir %{_localstatedir}/singularity
+%dir %{_localstatedir}/singularity/helpers
 %dir %{_localstatedir}/singularity/mnt
 %dir %{_localstatedir}/singularity/mnt/session
 %dir %{_localstatedir}/singularity/mnt/container
@@ -141,6 +142,7 @@ rm -rf $RPM_BUILD_ROOT
 # Scripts
 %{_libexecdir}/singularity/functions
 %{_libexecdir}/singularity/image-handler.sh
+%{_libexecdir}/singularity/helpers/inspect.sh
 
 # Directories
 %{_libexecdir}/singularity/bootstrap-scripts
