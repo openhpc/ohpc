@@ -1,6 +1,6 @@
 % begin_ohpc_run
+% ohpc_validation_newline
 % ohpc_validation_comment Add hosts to cluster
-
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
 # Register nodes for PXE provisioning 
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
@@ -8,4 +8,62 @@
         done
 \end{lstlisting}
 % end_ohpc_run
+
+\noindent \xCAT{} requires a network domainname specification for systemwide name
+resolution. This value can be set to match your local DNS schema or given a
+unique identifier such as ``local''. In this recipe, we leverage the
+\texttt{\$domain\_name} variable to define as follows:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Define local domainname
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+[sms](*\#*) chdef -t site domain=${domain_name}
+\end{lstlisting}
+
+\clearpage
+If enabling {\em optional} IPoIB functionality (e.g. to support Lustre over \InfiniBand{}), additional
+settings are required to define the IPoIB network with \xCAT{} and specify
+desired IP settings for each compute. This can be accomplished as follows:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Setup IPoIB networking
+% ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+# Define ib0 netmask
+[sms](*\#*) chdef -t network -o ipoib0 mask=$ipoib_netmask mgtifname=ib0
+# Register desired IPoIB IPs per compute
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+		chdef c1 nicips.ib0=${c_ipoib[i]} nictypes.ib0="InfiniBand" nicnetworks.ib0=ib0
+        done
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+With the desired compute nodes and domain identified, the remaining steps in the
+provisioning configuration process are to define the provisioning mode and
+image for the {\em compute} group and use \xCAT{} commands to complete
+configuration for network services like DNS and DHCP. These tasks are
+accomplished as follows:
+
+%\clearpage
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Complete networking setup, associate provisioning image
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+# Define provisioning method for computes
+[sms](*\#*) chdef -t group compute provmethod=BOSVER-x86_64-netboot-compute
+# Complete network service configurations
+[sms](*\#*) makehosts
+[sms](*\#*) makenetworks
+[sms](*\#*) makedhcp -n
+[sms](*\#*) makedns -n
+# Associate desired provisioning image for computes
+[sms](*\#*) nodeset compute osimage=BOSVER-x86_64-netboot-compute
+# restart DHCP
+[sms](*\#*) service dhcpd restart
+\end{lstlisting}
 
