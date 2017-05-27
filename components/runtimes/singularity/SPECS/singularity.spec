@@ -105,8 +105,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/singularity
 %dir %{_libexecdir}/singularity
 %dir %{_libexecdir}/singularity/bin
+%dir %{_libexecdir}/singularity/helpers
 %dir %{_localstatedir}/singularity
-%dir %{_localstatedir}/singularity/helpers
 %dir %{_localstatedir}/singularity/mnt
 %dir %{_localstatedir}/singularity/mnt/session
 %dir %{_localstatedir}/singularity/mnt/container
