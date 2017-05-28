@@ -70,27 +70,27 @@ accomplished as follows:
 [sms](*\#*) service dhcpd restart
 \end{lstlisting}
 
-If the Lustre client was enabled for computes in \S\ref{sec:lustre_client}, you
-should be able to mount the file system post-boot using the fstab entry
-(e.g. via ``\texttt{mount /mnt/lustre}''). Alternatively, if 
-you prefer to have the file system mounted automatically at boot time, a simple
-postscript can be created and registered with \xCAT{} for this purpose as follows.
-
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_validation_comment Optionally create xCAT postscript to mount Lustre client
-% ohpc_command if [ ${enable_lustre_client} -eq 1 ];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
-# Optionally create postscript to mount Lustre client at boot
-[sms](*\#*) echo '#!/bin/bash' > /install/postscripts/lustre-client
-[sms](*\#*) echo 'mount /mnt/lustre' >> /install/postscripts/lustre-client
-[sms](*\#*) chmod 755 /install/postscripts/lustre-client
-# Register script for computes
-[sms](*\#*) chdef compute -p postscripts=lustre-client
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% end_ohpc_run
-
+%%% If the Lustre client was enabled for computes in \S\ref{sec:lustre_client}, you
+%%% should be able to mount the file system post-boot using the fstab entry
+%%% (e.g. via ``\texttt{mount /mnt/lustre}''). Alternatively, if 
+%%% you prefer to have the file system mounted automatically at boot time, a simple
+%%% postscript can be created and registered with \xCAT{} for this purpose as follows.
+%%% 
+%%% % begin_ohpc_run
+%%% % ohpc_validation_newline
+%%% % ohpc_validation_comment Optionally create xCAT postscript to mount Lustre client
+%%% % ohpc_command if [ ${enable_lustre_client} -eq 1 ];then
+%%% % ohpc_indent 5
+%%% \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
+%%% # Optionally create postscript to mount Lustre client at boot
+%%% [sms](*\#*) echo '#!/bin/bash' > /install/postscripts/lustre-client
+%%% [sms](*\#*) echo 'mount /mnt/lustre' >> /install/postscripts/lustre-client
+%%% [sms](*\#*) chmod 755 /install/postscripts/lustre-client
+%%% # Register script for computes
+%%% [sms](*\#*) chdef compute -p postscripts=lustre-client
+%%% \end{lstlisting}
+%%% % ohpc_indent 0
+%%% % ohpc_command fi
+%%% % end_ohpc_run
+%%% 
 
