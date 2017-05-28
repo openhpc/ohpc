@@ -36,7 +36,7 @@ the {\em ib0} interface:
 # Define ib0 netmask
 [sms](*\#*) chdef -t network -o ib0 mask=$ipoib_netmask
 # Enable secondary NIC configuration
-[sms](*\#*) chdef compute -p postscripts=confignics  
+[sms](*\#*) chdef compute -p postbootscripts=confignics
 # Register desired IPoIB IPs per compute
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
 		chdef ${c_name[i]} nicips.ib0=${c_ipoib[i]} nictypes.ib0="InfiniBand" nicnetworks.ib0=ib0
