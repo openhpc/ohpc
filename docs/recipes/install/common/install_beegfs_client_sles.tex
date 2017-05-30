@@ -40,8 +40,7 @@ to allow loading of the necessary modules.
 [sms](*\#*) (*\chrootinstall*) beegfs-client beegfs-helperd beegfs-utils
 
 # Disable auto-build of kernel module in compute node
-[sms](*\#*) perl -pi -e "s/^buildEnabled=true/buildEnabled=false/" \ 
-        $CHROOT/etc/beegfs/beegfs-client-autobuild.conf
+[sms](*\#*) perl -pi -e "s/^buildEnabled=true/buildEnabled=false/" $CHROOT/etc/beegfs/beegfs-client-autobuild.conf
 
 # Enable client daemons on compute nodes
 [sms](*\#*) chroot $CHROOT systemctl enable beegfs-helperd beegfs-client
