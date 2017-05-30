@@ -53,7 +53,8 @@ Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 %if 0%{with_psm2}
-BuildRequires:  hfi1-psm hfi1-psm-devel
+BuildRequires:  libpsm2-devel >= 10.2.0
+Requires:       libpsm2 >= 10.2.0
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
