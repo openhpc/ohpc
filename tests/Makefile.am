@@ -13,6 +13,10 @@ if ADMIN_ENABLED
    SUBDIRS += admin
 endif
 
+if BEEGFS_ENABLED
+   SUBDIRS += fs/beegfs
+endif
+
 if BOS_ENABLED
    SUBDIRS += bos
 endif
@@ -31,10 +35,6 @@ endif
 
 
 else # non root tests
-
-if BEEGFS_ENABLED
-   SUBDIRS += fs/beegfs
-endif
 
 if EASYBUILD_ENABLED
    SUBDIRS += dev-tools/easybuild

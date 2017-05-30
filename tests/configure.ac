@@ -90,23 +90,29 @@ AC_ARG_ENABLE([bos],
 	 [],[enable_bos=yes])
 AM_CONDITIONAL(BOS_ENABLED,test "x$enable_bos" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# BeeGFS
+AC_ARG_ENABLE([beegfs],
+   [AS_HELP_STRING([--enable-beegfs],[Enable BeeGFS utility tests (default=no, root only)])],
+	 [],[enable_beegfs=yes])
+AM_CONDITIONAL(BEEGFS_ENABLED,test "x$enable_beegfs" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # Out-of-band
 AC_ARG_ENABLE([oob],
 	 [AS_HELP_STRING([--enable-oob],[Enable oob tests (default=yes, root only)])],
 	 [],[enable_oob=yes])
 AM_CONDITIONAL(OOB_ENABLED,test "x$enable_oob" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# spack
-AC_ARG_ENABLE([spack],
-	 [AS_HELP_STRING([--enable-spack],[Enable spack tests (default=yes, root only)])],
-	 [],[enable_spack=yes])
-AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" ) 
-#------------------------------------------------------------------------------------------
 # Singularity
 AC_ARG_ENABLE([singularity],
      [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes, root only)])],
 	 [],[enable_singularity=yes])
 AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
+#------------------------------------------------------------------------------------------
+# spack
+AC_ARG_ENABLE([spack],
+	 [AS_HELP_STRING([--enable-spack],[Enable spack tests (default=yes, root only)])],
+	 [],[enable_spack=yes])
+AM_CONDITIONAL(SPACK_ENABLED,test "x$enable_spack" = "xyes" ) 
 
 #-----------------
 # User level tests
@@ -125,12 +131,6 @@ AC_ARG_ENABLE([R],
    [AS_HELP_STRING([--enable-R],[Enable R tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_R,yes)])
 AM_CONDITIONAL(R_ENABLED,test "x$enable_R" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# BeeGFS
-AC_ARG_ENABLE([beegfs],
-   [AS_HELP_STRING([--enable-beegfs],[Enable BeeGFS utility tests (default=no)])],[],
-   [AX_OPTION_DEFAULT(type=short,enable_beegfs,no)])
-AM_CONDITIONAL(BEEGFS_ENABLED,test "x$enable_beegfs" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Lustre
 AC_ARG_ENABLE([lustre],
