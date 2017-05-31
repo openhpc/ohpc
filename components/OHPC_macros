@@ -33,6 +33,12 @@
 
 DocDir:    %{OHPC_PUB}/doc/contrib
 
+%if 0%{?rhel} == 7
+	# OBS define's rhel_version to 700 for RHEL, in case we are
+	# not running in OBS
+	%global rhel_version 700
+%endif
+
 # OpenHPC packages require ohpc-filesystem which defines the basic
 # installation path layout
 %if 0%{?ohpc_bootstrap} == 0
