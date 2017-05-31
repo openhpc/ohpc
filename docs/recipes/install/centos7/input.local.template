@@ -104,7 +104,7 @@ kargs="${kargs:-acpi_pad.disable=1}"
 beegfs_repo="${beegfs_repo:-https://www.beegfs.io/release/beegfs_6/dists/beegfs-rhel7.repo}"
 
 # BeeGFS sysMgmtdHost
-sysmgmtd_host="${sysmgmtd_host:-192.168.1.16}"
+sysmgmtd_host="${sysmgmtd_host:-172.17.1.16}"
 
 # Lustre MGS mount name
 mgs_fs_name="${mgs_fs_name:-192.168.100.254@o2ib:/lustre1}"
