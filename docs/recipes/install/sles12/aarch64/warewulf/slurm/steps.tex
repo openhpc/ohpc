@@ -29,7 +29,7 @@
 % Define package manager commands
 \newcommand{\pkgmgr}{zypper}
 \newcommand{\addrepo}{zypper ar}
-\newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
+\newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/zypp/repos.d}
 \newcommand{\clean}{zypper clean -a}
 \newcommand{\chrootclean}{zypper --root \$CHROOT clean}
 \newcommand{\install}{zypper -n install}
