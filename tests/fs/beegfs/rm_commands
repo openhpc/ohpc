@@ -21,26 +21,26 @@ fi
 check_rms
 
 @test "[BeeGFS] beegfs-df - $BEEGFS_TEST_PATH ($RESOURCE_MANAGER)" {
-    run_serial_binary /usr/bin/beegfs-df $BEEGFS_TEST_PATH
+    run ssh c1 /usr/bin/beegfs-df $BEEGFS_TEST_PATH
     assert_success
 }
 
 @test "[BeeGFS] beegfs-ctl --getentryinfo - $BEEGFS_TEST_PATH ($RESOURCE_MANAGER)" {
-    run_serial_binary beegfs-ctl --getentryinfo $BEEGFS_TEST_PATH
+    run ssh c1 beegfs-ctl --getentryinfo $BEEGFS_TEST_PATH
     assert_success
 }
 
 @test "[BeeGFS] set target count=2 test - $BEEGFS_TEST_PATH ($RESOURCE_MANAGER)" {
     local testdir="tempdir-$RANDOM"
 
-    run run_serial_binary mkdir $BEEGFS_TEST_PATH/$testdir
+    run ssh c1 mkdir $BEEGFS_TEST_PATH/$testdir
     assert_success
 
-    run run_serial_binary beegfs-ctl --setpattern --numtargets=2 --chunksize=1m $BEEGFS_TEST_PATH/$testdir
+    run ssh c1 beegfs-ctl --setpattern --numtargets=2 --chunksize=1m $BEEGFS_TEST_PATH/$testdir
     assert_success
 
     # Generate file in new directory
-    run_serial_binary echo "atest" > $BEEGFS_TEST_PATH/$testdir/afile
+    run ssh c1 echo "atest" > $BEEGFS_TEST_PATH/$testdir/afile
     run ls $BEEGFS_TEST_PATH/$testdir/afile
     assert_success
 
