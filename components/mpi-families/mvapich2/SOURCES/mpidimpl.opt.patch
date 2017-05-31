@@ -1,0 +1,35 @@
+--- ./src/mpid/ch3/include/mpidimpl.h.orig	2017-05-31 14:01:36.114180288 -0500
++++ ./src/mpid/ch3/include/mpidimpl.h	2017-05-31 14:06:56.154455159 -0500
+@@ -22,6 +22,11 @@
+  * channel.  Do not include them in the MPID macros.
+  */
+ 
++#ifdef __GNUC__
++#pragma GCC push_options
++#pragma GCC optimize ("O2")
++#endif
++
+ #if !defined(MPICH_MPIDIMPL_H_INCLUDED)
+ #define MPICH_MPIDIMPL_H_INCLUDED
+ 
+@@ -2227,8 +2232,12 @@
+ 
+ int MPIDI_Num_local_processes(MPIDI_PG_t *pg);
+ int MPIDI_Get_local_process_id(MPIDI_PG_t *pg);
++
++
+ void mv2_show_cpu_affinity(MPIDI_PG_t *pg);
+ 
++
++
+ #define MPIDI_CH3U_PKT_SIZE(_pkt) \
+     (MPIDI_CH3_Pkt_size_index[((MPIDI_CH3_Pkt_t *)(_pkt))->type])
+ 
+@@ -2255,3 +2264,7 @@
+ #endif
+ 
+ #endif /* !defined(MPICH_MPIDIMPL_H_INCLUDED) */
++
++#ifdef __GNUC__
++#pragma GCC pop_options
++#endif
