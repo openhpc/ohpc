@@ -159,10 +159,16 @@
 \paragraph{Increase locked memory limits}
 \input{common/memlimits} 
 
+\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
+\input{common/install_beegfs_client_sles}
+
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
 \input{common/lustre-client-sles}
 \input{common/lustre-client-post}
+
+\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
+\input{common/syslog}
 
 \clearpage
 \paragraph{Add \Nagios{} monitoring}
@@ -183,13 +189,7 @@
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
-\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
-\input{common/install_beegfs_client_sles}
-
 %\clearpage
-\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
-\input{common/syslog}
-
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
 \input{common/import_ww_files_ib_sles}
