@@ -5,10 +5,14 @@ include:
 \begin{multicols}{2}
 \begin{itemize*}
 \item Increase memlock limits
-\item Restrict ssh access to compute resources
+
+\nottoggle{ispbs}{\item Restrict ssh access to compute resources}
+
 \item Add \beegfs{} client
 \item Add \Lustre{} client
-\item Enable syslog forwarding
+
+\iftoggle{isWarewulf}{\item Enable syslog forwarding}
+
 \item Add \Nagios{} Core monitoring
 \item Add \Ganglia{} monitoring
 \item Add \clustershell{}
