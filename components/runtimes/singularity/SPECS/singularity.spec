@@ -8,12 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?_rel:%{expand:%%global _rel 0.1}}
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
 %define pname singularity
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 # This allows us to pick up the default value from the configure
 %{!?with_slurm: %global with_slurm no}
@@ -26,14 +24,14 @@
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
 Version: 2.3
-Release: %{_rel}%{?dist}
+Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
 Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
-Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
+Source0: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
+Source1: OHPC_macros
 ExclusiveOS: linux
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
@@ -80,15 +78,13 @@ fi
   --without-slurm
 %endif
 
+%{__make} %{?_smp_mflags}
 
 %install
-%{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
 rm $RPM_BUILD_ROOT/%{_libdir}/singularity/*.la
+# NO_BRP_CHECK_RPATH has no effect on CentOS 7
 export NO_BRP_CHECK_RPATH=true
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 
 %post
@@ -155,7 +151,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_includedir}/singularity
 %dir %{_libdir}/singularity
 %{_libdir}/singularity/lib*.so
-#%{_libdir}/singularity/lib*.a
 %{_includedir}/singularity/*.h
 
 
@@ -166,4 +161,3 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
-
