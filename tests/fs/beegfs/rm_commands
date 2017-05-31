@@ -36,7 +36,7 @@ check_rms
     run run_serial_binary mkdir $BEEGFS_TEST_PATH/$testdir
     assert_success
 
-    run run_serial_binary --setpattern --numtargets=2 --chunksize=1m $BEEGFS_TEST_PATH/$testdir
+    run run_serial_binary beegfs-ctl --setpattern --numtargets=2 --chunksize=1m $BEEGFS_TEST_PATH/$testdir
     assert_success
 
     # Generate file in new directory
@@ -45,10 +45,10 @@ check_rms
     assert_success
 
     # verify correct stripe settings for file in directory
-    beegfs-ctl --getentryinfo  $BEEGFS_TEST_PATH/$testdir/afile |tail -2 >& .cmd_output
+    beegfs-ctl --getentryinfo  $BEEGFS_TEST_PATH/$testdir/afile |sed -n 7,8p  >& .cmd_output
     run cat .cmd_output
     assert_output "+ Chunksize: 1M
-    + Number of storage targets: desired: 2"
++ Number of storage targets: desired: 2; actual: 1"
 
     rm -rf $BEEGFS_TEST_PATH/$testdir
 
