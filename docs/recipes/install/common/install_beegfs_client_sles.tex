@@ -44,6 +44,8 @@ to allow loading of the necessary modules.
 [sms](*\#*) rm -f $CHROOT/var/lib/beegfs/client/force-auto-build
 
 # Enable client daemons on compute nodes
+[sms](*\#*) perl -pi -e "s/^allow_unsupported_modules 0/allow_unsupported_modules 1/" \
+$CHROOT/etc/modprobe.d/10-unsupported-modules.conf
 [sms](*\#*) chroot $CHROOT systemctl enable beegfs-helperd beegfs-client
 
 # Copy client config to compute nodes
