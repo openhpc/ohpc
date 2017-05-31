@@ -39,12 +39,10 @@ Summary:        C++ Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
 Version:        4.3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
 Source101:	OHPC_macros
-Source103:	OHPC_setup_mpi
-
 
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -95,8 +93,6 @@ NetCDF data is:
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 module load netcdf
@@ -118,8 +114,6 @@ make %{?_smp_mflags}
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 module load netcdf
@@ -193,6 +187,9 @@ EOF
 %doc COPYRIGHT
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 4.3.0-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 4.3.0-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

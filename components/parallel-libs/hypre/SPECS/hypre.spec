@@ -41,14 +41,13 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        2.11.1
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
 Group:          ohpc/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         https://computation.llnl.gov/project/linear_solvers/download/hypre-%{version}.tar.gz
 Source1:        OHPC_macros
-Source3:        OHPC_setup_mpi
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
@@ -89,8 +88,6 @@ cp /usr/lib/rpm/config.guess src/config
 %endif
 
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
 
@@ -137,8 +134,6 @@ cd ..
 
 %install
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load superlu
 
@@ -251,6 +246,9 @@ EOF
 %doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.11.1-1
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.11.1-0
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

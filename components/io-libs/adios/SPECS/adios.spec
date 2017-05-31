@@ -22,13 +22,12 @@
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 1.11.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
 Source1: OHPC_macros
-Source3: OHPC_setup_mpi
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
@@ -83,8 +82,6 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load autotools
 module load phdf5
@@ -152,8 +149,6 @@ chmod +x adios_config
 %install
 # OpenHPC compiler designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 export NO_BRP_CHECK_RPATH=true
 
 make DESTDIR=$RPM_BUILD_ROOT install
@@ -257,6 +252,9 @@ EOF
 %doc TODO
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 1.11.0-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.11.0-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

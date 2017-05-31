@@ -62,7 +62,7 @@ BuildRequires: ohpc-buildroot
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
 
-%if "%{compiler_family}" == "gnu" 
+%if "%{compiler_family}" == "gnu"
 BuildRequires: gnu-compilers%{PROJ_DELIM} >= 7.1.0
 Requires:      gnu-compilers%{PROJ_DELIM} >= 7.1.0
 %endif
@@ -91,7 +91,7 @@ Requires:      gnu-7-compilers%{PROJ_DELIM}
 %if "%{mpi_family}" == "impi"
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
-%endif 
+%endif
 %if "%{mpi_family}" == "mpich"
 BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
 Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
@@ -108,4 +108,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 %global ohpc_setup_compiler %{expand:\
 	. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
+	%if 0%{?ohpc_mpi_dependent} == 1 \
+		. %{OHPC_ADMIN}/ohpc/OHPC_setup_mpi %{mpi_family} \
+	%endif \
 }

@@ -16,6 +16,10 @@
 # Sets up build environment for supported MPI families
 #-----------------------------------------------------------------------
 
+if [ "$#" = "1" ]; then
+    OHPC_MPI_FAMILY=$1
+fi
+
 if [ -z "$OHPC_MPI_FAMILY" ]; then
     echo "Unknown OHPC_MPI_FAMILY"
     exit 1

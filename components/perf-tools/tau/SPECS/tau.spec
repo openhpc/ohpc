@@ -20,14 +20,13 @@
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 Version:   2.26.1
-Release:   1%{?dist}
+Release:   2%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
 Source1:   OHPC_macros
-Source3:   OHPC_setup_mpi
 Patch1:    tau-2.26.forceshared.patch
 Patch2:    tau-add-explicit-linking-option.patch
 
@@ -80,8 +79,6 @@ sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 module load papi
 module load pdtoolkit
 
@@ -239,6 +236,9 @@ EOF
 %doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.26.1-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.26.1-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

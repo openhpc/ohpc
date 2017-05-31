@@ -20,13 +20,12 @@
 Summary:   Toolset for performance analysis of large-scale parallel applications
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   2.3.1
-Release:   1%{?dist}
+Release:   2%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.scalasca.org
 Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/2.3/dist/scalasca-%{version}.tar.gz
 Source1:   OHPC_macros
-Source3:   OHPC_setup_mpi
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -60,9 +59,6 @@ This is the %{compiler_family}-%{mpi_family} version.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
-
 module load scorep
 
 %if %{compiler_family} == intel
@@ -91,8 +87,6 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 
 # OpenHPC compiler designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load scorep
 
@@ -155,6 +149,9 @@ EOF
 
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.3.1-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.3.1-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

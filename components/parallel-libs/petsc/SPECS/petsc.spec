@@ -27,10 +27,9 @@ Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
 Version:        3.7.6
-Release:        0%{?dist}
+Release:        1%{?dist}
 Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
 Source1:        OHPC_macros
-Source3:        OHPC_setup_mpi
 Patch1:         petsc.rpath.patch
 Url:            http://www.mcs.anl.gov/petsc/
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -58,8 +57,6 @@ differential equations.
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 
@@ -181,6 +178,9 @@ EOF
 %doc CONTRIBUTING LICENSE
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.7.6-1
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.7.6-0
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 

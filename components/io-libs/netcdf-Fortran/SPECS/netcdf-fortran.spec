@@ -39,7 +39,7 @@ Summary:        Fortran Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
 Version:        4.4.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
 Source101:	OHPC_macros
@@ -93,8 +93,6 @@ NetCDF data is:
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 module load netcdf
@@ -120,8 +118,6 @@ make %{?_smp_mflags}
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_mpi
 
 module load phdf5
 module load netcdf
@@ -195,6 +191,9 @@ EOF
 %doc README.md
 
 %changelog
+* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 4.4.4-2
+- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 4.4.4-1
 - switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
 
