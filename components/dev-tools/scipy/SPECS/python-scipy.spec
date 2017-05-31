@@ -61,7 +61,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        0.19.0
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools

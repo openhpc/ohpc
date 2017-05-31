@@ -20,7 +20,7 @@
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   4.1
-Release:   2%{?dist}
+Release:   1%{?dist}
 License:   CPL
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks

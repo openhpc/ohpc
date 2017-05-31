@@ -20,7 +20,7 @@
 Summary:   A Fast Fourier Transform library
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.3.6
-Release:   2%{?dist}
+Release:   1%{?dist}
 License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
 URL:       http://www.fftw.org

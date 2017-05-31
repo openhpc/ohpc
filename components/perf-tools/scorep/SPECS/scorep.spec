@@ -20,7 +20,7 @@
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.0
-Release:   2%{?dist}
+Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/

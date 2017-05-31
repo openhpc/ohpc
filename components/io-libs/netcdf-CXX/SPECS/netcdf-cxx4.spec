@@ -39,7 +39,7 @@ Summary:        C++ Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
 Version:        4.3.0
-Release:        2%{?dist}
+Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
 Source101:	OHPC_macros

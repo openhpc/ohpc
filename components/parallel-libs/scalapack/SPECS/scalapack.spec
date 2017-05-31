@@ -44,7 +44,7 @@ Summary:        A subset of LAPACK routines redesigned for heterogenous computin
 License:        netlib ScaLAPACK License
 Group:          Development/Libraries/Parallel
 Version:        2.0.2
-Release:        13.2%{?dist}
+Release:        1%{?dist}
 # This is freely distributable without any restrictions.
 Url:            http://www.netlib.org/lapack-dev/
 Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz

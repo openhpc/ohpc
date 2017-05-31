@@ -20,7 +20,7 @@
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.7.1
-Release:   2%{?dist}
+Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/io-tools
 URL:       http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html
