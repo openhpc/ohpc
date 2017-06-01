@@ -8,8 +8,18 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
-@test "[ganglia] check for RPM" {
+@test "[ganglia] check for RPMs" {
     run check_if_rpm_installed "ganglia${DELIM}"
+    assert_success
+    run check_if_rpm_installed "ganglia-devel${DELIM}"
+    assert_success
+    run check_if_rpm_installed "ganglia-gmetad${DELIM}"
+    assert_success
+    run check_if_rpm_installed "ganglia-gmond${DELIM}"
+    assert_success
+    run check_if_rpm_installed "ganglia-gmond-python${DELIM}"
+    assert_success
+    run check_if_rpm_installed "ganglia-web${DELIM}"
     assert_success
 }
 
