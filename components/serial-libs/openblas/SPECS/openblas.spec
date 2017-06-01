@@ -52,6 +52,8 @@ Patch2:         openblas-noexecstack.patch
 Patch3:         openblas-gemv.patch
 # PATCH-FIX-UPSTREADM fix-arm64-cpuid-return.patch
 Patch4:         fix-arm64-cpuid-return.patch
+Patch5:         0001-build-LLVM-Add-Flang-compiler-support-and-enable-Ope.patch
+Patch6:         0002-build-Flang-has-the-same-interface-as-PGI.patch
 ExclusiveArch:  %ix86 ia64 ppc ppc64 x86_64 aarch64
 
 %description
@@ -69,6 +71,8 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 # karl.w.schulz@intel.com (9/19/16) - disabling patch3 for v0.2.19
 #%patch3 -p1
 %patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %build
 # OpenHPC compiler/mpi designation
