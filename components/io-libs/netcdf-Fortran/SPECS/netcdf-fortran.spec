@@ -113,6 +113,11 @@ export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }
 
+%if "%{compiler_family}" == "llvm"
+%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
+%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
+%endif
+
 make %{?_smp_mflags}
 
 %install
