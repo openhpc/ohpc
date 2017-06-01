@@ -11,6 +11,7 @@ register user credential files:
 # Define path for xCAT synclist file
 [sms](*\#*) mkdir -p /install/custom/netboot
 [sms](*\#*) chdef -t osimage -o centos7.3-x86_64-netboot-compute synclists="/install/custom/netboot/compute.synclist"
+
 # Add desired credential files to synclist
 [sms](*\#*) echo "/etc/passwd -> /etc/passwd" > /install/custom/netboot/compute.synclist
 [sms](*\#*) echo "/etc/group -> /etc/group" >> /install/custom/netboot/compute.synclist

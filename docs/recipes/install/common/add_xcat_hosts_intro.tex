@@ -35,8 +35,10 @@ the {\em ib0} interface:
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define ib0 netmask
 [sms](*\#*) chdef -t network -o ib0 mask=$ipoib_netmask
+
 # Enable secondary NIC configuration
 [sms](*\#*) chdef compute -p postbootscripts=confignics
+
 # Register desired IPoIB IPs per compute
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
 		chdef ${c_name[i]} nicips.ib0=${c_ipoib[i]} nictypes.ib0="InfiniBand" nicnetworks.ib0=ib0
@@ -59,13 +61,16 @@ accomplished as follows:
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1]
 # Define provisioning method for computes
 [sms](*\#*) chdef -t group compute provmethod=BOSVER-x86_64-netboot-compute
+
 # Complete network service configurations
 [sms](*\#*) makehosts
 [sms](*\#*) makenetworks
 [sms](*\#*) makedhcp -n
 [sms](*\#*) makedns -n
+
 # Associate desired provisioning image for computes
 [sms](*\#*) nodeset compute osimage=BOSVER-x86_64-netboot-compute
+
 # restart DHCP
 [sms](*\#*) service dhcpd restart
 \end{lstlisting}
