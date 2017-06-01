@@ -31,8 +31,7 @@ Release: %{_rel}%{?dist}
 License: BSD-3-Clause-LBNL
 Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
-#Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
-Source: https://github.com/crbaird/singularity/archive/%{version}.tar.gz
+Source: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
 ExclusiveOS: linux
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 BuildRequires: autoconf
