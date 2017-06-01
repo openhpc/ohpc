@@ -146,7 +146,7 @@ export NO_BRP_CHECK_RPATH=true
 
 
 
-%files -n singularity-devel-ohpc
+%files -n singularity-devel%{PROJ_DELIM}
 %defattr(-, root, root)
 %dir %{_includedir}/singularity
 %dir %{_libdir}/singularity
@@ -155,7 +155,7 @@ export NO_BRP_CHECK_RPATH=true
 
 
 %if %slurm
-%files -n singularity-slurm-ohpc
+%files -n singularity-slurm%{PROJ_DELIM}
 %defattr(-, root, root)
 %{_libdir}/slurm/singularity.so
 %endif
