@@ -13,7 +13,7 @@
 %define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -32,12 +32,13 @@ Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/num
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
+Patch4:         numpy-llvm-arm.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 %if 0%{?suse_version}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
 %else
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel" || "%{compiler_family}" == "arm"
 BuildRequires: python34-build-patch%{PROJ_DELIM}
 %endif
 %endif
@@ -62,6 +63,7 @@ basic linear algebra and random number generation.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -69,8 +71,14 @@ basic linear algebra and random number generation.
 
 %if "%{compiler_family}" == "intel"
 COMPILER_FLAG="--compiler=intelem"
-%else
-module load openblas
+%endif
+
+%if "%{compiler_family}" == "llvm"
+COMPILER_FLAG="--fcompiler=flang --compiler=clang"
+%endif
+
+%if "%{compiler_family}" == "arm"
+COMPILER_FLAG="--fcompiler=armflang --compiler=armclang"
 %endif
 
 %if "%{compiler_family}" == "intel"
@@ -81,7 +89,19 @@ library_dirs = $MKLROOT/lib/intel64
 mkl_libs = mkl_rt
 lapack_libs = mkl_rt
 EOF
-%else
+%endif
+
+%if "%{compiler_family}" == "arm"
+cat > site.cfg << EOF
+[openblas]
+libraries = armpl
+library_dirs = $ARMPL_LIBRARIES
+include_dirs = $ARMPL_INCLUDES
+EOF
+%endif
+
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+module load openblas
 cat > site.cfg << EOF
 [openblas]
 libraries = openblas
@@ -126,10 +146,10 @@ module-whatis "URL %{url}"
 family                      numpy
 set     version             %{version}
 
-# Require openblas for gnu compiler families
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+# Require openblas for gnu and llvm compiler families
+depends-on openblas
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib64/%{python_lib_dir}/site-packages
