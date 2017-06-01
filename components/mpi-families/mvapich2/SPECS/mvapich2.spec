@@ -35,12 +35,10 @@ URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
 Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 
-# karl.w.schulz@intel.com (09/08/2015)
-%global _default_patch_fuzz 2
-Patch0:    winfree.patch
 # karl.w.schulz@intel.com (04/13/2016)
-Patch1:    minit.patch
-Patch2:    mvapich2-get_cycles.patch
+Patch0:    mvapich2-get_cycles.patch
+# karl.w.schulz@intel.com (05/21/2017)
+Patch1:     mpidimpl.opt.patch
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
@@ -86,11 +84,8 @@ across multiple networks.
 %prep
 
 %setup -q -n %{pname}-%{version}
-# disabled on 09/19/16
-# %patch0 -p1
-# disabled on 09/19/16, patch was upstreamed in v2.2
-# %patch1 -p0
-%patch2 -p1
+%patch0 -p1
+%patch1 -p0
 
 %build
 %ohpc_setup_compiler
@@ -106,12 +101,12 @@ across multiple networks.
 %endif
 	    --enable-fast=O3 || { cat config.log && exit 1; }
 
-make
+make %{?_smp_mflags}
+
 %install
 %ohpc_setup_compiler
-# 06/04/15 - karl.w.schulz@intel.com; run serial build for fortran deps
-make DESTDIR=$RPM_BUILD_ROOT install
 
+make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # Remove .la files detected by rpm
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
@@ -171,6 +166,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed May 31 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.2-1
+- re-enable parallel builds, add patch for gcc7 optimization issue, remove unused patches
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.2-1
 - switch to ohpc_compiler_dependent flag
 
