@@ -14,6 +14,10 @@ rm=$RESOURCE_MANAGER
 @test "[nagios] check for RPM" {
     run check_if_rpm_installed "nagios${DELIM}"
     assert_success
+    run check_if_rpm_installed "nagios-plugins-all${DELIM}"
+    assert_success
+    run check_if_rpm_installed "nrpe${DELIM}"
+    assert_success
 }
 
 @test "[nagios] test check_http" {
