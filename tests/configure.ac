@@ -93,7 +93,7 @@ AM_CONDITIONAL(BOS_ENABLED,test "x$enable_bos" = "xyes" )
 # BeeGFS
 AC_ARG_ENABLE([beegfs],
    [AS_HELP_STRING([--enable-beegfs],[Enable BeeGFS utility tests (default=no, root only)])],
-	 [],[enable_beegfs=yes])
+	 [],[enable_beegfs=no])
 AM_CONDITIONAL(BEEGFS_ENABLED,test "x$enable_beegfs" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Out-of-band
@@ -435,6 +435,12 @@ echo
 echo Submodule Configuration:
 echo 
 if test "x$ROOT_ENABLED" = "x1" ; then
+    if test "x$enable_beegfs" = "xyes"; then
+       echo '    'BeeGFS client............. : enabled
+    else
+       echo '    'BeeGFS client............. : disabled
+    fi
+
     if test "x$enable_bos" = "xyes"; then
        echo '    'Base operating system..... : enabled
     else 
@@ -474,12 +480,6 @@ echo    User Environment:
        echo '    'Compilers................. : enabled
     else
        echo '    'Compilers................. : disabled
-    fi
-
-    if test "x$enable_beegfs" = "xyes"; then
-       echo '    'BeeGFS client............. : enabled
-    else
-       echo '    'BeeGFS client............. : disabled
     fi
 
     if test "x$enable_lustre" = "xyes"; then
