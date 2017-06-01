@@ -200,7 +200,7 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
     --with-nagios-user=nagios \
     --with-nagios-grp=nagios \
     --bindir=%{_sbindir} \
-    --sbindir=%{nagios_cgidir} \
+    --sbindir=%{_libdir}/%{pname}/cgi-bin \
     --libexecdir=%{_libdir}/%{pname}/plugins \
     --sysconfdir=%{_sysconfdir}/%{pname} \
     --localstatedir=%{_localstatedir}/log/%{pname} \
