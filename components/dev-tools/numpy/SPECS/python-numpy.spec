@@ -33,6 +33,7 @@ Source1:        OHPC_macros
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
+Patch4:         numpy-llvm.patch
 BuildRequires:  python-devel python-setuptools
 Requires:       python
 Provides:       numpy = %{version}
@@ -65,6 +66,7 @@ basic linear algebra and random number generation.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %if "%{compiler_family}" == "intel"
 cat > site.cfg << EOF
@@ -92,6 +94,11 @@ COMPILER_FLAG="--compiler=intelem"
 %else
 module load openblas
 %endif
+
+%if "%{compiler_family}" == "llvm"
+COMPILER_FLAG="--fcompiler=flang --compiler=clang"
+%endif
+
 #CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
 python setup.py build $COMPILER_FLAG
 

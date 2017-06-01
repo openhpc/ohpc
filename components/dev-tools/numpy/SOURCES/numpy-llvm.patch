@@ -1,0 +1,99 @@
+diff -ruN numpy-1.12.1.old/numpy/distutils/ccompiler.py numpy-1.12.1/numpy/distutils/ccompiler.py
+--- numpy-1.12.1.old/numpy/distutils/ccompiler.py	2017-03-05 20:13:51.000000000 +0000
++++ numpy-1.12.1/numpy/distutils/ccompiler.py	2017-06-05 21:20:46.622859452 +0100
+@@ -536,10 +536,13 @@
+                               "Intel C Compiler for 64-bit applications on Windows")
+ compiler_class['pathcc'] = ('pathccompiler', 'PathScaleCCompiler',
+                             "PathScale Compiler for SiCortex-based applications")
++compiler_class['clang'] = ('clangccompiler', 'ClangCCompiler',
++                            "LLVM compiler for 64-bit applications")
+ ccompiler._default_compilers += (('linux.*', 'intel'),
+                                  ('linux.*', 'intele'),
+                                  ('linux.*', 'intelem'),
+                                  ('linux.*', 'pathcc'),
++                                 ('linux.*', 'clang'),
+                                  ('nt', 'intelw'),
+                                  ('nt', 'intelemw'))
+ 
+diff -ruN numpy-1.12.1.old/numpy/distutils/clangccompiler.py numpy-1.12.1/numpy/distutils/clangccompiler.py
+--- numpy-1.12.1.old/numpy/distutils/clangccompiler.py	1970-01-01 01:00:00.000000000 +0100
++++ numpy-1.12.1/numpy/distutils/clangccompiler.py	2017-06-05 21:20:46.622859452 +0100
+@@ -0,0 +1,23 @@
++from __future__ import division, absolute_import, print_function
++
++from distutils.unixccompiler import UnixCCompiler
++
++class ClangCCompiler(UnixCCompiler):
++
++    """
++    LLVM compiler.
++    """
++
++    compiler_type = 'clang'
++    cc_exe = 'clang -fPIC -DPIC'
++    cxx_exe = 'clang++ -fPIC -DPIC'
++
++    def __init__ (self, verbose=0, dry_run=0, force=0):
++        UnixCCompiler.__init__ (self, verbose, dry_run, force)
++        cc_compiler = self.cc_exe
++        cxx_compiler = self.cxx_exe
++        self.set_executables(compiler=cc_compiler,
++                             compiler_so=cc_compiler,
++                             compiler_cxx=cxx_compiler,
++                             linker_exe=cc_compiler,
++                             linker_so=cc_compiler + ' -shared -rtlib=compiler-rt')
+diff -ruN numpy-1.12.1.old/numpy/distutils/fcompiler/__init__.py numpy-1.12.1/numpy/distutils/fcompiler/__init__.py
+--- numpy-1.12.1.old/numpy/distutils/fcompiler/__init__.py	2017-03-05 20:13:51.000000000 +0000
++++ numpy-1.12.1/numpy/distutils/fcompiler/__init__.py	2017-06-05 21:20:46.622859452 +0100
+@@ -709,7 +709,7 @@
+                'intelvem', 'intelem')),
+     ('cygwin.*', ('gnu', 'intelv', 'absoft', 'compaqv', 'intelev', 'gnu95', 'g95')),
+     ('linux.*', ('gnu95', 'intel', 'lahey', 'pg', 'absoft', 'nag', 'vast', 'compaq',
+-                'intele', 'intelem', 'gnu', 'g95', 'pathf95')),
++                'intele', 'intelem', 'gnu', 'g95', 'pathf95', 'flang')),
+     ('darwin.*', ('gnu95', 'nag', 'absoft', 'ibm', 'intel', 'gnu', 'g95', 'pg')),
+     ('sunos.*', ('sun', 'gnu', 'gnu95', 'g95')),
+     ('irix.*', ('mips', 'gnu', 'gnu95',)),
+diff -ruN numpy-1.12.1.old/numpy/distutils/fcompiler/flang.py numpy-1.12.1/numpy/distutils/fcompiler/flang.py
+--- numpy-1.12.1.old/numpy/distutils/fcompiler/flang.py	1970-01-01 01:00:00.000000000 +0100
++++ numpy-1.12.1/numpy/distutils/fcompiler/flang.py	2017-06-05 21:32:54.170297315 +0100
+@@ -0,0 +1,39 @@
++from __future__ import division, absolute_import, print_function
++
++from numpy.distutils.fcompiler import FCompiler
++
++compilers = ['LLVMFCompiler']
++
++class LLVMFCompiler(FCompiler):
++
++    compiler_type = 'flang'
++    description = 'LLVM Fortran Compiler'
++    version_pattern =  r'clang version (?P<version>[\d.]+)'
++
++    executables = {
++        'version_cmd'  : ["flang", "--version"],
++        'compiler_f77' : ["flang", "-Mfixed"],
++        'compiler_fix' : ["flang", "-Mfixed"],
++        'compiler_f90' : ["flang"],
++        'linker_so'    : ["flang", "-shared"],
++        'archiver'     : ["ar", "-cr"],
++        'ranlib'       : ["ranlib"]
++    }
++    pic_flags = ['-fPIC -DPIC']
++    module_dir_switch = None
++    module_include_switch = '-I'
++
++    def get_flags_opt(self):
++        return ['-O2']
++    def get_flags_debug(self):
++        return ['-g']
++    def runtime_library_dir_option(self, dir):
++        return '-Wl,-rpath="%s"' % dir
++
++if __name__ == '__main__':
++    from distutils import log
++    log.set_verbosity(2)
++    from numpy.distutils.fcompiler import new_fcompiler
++    compiler = new_fcompiler(compiler='flang')
++    compiler.customize()
++    print(compiler.get_version())
