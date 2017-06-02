@@ -145,6 +145,11 @@ export PATH="./:$PATH"
 
 ./configure ${BASEFLAGS}
 
+%if "%{compiler_family}" == "llvm"
+%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
+%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
+%endif
+
 make %{?_smp_mflags}
 
 %install
