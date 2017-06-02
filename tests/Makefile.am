@@ -21,6 +21,15 @@ if BOS_ENABLED
    SUBDIRS += bos
 endif
 
+if OPA_FABRIC_ENABLED
+   SUBDIRS += fabric
+endif
+
+if IB_FABRIC_ENABLED
+   SUBDIRS += fabric
+endif
+
+
 if OOB_ENABLED
    SUBDIRS += oob
 endif
