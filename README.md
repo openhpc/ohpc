@@ -1,10 +1,13 @@
+![](https://img.shields.io/badge/components-59-green.svg)
+![](https://img.shields.io/badge/additions-3-orange.svg)
+
 ---
 
 ### OpenHPC: Community building blocks for HPC systems. (v1.3.1)
 
 ---
 
-![](https://img.shields.io/badge/components-59-green.svg)
+
 
 #### Introduction
 
