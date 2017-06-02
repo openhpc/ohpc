@@ -4,6 +4,8 @@
 
 ---
 
+[!https://img.shields.io/badge/components-59-green.svg]
+
 #### Introduction
 
 This stack provides a variety of common, pre-built ingredients required to
