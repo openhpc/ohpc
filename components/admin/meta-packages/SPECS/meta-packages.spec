@@ -83,7 +83,7 @@ OpenHPC compute node base packages
 %package ganglia
 Summary:   OpenHPC Ganglia monitoring
 Requires:  ganglia%{PROJ_DELIM}
-Requires:  ganglia-devel-%{PROJ_DELIM}
+Requires:  ganglia-devel%{PROJ_DELIM}
 Requires:  ganglia-gmetad%{PROJ_DELIM}
 Requires:  ganglia-gmond%{PROJ_DELIM}
 Requires:  ganglia-gmond-python%{PROJ_DELIM}
