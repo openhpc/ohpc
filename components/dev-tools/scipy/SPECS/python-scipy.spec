@@ -16,7 +16,7 @@
 
 %global gnu_family gnu8
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -35,7 +35,9 @@ Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#/%{pna
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
+%if "%{compiler_family}" != "arm"
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%endif
 BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
 BuildRequires:  %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
@@ -66,14 +68,14 @@ find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python3||" {} \;
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 module load fftw
 %endif
 
 module load %{python_module_prefix}numpy
 
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 cat > site.cfg << EOF
 [mkl]
 library_dirs = $MKLROOT/lib/intel64
@@ -81,7 +83,18 @@ include_dirs = $MKLROOT/include
 mkl_libs = mkl_rt
 lapack_libs =
 EOF
-%else
+%endif
+
+%if "%{compiler_family}" == "arm"
+cat > site.cfg << EOF
+[openblas]
+libraries = armpl
+library_dirs = $ARMPL_LIBRARIES
+include_dirs = $ARMPL_INCLUDES
+EOF
+%endif
+
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 cat > site.cfg << EOF
 [openblas]
 libraries = openblas
@@ -95,7 +108,19 @@ CFLAGS="%{optflags} -fno-strict-aliasing" \
 LDSHARED="icc -shared" \
 %__python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
 %else
+%if "%{compiler_family}" == "llvm"
+LDSHARED=clang \
+LDFLAGS="-shared -rtlib=compiler-rt -lm" \
+%__python setup.py config_fc --fcompiler=flang --noarch build
+%else
+%if "%{compiler_family}" == "arm"
+LDSHARED=armclang \
+LDFLAGS="-shared -rtlib=compiler-rt -lm" \
+%__python setup.py config_fc --fcompiler=armflang --noarch build
+%else
 %__python setup.py config_fc --fcompiler=gnu95 --noarch build
+%endif
+%endif
 %endif
 
 %install
@@ -146,7 +171,9 @@ prepend-path    PYTHONPATH          %{install_path}/lib64/%{python_lib_dir}/site
 
 setenv          %{PNAME}_DIR        %{install_path}
 
+%if "%{compiler_family}" != "arm"
 depends-on fftw
+%endif
 depends-on %{python_module_prefix}numpy
 
 EOF
