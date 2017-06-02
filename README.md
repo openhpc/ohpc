@@ -4,7 +4,7 @@
 
 ---
 
-[!https://img.shields.io/badge/components-59-green.svg]
+[![Components](https://img.shields.io/badge/components-59-green.svg)]
 
 #### Introduction
 
