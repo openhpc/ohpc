@@ -1,9 +1,15 @@
 #!./common/bats/bin/bats
 
 export BATS_JUNIT_CLASS=Singularity
-source ./common/TEST_ENV  || exit 1
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
 
 echo " "
 echo " "
@@ -35,6 +41,12 @@ fi
 
 @test "[singularity] exec image" {
     singularity exec /tmp/${DISTRO}.img cat /etc/os-release
+    assert_success
+}
+
+@test "[singularity] exec image via $rm" {
+    export -f run_serial_binary
+    su ohpc-test -c "run_serial_binary singularity exec /tmp/${DISTRO}.img cat /etc/os-release"
     assert_success
     rm -rf /tmp/${DISTRO}.img
 }
