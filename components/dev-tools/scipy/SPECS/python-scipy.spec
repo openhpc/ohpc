@@ -135,14 +135,20 @@ LAPACK=%{_libdir} \
 LDSHARED="icc -shared" \
 python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
 %else
+%if "%{compiler_family}" == "llvm"
+LDSHARED=clang \
+LDFLAGS="-shared -rtlib=compiler-rt -lm" \
+python setup.py config_fc --fcompiler=flang --noarch build
+%else
 python setup.py config_fc --fcompiler=gnu95 --noarch build
+%endif
 %endif
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" != "intel"
 module load openblas
 %endif
 
