@@ -1,5 +1,6 @@
 ![](https://img.shields.io/badge/components-59-green.svg)
-![](https://img.shields.io/badge/additions-3-orange.svg)
+![](https://img.shields.io/badge/new-additions-3-blue.svg)
+![](https://img.shields.io/badge/updates-37%-lightgrey.svg)
 
 ---
 
