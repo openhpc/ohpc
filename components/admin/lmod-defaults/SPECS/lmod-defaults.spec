@@ -24,12 +24,7 @@ URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
 Source0:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
 Requires: lmod%{PROJ_DELIM}
-%endif
 
 
 %description
