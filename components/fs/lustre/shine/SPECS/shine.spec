@@ -6,7 +6,7 @@
 
 Name:      %{pname}%{PROJ_DELIM}
 Summary:   Lustre administration utility
-Version:   1.4
+Version:   1.5
 Release:   1%{?dist}
 Source0:   https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
 Source1:   OHPC_macros
