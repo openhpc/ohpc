@@ -51,7 +51,7 @@ AM_CONDITIONAL(XCAT_ENABLED,test "x$enable_xcat" = "xyes" )
 # Option for testing against multiple compiler/MPI families
 AC_MSG_CHECKING([if enable PXSE toolchain related tests])
 AC_ARG_ENABLE([pxse],
-	 [AS_HELP_STRING([--enable-pxse],[Enable development tool tests with PXSE toolchain (default=no]))],
+	 [AS_HELP_STRING([--enable-pxse],[Enable development tool tests with PXSE toolchain (default=no)],,120)],
 	 [],[enable_pxse=no])
 
 # Default MPI families to test
@@ -69,7 +69,14 @@ fi
 AC_ARG_WITH(mpi-families,
 	[AS_HELP_STRING([--with-mpi-families=[MPI]],[Override desired MPI families])],
 	[MPI_FAMILIES=$withval])
-		      
+
+# Fabric options
+AC_ARG_WITH(fabric,
+	[AS_HELP_STRING([--with-fabric=[type]],[Specify fabric type (default=none, additional options=ip,opa)],,120)],
+	[FABRIC=$withval],[FABRIC=none])
+AM_CONDITIONAL(OPA_FABRIC_ENABLED,test "x$FABRIC" = "xopa" )
+AM_CONDITIONAL(IB_FABRIC_ENABLED,test "x$FABRIC" = "xib" )
+
 # Use customizable test driver
 #AC_SUBST([LOG_DRIVER],['$(SHELL) $(top_srcdir)/test-driver-cmt'])
 
@@ -80,7 +87,7 @@ AC_ARG_WITH(mpi-families,
 #------------------------------------------------------------------------------------------
 # Administrator Environment
 AC_ARG_ENABLE([admin],
-   [AS_HELP_STRING([--enable-admin],[Enable administrator environment tests (default=yes, root only)])],[],
+   [AS_HELP_STRING([--enable-admin],[Enable administrator environment tests (default=yes, root only)],,120)],[],
    [AX_OPTION_DEFAULT(type=short,enable_admin,yes)])
 AM_CONDITIONAL(ADMIN_ENABLED,test "x$enable_admin" = "xyes" ) 
 #------------------------------------------------------------------------------------------
@@ -254,7 +261,7 @@ AM_CONDITIONAL(MUMPS_ENABLED,test "x$enable_mumps" = "xyes" )
 #------------------------------------------------------------------------------------------
 # OOM
 AC_ARG_ENABLE([oom],
-   [AS_HELP_STRING([--enable-oom],[Enable out-of-memory tests under resource manager (default=yes)])],[],
+   [AS_HELP_STRING([--enable-oom],[Enable out-of-memory tests under resource manager (default=yes)],,120)],[],
    [AX_OPTION_DEFAULT(type=short,enable_oom,yes)])
 AM_CONDITIONAL(OOM_ENABLED,test "x$enable_oom" = "xyes" )
 #------------------------------------------------------------------------------------------
@@ -384,6 +391,7 @@ AC_OUTPUT( Makefile
        admin/Makefile 
        user-env/Makefile 
        bos/Makefile
+       fabric/Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
        oob/Makefile
@@ -412,6 +420,7 @@ echo Build host.................... : ${ac_hostname}
 echo Configure date................ : `date +'%F %H:%M'`
 echo Build architecture............ : ${host_cpu}
 echo Host operating system......... : ${DISTRO_FAMILY}
+
 echo Compiler Families............. : ${COMPILER_FAMILIES}
 echo MPI Families.................. : ${MPI_FAMILIES}
 if test "x$enable_slurm" = "xyes" ; then
@@ -446,6 +455,12 @@ if test "x$ROOT_ENABLED" = "x1" ; then
     else 
        echo '    'Base operating system..... : disabled
     fi
+
+    if test "x$FABRIC" = "xnone"; then
+       echo '    'Fabric.................... : disabled
+    else 
+        echo '    'Fabric.................... : ${FABRIC}
+    fi	
 
     if test "x$enable_hardware" = "xyes"; then
        echo '    'Hardware benchmarks....... : enabled	

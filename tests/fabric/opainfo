@@ -1,0 +1,36 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+which koomie_cf >& /dev/null
+if [ $? -ne 0 ]; then
+    ERROR "koomie_cf executable not found - please verify losf is installed."
+fi
+
+@test "[BOS] master opainfo exists" {
+    run which opainfo
+    assert_success
+}
+
+@test "[BOS] master OPA port active" {
+    status=`opainfo | grep PortState | awk '{print $2}'`
+    assert_equal "$status" "Active"
+}
+
+@test "[BOS] compute OPA ports active" {
+    koomie_cf -x "c[0-9]+\b" opainfo | grep PortState >& .cmd_output || exit 1
+    for status in `cat .cmd_output | awk '{print $3}'`; do
+        if [ "$status" != "Active" ];then
+            flunk
+        fi
+    done
+
+    rm -f .cmd_output
+
+}
