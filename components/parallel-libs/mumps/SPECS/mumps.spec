@@ -46,7 +46,9 @@ Source1:        Makefile.gnu.openmpi.inc
 Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
-Source5:        OHPC_macros
+Source5:        Makefile.llvm.impi.inc
+Source6:        Makefile.llvm.openmpi.inc
+Source7:        OHPC_macros
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Patch2:         mumps-5.0.2-psxe2017.patch
@@ -57,7 +59,7 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
-%if %{compiler_family} == "gnu"
+%if %{compiler_family} != "intel"
 BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
@@ -96,31 +98,47 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
+%if "%{compiler_family}" == "llvm"
+cp -f %{S:5} Makefile.inc
+%endif
 %endif
 
 %if "%{mpi_family}" == "mpich"
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if "%{compiler_family}" == "intel"
-cp -f %{S:3} Makefile.inc
-%else
+%if "%{compiler_family}" == "gnu"
 cp -f %{S:2} Makefile.inc
 %endif
+%if "%{compiler_family}" == "intel"
+cp -f %{S:3} Makefile.inc
 %endif
+%if "%{compiler_family}" == "llvm"
+cp -f %{S:5} Makefile.inc
+%endif
+%endif
+
 %if "%{mpi_family}" == "mvapich2"
 export LIBS="-L$MPI_DIR/lib -lmpi"
+%if "%{compiler_family}" == "gnu"
+cp -f %{S:2} Makefile.inc
+%endif
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
-%else
-cp -f %{S:2} Makefile.inc
+%endif
+%if "%{compiler_family}" == "llvm"
+cp -f %{S:5} Makefile.inc
 %endif
 %endif
 
 %if "%{mpi_family}" == "openmpi"
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
+%if "%{compiler_family}" == "gnu"
+cp -f %{S:1} Makefile.inc
+%endif
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
-%else
-cp -f %{S:1} Makefile.inc
+%endif
+%if "%{compiler_family}" == "llvm"
+cp -f %{S:6} Makefile.inc
 %endif
 %endif
 
