@@ -30,6 +30,8 @@ Source1:        Makefile.gnu.openmpi.inc
 Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
+Source5:        Makefile.arm.impi.inc
+Source6:        Makefile.arm.openmpi.inc
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Patch2:         mumps-5.0.2-psxe2017.patch
@@ -41,7 +43,8 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
-%if %{compiler_family} == "%{gnu_family}"
+# Every other family needs scalapack
+%if %{compiler_family} != "intel"
 BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
@@ -66,8 +69,12 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %build
 %ohpc_setup_compiler
 
-# Enable scalapack linkage for blas/lapack with gnu builds
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" == "arm"
+module load scalapack
+%endif
+
+# Enable scalapack and openblas linkage for blas/lapack with gnu and other (e.g. llvm) builds
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load scalapack openblas
 %endif
 
@@ -81,34 +88,50 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
+%if "%{compiler_family}" == "arm"
+cp -f %{S:5} Makefile.inc
+%endif
 %endif
 
 %if "%{mpi_family}" == "mpich"
 %global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if "%{compiler_family}" == "intel"
-cp -f %{S:3} Makefile.inc
-%else
+%if "%{compiler_family}" == "gnu"
 cp -f %{S:2} Makefile.inc
 %endif
+%if "%{compiler_family}" == "intel"
+cp -f %{S:3} Makefile.inc
 %endif
+%if "%{compiler_family}" == "arm"
+cp -f %{S:5} Makefile.inc
+%endif
+%endif
+
 %if "%{mpi_family}" == "mvapich2"
 %global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
+%if "%{compiler_family}" == "gnu"
+cp -f %{S:2} Makefile.inc
+%endif
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
-%else
-cp -f %{S:2} Makefile.inc
+%endif
+%if "%{compiler_family}" == "arm"
+cp -f %{S:5} Makefile.inc
 %endif
 %endif
 
 %if "%{mpi_family}" == "openmpi"
 %global MUMPS_MPI openmpi
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
+%if "%{compiler_family}" == "gnu"
+cp -f %{S:1} Makefile.inc
+%endif
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
-%else
-cp -f %{S:1} Makefile.inc
+%endif
+%if "%{compiler_family}" == "arm"
+cp -f %{S:6} Makefile.inc
 %endif
 %endif
 
@@ -118,7 +141,11 @@ export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
 %else
+%if "%{compiler_family}" == "arm"
+cp -f %{S:6} Makefile.inc
+%else
 cp -f %{S:1} Makefile.inc
+%endif
 %endif
 %endif
 
@@ -168,9 +195,9 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if { ![is-loaded intel] } {
-    depends-on scalapack
-}
+%if "%{compiler_family}" != "intel"
+depends-on scalapack
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
