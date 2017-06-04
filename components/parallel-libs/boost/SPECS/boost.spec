@@ -34,6 +34,11 @@ Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if 0%{?sles_version} || 0%{?suse_version}
+Patch1:         boost_fenv_suse.patch
+%endif
+%endif
 
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  bzip2-devel
@@ -80,9 +85,25 @@ see the boost-doc package.
 %prep
 %setup -q -n %{pname}_%{version_exp}
 
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if 0%{?sles_version} || 0%{?suse_version}
+%patch1 -p1
+%endif
+%endif
+
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+export toolset=clang
+%endif
+
+%if "%{compiler_family}" == "arm"
+which_armclang=`which armclang`
+where_armclang=`dirname ${which_armclang}`
+export PATH=${where_armclang}/../llvm-bin:$PATH
+%endif
 
 %if %build_mpi
 export CC=mpicc
@@ -111,6 +132,12 @@ EOF
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+
+%if "%{compiler_family}" == "arm"
+which_armclang=`which armclang`
+where_armclang=`dirname ${which_armclang}`
+export PATH=${where_armclang}/../llvm-bin:$PATH
+%endif
 
 %if %build_mpi
 export CC=mpicc
