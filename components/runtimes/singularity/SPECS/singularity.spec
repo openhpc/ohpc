@@ -37,16 +37,13 @@ BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: python
 
+# Default library install path
+%define install_path %{OHPC_LIBS}/%{pname}/%version
+
 %description
 Singularity provides functionality to build the smallest most minimal
 possible containers, and running those containers as single application
 environments.
-
-%package -n singularity-devel%{PROJ_DELIM}
-Summary: Development libraries for Singularity
-
-%description -n singularity-devel%{PROJ_DELIM}
-Development files for Singularity
 
 %if %slurm
 %package -n singularity-slurm%{PROJ_DELIM}
@@ -71,7 +68,8 @@ if [ ! -f configure ]; then
   ./autogen.sh
 fi
 
-%configure --disable-static --with-pic \
+%configure --prefix=%{install_path}  \
+  --disable-static --with-pic \
 %if %slurm
   --with-slurm
 %else
@@ -82,82 +80,69 @@ fi
 
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
-rm $RPM_BUILD_ROOT/%{_libdir}/singularity/*.la
+rm $RPM_BUILD_ROOT/%install_path}/lib64/singularity/*.la
 # NO_BRP_CHECK_RPATH has no effect on CentOS 7
 export NO_BRP_CHECK_RPATH=true
 
 
-%post
-/sbin/ldconfig || exit 1
-%postun -p /sbin/ldconfig
+# OpenHPC module file
+%{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+#%Module1.0#####################################################################
 
+proc ModulesHelp { } {
+
+        puts stderr " "
+        puts stderr "This module loads the %{pname} utility"
+        puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{pname}"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime"
+module-whatis "Description: %{summary}"
+module-whatis "URL %{url}"
+
+set     version             %{version}
+
+prepend-path    PATH                %{install_path}/bin
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    MANPATH             %{install_path}/man
+
+setenv          %{pname}_DIR        %{install_path}
+setenv          %{pname}_BIN        %{install_path}/bin
+
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
+
+%{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
 %defattr(-, root, root)
 %doc examples AUTHORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
-%attr(0755, root, root) %dir %{_sysconfdir}/singularity
-%attr(0644, root, root) %config(noreplace) %{_sysconfdir}/singularity/*
-%dir %{_libdir}/singularity
-%dir %{_libexecdir}/singularity
-%dir %{_libexecdir}/singularity/bin
-%dir %{_libexecdir}/singularity/helpers
-%dir %{_localstatedir}/singularity
-%dir %{_localstatedir}/singularity/mnt
-%dir %{_localstatedir}/singularity/mnt/session
-%dir %{_localstatedir}/singularity/mnt/container
-%dir %{_localstatedir}/singularity/mnt/overlay
-
-%{_bindir}/singularity
-%{_bindir}/run-singularity
-%{_mandir}/man1/*
-%{_libdir}/singularity/lib*.so.*
-%{_sysconfdir}/bash_completion.d/singularity
-
+%attr(0644, root, root) %config(noreplace) %{install_path}/etc/singularity/*
+%{OHPC_HOME}
+%{OHPC_PUB}
 #SUID programs
-%attr(4755, root, root) %{_libexecdir}/singularity/bin/action-suid
-%attr(4755, root, root) %{_libexecdir}/singularity/bin/create-suid
-%attr(4755, root, root) %{_libexecdir}/singularity/bin/copy-suid
-%attr(4755, root, root) %{_libexecdir}/singularity/bin/expand-suid
-%attr(4755, root, root) %{_libexecdir}/singularity/bin/export-suid
-%attr(4755, root, root) %{_libexecdir}/singularity/bin/import-suid
-%attr(4755, root, root) %{_libexecdir}/singularity/bin/mount-suid
-
-# Binaries
-%{_libexecdir}/singularity/bin/action
-%{_libexecdir}/singularity/bin/bootstrap
-%{_libexecdir}/singularity/bin/copy
-%{_libexecdir}/singularity/bin/cleanupd
-%{_libexecdir}/singularity/bin/create
-%{_libexecdir}/singularity/bin/expand
-%{_libexecdir}/singularity/bin/export
-%{_libexecdir}/singularity/bin/get-section
-%{_libexecdir}/singularity/bin/import
-%{_libexecdir}/singularity/bin/mount
-
-# Scripts
-%{_libexecdir}/singularity/functions
-%{_libexecdir}/singularity/image-handler.sh
-%{_libexecdir}/singularity/helpers/inspect.sh
-
-# Directories
-%{_libexecdir}/singularity/bootstrap-scripts
-%{_libexecdir}/singularity/cli
-%{_libexecdir}/singularity/python
-
-
-
-%files -n singularity-devel%{PROJ_DELIM}
-%defattr(-, root, root)
-%dir %{_includedir}/singularity
-%dir %{_libdir}/singularity
-%{_libdir}/singularity/lib*.so
-%{_includedir}/singularity/*.h
-
+%attr(4755, root, root) %{install_path}/libexec/bin/action-suid
+%attr(4755, root, root) %{install_path}/libexec/bin/create-suid
+%attr(4755, root, root) %{install_path}/libexec/bin/copy-suid
+%attr(4755, root, root) %{install_path}/libexec/bin/expand-suid
+%attr(4755, root, root) %{install_path}/libexec/bin/export-suid
+%attr(4755, root, root) %{install_path}/libexec/bin/import-suid
+%attr(4755, root, root) %{install_path}/libexec/bin/mount-suid
 
 %if %slurm
 %files -n singularity-slurm%{PROJ_DELIM}
 %defattr(-, root, root)
-%{_libdir}/slurm/singularity.so
+%{install_path}/lib/slurm/singularity.so
 %endif
 
 %changelog
