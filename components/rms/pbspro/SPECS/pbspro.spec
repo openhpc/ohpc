@@ -157,6 +157,11 @@ Conflicts: pbs-cmds
 Requires: expat
 Requires: python >= 2.6
 Requires: python < 3.0
+%if %{defined suse_version}
+Requires: libhwloc5
+%else
+Requires: hwloc-libs
+%endif
 Autoreq: 1
 
 %description -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
