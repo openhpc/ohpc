@@ -11,6 +11,8 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 
+module load singularity
+
 echo " "
 echo " "
 echo "-------------------------------------------------------"
@@ -46,7 +48,10 @@ fi
 
 @test "[singularity] exec image via $rm" {
     export -f run_serial_binary
-    su ohpc-test -c "run_serial_binary singularity exec /tmp/${DISTRO}.img cat /etc/os-release"
+    mv /tmp/$DISTRO.img ~ohpc-test/.
+    su ohpc-test -c "run_serial_binary singularity exec ${DISTRO}.img cat /etc/os-release"
     assert_success
-    rm -rf /tmp/${DISTRO}.img
+
+    run rm -rf ~ohpc-test/${DISTRO}.img
+    assert_success
 }
