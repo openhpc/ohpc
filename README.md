@@ -1,5 +1,5 @@
-![](https://img.shields.io/badge/components-59-green.svg)
-![](https://img.shields.io/badge/additions-3-blue.svg)
+![](https://img.shields.io/badge/components%20available-59-green.svg)
+![](https://img.shields.io/badge/new%20additions-3-blue.svg)
 ![](https://img.shields.io/badge/updates-37%25-lightgrey.svg)
 
 ---
@@ -20,11 +20,11 @@ scientific libraries.
 The compatible OS version(s) for this release and the total number of
 pre-packaged RPMs available per architecture type are summarized as follows:
 
-![](https://img.shields.io/badge/CentOS%207.3%20RPMs%20(x86_64)-344-red.svg)
-![](https://img.shields.io/badge/CentOS$207.3%20RPMs%20(aarch64)-238-red.svg)
+![](https://img.shields.io/badge/CentOS_7.3_RPMs_(x86_64)-344-464646.svg?colorA=c5222d)
+![](https://img.shields.io/badge/CentOS_7.3_RPMs_(aarch64)-238-464646.svg?colorA=c5222d)
 
-![](https://img.shields.io/badge/SLES12%20SP2%20RPMs%20(x86_64)-349-green.svg)
-![](https://img.shields.io/badge/SLES12$20SP2%20RPMs%20(aarch64)-241-green.svg)
+![](https://img.shields.io/badge/SLES12_SP2_RPMs_(x86_64)-349-464646.svg?colorA=3bd068)
+![](https://img.shields.io/badge/SLES12_SP2_RPMs_(aarch64)-241-464646.svg?colorA=3bd068)
 
 
 Base OS     | x86_64                      | aarch64                     | noarch
