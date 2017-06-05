@@ -199,6 +199,11 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
         if { ![is-loaded openblas]  } {
           module load openblas
         }
+
+        if { ![is-loaded %{mpi_family}]  } {
+	   module load %{mpi_family}
+	}
+
         if { ![is-loaded scalapack]  } {
           module load scalapack
         }
