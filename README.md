@@ -20,6 +20,13 @@ scientific libraries.
 The compatible OS version(s) for this release and the total number of
 pre-packaged RPMs available per architecture type are summarized as follows:
 
+![](https://img.shields.io/badge/CentOS%207.3%20RPMs%20(x86_64)-344-red.svg)
+![](https://img.shields.io/badge/CentOS$207.3%20RPMs%20(aarch64)-238-red.svg)
+
+![](https://img.shields.io/badge/SLES12%20SP2%20RPMs%20(x86_64)-349-green.svg)
+![](https://img.shields.io/badge/SLES12$20SP2%20RPMs%20(aarch64)-241-green.svg)
+
+
 Base OS     | x86_64                      | aarch64                     | noarch
 ---         | :---:                       | :---:                       | :---:
 CentOS 7.3  | 301 (249 Updates/Additions) | 193 (155 Updates/Additions) | 43 (6 Updates/Additions)
