@@ -1,6 +1,3 @@
-![](https://img.shields.io/badge/components%20available-59-green.svg)
-![](https://img.shields.io/badge/new%20additions-3-blue.svg)
-![](https://img.shields.io/badge/updates-37%25-lightgrey.svg)
 
 ---
 
@@ -8,6 +5,9 @@
 
 ---
 
+![](https://img.shields.io/badge/components%20available-59-green.svg)
+![](https://img.shields.io/badge/new%20additions-3-blue.svg)
+![](https://img.shields.io/badge/updates-37%25-lightgrey.svg)
 
 
 #### Introduction
