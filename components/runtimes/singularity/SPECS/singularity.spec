@@ -80,7 +80,7 @@ fi
 
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
-rm $RPM_BUILD_ROOT/%install_path}/lib64/singularity/*.la
+rm $RPM_BUILD_ROOT/%{install_path}/lib64/singularity/*.la
 # NO_BRP_CHECK_RPATH has no effect on CentOS 7
 export NO_BRP_CHECK_RPATH=true
 
