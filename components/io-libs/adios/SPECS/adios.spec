@@ -28,6 +28,7 @@ Group:   %{PROJ_NAME}/io-libs
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
 Source1: OHPC_macros
+Patch1:  adios-return-value.patch
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
@@ -72,6 +73,7 @@ how they process the data.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 %build
 sed -i 's|@BUILDROOT@|%buildroot|' wrappers/numpy/setup*

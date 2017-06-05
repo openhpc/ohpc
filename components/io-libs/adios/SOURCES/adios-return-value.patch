@@ -1,0 +1,11 @@
+diff -ruN adios-1.11.0.old/src/core/adiosf.c adios-1.11.0/src/core/adiosf.c
+--- adios-1.11.0.old/src/core/adiosf.c	2016-11-14 17:58:50.000000000 +0000
++++ adios-1.11.0/src/core/adiosf.c	2017-06-05 11:44:07.422693067 +0100
+@@ -548,6 +548,7 @@
+         adios_common_set_time_aggregation(g, bufsize, sg);
+     }
+     *err = adios_errno;
++    return adios_errno;
+ }
+ 
+ ///////////////////////////////////////////////////////////////////////////////
