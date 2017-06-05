@@ -130,13 +130,13 @@ EOF
 %{OHPC_HOME}
 %{OHPC_PUB}
 #SUID programs
-%attr(4755, root, root) %{install_path}/libexec/bin/action-suid
-%attr(4755, root, root) %{install_path}/libexec/bin/create-suid
-%attr(4755, root, root) %{install_path}/libexec/bin/copy-suid
-%attr(4755, root, root) %{install_path}/libexec/bin/expand-suid
-%attr(4755, root, root) %{install_path}/libexec/bin/export-suid
-%attr(4755, root, root) %{install_path}/libexec/bin/import-suid
-%attr(4755, root, root) %{install_path}/libexec/bin/mount-suid
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/action-suid
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/create-suid
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/copy-suid
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/expand-suid
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/export-suid
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/import-suid
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/mount-suid
 
 %if %slurm
 %files -n singularity-slurm%{PROJ_DELIM}
