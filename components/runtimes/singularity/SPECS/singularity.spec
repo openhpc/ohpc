@@ -68,7 +68,7 @@ if [ ! -f configure ]; then
   ./autogen.sh
 fi
 
-%configure --prefix=%{install_path}  \
+./configure --prefix=%{install_path}  \
   --disable-static --with-pic \
 %if %slurm
   --with-slurm
