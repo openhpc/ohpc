@@ -1,2 +1,3 @@
 setBadness("permissions-file-setuid-bit", 4)
 setBadness("non-position-independent-executable", 2)
+addFilter("library-without-ldconfig")
