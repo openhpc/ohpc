@@ -71,7 +71,11 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
+%if %{defined suse_version}
+BuildRequires: hwloc-devel < 2.0
+%else
 BuildRequires: hwloc-devel
+%endif
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
 BuildRequires: libedit-devel
