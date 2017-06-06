@@ -72,7 +72,7 @@ BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
 %if %{defined suse_version}
-BuildRequires: hwloc-devel < 2.0
+BuildRequires: hwloc-devel < 1.9.0
 %else
 BuildRequires: hwloc-devel
 %endif
