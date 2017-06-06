@@ -11,7 +11,13 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 
-module load singularity
+setup() {
+    if [ -z "$MODULEPATH" ];then
+        . /etc/profile.d/lmod.sh || exit 1
+    fi
+    module purge        || exit 1
+    module load singularity || exit 1
+}
 
 echo " "
 echo " "
