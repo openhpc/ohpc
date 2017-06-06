@@ -191,9 +191,6 @@ for prog in *; do
     mv $prog %{base_pname}_$prog
 done
 popd
-pushd %{buildroot}%{install_path}/bin
-      rm -f %{base_pname}_gpart && ln -s ./%{base_pname}_gmap %{base_pname}_gpart
-popd
 
 # Convert the license files to utf8
 pushd doc
