@@ -15,6 +15,9 @@ setup() {
     if [ -z "$MODULEPATH" ];then
         . /etc/profile.d/lmod.sh || exit 1
     fi
+    if [ x$rm = "xpbspro" ];then
+        . /etc/profile.d/pbs.sh || exit 1
+    fi
     module purge        || exit 1
     module load singularity || exit 1
 }
