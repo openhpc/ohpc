@@ -20,6 +20,9 @@ of the bootstrap image based on the running kernel.
 [sms](*\#*) export WW_CONF=/etc/warewulf/bootstrap.conf
 [sms](*\#*) echo "drivers += updates/kernel/" >> $WW_CONF
 
+# (Optional) Include overlayfs drivers; needed by Singularity
+[sms](*\#*) echo "drivers += overlay" >> $WW_CONF
+
 # Build bootstrap image
 [sms](*\#*) wwbootstrap `uname -r`
 \end{lstlisting}
