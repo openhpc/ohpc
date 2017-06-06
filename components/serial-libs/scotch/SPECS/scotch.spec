@@ -143,10 +143,6 @@ for prog in *; do
 done
 popd
 
-pushd %{buildroot}%{install_path}/bin
-	rm -f scotch_gpart && ln -s ./scotch_gmap scotch_gpart
-popd
-
 # Convert the license files to utf8
 pushd doc
 iconv -f iso8859-1 -t utf-8 < CeCILL-C_V1-en.txt > CeCILL-C_V1-en.txt.conv
