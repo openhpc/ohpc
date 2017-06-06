@@ -20,10 +20,10 @@ scientific libraries.
 The compatible OS version(s) for this release and the total number of
 pre-packaged RPMs available per architecture type are summarized as follows:
 
-![](https://img.shields.io/badge/CentOS_7.3_RPMs_(x86&#9564)_-344-464646.svg?colorA=c5222d)
+![](https://img.shields.io/badge/CentOS_7.3_RPMs_(x86_64)_-344-464646.svg?colorA=c5222d)
 ![](https://img.shields.io/badge/CentOS_7.3_RPMs_(aarch64)-238-464646.svg?colorA=c5222d)
 
-![](https://img.shields.io/badge/SLES12_SP2_RPMs_(x86&#9564)_-349-464646.svg?colorA=3bd068)
+![](https://img.shields.io/badge/SLES12_SP2_RPMs_(x86_64)_-349-464646.svg?colorA=3bd068)
 ![](https://img.shields.io/badge/SLES12_SP2_RPMs_(aarch64)-241-464646.svg?colorA=3bd068)
 
 
