@@ -322,6 +322,7 @@ fi
 %{_sbindir}/*
 %{_bindir}/*
 %{_libdir}/%{pname}/cgi-bin/*cgi
+%{_unitdir}/%{pname}.service
 %{_initrddir}/nagios
 %if 0%{?sles_version} || 0%{?suse_version}
 %config(noreplace) %{_sysconfdir}/apache2/conf.d/nagios.conf
