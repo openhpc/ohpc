@@ -258,7 +258,7 @@ install -d -m 0755 %{buildroot}%{_libdir}/%{pname}/plugins/eventhandlers
 install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
 
 # Install systemd entry
-install -D -m 0644 -p %{SOURCE7} %{buildroot}%{_unitdir}/%{name}.service
+install -D -m 0644 -p %{SOURCE7} %{buildroot}%{_unitdir}/%{pname}.service
 
 # remove static library that is build in 4.1.1
 rm -v    %{buildroot}%{_libdir}/%{pname}/libnagios.a
