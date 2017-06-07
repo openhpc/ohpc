@@ -36,7 +36,7 @@ Requires:  autoconf%{PROJ_DELIM}
 Requires:  automake%{PROJ_DELIM}
 Requires:  libtool%{PROJ_DELIM}
 %description autotools
-OpenHPC collection of GNU autotools packages
+Collection of GNU autotools packages
 
 %package base
 Summary:   OpenHPC base
@@ -70,7 +70,7 @@ Requires:  libmlx4-rdmav2
 Requires:  nfs-kernel-server
 %endif
 %description base
-OpenHPC base packages
+Collection of base packages
 
 %package base-compute
 Summary:   OpenHPC compute node base
@@ -78,7 +78,7 @@ Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
 %description base-compute
-OpenHPC compute node base packages
+Collection of compute node base packages
 
 %package ganglia
 Summary:   OpenHPC Ganglia monitoring
@@ -89,7 +89,7 @@ Requires:  ganglia-gmond%{PROJ_DELIM}
 Requires:  ganglia-gmond-python%{PROJ_DELIM}
 Requires:  ganglia-web%{PROJ_DELIM}
 %description ganglia
-OpenHPC collection of Ganglia monitoring and metrics packages
+Collection of Ganglia monitoring and metrics packages
 
 %package io-libs-gnu
 Summary:   OpenHPC IO libraries for GNU
@@ -112,7 +112,7 @@ Requires:  netcdf-gnu-mvapich2%{PROJ_DELIM}
 Requires:  phdf5-gnu-mvapich2%{PROJ_DELIM}
 %endif
 %description io-libs-gnu
-OpenHPC IO library builds for use with GNU compiler toolchain
+Collection of IO library builds for use with GNU compiler toolchain
 
 %package io-libs-intel
 Summary:   OpenHPC IO libraries for Intel(R) Parallel Studio XE
@@ -143,7 +143,7 @@ Requires:  phdf5-intel-mpich%{PROJ_DELIM}
 Requires:  phdf5-intel-mvapich2%{PROJ_DELIM}
 Requires:  phdf5-intel-openmpi%{PROJ_DELIM}
 %description io-libs-intel
-OpenHPC IO library builds for use with Intel(R) Parallel Studio XE software suite
+Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite
 
 %package nagios
 Summary:   OpenHPC Nagios monitoring
@@ -151,7 +151,7 @@ Requires:  nagios%{PROJ_DELIM}
 Requires:  nagios-plugins-all%{PROJ_DELIM}
 Requires:  nrpe%{PROJ_DELIM}
 %description nagios
-OpenHPC collection of Nagios monitoring and metrics packages
+Collection of Nagios monitoring and metrics packages
 
 %package parallel-libs-gnu
 Summary:   OpenHPC parallel libraries for GNU
@@ -182,7 +182,7 @@ Requires:  superlu_dist-gnu-mvapich2%{PROJ_DELIM}
 Requires:  trilinos-gnu-mvapich2%{PROJ_DELIM}
 %endif
 %description parallel-libs-gnu
-OpenHPC parallel library builds for use with GNU compiler toolchain
+Collection of parallel library builds for use with GNU compiler toolchain
 
 %package parallel-libs-gnu-mpich
 Summary:   OpenHPC parallel libraries for GNU and MPICH
@@ -195,7 +195,7 @@ Requires:  scalapack-gnu-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-gnu-mpich%{PROJ_DELIM}
 Requires:  trilinos-gnu-mpich%{PROJ_DELIM}
 %description parallel-libs-gnu-mpich
-OpenHPC parallel library builds for use with GNU compiler toolchain and the MPICH runtime
+Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
 
 %package parallel-libs-gnu-mvapich2
 Summary:   OpenHPC parallel libraries for GNU and MVAPICH2
@@ -208,7 +208,7 @@ Requires:  scalapack-gnu-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-gnu-mvapich2%{PROJ_DELIM}
 Requires:  trilinos-gnu-mvapich2%{PROJ_DELIM}
 %description parallel-libs-gnu-mvapich2
-OpenHPC parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
+Collection of parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
 
 %package parallel-libs-gnu-openmpi
 Summary:   OpenHPC parallel libraries for GNU and OpenMPI
@@ -221,7 +221,7 @@ Requires:  scalapack-gnu-openmpi%{PROJ_DELIM}
 Requires:  superlu_dist-gnu-openmpi%{PROJ_DELIM}
 Requires:  trilinos-gnu-openmpi%{PROJ_DELIM}
 %description parallel-libs-gnu-openmpi
-OpenHPC parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
+Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 
 %package parallel-libs-intel-impi
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and Intel(R) MPI Library
@@ -240,7 +240,7 @@ Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
 Requires:  trilinos-gnu-impi%{PROJ_DELIM}
 Requires:  trilinos-intel-impi%{PROJ_DELIM}
 %description parallel-libs-intel-impi
-OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
+Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
 
 %package parallel-libs-intel-mpich
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
@@ -252,7 +252,7 @@ Requires:  scalapack-intel-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
 Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description parallel-libs-intel-mpich
-OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
+Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 
 %package parallel-libs-intel-mvapich2
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
@@ -264,7 +264,7 @@ Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
 Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description parallel-libs-intel-mvapich2
-OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
+Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
 
 %package parallel-libs-intel-openmpi
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
@@ -276,7 +276,7 @@ Requires:  scalapack-intel-openmpi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-openmpi%{PROJ_DELIM}
 Requires:  trilinos-intel-openmpi%{PROJ_DELIM}
 %description parallel-libs-intel-openmpi
-OpenHPC parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
+Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 
 %package perf-tools-gnu
 Summary:   OpenHPC performance tools for GNU
@@ -296,7 +296,7 @@ Requires:  tau-gnu-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu-mvapich2%{PROJ_DELIM}
 %endif
 %description perf-tools-gnu
-OpenHPC performance tool builds for use with GNU compiler toolchain
+Collection of performance tool builds for use with GNU compiler toolchain
 
 %package perf-tools-intel
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
@@ -322,7 +322,7 @@ Requires:  scalasca-intel-mpich%{PROJ_DELIM}
 Requires:  scalasca-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-intel-openmpi%{PROJ_DELIM}
 %description perf-tools-intel
-OpenHPC performance tool builds for use with Intel(R) Parallel Studio XE toolchain
+Collection of performance tool builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package python-libs-gnu
 Summary:   OpenHPC python libraries for GNU
@@ -333,27 +333,27 @@ Requires:  python-scipy-gnu-openmpi%{PROJ_DELIM}
 Requires:  python-scipy-gnu-mvapich2%{PROJ_DELIM}
 %endif
 %description python-libs-gnu
-OpenHPC python related library builds for use with GNU compiler toolchain
+Collection of python related library builds for use with GNU compiler toolchain
 
 %package python-libs-intel
 Summary:   OpenHPC python libraries for Intel(R) Parallel Studio XE
 Requires:  python-numpy-intel%{PROJ_DELIM}
 %description python-libs-intel
-OpenHPC python related library builds for use with Intel(R) Parallel Studio XE toolchain
+Collection of python related library builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package runtimes-gnu
 Summary:   OpenHPC runtimes for GNU
 Requires:  ocr-gnu%{PROJ_DELIM}
 Requires:  singularity%{PROJ_DELIM}
 %description runtimes-gnu
-OpenHPC runtimes for use with GNU compiler toolchain
+Collection of runtimes for use with GNU compiler toolchain
 
 %package runtimes-intel
 Summary:   OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
 Requires:  ocr-intel%{PROJ_DELIM}
 Requires:  singularity%{PROJ_DELIM}
 %description runtimes-intel
-OpenHPC runtimes for use with Intel(R) Parallel Studio XE toolchain
+Collection of runtimes for use with Intel(R) Parallel Studio XE toolchain
 
 %package serial-libs-gnu
 Summary:   OpenHPC serial libraries for GNU
@@ -362,14 +362,14 @@ Requires:  metis-gnu%{PROJ_DELIM}
 Requires:  openblas-gnu%{PROJ_DELIM}
 Requires:  superlu-gnu%{PROJ_DELIM}
 %description serial-libs-gnu
-OpenHPC serial library builds for use with GNU compiler toolchain
+Collection of serial library builds for use with GNU compiler toolchain
 
 %package serial-libs-intel
 Summary:   OpenHPC serial libraries for Intel(R) Parallel Studio XE
 Requires:  metis-intel%{PROJ_DELIM}
 Requires:  superlu-intel%{PROJ_DELIM}
 %description serial-libs-intel
-OpenHPC serial library builds for use with Intel(R) Parallel Studio XE toolchain
+Collection of serial library builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package slurm-client
 Summary:   OpenHPC client packages for SLURM
@@ -380,7 +380,7 @@ Requires:  slurm-sjobexit%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
 Requires:  munge%{PROJ_DELIM}
 %description slurm-client
-OpenHPC client packages for SLURM
+Collection of client packages for SLURM
 
 %package slurm-server
 Summary:   OpenHPC server packages for SLURM
@@ -397,7 +397,7 @@ Requires:  munge-libs%{PROJ_DELIM}
 Requires:  munge-devel%{PROJ_DELIM}
 Requires:  pdsh-mod-slurm%{PROJ_DELIM}
 %description slurm-server
-OpenHPC server packages for SLURM
+Collection of server packages for SLURM
 
 %package warewulf
 Summary:   OpenHPC base packages for Warewulf
@@ -407,7 +407,7 @@ Requires:  warewulf-provision%{PROJ_DELIM}
 Requires:  warewulf-provision-server%{PROJ_DELIM}
 Requires:  warewulf-vnfs%{PROJ_DELIM}
 %description warewulf
-OpenHPC collection of base packages for Warewulf provisioning
+Collection of base packages for Warewulf provisioning
 
 
 %prep
