@@ -5,12 +5,19 @@ rm -f ${logfile}.*
 
 echo ++++ search and log OpenHPC patterns
 
-for meta_package in `rpm -qa | grep -e "ohpc-" | grep -v "ohpc-release" | grep -v "ohpc-filesystem | sort`; do
-        echo "parsing $meta_package"
-        info=`rpm -qi $meta_package | grep -A1 "Description :" | tail -1`
+if [ -e /etc/redhat-release ];then
+    repoquery ohpc* --queryformat='%{Name} %{Group} %{Summary}' | grep ohpc/meta-package | cut -d' ' -f1,3- | sort >> ${logfile}.all
 
-        echo $meta_package $info >> ${logfile}.all
-done
+#	repoquery ohpc* --queryformat='%{Name} %{Summary}' | grep -e "^ohpc-" | grep -v "ohpc-release" | grep -v "ohpc-filesystem" | sort >> ${logfile}.all
+
+fi
+
+##for meta_package in `rpm -qa | grep -e "ohpc-" | grep -v "ohpc-release" | grep -v "ohpc-filesystem" | sort`; do
+##        echo "parsing $meta_package"
+##        info=`rpm -qi $meta_package | grep -A1 "Description :" | tail -1`
+##
+##        echo $meta_package $info >> ${logfile}.all
+##done
 
 #   | ohpc-autotools    | ohpc-autotools    | pattern
 #   | ohpc-base         | ohpc-base         | pattern
