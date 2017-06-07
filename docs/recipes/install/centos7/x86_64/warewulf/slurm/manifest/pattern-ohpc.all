@@ -4,7 +4,6 @@ ohpc-base OpenHPC base
 ohpc-ganglia OpenHPC Ganglia monitoring
 ohpc-io-libs-gnu OpenHPC IO libraries for GNU
 ohpc-io-libs-intel OpenHPC IO libraries for Intel(R) Parallel Studio XE
-ohpc Meta-packages to ease installation.
 ohpc-nagios OpenHPC Nagios monitoring
 ohpc-parallel-libs-gnu-mpich OpenHPC parallel libraries for GNU and MPICH
 ohpc-parallel-libs-gnu-mvapich2 OpenHPC parallel libraries for GNU and MVAPICH2
