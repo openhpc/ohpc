@@ -20,6 +20,11 @@ rm=$RESOURCE_MANAGER
     assert_success
 }
 
+@test "[nagios] test nagiostats" {
+    run nagiostats
+    assert_success
+}
+
 @test "[nagios] test check_http" {
     if [ $use_proxy -eq 0];then
 	run /usr/lib64/nagios/plugins/check_http -I ${proxy_host} -p ${proxy_port} -u http://openhpc.community
