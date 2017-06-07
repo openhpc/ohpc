@@ -21,6 +21,7 @@ Epoch: 3
 Summary: Remote shell program that uses munge authentication
 License: none
 Group: %{PROJ_NAME}/admin
+URL: https://github.com/chaos/mrsh
 Source:    https://github.com/chaos/mrsh/archive/mrsh-2-7-1.tar.gz
 Source1:   OHPC_macros
 Patch0: null-terminate.patch
