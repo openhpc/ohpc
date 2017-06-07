@@ -72,7 +72,7 @@ BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
 %if %{defined suse_version}
-BuildRequires: hwloc-devel < 2.0.0
+BuildRequires: hwloc-devel < 2
 %else
 BuildRequires: hwloc-devel
 %endif
@@ -161,7 +161,9 @@ Conflicts: pbs-cmds
 Requires: expat
 Requires: python >= 2.6
 Requires: python < 3.0
-Requires: hwloc-libs
+%if %{defined suse_version}
+Requires: libhwloc5
+%endif
 Autoreq: 1
 
 %description -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
