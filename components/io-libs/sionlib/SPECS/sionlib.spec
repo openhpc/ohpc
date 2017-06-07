@@ -17,12 +17,12 @@
 %define pname sionlib
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
+Summary:   Scalable I/O Library for Parallel Access to Task-Local Files
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.7.1
 Release:   1%{?dist}
 License:   BSD
-Group:     %{PROJ_NAME}/io-tools
+Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html
 Source0:   http://apps.fz-juelich.de/jsc/sionlib/download.php?version=%{version}#/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
