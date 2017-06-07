@@ -6,7 +6,7 @@ rm -f ${logfile}.*
 echo ++++ search and log OpenHPC patterns
 
 if [ -e /etc/redhat-release ];then
-    repoquery ohpc* --queryformat='%{Name} %{Group} %{Summary}' | grep ohpc/meta-package | cut -d' ' -f1,3- | sort >> ${logfile}.all
+    repoquery ohpc* --queryformat='%{Name} %{Group} %{Summary}' | grep ohpc/meta-package | cut -d' ' -f1,3- | grep -e "^ohpc-" | sort >> ${logfile}.all
 
 #	repoquery ohpc* --queryformat='%{Name} %{Summary}' | grep -e "^ohpc-" | grep -v "ohpc-release" | grep -v "ohpc-filesystem" | sort >> ${logfile}.all
 
