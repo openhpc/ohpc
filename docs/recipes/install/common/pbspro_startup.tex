@@ -34,6 +34,8 @@ options.
 [sms](*\#*) qmgr -c "set server default_qsub_arguments= -V"
 # enable uniform multi-node MPI task distribution
 [sms](*\#*) qmgr -c "set server resources_default.place=scatter"
+# enable support for job accounting
+[sms](*\#*) qmgr -c "set server job_history_enable=True"
 # register compute hosts with pbspro
 [sms](*\#*) for host in "${c_name[@]}"; do
            qmgr -c "create node $host"
