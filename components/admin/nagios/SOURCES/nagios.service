@@ -1,0 +1,18 @@
+[Unit]
+Description=Nagios Network Monitoring
+After=network.target
+Documentation=https://www.nagios.org/documentation/
+
+[Service]
+Type=forking
+User=nagios
+Group=nagios
+PIDFile=/var/run/nagios/nagios.pid
+# Verify Nagios config before start as upstream suggested
+ExecStartPre=/usr/sbin/nagios -v /etc/nagios/nagios.cfg
+ExecStart=/usr/sbin/nagios -d /etc/nagios/nagios.cfg
+ExecStopPost=/usr/bin/rm -f /var/spool/nagios/cmd/nagios.cmd
+
+
+[Install]
+WantedBy=multi-user.target

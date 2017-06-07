@@ -32,6 +32,7 @@ Source3: nagios.internet.cfg
 Source4: nagios.htpasswd
 Source5: nagios.upgrade_to_v3.ReadMe
 Source6: nagios.upgrade_to_v3.sh
+Source7: nagios.service
 # PNG files from the old nagios-0010-Added-several-images-to-the-sample-config.patch
 Source10: printer.png
 Source11: router.png
@@ -255,6 +256,9 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/%{pname}
 install -d -m 0755 %{buildroot}%{_libdir}/%{pname}/plugins/eventhandlers
 
 install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
+
+# Install systemd entry
+install -D -m 0644 -p %{SOURCE7} %{buildroot}%{_unitdir}/%{name}.service
 
 # remove static library that is build in 4.1.1
 rm -v    %{buildroot}%{_libdir}/%{pname}/libnagios.a
