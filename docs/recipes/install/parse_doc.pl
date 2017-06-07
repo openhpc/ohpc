@@ -37,6 +37,7 @@ chdir $inputDir;
 # Determine BaseOS, arch, and define package manager commands
 my $BaseOS             = "";
 my $BaseOSshort        = "";
+my $OSimage            = "";
 my $arch               = "";
 my $Install            = "";
 my $chrootInstall      = "";
@@ -70,6 +71,8 @@ while( my $line = <IN> ) {
         $BaseOS = $1;
     } elsif( $line =~ /\\newcommand\{\\baseosshort\}\{(.+)\}/ ) {
         $BaseOSshort = $1;
+    } elsif( $line =~ /\\newcommand\{\\osimage\}\{(.+)\}/ ) {
+        $OSimage = $1;
     } elsif( $line =~ /\\newcommand\{\\arch\}\{(.+)\}/ ) {
         $arch = $1;
 	# undo latex escape for x86
@@ -275,6 +278,7 @@ sub update_cmd {
     $cmd =~ s/\(\*\\chrootaddrepo\*\)/$chrootaddrepo/;
     $cmd =~ s/\(\*\\beegfsrepo\*\)/$beegfsrepo/;
     $cmd =~ s/BOSVER/$BaseOS/;
+    $cmd =~ s/OSIMAGE/$OSimage/;
     $cmd =~ s/BOSSHORT/$BaseOSshort/;
     $cmd =~ s/ARCH/$arch/;
 

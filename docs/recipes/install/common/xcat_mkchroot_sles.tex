@@ -1,0 +1,48 @@
+% -*- mode: latex; fill-column: 120; -*-
+
+With the provisioning services enabled, the next step is to define and customize a system image that can subsequently be
+used to provision one or more {\em compute} nodes. The following subsections highlight this process.
+
+\subsubsection{Build initial BOS image} \label{sec:assemble_bos}
+The following steps illustrate the process to build a minimal, default image for use with \xCAT{}. To begin, you will
+first need to have a local copy of the ISO image available for the underlying OS. In this recipe, the relevant ISO image
+is \texttt{SLE-12-SP2-SERVER-DVD-X86\_64-GM-DVD1.iso}. We initialize the image
+creation process using the \texttt{copycds} command assuming that the necessary ISO image is available locally in 
+\texttt{\$\{iso\_path\}} as follows:
+
+% begin_ohpc_run
+% ohpc_comment_header Initialize OS images for use with xCAT \ref{sec:assemble_bos}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
+[sms](*\#*) copycds ${iso_path}/SLE-12-SP2-Server-DVD-x86_64-GM-DVD1.iso
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Once completed, several OS images should be available for use within \xCAT{}. These can be queried via:
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
+# Query available images
+[sms](*\#*) lsdef -t osimage
+sles12.2-x86_64-install-compute  (osimage)
+sles12.2-x86_64-install-service  (osimage)
+sles12.2-x86_64-netboot-compute  (osimage)
+sles12.2-x86_64-statelite-compute  (osimage)
+\end{lstlisting}
+
+In this example, we leverage the stateless ({\em netboot}) image for compute nodes and proceed by using
+\texttt{genimage} to initialize a chroot-based install. Note that the previous query highlights the existence of other
+provisioning images as well. Please consult available xCAT
+\href{https://xcat-docs.readthedocs.io/en/stable/}{\color{blue} documentation} if interested in using an alternative
+stateful or statelite approach.
+%The \texttt{CHROOT} environment variable highlights the path and is used by
+%subsequent commands to augment the basic installation.
+\newpage
+
+% begin_ohpc_run
+% ohpc_comment_header Create chroot based compute image \ref{sec:assemble_bos}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={OSIMAGE}{\osimage{}}1]
+# Save chroot location for compute image
+[sms](*\#*) export CHROOT=/install/netboot/OSIMAGE/x86_64/compute/rootimg/
+# Build initial chroot image
+[sms](*\#*) genimage OSIMAGE-x86_64-netboot-compute
+\end{lstlisting}
+% end_ohpc_run
