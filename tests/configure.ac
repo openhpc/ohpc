@@ -40,6 +40,7 @@ fi
 # RMS test
 AC_CHECK_FILE(/etc/pbs.conf,[enable_pbs=yes],[enable_slurm=yes])
 AM_CONDITIONAL(SLURM_ENABLED,test "x$enable_slurm" = "xyes" )
+AM_CONDITIONAL(PBS_ENABLED,test "x$enable_pbs" = "xyes" )
 
 # Provisioner test(s)
 AC_CHECK_FILE(/etc/warewulf/functions,[enable_warewulf=yes],[enable_warewulf=no])

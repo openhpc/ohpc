@@ -1,0 +1,24 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+@test "[pbs] check for availability of job history with qstat " {
+    run which qstat
+    assert_success
+
+    qstat -x >& .qstat.output
+    run grep "PBS is not configured" .qstat.output
+    assert_failure
+
+    run grep "^Job id" .qstat.output
+    assert_success
+
+    rm -f .qstat.output
+}
+
