@@ -345,7 +345,7 @@ fi
 %attr(0640,root,apache) %config(noreplace) %{_datadir}/%{pname}/html/config.inc.php
 %endif
 %attr(2775,nagios,nagios) %dir %{_localstatedir}/spool/%{pname}/cmd
-%attr(0750,nagios,nagios) %dir %{_localstatedir}/run/%{name}
+%attr(0750,nagios,nagios) %dir %{_localstatedir}/run/%{pname}
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}/archives
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}/spool/
