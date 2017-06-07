@@ -196,7 +196,7 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
     --with-init-dir=%{_initrddir} \
     --with-cgiurl=/%{pname}/cgi-bin/ \
     --with-htmlurl=/%{pname} \
-    --with-lockfile=%{_localstatedir}/run/%{pname}.pid \
+    --with-lockfile=%{_localstatedir}/run/%{pname}/%{pname}.pid \
     --libdir=%{_libdir}/%{pname} \
     --with-nagios-user=nagios \
     --with-nagios-grp=nagios \
@@ -256,6 +256,7 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/%{pname}
 install -d -m 0755 %{buildroot}%{_libdir}/%{pname}/plugins/eventhandlers
 
 install -d -m 0775 %{buildroot}%{_localstatedir}/spool/%{pname}/cmd
+install -d -m 0775 %{buildroot}%{_localstatedir}/run/%{pname}
 
 # Install systemd entry
 install -D -m 0644 -p %{SOURCE7} %{buildroot}%{_unitdir}/%{pname}.service
@@ -344,6 +345,7 @@ fi
 %attr(0640,root,apache) %config(noreplace) %{_datadir}/%{pname}/html/config.inc.php
 %endif
 %attr(2775,nagios,nagios) %dir %{_localstatedir}/spool/%{pname}/cmd
+%attr(0750,nagios,nagios) %dir %{_localstatedir}/run/%{name}
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}/archives
 %attr(0750,nagios,nagios) %dir %{_localstatedir}/log/%{pname}/spool/
