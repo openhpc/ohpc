@@ -200,6 +200,8 @@ foreach my $distro (@distros) {
 	if ($micro) {
 	    for my $n_distro (@n_distros) {
 		$tar_args .= "--exclude $distro/updates/$n_distro \\\n";
+		$tar_args .= "--exclude $distro/updates/$distro/src \\\n";
+		$tar_args .= "--exclude $distro/updates/$distro/$n_arch \\\n";
 	    }
 	}
 
@@ -252,6 +254,9 @@ foreach my $distro (@distros) {
 	$tar_args .= "--exclude $distro/updates/noarch \\\n";
 	for my $n_distro (@n_distros) {
 	    $tar_args .= "--exclude $distro/updates/$n_distro \\\n";
+	    $tar_args .= "--exclude $distro/updates/$distro/noarch \\\n";
+	    $tar_args .= "--exclude $distro/updates/$distro/$arch \\\n";
+	    $tar_args .= "--exclude $distro/updates/$distro/$n_arch \\\n";
 	}
     }
 
