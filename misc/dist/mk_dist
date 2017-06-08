@@ -170,10 +170,6 @@ if( !$skipCopy) {
         print "\nCopying updates\n";
         unlink "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
         rmtree "$tmp_dir/empty" || warn "Unable to remove empty dir: $!";
-        dircopy("$base_repo_path/$base_release:/Update$micro/", "$tmp_dir/updates") ||
-            die "Unable to copy update repo: $!";
-        dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
-            die "Unable to copy update repo: $!";
         dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
             die "Unable to copy update repo: $!";
     }
@@ -204,8 +200,6 @@ foreach my $distro (@distros) {
 	if ($micro) {
 	    for my $n_distro (@n_distros) {
 		$tar_args .= "--exclude $distro/updates/$n_distro \\\n";
-		$tar_args .= "--exclude $distro/updates/$distro/src \\\n";
-		$tar_args .= "--exclude $distro/updates/$distro/$n_arch \\\n";
 	    }
 	}
 
