@@ -11,7 +11,7 @@ Release:   1%{?dist}
 Source0:   https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
 Source1:   OHPC_macros
 License:   GPLv2
-Group:     Applications/System
+Group:     %{PROJ_NAME}/lustre
 Vendor:    CEA
 Url:       http://lustre-shine.sourceforge.net/
 DocDir:    %{OHPC_PUB}/doc/contrib
