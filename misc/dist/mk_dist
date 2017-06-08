@@ -192,6 +192,9 @@ foreach my $distro (@distros) {
 	my @n_arches = grep { $_ ne $arch } @arches;
 	for my $n_arch (@n_arches) {
 	    $tar_args .= "--exclude $distro/$n_arch \\\n";
+	    if ($micro) {
+		    $tar_args .= "--exclude $distro/updates/$distro/$n_arch \\\n";
+	    }
 	}
 	$tar_args .= "--exclude $distro/iso \\\n";
 	$tar_args .= "--exclude $distro/src \\\n";
@@ -201,7 +204,6 @@ foreach my $distro (@distros) {
 	    for my $n_distro (@n_distros) {
 		$tar_args .= "--exclude $distro/updates/$n_distro \\\n";
 		$tar_args .= "--exclude $distro/updates/$distro/src \\\n";
-		$tar_args .= "--exclude $distro/updates/$distro/$n_arch \\\n";
 	    }
 	}
 
@@ -255,8 +257,6 @@ foreach my $distro (@distros) {
 	for my $n_distro (@n_distros) {
 	    $tar_args .= "--exclude $distro/updates/$n_distro \\\n";
 	    $tar_args .= "--exclude $distro/updates/$distro/noarch \\\n";
-	    $tar_args .= "--exclude $distro/updates/$distro/$arch \\\n";
-	    $tar_args .= "--exclude $distro/updates/$distro/$n_arch \\\n";
 	}
     }
 
