@@ -1,0 +1,39 @@
+\begin{center}
+\begin{tcolorbox}[]
+\small Major upgrades of the GNU compiler toolchain may introduce runtime 
+incompatibility with previously compiled FORTRAN codes. If re-compilation with the 
+newer toolchain is undesireable, a possible workaround is to install the older 
+compiler suite along side the upgraded one.
+
+\begin{lstlisting}[language=bash,keywords={}]
+# list overlapping packages
+[sms](*\#*)  yum list --showduplicate gnu-compilers-ohpc
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+Installed Packages
+gnu-compilers-ohpc.x86_64                            7.1.0-11.2
+@OpenHPC_1.3_Update1_Factory
+Available Packages
+gnu-compilers-ohpc.x86_64                            5.4.0-13.1
+OpenHPC                     
+gnu-compilers-ohpc.x86_64                            7.1.0-11.2
+OpenHPC_1.3_Update1_Factory
+
+# download previous version
+[sms](*\#*) yumdownloader gnu-compilers-ohpc-5.4.0
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+gnu-compilers-ohpc-5.4.0-13.1.x86_64.rpm                                       |  44 MB  00:00:02     
+
+# force install
+[sms](*\#*) rpm -ivh --force gnu-compilers-ohpc-5.4.0-13.1.x86_64.rpm
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:gnu-compilers-ohpc-5.4.0-13.1    ################################# [100%]
+
+# modify environment to use older libgfortran
+[test@sms ~]$ export LD_LIRBARY_PATH=/opt/ohpc/pub/compiler/gcc/5.4.0/lib64:${LD_LIBRARY_PATH}
+[test@sms ~]$ mpirun tests/mpi/F90_test
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}

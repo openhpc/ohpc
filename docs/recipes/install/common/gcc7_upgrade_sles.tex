@@ -1,0 +1,40 @@
+\begin{center}
+\begin{tcolorbox}[]
+\small Major upgrades of the GNU compiler toolchain may introduce runtime 
+incompatibility with previously compiled FORTRAN codes. If re-compilation with the 
+newer toolchain is undesireable, a possible workaround is to install the older 
+compiler suite along side the upgraded one.
+
+\begin{lstlisting}[language=bash,keywords={}]
+# list overlapping packages
+[sms](*\#*)  zypper search --details gnu-compilers-ohpc
+Loading repository data...
+Reading installed packages...
+
+S | Name               | Type       | Version    | Arch   | Repository                        
+--+--------------------+------------+------------+--------+-----------------------------------
+  | gnu-compilers-ohpc | srcpackage | 7.1.0-11.2 | noarch | OpenHPC-1.3 - Updates             
+  | gnu-compilers-ohpc | srcpackage | 5.4.0-13.1 | noarch | OpenHPC-1.3 - Base                
+i | gnu-compilers-ohpc | package    | 7.1.0-11.2 | x86_64 | OpenHPC-1.3 - Updates             
+v | gnu-compilers-ohpc | package    | 5.4.0-13.1 | x86_64 | OpenHPC-1.3 - Base                
+
+# download previous version
+[sms](*\#*) zypper --pkg-cache-dir=. download gnu-compilers-ohpc-5.4.0
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+Retrieving package gnu-compilers-ohpc-5.4.0-13.1.x86_64       (1/1),  43.9 MiB (233.1 MiB unpacked)
+(1/1) ./OpenHPC/x86_64/gnu-compilers-ohpc-5.4.0-13.1.x86_64.rpm .............................[done]
+
+
+# force install
+[sms](*\#*) rpm -ivh --force ./OpenHPC/x86_64/gnu-compilers-ohpc-5.4.0-13.1.x86_64.rpm
+Preparing...                          ################################# [100%]
+Updating / installing...
+   1:gnu-compilers-ohpc-5.4.0-13.1    ################################# [100%]
+
+# modify environment to use older libgfortran
+[test@sms ~]$ export LD_LIRBARY_PATH=/opt/ohpc/pub/compiler/gcc/5.4.0/lib64:${LD_LIBRARY_PATH}
+[test@sms ~]$ mpirun tests/mpi/F90_test
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}

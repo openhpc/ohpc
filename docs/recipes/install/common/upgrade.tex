@@ -61,3 +61,9 @@ rolling updates are pre-configured.
 \noindent In the case where packages were upgraded within the chroot compute image,
 you will need to reboot the compute nodes when convenient to enable the
 changes.
+
+\iftoggleverb{isCentOS}
+\input common/gcc7_upgrade_centos.tex
+\else
+\input common/gcc7_upgrade_sles.tex
+\fi
