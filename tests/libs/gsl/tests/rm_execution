@@ -136,6 +136,10 @@ tx2=test_static
 }
 
 @test "[$tname] run eigen under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    # karl.w.schulz@intel.com (6/8/17) - disable test on aarch64 as precision assumptions
+    # within GSL are tuned for x86 and 80-bit extended precision
+    [[ "$ARCH" == "aarch64" ]] && skip "Skipping eigen test for ARCH=$ARCH"
+
     pushd eigen
     if [ ! -s $tx1 ];then
         flunk "$tx1 binary does not exit"
