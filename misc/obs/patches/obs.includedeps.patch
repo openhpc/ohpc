@@ -1,0 +1,139 @@
+--- bs_srcserver.orig	2017-05-09 20:31:21.504369525 +0000
++++ bs_srcserver	2017-06-05 12:12:44.129785627 +0000
+@@ -3395,7 +3395,19 @@
+ 	      }
+ 	    }
+ 	    # get build dependency info
+-	    my $d = Build::parse_typed($conf, "$srcrep/$packid/$md5-$file", $buildtype);
++
++	    # karl.w.schulz@intel.com (5/10/17) - expand .spec file if
++	    # %include directives are included, otherwise, parse as is.
++
++	    my $d;
++	    my $numproj = @$projids;
++
++	    if ($buildtype eq "spec" && scanspec_for_includes("$srcrep/$packid/$md5-$file") && $numproj == 1) {
++		$d = analyze_deps_from_includes($conf,"$srcrep/$packid/$md5-$file",$srcrep,$projid,$packid);
++	    } else {
++		$d = Build::parse_typed($conf, "$srcrep/$packid/$md5-$file", $buildtype);
++	    }
++
+ 	    data2utf8xml($d);
+ 	    if (!$d || !defined($d->{'name'})) {
+ 	      $rinfo->{'error'} = "can not parse package name from $file";
+@@ -3406,6 +3418,13 @@
+ 	    $pinfo->{'versrel'} ||= "$version-$rev->{'vrev'}";
+ 	    $rinfo->{'name'} = $d->{'name'};
+ 	    $rinfo->{'dep'} = $d->{'deps'};
++
++	    # debug: display final dependencies
++##	    my @koomiedeps = @{$rinfo->{'dep'}};
++##	    foreach my $mydep (@koomiedeps) {
++##		print "final deps ($packid) = $mydep\n";
++##	    }
++
+ 	    if ($d->{'prereqs'}) {
+ 	      my %deps = map {$_ => 1} (@{$d->{'deps'} || []}, @{$d->{'subpacks'} || []});
+ 	      my @prereqs = grep {!$deps{$_} && !/^%/} @{$d->{'prereqs'}};
+@@ -8209,6 +8228,101 @@
+   return ($trackers, $BSXML::issue_trackers);
+ }
+ 
++# karl.w.schulz@intel.com (5/10/17) - scan .spec to see if %include
++# directive is requested
++sub scanspec_for_includes {
++    my ($specfile) = @_;
++    if (!open(SPEC, '<', $specfile)) {
++	warn("$specfile: $!\n");
++	return 0;
++    }
++
++    if( grep { /^%include\s+%{_sourcedir}/ } <SPEC> ) {
++	return 1;
++    } else {
++	return 0;
++    }
++}
++
++# karl.w.schulz@intel.com (5/10/17) - scan .spec and look for any
++# build dependencies mentioned in %include files
++sub analyze_deps_from_includes {
++    my ($conf,$specfile,$srcprep,$projid,$packid) = @_;
++
++    my @localdeps = ();
++
++    if (!open(SPEC, '<', $specfile)) {
++	warn("$specfile: $!\n");
++	return @localdeps;
++    }
++
++    my $rev = getrev($projid,$packid);
++    
++    my @includeFiles = ();
++    my @expanded_spec = ();
++
++    foreach my $line (<SPEC>) {
++	if ($line =~ /^%include\s+%{_sourcedir}\/(\S+)$/) {
++	    my $scanfile = $1;
++	    
++	    push (@includeFiles,$scanfile);
++
++	    # resolve path to includeFile
++	    my $srcFile="";
++	    my $files;
++	    $files = lsrev($rev);
++
++	    my %files_hash = map {$_ => [$files->{$_}, $_]} keys %$files;
++
++	    if ( exists($files_hash{$scanfile}) ) {
++		$srcFile  = $scanfile;
++	    } elsif ( exists ($files_hash{'_service'}) ) {
++		$files = lsrev_service($rev);
++		%files_hash = map {$_ => [$files->{$_}, $_]} keys %$files;
++		if ( exists ($files_hash{"_service:extract_file:$scanfile"}) ) {
++		    $srcFile = "_service:extract_file:$scanfile";
++		}
++	    } elsif ( exists ($files_hash{'_link'}) ) {
++		$files = lsrev_expanded($rev);
++		%files_hash = map {$_ => [$files->{$_}, $_]} keys %$files;
++		if ( exists ($files_hash{"_service:extract_file:$scanfile"}) ) {
++		    $srcFile = "_service:extract_file:$scanfile";
++		}
++#	    } elsif ( exists ($files_hash{'_aggregate'}) ) {
++#		print "--> project has an _aggregate file\n";
++	    }
++
++	    if ( $srcFile eq "" ) {
++		warn("analyze_deps: unable to determine raw src for $scanfile\n");
++		next;
++	    }
++
++	    my @s = repstat($rev, $srcFile, $files->{$srcFile});
++	    my $includeFile = "$srcrep/$packid/$files->{$srcFile}-$srcFile";
++
++	    if (!open(INCLUDE, '<', $includeFile)) {
++		warn("unable to open $includeFile: $!\n");
++		next;
++	    } else {
++		while (my $inc_line = <INCLUDE>) {
++		    push(@expanded_spec,$inc_line);
++		}
++		close(INCLUDE);
++	    }
++	} else {
++	    push(@expanded_spec,$line);
++	}
++    }
++
++    my $d;
++
++    if(@includeFiles) {
++	$d = Build::parse_typed($conf, \@expanded_spec,"spec");
++    }
++
++    return $d;
++}
++
+ ####################################################################
+ 
+ sub external_notification {
