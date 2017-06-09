@@ -112,7 +112,7 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun
-if [ $1 -eq 1 ] ; then
+if [ $1 -ge 1 ] ; then
     /bin/systemctl try-restart conman.service >/dev/null 2>&1 || :
 fi
 
