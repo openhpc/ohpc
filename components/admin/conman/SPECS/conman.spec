@@ -26,6 +26,9 @@ URL:		http://dun.github.io/conman/
 DocDir:         %{OHPC_PUB}/doc/contrib
 
 Requires:	expect
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 
@@ -84,9 +87,7 @@ rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 rm -rf "%{buildroot}"
 
 %post
-if [ $1 -eq 1 ] ; then
-    /bin/systemctl daemon-reload >/dev/null 2>&1 || :
-fi
+%systemd_post conman.service
 
 if ! grep "^SERVER" /etc/conman.conf > /dev/null; then
     cat <<-HERE >> /etc/conman.conf
@@ -106,15 +107,10 @@ HERE
 fi
 
 %preun
-if [ $1 -eq 0 ] ; then
-    /bin/systemctl --no-reload disable conman.service > /dev/null 2>&1 || :
-    /bin/systemctl stop conman.service > /dev/null 2>&1 || :
-fi
+%systemd_preun conman.service
 
 %postun
-if [ $1 -ge 1 ] ; then
-    /bin/systemctl try-restart conman.service >/dev/null 2>&1 || :
-fi
+%systemd_postun_with_restart conman.service
 
 %if %{?insserv_cleanup:1}0
 %insserv_cleanup
