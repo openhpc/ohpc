@@ -12,23 +12,18 @@
 
 %if "%{compiler_family}" == "gnu7"
 %global gnu_version 7.1.0
+%global gnu_major_ver 7
 %global gnu_release 1
-%global pname gnu-7-compilers
+%global pname gnu7-compilers
 %global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.bz2
 %global source_directory gcc-%{version}
 %else
 %if "%{compiler_family}" == "dts6"
 %global gnu_version 6
+%global gnu_major_ver 6
 %global gnu_release 0
 %global pname gnu-dts6-compilers
 %global source_directory %{nil}
-%else
-%global gnu_version 7.1.0
-%global gnu_release 1
-%global pname gnu-compilers
-%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.bz2
-%global source_directory gcc-%{version}
-%endif
 %endif
 
 # Define subcomponent versions required for build
@@ -110,8 +105,8 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/gnu
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/gnu/%{version}
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/gnu%{gnu_major_ver}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/gnu%{gnu_major_ver}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -143,7 +138,7 @@ prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}
 family "compiler"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/gnu/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/gnu%{gnu_major_ver}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -155,7 +150,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_MODULES}/gnu/
+%{OHPC_MODULES}/gnu%{gnu_version}/
 %if "%{compiler_family}" != "dts6"
 %dir %{OHPC_COMPILERS}/gcc
 %{install_path}
@@ -173,6 +168,9 @@ EOF
 %endif
 
 %changelog
+* Fri Jun  9 2017 Karl W Schulz <karl.w.schulz@intel.com>
+- include major version in modulefile schema
+
 * Fri Feb 17 2017 Adrian Reber <areber@redhat.com>
 - Added support to build gnu-compilers (5.4.0) and
   gnu-7-compilers from same SPEC file

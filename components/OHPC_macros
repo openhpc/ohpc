@@ -62,9 +62,9 @@ BuildRequires: ohpc-buildroot
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
 
-%if "%{compiler_family}" == "gnu"
-BuildRequires: gnu-compilers%{PROJ_DELIM} >= 7.1.0
-Requires:      gnu-compilers%{PROJ_DELIM} >= 7.1.0
+%if "%{compiler_family}" == "gnu7"
+BuildRequires: gnu7-compilers%{PROJ_DELIM} >= 7.1.0
+Requires:      gnu7-compilers%{PROJ_DELIM} >= 7.1.0
 %endif
 %if "%{compiler_family}" == "intel"
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -79,7 +79,7 @@ Requires:      devtoolset-6
 BuildRequires: gnu-dts6-compilers%{PROJ_DELIM}
 Requires:      gnu-dts6-compilers%{PROJ_DELIM}
 %endif
-%if "%{compiler_family}" == "gnu7"
+%if "%{compiler_family}" == "gnu7rh"
 BuildRequires: gnu-7-compilers%{PROJ_DELIM}
 Requires:      gnu-7-compilers%{PROJ_DELIM}
 %endif
@@ -92,9 +92,9 @@ Requires:      gnu-7-compilers%{PROJ_DELIM}
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %endif
-%if "%{mpi_family}" == "mpich"
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
+%if "%{mpi_family}" == "mpich3"
+BuildRequires: mpich3-%{compiler_family}%{PROJ_DELIM}
+Requires:      mpich3-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if "%{mpi_family}" == "mvapich2"
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
