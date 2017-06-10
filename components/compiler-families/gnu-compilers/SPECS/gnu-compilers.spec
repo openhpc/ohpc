@@ -17,7 +17,8 @@
 %global pname gnu7-compilers
 %global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.bz2
 %global source_directory gcc-%{version}
-%else
+%endif
+
 %if "%{compiler_family}" == "dts6"
 %global gnu_version 6
 %global gnu_major_ver 6
