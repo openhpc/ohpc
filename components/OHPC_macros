@@ -56,7 +56,7 @@ BuildRequires: ohpc-buildroot
 # these choices can be overridden by specifing the compiler_family/mpi_family
 # variables via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %global compiler_family gnu}
+%{!?compiler_family: %global compiler_family gnu7}
 %{!?mpi_family: %global mpi_family openmpi}
 
 # Compiler dependencies
