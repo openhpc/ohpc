@@ -27,7 +27,7 @@
 %global OHPC_MODULES    %{OHPC_PUB}/modulefiles
 %global OHPC_MODULEDEPS %{OHPC_PUB}/moduledeps
 %global debug_package   %{nil}
-%global dist            .ohpc.1.3
+%global dist            .ohpc.1.4
 
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
