@@ -77,6 +77,14 @@ Summary:   OpenHPC compute node base
 Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
+%if 0%{?centos_version} || 0%{?rhel_version}
+Requires:  cairo-devel
+Requires:  libpciaccess
+%endif
+%if 0%{?sles_version}
+Requires:  libcairo2
+Requires:  libpciaccess0
+%endif
 %description base-compute
 Collection of compute node base packages
 
