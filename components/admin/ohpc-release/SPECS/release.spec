@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%global ohpc_bootstrap 1
 
 %if 0%{?centos_version} || 0%{?rhel_version}
 %if 0%{?centos_version} == 700
