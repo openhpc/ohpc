@@ -29,6 +29,8 @@
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
+%global gnu_family gnu7
+
 %{!?mpi_family: %global mpi_family openmpi}
 
 %if "%{compiler_family}" != "intel"
@@ -142,7 +144,7 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%if %{compiler_family} == gnu
+%if "%{compiler_family}" == "%{gnu_family}"
 module load openblas
 %endif
 
