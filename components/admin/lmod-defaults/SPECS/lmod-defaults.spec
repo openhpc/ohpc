@@ -13,7 +13,7 @@
 
 Summary:   OpenHPC default login environments
 Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.3
+Version:   1.4
 Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/admin
