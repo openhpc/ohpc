@@ -12,7 +12,9 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %if 0%{?centos_version} || 0%{?rhel_version}
-%define disttag %{dist}
+%if 0%{?centos_version} == 700
+%define disttag .el7
+%endif
 %endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
