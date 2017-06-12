@@ -5,8 +5,8 @@ Table \ref{table:mpi}.
 The command that follows installs a default set of MPI families that
 provide support for ethernet and InfiniBand environments. If installing on a
 system with an \IntelR{} Omni-Path fabric, use the {psm2} variants for
-OpenMPI and MVAPICH instead (e.g. \texttt{openmpi-psm2-gnu-ohpc}
-and \texttt{mvapich2-psm2-gnu-ohpc}, respectively).
+OpenMPI and MVAPICH instead (e.g. \texttt{openmpi-psm2-gnu7-ohpc}
+and \texttt{mvapich2-psm2-gnu7-ohpc}, respectively).
 
 
 \iftoggleverb{isx86}
@@ -46,7 +46,7 @@ OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolum
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) openmpi-gnu-ohpc mvapich2-gnu-ohpc mpich-gnu-ohpc
+[sms](*\#*) (*\install*) openmpi-gnu7-ohpc mvapich2-gnu7-ohpc mpich-gnu7-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command elif [[ ${enable_mpi_opa} -eq 1 ]];then
