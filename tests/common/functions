@@ -135,6 +135,10 @@ check_compiler_family()
 	myCC=gcc
 	myCXX=g++
 	myFC=gfortran
+    elif [ $LMOD_FAMILY_COMPILER == "gnu7" ];then
+	myCC=gcc
+	myCXX=g++
+	myFC=gfortran
     else
 	ERROR "Unknown compiler family"
 	exit 1

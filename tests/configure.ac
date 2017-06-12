@@ -58,13 +58,18 @@ AC_ARG_ENABLE([pxse],
 # Default MPI families to test
 if test x$enable_pxse = xyes ;then
    AC_MSG_RESULT([yes])
-   AC_SUBST(COMPILER_FAMILIES,["gnu intel"])       
+   AC_SUBST(COMPILER_FAMILIES,["gnu7 intel"])       
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi impi"])
 else
    AC_MSG_RESULT([no])
-   AC_SUBST(COMPILER_FAMILIES,[gnu])       
+   AC_SUBST(COMPILER_FAMILIES,[gnu7])       
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi"])
 fi
+
+# Compiler families can be overriden by user
+AC_ARG_WITH(compiler-families,
+	[AS_HELP_STRING([--with-compiler-families=[compiler]],[Override desired Compiler families])],
+	[COMPILER_FAMILIES=$withval])
 
 # MPI families can be overriden by user
 AC_ARG_WITH(mpi-families,

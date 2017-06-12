@@ -4,13 +4,7 @@
 load ../../common/test_helper_functions || exit 1
 source ../../common/functions || exit 1
 
-if [ "$LMOD_FAMILY_COMPILER" = "gnu" ];then
-    family=gnu
-elif [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
-    family=intel
-else
-    ERROR "Unsupported or unknown compiler family"
-fi
+family=$LMOD_FAMILY_COMPILER
 
 @test "[Compilers] debugger man page ($family)" {
     if [ "$family" = "gnu" ];then

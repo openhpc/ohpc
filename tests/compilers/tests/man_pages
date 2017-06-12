@@ -6,13 +6,7 @@ source ../../common/functions || exit 1
 
 check_compiler_family CC CXX FC
 
-if [ "$LMOD_FAMILY_COMPILER" = "gnu" ];then
-    family=gnu
-elif [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
-    family=intel
-else
-    ERROR "Unsupported or unknown compiler family"
-fi
+family=$LMOD_FAMILY_COMPILER
 
 @test "[Compilers] C compiler man page ($family)" {
     run man -w $CC
