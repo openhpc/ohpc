@@ -57,7 +57,7 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
-%if %{compiler_family} == "gnu"
+%if %{compiler_family} == "gnu7"
 BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
