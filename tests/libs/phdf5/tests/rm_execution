@@ -11,6 +11,7 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 
+CMD_TIMEOUT="1:20"
 NODES=2
 TASKS=8
 ARGS="$LUSTRE_TEST_PATH/phdf_test.out"
@@ -20,7 +21,7 @@ ARGS="$LUSTRE_TEST_PATH/phdf_test.out"
 	flunk "C_mpi_test binary does not exit"
     fi
 
-    run_mpi_binary ./C_mpi_test $ARGS $NODES $TASKS
+    run_mpi_binary -t $CMD_TIMEOUT ./C_mpi_test $ARGS $NODES $TASKS
     assert_success
 }
 
@@ -29,7 +30,7 @@ ARGS="$LUSTRE_TEST_PATH/phdf_test.out"
 	flunk "F_mpi_test binary does not exit"
     fi
 
-    run_mpi_binary ./F_mpi_test $ARGS $NODES $TASKS
+    run_mpi_binary -t $CMD_TIMEOUT ./F_mpi_test $ARGS $NODES $TASKS
     assert_success
 }
 
