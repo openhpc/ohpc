@@ -11,12 +11,9 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-%{!?compiler_family: %global compiler_family gnu}
-%{!?mpi_family: %global mpi_family openmpi}
-
 Summary:   OpenHPC default login environments
 Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.2
+Version:   1.3
 Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/admin
