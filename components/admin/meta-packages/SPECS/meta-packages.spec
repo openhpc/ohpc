@@ -355,7 +355,7 @@ Requires:  singularity%{PROJ_DELIM}
 %description runtimes-intel
 Collection of runtimes for use with Intel(R) Parallel Studio XE toolchain
 
-%package serial-libs-t gnu7
+%package serial-libs-gnu7
 Summary:   OpenHPC serial libraries for GNU
 Requires:  gsl-gnu7%{PROJ_DELIM}
 Requires:  metis-gnu7%{PROJ_DELIM}
