@@ -8,8 +8,8 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/OHPC_macros
 %global ohpc_bootstrap 1
+%include %{_sourcedir}/OHPC_macros
 
 %if 0%{?centos_version} || 0%{?rhel_version}
 %if 0%{?centos_version} == 700
