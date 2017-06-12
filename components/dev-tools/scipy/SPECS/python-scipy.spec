@@ -86,6 +86,8 @@ Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
+#!BuildIgnore: post-build-checks
+
 %description
 Scipy is open-source software for mathematics, science, and
 engineering. The core library is NumPy which provides convenient and
