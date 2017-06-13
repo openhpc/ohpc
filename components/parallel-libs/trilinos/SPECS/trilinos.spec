@@ -111,7 +111,11 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
         -DLAPACK_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                    \
         -DLAPACK_LIBRARY_NAMES:STRING="openblas"                        \
+%if "%{compiler_family}" == "llvm"
+        -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lflang"                    \
+%else
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
+%endif
 %endif
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \

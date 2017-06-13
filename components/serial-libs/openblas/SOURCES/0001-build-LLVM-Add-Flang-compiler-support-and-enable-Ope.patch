@@ -1,0 +1,147 @@
+From ae2f9c83dd892f3108648c2c1a939bc68031dc51 Mon Sep 17 00:00:00 2001
+From: Paul Osmialowski <pawel.osmialowski@arm.com>
+Date: Thu, 25 May 2017 12:22:17 +0100
+Subject: [PATCH 1/2] build: LLVM: Add Flang compiler support and enable OpenMP
+ for Clang
+
+Signed-off-by: Paul Osmialowski <pawel.osmialowski@arm.com>
+---
+ Makefile.system | 18 +++++++++++++++++-
+ cmake/fc.cmake  | 15 +++++++++++++++
+ common_arm64.h  |  4 ++++
+ f_check         | 20 ++++++++++++++++++--
+ 4 files changed, 54 insertions(+), 3 deletions(-)
+
+diff --git a/Makefile.system b/Makefile.system
+index b05177b6..c4b61fbd 100644
+--- a/Makefile.system
++++ b/Makefile.system
+@@ -406,7 +406,6 @@ CCOMMON_OPT    += -fopenmp
+ endif
+ 
+ ifeq ($(C_COMPILER), CLANG)
+-$(error OpenBLAS: Clang didn't support OpenMP yet.)
+ CCOMMON_OPT    += -fopenmp
+ endif
+ 
+@@ -575,6 +574,23 @@ endif
+ #  Fortran Compiler dependent settings
+ #
+ 
++ifeq ($(F_COMPILER), FLANG)
++CCOMMON_OPT += -DF_INTERFACE_FLANG
++ifdef BINARY64
++ifdef INTERFACE64
++ifneq ($(INTERFACE64), 0)
++FCOMMON_OPT += -i8
++endif
++endif
++FCOMMON_OPT += -Wall
++else
++FCOMMON_OPT += -Wall
++endif
++ifeq ($(USE_OPENMP), 1)
++FCOMMON_OPT += -fopenmp
++endif
++endif
++
+ ifeq ($(F_COMPILER), G77)
+ CCOMMON_OPT += -DF_INTERFACE_G77
+ FCOMMON_OPT += -Wall
+diff --git a/cmake/fc.cmake b/cmake/fc.cmake
+index ba156c21..ee9d2051 100644
+--- a/cmake/fc.cmake
++++ b/cmake/fc.cmake
+@@ -3,6 +3,21 @@
+ ## Description: Ported from portion of OpenBLAS/Makefile.system
+ ##              Sets Fortran related variables.
+ 
++if (${F_COMPILER} STREQUAL "FLANG")
++  set(CCOMMON_OPT "${CCOMMON_OPT} -DF_INTERFACE_FLANG")
++  if (BINARY64)
++    if (INTERFACE64)
++      set(FCOMMON_OPT "${FCOMMON_OPT} -i8")
++    endif ()
++    set(FCOMMON_OPT "${FCOMMON_OPT} -Wall")
++  else ()
++    set(FCOMMON_OPT "${FCOMMON_OPT} -Wall")
++  endif ()
++  if (USE_OPENMP)
++    set(FCOMMON_OPT "${FCOMMON_OPT} -fopenmp")
++  endif ()
++endif ()
++
+ if (${F_COMPILER} STREQUAL "G77")
+   set(CCOMMON_OPT "${CCOMMON_OPT} -DF_INTERFACE_G77")
+   set(FCOMMON_OPT "${FCOMMON_OPT} -Wall")
+diff --git a/common_arm64.h b/common_arm64.h
+index d9d5d215..c6ef2fb5 100644
+--- a/common_arm64.h
++++ b/common_arm64.h
+@@ -39,7 +39,11 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ #define INLINE inline
+ 
++#ifdef F_INTERFACE_FLANG
++#define RETURN_BY_STACK
++#else
+ #define RETURN_BY_COMPLEX
++#endif
+ 
+ #ifndef ASSEMBLER
+ 
+diff --git a/f_check b/f_check
+index 2f01f1c4..0ba62983 100644
+--- a/f_check
++++ b/f_check
+@@ -33,6 +33,7 @@ if ($compiler eq "") {
+               "ppuf77", "ppuf95", "ppuf90", "ppuxlf",
+ 	      "pathf90", "pathf95",
+ 	      "pgf95", "pgf90", "pgf77",
++	      "flang",
+               "ifort");
+ 
+ OUTER:
+@@ -78,8 +79,13 @@ if ($compiler eq "") {
+ 		$vendor = GFORTRAN;
+ 		$openmp = "-fopenmp";
+ 	    } else {
+-		$vendor = G77;
+-		$openmp = "";
++		if ($compiler =~ /flang/) {
++		    $vendor = FLANG;
++		    $openmp = "-fopenmp";
++		} else {
++		    $vendor = G77;
++		    $openmp = "";
++		}
+ 	    }
+ 
+ 	}
+@@ -197,6 +203,12 @@ if ($compiler eq "") {
+ 	    $openmp = "-mp";
+ 	}
+ 
++	if ($compiler =~ /flang/) {
++	    $vendor = FLANG;
++	    $bu     = "_";
++	    $openmp = "-fopenmp";
++	}
++
+ 	if ($vendor eq "") {
+ 	    $nofortran = 1;
+ 	    $compiler = "gfortran";
+@@ -325,6 +337,10 @@ if ($vendor eq "INTEL"){
+     #$linker_a .= "-lgfortran"
+ }
+ 
++if ($vendor eq "FLANG"){
++    $linker_a .= "-lflang"
++}
++
+ open(MAKEFILE, ">> $makefile") || die "Can't append $makefile";
+ open(CONFFILE, ">> $config"  ) || die "Can't append $config";
+ 
+-- 
+2.13.0
+

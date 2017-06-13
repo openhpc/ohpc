@@ -1,0 +1,31 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions           || exit 1
+
+if [ -s ./LOCAL_ENV ];then
+    source ./LOCAL_ENV
+else
+    ERROR "missing LOCAL_ENV"
+fi
+
+@test "[$TEST_DIR] running cmake --system-information" {
+    cmake --system-information | grep ohpc
+}
+
+@test "[$TEST_DIR] run cmake" {
+    pushd test
+    cmake .
+    popd
+}
+
+@test "[$TEST_DIR] run make on generated Makefile" {
+    pushd test
+    VERBOSE=1 make
+    popd
+}
+
+@test "[$TEST_DIR] run compiled binary" {
+    test/COnly
+}

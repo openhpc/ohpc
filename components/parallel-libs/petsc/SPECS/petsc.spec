@@ -86,7 +86,9 @@ module load scalapack openblas
         --with-fc=mpiifort  \
         --with-f77=mpiifort \
 %else
+%if "%{compiler_family}" == "gnu"
         --FFLAGS=-I$I_MPI_ROOT/include64/gfortran/4.9.0/ \
+%endif
 %endif
 %endif
         --with-clanguage=C++ \

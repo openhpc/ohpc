@@ -1,0 +1,8 @@
+test/CMakeFiles
+test/CMakeCache.txt
+test/COnly
+test/Makefile
+test/*.cmake
+test/*.a
+test/*.o
+test/*.so

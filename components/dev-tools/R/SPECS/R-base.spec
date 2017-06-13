@@ -164,6 +164,12 @@ BLAS="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl 
 echo "MKL options flag .... $MKL "
 %endif
 
+%if "%{compiler_family}" == "llvm"
+FFLAGS="-fPIC -DPIC -i4" \
+FCFLAGS="-fPIC -DPIC -i4" \
+FPICFLAGS="-i4" \
+FCPICFLAGS="-i4" \
+%endif
 ./configure  \
             --with-lapack="$BLAS" \
             --with-blas="$BLAS" \

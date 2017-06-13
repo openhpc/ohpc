@@ -1,0 +1,12 @@
+diff -ruN boost_1_63_0.old/boost/detail/fenv.hpp boost_1_63_0/boost/detail/fenv.hpp
+--- boost_1_63_0.old/boost/detail/fenv.hpp	2016-12-22 12:33:14.000000000 +0000
++++ boost_1_63_0/boost/detail/fenv.hpp	2017-06-04 22:19:21.413298003 +0100
+@@ -16,7 +16,7 @@
+ 
+ /* If we're using clang + glibc, we have to get hacky.
+  * See http://llvm.org/bugs/show_bug.cgi?id=6907 */
+-#if defined(__clang__)       &&  (__clang_major__ < 3) &&    \
++#if defined(__clang__)       && \
+     defined(__GNU_LIBRARY__) && /* up to version 5 */ \
+     defined(__GLIBC__) &&         /* version 6 + */ \
+     !defined(_FENV_H)

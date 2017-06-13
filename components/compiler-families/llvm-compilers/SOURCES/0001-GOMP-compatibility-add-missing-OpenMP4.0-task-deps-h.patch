@@ -1,0 +1,57 @@
+From b78659393ee7872fb9c66ad904fc83d9b84f09e3 Mon Sep 17 00:00:00 2001
+From: Paul Osmialowski <pawel.osmialowski@arm.com>
+Date: Thu, 23 Mar 2017 15:03:17 +0000
+Subject: [PATCH] GOMP compatibility: add missing OpenMP4.0 task deps handling
+ code
+
+Differential Revision: https://reviews.llvm.org/D31071
+
+git-svn-id: https://llvm.org/svn/llvm-project/openmp/trunk@298605 91177308-0d34-0410-b5e6-96231b3b80d8
+---
+ runtime/src/kmp_gsupport.cpp | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/runtime/src/kmp_gsupport.cpp b/runtime/src/kmp_gsupport.cpp
+index 2c6d097..ada7ce9 100644
+--- a/runtime/src/kmp_gsupport.cpp
++++ b/runtime/src/kmp_gsupport.cpp
+@@ -918,7 +918,11 @@ PARALLEL_LOOP_START(xexpand(KMP_API_NAME_GOMP_PARALLEL_LOOP_RUNTIME_START),
+ 
+ void
+ xexpand(KMP_API_NAME_GOMP_TASK)(void (*func)(void *), void *data, void (*copy_func)(void *, void *),
+-  long arg_size, long arg_align, bool if_cond, unsigned gomp_flags)
++  long arg_size, long arg_align, bool if_cond, unsigned gomp_flags
++#if OMP_40_ENABLED
++  , void **depend
++#endif
++)
+ {
+     MKLOC(loc, "GOMP_task");
+     int gtid = __kmp_entry_gtid();
+@@ -962,6 +966,23 @@ xexpand(KMP_API_NAME_GOMP_TASK)(void (*func)(void *), void *data, void (*copy_fu
+     }
+ 
+     if (if_cond) {
++#if OMP_40_ENABLED
++        if (gomp_flags & 8) {
++            KMP_ASSERT(depend);
++            const size_t ndeps = (kmp_intptr_t)depend[0];
++            const size_t nout = (kmp_intptr_t)depend[1];
++            kmp_depend_info_t dep_list[ndeps];
++
++            for (size_t i = 0U; i < ndeps; i++) {
++                dep_list[i].base_addr = (kmp_intptr_t)depend[2U + i];
++                dep_list[i].len = 0U;
++                dep_list[i].flags.in = 1;
++                dep_list[i].flags.out = (i < nout);
++            }
++            __kmpc_omp_task_with_deps(&loc, gtid, task, ndeps, dep_list, 0, NULL);
++        }
++        else
++#endif
+         __kmpc_omp_task(&loc, gtid, task);
+     }
+     else {
+-- 
+2.10.2
+
