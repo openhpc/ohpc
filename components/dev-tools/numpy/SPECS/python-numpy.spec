@@ -128,7 +128,7 @@ module-whatis "URL %{url}"
 set     version             %{version}
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-  if { [is-loaded gnu] && ![is-loaded openblas] } {
+  if { ![is-loaded intel] && ![is-loaded openblas] } {
       module load openblas
     }
 }

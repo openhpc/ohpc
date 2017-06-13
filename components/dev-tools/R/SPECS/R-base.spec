@@ -219,7 +219,7 @@ setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_SHARE      %{install_path}/share
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { [is-loaded gnu] } {
+    if { ![is-loaded intel] } {
         if { ![is-loaded openblas]  } {
           module load openblas
         }
