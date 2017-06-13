@@ -140,7 +140,7 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded phdf5]  } {
         module load phdf5
     }
-    if { ![is-loaded intel] } {
+    if { [is-loaded gnu] } {
         if { ![is-loaded openblas]  } {
           module load openblas
         }

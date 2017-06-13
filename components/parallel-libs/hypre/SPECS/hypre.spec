@@ -33,7 +33,6 @@
 %if "%{compiler_family}" != "intel"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
-%global compiler_module %{compiler_family}
 %endif
 
 # Base package name
@@ -205,13 +204,13 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require superlu (and openblas for gnu compiler families)
+# Require superlu (and scalapack for gnu compiler families)
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded superlu]  } {
         module load superlu
     }
-    if { ![is-loaded intel] } {
+    if { [is-loaded gnu] } {
         if { ![is-loaded openblas]  } {
           module load openblas
         }
