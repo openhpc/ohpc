@@ -1,1 +1,1 @@
-../../../common/m4/compiler_family.m4
+../../../m4/compiler_family.m4

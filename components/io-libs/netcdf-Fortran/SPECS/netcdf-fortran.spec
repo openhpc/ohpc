@@ -43,7 +43,6 @@ Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-fortran/archive/v%{version}.tar.gz
 Source101:	OHPC_macros
-Source103:	OHPC_setup_mpi
 
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.8.8

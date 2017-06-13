@@ -120,7 +120,7 @@ rpm=boost-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
     if [ $LMOD_FAMILY_COMPILER == "intel" ];then
         CXX=icpc
-    elif [ $LMOD_FAMILY_COMPILER == "gnu" ];then
+    elif [[ $LMOD_FAMILY_COMPILER =~ "gnu" ]];then
         CXX=g++
     else
         flunk "Unknown compiler family"

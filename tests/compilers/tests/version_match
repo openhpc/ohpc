@@ -4,13 +4,7 @@
 load ../../common/test_helper_functions || exit 1
 source ../../common/functions || exit 1
 
-if [ "$LMOD_FAMILY_COMPILER" = "gnu" ];then
-    family=gnu
-elif [ "$LMOD_FAMILY_COMPILER" = "intel" ];then
-    family=intel
-else
-    ERROR "Unsupported or unknown compiler family"
-fi
+family=$LMOD_FAMILY_COMPILER
 
 @test "[Compilers] compiler module loaded ($family)" {
     module list $family >& .cmd_output || exit 1
@@ -32,14 +26,14 @@ fi
     module list $family >& .cmd_output || exit 1
     local my_mod_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
 
-    if [ "$family" = "intel" ];then
+    if [[ "$family" = "intel" ]];then
 	version=`icc -V 2>&1 | grep Version | awk -F 'Version' '{print $2}' | awk '{print $1}'` || exit 1
 	assert_equal "$my_mod_version" "$version"
 	version=`icpc -V 2>&1 | grep Version | awk -F 'Version' '{print $2}' | awk '{print $1}'` || exit 1
 	assert_equal "$my_mod_version" "$version"
 	version=`ifort -V 2>&1 | grep Version | awk -F 'Version' '{print $2}' | awk '{print $1}'` || exit 1
 	assert_equal "$my_mod_version" "$version"
-    elif [ "$family" = "gnu" ];then
+    elif [[ "$family" =~ "gnu"  ]];then
 	version=`gcc --version | head -1 | awk '{print $3}'`
 	assert_equal "$my_mod_version" "$version"
 	version=`g++ --version | head -1 | awk '{print $3}'`

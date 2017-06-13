@@ -30,6 +30,8 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
+%global gnu_family gnu7
+
 # Base package name
 %define pname mumps
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -57,7 +59,7 @@ BuildRequires: libgomp1
 BuildRequires: libgomp
 %endif
 
-%if %{compiler_family} == "gnu"
+%if %{compiler_family} == "%{gnu_family}"
 BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
@@ -90,7 +92,7 @@ module load scalapack openblas
 # Select appropriate Makefile.inc with MKL
 %if "%{mpi_family}" == "impi"
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if "%{compiler_family}" == "gnu"
+%if "%{compiler_family}" == "%{gnu_family}"
 cp -f %{S:2} Makefile.inc
 %endif
 %if "%{compiler_family}" == "intel"
@@ -171,7 +173,7 @@ module-whatis "%{url}"
 set     version                     %{version}
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { [is-loaded gnu] } {
+    if { [is-loaded %{gnu_family}] } {
         if { ![is-loaded scalapack]  } {
           module load scalapack
         }

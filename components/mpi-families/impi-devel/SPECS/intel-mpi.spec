@@ -11,6 +11,8 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
+%global gnu_family gnu7
+
 %define pname intel-mpi-devel
 %define year 2017
 
@@ -48,7 +50,7 @@ suite.
 
 %install
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/%{gnu_family}/impi
 
 %post
 
@@ -146,7 +148,7 @@ set     ModulesVersion      "${version}"
 EOF
 
 	    # OpenHPC module file for GNU compiler toolchain
-	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/gnu/impi/${version}
+	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/%{gnu_family}/impi/${version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -171,24 +173,24 @@ module-whatis "URL: http://software.intel.com/en-us/articles/intel-mpi-library/"
 
 set     version                 ${version}
 
-prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
+prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/%{gnu_family}-impi
 
 family "MPI"
 EOF
 
-	    # Append with environment vars parsed directlry from mpivars.sh
-	    ${scanner} ${topDir}/${dir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/gnu/impi/${version} || exit 1
+	    # Append with environment vars parsed directly from mpivars.sh
+	    ${scanner} ${topDir}/${dir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/%{gnu_family}/impi/${version} || exit 1
 
 	    # Version file
-	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/gnu/impi/.version.${version}
+	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/%{gnu_family}/impi/.version.${version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "${version}"
 EOF
 	  # Inventory for later removal
       echo "%{OHPC_MODULEDEPS}/intel/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
       echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
-      echo "%{OHPC_MODULEDEPS}/gnu/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-      echo "%{OHPC_MODULEDEPS}/gnu/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
+      echo "%{OHPC_MODULEDEPS}/%{gnu_family}/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+      echo "%{OHPC_MODULEDEPS}/%{gnu_family}/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
 	fi
     done
 fi

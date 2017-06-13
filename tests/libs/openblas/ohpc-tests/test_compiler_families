@@ -15,7 +15,11 @@ export BATS_JUNIT_CLASS=openblas
 
 ./bootstrap || exit 1
 
-for compiler in gnu ; do
+for compiler in $COMPILER_FAMILIES ; do
+
+        # gnu families only
+        [[ ! $compiler =~ gnu ]] && continue
+    
 	echo " "
 	echo " "
 	echo "-------------------------------------------------------"
