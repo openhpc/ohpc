@@ -53,16 +53,16 @@ for \texttt{/opt/intel} that is mounted on desired compute nodes.
 % ohpc_command fi
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-# Install 3rd party libraries/tools built with Intel toolchain
-[sms](*\#*) (*\install*) ohpc-serial-libs-intel
-[sms](*\#*) (*\install*) ohpc-io-libs-intel
-[sms](*\#*) (*\install*) ohpc-perf-tools-intel
-[sms](*\#*) (*\install*) ohpc-python-libs-intel
-[sms](*\#*) (*\install*) ohpc-runtimes-intel
-[sms](*\#*) (*\install*) ohpc-parallel-libs-intel-mpich
-[sms](*\#*) (*\install*) ohpc-parallel-libs-intel-mvapich2
-[sms](*\#*) (*\install*) ohpc-parallel-libs-intel-openmpi
-[sms](*\#*) (*\install*) ohpc-parallel-libs-intel-impi
+# Install 3rd party libraries/tools meta-packages built with Intel toolchain
+[sms](*\#*) (*\install*) ohpc-intel-serial-libs
+[sms](*\#*) (*\install*) ohpc-intel-io-libs
+[sms](*\#*) (*\install*) ohpc-intel-perf-tools
+[sms](*\#*) (*\install*) ohpc-intel-python-libs
+[sms](*\#*) (*\install*) ohpc-intel-runtimes
+[sms](*\#*) (*\install*) ohpc-intel-mpich-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-mvapich2-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-openmpi-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-impi-parallel-libs
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi

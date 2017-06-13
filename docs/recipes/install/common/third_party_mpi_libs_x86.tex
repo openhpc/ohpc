@@ -3,10 +3,10 @@
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-# Install parallel libs for all available MPI toolchains
-[sms](*\#*) (*\install*) ohpc-parallel-libs-gnu7-mpich
-[sms](*\#*) (*\install*) ohpc-parallel-libs-gnu7-mvapich2
-[sms](*\#*) (*\install*) ohpc-parallel-libs-gnu7-openmpi
+# Install parallel lib meta-packges for all available MPI toolchains
+[sms](*\#*) (*\install*) ohpc-gnu7-mpich-parallel-libs
+[sms](*\#*) (*\install*) ohpc-gnu7-mvapich2-parallel-libs
+[sms](*\#*) (*\install*) ohpc-gnu7-openmpi-parallel-libs
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command elif [[ ${enable_mpi_opa} -eq 1 ]];then

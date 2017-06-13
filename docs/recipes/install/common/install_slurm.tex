@@ -6,7 +6,9 @@ the corresponding compute image in a subsequent step.
 % begin_ohpc_run
 % ohpc_comment_header Add resource management services on master node \ref{sec:add_rm}
 \begin{lstlisting}[language=bash,keywords={}]
+# Install slurm server meta-package
 [sms](*\#*) (*\install*) ohpc-slurm-server
+
 # Identify resource manager hostname on master host
 [sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 \end{lstlisting}

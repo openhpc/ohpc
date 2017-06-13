@@ -11,8 +11,10 @@ commands can be used to enable \Ganglia{} to monitor both the {\em master} and
 % ohpc_indent 5
 % ohpc_validation_comment Install Ganglia on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Install Ganglia
+# Install Ganglia meta-package on master
 [sms](*\#*) (*\install*) ohpc-ganglia
+
+# Install Ganglia compute node daemon
 [sms](*\#*) (*\chrootinstall*) ganglia-gmond-ohpc
 
 # Use example configuration script to enable unicast receiver on master host

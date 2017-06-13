@@ -26,10 +26,11 @@ following:
 % begin_ohpc_run
 % ohpc_comment_header Install 3rd Party Libraries and Tools \ref{sec:3rdparty}
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-[sms](*\#*) (*\install*) ohpc-serial-libs-gnu7
-[sms](*\#*) (*\install*) ohpc-io-libs-gnu7
-[sms](*\#*) (*\install*) ohpc-python-libs-gnu7
-[sms](*\#*) (*\install*) ohpc-runtimes-gnu7
+# Install 3rd party libraries/tools meta-packages built with GNU toolchain
+[sms](*\#*) (*\install*) ohpc-gnu7-serial-libs
+[sms](*\#*) (*\install*) ohpc-gnu7-io-libs
+[sms](*\#*) (*\install*) ohpc-gnu7-python-libs
+[sms](*\#*) (*\install*) ohpc-gnu7-runtimes
 \end{lstlisting}
 % end_ohpc_run
 

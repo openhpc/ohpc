@@ -114,7 +114,7 @@
 # Import GPG keys for chroot repository usage
 [sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 
-# Add SLURM client support
+# Add SLURM client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
 # Add IB support
