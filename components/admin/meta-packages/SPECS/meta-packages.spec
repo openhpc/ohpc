@@ -262,7 +262,7 @@ Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description intel-mpich-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 
-%package intel-mvapich2parallel-libs
+%package intel-mvapich2-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
 Requires:  boost-intel-mvapich2%{PROJ_DELIM}
 Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
