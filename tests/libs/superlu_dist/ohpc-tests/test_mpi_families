@@ -30,7 +30,7 @@ for compiler in $COMPILER_FAMILIES ; do
 	module load $mpi         || exit 1
 
 	module load $mpi         || exit 1
-	if [[ "${compiler}" == "gnu" ]];then
+	if [[ "${compiler}" =~ "gnu" ]];then
 	    module load scalapack    || exit 1
 	    module load openblas     || exit 1
 	fi
