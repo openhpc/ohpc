@@ -15,7 +15,7 @@ export BATS_JUNIT_CLASS=scalapack
 
 ./bootstrap || exit 1
 
-for compiler in gnu ; do
+for compiler in gnu7 ; do
     for mpi in $MPI_FAMILIES ; do
 
 	echo " "

@@ -18,7 +18,7 @@ MPIs_local=`echo $MPI_FAMILIES | sed 's/impi//'`
 
 ./bootstrap || exit 1
 
-for compiler in gnu ; do
+for compiler in gnu7 ; do
     for mpi in $MPIs_local ; do
 
 	echo " "
