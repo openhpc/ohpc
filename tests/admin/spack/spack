@@ -21,7 +21,7 @@ setup() {
 }
 
 @test "[spack] add compiler" {
-    ml gnu
+    module load  gnu7
     spack compiler find
     assert_success
 }
