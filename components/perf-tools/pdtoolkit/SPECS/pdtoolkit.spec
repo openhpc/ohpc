@@ -28,6 +28,7 @@ Source1:        OHPC_macros
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 
+#!BuildIgnore: post-build-checks
 #define _unpackaged_files_terminate_build      0
 #define __check_files /bin/true
 
