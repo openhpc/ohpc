@@ -116,19 +116,19 @@ rm -f edg44-upcparse
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 %endif
-#rm -f pebil.static
-#ln -s  ../../contrib/pebil/pebil/pebil.static
+rm -f pebil.static
 rm -f roseparse
+rm -f smaqao
 %ifarch x86_64
+ln -s  ../../contrib/pebil/pebil/pebil.static
 ln -s  ../../contrib/rose/roseparse/roseparse
+ln -s  ../../contrib/maqao/maqao/smaqao
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/roseparse
 %endif
 sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/depend.pl
 sed -i 's|/usr/local/bin/perl|/usr/bin/perl|g' ../../contrib/rose/rose-header-gen/config/cmp.pl
 rm -f ../../contrib/rose/rose-header-gen/config.log
 rm -f ../../contrib/rose/rose-header-gen/config.status
-#rm -f smaqao
-#ln -s  ../../contrib/maqao/maqao/smaqao
 popd
 pushd %buildroot%{install_path}/%{arch_dir}
 rm -f include
