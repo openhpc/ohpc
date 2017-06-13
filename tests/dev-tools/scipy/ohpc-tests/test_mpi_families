@@ -13,7 +13,7 @@ export BATS_JUNIT_CLASS=SciPy
 
 MPIs_local=`echo $MPI_FAMILIES | sed 's/impi//'`
 
-for compiler in gnu ; do
+for compiler in gnu7 ; do
     for mpi in $MPIs_local ; do
 
         echo " "
