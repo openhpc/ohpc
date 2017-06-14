@@ -102,6 +102,17 @@ leading scientists and engineers.
 %setup -q -n %{pname}-%{version}
 find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
+%build
+# OpenHPC compiler/mpi designation
+%ohpc_setup_compiler
+
+%if "%{compiler_family}" != "intel"
+module load openblas
+module load fftw
+%endif
+
+module load numpy
+
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
 [mkl]
@@ -118,17 +129,6 @@ library_dirs = $OPENBLAS_LIB
 include_dirs = $OPENBLAS_INC
 EOF
 %endif
-
-%build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
-
-%if "%{compiler_family}" != "intel"
-module load openblas
-module load fftw
-%endif
-
-module load numpy
 
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 %if "%{compiler_family}" == "intel"
