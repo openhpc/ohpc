@@ -126,7 +126,7 @@ EOF
 
 %if "%{compiler_family}" != "intel"
 module load openblas
-module load fftw
+module spider fftw
 %endif
 
 module load numpy
