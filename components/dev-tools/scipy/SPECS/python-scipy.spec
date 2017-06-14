@@ -126,15 +126,15 @@ EOF
 
 %if "%{compiler_family}" != "intel"
 module load openblas
+module load fftw
 %endif
 
 module load numpy
 
 CFLAGS="%{optflags} -fno-strict-aliasing" \
-ATLAS=%{_libdir}/atlas \
-FFTW=%{_libdir}
-BLAS=%{_libdir} \
-LAPACK=%{_libdir} \
+FFTW=$FFTW_LIB \
+BLAS=$OPENBLAS_LIB \
+LAPACK=$OPENBLAS_LIB \
 %if "%{compiler_family}" == "intel"
 LDSHARED="icc -shared" \
 python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
