@@ -66,6 +66,16 @@ basic linear algebra and random number generation.
 %patch2 -p1
 %patch3 -p1
 
+%build
+# OpenHPC compiler/mpi designation
+%ohpc_setup_compiler
+
+%if "%{compiler_family}" == "intel"
+COMPILER_FLAG="--compiler=intelem"
+%else
+module load openblas
+%endif
+
 %if "%{compiler_family}" == "intel"
 cat > site.cfg << EOF
 [mkl]
@@ -83,15 +93,6 @@ include_dirs = $OPENBLAS_INC
 EOF
 %endif
 
-%build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
-
-%if "%{compiler_family}" == "intel"
-COMPILER_FLAG="--compiler=intelem"
-%else
-module load openblas
-%endif
 #CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
 python setup.py build $COMPILER_FLAG
 
