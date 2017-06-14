@@ -69,13 +69,13 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.scipy.org
 Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
-BuildRequires:  blas-devel
+#BuildRequires:  blas-devel
 Source1:        OHPC_macros
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  lapack-devel
+#BuildRequires:  lapack-devel
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  python-Cython
