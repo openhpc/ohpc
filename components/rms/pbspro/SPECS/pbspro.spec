@@ -164,6 +164,9 @@ Requires: python < 3.0
 %if %{defined suse_version}
 Requires: libhwloc5
 %endif
+%if 0%{?rhel} >= 7
+Requires: hwloc-libs
+%endif
 Autoreq: 1
 
 %description -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
