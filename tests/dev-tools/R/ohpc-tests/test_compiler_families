@@ -8,8 +8,8 @@ status=0
 source ./common/TEST_ENV  || exit 1
 source ./common/functions || exit 1
 
-cd dev-tools/R-base || exit 1
-export BATS_JUNIT_CLASS="R_base"
+cd dev-tools/R || exit 1
+export BATS_JUNIT_CLASS="R"
 
 # bootstrap the local autotools project if necessary
 
@@ -23,19 +23,13 @@ for compiler in $COMPILER_FAMILIES ; do
     echo " "
     echo " "
     echo "-------------------------------------------------------"
-    echo "Dev Tools: R_base tests: $compiler"
+    echo "Dev Tools: R tests: $compiler"
     echo "-------------------------------------------------------"
     
     module purge          || exit 1
     module load $compiler || exit 1
-    module load R_base    || exit 1
+    module load R         || exit 1
     
-    if [ "$compiler" = "intel" ]; then
-       echo "Need to prepend libgfortran.so path to LD_LIBRARY_PATH when using the $compiler toolchain"
-       export LD_LIBRARY_PATH=/opt/ohpc/pub/compiler/gcc/4.9.2/lib64/:$LD_LIBRARY_PATH
-    fi
-
-
     ./configure   || exit 1
     make clean    || exit 1
     make -k check || status=1

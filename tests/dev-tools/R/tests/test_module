@@ -8,18 +8,28 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
-PKG=R_BASE
-testname=R_base
-module=R_base
-rpm=R_base${DELIM}
+PKG=R
+testname=R
+module=R
+rpm=R-${LMOD_FAMILY_COMPILER}${DELIM}
 
 # Query local compiler family
 check_compiler_family CC CXX FC
 
 @test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
-    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    module list $module/ | grep "1) $module" >& .cmd_output || exit 1
     run grep $module .cmd_output 
     assert_success
+    
+   # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+
+    # check binary version against rpm
+    R --version | head -1 | awk '{print $3}' >& .cmd_output
+    run cat .cmd_output
+    assert_output $version
     
 }
 

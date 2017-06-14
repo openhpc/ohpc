@@ -103,7 +103,7 @@ if NUMPY_ENABLED
 endif
 
 if R_ENABLED
-   TESTS += dev-tools/R-base/ohpc-tests/test_compiler_families
+   TESTS += dev-tools/R/ohpc-tests/test_compiler_families
 endif
 
 if SCIPY_ENABLED

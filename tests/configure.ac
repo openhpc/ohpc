@@ -413,7 +413,7 @@ AC_OUTPUT( Makefile
        dev-tools/tbb/Makefile
        dev-tools/tbb/tests/Makefile
        dev-tools/cilk/Makefile
-       dev-tools/R-base/Makefile
+       dev-tools/R/Makefile
        modules/Makefile )
 
 echo
