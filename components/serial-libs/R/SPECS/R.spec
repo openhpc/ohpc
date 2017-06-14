@@ -47,7 +47,7 @@ Patch:          tre.patch
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
-Group:          %{PROJ_NAME}/dev-tools
+Group:          %{PROJ_NAME}/serial-libs
 
 # Default library install path
 %define         install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version

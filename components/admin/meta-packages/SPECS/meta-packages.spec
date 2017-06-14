@@ -368,6 +368,7 @@ Summary:   OpenHPC serial libraries for GNU
 Requires:  gsl-gnu7%{PROJ_DELIM}
 Requires:  metis-gnu7%{PROJ_DELIM}
 Requires:  openblas-gnu7%{PROJ_DELIM}
+Requires:  R-gnu7%{PROJ_DELIM}
 Requires:  superlu-gnu7%{PROJ_DELIM}
 %description gnu7-serial-libs
 Collection of serial library builds for use with GNU compiler toolchain
