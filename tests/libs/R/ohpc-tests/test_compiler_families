@@ -8,7 +8,7 @@ status=0
 source ./common/TEST_ENV  || exit 1
 source ./common/functions || exit 1
 
-cd dev-tools/R || exit 1
+cd libs/R || exit 1
 export BATS_JUNIT_CLASS="R"
 
 # bootstrap the local autotools project if necessary
