@@ -131,9 +131,6 @@ module load fftw
 module load numpy
 
 CFLAGS="%{optflags} -fno-strict-aliasing" \
-FFTW=$FFTW_LIB \
-BLAS=$OPENBLAS_LIB \
-LAPACK=$OPENBLAS_LIB \
 %if "%{compiler_family}" == "intel"
 LDSHARED="icc -shared" \
 python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
