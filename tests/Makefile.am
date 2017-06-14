@@ -102,10 +102,6 @@ if NUMPY_ENABLED
    TESTS += dev-tools/numpy/ohpc-tests/test_mpi_families
 endif
 
-if R_ENABLED
-   TESTS += dev-tools/R/ohpc-tests/test_compiler_families
-endif
-
 if SCIPY_ENABLED
    TESTS += dev-tools/scipy/ohpc-tests/test_mpi_families
 endif
@@ -172,6 +168,10 @@ endif
 
 if PHDF5_ENABLED
    TESTS += libs/phdf5/ohpc-tests/test_mpi_families
+endif
+
+if R_ENABLED
+   TESTS += libs/R/ohpc-tests/test_compiler_families
 endif
 
 if SCALAPACK_ENABLED
