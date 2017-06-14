@@ -571,12 +571,6 @@ echo    Dev Tools:
        echo '    'hwloc..................... : disabled
     fi
 
-    if test "x$enable_R" = "xyes"; then
-       echo '    'R base package............ : enabled
-    else
-       echo '    'R base package............ : disabled
-    fi
-
     if test "x$enable_tbb" = "xyes"; then
        echo '    'TBB....................... : enabled
     else
@@ -705,6 +699,12 @@ echo    Libraries:
        echo '    'PHDF5..................... : enabled
     else
        echo '    'PHDF5..................... : disabled
+    fi
+
+    if test "x$enable_R" = "xyes"; then
+       echo '    'R base package............ : enabled
+    else
+       echo '    'R base package............ : disabled
     fi
 
     if test "x$enable_scalapack" = "xyes"; then
