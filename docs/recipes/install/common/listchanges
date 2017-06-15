@@ -40,15 +40,11 @@ echo "*** New release: ${t_new}"
 echo
 echo "*** Packages Deleted:"
 join -v 1 ${f_old} ${f_new} > ${f_del}
-echo
-echo "*** Packages Added:"
 join -v 2 ${f_old} ${f_new} >  ${f_add}
-echo
-echo "*** Pakages Updated:"
 join      ${f_old} ${f_new} > ${f_upd}
 
-
-
+echo
+echo "[Component Additions]"
 
 while read entry; do
       name=`echo ${entry} | awk '{print $1}'`
