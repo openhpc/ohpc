@@ -2,25 +2,25 @@ ohpc-autotools OpenHPC autotools
 ohpc-base-compute OpenHPC compute node base
 ohpc-base OpenHPC base
 ohpc-ganglia OpenHPC Ganglia monitoring
-ohpc-io-libs-gnu OpenHPC IO libraries for GNU
-ohpc-io-libs-intel OpenHPC IO libraries for Intel(R) Parallel Studio XE
+ohpc-gnu7-io-libs OpenHPC IO libraries for GNU
+ohpc-gnu7-mpich-parallel-libs OpenHPC parallel libraries for GNU and MPICH
+ohpc-gnu7-mvapich2-parallel-libs OpenHPC parallel libraries for GNU and MVAPICH2
+ohpc-gnu7-openmpi-parallel-libs OpenHPC parallel libraries for GNU and OpenMPI
+ohpc-gnu7-parallel-libs OpenHPC parallel libraries for GNU
+ohpc-gnu7-perf-tools OpenHPC performance tools for GNU
+ohpc-gnu7-python-libs OpenHPC python libraries for GNU
+ohpc-gnu7-runtimes OpenHPC runtimes for GNU
+ohpc-gnu7-serial-libs OpenHPC serial libraries for GNU
+ohpc-intel-impi-parallel-libs OpenHPC parallel libraries for Intel(R) Parallel Studio XE and Intel(R) MPI Library
+ohpc-intel-io-libs OpenHPC IO libraries for Intel(R) Parallel Studio XE
+ohpc-intel-mpich-parallel-libs OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
+ohpc-intel-mvapich2-parallel-libs OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
+ohpc-intel-openmpi-parallel-libs OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
+ohpc-intel-perf-tools OpenHPC performance tools for Intel(R) Parallel Studio XE
+ohpc-intel-python-libs OpenHPC python libraries for Intel(R) Parallel Studio XE
+ohpc-intel-runtimes OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
+ohpc-intel-serial-libs OpenHPC serial libraries for Intel(R) Parallel Studio XE
 ohpc-nagios OpenHPC Nagios monitoring
-ohpc-parallel-libs-gnu-mpich OpenHPC parallel libraries for GNU and MPICH
-ohpc-parallel-libs-gnu-mvapich2 OpenHPC parallel libraries for GNU and MVAPICH2
-ohpc-parallel-libs-gnu OpenHPC parallel libraries for GNU
-ohpc-parallel-libs-gnu-openmpi OpenHPC parallel libraries for GNU and OpenMPI
-ohpc-parallel-libs-intel-impi OpenHPC parallel libraries for Intel(R) Parallel Studio XE and Intel(R) MPI Library
-ohpc-parallel-libs-intel-mpich OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
-ohpc-parallel-libs-intel-mvapich2 OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
-ohpc-parallel-libs-intel-openmpi OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
-ohpc-perf-tools-gnu OpenHPC performance tools for GNU
-ohpc-perf-tools-intel OpenHPC performance tools for Intel(R) Parallel Studio XE
-ohpc-python-libs-gnu OpenHPC python libraries for GNU
-ohpc-python-libs-intel OpenHPC python libraries for Intel(R) Parallel Studio XE
-ohpc-runtimes-gnu OpenHPC runtimes for GNU
-ohpc-runtimes-intel OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
-ohpc-serial-libs-gnu OpenHPC serial libraries for GNU
-ohpc-serial-libs-intel OpenHPC serial libraries for Intel(R) Parallel Studio XE
 ohpc-slurm-client OpenHPC client packages for SLURM
 ohpc-slurm-server OpenHPC server packages for SLURM
 ohpc-warewulf OpenHPC base packages for Warewulf
