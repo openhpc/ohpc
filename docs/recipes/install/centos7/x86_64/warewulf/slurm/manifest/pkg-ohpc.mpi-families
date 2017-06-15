@@ -1,11 +1,16 @@
 intel-mpi-devel-ohpc 2017 https://github.com/openhpc/ohpc ohpc/mpi-families OpenHPC compatibility package for Intel(R) MPI Library
+mpich-gnu7-ohpc 3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-gnu-ohpc 3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mpich-intel-ohpc 3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mvapich2-gnu7-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-intel-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
+mvapich2-psm2-gnu7-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-intel-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-openmpi-gnu-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi-gnu7-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi-gnu-ohpc 1.10.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi-intel-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-psm2-gnu-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi-psm2-gnu7-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi-psm2-gnu-ohpc 1.10.6 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi-psm2-intel-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI

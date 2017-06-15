@@ -3,11 +3,15 @@ automake-ohpc 1.15 http://www.gnu.org/software/automake/ ohpc/dev-tools A GNU to
 EasyBuild-ohpc 3.2.1 http://hpcugent.github.com/easybuild ohpc/dev-tools Build and installation framework
 hwloc-ohpc 1.11.6 http://www.open-mpi.org/projects/hwloc/ ohpc/dev-tools Portable Hardware Locality
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
-python-numpy-gnu-ohpc 1.12.1 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
+python-numpy-gnu7-ohpc 1.12.1 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
+python-numpy-gnu-ohpc 1.11.1 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
 python-numpy-intel-ohpc 1.12.1 http://sourceforge.net/projects/numpy ohpc/dev-tools NumPy array processing for numbers, strings, records and objects
+python-scipy-gnu7-mpich-ohpc 0.19.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python-scipy-gnu7-mvapich2-ohpc 0.19.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python-scipy-gnu7-openmpi-ohpc 0.19.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu-mpich-ohpc 0.19.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu-mvapich2-ohpc 0.19.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu-openmpi-ohpc 0.19.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
-R_base-ohpc 3.3.3 http://www.r-project.org/ ohpc/dev-tools R is a language and environment for statistical computing and graphics (S-Plus like).
+R_base-ohpc 3.3.2 http://www.r-project.org/ ohpc/dev-tools R is a language and environment for statistical computing and graphics (S-Plus like).
 spack-ohpc 0.10.0 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
 valgrind-ohpc 3.12.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger

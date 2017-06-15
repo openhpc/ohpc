@@ -1,2 +1,3 @@
-gnu-compilers-ohpc 7.1.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
+gnu7-compilers-ohpc 7.1.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
+gnu-compilers-ohpc 5.4.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
 intel-compilers-devel-ohpc 2017 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Intel(R) Parallel Studio XE
