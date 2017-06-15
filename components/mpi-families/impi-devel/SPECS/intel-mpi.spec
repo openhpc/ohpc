@@ -47,6 +47,9 @@ suite.
 %build
 
 %install
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu7/impi
 
 %post
 
@@ -225,6 +228,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
+%{OHPC_MODULEDEPS}
 
 %changelog
 
