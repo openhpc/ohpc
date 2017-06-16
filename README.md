@@ -7,7 +7,7 @@
 
 [![Components](https://img.shields.io/badge/components%20available-67-green.svg) ](https://github.com/openhpc/ohpc/wiki/Component-List)
 [![Additions](https://img.shields.io/badge/new%20additions-3-blue.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.1.GA)
-[![Updates](https://img.shields.io/badge/updates-from--44%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.1.GA)
+[![Updates](https://img.shields.io/badge/updates-44%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.1.GA)
 
 
 #### Introduction
