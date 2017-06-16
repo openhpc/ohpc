@@ -6,14 +6,14 @@ their locally installed packages against the latest repository versions to
 obtain access to bug fixes and newer component versions. This can be
 accomplished with the underlying package manager as \OHPC{} packaging maintains
 versioning state across releases. Also, package builds available from the
-\OHPC{} repositories have ``\texttt{-ohpc}'' appended to their names so
+\OHPC{} repositories have ``\texttt{-ohpc}'' appended to their names so that
 wild cards can be used as a simple way to obtain updates. The following general
-procedure highlights a method for upgrading existing installations.  Note that
-when upgrading from a minor release older than v\OHPCVerTree{}, you will first
+procedure highlights a method for upgrading existing installations.
+When upgrading from a minor release older than v\OHPCVerTree{}, you will first
 need to update your local \OHPC{} repository configuration to point against the
 v\OHPCVerTree{} release (or update your locally hosted mirror). Refer to
 \S\ref{sec:enable_repo} for more details on enabling the latest
-repository. Alternatively, when upgrading between micro releases on the same
+repository. In contrast, when upgrading between micro releases on the same
 branch (e.g. from v\OHPCVerTree{} to \OHPCVerTree{}.1), there is no need to
 adjust local package manager configurations when using the public repository as
 rolling updates are pre-configured.
@@ -62,9 +62,27 @@ rolling updates are pre-configured.
 you will need to reboot the compute nodes when convenient to enable the
 changes.
 
-%%% \iftoggleverb{isCentOS}
-%%% \input common/gcc7_upgrade_centos.tex
-%%% \else
-%%% \input common/gcc7_upgrade_sles.tex
-%%% \fi
-\input common/gcc7_upgrade.tex
+Component additions are also fair game for \OHPC{} micro releases, and the 1.3.1
+release in particular includes GCC 7.1.0, along with runtimes and libraries
+compiled with that toolchain. Installation of these additions is simplified
+with the use of \OHPC{}'s meta-packages, and the toolchain package naming 
+convention allows the new compiler to be installed concurrently with older 
+versions. The following example illustrates configuring a GCC 7.1.0 default
+development environment and installing all correlated packages.
+
+\begin{lstlisting}[language=bash,keywords={}]
+# Update default environment
+[sms](*\#*) (*\remove*) lmod-defaults-gnu-mvapich2-ohpc
+[sms](*\#*) (*\install*) lmod-defaults-gnu7-mvapich2-ohpc
+
+# Install GCC 7.1.0-compiled meta-packages with dependencies
+[sms](*\#*)  (*\install*) ohpc-gnu7-perf-tools \
+                         ohpc-gnu7-serial-libs \
+                         ohpc-gnu7-io-libs \
+                         ohpc-gnu7-python-libs \
+                         ohpc-gnu7-runtimes \
+                         ohpc-gnu7-mpich-parallel-libs \
+                         ohpc-gnu7-openmpi-parallel-libs \
+                         ohpc-gnu7-mvapich2-parallel-libs
+\end{lstlisting}
+

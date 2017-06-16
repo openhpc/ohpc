@@ -43,9 +43,10 @@ my $Install            = "";
 my $chrootInstall      = "";
 my $groupInstall       = "";
 my $groupChrootInstall = "";
-my $addrepo = "";
-my $chrootaddrepo = "";
-my $beegfsrepo = "";
+my $remove             = "";
+my $addrepo            = "";
+my $chrootaddrepo      = "";
+my $beegfsrepo         = "";
 
 # parse package command macro's from input file
 open( IN, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
@@ -73,6 +74,8 @@ while( my $line = <IN> ) {
         $BaseOSshort = $1;
     } elsif( $line =~ /\\newcommand\{\\osimage\}\{(.+)\}/ ) {
         $OSimage = $1;
+    } elsif( $line =~ /\\newcommand\{\\remove\}\{(.+)\}/ ) {
+        $remove = $1;
     } elsif( $line =~ /\\newcommand\{\\arch\}\{(.+)\}/ ) {
         $arch = $1;
 	# undo latex escape for x86
@@ -274,6 +277,7 @@ sub update_cmd {
     $cmd =~ s/\(\*\\chrootinstall\*\)/$chrootInstall/;
     $cmd =~ s/\(\*\\groupinstall\*\)/$groupInstall/;
     $cmd =~ s/\(\*\\groupchrootinstall\*\)/$groupChrootInstall/;
+    $cmd =~ s/\(\*\\remove\*\)/$remove/;
     $cmd =~ s/\(\*\\addrepo\*\)/$addrepo/;
     $cmd =~ s/\(\*\\chrootaddrepo\*\)/$chrootaddrepo/;
     $cmd =~ s/\(\*\\beegfsrepo\*\)/$beegfsrepo/;
