@@ -13,7 +13,7 @@
 
 Summary: Meta-packages to ease installation.
 Name:    %{PROJ_NAME}
-Version: 1.4
+Version: 1.3.1
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
