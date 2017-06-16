@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-Summary: Meta-packages to ease installation.
+Summary: Meta-packages to ease installation
 Name:    meta-packages
 Version: 1.3.1
 Release: 1
