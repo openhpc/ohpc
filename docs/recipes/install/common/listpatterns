@@ -16,9 +16,8 @@ if [ -e /etc/redhat-release ];then
 	options="--archlist=aarch64"
     fi
 
-    repoquery ohpc* $options --queryformat='%{Name} %{Group} %{Summary}' | grep ohpc/meta-package | cut -d' ' -f1,4- | grep -e "^ohpc-" | sort >> ${logfile}.all
-
-#	repoquery ohpc* --queryformat='%{Name} %{Summary}' | grep -e "^ohpc-" | grep -v "ohpc-release" | grep -v "ohpc-filesystem" | sort >> ${logfile}.all
+#    repoquery ohpc* $options --queryformat='%{Name} %{Group} %{Summary}' | grep ohpc/meta-package | cut -d' ' -f1,4- | grep -e "^ohpc-" | sort >> ${logfile}.all
+    repoquery ohpc* $options --queryformat='%{Name} %{Group} %{Description}' | grep ohpc/meta-package | cut -d' ' -f1,3- | grep -e "^ohpc-" | sort >> ${logfile}.all
 
 fi
 
