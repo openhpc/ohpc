@@ -29,7 +29,7 @@ $mpi_exceptions{"mkl-blacs"} = 1;
 # extra file to create) - per arch basis
 
 my %page_breaks = ();
-if ( $ENV{'PWD'} =~ /\s+\/x86_64\// ) {
+if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"scorep-gnu7-impi-ohpc"} = 2;
     $page_breaks{"petsc-gnu-impi-ohpc"} = 2;
     $page_breaks{"phdf5-gnu-impi-ohpc"} = 2;
