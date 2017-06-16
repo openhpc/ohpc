@@ -1,18 +1,39 @@
-Version 1.3.1 (June 2017)
+# -*- mode: sh; fill-column: 120; -*- 
+
+Version 1.3.1 (16 June 2017)
+
+[Important Highlights/Notices]
+
+  * A new compiler variant (gnu7) is introduced with this release. In the case of a fresh install, OpenHPC recipes
+    default to installing the new variant along with matching runtimes and libraries. However, if upgrading a previously
+    installed system, administrators can opt-in to enable the gnu7 variant . This procedure is detailed in Appendix B of
+    the OpenHPC Install Guide(s).
+
+  * There are significant changes included in the warewulf-httpd.conf file that ships with the
+    warewulf-provision-server-ohpc package. If upgrading from a version prior to 1.3, the updated config file will be
+    saved as /etc/httpd/conf.d/warewulf-httpd.conf.rpmnew locally. You will need to copy this new version to the
+    production file and restart the web server to ensure correct provisioning behavior. As an example for CentOS:
+
+    [sms]# cp /etc/httpd/conf.d/warewulf-httpd.conf.rpmnew /etc/httpd/conf.d/warewulf-httpd.conf
+    [sms]# systemctl restart httpd
 
 [General]
 
   * addition of example xCAT based recipe (https://github.com/openhpc/ohpc/issues/323)
   * inclusion of optional BeeGFS client enablement for installation recipes (https://github.com/openhpc/ohpc/issues/340)
-  * switch to use of convenience meta packages versus groups/patterns used in previous releases (https://github.com/openhpc/ohpc/issues/443)
+  * switch to use of convenience meta packages versus groups/patterns used in previous releases. A list of provided
+    meta-packages can be found in Appendix E of the OpenHPC Install Guide(s).
+    (https://github.com/openhpc/ohpc/issues/443)
+  * 'R' language package name changed from R_base-ohpc to R-gnu7-ohpc, and the lmod module changed from R_base to R
+    (https://github.com/openhpc/ohpc/issues/472)
   * fix missing dependency for phdf5 (https://github.com/openhpc/ohpc/issues/436)
+  * documentation fix for installation template paths (https://github.com/openhpc/ohpc/issues/423)
   * split pdsh packaging to facilitate optional SLURM add-on (https://github.com/openhpc/ohpc/issues/435)
   * updated package groups for consistency of several administrative packages
   * Lmod packaging updated to conflict SLES Modules package (https://github.com/openhpc/ohpc/issues/440)
   * updated .spec files to further centralize compiler/mpi family setup (https://github.com/openhpc/ohpc/issues/447)
   * updates to OHPC_macros to support builds outside of OBS (https://github.com/openhpc/ohpc/pull/459)
   * variety of component version updates and other additions highlighted below
-
 
 [Component Additions]
 
