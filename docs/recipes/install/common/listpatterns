@@ -5,8 +5,18 @@ rm -f ${logfile}.*
 
 echo ++++ search and log OpenHPC patterns
 
+
+
 if [ -e /etc/redhat-release ];then
-    repoquery ohpc* --queryformat='%{Name} %{Group} %{Summary}' | grep ohpc/meta-package | cut -d' ' -f1,4- | grep -e "^ohpc-" | sort >> ${logfile}.all
+
+    options=""
+    pwd  | grep -q aarch64
+    if [ $? -eq 0 ];then
+	echo "Querying aarch64..."
+	options="--archlist=aarch64"
+    fi
+
+    repoquery ohpc* $options --queryformat='%{Name} %{Group} %{Summary}' | grep ohpc/meta-package | cut -d' ' -f1,4- | grep -e "^ohpc-" | sort >> ${logfile}.all
 
 #	repoquery ohpc* --queryformat='%{Name} %{Summary}' | grep -e "^ohpc-" | grep -v "ohpc-release" | grep -v "ohpc-filesystem" | sort >> ${logfile}.all
 
