@@ -120,7 +120,7 @@
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 \input{common/add_to_compute_chroot_intro}
 
-\clearpage
+%\clearpage
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Import GPG keys for chroot repository usage
@@ -153,6 +153,7 @@
 \end{lstlisting}
 % end_ohpc_run
 
+\vspace*{-0.1cm}
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 \input{common/warewulf_chroot_customize_sles}
 
@@ -196,6 +197,7 @@
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
+\clearpage
 \paragraph{Add \mrsh{}}
 \input{common/mrsh}
 
@@ -218,6 +220,7 @@
 \input{common/add_ww_hosts_slurm}
 \input{common/add_ww_hosts_finalize}
 
+\vspace*{0.2cm}
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 
@@ -278,6 +281,7 @@ also provides the \GNU{} compiler toolchain with the MPICH stack:
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_aarch}
 
+\clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/slurm_startup}
 
