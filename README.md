@@ -28,16 +28,9 @@ SLES 12 SP2 | 587     | 363      | 60
 A detailed list of all available components is available in
 the "Package Manifest" appendix located in each of the companion install
 guide documents, and a list of updated packages can be found in the
-[release notes](https://github.com/openhpc/ohpc/releases/tag/v1.3.1.GA). 
-
-#### \*\* Important note for	those upgrading	from versions prior to 1.3
-
-There are significant changes included in the `warewulf-httpd.conf file` that ships with the warewulf-provision-server-ohpc package. If upgrading from a previously installed version, the updated config file will be saved as `/etc/httpd/conf.d/warewulf-httpd.conf.rpmnew` locally. You will need to copy this new version to the production file and restart the web server to ensure correct provisioning behavior. As an example for CentOS:
-
-```
-[sms]# cp /etc/httpd/conf.d/warewulf-httpd.conf.rpmnew /etc/httpd/conf.d/warewulf-httpd.conf
-[sms]# systemctl restart httpd
-```
+[release notes](https://github.com/openhpc/ohpc/releases/tag/v1.3.1.GA). The
+release notes also contain important information for those upgrading from previous
+versions of OpenHPC.
 
 #### Getting started
 
