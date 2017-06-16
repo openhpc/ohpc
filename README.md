@@ -78,7 +78,7 @@ Note that ARM-based builds in this release are being provided as a **Technology 
 ###### [CentOS 7.3]
 * [ohpc-release-1.3-1.el7.aarch64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.1-aarch64.pdf)
-* [Tar Archive](http://build.openhpc.community/dist/1.3.1/OpenHPC-1.3.1.CentOS_7_aarch64.tar) mirror of yum repository (md5sum=0c9602f1ac898569b56a6cd4f6505881)
+* [Tar Archive](http://build.openhpc.community/dist/1.3.1/OpenHPC-1.3.1.CentOS_7.aarch64.tar) mirror of yum repository (md5sum=0c9602f1ac898569b56a6cd4f6505881)
 
 ###### [SLES 12 SP2]
 * [ohpc-release-1.3-1.sle12.aarch64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.aarch64.rpm) (md5sum=706a42f7785952f8b543c501eeec05da)
