@@ -1,0 +1,16 @@
+ohpc-autotools Collection of GNU autotools packages
+ohpc-base Collection of base packages
+ohpc-base-compute Collection of compute node base packages
+ohpc-ganglia Collection of Ganglia monitoring and metrics packages
+ohpc-gnu7-io-libs Collection of IO library builds for use with GNU compiler toolchain
+ohpc-gnu7-mpich-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-gnu7-openmpi-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
+ohpc-gnu7-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain
+ohpc-gnu7-perf-tools Collection of performance tool builds for use with GNU compiler toolchain
+ohpc-gnu7-python-libs Collection of python related library builds for use with GNU compiler toolchain
+ohpc-gnu7-runtimes Collection of runtimes for use with GNU compiler toolchain
+ohpc-gnu7-serial-libs Collection of serial library builds for use with GNU compiler toolchain
+ohpc-nagios Collection of Nagios monitoring and metrics packages
+ohpc-slurm-client Collection of client packages for SLURM
+ohpc-slurm-server Collection of server packages for SLURM
+ohpc-warewulf Collection of base packages for Warewulf provisioning
