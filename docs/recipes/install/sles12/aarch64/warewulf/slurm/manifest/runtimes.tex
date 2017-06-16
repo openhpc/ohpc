@@ -1,5 +1,7 @@
 \newcolumntype{C}[1]{>{\centering}p{#1}} 
 \newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
 \small
 \begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
 \toprule
@@ -7,11 +9,20 @@
 \midrule
 
 % <-- begin entry for ocr
-\multirow{2}{*}{ocr-gnu-ohpc} & 
+ocr-gnu7-ohpc &
 \multirow{2}{*}{1.0.1} & 
-Open Community Runtime (OCR) for shared memory. \newline {\color{logoblue} \url{https://xstack.exascale-tech.com/wiki}} \\ 
+\multirow{2}{\linewidth}{Open Community Runtime (OCR) for shared memory. \newline {\color{logoblue} \url{https://xstack.exascale-tech.com/wiki}}} \\ 
+ocr-gnu-ohpc &
+& \\ 
 \hline
 % <-- end entry for ocr
+
+% <-- begin entry for singularity-ohpc
+\multirow{2}{*}{singularity-ohpc} & 
+\multirow{2}{*}{2.3} & 
+Application and environment virtualization. \newline { \color{logoblue} \url{http://singularity.lbl.gov}} 
+\\ \hline 
+% <-- end entry for singularity-ohpc
 
 \bottomrule
 \end{tabularx}

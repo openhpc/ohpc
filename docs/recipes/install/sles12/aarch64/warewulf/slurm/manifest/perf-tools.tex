@@ -1,5 +1,7 @@
 \newcolumntype{C}[1]{>{\centering}p{#1}} 
 \newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
 \small
 \begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
 \toprule
@@ -7,69 +9,92 @@
 \midrule
 
 % <-- begin entry for imb
-imb-gnu-mpich-ohpc & 
-\multirow{2}{*}{4.1} & 
-\multirow{2}{\linewidth}{Intel MPI Benchmarks (IMB). \newline {\color{logoblue} \url{https://softtware.intel.com/en-us/articles/intel-mpi-benchmarks}}} \\ 
-imb-gnu-openmpi-ohpc & 
+imb-gnu7-mpich-ohpc &
+\multirow{4}{*}{4.1} & 
+\multirow{4}{\linewidth}{Intel MPI Benchmarks (IMB). \newline {\color{logoblue} \url{https://software.intel.com/en-us/articles/intel-mpi-benchmarks}}} \\ 
+imb-gnu7-openmpi-ohpc &
+& \\ 
+imb-gnu-mpich-ohpc &
+& \\ 
+imb-gnu-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for imb
 
 % <-- begin entry for mpiP
-mpiP-gnu-mpich-ohpc & 
-\multirow{2}{*}{3.4.1} & 
-\multirow{2}{\linewidth}{mpiP: a lightweight profiling library for MPI applications. \newline {\color{logoblue} \url{http://mpip.sourceforge.net}}} \\ 
-mpiP-gnu-openmpi-ohpc & 
+mpiP-gnu7-mpich-ohpc &
+\multirow{4}{*}{3.4.1} & 
+\multirow{4}{\linewidth}{mpiP: a lightweight profiling library for MPI applications. \newline {\color{logoblue} \url{http://mpip.sourceforge.net}}} \\ 
+mpiP-gnu7-openmpi-ohpc &
+& \\ 
+mpiP-gnu-mpich-ohpc &
+& \\ 
+mpiP-gnu-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for mpiP
 
 % <-- begin entry for papi-ohpc
 \multirow{2}{*}{papi-ohpc} & 
-\multirow{2}{*}{5.4.3} & 
+\multirow{2}{*}{5.5.1} & 
 Performance Application Programming Interface. \newline { \color{logoblue} \url{http://icl.cs.utk.edu/papi}} 
 \\ \hline 
 % <-- end entry for papi-ohpc
 
 % <-- begin entry for pdtoolkit
-\multirow{2}{*}{pdtoolkit-gnu-ohpc} & 
+pdtoolkit-gnu7-ohpc &
 \multirow{2}{*}{3.23} & 
-PDT is a framework for analyzing source code. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/Research/pdt}} \\ 
+\multirow{2}{\linewidth}{PDT is a framework for analyzing source code. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/Research/pdt}}} \\ 
+pdtoolkit-gnu-ohpc &
+& \\ 
 \hline
 % <-- end entry for pdtoolkit
 
 % <-- begin entry for scalasca
-scalasca-gnu-mpich-ohpc & 
-\multirow{2}{*}{2.3.1} & 
-\multirow{2}{\linewidth}{Toolset for performance analysis of large-scale parallel applications.  {\color{logoblue} \url{http://www.scalasca.org}}} \\ 
-scalasca-gnu-openmpi-ohpc & 
+scalasca-gnu7-mpich-ohpc &
+\multirow{4}{*}{2.3.1} & 
+\multirow{4}{\linewidth}{Toolset for performance analysis of large-scale parallel applications. \newline {\color{logoblue} \url{http://www.scalasca.org}}} \\ 
+scalasca-gnu7-openmpi-ohpc &
+& \\ 
+scalasca-gnu-mpich-ohpc &
+& \\ 
+scalasca-gnu-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for scalasca
 
 % <-- begin entry for scorep
-scorep-gnu-mpich-ohpc & 
-\multirow{2}{*}{3.0} & 
-\multirow{2}{\linewidth}{Scalable Performance Measurement Infrastructure for Parallel Codes.  {\color{logoblue} \url{http://www.vi-hps.org/projects/score-p}}} \\ 
-scorep-gnu-openmpi-ohpc & 
+scorep-gnu7-mpich-ohpc &
+\multirow{4}{*}{3.0} & 
+\multirow{4}{\linewidth}{Scalable Performance Measurement Infrastructure for Parallel Codes. \newline {\color{logoblue} \url{http://www.vi-hps.org/projects/score-p}}} \\ 
+scorep-gnu7-openmpi-ohpc &
+& \\ 
+scorep-gnu-mpich-ohpc &
+& \\ 
+scorep-gnu-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for scorep
 
 % <-- begin entry for sionlib
-\multirow{3}{*}{sionlib-gnu-mpich-ohpc} & 
-\multirow{3}{*}{1.7.0} & 
-Scalable Performance Measurement Infrastructure for Parallel Codes.  {\color{logoblue} \url{http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html}} \\ 
-sionlib-gnu-openmpi-ohpc & 
+sionlib-gnu-mpich-ohpc &
+\multirow{2}{*}{1.7.0} & 
+\multirow{2}{\linewidth}{Scalable Performance Measurement Infrastructure for Parallel Codes.  {\color{logoblue} \url{http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html}}} \\ 
+sionlib-gnu-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for sionlib
 
 % <-- begin entry for tau
-tau-gnu-mpich-ohpc & 
-\multirow{2}{*}{2.26} & 
-\multirow{2}{\linewidth}{Tuning and Analysis Utilities Profiling Package. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/research/tau/home.php}}} \\ 
-tau-gnu-openmpi-ohpc & \\
+tau-gnu7-mpich-ohpc &
+\multirow{4}{*}{2.26.1} & 
+\multirow{4}{\linewidth}{Tuning and Analysis Utilities Profiling Package. \newline {\color{logoblue} \url{http://www.cs.uoregon.edu/research/tau/home.php}}} \\ 
+tau-gnu7-openmpi-ohpc &
+& \\ 
+tau-gnu-mpich-ohpc &
+& \\ 
+tau-gnu-openmpi-ohpc &
+& \\ 
 \hline
 % <-- end entry for tau
 

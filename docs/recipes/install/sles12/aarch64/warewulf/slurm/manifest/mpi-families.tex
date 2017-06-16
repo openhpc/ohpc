@@ -1,5 +1,7 @@
 \newcolumntype{C}[1]{>{\centering}p{#1}} 
 \newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
 \small
 \begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
 \toprule
@@ -7,16 +9,20 @@
 \midrule
 
 % <-- begin entry for mpich
-\multirow{2}{*}{mpich-gnu-ohpc} &
-\multirow{2}{*}{3.2} &
-MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}} \\ 
+mpich-gnu7-ohpc &
+\multirow{2}{*}{3.2} & 
+\multirow{2}{\linewidth}{MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}}} \\ 
+mpich-gnu-ohpc &
+& \\ 
 \hline
 % <-- end entry for mpich
 
 % <-- begin entry for openmpi
-\multirow{2}{*}{openmpi-gnu-ohpc} & 
-\multirow{2}{*}{1.10.6} & 
-A powerful implementation of MPI. \newline {\color{logoblue} \url{http://www.open-mpi.org}} \\ 
+openmpi-gnu-ohpc &
+\multirow{1}{*}{1.10.6} & 
+\multirow{2}{\linewidth}{A powerful implementation of MPI. \newline {\color{logoblue} \url{http://www.open-mpi.org}}} \\ 
+\cline{1-2} openmpi-gnu7-ohpc &\multirow{1}{*}{1.10.7}
+& \\ 
 \hline
 % <-- end entry for openmpi
 
