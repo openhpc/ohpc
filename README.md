@@ -5,7 +5,7 @@
 
 ---
 
-![](https://img.shields.io/badge/components%20available-67-green.svg)
+![https://github.com/openhpc/ohpc/wiki/Component-List](https://img.shields.io/badge/components%20available-67-green.svg)
 ![](https://img.shields.io/badge/new%20additions-3-blue.svg)
 ![](https://img.shields.io/badge/updates-37%25-lightgrey.svg)
 
