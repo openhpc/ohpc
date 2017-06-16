@@ -207,7 +207,7 @@ Requires:  scalasca-gnu7-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu7-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain
 
-%package gnu7-python-libs
+%package -n %{PROJ_NAME}-gnu7-python-libs
 Summary:   OpenHPC python libraries for GNU
 Requires:  python-numpy-gnu7%{PROJ_DELIM}
 Requires:  python-scipy-gnu7-mpich%{PROJ_DELIM}
