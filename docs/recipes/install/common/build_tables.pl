@@ -26,12 +26,14 @@ $mpi_exceptions{"fftw"} = 3;
 $mpi_exceptions{"mkl-blacs"} = 1;
 
 # Define any packages that should start a new page (hash value determines which
-# extra file to create)
+# extra file to create) - per arch basis
 
 my %page_breaks = ();
-$page_breaks{"scorep-gnu7-impi-ohpc"} = 2;
-$page_breaks{"petsc-gnu-impi-ohpc"} = 2;
-$page_breaks{"phdf5-gnu-impi-ohpc"} = 2;
+if ( $ENV{'PWD'} =~ /\s+\/x86_64\// ) {
+    $page_breaks{"scorep-gnu7-impi-ohpc"} = 2;
+    $page_breaks{"petsc-gnu-impi-ohpc"} = 2;
+    $page_breaks{"phdf5-gnu-impi-ohpc"} = 2;
+}
 
 my $longSummaryLine = 60;
 my $urlColor="logoblue";
