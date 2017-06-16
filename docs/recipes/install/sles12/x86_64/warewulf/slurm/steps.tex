@@ -176,14 +176,14 @@
 \input{common/lustre-client-sles}
 \input{common/lustre-client-post}
 
-\clearpage
+%\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
 \paragraph{Add \Nagios{} monitoring}
 \input{common/nagios}
 
-\clearpage
+%\clearpage
 \paragraph{Add \Ganglia{} monitoring}
 \input{common/ganglia}
 
@@ -199,9 +199,10 @@
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
-\clearpage
+%\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
+\vspace*{0.3cm}
 \input{common/import_ww_files_slurm}
 \input{common/import_ww_files_ib_sles}
 \input{common/finalize_provisioning}
@@ -209,6 +210,7 @@
 \input{common/add_ww_hosts_slurm}
 \input{common/add_ww_hosts_finalize}
 
+\vspace*{0.2cm}
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 
