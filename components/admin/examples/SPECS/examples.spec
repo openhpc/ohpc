@@ -13,7 +13,7 @@
 
 Summary: Example source code and templates for use within OpenHPC environment.
 Name:    examples%{PROJ_DELIM}
-Version: 1.4
+Version: 1.3.1
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/admin
