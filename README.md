@@ -53,7 +53,7 @@ the downloads section of the latest
 * [ohpc-release-1.3-1.el7.x86_64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm) (md5sum=d5139cf3aa83d095e6851628e8a684fa)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-Warewulf-PBSPro-1.3.1-x86_64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.1-x86_64.pdf)
-* [Install Guide (with xCAT & Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-xCAT-SLURM-1.3.1-x86_64.pdf)
+* [Install Guide (with xCAT + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-xCAT-SLURM-1.3.1-x86_64.pdf)
 * [Tar Archive](http://build.openhpc.community/dist/1.3.1/OpenHPC-1.3.1.CentOS_7.x86_64.tar) mirror of yum repository (md5sum=e53ad41d09fed7b2ee763cfec6c2fcb1)
 
 ###### [SLES 12 SP2]
