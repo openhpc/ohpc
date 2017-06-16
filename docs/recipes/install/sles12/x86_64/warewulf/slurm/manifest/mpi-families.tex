@@ -1,5 +1,7 @@
 \newcolumntype{C}[1]{>{\centering}p{#1}} 
 \newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
 \small
 \begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
 \toprule
@@ -14,36 +16,46 @@ OpenHPC compatibility package for Intel(R) MPI Library. \newline { \color{logobl
 % <-- end entry for intel-mpi-devel-ohpc
 
 % <-- begin entry for mpich
-mpich-gnu-ohpc & 
-\multirow{2}{*}{3.2} & 
-\multirow{2}{\linewidth}{MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}}} \\ 
-mpich-intel-ohpc & 
+mpich-gnu7-ohpc &
+\multirow{3}{*}{3.2} & 
+\multirow{3}{\linewidth}{MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}}} \\ 
+mpich-gnu-ohpc &
+& \\ 
+mpich-intel-ohpc &
 & \\ 
 \hline
 % <-- end entry for mpich
 
 % <-- begin entry for mvapich2
-mvapich2-gnu-ohpc & 
-\multirow{4}{*}{2.2} & 
-\multirow{4}{\linewidth}{OSU MVAPICH2 MPI implementation. \newline {\color{logoblue} \url{http://mvapich.cse.ohio-state.edu/overview/mvapich2}}} \\ 
-mvapich2-intel-ohpc & 
+mvapich2-gnu7-ohpc &
+\multirow{6}{*}{2.2} & 
+\multirow{6}{\linewidth}{OSU MVAPICH2 MPI implementation. \newline {\color{logoblue} \url{http://mvapich.cse.ohio-state.edu/overview/mvapich2}}} \\ 
+mvapich2-gnu-ohpc &
 & \\ 
-mvapich2-psm2-gnu-ohpc & 
+mvapich2-intel-ohpc &
 & \\ 
-mvapich2-psm2-intel-ohpc & 
+mvapich2-psm2-gnu7-ohpc &
+& \\ 
+mvapich2-psm2-gnu-ohpc &
+& \\ 
+mvapich2-psm2-intel-ohpc &
 & \\ 
 \hline
 % <-- end entry for mvapich2
 
 % <-- begin entry for openmpi
-openmpi-gnu-ohpc & 
-\multirow{4}{*}{1.10.6} & 
-\multirow{4}{\linewidth}{A powerful implementation of MPI. \newline {\color{logoblue} \url{http://www.open-mpi.org}}} \\ 
-openmpi-intel-ohpc & 
+openmpi-gnu-ohpc &
+\multirow{2}{*}{1.10.6} & 
+\multirow{6}{\linewidth}{A powerful implementation of MPI. \newline {\color{logoblue} \url{http://www.open-mpi.org}}} \\ 
+openmpi-psm2-gnu-ohpc &
 & \\ 
-openmpi-psm2-gnu-ohpc & 
+\cline{1-2} openmpi-gnu7-ohpc &\multirow{4}{*}{1.10.7}
 & \\ 
-openmpi-psm2-intel-ohpc & 
+openmpi-intel-ohpc &
+& \\ 
+openmpi-psm2-gnu7-ohpc &
+& \\ 
+openmpi-psm2-intel-ohpc &
 & \\ 
 \hline
 % <-- end entry for openmpi

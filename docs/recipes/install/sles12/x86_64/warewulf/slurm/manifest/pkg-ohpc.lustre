@@ -1,1 +1,3 @@
-lustre-client-ohpc 2.8.0 https://wiki.hpdd.intel.com/ ohpc/lustre Lustre File System
+lustre-client-ohpc 2.9.0 https://wiki.hpdd.intel.com/ ohpc/lustre Lustre File System
+lustre-client-ohpc-kmp-default 2.9.0_k4.4.21_69 https://wiki.hpdd.intel.com/ ohpc/lustre Lustre File System
+shine-ohpc 1.5 http://lustre-shine.sourceforge.net/ ohpc/lustre Lustre administration utility
