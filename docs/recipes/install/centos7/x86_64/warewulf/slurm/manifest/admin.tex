@@ -1,5 +1,7 @@
 \newcolumntype{C}[1]{>{\centering}p{#1}} 
 \newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
 \small
 \begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
 \toprule
@@ -49,22 +51,30 @@ Static cluster configuration database. \newline { \color{logoblue} \url{https://
 % <-- end entry for genders-ohpc
 
 % <-- begin entry for lmod-defaults
-lmod-defaults-gnu-impi-ohpc & 
-\multirow{8}{*}{1.2} & 
-\multirow{8}{\linewidth}{OpenHPC default login environments. \newline {\color{logoblue} \url{https://github.com/openhpc/ohpc}}} \\ 
-lmod-defaults-gnu-mpich-ohpc & 
+lmod-defaults-gnu-impi-ohpc &
+\multirow{4}{*}{1.2} & 
+\multirow{12}{\linewidth}{OpenHPC default login environments. \newline {\color{logoblue} \url{https://github.com/openhpc/ohpc}}} \\ 
+lmod-defaults-gnu-mpich-ohpc &
 & \\ 
-lmod-defaults-gnu-mvapich2-ohpc & 
+lmod-defaults-gnu-mvapich2-ohpc &
 & \\ 
-lmod-defaults-gnu-openmpi-ohpc & 
+lmod-defaults-gnu-openmpi-ohpc &
 & \\ 
-lmod-defaults-intel-impi-ohpc & 
+\cline{1-2} lmod-defaults-gnu7-impi-ohpc &\multirow{8}{*}{1.3.1}
 & \\ 
-lmod-defaults-intel-mpich-ohpc & 
+lmod-defaults-gnu7-mpich-ohpc &
 & \\ 
-lmod-defaults-intel-mvapich2-ohpc & 
+lmod-defaults-gnu7-mvapich2-ohpc &
 & \\ 
-lmod-defaults-intel-openmpi-ohpc & 
+lmod-defaults-gnu7-openmpi-ohpc &
+& \\ 
+lmod-defaults-intel-impi-ohpc &
+& \\ 
+lmod-defaults-intel-mpich-ohpc &
+& \\ 
+lmod-defaults-intel-mvapich2-ohpc &
+& \\ 
+lmod-defaults-intel-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for lmod-defaults
@@ -90,19 +100,19 @@ Remote shell program that uses munge authentication. \newline { \color{logoblue}
 \\ \hline 
 % <-- end entry for mrsh-ohpc
 
-% <-- begin entry for nagios-ohpc
-\multirow{2}{*}{nagios-ohpc} & 
-\multirow{2}{*}{4.3.1} & 
-Host/service/network monitoring program. \newline { \color{logoblue} \url{http://www.nagios.org}} 
-\\ \hline 
-% <-- end entry for nagios-ohpc
-
 % <-- begin entry for nagios-plugins-ohpc
 \multirow{2}{*}{nagios-plugins-ohpc} & 
 \multirow{2}{*}{2.2.0} & 
 Host/service/network monitoring program plugins for Nagios. \newline { \color{logoblue} \url{https://www.nagios-plugins.org}} 
 \\ \hline 
 % <-- end entry for nagios-plugins-ohpc
+
+% <-- begin entry for nagios-ohpc
+\multirow{2}{*}{nagios-ohpc} & 
+\multirow{2}{*}{4.3.1} & 
+Host/service/network monitoring program. \newline { \color{logoblue} \url{http://www.nagios.org}} 
+\\ \hline 
+% <-- end entry for nagios-ohpc
 
 % <-- begin entry for ndoutils-ohpc
 \multirow{2}{*}{ndoutils-ohpc} & 
