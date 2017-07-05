@@ -196,4 +196,8 @@ if TRILINOS_ENABLED
    TESTS += libs/trilinos/ohpc-tests/test_mpi_families
 endif
 
+if PLASMA_ENABLED
+   TESTS += libs/plasma/ohpc-tests/test_compiler_families
+endif
+
 endif

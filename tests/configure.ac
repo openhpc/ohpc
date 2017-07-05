@@ -353,6 +353,12 @@ AC_ARG_ENABLE([prk],
    [AX_OPTION_DEFAULT(type=long,enable_prk,no)])
 AM_CONDITIONAL(PRK_ENABLED,test "x$enable_prk" = "xyes" )
 #------------------------------------------------------------------------------------------
+# plasma
+AC_ARG_ENABLE([plasma],
+   [AS_HELP_STRING([--enable-plasma],[Enable PLASMA library tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_plasma,yes)])
+AM_CONDITIONAL(PLASMA_ENABLED,test "x$enable_plasma" = "xyes" )
+#------------------------------------------------------------------------------------------
 
 AC_OUTPUT( Makefile 
        common/TEST_ENV
@@ -661,6 +667,12 @@ echo    Libraries:
        echo '    'Trilinos ................. : enabled
     else
        echo '    'Trilinos.................. : disabled
+    fi
+
+    if test "x$enable_plasma" = "xyes"; then
+       echo '    'PLASMA....................... : enabled
+    else
+       echo '    'PLASMA....................... : disabled
     fi
 
 echo    Apps:
