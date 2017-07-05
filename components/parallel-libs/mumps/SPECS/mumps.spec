@@ -117,7 +117,7 @@ cp -f %{S:2} Makefile.inc
 %endif
 %endif
 
-%if "%{mpi_family}" == "openmpi"
+%if "%{openmpi}" == "openmpi"
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
@@ -203,8 +203,8 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
-%{OHPC_PUB}
+%{install_path}
+%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %doc ChangeLog CREDITS INSTALL LICENSE README VERSION
 
 %changelog

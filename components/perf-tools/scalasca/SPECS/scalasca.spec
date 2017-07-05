@@ -61,23 +61,23 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 module load scorep
 
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 CONFIGURE_OPTIONS="--with-nocross-compiler-suite=intel "
 %endif
 
-%if %{mpi_family} == impi
+%if "%{mpi_family}" == "impi"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=intel3 "
 %endif
 
-%if %{mpi_family} == mpich
+%if "%{mpi_family}" == "mpich"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
 %endif
 
-%if %{mpi_family} == mvapich2
+%if "%{mpi_family}" == "mvapich2"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
 %endif
 
-%if %{mpi_family} == openmpi
+%if "%{openmpi}" == "openmpi"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 

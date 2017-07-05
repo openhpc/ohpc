@@ -48,23 +48,23 @@ This is the %{compiler_family}-%{mpi_family} version.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 CONFIGURE_OPTIONS="--compiler=intel --disable-parutils "
 %endif
 
-%if %{mpi_family} == impi
+%if "%{mpi_family}" == "impi"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=intel2 "
 %endif
 
-%if %{mpi_family} == mpich
+%if "%{mpi_family}" == "mpich"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
 %endif
 
-%if %{mpi_family} == mvapich2
+%if "%{mpi_family}" == "mvapich2"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
 %endif
 
-%if %{mpi_family} == openmpi
+%if "%{openmpi}" == "openmpi"
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 

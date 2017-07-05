@@ -73,6 +73,9 @@ BuildRequires: ohpc-buildroot
 	%global mpi_family openmpiv1.10
 %endif
 
+# This returns 'openmpi' without version suffix, if openmpi* is selected.
+%global openmpi %(eval echo -n %{mpi_family} | cut -c 1-7)
+
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
 
