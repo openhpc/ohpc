@@ -1,0 +1,293 @@
+/**
+ *
+ * @file testing_dsyevd.c
+ *
+ *  PLASMA testing routines
+ *  PLASMA is a software package provided by Univ. of Tennessee,
+ *  Univ. of California Berkeley and Univ. of Colorado Denver
+ *
+ * @version 2.8.0
+ * @author Hatem Ltaief
+ * @author Azzam Haidar
+ * @date 2010-11-15
+ * @generated d Fri Apr  1 11:03:05 2016
+ *
+ **/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+#include <plasma.h>
+#include <cblas.h>
+#include <lapacke.h>
+#include <core_blas.h>
+#include "testing_dmain.h"
+
+#undef COMPLEX
+#define REAL
+
+static int check_orthogonality(int, int, double*, int, double);
+static int check_reduction(int, int, int, double*, double*, int, double*, double);
+static int check_solution(int, double*, double*, double);
+
+int testing_dsyevd(int argc, char **argv)
+{
+    /* Check for number of arguments*/
+    if (argc != 3) {
+        USAGE("HEEVD", "MODE N LDA",
+              "   - MODE : mode used to generate the matrix\n"
+              "   - N    : size of the matrix A\n"
+              "   - LDA  : leading dimension of the matrix A\n");
+        return -1;
+    }
+
+    int    mode  = atoi(argv[0]);
+    int    N     = atoi(argv[1]);
+    int    LDA   = atoi(argv[2]);
+    int    LDQ   = LDA;
+    double eps   = LAPACKE_dlamch_work('e');
+    double dmax  = 1.0;
+    double rcond = 1.0e6;
+    int INFO=-1;
+
+    PLASMA_enum uplo = PlasmaLower;
+    PLASMA_enum vec  = PlasmaVec;
+    int info_ortho     = 0;
+    int info_solution  = 0;
+    int info_reduction = 0;
+    int LDAxN = LDA*N;
+    int LDQxN = LDQ*N;
+
+    double *A1   = NULL;
+    double *A2   = (double *)malloc(LDAxN*sizeof(double));
+    double *Q    = NULL;
+    double             *W1   = (double *)malloc(N*sizeof(double));
+    double             *W2   = (double *)malloc(N*sizeof(double));
+    double *work = (double *)malloc(3*N* sizeof(double));
+    PLASMA_desc *T;
+
+    /* Check if unable to allocate memory */
+    if ( (!A2) || (!W1) || (!W2) ){
+        printf("Out of Memory \n ");
+        return -2;
+    }
+
+    PLASMA_Disable(PLASMA_AUTOTUNING);
+    PLASMA_Set(PLASMA_TILE_SIZE, 120);
+    PLASMA_Set(PLASMA_INNER_BLOCK_SIZE, 20);
+
+    PLASMA_Enable(PLASMA_WARNINGS);
+    PLASMA_Enable(PLASMA_ERRORS);
+    PLASMA_Alloc_Workspace_dsyevd(N, N, &T);
+
+    /*----------------------------------------------------------
+    *  TESTING DSYEVD
+    */
+    /* Initialize A1 */
+    if (mode == 0){
+        int i;
+        for (i=0; i<N; i++){
+            W1[i] = (double )i+1;
+        }
+    }
+    LAPACKE_dlatms_work( LAPACK_COL_MAJOR, N, N,
+                         lapack_const(PlasmaDistSymmetric), ISEED,
+                         lapack_const(PlasmaHermGeev), W1, mode, rcond,
+                         dmax, N, N,
+                         lapack_const(PlasmaNoPacking), A2, LDA, work );
+
+    /*
+     * Sort the eigenvalue because when computing the tridiag
+     * and then the eigenvalue of the DSTQR are sorted.
+     * So to avoid testing fail when having good results W1 should be sorted
+     */
+    LAPACKE_dlasrt_work( 'I', N, W1 );
+
+    if ( vec == PlasmaVec ) {
+        Q  = (double *)malloc(LDQxN*sizeof(double));
+        A1 = (double *)malloc(LDAxN*sizeof(double));
+
+        /* Copy A2 into A1 */
+        LAPACKE_dlacpy_work(LAPACK_COL_MAJOR, 'A', N, N, A2, LDA, A1, LDA);
+    }
+    /*
+     * PLASMA DSYEVD
+     */
+    INFO = PLASMA_dsyevd(vec, uplo, N, A2, LDA, W2, T, Q, LDQ);
+    if(INFO!=0){
+        printf(" ERROR OCCURED INFO %d\n",INFO);
+        goto fin;
+    }
+
+    printf("\n");
+    printf("------ TESTS FOR PLASMA DSYEVD ROUTINE -------  \n");
+    printf("        Size of the Matrix %d by %d\n", N, N);
+    printf("\n");
+    printf(" The matrix A is randomly generated for each test.\n");
+    printf("============\n");
+    printf(" The relative machine precision (eps) is to be %e \n",eps);
+    printf(" Computational tests pass if scaled residuals are less than 60.\n");
+
+    /* Check the orthogonality, reduction and the eigen solutions */
+    if (vec == PlasmaVec) {
+        info_ortho = check_orthogonality(N, N, Q, LDQ, eps);
+        info_reduction = check_reduction(uplo, N, 1, A1, W2, LDA, Q, eps);
+    }
+    info_solution = check_solution(N, W1, W2, eps);
+
+    if ( (info_solution == 0) & (info_ortho == 0) & (info_reduction == 0) ) {
+        printf("***************************************************\n");
+        printf(" ---- TESTING DSYEVD ...................... PASSED !\n");
+        printf("***************************************************\n");
+    }
+    else {
+        printf("************************************************\n");
+        printf(" - TESTING DSYEVD ... FAILED !\n");
+        printf("************************************************\n");
+    }
+
+ fin:
+    PLASMA_Dealloc_Handle_Tile(&T);
+    free(A2);
+    free(W1);
+    free(W2);
+    free(work);
+    if (Q  != NULL) free(Q);
+    if (A1 != NULL) free(A1);
+
+    return 0;
+}
+
+/*-------------------------------------------------------------------
+ * Check the orthogonality of Q
+ */
+static int check_orthogonality(int M, int N, double *Q, int LDQ, double eps)
+{
+    double  done  =  1.0;
+    double  mdone = -1.0;
+    double  normQ, result;
+    int     info_ortho;
+    int     minMN = min(M, N);
+    double *work = (double *)malloc(minMN*sizeof(double));
+
+    /* Build the idendity matrix */
+    double *Id = (double *) malloc(minMN*minMN*sizeof(double));
+    LAPACKE_dlaset_work(LAPACK_COL_MAJOR, 'A', minMN, minMN, 0., 1., Id, minMN);
+
+    /* Perform Id - Q'Q */
+    if (M >= N)
+        cblas_dsyrk(CblasColMajor, CblasUpper, CblasTrans, N, M, done, Q, LDQ, mdone, Id, N);
+    else
+        cblas_dsyrk(CblasColMajor, CblasUpper, CblasNoTrans,   M, N, done, Q, LDQ, mdone, Id, M);
+
+    normQ = LAPACKE_dlansy_work(LAPACK_COL_MAJOR, lapack_const(PlasmaInfNorm), 'U', minMN, Id, minMN, work);
+
+    result = normQ / (minMN * eps);
+    printf(" ======================================================\n");
+    printf(" ||Id-Q'*Q||_oo / (minMN*eps)          : %15.3E \n",  result );
+    printf(" ======================================================\n");
+
+    if ( isnan(result) || isinf(result) || (result > 60.0) ) {
+        printf("-- Orthogonality is suspicious ! \n");
+        info_ortho=1;
+    }
+    else {
+        printf("-- Orthogonality is CORRECT ! \n");
+        info_ortho=0;
+    }
+    free(work); free(Id);
+    return info_ortho;
+}
+
+/*------------------------------------------------------------
+ *  Check the reduction
+ */
+static int check_reduction(int uplo, int N, int bw, double *A, double *D, int LDA, double *Q, double eps )
+{
+    (void) bw;
+    double zone  =  1.0;
+    double mzone = -1.0;
+    double *TEMP     = (double *)malloc(N*N*sizeof(double));
+    double *Residual = (double *)malloc(N*N*sizeof(double));
+    double *work = (double *)malloc(N*sizeof(double));
+    double Anorm, Rnorm, result;
+    int info_reduction;
+    int i;
+
+    /* Compute TEMP =  Q * LAMBDA */
+    LAPACKE_dlacpy_work(LAPACK_COL_MAJOR, lapack_const(PlasmaUpperLower), N, N, Q, LDA, TEMP, N);
+    for (i = 0; i < N; i++){
+        cblas_dscal(N, D[i], &(TEMP[i*N]),1);
+    }
+    /* Compute Residual = A - Q * LAMBDA * Q^H */
+    /* A is Hermetian but both upper and lower
+     * are assumed valable here for checking
+     * otherwise it need to be symetrized before
+     * checking.
+     */
+    LAPACKE_dlacpy_work(LAPACK_COL_MAJOR, lapack_const(PlasmaUpperLower), N, N, A, LDA, Residual, N);
+    cblas_dgemm(CblasColMajor, CblasNoTrans, CblasTrans, N, N, N, (mzone), TEMP, N,  Q, LDA, (zone), Residual,     N);
+
+    Rnorm = LAPACKE_dlange_work(LAPACK_COL_MAJOR, lapack_const(PlasmaOneNorm), N, N, Residual, N,   work);
+    Anorm = LAPACKE_dlansy_work(LAPACK_COL_MAJOR, lapack_const(PlasmaOneNorm), lapack_const(uplo), N, A,       LDA, work);
+
+    result = Rnorm / ( Anorm * N * eps);
+    if ( uplo == PlasmaLower ){
+        printf(" ======================================================\n");
+        printf(" ||A-Q*LAMBDA*Q'||_oo/(||A||_oo.N.eps) : %15.3E \n",  result );
+        printf(" ======================================================\n");
+    }else{
+        printf(" ======================================================\n");
+        printf(" ||A-Q'*LAMBDA*Q||_oo/(||A||_oo.N.eps) : %15.3E \n",  result );
+        printf(" ======================================================\n");
+    }
+
+    if ( isnan(result) || isinf(result) || (result > 60.0) ) {
+        printf("-- Reduction is suspicious ! \n");
+        info_reduction = 1;
+    }
+    else {
+        printf("-- Reduction is CORRECT ! \n");
+        info_reduction = 0;
+    }
+
+    free(TEMP); free(Residual);
+    free(work);
+
+    return info_reduction;
+}
+/*------------------------------------------------------------
+ *  Check the eigenvalues
+ */
+static int check_solution(int N, double *E1, double *E2, double eps)
+{
+    int info_solution, i;
+    double resid;
+    double maxtmp;
+    double maxel = fabs( fabs(E1[0]) - fabs(E2[0]) );
+    double maxeig = max( fabs(E1[0]), fabs(E2[0]) );
+    for (i = 1; i < N; i++){
+        resid   = fabs(fabs(E1[i])-fabs(E2[i]));
+        maxtmp  = max(fabs(E1[i]), fabs(E2[i]));
+
+        /* Update */
+        maxeig = max(maxtmp, maxeig);
+        maxel  = max(resid,  maxel );
+    }
+
+    maxel = maxel / (maxeig * N * eps);
+    printf(" ======================================================\n");
+    printf(" | D - eigcomputed | / (|D| * N * eps) : %15.3E \n",  maxel );
+    printf(" ======================================================\n");
+
+    if ( isnan(maxel) || isinf(maxel) || (maxel > 100) ) {
+        printf("-- The eigenvalues are suspicious ! \n");
+        info_solution = 1;
+    }
+    else{
+        printf("-- The eigenvalues are CORRECT ! \n");
+        info_solution = 0;
+    }
+    return info_solution;
+}

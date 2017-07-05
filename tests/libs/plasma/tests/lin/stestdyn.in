@@ -1,0 +1,25 @@
+Data file for testing REAL PLASMA linear eqn. routines
+1                              Number of values of NP 
+2                              Values of NP (number of cores)
+1                              Values of SCHED (0: Static, 1:Dynamic)
+10                             Number of values of M
+0 1 2 5 8 17 23 97 211 407     Values of M (row dimension)
+10                             Number of values of N
+0 1 2 5 8 17 23 97 211 407     Values of N (column dimension)
+3                              Number of values of NRHS
+1 2 15                         Values of NRHS (number of right hand sides)
+5                              Number of values of NB
+1 2 10 20 50                   Values of NB (the tile size)
+1 2 5 10 10                    Values of IB (the inner block size)
+1 0 5 9 1                      Values of NX (crossover point)
+3                              Number of values of RANK
+30 50 90                       Values of rank (as a % of N)
+60.0                           Threshold value of test ratio
+T                              Put T to test the PLASMA routines
+T                              Put T to test the driver routines
+T                              Put T to test the error exits
+SGE   11                       List types on next line if 0 < NTYPES < 11
+SPO    9                       List types on next line if 0 < NTYPES <  9
+SLS    6                       List types on next line if 0 < NTYPES <  6
+SQR    8                       List types on next line if 0 < NTYPES <  8
+SLQ    8                       List types on next line if 0 < NTYPES <  8
