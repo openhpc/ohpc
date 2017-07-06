@@ -125,11 +125,12 @@ make install
 make exports
 
 # move from tmp install dir to %install_path
-rm -rf %buildroot
-mkdir -p %buildroot%{install_path}
+rm -rf %{buildroot}
+# dirname removes the last directory
+mkdir -p `dirname %{buildroot}%{install_path}`
 pushd /tmp
 export tmp_path=%{install_path}
-mv ${tmp_path#*/} %buildroot%{install_path}/..
+mv ${tmp_path#*/} `dirname %{buildroot}%{install_path}`
 popd
 
 # clean up

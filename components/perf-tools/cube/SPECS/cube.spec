@@ -28,7 +28,6 @@ Provides:  lib%PNAME.so()(64bit)
 Provides:  cube
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 
 Requires: qt qt-x11
@@ -41,8 +40,6 @@ BuildRequires: gcc-c++
 BuildRequires: dbus-1-devel
 BuildRequires: libqt4-devel
 %endif
-
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_PUB}/%{pname}/%version
@@ -79,11 +76,12 @@ make install
 #make exports
 
 
-rm -rf %buildroot
-mkdir -p %buildroot%{install_path}
+rm -rf %{buildroot}
+# dirname removes the last directory
+mkdir -p `dirname %{buildroot}%{install_path}`
 pushd /tmp
 export tmp_path=%{install_path}
-mv ${tmp_path#*/} %buildroot%{install_path}/..
+mv ${tmp_path#*/} `dirname %{buildroot}%{install_path}`
 popd
 pushd %{buildroot}%{install_path}/bin
 sed -i 's|/tmp/||g' $(egrep -IR '/tmp/' ./|awk -F : '{print $1}')
