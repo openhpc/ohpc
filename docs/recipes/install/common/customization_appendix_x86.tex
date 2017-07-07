@@ -74,18 +74,18 @@ illustrates how to override the default mpi\_family.
 
 # Download SRPM from OpenHPC repository and install locally
 [test@sms ~]$ rpm -i \
-  http://build.openhpc.community/OpenHPC:/VER/OSREPO/src/fftw-gnu7-openmpi-ohpc-3.3.6-20.3.src.rpm
+  http://build.openhpc.community/OpenHPC:/VER/OSREPO/src/fftw-gnu-openmpi-ohpc-3.3.4-4.1.src.rpm
 
 # Modify spec file as desired
 [test@sms ~]$ cd ~/rpmbuild/SPECS
 [test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/enable-static=no/enable-static=yes/" fftw.spec
 
 # Increment RPM release so package manager will see an update
-[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   20.3/Release:   20.4/" fftw.spec
+[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   4.1/Release:   5.1/" fftw.spec
 
 # Rebuild binary RPM. Note that additional directives can be specified to modify build
 [test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "mpi_family mvapich2" fftw.spec
 
 # Install the new package
-[test@sms ~]$ sudo (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-gnu-mvapich2-ohpc-3.3.6-20.4.rpm
+[test@sms ~]$ sudo (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-gnu-mvapich2-ohpc-3.3.6-5.1.rpm
 \end{lstlisting}
