@@ -121,6 +121,7 @@ EOF
 
 find %{buildroot} -name '*.la' -exec rm {} \;
 sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
+egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
