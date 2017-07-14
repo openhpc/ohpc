@@ -77,7 +77,7 @@ module load scalapack
 
 export SHARED_OPT=-shared
 
-%if %{compiler_family} == gnu
+%if %{compiler_family} == gnu7
 export PIC_OPT=-fPIC
 export SONAME_OPT="-Wl,-soname"
 %endif
