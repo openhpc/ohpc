@@ -90,7 +90,8 @@ popd
 
 # clean up
 pushd %{buildroot}%{install_path}
-sed -i 's|/tmp||g' $(egrep -R '/tmp' ./ |awk -F : '{print $1}')
+sed -i 's|/tmp||g' $(egrep -R '/tmp' ./ |\
+egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
 popd
 
 # Module file
