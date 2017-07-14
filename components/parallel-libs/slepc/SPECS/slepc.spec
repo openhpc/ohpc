@@ -69,7 +69,7 @@ set -- *
 module load openblas
 %endif
 module load petsc
-./configure --prefix=%{buildroot}%{install_path}
+./configure --prefix=/tmp%{install_path}
 make 
 
 %install
@@ -79,6 +79,19 @@ module load openblas
 %endif
 module load petsc
 make install
+
+# move from tmp install dir to %install_path
+rm -rf %buildroot
+mkdir -p %buildroot%{install_path}
+pushd /tmp
+export tmp_path=%{install_path}
+mv ${tmp_path#*/} %buildroot%{install_path}/..
+popd
+
+# clean up
+pushd %{buildroot}%{install_path}
+sed -i 's|/tmp||g' $(egrep -R '/tmp' ./ |awk -F : '{print $1}')
+popd
 
 # Module file
 # OpenHPC module file
@@ -118,12 +131,6 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_ARCH       ""
 EOF
-
-find %{buildroot} -name '*.la' -exec rm {} \;
-pushd %{buildroot}%{install_path}
-sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
-egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
-popd
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
