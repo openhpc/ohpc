@@ -69,7 +69,7 @@ set -- *
 module load openblas
 %endif
 module load petsc
-./configure --prefix=$RPM_BUILDROOT/%{install_path}
+./configure --prefix=%{buildroot}%{install_path}
 make 
 
 %install
