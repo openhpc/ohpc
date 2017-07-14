@@ -39,8 +39,6 @@ Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{
 Source2: http://www.netlib.org/lapack/lapack-3.6.0.tgz
 Source3: %{pname}-rpmlintrc
 Source4: OHPC_macros
-Source5: OHPC_setup_compiler
-Source6: OHPC_setup_mpi
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
