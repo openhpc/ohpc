@@ -68,12 +68,9 @@ cp %{SOURCE0} build/download
 cp %{SOURCE2} build/download
 
 # OpenHPC compiler/mpi designation
-. /etc/profile.d/lmod.sh
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/OHPC_setup_mpi
-%if %{compiler_family} == gnu
+%ohpc_setup_compiler
+
+%if "%{compiler_family}" != "intel"
 module load openblas
 module load scalapack
 %endif
