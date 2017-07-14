@@ -74,7 +74,7 @@ make
 
 %install
 %ohpc_setup_compiler
-make install
+make DESTDIR=$RPM_BUILD_ROOT install
 
 # Module file
 # OpenHPC module file
