@@ -120,6 +120,7 @@ setenv          %{PNAME}_ARCH       ""
 EOF
 
 find %{buildroot} -name '*.la' -exec rm {} \;
+sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
