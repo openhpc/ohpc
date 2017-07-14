@@ -94,7 +94,7 @@ plasma-installer_%{version}/setup.py              \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
     --cblaslib="-L${OPENBLAS_LIB} -lopenblas"     \
     --lapacklib="-L${SCALAPACK_LIB} -lscalapack"  \
-    --lapclib="-L${OPENBLAS} -lopenblas
+    --lapclib="-L${OPENBLAS} -lopenblas"
 
 #
 #Create shared libraries
