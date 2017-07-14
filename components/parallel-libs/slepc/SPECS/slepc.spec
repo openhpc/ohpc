@@ -69,7 +69,7 @@ set -- *
 module load openblas
 %endif
 module load petsc
-./configure --prefix=%{install_path}
+./configure --prefix=$RPM_BUILDROOT/%{install_path}
 make 
 
 %install
@@ -78,7 +78,7 @@ make
 module load openblas
 %endif
 module load petsc
-make DESTDIR=$RPM_BUILD_ROOT install
+make install
 
 # Module file
 # OpenHPC module file
