@@ -99,7 +99,12 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-PLASMA is a software package for solving problems in dense linear algebra using multicore processors and Xeon Phi coprocessors. PLASMA provides implementations of state-of-the-art algorithms using cutting-edge task scheduling techniques. PLASMA currently offers a collection of routines for solving linear systems of equations, least squares problems, eigenvalue problems, and singular value problems.
+PLASMA is a software package for solving problems in dense linear algebra using
+multicore processors and Xeon Phi coprocessors. PLASMA provides implementations
+of state-of-the-art algorithms using cutting-edge task scheduling
+techniques. PLASMA currently offers a collection of routines for solving linear
+systems of equations, least squares problems, eigenvalue problems, and singular
+value problems.
 
 %prep
 %setup -q -a 1 -n %{pname}_%{version}
@@ -199,10 +204,6 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
         if { ![is-loaded openblas]  } {
           module load openblas
         }
-
-        if { ![is-loaded %{mpi_family}]  } {
-	   module load %{mpi_family}
-	}
 
         if { ![is-loaded scalapack]  } {
           module load scalapack
