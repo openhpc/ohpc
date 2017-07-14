@@ -120,8 +120,10 @@ setenv          %{PNAME}_ARCH       ""
 EOF
 
 find %{buildroot} -name '*.la' -exec rm {} \;
+pushd %{buildroot}%{install_path}
 sed -i 's|%buildroot||g' $(egrep -R '%buildroot' ./ |\
 egrep -v 'Binary\ file.*matches' |awk -F : '{print $1}')
+popd
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
