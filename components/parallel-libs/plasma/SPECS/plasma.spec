@@ -36,11 +36,10 @@ Group:     %{PROJ_NAME}/parallel-libs
 URL: https://bitbucket.org/icl/%{pname}		
 Source0: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}_%{version}.tar.gz
 Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{version}.tar.gz
-Source2: http://www.netlib.org/lapack/lapack-3.6.0.tgz
-Source3: %{pname}-rpmlintrc
-Source4: OHPC_macros
-Source5: OHPC_setup_compiler
-Source6: OHPC_setup_mpi
+Source2: %{pname}-rpmlintrc
+Source3: OHPC_macros
+Source4: OHPC_setup_compiler
+Source5: OHPC_setup_mpi
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
@@ -65,7 +64,6 @@ value problems.
 mkdir -p build/download
 
 cp %{SOURCE0} build/download
-cp %{SOURCE2} build/download
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
@@ -96,7 +94,7 @@ plasma-installer_%{version}/setup.py              \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
     --cblaslib="-L${OPENBLAS_LIB} -lopenblas"     \
     --lapacklib="-L${SCALAPACK_LIB} -lscalapack"  \
-    --downlapc 
+    --lapclib="-L${OPENBLAS} -lopenblas
 
 #
 #Create shared libraries
