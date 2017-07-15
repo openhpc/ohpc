@@ -29,8 +29,6 @@ Source0: http://gforge.inria.fr/frs/download.php/file/34618/%{base_pname}_%{vers
 Source1: scotch-Makefile.inc.in
 Source2: scotch-rpmlintrc
 Source3: OHPC_macros
-Source4: OHPC_setup_compiler
-Source5: OHPC_setup_mpi
 Patch0:  scotch-%{version}-destdir.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
