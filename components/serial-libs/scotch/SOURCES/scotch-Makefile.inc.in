@@ -1,0 +1,21 @@
+EXE	=
+LIB	= .a
+OBJ	= .o
+
+MAKE	= make
+AR	= ar
+ARFLAGS	= -ruv
+CAT	= cat
+CCS	= gcc
+CCP     = mpicc
+CCD	= mpicc
+CFLAGS	= @RPMFLAGS@ -O3 -DCOMMON_FILE_COMPRESS_GZ -DCOMMON_FILE_COMPRESS_BZ2 -DCOMMON_PTHREAD -DCOMMON_RANDOM_FIXED_SEED -DSCOTCH_RENAME -Drestrict=__restrict -DIDXSIZE64
+LDFLAGS	= -lpthread -lz -lbz2 -lm -lrt
+CP	= cp -a
+LEX	= flex -Pscotchyy -olex.yy.c
+LN	= ln
+MKDIR	= mkdir -p
+MV	= mv
+RANLIB	= ranlib
+YACC	= bison -pscotchyy -y -b y
+
