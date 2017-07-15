@@ -28,16 +28,9 @@ SLES 12 SP2 | 587     | 363      | 60
 A detailed list of all available components is available in
 the "Package Manifest" appendix located in each of the companion install
 guide documents, and a list of updated packages can be found in the
-[release notes](https://github.com/openhpc/ohpc/releases/tag/v1.3.1.GA). 
-
-#### \*\* Important note for	those upgrading	from versions prior to 1.3
-
-There are significant changes included in the `warewulf-httpd.conf file` that ships with the warewulf-provision-server-ohpc package. If upgrading from a previously installed version, the updated config file will be saved as `/etc/httpd/conf.d/warewulf-httpd.conf.rpmnew` locally. You will need to copy this new version to the production file and restart the web server to ensure correct provisioning behavior. As an example for CentOS:
-
-```
-[sms]# cp /etc/httpd/conf.d/warewulf-httpd.conf.rpmnew /etc/httpd/conf.d/warewulf-httpd.conf
-[sms]# systemctl restart httpd
-```
+[release notes](https://github.com/openhpc/ohpc/releases/tag/v1.3.1.GA). The
+release notes also contain important information for those upgrading from previous
+versions of OpenHPC.
 
 #### Getting started
 
@@ -60,7 +53,7 @@ the downloads section of the latest
 * [ohpc-release-1.3-1.el7.x86_64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm) (md5sum=d5139cf3aa83d095e6851628e8a684fa)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-Warewulf-PBSPro-1.3.1-x86_64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.1-x86_64.pdf)
-* [Install Guide (with xCAT & Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-xCAT-SLURM-1.3.1-x86_64.pdf)
+* [Install Guide (with xCAT + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-xCAT-SLURM-1.3.1-x86_64.pdf)
 * [Tar Archive](http://build.openhpc.community/dist/1.3.1/OpenHPC-1.3.1.CentOS_7.x86_64.tar) mirror of yum repository (md5sum=e53ad41d09fed7b2ee763cfec6c2fcb1)
 
 ###### [SLES 12 SP2]
@@ -78,7 +71,7 @@ Note that ARM-based builds in this release are being provided as a **Technology 
 ###### [CentOS 7.3]
 * [ohpc-release-1.3-1.el7.aarch64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.1.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.1-aarch64.pdf)
-* [Tar Archive](http://build.openhpc.community/dist/1.3.1/OpenHPC-1.3.CentOS_7_aarch64.tar) mirror of yum repository (md5sum=0c9602f1ac898569b56a6cd4f6505881)
+* [Tar Archive](http://build.openhpc.community/dist/1.3.1/OpenHPC-1.3.1.CentOS_7.aarch64.tar) mirror of yum repository (md5sum=0c9602f1ac898569b56a6cd4f6505881)
 
 ###### [SLES 12 SP2]
 * [ohpc-release-1.3-1.sle12.aarch64.rpm](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.aarch64.rpm) (md5sum=706a42f7785952f8b543c501eeec05da)
