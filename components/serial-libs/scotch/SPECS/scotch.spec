@@ -8,38 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# scotch - Graph, mesh and hypergraph partitioning library(serial version)
-
-#-ohpc-header-comp-begin----------------------------------------------
-
+# scotch - Graph, mesh and hypergraph partitioning library (serial version)
+%define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
-
-# OpenHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: intel-compilers-devel%{PROJ_DELIM}
-Requires:      intel-compilers-devel%{PROJ_DELIM}
-%if 0%{OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
 
 %define pname scotch
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
@@ -54,8 +25,6 @@ URL:		http://www.labri.fr/perso/pelegrin/%{pname}/
 Source0:	http://gforge.inria.fr/frs/download.php/file/34618/%{pname}_%{version}.tar.gz
 Source1:	%{pname}-Makefile.inc.in
 Source2:	%{pname}-rpmlintrc
-Source3:        OHPC_macros
-Source4:        OHPC_setup_compiler
 Patch0:         %{pname}-%{version}-destdir.patch
 BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:         %{OHPC_PUB}/doc/contrib
@@ -89,11 +58,8 @@ sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %{SOURCE1} > src/Makefile.inc
 popd
 
 %build
-. /etc/profile.d/lmod.sh
-
 # OpenHPC compiler/mpi designation
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-. %{_sourcedir}/OHPC_setup_compiler
+%ohpc_setup_compiler
 
 %define dosingle() \
 make %{?_smp_mflags}; \
