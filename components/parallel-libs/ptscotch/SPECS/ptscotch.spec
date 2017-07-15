@@ -9,57 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 # ptscotch - a parallel version of Graph, mesh and hypergraph partitioning library
-
-#-ohpc-header-comp-begin----------------------------------------------
-
+%define ohpc_compiler_dependent 1
+%define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
-
-# OpenHPC convention: the default assumes the gnu compiler family;
-# however, this can be overridden by specifing the compiler_family
-# variable via rpmbuild or other mechanisms.
-
-%{!?compiler_family: %global compiler_family gnu}
-
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-# Compiler dependencies
-%if %{compiler_family} == gnu
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%endif
-%if %{compiler_family} == intel
-BuildRequires: intel-compilers-devel%{PROJ_DELIM}
-Requires:      intel-compilers-devel%{PROJ_DELIM}
-%if 0%{OHPC_BUILD}
-BuildRequires: intel_licenses
-%endif
-%endif
-
-# MPI dependencies
-%{!?mpi_family:      %global mpi_family openmpi}
-
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi-devel%{PROJ_DELIM}
-Requires:      intel-mpi-devel%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
-
-#-ohpc-header-comp-end------------------------------------------------
 
 # Base package name
 %define base_pname scotch
@@ -105,17 +57,6 @@ BuildRequires:  zlib-devel
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%{version}
 
-
-%define _mpi_load					\
-	export OHPC_COMPILER_FAMILY=%{compiler_family}; \
-	export OHPC_MPI_FAMILY=%{mpi_family};		\
-	. %{_sourcedir}/OHPC_setup_compiler;		\
-	. %{_sourcedir}/OHPC_setup_mpi;					
-
-%define _mpi_unload \
-	module unload ${OHPC_MPI_FAMILY};
-
-
 %description
 Scotch is a software package for graph and mesh/hypergraph partitioning and
 sparse matrix ordering.
@@ -129,11 +70,7 @@ popd
 
 %build
 # OpenHPC compiler/mpi designation
-. /etc/profile.d/lmod.sh
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/OHPC_setup_mpi
+%ohpc_setup_compiler
 
 %define dobuild() \
 make %{?_smp_mflags} %{pname}; \
@@ -144,20 +81,13 @@ mpicc -shared -Wl,-soname=lib%{pname}.so.0 -o ../lib/lib%{pname}.so.0.0	libscotc
 mpicc -shared -Wl,-soname=lib%{pname}parmetis.so.0 -o ../lib/lib%{pname}parmetis.so.0.0 libscotchmetis/*.o ../lib/lib%{pname}.so.0.0 ../lib/lib%{pname}err.so.0.0
 
 pushd %{base_pname}_%{version}/src
-%{_mpi_load}
+
 %dobuild
-%{_mpi_unload}
+
 popd
 
 %install
-rm -rf ${RPM_BUILD_ROOT}
-
-# OpenHPC compiler/mpi designation
-. /etc/profile.d/lmod.sh
-export OHPC_COMPILER_FAMILY=%{compiler_family}
-export OHPC_MPI_FAMILY=%{mpi_family}
-. %{_sourcedir}/OHPC_setup_compiler
-. %{_sourcedir}/OHPC_setup_mpi
+%ohpc_setup_compiler
 
 %define doinst() \
 pushd src/; \
@@ -175,10 +105,8 @@ done; \
 popd
 
 pushd %{base_pname}_%{version}
-%{_mpi_load}
 export libdir=%{buildroot}%{install_path}/lib
 %doinst prefix=%{buildroot}%{install_path} libdir=%{buildroot}%{install_path}/lib
-%{_mpi_unload}
 
 pushd %{buildroot}%{install_path}/bin
 for prog in *; do
@@ -210,7 +138,7 @@ popd
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the PETSc library built with the %{compiler_family} compiler"
+puts stderr "This module loads the Scotch library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr " "
 
