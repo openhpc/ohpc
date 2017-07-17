@@ -61,7 +61,6 @@ sparse matrix ordering.
 
 %prep
 %setup -q -n %{base_pname}_%{version}
-pushd %{base_pname}_%{version}
 %patch0 -p1
 sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %SOURCE1 > src/Makefile.inc
 popd
