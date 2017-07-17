@@ -59,15 +59,26 @@ sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %{SOURCE1} > src/Makefile.inc
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-cd src
+pushd src
 make %{?_smp_mflags}
-
+popd
 
 %install
 rm -rf %{buildroot}
 
 cd src
 make prefix=%{buildroot}%{install_path} install
+
+# make dynamic, remove static linkings
+pushd %{buildroot}%{install_path}/lib
+for static_lib in *.a; do \ 
+        lib=`basename $static_lib .a`; \
+        ar x $static_lib; \
+        ${CC} -shared -Wl,-soname=$lib.so -o $lib.so *.o; \
+        rm $static_lib *\.o; \
+done;
+popd
+install -d %{buildroot}%{install_path}/lib
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
