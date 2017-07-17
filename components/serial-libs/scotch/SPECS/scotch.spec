@@ -106,7 +106,7 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %files
 %defattr(-,root,root)
-%doc %{pname}_%{version}/README.txt %{pname}_%{version}/doc/*
+%doc README.txt ./doc/*
 %{OHPC_PUB}
 
 %changelog
