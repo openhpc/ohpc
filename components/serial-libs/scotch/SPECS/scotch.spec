@@ -51,7 +51,7 @@ Scotch is a software package for graph and mesh/hypergraph partitioning and
 sparse matrix ordering.
 
 %prep
-%setup -c -q -n %{pname}_%{version}
+%setup -q -n %{pname}_%{version}
 pushd %{pname}_%{version}
 %patch0 -p1
 sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %{SOURCE1} > src/Makefile.inc
