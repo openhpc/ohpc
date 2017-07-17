@@ -64,6 +64,8 @@ make %{?_smp_mflags}
 popd
 
 %install
+# OpenHPC compiler/mpi designation
+%ohpc_setup_compiler
 rm -rf %{buildroot}
 
 cd src
