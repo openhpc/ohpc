@@ -71,12 +71,12 @@ make prefix=%{buildroot}%{install_path} install
 
 # make dynamic, remove static linkings
 pushd %{buildroot}%{install_path}/lib
-for static_lib in *.a; do \ 
-        lib=`basename $static_lib .a`; \
-        ar x $static_lib; \
-        ${CC} -shared -Wl,-soname=$lib.so -o $lib.so *.o; \
-        rm $static_lib *\.o; \
-done;
+for static_lib in *.a; do \
+    lib=`basename $static_lib .a`; \
+    ar x $static_lib; \
+    ${CC} -shared -Wl,-soname=$lib.so -o $lib.so *.o; \
+    rm $static_lib *\.o; \
+done; \
 popd
 install -d %{buildroot}%{install_path}/lib
 
