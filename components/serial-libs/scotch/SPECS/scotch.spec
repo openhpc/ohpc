@@ -51,73 +51,36 @@ Scotch is a software package for graph and mesh/hypergraph partitioning and
 sparse matrix ordering.
 
 %prep
-%setup -c -q -n %{pname}_%{version}
-pushd %{pname}_%{version}
+%setup -q -n %{pname}_%{version}
 %patch0 -p1
 sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %{SOURCE1} > src/Makefile.inc
-popd
 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%define dosingle() \
-make %{?_smp_mflags}; \
-${CC} -shared -Wl,-soname=libscotcherr.so.0 -o ../lib/libscotcherr.so.0.0	libscotch/library_error.o; \
-${CC} -shared -Wl,-soname=libscotcherrexit.so.0 -o ../lib/libscotcherrexit.so.0.0	libscotch/library_error_exit.o; \
-rm -f libscotch/library_error*.o; \
-${CC} -shared -Wl,-soname=libscotch.so.0 -o ../lib/libscotch.so.0.0 libscotch/*.o ../lib/libscotcherr.so.0.0 -lpthread -lgfortran -lz -lbz2 -lrt; \
-${CC} -shared -Wl,-soname=libscotchmetis.so.0 -o ../lib/libscotchmetis.so.0.0 libscotchmetis/*.o ../lib/libscotch.so.0.0 ../lib/libscotcherr.so.0.0 
-
-pushd %{pname}_%{version}/src/
-%dosingle
+pushd src
+make %{?_smp_mflags}
 popd
-
 
 %install
+# OpenHPC compiler/mpi designation
+%ohpc_setup_compiler
 rm -rf %{buildroot}
 
-%define doinst() \
-pushd src/; \
-make %{?_smp_mflags} install %*; \
-popd \
-pushd lib; \
-for static_libs in *.a; do \
-	libs=`basename $static_libs .a`; \
-	ln -s $libs.so.0.0 $libs.so; \
-	ln -s $libs.so.0.0 $libs.so.0; \
-        rm -f $libdir/$static_libs; \
-        cp -dp $libs.so* $libdir/; \
+cd src
+make prefix=%{buildroot}%{install_path} install
+
+# make dynamic, remove static linkings
+pushd %{buildroot}%{install_path}/lib
+for static_lib in *.a; do \
+    lib=`basename $static_lib .a`; \
+    ar x $static_lib; \
+    ${CC} -shared -Wl,-soname=$lib.so -o $lib.so *.o; \
+    rm $static_lib *\.o; \
 done; \
 popd
-
-
-pushd %{pname}_%{version}/
-export libdir=%{buildroot}%{install_path}/lib
-%doinst prefix=%{buildroot}%{install_path} libdir=%{buildroot}%{install_path}/lib
-
-pushd %{buildroot}%{install_path}/bin
-for prog in *; do
-	mv $prog scotch_$prog
-done
-popd
-
-pushd %{buildroot}%{install_path}/share/man/man1
-rm -f d*
-for prog in *; do
-	mv $prog scotch_$prog
-done
-popd
-
-# Convert the license files to utf8
-pushd doc
-iconv -f iso8859-1 -t utf-8 < CeCILL-C_V1-en.txt > CeCILL-C_V1-en.txt.conv
-iconv -f iso8859-1 -t utf-8 < CeCILL-C_V1-fr.txt > CeCILL-C_V1-fr.txt.conv
-mv -f CeCILL-C_V1-en.txt.conv CeCILL-C_V1-en.txt
-mv -f CeCILL-C_V1-fr.txt.conv CeCILL-C_V1-fr.txt
-popd
-
-popd
+install -d %{buildroot}%{install_path}/lib
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -154,15 +117,9 @@ EOF
 %clean
 rm -rf ${RPM_BUILD_ROOT}
 
-%post
-/sbin/ldconfig
-
-%postun
-/sbin/ldconfig
-
 %files
 %defattr(-,root,root)
-%doc %{pname}_%{version}/README.txt %{pname}_%{version}/doc/*
+%doc README.txt ./doc/*
 %{OHPC_PUB}
 
 %changelog
