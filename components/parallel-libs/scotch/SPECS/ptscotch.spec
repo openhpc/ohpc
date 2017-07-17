@@ -60,7 +60,7 @@ Scotch is a software package for graph and mesh/hypergraph partitioning and
 sparse matrix ordering.
 
 %prep
-%setup -c -q -n %{base_pname}_%{version}
+%setup -q -n %{base_pname}_%{version}
 pushd %{base_pname}_%{version}
 %patch0 -p1
 sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %SOURCE1 > src/Makefile.inc
@@ -70,52 +70,25 @@ popd
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%define dobuild() \
-make %{?_smp_mflags} %{pname}; \
-mpicc -shared -Wl,-soname=lib%{pname}err.so.0 -o ../lib/lib%{pname}err.so.0.0 libscotch/library_error.o; \
-mpicc -shared -Wl,-soname=lib%{pname}errexit.so.0 -o ../lib/lib%{pname}errexit.so.0.0  libscotch/library_error_exit.o; \
-rm -f libscotch/library_error*.o; \
-mpicc -shared -Wl,-soname=lib%{pname}.so.0 -o ../lib/lib%{pname}.so.0.0	libscotch/*.o ../lib/lib%{pname}err.so.0.0 -lgfortran -lz -lbz2 ; \
-mpicc -shared -Wl,-soname=lib%{pname}parmetis.so.0 -o ../lib/lib%{pname}parmetis.so.0.0 libscotchmetis/*.o ../lib/lib%{pname}.so.0.0 ../lib/lib%{pname}err.so.0.0
-
-pushd %{base_pname}_%{version}/src
-
-%dobuild
-
+pushd src
+make %{?_smp_mflags} %{pname}
 popd
 
 %install
 %ohpc_setup_compiler
 
-%define doinst() \
-pushd src/; \
-make %{?_smp_mflags} install %*; \
-popd \
-pushd lib; \
-for static_libs in *.a; do \
-    libs=`basename $static_libs .a`; \
-    ln -s ${libs}.so.0.0 ${libs}.so; \
-    ln -s ${libs}.so.0.0 ${libs}.so.0; \
-        rm -f ${libdir}/${static_libs}; \
-        cp -dp ${libs}.so* ${libdir}/; \
-        rm -f ${libdir}/lib%{base_pname}*.so*; \
+pushd src
+make prefix=%{buildroot}%{install_path} install
+# make dynamic, remove static linkings
+pushd %{buildroot}%{install_path}/lib
+for static_lib in *.a; do \
+    lib=`basename $static_lib .a`; \
+    ar x $static_lib; \
+    mpicc -shared -Wl,-soname=$lib.so -o $lib.so *.o; \
+    rm $static_lib *\.o; \
 done; \
 popd
-
-pushd %{base_pname}_%{version}
-export libdir=%{buildroot}%{install_path}/lib
-%doinst prefix=%{buildroot}%{install_path} libdir=%{buildroot}%{install_path}/lib
-
-pushd %{buildroot}%{install_path}/bin
-for prog in *; do
-    mv $prog %{base_pname}_$prog
-done
-popd
-pushd %{buildroot}%{install_path}/share/man/man1
-rm -f d*
-for prog in *; do
-    mv $prog %{base_pname}_$prog
-done
+install -d %{buildroot}%{install_path}/lib
 popd
 
 # Convert the license files to utf8
@@ -124,8 +97,6 @@ iconv -f iso8859-1 -t utf-8 < CeCILL-C_V1-en.txt > CeCILL-C_V1-en.txt.conv
 iconv -f iso8859-1 -t utf-8 < CeCILL-C_V1-fr.txt > CeCILL-C_V1-fr.txt.conv
 mv -f CeCILL-C_V1-en.txt.conv CeCILL-C_V1-en.txt
 mv -f CeCILL-C_V1-fr.txt.conv CeCILL-C_V1-fr.txt
-popd
-
 popd
 
 # OpenHPC module file
@@ -165,13 +136,9 @@ EOF
 %clean
 rm -rf ${RPM_BUILD_ROOT}
 
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
 %files
 %defattr(-,root,root)
-%doc %{base_pname}_%{version}/README.txt %{base_pname}_%{version}/doc/*
+%doc README.txt ./doc/*
 %{OHPC_PUB}
 
 %changelog
