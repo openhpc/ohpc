@@ -68,7 +68,7 @@ popd
 %ohpc_setup_compiler
 rm -rf %{buildroot}
 
-cd src
+pushd src
 make prefix=%{buildroot}%{install_path} install
 
 # make dynamic, remove static linkings
@@ -81,6 +81,15 @@ for static_lib in *.a; do \
 done; \
 popd
 install -d %{buildroot}%{install_path}/lib
+popd
+
+# Convert the license files to utf8
+pushd doc
+iconv -f iso8859-1 -t utf-8 < CeCILL-C_V1-en.txt > CeCILL-C_V1-en.txt.conv
+iconv -f iso8859-1 -t utf-8 < CeCILL-C_V1-fr.txt > CeCILL-C_V1-fr.txt.conv
+mv -f CeCILL-C_V1-en.txt.conv CeCILL-C_V1-en.txt
+mv -f CeCILL-C_V1-fr.txt.conv CeCILL-C_V1-fr.txt
+popd
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
