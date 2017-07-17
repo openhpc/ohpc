@@ -52,10 +52,8 @@ sparse matrix ordering.
 
 %prep
 %setup -q -n %{pname}_%{version}
-pushd %{pname}_%{version}
 %patch0 -p1
 sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %{SOURCE1} > src/Makefile.inc
-popd
 
 %build
 # OpenHPC compiler/mpi designation
