@@ -683,12 +683,6 @@ echo    Libraries:
        echo '    'NetCDF.................... : disabled
     fi
 
-    if test "x$enable_pnetcdf" = "xyes"; then
-       echo '    'PNetCDF.................... : enabled
-    else
-       echo '    'PNetCDF.................... : disabled
-    fi
-
     if test "x$enable_numpy" = "xyes"; then
        echo '    'Numpy..................... : enabled
     else
@@ -711,6 +705,12 @@ echo    Libraries:
        echo '    'PHDF5..................... : enabled
     else
        echo '    'PHDF5..................... : disabled
+    fi
+
+    if test "x$enable_pnetcdf" = "xyes"; then
+       echo '    'PNetCDF.................... : enabled
+    else
+       echo '    'PNetCDF.................... : disabled
     fi
 
     if test "x$enable_R" = "xyes"; then
