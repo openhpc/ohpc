@@ -110,6 +110,8 @@ Requires:  netcdf-fortran-gnu7-mpich%{PROJ_DELIM}
 Requires:  netcdf-fortran-gnu7-openmpi%{PROJ_DELIM}
 Requires:  netcdf-gnu7-mpich%{PROJ_DELIM}
 Requires:  netcdf-gnu7-openmpi%{PROJ_DELIM}
+Requires:  pnetcdf-gnu7-mpich%{PROJ_DELIM}
+Requires:  pnetcdf-gnu7-openmpi%{PROJ_DELIM}
 Requires:  phdf5-gnu7-mpich%{PROJ_DELIM}
 Requires:  phdf5-gnu7-openmpi%{PROJ_DELIM}
 %ifnarch aarch64
@@ -117,6 +119,7 @@ Requires:  adios-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-cxx-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-fortran-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-gnu7-mvapich2%{PROJ_DELIM}
+Requires:  pnetcdf-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  phdf5-gnu7-mvapich2%{PROJ_DELIM}
 %endif
 %description -n %{PROJ_NAME}-gnu7-io-libs
@@ -298,6 +301,11 @@ Requires:  netcdf-intel-impi%{PROJ_DELIM}
 Requires:  netcdf-intel-mpich%{PROJ_DELIM}
 Requires:  netcdf-intel-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-intel-openmpi%{PROJ_DELIM}
+Requires:  pnetcdf-gnu7-impi%{PROJ_DELIM}
+Requires:  pnetcdf-intel-impi%{PROJ_DELIM}
+Requires:  pnetcdf-intel-mpich%{PROJ_DELIM}
+Requires:  pnetcdf-intel-mvapich2%{PROJ_DELIM}
+Requires:  pnetcdf-intel-openmpi%{PROJ_DELIM}
 Requires:  phdf5-gnu7-impi%{PROJ_DELIM}
 Requires:  phdf5-intel-impi%{PROJ_DELIM}
 Requires:  phdf5-intel-mpich%{PROJ_DELIM}
