@@ -349,6 +349,12 @@ AC_ARG_ENABLE([autotools],
    [AX_OPTION_DEFAULT(type=short,enable_autotools,yes)])
 AM_CONDITIONAL(AUTOTOOLS_ENABLED,test "x$enable_autotools" = "xyes" )
 #------------------------------------------------------------------------------------------
+# CMake
+AC_ARG_ENABLE([cmake],
+   [AS_HELP_STRING([--enable-cmake],[Enable CMake tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_cmake,yes)])
+AM_CONDITIONAL(CMAKE_ENABLED,test "x$enable_cmake" = "xyes" )
+#------------------------------------------------------------------------------------------
 # TBB
 AC_ARG_ENABLE([tbb],
    [AS_HELP_STRING([--enable-tbb],[Enable tbb tests (default=yes)])],[],
@@ -557,6 +563,12 @@ echo    Dev Tools:
        echo '    'Autotools................. : enabled
     else
        echo '    'Autotools................. : disabled
+    fi
+
+    if test "x$enable_cmake" = "xyes"; then
+       echo '    'CMake..................... : enabled
+    else
+       echo '    'CMake..................... : disabled
     fi
 
     if test "x$enable_cilk" = "xyes"; then
