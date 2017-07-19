@@ -147,6 +147,8 @@ Requires:  petsc-gnu7-mpich%{PROJ_DELIM}
 Requires:  petsc-gnu7-openmpi%{PROJ_DELIM}
 Requires:  scalapack-gnu7-mpich%{PROJ_DELIM}
 Requires:  scalapack-gnu7-openmpi%{PROJ_DELIM}
+Requires:  slepc-gnu7-mpich%{PROJ_DELIM}
+Requires:  slepc-gnu7-openmpi%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-openmpi%{PROJ_DELIM}
 Requires:  trilinos-gnu7-mpich%{PROJ_DELIM}
@@ -158,6 +160,7 @@ Requires:  hypre-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  mumps-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  petsc-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-gnu7-mvapich2%{PROJ_DELIM}
+Requires:  slepc-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  trilinos-gnu7-mvapich2%{PROJ_DELIM}
 %endif
@@ -172,6 +175,7 @@ Requires:  hypre-gnu7-mpich%{PROJ_DELIM}
 Requires:  mumps-gnu7-mpich%{PROJ_DELIM}
 Requires:  petsc-gnu7-mpich%{PROJ_DELIM}
 Requires:  scalapack-gnu7-mpich%{PROJ_DELIM}
+Requires:  slepc-gnu7-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-mpich%{PROJ_DELIM}
 Requires:  trilinos-gnu7-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu7-mpich-parallel-libs
@@ -185,6 +189,7 @@ Requires:  hypre-gnu7-openmpi%{PROJ_DELIM}
 Requires:  mumps-gnu7-openmpi%{PROJ_DELIM}
 Requires:  petsc-gnu7-openmpi%{PROJ_DELIM}
 Requires:  scalapack-gnu7-openmpi%{PROJ_DELIM}
+Requires:  slepc-gnu7-openmpi%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-openmpi%{PROJ_DELIM}
 Requires:  trilinos-gnu7-openmpi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu7-openmpi-parallel-libs
@@ -322,6 +327,7 @@ Requires:  hypre-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  mumps-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  petsc-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-gnu7-mvapich2%{PROJ_DELIM}
+Requires:  slepc-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  trilinos-gnu7-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu7-mvapich2-parallel-libs
@@ -339,6 +345,8 @@ Requires:  petsc-gnu7-impi%{PROJ_DELIM}
 Requires:  petsc-intel-impi%{PROJ_DELIM}
 Requires:  scalapack-gnu7-impi%{PROJ_DELIM}
 Requires:  scalapack-intel-impi%{PROJ_DELIM}
+Requires:  slepc-gnu7-impi%{PROJ_DELIM}
+Requires:  slepc-intel-impi%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-impi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
 Requires:  trilinos-gnu7-impi%{PROJ_DELIM}
@@ -353,6 +361,7 @@ Requires:  hypre-intel-mpich%{PROJ_DELIM}
 Requires:  mumps-intel-mpich%{PROJ_DELIM}
 Requires:  petsc-intel-mpich%{PROJ_DELIM}
 Requires:  scalapack-intel-mpich%{PROJ_DELIM}
+Requires:  slepc-intel-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
 Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-parallel-libs
@@ -365,6 +374,7 @@ Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
 Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
 Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
+Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
 Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
@@ -377,6 +387,7 @@ Requires:  hypre-intel-openmpi%{PROJ_DELIM}
 Requires:  mumps-intel-openmpi%{PROJ_DELIM}
 Requires:  petsc-intel-openmpi%{PROJ_DELIM}
 Requires:  scalapack-intel-openmpi%{PROJ_DELIM}
+Requires:  slepc-intel-openmpi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-openmpi%{PROJ_DELIM}
 Requires:  trilinos-intel-openmpi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-openmpi-parallel-libs
