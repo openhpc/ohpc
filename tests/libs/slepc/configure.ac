@@ -19,7 +19,6 @@ fi
 
 # set compilers to use MPI toolchain 
 CC=mpicc
-CXX=mpicxx
 F77=mpif77
 FC=mpif90
 
@@ -27,21 +26,20 @@ FC=mpif90
 AC_PROG_CC
 AC_PROG_F77
 AC_PROG_FC
-AC_PROG_CXX
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
 if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
   CFLAGS="-I ${SLEPC_INC} -I ${MKLROOT}/include ${CFLAGS}"
-  CXXFLAGS="-I ${SLEPC_INC} -I ${MKLROOT}/include ${CXXFLAGS} -fopenmp"
   FFLAGS="-I ${SLEPC_INC} -I ${MKLROOT}/include ${FFLAGS}"
-  LDFLAGS="-L${SLEPC_LIB} -lSLEPC ${LDFLAGS}"
+  FCFLAGS="-I ${SLEPC_INC} -I ${MKLROOT}/include ${FFLAGS}"
+  LDFLAGS="-L${SLEPC_LIB} -lslepc ${LDFLAGS}"
 else
   CFLAGS="-I ${SLEPC_INC} ${CFLAGS}"
-  CXXFLAGS="-I ${SLEPC_INC} ${CXXFLAGS} -fopenmp"
-  FFLAGS="-I ${SLEPC_INC} ${FFLAGS}"
-  LDFLAGS="-L${SLEPC_LIB} -lSLEPC ${LDFLAGS}"
+  FFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${FFLAGS}"
+  FCFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${FFLAGS}"
+  LDFLAGS="-L${SLEPC_LIB} -lslepc -L${PETSC_LIB} -lpetsc ${LDFLAGS}"
 fi
 
 
@@ -59,11 +57,11 @@ echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
 echo OHPC MPI toolchain............. : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
-echo C++ compiler.................. : `which $CXX`
-echo Fortran compiler ............. : `which $F77`
+echo F77 compiler ................. : `which $F77`
+echo F90 compiler ................. : `which $F77`
 echo 
 echo C compiler flags.............. : $CFLAGS
-echo C++ compiler flags............ : $CXXFLAGS
-echo Fortran compiler flags........ : $FFLAGS
+echo F77 compiler flags............ : $FFLAGS
+echo F90 compiler flags............ : $FCFLAGS
 echo 
 echo '-------------------------------------------------------------------------------------------------------------'
