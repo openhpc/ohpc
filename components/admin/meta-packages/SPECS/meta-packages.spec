@@ -42,6 +42,7 @@ Collection of GNU autotools packages
 Summary:   OpenHPC base
 Requires:  bc
 Requires:  conman%{PROJ_DELIM}
+Requires:  cmake%{PROJ_DELIM}
 Requires:  emacs-nox
 Requires:  examples%{PROJ_DELIM}
 Requires:  gdb
