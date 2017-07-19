@@ -40,6 +40,6 @@ echo "-------------------------------------------------------"
 
 module purge          || exit 1
 module load cmake     || exit 1
-module load gnu       || exit 1
+module load gnu7      || exit 1
 
 ./test_cmake $BATS_OPTS
