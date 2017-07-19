@@ -19,6 +19,8 @@ FC=mpif90
 
 #OHPC_COMPILER_FAMILY
 
+AM_CONDITIONAL([INTEL], [test "x$LMOD_FAMILY_COMPILER" = "xintel"])
+
 # test compilers
 
 AC_PROG_CC

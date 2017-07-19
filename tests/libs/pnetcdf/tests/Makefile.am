@@ -110,12 +110,20 @@ csnap_SOURCES               = testutils.c
 
 TESTS                      += fixedform
 check_PROGRAMS             += fixedform
+if INTEL
+fixedform_LDFLAGS           = -g -I. -fixed fixedform.f90
+else
 fixedform_LDFLAGS           = -g -I. -ffixed-form fixedform.f90
+endif
 fixedform_SOURCES           = testutilsf.F90
 
 TESTS                      += freeform
 check_PROGRAMS             += freeform
+if INTEL
+freeform_LDFLAGS            = -g -I. -free freeform.f
+else 
 freeform_LDFLAGS            = -g -I. -ffree-form freeform.f
+endif
 freeform_SOURCES            = testutilsf.F90
 
 TESTS                      += pnctest
