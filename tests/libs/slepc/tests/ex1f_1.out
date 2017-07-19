@@ -1,0 +1,13 @@
+
+1-D Laplacian Eigenproblem, n = 30 (Fortran)
+
+ Number of iterations of the method:   4
+ Solution method: krylovschur                                                                     
+ Number of requested eigenvalues: 1
+ Stopping condition: tol=1.0000E-08, maxit= 100
+ Number of converged eigenpairs: 1
+
+          k          ||Ax-kx||/||kx||
+  ----------------- ------------------
+     3.9897E+00         4.7299E-09
+

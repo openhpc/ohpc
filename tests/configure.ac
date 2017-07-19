@@ -319,6 +319,12 @@ AC_ARG_ENABLE([scipy],
    [AX_OPTION_DEFAULT(type=long,enable_scipy,yes)])
 AM_CONDITIONAL(SCIPY_ENABLED,test "x$enable_scipy" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# SLEPC
+AC_ARG_ENABLE([slepc],
+   [AS_HELP_STRING([--enable-slepc],[Enable slepc tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_slepc,yes)])
+AM_CONDITIONAL(SLEPC_ENABLED,test "x$enable_slepc" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # SuperLU
 AC_ARG_ENABLE([superlu],
    [AS_HELP_STRING([--enable-superlu],[Enable superlu tests (default=yes)])],[],
@@ -741,6 +747,12 @@ echo    Libraries:
        echo '    'Scipy..................... : enabled
     else
        echo '    'Scipy..................... : disabled
+    fi
+
+    if test "x$enable_slepc" = "xyes"; then
+       echo '    'SLEPc................. : enabled
+    else
+       echo '    'SLEPc................. : disabled
     fi
 
     if test "x$enable_superlu" = "xyes"; then

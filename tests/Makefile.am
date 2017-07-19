@@ -186,6 +186,10 @@ if SCALAPACK_ENABLED
    TESTS += libs/scalapack/ohpc-tests/test_mpi_families
 endif
 
+if SLEPC_ENABLED
+   TESTS += libs/slepc/ohpc-tests/test_mpi_families
+endif
+
 if SUPERLU_ENABLED
    TESTS += libs/superlu/ohpc-tests/test_compiler_families
 endif
