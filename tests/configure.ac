@@ -726,9 +726,9 @@ echo    Libraries:
     fi
 
     if test "x$enable_pnetcdf" = "xyes"; then
-       echo '    'PNetCDF.................... : enabled
+       echo '    'PNetCDF................... : enabled
     else
-       echo '    'PNetCDF.................... : disabled
+       echo '    'PNetCDF................... : disabled
     fi
 
     if test "x$enable_R" = "xyes"; then
@@ -750,9 +750,9 @@ echo    Libraries:
     fi
 
     if test "x$enable_slepc" = "xyes"; then
-       echo '    'SLEPc................. : enabled
+       echo '    'SLEPc..................... : enabled
     else
-       echo '    'SLEPc................. : disabled
+       echo '    'SLEPc..................... : disabled
     fi
 
     if test "x$enable_superlu" = "xyes"; then
