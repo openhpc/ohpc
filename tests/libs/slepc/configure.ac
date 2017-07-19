@@ -21,10 +21,12 @@ fi
 CC=mpicc
 CXX=mpicxx
 F77=mpif77
+FC=mpif90
 
 # test compilers
 AC_PROG_CC
 AC_PROG_F77
+AC_PROG_FC
 AC_PROG_CXX
 
 # Checks for typedefs, structures, and compiler characteristics.
