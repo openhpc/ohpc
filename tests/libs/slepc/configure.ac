@@ -36,7 +36,7 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
   FCFLAGS="-I ${SLEPC_INC} -I ${MKLROOT}/include ${FFLAGS}"
   LDFLAGS="-L${SLEPC_LIB} -lslepc ${LDFLAGS}"
 else
-  CFLAGS="-I ${SLEPC_INC} ${CFLAGS}"
+  CFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${CFLAGS}"
   FFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${FFLAGS}"
   FCFLAGS="-I ${SLEPC_INC} -I ${PETSC_INC} ${FFLAGS}"
   LDFLAGS="-L${SLEPC_LIB} -lslepc -L${PETSC_LIB} -lpetsc ${LDFLAGS}"
