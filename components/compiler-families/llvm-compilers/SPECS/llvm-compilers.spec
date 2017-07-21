@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%define compiler_family gnu
+%define compiler_family gnu7
 %include %{_sourcedir}/OHPC_macros
 
 # Remember to drop this gnu-compilers dependency in the future,
@@ -38,7 +38,7 @@ Source7:   http://releases.llvm.org/%{version}/lld-%{version}.src.tar.xz
 Source8:   http://releases.llvm.org/%{version}/openmp-%{version}.src.tar.xz
 Source9:   OHPC_macros
 Patch1:    0001-GOMP-compatibility-add-missing-OpenMP4.0-task-deps-h.patch
-BuildRequires: gnu-compilers%{PROJ_DELIM}
+BuildRequires: gnu7-compilers%{PROJ_DELIM}
 BuildRequires: cmake%{PROJ_DELIM}
 BuildRequires: make
 BuildRequires: perl
@@ -47,7 +47,7 @@ BuildRequires: pkgconfig
 BuildRequires: binutils-devel
 BuildRequires: libstdc++-devel
 Requires:      binutils
-Requires:      gnu-compilers%{PROJ_DELIM} = %{gnuver}
+Requires:      gnu7-compilers%{PROJ_DELIM} = %{gnuver}
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires: perl-Data-Dumper
 %endif
