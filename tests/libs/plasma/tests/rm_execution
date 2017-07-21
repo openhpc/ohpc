@@ -38,6 +38,6 @@ ARGS=0
 	flunk "F90_test binary does not exit"
     fi
 
-    run_serial_binary ./F90_test $ARGS
+    run_serial_binary ./F90_test "< gebrd_example.d"
     assert_success
 }
