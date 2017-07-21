@@ -148,7 +148,7 @@ module-whatis "URL %{url}"
 set     version			    %{version}
 
 
-# Require openblas and scalapack for gnu compiler families
+# Require openblas for gnu compiler families
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if { [is-loaded gnu] } {
