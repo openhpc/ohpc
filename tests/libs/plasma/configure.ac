@@ -14,14 +14,8 @@ if test "x$PLASMA_DIR" = "x"; then
    echo
    AC_ERROR([PLASMA_DIR not defined - please load plasma environment.])
 else
-   AC_MSG_RESULT([no])
+   AC_MSG_RESULT([yes])
 fi
-
-# unset default compilers and detect compiler toolchain from environment
-CC=" "
-F77=" "
-FC=" "
-
 # test compilers
 AC_PROG_CC
 AC_PROG_F77
@@ -34,12 +28,12 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
   CFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${CFLAGS}"
   FFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS}"
   FCFLAGS="-I ${PLASMA_INC} -I ${MKLROOT}/include ${FFLAGS}"
-  LDFLAGS="-L${PLASMA_LIB} -lplasma -lmkl_rt ${LDFLAGS}"
+  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblasqw -lcoreblas -lquark -lmkl_rt -lpthread -lm ${LDFLAGS}"
 else
-  CFLAGS="-I ${PLASMA_INC} -I ${SCALAPACK_INC} ${CFLAGS}"
-  FFLAGS="-I ${PLASMA_INC} -I ${SCALAPACK_INC} ${FFLAGS}"
-  FCFLAGS="-I ${PLASMA_INC} -I ${SCALAPACK_INC} ${FFLAGS}"
-  LDFLAGS="-L${PLASMA_LIB} -lplasma -L${SCALAPACK_LIB} -lscalapack ${LDFLAGS}"
+  CFLAGS="-I ${PLASMA_INC} ${CFLAGS}"
+  FFLAGS="-I ${PLASMA_INC} ${FFLAGS}"
+  FCFLAGS="-I ${PLASMA_INC} ${FFLAGS}"
+  LDFLAGS="-L${PLASMA_LIB} -lplasma -lcoreblasqw -lcoreblas -lquark -L${OPENBLAS_LIB} -lopenblas -lpthread -lm ${LDFLAGS}"
 fi
 
 
