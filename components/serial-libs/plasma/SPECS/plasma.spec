@@ -11,14 +11,11 @@
 # plasma - Parallel Linear Algebra Software for Multicore Architectures
 
 %define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 # Build requires
 BuildRequires: python
 %if "%{compiler_family}" != "intel"
-BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -27,7 +24,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname plasma
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name:	%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name:	%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version: 2.8.0
 Release: 1
 Summary: Parallel Linear Algebra Software for Multicore Architectures
@@ -46,7 +43,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # Disable debug packages
 %define debug_package %{nil}
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
 PLASMA is a software package for solving problems in dense linear algebra using
@@ -65,12 +62,11 @@ mkdir -p build/download
 cp %{SOURCE0} build/download
 cp %{SOURCE2} build/download
 
-# OpenHPC compiler/mpi designation
+# OpenHPC compiler designation
 %ohpc_setup_compiler
 
 %if "%{compiler_family}" != "intel"
 module load openblas
-module load scalapack
 %endif
 
 export SHARED_OPT=-shared
@@ -94,7 +90,6 @@ plasma-installer_%{version}/setup.py              \
     --fflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
     --cblaslib="-L${OPENBLAS_LIB} -lopenblas"     \
-    --lapacklib="-L${SCALAPACK_LIB} -lscalapack"  \
 %endif
 %if %{compiler_family} == intel
     --cflags="${RPM_OPT_FLAGS} ${PIC_OPT}" \
@@ -140,11 +135,11 @@ proc ModulesHelp { } {
 
 puts stderr " "
 puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-puts stderr "toolchain and the %{mpi_family} MPI stack."
+puts stderr "toolchain."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
+module-whatis "Name: %{pname} built with %{compiler_family} compiler"
 module-whatis "Version: %{version}"
 module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
@@ -159,10 +154,6 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if { [is-loaded gnu] } {
         if { ![is-loaded openblas]  } {
           module load openblas
-        }
-
-        if { ![is-loaded scalapack]  } {
-          module load scalapack
         }
     }
 }
@@ -207,10 +198,6 @@ popd 2>&1 > /dev/null
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
