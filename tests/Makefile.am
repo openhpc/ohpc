@@ -174,6 +174,10 @@ if PHDF5_ENABLED
    TESTS += libs/phdf5/ohpc-tests/test_mpi_families
 endif
 
+if PLASMA_ENABLED
+   TESTS += libs/plasma/ohpc-tests/test_compiler_families
+endif
+
 if PNETCDF_ENABLED
    TESTS += libs/pnetcdf/ohpc-tests/test_mpi_families
 endif

@@ -301,6 +301,12 @@ AC_ARG_ENABLE([petsc],
    [AX_OPTION_DEFAULT(type=long,enable_petsc,yes)])
 AM_CONDITIONAL(PETSC_ENABLED,test "x$enable_petsc" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# PLASMA
+AC_ARG_ENABLE([plasma],
+   [AS_HELP_STRING([--enable-plasma],[Enable PLASMA tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_plasma,yes)])
+AM_CONDITIONAL(PLASMA_ENABLED,test "x$enable_plasma" = "xyes" )
+#------------------------------------------------------------------------------------------
 # RMS harness
 AC_ARG_ENABLE([rms-harness],
    [AS_HELP_STRING([--enable-rms-harness],[Enable RMS harness tests(default=yes)])],[],
@@ -723,6 +729,12 @@ echo    Libraries:
        echo '    'PHDF5..................... : enabled
     else
        echo '    'PHDF5..................... : disabled
+    fi
+
+    if test "x$enable_plasma" = "xyes"; then
+       echo '    'PLASMA.................... : enabled
+    else
+       echo '    'PLASMA.................... : disabled
     fi
 
     if test "x$enable_pnetcdf" = "xyes"; then
