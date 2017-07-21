@@ -239,6 +239,7 @@ Summary:   OpenHPC serial libraries for GNU
 Requires:  gsl-gnu7%{PROJ_DELIM}
 Requires:  metis-gnu7%{PROJ_DELIM}
 Requires:  openblas-gnu7%{PROJ_DELIM}
+Requires:  plasma-gnu7%{PROJ_DELIM}
 Requires:  R-gnu7%{PROJ_DELIM}
 Requires:  superlu-gnu7%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu7-serial-libs
@@ -436,6 +437,7 @@ Collection of runtimes for use with Intel(R) Parallel Studio XE toolchain
 %package -n %{PROJ_NAME}-intel-serial-libs
 Summary:   OpenHPC serial libraries for Intel(R) Parallel Studio XE
 Requires:  metis-intel%{PROJ_DELIM}
+Requires:  plasma-intel%{PROJ_DELIM}
 Requires:  superlu-intel%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-serial-libs
 Collection of serial library builds for use with Intel(R) Parallel Studio XE toolchain
