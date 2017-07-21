@@ -45,6 +45,7 @@ BuildRequires: perl
 BuildRequires: python
 BuildRequires: pkgconfig
 BuildRequires: binutils-devel
+BuildRequires: libstdc++-devel
 Requires:      binutils
 Requires:      gnu-compilers%{PROJ_DELIM} = %{gnuver}
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
