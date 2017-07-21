@@ -38,7 +38,7 @@ ARGS=8
 	flunk "ex16f90 binary does not exit"
     fi
     
-    run_mpi_binary ./ex16f90 "" $NODES $TASKS
+    run_mpi_binary ./ex16f90 " -pep_nev 4 -terse " 1 1
     assert_success
 }
 
