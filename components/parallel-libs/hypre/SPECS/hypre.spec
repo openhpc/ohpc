@@ -210,7 +210,7 @@ if [ expr [ module-info mode load ] || [module-info mode display ] ] {
     if {  ![is-loaded superlu]  } {
         module load superlu
     }
-    if { [is-loaded gnu] } {
+    if { [is-loaded gnu7] } {
         if { ![is-loaded openblas]  } {
           module load openblas
         }
