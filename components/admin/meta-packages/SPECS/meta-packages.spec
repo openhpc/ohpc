@@ -150,6 +150,8 @@ Requires:  scalapack-gnu7-mpich%{PROJ_DELIM}
 Requires:  scalapack-gnu7-openmpi%{PROJ_DELIM}
 Requires:  slepc-gnu7-mpich%{PROJ_DELIM}
 Requires:  slepc-gnu7-openmpi%{PROJ_DELIM}
+Requires:  scotch-gnu7-mpich%{PROJ_DELIM}
+Requires:  scotch-gnu7-openmpi%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-openmpi%{PROJ_DELIM}
 Requires:  trilinos-gnu7-mpich%{PROJ_DELIM}
@@ -162,6 +164,7 @@ Requires:  mumps-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  petsc-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  slepc-gnu7-mvapich2%{PROJ_DELIM}
+Requires:  scotch-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  trilinos-gnu7-mvapich2%{PROJ_DELIM}
 %endif
@@ -177,6 +180,7 @@ Requires:  mumps-gnu7-mpich%{PROJ_DELIM}
 Requires:  petsc-gnu7-mpich%{PROJ_DELIM}
 Requires:  scalapack-gnu7-mpich%{PROJ_DELIM}
 Requires:  slepc-gnu7-mpich%{PROJ_DELIM}
+Requires:  scotch-gnu7-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-mpich%{PROJ_DELIM}
 Requires:  trilinos-gnu7-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu7-mpich-parallel-libs
@@ -191,6 +195,7 @@ Requires:  mumps-gnu7-openmpi%{PROJ_DELIM}
 Requires:  petsc-gnu7-openmpi%{PROJ_DELIM}
 Requires:  scalapack-gnu7-openmpi%{PROJ_DELIM}
 Requires:  slepc-gnu7-openmpi%{PROJ_DELIM}
+Requires:  scotch-gnu7-openmpi%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-openmpi%{PROJ_DELIM}
 Requires:  trilinos-gnu7-openmpi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu7-openmpi-parallel-libs
@@ -241,6 +246,7 @@ Requires:  metis-gnu7%{PROJ_DELIM}
 Requires:  openblas-gnu7%{PROJ_DELIM}
 Requires:  plasma-gnu7%{PROJ_DELIM}
 Requires:  R-gnu7%{PROJ_DELIM}
+Requires:  scotch-gnu7%{PROJ_DELIM}
 Requires:  superlu-gnu7%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu7-serial-libs
 Collection of serial library builds for use with GNU compiler toolchain
@@ -330,6 +336,7 @@ Requires:  mumps-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  petsc-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  slepc-gnu7-mvapich2%{PROJ_DELIM}
+Requires:  scotch-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-mvapich2%{PROJ_DELIM}
 Requires:  trilinos-gnu7-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu7-mvapich2-parallel-libs
@@ -349,6 +356,8 @@ Requires:  scalapack-gnu7-impi%{PROJ_DELIM}
 Requires:  scalapack-intel-impi%{PROJ_DELIM}
 Requires:  slepc-gnu7-impi%{PROJ_DELIM}
 Requires:  slepc-intel-impi%{PROJ_DELIM}
+Requires:  scotch-gnu7-impi%{PROJ_DELIM}
+Requires:  scotch-intel-impi%{PROJ_DELIM}
 Requires:  superlu_dist-gnu7-impi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
 Requires:  trilinos-gnu7-impi%{PROJ_DELIM}
@@ -364,6 +373,7 @@ Requires:  mumps-intel-mpich%{PROJ_DELIM}
 Requires:  petsc-intel-mpich%{PROJ_DELIM}
 Requires:  scalapack-intel-mpich%{PROJ_DELIM}
 Requires:  slepc-intel-mpich%{PROJ_DELIM}
+Requires:  scotch-intel-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
 Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-parallel-libs
@@ -377,6 +387,7 @@ Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
 Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
 Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
+Requires:  scotch-intel-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
 Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
@@ -390,6 +401,7 @@ Requires:  mumps-intel-openmpi%{PROJ_DELIM}
 Requires:  petsc-intel-openmpi%{PROJ_DELIM}
 Requires:  scalapack-intel-openmpi%{PROJ_DELIM}
 Requires:  slepc-intel-openmpi%{PROJ_DELIM}
+Requires:  scotch-intel-openmpi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-openmpi%{PROJ_DELIM}
 Requires:  trilinos-intel-openmpi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-openmpi-parallel-libs
@@ -438,6 +450,7 @@ Collection of runtimes for use with Intel(R) Parallel Studio XE toolchain
 Summary:   OpenHPC serial libraries for Intel(R) Parallel Studio XE
 Requires:  metis-intel%{PROJ_DELIM}
 Requires:  plasma-intel%{PROJ_DELIM}
+Requires:  scotch-intel%{PROJ_DELIM}
 Requires:  superlu-intel%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-serial-libs
 Collection of serial library builds for use with Intel(R) Parallel Studio XE toolchain
