@@ -151,7 +151,7 @@ set     version			    %{version}
 # Require openblas for gnu compiler families
 
 if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { [is-loaded gnu] } {
+    if { [is-loaded gnu7] } {
         if { ![is-loaded openblas]  } {
           module load openblas
         }
