@@ -519,54 +519,30 @@ if test "x$ROOT_ENABLED" = "x1" ; then
 
 else
 
-echo    User Environment:
+echo    Apps:
 
-    if test "x$enable_compilers" = "xyes"; then
-       echo '    'Compilers................. : enabled
+    if test "x$enable_hpcg" = "xyes"; then
+       echo '    'HPCG...................... : enabled
     else
-       echo '    'Compilers................. : disabled
+       echo '    'HPCG...................... : disabled
     fi
 
-    if test "x$enable_lustre" = "xyes"; then
-       echo '    'Lustre client............. : enabled
+    if test "x$enable_minidft" = "xyes"; then
+       echo '    'MiniDFT................... : enabled
     else
-       echo '    'Lustre client............. : disabled
+       echo '    'MiniDFT................... : disabled
     fi
 
-    if test "x$enable_modules" = "xyes"; then
-       echo '    'Modules................... : enabled
+    if test "x$enable_minife" = "xyes"; then
+       echo '    'MiniFE.................... : enabled
     else
-       echo '    'Modules................... : disabled
+       echo '    'MiniFE.................... : disabled
     fi
 
-    if test "x$enable_mpi" = "xyes"; then
-       echo '    'MPI....................... : enabled
+    if test "x$enable_prk" = "xyes"; then
+       echo '    'PRK....................... : enabled
     else
-       echo '    'MPI....................... : disabled
-    fi
-
-    if test "x$enable_munge" = "xyes"; then
-       echo '    'Munge..................... : enabled
-    else
-       echo '    'Munge..................... : disabled
-    fi
-
-    if test "x$enable_oom" = "xyes"; then
-       echo '    'OOM....................... : enabled
-    else
-       echo '    'OOM....................... : disabled
-    fi
-
-    if test "x$enable_packaging" = "xyes"; then
-       echo '    'Packaging tests........... : enabled 
-    else   
-       echo '    'Packaging tests........... : disabled 
-    fi
-
-    if test "x$enable_rms_harness" = "xyes"; then
-       echo '    'RMS test harness.......... : enabled 
-    else   
-       echo '    'RMS test harness.......... : disabled 
+       echo '    'PRK....................... : disabled
     fi
 
 echo    Dev Tools:
@@ -611,32 +587,6 @@ echo    Dev Tools:
        echo '    'Valgrind.................. : enabled
     else
        echo '    'Valgrind.................. : disabled
-    fi
-
-echo    Performance Tools:
-
-    if test "x$enable_mpiP" = "xyes"; then
-       echo '    'mpiP Profiler........ .... : enabled
-    else
-       echo '    'mpiP Profiler............. : disabled
-    fi
-
-    if test "x$enable_papi" = "xyes"; then
-       echo '    'Papi...................... : enabled
-    else
-       echo '    'Papi...................... : disabled
-    fi
-
-    if test "x$enable_scalasca" = "xyes"; then
-       echo '    'Scalasca.................. : enabled
-    else
-       echo '    'Scalasca.................. : disabled
-    fi
-
-    if test "x$enable_tau" = "xyes"; then
-       echo '    'TAU....................... : enabled
-    else
-       echo '    'TAU....................... : disabled
     fi
 
 echo    Libraries:
@@ -785,6 +735,32 @@ echo    Libraries:
        echo '    'Trilinos.................. : disabled
     fi
 
+echo    Performance Tools:
+
+    if test "x$enable_mpiP" = "xyes"; then
+       echo '    'mpiP Profiler........ .... : enabled
+    else
+       echo '    'mpiP Profiler............. : disabled
+    fi
+
+    if test "x$enable_papi" = "xyes"; then
+       echo '    'Papi...................... : enabled
+    else
+       echo '    'Papi...................... : disabled
+    fi
+
+    if test "x$enable_scalasca" = "xyes"; then
+       echo '    'Scalasca.................. : enabled
+    else
+       echo '    'Scalasca.................. : disabled
+    fi
+
+    if test "x$enable_tau" = "xyes"; then
+       echo '    'TAU....................... : enabled
+    else
+       echo '    'TAU....................... : disabled
+    fi
+
 echo    Runtimes:
 
     if test "x$enable_ocr" = "xyes"; then
@@ -793,30 +769,54 @@ echo    Runtimes:
        echo '    'OCR....................... : disabled
     fi
 
-echo    Apps:
+echo    User Environment:
 
-    if test "x$enable_hpcg" = "xyes"; then
-       echo '    'HPCG...................... : enabled
+    if test "x$enable_compilers" = "xyes"; then
+       echo '    'Compilers................. : enabled
     else
-       echo '    'HPCG...................... : disabled
+       echo '    'Compilers................. : disabled
     fi
 
-    if test "x$enable_minidft" = "xyes"; then
-       echo '    'MiniDFT................... : enabled
+    if test "x$enable_lustre" = "xyes"; then
+       echo '    'Lustre client............. : enabled
     else
-       echo '    'MiniDFT................... : disabled
+       echo '    'Lustre client............. : disabled
     fi
 
-    if test "x$enable_minife" = "xyes"; then
-       echo '    'MiniFE.................... : enabled
+    if test "x$enable_modules" = "xyes"; then
+       echo '    'Modules................... : enabled
     else
-       echo '    'MiniFE.................... : disabled
+       echo '    'Modules................... : disabled
     fi
 
-    if test "x$enable_prk" = "xyes"; then
-       echo '    'PRK....................... : enabled
+    if test "x$enable_mpi" = "xyes"; then
+       echo '    'MPI....................... : enabled
     else
-       echo '    'PRK....................... : disabled
+       echo '    'MPI....................... : disabled
+    fi
+
+    if test "x$enable_munge" = "xyes"; then
+       echo '    'Munge..................... : enabled
+    else
+       echo '    'Munge..................... : disabled
+    fi
+
+    if test "x$enable_oom" = "xyes"; then
+       echo '    'OOM....................... : enabled
+    else
+       echo '    'OOM....................... : disabled
+    fi
+
+    if test "x$enable_packaging" = "xyes"; then
+       echo '    'Packaging tests........... : enabled 
+    else   
+       echo '    'Packaging tests........... : disabled 
+    fi
+
+    if test "x$enable_rms_harness" = "xyes"; then
+       echo '    'RMS test harness.......... : enabled 
+    else   
+       echo '    'RMS test harness.......... : disabled 
     fi
 
 fi
