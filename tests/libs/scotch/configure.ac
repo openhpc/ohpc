@@ -24,7 +24,7 @@ AC_PROG_CC
 AC_C_CONST
 
 CFLAGS="-I ${SCOTCH_INC} ${CFLAGS}"
-LDFLAGS="-L${SCOTCH_LIB} -lscotch  -lscotcherrexit ${LDFLAGS}"
+LDFLAGS="-L${SCOTCH_LIB} -lscotch  -lscotcherrexit -lz -lbz2 -lm -lrt -pthread ${LDFLAGS}"
 
 
 # Set subdirectories

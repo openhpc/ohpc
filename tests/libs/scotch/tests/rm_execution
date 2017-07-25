@@ -11,15 +11,6 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 
-@test "[libs/scotch] arch test binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s arch ];then
-	flunk "arch binary does not exit"
-    fi
-    
-    run_serial_binary ./arch ""
-    assert_success
-}
-
 @test "[libs/scotch] graph_map binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s graph_map ];then
 	flunk "grapch_map binary does not exit"
