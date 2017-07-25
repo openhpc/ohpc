@@ -10,6 +10,8 @@
 
 # lustre.spec
 
+# needssslcertforbuild
+
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
@@ -336,9 +338,6 @@ fi
 make %{?_smp_mflags} -s %{?make_args}
 
 %install
-
-# needssslcertforbuild
-export BRP_PESIGN_FILES='*.ko'
 
 make install DESTDIR=$RPM_BUILD_ROOT
 
