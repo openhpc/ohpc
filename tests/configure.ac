@@ -325,6 +325,12 @@ AC_ARG_ENABLE([scipy],
    [AX_OPTION_DEFAULT(type=long,enable_scipy,yes)])
 AM_CONDITIONAL(SCIPY_ENABLED,test "x$enable_scipy" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Scotch
+AC_ARG_ENABLE([scotch],
+   [AS_HELP_STRING([--enable-scotch],[Enable scotch tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_scotch,yes)])
+AM_CONDITIONAL(SCOTCH_ENABLED,test "x$enable_scotch" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # SLEPC
 AC_ARG_ENABLE([slepc],
    [AS_HELP_STRING([--enable-slepc],[Enable slepc tests (default=yes)])],[],
@@ -709,6 +715,12 @@ echo    Libraries:
        echo '    'Scipy..................... : enabled
     else
        echo '    'Scipy..................... : disabled
+    fi
+
+    if test "x$enable_scotch" = "xyes"; then
+       echo '    'Scotch.................... : enabled
+    else
+       echo '    'Scotch.................... : disabled
     fi
 
     if test "x$enable_slepc" = "xyes"; then

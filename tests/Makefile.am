@@ -190,6 +190,10 @@ if SCALAPACK_ENABLED
    TESTS += libs/scalapack/ohpc-tests/test_mpi_families
 endif
 
+if SCOTCH_ENABLED
+   TESTS += libs/scotch/ohpc-tests/test_compiler_families
+endif
+
 if SLEPC_ENABLED
    TESTS += libs/slepc/ohpc-tests/test_mpi_families
 endif

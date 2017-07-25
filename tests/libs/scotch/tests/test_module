@@ -1,0 +1,130 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+PKG=SCOTCH
+module=scotch
+family=$LMOD_FAMILY_COMPILER
+testname=libs/Scotch
+binary=gout
+library=libscotch
+header=scotch.h
+rpm=$module-$family${DELIM}
+
+@test "[$testname] Verify $PKG module is loaded and matches rpm version ($family)" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+}
+
+@test "[$testname] Verify ${PKG}_DIR is defined and directory exists ($family)" {
+    PKG_DIR=${PKG}_DIR
+
+    if [ -z "${!PKG_DIR}" ];then
+        flunk "env setting ${PKG_DIR} not defined"
+    fi
+
+    if [ ! -d "${!PKG_DIR}" ];then
+        flunk "directory ${!PKG_DIR} does not exist"
+    fi
+}
+
+# ----------
+# Lib Tests
+# ----------
+
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -d ${!LIB} ];then
+        flunk "directory ${!LIB} does not exist"
+    fi
+}
+
+@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -s ${!LIB}/${library}.so ];then
+        flunk "${library}.so does not exist"
+    fi
+}
+
+@test "[$testname] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ -e ${!LIB}/${library}.a ];then
+        flunk "${library}.a exists when not expecting it"
+    fi
+}
+
+# --------------
+# Include Tests
+# --------------
+
+@test "[$testname] Verify module ${PKG}_INC is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    INC=${PKG}_INC
+
+    if [ -z ${!INC} ];then
+        flunk "${PKG}_INC directory not defined"
+    fi
+  
+    if [ ! -d ${!INC} ];then
+        flunk "directory ${!INC} does not exist"
+    fi
+}
+
+@test "[$testname] Verify header file is present in ${PKG}_INC ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    INC=${PKG}_INC
+
+    if [ -z ${!INC} ];then
+        flunk "${PKG}_INC directory not defined"
+    fi
+  
+    if [ ! -s ${!INC}/${header} ];then
+        flunk "directory $header file does not exist"
+    fi
+}
+
+# ----------
+# Binaries
+# ----------
+
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
+    BIN=${PKG}_BIN
+    if [ -z ${!BIN} ];then
+        flunk "${PKG}_BIN directory not defined"
+    fi
+
+    if [ ! -d ${!BIN} || -z "${!BIN}" ];then
+        flunk "directory ${!BIN} does not exist"
+    fi
+}
+
+@test "[$testname] Verify availability of $binary binary" {
+    run which $binary
+    assert_success
+}
+
+rm -f .cmd_output
