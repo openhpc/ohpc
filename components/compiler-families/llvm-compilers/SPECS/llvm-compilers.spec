@@ -47,6 +47,7 @@ BuildRequires: pkgconfig
 BuildRequires: binutils-devel
 BuildRequires: libstdc++-devel
 Requires:      binutils
+Requires:      gnu-c++
 Requires:      gnu7-compilers%{PROJ_DELIM} = %{gnuver}
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires: perl-Data-Dumper
