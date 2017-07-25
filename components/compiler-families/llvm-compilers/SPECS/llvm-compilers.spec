@@ -18,7 +18,8 @@
 %global clang_sha 1210030915d1e1441d62eea54976f4ced7f6ad88
 %global flang_sha cab3fc47849d7ba8effef8474b9aae2cc60e8c57
 
-%define pname llvm-compilers
+%global pname llvm-compilers
+%global major_ver 4
 
 Summary:   The LLVM Compiler Infrastructure
 Name:      %{pname}%{PROJ_DELIM}
@@ -203,8 +204,8 @@ cmake \
 cd ..
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/llvm
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/llvm/%{version}
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/llvm%{major_ver}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/llvm%{major_ver}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -243,7 +244,7 @@ prepend-path    CPLUS_INCLUDE_PATH  %{gnu_path}/include/c++/%{gnuver}:%{gnu_path
 family "compiler"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/llvm/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/llvm%{major_ver}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -253,7 +254,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_MODULES}/llvm
+%{OHPC_MODULES}/llvm%{major_ver}
 %dir %{OHPC_COMPILERS}/llvm
 %{install_path}
 %doc llvm/CODE_OWNERS.TXT
