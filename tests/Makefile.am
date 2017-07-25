@@ -182,6 +182,10 @@ if PNETCDF_ENABLED
    TESTS += libs/pnetcdf/ohpc-tests/test_mpi_families
 endif
 
+if PTSCOTCH_ENABLED
+   TESTS += libs/ptscotch/ohpc-tests/test_mpi_families
+endif
+
 if R_ENABLED
    TESTS += libs/R/ohpc-tests/test_compiler_families
 endif

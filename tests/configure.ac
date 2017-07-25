@@ -307,6 +307,12 @@ AC_ARG_ENABLE([plasma],
    [AX_OPTION_DEFAULT(type=long,enable_plasma,yes)])
 AM_CONDITIONAL(PLASMA_ENABLED,test "x$enable_plasma" = "xyes" )
 #------------------------------------------------------------------------------------------
+# PTScotch
+AC_ARG_ENABLE([ptscotch],
+   [AS_HELP_STRING([--enable-ptscotch],[Enable ptscotch tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_ptscotch,yes)])
+AM_CONDITIONAL(PTSCOTCH_ENABLED,test "x$enable_ptscotch" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # RMS harness
 AC_ARG_ENABLE([rms-harness],
    [AS_HELP_STRING([--enable-rms-harness],[Enable RMS harness tests(default=yes)])],[],
@@ -697,6 +703,12 @@ echo    Libraries:
        echo '    'PNetCDF................... : enabled
     else
        echo '    'PNetCDF................... : disabled
+    fi
+
+    if test "x$enable_ptscotch" = "xyes"; then
+       echo '    'PTScotch.................... : enabled
+    else
+       echo '    'PTScotch.................... : disabled
     fi
 
     if test "x$enable_R" = "xyes"; then

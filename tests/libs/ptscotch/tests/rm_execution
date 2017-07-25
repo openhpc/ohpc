@@ -11,21 +11,21 @@ fi
 check_rms
 rm=$RESOURCE_MANAGER
 
-@test "[libs/scotch] graph_map binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s graph_map ];then
+@test "[libs/scotch] dgraph_redist binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s dgraph_redist ];then
 	flunk "grapch_map binary does not exit"
     fi
     
-    run_serial_binary ./graph_map "m4x4.grf"
+    run_serial_binary ./dgraph_redist "bump.grf"
     assert_success
 }
 
-@test "[libs/scotch] strat_seq binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s strat_seq ];then
-	flunk "strat_seq does not exit"
+@test "[libs/scotch] strat_par binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s strat_par ];then
+	flunk "strat_par does not exit"
     fi
     
-    run_serial_binary ./strat_seq ""
+    run_serial_binary ./strat_par ""
     assert_success
 }
 
