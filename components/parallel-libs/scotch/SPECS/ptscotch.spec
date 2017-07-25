@@ -36,13 +36,16 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 BuildRequires:	flex bison
 %if 0%{?suse_version} >= 1100
 BuildRequires:  libbz2-devel
+Requires:       libbz2-devel
 BuildRequires:  zlib-devel
 %else
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  bzip2
+Requires:       bzip2
 BuildRequires:  zlib-devel
 %else
 BuildRequires:  bzip2-devel
+Requires:       bzip2-devel
 BuildRequires:  zlib-devel
 %endif
 %endif
