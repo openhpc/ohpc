@@ -9,3 +9,14 @@ toolchain currently loaded.
 [sms](*\#*) (*\install*) gnu7-compilers-ohpc
 \end{lstlisting}
 % end_ohpc_run
+
+The llvm compiler toolchains are also provided as a standalone additional
+compiler family (ie. users can easily switch between gcc/clang environments),
+but we do not provide the full complement of downstream library builds.
+
+% begin_ohpc_run
+% ohpc_comment_header Install llvm Compilers \ref{sec:install_llvm_compilers}
+\begin{lstlisting}[language=bash]
+[sms](*\#*) (*\install*) llvm-compilers-ohpc
+\end{lstlisting}
+% end_ohpc_run
