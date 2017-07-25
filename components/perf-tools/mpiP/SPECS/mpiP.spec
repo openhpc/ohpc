@@ -17,9 +17,9 @@
 # gnu compilers underneath in order to support call-site demangling
 %if "%{compiler_family}" == "intel"
 Requires:      intel-compilers-devel%{PROJ_DELIM}
-BuildRequires: gnu-compilers%{PROJ_DELIM}
-Requires:      gnu-compilers%{PROJ_DELIM}
-%global compiler_family gnu
+BuildRequires: gnu7-compilers%{PROJ_DELIM}
+Requires:      gnu7-compilers%{PROJ_DELIM}
+%global compiler_family gnu7
 %endif
 
 # Base package name
