@@ -139,6 +139,10 @@ check_compiler_family()
 	myCC=gcc
 	myCXX=g++
 	myFC=gfortran
+    elif [[ $LMOD_FAMILY_COMPILER =~ "llvm" ]];then
+	myCC=clang
+	myCXX=clang++
+	myFC=flang
     else
 	ERROR "Unknown compiler family"
 	exit 1

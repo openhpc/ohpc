@@ -29,6 +29,11 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xgnu7"; then
    CXX=g++
    FC=gfortran
    AC_MSG_RESULT([gnu7])
+elif test "x$LMOD_FAMILY_COMPILER" = "xllvm"; then
+   CC=clang
+   CXX=clang++
+   FC=flang
+   AC_MSG_RESULT([llvm4])
 elif test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
    CC=icc
    CXX=icpc
