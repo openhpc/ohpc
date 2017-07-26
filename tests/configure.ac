@@ -645,12 +645,6 @@ echo    Libraries:
        echo '    'HYPRE..................... : disabled
     fi
 
-    if test "x$enable_imb" = "xyes"; then
-       echo '    'IMB....................... : enabled
-    else
-       echo '    'IMB....................... : disabled
-    fi
-
     if test "x$enable_metis" = "xyes"; then
        echo '    'Metis..................... : enabled
     else
@@ -760,6 +754,12 @@ echo    Libraries:
     fi
 
 echo    Performance Tools:
+
+    if test "x$enable_imb" = "xyes"; then
+       echo '    'IMB....................... : enabled
+    else
+       echo '    'IMB....................... : disabled
+    fi
 
     if test "x$enable_mpiP" = "xyes"; then
        echo '    'mpiP Profiler........ .... : enabled
