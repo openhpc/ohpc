@@ -17,6 +17,9 @@ else
    AC_MSG_RESULT([no])
 fi
 
+# set compilers to use MPI toolchain
+CC=mpicc
+
 # test compilers
 AC_PROG_CC
 
