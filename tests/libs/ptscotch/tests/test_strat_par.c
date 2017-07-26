@@ -47,13 +47,14 @@
 **  The defines and includes.
 */
 
+#include <mpi.h>
 #include <stdio.h>
 #if (((defined __STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)) || (defined HAVE_STDINT_H))
 #include <stdint.h>
 #endif /* (((defined __STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)) || (defined HAVE_STDINT_H)) */
 #include <stdlib.h>
 
-#include "scotch.h"
+#include "ptscotch.h"
 
 /*********************/
 /*                   */
@@ -70,64 +71,52 @@ char *              argv[])
 
   SCOTCH_errorProg (argv[0]);
 
-  printf ("Sequential mapping strategy, SCOTCH_STRATDEFAULT\n");
+  printf ("Parallel mapping strategy, SCOTCH_STRATDEFAULT\n");
 
   SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphMapBuild (&stradat, SCOTCH_STRATDEFAULT, 16, 0.03);
+  SCOTCH_stratDgraphMapBuild (&stradat, SCOTCH_STRATDEFAULT, 16, 16, 0.03);
   SCOTCH_stratExit (&stradat);
 
-  printf ("Sequential mapping strategy, SCOTCH_STRATRECURSIVE\n");
+  printf ("Parallel mapping strategy, SCOTCH_STRATRECURSIVE\n");
 
   SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphMapBuild (&stradat, SCOTCH_STRATRECURSIVE, 16, 0.03);
+  SCOTCH_stratDgraphMapBuild (&stradat, SCOTCH_STRATRECURSIVE, 16, 16, 0.03);
   SCOTCH_stratExit (&stradat);
 
-  printf ("Sequential mapping strategy, SCOTCH_STRATREMAP\n");
+  printf ("Parallel ordering strategy, SCOTCH_STRATDEFAULT\n");
 
   SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphMapBuild (&stradat, SCOTCH_STRATREMAP, 16, 0.03);
+  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATDEFAULT, 1, 0, 0.2);
   SCOTCH_stratExit (&stradat);
 
-  printf ("Sequential mapping strategy, SCOTCH_STRATRECURSIVE | SCOTCH_STRATREMAP\n");
+  printf ("Parallel ordering strategy, SCOTCH_STRATLEVELMAX\n");
 
   SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphMapBuild (&stradat, SCOTCH_STRATRECURSIVE | SCOTCH_STRATREMAP, 16, 0.03);
+  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATLEVELMAX, 1, 3, 0.2);
   SCOTCH_stratExit (&stradat);
 
-  printf ("Sequential ordering strategy, SCOTCH_STRATDEFAULT\n");
+  printf ("Parallel ordering strategy, SCOTCH_STRATLEVELMIN\n");
 
   SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphOrderBuild (&stradat, SCOTCH_STRATDEFAULT, 0, 0.2);
+  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATLEVELMIN, 1, 3, 0.2);
   SCOTCH_stratExit (&stradat);
 
-  printf ("Sequential ordering strategy, SCOTCH_STRATLEVELMAX\n");
+  printf ("Parallel ordering strategy, SCOTCH_STRATLEVELMAX | SCOTCH_STRATLEVELMIN\n");
 
   SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphOrderBuild (&stradat, SCOTCH_STRATLEVELMAX, 3, 0.2);
+  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATLEVELMAX | SCOTCH_STRATLEVELMIN, 1, 3, 0.2);
   SCOTCH_stratExit (&stradat);
 
-  printf ("Sequential ordering strategy, SCOTCH_STRATLEVELMIN\n");
+  printf ("Parallel ordering strategy, SCOTCH_STRATLEAFSIMPLE\n");
 
   SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphOrderBuild (&stradat, SCOTCH_STRATLEVELMIN, 3, 0.2);
+  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATLEAFSIMPLE, 1, 0, 0.2);
   SCOTCH_stratExit (&stradat);
 
-  printf ("Sequential ordering strategy, SCOTCH_STRATLEVELMAX | SCOTCH_STRATLEVELMIN\n");
+  printf ("Parallel ordering strategy, SCOTCH_STRATSEPASIMPLE\n");
 
   SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphOrderBuild (&stradat, SCOTCH_STRATLEVELMAX | SCOTCH_STRATLEVELMIN, 3, 0.2);
-  SCOTCH_stratExit (&stradat);
-
-  printf ("Sequential ordering strategy, SCOTCH_STRATLEAFSIMPLE\n");
-
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphOrderBuild (&stradat, SCOTCH_STRATLEAFSIMPLE, 3, 0.2);
-  SCOTCH_stratExit (&stradat);
-
-  printf ("Sequential ordering strategy, SCOTCH_STRATSEPASIMPLE\n");
-
-  SCOTCH_stratInit (&stradat);
-  SCOTCH_stratGraphOrderBuild (&stradat, SCOTCH_STRATSEPASIMPLE, 3, 0.2);
+  SCOTCH_stratDgraphOrderBuild (&stradat, SCOTCH_STRATSEPASIMPLE, 1, 0, 0.2);
   SCOTCH_stratExit (&stradat);
 
   return (0);
