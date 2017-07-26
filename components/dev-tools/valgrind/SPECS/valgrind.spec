@@ -32,7 +32,7 @@ Patch4:    thunderx_always_use_fallback_LLSC.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%define install_path %{OHPC_PUB}/%{pname}/%version
+%define install_path %{OHPC_UTILS}/%{pname}/%version
 
 %description 
 
@@ -99,7 +99,7 @@ EOF
 %files
 %defattr(-,root,root)
 %{OHPC_HOME}
-%{OHPC_PUB}
+%{OHPC_UTILS}
 %doc AUTHORS
 %doc README_DEVELOPERS
 %doc README

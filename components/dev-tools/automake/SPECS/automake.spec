@@ -24,7 +24,7 @@ Source0:   https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
-%define install_path %{OHPC_PUB}/autotools
+%define install_path %{OHPC_UTILS}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
 BuildRequires: autoconf%{PROJ_DELIM} >= 2.69
@@ -59,8 +59,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{OHPC_PUB}
-%{OHPC_PUB}
+%dir %{OHPC_UTILS}
+%{OHPC_UTILS}
 %doc THANKS
 %doc ChangeLog
 %doc NEWS

@@ -37,7 +37,7 @@ BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
 %endif
 
-%define install_path %{OHPC_APPS}/%{pname}/%version
+%define install_path %{OHPC_UTILS}/%{pname}/%version
 
 %description
 CMake is used to control the software compilation process using simple
@@ -99,7 +99,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_APPS}/%{pname}
+%{OHPC_UTILS}/%{pname}
 %{OHPC_MODULES}/%{pname}
 
 %changelog
