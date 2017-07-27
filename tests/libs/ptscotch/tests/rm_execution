@@ -32,15 +32,15 @@ rm=$RESOURCE_MANAGER
     assert_success
 }
 
-@test "[libs/PTScotch] gout binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s $PTSCOTCH_BIN/gout ];then
-	flunk "gout does not exit"
+@test "[libs/PTScotch] gord binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s $PTSCOTCH_BIN/gord ];then
+	flunk "gord does not exit"
     fi
     
-    run_serial_binary gout "-om -gn -mn m4x4.grf - - m4x4.ps"
+    run_mpi_binary gord "bump.grf /dev/null -vt" $NODES $TASKS
     assert_success
 
     if [ ! -f m4x4.ps ];then
-    flunk "gout failed to produce output"
+    flunk "gord failed to produce output"
     fi
 }
