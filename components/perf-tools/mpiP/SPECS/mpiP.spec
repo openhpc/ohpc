@@ -19,7 +19,6 @@
 Requires:      intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: gnu7-compilers%{PROJ_DELIM}
 Requires:      gnu7-compilers%{PROJ_DELIM}
-%global compiler_family gnu7
 %endif
 
 # Base package name
@@ -69,6 +68,7 @@ cp /usr/lib/rpm/config.guess bin
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
 # see above where compiler_family is changed
+%define compiler_family gnu7
 %ohpc_setup_compiler
 
 CC=mpicc
@@ -87,6 +87,7 @@ FC=mpif90
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
 # see above where compiler_family is changed
+%define compiler_family gnu7
 %ohpc_setup_compiler
 
 make %{?_smp_mflags} shared
