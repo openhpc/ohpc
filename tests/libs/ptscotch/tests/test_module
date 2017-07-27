@@ -9,7 +9,7 @@ fi
 
 PKG=PTSCOTCH
 module=ptscotch
-family=$LMOD_FAMILY_COMPILER
+family=$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI
 testname=libs/PTScotch
 binary=dgscat
 library=libptscotch
