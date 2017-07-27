@@ -60,6 +60,8 @@ Patch1: lmod.consulting.patch
 Patch2: lmod.site.patch
 # 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
 %global _default_patch_fuzz 2
+# 7/27/17 karl.w.schulz@intel.com - patch to enable depends_on support for tcl modules
+Patch3: depends_on.patch
 
 # Known dependencies
 Requires: lua >= %{luaver}
