@@ -37,7 +37,7 @@ rm=$RESOURCE_MANAGER
     run_serial_binary gout "-om -gn -mn m4x4.grf - - m4x4.ps"
     assert_success
 
-    if [ ! -x m4x4.ps ];then
+    if [ ! -f m4x4.ps ];then
     flunk "gout failed to produce output"
     fi
 }
