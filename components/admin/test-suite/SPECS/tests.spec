@@ -47,7 +47,7 @@ is made available under an '%{testuser}' user account.
 
 %build
 
-export PATH=/opt/ohpc/utils/autotools/bin:$PATH
+export PATH=/opt/ohpc/pub/utils/autotools/bin:$PATH
 cd tests
 ./bootstrap
 
