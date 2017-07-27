@@ -8,7 +8,7 @@ status=0
 source ./common/TEST_ENV  || exit 1
 source ./common/functions || exit 1
 
-cd libs/imb               || exit 1
+cd perf-tools/imb               || exit 1
 
 export BATS_JUNIT_CLASS=IMB
 
