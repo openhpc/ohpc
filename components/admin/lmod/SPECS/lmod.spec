@@ -81,6 +81,7 @@ Supports a Software Hierarchy
 # OpenHPC patches
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %build
 unset MODULEPATH
