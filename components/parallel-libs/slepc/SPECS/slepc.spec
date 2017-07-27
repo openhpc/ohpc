@@ -116,13 +116,7 @@ module-whatis "URL %{url}"
 
 set     version             %{version}
 
-# Require petsc
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-        if { ![is-loaded petsc]  } {
-          module load petsc
-        }
-}
+depends_on petsc
 
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
