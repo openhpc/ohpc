@@ -205,11 +205,7 @@ module-whatis "%{url}"
 
 set             version             %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded phdf5]  } {
-      module load phdf5
-    }
-}
+depends-on phdf5
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
