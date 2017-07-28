@@ -80,12 +80,7 @@ prepend-path    MANPATH             %{install_path}/share/man
 
 setenv          %{pname}_DIR        %{install_path}
 
-# Autoload Clustershell
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded clustershell]  } {
-        module load clustershell
-    }
-}
+depends-on clustershell
 EOF
 
 %clean
