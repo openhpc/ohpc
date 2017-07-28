@@ -149,13 +149,7 @@ module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
-# Require generic netcdf
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded netcdf]  } {
-        module load netcdf
-    }
-}
+depends-on netcdf
 
 set             version             %{version}
 
