@@ -204,17 +204,10 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require superlu (and scalapack for gnu compiler families)
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded superlu]  } {
-        module load superlu
-    }
-    if { [is-loaded gnu7] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
-        }
-    }
+# Require superlu (and openblas for gnu compiler families)
+depends-on superlu
+if { [is-loaded gnu7] } {
+    depends-on openblas
 }
 
 prepend-path    PATH                %{install_path}/bin
