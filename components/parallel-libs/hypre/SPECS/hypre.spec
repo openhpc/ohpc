@@ -206,7 +206,7 @@ set     version                     %{version}
 
 # Require superlu (and openblas for gnu compiler families)
 depends-on superlu
-if { [is-loaded gnu7] } {
+if { ![is-loaded intel] } {
     depends-on openblas
 }
 
