@@ -149,7 +149,7 @@ set     version			    %{version}
 
 
 # Require openblas for gnu compiler families
-if { [is-loaded gnu7] } {
+if { ![is-loaded intel] } {
     depends-on openblas
 }
 
