@@ -23,7 +23,7 @@
 
 Summary:   The LLVM Compiler Infrastructure
 Name:      %{pname}%{PROJ_DELIM}
-Version:   4.0.0
+Version:   4.0.1
 Release:   1%{?dist}
 License:   UIUC, Apache-2.0
 Group:     %{PROJ_NAME}/compiler-families
