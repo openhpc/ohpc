@@ -116,7 +116,7 @@ module-whatis "URL %{url}"
 
 set     version             %{version}
 
-depends_on petsc
+depends-on petsc
 
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
