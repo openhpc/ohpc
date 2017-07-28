@@ -184,21 +184,8 @@ prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-package
 
 setenv          %{PNAME}_DIR        %{install_path}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded fftw]  } {
-        module load fftw
-    }
-    if {  ![is-loaded numpy]  } {
-        module load numpy
-    }
-    if {  ![is-loaded openblas]  } {
-        module load openblas
-    }
-}
-
-if [ module-info mode remove ] {
-    module unload numpy
-}
+depends-on fftw
+depends-on numpy
 
 EOF
 

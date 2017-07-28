@@ -128,10 +128,9 @@ module-whatis "URL %{url}"
 
 set     version             %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-  if { ![is-loaded intel] && ![is-loaded openblas] } {
-      module load openblas
-    }
+# Require openblas for gnu compiler families
+if { [is-loaded gnu7] } {
+    depends-on openblas
 }
 
 prepend-path    PATH                %{install_path}/bin
