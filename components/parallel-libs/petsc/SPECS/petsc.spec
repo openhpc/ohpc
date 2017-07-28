@@ -135,19 +135,9 @@ module-whatis "%{url}"
 set     version                     %{version}
 
 # Require phdf5 (and scalapack for gnu compiler families)
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded phdf5]  } {
-        module load phdf5
-    }
-    if { ![is-loaded intel] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
-        }
-        if { ![is-loaded scalapack]  } {
-          module load scalapack
-        }
-    }
+depends-on phdf5
+if { ![is-loaded intel] } {
+    depends-on openblas
 }
 
 prepend-path    PATH                %{install_path}/bin
