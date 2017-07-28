@@ -129,10 +129,8 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded openblas]  } {
-      module load openblas
-    }
+if { ![is-loaded intel]  } {
+    depends-on openblas
 }
 
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
