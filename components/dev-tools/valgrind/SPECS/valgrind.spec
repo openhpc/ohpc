@@ -21,7 +21,7 @@ License:   GPL
 URL:       http://www.valgrind.org/
 DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/dev-tools
-Source:    http://valgrind.org/downloads/%{pname}-%{version}.tar.bz2
+Source:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 %ifarch aarch64
 Patch1:    revVEX3352.patch
