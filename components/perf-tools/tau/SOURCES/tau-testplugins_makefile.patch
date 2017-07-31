@@ -1,0 +1,11 @@
+--- tau-2.26.2p1/plugins/testplugins/Makefile	2017-06-10 12:22:04.000000000 -0700
++++ tau-2.26.2p1.patch/plugins/testplugins/Makefile	2017-07-31 10:49:16.000000000 -0700
+@@ -15,7 +15,7 @@
+ 
+ CFLAGS = $(TAU_MPI_COMPILE_INCLUDE) $(TAU_INCLUDE) $(TAU_DEFS) $(USER_OPT) $(TAU_INTERNAL_FLAGS) -fPIC
+ 
+-LDFLAGS = $(TAU_MPI_LIB)
++LDFLAGS =  $(TAU_EXTRA_LIBRARY_FLAGS) $(TAUEXTRASHLIBOPTS) $(TAU_SHLIB_EXTRA_CXXLIBS) $(TAU_LINKER_OPTS) $(TAU_LDFLAGS) $(TAU_MPI_LIB)
+ 
+ OBJS = libtau_plugin_function_registration_complete.so libtau_plugin_atomic_event_trigger.so libtau_plugin_atomic_event_registration_complete.so libtau_plugin_end_of_execution.so libtau_plugin_interrupt_trigger.so tau_plugin_function_registration_complete.o tau_plugin_atomic_event_trigger.o tau_plugin_atomic_event_registration_complete.o tau_plugin_end_of_execution.o tau_plugin_interrupt_trigger.o
+ 
