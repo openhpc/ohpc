@@ -29,6 +29,7 @@ Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.t
 Source1:   OHPC_macros
 Patch1:    tau-2.26.forceshared.patch
 Patch2:    tau-add-explicit-linking-option.patch
+Patch3:    tau-shared_libpdb.patch
 
 Provides:  lib%PNAME.so()(64bit)
 Provides:  perl(ebs2otf)
@@ -71,6 +72,7 @@ automatic instrumentation tool.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel

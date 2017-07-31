@@ -1,0 +1,40 @@
+--- tau-2.26.2p1/utils/Makefile	2017-06-10 12:22:06.000000000 -0700
++++ tau-2.26.2p1.patch/utils/Makefile	2017-07-31 09:57:25.000000000 -0700
+@@ -84,7 +84,7 @@
+ tau_events.o: 	tau_events.cpp
+ 		$(CXX) $(CFLAGS)  -c tau_events.cpp
+ 
+-tau_instrumentor: tau_instrumentor.o tau_instrument.o tau_selective.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a 
++tau_instrumentor: tau_instrumentor.o tau_instrument.o tau_selective.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so 
+ 		$(PDT_CXX_COMP) $(PDT_CFLAGS) tau_instrumentor.o tau_instrument.o tau_selective.o -o $@ $(PDTOPTS) -lm $(LEXTRAUTIL) 
+ 
+ tau_instrumentor.o: tau_instrumentor.cpp 
+@@ -123,13 +123,13 @@
+ tau_trace2json.o: tau_trace2json.cpp
+ 		$(CXX) $(CFLAGS) $< -c 
+ 
+-tau_wrap: tau_wrap.o tau_selective.o tau_instrument.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a 
++tau_wrap: tau_wrap.o tau_selective.o tau_instrument.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so 
+ 		$(PDT_CXX_COMP) $(PDT_CFLAGS) tau_wrap.o tau_selective.o tau_instrument.o -o $@ $(PDTOPTS) -lm $(LEXTRAUTIL) 
+ 
+ tau_wrap.o: tau_wrap.cpp 
+ 		$(PDT_CXX_COMP) $(PDT_CFLAGS) -I$(PDTDIR)/include -c tau_wrap.cpp $(WRAPOPTS)
+ 
+-tau_ompcheck: tau_ompcheck.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a 
++tau_ompcheck: tau_ompcheck.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so 
+ 		$(PDT_CXX_COMP) $(PDT_CFLAGS) tau_ompcheck.o -o $@ $(PDTOPTS) -lm $(LEXTRAUTIL) 
+ 
+ tau_ompcheck.o: tau_ompcheck.cpp 
+@@ -142,10 +142,10 @@
+ 		gcc -c perf2tau.c -I$(PERFINCDIR)
+ 
+ 
+-$(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a:
++$(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so:
+ 		@echo 
+ 		@echo "******************************************************"
+-		@echo "PDT Configuration Error. $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a not found."
++		@echo "PDT Configuration Error. $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so not found."
+ 	        @echo "Please configure PDT again and then install TAU."
+ 		@echo 
+ 		@echo "******************************************************"
