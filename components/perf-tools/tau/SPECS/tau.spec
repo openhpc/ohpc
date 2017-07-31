@@ -100,6 +100,16 @@ export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
 export BUILDROOT=%buildroot
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 export TAUROOT=`pwd`
+
+# Try and figure out architecture
+detectarch=unknown
+detectarch=`./utils/archfind`
+if [ "x$detectarch" = "x" ]
+  then
+    detectarch=unknown
+fi
+%global machine `echo $detectarch`
+
 ./configure \
     -prefix=/tmp%{install_path} \
     -exec-prefix= \
