@@ -87,7 +87,7 @@ module load papi
 module load pdtoolkit
 
 %if "%{compiler_family}" == "intel"
-export fcomp=mpiifort
+export fcomp=mpifort
 %else
 export fcomp=gfortran
 %endif
