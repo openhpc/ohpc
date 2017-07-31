@@ -111,6 +111,7 @@ if [ "x$detectarch" = "x" ]
     detectarch=unknown
 fi
 %global machine `echo $detectarch`
+export CONFIG_ARCH=%{machine}
 
 ./configure \
     -prefix=/tmp%{install_path} \
