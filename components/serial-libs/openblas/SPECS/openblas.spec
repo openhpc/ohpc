@@ -99,6 +99,7 @@ sed -i '/#define OPENBLAS_NEEDBUNDERSCORE/,/#define OPENBLAS_VERSION/{//!d}' %{b
 
 # Remove buildroot
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/lib/cmake/openblas/OpenBLASConfig.cmake
+sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/lib/pkgconfig/openblas.pc
 
 # Remove static lib
 rm -f %{buildroot}%{install_path}/lib/*a
