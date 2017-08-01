@@ -1,7 +1,7 @@
 
 ---
 
-### OpenHPC: Community building blocks for HPC systems. (v1.3.1)
+### OpenHPC: Community building blocks for HPC systems. (v1.3.2)
 
 ---
 
