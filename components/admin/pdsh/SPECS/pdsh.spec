@@ -24,10 +24,10 @@ Group:     %{PROJ_NAME}/admin
 #Source0:   %{pname}-%{version}.tar.gz
 Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
+Patch1:    pdsh-autoconf.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 BuildRequires: autoconf
 BuildRequires: automake
-BuildRequires: git
 BuildRequires: libtool
 
 %define debug_package %{nil}
@@ -320,6 +320,7 @@ from an allocated Torque job.
 
 %prep
 %setup  -q -n %{pname}-%{pname}-%{version}
+%patch1 -p1
 ##############################################################################
 
 %build
