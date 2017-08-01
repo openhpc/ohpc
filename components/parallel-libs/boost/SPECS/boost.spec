@@ -98,7 +98,7 @@ see the boost-doc package.
 
 %prep
 %setup -q -n %{pname}_%{version_exp}
-%patch1 -p1
+%patch1 -p2
 
 %build
 # OpenHPC compiler/mpi designation
