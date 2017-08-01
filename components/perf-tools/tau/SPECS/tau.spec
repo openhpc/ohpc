@@ -116,6 +116,7 @@ fi
 export CONFIG_ARCH=%{machine}
 
 ./configure \
+    -arch=%{machine} \
     -prefix=/tmp%{install_path} \
     -exec-prefix= \
 	-c++=mpicxx \
