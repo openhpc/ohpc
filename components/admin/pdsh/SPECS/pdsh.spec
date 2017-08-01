@@ -325,6 +325,7 @@ from an allocated Torque job.
 cp /usr/lib/rpm/config.guess config
 %endif
 
+./bootstrap
 ./configure --prefix=%{install_path} \
     --with-rcmd-rank-list="ssh mrsh rsh krb4 qsh mqsh exec xcpu" \
     %{?_enable_debug}       \
