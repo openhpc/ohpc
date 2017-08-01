@@ -1,28 +1,26 @@
-Index: OpenBLAS-0.2.13/exports/Makefile
-===================================================================
---- OpenBLAS-0.2.13.orig/exports/Makefile
-+++ OpenBLAS-0.2.13/exports/Makefile
-@@ -118,6 +118,7 @@ else
+--- OpenBLAS-0.2.20/exports/Makefile	2017-07-23 21:03:35.000000000 -0700
++++ OpenBLAS-0.2.20.patch/exports/Makefile	2017-08-01 13:17:26.000000000 -0700
+@@ -137,6 +137,7 @@
  endif
  ifneq ($(C_COMPILER), LSB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o ../$(LIBSONAME) \
-+	-Wl,-z,noexecstack \
++    -Wl,-z,noexecstack \
  	-Wl,--whole-archive $< -Wl,--no-whole-archive \
- 	-Wl,-soname,$(LIBPREFIX).so.$(MAJOR_VERSION) $(EXTRALIB)
+ 	-Wl,-soname,$(INTERNALNAME) $(EXTRALIB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -w -o linktest linktest.c ../$(LIBSONAME) $(FEXTRALIB) && echo OK.
-@@ -145,6 +146,7 @@ else
+@@ -164,6 +165,7 @@
  ../$(LIBSONAME) : ../$(LIBNAME).renamed linktest.c
  endif
  	$(CC) $(CFLAGS) $(LDFLAGS)  -shared -o ../$(LIBSONAME) \
-+	-Wl,-z,noexecstack \
++    -Wl,-z,noexecstack \
  	-Wl,--whole-archive $< -Wl,--no-whole-archive \
  	$(FEXTRALIB) $(EXTRALIB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -w -o linktest linktest.c ../$(LIBSONAME) $(FEXTRALIB) && echo OK.
-@@ -164,6 +166,7 @@ ifeq ($(OSNAME), SunOS)
+@@ -183,6 +185,7 @@
  
  so : ../$(LIBSONAME)
  	$(CC) $(CFLAGS) $(LDFLAGS)  -shared -o ../$(LIBSONAME) \
-+	-Wl,-z,noexecstack \
++    -Wl,-z,noexecstack \
  	-Wl,--whole-archive ../$(LIBNAME) -Wl,--no-whole-archive $(EXTRALIB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -w -o linktest linktest.c ../$(LIBSONAME) $(FEXTRALIB) && echo OK.
  	rm -f linktest
