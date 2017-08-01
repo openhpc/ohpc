@@ -417,7 +417,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %files
 %defattr(-,root,root)
 %doc COPYING README NEWS DISCLAIMER 
-%doc README.KRB4 README.modules README.QsNet
+%doc README.KRB4 README.modules
 %{OHPC_HOME}
 %{OHPC_PUB}
 %{_bindir}/pdsh
