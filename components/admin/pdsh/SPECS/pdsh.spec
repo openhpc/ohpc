@@ -25,6 +25,9 @@ Group:     %{PROJ_NAME}/admin
 Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
 
 %define debug_package %{nil}
 
