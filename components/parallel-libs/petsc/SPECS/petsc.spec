@@ -137,7 +137,7 @@ set     version                     %{version}
 # Require phdf5 (and scalapack for gnu compiler families)
 depends-on phdf5
 if { ![is-loaded intel] } {
-    depends-on openblas
+    depends-on scalapack
 }
 
 prepend-path    PATH                %{install_path}/bin
