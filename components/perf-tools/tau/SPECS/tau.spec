@@ -188,7 +188,7 @@ popd
 
 # remove static libs
 pushd %{buildroot}%{install_path}/lib
-rm -rf \.*a static-*
+rm -rf \.a static-*
 popd
 
 # OpenHPC module file
