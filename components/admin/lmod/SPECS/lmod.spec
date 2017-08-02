@@ -27,7 +27,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   7.5.17
+Version:   7.6.1
 Release:   1
 License:   MIT
 Group:     %{PROJ_NAME}/admin
@@ -60,8 +60,6 @@ Patch1: lmod.consulting.patch
 Patch2: lmod.site.patch
 # 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
 %global _default_patch_fuzz 2
-# 7/27/17 karl.w.schulz@intel.com - patch to enable depends_on support for tcl modules
-Patch3: depends_on.patch
 
 # Known dependencies
 Requires: lua >= %{luaver}
@@ -81,7 +79,6 @@ Supports a Software Hierarchy
 # OpenHPC patches
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
 
 %build
 unset MODULEPATH
