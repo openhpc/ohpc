@@ -196,20 +196,35 @@ main (void)
 
   gsl_set_error_handler (&my_error_handler);
 
-  test_trap ();
-  test_float_trap ();
-  test_long_double_trap ();
-  test_ulong_trap ();
-  test_long_trap ();
-  test_uint_trap ();
-  test_int_trap ();
-  test_ushort_trap ();
-  test_short_trap ();
-  test_uchar_trap ();
-  test_char_trap ();
-  test_complex_trap ();
-  test_complex_float_trap ();
-  test_complex_long_double_trap ();
+  test_alloc_zero_length ();
+  test_float_alloc_zero_length ();
+  test_long_double_alloc_zero_length ();
+  test_ulong_alloc_zero_length ();
+  test_long_alloc_zero_length ();
+  test_uint_alloc_zero_length ();
+  test_int_alloc_zero_length ();
+  test_ushort_alloc_zero_length ();
+  test_short_alloc_zero_length ();
+  test_uchar_alloc_zero_length ();
+  test_char_alloc_zero_length ();
+  test_complex_alloc_zero_length ();
+  test_complex_float_alloc_zero_length ();
+  test_complex_long_double_alloc_zero_length ();
+
+  test_calloc_zero_length ();
+  test_float_calloc_zero_length ();
+  test_long_double_calloc_zero_length ();
+  test_ulong_calloc_zero_length ();
+  test_long_calloc_zero_length ();
+  test_uint_calloc_zero_length ();
+  test_int_calloc_zero_length ();
+  test_ushort_calloc_zero_length ();
+  test_short_calloc_zero_length ();
+  test_uchar_calloc_zero_length ();
+  test_char_calloc_zero_length ();
+  test_complex_calloc_zero_length ();
+  test_complex_float_calloc_zero_length ();
+  test_complex_long_double_calloc_zero_length ();
 
   exit (gsl_test_summary ());
 }
