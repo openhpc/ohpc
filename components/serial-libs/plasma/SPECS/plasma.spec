@@ -40,6 +40,7 @@ Source4: OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
+#!BuildIgnore: post-build-checks rpmlint-Factory
 # Disable debug packages
 %define debug_package %{nil}
 # Default library install path
