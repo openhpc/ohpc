@@ -26,7 +26,7 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 
-BuildRequires:-post-build-checks
+BuildRequires: -post-build-checks
 
 Requires: prun%{PROJ_DELIM}
 Requires: intel-mpi-doc >= %{year}
@@ -65,10 +65,19 @@ if [ -d ${topDir} ];then
 
     for dir in ${versions}; do
 	if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
-	    version=`grep "^MPIVERSION=" ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc | cut -d '"' -f2 | sed 's| Update |\.|'`
+	    version=`grep "^MPIVERSION=" ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc | cut -d '"' -f2`
 	    if [ -z "${version}" ];then
 		echo "Error: unable to determine MPI version"
 		exit 1
+            elif [ "${version:0:2}" = "20" -a -e ${topDir}/${dir}/linux/bin/intel64/icc ];then
+                # Starting with 2017, the MPI versions distributed with
+                # Parallel Studio are versioned to match the compiler
+                # version they're shipped with.  Rather than extracting a
+                # version string from mpiicc that would be similar to, but not
+                # the same as the compiler version, we just use the actual
+                # compiler version that it's shipped with.  This is extracted
+                # using the same logic as the compiler modules
+                version=`${topDir}/${dir}/linux/bin/intel64/icc -V 2>&1 | grep Version | awk -F 'Version' '{print $2}' | awk '{print $1}'`
 	    fi
 	    
 	    echo "--> Installing OpenHPC-style modulefile for MPI version=${version}"
