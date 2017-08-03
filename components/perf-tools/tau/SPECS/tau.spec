@@ -105,6 +105,11 @@ export BUILDROOT=%buildroot
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 export TAUROOT=`pwd`
 
+# override with newer config.guess for aarch64
+%ifarch aarch64
+cp /usr/lib/rpm/config.guess utils/opari2/build-config/.
+%endif
+
 # Try and figure out architecture
 detectarch=unknown
 detectarch=`./utils/archfind`
