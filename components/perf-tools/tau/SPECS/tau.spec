@@ -135,6 +135,7 @@ export CONFIG_ARCH=%{machine}
 	-pdt=$PDTOOLKIT_DIR \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
+    -opari \
 	-extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp/%{install_path}/lib -L/tmp/%{install_path}/%{machine}/lib" 
 
 make install
