@@ -46,13 +46,12 @@ AMD64/MacOSX.
 %prep
 %setup -q -n %{pname}-%{version}
 %ifarch aarch64
-%global _default_patch_fuzz 3
 # karl.w.schulz@intel.com (9/2/17) - disabling revVEX3352.patch; looks to have landed in 3.13.0 release
 #%patch1 -p0
 %patch2 -p0
 # karl.w.schulz@intel.com (9/2/17) - disabling rev16309.patch; looks to have landed in 3.13.0 release
 #%patch3 -p0
-%patch4 -p1
+#%patch4 -p1
 %endif
 
 %build
