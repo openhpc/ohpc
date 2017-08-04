@@ -40,7 +40,7 @@ DocDir: %{OHPC_PUB}/doc/contrib
 Patch1: warewulf-provision.httpdconfdir.patch
 Patch2: warewulf-provision.sles_stateful.patch
 Patch3: warewulf-provision.wwgetvnfs.patch
-Patch3: warewulf-provision.pxe_file_modes.patch
+Patch4: warewulf-provision.pxe_file_modes.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -109,6 +109,7 @@ cd %{dname}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 cd %{dname}
