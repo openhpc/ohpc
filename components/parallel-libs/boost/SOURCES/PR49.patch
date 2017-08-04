@@ -1,57 +1,19 @@
-From 00e55d8f5e5280f499bf34b2c41bb9b67c7c8549 Mon Sep 17 00:00:00 2001
-From: Alain Miniussi <alain.miniussi@oca.eu>
-Date: Sat, 15 Jul 2017 14:00:06 +0200
-Subject: [PATCH] Do not include serialization/detail/get_data.hpp as it
- disapear in 1.64.
+From babaa35f51d8b009eba762bc50a5290906b4b0ca Mon Sep 17 00:00:00 2001
+From: Jonathan Wakely <jwakely@redhat.com>
+Date: Thu, 26 Jan 2017 20:15:19 +0000
+Subject: [PATCH] Replace boost::serialization::detail::get_data function.
 
 ---
- include/boost/mpi/detail/antiques.hpp              | 29 ++++++++++++++++++++++
- .../boost/mpi/detail/mpi_datatype_primitive.hpp    | 14 +++++------
- include/boost/mpi/detail/packed_iprimitive.hpp     |  4 +--
- include/boost/mpi/detail/packed_oprimitive.hpp     |  7 ++++--
- 4 files changed, 43 insertions(+), 11 deletions(-)
- create mode 100644 include/boost/mpi/detail/antiques.hpp
+ include/boost/mpi/detail/mpi_datatype_primitive.hpp | 19 ++++++++++++-------
+ include/boost/mpi/detail/packed_iprimitive.hpp      |  8 ++++++--
+ include/boost/mpi/detail/packed_oprimitive.hpp      |  8 ++++++--
+ 3 files changed, 24 insertions(+), 11 deletions(-)
 
-diff --git a/include/boost/mpi/detail/antiques.hpp b/include/boost/mpi/detail/antiques.hpp
-new file mode 100644
-index 0000000..6ece779
---- /dev/null
-+++ b/include/boost/mpi/detail/antiques.hpp
-@@ -0,0 +1,29 @@
-+//          Copyright Alain Miniussi 2014.
-+// Distributed under the Boost Software License, Version 1.0.
-+//    (See accompanying file LICENSE_1_0.txt or copy at
-+//          http://www.boost.org/LICENSE_1_0.txt)
-+
-+// Authors: Alain Miniussi
-+
-+#ifndef BOOST_MPI_ANTIQUES_HPP
-+#define BOOST_MPI_ANTIQUES_HPP
-+
-+#include <vector>
-+
-+// Support for some obsolette compilers
-+
-+namespace boost { namespace mpi {
-+    namespace detail {
-+      // Some old gnu compiler have no support for vector<>::data
-+      // Use this in the mean time, the cumbersome syntax should 
-+      // serve as an incentive to get rid of this when those compilers 
-+      // are dropped.
-+      template <typename T, typename A>
-+      T* c_data(std::vector<T,A>& v) { return &(v[0]); }
-+
-+      template <typename T, typename A>
-+      T const* c_data(std::vector<T,A> const& v) { return &(v[0]); }
-+  
-+} } }
-+
-+#endif
 diff --git a/include/boost/mpi/detail/mpi_datatype_primitive.hpp b/include/boost/mpi/detail/mpi_datatype_primitive.hpp
-index c230055..b2263fa 100644
+index c230055..b95fc38 100644
 --- a/include/boost/mpi/detail/mpi_datatype_primitive.hpp
 +++ b/include/boost/mpi/detail/mpi_datatype_primitive.hpp
-@@ -25,10 +25,10 @@ namespace std{
+@@ -25,7 +25,6 @@ namespace std{
  #include <boost/assert.hpp>
  #include <boost/mpl/placeholders.hpp>
  #include <boost/serialization/array.hpp>
@@ -59,20 +21,16 @@ index c230055..b2263fa 100644
  #include <stdexcept>
  #include <iostream>
  #include <vector>
-+#include <boost/mpi/detail/antiques.hpp>
- 
- namespace boost { namespace mpi { namespace detail {
- 
-@@ -80,18 +80,18 @@ class mpi_datatype_primitive
+@@ -80,18 +79,18 @@ class mpi_datatype_primitive
         BOOST_MPI_CHECK_RESULT(MPI_Type_create_struct,
                      (
                        addresses.size(),
 -                      boost::serialization::detail::get_data(lengths),
 -                      boost::serialization::detail::get_data(addresses),
 -                      boost::serialization::detail::get_data(types),
-+                      c_data(lengths),
-+                      c_data(addresses),
-+                      c_data(types),
++                      get_data(lengths),
++                      get_data(addresses),
++                      get_data(types),
                        &datatype_
                      ));
  #else
@@ -82,57 +40,80 @@ index c230055..b2263fa 100644
 -                                boost::serialization::detail::get_data(lengths),
 -                                boost::serialization::detail::get_data(addresses),
 -                                boost::serialization::detail::get_data(types),
-+                                c_data(lengths),
-+                                c_data(addresses),
-+                                c_data(types),
++                                get_data(lengths),
++                                get_data(addresses),
++                                get_data(types),
                                  &datatype_
                                  ));
  #endif
+@@ -129,6 +128,12 @@ class mpi_datatype_primitive
+       lengths.push_back(l);
+     }
+ 
++    template <class T>
++    static T* get_data(std::vector<T>& v)
++    {
++      return v.empty() ? 0 : &(v[0]);
++    }
++
+     std::vector<MPI_Aint> addresses;
+     std::vector<MPI_Datatype> types;
+     std::vector<int> lengths;
 diff --git a/include/boost/mpi/detail/packed_iprimitive.hpp b/include/boost/mpi/detail/packed_iprimitive.hpp
-index 7080cbf..69d2c73 100644
+index 7080cbf..227dc8e 100644
 --- a/include/boost/mpi/detail/packed_iprimitive.hpp
 +++ b/include/boost/mpi/detail/packed_iprimitive.hpp
-@@ -16,8 +16,8 @@
+@@ -16,7 +16,6 @@
  #include <boost/mpi/exception.hpp>
  #include <boost/assert.hpp>
  #include <boost/serialization/array.hpp>
 -#include <boost/serialization/detail/get_data.hpp>
  #include <vector>
-+#include <boost/mpi/detail/antiques.hpp>
  #include <boost/mpi/allocator.hpp>
  
- namespace boost { namespace mpi {
-@@ -104,7 +104,7 @@ class BOOST_MPI_DECL packed_iprimitive
+@@ -104,7 +103,12 @@ class BOOST_MPI_DECL packed_iprimitive
      void load_impl(void * p, MPI_Datatype t, int l)
      {
        BOOST_MPI_CHECK_RESULT(MPI_Unpack,
 -        (const_cast<char*>(boost::serialization::detail::get_data(buffer_)), buffer_.size(), &position, p, l, t, comm));
-+                             (const_cast<char*>(detail::c_data(buffer_)), buffer_.size(), &position, p, l, t, comm));
++        (get_data(buffer_), buffer_.size(), &position, p, l, t, comm));
++    }
++
++    static buffer_type::value_type* get_data(buffer_type& b)
++    {
++      return b.empty() ? 0 : &(b[0]);
      }
  
      buffer_type & buffer_;
 diff --git a/include/boost/mpi/detail/packed_oprimitive.hpp b/include/boost/mpi/detail/packed_oprimitive.hpp
-index 5b6b3b2..1cb4ba0 100644
+index fbcde9a..3c81a70 100644
 --- a/include/boost/mpi/detail/packed_oprimitive.hpp
 +++ b/include/boost/mpi/detail/packed_oprimitive.hpp
-@@ -15,7 +15,7 @@
+@@ -15,7 +15,6 @@
  
  #include <boost/mpi/datatype.hpp>
  #include <boost/mpi/exception.hpp>
 -#include <boost/serialization/detail/get_data.hpp>
-+#include <boost/mpi/detail/antiques.hpp>
  #include <boost/serialization/array.hpp>
  #include <boost/assert.hpp>
  #include <vector>
-@@ -98,7 +98,10 @@ class BOOST_MPI_DECL packed_oprimitive
+@@ -103,13 +102,18 @@ class BOOST_MPI_DECL packed_oprimitive
  
        // pack the data into the buffer
        BOOST_MPI_CHECK_RESULT(MPI_Pack,
 -      (const_cast<void*>(p), l, t, boost::serialization::detail::get_data(buffer_), buffer_.size(), &position, comm));
-+                             (const_cast<void*>(p),l,t, 
-+                              detail::c_data(buffer_),
-+                              buffer_.size(), 
-+                              &position,comm));
++      (const_cast<void*>(p), l, t, get_data(buffer_), buffer_.size(), &position, comm));
        // reduce the buffer size if needed
        BOOST_ASSERT(std::size_t(position) <= buffer_.size());
        if (std::size_t(position) < buffer_.size())
+           buffer_.resize(position);
+     }
+ 
++    static buffer_type::value_type* get_data(buffer_type& b)
++    {
++      return b.empty() ? 0 : &(b[0]);
++    }
++
+   buffer_type& buffer_;
+   mutable std::size_t size_;
+   MPI_Comm comm;
