@@ -9,7 +9,7 @@
 +                        mode => 0755,
 +                    });
                      system("cp $datadir/warewulf/$f $tftpdir/warewulf/$f");
-+                    chmod 0644 $tftpdir/warewulf/$f;
++                    chmod 0644, "$tftpdir/warewulf/$f";
                  } else {
                      &eprint("Could not locate Warewulf's internal $f! Things might be broken!\n");
                  }
@@ -28,7 +28,7 @@
                  if (! close PXELINUX) {
                      &eprint("Could not write Pxelinux configuration file: $!\n");
                  }
-+                if (! chmod 0644 $tftproot/warewulf/pxelinux.cfg/$config)
++                if (! chmod 0644, "$tftproot/warewulf/pxelinux.cfg/$config")
 +                    &eprint("Could not chmod Pxelinux configuration file: $!\n");
 +                }
              } else {
