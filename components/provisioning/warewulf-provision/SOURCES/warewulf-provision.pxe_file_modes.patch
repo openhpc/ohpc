@@ -1,0 +1,36 @@
+--- warewulf3-3.7pre.ohpc1.3/provision/lib/Warewulf/Provision/Pxelinux.pm	2017-03-22 08:41:20.000000000 -0700
++++ warewulf3-3.7pre.ohpc1.3.patch/provision/lib/Warewulf/Provision/Pxelinux.pm	2017-08-04 11:14:31.000000000 -0700
+@@ -89,8 +89,11 @@
+             if (! -f "$tftpdir/warewulf/$f") {
+                 if (-f "$datadir/warewulf/$f") {
+                     &iprint("Copying $f to the tftp root\n");
+-                    mkpath("$tftpdir/warewulf/");
++                    mkpath("$tftpdir/warewulf/", {
++                        mode => 0755,
++                    });
+                     system("cp $datadir/warewulf/$f $tftpdir/warewulf/$f");
++                    chmod 0644 $tftpdir/warewulf/$f;
+                 } else {
+                     &eprint("Could not locate Warewulf's internal $f! Things might be broken!\n");
+                 }
+@@ -138,7 +141,9 @@
+ 
+     if (! -d "$tftproot/warewulf/pxelinux.cfg") {
+         &iprint("Creating pxelinux configuration directory: $tftproot/warewulf/pxelinux.cfg");
+-        mkpath("$tftproot/warewulf/pxelinux.cfg");
++        mkpath("$tftproot/warewulf/pxelinux.cfg", {
++            mode => 0755,
++        });
+     }
+ 
+     foreach my $nodeobj (@nodeobjs) {
+@@ -279,6 +284,9 @@
+                 if (! close PXELINUX) {
+                     &eprint("Could not write Pxelinux configuration file: $!\n");
+                 }
++                if (! chmod 0644 $tftproot/warewulf/pxelinux.cfg/$config)
++                    &eprint("Could not chmod Pxelinux configuration file: $!\n");
++                }
+             } else {
+                 &eprint("Node: $nodename-$devname: Bad characters in hwaddr: '$hwaddr'\n");
+             }
