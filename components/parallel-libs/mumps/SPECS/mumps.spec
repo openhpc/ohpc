@@ -172,12 +172,8 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { [is-loaded %{gnu_family}] } {
-        if { ![is-loaded scalapack]  } {
-          module load scalapack
-        }
-    }
+if { ![is-loaded intel] } {
+    depends-on scalapack
 }
 
 prepend-path    PATH                %{install_path}/bin

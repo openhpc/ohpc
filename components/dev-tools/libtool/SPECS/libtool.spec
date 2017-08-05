@@ -27,7 +27,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 %define debug_package %{nil}
-%define install_path %{OHPC_PUB}/autotools
+%define install_path %{OHPC_UTILS}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
 Requires:      automake%{PROJ_DELIM} >= 1.14.1
@@ -93,9 +93,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{OHPC_PUB}
+%dir %{OHPC_UTILS}
 %dir %{OHPC_MODULES}
-%{OHPC_PUB}
+%{OHPC_UTILS}
 %{OHPC_MODULES}/autotools
 %doc AUTHORS
 %doc ChangeLog

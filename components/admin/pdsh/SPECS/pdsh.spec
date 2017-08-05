@@ -15,7 +15,7 @@
 
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.31
+Version:   2.32
 Release:   1
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
@@ -24,7 +24,11 @@ Group:     %{PROJ_NAME}/admin
 #Source0:   %{pname}-%{version}.tar.gz
 Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
+Patch1:    pdsh-autoconf.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
 
 %define debug_package %{nil}
 
@@ -316,6 +320,7 @@ from an allocated Torque job.
 
 %prep
 %setup  -q -n %{pname}-%{pname}-%{version}
+%patch1 -p1
 ##############################################################################
 
 %build
@@ -325,6 +330,7 @@ from an allocated Torque job.
 cp /usr/lib/rpm/config.guess config
 %endif
 
+./bootstrap
 ./configure --prefix=%{install_path} \
     --with-rcmd-rank-list="ssh mrsh rsh krb4 qsh mqsh exec xcpu" \
     %{?_enable_debug}       \
@@ -411,7 +417,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %files
 %defattr(-,root,root)
 %doc COPYING README NEWS DISCLAIMER 
-%doc README.KRB4 README.modules README.QsNet
+%doc README.KRB4 README.modules
 %{OHPC_HOME}
 %{OHPC_PUB}
 %{_bindir}/pdsh

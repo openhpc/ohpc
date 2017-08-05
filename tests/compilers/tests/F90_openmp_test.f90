@@ -36,14 +36,14 @@ program main
   character (len=32) argv
   integer argc
 
-  argc = iargc()
-
+  argc = command_argument_count()
   if (argc > 0) then
-    call getarg (1, argv)
-    read (argv, *) nthreads
+     call get_command_argument(1,argv)
+     read (argv, *) nthreads
   else
-    nthreads = 1
+     nthreads = 2
   endif
+     
 
   print *, "# threads: ", nthreads
   call omp_set_num_threads(nthreads)

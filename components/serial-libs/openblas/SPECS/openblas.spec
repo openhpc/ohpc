@@ -35,7 +35,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        0.2.19
+Version:        0.2.20
 Release:        1%{?dist}
 Summary:        An optimized BLAS library based on GotoBLAS2
 License:        BSD-3-Clause
@@ -99,6 +99,7 @@ sed -i '/#define OPENBLAS_NEEDBUNDERSCORE/,/#define OPENBLAS_VERSION/{//!d}' %{b
 
 # Remove buildroot
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/lib/cmake/openblas/OpenBLASConfig.cmake
+sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/lib/pkgconfig/openblas.pc
 
 # Remove static lib
 rm -f %{buildroot}%{install_path}/lib/*a

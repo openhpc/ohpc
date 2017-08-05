@@ -13,7 +13,7 @@
 
 Summary:   Integration test suite for OpenHPC
 Name:      test-suite%{PROJ_DELIM}
-Version:   1.3.1
+Version:   1.3.2
 Release:   1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
@@ -47,7 +47,7 @@ is made available under an '%{testuser}' user account.
 
 %build
 
-export PATH=/opt/ohpc/pub/autotools/bin:$PATH
+export PATH=/opt/ohpc/pub/utils/autotools/bin:$PATH
 cd tests
 ./bootstrap
 

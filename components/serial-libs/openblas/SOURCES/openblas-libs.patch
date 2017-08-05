@@ -1,6 +1,6 @@
---- openblas-0.2.14/f_check	2015-03-24 13:07:07.000000000 -0700
-+++ openblas-0.2.14.patch/f_check	2015-09-10 21:45:22.000000000 -0700
-@@ -313,7 +313,7 @@
+--- OpenBLAS-0.2.20/f_check	2017-07-23 21:03:35.000000000 -0700
++++ OpenBLAS-0.2.20.patch/f_check	2017-08-01 13:03:03.000000000 -0700
+@@ -340,7 +340,7 @@
  }
  
  if ($vendor eq "INTEL"){
@@ -8,4 +8,4 @@
 +    #$linker_a .= "-lgfortran"
  }
  
- open(MAKEFILE, ">> $makefile") || die "Can't append $makefile";
+ if ($vendor eq "FLANG"){

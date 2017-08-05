@@ -181,6 +181,12 @@ AC_ARG_ENABLE([netcdf],
    [AX_OPTION_DEFAULT(type=long,enable_netcdf,yes)])
 AM_CONDITIONAL(NETCDF_ENABLED,test "x$enable_netcdf" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# PNetCDF
+AC_ARG_ENABLE([pnetcdf],
+   [AS_HELP_STRING([--enable-pnetcdf],[Enable PNetCDF tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_pnetcdf,yes)])
+AM_CONDITIONAL(PNETCDF_ENABLED,test "x$enable_pnetcdf" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # HDF5
 AC_ARG_ENABLE([hdf5],
    [AS_HELP_STRING([--enable-hdf5],[Enable HDF5 tests (default=yes)])],[],
@@ -295,6 +301,18 @@ AC_ARG_ENABLE([petsc],
    [AX_OPTION_DEFAULT(type=long,enable_petsc,yes)])
 AM_CONDITIONAL(PETSC_ENABLED,test "x$enable_petsc" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# PLASMA
+AC_ARG_ENABLE([plasma],
+   [AS_HELP_STRING([--enable-plasma],[Enable PLASMA tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_plasma,yes)])
+AM_CONDITIONAL(PLASMA_ENABLED,test "x$enable_plasma" = "xyes" )
+#------------------------------------------------------------------------------------------
+# PTScotch
+AC_ARG_ENABLE([ptscotch],
+   [AS_HELP_STRING([--enable-ptscotch],[Enable ptscotch tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_ptscotch,yes)])
+AM_CONDITIONAL(PTSCOTCH_ENABLED,test "x$enable_ptscotch" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # RMS harness
 AC_ARG_ENABLE([rms-harness],
    [AS_HELP_STRING([--enable-rms-harness],[Enable RMS harness tests(default=yes)])],[],
@@ -312,6 +330,18 @@ AC_ARG_ENABLE([scipy],
    [AS_HELP_STRING([--enable-scipy],[Enable scipy tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_scipy,yes)])
 AM_CONDITIONAL(SCIPY_ENABLED,test "x$enable_scipy" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# Scotch
+AC_ARG_ENABLE([scotch],
+   [AS_HELP_STRING([--enable-scotch],[Enable scotch tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_scotch,yes)])
+AM_CONDITIONAL(SCOTCH_ENABLED,test "x$enable_scotch" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# SLEPC
+AC_ARG_ENABLE([slepc],
+   [AS_HELP_STRING([--enable-slepc],[Enable slepc tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_slepc,yes)])
+AM_CONDITIONAL(SLEPC_ENABLED,test "x$enable_slepc" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # SuperLU
 AC_ARG_ENABLE([superlu],
@@ -342,6 +372,12 @@ AC_ARG_ENABLE([autotools],
    [AS_HELP_STRING([--enable-autotools],[Enable autotools tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=short,enable_autotools,yes)])
 AM_CONDITIONAL(AUTOTOOLS_ENABLED,test "x$enable_autotools" = "xyes" )
+#------------------------------------------------------------------------------------------
+# CMake
+AC_ARG_ENABLE([cmake],
+   [AS_HELP_STRING([--enable-cmake],[Enable CMake tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_cmake,yes)])
+AM_CONDITIONAL(CMAKE_ENABLED,test "x$enable_cmake" = "xyes" )
 #------------------------------------------------------------------------------------------
 # TBB
 AC_ARG_ENABLE([tbb],
@@ -495,6 +531,268 @@ if test "x$ROOT_ENABLED" = "x1" ; then
 
 else
 
+echo    Apps:
+
+    if test "x$enable_hpcg" = "xyes"; then
+       echo '    'HPCG...................... : enabled
+    else
+       echo '    'HPCG...................... : disabled
+    fi
+
+    if test "x$enable_minidft" = "xyes"; then
+       echo '    'MiniDFT................... : enabled
+    else
+       echo '    'MiniDFT................... : disabled
+    fi
+
+    if test "x$enable_minife" = "xyes"; then
+       echo '    'MiniFE.................... : enabled
+    else
+       echo '    'MiniFE.................... : disabled
+    fi
+
+    if test "x$enable_prk" = "xyes"; then
+       echo '    'PRK....................... : enabled
+    else
+       echo '    'PRK....................... : disabled
+    fi
+
+echo    Dev Tools:
+
+    if test "x$enable_autotools" = "xyes"; then
+       echo '    'Autotools................. : enabled
+    else
+       echo '    'Autotools................. : disabled
+    fi
+
+    if test "x$enable_cmake" = "xyes"; then
+       echo '    'CMake..................... : enabled
+    else
+       echo '    'CMake..................... : disabled
+    fi
+
+    if test "x$enable_cilk" = "xyes"; then
+       echo '    'CILK...................... : enabled
+    else
+       echo '    'CILK...................... : disabled
+    fi
+
+    if test "x$enable_easybuild" = "xyes"; then
+       echo '    'EasyBuild................. : enabled
+    else
+       echo '    'EasyBuild................. : disabled
+    fi
+
+    if test "x$enable_hwloc" = "xyes"; then
+       echo '    'hwloc..................... : enabled
+    else
+       echo '    'hwloc..................... : disabled
+    fi
+
+    if test "x$enable_tbb" = "xyes"; then
+       echo '    'TBB....................... : enabled
+    else
+       echo '    'TBB....................... : disabled
+    fi
+
+    if test "x$enable_valgrind" = "xyes"; then
+       echo '    'Valgrind.................. : enabled
+    else
+       echo '    'Valgrind.................. : disabled
+    fi
+
+echo    Libraries:
+
+    if test "x$enable_adios" = "xyes"; then
+       echo '    'Adios .................... : enabled
+    else
+       echo '    'Adios .................... : disabled
+    fi
+
+    if test "x$enable_boost" = "xyes"; then
+       echo '    'Boost .................... : enabled
+    else
+       echo '    'Boost .................... : disabled
+    fi
+
+    if test "x$enable_boost_mpi" = "xyes"; then
+       echo '    'Boost MPI................. : enabled
+    else
+       echo '    'Boost MPI................. : disabled
+    fi
+
+    if test "x$enable_fftw" = "xyes"; then
+       echo '    'FFTW...................... : enabled
+    else
+       echo '    'FFTW...................... : disabled
+    fi
+
+    if test "x$enable_gsl" = "xyes"; then
+       echo '    'GSL....................... : enabled
+    else
+       echo '    'GSL....................... : disabled
+    fi
+
+    if test "x$enable_hdf5" = "xyes"; then
+       echo '    'HDF5...................... : enabled
+    else
+       echo '    'HDF5...................... : disabled
+    fi
+
+    if test "x$enable_hypre" = "xyes"; then
+       echo '    'HYPRE..................... : enabled
+    else
+       echo '    'HYPRE..................... : disabled
+    fi
+
+    if test "x$enable_metis" = "xyes"; then
+       echo '    'Metis..................... : enabled
+    else
+       echo '    'Metis..................... : disabled
+    fi
+
+    if test "x$enable_mumps" = "xyes"; then
+       echo '    'MUMPS..................... : enabled
+    else
+       echo '    'MUMPS..................... : disabled
+    fi
+
+    if test "x$enable_netcdf" = "xyes"; then
+       echo '    'NetCDF.................... : enabled
+    else
+       echo '    'NetCDF.................... : disabled
+    fi
+
+    if test "x$enable_numpy" = "xyes"; then
+       echo '    'Numpy..................... : enabled
+    else
+       echo '    'Numpy..................... : disabled
+    fi
+
+    if test "x$enable_openblas" = "xyes"; then
+       echo '    'OPENBLAS.................. : enabled
+    else
+       echo '    'OPENBLAS.................. : disabled
+    fi
+
+    if test "x$enable_petsc" = "xyes"; then
+       echo '    'PETSc..................... : enabled
+    else
+       echo '    'PETSc..................... : disabled
+    fi
+
+    if test "x$enable_phdf5" = "xyes"; then
+       echo '    'PHDF5..................... : enabled
+    else
+       echo '    'PHDF5..................... : disabled
+    fi
+
+    if test "x$enable_plasma" = "xyes"; then
+       echo '    'PLASMA.................... : enabled
+    else
+       echo '    'PLASMA.................... : disabled
+    fi
+
+    if test "x$enable_pnetcdf" = "xyes"; then
+       echo '    'PNetCDF................... : enabled
+    else
+       echo '    'PNetCDF................... : disabled
+    fi
+
+    if test "x$enable_ptscotch" = "xyes"; then
+       echo '    'PTScotch.................... : enabled
+    else
+       echo '    'PTScotch.................... : disabled
+    fi
+
+    if test "x$enable_R" = "xyes"; then
+       echo '    'R base package............ : enabled
+    else
+       echo '    'R base package............ : disabled
+    fi
+
+    if test "x$enable_scalapack" = "xyes"; then
+       echo '    'ScaLAPACK................. : enabled
+    else
+       echo '    'ScaLAPACK................. : disabled
+    fi
+
+    if test "x$enable_scipy" = "xyes"; then
+       echo '    'Scipy..................... : enabled
+    else
+       echo '    'Scipy..................... : disabled
+    fi
+
+    if test "x$enable_scotch" = "xyes"; then
+       echo '    'Scotch.................... : enabled
+    else
+       echo '    'Scotch.................... : disabled
+    fi
+
+    if test "x$enable_slepc" = "xyes"; then
+       echo '    'SLEPc..................... : enabled
+    else
+       echo '    'SLEPc..................... : disabled
+    fi
+
+    if test "x$enable_superlu" = "xyes"; then
+       echo '    'Superlu................... : enabled
+    else
+       echo '    'Superlu................... : disabled
+    fi
+
+    if test "x$enable_superlu_dist" = "xyes"; then
+       echo '    'Superlu_dist.............. : enabled
+    else
+       echo '    'Superlu_dist.............. : disabled
+    fi
+
+    if test "x$enable_trilinos" = "xyes"; then
+       echo '    'Trilinos ................. : enabled
+    else
+       echo '    'Trilinos.................. : disabled
+    fi
+
+echo    Performance Tools:
+
+    if test "x$enable_imb" = "xyes"; then
+       echo '    'IMB....................... : enabled
+    else
+       echo '    'IMB....................... : disabled
+    fi
+
+    if test "x$enable_mpiP" = "xyes"; then
+       echo '    'mpiP Profiler........ .... : enabled
+    else
+       echo '    'mpiP Profiler............. : disabled
+    fi
+
+    if test "x$enable_papi" = "xyes"; then
+       echo '    'Papi...................... : enabled
+    else
+       echo '    'Papi...................... : disabled
+    fi
+
+    if test "x$enable_scalasca" = "xyes"; then
+       echo '    'Scalasca.................. : enabled
+    else
+       echo '    'Scalasca.................. : disabled
+    fi
+
+    if test "x$enable_tau" = "xyes"; then
+       echo '    'TAU....................... : enabled
+    else
+       echo '    'TAU....................... : disabled
+    fi
+
+echo    Runtimes:
+
+    if test "x$enable_ocr" = "xyes"; then
+       echo '    'OCR....................... : enabled
+    else
+       echo '    'OCR....................... : disabled
+    fi
+
 echo    User Environment:
 
     if test "x$enable_compilers" = "xyes"; then
@@ -543,232 +841,6 @@ echo    User Environment:
        echo '    'RMS test harness.......... : enabled 
     else   
        echo '    'RMS test harness.......... : disabled 
-    fi
-
-echo    Dev Tools:
-
-    if test "x$enable_autotools" = "xyes"; then
-       echo '    'Autotools................. : enabled
-    else
-       echo '    'Autotools................. : disabled
-    fi
-
-    if test "x$enable_cilk" = "xyes"; then
-       echo '    'CILK...................... : enabled
-    else
-       echo '    'CILK...................... : disabled
-    fi
-
-    if test "x$enable_easybuild" = "xyes"; then
-       echo '    'EasyBuild................. : enabled
-    else
-       echo '    'EasyBuild................. : disabled
-    fi
-
-    if test "x$enable_hwloc" = "xyes"; then
-       echo '    'hwloc..................... : enabled
-    else
-       echo '    'hwloc..................... : disabled
-    fi
-
-    if test "x$enable_tbb" = "xyes"; then
-       echo '    'TBB....................... : enabled
-    else
-       echo '    'TBB....................... : disabled
-    fi
-
-    if test "x$enable_valgrind" = "xyes"; then
-       echo '    'Valgrind.................. : enabled
-    else
-       echo '    'Valgrind.................. : disabled
-    fi
-
-echo    Performance Tools:
-
-    if test "x$enable_mpiP" = "xyes"; then
-       echo '    'mpiP Profiler........ .... : enabled
-    else
-       echo '    'mpiP Profiler............. : disabled
-    fi
-
-    if test "x$enable_papi" = "xyes"; then
-       echo '    'Papi...................... : enabled
-    else
-       echo '    'Papi...................... : disabled
-    fi
-
-    if test "x$enable_scalasca" = "xyes"; then
-       echo '    'Scalasca.................. : enabled
-    else
-       echo '    'Scalasca.................. : disabled
-    fi
-
-    if test "x$enable_tau" = "xyes"; then
-       echo '    'TAU....................... : enabled
-    else
-       echo '    'TAU....................... : disabled
-    fi
-
-echo    Libraries:
-
-    if test "x$enable_adios" = "xyes"; then
-       echo '    'Adios .................... : enabled
-    else
-       echo '    'Adios .................... : disabled
-    fi
-
-    if test "x$enable_boost" = "xyes"; then
-       echo '    'Boost .................... : enabled
-    else
-       echo '    'Boost .................... : disabled
-    fi
-
-    if test "x$enable_boost_mpi" = "xyes"; then
-       echo '    'Boost MPI................. : enabled
-    else
-       echo '    'Boost MPI................. : disabled
-    fi
-
-    if test "x$enable_fftw" = "xyes"; then
-       echo '    'FFTW...................... : enabled
-    else
-       echo '    'FFTW...................... : disabled
-    fi
-
-    if test "x$enable_gsl" = "xyes"; then
-       echo '    'GSL....................... : enabled
-    else
-       echo '    'GSL....................... : disabled
-    fi
-
-    if test "x$enable_hdf5" = "xyes"; then
-       echo '    'HDF5...................... : enabled
-    else
-       echo '    'HDF5...................... : disabled
-    fi
-
-    if test "x$enable_hypre" = "xyes"; then
-       echo '    'HYPRE..................... : enabled
-    else
-       echo '    'HYPRE..................... : disabled
-    fi
-
-    if test "x$enable_imb" = "xyes"; then
-       echo '    'IMB....................... : enabled
-    else
-       echo '    'IMB....................... : disabled
-    fi
-
-    if test "x$enable_metis" = "xyes"; then
-       echo '    'Metis..................... : enabled
-    else
-       echo '    'Metis..................... : disabled
-    fi
-
-    if test "x$enable_mumps" = "xyes"; then
-       echo '    'MUMPS..................... : enabled
-    else
-       echo '    'MUMPS..................... : disabled
-    fi
-
-    if test "x$enable_netcdf" = "xyes"; then
-       echo '    'NetCDF.................... : enabled
-    else
-       echo '    'NetCDF.................... : disabled
-    fi
-
-    if test "x$enable_numpy" = "xyes"; then
-       echo '    'Numpy..................... : enabled
-    else
-       echo '    'Numpy..................... : disabled
-    fi
-
-    if test "x$enable_openblas" = "xyes"; then
-       echo '    'OPENBLAS.................. : enabled
-    else
-       echo '    'OPENBLAS.................. : disabled
-    fi
-
-    if test "x$enable_petsc" = "xyes"; then
-       echo '    'PETSc..................... : enabled
-    else
-       echo '    'PETSc..................... : disabled
-    fi
-
-    if test "x$enable_phdf5" = "xyes"; then
-       echo '    'PHDF5..................... : enabled
-    else
-       echo '    'PHDF5..................... : disabled
-    fi
-
-    if test "x$enable_R" = "xyes"; then
-       echo '    'R base package............ : enabled
-    else
-       echo '    'R base package............ : disabled
-    fi
-
-    if test "x$enable_scalapack" = "xyes"; then
-       echo '    'ScaLAPACK................. : enabled
-    else
-       echo '    'ScaLAPACK................. : disabled
-    fi
-
-    if test "x$enable_scipy" = "xyes"; then
-       echo '    'Scipy..................... : enabled
-    else
-       echo '    'Scipy..................... : disabled
-    fi
-
-    if test "x$enable_superlu" = "xyes"; then
-       echo '    'Superlu................... : enabled
-    else
-       echo '    'Superlu................... : disabled
-    fi
-
-    if test "x$enable_superlu_dist" = "xyes"; then
-       echo '    'Superlu_dist.............. : enabled
-    else
-       echo '    'Superlu_dist.............. : disabled
-    fi
-
-    if test "x$enable_trilinos" = "xyes"; then
-       echo '    'Trilinos ................. : enabled
-    else
-       echo '    'Trilinos.................. : disabled
-    fi
-
-echo    Runtimes:
-
-    if test "x$enable_ocr" = "xyes"; then
-       echo '    'OCR....................... : enabled
-    else
-       echo '    'OCR....................... : disabled
-    fi
-
-echo    Apps:
-
-    if test "x$enable_hpcg" = "xyes"; then
-       echo '    'HPCG...................... : enabled
-    else
-       echo '    'HPCG...................... : disabled
-    fi
-
-    if test "x$enable_minidft" = "xyes"; then
-       echo '    'MiniDFT................... : enabled
-    else
-       echo '    'MiniDFT................... : disabled
-    fi
-
-    if test "x$enable_minife" = "xyes"; then
-       echo '    'MiniFE.................... : enabled
-    else
-       echo '    'MiniFE.................... : disabled
-    fi
-
-    if test "x$enable_prk" = "xyes"; then
-       echo '    'PRK....................... : enabled
-    else
-       echo '    'PRK....................... : disabled
     fi
 
 fi

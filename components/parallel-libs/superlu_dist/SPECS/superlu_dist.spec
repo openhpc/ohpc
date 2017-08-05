@@ -148,13 +148,7 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require metis
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded metis]  } {
-        module load metis
-    }
-}
+depends-on metis
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include

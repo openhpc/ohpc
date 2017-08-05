@@ -1,0 +1,24 @@
+--- tau-2.26.2p1/Makefile.skel	2017-06-10 12:22:03.000000000 -0700
++++ tau-2.26.2p1.patch/Makefile.skel	2017-07-31 12:04:02.000000000 -0700
+@@ -50,8 +50,8 @@
+ EXPORTS = utils src/Profile
+ 
+ # Example Programs
+-EXAMPLES = examples/instrument examples/threads \
+-examples/cthreads examples/fortran examples/f90 $(MPIEXAMPLES) $(PDTEXAMPLE)
++#EXAMPLES = examples/instrument examples/threads \
++#examples/cthreads examples/fortran examples/f90 $(MPIEXAMPLES) $(PDTEXAMPLE)
+ 
+ # PC++ Support
+ #PCXX#PCXX=lang_support/pc++#ENDIF#
+--- tau-2.26.2p1/plugins/Makefile	2017-06-10 12:22:04.000000000 -0700
++++ tau-2.26.2p1.patch/plugins/Makefile	2017-07-31 12:32:31.000000000 -0700
+@@ -18,7 +18,7 @@
+ TEST_PLUGINS=testplugins
+ EXAMPLES=examples
+ 
+-SUBDIR = $(TEST_PLUGINS) $(EXAMPLES) #$(TUNING_POLICY)
++SUBDIR = $(TEST_PLUGINS) #$(EXAMPLES) $(TUNING_POLICY)
+ 
+ all: install
+ 	@echo

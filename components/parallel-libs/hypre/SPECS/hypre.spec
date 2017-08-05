@@ -40,7 +40,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        2.11.1
+Version:        2.11.2
 Release:        1%{?dist}
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
@@ -204,17 +204,10 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require superlu (and scalapack for gnu compiler families)
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded superlu]  } {
-        module load superlu
-    }
-    if { [is-loaded gnu] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
-        }
-    }
+# Require superlu (and openblas for gnu compiler families)
+depends-on superlu
+if { ![is-loaded intel] } {
+    depends-on openblas
 }
 
 prepend-path    PATH                %{install_path}/bin

@@ -1,0 +1,12 @@
+--- pdsh-pdsh-2.32/configure.ac	2017-06-22 11:10:38.000000000 -0700
++++ pdsh-pdsh-2.32.patch/configure.ac	2017-07-31 19:21:50.000000000 -0700
+@@ -6,8 +6,7 @@
+ #
+ # This file is to be processed with autoconf to generate a configure script.
+ 
+-AC_INIT([pdsh],
+-        m4_esyscmd([git describe --always |  awk '/.*/ {sub(/^pdsh-/, ""); printf "%s",$1; exit}']))
++AC_INIT([pdsh], [2.32])
+ 
+ AC_CONFIG_SRCDIR([pdsh])
+ AC_CONFIG_AUX_DIR([config])

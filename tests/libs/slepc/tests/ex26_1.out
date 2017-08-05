@@ -1,0 +1,6 @@
+
+Square root of Laplacian y=sqrt(A)*e_1, N=100 (10x10 grid)
+
+ Intermediate vector has norm 2.
+ Error norm is less than 100*epsilon
+

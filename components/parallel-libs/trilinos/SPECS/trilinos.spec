@@ -199,12 +199,8 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
 
 # Autoload openblas for gnu builds
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded intel] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
-        }
-    }
+if { ![is-loaded intel] } {
+    depends-on openblas
 }
 
 EOF

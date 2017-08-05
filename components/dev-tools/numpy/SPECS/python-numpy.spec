@@ -22,7 +22,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.12.1
+Version:        1.13.1
 Release:        1%{?dist}
 Url:            http://sourceforge.net/projects/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
@@ -128,10 +128,9 @@ module-whatis "URL %{url}"
 
 set     version             %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-  if { ![is-loaded intel] && ![is-loaded openblas] } {
-      module load openblas
-    }
+# Require openblas for gnu compiler families
+if { ![is-loaded intel] } {
+    depends-on openblas
 }
 
 prepend-path    PATH                %{install_path}/bin

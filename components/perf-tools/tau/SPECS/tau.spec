@@ -19,7 +19,7 @@
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.26.1
+Version:   2.26.2p1
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
@@ -27,8 +27,10 @@ Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
 Source1:   OHPC_macros
-Patch1:    tau-2.26.forceshared.patch
-Patch2:    tau-add-explicit-linking-option.patch
+Patch1:    tau-add-explicit-linking-option.patch
+Patch2:    tau-shared_libpdb.patch
+Patch3:    tau-testplugins_makefile.patch
+Patch4:    tau-disable_examples.patch
 
 Provides:  lib%PNAME.so()(64bit)
 Provides:  perl(ebs2otf)
@@ -71,6 +73,8 @@ automatic instrumentation tool.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
@@ -83,7 +87,7 @@ module load papi
 module load pdtoolkit
 
 %if "%{compiler_family}" == "intel"
-export fcomp=mpiifort
+export fcomp=ifort
 %else
 export fcomp=gfortran
 %endif
@@ -100,7 +104,25 @@ export OMPI_LDFLAGS="-Wl,--as-needed -L$MPI_LIB_DIR"
 export BUILDROOT=%buildroot
 export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 export TAUROOT=`pwd`
+
+# override with newer config.guess for aarch64
+%ifarch aarch64
+cp /usr/lib/rpm/config.guess utils/opari2/build-config/.
+cp /usr/lib/rpm/config.sub utils/opari2/build-config/.
+%endif
+
+# Try and figure out architecture
+detectarch=unknown
+detectarch=`./utils/archfind`
+if [ "x$detectarch" = "x" ]
+  then
+    detectarch=unknown
+fi
+%global machine `echo $detectarch`
+export CONFIG_ARCH=%{machine}
+
 ./configure \
+    -arch=%{machine} \
     -prefix=/tmp%{install_path} \
     -exec-prefix= \
 	-c++=mpicxx \
@@ -119,7 +141,10 @@ export TAUROOT=`pwd`
 	-pdt=$PDTOOLKIT_DIR \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
-	-extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp/%{install_path}/lib" 
+%if %{compiler_family} != intel
+    -opari \
+%endif
+	-extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp/%{install_path}/lib -L/tmp/%{install_path}/%{machine}/lib" 
 
 make install
 make exports
@@ -164,15 +189,16 @@ sed -i "s|$PDTOOLKIT_DIR|\$\{PDTOOLKIT_DIR\}|g" $(egrep -IR "$PDTOOLKIT_DIR" %bu
 pushd %{buildroot}%{install_path}/lib
 %if %{compiler_family} == intel
 ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
-%else
-ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi
-%endif
 ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-profile-trace.so
+%else
+ln -s shared-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace shared-mpi
+ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace.so
+%endif
 popd
 
 # remove static libs
 pushd %{buildroot}%{install_path}/lib
-rm -rf \.*a static-*
+rm -rf *\.a static-*
 popd
 
 # OpenHPC module file
@@ -208,14 +234,8 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
 setenv          %{PNAME}_OPTIONS    "-optRevert -optShared -optNoTrackGOMP"
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded papi]  } {
-        module load papi
-    }
-    if {  ![is-loaded pdtoolkit]  } {
-        module load pdtoolkit
-    }
-}
+depends-on papi
+depends-on pdtoolkit
 
 EOF
 

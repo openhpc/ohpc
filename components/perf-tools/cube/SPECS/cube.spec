@@ -16,7 +16,7 @@
 
 Name: %{pname}%{PROJ_DELIM}
 
-Version:   4.3.3
+Version:   4.3.5
 Release:   1%{?dist}
 Summary:   Score-P and Scalasca performance report explorer
 License:   BSD-style license

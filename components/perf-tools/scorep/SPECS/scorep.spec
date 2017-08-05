@@ -19,7 +19,7 @@
 
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   3.0
+Version:   3.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
@@ -132,23 +132,9 @@ module-whatis "URL %{url}"
 
 set     version			    %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded papi]  } {
-      module load papi
-    }
-}
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded pdtoolkit]  } {
-      module load pdtoolkit
-    }
-}
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded sionlib]  } {
-      module load sionlib
-    }
-}
+depends-on papi
+depends-on pdtoolkit
+depends-on sionlib
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man

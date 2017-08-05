@@ -17,7 +17,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        3.23
+Version:        3.24
 Release:        1%{?dist}
 License:        Program Database Toolkit License
 Summary:        PDT is a framework for analyzing source code

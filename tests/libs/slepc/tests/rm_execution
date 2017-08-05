@@ -1,0 +1,52 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+NODES=2
+TASKS=4
+ARGS=8
+
+@test "[libs/SLEPc] F77 eigensystem with EPS object test binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s ex1f ];then
+	flunk "ex1f binary does not exit"
+    fi
+    
+    run_mpi_binary ./ex1f "" $NODES $TASKS
+    assert_success
+}
+
+@test "[libs/SLEPc] C SVD of the Lauchli matrix binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s ex15 ];then
+	flunk "ex15 binary does not exit"
+    fi
+    
+    run_mpi_binary ./ex15 "" $NODES $TASKS
+    assert_success
+}
+
+@test "[libs/SLEPc] F90 quadratic eigensystem with PEP object binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s ex16f90 ];then
+	flunk "ex16f90 binary does not exit"
+    fi
+    
+    run_mpi_binary ./ex16f90 " -pep_nev 4 -terse " 1 1
+    assert_success
+}
+
+@test "[libs/SLEPc] C Square root of the 2-D Laplacian binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s ex26 ];then
+	flunk "ex26 binary does not exit"
+    fi
+    
+    run_mpi_binary ./ex26 "" $NODES $TASKS
+    assert_success
+}

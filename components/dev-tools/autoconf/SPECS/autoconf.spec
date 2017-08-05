@@ -34,7 +34,7 @@ BuildRequires: perl(Data::Dumper)
 BuildRequires: perl(Text::ParseWords)
 %endif
 
-%define install_path %{OHPC_PUB}/autotools
+%define install_path %{OHPC_UTILS}/autotools
 
 %description
 GNU Autoconf is a tool for configuring source code and Makefiles.
@@ -72,7 +72,7 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 %files
 %defattr(-,root,root,-)
 %dir %{OHPC_HOME}
-%{OHPC_PUB}
+%{OHPC_UTILS}
 %doc THANKS
 %doc NEWS
 %doc ChangeLog.2

@@ -20,12 +20,13 @@
 %global OHPC_HOME       /opt/%{PROJ_NAME}
 %global OHPC_ADMIN      %{OHPC_HOME}/admin
 %global OHPC_PUB        %{OHPC_HOME}/pub
-%global OHPC_COMPILERS  %{OHPC_PUB}/compiler
-%global OHPC_MPI_STACKS %{OHPC_PUB}/mpi
 %global OHPC_APPS       %{OHPC_PUB}/apps
+%global OHPC_COMPILERS  %{OHPC_PUB}/compiler
 %global OHPC_LIBS       %{OHPC_PUB}/libs
 %global OHPC_MODULES    %{OHPC_PUB}/modulefiles
 %global OHPC_MODULEDEPS %{OHPC_PUB}/moduledeps
+%global OHPC_MPI_STACKS %{OHPC_PUB}/mpi
+%global OHPC_UTILS      %{OHPC_PUB}/utils
 %global debug_package   %{nil}
 %global dist            .ohpc
 
@@ -82,6 +83,10 @@ Requires:      gnu-dts6-compilers%{PROJ_DELIM}
 %if "%{compiler_family}" == "gnu7rh"
 BuildRequires: gnu-7-compilers%{PROJ_DELIM}
 Requires:      gnu-7-compilers%{PROJ_DELIM}
+%endif
+%if "%{compiler_family}" == "llvm"
+BuildRequires: llvm-compilers%{PROJ_DELIM}
+Requires:      llvm-compilers%{PROJ_DELIM}
 %endif
 
 %endif

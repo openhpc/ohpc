@@ -110,13 +110,26 @@ FUNCTION (test, binary) (void)
 
 }
 
-
 void
-FUNCTION (test, trap) (void)
+FUNCTION (test, alloc_zero_length) (void)
 {
   TYPE (gsl_block) * b = FUNCTION (gsl_block, alloc) (0);
 
-  gsl_test (b != 0, NAME (gsl_block) "_alloc traps zero length");
+  gsl_test (b == 0, NAME (gsl_block) "_alloc permits zero length");
+  gsl_test (b->size != 0, NAME (gsl_block) "_alloc reflects zero length");
+
+  FUNCTION (gsl_block, free) (b);
+}
+
+void
+FUNCTION (test, calloc_zero_length) (void)
+{
+  TYPE (gsl_block) * b = FUNCTION (gsl_block, calloc) (0);
+
+  gsl_test (b == 0, NAME (gsl_block) "_calloc permits zero length");
+  gsl_test (b->size != 0, NAME (gsl_block) "_calloc reflects zero length");
+
+  FUNCTION (gsl_block, free) (b);
 }
 
 

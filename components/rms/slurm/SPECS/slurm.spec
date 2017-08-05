@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%include %{_sourcedir}/rpmmacros
+%global _with_mysql  1
 
 %define pname slurm
 
@@ -113,11 +113,7 @@ Summary:   Slurm Workload Manager
 License:   GPL
 Group:     %{PROJ_NAME}/rms
 Source:    https://github.com/SchedMD/slurm/archive/%{pname}-%{ver_exp}.tar.gz
-#Source:    http://www.schedmd.com/download/archive/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
-Source2:   rpmmacros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}
-DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://slurm.schedmd.com/
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
@@ -502,7 +498,6 @@ Gives the ability for Slurm to use Berkeley Lab Checkpoint/Restart
 %__make %{?_smp_mflags}
 
 %install
-rm -rf "$RPM_BUILD_ROOT"
 DESTDIR="$RPM_BUILD_ROOT" %__make install
 DESTDIR="$RPM_BUILD_ROOT" %__make install-contrib
 
@@ -834,10 +829,6 @@ touch $LIST
 %endif
 
 mkdir -p $RPM_BUILD_ROOT/%{_docdir}
-#############################################################################
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 #############################################################################
 
 %files -f slurm.files
