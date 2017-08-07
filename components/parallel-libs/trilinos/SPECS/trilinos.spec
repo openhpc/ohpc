@@ -34,7 +34,7 @@ BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
-Requires:       lmod >= 7.6.1
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  perl
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  qt-devel

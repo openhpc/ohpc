@@ -52,7 +52,7 @@ Source5:        OHPC_macros
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Patch2:         mumps-5.0.2-psxe2017.patch
-Requires:       lmod >= 7.6.1
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1

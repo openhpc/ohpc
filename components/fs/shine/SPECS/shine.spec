@@ -20,7 +20,7 @@ BuildArch: noarch
 BuildRequires: python
 #!BuildIgnore: post-build-checks
 Requires:  clustershell%{PROJ_DELIM} >= 1.5.1
-Requires:  lmod >= 7.6.1
+Requires:  lmod%{PROJ_DELIM} >= 7.6.1
 Provides:  %{pname} = %{version}
 
 # Default library install path

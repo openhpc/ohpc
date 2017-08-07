@@ -53,7 +53,7 @@ Patch2:         superlu-4.3-dont-opt-away.diff
 # this routine in the library which, however, remains fully functionnal
 Patch3:         superlu-5.1-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
-Requires:       lmod >= 7.6.1
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  tcsh
 
 # Default library install path

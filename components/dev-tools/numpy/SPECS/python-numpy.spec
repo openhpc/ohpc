@@ -33,7 +33,7 @@ Source1:        OHPC_macros
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
-Requires:       lmod >= 7.6.1
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  python-devel python-setuptools
 Requires:       python
 Provides:       numpy = %{version}

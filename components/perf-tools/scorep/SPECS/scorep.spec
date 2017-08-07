@@ -36,7 +36,7 @@ BuildRequires: binutils-devel
 Requires     : binutils-devel
 BuildRequires: libunwind-devel
 Requires     : libunwind-devel
-Requires     : lmod >= 7.6.1
+Requires     : lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: zlib-devel
 BuildRequires: papi%{PROJ_DELIM}
 Requires     : papi%{PROJ_DELIM}

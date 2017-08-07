@@ -51,7 +51,7 @@ Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
 Source2:        OHPC_macros
 Patch0:         scalapack-2.0.2-shared-lib.patch
-Requires:       lmod >= 7.6.1
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset

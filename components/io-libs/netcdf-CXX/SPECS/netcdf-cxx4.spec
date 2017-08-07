@@ -45,7 +45,7 @@ Source0:	https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
 Source101:	OHPC_macros
 
 BuildRequires:  zlib-devel >= 1.2.5
-Requires:       lmod >= 7.6.1
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

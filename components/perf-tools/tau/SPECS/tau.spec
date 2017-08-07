@@ -47,7 +47,7 @@ BuildRequires: curl
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
-Requires:      lmod >= 7.6.1
+Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: papi%{PROJ_DELIM}
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires: papi%{PROJ_DELIM}

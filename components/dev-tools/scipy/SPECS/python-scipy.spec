@@ -80,7 +80,7 @@ BuildRequires:  python-setuptools
 BuildRequires:  python-Cython
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
-Requires:       lmod >= 7.6.1
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 # Default library install path
