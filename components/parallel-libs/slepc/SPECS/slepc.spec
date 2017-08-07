@@ -34,8 +34,9 @@ Source0:        http://slepc.upv.es/download/distrib/%{pname}-%{version}.tar.gz
 Source1:        OHPC_macros
 BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:         %{OHPC_PUB}/doc/contrib
-BuildRequires: petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires: petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       lmod >= 7.6.1
 
 # A configure script in slepc is made by python
 BuildRequires: python

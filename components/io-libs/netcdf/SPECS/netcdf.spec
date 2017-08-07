@@ -49,6 +49,7 @@ Source101:	OHPC_macros
 
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  m4
+Requires:       lmod >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 

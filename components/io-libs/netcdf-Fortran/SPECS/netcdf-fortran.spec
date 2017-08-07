@@ -48,6 +48,7 @@ BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.8.8
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       lmod >= 7.6.1
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 

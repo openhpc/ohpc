@@ -55,6 +55,7 @@ Patch0:         superlu_dist-4.1-sequence-point.patch
 Patch1:         superlu_dist-4.2-make.patch
 Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
 Patch3:         superlu_dist-4.1-parmetis.patch
+Requires:       lmod >= 7.6.1
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 

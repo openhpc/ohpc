@@ -57,6 +57,7 @@ Source1:        OHPC_macros
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
+Requires:       lmod >= 7.6.1
 BuildRequires:  python-devel
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 %if 0%{?suse_version}

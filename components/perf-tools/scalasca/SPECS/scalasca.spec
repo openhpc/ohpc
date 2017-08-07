@@ -26,6 +26,7 @@ Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.scalasca.org
 Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/2.3/dist/scalasca-%{version}.tar.gz
 Source1:   OHPC_macros
+Requires:  lmod >= 7.6.1
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

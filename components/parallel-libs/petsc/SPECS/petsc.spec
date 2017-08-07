@@ -32,6 +32,7 @@ Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{versi
 Source1:        OHPC_macros
 Patch1:         petsc.rpath.patch
 Url:            http://www.mcs.anl.gov/petsc/
+Requires:       lmod >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python

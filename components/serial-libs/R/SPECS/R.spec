@@ -96,6 +96,7 @@ Requires:	libicu52_1
 BuildRequires:  libicu
 Requires:	libicu
 %endif
+Requires:       lmod >= 7.6.1
 
 Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
