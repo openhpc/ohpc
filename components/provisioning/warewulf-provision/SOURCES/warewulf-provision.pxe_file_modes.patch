@@ -35,8 +35,19 @@
                  &eprint("Node: $nodename-$devname: Bad characters in hwaddr: '$hwaddr'\n");
              }
 --- warewulf3-3.7pre.ohpc1.3/provision/lib/Warewulf/Bootstrap.pm	2017-03-22 08:41:20.000000000 -0700
-+++ warewulf3-3.7pre.ohpc1.3.patch/provision/lib/Warewulf/Bootstrap.pm	2017-08-07 15:35:10.000000000 -0700
-@@ -318,7 +318,9 @@
++++ warewulf3-3.7pre.ohpc1.3.patch/provision/lib/Warewulf/Bootstrap.pm	2017-08-07 15:47:34.000000000 -0700
+@@ -186,7 +186,9 @@
+             my $dirname = dirname($file);
+ 
+             if (! -d $dirname) {
+-                mkpath($dirname);
++                mkpath($dirname, {
++                    mode => 0755,
++                });
+             }
+         }
+ 
+@@ -318,7 +320,9 @@
              }
  
              mkpath($tmpdir);
@@ -47,7 +58,7 @@
              chdir($tmpdir);
  
              &dprint("Opening gunzip/cpio pipe\n");
-@@ -348,12 +350,15 @@
+@@ -348,12 +352,15 @@
              system("cd $tmpdir/initramfs; find . | cpio -o --quiet -H newc -F $bootstrapdir/initfs");
              &nprint("Compressing the initramfs\n");
              system("gzip -f -9 $bootstrapdir/initfs");
