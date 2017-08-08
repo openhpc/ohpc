@@ -257,7 +257,7 @@ Summary:   OpenHPC client packages for SLURM
 Requires:  slurm%{PROJ_DELIM}
 Requires:  slurm-munge%{PROJ_DELIM}
 Requires:  slurm-plugins%{PROJ_DELIM}
-Requires:  slurm-sjobexit%{PROJ_DELIM}
+Requires:  slurm-contribs%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
 Requires:  munge%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-slurm-client
