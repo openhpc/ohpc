@@ -700,9 +700,9 @@ echo    Libraries:
     fi
 
     if test "x$enable_ptscotch" = "xyes"; then
-       echo '    'PTScotch.................... : enabled
+       echo '    'PTScotch.................. : enabled
     else
-       echo '    'PTScotch.................... : disabled
+       echo '    'PTScotch.................. : disabled
     fi
 
     if test "x$enable_R" = "xyes"; then
