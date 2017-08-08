@@ -94,7 +94,7 @@
 %slurm_with_opt sgijob
 %endif
 
-%define ver_exp 17-02-06-1
+%define ver_exp 17-02-6-1
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 17.02.6
