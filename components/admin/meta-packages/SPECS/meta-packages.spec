@@ -272,7 +272,6 @@ Requires:  slurm-perlapi%{PROJ_DELIM}
 Requires:  slurm-devel%{PROJ_DELIM}
 Requires:  slurm-slurmdbd%{PROJ_DELIM}
 Requires:  slurm-sql%{PROJ_DELIM}
-Requires:  slurm-slurmdb-direct%{PROJ_DELIM}
 Requires:  munge%{PROJ_DELIM}
 Requires:  munge-libs%{PROJ_DELIM}
 Requires:  munge-devel%{PROJ_DELIM}
