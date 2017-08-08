@@ -1,0 +1,322 @@
+\documentclass[letterpaper]{article}
+\usepackage{common/ohpc-doc}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
+
+% Include git variables
+\input{vc.tex}
+
+% Define Base OS and other local macros
+\newcommand{\Installmode}{Stateful}
+\newcommand{\installmode}{stateful}
+\newcommand{\baseOS}{CentOS7.3}
+\newcommand{\OSRepo}{CentOS\_7.3}
+\newcommand{\OSTree}{CentOS\_7}
+\newcommand{\OSTag}{el7}
+\newcommand{\baseos}{centos7.3}
+\newcommand{\baseosshort}{centos7}
+\newcommand{\provisioner}{xCAT}
+\newcommand{\rms}{SLURM}
+\newcommand{\rmsshort}{slurm}
+\newcommand{\arch}{x86\_64}
+
+% Define package manager commands
+\newcommand{\pkgmgr}{yum}
+\newcommand{\addrepo}{wget -P /etc/yum.repos.d}
+\newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
+\newcommand{\clean}{yum clean expire-cache}
+\newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
+\newcommand{\install}{yum -y install}
+\newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
+\newcommand{\groupinstall}{yum -y groupinstall}
+\newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
+\newcommand{\remove}{yum -y remove}
+\newcommand{\upgrade}{yum -y upgrade}
+\newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
+\newcommand{\tftppkg}{syslinux-tftpboot}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_6/dists/beegfs-rhel7.repo}
+%%% WARNING: Hack below. The version should be read from ohpc-doc.sty, but the 
+%%% perl parsing script does not read that file. This works for one release, but
+%%% needs a proper fix.
+\newcommand{\VERLONG}{1.3.1}
+
+% boolean for os-specific formatting
+\toggletrue{isCentOS}
+\toggletrue{isCentOS_ww_slurm_x86}
+\toggletrue{isx86}
+\toggletrue{isxCAT}
+\toggletrue{isstateful}
+
+\begin{document}
+\graphicspath{{common/figures/}}
+\thispagestyle{empty}
+
+% Title Page
+\input{common/title}
+% Disclaimer 
+\input{common/legal} 
+
+\newpage
+\tableofcontents
+\newpage
+
+% Introduction  --------------------------------------------------
+
+\section{Introduction} \label{sec:introduction}
+\input{common/install_header}
+\input{common/intro} \\
+
+\input{common/base_edition/edition}
+\input{common/audience}
+\input{common/requirements}
+\input{common/inputs}
+
+%%% begin_ohpc_run
+%%% ohpc_validation_newline
+%%% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
+%%% ohpc_validation_newline
+%%% ohpc_command yum repolist | grep -q OpenHPC
+%%% ohpc_command if [ $? -ne 0 ];then
+%%% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
+%%% ohpc_command    exit 1
+%%% ohpc_command fi
+%%% end_ohpc_run
+
+% Base Operating System --------------------------------------------
+
+\section{Install Base Operating System (BOS)}
+\input{common/bos}
+
+\clearpage 
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Disable firewall 
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) systemctl disable firewalld
+[sms](*\#*) systemctl stop firewalld
+\end{lstlisting}
+% end_ohpc_run
+
+% ------------------------------------------------------------------
+
+\section{Install \OHPC{} Components} \label{sec:basic_install}
+\input{common/install_ohpc_components_intro.tex}
+
+\subsection{Download \OHPC{} repository for local use} \label{sec:enable_repo}
+\input{common/enable_local_ohpc_repo.tex}
+\subsection{Enable \xCAT{} repository for local use} \label{sec:enable_xcat}
+\input{common/enable_xcat_repo}
+
+\noindent \xCAT{} has a number of dependencies that are required for
+installation that are housed in separate public repositories for various
+distributions. To enable for local use, issue the following:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) (*\addrepo*) https://xcat.org/files/xcat/repos/yum/xcat-dep/rh7/ARCH/xCAT-dep.repo
+\end{lstlisting}
+% end_ohpc_run
+
+In addition to the \OHPC{} and \xCAT{} package repositories, the {\em master} host also
+requires access to the standard base OS distro repositories in order to resolve
+necessary dependencies. For \baseOS{}, the requirements are to have access to
+both the base OS and EPEL repositories for which mirrors are freely available online:
+
+\begin{itemize*}
+\item CentOS-7 - Base 7.3.1611
+  (e.g. \href{http://mirror.centos.org/centos-7/7/os/x86\_64}
+             {\color{blue}{http://mirror.centos.org/centos-7/7/os/x86\_64}} )
+\item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
+                        {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
+\end{itemize*}
+
+\noindent The public EPEL repository will be enabled automatically upon installation of the 
+\texttt{ohpc-release} package. Note that this requires the CentOS Extras
+repository, which is shipped with CentOS and is enabled by default.
+
+\input{common/automation}
+
+
+\subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
+\input{common/install_provisioning_xcat_intro}
+%%%\input{common/enable_pxe}
+\input{common/time}
+
+\subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
+\input{common/install_slurm}
+
+\subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+\input{common/ibsupport_sms_centos}
+
+\vspace*{-0.15cm}
+\subsection{Complete basic \xCAT{} setup for {\em master} node} \label{sec:setup_xcat}
+\input{common/xcat_setup}
+
+
+\subsection{Create BOS image and a post-install script for {\em compute} nodes}
+\input{common/xcat_post_install_script_centos}
+
+\subsubsection{Initialize post-install script} \label{sec:init_script}
+\input{common/init_postinstall_script_xcat}
+
+\subsubsection{Initialize file synchronization list} \label{sec:init_synclist}
+\input{common/init_synclist_xcat}
+
+\subsubsection{Add repositories on {\em compute} nodes}
+\label{sec:script_add_repos}
+\input{common/postscript_add_repositories_xcat_centos}
+
+\subsubsection{Add \OHPC{} components} \label{sec:add_components}
+\input{common/add_to_compute_stateful_xcat_intro}
+
+%\newpage
+% begin_ohpc_run
+% ohpc_validation_comment Add OpenHPC components to compute instance
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add Slurm client support meta-package
+[sms](*\#*) echo "(*\install*) ohpc-slurm-client" >> $postbootscript
+
+# Add IB support and enable
+[sms](*\#*) echo "(*\groupinstall*) "\""InfiniBand Support"\""" >> $postbootscript
+[sms](*\#*) echo "(*\install*) infinipath-psm" >> $postbootscript
+[sms](*\#*) echo "systemctl enable rdma" >> $postbootscript
+[sms](*\#*) echo "systemctl start  rdma" >> $postbootscript
+
+# Add Network Time Protocol (NTP) support
+[sms](*\#*) echo "(*\install*) ntp" >> $postbootscript
+
+# Add kernel drivers
+[sms](*\#*) echo "(*\install*) kernel" >> $postbootscript
+
+# Include modules user environment
+[sms](*\#*) echo "(*\install*) lmod-ohpc" >> $postbootscript
+\end{lstlisting}
+% end_ohpc_run
+
+
+\subsubsection{Customize system configuration} \label{sec:master_customization}
+\input{common/xcat_stateful_customize_centos}
+
+% Additional commands when additional computes are requested
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Update basic slurm configuration if additional computes defined
+% ohpc_command if [ ${num_computes} -gt 4 ];then
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
+
+% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
+% ohpc_command fi
+% end_ohpc_run
+
+%\clearpage
+\subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
+\input{common/compute_customizations_intro}
+
+\paragraph{Increase locked memory limits}
+\input{common/memlimits_stateful}
+
+\paragraph{Enable ssh control via resource manager} 
+\input{common/slurm_pam_stateful}
+
+\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+\input{common/lustre-client}
+\input{common/lustre-client-centos-stateful}
+\input{common/lustre-client-post-stateful}
+
+\paragraph{Add \Nagios{} monitoring}
+\input{common/nagios_stateful}
+
+\vspace*{0.4cm}
+\paragraph{Add \Ganglia{} monitoring}
+\input{common/ganglia_stateful}
+
+%\paragraph{Add \clustershell{}}
+%\input{common/clustershell}
+
+\paragraph{Add \mrsh{}}
+\input{common/mrsh_stateful}
+
+\paragraph{Add \genders{}}
+\input{common/genders}
+
+\paragraph{Add \conman{}} \label{sec:add_conman}
+\input{common/conman}
+
+\subsubsection{Identify files for synchronization} \label{sec:file_import}
+\input{common/import_xcat_files}
+\input{common/import_xcat_files_slurm}
+\input{common/synclist_osimage_stateful}
+
+\subsection{Finalizing provisioning configuration} \label{sec:assemble_bootstrap}
+%%%\input{common/finalize_xcat_provisioning}
+\input{common/add_xcat_hosts_intro}
+\input{common/xcat_set_provisioning_image_stateful}
+
+
+%%%\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
+%%%\input{common/conman_post}
+
+%\vspace*{-0.25cm}
+\subsection{Boot compute nodes} \label{sec:boot_computes}
+\input{common/reset_computes_xcat} 
+
+%\vspace*{-0.50cm}
+\section{Install \OHPC{} Development Components}
+\input{common/dev_intro.tex}
+
+\vspace*{-0.15cm}
+\subsection{Development Tools} \label{sec:install_dev_tools}
+\input{common/dev_tools}
+
+\vspace*{-0.15cm}
+\subsection{Compilers} \label{sec:install_compilers}
+\input{common/compilers}
+
+%\clearpage
+\subsection{MPI Stacks} \label{sec:mpi}
+\input{common/mpi}
+
+\subsection{Performance Tools} \label{sec:install_perf_tools}
+\input{common/perf_tools}
+
+\subsection{Setup default development environment}
+\input{common/default_dev}
+
+%\vspace*{0.2cm}
+\subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
+\input{common/third_party_libs_intro}
+
+\input{common/third_party_libs}
+\vspace*{0.1cm}
+\input{common/third_party_mpi_libs_x86}
+
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
+\input{common/pxse_enabled_builds}
+
+\section{Resource Manager Startup} \label{sec:rms_startup}
+\input{common/slurm_startup_stateful}
+
+\section{Run a Test Job} \label{sec:test_job}
+\input{common/xcat_slurm_test_job}
+
+\clearpage
+\appendix
+%\section*{Appendices}
+{\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
+
+\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+\input{common/automation_appendix}
+\input{common/upgrade_stateful}
+\input{common/test_suite}
+\input{common/customization_appendix_x86}
+\input{manifest}
+\input{common/signature}
+
+
+\end{document}
+

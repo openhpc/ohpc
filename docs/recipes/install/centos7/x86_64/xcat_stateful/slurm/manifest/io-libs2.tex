@@ -1,0 +1,59 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+phdf5-gnu-impi-ohpc &
+\multirow{4}{*}{1.8.17} & 
+\multirow{12}{\linewidth}{A general purpose library and file format for storing scientific data. \newline {\color{logoblue} \url{http://www.hdfgroup.org/HDF5}}} \\ 
+phdf5-gnu-mpich-ohpc &
+& \\ 
+phdf5-gnu-mvapich2-ohpc &
+& \\ 
+phdf5-gnu-openmpi-ohpc &
+& \\ 
+\cline{1-2} phdf5-gnu7-impi-ohpc &\multirow{8}{*}{1.10.0}
+& \\ 
+phdf5-gnu7-mpich-ohpc &
+& \\ 
+phdf5-gnu7-mvapich2-ohpc &
+& \\ 
+phdf5-gnu7-openmpi-ohpc &
+& \\ 
+phdf5-intel-impi-ohpc &
+& \\ 
+phdf5-intel-mpich-ohpc &
+& \\ 
+phdf5-intel-mvapich2-ohpc &
+& \\ 
+phdf5-intel-openmpi-ohpc &
+& \\ 
+\hline
+% <-- end entry for phdf5
+
+% <-- begin entry for sionlib
+sionlib-gnu7-impi-ohpc &
+\multirow{8}{*}{1.7.1} & 
+\multirow{8}{\linewidth}{Scalable I/O Library for Parallel Access to Task-Local Files. \newline {\color{logoblue} \url{http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html}}} \\ 
+sionlib-gnu7-mpich-ohpc &
+& \\ 
+sionlib-gnu7-mvapich2-ohpc &
+& \\ 
+sionlib-gnu7-openmpi-ohpc &
+& \\ 
+sionlib-intel-impi-ohpc &
+& \\ 
+sionlib-intel-mpich-ohpc &
+& \\ 
+sionlib-intel-mvapich2-ohpc &
+& \\ 
+sionlib-intel-openmpi-ohpc &
+& \\ 
+\hline
+% <-- end entry for sionlib
+
+\bottomrule
+\end{tabularx}

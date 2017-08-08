@@ -16,6 +16,7 @@ your SMS host.
 [sms](*\#*) echo ${sms_ip} ${sms_name} >> /etc/hosts
 \end{lstlisting}
 
+\iftoggleverb{isWarewulf}
 While it is theoretically possible to enable SELinux on a cluster provisioned
 with \provisioner{}, 
 doing so is beyond the scope of this document. Even the use of
@@ -24,6 +25,13 @@ master} SMS host. If SELinux components are installed locally,
 the \texttt{selinuxenabled} command can be used to determine if SELinux is
 currently enabled. If enabled, consult the distro documentation for information
 on how to disable. \\
+\fi
+
+\iftoggleverb{isxCAT} Another important consideration is SELinux. This security
+mechanism is not supported by \xCAT{} and gets automatically disabled upon
+\xCAT{} installation.  Thus this document assumes that SELinux is fully
+deactivated. \\ \fi
+
 
 Finally, provisioning services rely on DHCP, TFTP, and HTTP network protocols.
 Depending on the local BOS configuration on the SMS host, default firewall
