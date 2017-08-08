@@ -152,6 +152,9 @@ requirements is as follows:
 \subsection{Complete basic \xCAT{} setup for {\em master} node} \label{sec:setup_xcat}
 \input{common/xcat_setup}
 
+\subsubsection{Initialize file synchronization list} \label{sec:init_synclist}
+\input{common/init_synclist_xcat}
+
 
 \subsection{Define {\em compute} image for provisioning}
 \input{common/xcat_mkchroot_sles}
@@ -237,15 +240,19 @@ requirements is as follows:
 \subsubsection{Identify files for synchronization} \label{sec:file_import}
 \input{common/import_xcat_files}
 \input{common/import_xcat_files_slurm}
+\input{common/synclist_osimage_stateless}
+
+\subsection{Finalizing provisioning configuration} \label{sec:assemble_bootstrap}
 \input{common/finalize_xcat_provisioning}
 \input{common/add_xcat_hosts_intro}
+\input{common/xcat_set_provisioning_image}
 
 %%%\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 %%%\input{common/conman_post}
 
 %\vspace*{-0.25cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
-\input{common/reset_computes} 
+\input{common/reset_computes_xcat} 
 
 %\vspace*{-0.50cm}
 \section{Install \OHPC{} Development Components}
