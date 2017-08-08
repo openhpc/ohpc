@@ -343,12 +343,6 @@ Summary: Slurm plugins (loadable shared objects)
 Group: %{PROJ_NAME}/rms
 Requires: munge-libs%{PROJ_DELIM}
 %description -n %{pname}-plugins%{PROJ_DELIM}
-
-%package -n %{pname}-plugins%{PROJ_DELIM}
-Summary: Slurm plugins (loadable shared objects)
-Group: %{PROJ_NAME}/rms
-Requires: munge-libs%{PROJ_DELIM}
-%description -n %{pname}-plugins%{PROJ_DELIM}
 Slurm plugins (loadable shared objects) supporting a wide variety of
 architectures and behaviors. These basically provide the building blocks
 with which Slurm can be configured. Note that some system specific plugins
