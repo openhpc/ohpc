@@ -416,10 +416,6 @@ Requires:  imb-intel-mpich%{PROJ_DELIM}
 Requires:  imb-intel-mvapich2%{PROJ_DELIM}
 Requires:  imb-intel-openmpi%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
-Requires:  mpiP-intel-impi%{PROJ_DELIM}
-Requires:  mpiP-intel-mpich%{PROJ_DELIM}
-Requires:  mpiP-intel-mvapich2%{PROJ_DELIM}
-Requires:  mpiP-intel-openmpi%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  tau-intel-impi%{PROJ_DELIM}
