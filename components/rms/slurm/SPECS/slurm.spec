@@ -1099,6 +1099,13 @@ if [ ! -f /var/log/slurm_jobacct.log ];then
     chown slurm: /var/log/slurm_jobacct.log
 fi
 
+# 8/8/17 karl.w.schulz@intel.com - create StateSaveLocation
+if [ ! -d /var/spool/slurm/ctld ];then
+   mkdir -p /var/spool/slurm/ctld
+   chown slurm: /var/spool/slurm
+   chown slurm: /var/spool/ctld
+fi
+
 if [ -x /sbin/ldconfig ]; then
     /sbin/ldconfig %{_libdir}
 fi
