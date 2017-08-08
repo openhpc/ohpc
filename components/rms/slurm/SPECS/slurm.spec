@@ -104,9 +104,8 @@ Summary: Slurm Workload Manager
 
 License: GPL
 Group: %{PROJ_NAME}/rms
-Source: slurm-17.02.6.tar.bz2
-Source:    https://github.com/SchedMD/slurm/archive/%{pname}-%{ver_exp}.tar.gz
-Source1:   OHPC_macros
+Source: https://github.com/SchedMD/slurm/archive/%{pname}-%{ver_exp}.tar.gz
+Source1: OHPC_macros
 URL: https://slurm.schedmd.com/
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
