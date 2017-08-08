@@ -34,8 +34,8 @@
              } else {
                  &eprint("Node: $nodename-$devname: Bad characters in hwaddr: '$hwaddr'\n");
              }
---- warewulf3-3.7pre.ohpc1.3/provision/lib/Warewulf/Bootstrap.pm	2017-03-22 08:41:20.000000000 -0700
-+++ warewulf3-3.7pre.ohpc1.3.patch/provision/lib/Warewulf/Bootstrap.pm	2017-08-07 15:47:34.000000000 -0700
+--- warewulf3-3.7pre.ohpc1.3/lib/Warewulf/Bootstrap.pm	2017-03-22 08:41:20.000000000 -0700
++++ warewulf3-3.7pre.ohpc1.3.patch/lib/Warewulf/Bootstrap.pm	2017-08-07 15:47:34.000000000 -0700
 @@ -186,7 +186,9 @@
              my $dirname = dirname($file);
  
