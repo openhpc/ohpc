@@ -1101,7 +1101,7 @@ fi
 if [ ! -d /var/spool/slurm/ctld ];then
    mkdir -p /var/spool/slurm/ctld
    chown slurm: /var/spool/slurm
-   chown slurm: /var/spool/ctld
+   chown slurm: /var/spool/slurm/ctld
 fi
 
 if [ -x /sbin/ldconfig ]; then
