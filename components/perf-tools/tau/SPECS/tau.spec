@@ -190,7 +190,7 @@ sed -i "s|$PDTOOLKIT_DIR|\$\{PDTOOLKIT_DIR\}|g" $(egrep -IR "$PDTOOLKIT_DIR" %bu
 pushd %{buildroot}%{install_path}/lib
 %if %{compiler_family} == intel
 ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
-ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-profile-trace.so
+ln -s libTAUsh-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace.so libTauMpi-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace.so
 %else
 ln -s shared-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace shared-mpi
 ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace.so
