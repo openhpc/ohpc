@@ -144,7 +144,7 @@ BuildRequires: libtool
 #%{?_with_genders:BuildRequires: genders > 1.0}
 #BuildRequires: genders > 1.0
 %{?_with_pam:BuildRequires: pam-devel}
-#%{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
+%{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
 %{?_with_torque:BuildRequires: torque-devel}
 
 
@@ -332,36 +332,26 @@ cp /usr/lib/rpm/config.guess config
 
 ./bootstrap
 ./configure --prefix=%{install_path} \
-    --with-rcmd-rank-list="ssh mrsh rsh krb4 qsh mqsh exec xcpu" \
+    --with-rcmd-rank-list="ssh mrsh rsh krb4 exec xcpu" \
     %{?_enable_debug}       \
-    %{?_with_pam}           \
-    %{?_without_pam}        \
     %{?_with_rsh}           \
     %{?_without_rsh}        \
     %{?_with_ssh}           \
     %{?_without_ssh}        \
     %{?_with_exec}          \
     %{?_without_exec}       \
-    %{?_with_qshell}        \
-    %{?_without_qshell}     \
     %{?_with_readline}      \
     %{?_without_readline}   \
     %{?_with_machines}      \
     %{?_without_machines}   \
     %{?_with_genders}       \
     %{?_without_genders}    \
-    %{?_with_rms}           \
-    %{?_without_rms}        \
     %{?_with_nodeupdown}    \
     %{?_without_nodeupdown} \
-    %{?_with_nodeattr}      \
-    %{?_without_nodeattr}   \
     %{?_with_mrsh}          \
     %{?_without_mrsh}       \
-    %{?_with_mqshell}       \
-    %{?_without_mqshell}    \
-    %{?_with_xcpu}          \
-    %{?_without_xcpu}       \
+    %{?_with_xcpu}       \
+    %{?_without_xcpu}    \
     %{?_with_slurm}         \
     %{?_without_slurm}      \
     %{?_with_torque}        \
