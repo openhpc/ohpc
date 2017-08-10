@@ -63,7 +63,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 
 %prep
 
-%setup -q -n %{pname}-%{version}-patch1
+%setup -q -n %{pname}-%{version}
 
 %build
 
