@@ -27,7 +27,7 @@ Source2:   OHPC_mod_generator.sh
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 #!BuildIgnore: brp-check-suse
-#BuildRequires: -post-build-checks
+#!BuildIgnore: post-build-checks
 
 Requires: gcc-c++
 Requires: grep
