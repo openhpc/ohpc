@@ -19,7 +19,7 @@ MINIFE_MATRIX_TYPE = -DMINIFE_CSR_MATRIX
 CFLAGS = -O3
 
 ifeq ($(LMOD_FAMILY_COMPILER),intel)
- CFLAGS += -openmp -restrict -mavx
+ CFLAGS += -qopenmp -restrict -mavx
 else
  CFLAGS += -fopenmp
 endif
