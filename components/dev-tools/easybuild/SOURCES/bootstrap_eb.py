@@ -9,7 +9,7 @@
 # Flemish Research Foundation (FWO) (http://www.fwo.be/en)
 # and the Department of Economy, Science and Innovation (EWI) (http://www.ewi-vlaanderen.be/en).
 #
-# http://github.com/hpcugent/easybuild
+# https://github.com/easybuilders/easybuild
 #
 # EasyBuild is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -423,7 +423,7 @@ def stage0(tmpdir):
     # We download a custom version of distribute: it uses a newer version of markerlib to avoid a bug (#1099)
     # It's is the source of distribute 0.6.49 with the file _markerlib/markers.py replaced by the 0.6 version of
     # markerlib which can be found at https://pypi.python.org/pypi/markerlib/0.6.0
-    sys.argv.append('--download-base=http://hpcugent.github.io/easybuild/files/')
+    sys.argv.append('--download-base=https://easybuilders.github.io/easybuild/files/')
     distribute_setup_main(version="0.6.49-patched1")
     sys.argv = orig_sys_argv
 
@@ -866,7 +866,7 @@ easyblock = 'EB_EasyBuildMeta'
 name = 'EasyBuild'
 version = '%(version)s'
 
-homepage = 'http://hpcugent.github.com/easybuild/'
+homepage = 'http://easybuilders.github.com/easybuild/'
 description = \"\"\"EasyBuild is a software build and installation framework
 written in Python that allows you to install software in a structured,
 repeatable and robust way.\"\"\"
