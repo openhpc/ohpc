@@ -22,7 +22,7 @@ Url:       http://sourceforge.net/projects/pdsh
 DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/admin
 #Source0:   %{pname}-%{version}.tar.gz
-Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
+Source0:   https://github.com/chaos/%{pname}/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 Patch1:    pdsh-autoconf.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
