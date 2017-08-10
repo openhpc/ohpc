@@ -26,7 +26,7 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 
-#BuildRequires: -post-build-checks
+#!BuildIgnore: post-build-checks
 
 Requires: prun%{PROJ_DELIM}
 Requires: intel-compilers-devel%{PROJ_DELIM}
