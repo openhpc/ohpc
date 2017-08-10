@@ -15,7 +15,7 @@
 
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.32
+Version:   2.33
 Release:   1
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
