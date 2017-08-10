@@ -29,7 +29,7 @@ Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{
 Source1:        OHPC_macros
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         Trilinos-trilinos-aarch64.patch
-BuildRequires:  cmake >= 2.8
+BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
@@ -75,9 +75,11 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load phdf5
-module load netcdf
+module load cmake
 module load boost
+module load netcdf
+module load phdf5
+
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
