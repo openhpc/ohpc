@@ -1,4 +1,4 @@
-#----------------------------------------------------------------------------bh-
+#---------------------------------------------------------------------------bh-
 # This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
@@ -24,11 +24,7 @@ Group:     %{PROJ_NAME}/admin
 #Source0:   %{pname}-%{version}.tar.gz
 Source0:   https://github.com/chaos/%{pname}/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-Patch1:    pdsh-autoconf.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: libtool
 
 %define debug_package %{nil}
 
@@ -320,7 +316,6 @@ from an allocated Torque job.
 
 %prep
 %setup  -q -n %{pname}-%{pname}-%{version}
-%patch1 -p1
 ##############################################################################
 
 %build
@@ -330,7 +325,6 @@ from an allocated Torque job.
 cp /usr/lib/rpm/config.guess config
 %endif
 
-./bootstrap
 ./configure --prefix=%{install_path} \
     --with-rcmd-rank-list="ssh mrsh rsh krb4 exec xcpu" \
     %{?_enable_debug}       \
