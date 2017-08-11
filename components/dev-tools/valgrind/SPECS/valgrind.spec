@@ -101,7 +101,6 @@ EOF
 %files
 %defattr(-,root,root)
 %{OHPC_HOME}
-%{OHPC_UTILS}
 %doc AUTHORS
 %doc README_DEVELOPERS
 %doc README
