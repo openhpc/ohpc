@@ -160,7 +160,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog COPYING INSTALL OPEN_ISSUES README THANKS
 
