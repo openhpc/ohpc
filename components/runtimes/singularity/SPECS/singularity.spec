@@ -149,7 +149,6 @@ EOF
 %defattr(-, root, root)
 %doc examples AUTHORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
 %attr(0644, root, root) %config(noreplace) %{install_path}/etc/singularity/*
-%{OHPC_HOME}
 %{OHPC_PUB}
 #SUID programs
 %attr(4755, root, root) %{install_path}/libexec/singularity/bin/action-suid
