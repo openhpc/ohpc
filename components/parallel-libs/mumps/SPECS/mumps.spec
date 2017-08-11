@@ -200,7 +200,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc ChangeLog CREDITS INSTALL LICENSE README VERSION
 
