@@ -402,7 +402,6 @@ rm -rf "$RPM_BUILD_ROOT"
 %defattr(-,root,root)
 %doc COPYING README NEWS DISCLAIMER.LLNS DISCLAIMER.UC
 %doc README.KRB4 README.modules
-%{OHPC_HOME}
 %{OHPC_PUB}
 %{_bindir}/pdsh
 %{_bindir}/dshbak
