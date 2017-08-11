@@ -108,7 +108,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc license/license.txt license/use-of-trademark-license.txt ReadMe_IMB.txt
 
