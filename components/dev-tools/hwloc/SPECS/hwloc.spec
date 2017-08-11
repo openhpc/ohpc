@@ -185,7 +185,6 @@ EOF
 %files
 %defattr(-, root, root, -)
 %doc AUTHORS COPYING NEWS README VERSION
-%{OHPC_HOME}
 %{OHPC_PUB}
 
 %changelog
