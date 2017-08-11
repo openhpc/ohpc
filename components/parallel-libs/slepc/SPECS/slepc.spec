@@ -134,7 +134,6 @@ rm -rf ${RPM_BUILD_ROOT}
 %files 
 %defattr(-,root,root,-)
 %{OHPC_PUB}
-%{OHPC_HOME}
 %doc COPYING COPYING.LESSER README docs/slepc.pdf
 
 %changelog
