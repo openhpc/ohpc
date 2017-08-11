@@ -72,6 +72,7 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 %files
 %defattr(-,root,root,-)
 %dir %{OHPC_HOME}
+%{OHPC_UTILS}
 %doc THANKS
 %doc NEWS
 %doc ChangeLog.2
