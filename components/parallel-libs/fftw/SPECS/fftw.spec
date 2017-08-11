@@ -129,7 +129,6 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO
 
