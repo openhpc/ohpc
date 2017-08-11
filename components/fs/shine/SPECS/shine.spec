@@ -90,7 +90,6 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc LICENSE README ChangeLog
-%{OHPC_HOME}
 %{OHPC_PUB}
 
 %changelog
