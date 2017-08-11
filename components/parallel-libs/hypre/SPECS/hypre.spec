@@ -235,7 +235,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
 
