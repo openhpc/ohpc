@@ -220,7 +220,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 
