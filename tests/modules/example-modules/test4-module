@@ -1,0 +1,15 @@
+#%Module1.0#####################################################################
+# Test module environment
+#############################################################################
+
+proc ModulesHelp { } {
+puts stderr "Help message from test4 module"
+}
+
+module-whatis "whatis: test4-module"
+
+setenv 	      TEST_MODULE	"trillian"
+prepend-path  PATH        	/my/test4-module-path
+append-path   MANPATH           /my/test4-manpath
+
+depends-on test3-module
