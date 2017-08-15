@@ -71,8 +71,6 @@ EASYBUILD_PACKAGES = [VSC_INSTALL, VSC_BASE, 'easybuild-framework', 'easybuild-e
 
 STAGE1_SUBDIR = 'eb_stage1'
 
-STAGE1_SUBDIR = 'eb_stage1'
-
 # set print_debug to True for detailed progress info
 print_debug = os.environ.pop('EASYBUILD_BOOTSTRAP_DEBUG', False)
 
@@ -685,14 +683,6 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
 
     debug("Running EasyBuild with arguments '%s'" % ' '.join(eb_args))
     sys.argv = eb_args
-
-    # location to 'eb' command (from stage 1) may be expected to be included in $PATH
-    # it usually is there after stage1, unless 'prep' is called again with another location
-    # (only when stage 0 is not skipped)
-    # cfr. https://github.com/easybuilders/easybuild-framework/issues/2279
-    curr_path = [x for x in os.environ.get('PATH', '').split(os.pathsep) if len(x) > 0]
-    os.environ['PATH'] = os.pathsep.join([os.path.join(tmpdir, STAGE1_SUBDIR, 'bin')] + curr_path)
-    debug("$PATH: %s" % os.environ['PATH'])
 
     # location to 'eb' command (from stage 1) may be expected to be included in $PATH
     # it usually is there after stage1, unless 'prep' is called again with another location
