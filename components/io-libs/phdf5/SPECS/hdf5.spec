@@ -49,10 +49,6 @@ BuildRequires: zlib-devel
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
-%if "%{mpi_family}" == "impi"
-%global __requires_exclude ^libmpi\\.so.*$|^libmpifort\\.so.*$
-%endif
-
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
