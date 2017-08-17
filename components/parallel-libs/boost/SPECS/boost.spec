@@ -52,7 +52,6 @@ Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
 Source101:	OHPC_macros
-Patch1:         PR49.patch
 
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  bzip2-devel
@@ -98,7 +97,6 @@ see the boost-doc package.
 
 %prep
 %setup -q -n %{pname}_%{version_exp}
-%patch1 -p2
 
 %build
 # OpenHPC compiler/mpi designation
