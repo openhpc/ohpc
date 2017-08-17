@@ -96,6 +96,7 @@ Requires:      llvm-compilers%{PROJ_DELIM}
 %if "%{mpi_family}" == "impi"
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
+%global __requires_exclude ^libmpi\\.so.*$|^libmpifort\\.so.*$|^libmpicxx\\.so.*$
 %endif
 %if "%{mpi_family}" == "mpich"
 BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
