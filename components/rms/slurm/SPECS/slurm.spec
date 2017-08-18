@@ -460,8 +460,6 @@ according to the Slurm
 	%{?with_freeipmi:--with-freeipmi=%{?with_freeipmi}}\
 	%{?with_cflags}
 
-cat config.log
-
 %__make %{?_smp_mflags}
 
 %install
