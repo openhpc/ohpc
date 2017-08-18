@@ -121,8 +121,9 @@ Requires: %{pname}-plugins%{PROJ_DELIM}
 
 %ifos linux
 BuildRequires: python
+BuildRequires: hwloc-devel libtool-ltdl
 %endif
-BuildRequires: hwloc-devel
+
 
 %ifos solaris
 Requires:	SUNWgnome-base-libs
