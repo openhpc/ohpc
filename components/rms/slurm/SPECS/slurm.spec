@@ -123,7 +123,9 @@ Requires: %{pname}-plugins%{PROJ_DELIM}
 BuildRequires: python
 %if 0%{?rhel_version} >= 700 || 0%{?centos_version} >= 700
 BuildRequires: hwloc-devel libtool-ltdl
+Requires: hwloc
 %else
+Requires: hwloc
 BuildRequires: hwloc-devel
 %endif
 %endif
