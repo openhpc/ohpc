@@ -46,7 +46,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %endif
 
 %endif
-BuildRequires:	-post-build-checks
+
 #!BuildIgnore: post-build-checks
 
 %endif
