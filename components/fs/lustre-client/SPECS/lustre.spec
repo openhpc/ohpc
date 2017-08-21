@@ -188,7 +188,7 @@ BuildRequires: libselinux-devel
 Requires: libselinux
 %endif
 %if %{with lustre_modules}
-BuildRequires: %kernel_module_package_buildreqs
+#BuildRequires: %kernel_module_package_buildreqs
 %if %{_vendor}=="redhat"
 BuildRequires: redhat-rpm-config
 %endif
