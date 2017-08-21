@@ -23,7 +23,6 @@
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
 
-BuildRequires: pesign-obs-integration
 %define sles_kernel 4.4.21-69-default
 %define kdir /lib/modules/%{sles_kernel}/source/
 %define kobjdir /lib/modules/%{sles_kernel}/build/
