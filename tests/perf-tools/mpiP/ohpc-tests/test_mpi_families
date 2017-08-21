@@ -16,7 +16,7 @@ export BATS_JUNIT_CLASS=mpiP
 ./bootstrap || exit 1
 
 for compiler in $COMPILER_FAMILIES ; do
-    if [[ $string == "gnu"* ]]; then
+    if [[ $compiler == "gnu"* ]]; then
     for mpi in $MPI_FAMILIES ; do
 
 	echo " "
