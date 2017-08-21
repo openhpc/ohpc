@@ -67,6 +67,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %bcond_without manpages
 %bcond_without shared
 %bcond_without static
+%bcond_with    systemd
 
 %if %{without servers}
     # --without servers overrides --with {ldiskfs|zfs}
@@ -75,7 +76,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.9.0}
+%{!?version: %global version 2.10.0}
 %{!?kver:    %global kver    %(uname -r)}
 %{!?kdir:    %global kdir    /lib/modules/%{kver}/source}
 %{!?kobjdir: %global kobjdir %(if [ "%{kdir}" = "/lib/modules/%{kver}/source" ]; then echo "/lib/modules/%{kver}/build"; else echo "%{kdir}"; fi)}
@@ -153,7 +154,22 @@ BuildRequires: kernel-devel = %{centos_kernel}
 	%endif
 %endif
 
+# RHEL >= 7 comes with systemd
+%if 0%{?rhel} >= 7
+%define with_systemd 1
+%endif
 
+# Fedora >= 15 comes with systemd, but only >= 18 has
+# the proper macros
+%if 0%{?fedora} >= 18
+%define with_systemd 1
+%endif
+
+# opensuse >= 12.1 comes with systemd, but only >= 13.1
+# has the proper macros
+%if 0%{?suse_version} >= 1310
+%define with_systemd 1
+%endif
 
 Summary: Lustre File System
 Name: %{lustre_name}
@@ -173,13 +189,12 @@ Source8: OHPC_macros
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
-Obsoletes: lustre-lite, lustre-lite-utils, lustre-ldap nfs-utils-lustre
-Provides: lustre-lite = %{version}, lustre-lite-utils = %{version}
 Requires: %{requires_kmod_name} = %{requires_kmod_version}
 BuildRequires: libtool
 %if %{with servers}
 Requires: lustre-osd
 Requires: lustre-osd-mount
+Obsoletes: lustre-client <= %{version}
 Provides: lustre-client = %{version}-%{release}
 %endif
 # GSS requires this: BuildRequires: pkgconfig, libgssapi-devel >= 0.10
@@ -195,6 +210,13 @@ BuildRequires: redhat-rpm-config
 %endif
 %endif
 
+%if %{with systemd}
+Requires(post): systemd
+Requires(preun): systemd
+Requires(postun): systemd
+BuildRequires: systemd
+%endif
+
 %description
 Userspace tools and files for the Lustre file system.
 
@@ -206,8 +228,8 @@ Userspace tools and files for the Lustre file system.
 %if %{with lustre_utils}
 %package osd-ldiskfs-mount
 Summary: osd-ldiskfs-mount contains mount's ldiskfs specific dso.
-Provides: lustre-osd-mount
-Group: Development/Kernel
+Provides: lustre-osd-mount = %{version}-%{fullrelease}
+Group: System Environment/Kernel
 
 %description osd-ldiskfs-mount
 LDISKFS hooks for mount/mkfs into a dynamic library.
@@ -220,8 +242,8 @@ LDISKFS hooks for mount/mkfs into a dynamic library.
 %if %{with lustre_utils}
 %package osd-zfs-mount
 Summary: osd-zfs-mount contains mount's zfs specific dso.
-Provides: lustre-osd-mount
-Group: Development/Kernel
+Provides: lustre-osd-mount = %{version}-%{fullrelease}
+Group: System Environment/Kernel
 
 %description osd-zfs-mount
 ZFS hooks for mount/mkfs into a dynamic library.
@@ -231,9 +253,21 @@ ZFS hooks for mount/mkfs into a dynamic library.
 
 %endif # with lustre_modules
 
+%if %{with servers}
+%package resource-agents
+Summary: HA Resuable Cluster Resource Scripts for Lustre
+Group: System Environment/Base
+Requires: lustre
+Requires: resource-agents
+
+%description resource-agents
+A set of scripts to operate Lustre resources in a High Availablity
+environment for both Pacemaker and rgmanager.
+%endif
+
 %package tests
 Summary: Lustre testing framework
-Group: Development/Kernel
+Group: System Environment/Kernel
 Provides: %{name}-tests = %{version}
 Requires: %{name} = %{version}, lustre-iokit
 Requires: %{requires_kmod_name} = %{requires_kmod_version}
@@ -293,9 +327,6 @@ ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
 %build
-
-
-
 # Set an explicit path to our Linux tree, if we can.
 cd $RPM_BUILD_DIR/lustre-%{version}
 # override %optflags so that the vendor's overzealous flags don't create
@@ -331,6 +362,8 @@ fi
 	%{!?with_zfs:--without-zfs} \
 	%{!?with_lnet_dlc:--disable-dlc} \
 	%{!?with_manpages:--disable-manpages} \
+	%{!?with_systemd:--with-systemdsystemunitdir=no} \
+	%{?with_systemd:--with-systemdsystemunitdir=%{_unitdir}} \
 	--with-linux=%{kdir} \
 	--with-linux-obj=%{kobjdir} \
 	--with-kmp-moddir=%{kmoddir}/%{name}
@@ -362,6 +395,8 @@ mv $basemodpath/fs/osd_zfs.ko $basemodpath-osd-zfs/fs/osd_zfs.ko
 %if %{with lustre_tests}
 mkdir -p $basemodpath-tests/fs
 mv $basemodpath/fs/llog_test.ko $basemodpath-tests/fs/llog_test.ko
+mkdir -p $RPM_BUILD_ROOT%{_libdir}/lustre/tests/kernel/
+mv $basemodpath/fs/kinode.ko $RPM_BUILD_ROOT%{_libdir}/lustre/tests/kernel/
 %endif
 
 :> lustre.files
@@ -375,6 +410,11 @@ echo '%{_sysconfdir}/ha.d/resource.d/Lustre.ha_v2' >>lustre.files
 echo '%{_sysconfdir}/ha.d/resource.d/Lustre' >>lustre.files
 %endif
 
+# systemd is on redhat, fedora, and suse
+%if %{with systemd}
+echo '%{_unitdir}/lnet.service' >>lustre.files
+%endif
+
 %if %{_vendor}=="redhat"
 # The following scripts are Red Hat specific
 %if %{with servers}
@@ -382,8 +422,17 @@ echo '%{_sysconfdir}/sysconfig/lustre' >>lustre.files
 echo '%{_sysconfdir}/sysconfig/lsvcgss' >>lustre.files
 echo '%{_sysconfdir}/init.d/lustre' >>lustre.files
 %endif
+
+%if %{without systemd}
 echo '%{_sysconfdir}/init.d/lnet' >>lustre.files
+%endif
+
 echo '%{_sysconfdir}/init.d/lsvcgss' >>lustre.files
+%endif
+
+%if %{with servers}
+mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/ocf/resource.d/lustre/
+install -m 0755 contrib/scripts/pacemaker/* $RPM_BUILD_ROOT%{_prefix}/lib/ocf/resource.d/lustre/
 %endif
 
 # fc18 needs 'x' permission for library files
@@ -409,6 +458,7 @@ if [ -d $RPM_BUILD_ROOT%{_libdir}/lustre/snmp ] ; then
 fi
 
 %if %{with lustre_utils}
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/lustre
 find $RPM_BUILD_ROOT%{_libdir}/lustre -name \*.la -type f -exec rm -f {} \;
 %endif
 
@@ -422,7 +472,6 @@ find $RPM_BUILD_ROOT/lib/modules -name \*.ko -type f -exec chmod u+x {} \;
 echo '%{_libdir}/lustre/tests/*' >>lustre-tests.files
 echo '%{_bindir}/mcreate' >>lustre-tests.files
 echo '%{_bindir}/munlink' >>lustre-tests.files
-echo '%{_bindir}/req_layout' >>lustre-tests.files
 echo '%{_sbindir}/wirecheck' >>lustre-tests.files
 echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %endif
@@ -456,13 +505,18 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %if %{with manpages}
 %{_mandir}/man?/*
 %endif
+%{_datadir}/lustre
 %{_includedir}/lustre
 %endif
-%{_datadir}/lustre
 %{_sysconfdir}/udev/rules.d/99-lustre.rules
 %config(noreplace) %{_sysconfdir}/ldev.conf
+%if %{with lnet_dlc}
+%config(noreplace) %{_sysconfdir}/lnet.conf
+%endif
 %config(noreplace) %{_sysconfdir}/modprobe.d/ko2iblnd.conf
-
+%if %{with lustre_utils}
+%config(noreplace) %{_sysconfdir}/lnet_routes.conf
+%endif
 %if %{with lustre_modules}
 
 %if %{with ldiskfs}
@@ -482,6 +536,12 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %endif
 
 %endif # with lustre_modules
+
+%if %{with servers}
+%files resource-agents
+%defattr(0755,root,root)
+%{_prefix}/lib/ocf/resource.d/lustre/
+%endif
 
 %if %{with lustre_tests}
 %files tests -f lustre-tests.files
@@ -510,6 +570,21 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %doc lustre-iokit/ost-survey/README.ost-survey
 %doc lustre-iokit/sgpdd-survey/README.sgpdd-survey
 %doc lustre-iokit/stats-collect/README.iokit-lstats
+%endif
+
+%post
+%if %{with systemd}
+%systemd_post lnet.service
+%endif
+
+%preun
+%if %{with systemd}
+%systemd_preun lnet.service
+%endif
+
+%postun
+%if %{with systemd}
+%systemd_postun_with_restart lnet.service
 %endif
 
 %clean
