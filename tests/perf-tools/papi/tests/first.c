@@ -154,8 +154,8 @@ main( int argc, char **argv )
 
 	/* Check cycles constraints */
 
-	min = ( long long ) ( ( double ) values[1][0] * .8 );
-	max = ( long long ) ( ( double ) values[1][0] * 1.2 );
+	min = ( long long ) ( ( double ) values[1][0] * .7 );
+	max = ( long long ) ( ( double ) values[1][0] * 1.3 );
 
 	/* Check constraint Col1=Col2 */		
 	if ( values[0][0] > max || values[0][0] < min ) {
