@@ -42,17 +42,20 @@ sub getPackageList {
     my $repo_url = "http://build.openhpc.community/OpenHPC:/$major_ver.$minor_ver:/Update$micro_ver:/Factory/$distro";
     my $query_args = "--repofrompath=\"$repo_id,$repo_url\" --repoid=\"$repo_id\" '*'";
     my @packages = `repoquery $query_args`;
+
     return @packages;
 }
 
 sub getPackageName {
     my $package = shift;
     my ($name, $ver) = split(/:/, $package);
+
     return substr $name, 0, -2;
 }
 
 sub getPackageRelease {
     my $package = shift;
+
     my ($name, $ver) = split(/:/, $package);
     my ($version, $rel) = split(/-/, $ver);
     my ($release, $extraver, $arch) = split(/\./, $rel);
@@ -62,6 +65,7 @@ sub getPackageRelease {
 
 sub getPackageVersion {
     my $package = shift;
+
     my ($name, $ver) = split(/:/, $package);
     my ($version, $rel) = split(/-/, $ver);
 
@@ -69,6 +73,7 @@ sub getPackageVersion {
 }
 sub getBasePackage {
     my ($package, $release, $distro) = @_;
+
     my ($major_ver, $minor_ver, $micro_ver) = split(/\./, $release);
     my $base_repo_id = "$major_ver.$minor_ver - Base ($distro)";
     my $base_repo_url = "http://build.openhpc.community/OpenHPC:/$major_ver.$minor_ver/$distro";
@@ -77,6 +82,6 @@ sub getBasePackage {
     my $query_args = "--repofrompath=\"$base_repo_id,$base_repo_url\" --repoid=\"$base_repo_id\" --repofrompath=\"$updates_repo_id,$updates_repo_url\" --repoid=\"$updates_repo_id\" '$package'";
     my $base_package = `repoquery $query_args`;
 
-   return $base_package;
+    return $base_package;
 }
 
