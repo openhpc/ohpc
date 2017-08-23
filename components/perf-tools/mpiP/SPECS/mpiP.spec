@@ -136,6 +136,7 @@ rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
 
 %files
 %defattr(-,root,root,-)
+%{OHPC_HOME}
 %{OHPC_PUB}
 %doc ChangeLog doc/PORTING.txt doc/README doc/UserGuide.txt
 
