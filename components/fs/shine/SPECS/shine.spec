@@ -10,6 +10,7 @@ Version:   1.5
 Release:   1%{?dist}
 Source0:   https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
 Source1:   OHPC_macros
+Patch1:    29fbd8ca10bf6d672d25439a025c460001fad33e.patch 
 License:   GPLv2
 Group:     %{PROJ_NAME}/lustre
 Vendor:    CEA
@@ -31,6 +32,7 @@ Lustre administration utility.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 %build
 export SHINEVERSION=%{version}
