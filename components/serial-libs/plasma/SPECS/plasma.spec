@@ -92,7 +92,8 @@ plasma-installer_%{version}/setup.py              \
     --fflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
     --cblaslib="-L${OPENBLAS_LIB} -lopenblas"     \
-    --lapacklib="-L${OPENBLAS_LIB} -lopenblas"     \
+    --lapacklib="-L${OPENBLAS_LIB} -lopenblas"    \
+    --lapclib="-L${OPENBLAS_LIB} -lopenblas"    
 %endif
 %if %{compiler_family} == intel
     --cflags="${RPM_OPT_FLAGS} ${PIC_OPT}" \
@@ -100,8 +101,8 @@ plasma-installer_%{version}/setup.py              \
     --blaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
     --cblaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
     --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
+    --lapclib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" 
 %endif
-    --downlapc
 
 #
 #Create shared libraries
