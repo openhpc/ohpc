@@ -9,11 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname nagios
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %global _hardened_build 1
 
@@ -57,8 +55,6 @@ Patch12: nagios-3.4.3-httpd-2.4-and-2.2.patch
 Patch14: nagios-3.5.0-conf.d-configuration-directory.patch
 Patch15: nagios-0012-add-aarch64-support.patch
 
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
-
 BuildRequires: gd-devel > 1.8, mailx, libjpeg-devel, libpng-devel
 BuildRequires: perl(CPAN)
 BuildRequires: perl(ExtUtils::MakeMaker)
@@ -85,9 +81,6 @@ Requires:           apache2-mod_php5
 %endif
 
 %if 0%{?fedora} || 0%{?rhel}
-Requires(preun): initscripts, chkconfig
-Requires(post): initscripts, chkconfig
-Requires(postun): initscripts
 Requires: php
 %else
 Requires(preun): wicked-service,aaa_base
@@ -96,6 +89,9 @@ Requires(postun): wicked-service
 Requires: php5
 %endif
 
+%{?systemd_requires}
+BuildRequires: systemd
+
 Requires: %{pname}-common%{PROJ_DELIM}
 # OBS, if you're going to parse Requires you need to match what RPM does or you'll just cause problems
 #Requires: user(nagios)
@@ -103,8 +99,6 @@ Requires: %{pname}-common%{PROJ_DELIM}
 #Requires: group(nagios)
 #Requires(pre): group(nagios)
 
-
-Summary(de): Nagios überwacht Dienste und Rechner und meldet Ihnen Ausfälle
 
 %description
 Nagios is a program that will monitor hosts and services on your
@@ -121,21 +115,9 @@ available at http://sourceforge.net/projects/nagiosplug.
 This package provides the core program, web interface, and documentation
 files for Nagios. Development files are built as a separate package.
 
-%description -l (de)
-Nagios ist ein Programm zum Überwachen von Rechner und Diensten
-in Ihrem Netzwerk. Wenn etwas ausfällt, kann es Sie per eMail
-oder Pager benachrichtigen. Nagios ist in C geschrieben und
-sollte auf allen Unix-Varianten (inklusive Linux :-) laufen. Es
-läuft als Dämon und überwacht laufend alle konfigurierten
-Dienste.
-
-Nagios überprüft die Rechner und Dienste nicht selber, sondern
-braucht dafür externe Programme. Viele dieser Programme finden
-Sie im Paket nagios-plugins.
-
 %package -n %{pname}-common%{PROJ_DELIM}
 Group: Applications/System
-Summary: Provides common directories, uid and gid among nagios-related packages. 
+Summary: Provides common directories, uid and gid among nagios-related packages.
 %if 0%{?fedora} || 0%{?rhel}
 Requires(pre): shadow-utils
 Requires(post): shadow-utils
@@ -184,7 +166,7 @@ may compile against.
 %patch11 -p1 -b .fix_perms
 %patch12 -p1 -b .httpd_conf
 %patch14 -p1 -b .conf_d
-%patch15 -p1 
+%patch15 -p1
 
 install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
 
@@ -233,7 +215,6 @@ echo >> html/stylesheets/common.css
 
 
 %install
-rm -rf %{buildroot}
 make DESTDIR=%{buildroot} INIT_OPTS="" INSTALL_OPTS="" COMMAND_OPTS="" CGIDIR="%{_libdir}/%{pname}/cgi-bin" CFGDIR="%{_sysconfdir}/%{pname}" fullinstall
 
 # relocated to sbin (Fedora-specific)
@@ -265,10 +246,6 @@ install -D -m 0644 -p %{SOURCE7} %{buildroot}%{_unitdir}/%{pname}.service
 rm -v    %{buildroot}%{_libdir}/%{pname}/libnagios.a
 
 
-%clean
-rm -rf %{buildroot}
-
-
 %pre -n %{pname}-common%{PROJ_DELIM}
 getent group nagios >/dev/null || groupadd -r nagios
 getent passwd nagios >/dev/null || useradd -r -g nagios -d %{_localstatedir}/spool/%{pname} -s /sbin/nologin nagios
@@ -276,11 +253,7 @@ exit 0
 
 
 %preun
-if [ $1 = 0 ]; then
-    /sbin/service nagios stop > /dev/null 2>&1 || :
-    /sbin/chkconfig --del %{pname} || :
-fi
-
+%systemd_preun %{pname}.service
 
 %post
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -292,7 +265,7 @@ fi
 %{_sbindir}/usermod -a -G %{pname} apache || :
 /usr/bin/systemctl try-restart httpd > /dev/null 2>&1 || :
 %endif
-/sbin/chkconfig --add %{pname} || :
+%systemd_post %{pname}.service
 
 
 %postun
@@ -301,10 +274,6 @@ fi
 %else
 /usr/bin/systemctl try-restart httpd > /dev/null 2>&1 || :
 %endif
-
-# missing buildrequires
-#%check
-#make test
 
 
 %files
