@@ -19,16 +19,14 @@ Release:   1
 License:   GPL-2
 Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
-URL:       https://github.com/hpcsi/losf 
+URL:       https://github.com/hpcsi/losf
 Source0:   https://github.com/hpcsi/losf/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %if 0%{?OHPC_BUILD}
-%{!?prefix: %define prefix %{OHPC_ADMIN}}
+%{!?prefix: %global prefix %{OHPC_ADMIN}}
 %else
-%{!?prefix: %define prefix /opt}
+%{!?prefix: %global prefix /opt}
 %endif
 
 
@@ -41,14 +39,13 @@ provides: perl(LosF_utils)
 provides: perl(LosF_history_utils)
 
 %if 0%{?sles_version} || 0%{?suse_version}
-requires: perl-Config-IniFiles >= 2.43 
+requires: perl-Config-IniFiles >= 2.43
 requires: perl-Log-Log4perl
 %else
 requires: yum-plugin-downloadonly
 %endif
 
 %define __spec_install_post %{nil}
-%define debug_package %{nil}
 %define __os_install_post %{_dbpath}/brp-compress
 
 %description
@@ -62,11 +59,7 @@ cluster.
 %prep
 %setup -q -n %{pname}-%{version}
 
-%build
-# Binary pass-through - empty build section
-
 %install
-rm -rf $RPM_BUILD_ROOT
 %{__mkdir_p} %{buildroot}/%{installPath}
 %{__mkdir_p} %{buildroot}/etc/profile.d
 cp -a * %{buildroot}/%{installPath}
@@ -83,16 +76,11 @@ for i in losf update initconfig koomie_cf sync_config_files node_types rpm_topdi
     ln -sf %{installPath}/$i ${RPM_BUILD_ROOT}/%{_bindir}
 done
 
-for i in idisk ilog ioff ion ipxe ireboot ireset isensor isoft istat ; do 
+for i in idisk ilog ioff ion ipxe ireboot ireset isensor isoft istat ; do
     ln -sf %{installPath}/utils/$i ${RPM_BUILD_ROOT}/%{_bindir}
 done
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-%post
 
 %postun
 
@@ -106,15 +94,6 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%if 0%{?OHPC_BUILD}
-%dir %{OHPC_HOME}
-%dir %{prefix}
-
-%endif
-
 %{installPath}
 %{_bindir}/*
-
-%{OHPC_PUB}
 %doc LICENSE COPYING CHANGES README
-

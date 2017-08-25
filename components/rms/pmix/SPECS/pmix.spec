@@ -14,7 +14,7 @@
 # Copyright (c) 2004-2005 The University of Tennessee and The University
 #                         of Tennessee Research Foundation.  All rights
 #                         reserved.
-# Copyright (c) 2004-2005 High Performance Computing Center Stuttgart, 
+# Copyright (c) 2004-2005 High Performance Computing Center Stuttgart,
 #                         University of Stuttgart.  All rights reserved.
 # Copyright (c) 2004-2005 The Regents of the University of California.
 #                         All rights reserved.
@@ -23,9 +23,9 @@
 #                         All rights reserved.
 # Copyright (c) 2015      Intel, Inc. All rights reserved.
 # $COPYRIGHT$
-# 
+#
 # Additional copyrights may follow
-# 
+#
 # $HEADER$
 #
 ############################################################################
@@ -41,7 +41,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define pname pmix
+%global pname pmix
 
 #############################################################################
 #
@@ -64,57 +64,57 @@
 # Define this if you want to make this SRPM build in
 # /opt/NAME/VERSION-RELEASE instead of the default /usr/.
 # type: bool (0/1)
-%{!?install_in_opt: %define install_in_opt 0}
+%{!?install_in_opt: %global install_in_opt 0}
 
 # Define this if you want this RPM to install environment setup
 # shell scripts.
 # type: bool (0/1)
-%{!?install_shell_scripts: %define install_shell_scripts 0}
+%{!?install_shell_scripts: %global install_shell_scripts 0}
 # type: string (root path to install shell scripts)
-%{!?shell_scripts_path: %define shell_scripts_path %{_bindir}}
+%{!?shell_scripts_path: %global shell_scripts_path %{_bindir}}
 # type: string (base name of the shell scripts)
-%{!?shell_scripts_basename: %define shell_scripts_basename mpivars}
+%{!?shell_scripts_basename: %global shell_scripts_basename mpivars}
 
 # Define this to 1 if you want this RPM to install a modulefile.
 # type: bool (0/1)
-%{!?install_modulefile: %define install_modulefile 1}
+%{!?install_modulefile: %global install_modulefile 1}
 # type: string (root path to install modulefiles)
-%{!?modulefile_path: %define modulefile_path /opt/ohpc/pub/modulefiles/}
+%{!?modulefile_path: %global modulefile_path /opt/ohpc/pub/modulefiles/}
 # type: string (subdir to install modulefile)
-%{!?modulefile_subdir: %define modulefile_subdir %{pname}}
+%{!?modulefile_subdir: %global modulefile_subdir %{pname}}
 # type: string (name of modulefile)
-%{!?modulefile_name: %define modulefile_name %{version}}
+%{!?modulefile_name: %global modulefile_name %{version}}
 
 # The name of the modules RPM.  Can vary from system to system.
 # RHEL6 calls it "environment-modules".
 # type: string (name of modules RPM)
-%{!?modules_rpm_name: %define modules_rpm_name lmod-ohpc}
+%{!?modules_rpm_name: %global modules_rpm_name lmod-ohpc}
 
 # Should we use the mpi-selector functionality?
 # type: bool (0/1)
-%{!?use_mpi_selector: %define use_mpi_selector 0}
+%{!?use_mpi_selector: %global use_mpi_selector 0}
 # The name of the mpi-selector RPM.  Can vary from system to system.
 # type: string (name of mpi-selector RPM)
-%{!?mpi_selector_rpm_name: %define mpi_selector_rpm_name mpi-selector}
+%{!?mpi_selector_rpm_name: %global mpi_selector_rpm_name mpi-selector}
 # The location of the mpi-selector executable (can be a relative path
 # name if "mpi-selector" can be found in the path)
 # type: string (path to mpi-selector exectuable)
-%{!?mpi_selector: %define mpi_selector mpi-selector}
+%{!?mpi_selector: %global mpi_selector mpi-selector}
 
 # Should we build a debuginfo RPM or not?
 # type: bool (0/1)
-%{!?build_debuginfo_rpm: %define build_debuginfo_rpm 0}
+%{!?build_debuginfo_rpm: %global build_debuginfo_rpm 0}
 
 # Should we build an all-in-one RPM, or several sub-package RPMs?
 # type: bool (0/1)
-%{!?build_all_in_one_rpm: %define build_all_in_one_rpm 1}
+%{!?build_all_in_one_rpm: %global build_all_in_one_rpm 1}
 
 # Should we use the default "check_files" RPM step (i.e., check for
 # unpackaged files)?  It is discouraged to disable this, but some
 # installers need it (e.g., older versions of OFED, because they
 # installed lots of other stuff in the BUILD_ROOT before PMIx/SHMEM).
 # type: bool (0/1)
-%{!?use_check_files: %define use_check_files 1}
+%{!?use_check_files: %global use_check_files 1}
 
 # By default, RPM supplies a bunch of optimization flags, some of
 # which may not work with non-gcc compilers.  We attempt to weed some
@@ -126,7 +126,7 @@
 # should be erased (in which case you probabl want to supply your own
 # optimization flags!).
 # type: bool (0/1)
-%{!?use_default_rpm_opt_flags: %define use_default_rpm_opt_flags 1}
+%{!?use_default_rpm_opt_flags: %global use_default_rpm_opt_flags 1}
 
 # Some compilers can be installed via tarball or RPM (e.g., Intel,
 # PGI).  If they're installed via RPM, then rpmbuild's auto-dependency
@@ -135,7 +135,7 @@
 # break; complaining that it can't find a bunch of compiler .so files.
 # So provide an option to turn this stuff off.
 # type: bool (0/1)
-%{!?disable_auto_requires: %define disable_auto_requires 0}
+%{!?disable_auto_requires: %global disable_auto_requires 0}
 
 # On some platforms, PMIx/SHMEM just flat-out doesn't work with
 # -D_FORTIFY_SOURCE (e.g., some users have reported that there are
@@ -145,7 +145,7 @@
 # for non-GCC compilers; setting this option to 0 will *always* strip
 # it out, even if you're using GCC.
 # type: bool (0/1)
-%{!?allow_fortify_source: %define allow_fortify_source 1}
+%{!?allow_fortify_source: %global allow_fortify_source 1}
 
 # Select md5 packing algorithm, that src.rpm created on one distro can be read on another.
 %global _binary_filedigest_algorithm 1
@@ -158,26 +158,26 @@
 #############################################################################
 
 %if %{install_in_opt}
-%define _prefix /opt/%{name}/%{version}
-%define _sysconfdir /opt/%{name}/%{version}/etc
-%define _libdir /opt/%{name}/%{version}/lib
-%define _includedir /opt/%{name}/%{version}/include
-%define _mandir /opt/%{name}/%{version}/man
+%global _prefix /opt/%{name}/%{version}
+%global _sysconfdir /opt/%{name}/%{version}/etc
+%global _libdir /opt/%{name}/%{version}/lib
+%global _includedir /opt/%{name}/%{version}/include
+%global _mandir /opt/%{name}/%{version}/man
 # Note that the name "pmix" is hard-coded in
 # opal/mca/installdirs/config for pkgdatadir; there is currently no
 # easy way to have OMPI change this directory name internally.  So we
 # just hard-code that name here as well (regardless of the value of
 # %{name} or %{_name}).
-%define _pkgdatadir /opt/%{name}/%{version}/share/pmix
+%global _pkgdatadir /opt/%{name}/%{version}/share/pmix
 # Per advice from Doug Ledford at Red Hat, docdir is supposed to be in
 # a fixed location.  But if you're installing a package in /opt, all
 # bets are off.  So feel free to install it anywhere in your tree.  He
 # suggests $prefix/doc.
-%define _defaultdocdir /opt/%{name}/%{version}/doc
+%global _defaultdocdir /opt/%{name}/%{version}/doc
 %endif
 
 %if !%{build_debuginfo_rpm}
-%define debug_package %{nil}
+%global debug_package %{nil}
 %endif
 
 %if %(test "%{_prefix}" = "/usr" && echo 1 || echo 0)
@@ -189,22 +189,22 @@
 # Is the sysconfdir under the prefix directory?  This affects
 # whether we list the sysconfdir separately in the files sections,
 # below.
-%define sysconfdir_in_prefix %(test "`echo %{_sysconfdir} | grep %{_prefix}`" = "" && echo 0 || echo 1)
+%global sysconfdir_in_prefix %(test "`echo %{_sysconfdir} | grep %{_prefix}`" = "" && echo 0 || echo 1)
 
-%{!?_pkgdatadir: %define _pkgdatadir %{_datadir}/pmix}
+%{!?_pkgdatadir: %global _pkgdatadir %{_datadir}/pmix}
 
 %if !%{use_check_files}
-%define __check_files %{nil}
+%global __check_files %{nil}
 %endif
 
-%{!?configure_options: %define configure_options %{nil}}
+%{!?configure_options: %global configure_options %{nil}}
 
 %if !%{use_default_rpm_opt_flags}
-%define optflags ""
+%global optflags ""
 %endif
 
 %if %{use_mpi_selector}
-%define install_shell_scripts 1
+%global install_shell_scripts 1
 %endif
 
 #############################################################################

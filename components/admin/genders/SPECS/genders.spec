@@ -10,7 +10,6 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname genders
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 1.22
@@ -20,7 +19,6 @@ License: GPL
 Source: https://github.com/chaos/genders/releases/download/genders-1-22-1/%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
 Requires: perl
-DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/admin
 URL: https://github.com/chaos/genders
 BuildRequires: gcc-c++
@@ -28,7 +26,6 @@ BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: python
 BuildRequires: python-devel
-BuildRoot: %{_tmppath}/%{pname}-%{version}
 Provides: %{pname} = %{version}
 
 %description
@@ -42,17 +39,17 @@ into a plain text file, it becomes possible to change the
 configuration of a cluster by modifying only one file.
 
 %package -n %{pname}-compat%{PROJ_DELIM}
-Summary: Compatibility Library 
+Summary: Compatibility Library
 Group: System Environment/Base
 %description -n %{pname}-compat%{PROJ_DELIM}
 genders API that is compatible with earlier releases of genders
 
-%{!?_with_perl_extensions: %{!?_without_perl_extensions: %define _with_perl_extensions --with-perl-extensions}}
-%{!?_with_python_extensions: %{!?_without_python_extensions: %define _with_python_extensions --with-python-extensions}}
-%{!?_with_cplusplus_extensions: %{!?_without_cplusplus_extensions: %define _with_cplusplus_extensions --with-cplusplus-extensions}}
+%{!?_with_perl_extensions: %{!?_without_perl_extensions: %global _with_perl_extensions --with-perl-extensions}}
+%{!?_with_python_extensions: %{!?_without_python_extensions: %global _with_python_extensions --with-python-extensions}}
+%{!?_with_cplusplus_extensions: %{!?_without_cplusplus_extensions: %global _with_cplusplus_extensions --with-cplusplus-extensions}}
 
 # choose vendor arch by default
-%{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %define _with_perl_vendor_arch --with-perl-vendor-arch}}
+%{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %global _with_perl_vendor_arch --with-perl-vendor-arch}}
 
 %prep
 %setup  -q -n %{pname}-%{version}
@@ -72,11 +69,10 @@ genders API that is compatible with earlier releases of genders
     %{?_with_cplusplus_extensions} \
     %{?_without_cplusplus_extensions} \
     --without-java-extensions
-make 
+make
 
 %install
-rm -rf $RPM_BUILD_ROOT
-DESTDIR="$RPM_BUILD_ROOT" make install 
+DESTDIR="$RPM_BUILD_ROOT" make install
 
 find "$RPM_BUILD_ROOT" -name .packlist -exec sed -i "s#$RPM_BUILD_ROOT##" {} \;
 find "$RPM_BUILD_ROOT" -name .packlist -exec sed -i '/BUILDROOT/d'        {} \;
@@ -94,7 +90,7 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %defattr(-,root,root)
 %doc README NEWS ChangeLog DISCLAIMER DISCLAIMER.UC COPYING TUTORIAL genders.sample
 # It doesn't matter if the user chooses a 32bit or 64bit target.  The
-# packaging must work off whatever Perl is installed.  
+# packaging must work off whatever Perl is installed.
 %if %{?_with_perl_site_arch:1}%{!?_with_perl_site_arch:0}
 %define _perldir %(perl -e 'use Config; $T=$Config{installsitearch}; $P=$Config{siteprefix}; $T=~/$P\\/(.*)/; print "%{_prefix}/$1\\n"')
 %endif
@@ -103,7 +99,7 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %endif
 %{_mandir}/man1/*
 %{_mandir}/man3/genders*
-%{_mandir}/man3/libgenders* 
+%{_mandir}/man3/libgenders*
 %{_includedir}/*
 %{_bindir}/*
 %{_libdir}/libgenders.*
