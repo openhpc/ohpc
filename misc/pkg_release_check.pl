@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 use strict;
+use warnings;
+use Sort::Versions;
 
 # basic usage
 sub usage {
@@ -16,21 +18,56 @@ if (! $release_version) {
 
 my @distros = ('CentOS_7', 'SLE_12');
 
+my @problems = ();
+
 foreach my $distro (@distros) {
     my @updates = getPackageList($release_version, $distro);
     chomp @updates;
 
-    foreach my $update (@updates) {
-        my $update_release_number = getPackageRelease($update);
-        my $package = getPackageName($update);
-        my $base_package = getBasePackage($package, $release_version, $distro);
-        my $base_release_number = getPackageRelease($base_package);
+    print "Analyzing release -> $release_version\n";
+    my %base_versions = cacheRepoPackages($release_version, $distro);
 
-        if ($base_release_number > $update_release_number) {
-            if (getPackageVersion($update) le getPackageVersion($base_package)) {
-                print "Error: $distro $update release number too low\n";
-            }
-        }
+    foreach my $update (@updates) {
+	my ($package,$update_version,$update_release) = split ' ',$update;
+
+	if (! exists ($base_versions{$package}) ) {
+	    print "[skipping new package $package]\n";
+	    next;
+	}
+
+	my $base_version = $base_versions{$package}[0];
+	my $base_release = $base_versions{$package}[1];
+
+## # 	# for testing
+## 	if($package eq "vim-clustershell-ohpc") {
+## 	    $update_release="24.1";
+##  	}
+
+	print "--> $package: \n";
+	print "    version (old,new) = $base_version,$update_version\n";
+	print "    release (old,new) = $base_release,$update_release\n";
+
+	# Sort the version strings...
+	my @versions = ($base_version,$update_version);
+	my @verSort = sort { versioncmp($a,$b) } @versions;
+
+	# Check if we have an older package string (version+release) being published...
+	if (versioncmp($base_release,$update_release) == 1 ) {
+	    if ( $update_version eq $verSort[0] ) {
+                print "\n    Error: $distro $update release number too low\n\n";
+		push(@problems,$package);
+	    }
+	}
+    }
+
+    if (@problems) {
+	print "\n";
+	foreach my $problem (@problems) {
+	    print "problem detected for package -> $problem\n";
+	}
+	exit(1);
+    } else {
+	print "\n All groovy for $distro\n";
     }
 }
 
@@ -40,7 +77,7 @@ sub getPackageList {
 
     my $repo_id = "$release - Update #$micro_ver rolling development builds ($distro)";
     my $repo_url = "http://build.openhpc.community/OpenHPC:/$major_ver.$minor_ver:/Update$micro_ver:/Factory/$distro";
-    my $query_args = "--repofrompath=\"$repo_id,$repo_url\" --repoid=\"$repo_id\" '*'";
+    my $query_args = "--repofrompath=\"$repo_id,$repo_url\" --repoid=\"$repo_id\" --queryformat='%{Name} %{Version} %{Release}' '*'";
     my @packages = `repoquery $query_args`;
 
     return @packages;
@@ -83,5 +120,36 @@ sub getBasePackage {
     my $base_package = `repoquery $query_args`;
 
     return $base_package;
+}
+
+
+sub cacheRepoPackages {
+    my ($release, $distro) = @_;
+    my ($major_ver, $minor_ver, $micro_ver) = split(/\./, $release);
+    
+    my $base_repo_id = "$major_ver.$minor_ver - Base ($distro)";
+    my $base_repo_url = "http://build.openhpc.community/OpenHPC:/$major_ver.$minor_ver/$distro";
+    my $updates_repo_id = "$major_ver.$minor_ver - Updates ($distro)";
+    my $updates_repo_url = "http://build.openhpc.community/OpenHPC:/$major_ver.$minor_ver/updates/$distro";
+    my $query_args = "--repofrompath=\"$base_repo_id,$base_repo_url\" --repoid=\"$base_repo_id\" --repofrompath=\"$updates_repo_id,$updates_repo_url\" --repoid=\"$updates_repo_id\" --queryformat='%{Name} %{Version} %{Release}' '*'";
+
+    my $base_package = `repoquery $query_args`;
+    my @results = `repoquery $query_args`;
+    chomp(@results);
+
+    my %base_versions = ();
+
+    foreach my $line (@results) {
+	my ($name,$version,$release) = split ' ',$line;
+	push(@{$base_versions{$name}},$version);
+	push(@{$base_versions{$name}},$release);
+    }
+
+    my $verCount = keys %base_versions;
+
+    print "Number of packages from base = $verCount\n";
+
+
+    return %base_versions;
 }
 
