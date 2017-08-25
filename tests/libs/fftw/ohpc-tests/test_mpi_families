@@ -39,7 +39,7 @@ for compiler in $COMPILER_FAMILIES ; do
 
 	./configure           || exit 1
 	make clean            || exit 1
-	make -k check         || status=0
+	make -k check         || status=1
 
         save_logs_mpi_family tests $compiler $mpi
         save_logs_mpi_family tests/ohpc_module $compiler $mpi
