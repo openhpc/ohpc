@@ -22,8 +22,8 @@ pre-packaged binary RPMs available per architecture type are summarized as follo
 
 Base OS     | x86_64  | aarch64  | noarch
 :---:       | :---:   | :---:    | :---:
-CentOS 7.3  | 583     | 361      | 60
-SLES 12 SP2 | 587     | 363      | 60
+CentOS 7.3  | 458     | 279      | 32
+SLES 12 SP2 | 462     | 287      | 32
 
 A detailed list of all available components is available in
 the "Package Manifest" appendix located in each of the companion install
