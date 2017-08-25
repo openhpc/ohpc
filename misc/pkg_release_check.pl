@@ -17,15 +17,18 @@ if (! $release_version) {
 }
 
 my @distros = ('CentOS_7', 'SLE_12');
+my @arches  = ('aarch64','x86_64');
 
 my @problems = ();
 
 foreach my $distro (@distros) {
-    my @updates = getPackageList($release_version, $distro);
+    foreach my $arch (@arches) {
+    my @updates = getPackageList($release_version, $distro, $arch);
     chomp @updates;
 
-    print "Analyzing release -> $release_version\n";
-    my %base_versions = cacheRepoPackages($release_version, $distro);
+    print '-' x 50;
+    print "\nAnalyzing release -> $release_version ($distro/$arch)\n";
+    my %base_versions = cacheRepoPackages($release_version, $distro,$arch);
 
     foreach my $update (@updates) {
 	my ($package,$update_version,$update_release) = split ' ',$update;
@@ -43,9 +46,6 @@ foreach my $distro (@distros) {
 ## 	    $update_release="24.1";
 ##  	}
 
-	print "--> $package: \n";
-	print "    version (old,new) = $base_version,$update_version\n";
-	print "    release (old,new) = $base_release,$update_release\n";
 
 	# Sort the version strings...
 	my @versions = ($base_version,$update_version);
@@ -54,6 +54,10 @@ foreach my $distro (@distros) {
 	# Check if we have an older package string (version+release) being published...
 	if (versioncmp($base_release,$update_release) == 1 ) {
 	    if ( $update_version eq $verSort[0] ) {
+		print "--> $package: \n";
+		print "    version (old,new) = $base_version,$update_version\n";
+		print "    release (old,new) = $base_release,$update_release\n";
+
                 print "\n    Error: $distro $update release number too low\n\n";
 		push(@problems,$package);
 	    }
@@ -67,17 +71,18 @@ foreach my $distro (@distros) {
 	}
 	exit(1);
     } else {
-	print "\n All groovy for $distro\n";
+	print "\n All groovy for $distro/$arch\n\n";
+    }
     }
 }
 
 sub getPackageList {
-    my ($release, $distro) = @_;
+    my ($release, $distro, $arch) = @_;
     my ($major_ver, $minor_ver, $micro_ver) = split(/\./, $release);
 
     my $repo_id = "$release - Update #$micro_ver rolling development builds ($distro)";
     my $repo_url = "http://build.openhpc.community/OpenHPC:/$major_ver.$minor_ver:/Update$micro_ver:/Factory/$distro";
-    my $query_args = "--repofrompath=\"$repo_id,$repo_url\" --repoid=\"$repo_id\" --queryformat='%{Name} %{Version} %{Release}' '*'";
+    my $query_args = "--repofrompath=\"$repo_id,$repo_url\" --repoid=\"$repo_id\" --queryformat='%{Name} %{Version} %{Release}' --archlist=$arch,noarch '*'";
     my @packages = `repoquery $query_args`;
 
     return @packages;
@@ -124,14 +129,14 @@ sub getBasePackage {
 
 
 sub cacheRepoPackages {
-    my ($release, $distro) = @_;
+    my ($release, $distro, $arch) = @_;
     my ($major_ver, $minor_ver, $micro_ver) = split(/\./, $release);
     
     my $base_repo_id = "$major_ver.$minor_ver - Base ($distro)";
     my $base_repo_url = "http://build.openhpc.community/OpenHPC:/$major_ver.$minor_ver/$distro";
     my $updates_repo_id = "$major_ver.$minor_ver - Updates ($distro)";
     my $updates_repo_url = "http://build.openhpc.community/OpenHPC:/$major_ver.$minor_ver/updates/$distro";
-    my $query_args = "--repofrompath=\"$base_repo_id,$base_repo_url\" --repoid=\"$base_repo_id\" --repofrompath=\"$updates_repo_id,$updates_repo_url\" --repoid=\"$updates_repo_id\" --queryformat='%{Name} %{Version} %{Release}' '*'";
+    my $query_args = "--repofrompath=\"$base_repo_id,$base_repo_url\" --repoid=\"$base_repo_id\" --repofrompath=\"$updates_repo_id,$updates_repo_url\" --repoid=\"$updates_repo_id\" --queryformat='%{Name} %{Version} %{Release}' --archlist=$arch,noarch '*'";
 
     my $base_package = `repoquery $query_args`;
     my @results = `repoquery $query_args`;
@@ -147,7 +152,7 @@ sub cacheRepoPackages {
 
     my $verCount = keys %base_versions;
 
-    print "Number of packages from base = $verCount\n";
+    print "\nNumber of packages from base config = $verCount\n\n";
 
 
     return %base_versions;
