@@ -58,7 +58,7 @@ value problems.
 
 %prep
 %setup -q -a 1 -n %{pname}_%{version}
-%patch1 -p 1
+%patch1 -p 0
 
 %build
 mkdir -p build/download
