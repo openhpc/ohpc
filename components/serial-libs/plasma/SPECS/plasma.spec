@@ -36,6 +36,7 @@ Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{
 Source2: http://www.netlib.org/lapack/lapack-3.7.0.tgz
 Source3: %{pname}-rpmlintrc
 Source4: OHPC_macros
+Patch1:  plasma-lapack_version.patch
 Requires: lmod%{PROJ_DELIM} >= 7.6.1
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -57,6 +58,7 @@ value problems.
 
 %prep
 %setup -q -a 1 -n %{pname}_%{version}
+%patch1 -p 2
 
 %build
 mkdir -p build/download

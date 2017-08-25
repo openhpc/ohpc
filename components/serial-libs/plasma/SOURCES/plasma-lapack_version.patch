@@ -1,0 +1,11 @@
+--- plasma-installer_2.8.0/script/framework.py	2015-12-05 03:59:11.000000000 -0800
++++ plasma-installer_2.8.0.patch/script/framework.py	2017-08-25 10:35:25.000000000 -0700
+@@ -53,7 +53,7 @@
+                     "2.0.0",
+                     "1.0.1", "1.0.0")
+     oldversions  = ("2.1.0", "2.0.0", "1.0.1", "1.0.0") # Releases from version which need the internal cblas and lapack
+-    lapversion   = "lapack-3.6.0"
++    lapversion   = "lapack-3.7.0"
+     ranlib       = ""                        # the ranlib command
+     clean        = 0
+     nbcores      = 2
