@@ -10,13 +10,12 @@
      clean        = 0
      nbcores      = 2
 --- plasma-installer_2.8.0/script/lapcwrapper.py	2016-03-08 09:26:24.000000000 -0800
-+++ plasma-installer_2.8.0.patch/script/lapcwrapper.py	2017-08-25 11:10:29.000000000 -0700
-@@ -279,7 +279,7 @@
++++ plasma-installer_2.8.0.patch/script/lapcwrapper.py	2017-08-25 13:06:30.000000000 -0700
+@@ -279,7 +279,6 @@
          shutil.copy('LAPACKE/include/lapacke_config.h', os.path.join(self.prefix,'include/lapacke_config.h'))
          shutil.copy('LAPACKE/include/lapacke_utils.h', os.path.join(self.prefix,'include/lapacke_utils.h'))
          shutil.copy('LAPACKE/include/lapacke_mangling.h', os.path.join(self.prefix,'include/lapacke_mangling.h'))
 -        shutil.copy('LAPACKE/include/lapacke_mangling_with_flags.h', os.path.join(self.prefix,'include/lapacke_mangling_with_flags.h'))
-+        shutil.copy('LAPACKE/include/lapacke_mangling_with_flags.h.in', os.path.join(self.prefix,'include/lapacke_mangling_with_flags.h.in'))
  
          # set framework variables to point to the freshly installed BLAS library
          self.config.lapclib   = '-L'+os.path.join(self.prefix,'lib')+' -llapacke'
