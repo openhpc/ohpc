@@ -76,7 +76,7 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 
 # Only *86 CPUs support DYNAMIC_ARCH
 %ifarch %ix86 x86_64
-%define openblas_target DYNAMIC_ARCH=1
+%define openblas_target DYNAMIC_ARCH=1 NUM_THREADS=256
 %endif
 # Temporary fix, OpenBLAS does not autodetect aarch64
 %ifarch aarch64
