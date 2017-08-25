@@ -33,7 +33,7 @@ Group:     %{PROJ_NAME}/parallel-libs
 URL: https://bitbucket.org/icl/%{pname}		
 Source0: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}_%{version}.tar.gz
 Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{version}.tar.gz
-Source2: http://www.netlib.org/lapack/lapack-3.6.0.tgz
+Source2: http://www.netlib.org/lapack/lapack-3.7.0.tgz
 Source3: %{pname}-rpmlintrc
 Source4: OHPC_macros
 Requires: lmod%{PROJ_DELIM} >= 7.6.1
