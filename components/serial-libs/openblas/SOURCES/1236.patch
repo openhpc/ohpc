@@ -186,17 +186,6 @@ index ab2ecdcaf..73b4df6b3 100644
      if (cpuid_level >= 0x80000006) {
        if(L2.size<=0){
 
-From 00774b1105ad5dbfe0e6be671096d51ad4a97b2e Mon Sep 17 00:00:00 2001
-From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
-Date: Wed, 12 Jul 2017 21:56:23 +0200
-Subject: [PATCH] Add dummy implementation of cpuid_count for the CPUIDEMU case
-
----
- cpuid_x86.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/cpuid_x86.c b/cpuid_x86.c
-index 73b4df6b3..103128a33 100644
 --- a/cpuid_x86.c
 +++ b/cpuid_x86.c
 @@ -157,6 +157,10 @@ void cpuid(unsigned int op, unsigned int *eax, unsigned int *ebx, unsigned int *
