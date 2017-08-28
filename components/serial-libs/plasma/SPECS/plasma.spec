@@ -98,9 +98,9 @@ plasma-installer_%{version}/setup.py              \
 %if %{compiler_family} == intel
     --cflags="${RPM_OPT_FLAGS} ${PIC_OPT}" \
     --fflags="${RPM_OPT_FLAGS} ${PIC_OPT}" \
-    --blaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
-    --cblaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
-    --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
+    --blaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core" \
+    --cblaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core" \
+    --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_gnu_thread -lmkl_core" \
 %endif
     --downlapc
 
