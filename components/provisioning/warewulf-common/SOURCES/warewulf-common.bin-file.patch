@@ -1,0 +1,11 @@
+--- a/common/lib/Warewulf/File.pm	2017-03-22 08:41:20.000000000 -0700
++++ b/common/lib/Warewulf/File.pm	2017-08-28 11:15:08.000000000 -0700
+@@ -492,6 +492,8 @@
+                     $format = "perl";
+                 } elsif ($buffer =~ /^#!\/[a-zA-Z0-9\/_\.]+\/python/) {
+                     $format = "python";
++                } elsif (-B _) {
++                    $format = "binary";
+                 } else {
+                     $format = "data";
+                 }
