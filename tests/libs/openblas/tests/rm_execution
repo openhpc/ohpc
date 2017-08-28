@@ -3,7 +3,6 @@
 
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
-export GFORTRAN_UNBUFFERED_PRECONNECTED=1
 
 if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
@@ -15,6 +14,8 @@ rm=$RESOURCE_MANAGER
 testname="libs/openblas"
 
 ARGS=0
+export GFORTRAN_UNBUFFERED_PRECONNECTED=1
+export OMP_NUM_THREADS=2
 
 @test "[$testname/xscblat1] xscblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xscblat1 ];then
