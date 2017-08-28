@@ -14,3 +14,10 @@ export BATS_USE_MKTEMP=1
 #------------------------
 #
 SCAN_MPI_LAUNCHER=prun
+#
+
+#------------------------
+# GLobal openblas options
+#------------------------
+#
+export OMP_NUM_THREADS=2
