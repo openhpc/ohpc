@@ -17,6 +17,7 @@ else
    AC_MSG_RESULT([yes])
 fi
 # test compilers
+OHPC_COMPILER_FAMILY
 AC_PROG_CC
 AC_PROG_F77
 AC_PROG_FC
