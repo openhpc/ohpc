@@ -40,8 +40,8 @@ repositories are housed at https://build.openhpc.community. To get started, you
 can enable an OpenHPC repository locally through installation of an
 ```ohpc-release``` RPM which includes gpg keys for package signing and defines
 the URL locations for [base] and [update] package repositories. Copies of the
-```ohpc-release``` package are provided below for convenience. Installtion guides 
-taylored for each supported resource manager are also available below or in
+```ohpc-release``` package are provided below for convenience. Installation guides 
+tailored for each supported resource manager are also available below or in
 the downloads section of the latest
 [release](https://github.com/openhpc/ohpc/releases/tag/v1.3.GA).
 
