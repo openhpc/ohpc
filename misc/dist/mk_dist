@@ -225,7 +225,6 @@ foreach my $distro (@distros) {
 
 	# exclude repocache
 	$tar_args .= "--exclude $distro/repocache\\\n";
-	$tar_args .= "--exclude $distro/updates/$distro/repocache \\\n";
 
 	# cd to $tmp_dir
 	$tar_args .= "-C $tmp_dir \\\n";
