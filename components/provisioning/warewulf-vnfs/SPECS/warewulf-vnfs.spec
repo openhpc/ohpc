@@ -26,6 +26,7 @@ Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source2: OHPC_macros
+Source3: rhel-7.tmpl
 
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -83,6 +84,8 @@ cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+
+install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
