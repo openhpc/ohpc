@@ -85,7 +85,7 @@ cd %{dname}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/*
+install -m 644 %{SOURCE3} $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/*
 
 %clean
 rm -rf $RPM_BUILD_ROOT
