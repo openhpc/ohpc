@@ -66,7 +66,7 @@ Requires:  binutils-devel
 Requires:  man-db
 Requires:  yum-utils
 %endif
-%if 0%{?sles_version}
+%if 0%{?sles_version} || 0%{?suse_version}
 Requires:  glibc-locale
 Requires:  libmlx4-rdmav2
 Requires:  nfs-kernel-server
@@ -83,7 +83,7 @@ Requires:  numactl
 Requires:  cairo-devel
 Requires:  libpciaccess
 %endif
-%if 0%{?sles_version}
+%if 0%{?sles_version} || 0%{?suse_version}
 Requires:  libcairo2
 Requires:  libpciaccess0
 %endif

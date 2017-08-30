@@ -46,7 +46,7 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  doxygen
-%if 0%{?sles_version}
+%if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
 BuildRequires:  gcc-c++
@@ -109,7 +109,7 @@ about the hardware, bind processes, and much more.
 %setup -q -n %{pname}-%{version}
 
 %build
-%if 0%{?sles_version}
+%if 0%{?sles_version} || 0%{?suse_version}
 sed -i 's/1.11 dist-bzip2 subdir-objects foreign tar-ustar parallel-tests -Wall -Werror/1.10 dist-bzip2 subdir-objects foreign tar-ustar -Wall -Werror/g' configure.ac
 %endif
 autoreconf --force --install
@@ -130,7 +130,7 @@ autoreconf --force --install
 # documentation will be handled by % doc macro
 %{__rm} -rf %{buildroot}%{install_path}/doc/ doc/doxygen-doc/man
 %{__rm} -rf doc/.deps
-%if 0%{?sles_version}
+%if 0%{?sles_version} || 0%{?suse_version}
 %fdupes -s %{buildroot}/%{install_path}/share/man/man1
 %fdupes -s %{buildroot}/%{install_path}/share/man/man3
 %fdupes -s %{buildroot}/%{install_path}/share/man/man7
