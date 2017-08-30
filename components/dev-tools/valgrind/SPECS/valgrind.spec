@@ -23,12 +23,6 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/dev-tools
 Source:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
-%ifarch aarch64
-Patch1:    revVEX3352.patch
-Patch2:    rev16269.v3.13.0.patch
-Patch3:    rev16309.patch
-Patch4:    thunderx_always_use_fallback_LLSC.patch
-%endif
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
@@ -45,14 +39,6 @@ AMD64/MacOSX.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%ifarch aarch64
-# karl.w.schulz@intel.com (9/2/17) - disabling revVEX3352.patch; looks to have landed in 3.13.0 release
-#%patch1 -p0
-%patch2 -p0
-# karl.w.schulz@intel.com (9/2/17) - disabling rev16309.patch; looks to have landed in 3.13.0 release
-#%patch3 -p0
-#%patch4 -p1
-%endif
 
 %build
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
