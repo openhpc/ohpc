@@ -166,8 +166,14 @@ if( !$skipCopy) {
 
     # copy base repo contents
     print "\nCopying base repo contents from OBS...\n";
-    unless(dircopy("$base_repo_path/$base_release", $tmp_dir)) {
-        die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
+    if ($preRelease) {
+        unless(dircopy("$base_repo_path/$base_release:/Factory", $tmp_dir)) {
+            die "Unable to copy $base_repo_path/$base_release:/Factory to $tmp_dir: $!";
+        }
+    } else {
+        unless(dircopy("$base_repo_path/$base_release", $tmp_dir)) {
+            die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
+        }
     }
     print "--> base repo copy complete\n";
 
