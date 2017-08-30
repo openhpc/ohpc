@@ -141,7 +141,7 @@ print "--> Requested release version = $release\n";
 print "--> Overwrite existing dists  = $overwrite\n";
 
 if($preRelease) {
-    print "--> Debug preRelease option     = 1\n";
+    print "--> Build from factory pre-release = 1\n";
 }
 
 if($skipCopy) {
