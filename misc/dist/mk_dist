@@ -171,7 +171,7 @@ if( !$skipCopy) {
         unlink "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
         rmtree "$tmp_dir/empty" || warn "Unable to remove empty dir: $!";
         dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
-            die "Unable to copy update repo: $!";
+            die "Unable to copy $base_repo_path/$base_release:/Update$micro repo: $!";
     }
 }
 
