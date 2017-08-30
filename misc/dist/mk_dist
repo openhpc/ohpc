@@ -34,6 +34,7 @@ sub usage {
     print "\n";
     print "Usage: mk_dist [OPTIONS]\n\n";
     print "OPTIONS:\n";
+    print "  --pre-release         use OBS Factory repository\n";
     print "  --skip-copy           skip copying of repo data (for debug only)\n";
     print "  --help                generate help message and exit\n";
     print "\n";
@@ -119,12 +120,14 @@ sub add_readme_file {
 $| = 1;
 
 # Command-line parsing
+my $preRelease = 0;
 my $skipCopy = 0;
 my $help = 0;
 
-GetOptions('skip-copy' => \$skipCopy,
-	   "h"             => \$help,
-           "help"          => \$help);
+GetOptions('pre-release' => \$preRelease,
+        'skip-copy' => \$skipCopy,
+        "h"             => \$help,
+        "help"          => \$help);
 
 usage() if ($help);
 
@@ -136,6 +139,10 @@ if ( ! -d $dest_dir ) {
 print "OpenHPC dist creation utility\n";
 print "--> Requested release version = $release\n";
 print "--> Overwrite existing dists  = $overwrite\n";
+
+if($preRelease) {
+    print "--> Debug preRelease option     = 1\n";
+}
 
 if($skipCopy) {
     print "--> Debug skipCopy option     = 1\n";
@@ -170,8 +177,13 @@ if( !$skipCopy) {
         print "\nCopying updates\n";
         unlink "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
         rmtree "$tmp_dir/empty" || warn "Unable to remove empty dir: $!";
-        dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
-            die "Unable to copy $base_repo_path/$base_release:/Update$micro repo: $!";
+        if ($preRelease) {
+            dircopy("$base_repo_path/$base_release:/Update$micro:/Factory/*", "$tmp_dir/updates") ||
+                die "Unable to copy $base_repo_path/$base_release:/Update$micro repo: $!";
+        } else {
+            dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
+                die "Unable to copy $base_repo_path/$base_release:/Update$micro repo: $!";
+        }
     }
 }
 
