@@ -221,10 +221,11 @@ foreach my $distro (@distros) {
 
 	# exclude any OBS created .repo files
 	$tar_args .= "--exclude $distro/OpenHPC*.repo \\\n";
-	$tar_args .= "--exclude $distro/updates/*/OpenHPC*.repo \\\n";
+	$tar_args .= "--exclude $distro/updates/OpenHPC*.repo \\\n";
 
 	# exclude repocache
-	$tar_args .= "--exclude $distro/repocache\\\n";
+	$tar_args .= "--exclude $distro/repocache \\\n";
+	$tar_args .= "--exclude $distro/updates/repocache \\\n";
 
 	# cd to $tmp_dir
 	$tar_args .= "-C $tmp_dir \\\n";
@@ -250,7 +251,7 @@ foreach my $distro (@distros) {
 	$tar_args .= "$distro make_repo.sh OpenHPC.local.repo README";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "\ntar command -> tar $tar_args\n\n";
-	system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
+	system("tar $tar_args") == 0 || die "Unable to execute $distro:$arch tar command: $!";
 
     } # end loop over @arches
     
@@ -279,6 +280,10 @@ foreach my $distro (@distros) {
     $tar_args .= "--exclude $distro/OpenHPC*.repo \\\n";
     $tar_args .= "--exclude $distro/updates/OpenHPC*.repo \\\n";
 
+	# exclude repocache
+	$tar_args .= "--exclude $distro/repocache \\\n";
+	$tar_args .= "--exclude $distro/updates/repocache \\\n";
+
     # add sources .repo file
     my $isSrcRepo=1;
     add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
@@ -293,7 +298,7 @@ foreach my $distro (@distros) {
 
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
-    system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
+    system("tar $tar_args") == 0 || die "Unable to execute $distro:src tar command: $!";
     
 } # end loop over @distros
 
