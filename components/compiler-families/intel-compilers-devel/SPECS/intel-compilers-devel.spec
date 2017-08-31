@@ -58,7 +58,7 @@ icc_subpath="linux/bin/intel64/icc$"
 
 echo "Checking for local PXSE compiler installation(s)."
 
-versions=`rpm -qal | grep ${icc_subpath}`
+versions_all=`rpm -qal | grep ${icc_subpath}`
 
 if [ $? -eq 1 ];then
     echo ""
@@ -71,18 +71,23 @@ fi
 # Verify min version expectations
 
 min_ver="16.0"
-
-for file in ${versions}; do 
+versions=""
+for file in ${versions_all}; do
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
     echo "--> Version ${version} detected"
     echo -e "${version}\n${min_ver}" | sort -V | head -n 1 | grep -q "^${min_ver}"
     if [ $? -ne 0 ];then
-	echo ""
-	echo "Error: local PXSE compatability support is for versions > ${min_ver}"
-	echo " "
-	exit 1
+        echo "Warning: skipping version ${version}"
+    else
+        versions="${versions} ${version}"
     fi
 done
+if [ -z "${versions}" ]; then
+    echo ""
+    echo "Error: local PXSE compatability support is for versions > ${min_ver}"
+    echo " "
+    exit 1
+fi
 
 %post
 
