@@ -61,6 +61,5 @@ fi
     su ohpc-test -c "run_serial_binary singularity exec ~/${DISTRO}.img cat /etc/os-release"
     assert_success
 
-    run rm -rf ~ohpc-test/${DISTRO}.img
-    assert_success
+    rm -f ~ohpc-test/${DISTRO}.img
 }
