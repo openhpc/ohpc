@@ -65,8 +65,10 @@ if [ $? -eq 1 ];then
 fi
 
 # Verify min version expectations
-
-min_ver="2016.0"
+# 2016 used 5.1 and 5.3 while 2017 and newer used 2017.x similar to the
+# associated compiler version.  Ether way, 2016 and newer translates to
+# impi package version >= 5.1
+min_ver="5.1"
 versions=""
 for file in ${versions_all}; do 
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
