@@ -28,7 +28,7 @@ echo "-------------------------------------------------------"
 echo "Runtimes: Singularity"
 echo "-------------------------------------------------------"
 
-if [ "x$DISTRO_FAMILY" == "xCentOS" ];then
+if [ "x$DISTRO_FAMILY" == "xCentOS" -o "x$DISTRO_FAMILY" == "xRHEL" ];then
     export DISTRO=centos
     export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc-2.3.1/examples/${DISTRO}/Singularity
 else
