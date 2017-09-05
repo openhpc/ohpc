@@ -92,6 +92,11 @@ load ../common/test_helper_functions
     module purge || exit 1
     export MODULEPATH=./example-modules:$MODULEPATH
     local orig_path="$PATH"
+
+    if [ -z "$MANPATH" ];then
+	export MANPATH="/foo"
+    fi
+
     local orig_manpath="$MANPATH"
 
     # verify path after module load
