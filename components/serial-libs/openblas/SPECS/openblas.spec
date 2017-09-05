@@ -75,9 +75,9 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 # karl.w.schulz@intel.com (9/19/16) - disabling patch3 for v0.2.19
 #%patch3 -p1
 %patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
+#%patch5 -p1
+#%patch6 -p1
+#%patch7 -p1
 
 %build
 # OpenHPC compiler/mpi designation
