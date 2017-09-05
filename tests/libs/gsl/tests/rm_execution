@@ -520,12 +520,12 @@ tx2=test_static
     if [ ! -s $tx1 ];then
         flunk "$tx1 binary does not exit"
     fi
-    run_serial_binary ./$tx1
+    run_serial_binary -t "00:03:00" ./$tx1
     assert_success
     if [ ! -s $tx2 ];then
         flunk "$tx2 binary does not exit"
     fi
-    run_serial_binary ./$tx2
+    run_serial_binary -t "00:03:00" ./$tx2
     assert_success
     popd
 }
