@@ -52,7 +52,7 @@ TASKS=4
     assert_success
 }
 
-@test "[$testname] re-use permutaion vector ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$testname] re-use permutation vector ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive2 ];then
 	flunk "pddrive2 binary does not exist"
     fi
@@ -61,7 +61,7 @@ TASKS=4
     assert_success
 }
 
-@test "[$testname] re-use permutaion vector ABglobal ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" { 
+@test "[$testname] re-use permutation vector ABglobal ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" { 
     if [ ! -s pddrive2_ABglobal ];then
 	flunk "pddrive2_ABglobal binary does not exist"
     fi
