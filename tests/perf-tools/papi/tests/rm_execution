@@ -19,7 +19,7 @@ ARGS=5
 
 @test "[$testname] C dynamic memory info under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s dmem_info ];then
-	flunk "dmem_info binary does not exit"
+	flunk "dmem_info binary does not exist"
     fi
 
     run_serial_binary ./dmem_info
@@ -28,7 +28,7 @@ ARGS=5
 
 @test "[$testname] C branch accuracy under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s branches ];then
-	flunk "branches binary does not exit"
+	flunk "branches binary does not exist"
     fi
 
     run_serial_binary ./branches
@@ -37,7 +37,7 @@ ARGS=5
 
 @test "[$testname] C Clock latency and resolution under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s clockres_pthreads ];then
-	flunk "clockres_pthreads binary does not exit"
+	flunk "clockres_pthreads binary does not exist"
     fi
 
     run_serial_binary ./clockres_pthreads
@@ -46,7 +46,7 @@ ARGS=5
 
 @test "[$testname] C cycle ratio under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s cycle_ratio ];then
-	flunk "cycle_ratio binary does not exit"
+	flunk "cycle_ratio binary does not exist"
     fi
 
     run_serial_binary ./cycle_ratio
@@ -55,7 +55,7 @@ ARGS=5
 
 @test "[$testname] C start, read, stop and again under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s first ];then
-	flunk "first binary does not exit"
+	flunk "first binary does not exist"
     fi
 
     run_serial_binary ./first
@@ -64,7 +64,7 @@ ARGS=5
 
 @test "[$testname] C L1 related events under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s memory ];then
-	flunk "memory binary does not exit"
+	flunk "memory binary does not exist"
     fi
 
     run_serial_binary ./memory
@@ -73,7 +73,7 @@ ARGS=5
 
 @test "[$testname] FORTRAN start/stop and read under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s cost ];then
-	flunk "cost binary does not exit"
+	flunk "cost binary does not exist"
     fi
 
     run_serial_binary ./cost
@@ -82,7 +82,7 @@ ARGS=5
 
 @test "[$testname] FORTRAN multiplex under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s fmultiplex1 ];then
-	flunk "fmultiplex1 binary does not exit"
+	flunk "fmultiplex1 binary does not exist"
     fi
 
     run_serial_binary ./fmultiplex1
@@ -91,7 +91,7 @@ ARGS=5
 
 @test "[$testname] FORTRAN high-level APIs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s highlevel ];then
-	flunk "highlevel binary does not exit"
+	flunk "highlevel binary does not exist"
     fi
 
     run_serial_binary ./highlevel
@@ -100,7 +100,7 @@ ARGS=5
 
 @test "[$testname] FORTRAN string passing under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s strtest ];then
-	flunk "strtest binary does not exit"
+	flunk "strtest binary does not exist"
     fi
 
     run_serial_binary ./strtest
@@ -109,7 +109,7 @@ ARGS=5
 
 @test "[$testname] FORTRAN L1 cache miss under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s tenth ];then
-	flunk "tenth binary does not exit"
+	flunk "tenth binary does not exist"
     fi
 
     run_serial_binary ./tenth
@@ -118,7 +118,7 @@ ARGS=5
 
 @test "[$testname] FORTRAN start, stop and timer under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s zero ];then
-	flunk "zero binary does not exit"
+	flunk "zero binary does not exist"
     fi
 
     run_serial_binary ./zero

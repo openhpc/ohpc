@@ -17,7 +17,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE structured test binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex1 ];then
-	flunk "ex1 binary does not exit"
+	flunk "ex1 binary does not exist"
     fi
     
     run_mpi_binary ./ex1 $ARGS $NODES $TASKS
@@ -26,7 +26,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE PCG with SMG preconditioner binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex2 ];then
-	flunk "ex2 binary does not exit"
+	flunk "ex2 binary does not exist"
     fi
     
     run_mpi_binary ./ex2 $ARGS $NODES $TASKS
@@ -35,7 +35,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE Semi-Structured PCG binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex6 ];then
-	flunk "ex6 binary does not exit"
+	flunk "ex6 binary does not exist"
     fi
     
     run_mpi_binary ./ex6 "" $NODES $TASKS
@@ -44,7 +44,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE Three-part stencil binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex8 ];then
-	flunk "ex8 binary does not exit"
+	flunk "ex8 binary does not exist"
     fi
     
     run_mpi_binary ./ex8 "" $NODES $TASKS
@@ -53,7 +53,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE FORTRAN PCG with PFMG preconditioner binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex12f ];then
-	flunk "ex12f binary does not exit"
+	flunk "ex12f binary does not exist"
     fi
     
     run_mpi_binary ./ex12f "" 1 2
@@ -62,7 +62,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE -Delta u = 1 binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex3 ];then
-	flunk "ex3 binary does not exit"
+	flunk "ex3 binary does not exist"
     fi
     
     run_mpi_binary ./ex3 "-n 33 -solver 0 -v 1 1" $NODES $TASKS
@@ -71,7 +71,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE convection-reaction-diffusion binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex4 ];then
-	flunk "ex4 binary does not exit"
+	flunk "ex4 binary does not exist"
     fi
     
     run_mpi_binary ./ex4 "-n 33 -solver 10  -K 3 -B 0 -C 1 -U0 2 -F 4" $NODES $TASKS
@@ -80,7 +80,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE FORTRAN 2-D Laplacian binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex5f ];then
-	flunk "ex5f binary does not exit"
+	flunk "ex5f binary does not exist"
     fi
     
     run_mpi_binary ./ex5f "" $NODES $TASKS
@@ -89,7 +89,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE Semi-Structured convection binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex7 ];then
-	flunk "ex7 binary does not exit"
+	flunk "ex7 binary does not exist"
     fi
     
     run_mpi_binary ./ex7 "-n 33 -solver 10 -K 3 -B 0 -C 1 -U0 2 -F 4" $NODES $TASKS
@@ -98,7 +98,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE biharmonic binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex9 ];then
-	flunk "ex9 binary does not exit"
+	flunk "ex9 binary does not exist"
     fi
     
     run_mpi_binary ./ex9 "-n 33 -solver 0 -v 1 1" $NODES $TASKS
@@ -107,7 +107,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE C++ Finite Element Interface binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex10 ];then
-	flunk "ex10 binary does not exit"
+	flunk "ex10 binary does not exist"
     fi
     
     run_mpi_binary ./ex10 "" $NODES $TASKS
@@ -116,7 +116,7 @@ ARGS=8
 
 @test "[libs/HYPRE] 2 PE 2-D Laplacian eigenvalue binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s ex11 ];then
-	flunk "ex11 binary does not exit"
+	flunk "ex11 binary does not exist"
     fi
     
     run_mpi_binary ./ex11 "" $NODES $TASKS

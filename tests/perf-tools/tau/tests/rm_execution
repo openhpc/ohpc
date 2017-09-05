@@ -24,7 +24,7 @@ unset OMP_NUM_THREADS
 
 @test "[libs/TAU] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_mpi_test ];then
-    flunk "C_mpi_test binary does not exit"
+    flunk "C_mpi_test binary does not exist"
     fi
 
     run_mpi_binary "tau_exec ./C_mpi_test" $ARGS $NODES $TASKS
@@ -41,7 +41,7 @@ unset OMP_NUM_THREADS
     TAU_METRICS=PAPI_LD_INS
     fi
     if [ ! -s CXX_mpi_test ];then
-    flunk "CXX_mpi_test binary does not exit"
+    flunk "CXX_mpi_test binary does not exist"
     fi
 
     run_mpi_binary ./run_CXX_mpi_test.sh $ARGS $NODES $TASKS
@@ -58,7 +58,7 @@ unset OMP_NUM_THREADS
     TAU_METRICS=PAPI_L1_DCM
     fi
     if [ ! -s C_omp_test ];then
-    flunk "C_omp_test binary does not exit"
+    flunk "C_omp_test binary does not exist"
     fi
 
     run_serial_binary ./run_C_omp_test.sh
@@ -73,7 +73,7 @@ unset OMP_NUM_THREADS
 @test "[libs/TAU] Serial FORTRAN binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     export TAU_TRACE=1 TAU_PROFILE=0
     if [ ! -s F_test ];then
-    flunk "F_test binary does not exit"
+    flunk "F_test binary does not exist"
     fi
 
     run_serial_binary "tau_exec ./F_test"

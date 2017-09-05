@@ -20,7 +20,7 @@ ARGS=null
 @test "[$testname] Kokkos-MemorySpace runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./lesson_kokkos_memspace.exe
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -30,7 +30,7 @@ ARGS=null
 @test "[$testname] Tpetra-InitMPI runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./lesson_tpetra_init.exe
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -40,7 +40,7 @@ ARGS=null
 @test "[$testname] Tpetra-DataRedistribution runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./lesson_tpetra_dataredist.exe
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -50,7 +50,7 @@ ARGS=null
 @test "[$testname] Epetra-DataRedistribution runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./lesson_epetra_dataredist.exe
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -60,7 +60,7 @@ ARGS=null
 @test "[$testname] Epetra-Galeri runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./lesson_epetra_galeri.exe
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -70,7 +70,7 @@ ARGS=null
 @test "[$testname] Epetra-Ifpack runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./lesson_epetra_ifpack.exe
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -80,7 +80,7 @@ ARGS=null
 @test "[$testname] Teuchos-ParameterList runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./lesson_teuchos_pl.exe
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -90,7 +90,7 @@ ARGS=null
 @test "[$testname] Teuchos-LAPACK runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./lesson_teuchos_lapack.exe
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -100,7 +100,7 @@ ARGS=null
 @test "[$testname] Teuchos-BLAS runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./lesson_teuchos_blas.exe
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS

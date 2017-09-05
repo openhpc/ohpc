@@ -19,7 +19,7 @@ ARGS=0
 
 @test "[$testname/PCSCAEX] CPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pcscaex ];then
-	flunk "pcscaex binary does not exit"
+	flunk "pcscaex binary does not exist"
     fi
 
     run_mpi_binary ./pcscaex $ARGS $NODES $TASKS
@@ -28,7 +28,7 @@ ARGS=0
 
 @test "[$testname/PDSCAEX] DPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pdscaex ];then
-	flunk "pdscaex binary does not exit"
+	flunk "pdscaex binary does not exist"
     fi
 
     run_mpi_binary ./pdscaex $ARGS $NODES $TASKS
@@ -37,7 +37,7 @@ ARGS=0
 
 @test "[$testname/PSSCAEX] SPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s psscaex ];then
-	flunk "psscaex binary does not exit"
+	flunk "psscaex binary does not exist"
     fi
 
     run_mpi_binary ./psscaex $ARGS $NODES $TASKS
@@ -46,7 +46,7 @@ ARGS=0
 
 @test "[$testname/PZSCAEX] ZPCGESV under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pzscaex ];then
-	flunk "pzscaex binary does not exit"
+	flunk "pzscaex binary does not exist"
     fi
 
     run_mpi_binary ./pzscaex $ARGS $NODES $TASKS

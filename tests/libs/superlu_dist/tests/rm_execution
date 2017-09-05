@@ -18,7 +18,7 @@ TASKS=4
 
 @test "[$testname] PDGSSVX with full (default) options ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive ];then
-	flunk "pddrive binary does not exit"
+	flunk "pddrive binary does not exist"
     fi
 
     run_mpi_binary ./pddrive "-r 2 -c 2 g20.rua" $NODES $TASKS
@@ -27,7 +27,7 @@ TASKS=4
 
 @test "[$testname] pdgssvx_ABglobal with full (default) options ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive_ABglobal ];then
-	flunk "pddrive_ABglobal binary does not exit"
+	flunk "pddrive_ABglobal binary does not exist"
     fi
 
     run_mpi_binary ./pddrive_ABglobal "-r 1 -c 1 g20.rua" $NODES $TASKS
@@ -36,7 +36,7 @@ TASKS=4
 
 @test "[$testname] vary RHS ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive1 ];then
-	flunk "pddrive1 binary does not exit"
+	flunk "pddrive1 binary does not exist"
     fi
 
     run_mpi_binary ./pddrive1 "-r 2 -c 2 g20.rua" $NODES $TASKS
@@ -45,7 +45,7 @@ TASKS=4
 
 @test "[$testname] vary RHS ABglobal ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive1_ABglobal ];then
-	flunk "pddrive1_ABglobal binary does not exit"
+	flunk "pddrive1_ABglobal binary does not exist"
     fi
 
     run_mpi_binary ./pddrive1_ABglobal "-r 1 -c 1 g20.rua" $NODES $TASKS
@@ -54,7 +54,7 @@ TASKS=4
 
 @test "[$testname] re-use permutaion vector ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive2 ];then
-	flunk "pddrive2 binary does not exit"
+	flunk "pddrive2 binary does not exist"
     fi
 
     run_mpi_binary ./pddrive2 "-r 2 -c 2 g20.rua" $NODES $TASKS
@@ -63,7 +63,7 @@ TASKS=4
 
 @test "[$testname] re-use permutaion vector ABglobal ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" { 
     if [ ! -s pddrive2_ABglobal ];then
-	flunk "pddrive2_ABglobal binary does not exit"
+	flunk "pddrive2_ABglobal binary does not exist"
     fi
 
     run_mpi_binary ./pddrive2_ABglobal "-r 1 -c 1 g20.rua" $NODES $TASKS
@@ -72,7 +72,7 @@ TASKS=4
 
 @test "[$testname] re-use symbolic factorization ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive3 ];then
-	flunk "pddrive3 binary does not exit"
+	flunk "pddrive3 binary does not exist"
     fi
 
     run_mpi_binary ./pddrive3 "-r 2 -c 2 g20.rua" $NODES $TASKS
@@ -81,7 +81,7 @@ TASKS=4
 
 @test "[$testname] re-use symbolic factorization ABglobal ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive3_ABglobal ];then
-	flunk "pddrive3_ABglobal binary does not exit"
+	flunk "pddrive3_ABglobal binary does not exist"
     fi
 
     run_mpi_binary ./pddrive3_ABglobal "-r 1 -c 1 g20.rua" $NODES $TASKS
@@ -90,7 +90,7 @@ TASKS=4
 
 @test "[$testname] multi-grid ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s pddrive4 ];then
-	flunk "pddrive4 binary does not exit"
+	flunk "pddrive4 binary does not exist"
     fi
 
     run_mpi_binary ./pddrive4 "g20.rua" $NODES 10

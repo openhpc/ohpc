@@ -17,7 +17,7 @@ ARGS=0
 
 @test "[$testname/C_test] C_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s C_test ];then
-	flunk "C_test binary does not exit"
+	flunk "C_test binary does not exist"
     fi
 
     run_serial_binary ./C_test $ARGS
@@ -26,7 +26,7 @@ ARGS=0
 
 @test "[$testname/F_test] F_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s F_test ];then
-	flunk "F_test binary does not exit"
+	flunk "F_test binary does not exist"
     fi
 
     run_serial_binary ./F_test $ARGS
@@ -35,7 +35,7 @@ ARGS=0
 
 @test "[$testname/F90_test] F90_test under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s F90_test ];then
-	flunk "F90_test binary does not exit"
+	flunk "F90_test binary does not exist"
     fi
 
     run_serial_binary ./F90_test "< gebrd_example.d"

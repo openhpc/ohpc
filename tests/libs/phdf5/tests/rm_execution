@@ -18,7 +18,7 @@ ARGS="$LUSTRE_TEST_PATH/phdf_test.out"
 
 @test "[libs/PHDF5] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_mpi_test ];then
-	flunk "C_mpi_test binary does not exit"
+	flunk "C_mpi_test binary does not exist"
     fi
 
     run_mpi_binary -t $CMD_TIMEOUT ./C_mpi_test $ARGS $NODES $TASKS
@@ -27,7 +27,7 @@ ARGS="$LUSTRE_TEST_PATH/phdf_test.out"
 
 @test "[libs/PHDF5] Parallel Fortran binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s F_mpi_test ];then
-	flunk "F_mpi_test binary does not exit"
+	flunk "F_mpi_test binary does not exist"
     fi
 
     run_mpi_binary -t $CMD_TIMEOUT ./F_mpi_test $ARGS $NODES $TASKS

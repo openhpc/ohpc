@@ -18,7 +18,7 @@ tx2=test_static
 @test "[$tname] run test_gsl_histogram ($LMOD_FAMILY_COMPILER)" {
     pushd test_gsl_histogram
     if [ ! -s ./test_gsl_histogram.sh ];then
-        flunk "test_gsl_histogram.sh does not exit"
+        flunk "test_gsl_histogram.sh does not exist"
     fi
     ./test_gsl_histogram.sh
     assert_success
@@ -28,7 +28,7 @@ tx2=test_static
 @test "[$tname] run block under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd block
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -38,7 +38,7 @@ tx2=test_static
 @test "[$tname] run bspline under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd bspline
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -48,7 +48,7 @@ tx2=test_static
 @test "[$tname] run cblas under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd cblas
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -58,7 +58,7 @@ tx2=test_static
 @test "[$tname] run cdf under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd cdf
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -68,7 +68,7 @@ tx2=test_static
 @test "[$tname] run cheb under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd cheb
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -78,7 +78,7 @@ tx2=test_static
 @test "[$tname] run combination under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd combination
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -88,7 +88,7 @@ tx2=test_static
 @test "[$tname] run complex under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd complex
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -98,7 +98,7 @@ tx2=test_static
 @test "[$tname] run const under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd const
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -108,7 +108,7 @@ tx2=test_static
 @test "[$tname] run deriv under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd deriv
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -118,7 +118,7 @@ tx2=test_static
 @test "[$tname] run dht under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd dht
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -128,7 +128,7 @@ tx2=test_static
 @test "[$tname] run diff under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd diff
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -142,7 +142,7 @@ tx2=test_static
 
     pushd eigen
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -152,7 +152,7 @@ tx2=test_static
 @test "[$tname] run err under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd err
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -162,7 +162,7 @@ tx2=test_static
 @test "[$tname] run fft under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd fft
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -172,7 +172,7 @@ tx2=test_static
 @test "[$tname] run fit under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd fit
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -182,7 +182,7 @@ tx2=test_static
 @test "[$tname] run histogram under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd histogram
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -192,7 +192,7 @@ tx2=test_static
 @test "[$tname] run ieee-utils under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd ieee-utils
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -202,7 +202,7 @@ tx2=test_static
 @test "[$tname] run integration under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd integration
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -212,7 +212,7 @@ tx2=test_static
 @test "[$tname] run interpolation under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd interpolation
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -222,7 +222,7 @@ tx2=test_static
 @test "[$tname] run linalg under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd linalg
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -232,12 +232,12 @@ tx2=test_static
 @test "[$tname] run matrix under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd matrix
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
     if [ ! -s $tx2 ];then
-        flunk "$tx2 binary does not exit"
+        flunk "$tx2 binary does not exist"
     fi
     run_serial_binary ./$tx2
     assert_success
@@ -247,7 +247,7 @@ tx2=test_static
 @test "[$tname] run min under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd min
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -257,7 +257,7 @@ tx2=test_static
 @test "[$tname] run monte under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd monte
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -272,7 +272,7 @@ tx2=test_static
 
     pushd multifit
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -282,7 +282,7 @@ tx2=test_static
 @test "[$tname] run multilarge under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd multilarge
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
 
     run_serial_binary -t "00:03:00" ./$tx1
@@ -293,7 +293,7 @@ tx2=test_static
 @test "[$tname] run multimin under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd multimin
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -303,7 +303,7 @@ tx2=test_static
 @test "[$tname] run multiroots under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd multiroots
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -313,7 +313,7 @@ tx2=test_static
 @test "[$tname] run multiset under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd multiset
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -323,7 +323,7 @@ tx2=test_static
 @test "[$tname] run ntuple under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd ntuple
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -333,7 +333,7 @@ tx2=test_static
 @test "[$tname] run ode-initval under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd ode-initval
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -343,7 +343,7 @@ tx2=test_static
 @test "[$tname] run ode-initval2 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd ode-initval2
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -353,7 +353,7 @@ tx2=test_static
 @test "[$tname] run permutation under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd permutation
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -363,7 +363,7 @@ tx2=test_static
 @test "[$tname] run poly under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd poly
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -373,7 +373,7 @@ tx2=test_static
 @test "[$tname] run qrng under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd qrng
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -383,7 +383,7 @@ tx2=test_static
 @test "[$tname] run randist under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd randist
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -393,7 +393,7 @@ tx2=test_static
 @test "[$tname] run rng under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd rng
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -403,7 +403,7 @@ tx2=test_static
 @test "[$tname] run roots under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd roots
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -413,7 +413,7 @@ tx2=test_static
 @test "[$tname] run rstat under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd rstat
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -423,7 +423,7 @@ tx2=test_static
 @test "[$tname] run siman under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd siman
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -433,7 +433,7 @@ tx2=test_static
 @test "[$tname] run sort under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd sort
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -443,7 +443,7 @@ tx2=test_static
 @test "[$tname] run spblas under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd spblas
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -458,7 +458,7 @@ tx2=test_static
 
     pushd specfunc
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -468,7 +468,7 @@ tx2=test_static
 @test "[$tname] run splinalg under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd splinalg
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -478,7 +478,7 @@ tx2=test_static
 @test "[$tname] run spmatrix under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd spmatrix
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -488,7 +488,7 @@ tx2=test_static
 @test "[$tname] run statistics under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd statistics
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -498,7 +498,7 @@ tx2=test_static
 @test "[$tname] run sum under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd sum
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -508,7 +508,7 @@ tx2=test_static
 @test "[$tname] run sys under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd sys
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
@@ -518,12 +518,12 @@ tx2=test_static
 @test "[$tname] run vector under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd vector
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary -t "00:03:00" ./$tx1
     assert_success
     if [ ! -s $tx2 ];then
-        flunk "$tx2 binary does not exit"
+        flunk "$tx2 binary does not exist"
     fi
     run_serial_binary -t "00:03:00" ./$tx2
     assert_success
@@ -533,7 +533,7 @@ tx2=test_static
 @test "[$tname] run wavelet under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     pushd wavelet
     if [ ! -s $tx1 ];then
-        flunk "$tx1 binary does not exit"
+        flunk "$tx1 binary does not exist"
     fi
     run_serial_binary ./$tx1
     assert_success
