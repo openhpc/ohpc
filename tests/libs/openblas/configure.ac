@@ -35,9 +35,7 @@ AC_SEARCH_LIBS([cos],[m],[],[AC_MSG_ERROR([no cos available])])
 
 CFLAGS="-w -I${OPENBLAS_INC} -I ./include $CFLAGS"
 FCFLAGS="-w -I${OPENBLAS_INC} -I ./include $FCFLAGS"
-
 LDFLAGS="-w -L${OPENBLAS_LIB} -lopenblas"
-LIBS="-lopenblas $LIBS"
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile)
@@ -60,6 +58,6 @@ echo C compiler flags.............. : $CFLAGS
 echo C++ compiler flags............ : $CXXFLAGS
 echo Fortran compiler flags........ : $FCFLAGS
 echo F77 compiler flags............ : $FFLAGS
-echo Linker flags.................. : $LDFLAGS $LIBS
+echo Linker flags.................. : $LDFLAGS 
 echo 
 echo '-------------------------------------------------------------------------------------------------------------'
