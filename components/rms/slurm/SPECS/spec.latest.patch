@@ -1,5 +1,5 @@
 --- slurm-17.02.7/slurm.spec	2017-08-14 12:48:43.000000000 -0500
-+++ slurm.spec	2017-08-19 08:36:23.000000000 -0500
++++ slurm.spec	2017-09-06 13:03:04.000000000 -0500
 @@ -1,3 +1,20 @@
 +#----------------------------------------------------------------------------bh-
 +# This RPM .spec file is part of the OpenHPC project.
@@ -261,7 +261,7 @@
 -Requires: slurm-perlapi
 -%description openlava
 +Group: %{PROJ_NAME}/rms
-+Requires: %{pname}-slurm-perlapi%{PROJ_DELIM}
++Requires: %{pname}-perlapi%{PROJ_DELIM}
 +%description -n %{pname}-openlava%{PROJ_DELIM}
  OpenLava wrapper scripts used for helping migrate from OpenLava/LSF to Slurm
  

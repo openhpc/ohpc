@@ -366,7 +366,7 @@ Torque wrapper scripts used for helping migrate from Torque/PBS to Slurm
 %package -n %{pname}-openlava%{PROJ_DELIM}
 Summary: openlava/LSF wrappers for transitition from OpenLava/LSF to Slurm
 Group: %{PROJ_NAME}/rms
-Requires: %{pname}-slurm-perlapi%{PROJ_DELIM}
+Requires: %{pname}-perlapi%{PROJ_DELIM}
 %description -n %{pname}-openlava%{PROJ_DELIM}
 OpenLava wrapper scripts used for helping migrate from OpenLava/LSF to Slurm
 
