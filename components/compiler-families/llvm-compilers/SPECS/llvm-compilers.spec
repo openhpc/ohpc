@@ -18,7 +18,7 @@
 %global clang_sha 1210030915d1e1441d62eea54976f4ced7f6ad88
 %global flang_sha cab3fc47849d7ba8effef8474b9aae2cc60e8c57
 
-%global pname llvm-compilers
+%global pname llvm4-compilers
 %global major_ver 4
 
 Summary:   The LLVM Compiler Infrastructure
