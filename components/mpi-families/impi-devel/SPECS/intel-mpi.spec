@@ -18,7 +18,7 @@ Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
 Version:   %{year}
 Source1:   OHPC_macros
-Release:   1
+Release:   2
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/mpi-families
@@ -42,9 +42,9 @@ suite.
 %build
 
 %install
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu7/impi
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/intel/.impi
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/gnu7/impi
 
 %pre
 
@@ -66,7 +66,8 @@ fi
 
 # Verify min version expectations
 
-min_ver="2016.0"
+# 5.1.1 is the MPI version shipped with 2016.
+min_ver="5.1.1"
 
 for file in ${versions}; do 
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
@@ -83,6 +84,7 @@ done
 %post
 
 mpicc_subpath="linux/mpi/intel64/bin/mpicc"
+
 scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
 versions=`rpm -qal | grep ${mpicc_subpath}$`
@@ -130,7 +132,7 @@ for file in ${versions}; do
 	    
     # Module header
 
-    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/${version}
+    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/.impi/${version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -159,11 +161,17 @@ prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/intel-impi
 family "MPI"
 EOF
 
+    # Sync with ICC versions
+    for D in %{OHPC_MODULEDEPS}/versioned/intel/*;do
+      %{__mkdir_p} ${D}/impi
+      %{__ln_s} %{OHPC_MODULEDEPS}/intel/.impi/${version} ${D}/impi/${version}
+    done
+ 
     # Append with environment vars parsed directlry from mpivars.sh
-    ${scanner} ${topDir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/intel/impi/${version} || exit 1
+    ${scanner} ${topDir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/intel/.impi/${version} || exit 1
 
     # Prepend bin_ohpc
-    %{__cat} << EOF >> %{OHPC_MODULEDEPS}/intel/impi/${version}
+    %{__cat} << EOF >> %{OHPC_MODULEDEPS}/intel/.impi/${version}
 #
 # Prefer bin_ohpc to allow developers to use standard mpicc, mpif90,
 # etc to access Intel toolchain.
@@ -172,7 +180,7 @@ prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 EOF
 
     # Version file
-    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/.version.${version}
+    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/.impi/.version.${version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "${version}"
 EOF
@@ -223,15 +231,17 @@ EOF
     perl -pi -e 's!moduledeps/gnu-impi!moduledeps/gnu7-impi!' %{OHPC_MODULEDEPS}/gnu7/impi/${version}
     
     # Inventory for later removal
-    echo "%{OHPC_MODULEDEPS}/intel/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-    echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
-    echo "%{OHPC_MODULEDEPS}/gnu/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-    echo "%{OHPC_MODULEDEPS}/gnu/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-    echo "%{OHPC_MODULEDEPS}/gnu7/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-    echo "%{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
+    for F in %{OHPC_MODULEDEPS}/versioned/intel/*/impi/${version};do
+        echo "${F}" >> %{OHPC_MODULEDEPS}/intel/.impi/.manifest
+    done
+    echo "%{OHPC_MODULEDEPS}/intel/.impi/${version}" >> %{OHPC_MODULEDEPS}/intel/.impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/intel/.impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/.impi/.manifest   
+    echo "%{OHPC_MODULEDEPS}/gnu/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/.impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/gnu/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/.impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/gnu7/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/.impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/.impi/.manifest   
 
 done
-
 
 %postun
 if [ "$1" = 0 ]; then
@@ -248,11 +258,11 @@ if [ "$1" = 0 ]; then
 	fi
     done
 
-    if [ -s %{OHPC_MODULEDEPS}/intel/impi/.manifest ];then
-	for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
+    if [ -s %{OHPC_MODULEDEPS}/intel/.impi/.manifest ];then
+	for file in `cat %{OHPC_MODULEDEPS}/intel/.impi/.manifest`; do
             rm $file
 	done
-	rm -f %{OHPC_MODULEDEPS}/intel/impi/.manifest
+	rm -f %{OHPC_MODULEDEPS}/intel/.impi/.manifest
     fi
 fi
 

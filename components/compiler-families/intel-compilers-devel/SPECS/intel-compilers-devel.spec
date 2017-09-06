@@ -17,7 +17,7 @@
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
 Version:   %{year}
-Release:   1
+Release:   2
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
@@ -47,8 +47,7 @@ Studio compiler suite.
 
 install -D -m755 %{SOURCE2}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
-
-
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPSS}/versioned/intel
 
 %pre
 
@@ -87,6 +86,8 @@ done
 %post
 
 icc_subpath="linux/bin/intel64/icc"
+mpiicc_subpath="linux/mpi/intel64/bin/mpiicc"
+
 scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
 versions=`rpm -qal | grep ${icc_subpath}$`
@@ -105,7 +106,12 @@ echo "Creating OpenHPC-style modulefiles for local PXSE compiler installation(s)
 for file in ${versions}; do
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
     topDir=`echo $file | sed "s|$icc_subpath||"`
-    echo "--> Installing modulefile for version=${version}"
+    impi_version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${topDir}${mpiicc_subpath}`
+    if [ -n "${impi_version}" ];then
+        echo "--> Installing modulefile for version=${version}, impi_version=${impi_version}"
+    else
+        echo "--> Installing modulefile for version=${version}"
+    fi
 
     # Module header
     %{__cat} << EOF > %{OHPC_MODULES}/intel/${version}
@@ -173,11 +179,25 @@ prepend-path  LD_LIBRARY_PATH    ${topDir}/linux/mkl/lib/intel64
 
 EOF
 
+    # Deal with sime module version dependent issues
+    %{__mkdir} -p %{OHPC_MODULEDEPS}/versioned/intel/${version}
+
+    # Default Version file for impi
+    if [ -n "${impi_version}" ];then
+        %{__mkdir} -p %{OHPC_MODULEDEPS}/versioned/intel/${version}/impi
+        %{__cat} << EOF > %{OHPC_MODULEDEPS}/versioned/intel/${version}/impi/.version
+#%Module1.0#####################################################################
+set	ModulesVersion	"${impi_version}"
+EOF
+        echo "prepend-path	MODULEPATH	%{OHPC_MODULEDEPS}/versioned/intel/${version}" >> %{OHPC_MODULES}/intel/${version}
+        echo "%{OHPC_MODULEDEPS}/versioned/intel/${version}/impi" >> %{OHPC_MODULES}/intel/.manifest
+    fi
+
     # Inventory for later removal
     echo "%{OHPC_MODULES}/intel/${version}" >> %{OHPC_MODULES}/intel/.manifest
     echo "%{OHPC_MODULES}/intel/.version.${version}" >> %{OHPC_MODULES}/intel/.manifest
+    echo "%{OHPC_MODULEDEPS}/versioned/intel/${version}" >> %{OHPC_MODULES}/intel/.manifest
     echo "%{OHPC_MODULEDEPS}/gnu/mkl/${version}" >> %{OHPC_MODULES}/intel/.manifest
-
 done
 
 %postun
