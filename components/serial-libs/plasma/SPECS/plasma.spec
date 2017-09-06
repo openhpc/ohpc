@@ -29,7 +29,7 @@ Version: 2.8.0
 Release: 1
 Summary: Parallel Linear Algebra Software for Multicore Architectures
 License: BSD-3-Clause
-Group:     %{PROJ_NAME}/parallel-libs
+Group:     %{PROJ_NAME}/serial-libs
 URL: https://bitbucket.org/icl/%{pname}		
 Source0: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}_%{version}.tar.gz
 Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{version}.tar.gz
