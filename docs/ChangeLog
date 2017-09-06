@@ -1,5 +1,134 @@
-# -*- mode: sh; fill-column: 120; -*- 
+# -*- mode: sh; fill-column: 120; -*-
 
+Version 1.3.2 (08 September 2017)
+
+[Important Highlights/Notices]
+
+  * There are significant changes included in the warewulf-httpd.conf file that ships with the
+    warewulf-provision-server-ohpc package. If upgrading from a version prior to 1.3, the updated config file will be
+    saved as /etc/httpd/conf.d/warewulf-httpd.conf.rpmnew locally. You will need to copy this new version to the
+    production file and restart the web server to ensure correct provisioning behavior. As an example for CentOS:
+
+    [sms]# cp /etc/httpd/conf.d/warewulf-httpd.conf.rpmnew /etc/httpd/conf.d/warewulf-httpd.conf
+    [sms]# systemctl restart httpd
+
+[General]
+
+  * update backend OBS build system to avoid false package dependences for CentOS (https://github.com/openhpc/ohpc/issues/451)
+  * update SLURM build to support cgroup plugin (https://github.com/openhpc/ohpc/issues/476)
+  * relocation of several package installs into utils/ subdirectory (https://github.com/openhpc/ohpc/issues/486)
+  * document enablement of dhcpd services to recipes (https://github.com/openhpc/ohpc/issues/492)
+  * adoption of newer 'depends_on' syntax to define Lmod dependencies (https://github.com/openhpc/ohpc/issues/495)
+  * avoid variable replacement for binary sync files in Warewulf (https://github.com/openhpc/ohpc/issues/531)
+  * llvm4 compiler variant introduced (providing clang, clang++, and flang compiler frontends)
+  * variety of component version updates and other additions highlighted below
+
+
+[Component Additions]
+  * cmake-ohpc                               (3.9.1)
+  * llvm4-compilers-ohpc                     (4.0.1)
+  * plasma-gnu7-ohpc                         (2.8.0)
+  * plasma-intel-ohpc                        (2.8.0)
+  * pnetcdf-gnu7-impi-ohpc                   (1.8.1)
+  * pnetcdf-gnu7-mpich-ohpc                  (1.8.1)
+  * pnetcdf-gnu7-mvapich2-ohpc               (1.8.1)
+  * pnetcdf-gnu7-openmpi-ohpc                (1.8.1)
+  * pnetcdf-intel-impi-ohpc                  (1.8.1)
+  * pnetcdf-intel-mpich-ohpc                 (1.8.1)
+  * pnetcdf-intel-mvapich2-ohpc              (1.8.1)
+  * pnetcdf-intel-openmpi-ohpc               (1.8.1)
+  * ptscotch-gnu7-impi-ohpc                  (6.0.4)
+  * ptscotch-gnu7-mpich-ohpc                 (6.0.4)
+  * ptscotch-gnu7-mvapich2-ohpc              (6.0.4)
+  * ptscotch-gnu7-openmpi-ohpc               (6.0.4)
+  * ptscotch-intel-impi-ohpc                 (6.0.4)
+  * ptscotch-intel-mpich-ohpc                (6.0.4)
+  * ptscotch-intel-mvapich2-ohpc             (6.0.4)
+  * ptscotch-intel-openmpi-ohpc              (6.0.4)
+  * scotch-gnu7-ohpc                         (6.0.4)
+  * scotch-intel-ohpc                        (6.0.4)
+  * slepc-gnu7-impi-ohpc                     (3.7.4)
+  * slepc-gnu7-mpich-ohpc                    (3.7.4)
+  * slepc-gnu7-mvapich2-ohpc                 (3.7.4)
+  * slepc-gnu7-openmpi-ohpc                  (3.7.4)
+  * slepc-intel-impi-ohpc                    (3.7.4)
+  * slepc-intel-mpich-ohpc                   (3.7.4)
+  * slepc-intel-mvapich2-ohpc                (3.7.4)
+  * slepc-intel-openmpi-ohpc                 (3.7.4)
+  * slurm-contribs-ohpc                      (17.02.7)
+  * slurm-openlava-ohpc                      (17.02.7)
+
+[Component Version Changes]
+
+* EasyBuild-ohpc                           (3.2.1 -> 3.3.1)
+  * R-gnu7-ohpc                              (3.3.3 -> 3.4.1)
+  * adios-gnu7-impi-ohpc                     (1.11.0 -> 1.12.0)
+  * adios-gnu7-mpich-ohpc                    (1.11.0 -> 1.12.0)
+  * adios-gnu7-mvapich2-ohpc                 (1.11.0 -> 1.12.0)
+  * adios-gnu7-openmpi-ohpc                  (1.11.0 -> 1.12.0)
+  * adios-intel-impi-ohpc                    (1.11.0 -> 1.12.0)
+  * adios-intel-mpich-ohpc                   (1.11.0 -> 1.12.0)
+  * adios-intel-mvapich2-ohpc                (1.11.0 -> 1.12.0)
+  * adios-intel-openmpi-ohpc                 (1.11.0 -> 1.12.0)
+  * docs-ohpc                                (1.3.1 -> 1.3.2)
+  * ganglia-web-ohpc                         (3.7.1 -> 3.7.2)
+  * gsl-gnu7-ohpc                            (2.3 -> 2.4)
+  * hdf5-gnu7-ohpc                           (1.10.0 -> 1.10.1)
+  * hdf5-intel-ohpc                          (1.10.0 -> 1.10.1)
+  * hwloc-ohpc                               (1.11.6 -> 1.11.7)
+  * hypre-gnu7-impi-ohpc                     (2.11.1 -> 2.11.2)
+  * hypre-gnu7-mpich-ohpc                    (2.11.1 -> 2.11.2)
+  * hypre-gnu7-mvapich2-ohpc                 (2.11.1 -> 2.11.2)
+  * hypre-gnu7-openmpi-ohpc                  (2.11.1 -> 2.11.2)
+  * hypre-intel-impi-ohpc                    (2.11.1 -> 2.11.2)
+  * hypre-intel-mpich-ohpc                   (2.11.1 -> 2.11.2)
+  * hypre-intel-mvapich2-ohpc                (2.11.1 -> 2.11.2)
+  * hypre-intel-openmpi-ohpc                 (2.11.1 -> 2.11.2)
+  * kmod-lustre-client-ohpc                  (2.9.0 -> 2.10.0)
+  * kmod-lustre-client-ohpc-tests            (2.9.0 -> 2.10.0)
+  * lmod-ohpc                                (7.4.8 -> 7.6.1)
+  * lustre-client-ohpc                       (2.9.0 -> 2.10.0)
+  * lustre-client-ohpc-tests                 (2.9.0 -> 2.10.0)
+  * openblas-gnu7-ohpc                       (0.2.19 -> 0.2.20)
+  * pdsh-mod-slurm-ohpc                      (2.31 -> 2.33)
+  * pdsh-ohpc                                (2.31 -> 2.33)
+  * pdtoolkit-gnu7-ohpc                      (3.23 -> 3.24)
+  * pdtoolkit-intel-ohpc                     (3.23 -> 3.24)
+  * phdf5-gnu7-impi-ohpc                     (1.10.0 -> 1.10.1)
+  * phdf5-gnu7-mpich-ohpc                    (1.10.0 -> 1.10.1)
+  * phdf5-gnu7-mvapich2-ohpc                 (1.10.0 -> 1.10.1)
+  * phdf5-gnu7-openmpi-ohpc                  (1.10.0 -> 1.10.1)
+  * phdf5-intel-impi-ohpc                    (1.10.0 -> 1.10.1)
+  * phdf5-intel-mpich-ohpc                   (1.10.0 -> 1.10.1)
+  * phdf5-intel-mvapich2-ohpc                (1.10.0 -> 1.10.1)
+  * phdf5-intel-openmpi-ohpc                 (1.10.0 -> 1.10.1)
+  * python-numpy-gnu7-ohpc                   (1.12.1 -> 1.13.1)
+  * python-numpy-intel-ohpc                  (1.12.1 -> 1.13.1)
+  * python-scipy-gnu7-mpich-ohpc             (0.19.0 -> 0.19.1)
+  * python-scipy-gnu7-mvapich2-ohpc          (0.19.0 -> 0.19.1)
+  * python-scipy-gnu7-openmpi-ohpc           (0.19.0 -> 0.19.1)
+  * scorep-gnu7-impi-ohpc                    (3.0 -> 3.1)
+  * scorep-gnu7-mpich-ohpc                   (3.0 -> 3.1)
+  * scorep-gnu7-mvapich2-ohpc                (3.0 -> 3.1)
+  * scorep-gnu7-openmpi-ohpc                 (3.0 -> 3.1)
+  * scorep-intel-impi-ohpc                   (3.0 -> 3.1)
+  * scorep-intel-mpich-ohpc                  (3.0 -> 3.1)
+  * scorep-intel-mvapich2-ohpc               (3.0 -> 3.1)
+  * scorep-intel-openmpi-ohpc                (3.0 -> 3.1)
+  * singularity-ohpc                         (2.3 -> 2.3.1)
+  * slurm-devel-ohpc                         (16.05.10 -> 17.02.7)
+  * slurm-munge-ohpc                         (16.05.10 -> 17.02.7)
+  * slurm-ohpc                               (16.05.10 -> 17.02.7)
+  * slurm-pam_slurm-ohpc                     (16.05.10 -> 17.02.7)
+  * slurm-perlapi-ohpc                       (16.05.10 -> 17.02.7)
+  * slurm-plugins-ohpc                       (16.05.10 -> 17.02.7)
+  * slurm-slurmdbd-ohpc                      (16.05.10 -> 17.02.7)
+  * slurm-sql-ohpc                           (16.05.10 -> 17.02.7)
+  * slurm-torque-ohpc                        (16.05.10 -> 17.02.7)
+  * test-suite-ohpc                          (1.3.1 -> 1.3.2)
+  * valgrind-ohpc                            (3.12.0 -> 3.13.0)
+
+----------------------------------------------------------------------------------------------------------------------
 Version 1.3.1 (16 June 2017)
 
 [Important Highlights/Notices]
