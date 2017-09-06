@@ -83,7 +83,7 @@ intel-mpi-devel-ohpc 2017 https://github.com/openhpc/ohpc ohpc/mpi-families Open
 kmod-lustre-client-ohpc 2.10.0 https://wiki.hpdd.intel.com/ System Environment/Kernel lustre-client-ohpc kernel module(s)
 kmod-lustre-client-ohpc-tests 2.10.0 https://wiki.hpdd.intel.com/ System Environment/Kernel lustre-client-ohpc-tests kernel module(s)
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
-llvm-compilers-ohpc 4.0.1 http://www.llvm.org ohpc/compiler-families The LLVM Compiler Infrastructure
+llvm4-compilers-ohpc 4.0.1 http://www.llvm.org ohpc/compiler-families The LLVM Compiler Infrastructure
 lmod-defaults-gnu-impi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu-mpich-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu-mvapich2-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
@@ -286,8 +286,8 @@ phdf5-intel-impi-ohpc 1.10.1 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general
 phdf5-intel-mpich-ohpc 1.10.1 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-intel-mvapich2-ohpc 1.10.1 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-intel-openmpi-ohpc 1.10.1 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
-plasma-gnu7-ohpc 2.8.0 https://bitbucket.org/icl/plasma ohpc/parallel-libs Parallel Linear Algebra Software for Multicore Architectures
-plasma-intel-ohpc 2.8.0 https://bitbucket.org/icl/plasma ohpc/parallel-libs Parallel Linear Algebra Software for Multicore Architectures
+plasma-gnu7-ohpc 2.8.0 https://bitbucket.org/icl/plasma ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
+plasma-intel-ohpc 2.8.0 https://bitbucket.org/icl/plasma ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
 pnetcdf-gnu7-impi-ohpc 1.8.1 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu7-mpich-ohpc 1.8.1 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu7-mvapich2-ohpc 1.8.1 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
