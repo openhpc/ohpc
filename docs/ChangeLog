@@ -17,6 +17,8 @@ Version 1.3.2 (08 September 2017)
   * update backend OBS build system to avoid false package dependences for CentOS (https://github.com/openhpc/ohpc/issues/451)
   * update SLURM build to support cgroup plugin (https://github.com/openhpc/ohpc/issues/476)
   * relocation of several package installs into utils/ subdirectory (https://github.com/openhpc/ohpc/issues/486)
+  * updated PXSE compatability packages to use pre-install scriptlet to verify locally installed versions instead of
+    specific package dependency (https://github.com/openhpc/ohpc/issues/479)
   * document enablement of dhcpd services to recipes (https://github.com/openhpc/ohpc/issues/492)
   * adoption of newer 'depends_on' syntax to define Lmod dependencies (https://github.com/openhpc/ohpc/issues/495)
   * avoid variable replacement for binary sync files in Warewulf (https://github.com/openhpc/ohpc/issues/531)
@@ -60,7 +62,7 @@ Version 1.3.2 (08 September 2017)
 
 [Component Version Changes]
 
-* EasyBuild-ohpc                           (3.2.1 -> 3.3.1)
+  * EasyBuild-ohpc                           (3.2.1 -> 3.3.1)
   * R-gnu7-ohpc                              (3.3.3 -> 3.4.1)
   * adios-gnu7-impi-ohpc                     (1.11.0 -> 1.12.0)
   * adios-gnu7-mpich-ohpc                    (1.11.0 -> 1.12.0)
