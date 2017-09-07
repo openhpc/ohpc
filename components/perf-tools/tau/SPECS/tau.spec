@@ -88,7 +88,7 @@ export fcomp=mpiifort
 export fcomp=gfortran
 %endif
 
-%if %{mpi_family} == impi
+%if "%{mpi_family}" == "impi"
 export MPI_INCLUDE_DIR=$I_MPI_ROOT/include64
 export MPI_LIB_DIR=$I_MPI_ROOT/lib64
 %else
@@ -152,7 +152,7 @@ sed -i "s|$TAUROOT|%{install_path}|g" $(egrep -IR "$TAUROOT" %buildroot%{install
 sed -i "s|/x86_64/lib|/lib|g" $(egrep -IR "/x86_64/lib" %buildroot%{install_path}|awk -F : '{print $1}')
 
 # replace hard paths with env vars
-%if %{mpi_family} == impi
+%if "%{mpi_family}" == "impi"
 sed -i "s|$I_MPI_ROOT|\$\{I_MPI_ROOT\}|g" $(egrep -IR "$I_MPI_ROOT" %buildroot%{install_path}|awk -F : '{print $1}')
 %else
 sed -i "s|$MPI_DIR|\$\{MPI_DIR\}|g" $(egrep -IR "$MPI_DIR" %buildroot%{install_path}|awk -F : '{print $1}')
@@ -162,7 +162,7 @@ sed -i "s|$PDTOOLKIT_DIR|\$\{PDTOOLKIT_DIR\}|g" $(egrep -IR "$PDTOOLKIT_DIR" %bu
 
 # link other bindings
 pushd %{buildroot}%{install_path}/lib
-%if %{compiler_family} == intel
+%if "%{compiler_family}" == "intel"
 ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
 %else
 ln -s shared-callpath-param-papi-mpi-pdt-openmp-profile-trace shared-mpi

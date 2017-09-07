@@ -13,8 +13,35 @@
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name/config
-%define pname openmpi
-%define with_openib 1
+%global pname openmpi
+%global with_openib 1
+
+# needed for provides
+%global rel 1%{?dist}
+
+%if "%{mpi_family}" == "openmpiv1.10"
+%global ompi_version 1.10.7
+%global ompi_source http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{ompi_version}.tar.bz2
+Provides: openmpi-%{compiler_family}%{PROJ_DELIM} = %{ompi_version}-%{rel}
+Obsoletes: openmpi-%{compiler_family}%{PROJ_DELIM} < 1.10.7-2
+%endif
+
+%if "%{mpi_family}" == "openmpiv2.0"
+%global ompi_version 2.0.3
+%global ompi_source http://www.open-mpi.org/software/ompi/v2.0/downloads/%{pname}-%{ompi_version}.tar.bz2
+%endif
+
+%if "%{mpi_family}" == "openmpiv2.1"
+%global ompi_version 2.1.1
+%global ompi_source http://www.open-mpi.org/software/ompi/v2.1/downloads/%{pname}-%{ompi_version}.tar.bz2
+%endif
+
+%if "%{mpi_family}" == "openmpiv3.0"
+%global ompi_version 3.0.0rc1
+%global ompi_source http://www.open-mpi.org/software/ompi/v3.0/downloads/%{pname}-%{ompi_version}.tar.bz2
+%endif
+
+%global rpmname %{mpi_family}
 
 %ifarch aarch64
 %define with_psm 0
@@ -32,20 +59,22 @@
 Summary:   A powerful implementation of MPI
 
 %if 0%{with_psm2}
-Name:      %{pname}-psm2-%{compiler_family}%{PROJ_DELIM}
+Name:      %{rpmname}-psm2-%{compiler_family}%{PROJ_DELIM}
 %else
-Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:      %{rpmname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-Version:   1.10.7
-Release:   1%{?dist}
+Version:   %{ompi_version}
+Release:   %{rel}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{version}.tar.bz2
+Source0:   %{ompi_source}
 Source1:   OHPC_macros
 Source3:   pbs-config
 Patch0:    config.pbs.patch
+Patch1:    openmpi-2.1-pbs-config.patch
+Patch2:    openmpi-3.0-pbs-config.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -89,8 +118,8 @@ BuildRequires:  openssl-devel
 %if %{with_psm2}
 BuildRequires:  libpsm2-devel >= 10.2.0
 Requires:       libpsm2 >= 10.2.0
-Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
+Provides: %{rpmname}-%{compiler_family}%{PROJ_DELIM}
+Conflicts: %{rpmname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 Requires: prun%{PROJ_DELIM}
@@ -111,7 +140,15 @@ Open MPI jobs.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%if "%{mpi_family}" != "openmpiv3.0" && "%{mpi_family}" != "openmpiv2.1"
 %patch0 -p0
+%endif
+%if "%{mpi_family}" == "openmpiv2.1"
+%patch1 -p1
+%endif
+%if "%{mpi_family}" == "openmpiv3.0"
+%patch2 -p1
+%endif
 
 %build
 # OpenHPC compiler designation
@@ -180,7 +217,7 @@ setenv          MPI_DIR             %{install_path}
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/man
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
-prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{pname}
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{rpmname}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 family "MPI"
@@ -196,12 +233,10 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %defattr(-,root,root,-)
-%{OHPC_PUB}
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%{install_path}
 %doc NEWS
 %doc README
 %doc LICENSE

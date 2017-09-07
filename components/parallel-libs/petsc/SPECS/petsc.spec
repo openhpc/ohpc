@@ -79,8 +79,8 @@ module load scalapack openblas
         --with-blas-lapack-lib=$OPENBLAS_LIB/libopenblas.so \
         --with-scalapack-dir=$SCALAPACK_DIR \
 %endif
-%if %{mpi_family} == impi
-%if %{compiler_family} == intel
+%if "%{mpi_family}" == "impi"
+%if "%{compiler_family}" == "intel"
         --with-cc=mpiicc    \
         --with-cxx=mpiicpc  \
         --with-fc=mpiifort  \

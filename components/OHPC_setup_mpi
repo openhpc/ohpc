@@ -32,6 +32,14 @@ fi
 
 if [ "$OHPC_MPI_FAMILY" = "openmpi" ]; then
     module load openmpi
+elif [ "$OHPC_MPI_FAMILY" = "openmpiv1.10" ]; then
+    module load openmpi/1.10.7
+elif [ "$OHPC_MPI_FAMILY" = "openmpiv2.0" ]; then
+    module load openmpi/2.0.3
+elif [ "$OHPC_MPI_FAMILY" = "openmpiv2.1" ]; then
+    module load openmpi/2.1.1
+elif [ "$OHPC_MPI_FAMILY" = "openmpiv3.0" ]; then
+    module load openmpi/3.0.0rc1
 elif [ "$OHPC_MPI_FAMILY" = "impi" ]; then
     module load impi
 elif [ "$OHPC_MPI_FAMILY" = "mvapich2" ]; then
@@ -42,6 +50,3 @@ else
     echo "Unsupported OHPC_MPI_FAMILY -> $OHPC_MPI_FAMILY"
     exit 1
 fi
-
-
-

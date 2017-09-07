@@ -57,7 +57,24 @@ BuildRequires: ohpc-buildroot
 # variables via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %global compiler_family gnu7}
+
+# mpi_family can either be mvapich2, mpich or different openmpi versions.
+# Historically openmpi was the 1.10 branch so that if openmpi is selected
+# it will automatically be replaced with openmpiv1.10. This can be removed
+# once the 1.10 branch is no longer part of OpenHPC.
+
 %{!?mpi_family: %global mpi_family openmpi}
+
+%if "%{mpi_family}" == "openmpi"
+	# Special treatment for "openmpi". "openmpi" used to be
+	# Open MPI 1.10.x. Now that multiple Open MPI versions
+	# are available in OpenHPC this re-defines %%{mpi_family}
+	# to openmpi-version
+	%global mpi_family openmpiv1.10
+%endif
+
+# This returns 'openmpi' without version suffix, if openmpi* is selected.
+%global openmpi %(eval echo -n %{mpi_family} | cut -c 1-7)
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
@@ -91,18 +108,9 @@ Requires:      gnu-7-compilers%{PROJ_DELIM}
 %if "%{mpi_family}" == "impi"
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
-%endif
-%if "%{mpi_family}" == "mpich"
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if "%{mpi_family}" == "mvapich2"
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if "%{mpi_family}" == "openmpi"
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+%else
+BuildRequires: %{mpi_family}-%{compiler_family}%{PROJ_DELIM}
+Requires:      %{mpi_family}-%{compiler_family}%{PROJ_DELIM}
 %endif
 %endif
 
