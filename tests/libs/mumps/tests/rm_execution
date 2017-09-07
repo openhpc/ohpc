@@ -20,7 +20,7 @@ ARGS=null
 @test "[$testname] C (double precision) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./C_double
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -30,7 +30,7 @@ ARGS=null
 @test "[$testname] Fortran (single precision) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./F_single
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -40,7 +40,7 @@ ARGS=null
 @test "[$testname] Fortran (double precision) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./F_double
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -50,7 +50,7 @@ ARGS=null
 @test "[$testname] Fortran (complex) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./F_complex
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS
@@ -60,7 +60,7 @@ ARGS=null
 @test "[$testname] Fortran (double complex) runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=./F_doublecomplex
     if [ ! -s $EXE ];then
-        flunk "$EXE binary does not exit"
+        flunk "$EXE binary does not exist"
     fi
 
     run_mpi_binary $EXE $ARGS $NODES $TASKS

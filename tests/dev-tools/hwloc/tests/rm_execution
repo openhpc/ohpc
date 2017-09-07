@@ -13,7 +13,7 @@ rm=$RESOURCE_MANAGER
 
 @test "[dev-tools/hwloc] lstopo runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s $HWLOC_BIN/lstopo ];then
-    flunk "lstopo binary does not exit"
+    flunk "lstopo binary does not exist"
     fi
 
     run_serial_binary $HWLOC_BIN/lstopo
@@ -22,7 +22,7 @@ rm=$RESOURCE_MANAGER
 
 @test "[dev-tools/hwloc] hwloc_hello runs under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s ./hwloc_hello ];then
-    flunk "hwloc_hello binary does not exit"
+    flunk "hwloc_hello binary does not exist"
     fi
 
     run_serial_binary ./hwloc_hello

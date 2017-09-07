@@ -48,6 +48,7 @@ BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 1.8.8
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -149,13 +150,7 @@ module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
-# Require generic netcdf
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded netcdf]  } {
-        module load netcdf
-    }
-}
+depends-on netcdf
 
 set             version             %{version}
 
@@ -183,7 +178,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc COPYRIGHT
 %doc F03Interfaces_LICENSE

@@ -1,0 +1,88 @@
+From 29fbd8ca10bf6d672d25439a025c460001fad33e Mon Sep 17 00:00:00 2001
+From: Bruno Travouillon <devel@travouillon.fr>
+Date: Wed, 28 Jun 2017 22:00:33 +0200
+Subject: [PATCH] Ticket #201: Check existence of tuning_file
+
+Also add an assert in Install as config_file must be defined.
+Add an additional test in FileSystemTest.
+
+Closes #201
+
+Change-Id: I8e329c1cab937d5a5e5c7bbf1359651e810509c5
+---
+ lib/Shine/Lustre/Actions/Install.py |  1 +
+ lib/Shine/Lustre/FileSystem.py      | 12 +++++++-----
+ tests/Lustre/FileSystemTest.py      | 10 ++++++++--
+ 3 files changed, 16 insertions(+), 7 deletions(-)
+
+diff --git a/lib/Shine/Lustre/Actions/Install.py b/lib/Shine/Lustre/Actions/Install.py
+index f31e862..0e9d1b0 100644
+--- a/lib/Shine/Lustre/Actions/Install.py
++++ b/lib/Shine/Lustre/Actions/Install.py
+@@ -33,6 +33,7 @@ class Install(CommonAction):
+ 
+     def __init__(self, nodes, fs, config_file, comps=None, **kwargs):
+         CommonAction.__init__(self)
++        assert config_file is not None
+         self.nodes = nodes
+         self.fs = fs
+         self.config_file = config_file
+diff --git a/lib/Shine/Lustre/FileSystem.py b/lib/Shine/Lustre/FileSystem.py
+index 81c4048..cebdbeb 100644
+--- a/lib/Shine/Lustre/FileSystem.py
++++ b/lib/Shine/Lustre/FileSystem.py
+@@ -413,7 +413,7 @@ def _prepare(self, action, comps=None, groupby=None, reverse=False,
+                     else:
+                         act = self._proxy_action(action, srv.hostname,
+                                                  comps, **kwargs)
+-                        if tunings:
++                        if tunings and tunings.filename:
+                             copy = Install(srv.hostname, self, tunings.filename,
+                                            comps=comps, **kwargs)
+                             act.depends_on(copy)
+@@ -584,11 +584,13 @@ def tune(self, tuning_model, comps=None, **kwargs):
+             else:
+                 act = self._proxy_action('tune', server.hostname, srvcomps,
+                                          **kwargs)
+-                copy = Install(server.hostname, self, tuning_model.filename,
+-                               comps=srvcomps, **kwargs)
+-                act.depends_on(copy)
++                if tuning_model.filename:
++                    copy = Install(server.hostname, self, tuning_model.filename,
++                                   comps=srvcomps, **kwargs)
++                    act.depends_on(copy)
++                    actions.add(copy)
++
+                 actions.add(act)
+-                actions.add(copy)
+ 
+         # Run local actions and FSProxyAction
+         actions.launch()
+diff --git a/tests/Lustre/FileSystemTest.py b/tests/Lustre/FileSystemTest.py
+index 8e04c64..c2e2db8 100644
+--- a/tests/Lustre/FileSystemTest.py
++++ b/tests/Lustre/FileSystemTest.py
+@@ -38,8 +38,8 @@ def _graph2obj(graph):
+         return result
+ 
+ class FakeTunings(object):
+-    def __init__(self):
+-        self.filename = 'foo'
++    def __init__(self, filename='foo'):
++        self.filename = filename
+ 
+ 
+ class PrepareTest(unittest.TestCase):
+@@ -88,6 +88,12 @@ def test_proxy_tunings(self):
+                             {'NAME': 'proxy', 'action': 'dummy'}]]])
+         self.assertEqual(str(graph[0][0][1].nodes), 'remote')
+ 
++        # With tunings but without tuning_file
++        graph = self.fs._prepare('dummy', tunings=FakeTunings(None))
++        self.assertEqual(_graph2obj(graph),
++                         [[[{'NAME': 'proxy', 'action': 'dummy'}]]])
++        self.assertEqual(str(graph[0][0][0].nodes), 'remote')
++
+     def test_local_tunings(self):
+         """prepare is ok with or without tunings"""
+         comp = self.fs.new_target(self.localsrv, 'mgt', 0, '/dev/fakedev')

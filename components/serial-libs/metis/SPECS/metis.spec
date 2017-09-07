@@ -123,8 +123,6 @@ EOF
 
 %files
 %defattr(-,root,root)
-%{OHPC_HOME}
-
 %{OHPC_PUB}
 %doc BUILD.txt Changelog Install.txt LICENSE.txt
 

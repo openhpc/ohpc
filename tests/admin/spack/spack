@@ -30,3 +30,12 @@ setup() {
     spack install libelf
     assert_success
 }
+
+@test "[spack] build with llvm" {
+    module load llvm4
+    spack compiler find
+    assert_success
+
+    spack install libelf%clang
+    assert_success
+}

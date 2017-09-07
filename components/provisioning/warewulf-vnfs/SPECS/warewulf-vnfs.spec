@@ -26,6 +26,7 @@ Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source2: OHPC_macros
+Source3: rhel-7.tmpl
 
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -84,13 +85,14 @@ cd %{dname}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
+install -m 755 %{SOURCE3} $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/*
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 
 %files
 %defattr(-,root,root)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/vnfs.conf

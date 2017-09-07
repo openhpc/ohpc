@@ -18,7 +18,7 @@ TASKS=8
 @test "[$testname] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     binary=arrays_write
     if [ ! -x $binary ];then
-	flunk "$binary binary does not exit"
+	flunk "$binary binary does not exist"
     fi
 
     run_mpi_binary ./${binary} "" $NODES $TASKS 
@@ -28,7 +28,7 @@ TASKS=8
 @test "[$testname] MPI F90 binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     binary=scalars_write
     if [ ! -x $binary ];then
-	flunk "$binary binary does not exit"
+	flunk "$binary binary does not exist"
     fi
 
     run_mpi_binary ./${binary} "" $NODES $TASKS

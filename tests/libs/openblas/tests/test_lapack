@@ -1,0 +1,36 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+PKG=OPENBLAS
+module=openblas
+testname=libs/OpenBLAS
+
+@test "[$testname/eigen] run lapack eigen-value solver ($LMOD_FAMILY_COMPILER)" {
+    if [ ! -s eigen ];then
+	flunk "eigen binary does not exist"
+    fi
+
+    run ./eigen
+    assert_output <<OUTPUT
+348  -8.50812
+243  -6.63782
+226  -6.62379
+229  -6.52187
+251  -6.96971
+224  -6.39422
+217  -6.48799
+239  -6.7803
+236  -6.85824
+244  -7.02413
+OUTPUT
+
+#    assert_success
+}
+

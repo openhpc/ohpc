@@ -46,14 +46,14 @@ check_rms
 
     # verify correct stripe settings for directory
     run lfs getstripe -d $LUSTRE_TEST_PATH/$testdir
-    assert_output "stripe_count:   2 stripe_size:    1048576 stripe_offset:  -1"
+    assert_output "stripe_count:  2 stripe_size:   1048576 stripe_offset: -1"
 
     # verify correct stripe settings for file in directory
     lfs getstripe $LUSTRE_TEST_PATH/$testdir/afile | head -3 >& .cmd_output
     run cat .cmd_output
     assert_output "$LUSTRE_TEST_PATH/$testdir/afile
-lmm_stripe_count:   2
-lmm_stripe_size:    1048576"
+lmm_stripe_count:  2
+lmm_stripe_size:   1048576"
 
     rm -rf $LUSTRE_TEST_PATH/$testdir
 

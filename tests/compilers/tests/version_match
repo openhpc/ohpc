@@ -40,6 +40,13 @@ family=$LMOD_FAMILY_COMPILER
 	assert_equal "$my_mod_version" "$version"
 	version=`gfortran --version | head -1 | awk '{print $4}'`
 	assert_equal "$my_mod_version" "$version"
+    elif [[ "$family" =~ "llvm"  ]];then
+	version=`clang --version | head -1 | awk '{print $3}'`
+	assert_equal "$my_mod_version" "$version"
+	version=`clang++ --version | head -1 | awk '{print $3}'`
+	assert_equal "$my_mod_version" "$version"
+	version=`flang --version | head -1 | awk '{print $3}'`
+	assert_equal "$my_mod_version" "$version"
     else
 	flunk "Unsupported compiler toolchain"
     fi

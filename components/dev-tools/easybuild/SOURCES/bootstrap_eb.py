@@ -9,7 +9,7 @@
 # Flemish Research Foundation (FWO) (http://www.fwo.be/en)
 # and the Department of Economy, Science and Innovation (EWI) (http://www.ewi-vlaanderen.be/en).
 #
-# http://github.com/hpcugent/easybuild
+# https://github.com/easybuilders/easybuild
 #
 # EasyBuild is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ from distutils.version import LooseVersion
 from hashlib import md5
 
 
-EB_BOOTSTRAP_VERSION = '20170503.01'
+EB_BOOTSTRAP_VERSION = '20170808.01'
 
 # argparse preferrred, optparse deprecated >=2.7
 HAVE_ARGPARSE = False
@@ -68,6 +68,8 @@ PYPI_SOURCE_URL = 'https://pypi.python.org/packages/source'
 VSC_BASE = 'vsc-base'
 VSC_INSTALL = 'vsc-install'
 EASYBUILD_PACKAGES = [VSC_INSTALL, VSC_BASE, 'easybuild-framework', 'easybuild-easyblocks', 'easybuild-easyconfigs']
+
+STAGE1_SUBDIR = 'eb_stage1'
 
 # set print_debug to True for detailed progress info
 print_debug = os.environ.pop('EASYBUILD_BOOTSTRAP_DEBUG', False)
@@ -419,7 +421,7 @@ def stage0(tmpdir):
     # We download a custom version of distribute: it uses a newer version of markerlib to avoid a bug (#1099)
     # It's is the source of distribute 0.6.49 with the file _markerlib/markers.py replaced by the 0.6 version of
     # markerlib which can be found at https://pypi.python.org/pypi/markerlib/0.6.0
-    sys.argv.append('--download-base=http://hpcugent.github.io/easybuild/files/')
+    sys.argv.append('--download-base=https://easybuilders.github.io/easybuild/files/')
     distribute_setup_main(version="0.6.49-patched1")
     sys.argv = orig_sys_argv
 
@@ -482,7 +484,7 @@ def stage1(tmpdir, sourcepath, distribute_egg_dir):
         run_easy_install(['--help'])
 
     # prepare install dir
-    targetdir_stage1 = os.path.join(tmpdir, 'eb_stage1')
+    targetdir_stage1 = os.path.join(tmpdir, STAGE1_SUBDIR)
     prep(targetdir_stage1)  # set PATH, Python search path
 
     # install latest EasyBuild with easy_install from PyPi
@@ -682,6 +684,14 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
     debug("Running EasyBuild with arguments '%s'" % ' '.join(eb_args))
     sys.argv = eb_args
 
+    # location to 'eb' command (from stage 1) may be expected to be included in $PATH
+    # it usually is there after stage1, unless 'prep' is called again with another location
+    # (only when stage 0 is not skipped)
+    # cfr. https://github.com/easybuilders/easybuild-framework/issues/2279
+    curr_path = [x for x in os.environ.get('PATH', '').split(os.pathsep) if len(x) > 0]
+    os.environ['PATH'] = os.pathsep.join([os.path.join(tmpdir, STAGE1_SUBDIR, 'bin')] + curr_path)
+    debug("$PATH: %s" % os.environ['PATH'])
+
     # install EasyBuild with EasyBuild
     from easybuild.main import main as easybuild_main
     easybuild_main()
@@ -846,7 +856,7 @@ easyblock = 'EB_EasyBuildMeta'
 name = 'EasyBuild'
 version = '%(version)s'
 
-homepage = 'http://hpcugent.github.com/easybuild/'
+homepage = 'http://easybuilders.github.com/easybuild/'
 description = \"\"\"EasyBuild is a software build and installation framework
 written in Python that allows you to install software in a structured,
 repeatable and robust way.\"\"\"

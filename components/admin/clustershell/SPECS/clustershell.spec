@@ -128,7 +128,6 @@ rm -rf %{buildroot}
 %defattr(-,root,root,-)
 %doc ChangeLog COPYING.LGPLv2.1
 %doc doc/examples
-%{OHPC_HOME}
 %{OHPC_PUB}
 %exclude %{vimdatadir}
 %exclude %{install_path}/share/vim/

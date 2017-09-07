@@ -19,7 +19,7 @@ ARGS=5
 
 @test "[$testname] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_test ];then
-	flunk "C_mpi_test binary does not exit"
+	flunk "C_mpi_test binary does not exist"
     fi
 
     run_mpi_binary ./C_mpi_test $ARGS $NODES $TASKS
@@ -28,7 +28,7 @@ ARGS=5
 
 @test "[$testname] MPI F77 binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s F_test ];then
-	flunk "F_test binary does not exit"
+	flunk "F_test binary does not exist"
     fi
 
     run_mpi_binary ./F_test $ARGS $NODES $TASKS
@@ -37,7 +37,7 @@ ARGS=5
 
 @test "[$testname] MPI F90 binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s F_test ];then
-	flunk "F_test binary does not exit"
+	flunk "F_test binary does not exist"
     fi
 
     run_mpi_binary ./F90_test $ARGS $NODES $TASKS

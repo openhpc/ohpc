@@ -34,6 +34,7 @@ sub usage {
     print "\n";
     print "Usage: mk_dist [OPTIONS]\n\n";
     print "OPTIONS:\n";
+    print "  --pre-release         use OBS Factory repository\n";
     print "  --skip-copy           skip copying of repo data (for debug only)\n";
     print "  --help                generate help message and exit\n";
     print "\n";
@@ -119,12 +120,14 @@ sub add_readme_file {
 $| = 1;
 
 # Command-line parsing
+my $preRelease = 0;
 my $skipCopy = 0;
 my $help = 0;
 
-GetOptions('skip-copy' => \$skipCopy,
-	   "h"             => \$help,
-           "help"          => \$help);
+GetOptions('pre-release' => \$preRelease,
+        'skip-copy' => \$skipCopy,
+        "h"             => \$help,
+        "help"          => \$help);
 
 usage() if ($help);
 
@@ -136,6 +139,10 @@ if ( ! -d $dest_dir ) {
 print "OpenHPC dist creation utility\n";
 print "--> Requested release version = $release\n";
 print "--> Overwrite existing dists  = $overwrite\n";
+
+if($preRelease) {
+    print "--> Build from factory pre-release = 1\n";
+}
 
 if($skipCopy) {
     print "--> Debug skipCopy option     = 1\n";
@@ -159,8 +166,14 @@ if( !$skipCopy) {
 
     # copy base repo contents
     print "\nCopying base repo contents from OBS...\n";
-    unless(dircopy("$base_repo_path/$base_release", $tmp_dir)) {
-        die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
+    if ($preRelease) {
+        unless(dircopy("$base_repo_path/$base_release:/Factory", $tmp_dir)) {
+            die "Unable to copy $base_repo_path/$base_release:/Factory to $tmp_dir: $!";
+        }
+    } else {
+        unless(dircopy("$base_repo_path/$base_release", $tmp_dir)) {
+            die "Unable to copy $base_repo_path/$base_release to $tmp_dir: $!";
+        }
     }
     print "--> base repo copy complete\n";
 
@@ -170,8 +183,13 @@ if( !$skipCopy) {
         print "\nCopying updates\n";
         unlink "$tmp_dir/updates" || warn "Unable to remove updates link: $!";
         rmtree "$tmp_dir/empty" || warn "Unable to remove empty dir: $!";
-        dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
-            die "Unable to copy update repo: $!";
+        if ($preRelease) {
+            dircopy("$base_repo_path/$base_release:/Update$micro:/Factory/*", "$tmp_dir/updates") ||
+                die "Unable to copy $base_repo_path/$base_release:/Update$micro repo: $!";
+        } else {
+            dircopy("$base_repo_path/$base_release:/Update$micro/*", "$tmp_dir/updates") ||
+                die "Unable to copy $base_repo_path/$base_release:/Update$micro repo: $!";
+        }
     }
 }
 
@@ -211,6 +229,10 @@ foreach my $distro (@distros) {
 	$tar_args .= "--exclude $distro/OpenHPC*.repo \\\n";
 	$tar_args .= "--exclude $distro/updates/OpenHPC*.repo \\\n";
 
+	# exclude repocache
+	$tar_args .= "--exclude $distro/repocache \\\n";
+	$tar_args .= "--exclude $distro/updates/repocache \\\n";
+
 	# cd to $tmp_dir
 	$tar_args .= "-C $tmp_dir \\\n";
 
@@ -235,7 +257,7 @@ foreach my $distro (@distros) {
 	$tar_args .= "$distro make_repo.sh OpenHPC.local.repo README";
 	print "\nCreating dist tarball for $distro:$arch -- \n";
 	print "\ntar command -> tar $tar_args\n\n";
-	system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
+	system("tar $tar_args") == 0 || die "Unable to execute $distro:$arch tar command: $!";
 
     } # end loop over @arches
     
@@ -264,6 +286,10 @@ foreach my $distro (@distros) {
     $tar_args .= "--exclude $distro/OpenHPC*.repo \\\n";
     $tar_args .= "--exclude $distro/updates/OpenHPC*.repo \\\n";
 
+	# exclude repocache
+	$tar_args .= "--exclude $distro/repocache \\\n";
+	$tar_args .= "--exclude $distro/updates/repocache \\\n";
+
     # add sources .repo file
     my $isSrcRepo=1;
     add_repo_file("$tmp_dir/OpenHPC.local.repo",$micro,$base_release,$release,$distro,$isSrcRepo);
@@ -278,7 +304,7 @@ foreach my $distro (@distros) {
 
     print "\nCreating dist tarball for $distro:src -- \n";
     print "\ntar command -> tar $tar_args\n\n";
-    system("tar $tar_args") == 0 || die "Unable to execute tar command: $!";
+    system("tar $tar_args") == 0 || die "Unable to execute $distro:src tar command: $!";
     
 } # end loop over @distros
 

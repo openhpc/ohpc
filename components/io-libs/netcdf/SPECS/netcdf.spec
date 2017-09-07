@@ -49,6 +49,7 @@ Source101:	OHPC_macros
 
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  m4
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
@@ -150,13 +151,7 @@ module-whatis "%{url}"
 
 set             version             %{version}
 
-# Require phdf5
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded phdf5]  } {
-        module load phdf5
-    }
-}
+depends-on phdf5
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
@@ -182,7 +177,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc COPYRIGHT
 %doc README.md

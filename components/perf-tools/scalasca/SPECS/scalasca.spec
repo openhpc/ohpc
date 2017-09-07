@@ -26,6 +26,7 @@ Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.scalasca.org
 Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/2.3/dist/scalasca-%{version}.tar.gz
 Source1:   OHPC_macros
+Requires:  lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -117,11 +118,7 @@ module-whatis "URL %{url}"
 
 set     version			    %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded scorep]  } {
-      module load scorep
-    }
-}
+depends-on scorep
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
@@ -143,7 +140,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc ChangeLog COPYING INSTALL OPEN_ISSUES README
 

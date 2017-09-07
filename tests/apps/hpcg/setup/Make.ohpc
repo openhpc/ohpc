@@ -119,7 +119,7 @@ HPCG_DEFS     = $(HPCG_OPTS) $(HPCG_INCLUDES) -DMPICH_IGNORE_CXX_SEEK
 CXX          = mpicxx
 
 ifeq ($(LMOD_FAMILY_COMPILER),intel)
-CXXFLAGS     = $(HPCG_DEFS) -O3 -openmp
+CXXFLAGS     = $(HPCG_DEFS) -O3 -qopenmp
 else
 CXXFLAGS     = $(HPCG_DEFS) -O3 -ffast-math -ftree-vectorize -ftree-vectorizer-verbose=0 -fopenmp
 endif

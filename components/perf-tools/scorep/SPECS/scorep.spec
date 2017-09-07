@@ -19,7 +19,7 @@
 
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   3.0
+Version:   3.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
@@ -36,9 +36,10 @@ BuildRequires: binutils-devel
 Requires     : binutils-devel
 BuildRequires: libunwind-devel
 Requires     : libunwind-devel
+Requires     : lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: zlib-devel
 BuildRequires: papi%{PROJ_DELIM}
-Requires:      papi%{PROJ_DELIM}
+Requires     : papi%{PROJ_DELIM}
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires     : pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -132,23 +133,9 @@ module-whatis "URL %{url}"
 
 set     version			    %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded papi]  } {
-      module load papi
-    }
-}
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded pdtoolkit]  } {
-      module load pdtoolkit
-    }
-}
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded sionlib]  } {
-      module load sionlib
-    }
-}
+depends-on papi
+depends-on pdtoolkit
+depends-on sionlib
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
@@ -173,7 +160,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog COPYING INSTALL OPEN_ISSUES README THANKS
 

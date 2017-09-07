@@ -53,6 +53,7 @@ Patch2:         superlu-4.3-dont-opt-away.diff
 # this routine in the library which, however, remains fully functionnal
 Patch3:         superlu-5.1-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  tcsh
 
 # Default library install path
@@ -116,12 +117,8 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded intel] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
-        }
-    }
+if { ![is-loaded intel] } {
+    depends-on openblas
 }
 
 
@@ -146,7 +143,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc README
 

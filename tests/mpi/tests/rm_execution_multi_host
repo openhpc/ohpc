@@ -17,7 +17,7 @@ ARGS=8
 
 @test "[MPI] C   binary runs on two nodes under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_test ];then
-	flunk "C_test binary does not exit"
+	flunk "C_test binary does not exist"
     fi
     
     run run_mpi_binary ./C_test $ARGS $NODES $TASKS
@@ -26,7 +26,7 @@ ARGS=8
 
 @test "[MPI] C++ binary runs on two nodes under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s CXX_test ];then
-	flunk "CXX_test binary does not exit"
+	flunk "CXX_test binary does not exist"
     fi
 
     run run_mpi_binary ./CXX_test $ARGS $NODES $TASKS
@@ -35,7 +35,7 @@ ARGS=8
 
 @test "[MPI] F90 binary runs on two nodes under resource manager ($RMS/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s F90_test ];then
-	flunk "F90_test binary does not exit"
+	flunk "F90_test binary does not exist"
     fi
 
     run run_mpi_binary ./F90_test $ARGS $NODES $TASKS

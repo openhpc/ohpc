@@ -52,6 +52,7 @@ Source5:        OHPC_macros
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Patch2:         mumps-5.0.2-psxe2017.patch
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -172,12 +173,8 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { [is-loaded %{gnu_family}] } {
-        if { ![is-loaded scalapack]  } {
-          module load scalapack
-        }
-    }
+if { ![is-loaded intel] } {
+    depends-on scalapack
 }
 
 prepend-path    PATH                %{install_path}/bin
@@ -203,7 +200,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc ChangeLog CREDITS INSTALL LICENSE README VERSION
 

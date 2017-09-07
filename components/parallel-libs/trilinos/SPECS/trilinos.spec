@@ -29,11 +29,12 @@ Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{
 Source1:        OHPC_macros
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         Trilinos-trilinos-aarch64.patch
-BuildRequires:  cmake >= 2.8
+BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  perl
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  qt-devel
@@ -74,9 +75,11 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load phdf5
-module load netcdf
+module load cmake
 module load boost
+module load netcdf
+module load phdf5
+
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
@@ -199,12 +202,8 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
 
 # Autoload openblas for gnu builds
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded intel] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
-        }
-    }
+if { ![is-loaded intel] } {
+    depends-on openblas
 }
 
 EOF
@@ -221,7 +220,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
 

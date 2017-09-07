@@ -51,6 +51,7 @@ Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
 Source2:        OHPC_macros
 Patch0:         scalapack-2.0.2-shared-lib.patch
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset
@@ -129,10 +130,8 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded openblas]  } {
-      module load openblas
-    }
+if { ![is-loaded intel]  } {
+    depends-on openblas
 }
 
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
@@ -152,7 +151,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc README LICENSE
 

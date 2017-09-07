@@ -92,6 +92,11 @@ load ../common/test_helper_functions
     module purge || exit 1
     export MODULEPATH=./example-modules:$MODULEPATH
     local orig_path="$PATH"
+
+    if [ -z "$MANPATH" ];then
+	export MANPATH="/foo"
+    fi
+
     local orig_manpath="$MANPATH"
 
     # verify path after module load
@@ -118,6 +123,23 @@ load ../common/test_helper_functions
     module remove test3-module || exit 1
     assert_equal "$orig_path"    "$PATH"
     assert_equal "$orig_manpath" $MANPATH
+}
+
+@test "[modules] module depends-on" {
+    module purge || exit 1
+    export MODULEPATH=./example-modules:$MODULEPATH
+
+    # verify dependent load
+    module load test4-module || exit 1
+    module list >& .cmd_output || exit 1
+    local my_output=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1`
+    assert_equal "1) test3-module   2) test4-module" "$my_output"
+
+    # verify dependent unload
+    module unload test4-module || exit 1
+    run module list
+    assert_success
+    assert_output "No modules loaded"
 }
 
 rm -f .cmd_output

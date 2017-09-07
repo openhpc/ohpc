@@ -81,7 +81,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{OHPC_HOME}
-%{OHPC_ADMIN}
 %doc LICENSE README.md
 
 %changelog

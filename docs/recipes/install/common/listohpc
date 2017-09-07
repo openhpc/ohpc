@@ -1,48 +1,94 @@
 #!/bin/bash
 
-logfile=pkg-ohpc
-rm -f ${logfile}.*
 
-echo ++++ search and log OpenHPC packages
-
-if [ -e /etc/redhat-release ];then
-
-    options=""
-    skip=""
-    pwd  | grep -q aarch64
-    if [ $? -eq 0 ];then
-	echo "Querying aarch64..."
-	options="--archlist=aarch64"
-	skip="mvapich2|pbspro"
-    fi
-
-    # query repo for ohpc packages
-    if [ -z "$skip" ];then
-	repoquery -qa $options --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" >> ${logfile}.all
-    else
-	repoquery -qa $options --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip >> ${logfile}.all
-    fi
-
-    info=`repoquery -q $options --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
-    echo ${info} >>${logfile}.all
-
-elif [ -e /etc/SuSE-release ];then
-    for pkg in `zypper search -i *-ohpc` ; do
-        name=`echo $pkg | grep -e -ohpc | cut -d '|' -f 2 | tr -d ' '`
-        if [ "${name}" != "" ]; then
-	    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' $name`
-	    echo ${info} >>${logfile}.all
-        fi
-    done
-
-    info=`rpm -q --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
-    echo ${info} >>${logfile}.all
-
-else
-    echo "ERROR: unknown distro type"
+if [ "$#" -lt 1 ];then
+    echo "usage: `basename $0` [version]"
     exit 1
 fi
 
+which repoquery >& /dev/null || { echo "repoquery must be installed locally"; exit 1; }
+
+version=$1
+
+minor_ver=`echo ${version} | cut -d '.' -f1,2`
+micro_ver=`echo ${version} | cut -d '.' -f3`
+
+if [[ -z $micro_ver ]];then
+    micro_ver=0
+fi
+
+logfile=pkg-ohpc
+rm -f ${logfile}.*
+
+options=""
+skip=""
+
+baseos=""
+arch=""
+
+pwd | grep -q sles12  && baseos="SLE_12"
+pwd | grep -q centos7 && baseos="CentOS_7"
+pwd | grep -q aarch64 && arch="aarch64"
+pwd | grep -q x86_64  && arch="x86_64"
+    
+if [[ -z ${baseos} ]];then
+    echo "Unknown or unsupported base os"
+    exit 1;
+fi
+
+if [[ -z ${arch} ]];then
+    echo "Unknown or unsupported architecture"
+    exit 1;
+fi
+
+echo "Querying available packages for baseOS=${baseos}, arch=${arch}: minor_ver=${minor_ver}, micro_ver=${micro_ver}"
+
+if [[ "${arch}" == "aarch64" ]];then
+    echo "Querying aarch64..."
+    skip="mvapich2|pbspro|impi-ohpc|lmod-defaults-intel"
+fi
+
+repobase="http://build.openhpc.community/OpenHPC:/${minor_ver}/${baseos}"
+if [[ $micro_ver -gt 0 ]];then
+    repoupdate="http://build.openhpc.community/OpenHPC:/${minor_ver}:/Update${micro_ver}/${baseos}"
+fi
+
+# include noarch in query
+arch="$arch,noarch"
+
+# pick a sort pony
+export LC_COLLATE=C
+
+# query repo for ohpc packages
+if [[ $micro_ver -eq 0 ]];then
+    if [ -z "$skip" ];then
+	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
+	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | sort >> ${logfile}.all
+    else
+	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
+	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip | sort >> ${logfile}.all
+    fi
+else
+    if [ -z "$skip" ];then
+	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
+	    --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
+	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | sort  >> ${logfile}.all
+    else
+	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
+	    --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
+	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip | sort >> ${logfile}.all
+    fi
+fi
+
+if [[ $micro_ver -eq 0 ]];then
+    info=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -q \
+--queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
+else
+    info=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -q \
+--repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
+--queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
+fi
+echo ${info} >>${logfile}.all
 
 echo
 echo ++++ list of OpenHPC package groups
@@ -52,7 +98,6 @@ echo $groups
 echo
 
 for grp in ${groups}; do
-    echo ++++ list of ohpc/${grp} packages installed
     grep "ohpc/${grp}" ${logfile}.all | sort -k 1.1,1.2 -k2V  >& ${logfile}.${grp} 
     echo 
 done

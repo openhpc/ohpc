@@ -38,8 +38,8 @@ ifeq ($(USE_OPENMP), TRUE)
         LDFLAGS += -fopenmp
     else
         DFLAGS  += -D__OPENMP
-        FFLAGS  += -openmp
-        LDFLAGS += -openmp
+        FFLAGS  += -qopenmp
+        LDFLAGS += -qopenmp
     endif
 endif
 

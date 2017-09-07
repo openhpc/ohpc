@@ -1,0 +1,218 @@
+From 377d4af1866658ba12e4c052e7fa52dfb4ec051f Mon Sep 17 00:00:00 2001
+From: Alain Miniussi <alain.miniussi@oca.eu>
+Date: Wed, 22 Feb 2017 15:40:12 +0100
+Subject: [PATCH] Remove all occurences of serialization/array.hpp, which
+ apparently were not used (all test passes without them) and is only
+ availlable in c++11 mode ( serialization/array.hp includes <array>, g++5.x
+ will fail, and we don't use std::array anyway). also,
+ serialization/detail/get_data has disapeared, so we now use the
+ std::<container>::data() method directly.
+
+---
+ include/boost/mpi/communicator.hpp                    |  1 -
+ include/boost/mpi/detail/binary_buffer_iprimitive.hpp |  1 -
+ include/boost/mpi/detail/binary_buffer_oprimitive.hpp |  1 -
+ include/boost/mpi/detail/forward_iprimitive.hpp       |  2 --
+ include/boost/mpi/detail/forward_oprimitive.hpp       |  1 -
+ include/boost/mpi/detail/ignore_iprimitive.hpp        |  1 -
+ include/boost/mpi/detail/ignore_oprimitive.hpp        |  1 -
+ include/boost/mpi/detail/ignore_skeleton_oarchive.hpp |  1 -
+ include/boost/mpi/detail/mpi_datatype_primitive.hpp   | 14 ++++++--------
+ include/boost/mpi/detail/packed_iprimitive.hpp        |  5 ++---
+ include/boost/mpi/detail/packed_oprimitive.hpp        |  5 ++---
+ include/boost/mpi/python/serialize.hpp                |  1 -
+ 12 files changed, 10 insertions(+), 24 deletions(-)
+
+diff --git a/include/boost/mpi/communicator.hpp b/include/boost/mpi/communicator.hpp
+index 1ecd892..514f051 100644
+--- a/include/boost/mpi/communicator.hpp
++++ b/include/boost/mpi/communicator.hpp
+@@ -34,7 +34,6 @@
+ #include <boost/mpi/skeleton_and_content_fwd.hpp>
+ 
+ // For (de-)serializing arrays
+-#include <boost/serialization/array.hpp>
+ 
+ #include <boost/mpi/detail/point_to_point.hpp>
+ #include <boost/mpi/status.hpp>
+diff --git a/include/boost/mpi/detail/binary_buffer_iprimitive.hpp b/include/boost/mpi/detail/binary_buffer_iprimitive.hpp
+index 388cd44..b49efd2 100644
+--- a/include/boost/mpi/detail/binary_buffer_iprimitive.hpp
++++ b/include/boost/mpi/detail/binary_buffer_iprimitive.hpp
+@@ -16,7 +16,6 @@
+ #include <boost/mpi/exception.hpp>
+ #include <boost/assert.hpp>
+ #include <boost/mpl/assert.hpp>
+-#include <boost/serialization/array.hpp>
+ #include <boost/serialization/is_bitwise_serializable.hpp>
+ #include <vector>
+ #include <boost/mpi/allocator.hpp>
+diff --git a/include/boost/mpi/detail/binary_buffer_oprimitive.hpp b/include/boost/mpi/detail/binary_buffer_oprimitive.hpp
+index 313097b..a9ba6c0 100644
+--- a/include/boost/mpi/detail/binary_buffer_oprimitive.hpp
++++ b/include/boost/mpi/detail/binary_buffer_oprimitive.hpp
+@@ -14,7 +14,6 @@
+ #include <cstddef> // size_t
+ #include <boost/config.hpp>
+ 
+-#include <boost/serialization/array.hpp>
+ #include <boost/serialization/is_bitwise_serializable.hpp>
+ #include <boost/assert.hpp>
+ #include <boost/mpl/assert.hpp>
+diff --git a/include/boost/mpi/detail/forward_iprimitive.hpp b/include/boost/mpi/detail/forward_iprimitive.hpp
+index 33d39fd..2180674 100644
+--- a/include/boost/mpi/detail/forward_iprimitive.hpp
++++ b/include/boost/mpi/detail/forward_iprimitive.hpp
+@@ -6,8 +6,6 @@
+ 
+ //  Authors: Matthias Troyer
+ 
+-#include <boost/serialization/array.hpp>
+-
+ #ifndef BOOST_MPI_DETAIL_FORWARD_IPRIMITIVE_HPP
+ #define BOOST_MPI_DETAIL_FORWARD_IPRIMITIVE_HPP
+ 
+diff --git a/include/boost/mpi/detail/forward_oprimitive.hpp b/include/boost/mpi/detail/forward_oprimitive.hpp
+index 78f7ca0..c0bfd0f 100644
+--- a/include/boost/mpi/detail/forward_oprimitive.hpp
++++ b/include/boost/mpi/detail/forward_oprimitive.hpp
+@@ -10,7 +10,6 @@
+ #define BOOST_MPI_DETAIL_FORWARD_OPRIMITIVE_HPP
+ 
+ #include <boost/config.hpp>
+-#include <boost/serialization/array.hpp>
+ 
+ namespace boost { namespace mpi { namespace detail {
+ 
+diff --git a/include/boost/mpi/detail/ignore_iprimitive.hpp b/include/boost/mpi/detail/ignore_iprimitive.hpp
+index 151ed0b..c58d110 100644
+--- a/include/boost/mpi/detail/ignore_iprimitive.hpp
++++ b/include/boost/mpi/detail/ignore_iprimitive.hpp
+@@ -11,7 +11,6 @@
+ 
+ #include <boost/config.hpp>
+ #include <boost/mpi/datatype.hpp>
+-#include <boost/serialization/array.hpp>
+ 
+ 
+ namespace boost { namespace mpi { namespace detail {
+diff --git a/include/boost/mpi/detail/ignore_oprimitive.hpp b/include/boost/mpi/detail/ignore_oprimitive.hpp
+index 4f2994b..8a671ef 100644
+--- a/include/boost/mpi/detail/ignore_oprimitive.hpp
++++ b/include/boost/mpi/detail/ignore_oprimitive.hpp
+@@ -11,7 +11,6 @@
+ 
+ #include <boost/config.hpp>
+ #include <boost/mpi/datatype.hpp>
+-#include <boost/serialization/array.hpp>
+ 
+ namespace boost { namespace mpi { namespace detail {
+ 
+diff --git a/include/boost/mpi/detail/ignore_skeleton_oarchive.hpp b/include/boost/mpi/detail/ignore_skeleton_oarchive.hpp
+index f9285a2..b221de1 100644
+--- a/include/boost/mpi/detail/ignore_skeleton_oarchive.hpp
++++ b/include/boost/mpi/detail/ignore_skeleton_oarchive.hpp
+@@ -14,7 +14,6 @@
+ #include <boost/archive/basic_archive.hpp>
+ #include <boost/archive/detail/oserializer.hpp>
+ #include <boost/serialization/collection_size_type.hpp>
+-#include <boost/serialization/array.hpp>
+ #include <boost/serialization/item_version_type.hpp>
+ 
+ namespace boost { namespace mpi { namespace detail {
+diff --git a/include/boost/mpi/detail/mpi_datatype_primitive.hpp b/include/boost/mpi/detail/mpi_datatype_primitive.hpp
+index c230055..501ae03 100644
+--- a/include/boost/mpi/detail/mpi_datatype_primitive.hpp
++++ b/include/boost/mpi/detail/mpi_datatype_primitive.hpp
+@@ -24,8 +24,6 @@ namespace std{
+ #include <boost/throw_exception.hpp>
+ #include <boost/assert.hpp>
+ #include <boost/mpl/placeholders.hpp>
+-#include <boost/serialization/array.hpp>
+-#include <boost/serialization/detail/get_data.hpp>
+ #include <stdexcept>
+ #include <iostream>
+ #include <vector>
+@@ -80,18 +78,18 @@ class mpi_datatype_primitive
+        BOOST_MPI_CHECK_RESULT(MPI_Type_create_struct,
+                     (
+                       addresses.size(),
+-                      boost::serialization::detail::get_data(lengths),
+-                      boost::serialization::detail::get_data(addresses),
+-                      boost::serialization::detail::get_data(types),
++                      lengths.data(),
++                      addresses.data(),
++                      types.data(),
+                       &datatype_
+                     ));
+ #else
+         BOOST_MPI_CHECK_RESULT(MPI_Type_struct,
+                                (
+                                 addresses.size(),
+-                                boost::serialization::detail::get_data(lengths),
+-                                boost::serialization::detail::get_data(addresses),
+-                                boost::serialization::detail::get_data(types),
++				lengths.data(),
++                                addresses.data(),
++                                types.data(),
+                                 &datatype_
+                                 ));
+ #endif
+diff --git a/include/boost/mpi/detail/packed_iprimitive.hpp b/include/boost/mpi/detail/packed_iprimitive.hpp
+index 7080cbf..bad3c21 100644
+--- a/include/boost/mpi/detail/packed_iprimitive.hpp
++++ b/include/boost/mpi/detail/packed_iprimitive.hpp
+@@ -15,8 +15,6 @@
+ #include <boost/mpi/datatype.hpp>
+ #include <boost/mpi/exception.hpp>
+ #include <boost/assert.hpp>
+-#include <boost/serialization/array.hpp>
+-#include <boost/serialization/detail/get_data.hpp>
+ #include <vector>
+ #include <boost/mpi/allocator.hpp>
+ 
+@@ -104,7 +102,8 @@ class BOOST_MPI_DECL packed_iprimitive
+     void load_impl(void * p, MPI_Datatype t, int l)
+     {
+       BOOST_MPI_CHECK_RESULT(MPI_Unpack,
+-        (const_cast<char*>(boost::serialization::detail::get_data(buffer_)), buffer_.size(), &position, p, l, t, comm));
++			     (const_cast<char*>(buffer_.data()),
++			      buffer_.size(), &position, p, l, t, comm));
+     }
+ 
+     buffer_type & buffer_;
+diff --git a/include/boost/mpi/detail/packed_oprimitive.hpp b/include/boost/mpi/detail/packed_oprimitive.hpp
+index fbcde9a..0bad299 100644
+--- a/include/boost/mpi/detail/packed_oprimitive.hpp
++++ b/include/boost/mpi/detail/packed_oprimitive.hpp
+@@ -15,8 +15,6 @@
+ 
+ #include <boost/mpi/datatype.hpp>
+ #include <boost/mpi/exception.hpp>
+-#include <boost/serialization/detail/get_data.hpp>
+-#include <boost/serialization/array.hpp>
+ #include <boost/assert.hpp>
+ #include <vector>
+ #include <boost/mpi/allocator.hpp>
+@@ -103,7 +101,8 @@ class BOOST_MPI_DECL packed_oprimitive
+ 
+       // pack the data into the buffer
+       BOOST_MPI_CHECK_RESULT(MPI_Pack,
+-      (const_cast<void*>(p), l, t, boost::serialization::detail::get_data(buffer_), buffer_.size(), &position, comm));
++			     (const_cast<void*>(p), l, t,
++			      buffer_.data(), buffer_.size(), &position, comm));
+       // reduce the buffer size if needed
+       BOOST_ASSERT(std::size_t(position) <= buffer_.size());
+       if (std::size_t(position) < buffer_.size())
+diff --git a/include/boost/mpi/python/serialize.hpp b/include/boost/mpi/python/serialize.hpp
+index 5f9136b..62e7543 100644
+--- a/include/boost/mpi/python/serialize.hpp
++++ b/include/boost/mpi/python/serialize.hpp
+@@ -35,7 +35,6 @@
+ #include <boost/mpl/if.hpp>
+ 
+ #include <boost/serialization/split_free.hpp>
+-#include <boost/serialization/array.hpp>
+ 
+ #include <boost/assert.hpp>
+ 

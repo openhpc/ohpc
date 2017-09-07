@@ -195,7 +195,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc INSTALL LICENSE_1_0.txt
 

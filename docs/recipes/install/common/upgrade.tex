@@ -14,7 +14,7 @@ need to update your local \OHPC{} repository configuration to point against the
 v\OHPCVerTree{} release (or update your locally hosted mirror). Refer to
 \S\ref{sec:enable_repo} for more details on enabling the latest
 repository. In contrast, when upgrading between micro releases on the same
-branch (e.g. from v\OHPCVerTree{} to \OHPCVerTree{}.1), there is no need to
+branch (e.g. from v\OHPCVerTree{} to \OHPCVerTree{}.2), there is no need to
 adjust local package manager configurations when using the public repository as
 rolling updates are pre-configured.
  
@@ -73,8 +73,9 @@ used to distinguish RPM package names and module hierarchy.
 In the case of a fresh install, \OHPC{} recipes default to installation of the
 latest toolchains available in a given release branch. However, if upgrading a
 previously installed system, administrators can {\em opt-in} to enable new
-variants as they become available. To illustrate this point, we use the \OHPC{}
-1.3.1 release as an example which includes a new {``gnu7''} compiler variant
+variants as they become available. To illustrate this point, consider the
+previous \OHPC{}
+1.3.1 release as an example which introduced a new {``gnu7''} compiler variant
 providing GCC 7.x along with runtimes and libraries compiled
 with the newer toolchain. Note that prior to the 1.3.1 release, the {``gnu''} variant was
 available which provided GCC 5.x versions.

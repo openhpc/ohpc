@@ -3,7 +3,6 @@
 
 load ./common/test_helper_functions || exit 1
 source ./common/functions || exit 1
-export GFORTRAN_UNBUFFERED_PRECONNECTED=1
 
 if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
@@ -15,10 +14,12 @@ rm=$RESOURCE_MANAGER
 testname="libs/openblas"
 
 ARGS=0
+export GFORTRAN_UNBUFFERED_PRECONNECTED=1
+export OMP_NUM_THREADS=2
 
 @test "[$testname/xscblat1] xscblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xscblat1 ];then
-	flunk "xscblat1 binary does not exit"
+	flunk "xscblat1 binary does not exist"
     fi
 
     run_serial_binary ./xscblat1 $ARGS
@@ -27,7 +28,7 @@ ARGS=0
 
 @test "[$testname/xdcblat1] xdcblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xdcblat1 ];then
-	flunk "xdcblat1 binary does not exit"
+	flunk "xdcblat1 binary does not exist"
     fi
 
     run_serial_binary ./xdcblat1 $ARGS
@@ -36,7 +37,7 @@ ARGS=0
 
 @test "[$testname/xccblat1] xccblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xccblat1 ];then
-	flunk "xccblat1 binary does not exit"
+	flunk "xccblat1 binary does not exist"
     fi
 
     run_serial_binary ./xccblat1 $ARGS
@@ -45,7 +46,7 @@ ARGS=0
 
 @test "[$testname/xzcblat1] xzcblat1 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xzcblat1 ];then
-	flunk "xzcblat1 binary does not exit"
+	flunk "xzcblat1 binary does not exist"
     fi
 
     run_serial_binary ./xzcblat1 $ARGS
@@ -54,7 +55,7 @@ ARGS=0
 
 @test "[$testname/xscblat2] xscblat2 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xscblat2 ];then
-	flunk "xscblat2 binary does not exit"
+	flunk "xscblat2 binary does not exist"
     fi
 
     run_serial_binary ./xscblat2 "$ARGS < sin2"
@@ -63,7 +64,7 @@ ARGS=0
 
 @test "[$testname/xdcblat2] xdcblat2 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xdcblat2 ];then
-	flunk "xdcblat2 binary does not exit"
+	flunk "xdcblat2 binary does not exist"
     fi
 
     run_serial_binary ./xdcblat2 "$ARGS < din2"
@@ -72,7 +73,7 @@ ARGS=0
 
 @test "[$testname/xccblat2] xccblat2 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xccblat2 ];then
-	flunk "xccblat2 binary does not exit"
+	flunk "xccblat2 binary does not exist"
     fi
 
     run_serial_binary ./xccblat2 "$ARGS < cin2"
@@ -81,7 +82,7 @@ ARGS=0
 
 @test "[$testname/xzcblat2] xzcblat2 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xzcblat2 ];then
-	flunk "xzcblat2 binary does not exit"
+	flunk "xzcblat2 binary does not exist"
     fi
 
     run_serial_binary ./xzcblat2 "$ARGS < zin2"
@@ -90,7 +91,7 @@ ARGS=0
 
 @test "[$testname/xscblat3] xscblat3 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xscblat3 ];then
-	flunk "xscblat3 binary does not exit"
+	flunk "xscblat3 binary does not exist"
     fi
 
     run_serial_binary ./xscblat3 "$ARGS < sin3"
@@ -99,7 +100,7 @@ ARGS=0
 
 @test "[$testname/xdcblat3] xdcblat3 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xdcblat3 ];then
-	flunk "xdcblat3 binary does not exit"
+	flunk "xdcblat3 binary does not exist"
     fi
 
     run_serial_binary ./xdcblat3 "$ARGS < din3"
@@ -108,7 +109,7 @@ ARGS=0
 
 @test "[$testname/xccblat3] xccblat3 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xccblat3 ];then
-	flunk "xccblat3 binary does not exit"
+	flunk "xccblat3 binary does not exist"
     fi
 
     run_serial_binary ./xccblat3 "$ARGS < cin3"
@@ -117,7 +118,7 @@ ARGS=0
 
 @test "[$testname/xzcblat3] xzcblat3 under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
     if [ ! -s xzcblat3 ];then
-	flunk "xzcblat3 binary does not exit"
+	flunk "xzcblat3 binary does not exist"
     fi
 
     run_serial_binary ./xzcblat3 "$ARGS < zin3"

@@ -40,7 +40,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Release:	1%{?dist}
-Version:        3.3.3
+Version:        3.4.1
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Source1:        OHPC_macros
 Patch:          tre.patch
@@ -96,6 +96,7 @@ Requires:	libicu52_1
 BuildRequires:  libicu
 Requires:	libicu
 %endif
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
@@ -218,12 +219,8 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_SHARE      %{install_path}/share
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded intel] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
-        }
-    }
+if { ![is-loaded intel] } {
+    depends-on openblas
 }
 
 EOF

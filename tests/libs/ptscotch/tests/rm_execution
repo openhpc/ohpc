@@ -1,0 +1,42 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+NODES=2
+TASKS=4
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+@test "[libs/PTScotch] dgraph_redist binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s dgraph_redist ];then
+	flunk "grapch_map binary does not exist"
+    fi
+    
+    run_mpi_binary ./dgraph_redist "bump.grf" $NODES $TASKS
+    assert_success
+}
+
+@test "[libs/PTScotch] strat_par binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s strat_par ];then
+	flunk "strat_par does not exist"
+    fi
+    
+    run_mpi_binary ./strat_par "" $NODES $TASKS
+    assert_success
+}
+
+@test "[libs/PTScotch] dgord binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s $PTSCOTCH_BIN/dgord ];then
+	flunk "dgord does not exist"
+    fi
+    
+    run_mpi_binary dgord "bump.grf /dev/null -vt" $NODES $TASKS
+    assert_success
+}

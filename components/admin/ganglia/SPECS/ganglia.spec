@@ -14,7 +14,7 @@
 %define pname ganglia
 
 %global gangver     3.7.2
-%global webver      3.7.1
+%global webver      3.7.2
 
 %global systemd         1
 %global _hardened_build 1

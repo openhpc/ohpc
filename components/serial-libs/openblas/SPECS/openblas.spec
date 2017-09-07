@@ -35,7 +35,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        0.2.19
+Version:        0.2.20
 Release:        1%{?dist}
 Summary:        An optimized BLAS library based on GotoBLAS2
 License:        BSD-3-Clause
@@ -52,6 +52,12 @@ Patch2:         openblas-noexecstack.patch
 Patch3:         openblas-gemv.patch
 # PATCH-FIX-UPSTREADM fix-arm64-cpuid-return.patch
 Patch4:         fix-arm64-cpuid-return.patch
+# PATCH for https://github.com/xianyi/OpenBLAS/pull/1262
+Patch5:         1262.patch
+# PATCH for https://github.com/xianyi/OpenBLAS/pull/1236
+Patch6:         1236.patch
+# PATCH for https://github.com/xianyi/OpenBLAS/pull/1247
+Patch7:         1247.patch
 ExclusiveArch:  %ix86 ia64 ppc ppc64 x86_64 aarch64
 
 %description
@@ -69,6 +75,9 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 # karl.w.schulz@intel.com (9/19/16) - disabling patch3 for v0.2.19
 #%patch3 -p1
 %patch4 -p1
+#%patch5 -p1
+#%patch6 -p1
+#%patch7 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -76,7 +85,7 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 
 # Only *86 CPUs support DYNAMIC_ARCH
 %ifarch %ix86 x86_64
-%define openblas_target DYNAMIC_ARCH=1
+%define openblas_target DYNAMIC_ARCH=1 NUM_THREADS=256
 %endif
 # Temporary fix, OpenBLAS does not autodetect aarch64
 %ifarch aarch64
@@ -99,6 +108,7 @@ sed -i '/#define OPENBLAS_NEEDBUNDERSCORE/,/#define OPENBLAS_VERSION/{//!d}' %{b
 
 # Remove buildroot
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/lib/cmake/openblas/OpenBLASConfig.cmake
+sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/lib/pkgconfig/openblas.pc
 
 # Remove static lib
 rm -f %{buildroot}%{install_path}/lib/*a
@@ -145,7 +155,6 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc BACKERS.md Changelog.txt CONTRIBUTORS.md GotoBLAS_00License.txt GotoBLAS_01Readme.txt GotoBLAS_02QuickInstall.txt GotoBLAS_03FAQ.txt GotoBLAS_04FAQ.txt GotoBLAS_05LargePage.txt GotoBLAS_06WeirdPerformance.txt LICENSE README.md TargetList.txt
 

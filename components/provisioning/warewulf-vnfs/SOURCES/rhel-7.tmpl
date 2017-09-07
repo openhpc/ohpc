@@ -1,0 +1,21 @@
+#DESC: A clone of Red Hat Enterprise Linux 7
+
+# The general RHEL include has all of the necessary functions, but requires
+# some basic variables specific to each chroot type to be defined.
+. include-rhel
+
+# Define the location of the yum repository
+YUM_MIRROR="RHEL-url"
+
+# Install only what is necessary/specific for this distribution
+PKGLIST="basesystem bash chkconfig coreutils e2fsprogs ethtool
+    filesystem findutils gawk grep initscripts iproute iputils
+    net-tools nfs-utils pam psmisc rdate rsync sed setup
+    shadow-utils rsyslog tcp_wrappers tzdata util-linux words
+    zlib tar less gzip which util-linux openssh-clients 
+    openssh-server dhclient pciutils vim-minimal shadow-utils
+    strace cronie crontabs cpio wget redhat-release"
+
+
+# vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:
+

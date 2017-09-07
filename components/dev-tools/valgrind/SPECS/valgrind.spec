@@ -15,24 +15,18 @@
 
 Summary:   Valgrind Memory Debugger
 Name:      %{pname}%{PROJ_DELIM}
-Version:   3.12.0
+Version:   3.13.0
 Release:   1
 License:   GPL
 URL:       http://www.valgrind.org/
 DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/dev-tools
-Source:    http://valgrind.org/downloads/%{pname}-%{version}.tar.bz2
+Source:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
-%ifarch aarch64
-Patch1:    revVEX3352.patch
-Patch2:    rev16269.patch
-Patch3:    rev16309.patch
-Patch4:    thunderx_always_use_fallback_LLSC.patch
-%endif
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
-%define install_path %{OHPC_PUB}/%{pname}/%version
+%define install_path %{OHPC_UTILS}/%{pname}/%version
 
 %description 
 
@@ -45,12 +39,6 @@ AMD64/MacOSX.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%ifarch aarch64
-%patch1 -p0
-%patch2 -p0
-%patch3 -p0
-%patch4 -p1
-%endif
 
 %build
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
@@ -99,7 +87,6 @@ EOF
 %files
 %defattr(-,root,root)
 %{OHPC_HOME}
-%{OHPC_PUB}
 %doc AUTHORS
 %doc README_DEVELOPERS
 %doc README

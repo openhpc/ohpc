@@ -36,7 +36,7 @@ resource management under \SLURM{}.
 [sms](*\#*) systemctl start slurmctld
 
 # Start slurm clients on compute hosts
-[sms](*\#*) pdsh -w c[1-4] systemctl start slurmd
+[sms](*\#*) pdsh -w $compute_prefix[1-4] systemctl start slurmd
 \end{lstlisting}
 % end_ohpc_run
 

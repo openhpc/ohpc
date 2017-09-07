@@ -26,16 +26,11 @@ BuildArch: x86_64
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 
-BuildRequires:-post-build-checks
+#!BuildIgnore: post-build-checks
 
 Requires: prun%{PROJ_DELIM}
-Requires: intel-mpi-doc >= %{year}
 Requires: intel-compilers-devel%{PROJ_DELIM}
 Provides: %{pname}%{PROJ_DELIM}
-
-Provides: libmpi.so.12()(64bit)
-Provides: libmpifort.so.12()(64bit)
-Provides: libmpicxx.so.12()(64bit) 
 
 %description
 
@@ -51,55 +46,98 @@ suite.
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu7/impi
 
+%pre
+
+# Verify pxse mpi stack is installed. Punt if not detected.
+
+mpicc_subpath="linux/mpi/intel64/bin/mpicc$"
+
+echo "Checking for local PXSE MPI installation(s)."
+
+versions_all=`rpm -qal | grep ${mpicc_subpath}`
+
+if [ $? -eq 1 ];then
+    echo ""
+    echo "Error: Unable to detect local Parallel Studio installation. The toolchain"
+    echo "       providing ${mpicc_subpath} must be installed prior to this compatability package"
+    echo " "
+    exit 1
+fi
+
+# Verify min version expectations
+# 2016 used 5.1 and 5.3 while 2017 and newer used 2017.x similar to the
+# associated compiler version.  Ether way, 2016 and newer translates to
+# impi package version >= 5.1
+min_ver="5.1"
+versions=""
+for file in ${versions_all}; do 
+    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    echo "--> Version ${version} detected"
+    echo -e "${version}\n${min_ver}" | sort -V | head -n 1 | grep -q "^${min_ver}"
+    if [ $? -ne 0 ];then
+        echo "Warning: skipping version ${version}"
+    else
+        versions="${versions} ${version}"
+    fi
+done
+if [ -z "${versions}" ]; then
+    echo ""
+    echo "Error: local PXSE compatability support is for versions > ${min_ver}"
+    echo ""
+    exit 1
+fi
+
 %post
 
-topDir=`rpm -q --qf '%{FILENAMES}\n' intel-mpi-doc | head -1` || exit 1
+mpicc_subpath="linux/mpi/intel64/bin/mpicc"
+scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
-echo " "
-echo "Scanning top-level dir = $topDir"
+versions=`rpm -qal | grep ${mpicc_subpath}$`
 
-if [ -d ${topDir} ];then
-    versions=`find -L ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*.*" -printf "%f "` || exit 1
+if [ $? -eq 1 ];then
+    echo ""
+    echo "Error: Unable to detect local Parallel Studio installation. The toolchain"
+    echo "       providing ${mpicc_subpath} must be installed prior to this compatability package"
+    exit 1
+fi
 
-    scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
+echo "Creating OpenHPC-style modulefiles for local PXSE MPI installation(s)."
 
-    for dir in ${versions}; do
-	if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
-	    version=`grep "^MPIVERSION=" ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc | cut -d '"' -f2 | sed 's| Update |\.|'`
-	    if [ -z "${version}" ];then
-		echo "Error: unable to determine MPI version"
-		exit 1
-	    fi
+# Create modulefiles for each locally detected installation.
+
+for file in ${versions}; do
+
+    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    topDir=`echo $file | sed "s|$mpicc_subpath||"`
+    echo "--> Installing modulefile for MPI version=${version}"
 	    
-	    echo "--> Installing OpenHPC-style modulefile for MPI version=${version}"
+    # Create soft links for standard MPI wrapper usage
 
-	    # Create soft links for standard MPI wrapper usage
+    ohpc_path=${topDir}/linux/mpi/intel64/bin_ohpc
 
-	    ohpc_path=${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
-
-	    %{__mkdir_p} ${ohpc_path} || exit 1
-	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ];then
-		if [ ! -e ${ohpc_path}/mpicc ];then
-		    %{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicc ${ohpc_path}/mpicc
-		fi
-	    fi
-	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicpc ];then
-		if [ ! -e ${ohpc_path}/mpicxx ];then
-		    %{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiicpc ${ohpc_path}/mpicxx
-		fi
-	    fi
-	    if [ -e ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ];then
-		if [ ! -e ${ohpc_path}/mpif90 ];then
-		    %{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif90
-		fi
-		if [ ! -e ${ohpc_path}/mpif77 ];then
-		    %{__ln_s} ${topDir}/${dir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif77
-		fi
-	    fi
+    %{__mkdir_p} ${ohpc_path} || exit 1
+    if [ -e ${topDir}/linux/mpi/intel64/bin/mpiicc ];then
+	if [ ! -e ${ohpc_path}/mpicc ];then
+	    %{__ln_s} ${topDir}/linux/mpi/intel64/bin/mpiicc ${ohpc_path}/mpicc
+	fi
+    fi
+    if [ -e ${topDir}/linux/mpi/intel64/bin/mpiicpc ];then
+	if [ ! -e ${ohpc_path}/mpicxx ];then
+	    %{__ln_s} ${topDir}/linux/mpi/intel64/bin/mpiicpc ${ohpc_path}/mpicxx
+	fi
+    fi
+    if [ -e ${topDir}/linux/mpi/intel64/bin/mpiifort ];then
+	if [ ! -e ${ohpc_path}/mpif90 ];then
+	    %{__ln_s} ${topDir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif90
+	fi
+	if [ ! -e ${ohpc_path}/mpif77 ];then
+	    %{__ln_s} ${topDir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif77
+	fi
+    fi
 	    
-	    # Module header
+    # Module header
 
-	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/${version}
+    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/${version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -128,11 +166,11 @@ prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/intel-impi
 family "MPI"
 EOF
 
-	    # Append with environment vars parsed directlry from mpivars.sh
-	    ${scanner} ${topDir}/${dir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/intel/impi/${version} || exit 1
+    # Append with environment vars parsed directlry from mpivars.sh
+    ${scanner} ${topDir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/intel/impi/${version} || exit 1
 
-	    # Prepend bin_ohpc
-	    %{__cat} << EOF >> %{OHPC_MODULEDEPS}/intel/impi/${version}
+    # Prepend bin_ohpc
+    %{__cat} << EOF >> %{OHPC_MODULEDEPS}/intel/impi/${version}
 #
 # Prefer bin_ohpc to allow developers to use standard mpicc, mpif90,
 # etc to access Intel toolchain.
@@ -140,14 +178,14 @@ EOF
 prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 EOF
 
-	    # Version file
-	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/.version.${version}
+    # Version file
+    %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/.version.${version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "${version}"
 EOF
 	
-	    # OpenHPC module file for GNU compiler toolchain
-	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/gnu/impi/${version}
+    # OpenHPC module file for GNU compiler toolchain
+    %{__cat} << EOF > %{OHPC_MODULEDEPS}/gnu/impi/${version}
 #%Module1.0#####################################################################
 proc ModulesHelp { } {
 
@@ -177,51 +215,52 @@ prepend-path    MODULEPATH      %{OHPC_MODULEDEPS}/gnu-impi
 family "MPI"
 EOF
 
-	    # Append with environment vars parsed directly from mpivars.sh
-	    ${scanner} ${topDir}/${dir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/gnu/impi/${version} || exit 1
+    # Append with environment vars parsed directly from mpivars.sh
+    ${scanner} ${topDir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/gnu/impi/${version} || exit 1
 
-	    # Version file
-	    %{__cat} << EOF > %{OHPC_MODULEDEPS}/gnu/impi/.version.${version}
+    # Version file
+    %{__cat} << EOF > %{OHPC_MODULEDEPS}/gnu/impi/.version.${version}
 #%Module1.0#####################################################################
 set     ModulesVersion      "${version}"
 EOF
 
-	    # support for additional gnu variants
-	    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/${version} %{OHPC_MODULEDEPS}/gnu7/impi/${version}
-	    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/.version.${version} %{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}
-	    perl -pi -e 's!moduledeps/gnu-impi!moduledeps/gnu7-impi!' %{OHPC_MODULEDEPS}/gnu7/impi/${version}
+    # support for additional gnu variants
+    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/${version} %{OHPC_MODULEDEPS}/gnu7/impi/${version}
+    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/.version.${version} %{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}
+    perl -pi -e 's!moduledeps/gnu-impi!moduledeps/gnu7-impi!' %{OHPC_MODULEDEPS}/gnu7/impi/${version}
+    
+    # Inventory for later removal
+    echo "%{OHPC_MODULEDEPS}/intel/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
+    echo "%{OHPC_MODULEDEPS}/gnu/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/gnu/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/gnu7/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
 
-	    # Inventory for later removal
-	    echo "%{OHPC_MODULEDEPS}/intel/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-	    echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
-	    echo "%{OHPC_MODULEDEPS}/gnu/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-	    echo "%{OHPC_MODULEDEPS}/gnu/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-	    echo "%{OHPC_MODULEDEPS}/gnu7/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-	    echo "%{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
-	fi
-    done
-fi
-
+done
 
 
 %postun
 if [ "$1" = 0 ]; then
-    topDir=`rpm -q --qf '%{FILENAMES}\n' intel-mpi-doc` || exit 1
 
-    if [ -d ${topDir} ];then
-	versions=`find -L ${topDir} -maxdepth 1 -type d -name "compilers_and_libraries_*" -printf "%f "` || exit 1
+    mpicc_subpath="linux/mpi/intel64/bin/mpicc"
+    versions=`rpm -qal | grep ${mpicc_subpath}$`
 
-	for dir in ${versions}; do
-	    if [ -d ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc ];then
-		rm -rf ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
-	    fi
-	done
-    fi
+    for file in ${versions}; do
+	version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+	topDir=`echo $file | sed "s|$mpicc_subpath||"`
 
-    for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
-        rm $file
+	if [ -d ${topDir}/linux/mpi/intel64/bin_ohpc ];then
+	    rm -rf ${topDir}/linux/mpi/intel64/bin_ohpc
+	fi
     done
-    rm -f %{OHPC_MODULEDEPS}/intel/impi/.manifest
+
+    if [ -s %{OHPC_MODULEDEPS}/intel/impi/.manifest ];then
+	for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
+            rm $file
+	done
+	rm -f %{OHPC_MODULEDEPS}/intel/impi/.manifest
+    fi
 fi
 
 %clean

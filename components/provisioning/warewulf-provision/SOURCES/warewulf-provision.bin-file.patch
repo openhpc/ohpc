@@ -1,0 +1,75 @@
+--- a/provision/cgi-bin/file.pl	2017-03-22 08:41:20.000000000 -0700
++++ b/provision/cgi-bin/file.pl	2017-08-28 11:28:58.000000000 -0700
+@@ -133,39 +133,41 @@
+                             close CACHE;
+                         }
+ 
+-                        # Search for all matching variable entries.
+-                        foreach my $wwstring ($read_buffer =~ m/\%\{[^\}]+\}(?:\[\d+\])?/g) {
+-                            # Check for format, and seperate into a seperate wwvar string
+-                            if ($wwstring =~ /^\%\{(.+?)\}(\[(\d+)\])?$/) {
+-                                my $wwvar = $1;
+-                                my $wwarrayindex = $3;
+-                                # Set the current object that we are looking at. This is
+-                                # important as we iterate through multiple levels.
+-                                my $curObj = $node;
+-                                my @keys = split(/::/, $wwvar);
+-                                while(my $key = shift(@keys)) {
+-                                    my $val = $curObj->get($key);
+-                                    if (ref($val) eq "Warewulf::ObjectSet") {
+-                                        my $find = shift(@keys);
+-                                        my $o = $val->find("name", $find);
+-                                        if ($o) {
+-                                            $curObj = $o;
++                        if ( $fileObj->format ne "binary" ) {
++                            # Search for all matching variable entries.
++                            foreach my $wwstring ($read_buffer =~ m/\%\{[^\}]+\}(?:\[\d+\])?/g) {
++                                # Check for format, and seperate into a seperate wwvar string
++                                if ($wwstring =~ /^\%\{(.+?)\}(\[(\d+)\])?$/) {
++                                    my $wwvar = $1;
++                                    my $wwarrayindex = $3;
++                                    # Set the current object that we are looking at. This is
++                                    # important as we iterate through multiple levels.
++                                    my $curObj = $node;
++                                    my @keys = split(/::/, $wwvar);
++                                    while(my $key = shift(@keys)) {
++                                        my $val = $curObj->get($key);
++                                        if (ref($val) eq "Warewulf::ObjectSet") {
++                                            my $find = shift(@keys);
++                                            my $o = $val->find("name", $find);
++                                            if ($o) {
++                                                $curObj = $o;
++                                            } else {
++                                                &dprint("Could not find object: $find\n");
++                                            }
++
++                                        } elsif (ref($val) eq "ARRAY") {
++                                            my $v;
++                                            if ($wwarrayindex) {
++                                                $v = $val->[$wwarrayindex];
++                                            } else {
++                                                $v = $val->[0];
++                                            }
++                                            $read_buffer =~ s/\Q$wwstring\E/$v/g;
++                                        } elsif ($val) {
++                                            $read_buffer =~ s/\Q$wwstring\E/$val/g;
+                                         } else {
+-                                            &dprint("Could not find object: $find\n");
++                                            $read_buffer =~ s/\Q$wwstring\E//g;
+                                         }
+-
+-                                    } elsif (ref($val) eq "ARRAY") {
+-                                        my $v;
+-                                        if ($wwarrayindex) {
+-                                            $v = $val->[$wwarrayindex];
+-                                        } else {
+-                                            $v = $val->[0];
+-                                        }
+-                                        $read_buffer =~ s/\Q$wwstring\E/$v/g;
+-                                    } elsif ($val) {
+-                                        $read_buffer =~ s/\Q$wwstring\E/$val/g;
+-                                    } else {
+-                                        $read_buffer =~ s/\Q$wwstring\E//g;
+                                     }
+                                 }
+                             }

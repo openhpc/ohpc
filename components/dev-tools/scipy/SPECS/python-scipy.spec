@@ -63,7 +63,7 @@ Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        0.19.0
+Version:        0.19.1
 Release:        1%{?dist}
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
@@ -80,6 +80,7 @@ BuildRequires:  python-setuptools
 BuildRequires:  python-Cython
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 # Default library install path
@@ -184,21 +185,8 @@ prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-package
 
 setenv          %{PNAME}_DIR        %{install_path}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded fftw]  } {
-        module load fftw
-    }
-    if {  ![is-loaded numpy]  } {
-        module load numpy
-    }
-    if {  ![is-loaded openblas]  } {
-        module load openblas
-    }
-}
-
-if [ module-info mode remove ] {
-    module unload numpy
-}
+depends-on fftw
+depends-on numpy
 
 EOF
 
@@ -214,7 +202,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc THANKS.txt
 %doc LICENSE.txt

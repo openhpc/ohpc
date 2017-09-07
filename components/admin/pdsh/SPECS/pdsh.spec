@@ -1,4 +1,4 @@
-#----------------------------------------------------------------------------bh-
+#---------------------------------------------------------------------------bh-
 # This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
@@ -9,30 +9,25 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-%define pname pdsh
+%global pname pdsh
 
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.31
+Version:   2.33
 Release:   1
 License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
-DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/admin
-#Source0:   %{pname}-%{version}.tar.gz
-Source0:   https://github.com/grondo/%{pname}/archive/%{pname}-%{version}.tar.gz
+Source0:   https://github.com/chaos/%{pname}/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
-%define debug_package %{nil}
 
 ### karl.w.schulz@intel.com (11/07/14) - temporarily disabling rcmd requirement
 ### Requires: pdsh-rcmd
 
 # Default library install path
-%define install_path %{OHPC_HOME}/admin/%{pname}
+%global install_path %{OHPC_HOME}/admin/%{pname}
 
 #
 # Enabling and disabling pdsh options
@@ -55,21 +50,21 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #
 #  Definition of default packages to build on various platforms:
 # 
-%define _defaults ssh exec readline pam
+%global _defaults ssh exec readline pam
 
 #   LLNL system defaults
 #%if 0%{?chaos}
-#%define _default_with %{_defaults} mrsh nodeupdown genders slurm 
+#%global _default_with %{_defaults} mrsh nodeupdown genders slurm
 #%else
 #   All other defaults
-%define _default_with %{_defaults} mrsh genders slurm
+%global _default_with %{_defaults} mrsh genders slurm
 #%endif
 
 #
 #   Environment variables can be used to override defaults above:
 #
-#%define _env_without ${PDSH_WITHOUT_OPTIONS}
-#%define _env_with    ${PDSH_WITH_OPTIONS} 
+#%global _env_without ${PDSH_WITHOUT_OPTIONS}
+#%global _env_with    ${PDSH_WITH_OPTIONS}
 
 #   Shortcut for % global expansion
 %define dstr "%%%%"global
@@ -126,7 +121,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 # (See /usr/share/doc/rpm-*/conditionalbuilds)
 #
 %if %{?_with_debug:1}%{!?_with_debug:0}
-  %define _enable_debug --enable-debug
+  %global _enable_debug --enable-debug
 %endif
 
 
@@ -140,7 +135,7 @@ BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 #%{?_with_genders:BuildRequires: genders > 1.0}
 #BuildRequires: genders > 1.0
 %{?_with_pam:BuildRequires: pam-devel}
-#%{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
+%{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
 %{?_with_torque:BuildRequires: torque-devel}
 
 
@@ -174,7 +169,7 @@ Group:   System Environment/Base
 Requires:  xinetd
 %description mqshd
 Remote shell service for running Quadrics QsNet jobs under pdsh with
-mrsh authentication.  Sets up Elan capabilities and environment variables 
+mrsh authentication.  Sets up Elan capabilities and environment variables
 needed by Quadrics MPICH executables.
 ##############################################################################
 
@@ -252,7 +247,7 @@ Pdsh module for libgenders functionality.
 %package   mod-nodeattr
 Summary:   Provides genders support for pdsh using the nodeattr program
 Group:     System Environment/Base
-Requires:  genders 
+Requires:  genders
 Conflicts: pdsh-mod-genders
 Conflicts: pdsh-mod-machines
 %description mod-nodeattr
@@ -315,7 +310,7 @@ from an allocated Torque job.
 ##############################################################################
 
 %prep
-%setup  -q -n %{pname}-%{pname}-%{version}
+%setup  -q -n %{pname}-%{version}
 ##############################################################################
 
 %build
@@ -326,36 +321,26 @@ cp /usr/lib/rpm/config.guess config
 %endif
 
 ./configure --prefix=%{install_path} \
-    --with-rcmd-rank-list="ssh mrsh rsh krb4 qsh mqsh exec xcpu" \
+    --with-rcmd-rank-list="ssh mrsh rsh krb4 exec xcpu" \
     %{?_enable_debug}       \
-    %{?_with_pam}           \
-    %{?_without_pam}        \
     %{?_with_rsh}           \
     %{?_without_rsh}        \
     %{?_with_ssh}           \
     %{?_without_ssh}        \
     %{?_with_exec}          \
     %{?_without_exec}       \
-    %{?_with_qshell}        \
-    %{?_without_qshell}     \
     %{?_with_readline}      \
     %{?_without_readline}   \
     %{?_with_machines}      \
     %{?_without_machines}   \
     %{?_with_genders}       \
     %{?_without_genders}    \
-    %{?_with_rms}           \
-    %{?_without_rms}        \
     %{?_with_nodeupdown}    \
     %{?_without_nodeupdown} \
-    %{?_with_nodeattr}      \
-    %{?_without_nodeattr}   \
     %{?_with_mrsh}          \
     %{?_without_mrsh}       \
-    %{?_with_mqshell}       \
-    %{?_without_mqshell}    \
-    %{?_with_xcpu}          \
-    %{?_without_xcpu}       \
+    %{?_with_xcpu}       \
+    %{?_without_xcpu}    \
     %{?_with_slurm}         \
     %{?_without_slurm}      \
     %{?_with_torque}        \
@@ -364,8 +349,8 @@ cp /usr/lib/rpm/config.guess config
     %{?_without_dshgroups}  \
     %{?_with_netgroup}      \
     %{?_without_netgroup}
-    
-           
+
+
 # FIXME: build fails when trying to build with _smp_mflags if qsnet is enabled
 make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS"
 
@@ -386,7 +371,7 @@ fi
 # install_doc_files
 %endif
 
-# 
+#
 # Remove all module .a's as they are not needed on any known RPM platform.
 find "%buildroot" -type f -name "*.a" | xargs rm -f
 
@@ -410,8 +395,8 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %files
 %defattr(-,root,root)
-%doc COPYING README NEWS DISCLAIMER 
-%doc README.KRB4 README.modules README.QsNet
+%doc COPYING README NEWS DISCLAIMER.LLNS DISCLAIMER.UC
+%doc README.KRB4 README.modules
 %{OHPC_HOME}
 %{OHPC_PUB}
 %{_bindir}/pdsh

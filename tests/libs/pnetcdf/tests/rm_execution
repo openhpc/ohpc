@@ -1,0 +1,51 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+NODES=1
+TASKS=2
+
+@test "[libs/PNETCDF] Parallel Fortran binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s f90tst_parallel ];then
+      flunk "f90tst_parallel does not exist"
+    fi
+
+    run_mpi_binary ./f90tst_parallel f90tst_parallel.nc $NODES $TASKS
+    assert_success
+}
+
+@test "[libs/PNETCDF] Parallel Fortran binary 2 runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s f90tst_parallel2 ];then
+      flunk "f90tst_parallel2 does not exist"
+    fi
+
+    run_mpi_binary ./f90tst_parallel2 f90tst_parallel2.nc $NODES $TASKS
+    assert_success
+}
+
+@test "[libs/PNETCDF] Parallel Fortran binary 3 runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s f90tst_parallel3 ];then
+      flunk "f90tst_parallel3 does not exist"
+    fi
+
+    run_mpi_binary ./f90tst_parallel3 f90tst_parallel3.nc $NODES $TASKS
+    assert_success
+}
+
+@test "[libs/PNETCDF] Parallel Fortran binary 4 runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s f90tst_parallel4 ];then
+      flunk "f90tst_parallel4 does not exist"
+    fi
+
+    run_mpi_binary ./f90tst_parallel4 f90tst_parallel4.nc $NODES $TASKS
+    assert_success
+}

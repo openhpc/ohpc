@@ -42,6 +42,7 @@ Patch1: warewulf-common.system.patch
 Patch2: mysql.r1978.patch
 # 02/22/17 charles.r.baird@intel.com - alternate package names for SuSE
 Patch3 : warewulf-common.dbinit.patch
+Patch4 : warewulf-common.bin-file.patch
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else
@@ -71,6 +72,7 @@ cd %{dname}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p2
 
 
 %build
@@ -105,7 +107,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-, root, root)
 %{_sysconfdir}/bash_completion.d/warewulf_completion
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/

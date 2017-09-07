@@ -14,7 +14,7 @@ export BATS_JUNIT_CLASS=Compilers
 
 ./bootstrap || exit 1
 
-for compiler in $COMPILER_FAMILIES ; do
+for compiler in llvm4 $COMPILER_FAMILIES ; do
 
     echo " "
     echo " "

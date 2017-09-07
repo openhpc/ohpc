@@ -28,7 +28,7 @@ Source2:   LICENSE
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
-%define package_target %{OHPC_PUB}/%{pname}/%{version}
+%define package_target %{OHPC_UTILS}/%{pname}/%{version}
 
 %description
 

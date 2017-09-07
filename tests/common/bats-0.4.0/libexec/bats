@@ -183,12 +183,14 @@ if [ "$formatter" == "tap-to-junit-xml" ]; then
     # also, add mktemp_flag
     set +e
     exec "$command" $count_flag $extended_syntax_flag "${filenames[@]}" | tee >(cat >&2) | tee "${baseName}.log" | "$formatter" --cmt $JUNIT_GROUP --output "${baseName}.log.xml"
+    status=$?
     set -e
     # john.a.westlund@intel.com
     # If timing is enabled fix the JUNIT xml output to include timing data
     if [ -n "$BATS_ENABLE_TIMING" ]; then
       fix-timings.pl -i "${baseName}.log.xml"
     fi
+    exit ${status}
   else
     echo "Error: Junit parsing incompatible with multiple files"
     exit 1

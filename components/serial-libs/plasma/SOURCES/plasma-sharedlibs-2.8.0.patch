@@ -1,0 +1,242 @@
+commit e59f410eaee40aefac4005bd2f67a6d4587e7140
+Author: Takeharu KATO <kato.takeharu@jp.fujitsu.com>
+Date:   Thu Apr 20 12:24:44 2017 +0900
+
+    plasma shared
+
+diff --git a/Makefile b/Makefile
+index fc51df1..3bca9d0 100644
+--- a/Makefile
++++ b/Makefile
+@@ -134,6 +134,7 @@ install-coreblas: libcoreblas pkgconfig-coreblas dir
+ 	cp $(PLASMA_DIR)/include/plasmatypes.h $(prefix)/include
+ 	cp $(PLASMA_DIR)/include/core_*.h      $(prefix)/include
+ 	cp $(LIBCOREBLAS)              $(prefix)/lib
++	cp $(LIBCOREBLAS_SO)              $(prefix)/lib
+ #       pkgconfig coreblas
+ 	cp $(PLASMA_DIR)/lib/pkgconfig/coreblas.pc $(prefix)/lib/pkgconfig/coreblas.pc
+ 
+@@ -145,6 +146,9 @@ endif
+ 	cp $(LIBCOREBLAS)              $(prefix)/lib
+ 	cp $(LIBCOREBLASQW)            $(prefix)/lib
+ 	cp $(LIBPLASMA)                $(prefix)/lib
++	cp $(LIBCOREBLAS_SO)           $(prefix)/lib
++	cp $(LIBCOREBLASQW_SO)         $(prefix)/lib
++	cp $(LIBPLASMA_SO)             $(prefix)/lib
+ #       pkgconfig plasma
+ 	cp $(PLASMA_DIR)/lib/pkgconfig/plasma.pc $(prefix)/lib/pkgconfig/plasma.pc
+ 
+diff --git a/Makefile.internal b/Makefile.internal
+index 79f0ace..e1b0b8d 100644
+--- a/Makefile.internal
++++ b/Makefile.internal
+@@ -31,11 +31,20 @@ INCEXT      = $(INCCLAPACK)
+ # Location of the libraries.
+ LIBDIR      = -L$(PLASMA_DIR)/lib
+ 
++# Options for shared libraries
++SHARED_OPT = -shared 
++SONAME_OPT = -Wl,-soname
++
+ # Location and name of the PLASMA library.
++PLAZMA_SOVER    = 0
+ LIBCOREBLAS     = $(PLASMA_DIR)/lib/libcoreblas.a
++LIBCOREBLAS_SO  = $(PLASMA_DIR)/lib/libcoreblas.so
+ LIBCOREBLASQW   = $(PLASMA_DIR)/lib/libcoreblasqw.a
++LIBCOREBLASQW_SO = $(PLASMA_DIR)/lib/libcoreblasqw.so
+ LIBPLASMA       = $(PLASMA_DIR)/lib/libplasma.a
++LIBPLASMA_SO    = $(PLASMA_DIR)/lib/libplasma.so
+ LIBEZT_COREBLAS = $(PLASMA_DIR)/lib/libeztrace-coreblas.a
++LIBEZT_COREBLAS_SO = $(PLASMA_DIR)/lib/libeztrace-coreblas.so
+ LIBEZT_CONVERT  = $(PLASMA_DIR)/lib/libeztrace-convert-coreblas.so
+ 
+ #             Trace librairies
+diff --git a/compute/Makefile b/compute/Makefile
+index b544b5d..6e558a0 100644
+--- a/compute/Makefile
++++ b/compute/Makefile
+@@ -75,17 +75,20 @@ ZSRC =  \
+ ALLSRC = $(ZSRC) $(CSRC) $(DSRC) $(SSRC)
+ ALLOBJ = $(ALLSRC:.c=.o)
+ 
+-all: $(LIBPLASMA)
++all: $(LIBPLASMA) $(LIBPLASMA_SO)
+ 
+ $(LIBPLASMA): $(HEADERS) $(ALLOBJ)
+ 	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
+ 	$(RANLIB) $@
+ 
++$(LIBPLASMA_SO): $(HEADERS) $(ALLOBJ)
++	$(CC) $(SHARED_OPT) $(SONAME_OPT)=$(LIBPLASMA_SO).$(PLAZMA_SOVER) -o $@ $(ALLOBJ)
++
+ clean:
+ 	rm -f *.o *~
+ 
+ cleanall: clean
+-	rm -f *.a
++	rm -f *.a *.so*
+ 
+ .c.o:
+ 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+diff --git a/control/Makefile b/control/Makefile
+index 4710d05..3a9dd0d 100644
+--- a/control/Makefile
++++ b/control/Makefile
+@@ -65,7 +65,7 @@ ALLOBJ  = $(ALLSRC:.c=.o)
+ ALLOBJ := $(ALLOBJ:.f90=.o)
+ ALLOBJ := $(ALLOBJ:.F90=.o)
+ 
+-all: $(LIBPLASMA)
++all: $(LIBPLASMA) $(LIBPLASMA_SO)
+ 
+ ifeq (${PLASMA_F90}, 1)
+ $(LIBPLASMA) : $(ALLMOD)
+@@ -75,11 +75,14 @@ $(LIBPLASMA): $(ALLOBJ)
+ 	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
+ 	$(RANLIB) $@
+ 
++$(LIBPLASMA_SO): $(ALLOBJ)
++	$(CC) $(SHARED_OPT) $(SONAME_OPT)=$(LIBPLASMA_SO).$(PLAZMA_SOVER) -o $@ $(ALLOBJ)
++
+ clean:
+ 	rm -f *.o *~ *.mod
+ 
+ cleanall: clean
+-	rm -f *.a $(ALLMOD)
++	rm -f *.a *.so* $(ALLMOD)
+ 
+ plasmaos.o : plasmaos.c plasmaos-hwloc.c 
+ 
+diff --git a/core_blas-eztrace/Makefile b/core_blas-eztrace/Makefile
+index c93a71e..98d3ea0 100644
+--- a/core_blas-eztrace/Makefile
++++ b/core_blas-eztrace/Makefile
+@@ -25,20 +25,23 @@ ALLSRC = coreblas.c \
+ 	 $(ZSRC) $(CSRC) $(DSRC) $(SSRC)
+ ALLOBJ = $(ALLSRC:.c=.o)
+ 
+-all: $(LIBEZT_COREBLAS) $(LIBEZT_CONVERT)
++all: $(LIBEZT_COREBLAS) $(LIBEZT_CONVERT) $(LIBEZT_COREBLAS_SO) 
+ 
+ $(LIBEZT_COREBLAS) : $(ALLOBJ)
+ 	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
+ 	$(RANLIB) $@
+ 
+ $(LIBEZT_CONVERT): eztrace_convert_coreblas.o
+-	$(CC) -shared $(CFLAGS) $(INC) $^ -o $@
++	$(CC)  $(SHARED_OPT) $(CFLAGS) $(INC) $^ -o $@
++
++$(LIBEZT_COREBLAS_SO): $(ALLOBJ)
++	$(CC) $(SHARED_OPT) $(SONAME_OPT)=$(LIBEZT_COREBLAS_SO).$(PLAZMA_SOVER) -o $@ $(ALLOBJ)
+ 
+ clean:
+ 	rm -f *.o *~
+ 
+ cleanall: clean
+-	rm -f $(LIBEZT_COREBLAS) $(LIBEZT_CONVERT)
++	rm -f $(LIBEZT_COREBLAS) $(LIBEZT_CONVERT) $(LIBEZT_COREBLAS_SO)
+ 
+ eztrace_convert_coreblas.o :  eztrace_convert_coreblas.c
+ 	$(CC) -fPIC $(CFLAGS) $(INC) -c $< -o $@
+diff --git a/core_blas-qwrapper/Makefile b/core_blas-qwrapper/Makefile
+index f6d5e1c..c660180 100644
+--- a/core_blas-qwrapper/Makefile
++++ b/core_blas-qwrapper/Makefile
+@@ -79,17 +79,20 @@ ALLSRC = qwrapper_alloc.c       \
+ 	$(ZSRC) $(CSRC) $(DSRC) $(SSRC)
+ ALLOBJ = $(ALLSRC:.c=.o)
+ 
+-all: $(LIBCOREBLASQW)
++all: $(LIBCOREBLASQW) $(LIBCOREBLASQW_SO)
+ 
+ $(LIBCOREBLASQW): $(ALLOBJ)
+ 	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
+ 	$(RANLIB) $@
+ 
++$(LIBCOREBLASQW_SO):  $(ALLOBJ)
++	$(CC) $(SHARED_OPT) $(SONAME_OPT)=$(LIBCOREBLASQW_SO).$(PLAZMA_SOVER) -o $@ $(ALLOBJ)
++
+ clean:
+ 	rm -f *.o *~
+ 
+ cleanall: clean
+-	rm -f *.a
++	rm -f *.a *.so*
+ 
+ .c.o :
+ 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+diff --git a/core_blas/Makefile b/core_blas/Makefile
+index 5cd8667..2976426 100644
+--- a/core_blas/Makefile
++++ b/core_blas/Makefile
+@@ -82,17 +82,20 @@ ALLSRC = global.c	                \
+ 	$(ZSRC) $(CSRC) $(DSRC) $(SSRC)
+ ALLOBJ = $(ALLSRC:.c=.o)
+ 
+-all: $(LIBCOREBLAS)
++all: $(LIBCOREBLAS) $(LIBCOREBLAS_SO)
+ 
+ $(LIBCOREBLAS): $(ALLOBJ)
+ 	$(ARCH) $(ARCHFLAGS) $@ $(ALLOBJ)
+ 	$(RANLIB) $@
+ 
++$(LIBCOREBLAS_SO): $(ALLOBJ)
++	 $(CC) $(SHARED_OPT) $(SONAME_OPT)=$(LIBCOREBLAS_SO).$(PLAZMA_SOVER) -o $@ $(ALLOBJ)
++
+ clean:
+ 	rm -f *.o *~
+ 
+ cleanall: clean
+-	rm -f *.a
++	rm -f *.a *.so*
+ 
+ .c.o :
+ 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+diff --git a/quark/Makefile b/quark/Makefile
+index 4ed348d..d0a3adb 100644
+--- a/quark/Makefile
++++ b/quark/Makefile
+@@ -16,8 +16,8 @@ include ../Makefile.internal
+ 
+ TRACE_SHARED_LIB_DESTINATION_DIRECTORY ?= $(PLASMA_DIR)/lib
+ 
+-all: libquark.a trace_shared_libs
+-lib: libquark.a trace_shared_libs
++all: libquark.a trace_shared_libs libquark.so
++lib: libquark.a trace_shared_libs libquark.so
+ 
+ # Decide whether to enable EZTrace tracing, and to build the shared tracing library.
+ # Note, for binaries EZTrace should be in the include and library paths ( -leztrace -lfxt )
+@@ -32,7 +32,7 @@ CFLAGS += -DTRACE_QUARK -I${EZT_DIR}/include
+ QUARK_TRACE_SO_LIB=$(TRACE_SHARED_LIB_DESTINATION_DIRECTORY)/libeztrace-convert-quark.so
+ QUARK_TRACE_OBJS=eztrace_convert_quark.o
+ $(QUARK_TRACE_SO_LIB): eztrace_convert_quark.o
+-	$(CC) -shared $(CFLAGS) $(INC) $^ -o $@
++	$(CC) $(SHARED_OPT) $(CFLAGS) $(INC) $^ -o $@
+ eztrace_convert_quark.o: eztrace_convert_quark.c quark_trace.h
+ 	$(CC) -fPIC $(CFLAGS) $(INC) -c $< -o $@
+ 
+@@ -54,6 +54,9 @@ libquark.a: icl_hash.o icl_list.o quarkos.o quark.o $(QUARK_TRACE_OBJS)
+ 	$(ARCH) $(ARCHFLAGS) $@ $^
+ 	$(RANLIB) $@
+ 
++libquark.so: icl_hash.o icl_list.o quarkos.o quark.o $(QUARK_TRACE_OBJS)
++	$(CC) $(SHARED_OPT) $(SONAME_OPT)=libquark.so.$(PLAZMA_SOVER) -o $@ icl_hash.o icl_list.o quarkos.o quark.o $(QUARK_TRACE_OBJS)
++
+ .c.o:
+ 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
+ 
+@@ -63,11 +66,12 @@ install: libquark.a install_shared_libs
+ 	cp icl_hash.h          $(prefix)/include
+ 	cp icl_list.h          $(prefix)/include
+ 	cp libquark.a          $(prefix)/lib
++	cp libquark.so	       $(prefix)/lib
+ 
+ clean:
+ 	rm -f *.o *~
+ 
+ cleanall: clean
+-	rm -f *.a
++	rm -f *.a *.so*
+ 
+ .PHONY: clean

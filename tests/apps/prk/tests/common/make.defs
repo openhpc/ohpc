@@ -8,7 +8,7 @@ CC=mpicc
 ifeq ($(LMOD_FAMILY_COMPILER),gnu)
   OPENMPFLAG=-fopenmp
 else
-  OPENMPFLAG=-openmp
+  OPENMPFLAG=-qopenmp
 endif
 
 #default compiler optimization flags

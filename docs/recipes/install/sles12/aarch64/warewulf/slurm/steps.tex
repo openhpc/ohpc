@@ -110,6 +110,7 @@
 \subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 \input{common/ibsupport_sms_sles}
 
+\vspace*{-0.3cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
 \input{common/warewulf_setup_sles}
@@ -130,7 +131,7 @@
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
 # Add IB support
-[sms](*\#*) (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2 libcairo2
+[sms](*\#*) (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
 [sms](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
@@ -187,6 +188,10 @@
 \input{common/lustre-client-post}
 
 \clearpage
+\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
+\input{common/syslog}
+
+\clearpage
 \paragraph{Add \Nagios{} monitoring}
 \input{common/nagios}
 
@@ -206,10 +211,6 @@
 
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
-
-\clearpage
-\paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
-\input{common/syslog}
 
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}

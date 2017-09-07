@@ -19,7 +19,7 @@ TIMEOUT="00:05:00"
 
 @test "[libs/FFTW] Serial C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_test ];then
-	flunk "C_test binary does not exit"
+	flunk "C_test binary does not exist"
     fi
     
     run_serial_binary -t ${TIMEOUT} ./C_test
@@ -28,7 +28,7 @@ TIMEOUT="00:05:00"
 
 @test "[libs/FFTW] MPI C binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s C_mpi_test ];then
-	flunk "C_mpi_test binary does not exit"
+	flunk "C_mpi_test binary does not exist"
     fi
 
     run_mpi_binary -t ${TIMEOUT} ./C_mpi_test $ARGS $NODES $TASKS
@@ -37,7 +37,7 @@ TIMEOUT="00:05:00"
 
 @test "[libs/FFTW] Serial Fortran binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ ! -s F_test ];then
-	flunk "F_test binary does not exit"
+	flunk "F_test binary does not exist"
     fi
 
     run_serial_binary -t ${TIMEOUT} ./F_test

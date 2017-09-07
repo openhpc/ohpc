@@ -42,7 +42,10 @@ xccblat3_SOURCES        = c_cblas3.c c_cblat3.f c_c3chke.c c_xerbla.c auxiliary.
 check_PROGRAMS         += xzcblat3
 xzcblat3_SOURCES        = c_zblas3.c c_zblat3.f c_z3chke.c c_xerbla.c auxiliary.c constant.c
 
+check_PROGRAMS         += eigen
+eigen_SOURCES           = eigen.cpp
 
 TESTS                  += test_module
+TESTS                  += test_lapack
 TESTS                  += rm_execution
 

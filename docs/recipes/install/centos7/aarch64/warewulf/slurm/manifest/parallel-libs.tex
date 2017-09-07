@@ -9,14 +9,14 @@
 \midrule
 
 % <-- begin entry for boost
-boost-gnu7-mpich-ohpc &
+boost-gnu-mpich-ohpc &
 \multirow{4}{*}{1.63.0} & 
 \multirow{4}{\linewidth}{Boost free peer-reviewed portable C++ source libraries. \newline {\color{logoblue} \url{http://www.boost.org}}} \\ 
-boost-gnu7-openmpi-ohpc &
-& \\ 
-boost-gnu-mpich-ohpc &
-& \\ 
 boost-gnu-openmpi-ohpc &
+& \\ 
+boost-gnu7-mpich-ohpc &
+& \\ 
+boost-gnu7-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for boost
@@ -35,14 +35,14 @@ fftw-gnu7-openmpi-ohpc &
 % <-- end entry for fftw
 
 % <-- begin entry for hypre
-hypre-gnu7-mpich-ohpc &
-\multirow{4}{*}{2.11.1} & 
-\multirow{4}{\linewidth}{Scalable algorithms for solving linear systems of equations. \newline {\color{logoblue} \url{http://www.llnl.gov/casc/hypre}}} \\ 
-hypre-gnu7-openmpi-ohpc &
-& \\ 
 hypre-gnu-mpich-ohpc &
-& \\ 
+\multirow{2}{*}{2.11.1} & 
+\multirow{4}{\linewidth}{Scalable algorithms for solving linear systems of equations. \newline {\color{logoblue} \url{http://www.llnl.gov/casc/hypre}}} \\ 
 hypre-gnu-openmpi-ohpc &
+& \\ 
+\cline{1-2} hypre-gnu7-mpich-ohpc &\multirow{2}{*}{2.11.2}
+& \\ 
+hypre-gnu7-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for hypre
@@ -73,28 +73,46 @@ petsc-gnu7-openmpi-ohpc &
 \hline
 % <-- end entry for petsc
 
+% <-- begin entry for ptscotch
+ptscotch-gnu7-mpich-ohpc &
+\multirow{2}{*}{6.0.4} & 
+\multirow{2}{\linewidth}{Graph, mesh and hypergraph partitioning library using MPI. \newline {\color{logoblue} \url{http://www.labri.fr/perso/pelegrin/scotch}}} \\ 
+ptscotch-gnu7-openmpi-ohpc &
+& \\ 
+\hline
+% <-- end entry for ptscotch
+
+% <-- begin entry for slepc
+slepc-gnu7-mpich-ohpc &
+\multirow{2}{*}{3.7.4} & 
+\multirow{2}{\linewidth}{A library for solving large scale sparse eigenvalue problems.  {\color{logoblue} \url{http://www.grycap.upv.es/slepc}}} \\ 
+slepc-gnu7-openmpi-ohpc &
+& \\ 
+\hline
+% <-- end entry for slepc
+
 % <-- begin entry for superlu_dist
-superlu\_dist-gnu7-mpich-ohpc &
+superlu\_dist-gnu-mpich-ohpc &
 \multirow{4}{*}{4.2} & 
 \multirow{4}{\linewidth}{A general purpose library for the direct solution of linear equations. \newline {\color{logoblue} \url{http://crd-legacy.lbl.gov/~xiaoye/SuperLU}}} \\ 
-superlu\_dist-gnu7-openmpi-ohpc &
-& \\ 
-superlu\_dist-gnu-mpich-ohpc &
-& \\ 
 superlu\_dist-gnu-openmpi-ohpc &
+& \\ 
+superlu\_dist-gnu7-mpich-ohpc &
+& \\ 
+superlu\_dist-gnu7-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for superlu_dist
 
 % <-- begin entry for trilinos
-trilinos-gnu7-mpich-ohpc &
+trilinos-gnu-mpich-ohpc &
 \multirow{4}{*}{12.10.1} & 
 \multirow{4}{\linewidth}{A collection of libraries of numerical algorithms. \newline {\color{logoblue} \url{http://trilinos.sandia.gov/index.html}}} \\ 
-trilinos-gnu7-openmpi-ohpc &
-& \\ 
-trilinos-gnu-mpich-ohpc &
-& \\ 
 trilinos-gnu-openmpi-ohpc &
+& \\ 
+trilinos-gnu7-mpich-ohpc &
+& \\ 
+trilinos-gnu7-openmpi-ohpc &
 & \\ 
 \hline
 % <-- end entry for trilinos

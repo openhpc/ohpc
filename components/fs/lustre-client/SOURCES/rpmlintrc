@@ -1,0 +1,3 @@
+addFilter("devel-file-in-non-devel-package")
+addFilter("summary-too-long")
+addFilter("suse-policy-kmp-missing-supplements")

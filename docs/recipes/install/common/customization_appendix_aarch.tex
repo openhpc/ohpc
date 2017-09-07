@@ -15,36 +15,34 @@ automatically.
 [sms](*\#*) mkdir /opt/ohpc/pub/modulefiles/example1
 [sms](*\#*) cp /opt/ohpc/pub/examples/example.modulefile \
     /opt/ohpc/pub/modulefiles/example1/1.0
-[sms](*\#*) mkdir /opt/ohpc/pub/moduledeps/gnu-openmpi/example2
+[sms](*\#*) mkdir /opt/ohpc/pub/moduledeps/gnu7-openmpi/example2
 [sms](*\#*) cp /opt/ohpc/pub/examples/example-mpi-dependent.modulefile \
-    /opt/ohpc/pub/moduledeps/gnu-openmpi/example2/1.0
+    /opt/ohpc/pub/moduledeps/gnu7-openmpi/example2/1.0
 [sms](*\#*) module avail
 
------------------------------ /opt/ohpc/pub/moduledeps/gnu-openmpi -----------------------------
-   adios/1.11.0    mpiP/3.4.1              phdf5/1.8.17       superlu_dist/4.2
-   boost/1.63.0    mumps/5.0.2             scalapack/2.0.2    tau/2.26
-   example2/1.0    netcdf/4.4.1.1          scalasca/2.3.1     trilinos/12.10.1
-   fftw/3.3.4      netcdf-cxx/4.3.0        scipy/0.19.0
-   hypre/2.11.1    netcdf-fortran/4.4.4    scorep/3.0
-   imb/4.1         petsc/3.7.5             sionlib/1.7.0
+-------------------------------- /opt/ohpc/pub/moduledeps/gnu7-openmpi ---------------------------------
+adios/1.12.0    imb/4.1                 netcdf/4.4.1.1    scalapack/2.0.2    slepc/3.7.4
+boost/1.63.0    mpiP/3.4.1              petsc/3.7.6       scalasca/2.3.1     superlu_dist/4.2
+example2/1.0    mumps/5.1.1             phdf5/1.10.1      scipy/0.19.1       tau/2.26.1
+fftw/3.3.6      netcdf-cxx/4.3.0        pnetcdf/1.8.1     scorep/3.1         trilinos/12.10.1
+hypre/2.11.2    netcdf-fortran/4.4.4    ptscotch/6.0.4    sionlib/1.7.1
 
---------------------------------- /opt/ohpc/pub/moduledeps/gnu ---------------------------------
-   R_base/3.3.2    metis/5.1.0     numpy/1.11.1       openmpi/1.10.6 (L)
-   gsl/2.2.1       mpich/3.2       ocr/1.0.1          pdtoolkit/3.23
-   hdf5/1.8.17     mvapich2/2.2    openblas/0.2.19    superlu/5.2.1
+------------------------------------ /opt/ohpc/pub/moduledeps/gnu7 -------------------------------------
+R/3.4.1        metis/5.1.0     ocr/1.0.1              pdtoolkit/3.24    superlu/5.2.1
+gsl/2.4        mpich/3.2       openblas/0.2.20        plasma/2.8.0
+hdf5/1.10.1    numpy/1.13.1    openmpi/1.10.7  (L)    scotch/6.0.4
 
----------------------------------- /opt/ohpc/pub/modulefiles -----------------------------------
-   EasyBuild/3.1.2           example1/1.0        papi/5.4.3
-   autotools          (L)    gnu/5.4.0    (L)    prun/1.1        (L)
-   clustershell/1.7.2        ohpc         (L)    valgrind/3.11.0
+-------------------------------------- /opt/ohpc/pub/modulefiles ---------------------------------------
+EasyBuild/3.3.1           example1/1.0        ohpc              (L)    valgrind/3.13.0
+autotools          (L)    gnu7/7.1.0   (L)    papi/5.5.1
+clustershell/1.7.3        hwloc/1.11.7        prun/1.1          (L)
+cmake/3.9.1               llvm4/4.0.1         singularity/2.3.1
 
-  Where:
-   L:  Module is loaded
-   D:  Default Module
+Where:
+L:  Module is loaded
 
 Use "module spider" to find all possible modules.
-Use "module keyword key1 key2 ..." to search for all possible modules matching
-any of the "keys".
+Use "module keyword key1 key2 ..." to search for all possible modules matching any of the "keys".
 \end{lstlisting}
 
 \clearpage
@@ -72,18 +70,18 @@ illustrates how to override the default mpi\_family.
 
 # Download SRPM from OpenHPC repository and install locally
 [test@sms ~]$ rpm -i \
-  http://build.openhpc.community/OpenHPC:/VER/OSREPO/src/fftw-gnu-openmpi-ohpc-3.3.6-20.3.src.rpm
+  http://build.openhpc.community/OpenHPC:/VER/OSREPO/src/fftw-gnu-openmpi-ohpc-3.3.4-4.1.src.rpm
 
 # Modify spec file as desired
 [test@sms ~]$ cd ~/rpmbuild/SPECS
 [test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/enable-static=no/enable-static=yes/" fftw.spec
 
 # Increment RPM release so package manager will see an update
-[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   20.3/Release:   20.4/" fftw.spec
+[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   4.1/Release:   5.1/" fftw.spec
 
 # Rebuild binary RPM. Note that additional directives can be specified to modify build
 [test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "mpi_family mvapich2" fftw.spec
 
 # Install the new package
-[test@sms ~]$ sudo (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-gnu-mvapich2-ohpc-3.3.6-20.4.rpm
+[test@sms ~]$ sudo (*\install*) ~test/rpmbuild/RPMS/x86_64/fftw-gnu-mvapich2-ohpc-3.3.6-5.1.rpm
 \end{lstlisting}

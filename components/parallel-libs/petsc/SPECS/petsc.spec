@@ -32,6 +32,7 @@ Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{versi
 Source1:        OHPC_macros
 Patch1:         petsc.rpath.patch
 Url:            http://www.mcs.anl.gov/petsc/
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
@@ -135,19 +136,9 @@ module-whatis "%{url}"
 set     version                     %{version}
 
 # Require phdf5 (and scalapack for gnu compiler families)
-
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if {  ![is-loaded phdf5]  } {
-        module load phdf5
-    }
-    if { ![is-loaded intel] } {
-        if { ![is-loaded openblas]  } {
-          module load openblas
-        }
-        if { ![is-loaded scalapack]  } {
-          module load scalapack
-        }
-    }
+depends-on phdf5
+if { ![is-loaded intel] } {
+    depends-on scalapack
 }
 
 prepend-path    PATH                %{install_path}/bin
@@ -173,7 +164,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 %doc CONTRIBUTING LICENSE
 
