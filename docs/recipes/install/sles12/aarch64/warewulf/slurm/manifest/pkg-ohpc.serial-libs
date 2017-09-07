@@ -1,9 +1,11 @@
+R-gnu7-ohpc 3.4.1 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 gsl-gnu-ohpc 2.2.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
-gsl-gnu7-ohpc 2.3 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
-metis-gnu7-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
+gsl-gnu7-ohpc 2.4 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 metis-gnu-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
-openblas-gnu7-ohpc 0.2.19 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
+metis-gnu7-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering
 openblas-gnu-ohpc 0.2.19 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
-R-gnu7-ohpc 3.3.3 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
-superlu-gnu7-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
+openblas-gnu7-ohpc 0.2.20 http://www.openblas.net ohpc/serial-libs An optimized BLAS library based on GotoBLAS2
+plasma-gnu7-ohpc 2.8.0 https://bitbucket.org/icl/plasma ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
+scotch-gnu7-ohpc 6.0.4 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 superlu-gnu-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
+superlu-gnu7-ohpc 5.2.1 http://crd.lbl.gov/~xiaoye/SuperLU/ ohpc/serial-libs A general purpose library for the direct solution of linear equations
