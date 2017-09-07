@@ -18,9 +18,9 @@ if [ -e /etc/redhat-release ];then
 
     # query repo for ohpc packages
     if [ -z "$skip" ];then
-	repoquery -qa $options --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" >> ${logfile}.all
+	repoquery -qa $options --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | sort >> ${logfile}.all
     else
-	repoquery -qa $options --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip >> ${logfile}.all
+	repoquery -qa $options --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip | sort >> ${logfile}.all
     fi
 
     info=`repoquery -q $options --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
