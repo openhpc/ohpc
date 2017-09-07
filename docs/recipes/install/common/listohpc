@@ -98,7 +98,6 @@ echo $groups
 echo
 
 for grp in ${groups}; do
-    echo ++++ list of ohpc/${grp} packages installed
     grep "ohpc/${grp}" ${logfile}.all | sort -k 1.1,1.2 -k2V  >& ${logfile}.${grp} 
     echo 
 done
