@@ -14,14 +14,14 @@ Version 1.3.2 (08 September 2017)
 
 [General]
 
-  * update backend OBS build system to avoid false package dependences for CentOS (https://github.com/openhpc/ohpc/issues/451)
-  * update SLURM build to support cgroup plugin (https://github.com/openhpc/ohpc/issues/476)
+  * updated backend OBS build system to avoid false package dependences for CentOS (https://github.com/openhpc/ohpc/issues/451)
+  * updated SLURM build to support cgroup plugin (https://github.com/openhpc/ohpc/issues/476)
   * relocation of several package installs into utils/ subdirectory (https://github.com/openhpc/ohpc/issues/486)
-  * updated PXSE compatability packages to use pre-install scriptlet to verify locally installed versions instead of
+  * updated PSXE compatibility packages to use pre-install scriptlet to verify locally installed versions instead of
     specific package dependency (https://github.com/openhpc/ohpc/issues/479)
-  * document enablement of dhcpd services to recipes (https://github.com/openhpc/ohpc/issues/492)
+  * added enablement of dhcpd services to recipes (https://github.com/openhpc/ohpc/issues/492)
   * adoption of newer 'depends_on' syntax to define Lmod dependencies (https://github.com/openhpc/ohpc/issues/495)
-  * avoid variable replacement for binary sync files in Warewulf (https://github.com/openhpc/ohpc/issues/531)
+  * fix to avoid variable replacement for binary sync files in Warewulf (https://github.com/openhpc/ohpc/issues/531)
   * llvm4 compiler variant introduced (providing clang, clang++, and flang compiler frontends)
   * variety of component version updates and other additions highlighted below
 
