@@ -80,7 +80,14 @@ else
     fi
 fi
 
-info=`repoquery -q $options --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
+if [[ $micro_ver -eq 0 ]];then
+    info=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -q \
+--queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
+else
+    info=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -q \
+--repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
+--queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`
+fi
 echo ${info} >>${logfile}.all
 
 echo
