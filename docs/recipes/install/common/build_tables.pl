@@ -2,6 +2,19 @@
 
 use warnings;
 use strict;
+use Getopt::Long;
+use Cwd;
+
+sub usage {
+    print "\n";
+    print "Usage: build_tables.pl [OPTIONS]\n\n";
+    print "  where available OPTIONS are as follows:\n\n";
+    print "     -h --help                      generate help message and exit\n";
+    print "        --category [name]           update provided category table only\n";
+    print "\n";
+    
+    exit(0);
+}
 
 my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
                         "parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
@@ -9,6 +22,18 @@ my @compiler_familes = ("gnu","gnu7","intel");
 my @mpi_families     = ("mvapich2","openmpi","impi","mpich");
 
 my @single_package_exceptions = ();
+
+my $help;
+my $category_single;
+
+GetOptions("h"          => \$help,
+           "category=s" => \$category_single ) || usage();
+
+if($help) {usage()};
+if($category_single) {
+    print "--> updating table contents for $category_single only\n";
+    @ohpcCategories = $category_single;
+}
 
 # Define any asymmetric compiler packages
 
@@ -30,8 +55,9 @@ $mpi_exceptions{"mkl-blacs"} = 1;
 
 my %page_breaks = ();
 if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
-    $page_breaks{"scorep-gnu7-impi-ohpc"} = 2;
+    $page_breaks{"scorep-gnu-impi-ohpc"} = 2;
     $page_breaks{"petsc-gnu-impi-ohpc"} = 2;
+    $page_breaks{"trilinos-gnu-impi-ohpc"} = 3;
     $page_breaks{"phdf5-gnu-impi-ohpc"} = 2;
 }
 
@@ -40,14 +66,22 @@ my $urlColor="logoblue";
 my $REMOVE_HTTP=0;
 my $FIXD_WIDTH=1;
 
+# Determine arch specific settings
+my $pwd = getcwd;
+my $numCompiler_permute;
+my $numMPI_permute;
 
-# Settings for aarch64
-my $numCompiler_permute = 1;
-my $numMPI_permute = 3;
-
-# Settings for x86_64
-my $numCompiler_permute = 2;
-my $numMPI_permute = 8;
+if ( $pwd =~ /\/x86_64\// ) {
+    print "arch = x86_64\n";
+    $numCompiler_permute = 2;
+    $numMPI_permute = 8;
+} elsif ( $pwd =~ /\/aarch64\// ) {
+    print "arch = aarch64\n";
+    $numCompiler_permute = 1;
+    $numMPI_permute = 3;
+} else {
+    die ("Unable to determin architecture from local path ($pwd)")
+}
 
 sub write_table_header {
     my $fd = shift;
