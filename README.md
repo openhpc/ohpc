@@ -25,9 +25,10 @@ Base OS     | x86_64  | aarch64  | noarch
 CentOS 7.3  | 458     | 279      | 32
 SLES 12 SP2 | 462     | 287      | 32
 
-A detailed list of all available components is available in
-the "Package Manifest" appendix located in each of the companion install
-guide documents, and a list of updated packages can be found in the
+A list of all available components is available on the OpenHPC
+[wiki](https://github.com/openhpc/ohpc/wiki/Component-List), and further details
+can be found in the "Package Manifest" appendix located in each of the companion 
+install guide documents. A list of updated packages can be found in the
 [release notes](https://github.com/openhpc/ohpc/releases/tag/v1.3.1.GA). The
 release notes also contain important information for those upgrading from previous
 versions of OpenHPC.
