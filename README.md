@@ -5,9 +5,10 @@
 
 ---
 
-[![Components](https://img.shields.io/badge/components%20available-70-green.svg) ](https://github.com/openhpc/ohpc/wiki/Component-List)
-[![Additions](https://img.shields.io/badge/new%20additions-5-blue.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.2.GA)
-[![Updates](https://img.shields.io/badge/updates-30%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.2.GA)
+[![Components](https://img.shields.io/badge/components%20available-75-green.svg) ](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.2)
+[![Additions](https://img.shields.io/badge/new%20additions-6-blue.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.2.GA)
+[![Updates](https://img.shields.io/badge/updates-32%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.2.GA)
+[![Tests](https://img.shields.io/badge/tests%20passing-100%25-brightgreen.svg) ](http://test.openhpc.community:8080/job/1.3.x/view/1.3.2/)
 
 
 #### Introduction
@@ -26,11 +27,12 @@ CentOS 7.3  | 458     | 279      | 32
 SLES 12 SP2 | 462     | 287      | 32
 
 A list of all available components is available on the OpenHPC
-[wiki](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.2), and further details
-can be found in the "Package Manifest" appendix located in each of the companion 
-install guide documents. A list of updated packages can be found in the
-[release notes](https://github.com/openhpc/ohpc/releases/tag/v1.3.2.GA). The
-release notes also contain important information for those upgrading from previous
+[wiki](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.2), and
+specific versioning details can be found in the "Package Manifest" appendix
+located in each of the companion install guide documents. A list of updated
+packages can be found in the [release
+notes](https://github.com/openhpc/ohpc/releases/tag/v1.3.2.GA). The release
+notes also contain important information for those upgrading from previous
 versions of OpenHPC.
 
 #### Getting started
@@ -44,7 +46,7 @@ the URL locations for [base] and [update] package repositories. Copies of the
 ```ohpc-release``` package are provided below for convenience. Installation guides 
 tailored for each supported resource manager are also available below or in
 the downloads section of the latest
-[release](https://github.com/openhpc/ohpc/releases/tag/v1.3.GA).
+[release](https://github.com/openhpc/ohpc/releases/tag/v1.3.2.GA).
 
 ---
 
