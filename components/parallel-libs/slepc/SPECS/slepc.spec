@@ -29,7 +29,7 @@ Release:        1
 Summary:        A library for solving large scale sparse eigenvalue problems
 License:        LGPL-3.0
 Group:          %{PROJ_NAME}/parallel-libs
-Url:            http://www.grycap.upv.es/slepc/
+Url:            http://slepc.upv.es
 Source0:        http://slepc.upv.es/download/distrib/%{pname}-%{version}.tar.gz
 Source1:        OHPC_macros
 BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
