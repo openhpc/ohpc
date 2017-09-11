@@ -4,12 +4,14 @@ use warnings;
 use strict;
 use Getopt::Long;
 use Cwd;
+use Sort::Versions;
 
 sub usage {
     print "\n";
     print "Usage: component_list.pl [OPTIONS]\n\n";
     print "  where available OPTIONS are as follows:\n\n";
     print "     -h --help                      generate help message and exit\n";
+    print "        --version  [version]        desired version to analyze\n";
     print "        --category [name]           update provided category table only\n";
     print "\n";
     
@@ -36,7 +38,7 @@ my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 my @compiler_familes = ("gnu","gnu7","intel");
 my @mpi_families     = ("mvapich2","openmpi","impi","mpich");
 
-my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","openmpi-psm2","scotch",
+my @package_skip = ("ohpc-release","R_base","mvapich2-psm","openmpi-psm2","scotch",
                     "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs");
 my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
 		     "intel-compilers-devel" => "Intel Compiler Compatibility Package",
@@ -49,15 +51,29 @@ my @package_uniq_delim = ("slurm");
 
 my $help;
 my $category_single;
+my $version;
 my $i;
 
 GetOptions("h"          => \$help,
+	   "version=s"  => \$version,
            "category=s" => \$category_single ) || usage();
 
 if($help) {usage()};
 if($category_single) {
     print "--> updating table contents for $category_single only\n";
     @ohpcCategories = $category_single;
+}
+
+if($version) {
+    print "--> using version=$version for analysis\n";
+} else {
+    die("Please specify desired version to analyzie with --version");
+}
+
+# version-specific packages to skip (ie. when new variants introduced)
+
+if($versioncmp($version,"1.3.1") >= 0) {
+    push(@package_skip,"gnu-compilers")
 }
 
 my $REMOVE_HTTP=0;
