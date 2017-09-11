@@ -72,7 +72,7 @@ if($version) {
 
 # version-specific packages to skip (ie. when new variants introduced)
 
-if($versioncmp($version,"1.3.1") >= 0) {
+if( versioncmp($version,"1.3.1") >= 0 ) {
     push(@package_skip,"gnu-compilers")
 }
 
