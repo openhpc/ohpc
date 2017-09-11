@@ -102,16 +102,24 @@ update_pkg_if_link () {
 	perl -pi -e 's/project=\'\S+\'/project=\'${branchNew}\'/ ${localdir}/_link || ERROR "unable to update parent in _link for $1"
     fi
 
+    # update to latest gnu compiler family
+    gnu_family=gnu7
+
+    echo $1 | grep -q gnu
+    if [ $? -eq 0 ];then
+	echo "Updating _link for gnu compiler family"
+	perl -pi -e "s/compiler_family gnu</compiler_family ${gnu_family}</" ${localdir}/_link
+    fi
+
     cd -
 } # end update_pkg_if_link()
 
 update_pkg_if_service () {
 
     local localdir="${branchNew}/$1"
+    local version=`echo $branchNew | awk -F : '{print $2}'`
 
     echo "${branchNew}" | grep -q ":Update" 
-
-    local version=`echo $branchNew | awk -F : '{print $2}'`
 
     if [ $? -eq 0 ];then
 	local update_ver=`echo $branchNew | awk -F : '{print $3}' | awk -F 'Update' '{print $2}'`
