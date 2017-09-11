@@ -26,7 +26,7 @@ skip=""
 baseos=""
 arch=""
 
-echo $version | egrep -q "^1.2|1.1"
+echo $version | egrep -q "^1.2|1.1|1.0"
 if [ $? -eq 0 ];then
     pwd | grep -q sles12  && baseos="SLE_12_SP1"
     pwd | grep -q centos7 && baseos="CentOS_7.2"
