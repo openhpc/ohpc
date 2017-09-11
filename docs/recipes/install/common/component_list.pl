@@ -88,7 +88,9 @@ print $header;
 foreach my $category (@ohpcCategories) {
     print "\n### $ohpcCategoryHeadings{$category}:\n";
 
+
     my $filein="pkg-ohpc.$category";
+    next unless (-s $filein);
     open(IN,"<$filein")  || die "Cannot open file -> $filein\n";
 
     
