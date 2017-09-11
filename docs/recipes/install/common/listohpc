@@ -33,7 +33,7 @@ if [ $? -eq 0 ];then
     pwd | grep -q centos7 && baseos="CentOS_7.1"
 fi
 
-echo $version | egrep -q "^1.2|^1.1|^1.0"
+echo $version | egrep -q "^1.2|^1.1"
 if [ $? -eq 0 ];then
     pwd | grep -q sles12  && baseos="SLE_12_SP1"
     pwd | grep -q centos7 && baseos="CentOS_7.2"
@@ -116,6 +116,5 @@ echo
 
 for grp in ${groups}; do
     grep "ohpc/${grp}" ${logfile}.all | sort -k 1.1,1.2 -k2V  >& ${logfile}.${grp} 
-    echo 
 done
 
