@@ -26,11 +26,21 @@ skip=""
 baseos=""
 arch=""
 
-echo $version | egrep -q "^1.2|1.1|1.0"
+
+
+echo $version | egrep -q "^1.0"
+if [ $? -eq 0 ];then
+    pwd | grep -q centos7 && baseos="CentOS_7.1"
+fi
+
+echo $version | egrep -q "^1.2|^1.1|^1.0"
 if [ $? -eq 0 ];then
     pwd | grep -q sles12  && baseos="SLE_12_SP1"
     pwd | grep -q centos7 && baseos="CentOS_7.2"
-else
+fi
+
+echo $version | egrep -q "^1.3"
+if [ $? -eq 0 ];then
     pwd | grep -q sles12  && baseos="SLE_12"
     pwd | grep -q centos7 && baseos="CentOS_7"
 fi
