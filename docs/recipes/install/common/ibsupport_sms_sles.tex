@@ -4,8 +4,7 @@ to the chosen {\em master} host.
 % begin_ohpc_run
 % ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) (*\install*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
-[sms](*\#*) (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils 
+[sms](*\#*) (*\install*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils libibverbs-utils
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
 [sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules /etc/udev/rules.d/
