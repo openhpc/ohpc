@@ -76,6 +76,7 @@ Collection of base packages
 
 %package -n %{PROJ_NAME}-base-compute
 Summary:   OpenHPC compute node base
+Requires:  binutils
 Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
