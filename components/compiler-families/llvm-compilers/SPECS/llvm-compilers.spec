@@ -18,12 +18,12 @@
 %global clang_sha 1210030915d1e1441d62eea54976f4ced7f6ad88
 %global flang_sha cab3fc47849d7ba8effef8474b9aae2cc60e8c57
 
-%global pname llvm4-compilers
-%global major_ver 4
+%global pname llvm5-compilers
+%global major_ver 5
 
 Summary:   The LLVM Compiler Infrastructure
 Name:      %{pname}%{PROJ_DELIM}
-Version:   4.0.1
+Version:   5.0.0
 Release:   1%{?dist}
 License:   UIUC, Apache-2.0
 Group:     %{PROJ_NAME}/compiler-families
