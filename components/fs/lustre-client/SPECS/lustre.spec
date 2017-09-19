@@ -30,7 +30,7 @@ BuildRequires: kernel-default-devel
 
 %if 0%{?centos_version} == 700
 
-# 7.3 kernel version
+# 7.4 kernel version
 %ifarch aarch64
 %define centos_kernel 4.2.0-0.21.el7
 BuildRequires: kernel = %{centos_kernel}
@@ -38,7 +38,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.aarch64/source/
 %define kobjdir /lib/modules/%{centos_kernel}.aarch64/build/
 %else
-%define centos_kernel 3.10.0-514.el7
+%define centos_kernel 3.10.0-693.el7
 BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.x86_64/source/
