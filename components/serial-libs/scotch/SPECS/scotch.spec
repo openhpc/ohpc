@@ -25,9 +25,8 @@ URL:		http://www.labri.fr/perso/pelegrin/%{pname}/
 Source0:	http://gforge.inria.fr/frs/download.php/file/34618/%{pname}_%{version}.tar.gz
 Source1:	%{pname}-Makefile.%{compiler_family}.inc.in
 Source2:	%{pname}-rpmlintrc
+Source3:	OHPC_macros
 Patch0:         %{pname}-%{version}-destdir.patch
-BuildRoot:	%{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:         %{OHPC_PUB}/doc/contrib
 
 BuildRequires:	flex bison
 %if 0%{?suse_version} >= 1100
@@ -46,7 +45,6 @@ BuildRequires:  zlib-devel
 %endif
 %endif
 
-%define debug_package %{nil}
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
@@ -69,7 +67,6 @@ popd
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
-rm -rf %{buildroot}
 
 pushd src
 make prefix=%{buildroot}%{install_path} install
@@ -127,13 +124,10 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
 %files
 %defattr(-,root,root)
 %doc README.txt ./doc/*
-%{OHPC_PUB}
+%{install_path}
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 
 %changelog
-
