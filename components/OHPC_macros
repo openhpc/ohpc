@@ -64,8 +64,8 @@ BuildRequires: ohpc-buildroot
 %if 0%{?ohpc_compiler_dependent} == 1
 
 %if "%{compiler_family}" == "gnu7"
-BuildRequires: gnu7-compilers%{PROJ_DELIM} >= 7.1.0
-Requires:      gnu7-compilers%{PROJ_DELIM} >= 7.1.0
+BuildRequires: gnu7-compilers%{PROJ_DELIM} >= 7.2.0
+Requires:      gnu7-compilers%{PROJ_DELIM} >= 7.2.0
 %endif
 %if "%{compiler_family}" == "intel"
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
