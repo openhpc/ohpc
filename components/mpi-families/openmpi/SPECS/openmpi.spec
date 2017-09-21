@@ -18,24 +18,20 @@
 
 %ifarch aarch64
 %define with_psm 0
+%define with_psm2 0
 %else
 %define with_psm 1
+%define with_psm2 1
 %endif
 
 %define with_lustre 0
 %define with_slurm 1
 
-# Default build is without psm2, but can be overridden
-%{!?with_psm2: %global with_psm2 0}
 %{!?with_tm: %global with_tm 1}
 
 Summary:   A powerful implementation of MPI
 
-%if 0%{with_psm2}
-Name:      %{pname}-psm2-%{compiler_family}%{PROJ_DELIM}
-%else
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-%endif
 
 Version:   1.10.7
 Release:   1%{?dist}
@@ -88,9 +84,6 @@ BuildRequires:  openssl-devel
 
 %if %{with_psm2}
 BuildRequires:  libpsm2-devel >= 10.2.0
-Requires:       libpsm2 >= 10.2.0
-Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 Requires: prun%{PROJ_DELIM}
@@ -209,6 +202,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.JAVA.txt
 
 %changelog
+* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 1.10.7-1
+- default to building with PSM and PSM2 at the same time
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.10.4-1
 - switch to ohpc_compiler_dependent flag
 
