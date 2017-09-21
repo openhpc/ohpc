@@ -33,15 +33,15 @@ Summary:   A powerful implementation of MPI
 
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   1.10.7
+Version:   3.0.0
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{version}.tar.bz2
+Source0:   http://www.open-mpi.org/software/ompi/v3.0/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source3:   pbs-config
-Patch0:    config.pbs.patch
+Patch0:    openmpi-3.0-pbs-config.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -50,6 +50,8 @@ BuildRequires:  postfix
 BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
+BuildRequires:  libevent-devel
+BuildRequires:  pmix%{PROJ_DELIM}
 %if 0%{with_slurm}
 BuildRequires:  slurm-devel%{PROJ_DELIM}
 #!BuildIgnore:  slurm%{PROJ_DELIM}
@@ -104,7 +106,7 @@ Open MPI jobs.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p0
+%patch0 -p1
 
 %build
 # OpenHPC compiler designation
@@ -112,6 +114,11 @@ Open MPI jobs.
 
 
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
+
+# build against external pmix and libevent
+BASEFLAGS="$BASEFLAGS --with-pmix=/opt/ohpc/pub/libs/pmix/2.0.1"
+BASEFLAGS="$BASEFLAGS --with-libevent=external"
+
 %if %{with_psm}
   BASEFLAGS="$BASEFLAGS --with-psm"
 %endif
@@ -189,12 +196,9 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
-%{OHPC_PUB}
+%{install_path}
+%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 %doc NEWS
 %doc README
 %doc LICENSE
@@ -202,6 +206,12 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.JAVA.txt
 
 %changelog
+* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 3.0.0-1
+- update to 3.0.0
+- use the OpenHPC pmix package
+- use the same libevent as pmix (external)
+- small cleanups
+
 * Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 1.10.7-1
 - default to building with PSM and PSM2 at the same time
 
