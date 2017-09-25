@@ -39,7 +39,7 @@ measurements for point-to-point and global communication operations for
 a range of message sizes.
 
 %prep
-%setup -n imb
+%setup -n mpi-benchmarks-%version
 
 # OpenHPC patches
 %patch1 -p0
