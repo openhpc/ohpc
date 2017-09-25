@@ -39,7 +39,7 @@ measurements for point-to-point and global communication operations for
 a range of message sizes.
 
 %prep
-%setup -n mpi-benchmarks-%version
+%setup -n mpi-benchmarks-%{version}
 
 # OpenHPC patches
 %patch1 -p0
@@ -108,7 +108,8 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_PUB}
+%{install_path}
+%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %doc license/license.txt license/use-of-trademark-license.txt ReadMe_IMB.txt
 
 
