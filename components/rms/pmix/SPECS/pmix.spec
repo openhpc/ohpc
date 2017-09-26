@@ -20,14 +20,8 @@ License: BSD
 Group: Development/Libraries
 Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 Source1: OHPC_macros
-Patch0: configure.patch
 
 BuildRequires: libevent-devel
-
-%global extraflags ""
-# %ifarch aarch64
-# %global extraflags "-mcmodel=large"
-# %endif
 
 %global install_path %{OHPC_LIBS}/%{pname}/%version
 
@@ -55,7 +49,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 #%patch0
 
 %build
-CFLAGS="%{optflags} %{extraflags}" ./configure --prefix=%{install_path}
+CFLAGS="%{optflags} ./configure --prefix=%{install_path}
 %{__make} %{?_smp_mflags}
 
 %install
