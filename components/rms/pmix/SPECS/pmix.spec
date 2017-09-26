@@ -24,6 +24,11 @@ Patch0: configure.patch
 
 BuildRequires: libevent-devel
 
+%global extraflags ""
+%ifarch aarch64
+%global extraflags "-mcmodel=large"
+%endif
+
 %global install_path %{OHPC_LIBS}/%{pname}/%version
 
 %description
@@ -50,7 +55,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %patch0
 
 %build
-CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
+CFLAGS="%{optflags} %{extraflags}" ./configure --prefix=%{install_path}
 %{__make} %{?_smp_mflags}
 
 %install
@@ -88,6 +93,7 @@ EOF
 %changelog
 * Tue Sep 26 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.0.1-1
 - add patch to disable c++ checks
+- use mcmodel=large for aarch64
 
 * Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 2.0.1-1
 - Update to 2.0.1
