@@ -23,7 +23,7 @@ Source1: OHPC_macros
 
 BuildRequires: libevent-devel
 
-%global install_path %{OHPC_LIBS}/%{pname}/%version
+%global install_path %{OHPC_LIBS}/%{pname}
 
 %description
 The Process Management Interface (PMI) has been used for quite some time as a
@@ -86,8 +86,8 @@ EOF
 
 %changelog
 * Tue Sep 26 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.0.1-1
-- add patch to disable c++ checks
-- use mcmodel=large for aarch64
+- downgrade to v1.2.3 for slurm support
+- tweak install path
 
 * Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 2.0.1-1
 - Update to 2.0.1
