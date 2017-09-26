@@ -109,7 +109,7 @@ Open MPI jobs.
 
 %prep
 
-%setup -q -n %{pname}-%{version}
+%setup -q -n openmpi-%{version}
 %patch0 -p1
 
 %build
