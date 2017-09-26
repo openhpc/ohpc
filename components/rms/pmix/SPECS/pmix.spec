@@ -14,7 +14,7 @@
 
 Summary: An extended/exascale implementation of PMI
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.0.1
+Version: 1.2.3
 Release: 1%{?dist}
 License: BSD
 Group: Development/Libraries
@@ -25,9 +25,9 @@ Patch0: configure.patch
 BuildRequires: libevent-devel
 
 %global extraflags ""
-%ifarch aarch64
-%global extraflags "-mcmodel=large"
-%endif
+# %ifarch aarch64
+# %global extraflags "-mcmodel=large"
+# %endif
 
 %global install_path %{OHPC_LIBS}/%{pname}/%version
 
@@ -52,7 +52,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0
+#%patch0
 
 %build
 CFLAGS="%{optflags} %{extraflags}" ./configure --prefix=%{install_path}
