@@ -49,7 +49,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 #%patch0
 
 %build
-CFLAGS="%{optflags} ./configure --prefix=%{install_path}
+CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
 %{__make} %{?_smp_mflags}
 
 %install
