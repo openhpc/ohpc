@@ -74,7 +74,7 @@ BuildRequires:  lustre-client%{PROJ_DELIM}
 BuildRequires:  libibumad-devel
 BuildRequires:  libibverbs-devel
 %else
-BuildRequires:  rmda-core-devel
+BuildRequires:  rdma-core-devel
 %endif
 %endif
 
