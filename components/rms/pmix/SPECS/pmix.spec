@@ -80,7 +80,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 EOF
 
 %files
-%{install_path}
+%{OHPC_LIBS}
 %{OHPC_MODULES}/%{pname}
 
 %changelog
