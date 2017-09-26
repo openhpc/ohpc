@@ -13,7 +13,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name/config
-%define pname openmpi
+%define pname openmpi3
 %define with_openib 1
 
 %ifarch aarch64
@@ -116,7 +116,7 @@ Open MPI jobs.
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 
 # build against external pmix and libevent
-BASEFLAGS="$BASEFLAGS --with-pmix=/opt/ohpc/pub/libs/pmix/2.0.1"
+BASEFLAGS="$BASEFLAGS --with-pmix=/opt/ohpc/pub/libs/pmix"
 BASEFLAGS="$BASEFLAGS --with-libevent=external"
 
 %if %{with_psm}
