@@ -52,6 +52,7 @@ BuildRequires:  opensm-devel
 BuildRequires:  numactl
 BuildRequires:  libevent-devel
 BuildRequires:  pmix%{PROJ_DELIM}
+BuildRequires:  hwloc-devel
 %if 0%{with_slurm}
 BuildRequires:  slurm-devel%{PROJ_DELIM}
 #!BuildIgnore:  slurm%{PROJ_DELIM}
@@ -121,7 +122,7 @@ BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --
 
 # build against external pmix and libevent
 BASEFLAGS="$BASEFLAGS --with-pmix=/opt/ohpc/pub/libs/pmix"
-BASEFLAGS="$BASEFLAGS --with-libevent=external"
+BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
 
 %if %{with_psm}
   BASEFLAGS="$BASEFLAGS --with-psm"
