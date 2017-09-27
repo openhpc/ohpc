@@ -52,7 +52,7 @@ BuildRequires:  opensm-devel
 BuildRequires:  numactl
 BuildRequires:  libevent-devel
 BuildRequires:  pmix%{PROJ_DELIM}
-BuildRequires:  hwloc hwloc-devel
+BuildRequires:  hwloc-devel libtool-ltdl
 %if 0%{with_slurm}
 BuildRequires:  slurm-devel%{PROJ_DELIM}
 #!BuildIgnore:  slurm%{PROJ_DELIM}
