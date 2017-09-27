@@ -157,6 +157,28 @@ function launch_openmpi () {
     fi
 }
 
+# ohpc builds of openmpi3.x leverage pmix
+function launch_openmpi3 () {
+    if [ ${RM} == "slurm" ];then
+        verify_launcher_avail mpirun
+
+	# no tm module avail when using slurm
+	export OMPI_MCA_ras=^tm
+	export OMPI_MCA_ess=^tm
+	export OMPI_MCA_plm=^tm
+	    
+        cmd="srun --mpi=pmix $@"
+    elif [ ${RM} == "pbspro" ];then
+        verify_launcher_avail mpiexec
+	cmd="mpiexec -x LD_LIBRARY_PATH --prefix ${MPI_DIR} --hostfile ${PBS_NODEFILE} $@"
+    else
+        _error "Unknown resource manager -> ${RM}"
+    fi
+
+    _info "Launch cmd = $cmd"
+    $cmd
+}
+
 DELIM=prun
 
 # Parse command-line args
@@ -217,6 +239,8 @@ elif [ $LMOD_FAMILY_MPI == "mvapich2" ];then
     launch_mvapich2 $EXEC $ARGS
 elif [ $LMOD_FAMILY_MPI == "openmpi" ];then
     launch_openmpi $EXEC $ARGS
+elif [ $LMOD_FAMILY_MPI == "openmpi3" ];then
+    launch_openmpi3 $EXEC $ARGS
 else
     _error "Unsupported or unknown MPI family -> $LMOD_FAMILY_MPI"
 fi
