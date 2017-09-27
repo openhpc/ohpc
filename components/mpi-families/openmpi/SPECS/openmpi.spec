@@ -74,11 +74,7 @@ BuildRequires:  lustre-client%{PROJ_DELIM}
 %endif
 
 %if %{with_openib}
-%if 0%{?suse_version}
 BuildRequires:  rdma-core-devel
-%else
-BuildRequires:  rdma-core-devel
-%endif
 %endif
 
 %if %{with_psm}
