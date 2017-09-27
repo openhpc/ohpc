@@ -148,7 +148,7 @@ cp %{SOURCE3} .
 export PATH="./:$PATH"
 %endif
 
-./configure ${BASEFLAGS}
+./configure ${BASEFLAGS} || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
 
