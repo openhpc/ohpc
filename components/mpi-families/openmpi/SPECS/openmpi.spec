@@ -75,7 +75,7 @@ BuildRequires:  lustre-client%{PROJ_DELIM}
 
 %if %{with_openib}
 %if 0%{?suse_version}
-BuildRequires:  libibverbs-devel
+BuildRequires:  libibverbs
 %else
 BuildRequires:  rdma-core-devel
 %endif
