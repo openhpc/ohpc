@@ -38,7 +38,6 @@ Source6:   http://releases.llvm.org/%{version}/libunwind-%{version}.src.tar.xz
 Source7:   http://releases.llvm.org/%{version}/lld-%{version}.src.tar.xz
 Source8:   http://releases.llvm.org/%{version}/openmp-%{version}.src.tar.xz
 Source9:   OHPC_macros
-Patch1:    0001-GOMP-compatibility-add-missing-OpenMP4.0-task-deps-h.patch
 BuildRequires: gnu7-compilers%{PROJ_DELIM}
 BuildRequires: cmake%{PROJ_DELIM}
 BuildRequires: make
@@ -67,9 +66,6 @@ The LLVM Compiler Infrastructure.
 
 %prep
 %setup -q -c -b1 -b2 -b3 -b4 -b5 -b6 -b7 -b8
-cd openmp-%{version}.src
-%patch1 -p1
-cd ..
 
 cd llvm-%{version}.src/tools
 ln -s ../../clang-%{clang_sha} clang
