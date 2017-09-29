@@ -224,7 +224,7 @@ fi
 
 %files -n nagios-plugins-nrpe%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_nrpe
-%doc Changelog LEGAL README.md
+%doc CHANGELOG.md LEGAL README.md
 
 %changelog
 * Thu May 1 2014 Sam Kottler <skottler@fedoraproject.org> - 2.15.2
