@@ -1,10 +1,10 @@
---- nagios-4.3.1/daemon-init.in	2017-02-23 12:00:40.000000000 -0800
-+++ nagios-4.3.1.patch/daemon-init.in	2017-02-27 14:54:05.000000000 -0800
-@@ -195,6 +195,7 @@
- 		rm -f $NagiosCommandFile
+--- a/daemon-init.in	2017-08-24 14:43:48.000000000 -0700
++++ b/daemon-init.in	2017-09-29 09:25:55.000000000 -0700
+@@ -210,6 +210,7 @@
+ 		su $NagiosUser -c "touch $NagiosVarDir/nagios.log $NagiosRetentionFile"
+ 		remove_commandfile
  		touch $NagiosRunFile
- 		chown -h $NagiosUser:$NagiosGroup $NagiosRunFile $NagiosVarDir/nagios.log $NagiosRetentionFile
-+        [ -x /sbin/restorecon ] && /sbin/restorecon $NagiosRunFile
++		[ -x /sbin/restorecon ] && /sbin/restorecon $NagiosRunFile
  		$NagiosBin -d $NagiosCfgFile
  		if [ -d $NagiosLockDir ]; then touch $NagiosLockDir/$NagiosLockFile; fi
  
