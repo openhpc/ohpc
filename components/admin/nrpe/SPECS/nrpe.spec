@@ -219,7 +219,7 @@ fi
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
 %config(noreplace) %{_tmpfilesdir}/%{pname}.conf
 %endif
-%doc Changelog LEGAL README.md README.SSL.md SECURITY.md docs/NRPE.pdf
+%doc CHANGELOG.md LEGAL README.md README.SSL.md SECURITY.md docs/NRPE.pdf
 %dir %attr(775, %{pname}, %{pname}) %{_localstatedir}/run/%{pname}
 
 %files -n nagios-plugins-nrpe%{PROJ_DELIM}
