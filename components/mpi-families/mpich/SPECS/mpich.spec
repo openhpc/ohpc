@@ -54,6 +54,9 @@ Message Passing Interface (MPI) standard.
 %build
 # OpenHPC compiler designation
 %ohpc_setup_compiler
+%if 0%{with_pmix}
+module load pmix
+%endif
 
 ./configure --prefix=%{install_path} \
 %if 0%{with_slurm}
