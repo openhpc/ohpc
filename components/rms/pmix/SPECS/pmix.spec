@@ -23,7 +23,7 @@ Source1: OHPC_macros
 
 BuildRequires: libevent-devel
 
-%global install_path %{OHPC_LIBS}/%{pname}
+%global install_path %{OHPC_ADMIN}/%{pname}/%{version}
 
 %description
 The Process Management Interface (PMI) has been used for quite some time as a
@@ -46,7 +46,6 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#%patch0
 
 %build
 CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
@@ -61,6 +60,12 @@ CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
 pushd ${RPM_BUILD_ROOT}/%{install_path}/lib
 %{__ln_s} libpmix.so libpmi.so
 popd
+
+# provide generic link to versioned install path (helpful for use by
+# administrative packages like resource managers)
+
+pushd ${RPM_BUILD_ROOT}/%{OHPC_ADMIN}/%{pname}
+%{__ln_s} %{version} %{pname}
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}%{OHPC_MODULES}/%{pname}
 cat <<EOF > ${RPM_BUILD_ROOT}%{OHPC_MODULES}/%{pname}/%{version}
