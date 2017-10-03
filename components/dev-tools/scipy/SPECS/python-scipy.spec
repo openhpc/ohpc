@@ -77,7 +77,7 @@ BuildRequires:  fdupes
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
-BuildRequires:  python-Cython
+BuildRequires:  python-Cython%{PROJ_DELIM}
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1

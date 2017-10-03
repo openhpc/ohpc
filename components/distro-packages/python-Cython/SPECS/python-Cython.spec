@@ -25,8 +25,8 @@
 # Please submit bugfixes or comments via http://bugs.opensuse.org/
 #
 
-
-Name:           python-Cython
+%define pname Cython
+Name:           python-%{pname}%{PROJ_DELIM}
 Version:        0.23.4
 Release:        76.1
 Url:            http://www.cython.org
@@ -72,7 +72,7 @@ libraries, and for fast C modules that speed up the execution of Python
 code.
 
 %prep
-%setup -q -n Cython-%{version}
+%setup -q -n %{pname}-%{version}
 %patch1
 # Fix non-executable scripts
 sed -i "s|^#!.*||" Cython/Debugger/{libpython,Cygdb}.py cython.py
