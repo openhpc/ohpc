@@ -99,11 +99,11 @@ module-whatis "URL: %{url}"
 
 set     version			    %{version}
 
+setenv          MPI_DIR             %{install_path}
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/man
+prepend-path    MANPATH             %{install_path}/share/man
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{pname}
-prepend-path    MPI_DIR             %{install_path}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 family "MPI"
