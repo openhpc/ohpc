@@ -58,7 +58,9 @@ CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
 # PMIx provides PMI1 and PMI2 interfaces in libmpix, but many packages check
 # linkage against libpmi.so directly - create soft link to libpmix.so
 
-%{__ln_s} ${RPM_BUILD_ROOT}/%{install_path}/lib/libpmix.so ${RPM_BUILD_ROOT}/%{install_path}/lib/libpmi.so
+pushd ${RPM_BUILD_ROOT}/%{install_path}/lib
+%{__ln_s} libpmix.so libpmi.so
+popd
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}%{OHPC_MODULES}/%{pname}
 cat <<EOF > ${RPM_BUILD_ROOT}%{OHPC_MODULES}/%{pname}/%{version}
