@@ -65,7 +65,7 @@ module load pmix
             --with-pm=no --with-pmi=slurm \
 %endif
 %if 0%{with_pmix}
-            CFLAGS="-L${PMIX_INC}" LIBS="-L${PMIX_LIB} -lpmix" --with-pm=none --with-pmi=slurm \
+            CFLAGS="-I${PMIX_INC}" LIBS="-L${PMIX_LIB} -lpmix" --with-pm=none --with-pmi=slurm \
 %endif
     || { cat config.log && exit 1; }
 
