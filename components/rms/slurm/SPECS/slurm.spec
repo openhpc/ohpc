@@ -10,7 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 %global _with_mysql  1
-%global slurm_with_pmix %{OHPC_LIBS}/pmix
+%global slurm_with_pmix %{OHPC_ADMIN}/pmix/pmix
 
 %define pname slurm
 
