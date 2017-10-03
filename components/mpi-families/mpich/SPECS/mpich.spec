@@ -35,6 +35,7 @@ Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
+Patch0:    config.pmix.patch
 
 Requires: prun%{PROJ_DELIM}
 Requires: perl
@@ -50,6 +51,7 @@ Message Passing Interface (MPI) standard.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch0 -p0
 
 %build
 # OpenHPC compiler designation
@@ -63,7 +65,7 @@ module load pmix
             --with-pm=no --with-pmi=slurm \
 %endif
 %if 0%{with_pmix}
-            LIBS="-L%{OHPC_LIBS}/pmix/lib -lpmix" --with-pm=none --with-pmi=slurm \
+            CFLAGS="-L${PMIX_INC}" LIBS="-L${PMIX_LIB} -lpmix" --with-pm=none --with-pmi=slurm \
 %endif
     || { cat config.log && exit 1; }
 
