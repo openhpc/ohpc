@@ -17,6 +17,12 @@
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %endif
 
+%define with_pmix 1
+%if 0%{with_pmix}
+BuildRequires:  pmix%{PROJ_DELIM}
+Provides:       pmix_enabled
+%endif
+
 # Base package name
 %define pname mpich
 
@@ -49,9 +55,17 @@ Message Passing Interface (MPI) standard.
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-./configure --prefix=%{install_path} \
+LIBS=""
+%if 0%{with_pmix}
+LIBS="-L%{OHPC_LIBS}/pmix/lib -lpmix"
+%endif
+
+./configure ${LIBS} --prefix=%{install_path} \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
+%endif
+%if 0%{with_pmix}
+            --with-pm=none --with-pmi=slurm \
 %endif
     || { cat config.log && exit 1; }
 
@@ -118,6 +132,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Oct  3 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.2-1
+- enabled build using external pmix library
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.2-1
 - switch to ohpc_compiler_dependent flag
 
