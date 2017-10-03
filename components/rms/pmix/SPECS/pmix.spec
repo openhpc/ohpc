@@ -91,7 +91,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 EOF
 
 %files
-%{OHPC_LIBS}
+%{OHPC_ADMIN}
 %{OHPC_MODULES}/%{pname}
 
 %changelog
