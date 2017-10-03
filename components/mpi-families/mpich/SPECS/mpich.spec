@@ -20,6 +20,7 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %define with_pmix 1
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
+BuildRequires: libevent-devel
 Provides:       pmix_enabled
 %endif
 
