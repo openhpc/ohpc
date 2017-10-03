@@ -55,17 +55,12 @@ Message Passing Interface (MPI) standard.
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-LIBS=""
-%if 0%{with_pmix}
-LIBS="-L%{OHPC_LIBS}/pmix/lib -lpmix"
-%endif
-
-./configure ${LIBS} --prefix=%{install_path} \
+./configure --prefix=%{install_path} \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
 %if 0%{with_pmix}
-            --with-pm=none --with-pmi=slurm \
+            LIBS="-L%{OHPC_LIBS}/pmix/lib -lpmix" --with-pm=none --with-pmi=slurm \
 %endif
     || { cat config.log && exit 1; }
 
