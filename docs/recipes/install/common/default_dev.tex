@@ -4,11 +4,11 @@ requiring MPI. This setup can be conveniently enabled via modules and the \OHPC{
 modules environment is pre-configured to load an \texttt{ohpc} module on login
 (if present). The following package install provides a default
 environment that enables autotools, the \GNU{} compiler toolchain, and the
-MVAPICH2 MPI stack.
+OpenMPI stack.
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) lmod-defaults-gnu7-mvapich2-ohpc
+[sms](*\#*) (*\install*) lmod-defaults-gnu7-openmpi3-ohpc
 \end{lstlisting}
 % end_ohpc_run
 
@@ -16,10 +16,10 @@ MVAPICH2 MPI stack.
 \begin{tcolorbox}[]
 \small
 If you want to change the default environment from the suggestion above, \OHPC{}
-also provides the \GNU{} compiler toolchain with the OpenMPI and MPICH stacks:
+also provides the \GNU{} compiler toolchain with the MPICH and MVAPICH2 stacks:
 \begin{itemize*}
-\item lmod-defaults-gnu7-openmpi-ohpc
 \item lmod-defaults-gnu7-mpich-ohpc
+\item lmod-defaults-gnu7-mvapich2-ohpc
 \end{itemize*}
 \end{tcolorbox}
 \end{center}
