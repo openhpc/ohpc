@@ -24,9 +24,8 @@
 %define with_psm2 1
 %endif
 
-%define with_lustre 0
-%define with_slurm 1
-
+%{!?with_lustre: %define with_lustre 0}
+%{!?with_slurm: %define with_slurm 0}
 %{!?with_tm: %global with_tm 1}
 
 Summary:   A powerful implementation of MPI
