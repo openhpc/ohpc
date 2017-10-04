@@ -78,7 +78,7 @@ AC_ARG_WITH(mpi-families,
 
 # Fabric options
 AC_ARG_WITH(fabric,
-	[AS_HELP_STRING([--with-fabric=[type]],[Specify fabric type (default=none, additional options=ip,opa)],,120)],
+	[AS_HELP_STRING([--with-fabric=[type]],[Specify fabric type (default=none, additional options=ib,opa)],,120)],
 	[FABRIC=$withval],[FABRIC=none])
 AM_CONDITIONAL(OPA_FABRIC_ENABLED,test "x$FABRIC" = "xopa" )
 AM_CONDITIONAL(IB_FABRIC_ENABLED,test "x$FABRIC" = "xib" )
