@@ -121,7 +121,7 @@ links below:
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
-\subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 \input{common/ibsupport_sms_centos}
 
 %\vspace*{-0.15cm}
@@ -141,10 +141,15 @@ links below:
 # Add Slurm client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
-# Add IB support and enable
+# Optionally add IB support and enable
+% ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
+% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
+% ohpc_indent 5
 [sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
 [sms](*\#*) (*\chrootinstall*) infinipath-psm
 [sms](*\#*) chroot $CHROOT systemctl enable rdma
+% ohpc_indent 0
+% ohpc_command fi
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) ntp
