@@ -1,0 +1,49 @@
+The following command adds Omni-Path support using base distro-provided drivers
+to the chosen {\em master} host.
+
+% begin_ohpc_run
+% ohpc_comment_header Optionally add Omni-Path support services on master node \ref{sec:add_opa}
+% ohpc_command if [[ ${enable_opa} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) (*\install*) opa-basic-tools
+
+# Load RDMA services
+[sms](*\#*) systemctl start rdma
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\input{common/opafm}
+
+%%% With the \OmniPath{} drivers included, you can also enable (optional) IPoIB functionality
+%%% which provides a mechanism to send IP packets over the IB network. If you plan
+%%% to mount a \Lustre{} file system over \InfiniBand{} (see \S\ref{sec:lustre_client}
+%%% for additional details), then having IPoIB enabled is a requirement for the
+%%% \Lustre{} client. \OHPC{} provides a template configuration file to aid in setting up
+%%% an {\em ib0} interface on the {\em master} host. To use, copy the template
+%%% provided and update the \texttt{\$\{sms\_ipoib\}} and
+%%% \texttt{\$\{ipoib\_netmask\}} entries to match local desired settings (alter ib0
+%%% naming as appropriate if system contains dual-ported or multiple HCAs).
+%%% 
+%%% % begin_ohpc_run
+%%% % ohpc_validation_newline
+%%% % ohpc_validation_comment Optionally enable IPoIB interface on SMS
+%%% % ohpc_command if [[ ${enable_ipoib} -eq 1 ]];then
+%%% % ohpc_indent 5
+%%% % ohpc_validation_comment Enable ib0
+%%% \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+%%% [sms](*\#*) cp /opt/ohpc/pub/examples/network/centos/ifcfg-ib0 /etc/sysconfig/network-scripts
+%%% 
+%%% # Define local IPoIB address and netmask
+%%% [sms](*\#*) perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network-scripts/ifcfg-ib0
+%%% [sms](*\#*) perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network-scripts/ifcfg-ib0
+%%% 
+%%% # Initiate ib0
+%%% [sms](*\#*) ifup ib0
+%%% \end{lstlisting}
+%%% % ohpc_indent 0
+%%% % ohpc_command fi
+%%% % end_ohpc_run
+
