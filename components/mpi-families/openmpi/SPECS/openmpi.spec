@@ -118,7 +118,8 @@ Open MPI jobs.
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 
 # build against external pmix and libevent
-BASEFLAGS="$BASEFLAGS --with-pmix=/opt/ohpc/pub/libs/pmix"
+module load pmix
+BASEFLAGS="$BASEFLAGS --with-pmix=${PMIX_DIR}"
 BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
 
 %if %{with_psm}
