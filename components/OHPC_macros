@@ -58,7 +58,7 @@ BuildRequires: ohpc-buildroot
 # variables via rpmbuild or other mechanisms.
 
 %{!?compiler_family: %global compiler_family gnu7}
-%{!?mpi_family: %global mpi_family openmpi}
+%{!?mpi_family: %global mpi_family openmpi3}
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
@@ -106,9 +106,9 @@ Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %endif
-%if "%{mpi_family}" == "openmpi"
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+%if "%{mpi_family}" == "openmpi3"
+BuildRequires: openmpi3-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %endif
 %endif
 
