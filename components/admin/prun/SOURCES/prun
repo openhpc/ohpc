@@ -18,14 +18,15 @@ LOGLEVEL=2     # 0=error,1=warn,2=info,3=debug
 function usage () {
 
     echo " "
-    echo "This utility can be use to launch parallel (MPI) applications within "
-    echo "a supported resource manager."
+    echo "This OpenHPC utility is used to launch parallel (MPI) applications"
+    echo "within a supported resource manager."
     echo " "
     echo "Usage: $DELIM <options> executable [arguments]"
     echo " "
     echo "where available options are as follows:"
     echo " "
     echo "  -h        generate help message and exit"
+    echo "  -v        enable verbose output"
     echo " "
     exit 1
 }
@@ -72,6 +73,15 @@ function verify_launcher_avail () {
     fi
 }
 
+function set_variable () {
+
+    local var=$1
+    local set=$2
+    
+    _debug "Setting env variable: $var=$2"
+    export $var="$2"
+}
+
 function launch_impi () {
     if [ $MODE == "native" ];then
         LAUNCHER="mpiexec.hydra"
@@ -83,31 +93,32 @@ function launch_impi () {
 	    cmd="$LAUNCHER -rmk pbs $@"
 	fi
 
-        _info "Launch cmd = $cmd"
+	_info "Launch cmd = $cmd (family=$LMOD_FAMILY_MPI)"
         $cmd
     fi
 }
 
 function launch_mpich () {
-    if [ $MODE == "native" ];then
 
-        LAUNCHER="mpiexec.hydra"
-        verify_launcher_avail $LAUNCHER
-
-	if [ ${RM} == "slurm" ];then
-            cmd="$LAUNCHER -bootstrap slurm $@"
-	elif [ ${RM} == "pbspro" ];then
-	    cmd="$LAUNCHER -rmk pbs $@"
+    if [[ ${RM} == "slurm" ]];then
+	if [[ ${OHPC_MPI_LAUNCHERS} =~ "pmix" ]];then
+            verify_launcher_avail srun
+            cmd="srun --mpi=pmix $@"
 	else
-            _error "Unknown resource manager -> ${RM}"
+	    verify_launcher mpiexec.hydra
+	    cmd="mpiexec.hydra -bootstrap slurm $@"
 	fi
-        _info "Launch cmd = $cmd"
-        $cmd
-
-        local _status=$?
-
-        return $_status
+    elif [[ ${RM} == "pbspro" ]];then
+	verify_launcher mpiexec.hydra
+	cmd="mpiexec.hydra -rmk pbs $@"
+    else
+        _error "Unknown resource manager -> ${RM}"
     fi
+
+    _info "Launch cmd = $cmd (family=$LMOD_FAMILY_MPI)"
+    $cmd
+
+        return $?
 }
 
 function launch_mvapich2 () {
@@ -124,7 +135,7 @@ function launch_mvapich2 () {
             _error "Unknown resource manager -> ${RM}"
 	fi
 
-        _info "Launch cmd = $cmd"
+	_info "Launch cmd = $cmd (family=$LMOD_FAMILY_MPI)"
         $cmd
 
         local _status=$?
@@ -133,60 +144,58 @@ function launch_mvapich2 () {
     fi
 }
 
-function launch_openmpi () {
-    if [ $MODE == "native" ];then
+function setupenv_openmpi () {
+    # disable warnings if psm2 unavail
+    [[ $(rpm -q --quiet libpsm2) ]] || set_variable OMPI_MCA_mtl ^psm2
 
-	if [ ${RM} == "slurm" ];then
-            verify_launcher_avail mpirun
-
-	    # no tm module avail when using slurm
-	    export OMPI_MCA_ras=^tm
-	    export OMPI_MCA_ess=^tm
-	    export OMPI_MCA_plm=^tm
-	    
-            cmd="mpirun $@"
-	elif [ ${RM} == "pbspro" ];then
-            verify_launcher_avail mpiexec
-	    cmd="mpiexec -x LD_LIBRARY_PATH --prefix ${MPI_DIR} --hostfile ${PBS_NODEFILE} $@"
-	else
-            _error "Unknown resource manager -> ${RM}"
-	fi
-
-        _info "Launch cmd = $cmd"
-        $cmd
+    # no tm module avail when using slurm
+    if [[ ${RM} == "slurm" ]];then
+	set_variable OMPI_MCA_ras ^tm
+	set_variable OMPI_MCA_ess ^tm
+	set_variable OMPI_MCA_plm ^tm
     fi
 }
 
-# ohpc builds of openmpi3.x leverage pmix
-function launch_openmpi3 () {
-    if [ ${RM} == "slurm" ];then
-        verify_launcher_avail mpirun
+function launch_openmpi () {
 
-	# no tm module avail when using slurm
-	export OMPI_MCA_ras=^tm
-	export OMPI_MCA_ess=^tm
-	export OMPI_MCA_plm=^tm
-	    
-        cmd="srun --mpi=pmix $@"
-    elif [ ${RM} == "pbspro" ];then
-        verify_launcher_avail mpiexec
-	cmd="mpiexec -x LD_LIBRARY_PATH --prefix ${MPI_DIR} --hostfile ${PBS_NODEFILE} $@"
+    setupenv_openmpi
+
+    if [[ ${RM} == "slurm" ]];then
+	if [[ ${OHPC_MPI_LAUNCHERS} =~ "pmix" ]];then
+            verify_launcher_avail srun
+            cmd="srun --mpi=pmix $@"
+	else
+	    verify_launcher_avail mpirun
+            cmd="mpirun $@"
+	fi
+    elif [[ ${RM} == "pbspro" ]];then
+            verify_launcher_avail mpiexec
+	    cmd="mpiexec -x LD_LIBRARY_PATH --prefix ${MPI_DIR} --hostfile ${PBS_NODEFILE} $@"
     else
         _error "Unknown resource manager -> ${RM}"
     fi
-
-    _info "Launch cmd = $cmd"
+    
+    _info "Launch cmd = $cmd (family=$LMOD_FAMILY_MPI)"
     $cmd
+
+    return $?
 }
+
+
+
+
 
 DELIM=prun
 
 # Parse command-line args
 
-while getopts ":h" opt; do
+while getopts "hv" opt; do
     case $opt in
 	h)
 	    usage
+	    ;;
+	v)
+	    LOGLEVEL=3
 	    ;;
 	\?)
 	    echo "Invalid option: -$OPTARG" >&2
@@ -194,6 +203,7 @@ while getopts ":h" opt; do
 	    ;;
     esac
 done
+shift $((OPTIND-1))
 
 if [ $# -lt 1 ];then
     usage
@@ -210,10 +220,9 @@ ARGS=$@
 # from locally installed packages. Like Highlander, we assume there can be only one.
 
 if [ -z "$RM" ];then
-    [[ -s /etc/pbs.conf ]]   && RM=pbspro
+    [[ -s /etc/pbs.conf ]] && RM=pbspro
     [[ -s /etc/slurm/slurm.conf ]] && RM=slurm
 fi
-
 
 if ! [ -x "$(command -v $EXEC)" ];then
     if [ ! -x $EXEC ];then
@@ -240,7 +249,7 @@ elif [ $LMOD_FAMILY_MPI == "mvapich2" ];then
 elif [ $LMOD_FAMILY_MPI == "openmpi" ];then
     launch_openmpi $EXEC $ARGS
 elif [ $LMOD_FAMILY_MPI == "openmpi3" ];then
-    launch_openmpi3 $EXEC $ARGS
+    launch_openmpi $EXEC $ARGS
 else
     _error "Unsupported or unknown MPI family -> $LMOD_FAMILY_MPI"
 fi
