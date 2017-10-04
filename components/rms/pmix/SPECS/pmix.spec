@@ -20,6 +20,7 @@ License: BSD
 Group: Development/Libraries
 Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 Source1: OHPC_macros
+Patch0: singleton.patch
 
 BuildRequires: libevent-devel
 
@@ -46,6 +47,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch0 -p1
 
 %build
 CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
