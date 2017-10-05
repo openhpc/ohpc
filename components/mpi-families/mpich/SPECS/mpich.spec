@@ -21,7 +21,6 @@ BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires: libevent-devel
-Provides:       pmix_enabled
 %endif
 
 # Base package name
@@ -66,11 +65,20 @@ module load pmix
             --with-pm=no --with-pmi=slurm \
 %endif
 %if 0%{with_pmix}
-            CFLAGS="-I${PMIX_INC}" LIBS="-L${PMIX_LIB} -lpmix" --with-pm=none --with-pmi=slurm \
+            CFLAGS="-I${PMIX_INC}" LIBS="-L%{OHPC_ADMIN}/pmix/pmix -lpmix" --with-pm=none --with-pmi=slurm \
 %endif
     || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
+
+# also enable hydra as backup job launch for non pmix aware resource managers
+%if 0%{with_pmix}
+pushd src/pm/hydra
+./configure --prefix=%{install_path}
+make %{?_smp_mflags}
+popd
+%endif
+
 %install
 # OpenHPC compiler designation
 %ohpc_setup_compiler
