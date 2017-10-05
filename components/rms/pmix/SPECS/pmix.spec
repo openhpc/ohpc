@@ -50,8 +50,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
 module load autotools
-autoconf
-automake
+./autogen.sh 
 
 %build
 CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
