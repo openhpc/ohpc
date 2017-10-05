@@ -23,7 +23,7 @@ Source1: OHPC_macros
 Patch0: singleton.5391e43.patch
 
 BuildRequires: libevent-devel
-BuildRequires: %{PROJ_DELIM}autotools
+BuildRequires: lmod%{PROJ_DELIM} %{PROJ_DELIM}autotools
 
 %global install_path %{OHPC_ADMIN}/%{pname}/%{version}
 
@@ -49,6 +49,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
+module load autotools
 autoconf
 automake
 
