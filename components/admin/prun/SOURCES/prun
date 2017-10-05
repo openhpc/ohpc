@@ -145,8 +145,8 @@ function launch_mvapich2 () {
 }
 
 function setupenv_openmpi () {
-    # disable warnings if psm2 unavail
-    [[ $(rpm -q --quiet libpsm2) ]] || set_variable OMPI_MCA_mtl ^psm2
+    # disable plugin loader warnings if not not available
+    set_variable OMPI_MCA_mca_base_component_show_load_errors 0
 
     # no tm module avail when using slurm
     if [[ ${RM} == "slurm" ]];then
