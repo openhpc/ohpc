@@ -20,8 +20,7 @@ License: BSD
 Group: Development/Libraries
 Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 Source1: OHPC_macros
-Patch0: singleton.patch
-Patch1: singleton.6351294.patch
+Patch0: singleton.5391e43.patch
 
 BuildRequires: libevent-devel
 
@@ -49,7 +48,6 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
-%patch1 -p1
 
 %build
 CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
@@ -57,13 +55,6 @@ CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
 
 %install
 %{__make} install DESTDIR=${RPM_BUILD_ROOT}
-
-# PMIx provides PMI1 and PMI2 interfaces in libmpix, but many packages check
-# linkage against libpmi.so directly - create soft link to libpmix.so
-
-pushd ${RPM_BUILD_ROOT}/%{install_path}/lib
-%{__ln_s} libpmix.so libpmi.so
-popd
 
 # provide generic link to versioned install path (helpful for use by
 # administrative packages like resource managers)
