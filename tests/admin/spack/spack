@@ -32,7 +32,7 @@ setup() {
 }
 
 @test "[spack] build with llvm" {
-    module load llvm4
+    module load llvm5
     spack compiler find
     assert_success
 
