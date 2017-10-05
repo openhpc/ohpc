@@ -71,7 +71,7 @@ module load pmix
 
 make %{?_smp_mflags}
 
-# also enable hydra as backup job launch for non pmix aware resource managers
+# enable hydra as backup job launch for non pmix aware resource managers
 %if 0%{with_pmix}
 pushd src/pm/hydra
 ./configure --prefix=%{install_path}
@@ -83,6 +83,13 @@ popd
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+
+# install hydra as backup job launch for non pmix aware resource managers
+%if 0%{with_pmix}
+pushd src/pm/hydra
+make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+popd
+%endif
 # Remove .la files detected by rpm
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
