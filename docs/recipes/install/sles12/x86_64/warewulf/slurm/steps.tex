@@ -118,14 +118,6 @@
 # Add SLURM client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
-# Optionally add IB support
-% ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
-% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
-% ohpc_indent 5
-[sms](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils libibverbs-utils
-% ohpc_indent 0
-% ohpc_command fi
-
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
 [sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
 
@@ -144,6 +136,16 @@
 # Remove default hostname to allow WW to provision network names
 [sms](*\#*) mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
 \end{lstlisting}
+
+% ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
+% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Optionally add IB support
+[sms](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils libibverbs-utils
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
 % end_ohpc_run
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
