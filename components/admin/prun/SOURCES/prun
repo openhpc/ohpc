@@ -105,11 +105,11 @@ function launch_mpich () {
             verify_launcher_avail srun
             cmd="srun --mpi=pmix $@"
 	else
-	    verify_launcher mpiexec.hydra
+	    verify_launcher_avail mpiexec.hydra
 	    cmd="mpiexec.hydra -bootstrap slurm $@"
 	fi
     elif [[ ${RM} == "pbspro" ]];then
-	verify_launcher mpiexec.hydra
+	verify_launcher_avail mpiexec.hydra
 	cmd="mpiexec.hydra -rmk pbs $@"
     else
         _error "Unknown resource manager -> ${RM}"
