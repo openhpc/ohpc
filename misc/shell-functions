@@ -1,0 +1,21 @@
+
+prepare_git_tree() {
+
+	local DIR=${1}
+
+        if [ ! -e ${DIR}/../SOURCES ]; then
+                # empty SOURCES directory are not created by git
+                mkdir ${DIR}/../SOURCES
+        fi
+
+        # for builds outside of OBS OHPC_macros needs to exist
+        if [ ! -e ${DIR}/../SOURCES/OHPC_macros ]; then
+                pushd ${DIR}/../SOURCES > /dev/null
+                if [ -e ../../../OHPC_macros ]; then
+                        ln -s ../../../OHPC_macros
+                elif [ -e ../../../../OHPC_macros ]; then
+                        ln -s ../../../../OHPC_macros
+                fi
+                popd > /dev/null
+        fi
+}
