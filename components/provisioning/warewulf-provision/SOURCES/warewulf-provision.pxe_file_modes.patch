@@ -1,42 +1,6 @@
---- warewulf3-3.7pre.ohpc1.3/lib/Warewulf/Provision/Pxelinux.pm	2017-03-22 08:41:20.000000000 -0700
-+++ warewulf3-3.7pre.ohpc1.3.patch/lib/Warewulf/Provision/Pxelinux.pm	2017-08-04 11:14:31.000000000 -0700
-@@ -89,8 +89,11 @@
-             if (! -f "$tftpdir/warewulf/$f") {
-                 if (-f "$datadir/warewulf/$f") {
-                     &iprint("Copying $f to the tftp root\n");
--                    mkpath("$tftpdir/warewulf/");
-+                    mkpath("$tftpdir/warewulf/", {
-+                        mode => 0755,
-+                    });
-                     system("cp $datadir/warewulf/$f $tftpdir/warewulf/$f");
-+                    chmod 0644, "$tftpdir/warewulf/$f";
-                 } else {
-                     &eprint("Could not locate Warewulf's internal $f! Things might be broken!\n");
-                 }
-@@ -138,7 +141,9 @@
- 
-     if (! -d "$tftproot/warewulf/pxelinux.cfg") {
-         &iprint("Creating pxelinux configuration directory: $tftproot/warewulf/pxelinux.cfg");
--        mkpath("$tftproot/warewulf/pxelinux.cfg");
-+        mkpath("$tftproot/warewulf/pxelinux.cfg", {
-+            mode => 0755,
-+        });
-     }
- 
-     foreach my $nodeobj (@nodeobjs) {
-@@ -279,6 +284,9 @@
-                 if (! close PXELINUX) {
-                     &eprint("Could not write Pxelinux configuration file: $!\n");
-                 }
-+                if (! chmod 0644, "$tftproot/warewulf/pxelinux.cfg/$config") {
-+                    &eprint("Could not chmod Pxelinux configuration file: $!\n");
-+                }
-             } else {
-                 &eprint("Node: $nodename-$devname: Bad characters in hwaddr: '$hwaddr'\n");
-             }
---- warewulf3-3.7pre.ohpc1.3/lib/Warewulf/Bootstrap.pm	2017-03-22 08:41:20.000000000 -0700
-+++ warewulf3-3.7pre.ohpc1.3.patch/lib/Warewulf/Bootstrap.pm	2017-08-07 15:47:34.000000000 -0700
-@@ -186,7 +186,9 @@
+--- a/lib/Warewulf/Bootstrap.pm	2017-09-06 14:18:10.000000000 -0700
++++ b/lib/Warewulf/Bootstrap.pm	2017-10-09 09:46:49.000000000 -0700
+@@ -210,7 +210,9 @@
              my $dirname = dirname($file);
  
              if (! -d $dirname) {
@@ -47,7 +11,7 @@
              }
          }
  
-@@ -318,7 +320,9 @@
+@@ -350,7 +352,9 @@
              }
  
              mkpath($tmpdir);
@@ -58,7 +22,7 @@
              chdir($tmpdir);
  
              &dprint("Opening gunzip/cpio pipe\n");
-@@ -348,12 +352,15 @@
+@@ -381,10 +385,13 @@
              system("cd $tmpdir/initramfs; find . | cpio -o --quiet -H newc -F $bootstrapdir/initfs");
              &nprint("Compressing the initramfs\n");
              system("gzip -f -9 $bootstrapdir/initfs");
@@ -68,9 +32,45 @@
 +            chmod 0644, "$bootstrapdir/kernel";
              system("rm -rf $tmpdir");
              open(COOKIE, "> $bootstrapdir/cookie");
++            chmod 0644, "$bootstrapdir/cookie";
              print COOKIE $self->checksum();
              close COOKIE;
-+            chmod 0644, "$bootstrapdir/cookie";
              &nprint("Bootstrap image '$bootstrap_name' is ready\n");
-         } else {
-             &dprint("Bootstrap ID is invalid\n");
+--- a/lib/Warewulf/Provision/Pxe.pm	2017-09-06 14:18:10.000000000 -0700
++++ b/lib/Warewulf/Provision/Pxe.pm	2017-10-09 09:49:12.000000000 -0700
+@@ -94,8 +94,11 @@
+                 if (-f "$datadir/warewulf/ipxe/$f") {
+                     &iprint("Copying $f to the tftp root\n");
+                     my $dirname = dirname("$tftpdir/warewulf/ipxe/$f");
+-                    mkpath($dirname);
++                    mkpath($dirname, {
++                        mode => 0755,
++                    });
+                     system("cp $datadir/warewulf/ipxe/$f $tftpdir/warewulf/ipxe/$f");
++                    chmod 0644, "$tftpdir/warewulf/ipxe/$f";
+                 } elsif ($arch eq "x86_64") {
+                     &eprint("Could not locate Warewulf's internal $datadir/warewulf/ipxe/$f! Things might be broken!\n");
+                 }
+@@ -106,8 +109,11 @@
+                 if (-f "$datadir/warewulf/ipxe/$f") {
+                     &iprint("Copying $f to the tftp root\n");
+                     my $dirname = dirname("$tftpdir/warewulf/ipxe/$f");
+-                    mkpath($dirname);
++                    mkpath($dirname, {
++                        mode => 0755,
++                    });
+                     system("cp $datadir/warewulf/ipxe/$f $tftpdir/warewulf/ipxe/$f");
++                    chmod 0644, "$tftpdir/warewulf/ipxe/$f";
+                 } elsif ($arch eq "aarch64") {
+                     &eprint("Could not locate Warewulf's internal $datadir/warewulf/ipxe/$f! Things might be broken!\n");
+                 }
+@@ -308,6 +314,9 @@
+                 if (! close IPXE) {
+                     &eprint("Could not write iPXE configuration file: $!\n");
+                 }
++                if (! chmod 0644, "$tftproot/warewulf/pxelinux.cfg/$config") {
++                    &eprint("Could not chmod Pxelinux configuration file: $!\n");
++                }
+             } else {
+                 &eprint("Node: $nodename-$devname: Bad characters in hwaddr: '$hwaddr'\n");
+             }
