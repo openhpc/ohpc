@@ -34,6 +34,11 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel
+BuildRequires: libacl-devel
+BuildRequires: libattr-devel
+BuildRequires: libuuid-devel
+BuildRequires: device-mapper-devel
+BuildRequires: xz-devel
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
