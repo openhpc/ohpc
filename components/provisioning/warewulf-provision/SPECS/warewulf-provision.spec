@@ -142,11 +142,22 @@ usermod -a -G warewulf www >/dev/null 2>&1 || :
 %else
 usermod -a -G warewulf apache >/dev/null 2>&1 || :
 %endif
-service httpd restart >/dev/null 2>&1 || :
-chkconfig httpd on >/dev/null 2>&1 || :
-chkconfig tftp on >/dev/null 2>&1 || :
-chkconfig xinetd on >/dev/null 2>&1 || :
-killall -1 xinetd || service xinetd restart >/dev/null 2>&1 || :
+systemctl enable httpd.service >/dev/null 2>&1 || :
+systemctl restart httpd.service >/dev/null 2>&1 || :
+systemctl enable tftp-server.socket >/dev/null 2>&1 || :
+systemctl restart tftp-server.socket >/dev/null 2>&1 || :
+
+mkdir -p %{_localstatedir}/warewulf/ipxe %{_localstatedir}/warewulf/bootstrap 2>/dev/null || :
+semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/warewulf/ipxe(/.*)?' 2>/dev/null || :
+semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/warewulf/bootstrap(/.*)?' 2>/dev/null || :
+restorecon -R %{_localstatedir}/warewulf/bootstrap || :
+restorecon -R %{_localstatedir}/warewulf/ipxe || :
+
+%postun server
+if [ $1 -eq 0 ] ; then
+semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/warewulf/ipxe(/.*)?' 2>/dev/null || :
+semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/warewulf/bootstrap(/.*)?' 2>/dev/null || :
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -159,12 +170,9 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf
 %config(noreplace) %{_sysconfdir}/warewulf/defaults/provision.conf
-%{_bindir}/*
+%{_sysconfdir}/warewulf/filesystem/examples/*.cmds
 %{_mandir}/*
 %{wwpkgdir}/*
-%ifarch x86_64
-%{_datadir}/warewulf/*
-%endif
 %{perl_vendorlib}/Warewulf/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Provision.pm
 %{perl_vendorlib}/Warewulf/Vnfs.pm
@@ -193,9 +201,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0750, root, apache) %{_libexecdir}/warewulf/cgi-bin/
 %endif
 
+%{_bindir}/*
+%{_datadir}/warewulf/ipxe/*
 %{perl_vendorlib}/Warewulf/Event/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Event/Dhcp.pm
-%{perl_vendorlib}/Warewulf/Event/Pxelinux.pm
+%{perl_vendorlib}/Warewulf/Event/Pxe.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Pxe.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Dhcp.pm
 
