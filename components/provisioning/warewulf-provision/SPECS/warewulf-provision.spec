@@ -131,10 +131,6 @@ cd %{dname}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%_docdir
 
-%ifnarch x86_64
-rm %{buildroot}/%{_datadir}/warewulf/*
-%endif
-
 %post -n %{pname}-server%{PROJ_DELIM}
 # 07/22/14 karl.w.schulz@intel.com - specify alternate group per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
