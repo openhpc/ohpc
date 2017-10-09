@@ -153,7 +153,7 @@ semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/warewulf/bootstra
 restorecon -R %{_localstatedir}/warewulf/bootstrap || :
 restorecon -R %{_localstatedir}/warewulf/ipxe || :
 
-%postun server
+%postun -n %{pname}-server%{PROJ_DELIM}
 if [ $1 -eq 0 ] ; then
 semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/warewulf/ipxe(/.*)?' 2>/dev/null || :
 semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/warewulf/bootstrap(/.*)?' 2>/dev/null || :
