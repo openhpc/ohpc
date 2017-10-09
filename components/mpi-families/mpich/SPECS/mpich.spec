@@ -17,7 +17,7 @@
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %endif
 
-%define with_pmix 1
+%{!?with_pmix: %define with_pmix 0}
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires: libevent-devel
@@ -71,25 +71,11 @@ module load pmix
 
 make %{?_smp_mflags}
 
-# enable hydra as backup job launch for non pmix aware resource managers
-%if 0%{with_pmix}
-pushd src/pm/hydra
-./configure --prefix=%{install_path}
-make %{?_smp_mflags}
-popd
-%endif
-
 %install
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
-# install hydra as backup job launch for non pmix aware resource managers
-%if 0%{with_pmix}
-pushd src/pm/hydra
-make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
-popd
-%endif
 # Remove .la files detected by rpm
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
@@ -115,7 +101,9 @@ module-whatis "URL: %{url}"
 set     version			    %{version}
 
 setenv          MPI_DIR             %{install_path}
+%if 0%{with_pmix}
 setenv          OHPC_MPI_LAUNCHERS  pmix
+%endif
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
