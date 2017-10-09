@@ -17,7 +17,7 @@
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %endif
 
-%{!?with_pmix: %define with_pmix 0}
+%{!?with_pmix: %define with_pmix 1}
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires: libevent-devel
