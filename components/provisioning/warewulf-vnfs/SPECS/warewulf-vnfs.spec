@@ -16,6 +16,7 @@
 
 %define pname warewulf-vnfs
 %define dname vnfs
+%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Summary: Warewulf VNFS Module
 Name:    %{pname}%{PROJ_DELIM}
@@ -24,7 +25,7 @@ Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source2: OHPC_macros
 Source3: rhel-7.tmpl
 
@@ -62,7 +63,7 @@ Virtual Node FileSystem objects.
 
 
 %prep
-%setup -n warewulf3-%{version}.ohpc1.3
+%setup -n warewulf3-%{dev_branch_sha}
 
 # OpenHPC patches
 cd %{dname}
