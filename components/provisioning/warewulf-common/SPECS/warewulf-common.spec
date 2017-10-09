@@ -68,7 +68,7 @@ supporting libs.
 
 
 %prep
-%setup -q -n warewulf3-%{version}.ohpc1.3
+%setup -q -n warewulf3-%{dev_branch_sha}
 cd %{dname}
 %patch1 -p1
 %patch2 -p1
