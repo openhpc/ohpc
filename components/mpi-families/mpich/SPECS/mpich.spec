@@ -11,8 +11,10 @@
 # MPICH MPI stack that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
+%{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
 %define with_slurm 0
+%{!?with_slurm: %define with_slurm 0}
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %endif
@@ -27,7 +29,7 @@ BuildRequires: libevent-devel
 %define pname mpich
 
 Summary:   MPICH MPI implementation
-Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 Version:   3.2
 Release:   1%{?dist}
 License:   BSD
