@@ -17,15 +17,16 @@
 
 %define pname warewulf-provision
 %define dname provision
+%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module
-Version: 3.7pre
+Version: 3.8pre
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -104,7 +105,7 @@ available the included GPL software.
 
 
 %prep
-%setup -q -n warewulf3-%{version}.ohpc1.3
+%setup -q -n warewulf3-%{dev_branch_sha}
 cd %{dname}
 ./autogen.sh
 %patch1 -p1
@@ -154,6 +155,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf
 %config(noreplace) %{_sysconfdir}/warewulf/defaults/provision.conf
 %{_bindir}/*
+%{_mandir}/*
 %{wwpkgdir}/*
 %ifarch x86_64
 %{_datadir}/warewulf/*
