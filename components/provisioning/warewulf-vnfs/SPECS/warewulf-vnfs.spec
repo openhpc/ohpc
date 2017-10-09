@@ -98,8 +98,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/vnfs.conf
 %config(noreplace) %{_sysconfdir}/warewulf/bootstrap.conf
-%{_libexecdir}/warewulf/*
 %{_bindir}/*
+%{_mandir}/*
+%{_libexecdir}/warewulf/*
 
 
 %changelog
