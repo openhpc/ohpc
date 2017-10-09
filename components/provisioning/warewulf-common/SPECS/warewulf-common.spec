@@ -95,10 +95,12 @@ groupadd -r warewulf >/dev/null 2>&1 || :
 
 %post
 if [ $1 -eq 2 ] ; then
-    %{_bindir}/wwsh object canonicalize >/dev/null 2>&1 || :
+    %{_bindir}/wwsh object canonicalize -t node >/dev/null 2>&1 || :
+    %{_bindir}/wwsh object canonicalize -t file >/dev/null 2>&1 || :
 fi
-service mysqld start >/dev/null 2>&1 || :
-chkconfig mysqld on >/dev/null 2>&1 || :
+
+systemctl start mariadb >/dev/null 2>&1 || :
+systemctl enable mariadb >/dev/null 2>&1 || :
 
 
 %clean
@@ -119,6 +121,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*
 %{_datadir}/warewulf/
 %{_libexecdir}/warewulf/wwinit
+%{_mandir}/*
 %{perl_vendorlib}/*
 
 # 06/14/14 karl.w.schulz@intel.com - include required dir for SUSE
