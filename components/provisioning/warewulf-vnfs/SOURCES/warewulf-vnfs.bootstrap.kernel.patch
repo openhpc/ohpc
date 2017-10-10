@@ -1,5 +1,16 @@
 --- a/bin/wwbootstrap	2017-10-10 13:17:14.000000000 -0700
-+++ b/bin/wwbootstrap	2017-10-10 13:54:07.000000000 -0700
++++ b/bin/wwbootstrap	2017-10-10 14:24:24.000000000 -0700
+@@ -153,8 +153,8 @@
+ 
+ mkpath("$tmpdir/initramfs");
+ 
+-if (! -f "$opt_chroot/boot/vmlinuz-$opt_kversion") {
+-    &eprint("Can't locate the boot kernel: ". $opt_chroot ."/boot/vmlinuz-$opt_kversion\n");
++if (! -f "$opt_chroot/boot/vmlinuz-$opt_kversion" && -f "$opt_chroot/boot/vmlinux-$opt_kversion.gz") {
++    &eprint("Can't locate the boot kernel\n");
+     exit 1;
+ }
+ 
 @@ -310,7 +310,11 @@
  
  # Attempt to gunzip the kernel, aarch64 kernels are compressed and iPXE can't boot gzip compressed kernels.
