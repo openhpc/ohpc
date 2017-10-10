@@ -8,9 +8,10 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# OpenMPI stack that is dependent on compiler toolchain
+# OpenMPI stack that is dependent on compiler toolchain (and possibly RMS)
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
+%{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
 # Base package name/config
 %define pname openmpi3
@@ -27,10 +28,11 @@
 %{!?with_lustre: %define with_lustre 0}
 %{!?with_slurm: %define with_slurm 0}
 %{!?with_tm: %global with_tm 1}
+%{!?with_pmix: %define with_pmix 0}
 
 Summary:   A powerful implementation of MPI
 
-Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
 Version:   3.0.0
 Release:   1%{?dist}
@@ -49,8 +51,10 @@ BuildRequires:  postfix
 BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
-BuildRequires:  libevent-devel
+%if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
+BuildRequires:  libevent-devel
+%endif
 BuildRequires:  hwloc-devel
 %if 0%{?centos_version} == 700
 BuildRequires: libtool-ltdl
@@ -118,9 +122,11 @@ Open MPI jobs.
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 
 # build against external pmix and libevent
+%if 0%{with_pmix}
 module load pmix
 BASEFLAGS="$BASEFLAGS --with-pmix=${PMIX_DIR}"
 BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
+%endif
 
 %if %{with_psm}
   BASEFLAGS="$BASEFLAGS --with-psm"
