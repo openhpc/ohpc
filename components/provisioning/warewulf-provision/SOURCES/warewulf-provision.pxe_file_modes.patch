@@ -68,7 +68,7 @@
                  if (! close IPXE) {
                      &eprint("Could not write iPXE configuration file: $!\n");
                  }
-+                if (! chmod 0644, "$tftproot/warewulf/pxelinux.cfg/$config") {
++                if (! chmod 0644, "$statedir/warewulf/ipxe/cfg/$config") {
 +                    &eprint("Could not chmod Pxelinux configuration file: $!\n");
 +                }
              } else {
