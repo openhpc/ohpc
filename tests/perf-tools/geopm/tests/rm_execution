@@ -1,0 +1,67 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions           || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+testname="perf-tools/geopm"
+
+NODES=2
+TASKS=4
+
+@test "[$testname] Test LD_PRELOAD ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s tutorial_0 ]; then
+        flunk "tutorial_0 binary does not exist"
+    fi
+
+    rm -f geopm_test_0_report geopm_test_0_trace*
+
+    run_mpi_binary "./geopm_test_0.sh" "" $NODES $TASKS
+    assert_success
+
+    test -f geopm_test_0_report
+    assert_success
+
+    for ff in geopm_test_0_trace-*; do
+        test -s ${ff}
+        assert_success
+    done
+
+    if [ $(grep '^Host:' geopm_test_0_report | wc -l) -ne ${NODES} ]; then
+        flunk "Number of hosts in report does not match node count"
+    fi
+
+    if [ $(ls geopm_test_0_trace-* | wc -l) -ne ${NODES} ]; then
+        flunk "Number of generated trace files does not match node count"
+    fi
+}
+
+@test "[$testname] Test geopmbench ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    rm -f geopm_test_1_report geopm_test_1_trace*
+
+    run_mpi_binary "./geopm_test_1.sh" "" $NODES $TASKS
+    assert_success
+
+    test -f geopm_test_1_report
+    assert_success
+
+    for ff in geopm_test_1_trace-*; do
+        test -s ${ff}
+        assert_success
+    done
+
+    if [ $(grep '^Host:' geopm_test_1_report | wc -l) -ne ${NODES} ]; then
+        flunk "Number of hosts in report does not match node count"
+    fi
+
+    if [ $(ls geopm_test_1_trace-* | wc -l) -ne ${NODES} ]; then
+        flunk "Number of generated trace files does not match node count"
+    fi
+}

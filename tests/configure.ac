@@ -248,6 +248,12 @@ AC_ARG_ENABLE([easybuild],
    [AX_OPTION_DEFAULT(type=long,enable_easybuild,yes)])
 AM_CONDITIONAL(EASYBUILD_ENABLED,test "x$enable_easybuild" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# GEOPM
+AC_ARG_ENABLE([geopm],
+   [AS_HELP_STRING([--enable-geopm],[Enable geopm tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_geopm,yes)])
+AM_CONDITIONAL(GEOPM_ENABLED,test "x$enable_geopm" = "xyes" )
+#------------------------------------------------------------------------------------------
 # HYPRE
 AC_ARG_ENABLE([hypre],
    [AS_HELP_STRING([--enable-hypre],[Enable HYPRE tests (default=yes)])],[],
@@ -459,6 +465,7 @@ AC_OUTPUT( Makefile
        user-env/Makefile 
        bos/Makefile
        fabric/Makefile
+       perf-tools/geopm/Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
        oob/Makefile
@@ -799,6 +806,12 @@ echo    Performance Tools:
        echo '    'IMB....................... : enabled
     else
        echo '    'IMB....................... : disabled
+    fi
+
+    if test "x$enable_geopm" = "xyes"; then
+       echo '    'GEOPM..................... : enabled
+    else
+       echo '    'GEOPM..................... : disabled
     fi
 
     if test "x$enable_likwid" = "xyes"; then

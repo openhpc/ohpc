@@ -1,0 +1,64 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+status=0
+
+source ./common/TEST_ENV  || exit 1
+source ./common/functions || exit 1
+
+export GEOPM_MPIEXEC_HYDRA=false
+mpiexec.hydra() {
+	$GEOPM_MPIEXEC_HYDRA -bind-to core "$@"
+}
+export -f mpiexec.hydra
+
+export GEOPM_MPIRUN=false
+mpirun() {
+	$GEOPM_MPIRUN --bind-to core "$@"
+}
+export -f mpirun
+
+export GEOPM_SRUN=false
+srun() {
+	$GEOPM_SRUN --cpu-bind=cores "$@"
+}
+export -f srun
+
+cd perf-tools/geopm || exit 1
+
+export BATS_JUNIT_CLASS=GEOPM
+
+# bootstrap the local autotools project if necessary
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+	for mpi in $MPI_FAMILIES ; do
+		echo " "
+		echo " "
+		echo "-------------------------------------------------------"
+		echo "Libraries: GEOPM tests: $compiler-$mpi"
+		echo "-------------------------------------------------------"
+
+		module purge          || exit 1
+		module load prun      || exit 1
+		module load $compiler || exit 1
+		module load $mpi      || exit 1
+		module load geopm     || exit 1
+
+		GEOPM_MPIEXEC_HYDRA=$(which mpiexec.hydra || echo 'false')
+		GEOPM_MPIRUN=$(which mpirun || echo 'false')
+		GEOPM_SRUN=$(which srun || echo 'false')
+
+		./configure           || exit 1
+		make clean            || exit 1
+		make -k check         || status=1
+
+		save_logs_mpi_family tests $compiler $mpi
+
+		make distclean
+	done
+done
+
+exit ${status}
