@@ -48,6 +48,7 @@ Patch1: warewulf-provision.httpdconfdir.patch
 #Patch3: warewulf-provision.wwgetvnfs.patch
 Patch4: warewulf-provision.pxe_file_modes.patch
 Patch5: warewulf-provision.bin-file.patch
+Patch6: warewulf-provision.sles_tftpboot.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -118,6 +119,7 @@ cd %{dname}
 #%patch3 -p1
 %patch4 -p1
 %patch5 -p2
+%patch6 -p1
 
 %build
 cd %{dname}
