@@ -186,6 +186,9 @@ module-whatis "URL: %{url}"
 set     version			    %{version}
 
 setenv          MPI_DIR             %{install_path}
+%if 0%{with_pmix}
+setenv          OHPC_MPI_LAUNCHERS  pmix
+%endif
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
