@@ -1,6 +1,6 @@
---- nagios-4.3.1/daemon-init.in	2017-02-23 12:00:40.000000000 -0800
-+++ nagios-4.3.1.patch/daemon-init.in	2017-02-27 14:58:21.000000000 -0800
-@@ -136,11 +136,14 @@
+--- a/daemon-init.in	2017-08-24 14:43:48.000000000 -0700
++++ b/daemon-init.in	2017-09-29 09:30:04.000000000 -0700
+@@ -134,11 +134,14 @@
  
  printstatus_nagios ()
  {
@@ -16,7 +16,7 @@
  }
  
  killproc_nagios ()
-@@ -235,6 +239,7 @@
+@@ -251,6 +254,7 @@
  	status)
  		pid_nagios
  		printstatus_nagios

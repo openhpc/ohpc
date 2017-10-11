@@ -1,0 +1,11 @@
+--- x/configure	2017-06-27 21:16:42.000000000 -0400
++++ a/configure	2017-06-30 11:35:21.492498617 -0400
+@@ -191390,7 +191390,7 @@
+                 orte_check_tm_LIBS="$orte_check_tm_LIBS $orte_check_tm_val"
+             fi
+         else
+-            if test "LIBS" = "LDFLAGS"; then
++            if test "LIBS" = "LIBS"; then
+                 orte_check_tm_LIBS="$orte_check_tm_LIBS $orte_check_tm_val"
+             fi
+         fi

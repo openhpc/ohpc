@@ -11,11 +11,11 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" == "gnu7"
-%global gnu_version 7.1.0
+%global gnu_version 7.2.0
 %global gnu_major_ver 7
 %global gnu_release 1
 %global pname gnu7-compilers
-%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.bz2
+%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
 %global source_directory gcc-%{version}
 %endif
 
@@ -31,7 +31,7 @@
 
 %global gmp_version 6.1.2
 %global mpc_version 1.0.3
-%global mpfr_version 3.1.5
+%global mpfr_version 3.1.6
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
@@ -43,8 +43,8 @@ URL:       http://gcc.gnu.org/
 %if "%{compiler_family}" != "dts6"
 Source0:   %{source}
 Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
-Source2:   ftp://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
-Source3:   http://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
+Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
+Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
 %endif
 Source4:   OHPC_macros
 

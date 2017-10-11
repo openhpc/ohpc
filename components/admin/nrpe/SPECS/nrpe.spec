@@ -21,7 +21,7 @@
 %define nsport 5666
 
 Name: %{pname}%{PROJ_DELIM}
-Version: 3.1.0
+Version: 3.2.0
 Release: 2%{?dist}
 Summary: Host/service/network monitoring agent for Nagios
 
@@ -219,12 +219,12 @@ fi
 %if 0%{?fedora} > 14 || 0%{?rhel} > 6
 %config(noreplace) %{_tmpfilesdir}/%{pname}.conf
 %endif
-%doc Changelog LEGAL README.md README.SSL.md SECURITY.md docs/NRPE.pdf
+%doc CHANGELOG.md LEGAL README.md README.SSL.md SECURITY.md docs/NRPE.pdf
 %dir %attr(775, %{pname}, %{pname}) %{_localstatedir}/run/%{pname}
 
 %files -n nagios-plugins-nrpe%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_nrpe
-%doc Changelog LEGAL README.md
+%doc CHANGELOG.md LEGAL README.md
 
 %changelog
 * Thu May 1 2014 Sam Kottler <skottler@fedoraproject.org> - 2.15.2

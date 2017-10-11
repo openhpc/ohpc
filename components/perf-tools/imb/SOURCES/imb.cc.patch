@@ -6,5 +6,5 @@
 -CC          = mpiicc 
 +CC          = mpicc 
  ifeq (,$(shell which ${CC}))
- $(error ${CC} is not defined through the PATH environment variable setting. Please try sourcing an Intel(r) Cluster Tools script file such as "mpivars.[c]sh" or "ictvars.[c]sh")
+ $(error ${CC} is not defined through the PATH environment variable setting. Please try sourcing an Intel(R) Cluster Tools script file such as "mpivars.[c]sh" or "ictvars.[c]sh")
  endif

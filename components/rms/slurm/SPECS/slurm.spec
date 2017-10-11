@@ -10,6 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 %global _with_mysql  1
+%global slurm_with_pmix %{OHPC_ADMIN}/pmix/pmix
 
 %define pname slurm
 
@@ -117,6 +118,8 @@ BuildRequires: klogd sysconfig
 %endif
 
 Requires: %{pname}-plugins%{PROJ_DELIM}
+BuildRequires: pmix%{PROJ_DELIM}
+Requires: pmix%{PROJ_DELIM}
 #!BuildIgnore: post-build-checks
 
 %ifos linux

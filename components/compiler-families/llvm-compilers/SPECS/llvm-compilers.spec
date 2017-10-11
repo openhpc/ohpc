@@ -13,17 +13,17 @@
 
 # Remember to drop this gnu-compilers dependency in the future,
 # when gcc-5.3+ appear in all the targeted Linux distros.
-%global gnuver 7.1.0
+%global gnuver 7.2.0
 
-%global clang_sha 1210030915d1e1441d62eea54976f4ced7f6ad88
-%global flang_sha cab3fc47849d7ba8effef8474b9aae2cc60e8c57
+%global clang_sha b11539abc46cbd19189c5719d1e30539de3a93b9
+%global flang_sha 37e86e06f74d9bd91ef6bb511c026753b9124006
 
-%global pname llvm4-compilers
-%global major_ver 4
+%global pname llvm5-compilers
+%global major_ver 5
 
 Summary:   The LLVM Compiler Infrastructure
 Name:      %{pname}%{PROJ_DELIM}
-Version:   4.0.1
+Version:   5.0.0
 Release:   1%{?dist}
 License:   UIUC, Apache-2.0
 Group:     %{PROJ_NAME}/compiler-families
@@ -38,7 +38,6 @@ Source6:   http://releases.llvm.org/%{version}/libunwind-%{version}.src.tar.xz
 Source7:   http://releases.llvm.org/%{version}/lld-%{version}.src.tar.xz
 Source8:   http://releases.llvm.org/%{version}/openmp-%{version}.src.tar.xz
 Source9:   OHPC_macros
-Patch1:    0001-GOMP-compatibility-add-missing-OpenMP4.0-task-deps-h.patch
 BuildRequires: gnu7-compilers%{PROJ_DELIM}
 BuildRequires: cmake%{PROJ_DELIM}
 BuildRequires: make
@@ -67,9 +66,6 @@ The LLVM Compiler Infrastructure.
 
 %prep
 %setup -q -c -b1 -b2 -b3 -b4 -b5 -b6 -b7 -b8
-cd openmp-%{version}.src
-%patch1 -p1
-cd ..
 
 cd llvm-%{version}.src/tools
 ln -s ../../clang-%{clang_sha} clang

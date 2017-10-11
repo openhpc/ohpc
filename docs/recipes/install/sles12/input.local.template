@@ -35,17 +35,18 @@ bmc_password="${bmc_password:-unknown}"
 provision_wait="${provision_wait:-180}"
 
 # Flags for optional installation/configuration
-
-enable_beegfs_client="${enable_beegfs_client:-0}"
+enable_ib="${enable_ib:-0}"
+enable_opa="${enable_opa:-0}"
 enable_mpi_defaults="${enable_mpi_defaults:-1}"
-enable_mpi_opa="${enable_mpi_opa:-0}"
+enable_ipoib="${enable_ipoib:-0}"
+
 enable_clustershell="${enable_clustershell:-0}"
 enable_ipmisol="${enable_ipmisol:-0}"
 enable_opensm="${enable_opensm:-0}"
-enable_ipoib="${enable_ipoib:-0}"
 enable_ganglia="${enable_ganglia:-0}"
 enable_genders="${enable_genders:-0}"
 enable_kargs="${enable_kargs:-0}"
+enable_beegfs_client="${enable_beegfs_client:-0}"
 enable_lustre_client="${enable_lustre_client:-0}"
 enable_mrsh="${enable_mrsh:-0}"
 enable_nagios="${enable_nagios:-0}"

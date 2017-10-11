@@ -17,15 +17,16 @@
 
 %define pname warewulf-provision
 %define dname provision
+%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module
-Version: 3.7pre
+Version: 3.8pre
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -33,13 +34,18 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel
+BuildRequires: libacl-devel
+BuildRequires: libattr-devel
+BuildRequires: libuuid-devel
+BuildRequires: device-mapper-devel
+BuildRequires: xz-devel
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 DocDir: %{OHPC_PUB}/doc/contrib
 Patch1: warewulf-provision.httpdconfdir.patch
-Patch2: warewulf-provision.sles_stateful.patch
-Patch3: warewulf-provision.wwgetvnfs.patch
+#Patch2: warewulf-provision.sles_stateful.patch
+#Patch3: warewulf-provision.wwgetvnfs.patch
 Patch4: warewulf-provision.pxe_file_modes.patch
 Patch5: warewulf-provision.bin-file.patch
 
@@ -104,12 +110,12 @@ available the included GPL software.
 
 
 %prep
-%setup -q -n warewulf3-%{version}.ohpc1.3
+%setup -q -n warewulf3-%{dev_branch_sha}
 cd %{dname}
 ./autogen.sh
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
+#%patch2 -p1
+#%patch3 -p1
 %patch4 -p1
 %patch5 -p2
 
@@ -125,10 +131,6 @@ cd %{dname}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%_docdir
 
-%ifnarch x86_64
-rm %{buildroot}/%{_datadir}/warewulf/*
-%endif
-
 %post -n %{pname}-server%{PROJ_DELIM}
 # 07/22/14 karl.w.schulz@intel.com - specify alternate group per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -136,11 +138,22 @@ usermod -a -G warewulf www >/dev/null 2>&1 || :
 %else
 usermod -a -G warewulf apache >/dev/null 2>&1 || :
 %endif
-service httpd restart >/dev/null 2>&1 || :
-chkconfig httpd on >/dev/null 2>&1 || :
-chkconfig tftp on >/dev/null 2>&1 || :
-chkconfig xinetd on >/dev/null 2>&1 || :
-killall -1 xinetd || service xinetd restart >/dev/null 2>&1 || :
+systemctl enable httpd.service >/dev/null 2>&1 || :
+systemctl restart httpd.service >/dev/null 2>&1 || :
+systemctl enable tftp-server.socket >/dev/null 2>&1 || :
+systemctl restart tftp-server.socket >/dev/null 2>&1 || :
+
+mkdir -p %{_localstatedir}/warewulf/ipxe %{_localstatedir}/warewulf/bootstrap 2>/dev/null || :
+semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/warewulf/ipxe(/.*)?' 2>/dev/null || :
+semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/warewulf/bootstrap(/.*)?' 2>/dev/null || :
+restorecon -R %{_localstatedir}/warewulf/bootstrap || :
+restorecon -R %{_localstatedir}/warewulf/ipxe || :
+
+%postun -n %{pname}-server%{PROJ_DELIM}
+if [ $1 -eq 0 ] ; then
+semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/warewulf/ipxe(/.*)?' 2>/dev/null || :
+semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/warewulf/bootstrap(/.*)?' 2>/dev/null || :
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -153,11 +166,9 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf
 %config(noreplace) %{_sysconfdir}/warewulf/defaults/provision.conf
-%{_bindir}/*
+%{_sysconfdir}/warewulf/filesystem/examples/*.cmds
+%{_mandir}/*
 %{wwpkgdir}/*
-%ifarch x86_64
-%{_datadir}/warewulf/*
-%endif
 %{perl_vendorlib}/Warewulf/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Provision.pm
 %{perl_vendorlib}/Warewulf/Vnfs.pm
@@ -186,9 +197,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(0750, root, apache) %{_libexecdir}/warewulf/cgi-bin/
 %endif
 
+%{_bindir}/*
+%{_datadir}/warewulf/ipxe/*
 %{perl_vendorlib}/Warewulf/Event/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Event/Dhcp.pm
-%{perl_vendorlib}/Warewulf/Event/Pxelinux.pm
+%{perl_vendorlib}/Warewulf/Event/Pxe.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Pxe.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Dhcp.pm
 

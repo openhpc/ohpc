@@ -2,7 +2,9 @@ The following command adds OFED and PSM support using base distro-provided drive
 to the chosen {\em master} host.
 
 % begin_ohpc_run
-% ohpc_comment_header Add InfiniBand support services on master node \ref{sec:add_ofed}
+% ohpc_comment_header Optionally add InfiniBand support services on master node \ref{sec:add_ofed}
+% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
+% ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) (*\groupinstall*) "InfiniBand Support"
 [sms](*\#*) (*\install*) infinipath-psm
@@ -10,6 +12,8 @@ to the chosen {\em master} host.
 # Load IB drivers
 [sms](*\#*) systemctl start rdma
 \end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
 % end_ohpc_run
 
 \input{common/opensm}

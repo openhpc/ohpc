@@ -1,0 +1,20 @@
+--- configure.ac.orig	2017-09-26 16:30:39.098208974 -0400
++++ configure.ac	2017-09-26 16:31:23.019268579 -0400
+@@ -163,7 +163,6 @@
+ 
+ LT_INIT()
+ LT_LANG([C])
+-LT_LANG([C++])
+ 
+ ############################################################################
+ # Setup the core
+@@ -192,7 +191,7 @@
+ PMIX_FLAGS_UNIQ(LIBS)
+ 
+ #
+-# Delayed the substitution of CFLAGS and CXXFLAGS until now because
++# Delayed the substitution of CFLAGS until now because
+ # they may have been modified throughout the course of this script.
+ #
+ 
+

@@ -51,7 +51,7 @@ mkdir -p %{buildroot}%{install_path}/share
 mv %{buildroot}/usr/sbin/shine %{buildroot}%{install_path}/sbin/.
 mv %{buildroot}/usr/share/shine/shine.init.redhat %{buildroot}%{install_path}/share/.
 mv %{buildroot}/usr/share/vim %{buildroot}%{install_path}/share/.
-rm %{buildroot}/var/cache/shine/conf/README
+
 # man pages
 mkdir -p %{buildroot}%{install_path}/share/man/{man1,man5}
 gzip -c doc/shine.1 >%{buildroot}%{install_path}/share/man/man1/shine.1.gz
@@ -94,6 +94,7 @@ rm -rf %{buildroot}
 %doc LICENSE README ChangeLog
 %{OHPC_ADMIN}
 %{OHPC_PUB}
+/var/cache/shine/conf/README
 
 %changelog
 * Wed Feb 24 2016 <aurelien.degremont@cea.fr> - 1.4-1

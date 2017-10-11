@@ -1,0 +1,410 @@
+diff --git a/src/client/pmi1.c b/src/client/pmi1.c
+old mode 100644
+new mode 100755
+index 6214e623..b5301908
+--- a/src/client/pmi1.c
++++ b/src/client/pmi1.c
+@@ -47,9 +47,6 @@
+ 
+ #define PMI_CHECK()             \
+     do {                        \
+-        if (pmi_singleton) {    \
+-            return PMI_SUCCESS; \
+-        }                       \
+         if (!pmi_init) {        \
+             return PMI_FAIL;    \
+         }                       \
+@@ -78,6 +75,9 @@ PMIX_EXPORT int PMI_Init(int *spawned)
+                 *spawned = 0;
+             }
+             pmi_singleton = true;
++            (void)strncpy(myproc.nspace, "1234", PMIX_MAX_NSLEN);
++            myproc.rank = 0;
++            pmi_init = 1;
+             return PMI_SUCCESS;
+         }
+         return PMI_ERR_INIT;
+@@ -122,7 +122,11 @@ PMIX_EXPORT int PMI_Initialized(PMI_BOOL *initialized)
+         return PMI_ERR_INVALID_ARG;
+     }
+ 
+-    *initialized = (PMIx_Initialized() ? PMI_TRUE : PMI_FALSE);
++    if (pmi_singleton) {
++        *initialized = PMI_TRUE;
++    } else {
++        *initialized = (PMIx_Initialized() ? PMI_TRUE : PMI_FALSE);
++    }
+ 
+     return PMI_SUCCESS;
+ }
+@@ -134,6 +138,10 @@ PMIX_EXPORT int PMI_Finalize(void)
+     PMI_CHECK();
+ 
+     pmi_init = 0;
++    if (pmi_singleton) {
++        return PMI_SUCCESS;
++    }
++
+     rc = PMIx_Finalize();
+     return convert_err(rc);
+ }
+@@ -144,6 +152,10 @@ PMIX_EXPORT int PMI_Abort(int flag, const char msg[])
+ 
+     PMI_CHECK();
+ 
++    if (pmi_singleton) {
++        return PMI_SUCCESS;
++    }
++
+     rc = PMIx_Abort(flag, msg, NULL, 0);
+     return convert_err(rc);
+ }
+@@ -166,6 +178,9 @@ PMIX_EXPORT int PMI_KVS_Put(const char kvsname[], const char key[], const char v
+     if ((value == NULL) || (strlen(value) > PMI_MAX_VAL_LEN)) {
+         return PMI_ERR_INVALID_VAL;
+     }
++    if (pmi_singleton) {
++        return PMI_SUCCESS;
++    }
+ 
+     pmix_output_verbose(2, pmix_globals.debug_output,
+             "PMI_KVS_Put: KVS=%s, key=%s value=%s", kvsname, key, value);
+@@ -181,11 +196,15 @@ PMIX_EXPORT int PMI_KVS_Commit(const char kvsname[])
+ {
+     pmix_status_t rc = PMIX_SUCCESS;
+ 
++    pmix_output(0, "%s:%d", __FILE__, __LINE__);
+     PMI_CHECK();
+ 
+     if ((kvsname == NULL) || (strlen(kvsname) > PMI_MAX_KVSNAME_LEN)) {
+         return PMI_ERR_INVALID_KVS;
+     }
++    if (pmi_singleton) {
++        return PMI_SUCCESS;
++    }
+ 
+     pmix_output_verbose(2, pmix_globals.debug_output, "PMI_KVS_Commit: KVS=%s",
+             kvsname);
+@@ -200,6 +219,7 @@ PMIX_EXPORT int PMI_KVS_Get( const char kvsname[], const char key[], char value[
+     pmix_value_t *val;
+     pmix_proc_t proc;
+ 
++    pmix_output(0, "%s:%d", __FILE__, __LINE__);
+     PMI_CHECK();
+ 
+     if ((kvsname == NULL) || (strlen(kvsname) > PMI_MAX_KVSNAME_LEN)) {
+@@ -269,6 +289,10 @@ PMIX_EXPORT int PMI_Barrier(void)
+ 
+     PMI_CHECK();
+ 
++    if (pmi_singleton) {
++        return PMI_SUCCESS;
++    }
++
+     info = &buf;
+     PMIX_INFO_CONSTRUCT(info);
+     PMIX_INFO_LOAD(info, PMIX_COLLECT_DATA, &val, PMIX_BOOL);
+@@ -295,6 +319,11 @@ PMIX_EXPORT int PMI_Get_size(int *size)
+         return PMI_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi_singleton) {
++        *size = 1;
++        return PMI_SUCCESS;
++    }
++
+     /* set controlling parameters
+      * PMIX_OPTIONAL - expect that these keys should be available on startup
+      */
+@@ -339,6 +368,11 @@ PMIX_EXPORT int PMI_Get_universe_size(int *size)
+         return PMI_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi_singleton) {
++        *size = 1;
++        return PMI_SUCCESS;
++    }
++
+     /* set controlling parameters
+      * PMIX_OPTIONAL - expect that these keys should be available on startup
+      */
+@@ -371,6 +405,11 @@ PMIX_EXPORT int PMI_Get_appnum(int *appnum)
+         return PMI_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi_singleton) {
++        *appnum = 0;
++        return PMI_SUCCESS;
++    }
++
+     /* set controlling parameters
+      * PMIX_OPTIONAL - expect that these keys should be available on startup
+      */
+@@ -403,6 +442,10 @@ PMIX_EXPORT int PMI_Publish_name(const char service_name[], const char port[])
+         return PMI_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi_singleton) {
++        return PMI_FAIL;
++    }
++
+     /* pass the service/port */
+     (void) strncpy(info.key, service_name, PMIX_MAX_KEYLEN);
+     info.value.type = PMIX_STRING;
+@@ -426,6 +469,10 @@ PMIX_EXPORT int PMI_Unpublish_name(const char service_name[])
+         return PMI_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi_singleton) {
++        return PMI_FAIL;
++    }
++
+     /* pass the service */
+     keys[0] = (char*) service_name;
+     keys[1] = NULL;
+@@ -445,6 +492,10 @@ PMIX_EXPORT int PMI_Lookup_name(const char service_name[], char port[])
+         return PMI_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi_singleton) {
++        return PMI_FAIL;
++    }
++
+     PMIX_PDATA_CONSTRUCT(&pdata);
+ 
+     /* pass the service */
+@@ -525,6 +576,11 @@ PMIX_EXPORT int PMI_Get_clique_size(int *size)
+         return PMI_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi_singleton) {
++        *size = 1;
++        return PMI_SUCCESS;
++    }
++
+     /* set controlling parameters
+      * PMIX_OPTIONAL - expect that these keys should be available on startup
+      */
+@@ -557,6 +613,11 @@ PMIX_EXPORT int PMI_Get_clique_ranks(int ranks[], int length)
+         return PMI_ERR_INVALID_ARGS;
+     }
+ 
++    if (pmi_singleton) {
++        ranks[0] = 0;
++        return PMI_SUCCESS;
++    }
++
+     rc = PMIx_Get(&proc, PMIX_LOCAL_PEERS, NULL, 0, &val);
+     if (PMIX_SUCCESS == rc) {
+         /* kv will contain a string of comma-separated
+@@ -668,6 +729,10 @@ PMIX_EXPORT int PMI_Spawn_multiple(int count,
+         return PMI_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi_singleton) {
++        return PMI_FAIL;
++    }
++
+     /* setup the apps */
+     PMIX_APP_CREATE(apps, count);
+     for (i = 0; i < count; i++) {
+diff --git a/src/client/pmi2.c b/src/client/pmi2.c
+old mode 100644
+new mode 100755
+index d6610636..ce8f76ce
+--- a/src/client/pmi2.c
++++ b/src/client/pmi2.c
+@@ -1,6 +1,6 @@
+ /* -*- Mode: C; c-basic-offset:4 ; indent-tabs-mode:nil -*- */
+ /*
+- * Copyright (c) 2014-2016 Intel, Inc.  All rights reserved.
++ * Copyright (c) 2014-2017 Intel, Inc. All rights reserved.
+  * Copyright (c) 2015      Research Organization for Information Science
+  *                         and Technology (RIST). All rights reserved.
+  * Copyright (c) 2016      Mellanox Technologies, Inc.
+@@ -40,9 +40,6 @@
+ 
+ #define PMI2_CHECK()                \
+     do {                            \
+-        if (pmi2_singleton) {       \
+-            return PMI2_SUCCESS;    \
+-        }                           \
+         if (!pmi2_init) {           \
+             return PMI2_FAIL;       \
+         }                           \
+@@ -82,6 +79,9 @@ PMIX_EXPORT int PMI2_Init(int *spawned, int *size, int *rank, int *appnum)
+                 *appnum = 0;
+             }
+             pmi2_singleton = true;
++            (void)strncpy(myproc.nspace, "1234", PMIX_MAX_NSLEN);
++            myproc.rank = 0;
++            pmi2_init = 1;
+             return PMI2_SUCCESS;
+         }
+         return PMI2_ERR_INIT;
+@@ -154,6 +154,10 @@ PMIX_EXPORT int PMI2_Init(int *spawned, int *size, int *rank, int *appnum)
+ PMIX_EXPORT int PMI2_Initialized(void)
+ {
+     int initialized;
++    if (pmi2_singleton) {
++        return 1;
++    }
++
+     initialized = (int)PMIx_Initialized();
+     return initialized;
+ }
+@@ -165,6 +169,10 @@ PMIX_EXPORT int PMI2_Finalize(void)
+     PMI2_CHECK();
+ 
+     pmi2_init = 0;
++    if (pmi2_singleton) {
++        return PMI2_SUCCESS;
++    }
++
+     rc = PMIx_Finalize();
+     return convert_err(rc);
+ }
+@@ -175,6 +183,10 @@ PMIX_EXPORT int PMI2_Abort(int flag, const char msg[])
+ 
+     PMI2_CHECK();
+ 
++    if (pmi2_singleton) {
++        return PMI2_SUCCESS;
++    }
++
+     rc = PMIx_Abort(flag, msg, NULL, 0);
+     return convert_err(rc);
+ }
+@@ -201,6 +213,10 @@ PMIX_EXPORT int PMI2_Job_Spawn(int count, const char * cmds[],
+         return PMI2_ERR_INVALID_ARGS;
+     }
+ 
++    if (pmi2_singleton) {
++        return PMI2_FAIL;
++    }
++
+     /* setup the apps */
+     PMIX_APP_CREATE(apps, count);
+     for (i=0; i < count; i++) {
+@@ -283,6 +299,11 @@ PMIX_EXPORT int PMI2_Info_GetSize(int *size)
+         return PMI2_ERR_INVALID_ARGS;
+     }
+ 
++    if (pmi2_singleton) {
++        *size = 1;
++        return PMI2_SUCCESS;
++    }
++
+     /* set controlling parameters
+      * PMIX_OPTIONAL - expect that these keys should be available on startup
+      */
+@@ -310,6 +331,10 @@ PMIX_EXPORT int PMI2_Job_Connect(const char jobid[], PMI2_Connect_comm_t *conn)
+         return PMI2_ERR_INVALID_ARGS;
+     }
+ 
++    if (pmi2_singleton) {
++        return PMI2_FAIL;
++    }
++
+     (void)strncpy(proc.nspace, (jobid ? jobid : myproc.nspace), sizeof(myproc.nspace));
+     proc.rank = PMIX_RANK_WILDCARD;
+     rc = PMIx_Connect(&proc, 1, NULL, 0);
+@@ -323,6 +348,10 @@ PMIX_EXPORT int PMI2_Job_Disconnect(const char jobid[])
+ 
+     PMI2_CHECK();
+ 
++    if (pmi2_singleton) {
++        return PMI2_SUCCESS;
++    }
++
+     (void)strncpy(proc.nspace, (jobid ? jobid : myproc.nspace), sizeof(myproc.nspace));
+     proc.rank = PMIX_RANK_WILDCARD;
+     rc = PMIx_Disconnect(&proc, 1, NULL, 0);
+@@ -341,6 +370,10 @@ PMIX_EXPORT int PMI2_KVS_Put(const char key[], const char value[])
+         return PMI2_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi2_singleton) {
++        return PMI2_SUCCESS;
++    }
++
+     pmix_output_verbose(3, pmix_globals.debug_output,
+             "PMI2_KVS_Put: key=%s value=%s", key, value);
+ 
+@@ -361,6 +394,10 @@ PMIX_EXPORT int PMI2_KVS_Fence(void)
+ 
+     pmix_output_verbose(3, pmix_globals.debug_output, "PMI2_KVS_Fence");
+ 
++    if (pmi2_singleton) {
++        return PMI2_SUCCESS;
++    }
++
+     if (PMIX_SUCCESS != (rc = PMIx_Commit())) {
+         return convert_err(rc);
+     }
+@@ -452,6 +489,10 @@ PMIX_EXPORT int PMI2_Info_GetNodeAttr(const char name[],
+         return PMI2_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi2_singleton) {
++        return PMI2_FAIL;
++    }
++
+     /* set controlling parameters
+      * PMIX_OPTIONAL - expect that these keys should be available on startup
+      */
+@@ -496,6 +537,10 @@ PMIX_EXPORT int PMI2_Info_PutNodeAttr(const char name[], const char value[])
+         return PMI2_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi2_singleton) {
++        return PMI2_SUCCESS;
++    }
++
+     val.type = PMIX_STRING;
+     val.data.string = (char*)value;
+     rc = PMIx_Put(PMIX_LOCAL, name, &val);
+@@ -517,6 +562,10 @@ PMIX_EXPORT int PMI2_Info_GetJobAttr(const char name[], char value[], int valuel
+         return PMI2_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi2_singleton) {
++        return PMI2_FAIL;
++    }
++
+     /* set controlling parameters
+      * PMIX_OPTIONAL - expect that these keys should be available on startup
+      */
+@@ -589,6 +638,10 @@ PMIX_EXPORT int PMI2_Nameserv_publish(const char service_name[],
+         return PMI2_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi2_singleton) {
++        return PMI2_FAIL;
++    }
++
+     /* pass the service/port */
+     (void)strncpy(info[0].key, service_name, PMIX_MAX_KEYLEN);
+     info[0].value.type = PMIX_STRING;
+@@ -623,6 +676,10 @@ PMIX_EXPORT int PMI2_Nameserv_lookup(const char service_name[],
+         return PMI2_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi2_singleton) {
++        return PMI2_FAIL;
++    }
++
+     PMIX_PDATA_CONSTRUCT(&pdata[0]);
+     PMIX_PDATA_CONSTRUCT(&pdata[1]);
+ 
+@@ -676,6 +733,10 @@ PMIX_EXPORT int PMI2_Nameserv_unpublish(const char service_name[],
+         return PMI2_ERR_INVALID_ARG;
+     }
+ 
++    if (pmi2_singleton) {
++        return PMI2_FAIL;
++    }
++
+     /* pass the service */
+     keys[0] = (char*)service_name;
+     keys[1] = NULL;
