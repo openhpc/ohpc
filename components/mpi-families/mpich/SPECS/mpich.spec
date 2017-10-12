@@ -41,7 +41,10 @@ Patch0:    config.pmix.patch
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
+
+%if "%{RMS_DELIM}" == "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{name}/%version

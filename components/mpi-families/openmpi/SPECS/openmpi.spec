@@ -44,6 +44,10 @@ Source1:   OHPC_macros
 Source3:   pbs-config
 Patch0:    openmpi-3.0-pbs-config.patch
 
+%if "%{RMS_DELIM}" == "%{nil}"
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
+
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
