@@ -19,7 +19,7 @@
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
 %endif
 
-%{!?with_pmix: %define with_pmix 1}
+%{!?with_pmix: %define with_pmix 0}
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires: libevent-devel
@@ -61,6 +61,7 @@ Message Passing Interface (MPI) standard.
 %ohpc_setup_compiler
 %if 0%{with_pmix}
 module load pmix
+export CPATH=${PMIX_INC}
 %endif
 
 ./configure --prefix=%{install_path} \
@@ -68,7 +69,7 @@ module load pmix
             --with-pm=no --with-pmi=slurm \
 %endif
 %if 0%{with_pmix}
-            CFLAGS="-I${PMIX_INC}" LIBS="-L%{OHPC_ADMIN}/pmix/pmix/lib -lpmix" --with-pm=none --with-pmi=slurm \
+            LIBS="-L%{OHPC_ADMIN}/pmix/pmix/lib -lpmix" --with-pm=none --with-pmi=slurm \
 %endif
     || { cat config.log && exit 1; }
 
