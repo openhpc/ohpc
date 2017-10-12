@@ -16,9 +16,24 @@ if [ ! -e ${SOURCEDIR}/OHPC_macros ]; then
 	exit 1
 fi
 
+cmp -s ${SOURCEDIR}/OHPC_macros components/OHPC_macros
+
+if [ "$?" == "1" ]; then
+	echo "WARNING: ${SOURCEDIR}/OHPC_macros and components/OHPC_macros differs."
+	echo "This might lead to unexpected/wrong results."
+	echo "Continuing anyway."
+fi
+
 DEPLIST=`mktemp`
 
 trap "rm -f ${DEPLIST}" EXIT QUIT HUP KILL TERM
+
+# If running on Fedora special defines are needed
+DISTRO=`rpm --eval '0%{?fedora}'`
+
+if [ "${DISTRO}" != "0" ]; then
+	FLAGS="--undefine fedora --define 'rhel 7'"
+fi
 
 for i in `find . -name *.spec`; do
 	SPEC=`basename ${i}`
@@ -26,8 +41,8 @@ for i in `find . -name *.spec`; do
 	NAMES=`rpmspec -q ${i} --queryformat '%{name}:' 2> /dev/null`
 	# Let's hope the first name is the right one
 	NAME=`echo ${NAMES} | cut -d: -f1`
-	REQ=`rpmspec -q ${i} --requires 2> /dev/null`
-	BR=`rpmspec -q ${i} --buildrequires 2> /dev/null`
+	REQ=`rpmspec -q ${i} ${FLAGS} --requires 2> /dev/null`
+	BR=`rpmspec -q ${i} ${FLAGS} --buildrequires 2> /dev/null`
 	for j in ${REQ} ${BR}; do
 		if [[ ${j} != *"ohpc"* ]] || [[ ${j} == *"buildroot"* ]]; then
 			OIFS=${IFS}

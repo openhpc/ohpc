@@ -62,6 +62,9 @@ for line in open(sys.argv[1]):
     # Ignore non ohpc (Build)Requires
     if line[2] == 'NA':
         continue
+    # Ignore kernel modules
+    if line[2].startswith('kmod'):
+        continue
     # Ignore the nagios_plugins
     if ((line[2].startswith('nagios-plugins')) and
             (not line[2].startswith('nagios-plugins-ohpc'))):
