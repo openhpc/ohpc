@@ -94,7 +94,7 @@ BuildRequires:  openssl-devel
 BuildRequires:  libpsm2-devel >= 10.2.0
 %endif
 
-Requires: prun%{PROJ_DELIM}
+Requires: prun%{PROJ_DELIM} >= 1.2
 #!BuildIgnore: post-build-checks
 
 # Default library install path

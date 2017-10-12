@@ -39,7 +39,7 @@ Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.
 Source1:   OHPC_macros
 Patch0:    config.pmix.patch
 
-Requires: prun%{PROJ_DELIM}
+Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 
