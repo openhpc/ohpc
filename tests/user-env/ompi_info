@@ -12,7 +12,7 @@ source ./common/functions || exit 1
 
     module purge
     module load gnu7
-    module load openmpi
+    module load openmpi3
 
     run which ompi_info
     assert_success
