@@ -80,7 +80,9 @@ cd %{dname}
 
 %build
 cd %{dname}
-./autogen.sh
+if [ ! -f configure ]; then
+    ./autogen.sh
+fi
 %configure
 %{__make} %{?mflags}
 

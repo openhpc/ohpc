@@ -57,7 +57,9 @@ adding IPMI functionality.
 
 %build
 cd %{dname}
-./autogen.sh
+if [ ! -f configure ]; then
+    ./autogen.sh
+fi
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
 

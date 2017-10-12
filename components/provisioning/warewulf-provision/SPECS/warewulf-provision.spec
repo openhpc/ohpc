@@ -113,7 +113,9 @@ available the included GPL software.
 %prep
 %setup -q -n warewulf3-%{dev_branch_sha}
 cd %{dname}
-./autogen.sh
+if [ ! -f configure ]; then
+    ./autogen.sh
+fi
 %patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
