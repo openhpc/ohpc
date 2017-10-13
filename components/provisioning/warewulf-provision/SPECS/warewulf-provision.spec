@@ -13,6 +13,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define debug_package %{nil}
+%define _cross_compile 0%{?cross_compile}
 %define wwpkgdir /srv/warewulf
 
 %define pname warewulf-provision
@@ -39,6 +40,17 @@ BuildRequires: libattr-devel
 BuildRequires: libuuid-devel
 BuildRequires: device-mapper-devel
 BuildRequires: xz-devel
+%if 0%{?_cross_compile}
+
+%if "%{_arch}" == "x86_64"
+BuildRequires: gcc-aarch64-linux-gnu
+%endif
+
+%if "%{_arch}" == "aarch64"
+BuildRequires: gcc-x86_64-linux-gnu
+%endif
+
+%endif
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
@@ -125,7 +137,13 @@ fi
 
 %build
 cd %{dname}
-%configure --localstatedir=%{wwpkgdir}
+
+%if 0%{?_cross_compile}
+  %configure --enable-cross-compile --localstatedir=%{wwpkgdir}
+%else
+  %configure --localstatedir=%{wwpkgdir}
+%endif
+
 %{__make} %{?mflags}
 
 
