@@ -40,7 +40,7 @@ BuildRequires: libattr-devel
 BuildRequires: libuuid-devel
 BuildRequires: device-mapper-devel
 BuildRequires: xz-devel
-#%if 0%{?_cross_compile}
+%if 0%{?_cross_compile}
 
 #%if "%{_arch}" == "x86_64"
 BuildRequires: gcc-aarch64-linux-gnu
@@ -50,7 +50,7 @@ BuildRequires: gcc-aarch64-linux-gnu
 #BuildRequires: gcc-x86_64-linux-gnu
 #%endif
 
-#%endif
+%endif
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
