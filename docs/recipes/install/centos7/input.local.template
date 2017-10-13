@@ -37,6 +37,22 @@ domain_name="${domain_name:-local}"
 # Path to copy of OS ISO image (xCAT recipe only)
 iso_path="${iso_path:-}"
 
+#Files to copy from SMS to compute nodes (xCAT recipe only)
+synclist="${synclist:-/install/custom/synclist}"
+
+#Script to execute on compute nodes after OS install and reboot (xCAT recipe only)
+postbootscript="${postbootscript:-/install/postscripts/custom_postboot}"
+
+#Location of local OHPC repository mirror
+#This directory has to be accessible via http, keep it in /install
+#(xCAT recipe only)
+ohpc_repo_dir="${ohpc_repo_dir:-/install/custom/ohpc}"
+
+#Location of local EPEL repository mirror
+#This directory has to be accessible via http, keep it in /install
+#(xCAT recipe only)
+epel_repo_dir="${epel_repo_dir:-/install/custom/epel}"
+
 # Provisioning interface used by compute hosts (Warewulf recipe only)
 eth_provision="${eth_provision:-eth0}"
 

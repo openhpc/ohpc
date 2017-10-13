@@ -1,20 +1,16 @@
-The \xCAT{} system includes functionality to synchronize files located on the
-SMS server for distribution to managed hosts. This is one way to
-distribute user credentials to {\em compute} nodes (alternatively, you may
-prefer to use a central authentication service like LDAP). To import local file-based
-credentials, issue the following to enable the {\em synclist} feature and
-register user credential files:
+To distribute user credentials to {\em compute} nodes, this document uses the
+\xCAT's synclist functionality introduced in \S~\ref{sec:init_synclist}.  Note that,
+alternatively, a central authentication service like LDAP may be used.  
+
+The following adds credential system files to synclist for distributing to {\em
+compute} nodes. 
 
 % begin_ohpc_run
 % ohpc_comment_header Import files \ref{sec:file_import}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Define path for xCAT synclist file
-[sms](*\#*) mkdir -p /install/custom/netboot
-[sms](*\#*) chdef -t osimage -o centos7.3-x86_64-netboot-compute synclists="/install/custom/netboot/compute.synclist"
-
 # Add desired credential files to synclist
-[sms](*\#*) echo "/etc/passwd -> /etc/passwd" > /install/custom/netboot/compute.synclist
-[sms](*\#*) echo "/etc/group -> /etc/group" >> /install/custom/netboot/compute.synclist
-[sms](*\#*) echo "/etc/shadow -> /etc/shadow" >> /install/custom/netboot/compute.synclist
+[sms](*\#*) echo "/etc/passwd -> /etc/passwd" >>  $synclist
+[sms](*\#*) echo "/etc/group  -> /etc/group"  >> $synclist
+[sms](*\#*) echo "/etc/shadow -> /etc/shadow" >> $synclist
 \end{lstlisting}
 % \end_ohpc_run

@@ -1,0 +1,16 @@
+The \xCAT{} system includes functionality to distribute files from the SMS
+server to the managed hosts. Here, this functionality is used to distribute user
+credentials and to synchronize configuration files across the cluster.  To use
+this feature, a \texttt{syncfile} listing files to be synchronized during the
+provisioning process needs to be prepared. The location and the name are given
+by the \texttt{\$syncfile} variable. Here, the file is created and content will
+be added to it later. It will also be associated with an appropriate
+\texttt{osimage} to make it active during the \xCAT{} provisioning process.
+
+% begin_ohpc_run
+% ohpc_comment_header Initialize synclist \ref{sec:init_synclist}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) mkdir -p $(dirname $synclist)
+[sms](*\#*) > $synclist
+\end{lstlisting}
+% \end_ohpc_run

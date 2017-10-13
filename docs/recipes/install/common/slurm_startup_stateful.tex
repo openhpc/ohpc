@@ -1,0 +1,67 @@
+In section \S\ref{sec:basic_install}, the \SLURM{} resource manager was installed
+and configured for use on both the {\em master} host and {\em compute} node
+instances. With the cluster nodes up and functional, we can now startup the
+resource manager services in preparation for running user jobs. Generally, this
+is a two-step process that requires starting up the controller daemons on the {\em
+ master} host and the client daemons on each of the {\em compute} hosts.
+Note that \SLURM{} leverages the use of the {\em munge} library to provide
+authentication services and this daemon also needs to be running on all hosts
+within the resource management pool. 
+
+Before proceeding, ensure that the {\em compute} nodes have been fully
+provisioned. An easy way to check this is using the \texttt{nodestat} command,
+which returns status of nodes. The correct status is \texttt{sshd}, but because
+sshd daemons get started before installs are completed, it is best to double
+check by connecting to serial consoles using \texttt{rcons}.   
+
+% begin_ohpc_run
+% ohpc_comment_header Allow for optional sleep to complete provisioning and wait for confirmation
+% ohpc_command sleep ${provision_wait}
+% ohpc_command echo "Please ensure that provisioning is completed before continuing"
+% ohpc_command echo "Current status is:"
+% ohpc_command nodestat compute
+% ohpc_command echo "Press any key to continue"
+% ohpc_command read
+% end_ohpc_run
+
+First, we enable and start required services on the {\em master} host
+
+% begin_ohpc_run
+% ohpc_comment_header Resource Manager Startup on SMS\ref{sec:rms_startup}
+\begin{lstlisting}[language=bash,keywords={}]
+# Start munge and slurm controller on master host
+[sms](*\#*) systemctl enable munge
+[sms](*\#*) systemctl enable slurmctld
+[sms](*\#*) systemctl start munge
+[sms](*\#*) systemctl start slurmctld
+\end{lstlisting}
+% end_ohpc_run
+
+Next, the corresponding services are enabled and started on {\em compute} hosts
+
+% begin_ohpc_run
+% ohpc_comment_header Resource Manager Startup on compute nodes\ref{sec:rms_startup}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) psh compute systemctl enable munge
+[sms](*\#*) psh compute systemctl enable slurmd
+[sms](*\#*) psh compute systemctl start munge
+[sms](*\#*) psh compute systemctl start slurmd
+\end{lstlisting}
+% end_ohpc_run
+
+
+%\iftoggle{isCentOS}{\clearpage}
+
+
+After this, you can check status of the nodes within \SLURM{} by using the \texttt{sinfo} 
+command. All compute nodes should be in an {\em idle} state. If the state
+is reported as {\em unknown}, the following might help:
+
+%%% % begin_ohpc_run
+\begin{lstlisting}[language=bash]
+[sms](*\#*) scontrol update partition=normal state=idle
+\end{lstlisting}
+%%% % end_ohpc_run
+
+If not, make sure that the \SLURM{} config file fits your hardware and consult 
+\href{https://slurm.schedmd.com/troubleshoot.html}{\color{blue}\SLURM{} Troubleshooting Guide}.
