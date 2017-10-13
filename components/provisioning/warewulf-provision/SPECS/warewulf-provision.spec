@@ -42,13 +42,13 @@ BuildRequires: device-mapper-devel
 BuildRequires: xz-devel
 %if 0%{?_cross_compile}
 
-%if "%{_arch}" == "x86_64"
+#%if "%{_arch}" == "x86_64"
 BuildRequires: gcc-aarch64-linux-gnu
-%endif
+#%endif
 
-%if "%{_arch}" == "aarch64"
-BuildRequires: gcc-x86_64-linux-gnu
-%endif
+#%if "%{_arch}" == "aarch64"
+#BuildRequires: gcc-x86_64-linux-gnu
+#%endif
 
 %endif
 Conflicts: warewulf < 3
