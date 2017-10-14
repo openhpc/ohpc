@@ -25,7 +25,7 @@ Patch0: singleton.5391e43.patch
 BuildRequires: libevent-devel
 BuildRequires: lmod-ohpc ohpc-autotools
 
-%global install_path %{OHPC_ADMIN}/%{pname}/%{version}
+%global install_path %{OHPC_ADMIN}/%{pname}
 
 %description
 The Process Management Interface (PMI) has been used for quite some time as a
@@ -58,12 +58,6 @@ CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
 
 %install
 %{__make} install DESTDIR=${RPM_BUILD_ROOT}
-
-# provide generic link to versioned install path (helpful for use by
-# administrative packages like resource managers)
-
-pushd ${RPM_BUILD_ROOT}/%{OHPC_ADMIN}/%{pname}
-%{__ln_s} %{version} %{pname}
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}%{OHPC_MODULES}/%{pname}
 cat <<EOF > ${RPM_BUILD_ROOT}%{OHPC_MODULES}/%{pname}/%{version}
