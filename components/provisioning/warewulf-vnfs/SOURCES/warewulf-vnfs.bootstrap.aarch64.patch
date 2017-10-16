@@ -1,27 +1,26 @@
---- wwbootstrap.orig    2017-10-13 18:34:31.987826928 -0400
-+++ wwbootstrap 2017-10-13 18:39:15.904564374 -0400
-@@ -153,7 +153,7 @@
+--- a/bin/wwbootstrap	2017-10-13 16:01:35.000000000 -0700
++++ b/bin/wwbootstrap	2017-10-16 08:55:50.000000000 -0700
+@@ -153,8 +153,8 @@
  
  mkpath("$tmpdir/initramfs");
  
--if (! -f "$opt_chroot/boot/vmlinuz-$opt_kversion" && -f "$opt_chroot/boot/vmlinux-$opt_kversion.gz") {
-+if (! -f "$opt_chroot/boot/Image-$opt_kversion" ) {
-     &eprint("Can't locate the boot kernel\n");
+-if (! -f "$opt_chroot/boot/vmlinuz-$opt_kversion") {
+-    &eprint("Can't locate the boot kernel: ". $opt_chroot ."/boot/vmlinuz-$opt_kversion\n");
++if (! -f "$opt_chroot/boot/Image-$opt_kversion") {
++    &eprint("Can't locate the boot kernel: ". $opt_chroot ."/boot/Image-$opt_kversion\n");
      exit 1;
  }
-@@ -308,12 +308,9 @@
+ 
+@@ -308,9 +308,9 @@
      close MODCONFFILE;
  }
  
 -# Attempt to gunzip the kernel, aarch64 kernels are compressed and iPXE can't boot gzip compressed kernels.
 -# Note, if the kernel isn't a gzip, IO::Uncompress::Gunzip makes a direct copy of the file.
--if (-e "$opt_chroot/boot/vmlinuz-$opt_kversion") {
--    gunzip "$opt_chroot/boot/vmlinuz-$opt_kversion" => "$tmpdir/kernel" or die "gunzip of kernel failed: $GunzipError\n";
--} elsif (-e "$opt_chroot/boot/vmlinux-$opt_kversion.gz") {
--    gunzip "$opt_chroot/boot/vmlinux-$opt_kversion.gz" => "$tmpdir/kernel" or die "gunzip of kernel failed: $GunzipError\n";
-+# copy zimage
+-gunzip "$opt_chroot/boot/vmlinuz-$opt_kversion" => "$tmpdir/kernel" or die "gunzip of kernel failed: $GunzipError\n";
 +if( -e "$opt_chroot/boot/Image-$opt_kversion" ) {
 +    copy("$opt_chroot/boot/Image-$opt_kversion", "$tmpdir/kernel");
- }
++}
  
  &nprint("Building and compressing bootstrap\n");
+ system("(cd $tmpdir; find . | cpio -o --quiet -H newc ) | gzip -c9 > $output");
