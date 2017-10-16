@@ -61,6 +61,7 @@ Patch1: warewulf-provision.httpdconfdir.patch
 Patch4: warewulf-provision.pxe_file_modes.patch
 Patch5: warewulf-provision.bin-file.patch
 Patch6: warewulf-provision.sles_tftpboot.patch
+Patch7: warewulf-provision.ipxe-kargs.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -134,6 +135,7 @@ fi
 %patch4 -p1
 %patch5 -p2
 %patch6 -p1
+%patch7 -p1
 
 %build
 cd %{dname}
