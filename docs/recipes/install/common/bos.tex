@@ -13,7 +13,9 @@ installed the BOS, there may be an adequate entry already defined
 in \path{/etc/hosts}. If not, the following addition can be used to identify
 your SMS host.
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) echo ${sms_ip} ${sms_name} >> /etc/hosts
+[sms](*\#*) if ! grep -q ${sms_name} /etc/hosts; then
+              echo ${sms_ip} ${sms_name} >> /etc/hosts
+            fi
 \end{lstlisting}
 
 While it is theoretically possible to enable SELinux on a cluster provisioned

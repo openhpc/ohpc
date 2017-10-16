@@ -82,8 +82,10 @@
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall 
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) systemctl disable firewalld
-[sms](*\#*) systemctl stop firewalld
+[sms](*\#*) if systemctl status firewalld; then
+              systemctl disable firewalld
+              systemctl stop firewalld
+            fi
 \end{lstlisting}
 % end_ohpc_run
 
