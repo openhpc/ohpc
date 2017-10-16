@@ -92,6 +92,7 @@ module load scalapack openblas
 
 # Select appropriate Makefile.inc with MKL
 %if "%{mpi_family}" == "impi"
+%global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
 %if "%{compiler_family}" == "%{gnu_family}"
 cp -f %{S:2} Makefile.inc
@@ -102,6 +103,7 @@ cp -f %{S:3} Makefile.inc
 %endif
 
 %if "%{mpi_family}" == "mpich"
+%global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
@@ -110,6 +112,7 @@ cp -f %{S:2} Makefile.inc
 %endif
 %endif
 %if "%{mpi_family}" == "mvapich2"
+%global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
@@ -119,6 +122,7 @@ cp -f %{S:2} Makefile.inc
 %endif
 
 %if "%{mpi_family}" == "openmpi"
+%global MUMPS_MPI openmpi
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
@@ -127,7 +131,17 @@ cp -f %{S:1} Makefile.inc
 %endif
 %endif
 
-make MUMPS_MPI=$OHPC_MPI_FAMILY \
+%if "%{mpi_family}" == "openmpi3"
+%global MUMPS_MPI openmpi
+export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
+%if "%{compiler_family}" == "intel"
+cp -f %{S:4} Makefile.inc
+%else
+cp -f %{S:1} Makefile.inc
+%endif
+%endif
+
+make MUMPS_MPI=%{MUMPS_MPI} \
      FC=mpif77 \
      MUMPS_LIBF77="$LIBS" \
      OPTC="$RPM_OPT_FLAGS" all
