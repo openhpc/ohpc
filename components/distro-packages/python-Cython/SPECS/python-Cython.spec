@@ -8,6 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%include %{_sourcedir}/OHPC_macros
+%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+
 #
 # spec file for package python-Cython
 #
