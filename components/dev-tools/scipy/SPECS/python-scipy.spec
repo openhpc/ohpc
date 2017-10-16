@@ -32,8 +32,6 @@
 
 %global gnu_family gnu7
 
-%{!?mpi_family: %global mpi_family openmpi}
-
 %if "%{compiler_family}" != "intel"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires: openblas-%{compiler_family}%{PROJ_DELIM}
@@ -53,8 +51,8 @@ BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: openmpi3-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 
