@@ -44,6 +44,7 @@ Patch2: mysql.r1978.patch
 # 02/22/17 charles.r.baird@intel.com - alternate package names for SuSE
 Patch3 : warewulf-common.dbinit.patch
 Patch4 : warewulf-common.bin-file.patch
+Patch5 : warewulf-common.del_from_binstore.patch
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else
@@ -74,6 +75,7 @@ cd %{dname}
 %patch2 -p1
 %patch3 -p1
 %patch4 -p2
+%patch5 -p1
 
 
 %build
