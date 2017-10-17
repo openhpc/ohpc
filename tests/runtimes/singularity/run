@@ -30,7 +30,7 @@ echo "-------------------------------------------------------"
 
 if [ "x$DISTRO_FAMILY" == "xCentOS" -o "x$DISTRO_FAMILY" == "xRHEL" ];then
     export DISTRO=centos
-    export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc-2.3.1/examples/${DISTRO}/Singularity
+    export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc-2.4/examples/${DISTRO}/Singularity
 else
     export DISTRO=opensuse
     export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc/examples/${DISTRO}/Singularity
