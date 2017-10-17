@@ -46,6 +46,7 @@ Patch0:    openmpi-3.0-pbs-config.patch
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 BuildRequires:  autoconf
