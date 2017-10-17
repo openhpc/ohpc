@@ -13,6 +13,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define debug_package %{nil}
+%define _cross_compile 0%{?cross_compile}
 %define wwpkgdir /srv/warewulf
 
 %define pname warewulf-provision
@@ -39,6 +40,17 @@ BuildRequires: libattr-devel
 BuildRequires: libuuid-devel
 BuildRequires: device-mapper-devel
 BuildRequires: xz-devel
+%if 0%{?_cross_compile}
+
+%if "%{_arch}" == "x86_64"
+BuildRequires: gcc-aarch64-linux-gnu
+%endif
+
+%if "%{_arch}" == "aarch64"
+BuildRequires: gcc-x86_64-linux-gnu
+%endif
+
+%endif
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
@@ -48,6 +60,8 @@ Patch1: warewulf-provision.httpdconfdir.patch
 #Patch3: warewulf-provision.wwgetvnfs.patch
 Patch4: warewulf-provision.pxe_file_modes.patch
 Patch5: warewulf-provision.bin-file.patch
+Patch6: warewulf-provision.sles_tftpboot.patch
+Patch7: warewulf-provision.ipxe-kargs.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -112,16 +126,26 @@ available the included GPL software.
 %prep
 %setup -q -n warewulf3-%{dev_branch_sha}
 cd %{dname}
-./autogen.sh
+if [ ! -f configure ]; then
+    ./autogen.sh
+fi
 %patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
 %patch4 -p1
 %patch5 -p2
+%patch6 -p1
+%patch7 -p1
 
 %build
 cd %{dname}
-%configure --localstatedir=%{wwpkgdir}
+
+%if 0%{?_cross_compile}
+  %configure --enable-cross-compile --localstatedir=%{wwpkgdir}
+%else
+  %configure --localstatedir=%{wwpkgdir}
+%endif
+
 %{__make} %{?mflags}
 
 

@@ -32,6 +32,8 @@ fi
 
 if [ "$OHPC_MPI_FAMILY" = "openmpi" ]; then
     module load openmpi
+elif [ "$OHPC_MPI_FAMILY" = "openmpi3" ]; then
+    module load openmpi3
 elif [ "$OHPC_MPI_FAMILY" = "impi" ]; then
     module load impi
 elif [ "$OHPC_MPI_FAMILY" = "mvapich2" ]; then

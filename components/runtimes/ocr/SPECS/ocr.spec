@@ -56,8 +56,8 @@ BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: openmpi3-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %endif
 Summary:   Open Community Runtime (OCR) for clusters using MPI
 Group:   %{PROJ_NAME}/runtimes

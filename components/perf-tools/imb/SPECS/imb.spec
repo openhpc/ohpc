@@ -108,8 +108,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{install_path}
-%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{OHPC_PUB}
 %doc license/license.txt license/use-of-trademark-license.txt ReadMe_IMB.txt
 
 

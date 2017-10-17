@@ -1,0 +1,12 @@
+--- a/lib/Warewulf/Provision/Tftp.pm	2017-10-11 10:47:19.000000000 -0700
++++ b/lib/Warewulf/Provision/Tftp.pm	2017-10-11 10:49:18.000000000 -0700
+@@ -78,6 +78,9 @@
+         } elsif (-d "/tftpboot") {
+             &dprint("Found tftpboot directory at /tftpboot\n");
+             $self->set("TFTPROOT", "/tftpboot");
++        } elsif (-d "/srv/tftpboot") {
++            &dprint("Found tftpboot directory at /srv/tftpboot\n");
++            $self->set("TFTPROOT", "/srv/tftpboot");
+         } else {
+             &wprint("Could not locate TFTP server directory!\n");
+         }

@@ -26,7 +26,7 @@
 Summary:  OpenHPC release files
 Name:     ohpc-release
 Version:  %{ohpc_version}
-Release:  1%{?disttag}
+Release:  2%{?disttag}
 License:  BSD-3
 Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc
@@ -83,6 +83,13 @@ name=OpenHPC-%{ohpc_version} - Updates
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/updates/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+
+[OpenHPC-Sources]
+name=OpenHPC-%{ohpc_version} - Sources
+baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/sources/%{_repository}
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+enabled=0
 EOF
 
 # repository GPG key

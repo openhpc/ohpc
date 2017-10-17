@@ -29,7 +29,7 @@ family=${LMOD_FAMILY_MPI}
 
     local mpi_version=""
 
-    if [ $family == "openmpi" ];then
+    if [ $family == "openmpi3" ];then
         run which ompi_info
         assert_success 
 
