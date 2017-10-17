@@ -58,6 +58,7 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: python
+Requires: file
 Requires: squashfs-tools
 
 # Default library install path
