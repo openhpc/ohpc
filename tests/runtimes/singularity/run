@@ -45,8 +45,8 @@ fi
     assert_success
 }
 
-@test "[singularity] bootstrap image" {
-    singularity bootstrap /tmp/${DISTRO}.img ${BOOTSTRAP_DEF}
+@test "[singularity] build image" {
+    singularity build /tmp/${DISTRO}.img ${BOOTSTRAP_DEF}
     assert_success
 }
 
