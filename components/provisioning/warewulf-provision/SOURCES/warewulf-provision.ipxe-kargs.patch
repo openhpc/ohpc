@@ -5,7 +5,7 @@
                      print IPXE "initrd \${base}/$arch/$bootstrapid/initfs.gz\n";
                      print IPXE "kernel \${base}/$arch/$bootstrapid/kernel ro initrd=initfs.gz wwhostname=$hostname ";
 -                    print IPXE join(" ", @kargs) . " ";
-+                    if (@kargs) {
++                    if ($kargs[0]) {
 +                        print IPXE join(" ", @kargs) . " ";
 +                    }
                      if ($console) {
