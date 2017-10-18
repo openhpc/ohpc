@@ -14,7 +14,7 @@
 # Copyright (c) 2012 Andy Cress
 #
 
-%{include %{_sourcedir}/OHPC_macros
+%include %{_sourcedir}/OHPC_macros
 
 %define pname ipmiutil
 
