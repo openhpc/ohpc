@@ -14,7 +14,7 @@
 # Copyright (c) 2012 Andy Cress
 #
 
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%{include %{_sourcedir}/OHPC_macros
 
 %define pname ipmiutil
 
@@ -25,6 +25,8 @@ Summary:   Easy-to-use IPMI server management utilities
 License:   BSD 3-clause
 Group:     %{PROJ_NAME}/distro-packages
 Source:    %{pname}-%{version}.tar.gz
+Source0:   https://downloads.sourceforge.net/project/ipmiutil/%{pname}-%{version}.tar.gz
+Source1:   OHPC_macros
 URL:       http://ipmiutil.sourceforge.net
 BuildRoot: %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 provides: %{pname}
