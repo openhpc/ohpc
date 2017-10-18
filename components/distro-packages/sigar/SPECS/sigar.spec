@@ -19,7 +19,7 @@ Release:	0.11.git58097d9%{?dist}
 Summary:	System Information Gatherer And Reporter
 
 %global sigar_suffix  0-g4b67f57
-%global sigar_hash    58097d9
+%global sigar_hash    ad47dc3
 
 Group:		System Environment/Libraries
 License:	ASL 2.0
