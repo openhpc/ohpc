@@ -24,7 +24,6 @@ Release: 1%{?dist}
 Summary:   Easy-to-use IPMI server management utilities
 License:   BSD 3-clause
 Group:     %{PROJ_NAME}/distro-packages
-Source:    %{pname}-%{version}.tar.gz
 Source0:   https://downloads.sourceforge.net/project/ipmiutil/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 URL:       http://ipmiutil.sourceforge.net
