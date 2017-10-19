@@ -23,7 +23,7 @@ Source1: OHPC_macros
 Patch0: singleton.5391e43.patch
 
 BuildRequires: libevent-devel
-BuildRequires: lmod-ohpc ohpc-autotools
+BuildRequires: lmod-ohpc libtool-ohpc
 
 %global install_path %{OHPC_ADMIN}/%{pname}
 
