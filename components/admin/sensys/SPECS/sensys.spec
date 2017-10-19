@@ -818,7 +818,7 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %{_prefix}/include/openmpi/orcm/version.h
 %{_prefix}/include/openmpi/orcm/constants.h
 %{_prefix}/include/openmpi/orcm/types.h
-%{_prefix}/include/openmpi/orcm/common/dataHolder.hpp
+#%{_prefix}/include/openmpi/orcm/common/dataHolder.hpp
 %{_prefix}/include/openmpi/orcm/common/dataContainer.hpp
 %{_prefix}/include/openmpi/orcm/common/UDExceptions.h
 %{_prefix}/include/openmpi/orcm/common/udsensors.h
