@@ -901,19 +901,3 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 # End of filelist for dynamic compilation
 
 %changelog
-* Fri May 22 2017 Erich Cordoba <erich.cordoba.malibran@intel.com> - 0.32.0-1.1
-- Enable static and dynamic building in the same spec file
-
-* Tue May 16 2017 Erich Cordoba <erich.cordoba.malibran@intel.com> - 0.32.0-1.1
-- Enable global definitions
-
-* Fri May 12 2017 Erich Cordoba <erich.cordoba.malibran@intel.com> - 0.32.0-2
-- Update dependencies for CentOS 7.3 and SLES 12 SP2
-
-* Mon Feb 13 2017 David Romero <david.romero.antequera@intel.com> - 0.32.0-2
-- Modifying spec file in order to support both CentOS and SuSE
-
-* Fri Feb 03 2017 Erich Cordoba <erich.cordoba.malibran@intel.com> - 0.32.0-2
-- Adding first version of Sensys spec file
-
-
