@@ -55,6 +55,7 @@ BuildRequires: flex
 BuildRequires: gcc-c++
 BuildRequires: ipmiutil-devel%{PROJ_DELIM} >= 2.9.6
 BuildRequires: libtool
+BuildRequires: sigar-devel-ohpc
 BuildRequires: postgresql-devel
 BuildRequires: net-snmp-devel >= 5.7.2
 BuildRequires: zeromq-devel >= 4.0.4
@@ -70,6 +71,7 @@ Requires: libcurl4
 %else
 Requires: libcurl
 %endif
+Requires: sigar-ohpc
 Requires: ipmiutil%{PROJ_DELIM} >= 2.9.6
 Requires: munge%{PROJ_DELIM}
 Requires: openssl
