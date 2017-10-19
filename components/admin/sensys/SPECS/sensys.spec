@@ -193,8 +193,10 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %{_prefix}/lib/openmpi/mca_dstore_hash.la
 %{_prefix}/lib/openmpi/mca_pmix_native.so
 %{_prefix}/lib/openmpi/mca_pmix_native.la
+%ifarch x86_64
 %{_prefix}/lib/openmpi/mca_pstat_linux.so
 %{_prefix}/lib/openmpi/mca_pstat_linux.la
+%endif
 %{_prefix}/lib/openmpi/mca_sec_basic.so
 %{_prefix}/lib/openmpi/mca_sec_basic.la
 %{_prefix}/lib/openmpi/mca_errmgr_orcm.so
@@ -329,7 +331,9 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %{_prefix}/share/openmpi/help-dstore-base.txt
 %{_prefix}/share/openmpi/help-opal-hwloc-base.txt
 %{_prefix}/share/openmpi/help-pmix-base.txt
+%ifarch x86_64
 %{_prefix}/share/openmpi/help-opal-timer-linux.txt
+%endif
 %{_prefix}/share/openmpi/help-opal-runtime.txt
 %{_prefix}/share/openmpi/help-opal_info.txt
 %{_prefix}/share/openmpi/help-opal-wrapper.txt
