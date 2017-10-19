@@ -235,8 +235,8 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %{_prefix}/lib/openmpi/mca_state_tool.la
 %{_prefix}/lib/openmpi/mca_state_orcm.so
 %{_prefix}/lib/openmpi/mca_state_orcm.la
-%{_prefix}/lib/openmpi/mca_notifier_smtp.la
-%{_prefix}/lib/openmpi/mca_notifier_smtp.so
+#%{_prefix}/lib/openmpi/mca_notifier_smtp.la
+#%{_prefix}/lib/openmpi/mca_notifier_smtp.so
 %{_prefix}/lib/openmpi/analytics_extension_average.so
 %{_prefix}/lib/openmpi/analytics_extension_average.la
 %{_prefix}/lib/openmpi/mca_analytics_filter.so
@@ -367,7 +367,7 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %{_prefix}/share/openmpi/help-sst-orcmd.txt
 %{_prefix}/share/openmpi/help-orcm-info.txt
 %{_prefix}/share/openmpi/help-orcmd.txt
-%{_prefix}/share/openmpi/help-orte-notifier-smtp.txt
+#%{_prefix}/share/openmpi/help-orte-notifier-smtp.txt
 %{_prefix}/share/openmpi/orcmcc-wrapper-data.txt
 %{_prefix}/share/man/man7/opal_crs.7
 %{_prefix}/share/man/man7/orte_hosts.7
