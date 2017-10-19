@@ -125,6 +125,9 @@ Provides components of Sensys to run on an aggregator.
 %setup -qn %{sensys_name}-1.0.0
 
 %build
+if [ ! -f configure ]; then
+    ./autogen.pl
+fi
 %configure %{configure_flags}
 %{__make} %{?_smp_mflags}
 
