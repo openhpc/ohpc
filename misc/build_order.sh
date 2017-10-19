@@ -32,7 +32,7 @@ trap "rm -f ${DEPLIST}" EXIT QUIT HUP KILL TERM
 DISTRO=`rpm --eval '0%{?fedora}'`
 
 if [ "${DISTRO}" != "0" ]; then
-	FLAGS="--undefine fedora --define 'rhel 7'"
+	FLAGS=(--undefine fedora --define "rhel 7")
 fi
 
 for i in `find . -name *.spec`; do
@@ -41,8 +41,8 @@ for i in `find . -name *.spec`; do
 	NAMES=`rpmspec -q ${i} --queryformat '%{name}:' 2> /dev/null`
 	# Let's hope the first name is the right one
 	NAME=`echo ${NAMES} | cut -d: -f1`
-	REQ=`rpmspec -q ${i} ${FLAGS} --requires 2> /dev/null`
-	BR=`rpmspec -q ${i} ${FLAGS} --buildrequires 2> /dev/null`
+	REQ=`rpmspec -q ${i} "${FLAGS[@]}" --requires 2> /dev/null`
+	BR=`rpmspec -q ${i} "${FLAGS[@]}" --buildrequires 2> /dev/null`
 	for j in ${REQ} ${BR}; do
 		if [[ ${j} != *"ohpc"* ]] || [[ ${j} == *"buildroot"* ]]; then
 			OIFS=${IFS}
