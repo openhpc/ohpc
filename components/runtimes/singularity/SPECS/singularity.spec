@@ -59,7 +59,11 @@ BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: python
 Requires: file
+%if 0%{?sles_version} || 0%{?suse_version}
+Requires: squashfs
+%else
 Requires: squashfs-tools
+%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
