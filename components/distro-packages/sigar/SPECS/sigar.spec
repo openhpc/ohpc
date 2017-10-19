@@ -35,7 +35,7 @@ Provides:       %{pname}
 #    git archive --prefix=sigar-1.6.5/ 833ca18 | bzip2 > sigar-1.6.5-833ca18.tbz2
 #
 # The diff from 1.6.4 is too huge to contemplate cherrypicking from
-Source0:	https://github.com/hyperic/sigar/archive/%{pname}-%{sigar_hash}.tar.gz#/%{pname}-%{version}.tar.gz
+Source0:	https://github.com/hyperic/sigar/archive/%{sigar_hash}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1:    OHPC_macros
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
