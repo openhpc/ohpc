@@ -499,10 +499,10 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %dir %{_prefix}/include/openmpi/orte/runtime/data_type_support
 %dir %{_prefix}/include/openmpi/orcm
 %dir %{_prefix}/include/openmpi/orcm/common
-%dir %{_prefix}/include/openmpi/orcm/common/config
-%dir %{_prefix}/include/openmpi/orcm/common/config/parsers
-%dir %{_prefix}/include/openmpi/orcm/common/config/parsers/xml
-%dir %{_prefix}/include/openmpi/orcm/common/config/sys
+#%dir %{_prefix}/include/openmpi/orcm/common/config
+#%dir %{_prefix}/include/openmpi/orcm/common/config/parsers
+#%dir %{_prefix}/include/openmpi/orcm/common/config/parsers/xml
+#%dir %{_prefix}/include/openmpi/orcm/common/config/sys
 %dir %{_prefix}/include/openmpi/orcm/common/parsers
 %dir %{_prefix}/include/openmpi/orcm/common/parsers/pugixml
 %dir %{_prefix}/include/openmpi/orcm/mca
@@ -827,12 +827,12 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %{_prefix}/include/openmpi/orcm/common/sensorconfig.hpp
 %{_prefix}/include/openmpi/orcm/common/sensorConfigNodeXml.hpp
 %{_prefix}/include/openmpi/orcm/common/xmlManager.hpp
-%{_prefix}/include/openmpi/orcm/common/config/parsers/CfgFile.hpp
-%{_prefix}/include/openmpi/orcm/common/config/parsers/CfgFileFctry.hpp
-%{_prefix}/include/openmpi/orcm/common/config/parsers/CfgFile_Error.hpp
-%{_prefix}/include/openmpi/orcm/common/config/parsers/ParseTools_Error.hpp
-%{_prefix}/include/openmpi/orcm/common/config/parsers/xml/CfgXML_Error.hpp
-%{_prefix}/include/openmpi/orcm/common/config/sys/LogicalGroup.hpp
+#%{_prefix}/include/openmpi/orcm/common/config/parsers/CfgFile.hpp
+#%{_prefix}/include/openmpi/orcm/common/config/parsers/CfgFileFctry.hpp
+#%{_prefix}/include/openmpi/orcm/common/config/parsers/CfgFile_Error.hpp
+#%{_prefix}/include/openmpi/orcm/common/config/parsers/ParseTools_Error.hpp
+#%{_prefix}/include/openmpi/orcm/common/config/parsers/xml/CfgXML_Error.hpp
+#%{_prefix}/include/openmpi/orcm/common/config/sys/LogicalGroup.hpp
 %{_prefix}/include/openmpi/orcm/common/parsers/pugixml/pugixml.cpp
 %{_prefix}/include/openmpi/orcm/common/parsers/pugixml/pugixml.hpp
 %{_prefix}/include/openmpi/orcm/common/parsers/pugixml/pugiconfig.hpp
