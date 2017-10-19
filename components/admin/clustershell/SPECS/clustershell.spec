@@ -7,7 +7,7 @@
 
 Name:          clustershell%{PROJ_DELIM}
 Version:       1.7.3
-Release:       1
+Release:       1%{?dist}
 Summary:       Python framework for efficient cluster administration
 
 Group:         %{PROJ_NAME}/admin

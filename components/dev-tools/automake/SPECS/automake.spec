@@ -15,7 +15,7 @@
 Summary:   A GNU tool for automatically creating Makefiles
 Name:      %{pname}%{PROJ_DELIM}
 Version:   1.15
-Release:   1
+Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/automake/

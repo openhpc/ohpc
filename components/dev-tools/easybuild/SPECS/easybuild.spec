@@ -20,7 +20,7 @@
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
 Version:   3.4.1
-Release:   1
+Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://hpcugent.github.com/easybuild

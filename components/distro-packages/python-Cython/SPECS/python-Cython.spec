@@ -13,7 +13,7 @@
 %define pname Cython
 Name:           python-%{pname}%{PROJ_DELIM}
 Version:        0.23.4
-Release:        76.1
+Release:        76.1%{?dist}
 Url:            http://www.cython.org
 Summary:        The Cython compiler for writing C extensions for the Python language
 License:        Apache-2.0
