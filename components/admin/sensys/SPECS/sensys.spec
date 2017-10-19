@@ -29,7 +29,7 @@
 %{!?config_extras: %define config_extras %{nil}}
 %{!?build_mode: %define build_mode --enable-debug=no}
 
-%{!?configure_flags: %define configure_flags %{config_platform} %{config_postgres} %{config_extras} %{build_mode}}
+%{!?configure_flags: %define configure_flags %{config_platform} %{config_extras} %{build_mode}}
 
 
 %define _prefix /opt/%{sensys_name}
