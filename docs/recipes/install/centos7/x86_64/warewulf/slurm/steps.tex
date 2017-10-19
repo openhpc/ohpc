@@ -161,13 +161,24 @@ repository, which is shipped with CentOS and is enabled by default.
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
 \end{lstlisting}
 
-% ohpc_comment_header Optionally add InfiniBand tn compute node image \ref{sec:add_components}
+% ohpc_comment_header Optionally add InfiniBand to compute node image \ref{sec:add_components}
 % ohpc_command if [[ ${enable_ib} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Optionally add IB support and enable
 [sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
 [sms](*\#*) (*\chrootinstall*) infinipath-psm
+[sms](*\#*) chroot $CHROOT systemctl enable rdma
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+
+% ohpc_comment_header Optionally add Omni-Path support to compute node image \ref{sec:add_components}
+% ohpc_command if [[ ${enable_opa} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Optionally add OPA support and enable
+[sms](*\#*) (*\chrootinstall*) opa-basic-tools
 [sms](*\#*) chroot $CHROOT systemctl enable rdma
 \end{lstlisting}
 % ohpc_indent 0
