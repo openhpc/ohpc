@@ -122,7 +122,7 @@ Provides components of Sensys to run on an aggregator.
 %endif
 
 %prep
-%setup -q
+%setup -qn %{sensys_name}-1.0.0
 
 %build
 %configure %{configure_flags}
