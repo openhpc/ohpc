@@ -90,6 +90,10 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
+%if %{mpi_family} == openmpi3
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
+%endif
+
 ./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS
 
 %install
