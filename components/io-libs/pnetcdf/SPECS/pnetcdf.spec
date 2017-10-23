@@ -64,7 +64,7 @@ MPICC=mpicc \
 MPIFC=mpifc \
 MPIF77=mpif77 \
 MPICXX=mpicxx \
-CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" \
+CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %{__make}
