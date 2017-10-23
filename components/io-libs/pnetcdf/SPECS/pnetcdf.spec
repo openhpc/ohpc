@@ -69,9 +69,7 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" \
 
 %{__make}
 
-pushd shared
-    mpif77 -shared -Wl,-soname=libpnetcdf.so.%{sonum} -o ../libpnetcdf.so.%{version}
-popd
+mpif77 -shared -Wl,-soname=libpnetcdf.so.%{sonum} -o ../libpnetcdf.so.%{version}
 
 %install
 # OpenHPC compiler/mpi designation
