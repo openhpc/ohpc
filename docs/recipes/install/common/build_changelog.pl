@@ -3,8 +3,8 @@
 use warnings;
 use strict;
 
-my @compiler_familes = ("gnu");
-my @mpi_families     = ("mvapich2","openmpi");
+my @compiler_familes = ("gnu7");
+my @mpi_families     = ("mpich", "mvapich2","openmpi3");
 
 my $delim="ohpc";
 my $merge_package_families = 0;

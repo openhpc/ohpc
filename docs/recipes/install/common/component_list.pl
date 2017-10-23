@@ -34,7 +34,7 @@ my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 			
 			 
 my @compiler_familes = ("gnu","gnu7","intel");
-my @mpi_families     = ("mvapich2","openmpi","impi","mpich");
+my @mpi_families     = ("mvapich2","openmpi","openmpi3","impi","mpich");
 
 my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","openmpi-psm2","scotch",
                     "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs");

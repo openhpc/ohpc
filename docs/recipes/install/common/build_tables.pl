@@ -19,7 +19,7 @@ sub usage {
 my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
                         "parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
 my @compiler_familes = ("gnu","gnu7","intel");
-my @mpi_families     = ("mvapich2","openmpi","impi","mpich");
+my @mpi_families     = ("mvapich2","openmpi","openmpi3","impi","mpich");
 
 my @single_package_exceptions = ();
 
@@ -43,6 +43,7 @@ $compiler_exceptions{"openblas"} = 1;
 
 $compiler_exceptions{"mvapich2"} = 4;
 $compiler_exceptions{"openmpi"} = 4;
+$compiler_exceptions{"openmpi3"} = 4;
 
 # Define any asymmetric MPI packages
 my %mpi_exceptions = ();
