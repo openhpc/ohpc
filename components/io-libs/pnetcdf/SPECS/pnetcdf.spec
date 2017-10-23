@@ -66,7 +66,7 @@ MPICXX=mpicxx \
 CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
-%{__make}
+%{__make} shared_library
 
 %install
 # OpenHPC compiler/mpi designation
