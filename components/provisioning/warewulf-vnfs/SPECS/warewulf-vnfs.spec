@@ -56,6 +56,8 @@ Patch4: warewulf-vnfs.utf8.patch
 Patch5: warewulf-vnfs.bootstrap.kernel.patch
 # 10/13/17 karl.w.schulz@intel.com - fixes bootstrap kernel format on aarch64 on sles
 Patch6: warewulf-vnfs.bootstrap.aarch64.patch
+# 10/23/17 reese.baird@intel.com - allows bootstrap with usb netdev
+Patch7: warewulf-vnfs.bootstrap_usb.patch
 
 
 %description
@@ -80,6 +82,7 @@ cd %{dname}
 %else
 %ifarch aarch64
 %patch6 -p1
+%patch7 -p1
 %endif
 %endif
 
