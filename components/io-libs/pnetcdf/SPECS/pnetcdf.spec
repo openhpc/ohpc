@@ -72,7 +72,7 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 pushd src/lib
 ar x libpnetcdf.a
 mpif77 -shared -Wl,-soname=libpnetcdf.so.%{sonum} -o ../libpnetcdf.so.%{version} *.o
-rm libnetcdf.a
+rm libpnetcdf.a
 popd
 
 %install
