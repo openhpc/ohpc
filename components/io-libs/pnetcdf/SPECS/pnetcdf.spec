@@ -70,7 +70,9 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" \
 %{__make}
 
 pushd src/lib
-mpif77 -shared -Wl,-soname=libpnetcdf.so.%{sonum} -o ../libpnetcdf.so.%{version}
+ar x libpnetcdf.a
+mpif77 -shared -Wl,-soname=libpnetcdf.so.%{sonum} -o ../libpnetcdf.so.%{version} *.o
+rm libnetcdf.a
 popd
 
 %install
