@@ -79,7 +79,7 @@ popd
 
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
 
-install -m 755 src/lib/libpnetcdf.so.%{version} %{buildroot}/%{install_path}/lib
+install -m 755 src/libpnetcdf.so.%{version} %{buildroot}/%{install_path}/lib
 pushd %{buildroot}/%{install_path}/lib
 ln -s libpnetcdf.so.%{version} libpnetcdf.so.%{sonum}
 ln -s libpnetcdf.so.%{version} libpnetcdf.so
