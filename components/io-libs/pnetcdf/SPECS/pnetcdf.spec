@@ -22,6 +22,7 @@
 Summary:   A Parallel NetCDF library (PnetCDF)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   1.8.1
+%global    sonum 1
 Release:   1%{?dist}
 License:   NetCDF
 Group:     %{PROJ_NAME}/io-libs
@@ -67,13 +68,24 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %{__make}
-%{__make} shared_library
+
+pushd shared
+    mpif77 -shared -Wl,-soname=libpnetcdf.so.%{sonum} -o ../libpnetcdf.so.%{version}
+popd
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
+
+install -m 755 libpnetcdf.so.%{version} %{buildroot}/%{install_path}/lib
+pushd %{buildroot}/%{install_path}/lib
+ln -s libpnetcdf.so.%{version} libpnetcdf.so.%{sonum}
+ln -s libpnetcdf.so.%{version} libpnetcdf.so
+popd
+
+find %{buildroot}/%{install_path} -name '*.la' -delete
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
