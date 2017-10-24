@@ -71,7 +71,7 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 
 pushd src/lib
 ar x libpnetcdf.a
-mpicxx -shared  -o ../libpnetcdf.so *.o
+mpif90 -shared  -o ../libpnetcdf.so *.o
 rm libpnetcdf.a
 popd
 
