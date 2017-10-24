@@ -53,7 +53,7 @@ enable_nagios="${enable_nagios:-0}"
 enable_powerman="${enable_powerman:-0}"
 enable_intel_packages="${enable_intel_packages:-0}"
 
-update_slurm_nodeconfig="$update_slurm_nodeconfig:-0}"
+update_slurm_nodeconfig="${update_slurm_nodeconfig:-0}"
 slurm_node_config="c[1-4] Sockets=2 CoresPerSocket=12 ThreadsPerCore=2"
 
 # -------------------------
