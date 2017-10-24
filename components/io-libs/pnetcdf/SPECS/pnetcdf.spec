@@ -68,7 +68,7 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %{__make}
-%{__make} shared_lib
+%{__make} shared_library
 
 #pushd src/lib
 #ar x libpnetcdf.a
