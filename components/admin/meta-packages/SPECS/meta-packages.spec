@@ -286,6 +286,7 @@ Collection of server packages for SLURM
 Summary:   OpenHPC base packages for Warewulf
 Requires:  warewulf-cluster%{PROJ_DELIM}
 Requires:  warewulf-common%{PROJ_DELIM}
+Requires:  warewulf-ipmi%{PROJ_DELIM}
 Requires:  warewulf-provision%{PROJ_DELIM}
 Requires:  warewulf-provision-server%{PROJ_DELIM}
 Requires:  warewulf-vnfs%{PROJ_DELIM}
