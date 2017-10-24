@@ -69,23 +69,11 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 
 %{__make}
 
-pushd src/lib
-ar x libpnetcdf.a
-mpif90 -shared  -o ../libpnetcdf.so *.o
-rm libpnetcdf.a
-popd
-
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
-
-install -m 755 src/libpnetcdf.so %{buildroot}/%{install_path}/lib
-#pushd %{buildroot}/%{install_path}/lib
-#ln -s libpnetcdf.so.%{version} libpnetcdf.so.%{sonum}
-#ln -s libpnetcdf.so.%{version} libpnetcdf.so
-#popd
 
 find %{buildroot}/%{install_path} -name '*.la' -delete
 
