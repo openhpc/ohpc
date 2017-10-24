@@ -68,12 +68,13 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %{__make}
+%{__make} shared_lib
 
-pushd src/lib
-ar x libpnetcdf.a
-mpif77 -shared -Wl,-soname=libpnetcdf.so.%{sonum} -o ../libpnetcdf.so.%{version} *.o
-rm libpnetcdf.a
-popd
+#pushd src/lib
+#ar x libpnetcdf.a
+#mpif77 -shared -Wl,-soname=libpnetcdf.so.%{sonum} -o ../libpnetcdf.so.%{version} *.o
+#rm libpnetcdf.a
+#popd
 
 %install
 # OpenHPC compiler/mpi designation
@@ -81,11 +82,11 @@ popd
 
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
 
-install -m 755 src/libpnetcdf.so.%{version} %{buildroot}/%{install_path}/lib
-pushd %{buildroot}/%{install_path}/lib
-ln -s libpnetcdf.so.%{version} libpnetcdf.so.%{sonum}
-ln -s libpnetcdf.so.%{version} libpnetcdf.so
-popd
+#install -m 755 src/libpnetcdf.so.%{version} %{buildroot}/%{install_path}/lib
+#pushd %{buildroot}/%{install_path}/lib
+#ln -s libpnetcdf.so.%{version} libpnetcdf.so.%{sonum}
+#ln -s libpnetcdf.so.%{version} libpnetcdf.so
+#popd
 
 find %{buildroot}/%{install_path} -name '*.la' -delete
 
