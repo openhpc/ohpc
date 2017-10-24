@@ -31,7 +31,7 @@ fi
         fi
     done
 
-    run `rpm -ql warewulf-ipmi-ohpc | grep ipmitool` -I lanplus -H $my_bmc_ip -U root power status
+    run `rpm -ql warewulf-ipmi-ohpc | grep ipmitool` -E -I lanplus -H $my_bmc_ip -U root power status
     assert_success
 }
 
