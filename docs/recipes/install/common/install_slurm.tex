@@ -27,7 +27,17 @@ the corresponding compute image in a subsequent step.
 \end{tcolorbox}
 \end{center}
 
-Other versions of this guide are available that describe installation of other
+% begin_ohpc_run
+% ohpc_comment_header Update node configuration for slurm.conf
+% ohpc_command if [[ ${update_slurm_nodeconfig} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_command perl -pi -e s/^NodeName=.+$/#/ /etc/slurm/slurm.conf
+% ohpc_command echo -e ${slurm_node_config} > /etc/slurm/slurm.conf
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+Other versions of this guide are available that describe installation of alternate
 resource management systems, and they can be found in the \texttt{docs-ohpc}
 package.
 
