@@ -1,0 +1,19 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+if [ -n "$IPMI_PASSWORD" ];then
+    export IPMI_PASSWORD
+fi
+
+@test "[warewulf-ipmi] ipmitool compiled with lanplus" {
+    run `rpm -ql warewulf-ipmi-ohpc | grep ipmitool` -I lanplus 
+    assert_success
+}
+
