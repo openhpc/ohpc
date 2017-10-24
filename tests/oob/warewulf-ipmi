@@ -13,7 +13,25 @@ if [ -n "$IPMI_PASSWORD" ];then
 fi
 
 @test "[warewulf-ipmi] ipmitool compiled with lanplus" {
-    run `rpm -ql warewulf-ipmi-ohpc | grep ipmitool` -I lanplus 
+
+    if [ -z "$IPMI_PASSWORD" ];then
+        flunk "IPMI_PASSWORD is not set"
+    fi
+
+    for lan in `seq 1 4`; do
+        ipmitool lan print $lan > .cmd_output || flunk "Unable to run ipmitool"
+        local my_bmc_ip=`cat .cmd_output | grep "IP Address              :" | awk '{print $4}'`
+
+        if [ $? -ne 0 ];then
+            flunk "Unable to ascertain local BMC IP address"
+        fi
+
+        if [ "$my_bmc_ip" != "0.0.0.0" ];then
+            break
+        fi
+    done
+
+    run `rpm -ql warewulf-ipmi-ohpc | grep ipmitool` -I lanplus -H $my_bmc_ip -U root power status
     assert_success
 }
 
