@@ -68,11 +68,10 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %{__make}
-%{__make} shared_library
 
-#pushd src/lib
+pushd src/lib
 #ar x libpnetcdf.a
-#mpif77 -shared -Wl,-soname=libpnetcdf.so.%{sonum} -o ../libpnetcdf.so.%{version} *.o
+mpif77 -shared  --whole-archive -Wl,-soname=libpnetcdf.so -o ../libpnetcdf.so
 #rm libpnetcdf.a
 #popd
 
@@ -82,7 +81,7 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
 
-#install -m 755 src/libpnetcdf.so.%{version} %{buildroot}/%{install_path}/lib
+install -m 755 src/libpnetcdf.so %{buildroot}/%{install_path}/lib
 #pushd %{buildroot}/%{install_path}/lib
 #ln -s libpnetcdf.so.%{version} libpnetcdf.so.%{sonum}
 #ln -s libpnetcdf.so.%{version} libpnetcdf.so
