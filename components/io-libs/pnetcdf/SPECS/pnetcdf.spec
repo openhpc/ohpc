@@ -70,10 +70,10 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 %{__make}
 
 pushd src/lib
-#ar x libpnetcdf.a
-mpicxx -shared  --whole-file -o ../libpnetcdf.so libpnetcdf.a
-#rm libpnetcdf.a
-#popd
+ar x libpnetcdf.a
+mpicxx -shared  -o ../libpnetcdf.so *.o
+rm libpnetcdf.a
+popd
 
 %install
 # OpenHPC compiler/mpi designation
