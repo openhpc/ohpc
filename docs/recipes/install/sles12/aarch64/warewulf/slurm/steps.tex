@@ -255,7 +255,33 @@
 \input{common/perf_tools}
 
 \subsection{Setup default development environment}
-\input{common/default_dev}
+
+System users often find it convenient to have a default development environment
+in place so that compilation can be performed directly for parallel programs
+requiring MPI. This setup can be conveniently enabled via modules and the \OHPC{}
+modules environment is pre-configured to load an \texttt{ohpc} module on login
+(if present). The following package install provides a default
+environment that enables autotools, the \GNU{} compiler toolchain, and the
+OpenMPI MPI stack.
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash]
+[sms](*\#*) (*\install*) lmod-defaults-gnu-openmpi-ohpc
+\end{lstlisting}
+% end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+If you want to change the default environment from the suggestion above, \OHPC{}
+also provides the \GNU{} compiler toolchain with the MPICH stack:
+\begin{itemize*}
+
+\item lmod-defaults-gnu-mpich-ohpc
+\end{itemize*}
+\end{tcolorbox}
+\end{center}
+
 
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
