@@ -40,6 +40,7 @@ BuildRequires: libattr-devel
 BuildRequires: libuuid-devel
 BuildRequires: device-mapper-devel
 BuildRequires: xz-devel
+Requires:      policycoreutils
 %if 0%{?_cross_compile}
 
 %if "%{_arch}" == "x86_64"
