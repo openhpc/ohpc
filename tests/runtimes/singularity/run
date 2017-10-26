@@ -31,9 +31,15 @@ echo "-------------------------------------------------------"
 if [ "x$DISTRO_FAMILY" == "xCentOS" -o "x$DISTRO_FAMILY" == "xRHEL" ];then
     export DISTRO=centos
     export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc-2.4/examples/${DISTRO}/Singularity
+    export ALTARCH_MIRROR=http://mirror.centos.org/altarch/7.4.1708/os/aarch64/
 else
     export DISTRO=opensuse
     export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc/examples/${DISTRO}/Singularity
+    export ALTARCH_MIRROR=http://download.opensuse.org/ports/aarch64/distribution/leap/42.3/repo/oss/
+fi
+
+if [ "x$ARCH" == "xaarch64" ];then
+    perl -pi -e "s/^MirrorURL\S+/MirrorURL=${ALTARCH_MIRROR}/" $BOOTSTRAP_DEF
 fi
 
 @test "[singularity] check for RPM" {
