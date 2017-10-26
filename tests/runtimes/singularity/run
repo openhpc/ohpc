@@ -39,7 +39,7 @@ else
 fi
 
 if [ "x$ARCH" == "xaarch64" ];then
-    perl -pi -e "s#^MirrorURL=(\S+)\S+#MirrorURL=${ALTARCH_MIRROR}#" $BOOTSTRAP_DEF
+    perl -pi -e "s#^MirrorURL: (\S+)\S+#MirrorURL: ${ALTARCH_MIRROR}#" $BOOTSTRAP_DEF
 fi
 
 @test "[singularity] check for RPM" {
