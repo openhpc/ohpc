@@ -265,6 +265,12 @@ AC_ARG_ENABLE([metis],
    [AX_OPTION_DEFAULT(type=long,enable_metis,yes)])
 AM_CONDITIONAL(METIS_ENABLED,test "x$enable_metis" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# mpi4py
+AC_ARG_ENABLE([mpi4py],
+   [AS_HELP_STRING([--enable-mpi4py],[Enable mpi4py tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_mpi4py,yes)])
+AM_CONDITIONAL(MPI4PY_ENABLED,test "x$enable_mpi4py" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # MUMPS
 AC_ARG_ENABLE([mumps],
    [AS_HELP_STRING([--enable-mumps],[Enable MUMPS tests (default=yes)])],[],
@@ -442,6 +448,8 @@ AC_OUTPUT( Makefile
        fs/lustre/Makefile
        dev-tools/easybuild/Makefile
        admin/spack/Makefile
+       dev-tools/mpi4py/Makefile
+       dev-tools/mpi4py/tests/Makefile
        dev-tools/numpy/Makefile
        dev-tools/numpy/tests/Makefile
        dev-tools/scipy/Makefile
@@ -649,6 +657,12 @@ echo    Libraries:
        echo '    'Metis..................... : enabled
     else
        echo '    'Metis..................... : disabled
+    fi
+
+    if test "x$enable_mpi4py" = "xyes"; then
+       echo '    'mpi4py..................... : enabled
+    else
+       echo '    'mpi4py..................... : disabled
     fi
 
     if test "x$enable_mumps" = "xyes"; then
