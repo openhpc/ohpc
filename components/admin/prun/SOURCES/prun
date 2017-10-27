@@ -155,6 +155,11 @@ function setupenv_openmpi () {
 	set_variable OMPI_MCA_ess ^tm
 	set_variable OMPI_MCA_plm ^tm
     fi
+
+    # use romio for openmpi3
+    if [[ $LMOD_FAMILY_MPI == "openmpi3" ]];then
+	set_variable OMPI_MCA_io romio314
+    fi
 }
 
 function launch_openmpi () {
