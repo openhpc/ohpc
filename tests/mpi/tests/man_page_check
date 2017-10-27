@@ -11,6 +11,6 @@ fi
 family=${LMOD_FAMILY_MPI}
 
 @test "[MPI] mpicc man page availible ($LMOD_FAMILY_COMPILER/$family)" {
-    man mpicc
+    man mpicc > /dev/null
     assert_success
 }
