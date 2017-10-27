@@ -33,7 +33,7 @@ Url:            http://www.cython.org
 Summary:        The Cython compiler for writing C extensions for the Python language
 License:        Apache-2.0
 Group:          Development/Languages/Python
-Source:         http://pypi.python.org/packages/source/C/Cython/Cython-%{version}.tar.gz
+Source:         https://pypi.python.org/packages/b3/89/e8dddc86bf4f144407962e04c4018f53dfe4d6ae5010d34573d8521e810e/Cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
 Patch1:         python-Cython-c++11.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
