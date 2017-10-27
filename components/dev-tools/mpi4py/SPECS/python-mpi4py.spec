@@ -27,7 +27,7 @@ Version:        2.0.0
 Release:        1%{?dist}
 Summary:        Python bindings for the Message Passing Interface (MPI) standard.
 License:        BSD-3-Clause
-Group:          %{PROJ_NAME}/parallel-libs
+Group:          %{PROJ_NAME}/dev-tools
 Url:            https://bitbucket.org/mpi4py/mpi4py
 Source0:        https://bitbucket.org/mpi4py/mpi4py/downloads/%{pname}-%{version}.tar.gz
 Source1:        OHPC_macros
