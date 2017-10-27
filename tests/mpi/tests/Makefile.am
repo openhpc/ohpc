@@ -13,6 +13,7 @@ TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 ###F90_test_SOURCES  = F90_test.f90
 
 TESTS             = build
+TESTS            += man_page_check
 TESTS            += version_match
 TESTS            += rm_execution_single_host
 TESTS            += rm_execution_multi_host
