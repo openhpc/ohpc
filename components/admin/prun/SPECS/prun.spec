@@ -16,7 +16,7 @@
 Summary:   Convenience utility for parallel job launch
 Name:      %{pname}%{PROJ_DELIM}
 Version:   1.2
-Release:   1
+Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 BuildArch: noarch

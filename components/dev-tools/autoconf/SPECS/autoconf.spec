@@ -15,7 +15,7 @@
 Summary:   A GNU tool for automatically configuring source code
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2.69
-Release:   1
+Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
 DocDir:    %{OHPC_PUB}/doc/contrib
