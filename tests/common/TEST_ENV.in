@@ -9,6 +9,7 @@ LUSTRE_TEST_PATH="/mnt/lustre/ohpc-test"
 NUM_COMPUTES=2
 export BATS_USE_MKTEMP=1
 export OMPI_MCA_io=romio314
+export OMPI_MCA_rmaps_base_oversubscribe=1
 #
 #------------------------
 # Scalasca profiling options
