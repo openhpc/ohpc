@@ -61,7 +61,7 @@ Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 Buildrequires: ofed
 %endif
 %if 0%{?rhel_version} || 0%{?centos_version}
-Buildrequires: rdma
+Buildrequires: rdma-core-devel
 %endif
 
 Requires: prun%{PROJ_DELIM}
