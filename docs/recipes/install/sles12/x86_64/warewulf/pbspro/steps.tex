@@ -7,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{SLES12SP2}
-\newcommand{\OSRepo}{SLE\_12\_SP2}
+\newcommand{\baseOS}{SLES12SP3}
+\newcommand{\OSRepo}{SLE\_12\_SP3}
 \newcommand{\OSTree}{SLE\_12}
 \newcommand{\OSTag}{sle12}
-\newcommand{\baseos}{sles12sp2}
+\newcommand{\baseos}{sles12sp3}
 \newcommand{\baseosshort}{sles12}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\rms}{PBS Professional}
@@ -144,17 +144,6 @@
 # Remove default hostname to allow WW to provision network names
 [sms](*\#*) mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
 \end{lstlisting}
-
-% ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
-% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Optionally add IB support
-[sms](*\#*) (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
-[sms](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
 % end_ohpc_run
 
 \vspace*{-0.3cm}
@@ -163,6 +152,12 @@
 
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
+
+\paragraph{Enable \InfiniBand{} drivers}
+\input{common/ibsupport_compute_sles.tex}
+
+\paragraph{Enable \OmniPath{} drivers}
+\input{common/opasupport_compute_centos.tex}
 
 \paragraph{Increase locked memory limits}
 \input{common/memlimits} 

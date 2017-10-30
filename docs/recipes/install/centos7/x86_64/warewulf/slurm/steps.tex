@@ -160,32 +160,7 @@ repository, which is shipped with CentOS and is enabled by default.
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
 \end{lstlisting}
-
-% ohpc_comment_header Optionally add InfiniBand to compute node image \ref{sec:add_components}
-% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Optionally add IB support and enable
-[sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
-[sms](*\#*) (*\chrootinstall*) infinipath-psm
-[sms](*\#*) chroot $CHROOT systemctl enable rdma
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-
-% ohpc_comment_header Optionally add Omni-Path support to compute node image \ref{sec:add_components}
-% ohpc_command if [[ ${enable_opa} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Optionally add OPA support and enable
-[sms](*\#*) (*\chrootinstall*) opa-basic-tools
-[sms](*\#*) (*\chrootinstall*) libpsm2
-[sms](*\#*) chroot $CHROOT systemctl enable rdma
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
 % end_ohpc_run
-
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 \input{common/warewulf_chroot_customize_centos}
@@ -207,6 +182,12 @@ repository, which is shipped with CentOS and is enabled by default.
 %\clearpage
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
+
+\paragraph{Enable \InfiniBand{} drivers}
+\input{common/ibsupport_compute_centos.tex}
+
+\paragraph{Enable \OmniPath{} drivers}
+\input{common/opasupport_compute_centos.tex}
 
 \paragraph{Increase locked memory limits}
 \input{common/memlimits}

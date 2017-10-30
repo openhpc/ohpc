@@ -100,6 +100,9 @@
 \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 \input{common/ibsupport_sms_sles}
 
+\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
+\input{common/opasupport_sms_sles}
+
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
 \input{common/warewulf_setup_sles}
@@ -136,16 +139,6 @@
 # Remove default hostname to allow WW to provision network names
 [sms](*\#*) mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
 \end{lstlisting}
-
-% ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
-% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Optionally add IB support
-[sms](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils libibverbs-utils
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
 % end_ohpc_run
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
@@ -168,6 +161,12 @@
 \newpage
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
+
+\paragraph{Enable \InfiniBand{} drivers}
+\input{common/ibsupport_compute_sles.tex}
+
+\paragraph{Enable \OmniPath{} drivers}
+\input{common/opasupport_compute_centos.tex}
 
 \paragraph{Increase locked memory limits}
 \input{common/memlimits} 

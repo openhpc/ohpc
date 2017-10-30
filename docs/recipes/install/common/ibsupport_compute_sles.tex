@@ -1,0 +1,19 @@
+If your compute resources support InfiniBand, the following commands add OFED
+and PSM support using base distro-provided drivers to the compute
+image. 
+
+% begin_ohpc_run
+% ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
+% ohpc_validation_newline
+% ohpc_validation_comment Add IB drivers to compute image
+% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add IB support and enable
+[sms](*\#*) (*\chrootinstall*) rdma-core libibmad5 librdmacm1 dapl-devel dapl-utils libibverbs-utils
+[sms](*\#*) chroot $CHROOT systemctl enable rdma
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+

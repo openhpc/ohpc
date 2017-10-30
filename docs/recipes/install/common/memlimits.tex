@@ -1,4 +1,4 @@
-In order to utilize \InfiniBand{} as the underlying high speed interconnect, it is
+In order to utilize \InfiniBand{} or Omni-Path as the underlying high speed interconnect, it is
 generally necessary to increase the locked memory settings for system
 users. This can be accomplished by updating
 the \texttt{/etc/security/limits.conf} file and this should be performed within
@@ -8,7 +8,8 @@ used to update the maximum locked memory settings on both the master host and
 the compute image:
 
 % begin_ohpc_run
-% ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
+% ohpc_validation_newline 
+% ohpc_validation_comment Update memlock settings
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Update memlock settings on master
 [sms](*\#*) perl -pi -e 's/# End of file/\* soft memlock unlimited\n$&/s' /etc/security/limits.conf
