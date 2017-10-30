@@ -1,0 +1,19 @@
+The following command adds Omni-Path support using base distro-provided drivers
+to the chosen {\em master} host.
+
+% begin_ohpc_run
+% ohpc_comment_header Optionally add Omni-Path support services on master node \ref{sec:add_opa}
+% ohpc_command if [[ ${enable_opa} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) (*\install*) opa-basic-tools libibmad5
+
+# Load RDMA services
+[sms](*\#*) systemctl start rdma
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\input{common/opafm}
+
