@@ -439,8 +439,8 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE t
 %package -n %{PROJ_NAME}-intel-python-libs
 Summary:   OpenHPC python libraries for Intel(R) Parallel Studio XE
 Requires:  python-numpy-intel%{PROJ_DELIM}
-Requires:  python-mpi4py-gnu%{gnu_major_ver}-ipmi%{PROJ_DELIM}
-Requires:  python-mpi4py-intel-ipmi%{PROJ_DELIM}
+Requires:  python-mpi4py-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  python-mpi4py-intel-impi%{PROJ_DELIM}
 Requires:  python-mpi4py-intel-mpich%{PROJ_DELIM}
 Requires:  python-mpi4py-intel-mvapich2%{PROJ_DELIM}
 Requires:  python-mpi4py-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
