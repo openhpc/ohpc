@@ -23,6 +23,7 @@ fi
 }
 
 @test "[OOB] ipmitool local bmc ping" {
+    [[ "$ARCH" == "aarch64" ]] && skip "Skipping local bmc ping for ARCH=$ARCH"
 
     # Check 4 channels of ipmi lan for IP address
 
@@ -44,6 +45,7 @@ fi
 }
 
 @test "[OOB] ipmitool power status" {
+    [[ "$ARCH" == "aarch64" ]] && skip "Skipping local power status for ARCH=$ARCH"
 
     if [ -z "$IPMI_PASSWORD" ];then
         flunk "IPMI_PASSWORD is not set"
@@ -70,6 +72,7 @@ fi
 }
 
 @test "[OOB] ipmitool read CPU1 sensor data" {
+    [[ "$ARCH" == "aarch64" ]] && skip "Skipping read CPU1 data for ARCH=$ARCH"
 
     if [ -z "$IPMI_PASSWORD" ];then
         flunk "IPMI_PASSWORD is not set"
