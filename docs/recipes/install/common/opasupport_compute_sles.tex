@@ -7,7 +7,7 @@ support using base distro-provided drivers to the compute image.
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add OPA support and enable
-[sms](*\#*) (*\chrootinstall*) opa-basic-tools libibmad5
+[sms](*\#*) (*\chrootinstall*) opa-basic-tools libibmad5 libibverbs
 [sms](*\#*) (*\chrootinstall*) libpsm2-2 libpsm2-compat
 [sms](*\#*) chroot $CHROOT systemctl enable rdma
 \end{lstlisting}
