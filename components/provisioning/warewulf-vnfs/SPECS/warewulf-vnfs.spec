@@ -59,7 +59,7 @@ Patch6: warewulf-vnfs.bootstrap.aarch64.patch
 # 10/23/17 reese.baird@intel.com - allows bootstrap with usb netdev
 Patch7: warewulf-vnfs.bootstrap_usb.patch
 # 10/31/17 reese.baird@intel.com - allow altarch yum mirror
-Patch8: warewulf-vnfs.aarch64.patch
+Patch8: warewulf-vnfs.centos_aarch64.patch
 
 
 %description
