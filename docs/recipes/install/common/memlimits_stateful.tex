@@ -1,0 +1,24 @@
+In order to utilize \InfiniBand{} as the underlying high speed interconnect, it is
+generally necessary to increase the locked memory settings for system
+users. This can be accomplished by updating
+the \texttt{/etc/security/limits.conf} file and this should be performed within
+and on all job submission hosts. In this recipe, jobs
+are submitted from the {\em master} host, and the following commands can be
+used to update the maximum locked memory settings on both the master host and compute nodes:
+
+% begin_ohpc_run
+% ohpc_comment_header Additional customizations \ref{sec:addl_customizations}
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Update memlock settings on master
+[sms](*\#*) perl -pi -e 's/# End of file/\* soft memlock unlimited\n$&/s' /etc/security/limits.conf
+[sms](*\#*) perl -pi -e 's/# End of file/\* hard memlock unlimited\n$&/s' /etc/security/limits.conf
+
+# Update memlock settings on compute nodes
+[sms](*\#*) echo "perl -pi -e "\'"s/# End of file/\* soft memlock unlimited\n$&/s"\'" \
+        /etc/security/limits.conf" >> $postbootscript
+[sms](*\#*) echo "perl -pi -e "\'"s/# End of file/\* hard memlock unlimited\n$&/s"\'" \
+        /etc/security/limits.conf" >> $postbootscript
+\end{lstlisting}
+% end_ohpc_run
+
+

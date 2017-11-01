@@ -1,0 +1,35 @@
+Here we configure NTP for compute resources and enable \NFS{}  mounting of a
+\$HOME file system and the public \OHPC{} install path (\texttt{/opt/ohpc/pub})
+that will be hosted by the {\em master} host in this  example configuration.
+
+\vspace*{0.15cm}
+% begin_ohpc_run
+% ohpc_comment_header Customize system configuration \ref{sec:master_customization}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Create NFS client mounts of /home and /opt/ohpc/pub on compute hosts
+[sms](*\#*) echo "echo "\""${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0"\"" \
+        >> /etc/fstab" >> $postbootscript
+[sms](*\#*) echo "echo "\""${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0"\"" \
+        >> /etc/fstab" >> $postbootscript
+[sms](*\#*) echo "systemctl restart nfs" >> $postbootscript
+
+# Mount NFS shares
+[sms](*\#*) echo "mount /home" >> $postbootscript
+[sms](*\#*) echo "mkdir -p /opt/ohpc/pub" >> $postbootscript
+[sms](*\#*) echo "mount /opt/ohpc/pub" >> $postbootscript
+
+# Export /home and OpenHPC public packages from master server
+[sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+[sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+[sms](*\#*) exportfs -a
+[sms](*\#*) systemctl restart nfs-server
+[sms](*\#*) systemctl enable nfs-server
+
+# Enable NTP time service on computes and identify master host as local NTP server
+[sms](*\#*) echo "echo "\""server ${sms_ip}"\"" >> /etc/ntp.conf"  >> $postbootscript
+[sms](*\#*) echo "systemctl enable ntpd" >> $postbootscript
+[sms](*\#*) echo "systemctl start ntpd" >> $postbootscript
+
+\end{lstlisting}
+% end_ohpc_run
+

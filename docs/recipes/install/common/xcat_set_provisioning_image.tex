@@ -1,0 +1,7 @@
+Next, we associate the desired provisioning image with the {\em compute} nodes:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={OSIMAGE}{\osimage{}}1 {OSIMAGETYPE}{\osimagetype{}}1]
+[sms](*\#*) nodeset compute osimage=OSIMAGE-x86_64-OSIMAGETYPE-compute
+\end{lstlisting}
+% end_ohpc_run

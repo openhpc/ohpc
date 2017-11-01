@@ -1,13 +1,68 @@
+%\subsubsection{Register nodes for provisioning}
+
+\noindent Next, we add {\em compute} nodes and define their properties as
+objects in \xCAT{} database. 
+These hosts are grouped logically into a group named {\em
+compute} to facilitate group-level commands used later in the recipe.  Note the
+use of variable names for the desired compute hostnames, node IPs, MAC
+addresses, and BMC login credentials, which should be modified to accommodate
+local settings and hardware. To to enable serial console access via  \xCAT{}, 
+{\texttt serialport} and {\texttt serialspeed}
+properties are also defined.
+
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Add hosts to cluster
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
-# Register nodes for PXE provisioning 
+# Define nodes as objects in xCAT database
 [sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
-		mkdef -t node ${c_name[i]} groups=compute,all ip=${c_ip[i]} mac=${c_mac[i]} netboot=pxe
+		mkdef -t node ${c_name[$i]} groups=compute,all ip=${c_ip[$i]} mac=${c_mac[$i]} netboot=xnba \
+		arch=x86_64 bmc=${c_bmc[$i]} bmcusername=${bmc_username} bmcpassword=${bmc_password} \
+		mgt=ipmi serialport=0 serialspeed=115200 
         done
 \end{lstlisting}
 % end_ohpc_run
+
+\begin{center}
+  \begin{tcolorbox}[]
+    \small 
+Defining nodes one-by-one, as done above, is only efficient
+for a small number of nodes. For larger node counts,
+\xCAT{} provides capabilities for automated detection and
+configuration.
+Consult the
+\href{http://xcat-docs.readthedocs.io/en/stable/guides/admin-guides/manage_clusters/ppc64le/discovery/}{\color{blue}\xCAT{}
+Hardware Discovery \& Define Node Guide}. Alternatively, confluent, a tool
+related to \xCAT{}, has also robust discovery capabilities and can be used to
+\href{https://hpc.lenovo.com/users/documentation/confluentdisco.html}{\color{blue}detect
+and autoconfigure} compute hosts.  
+\end{tcolorbox}
+\end{center}
+
+
+Next, we set root password for {\em compute} nodes. Note that \xCAT{} sets up 
+\texttt{ssh} keys to enable passwordless logins for root across the cluster 
+so the password is mainly used for privilege escalation and direct logins into
+the nodes.
+
+% begin_ohpc_run
+% ohpc_validation_comment Set default root password
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
+[sms](*\#*) chtab key=system passwd.username=root passwd.password=cluster
+\end{lstlisting}
+% end_ohpc_run
+
+\iftoggleverb{isstateful}
+\noindent To enable execution of the prepared script as a part of the provisioning process,
+we add it to \xCAT{} as a post-install task for the {\em compute} group. 
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Enable execution of postbootscript
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,]
+[sms](*\#*) chdef compute -p postbootscripts=$(basename $postbootscript)
+\end{lstlisting}
+% end_ohpc_run
+\fi
 
 \noindent \xCAT{} requires a network domain name specification for system-wide name
 resolution. This value can be set to match your local DNS schema or given a
@@ -48,10 +103,9 @@ the {\em ib0} interface:
 % ohpc_command fi
 % end_ohpc_run
 
-With the desired compute nodes and domain identified, the remaining steps in the
-provisioning configuration process are to define the provisioning mode and
-image for the {\em compute} group and use \xCAT{} commands to complete
-configuration for network services like DNS and DHCP. These tasks are
+With the desired compute nodes and domain identified, the next step in the
+provisioning configuration process is to use \xCAT{} commands to complete
+configuration for network services like DNS and DHCP. This is
 accomplished as follows:
 
 %\clearpage
@@ -68,11 +122,6 @@ accomplished as follows:
 [sms](*\#*) makedhcp -n
 [sms](*\#*) makedns -n
 
-# Associate desired provisioning image for computes
-[sms](*\#*) nodeset compute osimage=BOSVER-x86_64-netboot-compute
-
-# restart DHCP
-[sms](*\#*) service dhcpd restart
 \end{lstlisting}
 
 %%% If the Lustre client was enabled for computes in \S\ref{sec:lustre_client}, you

@@ -1,0 +1,14 @@
+To make a \texttt{synclist} active, it needs to be associated with a prepared OS
+image. The synchronization is then performed as the part of the provisioning
+process when using the image.
+
+
+The following associates the prepared \texttt{synclist} with the \installmode{} \xCAT{} image:
+
+% begin_ohpc_run
+% ohpc_comment_header Import files \ref{sec:file_import}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={OSIMAGE}{\osimage{}}1 {OSIMAGETYPE}{\osimagetype{}}1]
+# Associate synclist with an osimage
+[sms](*\#*) chdef -t osimage -o OSIMAGE-x86_64-OSIMAGETYPE-compute synclists="$synclist"
+\end{lstlisting}
+% \end_ohpc_run

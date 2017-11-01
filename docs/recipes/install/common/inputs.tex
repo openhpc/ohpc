@@ -31,6 +31,16 @@ node counts. \\
 & \texttt{\$\{c\_name[0]\}}, \texttt{\$\{c\_name[1]\}}, ... & {\small \# Host names for computes} \\
 & \texttt{\$\{compute\_regex\}} & {\small \# Regex matching all compute node names (e.g. ``c*'')} \\
 & \texttt{\$\{compute\_prefix\}} & {\small \# Prefix for compute node names (e.g. ``c'')} \\
+\iftoggleverb{isxCAT}
+& \texttt{\$\{iso\_path\}} & {\small \# Directory location of OS iso for \xCAT{} install} \\
+& \texttt{\$\{synclist\}} & {\small \# Filesystem location of \xCAT{} synclist file} \\
+\fi
+\iftoggleverb{isstateful}
+& \texttt{\$\{postbootscript\}} & {\small \# Filesystem location of \xCAT{} postboot script file} \\
+& \texttt{\$\{ohpc\_repo\_dir\}} & {\small \# Directory location of local \OHPC{} repository mirror} \\
+& \texttt{\$\{epel\_repo\_dir\}} & {\small \# Directory location of local EPEL repository
+mirror} \\
+\fi
 \end{tabular}
 
 \vspace*{0.2cm}
