@@ -14,7 +14,7 @@
 
 %define pname warewulf-cluster
 %define dname cluster
-%define dev_branch_sha 554cd1c2db0f01d995384ff952a5104f75244216 
+%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf

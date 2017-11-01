@@ -16,7 +16,7 @@
 
 %define pname warewulf-vnfs
 %define dname vnfs
-%define dev_branch_sha 554cd1c2db0f01d995384ff952a5104f75244216 
+%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Summary: Warewulf VNFS Module
 Name:    %{pname}%{PROJ_DELIM}
