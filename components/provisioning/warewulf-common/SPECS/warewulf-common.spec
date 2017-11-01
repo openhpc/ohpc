@@ -16,7 +16,7 @@
 
 %define pname warewulf-common
 %define dname common
-%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
+%define dev_branch_sha 554cd1c2db0f01d995384ff952a5104f75244216 
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering

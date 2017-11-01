@@ -16,7 +16,7 @@
 %define dname ipmi
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
-%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
+%define dev_branch_sha 554cd1c2db0f01d995384ff952a5104f75244216 
 
 %if 0%{?PROJ_NAME:1}
 %define rpmname %{pname}-%{PROJ_NAME}
