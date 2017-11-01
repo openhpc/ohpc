@@ -4,8 +4,8 @@
 load ../common/test_helper_functions
 source ../common/functions || exit 1
 
-if [ -s ../TEST_ENV ];then
-    source ../TEST_ENV
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
 fi
 
 if [ -n "$IPMI_PASSWORD" ];then
@@ -13,6 +13,7 @@ if [ -n "$IPMI_PASSWORD" ];then
 fi
 
 @test "[warewulf-ipmi] ipmitool compiled with lanplus" {
+    [[ "$ARCH" == "aarch64" ]] && skip "Skipping warewulf-ipmitool check for ARCH=$ARCH"
 
     if [ -z "$IPMI_PASSWORD" ];then
         flunk "IPMI_PASSWORD is not set"
