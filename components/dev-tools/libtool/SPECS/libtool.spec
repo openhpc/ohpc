@@ -25,7 +25,7 @@ Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
-% _provides exclude ^libltdl.so\\.so.*$
+% global __provides_exclude ^libltdl.so\\.so.*$
 
 %define debug_package %{nil}
 %define install_path %{OHPC_UTILS}/autotools
