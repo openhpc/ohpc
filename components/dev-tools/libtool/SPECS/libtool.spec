@@ -94,10 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{OHPC_UTILS}
-%dir %{OHPC_MODULES}
-%{OHPC_UTILS}
-%{OHPC_MODULES}/autotools
+%{OHPC_PUB}
 %doc AUTHORS
 %doc ChangeLog
 %doc COPYING
