@@ -38,8 +38,10 @@ BuildRequires: libunwind-devel
 Requires     : libunwind-devel
 Requires     : lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: zlib-devel
+%ifarch x86_64
 BuildRequires: papi%{PROJ_DELIM}
 Requires     : papi%{PROJ_DELIM}
+%endif
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires     : pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -66,7 +68,9 @@ This is the %{compiler_family}-%{mpi_family} version.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%ifarch x86_64
 module load papi
+%endif
 module load pdtoolkit
 module load sionlib
 
@@ -103,7 +107,9 @@ export NO_BRP_CHECK_RPATH=true
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
+%ifarch x86_64
 module load papi
+%endif
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
@@ -137,7 +143,6 @@ module-whatis "URL %{url}"
 
 set     version			    %{version}
 
-depends-on papi
 depends-on pdtoolkit
 depends-on sionlib
 
@@ -151,6 +156,10 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
+
+%ifarch x86_64
+echo "depends-on papi" >> %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%endif
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
