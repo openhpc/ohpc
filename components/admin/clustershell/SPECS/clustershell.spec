@@ -67,12 +67,12 @@ mv conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
 mv conf/groups.conf.d/*.conf.example %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
 
 # man pages
-install -d %{buildroot}/%install_path/share/man/{man1,man5}
-install -p -m 0644 doc/man/man1/clubak.1 %{buildroot/%install_path}/share/man/man1/
-install -p -m 0644 doc/man/man1/clush.1 %{buildroot/%install_path}/share/man/man1/
-install -p -m 0644 doc/man/man1/nodeset.1 %{buildroot/%install_path}/share/man/man1/
-install -p -m 0644 doc/man/man5/clush.conf.5 %{buildroot/%install_path}/share/man/man5/
-install -p -m 0644 doc/man/man5/groups.conf.5 %{buildroot/%install_path}/share/man/man5/
+install -d %{buildroot}/%{install_path}/share/man/{man1,man5}
+install -p -m 0644 doc/man/man1/clubak.1 %{buildroot/%{install_path}/share/man/man1/
+install -p -m 0644 doc/man/man1/clush.1 %{buildroot/%{install_path}/share/man/man1/
+install -p -m 0644 doc/man/man1/nodeset.1 %{buildroot/%{install_path}/share/man/man1/
+install -p -m 0644 doc/man/man5/clush.conf.5 %{buildroot/%{install_path}/share/man/man5/
+install -p -m 0644 doc/man/man5/groups.conf.5 %{buildroot/%{install_path}/share/man/man5/
 
 # vim addons
 %define vimdatadir %{install_path}/share/vim/vimfiles
