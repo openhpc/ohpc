@@ -1,0 +1,75 @@
+\Sensys{} provides resilient and scalable monitoring for resource utilization
+and state of node health, collecting all the data in a database for subsequent
+analysis. Sensys includes several loadable plugins that monitor various metrics
+related to different features present in each node like temperature, voltage,
+power usage, memory, disk and process information.\\
+
+\noindent Sensys has two daemons called {\em orcmd} and {\em orcmsched} that run
+at root level. Daemon {\em orcmd} can be defined to run as an {\em aggregator}
+or a {\em compute node} monitoring agent.
+An {\em aggregator} is an interface that receives all the telemetry collected by
+the {\em compute nodes} monitoring agents and stores it to a database, {\em
+orcmsched} is an agent that tracks the presence of all the {\em orcmd} daemons
+and their connections in the cluster.\\
+The mapping of nodes to the roles provided by \Sensys{} must be defined by the
+user via the configuration file {\em orcm-site.xml} located under the {\em etc}
+directory at \Sensys{} installation path.
+\Sensys{} requires a postgresql database enabled in the cluster, it can be
+placed in the same node where the {\em aggregator} daemon is going to be
+executed. \\
+
+\noindent The simplest way to install, setup and enable \Sensys{} in a cluster
+where the {\em SMS} features a postgresql database server and a {\em nfs}
+filesystem is accessible by all {\em compute nodes} in the cluster is shown
+below:
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install Sensys meta-package
+[sms](*\#*) (*\install*) ohpc-sensys
+# Add the default installation path /opt/sensys to the /etc/exports file
+[sms](*\#*) echo "/opt/sensys/ *(ro,fsid=13)" >> /etc/exports
+[sms](*\#*) SMS_IP=<replace-with-ip-of-sms>; echo $SMS_IP":/opt/sensys/
+/opt/sensys/ nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+
+# Apply changes to nfs service
+[sms](*\#*) exportfs -a
+[sms](*\#*) systemctl restart nfs
+
+# Setup a database for the collected data
+[sms](*\#*) (*\install*) postgresql
+[sms](*\#*) su -u postgres createuser -P <db_user>
+[sms](*\#*) su -u postgres createdb --owner <db_user> <db_name>
+[sms](*\#*) psql -U <db_user> -W -f /opt/sensys/share/db-schema/sensys.sql <db_name>
+
+# Update the default configuration file, by adding your scheduler and aggregator hostnames
+# and use a regex to update the compute nodes
+[sms](*\#*) sed -i 's/SMS/<replace-with-hostname-of-sms>/' /opt/sensys/etc/orcm-site.xml
+[sms](*\#*) sed -i 's/agg01/<replace-with-hostname-of-aggregator>/' /opt/sensys/etc/orcm-site.xml
+[sms](*\#*) sed -i 's/cn01/<replace-with-compute-nodes-prefix>[2:00-49]/' /opt/sensys/etc/orcm-site.xml
+
+# Example: monitoring coretemp with a time period of 30 seconds
+# Launch Sensys scheduler in the background
+[sms](*\#*) /opt/sensys/bin/orcmsched &
+# Launch Sensys on aggregator
+[sms](*\#*) /opt/sensys/bin/orcmd -omca sensor heartbeat,coretemp \
+        -omca sensor_base_sample_rate 30 \
+        -omca db_postgres_uri localhost:5432 \
+        -omca db_postgres_user <db_user>:<db_password> \
+        -omca db_postgres_database <db_name> &
+# Launch Sensys on compute nodes
+[sms](*\#*) /opt/sensys/bin/orcmd -omca sensor heartbeat,coretemp \
+        -omca sensor_base_sample_rate 30 &
+\end{lstlisting}
+
+\noindent  Once enabled and running, \Sensys{} should start filling up the
+database with the monitored data, which can be queried at any time.
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Log into database
+[sms](*\#*) psql -d <db_name> -U <db_user>
+# Query data_sample_raw table
+(*\$*) SELECT * FROM data_sample_raw;
+\end{lstlisting}
+
+\noindent \Sensys{} has many more sensors and options available and those can be
+reviewed \href{https://intel-ctrlsys.github.io/sensys}{\color{blue}{here}}.
