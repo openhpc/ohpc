@@ -15,8 +15,6 @@ fi
 }
 
 @test "[sensys] start and check orcmd" {
-
-    systemctl start orcmd
     systemctl status orcmd
     assert_success
 }
