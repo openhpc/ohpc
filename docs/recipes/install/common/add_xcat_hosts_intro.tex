@@ -34,7 +34,7 @@ the {\em ib0} interface:
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define ib0 netmask
-[sms](*\#*) chdef -t network -o ib0 mask=$ipoib_netmask
+[sms](*\#*) chdef -t network -o ib0 mask=$ipoib_netmask net=${c_ipoib[0]}
 
 # Enable secondary NIC configuration
 [sms](*\#*) chdef compute -p postbootscripts=confignics
