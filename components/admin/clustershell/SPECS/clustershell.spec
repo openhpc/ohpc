@@ -6,7 +6,7 @@
 %define pname clustershell
 
 Name:          clustershell%{PROJ_DELIM}
-Version:       1.7.3
+Version:       1.8
 Release:       1%{?dist}
 Summary:       Python framework for efficient cluster administration
 
@@ -67,12 +67,12 @@ mv conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
 mv conf/groups.conf.d/*.conf.example %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
 
 # man pages
-#install -d %{buildroot}/%{_mandir}/{man1,man5}
-#install -p -m 0644 doc/man/man1/clubak.1 %{buildroot}/%{_mandir}/man1/
-#install -p -m 0644 doc/man/man1/clush.1 %{buildroot}/%{_mandir}/man1/
-#install -p -m 0644 doc/man/man1/nodeset.1 %{buildroot}/%{_mandir}/man1/
-#install -p -m 0644 doc/man/man5/clush.conf.5 %{buildroot}/%{_mandir}/man5/
-#install -p -m 0644 doc/man/man5/groups.conf.5 %{buildroot}/%{_mandir}/man5/
+install -d %{buildroot}/%install_path/%{_mandir}/{man1,man5}
+install -p -m 0644 doc/man/man1/clubak.1 %{buildroot/%install_path}/%{_mandir}/man1/
+install -p -m 0644 doc/man/man1/clush.1 %{buildroot/%install_path}/%{_mandir}/man1/
+install -p -m 0644 doc/man/man1/nodeset.1 %{buildroot/%install_path}/%{_mandir}/man1/
+install -p -m 0644 doc/man/man5/clush.conf.5 %{buildroot/%install_path}/%{_mandir}/man5/
+install -p -m 0644 doc/man/man5/groups.conf.5 %{buildroot/%install_path}/%{_mandir}/man5/
 
 # vim addons
 %define vimdatadir %{install_path}/share/vim/vimfiles
@@ -103,7 +103,7 @@ set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib/python2.7/site-packages
-prepend-path    MANPATH             %{install_path}/man
+prepend-path    MANPATH             %{install_path}/%{_mandir}
 
 setenv          %{pname}_DIR        %{install_path}
 setenv          %{pname}_BIN        %{install_path}/bin
