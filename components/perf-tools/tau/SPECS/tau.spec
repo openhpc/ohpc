@@ -47,9 +47,11 @@ BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires: papi%{PROJ_DELIM}
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+%ifarch x86_64
+BuildRequires: papi%{PROJ_DELIM}
 Requires: papi%{PROJ_DELIM}
+%endif
 Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks
@@ -82,7 +84,9 @@ sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+%ifarch x86_64
 module load papi
+%endif
 module load pdtoolkit
 
 %if "%{compiler_family}" == "intel"
@@ -136,7 +140,9 @@ export CONFIG_ARCH=%{machine}
     -PROFILE \
     -PROFILECALLPATH \
 	-PROFILEPARAM \
+%ifarch x86_64
     -papi=$PAPI_DIR \
+%endif
 	-pdt=$PDTOOLKIT_DIR \
 	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
 	-openmp \
@@ -191,8 +197,13 @@ pushd %{buildroot}%{install_path}/lib
 ln -s shared-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace shared-mpi
 ln -s libTAUsh-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace.so libTauMpi-callpath-param-icpc-papi-mpi-pdt-openmp-profile-trace.so
 %else
+%ifarch x86_64
 ln -s shared-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace shared-mpi
 ln -s libTAUsh-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace.so libTauMpi-callpath-param-papi-mpi-pdt-openmp-opari-profile-trace.so
+%else
+ln -s shared-callpath-param-mpi-pdt-openmp-opari-profile-trace shared-mpi
+ln -s libTAUsh-callpath-param-mpi-pdt-openmp-opari-profile-trace.so libTauMpi-callpath-param-mpi-pdt-openmp-opari-profile-trace.so
+%endif
 %endif
 popd
 
@@ -234,10 +245,13 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_MAKEFILE   %{install_path}/include/Makefile
 setenv          %{PNAME}_OPTIONS    "-optRevert -optShared -optNoTrackGOMP"
 
-depends-on papi
 depends-on pdtoolkit
 
 EOF
+
+%ifarch x86_64
+echo "depends-on papi" >> %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%endif
 
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
