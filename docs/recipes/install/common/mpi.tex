@@ -37,11 +37,15 @@ OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolum
 
 % begin_ohpc_run
 % ohpc_comment_header Install MPI Stacks \ref{sec:mpi}
-% ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
+% ohpc_command if [[ ${enable_mpi_defaults} -eq 1 && ${enable_pmix} -eq 0 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
 [sms](*\#*) (*\install*) openmpi3-gnu7-ohpc mpich-gnu7-ohpc
 \end{lstlisting}
+% ohpc_indent 0
+% ohpc_command elif [[ ${enable_mpi_defaults} -eq 1 && ${enable_pmix} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_command (*\install*) openmpi3-pmix-slurm-gnu7-ohpc mpich-gnu7-ohpc
 % ohpc_indent 0
 % ohpc_command fi
 
@@ -50,6 +54,7 @@ If your system includes \InfiniBand{} and you enabled underlying support in
 MVAPICH2 family is available for use:
 
 % begin_ohpc_run
+% ohpc_validation_newline
 % ohpc_command if [[ ${enable_ib} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
