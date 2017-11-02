@@ -23,6 +23,7 @@ where the {\em SMS} features a postgresql database server and a {\em nfs}
 filesystem is accessible by all {\em compute nodes} in the cluster is shown
 below:
 
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Setup a database for the collected data
 [sms](*\#*) (*\install*) postgresql
 [sms](*\#*) su -u postgres createuser -P ohpc-admin
@@ -61,3 +62,4 @@ database with the monitored data, which can be queried at any time.
 
 \noindent \Sensys{} has many more sensors and options available and those can be
 reviewed \href{https://intel-ctrlsys.github.io/sensys}{\color{blue}{here}}.
+%\end{lstlisting}
