@@ -32,7 +32,7 @@
 %{!?configure_flags: %define configure_flags %{config_platform} %{config_extras} %{build_mode}}
 
 
-%define _prefix /opt/ohpc/pub/%{sensys_name}
+%define _prefix /opt/ohpc/admin/%{sensys_name}
 %define _libdir %{_prefix}/lib
 %define _sysconfdir %{_prefix}/etc
 %define _datarootdir %{_prefix}/share
