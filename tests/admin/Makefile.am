@@ -7,7 +7,7 @@ TESTS  += conman
 TESTS  += ganglia
 TESTS  += genders
 TESTS  += nagios
-
+TESTS  += sensys
 if WAREWULF_ENABLED
 TESTS  += warewulf
 endif
