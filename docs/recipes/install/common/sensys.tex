@@ -23,29 +23,17 @@ where the {\em SMS} features a postgresql database server and a {\em nfs}
 filesystem is accessible by all {\em compute nodes} in the cluster is shown
 below:
 
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Install Sensys meta-package
-[sms](*\#*) (*\install*) ohpc-sensys
-# Add the default installation path /opt/sensys to the /etc/exports file
-[sms](*\#*) echo "/opt/sensys/ *(ro,fsid=13)" >> /etc/exports
-[sms](*\#*) SMS_IP=<replace-with-ip-of-sms>; echo $SMS_IP":/opt/sensys/
-/opt/sensys/ nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
-
-# Apply changes to nfs service
-[sms](*\#*) exportfs -a
-[sms](*\#*) systemctl restart nfs
-
 # Setup a database for the collected data
 [sms](*\#*) (*\install*) postgresql
-[sms](*\#*) su -u postgres createuser -P <db_user>
-[sms](*\#*) su -u postgres createdb --owner <db_user> <db_name>
-[sms](*\#*) psql -U <db_user> -W -f /opt/sensys/share/db-schema/sensys.sql <db_name>
+[sms](*\#*) su -u postgres createuser -P ohpc-admin
+[sms](*\#*) su -u postgres createdb --owner ohpc-admin sensys
+[sms](*\#*) psql -U ohpc-admin -W -f /opt/sensys/share/db-schema/sensys.sql sensys
 
 # Update the default configuration file, by adding your scheduler and aggregator hostnames
 # and use a regex to update the compute nodes
-[sms](*\#*) sed -i 's/SMS/<replace-with-hostname-of-sms>/' /opt/sensys/etc/orcm-site.xml
-[sms](*\#*) sed -i 's/agg01/<replace-with-hostname-of-aggregator>/' /opt/sensys/etc/orcm-site.xml
-[sms](*\#*) sed -i 's/cn01/<replace-with-compute-nodes-prefix>[2:00-49]/' /opt/sensys/etc/orcm-site.xml
+[sms](*\#*) sed -i 's/SMS/${sms_name}/' /opt/sensys/etc/orcm-site.xml
+[sms](*\#*) sed -i 's/agg01/${sms_name}/' /opt/sensys/etc/orcm-site.xml
+[sms](*\#*) sed -i 's/cn01/${compute_prefix}[2:00-49]/' /opt/sensys/etc/orcm-site.xml
 
 # Example: monitoring coretemp with a time period of 30 seconds
 # Launch Sensys scheduler in the background
@@ -54,8 +42,8 @@ below:
 [sms](*\#*) /opt/sensys/bin/orcmd -omca sensor heartbeat,coretemp \
         -omca sensor_base_sample_rate 30 \
         -omca db_postgres_uri localhost:5432 \
-        -omca db_postgres_user <db_user>:<db_password> \
-        -omca db_postgres_database <db_name> &
+        -omca db_postgres_user ohpc-admin \
+        -omca db_postgres_database ohpc-admin &
 # Launch Sensys on compute nodes
 [sms](*\#*) /opt/sensys/bin/orcmd -omca sensor heartbeat,coretemp \
         -omca sensor_base_sample_rate 30 &
@@ -66,7 +54,7 @@ database with the monitored data, which can be queried at any time.
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Log into database
-[sms](*\#*) psql -d <db_name> -U <db_user>
+[sms](*\#*) psql -d sensys -U ohpc-admin
 # Query data_sample_raw table
 (*\$*) SELECT * FROM data_sample_raw;
 \end{lstlisting}
