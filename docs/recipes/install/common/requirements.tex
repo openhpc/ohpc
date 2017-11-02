@@ -15,7 +15,12 @@ assumed to exist previously.
 
 \begin{figure}[hbt]
 \center
-\includegraphics[width=0.85\linewidth]{ohpc-arch-small2.pdf}
+\iftoggleverb{isx86}
+\includegraphics[width=0.85\linewidth]{ohpc-arch-small3.pdf}
+\fi
+\iftoggleverb{isaarch}
+\includegraphics[width=0.85\linewidth]{ohpc-arch-small-eth.pdf}
+\fi
 \vspace*{-0.2cm}
 \caption{Overview of physical cluster architecture.} \label{fig:physical_arch}
 \end{figure}
@@ -38,8 +43,10 @@ switching infrastructure; however, an alternate configuration can also be
 accommodated via the use of a shared NIC, which runs a packet filter to divert
 management packets between the host and BMC.
 
- In addition to the IP networking, there is an optional high-speed network
+\iftoggleverb{isx86}
+In addition to the IP networking, there is an optional high-speed network
 (\InfiniBand{} or \OmniPath{} in this recipe) that is also connected to each of the
 hosts. This high speed network is used for application message passing and
-optionally for \Lustre{} connectivity as well.
-
+optionally for parallel file system connectivity as well (e.g. to
+existing \Lustre{} or BeeGFS storage targets).
+\fi

@@ -44,7 +44,7 @@
 \thispagestyle{empty}
 
 % Title Page --------------------------------------------------------
-\input{common/title_preview}
+\input{common/title}
 % Disclaimer
 \input{common/legal} 
 
@@ -97,8 +97,9 @@
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
-\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
-\input{common/ibsupport_sms_sles}
+%% Add if/when IB is available for testing
+%% \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+%% \input{common/ibsupport_sms_sles}
 
 \vspace*{-0.3cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
@@ -138,17 +139,6 @@
 # Remove default hostname to allow WW to provision network names
 [sms](*\#*) mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
 \end{lstlisting}
-
-% ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
-% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Optionally add IB support
-[sms](*\#*) (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
-[sms](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
 % end_ohpc_run
 
 \vspace*{-0.1cm}
@@ -172,17 +162,18 @@
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
-\paragraph{Increase locked memory limits}
-\input{common/memlimits} 
+%% Add if/when IB is available for testing
+%% \paragraph{Increase locked memory limits}
+%% \input{common/memlimits} 
 
 \paragraph{Enable ssh control via resource manager} 
 \input{common/slurm_pam}
 
-\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
-\input{common/lustre-client}
-\input{common/lustre-client}
-\input{common/lustre-client-sles}
-\input{common/lustre-client-post}
+%% \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+%% \input{common/lustre-client}
+%% \input{common/lustre-client}
+%% \input{common/lustre-client-sles}
+%% \input{common/lustre-client-post}
 
 \clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}

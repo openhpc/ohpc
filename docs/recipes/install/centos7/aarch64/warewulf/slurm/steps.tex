@@ -110,8 +110,9 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
-\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
-\input{common/ibsupport_sms_centos}
+%% Add if/when IB is available for testing
+%% \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+%% \input{common/ibsupport_sms_centos}
 
 %\vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
@@ -139,18 +140,6 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
 \end{lstlisting}
-
-% ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
-% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Optionally add IB support and enable
-[sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
-[sms](*\#*) (*\chrootinstall*) infinipath-psm
-[sms](*\#*) chroot $CHROOT systemctl enable rdma
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
 % end_ohpc_run
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
@@ -174,17 +163,18 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
-\paragraph{Increase locked memory limits}
-\input{common/memlimits}
+%% Add if/when IB is available for testing
+%% \paragraph{Increase locked memory limits}
+%% \input{common/memlimits}
 
 \paragraph{Enable ssh control via resource manager} 
 \input{common/slurm_pam}
 
-\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
-\input{common/lustre-client}
-\input{common/lustre-client-centos}
-\vspace*{0.5cm}
-\input{common/lustre-client-post}
+%%\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+%%\input{common/lustre-client}
+%%\input{common/lustre-client-centos}
+%%\vspace*{0.5cm}
+%%\input{common/lustre-client-post}
 
 \clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}

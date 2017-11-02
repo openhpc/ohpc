@@ -4,13 +4,17 @@ include:
 
 \begin{multicols}{2}
 \begin{itemize*}
+\iftoggleverb{isx86}
 \item Add InfiniBand or Omni-Path drivers
 \item Increase memlock limits
+\fi
 
 \nottoggle{ispbs}{\item Restrict ssh access to compute resources}
 
+\iftoggleverb{isx86}
 \item Add \beegfs{} client
 \item Add \Lustre{} client
+\fi
 
 \iftoggle{isWarewulf}{\item Enable syslog forwarding}
 
