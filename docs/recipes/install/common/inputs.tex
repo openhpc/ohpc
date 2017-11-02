@@ -38,11 +38,13 @@ node counts. \\
 \vspace*{0.1cm}
 
 \begin{tabular}{@{}>{\textbullet}l p{7cm} l}
+\iftoggleverb{isx86}
 & \texttt{\$\{sysmgmtd\_host\}} & {\small \# BeeGFS System Management host name} \\
 & \texttt{\$\{mgs\_fs\_name\}} & {\small \# Lustre MGS mount name} \\
 & \texttt{\$\{sms\_ipoib\}} & {\small \# IPoIB address for SMS server} \\
 & \texttt{\$\{ipoib\_netmask\}} & {\small \# Subnet netmask for internal IPoIB} \\
-  & \texttt{\$\{c\_ipoib[0]\}}, \texttt{\$\{c\_ipoib[1]\}}, ... & {\small \# IPoIB addresses for computes} \\
+& \texttt{\$\{c\_ipoib[0]\}}, \texttt{\$\{c\_ipoib[1]\}}, ... & {\small \# IPoIB addresses for computes} \\
+\fi
 \iftoggleverb{isWarewulf}
 & \texttt{\$\{kargs\}} & {\small \# Kernel boot arguments} \\
 \fi

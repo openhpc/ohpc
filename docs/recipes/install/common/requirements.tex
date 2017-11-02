@@ -9,9 +9,12 @@ used interchangeably in this guide. For power management, we assume that
 the compute node baseboard management controllers (BMCs) are available via IPMI
 from the chosen master host. For file systems, we assume that the chosen master
 server will host an \NFS{} file system that is made available to the compute
-nodes. Installation information is also discussed to optionally include a
-\Lustre{} file system mount and in this case, the \Lustre{} file system is
-assumed to exist previously.
+nodes.
+\iftoggleverb{isx86}
+Installation information is also discussed to optionally mount a
+parallel file system and in this case, the parallel file system is assumed to
+exist previously.
+\fi
 
 \begin{figure}[hbt]
 \center
