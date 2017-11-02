@@ -94,7 +94,7 @@ power usage, memory, disk and process information.
 %package -n %{sensys_name}-devel%{PROJ_DELIM}
 Summary: Development files for Sensys
 Group: Development/Libraries
-Requires: %{sensys_name}
+Requires: %{sensys_name}%{PROJ_DELIM}
 %description -n %{sensys_name}-devel%{PROJ_DELIM}
 The headers needed to develop new components for Sensys
 
@@ -107,7 +107,7 @@ Scripts for daemon start process on boot process.
 %package -n %{sensys_name}-aggr%{PROJ_DELIM}
 Summary: Sensys plugins only needed to run sensys in aggregator.
 Group: System Environment/Base
-Requires: %{sensys_name}
+Requires: %{sensys_name}%{PROJ_DELIM}
 Requires: ipmiutil%{PROJ_DELIM} >= 2.9.6
 Requires: net-snmp >= 5.7.2
 %if 0%{?suse_version} > 1200
