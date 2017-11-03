@@ -1,11 +1,11 @@
 #!../common/bats/bin/bats
 # -*-sh-*-
 
-load ../common/test_helper_functions
-source ../common/functions || exit 1
+load ./common/test_helper_functions
+source ./common/functions || exit 1
 
-if [ -s ../TEST_ENV ];then
-    source ../TEST_ENV
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
 fi
 
 # Test how many computes we have available presently
@@ -19,6 +19,7 @@ num_computes=`koomie_cf -x "c[0-9]+\b" uptime | grep "load average" | wc -l`
 if [ "$num_computes" -lt 0 ];then
     ERROR "Test requries at least 1 available compute node"
 fi
+sms_kernel=`uname -r`
 
 @test "[BOS] OS distribution matches $BOS_RELEASE ($num_computes active computes) " {
     skip "disable BOS_RELEASE check"
@@ -31,32 +32,22 @@ fi
 }
 
 @test "[BOS] consistent kernel ($num_computes active computes) " {
-    skip "superceded kernel consistency check by clck"
-    koomie_cf -x "c[0-9]+\b" ls -l /etc/$BOS_RELEASE | awk '{print $10}' >& .cmd_output || exit 1
+    koomie_cf -x "c[0-9]+\b" uname -r >& .cmd_output || exit 1
 
-    local count=0
     for kernel in `cat .cmd_output | awk '{print $2}'`; do
-	count=$((count+1))
-	if [ $count -eq 1 ];then
-	    kernel_match=$kernel
-	fi
-	
-	if [ "$kernel" != "$kernel_match" ];then
-	    flunk
-	fi
+	assert_equal $kernel $sms_kernel
     done
 
     rm -f .cmd_output
 }
 
 @test "[BOS] increased locked memory limits " {
+    [[ "$ARCH" == "aarch64" ]] && skip "Skipping memlock settings for ARCH=$ARCH"
 
     koomie_cf -x "c[0-9]+\b" prlimit -l -o SOFT | grep -v SOFT >& .cmd_output || exit 1
 
     for limit in `cat .cmd_output | awk '{print $2}'`; do
-        if [ "$limit" != "unlimited" ];then
-            flunk
-        fi
+	assert_equal $limit unlimited
     done
 
     rm -f .cmd_output
@@ -64,9 +55,7 @@ fi
     koomie_cf -x "c[0-9]+\b" prlimit -l -o HARD | grep -v HARD >& .cmd_output || exit 1
 
     for limit in `cat .cmd_output | awk '{print $2}'`; do
-        if [ "$limit" != "unlimited" ];then
-            flunk
-        fi
+	assert_equal $limit unlimited
     done
 
     rm -f .cmd_output
