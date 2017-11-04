@@ -27,7 +27,7 @@ unset OMP_NUM_THREADS
     flunk "C_mpi_test binary does not exist"
     fi
 
-    run_mpi_binary "tau_exec ./C_mpi_test" $ARGS $NODES $TASKS
+    run_mpi_binary "tau_exec ./C_mpi_test" "" $NODES $TASKS
     assert_success
 
     run ls profile.$LAST_TASK_INDEX.0.0
