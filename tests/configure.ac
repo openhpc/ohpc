@@ -660,9 +660,9 @@ echo    Libraries:
     fi
 
     if test "x$enable_mpi4py" = "xyes"; then
-       echo '    'mpi4py..................... : enabled
+       echo '    'mpi4py.................... : enabled
     else
-       echo '    'mpi4py..................... : disabled
+       echo '    'mpi4py.................... : disabled
     fi
 
     if test "x$enable_mumps" = "xyes"; then
