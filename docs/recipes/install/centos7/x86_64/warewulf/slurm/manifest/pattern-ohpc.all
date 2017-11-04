@@ -5,6 +5,7 @@ ohpc-ganglia Collection of Ganglia monitoring and metrics packages
 ohpc-gnu7-io-libs Collection of IO library builds for use with GNU compiler toolchain
 ohpc-gnu7-mpich-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
 ohpc-gnu7-mvapich2-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
+ohpc-gnu7-openmpi3-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 ohpc-gnu7-openmpi-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 ohpc-gnu7-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain
 ohpc-gnu7-perf-tools Collection of performance tool builds for use with GNU compiler toolchain
@@ -15,6 +16,7 @@ ohpc-intel-impi-parallel-libs Collection of parallel library builds for use with
 ohpc-intel-io-libs Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite
 ohpc-intel-mpich-parallel-libs Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 ohpc-intel-mvapich2-parallel-libs Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
+ohpc-intel-openmpi3-parallel-libs Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 ohpc-intel-openmpi-parallel-libs Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 ohpc-intel-perf-tools Collection of performance tool builds for use with Intel(R) Parallel Studio XE toolchain
 ohpc-intel-python-libs Collection of python related library builds for use with Intel(R) Parallel Studio XE toolchain
