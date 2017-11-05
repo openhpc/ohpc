@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ./common/listohpc
-./common/listpatterns
+#./common/listpatterns
 ./common/listchanges
 
 ./common/build_tables.pl
