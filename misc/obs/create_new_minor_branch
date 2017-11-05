@@ -20,7 +20,8 @@ DISABLE_ARCH="x86_64 aarch64"
 SKIP_LINK_UPDATES="latexmk"
 SKIP_SERVICE_UPDATES="XXXXXXX"
 
-MAX_UPDATES=1   # 1.1.1 was last 1.1 release
+MAX_UPDATES=2   # 1.3.2 was last 1.1 release
+#MAX_UPDATES=0   # 1.3.2 was last 1.3 release (set to 0 when creating from previous update release)
 
 TMPDIR=$(mktemp -d) || exit 1
 
