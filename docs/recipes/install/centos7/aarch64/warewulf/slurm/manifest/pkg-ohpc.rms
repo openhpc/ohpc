@@ -2,14 +2,14 @@ munge-ohpc 0.5.12 http://dun.github.io/munge/ ohpc/rms MUNGE authentication serv
 slurm-sjstat-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
 slurm-sjobexit-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Slurm job exit code management tools
 slurm-slurmdb-direct-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Wrappers to write directly to the slurmdb
-slurm-devel-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
-slurm-pam_slurm-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
-slurm-perlapi-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
-slurm-contribs-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
-slurm-sql-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms Slurm SQL support
-slurm-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
-slurm-munge-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms Slurm authentication and crypto implementation using Munge
-slurm-slurmdbd-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
-slurm-plugins-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms Slurm plugins (loadable shared objects)
-slurm-torque-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
-slurm-openlava-ohpc 17.02.7 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transitition from OpenLava/LSF to Slurm
+slurm-devel-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
+slurm-pam_slurm-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
+slurm-perlapi-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
+slurm-contribs-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
+slurm-sql-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms Slurm SQL support
+slurm-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
+slurm-munge-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms Slurm authentication and crypto implementation using Munge
+slurm-slurmdbd-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
+slurm-plugins-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms Slurm plugins (loadable shared objects)
+slurm-torque-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
+slurm-openlava-ohpc 17.02.9 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transitition from OpenLava/LSF to Slurm
