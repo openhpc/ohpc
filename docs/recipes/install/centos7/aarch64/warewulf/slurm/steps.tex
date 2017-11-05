@@ -176,7 +176,7 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 %%\vspace*{0.5cm}
 %%\input{common/lustre-client-post}
 
-\clearpage
+%\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
@@ -245,9 +245,11 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 %\vspace*{0.2cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
+\input{common/third_party_libs_petsc_centos}
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_aarch}
 
+\clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/slurm_startup}
 
