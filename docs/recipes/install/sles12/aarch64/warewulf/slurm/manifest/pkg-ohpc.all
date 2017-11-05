@@ -45,7 +45,7 @@ hypre-gnu7-openmpi-ohpc 2.11.2 http://www.llnl.gov/casc/hypre/ ohpc/parallel-lib
 hypre-gnu7-openmpi3-ohpc 2.11.2 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 imb-gnu-mpich-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
-imb-gnu7-mpich-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
+imb-gnu7-mpich-ohpc 2018.0 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu7-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu7-openmpi3-ohpc 2018.0 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 ipmiutil-devel-ohpc 2.9.6 http://ipmiutil.sourceforge.net Development/Libraries Includes libraries and headers for the ipmiutil package
