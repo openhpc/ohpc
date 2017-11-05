@@ -89,9 +89,6 @@ imb-intel-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-b
 imb-intel-openmpi3-ohpc 2018.0 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 intel-compilers-devel-ohpc 2017 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Intel(R) Parallel Studio XE
 intel-mpi-devel-ohpc 2017 https://github.com/openhpc/ohpc ohpc/mpi-families OpenHPC compatibility package for Intel(R) MPI Library
-ipmiutil-devel-ohpc 2.9.6 http://ipmiutil.sourceforge.net Development/Libraries Includes libraries and headers for the ipmiutil package
-ipmiutil-ohpc 2.9.6 http://ipmiutil.sourceforge.net ohpc/distro-packages Easy-to-use IPMI server management utilities
-ipmiutil-static-ohpc 2.9.6 http://ipmiutil.sourceforge.net Development/Libraries Includes static libraries for the ipmiutil package
 kmod-lustre-client-ohpc 2.10.0 https://wiki.hpdd.intel.com/ System Environment/Kernel lustre-client-ohpc kernel module(s)
 kmod-lustre-client-ohpc-tests 2.10.0 https://wiki.hpdd.intel.com/ System Environment/Kernel lustre-client-ohpc-tests kernel module(s)
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
@@ -407,8 +404,6 @@ scorep-intel-openmpi3-ohpc 3.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf
 scotch-gnu7-ohpc 6.0.4 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 scotch-intel-ohpc 6.0.4 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 shine-ohpc 1.5 http://lustre-shine.sourceforge.net/ ohpc/lustre Lustre administration utility
-sigar-devel-ohpc 1.6.5 http://sigar.hyperic.com/ ohpc/distro-packages SIGAR Development package - System Information Gatherer And Reporter
-sigar-ohpc 1.6.5 http://sigar.hyperic.com/ ohpc/distro-packages System Information Gatherer And Reporter
 singularity-ohpc 2.4 http://singularity.lbl.gov/ ohpc/runtimes Application and environment virtualization
 sionlib-gnu-impi-ohpc 1.7.0 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 sionlib-gnu-mpich-ohpc 1.7.0 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes

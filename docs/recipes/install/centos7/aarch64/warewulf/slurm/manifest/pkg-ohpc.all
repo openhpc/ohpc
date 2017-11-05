@@ -48,9 +48,6 @@ imb-gnu-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-ben
 imb-gnu7-mpich-ohpc 2018.0 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu7-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu7-openmpi3-ohpc 2018.0 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
-ipmiutil-devel-ohpc 2.9.6 http://ipmiutil.sourceforge.net Development/Libraries Includes libraries and headers for the ipmiutil package
-ipmiutil-ohpc 2.9.6 http://ipmiutil.sourceforge.net ohpc/distro-packages Easy-to-use IPMI server management utilities
-ipmiutil-static-ohpc 2.9.6 http://ipmiutil.sourceforge.net Development/Libraries Includes static libraries for the ipmiutil package
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
 llvm4-compilers-ohpc 4.0.1 http://www.llvm.org ohpc/compiler-families The LLVM Compiler Infrastructure
 llvm5-compilers-ohpc 5.0.0 http://www.llvm.org ohpc/compiler-families The LLVM Compiler Infrastructure
@@ -223,8 +220,6 @@ scorep-gnu7-openmpi-ohpc 3.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-t
 scorep-gnu7-openmpi3-ohpc 3.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scotch-gnu7-ohpc 6.0.4 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 shine-ohpc 1.5 http://lustre-shine.sourceforge.net/ ohpc/lustre Lustre administration utility
-sigar-devel-ohpc 1.6.5 http://sigar.hyperic.com/ ohpc/distro-packages SIGAR Development package - System Information Gatherer And Reporter
-sigar-ohpc 1.6.5 http://sigar.hyperic.com/ ohpc/distro-packages System Information Gatherer And Reporter
 singularity-ohpc 2.4 http://singularity.lbl.gov/ ohpc/runtimes Application and environment virtualization
 sionlib-gnu-mpich-ohpc 1.7.0 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 sionlib-gnu-openmpi-ohpc 1.7.0 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
