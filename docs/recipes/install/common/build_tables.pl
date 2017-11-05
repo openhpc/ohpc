@@ -22,6 +22,8 @@ my @compiler_familes = ("gnu","gnu7","intel");
 my @mpi_families     = ("mvapich2","openmpi","openmpi3","impi","mpich");
 
 my @single_package_exceptions = ();
+my @exclude = ("slurm-sjstat-ohpc","slurm-slurmdb-direct-ohpc","slurm-sjobexit-ohpc");  # package name changes with slurm 17.02.9
+push @exclude, "lustre-client-ohpc-kmp-default";
 
 my $help;
 my $category_single;
@@ -59,7 +61,7 @@ if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"scorep-gnu-impi-ohpc"} = 2;
     $page_breaks{"petsc-gnu-impi-ohpc"} = 2;
     $page_breaks{"trilinos-gnu-impi-ohpc"} = 3;
-    $page_breaks{"phdf5-gnu-impi-ohpc"} = 2;
+    $page_breaks{"netcdf-gnu-impi-ohpc"} = 2;
 }
 
 my $longSummaryLine = 60;
@@ -144,6 +146,12 @@ foreach my $category (@ohpcCategories) {
 		} elsif ( $url_raw =~ /https:\/\/(\S+)/) {
 		    $url=$1;
 		}
+	    }
+
+	    # Skip any excluded packages
+	    if ( grep ( /$name$/, @exclude) ) {
+		print "--> skipping $name per exclude request\n";
+		next;
 	    }
 
 	    # Include period for summary
