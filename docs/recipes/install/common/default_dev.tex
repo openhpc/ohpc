@@ -15,11 +15,21 @@ OpenMPI stack.
 \begin{center}
 \begin{tcolorbox}[]
 \small
+\iftoggleverb{isx86}
 If you want to change the default environment from the suggestion above, \OHPC{}
 also provides the \GNU{} compiler toolchain with the MPICH and MVAPICH2 stacks:
+\fi
+
+\iftoggleverb{isaarch}
+If you want to change the default environment from the suggestion above, \OHPC{}
+also provides the \GNU{} compiler toolchain with the MPICH stack:
+\fi
+
 \begin{itemize*}
 \item lmod-defaults-gnu7-mpich-ohpc
+\iftoggleverb{isx86}
 \item lmod-defaults-gnu7-mvapich2-ohpc
+\fi
 \end{itemize*}
 \end{tcolorbox}
 \end{center}

@@ -1,0 +1,29 @@
+\iftoggleverb{isx86}
+\begin{lstlisting}[language=bash,keepspaces=true,keywords={}]
+[sms](*\#*) zypper search -t package petsc-gnu7-*-ohpc
+Loading repository data...
+Reading installed packages...
+
+S | Name                    | Summary
+--+-------------------------+--------------------------------------------------------+--------
+ | petsc-gnu7-impi-ohpc     | Portable Extensible Toolkit for Scientific Computation | package
+ | petsc-gnu7-mpich-ohpc    | Portable Extensible Toolkit for Scientific Computation | package
+ | petsc-gnu7-mvapich2-ohpc | Portable Extensible Toolkit for Scientific Computation | package
+ | petsc-gnu7-openmpi3-ohpc | Portable Extensible Toolkit for Scientific Computation | package
+\end{lstlisting}
+\fi
+
+\iftoggleverb{isaarch}
+\begin{lstlisting}[language=bash,keepspaces=true,keywords={}]
+[sms](*\#*) zypper search -t package petsc-gnu7-*-ohpc
+Loading repository data...
+Reading installed packages...
+
+S | Name                    | Summary
+--+-------------------------+--------------------------------------------------------+--------
+ | petsc-gnu7-mpich-ohpc    | Portable Extensible Toolkit for Scientific Computation | package
+ | petsc-gnu7-openmpi3-ohpc | Portable Extensible Toolkit for Scientific Computation | package
+\end{lstlisting}
+\fi
+
+
