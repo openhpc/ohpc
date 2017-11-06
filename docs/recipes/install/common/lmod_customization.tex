@@ -1,0 +1,43 @@
+Locally installed applications can easily be integrated in to \OHPC{} systems by
+following the Lmod convention laid out by the provided packages. Two sample
+module files are included in the \texttt{examples-ohpc} package\textemdash one
+representing an application with no compiler or MPI runtime dependencies, and
+one dependent on OpenMPI and the \GNU{} toolchain. Simply copy these files to the
+prescribed locations, and the \texttt{lmod} application should pick them up
+automatically.
+
+\begin{lstlisting}[alsoletter={/,.},morekeywords={example1/1.0, example2/1.0}]
+[sms](*\#*) mkdir /opt/ohpc/pub/modulefiles/example1
+[sms](*\#*) cp /opt/ohpc/pub/examples/example.modulefile \
+    /opt/ohpc/pub/modulefiles/example1/1.0
+[sms](*\#*) mkdir /opt/ohpc/pub/moduledeps/gnu7-openmpi3/example2
+[sms](*\#*) cp /opt/ohpc/pub/examples/example-mpi-dependent.modulefile \
+    /opt/ohpc/pub/moduledeps/gnu7-openmpi3/example2/1.0
+[sms](*\#*) module avail
+
+----------------------------------- /opt/ohpc/pub/moduledeps/gnu7-openmpi3 -----------------------------------
+   adios/1.12.0    imb/2018.0          netcdf-fortran/4.4.4    ptscotch/6.0.4     sionlib/1.7.1
+   boost/1.65.1    mpi4py/2.0.0        netcdf/4.4.1.1          scalapack/2.0.2    slepc/3.7.4
+   example2/1.0    mpiP/3.4.1          petsc/3.7.6             scalasca/2.3.1     superlu_dist/4.2
+   fftw/3.3.6      mumps/5.1.1         phdf5/1.10.1            scipy/0.19.1       tau/2.26.1
+   hypre/2.11.2    netcdf-cxx/4.3.0    pnetcdf/1.8.1           scorep/3.1         trilinos/12.10.1
+
+--------------------------------------- /opt/ohpc/pub/moduledeps/gnu7 ----------------------------------------
+   R/3.4.2        metis/5.1.0     ocr/1.0.1              pdtoolkit/3.24    superlu/5.2.1
+   gsl/2.4        mpich/3.2       openblas/0.2.20        plasma/2.8.0
+   hdf5/1.10.1    numpy/1.13.1    openmpi3/3.0.0  (L)    scotch/6.0.4
+
+---------------------------------------- /opt/ohpc/admin/modulefiles -----------------------------------------
+   spack/0.10.0
+
+----------------------------------------- /opt/ohpc/pub/modulefiles ------------------------------------------
+   EasyBuild/3.4.1         cmake/3.9.2         hwloc/1.11.8        pmix/1.2.3             valgrind/3.13.0
+   autotools        (L)    example1/1.0 (L)    llvm5/5.0.0         prun/1.2        (L)
+   clustershell/1.8        gnu7/7.2.0   (L)    ohpc         (L)    singularity/2.4
+
+  Where:
+   L:  Module is loaded
+
+Use "module spider" to find all possible modules.
+Use "module keyword key1 key2 ..." to search for all possible modules matching any of the "keys".
+\end{lstlisting}
