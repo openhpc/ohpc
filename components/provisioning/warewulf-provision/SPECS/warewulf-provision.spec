@@ -167,25 +167,15 @@ systemctl restart httpd.service >/dev/null 2>&1 || :
 systemctl enable tftp-server.socket >/dev/null 2>&1 || :
 systemctl restart tftp-server.socket >/dev/null 2>&1 || :
 
-if [ ! -d %{_localstatedir}/warewulf/bootstrap ];then
-bootstraps=`wwsh bootstrap list | tail -n +2 | awk '{print $1}'`
-
-for boot in $bootstraps; do
-    echo "Updating  bootstrap image: $boot"
-    wwsh bootstrap export ${boot} /tmp/.exported_bootstrap
-    if [ -s /tmp/.exported_bootstrap ]
-        wwsh -y bootstrap import /tmp/.exported_bootstrap --name ${boot}
-    fi
-    rm -f /tmp/.exported_bootstrap
-done
-fi
-
 mkdir -p %{_localstatedir}/warewulf/ipxe %{_localstatedir}/warewulf/bootstrap 2>/dev/null || :
 semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/warewulf/ipxe(/.*)?' 2>/dev/null || :
 semanage fcontext -a -t httpd_sys_content_t '%{_localstatedir}/warewulf/bootstrap(/.*)?' 2>/dev/null || :
 restorecon -R %{_localstatedir}/warewulf/bootstrap || :
 restorecon -R %{_localstatedir}/warewulf/ipxe || :
 
+if [ $1 -eq 2 ] ; then
+    wwsh bootstrap rebuild
+fi
 
 %postun -n %{pname}-server%{PROJ_DELIM}
 if [ $1 -eq 0 ] ; then
