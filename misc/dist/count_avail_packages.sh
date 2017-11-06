@@ -32,7 +32,7 @@ echo " "
 
 colon=""
 factory=""
-if [ -n "$USE_FACTORY" ]; then
+if [[ ${USE_FACTORY} -eq 1 ]]; then
     echo "[Querying from Factory repositories]"
     colon=":"
     factory="Factory/"
