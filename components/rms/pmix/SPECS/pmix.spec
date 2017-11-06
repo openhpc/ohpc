@@ -17,7 +17,7 @@ Name: %{pname}%{PROJ_DELIM}
 Version: 1.2.3
 Release: 1%{?dist}
 License: BSD
-Group: Development/Libraries
+Group: %{PROJ_NAME}/rms
 Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 Source1: OHPC_macros
 Patch0: singleton.5391e43.patch
