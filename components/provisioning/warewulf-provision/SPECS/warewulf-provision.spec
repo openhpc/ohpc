@@ -173,7 +173,9 @@ bootstraps=`wwsh bootstrap list | tail -n +2 | awk '{print $1}'`
 for boot in $bootstraps; do
     echo "Updating  bootstrap image: $boot"
     wwsh bootstrap export ${boot} /tmp/.exported_bootstrap
-    wwsh -y bootstrap import /tmp/.exported_bootstrap --name ${boot}
+    if [ -s /tmp/.exported_bootstrap ]
+        wwsh -y bootstrap import /tmp/.exported_bootstrap --name ${boot}
+    fi
     rm -f /tmp/.exported_bootstrap
 done
 fi
