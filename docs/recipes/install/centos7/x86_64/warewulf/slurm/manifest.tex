@@ -20,12 +20,13 @@
 \renewcommand{\secondColWidth}{2.0cm}
 
 % Provisioning
-
+\iftoggleverb{isWarewulf}
 \begin{table}[h!]
 \caption{\bf Provisioning} \vspace*{\captionSpace{}} \label{table:provisioning}
 \input manifest/provisioning
 \vspace*{\tabSpaceBot{}}
 \end{table}
+\fi
 
 \renewcommand{\firstColWidth}{4.1cm}
 \renewcommand{\secondColWidth}{1.8cm}

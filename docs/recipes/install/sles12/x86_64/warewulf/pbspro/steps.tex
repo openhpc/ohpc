@@ -102,6 +102,9 @@
 \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 \input{common/ibsupport_sms_sles}
 
+\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
+\input{common/opasupport_sms_sles}
+
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
 \input{common/warewulf_setup_sles}
@@ -198,6 +201,7 @@
 \input{common/import_ww_files}
 \input{common/import_ww_files_ib_sles}
 \input{common/finalize_provisioning}
+\vspace*{0.8cm}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_pbs}
 \input{common/add_ww_hosts_finalize}
@@ -243,7 +247,7 @@
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/pbspro_startup}
 
-\clearpage
+%\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{common/pbspro_test_job}
 

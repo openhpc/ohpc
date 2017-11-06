@@ -185,6 +185,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
 \input{common/lustre-client-centos}
+\clearpage
 \input{common/lustre-client-post}
 
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
@@ -200,7 +201,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
-\clearpage
+%\clearpage
 \paragraph{Add \genders{}}
 \input{common/genders}
 
@@ -216,7 +217,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/add_ww_hosts_pbs}
 \input{common/add_ww_hosts_finalize}
 
-\clearpage
+%\clearpage
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 
@@ -224,18 +225,19 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/stateful}
 
 %\vspace*{-0.1cm}
+\clearpage
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes} 
 
-\vspace*{-0.50cm}
+%\vspace*{-0.50cm}
 \section{Install \OHPC{} Development Components}
 \input{common/dev_intro.tex}
 
-\vspace*{-0.15cm}
+%\vspace*{-0.15cm}
 \subsection{Development Tools} \label{sec:install_dev_tools}
 \input{common/dev_tools}
 
-\vspace*{-0.15cm}
+%\vspace*{-0.15cm}
 \subsection{Compilers} \label{sec:install_compilers}
 \input{common/compilers}
 
@@ -249,9 +251,10 @@ repository, which is shipped with CentOS and is enabled by default.
 \subsection{Setup default development environment}
 \input{common/default_dev}
 
-%\vspace*{0.2cm}
+%\vspace*{0.4cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
+\clearpage
 \input{common/third_party_libs_petsc_centos}
 \input{common/third_party_libs}
 \vspace*{0.1cm}
@@ -260,6 +263,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
 \input{common/pxse_enabled_builds}
 
+\clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/pbspro_startup}
 
