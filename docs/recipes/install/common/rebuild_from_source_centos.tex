@@ -30,8 +30,8 @@ illustrates how to override the default mpi\_family.
 [test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   28.11/Release:   29.1/" fftw.spec
 
 # Rebuild binary RPM. Note that additional directives can be specified to modify build
-[test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "mpi_family mvapich2" fftw.spec
+[test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "mpi_family mpich" fftw.spec
 
 # Install the new package
-[test@sms ~]$ sudo (*\install*) ~test/rpmbuild/RPMS/ARCH/fftw-gnu-mvapich2-ohpc-3.3.6-29.1.ARCH.rpm
+[test@sms ~]$ sudo (*\install*) ~test/rpmbuild/RPMS/ARCH/fftw-gnu-mpich-ohpc-3.3.6-29.1.ARCH.rpm
 \end{lstlisting}
