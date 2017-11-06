@@ -2,6 +2,7 @@ munge-ohpc 0.5.12 http://dun.github.io/munge/ ohpc/rms MUNGE authentication serv
 pbspro-execution-ohpc 14.1.0 https://github.com/pbspro/pbspro ohpc/rms PBS Professional for an execution host
 pbspro-client-ohpc 14.1.0 https://github.com/pbspro/pbspro ohpc/rms PBS Professional for a client host
 pbspro-server-ohpc 14.1.0 https://github.com/pbspro/pbspro ohpc/rms PBS Professional for a server host
+pmix-ohpc 1.2.3 https://pmix.github.io/pmix/ ohpc/rms An extended/exascale implementation of PMI
 slurm-sjstat-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
 slurm-sjobexit-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Slurm job exit code management tools
 slurm-slurmdb-direct-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Wrappers to write directly to the slurmdb

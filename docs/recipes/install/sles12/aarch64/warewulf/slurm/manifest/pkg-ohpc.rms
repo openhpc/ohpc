@@ -1,4 +1,5 @@
 munge-ohpc 0.5.12 http://dun.github.io/munge/ ohpc/rms MUNGE authentication service
+pmix-ohpc 1.2.3 https://pmix.github.io/pmix/ ohpc/rms An extended/exascale implementation of PMI
 slurm-sjstat-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
 slurm-sjobexit-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Slurm job exit code management tools
 slurm-slurmdb-direct-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Wrappers to write directly to the slurmdb

@@ -179,7 +179,7 @@ phdf5-gnu7-mpich-ohpc 1.10.1 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general
 phdf5-gnu7-openmpi-ohpc 1.10.1 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 phdf5-gnu7-openmpi3-ohpc 1.10.1 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 plasma-gnu7-ohpc 2.8.0 https://bitbucket.org/icl/plasma ohpc/serial-libs Parallel Linear Algebra Software for Multicore Architectures
-pmix-ohpc 1.2.3 None Development/Libraries An extended/exascale implementation of PMI
+pmix-ohpc 1.2.3 https://pmix.github.io/pmix/ ohpc/rms An extended/exascale implementation of PMI
 pnetcdf-gnu7-mpich-ohpc 1.8.1 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu7-openmpi-ohpc 1.8.1 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
 pnetcdf-gnu7-openmpi3-ohpc 1.8.1 http://cucis.ece.northwestern.edu/projects/PnetCDF ohpc/io-libs A Parallel NetCDF library (PnetCDF)
