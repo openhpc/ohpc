@@ -23,7 +23,8 @@ Version 1.3.3 (08 September 2017)
     (`/srv/warewulf/bootstrap/`).
 
 [General]
-
+ 
+  * updates to support and target latest distro versions: CentOS 7.4 and SLES 12 SP3
   * external PMIx support configured for SLURM. Interested users can enable PMI job launch using an alternate openmpi
     variant, `openmpi3-pmix-slurm-gnu7-ohpc` (https://github.com/openhpc/ohpc/issues/466)
   * a combined monolithic build supporting tcp, InfiniBand, and Omni-Path is provided for openmpi3 MPI variant
