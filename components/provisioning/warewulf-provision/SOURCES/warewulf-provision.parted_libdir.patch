@@ -1,0 +1,11 @@
+--- a/initramfs/Makefile.am	2017-11-07 09:52:15.000000000 -0800
++++ b/initramfs/Makefile.am	2017-11-07 10:03:12.000000000 -0800
+@@ -24,7 +24,7 @@
+ PARTED_VERSION = 3.2
+ PARTED_SOURCE = $(top_srcdir)/3rd_party/GPL/parted-$(PARTED_VERSION).tar.xz
+ PARTED_DIR = parted-$(PARTED_VERSION)
+-PARTED_CONFIGARGS = --prefix=/usr --without-readline --disable-static --disable-nls --disable-dynamic-loading --disable-debug
++PARTED_CONFIGARGS = --prefix=/usr --libdir=/usr/lib64 --without-readline --disable-static --disable-nls --disable-dynamic-loading --disable-debug
+ 
+ e2fsprogs:
+ 	@ if [ ! -d "_work/$(E2FSPROGS_DIR)" ]; then \
