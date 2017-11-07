@@ -30,7 +30,7 @@ my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 			    'provisioning' => 'Provisioning Tools',
 			    'rms' => 'Resource Management',
 			    'runtimes' => 'Runtimes',
-			    'serial-libs' => 'Serial Libraries');
+			    'serial-libs' => 'Serial / Threaded Libraries');
 			
 			 
 my @compiler_familes = ("gnu","gnu7","intel");
@@ -41,8 +41,11 @@ my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","open
 my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
 		     "intel-compilers-devel" => "Intel Compiler Compatibility Package",
 		     "llvm4-compilers" => "LLVM Compiler Suite",
+		     "llvm5-compilers" => "LLVM Compiler Suite",
                      "intel-mpi-devel" => "Intel MPI Compatibility Package",
                      "pbspro-server" => "PBSPro",
+		     "openmpi3" => "openmpi",
+		     "openmpi3-pmix-slurm" => "openmpi",
                      "warewulf-common" => "warewulf",
                      "ptscotch" => "scotch");
 my @package_uniq_delim = ("slurm");
@@ -177,6 +180,6 @@ foreach my $category (@ohpcCategories) {
 
 }
 
-print STDERR "----------------------------\n";
-print STDERR "# of Components = $component_cnt\n";
+print STDOUT "----------------------------\n";
+print STDOUT "# of Components = $component_cnt\n";
 
