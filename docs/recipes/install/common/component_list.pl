@@ -180,6 +180,6 @@ foreach my $category (@ohpcCategories) {
 
 }
 
-print STDOUT "----------------------------\n";
-print STDOUT "# of Components = $component_cnt\n";
+print "----------------------------\n";
+print "# of Components = $component_cnt\n";
 
