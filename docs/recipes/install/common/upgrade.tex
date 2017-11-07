@@ -74,18 +74,17 @@ In the case of a fresh install, \OHPC{} recipes default to installation of the
 latest toolchains available in a given release branch. However, if upgrading a
 previously installed system, administrators can {\em opt-in} to enable new
 variants as they become available. To illustrate this point, consider the
-previous \OHPC{}
-1.3.2 release as an example which contained an {``openmpi''} mpi variant
-providing OpenMPI 1.10.x along with runtimes and libraries compiled
-with this toolchain. That release also contained the {``llvm4''} compiler family
-which has been updated to {``llvm5''} in \OHPC{} 1.3.3.
-In the case where an admin would like to enable the newer {``openmpi3''} toolchain,
-installation of these additions is simplified
-with the use of \OHPC{}'s meta-packages (see Table~\ref{table:groups} in Appendix 
-\ref{appendix:manifest}).
-The following example illustrates adding the complete ``openmpi3'' toolchain.
-We leverage the convenience meta-packages containg MPI-dependent buils, and also we
-also update the modules environment to make it the default.
+previous \OHPC{} 1.3.2 release as an example which contained an {``openmpi''}
+MPI variant providing OpenMPI 1.10.x along with runtimes and libraries compiled
+with this toolchain. That release also contained the {``llvm4''} compiler
+family which has been updated to {``llvm5''} in \OHPC{} 1.3.3.  In the case
+where an admin would like to enable the newer {``openmpi3''} toolchain,
+installation of these additions is simplified with the use of \OHPC{}'s
+meta-packages (see Table~\ref{table:groups} in Appendix
+\ref{appendix:manifest}).  The following example illustrates adding the
+complete ``openmpi3'' toolchain.  Note that we leverage the convenience
+meta-packages containing MPI-dependent builds, and we also update the
+modules environment to make it the default.
 
 \begin{lstlisting}[language=bash,keywords={}]
 # Update default environment
