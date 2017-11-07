@@ -1,15 +1,14 @@
 OpenHPC Software Stack
-Version 1.2 (12 November 2016) 
 
 Introduction:
 
-   This release provides a variety of common, pre-built ingredients
+   OpenHPC provides a variety of common, pre-built ingredients
    required to deploy and manage an HPC Linux cluster including
    provisioning tools, resource management, I/O clients, development
    tools, and a variety of scientific libraries.
    
-   Please see https://github.com/openhpc/ohpc/releases/tag/v1.2.GA for specific
-   release notes.
+   Please see https://github.com/openhpc/ohpc/releases for more detailed 
+   release notes regarding a specific version.
 
 
 Questions, Comments, or Bug Reports?
