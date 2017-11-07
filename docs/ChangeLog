@@ -2,6 +2,40 @@
 
 Version 1.3.3 (08 September 2017)
 
+[Important Highlights/Notices]
+
+  * A new compiler variant (llvm5) is introduced with this release. In addition ,a new MPI variant (openmpi3) is also
+    included. In the case of a fresh install, OpenHPC recipes default to installing the new variants along with matching
+    runtimes and libraries. However, if upgrading a previously installed system, administrators can opt-in to enable the
+    new additions. This procedure is detailed in Appendix B of the OpenHPC Install Guide(s).
+
+  * There are significant changes included in the warewulf-httpd.conf file that ships with the
+    warewulf-provision-server-ohpc package. If upgrading from a version prior to OpenHPC v1.3, the updated config file
+    will be saved as /etc/httpd/conf.d/warewulf-httpd.conf.rpmnew locally. You will need to copy this new version to the
+    production file and restart the web server to ensure correct provisioning behavior. As an example for CentOS:
+
+    [sms]# cp /etc/httpd/conf.d/warewulf-httpd.conf.rpmnew /etc/httpd/conf.d/warewulf-httpd.conf
+    [sms]# systemctl restart httpd
+
+  * The newer Warewulf version included in OpenHPC v1.3.3 leverages iPXE for multi-architecture support. Administrators
+    on existing systems who upgrade to the newer version may notice the upgrade process rebuilding previously defined
+    bootstrap images. This is due to the fact that the images are now stored in a different path
+    (`/srv/warewulf/bootstrap/`).
+
+[General]
+
+  * external PMIx support configured for SLURM. Interested users can enable PMI job launch using an alternate openmpi
+    variant, `openmpi3-pmix-slurm-gnu7-ohpc` (https://github.com/openhpc/ohpc/issues/466)
+  * a combined monolithic build supporting tcp, InfiniBand, and Omni-Path is provided for openmpi3 MPI variant
+    (https://github.com/openhpc/ohpc/issues/475)
+  * fix incorrect MANPATH settings in several MPI modules (https://github.com/openhpc/ohpc/issues/561)
+  * packaging and config requirements for high-speed interconnects delineated as optional in install recipes
+    (https://github.com/openhpc/ohpc/issues/563)
+  * warewulf-ipmi packaging updated to include lanplus interface (https://github.com/openhpc/ohpc/issues/570)
+  * Tech Preview designation removed from aarch64 recipes as bare-metal provisioning now supported with newer Warewulf
+    version (https://github.com/openhpc/ohpc/issues/593)
+  * variety of component version updates and other additions highlighted below
+
 [Component Additions]
 
   * pmix-ohpc                                (v1.2.3)
@@ -15,7 +49,7 @@ Version 1.3.3 (08 September 2017)
 
 [Compiler Variant Addition]
 
-* llvm5-compilers-ohpc                     (v5.0.0)
+  * llvm5-compilers-ohpc                     (v5.0.0)
 
 [MPI Variant Addition]
 
