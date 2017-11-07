@@ -17,7 +17,8 @@ provided in the distribution.
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Select (and customize) appropriate parted layout example
 [sms](*\#*) export PARTED_CMDS=/etc/warewulf/filesystem/examples/gpt_example.cmds
-[sms](*\#*) wwsh provision set --filesystem=$PARTED_CMDS "${compute_regex}" 
+[sms](*\#*) cp /etc/warewulf/filesystem/examples/gpt_example.cmds /etc/warewulf/filesystem/gpt.cmds
+[sms](*\#*) wwsh provision set --filesystem=gpt "${compute_regex}" 
 \end{lstlisting}
 
 \noindent Upon subsequent reboot of the modified nodes, Warewulf will partition
