@@ -37,25 +37,6 @@ BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-# MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi%{PROJ_DELIM}
-Requires:      intel-mpi%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi3-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
-%endif
-
-
 # Base package name
 %define pname scipy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
