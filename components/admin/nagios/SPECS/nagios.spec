@@ -305,10 +305,8 @@ exit 0
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/conf.d
 %attr(0640,root,nagios) %config(noreplace) %{_sysconfdir}/%{pname}/private/resource.cfg
 %if 0%{?sles_version} || 0%{?suse_version}
-%attr(0640,root,www) %config(noreplace) %{_sysconfdir}/%{pname}/passwd
 %attr(0640,root,www) %config(noreplace) %{_datadir}/%{pname}/html/config.inc.php
 %else
-%attr(0640,root,apache) %config(noreplace) %{_sysconfdir}/%{pname}/passwd
 %attr(0640,root,apache) %config(noreplace) %{_datadir}/%{pname}/html/config.inc.php
 %endif
 %attr(2775,nagios,nagios) %dir %{_localstatedir}/spool/%{pname}/cmd
