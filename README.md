@@ -53,7 +53,7 @@ the downloads section of the latest
 #### Architecture = (aarch64)
 
 ###### [CentOS 7.4]
-* [Latest 1.3.x version of 'ohpc-release' for EL7](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
+* [Latest version of 'ohpc-release' for EL7](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
 * [Latest OpenHPC Release RPM](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.3.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.3-aarch64.pdf)
 * [Tar Archive](http://build.openhpc.community/dist/1.3.3/OpenHPC-1.3.3.CentOS_7.aarch64.tar) mirror of yum repository (md5sum=c0533df7be95cfc42d6a0450e4aaec83)
