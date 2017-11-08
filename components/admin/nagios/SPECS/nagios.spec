@@ -224,6 +224,7 @@ install -d -m 0755 %{buildroot}%{_sysconfdir}/%{pname}/private
 mv %{buildroot}%{_sysconfdir}/%{pname}/resource.cfg %{buildroot}%{_sysconfdir}/%{pname}/private/resource.cfg
 
 install -d -m 0755 %{buildroot}%{_sysconfdir}/%{pname}/conf.d/
+touch %{buildroot}%{_sysconfdir}/%{pname}/passwd
 
 # Install header-file
 install -D -m 0644 include/locations.h %{buildroot}%{_includedir}/%{pname}/locations.h
