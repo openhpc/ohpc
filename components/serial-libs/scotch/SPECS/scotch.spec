@@ -57,16 +57,14 @@ sparse matrix ordering.
 sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %{SOURCE1} > src/Makefile.inc
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 pushd src
 make %{?_smp_mflags}
 popd
 
 %install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 pushd src
 make prefix=%{buildroot}%{install_path} install

@@ -50,8 +50,7 @@ data, and of arbitrary input size.
 %setup -q -n %{pname}-%{version}-pl2
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 BASEFLAGS="--enable-shared --disable-dependency-tracking --enable-threads"
 %if %{openmp}
@@ -66,8 +65,7 @@ BASEFLAGS="$BASEFLAGS --enable-mpi"
 make
 
 %install
-# OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 make DESTDIR=$RPM_BUILD_ROOT install
 

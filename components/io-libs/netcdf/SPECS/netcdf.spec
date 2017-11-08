@@ -26,8 +26,9 @@
 #
 
 # Build that is dependent on compiler/mpi toolchains
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules %{compiler_family}-%{mpi_family}/phdf5
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -49,9 +50,6 @@ Source101:	OHPC_macros
 
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  m4
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -94,10 +92,8 @@ NetCDF data is:
 %setup -q -n %{pname}-c-%{version}
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
-module load phdf5
 export CPPFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
@@ -115,8 +111,7 @@ export CC=mpicc
 make %{?_smp_mflags}
 
 %install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 module load phdf5
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"

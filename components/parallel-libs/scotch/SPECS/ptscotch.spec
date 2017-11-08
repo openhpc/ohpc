@@ -30,8 +30,6 @@ Source1: scotch-Makefile.%{compiler_family}.inc.in
 Source2: scotch-rpmlintrc
 Source3: OHPC_macros
 Patch0:  scotch-%{version}-destdir.patch
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires:	flex bison
 %if 0%{?suse_version} >= 1100
@@ -50,11 +48,6 @@ BuildRequires:  zlib-devel
 %endif
 %endif
 
-# Requires:	
-
-#Disable debug packages
-%define debug_package %{nil}
-
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%{version}
 
@@ -68,15 +61,14 @@ sparse matrix ordering.
 sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %SOURCE1 > src/Makefile.inc
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 pushd src
 make %{?_smp_mflags} %{pname}
 popd
 
 %install
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 pushd src
 make prefix=%{buildroot}%{install_path} install
@@ -134,9 +126,6 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
-
-%clean
-rm -rf ${RPM_BUILD_ROOT}
 
 %files
 %defattr(-,root,root)

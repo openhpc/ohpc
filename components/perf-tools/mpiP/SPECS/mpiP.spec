@@ -68,8 +68,8 @@ cp /usr/lib/rpm/config.guess bin
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
 # see above where compiler_family is changed
-%define compiler_family gnu7
-%ohpc_setup_compiler
+%global compiler_family gnu7
+%ohpc_load_modules
 
 CC=mpicc
 CXX=mpicxx
@@ -87,8 +87,8 @@ FC=mpif90
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
 # see above where compiler_family is changed
-%define compiler_family gnu7
-%ohpc_setup_compiler
+%global compiler_family gnu7
+%ohpc_load_modules
 
 make %{?_smp_mflags} shared
 make DESTDIR=$RPM_BUILD_ROOT install

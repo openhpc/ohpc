@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# parameter 1: project name like ohpc
+# parameter 2: minimum lmod version
+
+PROJECT=$1
+LMOD_VERSION=$2
+
+# This script tries to detect required modules and creates the
+# corresponding requires
+# ${PROJECT}-module(name) # in most cases compiler or compiler-mpi
+
+# rpmbuild gives us a list of all installed files through a pipe
+
+filelist=`sed "s/[]['\"*?{}]/\\\\\&/g"`
+
+for file in ${filelist}; do
+	# Detect required modules by looking at the directory
+	# name after 'moduledeps'
+	if [[ "${file}" == *"moduledeps"* ]]; then
+		ADD_LMOD_DEPENDENCY=1
+		# only look at directories
+		if [[ ! -d ${file} ]]; then
+			continue
+		fi
+		dep=`awk -Fmoduledeps/ '{ print $2 }' <<< ${file}`
+		# the result of this should be at least 2 characters long
+		deplen=${#dep}
+		if [[ ${deplen} -lt 2 ]]; then
+			continue
+		fi
+		# Get the first field
+		dep=`cut -d/ -f1 <<< ${dep}`
+		echo "${PROJECT}-module(${dep})"
+	fi
+done
+
+# If any module file is found in modulefiles or moduledeps
+# lmod should probably be installed
+ADD_LMOD_DEPENDENCY=0
+
+# If a 'depends-on' is found we need to add a mimimum lmod version
+ADD_LMOD_VERSION_DEPENDENCY=0
+
+# Change IFS for looping over depends-on lines
+IFS=$'\n'
+
+# Try to find depends-on statements
+for file in ${filelist}; do
+	# skip directories
+	if [[ -d ${file} ]]; then
+		continue
+	fi
+	if [[ "${file}" == *"modulefiles"* || "${file}" == *"moduledeps"* ]]; then
+		ADD_LMOD_DEPENDENCY=1
+		deps=`grep depends-on ${file} 2>&1`
+		if [[ $? -ne 0 ]]; then
+			continue
+		fi
+		for dep in ${deps}; do
+			# trim leading whitespace
+			dep=`sed -e 's/^[[:space:]]*//' <<< ${dep}`
+			dep=`cut -d\  -f2 <<< ${dep}`
+			deplen=${#dep}
+			if [[ ${deplen} -lt 2 ]]; then
+				continue
+			fi
+			echo "${PROJECT}-module(${dep})"
+		done
+		ADD_LMOD_VERSION_DEPENDENCY=1
+	fi
+done
+
+if [[ ${ADD_LMOD_VERSION_DEPENDENCY} -eq 1 ]]; then
+	echo "lmod-${PROJECT} >= ${LMOD_VERSION}"
+elif [[ ${ADD_LMOD_DEPENDENCY} -eq 1 ]]; then
+	echo "lmod-${PROJECT}"
+fi
+
+exit 0

@@ -1,0 +1,41 @@
+#  Copyright 2017 Adrian Reber
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+# This file depends on definitions in OHPC_macros
+
+%ohpc_setup_compiler() \
+	%if 0%{?ohpc_compiler_dependent} == 1 \
+		. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
+	%endif \
+	%{nil}
+
+
+# This macro loads the necessary modules. Modules need to be defined in
+# %%ohpc_required_modules
+%ohpc_load_modules() \
+	%ohpc_setup_compiler \
+        for i in %{?ohpc_internal_modules:%ohpc_internal_modules} \\\
+		%{?ohpc_required_modules:%ohpc_required_modules}; do \
+		if [[ x"${i}" == x"%{compiler_family}"* ]]; then \
+			# If the module name starts with the compiler_family \
+			# remove the first part. \
+			if [[ x"${i}" != x"%{ohpc_compiler_module}" ]]; then \
+				# But only if it is not the actual compiler \
+				# module we want to load. \
+				i=${i#*/} \
+			fi \
+		fi \
+		module load ${i}; \
+        done \
+	%{nil}

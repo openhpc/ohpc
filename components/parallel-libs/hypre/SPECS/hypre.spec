@@ -26,8 +26,9 @@
 #
 
 # Build that is is dependent on compiler toolchain and MPI
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules %{compiler_family}/superlu %{compiler_family}/numpy
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" != "intel"
@@ -54,12 +55,7 @@ Source1:        OHPC_macros
 # TODO : add babel
 #BuildRequires:  babel-devel
 #BuildRequires:  libltdl-devel
-BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
-Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  python-devel
-BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires:  python-xml
 %else
@@ -88,9 +84,7 @@ phenomena in the defense, environmental, energy, and biological sciences.
 cp /usr/lib/rpm/config.guess src/config
 %endif
 
-%ohpc_setup_compiler
-
-module load superlu
+%ohpc_load_modules
 
 %if "%{compiler_family}" != "intel"
 module load openblas
@@ -134,9 +128,7 @@ make %{?_smp_mflags} all CC="mpicc $FLAGS" \
 cd ..
 
 %install
-%ohpc_setup_compiler
-
-module load superlu
+%ohpc_load_modules
 
 %if "%{compiler_family}" != "intel"
 module load openblas
@@ -205,11 +197,10 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require superlu (and openblas for gnu compiler families)
 depends-on superlu
-if { ![is-loaded intel] } {
+%if "%{compiler_family}" != "intel"
     depends-on openblas
-}
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include

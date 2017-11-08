@@ -9,8 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 # Build that is dependent on compiler/mpi toolchains
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules autotools %{compiler_family}-%{mpi_family}/phdf5 %{compiler_family}-%{mpi_family}/netcdf %{compiler_family}/numpy
 %include %{_sourcedir}/OHPC_macros
 
 %{!?with_lustre: %global with_lustre 0}
@@ -31,18 +32,11 @@ Source1: OHPC_macros
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
-Requires:      zlib
+Requires:      zlib glib2
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
 
-BuildRequires: libtool%{PROJ_DELIM}
-Requires:      lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-
-BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: python-devel
 
 %if 0%{with_lustre}
@@ -51,7 +45,6 @@ BuildRequires: python-devel
 BuildRequires: lustre-lite
 Requires: lustre-client%{PROJ_DELIM}
 %endif
-BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -82,12 +75,7 @@ LIBSUFF=64
 sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 
 # OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
-
-module load autotools
-module load phdf5
-module load netcdf
-module load numpy
+%ohpc_load_modules
 
 TOPDIR=$PWD
 
@@ -149,7 +137,7 @@ chmod +x adios_config
 
 %install
 # OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 export NO_BRP_CHECK_RPATH=true
 
 make DESTDIR=$RPM_BUILD_ROOT install
@@ -158,10 +146,6 @@ make DESTDIR=$RPM_BUILD_ROOT install
 export PPATH="/lib64/python2.7/site-packages"
 export PATH=$(pwd):$PATH
 
-%if "%{compiler_family}" != "intel"
-module load openblas
-%endif
-module load numpy
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
 make MPI=y python

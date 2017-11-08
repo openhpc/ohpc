@@ -25,8 +25,9 @@
 #-------------------------------------------------------------------------------
 
 # Build that is dependent on compiler/mpi toolchains
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules %{compiler_family}-%{mpi_family}/phdf5 %{compiler_family}-%{mpi_family}/netcdf
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -45,11 +46,6 @@ Source0:	https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
 Source101:	OHPC_macros
 
 BuildRequires:  zlib-devel >= 1.2.5
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -92,11 +88,7 @@ NetCDF data is:
 %setup -q -n %{pname}4-%{version}
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
-
-module load phdf5
-module load netcdf
+%ohpc_load_modules
 
 export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
@@ -113,11 +105,7 @@ export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 make %{?_smp_mflags}
 
 %install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
-
-module load phdf5
-module load netcdf
+%ohpc_load_modules
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 

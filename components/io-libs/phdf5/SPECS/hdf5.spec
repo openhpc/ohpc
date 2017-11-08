@@ -73,7 +73,7 @@ cp /usr/lib/rpm/config.guess bin
 %endif
 
 # OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 export CC=mpicc
 export CXX=mpicxx
@@ -93,7 +93,7 @@ export MPICXX=mpicxx
 %install
 
 # OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 export NO_BRP_CHECK_RPATH=true
 

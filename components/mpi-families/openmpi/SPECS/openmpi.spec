@@ -10,6 +10,16 @@
 
 # OpenMPI stack that is dependent on compiler toolchain (and possibly RMS)
 %define ohpc_compiler_dependent 1
+
+%{!?with_lustre: %global with_lustre 0}
+%{!?with_slurm: %global with_slurm 0}
+%{!?with_tm: %global with_tm 1}
+%{!?with_pmix: %global with_pmix 0}
+
+%if 0%{with_pmix}
+%global ohpc_required_modules pmix
+%endif
+
 %include %{_sourcedir}/OHPC_macros
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
@@ -25,10 +35,6 @@
 %define with_psm2 1
 %endif
 
-%{!?with_lustre: %define with_lustre 0}
-%{!?with_slurm: %define with_slurm 0}
-%{!?with_tm: %global with_tm 1}
-%{!?with_pmix: %define with_pmix 0}
 
 Summary:   A powerful implementation of MPI
 
@@ -57,16 +63,18 @@ BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
 %if 0%{with_pmix}
-BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires:  libevent-devel
 %endif
 BuildRequires:  hwloc-devel
+Requires: hwloc-libs
 %if 0%{?centos_version} == 700
 BuildRequires: libtool-ltdl
+Requires:      libtool-ltdl
 %endif
 %if 0%{with_slurm}
 BuildRequires:  slurm-devel%{PROJ_DELIM}
 #!BuildIgnore:  slurm%{PROJ_DELIM}
+Requires:       slurm%{PROJ_DELIM}
 %endif
 
 %if 0%{?suse_version}
@@ -75,6 +83,8 @@ BuildRequires:  sysfsutils
 %else
 BuildRequires:  libsysfs-devel
 BuildRequires:  numactl-devel
+Requires:       numactl-libs
+Requires:       libsysfs
 %endif
 
 %if %{with_lustre}
@@ -100,6 +110,7 @@ BuildRequires:  libpsm2-devel >= 10.2.0
 %endif
 
 Requires: prun%{PROJ_DELIM} >= 1.2
+Requires: pbspro-server%{PROJ_DELIM} openssl-libs infinipath-psm rdma-core
 #!BuildIgnore: post-build-checks
 
 # Default library install path
@@ -120,15 +131,13 @@ Open MPI jobs.
 %patch0 -p1
 
 %build
-# OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
 
 # build against external pmix and libevent
 %if 0%{with_pmix}
-module load pmix
 BASEFLAGS="$BASEFLAGS --with-pmix=${PMIX_DIR}"
 BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
 %endif
@@ -162,8 +171,7 @@ export PATH="./:$PATH"
 make %{?_smp_mflags}
 
 %install
-# OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 # Remove .la files detected by rpm
 

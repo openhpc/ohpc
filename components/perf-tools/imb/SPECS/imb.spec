@@ -9,8 +9,8 @@
 #----------------------------------------------------------------------------eh-
 
 # Build that is dependent on compiler/mpi toolchains
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -45,18 +45,14 @@ a range of message sizes.
 %patch1 -p0
 
 %build
-
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 cd src
 make all
 cd -
 
 %install
-
-# OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %{__mkdir} -p %{buildroot}%{install_path}/bin
 cd src

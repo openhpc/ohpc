@@ -53,7 +53,6 @@ Patch2:         superlu-4.3-dont-opt-away.diff
 # this routine in the library which, however, remains fully functionnal
 Patch3:         superlu-5.1-disable-hsl.patch
 Url:            http://crd.lbl.gov/~xiaoye/SuperLU/
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  tcsh
 
 # Default library install path
@@ -74,7 +73,7 @@ Docu can be found on http://www.netlib.org.
 %patch3 -p1
 
 %build
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 make lib
 
@@ -117,10 +116,9 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if { ![is-loaded intel] } {
+%if "%{compiler_family}" != "intel"
     depends-on openblas
-}
-
+%endif
 
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib

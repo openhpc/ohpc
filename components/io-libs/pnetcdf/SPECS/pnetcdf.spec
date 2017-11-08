@@ -54,7 +54,7 @@ cp /usr/lib/rpm/config.guess scripts
 %endif
 
 # OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 CC=mpicc \
 CXX=mpicxx \
@@ -70,8 +70,7 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" FFLAGS="-fPIC" \
 %{__make}
 
 %install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
 

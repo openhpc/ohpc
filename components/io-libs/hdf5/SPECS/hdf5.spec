@@ -72,8 +72,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 cp /usr/lib/rpm/config.guess bin
 %endif
 
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 ./configure --prefix=%{install_path} \
 	    --enable-fortran         \
@@ -85,9 +84,7 @@ cp /usr/lib/rpm/config.guess bin
 make %{?_smp_mflags}
 
 %install
-
-# OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 export NO_BRP_CHECK_RPATH=true
 

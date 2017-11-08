@@ -35,7 +35,13 @@ BuildRequires:  pkgconfig
 %if 0%{!?sles_version} && 0%{!?suse_version}
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
+Requires:       expat
+Requires:       bzip2
 %endif
+Requires:       libarchive
+Requires:       libcurl
+Requires:       ncurses-libs
+Requires:       zlib
 
 %define install_path %{OHPC_UTILS}/%{pname}/%version
 

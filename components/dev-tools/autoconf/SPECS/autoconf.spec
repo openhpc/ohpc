@@ -24,7 +24,7 @@ Source0:   https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
-Requires: m4
+Requires: m4 perl(Data::Dumper)
 
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires: m4

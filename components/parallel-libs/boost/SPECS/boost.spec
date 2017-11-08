@@ -99,8 +99,7 @@ see the boost-doc package.
 %setup -q -n %{pname}_%{version_exp}
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %if %build_mpi
 export CC=mpicc
@@ -127,8 +126,7 @@ EOF
 
 
 %install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %if %build_mpi
 export CC=mpicc

@@ -223,7 +223,7 @@ Requires(pre):  shadow-utils
 %endif
 
 #needed to enable jobcomp_elasticsearch plugin
-BuildRequires: curl-devel
+BuildRequires: curl-devel lua-devel
 
 %description
 Slurm is an open source, fault-tolerant, and highly

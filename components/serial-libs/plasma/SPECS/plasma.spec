@@ -37,14 +37,9 @@ Source2: http://www.netlib.org/lapack/lapack-3.7.0.tgz
 Source3: %{pname}-rpmlintrc
 Source4: OHPC_macros
 Patch1:  plasma-lapack_version.patch
-Requires: lmod%{PROJ_DELIM} >= 7.6.1
 
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 #!BuildIgnore: post-build-checks 
-# Disable debug packages
-%define debug_package %{nil}
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
@@ -67,7 +62,7 @@ cp %{SOURCE0} build/download
 cp %{SOURCE2} build/download
 
 # OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %if "%{compiler_family}" != "intel"
 module load openblas
@@ -153,9 +148,9 @@ set     version			    %{version}
 
 
 # Require openblas for gnu compiler families
-if { ![is-loaded intel] } {
+%if "%{compiler_family}" != "intel"
     depends-on openblas
-}
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man

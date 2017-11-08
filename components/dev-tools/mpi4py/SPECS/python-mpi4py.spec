@@ -33,8 +33,6 @@ Source0:        https://bitbucket.org/mpi4py/mpi4py/downloads/%{pname}-%{version
 Source1:        OHPC_macros
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
-#BuildRequires:  python-Cython
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       python
 
 # Default library install path
@@ -52,15 +50,12 @@ exposes an API which grounds on the standard MPI-2 C++ bindings.
 find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
 %build
-
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 python setup.py build
 
 %install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
 

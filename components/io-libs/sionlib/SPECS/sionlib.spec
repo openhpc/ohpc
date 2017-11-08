@@ -44,9 +44,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %patch0 -p0
 
 %build
-
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %if %{compiler_family} == intel
 CONFIGURE_OPTIONS="--compiler=intel --disable-parutils "
@@ -84,9 +82,7 @@ sed -i 's|-g|-g -fpic|g' build-*/Makefile.defs
 %endif
 
 %install
-
-# OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 make DESTDIR=$RPM_BUILD_ROOT install
 

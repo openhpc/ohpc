@@ -9,8 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 # Build that is dependent on compiler/mpi toolchains
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules pdtoolkit sionlib
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -36,16 +37,11 @@ BuildRequires: binutils-devel
 Requires     : binutils-devel
 BuildRequires: libunwind-devel
 Requires     : libunwind-devel
-Requires     : lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: zlib-devel
 %ifarch x86_64
 BuildRequires: papi%{PROJ_DELIM}
 Requires     : papi%{PROJ_DELIM}
 %endif
-BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
-Requires     : pdtoolkit-%{compiler_family}%{PROJ_DELIM}
-BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires     : sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -64,15 +60,11 @@ This is the %{compiler_family}-%{mpi_family} version.
 %patch0 -p1
 
 %build
-
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %ifarch x86_64
 module load papi
 %endif
-module load pdtoolkit
-module load sionlib
 
 %if %{compiler_family} == intel
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-nocross-compiler-suite=intel "
@@ -101,11 +93,9 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 ./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS
 
 %install
+%ohpc_load_modules
 
 export NO_BRP_CHECK_RPATH=true
-
-# OpenHPC compiler designation
-%ohpc_setup_compiler
 
 %ifarch x86_64
 module load papi

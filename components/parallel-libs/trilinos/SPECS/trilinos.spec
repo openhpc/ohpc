@@ -9,8 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 # Build that is is dependent on compiler toolchain and MPI
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules cmake %{compiler_family}-%{mpi_family}/boost %{compiler_family}-%{mpi_family}/phdf5 %{compiler_family}-%{mpi_family}/netcdf
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -29,12 +30,10 @@ Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{
 Source1:        OHPC_macros
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 Patch1:         Trilinos-trilinos-aarch64.patch
-BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  perl
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  qt-devel
@@ -44,9 +43,6 @@ BuildRequires:  libqt4-devel
 BuildRequires:  swig > 2.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel
-BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %if "%{compiler_family}" != intel
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -72,13 +68,7 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 %patch1 -p1
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
-
-module load cmake
-module load boost
-module load netcdf
-module load phdf5
+%ohpc_load_modules
 
 %if "%{compiler_family}" != "intel"
 module load openblas
@@ -167,7 +157,7 @@ make %{?_smp_mflags} VERBOSE=1
 cd ..
 
 %install
-%ohpc_setup_compiler
+%ohpc_load_modules
 cd tmp
 make %{?_smp_mflags} DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
@@ -203,9 +193,9 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
 
 # Autoload openblas for gnu builds
-if { ![is-loaded intel] } {
+%if "%{compiler_family}" != "intel"
     depends-on openblas
-}
+%endif
 
 EOF
 

@@ -8,6 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%global ohpc_required_modules autotools
 %include %{_sourcedir}/OHPC_macros
 %global pname pmix
 %global PNAME %(tr [a-z] [A-Z] <<< %{pname})
@@ -24,7 +25,8 @@ Source1: OHPC_macros
 Patch0: singleton.5391e43.patch
 
 BuildRequires: libevent-devel
-BuildRequires: lmod-ohpc libtool-ohpc
+
+Requires: libevent
 
 %global install_path %{OHPC_ADMIN}/%{pname}
 
@@ -50,8 +52,8 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %prep
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
-module load autotools
-./autogen.sh 
+%ohpc_load_modules
+./autogen.sh
 
 %build
 CFLAGS="%{optflags}" ./configure --prefix=%{install_path}

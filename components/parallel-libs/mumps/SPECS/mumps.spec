@@ -52,7 +52,6 @@ Source5:        OHPC_macros
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Patch2:         mumps-5.0.2-psxe2017.patch
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 %if 0%{?suse_version}
 BuildRequires: libgomp1
@@ -83,7 +82,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %endif
 
 %build
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 # Enable scalapack linkage for blas/lapack with gnu builds
 %if "%{compiler_family}" != "intel"
@@ -187,9 +186,9 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if { ![is-loaded intel] } {
+%if "%{compiler_family}" != "intel"
     depends-on scalapack
-}
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include

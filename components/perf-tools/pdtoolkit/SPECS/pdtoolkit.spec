@@ -44,8 +44,7 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 ./configure -prefix=%buildroot%{install_path} \
         -useropt=-fPIC \
@@ -59,7 +58,7 @@ export DONT_STRIP=1
 make %{?_smp_mflags}
 
 %install
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 ./configure -prefix=%buildroot%{install_path} \
 %if "%{compiler_family}" == "intel"

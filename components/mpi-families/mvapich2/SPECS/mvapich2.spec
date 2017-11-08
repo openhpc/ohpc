@@ -87,7 +87,7 @@ across multiple networks.
 %patch1 -p0
 
 %build
-%ohpc_setup_compiler
+%ohpc_load_modules
 ./configure --prefix=%{install_path} \
 	    --enable-cxx \
 	    --enable-g=dbg \
@@ -103,7 +103,7 @@ across multiple networks.
 make %{?_smp_mflags}
 
 %install
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 

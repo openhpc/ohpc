@@ -8,7 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%define compiler_family gnu7
+%global compiler_family gnu7
+%global ohpc_compiler_dependent 1
+%global ohpc_required_modules cmake
 %include %{_sourcedir}/OHPC_macros
 
 # Remember to drop this gnu-compilers dependency in the future,
@@ -38,8 +40,6 @@ Source6:   http://releases.llvm.org/%{version}/libunwind-%{version}.src.tar.xz
 Source7:   http://releases.llvm.org/%{version}/lld-%{version}.src.tar.xz
 Source8:   http://releases.llvm.org/%{version}/openmp-%{version}.src.tar.xz
 Source9:   OHPC_macros
-BuildRequires: gnu7-compilers%{PROJ_DELIM}
-BuildRequires: cmake%{PROJ_DELIM}
 BuildRequires: make
 BuildRequires: perl
 BuildRequires: python
@@ -48,7 +48,6 @@ BuildRequires: binutils-devel
 BuildRequires: libstdc++-devel
 Requires:      binutils
 Requires:      gcc-c++
-Requires:      gnu7-compilers%{PROJ_DELIM}
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires: perl-Data-Dumper
 %endif
@@ -102,8 +101,7 @@ ln -s flang-%{flang_sha} flang
 %{__sed} -i -e 's/-Werror/-Wall/g' flang/CMakeLists.txt
 
 %install
-%ohpc_setup_compiler
-module load cmake
+%ohpc_load_modules
 
 mkdir build-clang
 cd build-clang

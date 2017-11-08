@@ -33,7 +33,6 @@ Source1:        OHPC_macros
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  python-devel python-setuptools
 Requires:       python
 Provides:       numpy = %{version}
@@ -129,10 +128,9 @@ module-whatis "URL %{url}"
 
 set     version             %{version}
 
-# Require openblas for gnu compiler families
-if { ![is-loaded intel] } {
+%if "%{compiler_family}" != "intel"
     depends-on openblas
-}
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages

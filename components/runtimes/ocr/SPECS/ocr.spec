@@ -77,9 +77,8 @@ This version is for clusters using MPI.
 %setup -q -n ocr-OCRv%{version}_ohpc
 
 %build
+%ohpc_load_modules
 cd ocr/build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
 
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
@@ -94,9 +93,8 @@ OCR_TYPE=x86-mpi make %{?_smp_mflags} all
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %install
+%ohpc_load_modules
 cd ocr/build
-# OpenHPC compiler designation
-%ohpc_setup_compiler
 
 mkdir -p $RPM_BUILD_ROOT/%{install_path}
 make OCR_TYPE=x86 OCR_INSTALL=$RPM_BUILD_ROOT/%{install_path} %{?_smp_mflags} install

@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# parameter 1: project name like ohpc
+# parameter 2: minimum lmod version
+
+PROJECT=$1
+LMOD_VERSION=$2
+
+# This script tries to detect installed modules and creates the
+# corresponding provides
+# ${PROJECT}-module(name)
+# ${PROJECT}-module(name/version)
+# ${PROJECT}-module(dependency/name/version)
+
+# rpmbuild gives us a list of all installed files through a pipe
+
+filelist=`sed "s/[]['\"*?{}]/\\\\\&/g"`
+
+for file in ${filelist}; do
+	# Search for modules under modulefiles and moduledeps
+	# But ignore .version files
+	if [[ "${file}" == *"modulefiles"*".version"* ]]; then
+		continue
+	fi
+	if [[ "${file}" == *"moduledeps"*".version"* ]]; then
+		continue
+	fi
+	if [[ "${file}" == *"modulefiles"* ]]; then
+		# ignore directories
+		if [[ -d ${file} ]]; then
+			continue
+		fi
+		# modules defined in modulefiles are usually
+		# name/version
+		# let's create two provides
+		# a generic 'name' and a 'name/version'
+		dep=`awk -Fmodulefiles/ '{ print $2 }' <<<  ${file}`
+		# the result of this should be at least 3 characters long
+		deplen=${#dep}
+		if [[ ${deplen} -lt 3 ]]; then
+			continue
+		fi
+		echo "${PROJECT}-module(${dep})"
+		echo "${PROJECT}-module(`dirname ${dep}`)"
+		# Check if this module extends the MODULEPATH, which means
+		# that it provides its service under an additional name.
+		dep=`grep -E "prepend-path(\s)*MODULEPATH(.)*moduledeps" ${file}`
+		if [[ $? -ne 0 ]]; then
+			continue
+		fi
+		dep=`awk -Fmoduledeps/ '{ print $2 }' <<< ${dep}`
+		echo "${PROJECT}-module(${dep})"
+	fi
+	if [[ "${file}" == *"moduledeps"* ]]; then
+		# ignore directories
+		if [[ -d ${file} ]]; then
+			continue
+		fi
+		dep=`awk -Fmoduledeps/ '{ print $2 }' <<< ${file}`
+		# First the full 'requires' with compiler-mpi
+		echo "${PROJECT}-module(${dep})"
+		echo "${PROJECT}-module(`dirname ${dep}`)"
+		# Remove the first directory level to also provide
+		# not just gnu/plasma but also plasma
+		dep=${dep#*/}
+		echo "${PROJECT}-module(${dep})"
+		echo "${PROJECT}-module(`dirname ${dep}`)"
+		# Check if this module extends the MODULEPATH, which means
+		# that it provides its service under an additional name.
+		dep=`grep -E "prepend-path(\s)*MODULEPATH(.)*moduledeps" ${file}`
+		if [[ $? -ne 0 ]]; then
+			continue
+		fi
+		dep=`awk -Fmoduledeps/ '{ print $2 }' <<< ${dep}`
+		echo "${PROJECT}-module(${dep})"
+	fi
+done

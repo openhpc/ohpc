@@ -10,20 +10,18 @@
 
 # MPICH MPI stack that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
+
+%{!?with_pmix: %global with_pmix 0}
+%if 0%{with_pmix}
+%global ohpc_required_modules pmix
+%endif
+
 %include %{_sourcedir}/OHPC_macros
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
-%define with_slurm 0
-%{!?with_slurm: %define with_slurm 0}
-%if 0%{with_slurm}
-BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
-%endif
+%global with_slurm 0
+%{!?with_slurm: %global with_slurm 0}
 
-%{!?with_pmix: %define with_pmix 0}
-%if 0%{with_pmix}
-BuildRequires:  pmix%{PROJ_DELIM}
-BuildRequires: libevent-devel
-%endif
 
 # Base package name
 %define pname mpich
@@ -41,6 +39,13 @@ Patch0:    config.pmix.patch
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
+
+%if 0%{with_pmix}
+BuildRequires: libevent-devel
+%endif
+%if 0%{with_slurm}
+BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
+%endif
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}

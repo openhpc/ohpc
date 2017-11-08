@@ -13,8 +13,9 @@
 #
 
 # Build that is is dependent on compiler toolchain and MPI
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules %{compiler_family}-%{mpi_family}/petsc
 %include %{_sourcedir}/OHPC_macros
 
 
@@ -32,11 +33,6 @@ Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://slepc.upv.es
 Source0:        http://slepc.upv.es/download/distrib/%{pname}-%{version}.tar.gz
 Source1:        OHPC_macros
-BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:         %{OHPC_PUB}/doc/contrib
-BuildRequires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 # A configure script in slepc is made by python
 BuildRequires: python
@@ -46,8 +42,6 @@ BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-# Disable debug packages
-%define debug_package %{nil}
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
@@ -65,20 +59,18 @@ quadratic eigenvalue problems.
 set -- *
 
 %build
-%ohpc_setup_compiler
+%ohpc_load_modules
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
-module load petsc
 ./configure --prefix=/tmp%{install_path}
-make 
+make
 
 %install
-%ohpc_setup_compiler
+%ohpc_load_modules
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
-module load petsc
 make install
 
 # move from tmp install dir to %install_path
@@ -128,10 +120,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_ARCH       ""
 EOF
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
-%files 
+%files
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc COPYING COPYING.LESSER README docs/slepc.pdf

@@ -9,8 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 # Build that is dependent on compiler/mpi toolchains
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules %{compiler_family}/pdtoolkit
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -46,13 +47,10 @@ BuildRequires: curl
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
 BuildRequires: libotf-devel zlib-devel python-devel
-Requires:      lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 %ifarch x86_64
 BuildRequires: papi%{PROJ_DELIM}
 Requires: papi%{PROJ_DELIM}
 %endif
-Requires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks
 
@@ -82,12 +80,10 @@ sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
 %endif
 
 %install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 %ifarch x86_64
 module load papi
 %endif
-module load pdtoolkit
 
 %if "%{compiler_family}" == "intel"
 export fcomp=ifort

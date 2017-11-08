@@ -96,7 +96,6 @@ Requires:	libicu52_1
 BuildRequires:  libicu
 Requires:	libicu
 %endif
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 Provides:       R = %{version}
 Provides:       R-KernSmooth = 2.23.14
@@ -219,9 +218,9 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_SHARE      %{install_path}/share
 
-if { ![is-loaded intel] } {
+%if "%{compiler_family}" != "intel"
     depends-on openblas
-}
+%endif
 
 EOF
 

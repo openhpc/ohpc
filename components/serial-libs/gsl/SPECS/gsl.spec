@@ -44,8 +44,7 @@ lends itself to being used in very high level languages (VHLLs).
 %setup -q -n %{pname}-%{version}
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %if %{compiler_family} == intel
 export CFLAGS="-fp-model strict $CFLAGS"
@@ -55,8 +54,7 @@ export CFLAGS="-fp-model strict $CFLAGS"
 make %{?_smp_mflags}
 
 %install
-# OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 # Remove static libraries

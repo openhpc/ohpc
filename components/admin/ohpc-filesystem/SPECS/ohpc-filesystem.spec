@@ -1,5 +1,5 @@
 Name: ohpc-filesystem
-Version: 1.3
+Version: 1.4
 Release: 1.ohpc
 Summary: Common top-level OpenHPC directories
 
@@ -7,6 +7,9 @@ Group: ohpc/admin
 License: ASL 2.0
 Source0: OHPC_setup_compiler
 Source1: OHPC_setup_mpi
+Source2: macros.ohpc
+Source3: find-provides.ohpc
+Source4: find-requires.ohpc
 
 BuildArch: noarch
 
@@ -30,6 +33,10 @@ mkdir -p $RPM_BUILD_ROOT/opt/ohpc/pub/{apps,doc,compiler,libs,moduledeps,modulef
 mkdir -p $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 install -p -m 644 %{SOURCE0} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
+install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
+install -p -m 755 %{SOURCE4} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
+mkdir -p $RPM_BUILD_ROOT/usr/lib/rpm/macros.d
+install -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT/usr/lib/rpm/macros.d
 
 %files
 %dir /opt/ohpc/
@@ -47,8 +54,14 @@ install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 %dir /opt/ohpc/admin/ohpc/
 /opt/ohpc/admin/ohpc/OHPC_setup_compiler
 /opt/ohpc/admin/ohpc/OHPC_setup_mpi
+/opt/ohpc/admin/ohpc/find-provides.ohpc
+/opt/ohpc/admin/ohpc/find-requires.ohpc
+/usr/lib/rpm/macros.d/macros.ohpc
 
 %changelog
+* Wed Nov 08 2017 Adrian Reber <areber@redhat.com> - 1.4
+- added scripts to find provides/requires based on modules
+
 * Mon May  8 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.3
 - minor description updates
 

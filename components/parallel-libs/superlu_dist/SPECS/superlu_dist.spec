@@ -26,8 +26,9 @@
 #
 
 # Build that is is dependent on compiler toolchain and MPI
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules %{compiler_family}/metis
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" != "intel"
@@ -55,9 +56,6 @@ Patch0:         superlu_dist-4.1-sequence-point.patch
 Patch1:         superlu_dist-4.2-make.patch
 Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
 Patch3:         superlu_dist-4.1-parmetis.patch
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
-Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks
 
@@ -87,10 +85,7 @@ solutions.
 %patch3 -p1
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
-
-module load metis
+%ohpc_load_modules
 
 %if "%{compiler_family}" != "intel"
 module load scalapack

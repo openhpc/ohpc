@@ -9,8 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 # PETSc library that is is dependent on compiler toolchain and MPI
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules %{compiler_family}-%{mpi_family}/phdf5
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" != "intel"
@@ -32,9 +33,6 @@ Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{versi
 Source1:        OHPC_macros
 Patch1:         petsc.rpath.patch
 Url:            http://www.mcs.anl.gov/petsc/
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python
 BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  xz
@@ -56,10 +54,8 @@ differential equations.
 
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
-module load phdf5
 
 # Enable scalapack linkage for blas/lapack with gnu builds
 %if "%{compiler_family}" != "intel"
@@ -137,9 +133,9 @@ set     version                     %{version}
 
 # Require phdf5 (and scalapack for gnu compiler families)
 depends-on phdf5
-if { ![is-loaded intel] } {
+%if "%{compiler_family}" != "intel"
     depends-on scalapack
-}
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include

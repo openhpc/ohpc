@@ -34,6 +34,8 @@
 
 DocDir:    %{OHPC_PUB}/doc/contrib
 
+%global lmod_version 7.6.1
+
 %if 0%{?rhel} == 7
 	# OBS define's rhel_version to 700 for RHEL, in case we are
 	# not running in OBS
@@ -44,6 +46,15 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # installation path layout
 %if 0%{?ohpc_bootstrap} == 0
 Requires: ohpc-filesystem
+%{!?ohpc_dependencies: %global ohpc_dependencies 1}
+%endif
+
+# Setting 'ohpc_dependencies' to '0' disable the special ohpc
+# dependency generator and uses the one from RPM
+%if 0%{?ohpc_dependencies} != 0
+%global _use_internal_dependency_generator 0
+%global __find_provides %{OHPC_ADMIN}/ohpc/find-provides.ohpc %{PROJ_NAME} %{lmod_version}
+%global __find_requires %{OHPC_ADMIN}/ohpc/find-requires.ohpc %{PROJ_NAME} %{lmod_version}
 %endif
 
 # OpenHPC packages also require ohpc-buildroot to access macros used to define
@@ -64,8 +75,7 @@ BuildRequires: ohpc-buildroot
 %if 0%{?ohpc_compiler_dependent} == 1
 
 %if "%{compiler_family}" == "gnu7"
-BuildRequires: gnu7-compilers%{PROJ_DELIM} >= 7.2.0
-Requires:      gnu7-compilers%{PROJ_DELIM} >= 7.2.0
+%global ohpc_compiler_module gnu7/7.2.0
 %endif
 %if "%{compiler_family}" == "intel"
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -97,24 +107,32 @@ Requires:      llvm-compilers%{PROJ_DELIM}
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %global __requires_exclude ^libmpi\\.so.*$|^libmpifort\\.so.*$|^libmpicxx\\.so.*$
-%endif
-%if "%{mpi_family}" == "mpich"
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if "%{mpi_family}" == "mvapich2"
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if "%{mpi_family}" == "openmpi3"
-BuildRequires: openmpi3-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
+%else
+# First the compiler, then the MPI
+%global ohpc_internal_modules %{expand:%%{?ohpc_compiler_module:%%{ohpc_compiler_module}}} %{mpi_family}
+BuildRequires: %{mpi_family}-%{compiler_family}%{PROJ_DELIM}
 %endif
 %endif
 
-%global ohpc_setup_compiler %{expand:\
-	. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
-	%if 0%{?ohpc_mpi_dependent} == 1 \
-		. %{OHPC_ADMIN}/ohpc/OHPC_setup_mpi %{mpi_family} \
-	%endif \
-}
+# The following lines make sure that it works if only one
+# of those variables is defined
+
+%{!?ohpc_compiler_module: %global ohpc_compiler_module %{nil}}
+
+%{!?ohpc_internal_modules: %global ohpc_internal_modules %{expand:%%{?ohpc_compiler_module:%%{ohpc_compiler_module}}}}
+
+%{?ohpc_required_modules: %global ohpc_internal_modules %{expand:%%{?ohpc_internal_modules:%%{ohpc_internal_modules}}} %{expand:%%{?ohpc_required_modules:%%{ohpc_required_modules}}}}
+
+# This creates the necessary BuildRequires:
+
+%{?ohpc_internal_modules:%{lua:
+	mods = rpm.expand("%{ohpc_internal_modules}")
+	delim = rpm.expand("%{PROJ_NAME}")
+	for i in mods:gmatch("%S+") do
+		print('BuildRequires: ')
+		print(delim)
+		print('-module(')
+		print(i)
+		print(')\n')
+	end
+}}

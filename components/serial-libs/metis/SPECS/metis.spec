@@ -67,15 +67,13 @@ shown to produce high quality results and scale to very large problems.
 %prep
 %setup -q -n %{pname}-%{version}
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 make config shared=1 prefix=%{install_path}
 make
 
 %install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 make install DESTDIR=${RPM_BUILD_ROOT}
 

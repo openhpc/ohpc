@@ -9,8 +9,9 @@
 #----------------------------------------------------------------------------eh-
 
 # Build that is dependent on compiler/mpi toolchains
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules %{compiler_family}-%{mpi_family}/scorep
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -26,11 +27,8 @@ Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.scalasca.org
 Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/2.3/dist/scalasca-%{version}.tar.gz
 Source1:   OHPC_macros
-Requires:  lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: zlib-devel
+Requires:  zlib
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -56,11 +54,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %setup -q -n %{pname}-%{version}
 
 %build
-
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
-
-module load scorep
+%ohpc_load_modules
 
 %if %{compiler_family} == intel
 CONFIGURE_OPTIONS="--with-nocross-compiler-suite=intel "
@@ -91,7 +85,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %install
 
 # OpenHPC compiler designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 module load scorep
 

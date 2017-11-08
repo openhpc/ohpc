@@ -70,7 +70,7 @@ for line in open(sys.argv[1]):
             (not line[2].startswith('nagios-plugins-ohpc'))):
         continue
     # This tries to filter out versions with a "."
-    if "." in line[2]:
+    if "." in line[2] and not "/" in line[2]:
         continue
     if line[0] in dependency:
         if line[2] not in dependency[line[0]]:
@@ -94,7 +94,6 @@ for k, v in dependency.items():
         v[i] = spec_dict[v[i]]
     # remove cylic dependencies
     dependency[k] = [x for x in v if x != k]
-
 
 # make a list of the dict
 dep_list = [(k, set(v)) for (k, v) in dependency.items()]

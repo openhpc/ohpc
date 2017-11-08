@@ -32,27 +32,18 @@ Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.t
 Source4:   https://pypi.io/packages/source/v/vsc-install/vsc-install-%{vsc_install_ver}.tar.gz
 Source5:   bootstrap_eb.py
 Source6:   OHPC_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: python
 BuildRequires: python-setuptools
 Requires: python-setuptools
 Requires: python
 #!BuildIgnore: post-build-checks
 
-# Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
-# environment; if building outside, lmod remains a formal build dependency).
-%if !0%{?OHPC_BUILD}
-BuildRequires: lmod%{PROJ_DELIM}
-%endif
-
-%define debug_package %{nil}
-
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
 
 %description
-EasyBuild is a software build and installation framework that allows 
-you to manage (scientific) software on High Performance Computing (HPC) 
+EasyBuild is a software build and installation framework that allows
+you to manage (scientific) software on High Performance Computing (HPC)
 systems in an efficient way.
 
 %prep

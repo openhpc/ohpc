@@ -26,8 +26,9 @@
 #
 
 # scipy build that is dependent on compiler toolchain
-%define ohpc_compiler_dependent 1
-%define ohpc_mpi_dependent 1
+%global ohpc_compiler_dependent 1
+%global ohpc_mpi_dependent 1
+%global ohpc_required_modules %{compiler_family}/numpy %{compiler_family}-%{mpi_family}/fftw
 %include %{_sourcedir}/OHPC_macros
 
 %global gnu_family gnu7
@@ -53,14 +54,10 @@ Source1:        OHPC_macros
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
-BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
 BuildRequires:  python-Cython%{PROJ_DELIM}
-BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -83,15 +80,12 @@ leading scientists and engineers.
 find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
 %build
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %if "%{compiler_family}" != "intel"
 module load openblas
-module load fftw
 %endif
 
-module load numpy
 
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
@@ -119,14 +113,12 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 %endif
 
 %install
-# OpenHPC compiler/mpi designation
-%ohpc_setup_compiler
+%ohpc_load_modules
 
 %if "%{compiler_family}" == "%{gnu_family}"
 module load openblas
 %endif
 
-module load numpy
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
 find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
