@@ -29,10 +29,12 @@ Version 1.3.3 (08 September 2017)
     variant, `openmpi3-pmix-slurm-gnu7-ohpc` (https://github.com/openhpc/ohpc/issues/466)
   * a combined monolithic build supporting tcp, InfiniBand, and Omni-Path is provided for openmpi3 MPI variant
     (https://github.com/openhpc/ohpc/issues/475)
+  * update nagios build to allow web console access (https://github.com/openhpc/ohpc/issues/555)
   * fix incorrect MANPATH settings in several MPI modules (https://github.com/openhpc/ohpc/issues/561)
   * packaging and config requirements for high-speed interconnects delineated as optional in install recipes
     (https://github.com/openhpc/ohpc/issues/563)
   * warewulf-ipmi packaging updated to include lanplus interface (https://github.com/openhpc/ohpc/issues/570)
+  * updated SLURM to address CVE-2017-15566 (https://github.com/openhpc/ohpc/issues/591)
   * Tech Preview designation removed from aarch64 recipes as bare-metal provisioning now supported with newer Warewulf
     version (https://github.com/openhpc/ohpc/issues/593)
   * variety of component version updates and other additions highlighted below
