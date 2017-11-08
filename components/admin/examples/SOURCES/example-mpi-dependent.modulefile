@@ -3,8 +3,8 @@
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the example library built with the gnu compiler"
-puts stderr "toolchain and the openmpi MPI stack."
+puts stderr "This module loads the example library built with the gnu7 compiler"
+puts stderr "toolchain and the openmpi3 MPI stack."
 puts stderr "\nVersion 1.0\n"
 
 }
@@ -16,13 +16,13 @@ module-whatis "URL http://www.google.com"
 
 set     version             1.0
 
-prepend-path    PATH                /opt/ohpc/pub/libs/gnu/openmpi/example/1.0/bin
-prepend-path    MANPATH             /opt/ohpc/pub/libs/gnu/openmpi/example/1.0/share/man
-prepend-path    INCLUDE             /opt/ohpc/pub/libs/gnu/openmpi/example/1.0/include
-prepend-path    LD_LIBRARY_PATH     /opt/ohpc/pub/libs/gnu/openmpi/example/1.0/lib
+prepend-path    PATH                /opt/ohpc/pub/libs/gnu7/openmpi3/example/1.0/bin
+prepend-path    MANPATH             /opt/ohpc/pub/libs/gnu7/openmpi3/example/1.0/share/man
+prepend-path    INCLUDE             /opt/ohpc/pub/libs/gnu7/openmpi3/example/1.0/include
+prepend-path    LD_LIBRARY_PATH     /opt/ohpc/pub/libs/gnu7/openmpi3/example/1.0/lib
 
-setenv          EXAMPLE_DIR        /opt/ohpc/pub/libs/gnu/openmpi/example/1.0
-setenv          EXAMPLE_BIN        /opt/ohpc/pub/libs/gnu/openmpi/example/1.0/bin
-setenv          EXAMPLE_LIB        /opt/ohpc/pub/libs/gnu/openmpi/example/1.0/lib
-setenv          EXAMPLE_INC        /opt/ohpc/pub/libs/gnu/openmpi/example/1.0/include
+setenv          EXAMPLE_DIR        /opt/ohpc/pub/libs/gnu7/openmpi3/example/1.0
+setenv          EXAMPLE_BIN        /opt/ohpc/pub/libs/gnu7/openmpi3/example/1.0/bin
+setenv          EXAMPLE_LIB        /opt/ohpc/pub/libs/gnu7/openmpi3/example/1.0/lib
+setenv          EXAMPLE_INC        /opt/ohpc/pub/libs/gnu7/openmpi3/example/1.0/include
 

@@ -43,7 +43,7 @@ for \texttt{/opt/intel} that is mounted on desired compute nodes.
 [sms](*\#*) (*\install*) intel-mpi-devel-ohpc
 \end{lstlisting}
 
-% ohpc_command if [[ ${enable_mpi_opa} -eq 1 ]];then
+% ohpc_command if [[ ${enable_opa} -eq 1 ]];then
 % ohpc_indent 10
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # Optionally, choose Omni-Path enabled MPI builds. Otherwise, skip to retain default MPI stacks
@@ -61,7 +61,7 @@ for \texttt{/opt/intel} that is mounted on desired compute nodes.
 [sms](*\#*) (*\install*) ohpc-intel-runtimes
 [sms](*\#*) (*\install*) ohpc-intel-mpich-parallel-libs
 [sms](*\#*) (*\install*) ohpc-intel-mvapich2-parallel-libs
-[sms](*\#*) (*\install*) ohpc-intel-openmpi-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-openmpi3-parallel-libs
 [sms](*\#*) (*\install*) ohpc-intel-impi-parallel-libs
 \end{lstlisting}
 % ohpc_indent 0

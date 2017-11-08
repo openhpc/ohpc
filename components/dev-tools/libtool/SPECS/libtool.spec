@@ -15,7 +15,7 @@
 Summary:   The GNU Portable Library Tool
 Name:      %{pname}%{PROJ_DELIM}
 Version:   2.4.6
-Release:   1
+Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/libtool/
@@ -25,6 +25,7 @@ Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
+%global __provides_exclude ^libltdl\\.so.*$
 
 %define debug_package %{nil}
 %define install_path %{OHPC_UTILS}/autotools
@@ -93,10 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%dir %{OHPC_UTILS}
-%dir %{OHPC_MODULES}
-%{OHPC_UTILS}
-%{OHPC_MODULES}/autotools
+%{OHPC_PUB}
 %doc AUTHORS
 %doc ChangeLog
 %doc COPYING

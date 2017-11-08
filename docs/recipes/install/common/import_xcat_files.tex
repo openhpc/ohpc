@@ -7,10 +7,10 @@ register user credential files:
 
 % begin_ohpc_run
 % ohpc_comment_header Import files \ref{sec:file_import}
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,literate={BOSVER}{\baseos{}}1]
 # Define path for xCAT synclist file
 [sms](*\#*) mkdir -p /install/custom/netboot
-[sms](*\#*) chdef -t osimage -o centos7.3-x86_64-netboot-compute synclists="/install/custom/netboot/compute.synclist"
+[sms](*\#*) chdef -t osimage -o BOSVER-x86_64-netboot-compute synclists="/install/custom/netboot/compute.synclist"
 
 # Add desired credential files to synclist
 [sms](*\#*) echo "/etc/passwd -> /etc/passwd" > /install/custom/netboot/compute.synclist

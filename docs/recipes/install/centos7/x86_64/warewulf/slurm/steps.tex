@@ -7,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{CentOS7.3}
-\newcommand{\OSRepo}{CentOS\_7.3}
+\newcommand{\baseOS}{CentOS7.4}
+\newcommand{\OSRepo}{CentOS\_7.4}
 \newcommand{\OSTree}{CentOS\_7}
 \newcommand{\OSTag}{el7}
-\newcommand{\baseos}{centos7.3}
+\newcommand{\baseos}{centos7.4}
 \newcommand{\baseosshort}{centos7}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\rms}{SLURM}
@@ -104,7 +104,7 @@ necessary dependencies. For \baseOS{}, the requirements are to have access to
 both the base OS and EPEL repositories for which mirrors are freely available online:
 
 \begin{itemize*}
-\item CentOS-7 - Base 7.3.1611
+\item CentOS-7 - Base 7.4.1708
   (e.g. \href{http://mirror.centos.org/centos-7/7/os/x86\_64}
              {\color{blue}{http://mirror.centos.org/centos-7/7/os/x86\_64}} )
 \item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
@@ -126,8 +126,11 @@ repository, which is shipped with CentOS and is enabled by default.
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
-\subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 \input{common/ibsupport_sms_centos}
+
+\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
+\input{common/opasupport_sms_centos}
 
 \vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
@@ -148,11 +151,6 @@ repository, which is shipped with CentOS and is enabled by default.
 # Add Slurm client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
-# Add IB support and enable
-[sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
-[sms](*\#*) (*\chrootinstall*) infinipath-psm
-[sms](*\#*) chroot $CHROOT systemctl enable rdma
-
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) ntp
 
@@ -163,7 +161,6 @@ repository, which is shipped with CentOS and is enabled by default.
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
 \end{lstlisting}
 % end_ohpc_run
-
 
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 \input{common/warewulf_chroot_customize_centos}
@@ -185,6 +182,12 @@ repository, which is shipped with CentOS and is enabled by default.
 %\clearpage
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
+
+\paragraph{Enable \InfiniBand{} drivers}
+\input{common/ibsupport_compute_centos.tex}
+
+\paragraph{Enable \OmniPath{} drivers}
+\input{common/opasupport_compute_centos.tex}
 
 \paragraph{Increase locked memory limits}
 \input{common/memlimits}
@@ -232,10 +235,11 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/add_ww_hosts_slurm}
 \input{common/add_ww_hosts_finalize}
 
-\clearpage
+%\clearpage
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 
+\vspace*{-0.15cm}
 \subsubsection{Optionally configure stateful provisioning}
 \input{common/stateful}
 
@@ -243,11 +247,11 @@ repository, which is shipped with CentOS and is enabled by default.
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes} 
 
-\vspace*{-0.50cm}
+\clearpage
 \section{Install \OHPC{} Development Components}
 \input{common/dev_intro.tex}
 
-\vspace*{-0.15cm}
+%\vspace*{-0.15cm}
 \subsection{Development Tools} \label{sec:install_dev_tools}
 \input{common/dev_tools}
 
@@ -268,7 +272,7 @@ repository, which is shipped with CentOS and is enabled by default.
 %\vspace*{0.2cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
-
+\input{common/third_party_libs_petsc_centos}
 \input{common/third_party_libs}
 \vspace*{0.1cm}
 \input{common/third_party_mpi_libs_x86}
@@ -276,6 +280,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
 \input{common/pxse_enabled_builds}
 
+\clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/slurm_startup}
 
@@ -293,7 +298,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/automation_appendix}
 \input{common/upgrade}
 \input{common/test_suite}
-\input{common/customization_appendix_x86}
+\input{common/customization_appendix_centos}
 \input{manifest}
 \input{common/signature}
 

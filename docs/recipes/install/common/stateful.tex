@@ -11,20 +11,14 @@ require that a boot loader (GRUB) be added to the image as follows:
 \end{lstlisting}
 
 \noindent Enabling stateful nodes also requires additional site-specific, disk-related
-parameters in the Warewulf configuration. In the example that follows, the
-compute node configuration is updated to define where to install the GRUB
-bootloader, which disk to partition, which partition to format, and what the
-filesystem layout will look like.
+parameters in the Warewulf configuration, and several example partitioning scripts are 
+provided in the distribution. 
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Update node object parameters
-[sms](*\#*) export sda1="mountpoint=/boot:dev=sda1:type=ext3:size=500"
-[sms](*\#*) export sda2="dev=sda2:type=swap:size=32768"
-[sms](*\#*) export sda3="mountpoint=/:dev=sda3:type=ext3:size=fill"
-[sms](*\#*) wwsh -y object modify -s bootloader=sda -t node "${compute_regex}" 
-[sms](*\#*) wwsh -y object modify -s diskpartition=sda -t node "${compute_regex}" 
-[sms](*\#*) wwsh -y object modify -s diskformat=sda1,sda2,sda3 -t node "${compute_regex}" 
-[sms](*\#*) wwsh -y object modify -s filesystems="$sda1,$sda2,$sda3" -t node "${compute_regex}" 
+# Select (and customize) appropriate parted layout example
+[sms](*\#*) export PARTED_CMDS=/etc/warewulf/filesystem/examples/gpt_example.cmds
+[sms](*\#*) cp /etc/warewulf/filesystem/examples/gpt_example.cmds /etc/warewulf/filesystem/gpt.cmds
+[sms](*\#*) wwsh provision set --filesystem=gpt "${compute_regex}" 
 \end{lstlisting}
 
 \noindent Upon subsequent reboot of the modified nodes, Warewulf will partition

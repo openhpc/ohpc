@@ -6,8 +6,8 @@
 %define pname clustershell
 
 Name:          clustershell%{PROJ_DELIM}
-Version:       1.7.3
-Release:       1
+Version:       1.8
+Release:       1%{?dist}
 Summary:       Python framework for efficient cluster administration
 
 Group:         %{PROJ_NAME}/admin
@@ -15,7 +15,7 @@ License:       LGPLv2.1
 URL:           http://clustershell.sourceforge.net/
 Source0:       https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
 Source1:       OHPC_macros
-Patch1:        clustershell-1.7.3-no-requires.patch
+Patch1:        clustershell-1.8-no-requires.patch
 BuildRoot:     %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 
 # Default library install path
@@ -67,12 +67,13 @@ mv conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
 mv conf/groups.conf.d/*.conf.example %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
 
 # man pages
-#install -d %{buildroot}/%{_mandir}/{man1,man5}
-#install -p -m 0644 doc/man/man1/clubak.1 %{buildroot}/%{_mandir}/man1/
-#install -p -m 0644 doc/man/man1/clush.1 %{buildroot}/%{_mandir}/man1/
-#install -p -m 0644 doc/man/man1/nodeset.1 %{buildroot}/%{_mandir}/man1/
-#install -p -m 0644 doc/man/man5/clush.conf.5 %{buildroot}/%{_mandir}/man5/
-#install -p -m 0644 doc/man/man5/groups.conf.5 %{buildroot}/%{_mandir}/man5/
+install -d %{buildroot}/%{install_path}/share/man/man1
+install -d %{buildroot}/%{install_path}/share/man/man5
+install -p -m 0644 doc/man/man1/clubak.1 %{buildroot}/%{install_path}/share/man/man1/
+install -p -m 0644 doc/man/man1/clush.1 %{buildroot}/%{install_path}/share/man/man1/
+install -p -m 0644 doc/man/man1/nodeset.1 %{buildroot}/%{install_path}/share/man/man1/
+install -p -m 0644 doc/man/man5/clush.conf.5 %{buildroot}/%{install_path}/share/man/man5/
+install -p -m 0644 doc/man/man5/groups.conf.5 %{buildroot}/%{install_path}/share/man/man5/
 
 # vim addons
 %define vimdatadir %{install_path}/share/vim/vimfiles
@@ -103,7 +104,7 @@ set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib/python2.7/site-packages
-prepend-path    MANPATH             %{install_path}/man
+prepend-path    MANPATH             %{install_path}/share/man
 
 setenv          %{pname}_DIR        %{install_path}
 setenv          %{pname}_BIN        %{install_path}/bin

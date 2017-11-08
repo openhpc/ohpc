@@ -20,17 +20,17 @@ fi
 
 check_rms
 
-@test "[BeeGFS] beegfs-df - $BEEGFS_TEST_PATH ($RESOURCE_MANAGER)" {
+@test "[BeeGFS] beegfs-df - $BEEGFS_TEST_PATH (compute node)" {
     run ssh c1 /usr/bin/beegfs-df $BEEGFS_TEST_PATH
     assert_success
 }
 
-@test "[BeeGFS] beegfs-ctl --getentryinfo - $BEEGFS_TEST_PATH ($RESOURCE_MANAGER)" {
+@test "[BeeGFS] beegfs-ctl --getentryinfo - $BEEGFS_TEST_PATH (compute node)" {
     run ssh c1 beegfs-ctl --getentryinfo $BEEGFS_TEST_PATH
     assert_success
 }
 
-@test "[BeeGFS] set target count=2 test - $BEEGFS_TEST_PATH ($RESOURCE_MANAGER)" {
+@test "[BeeGFS] set target count=2 test - $BEEGFS_TEST_PATH (compute node)" {
     local testdir="tempdir-$RANDOM"
 
     run ssh c1 mkdir $BEEGFS_TEST_PATH/$testdir

@@ -1,4 +1,4 @@
-\clearpage
+%\iftoggle{isx86}{\clearpage}
 % begin_ohpc_run
 % ohpc_validation_comment Add hosts to cluster
 
@@ -14,6 +14,8 @@
         done
 \end{lstlisting}
 % end_ohpc_run
+
+\iftoggle{isCentOS_ww_pbs_x86}{\clearpage}
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Additional step required if desiring to use predictable network interface

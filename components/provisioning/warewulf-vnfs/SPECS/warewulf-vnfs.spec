@@ -16,15 +16,16 @@
 
 %define pname warewulf-vnfs
 %define dname vnfs
+%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Summary: Warewulf VNFS Module
 Name:    %{pname}%{PROJ_DELIM}
-Version: 3.7pre
+Version: 3.8pre
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source2: OHPC_macros
 Source3: rhel-7.tmpl
 
@@ -51,6 +52,14 @@ Patch2: warewulf-vnfs.pigz.patch
 Patch3: warewulf-vnfs.wwmkchroot.patch
 # 02/23/17 reese.baird@intel.com - fixes unicode in files inserted to vnfs
 Patch4: warewulf-vnfs.utf8.patch
+# 10/10/17 reese.baird@intel.com - fixes bootstrap kernel name on sles
+Patch5: warewulf-vnfs.bootstrap.kernel.patch
+# 10/13/17 karl.w.schulz@intel.com - fixes bootstrap kernel format on aarch64 on sles
+Patch6: warewulf-vnfs.bootstrap.aarch64.patch
+# 10/23/17 reese.baird@intel.com - allows bootstrap with usb netdev
+Patch7: warewulf-vnfs.bootstrap_usb.patch
+# 10/31/17 reese.baird@intel.com - allow altarch yum mirror
+Patch8: warewulf-vnfs.centos_aarch64.patch
 
 
 %description
@@ -62,7 +71,7 @@ Virtual Node FileSystem objects.
 
 
 %prep
-%setup -n warewulf3-%{version}.ohpc1.3
+%setup -n warewulf3-%{dev_branch_sha}
 
 # OpenHPC patches
 cd %{dname}
@@ -70,11 +79,22 @@ cd %{dname}
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%if 0%{!?sles_version} && 0%{!?suse_version}
+%patch5 -p1
+%else
+%ifarch aarch64
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%endif
+%endif
 
 
 %build
 cd %{dname}
-./autogen.sh
+if [ ! -f configure ]; then
+    ./autogen.sh
+fi
 %configure
 %{__make} %{?mflags}
 
@@ -97,8 +117,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/vnfs.conf
 %config(noreplace) %{_sysconfdir}/warewulf/bootstrap.conf
-%{_libexecdir}/warewulf/*
 %{_bindir}/*
+%{_mandir}/*
+%{_libexecdir}/warewulf/*
 
 
 %changelog

@@ -1,0 +1,16 @@
+If your compute resources support Omni-Path, the following commands add OPA
+support using base distro-provided drivers to the compute image. 
+
+% begin_ohpc_run
+% ohpc_validation_comment Add Omni-Path drivers to compute image
+% ohpc_command if [[ ${enable_opa} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add OPA support and enable
+[sms](*\#*) (*\chrootinstall*) opa-basic-tools libibmad5 libibverbs
+[sms](*\#*) (*\chrootinstall*) libpsm2-2 libpsm2-compat
+[sms](*\#*) chroot $CHROOT systemctl enable rdma
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run

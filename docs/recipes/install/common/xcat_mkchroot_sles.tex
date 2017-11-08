@@ -6,14 +6,14 @@ used to provision one or more {\em compute} nodes. The following subsections hig
 \subsubsection{Build initial BOS image} \label{sec:assemble_bos}
 The following steps illustrate the process to build a minimal, default image for use with \xCAT{}. To begin, you will
 first need to have a local copy of the ISO image available for the underlying OS. In this recipe, the relevant ISO image
-is \texttt{SLE-12-SP2-SERVER-DVD-X86\_64-GM-DVD1.iso}. We initialize the image
+is \texttt{SLE-12-SP3-SERVER-DVD-X86\_64-GM-DVD1.iso}. We initialize the image
 creation process using the \texttt{copycds} command assuming that the necessary ISO image is available locally in 
 \texttt{\$\{iso\_path\}} as follows:
 
 % begin_ohpc_run
 % ohpc_comment_header Initialize OS images for use with xCAT \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
-[sms](*\#*) copycds ${iso_path}/SLE-12-SP2-Server-DVD-x86_64-GM-DVD1.iso
+[sms](*\#*) copycds ${iso_path}/SLE-12-SP3-Server-DVD-x86_64-GM-DVD1.iso
 \end{lstlisting}
 % end_ohpc_run
 

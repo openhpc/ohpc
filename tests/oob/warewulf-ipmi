@@ -1,0 +1,39 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ../common/test_helper_functions
+source ../common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+if [ -n "$IPMI_PASSWORD" ];then
+    export IPMI_PASSWORD
+fi
+
+@test "[warewulf-ipmi] ipmitool compiled with lanplus" {
+    [[ "$ARCH" == "aarch64" ]] && skip "Skipping warewulf-ipmitool check for ARCH=$ARCH"
+    rpm -q --quiet warewulf-ipmi-ohpc || skip "Warewulf not installed, skipping warewulf-ipmitool check"
+
+    if [ -z "$IPMI_PASSWORD" ];then
+        flunk "IPMI_PASSWORD is not set"
+    fi
+
+    for lan in `seq 1 4`; do
+        ipmitool lan print $lan > .cmd_output || flunk "Unable to run ipmitool"
+        local my_bmc_ip=`cat .cmd_output | grep "IP Address              :" | awk '{print $4}'`
+
+        if [ $? -ne 0 ];then
+            flunk "Unable to ascertain local BMC IP address"
+        fi
+
+        if [ "$my_bmc_ip" != "0.0.0.0" ];then
+            break
+        fi
+    done
+
+    run `rpm -ql warewulf-ipmi-ohpc | grep ipmitool` -E -I lanplus -H $my_bmc_ip -U root power status
+    assert_success
+}
+

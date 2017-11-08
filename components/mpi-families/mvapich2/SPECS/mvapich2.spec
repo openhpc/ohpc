@@ -61,14 +61,13 @@ Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 Buildrequires: ofed
 %endif
 %if 0%{?rhel_version} || 0%{?centos_version}
-Buildrequires: rdma
+Buildrequires: rdma-core-devel
 %endif
 
 Requires: prun%{PROJ_DELIM}
 
 BuildRequires: bison
-BuildRequires: libibmad-devel libibverbs-devel
-BuildRequires: librdmacm-devel
+BuildRequires: libibmad-devel 
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
@@ -133,7 +132,7 @@ module-whatis "URL: %{url}"
 set     version			    %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/man
+prepend-path    MANPATH             %{install_path}/share/man
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{pname}
 prepend-path    MPI_DIR             %{install_path}

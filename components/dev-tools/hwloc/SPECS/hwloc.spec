@@ -30,7 +30,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        1.11.7
+Version:        1.11.8
 Release:        2%{?dist}
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause

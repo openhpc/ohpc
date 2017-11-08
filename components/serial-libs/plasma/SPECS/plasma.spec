@@ -26,7 +26,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 Name:	%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version: 2.8.0
-Release: 1
+Release: 1%{?dist}
 Summary: Parallel Linear Algebra Software for Multicore Architectures
 License: BSD-3-Clause
 Group:     %{PROJ_NAME}/serial-libs

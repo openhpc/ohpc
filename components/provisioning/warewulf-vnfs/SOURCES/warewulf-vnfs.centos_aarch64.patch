@@ -1,0 +1,11 @@
+--- a/libexec/wwmkchroot/centos-7.tmpl	2017-10-23 12:42:13.000000000 -0700
++++ b/libexec/wwmkchroot/centos-7.tmpl	2017-10-31 10:26:59.000000000 -0700
+@@ -9,7 +9,7 @@
+ # Define the location of the YUM repository
+ if [ -z "$YUM_MIRROR" ]; then
+     if [ -z "$YUM_MIRROR_BASE" ]; then
+-        YUM_MIRROR_BASE="http://mirror.centos.org/centos-7"
++        YUM_MIRROR_BASE="http://mirror.centos.org/altarch"
+     fi
+     YUM_MIRROR="${YUM_MIRROR_BASE}/7/os/\$basearch/"
+ fi

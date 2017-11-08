@@ -21,7 +21,7 @@
 %global _hardened_build 1
 
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.2.0
+Version: 2.2.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program plugins for Nagios
 DocDir:  %{OHPC_PUB}/doc/contrib
@@ -37,7 +37,6 @@ Patch2: nagios-plugins-0002-Remove-assignment-of-not-parsed-to-jitter.patch
 #Patch3: nagios-plugins-0003-Fedora-specific-fixes-for-searching-for-diff-and-tai.patch
 #Patch4: nagios-plugins-0004-Fedora-specific-patch-for-not-to-fixing-fully-qualif.patch
 # https://bugzilla.redhat.com/512559
-Patch5: nagios-plugins-0005-Prevent-check_swap-from-returning-OK-if-no-swap-acti.patch
 Patch7: nagios-plugins-0007-Fix-the-use-lib-statement-and-the-external-ntp-comma.patch
 
 %if 0%{?fedora} || 0%{?rhel}
@@ -729,7 +728,6 @@ Provides check_wave support for Nagios.
 %patch2 -p1 -b .not_parsed
 #%patch3 -p1 -b .proper_paths
 #%patch4 -p1 -b .no_need_fo_fix_paths
-%patch5 -p1 -b .fix_missing_swap
 %patch7 -p1 -b .ext_ntp_cmds
 
 

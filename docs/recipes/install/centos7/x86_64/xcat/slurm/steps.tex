@@ -7,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{CentOS7.3}
-\newcommand{\OSRepo}{CentOS\_7.3}
+\newcommand{\baseOS}{CentOS7.4}
+\newcommand{\OSRepo}{CentOS\_7.4}
 \newcommand{\OSTree}{CentOS\_7}
 \newcommand{\OSTag}{el7}
-\newcommand{\baseos}{centos7.3}
+\newcommand{\baseos}{centos7.4}
 \newcommand{\baseosshort}{centos7}
 \newcommand{\provisioner}{xCAT}
 \newcommand{\rms}{SLURM}
@@ -116,7 +116,7 @@ necessary dependencies. For \baseOS{}, the requirements are to have access to
 both the base OS and EPEL repositories for which mirrors are freely available online:
 
 \begin{itemize*}
-\item CentOS-7 - Base 7.3.1611
+\item CentOS-7 - Base 7.4.1708
   (e.g. \href{http://mirror.centos.org/centos-7/7/os/x86\_64}
              {\color{blue}{http://mirror.centos.org/centos-7/7/os/x86\_64}} )
 \item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
@@ -138,8 +138,11 @@ repository, which is shipped with CentOS and is enabled by default.
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
-\subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 \input{common/ibsupport_sms_centos}
+
+\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
+\input{common/opasupport_sms_centos}
 
 \vspace*{-0.15cm}
 \subsection{Complete basic \xCAT{} setup for {\em master} node} \label{sec:setup_xcat}
@@ -159,11 +162,6 @@ repository, which is shipped with CentOS and is enabled by default.
 # Add Slurm client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
-# Add IB support and enable
-[sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
-[sms](*\#*) (*\chrootinstall*) infinipath-psm
-[sms](*\#*) chroot $CHROOT systemctl enable rdma
-
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) ntp
 
@@ -173,9 +171,21 @@ repository, which is shipped with CentOS and is enabled by default.
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
 \end{lstlisting}
+
+% ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
+% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Optionally add IB support and enable
+[sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
+[sms](*\#*) (*\chrootinstall*) infinipath-psm
+[sms](*\#*) chroot $CHROOT systemctl enable rdma
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
 % end_ohpc_run
 
-
+%\vspace*{0.5cm}
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 \input{common/xcat_chroot_customize_centos}
 
@@ -290,7 +300,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/automation_appendix}
 \input{common/upgrade}
 \input{common/test_suite}
-\input{common/customization_appendix_x86}
+\input{common/customization_appendix_centos}
 \input{manifest}
 \input{common/signature}
 

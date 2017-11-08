@@ -1,7 +1,7 @@
 #!/bin/bash
 
-t_old="obs/OpenHPC_1.3.1_Factory"
-t_new="obs/OpenHPC_1.3.2_Factory"
+t_old="obs/OpenHPC_1.3.2_Factory"
+t_new="obs/OpenHPC_1.3.3_Factory"
 
 f_all=pkg-ohpc.all
 f_add=pkg-ohpc.chglog-add

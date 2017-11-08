@@ -45,7 +45,7 @@
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.3.1
+Version: 2.4
 Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
@@ -58,6 +58,12 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: python
+Requires: file
+%if 0%{?sles_version} || 0%{?suse_version}
+Requires: squashfs
+%else
+Requires: squashfs-tools
+%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
@@ -147,16 +153,13 @@ EOF
 
 %files
 %defattr(-, root, root)
-%doc examples AUTHORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
+%doc examples CONTRIBUTORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
 %attr(0644, root, root) %config(noreplace) %{install_path}/etc/singularity/*
 %{OHPC_PUB}
 #SUID programs
 %attr(4755, root, root) %{install_path}/libexec/singularity/bin/action-suid
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/create-suid
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/expand-suid
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/export-suid
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/import-suid
 %attr(4755, root, root) %{install_path}/libexec/singularity/bin/mount-suid
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/start-suid
 
 %if %slurm
 %files -n singularity-slurm%{PROJ_DELIM}

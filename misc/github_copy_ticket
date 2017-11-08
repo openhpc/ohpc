@@ -1,0 +1,172 @@
+#!/usr/bin/env python
+
+import sys
+import requests
+import re
+import argparse
+import ConfigParser
+import os.path
+
+
+def main(argv):
+    users_url='https://api.github.com/users'
+    issue_url='https://api.github.com/repos/openhpc/ohpc/issues'
+
+    # Determine user credentials from config file
+    configFile = os.path.expanduser("~/.github_copy_ticket.config")
+
+    if not os.path.isfile(configFile):
+        print("")
+        print("Unable to access config file with user credentials. Please add desired")
+        print("access credentials to the config file: %s " % configFile)
+        print("")
+        print("e.g. format:")
+        print("[github]")
+        print("name = superfly")
+        print("auth = 1234abcdefg987poiu")
+        print("")
+        exit(1)
+
+    try:
+        Config = ConfigParser.ConfigParser()
+        Config.read(configFile)
+
+        name = Config.get('github','name')
+        auth = Config.get('github','auth')
+        user_auth=(name,auth)
+
+    except:
+        print("Unable to read user/auth settings from config file")
+        exit(1)
+
+    new_issue_url=issue_url
+    repo_url=''
+    input_param = {}
+    input_param = input_test2(argv, issue_url, users_url, user_auth)
+    
+    if raw_input("Are you sure you wish to continue with these inputs? (y/n) ").lower() == 'n': sys.exit("Aborting")
+    payload = get_issue(issue_url, user_auth, input_param['issue'])
+    # Add new input parameters to payload for the new ticket
+    # input_param['milestone'], input_param['owner']
+    if input_param['milestone']: 
+        midx = get_milestone_index(issue_url.strip("/issues"), user_auth ,input_param['milestone'])
+        payload['milestone'] = int(midx)
+    if input_param['owner']: payload['assignee'] = str(input_param['owner'])
+        
+    #Update the current ticket title with the new version
+    payload_title = re.sub('\(.*?\)','',payload['title']).strip()
+    new_title = str(payload_title)+" ("+str(input_param['ver'])+")"
+    print "New issue title:", new_title
+    payload['title'] = str(new_title)
+    
+    print "New issue parameters:", payload
+    if raw_input("Are you sure you wish to create a new issue? (y/n) ").lower() == 'y':
+        create_issue(issue_url, user_auth, payload)
+    else: sys.exit("Abort: Issue not created")
+    return 0
+
+def input_test2(argv, issue_url, users_url, user_auth):
+    issue_num = None
+    newver = None
+    milestone = None
+    assignee = None
+    new_param = {
+        "issue": "",
+        "ver": "",
+        "milestone": "",
+        "owner": ""
+    } #Input parameters
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-i", "--issue", metavar='Issue No.', help="Issue number [int]", type=int, required=True)
+    parser.add_argument("-n", "--newver", metavar='Version', help="New version number", required=True)
+    parser.add_argument("-m", "--milestone", help="Milestone")
+    parser.add_argument("-o", "--owner", help="New owner/assignee")
+    args=parser.parse_args()
+    new_param['issue'] = args.issue
+    new_param['ver'] = args.newver
+    new_param['milestone'] = args.milestone
+    new_param['owner'] = args.owner
+    print 'Issue number:\t', new_param['issue']
+    print 'New version:\t', new_param['ver']
+    print 'New Milestone:\t', new_param['milestone']
+    print 'New Owner:\t', new_param['owner']
+    return new_param
+
+
+def check_user(assignee, users_url, user_auth):
+    user_info = requests.get( users_url+'/'+assignee, auth=user_auth)
+    if user_info.status_code != requests.codes.ok:
+        print "User", assignee, "not found. Please check spelling."
+        sys.exit("Exit: User not found.")
+    return 0 
+
+def get_milestone_index(repo_url, user_auth, milestone):
+    ms_idx = None
+    ms_lst = []
+    repo_ms = requests.get(repo_url+'/'+'milestones', auth=user_auth)
+
+    for ms in repo_ms.json(): 
+        #print "\t", ms['number'], "==>", ms['title']
+        ms_lst.append(str(ms['title']))
+        if ms['title'] == str(milestone): ms_idx = ms['number']
+    if ms_idx is None: 
+        print "Valid milestones are:\t", ms_lst
+        sys.exit('Error: Invalid milestone entered!')
+    return ms_idx
+
+def get_milestones(repo_url, user_auth):
+    ms_lst = []  #Milestones list
+    repo_ms = requests.get(repo_url+'/'+'milestones', auth=user_auth)
+    print "Repo Milestones:"
+    for ms in repo_ms.json(): 
+        print "\t", ms['number'], "==>", ms['title']
+        ms_lst.append(ms['number'])  #Collect repo milestones
+    return ms_lst
+
+def get_issue(issue_url,user_auth, issue_number):
+    issue = {
+        "title": "",
+        "body": "no body for now :)",
+        "labels": []
+    } #Issue parameters
+
+    issue_info = requests.get(issue_url+'/'+str(issue_number), auth=user_auth)
+    if issue_info.status_code == requests.codes.ok:
+        issue['title'] = issue_info.json()['title'] #Collect 'title'
+        print "Issue", issue_info.json()['number'], "title:", issue['title']
+        issue['body'] = str(issue_info.json()['body'])  #Collect 'Body of comment'
+        print "Body:\t", issue['body']
+        if issue_info.json()['assignee'] is not None: 
+            print "Current Assignee:\t", issue_info.json()['assignee']['login']
+        if issue_info.json()['milestone'] is not None:
+            print "Current issue milestone:", issue_info.json()['milestone']['number']
+        else : print "Current issue milestone:"
+        issue_labels = issue_info.json()['labels']  #Labels list
+        print "Current Labels:"
+        for item in issue_labels: 
+            print "\t", item['name']
+            if item['name'] == 'built':
+                continue
+            if item['name'] == 'new addition':
+                continue
+
+            print "\t", ": will be inherited for the new issue"
+            issue['labels'].append(str(item['name']))  #Collect 'labels' except the 'built label
+
+        issue['labels'].append('component')  #Collect 'labels' except the 'built label        
+
+    else:
+        sys.exit("Exit: Issue not found.")
+    return issue
+
+def create_issue(new_issue_url, user_auth, payload):
+    print payload
+    new_issue = requests.post(new_issue_url, auth=user_auth, json=payload)
+    print new_issue.status_code
+    if new_issue.status_code == requests.codes.created:
+        new_number = new_issue.json()['number']
+        print "New ticket number:", new_number
+    else: sys.exit("Exit: Issue not successfully created.")
+    
+if __name__ == "__main__":
+   main(sys.argv[1:])

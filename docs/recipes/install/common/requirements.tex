@@ -9,13 +9,21 @@ used interchangeably in this guide. For power management, we assume that
 the compute node baseboard management controllers (BMCs) are available via IPMI
 from the chosen master host. For file systems, we assume that the chosen master
 server will host an \NFS{} file system that is made available to the compute
-nodes. Installation information is also discussed to optionally include a
-\Lustre{} file system mount and in this case, the \Lustre{} file system is
-assumed to exist previously.
+nodes.
+\iftoggleverb{isx86}
+Installation information is also discussed to optionally mount a
+parallel file system and in this case, the parallel file system is assumed to
+exist previously.
+\fi
 
 \begin{figure}[hbt]
 \center
-\includegraphics[width=0.85\linewidth]{ohpc-arch-small2.pdf}
+\iftoggleverb{isx86}
+\includegraphics[width=0.85\linewidth]{ohpc-arch-small3.pdf}
+\fi
+\iftoggleverb{isaarch}
+\includegraphics[width=0.85\linewidth]{ohpc-arch-small-eth.pdf}
+\fi
 \vspace*{-0.2cm}
 \caption{Overview of physical cluster architecture.} \label{fig:physical_arch}
 \end{figure}
@@ -38,8 +46,10 @@ switching infrastructure; however, an alternate configuration can also be
 accommodated via the use of a shared NIC, which runs a packet filter to divert
 management packets between the host and BMC.
 
- In addition to the IP networking, there is a high-speed network
-(\InfiniBand{} in this recipe) that is also connected to each of the
+\iftoggleverb{isx86}
+In addition to the IP networking, there is an optional high-speed network
+(\InfiniBand{} or \OmniPath{} in this recipe) that is also connected to each of the
 hosts. This high speed network is used for application message passing and
-optionally for \Lustre{} connectivity as well.
-
+optionally for parallel file system connectivity as well (e.g. to
+existing \Lustre{} or BeeGFS storage targets).
+\fi

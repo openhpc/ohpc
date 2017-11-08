@@ -20,7 +20,7 @@
 
 Name:	%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 6.0.4
-Release: 1
+Release: 1%{?dist}
 Summary: Graph, mesh and hypergraph partitioning library using MPI
 License: CeCILL-C
 Group: %{PROJ_NAME}/parallel-libs

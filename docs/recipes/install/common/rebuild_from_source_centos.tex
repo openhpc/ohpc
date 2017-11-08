@@ -1,0 +1,37 @@
+Users of \OHPC{} may find it desirable to rebuild one of the supplied packages
+to apply build customizations or satisfy local requirements. One way to
+accomplish this is to install the appropriate source RPM, modify the specfile
+as needed, and rebuild to obtain an updated binary RPM. A brief example using
+the FFTW library is highlighted below.  Note that the source RPMs can be downloaded from the
+community build server at \href{https://build.openhpc.community}
+{\color{blue}{https://build.openhpc.community}} via a web browser or directly
+via \texttt{yum} as highlighted below. The \OHPC{} build system design
+leverages several keywords to control the choice of compiler and MPI families
+for relevant development libraries and the \texttt{rpmbuild} example
+illustrates how to override the default mpi\_family.
+
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
+    literate={ARCH}{\arch{}}1 {-}{-}1]
+# Install rpm-build package and yum tools from base OS distro
+[test@sms ~]$ sudo (*\install*) rpm-build yum-utils
+
+# Install FFTW's build dependencies
+[test@sms ~]$ sudo yum-builddep fftw-gnu7-openmpi3-ohpc
+
+# Download SRPM from OpenHPC repository and install locally
+[test@sms ~]$ yumdownloader --source fftw-gnu7-openmpi3-ohpc
+[test@sms ~]$ rpm -i ./fftw-gnu7-openmpi3-ohpc-3.3.6-28.11.src.rpm
+
+# Modify spec file as desired
+[test@sms ~]$ cd ~/rpmbuild/SPECS
+[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/enable-static=no/enable-static=yes/" fftw.spec
+
+# Increment RPM release so package manager will see an update
+[test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   28.11/Release:   29.1/" fftw.spec
+
+# Rebuild binary RPM. Note that additional directives can be specified to modify build
+[test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "mpi_family mpich" fftw.spec
+
+# Install the new package
+[test@sms ~]$ sudo (*\install*) ~test/rpmbuild/RPMS/ARCH/fftw-gnu-mpich-ohpc-3.3.6-29.1.ARCH.rpm
+\end{lstlisting}

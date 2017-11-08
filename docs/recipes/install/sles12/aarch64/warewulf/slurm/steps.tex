@@ -1,13 +1,5 @@
 \documentclass[letterpaper]{article}
 \usepackage{common/ohpc-doc}
-
-% \usepackage[firstpage]{draftwatermark}
-% \SetWatermarkText{[~Tech Preview~] }
-% \SetWatermarkScale{0.45}
-% \SetWatermarkAngle{0.0}
-% \SetWatermarkVerCenter{.63\paperheight}
-% \SetWatermarkColor[rgb]{.7,.7,.7}
-
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
 
@@ -15,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{SLES12SP2}
-\newcommand{\OSRepo}{SLE\_12\_SP2}
+\newcommand{\baseOS}{SLES12SP3}
+\newcommand{\OSRepo}{SLE\_12\_SP3}
 \newcommand{\OSTree}{SLE\_12}
 \newcommand{\OSTag}{sle12}
-\newcommand{\baseos}{sles12sp2}
+\newcommand{\baseos}{sles12sp3}
 \newcommand{\baseosshort}{sles12}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\rms}{SLURM}
@@ -52,7 +44,7 @@
 \thispagestyle{empty}
 
 % Title Page --------------------------------------------------------
-\input{common/title_preview}
+\input{common/title}
 % Disclaimer
 \input{common/legal} 
 
@@ -61,8 +53,6 @@
 \newpage
 
 % Introduction  ----------------------------------------------------
-
-\input{common/tech_preview}
 
 \section{Introduction} \label{sec:introduction}
 \input{common/install_header}
@@ -107,8 +97,9 @@
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
-\subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
-\input{common/ibsupport_sms_sles}
+%% Add if/when IB is available for testing
+%% \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+%% \input{common/ibsupport_sms_sles}
 
 \vspace*{-0.3cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
@@ -130,10 +121,6 @@
 # Add SLURM client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
-# Add IB support
-[sms](*\#*) (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
-[sms](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
-
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
 [sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
 
@@ -154,7 +141,7 @@
 \end{lstlisting}
 % end_ohpc_run
 
-\vspace*{-0.1cm}
+\clearpage
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 \input{common/warewulf_chroot_customize_sles}
 
@@ -172,56 +159,58 @@
 % ohpc_command fi
 % end_ohpc_run
 
+%\clearpage
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
-\paragraph{Increase locked memory limits}
-\input{common/memlimits} 
+%% Add if/when IB is available for testing
+%% \paragraph{Increase locked memory limits}
+%% \input{common/memlimits} 
 
 \paragraph{Enable ssh control via resource manager} 
 \input{common/slurm_pam}
 
-\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
-\input{common/lustre-client}
-\input{common/lustre-client}
-\input{common/lustre-client-sles}
-\input{common/lustre-client-post}
+%% \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+%% \input{common/lustre-client}
+%% \input{common/lustre-client}
+%% \input{common/lustre-client-sles}
+%% \input{common/lustre-client-post}
 
 \clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
-\clearpage
+
 \paragraph{Add \Nagios{} monitoring}
 \input{common/nagios}
 
-\clearpage
 \paragraph{Add \Ganglia{} monitoring}
 \input{common/ganglia}
 
+\clearpage
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
-\clearpage
 \paragraph{Add \mrsh{}}
 \input{common/mrsh}
 
 \paragraph{Add \genders{}}
 \input{common/genders}
 
+\clearpage
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
 \input{common/import_ww_files_slurm}
-\input{common/import_ww_files_ib_sles}
+%% \input{common/import_ww_files_ib_sles}
 \input{common/finalize_provisioning}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_slurm}
 \input{common/add_ww_hosts_finalize}
 
-\vspace*{0.2cm}
+\vspace*{0.4cm}
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 
@@ -248,41 +237,14 @@
 \input{common/perf_tools}
 
 \subsection{Setup default development environment}
-
-System users often find it convenient to have a default development environment
-in place so that compilation can be performed directly for parallel programs
-requiring MPI. This setup can be conveniently enabled via modules and the \OHPC{}
-modules environment is pre-configured to load an \texttt{ohpc} module on login
-(if present). The following package install provides a default
-environment that enables autotools, the \GNU{} compiler toolchain, and the
-OpenMPI MPI stack.
-
-% begin_ohpc_run
-\begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) lmod-defaults-gnu-openmpi-ohpc
-\end{lstlisting}
-% end_ohpc_run
-
-\begin{center}
-\begin{tcolorbox}[]
-\small
-If you want to change the default environment from the suggestion above, \OHPC{}
-also provides the \GNU{} compiler toolchain with the MPICH stack:
-\begin{itemize*}
-
-\item lmod-defaults-gnu-mpich-ohpc
-\end{itemize*}
-\end{tcolorbox}
-\end{center}
-
+\input{common/default_dev}
 
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
-
+\input{common/third_party_libs_petsc_sles}
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_aarch}
 
-\clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/slurm_startup}
 
@@ -300,7 +262,7 @@ also provides the \GNU{} compiler toolchain with the MPICH stack:
 \input{common/automation_appendix}
 \input{common/upgrade}
 \input{common/test_suite}
-\input{common/customization_appendix_aarch}
+\input{common/customization_appendix_sles}
 \input{manifest}
 \input{common/signature}
 

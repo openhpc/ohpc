@@ -15,7 +15,7 @@
 
 Name:  %{pname}%{PROJ_DELIM}
 Version: 2.3.24
-Release: 1
+Release: 1%{?dist}
 
 Summary: PowerMan - centralized power control for clusters
 License: GPL

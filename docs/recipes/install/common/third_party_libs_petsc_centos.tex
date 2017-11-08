@@ -1,0 +1,24 @@
+\iftoggleverb{isx86}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) yum search petsc-gnu7 ohpc
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+=========================== N/S matched: petsc-gnu7, ohpc ===========================
+petsc-gnu7-impi-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu7-mpich-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu7-mvapich2-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu7-openmpi3-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+\end{lstlisting}
+\fi
+
+\iftoggleverb{isaarch}
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) yum search petsc-gnu7 ohpc
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+=========================== N/S matched: petsc-gnu7, ohpc ===========================
+petsc-gnu7-mpich-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+petsc-gnu7-openmpi3-ohpc.x86_64 : Portable Extensible Toolkit for Scientific Computation
+\end{lstlisting}
+\fi
+

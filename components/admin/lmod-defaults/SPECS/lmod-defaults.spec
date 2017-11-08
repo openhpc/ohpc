@@ -13,7 +13,7 @@
 
 Summary:   OpenHPC default login environments
 Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.3.1
+Version:   1.3.3
 Release:   1
 License:   BSD
 Group:     %{PROJ_NAME}/admin
@@ -53,8 +53,8 @@ prepend-path     PATH   %{OHPC_PUB}/bin
 
 if { [ expr [module-info mode load] || [module-info mode display] ] } {
         prepend-path MANPATH /usr/local/share/man:/usr/share/man/overrides:/usr/share/man/en:/usr/share/man
-	module try-add autotools
-	module try-add prun
+        module try-add autotools
+        module try-add prun
         module try-add %{compiler_family}
         module try-add %{mpi_family}
 }
@@ -63,7 +63,7 @@ if [ module-info mode remove ] {
         module del %{mpi_family}
         module del %{compiler_family}
         module del prun
-	module del autotools
+        module del autotools
 }
 EOF
 

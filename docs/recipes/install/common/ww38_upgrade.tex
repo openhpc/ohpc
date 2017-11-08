@@ -1,0 +1,14 @@
+The \OHPCVerTree{}.3 release includes a major update (v3.8pre) of the \Warewulf{}
+provisioning system. This update brings many improvements such as iPXE support
+and \texttt{parted} filesystem partitioning, but upgrading requires some
+additional steps. In particular, any existing bootstrap images should be
+exported and re-imported to insure new initramfs capabilities are enabled.
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+[sms](*\#*) bootstraps=`wwsh bootstrap list | tail -n +2 | awk '{print $1}'`
+[sms](*\#*) for boot in $bootstraps; do \
+    wwsh bootstrap export ${boot} /tmp/.exported_bootstrap; \
+    wwsh -y bootstrap import /tmp/.exported_bootstrap --name ${boot}; \
+    rm -f /tmp/.exported_bootstrap; \
+done
+\end{lstlisting}

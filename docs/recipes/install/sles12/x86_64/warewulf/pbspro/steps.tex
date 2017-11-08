@@ -7,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{SLES12SP2}
-\newcommand{\OSRepo}{SLE\_12\_SP2}
+\newcommand{\baseOS}{SLES12SP3}
+\newcommand{\OSRepo}{SLE\_12\_SP3}
 \newcommand{\OSTree}{SLE\_12}
 \newcommand{\OSTag}{sle12}
-\newcommand{\baseos}{sles12sp2}
+\newcommand{\baseos}{sles12sp3}
 \newcommand{\baseosshort}{sles12}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\rms}{PBS Professional}
@@ -99,8 +99,11 @@
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_pbspro}
 
-\subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
 \input{common/ibsupport_sms_sles}
+
+\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
+\input{common/opasupport_sms_sles}
 
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
@@ -125,10 +128,6 @@
 [sms](*\#*) perl -pi -e "s/\$clienthost \S+/\$clienthost ${sms_name}/" $CHROOT/var/spool/pbs/mom_priv/config
 [sms](*\#*) echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
 [sms](*\#*) chroot $CHROOT systemctl enable pbs
-
-# Add IB support
-[sms](*\#*) (*\chrootinstall*) libibverbs-runtime libmlx4-rdmav2 libipathverbs-rdmav2
-[sms](*\#*) (*\chrootinstall*) libibmad5 librdmacm1 rdma infinipath-psm dapl-devel dapl-utils
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
 [sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
@@ -156,6 +155,12 @@
 
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
+
+\paragraph{Enable \InfiniBand{} drivers}
+\input{common/ibsupport_compute_sles.tex}
+
+\paragraph{Enable \OmniPath{} drivers}
+\input{common/opasupport_compute_sles.tex}
 
 \paragraph{Increase locked memory limits}
 \input{common/memlimits} 
@@ -196,6 +201,7 @@
 \input{common/import_ww_files}
 \input{common/import_ww_files_ib_sles}
 \input{common/finalize_provisioning}
+\vspace*{0.8cm}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_pbs}
 \input{common/add_ww_hosts_finalize}
@@ -231,7 +237,7 @@
 
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
-
+\input{common/third_party_libs_petsc_sles}
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_x86}
 
@@ -241,7 +247,7 @@
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/pbspro_startup}
 
-\clearpage
+%\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{common/pbspro_test_job}
 
@@ -255,7 +261,7 @@
 \input{common/automation_appendix}
 \input{common/upgrade}
 \input{common/test_suite}
-\input{common/customization_appendix_x86}
+\input{common/customization_appendix_sles}
 \input{manifest}
 \input{common/signature}
 

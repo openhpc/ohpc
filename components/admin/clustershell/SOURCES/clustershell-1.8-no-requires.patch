@@ -1,0 +1,11 @@
+--- a/setup.py	2017-10-23 11:22:31.000000000 -0700
++++ b/setup.py	2017-11-02 11:59:54.000000000 -0700
+@@ -33,7 +33,7 @@
+ VERSION = '1.8'
+ 
+ # Dependencies (for pip install)
+-REQUIRES = ['PyYAML']
++REQUIRES = []
+ 
+ setup(name='ClusterShell',
+       version=VERSION,

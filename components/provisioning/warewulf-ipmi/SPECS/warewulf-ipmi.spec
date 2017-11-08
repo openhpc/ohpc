@@ -16,6 +16,7 @@
 %define dname ipmi
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
+%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 %if 0%{?PROJ_NAME:1}
 %define rpmname %{pname}-%{PROJ_NAME}
@@ -25,17 +26,18 @@
 
 Name: %{rpmname}
 Summary: IPMI Module for Warewulf
-Version: 3.7pre
+Version: 3.8pre
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: openssl-devel
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
@@ -51,11 +53,13 @@ adding IPMI functionality.
 
 
 %prep
-%setup -n warewulf3-%{version}.ohpc1.3
+%setup -n warewulf3-%{dev_branch_sha}
 
 %build
 cd %{dname}
-./autogen.sh
+if [ ! -f configure ]; then
+    ./autogen.sh
+fi
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
 

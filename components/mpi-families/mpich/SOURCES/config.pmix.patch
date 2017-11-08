@@ -1,0 +1,12 @@
+--- configure.orig	2017-10-03 10:45:53.825761551 -0500
++++ configure	2017-10-03 10:46:22.703531036 -0500
+@@ -46438,7 +46438,7 @@
+ fi
+ 
+ 
+-ac_fn_c_check_header_mongrel "$LINENO" "slurm/pmi.h" "ac_cv_header_slurm_pmi_h" "$ac_includes_default"
++ac_fn_c_check_header_mongrel "$LINENO" "pmi.h" "ac_cv_header_slurm_pmi_h" "$ac_includes_default"
+ if test "x$ac_cv_header_slurm_pmi_h" = xyes; then :
+ 
+ else
+

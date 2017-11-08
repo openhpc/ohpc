@@ -27,15 +27,15 @@ setup() {
 }
 
 @test "[spack] test build" {
-    spack install libelf
+    spack install libjpeg-turbo
     assert_success
 }
 
 @test "[spack] build with llvm" {
-    module load llvm4
+    module load llvm5
     spack compiler find
     assert_success
 
-    spack install libelf%clang
+    spack install libjpeg-turbo%clang
     assert_success
 }

@@ -16,7 +16,7 @@ else
     DFLAGS    = -D__INTEL
     FFLAGS    = -fpp -O3
     LDFLAGS   =
-ifeq ($(LMOD_FAMILY_MPI),openmpi)
+ifeq ($(LMOD_FAMILY_MPI),openmpi3)
     BLAS_LIBS = -lmkl_blacs_openmpi_lp64
 else
     BLAS_LIBS = -lmkl_blacs_intelmpi_lp64

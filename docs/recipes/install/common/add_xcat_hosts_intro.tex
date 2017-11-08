@@ -34,7 +34,7 @@ the {\em ib0} interface:
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
 # Define ib0 netmask
-[sms](*\#*) chdef -t network -o ib0 mask=$ipoib_netmask
+[sms](*\#*) chdef -t network -o ib0 mask=$ipoib_netmask net=${c_ipoib[0]}
 
 # Enable secondary NIC configuration
 [sms](*\#*) chdef compute -p postbootscripts=confignics
@@ -48,6 +48,7 @@ the {\em ib0} interface:
 % ohpc_command fi
 % end_ohpc_run
 
+\clearpage
 With the desired compute nodes and domain identified, the remaining steps in the
 provisioning configuration process are to define the provisioning mode and
 image for the {\em compute} group and use \xCAT{} commands to complete

@@ -102,6 +102,10 @@ if HWLOC_ENABLED
    TESTS += dev-tools/hwloc/ohpc-tests/test_compiler_families
 endif
 
+if MPI4PY_ENABLED
+   TESTS += dev-tools/mpi4py/ohpc-tests/test_mpi_families
+endif
+
 if NUMPY_ENABLED
    TESTS += dev-tools/numpy/ohpc-tests/test_mpi_families
 endif

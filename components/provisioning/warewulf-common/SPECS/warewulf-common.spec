@@ -16,15 +16,16 @@
 
 %define pname warewulf-common
 %define dname common
+%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
-Version: 3.7pre
+Version: 3.8pre
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 BuildRequires: autoconf
@@ -43,6 +44,7 @@ Patch2: mysql.r1978.patch
 # 02/22/17 charles.r.baird@intel.com - alternate package names for SuSE
 Patch3 : warewulf-common.dbinit.patch
 Patch4 : warewulf-common.bin-file.patch
+Patch5 : warewulf-common.del_from_binstore.patch
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else
@@ -67,17 +69,20 @@ supporting libs.
 
 
 %prep
-%setup -q -n warewulf3-%{version}.ohpc1.3
+%setup -q -n warewulf3-%{dev_branch_sha}
 cd %{dname}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p2
+%patch5 -p1
 
 
 %build
 cd %{dname}
-./autogen.sh
+if [ ! -f configure ]; then
+    ./autogen.sh
+fi
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
 
@@ -94,10 +99,12 @@ groupadd -r warewulf >/dev/null 2>&1 || :
 
 %post
 if [ $1 -eq 2 ] ; then
-    %{_bindir}/wwsh object canonicalize >/dev/null 2>&1 || :
+    %{_bindir}/wwsh object canonicalize -t node >/dev/null 2>&1 || :
+    %{_bindir}/wwsh object canonicalize -t file >/dev/null 2>&1 || :
 fi
-service mysqld start >/dev/null 2>&1 || :
-chkconfig mysqld on >/dev/null 2>&1 || :
+
+systemctl start mariadb >/dev/null 2>&1 || :
+systemctl enable mariadb >/dev/null 2>&1 || :
 
 
 %clean
@@ -118,6 +125,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*
 %{_datadir}/warewulf/
 %{_libexecdir}/warewulf/wwinit
+%{_mandir}/*
 %{perl_vendorlib}/*
 
 # 06/14/14 karl.w.schulz@intel.com - include required dir for SUSE

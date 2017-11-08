@@ -8,7 +8,7 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
+%include %{_sourcedir}/OHPC_macros
 
 %define pname sigar
 %define debug_package %{nil}
@@ -19,9 +19,9 @@ Release:	0.11.git58097d9%{?dist}
 Summary:	System Information Gatherer And Reporter
 
 %global sigar_suffix  0-g4b67f57
-%global sigar_hash    58097d9
+%global sigar_hash    ad47dc3b494e9293d1f087aebb099bdba832de5e
 
-Group:		System Environment/Libraries
+Group:		%{PROJ_NAME}/distro-packages
 License:	ASL 2.0
 URL:		http://sigar.hyperic.com/
 Provides:       %{pname}
@@ -35,8 +35,8 @@ Provides:       %{pname}
 #    git archive --prefix=sigar-1.6.5/ 833ca18 | bzip2 > sigar-1.6.5-833ca18.tbz2
 #
 # The diff from 1.6.4 is too huge to contemplate cherrypicking from
-Source0:	%{pname}-%{version}-%{sigar_hash}.tbz2
-
+Source0:	https://github.com/hyperic/sigar/archive/%{sigar_hash}.tar.gz#/%{pname}-%{version}.tar.gz
+Source1:    OHPC_macros
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	gcc cmake
@@ -74,7 +74,7 @@ Header files for developing against the Sigar API
 %prep
 # When using the GitHub tarballs, use:
 # setup -q -n hyperic-{name}-{sigar_hash}
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}-%{sigar_hash}
 
 %patch100 -p1 -b .bz714249
 %patch101 -p1 -b .bz746288

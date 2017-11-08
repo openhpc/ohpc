@@ -32,31 +32,10 @@
 
 %global gnu_family gnu7
 
-%{!?mpi_family: %global mpi_family openmpi}
-
 %if "%{compiler_family}" != "intel"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
-
-# MPI dependencies
-%if %{mpi_family} == impi
-BuildRequires: intel-mpi%{PROJ_DELIM}
-Requires:      intel-mpi%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mpich
-BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
-Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == mvapich2
-BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
-Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if %{mpi_family} == openmpi
-BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
-Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
-%endif
-
 
 # Base package name
 %define pname scipy
@@ -69,7 +48,7 @@ Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.scipy.org
-Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
+Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1:        OHPC_macros
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
@@ -77,7 +56,7 @@ BuildRequires:  fdupes
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  python-devel
 BuildRequires:  python-setuptools
-BuildRequires:  python-Cython
+BuildRequires:  python-Cython%{PROJ_DELIM}
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1

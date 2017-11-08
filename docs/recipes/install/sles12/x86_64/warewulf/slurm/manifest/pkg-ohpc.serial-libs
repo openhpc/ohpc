@@ -1,4 +1,4 @@
-R-gnu7-ohpc 3.4.1 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
+R-gnu7-ohpc 3.4.2 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 gsl-gnu-ohpc 2.2.1 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 gsl-gnu7-ohpc 2.4 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 metis-gnu-ohpc 5.1.0 http://glaros.dtc.umn.edu/gkhome/metis/metis/overview ohpc/serial-libs Serial Graph Partitioning and Fill-reducing Matrix Ordering

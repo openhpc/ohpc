@@ -47,6 +47,9 @@ provisioned {\em compute} nodes.
 [sms](*\#*) echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost \
         >> $CHROOT/etc/nagios/nrpe.cfg
 
+# define password for nagiosadmin to be able to connect to web interface
+[sms](*\#*) htpasswd -bc /etc/nagios/passwd nagiosadmin ${nagios_web_password}
+
 # Enable Nagios on master, and configure
 [sms](*\#*) chkconfig nagios on
 [sms](*\#*) systemctl start nagios

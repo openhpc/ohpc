@@ -14,8 +14,8 @@
 
 Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.54.0
-Release:   1
+Version:   0.55.0
+Release:   1%{?dist}
 License:   GPL-2
 Group:     %{PROJ_NAME}/admin
 BuildArch: noarch

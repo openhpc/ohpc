@@ -7,18 +7,22 @@ mounting of a \$HOME file system and the public \OHPC{} install path
 (\texttt{/opt/ohpc/pub}) that will be hosted by the {\em master} host in this
 example configuration.
 
+\iftoggleverb{isCentOS_ww_pbs_x86}
+\clearpage
+\else
 \vspace*{0.15cm}
+\fi
+
 % begin_ohpc_run
 % ohpc_comment_header Customize system configuration \ref{sec:master_customization}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Initialize warewulf database and add new cluster key to base image
+# Initialize warewulf database and ssh_keys
 [sms](*\#*) wwinit database
 [sms](*\#*) wwinit ssh_keys
-[sms](*\#*) cat ~/.ssh/cluster.pub >> $CHROOT/root/.ssh/authorized_keys
 
 # Add NFS client mounts of /home and /opt/ohpc/pub to base image
-[sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,rsize=1024,wsize=1024,cto 0 0" >> $CHROOT/etc/fstab
-[sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,nodev,nosuid,noatime 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev,noatime 0 0" >> $CHROOT/etc/fstab
 
 # Export /home and OpenHPC public packages from master server
 [sms](*\#*) echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports

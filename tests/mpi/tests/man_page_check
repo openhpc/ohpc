@@ -1,0 +1,16 @@
+#!../../common/bats/bin/bats
+# -*-sh-*-
+
+load ../../common/test_helper_functions || exit 1
+source ../../common/functions || exit 1
+
+if [ -s ../../TEST_ENV ];then
+    source ../../TEST_ENV
+fi
+
+family=${LMOD_FAMILY_MPI}
+
+@test "[MPI] mpicc man page availible ($LMOD_FAMILY_COMPILER/$family)" {
+    man mpicc > /dev/null
+    assert_success
+}

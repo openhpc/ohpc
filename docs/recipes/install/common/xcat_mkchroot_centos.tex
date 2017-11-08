@@ -6,14 +6,14 @@ used to provision one or more {\em compute} nodes. The following subsections hig
 \subsubsection{Build initial BOS image} \label{sec:assemble_bos}
 The following steps illustrate the process to build a minimal, default image for use with \xCAT{}. To begin, you will
 first need to have a local copy of the ISO image available for the underlying OS. In this recipe, the relevant ISO image
-is \texttt{CentOS-7-x86\_64-DVD-1611.iso} (available from the CentOS mirrors). We initialize the image
+is \texttt{CentOS-7-x86\_64-DVD-1708.iso} (available from the CentOS mirrors). We initialize the image
 creation process using the \texttt{copycds} command assuming that the necessary ISO image is available locally in 
 \texttt{\$\{iso\_path\}} as follows:
 
 % begin_ohpc_run
 % ohpc_comment_header Initialize OS images for use with xCAT \ref{sec:assemble_bos}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
-[sms](*\#*) copycds ${iso_path}/CentOS-7-x86_64-DVD-1611.iso
+[sms](*\#*) copycds ${iso_path}/CentOS-7-x86_64-DVD-1708.iso
 \end{lstlisting}
 % end_ohpc_run
 
@@ -22,9 +22,9 @@ creation process using the \texttt{copycds} command assuming that the necessary 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
 # Query available images
 [sms](*\#*) lsdef -t osimage
-centos7.3-x86_64-install-compute  (osimage)
-centos7.3-x86_64-netboot-compute  (osimage)
-centos7.3-x86_64-statelite-compute  (osimage)
+centos7.4-x86_64-install-compute  (osimage)
+centos7.4-x86_64-netboot-compute  (osimage)
+centos7.4-x86_64-statelite-compute  (osimage)
 \end{lstlisting}
 
 
@@ -35,7 +35,6 @@ provisioning images as well. Please consult available xCAT
 stateful or statelite approach.
 %The \texttt{CHROOT} environment variable highlights the path and is used by
 %subsequent commands to augment the basic installation.
-\newpage
 
 % begin_ohpc_run
 % ohpc_comment_header Create chroot based compute image \ref{sec:assemble_bos}

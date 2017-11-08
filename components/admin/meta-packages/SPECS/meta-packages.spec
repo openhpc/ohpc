@@ -11,15 +11,17 @@
 %include %{_sourcedir}/OHPC_macros
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 %global gnu_major_ver 7
+%global openmpi_major_ver 3
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 1.3.2
+Version: 1.3.3
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
 URL:     https://github.com/openhpc/ohpc
 Source0: LICENSE
+Source1: OHPC_macros
 
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -76,6 +78,7 @@ Collection of base packages
 
 %package -n %{PROJ_NAME}-base-compute
 Summary:   OpenHPC compute node base
+Requires:  binutils
 Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
@@ -104,18 +107,18 @@ Collection of Ganglia monitoring and metrics packages
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-io-libs
 Summary:   OpenHPC IO libraries for GNU
 Requires:  adios-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  adios-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  adios-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  hdf5-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  netcdf-cxx-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  netcdf-cxx-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  netcdf-cxx-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  netcdf-fortran-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  netcdf-fortran-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  netcdf-fortran-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  netcdf-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  netcdf-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  netcdf-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  pnetcdf-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  pnetcdf-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  pnetcdf-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  phdf5-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  phdf5-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  phdf5-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
 Requires:  adios-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-cxx-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -138,25 +141,25 @@ Collection of Nagios monitoring and metrics packages
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-parallel-libs
 Summary:   OpenHPC parallel libraries for GNU
 Requires:  boost-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  boost-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  boost-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  fftw-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  fftw-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  fftw-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  hypre-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  hypre-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  hypre-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  mumps-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  mumps-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  petsc-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  petsc-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  scalapack-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  scalapack-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  slepc-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  slepc-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  slepc-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  ptscotch-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  ptscotch-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  ptscotch-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  superlu_dist-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  superlu_dist-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  superlu_dist-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  trilinos-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  trilinos-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  trilinos-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
 Requires:  boost-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  fftw-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -187,33 +190,33 @@ Requires:  trilinos-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-parallel-libs
 Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
 
-%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi-parallel-libs
+%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-parallel-libs
 Summary:   OpenHPC parallel libraries for GNU and OpenMPI
-Requires:  boost-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  fftw-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  hypre-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  mumps-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  petsc-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  scalapack-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  slepc-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  ptscotch-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  superlu_dist-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  trilinos-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi-parallel-libs
+Requires:  boost-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  fftw-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  hypre-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  mumps-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  petsc-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  scalapack-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  slepc-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  ptscotch-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  superlu_dist-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  trilinos-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-parallel-libs
 Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
 Summary:   OpenHPC performance tools for GNU
 Requires:  imb-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  imb-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  imb-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  mpiP-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
-Requires:  papi%{PROJ_DELIM}
+Requires:  mpiP-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  tau-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
+Requires:  papi%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -224,10 +227,13 @@ Collection of performance tool builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
 Summary:   OpenHPC python libraries for GNU
+Requires:  python-mpi4py-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  python-mpi4py-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  python-numpy-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  python-scipy-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  python-scipy-gnu%{gnu_major_ver}-openmpi%{PROJ_DELIM}
+Requires:  python-scipy-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
+Requires:  python-mpi4py-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  python-scipy-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 %endif
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
@@ -283,6 +289,7 @@ Collection of server packages for SLURM
 Summary:   OpenHPC base packages for Warewulf
 Requires:  warewulf-cluster%{PROJ_DELIM}
 Requires:  warewulf-common%{PROJ_DELIM}
+Requires:  warewulf-ipmi%{PROJ_DELIM}
 Requires:  warewulf-provision%{PROJ_DELIM}
 Requires:  warewulf-provision-server%{PROJ_DELIM}
 Requires:  warewulf-vnfs%{PROJ_DELIM}
@@ -297,33 +304,33 @@ Requires:  adios-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  adios-intel-impi%{PROJ_DELIM}
 Requires:  adios-intel-mpich%{PROJ_DELIM}
 Requires:  adios-intel-mvapich2%{PROJ_DELIM}
-Requires:  adios-intel-openmpi%{PROJ_DELIM}
+Requires:  adios-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-impi%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-mpich%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-mvapich2%{PROJ_DELIM}
-Requires:  netcdf-cxx-intel-openmpi%{PROJ_DELIM}
+Requires:  netcdf-cxx-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  netcdf-fortran-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  netcdf-fortran-intel-impi%{PROJ_DELIM}
 Requires:  netcdf-fortran-intel-mpich%{PROJ_DELIM}
 Requires:  netcdf-fortran-intel-mvapich2%{PROJ_DELIM}
-Requires:  netcdf-fortran-intel-openmpi%{PROJ_DELIM}
+Requires:  netcdf-fortran-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  netcdf-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  netcdf-intel-impi%{PROJ_DELIM}
 Requires:  netcdf-intel-mpich%{PROJ_DELIM}
 Requires:  netcdf-intel-mvapich2%{PROJ_DELIM}
-Requires:  netcdf-intel-openmpi%{PROJ_DELIM}
+Requires:  netcdf-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  pnetcdf-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  pnetcdf-intel-impi%{PROJ_DELIM}
 Requires:  pnetcdf-intel-mpich%{PROJ_DELIM}
 Requires:  pnetcdf-intel-mvapich2%{PROJ_DELIM}
-Requires:  pnetcdf-intel-openmpi%{PROJ_DELIM}
+Requires:  pnetcdf-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  phdf5-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  phdf5-intel-impi%{PROJ_DELIM}
 Requires:  phdf5-intel-mpich%{PROJ_DELIM}
 Requires:  phdf5-intel-mvapich2%{PROJ_DELIM}
-Requires:  phdf5-intel-openmpi%{PROJ_DELIM}
+Requires:  phdf5-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-io-libs
 Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite
 
@@ -393,18 +400,18 @@ Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
 
-%package -n %{PROJ_NAME}-intel-openmpi-parallel-libs
+%package -n %{PROJ_NAME}-intel-openmpi%{openmpi_major_ver}-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
-Requires:  boost-intel-openmpi%{PROJ_DELIM}
-Requires:  hypre-intel-openmpi%{PROJ_DELIM}
-Requires:  mumps-intel-openmpi%{PROJ_DELIM}
-Requires:  petsc-intel-openmpi%{PROJ_DELIM}
-Requires:  scalapack-intel-openmpi%{PROJ_DELIM}
-Requires:  slepc-intel-openmpi%{PROJ_DELIM}
-Requires:  ptscotch-intel-openmpi%{PROJ_DELIM}
-Requires:  superlu_dist-intel-openmpi%{PROJ_DELIM}
-Requires:  trilinos-intel-openmpi%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-intel-openmpi-parallel-libs
+Requires:  boost-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  hypre-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  mumps-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  petsc-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  scalapack-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  slepc-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  ptscotch-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  superlu_dist-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  trilinos-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-intel-openmpi%{openmpi_major_ver}-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 
 %package -n %{PROJ_NAME}-intel-perf-tools
@@ -413,25 +420,30 @@ Requires:  imb-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  imb-intel-impi%{PROJ_DELIM}
 Requires:  imb-intel-mpich%{PROJ_DELIM}
 Requires:  imb-intel-mvapich2%{PROJ_DELIM}
-Requires:  imb-intel-openmpi%{PROJ_DELIM}
+Requires:  imb-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  tau-intel-impi%{PROJ_DELIM}
 Requires:  tau-intel-mpich%{PROJ_DELIM}
 Requires:  tau-intel-mvapich2%{PROJ_DELIM}
-Requires:  tau-intel-openmpi%{PROJ_DELIM}
+Requires:  tau-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
 Requires:  scalasca-intel-mvapich2%{PROJ_DELIM}
-Requires:  scalasca-intel-openmpi%{PROJ_DELIM}
+Requires:  scalasca-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-perf-tools
 Collection of performance tool builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package -n %{PROJ_NAME}-intel-python-libs
 Summary:   OpenHPC python libraries for Intel(R) Parallel Studio XE
 Requires:  python-numpy-intel%{PROJ_DELIM}
+Requires:  python-mpi4py-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  python-mpi4py-intel-impi%{PROJ_DELIM}
+Requires:  python-mpi4py-intel-mpich%{PROJ_DELIM}
+Requires:  python-mpi4py-intel-mvapich2%{PROJ_DELIM}
+Requires:  python-mpi4py-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-python-libs
 Collection of python related library builds for use with Intel(R) Parallel Studio XE toolchain
 
@@ -475,7 +487,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-io-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-parallel-libs
-%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi-parallel-libs
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-runtimes
@@ -491,7 +503,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{PROJ_NAME}-intel-impi-parallel-libs
 %files -n %{PROJ_NAME}-intel-mpich-parallel-libs
 %files -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
-%files -n %{PROJ_NAME}-intel-openmpi-parallel-libs
+%files -n %{PROJ_NAME}-intel-openmpi%{openmpi_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-intel-perf-tools
 %files -n %{PROJ_NAME}-intel-python-libs
 %files -n %{PROJ_NAME}-intel-runtimes

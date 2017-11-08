@@ -1,13 +1,5 @@
 \documentclass[letterpaper]{article}
 \usepackage{common/ohpc-doc}
-
-%% \usepackage[firstpage]{draftwatermark}
-%% \SetWatermarkText{[~Tech Preview~] }
-%% \SetWatermarkScale{0.45}
-%% \SetWatermarkAngle{0.0}
-%% \SetWatermarkVerCenter{.63\paperheight}
-%% \SetWatermarkColor[rgb]{.7,.7,.7}
-%% 
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
 
@@ -15,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{CentOS7.3}
-\newcommand{\OSRepo}{CentOS\_7.3}
+\newcommand{\baseOS}{CentOS7.4}
+\newcommand{\OSRepo}{CentOS\_7.4}
 \newcommand{\OSTree}{CentOS\_7}
 \newcommand{\OSTag}{el7}
-\newcommand{\baseos}{centos7.3}
+\newcommand{\baseos}{centos7.4}
 \newcommand{\baseosshort}{centos7}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\rms}{SLURM}
@@ -52,7 +44,7 @@
 \thispagestyle{empty}
 
 % Title Page --------------------------------------------------------
-\input{common/title_preview}
+\input{common/title}
 % Disclaimer
 \input{common/legal} 
 
@@ -62,7 +54,6 @@
 
 % Introduction  ----------------------------------------------------
 
-\input{common/tech_preview}
 
 \section{Introduction} \label{sec:introduction}
 \input{common/install_header}
@@ -98,18 +89,16 @@
 In addition to the \OHPC{} package repository, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
 necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base OS and EPEL repositories for which mirrors. Note that for this
-Tech Preview, an altarch variation of the \OSRepo{} release was used.
-Additional info and a pointer to available ISO images is available at the
-links below:
+both the base OS and EPEL repositories for which mirrors are freely available online:
 
 \begin{itemize*}
-\item CentOS Alt Arch Info 
-  \href{https://wiki.centos.org/SpecialInterestGroup/AltArch/AArch64}{\color{blue}{(aarch64)}}
-\item Repository/ISO images
-    \href{http://mirror.centos.org/altarch/7.3.1611/os/aarch64/}{\color{blue}{(7.3.1611)}}
+\item CentOS-7 - Base 7.4.1708
+  (e.g. \href{http://mirror.centos.org/altarch/7.4.1708/os/aarch64/}
+  {\color{blue}{http://mirror.centos.org/altarch/7.4.1708/os/aarch64/}} )
+  \item EPEL 7
+    (e.g. \href{http://download.fedoraproject.org/pub/epel/7/aarch64}
+                            {\color{blue}{http://download.fedoraproject.org/pub/epel/7/aarch64}})
 \end{itemize*}
-
 
 \input{common/automation}
 
@@ -121,8 +110,9 @@ links below:
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
-\subsection{Add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
-\input{common/ibsupport_sms_centos}
+%% Add if/when IB is available for testing
+%% \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+%% \input{common/ibsupport_sms_centos}
 
 %\vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
@@ -140,11 +130,6 @@ links below:
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add Slurm client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
-
-# Add IB support and enable
-[sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
-[sms](*\#*) (*\chrootinstall*) infinipath-psm
-[sms](*\#*) chroot $CHROOT systemctl enable rdma
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) ntp
@@ -178,19 +163,20 @@ links below:
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
-\paragraph{Increase locked memory limits}
-\input{common/memlimits}
+%% Add if/when IB is available for testing
+%% \paragraph{Increase locked memory limits}
+%% \input{common/memlimits}
 
 \paragraph{Enable ssh control via resource manager} 
 \input{common/slurm_pam}
 
-\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
-\input{common/lustre-client}
-\input{common/lustre-client-centos}
-\vspace*{0.5cm}
-\input{common/lustre-client-post}
+%%\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+%%\input{common/lustre-client}
+%%\input{common/lustre-client-centos}
+%%\vspace*{0.5cm}
+%%\input{common/lustre-client-post}
 
-\clearpage
+%\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
@@ -217,7 +203,7 @@ links below:
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
 \input{common/import_ww_files_slurm}
-\input{common/import_ww_files_ib_centos}
+%% \input{common/import_ww_files_ib_centos}
 \input{common/finalize_provisioning}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_slurm}
@@ -259,9 +245,11 @@ links below:
 %\vspace*{0.2cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
+\input{common/third_party_libs_petsc_centos}
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_aarch}
 
+\clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/slurm_startup}
 
@@ -278,7 +266,7 @@ links below:
 \input{common/automation_appendix}
 \input{common/upgrade}
 \input{common/test_suite}
-\input{common/customization_appendix_aarch}
+\input{common/customization_appendix_centos}
 \input{manifest}
 \input{common/signature}
 

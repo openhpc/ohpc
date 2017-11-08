@@ -1,0 +1,21 @@
+#!../common/bats/bin/bats
+## -*-sh-*-
+
+load ../common/test_helper_functions
+source ../common/functions || exit 1
+
+if [ -s ../TEST_ENV ];then
+    source ../TEST_ENV
+fi
+
+
+@test "[sensys] check for RPM" {
+    run check_if_rpm_installed "sensys${DELIM}"
+    assert_success
+}
+
+@test "[sensys] start and check orcmd" {
+    systemctl status orcmd
+    assert_success
+}
+

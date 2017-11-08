@@ -19,9 +19,11 @@ sub usage {
 my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
                         "parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
 my @compiler_familes = ("gnu","gnu7","intel");
-my @mpi_families     = ("mvapich2","openmpi","impi","mpich");
+my @mpi_families     = ("mvapich2","openmpi","openmpi3","impi","mpich");
 
 my @single_package_exceptions = ();
+my @exclude = ("slurm-sjstat-ohpc","slurm-slurmdb-direct-ohpc","slurm-sjobexit-ohpc");  # package name changes with slurm 17.02.9
+push @exclude, "lustre-client-ohpc-kmp-default";
 
 my $help;
 my $category_single;
@@ -43,6 +45,7 @@ $compiler_exceptions{"openblas"} = 1;
 
 $compiler_exceptions{"mvapich2"} = 4;
 $compiler_exceptions{"openmpi"} = 4;
+$compiler_exceptions{"openmpi3"} = 4;
 
 # Define any asymmetric MPI packages
 my %mpi_exceptions = ();
@@ -58,7 +61,7 @@ if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"scorep-gnu-impi-ohpc"} = 2;
     $page_breaks{"petsc-gnu-impi-ohpc"} = 2;
     $page_breaks{"trilinos-gnu-impi-ohpc"} = 3;
-    $page_breaks{"phdf5-gnu-impi-ohpc"} = 2;
+    $page_breaks{"netcdf-gnu-impi-ohpc"} = 2;
 }
 
 my $longSummaryLine = 60;
@@ -143,6 +146,12 @@ foreach my $category (@ohpcCategories) {
 		} elsif ( $url_raw =~ /https:\/\/(\S+)/) {
 		    $url=$1;
 		}
+	    }
+
+	    # Skip any excluded packages
+	    if ( grep ( /$name$/, @exclude) ) {
+		print "--> skipping $name per exclude request\n";
+		next;
 	    }
 
 	    # Include period for summary

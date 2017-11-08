@@ -1,6 +1,6 @@
---- nrpe-3.0.1/sample-config/nrpe.cfg.in	2016-09-08 09:18:58.000000000 -0700
-+++ nrpe-3.0.1.patch/sample-config/nrpe.cfg.in	2017-04-04 11:21:52.000000000 -0700
-@@ -257,8 +257,7 @@
+--- a/sample-config/nrpe.cfg.in	2017-06-27 14:13:20.000000000 -0700
++++ b/sample-config/nrpe.cfg.in	2017-09-29 09:51:30.000000000 -0700
+@@ -282,8 +282,7 @@
  # This directive allows you to include definitions from config files (with a
  # .cfg extension) in one or more directories (with recursion).
  

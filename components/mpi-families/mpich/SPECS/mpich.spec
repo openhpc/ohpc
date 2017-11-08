@@ -11,17 +11,25 @@
 # MPICH MPI stack that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
+%{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
 %define with_slurm 0
+%{!?with_slurm: %define with_slurm 0}
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
+%endif
+
+%{!?with_pmix: %define with_pmix 0}
+%if 0%{with_pmix}
+BuildRequires:  pmix%{PROJ_DELIM}
+BuildRequires: libevent-devel
 %endif
 
 # Base package name
 %define pname mpich
 
 Summary:   MPICH MPI implementation
-Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 Version:   3.2
 Release:   1%{?dist}
 License:   BSD
@@ -29,9 +37,14 @@ Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
+Patch0:    config.pmix.patch
 
-Requires: prun%{PROJ_DELIM}
+Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
+
+%if "%{RMS_DELIM}" != "%{nil}"
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{name}/%version
@@ -44,22 +57,32 @@ Message Passing Interface (MPI) standard.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch0 -p0
 
 %build
 # OpenHPC compiler designation
 %ohpc_setup_compiler
+%if 0%{with_pmix}
+module load pmix
+export CPATH=${PMIX_INC}
+%endif
 
 ./configure --prefix=%{install_path} \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
+%if 0%{with_pmix}
+            LIBS="-L%{OHPC_ADMIN}/pmix/pmix/lib -lpmix" --with-pm=none --with-pmi=slurm \
+%endif
     || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
+
 %install
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
+
 # Remove .la files detected by rpm
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
@@ -84,11 +107,14 @@ module-whatis "URL: %{url}"
 
 set     version			    %{version}
 
+setenv          MPI_DIR             %{install_path}
+%if 0%{with_pmix}
+setenv          OHPC_MPI_LAUNCHERS  pmix
+%endif
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/man
+prepend-path    MANPATH             %{install_path}/share/man
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{pname}
-prepend-path    MPI_DIR             %{install_path}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 family "MPI"
@@ -118,6 +144,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Oct  3 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.2-1
+- enabled build using external pmix library
+
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.2-1
 - switch to ohpc_compiler_dependent flag
 

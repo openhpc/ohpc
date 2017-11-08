@@ -52,7 +52,7 @@ rolling updates are pre-configured.
 \iftoggleverb{isxCAT}
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,
     literate={-}{-}1 {BOSVER}{\baseos{}}1 {ARCH}{\arch{}}1]
-[sms](*\#*) packimage centos7.3-x86_64-netboot-compute
+[sms](*\#*) packimage BOSVER-x86_64-netboot-compute
 \end{lstlisting}
 \fi
 
@@ -74,39 +74,31 @@ In the case of a fresh install, \OHPC{} recipes default to installation of the
 latest toolchains available in a given release branch. However, if upgrading a
 previously installed system, administrators can {\em opt-in} to enable new
 variants as they become available. To illustrate this point, consider the
-previous \OHPC{}
-1.3.1 release as an example which introduced a new {``gnu7''} compiler variant
-providing GCC 7.x along with runtimes and libraries compiled
-with the newer toolchain. Note that prior to the 1.3.1 release, the {``gnu''} variant was
-available which provided GCC 5.x versions.
-%Component additions are also fair game for \OHPC{} micro releases, and the 1.3.1
-%release in particular includes GCC 7.1.0, along with runtimes and libraries
-%compiled with that toolchain.
-In the case where an admin would like to enable the newer {gnu7} toolchain,
-installation of these additions is simplified
-with the use of \OHPC{}'s meta-packages (see Table~\ref{table:groups} in Appendix 
-\ref{appendix:manifest}).
-%and the toolchain package naming 
-%convention allows the new compiler to be installed concurrently with older 
-%versions.
-The following example illustrates adding the complete ``gnu7'' toolchain
-environment leveraging convenience meta-packages and also updates the modules environment to make it the default.
-%configuring a GCC 7.1.0 default
-%development environment and installing all correlated packages.
+previous \OHPC{} 1.3.2 release as an example which contained an {``openmpi''}
+MPI variant providing OpenMPI 1.10.x along with runtimes and libraries compiled
+with this toolchain. That release also contained the {``llvm4''} compiler
+family which has been updated to {``llvm5''} in \OHPC{} 1.3.3.  In the case
+where an admin would like to enable the newer {``openmpi3''} toolchain,
+installation of these additions is simplified with the use of \OHPC{}'s
+meta-packages (see Table~\ref{table:groups} in Appendix
+\ref{appendix:manifest}).  The following example illustrates adding the
+complete ``openmpi3'' toolchain.  Note that we leverage the convenience
+meta-packages containing MPI-dependent builds, and we also update the
+modules environment to make it the default.
 
 \begin{lstlisting}[language=bash,keywords={}]
 # Update default environment
-[sms](*\#*) (*\remove*) lmod-defaults-gnu-mvapich2-ohpc
-[sms](*\#*) (*\install*) lmod-defaults-gnu7-mvapich2-ohpc
+[sms](*\#*) (*\remove*) lmod-defaults-gnu7-openmpi-ohpc
+[sms](*\#*) (*\install*) lmod-defaults-gnu7-openmpi3-ohpc
 
-# Install GCC 7.x-compiled meta-packages with dependencies
+# Install OpenMPI 3.x-compiled meta-packages with dependencies
 [sms](*\#*)  (*\install*) ohpc-gnu7-perf-tools \
-                         ohpc-gnu7-serial-libs \
                          ohpc-gnu7-io-libs \
                          ohpc-gnu7-python-libs \
                          ohpc-gnu7-runtimes \
-                         ohpc-gnu7-mpich-parallel-libs \
-                         ohpc-gnu7-openmpi-parallel-libs \
-                         ohpc-gnu7-mvapich2-parallel-libs
+                         ohpc-gnu7-openmpi3-parallel-libs
+
+# Install LLVM/Clang 5.x
+[sms](*\#*)  (*\install*) llvm5-compilers-ohpc
 \end{lstlisting}
 

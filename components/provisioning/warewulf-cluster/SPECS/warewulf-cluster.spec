@@ -14,15 +14,16 @@
 
 %define pname warewulf-cluster
 %define dname cluster
+%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
-Version: 3.7pre
+Version: 3.8pre
 Release: %{_rel}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/v%{version}.ohpc1.3.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
@@ -46,12 +47,6 @@ Patch1: warewulf-cluster.wwinit.patch
 %if %{OHPC_BUILD}
 %define disable_node_package 1
 %endif
-
-# 07/21/14 karl.w.schulz@intel.com - explicitly document libcom32 and libutil as being provided
-provides: libcom32.c32
-provides: libutil.c32
-
-
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -79,13 +74,15 @@ provisioned nodes.
 %endif
 
 %prep
-%setup -n warewulf3-%{version}.ohpc1.3
+%setup -n warewulf3-%{dev_branch_sha}
 cd %{dname}
 %patch1 -p1
 
 %build
 cd %{dname}
-./autogen.sh
+if [ ! -f configure ]; then
+    ./autogen.sh
+fi
 %configure
 %{__make} %{?mflags}
 

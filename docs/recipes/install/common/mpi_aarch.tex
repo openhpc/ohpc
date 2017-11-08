@@ -1,22 +1,22 @@
-For MPI development support, \OHPC{} presently provides pre-packaged builds for
-two MPI families. Note that for this {\bf Tech Preview} release, MPI tests have only been
-carried using an {\em ethernet} transport layer.
+For MPI development and runtime support, \OHPC{} provides pre-packaged builds
+for two MPI families that are compatible with ethernet fabrics. These MPI
+stacks can be installed as follows:
 
 % begin_ohpc_run
 % ohpc_comment_header Install MPI Stacks \ref{sec:mpi}
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) openmpi-gnu7-ohpc mpich-gnu7-ohpc
+[sms](*\#*) (*\install*) openmpi3-gnu7-ohpc mpich-gnu7-ohpc
 \end{lstlisting}
 % ohpc_indent 0
-% ohpc_command elif [[ ${enable_mpi_opa} -eq 1 ]];then
+% ohpc_command elif [[ ${enable_opa} -eq 1 ]];then
 % ohpc_indent 5
-% ohpc_command (*\install*) openmpi-psm2-gnu7-ohpc mvapich2-psm2-gnu7-ohpc
+% ohpc_command (*\install*) openmpi3-psm2-gnu7-ohpc mvapich2-psm2-gnu7-ohpc
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run
 
-% TODO add tooltip about existence of OPA stacks
+
 
 

@@ -34,6 +34,11 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xllvm4"; then
    CXX=clang++
    FC=flang
    AC_MSG_RESULT([llvm4])
+elif test "x$LMOD_FAMILY_COMPILER" = "xllvm5"; then
+   CC=clang
+   CXX=clang++
+   FC=flang
+   AC_MSG_RESULT([llvm4])
 elif test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
    CC=icc
    CXX=icpc

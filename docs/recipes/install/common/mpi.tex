@@ -1,27 +1,22 @@
-For MPI development support, \OHPC{} provides pre-packaged builds for
-a variety of MPI families and transport layers. Currently available options and
-their applicability to various network transports are summarized in
-Table \ref{table:mpi}.
-The command that follows installs a default set of MPI families that
-provide support for ethernet and InfiniBand environments. If installing on a
-system with an \IntelR{} Omni-Path fabric, use the {psm2} variants for
-OpenMPI and MVAPICH instead (e.g. \texttt{openmpi-psm2-gnu7-ohpc}
-and \texttt{mvapich2-psm2-gnu7-ohpc}, respectively).
-
+For MPI development and runtime support, \OHPC{} provides pre-packaged builds
+for a variety of MPI families and transport layers. Currently available options
+and their applicability to various network transports are summarized in
+Table~\ref{table:mpi}.  The command that follows installs a starting set of MPI
+families that are compatible with ethernet fabrics. 
 
 \iftoggleverb{isx86}
 % x86_64
 
 \begin{table}[h]
-\caption{Available MPI builds} \label{table:mpi}
+\caption{Available MPI variants} \label{table:mpi}
 \centering
 \begin{tabular}{@{\hspace*{0.2cm}} *5l @{}}    \toprule
                                   & Ethernet (TCP)                 & \InfiniBand{}                  & \IntelR{} Omni-Path            \\ \midrule
 \rowcolor{black!10} MPICH         & \multicolumn{1}{c}{\checkmark} &                                &                                \\
 MVAPICH2                          &                                & \multicolumn{1}{c}{\checkmark} &                                \\
-\rowcolor{black!10} MVAPICH2 (psm2) &                                &                                & \multicolumn{1}{c}{\checkmark} \\
-OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} &                                \\
-\rowcolor{black!10} OpenMPI (psm2)  & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\ \bottomrule
+\rowcolor{black!10} MVAPICH2 (psm2) &                              &                                & \multicolumn{1}{c}{\checkmark} \\
+OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\
+\rowcolor{black!10} OpenMPI (PMIx) & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} & \multicolumn{1}{c}{\checkmark} \\ \bottomrule
 \end{tabular}
 \end{table}
 
@@ -40,22 +35,49 @@ OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolum
 
 \fi
 
-
 % begin_ohpc_run
 % ohpc_comment_header Install MPI Stacks \ref{sec:mpi}
-% ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
+% ohpc_command if [[ ${enable_mpi_defaults} -eq 1 && ${enable_pmix} -eq 0 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) openmpi-gnu7-ohpc mvapich2-gnu7-ohpc mpich-gnu7-ohpc
+[sms](*\#*) (*\install*) openmpi3-gnu7-ohpc mpich-gnu7-ohpc
 \end{lstlisting}
 % ohpc_indent 0
-% ohpc_command elif [[ ${enable_mpi_opa} -eq 1 ]];then
+% ohpc_command elif [[ ${enable_mpi_defaults} -eq 1 && ${enable_pmix} -eq 1 ]];then
 % ohpc_indent 5
-% ohpc_command (*\install*) openmpi-psm2-gnu7-ohpc mvapich2-psm2-gnu7-ohpc
+% ohpc_command (*\install*) openmpi3-pmix-slurm-gnu7-ohpc mpich-gnu7-ohpc
+% ohpc_indent 0
+% ohpc_command fi
+
+If your system includes \InfiniBand{} and you enabled underlying support in
+\S\ref{sec:add_ofed} and \S\ref{sec:addl_customizations}, an additional
+MVAPICH2 family is available for use:
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_ib} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash]
+[sms](*\#*) (*\install*) mvapich2-gnu7-ohpc
+\end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run
 
-% TODO add tooltip about existence of OPA stacks
+Alternatively, if your system includes \IntelR{} \OmniPath{}, use the (\texttt{psm2})
+variant of MVAPICH2 instead:
 
+% begin_ohpc_run
+% ohpc_command if [[ ${enable_opa} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash]
+[sms](*\#*) (*\install*) mvapich2-psm2-gnu7-ohpc
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
 
+An additional OpenMPI build variant is listed in Table~\ref{table:mpi} which
+enables \href{https://pmix.github.io/pmix/}{\color{blue}{PMIx}} job launch
+support for use with \SLURM{}. This optional variant is
+available as \texttt{openmpi3-pmix-slurm-gnu7-ohpc}.

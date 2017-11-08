@@ -85,6 +85,11 @@ if [[ $micro_ver -eq 0 ]];then
 	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
 	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip | sort >> ${logfile}.all
     fi
+
+    # query meta-packages
+    repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base \
+	--queryformat='%{Name} %{Group} %{Description}\n' ohpc* | grep  ohpc/meta-package | cut -d' ' -f1,3- | grep -e "^ohpc-"| sort > pattern-ohpc.all
+
 else
     if [ -z "$skip" ];then
 	repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -a \
@@ -95,8 +100,14 @@ else
 	    --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
 	    --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' | grep -e "-ohpc\b" | egrep -v  $skip | sort >> ${logfile}.all
     fi
+
+    # query meta-packages
+    repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base \
+	--repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update \
+	--queryformat='%{Name} %{Group} %{Description}\n' ohpc* | grep  ohpc/meta-package | cut -d' ' -f1,3- | grep -e "^ohpc-"| sort > pattern-ohpc.all
 fi
 
+# include ohpc-release
 if [[ $micro_ver -eq 0 ]];then
     info=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base -q \
 --queryformat='%{Name} %{Version} %{URL} %{Group} %{Summary}\n' ohpc-release`

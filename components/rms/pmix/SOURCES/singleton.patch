@@ -1,0 +1,117 @@
+diff --git a/src/client/pmi1.c b/src/client/pmi1.c
+index c53462c1..6214e623 100644
+--- a/src/client/pmi1.c
++++ b/src/client/pmi1.c
+@@ -1,6 +1,6 @@
+ /* -*- Mode: C; c-basic-offset:4 ; indent-tabs-mode:nil -*- */
+ /*
+- * Copyright (c) 2014-2015 Intel, Inc.  All rights reserved.
++ * Copyright (c) 2014-2017 Intel, Inc. All rights reserved.
+  * Copyright (c) 2014      Research Organization for Information Science
+  *                         and Technology (RIST). All rights reserved.
+  * Copyright (c) 2016      Mellanox Technologies, Inc.
+@@ -45,11 +45,14 @@
+ #define PMI_MAX_VAL_LEN      4096            /* Maximum size of a PMI value */
+ 
+ 
+-#define PMI_CHECK() \
+-	do {                     \
+-        if (!pmi_init) {     \
+-            return PMI_FAIL; \
+-        }                    \
++#define PMI_CHECK()             \
++    do {                        \
++        if (pmi_singleton) {    \
++            return PMI_SUCCESS; \
++        }                       \
++        if (!pmi_init) {        \
++            return PMI_FAIL;    \
++        }                       \
+     } while (0)
+ 
+ /* local functions */
+@@ -57,6 +60,7 @@ static pmix_status_t convert_int(int *value, pmix_value_t *kv);
+ static int convert_err(pmix_status_t rc);
+ static pmix_proc_t myproc;
+ static int pmi_init = 0;
++static bool pmi_singleton = false;
+ 
+ PMIX_EXPORT int PMI_Init(int *spawned)
+ {
+@@ -66,7 +70,16 @@ PMIX_EXPORT int PMI_Init(int *spawned)
+     pmix_info_t info[1];
+     bool  val_optinal = 1;
+ 
+-    if (PMIX_SUCCESS != PMIx_Init(&myproc)) {
++    if (PMIX_SUCCESS != (rc = PMIx_Init(&myproc))) {
++        /* if we didn't see a PMIx server (e.g., missing envar),
++         * then allow us to run as a singleton */
++        if (PMIX_ERR_INVALID_NAMESPACE == rc) {
++            if (NULL != spawned) {
++                *spawned = 0;
++            }
++            pmi_singleton = true;
++            return PMI_SUCCESS;
++        }
+         return PMI_ERR_INIT;
+     }
+ 
+diff --git a/src/client/pmi2.c b/src/client/pmi2.c
+index 2b0bcfba..d6610636 100644
+--- a/src/client/pmi2.c
++++ b/src/client/pmi2.c
+@@ -38,11 +38,14 @@
+ 
+ #define ANL_MAPPING "PMI_process_mapping"
+ 
+-#define PMI2_CHECK() \
+-    do {                     \
+-        if (!pmi2_init) {     \
+-            return PMI2_FAIL; \
+-        }                    \
++#define PMI2_CHECK()                \
++    do {                            \
++        if (pmi2_singleton) {       \
++            return PMI2_SUCCESS;    \
++        }                           \
++        if (!pmi2_init) {           \
++            return PMI2_FAIL;       \
++        }                           \
+     } while (0)
+ 
+ /* local functions */
+@@ -51,6 +54,7 @@ static int convert_err(pmix_status_t rc);
+ static pmix_proc_t myproc;
+ static int pmi2_init = 0;
+ static bool commit_reqd = false;
++static bool pmi2_singleton = false;
+ 
+ PMIX_EXPORT int PMI2_Init(int *spawned, int *size, int *rank, int *appnum)
+ {
+@@ -61,7 +65,25 @@ PMIX_EXPORT int PMI2_Init(int *spawned, int *size, int *rank, int *appnum)
+     pmix_proc_t proc = myproc;
+     proc.rank = PMIX_RANK_WILDCARD;
+ 
+-    if (PMIX_SUCCESS != PMIx_Init(&myproc)) {
++    if (PMIX_SUCCESS != (rc = PMIx_Init(&myproc))) {
++        /* if we didn't see a PMIx server (e.g., missing envar),
++         * then allow us to run as a singleton */
++        if (PMIX_ERR_INVALID_NAMESPACE == rc) {
++            if (NULL != spawned) {
++                *spawned = 0;
++            }
++            if (NULL != size) {
++                *size = 1;
++            }
++            if (NULL != rank) {
++                *rank = 0;
++            }
++            if (NULL != appnum) {
++                *appnum = 0;
++            }
++            pmi2_singleton = true;
++            return PMI2_SUCCESS;
++        }
+         return PMI2_ERR_INIT;
+     }
+ 

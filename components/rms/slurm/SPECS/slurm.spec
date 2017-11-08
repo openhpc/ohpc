@@ -10,6 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 %global _with_mysql  1
+%global slurm_with_pmix %{OHPC_ADMIN}/pmix
 
 %define pname slurm
 
@@ -94,10 +95,10 @@
 %slurm_with_opt sgijob
 %endif
 
-%define ver_exp 17-02-7-1
+%define ver_exp 17-02-9-1
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 17.02.7
+Version: 17.02.9
 Release: 1%{?dist}
 
 Summary: Slurm Workload Manager
@@ -117,6 +118,8 @@ BuildRequires: klogd sysconfig
 %endif
 
 Requires: %{pname}-plugins%{PROJ_DELIM}
+BuildRequires: pmix%{PROJ_DELIM}
+Requires: pmix%{PROJ_DELIM}
 #!BuildIgnore: post-build-checks
 
 %ifos linux
