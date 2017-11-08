@@ -27,7 +27,6 @@ Source0: https://assets.nagios.com/downloads/nagioscore/releases/nagios-%{versio
 Source1: nagios.logrotate
 Source2: nagios.htaccess
 Source3: nagios.internet.cfg
-Source4: nagios.htpasswd
 Source5: nagios.upgrade_to_v3.ReadMe
 Source6: nagios.upgrade_to_v3.sh
 Source7: nagios.service
@@ -225,7 +224,6 @@ install -d -m 0755 %{buildroot}%{_sysconfdir}/%{pname}/private
 mv %{buildroot}%{_sysconfdir}/%{pname}/resource.cfg %{buildroot}%{_sysconfdir}/%{pname}/private/resource.cfg
 
 install -d -m 0755 %{buildroot}%{_sysconfdir}/%{pname}/conf.d/
-install -D -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/%{pname}/passwd
 
 # Install header-file
 install -D -m 0644 include/locations.h %{buildroot}%{_includedir}/%{pname}/locations.h
