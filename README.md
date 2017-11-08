@@ -21,11 +21,6 @@ scientific libraries.
 The compatible OS version(s) for this release and the total number of
 pre-packaged binary RPMs available per architecture type are summarized as follows:
 
-Base OS     | x86_64  | aarch64  | noarch
-:---:       | :---:   | :---:    | :---:
-CentOS 7.4  | 517     | 309      | 34
-SLES 12 SP3 | 521     | 317      | 34
-
 Base OS     | aarch64 | x86_64  | noarch
 :---:       | :---:   | :---:   | :---:
 CentOS 7.4  | 309     | 517     | 34
