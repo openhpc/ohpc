@@ -48,7 +48,7 @@ provisioned {\em compute} nodes.
         >> $CHROOT/etc/nagios/nrpe.cfg
 
 # define password for nagiosadmin to be able to connect to web interface
-[sms](*\#*) htpasswd -bc passwd nagiosadmin ${nagios_web_password}
+[sms](*\#*) htpasswd -bc /etc/nagios/passwd nagiosadmin ${nagios_web_password}
 
 # Enable Nagios on master, and configure
 [sms](*\#*) chkconfig nagios on
