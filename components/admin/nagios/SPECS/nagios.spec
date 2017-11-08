@@ -161,6 +161,7 @@ may compile against.
 %patch5 -p1 -b .install_config
 %patch6 -p1 -b .dont_start_by_default
 %patch7 -p1 -b .return_2
+%patch8 -p1 -b .passwd
 %patch10 -p1 -b .more_images
 %patch11 -p1 -b .fix_perms
 %patch12 -p1 -b .httpd_conf
