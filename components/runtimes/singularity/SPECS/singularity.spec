@@ -34,6 +34,7 @@
 
 # Base package name
 %define pname singularity
+%define PNAME SINGULARITY
 
 # This allows us to pick up the default value from the configure
 %{!?with_slurm: %global with_slurm no}
@@ -136,8 +137,8 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path    MANPATH             %{install_path}/man
 
-setenv          %{pname}_DIR        %{install_path}
-setenv          %{pname}_BIN        %{install_path}/bin
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
 
 EOF
 
