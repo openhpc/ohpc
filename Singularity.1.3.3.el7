@@ -20,7 +20,8 @@ yum -y install \
     ohpc-gnu7-openmpi3-parallel-libs \
     ohpc-gnu7-perf-tools \
     ohpc-gnu7-python-libs \
-    ohpc-gnu7-serial-libs
+    ohpc-gnu7-serial-libs \
+    openssh-clients
 
 yum -y install lmod-defaults-gnu7-openmpi3-ohpc
 
