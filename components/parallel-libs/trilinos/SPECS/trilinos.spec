@@ -96,7 +96,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
 %if "%{compiler_family}" == "intel"
-        -DTrilinos_ENABLE_MueLu:BOOL=OFF                                \
         -DTPL_ENABLE_MKL:BOOL=ON                                        \
         -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
         -DMKL_LIBRARY_DIRS:FILEPATH="${MKLROOT}/lib/intel64"            \
@@ -116,6 +115,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DLAPACK_LIBRARY_NAMES:STRING="openblas"                        \
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
 %endif
+        -DTrilinos_ENABLE_MueLu:BOOL=ON                                 \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
@@ -125,6 +125,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 %if 0%{?suse_version} >= 1210
         -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
 %endif
+        -DTrilinos_ENABLE_EXAMPLES:BOOL=OFF                             \
         -DTrilinos_ENABLE_STK:BOOL=OFF                                  \
         -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
         -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
