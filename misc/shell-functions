@@ -19,3 +19,15 @@ prepare_git_tree() {
                 popd > /dev/null
         fi
 }
+
+build_srpm() {
+	local SPEC=${1}
+	local DIR=`dirname ${1}`
+
+	SRPM=`rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define 'rhel 7' --undefine 'fedora' ${SPEC}`
+	RESULT=$?
+
+	echo ${SRPM} | tail -1 | awk -F\  '{ print $2 }'
+
+	return ${RESULT}
+}
