@@ -316,7 +316,7 @@ from an allocated Torque job.
 %build
 
 # work around old config.guess on aarch64 systems
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess config
 %endif
 

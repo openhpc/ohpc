@@ -84,7 +84,7 @@ phenomena in the defense, environmental, energy, and biological sciences.
 
 %build
 
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess src/config
 %endif
 

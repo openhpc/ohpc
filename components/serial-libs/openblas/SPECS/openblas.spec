@@ -58,7 +58,7 @@ Patch5:         1262.patch
 Patch6:         1236.patch
 # PATCH for https://github.com/xianyi/OpenBLAS/pull/1247
 Patch7:         1247.patch
-ExclusiveArch:  %ix86 ia64 ppc ppc64 x86_64 aarch64
+ExclusiveArch:  %ix86 ia64 ppc ppc64 ppc64le x86_64 aarch64
 
 %description
 OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.

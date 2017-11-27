@@ -79,6 +79,7 @@ cd llvm-%{version}.src/projects
 ln -s ../../compiler-rt-%{version}.src compiler-rt
 cd ../..
 
+%ifnarch ppc64le
 cd llvm-%{version}.src/projects
 ln -s ../../libcxx-%{version}.src libcxx
 cd ../..
@@ -90,6 +91,7 @@ cd ../..
 cd llvm-%{version}.src/projects
 ln -s ../../libunwind-%{version}.src libunwind
 cd ../..
+%endif
 
 cd llvm-%{version}.src/projects
 ln -s ../../openmp-%{version}.src openmp
