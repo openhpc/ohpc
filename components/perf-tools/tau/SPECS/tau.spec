@@ -30,6 +30,7 @@ Source1:   OHPC_macros
 Patch1:    tau-add-explicit-linking-option.patch
 Patch2:    tau-shared_libpdb.patch
 Patch3:    tau-disable_examples.patch
+Patch4:    tau-ucontext.patch
 
 Provides:  lib%PNAME.so()(64bit)
 Provides:  perl(ebs2otf)
@@ -76,6 +77,7 @@ automatic instrumentation tool.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
@@ -271,6 +273,9 @@ EOF
 %doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
 
 %changelog
+* Mon Nov 27 2017 Christian Goll <cgoll@suse.de> - 2.26.1-2
+- added ucontext patch for newer glibc versions
+
 * Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.26.1-2
 - Remove separate mpi setup; it is part of the %%ohpc_compiler macro
 
