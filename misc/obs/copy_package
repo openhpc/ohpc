@@ -52,6 +52,7 @@ query_minor_branch () {
 update_pkg_if_link () {
 
     local localdir="${branchNew}/$1"
+    local parent_path="${branchCurrent}"
 
     cd $TMPDIR || ERROR "unable to cd to $TMPDIR"
     osc co ${branchNew} $1
@@ -67,7 +68,8 @@ update_pkg_if_link () {
 
     echo "${SKIP_LINK_UPDATES}" | grep -q $1
     if [ $? -eq 1 ];then
-	perl -pi -e 's/project=\'\S+\'/project=\'${branchNew}\'/ ${localdir}/_link || ERROR "unable to update parent in _link for $1"
+	echo "Updating _link for to latest branch"
+	perl -pi -e "s/project=\S+/project=\'${branchNew}\'/" ${localdir}/_link || ERROR "unable to update parent in _link for $1"
     fi
 
     # update to latest gnu compiler family
