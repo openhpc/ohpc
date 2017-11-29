@@ -15,7 +15,7 @@
 %define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:	0.5.12
+Version:	0.5.13
 Release:	1%{?dist}
 
 Summary:	MUNGE authentication service
