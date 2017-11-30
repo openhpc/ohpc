@@ -61,13 +61,6 @@ make %{?_smp_mflags}
 %install
 %ohpc_setup_compiler
 
-./configure -prefix=%buildroot%{install_path} \
-%if "%{compiler_family}" == "intel"
-        -icpc
-%else
-        -GNU
-%endif
-
 export DONT_STRIP=1
 make %{?_smp_mflags} install
 
