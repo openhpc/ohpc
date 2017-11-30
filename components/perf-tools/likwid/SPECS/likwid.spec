@@ -49,7 +49,7 @@ limited to any specific architecture.
 
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
-%else "%{compiler_family}" == "intel"
+%else
 %define compiler ICC
 %endif
 
