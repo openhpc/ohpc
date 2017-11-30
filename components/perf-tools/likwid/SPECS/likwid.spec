@@ -60,7 +60,7 @@ limited to any specific architecture.
 make \
     COMPILER="%{compiler}" \
     FC="%{fortran_compiler}" \
-    FCFLAGS="%{fc_flags}" \
+    FCFLAGS='%{fc_flags}' \
     FORTRAN_INTERFACE="true" \
     PREFIX="%{install_path}" \
     LIBDIR="%{install_path}/lib" \
