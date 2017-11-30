@@ -126,6 +126,18 @@ echo " "
 PKG=$3
 
 echo "Copying existing package $PKG from ${branchCurrent} to ${branchNew}..."
+
+# verify packages exists in source project
+osc api -X GET "/source/${branchCurrent}/$PKG" &> /dev/null 
+if [[ $? -ne 0 ]];then
+    echo " "
+    echo "whoa slow your roll....package $PKG not found in ${branchCurrent}"
+    echo "--> cowardly refusing to continue"
+    exit 1
+fi
+
+exit 0
+
 cmd="osc copypac ${branchCurrent} $PKG ${branchNew}"
 run_cmd "$cmd"
 
