@@ -55,6 +55,7 @@ limited to any specific architecture.
 
 make \
     COMPILER="%{compiler}" \
+    FORTRAN_INTERFACE="true" \
     PREFIX="%{install_path}" \
     LIBDIR="%{install_path}/lib" \
     MANPREFIX="%{install_path}/man" \
@@ -64,6 +65,7 @@ make \
 %install
 
 make %{?_smp_mflags} \
+    FORTRAN_INTERFACE="true" \
     PREFIX="%{buildroot}%{install_path}" \
     LIBDIR="%{buildroot}%{install_path}/lib" \
     MANPREFIX="%{buildroot}%{install_path}/man" \
