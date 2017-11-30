@@ -16,7 +16,7 @@
 # Base package name
 %define pname trilinos
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-%define ver_exp 12-10-1
+%define ver_exp 12-12-1
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        12.12.1
