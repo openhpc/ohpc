@@ -19,7 +19,7 @@
 %define ver_exp 12-10-1
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        12.10.1
+Version:        12.12.1
 Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
