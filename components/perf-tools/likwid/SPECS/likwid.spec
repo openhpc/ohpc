@@ -50,14 +50,17 @@ limited to any specific architecture.
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
 %define fortran_compiler gfortran
+%define fc_flags "-J ./ -fsyntax-only"
 %else
 %define compiler ICC
 %define fortran_compiler ifort
+%define fc_flags "-module ./"
 %endif
 
 make \
     COMPILER="%{compiler}" \
     FC="%{fortran_compiler}" \
+    FCFLAGS="%{fc_flags}" \
     FORTRAN_INTERFACE="true" \
     PREFIX="%{install_path}" \
     LIBDIR="%{install_path}/lib" \
