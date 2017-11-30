@@ -50,11 +50,11 @@ limited to any specific architecture.
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
 %define fortran_compiler gfortran
-%define fc_flags "-J ./ "
+%define fc_flags '-J ./ '
 %else
 %define compiler ICC
 %define fortran_compiler ifort
-%define fc_flags "-module ./"
+%define fc_flags '-module ./'
 %endif
 
 make \
