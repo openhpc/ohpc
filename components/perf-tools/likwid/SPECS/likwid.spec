@@ -49,12 +49,15 @@ limited to any specific architecture.
 
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
+%define fortran_compiler gfortran
 %else
 %define compiler ICC
+%define fortran_compiler ifort
 %endif
 
 make \
     COMPILER="%{compiler}" \
+    FC="%{fortran_compiler}" \
     FORTRAN_INTERFACE="true" \
     PREFIX="%{install_path}" \
     LIBDIR="%{install_path}/lib" \
