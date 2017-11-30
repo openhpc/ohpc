@@ -28,7 +28,6 @@ Url:            http://trilinos.sandia.gov/index.html
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Source1:        OHPC_macros
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
-Patch1:         Trilinos-trilinos-aarch64.patch
 BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  doxygen
 BuildRequires:  expat
@@ -69,7 +68,6 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 %prep
 %setup -q -n  Trilinos-trilinos-release-%{ver_exp}
 %patch0 -p1
-%patch1 -p1
 
 %build
 # OpenHPC compiler/mpi designation
