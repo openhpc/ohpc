@@ -50,7 +50,7 @@ limited to any specific architecture.
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
 %define fortran_compiler gfortran
-%define fc_flags "-J -fsyntax-only ./"
+%define fc_flags "-J ./"
 %else
 %define compiler ICC
 %define fortran_compiler ifort
