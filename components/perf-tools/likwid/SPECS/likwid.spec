@@ -50,7 +50,7 @@ limited to any specific architecture.
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
 %define fortran_compiler gfortran
-%define fc_flags "-J ./"
+%define fc_flags "-J ./ "
 %else
 %define compiler ICC
 %define fortran_compiler ifort
@@ -60,12 +60,13 @@ limited to any specific architecture.
 make \
     COMPILER="%{compiler}" \
     FC="%{fortran_compiler}" \
-    FCFLAGS='%{fc_flags}' \
+    FCFLAGS="%{fc_flags}" \
     FORTRAN_INTERFACE="true" \
     PREFIX="%{install_path}" \
     LIBDIR="%{install_path}/lib" \
     MANPREFIX="%{install_path}/man" \
-    OPTFLAGS="%{optflags}"
+    OPTFLAGS="%{optflags}" \
+    Q=""
 
 
 %install
@@ -77,6 +78,7 @@ make %{?_smp_mflags} \
     MANPREFIX="%{buildroot}%{install_path}/man" \
     INSTALL_CHOWN="" \
     OPTFLAGS="%{optflags}" \
+    Q="" \
     install 
 
 # OpenHPC module file
