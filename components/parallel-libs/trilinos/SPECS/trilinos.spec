@@ -54,6 +54,7 @@ BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 #!BuildIgnore: post-build-checks
+#!BuildIgnore: brp-check-suse
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
