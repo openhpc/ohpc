@@ -62,6 +62,7 @@ make %{?_smp_mflags}
 %ohpc_setup_compiler
 
 ./configure -prefix=%buildroot%{install_path} \
+        -useropt=-fPIC \
 %if "%{compiler_family}" == "intel"
         -icpc
 %else
