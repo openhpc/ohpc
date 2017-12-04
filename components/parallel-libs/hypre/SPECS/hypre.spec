@@ -117,7 +117,8 @@ cd src
 %endif
     --with-mli \
     --with-fei \
-    --with-superlu \
+    --with-superlu-include=$SUPERLU_INC \
+    --with-superlu-lib=$SUPERLU_LIB \
     CC="mpicc $FLAGS" \
     CXX="mpicxx $FLAGS" \
     F77="mpif77 $FLAGS"
