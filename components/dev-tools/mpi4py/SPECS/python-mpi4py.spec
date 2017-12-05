@@ -23,7 +23,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        2.0.0
+Version:        3.0.0
 Release:        1%{?dist}
 Summary:        Python bindings for the Message Passing Interface (MPI) standard.
 License:        BSD-3-Clause
