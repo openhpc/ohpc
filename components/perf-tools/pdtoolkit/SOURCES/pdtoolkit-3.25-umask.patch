@@ -1,11 +1,11 @@
---- pdtoolkit-3.25/configure~    2017-11-06 12:55:45.000000000 -0600
-+++ pdtoolkit-3.25/configure    2017-12-05 16:03:59.368119000 -0600
+--- a/configure	2017-11-06 10:55:45.000000000 -0800
++++ b/configure	2017-12-05 14:32:47.000000000 -0800
 @@ -606,7 +606,7 @@
-
-  -prefix=*)
-    prefix_given=yes
+ 
+   -prefix=*)
+     prefix_given=yes
 -    umask 2;
 +#    umask 2;
-    prefixdir=`echo $arg | sed -e 's/-prefix=//'`
-    shift
-    ;;
+     prefixdir=`echo $arg | sed -e 's/-prefix=//'`
+     shift
+     ;;
