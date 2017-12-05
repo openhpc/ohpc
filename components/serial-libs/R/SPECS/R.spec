@@ -43,7 +43,6 @@ Release:	1%{?dist}
 Version:        3.4.3
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Source1:        OHPC_macros
-Patch:          tre.patch
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
