@@ -1,0 +1,22 @@
+--- a/plugins/testplugins/Makefile      2017-11-06 20:05:39.000000000 -0600
++++ b/plugins/testplugins/Makefile      2017-12-06 10:57:59.267761422 -0600
+@@ -15,7 +15,7 @@
+
+ CFLAGS = $(TAU_MPI_COMPILE_INCLUDE) $(TAU_INCLUDE) $(TAU_DEFS) $(USER_OPT) $(TAU_INTERNAL_FLAGS) -fPIC
+
+-LDFLAGS = $(TAU_MPI_LIB)
++LDFLAGS = -L/tmp/opt/ohpc/pub/libs/gnu7/openmpi3/tau/2.27/lib $(TAU_MPI_LIB)
+
+ OBJS = libtau_plugin_function_registration_complete.so libtau_plugin_atomic_event_trigger.so libtau_plugin_atomic_event_registration_complete.so libtau_plugin_end_of_execution.so libtau_plugin_interrupt_trigger.so tau_plugin_function_registration_complete.o tau_plugin_atomic_event_trigger.o tau_plugin_atomic_event_registration_complete.o tau_plugin_end_of_execution.o tau_plugin_interrupt_trigger.o
+
+--- a/plugins/examples/Makefile 2017-11-06 20:05:39.000000000 -0600
++++ b/plugins/examples/Makefile 2017-12-06 11:07:42.515982010 -0600
+@@ -15,7 +15,7 @@
+
+ CFLAGS = $(TAU_MPI_COMPILE_INCLUDE) $(TAU_INCLUDE) $(TAU_DEFS) $(USER_OPT) $(TAU_INTERNAL_FLAGS) -fPIC
+
+-LDFLAGS = $(TAU_MPI_LIB)
++LDFLAGS = -L/tmp/opt/ohpc/pub/libs/gnu7/openmpi3/tau/2.27/lib $(TAU_MPI_LIB)
+
+ OBJS = libTAU-filter-plugin.so libTAU-mpit-recommend-sharp-usage-plugin.so libTAU-mpit-mvapich-free_unused_vbufs.so tau_plugin_example_disable_instrumentation_runtime.o tau_plugin_example_mpit_recommend_sharp_usage.o tau_plugin_example_free_unused_vbufs.o
+
