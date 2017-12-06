@@ -12,7 +12,7 @@
 
 %{?!python_module:%define python_module() python-%{**} python3-%{**}}
 %define         oldpython python
-Name:           python-Cython
+Name:           python-Cython%{PROJ_DELIM}
 Version:        0.26.1
 Release:        0
 Url:            http://www.cython.org
