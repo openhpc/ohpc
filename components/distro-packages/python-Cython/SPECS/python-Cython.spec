@@ -22,26 +22,24 @@ Group:          Development/Languages/Python
 Source:         https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
 Source2:        OHPC_macros
-Patch1:         python-Cython-c++11.patch
+#Patch1:         python-Cython-c++11.patch
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
+BuildRequires:  %{python_module devel}
 BuildRequires:  %{python_module xml}
 Requires:       python-xml
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
 %else
+BuildRequires:  python34-devel
 BuildRequires:  libxml2-python
 Requires:       libxml2-python
 %endif
 BuildRequires:  gcc-c++
-BuildRequires:  %{python_module devel}
 Requires:       python-devel
 BuildRequires:  python-rpm-macros
 Provides:       python-cython = %{version}
 Obsoletes:      python-cython < %{version}
-%if 0%{?suse_version} && 0%{?suse_version} <= 1110
-%{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-%endif
 
 %python_subpackages
 
@@ -62,7 +60,7 @@ code.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1
+#%patch1
 # Fix non-executable scripts
 sed -i "s|^#!.*||" Cython/Debugger/{libpython,Cygdb}.py cython.py
 
