@@ -10,9 +10,10 @@
 
 %include %{_sourcedir}/OHPC_macros
 
+%{?!python_module:%define python_module() python-%{**} python3-%{**}}
 %define pname Cython
 Name:           python-%{pname}%{PROJ_DELIM}
-Version:        0.23.4
+Version:        0.26.1
 Release:        76.1%{?dist}
 Url:            http://www.cython.org
 Summary:        The Cython compiler for writing C extensions for the Python language
@@ -24,7 +25,7 @@ Source2:        OHPC_macros
 Patch1:         python-Cython-c++11.patch
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
-BuildRequires:  python-xml
+BuildRequires:  %{python_module xml}
 Requires:       python-xml
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
@@ -33,8 +34,9 @@ BuildRequires:  libxml2-python
 Requires:       libxml2-python
 %endif
 BuildRequires:  gcc-c++
-BuildRequires:  python-devel
+BuildRequires:  %{python_module devel}
 Requires:       python-devel
+BuildRequires:  python-rpm-macros
 Provides:       python-cython = %{version}
 Obsoletes:      python-cython < %{version}
 %if 0%{?suse_version} && 0%{?suse_version} <= 1110
@@ -61,23 +63,29 @@ code.
 %patch1
 # Fix non-executable scripts
 sed -i "s|^#!.*||" Cython/Debugger/{libpython,Cygdb}.py cython.py
-# Fix EOL encoding
-sed -i "s|\r||" Demos/callback/{README.txt,cheesefinder.h} Demos/embed/Makefile.{unix,msc.static} Doc/primes.c
 
 %build
 CFLAGS="%{optflags}" python setup.py build
+%python_build
 
 %install
-python setup.py install --prefix=%{_prefix} --root=%{buildroot}
-
+%{python_expand %$python_install
 # Prepare for update-alternatives usage
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives
 for p in cython cythonize cygdb ; do
-    mv %{buildroot}%{_bindir}/$p %{buildroot}%{_bindir}/$p-%{py_ver}
-    ln -s -f %{_sysconfdir}/alternatives/$p %{buildroot}%{_bindir}/$p
-    # create a dummy target for /etc/alternatives/$p
-    touch %{buildroot}%{_sysconfdir}/alternatives/$p
+    mv %{buildroot}%{_bindir}/$p %{buildroot}%{_bindir}/$p-%{$python_bin_suffix}
 done
+}
+for p in cython cythonize cygdb ; do
+    %prepare_alternative $p
+done
+
+%{python_expand chmod a+x %{buildroot}%{$python_sitearch}/Cython/Build/Cythonize.py
+sed -i "s|^#!/usr/bin/env python$|#!%{__$python}|" %{buildroot}%{$python_sitearch}/Cython/Build/Cythonize.py
+$python -m compileall -d %{$python_sitearch} %{buildroot}%{$python_sitearch}/Cython/Build/
+$python -O -m compileall -d %{$python_sitearch} %{buildroot}%{$python_sitearch}/Cython/Build/
+%fdupes %{buildroot}%{$python_sitearch}
+}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes -s %{buildroot}%{python_sitearch} %{buildroot}%{_docdir}
@@ -85,40 +93,26 @@ done
 rm -rf %{buildroot}%{python_sitearch}/__pycache__/
 
 %post
-%_sbindir/update-alternatives \
-   --install %{_bindir}/cython cython %{_bindir}/cython-%{py_ver} 30 \
-   --slave %{_bindir}/cythonize cythonize %{_bindir}/cythonize-%{py_ver} \
-   --slave %{_bindir}/cygdb cygdb %{_bindir}/cygdb-%{py_ver}
+%python_install_alternative cython cythonize cygdb
 
 %postun
-if [ $1 -eq 0 ] ; then
-    %_sbindir/update-alternatives --remove cython %{_bindir}/cython-%{py_ver}
-fi
+%python_uninstall_alternative cython
 
-%check
-%if 0%{?suse_version} && 0%{?suse_version} <= 1140
-sed -i.SLES11.SP4.bak -e 's/const char/char/' ./tests/run/cpdef_extern_func.pyx
-#mv ./tests/run/cpdef_extern_func.pxd ./tests/run/cpdef_extern_func.pxd.TNT.txt
-#mv ./tests/run/cpdef_extern_func.pyx ./tests/run/cpdef_extern_func.pyx.TNT.txt
-#sleep 60
-%endif
-python runtests.py -vv
-
-%files
+%files %{python_files}
 %defattr(-,root,root,-)
-%doc COPYING.txt LICENSE.txt README.txt ToDo.txt USAGE.txt Doc Demos
-%{_bindir}/cygdb
-%{_bindir}/cython
-%{_bindir}/cythonize
-%{_bindir}/cygdb-%{py_ver}
-%{_bindir}/cython-%{py_ver}
-%{_bindir}/cythonize-%{py_ver}
-%ghost %{_sysconfdir}/alternatives/cygdb
-%ghost %{_sysconfdir}/alternatives/cython
-%ghost %{_sysconfdir}/alternatives/cythonize
+%if 0%{?leap_version} >= 420200 || 0%{?suse_version} > 1320
+%license LICENSE.txt
+%else
+%doc LICENSE.txt
+%endif
+%doc COPYING.txt README.txt ToDo.txt USAGE.txt
+%python_alternative %{_bindir}/cygdb
+%python_alternative %{_bindir}/cython
+%python_alternative %{_bindir}/cythonize
 %{python_sitearch}/Cython/
 %{python_sitearch}/Cython-%{version}-py*.egg-info
 %{python_sitearch}/cython.py*
+%pycache_only %{python_sitearch}/__pycache__/cython*.py*
 %{python_sitearch}/pyximport/
 
 %changelog
