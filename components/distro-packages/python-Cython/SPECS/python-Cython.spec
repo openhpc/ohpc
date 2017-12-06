@@ -43,6 +43,8 @@ Obsoletes:      python-cython < %{version}
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 %endif
 
+%python_subpackages
+
 %description
 The Cython language makes writing C extensions for the Python language as
 easy as Python itself.  Cython is a source code translator based on the
