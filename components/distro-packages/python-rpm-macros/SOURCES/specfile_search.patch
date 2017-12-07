@@ -1,0 +1,27 @@
+--- a/macros.lua	2017-12-07 11:46:04.000000000 -0800
++++ b/macros.lua	2017-12-07 15:30:01.000000000 -0800
+@@ -56,15 +56,15 @@
+     specpath = rpm.expand("%_specfile")
+ 
+     -- search possible locations - shouldn't be necessary anymore
+---    local locations = { rpm.expand("%_sourcedir"), rpm.expand("%_specdir"), posix.getcwd(), posix.getcwd() .. "/" .. name }
+---    for _,loc in ipairs(locations) do
+---        local filename = loc .. "/" .. name .. ".spec"
+---        if posix.stat(filename, "mode") ~= nil then
+---            io.stderr:write("could not find spec as " .. filename .. "\n")
+---            specpath = filename
+---            break
+---        end
+---    end
++    local locations = { rpm.expand("%_sourcedir"), rpm.expand("%_specdir"), posix.getcwd(), posix.getcwd() .. "/" .. name }
++    for _,loc in ipairs(locations) do
++        local filename = loc .. "/" .. name .. ".spec"
++        if posix.stat(filename, "mode") ~= nil then
++            io.stderr:write("could not find spec as " .. filename .. "\n")
++            specpath = filename
++            break
++        end
++    end
+ end
+ 
+ function python_subpackages()
