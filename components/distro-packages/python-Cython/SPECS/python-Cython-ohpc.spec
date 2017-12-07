@@ -25,17 +25,19 @@ Source1:        python-Cython-rpmlintrc
 BuildRequires:  %{python_module devel}
 BuildRequires:  %{python_module xml}
 BuildRequires:  fdupes
+Requires(post): update-alternatives
+Requires(postun): update-alternatives
 %else
 BuildRequires:  libxml2-python
 Requires:       libxml2-python
 BuildRequires:  python-devel
+Requires(post): chkconfig
+Requires(postun): chkconfig
 %endif
 BuildRequires:  gcc-c++
 BuildRequires:  python-rpm-macros
 Requires:       python-devel
 Requires:       python-xml
-Requires(post): update-alternatives
-Requires(postun): update-alternatives
 %ifpython2
 Provides:       %{oldpython}-cython = %{version}
 Obsoletes:      %{oldpython}-cython < %{version}
