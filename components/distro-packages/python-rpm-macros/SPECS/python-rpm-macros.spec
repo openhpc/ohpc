@@ -46,7 +46,7 @@ mv macros-default-pythons macros/035-default-pythons
 %endif
 
 %if 0%{?suse_version}
-%global install_path %{_sysconfdir}
+%global install_path %{_sysconfdir}/rpm
 %else
 %global install_path /usr/lib/rpm/macros.d
 %endif
@@ -55,11 +55,11 @@ mv macros-default-pythons macros/035-default-pythons
 ./compile-macros.sh
 
 %install
-mkdir -p %{buildroot}%{install_path}/rpm
-install -m 644 macros.python_all %{buildroot}%{install_path}/rpm
+mkdir -p %{buildroot}%{install_path}
+install -m 644 macros.python_all %{buildroot}%{install_path}
 
 %files
 %defattr(-,root,root)
-%{install_path}/rpm/macros.python_all
+%{install_path}/macros.python_all
 
 %changelog
