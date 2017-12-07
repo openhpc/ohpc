@@ -45,15 +45,21 @@ are only building for distros newer than Leap 42.2
 mv macros-default-pythons macros/035-default-pythons
 %endif
 
+%if 0%{?suse_version}
+%global install_path %{_sysconfdir}
+%else
+%global install_path /usr/lib/rpm/macros.d
+%endif
+
 %build
 ./compile-macros.sh
 
 %install
-mkdir -p %{buildroot}%{_sysconfdir}/rpm
-install -m 644 macros.python_all %{buildroot}%{_sysconfdir}/rpm
+mkdir -p %{buildroot}%{install_path}/rpm
+install -m 644 macros.python_all %{buildroot}%{install_path}/rpm
 
 %files
 %defattr(-,root,root)
-%{_sysconfdir}/rpm/macros.python_all
+%{install_path}/rpm/macros.python_all
 
 %changelog
