@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %{?!python_module:%define python_module() python-%{**} python3-%{**}}
-Name:           python-Cython%{PROJ_DELIM}
+Name:           python-Cython-ohpc
 Version:        0.26.1
 Release:        0
 Url:            http://www.cython.org
