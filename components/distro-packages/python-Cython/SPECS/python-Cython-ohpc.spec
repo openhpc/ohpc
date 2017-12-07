@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %{?!python_module:%define python_module() python-%{**} python3-%{**}}
-Name:           python-Cython-ohpc
+Name:           python-Cython%{PROJ_DELIM}
 Version:        0.26.1
 Release:        0
 Url:            http://www.cython.org
@@ -34,7 +34,7 @@ Requires(post): chkconfig
 Requires(postun): chkconfig
 %endif
 BuildRequires:  gcc-c++
-BuildRequires:  python-rpm-macros
+BuildRequires:  python-rpm-macros%{PROJ_DELIM}
 Requires:       python-devel
 Requires:       python-xml
 
