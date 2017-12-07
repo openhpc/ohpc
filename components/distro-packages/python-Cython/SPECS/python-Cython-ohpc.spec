@@ -11,7 +11,6 @@
 %include %{_sourcedir}/OHPC_macros
 
 %{?!python_module:%define python_module() python-%{**} python3-%{**}}
-%define         oldpython python
 Name:           python-Cython-ohpc
 Version:        0.26.1
 Release:        0
@@ -27,10 +26,6 @@ BuildRequires:  %{python_module xml}
 BuildRequires:  fdupes
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
-%ifpython2
-Provides:       %{oldpython}-cython = %{version}
-Obsoletes:      %{oldpython}-cython < %{version}
-%endif
 %else
 BuildRequires:  libxml2-python
 Requires:       libxml2-python
