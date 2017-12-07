@@ -27,6 +27,10 @@ BuildRequires:  %{python_module xml}
 BuildRequires:  fdupes
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
+%ifpython2
+Provides:       %{oldpython}-cython = %{version}
+Obsoletes:      %{oldpython}-cython < %{version}
+%endif
 %else
 BuildRequires:  libxml2-python
 Requires:       libxml2-python
@@ -38,10 +42,6 @@ BuildRequires:  gcc-c++
 BuildRequires:  python-rpm-macros
 Requires:       python-devel
 Requires:       python-xml
-%ifpython2
-Provides:       %{oldpython}-cython = %{version}
-Obsoletes:      %{oldpython}-cython < %{version}
-%endif
 
 %python_subpackages
 
