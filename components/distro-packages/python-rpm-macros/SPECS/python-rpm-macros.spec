@@ -28,7 +28,6 @@ Source:         python-rpm-macros-%{version}.tar.bz2
 Source100:      README.packaging
 Source101:      update.sh
 Patch1:         specfile_search.patch
-Patch2:         centos_flavors.patch
 # Fedora compatibility
 Provides:       python2-rpm-macros
 Provides:       python3-rpm-macros
@@ -47,9 +46,6 @@ are only building for distros newer than Leap 42.2
 mv macros-default-pythons macros/035-default-pythons
 %endif
 %patch1 -p1
-%if !0%{?suse_version}
-%patch2 -p1
-%endif
 
 %if 0%{?suse_version}
 %global install_path %{_sysconfdir}/rpm
