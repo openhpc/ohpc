@@ -21,6 +21,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname numpy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
+%{?!python_module:%define python_module() python-%{**} python3-%{**}}
 Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.13.3
 Release:        1%{?dist}
@@ -34,17 +35,23 @@ Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  python-devel python-setuptools
+BuildRequires:  %{python_module  setuptools}
+BuildRequires:  python-rpm-macros%{PROJ_DELIM}
 Requires:       python
 Provides:       numpy = %{version}
 %if 0%{?suse_version}
+BuildRequires:  %{python_module devel}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
+%else
+BuildRequires:  python-devel
+BuildRequires:  python34-devel
 %endif
 %if ! 0%{?fedora_version}
 Provides:       python-numeric = %{version}
 Obsoletes:      python-numeric < %{version}
 %endif
+%python_subpackages
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -95,14 +102,14 @@ EOF
 %endif
 
 #CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
-python setup.py build $COMPILER_FLAG
+%python_build $COMPILER_FLAG
 
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+%python_exec setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
 %endif
@@ -152,7 +159,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%files
+%files %{python_files}
 %defattr(-,root,root)
 %{OHPC_PUB}
 %doc INSTALL.rst.txt
