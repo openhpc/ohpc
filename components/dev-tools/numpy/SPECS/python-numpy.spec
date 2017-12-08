@@ -48,10 +48,6 @@ BuildRequires:  python-setuptools
 BuildRequires:  python34-devel
 BuildRequires:  python34-setuptools
 %endif
-%if ! 0%{?fedora_version}
-Provides:       python-numeric = %{version}
-Obsoletes:      python-numeric < %{version}
-%endif
 %python_subpackages
 
 # Default library install path
