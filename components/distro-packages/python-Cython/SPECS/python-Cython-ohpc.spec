@@ -30,6 +30,7 @@ Requires(postun): update-alternatives
 BuildRequires:  libxml2-python
 Requires:       libxml2-python
 BuildRequires:  python-devel
+BuildRequires:  python34-devel
 Requires(post): chkconfig
 Requires(postun): chkconfig
 %endif
