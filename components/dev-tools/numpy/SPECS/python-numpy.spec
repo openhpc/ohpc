@@ -35,17 +35,19 @@ Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  %{python_module  setuptools}
 BuildRequires:  python-rpm-macros%{PROJ_DELIM}
 Requires:       python
 Provides:       numpy = %{version}
 %if 0%{?suse_version}
 BuildRequires:  %{python_module devel}
+BuildRequires:  %{python_module  setuptools}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
 %else
 BuildRequires:  python-devel
+BuildRequires:  python-setuptools
 BuildRequires:  python34-devel
+BuildRequires:  python34-setuptools
 %endif
 %if ! 0%{?fedora_version}
 Provides:       python-numeric = %{version}
