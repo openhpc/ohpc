@@ -47,7 +47,7 @@
 
 Summary:   PBS Professional
 Name:      %{pname}%{PROJ_DELIM}
-Version:   14.1.0
+Version:   14.1.2
 Release:   0%{?dist}
 Source0:   https://github.com/PBSPro/pbspro/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
