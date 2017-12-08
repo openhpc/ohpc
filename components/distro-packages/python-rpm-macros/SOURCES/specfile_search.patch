@@ -1,5 +1,5 @@
 --- a/macros.lua	2017-12-07 11:46:04.000000000 -0800
-+++ b/macros.lua	2017-12-08 12:47:48.000000000 -0800
++++ b/macros.lua	2017-12-08 13:06:57.000000000 -0800
 @@ -14,7 +14,7 @@
      -- ...but check that it is actually in the buildset
      if insert_last_python then table.insert(pythons, last_python) end
@@ -9,3 +9,32 @@
      local spec_name_prefix = "python"
      -- modname from name
      local name = modname
+@@ -53,18 +53,18 @@
+     end
+ 
+     -- find the spec file
+-    specpath = rpm.expand("%_specfile")
++--    specpath = rpm.expand("%_specfile")
+ 
+     -- search possible locations - shouldn't be necessary anymore
+---    local locations = { rpm.expand("%_sourcedir"), rpm.expand("%_specdir"), posix.getcwd(), posix.getcwd() .. "/" .. name }
+---    for _,loc in ipairs(locations) do
+---        local filename = loc .. "/" .. name .. ".spec"
+---        if posix.stat(filename, "mode") ~= nil then
+---            io.stderr:write("could not find spec as " .. filename .. "\n")
+---            specpath = filename
+---            break
+---        end
+---    end
++    local locations = { rpm.expand("%_sourcedir"), rpm.expand("%_specdir"), posix.getcwd(), posix.getcwd() .. "/" .. name }
++    for _,loc in ipairs(locations) do
++        local filename = loc .. "/" .. name .. ".spec"
++        if posix.stat(filename, "mode") ~= nil then
++            io.stderr:write("could not find spec as " .. filename .. "\n")
++            specpath = filename
++            break
++        end
++    end
+ end
+ 
+ function python_subpackages()
