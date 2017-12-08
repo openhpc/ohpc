@@ -37,7 +37,6 @@ Patch3:         numpy-intelfcomp.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  python-rpm-macros%{PROJ_DELIM}
 Requires:       python
-Provides:       numpy = %{version}
 %if 0%{?suse_version}
 BuildRequires:  %{python_module devel}
 BuildRequires:  %{python_module  setuptools}
