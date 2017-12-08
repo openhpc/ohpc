@@ -1,0 +1,15 @@
+--- a/compile-macros.sh	2017-12-07 11:46:04.000000000 -0800
++++ b/compile-macros.sh	2017-12-08 09:18:49.000000000 -0800
+@@ -1,10 +1,10 @@
+ #!/bin/bash
+ 
+-FLAVORS="python2 python3 pypy3"
++FLAVORS="python2 python34 pypy3"
+ 
+ # order of BUILDSET is important, it is copied to order of %pythons,
+ # and that determines the last installed binary
+-BUILDSET="python2 python3"
++BUILDSET="python2 python34"
+ 
+ 
+ ### flavor-specific: generate from flavor.in
