@@ -26,7 +26,6 @@ BuildRequires:  fdupes
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
 %else
-BuildRequires:  %{python_module devel}
 BuildRequires:  libxml2-python
 Requires:       libxml2-python
 #BuildRequires:  python-devel
@@ -34,6 +33,7 @@ Requires:       libxml2-python
 Requires(post): chkconfig
 Requires(postun): chkconfig
 %endif
+BuildRequires:  %{python_module devel}
 BuildRequires:  gcc-c++
 BuildRequires:  python-rpm-macros%{PROJ_DELIM}
 Requires:       python-devel
