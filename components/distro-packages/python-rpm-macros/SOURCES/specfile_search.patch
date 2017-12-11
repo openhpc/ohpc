@@ -1,5 +1,5 @@
 --- a/macros.lua	2017-12-07 11:46:04.000000000 -0800
-+++ b/macros.lua	2017-12-11 09:21:54.000000000 -0800
++++ b/macros.lua	2017-12-11 10:29:00.000000000 -0800
 @@ -14,7 +14,7 @@
      -- ...but check that it is actually in the buildset
      if insert_last_python then table.insert(pythons, last_python) end
@@ -38,6 +38,15 @@
  end
  
  function python_subpackages()
+@@ -281,7 +281,7 @@
+ 
+     -- before we start, print Provides: python2-modname
+     if is_called_python and old_python2 then
+-        print(rpm.expand("Provides: python2-" .. modname .. " = %{version}-%{release}\n"))
++        print(rpm.expand("Provides: python-" .. modname .. " = %{version}-%{release}\n"))
+     end
+ 
+     for _,python in ipairs(pythons) do
 --- a/functions.lua	2017-12-07 11:46:04.000000000 -0800
 +++ b/functions.lua	2017-12-11 09:22:39.000000000 -0800
 @@ -59,7 +59,7 @@
