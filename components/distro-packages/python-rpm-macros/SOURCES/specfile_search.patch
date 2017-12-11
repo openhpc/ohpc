@@ -1,51 +1,11 @@
---- a/macros.lua	2017-12-07 11:46:04.000000000 -0800
-+++ b/macros.lua	2017-12-08 13:18:52.000000000 -0800
-@@ -14,7 +14,7 @@
-     -- ...but check that it is actually in the buildset
-     if insert_last_python then table.insert(pythons, last_python) end
- 
--    modname = rpm.expand("%name")
-+    modname = string.gsub(rpm.expand("%name"), "-ohpc", "")
-     local spec_name_prefix = "python"
-     -- modname from name
-     local name = modname
-@@ -53,18 +53,18 @@
-     end
- 
-     -- find the spec file
--    specpath = rpm.expand("%_specfile")
-+--    specpath = rpm.expand("%_specfile")
- 
-     -- search possible locations - shouldn't be necessary anymore
----    local locations = { rpm.expand("%_sourcedir"), rpm.expand("%_specdir"), posix.getcwd(), posix.getcwd() .. "/" .. name }
----    for _,loc in ipairs(locations) do
----        local filename = loc .. "/" .. name .. ".spec"
----        if posix.stat(filename, "mode") ~= nil then
----            io.stderr:write("could not find spec as " .. filename .. "\n")
----            specpath = filename
----            break
----        end
----    end
-+    local locations = { rpm.expand("%_specdir"), rpm.expand("%_sourcedir"), posix.getcwd(), posix.getcwd() .. "/" .. name }
-+    for _,loc in ipairs(locations) do
-+        local filename = loc .. "/" .. name .. ".spec"
-+        if posix.stat(filename, "mode") ~= nil then
-+            io.stderr:write("could not find spec as " .. filename .. "\n")
-+            specpath = filename
-+            break
-+        end
-+    end
- end
- 
- function python_subpackages()
 --- a/functions.lua	2017-12-07 11:46:04.000000000 -0800
-+++ b/functions.lua	2017-12-08 14:16:42.000000000 -0800
++++ b/functions.lua	2017-12-11 09:22:39.000000000 -0800
 @@ -59,7 +59,7 @@
      if flavor == "python2" and old_python2 then
          flavor = "python"
      end
 -    local name = flavor .. "-" .. modname
-+    local name = flavor .. "-" .. modname .. "-ohpc"
++    local name = flavor .. "-" .. modname .. "%PROJ_DELIM"
      if subpkg and subpkg ~= "" then
          name = name .. "-" .. subpkg
      end
