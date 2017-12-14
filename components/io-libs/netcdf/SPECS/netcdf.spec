@@ -47,6 +47,7 @@ Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
 Source101:	OHPC_macros
 
+BuildRequires:  curl-devel
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  m4
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
@@ -107,7 +108,6 @@ export CC=mpicc
     --enable-shared \
     --enable-netcdf-4 \
     --enable-dap \
-    --enable-ncgen4 \
     --with-pic \
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }
