@@ -56,6 +56,8 @@
 %define pbs_home /var/spool/pbs
 %define pbs_dbuser postgres
 %define pbs_dist %{pbs_name}-%{pbs_version}.tar.gz
+
+# Patch1: logic for systemd.patch
 %if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7
 %define have_systemd 1
 %endif
@@ -66,15 +68,7 @@ Version:   %{pbs_version}
 Release:   %{pbs_release}
 Source0:   https://github.com/PBSPro/pbspro/archive/v%{pbs_version}.tar.gz#$/%{pbs_name}-%{pbs_version}.tar.gz
 Source1:   OHPC_macros
-
-# scott@altair.com (suse_version condition added in Altair 14.1.2 spec file)
-# %if %{defined suse_version}
-# Source2:   %{name}-rpmlintrc
-# %endif
-
-# scott@altair.com (commenting out Patch1 to confirm it is no longer required)
 Patch1:    systemd.patch
-
 License:   AGPLv3 with exceptions
 URL:       https://github.com/PBSPro/pbspro
 Prefix:    %{pbs_prefix}
@@ -95,13 +89,11 @@ BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
 
-# scott@altair.com (Altair does not make distinction of suse_version in 14.1.2 spec file; commented out single BuildRequires)
 %if %{defined suse_version}
 BuildRequires: hwloc-devel < 2
 %else
 BuildRequires: hwloc-devel
 %endif
-# BuildRequires: hwloc-devel
 
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
@@ -130,6 +122,7 @@ BuildRequires: libXext
 BuildRequires: libXft
 %endif
 
+# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 BuildRequires: systemd
 %endif
@@ -240,6 +233,7 @@ the PBS Professional user commands.
 %setup -n %{pbs_name}-%{pbs_version}
 
 # karl.w.schulz@intel.com (enable systemd startup - patches from pbs master branch)
+# Patch1: logic for systemd.patch
 %patch1 -p1
 
 %build
@@ -382,6 +376,7 @@ echo
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
 
+# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %endif
@@ -398,9 +393,12 @@ echo
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
+
+# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %endif
+
 # %{_sysconfdir}/init.d/pbs
 %exclude %{pbs_prefix}/bin/printjob_svr.bin
 %exclude %{pbs_prefix}/etc/pbs_db_schema.sql
@@ -464,6 +462,7 @@ echo
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
+# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 %exclude %{_unitdir}/pbs.service
 %endif
