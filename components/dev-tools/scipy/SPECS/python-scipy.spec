@@ -64,6 +64,7 @@ BuildRequires:  %{python_module devel}
 BuildRequires:  %{python_module setuptools}
 BuildRequires:  %{python_module Cython}%{PROJ_DELIM}
 BuildRequires:  %{python_module numpy}-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  python-rpm-macros%{PROJ_DELIM}
 BuildRequires:  swig
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       %{python_module numpy}-%{compiler_family}%{PROJ_DELIM}
