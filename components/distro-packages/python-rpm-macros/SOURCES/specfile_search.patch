@@ -35,7 +35,7 @@
      if insert_last_python then table.insert(pythons, last_python) end
  
 -    modname = rpm.expand("%name")
-+    modname = string.gsub(rpm.expand("%name"), "%PROJ_DELIM", "")
++    modname = string.gsub(rpm.expand("%name"), rpm.expand("%PROJ_DELIM"), "")
 +    modname = string.gsub(modname, "-" .. compiler_family, "")
 +    modname = string.gsub(modname, "-" .. mpi_family, "")
      local spec_name_prefix = "python"
