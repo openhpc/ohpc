@@ -21,7 +21,11 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname numpy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%{?!python_module:%define python_module() python-%{**} python3-%{**}}
+%if 0%{?sles_version} || 0%{?suse_version}
+%define python_module() python-%{**} python3-%{**}
+%else
+%define python_module() python-%{**} python34-%{**}
+%endif
 Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.13.3
 Release:        1%{?dist}
@@ -38,16 +42,11 @@ Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  python-rpm-macros%{PROJ_DELIM}
 Requires:       python
 %if 0%{?suse_version}
-BuildRequires:  %{python_module devel}
-BuildRequires:  %{python_module  setuptools}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
-%else
-BuildRequires:  python-devel
-BuildRequires:  python-setuptools
-BuildRequires:  python34-devel
-BuildRequires:  python34-setuptools
 %endif
+BuildRequires:  %{python_module devel}
+BuildRequires:  %{python_module  setuptools}
 %python_subpackages
 
 # Default library install path
