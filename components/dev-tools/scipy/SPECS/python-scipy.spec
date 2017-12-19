@@ -187,7 +187,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%files %{python_Files}
+%files %{python_files}
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc THANKS.txt
