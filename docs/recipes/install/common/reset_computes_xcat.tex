@@ -1,0 +1,40 @@
+Prior to booting the {\em compute} hosts, we set them up to the network boot
+mode:
+
+% begin_ohpc_run
+% ohpc_comment_header Set nodes to net boot \ref{sec:boot_computes}
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) rsetboot compute net
+\end{lstlisting} 
+% end_ohpc_run
+
+At this point, the {\em master} server should be able to boot the newly defined
+compute nodes. This is done by using the \texttt{rpower} \xCAT{} command
+leveraging the IPMI protocol set up during the the {\em compute} node definition
+in \S~\ref{sec:assemble_bootstrap}. The following power cycles each of the
+desired hosts.
+
+
+% begin_ohpc_run
+% ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) rpower compute reset
+\end{lstlisting} 
+% end_ohpc_run
+
+Once kicked off, the boot process should take about \nottoggle{isstateful}{5
+minutes (depending on BIOS post times)}{15 to 30 minutes}.  You can verify that
+the compute hosts are available via ssh, or via parallel ssh tools to multiple
+hosts.  \xCAT{} provides a \texttt{psh} command which accomplish this while
+taking advantage of defined node names and groups. For example:
+
+\begin{lstlisting}[language=bash]
+[sms](*\#*) psh compute uptime
+c1:  08:53:46 up 5 days, 18:30,  0 users,  load average: 0.00, 0.01, 0.05
+c2:  08:53:51 up 5 days, 18:29,  0 users,  load average: 0.00, 0.01, 0.05
+c3:  08:53:44 up 5 days, 18:30,  0 users,  load average: 0.00, 0.01, 0.05
+c4:  08:53:36 up 5 days, 18:30,  0 users,  load average: 0.00, 0.01, 0.05
+\end{lstlisting}
+Another  useful way of monitoring provisioning is to use  the \texttt{rcons} command,
+which displays serial console for a selected node. Note that the escape sequence
+is \texttt{CTRL-e c } typed sequentially. 

@@ -1,0 +1,109 @@
+\subsection{Upgrading OpenHPC Packages}  \label{appendix:upgrade}
+
+
+As newer \OHPC{} releases are made available, users are encouraged to upgrade
+their locally installed packages against the latest repository versions to
+obtain access to bug fixes and newer component versions. This can be
+accomplished with the underlying package manager as \OHPC{} packaging maintains
+versioning state across releases. Also, package builds available from the
+\OHPC{} repositories have ``\texttt{-ohpc}'' appended to their names so that
+wild cards can be used as a simple way to obtain updates. The following general
+procedure highlights a method for upgrading existing installations.
+
+The first step, when using a local mirror as described in
+\S\ref{sec:enable_repo}, is downloading a new tarball from \texttt{http://build.openhpc.community/dist}. 
+After this, move (or remove) the old repository directory, unpack
+the new tarball and run the \texttt{make\_repo.sh} script. In the following,
+substitute \texttt{x.x.x} with the desired version number. 
+
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
+	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1 
+        {VER2}{\OHPCVersion{}}1]
+[sms](*\#*) wget http://build.openhpc.community/dist/x.x.x/OpenHPC-x.x.x.OSREPO.ARCH.tar
+[sms](*\#*) mv $ohpc_repo_dir "$ohpc_repo_dir"_old
+[sms](*\#*) mkdir -p $ohpc_repo_dir
+[sms](*\#*) tar xvf OpenHPC-x.x.x.OSREPO.ARCH.tar -C $ohpc_repo_dir
+[sms](*\#*) $ohpc_repo_dir/make_repo.sh
+\end{lstlisting}
+
+The {\em compute} hosts will pickup new packages automatically as long as the repository
+location on the SMS stays the same. If you prefer to use a different location,
+setup repositories on the nodes as described in \S\ref{sec:script_add_repos}.
+
+The actual update is performed as follows:
+\begin{enumerate*}
+\item (Optional) Ensure repo metadata is current (on head and compute nodes.)
+  Package managers will naturally do this on their own over time,
+  but if you are wanting to access updates immediately after a new release,
+  the following can be used to sync to the latest.
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*)  (*\clean*)
+[sms](*\#*)  psh compute (*\clean*)
+\end{lstlisting}
+
+\item Upgrade master (SMS) node
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*)  (*\upgrade*) "*-ohpc"
+\end{lstlisting}
+  
+\item Upgrade packages on compute nodes
+
+\begin{lstlisting}[language=bash,keywords={}]
+[sms](*\#*) psh compute  (*\upgrade*) "*-ohpc"
+\end{lstlisting}
+  
+
+\end{enumerate*}
+
+\noindent Note that to update running services such as a resource manager a
+service restart (or a full reboot) is required.
+
+\subsubsection{New component variants}
+
+As newer variants of key compiler/MPI stacks are released, \OHPC{} will
+periodically add toolchains enabling the latest variant. To stay consistent
+throughout the build hierarchy, minimize recompilation requirements for existing
+binaries, and allow for multiple variants to coexist, unique delimiters are
+used to distinguish RPM package names and module hierarchy.
+
+In the case of a fresh install, \OHPC{} recipes default to installation of the
+latest toolchains available in a given release branch. However, if upgrading a
+previously installed system, administrators can {\em opt-in} to enable new
+variants as they become available. To illustrate this point, we use the \OHPC{}
+1.3.1 release as an example which includes a new {``gnu7''} compiler variant
+providing GCC 7.x along with runtimes and libraries compiled
+with the newer toolchain. Note that prior to the 1.3.1 release, the {``gnu''} variant was
+available which provided GCC 5.x versions.
+%Component additions are also fair game for \OHPC{} micro releases, and the 1.3.1
+%release in particular includes GCC 7.1.0, along with runtimes and libraries
+%compiled with that toolchain.
+In the case where an admin would like to enable the newer {gnu7} toolchain,
+installation of these additions is simplified
+with the use of \OHPC{}'s meta-packages (see Table~\ref{table:groups} in Appendix 
+\ref{appendix:manifest}).
+%and the toolchain package naming 
+%convention allows the new compiler to be installed concurrently with older 
+%versions.
+The following example illustrates adding the complete ``gnu7'' toolchain
+environment leveraging convenience meta-packages and also updates the modules environment to make it the default.
+%configuring a GCC 7.1.0 default
+%development environment and installing all correlated packages.
+
+\begin{lstlisting}[language=bash,keywords={}]
+# Update default environment
+[sms](*\#*) (*\remove*) lmod-defaults-gnu-mvapich2-ohpc
+[sms](*\#*) (*\install*) lmod-defaults-gnu7-mvapich2-ohpc
+
+# Install GCC 7.x-compiled meta-packages with dependencies
+[sms](*\#*)  (*\install*) ohpc-gnu7-perf-tools \
+                         ohpc-gnu7-serial-libs \
+                         ohpc-gnu7-io-libs \
+                         ohpc-gnu7-python-libs \
+                         ohpc-gnu7-runtimes \
+                         ohpc-gnu7-mpich-parallel-libs \
+                         ohpc-gnu7-openmpi-parallel-libs \
+                         ohpc-gnu7-mvapich2-parallel-libs
+\end{lstlisting}
+

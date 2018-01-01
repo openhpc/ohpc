@@ -1,0 +1,89 @@
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\newcolumntype{C}[1]{>{\centering}p{#1}} 
+\newcolumntype{L}[1]{>{\raggedleft}p{#1}} 
+\small
+\begin{tabularx}{\textwidth}{L{\firstColWidth{}}|C{\secondColWidth{}}|X}
+\toprule
+{\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
+\midrule
+
+% <-- begin entry for automake-ohpc
+\multirow{2}{*}{automake-ohpc} & 
+\multirow{2}{*}{1.15} & 
+A GNU tool for automatically creating Makefiles. \newline { \color{logoblue} \url{http://www.gnu.org/software/automake}} 
+\\ \hline 
+% <-- end entry for automake-ohpc
+
+% <-- begin entry for autoconf-ohpc
+\multirow{2}{*}{autoconf-ohpc} & 
+\multirow{2}{*}{2.69} & 
+A GNU tool for automatically configuring source code. \newline { \color{logoblue} \url{http://www.gnu.org/software/autoconf}} 
+\\ \hline 
+% <-- end entry for autoconf-ohpc
+
+% <-- begin entry for EasyBuild-ohpc
+\multirow{2}{*}{EasyBuild-ohpc} & 
+\multirow{2}{*}{3.2.1} & 
+Build and installation framework. \newline { \color{logoblue} \url{http://hpcugent.github.com/easybuild}} 
+\\ \hline 
+% <-- end entry for EasyBuild-ohpc
+
+% <-- begin entry for hwloc-ohpc
+\multirow{2}{*}{hwloc-ohpc} & 
+\multirow{2}{*}{1.11.6} & 
+Portable Hardware Locality. \newline { \color{logoblue} \url{http://www.open-mpi.org/projects/hwloc}} 
+\\ \hline 
+% <-- end entry for hwloc-ohpc
+
+% <-- begin entry for libtool-ohpc
+\multirow{2}{*}{libtool-ohpc} & 
+\multirow{2}{*}{2.4.6} & 
+The GNU Portable Library Tool. \newline { \color{logoblue} \url{http://www.gnu.org/software/libtool}} 
+\\ \hline 
+% <-- end entry for libtool-ohpc
+
+% <-- begin entry for python-scipy
+python-scipy-gnu7-mpich-ohpc &
+\multirow{6}{*}{0.19.0} & 
+\multirow{6}{\linewidth}{Scientific Tools for Python. \newline {\color{logoblue} \url{http://www.scipy.org}}} \\ 
+python-scipy-gnu7-mvapich2-ohpc &
+& \\ 
+python-scipy-gnu7-openmpi-ohpc &
+& \\ 
+python-scipy-gnu-mpich-ohpc &
+& \\ 
+python-scipy-gnu-mvapich2-ohpc &
+& \\ 
+python-scipy-gnu-openmpi-ohpc &
+& \\ 
+\hline
+% <-- end entry for python-scipy
+
+% <-- begin entry for python-numpy
+python-numpy-gnu-ohpc &
+\multirow{1}{*}{1.11.1} & 
+\multirow{3}{\linewidth}{NumPy array processing for numbers, strings, records and objects. \newline {\color{logoblue} \url{http://sourceforge.net/projects/numpy}}} \\ 
+\cline{1-2} python-numpy-gnu7-ohpc &\multirow{2}{*}{1.12.1}
+& \\ 
+python-numpy-intel-ohpc &
+& \\ 
+\hline
+% <-- end entry for python-numpy
+
+% <-- begin entry for spack-ohpc
+\multirow{2}{*}{spack-ohpc} & 
+\multirow{2}{*}{0.10.0} & 
+HPC software package management. \newline { \color{logoblue} \url{https://github.com/LLNL/spack}} 
+\\ \hline 
+% <-- end entry for spack-ohpc
+
+% <-- begin entry for valgrind-ohpc
+\multirow{2}{*}{valgrind-ohpc} & 
+\multirow{2}{*}{3.12.0} & 
+Valgrind Memory Debugger. \newline { \color{logoblue} \url{http://www.valgrind.org}} 
+\\ \hline 
+% <-- end entry for valgrind-ohpc
+
+\bottomrule
+\end{tabularx}

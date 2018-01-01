@@ -1,11 +1,11 @@
-\noindent Similarly, to import the global Slurm configuration file and the cryptographic
-key that is required by the {\em munge} authentication library to be available
-on every host in the resource management pool, issue the following:
+\noindent Similarly, to distribute the global Slurm configuration file and the
+cryptographic key that is required by the {\em munge} authentication library to
+every host in the resource management pool, issue the following:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) echo "/etc/slurm/slurm.conf -> /etc/slurm/slurm.conf " >> /install/custom/netboot/compute.synclist
-[sms](*\#*) echo "/etc/munge/munge.key -> /etc/munge/munge.key " >> /install/custom/netboot/compute.synclist
+[sms](*\#*) echo "/etc/slurm/slurm.conf -> /etc/slurm/slurm.conf" >> $synclist
+[sms](*\#*) echo "/etc/munge/munge.key  -> /etc/munge/munge.key"  >> $synclist
 \end{lstlisting}
 % \end_ohpc_run
 
@@ -15,5 +15,13 @@ on every host in the resource management pool, issue the following:
 The ``\texttt{updatenode compute -F}'' command can be used to distribute changes made to any
 defined synchronization files on the SMS host. Users wishing to automate this process may
 want to consider adding a crontab entry to perform this action at defined intervals.
+
+\iftoggleverb{isstateful}
+Note that under certain circumstances full user and group synchronization can 
+cause problems. For example, a different order of installation between {\em
+master} and {\em compute} nodes can cause system created groups and users to have
+different ID numbers. In such a case, it is better to only synchronize
+non-system users and groups.  
+\fi
 \end{tcolorbox}
 \end{center}

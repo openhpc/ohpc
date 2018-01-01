@@ -1,0 +1,14 @@
+% -*- mode: latex; fill-column: 120; -*- 
+
+With repositories set, the script can now
+install additional components to include resource management client services, \InfiniBand{} drivers, and other additional
+packages to support the default \OHPC{} environment. The first step is to  add a base compute package:
+% begin_ohpc_run
+% ohpc_comment_header Add OpenHPC base components to compute image \ref{sec:add_components}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Install compute node base meta-package
+[sms](*\#*) echo "(*\install*) ohpc-base-compute" >> $postbootscript
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Next, we install additional components as follows:

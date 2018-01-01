@@ -1,0 +1,18 @@
+% -*- mode: latex; fill-column: 120; -*- 
+
+Post-install script name and location is controlled by the \texttt{\$postbootscript}
+variable. The steps below initialize the script file.
+
+% begin_ohpc_run
+% ohpc_comment_header Initialize post-install script \ref{sec:init_script}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+#Create postbootscript directory if it does not exist
+[sms](*\#*) mkdir -p $(dirname $postbootscript)
+
+#Create empty file, set it executable and insert header
+[sms](*\#*) > $postbootscript
+[sms](*\#*) chmod +x $postbootscript
+[sms](*\#*) echo -e "#!/bin/bash" >> $postbootscript
+\end{lstlisting}
+% end_ohpc_run
+
