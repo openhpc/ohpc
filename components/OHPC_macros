@@ -91,6 +91,8 @@ Requires:      llvm-compilers%{PROJ_DELIM}
 
 %endif
 
+%global __libsymlink_exclude_path  %{OHPC_HOME}/.*$
+
 # MPI dependencies
 %if 0%{?ohpc_mpi_dependent} == 1
 %if "%{mpi_family}" == "impi"
