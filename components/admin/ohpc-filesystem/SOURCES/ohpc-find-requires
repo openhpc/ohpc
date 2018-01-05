@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+# ohpc-find-requires
+
+IFS=$'\n'
+TMPFILE=$(mktemp)
+LOGFILE=/tmp/requires.log
+
+# First argument is buildroot
+buildroot="$1"
+if [ ! -d "$buildroot" ]; then
+    >&2 echo "Invalid buildroot"
+    exit 1
+fi
+
+# Get the list of files.
+filelist=`sed "s/[]['\"*?{}]/\\\\\&/g"`
+
+if [ -z "$filelist" ]; then exit 0; fi
+
+# Step 1: use standard rpmdeps analysis and cache results
+echo "$filelist" | /usr/lib/rpm/elfdeps -R >> $TMPFILE
+
+# Step 2: remove any .so's from requires list if they are not provides by base OS
+
+for require in `cat $TMPFILE`; do
+
+    # Check if this is owned by ohpc pre-requisite
+    package=$(rpm -q --queryformat '%{NAME}\n' --whatprovides "$require(ohpc)")
+    if [ $? -eq 0 ];then
+	echo "$require(ohpc)"
+#	echo "--> package owner = $package" >> ${LOGFILE}
+    else
+	# check if this requirement is housed in
+	# ${buildroot}/opt/ohpc. If so, we append an (ohpc)
+	# designation, otherwise we leave the requirement as is to be
+	# satisfied by packages outside of ohpc.
+	
+	# strip off () to get libname
+	
+	libname=${require%%(*}
+	match=$(find ${buildroot}/opt/ohpc -name ${libname})
+
+	if [ -n "${match}" ];then
+#	    echo "--> current ohpc build is package owner" >> ${LOGFILE}
+	    echo "$require(ohpc)"
+	else
+#	    echo "--> package assumed external to ohpc" >> ${LOGFILE}
+	    echo "$require"
+	fi
+	
+     fi
+		  
+ done
+
+rm -f $TMPFILE

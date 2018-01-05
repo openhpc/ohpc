@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# ohpc-find-provides
+
+IFS=$'\n'
+TMPFILE=$(mktemp)
+appendString=""
+
+while getopts "r:" opt; do
+    case ${opt} in
+    	r )
+	    appendString=$OPTARG
+	    ;;
+    esac
+done
+
+# Get the list of files.
+filelist=`sed "s/[]['\"*?{}]/\\\\\&/g"`
+
+# Default mode - if the "-r" option is not enabled to provide a string
+# to append, we simply return to ignore .so's installed into OHPC path
+
+if [ -z "$appendString" ];then
+    exit 0
+elif [ -x /usr/lib/rpm/elfdeps -a -n "$filelist" ];then
+    
+    # Otherwise, use elfdeps and append a string to detected Provides
+    # information
+    
+    provideList=$(echo $filelist | /usr/lib/rpm/elfdeps -P)
+    for provide in $provideList; do
+	echo "$provide(ohpc)"
+    done
+fi
