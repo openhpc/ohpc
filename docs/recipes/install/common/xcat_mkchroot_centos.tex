@@ -1,6 +1,8 @@
 % -*- mode: latex; fill-column: 120; -*-
 
-With the provisioning services enabled, the next step is to define and customize a system image that can subsequently be
+With the provisioning services enabled, the next step is to define
+\nottoggle{isxCATstateful}{and customize} 
+a system image that can subsequently be
 used to provision one or more {\em compute} nodes. The following subsections highlight this process.
 
 \subsubsection{Build initial BOS image} \label{sec:assemble_bos}
@@ -27,12 +29,26 @@ centos7.4-x86_64-netboot-compute  (osimage)
 centos7.4-x86_64-statelite-compute  (osimage)
 \end{lstlisting}
 
-
-In this example, we leverage the stateless ({\em netboot}) image for compute nodes and proceed by using
+In this example, we leverage
+\iftoggleverb{isxCATstateful}
+the stateful ({\em install}) image for provisioning of {\em
+compute} nodes.  The other images, {\em
+netboot-compute} and {\em statelite-compute}, are for stateless and statelite
+installations, respectively. \OHPC{} provides a stateless \xCAT{} recipe,
+follow that guide if you are interested in a stateless install.
+Statelite installation is an intermediate type of install, in which a limited
+number of files and directories persist across reboots.  Please consult
+available xCAT \href{https://xcat-docs.readthedocs.io/en/stable/}{\color{blue}
+documentation} if interested in this type of install.
+\else
+the stateless ({\em netboot}) image for compute nodes and proceed by using
 \texttt{genimage} to initialize a chroot-based install. Note that the previous query highlights the existence of other
-provisioning images as well. Please consult available xCAT
-\href{https://xcat-docs.readthedocs.io/en/stable/}{\color{blue} documentation} if interested in using an alternative
-stateful or statelite approach.
+provisioning images as well. \OHPC{} provides a stateful \xCAT{} recipe, 
+follow that guide if you are interested in  stateful install.
+Statelite installation is an intermediate type of install, in which a limited
+number of files and directories persist across reboots.  Please consult
+available xCAT \href{https://xcat-docs.readthedocs.io/en/stable/}{\color{blue}
+documentation} if interested in that type of install.
 %The \texttt{CHROOT} environment variable highlights the path and is used by
 %subsequent commands to augment the basic installation.
 
@@ -45,3 +61,5 @@ stateful or statelite approach.
 [sms](*\#*) genimage BOSVER-x86_64-netboot-compute
 \end{lstlisting}
 % end_ohpc_run
+
+\fi

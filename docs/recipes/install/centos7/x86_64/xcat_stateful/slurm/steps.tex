@@ -17,7 +17,7 @@
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
 \newcommand{\arch}{x86\_64}
-\newcommand{\installimage}{netboot}
+\newcommand{\installimage}{install}
 
 % Define package manager commands
 \newcommand{\pkgmgr}{yum}
@@ -26,9 +26,9 @@
 \newcommand{\clean}{yum clean expire-cache}
 \newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
 \newcommand{\install}{yum -y install}
-\newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
+\newcommand{\chrootinstall}{psh compute yum -y install}
 \newcommand{\groupinstall}{yum -y groupinstall}
-\newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
+\newcommand{\groupchrootinstall}{psh compute yum -y groupinstall}
 \newcommand{\remove}{yum -y remove}
 \newcommand{\upgrade}{yum -y upgrade}
 \newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
@@ -40,6 +40,7 @@
 \toggletrue{isCentOS_ww_slurm_x86}
 \toggletrue{isx86}
 \toggletrue{isxCAT}
+\toggletrue{isxCATstateful}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -93,11 +94,9 @@
 
 % ------------------------------------------------------------------
 
-\section{Install \OHPC{} Components} \label{sec:basic_install}
-\input{common/install_ohpc_components_intro.tex}
+\section{Install \xCAT{} and Provision Nodes with BOS} \label{sec:provision_compute_bos}
+\input{common/xcat_stateful_compute_bos_intro}
 
-\subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
-\input{common/enable_ohpc_repo}
 \subsection{Enable \xCAT{} repository for local use} \label{sec:enable_xcat}
 \input{common/enable_xcat_repo}
 
@@ -110,6 +109,36 @@ distributions. To enable for local use, issue the following:
 [sms](*\#*)  (*\addrepo*) https://xcat.org/files/xcat/repos/yum/xcat-dep/rh7/ARCH/xCAT-dep.repo
 \end{lstlisting}
 % end_ohpc_run
+
+\subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
+\input{common/install_provisioning_xcat_intro_stateful}
+%\input{common/enable_pxe}
+
+\vspace*{-0.15cm}
+\subsection{Complete basic \xCAT{} setup for {\em master} node} \label{sec:setup_xcat}
+\input{common/xcat_setup}
+
+
+\subsection{Define {\em compute} image for provisioning}
+\input{common/xcat_mkchroot_centos}
+
+\subsection{Add compute nodes into \xCAT{} database} \label{sec:xcat_add_nodes}
+\input{common/add_xcat_hosts_intro}
+
+%\vspace*{-0.25cm}
+\subsection{Boot compute nodes} \label{sec:boot_computes}
+\input{common/reset_computes_xcat} 
+
+
+
+
+\section{Install \OHPC{} Components} \label{sec:basic_install}
+\input{common/install_ohpc_components_intro}
+
+
+\subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
+\input{common/enable_local_ohpc_repo}
+
 
 In addition to the \OHPC{} and \xCAT{} package repositories, the {\em master} host also
 requires access to the standard base OS distro repositories in order to resolve
@@ -124,16 +153,29 @@ both the base OS and EPEL repositories for which mirrors are freely available on
                         {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
 \end{itemize*}
 
-\noindent The public EPEL repository will be enabled automatically upon installation of the 
-\texttt{ohpc-release} package. Note that this requires the CentOS Extras
+\noindent The public EPEL repository is enabled by installing
+\texttt{epel-release} package. Note that this requires the CentOS Extras
 repository, which is shipped with CentOS and is enabled by default.
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*)  (*\install*) epel-release
+\end{lstlisting}
+% end_ohpc_run
+
+Now \OHPC{} packages can be installed. To add the base package on the SMS
+issue the following
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*)  (*\install*) ohpc-base
+\end{lstlisting}
+% end_ohpc_run
+
 
 \input{common/automation}
 
 
-\subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
-\input{common/install_provisioning_xcat_intro}
-\input{common/enable_pxe}
+\subsection{Setup time synchronization service on {\em master} node} \label{sec:add_ntp}
 \input{common/time}
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
@@ -145,16 +187,9 @@ repository, which is shipped with CentOS and is enabled by default.
 \subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
 \input{common/opasupport_sms_centos}
 
-\vspace*{-0.15cm}
-\subsection{Complete basic \xCAT{} setup for {\em master} node} \label{sec:setup_xcat}
-\input{common/xcat_setup}
 
-
-\subsection{Define {\em compute} image for provisioning}
-\input{common/xcat_mkchroot_centos}
-
-\subsubsection{Add \OHPC{} components} \label{sec:add_components}
-\input{common/add_to_compute_chroot_xcat_intro}
+\subsubsection{Add \OHPC{} components to {\em compute} nodes} \label{sec:add_components}
+\input{common/add_to_compute_stateful_xcat_intro}
 
 %\newpage
 % begin_ohpc_run
@@ -172,6 +207,7 @@ repository, which is shipped with CentOS and is enabled by default.
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
 \end{lstlisting}
+% end_ohpc_run
 
 % ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
 % ohpc_command if [[ ${enable_ib} -eq 1 ]];then
@@ -180,7 +216,8 @@ repository, which is shipped with CentOS and is enabled by default.
 # Optionally add IB support and enable
 [sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
 [sms](*\#*) (*\chrootinstall*) infinipath-psm
-[sms](*\#*) chroot $CHROOT systemctl enable rdma
+[sms](*\#*) psh compute systemctl enable rdma
+[sms](*\#*) psh compute systemctl start rdma
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -188,7 +225,7 @@ repository, which is shipped with CentOS and is enabled by default.
 
 %\vspace*{0.5cm}
 \subsubsection{Customize system configuration} \label{sec:master_customization}
-\input{common/xcat_chroot_customize_centos}
+\input{common/xcat_stateful_customize_centos}
 
 % Additional commands when additional computes are requested
 
@@ -209,28 +246,28 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/compute_customizations_intro}
 
 \paragraph{Increase locked memory limits}
-\input{common/memlimits}
+\input{common/memlimits_stateful}
 
 \paragraph{Enable ssh control via resource manager} 
-\input{common/slurm_pam}
+\input{common/slurm_pam_stateful}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
-\input{common/lustre-client-centos}
-\input{common/lustre-client-post}
+\input{common/lustre-client-centos-stateful}
+\input{common/lustre-client-post-stateful}
 
 \paragraph{Add \Nagios{} monitoring}
-\input{common/nagios}
+\input{common/nagios_stateful}
 
 \vspace*{0.4cm}
 \paragraph{Add \Ganglia{} monitoring}
-\input{common/ganglia}
+\input{common/ganglia_stateful}
 
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
 \paragraph{Add \mrsh{}}
-\input{common/mrsh}
+\input{common/mrsh_stateful}
 
 \paragraph{Add \genders{}}
 \input{common/genders}
@@ -238,20 +275,13 @@ repository, which is shipped with CentOS and is enabled by default.
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
-\subsubsection{Identify files for synchronization} \label{sec:file_import}
-\input{common/import_xcat_files}
-\input{common/import_xcat_files_slurm}
-\input{common/finalize_xcat_provisioning}
-
-\subsection{Add compute nodes into \xCAT{} database} \label{sec:xcat_add_nodes}
-\input{common/add_xcat_hosts_intro}
+%\subsubsection{Identify files for synchronization} \label{sec:file_import}
+%\input{common/import_xcat_files}
+%\input{common/import_xcat_files_slurm}
 
 %%%\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 %%%\input{common/conman_post}
 
-%\vspace*{-0.25cm}
-\subsection{Boot compute nodes} \label{sec:boot_computes}
-\input{common/reset_computes_xcat} 
 
 %\vspace*{-0.50cm}
 \section{Install \OHPC{} Development Components}
@@ -287,7 +317,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/pxse_enabled_builds}
 
 \section{Resource Manager Startup} \label{sec:rms_startup}
-\input{common/slurm_startup}
+\input{common/slurm_startup_stateful}
 
 \section{Run a Test Job} \label{sec:test_job}
 \input{common/xcat_slurm_test_job}
@@ -301,7 +331,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \renewcommand{\thesubsection}{\Alph{subsection}}
 
 \input{common/automation_appendix}
-\input{common/upgrade}
+\input{common/upgrade_stateful}
 \input{common/test_suite}
 \input{common/customization_appendix_centos}
 \input{manifest}
