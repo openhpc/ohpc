@@ -32,7 +32,7 @@ Source1:        OHPC_macros
 Source2:        superlu_dist-make.inc
 Patch1:         superlu_dist-parmetis.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  bz2-devel
+BuildRequires:  bzip2-devel
 BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
