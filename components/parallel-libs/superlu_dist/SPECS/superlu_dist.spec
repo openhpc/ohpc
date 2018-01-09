@@ -30,6 +30,7 @@ URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Source1:        OHPC_macros
 Source2:        superlu_dist-make.inc
+Source3:        superlu_dist-intel-make.inc
 Patch1:         superlu_dist-parmetis.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -63,7 +64,11 @@ solutions.
 %prep
 %setup -q -n SuperLU_DIST_%{version}
 %patch1 -p1
+%if "%{compiler_family}" = "intel"
+cp %SOURCE3 make.inc
+%else
 cp %SOURCE2 make.inc
+%endif
 
 %build
 # OpenHPC compiler/mpi designation

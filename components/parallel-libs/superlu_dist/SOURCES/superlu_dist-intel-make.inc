@@ -1,0 +1,42 @@
+############################################################################
+#
+#  Program:         SuperLU_DIST
+#
+#  Module:          make.inc
+#
+#  Purpose:         Top-level Definitions
+#
+#  Creation date:   March 1, 2016	version 5.0.0
+#
+#  Modified:	    
+#		    
+#
+############################################################################
+#
+#  The name of the libraries to be created/linked to
+#
+SuperLUroot	=
+DSUPERLULIB   	= $(SuperLUroot)/SRC/libsuperlu_dist.a
+BLASDEF		= -DUSE_VENDOR_BLAS
+BLASLIB		= -L${MKL_LIB_PATH} -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
+
+INCLUDES    = -I${MKLROOT}/include -I$(PTSCOTCH_INC) -I$(OPENBLAS_INC)
+LIBS		= $(DSUPERLULIB) -L$(METIS_LIB) -L$(OPENBLAS_LIB) -L$(PTSCOTCH_LIB) -lptscotchparmetis -lptscotch -lptscotcherr -lmetis -lscotch $(BLASLIB) -lbz2
+
+#
+#  The archiver and the flag(s) to use when building archive (library)
+#  If your system has no ranlib, set RANLIB = echo.
+#
+ARCH         = /usr/bin/ar
+ARCHFLAGS    = cr
+RANLIB       = /usr/bin/ranlib
+
+CC           = mpicc
+CFLAGS 	     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -std=c99 -fPIC -g
+# CFLAGS       += -D
+# CFLAGS       +=  
+NOOPTS       = -O0
+FORTRAN	     = mpif90
+
+LOADER       = $(CC) -fopenmp
+LOADOPTS     = 
