@@ -84,9 +84,6 @@ mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
     -L$OPENBLAS_LIB -L$PTSCOTCH_LIB -lptscotchparmetis \
     -lptscotch -lptscotcherr -lscotch -lmetis -lopenblas \
     -lbz2 %{?__global_ldflags}
-pushd lib
-ln -s %{libname}.so.%{version} %{libname}.so
-popd
 
 
 %install
@@ -100,7 +97,7 @@ install -m644 SRC/*.h %{buildroot}%{install_path}/include/
 %{__mkdir_p} %{buildroot}%{install_path}/lib
 install -m 755 libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
+ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.%{major}
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
 
