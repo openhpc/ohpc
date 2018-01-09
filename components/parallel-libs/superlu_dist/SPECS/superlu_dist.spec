@@ -32,6 +32,7 @@ Source1:        OHPC_macros
 Source2:        superlu_dist-make.inc
 Patch1:         superlu_dist-parmetis.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+BuildRequires:  bz2-devel
 BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
@@ -83,7 +84,7 @@ mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
     -o lib/%{libname}.so.%{version} tmp/*.o -fopenmp -L$METIS_LIB \
     -L$OPENBLAS_LIB -L$PTSCOTCH_LIB -lptscotchmarmetis \
     -lptscotch -lptscotcherr -lscotch -lmetis -lopenblas \
-    %{?__global_ldflags}
+    -lbz2 %{?__global_ldflags}
 pushd lib
 ln -s %{libname}.so.%{version} %{libname}.so
 popd
