@@ -7,11 +7,10 @@ accomplished as follows:
 % begin_ohpc_run
 % ohpc_comment_header Resource Manager Startup \ref{sec:rms_startup}
 \begin{lstlisting}[language=bash,keywords={}]
-xdcp compute /etc/slurm/slurm.conf /etc/slurm/slurm.conf
-xdcp compute /etc/munge/munge.key /etc/munge/munge.key
+[sms](*\#*) xdcp compute /etc/slurm/slurm.conf /etc/slurm/slurm.conf
+[sms](*\#*) xdcp compute /etc/munge/munge.key /etc/munge/munge.key
 \end{lstlisting}
 % end_ohpc_run
-
 
 
 With \SLURM{} configured, we can now startup the
@@ -30,15 +29,6 @@ The following commands can be used to startup the necessary services to support
 resource management under \SLURM{}.
 
 %\iftoggle{isCentOS}{\clearpage}
-
-% Allow for optional sleep to wait for nodes to provision when using install
-% script
-
-
-% begin_ohpc_run
-% ohpc_comment_header Allow for optional sleep to wait for provisioning to complete
-% ohpc_command sleep ${provision_wait}
-% end_ohpc_run
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
