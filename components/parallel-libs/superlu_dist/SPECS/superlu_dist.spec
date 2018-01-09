@@ -64,7 +64,7 @@ solutions.
 %prep
 %setup -q -n SuperLU_DIST_%{version}
 %patch1 -p1
-%if "%{compiler_family}" = "intel"
+%if "%{compiler_family}" == "intel"
 cp %SOURCE3 make.inc
 %else
 cp %SOURCE2 make.inc
