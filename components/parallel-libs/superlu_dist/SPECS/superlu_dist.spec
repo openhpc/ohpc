@@ -151,7 +151,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{OHPC_PUB}
-%doc README
+%doc README.md
 
 %changelog
 * Tue May 23 2017 Adrian Reber <areber@redhat.com> - 4.2-1
