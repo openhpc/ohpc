@@ -21,7 +21,7 @@ BLASDEF		= -DUSE_VENDOR_BLAS
 BLASLIB		= -lopenblas
 
 INCLUDES    = -I$(PTSCOTCH_INC) -I$(OPENBLAS_INC)
-LIBS		= $(DSUPERLULIB) -lptscotchparmetis -lptscotch -lptscotcherr -lmetis -lscotch $(BLASLIB)
+LIBS		= $(DSUPERLULIB) -L$(PTSCOTCH_LIB) -L$(OPENBLAS_LIB) -lptscotchparmetis -lptscotch -lptscotcherr -lmetis -lscotch $(BLASLIB)
 
 #
 #  The archiver and the flag(s) to use when building archive (library)
