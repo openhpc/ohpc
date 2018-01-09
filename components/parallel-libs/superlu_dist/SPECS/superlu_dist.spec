@@ -80,7 +80,7 @@ module load metis ptscotch
 module load openblas
 %define blas_lib -L$OPENBLAS_LIB -lopenblas
 %else
-%define blas_lib  -L$MKL_LIB_PATH -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
+%define blas_lib  -L$MKLROOT/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 %endif
 
 make SuperLUroot=$(pwd)
