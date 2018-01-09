@@ -1,0 +1,12 @@
+--- SuperLU_DIST_5.1.0/SRC/get_perm_c_parmetis.c~	2016-05-16 06:16:44.000000000 +0100
++++ SuperLU_DIST_5.1.0/SRC/get_perm_c_parmetis.c	2016-10-17 00:48:13.758797521 +0100
+@@ -24,6 +24,9 @@
+ /* limits.h:  the largest positive integer (INT_MAX) */
+ #include <limits.h>
+ #include <math.h>
++#include <sys/types.h>
++#include <stdio.h>
++#include <scotch.h>
+ #include "parmetis.h"
+ #include "superlu_ddefs.h"
+ 

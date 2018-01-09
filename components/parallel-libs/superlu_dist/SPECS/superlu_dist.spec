@@ -8,42 +8,20 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package superlu_dist
-#
-# Copyright (c) 2012 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
-# Build that is is dependent on compiler toolchain and MPI
+# superlu_dist build that is is dependent on compiler toolchain and MPI
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
-
-%if "%{compiler_family}" != "intel"
-BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
 
 # Base package name
 %define pname superlu_dist
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define major   4
+%define major   5
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        4.2
+Version:        5.2.2
 Release:        1%{?dist}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
@@ -51,13 +29,16 @@ Group:          %{PROJ_NAME}/parallel-libs
 URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Source1:        OHPC_macros
-Patch0:         superlu_dist-4.1-sequence-point.patch
-Patch1:         superlu_dist-4.2-make.patch
-Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
-Patch3:         superlu_dist-4.1-parmetis.patch
+Source2:        superlu_dist-make.inc
+Patch1:         superlu_dist-parmetis.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
+%if "%{compiler_family}" != "intel"
+BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
+Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
+%endif
 
 #!BuildIgnore: post-build-checks
 
@@ -81,26 +62,27 @@ solutions.
 
 %prep
 %setup -q -n SuperLU_DIST_%{version}
-%patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
+cp %SOURCE2 make.inc
 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load metis
+module load metis ptscotch
 
 %if "%{compiler_family}" != "intel"
-module load scalapack
+module load openblas
 %endif
 
-make superlulib DSuperLUroot=$PWD
+make SuperLUroot=$(pwd)
 
 mkdir tmp
 (cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
+mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
+    -o lib/%{libname}.so.%{version} tmp/*.o -fopenmp -lptscotchmarmetis \
+    -lptscotch -lptscotcherr -lscotch -lmetis -lopenblas \
+    %{?__global_ldflags}
 pushd lib
 ln -s %{libname}.so.%{version} %{libname}.so
 popd
@@ -112,10 +94,7 @@ popd
 install -m644 make.inc %{buildroot}%{install_path}/etc
 
 %{__mkdir_p} %{buildroot}%{install_path}/include
-install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
-              SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
-              SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
-              %{buildroot}%{install_path}/include/
+install -m644 SRC/*.h %{buildroot}%{install_path}/include/
 
 %{__mkdir_p} %{buildroot}%{install_path}/lib
 install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
