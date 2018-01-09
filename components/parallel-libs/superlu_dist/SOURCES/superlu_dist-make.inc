@@ -20,6 +20,7 @@ DSUPERLULIB   	= $(SuperLUroot)/SRC/libsuperlu_dist.a
 BLASDEF		= -DUSE_VENDOR_BLAS
 BLASLIB		= -lopenblas
 
+INCLUDES    = -I$(PTSCOTCH_INC) -I$(OPENBLAS_INC)
 LIBS		= $(DSUPERLULIB) -lptscotchparmetis -lptscotch -lptscotcherr -lmetis -lscotch $(BLASLIB)
 
 #
@@ -31,7 +32,7 @@ ARCHFLAGS    = cr
 RANLIB       = /usr/bin/ranlib
 
 CC           = mpicc
-CFLAGS 	     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 -fopenmp -std=c99 -fPIC -g
+CFLAGS 	     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 ${INCLUDES) -fopenmp -std=c99 -fPIC -g
 # CFLAGS       += -D
 # CFLAGS       +=  
 NOOPTS       = -O0
