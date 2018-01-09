@@ -20,8 +20,8 @@ DSUPERLULIB   	= $(SuperLUroot)/SRC/libsuperlu_dist.a
 BLASDEF		= -DUSE_VENDOR_BLAS
 BLASLIB		= -L${MKL_LIB_PATH} -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 
-INCLUDES    = -I${MKLROOT}/include -I$(PTSCOTCH_INC) -I$(OPENBLAS_INC)
-LIBS		= $(DSUPERLULIB) -L$(METIS_LIB) -L$(OPENBLAS_LIB) -L$(PTSCOTCH_LIB) -lptscotchparmetis -lptscotch -lptscotcherr -lmetis -lscotch $(BLASLIB) -lbz2
+INCLUDES    = -I${MKLROOT}/include -I$(PTSCOTCH_INC)
+LIBS		= $(DSUPERLULIB) -L$(METIS_LIB) -L$(PTSCOTCH_LIB) -lptscotchparmetis -lptscotch -lptscotcherr -lmetis -lscotch $(BLASLIB) -lbz2
 
 #
 #  The archiver and the flag(s) to use when building archive (library)
