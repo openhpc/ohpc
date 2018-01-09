@@ -80,7 +80,8 @@ make SuperLUroot=$(pwd)
 mkdir tmp
 (cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
 mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
-    -o lib/%{libname}.so.%{version} tmp/*.o -fopenmp -lptscotchmarmetis \
+    -o lib/%{libname}.so.%{version} tmp/*.o -fopenmp -L$PTSCOTCH_LIB \
+    -L$OPENBLAS_LIB -lptscotchmarmetis \
     -lptscotch -lptscotcherr -lscotch -lmetis -lopenblas \
     %{?__global_ldflags}
 pushd lib
