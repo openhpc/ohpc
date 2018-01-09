@@ -18,6 +18,10 @@
 \newcommand{\rmsshort}{slurm}
 \newcommand{\arch}{x86\_64}
 \newcommand{\installimage}{install}
+%%% WARNING: Hack below. The version should be read from ohpc-doc.sty, but the
+%%% perl parsing script does not read that file. This works for one release, but
+%%% needs a proper fix.
+\newcommand{\VERLONG}{1.3.3}
 
 % Define package manager commands
 \newcommand{\pkgmgr}{yum}
@@ -66,16 +70,6 @@
 \input{common/requirements}
 \input{common/inputs}
 
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
-% ohpc_validation_newline
-% ohpc_command yum repolist | grep -q OpenHPC
-% ohpc_command if [ $? -ne 0 ];then
-% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
-% ohpc_command    exit 1
-% ohpc_command fi
-% end_ohpc_run
 
 % Base Operating System --------------------------------------------
 
@@ -106,7 +100,7 @@ distributions. To enable for local use, issue the following:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*)  (*\addrepo*) https://xcat.org/files/xcat/repos/yum/xcat-dep/rh7/ARCH/xCAT-dep.repo
+[sms](*\#*) (*\addrepo*) https://xcat.org/files/xcat/repos/yum/xcat-dep/rh7/ARCH/xCAT-dep.repo
 \end{lstlisting}
 % end_ohpc_run
 
@@ -138,6 +132,17 @@ distributions. To enable for local use, issue the following:
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{common/enable_local_ohpc_repo}
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
+% ohpc_validation_newline
+% ohpc_command yum repolist | grep -q OpenHPC
+% ohpc_command if [ $? -ne 0 ];then
+% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
+% ohpc_command    exit 1
+% ohpc_command fi
+% end_ohpc_run
 
 
 In addition to the \OHPC{} and \xCAT{} package repositories, the {\em master} host also
