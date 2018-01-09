@@ -80,7 +80,7 @@ make SuperLUroot=$(pwd)
 mkdir tmp
 (cd tmp; ar x ../SRC/libsuperlu_dist.a)
 mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
-    -o lib/%{libname}.so.%{version} tmp/*.o -fopenmp -L$METIS_LIB \
+    -o ../%{libname}.so.%{version} tmp/*.o -fopenmp -L$METIS_LIB \
     -L$OPENBLAS_LIB -L$PTSCOTCH_LIB -lptscotchmarmetis \
     -lptscotch -lptscotcherr -lscotch -lmetis -lopenblas \
     -lbz2 %{?__global_ldflags}
@@ -98,7 +98,7 @@ install -m644 make.inc %{buildroot}%{install_path}/etc
 install -m644 SRC/*.h %{buildroot}%{install_path}/include/
 
 %{__mkdir_p} %{buildroot}%{install_path}/lib
-install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
+install -m 755 libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
