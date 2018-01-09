@@ -78,6 +78,9 @@ module load metis ptscotch
 
 %if "%{compiler_family}" != "intel"
 module load openblas
+%define blas_lib -lopenblas
+%else
+%define blas_lib  -L$MKL_LIB_PATH -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 %endif
 
 make SuperLUroot=$(pwd)
@@ -87,7 +90,7 @@ mkdir tmp
 mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
     -o ./%{libname}.so.%{version} tmp/*.o -fopenmp -L$METIS_LIB \
     -L$OPENBLAS_LIB -L$PTSCOTCH_LIB -lptscotchparmetis \
-    -lptscotch -lptscotcherr -lscotch -lmetis -lopenblas \
+    -lptscotch -lptscotcherr -lscotch -lmetis %{blas_lib} \
     -lbz2 %{?__global_ldflags}
 
 
