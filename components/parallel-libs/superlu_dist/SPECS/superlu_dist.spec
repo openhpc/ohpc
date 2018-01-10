@@ -91,7 +91,7 @@ mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
     -o ./%{libname}.so.%{version} tmp/*.o -fopenmp -L$METIS_LIB \
     -L$PTSCOTCH_LIB -lptscotchparmetis \
     -lptscotch -lptscotcherr -lscotch -lmetis %{blas_lib} \
-    -lbz2 %{?__global_ldflags}
+    -lbz2 -lz %{?__global_ldflags}
 
 
 %install

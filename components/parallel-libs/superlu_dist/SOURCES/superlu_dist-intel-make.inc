@@ -21,7 +21,7 @@ BLASDEF		= -DUSE_VENDOR_BLAS
 BLASLIB		= -L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 
 INCLUDES    = -I${MKLROOT}/include -I$(PTSCOTCH_INC)
-LIBS		= $(DSUPERLULIB) -L$(METIS_LIB) -L$(PTSCOTCH_LIB) -lptscotchparmetis -lptscotch -lptscotcherr -lmetis -lscotch $(BLASLIB) -lbz2
+LIBS		= $(DSUPERLULIB) -L$(METIS_LIB) -L$(PTSCOTCH_LIB) -lptscotchparmetis -lptscotch -lptscotcherr -lmetis -lscotch $(BLASLIB) -lbz2 -lz
 
 #
 #  The archiver and the flag(s) to use when building archive (library)
