@@ -1,5 +1,5 @@
-%__ohpc_provides	/usr/lib/rpm/ohpc-find-provides -r ohpc
-%__ohpc_requires 	/usr/lib/rpm/ohpc-find-requires %{buildroot}
+%__ohpc_provides	/usr/lib/rpm/ohpc-find-provides
+%__ohpc_requires 	/usr/lib/rpm/ohpc-find-requires %{buildroot} %{OHPC_HOME}
 %__ohpc_path            ^%{OHPC_HOME}
 %__elf_exclude_path 	^%{OHPC_HOME}
 
