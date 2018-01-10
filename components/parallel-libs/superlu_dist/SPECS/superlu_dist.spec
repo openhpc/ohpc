@@ -34,6 +34,7 @@ Source3:        superlu_dist-intel-make.inc
 Patch1:         superlu_dist-parmetis.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 %if "%{compiler_family}" != "intel"
@@ -144,6 +145,7 @@ module-whatis "%{url}"
 set     version                     %{version}
 
 depends-on metis
+depends-on ptscotch
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
