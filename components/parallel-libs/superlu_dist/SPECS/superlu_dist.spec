@@ -40,6 +40,10 @@ Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
+BuildRequires:  bzip2-devel
+Requires:       bzip2-devel
+BuildRequires:  zlib-devel
+Requires:       zlib-devel
 
 #!BuildIgnore: post-build-checks
 
