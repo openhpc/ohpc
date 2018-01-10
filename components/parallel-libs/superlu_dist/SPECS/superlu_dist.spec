@@ -43,7 +43,7 @@ Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  libbz2-devel
-Requires:       libbz2
+Requires:       libbz2-1
 %else
 BuildRequires:  bzip2-devel
 Requires:       bzip2
