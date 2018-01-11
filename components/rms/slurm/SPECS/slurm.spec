@@ -525,7 +525,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 %dir %{_libdir}/slurm/src
 #############################################################################
 
-%files example-configs
+%files -n %{pname}-example-configs%{PROJ_DELIM}
 %defattr(-,root,root,0755)
 %dir %{_sysconfdir}
 %if %{with cray}
