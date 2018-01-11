@@ -72,14 +72,14 @@ Source1:    OHPC_macros
 # Build with PAM by default on linux
 %bcond_without pam
 
-Requires: munge
+Requires: munge%{PROJ_DELIM}
 
 %{?systemd_requires}
 BuildRequires: systemd
-BuildRequires: munge-devel munge-libs
+BuildRequires: munge-devel%{PROJ_DELIM} munge-libs%{PROJ_DELIM}
 BuildRequires: python
 BuildRequires: readline-devel
-Obsoletes: slurm-lua%{PROJ_NAME} slurm-munge%{PROJ_NAME} slurm-plugins%{PROJ_NAME}
+Obsoletes: slurm-lua%{PROJ_DELIM} slurm-munge%{PROJ_DELIM} slurm-plugins%{PROJ_DELIM}
 
 +# 8/15/14 karl.w.schulz@intel.com - include prereq
 %if 0%{?suse_version}
@@ -255,7 +255,7 @@ Slurm compute node daemon. Used to launch jobs on compute nodes
 Summary: Slurm database daemon
 Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
-Obsoletes: slurm-sql%{PROJ_NAME}
+Obsoletes: slurm-sql%{PROJ_DELIM}
 %description -n %{pname}-slurmdbd%{PROJ_DELIM}
 Slurm database daemon. Used to accept and process database RPCs and upload
 database changes to slurmctld daemons on each cluster
@@ -287,7 +287,7 @@ OpenLava wrapper scripts used for helping migrate from OpenLava/LSF to Slurm
 Summary: Perl tool to print Slurm job state information
 Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
-Obsoletes: slurm-sjobexit%{PROJ_NAME} slurm-sjstat%{PROJ_NAME} slurm-seff%{PROJ_NAME}
+Obsoletes: slurm-sjobexit%{PROJ_DELIM} slurm-sjstat%{PROJ_DELIM} slurm-seff%{PROJ_DELIM}
 %description -n %{pname}-contribs%{PROJ_DELIM}
 seff is a mail program used directly by the Slurm daemons. On completion of a
 job, wait for it's accounting information to be available and include that
@@ -305,8 +305,8 @@ utilities will provide more information and greater depth of understanding.
 Summary: PAM module for restricting access to compute nodes via Slurm
 Group: %{PROJ_NAME}/rms
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
-BuildRequires: pam-devel%{PROJ_NAME}
-Obsoletes: pam_slurm%{PROJ_NAME}
+BuildRequires: pam-devel
+Obsoletes: pam_slurm%{PROJ_DELIM}
 %description -n %{pname}-pam_slurm%{PROJ_DELIM}
 This module restricts access to compute nodes in a cluster where Slurm is in
 use.  Access is granted to root, any user with an Slurm-launched job currently
