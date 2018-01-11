@@ -617,7 +617,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 %endif
 #############################################################################
 
-%files %{pname}-torque%{PROJ_DELIM}
+%files -n %{pname}-torque%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_bindir}/pbsnodes
 %{_bindir}/qalter
