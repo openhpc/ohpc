@@ -497,11 +497,11 @@ touch $LIST
     test -f %{buildroot}/lib64/security/pam_slurm_adopt.so		&&
 	echo /lib64/security/pam_slurm_adopt.so		>>$LIST
 %endif
+mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 #############################################################################
 
 %clean
 rm -rf %{buildroot}
-mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 #############################################################################
 
 %files -f slurm.files
