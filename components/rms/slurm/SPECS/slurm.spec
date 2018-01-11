@@ -633,7 +633,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 %{_libdir}/slurm/spank_pbs.so
 #############################################################################
 
-%files %{pname}-openlava%{PROJ_DELIM}
+%files -n %{pname}-openlava%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_bindir}/bjobs
 %{_bindir}/bkill
@@ -642,7 +642,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 
 #############################################################################
 
-%files %{pname}-contribs%{PROJ_DELIM}
+%files -n %{pname}-contribs%{PROJ_DELIM}
 %defattr(-,root,root)
 %{_bindir}/seff
 %{_bindir}/sjobexitmod
