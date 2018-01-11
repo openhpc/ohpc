@@ -88,7 +88,7 @@ ln -s mpfr-%{mpfr_version} mpfr
 
 %{__mkdir} obj
 cd obj
-../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path}
+../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path} --disable-static --enable-shared
 make %{?_smp_mflags}
 %endif
 %install
