@@ -81,7 +81,7 @@ BuildRequires: python
 BuildRequires: readline-devel
 Obsoletes: slurm-lua%{PROJ_DELIM} slurm-munge%{PROJ_DELIM} slurm-plugins%{PROJ_DELIM}
 
-+# 8/15/14 karl.w.schulz@intel.com - include prereq
+# 8/15/14 karl.w.schulz@intel.com - include prereq
 %if 0%{?suse_version}
 PreReq: %{insserv_prereq} %{fillup_prereq}
 %endif
@@ -386,7 +386,7 @@ install -D -m755 etc/slurm.epilog.clean %{buildroot}/%{_sysconfdir}/slurm.epilog
 install -D -m644 etc/slurmdbd.conf.example %{buildroot}/%{_sysconfdir}/slurmdbd.conf.example
 install -D -m755 contribs/sjstat %{buildroot}/%{_bindir}/sjstat
 
-+# 9/8/14 karl.w.schulz@intel.com - provide starting config file
+# 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
 head -n -2 $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf.example | grep -v ReturnToService > $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "# OpenHPC default configuration" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
