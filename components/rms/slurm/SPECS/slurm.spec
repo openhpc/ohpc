@@ -32,7 +32,7 @@ URL:		https://slurm.schedmd.com/
 %global slurm_source_dir %{pname}-%{version}-%{rel}
 %endif
 
-Source:		https://github.com/SchedMD/slurm/archive/%{pname}-%{ver_exp}.tar.gz
+Source:		https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
 Source1:    OHPC_macros
 
 # build options		.rpmmacros options	change to default action
