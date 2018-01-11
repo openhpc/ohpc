@@ -15,7 +15,7 @@
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 1.3.3
+Version: 1.3.4
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
