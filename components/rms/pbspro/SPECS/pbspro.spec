@@ -216,6 +216,10 @@ the PBS Professional user commands.
 
 %build
 
+if [ ! -x ./configure ] then
+    ./autogen.sh
+fi
+
 [ -d build ] && rm -rf build
 mkdir build
 cd build
