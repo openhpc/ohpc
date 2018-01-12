@@ -9,9 +9,25 @@
 #--------------------------------------------------------------------
 
 if [ "$#" -lt 3 ];then
-    echo "usage: `basename $0` [source-project] [target-project] [pkg-name]"
+    echo " "
+    echo "usage: `basename $0` <OPTIONS> [source-project] [target-project] [pkg-name]"
+    echo " "
+    echo "where OPTIONS are:"
+    echo "  -i          maintain release string during copy and increment by 1"
+    echo " "
     exit 1
 fi
+
+incrementRelease=0
+
+while getopts "i" opt; do
+    case ${opt} in
+	i ) 
+	    incrementRelease=1
+	    ;;
+    esac
+done
+shift $((OPTIND -1))
 
 export branchCurrent=$1
 export branchNew=$2
@@ -136,6 +152,15 @@ if [[ $? -ne 0 ]];then
     exit 1
 fi
 
+# grab release string
+if [ $incrementRelease -eq 1 ];then
+    relNumber=$(osc api -X GET "/source/${branchCurrent}/${PKG}" | grep vrev | perl -pe 's/.*vrev="(\d+)".*$/$1/')
+    let relNumber="$relNumber+1"
+    if [ $relNumber -lt 1 ];then
+	ERROR "target release number must be > 0"
+    fi
+fi
+
 cmd="osc copypac ${branchCurrent} $PKG ${branchNew}"
 run_cmd "$cmd"
 
@@ -173,4 +198,36 @@ if [[ $found_link -eq 1 ]];then
     fi
     osc ci -m "committing updated _link files"
     cd -
+fi
+
+if [ $incrementRelease -eq 1 ];then
+    echo "--> Updating package to have desired Release string setting = $relNumber"
+    cd $TMPDIR/$branchNew/$3
+    
+    # strategy for packages with _service files
+    if [ -f _service ];then
+
+	# make additional commits to match desired release number
+	if [ $relNumber -eq 1 ];then
+	    echo "No change necessary, minimum release string is 2"
+	elif [ $relNumber -eq 2 ];then
+	    echo "No change necessary, minimum release string is 2"
+	elif [ $relNumber -eq 3 ];then
+	    osc commit -f -m "copy_package: final commit for release matching (3 of tgt=$relNumber)"
+	elif [ $relNumber -eq 4 ];then
+	    osc commit -f -m "copy_package: temp noop commit for release matching (3 of tgt=$relNumber)"
+	    osc commit -f -m "copy_package: final commit for release matching (4 of tgt=$relNumber)"
+	else
+	    mv _service _service.orig
+	    osc rm _service
+	    osc ci -m "copy_package: temp removal for release matching (3 of tgt=$relNumber)"
+	    let numIters="$relNumber-1"
+	    for j in `seq 4 $numIters`; do
+		osc commit -f -m "copy_package: temp noop commit for release matching ($j of tgt=$relNumber)"
+	    done
+	    mv _service.orig _service
+	    osc add _service
+	    osc ci -m "copy_package: final commit for release matching ($relNumber of tgt=$relNumber)"
+	fi
+    fi
 fi
