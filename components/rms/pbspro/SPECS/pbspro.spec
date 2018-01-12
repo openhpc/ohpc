@@ -216,7 +216,7 @@ the PBS Professional user commands.
 
 %build
 
-if [ ! -x ./configure ] then
+if [ ! -x ./configure ]; then
     ./autogen.sh
 fi
 
