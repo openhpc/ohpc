@@ -41,6 +41,12 @@ Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname scipy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
+%if 0%{?sles_version} || 0%{?suse_version}
+%define python_module() python-%{**} python3-%{**}
+%else
+%define python_module() python-%{**} python34-%{**}
+%endif
+
 Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.0.0
 Release:        1%{?dist}
@@ -54,13 +60,15 @@ Source1:        OHPC_macros
 BuildRequires:  fdupes
 %endif
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  python-devel
-BuildRequires:  python-setuptools
-BuildRequires:  python-Cython%{PROJ_DELIM}
-BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  %{python_module devel}
+BuildRequires:  %{python_module setuptools}
+BuildRequires:  %{python_module Cython}%{PROJ_DELIM}
+BuildRequires:  %{python_module numpy}-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  python-rpm-macros%{PROJ_DELIM}
 BuildRequires:  swig
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
+Requires:       %{python_module numpy}-%{compiler_family}%{PROJ_DELIM}
+%python_subpackages
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -113,9 +121,9 @@ EOF
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 %if "%{compiler_family}" == "intel"
 LDSHARED="icc -shared" \
-python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
+%python_exec  setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
 %else
-python setup.py config_fc --fcompiler=gnu95 --noarch build
+%python_exec  setup.py config_fc --fcompiler=gnu95 --noarch build
 %endif
 
 %install
@@ -127,7 +135,7 @@ module load openblas
 %endif
 
 module load numpy
-python setup.py install --prefix=%{install_path} --root=%{buildroot}
+%python_exec  setup.py install --prefix=%{install_path} --root=%{buildroot}
 find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
 find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type d -name examples | xargs rm -rf
@@ -179,7 +187,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%files
+%files %{python_files}
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc THANKS.txt

@@ -48,11 +48,11 @@ suite.
 
 %pre
 
-# Verify pxse mpi stack is installed. Punt if not detected.
+# Verify psxe mpi stack is installed. Punt if not detected.
 
 mpicc_subpath="linux/mpi/intel64/bin/mpicc$"
 
-echo "Checking for local PXSE MPI installation(s)."
+echo "Checking for local PSXE MPI installation(s)."
 
 versions_all=`rpm -qal | grep ${mpicc_subpath}`
 
@@ -82,7 +82,7 @@ for file in ${versions_all}; do
 done
 if [ -z "${versions}" ]; then
     echo ""
-    echo "Error: local PXSE compatability support is for versions > ${min_ver}"
+    echo "Error: local PSXE compatability support is for versions > ${min_ver}"
     echo ""
     exit 1
 fi
@@ -101,7 +101,7 @@ if [ $? -eq 1 ];then
     exit 1
 fi
 
-echo "Creating OpenHPC-style modulefiles for local PXSE MPI installation(s)."
+echo "Creating OpenHPC-style modulefiles for local PSXE MPI installation(s)."
 
 # Create modulefiles for each locally detected installation.
 

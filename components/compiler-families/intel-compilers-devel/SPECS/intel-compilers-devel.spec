@@ -52,11 +52,11 @@ install -D -m755 %{SOURCE2}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_
 
 %pre
 
-# Verify pxse compilers are installed. Punt if not detected.
+# Verify psxe compilers are installed. Punt if not detected.
 
 icc_subpath="linux/bin/intel64/icc$"
 
-echo "Checking for local PXSE compiler installation(s)."
+echo "Checking for local PSXE compiler installation(s)."
 
 versions_all=`rpm -qal | grep ${icc_subpath}`
 
@@ -84,7 +84,7 @@ for file in ${versions_all}; do
 done
 if [ -z "${versions}" ]; then
     echo ""
-    echo "Error: local PXSE compatability support is for versions > ${min_ver}"
+    echo "Error: local PSXE compatability support is for versions > ${min_ver}"
     echo " "
     exit 1
 fi
@@ -103,7 +103,7 @@ if [ $? -eq 1 ];then
     exit 1
 fi
 
-echo "Creating OpenHPC-style modulefiles for local PXSE compiler installation(s)."
+echo "Creating OpenHPC-style modulefiles for local PSXE compiler installation(s)."
 
 # Create modulefiles for each locally detected installation.
 

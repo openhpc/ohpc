@@ -7,12 +7,15 @@ Group: ohpc/admin
 License: ASL 2.0
 Source0: OHPC_setup_compiler
 Source1: OHPC_setup_mpi
+Source2: ohpc.attr
+Source3: ohpc-find-requires
+Source4: ohpc-find-provides
 
 BuildArch: noarch
 
 %description
 This administrative package is used to define top level OpenHPC installation
-directories and is utilized by most packages that do not install into system
+directories. It is utilized by most packages that do not install into system
 default paths.
 
 %package -n ohpc-buildroot
@@ -22,14 +25,24 @@ Requires: lmod-ohpc
 Requires: ohpc-filesystem
 
 %description -n ohpc-buildroot
-Common compiler and MPI family convenience scripts used during OpenHPC builds.
+
+This administrative package is used to provide RPM dependency analysis tools
+and common compiler and MPI family convenience scripts used during OpenHPC
+builds.
 
 %install
 # The ohpc-filesystems owns all the common directories
 mkdir -p $RPM_BUILD_ROOT/opt/ohpc/pub/{apps,doc,compiler,libs,moduledeps,modulefiles,mpi}
 mkdir -p $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
+mkdir -p $RPM_BUILD_ROOT/usr/lib/rpm/fileattrs
+
 install -p -m 644 %{SOURCE0} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
+
+# rpm dependency plugins
+install -p -m 755 %{SOURCE2} $RPM_BUILD_ROOT/usr/lib/rpm/fileattrs
+install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
+install -p -m 755 %{SOURCE4} $RPM_BUILD_ROOT/usr/lib/rpm
 
 %files
 %dir /opt/ohpc/
@@ -45,8 +58,13 @@ install -p -m 644 %{SOURCE1} $RPM_BUILD_ROOT/opt/ohpc/admin/ohpc
 
 %files -n ohpc-buildroot
 %dir /opt/ohpc/admin/ohpc/
+%dir /usr/lib/rpm/
+%dir /usr/lib/rpm/fileattrs/
 /opt/ohpc/admin/ohpc/OHPC_setup_compiler
 /opt/ohpc/admin/ohpc/OHPC_setup_mpi
+/usr/lib/rpm/ohpc-find-provides
+/usr/lib/rpm/ohpc-find-requires
+/usr/lib/rpm/fileattrs/ohpc.attr
 
 %changelog
 * Mon May  8 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.3

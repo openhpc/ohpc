@@ -43,6 +43,7 @@ eth_provision="${eth_provision:-eth0}"
 # Flags for optional installation/configuration
 enable_ib="${enable_ib:-0}"
 enable_opa="${enable_opa:-0}"
+enable_opafm="${enable_opafm:-0}"
 enable_mpi_defaults="${enable_mpi_defaults:-1}"
 enable_ipoib="${enable_ipoib:-0}"
 

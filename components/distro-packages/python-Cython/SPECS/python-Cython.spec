@@ -10,7 +10,11 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%{?!python_module:%define python_module() python-%{**} python3-%{**}}
+%if 0%{?sles_version} || 0%{?suse_version}
+%define python_module() python-%{**} python3-%{**}
+%else
+%define python_module() python-%{**} python34-%{**}
+%endif
 Name:           python-Cython%{PROJ_DELIM}
 Version:        0.26.1
 Release:        0
@@ -21,7 +25,6 @@ Group:          Development/Languages/Python
 Source:         https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
 %if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  %{python_module devel}
 BuildRequires:  %{python_module xml}
 BuildRequires:  fdupes
 Requires(post): update-alternatives
@@ -29,11 +32,10 @@ Requires(postun): update-alternatives
 %else
 BuildRequires:  libxml2-python
 Requires:       libxml2-python
-BuildRequires:  python-devel
-BuildRequires:  python34-devel
 Requires(post): chkconfig
 Requires(postun): chkconfig
 %endif
+BuildRequires:  %{python_module devel}
 BuildRequires:  gcc-c++
 BuildRequires:  python-rpm-macros%{PROJ_DELIM}
 Requires:       python-devel

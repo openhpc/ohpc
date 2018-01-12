@@ -15,7 +15,7 @@
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 1.3.3
+Version: 1.3.4
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
@@ -261,9 +261,9 @@ Collection of serial library builds for use with GNU compiler toolchain
 %package -n %{PROJ_NAME}-slurm-client
 Summary:   OpenHPC client packages for SLURM
 Requires:  slurm%{PROJ_DELIM}
-Requires:  slurm-munge%{PROJ_DELIM}
-Requires:  slurm-plugins%{PROJ_DELIM}
+Requires:  slurmd%{PROJ_DELIM}
 Requires:  slurm-contribs%{PROJ_DELIM}
+Requires:  slurm-example-configs%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
 Requires:  munge%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-slurm-client
@@ -272,12 +272,10 @@ Collection of client packages for SLURM
 %package -n %{PROJ_NAME}-slurm-server
 Summary:   OpenHPC server packages for SLURM
 Requires:  slurm%{PROJ_DELIM}
-Requires:  slurm-munge%{PROJ_DELIM}
-Requires:  slurm-plugins%{PROJ_DELIM}
 Requires:  slurm-perlapi%{PROJ_DELIM}
 Requires:  slurm-devel%{PROJ_DELIM}
 Requires:  slurm-slurmdbd%{PROJ_DELIM}
-Requires:  slurm-sql%{PROJ_DELIM}
+Requires:  slurm-slurmctld%{PROJ_DELIM}
 Requires:  munge%{PROJ_DELIM}
 Requires:  munge-libs%{PROJ_DELIM}
 Requires:  munge-devel%{PROJ_DELIM}
