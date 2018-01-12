@@ -91,6 +91,7 @@ Requires:      llvm-compilers%{PROJ_DELIM}
 
 %endif
 
+# Disable RPM symlink analysis on files in %{OHPC_HOME}. 
 %global __libsymlink_exclude_path  %{OHPC_HOME}/.*$
 
 # MPI dependencies
