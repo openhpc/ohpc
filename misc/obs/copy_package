@@ -57,6 +57,48 @@ run_cmd () {
     fi
 }
 
+# determine repos and build architectures available in parent repo
+query_source_repos_and_arches () {
+    export repos=$(osc api -X GET "/build/$branchCurrent" | grep entry | awk -F 'name="' '{print $2}' | awk -F '"' '{print $1}')
+    for repo in $repos; do
+	echo "--> Available repos = $repo"
+    done
+
+    testArch=$(echo $repos | awk '{print $1}')
+    export arches=$(osc api -X GET "/build/$branchCurrent/$testArch" | grep entry | awk -F 'name="' '{print $2}' | awk -F '"' '{print $1}')
+    for arch in $arches; do
+	echo "--> Available arches = $arch"
+    done
+}
+
+# determine highest release number for package
+query_rpm_release () {
+    package=$1
+    maxRelease=0
+
+    # Loop over each distro and arch type to determine max release number.
+
+    for repo in $repos; do
+	for arch in $arches; do
+	    release=$(osc api -X GET "/build/$branchCurrent/$repo/$arch/$package/" | grep $arch.rpm | head -1 | perl -pe 's/.*binary filename=\S+-(\d+)\.(\d+)\.x86_64\.rpm".*$/$1/')
+	    if [ -n "$release" ];then
+		if [ $release -gt $maxRelease ];then
+		    maxRelease=$release
+		fi
+	    fi
+	done
+    done
+
+    if [ $maxRelease -eq 0 ];then
+	ERROR "Unable to determine RPM release number"
+    else
+	echo "--> Upstream RPM release = $maxRelease"
+    fi
+
+    export maxRelease
+
+}
+
 query_minor_branch () {
     export SOURCE_VER=`echo $1 | awk -F : '{print $2}'`
     [[ -z "${SOURCE_VER}" ]] && { echo "Error querying minor branch for $1"; exit 1; }
@@ -154,8 +196,10 @@ fi
 
 # grab release string
 if [ $incrementRelease -eq 1 ];then
-    relNumber=$(osc api -X GET "/source/${branchCurrent}/${PKG}" | grep vrev | perl -pe 's/.*vrev="(\d+)".*$/$1/')
-    let relNumber="$relNumber+1"
+    query_source_repos_and_arches
+    query_rpm_release $PKG
+    #relNumber=$(osc api -X GET "/source/${branchCurrent}/${PKG}" | grep vrev | perl -pe 's/.*vrev="(\d+)".*$/$1/')
+    let relNumber="$maxRelease+1"
     if [ $relNumber -lt 1 ];then
 	ERROR "target release number must be > 0"
     fi
@@ -203,6 +247,8 @@ fi
 if [ $incrementRelease -eq 1 ];then
     echo "--> Updating package to have desired Release string setting = $relNumber"
     cd $TMPDIR/$branchNew/$3
+
+    let numIters="$relNumber-1"
     
     # strategy for packages with _service files
     if [ -f _service ];then
@@ -221,7 +267,7 @@ if [ $incrementRelease -eq 1 ];then
 	    mv _service _service.orig
 	    osc rm _service
 	    osc ci -m "copy_package: temp removal for release matching (3 of tgt=$relNumber)"
-	    let numIters="$relNumber-1"
+
 	    for j in `seq 4 $numIters`; do
 		osc commit -f -m "copy_package: temp noop commit for release matching ($j of tgt=$relNumber)"
 	    done
@@ -229,5 +275,16 @@ if [ $incrementRelease -eq 1 ];then
 	    osc add _service
 	    osc ci -m "copy_package: final commit for release matching ($relNumber of tgt=$relNumber)"
 	fi
+    elif [ -f _link ];then
+	# Note: evidence dictates linked packages can have release numbers that are different than the OBS vrev. Therefore, query package
+	# directly
+	echo "updating package with _link ($TMPDIR)"
+	osc repairwc .
+	rm _link
+	osc up -u .
+	for j in `seq 3 $numIters`; do
+	    osc commit -f -m "copy_package: temp noop commit for release matching ($j of tgt=$relNumber)"
+	done
+	osc ci -f -m "copy_package: final commit for release matching ($relNumber of tgt=$relNumber)"
     fi
 fi
