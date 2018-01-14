@@ -49,6 +49,7 @@ my $chrootaddrepo      = "";
 my $beegfsrepo         = "";
 my $verlong            = "";
 my $OSTree             = "";
+my $image              = "";
 
 # parse package command macro's from input file
 open( IN, "<$basename.tex" ) || die __LINE__ . ": Cannot open file -> $file\n$!";
@@ -74,6 +75,8 @@ while( my $line = <IN> ) {
         $OSTree = $1;
 	# undo latex escape for underscore
 	$OSTree =~ s/\\_/_/;
+    } elsif( $line =~ /\\newcommand\{\\installimage\}\{(.+)\}/ ) {
+        $image = $1;
     } elsif( $line =~ /\\newcommand\{\\groupchrootinstall\}\{(.+)\}/ ) {
         $groupChrootInstall = $1;
     } elsif( $line =~ /\\newcommand\{\\baseos\}\{(.+)\}/ ) {
@@ -104,6 +107,7 @@ $groupChrootInstall =~ s/\\\$/\$/;
 # print "BaseOS              = $BaseOS\n";
 # print "VERLONG             = $verlong\n";
 # print "OSTree              = $OSTree\n";
+ print "IMAGE              = $image\n";
 # exit(1);
 
 if( $Install eq "" || $chrootInstall eq "" || $groupInstall eq "" || $groupChrootInstall eq "" ) {
@@ -297,6 +301,7 @@ sub update_cmd {
     $cmd =~ s/ARCH/$arch/;
     $cmd =~ s/VERLONG/$verlong/g;
     $cmd =~ s/OSTREE/$OSTree/;
+    $cmd =~ s/IMAGE/$image/;
 
     return( $cmd );
 } # end update_cmd
