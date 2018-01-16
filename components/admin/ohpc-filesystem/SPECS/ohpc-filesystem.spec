@@ -21,6 +21,7 @@ Source0: OHPC_setup_compiler
 Source1: OHPC_setup_mpi
 Source2: ohpc-find-requires
 Source3: ohpc-find-provides
+Source4: OHPC_macros
 
 BuildArch: noarch
 
