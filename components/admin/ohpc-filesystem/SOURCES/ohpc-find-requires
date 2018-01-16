@@ -24,13 +24,8 @@ if [ ! -d "$buildroot" ]; then
     exit 1
 fi
 
-# Second argument is default search path; if provided, 3rd argument is
-# path from %{OHPC_HOME} which overrides default (although it is the
-# same path for canonical ohpc builds).
+# Second argument is default search path.
 searchPath="$2"
-if [ $numArgs -gt 2 ];then
-    searchPath="$3"
-fi
 
 if [ -z "$searchPath" ];then
     >&2echo "Required search path argument not provided"
