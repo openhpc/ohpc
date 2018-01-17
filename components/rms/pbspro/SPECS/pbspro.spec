@@ -67,7 +67,7 @@ Name:      %{pbs_name}%{PROJ_DELIM}
 Version:   %{pbs_version}
 Release:   %{pbs_release}
 #Source0:   https://github.com/PBSPro/pbspro/archive/v%{pbs_version}.tar.gz#$/%{pbs_name}-%{pbs_version}.tar.gz
-Source0: https://github.com/PBSPro/pbspro/releases/download/v%{version}/%{pname}-%{version}.tar.gz
+Source0: https://github.com/PBSPro/pbspro/releases/download/v%{version}/%{pbs_name}-%{version}.tar.gz
 Source1:   OHPC_macros
 Patch1:    systemd.patch
 License:   AGPLv3 with exceptions
