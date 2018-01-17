@@ -24,8 +24,9 @@ if [ ! -d "$buildroot" ]; then
     exit 1
 fi
 
-# Second argument is top-level search path
+# Second argument is default search path.
 searchPath="$2"
+
 if [ -z "$searchPath" ];then
     >&2echo "Required search path argument not provided"
     exit 1

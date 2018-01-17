@@ -42,6 +42,7 @@ URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
+Patch0:    psxe18.fortran.patch
 
 BuildRequires: zlib-devel
 Requires:      zlib-devel
@@ -64,6 +65,7 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch0 -p1
 
 %build
 
