@@ -66,7 +66,8 @@ Summary:   PBS Professional
 Name:      %{pbs_name}%{PROJ_DELIM}
 Version:   %{pbs_version}
 Release:   %{pbs_release}
-Source0:   https://github.com/PBSPro/pbspro/archive/v%{pbs_version}.tar.gz#$/%{pbs_name}-%{pbs_version}.tar.gz
+#Source0:   https://github.com/PBSPro/pbspro/archive/v%{pbs_version}.tar.gz#$/%{pbs_name}-%{pbs_version}.tar.gz
+Source0: https://github.com/PBSPro/pbspro/releases/download/v%{version}/%{pbs_name}-%{version}.tar.gz
 Source1:   OHPC_macros
 Patch1:    systemd.patch
 License:   AGPLv3 with exceptions
@@ -240,12 +241,16 @@ the PBS Professional user commands.
 
 <<<<<<< HEAD
 # scott@altair.com (Referring to Altair INSTALL in 14.1.2, required execution of autogen.sh before executing configure)
+<<<<<<< HEAD
 [ -f autogen.sh ] && ./autogen.sh
 =======
 if [ ! -x ./configure ]; then
     ./autogen.sh
 fi
 >>>>>>> eda5e085fd4f970b7fe75d2b7e4322e3835db3fd
+=======
+#[ -f autogen.sh ] && ./autogen.sh
+>>>>>>> 04d678ec1fa198f577f72cdb8bb89c5719f625e4
 
 [ -d build ] && rm -rf build
 mkdir build
