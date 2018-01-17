@@ -239,18 +239,10 @@ the PBS Professional user commands.
 
 %build
 
-<<<<<<< HEAD
 # scott@altair.com (Referring to Altair INSTALL in 14.1.2, required execution of autogen.sh before executing configure)
-<<<<<<< HEAD
-[ -f autogen.sh ] && ./autogen.sh
-=======
-if [ ! -x ./configure ]; then
-    ./autogen.sh
-fi
->>>>>>> eda5e085fd4f970b7fe75d2b7e4322e3835db3fd
-=======
-#[ -f autogen.sh ] && ./autogen.sh
->>>>>>> 04d678ec1fa198f577f72cdb8bb89c5719f625e4
+#if [ ! -x ./configure ]; then
+#    ./autogen.sh
+#fi
 
 [ -d build ] && rm -rf build
 mkdir build
