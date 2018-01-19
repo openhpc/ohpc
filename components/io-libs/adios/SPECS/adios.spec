@@ -30,7 +30,7 @@ Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
 Source1: OHPC_macros
 AutoReq: no
 
-BuildRequires: zlib-devel glib2-devel libcurl
+BuildRequires: zlib-devel glib2-devel
 Requires:      zlib
 
 # libm.a from CMakeLists
@@ -56,7 +56,9 @@ BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
-BuildRequires: fdupes
+BuildRequires: fdupes libcurl4
+%else
+BuildRequires: libcurl
 %endif
 
 # Default library install path
