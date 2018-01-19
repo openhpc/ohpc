@@ -30,7 +30,7 @@ Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
 Source1: OHPC_macros
 AutoReq: no
 
-BuildRequires: zlib-devel glib2-devel
+BuildRequires: zlib-devel glib2-devel libcurl
 Requires:      zlib
 
 # libm.a from CMakeLists
