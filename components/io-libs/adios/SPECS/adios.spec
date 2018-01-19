@@ -56,9 +56,9 @@ BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
-BuildRequires: fdupes libcurl4
+BuildRequires: fdupes libcurl4 libcurl-devel
 %else
-BuildRequires: libcurl
+BuildRequires: libcurl libcurl-devel
 %endif
 
 # Default library install path
