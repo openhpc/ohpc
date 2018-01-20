@@ -279,8 +279,7 @@ Requires:  slurm-slurmctld%{PROJ_DELIM}
 Requires:  munge%{PROJ_DELIM}
 Requires:  munge-libs%{PROJ_DELIM}
 Requires:  munge-devel%{PROJ_DELIM}
-# (1/19/2018) - pdsh slurm module not yet compatabile with newer slurm, removing for now
-#Requires:  pdsh-mod-slurm%{PROJ_DELIM}
+Requires:  pdsh-mod-slurm%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-slurm-server
 Collection of server packages for SLURM
 
