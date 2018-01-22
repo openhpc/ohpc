@@ -272,13 +272,14 @@ Collection of client packages for SLURM
 %package -n %{PROJ_NAME}-slurm-server
 Summary:   OpenHPC server packages for SLURM
 Requires:  slurm%{PROJ_DELIM}
-Requires:  slurm-perlapi%{PROJ_DELIM}
 Requires:  slurm-devel%{PROJ_DELIM}
-Requires:  slurm-slurmdbd%{PROJ_DELIM}
+Requires:  slurm-example-configs%{PROJ_DELIM}
+Requires:  slurm-perlapi%{PROJ_DELIM}
 Requires:  slurm-slurmctld%{PROJ_DELIM}
+Requires:  slurm-slurmdbd%{PROJ_DELIM}
 Requires:  munge%{PROJ_DELIM}
-Requires:  munge-libs%{PROJ_DELIM}
 Requires:  munge-devel%{PROJ_DELIM}
+Requires:  munge-libs%{PROJ_DELIM}
 Requires:  pdsh-mod-slurm%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-slurm-server
 Collection of server packages for SLURM
