@@ -19,7 +19,7 @@
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   3.5.0
+Version:   3.5.1
 Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools

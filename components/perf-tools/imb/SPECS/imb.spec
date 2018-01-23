@@ -19,7 +19,7 @@
 
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   2018.0
+Version:   2018.1
 Release:   1%{?dist}
 License:   CPL
 Group:     %{PROJ_NAME}/perf-tools

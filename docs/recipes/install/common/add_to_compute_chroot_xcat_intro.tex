@@ -12,6 +12,7 @@ the chroot.
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 [sms](*\#*) yum-config-manager --installroot=$CHROOT --enable base
 [sms](*\#*) cp /etc/yum.repos.d/OpenHPC.repo $CHROOT/etc/yum.repos.d
+[sms](*\#*) cp /etc/yum.repos.d/epel.repo $CHROOT/etc/yum.repos.d
 \end{lstlisting}
 % end_ohpc_run
 

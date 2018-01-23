@@ -21,7 +21,7 @@
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 1.12.0
+Version: 1.13.0
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
@@ -56,7 +56,9 @@ BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
-BuildRequires: fdupes
+BuildRequires: fdupes libcurl4 libcurl-devel
+%else
+BuildRequires: libcurl libcurl-devel
 %endif
 
 # Default library install path

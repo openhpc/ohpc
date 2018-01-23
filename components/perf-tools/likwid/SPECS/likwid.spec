@@ -19,12 +19,12 @@
 
 Summary:   Toolsuite of command line applications for performance oriented programmers
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   4.3.0
+Version:   4.3.1
 Release:   1%{?dist}
 License:   GPLv3
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://github.com/RRZE-HPC/likwid
-Source0:   https://github.com/RRZE-HPC/likwid/archive/4.3.0.tar.gz#/%{pname}-%{version}.tar.gz
+Source0:   https://github.com/RRZE-HPC/likwid/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
