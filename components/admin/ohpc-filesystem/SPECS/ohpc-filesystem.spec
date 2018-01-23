@@ -59,12 +59,19 @@ install -p -m 755 %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/rpm
 %{__cat} <<EOF > %{buildroot}//usr/lib/rpm/fileattrs/ohpc.attr
 %%__ohpc_provides        /usr/lib/rpm/ohpc-find-provides
 %%__ohpc_requires        /usr/lib/rpm/ohpc-find-requires %%{buildroot} %{OHPC_HOME}
+
 %%__ohpc_path            ^%{OHPC_HOME}
 %%__elf_exclude_path     ^%{OHPC_HOME}
 
 %%__ohpc_magic           ^ELF (32|64)-bit.*$
 %%__ohpc_flags           magic_and_path
 EOF
+
+%if 0%{?sles_version} || 0%{?suse_version}
+%{__cat} <<EOF >> %{buildroot}//usr/lib/rpm/fileattrs/ohpc.attr
+%%__elflib_exclude_path     ^%{OHPC_HOME}
+EOF
+%endif
 
 
 %files
