@@ -69,7 +69,7 @@ EOF
 
 %if 0%{?sles_version} || 0%{?suse_version}
 %{__cat} <<EOF >> %{buildroot}//usr/lib/rpm/fileattrs/ohpc.attr
-%%__elflib_exclude_path     ^%{OHPC_HOME}
+%%__elflib_exclude_path  ^%{OHPC_HOME}
 EOF
 %endif
 
