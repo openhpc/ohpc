@@ -261,7 +261,7 @@ Collection of serial library builds for use with GNU compiler toolchain
 %package -n %{PROJ_NAME}-slurm-client
 Summary:   OpenHPC client packages for SLURM
 Requires:  slurm%{PROJ_DELIM}
-Requires:  slurmd%{PROJ_DELIM}
+Requires:  slurm-slurmd%{PROJ_DELIM}
 Requires:  slurm-contribs%{PROJ_DELIM}
 Requires:  slurm-example-configs%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
