@@ -216,9 +216,10 @@ Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
-Requires:  papi%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 %endif
@@ -420,6 +421,7 @@ Requires:  imb-intel-impi%{PROJ_DELIM}
 Requires:  imb-intel-mpich%{PROJ_DELIM}
 Requires:  imb-intel-mvapich2%{PROJ_DELIM}
 Requires:  imb-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  likwid-intel-%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
