@@ -30,15 +30,15 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        1.11.8
-Release:        2%{?dist}
+Version:        1.11.9
+Release:        1%{?dist}
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
 Source0:        https://www.open-mpi.org/software/hwloc/v1.11/downloads/%{pname}-%{version}.tar.bz2
-Source1:   OHPC_macros
-Source2:   LICENSE
+Source1:        OHPC_macros
+Source2:        LICENSE
 
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
