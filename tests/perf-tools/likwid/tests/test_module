@@ -1,0 +1,156 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+PKG=LIKWID
+module=likwid
+testname=libs/LIKWID
+library=liblikwid
+header=likwid.h
+rpm=likwid-${LMOD_FAMILY_COMPILER}${DELIM}
+
+check_rms
+
+@test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+
+    rm -f .cmd_output
+}
+
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
+    DIR=${PKG}_DIR
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+    
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
+    BIN=${PKG}_BIN
+    if [ -z ${!BIN} ];then
+        flunk "${PKG}_BIN directory not defined"
+    fi
+    
+    if [ ! -d ${!BIN} || -z "${!BIN}" ];then
+        flunk "directory ${!BIN} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify availability/execution of likwid-perfctr binary" {
+    run which likwid-perfctr
+    assert_success
+
+    rm -f .avail-instructions
+    likwid-perfctr -a >& .avail-instructions
+    
+    run ls -l .avail-instructions
+    assert_success
+
+    if [ `wc -l ./av | awk '{print $1}'` -lt "3" ]; then 
+            flunk "no counters avaliable"
+    fi
+}
+
+# ----------
+# Man pages
+# ----------
+
+@test "[$testname] Verify availability of man page for likwid_avail" {
+    DIR=${PKG}_DIR
+
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+    
+    run man -w likwid-perfctr
+    assert_success
+    assert_output "${!DIR}/man/man1/likwid-perfctr.1"
+}
+
+# ----------
+# Lib Tests
+# ----------
+
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+ 
+    if [ ! -d ${!LIB} ];then
+        flunk "directory ${!LIB} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -s ${!LIB}/${library}.so ];then
+        flunk "${library}.so does not exist"
+    fi 
+}
+
+@test "[$testname] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ -e ${!LIB}/${library}.a ];then
+        flunk "${library}.a exists when not expecting it"
+    fi 
+}
+
+# --------------
+# Include Tests
+# --------------
+
+@test "[$testname] Verify module ${PKG}_INC is defined and exists ($LMOD_FAMILY_COMPILER)" {
+    INC=${PKG}_INC
+
+    if [ -z ${!INC} ];then
+        flunk "${PKG}_INC directory not defined"
+    fi
+    
+    if [ ! -d ${!INC} ];then
+        flunk "directory ${!INC} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify header file is present in ${PKG}_INC ($LMOD_FAMILY_COMPILER)" {
+    INC=${PKG}_INC
+
+    if [ -z ${!INC} ];then
+        flunk "${PKG}_INC directory not defined"
+    fi
+    
+    if [ ! -s ${!INC}/${header} ];then
+        flunk "directory $header file does not exist"
+    fi 
+}
