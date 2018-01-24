@@ -26,6 +26,7 @@ Group:     %{PROJ_NAME}/perf-tools
 URL:       https://github.com/RRZE-HPC/likwid
 Source0:   https://github.com/RRZE-HPC/likwid/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
+Patch1:    likwid-gfortran.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -40,7 +41,7 @@ limited to any specific architecture.
 
 %prep
 %setup -q -n %{pname}-%{version}
-
+%patch1 -p1
 
 %build
 
@@ -49,19 +50,13 @@ limited to any specific architecture.
 
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
-%define fortran_compiler gfortran
-%define fc_flags -J ./ 
 %else
 %define compiler ICC
-%define fortran_compiler ifort
-%define fc_flags -module ./
 %endif
 
 make \
-    COMPILER="%{compiler}" \
-    FC="%{fortran_compiler}" \
-    FCFLAGS="%{fc_flags}" \
     FORTRAN_INTERFACE="true" \
+    COMPILER="%{compiler}" \
     PREFIX="%{install_path}" \
     LIBDIR="%{install_path}/lib" \
     MANPREFIX="%{install_path}/man" \
@@ -76,12 +71,8 @@ make \
 
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
-%define fortran_compiler gfortran
-%define fc_flags -J ./ 
 %else
 %define compiler ICC
-%define fortran_compiler ifort
-%define fc_flags -module ./
 %endif
 
 make %{?_smp_mflags} \
