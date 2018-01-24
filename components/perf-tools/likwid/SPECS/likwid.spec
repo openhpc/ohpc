@@ -71,6 +71,19 @@ make \
 
 %install
 
+# OpenHPC compiler/mpi designation
+%ohpc_setup_compiler
+
+%if "%{compiler_family}" == "%{gnu_family}"
+%define compiler GCC
+%define fortran_compiler gfortran
+%define fc_flags -J ./ 
+%else
+%define compiler ICC
+%define fortran_compiler ifort
+%define fc_flags -module ./
+%endif
+
 make %{?_smp_mflags} \
     FORTRAN_INTERFACE="true" \
     PREFIX="%{buildroot}%{install_path}" \
