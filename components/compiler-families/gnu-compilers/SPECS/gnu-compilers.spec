@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" == "gnu7"
-%global gnu_version 7.2.0
+%global gnu_version 7.3.0
 %global gnu_major_ver 7
 %global gnu_release 1
 %global pname gnu7-compilers
@@ -31,7 +31,7 @@
 
 %global gmp_version 6.1.2
 %global mpc_version 1.0.3
-%global mpfr_version 3.1.6
+%global mpfr_version 4.0.0
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
