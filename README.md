@@ -46,7 +46,9 @@ the URL locations for [base] and [update] package repositories. Copies of the
 ```ohpc-release``` package are provided below for convenience. Installation guides 
 tailored for each supported resource manager are also available below or in
 the downloads section of the latest
-[release](https://github.com/openhpc/ohpc/releases/tag/v1.3.3.GA).
+[release](https://github.com/openhpc/ohpc/releases/tag/v1.3.3.GA). Instructions
+for mirroring the OpenHPC repositories with rsync can be found in the
+[wiki](https://github.com/openhpc/ohpc/wiki/Repository-Access-via-rsync).
 
 ---
 

@@ -247,6 +247,12 @@ AC_ARG_ENABLE([hypre],
    [AX_OPTION_DEFAULT(type=long,enable_hypre,yes)])
 AM_CONDITIONAL(HYPRE_ENABLED,test "x$enable_hypre" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Likwid
+AC_ARG_ENABLE([likwid],
+   [AS_HELP_STRING([--enable-likwid],[Enable likwid tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_likwid,yes)])
+AM_CONDITIONAL(LIKWID_ENABLED,test "x$enable_likwid" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # MODULES
 AC_ARG_ENABLE([modules],
    [AS_HELP_STRING([--enable-modules],[Enable Module tests (default=yes)])],[],
@@ -773,6 +779,12 @@ echo    Performance Tools:
        echo '    'IMB....................... : enabled
     else
        echo '    'IMB....................... : disabled
+    fi
+
+    if test "x$enable_likwid" = "xyes"; then
+       echo '    'Likwid.................... : enabled
+    else
+       echo '    'Likwid.................... : disabled
     fi
 
     if test "x$enable_mpiP" = "xyes"; then

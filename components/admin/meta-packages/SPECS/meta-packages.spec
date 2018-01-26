@@ -216,9 +216,10 @@ Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
-Requires:  papi%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 %endif
@@ -261,7 +262,7 @@ Collection of serial library builds for use with GNU compiler toolchain
 %package -n %{PROJ_NAME}-slurm-client
 Summary:   OpenHPC client packages for SLURM
 Requires:  slurm%{PROJ_DELIM}
-Requires:  slurmd%{PROJ_DELIM}
+Requires:  slurm-slurmd%{PROJ_DELIM}
 Requires:  slurm-contribs%{PROJ_DELIM}
 Requires:  slurm-example-configs%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
@@ -420,6 +421,7 @@ Requires:  imb-intel-impi%{PROJ_DELIM}
 Requires:  imb-intel-mpich%{PROJ_DELIM}
 Requires:  imb-intel-mvapich2%{PROJ_DELIM}
 Requires:  imb-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  likwid-intel-%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}

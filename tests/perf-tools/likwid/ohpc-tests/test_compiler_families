@@ -1,0 +1,40 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+status=0
+
+source ./common/TEST_ENV  || exit 1
+source ./common/functions || exit 1
+
+cd perf-tools/likwid || exit 1
+export BATS_JUNIT_CLASS=LIKWID
+
+# bootstrap the local autotools project if necessary
+
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+
+    echo " "
+    echo " "
+    echo "----------------------------------------------------------"
+    echo "Perf Tools: LIKWID tests: $compiler"
+    echo "----------------------------------------------------------"
+
+    module purge                || exit 1
+    module load $compiler       || exit 1
+    module load likwid          || exit 1
+
+    ./configure                 || exit 1
+    make clean                  || exit 1
+    make -k check               || status=1
+
+    save_logs_compiler_family tests $compiler
+
+    make distclean
+
+done
+
+exit ${status}

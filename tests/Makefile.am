@@ -222,6 +222,10 @@ if IMB_ENABLED
    TESTS += perf-tools/imb/ohpc-tests/test_mpi_families
 endif
 
+if LIKWID_ENABLED
+   TESTS += perf-tools/likwid/ohpc-tests/test_compiler_families
+endif
+
 if MPIP_ENABLED
    TESTS += perf-tools/mpiP/ohpc-tests/test_mpi_families
 endif
