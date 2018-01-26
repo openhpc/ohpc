@@ -1,13 +1,17 @@
 --- a/functions.lua     2017-12-07 11:46:04.000000000 -0800
-+++ b/functions.lua     2018-01-26 09:32:27.000000000 -0800
-@@ -56,10 +56,23 @@
++++ b/functions.lua     2018-01-26 12:20:28.000000000 -0800
+@@ -56,10 +56,27 @@
  end
  
  function package_name(flavor, modname, subpkg, append)
 +    local compiler_family = rpm.expand("%compiler_family")
 +    local mpi_family = rpm.expand("%mpi_family")
 +    local ohpc_suffix = rpm.expand("%PROJ_DELIM")
-+    local is_centos = rpm.expand("%centos_version") ~= ""
++    local function is_suse()
++        local s = rpm.expand("%suse_version")
++        return s == nil or s == ''
++    end
++
 +    if string.match(rpm.expand("%name"), mpi_family) then
 +        ohpc_suffix = "-" .. mpi_family .. ohpc_suffix
 +    end
@@ -18,7 +22,7 @@
          flavor = "python"
      end
 -    local name = flavor .. "-" .. modname
-+    if flavor == "python3" and is_centos then
++    if flavor == "python3" and not is_suse() then
 +        flavor = "python34"
 +    end
 +    local name = flavor .. "-" .. modname .. ohpc_suffix
