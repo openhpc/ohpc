@@ -7,7 +7,7 @@
 +    local compiler_family = rpm.expand("%compiler_family")
 +    local mpi_family = rpm.expand("%mpi_family")
 +    local ohpc_suffix = rpm.expand("%PROJ_DELIM")
-+    local is_centos = rpm.expand("%centos") ~= ""
++    local is_centos = rpm.expand("%centos_version") ~= ""
 +    if string.match(rpm.expand("%name"), mpi_family) then
 +        ohpc_suffix = "-" .. mpi_family .. ohpc_suffix
 +    end
