@@ -9,7 +9,7 @@
 +    local ohpc_suffix = rpm.expand("%PROJ_DELIM")
 +    local function is_centos()
 +        local s = rpm.expand("%centos")
-+        return s ~= nil or s ~= ''
++        return s ~= ''
 +    end
 +
 +    if string.match(rpm.expand("%name"), mpi_family) then
