@@ -13,6 +13,7 @@
 %if 0%{?sles_version} || 0%{?suse_version}
 %define python_module() python-%{**} python3-%{**}
 %else
+%define __python /usr/bin/python3.4
 %define python_module() python-%{**} python34-%{**}
 %endif
 Name:           python-Cython%{PROJ_DELIM}
@@ -38,8 +39,7 @@ Requires(postun): chkconfig
 BuildRequires:  %{python_module devel}
 BuildRequires:  gcc-c++
 BuildRequires:  python-rpm-macros%{PROJ_DELIM}
-Requires:       python-devel
-Requires:       python-xml
+Requires:       %{python_module devel}
 
 %python_subpackages
 
