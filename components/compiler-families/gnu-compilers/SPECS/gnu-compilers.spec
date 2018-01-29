@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" == "gnu7"
-%global gnu_version 7.2.0
+%global gnu_version 7.3.0
 %global gnu_major_ver 7
 %global gnu_release 1
 %global pname gnu7-compilers
