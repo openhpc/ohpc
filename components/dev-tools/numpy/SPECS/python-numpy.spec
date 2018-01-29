@@ -24,6 +24,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %if 0%{?sles_version} || 0%{?suse_version}
 %define python_module() python-%{**} python3-%{**}
 %else
+%define __python3 /usr/bin/python3.4
 %define python_module() python-%{**} python34-%{**}
 %endif
 Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
