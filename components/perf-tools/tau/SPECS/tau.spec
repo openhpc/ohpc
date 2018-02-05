@@ -33,7 +33,7 @@ Patch3:    tau-disable_examples.patch
 Patch4:    tau-ucontext.patch
 Patch5:    tau-testplugins_makefile.patch
 
-Provides:  lib%PNAME.so()(64bit)
+Provides:  lib%PNAME.so()(64bit)(%PROJ_DELIM)
 Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
