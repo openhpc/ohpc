@@ -37,6 +37,9 @@ Group:          %{PROJ_NAME}/dev-tools
 Url:            https://bitbucket.org/mpi4py/mpi4py
 Source0:        https://bitbucket.org/mpi4py/mpi4py/downloads/%{pname}-%{version}.tar.gz
 Source1:        OHPC_macros
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires:  python-rpm-macros
+%endif
 BuildRequires:  %{python3_prefix}-devel
 BuildRequires:  %{python3_prefix}-setuptools
 #BuildRequires:  python-Cython
