@@ -96,14 +96,14 @@ include_dirs = $OPENBLAS_INC
 EOF
 %endif
 
-CFLAGS="%{optflags} -fno-strict-aliasing" %{python3_prefix} setup.py build $COMPILER_FLAG
+CFLAGS="%{optflags} -fno-strict-aliasing" %__python3 setup.py build $COMPILER_FLAG
 
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%{python3_prefix} setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+%__python3 setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
