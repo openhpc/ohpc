@@ -138,7 +138,7 @@ if { ![is-loaded intel] } {
 }
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib64/python%{py3_ver}/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib64/python3.4/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin

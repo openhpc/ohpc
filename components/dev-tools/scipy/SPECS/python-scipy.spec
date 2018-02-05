@@ -135,17 +135,17 @@ module load openblas
 
 module load numpy
 %__python3 setup.py install --prefix=%{install_path} --root=%{buildroot}
-find %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
+find %{buildroot}%{install_path}/lib64/python3.4/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
-find %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages/scipy/weave -type d -name examples | xargs rm -rf
+find %{buildroot}%{install_path}/lib64/python3.4/site-packages/scipy/weave -type d -name examples | xargs rm -rf
 
 %if 0%{?sles_version} || 0%{?suse_version}
-%fdupes %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages
+%fdupes %{buildroot}%{install_path}/lib64/python3.4/site-packages
 %endif
 
 # fix executability issue
-chmod +x %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages/%{pname}/io/arff/arffread.py
-chmod +x %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages/%{pname}/special/spfun_stats.py
+chmod +x %{buildroot}%{install_path}/lib64/python3.4/site-packages/%{pname}/io/arff/arffread.py
+chmod +x %{buildroot}%{install_path}/lib64/python3.4/site-packages/%{pname}/special/spfun_stats.py
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -168,7 +168,7 @@ module-whatis "URL %{url}"
 
 set     version             %{version}
 
-prepend-path    PYTHONPATH          %{install_path}/lib64/python%py3_ver/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib64/python3.4/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 
