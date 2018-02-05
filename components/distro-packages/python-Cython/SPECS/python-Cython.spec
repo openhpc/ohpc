@@ -11,12 +11,12 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if 0%{?sles_version} || 0%{?suse_version}
-%define python_module() python-%{**} python3-%{**}
+%define python3_prefix python3
 %else
-%define __python /usr/bin/python3.4
-%define python_module() python-%{**} python34-%{**}
+%define python3_prefix python34
 %endif
-Name:           python-Cython%{PROJ_DELIM}
+
+Name:           %{python3_prefix}-Cython%{PROJ_DELIM}
 Version:        0.26.1
 Release:        0
 Url:            http://www.cython.org
@@ -26,7 +26,7 @@ Group:          Development/Languages/Python
 Source:         https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
 %if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  %{python_module xml}
+BuildRequires:  %{python3_prefix}-xml
 BuildRequires:  fdupes
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
@@ -36,12 +36,9 @@ Requires:       libxml2-python
 Requires(post): chkconfig
 Requires(postun): chkconfig
 %endif
-BuildRequires:  %{python_module devel}
 BuildRequires:  gcc-c++
-BuildRequires:  python-rpm-macros%{PROJ_DELIM}
-Requires:       %{python_module devel}
-
-%python_subpackages
+BuildRequires:  %{python3_prefix}-devel
+Requires:       %{python3_prefix}-devel
 
 %description
 The Cython language allows for writing C extensions for the Python
@@ -59,37 +56,38 @@ allows the compiler to generate very efficient C code from Cython code.
 sed -i "s|^#!.*||" Cython/Debugger/{libpython,Cygdb}.py cython.py
 
 %build
-export CFLAGS="%{optflags}"
-%python_build
+CFLAGS="%{optflags}" python3 setup.py build
 
 %install
-%{python_expand %$python_install
+python3 setup.py install --prefix=%{_prefix} --root=%{buildroot}
+
 # Prepare for update-alternatives usage
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives
 for p in cython cythonize cygdb ; do
-    mv %{buildroot}%{_bindir}/$p %{buildroot}%{_bindir}/$p-%{$python_bin_suffix}
-done
-}
-for p in cython cythonize cygdb ; do
-    %prepare_alternative $p
+    mv %{buildroot}%{_bindir}/$p %{buildroot}%{_bindir}/$p-%{py3_ver}
+    ln -s -f %{_sysconfdir}/alternatives/$p %{buildroot}%{_bindir}/$p
+    # create a dummy target for /etc/alternatives/$p
+    touch %{buildroot}%{_sysconfdir}/alternatives/$p
+
 done
 
-%{python_expand chmod a+x %{buildroot}%{$python_sitearch}/Cython/Build/Cythonize.py
-sed -i "s|^#!/usr/bin/env python$|#!%{__$python}|" %{buildroot}%{$python_sitearch}/Cython/Build/Cythonize.py
-$python -m compileall -d %{$python_sitearch} %{buildroot}%{$python_sitearch}/Cython/Build/
-$python -O -m compileall -d %{$python_sitearch} %{buildroot}%{$python_sitearch}/Cython/Build/
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes %{buildroot}%{$python_sitearch}
 %endif
 }
 
 %post
-%python_install_alternative cython cythonize cygdb
+"%_sbindir/update-alternatives" \
+   --install %{_bindir}/cython cython %{_bindir}/cython-%{py3_ver} 30 \
+   --slave %{_bindir}/cythonize cythonize %{_bindir}/cythonize-%{py3_ver} \
+   --slave %{_bindir}/cygdb cygdb %{_bindir}/cygdb-%{py3_ver}
 
 %postun
-%python_uninstall_alternative cython
+if [ $1 -eq 0 ] ; then
+    "%_sbindir/update-alternatives" --remove cython %{_bindir}/cython-%{py3_ver}
+fi
 
-%files %{python_files}
+%files
 %defattr(-,root,root,-)
 %if 0%{?leap_version} >= 420200 || 0%{?suse_version} > 1320
 %license LICENSE.txt
@@ -97,14 +95,19 @@ $python -O -m compileall -d %{$python_sitearch} %{buildroot}%{$python_sitearch}/
 %doc LICENSE.txt
 %endif
 %doc COPYING.txt README.txt ToDo.txt USAGE.txt
-%python_alternative %{_bindir}/cygdb
-%python_alternative %{_bindir}/cython
-%python_alternative %{_bindir}/cythonize
-%{python_sitearch}/Cython/
-%{python_sitearch}/Cython-%{version}-py*.egg-info
-%{python_sitearch}/cython.py*
-%pycache_only %{python_sitearch}/__pycache__/cython*.py*
-%{python_sitearch}/pyximport/
+%{_bindir}/cygdb
+%{_bindir}/cython
+%{_bindir}/cythonize
+%{_bindir}/cygdb-%{py3_ver}
+%{_bindir}/cython-%{py3_ver}
+%{_bindir}/cythonize-%{py3_ver}
+%ghost %{_sysconfdir}/alternatives/cygdb
+%ghost %{_sysconfdir}/alternatives/cython
+%ghost %{_sysconfdir}/alternatives/cythonize
+%{python3_sitearch}/Cython/
+%{python3_sitearch}/Cython-%{version}-py*.egg-info
+%{python3_sitearch}/cython.py*
+%{python3_sitearch}/pyximport/
 
 %changelog
 
