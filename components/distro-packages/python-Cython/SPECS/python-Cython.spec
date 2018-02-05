@@ -106,6 +106,7 @@ fi
 %{python3_sitearch}/Cython/
 %{python3_sitearch}/Cython-%{version}-py*.egg-info
 %{python3_sitearch}/cython.py*
+%{python3_sitearch}/__pycache__/*
 %{python3_sitearch}/pyximport/
 
 %changelog
