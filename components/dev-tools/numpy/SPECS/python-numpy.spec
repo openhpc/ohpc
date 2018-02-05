@@ -22,12 +22,12 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %if 0%{?sles_version} || 0%{?suse_version}
-%define python_module() python-%{**} python3-%{**}
+%define python3_prefix python3
 %else
-%define __python3 /usr/bin/python3.4
-%define python_module() python-%{**} python34-%{**}
+%define python3_prefix python34
 %endif
-Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
+
+Name:           %{python3_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.13.3
 Release:        1%{?dist}
 Url:            http://sourceforge.net/projects/numpy
@@ -40,15 +40,13 @@ Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  python-rpm-macros%{PROJ_DELIM}
-Requires:       python
+Requires:       %{python3_prefix}
 %if 0%{?suse_version}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
 %endif
-BuildRequires:  %{python_module devel}
-BuildRequires:  %{python_module  setuptools}
-%python_subpackages
+BuildRequires:  %{python3_prefix}-devel
+BuildRequires:  %{python3_prefix}-setuptools
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -98,15 +96,15 @@ include_dirs = $OPENBLAS_INC
 EOF
 %endif
 
-#CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
-%python_build $COMPILER_FLAG
+CFLAGS="%{optflags} -fno-strict-aliasing" %{python3_prefix} setup.py build $COMPILER_FLAG
 
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%python_exec setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+%{python3_prefix} setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
 %endif
@@ -120,12 +118,12 @@ EOF
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
+puts stderr "This module loads the %{python3_prefix}-%{pname} library built with the %{compiler_family} compiler"
 puts stderr "toolchain."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Name: %{python3_prefix}-%{pname} built with %{compiler_family} compiler"
 module-whatis "Version: %{version}"
 module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
@@ -139,7 +137,7 @@ if { ![is-loaded intel] } {
 }
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib64/python%{py3_ver}/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
@@ -156,7 +154,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%files %{python_files}
+%files
 %defattr(-,root,root)
 %{OHPC_PUB}
 %doc INSTALL.rst.txt
