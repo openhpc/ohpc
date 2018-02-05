@@ -42,13 +42,12 @@ Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %if 0%{?sles_version} || 0%{?suse_version}
-%define python_module() python-%{**} python3-%{**}
+%define python3_prefix python3
 %else
-%define __python3 /usr/bin/python3.4
-%define python_module() python-%{**} python34-%{**}
+%define python3_prefix python34
 %endif
 
-Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name:           %{python3_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Scientific Tools for Python
@@ -59,17 +58,16 @@ Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#/%{pna
 Source1:        OHPC_macros
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
+BuildRequires:  python-rpm-macros
 %endif
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  %{python_module devel}
-BuildRequires:  %{python_module setuptools}
-BuildRequires:  %{python_module Cython}%{PROJ_DELIM}
-BuildRequires:  %{python_module numpy}-%{compiler_family}%{PROJ_DELIM}
-BuildRequires:  python-rpm-macros%{PROJ_DELIM}
+BuildRequires:  %{python3_prefix}-devel
+BuildRequires:  %{python3_prefix}-setuptools
+BuildRequires:  %{python3_prefix}-Cython%{PROJ_DELIM}
+BuildRequires:  %{python3_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-Requires:       %{python_module numpy}-%{compiler_family}%{PROJ_DELIM}
-%python_subpackages
+Requires:       %{python3_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -89,7 +87,7 @@ leading scientists and engineers.
 
 %prep
 %setup -q -n %{pname}-%{version}
-find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
+find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python3||" {} \;
 
 %build
 # OpenHPC compiler/mpi designation
@@ -122,9 +120,9 @@ EOF
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 %if "%{compiler_family}" == "intel"
 LDSHARED="icc -shared" \
-%python_exec  setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
+%__python3 setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
 %else
-%python_exec  setup.py config_fc --fcompiler=gnu95 --noarch build
+%__python3 setup.py config_fc --fcompiler=gnu95 --noarch build
 %endif
 
 %install
@@ -136,17 +134,18 @@ module load openblas
 %endif
 
 module load numpy
-%python_exec  setup.py install --prefix=%{install_path} --root=%{buildroot}
-find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
+%__python3 setup.py install --prefix=%{install_path} --root=%{buildroot}
+find %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
-find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type d -name examples | xargs rm -rf
+find %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages/scipy/weave -type d -name examples | xargs rm -rf
+
 %if 0%{?sles_version} || 0%{?suse_version}
-%fdupes %{buildroot}%{install_path}/lib64/python2.7/site-packages
+%fdupes %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages
 %endif
 
 # fix executability issue
-chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/arff/arffread.py
-chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py
+chmod +x %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages/%{pname}/io/arff/arffread.py
+chmod +x %{buildroot}%{install_path}/lib64/python%py3_ver/site-packages/%{pname}/special/spfun_stats.py
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -156,12 +155,12 @@ chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/spec
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
+puts stderr "This module loads the %{python3_prefix}-%{pname} library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI library."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family}"
+module-whatis "Name: %{python3_prefix}-%{pname} built with %{compiler_family} compiler and %{mpi_family}"
 module-whatis "Version: %{version}"
 module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
@@ -169,7 +168,7 @@ module-whatis "URL %{url}"
 
 set     version             %{version}
 
-prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib64/python%py3_ver/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 
@@ -188,7 +187,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%files %{python_files}
+%files
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc THANKS.txt
