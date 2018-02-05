@@ -74,7 +74,6 @@ done
 %if 0%{?sles_version} || 0%{?suse_version}
 %fdupes %{buildroot}%{python3_sitearch} %{buildroot}%{_docdir}
 %endif
-}
 
 %post
 "%_sbindir/update-alternatives" \
