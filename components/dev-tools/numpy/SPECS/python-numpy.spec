@@ -43,6 +43,7 @@ Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 Requires:       %{python3_prefix}
 %if 0%{?suse_version}
 BuildRequires:  fdupes
+BuildRequires:  python-rpm-macros
 #!BuildIgnore: post-build-checks
 %endif
 BuildRequires:  %{python3_prefix}-devel
