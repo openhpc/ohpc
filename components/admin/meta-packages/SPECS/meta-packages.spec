@@ -146,6 +146,8 @@ Requires:  fftw-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  fftw-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  hypre-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  hypre-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  mfem-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  mfem-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
@@ -164,6 +166,7 @@ Requires:  trilinos-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  boost-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  fftw-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  hypre-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  mfem-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -180,6 +183,7 @@ Summary:   OpenHPC parallel libraries for GNU and MPICH
 Requires:  boost-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  fftw-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  hypre-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  mfem-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
@@ -195,6 +199,7 @@ Summary:   OpenHPC parallel libraries for GNU and OpenMPI
 Requires:  boost-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  fftw-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  hypre-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  mfem-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
@@ -339,6 +344,7 @@ Summary:   OpenHPC parallel libraries for GNU and MVAPICH2
 Requires:  boost-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  fftw-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  hypre-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  mfem-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -355,6 +361,8 @@ Requires:  boost-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  boost-intel-impi%{PROJ_DELIM}
 Requires:  hypre-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  hypre-intel-impi%{PROJ_DELIM}
+Requires:  mfem-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  mfem-intel-impi%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  mumps-intel-impi%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
@@ -376,6 +384,7 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
 Requires:  boost-intel-mpich%{PROJ_DELIM}
 Requires:  hypre-intel-mpich%{PROJ_DELIM}
+Requires:  mfem-intel-mpich%{PROJ_DELIM}
 Requires:  mumps-intel-mpich%{PROJ_DELIM}
 Requires:  petsc-intel-mpich%{PROJ_DELIM}
 Requires:  scalapack-intel-mpich%{PROJ_DELIM}
@@ -390,6 +399,7 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
 Requires:  boost-intel-mvapich2%{PROJ_DELIM}
 Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
+Requires:  mfem-intel-mvapich2%{PROJ_DELIM}
 Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
 Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
@@ -404,6 +414,7 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
 Requires:  boost-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  hypre-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  mfem-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mumps-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  petsc-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalapack-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
