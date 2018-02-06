@@ -1,17 +1,15 @@
-
 static char help[] = "Newton methods to solve u'' + u^{2} = f in parallel.\n\
 This example employs a user-defined monitoring routine and optionally a user-defined\n\
-routine to check candidate iterates produced by line search routines.  This code also\n\
-demonstrates use of the macro __FUNCT__ to define routine names for use in error handling.\n\
+routine to check candidate iterates produced by line search routines.\n\
 The command line options include:\n\
   -pre_check_iterates : activate checking of iterates\n\
   -post_check_iterates : activate checking of iterates\n\
-  -check_tol <tol>: set tolerance for iterate checking\n\n";
+  -check_tol <tol>: set tolerance for iterate checking\n\
+  -user_precond : activate a (trivial) user-defined preconditioner\n\n";
 
 /*T
    Concepts: SNES^basic parallel example
    Concepts: SNES^setting a user-defined monitoring routine
-   Concepts: error handling^using the macro __FUNCT__ to define routine names;
    Processors: n
 T*/
 
@@ -20,11 +18,14 @@ T*/
    Include "petscdraw.h" so that we can use PETSc drawing routines.
    Include "petscsnes.h" so that we can use SNES solvers.  Note that this
    file automatically includes:
-     petscsys.h       - base PETSc routines   petscvec.h - vectors
-     petscmat.h - matrices
-     petscis.h     - index sets            petscksp.h - Krylov subspace methods
-     petscviewer.h - viewers               petscpc.h  - preconditioners
-     petscksp.h   - linear solvers
+     petscsys.h    - base PETSc routines
+     petscvec.h    - vectors
+     petscmat.h    - matrices
+     petscis.h     - index sets
+     petscksp.h    - Krylov subspace methods
+     petscviewer.h - viewers
+     petscpc.h     - preconditioners
+     petscksp.h    - linear solvers
 */
 
 #include <petscdm.h>
@@ -32,14 +33,7 @@ T*/
 #include <petscsnes.h>
 
 /*
-   User-defined routines.  Note that immediately before each routine below,
-   we define the macro __FUNCT__ to be a string containing the routine name.
-   If defined, this macro is used in the PETSc error handlers to provide a
-   complete traceback of routine names.  All PETSc library routines use this
-   macro, and users can optionally employ it as well in their application
-   codes.  Note that users can get a traceback of PETSc errors regardless of
-   whether they define __FUNCT__ in application codes; this macro merely
-   provides the added traceback detail of the application routine names.
+   User-defined routines.
 */
 PetscErrorCode FormJacobian(SNES,Vec,Mat,Mat,void*);
 PetscErrorCode FormFunction(SNES,Vec,Vec,void*);
@@ -82,12 +76,10 @@ typedef struct {
   PetscInt its0; /* num of prevous outer KSP iterations */
 } SetSubKSPCtx;
 
-#undef __FUNCT__
-#define __FUNCT__ "main"
 int main(int argc,char **argv)
 {
   SNES           snes;                 /* SNES context */
-  SNESLineSearch linesearch;          /* SNESLineSearch context */
+  SNESLineSearch linesearch;           /* SNESLineSearch context */
   Mat            J;                    /* Jacobian matrix */
   ApplicationCtx ctx;                  /* user-defined context */
   Vec            x,r,U,F;              /* vectors */
@@ -101,8 +93,7 @@ int main(int argc,char **argv)
   PetscReal      abstol,rtol,stol,norm;
   PetscBool      flg;
 
-
-  PetscInitialize(&argc,&argv,(char*)0,help);
+  ierr = PetscInitialize(&argc,&argv,(char*)0,help);if (ierr) return ierr;
   ierr  = MPI_Comm_rank(PETSC_COMM_WORLD,&ctx.rank);CHKERRQ(ierr);
   ierr  = MPI_Comm_size(PETSC_COMM_WORLD,&ctx.size);CHKERRQ(ierr);
   ierr  = PetscOptionsGetInt(NULL,NULL,"-n",&N,NULL);CHKERRQ(ierr);
@@ -122,6 +113,8 @@ int main(int argc,char **argv)
      Create distributed array (DMDA) to manage parallel grid and vectors
   */
   ierr = DMDACreate1d(PETSC_COMM_WORLD,DM_BOUNDARY_NONE,N,1,1,NULL,&ctx.da);CHKERRQ(ierr);
+  ierr = DMSetFromOptions(ctx.da);CHKERRQ(ierr);
+  ierr = DMSetUp(ctx.da);CHKERRQ(ierr);
 
   /*
      Extract global and local vectors from DMDA; then duplicate for remaining
@@ -163,7 +156,7 @@ int main(int argc,char **argv)
   ierr = SNESSetJacobian(snes,J,J,FormJacobian,&ctx);CHKERRQ(ierr);
 
   /*
-     Optional allow user provided preconditioner
+     Optionally allow user-provided preconditioner
    */
   ierr = PetscOptionsHasName(NULL,NULL,"-user_precond",&flg);CHKERRQ(ierr);
   if (flg) {
@@ -308,11 +301,10 @@ int main(int argc,char **argv)
   ierr = SNESDestroy(&snes);CHKERRQ(ierr);
   ierr = DMDestroy(&ctx.da);CHKERRQ(ierr);
   ierr = PetscFinalize();
-  PetscFunctionReturn(0);
+  return ierr;
 }
+
 /* ------------------------------------------------------------------- */
-#undef __FUNCT__
-#define __FUNCT__ "FormInitialGuess"
 /*
    FormInitialGuess - Computes initial guess.
 
@@ -328,9 +320,8 @@ PetscErrorCode FormInitialGuess(Vec x)
   ierr = VecSet(x,pfive);CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
+
 /* ------------------------------------------------------------------- */
-#undef __FUNCT__
-#define __FUNCT__ "FormFunction"
 /*
    FormFunction - Evaluates nonlinear function, F(x).
 
@@ -412,9 +403,8 @@ PetscErrorCode FormFunction(SNES snes,Vec x,Vec f,void *ctx)
   ierr = DMRestoreLocalVector(da,&xlocal);CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
+
 /* ------------------------------------------------------------------- */
-#undef __FUNCT__
-#define __FUNCT__ "FormJacobian"
 /*
    FormJacobian - Evaluates Jacobian matrix.
 
@@ -493,9 +483,8 @@ PetscErrorCode FormJacobian(SNES snes,Vec x,Mat jac,Mat B,void *ctx)
 
   PetscFunctionReturn(0);
 }
+
 /* ------------------------------------------------------------------- */
-#undef __FUNCT__
-#define __FUNCT__ "Monitor"
 /*
    Monitor - Optional user-defined monitoring routine that views the
    current iterate with an x-window plot. Set by SNESMonitorSet().
@@ -525,8 +514,6 @@ PetscErrorCode Monitor(SNES snes,PetscInt its,PetscReal fnorm,void *ctx)
 }
 
 /* ------------------------------------------------------------------- */
-#undef __FUNCT__
-#define __FUNCT__ "PreCheck"
 /*
    PreCheck - Optional user-defined routine that checks the validity of
    candidate steps of a line search method.  Set by SNESLineSearchSetPreCheck().
@@ -548,8 +535,6 @@ PetscErrorCode PreCheck(SNESLineSearch linesearch,Vec xcurrent,Vec y, PetscBool 
 }
 
 /* ------------------------------------------------------------------- */
-#undef __FUNCT__
-#define __FUNCT__ "PostCheck"
 /*
    PostCheck - Optional user-defined routine that checks the validity of
    candidate steps of a line search method.  Set by SNESLineSearchSetPostCheck().
@@ -610,8 +595,7 @@ PetscErrorCode PostCheck(SNESLineSearch linesearch,Vec xcurrent,Vec y,Vec x,Pets
         tmp        = xa[i];
         xa[i]      = .5*(xa[i] + xa_last[i]);
         *changed_x = PETSC_TRUE;
-        ierr       = PetscPrintf(PETSC_COMM_WORLD,"  Altering entry %D: x=%g, x_last=%g, diff=%g, x_new=%g\n",
-                                 i,(double)PetscAbsScalar(tmp),(double)PetscAbsScalar(xa_last[i]),(double)rdiff,(double)PetscAbsScalar(xa[i]));CHKERRQ(ierr);
+        ierr       = PetscPrintf(PETSC_COMM_WORLD,"  Altering entry %D: x=%g, x_last=%g, diff=%g, x_new=%g\n",i,(double)PetscAbsScalar(tmp),(double)PetscAbsScalar(xa_last[i]),(double)rdiff,(double)PetscAbsScalar(xa[i]));CHKERRQ(ierr);
       }
     }
     ierr = DMDAVecRestoreArray(da,check->last_step,&xa_last);CHKERRQ(ierr);
@@ -621,10 +605,7 @@ PetscErrorCode PostCheck(SNESLineSearch linesearch,Vec xcurrent,Vec y,Vec x,Pets
   PetscFunctionReturn(0);
 }
 
-
 /* ------------------------------------------------------------------- */
-#undef __FUNCT__
-#define __FUNCT__ "PostSetSubKSP"
 /*
    PostSetSubKSP - Optional user-defined routine that reset SubKSP options when hierarchical bjacobi PC is used
    e.g,
@@ -694,10 +675,3 @@ PetscErrorCode MatrixFreePreconditioner(PC pc,Vec x,Vec y)
   ierr = VecCopy(x,y);CHKERRQ(ierr);
   return 0;
 }
-
-
-
-
-
-
-
