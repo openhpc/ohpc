@@ -13,7 +13,7 @@
 
 # Remember to drop this gnu-compilers dependency in the future,
 # when gcc-5.3+ appear in all the targeted Linux distros.
-%global gnuver 7.2.0
+%global gnuver 7.3.0
 
 %global clang_sha b11539abc46cbd19189c5719d1e30539de3a93b9
 %global flang_sha 37e86e06f74d9bd91ef6bb511c026753b9124006
