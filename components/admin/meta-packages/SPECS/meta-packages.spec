@@ -130,6 +130,42 @@ Requires:  phdf5-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-io-libs
 Collection of IO library builds for use with GNU compiler toolchain
 
+%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-io-libs
+Summary:   OpenHPC IO libraries for GNU and MPICH
+Requires:  adios-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  netcdf-cxx-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  netcdf-fortran-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  netcdf-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  pnetcdf-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  phdf5-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  hdf5-gnu%{gnu_major_ver}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-io-libs
+Collection of IO library builds for use with GNU compiler toolchain and the MPICH runtime
+
+%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-io-libs
+Summary:   OpenHPC IO libraries for GNU and MVAPICH2
+Requires:  adios-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  netcdf-cxx-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  netcdf-fortran-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  netcdf-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  pnetcdf-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  phdf5-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  hdf5-gnu%{gnu_major_ver}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-io-libs
+Collection of IO library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
+
+%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-io-libs
+Summary:   OpenHPC IO libraries for GNU and OpenMPI
+Requires:  adios-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  netcdf-cxx-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  netcdf-fortran-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  netcdf-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  pnetcdf-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  phdf5-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  hdf5-gnu%{gnu_major_ver}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-io-libs
+Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime
+
 %package -n %{PROJ_NAME}-nagios
 Summary:   OpenHPC Nagios monitoring
 Requires:  nagios%{PROJ_DELIM}
@@ -230,6 +266,39 @@ Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 %endif
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain
+
+%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
+Summary:   OpenHPC performance tools for GNU and MPICH
+Requires:  imb-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  mpiP-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  tau-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
+Requires:  papi%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
+Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime
+
+%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-perf-tools
+Summary:   OpenHPC performance tools for GNU and MVAPICH2
+Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
+Requires:  papi%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-perf-tools
+Collection of performance tool builds for use with GNU compiler toolchain and the MVAPICH2 runtime
+
+%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
+Summary:   OpenHPC performance tools for GNU and OpenMPI
+Requires:  imb-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  mpiP-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
+Requires:  papi%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
+Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime
 
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
 Summary:   OpenHPC python libraries for GNU
@@ -497,10 +566,16 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{PROJ_NAME}-base-compute
 %files -n %{PROJ_NAME}-ganglia
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-io-libs
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-io-libs
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-io-libs
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-io-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich-perf-tools
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-runtimes
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-serial-libs
