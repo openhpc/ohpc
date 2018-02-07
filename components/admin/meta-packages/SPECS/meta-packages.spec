@@ -108,7 +108,6 @@ Collection of Ganglia monitoring and metrics packages
 Summary:   OpenHPC IO libraries for GNU
 Requires:  adios-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  adios-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
-Requires:  hdf5-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  netcdf-cxx-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  netcdf-cxx-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  netcdf-fortran-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
@@ -255,6 +254,7 @@ Collection of runtimes for use with GNU compiler toolchain
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-serial-libs
 Summary:   OpenHPC serial libraries for GNU
 Requires:  gsl-gnu%{gnu_major_ver}%{PROJ_DELIM}
+Requires:  hdf5-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  metis-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  openblas-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  plasma-gnu%{gnu_major_ver}%{PROJ_DELIM}
@@ -310,7 +310,6 @@ Requires:  adios-intel-impi%{PROJ_DELIM}
 Requires:  adios-intel-mpich%{PROJ_DELIM}
 Requires:  adios-intel-mvapich2%{PROJ_DELIM}
 Requires:  adios-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
-Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  netcdf-cxx-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-impi%{PROJ_DELIM}
 Requires:  netcdf-cxx-intel-mpich%{PROJ_DELIM}
@@ -468,6 +467,7 @@ Collection of runtimes for use with Intel(R) Parallel Studio XE toolchain
 
 %package -n %{PROJ_NAME}-intel-serial-libs
 Summary:   OpenHPC serial libraries for Intel(R) Parallel Studio XE
+Requires:  hdf5-intel%{PROJ_DELIM}
 Requires:  metis-intel%{PROJ_DELIM}
 Requires:  plasma-intel%{PROJ_DELIM}
 Requires:  scotch-intel%{PROJ_DELIM}
