@@ -571,7 +571,6 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-io-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-parallel-libs
-%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
