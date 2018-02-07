@@ -1,27 +1,25 @@
 #!/bin/bash
 #--------------------------------------------------------------------
-# Script to use osc command line to populate a new OpenHPC minor
-# branch in OBS from a previous version.
+# Script to use osc command line to copy a package to new 
+# branch in OBS using configuration from previous version. This
+# script will automatically update the branch information in _service
+# and _link files.
 #
-# Originally: 9/7/2016 - karl.w.schulz@intel.com
+# Originally: 11/29/2017 - karl.w.schulz@intel.com
 #--------------------------------------------------------------------
 
-if [ "$#" -lt 2 ];then
-    echo "usage: `basename $0` [source-project] [target-project] <optional pkg-name>"
+if [ "$#" -lt 3 ];then
+    echo "usage: `basename $0` [source-project] [target-project] [pkg-name]"
     exit 1
 fi
 
 export branchCurrent=$1
 export branchNew=$2
 
-
 ENABLE_CMDS=1
 DISABLE_ARCH="x86_64 aarch64"
 SKIP_LINK_UPDATES="latexmk"
 SKIP_SERVICE_UPDATES="XXXXXXX"
-
-MAX_UPDATES=2   # 1.3.2 was last 1.1 release
-#MAX_UPDATES=0   # 1.3.2 was last 1.3 release (set to 0 when creating from previous update release)
 
 TMPDIR=$(mktemp -d) || exit 1
 
@@ -51,40 +49,10 @@ query_minor_branch () {
     [[ -z "${PARENT_PROJ}" ]] && { echo "Error querying project name for $1"; exit 1; }
 }
 
-check_for_package_update () {
-    found_update=""
-    found_link=0
-    parent_path=${branchCurrent}
-
-    local igot
-
-    # before scanning for updates, check if this is a child package with _link
-    osc api -X GET "/source/${branchCurrent}/$1/_link" &> /dev/null && found_link=1 || found_link=0
-
-    for i in `seq 1 ${MAX_UPDATES}`; do 
-
-	igot=$(osc ls ${PARENT_PROJ}:${SOURCE_VER}:Update$i:Factory $1 2> /dev/null)
-	returned=$?
-
-	if [ $returned -eq 0 ];then
-
-	    if [ "${igot}" == "_aggregate" ];then
-		echo "Ignoring _aggregate package..."
-		continue
-	    fi
-
-	    # check if this a child package with _link
-	    osc api -X GET "/source/${PARENT_PROJ}:${SOURCE_VER}:Update$i:Factory/$1/_link" &> /dev/null && found_link=1 || found_link=0
-
-	    parent_path="${PARENT_PROJ}:${SOURCE_VER}:Update$i:Factory"
-	    found_update=$i
-	fi
-    done
-}
-
 update_pkg_if_link () {
 
     local localdir="${branchNew}/$1"
+    local parent_path="${branchCurrent}"
 
     cd $TMPDIR || ERROR "unable to cd to $TMPDIR"
     osc co ${branchNew} $1
@@ -100,7 +68,8 @@ update_pkg_if_link () {
 
     echo "${SKIP_LINK_UPDATES}" | grep -q $1
     if [ $? -eq 1 ];then
-	perl -pi -e 's/project=\'\S+\'/project=\'${branchNew}\'/ ${localdir}/_link || ERROR "unable to update parent in _link for $1"
+	echo "Updating _link for to latest branch"
+	perl -pi -e "s/project=\S+/project=\'${branchNew}\'/" ${localdir}/_link || ERROR "unable to update parent in _link for $1"
     fi
 
     # update to latest gnu compiler family
@@ -154,57 +123,46 @@ echo "Parent project                = ${PARENT_PROJ}"
 echo "TMPDIR                        = $TMPDIR"
 echo " "
 
-if [ $# -gt 2 ];then
-    PKG_LIST=$3
-else
-    PKG_LIST=`osc ls ${branchCurrent}`
+PKG=$3
+
+echo "Copying existing package $PKG from ${branchCurrent} to ${branchNew}..."
+
+# verify packages exists in source project
+osc api -X GET "/source/${branchCurrent}/$PKG" &> /dev/null 
+if [[ $? -ne 0 ]];then
+    echo " "
+    echo "whoa slow your roll....package $PKG not found in ${branchCurrent}"
+    echo "--> cowardly refusing to continue"
+    exit 1
 fi
 
-for PKG in ${PKG_LIST} ; do 
+cmd="osc copypac ${branchCurrent} $PKG ${branchNew}"
+run_cmd "$cmd"
 
-    echo "Copying existing package $PKG from ${branchCurrent} to ${branchNew}..."
+# check if this is a child package with _link
+osc api -X GET "/source/${branchCurrent}/$PKG/_link" &> /dev/null && found_link=1 || found_link=0
 
-    if [[ ${PKG} == "_pattern" ]];then
-	echo "Skipping _pattern..."
-	continue
-    fi
-    
-    # check for package in update releases...
-    check_for_package_update ${PKG}
+# disable arch'es present in previous build (to avoid rebuilds)
 
-    if [[ -n ${found_update} ]];then
-	echo "Update found for ${PKG} -> Update${found_update}"
-	cmd="osc release ${PARENT_PROJ}:${SOURCE_VER}:Update${found_update}:Factory $PKG"
-    else
-	cmd="osc release ${branchCurrent} $PKG"
-    fi
-    
+for myarch in ${DISABLE_ARCH}; do    
+    cmd="osc api -X POST \"/source/${branchNew}/${PKG}?cmd=set_flag&flag=build&status=disable&arch=${myarch}\""
     run_cmd "$cmd"
-
-    # disable arch'es present in previous build (to avoid rebuilds)
-    # osc api -X POST "/source/OpenHPC:1.2:Factory/autoconf?cmd=set_flag&flag=build&status=disable&arch=x86_64"
-
-    for myarch in ${DISABLE_ARCH}; do    
-	cmd="osc api -X POST \"/source/${branchNew}/${PKG}?cmd=set_flag&flag=build&status=disable&arch=${myarch}\""
-	run_cmd "$cmd"
-    done
-
-    # Update path in _service files to match new release branch
-
-    if [[ ($found_link -eq 0) && ($ENABLE_CMDS -eq 1) ]]; then
-	echo "Upating _service file to use latest branch for source"
-	update_pkg_if_service ${PKG} 
-    fi
-    
-    # update config if source_package was a link, since "osc release" will simply create a _service file
-    if [[ ($found_link -eq 1) && ($ENABLE_CMDS -eq 1) ]]; then
-	echo "Originating package source for $PKG is a _link..."
-	update_pkg_if_link ${PKG}
-    fi
-    
-    
 done
 
+# Update path in _service files to match new release branch
+
+if [[ ($found_link -eq 0) && ($ENABLE_CMDS -eq 1) ]]; then
+    echo "Upating _service file to use latest branch for source"
+    update_pkg_if_service ${PKG} 
+fi
+    
+# update config if source_package was a link, since "osc release" will simply create a _service file
+if [[ ($found_link -eq 1) && ($ENABLE_CMDS -eq 1) ]]; then
+    echo "Originating package source for $PKG is a _link..."
+    update_pkg_if_link ${PKG}
+fi
+    
+    
 if [[ $found_link -eq 1 ]];then
     echo " "
     echo "At least 1 _link file updated. committing staged changes in $TMPDIR..."
