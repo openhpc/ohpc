@@ -567,14 +567,12 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{PROJ_NAME}-ganglia
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-io-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-io-libs
-%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-io-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-io-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
-%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich-perf-tools
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-runtimes
@@ -585,6 +583,8 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{PROJ_NAME}-warewulf
 # x86_64 specific groups
 %ifnarch aarch64
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-io-libs
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-perf-tools
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-parallel-libs
 %files -n %{PROJ_NAME}-intel-io-libs
 %files -n %{PROJ_NAME}-intel-impi-parallel-libs
