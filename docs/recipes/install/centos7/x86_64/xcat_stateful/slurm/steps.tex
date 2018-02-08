@@ -237,6 +237,7 @@ issue the following
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Update basic slurm configuration if additional computes defined
+% ohpc_validation_comment This is performed on the SMS, nodes will pick it up config file is copied there later
 % ohpc_command if [ ${num_computes} -gt 4 ];then
 % ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
 % ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
