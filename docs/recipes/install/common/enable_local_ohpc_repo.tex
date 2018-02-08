@@ -1,0 +1,26 @@
+\OHPC{} provides an online package repository, but here we setup and use a local
+mirror on the SMS host for \OHPC{} package installation. This is preferable for
+a stateful install, because {\em compute} nodes can access it on the local
+network.  
+
+
+Assuming that the {\em master} has outside network access, the mirror is
+created  by downloading a tarball of the repository, unpacking it and running a
+provided script to configure the package manager.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_comment_header Download OHPC repo and create local mirror \ref{sec:enable_xcat}
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
+	literate={VER}{\OHPCVerTree{}}1 {OSTREE}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1 
+        {VERLONG}{\OHPCVersion{}}1]
+# Download OHPC tarball for local installation
+[sms](*\#*) wget http://build.openhpc.community/dist/VERLONG/OpenHPC-VERLONG.OSTREE.ARCH.tar
+# Create directory if necessary
+[sms](*\#*) mkdir -p $ohpc_repo_dir
+#Unpack
+[sms](*\#*) tar xvf OpenHPC-VERLONG.OSTREE.ARCH.tar -C $ohpc_repo_dir
+#Create local mirror repository
+[sms](*\#*) $ohpc_repo_dir/make_repo.sh
+\end{lstlisting}
+% end_ohpc_run
