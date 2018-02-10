@@ -17,6 +17,7 @@
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
 \newcommand{\arch}{x86\_64}
+\newcommand{\installimage}{netboot}
 
 % Define package manager commands
 \newcommand{\pkgmgr}{yum}
@@ -80,7 +81,7 @@
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
-\clearpage 
+%\clearpage 
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall 
@@ -150,6 +151,7 @@ repository, which is shipped with CentOS and is enabled by default.
 
 
 \subsection{Define {\em compute} image for provisioning}
+\input{common/xcat_init_os_images_centos}
 \input{common/xcat_mkchroot_centos}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
@@ -241,6 +243,8 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/import_xcat_files}
 \input{common/import_xcat_files_slurm}
 \input{common/finalize_xcat_provisioning}
+
+\subsection{Add compute nodes into \xCAT{} database} \label{sec:xcat_add_nodes}
 \input{common/add_xcat_hosts_intro}
 
 %%%\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
@@ -248,7 +252,7 @@ repository, which is shipped with CentOS and is enabled by default.
 
 %\vspace*{-0.25cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
-\input{common/reset_computes} 
+\input{common/reset_computes_xcat} 
 
 %\vspace*{-0.50cm}
 \section{Install \OHPC{} Development Components}

@@ -8,12 +8,25 @@ host that can be used to run an example job.
 \end{lstlisting}
 % end_ohpc_run
 
+Next, the user's credentials need to be distributed across the cluster.
+\xCAT{}'s \texttt{xdcp} has a merge functionality that adds new entries into
+credential files on {\em compute} nodes: 
+
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={}]
-# Update synclist files
-[sms](*\#*) updatenode compute -F
+# Create a sync file for pushing user credentials to the nodes
+[sms](*\#*) echo "MERGE:" > syncusers
+[sms](*\#*) echo "/etc/passwd -> /etc/passwd" >> syncusers
+[sms](*\#*) echo "/etc/group -> /etc/group"       >> syncusers
+[sms](*\#*) echo "/etc/shadow -> /etc/shadow" >> syncusers
+# Use xCAT to distribute credentials to nodes
+[sms](*\#*) xdcp compute -F syncusers
 \end{lstlisting}
 % end_ohpc_run
+
+\nottoggle{isxCATstateful}{Alternatively, the \texttt{updatenode compute -f} command
+can be used. This is re-synchronize (i.e. copy) all the files defined in the
+\texttt{syncfile} setup in Section \ref{sec:file_import}.} 
 
 
 \OHPC{} includes a simple ``hello-world'' MPI application in the
