@@ -1083,9 +1083,13 @@ mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 #    fi
 #fi
 
-getent passwd slurm >/dev/null || \
-    /usr/sbin/useradd -U -c "SLURM resource manager" \
-    -s /sbin/nologin -r -d %{_sysconfdir} slurm
+# provide specific uid/gid to ensure that it is the same across the cluster
+/usr/bin/getent group slurm >/dev/null 2>&1 || \
+  /usr/sbin/groupadd -r slurm -g 202
+/usr/bin/getent passwd slurm >/dev/null 2>&1 || \
+  /usr/sbin/useradd -c "SLURM resource manager" \
+  -d %{_sysconfdir} -g slurm -s /bin/nologin -r slurm -u 202
+  
 exit 0
 
 %post
