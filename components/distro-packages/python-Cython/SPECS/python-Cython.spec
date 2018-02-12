@@ -64,7 +64,7 @@ python3 setup.py install --prefix=%{_prefix} --root=%{buildroot}
 # Prepare for update-alternatives usage
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives
 for p in cython cythonize cygdb ; do
-    mv %{buildroot}%{_bindir}/$p %{buildroot}%{_bindir}/$p-%{py3_ver}
+    mv %{buildroot}%{_bindir}/$p %{buildroot}%{_bindir}/$p-%{python3_version}
     ln -s -f %{_sysconfdir}/alternatives/$p %{buildroot}%{_bindir}/$p
     # create a dummy target for /etc/alternatives/$p
     touch %{buildroot}%{_sysconfdir}/alternatives/$p
@@ -77,13 +77,13 @@ done
 
 %post
 "%_sbindir/update-alternatives" \
-   --install %{_bindir}/cython cython %{_bindir}/cython-%{py3_ver} 30 \
-   --slave %{_bindir}/cythonize cythonize %{_bindir}/cythonize-%{py3_ver} \
-   --slave %{_bindir}/cygdb cygdb %{_bindir}/cygdb-%{py3_ver}
+   --install %{_bindir}/cython cython %{_bindir}/cython-%{python3_version} 30 \
+   --slave %{_bindir}/cythonize cythonize %{_bindir}/cythonize-%{python3_version} \
+   --slave %{_bindir}/cygdb cygdb %{_bindir}/cygdb-%{python3_version}
 
 %postun
 if [ $1 -eq 0 ] ; then
-    "%_sbindir/update-alternatives" --remove cython %{_bindir}/cython-%{py3_ver}
+    "%_sbindir/update-alternatives" --remove cython %{_bindir}/cython-%{python3_version}
 fi
 
 %files
@@ -97,9 +97,9 @@ fi
 %{_bindir}/cygdb
 %{_bindir}/cython
 %{_bindir}/cythonize
-%{_bindir}/cygdb-%{py3_ver}
-%{_bindir}/cython-%{py3_ver}
-%{_bindir}/cythonize-%{py3_ver}
+%{_bindir}/cygdb-%{python3_version}
+%{_bindir}/cython-%{python3_version}
+%{_bindir}/cythonize-%{python3_version}
 %ghost %{_sysconfdir}/alternatives/cygdb
 %ghost %{_sysconfdir}/alternatives/cython
 %ghost %{_sysconfdir}/alternatives/cythonize
