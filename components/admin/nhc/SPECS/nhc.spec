@@ -23,7 +23,7 @@ Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/mej/nhc/
-Source0: https://github.com/mej/nhc/archive/%{version}.tar.gz#%{pname}-%{version}.tar.gz
+Source0: https://github.com/mej/nhc/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
 Requires: bash
 BuildRequires: automake autoconf
