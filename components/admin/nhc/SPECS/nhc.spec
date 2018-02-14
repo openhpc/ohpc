@@ -25,6 +25,8 @@ Group: %{PROJ_NAME}/admin
 URL: https://github.com/mej/nhc/
 Source0: https://github.com/mej/nhc/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
+# upstream patch will land in v1.4.3
+Patch1:  nhc-bash-substitution.patch
 Requires: bash
 BuildRequires: automake autoconf
 BuildRequires: rpm-build
@@ -43,7 +45,7 @@ which checks should be run on which nodes.
 
 %prep
 %setup -q -n %{pname}-%{version}
-
+%patch1 -p1
 
 %build
 if [ ! -f configure ]; then

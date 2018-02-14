@@ -1,0 +1,221 @@
+From 5ced918ea79d560fc63b23c00ae46785af0e9da7 Mon Sep 17 00:00:00 2001
+From: Michael Jennings <mej@lanl.gov>
+Date: Sat, 27 May 2017 22:13:28 -0600
+Subject: [PATCH] test/test_lbnl_file.nhc:  Put all process substitutions on
+ the same lines where they're used.
+
+Some (newer?) versions of BASH don't like creating a process
+substitution file on one line and using it on the next while other
+(older?) versions seem to handle it just fine.  Keeping everything all
+on the same line should work everywhere, so let's do that.  This
+should (hopefully?) fix #31 which appears on both Fedora and Cygwin64
+but which I had previously misunderstood.
+---
+ test/test_lbnl_file.nhc | 138 ++++++++++++++++--------------------------------
+ 1 file changed, 46 insertions(+), 92 deletions(-)
+
+diff --git a/test/test_lbnl_file.nhc b/test/test_lbnl_file.nhc
+index 3eaaff6..3eff22c 100644
+--- a/test/test_lbnl_file.nhc
++++ b/test/test_lbnl_file.nhc
+@@ -14,154 +14,108 @@ plan $((3+5+5+3+9+6+8+10+22)) "lbnl_file.nhc" && {
+         # correctly (i.e., <(...) constructs) when debugging (set -x).  Skip.
+         skip $((5+5+3+9+6+8+10))
+     else
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line3/'
++        check_file_contents <(echo "$FILEDATA") '/line3/'
+         is $? 0 'Single regexp match success'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE 'line1'
++        check_file_contents <(echo "$FILEDATA") 'line1'
+         is $? 0 'Single glob match success'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line1/' '/^line2$/' '/line3/' '/^line4$/' '/line5/' '/^line6$/'
++        check_file_contents <(echo "$FILEDATA") '/line1/' '/^line2$/' '/line3/' '/^line4$/' '/line5/' '/^line6$/'
+         is $? 0 'Multiple regexp match success'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '*line1*' 'line2' '*line3*' 'line4' '*line5*' 'line6'
++        check_file_contents <(echo "$FILEDATA") '*line1*' 'line2' '*line3*' 'line4' '*line5*' 'line6'
+         is $? 0 'Multiple glob match success'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line1/' '/^line2$/' '*line3*' 'line4' '/line5$/' '/^line6/'
++        check_file_contents <(echo "$FILEDATA") '/line1/' '/^line2$/' '*line3*' 'line4' '/line5$/' '/^line6/'
+         is $? 0 'Multiple mixed glob/regexp matches success'
+ 
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line7/'
++        check_file_contents <(echo "$FILEDATA") '/line7/'
+         is $? 1 'Single regexp match failure'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE 'line7'
++        check_file_contents <(echo "$FILEDATA") 'line7'
+         is $? 1 'Single glob match failure'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line7/' '/^line8$/' '/line9/' '/^line10$/' '/line11/' '/^line12$/'
++        check_file_contents <(echo "$FILEDATA") '/line7/' '/^line8$/' '/line9/' '/^line10$/' '/line11/' '/^line12$/'
+         is $? 1 'Multiple regexp match failure'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '*line7*' 'line8' '*line9*' 'line10' '*line11*' 'line12'
++        check_file_contents <(echo "$FILEDATA") '*line7*' 'line8' '*line9*' 'line10' '*line11*' 'line12'
+         is $? 1 'Multiple glob match failure'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line7/' '/^line8$/' '*line9*' 'line10' '/line11$/' '/^line12/'
++        check_file_contents <(echo "$FILEDATA") '/line7/' '/^line8$/' '*line9*' 'line10' '/line11$/' '/^line12/'
+         is $? 1 'Multiple mixed glob/regexp matches failure'
+ 
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line1/' '/^line7$/' '*line9*' 'line11'
++        check_file_contents <(echo "$FILEDATA") '/line1/' '/^line7$/' '*line9*' 'line11'
+         is $? 1 'Multiple matches, 1 success, 3 failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line7/' '/^line2$/' '*line3*' 'line11'
++        check_file_contents <(echo "$FILEDATA") '/line7/' '/^line2$/' '*line3*' 'line11'
+         is $? 1 'Multiple matches, 2 successes, 2 failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line1/' '/^line7$/' '*line3*' 'line4'
++        check_file_contents <(echo "$FILEDATA") '/line1/' '/^line7$/' '*line3*' 'line4'
+         is $? 1 'Multiple matches, 3 successes, 1 failure'
+ 
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!line7'
++        check_file_contents <(echo "$FILEDATA") '!line7'
+         is $? 0 'Single negated glob match success'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!line1'
++        check_file_contents <(echo "$FILEDATA") '!line1'
+         is $? 1 'Single negated glob match failure'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!/line7/'
++        check_file_contents <(echo "$FILEDATA") '!/line7/'
+         is $? 0 'Single negated regexp match success'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!/^line1/'
++        check_file_contents <(echo "$FILEDATA") '!/^line1/'
+         is $? 1 'Single negated regexp match failure'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!/line7/' '!/line8/' '!/line9/' '!/line0/'
++        check_file_contents <(echo "$FILEDATA") '!/line7/' '!/line8/' '!/line9/' '!/line0/'
+         is $? 0 'Multiple negated matches, 4 successes, 0 failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!/line1/' '!/line8/' '!/line9/' '!/line0/'
++        check_file_contents <(echo "$FILEDATA") '!/line1/' '!/line8/' '!/line9/' '!/line0/'
+         is $? 1 'Multiple negated matches, 3 successes, 1 failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!/line1/' '!/line2/' '!/line9/' '!/line0/'
++        check_file_contents <(echo "$FILEDATA") '!/line1/' '!/line2/' '!/line9/' '!/line0/'
+         is $? 1 'Multiple negated matches, 2 successes, 2 failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!/line1/' '!/line2/' '!/line3/' '!/line0/'
++        check_file_contents <(echo "$FILEDATA") '!/line1/' '!/line2/' '!/line3/' '!/line0/'
+         is $? 1 'Multiple negated matches, 1 successes, 3 failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!/line1/' '!/line2/' '!/line3/' '!/line4/'
++        check_file_contents <(echo "$FILEDATA") '!/line1/' '!/line2/' '!/line3/' '!/line4/'
+         is $? 1 'Multiple negated matches, 0 successes, 4 failures'
+ 
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line1/' '/line2/' '!/line7/' '!/line8/'
++        check_file_contents <(echo "$FILEDATA") '/line1/' '/line2/' '!/line7/' '!/line8/'
+         is $? 0 '4 matches:  2 positive successes, 0 positive failures, 2 negative successes, 0 negative failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line1/' '/line7/' '!/line8/' '!/line2/'
++        check_file_contents <(echo "$FILEDATA") '/line1/' '/line7/' '!/line8/' '!/line2/'
+         is $? 1 '4 matches:  1 positive success, 1 positive failure, 1 negative success, 1 negative failure'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line7/' '/line8/' '!/line1/' '!/line2/'
++        check_file_contents <(echo "$FILEDATA") '/line7/' '/line8/' '!/line1/' '!/line2/'
+         is $? 1 '4 matches:  0 positive successes, 2 positive failures, 0 negative successes, 2 negative failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line1/' '/line2/' '/line7/' '!/line8/'
++        check_file_contents <(echo "$FILEDATA") '/line1/' '/line2/' '/line7/' '!/line8/'
+         is $? 1 '4 matches:  2 positive successes, 1 positive failures, 1 negative successes, 0 negative failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line1/' '/line7/' '!/line8/' '!/line9/'
++        check_file_contents <(echo "$FILEDATA") '/line1/' '/line7/' '!/line8/' '!/line9/'
+         is $? 1 '4 matches:  1 positive successes, 1 positive failures, 2 negative successes, 0 negative failures'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/line7/' '/line8/' '!/line9/' '!/line0/'
++        check_file_contents <(echo "$FILEDATA") '/line7/' '/line8/' '!/line9/' '!/line0/'
+         is $? 1 '4 matches:  0 positive successes, 2 positive failures, 2 negative successes, 0 negative failures'
+ 
+         FILEDATA=$'$pbsserver master.node\n$pbsclient master.node\n$restricted master.node\n\n$usecp *:/global /global\n$usecp *:/clusterfs /clusterfs\n$usecp *:/var/spool/torque /var/spool/torque\n\n$nospool_dir_list *\n$spool_as_final_name true\n\n$node_check_script /usr/sbin/nhc\n$node_check_interval 5,jobstart,jobend\n$down_on_error 1\n$check_poll_time 60\n\n$logevent 255\n$loglevel 3\n'
+ 
+     # Some real-world example checks against an actual TORQUE pbs_mom config
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/^\$pbsserver master.node$/'
++        check_file_contents <(echo "$FILEDATA") '/^\$pbsserver master.node$/'
+         is $? 0 'Real world example:  Match TORQUE server name against MOM config'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!/^\$pbsserver[[:space:]]*local/'
++        check_file_contents <(echo "$FILEDATA") '!/^\$pbsserver[[:space:]]*local/'
+         is $? 0 'Real world example:  Forbid localhost in MOM config'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/^\$spool_as_final_name (true|True|TRUE|1|yes|Yes|YES)$/'
++        check_file_contents <(echo "$FILEDATA") '/^\$spool_as_final_name (true|True|TRUE|1|yes|Yes|YES)$/'
+         is $? 0 'Real world example:  Assert TORQUE configuration setting in MOM config (present)'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '/^\$source_login_batch (true|True|TRUE|1|yes|Yes|YES)$/'
++        check_file_contents <(echo "$FILEDATA") '/^\$source_login_batch (true|True|TRUE|1|yes|Yes|YES)$/'
+         is $? 1 'Real world example:  Assert TORQUE configuration setting in MOM config (missing)'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '$logevent *' '$loglevel *' '$check_poll_time *'
++        check_file_contents <(echo "$FILEDATA") '$logevent *' '$loglevel *' '$check_poll_time *'
+         is $? 0 'Real world example:  Match TORQUE variable names against MOM config (present)'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '$status_update_time *' '$timeout *' '$usecp *'
++        check_file_contents <(echo "$FILEDATA") '$status_update_time *' '$timeout *' '$usecp *'
+         is $? 1 'Real world example:  Match TORQUE variable names against MOM config (missing)'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!source_login_batch *' '$check_poll_time *' '$usecp *'
++        check_file_contents <(echo "$FILEDATA") '!source_login_batch *' '$check_poll_time *' '$usecp *'
+         is $? 0 'Real world example:  Match TORQUE variable names against MOM config (mixed positive/negative)'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_contents $FILEDATA_FILE '!$pbs*'
++        check_file_contents <(echo "$FILEDATA") '!$pbs*'
+         is $? 1 'Real world example:  Match TORQUE configuration (negated, failed)'
+ 
+     # Check some file attributes of a dynamically-created file
+         FILEDATA='stuff'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -a $FILEDATA_FILE -e $FILEDATA_FILE -r $FILEDATA_FILE
++        FILEDATA_FILE=<(echo "$FILEDATA") check_file_test -a "$FILEDATA_FILE" -e "$FILEDATA_FILE" -r "$FILEDATA_FILE"
+         is $? 0 'Bash process substitution file exists and is readable.'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -a -e -r $FILEDATA_FILE
++        check_file_test -a -e -r <(echo "$FILEDATA")
+         is $? 0 'Bash process substitution file exists and is readable (single file, multiple operators).'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -d $FILEDATA_FILE
++        check_file_test -d <(echo "$FILEDATA")
+         is $? 1 'Bash process substitution file is not a directory.'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -f $FILEDATA_FILE
++        check_file_test -f <(echo "$FILEDATA")
+         is $? 1 'Bash process substitution file is not a regular file.'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -g $FILEDATA_FILE
++        check_file_test -g <(echo "$FILEDATA")
+         is $? 1 'Bash process substitution file is not setgid.'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -k $FILEDATA_FILE
++        check_file_test -k <(echo "$FILEDATA")
+         is $? 1 'Bash process substitution file is not sticky.'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -u $FILEDATA_FILE
++        check_file_test -u <(echo "$FILEDATA")
+         is $? 1 'Bash process substitution file is not setuid.'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -x $FILEDATA_FILE
++        check_file_test -x <(echo "$FILEDATA")
+         is $? 1 'Bash process substitution file is not executable.'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -O $FILEDATA_FILE
++        check_file_test -O <(echo "$FILEDATA")
+         is $? 0 'Bash process substitution file is owned by uid $EUID.'
+-        FILEDATA_FILE=<(echo "$FILEDATA")
+-        check_file_test -G $FILEDATA_FILE
++        check_file_test -G <(echo "$FILEDATA")
+         is $? 0 'Bash process substitution file is owned by gid of $$.'
+     fi
+ 
