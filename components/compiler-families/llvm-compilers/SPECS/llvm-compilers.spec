@@ -41,10 +41,12 @@ BuildRequires: pkgconfig
 BuildRequires: binutils-devel
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires: gcc-fortran
-BuildRequires: libstdc++48-devel
+BuildRequires: libstdc++6-devel
+Requires: libstdc++6
 %else
 BuildRequires: gcc-gfortran
 BuildRequires: libstdc++-devel
+Requires: libstdc++
 %endif
 Requires:      binutils
 BuildRequires:      gcc-c++
