@@ -45,6 +45,10 @@ Requires:       %{python3_prefix}
 BuildRequires:  fdupes
 BuildRequires:  python-rpm-macros
 #!BuildIgnore: post-build-checks
+%else
+%if %{compiler_family} == intel
+BuildRequires: python34-build-patch%{PROJ_DELIM}
+%endif
 %endif
 BuildRequires:  %{python3_prefix}-devel
 BuildRequires:  %{python3_prefix}-setuptools
