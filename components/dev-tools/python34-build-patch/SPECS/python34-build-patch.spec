@@ -30,6 +30,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
 
+Requires: python34-libs
 Requires: patch
 
 Provides: %{pname}%{PROJ_DELIM}
