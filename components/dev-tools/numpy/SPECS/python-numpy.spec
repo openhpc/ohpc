@@ -28,7 +28,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 Name:           %{python3_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.14.0
+Version:        1.14.1
 Release:        1%{?dist}
 Url:            http://sourceforge.net/projects/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
