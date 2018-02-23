@@ -72,8 +72,6 @@ Source1:    OHPC_macros
 # Build with PAM by default on linux
 %bcond_without pam
 
-BuildRequires: gtk2-devel
-Requires: gtk2
 Requires: munge%{PROJ_DELIM}
 
 %{?systemd_requires}
@@ -302,6 +300,17 @@ about jobs that are currently active on the machine. This output is built
 using the Slurm utilities, sinfo, squeue and scontrol, the man pages for these
 utilities will provide more information and greater depth of understanding.
 
+%package -n %{pname}-sview%{PROJ_DELIM}
+Summary: Graphical user interface to view and modify Slurm state
+Group: %{PROJ_NAME}/rms
+Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
+BuildRequires: gtk2-devel
+Requires: gtk2
+%description  -n %{pname}-sview%{PROJ_DELIM}
+This package provides sview, which can be used to view Slurm configuration, job, 
+step, node and partitions state information. Authorized users can also modify 
+select information.
+
 %if %{with pam}
 %package -n %{pname}-pam_slurm%{PROJ_DELIM}
 Summary: PAM module for restricting access to compute nodes via Slurm
@@ -514,6 +523,7 @@ rm -rf %{buildroot}
 %exclude %{_bindir}/sjobexitmod
 %exclude %{_bindir}/sjstat
 %exclude %{_bindir}/smail
+%exclude %{_bindir}/sview
 %exclude %{_libdir}/libpmi*
 %{_libdir}/*.so*
 %{_libdir}/slurm/src/*
@@ -524,6 +534,7 @@ rm -rf %{buildroot}
 %{_mandir}
 %exclude %{_mandir}/man1/sjobexit*
 %exclude %{_mandir}/man1/sjstat*
+%exclude %{_mandir}/man1/sview*
 %dir %{_libdir}/slurm/src
 #############################################################################
 
@@ -587,7 +598,6 @@ rm -rf %{buildroot}
 %{_perldir}/auto/Slurmdb/Slurmdb.so
 %{_perldir}/auto/Slurmdb/autosplit.ix
 %{_perlman3dir}/Slurm*
-
 #############################################################################
 
 %files -n %{pname}-slurmctld%{PROJ_DELIM}
@@ -641,7 +651,6 @@ rm -rf %{buildroot}
 %{_bindir}/bkill
 %{_bindir}/bsub
 %{_bindir}/lsid
-
 #############################################################################
 
 %files -n %{pname}-contribs%{PROJ_DELIM}
@@ -651,6 +660,12 @@ rm -rf %{buildroot}
 %{_bindir}/sjstat
 %{_bindir}/smail
 %{_mandir}/man1/sjstat*
+#############################################################################
+
+%files -n %{pname}-sview%{PROJ_DELIM}
+%defattr(-,root,root)
+%{_mandir}/man1/sview*
+%{_bindir}/sview
 #############################################################################
 
 %if %{with pam}
