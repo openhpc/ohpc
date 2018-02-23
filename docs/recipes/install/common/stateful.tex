@@ -38,6 +38,11 @@ layout.
 \end{center}
 
 \noindent Upon subsequent reboot of the modified nodes, Warewulf will partition
-and format the disk to host the desired VNFS image.  Once installed to disk,
-the BIOS boot option order could be updated to reflect a desire
-to boot from disk.
+and format the disk to host the desired VNFS image.  Once the image is installed 
+to disk, warewulf can be configured to use the nodes' local storage as the boot 
+device.
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Boot the node from the local disk
+[sms](*\#*) wwsh provision set --bootlocal=normal "${compute_regex}"
+\end{lstlisting}
