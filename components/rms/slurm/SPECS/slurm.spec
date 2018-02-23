@@ -72,8 +72,6 @@ Source1:    OHPC_macros
 # Build with PAM by default on linux
 %bcond_without pam
 
-BuildRequires: gtk2-devel
-Requires: gtk2
 Requires: munge%{PROJ_DELIM}
 
 %{?systemd_requires}
