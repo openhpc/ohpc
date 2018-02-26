@@ -90,7 +90,7 @@ module load openblas
 module load fftw
 %endif
 
-module load numpy
+module load %{python_module_prefix}numpy
 
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
@@ -125,7 +125,7 @@ LDSHARED="icc -shared" \
 module load openblas
 %endif
 
-module load numpy
+module load %{python_module_prefix}numpy
 %__python setup.py install --prefix=%{install_path} --root=%{buildroot}
 find %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
