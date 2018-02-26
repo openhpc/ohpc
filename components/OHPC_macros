@@ -120,7 +120,7 @@ Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %if 0%{?ohpc_python_dependent} == 1
 %if "%{python_family}" == "python3"
 %global __python %__python3
-%global python_module_prefix py3
+%global python_module_prefix py3-
 %global python_lib_dir python3.4
 %if "%{rhel_version}" == "700"
 %global python_prefix python34
@@ -130,7 +130,7 @@ Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %endif
 %endif
 %if "%{python_family}" == "python2"
-%global python_module_prefix py2
+%global python_module_prefix py2-
 %global python_lib_dir python2.7
 %global python_prefix python
 %endif
