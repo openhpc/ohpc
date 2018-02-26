@@ -1,4 +1,3 @@
-%define python_family python2
 #----------------------------------------------------------------------------bh-
 # This RPM .spec file is part of the OpenHPC project.
 #
@@ -108,8 +107,8 @@ CFLAGS="%{optflags} -fno-strict-aliasing" %__python setup.py build $COMPILER_FLA
 
 # OpenHPC module file
 %{!?compiler_family: %global compiler_family gnu}
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{python_prefix}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{python_prefix}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{python_module_prefix}%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{python_module_prefix}%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -141,7 +140,7 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{python_prefix}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{python_module_prefix}%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
