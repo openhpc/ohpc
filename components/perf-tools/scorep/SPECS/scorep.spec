@@ -33,19 +33,19 @@ BuildRequires:  fdupes
 %endif
 BuildRequires: automake
 BuildRequires: binutils-devel
-Requires     : binutils-devel
+Requires:      binutils-devel
 BuildRequires: libunwind-devel
-Requires     : libunwind-devel
-Requires     : lmod%{PROJ_DELIM} >= 7.6.1
+Requires:      libunwind-devel
+Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: zlib-devel
 %ifarch x86_64
 BuildRequires: papi%{PROJ_DELIM}
-Requires     : papi%{PROJ_DELIM}
+Requires:      papi%{PROJ_DELIM}
 %endif
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
-Requires     : pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+Requires:      pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires     : sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
