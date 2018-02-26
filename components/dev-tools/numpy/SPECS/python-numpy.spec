@@ -1,3 +1,4 @@
+%define python_family python2
 #----------------------------------------------------------------------------bh-
 # This RPM .spec file is part of the OpenHPC project.
 #
@@ -10,6 +11,7 @@
 
 # Numpy python library build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
+%define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" != "intel"
@@ -21,13 +23,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname numpy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%if 0%{?sles_version} || 0%{?suse_version}
-%define python3_prefix python3
-%else
-%define python3_prefix python34
-%endif
-
-Name:           %{python3_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.14.1
 Release:        1%{?dist}
 Url:            http://sourceforge.net/projects/numpy
@@ -40,18 +36,14 @@ Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-Requires:       %{python3_prefix}
 %if 0%{?suse_version}
 BuildRequires:  fdupes
-BuildRequires:  python-rpm-macros
 #!BuildIgnore: post-build-checks
 %else
 %if %{compiler_family} == intel
 BuildRequires: python34-build-patch%{PROJ_DELIM}
 %endif
 %endif
-BuildRequires:  %{python3_prefix}-devel
-BuildRequires:  %{python3_prefix}-setuptools
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -101,14 +93,14 @@ include_dirs = $OPENBLAS_INC
 EOF
 %endif
 
-CFLAGS="%{optflags} -fno-strict-aliasing" %__python3 setup.py build $COMPILER_FLAG
+CFLAGS="%{optflags} -fno-strict-aliasing" %__python setup.py build $COMPILER_FLAG
 
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%__python3 setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+%__python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
 
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
@@ -116,19 +108,19 @@ CFLAGS="%{optflags} -fno-strict-aliasing" %__python3 setup.py build $COMPILER_FL
 
 # OpenHPC module file
 %{!?compiler_family: %global compiler_family gnu}
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{python_prefix}/%{compiler_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{python_prefix}/%{compiler_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{python3_prefix}-%{pname} library built with the %{compiler_family} compiler"
-puts stderr "toolchain."
+puts stderr "This module loads the %{pname} library built with %{python_prefix}"
+puts stderr "and the %{compiler_family} compiler toolchain."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{python3_prefix}-%{pname} built with %{compiler_family} compiler"
+module-whatis "Name: %{python_prefix}-%{pname} built with %{compiler_family} compiler"
 module-whatis "Version: %{version}"
 module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
@@ -142,14 +134,14 @@ if { ![is-loaded intel] } {
 }
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib64/python3.4/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib64/%{python_lib_dir}/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{python_prefix}/%{compiler_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
