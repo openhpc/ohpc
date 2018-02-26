@@ -1,5 +1,5 @@
 --- slurm-17.11.2/slurm.spec	2018-01-04 13:15:01.000000000 -0800
-+++ slurm.spec	2018-01-11 11:26:43.000000000 -0800
++++ slurm.spec	2018-02-26 10:19:26.000000000 -0800
 @@ -1,21 +1,39 @@
 -Name:		slurm
 +#----------------------------------------------------------------------------bh-
@@ -231,9 +231,21 @@
  seff is a mail program used directly by the Slurm daemons. On completion of a
  job, wait for it's accounting information to be available and include that
  information in the email body.
-@@ -265,13 +301,13 @@
+@@ -264,14 +300,25 @@
+ using the Slurm utilities, sinfo, squeue and scontrol, the man pages for these
  utilities will provide more information and greater depth of understanding.
  
++%package -n %{pname}-sview%{PROJ_DELIM}
++Summary: Graphical user interface to view and modify Slurm state
++Group: %{PROJ_NAME}/rms
++Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
++BuildRequires: gtk2-devel
++Requires: gtk2
++%description  -n %{pname}-sview%{PROJ_DELIM}
++This package provides sview, which can be used to view Slurm configuration, job, 
++step, node and partitions state information. Authorized users can also modify 
++select information.
++
  %if %{with pam}
 -%package pam_slurm
 +%package -n %{pname}-pam_slurm%{PROJ_DELIM}
@@ -250,7 +262,7 @@
  This module restricts access to compute nodes in a cluster where Slurm is in
  use.  Access is granted to root, any user with an Slurm-launched job currently
  running on the node, or any user who has allocated resources on the node
-@@ -350,6 +386,30 @@
+@@ -350,6 +397,30 @@
  install -D -m644 etc/slurmdbd.conf.example %{buildroot}/%{_sysconfdir}/slurmdbd.conf.example
  install -D -m755 contribs/sjstat %{buildroot}/%{_bindir}/sjstat
  
@@ -281,7 +293,7 @@
  # Delete unpackaged files:
  find %{buildroot} -name '*.a' -exec rm {} \;
  find %{buildroot} -name '*.la' -exec rm {} \;
-@@ -412,7 +472,7 @@
+@@ -412,7 +483,7 @@
  Cflags: -I\${includedir}
  Libs: -L\${libdir} -lslurm
  Description: Slurm API
@@ -290,7 +302,7 @@
  Version: %{version}
  EOF
  
-@@ -437,6 +497,7 @@
+@@ -437,6 +508,7 @@
      test -f %{buildroot}/lib64/security/pam_slurm_adopt.so		&&
  	echo /lib64/security/pam_slurm_adopt.so		>>$LIST
  %endif
@@ -298,7 +310,19 @@
  #############################################################################
  
  %clean
-@@ -464,7 +525,7 @@
+@@ -451,6 +523,7 @@
+ %exclude %{_bindir}/sjobexitmod
+ %exclude %{_bindir}/sjstat
+ %exclude %{_bindir}/smail
++%exclude %{_bindir}/sview
+ %exclude %{_libdir}/libpmi*
+ %{_libdir}/*.so*
+ %{_libdir}/slurm/src/*
+@@ -461,10 +534,11 @@
+ %{_mandir}
+ %exclude %{_mandir}/man1/sjobexit*
+ %exclude %{_mandir}/man1/sjstat*
++%exclude %{_mandir}/man1/sview*
  %dir %{_libdir}/slurm/src
  #############################################################################
  
@@ -307,7 +331,7 @@
  %defattr(-,root,root,0755)
  %dir %{_sysconfdir}
  %if %{with cray}
-@@ -473,6 +534,26 @@
+@@ -473,6 +547,26 @@
  %dir /opt/modulefiles/slurm
  %{_sbindir}/slurmconfgen.py
  %endif
@@ -334,7 +358,7 @@
  %config %{_sysconfdir}/cgroup.conf.example
  %config %{_sysconfdir}/cgroup_allowed_devices_file.conf.example
  %config %{_sysconfdir}/layouts.d/power.conf.example
-@@ -483,7 +564,7 @@
+@@ -483,7 +577,7 @@
  %config %{_sysconfdir}/slurmdbd.conf.example
  #############################################################################
  
@@ -343,7 +367,7 @@
  %defattr(-,root,root)
  %dir %attr(0755,root,root)
  %dir %{_prefix}/include/slurm
-@@ -492,7 +573,7 @@
+@@ -492,7 +586,7 @@
  %{_libdir}/pkgconfig/slurm.pc
  #############################################################################
  
@@ -352,8 +376,11 @@
  %defattr(-,root,root)
  %{_perldir}/Slurm.pm
  %{_perldir}/Slurm/Bitstr.pm
-@@ -507,27 +588,27 @@
- 
+@@ -504,30 +598,29 @@
+ %{_perldir}/auto/Slurmdb/Slurmdb.so
+ %{_perldir}/auto/Slurmdb/autosplit.ix
+ %{_perlman3dir}/Slurm*
+-
  #############################################################################
  
 -%files slurmctld
@@ -384,7 +411,7 @@
  %defattr(-,root,root)
  %if %{with cray}
  %{_libdir}/slurmpmi/*
-@@ -536,7 +617,7 @@
+@@ -536,7 +629,7 @@
  %endif
  #############################################################################
  
@@ -393,7 +420,7 @@
  %defattr(-,root,root)
  %{_bindir}/pbsnodes
  %{_bindir}/qalter
-@@ -552,7 +633,7 @@
+@@ -552,16 +645,15 @@
  %{_libdir}/slurm/spank_pbs.so
  #############################################################################
  
@@ -402,8 +429,9 @@
  %defattr(-,root,root)
  %{_bindir}/bjobs
  %{_bindir}/bkill
-@@ -561,7 +642,7 @@
- 
+ %{_bindir}/bsub
+ %{_bindir}/lsid
+-
  #############################################################################
  
 -%files contribs
@@ -411,9 +439,16 @@
  %defattr(-,root,root)
  %{_bindir}/seff
  %{_bindir}/sjobexitmod
-@@ -571,38 +652,59 @@
+@@ -570,39 +662,66 @@
+ %{_mandir}/man1/sjstat*
  #############################################################################
  
++%files -n %{pname}-sview%{PROJ_DELIM}
++%defattr(-,root,root)
++%{_mandir}/man1/sview*
++%{_bindir}/sview
++#############################################################################
++
  %if %{with pam}
 -%files -f pam.files pam_slurm
 +%files -f pam.files -n %{pname}-pam_slurm%{PROJ_DELIM}
