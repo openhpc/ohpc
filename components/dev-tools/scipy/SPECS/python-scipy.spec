@@ -28,6 +28,7 @@
 # scipy build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
+%define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 %global gnu_family gnu7
@@ -41,13 +42,7 @@ Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname scipy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%if 0%{?sles_version} || 0%{?suse_version}
-%define python3_prefix python3
-%else
-%define python3_prefix python34
-%endif
-
-Name:           %{python3_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name:           %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Scientific Tools for Python
@@ -58,16 +53,13 @@ Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#/%{pna
 Source1:        OHPC_macros
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
-BuildRequires:  python-rpm-macros
 %endif
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  %{python3_prefix}-devel
-BuildRequires:  %{python3_prefix}-setuptools
-BuildRequires:  %{python3_prefix}-Cython%{PROJ_DELIM}
-BuildRequires:  %{python3_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
+BuildRequires:  %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-Requires:       %{python3_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
+Requires:       %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -120,9 +112,9 @@ EOF
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 %if "%{compiler_family}" == "intel"
 LDSHARED="icc -shared" \
-%__python3 setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
+%__python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
 %else
-%__python3 setup.py config_fc --fcompiler=gnu95 --noarch build
+%__python setup.py config_fc --fcompiler=gnu95 --noarch build
 %endif
 
 %install
@@ -134,22 +126,22 @@ module load openblas
 %endif
 
 module load numpy
-%__python3 setup.py install --prefix=%{install_path} --root=%{buildroot}
-find %{buildroot}%{install_path}/lib64/python3.4/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
+%__python setup.py install --prefix=%{install_path} --root=%{buildroot}
+find %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
-find %{buildroot}%{install_path}/lib64/python3.4/site-packages/scipy/weave -type d -name examples | xargs rm -rf
+find %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/scipy/weave -type d -name examples | xargs rm -rf
 
 %if 0%{?sles_version} || 0%{?suse_version}
-%fdupes %{buildroot}%{install_path}/lib64/python3.4/site-packages
+%fdupes %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages
 %endif
 
 # fix executability issue
-chmod +x %{buildroot}%{install_path}/lib64/python3.4/site-packages/%{pname}/io/arff/arffread.py
-chmod +x %{buildroot}%{install_path}/lib64/python3.4/site-packages/%{pname}/special/spfun_stats.py
+chmod +x %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/%{pname}/io/arff/arffread.py
+chmod +x %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/%{pname}/special/spfun_stats.py
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -168,16 +160,16 @@ module-whatis "URL %{url}"
 
 set     version             %{version}
 
-prepend-path    PYTHONPATH          %{install_path}/lib64/python3.4/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib64/%{python_lib_dir}/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 
 depends-on fftw
-depends-on numpy
+depends-on %{python_module_prefix}numpy
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
