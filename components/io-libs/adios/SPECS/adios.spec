@@ -11,6 +11,7 @@
 # Build that is dependent on compiler/mpi toolchains
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
+%define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 %{!?with_lustre: %global with_lustre 0}
@@ -43,7 +44,6 @@ Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: python-devel
 
 %if 0%{with_lustre}
 # This is the legacy name for lustre-lite
@@ -51,8 +51,6 @@ BuildRequires: python-devel
 BuildRequires: lustre-lite
 Requires: lustre-client%{PROJ_DELIM}
 %endif
-BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
-
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
@@ -73,6 +71,15 @@ elements, their types, and how you wish to process them this run, the
 routines in the host code (either Fortran or C) can transparently change
 how they process the data.
 
+%package -n %{python_flavor}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Summary: Bindings for %{python_flavor} to adios
+Group: %{PROJ_NAME}/io-libs
+BuildRequires: %{python_family}-numpy-%{compiler_family}%{PROJ_DELIM}
+Requires: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} = %{version}-%{release}
+%description -n %{python_flavor}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+This package includes the %{python_flavor} API to provide a
+helpful interface to Adios through Python
+
 %prep
 %setup -q -n %{pname}-%{version}
 
@@ -89,7 +96,7 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 module load autotools
 module load phdf5
 module load netcdf
-module load numpy
+module load %{python_module_prefix}numpy
 
 TOPDIR=$PWD
 
@@ -157,17 +164,17 @@ export NO_BRP_CHECK_RPATH=true
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # this is clearly generated someway and shouldn't be static
-export PPATH="/lib64/python2.7/site-packages"
+export PPATH="/lib64/%{python_lib_dir}/site-packages"
 export PATH=$(pwd):$PATH
 
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
-module load numpy
+module load %{python_module_prefix}numpy
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
 make MPI=y python
-python setup.py install --prefix="%buildroot%{install_path}/python"
+%__python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
 install -m644 utils/skel/lib/skel_suite.py \
@@ -213,7 +220,6 @@ depends-on phdf5
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-prepend-path	PYTHONPATH          %{install_path}/python/lib64/python2.7/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_DOC        %{install_path}/docs
@@ -232,6 +238,41 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+
+# OpenHPC python module file
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}/%{version}
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } {
+
+puts stderr " "
+puts stderr "This module loads %{python_flavor} bindings for the %{PNAME} library "
+puts stderr "built with the %{compiler_family} compiler toolchain and the %{mpi_family} MPI stack."
+puts stderr "\nVersion %{version}\n"
+
+}
+module-whatis "Name: %{PNAME} for %{python_flavor} built with %{compiler_family} compiler and %{mpi_family} MPI"
+module-whatis "Version: %{version}"
+module-whatis "Category: runtime library"
+module-whatis "Description: %{summary}"
+module-whatis "%{url}"
+
+set             version             %{version}
+prepend-path	PYTHONPATH          %{install_path}/python/lib64/%{python_lib_dir}/site-packages
+
+depends-on      adios
+family          adios-python
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}/.version.%{version}
+#%Module1.0#####################################################################
+##
+## version file for %{python_module_prefix}%{pname}-%{version}
+##
+set     ModulesVersion      "%{version}"
+EOF
+
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -241,6 +282,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
+%exclude %{install_path}/python
 %{OHPC_HOME}
 %doc AUTHORS
 %doc COPYING
@@ -249,6 +291,10 @@ EOF
 %doc NEWS
 %doc README.md
 %doc TODO
+
+%files -n %{python_flavor}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%{install_path}/python
+%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}
 
 %changelog
 * Tue May 23 2017 Adrian Reber <areber@redhat.com> - 1.11.0-2
