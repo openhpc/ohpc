@@ -59,7 +59,6 @@ Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  python-devel
-BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires:  python-xml
 %else
