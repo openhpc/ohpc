@@ -51,6 +51,7 @@ Requires:  examples%{PROJ_DELIM}
 Requires:  gdb
 Requires:  ipmitool
 Requires:  libstdc++-devel
+Requires:  libunwind
 Requires:  lmod%{PROJ_DELIM}
 Requires:  losf%{PROJ_DELIM}
 Requires:  make
@@ -256,6 +257,8 @@ Requires:  tau-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
@@ -263,6 +266,7 @@ Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  scorep-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 %endif
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain
@@ -273,6 +277,7 @@ Requires:  imb-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
@@ -284,6 +289,7 @@ Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  scorep-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-perf-tools
@@ -295,6 +301,7 @@ Requires:  imb-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
@@ -514,6 +521,11 @@ Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
 Requires:  scalasca-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  scorep-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  scorep-intel-impi%{PROJ_DELIM}
+Requires:  scorep-intel-mpich%{PROJ_DELIM}
+Requires:  scorep-intel-mvapich2%{PROJ_DELIM}
+Requires:  scorep-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-perf-tools
 Collection of performance tool builds for use with Intel(R) Parallel Studio XE toolchain
 
