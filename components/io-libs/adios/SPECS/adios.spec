@@ -290,6 +290,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %exclude %{install_path}/%{python_family}
+%exclude %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}
 %{OHPC_HOME}
 %doc AUTHORS
 %doc COPYING
