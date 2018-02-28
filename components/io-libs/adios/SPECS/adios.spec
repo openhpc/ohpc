@@ -71,10 +71,10 @@ elements, their types, and how you wish to process them this run, the
 routines in the host code (either Fortran or C) can transparently change
 how they process the data.
 
-%package -n %{python_flavor}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%package -n %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary: Bindings for %{python_flavor} to adios
 Group: %{PROJ_NAME}/io-libs
-BuildRequires: %{python_family}-numpy-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 Requires: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} = %{version}-%{release}
 %description -n %{python_flavor}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 This package includes the %{python_flavor} API to provide a
@@ -174,13 +174,13 @@ module load %{python_module_prefix}numpy
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
 make MPI=y python
-%__python setup.py install --prefix="%buildroot%{install_path}/python"
+%__python setup.py install --prefix="%buildroot%{install_path}/%{python_family}"
 popd
 
 install -m644 utils/skel/lib/skel_suite.py \
 	utils/skel/lib/skel_template.py \
 	utils/skel/lib/skel_test_plan.py \
-	%buildroot%{install_path}/python
+	%buildroot%{install_path}/%{python_family}
 
 rm -f $(find examples -name '*.o') \
 	examples/staging/stage_write/writer_adios
@@ -191,8 +191,8 @@ chmod 644 $(find examples -type f -name "*.xml")
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 
-mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
-find %buildroot%{install_path}/python -name \*pyc -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
+mv %buildroot%{install_path}/lib/%{python_family}/*.py %buildroot%{install_path}/%{python_family}
+find %buildroot%{install_path}/%{python_family} -name \*pyc -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -247,19 +247,19 @@ EOF
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads %{python_flavor} bindings for the %{PNAME} library "
+puts stderr "This module loads %{python_family} bindings for the %{PNAME} library "
 puts stderr "built with the %{compiler_family} compiler toolchain and the %{mpi_family} MPI stack."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{PNAME} for %{python_flavor} built with %{compiler_family} compiler and %{mpi_family} MPI"
+module-whatis "Name: %{PNAME} for %{python_family} built with %{compiler_family} compiler and %{mpi_family} MPI"
 module-whatis "Version: %{version}"
 module-whatis "Category: runtime library"
 module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
 set             version             %{version}
-prepend-path	PYTHONPATH          %{install_path}/python/lib64/%{python_lib_dir}/site-packages
+prepend-path	PYTHONPATH          %{install_path}/%{python_family}/lib64/%{python_lib_dir}/site-packages
 
 depends-on      adios
 family          adios-python
@@ -282,7 +282,7 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%exclude %{install_path}/python
+%exclude %{install_path}/%{python_family}
 %{OHPC_HOME}
 %doc AUTHORS
 %doc COPYING
@@ -292,8 +292,8 @@ EOF
 %doc README.md
 %doc TODO
 
-%files -n %{python_flavor}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%{install_path}/python
+%files -n %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%{install_path}/%{python_family}
 %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}
 
 %changelog
