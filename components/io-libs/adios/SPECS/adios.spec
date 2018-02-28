@@ -63,6 +63,9 @@ BuildRequires: libcurl libcurl-devel
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
+# Turn off the brp-python-bytecompile script
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+
 %description
 The Adaptable IO System (ADIOS) provides a simple, flexible way for
 scientists to desribe the data in their code that may need to be
