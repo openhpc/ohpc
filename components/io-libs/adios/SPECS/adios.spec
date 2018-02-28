@@ -29,6 +29,7 @@ Group:   %{PROJ_NAME}/io-libs
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
 Source1: OHPC_macros
+Patch1:  adios-py3-numpy.patch
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
@@ -82,6 +83,11 @@ helpful interface to Adios through Python
 
 %prep
 %setup -q -n %{pname}-%{version}
+
+# python version is hardcoded in Makefile
+%if "%{python_family}" == "python3"
+%patch1 -p1
+%endif
 
 %build
 sed -i 's|@BUILDROOT@|%buildroot|' wrappers/numpy/setup*

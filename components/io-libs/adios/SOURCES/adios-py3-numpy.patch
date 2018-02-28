@@ -1,0 +1,18 @@
+--- a/wrappers/numpy/Makefile	2015-04-06 10:10:09.000000000 -0700
++++ b/wrappers/numpy/Makefile	2018-02-28 14:31:57.000000000 -0800
+@@ -30,13 +30,13 @@
+ 	cython --cplus adios.pyx
+ 
+ adios.so:  
+-	python setup.py build_ext -lrt
++	python3 setup.py build_ext -lrt
+ 
+ adios_mpi.cpp:  adios_mpi.pyx
+ 	cython --cplus adios_mpi.pyx
+ 
+ adios_mpi.so:  
+-	python setup_mpi.py build
++	python3 setup_mpi.py build
+ 
+ clean:
+ 	rm -rf build
