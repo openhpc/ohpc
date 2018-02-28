@@ -76,7 +76,7 @@ Summary: Bindings for %{python_flavor} to adios
 Group: %{PROJ_NAME}/io-libs
 BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 Requires: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} = %{version}-%{release}
-%description -n %{python_flavor}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%description -n %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 This package includes the %{python_flavor} API to provide a
 helpful interface to Adios through Python
 
