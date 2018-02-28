@@ -197,7 +197,8 @@ chmod 644 $(find examples -type f -name "*.xml")
 install -d %buildroot%{install_path}/lib
 cp -fR examples %buildroot%{install_path}/lib
 
-mv %buildroot%{install_path}/lib/%{python_family}/*.py %buildroot%{install_path}/%{python_family}
+mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/%{python_family}
+rm -rf %buildroot%{install_path}/lib/python
 find %buildroot%{install_path}/%{python_family} -name \*pyc -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
 
 # OpenHPC module file
