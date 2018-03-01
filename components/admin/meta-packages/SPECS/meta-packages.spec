@@ -632,6 +632,8 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python2-libs
+%files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python3-libs
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-runtimes
 %files -n %{PROJ_NAME}-gnu%{gnu_major_ver}-serial-libs
 %files -n %{PROJ_NAME}-nagios
@@ -650,6 +652,8 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{PROJ_NAME}-intel-openmpi%{openmpi_major_ver}-parallel-libs
 %files -n %{PROJ_NAME}-intel-perf-tools
 %files -n %{PROJ_NAME}-intel-python-libs
+%files -n %{PROJ_NAME}-intel-python2-libs
+%files -n %{PROJ_NAME}-intel-python3-libs
 %files -n %{PROJ_NAME}-intel-runtimes
 %files -n %{PROJ_NAME}-intel-serial-libs
 %endif
