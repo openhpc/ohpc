@@ -80,6 +80,7 @@ module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
+family                      mpi4py
 set     version             %{version}
 
 prepend-path    PYTHONPATH          %{install_path}/lib64/%{python_lib_dir}/site-packages
