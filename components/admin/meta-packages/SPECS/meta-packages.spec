@@ -13,6 +13,12 @@
 %global gnu_major_ver 7
 %global openmpi_major_ver 3
 
+%if 0%{?rhel_version}
+%global python3_prefix python34
+%else
+%global python3_prefix python3
+%endif
+
 Summary: Meta-packages to ease installation
 Name:    meta-packages
 Version: 1.3.4
@@ -309,6 +315,13 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
 Summary:   OpenHPC python libraries for GNU
+Requires:  %{PROJ_NAME}-gnu%{gnu_major_ver}-python2-libs
+Requires:  %{PROJ_NAME}-gnu%{gnu_major_ver}-python3-libs
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
+Collection of python related library builds for use with GNU compiler toolchain
+
+%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python2-libs
+Summary:   OpenHPC python2 libraries for GNU
 Requires:  python-mpi4py-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  python-mpi4py-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  python-numpy-gnu%{gnu_major_ver}%{PROJ_DELIM}
@@ -318,8 +331,22 @@ Requires:  python-scipy-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DE
 Requires:  python-mpi4py-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  python-scipy-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 %endif
-%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python-libs
-Collection of python related library builds for use with GNU compiler toolchain
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python2-libs
+Collection of python2 related library builds for use with GNU compiler toolchain
+
+%package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python3-libs
+Summary:   OpenHPC python3 libraries for GNU
+Requires:  %{python3_prefix}-mpi4py-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  %{python3_prefix}-mpi4py-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  %{python3_prefix}-numpy-gnu%{gnu_major_ver}%{PROJ_DELIM}
+Requires:  %{python3_prefix}-scipy-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  %{python3_prefix}-scipy-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+%ifnarch aarch64
+Requires:  %{python3_prefix}-mpi4py-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  %{python3_prefix}-scipy-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+%endif
+%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-python3-libs
+Collection of python3 related library builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-runtimes
 Summary:   OpenHPC runtimes for GNU
@@ -531,14 +558,32 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-python-libs
 Summary:   OpenHPC python libraries for Intel(R) Parallel Studio XE
+Requires:  %{PROJ_NAME}-intel-python2-libs
+Requires:  %{PROJ_NAME}-intel-python3-libs
+%description -n %{PROJ_NAME}-intel-python-libs
+Collection of python related library builds for use with Intel(R) Parallel Studio XE toolchain
+
+%package -n %{PROJ_NAME}-intel-python2-libs
+Summary:   OpenHPC python2 libraries for Intel(R) Parallel Studio XE
 Requires:  python-numpy-intel%{PROJ_DELIM}
 Requires:  python-mpi4py-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  python-mpi4py-intel-impi%{PROJ_DELIM}
 Requires:  python-mpi4py-intel-mpich%{PROJ_DELIM}
 Requires:  python-mpi4py-intel-mvapich2%{PROJ_DELIM}
 Requires:  python-mpi4py-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-intel-python-libs
-Collection of python related library builds for use with Intel(R) Parallel Studio XE toolchain
+%description -n %{PROJ_NAME}-intel-python2-libs
+Collection of python2 related library builds for use with Intel(R) Parallel Studio XE toolchain
+
+%package -n %{PROJ_NAME}-intel-python3-libs
+Summary:   OpenHPC python3 libraries for Intel(R) Parallel Studio XE
+Requires:  %{python3_prefix}-numpy-intel%{PROJ_DELIM}
+Requires:  %{python3_prefix}-mpi4py-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  %{python3_prefix}-mpi4py-intel-impi%{PROJ_DELIM}
+Requires:  %{python3_prefix}-mpi4py-intel-mpich%{PROJ_DELIM}
+Requires:  %{python3_prefix}-mpi4py-intel-mvapich2%{PROJ_DELIM}
+Requires:  %{python3_prefix}-mpi4py-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-intel-python3-libs
+Collection of python3 related library builds for use with Intel(R) Parallel Studio XE toolchain
 
 %package -n %{PROJ_NAME}-intel-runtimes
 Summary:   OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
