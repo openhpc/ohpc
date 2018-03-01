@@ -125,6 +125,7 @@ module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
+family                      numpy
 set     version             %{version}
 
 # Require openblas for gnu compiler families
