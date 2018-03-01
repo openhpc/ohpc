@@ -8,9 +8,9 @@ if [ -s ./common/TEST_ENV ];then
 fi
 
 PKG=NUMPY
-module=numpy
-testname=Numpy
-rpm=python-numpy-$LMOD_FAMILY_COMPILER${DELIM}
+module=$python_module_prefix-numpy
+testname=$python-Numpy
+rpm=$python_package_prefix-numpy-$LMOD_FAMILY_COMPILER${DELIM}
 
 
 @test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {

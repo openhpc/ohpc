@@ -60,10 +60,12 @@ if test x$enable_pxse = xyes ;then
    AC_MSG_RESULT([yes])
    AC_SUBST(COMPILER_FAMILIES,["gnu7 intel"])       
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi3 impi"])
+   AC_SUBST(PYTHON_FAMILIES,["python2 python3"])
 else
    AC_MSG_RESULT([no])
    AC_SUBST(COMPILER_FAMILIES,[gnu7])       
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi3"])
+   AC_SUBST(PYTHON_FAMILIES,["python2 python3"])
 fi
 
 # Compiler families can be overriden by user
@@ -75,6 +77,11 @@ AC_ARG_WITH(compiler-families,
 AC_ARG_WITH(mpi-families,
 	[AS_HELP_STRING([--with-mpi-families=[MPI]],[Override desired MPI families])],
 	[MPI_FAMILIES=$withval])
+
+# Python families can be overriden by user
+AC_ARG_WITH(python-families,
+	[AS_HELP_STRING([--with-python-families=[PYTHON]],[Override desired Python families])],
+	[PYTHON_FAMILIES=$withval])
 
 # Fabric options
 AC_ARG_WITH(fabric,
@@ -479,6 +486,7 @@ echo Host operating system......... : ${DISTRO_FAMILY}
 
 echo Compiler Families............. : ${COMPILER_FAMILIES}
 echo MPI Families.................. : ${MPI_FAMILIES}
+echo Python Families............... : ${PYTHON_FAMILIES}
 if test "x$enable_slurm" = "xyes" ; then
    echo Resource manager ............. : SLURM
 fi

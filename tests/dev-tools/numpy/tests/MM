@@ -8,8 +8,8 @@ if [ -s ../../../TEST_ENV ];then
     source ../../../TEST_ENV
 fi
 
-module load numpy
+module load $python_module_prefix-numpy
 
-@test "[dev-tools/numpy] Numpy Matrix Multiply" {
-    run python MM.py
+@test "[dev-tools/$python-numpy] Numpy Matrix Multiply" {
+    run $_python MM.py
 }
