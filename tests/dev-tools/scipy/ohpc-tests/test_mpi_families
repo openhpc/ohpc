@@ -21,6 +21,8 @@ for compiler in $COMPILER_FAMILIES ; do
     for mpi in $MPIs_local ; do
         for python in $PYTHON_FAMILIES ; do
 
+            get_python_vars $python
+
             echo " "
             echo " "
             echo "-------------------------------------------------------"
@@ -36,7 +38,7 @@ for compiler in $COMPILER_FAMILIES ; do
             make clean                              || exit 1
             make -k check                           || status=1
 
-            save_logs_mpi_family tests $compiler $mpi
+            save_logs_mpi_family tests $python-$compiler $mpi
 
     	make clean
         done
