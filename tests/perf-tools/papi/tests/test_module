@@ -73,13 +73,9 @@ check_rms
 @test "[$testname] Verify availability of man page for papi_avail" {
     DIR=${PKG}_DIR
 
-    if [ -z ${!DIR} ];then
-        flunk "${PKG}_DIR directory not defined"
+    if [ ! -d ${!DIR}/share/man ];then
+        flunk "Manual directory ${!DIR}/share/man does not exist"
     fi
-
-    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
-        flunk "directory ${!DIR} does not exist"
-    fi 
     
     run man -w papi_avail
     assert_success
