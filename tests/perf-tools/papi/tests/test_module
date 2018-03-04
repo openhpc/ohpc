@@ -79,7 +79,7 @@ check_rms
     
     run man -w papi_avail
     assert_success
-    assert_output "${!DIR}/man/man1/papi_avail.1"
+    assert_output "${!DIR}/share/man/man1/papi_avail.1"
 }
 
 # ----------
