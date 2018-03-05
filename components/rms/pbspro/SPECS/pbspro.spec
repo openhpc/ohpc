@@ -69,6 +69,7 @@ Release:   %{pbs_release}
 Source0: https://github.com/PBSPro/pbspro/releases/download/v%{version}/%{pbs_name}-%{version}.tar.gz
 Source1:   OHPC_macros
 Patch1:    systemd.patch
+Patch2:    pbs.null.patch
 License:   AGPLv3 with exceptions
 URL:       https://github.com/PBSPro/pbspro
 Prefix:    %{pbs_prefix}
@@ -235,6 +236,8 @@ the PBS Professional user commands.
 # karl.w.schulz@intel.com (enable systemd startup - patches from pbs master branch)
 # Patch1: logic for systemd.patch
 %patch1 -p1
+# karl.ices.utexas.edu (don't copy from /dev/null as it may not exist in chroot env)
+%patch2 -p0
 
 %build
 
