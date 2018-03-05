@@ -1,0 +1,16 @@
+\begin{center}
+\begin{tcolorbox}[]
+\small
+By default, OpenHPC ships the Likwid performance analysis toolkit. This packge 
+requires the MSR driver, which is not enabled on SUSE distributions. 
+% begin_ohpc_run
+% ohpc_comment_header
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Load MSR driver
+[sms](*\#*) modprobe msr
+\end{lstlisting}
+% end_ohpc_run
+\end{tcolorbox}
+\end{center}
+
+
