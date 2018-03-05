@@ -141,7 +141,7 @@ fi
 %patch7 -p1
 %patch8 -p1
 %patch9 -p2
-%patch10 -p1
+%patch10 -p2
 
 %build
 cd %{dname}
