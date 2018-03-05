@@ -92,10 +92,12 @@ Requires:  numactl
 %if 0%{?centos_version} || 0%{?rhel_version}
 Requires:  cairo-devel
 Requires:  libpciaccess
+Requires:  python34
 %endif
 %if 0%{?sles_version} || 0%{?suse_version}
 Requires:  libcairo2
 Requires:  libpciaccess0
+Requires:  python3
 %endif
 %description -n %{PROJ_NAME}-base-compute
 Collection of compute node base packages
