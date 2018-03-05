@@ -52,7 +52,7 @@ get_python_vars() {
     fi
     if [ "x$__python_family" == "xpython3" ]; then
         export _python=python3.4
-        export python_package_prefix=py3
+        export python_module_prefix=py3
         if [ "x$DISTRO_FAMILY" == "xCentOS" -o "x$DISTRO_FAMILY" == "xRHEL" ];then
             export python_package_prefix=python34
         else
