@@ -60,6 +60,8 @@ Patch6: warewulf-vnfs.bootstrap.aarch64.patch
 Patch7: warewulf-vnfs.bootstrap_usb.patch
 # 10/31/17 reese.baird@intel.com - allow altarch yum mirror
 Patch8: warewulf-vnfs.centos_aarch64.patch
+# 03/05/18 reese.baird@intel.com - load msr driver for SLES
+Patch9: warewulf-vnfs.bootstrap.msr.patch
 
 
 %description
@@ -88,6 +90,7 @@ cd %{dname}
 %patch8 -p1
 %endif
 %endif
+%patch9 -p1
 
 
 %build
