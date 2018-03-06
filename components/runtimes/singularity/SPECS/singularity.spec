@@ -57,6 +57,7 @@ Source1: OHPC_macros
 ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: libarchive-devel
 BuildRequires: libtool
 BuildRequires: python
 Requires: file
