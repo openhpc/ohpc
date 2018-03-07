@@ -46,7 +46,7 @@
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.4.3
+Version: 2.4.4
 Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
@@ -57,7 +57,6 @@ Source1: OHPC_macros
 ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
-BuildRequires: libarchive-devel
 BuildRequires: libtool
 BuildRequires: python
 Requires: file
