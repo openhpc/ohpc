@@ -12,11 +12,10 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname arm-compilers-devel
-%define year 2017
 
 Summary:   OpenHPC compatibility package for Arm HPC compiler
 Name:      %{pname}%{PROJ_DELIM}
-Version:   %{year}
+Version:   1.3.4
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -109,6 +108,17 @@ if [ ! -n "${modpath}" ];then
     exit 1
 fi
 
+# cache path to generic compiler modulename
+
+generic=`find /opt/arm/modulefiles/Generic-AArch64/ -name arm-hpc-compiler | awk -F '/opt/arm/modulefiles/' '{print $2}'`
+if [ ! -n "${generic}" ];then
+    echo ""
+    echo "Error: Unable to determine path to Generic modulefiles provided by Arm compiler toolchain"
+    exit 1
+else
+    echo "--> Setting generic variant path to: $generic"
+fi
+
 # Module header
 %{__cat} << EOF > %{OHPC_MODULES}/arm/compat
 #%Module1.0#####################################################################
@@ -116,19 +126,23 @@ fi
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "OpenHPC compatibility module that enables access to modulefiles provide"
+puts stderr "OpenHPC compatibility module that enables access to modulefiles provided"
 puts stderr "by separate Arm compiler installation."
 
 }
 
 module-whatis "Name:  Compiler"
-module-whatis "Version: ${version}"
 module-whatis "Category: compiler, runtime support"
 module-whatis "Description: Arm Compiler Family (C/C++/Fortran for aarch64)"
 module-whatis "URL: https://developer.arm.com/products/software-development-tools/hpc"
 
+set    ARM_GENERIC ${generic}
+setenv ARM_GENERIC \$ARM_GENERIC
+
 # update module path hierarchy
 prepend-path    MODULEPATH          ${modpath}
+# load generic variant
+depends-on      \$ARM_GENERIC
 family "compiler"
 EOF
 
