@@ -2,4 +2,4 @@
 
 unset OMP_NUM_THREADS
 export OMP_NUM_THREADS=10
-tau_exec ./C_omp_test
+tau_exec -XrunTAUsh-callpath-param-papi-pdt-openmp-opari-profile-trace ./C_omp_test
