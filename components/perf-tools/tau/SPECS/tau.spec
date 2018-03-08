@@ -132,31 +132,58 @@ export CONFIG_ARCH=%{machine}
     -arch=%{machine} \
     -prefix=/tmp%{install_path} \
     -exec-prefix= \
-	-c++=mpicxx \
-	-cc=mpicc \
-	-fortran=$fcomp \
-	-iowrapper \
-	-mpi \
-	-mpiinc=$MPI_INCLUDE_DIR \
-	-mpilib=$MPI_LIB_DIR \
-	-slog2 \
-	-CPUTIME \
+    -fortran=$fcomp \
+    -iowrapper \
+    -slog2 \
+    -CPUTIME \
     -PROFILE \
     -PROFILECALLPATH \
-	-PROFILEPARAM \
+    -PROFILEPARAM \
 %ifarch x86_64
     -papi=$PAPI_DIR \
 %endif
-	-pdt=$PDTOOLKIT_DIR \
-	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
-	-openmp \
+    -pdt=$PDTOOLKIT_DIR \
+    -useropt="%optflags -I$PWD/include -fno-strict-aliasing" \
+    -openmp \
 %if %{compiler_family} != intel
     -opari \
 %endif
-	-extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
+    -extrashlibopts="-fPIC -L/tmp%{install_path}/lib" 
 
 make install
 make exports
+make clean
+
+./configure \
+    -arch=%{machine} \
+    -prefix=/tmp%{install_path} \
+    -exec-prefix= \
+    -c++=mpicxx \
+    -cc=mpicc \
+    -fortran=$fcomp \
+    -iowrapper \
+    -mpi \
+    -mpiinc=$MPI_INCLUDE_DIR \
+    -mpilib=$MPI_LIB_DIR \
+    -slog2 \
+    -CPUTIME \
+    -PROFILE \
+    -PROFILECALLPATH \
+    -PROFILEPARAM \
+%ifarch x86_64
+    -papi=$PAPI_DIR \
+%endif
+    -pdt=$PDTOOLKIT_DIR \
+    -useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
+    -openmp \
+%if %{compiler_family} != intel
+    -opari \
+%endif
+    -extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
+
+make install
+make exports
+
 
 # move from tmp install dir to %install_path
 rm -rf %{buildroot}
@@ -286,3 +313,4 @@ EOF
 
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 2.26-1
 - Switching to %%ohpc_compiler macro
+
