@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source ./common/TEST_ENV
 unset OMP_NUM_THREADS
 export OMP_NUM_THREADS=10
 if [ "x$ARCH" == "xx86_64" ];then
