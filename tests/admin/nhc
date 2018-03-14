@@ -14,7 +14,7 @@ fi
 }
 
 @test "[nhc] generate config file" {
-    nhc-genconf
+    run nhc-genconf
     if [ ! -f /etc/nhc/nhc.conf.auto ]; then
         flunk
     fi
