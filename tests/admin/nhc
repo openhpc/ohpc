@@ -14,13 +14,16 @@ fi
 }
 
 @test "[nhc] generate config file" {
-    run nhc-genconf
-    assert_success
+    nhc-genconf
+    if [ ! -f /etc/nhc/nhc.conf.auto ]; then
+        flunk
+    fi
 }
 
 @test "[nhc] service failure detection and restart" {
+    grep ntpd /etc/nhc/nhc.conf.auto > /etc/nhc/nhc.conf.ntpd
     systemctl stop ntpd
-    run nhc -c /etc/nhc/nhc.conf.auto
+    run nhc -c /etc/nhc/nhc.conf.ntpd
     assert_failure
     run systemctl status ntpd
     assert_success
