@@ -65,6 +65,7 @@ Patch7: warewulf-provision.ipxe-kargs.patch
 Patch8: warewulf-provision.parted_libdir.patch
 Patch9: warewulf-provision-ppc64le.patch
 Patch10: warewulf-provision.pxe_exit_status.patch
+Patch11: warewulf-provision.hostname.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -142,6 +143,7 @@ fi
 %patch8 -p1
 %patch9 -p2
 %patch10 -p2
+%patch11 -p2
 
 %build
 cd %{dname}
