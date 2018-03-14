@@ -39,6 +39,7 @@
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
+\toggletrue{isSLURM}
 \toggletrue{isx86}
 \toggletrue{isxCAT}
 
@@ -239,6 +240,9 @@ requirements is as follows:
 
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
+
+\paragraph{Add \nhc{}} \label{sec:add_nhc}
+\input{common/nhc}
 
 \subsubsection{Identify files for synchronization} \label{sec:file_import}
 \input{common/import_xcat_files}

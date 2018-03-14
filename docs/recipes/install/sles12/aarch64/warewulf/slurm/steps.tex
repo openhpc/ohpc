@@ -36,8 +36,9 @@
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
 \toggletrue{isaarch}
-\toggletrue{isWarewulf}
 \toggletrue{isSLES_ww_slurm_aarch}
+\toggletrue{isSLURM}
+\toggletrue{isWarewulf}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -200,6 +201,9 @@
 \clearpage
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
+
+\paragraph{Add \nhc{}} \label{sec:add_nhc}
+\input{common/nhc}
 
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
