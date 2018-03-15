@@ -78,6 +78,10 @@ make config \
 
 make %{?_smp_mflags}
 
+mkdir tmp
+(cd tmp; ar -x ../libmfem.a)
+mpicxx -shared -Wl,-soname,libmfem.so.3 -o libmfem.so tmp/*.o
+
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
@@ -91,6 +95,13 @@ module load superlu_dist
 make PREFIX=%{buildroot}%{install_path} install
 
 sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/share/mfem/config.mk
+
+install -m 644 libmfem.so %{buildroot}%{install_path}/lib/libmfem.so.%{version}
+pushd %{buildroot}%{install_path}/lib
+ln -s libmfem.so.%{version} libmfem.so.3
+ln -s libmfem.so.3 libmfem.so
+rm -f libmfem.a
+popd
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
