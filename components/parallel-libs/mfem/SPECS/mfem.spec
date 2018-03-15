@@ -103,6 +103,8 @@ ln -s libmfem.so.3 libmfem.so
 rm -f libmfem.a
 popd
 
+find %{buildroot}%{install_path}/. -type f -exec chmod 644 -- {} +
+
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
