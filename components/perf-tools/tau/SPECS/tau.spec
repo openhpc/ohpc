@@ -132,6 +132,8 @@ export CONFIG_ARCH=%{machine}
     -arch=%{machine} \
     -prefix=/tmp%{install_path} \
     -exec-prefix= \
+    -c++=$CXX \
+    -cc=$CC \
     -fortran=$fcomp \
     -iowrapper \
     -slog2 \
