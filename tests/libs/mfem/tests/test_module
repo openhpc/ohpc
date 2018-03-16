@@ -12,7 +12,7 @@ PKG=MFEM
 module=mfem
 testname=libs/MFEM
 library=libmfem
-header=mfem.h
+header=mfem.hpp
 rpm=mfem-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
 
 check_rms
@@ -69,15 +69,15 @@ check_rms
     fi 
 }
 
-@test "[$testname] Verify (static) library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify (dynamic) library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
         flunk "${PKG}_LIB directory not defined"
     fi
 
-    if [ ! -s ${!LIB}/${library}.a ];then
-        flunk "${library}.a does not exist"
+    if [ ! -s ${!LIB}/${library}.so ];then
+        flunk "${library}.so does not exist"
     fi 
 }
 
