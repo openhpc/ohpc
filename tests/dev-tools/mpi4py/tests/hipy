@@ -17,7 +17,7 @@ ARGS=8
 
 module load $python_module_prefix-mpi4py
 
-@test "[dev-tools/$python-mpi4py] python hello world ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[dev-tools/$python_module_prefix-mpi4py] python hello world ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ -z ${_python} ];then
     flunk "\${_python} not set"
     fi

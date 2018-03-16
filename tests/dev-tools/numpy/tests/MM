@@ -10,6 +10,6 @@ fi
 
 module load $python_module_prefix-numpy
 
-@test "[dev-tools/$python-numpy] Numpy Matrix Multiply" {
+@test "[dev-tools/$python_module_prefix-numpy] Numpy Matrix Multiply" {
     run $_python MM.py
 }
