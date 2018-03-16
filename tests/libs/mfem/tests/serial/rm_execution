@@ -1,0 +1,46 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+testname="libs/MFEM"
+
+NODES=1
+TASKS=1
+
+@test "[$testname] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    binary=laplace
+    if [ ! -x $binary ];then
+	flunk "$binary binary does not exist"
+    fi
+
+    run_mpi_binary ./${binary} "" $NODES $TASKS 
+    assert_success
+}
+
+@test "[$testname] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    binary=cantilever
+    if [ ! -x $binary ];then
+	flunk "$binary binary does not exist"
+    fi
+
+    run_mpi_binary ./${binary} "" $NODES $TASKS 
+    assert_success
+}
+
+@test "[$testname] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    binary=diffusion
+    if [ ! -x $binary ];then
+	flunk "$binary binary does not exist"
+    fi
+
+    run_mpi_binary ./${binary} "" $NODES $TASKS 
+    assert_success
+}
