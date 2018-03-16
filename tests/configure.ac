@@ -276,7 +276,7 @@ AM_CONDITIONAL(NUMPY_ENABLED,test "x$enable_numpy" = "xyes" )
 AC_ARG_ENABLE([mfem],
    [AS_HELP_STRING([--enable-mfem],[Enable mfem tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_mfem,yes)])
-AM_CONDITIONAL(ADIOS_ENABLED,test "x$enable_mfem" = "xyes" )
+AM_CONDITIONAL(MFEM_ENABLED,test "x$enable_mfem" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Metis
 AC_ARG_ENABLE([metis],
