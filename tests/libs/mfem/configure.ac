@@ -80,7 +80,7 @@ LDFLAGS="-L${MFEM_LIB} -L${HYPRE_LIB} -L${METIS_LIB} -L${NETCDF_LIB} -L${PETSC_L
 LIBS="-lmfem -lHYPRE -lmetis -lnetcdf -lpetsc -lsuperlu_dist"
 
 # Set subdirectories
-AC_CONFIG_FILES(Makefile tests/Makefile )
+AC_CONFIG_FILES(Makefile tests/Makefile tests/serial/Makefile tests/parallel/Makefile )
 
 # Configure
 AC_OUTPUT()
