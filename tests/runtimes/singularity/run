@@ -29,8 +29,9 @@ echo "Runtimes: Singularity"
 echo "-------------------------------------------------------"
 
 if [ "x$DISTRO_FAMILY" == "xCentOS" -o "x$DISTRO_FAMILY" == "xRHEL" ];then
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
     export DISTRO=centos
-    export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc-2.4.4/examples/${DISTRO}/Singularity
+    export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc-$version/examples/${DISTRO}/Singularity
     export ALTARCH_MIRROR=http://mirror.centos.org/altarch/7.4.1708/os/aarch64/
 else
     export DISTRO=opensuse
