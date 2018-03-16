@@ -1,16 +1,16 @@
-TESTS_ENVIRONMENT  = BATS_NO_SUMMARY=1
+TESTS_ENVIRONMENT    = BATS_NO_SUMMARY=1
 
-check_PROGRAMS     = p_laplace
-laplace_SOURCES    = ex1p.cpp
+TESTS                = p_laplace
+check_PROGRAMS       = p_laplace
+p_laplace_SOURCES    = ex1p.cpp
 
-check_PROGRAMS     = p_cantilever
-cantilever_SOURCES = ex2p.cpp
+TESTS               += p_cantilever
+check_PROGRAMS      += p_cantilever
+p_cantilever_SOURCES = ex2p.cpp
 
-check_PROGRAMS     = p_diffusion
-diffusion_SOURCES  = ex3p.cpp
+TESTS               += p_diffusion
+check_PROGRAMS      += p_diffusion
+p_diffusion_SOURCES  = ex3p.cpp
 
-TESTS             += p_laplace
-TESTS             += p_cantilever
-TESTS             += p_diffusion
 
 TESTS             += rm_execution

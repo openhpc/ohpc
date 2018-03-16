@@ -1,16 +1,16 @@
 TESTS_ENVIRONMENT  = BATS_NO_SUMMARY=1
 
-check_PROGRAMS     = laplace
-laplace_SOURCES    = ex1.cpp
+TESTS                = s_laplace
+check_PROGRAMS       = s_laplace
+s_laplace_SOURCES    = ex1.cpp
 
-check_PROGRAMS     = cantilever
-cantilever_SOURCES = ex2.cpp
+TESTS               += s_cantilever
+check_PROGRAMS      += s_cantilever
+s_cantilever_SOURCES = ex2.cpp
 
-check_PROGRAMS     = diffusion
-diffusion_SOURCES  = ex3.cpp
-
-TESTS             += laplace
-TESTS             += cantilever
-TESTS             += diffusion
-
-TESTS             += rm_execution
+TESTS               += s_diffusion
+check_PROGRAMS      += s_diffusion
+s_diffusion_SOURCES  = ex3.cpp
+                    
+                    
+TESTS               += rm_execution
