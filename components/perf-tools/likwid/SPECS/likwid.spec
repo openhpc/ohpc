@@ -41,7 +41,9 @@ limited to any specific architecture.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%if "%{compiler_family}" == "%{gnu_family}"
 %patch1 -p1
+%endif
 
 %build
 
