@@ -21,9 +21,20 @@ TASKS=1
 	flunk "$binary binary does not exist"
     fi
 
-    run_mpi_binary ./${binary} "" $NODES $TASKS 
+    run_mpi_binary ./${binary} "-no-vis" $NODES $TASKS 
     assert_success
 }
+
+@test "[$testname] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    binary=s_laplace_perf
+    if [ ! -x $binary ];then
+	flunk "$binary binary does not exist"
+    fi
+
+    run_mpi_binary ./${binary} "-no-vis -rs 2" $NODES $TASKS 
+    assert_success
+}
+
 
 @test "[$testname] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     binary=s_cantilever
@@ -31,7 +42,7 @@ TASKS=1
 	flunk "$binary binary does not exist"
     fi
 
-    run_mpi_binary ./${binary} "" $NODES $TASKS 
+    run_mpi_binary ./${binary} "-no-vis" $NODES $TASKS 
     assert_success
 }
 
@@ -41,6 +52,6 @@ TASKS=1
 	flunk "$binary binary does not exist"
     fi
 
-    run_mpi_binary ./${binary} "" $NODES $TASKS 
+    run_mpi_binary ./${binary} "-no-vis" $NODES $TASKS 
     assert_success
 }
