@@ -17,7 +17,7 @@ fi
 PKG=MPI4PY
 testname=mpi4py
 
-@test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     for python in "${!python_module_prefixes[@]}"; do
         module=${python_module_prefixes[$python]}-mpi4py
         rpm=${python_package_prefixes[$python]}-mpi4py-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
@@ -34,7 +34,7 @@ testname=mpi4py
     done
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     DIR=${PKG}_DIR
     if [ -z ${!DIR} ];then
         flunk "${PKG}_DIR directory not defined"
@@ -50,7 +50,7 @@ testname=mpi4py
 # Python Path
 # --------------
 
-@test "[$testname] Verify PYTHONPATH is defined and exists ($LMOD_FAMILY_COMPILER)" {
+@test "[$testname] Verify PYTHONPATH is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     if [ -z ${PYTHONPATH} ];then
         flunk "PYTHONPATH directory not defined"
     fi
