@@ -15,6 +15,3 @@ s_cantilever_SOURCES      = ex2.cpp
 TESTS                    += s_diffusion
 check_PROGRAMS           += s_diffusion
 s_diffusion_SOURCES       = ex3.cpp
-                    
-                    
-TESTS                    += rm_execution

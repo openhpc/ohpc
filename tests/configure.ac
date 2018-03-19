@@ -272,17 +272,17 @@ AC_ARG_ENABLE([numpy],
    [AX_OPTION_DEFAULT(type=long,enable_numpy,yes)])
 AM_CONDITIONAL(NUMPY_ENABLED,test "x$enable_numpy" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# MFEM
-AC_ARG_ENABLE([mfem],
-   [AS_HELP_STRING([--enable-mfem],[Enable mfem tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_mfem,yes)])
-AM_CONDITIONAL(MFEM_ENABLED,test "x$enable_mfem" = "xyes" )
-#------------------------------------------------------------------------------------------
 # Metis
 AC_ARG_ENABLE([metis],
    [AS_HELP_STRING([--enable-metis],[Enable metis tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_metis,yes)])
 AM_CONDITIONAL(METIS_ENABLED,test "x$enable_metis" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# MFEM
+AC_ARG_ENABLE([mfem],
+   [AS_HELP_STRING([--enable-mfem],[Enable mfem tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_mfem,yes)])
+AM_CONDITIONAL(MFEM_ENABLED,test "x$enable_mfem" = "xyes" )
 #------------------------------------------------------------------------------------------
 # mpi4py
 AC_ARG_ENABLE([mpi4py],

@@ -15,7 +15,7 @@ testname="libs/MFEM"
 NODES=2
 TASKS=8
 
-@test "[$testname] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$testname] p_laplace MPI binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     binary=p_laplace
     if [ ! -x $binary ];then
 	flunk "$binary binary does not exist"
@@ -25,7 +25,7 @@ TASKS=8
     assert_success
 }
 
-@test "[$testname] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$testname] p_laplace_perf MPI binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     binary=p_laplace_perf
     if [ ! -x $binary ];then
 	flunk "$binary binary does not exist"
@@ -35,7 +35,7 @@ TASKS=8
     assert_success
 }
 
-@test "[$testname] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$testname] p_cantilever MPI binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     binary=p_cantilever
     if [ ! -x $binary ];then
 	flunk "$binary binary does not exist"
@@ -45,7 +45,7 @@ TASKS=8
     assert_success
 }
 
-@test "[$testname] MPI C++ binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$testname] p_diffusion MPI binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     binary=p_diffusion
     if [ ! -x $binary ];then
 	flunk "$binary binary does not exist"
