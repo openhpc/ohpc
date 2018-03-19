@@ -21,7 +21,7 @@ setup() {
     module load $module
 }
 
-@test "[$testname] Verify $module module is loaded and matches rpm version" {
+@test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     module list $module | grep "1) $module" >& .cmd_output || exit 1
     run grep $module .cmd_output 
     assert_success
@@ -32,7 +32,7 @@ setup() {
     assert_output "  1) $module/$version"
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists" {
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     DIR=${PKG}_DIR
     if [ -z ${!DIR} ];then
         flunk "${PKG}_DIR directory not defined"
@@ -47,7 +47,7 @@ setup() {
 # Binaries
 # ----------
 
-@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     BIN=${PKG}_BIN
     if [ -z ${!BIN} ];then
         flunk "${PKG}_BIN directory not defined"
@@ -58,12 +58,12 @@ setup() {
     fi 
 }
 
-@test "[$testname] Verify availability of taucc binary" {
+@test "[$testname] Verify availability of taucc binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     run which taucc
     assert_success
 }
 
-@test "[$testname] Verify availability of pprof binary" {
+@test "[$testname] Verify availability of pprof binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     run which pprof
     assert_success
 }
@@ -72,7 +72,7 @@ setup() {
 # Man pages
 # ----------
 
-@test "[$testname] Verify availability of man page for taucc" {
+@test "[$testname] Verify availability of man page for taucc ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     DIR=${PKG}_DIR
 
     if [ -z ${!DIR} ];then
@@ -92,7 +92,7 @@ setup() {
 # Lib Tests
 # ----------
 
-@test "[$testname] Verify module ${PKG}_LIB is defined and exists" {
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
@@ -104,7 +104,7 @@ setup() {
     fi 
 }
 
-@test "[$testname] Verify dynamic library available in ${PKG}_LIB" {
+@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     LIB=${PKG}_LIB
 
     if [ -z ${!LIB} ];then
