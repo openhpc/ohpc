@@ -4,4 +4,4 @@
  drivers += wmi, processor, button, sg, igb, i2c_algo_bit, dca, ptp
  drivers += pps_core, ahci, libahci, libata, scsi_mod
  drivers += nfs_acl, nfsv3, nfsv4, coretemp
-+modprobe += msr
++drivers += msr
