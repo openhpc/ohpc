@@ -10,7 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%global clang_sha b11539abc46cbd19189c5719d1e30539de3a93b9
+%global clang_sha 64043d5cec9fb02d1b0fd80c9f2c4e9e4f09cf8f
 %global flang_sha 37e86e06f74d9bd91ef6bb511c026753b9124006
 
 %global pname llvm5-compilers
@@ -18,14 +18,14 @@
 
 Summary:   The LLVM Compiler Infrastructure
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.0.0
+Version:   5.0.1
 Release:   1%{?dist}
 License:   UIUC, Apache-2.0
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://www.llvm.org
 Source0:   http://releases.llvm.org/%{version}/llvm-%{version}.src.tar.xz
 Source1:   https://github.com/flang-compiler/clang/archive/%{clang_sha}.tar.gz
-Source2:   https://github.com/flang-compiler/flang/archive/%{flang_sha}.tar.gz
+Source2:   https://github.com/flang-compiler/flang/archive/flang_20180308.tar.gz
 Source3:   http://releases.llvm.org/%{version}/compiler-rt-%{version}.src.tar.xz
 Source4:   http://releases.llvm.org/%{version}/libcxx-%{version}.src.tar.xz
 Source5:   http://releases.llvm.org/%{version}/libcxxabi-%{version}.src.tar.xz
@@ -93,7 +93,7 @@ ln -s ../../openmp-%{version}.src openmp
 cd ../..
 
 ln -s llvm-%{version}.src llvm
-ln -s flang-%{flang_sha} flang
+ln -s flang-flang_20180308 flang
 
 # Flang code is not ready for -Werror
 %{__sed} -i -e 's/-Werror/-Wall/g' flang/CMakeLists.txt
