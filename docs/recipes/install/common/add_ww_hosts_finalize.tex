@@ -1,7 +1,7 @@
 % ohpc_validation_newline
 % ohpc_validation_comment Optionally, add arguments to bootstrap kernel
 % ohpc_command if [[ ${enable_kargs} -eq 1 ]]; then
-% ohpc_command    wwsh -y provision set "${compute_regex}" --kargs=${kargs}
+% ohpc_command   wwsh -y provision set "${compute_regex}" --kargs="${kargs}"
 % ohpc_command fi
 
 % ohpc_validation_newline
