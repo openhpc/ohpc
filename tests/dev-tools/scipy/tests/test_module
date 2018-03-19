@@ -16,6 +16,7 @@ fi
 
 PKG=SCIPY
 module=scipy
+testname=scipy
 
 @test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
     for python in "${!python_module_prefixes[@]}"; do
