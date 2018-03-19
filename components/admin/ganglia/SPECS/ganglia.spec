@@ -38,6 +38,7 @@ Patch0:             ganglia-web-3.5.7-statedir.patch
 #Patch1:             ganglia-3.7.1-py-syntax.patch
 Patch2:             ganglia-no-private-apr.patch
 Patch3:             ganglia-3.7.2-apache.patch
+Patch4:             disk_monitoring.patch
 %if 0%{?systemd}
 BuildRequires:      systemd
 %endif
@@ -166,6 +167,10 @@ install -m 0644 %{SOURCE2} gmond/gmond.service.in
 install -m 0644 %{SOURCE3} gmetad/gmetad.service.in
 
 %patch3 -p0
+
+# karl.w.schulz@ices.utexas.edu (03/19/18)
+# fix timings for disk_totals (https://github.com/openhpc/ohpc/issues/681)
+%patch4 -p1
 
 # web part
 %setup -n ganglia-%{gangver} -q -T -D -a 1

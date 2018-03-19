@@ -1,0 +1,6 @@
+372,373c372,373
+<   collect_every = 1800\n\
+<   time_threshold = 3600\n\
+---
+>   collect_every = 180\n\
+>   time_threshold = 180\n\
