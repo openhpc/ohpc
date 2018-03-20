@@ -14,7 +14,7 @@
 
 Summary: An extended/exascale implementation of PMI
 Name: %{pname}%{PROJ_DELIM}
-Version: 1.2.3
+Version: 2.1.1
 Release: 1%{?dist}
 License: BSD
 URL: https://pmix.github.io/pmix/
