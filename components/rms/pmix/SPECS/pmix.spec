@@ -49,7 +49,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
+#%patch0 -p1
 module load autotools
 ./autogen.sh 
 
