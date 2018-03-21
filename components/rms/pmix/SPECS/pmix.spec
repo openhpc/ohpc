@@ -25,6 +25,7 @@ Patch0: singleton.5391e43.patch
 
 BuildRequires: libevent-devel
 BuildRequires: lmod-ohpc libtool-ohpc
+#!BuildIgnore: post-build-checks
 
 %global install_path %{OHPC_ADMIN}/%{pname}
 
