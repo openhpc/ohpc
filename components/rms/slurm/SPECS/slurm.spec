@@ -10,6 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 %global _with_mysql  1
+%global _with_pmix --with-pmix=%{OHPC_ADMIN}/pmix
 
 %define pname slurm
 
@@ -85,6 +86,8 @@ Obsoletes: slurm-lua%{PROJ_DELIM} slurm-munge%{PROJ_DELIM} slurm-plugins%{PROJ_D
 %if 0%{?suse_version}
 PreReq: %{insserv_prereq} %{fillup_prereq}
 %endif
+BuildRequires: pmix%{PROJ_DELIM}
+Requires: pmix%{PROJ_DELIM}
 #!BuildIgnore: post-build-checks
 
 # fake systemd support when building rpms on other platforms
