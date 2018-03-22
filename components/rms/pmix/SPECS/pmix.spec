@@ -14,17 +14,17 @@
 
 Summary: An extended/exascale implementation of PMI
 Name: %{pname}%{PROJ_DELIM}
-Version: 1.2.3
+Version: 2.1.1
 Release: 1%{?dist}
 License: BSD
 URL: https://pmix.github.io/pmix/
 Group: %{PROJ_NAME}/rms
 Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 Source1: OHPC_macros
-Patch0: singleton.5391e43.patch
 
 BuildRequires: libevent-devel
 BuildRequires: lmod-ohpc libtool-ohpc
+#!BuildIgnore: post-build-checks
 
 %global install_path %{OHPC_ADMIN}/%{pname}
 
@@ -49,9 +49,6 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
-module load autotools
-./autogen.sh 
 
 %build
 CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
