@@ -24,6 +24,12 @@ BuildArch: aarch64
 #!BuildIgnore: post-build-checks
 
 Requires: lmod%{PROJ_DELIM}
+Provides: libflang.so()(64bit)
+Provides: libflangrti.so()(64bit)
+Provides: libompstub.so()(64bit)
+Provides: libomp.so()(64bit)
+Provides: libomp.so(VERSION)(64bit)
+AutoReq:  no
 
 %description
 
