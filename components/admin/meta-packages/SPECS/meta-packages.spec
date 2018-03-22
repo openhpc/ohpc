@@ -377,6 +377,12 @@ Requires:  slurm-contribs%{PROJ_DELIM}
 Requires:  slurm-example-configs%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
 Requires:  munge%{PROJ_DELIM}
+%if 0%{?centos_version} || 0%{?rhel_version}
+Requires:  hwloc-libs
+%endif
+%if 0%{?sles_version} || 0%{?suse_version}
+Requires:  libhwloc5
+%endif
 %description -n %{PROJ_NAME}-slurm-client
 Collection of client packages for SLURM
 
