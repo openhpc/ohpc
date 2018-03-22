@@ -15,7 +15,9 @@ resource management under \rms{}.
 % begin_ohpc_run
 % ohpc_comment_header Resource Manager Startup \ref{sec:rms_startup}
 \begin{lstlisting}[language=bash,keywords={}]
-# start pbspro daemons on master host
+# start munge and pbspro daemons on master host
+[sms](*\#*) systemctl enable munge
+[sms](*\#*) systemctl start munge
 [sms](*\#*) systemctl enable pbs
 [sms](*\#*) systemctl start pbs
 \end{lstlisting}
