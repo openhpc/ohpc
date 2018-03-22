@@ -21,7 +21,6 @@ URL: https://pmix.github.io/pmix/
 Group: %{PROJ_NAME}/rms
 Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 Source1: OHPC_macros
-Patch0: singleton.5391e43.patch
 
 BuildRequires: libevent-devel
 BuildRequires: lmod-ohpc libtool-ohpc
@@ -50,9 +49,6 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#%patch0 -p1
-#module load autotools
-#./autogen.sh 
 
 %build
 CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
