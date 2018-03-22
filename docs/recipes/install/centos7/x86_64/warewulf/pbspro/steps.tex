@@ -151,6 +151,7 @@ repository, which is shipped with CentOS and is enabled by default.
 [sms](*\#*) (*\chrootinstall*) pbspro-execution-ohpc
 [sms](*\#*) perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
 [sms](*\#*) echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
+[sms](*\#*) echo "PBS_AUTH_METHOD=munge" >> /etc/pbs.conf
 [sms](*\#*) chroot $CHROOT opt/pbs/libexec/pbs_habitat
 [sms](*\#*) perl -pi -e "s/\$clienthost \S+/\$clienthost ${sms_name}/" $CHROOT/var/spool/pbs/mom_priv/config
 [sms](*\#*) echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
@@ -200,13 +201,15 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/nagios}
 
 \clearpage
+\paragraph{Add \mrsh{}}
+\input{common/mrsh}
+
 \paragraph{Add \Ganglia{} monitoring}
 \input{common/ganglia}
 
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
-%\clearpage
 \paragraph{Add \genders{}}
 \input{common/genders}
 
@@ -219,6 +222,7 @@ repository, which is shipped with CentOS and is enabled by default.
 %\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
+\input{common/import_ww_files_pbs.tex}
 \input{common/import_ww_files_ib_centos}
 \input{common/finalize_provisioning}
 \input{common/add_ww_hosts_intro}
