@@ -25,7 +25,7 @@ Group:     %{PROJ_NAME}/compiler-families
 URL:       http://www.llvm.org
 Source0:   http://releases.llvm.org/%{version}/llvm-%{version}.src.tar.xz
 Source1:   https://github.com/flang-compiler/clang/archive/%{clang_sha}.tar.gz
-Source2:   https://github.com/flang-compiler/flang/archive/flang_20180308.tar.gz
+Source2:   https://github.com/flang-compiler/flang/archive/flang_20180319.tar.gz
 Source3:   http://releases.llvm.org/%{version}/compiler-rt-%{version}.src.tar.xz
 Source4:   http://releases.llvm.org/%{version}/libcxx-%{version}.src.tar.xz
 Source5:   http://releases.llvm.org/%{version}/libcxxabi-%{version}.src.tar.xz
@@ -93,7 +93,7 @@ ln -s ../../openmp-%{version}.src openmp
 cd ../..
 
 ln -s llvm-%{version}.src llvm
-ln -s flang-flang_20180308 flang
+ln -s flang-flang_20180319 flang
 
 # Flang code is not ready for -Werror
 %{__sed} -i -e 's/-Werror/-Wall/g' flang/CMakeLists.txt
