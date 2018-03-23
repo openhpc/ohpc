@@ -8,7 +8,7 @@
 % ohpc_validation_comment Install Lustre client on master
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Add Lustre client software to master host
-[sms](*\#*) (*\install*) lustre-client-ohpc lustre-client-ohpc-modules
+[sms](*\#*) (*\install*) lustre-client-ohpc kmod-lustre-client-ohpc
 \end{lstlisting}
 % end_ohpc_run
 
@@ -16,7 +16,7 @@
 % ohpc_validation_comment Enable lustre in WW compute image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Include Lustre client software in compute image
-[sms](*\#*) (*\chrootinstall*) lustre-client-ohpc lustre-client-ohpc-modules
+[sms](*\#*) (*\chrootinstall*) lustre-client-ohpc kmod-lustre-client-ohpc
 
 # Include mount point and file system mount in compute image
 [sms](*\#*) mkdir $CHROOT/mnt/lustre
