@@ -107,7 +107,7 @@ $groupChrootInstall =~ s/\\\$/\$/;
 # print "BaseOS              = $BaseOS\n";
 # print "VERLONG             = $verlong\n";
 # print "OSTree              = $OSTree\n";
- print "IMAGE              = $image\n";
+# print "IMAGE               = $image\n";
 # exit(1);
 
 if( $Install eq "" || $chrootInstall eq "" || $groupInstall eq "" || $groupChrootInstall eq "" ) {
