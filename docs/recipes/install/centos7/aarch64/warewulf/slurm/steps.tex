@@ -65,6 +65,17 @@
 \input{common/requirements}
 \input{common/inputs}
 
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
+% ohpc_validation_newline
+% ohpc_command yum repolist | grep -q OpenHPC
+% ohpc_command if [ $? -ne 0 ];then
+% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
+% ohpc_command    exit 1
+% ohpc_command fi
+% end_ohpc_run
+
 % Base Operating System --------------------------------------------
 
 \section{Install Base Operating System (BOS)}
