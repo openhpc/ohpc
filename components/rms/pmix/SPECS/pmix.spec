@@ -24,6 +24,7 @@ Source1: OHPC_macros
 
 BuildRequires: libevent-devel
 BuildRequires: lmod-ohpc libtool-ohpc
+BuildRequires: gcc-c++
 #!BuildIgnore: post-build-checks
 
 %global install_path %{OHPC_ADMIN}/%{pname}
@@ -51,7 +52,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %setup -q -n %{pname}-%{version}
 
 %build
-CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
+CFLAGS="%{optflags}" ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 %{__make} %{?_smp_mflags}
 
 %install
