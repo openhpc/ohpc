@@ -76,12 +76,12 @@ routines in the host code (either Fortran or C) can transparently change
 how they process the data.
 
 %package -n %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Summary: Bindings for %{python_flavor} to adios
+Summary: Bindings for %{python_prefix} to adios
 Group: %{PROJ_NAME}/io-libs
 BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 Requires: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} = %{version}-%{release}
 %description -n %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-This package includes the %{python_flavor} API to provide a
+This package includes the %{python_prefix} API to provide a
 helpful interface to Adios through Python
 
 %prep
