@@ -1,5 +1,6 @@
-Prior to booting the {\em compute} hosts, we set them up to the network boot
-mode:
+Prior to booting the {\em compute} hosts, we configure them to use PXE as their
+next boot mode. After the initial PXE, ensuing boots will return to using the default boot device
+specified in the BIOS.
 
 % begin_ohpc_run
 % ohpc_comment_header Set nodes to netboot \ref{sec:boot_computes}

@@ -1,6 +1,6 @@
 % -*- mode: latex; fill-column: 120; -*- 
 
-Next step is adding \OHPC{} components to the {\em compute} nodes that at this
+The next step is adding \OHPC{} components to the {\em compute} nodes that at this
 point are running basic OSes.  This process will leverage two \xCAT{}-provided
 commands: \texttt{psh} to run \texttt{\pkgmgr{}} installer on all the
 nodes in parallel  and \texttt{xdcp} to distribute configuration files from the
@@ -11,8 +11,8 @@ properly.
 
 \xCAT{} has automatically setup an  OS repository on the SMS and configured the
 nodes to use it, but it has  also enabled online OS repositories, which will
-cause  \texttt{\pkgmgr{}} failures if there is no connection to public network. 
-To avoid this, we disable the online repositories
+cause  \texttt{\pkgmgr{}} failures if there is no connection to the public internet. 
+To avoid this, we disable the online repositories:
 
 % begin_ohpc_run
 % ohpc_comment_header Setup nodes repositories and Install OHPC components \ref{sec:add_components}
@@ -33,7 +33,7 @@ setup in on the SMS in \S\ref{sec:enable_repo}
 [sms](*\#*) psh compute yum-config-manager --add-repo=http://$sms_ip/$ohpc_repo_dir/OpenHPC.local.repo
 # Replace local path with SMS URL
 [sms](*\#*) psh compute "perl -pi -e 's/file:\/\/\@PATH\@/http:\/\/$sms_ip"${ohpc_repo_dir//\//"\/"}"/s' \
-/etc/yum.repos.d/OpenHPC.local.repo"
+        /etc/yum.repos.d/OpenHPC.local.repo"
 \end{lstlisting}
 % end_ohpc_run
 

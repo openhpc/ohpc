@@ -20,6 +20,7 @@
 
 # Create mount point and file system mount
 [sms](*\#*) psh compute mkdir /mnt/lustre
-[sms](*\#*) psh compute echo "\""${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock,retry=2 0 0"\"" \>\> /etc/fstab
+[sms](*\#*) psh compute echo  \ 
+        "\""${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock,retry=2 0 0"\"" \>\> /etc/fstab
 \end{lstlisting}
 % end_ohpc_run
