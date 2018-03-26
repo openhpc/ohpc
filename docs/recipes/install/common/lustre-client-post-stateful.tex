@@ -13,7 +13,7 @@ attached to \texttt{ib0}. Note that these modifications are made to both the
 % ohpc_validation_comment Enable o2ib for Lustre
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [sms](*\#*) echo "options lnet networks=o2ib(ib0)" >> /etc/modprobe.d/lustre.conf
-[sms](*\#*) psh compute echo "\""options lnet networks=o2ib(ib0)"\"" \>\> /etc/modprobe.d/lustre.conf
+[sms](*\#*) psh compute echo "\""options lnet networks=o2ib\(ib0\)"\"" \>\> /etc/modprobe.d/lustre.conf
 \end{lstlisting}
 % end_ohpc_run
 
