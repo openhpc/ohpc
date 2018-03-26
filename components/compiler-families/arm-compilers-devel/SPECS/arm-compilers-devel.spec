@@ -35,12 +35,7 @@ AutoReq:  no
 
 Provides OpenHPC-style module compatibility for use with the Arm HPC compiler suite.
 
-%install
-
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/arm
-
-
-%pre
+%prep
 
 # Verify Arm HPC compilers are installed. Punt if not detected.
 
@@ -79,7 +74,9 @@ if [ -z "${versions}" ]; then
     exit 1
 fi
 
-%post
+%install
+
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/arm
 
 arm_subpath="aarch64-linux/bin/armclang$"
 packages=`rpm -qal | grep ${arm_subpath}`
@@ -117,7 +114,7 @@ else
 fi
 
 # Module header
-%{__cat} << EOF > %{OHPC_MODULES}/arm/compat
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/arm/compat
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
