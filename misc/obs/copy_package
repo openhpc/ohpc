@@ -80,7 +80,7 @@ query_rpm_release () {
 
     for repo in $repos; do
 	for arch in $arches; do
-	    release=$(osc api -X GET "/build/$branchCurrent/$repo/$arch/$package/" | grep $arch.rpm | head -1 | perl -pe 's/.*binary filename=\S+-(\d+)\.(\d+)\.x86_64\.rpm".*$/$1/')
+	    release=$(osc api -X GET "/build/$branchCurrent/$repo/$arch/$package/" | grep $arch.rpm | head -1 | perl -pe "s/.*binary filename=\S+-(\d+)\.(\d+)\.$arch\.rpm\".*\$/\$1/")
 	    if [ -n "$release" ];then
 		if [ $release -gt $maxRelease ];then
 		    maxRelease=$release
