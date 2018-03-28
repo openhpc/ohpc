@@ -42,11 +42,7 @@ Patch4:             disk_monitoring.patch
 %if 0%{?systemd}
 BuildRequires:      systemd
 %endif
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:      librrd8
-%else
 BuildRequires:      rrdtool > 1.4.7
-%endif
 BuildRequires:      libpng-devel
 BuildRequires:      libart_lgpl-devel
 BuildRequires:      libconfuse-devel
