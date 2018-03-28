@@ -55,7 +55,6 @@ BuildRequires:      perl
 BuildRequires:      fdupes
 BuildRequires:      libapr1-devel
 BuildRequires:      libexpat-devel
-Requires:           rrdtool < 1.7.0
 # Can't find memcached built for SLES
 #BuildRequires:      php5-memcached
 %else
