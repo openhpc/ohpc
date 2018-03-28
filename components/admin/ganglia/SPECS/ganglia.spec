@@ -42,7 +42,7 @@ Patch4:             disk_monitoring.patch
 %if 0%{?systemd}
 BuildRequires:      systemd
 %endif
-BuildRequires:      rrdtool-devel > 1.4.7
+BuildRequires:      rrdtool-devel
 BuildRequires:      libpng-devel
 BuildRequires:      libart_lgpl-devel
 BuildRequires:      libconfuse-devel
@@ -78,7 +78,7 @@ well-defined XML format.
 Summary:            Ganglia Web Frontend
 Group:              Applications/Internet
 Version:            %{webver}
-Requires:           rrdtool > 1.4.7
+Requires:           rrdtool
 Requires:           php
 Requires:           php-gd
 Requires:           php-ZendFramework
