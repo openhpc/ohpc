@@ -41,7 +41,6 @@ provides: perl(LosF_history_utils)
 %if 0%{?sles_version} || 0%{?suse_version}
 Requires: perl-Config-IniFiles >= 2.43
 Requires: perl-Log-Log4perl
-Requires: rrdtool < 1.7.0
 %else
 requires: yum-plugin-downloadonly
 %endif
