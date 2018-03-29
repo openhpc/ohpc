@@ -23,8 +23,8 @@ pre-packaged binary RPMs available per architecture type are summarized as follo
 
 Base OS     | aarch64 | x86_64  | noarch
 :---:       | :---:   | :---:   | :---:
-CentOS 7.4  | 309     | 517     | 34
-SLES 12 SP3 | 317     | 521     | 34
+CentOS 7.4  | 344     | 552     | 35
+SLES 12 SP3 | 352     | 556     | 35
 
 A list of all available components is available on the OpenHPC
 [wiki](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.3), and
