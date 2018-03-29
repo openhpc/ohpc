@@ -107,6 +107,9 @@ make ; %{parser} steps.tex > recipe.sh ; popd
 pushd docs/recipes/install/sles12/aarch64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
+pushd docs/recipes/install/sles12/aarch64/warewulf/pbspro
+make ; %{parser} steps.tex > recipe.sh ; popd
+
 %install
 
 %{__mkdir_p} %{buildroot}%{OHPC_PUB}/doc
@@ -151,6 +154,10 @@ install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHP
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
 %define lpath sles12/aarch64/warewulf/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
+%define lpath sles12/aarch64/warewulf/pbspro
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
