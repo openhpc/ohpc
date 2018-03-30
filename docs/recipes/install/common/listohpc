@@ -8,6 +8,19 @@ fi
 
 which repoquery >& /dev/null || { echo "repoquery must be installed locally"; exit 1; }
 
+naturalSort=0
+
+while getopts ":n" opt; do
+  case ${opt} in
+    n ) # process option t
+	  naturalSort=1
+      ;;
+    \? ) echo "Usage: cmd [-n]"
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
 version=$1
 
 minor_ver=`echo ${version} | cut -d '.' -f1,2`
@@ -109,6 +122,11 @@ echo $groups
 echo
 
 for grp in ${groups}; do
-    grep "ohpc/${grp}" ${logfile}.all | sort -k 1.1,1.2 -k2V  >& ${logfile}.${grp} 
+    if [[ $naturalSort -eq 1 ]];then
+	grep "ohpc/${grp}" ${logfile}.all | sort   >& ${logfile}.${grp} 
+    else
+	grep "ohpc/${grp}" ${logfile}.all | sort -k 1.1,1.2 -k2V  >& ${logfile}.${grp} 
+    fi
+
 done
 
