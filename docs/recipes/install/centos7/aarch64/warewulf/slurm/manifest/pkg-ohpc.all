@@ -173,6 +173,9 @@ openmpi-gnu7-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful im
 openmpi3-gnu7-ohpc 3.0.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi3-pmix-slurm-gnu7-ohpc 3.0.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 papi-ohpc 5.6.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
+pbspro-client-ohpc 14.1.2 https://github.com/PBSPro/pbspro ohpc/rms PBS Professional for a client host
+pbspro-execution-ohpc 14.1.2 https://github.com/PBSPro/pbspro ohpc/rms PBS Professional for an execution host
+pbspro-server-ohpc 14.1.2 https://github.com/PBSPro/pbspro ohpc/rms PBS Professional for a server host
 pdsh-mod-slurm-ohpc 2.33 http://sourceforge.net/projects/pdsh System Environment/Base Provides support for running pdsh under SLURM allocations
 pdsh-ohpc 2.33 http://sourceforge.net/projects/pdsh ohpc/admin Parallel remote shell program
 pdtoolkit-gnu-ohpc 3.23 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
