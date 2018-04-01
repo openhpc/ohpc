@@ -58,7 +58,7 @@ echo "Querying available packages for baseOS=${baseos}, arch=${arch}: minor_ver=
 
 if [[ "${arch}" == "aarch64" ]];then
     echo "Querying aarch64..."
-    skip="mvapich2|pbspro|impi-ohpc|lmod-defaults-intel"
+    skip="mvapich2|impi-ohpc|lmod-defaults-intel"
 fi
 
 repobase="http://build.openhpc.community/OpenHPC:/${minor_ver}/${baseos}"
