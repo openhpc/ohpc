@@ -26,16 +26,14 @@ credential files on {\em compute} nodes:
 
 \nottoggle{isxCATstateful}{Alternatively, the \texttt{updatenode compute -f} command
 can be used. This re-synchronizes (i.e. copies) all the files defined in the
-\texttt{syncfile} setup in Section \ref{sec:file_import}.}  \\
+\texttt{syncfile} setup in Section \ref{sec:file_import}. \\}  
 
 \vspace*{0.2cm}
 \input{common/prun}
 
 \iftoggle{isSLES_ww_slurm_x86}{\clearpage}
-\iftoggle{isxCATstateful}{\clearpage}
 \iftoggle{isxCAT}{\clearpage}
 
-  
 \subsection{Interactive execution}
 To use the newly created ``test'' account to compile and execute the
 application {\em interactively} through the resource manager, execute the
