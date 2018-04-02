@@ -25,23 +25,15 @@ credential files on {\em compute} nodes:
 % end_ohpc_run
 
 \nottoggle{isxCATstateful}{Alternatively, the \texttt{updatenode compute -f} command
-can be used. This is re-synchronize (i.e. copy) all the files defined in the
-\texttt{syncfile} setup in Section \ref{sec:file_import}.} 
+can be used. This re-synchronizes (i.e. copies) all the files defined in the
+\texttt{syncfile} setup in Section \ref{sec:file_import}.}  \\
 
-
-\OHPC{} includes a simple ``hello-world'' MPI application in the
-\path{/opt/ohpc/pub/examples} directory that can be used for this quick
-compilation and execution. \OHPC{} also provides a companion job-launch script
-named \texttt{prun} that is installed in concert with the pre-packaged MPI
-toolchains. At present, \OHPC{} is unable to include the PMI process management
-server normally included within \SLURM{} which implies that \texttt{srun} cannot
-be use for MPI job launch. Instead, native job launch mechanisms provided by
-the MPI stacks are utilized and \texttt{prun} abstracts this process for the
-various stacks to retain a single launch command.
+\vspace*{0.2cm}
+\input{common/prun}
 
 \iftoggle{isSLES_ww_slurm_x86}{\clearpage}
 \iftoggle{isxCATstateful}{\clearpage}
-%\iftoggle{isCentOS_ww_slurm_x86}{\clearpage}
+\iftoggle{isxCAT}{\clearpage}
 
   
 \subsection{Interactive execution}
