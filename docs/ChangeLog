@@ -9,7 +9,7 @@ Version 1.3.4 (02 April 2018)
     public install path (`/opt/ohpc/pub`).  This convention update was made to avoid interaction with distro (or other
     community) provided RPMs that might package the same dynamic library. All of the relevant OpenHPC packages have been
     rebuilt to provide self-consistent dependencies.  As an example of the change, the following highlights the
-    resulting change for the library that is tagged as being provided by the `gsl-gnu7-ohpc` RPM:
+    resulting change for the .so that is tagged as being provided by the `gsl-gnu7-ohpc` RPM:
 
     Old convention: libgsl.so.23()(64bit)
     New convention: libgsl.so.23()(64bit)(ohpc)
@@ -38,7 +38,7 @@ Version 1.3.4 (02 April 2018)
 
   * updated Singularity modulefiles for consistency (https://github.com/openhpc/ohpc/issues/601) 
   * updated SLURM to address CVE-2018-7033 (https://github.com/openhpc/ohpc/issues/605)
-  * include Warewulf patch to fix non-zero exist status for `wwsh pxe update` (https://github.com/openhpc/ohpc/issues/636)
+  * include Warewulf patch to fix non-zero exit status for `wwsh pxe update` (https://github.com/openhpc/ohpc/issues/636)
   * update default Ganglia settings for `disk_total` (https://github.com/openhpc/ohpc/issues/681)
   * document requirement to set `PBS_LEAF_NAME` in PBS Professional recipes (https://github.com/openhpc/ohpc/issues/684)
   * updated llvm builds to leverage distro gcc during build (https://github.com/openhpc/ohpc/issues/649)
