@@ -17,7 +17,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        3.24
+Version:        3.25
 Release:        1%{?dist}
 License:        Program Database Toolkit License
 Summary:        PDT is a framework for analyzing source code
@@ -25,6 +25,7 @@ Url:            http://www.cs.uoregon.edu/Research/pdt
 Group:          %{PROJ_NAME}/perf-tools
 Source:         https://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/pdtoolkit-%{version}.tar.gz
 Source1:        OHPC_macros
+Patch1:         pdtoolkit-3.25-umask.patch
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 
@@ -41,6 +42,7 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 
 %build
@@ -55,18 +57,7 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
         -GNU
 %endif
 
-export DONT_STRIP=1
 make %{?_smp_mflags}
-
-%install
-%ohpc_setup_compiler
-
-./configure -prefix=%buildroot%{install_path} \
-%if "%{compiler_family}" == "intel"
-        -icpc
-%else
-        -GNU
-%endif
 
 export DONT_STRIP=1
 make %{?_smp_mflags} install
@@ -84,8 +75,12 @@ rm -f %buildroot%{install_path}/.last_config
 
 %ifarch aarch64
 %define arch_dir arm64_linux
-%else
+%endif
+%ifarch x86_64
 %define arch_dir x86_64
+%endif
+%ifarch ppc64le
+%define arch_dir ibm64linux
 %endif
 
 pushd %buildroot%{install_path}/%{arch_dir}/lib
@@ -102,17 +97,17 @@ ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
 %endif
 rm -f edg44-c-roseparse
-%ifnarch aarch64
+%ifnarch aarch64 || ppc64le
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
 %endif
 rm -f edg44-cxx-roseparse
-%ifnarch aarch64
+%ifnarch aarch64 || ppc64le
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
 %endif
 rm -f edg44-upcparse
-%ifnarch aarch64
+%ifnarch aarch64 || ppc64le
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 %endif

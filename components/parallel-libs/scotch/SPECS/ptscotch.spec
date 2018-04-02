@@ -80,6 +80,10 @@ popd
 
 pushd src
 make prefix=%{buildroot}%{install_path} install
+
+# install parmetis compatibility header
+install -m644 libscotchmetis/parmetis.h %{buildroot}%{install_path}/include/
+
 # make dynamic, remove static linkings
 pushd %{buildroot}%{install_path}/lib
 for static_lib in *.a; do \

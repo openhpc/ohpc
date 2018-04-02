@@ -60,10 +60,12 @@ if test x$enable_pxse = xyes ;then
    AC_MSG_RESULT([yes])
    AC_SUBST(COMPILER_FAMILIES,["gnu7 intel"])       
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi3 impi"])
+   AC_SUBST(PYTHON_FAMILIES,["python2 python3"])
 else
    AC_MSG_RESULT([no])
    AC_SUBST(COMPILER_FAMILIES,[gnu7])       
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi3"])
+   AC_SUBST(PYTHON_FAMILIES,["python2 python3"])
 fi
 
 # Compiler families can be overriden by user
@@ -75,6 +77,11 @@ AC_ARG_WITH(compiler-families,
 AC_ARG_WITH(mpi-families,
 	[AS_HELP_STRING([--with-mpi-families=[MPI]],[Override desired MPI families])],
 	[MPI_FAMILIES=$withval])
+
+# Python families can be overriden by user
+AC_ARG_WITH(python-families,
+	[AS_HELP_STRING([--with-python-families=[PYTHON]],[Override desired Python families])],
+	[PYTHON_FAMILIES=$withval])
 
 # Fabric options
 AC_ARG_WITH(fabric,
@@ -247,6 +254,12 @@ AC_ARG_ENABLE([hypre],
    [AX_OPTION_DEFAULT(type=long,enable_hypre,yes)])
 AM_CONDITIONAL(HYPRE_ENABLED,test "x$enable_hypre" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Likwid
+AC_ARG_ENABLE([likwid],
+   [AS_HELP_STRING([--enable-likwid],[Enable likwid tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_likwid,yes)])
+AM_CONDITIONAL(LIKWID_ENABLED,test "x$enable_likwid" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # MODULES
 AC_ARG_ENABLE([modules],
    [AS_HELP_STRING([--enable-modules],[Enable Module tests (default=yes)])],[],
@@ -264,6 +277,12 @@ AC_ARG_ENABLE([metis],
    [AS_HELP_STRING([--enable-metis],[Enable metis tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_metis,yes)])
 AM_CONDITIONAL(METIS_ENABLED,test "x$enable_metis" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# MFEM
+AC_ARG_ENABLE([mfem],
+   [AS_HELP_STRING([--enable-mfem],[Enable mfem tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_mfem,yes)])
+AM_CONDITIONAL(MFEM_ENABLED,test "x$enable_mfem" = "xyes" )
 #------------------------------------------------------------------------------------------
 # mpi4py
 AC_ARG_ENABLE([mpi4py],
@@ -473,6 +492,7 @@ echo Host operating system......... : ${DISTRO_FAMILY}
 
 echo Compiler Families............. : ${COMPILER_FAMILIES}
 echo MPI Families.................. : ${MPI_FAMILIES}
+echo Python Families............... : ${PYTHON_FAMILIES}
 if test "x$enable_slurm" = "xyes" ; then
    echo Resource manager ............. : SLURM
 fi
@@ -653,6 +673,12 @@ echo    Libraries:
        echo '    'HYPRE..................... : disabled
     fi
 
+    if test "x$enable_mfem" = "xyes"; then
+       echo '    'MFEM...................... : enabled
+    else
+       echo '    'MFEM...................... : disabled
+    fi
+
     if test "x$enable_metis" = "xyes"; then
        echo '    'Metis..................... : enabled
     else
@@ -773,6 +799,12 @@ echo    Performance Tools:
        echo '    'IMB....................... : enabled
     else
        echo '    'IMB....................... : disabled
+    fi
+
+    if test "x$enable_likwid" = "xyes"; then
+       echo '    'Likwid.................... : enabled
+    else
+       echo '    'Likwid.................... : disabled
     fi
 
     if test "x$enable_mpiP" = "xyes"; then

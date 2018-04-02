@@ -38,8 +38,10 @@ my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 my @compiler_familes = ("gnu","gnu7","intel");
 my @mpi_families     = ("mvapich2","openmpi","openmpi3","impi","mpich");
 
-my @package_skip = ("ohpc-release","R_base","mvapich2-psm","openmpi-psm2","scotch",
-                    "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs");
+my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","openmpi-psm2","scotch",
+                    "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs",
+                     "python34-build-patch","python34-scipy","python34-numpy","python34-mpi4py");
+
 my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
 		     "intel-compilers-devel" => "Intel Compiler Compatibility Package",
 		     "llvm4-compilers" => "LLVM Compiler Suite",

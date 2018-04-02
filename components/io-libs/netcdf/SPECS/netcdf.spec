@@ -41,12 +41,13 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.4.1.1
+Version:        4.5.0
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
 Source101:	OHPC_macros
 
+BuildRequires:  curl-devel
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  m4
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
@@ -107,7 +108,6 @@ export CC=mpicc
     --enable-shared \
     --enable-netcdf-4 \
     --enable-dap \
-    --enable-ncgen4 \
     --with-pic \
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }

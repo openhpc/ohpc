@@ -12,7 +12,7 @@
 !  -------------------------------------------------------------------------
 
       program main
-      implicit none
+
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !                    Include files
@@ -27,6 +27,8 @@
 #include <petsc/finclude/petscmat.h>
 #include <petsc/finclude/petscpc.h>
 #include <petsc/finclude/petscksp.h>
+      use petsc
+      implicit none
 
 ! - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 !                   Variable declarations
@@ -72,9 +74,9 @@
       m       = 8
       n       = 7
       ione    = 1
-      call PetscOptionsGetInt(PETSC_NULL_OBJECT,PETSC_NULL_CHARACTER,    &
+      call PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,    &
      &                        '-m',m,flg,ierr)
-      call PetscOptionsGetInt(PETSC_NULL_OBJECT,PETSC_NULL_CHARACTER,    &
+      call PetscOptionsGetInt(PETSC_NULL_OPTIONS,PETSC_NULL_CHARACTER,    &
      &                        '-n',n,flg,ierr)
       call MPI_Comm_rank(PETSC_COMM_WORLD,rank,ierr)
 
@@ -274,11 +276,13 @@
 !
       subroutine SampleShellPCSetUp(pc,x,ierr)
 
-      implicit none
+
 
 #include <petsc/finclude/petscsys.h>
 #include <petsc/finclude/petscvec.h>
 #include <petsc/finclude/petscmat.h>
+      use petsc
+      implicit none
 
       PC      pc
       Vec     x
@@ -290,7 +294,7 @@
       PC jacobi,sor
       Vec work
 
-      call PCGetOperators(pc,PETSC_NULL_OBJECT,pmat,ierr)
+      call PCGetOperators(pc,PETSC_NULL_MAT,pmat,ierr)
       call PCCreate(PETSC_COMM_WORLD,jacobi,ierr)
       call PCSetType(jacobi,PCJACOBI,ierr)
       call PCSetOperators(jacobi,pmat,pmat,ierr)
@@ -328,21 +332,23 @@
 !
       subroutine SampleShellPCApply(pc,x,y,ierr)
 
-      implicit none
+
 
 #include <petsc/finclude/petscsys.h>
 #include <petsc/finclude/petscvec.h>
 #include <petsc/finclude/petscpc.h>
-
+      use petsc
+      implicit none
       PC      pc
       Vec     x,y
       PetscErrorCode ierr
       PetscScalar  one
 
 !  Common block to store data for user-provided preconditioner
-      common /mypcs/ jacobi,sor,work
       PC  jacobi,sor
       Vec work
+      common /mypcs/ jacobi,sor,work
+
 
       one = 1.0
       call PCApply(jacobi,x,y,ierr)

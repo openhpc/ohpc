@@ -17,6 +17,7 @@
 \newcommand{\rms}{SLURM}
 \newcommand{\rmsshort}{slurm}
 \newcommand{\arch}{x86\_64}
+\newcommand{\installimage}{netboot}
 
 % Define package manager commands
 \newcommand{\pkgmgr}{yum}
@@ -37,6 +38,7 @@
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
 \toggletrue{isCentOS_ww_slurm_x86}
+\toggletrue{isSLURM}
 \toggletrue{isx86}
 \toggletrue{isxCAT}
 
@@ -80,7 +82,7 @@
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
-\clearpage 
+%\clearpage 
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall 
@@ -150,6 +152,7 @@ repository, which is shipped with CentOS and is enabled by default.
 
 
 \subsection{Define {\em compute} image for provisioning}
+\input{common/xcat_init_os_images_centos}
 \input{common/xcat_mkchroot_centos}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
@@ -213,8 +216,10 @@ repository, which is shipped with CentOS and is enabled by default.
 \paragraph{Enable ssh control via resource manager} 
 \input{common/slurm_pam}
 
+\vspace*{0.4cm}
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
+\vspace*{0.2cm}
 \input{common/lustre-client-centos}
 \input{common/lustre-client-post}
 
@@ -237,10 +242,16 @@ repository, which is shipped with CentOS and is enabled by default.
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
+\paragraph{Add \nhc{}} \label{sec:add_nhc}
+\input{common/nhc}
+
 \subsubsection{Identify files for synchronization} \label{sec:file_import}
 \input{common/import_xcat_files}
 \input{common/import_xcat_files_slurm}
 \input{common/finalize_xcat_provisioning}
+
+\vspace*{0.6cm}
+\subsection{Add compute nodes into \xCAT{} database} \label{sec:xcat_add_nodes}
 \input{common/add_xcat_hosts_intro}
 
 %%%\subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
@@ -248,7 +259,7 @@ repository, which is shipped with CentOS and is enabled by default.
 
 %\vspace*{-0.25cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
-\input{common/reset_computes} 
+\input{common/reset_computes_xcat} 
 
 %\vspace*{-0.50cm}
 \section{Install \OHPC{} Development Components}

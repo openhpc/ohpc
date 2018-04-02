@@ -81,7 +81,6 @@
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
-\clearpage
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall 
@@ -150,6 +149,7 @@ repository, which is shipped with CentOS and is enabled by default.
 # Add PBS Professional client support
 [sms](*\#*) (*\chrootinstall*) pbspro-execution-ohpc
 [sms](*\#*) perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
+[sms](*\#*) echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
 [sms](*\#*) chroot $CHROOT opt/pbs/libexec/pbs_habitat
 [sms](*\#*) perl -pi -e "s/\$clienthost \S+/\$clienthost ${sms_name}/" $CHROOT/var/spool/pbs/mom_priv/config
 [sms](*\#*) echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
@@ -212,6 +212,9 @@ repository, which is shipped with CentOS and is enabled by default.
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
+\paragraph{Add \nhc{}} \label{sec:add_nhc}
+\input{common/nhc}
+
 %\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
@@ -228,8 +231,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \subsubsection{Optionally configure stateful provisioning}
 \input{common/stateful}
 
-%\vspace*{-0.1cm}
-%\clearpage
+\vspace*{0.75cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes} 
 
@@ -255,15 +257,15 @@ repository, which is shipped with CentOS and is enabled by default.
 \subsection{Setup default development environment}
 \input{common/default_dev}
 
-%\vspace*{0.4cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
 \input{common/third_party_libs_petsc_centos}
 \input{common/third_party_libs}
-\vspace*{0.1cm}
 \input{common/third_party_mpi_libs_x86}
 
+\vspace*{0.8cm}
 \subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
+\vspace*{0.2cm}
 \input{common/pxse_enabled_builds}
 
 \clearpage

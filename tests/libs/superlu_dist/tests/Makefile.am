@@ -23,7 +23,7 @@ check_PROGRAMS               += pddrive1_ABglobal
 pddrive1_ABglobal_SOURCES     = pddrive1_ABglobal.c
 
 check_PROGRAMS               += pddrive2
-pddrive2_SOURCES              = pddrive2.c dcreate_matrix.c
+pddrive2_SOURCES              = pddrive2.c dcreate_matrix.c dcreate_matrix_perturbed.c
 
 check_PROGRAMS               += pddrive2_ABglobal
 pddrive2_ABglobal_SOURCES     = pddrive2_ABglobal.c

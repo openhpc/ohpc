@@ -6,7 +6,16 @@
 \usepackage{textcomp}
 \usepackage{array}
 \usepackage{fancyhdr}
+%\usepackage[hidelinks]{hyperref}
 \usepackage{hyperref}
+% update hypref link colors
+\hypersetup{
+  colorlinks   = true, %Colors links instead of ugly boxes
+  urlcolor     = blue, %Color for external hyperlinks
+  linkcolor    = blue, %Color of internal links
+%  citecolor   = red %Color of citations
+}
+
 \usepackage{textcomp}
 \usepackage{tabularx}
 \usepackage{booktabs}
@@ -33,7 +42,7 @@
 % ----------- Variables to change per release -------------
 
 
-\newcommand{\OHPCVersion}{1.3.3}
+\newcommand{\OHPCVersion}{1.3.4}
 \newcommand{\OHPCVerTree}{1.3}
 
 % ---------------------------------------------------------
@@ -44,13 +53,17 @@
 \newtoggle{isaarch}
 \newtoggle{ispbs}
 \newtoggle{isWarewulf}
+\newtoggle{isSLURM}
 \newtoggle{isxCAT}
+\newtoggle{isxCATstateful}
 \newtoggle{isCentOS_ww_slurm_x86}
 \newtoggle{isCentOS_ww_pbs_x86}
 \newtoggle{isSLES_ww_slurm_x86}
 \newtoggle{isSLES_ww_pbs_x86}
 \newtoggle{isCentOS_ww_slurm_aarch}
+\newtoggle{isCentOS_ww_pbs_aarch}
 \newtoggle{isSLES_ww_slurm_aarch}
+\newtoggle{isSLES_ww_pbs_aarch}
 
 % utility to check os-specific settings
 \newcommand{\iftoggleverb}[1]{%
@@ -120,6 +133,7 @@
 \newcommand{\MUNGE}{\emph{munge}}
 \newcommand{\Nagios}{Nagios}
 \newcommand{\NFS}{NFS}
+\newcommand{\nhc}{NHC}
 \newcommand{\OHPC}{OpenHPC}
 \newcommand{\ORCM}{ORCM}
 \newcommand{\powerman}{\emph{powerman}}

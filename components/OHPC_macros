@@ -35,9 +35,9 @@
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %if 0%{?rhel} == 7
-	# OBS define's rhel_version to 700 for RHEL, in case we are
-	# not running in OBS
-	%global rhel_version 700
+    # OBS define's rhel_version to 700 for RHEL, in case we are
+    # not running in OBS
+    %global rhel_version 700
 %endif
 
 # OpenHPC packages require ohpc-filesystem which defines the basic
@@ -59,6 +59,7 @@ BuildRequires: ohpc-buildroot
 
 %{!?compiler_family: %global compiler_family gnu7}
 %{!?mpi_family: %global mpi_family openmpi3}
+%{!?python_family: %global python_family python3}
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
@@ -91,6 +92,9 @@ Requires:      llvm-compilers%{PROJ_DELIM}
 
 %endif
 
+# Disable RPM symlink analysis on files in %%{OHPC_HOME}. 
+%global __libsymlink_exclude_path  %{OHPC_HOME}/.*$
+
 # MPI dependencies
 %if 0%{?ohpc_mpi_dependent} == 1
 %if "%{mpi_family}" == "impi"
@@ -112,9 +116,34 @@ Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %endif
 %endif
 
+# Python dependencies and macros
+%if 0%{?ohpc_python_dependent} == 1
+%if "%{python_family}" == "python3"
+%global __python %__python3
+%global python_module_prefix py3-
+%global python_lib_dir python3.4
+%if "%{rhel_version}" == "700"
+%global python_prefix python34
+%endif
+%if 0%{?suse_version}
+%global python_prefix python3
+%endif
+%endif
+%if "%{python_family}" == "python2"
+%global python_module_prefix py2-
+%global python_lib_dir python2.7
+%global python_prefix python
+%endif
+BuildRequires: %{python_prefix}-devel
+BuildRequires: %{python_prefix}-setuptools
+BuildRequires: python-rpm-macros
+Requires:      %{python_prefix}
+%endif
+
 %global ohpc_setup_compiler %{expand:\
-	. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
-	%if 0%{?ohpc_mpi_dependent} == 1 \
-		. %{OHPC_ADMIN}/ohpc/OHPC_setup_mpi %{mpi_family} \
-	%endif \
+    . %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
+    %if 0%{?ohpc_mpi_dependent} == 1 \
+        . %{OHPC_ADMIN}/ohpc/OHPC_setup_mpi %{mpi_family} \
+    %endif \
 }
+

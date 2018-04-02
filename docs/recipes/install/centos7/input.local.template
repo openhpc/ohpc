@@ -37,12 +37,17 @@ domain_name="${domain_name:-local}"
 # Path to copy of OS ISO image (xCAT recipe only)
 iso_path="${iso_path:-}"
 
+# Path to local repository web roots (xCAT recipe only)
+ohpc_repo_dir="${ohpc_repo_dir:-/install/ohpc}"
+epel_repo_dir="${epel_repo_dir:-/install/epel}"
+
 # Provisioning interface used by compute hosts (Warewulf recipe only)
 eth_provision="${eth_provision:-eth0}"
 
 # Flags for optional installation/configuration
 enable_ib="${enable_ib:-0}"
 enable_opa="${enable_opa:-0}"
+enable_opafm="${enable_opafm:-0}"
 enable_mpi_defaults="${enable_mpi_defaults:-1}"
 enable_ipoib="${enable_ipoib:-0}"
 

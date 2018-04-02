@@ -15,13 +15,17 @@ NODES=2
 TASKS=8
 ARGS=8
 
-module load mpi4py
+module load $python_module_prefix-mpi4py
 
-@test "[dev-tools/mpi4py] python hello world ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[dev-tools/$python_module_prefix-mpi4py] python hello world ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ -z ${_python} ];then
+    flunk "\${_python} not set"
+    fi
+
     if [ ! -s helloworld.py ];then
     flunk "helloworld.py does not exist"
     fi
 
-    run_mpi_binary "python helloworld.py" $ARGS $NODES $TASKS
+    run_mpi_binary "${_python} helloworld.py" $ARGS $NODES $TASKS
     assert_success
 }

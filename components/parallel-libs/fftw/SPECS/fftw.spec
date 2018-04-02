@@ -19,12 +19,12 @@
 
 Summary:   A Fast Fourier Transform library
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   3.3.6
+Version:   3.3.7
 Release:   1%{?dist}
 License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
 URL:       http://www.fftw.org
-Source0:   http://www.fftw.org/fftw-%{version}-pl2.tar.gz
+Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
 Source1:   OHPC_macros
 
 %define openmp        1
@@ -47,7 +47,7 @@ data, and of arbitrary input size.
 
 
 %prep
-%setup -q -n %{pname}-%{version}-pl2
+%setup -q -n %{pname}-%{version}
 
 %build
 # OpenHPC compiler/mpi designation

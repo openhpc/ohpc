@@ -1,0 +1,12 @@
+--- a/SRC/get_perm_c_parmetis.c	2018-01-28 12:29:53.000000000 -0800
++++ b/SRC/get_perm_c_parmetis.c	2018-01-29 14:26:11.000000000 -0800
+@@ -26,6 +26,9 @@
+ #include <math.h>
+ #include "superlu_dist_config.h"
+ #ifdef HAVE_PARMETIS
++#include <sys/types.h>
++#include <stdio.h>
++#include <scotch.h>
+ #include "parmetis.h"
+ #endif
+ #include "superlu_ddefs.h"

@@ -3,11 +3,17 @@ ohpc-base Collection of base packages
 ohpc-base-compute Collection of compute node base packages
 ohpc-ganglia Collection of Ganglia monitoring and metrics packages
 ohpc-gnu7-io-libs Collection of IO library builds for use with GNU compiler toolchain
+ohpc-gnu7-mpich-io-libs Collection of IO library builds for use with GNU compiler toolchain and the MPICH runtime
 ohpc-gnu7-mpich-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-gnu7-mpich-perf-tools Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-gnu7-openmpi3-io-libs Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime
 ohpc-gnu7-openmpi3-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
+ohpc-gnu7-openmpi3-perf-tools Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime
 ohpc-gnu7-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain
 ohpc-gnu7-perf-tools Collection of performance tool builds for use with GNU compiler toolchain
 ohpc-gnu7-python-libs Collection of python related library builds for use with GNU compiler toolchain
+ohpc-gnu7-python2-libs Collection of python2 related library builds for use with GNU compiler toolchain
+ohpc-gnu7-python3-libs Collection of python3 related library builds for use with GNU compiler toolchain
 ohpc-gnu7-runtimes Collection of runtimes for use with GNU compiler toolchain
 ohpc-gnu7-serial-libs Collection of serial library builds for use with GNU compiler toolchain
 ohpc-nagios Collection of Nagios monitoring and metrics packages

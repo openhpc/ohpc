@@ -24,7 +24,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.7.4
+Version:        3.8.2
 Release:        1
 Summary:        A library for solving large scale sparse eigenvalue problems
 License:        LGPL-3.0
@@ -134,6 +134,6 @@ rm -rf ${RPM_BUILD_ROOT}
 %files 
 %defattr(-,root,root,-)
 %{OHPC_PUB}
-%doc COPYING COPYING.LESSER README docs/slepc.pdf
+%doc LICENSE README docs/slepc.pdf
 
 %changelog

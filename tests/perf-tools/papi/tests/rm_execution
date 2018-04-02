@@ -85,7 +85,7 @@ ARGS=5
 	flunk "fmultiplex1 binary does not exist"
     fi
 
-    run_serial_binary ./fmultiplex1
+    run_serial_binary -t "00:03:00" ./fmultiplex1
     assert_success
 }
 

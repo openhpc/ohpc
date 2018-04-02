@@ -16,22 +16,33 @@ provided in the distribution.
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Select (and customize) appropriate parted layout example
-[sms](*\#*) export PARTED_CMDS=/etc/warewulf/filesystem/examples/gpt_example.cmds
 [sms](*\#*) cp /etc/warewulf/filesystem/examples/gpt_example.cmds /etc/warewulf/filesystem/gpt.cmds
 [sms](*\#*) wwsh provision set --filesystem=gpt "${compute_regex}" 
+[sms](*\#*) wwsh provision set --bootloader=sda "${compute_regex}" 
 \end{lstlisting}
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+Those provisioning compute nodes in UEFI mode will install a slightly different
+set of packages in to the VNFS. Warewulf also provides an example EFI filesystem
+layout.
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add GRUB2 bootloader and re-assemble VNFS image
+[sms](*\#*) (*\chrootinstall*) grub2-efi grub2-efi-modules
+[sms](*\#*) cp /etc/warewulf/filesystem/examples/efi_example.cmds /etc/warewulf/filesystem/efi.cmds
+[sms](*\#*) wwsh provision set --filesystem=efi "${compute_regex}" 
+[sms](*\#*) wwsh provision set --bootloader=sda "${compute_regex}" 
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}
 
 \noindent Upon subsequent reboot of the modified nodes, Warewulf will partition
-and format the disk to host the desired VNFS image.  Once installed to disk,
-Warewulf can be instructed to subsequently boot from local storage
-(alternatively, the BIOS boot option order could be updated to reflect a desire
-to boot from disk):
+and format the disk to host the desired VNFS image.  Once the image is installed 
+to disk, warewulf can be configured to use the nodes' local storage as the boot 
+device.
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# After provisioning, update node object parameters to boot from local storage
-[sms](*\#*) wwsh -y object modify -s bootlocal=EXIT -t node "${compute_regex}"
+# Boot the node from the local disk
+[sms](*\#*) wwsh provision set --bootlocal=normal "${compute_regex}"
 \end{lstlisting}
-
-
-\noindent Deleting the bootlocal object parameter will cause Warewulf to once
-again reformat and re-install to local storage upon a new PXE boot request.

@@ -39,8 +39,8 @@ provides: perl(LosF_utils)
 provides: perl(LosF_history_utils)
 
 %if 0%{?sles_version} || 0%{?suse_version}
-requires: perl-Config-IniFiles >= 2.43
-requires: perl-Log-Log4perl
+Requires: perl-Config-IniFiles >= 2.43
+Requires: perl-Log-Log4perl
 %else
 requires: yum-plugin-downloadonly
 %endif

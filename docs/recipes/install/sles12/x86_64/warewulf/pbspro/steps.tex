@@ -36,9 +36,9 @@
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
-\toggletrue{isx86}
-\toggletrue{isWarewulf}
 \toggletrue{isSLES_ww_pbs_x86}
+\toggletrue{isWarewulf}
+\toggletrue{isx86}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -69,7 +69,6 @@
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
-\clearpage
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall 
@@ -124,6 +123,7 @@
 # Add PBS Professional client support
 [sms](*\#*) (*\chrootinstall*) pbspro-execution-ohpc
 [sms](*\#*) perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
+[sms](*\#*) echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
 [sms](*\#*) chroot $CHROOT opt/pbs/libexec/pbs_habitat
 [sms](*\#*) perl -pi -e "s/\$clienthost \S+/\$clienthost ${sms_name}/" $CHROOT/var/spool/pbs/mom_priv/config
 [sms](*\#*) echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
@@ -196,12 +196,15 @@
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
+\paragraph{Add \nhc{}} \label{sec:add_nhc}
+\input{common/nhc}
+
 %\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
 \input{common/import_ww_files_ib_sles}
 \input{common/finalize_provisioning}
-\vspace*{0.8cm}
+\vspace*{0.1cm}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_pbs}
 \input{common/add_ww_hosts_finalize}
@@ -231,10 +234,12 @@
 
 \subsection{Performance Tools} \label{sec:install_perf_tools}
 \input{common/perf_tools}
+\input{common/perf_tools_sles}
+\vspace*{-0.6cm}
 
 \subsection{Setup default development environment}
 \input{common/default_dev}
-
+\vspace*{-0.6cm}
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
 \input{common/third_party_libs_petsc_sles}

@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" == "gnu7"
-%global gnu_version 7.2.0
+%global gnu_version 7.3.0
 %global gnu_major_ver 7
 %global gnu_release 1
 %global pname gnu7-compilers
@@ -88,7 +88,7 @@ ln -s mpfr-%{mpfr_version} mpfr
 
 %{__mkdir} obj
 cd obj
-../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path}
+../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path} --disable-static --enable-shared
 make %{?_smp_mflags}
 %endif
 %install

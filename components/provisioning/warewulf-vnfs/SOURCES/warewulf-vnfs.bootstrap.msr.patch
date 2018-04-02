@@ -1,0 +1,7 @@
+--- a/etc/bootstrap.conf	2018-03-05 14:31:25.000000000 -0800
++++ b/etc/bootstrap.conf	2018-03-05 14:32:01.000000000 -0800
+@@ -38,3 +38,4 @@
+ drivers += wmi, processor, button, sg, igb, i2c_algo_bit, dca, ptp
+ drivers += pps_core, ahci, libahci, libata, scsi_mod
+ drivers += nfs_acl, nfsv3, nfsv4, coretemp
++drivers += msr

@@ -1,0 +1,30 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+@test "[nhc] check for RPM" {
+    run check_if_rpm_installed "nhc${DELIM}"
+    assert_success
+}
+
+@test "[nhc] generate config file" {
+    run nhc-genconf
+    if [ ! -f /etc/nhc/nhc.conf.auto ]; then
+        flunk
+    fi
+}
+
+@test "[nhc] service failure detection and restart" {
+    grep ntpd /etc/nhc/nhc.conf.auto > /etc/nhc/nhc.conf.ntpd
+    systemctl stop ntpd
+    run nhc -c /etc/nhc/nhc.conf.ntpd
+    assert_failure
+    run systemctl status ntpd
+    assert_success
+}

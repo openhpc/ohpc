@@ -36,9 +36,10 @@
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
-\toggletrue{isx86}
-\toggletrue{isWarewulf}
 \toggletrue{isSLES_ww_slurm_x86}
+\toggletrue{isSLURM}
+\toggletrue{isWarewulf}
+\toggletrue{isx86}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -69,7 +70,6 @@
 \section{Install Base Operating System (BOS)}
 \input{common/bos}
 
-\clearpage
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall 
@@ -208,6 +208,9 @@
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
+\paragraph{Add \nhc{}} \label{sec:add_nhc}
+\input{common/nhc}
+
 %\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
@@ -226,6 +229,7 @@
 \subsubsection{Optionally configure stateful provisioning}
 \input{common/stateful}
 
+\clearpage
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes}
 
@@ -244,6 +248,7 @@
 
 \subsection{Performance Tools} \label{sec:install_perf_tools}
 \input{common/perf_tools}
+\input{common/perf_tools_sles}
 
 \subsection{Setup default development environment}
 \input{common/default_dev}

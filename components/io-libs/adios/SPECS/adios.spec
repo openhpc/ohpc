@@ -21,7 +21,7 @@
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 1.12.0
+Version: 1.13.0
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
@@ -56,7 +56,9 @@ BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
-BuildRequires: fdupes
+BuildRequires: fdupes libcurl4 libcurl-devel
+%else
+BuildRequires: libcurl libcurl-devel
 %endif
 
 # Default library install path
@@ -87,7 +89,7 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 module load autotools
 module load phdf5
 module load netcdf
-module load numpy
+module load py2-numpy
 
 TOPDIR=$PWD
 
@@ -161,7 +163,7 @@ export PATH=$(pwd):$PATH
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
-module load numpy
+module load py2-numpy
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
 make MPI=y python

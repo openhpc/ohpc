@@ -7,23 +7,32 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
+declare -A python_module_prefixes=( ["python2"]="py2" ["python3"]="py3")
+if [ "x$DISTRO_FAMILY" == "xCentOS" -o "x$DISTRO_FAMILY" == "xRHEL" ];then
+    declare -A python_package_prefixes=( ["python2"]="python" ["python3"]="python34")
+else
+    declare -A python_package_prefixes=( ["python2"]="python" ["python3"]="python3")
+fi
+
 PKG=SCIPY
 module=scipy
-testname=Scipy
-rpm=python-scipy-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
-
+testname=scipy
 
 @test "[$testname] Verify $PKG module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER)" {
-    module list $module | grep "1) $module" >& .cmd_output || exit 1
-    run grep $module .cmd_output 
-    assert_success
+    for python in "${!python_module_prefixes[@]}"; do
+        module=${python_module_prefixes[$python]}-scipy
+        rpm=${python_package_prefixes[$python]}-scipy-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
+        module list $module | grep "1) $module" >& .cmd_output || exit 1
+        run grep $module .cmd_output 
+        assert_success
     
-    # check version against rpm
-    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
-    run cat .cmd_output
-    assert_output "  1) $module/$version"
+        # check version against rpm
+        local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+        run cat .cmd_output
+        assert_output "  1) $module/$version"
 
-    rm -f .cmd_output
+        rm -f .cmd_output
+    done
 }
 
 @test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER)" {

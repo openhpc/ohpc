@@ -1,16 +1,28 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 
 
 /*! @file 
  * \brief Driver program for PDGSSVX example
  *
  * <pre>
- * -- Distributed SuperLU routine (version 2.1) --
+ * -- Distributed SuperLU routine (version 4.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * November 1, 2007
- *
+ * April 5, 2015
+ * </pre>
  */
 
 #include <math.h>
+#include <superlu_dist_config.h>
 #include "superlu_ddefs.h"
 
 /*! \brief
@@ -31,14 +43,14 @@
  *   4. Call pdgssvx
  *   5. Release the process grid and terminate the MPI environment
  *
- * On an IBM SP, the program may be run by typing
- *    poe pddrive -r <proc rows> -c <proc columns> <input_file> -procs <p>
+ * With MPICH,  program may be run by typing:
+ *    mpiexec -n <np> pddrive -r <proc rows> -c <proc columns> big.rua
  * </pre>
  */
 
 int main(int argc, char *argv[])
 {
-    superlu_options_t options;
+    superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
     ScalePermstruct_t ScalePermstruct;
@@ -52,7 +64,7 @@ int main(int argc, char *argv[])
     int      iam, info, ldb, ldx, nrhs;
     char     **cpp, c;
     FILE *fp, *fopen();
-    extern int cpp_defs();
+    int cpp_defs();
 
     nprow = 1;  /* Default process rows.      */
     npcol = 1;  /* Default process columns.   */
@@ -71,8 +83,8 @@ int main(int argc, char *argv[])
 	    switch (c) {
 	      case 'h':
 		  printf("Options:\n");
-		  printf("\t-r <int>: process rows    (default %d)\n", nprow);
-		  printf("\t-c <int>: process columns (default %d)\n", npcol);
+		  printf("\t-r <int>: process rows    (default %4d)\n", nprow);
+		  printf("\t-c <int>: process columns (default %4d)\n", npcol);
 		  exit(0);
 		  break;
 	      case 'r': nprow = atoi(*cpp);
@@ -97,8 +109,13 @@ int main(int argc, char *argv[])
     iam = grid.iam;
     if ( iam >= nprow * npcol )	goto out;
     if ( !iam ) {
-	printf("Input matrix file: %s\n", *cpp);
-        printf("\tProcess grid\t%d X %d\n", grid.nprow, grid.npcol);
+	int v_major, v_minor, v_bugfix;
+	superlu_dist_GetVersionNumber(&v_major, &v_minor, &v_bugfix);
+	printf("Library version:\t%d.%d.%d\n", v_major, v_minor, v_bugfix);
+
+	printf("Input matrix file:\t%s\n", *cpp);
+        printf("Process grid:\t\t%d X %d\n", (int)grid.nprow, (int)grid.npcol);
+	fflush(stdout);
     }
 
 #if ( VAMPIR>=1 )
@@ -127,7 +144,7 @@ int main(int argc, char *argv[])
         options.ParSymbFact       = NO;
         options.ColPerm           = METIS_AT_PLUS_A;
         options.RowPerm           = LargeDiag;
-        options.ReplaceTinyPivot  = YES;
+        options.ReplaceTinyPivot  = NO;
         options.IterRefine        = DOUBLE;
         options.Trans             = NOTRANS;
         options.SolveInitialized  = NO;
@@ -136,16 +153,17 @@ int main(int argc, char *argv[])
      */
     set_default_options_dist(&options);
 #if 0
+    options.ColPerm = PARMETIS;
+    options.ParSymbFact = YES;
     options.RowPerm = NOROWPERM;
     options.IterRefine = NOREFINE;
-    options.ColPerm = NATURAL;
     options.Equil = NO; 
-    options.ReplaceTinyPivot = NO;
 #endif
 
     if (!iam) {
 	print_sp_ienv_dist(&options);
 	print_options_dist(&options);
+	fflush(stdout);
     }
 
     m = A.nrow;

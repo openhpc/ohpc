@@ -1,5 +1,5 @@
---- tau-2.26.1/utils/Makefile	2016-08-11 08:53:36.000000000 -0700
-+++ tau-2.26.1.patch/utils/Makefile	2017-08-17 10:27:14.000000000 -0700
+--- a/utils/Makefile	2017-12-04 12:58:56.000000000 -0800
++++ b/utils/Makefile	2017-12-04 13:02:47.000000000 -0800
 @@ -84,7 +84,7 @@
  tau_events.o: 	tau_events.cpp
  		$(CXX) $(CFLAGS)  -c tau_events.cpp
@@ -9,9 +9,9 @@
  		$(PDT_CXX_COMP) $(PDT_CFLAGS) tau_instrumentor.o tau_instrument.o tau_selective.o -o $@ $(PDTOPTS) -lm $(LEXTRAUTIL) 
  
  tau_instrumentor.o: tau_instrumentor.cpp 
-@@ -117,13 +117,13 @@
- tau_run.o: 	tau_run.cpp
- 		$(CXX) $(CFLAGS) $(DYNINC) -DTAU_DYNINST -DTAU_DYNINST41PLUS $(DYN_PKG_OPT) -c tau_run.cpp $(TAU_BOOSTINC)
+@@ -123,13 +123,13 @@
+ tau_trace2json.o: tau_trace2json.cpp
+ 		$(CXX) $(CFLAGS) $< -c 
  
 -tau_wrap: tau_wrap.o tau_selective.o tau_instrument.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a 
 +tau_wrap: tau_wrap.o tau_selective.o tau_instrument.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so 
@@ -25,7 +25,7 @@
  		$(PDT_CXX_COMP) $(PDT_CFLAGS) tau_ompcheck.o -o $@ $(PDTOPTS) -lm $(LEXTRAUTIL) 
  
  tau_ompcheck.o: tau_ompcheck.cpp 
-@@ -136,10 +136,10 @@
+@@ -142,10 +142,10 @@
  		gcc -c perf2tau.c -I$(PERFINCDIR)
  
  

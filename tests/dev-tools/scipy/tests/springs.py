@@ -63,4 +63,4 @@ wsol = odeint(vectorfield, w0, t, args=(p,),
 
 # Print the solution.
 for t1, w1 in zip(t, wsol):
-    print t1, w1[0], w1[1], w1[2], w1[3]
+    print('{} {} {} {} {}'.format(t1, w1[0], w1[1], w1[2], w1[3]))

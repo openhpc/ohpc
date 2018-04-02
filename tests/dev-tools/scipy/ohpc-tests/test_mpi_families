@@ -19,25 +19,29 @@ for compiler in $COMPILER_FAMILIES ; do
     [[ ! $compiler =~ gnu ]] && continue
     
     for mpi in $MPIs_local ; do
+        for python in $PYTHON_FAMILIES ; do
 
-        echo " "
-        echo " "
-        echo "-------------------------------------------------------"
-        echo "Dev Toolsk: scipy tests: $compiler-$mpi"
-        echo "-------------------------------------------------------"
+            get_python_vars $python
 
-        module purge          || exit 1
-        module load prun      || exit 1
-        module load $compiler || exit 1
-        module load $mpi      || exit 1
-        module load scipy     || exit 1
+            echo " "
+            echo " "
+            echo "-------------------------------------------------------"
+            echo "Dev Toolsk: $python-scipy tests: $compiler-$mpi"
+            echo "-------------------------------------------------------"
 
-        make clean            || exit 1
-        make -k check         || status=1
+            module purge                            || exit 1
+            module load prun                        || exit 1
+            module load $compiler                   || exit 1
+            module load $mpi                        || exit 1
+            module load $python_module_prefix-scipy || exit 1
 
-        save_logs_mpi_family tests $compiler $mpi
+            make clean                              || exit 1
+            make -k check                           || status=1
 
-	make clean
+            save_logs_mpi_family tests $python-$compiler $mpi
+
+    	make clean
+        done
     done
 done
 

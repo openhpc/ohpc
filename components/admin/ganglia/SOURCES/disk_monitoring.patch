@@ -1,0 +1,13 @@
+--- ganglia-3.7.2/lib/default_conf.h.in.orig	2018-03-19 15:57:41.000000000 -0500
++++ ganglia-3.7.2/lib/default_conf.h.in	2018-03-19 15:57:59.000000000 -0500
+@@ -369,8 +369,8 @@
+ \n\
+ /* Different than 2.5.x default since the old config made no sense */\n\
+ collection_group {\n\
+-  collect_every = 1800\n\
+-  time_threshold = 3600\n\
++  collect_every = 180\n\
++  time_threshold = 180\n\
+   metric {\n\
+     name = \"disk_total\"\n\
+     value_threshold = 1.0\n\

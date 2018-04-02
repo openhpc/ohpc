@@ -15,15 +15,15 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %define vsc_base_ver 2.5.8
-%define vsc_install_ver 0.10.26
+%define vsc_install_ver 0.10.29
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   3.4.1
+Version:   3.5.3
 Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
-URL:       http://hpcugent.github.com/easybuild
+URL:       http://easybuilders.github.io/easybuild
 
 Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
 Source1:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
@@ -92,7 +92,7 @@ module-whatis "Name: %{pname}"
 module-whatis "Version: %{version}"
 module-whatis "Category: system tool"
 module-whatis "Description: %{summary}"
-module-whatis "URL: http://hpcugent.github.io/easybuild/"
+module-whatis "URL: http://easybuilders.github.io/easybuild/"
 
 set             version                 %{version}
 set             home                    \$::env(HOME)

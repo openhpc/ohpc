@@ -16,10 +16,10 @@
 # Base package name
 %define pname trilinos
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-%define ver_exp 12-10-1
+%define ver_exp 12-12-1
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        12.10.1
+Version:        12.12.1
 Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
@@ -28,7 +28,6 @@ Url:            http://trilinos.sandia.gov/index.html
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Source1:        OHPC_macros
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
-Patch1:         Trilinos-trilinos-aarch64.patch
 BuildRequires:  cmake%{PROJ_DELIM}
 BuildRequires:  doxygen
 BuildRequires:  expat
@@ -55,6 +54,7 @@ BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 #!BuildIgnore: post-build-checks
+#!BuildIgnore: brp-check-suse
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -69,7 +69,6 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 %prep
 %setup -q -n  Trilinos-trilinos-release-%{ver_exp}
 %patch0 -p1
-%patch1 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -96,7 +95,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
 %if "%{compiler_family}" == "intel"
-        -DTrilinos_ENABLE_MueLu:BOOL=OFF                                \
         -DTPL_ENABLE_MKL:BOOL=ON                                        \
         -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
         -DMKL_LIBRARY_DIRS:FILEPATH="${MKLROOT}/lib/intel64"            \
@@ -116,6 +114,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DLAPACK_LIBRARY_NAMES:STRING="openblas"                        \
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
 %endif
+        -DTrilinos_ENABLE_MueLu:BOOL=ON                                 \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
@@ -125,9 +124,11 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 %if 0%{?suse_version} >= 1210
         -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
 %endif
+        -DTrilinos_ENABLE_EXAMPLES:BOOL=OFF                             \
         -DTrilinos_ENABLE_STK:BOOL=OFF                                  \
         -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
         -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
+        -DTrilinos_ENABLE_EXPLICIT_INSTANTIATION:BOOL=ON                \
         -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
         -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
         -DTEUCHOS_ENABLE_libxml2:BOOL=ON                                \

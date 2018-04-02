@@ -12,24 +12,27 @@ cd dev-tools/numpy        || exit 1
 export BATS_JUNIT_CLASS=Numpy
 
 for compiler in $COMPILER_FAMILIES ; do
+    for python in $PYTHON_FAMILIES ; do
 
-    echo " "
-    echo " "
-    echo "----------------------------------------------------------"
-    echo "Dev tools: Numpy tests: $compiler"
-    echo "----------------------------------------------------------"
+        echo " "
+        echo " "
+        echo "----------------------------------------------------------"
+        echo "Dev tools: $python-Numpy tests: $compiler"
+        echo "----------------------------------------------------------"
 
-    module purge                || exit 1
-    module load $compiler       || exit 1
-    module load numpy           || exit 1
+        get_python_vars $python
 
-    make clean >& /dev/null     || exit 1
-    make -k check               || status=1
+        module purge                          || exit 1
+        module load $compiler                 || exit 1
+        module load $python_module_prefix-numpy || exit 1
 
-    save_logs_compiler_family tests $compiler
+        make clean >& /dev/null     || exit 1
+        make -k check               || status=1
 
-    make clean >& /dev/null
+        save_logs_compiler_family tests $python-$compiler
 
+        make clean >& /dev/null
+    done
 done
 
 exit ${status}

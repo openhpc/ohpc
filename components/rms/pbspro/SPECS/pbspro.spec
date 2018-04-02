@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 #
-#  Copyright (C) 1994-2016 Altair Engineering, Inc.
+#  Copyright (C) 1994-2017 Altair Engineering, Inc.
 #  For more information, contact Altair at www.altair.com.
 #   
 #  This file is part of the PBS Professional ("PBS Pro") software.
@@ -30,32 +30,50 @@
 #  You should have received a copy of the GNU Affero General Public License along 
 #  with this program.  If not, see <http://www.gnu.org/licenses/>.
 #   
+#  Commercial License Information: 
+#  
+#  The PBS Pro software is licensed under the terms of the GNU Affero General 
+#  Public License agreement ("AGPL"), except where a separate commercial license 
+#  agreement for PBS Pro version 14 or later has been executed in writing with Altair.
+#   
+#  Altair’s dual-license business model allows companies, individuals, and 
+#  organizations to create proprietary derivative works of PBS Pro and distribute 
+#  them - whether embedded or bundled with other software - under a commercial 
+#  license agreement.
+#  
+#  Use of Altair’s trademarks, including but not limited to "PBS™", 
+#  "PBS Professional®", and "PBS Pro™" and Altair’s logos is subject to Altair's 
+#  trademark licensing policies.
+#
 
 %define pbs_name pbspro
 %define pbs_client client
 %define pbs_execution execution
 %define pbs_server server
+%define pbs_version 14.1.2
+%define pbs_release 0
 %define pbs_prefix /opt/pbs
 %define pbs_home /var/spool/pbs
 %define pbs_dbuser postgres
 %define pbs_dist %{pbs_name}-%{pbs_version}.tar.gz
+
+# Patch1: logic for systemd.patch
 %if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7
 %define have_systemd 1
 %endif
 
-%define pname pbspro
-
 Summary:   PBS Professional
-Name:      %{pname}%{PROJ_DELIM}
-Version:   14.1.0
-Release:   0%{?dist}
-Source0:   https://github.com/PBSPro/pbspro/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
+Name:      %{pbs_name}%{PROJ_DELIM}
+Version:   %{pbs_version}
+Release:   %{pbs_release}
+Source0: https://github.com/PBSPro/pbspro/releases/download/v%{version}/%{pbs_name}-%{version}.tar.gz
 Source1:   OHPC_macros
 Patch1:    systemd.patch
+Patch2:    pbs.null.patch
 License:   AGPLv3 with exceptions
-URL:       https://github.com/pbspro/pbspro
+URL:       https://github.com/PBSPro/pbspro
 Prefix:    %{pbs_prefix}
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
+BuildRoot: %{_tmppath}/%{pbs_name}-%{pbs_version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %bcond_with alps
@@ -71,11 +89,13 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
+
 %if %{defined suse_version}
 BuildRequires: hwloc-devel < 2
 %else
 BuildRequires: hwloc-devel
 %endif
+
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
 BuildRequires: libedit-devel
@@ -102,6 +122,8 @@ BuildRequires: openssl-devel
 BuildRequires: libXext
 BuildRequires: libXft
 %endif
+
+# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 BuildRequires: systemd
 %endif
@@ -117,7 +139,7 @@ job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
 
-%package -n %{pname}-%{pbs_server}%{PROJ_DELIM}
+%package -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 Summary: PBS Professional for a server host
 Group:  %{PROJ_NAME}/rms
 Conflicts: pbspro-execution
@@ -141,7 +163,7 @@ Requires: libical
 %endif
 Autoreq: 1
 
-%description -n %{pname}-%{pbs_server}%{PROJ_DELIM}
+%description -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 PBS Professional® is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
@@ -150,7 +172,7 @@ HPC clusters, clouds and supercomputers.
 This package is intended for a server host. It includes all
 PBS Professional components.
 
-%package -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
+%package -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
 Summary: PBS Professional for an execution host
 Group:   %{PROJ_NAME}/rms
 Conflicts: pbspro-server
@@ -169,7 +191,7 @@ Requires: hwloc-libs
 %endif
 Autoreq: 1
 
-%description -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
+%description -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
 PBS Professional® is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
@@ -179,7 +201,7 @@ This package is intended for an execution host. It does not
 include the scheduler, server, or communication agent. It
 does include the PBS Professional user commands.
 
-%package -n %{pname}-%{pbs_client}%{PROJ_DELIM}
+%package -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
 Summary: PBS Professional for a client host
 Group: %{PROJ_NAME}/rms
 Conflicts: pbspro-server
@@ -191,7 +213,7 @@ Requires: python >= 2.6
 Requires: python < 3.0
 Autoreq: 1
 
-%description -n %{pname}-%{pbs_client}%{PROJ_DELIM}
+%description -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
 PBS Professional® is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
@@ -209,10 +231,13 @@ the PBS Professional user commands.
 %endif
 
 %prep
-%setup -n %{pname}-%{version}
+%setup -n %{pbs_name}-%{pbs_version}
 
 # karl.w.schulz@intel.com (enable systemd startup - patches from pbs master branch)
+# Patch1: logic for systemd.patch
 %patch1 -p1
+# karl.ices.utexas.edu (don't copy from /dev/null as it may not exist in chroot env)
+%patch2 -p0
 
 %build
 
@@ -220,7 +245,7 @@ the PBS Professional user commands.
 mkdir build
 cd build
 ../configure CFLAGS="-fPIC" \
-	PBS_VERSION=%{version} \
+	PBS_VERSION=%{pbs_version} \
 	--prefix=%{pbs_prefix} \
 %if %{defined suse_version}
 	--libexecdir=%{pbs_prefix}/libexec \
@@ -245,19 +270,20 @@ cd build
 cd build
 %make_install
 
-%post -n %{pname}-%{pbs_server}%{PROJ_DELIM}
+# scott@altair.com (redirecting pbs_postinstall to /dev/null ; reducing verbosity)
+%post -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall server \
-	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} %{pbs_dbuser}
+	%{pbs_version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} %{pbs_dbuser} >/dev/null 2>&1
 
-%post -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
+%post -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall execution \
-	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home}
+	%{pb_version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} >/dev/null 2>&1
 
-%post -n %{pname}-%{pbs_client}%{PROJ_DELIM}
+%post -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall client \
-	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}
+	%{pbs_version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} >/dev/null 2>&1
 
-%preun -n %{pname}-%{pbs_server}%{PROJ_DELIM}
+%preun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
 	out=`/sbin/chkconfig --list pbs 2>/dev/null`
 	if [ $? -eq 0 ]; then
@@ -279,16 +305,16 @@ else
 	rm -f /etc/rc.d/rc6.d/K10pbs
 fi
 rm -f ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/etc/db_user.new
-if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
+if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{pbs_version} ]; then
 	top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
 	if [ -h $top_level/default ]; then
 		link_target=`readlink $top_level/default`
-		[ `basename "$link_target"` = %{version} ] && rm -f $top_level/default
+		[ `basename "$link_target"` = %{pbs_version} ] && rm -f $top_level/default
 	fi
 fi
 rm -f /etc/init.d/pbs
 
-%preun -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
+%preun -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
 if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
 	out=`/sbin/chkconfig --list pbs 2>/dev/null`
 	if [ $? -eq 0 ]; then
@@ -309,40 +335,41 @@ else
 	rm -f /etc/rc.d/rc5.d/S90pbs
 	rm -f /etc/rc.d/rc6.d/K10pbs
 fi
-if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
+if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{pbs_version} ]; then
 	top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
 	if [ -h $top_level/default ]; then
 		link_target=`readlink $top_level/default`
-		[ `basename "$link_target"` = %{version} ] && rm -f $top_level/default
+		[ `basename "$link_target"` = %{pbs_version} ] && rm -f $top_level/default
 	fi
 fi
 rm -f /etc/init.d/pbs
 
-%preun -n %{pname}-%{pbs_client}%{PROJ_DELIM}
-if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
+%preun -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
+if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{pbs_version} ]; then
 	top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
 	if [ -h $top_level/default ]; then
 		link_target=`readlink $top_level/default`
-		[ `basename "$link_target"` = %{version} ] && rm -f $top_level/default
+		[ `basename "$link_target"` = %{pbs_version} ] && rm -f $top_level/default
 	fi
 fi
 
-%postun -n %{pname}-%{pbs_server}%{PROJ_DELIM}
-echo
-echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
-echo
+# scott@altair.com (commenting out %postun; reducing verbosity)
+#%postun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
+#echo
+#echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
+#echo
 
-%postun -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
-echo
-echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
-echo
+#%postun -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
+#echo
+#echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
+#echo
 
-%postun -n %{pname}-%{pbs_client}%{PROJ_DELIM}
-echo
-echo "NOTE: /etc/pbs.conf must be deleted manually"
-echo
+#%postun -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
+#echo
+#echo "NOTE: /etc/pbs.conf must be deleted manually"
+#echo
 
-%files -n %{pname}-%{pbs_server}%{PROJ_DELIM}
+%files -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
@@ -350,14 +377,17 @@ echo
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
+
+# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %endif
+
 # %{_sysconfdir}/init.d/pbs
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
-%files -n %{pname}-%{pbs_execution}%{PROJ_DELIM}
+%files -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
@@ -365,9 +395,12 @@ echo
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
+
+# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %endif
+
 # %{_sysconfdir}/init.d/pbs
 %exclude %{pbs_prefix}/bin/printjob_svr.bin
 %exclude %{pbs_prefix}/etc/pbs_db_schema.sql
@@ -390,7 +423,7 @@ echo
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
-%files -n %{pname}-%{pbs_client}%{PROJ_DELIM}
+%files -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
@@ -430,7 +463,8 @@ echo
 %exclude %{pbs_prefix}/sbin/pbsfs
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
+
+# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 %exclude %{_unitdir}/pbs.service
 %endif
-

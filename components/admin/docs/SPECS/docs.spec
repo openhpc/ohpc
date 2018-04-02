@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name:           docs%{PROJ_DELIM}
-Version:        1.3.3
+Version:        1.3.4
 Release:        1
 Summary:        OpenHPC documentation
 License:        BSD-3-Clause
@@ -85,6 +85,9 @@ make ; %{parser} steps.tex > recipe.sh ; popd
 pushd docs/recipes/install/centos7/x86_64/xcat/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
+pushd docs/recipes/install/centos7/x86_64/xcat_stateful/slurm
+make ; %{parser} steps.tex > recipe.sh ; popd
+
 pushd docs/recipes/install/sles12/x86_64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
@@ -98,7 +101,13 @@ make ; %{parser} steps.tex > recipe.sh ; popd
 pushd docs/recipes/install/centos7/aarch64/warewulf/slurm
 make ; %{parser} steps.tex > recipe.sh ; popd
 
+pushd docs/recipes/install/centos7/aarch64/warewulf/pbspro
+make ; %{parser} steps.tex > recipe.sh ; popd
+
 pushd docs/recipes/install/sles12/aarch64/warewulf/slurm
+make ; %{parser} steps.tex > recipe.sh ; popd
+
+pushd docs/recipes/install/sles12/aarch64/warewulf/pbspro
 make ; %{parser} steps.tex > recipe.sh ; popd
 
 %install
@@ -122,6 +131,10 @@ install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHP
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
+%define lpath centos7/x86_64/xcat_stateful/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
 %define lpath sles12/x86_64/warewulf/slurm
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
@@ -136,7 +149,15 @@ install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHP
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 
+%define lpath centos7/aarch64/warewulf/pbspro
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
 %define lpath sles12/aarch64/warewulf/slurm
+install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
+install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
+
+%define lpath sles12/aarch64/warewulf/pbspro
 install -m 0644 -p -D docs/recipes/install/%{lpath}/steps.pdf %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/Install_guide.pdf
 install -m 0755 -p -D docs/recipes/install/%{lpath}/recipe.sh %{buildroot}/%{OHPC_PUB}/doc/recipes/%{lpath}/recipe.sh
 

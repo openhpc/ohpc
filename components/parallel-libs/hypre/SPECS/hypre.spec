@@ -40,13 +40,13 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        2.11.2
+Version:        2.13.0
 Release:        1%{?dist}
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
 Group:          ohpc/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
-Source:         https://computation.llnl.gov/project/linear_solvers/download/hypre-%{version}.tar.gz
+Source:         https://github.com/LLNL/hypre/archive/v%{version}.tar.gz#/hypre-%{version}.tar.gz
 Source1:        OHPC_macros
 %if 0%{?suse_version} <= 1110
 %{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
@@ -59,7 +59,6 @@ Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  python-devel
-BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires:  python-xml
 %else
@@ -84,7 +83,7 @@ phenomena in the defense, environmental, energy, and biological sciences.
 
 %build
 
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess src/config
 %endif
 
@@ -97,7 +96,7 @@ module load openblas
 %endif
 
 
-FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_ "
+FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
 cd src
 ./configure \
     --prefix=%{install_path} \
@@ -117,7 +116,8 @@ cd src
 %endif
     --with-mli \
     --with-fei \
-    --with-superlu \
+    --with-superlu-include=$SUPERLU_INC \
+    --with-superlu-lib=$SUPERLU_LIB \
     CC="mpicc $FLAGS" \
     CXX="mpicxx $FLAGS" \
     F77="mpif77 $FLAGS"

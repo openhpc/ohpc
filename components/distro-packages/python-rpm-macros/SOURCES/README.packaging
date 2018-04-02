@@ -1,0 +1,10 @@
+This file contains information for OpenBuildService packagers.
+
+To update this package from git, run the file update.sh
+
+It pulls the latest version from github, assigns a date-based version
+number, removes previous tarball and creates a new one, inputs the
+version number in the spec file, and notes the version bump in changelog.
+
+In the future, changelog should also be maintained in git and auto-dumped
+into the changes file.

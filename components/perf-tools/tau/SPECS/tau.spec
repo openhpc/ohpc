@@ -19,7 +19,7 @@
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.26.1
+Version:   2.27
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
@@ -30,8 +30,10 @@ Source1:   OHPC_macros
 Patch1:    tau-add-explicit-linking-option.patch
 Patch2:    tau-shared_libpdb.patch
 Patch3:    tau-disable_examples.patch
+Patch4:    tau-ucontext.patch
+Patch5:    tau-testplugins_makefile.patch
 
-Provides:  lib%PNAME.so()(64bit)
+Provides:  lib%PNAME.so()(64bit)(%PROJ_NAME)
 Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
@@ -76,6 +78,8 @@ automatic instrumentation tool.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
@@ -109,7 +113,7 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 export TAUROOT=`pwd`
 
 # override with newer config.guess for aarch64
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess utils/opari2/build-config/.
 cp /usr/lib/rpm/config.sub utils/opari2/build-config/.
 %endif
@@ -128,31 +132,60 @@ export CONFIG_ARCH=%{machine}
     -arch=%{machine} \
     -prefix=/tmp%{install_path} \
     -exec-prefix= \
-	-c++=mpicxx \
-	-cc=mpicc \
-	-fortran=$fcomp \
-	-iowrapper \
-	-mpi \
-	-mpiinc=$MPI_INCLUDE_DIR \
-	-mpilib=$MPI_LIB_DIR \
-	-slog2 \
-	-CPUTIME \
+    -c++=$CXX \
+    -cc=$CC \
+    -fortran=$fcomp \
+    -iowrapper \
+    -slog2 \
+    -CPUTIME \
     -PROFILE \
     -PROFILECALLPATH \
-	-PROFILEPARAM \
+    -PROFILEPARAM \
 %ifarch x86_64
     -papi=$PAPI_DIR \
 %endif
-	-pdt=$PDTOOLKIT_DIR \
-	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
-	-openmp \
+    -pdt=$PDTOOLKIT_DIR \
+    -useropt="%optflags -I$PWD/include -fno-strict-aliasing" \
+    -openmp \
 %if %{compiler_family} != intel
     -opari \
 %endif
-	-extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp/%{install_path}/lib -L/tmp/%{install_path}/%{machine}/lib" 
+    -extrashlibopts="-fPIC -L/tmp%{install_path}/lib" 
 
 make install
 make exports
+make clean
+
+./configure \
+    -arch=%{machine} \
+    -prefix=/tmp%{install_path} \
+    -exec-prefix= \
+    -c++=mpicxx \
+    -cc=mpicc \
+    -fortran=$fcomp \
+    -iowrapper \
+    -mpi \
+    -mpiinc=$MPI_INCLUDE_DIR \
+    -mpilib=$MPI_LIB_DIR \
+    -slog2 \
+    -CPUTIME \
+    -PROFILE \
+    -PROFILECALLPATH \
+    -PROFILEPARAM \
+%ifarch x86_64
+    -papi=$PAPI_DIR \
+%endif
+    -pdt=$PDTOOLKIT_DIR \
+    -useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
+    -openmp \
+%if %{compiler_family} != intel
+    -opari \
+%endif
+    -extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
+
+make install
+make exports
+
 
 # move from tmp install dir to %install_path
 rm -rf %{buildroot}
@@ -271,6 +304,9 @@ EOF
 %doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
 
 %changelog
+* Mon Nov 27 2017 Christian Goll <cgoll@suse.de> - 2.26.1-2
+- added ucontext patch for newer glibc versions
+
 * Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.26.1-2
 - Remove separate mpi setup; it is part of the %%ohpc_compiler macro
 
@@ -279,3 +315,4 @@ EOF
 
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 2.26-1
 - Switching to %%ohpc_compiler macro
+

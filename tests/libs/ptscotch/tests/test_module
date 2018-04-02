@@ -111,7 +111,7 @@ rpm=$module-$family${DELIM}
 # Binaries
 # ----------
 
-@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     BIN=${PKG}_BIN
     if [ -z ${!BIN} ];then
         flunk "${PKG}_BIN directory not defined"
@@ -122,7 +122,7 @@ rpm=$module-$family${DELIM}
     fi
 }
 
-@test "[$testname] Verify availability of $binary binary" {
+@test "[$testname] Verify availability of $binary binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     run which $binary
     assert_success
 }

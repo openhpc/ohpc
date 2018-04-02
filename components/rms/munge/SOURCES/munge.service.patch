@@ -1,5 +1,5 @@
---- src/etc/munge.service	2013-08-27 11:35:31.000000000 -0700
-+++ src/etc/munge.service	2014-11-10 11:37:55.104178894 -0800
+--- src/etc/munge.service.in	2013-08-27 11:35:31.000000000 -0700
++++ src/etc/munge.service.in	2014-11-10 11:37:55.104178894 -0800
 @@ -12,6 +12,11 @@
  User=munge
  Group=munge

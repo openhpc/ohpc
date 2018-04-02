@@ -59,9 +59,9 @@ $mpi_exceptions{"mkl-blacs"} = 1;
 my %page_breaks = ();
 if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"scorep-gnu-impi-ohpc"} = 2;
-    $page_breaks{"petsc-gnu-impi-ohpc"} = 2;
-    $page_breaks{"trilinos-gnu-impi-ohpc"} = 3;
-    $page_breaks{"netcdf-gnu-impi-ohpc"} = 2;
+    $page_breaks{"mumps-gnu-impi-ohpc"} = 2;
+    $page_breaks{"superlu_dist-gnu-impi-ohpc"} = 3;
+    $page_breaks{"netcdf-gnu7-impi-ohpc"} = 2;
 }
 
 my $longSummaryLine = 60;

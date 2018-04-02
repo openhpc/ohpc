@@ -150,6 +150,10 @@ if HYPRE_ENABLED
    TESTS += libs/hypre/ohpc-tests/test_mpi_families
 endif
 
+if MFEM_ENABLED
+   TESTS += libs/mfem/ohpc-tests/test_mpi_families
+endif
+
 if METIS_ENABLED
    TESTS += libs/metis/ohpc-tests/test_compiler_families
 endif
@@ -220,6 +224,10 @@ endif
 
 if IMB_ENABLED
    TESTS += perf-tools/imb/ohpc-tests/test_mpi_families
+endif
+
+if LIKWID_ENABLED
+   TESTS += perf-tools/likwid/ohpc-tests/test_compiler_families
 endif
 
 if MPIP_ENABLED

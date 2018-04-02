@@ -3,5 +3,5 @@
 echo " "
 echo " "
 echo "-------------------------------------------------------"
-echo "Numpy Python Module Tests"
+echo "Numpy $python Module Tests"
 echo "-------------------------------------------------------"

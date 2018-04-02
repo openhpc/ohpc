@@ -1,0 +1,45 @@
+Prior to booting the {\em compute} hosts, we configure them to use PXE as their
+next boot mode. After the initial PXE, ensuing boots will return to using the default boot device
+specified in the BIOS.
+
+% begin_ohpc_run
+% ohpc_comment_header Set nodes to netboot \ref{sec:boot_computes}
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) rsetboot compute net
+\end{lstlisting} 
+% end_ohpc_run
+
+At this point, the {\em master} server should be able to boot the newly defined
+compute nodes. This is done by using the \texttt{rpower} \xCAT{} command
+leveraging IPMI protocol set up during the the {\em compute} node definition
+in \S~\ref{sec:xcat_add_nodes}. The following power cycles each of the
+desired hosts.
+
+
+% begin_ohpc_run
+% ohpc_comment_header Boot compute nodes
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+[sms](*\#*) rpower compute reset
+\end{lstlisting} 
+% end_ohpc_run
+
+Once kicked off, the boot process should take about \nottoggle{isxCATstateful}{5
+minutes (depending on BIOS post times)}{5 to 10 minutes}.  You can monitor the
+provisioning by using the \texttt{rcons} command, which displays serial console
+for a selected node. Note that the escape sequence
+is \texttt{CTRL-e c .} typed sequentially. 
+
+Successful provisioning can be verified by a parallel command on the compute
+nodes. The default install provides two such tools: \xCAT{}-provided
+\texttt{psh} command, which uses \xCAT{} node names and groups,
+and \texttt{pdsh}, which works independently.  For example, to run a command on
+the newly imaged compute hosts using \texttt{psh}, execute the following:
+
+\begin{lstlisting}[language=bash]
+[sms](*\#*) psh compute uptime
+c1:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+c2:  12:56:50 up 13 min,  0 users,  load average: 0.00, 0.02, 0.05
+c3:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.02, 0.05
+c4:  12:56:50 up 14 min,  0 users,  load average: 0.00, 0.01, 0.04
+\end{lstlisting}
+Note that the equivalent \texttt{pdsh} command is \texttt{pdsh -w c[1-4] uptime}. 

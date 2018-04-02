@@ -1,0 +1,91 @@
+% -*- mode: latex; fill-column: 120; -*- 
+
+The next step is adding \OHPC{} components to the {\em compute} nodes that at this
+point are running basic OSes.  This process will leverage two \xCAT{}-provided
+commands: \texttt{psh} to run \texttt{\pkgmgr{}} installer on all the
+nodes in parallel  and \texttt{xdcp} to distribute configuration files from the
+SMS to the {\em compute} nodes. 
+
+\noindent To do this, repositories on the {\em compute} nodes need to be configured
+properly. 
+
+\xCAT{} has automatically setup an  OS repository on the SMS and configured the
+nodes to use it, but it has  also enabled online OS repositories, which will
+cause  \texttt{\pkgmgr{}} failures if there is no connection to the public internet. 
+To avoid this, we disable the online repositories:
+
+% begin_ohpc_run
+% ohpc_comment_header Setup nodes repositories and Install OHPC components \ref{sec:add_components}
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Install yum-utils to have yum-config-manager available
+[sms](*\#*) psh compute yum --setopt=\*.skip_if_unavailable=1 -y install yum-utils
+# Disable OS repositories pointing to outside network
+[sms](*\#*) psh compute yum-config-manager --disable CentOS\*
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Next, the nodes are configured to use the local \OHPC{} repository
+setup in on the SMS in \S\ref{sec:enable_repo}
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Add OpenHPC repo mirror hosted on SMS
+[sms](*\#*) psh compute yum-config-manager --add-repo=http://$sms_ip/$ohpc_repo_dir/OpenHPC.local.repo
+# Replace local path with SMS URL
+[sms](*\#*) psh compute "perl -pi -e 's/file:\/\/\@PATH\@/http:\/\/$sms_ip"${ohpc_repo_dir//\//"\/"}"/s' \
+        /etc/yum.repos.d/OpenHPC.local.repo"
+\end{lstlisting}
+% end_ohpc_run
+
+The {\em compute} nodes also need access to the EPEL repository, a required
+dependency for \OHPC{} packages. A straightforward way to accomplish this is to
+host a local mirror on the {\em master} host. However, the repository is very
+large ($>$10 GB) containing thousands of packages, while only 5 (\texttt{fping,
+qstat, libconfuse, python34, python34-libs}) are required for packages installed this guide.  Therefore,
+here we only download the required packages and put them into a repository
+accessible to the nodes.  Users wanting to mirror the entire EPEL repository
+instead can take advantage of the \texttt{reposync} utility and should expect a
+download time of over an hour depending on their network connection and a choice
+of EPEL mirror.
+
+% begin_ohpc_run
+% ohpc_comment_header Configure access to EPEL packages
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Create directory holding EPEL packages
+[sms](*\#*) mkdir -p $epel_repo_dir
+[sms](*\#*) (*\install*) yum-utils createrepo
+# Download required EPEL packages
+[sms](*\#*) yumdownloader --destdir $epel_repo_dir fping qstat libconfuse python34 python34-libs
+# Create a repository from the downloaded packages
+[sms](*\#*) createrepo $epel_repo_dir
+
+# Setup access to the repo from the compute hosts
+[sms](*\#*) psh compute yum-config-manager --add-repo=http://$sms_ip/$epel_repo_dir
+[sms](*\#*) psh compute "echo gpgcheck=0 >> /etc/yum.repos.d/$sms_ip"${epel_repo_dir//\//"_"}.repo
+\end{lstlisting}
+% end_ohpc_run
+
+
+\noindent Additionally, a workaround is needed for \OHPC{} documentation files,
+which are installed into a read-only NFS share /opt/ohpc/pub. Any package
+attempting to write to that directory will fail to install. The following
+prevents that by directing \texttt{rpm} not to install documentation files on
+the {\em compute} nodes: 
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) psh compute echo -e %_excludedocs 1 \>\> ~/.rpmmacros
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Now \OHPC{} and other cluster-related software components can be
+installed on the nodes. The first step is to install a base compute package:
+% begin_ohpc_run
+% ohpc_comment_header Add OpenHPC base components to compute image
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# Install compute node base meta-package
+[sms](*\#*) (*\chrootinstall*) ohpc-base-compute
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Next, we can include additional components:

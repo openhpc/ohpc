@@ -1,0 +1,43 @@
+From 275331380d391aac6d3c527257de11fc41d0c94a Mon Sep 17 00:00:00 2001
+From: Ben Allen <bsallen@alcf.anl.gov>
+Date: Mon, 18 Dec 2017 16:40:39 -0800
+Subject: [PATCH] Pass exit status up from Provision/Pxe->update() and
+ Warewulf/Module/Cli/Pxe->exec()
+
+- Fixes `wwsh pxe update` exit status being non-zero.
+
+Closes #94
+---
+ provision/lib/Warewulf/Module/Cli/Pxe.pm | 4 +++-
+ provision/lib/Warewulf/Provision/Pxe.pm  | 1 +
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/provision/lib/Warewulf/Module/Cli/Pxe.pm b/provision/lib/Warewulf/Module/Cli/Pxe.pm
+index 05e930d..62438e1 100644
+--- a/provision/lib/Warewulf/Module/Cli/Pxe.pm
++++ b/provision/lib/Warewulf/Module/Cli/Pxe.pm
+@@ -118,11 +118,13 @@ exec()
+     if (! $command) {
+         &eprint("You must provide a command!\n\n");
+         print $self->help();
++        return();
+     } elsif ($command eq "update") {
+-        $pxe->update($objSet->get_list());
++        return($pxe->update($objSet->get_list()));
+     } else {
+         &eprint("Unknown command: $command\n\n");
+         print $self->help();
++        return();
+     }
+ 
+ }
+diff --git a/provision/lib/Warewulf/Provision/Pxe.pm b/provision/lib/Warewulf/Provision/Pxe.pm
+index ffbf246..5fccaab 100644
+--- a/provision/lib/Warewulf/Provision/Pxe.pm
++++ b/provision/lib/Warewulf/Provision/Pxe.pm
+@@ -313,6 +313,7 @@ update()
+             }
+         }
+     }
++    return(1);
+ }

@@ -38,20 +38,20 @@
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.65.1
+Version:        1.66.0
 
-%define version_exp 1_65_1
+%define version_exp 1_66_0
 
 Release:        1%{?dist}
 License:        BSL-1.0
-Group:		%{PROJ_NAME}/parallel-libs
+Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.boost.org
-Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boost_%{version_exp}.tar.gz
+Source0:        https://dl.bintray.com/boostorg/release/%{version}/source/boost_%{version_exp}.tar.gz
 Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
-Source101:	OHPC_macros
+Source101:      OHPC_macros
 
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  bzip2-devel

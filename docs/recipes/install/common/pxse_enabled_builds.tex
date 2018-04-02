@@ -46,11 +46,13 @@ for \texttt{/opt/intel} that is mounted on desired compute nodes.
 % ohpc_command if [[ ${enable_opa} -eq 1 ]];then
 % ohpc_indent 10
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
-# Optionally, choose Omni-Path enabled MPI builds. Otherwise, skip to retain default MPI stacks
-[sms](*\#*) (*\install*) openmpi-psm2-intel-ohpc mvapich2-psm2-intel-ohpc
+# Optionally, choose the Omni-Path enabled build for MVAPICH2. Otherwise, skip to retain IB variant
+[sms](*\#*) (*\install*) mvapich2-psm2-intel-ohpc
 \end{lstlisting}
 % ohpc_indent 5
 % ohpc_command fi
+
+\iftoggle{isSLES_ww_slurm_x86}{\clearpage}
 
 \begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
 # Install 3rd party libraries/tools meta-packages built with Intel toolchain

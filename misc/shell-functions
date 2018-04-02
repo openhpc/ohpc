@@ -1,0 +1,33 @@
+
+prepare_git_tree() {
+
+	local DIR=${1}
+
+        if [ ! -e ${DIR}/../SOURCES ]; then
+                # empty SOURCES directory are not created by git
+                mkdir ${DIR}/../SOURCES
+        fi
+
+        # for builds outside of OBS OHPC_macros needs to exist
+        if [ ! -e ${DIR}/../SOURCES/OHPC_macros ]; then
+                pushd ${DIR}/../SOURCES > /dev/null
+                if [ -e ../../../OHPC_macros ]; then
+                        ln -s ../../../OHPC_macros
+                elif [ -e ../../../../OHPC_macros ]; then
+                        ln -s ../../../../OHPC_macros
+                fi
+                popd > /dev/null
+        fi
+}
+
+build_srpm() {
+	local SPEC=${1}
+	local DIR=`dirname ${1}`
+
+	SRPM=`rpmbuild -bs --nodeps --define "_sourcedir ${DIR}/../SOURCES" --define 'rhel 7' --undefine 'fedora' ${SPEC}`
+	RESULT=$?
+
+	echo ${SRPM} | tail -1 | awk -F\  '{ print $2 }'
+
+	return ${RESULT}
+}

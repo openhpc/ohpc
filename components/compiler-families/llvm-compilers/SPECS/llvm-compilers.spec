@@ -8,14 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%define compiler_family gnu7
 %include %{_sourcedir}/OHPC_macros
 
-# Remember to drop this gnu-compilers dependency in the future,
-# when gcc-5.3+ appear in all the targeted Linux distros.
-%global gnuver 7.2.0
-
-%global clang_sha b11539abc46cbd19189c5719d1e30539de3a93b9
+%global clang_sha 64043d5cec9fb02d1b0fd80c9f2c4e9e4f09cf8f
 %global flang_sha 37e86e06f74d9bd91ef6bb511c026753b9124006
 
 %global pname llvm5-compilers
@@ -23,14 +18,14 @@
 
 Summary:   The LLVM Compiler Infrastructure
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.0.0
+Version:   5.0.1
 Release:   1%{?dist}
 License:   UIUC, Apache-2.0
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://www.llvm.org
 Source0:   http://releases.llvm.org/%{version}/llvm-%{version}.src.tar.xz
 Source1:   https://github.com/flang-compiler/clang/archive/%{clang_sha}.tar.gz
-Source2:   https://github.com/flang-compiler/flang/archive/%{flang_sha}.tar.gz
+Source2:   https://github.com/flang-compiler/flang/archive/flang_20180319.tar.gz
 Source3:   http://releases.llvm.org/%{version}/compiler-rt-%{version}.src.tar.xz
 Source4:   http://releases.llvm.org/%{version}/libcxx-%{version}.src.tar.xz
 Source5:   http://releases.llvm.org/%{version}/libcxxabi-%{version}.src.tar.xz
@@ -38,27 +33,29 @@ Source6:   http://releases.llvm.org/%{version}/libunwind-%{version}.src.tar.xz
 Source7:   http://releases.llvm.org/%{version}/lld-%{version}.src.tar.xz
 Source8:   http://releases.llvm.org/%{version}/openmp-%{version}.src.tar.xz
 Source9:   OHPC_macros
-BuildRequires: gnu7-compilers%{PROJ_DELIM}
 BuildRequires: cmake%{PROJ_DELIM}
 BuildRequires: make
 BuildRequires: perl
 BuildRequires: python
 BuildRequires: pkgconfig
 BuildRequires: binutils-devel
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires: gcc-fortran
+BuildRequires: libstdc++48-devel
+Requires: libstdc++6
+%else
+BuildRequires: gcc-gfortran
 BuildRequires: libstdc++-devel
+Requires: libstdc++
+%endif
 Requires:      binutils
+BuildRequires:      gcc-c++
 Requires:      gcc-c++
-Requires:      gnu7-compilers%{PROJ_DELIM}
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires: perl-Data-Dumper
 %endif
 
 %define install_path %{OHPC_COMPILERS}/llvm/%{version}
-%define gnu_path %{OHPC_COMPILERS}/gcc/%{gnuver}
-%if 0%{?sles_version} || 0%{?suse_version}
-%define compiler_path `%{OHPC_COMPILERS}/gcc/%{gnuver}/bin/g++ -v --version 2>&1|grep COMPILER_PATH|cut -f 2- -d '='`
-%define library_path `%{OHPC_COMPILERS}/gcc/%{gnuver}/bin/g++ -v --version 2>&1|grep LIBRARY_PATH|cut -f 2- -d '='`
-%endif
 
 %description
 
@@ -96,13 +93,12 @@ ln -s ../../openmp-%{version}.src openmp
 cd ../..
 
 ln -s llvm-%{version}.src llvm
-ln -s flang-%{flang_sha} flang
+ln -s flang-flang_20180319 flang
 
 # Flang code is not ready for -Werror
 %{__sed} -i -e 's/-Werror/-Wall/g' flang/CMakeLists.txt
 
 %install
-%ohpc_setup_compiler
 module load cmake
 
 mkdir build-clang
@@ -123,32 +119,16 @@ cmake \
 %{__make} DESTDIR=$RPM_BUILD_ROOT INSTALL="%{__install} -p" install
 cd ..
 
-%if 0%{?sles_version} || 0%{?suse_version}
-SUSE_CXXFLAGS="-I%{gnu_path}/include/c++/%{gnuver}"
-%ifarch aarch64
-SUSE_CXXFLAGS="$SUSE_CXXFLAGS -I%{gnu_path}/include/c++/%{gnuver}/aarch64-unknown-linux-gnu"
-%endif
-%ifarch x86_64
-SUSE_CXXFLAGS="$SUSE_CXXFLAGS -I%{gnu_path}/include/c++/%{gnuver}/x86_64-pc-linux-gnu"
-%endif
-%endif
 
 mkdir build-flang
 cd build-flang
 CC=$RPM_BUILD_ROOT/%{install_path}/bin/clang \
 CXX=$RPM_BUILD_ROOT/%{install_path}/bin/clang++ \
 CFLAGS="-fPIC -DPIC" \
-%if 0%{?sles_version} || 0%{?suse_version}
-CXXFLAGS="-fPIC -DPIC $SUSE_CXXFLAGS" \
-%else
 CXXFLAGS="-fPIC -DPIC" \
-%endif
 FFLAGS="-fPIC -DPIC" \
 FCFLAGS="-fPIC -DPIC" \
-%if 0%{?sles_version} || 0%{?suse_version}
-COMPILER_PATH=%{compiler_path} \
-LIBRARY_PATH=%{library_path} \
-%endif
+
 cmake \
 ../flang \
 -DCMAKE_SKIP_RPATH=YES \
@@ -164,10 +144,7 @@ cmake \
 -DFLANG_LIBOMP=$RPM_BUILD_ROOT/%{install_path}/lib/libomp.so \
 -DCMAKE_INSTALL_PREFIX=%{install_path}
 
-%if 0%{?sles_version} || 0%{?suse_version}
-COMPILER_PATH=%{compiler_path} \
-LIBRARY_PATH=%{library_path} \
-%endif
+
 %{__make} VERBOSE=1
 %{__make} VERBOSE=1 DESTDIR=$RPM_BUILD_ROOT INSTALL="%{__install} -p" install
 cd ..
@@ -181,10 +158,7 @@ F90=$RPM_BUILD_ROOT/%{install_path}/bin/flang \
 F95=$RPM_BUILD_ROOT/%{install_path}/bin/flang \
 F03=$RPM_BUILD_ROOT/%{install_path}/bin/flang \
 LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{install_path}/lib:$LD_LIBRARY_PATH \
-%if 0%{?sles_version} || 0%{?suse_version}
-COMPILER_PATH=%{compiler_path} \
-LIBRARY_PATH=%{library_path} \
-%endif
+
 cmake \
 ../llvm/projects/openmp \
 -DBUILD_SHARED_LIBS=True \
@@ -223,19 +197,10 @@ set     version                            %{version}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    LD_LIBRARY_PATH     %{gnu_path}/lib64:%{install_path}/lib
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path    CMAKE_MODULE_PATH   %{install_path}/lib/cmake/clang:%{install_path}/lib/cmake/llvm
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/llvm
-%if 0%{?sles_version} || 0%{?suse_version}
-prepend-path    COMPILER_PATH       %{compiler_path}
-prepend-path    LIBRARY_PATH        %{library_path}
-%ifarch aarch64
-prepend-path    CPLUS_INCLUDE_PATH  %{gnu_path}/include/c++/%{gnuver}:%{gnu_path}/include/c++/%{gnuver}/aarch64-unknown-linux-gnu
-%endif
-%ifarch x86_64
-prepend-path    CPLUS_INCLUDE_PATH  %{gnu_path}/include/c++/%{gnuver}:%{gnu_path}/include/c++/%{gnuver}/x86_64-pc-linux-gnu
-%endif
-%endif
+
 
 family "compiler"
 EOF
@@ -264,3 +229,4 @@ EOF
 %changelog
 * Thu May 25 2017 Paul Osmialowski <pawel.osmialowski@foss.arm.com> - 4.0.0-1
 - add Fortran language frontend and runtime libraries (Flang)
+

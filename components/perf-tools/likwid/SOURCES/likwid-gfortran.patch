@@ -1,0 +1,20 @@
+--- a/make/include_GCC.mk	2018-01-24 11:40:41.000000000 -0800
++++ b/make/include_GCC.mk	2018-01-24 11:40:10.000000000 -0800
+@@ -1,5 +1,5 @@
+ CC  = gcc
+-FC  = ifort
++FC  = gfortran
+ AS  = as
+ AR  = ar
+ PAS = ./perl/AsmGen.pl
+@@ -13,8 +13,8 @@
+ #ANSI_CFLAGS += -Wall
+ 
+ CFLAGS   =  -O2 -std=c99 -Wno-format -fPIC
+-FCFLAGS  = -module ./  # ifort
+-#FCFLAGS  = -J ./  -fsyntax-only  #gfortran
++#FCFLAGS  = -module ./  # ifort
++FCFLAGS  = -J ./  -fsyntax-only  #gfortran
+ PASFLAGS  = x86-64
+ ASFLAGS  = 
+ CPPFLAGS =
