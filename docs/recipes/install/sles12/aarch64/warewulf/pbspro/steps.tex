@@ -36,7 +36,7 @@
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
 \toggletrue{isaarch}
-%\toggletrue{isSLES_ww_pbs_aarch}
+\toggletrue{isSLES_ww_pbs_aarch}
 \toggletrue{ispbs}
 \toggletrue{isWarewulf}
 
@@ -196,6 +196,7 @@
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
 %% \input{common/import_ww_files_ib_sles}
+\clearpage
 \input{common/finalize_provisioning}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_pbs}
@@ -232,6 +233,7 @@
 
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
+\clearpage
 \input{common/third_party_libs_petsc_sles}
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_aarch}
