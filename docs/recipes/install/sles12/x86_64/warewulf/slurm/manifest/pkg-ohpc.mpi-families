@@ -1,7 +1,7 @@
 intel-mpi-devel-ohpc 2017 https://github.com/openhpc/ohpc ohpc/mpi-families OpenHPC compatibility package for Intel(R) MPI Library
 mpich-gnu-ohpc 3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-mpich-gnu7-ohpc 3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-mpich-intel-ohpc 3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-gnu7-ohpc 3.2.1 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-intel-ohpc 3.2.1 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
 mvapich2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-gnu7-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-intel-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
