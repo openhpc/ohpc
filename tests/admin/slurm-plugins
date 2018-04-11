@@ -12,3 +12,8 @@ fi
     run ls /usr/lib64/slurm/jobcomp_elasticsearch.so
     assert_success
 }
+
+@test "[slurm] check for job_submit_lua plugin" {
+    run ls /usr/lib64/slurm/job_submit_lua.so
+    assert_success
+}
