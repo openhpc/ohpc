@@ -77,6 +77,7 @@ Requires: munge%{PROJ_DELIM}
 
 %{?systemd_requires}
 BuildRequires: systemd
+BuildRequires: libssh2-devel
 BuildRequires: munge-devel%{PROJ_DELIM} munge-libs%{PROJ_DELIM}
 BuildRequires: python
 BuildRequires: readline-devel
