@@ -147,6 +147,9 @@ BuildRequires: pkgconfig
 
 BuildRequires: perl(ExtUtils::MakeMaker)
 
+#needed to enable jobcomp_elasticsearch plugin
+BuildRequires: libcurl-devel
+
 %if %{with lua}
 %if %{defined suse_version}
 BuildRequires: lua51-devel
