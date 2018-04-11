@@ -61,11 +61,13 @@ Source1:    OHPC_macros
 %bcond_with hwloc
 %bcond_with mysql
 %bcond_with hdf5
-%bcond_with lua
 %bcond_with numa
 
 # Build with OpenSSL by default on all platforms (disable using --without openssl)
 %bcond_without openssl
+
+# 4/11/18 karl@ices.utexas.edu - enable lua bindings
+%bcond_without lua
 
 # Use debug by default on all systems
 %bcond_without debug
