@@ -1,0 +1,14 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+@test "[slurm] check for jobcomp_elasticsearch plugin" {
+    run ls /usr/lib64/slurm/jobcomp_elasticsearch.so
+    assert_success
+}
