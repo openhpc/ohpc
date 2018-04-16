@@ -21,7 +21,7 @@
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 1.3.4
+Version: 1.3.5
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
@@ -77,7 +77,6 @@ Requires:  yum-utils
 %endif
 %if 0%{?sles_version} || 0%{?suse_version}
 Requires:  glibc-locale
-Requires:  libmlx4-rdmav2
 Requires:  nfs-kernel-server
 %endif
 %description -n %{PROJ_NAME}-base
