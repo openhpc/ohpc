@@ -414,6 +414,12 @@ echo "ReturnToService=1" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 # 9/17/14 karl.w.schulz@intel.com - Add option to drop VM cache during epilog
 sed -i '/^# No other SLURM jobs,/i \\n# Drop clean caches (OpenHPC)\necho 3 > /proc/sys/vm/drop_caches\n\n#' $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.epilog.clean
 
+# Add plugstack file to include configuration files dropped to plugstack.conf.d
+cat > $RPM_BUILD_ROOT/%{_sysconfdir}/plugstack.conf <<EOF
+include /%{_sysconfdir}/plugstack.conf.d/*
+EOF
+
+mkdir $RPM_BUILD_ROOT/%{_sysconfdir}/plugstack.conf.d
 %endif
 
 # Correct some file permissions
@@ -558,6 +564,8 @@ rm -rf %{buildroot}
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
 %config (noreplace) %{_sysconfdir}/slurm.conf
+%config (noreplace) %{_sysconfdir}/plugstack.conf
+%dir %{_sysconfdir}/plugstack.conf.d
 %endif
 
 # 11/13/14 karl.w.schulz@intel.com - include systemd files 
