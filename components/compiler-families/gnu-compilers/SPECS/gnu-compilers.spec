@@ -8,24 +8,11 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%global compiler_family gnu
+
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" == "gnu7"
-%global gnu_version 7.3.0
-%global gnu_major_ver 7
-%global gnu_release 1
-%global pname gnu7-compilers
-%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
-%global source_directory gcc-%{version}
-%endif
-
-%if "%{compiler_family}" == "dts6"
-%global gnu_version 6
-%global gnu_major_ver 6
-%global gnu_release 0
-%global pname gnu-dts6-compilers
-%global source_directory %{nil}
-%endif
+%global pname gnu-compilers
 
 # Define subcomponent versions required for build
 
@@ -35,17 +22,15 @@
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
-Version:   %{gnu_version}
-Release:   %{gnu_release}%{?dist}
+Version:   5.4.0
+Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://gcc.gnu.org/
-%if "%{compiler_family}" != "dts6"
-Source0:   %{source}
+Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.bz2
 Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
 Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
-%endif
 Source4:   OHPC_macros
 
 BuildRequires:  bison
