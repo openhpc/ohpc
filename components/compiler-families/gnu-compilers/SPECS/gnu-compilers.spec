@@ -63,7 +63,7 @@ frontend.
 
 %prep
 %if "%{compiler_family}" != "dts6"
-%setup -q -n %{source_directory} -a1 -a2 -a3
+%setup -q -n gcc-%{version} -a1 -a2 -a3
 
 ln -s gmp-%{gmp_version} gmp
 ln -s mpc-%{mpc_version} mpc
