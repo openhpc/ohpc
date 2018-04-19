@@ -72,8 +72,7 @@ BuildRequires:  lustre-client%{PROJ_DELIM}
 %endif
 
 %if %{with_openib}
-BuildRequires:  libibumad-devel
-BuildRequires:  libibverbs-devel
+BuildRequires:  rdma-core-devel
 %endif
 
 %if %{with_psm}

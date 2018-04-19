@@ -1,0 +1,13 @@
+--- configure.orig	2017-03-22 14:43:34.520446787 -0500
++++ configure	2017-03-22 14:44:51.993727117 -0500
+@@ -134252,7 +134252,9 @@
+ 
+            CPPFLAGS="$CPPFLAGS $ess_tm_CPPFLAGS"
+            LIBS="$LIBS $ess_tm_LIBS"
+-           LDFLAGS="$LDFLAGS $ess_tm_LDFLAGS"
++#           LDFLAGS="$LDFLAGS $ess_tm_LDFLAGS"
++
++           LIBS="$LIBS $ess_tm_LDFLAGS"
+ 
+            ac_fn_c_check_header_mongrel "$LINENO" "tm.h" "ac_cv_header_tm_h" "$ac_includes_default"
+ if test "x$ac_cv_header_tm_h" = xyes; then :
