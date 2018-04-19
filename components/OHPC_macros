@@ -68,6 +68,10 @@ BuildRequires: ohpc-buildroot
 BuildRequires: gnu7-compilers%{PROJ_DELIM} >= 7.2.0
 Requires:      gnu7-compilers%{PROJ_DELIM} >= 7.2.0
 %endif
+%if "%{compiler_family}" == "gnu"
+BuildRequires: gnu-compilers%{PROJ_DELIM} >= 5.4.0
+Requires:      gnu-compilers%{PROJ_DELIM} >= 5.4.0
+%endif
 %if "%{compiler_family}" == "intel"
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
