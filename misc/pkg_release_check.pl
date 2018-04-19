@@ -17,7 +17,7 @@ if (! $release_version) {
 }
 
 my @distros = ('CentOS_7', 'SLE_12');
-my @arches  = ('aarch64','x86_64');
+my @arches  = ('aarch64','x86_64', 'noarch');
 
 my @problems = ();
 
