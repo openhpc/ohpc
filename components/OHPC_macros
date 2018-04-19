@@ -118,6 +118,10 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: openmpi3-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %endif
+%if "%{mpi_family}" == "openmpi"
+BuildRequires: openmpi-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi-%{compiler_family}%{PROJ_DELIM}
+%endif
 %endif
 
 # Python dependencies and macros
