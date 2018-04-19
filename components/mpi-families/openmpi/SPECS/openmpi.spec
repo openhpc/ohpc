@@ -8,46 +8,44 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# OpenMPI stack that is dependent on compiler toolchain (and possibly RMS)
+# OpenMPI stack that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
 # Base package name/config
-%define pname openmpi3
+%define pname openmpi
 %define with_openib 1
 
-%ifarch aarch64 || ppc64le
+%ifarch aarch64
 %define with_psm 0
-%define with_psm2 0
 %else
 %define with_psm 1
-%define with_psm2 1
 %endif
 
-%{!?with_lustre: %define with_lustre 0}
-%{!?with_slurm: %define with_slurm 0}
+%define with_lustre 0
+%define with_slurm 1
+
+# Default build is without psm2, but can be overridden
+%{!?with_psm2: %global with_psm2 0}
 %{!?with_tm: %global with_tm 1}
-%{!?with_pmix: %define with_pmix 0}
 
 Summary:   A powerful implementation of MPI
 
-Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
+%if 0%{with_psm2}
+Name:      %{pname}-psm2-%{compiler_family}%{PROJ_DELIM}
+%else
+Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
 
-Version:   3.0.0
+Version:   1.10.7
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-Source0:   http://www.open-mpi.org/software/ompi/v3.0/downloads/openmpi-%{version}.tar.bz2
+Source0:   http://www.open-mpi.org/software/ompi/v1.10/downloads/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source3:   pbs-config
-Patch0:    openmpi-3.0-pbs-config.patch
-
-%if "%{RMS_DELIM}" != "%{nil}"
-Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
-%endif
+Patch0:    config.pbs.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -56,14 +54,6 @@ BuildRequires:  postfix
 BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
-%if 0%{with_pmix}
-BuildRequires:  pmix%{PROJ_DELIM}
-BuildRequires:  libevent-devel
-%endif
-BuildRequires:  hwloc-devel
-%if 0%{?centos_version} == 700
-BuildRequires: libtool-ltdl
-%endif
 %if 0%{with_slurm}
 BuildRequires:  slurm-devel%{PROJ_DELIM}
 #!BuildIgnore:  slurm%{PROJ_DELIM}
@@ -82,7 +72,8 @@ BuildRequires:  lustre-client%{PROJ_DELIM}
 %endif
 
 %if %{with_openib}
-BuildRequires:  rdma-core-devel
+BuildRequires:  libibumad-devel
+BuildRequires:  libibverbs-devel
 %endif
 
 %if %{with_psm}
@@ -97,9 +88,12 @@ BuildRequires:  openssl-devel
 
 %if %{with_psm2}
 BuildRequires:  libpsm2-devel >= 10.2.0
+Requires:       libpsm2 >= 10.2.0
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-Requires: prun%{PROJ_DELIM} >= 1.2
+Requires: prun%{PROJ_DELIM}
 #!BuildIgnore: post-build-checks
 
 # Default library install path
@@ -116,8 +110,8 @@ Open MPI jobs.
 
 %prep
 
-%setup -q -n openmpi-%{version}
-%patch0 -p1
+%setup -q -n %{pname}-%{version}
+%patch0 -p0
 
 %build
 # OpenHPC compiler designation
@@ -125,14 +119,6 @@ Open MPI jobs.
 
 
 BASEFLAGS="--prefix=%{install_path} --disable-static --enable-builtin-atomics --with-sge --enable-mpi-cxx"
-
-# build against external pmix and libevent
-%if 0%{with_pmix}
-module load pmix
-BASEFLAGS="$BASEFLAGS --with-pmix=${PMIX_DIR}"
-BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
-%endif
-
 %if %{with_psm}
   BASEFLAGS="$BASEFLAGS --with-psm"
 %endif
@@ -157,7 +143,7 @@ cp %{SOURCE3} .
 export PATH="./:$PATH"
 %endif
 
-./configure ${BASEFLAGS} || { cat config.log && exit 1; }
+./configure ${BASEFLAGS}
 
 make %{?_smp_mflags}
 
@@ -191,11 +177,8 @@ module-whatis "URL: %{url}"
 set     version			    %{version}
 
 setenv          MPI_DIR             %{install_path}
-%if 0%{with_pmix}
-setenv          OHPC_MPI_LAUNCHERS  pmix
-%endif
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
+prepend-path    MANPATH             %{install_path}/man
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{pname}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
@@ -213,9 +196,12 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %files
-%{install_path}
-%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%defattr(-,root,root,-)
+%{OHPC_PUB}
 %doc NEWS
 %doc README
 %doc LICENSE
@@ -223,15 +209,6 @@ EOF
 %doc README.JAVA.txt
 
 %changelog
-* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 3.0.0-1
-- update to 3.0.0
-- use the OpenHPC pmix package
-- use the same libevent as pmix (external)
-- small cleanups
-
-* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 1.10.7-1
-- default to building with PSM and PSM2 at the same time
-
 * Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.10.4-1
 - switch to ohpc_compiler_dependent flag
 
