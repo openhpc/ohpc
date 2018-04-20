@@ -1,0 +1,220 @@
+--- superlu_dist-4.1/EXAMPLE/pddrive1_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive1_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -35,7 +35,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pddrive1.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive1.c	2015-08-19 15:02:29.000000000 -0700
+@@ -15,7 +15,7 @@
+ #include "superlu_ddefs.h"
+ 
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ /*
+  * Purpose
+  * =======
+--- superlu_dist-4.1/EXAMPLE/pddrive2_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive2_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -35,7 +35,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pddrive2.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive2.c	2015-08-19 15:02:29.000000000 -0700
+@@ -35,7 +35,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pddrive3_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive3_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -41,7 +41,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pddrive3.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive3.c	2015-08-19 15:02:29.000000000 -0700
+@@ -41,7 +41,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pddrive4_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive4_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -37,7 +37,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pddrive4.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive4.c	2015-08-19 15:02:29.000000000 -0700
+@@ -37,7 +37,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pddrive_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -36,7 +36,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pddrive.c	2015-07-28 14:50:47.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pddrive.c	2015-08-19 15:02:29.000000000 -0700
+@@ -37,7 +37,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pzdrive1_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive1_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -34,7 +34,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pzdrive1.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive1.c	2015-08-19 15:02:29.000000000 -0700
+@@ -14,7 +14,7 @@
+ #include "superlu_zdefs.h"
+ 
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ /*
+  * Purpose
+  * =======
+--- superlu_dist-4.1/EXAMPLE/pzdrive2_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive2_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -34,7 +34,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pzdrive2.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive2.c	2015-08-19 15:02:29.000000000 -0700
+@@ -34,7 +34,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pzdrive3_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive3_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -40,7 +40,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pzdrive3.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive3.c	2015-08-19 15:02:29.000000000 -0700
+@@ -40,7 +40,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pzdrive4_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive4_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -36,7 +36,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pzdrive4.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive4.c	2015-08-19 15:02:29.000000000 -0700
+@@ -36,7 +36,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pzdrive_ABglobal.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive_ABglobal.c	2015-08-19 15:02:29.000000000 -0700
+@@ -35,7 +35,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
+--- superlu_dist-4.1/EXAMPLE/pzdrive.c	2015-07-17 19:54:17.000000000 -0700
++++ superlu_dist-4.1.patch/EXAMPLE/pzdrive.c	2015-08-19 15:02:29.000000000 -0700
+@@ -36,7 +36,7 @@
+  * </pre>
+  */
+ 
+-int main(int argc, char *argv[])
++void main(int argc, char *argv[])
+ {
+     superlu_options_t options;
+     SuperLUStat_t stat;
