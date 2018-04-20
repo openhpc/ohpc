@@ -1,5 +1,5 @@
---- a/numpy/distutils/fcompiler/intel.py	2017-09-24 17:47:22.000000000 -0700
-+++ b/numpy/distutils/fcompiler/intel.py	2017-12-08 14:36:37.000000000 -0800
+--- numpy-1.12.1/numpy/distutils/fcompiler/intel.py	2017-03-12 14:36:42.000000000 -0700
++++ numpy-1.12.1.patch/numpy/distutils/fcompiler/intel.py	2017-04-17 11:45:23.000000000 -0700
 @@ -2,6 +2,7 @@
  from __future__ import division, absolute_import, print_function
  
@@ -8,16 +8,29 @@
  
  from numpy.distutils.ccompiler import simple_version_match
  from numpy.distutils.fcompiler import FCompiler, dummy_fortran_file
-@@ -61,7 +62,7 @@
-         return ['-fp-model strict -O1 -{}'.format(mpopt)]
+@@ -56,7 +57,7 @@
+         return ['-fPIC']
+ 
+     def get_flags_opt(self):  # Scipy test failures with -O2
+-        return ['-xhost -openmp -fp-model strict -O1']
++        return ['-qopenmp -fp-model strict -O1']
  
      def get_flags_arch(self):
--        return []
+         return []
+@@ -120,10 +121,10 @@
+         return ['-fPIC']
+ 
+     def get_flags_opt(self):  # Scipy test failures with -O2
+-        return ['-openmp -fp-model strict -O1']
++        return ['-qopenmp -fp-model strict -O1']
+ 
+     def get_flags_arch(self):
+-        return ['']
 +        return environ.get('ARCH_FLAGS', '-xSSE4.2 -axCORE-AVX2,CORE-AVX512').strip().split()
  
-     def get_flags_linker_so(self):
-         opt = FCompiler.get_flags_linker_so(self)
-@@ -170,10 +171,10 @@
+ # Is there no difference in the version string between the above compilers
+ # and the Visual compilers?
+@@ -166,10 +167,10 @@
          return []
  
      def get_flags_debug(self):
@@ -30,7 +43,7 @@
  
      def get_flags_arch(self):
          return ["/arch:IA32", "/QaxSSE3"]
-@@ -209,7 +210,7 @@
+@@ -205,7 +206,7 @@
      version_match = simple_version_match(start=r'Intel\(R\).*?64,')
  
      def get_flags_arch(self):
