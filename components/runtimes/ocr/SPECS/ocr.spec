@@ -28,7 +28,7 @@ Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://xstack.exascale-tech.com/wiki
-Source0:   https://xstack.exascale-tech.com/git/public/snapshots/ocr-refs/tags/OCRv%{version}_ohpc.tbz2
+Source0:   OCRv%{version}_ohpc.tbz2
 Source1:   OHPC_macros
 
 %description
