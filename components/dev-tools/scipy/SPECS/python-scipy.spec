@@ -28,10 +28,9 @@
 # scipy build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
-%define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu7
+%global gnu_family gnu
 
 %if "%{compiler_family}" != "intel"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
@@ -42,8 +41,8 @@ Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname scipy
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name:           %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.0.0
+Name:           python-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Version:        0.19.1
 Release:        1%{?dist}
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
@@ -55,11 +54,13 @@ Source1:        OHPC_macros
 BuildRequires:  fdupes
 %endif
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  %{python_prefix}-Cython%{PROJ_DELIM}
-BuildRequires:  %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
+BuildRequires:  python-devel
+BuildRequires:  python-setuptools
+BuildRequires:  python-Cython%{PROJ_DELIM}
+BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-Requires:       %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
+Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -79,7 +80,7 @@ leading scientists and engineers.
 
 %prep
 %setup -q -n %{pname}-%{version}
-find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python3||" {} \;
+find . -type f -name "*.py" -exec sed -i "s|#!/usr/bin/env python||" {} \;
 
 %build
 # OpenHPC compiler/mpi designation
@@ -90,7 +91,7 @@ module load openblas
 module load fftw
 %endif
 
-module load %{python_module_prefix}numpy
+module load numpy
 
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
@@ -112,9 +113,9 @@ EOF
 CFLAGS="%{optflags} -fno-strict-aliasing" \
 %if "%{compiler_family}" == "intel"
 LDSHARED="icc -shared" \
-%__python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
+python setup.py config --compiler=intelm --fcompiler=intelem build_clib --compiler=intelem --fcompiler=intelem build_ext --compiler=intelem --fcompiler=intelem build
 %else
-%__python setup.py config_fc --fcompiler=gnu95 --noarch build
+python setup.py config_fc --fcompiler=gnu95 --noarch build
 %endif
 
 %install
@@ -125,52 +126,50 @@ LDSHARED="icc -shared" \
 module load openblas
 %endif
 
-module load %{python_module_prefix}numpy
-%__python setup.py install --prefix=%{install_path} --root=%{buildroot}
-find %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
+module load numpy
+python setup.py install --prefix=%{install_path} --root=%{buildroot}
+find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
-find %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/scipy/weave -type d -name examples | xargs rm -rf
-
+find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy/weave -type d -name examples | xargs rm -rf
 %if 0%{?sles_version} || 0%{?suse_version}
-%fdupes %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages
+%fdupes %{buildroot}%{install_path}/lib64/python2.7/site-packages
 %endif
 
 # fix executability issue
-chmod +x %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/%{pname}/io/arff/arffread.py
-chmod +x %{buildroot}%{install_path}/lib64/%{python_lib_dir}/site-packages/%{pname}/special/spfun_stats.py
+chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/io/arff/arffread.py
+chmod +x %{buildroot}%{install_path}/lib64/python2.7/site-packages/%{pname}/special/spfun_stats.py
 
 # OpenHPC module file
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}/%{version}
+%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{python3_prefix}-%{pname} library built with the %{compiler_family} compiler"
+puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
 puts stderr "toolchain and the %{mpi_family} MPI library."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{python3_prefix}-%{pname} built with %{compiler_family} compiler and %{mpi_family}"
+module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family}"
 module-whatis "Version: %{version}"
 module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
-family                      scipy
 set     version             %{version}
 
-prepend-path    PYTHONPATH          %{install_path}/lib64/%{python_lib_dir}/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 
 depends-on fftw
-depends-on %{python_module_prefix}numpy
+depends-on numpy
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{python_module_prefix}%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
