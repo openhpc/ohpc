@@ -54,6 +54,7 @@ Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
 Source0: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
+Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
@@ -90,7 +91,7 @@ require a setuid binary.
 
 %prep
 %setup -q -n %{pname}-%{version}
-
+%patch1 -p1
 
 %build
 if [ ! -f configure ]; then
