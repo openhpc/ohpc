@@ -38,7 +38,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define 	pname R_base
 %define 	PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:		%{pname}%{PROJ_DELIM}
 Release:	1%{?dist}
 Version:        3.3.3
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
