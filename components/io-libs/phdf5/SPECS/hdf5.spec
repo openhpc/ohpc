@@ -48,6 +48,7 @@ Source1:   OHPC_macros
 Patch0:    psxe18.fortran.patch
 
 BuildRequires: zlib-devel
+Requires:      zlib-devel
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
