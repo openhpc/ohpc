@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 ##
-# Copyright 2013-2017 Ghent University
+# Copyright 2013-2018 Ghent University
 #
 # This file is part of EasyBuild,
 # originally created by the HPC team of Ghent University (http://ugent.be/hpc/en),
@@ -49,11 +49,12 @@ import site
 import sys
 import tempfile
 import traceback
+import urllib2
 from distutils.version import LooseVersion
 from hashlib import md5
 
 
-EB_BOOTSTRAP_VERSION = '20170808.01'
+EB_BOOTSTRAP_VERSION = '20180412.02'
 
 # argparse preferrred, optparse deprecated >=2.7
 HAVE_ARGPARSE = False
@@ -240,8 +241,17 @@ def check_module_command(tmpdir):
 
     def check_cmd_help(modcmd):
         """Check 'help' output for specified command."""
-        modcmd_re = re.compile(r'module\s.*command\s')
+        modcmd_re = re.compile(r'module\s.*command')
         cmd = "%s python help" % modcmd
+        os.system("%s > %s 2>&1" % (cmd, out))
+        txt = open(out, 'r').read()
+        debug("Output from %s: %s" % (cmd, txt))
+        return modcmd_re.search(txt)
+
+    def is_modulecmd_tcl_modulestcl():
+        """Determine if modulecmd.tcl is EnvironmentModulesTcl."""
+        modcmd_re = re.compile('Modules Release Tcl')
+        cmd = "modulecmd.tcl python --version"
         os.system("%s > %s 2>&1" % (cmd, out))
         txt = open(out, 'r').read()
         debug("Output from %s: %s" % (cmd, txt))
@@ -250,13 +260,16 @@ def check_module_command(tmpdir):
     # order matters, which is why we don't use a dict
     known_module_commands = [
         ('lmod', 'Lmod'),
+        ('modulecmd.tcl', 'EnvironmentModules'),
         ('modulecmd', 'EnvironmentModulesC'),
-        ('modulecmd.tcl', 'EnvironmentModulesTcl'),
     ]
     out = os.path.join(tmpdir, 'module_command.out')
     modtool = None
     for modcmd, modtool in known_module_commands:
         if check_cmd_help(modcmd):
+            # distinguish between EnvironmentModulesTcl and EnvironmentModules
+            if modcmd == 'modulecmd.tcl' and is_modulecmd_tcl_modulestcl():
+                modtool = 'EnvironmentModulesTcl'
             easybuild_modules_tool = modtool
             info("Found module command '%s' (%s), so using it." % (modcmd, modtool))
             break
@@ -266,6 +279,14 @@ def check_module_command(tmpdir):
             if modcmd and check_cmd_help(modcmd):
                 easybuild_modules_tool = modtool
                 info("Found module command '%s' via $LMOD_CMD (%s), so using it." % (modcmd, modtool))
+                break
+        elif modtool == 'EnvironmentModules':
+            # check value of $MODULESHOME as fallback
+            moduleshome = os.environ.get('MODULESHOME', 'MODULESHOME_NOT_DEFINED')
+            modcmd = os.path.join(moduleshome, 'libexec', 'modulecmd.tcl')
+            if os.path.exists(modcmd) and check_cmd_help(modcmd):
+                easybuild_modules_tool = modtool
+                info("Found module command '%s' via $MODULESHOME (%s), so using it." % (modcmd, modtool))
                 break
 
     if easybuild_modules_tool is None:
@@ -639,14 +660,36 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
         'preinstallopts': preinstallopts,
     })
 
-    # create easyconfig file
-    ebfile = os.path.join(tmpdir, 'EasyBuild-%s.eb' % templates['version'])
-    handle = open(ebfile, 'w')
+    # determine PyPI URLs for individual packages
+    pkg_urls = []
+    for pkg in EASYBUILD_PACKAGES:
+        # format of pkg entries in templates: "'<pkg_filename>',"
+        pkg_filename = templates[pkg][1:-2]
+
+        # the lines below implement a simplified version of the 'pypi_source_urls' and 'derive_alt_pypi_url' functions,
+        # which we can't leverage here, partially because of transitional changes in PyPI (#md5= -> #sha256=)
+
+        # determine download URL via PyPI's 'simple' API
+        pkg_simple = urllib2.urlopen('https://pypi.python.org/simple/%s' % pkg, timeout=10).read()
+        pkg_url_part_regex = re.compile('/(packages/[^#]+)/%s#' % pkg_filename)
+        res = pkg_url_part_regex.search(pkg_simple)
+        if res:
+            pkg_url_part = res.group(1)
+        else:
+            error("Failed to determine PyPI package URL for %s: %s\n" % (pkg, pkg_simple))
+
+        pkg_url = 'https://pypi.python.org/' + pkg_url_part
+        pkg_urls.append(pkg_url)
+
     templates.update({
-        'source_urls': '\n'.join(["'%s/%s/%s'," % (PYPI_SOURCE_URL, pkg[0], pkg) for pkg in EASYBUILD_PACKAGES]),
+        'source_urls': '\n'.join(["'%s'," % pkg_url for pkg_url in pkg_urls]),
         'sources': "%(vsc-install)s%(vsc-base)s%(easybuild-framework)s%(easybuild-easyblocks)s%(easybuild-easyconfigs)s" % templates,
         'pythonpath': distribute_egg_dir,
     })
+
+    # create easyconfig file
+    ebfile = os.path.join(tmpdir, 'EasyBuild-%s.eb' % templates['version'])
+    handle = open(ebfile, 'w')
     handle.write(EASYBUILD_EASYCONFIG_TEMPLATE % templates)
     handle.close()
 
@@ -695,6 +738,9 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
     # install EasyBuild with EasyBuild
     from easybuild.main import main as easybuild_main
     easybuild_main()
+
+    if print_debug:
+        os.environ['EASYBUILD_DEBUG'] = '1'
 
     # make sure the EasyBuild module was actually installed
     # EasyBuild configuration options that are picked up from configuration files/environment may break the bootstrap,
