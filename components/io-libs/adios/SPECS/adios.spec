@@ -51,7 +51,11 @@ BuildRequires: python-devel
 BuildRequires: lustre-lite
 Requires: lustre-client%{PROJ_DELIM}
 %endif
+%if "%{compiler_family}" != "intel"
 BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
+%else
+BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM} < 1.14
+%endif
 
 
 %if 0%{?sles_version} || 0%{?suse_version}
