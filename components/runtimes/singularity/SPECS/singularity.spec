@@ -58,6 +58,7 @@ Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: libarchive-devel
 BuildRequires: libtool
 BuildRequires: python
 Requires: file
