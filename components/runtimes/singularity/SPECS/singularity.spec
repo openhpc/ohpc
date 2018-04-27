@@ -46,7 +46,7 @@
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.4.6
+Version: 2.5.0
 Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
