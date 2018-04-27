@@ -51,7 +51,7 @@ BuildRequires: python-devel
 BuildRequires: lustre-lite
 Requires: lustre-client%{PROJ_DELIM}
 %endif
-BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM} = 1.12.1
 
 
 %if 0%{?sles_version} || 0%{?suse_version}
