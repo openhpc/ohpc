@@ -50,13 +50,13 @@ AC_CHECK_FILE(/etc/profile.d/xcat.sh,[enable_xcat=yes],[enable_cat=no])
 AM_CONDITIONAL(XCAT_ENABLED,test "x$enable_xcat" = "xyes" )
 
 # Option for testing against multiple compiler/MPI families
-AC_MSG_CHECKING([if enable PXSE toolchain related tests])
-AC_ARG_ENABLE([pxse],
-	 [AS_HELP_STRING([--enable-pxse],[Enable development tool tests with PXSE toolchain (default=no)],,120)],
-	 [],[enable_pxse=no])
+AC_MSG_CHECKING([if enable PSXE toolchain related tests])
+AC_ARG_ENABLE([psxe],
+	 [AS_HELP_STRING([--enable-psxe],[Enable development tool tests with PSXE toolchain (default=no)],,120)],
+	 [],[enable_psxe=no])
 
 # Default MPI families to test
-if test x$enable_pxse = xyes ;then
+if test x$enable_psxe = xyes ;then
    AC_MSG_RESULT([yes])
    AC_SUBST(COMPILER_FAMILIES,["gnu7 intel"])       
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi3 impi"])
