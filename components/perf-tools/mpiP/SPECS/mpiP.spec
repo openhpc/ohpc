@@ -40,7 +40,7 @@ BuildRequires: binutils-devel
 BuildRequires: python
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%global install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 
@@ -148,3 +148,4 @@ rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
 
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.4.1-1
 - Switching to %%ohpc_compiler macro
+
