@@ -19,8 +19,8 @@
 Requires:      intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: gnu7-compilers%{PROJ_DELIM}
 Requires:      gnu7-compilers%{PROJ_DELIM}
-BuildRequires: openmpi3-gnu7%{PROJ_DELIM}
-Requires:      openmpi3-gnu7%{PROJ_DELIM}
+BuildRequires: %{mpi_family}-gnu7%{PROJ_DELIM}
+Requires:      %{mpi_family}-gnu7%{PROJ_DELIM}
 %endif
 
 # Base package name
