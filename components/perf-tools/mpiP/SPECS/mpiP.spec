@@ -19,6 +19,8 @@
 Requires:      intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: gnu7-compilers%{PROJ_DELIM}
 Requires:      gnu7-compilers%{PROJ_DELIM}
+BuildRequires: openmpi3-gnu7%{PROJ_DELIM}
+Requires:      openmpi3-gnu7%{PROJ_DELIM}
 %endif
 
 # Base package name
@@ -67,9 +69,8 @@ cp /usr/lib/rpm/config.guess bin
 # OpenHPC compiler/mpi designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-# see above where compiler_family is changed
-%define compiler_family gnu7
-%ohpc_setup_compiler
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu7
+module load %{mpi_family}
 
 CC=mpicc
 CXX=mpicxx
@@ -86,9 +87,8 @@ FC=mpif90
 # OpenHPC compiler designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-# see above where compiler_family is changed
-%define compiler_family gnu7
-%ohpc_setup_compiler
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu7
+module load %{mpi_family}
 
 make %{?_smp_mflags} shared
 make DESTDIR=$RPM_BUILD_ROOT install
