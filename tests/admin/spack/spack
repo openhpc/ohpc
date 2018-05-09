@@ -39,3 +39,8 @@ setup() {
     spack install libjpeg-turbo%clang
     assert_success
 }
+
+@test "[spack] test module refresh" }
+    echo y | spack module refresh
+    assert_success
+}
