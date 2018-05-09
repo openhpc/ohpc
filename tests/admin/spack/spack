@@ -40,7 +40,7 @@ setup() {
     assert_success
 }
 
-@test "[spack] test module refresh" }
+@test "[spack] test module refresh" {
     echo y | spack module refresh
     assert_success
 }
