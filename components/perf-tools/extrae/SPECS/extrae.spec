@@ -26,6 +26,7 @@ Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
 Source1:	OHPC_macros
+Patch1:     extrae.makefile-destdir.patch
 
 BuildRequires:	autoconf%{PROJ_DELIM}
 BuildRequires:	automake%{PROJ_DELIM}
@@ -45,6 +46,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 
 %build
@@ -53,8 +55,10 @@ This is the %{compiler_family}-%{mpi_family} version.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+module load autotools
 module load papi
 
+./bootstrap
 ./configure --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
 make %{?_smp_mflags} 
 
