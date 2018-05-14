@@ -29,7 +29,11 @@ Source1:	OHPC_macros
 
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison
+%if 0%{?suse_version}
+BuildRequires: flex
+%else
 BuildRequires: flex-devel
+%endif
 BuildRequires: autoconf%{PROJ_DELIM}
 BuildRequires: automake%{PROJ_DELIM}
 #BuildRequires: libtool%{PROJ_DELIM}
