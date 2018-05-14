@@ -58,7 +58,7 @@ module load autotools
 module load boost
 
 ./bootstrap
-LDFLAGS="-lstdc++" ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR
+CFLAGS="-std=c99" LDFLAGS="-lstdc++" ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR
 
 
 make %{?_smp_mflags} 
