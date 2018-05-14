@@ -37,10 +37,7 @@ BuildRequires: flex-devel
 BuildRequires: autoconf%{PROJ_DELIM}
 BuildRequires: automake%{PROJ_DELIM}
 BuildRequires: libtool%{PROJ_DELIM}
-#BuildRequires:	binutils-devel
-#BuildRequires:	libxml2-devel
-#BuildRequires:	papi%{PROJ_DELIM}
-#Requires:	papi%{PROJ_DELIM}
+#!BuildIgnore: post-build-checks
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
