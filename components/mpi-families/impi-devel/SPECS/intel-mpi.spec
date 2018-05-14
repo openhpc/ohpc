@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname intel-mpi-devel
-%define year 2017
+%define year 2018
 
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
@@ -257,7 +257,9 @@ if [ "$1" = 0 ]; then
 
     if [ -s %{OHPC_MODULEDEPS}/intel/impi/.manifest ];then
 	for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
-            rm $file
+	   if [ -e $file ];then
+               rm $file
+	   fi
 	done
 	rm -f %{OHPC_MODULEDEPS}/intel/impi/.manifest
     fi
