@@ -36,7 +36,7 @@ BuildRequires: flex-devel
 %endif
 BuildRequires: autoconf%{PROJ_DELIM}
 BuildRequires: automake%{PROJ_DELIM}
-#BuildRequires: libtool%{PROJ_DELIM}
+BuildRequires: libtool%{PROJ_DELIM}
 #BuildRequires:	binutils-devel
 #BuildRequires:	libxml2-devel
 #BuildRequires:	papi%{PROJ_DELIM}
