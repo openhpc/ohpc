@@ -55,28 +55,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 module load papi
 
-%if %{compiler_family} == intel
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-nocross-compiler-suite=intel "
-%endif
-
-%if %{mpi_family} == impi
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=intel3 "
-%endif
-
-%if %{mpi_family} == mpich
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
-%endif
-
-%if %{mpi_family} == mvapich2
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
-%endif
-
-%if %{mpi_family} == openmpi
-CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=$MPI_DIR "
-%endif
-
-./bootstrap
-./configure --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} $CONFIGURE_OPTIONS
+./configure --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
 make %{?_smp_mflags} 
 
 %install
@@ -115,11 +94,7 @@ module-whatis "URL %{url}"
 
 set     version			    %{version}
 
-if [ expr [ module-info mode load ] || [module-info mode display ] ] {
-    if { ![is-loaded papi]  } {
-      module load papi
-    }
-}
+depends-on papi
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
@@ -145,7 +120,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 
 %doc
