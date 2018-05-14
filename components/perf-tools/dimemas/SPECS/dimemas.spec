@@ -54,6 +54,7 @@ Dimemas is a performance analysis tool for message-passing programs. It enables 
 
 %build
 %ohpc_setup_compiler
+module load autotools
 module load boost
 
 ./bootstrap
