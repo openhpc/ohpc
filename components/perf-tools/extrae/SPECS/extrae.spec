@@ -60,7 +60,7 @@ module load autotools
 module load papi
 
 ./bootstrap
-./configure --with-libxml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
+./configure --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
 make %{?_smp_mflags} 
 
 %install
