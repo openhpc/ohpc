@@ -178,6 +178,12 @@ EOF
 prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 EOF
 
+    # Also define MPI_HOME based on $I_MPI_ROOT
+    IMPI_HOME=`egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}'`
+    if [ -d "$IMPI_HOME/intel64" ];then
+	echo "setenv          MPI_HOME        $IMPI_HOME/intel64" >> %{OHPC_MODULEDEPS}/intel/impi/${version}
+    fi
+
     # Version file
     %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/.version.${version}
 #%Module1.0#####################################################################
@@ -223,6 +229,12 @@ EOF
 #%Module1.0#####################################################################
 set     ModulesVersion      "${version}"
 EOF
+
+    # Also define MPI_HOME based on $I_MPI_ROOT
+    IMPI_HOME=`egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}'`
+    if [ -d "$IMPI_HOME/intel64" ];then
+	echo "setenv          MPI_HOME        $IMPI_HOME/intel64" >> %{OHPC_MODULEDEPS}/gnu/impi/${version}
+    fi
 
     # support for additional gnu variants
     %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/${version} %{OHPC_MODULEDEPS}/gnu7/impi/${version}
