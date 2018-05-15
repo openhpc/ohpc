@@ -18,7 +18,7 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:	Paraver
-Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:	4.7.2
 Release:	4
 License:	LGPL-2.1
@@ -27,7 +27,7 @@ URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/wxparaver/wxparaver-%{version}-src.tar.bz2
 Source1:	OHPC_macros
 
-BuildRequires: boost
+BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison
 BuildRequires: flex-devel
 BuildRequires: autoconf%{PROJ_DELIM}
@@ -37,7 +37,7 @@ BuildRequires:	binutils-devel
 BuildRequires:	libxml2-devel
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
 Paraver was developed to respond to the need to have a qualitative global perception of the application behavior by visual inspection and then to be able to focus on the detailed quantitative analysis of the problems. Expressive power, flexibility and the capability of efficiently handling large traces are key features addressed in the design of Paraver. The clear and modular structure of Paraver plays a significant role towards achieving these targets.
@@ -67,14 +67,15 @@ make DESTDIR=$RPM_BUILD_ROOT install
 
 
 # OpenHPC module file
-%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
 puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
+puts stderr "toolchain and the %{mpi_family} MPI stack."
 puts stderr "\nVersion %{version}\n"
 
 }
@@ -97,7 +98,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -110,7 +111,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%{OHPC_HOME}
 %{OHPC_PUB}
 
 %doc
