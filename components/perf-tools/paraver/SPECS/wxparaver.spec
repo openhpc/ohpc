@@ -31,8 +31,10 @@ BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison
 %if 0%{?suse_version}
 BuildRequires: flex
+BuildRequires: wxGTK3-3_2-devel
 %else
 BuildRequires: flex-devel
+BuildRequires: wxGTK3-devel
 %endif
 BuildRequires: autoconf%{PROJ_DELIM}
 BuildRequires: automake%{PROJ_DELIM}
@@ -54,8 +56,13 @@ Paraver was developed to respond to the need to have a qualitative global percep
 %ohpc_setup_compiler
 module load boost
 
-CC=g++ ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR --with-wx-config=/usr/libexec/wxGTK3/wx-config
+%if 0%{?suse_version}
+%global wx_config /usr/bin/wx-config
+%else
+%global wx_config /usr/libexec/wxGTK3/wx-config
+%endif
 
+CC=g++ ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR --with-wx-config=%{wx_config}
 
 
 make %{?_smp_mflags} 
