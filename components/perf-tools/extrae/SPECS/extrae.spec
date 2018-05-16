@@ -59,8 +59,14 @@ This is the %{compiler_family}-%{mpi_family} version.
 module load autotools
 module load papi
 
+%if  "%{compiler_family}" == "intel"
+%if  "%{mpi_family}" == "impi"
+%global compiler_vars "CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort"
+%endif
+%endif
+
 ./bootstrap
-./configure --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
+%{compiler_vars} ./configure --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
 make %{?_smp_mflags} 
 
 %install
