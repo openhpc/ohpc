@@ -38,7 +38,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.aarch64/source/
 %define kobjdir /lib/modules/%{centos_kernel}.aarch64/build/
 %else
-%define centos_kernel 3.10.0-693.el7
+%define centos_kernel 3.10.0-862.el7
 BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.x86_64/source/
@@ -76,7 +76,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.10.2}
+%{!?version: %global version 2.10.3}
 %{!?kver:    %global kver    %(uname -r)}
 %{!?kdir:    %global kdir    /lib/modules/%{kver}/source}
 %{!?kobjdir: %global kobjdir %(if [ "%{kdir}" = "/lib/modules/%{kver}/source" ]; then echo "/lib/modules/%{kver}/build"; else echo "%{kdir}"; fi)}
