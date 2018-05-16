@@ -18,14 +18,3 @@
  
  #ifdef TAU_BGP
    // *CWL* returns void ** but used directly as the FP.
---- tau-2.26.1/src/Profile/TauSampling.cpp	2017-11-21 15:11:52.429720127 +0100
-+++ tau-2.26.1/src/Profile/TauSampling.cpp.patched	2017-11-21 15:12:45.549707976 +0100
-@@ -417,7 +417,7 @@
- /* EVERYTHING ELSE SUPPORT */
- 
- #else
--  struct ucontext *uc = (struct ucontext *)p;
-+  ucontext_t *uc = (ucontext_t *)p;
-   struct sigcontext *sc;
-   sc = (struct sigcontext *)&uc->uc_mcontext;
- #ifdef TAU_BGP
