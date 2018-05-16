@@ -38,7 +38,7 @@
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.66.0
+Version:        1.67.0
 
 %define version_exp 1_66_0
 
