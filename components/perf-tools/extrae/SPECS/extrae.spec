@@ -66,7 +66,7 @@ module load papi
 %endif
 
 ./bootstrap
-%{compiler_vars} ./configure --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
+./configure %{compiler_vars} --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
 make %{?_smp_mflags} 
 
 %install
