@@ -61,12 +61,12 @@ module load papi
 
 %if  "%{compiler_family}" == "intel"
 %if  "%{mpi_family}" == "impi"
-%global compiler_vars CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort
+export compiler_vars="CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort"
 %endif
 %endif
 
 ./bootstrap
-./configure %{compiler_vars} --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
+./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
 make %{?_smp_mflags} 
 
 %install
