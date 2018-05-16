@@ -34,12 +34,12 @@ Summary:   A powerful implementation of MPI
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   3.0.1
+Version:   3.1.0
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-Source0:   http://www.open-mpi.org/software/ompi/v3.0/downloads/openmpi-%{version}.tar.bz2
+Source0:   http://www.open-mpi.org/software/ompi/v3.1/downloads/openmpi-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source3:   pbs-config
 Patch0:    openmpi-3.0-pbs-config.patch
