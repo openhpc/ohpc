@@ -61,7 +61,7 @@ module load papi
 
 %if  "%{compiler_family}" == "intel"
 %if  "%{mpi_family}" == "impi"
-%global compiler_vars "CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort"
+%global compiler_vars CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort
 %endif
 %endif
 
