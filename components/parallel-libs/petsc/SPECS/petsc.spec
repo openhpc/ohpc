@@ -107,8 +107,6 @@ make
 
 make install DESTDIR=$RPM_BUILD_ROOT/%{install_path}
 
-rm %{buildroot}%{install_path}/lib/petsc/conf/configure.log
-
 # remove stock module file
 rm -rf %{buildroot}%{install_path}/lib/modules
 
