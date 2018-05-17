@@ -1,0 +1,11 @@
+--- a/doc-src/conf.py	2017-11-20 15:28:53.000000000 -0800
++++ b/doc-src/conf.py	2017-11-20 15:29:30.000000000 -0800
+@@ -94,7 +94,7 @@
+ import sphinx_rtd_theme
+ html_theme = 'sphinx_rtd_theme'
+ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+-highlight_language = 'console'
++highlight_language = 'none'
+ 
+ # Theme options are theme-specific and customize the look and feel of a theme
+ # further.  For a list of options available for each theme, see the
