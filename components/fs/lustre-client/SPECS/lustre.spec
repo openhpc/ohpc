@@ -64,7 +64,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %bcond_without lustre_iokit
 %bcond_without lustre_modules
 %bcond_with snmp
-%bcond_without gss_keyring
+%bcond_with gss_keyring
 %bcond_without manpages
 %bcond_without shared
 %bcond_without static
