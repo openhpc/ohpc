@@ -122,7 +122,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{OHPC_PUB}
-%doc COPYRIGHT CREDITS INSTALL README README.LINUX README.consistency README.large_files RELEASE_NOTES cobalt.script pbs.script src/lib/ncconfig.h
+%doc AUTHORS ChaneLog COPYRIGHT CREDITS INSTALL NEWS README RELEASE_NOTES 
 
 %changelog
 * Mon May  1 2017 Paul Osmialowski <pawel.osmialowski@foss.arm.com> - 1.8.1-1
