@@ -105,7 +105,7 @@ make
 
 %install
 
-make install DESTDIR=$RPM_BUILD_ROOT/%{install_path}
+make install DESTDIR=$RPM_BUILD_ROOT
 
 # remove stock module file
 rm -rf %{buildroot}%{install_path}/lib/modules
