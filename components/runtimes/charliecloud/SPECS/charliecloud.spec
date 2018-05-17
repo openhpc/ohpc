@@ -20,10 +20,10 @@ Release:   %{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://hpc.github.io/charliecloud/
-Source0:   https://github.com/hpc/charliecloud/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:   https://github.com/hpc/charliecloud/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 Patch1:    charliecloud-language_highlight.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: python 
