@@ -140,12 +140,18 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %global modules_fs_path /lib/modules/%{kversion}/%{kmoddir}
 
 %if %{_vendor}=="redhat" || %{_vendor}=="fedora"
+	%global requires_yaml_name libyaml
 	%global requires_kmod_name kmod-%{lustre_name}
-	%global requires_kmod_tests_name kmod-%{lustre_name}-tests
+	%if %{with lustre_tests}
+		%global requires_kmod_tests_name kmod-%{lustre_name}-tests
+	%endif
 	%global requires_kmod_version %{version}
 %else	#for Suse
+	%global requires_yaml_name libyaml-0-2
 	%global requires_kmod_name %{lustre_name}-kmp
-	%global requires_kmod_tests_name %{lustre_name}-tests-kmp
+	%if %{with lustre_tests}
+		%global requires_kmod_tests_name %{lustre_name}-tests-kmp
+	%endif
 	%define krequires %(echo %{kversion} | sed -e 's/\.x86_64$//' -e 's/\.i[3456]86$//' -e 's/-smp$//' -e 's/-bigsmp$//' -e 's/[-.]ppc64$//' -e 's/\.aarch64$//' -e 's/-default$//')
 	%if 0%{?suse_version} >= 1200
 		%global requires_kmod_version %{version}_k%(echo %{krequires} | sed -r 'y/-/_/; s/^(2\.6\.[0-9]+)_/\\1.0_/;')
