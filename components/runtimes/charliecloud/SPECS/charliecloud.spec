@@ -53,7 +53,7 @@ find doc-src -type f -print0 | xargs -0 sed -i '/.*:language: docker.*/d'
 mv doc html
 
 %install
-DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
+PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
