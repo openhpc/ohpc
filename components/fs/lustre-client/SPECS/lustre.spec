@@ -64,11 +64,20 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %bcond_without lustre_iokit
 %bcond_without lustre_modules
 %bcond_with snmp
+%bcond_with gss
 %bcond_with gss_keyring
 %bcond_without manpages
 %bcond_without shared
 %bcond_without static
 %bcond_with    systemd
+
+# By default both gss and gss keyring are disabled.
+# gss keyring requires the gss core. If the builder
+# request gss_keyring we must enable gss core even if
+# the builder attempts to disable gss.
+%if %{with gss_keyring}
+    %define with_gss
+%endif
 
 %if %{without servers}
     # --without servers overrides --with {ldiskfs|zfs}
@@ -193,6 +202,7 @@ Source5: kmp-lustre-osd-zfs.preamble
 Source6: kmp-lustre-osd-zfs.files
 Source7: kmp-lustre-tests.files
 Source8: OHPC_macros
+Patch0:  6189ae07.diff
 URL: https://wiki.hpdd.intel.com/
 DocDir: %{OHPC_PUB}/doc/contrib
 BuildRoot: %{_tmppath}/lustre-%{version}-root
@@ -337,6 +347,7 @@ clients in order to run
 %endif
 %prep
 %setup -qn lustre-%{version}
+%patch0 -p1
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
@@ -375,6 +386,7 @@ fi
 	%{!?with_servers:--disable-server} \
 	%{!?with_zfs:--without-zfs} \
 	%{!?with_snmp:--disable-snmp} \
+	%{!?with_gss:--disable-gss} \
 	%{!?with_gss_keyring:--disable-gss-keyring} \
 	%{!?with_manpages:--disable-manpages} \
 	%{!?with_systemd:--with-systemdsystemunitdir=no} \
@@ -436,6 +448,7 @@ echo '%{_sysconfdir}/sysconfig/lustre' >>lustre.files
 %if %{with gss_keyring}
 echo '%{_sysconfdir}/init.d/lsvcgss' >>lustre.files
 echo '%{_sysconfdir}/sysconfig/lsvcgss' >>lustre.files
+echo '%config(noreplace) %{_sysconfdir}/request-key.d/lgssc.conf' >>lustre.files
 %endif
 %endif
 
@@ -443,11 +456,6 @@ echo '%{_sysconfdir}/sysconfig/lsvcgss' >>lustre.files
 echo '%{_sysconfdir}/init.d/lnet' >>lustre.files
 %endif
 %endif
-
-CONFIGURE_ARGS="%{?configure_args}"
-if [ -z "$(echo $CONFIGURE_ARGS | grep "\-\-disable\-gss\-keyring")" ]; then
-    echo '%config(noreplace) %{_sysconfdir}/request-key.d/lgssc.conf' >>lustre.files
-fi
 
 %if %{with servers}
 mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/ocf/resource.d/lustre/
