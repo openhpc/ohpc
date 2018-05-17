@@ -26,7 +26,6 @@ Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
 Source0:   http://www.vi-hps.org/upload/packages/scorep/scorep-%{version}.tar.gz
 Source1:   OHPC_macros
-Patch0:    scorep-gcc7.patch
 
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
@@ -61,7 +60,6 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
 
 %build
 
