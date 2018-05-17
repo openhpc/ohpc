@@ -97,7 +97,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
-%doc COPYRIGHT LICENSE README.rst examples
+%doc LICENSE README.rst examples
 %{OHPC_PUB}
 
 %changelog
