@@ -22,6 +22,7 @@
 %if 0%{?suse_version}
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
+BuildRequires: libyaml-0-2
 
 %define sles_kernel 4.4.73-5-default
 %define kdir /lib/modules/%{sles_kernel}/source/
@@ -29,6 +30,8 @@ BuildRequires: kernel-default-devel
 %endif
 
 %if 0%{?centos_version} == 700
+
+BuildRequires: libyaml
 
 # 7.4 kernel version
 %ifarch aarch64
