@@ -169,6 +169,8 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
+# rename prun to avoid namespace conflict with ohpc
+%{__mv} $RPM_BUILD_ROOT/%{install_path}/bin/prun $RPM_BUILD_ROOT/%{install_path}/bin/prun.ompi
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
