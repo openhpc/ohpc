@@ -31,7 +31,7 @@ BuildRequires: libyaml-0-2
 
 %if 0%{?centos_version} == 700
 
-BuildRequires: libyaml
+BuildRequires: libyaml-devel
 
 # 7.4 kernel version
 %ifarch aarch64
