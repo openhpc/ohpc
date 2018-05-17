@@ -112,7 +112,12 @@ export CC=mpicc
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }
 
-make %{?_smp_mflags}
+# karl@ices.utexas.edu (5/17/18) - switching to serial make to avoid
+# problems. Others also reporing error with parallel build.
+#
+# https://github.com/Unidata/netcdf-c/issues/896
+make
+#make %{?_smp_mflags}
 
 %install
 # OpenHPC compiler/mpi designation
