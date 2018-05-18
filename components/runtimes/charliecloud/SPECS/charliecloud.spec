@@ -28,12 +28,6 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: python 
 BuildRequires: rsync
-BuildRequires: python-sphinx_rtd_theme 
-%if 0%{?suse_version}
-BuildRequires: python-Sphinx 
-%else
-BuildRequires: python-sphinx
-%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
@@ -49,8 +43,6 @@ find doc-src -type f -print0 | xargs -0 sed -i '/.*:language: docker.*/d'
 
 %build
 %{__make} %{?mflags}
-%{__make} -C doc-src %{?mflags}
-mv doc html
 
 %install
 PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
