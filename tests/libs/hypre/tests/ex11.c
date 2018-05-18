@@ -232,9 +232,7 @@ int main (int argc, char *argv[])
    {
       HYPRE_BoomerAMGCreate(&precond);
       HYPRE_BoomerAMGSetPrintLevel(precond, 1); /* print amg solution info */
-      HYPRE_BoomerAMGSetCoarsenType(precond, 6);
-      HYPRE_BoomerAMGSetRelaxType(precond, 6); /* Sym G.S./Jacobi hybrid */
-      HYPRE_BoomerAMGSetNumSweeps(precond, 1);
+      HYPRE_BoomerAMGSetNumSweeps(precond, 2); /* 2 sweeps of smoothing */
       HYPRE_BoomerAMGSetTol(precond, 0.0); /* conv. tolerance zero */
       HYPRE_BoomerAMGSetMaxIter(precond, 1); /* do only one iteration! */
    }
@@ -257,7 +255,7 @@ int main (int argc, char *argv[])
          verbosity = 0;
 
       /* define an interpreter for the ParCSR interface */
-      interpreter = hypre_CTAlloc(mv_InterfaceInterpreter,1);
+      interpreter = hypre_CTAlloc(mv_InterfaceInterpreter, 1, HYPRE_MEMORY_HOST);
       HYPRE_ParCSRSetupInterpreter(interpreter);
       HYPRE_ParCSRSetupMatvec(&matvec_fn);
 
@@ -303,8 +301,8 @@ int main (int argc, char *argv[])
       /* clean-up */
       HYPRE_BoomerAMGDestroy(precond);
       HYPRE_LOBPCGDestroy(lobpcg_solver);
-      hypre_TFree(eigenvalues);
-      hypre_TFree(interpreter);
+      hypre_TFree(eigenvalues, HYPRE_MEMORY_HOST);
+      hypre_TFree(interpreter, HYPRE_MEMORY_HOST);
    }
 
    /* Save the solution for GLVis visualization, see vis/glvis-ex11.sh */
