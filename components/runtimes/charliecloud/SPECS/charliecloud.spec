@@ -32,6 +32,9 @@ BuildRequires: rsync
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
 
+# Turn off the brp-python-bytecompile script
+%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+
 %description
 Charliecloud provides user-defined software stacks (UDSS) for
 high-performance computing (HPC) centers.
