@@ -30,4 +30,4 @@ if V110
 DO_110=1_10
 endif
 
-SUBDIRS = $(DO_16) $(DO_18) $(DO_110)
+SUBDIRS = $(DO_16) $(DO_18) $(DO_110) ohpc_module
