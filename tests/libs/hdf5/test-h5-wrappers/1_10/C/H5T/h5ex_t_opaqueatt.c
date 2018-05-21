@@ -102,7 +102,7 @@ main (void)
 
     /*
      * Get datatype and properties for the datatype.  Note that H5Tget_tag
-     * allocates space for the string in tag, so we must remember to free() it
+     * allocates space for the string in tag, so we must remember to H5free_memory() it
      * later.
      */
     dtype = H5Aget_type (attr);
@@ -136,7 +136,7 @@ main (void)
      * Close and release resources.
      */
     free (rdata);
-    free (tag);
+    H5free_memory (tag);
     status = H5Aclose (attr);
     status = H5Dclose (dset);
     status = H5Sclose (space);

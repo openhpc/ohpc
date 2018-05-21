@@ -45,5 +45,4 @@ testfiles/h5ex_d_unlimadd.ddl \
 testfiles/h5ex_d_checksum.ddl testfiles/h5ex_d_transform.ddl \
 testfiles/h5ex_d_fillval.ddl testfiles/h5ex_d_alloc.ddl test.sh
 
-TESTS_ENVIRONMENT = sh
 TESTS = test.sh
