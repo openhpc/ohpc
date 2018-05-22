@@ -41,8 +41,8 @@ downloaded from the BeeGFS repository:
 % ohpc_command if [[ ${enable_beegfs_client} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) wget https://www.beegfs.io/release/beegfs_6/0001-client-fix-readdir-in-rhel-7.5.patch \
-    -O /opt/beegfs/src/client/beegfs_client_module_6/0001-client-fix-readdir-in-rhel-7.5.patch
+[sms](*\#*) wget https://www.beegfs.io/release/beegfs_6/0001-client-fix-readdir-in-rhel-7.5.patch  \
+        -O /opt/beegfs/src/client/beegfs_client_module_6/0001-client-fix-readdir-in-rhel-7.5.patch
 [sms](*\#*) cd /opt/beegfs/src/client/beegfs_client_module_6
 [sms](*\#*) patch -p2 < 0001-client-fix-readdir-in-rhel-7.5.patch
 [sms](*\#*) /etc/init.d/beegfs-client rebuild
