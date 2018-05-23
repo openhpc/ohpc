@@ -25,4 +25,4 @@ testfiles/h5ex_g_intermediate.tst testfiles/h5ex_g_phase.tst testfiles/h5ex_g_vi
 h5ex_g_iterate.h5 h5ex_g_traverse.h5 h5ex_g_visit.h5 \
 test.sh
 
-TESTS = test.sh
+TESTS = tests
