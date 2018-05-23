@@ -26,4 +26,4 @@ h5ex_g_iterate.h5 h5ex_g_traverse.h5 h5ex_g_visit.h5 \
 test.sh
 
 AM_CPPFLAGS = '-D H5_USE_18_API'
-TESTS = test.sh
+TESTS = tests
