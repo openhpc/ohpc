@@ -1,0 +1,108 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+PKG=HDF5
+testname=libs/HDF5_1_10_API_Fortran_h5_wrapper-tests
+
+check_rms
+
+@test "[$testname] Verify h5ex_g_create ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_g_create
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+
+    rm -f h5ex_g_create.h5
+    
+}
+
+@test "[$testname] Verify h5ex_g_compact ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_g_compact
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "${binary}1.h5" ];then
+	flunk "${binary}1.h5 file not created"
+    else
+	h5dump ${binary}1.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/${binary}1.ddl
+	assert_success
+    fi
+
+    if [ ! -s "${binary}2.h5" ];then
+	flunk "${binary}2.h5 file not created"
+    else
+	h5dump ${binary}2.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/${binary}2.ddl
+	assert_success
+    fi
+
+    rm -f h5ex_g_compact*.h5
+    
+}
+
+@test "[$testname] Verify h5ex_g_phase ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_g_phase
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    run "./$binary"
+    assert_output "1 Groups: Storage type is H5G_STORAGE_TYPE_COMPACT_F
+2 Groups: Storage type is H5G_STORAGE_TYPE_COMPACT_F
+3 Groups: Storage type is H5G_STORAGE_TYPE_COMPACT_F
+4 Groups: Storage type is H5G_STORAGE_TYPE_COMPACT_F
+5 Groups: Storage type is H5G_STORAGE_TYPE_COMPACT_F
+6 Groups: Storage type is H5G_STORAGE_TYPE_DENSE_F
+7 Groups: Storage type is H5G_STORAGE_TYPE_DENSE_F
+
+6 Groups: Storage type is H5G_STORAGE_TYPE_DENSE_F
+5 Groups: Storage type is H5G_STORAGE_TYPE_DENSE_F
+4 Groups: Storage type is H5G_STORAGE_TYPE_DENSE_F
+3 Groups: Storage type is H5G_STORAGE_TYPE_DENSE_F
+2 Groups: Storage type is H5G_STORAGE_TYPE_COMPACT_F
+1 Groups: Storage type is H5G_STORAGE_TYPE_COMPACT_F
+0 Groups: Storage type is H5G_STORAGE_TYPE_COMPACT_F"
+
+}
+
+@test "[$testname] Verify h5ex_g_corder ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_g_corder
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    run "./$binary"
+    assert_output "Traversing group using alphabetical indices:
+Index  0: 5
+Index  1: D
+Index  2: F
+Index  3: H
+
+Traversing group using creation order indices:
+Index  0: H
+Index  1: D
+Index  2: F
+Index  3: 5"
+
+}
+
+
