@@ -34,11 +34,13 @@ appears when accessing the BeeGFS mount point. A patch is available and can be
 downloaded from the BeeGFS repository:
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) (*\install*) patch
 [sms](*\#*) wget https://www.beegfs.io/release/beegfs_6/0001-client-fix-readdir-in-rhel-7.5.patch  \
         -O /opt/beegfs/src/client/beegfs_client_module_6/0001-client-fix-readdir-in-rhel-7.5.patch
 [sms](*\#*) cd /opt/beegfs/src/client/beegfs_client_module_6
 [sms](*\#*) patch -p2 < 0001-client-fix-readdir-in-rhel-7.5.patch
 [sms](*\#*) /etc/init.d/beegfs-client rebuild
+[sms](*\#*) /etc/init.d/beegfs-client try-restart
 \end{lstlisting}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
