@@ -76,13 +76,6 @@ PKG="Boost/MPI"
     assert_success
 }
 
-@test "[$PKG] nonblocking_test under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    test=nonblocking_test
-    if [ ! -x $test ];then
-        flunk "$test does not exist"
-    fi
-    run_mpi_binary ./$test atest 2 16
-    assert_success
-}
+
 
 

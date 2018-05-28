@@ -29,9 +29,6 @@ ring_test_SOURCES         = ring_test.cpp
 check_PROGRAMS           += pointer_test
 pointer_test_SOURCES      = pointer_test.cpp
 
-check_PROGRAMS           += nonblocking_test
-nonblocking_test_SOURCES  = nonblocking_test.cpp
-
 # Test execution through resource manager
 
 TESTS                    += rm_execution
