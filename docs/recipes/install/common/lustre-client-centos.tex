@@ -20,6 +20,7 @@
 
 # Include mount point and file system mount in compute image
 [sms](*\#*) mkdir $CHROOT/mnt/lustre
-[sms](*\#*) echo "${mgs_fs_name} /mnt/lustre lustre defaults,_netdev,localflock,retry=2 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${mgs_fs_name} /mnt/lustre lustre defaults,localflock,noauto,x-systemd.automount 0 0" \
+    >> $CHROOT/etc/fstab
 \end{lstlisting}
 % end_ohpc_run
