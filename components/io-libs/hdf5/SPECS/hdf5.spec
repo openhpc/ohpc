@@ -42,9 +42,12 @@ URL:       http://www.hdfgroup.org/HDF5
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
+Patch0:    h5cc.patch
+Patch1:    h5fc.patch
+Patch2:    h5cxx.patch
 
 BuildRequires: zlib-devel
-Requires:      zlib-devel
+Requires:      zlib
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -64,6 +67,9 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 %prep
 
 %setup -q -n %{pname}-%{version}
+%patch0 -p0
+%patch1 -p0
+%patch2 -p0
 
 %build
 
