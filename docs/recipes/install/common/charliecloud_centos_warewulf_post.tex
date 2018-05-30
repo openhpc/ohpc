@@ -12,7 +12,6 @@ Preview, so it must be manually enabled with kernel arguments.
 [sms](*\#*) wwsh -y provision set "${compute_regex}" --kargs=namespace.unpriv_enable=1
 
 # Increase per-user limit on the number of user namespaces that may be created
-[sms](*\#*) echo "user.max_user_namespaces=15076" >> /etc/sysctl.conf
-[sms](*\#*) pdsh -w $compute_prefix[1-4] 'echo "user.max_user_namespaces=15076" >> /etc/sysctl.conf'
+[sms](*\#*) echo "user.max_user_namespaces=15076" >> $CHROOT/etc/sysctl.conf'
 \end{lstlisting}
 % end_ohpc_run
