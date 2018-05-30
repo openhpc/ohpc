@@ -242,6 +242,12 @@ AC_ARG_ENABLE([boost-mpi],
    [AX_OPTION_DEFAULT(type=long,enable_boost_mpi,yes)])
 AM_CONDITIONAL(BOOST_MPI_ENABLED,test "x$enable_boost_mpi" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Charliecloud
+AC_ARG_ENABLE([charliecloud],
+   [AS_HELP_STRING([--enable-charliecloud],[Enable Charliecloud tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_charliecloud,yes)])
+AM_CONDITIONAL(CHARLIECLOUD_ENABLED,test "x$enable_charliecloud" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # EasyBuild
 AC_ARG_ENABLE([easybuild],
    [AS_HELP_STRING([--enable-easybuild],[Enable EasyBuild tests (default=yes)])],[],
@@ -832,6 +838,12 @@ echo    Performance Tools:
     fi
 
 echo    Runtimes:
+
+    if test "x$enable_charliecloud" = "xyes"; then
+       echo '    'Charliecloud.............. : enabled
+    else
+       echo '    'Charliecloud.............. : disabled
+    fi
 
     if test "x$enable_ocr" = "xyes"; then
        echo '    'OCR....................... : enabled

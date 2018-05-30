@@ -1,0 +1,50 @@
+#!./common/bats/bin/bats
+
+export BATS_JUNIT_CLASS=Charliecloud
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+image_dir=~/tests/runtimes/charliecloud
+
+setup() {
+    if [ -z "$MODULEPATH" ];then
+        . /etc/profile.d/lmod.sh || exit 1
+    fi
+    if [ x$rm = "xpbspro" ];then
+        . /etc/profile.d/pbs.sh || exit 1
+    fi
+    module purge        || exit 1
+    module load charliecloud || exit 1
+}
+
+echo " "
+echo " "
+echo "-------------------------------------------------------"
+echo "Runtimes: Charliecloud"
+echo "-------------------------------------------------------"
+
+@test "[charliecloud] check for RPM" {
+    check_if_rpm_installed "charliecloud${DELIM}"
+}
+
+@test "[charliecloud] build image" {
+    run $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest/Build $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest chtest.tar.gz $image_dir
+    assert_success
+}
+
+@test "[charliecloud] exec image locally" {
+    run ch-run $image_dir/img -- cat /etc/os-release
+    assert_success
+}
+
+@test "[charliecloud] exec image via $rm" {
+    run_serial_binary ch-run $image_dir/img -- cat /etc/os-release
+    assert_success
+
+}

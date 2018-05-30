@@ -45,6 +45,10 @@ endif
 
 else # non root tests
 
+if CHARLIECLOUD_ENABLED
+   SUBDIRS += runtimes/charliecloud
+endif
+
 if EASYBUILD_ENABLED
    SUBDIRS += dev-tools/easybuild
 endif
