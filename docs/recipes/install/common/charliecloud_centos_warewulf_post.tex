@@ -1,0 +1,17 @@
+The Charliecloud container runtime requires enabling the user namespaces mapping
+option. This allows applications to run with root privilege inside a container, 
+but have them run as a different, typically non-privileged, user on the host.
+Though generally regarded as mature and safe, CentOS considers this a Technology
+Preview, so it must be manually enabled with kernel arguments.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, enable console redirection 
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Define node kernel arguments to support user namespaces
+[sms](*\#*) wwsh -y provision set "${compute_regex}" --kargs=namespace.unpriv_enable=1
+
+# Increase per-user limit on the number of user namespaces that may be created
+[sms](*\#*) echo "user.max_user_namespaces=15076" >> /etc/sysctl.conf
+\end{lstlisting}
+% end_ohpc_run
