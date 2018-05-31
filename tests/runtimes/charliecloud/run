@@ -34,7 +34,7 @@ echo "-------------------------------------------------------"
 }
 
 @test "[charliecloud] build image" {
-    run $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest/Build $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest $ARCH chtest.tar.gz $image_dir
+    run $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest/Build $ARCH $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest chtest.tar.gz $image_dir
     assert_success
 }
 
