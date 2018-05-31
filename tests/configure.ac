@@ -468,6 +468,7 @@ AC_OUTPUT( Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
        oob/Makefile
+       runtimes/charliecloud/Makefile
        runtimes/singularity/Makefile
        fs/beegfs/Makefile
        fs/lustre/Makefile
