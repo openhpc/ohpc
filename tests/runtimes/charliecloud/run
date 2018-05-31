@@ -44,7 +44,7 @@ echo "-------------------------------------------------------"
 }
 
 @test "[charliecloud] exec image via $rm" {
-    run_serial_binary ch-run $image_dir/img -- cat /etc/os-release
+    run_serial_binary ch-run -w $image_dir/img -- cat /etc/os-release
     assert_success
 
 }
