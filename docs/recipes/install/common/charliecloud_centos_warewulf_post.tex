@@ -13,5 +13,7 @@ Preview, so it must be manually enabled with kernel arguments.
 
 # Increase per-user limit on the number of user namespaces that may be created
 [sms](*\#*) echo "user.max_user_namespaces=15076" >> $CHROOT/etc/sysctl.conf
+# rebuild VNFS
+[sms](*\#*) wwvnfs --chroot $CHROOT
 \end{lstlisting}
 % end_ohpc_run
