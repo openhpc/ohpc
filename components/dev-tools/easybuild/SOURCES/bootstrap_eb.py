@@ -54,7 +54,7 @@ from distutils.version import LooseVersion
 from hashlib import md5
 
 
-EB_BOOTSTRAP_VERSION = '20180412.02'
+EB_BOOTSTRAP_VERSION = '20180531.01'
 
 # argparse preferrred, optparse deprecated >=2.7
 HAVE_ARGPARSE = False
@@ -670,16 +670,26 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
         # which we can't leverage here, partially because of transitional changes in PyPI (#md5= -> #sha256=)
 
         # determine download URL via PyPI's 'simple' API
-        pkg_simple = urllib2.urlopen('https://pypi.python.org/simple/%s' % pkg, timeout=10).read()
-        pkg_url_part_regex = re.compile('/(packages/[^#]+)/%s#' % pkg_filename)
-        res = pkg_url_part_regex.search(pkg_simple)
-        if res:
-            pkg_url_part = res.group(1)
-        else:
-            error("Failed to determine PyPI package URL for %s: %s\n" % (pkg, pkg_simple))
+        pkg_simple = None
+        try:
+            pkg_simple = urllib2.urlopen('https://pypi.python.org/simple/%s' % pkg, timeout=10).read()
+        except (urllib2.URLError, urllib2.HTTPError) as err:
+            # failing to figure out the package download URl may be OK when source tarballs are provided
+            if sourcepath:
+                info("Ignoring failed attempt to determine '%s' download URL since source tarballs are provided" % pkg)
+            else:
+                raise err
 
-        pkg_url = 'https://pypi.python.org/' + pkg_url_part
-        pkg_urls.append(pkg_url)
+        if pkg_simple:
+            pkg_url_part_regex = re.compile('/(packages/[^#]+)/%s#' % pkg_filename)
+            res = pkg_url_part_regex.search(pkg_simple)
+            if res:
+                pkg_url_part = res.group(1)
+            else:
+                error("Failed to determine PyPI package URL for %s: %s\n" % (pkg, pkg_simple))
+
+            pkg_url = 'https://pypi.python.org/' + pkg_url_part
+            pkg_urls.append(pkg_url)
 
     templates.update({
         'source_urls': '\n'.join(["'%s'," % pkg_url for pkg_url in pkg_urls]),
