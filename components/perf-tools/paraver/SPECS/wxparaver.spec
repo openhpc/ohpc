@@ -52,7 +52,8 @@ Paraver was developed to respond to the need to have a qualitative global percep
 %setup -q -n %{pname}-%{version}
 
 
-%build
+%install
+export NO_BRP_CHECK_RPATH=true
 %ohpc_setup_compiler
 module load boost
 
@@ -63,16 +64,6 @@ module load boost
 %endif
 
 CC=g++ ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR --with-wx-config=%{wx_config}
-
-
-make %{?_smp_mflags} 
-
-%install
-
-export NO_BRP_CHECK_RPATH=true
-
-# OpenHPC compiler designation
-%ohpc_setup_compiler
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
