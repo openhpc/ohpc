@@ -24,6 +24,7 @@ URL:       https://hpc.github.io/charliecloud/
 Source0:   https://github.com/hpc/charliecloud/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 Patch1:    charliecloud-language_highlight.patch
+Patch2:    charliecloud-test-build.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
@@ -44,6 +45,7 @@ high-performance computing (HPC) centers.
 %setup -q -n %{pname}-%{version}
 find doc-src -type f -print0 | xargs -0 sed -i '/.*:language: docker.*/d'
 %patch1 -p1
+%patch2 -p1
 
 %build
 %{__make} %{?mflags}
