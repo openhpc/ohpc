@@ -1,0 +1,7 @@
+--- a/etc/bootstrap.conf	2018-05-29 14:40:28.558370117 -0700
++++ b/etc/bootstrap.conf	2018-05-29 14:42:08.972087659 -0700
+@@ -43,3 +43,4 @@
+ drivers += pps_core, ahci, libahci, libata, scsi_mod
+ drivers += nfs_acl, nfsv3, nfsv4, coretemp
+ drivers += msr
++drivers += msr-safe

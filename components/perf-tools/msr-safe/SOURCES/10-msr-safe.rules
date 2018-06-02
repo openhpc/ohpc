@@ -1,0 +1,3 @@
+SUBSYSTEM=="msr_safe", GROUP="msr", MODE="0660"
+SUBSYSTEM=="msr_batch", GROUP="msr", MODE="0660"
+SUBSYSTEM=="msr_whitelist", GROUP="msr", MODE="0660"

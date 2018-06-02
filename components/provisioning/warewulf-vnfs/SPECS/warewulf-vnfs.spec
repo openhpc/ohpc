@@ -64,6 +64,8 @@ Patch8: warewulf-vnfs.centos_aarch64.patch
 Patch9: warewulf-vnfs.bootstrap.msr.patch
 # 05/14/18 reese.baird@intel.com - create /dev/urandom in chroot for centos7
 Patch10: warewulf-vnfs.urandom-chroot.patch
+# 05/29/18 christopher.m.cantalupo@intel.com - load msr-safe driver
+Patch11: warewulf-vnfs.bootstrap.msr-safe.patch
 
 
 %description
@@ -94,6 +96,7 @@ cd %{dname}
 %endif
 %patch9 -p1
 %patch10 -p1
+%patch11 -p1
 
 
 %build

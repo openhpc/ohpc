@@ -1,0 +1,5 @@
+addFilter("devel-file-in-non-devel-package")
+addFilter("library-without-ldconfig-postun")
+addFilter("library-without-ldconfig-postin")
+addFilter("invalid-spec-name")
+

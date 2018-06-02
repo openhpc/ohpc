@@ -1,0 +1,38 @@
+Global Extensible Open Power Manager (\GEOPM{}) is an extensible power
+management framework targeting high performance computing.  The library can be
+extended to support new control algorithms and new hardware power management
+features.  The \GEOPM{} package provides built in features ranging from static
+management of power policy for each individual compute node, to dynamic
+coordination of power policy and performance across all of the compute nodes
+hosting one MPI job on a portion of a distributed computing system.  The
+dynamic coordination is implemented as a hierarchical control system for
+scalable communication and decentralized control.  The following
+commands can be used to enable development on the {\em master} host and
+execution of the \GEOPM{} runtime on the {\em compute} hosts.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_geopm} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_validation_comment Install GEOPM on master and compute nodes
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install GEOPM package on master
+[sms](*\#*) (*\install*) geopm-ohpc
+
+# Install GEOPM package on compute node
+[sms](*\#*) (*\chrootinstall*) geopm-ohpc
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\noindent Installing the \GEOPM{} package on the {\em master} host will enable
+users to compile against the \GEOPM{} libraries and include headers, and
+installing on the {\em compute} hosts will enable applications to use
+\GEOPM{} at runtime.  For documentation on how to use \GEOPM{} please see
+the \GEOPM{} man pages which are all linked from the geopm(7) overview
+man page available in html here:
+\href{http://geopm.github.io/man/geopm.7.html}{\color{blue}{http://geopm.github.io/man/geopm.7.html}}.
+Please see the \GEOPM{} tutorials and for working examples using the
+\GEOPM{} runtime here:
+\href{https://github.com/geopm/geopm/tree/dev/tutorial}{\color{blue}{https://github.com/geopm/geopm/tree/dev/tutorial}}.
