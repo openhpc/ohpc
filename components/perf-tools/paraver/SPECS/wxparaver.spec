@@ -85,9 +85,6 @@ make DESTDIR=$RPM_BUILD_ROOT install
 %install
 export NO_BRP_CHECK_RPATH=true
 
-%if 0%{?suse_version}
-%fdupes -s %{buildroot}%{install_path}
-%endif
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
