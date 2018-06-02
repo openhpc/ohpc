@@ -52,21 +52,42 @@ Paraver was developed to respond to the need to have a qualitative global percep
 %setup -q -n %{pname}-%{version}
 
 
-%install
-export NO_BRP_CHECK_RPATH=true
+
+%build
 %ohpc_setup_compiler
 module load boost
 
+%if 0%{?centos_version}
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/libexec/wxGTK3/wx-config "
+%endif
 %if 0%{?suse_version}
-%global wx_config /usr/bin/wx-config
-%else
-%global wx_config /usr/libexec/wxGTK3/wx-config
+CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/bin/wx-config "
 %endif
 
-CC=g++ ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR --with-wx-config=%{wx_config}
+
+./configure --with-paraver=$RPM_BUILD_ROOT%{install_path} --prefix=%{install_path} --with-boost=$BOOST_DIR $CONFIGURE_OPTIONS
+
+
+cd $RPM_BUILD_DIR/%{pname}-%{version}/src/paraver-kernel/
+
+make %{?_smp_mflags} 
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
+
+cd $RPM_BUILD_DIR/%{pname}-%{version}/
+
+make %{?_smp_mflags} 
+
+make DESTDIR=$RPM_BUILD_ROOT install
+
+
+%install
+export NO_BRP_CHECK_RPATH=true
+
+%if 0%{?suse_version}
+%fdupes -s %{buildroot}%{install_path}
+%endif
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -120,3 +141,4 @@ EOF
 
 
 %changelog
+
