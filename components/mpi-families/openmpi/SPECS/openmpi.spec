@@ -34,12 +34,12 @@ Summary:   A powerful implementation of MPI
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   3.0.0
+Version:   3.1.0
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-Source0:   http://www.open-mpi.org/software/ompi/v3.0/downloads/openmpi-%{version}.tar.bz2
+Source0:   http://www.open-mpi.org/software/ompi/v3.1/downloads/openmpi-%{version}.tar.bz2
 Source1:   OHPC_macros
 Source3:   pbs-config
 Patch0:    openmpi-3.0-pbs-config.patch
@@ -169,6 +169,9 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
 rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
+# rename prun to avoid namespace conflict with ohpc
+%{__mv} $RPM_BUILD_ROOT/%{install_path}/bin/prun $RPM_BUILD_ROOT/%{install_path}/bin/prun.ompi
+%{__mv} $RPM_BUILD_ROOT/%{install_path}/share/man/man1/prun.1 $RPM_BUILD_ROOT/%{install_path}/share/man/man1/prun.ompi.1
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}

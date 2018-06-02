@@ -21,10 +21,6 @@ jobs to bad nodes, reducing the risk of system-induced job failures.
 # Install NHC on master and compute nodes
 [sms](*\#*) (*\install*) nhc-ohpc
 [sms](*\#*) (*\chrootinstall*) nhc-ohpc
-
-# Generate NHC configuration file based on compute node environment
-[sms](*\#*) pdsh -w c1 "/usr/sbin/nhc-genconf -H '*' -c -" | dshbak -c > /etc/nhc/nhc.conf.new
-
 \end{lstlisting}
 % end_ohpc_run
 

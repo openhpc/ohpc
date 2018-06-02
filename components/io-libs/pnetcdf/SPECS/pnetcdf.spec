@@ -21,7 +21,7 @@
 
 Summary:   A Parallel NetCDF library (PnetCDF)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.8.1
+Version:   1.9.0
 %global    sonum 1
 Release:   1%{?dist}
 License:   NetCDF
@@ -122,7 +122,7 @@ EOF
 %files
 %defattr(-,root,root,-)
 %{OHPC_PUB}
-%doc COPYRIGHT CREDITS INSTALL README README.LINUX README.consistency README.large_files RELEASE_NOTES cobalt.script pbs.script src/lib/ncconfig.h
+%doc AUTHORS ChangeLog COPYRIGHT CREDITS INSTALL NEWS README RELEASE_NOTES 
 
 %changelog
 * Mon May  1 2017 Paul Osmialowski <pawel.osmialowski@foss.arm.com> - 1.8.1-1

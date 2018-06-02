@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname intel-compilers-devel
-%define year 2017
+%define year 2018
 
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
@@ -51,6 +51,21 @@ install -D -m755 %{SOURCE2}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_
 
 
 %pre
+
+
+# Special accommodation check for upgrades. Older versions of this
+# package incorrectly remove modulefiles during an upgrade. Check if
+# currently installed version is older than fixed version and flag so
+# we can fix after the fact.
+if [ $1 -gt 1 ];then
+
+    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' %{name}`
+    minVerFix="2018.1.1"
+    result=`echo -e "${version}\n${minVerFix}" | sort -V | head -n 1`
+    if [ "$result" != "$minVerFix" ];then
+	touch %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix
+    fi
+fi
 
 # Verify psxe compilers are installed. Punt if not detected.
 
@@ -105,8 +120,12 @@ fi
 
 echo "Creating OpenHPC-style modulefiles for local PSXE compiler installation(s)."
 
-# Create modulefiles for each locally detected installation.
+# initialize manifest to log files created during this process
+if [ -e %{OHPC_MODULES}/intel/.manifest ];then
+    rm -f %{OHPC_MODULES}/intel/.manifest
+fi
 
+# Create modulefiles for each locally detected installation.
 for file in ${versions}; do
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
     topDir=`echo $file | sed "s|$icc_subpath||"`
@@ -178,20 +197,70 @@ prepend-path  LD_LIBRARY_PATH    ${topDir}/linux/mkl/lib/intel64
 
 EOF
 
-    # Inventory for later removal
+    # Inventory for later removal 
+
     echo "%{OHPC_MODULES}/intel/${version}" >> %{OHPC_MODULES}/intel/.manifest
     echo "%{OHPC_MODULES}/intel/.version.${version}" >> %{OHPC_MODULES}/intel/.manifest
     echo "%{OHPC_MODULEDEPS}/gnu/mkl/${version}" >> %{OHPC_MODULES}/intel/.manifest
 
+    # special accommodation for older versions of this package which incorrectly remove
+    # modulefiles during a package upgrade. Cache the newly created modulefiles so we can 
+    # re-instantiate them in %posttrans
+    if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
+	compilerStateDir=%{_localstatedir}/lib/rpm-state/ohpc-intel-compiler-versions
+	mklStateDir=%{_localstatedir}/lib/rpm-state/ohpc-gnu-mkl-versions
+
+	[ -d "$compilerStateDir" ] || %{__mkdir} "$compilerStateDir"
+	[ -d "$mklStateDir" ] || %{__mkdir} "$mklStateDir"
+
+	%{__cp} -p "%{OHPC_MODULES}/intel/${version}" $compilerStateDir
+	%{__cp} -p "%{OHPC_MODULES}/intel/.version.${version}" $compilerStateDir
+	%{__cp} -p "%{OHPC_MODULEDEPS}/gnu/mkl/${version}" $mklStateDir
+    fi
+
 done
+
+# special accomodation for older versions of this package which incorrectly remove
+# modulefiles during a package upgrade. Cache final .manifest file as well.
+if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
+    %{__cp} -p %{OHPC_MODULES}/intel/.manifest %{_localstatedir}/lib/rpm-state/ohpc-manifest
+fi
+
+ls -l %{OHPC_MODULES}/intel/${version}
+cat %{OHPC_MODULES}/intel/.manifest
 
 %postun
 
-if [ -s %{OHPC_MODULES}/intel/.manifest ];then
-    for file in `cat %{OHPC_MODULES}/intel/.manifest`; do
-        rm $file
+if [ $1 -eq 0 ];then
+   if [ -s %{OHPC_MODULES}/intel/.manifest ];then
+       for file in `cat %{OHPC_MODULES}/intel/.manifest`; do
+	   if [ -e $file ];then
+               rm $file
+	   fi
+       done
+       rm -f %{OHPC_MODULES}/intel/.manifest
+   fi
+fi
+
+%posttrans
+
+# special accommodation for older versions of this package which incorrectly remove
+# modulefiles during a package upgrade.
+if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
+    echo "--> Applying upgrade fix to reinstate OpenHPC-style modulefiles"
+    for file in `find /var/lib/rpm-state/ohpc-intel-compiler-versions/ -type f`; do 
+	%{__mv} $file %{OHPC_MODULES}/intel/
     done
-    rm -f %{OHPC_MODULES}/intel/.manifest
+    rmdir /var/lib/rpm-state/ohpc-intel-compiler-versions/
+
+    for file in `find /var/lib/rpm-state/ohpc-gnu-mkl-versions/ -type f`; do 
+	%{__mv} $file %{OHPC_MODULEDEPS}/gnu/mkl/
+    done
+    rmdir /var/lib/rpm-state/ohpc-gnu-mkl-versions/
+
+    %{__mv} %{_localstatedir}/lib/rpm-state/ohpc-manifest %{OHPC_MODULES}/intel/.manifest
+    
+    rm -f %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix 
 fi
 
 %clean

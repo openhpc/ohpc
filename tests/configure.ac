@@ -50,13 +50,13 @@ AC_CHECK_FILE(/etc/profile.d/xcat.sh,[enable_xcat=yes],[enable_cat=no])
 AM_CONDITIONAL(XCAT_ENABLED,test "x$enable_xcat" = "xyes" )
 
 # Option for testing against multiple compiler/MPI families
-AC_MSG_CHECKING([if enable PXSE toolchain related tests])
-AC_ARG_ENABLE([pxse],
-	 [AS_HELP_STRING([--enable-pxse],[Enable development tool tests with PXSE toolchain (default=no)],,120)],
-	 [],[enable_pxse=no])
+AC_MSG_CHECKING([if enable PSXE toolchain related tests])
+AC_ARG_ENABLE([psxe],
+	 [AS_HELP_STRING([--enable-psxe],[Enable development tool tests with PSXE toolchain (default=no)],,120)],
+	 [],[enable_psxe=no])
 
 # Default MPI families to test
-if test x$enable_pxse = xyes ;then
+if test x$enable_psxe = xyes ;then
    AC_MSG_RESULT([yes])
    AC_SUBST(COMPILER_FAMILIES,["gnu7 intel"])       
    AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi3 impi"])
@@ -241,6 +241,12 @@ AC_ARG_ENABLE([boost-mpi],
    [AS_HELP_STRING([--enable-boost-mpi],[Enable BOOST library MPI tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_boost_mpi,yes)])
 AM_CONDITIONAL(BOOST_MPI_ENABLED,test "x$enable_boost_mpi" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# Charliecloud
+AC_ARG_ENABLE([charliecloud],
+   [AS_HELP_STRING([--enable-charliecloud],[Enable Charliecloud tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_charliecloud,yes)])
+AM_CONDITIONAL(CHARLIECLOUD_ENABLED,test "x$enable_charliecloud" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # EasyBuild
 AC_ARG_ENABLE([easybuild],
@@ -462,6 +468,7 @@ AC_OUTPUT( Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
        oob/Makefile
+       runtimes/charliecloud/Makefile
        runtimes/singularity/Makefile
        fs/beegfs/Makefile
        fs/lustre/Makefile
@@ -832,6 +839,12 @@ echo    Performance Tools:
     fi
 
 echo    Runtimes:
+
+    if test "x$enable_charliecloud" = "xyes"; then
+       echo '    'Charliecloud.............. : enabled
+    else
+       echo '    'Charliecloud.............. : disabled
+    fi
 
     if test "x$enable_ocr" = "xyes"; then
        echo '    'OCR....................... : enabled

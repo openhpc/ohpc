@@ -21,7 +21,7 @@
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 1.13.0
+Version: 1.13.1
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs

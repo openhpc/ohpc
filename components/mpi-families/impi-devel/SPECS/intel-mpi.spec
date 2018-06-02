@@ -12,7 +12,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname intel-mpi-devel
-%define year 2017
+%define year 2018
 
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
@@ -178,6 +178,12 @@ EOF
 prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 EOF
 
+    # Also define MPI_DIR based on $I_MPI_ROOT
+    IMPI_DIR=`egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}'`
+    if [ -d "$IMPI_DIR/intel64" ];then
+	echo "setenv          MPI_DIR        $IMPI_DIR/intel64" >> %{OHPC_MODULEDEPS}/intel/impi/${version}
+    fi
+
     # Version file
     %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/.version.${version}
 #%Module1.0#####################################################################
@@ -224,6 +230,12 @@ EOF
 set     ModulesVersion      "${version}"
 EOF
 
+    # Also define MPI_DIR based on $I_MPI_ROOT
+    IMPI_DIR=`egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}'`
+    if [ -d "$IMPI_DIR/intel64" ];then
+	echo "setenv          MPI_DIR        $IMPI_DIR/intel64" >> %{OHPC_MODULEDEPS}/gnu/impi/${version}
+    fi
+
     # support for additional gnu variants
     %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/${version} %{OHPC_MODULEDEPS}/gnu7/impi/${version}
     %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/.version.${version} %{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}
@@ -257,7 +269,9 @@ if [ "$1" = 0 ]; then
 
     if [ -s %{OHPC_MODULEDEPS}/intel/impi/.manifest ];then
 	for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
-            rm $file
+	   if [ -e $file ];then
+               rm $file
+	   fi
 	done
 	rm -f %{OHPC_MODULEDEPS}/intel/impi/.manifest
     fi

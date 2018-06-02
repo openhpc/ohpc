@@ -1,0 +1,25 @@
+--- a/test/chtest/Build	2018-05-09 13:45:25.000000000 -0700
++++ b/test/chtest/Build	2018-05-31 13:31:56.000000000 -0700
+@@ -13,9 +13,10 @@
+ 
+ set -ex
+ 
+-SRCDIR=$1
+-TARBALL=$2
+-WORKDIR=$3
++ARCH=$1
++SRCDIR=$2
++TARBALL=$3
++WORKDIR=$4
+ MIRROR=http://dl-cdn.alpinelinux.org/alpine/v3.6
+ APK_TOOLS=apk-tools-static-2.7.5-r0.apk
+ IMG="$WORKDIR/img"
+@@ -33,7 +34,7 @@
+ ## Bootstrap base Alpine Linux.
+ 
+ # Download statically linked apk.
+-wget $MIRROR/main/x86_64/$APK_TOOLS
++wget $MIRROR/main/$ARCH/$APK_TOOLS
+ 
+ # Bootstrap directories.
+ mkdir img

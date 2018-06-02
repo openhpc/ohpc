@@ -19,6 +19,10 @@
 Requires:      intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: gnu7-compilers%{PROJ_DELIM}
 Requires:      gnu7-compilers%{PROJ_DELIM}
+%if "%{mpi_family}" != "impi"
+BuildRequires: %{mpi_family}-gnu7%{PROJ_DELIM}
+Requires:      %{mpi_family}-gnu7%{PROJ_DELIM}
+%endif
 %endif
 
 # Base package name
@@ -40,7 +44,8 @@ BuildRequires: binutils-devel
 BuildRequires: python
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%global install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%global module_dir %{compiler_family}-%{mpi_family}
 
 %description
 
@@ -67,9 +72,8 @@ cp /usr/lib/rpm/config.guess bin
 # OpenHPC compiler/mpi designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-# see above where compiler_family is changed
-%define compiler_family gnu7
-%ohpc_setup_compiler
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu7
+module load %{mpi_family}
 
 CC=mpicc
 CXX=mpicxx
@@ -86,16 +90,15 @@ FC=mpif90
 # OpenHPC compiler designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-# see above where compiler_family is changed
-%define compiler_family gnu7
-%ohpc_setup_compiler
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu7
+module load %{mpi_family}
 
 make %{?_smp_mflags} shared
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # OpenHPC module file
-%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{module_dir}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{module_dir}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -121,7 +124,7 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{module_dir}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -148,3 +151,4 @@ rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
 
 * Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.4.1-1
 - Switching to %%ohpc_compiler macro
+

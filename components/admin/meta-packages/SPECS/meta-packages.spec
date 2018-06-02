@@ -21,7 +21,7 @@
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 1.3.4
+Version: 1.3.5
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
@@ -77,7 +77,6 @@ Requires:  yum-utils
 %endif
 %if 0%{?sles_version} || 0%{?suse_version}
 Requires:  glibc-locale
-Requires:  libmlx4-rdmav2
 Requires:  nfs-kernel-server
 %endif
 %description -n %{PROJ_NAME}-base
@@ -353,6 +352,7 @@ Collection of python3 related library builds for use with GNU compiler toolchain
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-runtimes
 Summary:   OpenHPC runtimes for GNU
 Requires:  ocr-gnu%{gnu_major_ver}%{PROJ_DELIM}
+Requires:  charliecloud%{PROJ_DELIM}
 Requires:  singularity%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-runtimes
 Collection of runtimes for use with GNU compiler toolchain
@@ -596,6 +596,7 @@ Collection of python3 related library builds for use with Intel(R) Parallel Stud
 %package -n %{PROJ_NAME}-intel-runtimes
 Summary:   OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
 Requires:  ocr-intel%{PROJ_DELIM}
+Requires:  charliecloud%{PROJ_DELIM}
 Requires:  singularity%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-runtimes
 Collection of runtimes for use with Intel(R) Parallel Studio XE toolchain

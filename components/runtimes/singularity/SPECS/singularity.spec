@@ -46,7 +46,7 @@
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.4.5
+Version: 2.5.1
 Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
@@ -54,9 +54,11 @@ Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
 Source0: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
+Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
+BuildRequires: libarchive-devel
 BuildRequires: libtool
 BuildRequires: python
 Requires: file
@@ -90,7 +92,7 @@ require a setuid binary.
 
 %prep
 %setup -q -n %{pname}-%{version}
-
+%patch1 -p1
 
 %build
 if [ ! -f configure ]; then

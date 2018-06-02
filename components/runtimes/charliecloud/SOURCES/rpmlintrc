@@ -1,0 +1,2 @@
+addFilter("library-without-ldconfig")
+addFilter("devel-file-in-non-devel-package")

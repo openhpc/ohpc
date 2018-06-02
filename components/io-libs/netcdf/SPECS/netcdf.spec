@@ -41,7 +41,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.5.0
+Version:        4.6.1
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
@@ -112,7 +112,12 @@ export CC=mpicc
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }
 
-make %{?_smp_mflags}
+# karl@ices.utexas.edu (5/17/18) - switching to serial make to avoid
+# problems. Others also reporing error with parallel build.
+#
+# https://github.com/Unidata/netcdf-c/issues/896
+make
+#make %{?_smp_mflags}
 
 %install
 # OpenHPC compiler/mpi designation

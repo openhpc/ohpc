@@ -1,5 +1,5 @@
 --- slurm-17.11.5/slurm.spec	2018-03-15 13:57:29.000000000 -0500
-+++ slurm.spec	2018-03-22 12:35:39.000000000 -0500
++++ slurm.spec	2018-05-10 09:47:01.000000000 -0500
 @@ -1,21 +1,40 @@
 -Name:		slurm
 +#----------------------------------------------------------------------------bh-
@@ -46,7 +46,22 @@
  
  # build options		.rpmmacros options	change to default action
  # ====================  ====================	========================
-@@ -54,21 +73,33 @@
+@@ -42,33 +61,48 @@
+ %bcond_with hwloc
+ %bcond_with mysql
+ %bcond_with hdf5
+-%bcond_with lua
+ %bcond_with numa
+ 
+ # Build with OpenSSL by default on all platforms (disable using --without openssl)
+ %bcond_without openssl
+ 
++# 4/11/18 karl@ices.utexas.edu - enable lua bindings
++%bcond_without lua
++
+ # Use debug by default on all systems
+ %bcond_without debug
+ 
  # Build with PAM by default on linux
  %bcond_without pam
  
@@ -56,6 +71,7 @@
  %{?systemd_requires}
  BuildRequires: systemd
 -BuildRequires: munge-devel munge-libs
++BuildRequires: libssh2-devel
 +BuildRequires: munge-devel%{PROJ_DELIM} munge-libs%{PROJ_DELIM}
  BuildRequires: python
  BuildRequires: readline-devel
@@ -83,7 +99,7 @@
  
  %define use_mysql_devel %(perl -e '`rpm -q mariadb-devel`; print $?;')
  
-@@ -76,9 +107,13 @@
+@@ -76,9 +110,13 @@
  %if %{use_mysql_devel}
  BuildRequires: mysql-devel >= 5.0.0
  %else
@@ -97,7 +113,7 @@
  
  %if %{with cray}
  BuildRequires: cray-libalpscomm_cn-devel
-@@ -102,13 +137,21 @@
+@@ -102,13 +140,24 @@
  BuildRequires: hwloc-devel
  BuildRequires: gtk2-devel
  BuildRequires: glib2-devel
@@ -110,6 +126,9 @@
  
  BuildRequires: perl(ExtUtils::MakeMaker)
  
++#needed to enable jobcomp_elasticsearch plugin
++BuildRequires: libcurl-devel
++
  %if %{with lua}
 -BuildRequires: pkgconfig(lua) >= 5.1.0
 +%if %{defined suse_version}
@@ -120,7 +139,7 @@
  %endif
  
  %if %{with hwloc}
-@@ -173,82 +216,82 @@
+@@ -173,82 +222,82 @@
  Components include machine status, partition management,
  job management, scheduling and accounting modules
  
@@ -244,7 +263,7 @@
  seff is a mail program used directly by the Slurm daemons. On completion of a
  job, wait for it's accounting information to be available and include that
  information in the email body.
-@@ -260,14 +303,25 @@
+@@ -260,14 +309,25 @@
  using the Slurm utilities, sinfo, squeue and scontrol, the man pages for these
  utilities will provide more information and greater depth of understanding.
  
@@ -275,7 +294,7 @@
  This module restricts access to compute nodes in a cluster where Slurm is in
  use.  Access is granted to root, any user with an Slurm-launched job currently
  running on the node, or any user who has allocated resources on the node
-@@ -287,7 +341,7 @@
+@@ -287,7 +347,7 @@
  	%{?_with_cpusetdir} \
  	%{?_with_mysql_config} \
  	%{?_with_ssl} \
@@ -284,7 +303,7 @@
  	%{?_with_cray_network:--enable-cray-network}\
  	%{?_with_multiple_slurmd:--enable-multiple-slurmd} \
  	%{?_with_pmix} \
-@@ -325,9 +379,7 @@
+@@ -325,9 +385,7 @@
     mv %{buildroot}/%{_libdir}/libpmi* %{buildroot}/%{_libdir}/slurmpmi
     install -D -m644 contribs/cray/plugstack.conf.template %{buildroot}/%{_sysconfdir}/plugstack.conf.template
     install -D -m644 contribs/cray/slurm.conf.template %{buildroot}/%{_sysconfdir}/slurm.conf.template
@@ -295,7 +314,7 @@
     echo -e '#%Module\nset ModulesVersion "%{version}-%{rel}"' > %{buildroot}/opt/modulefiles/slurm/.version
  %else
     rm -f contribs/cray/opt_modulefiles_slurm
-@@ -348,6 +400,30 @@
+@@ -348,6 +406,30 @@
  install -D -m644 etc/slurmdbd.conf.example %{buildroot}/%{_sysconfdir}/slurmdbd.conf.example
  install -D -m755 contribs/sjstat %{buildroot}/%{_bindir}/sjstat
  
@@ -326,7 +345,7 @@
  # Delete unpackaged files:
  find %{buildroot} -name '*.a' -exec rm {} \;
  find %{buildroot} -name '*.la' -exec rm {} \;
-@@ -401,14 +477,6 @@
+@@ -401,14 +483,6 @@
  test -f %{buildroot}/opt/modulefiles/slurm/.version &&
    echo /opt/modulefiles/slurm/.version >> $LIST
  
@@ -341,7 +360,7 @@
  # Make pkg-config file
  mkdir -p %{buildroot}/%{_libdir}/pkgconfig
  cat >%{buildroot}/%{_libdir}/pkgconfig/slurm.pc <<EOF
-@@ -418,7 +486,7 @@
+@@ -418,7 +492,7 @@
  Cflags: -I\${includedir}
  Libs: -L\${libdir} -lslurm
  Description: Slurm API
@@ -350,7 +369,7 @@
  Version: %{version}
  EOF
  
-@@ -443,6 +511,7 @@
+@@ -443,6 +517,7 @@
      test -f %{buildroot}/lib64/security/pam_slurm_adopt.so		&&
  	echo /lib64/security/pam_slurm_adopt.so		>>$LIST
  %endif
@@ -358,7 +377,7 @@
  #############################################################################
  
  %clean
-@@ -457,6 +526,7 @@
+@@ -457,6 +532,7 @@
  %exclude %{_bindir}/sjobexitmod
  %exclude %{_bindir}/sjstat
  %exclude %{_bindir}/smail
@@ -366,7 +385,7 @@
  %exclude %{_libdir}/libpmi*
  %{_libdir}/*.so*
  %{_libdir}/slurm/src/*
-@@ -467,19 +537,39 @@
+@@ -467,19 +543,39 @@
  %{_mandir}
  %exclude %{_mandir}/man1/sjobexit*
  %exclude %{_mandir}/man1/sjstat*
@@ -386,7 +405,7 @@
  %config %{_sysconfdir}/slurm.conf.template
 +%dir /opt/modulefiles/slurm
 +%{_sbindir}/slurmconfgen.py
-+%endif
+ %endif
 +%config %{_sysconfdir}/slurm.conf.example
 +
 +%{OHPC_PUB}
@@ -405,12 +424,12 @@
 +%config /usr/lib/systemd/system/slurmd.service
 +%config /usr/lib/systemd/system/slurmdbd.service
 +
- %endif
++%endif
 +
  %config %{_sysconfdir}/cgroup.conf.example
  %config %{_sysconfdir}/cgroup_allowed_devices_file.conf.example
  %config %{_sysconfdir}/layouts.d/power.conf.example
-@@ -490,7 +580,7 @@
+@@ -490,7 +586,7 @@
  %config %{_sysconfdir}/slurmdbd.conf.example
  #############################################################################
  
@@ -419,7 +438,7 @@
  %defattr(-,root,root)
  %dir %attr(0755,root,root)
  %dir %{_prefix}/include/slurm
-@@ -499,7 +589,7 @@
+@@ -499,7 +595,7 @@
  %{_libdir}/pkgconfig/slurm.pc
  #############################################################################
  
@@ -428,7 +447,7 @@
  %defattr(-,root,root)
  %{_perldir}/Slurm.pm
  %{_perldir}/Slurm/Bitstr.pm
-@@ -511,30 +601,29 @@
+@@ -511,30 +607,29 @@
  %{_perldir}/auto/Slurmdb/Slurmdb.so
  %{_perldir}/auto/Slurmdb/autosplit.ix
  %{_perlman3dir}/Slurm*
@@ -463,7 +482,7 @@
  %defattr(-,root,root)
  %if %{with cray}
  %{_libdir}/slurmpmi/*
-@@ -543,7 +632,7 @@
+@@ -543,7 +638,7 @@
  %endif
  #############################################################################
  
@@ -472,7 +491,7 @@
  %defattr(-,root,root)
  %{_bindir}/pbsnodes
  %{_bindir}/qalter
-@@ -559,16 +648,15 @@
+@@ -559,16 +654,15 @@
  %{_libdir}/slurm/spank_pbs.so
  #############################################################################
  
@@ -491,7 +510,7 @@
  %defattr(-,root,root)
  %{_bindir}/seff
  %{_bindir}/sjobexitmod
-@@ -577,39 +665,66 @@
+@@ -577,39 +671,70 @@
  %{_mandir}/man1/sjstat*
  #############################################################################
  
@@ -510,9 +529,13 @@
  
  %pre
  
-+getent passwd slurm >/dev/null || \
-+    /usr/sbin/useradd -U -c "SLURM resource manager" \
-+    -s /sbin/nologin -r -d %{_sysconfdir} slurm
++# provide specific uid/gid to ensure that it is the same across the cluster
++/usr/bin/getent group slurm >/dev/null 2>&1 || \
++  /usr/sbin/groupadd -r slurm -g 202
++/usr/bin/getent passwd slurm >/dev/null 2>&1 || \
++  /usr/sbin/useradd -c "SLURM resource manager" \
++  -d %{_sysconfdir} -g slurm -s /bin/nologin -r slurm -u 202
++  
 +exit 0
 +
  %post

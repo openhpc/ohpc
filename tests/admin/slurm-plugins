@@ -1,0 +1,24 @@
+#!../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+@test "[slurm] check for jobcomp_elasticsearch plugin" {
+    run ls /usr/lib64/slurm/jobcomp_elasticsearch.so
+    assert_success
+}
+
+@test "[slurm] check for job_submit_lua plugin" {
+    run ls /usr/lib64/slurm/job_submit_lua.so
+    assert_success
+}
+
+@test "[slurm] check for --x11 option" {
+    run srun --x11 --pty /bin/bash
+    assert_output "srun: error: No DISPLAY variable set, cannot setup x11 forwarding."
+}

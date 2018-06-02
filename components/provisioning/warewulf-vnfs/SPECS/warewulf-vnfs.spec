@@ -62,6 +62,8 @@ Patch7: warewulf-vnfs.bootstrap_usb.patch
 Patch8: warewulf-vnfs.centos_aarch64.patch
 # 03/05/18 reese.baird@intel.com - load msr driver for SLES
 Patch9: warewulf-vnfs.bootstrap.msr.patch
+# 05/14/18 reese.baird@intel.com - create /dev/urandom in chroot for centos7
+Patch10: warewulf-vnfs.urandom-chroot.patch
 
 
 %description
@@ -91,6 +93,7 @@ cd %{dname}
 %endif
 %endif
 %patch9 -p1
+%patch10 -p1
 
 
 %build

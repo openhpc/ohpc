@@ -1,0 +1,156 @@
+From 6189ae07c5161d14c9e9f863a400045f923f2301 Mon Sep 17 00:00:00 2001
+From: James Simmons <uja.ornl@yahoo.com>
+Date: Thu, 29 Mar 2018 13:02:42 -0400
+Subject: [PATCH] LU-10752 build: fix rpm packaging issues for gss
+
+Lustre can create rpms in two ways. One is with make rpm and the
+other is using the actual source rpm that is provided. Their are
+several issues with how GSS is handled with rpm packaging.
+
+First problem is that you can ./configure --disable-gss which has
+never been handled. Secondly if you do configure with disable-gss
+it is still possible to have the option enable-gss-keyring set to
+yes. The reason it was never seen before is due to everything
+being treated with the keyring option. Now if the user sets
+enable-gss to no then enable-gss-keyring will also be set to no
+even if the user tries to set it to yes. This was done by properly
+setting $enable_gss and $enable_gss_keyring in lustre-core.m4.
+In the spec file create the bcond gss to handle the gss only case
+and we turn on gss if gss_keyring is true. Move lgssc.conf under
+the with_gss_keyring bcond which is only needed for server builds
+along side lsvcgss.
+
+It is impossible to know if it can build due to the spec file not
+properly handling build dependencies for GSS and not knowing if
+the kernel is too new for GSS. So the user has to provide the
+options --with gss and / or --with gss-keyring to rpmbuild. If
+the user only provides gss-keyring option to rpmbuild make sure
+it enables gss as well. That is handled in the spec file.
+
+For the case of make rpms fix it up so if gss-keyring is enabled
+then by default the core gss handling is enabled. Also handle the
+long ignored enable-gss case.
+
+Test-Parameters: trivial
+
+Change-Id: Ieed9df98a27bd6e77504486762d6e60ddca5a916
+Signed-off-by: James Simmons <uja.ornl@yahoo.com>
+Reviewed-on: https://review.whamcloud.com/31757
+Tested-by: Jenkins
+Tested-by: Maloo <hpdd-maloo@intel.com>
+Reviewed-by: Sebastien Buisson <sbuisson@ddn.com>
+Reviewed-by: Elena Gryaznova <c17455@cray.com>
+Reviewed-by: Oleg Drokin <oleg.drokin@intel.com>
+---
+
+diff --git a/config/lustre-build.m4 b/config/lustre-build.m4
+index 81d7e6f..acc0cc1 100644
+--- a/config/lustre-build.m4
++++ b/config/lustre-build.m4
+@@ -530,8 +530,11 @@
+ if test x$enable_zfs = xyes ; then
+ 	RPMBINARGS="$RPMBINARGS --with zfs"
+ fi
+-if test x$enable_gss_keyring == xno ; then
+-	RPMBINARGS="$RPMBINARGS --without gss_keyring"
++if test x$enable_gss_keyring = xyes ; then
++	RPMBINARGS="$RPMBINARGS --with gss_keyring --with gss"
++fi
++if test x$enable_gss = xyes ; then
++	RPMBINARGS="$RPMBINARGS --with gss"
+ fi
+ if test x$enable_iokit != xyes ; then
+ 	RPMBINARGS="$RPMBINARGS --without lustre_iokit"
+diff --git a/lustre.spec.in b/lustre.spec.in
+index 1ce962b..6cf311d 100644
+--- a/lustre.spec.in
++++ b/lustre.spec.in
+@@ -9,11 +9,20 @@
+ %bcond_without lustre_iokit
+ %bcond_without lustre_modules
+ %bcond_with snmp
+-%bcond_without gss_keyring
++%bcond_with gss
++%bcond_with gss_keyring
+ %bcond_without manpages
+ %bcond_without shared
+ %bcond_without static
+ %bcond_with    systemd
++
++# By default both gss and gss keyring are disabled.
++# gss keyring requires the gss core. If the builder
++# request gss_keyring we must enable gss core even if
++# the builder attempts to disable gss.
++%if %{with gss_keyring}
++    %define with_gss
++%endif
+ 
+ %if %{without servers}
+     # --without servers overrides --with {ldiskfs|zfs}
+@@ -313,6 +322,7 @@
+ 	%{!?with_servers:--disable-server} \
+ 	%{!?with_zfs:--without-zfs} \
+ 	%{!?with_snmp:--disable-snmp} \
++	%{!?with_gss:--disable-gss} \
+ 	%{!?with_gss_keyring:--disable-gss-keyring} \
+ 	%{!?with_manpages:--disable-manpages} \
+ 	%{!?with_systemd:--with-systemdsystemunitdir=no} \
+@@ -374,6 +384,7 @@
+ %if %{with gss_keyring}
+ echo '%{_sysconfdir}/init.d/lsvcgss' >>lustre.files
+ echo '%{_sysconfdir}/sysconfig/lsvcgss' >>lustre.files
++echo '%config(noreplace) %{_sysconfdir}/request-key.d/lgssc.conf' >>lustre.files
+ %endif
+ %endif
+ 
+@@ -381,11 +392,6 @@
+ echo '%{_sysconfdir}/init.d/lnet' >>lustre.files
+ %endif
+ %endif
+-
+-CONFIGURE_ARGS="%{?configure_args}"
+-if [ -z "$(echo $CONFIGURE_ARGS | grep "\-\-disable\-gss\-keyring")" ]; then
+-    echo '%config(noreplace) %{_sysconfdir}/request-key.d/lgssc.conf' >>lustre.files
+-fi
+ 
+ %if %{with servers}
+ mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/ocf/resource.d/lustre/
+diff --git a/lustre/autoconf/lustre-core.m4 b/lustre/autoconf/lustre-core.m4
+index 3539bf9..f104079 100644
+--- a/lustre/autoconf/lustre-core.m4
++++ b/lustre/autoconf/lustre-core.m4
+@@ -327,10 +327,13 @@
+ 		AC_DEFINE([HAVE_GSS], [1], [Define this is if you enable gss])
+ 		enable_gss="yes"
+ 	], [
++		enable_gss_keyring="no"
+ 		enable_gss="no"
+ 	])
+ 
+ 	enable_ssk=$enable_gss
++], [
++	enable_gss_keyring="no"
+ ])
+ ]) # LC_CONFIG_GSS
+ 
+diff --git a/lustre/conf/Makefile.am b/lustre/conf/Makefile.am
+index d452924..3e5bc68 100644
+--- a/lustre/conf/Makefile.am
++++ b/lustre/conf/Makefile.am
+@@ -57,14 +57,11 @@
+ sysconfig_DATA = lustre
+ if GSS_KEYRING
+ sysconfig_DATA += lsvcgss
++requestkeydir = $(sysconfdir)/request-key.d
++requestkey_DATA = lgssc.conf
+ endif
+ endif
+ endif
+ 
+ modprobedir = $(sysconfdir)/modprobe.d
+ modprobe_DATA = ko2iblnd.conf
+-
+-if GSS_KEYRING
+-requestkeydir = $(sysconfdir)/request-key.d
+-requestkey_DATA = lgssc.conf
+-endif

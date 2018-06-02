@@ -29,7 +29,7 @@ Source1:   OHPC_macros
 Requires:  lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 4.0
 BuildRequires: zlib-devel
 
 # Default library install path

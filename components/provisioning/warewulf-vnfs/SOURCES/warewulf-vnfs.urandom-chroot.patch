@@ -1,0 +1,13 @@
+--- warewulf3/libexec/wwmkchroot/include-rhel	2017-08-16 15:07:47.000000000 -0700
++++ warewulf3.patch/libexec/wwmkchroot/include-rhel	2018-05-14 09:12:35.000000000 -0700
+@@ -45,6 +45,10 @@
+     YUM_CONF_DIRNAME=`dirname $YUM_CONF`
+     mkdir -m 0755 -p $CHROOTDIR/$YUM_CONF_DIRNAME
+ 
++    # RPM in RHEL/CentOS 7.5 requires /dev/random to install packages
++    # https://bugzilla.mozilla.org/show_bug.cgi?id=889116
++    mknod $CHROOTDIR/dev/urandom c 1 9
++
+     > $CHROOTDIR/$YUM_CONF
+     echo "[main]" >> $CHROOTDIR/$YUM_CONF
+     echo 'cachedir=/var/cache/yum/$basearch/$releasever' >> $CHROOTDIR/$YUM_CONF
