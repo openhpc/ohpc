@@ -256,6 +256,8 @@ Collection of parallel library builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
 Summary:   OpenHPC performance tools for GNU
+Requires:  dimemas-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  dimemas-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
@@ -269,6 +271,7 @@ Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
+Requires:  dimemas-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
@@ -283,6 +286,7 @@ Collection of performance tool builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
 Summary:   OpenHPC performance tools for GNU and MPICH
+Requires:  dimemas-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
@@ -296,6 +300,7 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-perf-tools
 Summary:   OpenHPC performance tools for GNU and MVAPICH2
+Requires:  dimemas-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -309,6 +314,7 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
 Summary:   OpenHPC performance tools for GNU and OpenMPI
+Requires:  dimemas-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
@@ -544,6 +550,11 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
+Requires:  dimemas-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  dimemas-intel-impi%{PROJ_DELIM}
+Requires:  dimemas-intel-mpich%{PROJ_DELIM}
+Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
+Requires:  dimemas-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  extrae-intel-impi%{PROJ_DELIM}
 Requires:  extrae-intel-mpich%{PROJ_DELIM}
