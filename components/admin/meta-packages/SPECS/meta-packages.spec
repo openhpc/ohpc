@@ -270,6 +270,8 @@ Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  wxparaver-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  wxparaver-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
 Requires:  dimemas-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -280,6 +282,7 @@ Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  wxparaver-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 %endif
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain
@@ -293,7 +296,7 @@ Requires:  mpiP-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
+Requires:  wxparaver-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime
@@ -303,11 +306,12 @@ Summary:   OpenHPC performance tools for GNU and MVAPICH2
 Requires:  dimemas-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
-Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
+Requires:  wxparaver-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain and the MVAPICH2 runtime
@@ -317,11 +321,12 @@ Summary:   OpenHPC performance tools for GNU and OpenMPI
 Requires:  dimemas-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
-Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
+Requires:  wxparaver-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime
@@ -583,6 +588,11 @@ Requires:  scorep-intel-impi%{PROJ_DELIM}
 Requires:  scorep-intel-mpich%{PROJ_DELIM}
 Requires:  scorep-intel-mvapich2%{PROJ_DELIM}
 Requires:  scorep-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  wxparaver-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  wxparaver-intel-impi%{PROJ_DELIM}
+Requires:  wxparaver-intel-mpich%{PROJ_DELIM}
+Requires:  wxparaver-intel-mvapich2%{PROJ_DELIM}
+Requires:  wxparaver-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-perf-tools
 Collection of performance tool builds for use with Intel(R) Parallel Studio XE toolchain
 
