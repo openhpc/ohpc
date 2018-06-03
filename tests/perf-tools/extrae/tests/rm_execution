@@ -23,7 +23,7 @@ unset OMP_NUM_THREADS
     flunk "mpi_ping binary does not exist"
     fi
 
-    run_mpi_binary "tracef.sh ./mpi_ping" "" $NODES $TASKS
+    run_mpi_binary "./tracef.sh ./mpi_ping" "" $NODES $TASKS
     assert_success
 
     run ls mpi_ping.prv
