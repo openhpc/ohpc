@@ -64,7 +64,7 @@ setup() {
 }
 
 @test "[$testname] Verify availability of extrae-cmd binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run which pprof
+    run which extrae-cmd
     assert_success
 }
 
