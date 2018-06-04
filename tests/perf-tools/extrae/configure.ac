@@ -31,10 +31,10 @@ fi
 
 OHPC_COMPILER_FAMILY
 
-CC=" "
-CXX=" "
-FC=" "
-F77=" "
+CC="mpicc"
+CXX="mpicxx"
+FC="mpif90"
+F77="mpif77"
 
 
 # test compilers
