@@ -30,8 +30,8 @@ Group:         %{PROJ_NAME}/parallel-libs
 URL:           https://geopm.github.io
 Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
 Source1:       OHPC_macros
-Requires:      kmod-msr-safe
-Requires:      msr-safe
+Requires:      kmod-msr-safe%{PROJ_DELIM}
+Requires:      msr-safe%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: hwloc-devel
