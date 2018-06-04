@@ -34,8 +34,8 @@ unset OMP_NUM_THREADS
 
 @test "[Extrae] Parallel trace merge runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 
-    run_mpi_binary "mpimpi2prv -syn -f TRACE.mpits -o trace.prv" $ARGS $NODES $TASKS
+    run_mpi_binary "mpimpi2prv -syn -f TRACE.mpits -o trace.prv" "" $NODES $TASKS
     assert_success
 
-    rm -rf profile*
+    rm -rf *prv *row *pcf TRACE.*
 }
