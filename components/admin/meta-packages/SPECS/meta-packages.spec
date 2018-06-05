@@ -270,8 +270,6 @@ Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
-Requires:  wxparaver-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
-Requires:  wxparaver-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
 Requires:  dimemas-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -282,7 +280,9 @@ Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  wxparaver-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  wxparaver-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  wxparaver-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %endif
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain
@@ -296,7 +296,9 @@ Requires:  mpiP-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+%ifnarch aarch64
 Requires:  wxparaver-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+%endif
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime
@@ -311,7 +313,9 @@ Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+%ifnarch aarch64
 Requires:  wxparaver-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+%endif
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain and the MVAPICH2 runtime
@@ -326,7 +330,9 @@ Requires:  mpiP-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+%ifnarch aarch64
 Requires:  wxparaver-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+$endif
 Requires:  papi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime
