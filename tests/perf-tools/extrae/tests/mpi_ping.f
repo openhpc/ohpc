@@ -4,7 +4,7 @@ C  Ping-pong with MPI + I/O
 
       integer BUFFSIZE, MSGSIZE, error, rank, size, dest, i
       integer status(MPI_STATUS_SIZE), NITERS, retsize
-      parameter (BUFFSIZE=100000, MSGSIZE=10000, NITERS=1000)
+      parameter (BUFFSIZE=100000, MSGSIZE=10000, NITERS=50)
       integer*1 buff, foo, sndmsg, rcvmsg
       dimension buff(BUFFSIZE)
       dimension foo(1)
