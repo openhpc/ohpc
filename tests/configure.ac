@@ -256,8 +256,8 @@ AM_CONDITIONAL(EASYBUILD_ENABLED,test "x$enable_easybuild" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Extrae
 AC_ARG_ENABLE([extrae],
-   [AS_HELP_STRING([--enable-extrae],[Enable Extrae tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_extrae,yes)])
+   [AS_HELP_STRING([--enable-extrae],[Enable Extrae tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_extrae,no)])
 AM_CONDITIONAL(EXTRAE_ENABLED,test "x$enable_extrae" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # HYPRE
