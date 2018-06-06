@@ -625,12 +625,6 @@ echo    Dev Tools:
        echo '    'EasyBuild................. : disabled
     fi
 
-    if test "x$enable_extrae" = "xyes"; then
-       echo '    'Extrae.................... : enabled
-    else
-       echo '    'Extrae.................... : disabled
-    fi
-
     if test "x$enable_hwloc" = "xyes"; then
        echo '    'hwloc..................... : enabled
     else
@@ -814,6 +808,12 @@ echo    Libraries:
     fi
 
 echo    Performance Tools:
+
+    if test "x$enable_extrae" = "xyes"; then
+       echo '    'Extrae.................... : enabled
+    else
+       echo '    'Extrae.................... : disabled
+    fi
 
     if test "x$enable_imb" = "xyes"; then
        echo '    'IMB....................... : enabled
