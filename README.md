@@ -23,7 +23,7 @@ pre-packaged binary RPMs available per architecture type are summarized as follo
 
 Base OS     | aarch64 | x86_64  | noarch
 :---:       | :---:   | :---:   | :---:
-CentOS 7.4  | 329     | 558     | 35
+CentOS 7.5  | 329     | 558     | 35
 SLES 12 SP3 | 337     | 561     | 35
 
 A list of all available components is available on the OpenHPC
@@ -54,7 +54,7 @@ for mirroring the OpenHPC repositories with rsync can be found in the
 
 #### Architecture = (aarch64)
 
-###### [CentOS 7.4]
+###### [CentOS 7.5]
 * [Latest version of 'ohpc-release' for EL7](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.5.GA/Install_guide-CentOS7-Warewulf-PBSPro-1.3.5-aarch64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.5.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.5-aarch64.pdf)
@@ -70,7 +70,7 @@ for mirroring the OpenHPC repositories with rsync can be found in the
 
 #### Architecture = (x86_64)
 
-###### [CentOS 7.4]
+###### [CentOS 7.5]
 * [Latest version of 'ohpc-release' for EL7](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm) (md5sum=d5139cf3aa83d095e6851628e8a684fa)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.5.GA/Install_guide-CentOS7-Warewulf-PBSPro-1.3.5-x86_64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.5.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.5-x86_64.pdf)
