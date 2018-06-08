@@ -1,0 +1,167 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "CHARLIECLOUD" "1" "2018-05-30 22:53 Coordinated Universal Time" "" "Charliecloud"
+.SH NAME
+charliecloud \- Lightweight user-defined software stacks for high-performance computing
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH WHAT IS CHARLIECLOUD?
+.sp
+Charliecloud provides user\-defined software stacks (UDSS) for high\-performance
+computing (HPC) centers. This "bring your own software stack" functionality
+addresses needs such as:
+.INDENT 0.0
+.IP \(bu 2
+software dependencies that are numerous, complex, unusual, differently
+configured, or simply newer/older than what the center provides;
+.IP \(bu 2
+build\-time requirements unavailable within the center, such as relatively
+unfettered internet access;
+.IP \(bu 2
+validated software stacks and configuration to meet the standards of a
+particular field of inquiry;
+.IP \(bu 2
+portability of environments between resources, including workstations and
+other test and development system not managed by the center;
+.IP \(bu 2
+consistent environments, even archivally so, that can be easily, reliabily,
+and verifiably reproduced in the future; and/or
+.IP \(bu 2
+usability and comprehensibility.
+.UNINDENT
+.sp
+\fBWARNING: Cray CLE in recent versions\fP has a bug that crashes nodes when
+cleaning up after some jobs, including if Charliecloud has been used. See the
+installation instructions for a workaround.
+.SH HOW DOES IT WORK?
+.sp
+Charliecloud uses Linux user namespaces to run containers with no privileged
+operations or daemons and minimal configuration changes on center resources.
+This simple approach avoids most security risks while maintaining access to
+the performance and functionality already on offer.
+.sp
+Container images can be built using Docker or anything else that can generate
+a standard Linux filesystem tree.
+.SH HOW DO I LEARN MORE?
+.INDENT 0.0
+.IP \(bu 2
+Documentation: \fI\%https://hpc.github.io/charliecloud\fP
+.IP \(bu 2
+GitHub repository: \fI\%https://github.com/hpc/charliecloud\fP
+.IP \(bu 2
+We wrote an article for USENIX\(aqs magazine \fI;login:\fP that explains in more
+detail the motivation for Charliecloud and the technology upon which it is
+based: \fI\%https://www.usenix.org/publications/login/fall2017/priedhorsky\fP
+.IP \(bu 2
+A more technical resource is our Supercomputing 2017 paper:
+\fI\%https://dl.acm.org/citation.cfm?id=3126925\fP
+.UNINDENT
+.SH WHO IS RESPONSIBLE?
+.sp
+The core Charliecloud team at Los Alamos is:
+.INDENT 0.0
+.IP \(bu 2
+Reid Priedhorsky <\fI\%reidpr@lanl.gov\fP>, co\-founder and BDFL
+.IP \(bu 2
+Tim Randles <\fI\%trandles@lanl.gov\fP>, co\-founder
+.IP \(bu 2
+Michael Jennings <\fI\%mej@lanl.gov\fP>
+.IP \(bu 2
+Jordan Ogas <\fI\%jogas@lanl.gov\fP>
+.UNINDENT
+.sp
+Patches (code, documentation, etc.) contributed by:
+.INDENT 0.0
+.IP \(bu 2
+Reid Priedhorsky <\fI\%reidpr@lanl.gov\fP>
+.IP \(bu 2
+Oliver Freyermuth <\fI\%o.freyermuth@googlemail.com\fP>
+.IP \(bu 2
+Christoph Junghans <\fI\%junghans@lanl.gov\fP>
+.IP \(bu 2
+Jordan Ogas <\fI\%jogas@lanl.gov\fP>
+.IP \(bu 2
+Matthew Vernon <\fI\%mv3@sanger.ac.uk\fP>
+.IP \(bu 2
+Peter Wienemann <\fI\%wienemann@physik.uni\-bonn.de\fP>
+.IP \(bu 2
+Lowell Wofford <\fI\%lowell@lanl.gov\fP>
+.UNINDENT
+.SH HOW CAN I PARTICIPATE?
+.sp
+Questions, comments, feature requests, bug reports, etc. can be directed to:
+.INDENT 0.0
+.IP \(bu 2
+our mailing list: \fIcharliecloud@groups.io\fP or \fI\%https://groups.io/g/charliecloud\fP
+.IP \(bu 2
+issues on GitHub
+.UNINDENT
+.sp
+Patches are much appreciated on the software itself as well as documentation.
+Optionally, please include in your first patch a credit for yourself in the
+list above.
+.sp
+We are friendly and welcoming of diversity on all dimensions.
+.SH COPYRIGHT AND LICENSE
+.sp
+Charliecloud is copyright © 2014–2018 Los Alamos National Security, LLC. This
+software has been approved for open source release, LA\-CC 14\-096.
+.sp
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this software except in compliance with the License. A copy of the license
+is included in file LICENSE.
+.sp
+This material was produced under U.S. Government contract DE\-AC52\-06NA25396
+for Los Alamos National Laboratory (LANL), which is operated by Los Alamos
+National Security, LLC for the U.S. Department of Energy. The U.S. Government
+has rights to use, reproduce, and distribute this software. NEITHER THE
+GOVERNMENT NOR LOS ALAMOS NATIONAL SECURITY, LLC MAKES ANY WARRANTY, EXPRESS
+OR IMPLIED, OR ASSUMES ANY LIABILITY FOR THE USE OF THIS SOFTWARE. If software
+is modified to produce derivative works, such modified software should be
+clearly marked, so as not to confuse it with the version available from LANL.
+.SS Reporting bugs
+.sp
+If Charliecloud was obtained from your Linux distribution, use your
+distribution\(aqs bug reporting procedures.
+.sp
+Otherwise, report bugs to: <\fI\%https://github.com/hpc/charliecloud/issues\fP>
+.SH SEE ALSO
+.sp
+ch\-build(1), ch\-build2dir(1), ch\-docker2tar(1), ch\-docker\-run(1), ch\-run(1),
+ch\-ssh(1), ch\-tar2dir(1)
+.sp
+Full documentation at: <\fI\%https://hpc.github.io/charliecloud\fP>
+.SH NOTE
+.sp
+These man pages are for Charliecloud version 0.2.4 (Git commit ).
+.SH AUTHOR
+Reid Priedhorsky, Tim Randles, and others
+.SH COPYRIGHT
+2014–2018, Los Alamos National Security, LLC
+.\" Generated by docutils manpage writer.
+.
