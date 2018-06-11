@@ -126,7 +126,7 @@ update_pkg_if_link () {
     cd $TMPDIR || ERROR "unable to cd to $TMPDIR"
     osc co ${branchNew} $1
 
-    osc api -X GET "/source/${parent_path}/$1/_link" > ${localdir}/_link || ERROR "unable to copy _link from ${parent_path}"
+    osc api -X GET "/source/${parent_path}/$2/_link" > ${localdir}/_link || ERROR "unable to copy _link from ${parent_path}"
 
     osc add ${localdir}/_link || ERROR "Unable to add _link file for $1"
     if [ -e ${localdir}/_service ];then
@@ -245,7 +245,7 @@ fi
 # update config if source_package was a link, since "osc release" will simply create a _service file
 if [[ ($found_link -eq 1) && ($ENABLE_CMDS -eq 1) ]]; then
     echo "Originating package source for $PKG is a _link..."
-    update_pkg_if_link ${PKGNEW}
+    update_pkg_if_link ${PKGNEW} ${PKG}
 fi
     
     
