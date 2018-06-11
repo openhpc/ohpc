@@ -234,7 +234,18 @@ if [[ "${minorVer}" == "1.3" && "${endMicroVer}" -eq 5 ]];then
               python-mpi4py-intel-openmpi3-v1.3.3
               python-numpy-gnu7-v1.3.2 python-numpy-intel-v1.3.2
               python-scipy-gnu7-mpich-v1.3.2 python-scipy-gnu7-mvapich2-v1.3.2 
-              python-scipy-gnu7-openmpi-v1.3.2 python-scipy-gnu7-openmpi3-v1.3.3"
+              python-scipy-gnu7-openmpi-v1.3.2 python-scipy-gnu7-openmpi3-v1.3.3
+              imb-gnu7-openmpi-v1.3.2
+              tau-gnu7-openmpi-v1.3.2
+              netcdf-gnu7-openmpi-v1.3.2
+              boost-gnu7-openmpi-v1.3.2
+              mumps-gnu7-openmpi-v1.3.2
+              trilinos-gnu7-openmpi-v1.3.2
+              phdf5-gnu7-openmpi-v1.3.2
+              scalapack-gnu7-openmpi-v1.3.2
+              hypre-gnu7-openmpi-v1.3.2
+              petsc-gnu7-openmpi-v1.3.2
+              fftw-gnu7-openmpi-v1.3.2"
 fi
 
 for pkg in $packages; do
