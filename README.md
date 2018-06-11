@@ -5,9 +5,9 @@
 
 ---
 
-[![Components](https://img.shields.io/badge/components%20available-80-green.svg) ](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.5)
-[![Additions](https://img.shields.io/badge/new%20additions-3-blue.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.5.GA)
-[![Updates](https://img.shields.io/badge/updates-42%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.5.GA)
+[![Components](https://img.shields.io/badge/components%20available-81-green.svg) ](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.5)
+[![Additions](https://img.shields.io/badge/new%20additions-1-blue.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.5.GA)
+[![Updates](https://img.shields.io/badge/updates-44%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.5.GA)
 [![Tests](https://img.shields.io/badge/tests%20passing-100%25-brightgreen.svg) ](http://test.openhpc.community:8080/job/1.3.x/view/1.3.5/)
 
 
