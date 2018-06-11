@@ -61,7 +61,7 @@ if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"scorep-gnu-impi-ohpc"} = 2;
     $page_breaks{"mumps-gnu-impi-ohpc"} = 2;
     $page_breaks{"superlu_dist-gnu-impi-ohpc"} = 3;
-    $page_breaks{"netcdf-gnu7-impi-ohpc"} = 2;
+    $page_breaks{"netcdf-gnu-impi-ohpc"} = 2;
 }
 
 my $longSummaryLine = 60;
@@ -83,7 +83,7 @@ if ( $pwd =~ /\/x86_64\// ) {
     $numCompiler_permute = 1;
     $numMPI_permute = 3;
 } else {
-    die ("Unable to determin architecture from local path ($pwd)")
+    die ("Unable to determine architecture from local path ($pwd)")
 }
 
 sub write_table_header {
