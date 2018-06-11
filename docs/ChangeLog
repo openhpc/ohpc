@@ -22,6 +22,7 @@ Version 1.3.5 (11 June 2018)
     in OpenHPC v1.3.4 (https://github.com/openhpc/ohpc/issues/702)
   * fix for stdin redirection issue using OpenMPI with build of newer version, v3.1.0 
     (https://github.com/openhpc/ohpc/issues/709)
+  * updated spack packaging to include missing templates (https://github.com/openhpc/ohpc/issues/715)
   * fix for PSXE compatibility packages removing ohpc-style modulefiles during package upgrade
     (https://github.com/openhpc/ohpc/issues/718)
   * re-enable jobcomp_elasticsearch plugin in SLURM builds (https://github.com/openhpc/ohpc/issues/698)
