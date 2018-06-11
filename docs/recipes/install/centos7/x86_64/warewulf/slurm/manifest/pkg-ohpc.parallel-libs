@@ -1,8 +1,8 @@
-boost-gnu7-openmpi-ohpc 1.63.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu-impi-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu-mpich-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu-mvapich2-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu-openmpi-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu7-openmpi-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-openmpi-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu7-impi-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu7-mpich-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
@@ -41,7 +41,6 @@ mfem-intel-impi-ohpc 3.3.2 http://mfem.org ohpc/parallel-libs Lightweight, gener
 mfem-intel-mpich-ohpc 3.3.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mfem-intel-mvapich2-ohpc 3.3.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
 mfem-intel-openmpi3-ohpc 3.3.2 http://mfem.org ohpc/parallel-libs Lightweight, general, scalable C++ library for finite element methods
-mumps-gnu7-openmpi-ohpc 5.1.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu-impi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu-mpich-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu-mvapich2-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
@@ -49,6 +48,7 @@ mumps-gnu-openmpi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUlt
 mumps-gnu7-impi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu7-mpich-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu7-mvapich2-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-gnu7-openmpi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu7-openmpi3-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-intel-impi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-intel-mpich-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
@@ -103,7 +103,6 @@ superlu_dist-intel-impi-ohpc 5.3.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ oh
 superlu_dist-intel-mpich-ohpc 5.3.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-intel-mvapich2-ohpc 5.3.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-intel-openmpi3-ohpc 5.3.0 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
-trilinos-gnu7-openmpi-ohpc 12.10.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu-impi-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu-mpich-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu-mvapich2-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
@@ -111,6 +110,7 @@ trilinos-gnu-openmpi-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/par
 trilinos-gnu7-impi-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu7-mpich-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu7-mvapich2-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu7-openmpi-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu7-openmpi3-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-impi-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-mpich-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms

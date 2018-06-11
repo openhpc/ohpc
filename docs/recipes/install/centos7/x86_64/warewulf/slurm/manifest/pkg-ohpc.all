@@ -24,7 +24,7 @@ boost-gnu-openmpi-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free
 boost-gnu7-impi-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu7-mpich-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu7-mvapich2-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-boost-gnu7-openmpi-ohpc 1.63.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu7-openmpi-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu7-openmpi3-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-impi-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-mpich-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
@@ -81,7 +81,7 @@ imb-gnu-openmpi-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-
 imb-gnu7-impi-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu7-mpich-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu7-mvapich2-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
-imb-gnu7-openmpi-ohpc 4.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
+imb-gnu7-openmpi-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu7-openmpi3-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-intel-impi-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-intel-mpich-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
@@ -156,7 +156,7 @@ mumps-gnu-openmpi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUlt
 mumps-gnu7-impi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu7-mpich-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu7-mvapich2-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
-mumps-gnu7-openmpi-ohpc 5.1.1 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-gnu7-openmpi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu7-openmpi3-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-intel-impi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-intel-mpich-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
@@ -267,7 +267,7 @@ netcdf-gnu-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/
 netcdf-gnu7-impi-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu7-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu7-mvapich2-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-gnu7-openmpi-ohpc 4.4.1.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu7-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu7-openmpi3-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-impi-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
@@ -369,7 +369,6 @@ python-scipy-gnu-mvapich2-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scient
 python-scipy-gnu-openmpi-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu7-mpich-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu7-mvapich2-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
-python-scipy-gnu7-openmpi-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu7-openmpi3-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python34-Cython-ohpc 0.26.1 http://www.cython.org Development/Languages/Python The Cython compiler for writing C extensions for the Python language
 python34-build-patch-ohpc 0.1 https://github.com/openhpc/ohpc ohpc/dev-tools OpenHPC build package for python34 modules
@@ -500,7 +499,7 @@ tau-gnu-openmpi-ohpc 2.27 http://www.cs.uoregon.edu/research/tau/home.php ohpc/p
 tau-gnu7-impi-ohpc 2.27.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu7-mpich-ohpc 2.27.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu7-mvapich2-ohpc 2.27.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
-tau-gnu7-openmpi-ohpc 2.26.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
+tau-gnu7-openmpi-ohpc 2.27 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu7-openmpi3-ohpc 2.27.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-intel-impi-ohpc 2.27.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-intel-mpich-ohpc 2.27.1 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
@@ -515,7 +514,7 @@ trilinos-gnu-openmpi-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/par
 trilinos-gnu7-impi-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu7-mpich-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu7-mvapich2-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
-trilinos-gnu7-openmpi-ohpc 12.10.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
+trilinos-gnu7-openmpi-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-gnu7-openmpi3-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-impi-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms
 trilinos-intel-mpich-ohpc 12.12.1 http://trilinos.sandia.gov/index.html ohpc/parallel-libs A collection of libraries of numerical algorithms

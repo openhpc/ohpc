@@ -29,7 +29,6 @@ netcdf-cxx-intel-mpich-ohpc 4.3.0 http://www.unidata.ucar.edu/software/netcdf/ o
 netcdf-cxx-intel-mvapich2-ohpc 4.3.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-intel-openmpi-ohpc 4.3.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-intel-openmpi3-ohpc 4.3.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
-netcdf-gnu7-openmpi-ohpc 4.4.1.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu-impi-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu-mpich-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu-mvapich2-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
@@ -48,6 +47,7 @@ netcdf-gnu-impi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-
 netcdf-gnu-mpich-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu-mvapich2-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu7-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-intel-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu7-impi-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-gnu7-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
