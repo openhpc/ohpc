@@ -42,7 +42,7 @@ fftw-gnu-mvapich2-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fouri
 fftw-gnu-openmpi-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu7-mpich-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu7-mvapich2-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
-fftw-gnu7-openmpi-ohpc 3.3.6 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
+fftw-gnu7-openmpi-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu7-openmpi3-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 ganglia-devel-ohpc 3.7.2 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Library
 ganglia-gmetad-ohpc 3.7.2 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Metadata collection daemon
@@ -67,7 +67,7 @@ hypre-gnu-openmpi-ohpc 2.13.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs
 hypre-gnu7-impi-ohpc 2.14.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu7-mpich-ohpc 2.14.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu7-mvapich2-ohpc 2.14.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
-hypre-gnu7-openmpi-ohpc 2.11.2 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
+hypre-gnu7-openmpi-ohpc 2.13.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu7-openmpi3-ohpc 2.14.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-intel-impi-ohpc 2.14.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-intel-mpich-ohpc 2.14.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
@@ -246,20 +246,6 @@ netcdf-cxx-intel-mpich-ohpc 4.3.0 http://www.unidata.ucar.edu/software/netcdf/ o
 netcdf-cxx-intel-mvapich2-ohpc 4.3.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-intel-openmpi-ohpc 4.3.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
 netcdf-cxx-intel-openmpi3-ohpc 4.3.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C++ Libraries for the Unidata network Common Data Form
-netcdf-gnu-impi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-gnu-mpich-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-gnu-mvapich2-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-gnu-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-gnu7-impi-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-gnu7-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-gnu7-mvapich2-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-gnu7-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-gnu7-openmpi3-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-intel-impi-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-intel-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-intel-mvapich2-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-intel-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
-netcdf-intel-openmpi3-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu-impi-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu-mpich-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-gnu-mvapich2-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
@@ -274,6 +260,20 @@ netcdf-fortran-intel-mpich-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcd
 netcdf-fortran-intel-mvapich2-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-intel-openmpi-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
 netcdf-fortran-intel-openmpi3-ohpc 4.4.4 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs Fortran Libraries for the Unidata network Common Data Form
+netcdf-gnu-impi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu-mpich-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu-mvapich2-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu7-impi-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu7-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu7-mvapich2-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu7-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-gnu7-openmpi3-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-intel-impi-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-intel-mpich-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-intel-mvapich2-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-intel-openmpi-ohpc 4.5.0 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
+netcdf-intel-openmpi3-ohpc 4.6.1 http://www.unidata.ucar.edu/software/netcdf/ ohpc/io-libs C Libraries for the Unidata network Common Data Form
 nhc-ohpc 1.4.2 https://github.com/mej/nhc/ ohpc/admin LBNL Node Health Check
 nrpe-ohpc 3.2.0 http://www.nagios.org ohpc/admin Host/service/network monitoring agent for Nagios
 ocr-gnu-ohpc 1.0.1 https://xstack.exascale-tech.com/wiki ohpc/runtimes Open Community Runtime (OCR) for shared memory
@@ -307,7 +307,7 @@ petsc-gnu-openmpi-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Po
 petsc-gnu7-impi-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu7-mpich-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu7-mvapich2-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-gnu7-openmpi-ohpc 3.7.6 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu7-openmpi-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu7-openmpi3-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-intel-impi-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-intel-mpich-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
@@ -371,6 +371,7 @@ python-scipy-gnu7-mpich-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientifi
 python-scipy-gnu7-mvapich2-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu7-openmpi3-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python34-Cython-ohpc 0.26.1 http://www.cython.org Development/Languages/Python The Cython compiler for writing C extensions for the Python language
+python34-build-patch-ohpc 0.1 https://github.com/openhpc/ohpc ohpc/dev-tools OpenHPC build package for python34 modules
 python34-mpi4py-gnu7-impi-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python34-mpi4py-gnu7-mpich-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python34-mpi4py-gnu7-mvapich2-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
@@ -458,13 +459,19 @@ slurm-contribs-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Perl tool to pri
 slurm-devel-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
 slurm-example-configs-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Example config files for Slurm
 slurm-libpmi-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm\'s implementation of the pmi libraries
+slurm-munge-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Slurm authentication and crypto implementation using Munge
 slurm-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm Workload Manager
 slurm-openlava-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms openlava/LSF wrappers for transition from OpenLava/LSF to Slurm
 slurm-pam_slurm-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms PAM module for restricting access to compute nodes via Slurm
 slurm-perlapi-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Perl API to Slurm
+slurm-plugins-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Slurm plugins (loadable shared objects)
+slurm-sjobexit-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Slurm job exit code management tools
+slurm-sjstat-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
 slurm-slurmctld-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm controller daemon
 slurm-slurmd-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm compute node daemon
+slurm-slurmdb-direct-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Wrappers to write directly to the slurmdb
 slurm-slurmdbd-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Slurm database daemon
+slurm-sql-ohpc 16.05.10 http://slurm.schedmd.com/ ohpc/rms Slurm SQL support
 slurm-sview-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Graphical user interface to view and modify Slurm state
 slurm-torque-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Torque/PBS wrappers for transition from Torque/PBS to Slurm
 spack-ohpc 0.11.2 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management

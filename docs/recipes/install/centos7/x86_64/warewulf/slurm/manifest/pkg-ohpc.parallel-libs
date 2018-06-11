@@ -12,18 +12,18 @@ boost-intel-impi-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free 
 boost-intel-mpich-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-mvapich2-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-intel-openmpi3-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-fftw-gnu7-openmpi-ohpc 3.3.6 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu-mpich-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu-mvapich2-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu-openmpi-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu7-mpich-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu7-mvapich2-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
+fftw-gnu7-openmpi-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu7-openmpi3-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
-hypre-gnu7-openmpi-ohpc 2.11.2 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu-impi-ohpc 2.13.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu-mpich-ohpc 2.13.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu-mvapich2-ohpc 2.13.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu-openmpi-ohpc 2.13.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
+hypre-gnu7-openmpi-ohpc 2.13.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-intel-openmpi-ohpc 2.13.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu7-impi-ohpc 2.14.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
 hypre-gnu7-mpich-ohpc 2.14.0 http://www.llnl.gov/casc/hypre/ ohpc/parallel-libs Scalable algorithms for solving linear systems of equations
@@ -55,11 +55,11 @@ mumps-intel-mpich-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUlt
 mumps-intel-mvapich2-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-intel-openmpi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-intel-openmpi3-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
-petsc-gnu7-openmpi-ohpc 3.7.6 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu-impi-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu-mpich-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu-mvapich2-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu-openmpi-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu7-openmpi-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-intel-openmpi-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu7-impi-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu7-mpich-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
