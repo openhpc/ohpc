@@ -65,6 +65,11 @@ BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
 
+%if %{compiler_family} == "gnu7"
+BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%endif
+
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
