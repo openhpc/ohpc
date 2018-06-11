@@ -23,6 +23,16 @@ stagingTransition=3
 aarch_sles="freeipmi:2"
 aarch_centos=""
 
+# define any packages which need to be skipped.
+skip_packages=""
+
+# 1.3.5 setting
+if [[ "${minorVer}" == "1.3" && "${endMicroVer}" -eq 5 ]];then
+    skip_packages="mpiP-gnu-openmpi"
+fi
+
+echo "skip_packages = $skip_packages"
+
 run_cmd () {
     local cmd="$@"
 
@@ -65,6 +75,7 @@ for i in `seq ${startMicroVer} ${endMicroVer}`; do
     fi
 
     igot=$(osc ls ${obsProject} 2> /dev/null)
+#    igot="mpiP-gnu-openmpi"
 
     echo " "
     echo "Scanning packages in $obsProject..."
@@ -102,6 +113,21 @@ for i in `seq ${startMicroVer} ${endMicroVer}`; do
 		else
 		    obsProjectNewer=${project}:${minorVer}:Update$j
 		    URLNewerBase="http://build.openhpc.community/${project}:/${minorVer}:/Update$j"
+		fi
+
+		# Skip package in latest rev (e.g. it is defined, but has no binaries built)
+		if [[ $j -eq ${endMicroVer} ]];then
+		    skipme=0
+		    for skip in ${skip_packages}; do
+			if [[ "${skip}" == "${pkg}" ]];then
+			    echo "      --> skipping ${pkg} due to presence in skip_packages"
+			    skipme=1
+			fi
+		    done
+		    if [[ $skipme -eq 1 ]];then 
+			continue
+		    fi
+			
 		fi
 
 		igot=$(osc ls ${obsProjectNewer} ${pkg} 2> /dev/null) 
@@ -173,9 +199,11 @@ fi
 
 # changes/removals for specific release
 
+packages=""
+project="${project}:${minorVer}:Update${endMicroVer}"
+
 # Version 1.3.4
 if [[ "${minorVer}" == "1.3" && "${endMicroVer}" -eq 4 ]];then
-    project="${project}:${minorVer}:Update${endMicroVer}"
     packages="slurm-devel-v1.3.1
               llvm4-compilers-v1.3.2
               python-mpi4py-gnu7-mpich-v1.3.3
@@ -189,16 +217,32 @@ if [[ "${minorVer}" == "1.3" && "${endMicroVer}" -eq 4 ]];then
               python-numpy-gnu7-v1.3.2 python-numpy-intel-v1.3.2
               python-scipy-gnu7-mpich-v1.3.2 python-scipy-gnu7-mvapich2-v1.3.2 python-scipy-gnu7-openmpi-v1.3.2 python-scipy-gnu7-openmpi3-v1.3.3
               python-Cython-v1.3.3"
-              
-
-    for pkg in $packages; do
-	echo "v1.3.4: checking if $pkg exists..."
-	igot=$(osc ls ${project} ${pkg} 2> /dev/null) 
-	if [[ $? -eq 0 ]]; then
-	    echo "--> removing package $pkg...."
-	    osc rdelete -m "remove deprecated package ${pkg}" ${project} $pkg
-	fi
-
-    done
-
 fi
+
+# Version 1.3.4
+if [[ "${minorVer}" == "1.3" && "${endMicroVer}" -eq 5 ]];then
+
+    packages="slurm-devel-v1.3.1
+              llvm4-compilers-v1.3.2
+              python-mpi4py-gnu7-mpich-v1.3.3
+              python-mpi4py-gnu7-mvapich2-v1.3.3
+              python-mpi4py-gnu7-openmpi3-v1.3.3
+              python-mpi4py-gnu7-impi-v1.3.3
+              python-mpi4py-intel-impi-v1.3.3
+              python-mpi4py-intel-mpich-v1.3.3
+              python-mpi4py-intel-mvapich2-v1.3.3
+              python-mpi4py-intel-openmpi3-v1.3.3
+              python-numpy-gnu7-v1.3.2 python-numpy-intel-v1.3.2
+              python-scipy-gnu7-mpich-v1.3.2 python-scipy-gnu7-mvapich2-v1.3.2 
+              python-scipy-gnu7-openmpi-v1.3.2 python-scipy-gnu7-openmpi3-v1.3.3"
+fi
+
+for pkg in $packages; do
+    echo "v${minorVer}.${endMicroVer}: checking if $pkg exists..."
+    igot=$(osc ls ${project} ${pkg} 2> /dev/null) 
+    if [[ $? -eq 0 ]]; then
+	echo "--> removing package $pkg...."
+	osc rdelete -m "remove deprecated package ${pkg}" ${project} $pkg
+    fi
+
+done
