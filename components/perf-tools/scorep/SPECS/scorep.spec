@@ -61,7 +61,9 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#%patch0 -p1
+%if %{compiler_family} == "gnu7"
+%patch0 -p1
+%endif
 
 %build
 
