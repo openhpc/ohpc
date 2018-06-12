@@ -171,7 +171,11 @@ export PATH=$(pwd):$PATH
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
+%if "%{compiler_family}" == "gnu7"
+module load py2-numpy
+%else
 module load numpy
+%endif
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
 make MPI=y python
