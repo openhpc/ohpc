@@ -51,7 +51,11 @@ BuildRequires: python-devel
 BuildRequires: lustre-lite
 Requires: lustre-client%{PROJ_DELIM}
 %endif
+%if "%{compiler_family}" == "gnu7"
+BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
+%else
 BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM} = 1.12.1
+%endif
 
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -89,7 +93,11 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 module load autotools
 module load phdf5
 module load netcdf
+%if "%{compiler_family}" == "gnu7"
+module load py2-numpy
+%else
 module load numpy
+%endif
 
 TOPDIR=$PWD
 
