@@ -60,7 +60,11 @@ BuildRequires:  python-Cython%{PROJ_DELIM}
 BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  swig
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+%if "%{compiler_family}" == "gnu7"
 Requires:       python-numpy-%{compiler_family}%{PROJ_DELIM}
+%else
+BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM} = 1.12.1
+%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -91,7 +95,11 @@ module load openblas
 module load fftw
 %endif
 
+%if "%{compiler_family}" == "gnu7"
+module load py2-numpy
+%else
 module load numpy
+%endif
 
 %if %{compiler_family} == intel
 cat > site.cfg << EOF
@@ -126,7 +134,12 @@ python setup.py config_fc --fcompiler=gnu95 --noarch build
 module load openblas
 %endif
 
+%if "%{compiler_family}" == "gnu7"
+module load py2-numpy
+%else
 module load numpy
+%endif
+
 python setup.py install --prefix=%{install_path} --root=%{buildroot}
 find %{buildroot}%{install_path}/lib64/python2.7/site-packages/scipy -type d -name tests | xargs rm -rf # Don't ship tests
 # Don't ship weave examples, they're marked as documentation:
