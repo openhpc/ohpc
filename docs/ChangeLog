@@ -16,16 +16,16 @@ Version 1.3.5 (13 June 2018)
 
   * updates to support CentOS7.5
   * enabled Lua job submit plugin in SLURM builds (https://github.com/openhpc/ohpc/issues/697)
+  * re-enable jobcomp_elasticsearch plugin in SLURM builds (https://github.com/openhpc/ohpc/issues/698)
   * fix for stateful provisioning when using Warewulf (https://github.com/openhpc/ohpc/issues/700)
   * enable X11 build support in SLURM (https://github.com/openhpc/ohpc/issues/701)
-  * rebuild of older compiler/MPI variants using updated to dependency schema for dynamic libraries that was introduced
+  * rebuild of older compiler/MPI variants using updated dependency schema for dynamic libraries that was introduced
     in OpenHPC v1.3.4 (https://github.com/openhpc/ohpc/issues/702)
   * fix for stdin redirection issue using OpenMPI with build of newer version, v3.1.0 
     (https://github.com/openhpc/ohpc/issues/709)
   * updated spack packaging to include missing templates (https://github.com/openhpc/ohpc/issues/715)
   * fix for PSXE compatibility packages removing ohpc-style modulefiles during package upgrade
     (https://github.com/openhpc/ohpc/issues/718)
-  * re-enable jobcomp_elasticsearch plugin in SLURM builds (https://github.com/openhpc/ohpc/issues/698)
   * updated documentation for NHC configuration (https://github.com/openhpc/ohpc/issues/741)
   * variety of component version updates and other additions highlighted below
 
