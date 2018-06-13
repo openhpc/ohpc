@@ -369,6 +369,7 @@ python-scipy-gnu-mvapich2-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scient
 python-scipy-gnu-openmpi-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu7-mpich-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu7-mvapich2-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python-scipy-gnu7-openmpi-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu7-openmpi3-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python34-Cython-ohpc 0.26.1 http://www.cython.org Development/Languages/Python The Cython compiler for writing C extensions for the Python language
 python34-build-patch-ohpc 0.1 https://github.com/openhpc/ohpc ohpc/dev-tools OpenHPC build package for python34 modules
@@ -448,12 +449,12 @@ sionlib-intel-openmpi3-ohpc 1.7.1 http://www.fz-juelich.de/ias/jsc/EN/Expertise/
 slepc-gnu7-impi-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu7-mpich-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu7-mvapich2-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-gnu7-openmpi-ohpc 3.7.4 http://www.grycap.upv.es/slepc/ ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-gnu7-openmpi-ohpc 3.8.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu7-openmpi3-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-intel-impi-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-intel-mpich-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-intel-mvapich2-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-intel-openmpi-ohpc 3.7.4 http://www.grycap.upv.es/slepc/ ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-intel-openmpi-ohpc 3.8.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-intel-openmpi3-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slurm-contribs-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Perl tool to print Slurm job state information
 slurm-devel-ohpc 17.11.7 https://slurm.schedmd.com/ ohpc/rms Development package for Slurm
