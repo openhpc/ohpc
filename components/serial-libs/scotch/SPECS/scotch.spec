@@ -127,7 +127,6 @@ EOF
 %files
 %defattr(-,root,root)
 %doc README.txt ./doc/*
-%{install_path}
-%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%{OHPC_PUB}
 
 %changelog
