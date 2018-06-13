@@ -1,0 +1,226 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "CH-FROMHOST" "1" "2018-05-30 22:53 Coordinated Universal Time" "" "Charliecloud"
+.SH NAME
+ch-fromhost \- Inject files from the host into an image directory
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH SYNOPSIS
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-fromhost [OPTION ...] (\-c CMD | \-f FILE | \-\-nvidia ...) IMGDIR
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH DESCRIPTION
+.sp
+Inject files from the host into the Charliecloud image directory
+\fBIMGDIR\fP\&.
+.sp
+The purpose of this command is to provide host\-specific files, such as GPU
+libraries, to a container. It should be run after \fBch\-tar2dir\fP and
+before \fBch\-run\fP\&. After invocation, the image is no longer portable to
+other hosts.
+.sp
+Injection is not atomic; if an error occurs partway through injection, the
+image is left in an undefined state. Injection is currently implemented using
+a simple file copy, but that may change in the future.
+.sp
+By default, file paths that contain the string \fB/bin\fP are assumed to be
+executables and are placed in \fB/usr/bin\fP within the container. File
+paths that contain the strings \fB/lib\fP or \fB\&.so\fP are assumed to be
+shared libraries and are placed in \fB/usr/lib\fP\&. Other files are placed in
+the directory specified by \fB\-\-dest\fP\&.
+.sp
+If any of the files appear to be shared libraries, run \fBldconfig\fP inside
+the container (using \fBch\-run \-w\fP) after injection.
+.SH OPTIONS
+.sp
+To specify which files to inject:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fB\-c\fP, \fB\-\-cmd CMD\fP
+Inject files listed in the standard output of command \fBCMD\fP\&.
+.TP
+.B \fB\-f\fP, \fB\-\-file FILE\fP
+Inject files listed in the file \fBFILE\fP\&.
+.TP
+.B \fB\-\-nvidia\fP
+Use \fBnvidia\-container\-cli list\fP (from \fBlibnvidia\-container\fP)
+to find executables and libraries to inject.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+These can be repeated, and at least one must be specified.
+.sp
+Additional arguments:
+.INDENT 0.0
+.INDENT 3.5
+\fB\-d\fP, \fB\-\-dest DST\fP
+.INDENT 0.0
+.INDENT 3.5
+Place files whose destination cannot be inferred in directory
+\fBIMGDIR/DST\fP\&. If such a file is found and this option is not
+specified, exit with an error.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B \fB\-h\fP, \fB\-\-help\fP
+Print help and exit.
+.TP
+.B \fB\-\-no\-infer\fP
+Do not infer the type of any files.
+.TP
+.B \fB\-v\fP, \fB\-\-verbose\fP
+Pist the injected files.
+.TP
+.B \fB\-\-version\fP
+Print version and exit.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH NOTES
+.sp
+Symbolic links are dereferenced, i.e., the files pointed to are injected, not
+the links themselves.
+.sp
+As a corollary, do not include symlinks to shared libraries. These will be
+re\-created by \fBldconfig\fP\&.
+.sp
+There are two alternate approaches for nVidia GPU libraries:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.IP 1. 3
+Link \fBlibnvidia\-containers\fP into \fBch\-run\fP and call the
+library functions directly. However, this would mean that Charliecloud
+would either (a) need to be compiled differently on machines with and
+without nVidia GPUs or (b) have \fBlibnvidia\-containers\fP available
+even on machines without nVidia GPUs. Neither of these is consistent with
+Charliecloud\(aqs philosophies of simplicity and minimal dependencies.
+.IP 2. 3
+Use \fBnvidia\-container\-cli configure\fP to do the injecting. This
+would require that containers have a half\-started state, where the
+namespaces are active and everything is mounted but \fBpivot_root(2)\fP
+has not been performed. This is not feasible because Charliecloud has no
+notion of a half\-started container.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+Further, while these alternate approaches would simplify or eliminate this
+script for nVidia GPUs, they would not solve the problem for other situations.
+.SH BUGS
+.sp
+File paths may not contain newlines.
+.SH EXAMPLES
+.sp
+Place shared library \fB/usr/lib64/libfoo.so\fP at path
+\fB/usr/lib/libfoo.so\fP within the image \fB/var/tmp/baz\fP and
+executable \fB/bin/bar\fP at path \fB/usr/bin/bar\fP\&. Then, create
+appropriate symlinks to \fBlibfoo\fP and update the \fBld.so\fP cache.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ cat qux.txt
+/bin/bar
+/usr/lib64/libfoo.so
+$ ch\-fromhost \-\-file qux.txt /var/tmp/baz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Same as above:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-fromhost \-\-cmd \(aqcat qux.txt\(aq /var/tmp/baz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Same as above, and also place file \fB/etc/quux\fP at \fB/etc/quux\fP
+within the container:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ cat corge.txt
+/bin/bar
+/etc/quux
+/usr/lib64/libfoo.so
+$ ch\-fromhost \-\-file corge.txt \-\-dest /etc /var/tmp/baz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Inject the executables and libraries recommended by nVidia into the image, and
+then run \fBldconfig\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-fromhost \-\-nvidia /var/tmp/baz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH REPORTING BUGS
+.sp
+If Charliecloud was obtained from your Linux distribution, use your
+distribution\(aqs bug reporting procedures.
+.sp
+Otherwise, report bugs to: <\fI\%https://github.com/hpc/charliecloud/issues\fP>
+.SH SEE ALSO
+.sp
+charliecloud(1)
+.sp
+Full documentation at: <\fI\%https://hpc.github.io/charliecloud\fP>
+.SH AUTHOR
+Reid Priedhorsky, Tim Randles, and others
+.SH COPYRIGHT
+2014–2018, Los Alamos National Security, LLC
+.\" Generated by docutils manpage writer.
+.

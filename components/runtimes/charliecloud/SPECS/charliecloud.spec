@@ -23,6 +23,15 @@ Group:     %{PROJ_NAME}/runtimes
 URL:       https://hpc.github.io/charliecloud/
 Source0:   https://github.com/hpc/charliecloud/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
+Source2:   ch-build.1
+Source3:   ch-build2dir.1
+Source4:   ch-docker-run.1
+Source5:   ch-docker2tar.1
+Source6:   ch-fromhost.1
+Source7:   ch-run.1
+Source8:   ch-ssh.1
+Source9:   ch-tar2dir.1
+Source10:  charliecloud.1
 Patch1:    charliecloud-language_highlight.patch
 Patch2:    charliecloud-test-build.patch
 BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
@@ -52,6 +61,10 @@ find doc-src -type f -print0 | xargs -0 sed -i '/.*:language: docker.*/d'
 
 %install
 PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
+
+# install externally generated man pages
+%{__mkdir} -p %{buildroot}%{install_path}/share/man/man1
+%{__install} -m644 %{_sourcedir}/ch*1 %{buildroot}%{install_path}/share/man/man1
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}

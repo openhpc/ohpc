@@ -31,7 +31,7 @@ Source1: OHPC_macros
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
-Requires:      zlib
+Requires:      zlib zlib-devel
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
