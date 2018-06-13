@@ -23,7 +23,7 @@ License:	CeCILL-C
 Group:		%{PROJ_NAME}/serial-libs
 URL:		http://www.labri.fr/perso/pelegrin/%{pname}/
 Source0:	http://gforge.inria.fr/frs/download.php/file/34618/%{pname}_%{version}.tar.gz
-Source1:	%{pname}-Makefile.%{compiler_family}.inc.in
+Source1:	%{pname}-Makefile.gnu7.inc.in
 Source2:	%{pname}-rpmlintrc
 Source3:	OHPC_macros
 Patch0:         %{pname}-%{version}-destdir.patch
