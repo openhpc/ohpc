@@ -1,4 +1,5 @@
+charliecloud-ohpc 0.2.4 https://hpc.github.io/charliecloud/ ohpc/runtimes Lightweight user-defined software stacks for high-performance computing
 ocr-gnu-ohpc 1.0.1 https://xstack.exascale-tech.com/wiki ohpc/runtimes Open Community Runtime (OCR) for shared memory
 ocr-gnu7-ohpc 1.0.1 https://xstack.exascale-tech.com/wiki ohpc/runtimes Open Community Runtime (OCR) for shared memory
 ocr-intel-ohpc 1.0.1 https://xstack.exascale-tech.com/wiki ohpc/runtimes Open Community Runtime (OCR) for shared memory
-singularity-ohpc 2.4.5 http://singularity.lbl.gov/ ohpc/runtimes Application and environment virtualization
+singularity-ohpc 2.5.1 http://singularity.lbl.gov/ ohpc/runtimes Application and environment virtualization

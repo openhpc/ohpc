@@ -1,0 +1,219 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "CH-DOCKER2TAR" "1" "2018-05-30 22:53 Coordinated Universal Time" "" "Charliecloud"
+.SH NAME
+ch-docker2tar \- Flatten a Docker image into a Charliecloud image tarball
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH SYNOPSIS
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-docker2tar IMAGE OUTDIR
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH DESCRIPTION
+.sp
+Flattens the Docker image tagged \fBIMAGE\fP into a Charliecloud tarball in
+directory \fBOUTDIR\fP\&.
+.sp
+Sudo privileges are required to run \fBdocker export\fP\&.
+.sp
+Additional arguments:
+.INDENT 0.0
+.INDENT 3.5
+.INDENT 0.0
+.TP
+.B \fB\-\-help\fP
+print help and exit
+.TP
+.B \fB\-\-version\fP
+print version and exit
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH EXAMPLE
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-docker2tar hello /var/tmp
+57M /var/tmp/hello.tar.gz
+$ ls \-lh /var/tmp
+\-rw\-r\-\-\-\-\-  1 reidpr reidpr  57M Feb 13 16:14 hello.tar.gz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SH REPORTING BUGS
+.sp
+If Charliecloud was obtained from your Linux distribution, use your
+distribution\(aqs bug reporting procedures.
+.sp
+Otherwise, report bugs to: <\fI\%https://github.com/hpc/charliecloud/issues\fP>
+.SH SEE ALSO
+.sp
+charliecloud(1)
+.sp
+Full documentation at: <\fI\%https://hpc.github.io/charliecloud\fP>
+.SH DOCKER TIPS
+.sp
+Docker is a convenient way to build Charliecloud images. While installing
+Docker is beyond the scope of this documentation, here are a few tips.
+.SS Understand the security implications of Docker
+.sp
+Because Docker (a) makes installing random crap from the internet really easy
+and (b) is easy to deploy insecurely, you should take care. Some of the
+implications are below. This list should not be considered comprehensive nor a
+substitute for appropriate expertise; adhere to your moral and institutional
+responsibilities.
+.SS \fBdocker\fP equals root
+.sp
+Anyone who can run the \fBdocker\fP command or interact with the Docker
+daemon can \fI\%trivially escalate to root\fP\&.
+This is considered a feature.
+.sp
+For this reason, don\(aqt create the \fBdocker\fP group, as this will allow
+passwordless, unlogged escalation for anyone in the group.
+.SS Images can contain bad stuff
+.sp
+Standard hygiene for "installing stuff from the internet" applies. Only work
+with images you trust. The official Docker Hub repositories can help.
+.SS Containers run as root
+.sp
+By default, Docker runs container processes as root. In addition to being poor
+hygiene, this can be an escalation path, e.g. if you bind\-mount host
+directories.
+.SS Docker alters your network configuration
+.sp
+To see what it did:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ifconfig    # note docker0 interface
+$ brctl show  # note docker0 bridge
+$ route \-n
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Docker installs services
+.sp
+If you don\(aqt want the service starting automatically at boot, e.g.:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ systemctl is\-enabled docker
+enabled
+$ systemctl disable docker
+$ systemctl is\-enabled docker
+disabled
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.SS Configuring for a proxy
+.sp
+By default, Docker does not work if you have a proxy, and it fails in two
+different ways.
+.sp
+The first problem is that Docker itself must be told to use a proxy. This
+manifests as:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ sudo docker run hello\-world
+Unable to find image \(aqhello\-world:latest\(aq locally
+Pulling repository hello\-world
+Get https://index.docker.io/v1/repositories/library/hello\-world/images: dial tcp 54.152.161.54:443: connection refused
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+If you have a systemd system, the \fI\%Docker documentation\fP explains how to
+configure this. If you don\(aqt have a systemd system, then
+\fB/etc/default/docker\fP might be the place to go?
+.sp
+The second problem is that Docker containers need to know about the proxy as
+well. This manifests as images failing to build because they can\(aqt download
+stuff from the internet.
+.sp
+The fix is to set the proxy variables in your environment, e.g.:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+export HTTP_PROXY=http://proxy.example.com:8088
+export http_proxy=$HTTP_PROXY
+export HTTPS_PROXY=$HTTP_PROXY
+export https_proxy=$HTTP_PROXY
+export ALL_PROXY=$HTTP_PROXY
+export all_proxy=$HTTP_PROXY
+export NO_PROXY=\(aqlocalhost,127.0.0.1,.example.com\(aq
+export no_proxy=$NO_PROXY
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+You also need to teach \fBsudo\fP to retain them. Add the following to
+\fB/etc/sudoers\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+Defaults env_keep+="HTTP_PROXY http_proxy HTTPS_PROXY https_proxy ALL_PROXY all_proxy NO_PROXY no_proxy"
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Because different programs use different subsets of these variables, and to
+avoid a situation where some things work and others don\(aqt, the Charliecloud
+test suite (see below) includes a test that fails if some but not all of the
+above variables are set.
+.SH AUTHOR
+Reid Priedhorsky, Tim Randles, and others
+.SH COPYRIGHT
+2014–2018, Los Alamos National Security, LLC
+.\" Generated by docutils manpage writer.
+.
