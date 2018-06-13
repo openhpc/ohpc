@@ -10,6 +10,7 @@
 
 # scotch - Graph, mesh and hypergraph partitioning library (serial version)
 %define ohpc_compiler_dependent 1
+%{!?compiler_family: %global compiler_family gnu7}
 %include %{_sourcedir}/OHPC_macros
 
 %define pname scotch
