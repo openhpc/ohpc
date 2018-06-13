@@ -6,6 +6,7 @@ hwloc-ohpc 1.11.10 http://www.open-mpi.org/projects/hwloc/ ohpc/dev-tools Portab
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
 python-scipy-gnu-mpich-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu-openmpi-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
+python-scipy-gnu7-openmpi-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu7-mpich-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu7-openmpi3-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python34-scipy-gnu7-mpich-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
