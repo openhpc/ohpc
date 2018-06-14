@@ -11,55 +11,56 @@
 %include %{_sourcedir}/OHPC_macros
 
 #
-#  Copyright (C) 1994-2017 Altair Engineering, Inc.
-#  For more information, contact Altair at www.altair.com.
-#   
-#  This file is part of the PBS Professional ("PBS Pro") software.
-#  
-#  Open Source License Information:
-#   
-#  PBS Pro is free software. You can redistribute it and/or modify it under the
-#  terms of the GNU Affero General Public License as published by the Free 
-#  Software Foundation, either version 3 of the License, or (at your option) any 
-#  later version.
-#   
-#  PBS Pro is distributed in the hope that it will be useful, but WITHOUT ANY 
-#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-#  PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.
-#   
-#  You should have received a copy of the GNU Affero General Public License along 
-#  with this program.  If not, see <http://www.gnu.org/licenses/>.
-#   
-#  Commercial License Information: 
-#  
-#  The PBS Pro software is licensed under the terms of the GNU Affero General 
-#  Public License agreement ("AGPL"), except where a separate commercial license 
-#  agreement for PBS Pro version 14 or later has been executed in writing with Altair.
-#   
-#  Altair’s dual-license business model allows companies, individuals, and 
-#  organizations to create proprietary derivative works of PBS Pro and distribute 
-#  them - whether embedded or bundled with other software - under a commercial 
-#  license agreement.
-#  
-#  Use of Altair’s trademarks, including but not limited to "PBS™", 
-#  "PBS Professional®", and "PBS Pro™" and Altair’s logos is subject to Altair's 
-#  trademark licensing policies.
+# Copyright (C) 1994-2018 Altair Engineering, Inc.
+# For more information, contact Altair at www.altair.com.
+#
+# This file is part of the PBS Professional ("PBS Pro") software.
+#
+# Open Source License Information:
+#
+# PBS Pro is free software. You can redistribute it and/or modify it under the
+# terms of the GNU Affero General Public License as published by the Free 
+# Software Foundation, either version 3 of the License, or (at your option) any 
+# later version.
+#
+# PBS Pro is distributed in the hope that it will be useful, but WITHOUT ANY 
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+# See the GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Commercial License Information: 
+#
+# For a copy of the commercial license terms and conditions,
+# go to: (http://www.pbspro.com/UserArea/agreement.html)
+# or contact the Altair Legal Department.
+#
+# Altair’s dual-license business model allows companies, individuals, and 
+# organizations to create proprietary derivative works of PBS Pro and distribute 
+# them - whether embedded or bundled with other software - under a commercial 
+# license agreement.
+#
+# Use of Altair’s trademarks, including but not limited to "PBS™", 
+# "PBS Professional®", and "PBS Pro™" and Altair’s logos is subject to Altair's 
+# trademark licensing policies.
 #
 
 %define pbs_name pbspro
 %define pbs_client client
 %define pbs_execution execution
 %define pbs_server server
-%define pbs_version 14.1.2
+%define pbs_version 18.1.2
 %define pbs_release 0
 %define pbs_prefix /opt/pbs
 %define pbs_home /var/spool/pbs
 %define pbs_dbuser postgres
 %define pbs_dist %{pbs_name}-%{pbs_version}.tar.gz
-
-# Patch1: logic for systemd.patch
-%if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7
+%if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7 || 0%{?debian_version} >= 8
 %define have_systemd 1
+%else
+%define _unitdir /usr/lib/systemd/system
 %endif
 
 Summary:   PBS Professional
@@ -68,8 +69,6 @@ Version:   %{pbs_version}
 Release:   %{pbs_release}
 Source0: https://github.com/PBSPro/pbspro/releases/download/v%{version}/%{pbs_name}-%{version}.tar.gz
 Source1:   OHPC_macros
-Patch1:    systemd.patch
-Patch2:    pbs.null.patch
 License:   AGPLv3 with exceptions
 URL:       https://github.com/PBSPro/pbspro
 Prefix:    %{pbs_prefix}
@@ -123,10 +122,6 @@ BuildRequires: libXext
 BuildRequires: libXft
 %endif
 
-# Patch1: logic for systemd.patch
-%if %{defined have_systemd}
-BuildRequires: systemd
-%endif
 #!BuildIgnore: post-build-checks
 
 # Pure python extensions use the 32 bit library path
@@ -233,12 +228,6 @@ the PBS Professional user commands.
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
 
-# karl.w.schulz@intel.com (enable systemd startup - patches from pbs master branch)
-# Patch1: logic for systemd.patch
-%patch1 -p1
-# karl.ices.utexas.edu (don't copy from /dev/null as it may not exist in chroot env)
-%patch2 -p0
-
 %build
 
 [ -d build ] && rm -rf build
@@ -271,103 +260,153 @@ cd build
 %make_install
 
 # scott@altair.com (redirecting pbs_postinstall to /dev/null ; reducing verbosity)
+
 %post -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
+# do not run pbs_postinstall when the CLE is greater than or equal to 6
+imps=0
+cle_release_version=0
+cle_release_path=/etc/opt/cray/release/cle-release
+if [ -f ${cle_release_path} ]; then
+    cle_release_version=`grep RELEASE ${cle_release_path} | cut -f2 -d= | cut -f1 -d.`
+fi
+[ "${cle_release_version}" -ge 6 ] 2>/dev/null && imps=1
+
+if [ $imps -eq 0 ]; then
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall server \
 	%{pbs_version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} %{pbs_dbuser} >/dev/null 2>&1
+else
+	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
+fi
 
 %post -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
+# do not run pbs_postinstall when the CLE is greater than or equal to 6
+imps=0
+cle_release_version=0
+cle_release_path=/etc/opt/cray/release/cle-release
+if [ -f ${cle_release_path} ]; then
+    cle_release_version=`grep RELEASE ${cle_release_path} | cut -f2 -d= | cut -f1 -d.`
+fi
+[ "${cle_release_version}" -ge 6 ] 2>/dev/null && imps=1
+
+if [ $imps -eq 0 ]; then
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall execution \
 	%{pb_version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} >/dev/null 2>&1
+else
+	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
+fi
 
 %post -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
+# do not run pbs_postinstall when the CLE is greater than or equal to 6
+imps=0
+cle_release_version=0
+cle_release_path=/etc/opt/cray/release/cle-release
+if [ -f ${cle_release_path} ]; then
+    cle_release_version=`grep RELEASE ${cle_release_path} | cut -f2 -d= | cut -f1 -d.`
+fi
+[ "${cle_release_version}" -ge 6 ] 2>/dev/null && imps=1
+
+if [ $imps -eq 0 ]; then
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall client \
 	%{pbs_version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} >/dev/null 2>&1
+else
+    install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
+fi
 
 %preun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
-if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
-	out=`/sbin/chkconfig --list pbs 2>/dev/null`
-	if [ $? -eq 0 ]; then
-		if [ -x /etc/init.d/pbs ]; then
-			/etc/init.d/pbs stop
-		else
-			/sbin/service pbs stop
-		fi
-		/sbin/chkconfig --del pbs
-	fi
-else
+if [ "$1" != "1" ]; then
+	# This is an uninstall, not an upgrade.
 	[ -x /etc/init.d/pbs ] && /etc/init.d/pbs stop
-	rm -f /etc/rc.d/rc0.d/K10pbs
-	rm -f /etc/rc.d/rc1.d/K10pbs
-	rm -f /etc/rc.d/rc2.d/K10pbs
-	rm -f /etc/rc.d/rc3.d/S90pbs
-	rm -f /etc/rc.d/rc4.d/K10pbs
-	rm -f /etc/rc.d/rc5.d/S90pbs
-	rm -f /etc/rc.d/rc6.d/K10pbs
-fi
-rm -f ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/etc/db_user.new
-if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{pbs_version} ]; then
-	top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
-	if [ -h $top_level/default ]; then
-		link_target=`readlink $top_level/default`
-		[ `basename "$link_target"` = %{pbs_version} ] && rm -f $top_level/default
+	[ -x /sbin/chkconfig ] && /sbin/chkconfig --del pbs >/dev/null 2>&1
+	rm -f /etc/rc.d/rc?.d/[KS]??pbs
+	if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
+		top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
+		if [ -h $top_level/default ]; then
+			link_target=`readlink $top_level/default`
+			[ `basename "$link_target"` = %{version} ] && rm -f $top_level/default
+		fi
 	fi
+	rm -f /etc/init.d/pbs
+	rm -f /opt/modulefiles/pbs/%{version}
+	%if %{defined have_systemd}
+		systemctl disable pbs
+		rm -f /usr/lib/systemd/system-preset/95-pbs.preset
+	%endif
 fi
-rm -f /etc/init.d/pbs
 
 %preun -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
-if [ -x /sbin/chkconfig -a -x /sbin/service ]; then
-	out=`/sbin/chkconfig --list pbs 2>/dev/null`
-	if [ $? -eq 0 ]; then
-		if [ -x /etc/init.d/pbs ]; then
-			/etc/init.d/pbs stop
-		else
-			/sbin/service pbs stop
-		fi
-		/sbin/chkconfig --del pbs
-	fi
-else
+if [ "$1" != "1" ]; then
+	# This is an uninstall, not an upgrade.
 	[ -x /etc/init.d/pbs ] && /etc/init.d/pbs stop
-	rm -f /etc/rc.d/rc0.d/K10pbs
-	rm -f /etc/rc.d/rc1.d/K10pbs
-	rm -f /etc/rc.d/rc2.d/K10pbs
-	rm -f /etc/rc.d/rc3.d/S90pbs
-	rm -f /etc/rc.d/rc4.d/K10pbs
-	rm -f /etc/rc.d/rc5.d/S90pbs
-	rm -f /etc/rc.d/rc6.d/K10pbs
-fi
-if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{pbs_version} ]; then
-	top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
-	if [ -h $top_level/default ]; then
-		link_target=`readlink $top_level/default`
-		[ `basename "$link_target"` = %{pbs_version} ] && rm -f $top_level/default
+	[ -x /sbin/chkconfig ] && /sbin/chkconfig --del pbs >/dev/null 2>&1
+	rm -f /etc/rc.d/rc?.d/[KS]??pbs
+	if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
+		top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
+		if [ -h $top_level/default ]; then
+			link_target=`readlink $top_level/default`
+			[ `basename "$link_target"` = %{version} ] && rm -f $top_level/default
+		fi
 	fi
+	rm -f /etc/init.d/pbs
+	rm -f /opt/modulefiles/pbs/%{version}
+	%if %{defined have_systemd}
+		systemctl disable pbs
+		rm -f /usr/lib/systemd/system-preset/95-pbs.preset
+	%endif
 fi
-rm -f /etc/init.d/pbs
 
 %preun -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
-if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{pbs_version} ]; then
-	top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
-	if [ -h $top_level/default ]; then
-		link_target=`readlink $top_level/default`
-		[ `basename "$link_target"` = %{pbs_version} ] && rm -f $top_level/default
+if [ "$1" != "1" ]; then
+	# This is an uninstall, not an upgrade.
+	if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
+		top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
+		if [ -h $top_level/default ]; then
+			link_target=`readlink $top_level/default`
+			[ `basename "$link_target"` = %{version} ] && rm -f $top_level/default
+		fi
 	fi
+	rm -f /opt/modulefiles/pbs/%{version}
 fi
 
 # scott@altair.com (commenting out %postun; reducing verbosity)
-#%postun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
-#echo
-#echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
-#echo
+#%postrun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
+if [ "$1" != "1" ]; then
+	# This is an uninstall, not an upgrade.
+	#echo
+	#echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
+	echo
+fi
 
 #%postun -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
-#echo
-#echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
-#echo
+if [ "$1" != "1" ]; then
+	# This is an uninstall, not an upgrade.
+	#echo
+	#echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
+	#echo
+fi
 
 #%postun -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
-#echo
-#echo "NOTE: /etc/pbs.conf must be deleted manually"
-#echo
+if [ "$1" != "1" ]; then
+	# This is an uninstall, not an upgrade.
+	#echo
+	#echo "NOTE: /etc/pbs.conf must be deleted manually"
+	#echo
+fi
+
+%posttrans -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
+# The %preun section of 14.x unconditially removes /etc/init.d/pbs
+# because it does not check whether the package is being removed
+# or upgraded. Make sure it exists here.
+if [ -r %{pbs_prefix}/libexec/pbs_init.d ]; then
+	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
+fi
+
+%posttrans -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
+# The %preun section of 14.x unconditially removes /etc/init.d/pbs
+# because it does not check whether the package is being removed
+# or upgraded. Make sure it exists here.
+if [ -r %{pbs_prefix}/libexec/pbs_init.d ]; then
+	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
+fi
 
 %files -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 %defattr(-,root,root, -)
@@ -377,12 +416,11 @@ fi
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
-
-# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
+%else
+%exclude %{_unitdir}/pbs.service
 %endif
-
 # %{_sysconfdir}/init.d/pbs
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
@@ -395,12 +433,11 @@ fi
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
-
-# Patch1: logic for systemd.patch
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
+%else
+%exclude %{_unitdir}/pbs.service
 %endif
-
 # %{_sysconfdir}/init.d/pbs
 %exclude %{pbs_prefix}/bin/printjob_svr.bin
 %exclude %{pbs_prefix}/etc/pbs_db_schema.sql
@@ -463,8 +500,4 @@ fi
 %exclude %{pbs_prefix}/sbin/pbsfs
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
-
-# Patch1: logic for systemd.patch
-%if %{defined have_systemd}
 %exclude %{_unitdir}/pbs.service
-%endif
