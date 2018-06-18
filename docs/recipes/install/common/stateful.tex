@@ -43,6 +43,6 @@ to disk, warewulf can be configured to use the nodes' local storage as the boot
 device.
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Boot the node from the local disk
+# Configure local boot (after successful provisioning)
 [sms](*\#*) wwsh provision set --bootlocal=normal "${compute_regex}"
 \end{lstlisting}
