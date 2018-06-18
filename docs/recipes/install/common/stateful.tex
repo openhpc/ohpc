@@ -30,6 +30,7 @@ layout.
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add GRUB2 bootloader and re-assemble VNFS image
 [sms](*\#*) (*\chrootinstall*) grub2-efi grub2-efi-modules
+[sms](*\#*) wwvnfs  --chroot $CHROOT
 [sms](*\#*) cp /etc/warewulf/filesystem/examples/efi_example.cmds /etc/warewulf/filesystem/efi.cmds
 [sms](*\#*) wwsh provision set --filesystem=efi "${compute_regex}" 
 [sms](*\#*) wwsh provision set --bootloader=sda "${compute_regex}" 
