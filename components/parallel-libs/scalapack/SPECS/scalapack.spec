@@ -42,7 +42,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        A subset of LAPACK routines redesigned for heterogenous computing
 License:        netlib ScaLAPACK License
-Group:          Development/Libraries/Parallel
+Group:          %{PROJ_NAME}/parallel-libs
 Version:        2.0.2
 Release:        1%{?dist}
 # This is freely distributable without any restrictions.
