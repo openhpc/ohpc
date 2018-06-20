@@ -53,7 +53,7 @@ Virtual Node FileSystem objects.
 
 
 %prep
-%setup -n warewulf3-vnfs-%{version}
+%setup -n warewulf3-%{version}
 
 
 %build
