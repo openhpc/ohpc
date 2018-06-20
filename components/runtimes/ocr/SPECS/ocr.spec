@@ -212,10 +212,3 @@ EOF
 %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 %endif
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.0.1-1
-- switch to use of ohpc_compiler_dependent flag
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 1.0.1-1
-- Switching to %%ohpc_compiler macro

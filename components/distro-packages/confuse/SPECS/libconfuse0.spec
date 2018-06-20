@@ -120,5 +120,3 @@ rm -rf examples/.deps/ examples/Makefile*
 %{_datadir}/
 %doc doc/html/ doc/tutorial-html/ examples/
 
-
-%changelog

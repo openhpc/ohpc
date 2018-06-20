@@ -186,7 +186,3 @@ EOF
 %defattr(-, root, root, -)
 %doc AUTHORS COPYING NEWS README VERSION
 %{OHPC_PUB}
-
-%changelog
-
-

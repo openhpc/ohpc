@@ -129,6 +129,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/*
 %{_mandir}/*
 %{_libexecdir}/warewulf/*
-
-
-%changelog

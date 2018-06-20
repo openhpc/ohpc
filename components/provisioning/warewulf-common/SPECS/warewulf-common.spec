@@ -132,5 +132,3 @@ rm -rf $RPM_BUILD_ROOT
 %if 0%{?sles_version} || 0%{?suse_version}
 %dir %{_libexecdir}/warewulf/
 %endif
-
-%changelog

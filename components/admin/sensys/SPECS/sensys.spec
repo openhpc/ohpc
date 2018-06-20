@@ -905,5 +905,3 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %postun -p /sbin/ldconfig
 %endif
 # End of filelist for dynamic compilation
-
-%changelog

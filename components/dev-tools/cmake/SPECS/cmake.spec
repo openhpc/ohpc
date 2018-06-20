@@ -102,7 +102,3 @@ EOF
 %dir %{OHPC_UTILS}
 %{OHPC_UTILS}/%{pname}
 %{OHPC_MODULES}/%{pname}
-
-%changelog
-* Tue May 30 2017 Paul Osmialowski <pawel.osmialowski@foss.arm.com> - 3.8.1-1
-- Initial build.

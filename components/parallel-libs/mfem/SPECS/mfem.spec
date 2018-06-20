@@ -161,5 +161,3 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc LICENSE README INSTALL
-
-%changelog

@@ -84,12 +84,3 @@ EOF
 %files
 %{OHPC_ADMIN}
 %{OHPC_MODULES}/%{pname}
-
-%changelog
-* Tue Sep 26 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.0.1-1
-- downgrade to v1.2.3 for slurm support
-- tweak install path
-
-* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 2.0.1-1
-- Update to 2.0.1
-- Delete most of the original spec file

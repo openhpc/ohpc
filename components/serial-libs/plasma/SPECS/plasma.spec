@@ -202,5 +202,3 @@ rm -rf ${RPM_BUILD_ROOT}
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc LICENSE README ReleaseNotes docs/pdf/*.pdf
-
-%changelog

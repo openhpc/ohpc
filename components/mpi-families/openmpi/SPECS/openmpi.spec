@@ -224,22 +224,3 @@ EOF
 %doc LICENSE
 %doc AUTHORS
 %doc README.JAVA.txt
-
-%changelog
-* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 3.0.0-1
-- update to 3.0.0
-- use the OpenHPC pmix package
-- use the same libevent as pmix (external)
-- small cleanups
-
-* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 1.10.7-1
-- default to building with PSM and PSM2 at the same time
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.10.4-1
-- switch to ohpc_compiler_dependent flag
-
-* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 1.10.6-1
-- Switching to %%ohpc_compiler macro
-
-* Tue Aug  5 2014  <karl.w.schulz@intel.com>
-- Initial build.

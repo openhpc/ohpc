@@ -77,5 +77,3 @@ fi
 
 %files
 %{OHPC_ADMIN}/compat/python34-distutils-unixccompiler.patch
-
-%changelog

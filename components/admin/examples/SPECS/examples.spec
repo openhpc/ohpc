@@ -72,6 +72,3 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{OHPC_HOME}
 %doc LICENSE
 %{OHPC_PUB}
-
-%changelog
-

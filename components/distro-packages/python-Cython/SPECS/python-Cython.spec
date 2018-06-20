@@ -108,6 +108,3 @@ fi
 %{python3_sitearch}/cython.py*
 %{python3_sitearch}/__pycache__/*
 %{python3_sitearch}/pyximport/
-
-%changelog
-

@@ -133,6 +133,3 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__repodir}
 /etc/pki
-
-%changelog
-

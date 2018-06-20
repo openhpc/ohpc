@@ -111,6 +111,3 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-, root, root)
 %doc LICENSE README.rst examples
 %{OHPC_PUB}
-
-%changelog
-

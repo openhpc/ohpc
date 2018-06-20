@@ -146,5 +146,3 @@ rm -rf ${RPM_BUILD_ROOT}
 %defattr(-,root,root)
 %doc README.txt ./doc/*
 %{OHPC_PUB}
-
-%changelog

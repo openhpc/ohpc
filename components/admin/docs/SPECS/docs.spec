@@ -171,5 +171,3 @@ install -m 0644 -p docs/recipes/install/sles12/input.local.template %{buildroot}
 %defattr(-,root,root)
 %dir %{OHPC_HOME}
 %{OHPC_PUB}
-
-%changelog

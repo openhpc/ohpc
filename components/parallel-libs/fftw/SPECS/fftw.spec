@@ -131,16 +131,3 @@ fi
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.3.6-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.3.6-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.3.4-1
-- Switching to %%ohpc_compiler macro
-
-* Tue Aug  5 2014  <karl.w.schulz@intel.com> -
-- Initial build.

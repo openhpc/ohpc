@@ -132,5 +132,3 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc INSTALL COPYING README.md
-
-%changelog

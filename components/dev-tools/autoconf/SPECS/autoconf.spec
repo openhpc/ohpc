@@ -90,12 +90,3 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 %doc ChangeLog.1
 %doc TODO
 %doc COPYING.EXCEPTION
-
-
-%changelog
-* Wed Feb 08 2017 Adrian Reber <adrian@lisas.de> - 2.69-1
-- fix building on CentOS 7.3
-
-* Mon Sep 15 2014  <karl.w.schulz@intel.com> - 
-- Initial build.
-

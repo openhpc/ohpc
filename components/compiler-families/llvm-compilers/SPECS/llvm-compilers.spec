@@ -225,8 +225,3 @@ EOF
 %doc llvm/README.txt
 %doc flang/README.md
 %doc llvm/RELEASE_TESTERS.TXT
-
-%changelog
-* Thu May 25 2017 Paul Osmialowski <pawel.osmialowski@foss.arm.com> - 4.0.0-1
-- add Fortran language frontend and runtime libraries (Flang)
-

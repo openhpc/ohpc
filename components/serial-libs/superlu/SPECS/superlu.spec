@@ -145,10 +145,3 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc README
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 5.2.1-0
-- switch to ohpc_compiler_dependent flag
-
-* Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 5.2.1-0
-- Switching to %%ohpc_compiler macro

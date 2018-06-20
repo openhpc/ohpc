@@ -122,7 +122,3 @@ EOF
 %{OHPC_PUB}
 
 %doc
-
-
-
-%changelog

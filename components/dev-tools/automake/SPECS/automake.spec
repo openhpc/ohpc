@@ -67,8 +67,3 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS
 %doc README
 %doc COPYING
-
-%changelog
-* Mon Sep 15 2014  <karl.w.schulz@intel.com> - 
-- Initial build.
-

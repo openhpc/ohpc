@@ -157,10 +157,3 @@ EOF
 %files
 %{OHPC_PUB}
 %doc BACKERS.md Changelog.txt CONTRIBUTORS.md GotoBLAS_00License.txt GotoBLAS_01Readme.txt GotoBLAS_02QuickInstall.txt GotoBLAS_03FAQ.txt GotoBLAS_04FAQ.txt GotoBLAS_05LargePage.txt GotoBLAS_06WeirdPerformance.txt LICENSE README.md TargetList.txt
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 0.2.19-1
-- switch to ohpc_compiler_dependent flag
-
-* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 0.2.19-1
-- Switching to %%ohpc_compiler macro

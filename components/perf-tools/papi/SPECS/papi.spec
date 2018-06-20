@@ -124,5 +124,3 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc ChangeLog*.txt INSTALL.txt LICENSE.txt README RELEASENOTES.txt
-
-%changelog

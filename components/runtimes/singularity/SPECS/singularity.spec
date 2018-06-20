@@ -169,5 +169,3 @@ EOF
 %defattr(-, root, root)
 %{install_path}/lib/slurm/singularity.so
 %endif
-
-%changelog

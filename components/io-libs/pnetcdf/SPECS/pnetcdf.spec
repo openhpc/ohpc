@@ -123,7 +123,3 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog COPYRIGHT CREDITS INSTALL NEWS README RELEASE_NOTES 
-
-%changelog
-* Mon May  1 2017 Paul Osmialowski <pawel.osmialowski@foss.arm.com> - 1.8.1-1
-- Initial build.

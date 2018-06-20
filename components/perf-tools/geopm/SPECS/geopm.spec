@@ -133,7 +133,3 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc README COPYING VERSION
-
-%changelog
-* Thu May 31 2018 <brad.geltz@intel.com> v0.5.0
-- Initial commit.

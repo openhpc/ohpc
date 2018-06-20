@@ -145,6 +145,3 @@ fi
 %endif
 
 %endif
-
-
-%changelog

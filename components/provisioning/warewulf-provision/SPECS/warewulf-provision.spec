@@ -246,6 +246,3 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{pname}-gpl_sources%{PROJ_DELIM}
 %defattr(-, root, root)
 %{_prefix}/src/warewulf/3rd_party/GPL/
-
-
-%changelog

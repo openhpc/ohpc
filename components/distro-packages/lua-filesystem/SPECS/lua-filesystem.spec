@@ -62,12 +62,3 @@ make %{?_smp_mflags} LUA_LIBDIR=%{lualibdir} CFLAGS="%{optflags} -fPIC"
 %dir %{_libdir}/lua
 %dir %{lualibdir}
 %{lualibdir}/lfs*
-
-%changelog
-* Tue Oct 17 2017 Adrian Reber <areber@redhat.com> - 1.6.3-0
-- removed setting PROJ_DELIM; this is done by OHPC_macros
-- replaced 'define' with 'global' to avoid scope problems and warnings
-- removed BuildRoot (not necessary) and debug_package (OHPC_macros)
-- removed implicit build dependency on perl
-- removed setting unused variables
-- removed opensuse comments; it is an OpenHPC spec file now

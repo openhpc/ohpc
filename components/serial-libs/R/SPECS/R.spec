@@ -238,13 +238,3 @@ EOF
 %doc ChangeLog
 %doc COPYING
 %doc README
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.3.3-1
-- switch to ohpc_compiler_dependent flag
-
-* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 3.3.1-1
-- Switching to %%ohpc_compiler macro
-
-* Wed Feb 08 2017 Adrian Reber <adrian@lisas.de> - 3.3.1
-- fix building on CentOS 7.3

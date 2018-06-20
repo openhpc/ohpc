@@ -112,17 +112,3 @@ fi
 %{_sbindir}/msr-safe
 %dir %{_mandir}/man1
 %doc %{_mandir}/man1/msrsave.1.gz
-
-
-%changelog
-* Fri May 25 2018 <christopher.m.cantalupo@intel.com> 1.2.0-1
-- Package version 1.2.0 for OpenHPC distribution
-* Wed Aug 23 2017 Ben Allen <bsallen@alcf.anl.gov> 9240638-4
-- Rev package version to 0.4
-* Tue Jan 17 2017 Ben Allen <bsallen@alcf.anl.gov> 7bfb843-2
-- Rev package version to 0.2
-* Mon Dec 05 2016 Christopher M. Cantalupo <christopher.m.cantalupo@intel.com>
-- Add msrsave application build and install.
-* Wed Apr 20 2016 Ben Allen <bsallen@alcf.anl.gov> 7667118-1
-- Initial release (v7667118)
-

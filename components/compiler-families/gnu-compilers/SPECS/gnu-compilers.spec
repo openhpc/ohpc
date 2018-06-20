@@ -176,5 +176,3 @@ EOF
 %doc NEWS
 %endif
 %endif
-
-%changelog

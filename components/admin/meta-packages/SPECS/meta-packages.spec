@@ -665,6 +665,3 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{PROJ_NAME}-intel-runtimes
 %files -n %{PROJ_NAME}-intel-serial-libs
 %endif
-
-%changelog
-

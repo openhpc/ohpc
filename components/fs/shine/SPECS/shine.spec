@@ -95,7 +95,3 @@ rm -rf %{buildroot}
 %{OHPC_ADMIN}
 %{OHPC_PUB}
 /var/cache/shine/conf/README
-
-%changelog
-* Wed Feb 24 2016 <aurelien.degremont@cea.fr> - 1.4-1
-- Initial packaging for OpenHPC

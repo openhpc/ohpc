@@ -417,5 +417,3 @@ rm -rf "$RPM_BUILD_ROOT"
 %files -n pdsh-mod-slurm%{PROJ_DELIM}
 %{install_path}/lib/pdsh/slurm.*
 %endif
-
-%changelog

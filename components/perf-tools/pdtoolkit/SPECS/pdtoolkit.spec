@@ -180,10 +180,3 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc CREDITS LICENSE README
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.23-1
-- switch to use of ohpc_compiler_dependent flag
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.22-1
-- Switching to %%ohpc_compiler macro

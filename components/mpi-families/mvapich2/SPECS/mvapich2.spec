@@ -162,17 +162,3 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGELOG
 %doc CHANGES
 %doc README
-
-
-%changelog
-* Wed May 31 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.2-1
-- re-enable parallel builds, add patch for gcc7 optimization issue, remove unused patches
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.2-1
-- switch to ohpc_compiler_dependent flag
-
-* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 2.2-1
-- Switching to %%ohpc_compiler macro
-
-* Tue Aug  5 2014  <karl.w.schulz@intel.com>
-- Initial build.

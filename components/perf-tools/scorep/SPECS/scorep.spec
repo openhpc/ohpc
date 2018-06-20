@@ -173,13 +173,3 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog COPYING INSTALL OPEN_ISSUES README THANKS
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.0-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.0-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.0-1
-- Switching to %%ohpc_compiler macro

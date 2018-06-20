@@ -82,6 +82,3 @@ rm -rf $RPM_BUILD_ROOT
 %{_libexecdir}/warewulf/ipmitool
 %{perl_vendorlib}/Warewulf/Ipmi.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/*
-
-
-%changelog

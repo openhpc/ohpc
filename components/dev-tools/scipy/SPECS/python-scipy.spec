@@ -185,13 +185,3 @@ EOF
 %{OHPC_PUB}
 %doc THANKS.txt
 %doc LICENSE.txt
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 0.19.0-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 0.19.0-1
-- switch to ohpc_compiler_dependent flag
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 0.19.0-1
-- Switching to %%ohpc_compiler macro

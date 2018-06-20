@@ -64,4 +64,3 @@ install -m 644 macros.python_all %{buildroot}%{install_path}
 %defattr(-,root,root)
 %{install_path}/macros.python_all
 
-%changelog

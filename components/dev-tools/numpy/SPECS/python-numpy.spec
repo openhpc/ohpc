@@ -158,10 +158,3 @@ EOF
 %doc LICENSE.txt
 %doc PKG-INFO
 %doc THANKS.txt
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.12.1-1
-- switch to ohpc_compiler_dependent flag
-
-* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.11.1-1
-- Switching to %%ohpc_compiler macro

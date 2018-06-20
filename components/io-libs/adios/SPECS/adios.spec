@@ -249,13 +249,3 @@ EOF
 %doc NEWS
 %doc README.md
 %doc TODO
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 1.11.0-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.11.0-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.11.0-1
-- Switching to %%ohpc_compiler macro

@@ -270,6 +270,3 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %{OHPC_ADMIN}
 %{OHPC_MODULES}
-
-%changelog
-

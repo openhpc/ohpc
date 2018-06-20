@@ -75,6 +75,3 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{OHPC_HOME}
 %dir %{OHPC_PUB}
 %{OHPC_MODULES}
-
-%changelog
-

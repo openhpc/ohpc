@@ -95,10 +95,3 @@ EOF
 /usr/lib/rpm/ohpc-find-provides
 /usr/lib/rpm/ohpc-find-requires
 /usr/lib/rpm/fileattrs/ohpc.attr
-
-%changelog
-* Mon May  8 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.3
-- minor description updates
-
-* Wed Feb 08 2017 Adrian Reber <areber@redhat.com> - 1.2
-- Initial release

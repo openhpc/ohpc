@@ -101,5 +101,3 @@ EOF
 %defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc LICENSE.rst
-
-%changelog
