@@ -10,6 +10,15 @@
 
 %include %{_sourcedir}/OHPC_macros
 
+%if "%{compiler_family}" == "gnu8"
+%global gnu_version 8.1.0
+%global gnu_major_ver 8
+%global gnu_release 1
+%global pname gnu8-compilers
+%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
+%global source_directory gcc-%{version}
+%endif
+
 %if "%{compiler_family}" == "gnu7"
 %global gnu_version 7.3.0
 %global gnu_major_ver 7
@@ -31,7 +40,7 @@
 
 %global gmp_version 6.1.2
 %global mpc_version 1.0.3
-%global mpfr_version 3.1.6
+%global mpfr_version 4.0.1
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
@@ -169,12 +178,3 @@ EOF
 %endif
 
 %changelog
-* Fri Jun  9 2017 Karl W Schulz <karl.w.schulz@intel.com>
-- include major version in modulefile schema
-
-* Fri Feb 17 2017 Adrian Reber <areber@redhat.com>
-- Added support to build gnu-compilers (5.4.0) and
-  gnu-7-compilers from same SPEC file
-
-* Tue Aug  5 2014  <karl.w.schulz@intel.com> -
-- Initial build.
