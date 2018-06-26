@@ -18,16 +18,15 @@
 
 %define pname warewulf-provision
 %define dname provision
-%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module
-Version: 3.8pre
+Version: 3.8.1
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -55,17 +54,17 @@ Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 DocDir: %{OHPC_PUB}/doc/contrib
-Patch1: warewulf-provision.httpdconfdir.patch
+#Patch1: warewulf-provision.httpdconfdir.patch
 #Patch2: warewulf-provision.sles_stateful.patch
 #Patch3: warewulf-provision.wwgetvnfs.patch
-Patch4: warewulf-provision.pxe_file_modes.patch
-Patch5: warewulf-provision.bin-file.patch
-Patch6: warewulf-provision.sles_tftpboot.patch
-Patch7: warewulf-provision.ipxe-kargs.patch
-Patch8: warewulf-provision.parted_libdir.patch
-Patch9: warewulf-provision-ppc64le.patch
-Patch10: warewulf-provision.pxe_exit_status.patch
-Patch11: warewulf-provision.hostname.patch
+#Patch4: warewulf-provision.pxe_file_modes.patch
+#Patch5: warewulf-provision.bin-file.patch
+#Patch6: warewulf-provision.sles_tftpboot.patch
+#Patch7: warewulf-provision.ipxe-kargs.patch
+#Patch8: warewulf-provision.parted_libdir.patch
+#Patch9: warewulf-provision-ppc64le.patch
+#Patch10: warewulf-provision.pxe_exit_status.patch
+#Patch11: warewulf-provision.hostname.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -78,6 +77,14 @@ administrative tools.  To actually provision systems, the
 %{name}-server package is also required.
 
 
+%package %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
+Summary: Warewulf - Provisioning Module - Initramfs Base and Capabilities for %{_arch}
+Group: %{PROJ_NAME}/provisioning
+BuildArch: noarch
+
+%description %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
+Warewulf Provisioning initramfs Base and Capabilities for %{_arch}.
+
 %package -n %{pname}-server%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module - Server
 Group: %{PROJ_NAME}/provisioning
@@ -85,14 +92,34 @@ Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
-Requires: apache2 apache2-mod_perl tftp dhcp-server xinetd tcpdump policycoreutils-python
+Requires: apache2 apache2-mod_perl tftp dhcp-server policycoreutils-python
 %else
-Requires: mod_perl httpd tftp-server dhcp xinetd tcpdump policycoreutils-python
+Requires: mod_perl httpd tftp-server dhcp policycoreutils-python
 %endif
 
 # charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf
 %if 0%{?sles_version} || 0%{?suse_version} == 1315
 BuildRequires: sles-release
+%endif
+
+%if "%{_arch}" == "x86_64" || 0%{?_cross_compile}
+%package %{pname}-server-ipxe-x86_64%{PROJ_DELIM}
+Summary: Warewulf - Provisioning Module - iPXE Bootloader x86_64
+Group: %{PROJ_NAME}/provisioning
+BuildArch: noarch
+
+%description %{pname}-server-ipxe-x86_64%{PROJ_DELIM}
+Warewulf bundled iPXE binaries for x86_64.
+%endif
+
+%if "%{_arch}" == "aarch64" || 0%{?_cross_compile}
+%package %{pname}-server-ipxe-aarch64%{PROJ_DELIM}
+Summary: Warewulf - Provisioning Module - iPXE Bootloader aarch64
+Group: %{PROJ_NAME}/provisioning
+BuildArch: noarch
+
+%description %{pname}-server-ipxe-aarch64%{PROJ_DELIM}
+Warewulf bundled iPXE binaries for aarch64.
 %endif
 
 %description -n %{pname}-server%{PROJ_DELIM}
@@ -108,7 +135,7 @@ do not require this package.
 
 %package -n %{pname}-gpl_sources%{PROJ_DELIM}
 Summary: This package contains the GPL sources used in Warewulf
-Group: Development/System
+Group: %{PROJ_NAME}/provisioning
 Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 %description -n %{pname}-gpl_sources%{PROJ_DELIM}
@@ -128,22 +155,22 @@ available the included GPL software.
 
 
 %prep
-%setup -q -n warewulf3-%{dev_branch_sha}
+%setup -q -n warewulf3-%{version}
 cd %{dname}
-%patch8 -p1
+#%patch8 -p1
 if [ ! -f configure ]; then
     ./autogen.sh
 fi
-%patch1 -p1
+#%patch1 -p1
 #%patch2 -p1
 #%patch3 -p1
-%patch4 -p1
-%patch5 -p2
-%patch6 -p1
-%patch7 -p1
-%patch9 -p2
-%patch10 -p2
-%patch11 -p2
+#%patch4 -p1
+#%patch5 -p2
+#%patch6 -p1
+#%patch7 -p1
+#%patch9 -p2
+#%patch10 -p2
+#%patch11 -p2
 
 %build
 cd %{dname}
@@ -204,7 +231,6 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/warewulf/defaults/provision.conf
 %{_sysconfdir}/warewulf/filesystem/examples/*.cmds
 %{_mandir}/*
-%{wwpkgdir}/*
 %{perl_vendorlib}/Warewulf/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Provision.pm
 %{perl_vendorlib}/Warewulf/Vnfs.pm
@@ -216,6 +242,9 @@ rm -rf $RPM_BUILD_ROOT
 %{perl_vendorlib}/Warewulf/Module/Cli/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Provision.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Vnfs.pm
+
+%files -n %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
+%{wwpkgdir}/*
 
 %files -n %{pname}-server%{PROJ_DELIM}
 %defattr(-, root, root)
@@ -234,14 +263,23 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %{_bindir}/*
-%ifnarch ppc64le
-%{_datadir}/warewulf/ipxe/*
-%endif
 %{perl_vendorlib}/Warewulf/Event/Bootstrap.pm
 %{perl_vendorlib}/Warewulf/Event/Dhcp.pm
 %{perl_vendorlib}/Warewulf/Event/Pxe.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Pxe.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/Dhcp.pm
+
+%if "%{_arch}" == "x86_64" || 0%{?_cross_compile}
+%files server-ipxe-x86_64
+%{_datadir}/warewulf/ipxe/bin-i386-efi
+%{_datadir}/warewulf/ipxe/bin-i386-pcbios
+%{_datadir}/warewulf/ipxe/bin-x86_64-efi
+%endif
+
+%if "%{_arch}" == "aarch64" || 0%{?_cross_compile}
+%files server-ipxe-aarch64
+%{_datadir}/warewulf/ipxe/bin-arm64-efi
+%endif
 
 %files -n %{pname}-gpl_sources%{PROJ_DELIM}
 %defattr(-, root, root)
