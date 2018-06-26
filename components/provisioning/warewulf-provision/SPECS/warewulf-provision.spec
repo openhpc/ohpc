@@ -270,14 +270,14 @@ rm -rf $RPM_BUILD_ROOT
 %{perl_vendorlib}/Warewulf/Module/Cli/Dhcp.pm
 
 %if "%{_arch}" == "x86_64" || 0%{?_cross_compile}
-%files server-ipxe-x86_64
+%files -n %{pname}-server-ipxe-x86_64%{PROJ_DELIM}
 %{_datadir}/warewulf/ipxe/bin-i386-efi
 %{_datadir}/warewulf/ipxe/bin-i386-pcbios
 %{_datadir}/warewulf/ipxe/bin-x86_64-efi
 %endif
 
 %if "%{_arch}" == "aarch64" || 0%{?_cross_compile}
-%files server-ipxe-aarch64
+%files -n %{pname}-server-ipxe-aarch64%{PROJ_DELIM}
 %{_datadir}/warewulf/ipxe/bin-arm64-efi
 %endif
 
