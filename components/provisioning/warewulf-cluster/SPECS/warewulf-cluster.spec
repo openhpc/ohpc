@@ -14,16 +14,15 @@
 
 %define pname warewulf-cluster
 %define dname cluster
-%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Tools used for clustering with Warewulf
-Version: 3.8pre
+Version: 3.8.1
 Release: %{_rel}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
@@ -74,7 +73,7 @@ provisioned nodes.
 %endif
 
 %prep
-%setup -n warewulf3-%{dev_branch_sha}
+%setup -n warewulf3-%{version}
 cd %{dname}
 %patch1 -p1
 
