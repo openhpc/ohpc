@@ -77,12 +77,12 @@ administrative tools.  To actually provision systems, the
 %{name}-server package is also required.
 
 
-%package %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
+%package -n %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module - Initramfs Base and Capabilities for %{_arch}
 Group: %{PROJ_NAME}/provisioning
 BuildArch: noarch
 
-%description %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
+%description -n %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
 Warewulf Provisioning initramfs Base and Capabilities for %{_arch}.
 
 %package -n %{pname}-server%{PROJ_DELIM}
@@ -103,22 +103,22 @@ BuildRequires: sles-release
 %endif
 
 %if "%{_arch}" == "x86_64" || 0%{?_cross_compile}
-%package %{pname}-server-ipxe-x86_64%{PROJ_DELIM}
+%package -n %{pname}-server-ipxe-x86_64%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module - iPXE Bootloader x86_64
 Group: %{PROJ_NAME}/provisioning
 BuildArch: noarch
 
-%description %{pname}-server-ipxe-x86_64%{PROJ_DELIM}
+%description -n %{pname}-server-ipxe-x86_64%{PROJ_DELIM}
 Warewulf bundled iPXE binaries for x86_64.
 %endif
 
 %if "%{_arch}" == "aarch64" || 0%{?_cross_compile}
-%package %{pname}-server-ipxe-aarch64%{PROJ_DELIM}
+%package -n %{pname}-server-ipxe-aarch64%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module - iPXE Bootloader aarch64
 Group: %{PROJ_NAME}/provisioning
 BuildArch: noarch
 
-%description %{pname}-server-ipxe-aarch64%{PROJ_DELIM}
+%description -n %{pname}-server-ipxe-aarch64%{PROJ_DELIM}
 Warewulf bundled iPXE binaries for aarch64.
 %endif
 
