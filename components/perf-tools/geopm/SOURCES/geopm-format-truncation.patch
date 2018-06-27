@@ -1,0 +1,11 @@
+--- a/src/Exception.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/src/Exception.cpp	2018-06-27 10:16:56.000000000 -0700
+@@ -144,7 +144,7 @@
+     void geopm_error_destroy_shmem(void)
+     {
+         int err = 0;
+-        char err_msg[NAME_MAX];
++        char err_msg[NAME_MAX+36];
+         DIR *did = opendir("/dev/shm");
+         if (did &&
+             strlen(geopm_env_shmkey()) &&
