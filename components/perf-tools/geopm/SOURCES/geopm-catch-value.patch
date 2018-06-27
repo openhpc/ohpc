@@ -300,3 +300,32 @@
              if (ex.err_value() == GEOPM_ERROR_INVALID) {
                  err = GEOPM_ERROR_NO_AGENT;
              }
+--- a/src/ApplicationIO.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/src/ApplicationIO.cpp	2018-06-27 09:27:27.000000000 -0700
+@@ -170,7 +170,7 @@
+         try {
+             result = m_epoch_regulator->total_region_runtime(region_id);
+         }
+-        catch (Exception ex) {
++        catch (Exception& ex) {
+         }
+         return result;
+     }
+@@ -188,7 +188,7 @@
+         try {
+             result = m_epoch_regulator->total_region_mpi_time(region_id);
+         }
+-        catch (Exception ex) {
++        catch (Exception& ex) {
+         }
+         return result;
+     }
+@@ -304,7 +304,7 @@
+         try {
+             result = m_epoch_regulator->total_count(region_id);
+         }
+-        catch (Exception ex) {
++        catch (Exception& ex) {
+         }
+         return result;
+     }
