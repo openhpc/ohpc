@@ -429,3 +429,112 @@
              if (ex.err_value() != GEOPM_ERROR_INVALID) {
                  throw ex;
              }
+--- a/./src/EnergyEfficientAgent.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./src/EnergyEfficientAgent.cpp	2018-06-27 09:57:54.000000000 -0700
+@@ -438,7 +438,7 @@
+                         uint64_t rid = geopm_crc32_str(0, rid_str.c_str());
+                         m_rid_freq_map[rid] = freq;
+                     }
+-                    catch (std::invalid_argument) {
++                    catch (std::invalid_argument&) {
+ 
+                     }
+                 }
+@@ -461,7 +461,7 @@
+             try {
+                 result = std::stod(env_efficient_freq_min);
+             }
+-            catch (std::invalid_argument) {
++            catch (std::invalid_argument&) {
+ 
+             }
+         }
+@@ -480,7 +480,7 @@
+             try {
+                 result = std::stod(env_efficient_freq_max);
+             }
+-            catch (std::invalid_argument) {
++            catch (std::invalid_argument&) {
+ 
+             }
+         }
+--- a/./src/geopmread_main.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./src/geopmread_main.cpp	2018-06-27 09:58:05.000000000 -0700
+@@ -152,7 +152,7 @@
+             try {
+                 domain_idx = std::stoi(pos_args[2]);
+             }
+-            catch (std::invalid_argument) {
++            catch (std::invalid_argument&) {
+                 std::cerr << "Error: invalid domain index.\n" << std::endl;
+                 err = EINVAL;
+             }
+--- a/./src/geopmwrite_main.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./src/geopmwrite_main.cpp	2018-06-27 09:58:19.000000000 -0700
+@@ -156,7 +156,7 @@
+             try {
+                 domain_idx = std::stoi(pos_args[2]);
+             }
+-            catch (std::invalid_argument) {
++            catch (std::invalid_argument&) {
+                 std::cerr << "Error: invalid domain index.\n" << std::endl;
+                 err = EINVAL;
+             }
+@@ -164,7 +164,7 @@
+                 try {
+                     write_value = std::stod(pos_args[3]);
+                 }
+-                catch (std::invalid_argument) {
++                catch (std::invalid_argument&) {
+                     std::cerr << "Error: invalid write value.\n" << std::endl;
+                     err = EINVAL;
+                 }
+--- a/./src/CpuinfoIOGroup.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./src/CpuinfoIOGroup.cpp	2018-06-27 09:58:51.000000000 -0700
+@@ -54,7 +54,7 @@
+             try {
+                 result = 1e3 * std::stod(line);
+             }
+-            catch (std::invalid_argument) {
++            catch (std::invalid_argument&) {
+ 
+             }
+         }
+@@ -100,7 +100,7 @@
+                         try {
+                             result = unit_factor[unit_idx] * std::stod(value_str);
+                         }
+-                        catch (std::invalid_argument) {
++                        catch (std::invalid_argument&) {
+ 
+                         }
+                     }
+--- a/./plugin/EfficientFreqDecider.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./plugin/EfficientFreqDecider.cpp	2018-06-27 09:59:06.000000000 -0700
+@@ -181,7 +181,7 @@
+                         uint64_t rid = geopm_crc32_str(0, rid_str.c_str());
+                         m_rid_freq_map[rid] = freq;
+                     }
+-                    catch (std::invalid_argument) {
++                    catch (std::invalid_argument&) {
+ 
+                     }
+                 }
+@@ -288,7 +288,7 @@
+             try {
+                 result = std::stod(env_efficient_freq_min);
+             }
+-            catch (std::invalid_argument) {
++            catch (std::invalid_argument&) {
+ 
+             }
+         }
+@@ -307,7 +307,7 @@
+             try {
+                 result = std::stod(env_efficient_freq_max);
+             }
+-            catch (std::invalid_argument) {
++            catch (std::invalid_argument&) {
+ 
+             }
+         }
