@@ -175,6 +175,53 @@
          thrown = e.err_value();
      }
      EXPECT_EQ(GEOPM_ERROR_NOT_IMPLEMENTED, thrown);
+--- a/./test/PolicyTest.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./test/PolicyTest.cpp	2018-06-27 09:38:19.000000000 -0700
+@@ -227,7 +227,7 @@
+     try {
+         m_policy->update(13, target);
+     }
+-    catch (geopm::Exception e) {
++    catch (geopm::Exception& e) {
+         thrown = e.err_value();
+     }
+     EXPECT_EQ(GEOPM_ERROR_INVALID, thrown);
+@@ -235,7 +235,7 @@
+     try {
+         m_policy->target(13, target);
+     }
+-    catch (geopm::Exception e) {
++    catch (geopm::Exception& e) {
+         thrown = e.err_value();
+     }
+     EXPECT_EQ(GEOPM_ERROR_INVALID, thrown);
+@@ -243,7 +243,7 @@
+     try {
+         m_policy->policy_message(13, m_policy_message, child_msg);
+     }
+-    catch (geopm::Exception e) {
++    catch (geopm::Exception& e) {
+         thrown = e.err_value();
+     }
+     EXPECT_EQ(GEOPM_ERROR_INVALID, thrown);
+@@ -256,7 +256,7 @@
+     try {
+         m_policy->update(13, m_num_domain + 1, target);
+     }
+-    catch (geopm::Exception e) {
++    catch (geopm::Exception& e) {
+         thrown = e.err_value();
+     }
+     EXPECT_EQ(GEOPM_ERROR_INVALID, thrown);
+@@ -264,7 +264,7 @@
+     try {
+         m_policy->target(13, m_num_domain + 1, target);
+     }
+-    catch (geopm::Exception e) {
++    catch (geopm::Exception& e) {
+         thrown = e.err_value();
+     }
+     EXPECT_EQ(GEOPM_ERROR_INVALID, thrown);
 --- a/./test/PlatformImpTest.cpp	2018-06-27 09:17:15.000000000 -0700
 +++ b/./test/PlatformImpTest.cpp	2018-06-27 09:15:30.000000000 -0700
 @@ -631,7 +631,7 @@
@@ -231,6 +278,46 @@
          thrown = 1;
      }
  
+--- a/./src/EpochRuntimeRegulator.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./src/EpochRuntimeRegulator.cpp	2018-06-27 09:37:56.000000000 -0700
+@@ -249,7 +249,7 @@
+                 region_id = geopm_region_id_set_mpi(region_id);
+                 result = total_region_runtime(region_id);
+             }
+-            catch (Exception ex) {
++            catch (Exception& ex) {
+                 /// @todo catch expected exception only
+             }
+         }
+--- a/./src/ApplicationIO.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./src/ApplicationIO.cpp	2018-06-27 09:27:27.000000000 -0700
+@@ -170,7 +170,7 @@
+         try {
+             result = m_epoch_regulator->total_region_runtime(region_id);
+         }
+-        catch (Exception ex) {
++        catch (Exception& ex) {
+         }
+         return result;
+     }
+@@ -188,7 +188,7 @@
+         try {
+             result = m_epoch_regulator->total_region_mpi_time(region_id);
+         }
+-        catch (Exception ex) {
++        catch (Exception& ex) {
+         }
+         return result;
+     }
+@@ -304,7 +304,7 @@
+         try {
+             result = m_epoch_regulator->total_count(region_id);
+         }
+-        catch (Exception ex) {
++        catch (Exception& ex) {
+         }
+         return result;
+     }
 --- a/./src/MPICommSplit.cpp	2018-06-27 09:17:15.000000000 -0700
 +++ b/./src/MPICommSplit.cpp	2018-06-27 09:15:40.000000000 -0700
 @@ -124,7 +124,7 @@
@@ -242,8 +329,39 @@
                  if (ex.err_value() != EEXIST) {
                      throw ex;
                  }
+--- a/./src/Profile.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./src/Profile.cpp	2018-06-27 09:37:48.000000000 -0700
+@@ -108,7 +108,7 @@
+             init_tprof_table(tprof_key, topo);
+             init_table(sample_key);
+         }
+-        catch (Exception ex) {
++        catch (Exception& ex) {
+             if (!m_rank) {
+                 std::cerr << "Warning: <geopm> Controller handshake failed, running without geopm." << std::endl;
+                 int err = ex.err_value();
+--- a/./src/MSRIOGroup.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./src/MSRIOGroup.cpp	2018-06-27 09:37:41.000000000 -0700
+@@ -452,7 +452,7 @@
+                                        pair_it.second.value,
+                                        pair_it.second.mask);
+                 }
+-                catch (Exception e) {
++                catch (Exception& e) {
+                     std::cerr << e.what() << std::endl;
+                 }
+             }
 --- a/./src/Controller.cpp	2018-06-27 09:17:15.000000000 -0700
-+++ b/./src/Controller.cpp	2018-06-27 09:16:00.000000000 -0700
++++ b/./src/Controller.cpp	2018-06-27 09:35:02.000000000 -0700
+@@ -525,7 +525,7 @@
+                 m_tree_comm->get_policy(level, policy);
+                 err = 0;
+             }
+-            catch (Exception ex) {
++            catch (Exception& ex) {
+                 if (ex.err_value() != GEOPM_ERROR_POLICY_UNKNOWN) {
+                     throw ex;
+                 }
 @@ -635,7 +635,7 @@
                      }
                      is_converged = m_policy[level]->is_converged(GEOPM_REGION_ID_EPOCH);
@@ -300,32 +418,14 @@
              if (ex.err_value() == GEOPM_ERROR_INVALID) {
                  err = GEOPM_ERROR_NO_AGENT;
              }
---- a/src/ApplicationIO.cpp	2018-06-27 09:17:15.000000000 -0700
-+++ b/src/ApplicationIO.cpp	2018-06-27 09:27:27.000000000 -0700
-@@ -170,7 +170,7 @@
+--- a/./src/PlatformTopology.cpp	2018-06-27 09:17:15.000000000 -0700
++++ b/./src/PlatformTopology.cpp	2018-06-27 09:37:02.000000000 -0700
+@@ -102,7 +102,7 @@
          try {
-             result = m_epoch_regulator->total_region_runtime(region_id);
+             result = hwloc_get_nbobjs_by_type(m_topo, hwloc_domain(domain_type));
          }
 -        catch (Exception ex) {
 +        catch (Exception& ex) {
-         }
-         return result;
-     }
-@@ -188,7 +188,7 @@
-         try {
-             result = m_epoch_regulator->total_region_mpi_time(region_id);
-         }
--        catch (Exception ex) {
-+        catch (Exception& ex) {
-         }
-         return result;
-     }
-@@ -304,7 +304,7 @@
-         try {
-             result = m_epoch_regulator->total_count(region_id);
-         }
--        catch (Exception ex) {
-+        catch (Exception& ex) {
-         }
-         return result;
-     }
+             if (ex.err_value() != GEOPM_ERROR_INVALID) {
+                 throw ex;
+             }
