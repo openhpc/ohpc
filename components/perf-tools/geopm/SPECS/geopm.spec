@@ -31,6 +31,7 @@ URL:           https://geopm.github.io
 Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
 Source1:       OHPC_macros
 Patch1:        geopm-catch-value.patch
+Patch2:        geopm-string-truncate.patch
 Requires:      kmod-msr-safe%{PROJ_DELIM}
 Requires:      msr-safe%{PROJ_DELIM}
 BuildRequires: autoconf
@@ -79,6 +80,7 @@ including support for static control.
 
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
+%patch2 -p1
 
 %build
 %ohpc_setup_compiler
