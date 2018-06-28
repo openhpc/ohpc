@@ -86,11 +86,38 @@ index 2acc643fe..100094681 100644
                          printf("file = %s\n",file);
                      }
                  }
+From ce7bc4ba69c232b72e54a641a531515187e1ef4c Mon Sep 17 00:00:00 2001
+From: "Christopher M. Cantalupo" <christopher.m.cantalupo@intel.com>
+Date: Thu, 28 Jun 2018 11:57:20 -0700
+Subject: [PATCH] Fix string sizing for strncpy and snprintf.
+
+- Also fix null termination in case of string overflow.
+
+Change-Id: I32b5199ba6bdf9f88b2f679c75a9ed587868efbf
+Signed-off-by: Christopher M. Cantalupo <christopher.m.cantalupo@intel.com>
+---
+ src/PlatformImp.cpp    |  9 +++++++--
+ src/geopmpolicy_main.c | 22 +++++++++++-----------
+ 2 files changed, 18 insertions(+), 13 deletions(-)
+
 diff --git a/src/PlatformImp.cpp b/src/PlatformImp.cpp
-index 4125ef436..54a07ff04 100644
+index 4125ef436..5a79d23f5 100644
 --- a/src/PlatformImp.cpp
 +++ b/src/PlatformImp.cpp
-@@ -450,7 +450,8 @@ namespace geopm
+@@ -123,7 +123,11 @@ namespace geopm
+     {
+         // Copy C string for m_msr_path
+         m_msr_path[NAME_MAX - 1] = '\0';
+-        strncpy(m_msr_path, other.m_msr_path, NAME_MAX - 1);
++        strncpy(m_msr_path, other.m_msr_path, NAME_MAX);
++        if (m_msr_path[NAME_MAX - 1] != '\0') {
++            throw Exception("PlatformImp: copy constructor: m_msr_path input value not null terminated.",
++                            GEOPM_ERROR_INVALID, __FILE__, __LINE__);
++        }
+     }
+ 
+ 
+@@ -450,7 +454,8 @@ namespace geopm
              }
  
              char tmp_path_template[NAME_MAX];
