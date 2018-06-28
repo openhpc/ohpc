@@ -86,7 +86,7 @@ including support for static control.
 %ohpc_setup_compiler
 test -f configure || ./autogen.sh
 ./configure --prefix=%{install_path} \
-            --disable-fortran --disable-doc \
+            --disable-doc \
             || ( cat config.log && false )
 %{__make}
 
