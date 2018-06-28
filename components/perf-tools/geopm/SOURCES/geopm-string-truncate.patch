@@ -86,38 +86,37 @@ index 2acc643fe..100094681 100644
                          printf("file = %s\n",file);
                      }
                  }
-From ce7bc4ba69c232b72e54a641a531515187e1ef4c Mon Sep 17 00:00:00 2001
+From b2c4fb914eb1773d6be6ae44b20040160c89ef85 Mon Sep 17 00:00:00 2001
 From: "Christopher M. Cantalupo" <christopher.m.cantalupo@intel.com>
 Date: Thu, 28 Jun 2018 11:57:20 -0700
-Subject: [PATCH] Fix string sizing for strncpy and snprintf.
+Subject: [PATCH] Fix string sizing for strncpy and snprintf for gnu8.
 
 - Also fix null termination in case of string overflow.
 
 Change-Id: I32b5199ba6bdf9f88b2f679c75a9ed587868efbf
 Signed-off-by: Christopher M. Cantalupo <christopher.m.cantalupo@intel.com>
 ---
- src/PlatformImp.cpp    |  9 +++++++--
+ src/PlatformImp.cpp    |  7 +++----
+ src/ProfileTable.cpp   |  4 ++--
  src/geopmpolicy_main.c | 22 +++++++++++-----------
- 2 files changed, 18 insertions(+), 13 deletions(-)
+ 3 files changed, 16 insertions(+), 17 deletions(-)
 
 diff --git a/src/PlatformImp.cpp b/src/PlatformImp.cpp
-index 4125ef436..5a79d23f5 100644
+index 4125ef436..67bfa2fa0 100644
 --- a/src/PlatformImp.cpp
 +++ b/src/PlatformImp.cpp
-@@ -123,7 +123,11 @@ namespace geopm
+@@ -121,9 +121,7 @@ namespace geopm
+         , m_is_initialized(other.m_is_initialized)
+         , M_MSR_SAVE_FILE_PATH(other.M_MSR_SAVE_FILE_PATH)
      {
-         // Copy C string for m_msr_path
-         m_msr_path[NAME_MAX - 1] = '\0';
+-        // Copy C string for m_msr_path
+-        m_msr_path[NAME_MAX - 1] = '\0';
 -        strncpy(m_msr_path, other.m_msr_path, NAME_MAX - 1);
-+        strncpy(m_msr_path, other.m_msr_path, NAME_MAX);
-+        if (m_msr_path[NAME_MAX - 1] != '\0') {
-+            throw Exception("PlatformImp: copy constructor: m_msr_path input value not null terminated.",
-+                            GEOPM_ERROR_INVALID, __FILE__, __LINE__);
-+        }
++        memcpy(m_msr_path, other.m_msr_path, NAME_MAX);
      }
  
  
-@@ -450,7 +454,8 @@ namespace geopm
+@@ -450,7 +448,8 @@ namespace geopm
              }
  
              char tmp_path_template[NAME_MAX];
@@ -127,6 +126,21 @@ index 4125ef436..5a79d23f5 100644
              int fd = mkstemp(tmp_path_template);
              if (fd == -1) {
                  std::ostringstream message;
+diff --git a/src/ProfileTable.cpp b/src/ProfileTable.cpp
+index 5710aeb15..35561322f 100644
+--- a/src/ProfileTable.cpp
++++ b/src/ProfileTable.cpp
+@@ -328,8 +328,8 @@ namespace geopm
+ 
+         while (buffer_remain) {
+             tmp_name[NAME_MAX - 1] = '\0';
+-            strncpy(tmp_name, buffer_ptr, NAME_MAX);
+-            if (tmp_name[NAME_MAX - 1] != '\0') {
++            char *end_ptr = strncpy(tmp_name, buffer_ptr, NAME_MAX - 1);
++            if (end_ptr == tmp_name + NAME_MAX - 1) {
+                 throw Exception("ProfileTable::name_set(): key string is too long", GEOPM_ERROR_RUNTIME, __FILE__, __LINE__);
+             }
+             if (strlen(tmp_name)) {
 diff --git a/src/geopmpolicy_main.c b/src/geopmpolicy_main.c
 index 100094681..6e03af9f1 100644
 --- a/src/geopmpolicy_main.c
