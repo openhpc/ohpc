@@ -16,7 +16,6 @@
 %define dname ipmi
 %define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
-%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
 
 %if 0%{?PROJ_NAME:1}
 %define rpmname %{pname}-%{PROJ_NAME}
@@ -26,12 +25,12 @@
 
 Name: %{rpmname}
 Summary: IPMI Module for Warewulf
-Version: 3.8pre
+Version: 3.8.1
 Release: %{_rel}%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
+Source0: https://github.com/warewulf/warewulf3/archive/%{version}.tar.gz#/warewulf3-%{version}.tar.gz
 Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -52,8 +51,16 @@ This is the IPMI module package.  It contains Warewulf modules for
 adding IPMI functionality.
 
 
+%package -n %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
+Summary: Warewulf - IPMI Module - Initramfs IPMI Capabilities for %{_arch}
+Group: System Environment/Clustering
+BuildArch: noarch
+%description -n %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
+Warewulf Provisioning initramfs IPMI capabilities for %{_arch}.
+
+
 %prep
-%setup -n warewulf3-%{dev_branch_sha}
+%setup -n warewulf3-%{version}
 
 %build
 cd %{dname}
@@ -82,3 +89,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libexecdir}/warewulf/ipmitool
 %{perl_vendorlib}/Warewulf/Ipmi.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/*
+
+%files -n %{pname}-initramfs-%{_arch}%{PROJ_DELIM}
+%{wwpkgdir}/initramfs/%{_arch}/capabilities/setup-ipmi
