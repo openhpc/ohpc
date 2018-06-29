@@ -15,9 +15,9 @@ that will be hosted by the {\em master} host in this  example configuration.
 
 # Create NFS client mounts of /home and /opt/ohpc/pub on compute hosts
 [sms](*\#*) psh compute echo \
-        "\""${sms_ip}:/home /home nfs nfsvers=3,nodev,nosuid,noatime 0 0"\"" \>\> /etc/fstab
+        "\""${sms_ip}:/home /home nfs nfsvers=3,nodev,nosuid 0 0"\"" \>\> /etc/fstab
 [sms](*\#*) psh compute echo \
-        "\""${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev,noatime 0 0"\"" \>\> /etc/fstab
+        "\""${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev 0 0"\"" \>\> /etc/fstab
 [sms](*\#*) psh compute systemctl restart nfs
 
 # Mount NFS shares
