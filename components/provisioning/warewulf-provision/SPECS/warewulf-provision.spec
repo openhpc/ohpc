@@ -55,6 +55,7 @@ Conflicts: warewulf < 3
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 DocDir: %{OHPC_PUB}/doc/contrib
 Patch1: warewulf-provision.httpdconfdir.patch
+Patch2: warewulf-provision.wwgetfiles.patch
 #Patch2: warewulf-provision.sles_stateful.patch
 #Patch3: warewulf-provision.wwgetvnfs.patch
 #Patch4: warewulf-provision.pxe_file_modes.patch
@@ -162,7 +163,7 @@ if [ ! -f configure ]; then
     ./autogen.sh
 fi
 %patch1 -p1
-#%patch2 -p1
+%patch2 -p1
 #%patch3 -p1
 #%patch4 -p1
 #%patch5 -p2
