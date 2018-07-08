@@ -38,7 +38,7 @@ fi
 for i in `find . -name *.spec`; do
 	SPEC=`basename ${i}`
 	SOURCES="`dirname ${i}`/../SOURCES"
-	NAMES=`rpmspec -q ${i} --queryformat '%{name}:' 2> /dev/null`
+	NAMES=`rpmspec -q ${i} "${FLAGS[@]}" --queryformat '%{name}:' 2> /dev/null`
 	# Let's hope the first name is the right one
 	NAME=`echo ${NAMES} | cut -d: -f1`
 	REQ=`rpmspec -q ${i} "${FLAGS[@]}" --requires 2> /dev/null`
