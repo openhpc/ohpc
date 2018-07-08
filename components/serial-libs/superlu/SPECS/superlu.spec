@@ -142,6 +142,5 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc README

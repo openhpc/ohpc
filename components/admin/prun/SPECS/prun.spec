@@ -92,7 +92,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_HOME}
 %doc LICENSE
 %{OHPC_HOME}

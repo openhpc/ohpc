@@ -77,7 +77,6 @@ install -m 755 %{SOURCE3} $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/*
 
 
 %files
-%defattr(-,root,root)
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/vnfs.conf

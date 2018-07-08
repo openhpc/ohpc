@@ -88,7 +88,6 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrlogi
 sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 
 %files
-%defattr(-,root,root)
 %doc NEWS README ChangeLog COPYING DISCLAIMER DISCLAIMER.UC
 %{_mandir}/man1/mrcp.1*
 %{_mandir}/man1/mrsh.1*
@@ -104,7 +103,6 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %dir /opt/ohpc/admin/mrsh/share/man/man1
 
 %files -n %{pname}-server%{PROJ_DELIM}
-%defattr(-,root,root)
 %config(noreplace) /etc/xinetd.d/mrshd
 %config(noreplace) /etc/xinetd.d/mrlogind
 %if %{?_without_pam:0}%{!?_without_pam:1}
@@ -123,7 +121,6 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %dir /opt/ohpc/admin/mrsh/share/man/man8
 
 %files -n %{pname}-rsh-compat%{PROJ_DELIM}
-%defattr(-,root,root)
 %{_mandir}/man1/rcp.1*
 %{_mandir}/man1/rsh.1*
 %{_mandir}/man1/rlogin.1*

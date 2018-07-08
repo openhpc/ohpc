@@ -176,7 +176,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_HOME}
 %dir %{OHPC_ADMIN}
 %{OHPC_ADMIN}/lmod

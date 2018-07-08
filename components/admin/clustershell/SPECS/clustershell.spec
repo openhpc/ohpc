@@ -126,7 +126,6 @@ EOF
 rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root,-)
 %doc ChangeLog COPYING.LGPLv2.1
 %doc doc/examples
 %{OHPC_PUB}
@@ -157,7 +156,6 @@ rm -rf %{buildroot}
 #%{_bindir}/nodeset
 
 %files -n vim-%{name}
-%defattr(-,root,root,-)
 %dir %{install_path}/share/vim/
 %dir %{vimdatadir}
 %dir %{vimdatadir}/ftdetect

@@ -299,6 +299,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*

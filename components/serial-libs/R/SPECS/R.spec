@@ -233,7 +233,6 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root)
 %{OHPC_HOME}
 %doc ChangeLog
 %doc COPYING

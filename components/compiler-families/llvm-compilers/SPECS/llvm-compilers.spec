@@ -214,7 +214,6 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_MODULES}/llvm%{major_ver}
 %dir %{OHPC_COMPILERS}/llvm
 %{install_path}

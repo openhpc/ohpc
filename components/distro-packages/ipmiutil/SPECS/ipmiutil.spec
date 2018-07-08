@@ -111,7 +111,6 @@ make install DESTDIR=%{buildroot}
 rm -rf %{buildroot}
 
 %files
-%defattr(-, root, root, -)
 %dir %{_datadir}/%{pname}
 %dir %{_var}/lib/%{pname}
 %{_bindir}/ipmiutil
@@ -184,7 +183,6 @@ rm -rf %{buildroot}
 %doc doc/UserGuide
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root)
 # %{_datadir}/%{name} is used by both ipmiutil and ipmituil-devel
 %dir %{_datadir}/%{pname}
 %{_datadir}/%{pname}/ipmi_sample.c
@@ -198,7 +196,6 @@ rm -rf %{buildroot}
 %{_libdir}/libipmiutil.so
 
 %files -n %{pname}-static%{PROJ_DELIM}
-%defattr(-,root,root)
 %{_libdir}/libipmiutil.a
 
 %pre

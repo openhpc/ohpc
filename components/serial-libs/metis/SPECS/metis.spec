@@ -122,6 +122,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root)
 %{OHPC_PUB}
 %doc BUILD.txt Changelog Install.txt LICENSE.txt

@@ -204,7 +204,6 @@ fi
 /sbin/ldconfig %{_libdir}
 
 %files
-%defattr(-,root,root,0755)
 %doc AUTHORS
 %doc COPYING
 %doc DISCLAIMER*
@@ -244,7 +243,6 @@ fi
 %endif
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %{_includedir}/*
 %{_libdir}/*.la
 %{_libdir}/pkgconfig/*.pc
@@ -253,6 +251,5 @@ fi
 %{_libdir}/*.so
 
 %files -n %{pname}-libs%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %{_libdir}/*.so.*
 

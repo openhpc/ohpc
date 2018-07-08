@@ -58,7 +58,6 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_UTILS}
 %{OHPC_UTILS}
 %doc THANKS

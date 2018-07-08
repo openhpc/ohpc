@@ -106,12 +106,10 @@ rm -rf examples/.deps/ examples/Makefile*
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %{_libdir}/libconfuse.so.0.0.0
 %{_libdir}/libconfuse.so.0
 
 %files -n libconfuse-devel
-%defattr(-,root,root,-)
 %{_libdir}/libconfuse.so
 %{_libdir}/libconfuse.la
 %{_libdir}/pkgconfig/libconfuse.pc

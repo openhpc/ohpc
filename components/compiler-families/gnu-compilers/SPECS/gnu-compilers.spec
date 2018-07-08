@@ -159,7 +159,6 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_MODULES}/gnu%{gnu_major_ver}/
 %if "%{compiler_family}" != "dts6"
 %dir %{OHPC_COMPILERS}/gcc

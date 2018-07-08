@@ -101,7 +101,6 @@ systemctl enable mariadb >/dev/null 2>&1 || :
 
 
 %files
-%defattr(-, root, root)
 %{_sysconfdir}/bash_completion.d/warewulf_completion
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE

@@ -100,7 +100,6 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %doc CHANGES.txt README.txt
 %{_bindir}/easy_install
 %{_bindir}/easy_install-%{py_ver}

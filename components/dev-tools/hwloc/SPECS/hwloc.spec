@@ -183,6 +183,5 @@ EOF
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-, root, root, -)
 %doc AUTHORS COPYING NEWS README VERSION
 %{OHPC_PUB}

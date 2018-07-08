@@ -119,6 +119,5 @@ EOF
 odbcinst -u -l -d %_libdir/psqlodbcw.so -n PSQL
 
 %files
-%defattr(-,root,root,-)
 %doc *.txt docs/*
 %_libdir/psql*

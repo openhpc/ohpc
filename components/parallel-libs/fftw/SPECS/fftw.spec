@@ -128,6 +128,5 @@ if [ "$1" = 0 ]; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO

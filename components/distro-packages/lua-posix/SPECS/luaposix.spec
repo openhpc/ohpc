@@ -84,7 +84,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root,-)
 %doc README ChangeLog NEWS
 %dir %{_docdir}/examples
 %dir %{_docdir}/modules

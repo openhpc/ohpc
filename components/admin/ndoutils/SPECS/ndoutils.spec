@@ -147,7 +147,6 @@ mkdir -p %{buildroot}%{_localstatedir}/run/ndoutils
 rm -rf %{buildroot}
 
 %files
-%defattr(-,root,root,-)
 %doc db README.Fedora gpl-2.0.txt
 %doc docs/html README REQUIREMENTS TODO UPGRADING
 %config(noreplace) %{_sysconfdir}/nagios/ndo2db.cfg

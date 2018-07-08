@@ -100,7 +100,6 @@ if [ "$1" -ge "1" ] ; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %dir %{_datadir}/msr-safe
 %dir %{_datadir}/msr-safe/whitelists
 %{_datadir}/msr-safe/whitelists/*

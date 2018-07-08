@@ -134,6 +134,5 @@ setenv          %{PNAME}_INC        %{install_path}/include
 EOF
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc README COPYING VERSION

@@ -199,6 +199,5 @@ popd 2>&1 > /dev/null
 rm -rf ${RPM_BUILD_ROOT}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc LICENSE README ReleaseNotes docs/pdf/*.pdf

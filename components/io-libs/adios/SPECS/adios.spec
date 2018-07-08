@@ -241,7 +241,6 @@ EOF
 %endif
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc AUTHORS
 %doc COPYING

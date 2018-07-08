@@ -192,7 +192,6 @@ EOF
 %endif
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
 %exclude %{install_path}/bin/ocrrun_mpi
@@ -203,7 +202,6 @@ EOF
 
 %if %{with mpi}
 %files -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
 %exclude %{install_path}/bin/ocrrun_x86

@@ -129,6 +129,5 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc INSTALL COPYING README.md

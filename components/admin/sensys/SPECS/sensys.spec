@@ -156,7 +156,6 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %clean
 
 %files -f %{_sourcedir}/files.txt
-%defattr(-,root,root,-)
 
 # Start of filelist definition for dynamic compilation
 %else
@@ -164,7 +163,6 @@ find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 %clean
 
 %files
-%defattr(-,root,root,-)
 %dir %{_prefix}
 %dir %{_prefix}/bin
 %dir %{_prefix}/etc

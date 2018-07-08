@@ -76,7 +76,6 @@ if [ $1 -gt 0 -a $2 -eq 0 ]; then
 
 
 %files
-%defattr(-, root, root)
 %doc COPYING ChangeLog LICENSE nhc.conf contrib/nhc.cron
 %dir %{_sysconfdir}/%{pname}/
 %dir %{_localstatedir}/lib/%{pname}/

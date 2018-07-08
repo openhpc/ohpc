@@ -398,7 +398,7 @@
  
 -%files -f example.configs example-configs
 +%files -n %{pname}-example-configs%{PROJ_DELIM}
- %defattr(-,root,root,0755)
+-%defattr(-,root,root,0755)
  %dir %{_sysconfdir}
  %if %{with cray}
  %config %{_sysconfdir}/plugstack.conf.template
@@ -435,7 +435,7 @@
  
 -%files devel
 +%files -n %{pname}-devel%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %dir %attr(0755,root,root)
  %dir %{_prefix}/include/slurm
 @@ -499,7 +595,7 @@
@@ -444,7 +444,7 @@
  
 -%files perlapi
 +%files -n %{pname}-perlapi%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %{_perldir}/Slurm.pm
  %{_perldir}/Slurm/Bitstr.pm
 @@ -511,30 +607,29 @@
@@ -456,14 +456,14 @@
  
 -%files slurmctld
 +%files -n %{pname}-slurmctld%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %{_sbindir}/slurmctld
  %{_unitdir}/slurmctld.service
  #############################################################################
  
 -%files slurmd
 +%files -n %{pname}-slurmd%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %{_sbindir}/slurmd
  %{_sbindir}/slurmstepd
  %{_unitdir}/slurmd.service
@@ -471,7 +471,7 @@
  
 -%files slurmdbd
 +%files -n %{pname}-slurmdbd%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %{_sbindir}/slurmdbd
  %{_libdir}/slurm/accounting_storage_mysql.so
  %{_unitdir}/slurmdbd.service
@@ -479,7 +479,7 @@
  
 -%files libpmi
 +%files -n %{pname}-libpmi%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %if %{with cray}
  %{_libdir}/slurmpmi/*
 @@ -543,7 +638,7 @@
@@ -488,7 +488,7 @@
  
 -%files torque
 +%files -n %{pname}-torque%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %{_bindir}/pbsnodes
  %{_bindir}/qalter
 @@ -559,16 +654,15 @@
@@ -497,7 +497,7 @@
  
 -%files openlava
 +%files -n %{pname}-openlava%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %{_bindir}/bjobs
  %{_bindir}/bkill
  %{_bindir}/bsub
@@ -507,7 +507,7 @@
  
 -%files contribs
 +%files -n %{pname}-contribs%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %{_bindir}/seff
  %{_bindir}/sjobexitmod
 @@ -577,39 +671,70 @@
@@ -515,7 +515,6 @@
  #############################################################################
  
 +%files -n %{pname}-sview%{PROJ_DELIM}
-+%defattr(-,root,root)
 +%{_mandir}/man1/sview*
 +%{_bindir}/sview
 +#############################################################################
@@ -523,7 +522,7 @@
  %if %{with pam}
 -%files -f pam.files pam_slurm
 +%files -f pam.files -n %{pname}-pam_slurm%{PROJ_DELIM}
- %defattr(-,root,root)
+-%defattr(-,root,root)
  %endif
  #############################################################################
  

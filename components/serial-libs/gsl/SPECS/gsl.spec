@@ -107,6 +107,5 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README THANKS TODO

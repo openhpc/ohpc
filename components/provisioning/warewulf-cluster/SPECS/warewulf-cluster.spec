@@ -110,7 +110,6 @@ rm -rf $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/wwfirstboot/*
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-, root, root)
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/LICENSE %{dname}/NEWS %{dname}/README %{dname}/README.node %{dname}/TODO
 %{_sysconfdir}/profile.d/*
@@ -122,7 +121,6 @@ rm -rf $RPM_BUILD_ROOT
 %if %{disable_node_package}
 
 %files -n %{pname}-node%{PROJ_DELIM}
-%defattr(-, root, root)
 %config(noreplace) %{_sysconfdir}/sysconfig/wwfirstboot.conf
 %if 0%{?suse_version}
 %dir %{_libexecdir}/warewulf/wwfirstboot

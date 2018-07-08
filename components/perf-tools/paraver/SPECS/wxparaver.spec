@@ -130,7 +130,6 @@ EOF
 
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 
 %doc

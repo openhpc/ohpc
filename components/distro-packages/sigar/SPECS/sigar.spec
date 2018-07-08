@@ -100,11 +100,9 @@ rm -rf $RPM_BUILD_ROOT
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %doc ChangeLog README LICENSE NOTICE AUTHORS
 %{_libdir}/libsigar.so
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root,-)
 %{_includedir}/sigar*.h
 %doc LICENSE NOTICE AUTHORS

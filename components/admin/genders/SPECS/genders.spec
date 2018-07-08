@@ -87,7 +87,6 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 
 %files
-%defattr(-,root,root)
 %doc README NEWS ChangeLog DISCLAIMER DISCLAIMER.UC COPYING TUTORIAL genders.sample
 # It doesn't matter if the user chooses a 32bit or 64bit target.  The
 # packaging must work off whatever Perl is installed.
@@ -116,7 +115,6 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %endif
 
 %files -n %{pname}-compat%{PROJ_DELIM}
-%defattr(-,root,root)
 %{_mandir}/man3/gendlib*
 %dir %{_prefix}/lib/genders
 %{_prefix}/lib/genders/*

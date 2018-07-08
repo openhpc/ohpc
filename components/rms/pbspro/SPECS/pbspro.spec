@@ -370,7 +370,6 @@ fi
 #echo
 
 %files -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
-%defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_rcp
@@ -388,7 +387,6 @@ fi
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
 %files -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
-%defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_rcp
@@ -424,7 +422,6 @@ fi
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
 %files -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
-%defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff

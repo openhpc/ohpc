@@ -224,7 +224,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-, root, root)
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
@@ -248,7 +247,6 @@ rm -rf $RPM_BUILD_ROOT
 %{wwpkgdir}/*
 
 %files -n %{pname}-server%{PROJ_DELIM}
-%defattr(-, root, root)
 %config(noreplace) %{_sysconfdir}/warewulf/dhcpd-template.conf
 %if 0%{?sles_version} || 0%{?suse_version}
 %config(noreplace) %{_sysconfdir}/apache2/conf.d/warewulf-httpd.conf
@@ -283,5 +281,4 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %files -n %{pname}-gpl_sources%{PROJ_DELIM}
-%defattr(-, root, root)
 %{_prefix}/src/warewulf/3rd_party/GPL/

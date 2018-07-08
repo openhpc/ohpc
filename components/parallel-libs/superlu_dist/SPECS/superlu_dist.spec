@@ -168,6 +168,5 @@ EOF
 %{__mkdir_p} %{buildroot}/%_docdir
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc README.md

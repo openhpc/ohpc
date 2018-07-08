@@ -117,7 +117,6 @@ fi
 %endif
 
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS
 %doc COPYING
 %doc DISCLAIMER*

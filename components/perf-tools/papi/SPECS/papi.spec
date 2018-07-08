@@ -121,6 +121,5 @@ rm -rf $RPM_BUILD_ROOT%{_libdir}/*.la
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc ChangeLog*.txt INSTALL.txt LICENSE.txt README RELEASENOTES.txt

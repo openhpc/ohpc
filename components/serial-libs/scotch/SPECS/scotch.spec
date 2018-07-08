@@ -125,7 +125,6 @@ setenv          %{PNAME}_INC        %{install_path}/include
 EOF
 
 %files
-%defattr(-,root,root)
 %doc README.txt ./doc/*
 %{install_path}
 %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}

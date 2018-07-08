@@ -93,7 +93,6 @@ if [ "$1" = 0 ];then
 fi
 
 %files
-%defattr(-,root,root,-)
 %{installPath}
 %{_bindir}/*
 %doc LICENSE COPYING CHANGES README

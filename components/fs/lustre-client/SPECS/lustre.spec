@@ -507,7 +507,6 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %endif
 
 %files -f lustre.files
-%defattr(-,root,root)
 %{_sbindir}/*
 %if %{with lustre_tests}
 %exclude %{_sbindir}/wirecheck
@@ -559,7 +558,6 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %if %{with ldiskfs}
 %if %{with lustre_utils}
 %files osd-ldiskfs-mount
-%defattr(-,root,root)
 %{_libdir}/lustre/mount_osd_ldiskfs.so
 %endif
 %endif
@@ -569,7 +567,6 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %if %{with zfs}
 %if %{with lustre_utils}
 %files osd-zfs-mount
-%defattr(-,root,root)
 %{_libdir}/lustre/mount_osd_zfs.so
 %{_sysconfdir}/zfs/zed.d/*
 %endif
@@ -586,12 +583,10 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 
 %if %{with lustre_tests}
 %files tests -f lustre-tests.files
-%defattr(-,root,root)
 %endif
 
 %if %{with lustre_iokit}
 %files -n lustre-iokit
-%defattr(-, root, root)
 %{_bindir}/iokit-config
 %{_bindir}/iokit-gather-stats
 %{_bindir}/iokit-libecho

@@ -277,7 +277,6 @@ exit 0
 
 
 %files
-%defattr(-,root,root,-)
 %dir %{_libdir}/%{pname}/plugins/eventhandlers
 %dir %{_libdir}/%{pname}/cgi-bin
 %dir %{_datadir}/%{pname}

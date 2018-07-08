@@ -220,6 +220,5 @@ EOF
 %{__mkdir_p} %{buildroot}/%_docdir
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES

@@ -124,7 +124,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root,-)
 %config /etc/ohpc-release
 
 %if 0%{?sles_version} || 0%{?suse_version}

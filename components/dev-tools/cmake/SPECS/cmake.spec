@@ -98,7 +98,6 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_UTILS}
 %{OHPC_UTILS}/%{pname}
 %{OHPC_MODULES}/%{pname}

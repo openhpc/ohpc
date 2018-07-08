@@ -132,6 +132,5 @@ EOF
 rm -rf ${RPM_BUILD_ROOT}
 
 %files 
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc LICENSE README docs/slepc.pdf

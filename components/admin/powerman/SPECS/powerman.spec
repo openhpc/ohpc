@@ -126,7 +126,6 @@ fi
 if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 
 %files
-%defattr(-,root,root,0755)
 %doc DISCLAIMER 
 %doc COPYING
 %doc NEWS
@@ -155,7 +154,6 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %attr(0644,root,root) %{_unitdir}/powerman.service
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %{_includedir}/*
 %{_libdir}/*.la
 %{_mandir}/*3/*
@@ -166,7 +164,6 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %endif
 
 %files -n %{pname}-libs%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %ifnos aix5.3 aix5.2 aix5.1 aix5.0 aix4.3
 %{_libdir}/*.so.*
 %else

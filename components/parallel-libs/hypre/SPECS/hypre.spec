@@ -234,6 +234,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
