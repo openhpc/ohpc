@@ -33,14 +33,14 @@ Source5:        OHPC_macros
 DocDir:         %{OHPC_PUB}/doc/contrib
 Prefix:         %{_prefix}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
-BuildRequires:  %kernel_module_package_buildreqs
+#BuildRequires:  %kernel_module_package_buildreqs
 BuildRequires:  systemd
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  udev
 #!BuildIgnore: post-build-checks
 %endif
 
-%kernel_module_package default
+#%kernel_module_package default
 
 %description
 Allows safer access to model specific registers (MSRs)
