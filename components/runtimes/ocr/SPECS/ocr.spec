@@ -131,7 +131,7 @@ module-whatis "%{url}"
 
 set             version		    %{version}
 
-prepend-path    INCLUDE             %{install_path}/include
+prepend-path    CPATH               %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
@@ -171,7 +171,7 @@ module-whatis "%{url}"
 
 set             version		    %{version}
 
-prepend-path    INCLUDE             %{install_path}/include
+prepend-path    CPATH               %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}

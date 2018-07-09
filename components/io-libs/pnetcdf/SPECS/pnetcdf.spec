@@ -100,7 +100,7 @@ set     version                     %{version}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    INCLUDE             %{install_path}/include
+prepend-path    CPATH               %{install_path}/include
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 setenv          %{PNAME}_DIR        %{install_path}

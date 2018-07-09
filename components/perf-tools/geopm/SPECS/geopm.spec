@@ -122,7 +122,7 @@ set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    PYTHONPATH          %{install_path}/lib/python2.7/site-packages
-prepend-path    INCLUDE             %{install_path}/include
+prepend-path    CPATH               %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path    MANPATH             %{install_path}/share/man
 
