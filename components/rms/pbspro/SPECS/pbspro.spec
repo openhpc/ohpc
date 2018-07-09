@@ -73,7 +73,6 @@ Patch2:    pbs.null.patch
 License:   AGPLv3 with exceptions
 URL:       https://github.com/PBSPro/pbspro
 Prefix:    %{pbs_prefix}
-BuildRoot: %{_tmppath}/%{pbs_name}-%{pbs_version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %bcond_with alps
@@ -81,7 +80,6 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 %bcond_with ibm-ib
 %bcond_with ibm-hps
 
-BuildRoot: %{buildroot}
 BuildRequires: gcc
 BuildRequires: make
 BuildRequires: rpm-build

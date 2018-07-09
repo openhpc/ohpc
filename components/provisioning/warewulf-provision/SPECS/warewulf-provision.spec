@@ -52,7 +52,6 @@ BuildRequires: gcc-x86_64-linux-gnu
 %endif
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 DocDir: %{OHPC_PUB}/doc/contrib
 Patch1: warewulf-provision.httpdconfdir.patch
 Patch2: warewulf-provision.wwgetfiles.patch

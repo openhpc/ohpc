@@ -39,7 +39,6 @@ Source6: services.cfg.example
 Source7: OHPC_macros
 Patch1: nrpe-0003-Include-etc-npre.d-config-directory.patch
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 # For reconfiguration
 BuildRequires: autoconf

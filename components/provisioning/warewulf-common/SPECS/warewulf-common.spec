@@ -35,7 +35,6 @@ Conflicts: warewulf <= 2.9
 %if 0%{!?sles_version} && 0%{!?suse_version}
 BuildArch: noarch
 %endif
-BuildRoot: %{?_tmppath}/%{pname}-%{version}-%{release}-root
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else

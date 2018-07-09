@@ -55,7 +55,6 @@ Group:          %{PROJ_NAME}/distro-packages
 Version:        09.03.0400
 Release:        33.1
 Source0:        %tarname-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 PreReq:         /usr/bin/odbcinst
 Obsoletes:      pg_odbc
 Obsoletes:      postgresql-odbc

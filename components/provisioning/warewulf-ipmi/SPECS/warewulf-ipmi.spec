@@ -40,7 +40,6 @@ BuildRequires: openssl-devel
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 DocDir: %{OHPC_PUB}/doc/contrib
 
 %description

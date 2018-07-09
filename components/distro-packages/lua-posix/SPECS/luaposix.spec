@@ -34,7 +34,6 @@ License:        MIT
 Url:            https://github.com/luaposix/luaposix
 Source0:        https://github.com/luaposix/luaposix/archive/release-v%{version}.tar.gz
 Source1:        OHPC_macros
-BuildRoot:      %{_tmppath}/luaposix-%{version}-%{release}-root-
 
 BuildRequires:  lua >= %{luaver}, lua-devel >= %{luaver}
 BuildRequires:  ncurses-devel

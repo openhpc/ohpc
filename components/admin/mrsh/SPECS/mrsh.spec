@@ -26,7 +26,6 @@ Source:    https://github.com/chaos/mrsh/archive/mrsh-2-7-1.tar.gz
 Source1:   OHPC_macros
 Patch0: null-terminate.patch
 Patch1: mrsh-pam-suse.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}
 BuildRequires: ncurses-devel pam-devel munge-devel%{PROJ_DELIM}
 Requires: munge%{PROJ_DELIM} >= 0.1-0
 Provides: mrsh

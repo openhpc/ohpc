@@ -22,7 +22,6 @@ URL:       http://www.gnu.org/software/automake/
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.gz
 Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 %define install_path %{OHPC_UTILS}/autotools
 

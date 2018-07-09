@@ -35,7 +35,6 @@ Url:       https://github.com/TACC/Lmod
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}

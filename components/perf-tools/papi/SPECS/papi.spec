@@ -24,7 +24,6 @@ URL:       http://icl.cs.utk.edu/papi/
 Source0:   http://icl.cs.utk.edu/projects/papi/downloads/papi-%{version}.tar.gz
 Source1:   OHPC_macros
 Patch1:    papi.ldconfig.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: ncurses-devel

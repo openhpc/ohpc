@@ -39,7 +39,6 @@ Source2:        zpl.txt
 Patch1:         setuptools-5.4.1-create-sitedir.patch
 # NOTE(toabctl): Fix for SLE11SP3 test failures
 Patch3:         fix-sle11-test-failure.patch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  python-devel
 BuildRequires:  python-xml
 # for tests

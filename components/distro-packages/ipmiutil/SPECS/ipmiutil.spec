@@ -27,7 +27,6 @@ Group:     %{PROJ_NAME}/distro-packages
 Source0:   https://downloads.sourceforge.net/project/ipmiutil/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 URL:       http://ipmiutil.sourceforge.net
-BuildRoot: %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 provides: %{pname}
 # Suggests: cron or vixie-cron or cronie or similar
 %if 0%{?fedora} >= 15

@@ -32,7 +32,6 @@ Source10: example.modulefile
 Source11: example-mpi-dependent.modulefile
 
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %description

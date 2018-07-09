@@ -43,7 +43,6 @@ BuildRequires:	zlib-devel
 BuildRequires:	systemd
 %endif
 %endif
-BuildRoot:	%{_tmppath}/%{pname}-%{version}
 DocDir:     %{OHPC_PUB}/doc/contrib
 #!BuildIgnore: post-build-checks
 

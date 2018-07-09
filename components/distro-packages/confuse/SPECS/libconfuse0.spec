@@ -32,7 +32,6 @@ Version:        2.7
 Release:        1
 License:        LGPL-2.1+
 Group:          Development/Libraries/C and C++
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  gcc-c++ gettext-devel libtool pkgconfig
 %if 0%{?suse_version} > 1020
 BuildRequires:  check-devel

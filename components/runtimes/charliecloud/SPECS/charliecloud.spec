@@ -34,7 +34,6 @@ Source9:   ch-tar2dir.1
 Source10:  charliecloud.1
 Patch1:    charliecloud-language_highlight.patch
 Patch2:    charliecloud-test-build.patch
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: python 

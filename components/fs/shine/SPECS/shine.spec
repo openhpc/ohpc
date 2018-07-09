@@ -16,7 +16,6 @@ Group:     %{PROJ_NAME}/lustre
 Vendor:    CEA
 Url:       http://lustre-shine.sourceforge.net/
 DocDir:    %{OHPC_PUB}/doc/contrib
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 BuildRequires: python
 #!BuildIgnore: post-build-checks

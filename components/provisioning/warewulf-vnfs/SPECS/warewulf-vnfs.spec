@@ -37,7 +37,6 @@ Conflicts: warewulf < 3
 %if 0%{!?sles_version} && 0%{!?suse_version}
 BuildArch: noarch
 %endif
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 DocDir: %{OHPC_PUB}/doc/contrib
 # Previous version had an architecture in its release. This is necessary for
 # YUM to properly update a package of a different BuildArch...

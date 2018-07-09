@@ -40,7 +40,6 @@ Source0:        https://www.open-mpi.org/software/hwloc/v1.11/downloads/%{pname}
 Source1:        OHPC_macros
 Source2:        LICENSE
 
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires:  autoconf
@@ -84,7 +83,6 @@ BuildRequires:  libnuma-devel
 BuildRequires:  numactl-devel
 %endif
 %endif
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 #!BuildIgnore: post-build-checks rpmlint-Factory
 #!BuildIgnore: #!BuildIgnore: brp-check-suse
 

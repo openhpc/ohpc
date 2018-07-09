@@ -33,7 +33,6 @@ Provides:       python2-rpm-macros
 Provides:       python3-rpm-macros
 #!BuildIgnore:  python-rpm-macros
 BuildArch:      noarch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
 This package contains SUSE RPM macros for Python build automation.

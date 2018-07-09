@@ -30,7 +30,6 @@ Source1: scotch-Makefile.%{compiler_family}.inc.in
 Source2: scotch-rpmlintrc
 Source3: OHPC_macros
 Patch0:  scotch-%{version}-destdir.patch
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires:	flex bison

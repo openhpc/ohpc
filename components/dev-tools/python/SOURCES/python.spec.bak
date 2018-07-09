@@ -76,7 +76,6 @@ Obsoletes:      python-64bit
 %endif
 Provides:       python-ctypes = 1.1.0
 Obsoletes:      python-ctypes < 1.1.0
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 #!BuildIgnore:  post-build-checks
 %global _python_bytecompile_errors_terminate_build 0
 

@@ -32,7 +32,6 @@ BuildRequires: automake autoconf
 BuildRequires: rpm-build
 Obsoletes: warewulf-nhc%{PROJ_DELIM} <= 1.4.2-1
 BuildArch: noarch
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{name}-%{version}-%{release}-root
 
 %description
 TORQUE (and other resource managers) allow for the execution of a

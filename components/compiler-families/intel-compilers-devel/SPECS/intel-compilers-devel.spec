@@ -24,7 +24,6 @@ Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
 Source1:   OHPC_macros
 Source2:   OHPC_mod_generator.sh
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks

@@ -26,7 +26,6 @@ License:            GPLv2 and BSD
 # Bundled libpqueue header. It has been relicensed to BSD:
 # https://github.com/vy/libpqueue/commit/de6480009c60afff22d4c7edf4353ef87797e497
 URL:                http://www.nagios.org/download/addons/
-BuildRoot:          %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0:            http://downloads.sourceforge.net/nagios/ndoutils-%{version}.tar.gz
 Source1:            README.Fedora

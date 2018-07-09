@@ -20,7 +20,6 @@ Group:     %{PROJ_NAME}/admin
 URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
 Source0:   OHPC_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: lmod%{PROJ_DELIM}
 
 

@@ -22,7 +22,6 @@ URL:       http://www.gnu.org/software/libtool/
 DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://ftp.gnu.org/gnu/libtool/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %global __provides_exclude ^libltdl\\.so.*$

@@ -32,7 +32,6 @@ Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.t
 Source4:   https://pypi.io/packages/source/v/vsc-install/vsc-install-%{vsc_install_ver}.tar.gz
 Source5:   bootstrap_eb.py
 Source6:   OHPC_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: python
 BuildRequires: python-setuptools
 Requires: python-setuptools

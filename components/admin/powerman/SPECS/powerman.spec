@@ -25,7 +25,6 @@ Url: http://code.google.com/p/powerman/
 #Source0: %{pname}-%{version}.tar.gz
 Source0: https://github.com/chaos/%{pname}/releases/download/%{version}/%{pname}-%{version}.tar.gz
 Source1: OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if 0%{?rhel}
 %define _with_httppower 1
