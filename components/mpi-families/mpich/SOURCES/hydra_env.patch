@@ -1,0 +1,12 @@
+--- src/pm/hydra/pm/pmiserv/pmip_cb.c.orig	2017-11-10 20:19:44.000000000 -0600
++++ src/pm/hydra/pm/pmiserv/pmip_cb.c	2018-07-09 10:59:22.000000000 -0500
+@@ -804,9 +804,6 @@
+                             "no executable given and doesn't look like a restart either\n");
+ 
+     /* Set default values */
+-    if (HYD_pmcd_pmip.user_global.binding == NULL)
+-        HYD_pmcd_pmip.user_global.binding = HYDU_strdup("none");
+-
+     if (HYD_pmcd_pmip.user_global.topolib == NULL && HYDRA_DEFAULT_TOPOLIB)
+         HYD_pmcd_pmip.user_global.topolib = HYDU_strdup(HYDRA_DEFAULT_TOPOLIB);
+ 
