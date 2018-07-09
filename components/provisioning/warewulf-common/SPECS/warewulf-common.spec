@@ -29,7 +29,6 @@ Source1: OHPC_macros
 ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
-DocDir: %{OHPC_PUB}/doc/contrib
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
 %if 0%{!?sles_version} && 0%{!?suse_version}

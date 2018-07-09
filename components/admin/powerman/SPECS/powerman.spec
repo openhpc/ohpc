@@ -19,7 +19,6 @@ Release: 1%{?dist}
 
 Summary: PowerMan - centralized power control for clusters
 License: GPL
-DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/admin
 Url: http://code.google.com/p/powerman/
 #Source0: %{pname}-%{version}.tar.gz

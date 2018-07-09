@@ -39,7 +39,6 @@ Release:   1%{?dist}
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros
 Patch0:    h5cc.patch

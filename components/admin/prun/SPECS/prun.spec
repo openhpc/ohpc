@@ -25,7 +25,6 @@ Source0:   %{pname}
 Source1:   OHPC_macros
 Source2:   LICENSE      
 
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define package_target %{OHPC_UTILS}/%{pname}/%{version}
 

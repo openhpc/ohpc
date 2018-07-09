@@ -40,7 +40,6 @@ Source0:        https://www.open-mpi.org/software/hwloc/v1.11/downloads/%{pname}
 Source1:        OHPC_macros
 Source2:        LICENSE
 
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires:  autoconf
 BuildRequires:  automake

@@ -204,7 +204,6 @@ Source7: kmp-lustre-tests.files
 Source8: OHPC_macros
 Patch0:  6189ae07.diff
 URL: https://wiki.hpdd.intel.com/
-DocDir: %{OHPC_PUB}/doc/contrib
 Requires: %{requires_kmod_name} = %{requires_kmod_version} zlib
 Requires: %{requires_yaml_name}
 BuildRequires: libtool libyaml-devel zlib-devel

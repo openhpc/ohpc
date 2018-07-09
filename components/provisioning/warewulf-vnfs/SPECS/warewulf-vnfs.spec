@@ -37,7 +37,6 @@ Conflicts: warewulf < 3
 %if 0%{!?sles_version} && 0%{!?suse_version}
 BuildArch: noarch
 %endif
-DocDir: %{OHPC_PUB}/doc/contrib
 # Previous version had an architecture in its release. This is necessary for
 # YUM to properly update a package of a different BuildArch...
 Obsoletes: warewulf-vnfs < 3.2-0

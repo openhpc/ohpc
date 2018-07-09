@@ -27,7 +27,6 @@ URL:       https://github.com/RRZE-HPC/likwid
 Source0:   https://github.com/RRZE-HPC/likwid/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 Patch1:    likwid-gfortran.patch
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version

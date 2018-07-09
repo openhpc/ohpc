@@ -38,7 +38,6 @@ Requires: python-mock
 %else
 Requires: python2-mock
 %endif
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %global install_path %{OHPC_ADMIN}/%{pname}/%version
 # Turn off the brp-python-bytecompile script

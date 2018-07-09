@@ -19,7 +19,6 @@ Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/automake/
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.gz
 Source1:   OHPC_macros
 

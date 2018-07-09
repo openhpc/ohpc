@@ -30,7 +30,6 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
-DocDir: %{OHPC_PUB}/doc/contrib
 #%if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 #%if ! 0%{?suse_version}
 #BuildRequires: libdb4-utils

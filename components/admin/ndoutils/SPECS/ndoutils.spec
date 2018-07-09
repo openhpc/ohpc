@@ -18,7 +18,6 @@
 Name:               %{pname}%{PROJ_DELIM}
 Version:            2.1.3
 Release:            7%{?dist}
-DocDir:             %{OHPC_PUB}/doc/contrib
 
 Summary:            Stores all configuration and event data from Nagios in a database
 Group:              %{PROJ_NAME}/admin

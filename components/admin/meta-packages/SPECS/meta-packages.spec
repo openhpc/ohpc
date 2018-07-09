@@ -30,7 +30,6 @@ Source0: LICENSE
 Source1: OHPC_macros
 
 
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %description
 

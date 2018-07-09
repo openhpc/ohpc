@@ -29,7 +29,6 @@ BuildRequires:  automake%{PROJ_DELIM}
 Requires(pre):  shadow
 %endif
 
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define testuser ohpc-test
 %define debug_package %{nil}

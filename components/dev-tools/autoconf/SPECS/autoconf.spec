@@ -18,7 +18,6 @@ Version:   2.69
 Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
-DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
 Source1:   OHPC_macros

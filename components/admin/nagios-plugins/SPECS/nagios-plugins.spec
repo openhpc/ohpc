@@ -24,7 +24,6 @@ Name: %{pname}%{PROJ_DELIM}
 Version: 2.2.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program plugins for Nagios
-DocDir:  %{OHPC_PUB}/doc/contrib
 Group: %{PROJ_NAME}/admin
 
 License: GPLv3

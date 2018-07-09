@@ -19,7 +19,6 @@ Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/libtool/
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://ftp.gnu.org/gnu/libtool/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 

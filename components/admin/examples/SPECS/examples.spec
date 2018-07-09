@@ -32,7 +32,6 @@ Source10: example.modulefile
 Source11: example-mpi-dependent.modulefile
 
 
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %description
 

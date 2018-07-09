@@ -50,7 +50,6 @@ BuildRequires:  git
 
 %define debug_package %{nil}
 
-DocDir:        %{OHPC_PUB}/doc/contrib
 
 %description 
 

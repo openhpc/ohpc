@@ -32,7 +32,6 @@ Release:   1%{?dist}
 License:   MIT
 Group:     %{PROJ_NAME}/admin
 Url:       https://github.com/TACC/Lmod
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 Source1:   OHPC_macros
 

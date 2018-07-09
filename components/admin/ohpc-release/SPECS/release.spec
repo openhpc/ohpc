@@ -34,7 +34,6 @@ Source1:  RPM-GPG-KEY-OpenHPC-1
 
 Provides: ohpc-release = %{version}
 
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %if 0%{?centos_version} || 0%{?rhel_version}
 Requires: epel-release

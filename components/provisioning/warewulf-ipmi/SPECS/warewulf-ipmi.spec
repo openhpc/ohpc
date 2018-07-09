@@ -40,7 +40,6 @@ BuildRequires: openssl-devel
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
-DocDir: %{OHPC_PUB}/doc/contrib
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable

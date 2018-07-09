@@ -15,7 +15,6 @@ License:   GPLv2
 Group:     %{PROJ_NAME}/lustre
 Vendor:    CEA
 Url:       http://lustre-shine.sourceforge.net/
-DocDir:    %{OHPC_PUB}/doc/contrib
 BuildArch: noarch
 BuildRequires: python
 #!BuildIgnore: post-build-checks

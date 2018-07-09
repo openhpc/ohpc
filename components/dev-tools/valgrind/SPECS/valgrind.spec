@@ -19,7 +19,6 @@ Version:   3.13.0
 Release:   1%{?dist}
 License:   GPL
 URL:       http://www.valgrind.org/
-DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/dev-tools
 Source:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
 Source1:   OHPC_macros

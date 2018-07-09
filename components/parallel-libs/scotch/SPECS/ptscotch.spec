@@ -30,7 +30,6 @@ Source1: scotch-Makefile.%{compiler_family}.inc.in
 Source2: scotch-rpmlintrc
 Source3: OHPC_macros
 Patch0:  scotch-%{version}-destdir.patch
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires:	flex bison
 %if 0%{?suse_version} >= 1100

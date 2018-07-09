@@ -23,7 +23,6 @@ Summary:	ConMan: The Console Manager
 Group:		%{PROJ_NAME}/admin
 License:	GPLv3+
 URL:		http://dun.github.io/conman/
-DocDir:         %{OHPC_PUB}/doc/contrib
 
 Requires:	expect
 Requires(post): systemd

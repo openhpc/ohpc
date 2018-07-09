@@ -26,7 +26,6 @@ Summary:            Distributed Monitoring System
 Group:              %{PROJ_NAME}/admin
 License:            BSD-3-Clause
 URL:                http://ganglia.sourceforge.net/
-DocDir:             %{OHPC_PUB}/doc/contrib
 Source0:            http://downloads.sourceforge.net/ganglia/ganglia-%{version}.tar.gz
 Source1:            http://downloads.sourceforge.net/ganglia/ganglia-web-%{webver}.tar.gz
 Source2:            gmond.service

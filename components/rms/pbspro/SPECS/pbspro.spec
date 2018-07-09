@@ -73,7 +73,6 @@ Patch2:    pbs.null.patch
 License:   AGPLv3 with exceptions
 URL:       https://github.com/PBSPro/pbspro
 Prefix:    %{pbs_prefix}
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %bcond_with alps
 %bcond_with cpuset
