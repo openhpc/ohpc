@@ -21,7 +21,7 @@
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 1.3.5
+Version: 1.3.6
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
@@ -405,8 +405,10 @@ Summary:   OpenHPC base packages for Warewulf
 Requires:  warewulf-cluster%{PROJ_DELIM}
 Requires:  warewulf-common%{PROJ_DELIM}
 Requires:  warewulf-ipmi%{PROJ_DELIM}
+Requires:  warewulf-provision-initramfs-%{_arch}%{PROJ_DELIM}
 Requires:  warewulf-provision%{PROJ_DELIM}
 Requires:  warewulf-provision-server%{PROJ_DELIM}
+Requires:  warewulf-provision-server-ipxe-%{_arch}%{PROJ_DELIM}
 Requires:  warewulf-vnfs%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-warewulf
 Collection of base packages for Warewulf provisioning
