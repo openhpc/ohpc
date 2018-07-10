@@ -19,7 +19,6 @@ License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
-Source0:   OHPC_macros
 Requires: lmod%{PROJ_DELIM}
 
 

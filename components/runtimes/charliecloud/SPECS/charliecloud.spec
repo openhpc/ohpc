@@ -22,7 +22,6 @@ License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://hpc.github.io/charliecloud/
 Source0:   https://github.com/hpc/charliecloud/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 Source2:   ch-build.1
 Source3:   ch-build2dir.1
 Source4:   ch-docker-run.1

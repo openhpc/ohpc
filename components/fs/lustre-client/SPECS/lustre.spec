@@ -201,7 +201,6 @@ Source4: kmp-lustre-osd-ldiskfs.files
 Source5: kmp-lustre-osd-zfs.preamble
 Source6: kmp-lustre-osd-zfs.files
 Source7: kmp-lustre-tests.files
-Source8: OHPC_macros
 Patch0:  6189ae07.diff
 URL: https://wiki.hpdd.intel.com/
 Requires: %{requires_kmod_name} = %{requires_kmod_version} zlib

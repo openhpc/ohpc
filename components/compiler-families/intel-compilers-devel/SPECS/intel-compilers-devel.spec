@@ -22,7 +22,6 @@ License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
-Source1:   OHPC_macros
 Source2:   OHPC_mod_generator.sh
 
 #!BuildIgnore: brp-check-suse

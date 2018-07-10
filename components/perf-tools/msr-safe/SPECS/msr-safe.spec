@@ -29,7 +29,6 @@ Source1:        msr-safe.service
 Source2:        msr-safe.sysconfig
 Source3:        10-msr-safe.rules
 Source4:        msr-safe.sh
-Source5:        OHPC_macros
 BuildRequires:  %kernel_module_package_buildreqs
 BuildRequires:  systemd
 %if 0%{?sles_version} || 0%{?suse_version}

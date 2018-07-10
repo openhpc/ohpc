@@ -20,7 +20,6 @@ License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/automake/
 Source0:   https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.gz
-Source1:   OHPC_macros
 
 %define install_path %{OHPC_UTILS}/autotools
 

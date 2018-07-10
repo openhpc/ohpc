@@ -31,7 +31,6 @@ License:        LGPL-3.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://slepc.upv.es
 Source0:        http://slepc.upv.es/download/distrib/%{pname}-%{version}.tar.gz
-Source1:        OHPC_macros
 BuildRequires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1

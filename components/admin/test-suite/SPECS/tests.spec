@@ -20,7 +20,6 @@ Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc/tests
 Source0:   tests-ohpc.tar
-Source1:   OHPC_macros
 
 BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}

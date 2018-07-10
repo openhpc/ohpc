@@ -40,7 +40,6 @@ License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
 Source0:   http://www.open-mpi.org/software/ompi/v3.1/downloads/openmpi-%{version}.tar.bz2
-Source1:   OHPC_macros
 Source3:   pbs-config
 Patch0:    openmpi-3.0-pbs-config.patch
 

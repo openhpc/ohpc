@@ -24,7 +24,6 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 URL:            https://cmake.org/
 Source0:        https://cmake.org/files/v%{major_version}/cmake-%{version}.tar.gz
-Source1:        OHPC_macros
 BuildRequires:  gcc-c++
 BuildRequires:  libarchive-devel
 BuildRequires:  curl-devel

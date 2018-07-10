@@ -33,7 +33,6 @@ License:   MIT
 Group:     %{PROJ_NAME}/admin
 Url:       https://github.com/TACC/Lmod
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}

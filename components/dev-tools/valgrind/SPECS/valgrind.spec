@@ -21,7 +21,6 @@ License:   GPL
 URL:       http://www.valgrind.org/
 Group:     %{PROJ_NAME}/dev-tools
 Source:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
-Source1:   OHPC_macros
 
 # Default library install path
 %define install_path %{OHPC_UTILS}/%{pname}/%version

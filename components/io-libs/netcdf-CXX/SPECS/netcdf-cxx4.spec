@@ -42,7 +42,6 @@ Version:        4.3.0
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-cxx4/archive/v%{version}.tar.gz
-Source101:	OHPC_macros
 
 BuildRequires:  zlib-devel >= 1.2.5
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1

@@ -25,7 +25,6 @@ License:	GNU
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
-Source1:	OHPC_macros
 Patch1:     extrae.makefile-destdir.patch
 
 BuildRequires:	autoconf%{PROJ_DELIM}

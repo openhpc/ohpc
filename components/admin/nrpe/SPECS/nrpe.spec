@@ -35,7 +35,6 @@ Source3: nrpe.service
 Source4: commands.cfg
 Source5: hosts.cfg.example
 Source6: services.cfg.example
-Source7: OHPC_macros
 Patch1: nrpe-0003-Include-etc-npre.d-config-directory.patch
 
 

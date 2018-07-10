@@ -31,7 +31,6 @@ Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-frame
 Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.tar.gz
 Source4:   https://pypi.io/packages/source/v/vsc-install/vsc-install-%{vsc_install_ver}.tar.gz
 Source5:   bootstrap_eb.py
-Source6:   OHPC_macros
 BuildRequires: python
 BuildRequires: python-setuptools
 Requires: python-setuptools

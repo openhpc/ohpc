@@ -28,7 +28,6 @@ URL: http://www.labri.fr/perso/pelegrin/scotch/
 Source0: http://gforge.inria.fr/frs/download.php/file/34618/%{base_pname}_%{version}.tar.gz
 Source1: scotch-Makefile.%{compiler_family}.inc.in
 Source2: scotch-rpmlintrc
-Source3: OHPC_macros
 Patch0:  scotch-%{version}-destdir.patch
 
 BuildRequires:	flex bison

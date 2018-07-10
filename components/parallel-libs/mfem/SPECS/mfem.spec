@@ -25,7 +25,6 @@ Group:          %{PROJ_NAME}/parallel-libs
 Version:        3.3.2
 Release:        1%{?dist}
 Source0:        https://github.com/mfem/mfem/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
-Source1:        OHPC_macros
 Url:            http://mfem.org
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

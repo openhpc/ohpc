@@ -22,7 +22,6 @@ Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc
 Source0:   %{pname}
-Source1:   OHPC_macros
 Source2:   LICENSE      
 
 

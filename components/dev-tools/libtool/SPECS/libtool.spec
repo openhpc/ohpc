@@ -20,7 +20,6 @@ License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/libtool/
 Source0:   https://ftp.gnu.org/gnu/libtool/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %global __provides_exclude ^libltdl\\.so.*$

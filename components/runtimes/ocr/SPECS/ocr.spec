@@ -29,7 +29,6 @@ License:   BSD
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://xstack.exascale-tech.com/wiki
 Source0:   https://xstack.exascale-tech.com/git/public/snapshots/ocr-refs/tags/OCRv%{version}_ohpc.tbz2
-Source1:   OHPC_macros
 
 %description
 The Open Community Runtime project is creating an application

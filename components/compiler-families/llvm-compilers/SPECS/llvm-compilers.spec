@@ -32,7 +32,6 @@ Source5:   http://releases.llvm.org/%{version}/libcxxabi-%{version}.src.tar.xz
 Source6:   http://releases.llvm.org/%{version}/libunwind-%{version}.src.tar.xz
 Source7:   http://releases.llvm.org/%{version}/lld-%{version}.src.tar.xz
 Source8:   http://releases.llvm.org/%{version}/openmp-%{version}.src.tar.xz
-Source9:   OHPC_macros
 BuildRequires: cmake%{PROJ_DELIM}
 BuildRequires: make
 BuildRequires: perl

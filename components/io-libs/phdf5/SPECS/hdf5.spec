@@ -44,7 +44,6 @@ Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
-Source1:   OHPC_macros
 Patch0:    h5cc.patch
 Patch1:    h5fc.patch
 Patch2:    h5cxx.patch

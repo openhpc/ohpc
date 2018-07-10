@@ -28,7 +28,6 @@ License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
-Source1: OHPC_macros
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel

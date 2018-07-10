@@ -19,7 +19,6 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/admin
 URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
-Source1:        OHPC_macros
 
 %if 0%{?suse_version}
 BuildRequires:  libstdc++6

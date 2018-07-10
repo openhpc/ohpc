@@ -32,7 +32,6 @@ Source2:            gmond.service
 Source3:            gmetad.service
 Source4:            ganglia-httpd24.conf.d
 Source6:            conf.php
-Source7:            OHPC_macros
 Patch0:             ganglia-web-3.5.7-statedir.patch
 #Patch1:             ganglia-3.7.1-py-syntax.patch
 Patch2:             ganglia-no-private-apr.patch

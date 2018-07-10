@@ -35,7 +35,6 @@ Source0: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}_%{version}.t
 Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{version}.tar.gz
 Source2: http://www.netlib.org/lapack/lapack-3.7.0.tgz
 Source3: %{pname}-rpmlintrc
-Source4: OHPC_macros
 Patch1:  plasma-lapack_version.patch
 Requires: lmod%{PROJ_DELIM} >= 7.6.1
 

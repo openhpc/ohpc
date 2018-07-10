@@ -29,7 +29,6 @@ License:       BSD-3-Clause
 Group:         %{PROJ_NAME}/parallel-libs
 URL:           https://geopm.github.io
 Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
-Source1:       OHPC_macros
 Patch1:        geopm-catch-value.patch
 Patch2:        geopm-string-truncate.patch
 Requires:      kmod-msr-safe%{PROJ_DELIM}

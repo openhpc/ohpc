@@ -20,7 +20,6 @@ License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
-Source1:   OHPC_macros
 
 Requires: m4
 

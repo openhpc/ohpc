@@ -17,7 +17,6 @@ Release: 1%{?dist}
 Summary: Static cluster configuration database
 License: GPL
 Source: https://github.com/chaos/genders/releases/download/genders-1-22-1/%{pname}-%{version}.tar.gz
-Source1: OHPC_macros
 Requires: perl
 Group:     %{PROJ_NAME}/admin
 URL: https://github.com/chaos/genders

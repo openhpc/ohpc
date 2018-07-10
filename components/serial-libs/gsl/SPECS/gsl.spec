@@ -24,7 +24,6 @@ License:   GPL
 Group:     %{PROJ_NAME}/serial-libs
 URL:       http://www.gnu.org/software/gsl
 Source0:   https://ftp.gnu.org/gnu/%{pname}/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 

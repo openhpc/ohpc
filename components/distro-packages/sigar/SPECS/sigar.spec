@@ -36,7 +36,6 @@ Provides:       %{pname}
 #
 # The diff from 1.6.4 is too huge to contemplate cherrypicking from
 Source0:	https://github.com/hyperic/sigar/archive/%{sigar_hash}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:    OHPC_macros
 
 BuildRequires:	gcc cmake
 

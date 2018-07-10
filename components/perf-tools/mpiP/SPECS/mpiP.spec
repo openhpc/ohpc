@@ -37,7 +37,6 @@ License:   BSD-3
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://mpip.sourceforge.net/
 Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    mpip.unwinder.patch
 
 BuildRequires: binutils-devel

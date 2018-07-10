@@ -48,7 +48,6 @@ BuildRequires:	systemd
 Conflicts: munge 
 
 Source0:   https://github.com/dun/munge/archive/munge-%{version}.tar.gz
-Source1:   OHPC_macros
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
 Patch1:     %{pname}.logdir.patch
 # 6/12/14 karl.w.schulz@intel.com - define default runlevel

@@ -27,7 +27,6 @@ Source5:  job.mpi
 Source6:  60-ipath.rules
 Source7:  gmond.conf
 Source8:  job.pbs.mpi
-Source9:  OHPC_macros
 Source10: example.modulefile
 Source11: example-mpi-dependent.modulefile
 

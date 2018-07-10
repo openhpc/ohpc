@@ -20,7 +20,6 @@ License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
 Group:     %{PROJ_NAME}/admin
 Source0:   https://github.com/chaos/%{pname}/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    pdsh-slurm-list.patch
 
 ### karl.w.schulz@intel.com (11/07/14) - temporarily disabling rcmd requirement

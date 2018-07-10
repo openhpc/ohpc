@@ -47,7 +47,6 @@ Source6:        python.keyring
 Source1:        macros.python
 Source2:        baselibs.conf
 Source5:        local.pth
-Source7:        OHPC_macros
 # COMMON-PATCH-BEGIN
 Patch1:         python-2.7-dirs.patch
 Patch2:         python-distutils-rpm-8.patch

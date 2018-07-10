@@ -37,7 +37,6 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
 Source0:        https://www.open-mpi.org/software/hwloc/v1.11/downloads/%{pname}-%{version}.tar.bz2
-Source1:        OHPC_macros
 Source2:        LICENSE
 
 

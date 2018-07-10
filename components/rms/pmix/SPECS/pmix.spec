@@ -20,7 +20,6 @@ License: BSD
 URL: https://pmix.github.io/pmix/
 Group: %{PROJ_NAME}/rms
 Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
-Source1: OHPC_macros
 
 BuildRequires: libevent-devel
 BuildRequires: lmod-ohpc libtool-ohpc

@@ -34,7 +34,6 @@ URL:		https://slurm.schedmd.com/
 %endif
 
 Source:		https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
-Source1:    OHPC_macros
 
 # build options		.rpmmacros options	change to default action
 # ====================  ====================	========================

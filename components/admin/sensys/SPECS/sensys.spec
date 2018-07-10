@@ -46,7 +46,6 @@ License: BSD-3-Clause
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/intel-ctrlsys/sensys
 Source0: https://github.com/intel-ctrlsys/sensys/archive/v1.0.0.tar.gz#/%{sensys_name}-%{version}.tar.gz
-Source1: OHPC_macros
 
 %{?systemd_requires}
 BuildRequires:  pkgconfig(systemd)

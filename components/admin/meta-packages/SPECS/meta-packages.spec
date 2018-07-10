@@ -27,7 +27,6 @@ License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
 URL:     https://github.com/openhpc/ohpc
 Source0: LICENSE
-Source1: OHPC_macros
 
 
 

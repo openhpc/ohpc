@@ -28,7 +28,6 @@ License:   NetCDF
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://cucis.ece.northwestern.edu/projects/PnetCDF
 Source0:   http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-%{version}.tar.gz
-Source1:   OHPC_macros
 
 BuildRequires:  grep
 BuildRequires:  m4

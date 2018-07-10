@@ -42,7 +42,6 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 Url:            http://www.openblas.net
 Source0:        https://github.com/xianyi/OpenBLAS/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:        OHPC_macros
 Patch0:         openblas-libs.patch
 # PATCH-FIX-UPSTREAM c_xerbla_no-void-return.patch
 Patch1:         c_xerbla_no-void-return.patch

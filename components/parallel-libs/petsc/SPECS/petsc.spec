@@ -29,7 +29,6 @@ Group:          %{PROJ_NAME}/parallel-libs
 Version:        3.9.1
 Release:        1%{?dist}
 Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
-Source1:        OHPC_macros
 Patch1:         petsc.rpath.patch
 Url:            http://www.mcs.anl.gov/petsc/
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1

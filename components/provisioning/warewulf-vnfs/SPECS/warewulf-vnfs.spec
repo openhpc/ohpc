@@ -25,7 +25,6 @@ License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
-Source2: OHPC_macros
 Source3: rhel-7.tmpl
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}

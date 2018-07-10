@@ -25,7 +25,6 @@ License:   GPLv3
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://github.com/RRZE-HPC/likwid
 Source0:   https://github.com/RRZE-HPC/likwid/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    likwid-gfortran.patch
 
 # Default library install path

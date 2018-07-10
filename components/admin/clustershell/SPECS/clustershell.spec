@@ -14,7 +14,6 @@ Group:         %{PROJ_NAME}/admin
 License:       LGPLv2.1
 URL:           http://clustershell.sourceforge.net/
 Source0:       https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
-Source1:       OHPC_macros
 Patch1:        clustershell-1.8-no-requires.patch
 
 # Default library install path

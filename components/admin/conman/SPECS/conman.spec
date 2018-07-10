@@ -40,7 +40,6 @@ BuildRequires:	freeipmi-devel
 
 Source0:	https://github.com/dun/conman/archive/%pname-%{version}.tar.gz
 Source1:    %{pname}.service
-Source2:       OHPC_macros
 Patch1:         conman.init.patch
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
