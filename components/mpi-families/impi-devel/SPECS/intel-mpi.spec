@@ -13,6 +13,7 @@
 
 %define pname intel-mpi-devel
 %define year 2018
+%global gnu_major_ver 8
 
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
@@ -44,7 +45,7 @@ suite.
 %install
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu7/impi
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi
 
 %pre
 
@@ -237,17 +238,17 @@ EOF
     fi
 
     # support for additional gnu variants
-    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/${version} %{OHPC_MODULEDEPS}/gnu7/impi/${version}
-    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/.version.${version} %{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}
-    perl -pi -e 's!moduledeps/gnu-impi!moduledeps/gnu7-impi!' %{OHPC_MODULEDEPS}/gnu7/impi/${version}
+    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/${version} %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/${version}
+    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/.version.${version} %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version.${version}
+    perl -pi -e 's!moduledeps/gnu-impi!moduledeps/gnu%{gnu_major_ver}-impi!' %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/${version}
     
     # Inventory for later removal
     echo "%{OHPC_MODULEDEPS}/intel/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
     echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
     echo "%{OHPC_MODULEDEPS}/gnu/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
     echo "%{OHPC_MODULEDEPS}/gnu/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-    echo "%{OHPC_MODULEDEPS}/gnu7/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-    echo "%{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
+    echo "%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
 
 done
 
