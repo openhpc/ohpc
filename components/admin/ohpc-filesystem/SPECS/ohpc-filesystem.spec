@@ -8,8 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/OHPC_macros
-
 Name: ohpc-filesystem
 Version: 1.3
 Release: 1.ohpc
