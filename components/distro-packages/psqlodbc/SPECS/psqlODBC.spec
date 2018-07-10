@@ -28,7 +28,6 @@
 
 %define pname   psqlODBC
 %define tarname psqlodbc
-%define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
 BuildRequires:  autoconf

@@ -14,7 +14,6 @@
 
 %define pname warewulf-ipmi
 %define dname ipmi
-%define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
 
 %if 0%{?PROJ_NAME:1}

@@ -12,7 +12,6 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define debug_package %{nil}
 
 %define pname warewulf-vnfs
 %define dname vnfs

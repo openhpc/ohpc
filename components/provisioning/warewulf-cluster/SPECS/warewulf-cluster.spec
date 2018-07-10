@@ -35,7 +35,6 @@ Conflicts: warewulf < 3
 #%endif
 #%endif
 
-%define debug_package %{nil}
 
 # 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
 Patch1: warewulf-cluster.wwinit.patch

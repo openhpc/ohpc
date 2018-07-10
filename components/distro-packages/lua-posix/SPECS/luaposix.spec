@@ -21,7 +21,6 @@
 %endif
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
-%define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:        33.2.1

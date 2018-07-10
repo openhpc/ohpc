@@ -12,7 +12,6 @@
 
 %define pname munge
 
-%define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:	0.5.13

@@ -44,7 +44,6 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # Disable debug packages
-%define debug_package %{nil}
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 

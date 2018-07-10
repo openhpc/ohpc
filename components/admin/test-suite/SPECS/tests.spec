@@ -29,7 +29,6 @@ Requires(pre):  shadow
 
 
 %define testuser ohpc-test
-%define debug_package %{nil}
 
 %description
 

@@ -338,9 +338,6 @@ simulate MDT service threads) locally on the MDS node, and does not need Lustre
 clients in order to run
 %endif
 
-%if 0%{?suse_version}
-%debug_package
-%endif
 %prep
 %setup -qn lustre-%{version}
 %patch0 -p1

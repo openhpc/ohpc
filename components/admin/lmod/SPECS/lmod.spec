@@ -63,7 +63,6 @@ Requires: tcl
 Requires: lua-filesystem%{PROJ_DELIM}
 Requires: lua-posix%{PROJ_DELIM}
 
-%define debug_package %{nil}
 
 %description 
 Lmod: An Environment Module System based on Lua, Reads TCL Modules,

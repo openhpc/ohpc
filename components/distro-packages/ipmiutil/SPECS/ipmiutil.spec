@@ -55,7 +55,6 @@ BuildRequires: gcc gcc-c++ libtool
 %define systemd_fls %{_datadir}/%{pname}
 %endif
 %define init_dir  %{_initrddir}
-%define debug_package %{nil}
 
 %description
 The ipmiutil package provides easy-to-use utilities to view the SEL,

@@ -46,7 +46,6 @@ BuildRequires:  texlive-dvips
 BuildRequires:  latexmk
 BuildRequires:  git
 
-%define debug_package %{nil}
 
 
 %description 

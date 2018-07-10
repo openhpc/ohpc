@@ -218,14 +218,6 @@ HPC clusters, clouds and supercomputers.
 This package is intended for a client host and provides
 the PBS Professional user commands.
 
-%if 0%{?opensuse_bs}
-# Do not specify debug_package for OBS builds.
-%else
-%if %{defined suse_version}
-%debug_package
-%endif
-%endif
-
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
 

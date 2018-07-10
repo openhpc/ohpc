@@ -12,7 +12,6 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define debug_package %{nil}
 %define _cross_compile 0%{?cross_compile}
 %define wwpkgdir /srv/warewulf
 

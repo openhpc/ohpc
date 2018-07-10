@@ -43,7 +43,6 @@ Requires: python
 BuildRequires: lmod%{PROJ_DELIM}
 %endif
 
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version

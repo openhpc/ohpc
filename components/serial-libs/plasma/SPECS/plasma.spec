@@ -41,7 +41,6 @@ Requires: lmod%{PROJ_DELIM} >= 7.6.1
 
 #!BuildIgnore: post-build-checks 
 # Disable debug packages
-%define debug_package %{nil}
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 

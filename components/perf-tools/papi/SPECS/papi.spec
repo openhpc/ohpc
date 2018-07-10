@@ -34,7 +34,6 @@ BuildRequires: chrpath
 BuildRequires: kernel-headers >= 2.6.32
 #Right now libpfm does not know anything about s390 and will fail
 ExcludeArch: s390 s390x
-%global debug_package %{nil} 
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version

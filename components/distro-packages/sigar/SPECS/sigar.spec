@@ -11,7 +11,6 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname sigar
-%define debug_package %{nil}
 
 Name:		%{pname}%{PROJ_DELIM}
 Version:	1.6.5

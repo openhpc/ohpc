@@ -24,7 +24,6 @@ Source0:   https://ftp.gnu.org/gnu/libtool/%{pname}-%{version}.tar.gz
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %global __provides_exclude ^libltdl\\.so.*$
 
-%define debug_package %{nil}
 %define install_path %{OHPC_UTILS}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69

@@ -192,7 +192,6 @@ BuildRequires: numactl-devel
 #  into non-standard locations (e.g. /usr/local)
 #
 %define __os_install_post /usr/lib/rpm/brp-compress
-%define debug_package %{nil}
 
 #
 # Should unpackaged files in a build root terminate a build?
