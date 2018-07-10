@@ -68,6 +68,7 @@ Requires: prun%{PROJ_DELIM}
 
 BuildRequires: bison
 BuildRequires: libibmad-devel 
+BuildRequires: zlib-devel
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
