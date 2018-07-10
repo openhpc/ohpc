@@ -56,25 +56,13 @@ cd tests
 cp -a * %{buildroot}/home/%{testuser}/tests
 find %{buildroot}/home/%{testuser}/tests -name .gitignore  -exec rm {} \;
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %pre
 getent passwd %{testuser} >/dev/null || \
     /usr/sbin/useradd -U -c "OpenHPC integration test account" \
     -s /bin/bash -m -b /home %{testuser}
 exit 0
 
-%post
-
-%postun
-
-
 %files
 %defattr(-,%{testuser},%{testuser},-)
 %dir /home/%{testuser}
 /home/%{testuser}/tests
-
-
-
-

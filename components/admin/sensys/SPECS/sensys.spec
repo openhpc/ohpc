@@ -151,14 +151,10 @@ chmod -R +r *
 %if %{static_build}
 find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 
-%clean
-
 %files -f %{_sourcedir}/files.txt
 
 # Start of filelist definition for dynamic compilation
 %else
-
-%clean
 
 %files
 %dir %{_prefix}

@@ -533,11 +533,6 @@ touch $LIST
 	echo /lib64/security/pam_slurm_adopt.so		>>$LIST
 %endif
 mkdir -p $RPM_BUILD_ROOT/%{_docdir}
-#############################################################################
-
-%clean
-rm -rf %{buildroot}
-#############################################################################
 
 %files -f slurm.files
 %{_datadir}/doc

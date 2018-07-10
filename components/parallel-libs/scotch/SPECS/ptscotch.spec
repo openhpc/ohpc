@@ -136,9 +136,6 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
 %files
 %doc README.txt ./doc/*
 %{OHPC_PUB}

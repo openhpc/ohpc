@@ -192,9 +192,6 @@ pushd %{buildroot}%{install_path}/lib 2>&1 > /dev/null
 /sbin/ldconfig -N .
 popd 2>&1 > /dev/null
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
 %files
 %{OHPC_PUB}
 %doc LICENSE README ReleaseNotes docs/pdf/*.pdf

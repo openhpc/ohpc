@@ -80,19 +80,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-%post
-
-%postun
-
-
 %files
 %dir %{OHPC_HOME}
 %doc LICENSE
 %{OHPC_HOME}
-
-
-
-

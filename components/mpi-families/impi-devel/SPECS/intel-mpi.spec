@@ -276,8 +276,5 @@ if [ "$1" = 0 ]; then
     fi
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %{OHPC_MODULEDEPS}

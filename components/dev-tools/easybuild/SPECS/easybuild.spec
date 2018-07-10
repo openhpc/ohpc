@@ -117,8 +117,5 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %{OHPC_HOME}

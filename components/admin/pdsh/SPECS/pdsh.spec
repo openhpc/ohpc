@@ -387,12 +387,6 @@ find ${RPM_BUILD_ROOT}
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-##############################################################################
-
-%clean
-rm -rf "$RPM_BUILD_ROOT"
-##############################################################################
-
 %files
 %doc COPYING README NEWS DISCLAIMER.LLNS DISCLAIMER.UC
 %doc README.KRB4 README.modules

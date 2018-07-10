@@ -76,8 +76,6 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
 %files
 %{OHPC_HOME}
 %doc LICENSE README.md

@@ -140,9 +140,6 @@ install -p -m 755 -D %{SOURCE3} %{buildroot}%{_initrddir}/ndo2db
 %endif
 mkdir -p %{buildroot}%{_localstatedir}/run/ndoutils
 
-%clean
-rm -rf %{buildroot}
-
 %files
 %doc db README.Fedora gpl-2.0.txt
 %doc docs/html README REQUIREMENTS TODO UPGRADING

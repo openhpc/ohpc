@@ -77,10 +77,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 make check
 
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
 %doc README ChangeLog NEWS
 %dir %{_docdir}/examples

@@ -136,9 +136,6 @@ rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-%clean
-rm -rf "$RPM_BUILD_ROOT"
-
 %pre
 # karl.w.schulz@intel.com (9/10/18) - provide specific uid/gid to deal with 
 # possibility of getting alternate ownership within Warewulf

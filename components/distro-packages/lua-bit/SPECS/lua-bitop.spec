@@ -56,11 +56,6 @@ make install LUA_LIBDIR=%{lualibdir} DESTDIR=$RPM_BUILD_ROOT
 %check
 make test
 
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
 %doc README
 %dir %{_libdir}/lua

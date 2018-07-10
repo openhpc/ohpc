@@ -159,9 +159,6 @@ install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{pname}.conf
 %endif
 
 
-%clean
-rm -rf %{buildroot}
-
 %pre
 getent group %{pname} >/dev/null || groupadd -r %{pname}
 getent passwd %{pname} >/dev/null || \

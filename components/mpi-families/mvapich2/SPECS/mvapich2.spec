@@ -151,9 +151,6 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %{OHPC_HOME}
 %doc README.envvar

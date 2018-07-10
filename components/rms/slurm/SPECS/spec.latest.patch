@@ -373,9 +373,7 @@
  	echo /lib64/security/pam_slurm_adopt.so		>>$LIST
  %endif
 +mkdir -p $RPM_BUILD_ROOT/%{_docdir}
- #############################################################################
  
- %clean
 @@ -457,6 +532,7 @@
  %exclude %{_bindir}/sjobexitmod
  %exclude %{_bindir}/sjstat

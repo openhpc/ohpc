@@ -80,8 +80,6 @@ rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf "%{buildroot}"
 
 %post
 %systemd_post conman.service

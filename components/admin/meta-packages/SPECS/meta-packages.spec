@@ -620,9 +620,6 @@ Collection of serial library builds for use with Intel(R) Parallel Studio XE too
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 
 %files -n %{PROJ_NAME}-autotools

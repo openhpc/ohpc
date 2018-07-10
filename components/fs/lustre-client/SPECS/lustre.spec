@@ -619,7 +619,3 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %if %{with systemd}
 %systemd_postun_with_restart lnet.service
 %endif
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-rm -rf %{_tmppath}/kmp

@@ -125,9 +125,6 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_ARCH       ""
 EOF
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
-%files 
+%files
 %{OHPC_PUB}
 %doc LICENSE README docs/slepc.pdf

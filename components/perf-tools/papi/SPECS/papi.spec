@@ -112,11 +112,6 @@ rm -rf $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %{__mkdir_p} $RPM_BUILD_ROOT/%{_docdir}
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %{OHPC_PUB}
 %doc ChangeLog*.txt INSTALL.txt LICENSE.txt README RELEASENOTES.txt

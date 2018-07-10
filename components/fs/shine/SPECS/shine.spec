@@ -83,9 +83,6 @@ setenv          %{pname}_DIR        %{install_path}
 depends-on clustershell
 EOF
 
-%clean
-rm -rf %{buildroot}
-
 %files
 %doc LICENSE README ChangeLog
 %{OHPC_ADMIN}

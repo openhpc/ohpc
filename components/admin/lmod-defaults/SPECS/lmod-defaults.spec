@@ -65,9 +65,6 @@ if [ module-info mode remove ] {
 }
 EOF
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %dir %{OHPC_HOME}
 %dir %{OHPC_PUB}

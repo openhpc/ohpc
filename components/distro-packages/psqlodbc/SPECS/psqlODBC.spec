@@ -94,9 +94,6 @@ export CFLAGS="%optflags -fno-strict-aliasing -I/usr/include/pgsql"
 make DESTDIR=%buildroot install
 rm -f %buildroot%_libdir/*.la
 
-%clean
-rm -rf %buildroot
-
 %post
 /sbin/ldconfig
 # odbcinst uses reference counting, so we don't

@@ -261,9 +261,6 @@ if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
     rm -f %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix 
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %{OHPC_ADMIN}
 %{OHPC_MODULES}

@@ -90,9 +90,6 @@ rm -rf $RPM_BUILD_ROOT
 %cmake 
 make install DESTDIR=$RPM_BUILD_ROOT
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig

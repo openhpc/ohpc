@@ -99,9 +99,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 #drop local state dir to avoid making systemd angry when it creates the statedir on start
 rm -rf $RPM_BUILD_ROOT/%{_localstatedir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %post
 /bin/systemctl enable powerman > /dev/null 2>&1 || :
 

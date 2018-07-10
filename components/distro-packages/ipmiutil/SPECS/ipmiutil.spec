@@ -105,9 +105,6 @@ make
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 
-%clean
-rm -rf %{buildroot}
-
 %files
 %dir %{_datadir}/%{pname}
 %dir %{_var}/lib/%{pname}

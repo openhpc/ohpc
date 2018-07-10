@@ -92,6 +92,3 @@ EOF
 %doc FAQ.txt
 %doc NEWS
 %doc COPYING
-
-%clean
-rm -rf $RPM_BUILD_ROOT

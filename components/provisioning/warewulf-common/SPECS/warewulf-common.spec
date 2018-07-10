@@ -94,9 +94,6 @@ systemctl enable mariadb >/dev/null 2>&1 || :
 %endif
 
 
-%clean
-
-
 %files
 %{_sysconfdir}/bash_completion.d/warewulf_completion
 %{OHPC_PUB}
