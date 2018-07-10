@@ -78,7 +78,6 @@ module load petsc
 make install
 
 # move from tmp install dir to %install_path
-rm -rf %buildroot
 mkdir -p %buildroot%{install_path}
 pushd /tmp
 export tmp_path=%{install_path}

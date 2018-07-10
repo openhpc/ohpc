@@ -137,7 +137,6 @@ CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" LDFLAGS="%{?__global_ldflags}"
 make %{?_smp_mflags} all
 
 %install
-rm -rf %{buildroot}
 %if 0%{?el4}%{?el5}%{?el6}
 install -D -p -m 0755 init-script %{buildroot}/%{_initrddir}/nrpe
 %else

@@ -85,7 +85,6 @@ sed -i.sed s:DESTINATION\ lib:DESTINATION\ %{_lib}: src/CMakeLists.txt
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %cmake 
 make install DESTDIR=$RPM_BUILD_ROOT
 

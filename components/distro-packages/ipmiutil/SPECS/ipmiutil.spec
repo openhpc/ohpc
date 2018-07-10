@@ -101,7 +101,6 @@ autoconf
 make 
 
 %install
-rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 
 %files

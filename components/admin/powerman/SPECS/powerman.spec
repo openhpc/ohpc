@@ -92,7 +92,6 @@ A shared library for applications using PowerMan.
 make
 
 %install
-rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT 
 
 #drop local state dir to avoid making systemd angry when it creates the statedir on start

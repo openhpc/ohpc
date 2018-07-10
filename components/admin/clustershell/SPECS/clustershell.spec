@@ -53,7 +53,6 @@ Syntax highlighting in the VIM editor for ClusterShell configuration files.
 %{__python} setup.py build
 
 %install
-rm -rf %{buildroot}
 %{__python} setup.py install -O1 --prefix=%{install_path} --skip-build --root %{buildroot}
 
 # config files

@@ -67,7 +67,6 @@ rsh compatability package for mrcp/mrlogin/mrsh
 make
 
 %install
-rm -rf $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/usr/bin

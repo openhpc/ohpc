@@ -40,9 +40,6 @@ within a resource manager for a variety of MPI families.
 # Binary pass-through - empty build section
 
 %install
-
-rm -rf $RPM_BUILD_ROOT
-
 %{__mkdir} -p %{buildroot}/%{package_target}
 install -D -m 0755 %SOURCE0 %{buildroot}/%{package_target}
 

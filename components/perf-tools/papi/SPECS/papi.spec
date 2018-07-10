@@ -54,8 +54,6 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" ./configure --with-s
 DBG="" CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" make
 
 %install
-
-rm -rf $RPM_BUILD_ROOT
 cd src
 
 make DESTDIR=$RPM_BUILD_ROOT install

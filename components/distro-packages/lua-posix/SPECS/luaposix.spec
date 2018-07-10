@@ -67,7 +67,6 @@ make %{?_smp_mflags}
 # include path to newer autotools
 export PATH=%{OHPC_PUB}/autotools/bin:$PATH
 
-rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 
 

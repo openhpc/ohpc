@@ -187,7 +187,6 @@ make exports
 
 
 # move from tmp install dir to %install_path
-rm -rf %{buildroot}
 # dirname removes the last directory
 mkdir -p `dirname %{buildroot}%{install_path}`
 pushd /tmp

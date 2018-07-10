@@ -88,7 +88,6 @@ chmod 644 db/installdb db/prepsql db/upgradedb
 make %{?_smp_mflags} all
 
 %install
-rm -rf %{buildroot}
 cp %{SOURCE1} %{SOURCE5} .
 mkdir -p %{buildroot}%{_localstatedir}/log/nagios
 mkdir -p %{buildroot}%{_localstatedir}/cache/ndoutils

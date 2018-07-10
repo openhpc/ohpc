@@ -71,7 +71,6 @@ Its features include:
 make %{?_smp_mflags}
 
 %install
-rm -rf "%{buildroot}"
 %{__mkdir_p} "%{buildroot}"
 make install DESTDIR="%{buildroot}"
 

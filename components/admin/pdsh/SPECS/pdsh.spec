@@ -357,7 +357,6 @@ make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS"
 ##############################################################################
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %{__mkdir_p} $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
 if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.qshd ]; then

@@ -378,7 +378,6 @@ chmod +x find-requires.sh
 %global _use_internal_dependency_generator 0
 %global __find_requires %{_builddir}/%{buildsubdir}/find-requires.sh
 
-rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 make install-contrib DESTDIR=%{buildroot}
 
