@@ -1,7 +1,6 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname clustershell
 

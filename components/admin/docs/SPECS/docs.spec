@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name:           docs%{PROJ_DELIM}
 Version:        1.3.6

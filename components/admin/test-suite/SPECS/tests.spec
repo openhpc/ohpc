@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Summary:   Integration test suite for OpenHPC
 Name:      test-suite%{PROJ_DELIM}

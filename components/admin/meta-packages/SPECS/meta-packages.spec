@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 %global gnu_major_ver 7
 %global openmpi_major_ver 3
 
