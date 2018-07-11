@@ -69,14 +69,14 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/bin/wx-config "
 
 cd $RPM_BUILD_DIR/%{pname}-%{version}/src/paraver-kernel/
 
-make %{?_smp_mflags} 
+make %{?_smp_mflags}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
 
 cd $RPM_BUILD_DIR/%{pname}-%{version}/
 
-make %{?_smp_mflags} 
+make %{?_smp_mflags}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 

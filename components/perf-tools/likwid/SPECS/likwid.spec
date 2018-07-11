@@ -32,9 +32,9 @@ BuildRequires: perl-Data-Dumper
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
-LIKWID stands for “Like I Knew What I’m Doing.” It is an easy to use yet powerful 
-command line performance tool suite for the GNU/Linux operating system. While the 
-focus of LIKWID is on x86 processors, some of the tools are portable and not 
+LIKWID stands for “Like I Knew What I’m Doing.” It is an easy to use yet powerful
+command line performance tool suite for the GNU/Linux operating system. While the
+focus of LIKWID is on x86 processors, some of the tools are portable and not
 limited to any specific architecture.
 
 %prep
@@ -83,7 +83,7 @@ make %{?_smp_mflags} \
     INSTALL_CHOWN="" \
     OPTFLAGS="%{optflags}" \
     Q="" \
-    install 
+    install
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
