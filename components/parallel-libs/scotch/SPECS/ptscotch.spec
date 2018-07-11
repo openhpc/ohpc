@@ -47,10 +47,6 @@ BuildRequires:  zlib-devel
 %endif
 %endif
 
-# Requires:	
-
-#Disable debug packages
-
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%{version}
 
