@@ -31,6 +31,7 @@ BuildRequires: bison
 %if 0%{?suse_version}
 BuildRequires: flex
 %else
+BuildRequires: flex
 BuildRequires: flex-devel
 %endif
 BuildRequires: autoconf%{PROJ_DELIM}
