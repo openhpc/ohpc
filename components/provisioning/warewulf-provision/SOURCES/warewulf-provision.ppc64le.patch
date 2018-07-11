@@ -1,36 +1,46 @@
---- a/provision/initramfs/Makefile.in.orig	2017-03-10 10:18:39.101375078 -0500
-+++ b/provision/initramfs/Makefile.in	2017-03-10 10:19:33.921378704 -0500
-@@ -282,6 +282,14 @@
- MAINTAINERCLEANFILES = Makefile.in
- all: all-recursive
+--- a/configure.ac	2018-07-11 13:44:07.000000000 -0700
++++ b/configure.ac	2018-07-11 13:42:58.000000000 -0700
+@@ -87,6 +87,7 @@
+     [x86_64],
+     [
+         build_x86_64=yes
++        LOADER=ld-linux
+         AS_IF([test "x$enable_cross_compile" = "xyes"], [
+             AC_MSG_NOTICE([cross-compile for aarch64 configured])
+             CROSS_COMPILE_ARM64="aarch64-linux-gnu-"
+@@ -96,11 +97,16 @@
+     [aarch64],
+     [
+         build_arm64=yes
++        LOADER=ld-linux
+         AS_IF([test "x$enable_cross_compile" = "xyes"], [
+             AC_MSG_NOTICE([cross-compile for x86_64 configured])
+             CROSS_COMPILE_X86_64="x86_64-linux-gnu-"
+             build_x86_64=yes
+         ])
++    ],
++    [ppc64le],
++    [
++        LOADER=ld64
+     ]
+ )
  
-+ARCH := $(shell uname -m)
-+
-+ifeq ($(ARCH),ppc64le)
-+	LOADER :=ld64
-+else
-+	LOADER :=ld-linux
-+endif
-+
- .SUFFIXES:
- $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
- 	@for dep in $?; do \
---- warewulf3-3.7pre/provision/initramfs/Makefile.in.orig	2017-03-13 11:43:02.946811424 -0400
-+++ warewulf3-3.7pre/provision/initramfs/Makefile.in	2017-03-13 11:48:46.216827808 -0400
-@@ -642,6 +642,12 @@
+--- a/initramfs/Makefile.am	2018-07-11 13:44:07.000000000 -0700
++++ b/initramfs/Makefile.am	2018-07-11 12:40:58.000000000 -0700
+@@ -73,6 +73,12 @@
  	fi
  	@ if [ ! -f "_work/$(LIBARCHIVE_DIR)/" ]; then \
  		echo "Building libarchive" ;\
 +		if [ -f "/usr/lib/rpm/config.guess" ]; then \
-+			cp /usr/lib/rpm/config.guess _work/$(LIBARCHIVE_DIR)/build/autoconf;\
++			cp /usr/lib/rpm/config.guess _work/$(LIBARCHIVE_DIR)/config;\
 +		fi; \
 +		if [ -f "/usr/lib/rpm/config.sub" ]; then \
-+			cp /usr/lib/rpm/config.sub _work/$(LIBARCHIVE_DIR)/build/autoconf;\
++			cp /usr/lib/rpm/config.sub _work/$(LIBARCHIVE_DIR)/config;\
 +		fi; \
  		(cd _work/$(LIBARCHIVE_DIR)/; ./configure $(LIBARCHIVE_CONFIGARGS)) ;\
  		$(MAKE) -C _work/$(LIBARCHIVE_DIR);\
  	fi
-@@ -683,8 +683,8 @@
+@@ -108,8 +114,8 @@
  	ln -s mkfs.ext4 rootfs/sbin/mkfs.ext3
  	cp -a _work/$(LIBARCHIVE_DIR)/bsdtar rootfs/bin/bsdtar
  	$(MAKE) -C _work/$(PARTED_DIR)/ DESTDIR=`pwd`/rootfs install

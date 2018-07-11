@@ -54,18 +54,14 @@ Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
 BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
 DocDir: %{OHPC_PUB}/doc/contrib
-Patch1: warewulf-provision.httpdconfdir.patch
-Patch2: warewulf-provision.wwgetfiles.patch
-#Patch2: warewulf-provision.sles_stateful.patch
-#Patch3: warewulf-provision.wwgetvnfs.patch
-#Patch4: warewulf-provision.pxe_file_modes.patch
-#Patch5: warewulf-provision.bin-file.patch
-#Patch6: warewulf-provision.sles_tftpboot.patch
-#Patch7: warewulf-provision.ipxe-kargs.patch
-#Patch8: warewulf-provision.parted_libdir.patch
-#Patch9: warewulf-provision-ppc64le.patch
-#Patch10: warewulf-provision.pxe_exit_status.patch
-#Patch11: warewulf-provision.hostname.patch
+Patch1: warewulf-provision.bin-file.patch
+Patch2: warewulf-provision.ipxe-kargs.patch
+Patch3: warewulf-provision.httpdconfdir.patch
+Patch4: warewulf-provision.parted_libdir.patch
+Patch5: warewulf-provision.ppc64le.patch
+Patch6: warewulf-provision.pxe_file_modes.patch
+Patch7: warewulf-provision.sles_tftpboot.patch
+Patch8: warewulf-provision.wwgetfiles.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -164,14 +160,12 @@ if [ ! -f configure ]; then
 fi
 %patch1 -p1
 %patch2 -p1
-#%patch3 -p1
-#%patch4 -p1
-#%patch5 -p2
-#%patch6 -p1
-#%patch7 -p1
-#%patch9 -p2
-#%patch10 -p2
-#%patch11 -p2
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
 
 %build
 cd %{dname}
