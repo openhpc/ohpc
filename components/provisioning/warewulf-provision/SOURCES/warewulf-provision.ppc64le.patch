@@ -1,5 +1,5 @@
---- a/configure.ac	2018-07-11 13:44:07.000000000 -0700
-+++ b/configure.ac	2018-07-11 13:42:58.000000000 -0700
+--- a/configure.ac	2018-07-11 13:56:05.000000000 -0700
++++ b/configure.ac	2018-07-11 14:20:58.000000000 -0700
 @@ -87,6 +87,7 @@
      [x86_64],
      [
@@ -8,7 +8,7 @@
          AS_IF([test "x$enable_cross_compile" = "xyes"], [
              AC_MSG_NOTICE([cross-compile for aarch64 configured])
              CROSS_COMPILE_ARM64="aarch64-linux-gnu-"
-@@ -96,11 +97,16 @@
+@@ -96,16 +97,22 @@
      [aarch64],
      [
          build_arm64=yes
@@ -25,8 +25,14 @@
      ]
  )
  
---- a/initramfs/Makefile.am	2018-07-11 13:44:07.000000000 -0700
-+++ b/initramfs/Makefile.am	2018-07-11 12:40:58.000000000 -0700
+ AC_SUBST(CROSS_COMPILE_X86_64)
+ AC_SUBST(CROSS_COMPILE_ARM64)
++AC_SUBST(LOADER)
+ AM_CONDITIONAL(BUILD_X86_64, [test "x$build_x86_64" = "xyes"])
+ AM_CONDITIONAL(BUILD_ARM64, [test "x$build_arm64" = "xyes"])
+ 
+--- a/initramfs/Makefile.am	2018-07-11 13:56:05.000000000 -0700
++++ b/initramfs/Makefile.am	2018-07-11 14:16:48.000000000 -0700
 @@ -73,6 +73,12 @@
  	fi
  	@ if [ ! -f "_work/$(LIBARCHIVE_DIR)/" ]; then \
