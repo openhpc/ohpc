@@ -41,6 +41,7 @@ Requires: python2-mock
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %global install_path %{OHPC_ADMIN}/%{pname}/%version
+%global package_install_path %{OHPC_PUB}/%{pname}/%version
 # Turn off the brp-python-bytecompile script
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
@@ -77,6 +78,9 @@ prepend-path   MODULEPATH   %{install_path}/modules
 EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
+
+%post
+sed -i 's/  install_tree:.*/  install_tree:%{package_install_path}/' %{install_path}/etc/defaults/config.yaml
 
 %clean
 rm -rf $RPM_BUILD_ROOT
