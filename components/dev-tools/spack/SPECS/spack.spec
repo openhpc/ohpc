@@ -83,9 +83,6 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
-#%post
-#sed -i "s/  install_tree:.*/  install_tree:%{spack_install_path}/" %{install_path}/etc/defaults/config.yaml
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 %files
