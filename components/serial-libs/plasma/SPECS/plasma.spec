@@ -30,17 +30,16 @@ Release: 1%{?dist}
 Summary: Parallel Linear Algebra Software for Multicore Architectures
 License: BSD-3-Clause
 Group:     %{PROJ_NAME}/serial-libs
-URL: https://bitbucket.org/icl/%{pname}		
+URL: https://bitbucket.org/icl/%{pname}
 Source0: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}_%{version}.tar.gz
 Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{version}.tar.gz
-Source2: http://www.netlib.org/lapack/lapack-3.7.0.tgz
+Source2: http://www.netlib.org/lapack/lapack-3.8.0.tar.gz
 Source3: %{pname}-rpmlintrc
 Patch1:  plasma-lapack_version.patch
 Requires: lmod%{PROJ_DELIM} >= 7.6.1
 
 
-#!BuildIgnore: post-build-checks 
-# Disable debug packages
+#!BuildIgnore: post-build-checks
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
@@ -105,7 +104,7 @@ plasma-installer_%{version}/setup.py              \
 #
 pushd install/lib  2>&1 > /dev/null
 find . -name "*.a"|while read static_lib
-do                                 
+do
     bname=`basename ${static_lib}`
     libname=`basename ${static_lib} .a`
     mkdir -p tmpdir
@@ -170,7 +169,7 @@ pushd install 2>&1 > /dev/null
 # Fix .pc files
 #
 find . -name "*.pc"|while read file
-do                                 
+do
     echo "Fix ${file} up"
     mv ${file} ${file}.tmp
     cat ${file}.tmp | \
