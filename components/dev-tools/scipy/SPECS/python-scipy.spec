@@ -14,7 +14,7 @@
 %define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu7
+%global gnu_family gnu8
 
 %if "%{compiler_family}" != "intel"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
