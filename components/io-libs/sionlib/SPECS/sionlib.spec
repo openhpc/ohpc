@@ -25,7 +25,7 @@ License:   BSD
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html
 Source0:   http://apps.fz-juelich.de/jsc/sionlib/download.php?version=%{version}#/%{pname}-%{version}.tar.gz
-Patch0:    gcc-6-7.patch
+Patch0:    gcc-6-7-8.patch
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
