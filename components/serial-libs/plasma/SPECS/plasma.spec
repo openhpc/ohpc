@@ -71,7 +71,7 @@ module load openblas
 
 export SHARED_OPT=-shared
 
-%if %{compiler_family} == gnu7
+%if %{compiler_family} == gnu8
 export PIC_OPT=-fPIC
 export SONAME_OPT="-Wl,-soname"
 %endif
@@ -85,7 +85,7 @@ plasma-installer_%{version}/setup.py              \
     --cc=${CC}                                    \
     --fc=${FC}                                    \
     --notesting                                   \
-%if %{compiler_family} == gnu7
+%if %{compiler_family} == gnu8
     --cflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
     --fflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
