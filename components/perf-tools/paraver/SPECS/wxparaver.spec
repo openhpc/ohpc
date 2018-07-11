@@ -56,7 +56,7 @@ Paraver was developed to respond to the need to have a qualitative global percep
 %ohpc_setup_compiler
 module load boost
 
-%if 0%{?centos_version}
+%if 0%{?centos_version} || 0%{?rhel}
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/libexec/wxGTK3/wx-config "
 %endif
 %if 0%{?suse_version}
