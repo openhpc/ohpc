@@ -11,6 +11,7 @@
 # Build that is dependent on compiler/mpi toolchains
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
+%define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 %{!?with_lustre: %global with_lustre 0}
@@ -51,7 +52,7 @@ BuildRequires: python-devel
 BuildRequires: lustre-lite
 Requires: lustre-client%{PROJ_DELIM}
 %endif
-BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 
 
 %if 0%{?sles_version} || 0%{?suse_version}
