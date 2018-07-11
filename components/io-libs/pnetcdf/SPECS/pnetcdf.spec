@@ -31,6 +31,7 @@ Source0:   http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-n
 
 BuildRequires:  grep
 BuildRequires:  m4
+BuildRequires:  zlib-devel
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
