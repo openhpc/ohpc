@@ -1,12 +1,13 @@
 --- a/configure.ac	2018-07-11 13:56:05.000000000 -0700
-+++ b/configure.ac	2018-07-11 20:39:32.000000000 -0700
-@@ -35,7 +35,8 @@
++++ b/configure.ac	2018-07-11 20:55:42.000000000 -0700
+@@ -35,7 +35,9 @@
  
  
  AC_MSG_CHECKING([for Debian based system])
 -AM_CONDITIONAL(ISDEB, [test -f /etc/debian_version])
-+AS_IF([test -f /etc/debian_version], [ISDEB([yes])],
-+    [test -f /etc/SuSE-release], [ISDEB([yes])])
++AS_IF([test -f /etc/debian_version], [deblike=yes],
++    [test -f /etc/SuSE-release], [deblike=yes])
++AM_CONDITIONAL(ISDEB, [test "x$deblike" = "xyes"])
  
  AC_PATH_PROG(PERLBIN, perl)
  if test -z "$PERLBIN"; then
