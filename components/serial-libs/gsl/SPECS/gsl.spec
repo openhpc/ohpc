@@ -18,7 +18,7 @@
 
 Summary:   GNU Scientific Library (GSL)
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   2.4
+Version:   2.5
 Release:   1%{?dist}
 License:   GPL
 Group:     %{PROJ_NAME}/serial-libs
