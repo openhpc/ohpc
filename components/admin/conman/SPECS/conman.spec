@@ -16,7 +16,7 @@
 
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.2.8
+Version:	0.2.9
 Release:	1%{?dist}
 
 Summary:	ConMan: The Console Manager
@@ -39,8 +39,6 @@ BuildRequires:	freeipmi-devel
 #!BuildIgnore: post-build-checks
 
 Source0:	https://github.com/dun/conman/archive/%pname-%{version}.tar.gz
-Source1:    %{pname}.service
-Patch1:         conman.init.patch
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -64,7 +62,6 @@ Its features include:
 
 %prep
 %setup -q -n %{pname}-%{pname}-%{version}
-%patch1 -p1
 
 %build
 %configure --with-tcp-wrappers --with-freeipmi
@@ -74,7 +71,6 @@ make %{?_smp_mflags}
 %{__mkdir_p} "%{buildroot}"
 make install DESTDIR="%{buildroot}"
 
-install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/%{pname}.service
 rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
