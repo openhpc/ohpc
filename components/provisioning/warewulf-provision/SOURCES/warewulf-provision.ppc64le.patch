@@ -1,0 +1,59 @@
+--- a/configure.ac	2018-07-11 13:56:05.000000000 -0700
++++ b/configure.ac	2018-07-11 14:20:58.000000000 -0700
+@@ -87,6 +87,7 @@
+     [x86_64],
+     [
+         build_x86_64=yes
++        LOADER=ld-linux
+         AS_IF([test "x$enable_cross_compile" = "xyes"], [
+             AC_MSG_NOTICE([cross-compile for aarch64 configured])
+             CROSS_COMPILE_ARM64="aarch64-linux-gnu-"
+@@ -96,16 +97,22 @@
+     [aarch64],
+     [
+         build_arm64=yes
++        LOADER=ld-linux
+         AS_IF([test "x$enable_cross_compile" = "xyes"], [
+             AC_MSG_NOTICE([cross-compile for x86_64 configured])
+             CROSS_COMPILE_X86_64="x86_64-linux-gnu-"
+             build_x86_64=yes
+         ])
++    ],
++    [ppc64le],
++    [
++        LOADER=ld64
+     ]
+ )
+ 
+ AC_SUBST(CROSS_COMPILE_X86_64)
+ AC_SUBST(CROSS_COMPILE_ARM64)
++AC_SUBST(LOADER)
+ AM_CONDITIONAL(BUILD_X86_64, [test "x$build_x86_64" = "xyes"])
+ AM_CONDITIONAL(BUILD_ARM64, [test "x$build_arm64" = "xyes"])
+ 
+--- a/initramfs/Makefile.am	2018-07-11 13:56:05.000000000 -0700
++++ b/initramfs/Makefile.am	2018-07-11 14:16:48.000000000 -0700
+@@ -73,6 +73,12 @@
+ 	fi
+ 	@ if [ ! -f "_work/$(LIBARCHIVE_DIR)/" ]; then \
+ 		echo "Building libarchive" ;\
++		if [ -f "/usr/lib/rpm/config.guess" ]; then \
++			cp /usr/lib/rpm/config.guess _work/$(LIBARCHIVE_DIR)/config;\
++		fi; \
++		if [ -f "/usr/lib/rpm/config.sub" ]; then \
++			cp /usr/lib/rpm/config.sub _work/$(LIBARCHIVE_DIR)/config;\
++		fi; \
+ 		(cd _work/$(LIBARCHIVE_DIR)/; ./configure $(LIBARCHIVE_CONFIGARGS)) ;\
+ 		$(MAKE) -C _work/$(LIBARCHIVE_DIR);\
+ 	fi
+@@ -108,8 +114,8 @@
+ 	ln -s mkfs.ext4 rootfs/sbin/mkfs.ext3
+ 	cp -a _work/$(LIBARCHIVE_DIR)/bsdtar rootfs/bin/bsdtar
+ 	$(MAKE) -C _work/$(PARTED_DIR)/ DESTDIR=`pwd`/rootfs install
+-	cp -L --parents /lib*/ld-linux* rootfs/
+-	find rootfs -type f -perm -o+x -print | grep -v ld-linux | xargs ldd | grep "=>" | awk '{print $$3}' | grep "^/" | sort | uniq | while read i; do cp -L --parents $$i rootfs/ && chmod 755 rootfs/$$i; done
++	cp -L --parents /lib*/$(LOADER)* rootfs/
++	find rootfs -type f -perm -o+x -print | grep -v $(LOADER) | xargs ldd | grep "=>" | awk '{print $$3}' | grep "^/" | sort | uniq | while read i; do cp -L --parents $$i rootfs/ && chmod 755 rootfs/$$i; done
+ 	rm -f rootfs/linuxrc rootfs/lib64/*.la rootfs/lib/*.la rootfs/usr/lib64/*.la rootfs/usr/lib/*.la
+ 	rm -rf rootfs/usr/share rootfs/usr/include rootfs/usr/lib/pkgconfig
+ 	find -type d \! -perm -u=w -exec chmod u+w {} \;

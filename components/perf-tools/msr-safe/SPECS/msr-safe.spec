@@ -23,7 +23,7 @@ Release:        1
 License:        GPLv3+
 Summary:        Allows safer access to model specific registers (MSRs)
 Url:            https://github.com/LLNL/msr-safe
-Group:          System Environment/Daemons
+Group:          %{PROJ_NAME}/perf-tools
 Source0:        https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source1:        msr-safe.service
 Source2:        msr-safe.sysconfig

@@ -26,7 +26,7 @@ Summary:       Global Extensible Open Power Manager
 Version:       0.5.1
 Release:       1
 License:       BSD-3-Clause
-Group:         %{PROJ_NAME}/parallel-libs
+Group:         %{PROJ_NAME}/perf-tools
 URL:           https://geopm.github.io
 Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
 Patch1:        geopm-catch-value.patch

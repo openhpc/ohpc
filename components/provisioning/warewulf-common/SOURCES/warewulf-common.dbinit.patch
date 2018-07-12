@@ -1,6 +1,6 @@
---- warewulf-common-3.7/libexec/wwinit/10-database.init	2017-02-22 09:32:02.000000000 -0800
-+++ warewulf-common-3.7.patch/libexec/wwinit/10-database.init	2017-02-22 21:35:08.000000000 -0800
-@@ -69,6 +69,8 @@
+--- a/libexec/wwinit/10-database.init	2018-03-12 15:18:19.000000000 -0700
++++ b/libexec/wwinit/10-database.init	2018-07-11 10:22:20.000000000 -0700
+@@ -145,6 +145,8 @@
          wwservice_activate mysqld mysql
      elif wwpackage_check mariadb-server; then
          wwservice_activate mariadb

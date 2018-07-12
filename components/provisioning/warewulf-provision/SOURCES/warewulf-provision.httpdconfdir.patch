@@ -1,14 +1,24 @@
---- warewulf-provision-3.7/configure	2017-02-22 13:14:14.000000000 -0800
-+++ warewulf-provision-3.7.patch/configure	2017-02-22 13:14:58.000000000 -0800
-@@ -2423,7 +2423,10 @@
+--- a/configure.ac	2018-07-11 13:56:05.000000000 -0700
++++ b/configure.ac	2018-07-11 15:07:55.000000000 -0700
+@@ -37,6 +37,9 @@
+ AC_MSG_CHECKING([for Debian based system])
+ AM_CONDITIONAL(ISDEB, [test -f /etc/debian_version])
  
- { $as_echo "$as_me:${as_lineno-$LINENO}: checking for Debian based system" >&5
- $as_echo_n "checking for Debian based system... " >&6; }
-- if test -f /etc/debian_version; then
-+if test -f /etc/debian_version; then
-+  ISDEB_TRUE=
-+  ISDEB_FALSE='#'
-+elif test -f /etc/SuSE-release; then
-   ISDEB_TRUE=
-   ISDEB_FALSE='#'
- else
++AC_MSG_CHECKING([for SUSE based system])
++AM_CONDITIONAL(ISSUSE, [test -f /etc/SuSE-release])
++
+ AC_PATH_PROG(PERLBIN, perl)
+ if test -z "$PERLBIN"; then
+    AC_MSG_ERROR([perl not found])
+--- a/etc/Makefile.am	2018-07-11 13:56:05.000000000 -0700
++++ b/etc/Makefile.am	2018-07-11 15:08:27.000000000 -0700
+@@ -6,7 +6,8 @@
+ # Check for Debian
+ if ISDEB
+ httpdir = $(sysconfdir)/apache2/conf.d/
+-else
++else if ISSUSE
++httpdir = $(sysconfdir)/apache2/conf.d/
+ # Assume RHEL Layout
+ httpdir = $(sysconfdir)/httpd/conf.d/
+ endif

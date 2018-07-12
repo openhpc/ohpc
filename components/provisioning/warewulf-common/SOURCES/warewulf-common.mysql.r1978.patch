@@ -1,5 +1,5 @@
---- a/lib/Warewulf/DataStore/SQL/MySQL.pm	2017-09-06 14:18:10.000000000 -0700
-+++ b/lib/Warewulf/DataStore/SQL/MySQL.pm	2017-10-09 08:17:50.000000000 -0700
+--- a/lib/Warewulf/DataStore/SQL/MySQL.pm	2018-03-12 15:18:19.000000000 -0700
++++ b/lib/Warewulf/DataStore/SQL/MySQL.pm	2018-07-11 10:22:10.000000000 -0700
 @@ -245,13 +245,16 @@
      my $dbh;
      my $conn_str = "DBI:mysql:database=$db_name";

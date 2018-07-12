@@ -25,6 +25,10 @@ License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
+Patch1:  warewulf-common.bin-file.patch
+Patch2:  warewulf-common.dbinit.patch
+Patch3:  warewulf-common.mysql.r1978.patch
+Patch4:  warewulf-common.rhel_service.patch
 ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
@@ -58,6 +62,11 @@ supporting libs.
 
 %prep
 %setup -q -n warewulf3-%{version}
+cd %{dname}
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 
 %build
