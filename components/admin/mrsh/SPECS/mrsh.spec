@@ -11,7 +11,6 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname mrsh
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 
 Name:    %{pname}%{PROJ_DELIM}
@@ -23,10 +22,8 @@ License: none
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/chaos/mrsh
 Source:    https://github.com/chaos/mrsh/archive/mrsh-2-7-1.tar.gz
-Source1:   OHPC_macros
 Patch0: null-terminate.patch
 Patch1: mrsh-pam-suse.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}
 BuildRequires: ncurses-devel pam-devel munge-devel%{PROJ_DELIM}
 Requires: munge%{PROJ_DELIM} >= 0.1-0
 Provides: mrsh
@@ -70,7 +67,6 @@ rsh compatability package for mrcp/mrlogin/mrsh
 make
 
 %install
-rm -rf $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/usr/bin
@@ -88,7 +84,6 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrlogi
 sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 
 %files
-%defattr(-,root,root)
 %doc NEWS README ChangeLog COPYING DISCLAIMER DISCLAIMER.UC
 %{_mandir}/man1/mrcp.1*
 %{_mandir}/man1/mrsh.1*
@@ -104,7 +99,6 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %dir /opt/ohpc/admin/mrsh/share/man/man1
 
 %files -n %{pname}-server%{PROJ_DELIM}
-%defattr(-,root,root)
 %config(noreplace) /etc/xinetd.d/mrshd
 %config(noreplace) /etc/xinetd.d/mrlogind
 %if %{?_without_pam:0}%{!?_without_pam:1}
@@ -123,7 +117,6 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %dir /opt/ohpc/admin/mrsh/share/man/man8
 
 %files -n %{pname}-rsh-compat%{PROJ_DELIM}
-%defattr(-,root,root)
 %{_mandir}/man1/rcp.1*
 %{_mandir}/man1/rsh.1*
 %{_mandir}/man1/rlogin.1*

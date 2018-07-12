@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname nrpe
@@ -28,7 +27,6 @@ Summary: Host/service/network monitoring agent for Nagios
 Group: %{PROJ_NAME}/admin
 License: GPLv2+
 URL: http://www.nagios.org
-DocDir: %{OHPC_PUB}/doc/contrib
 Source0: https://github.com/NagiosEnterprises/nrpe/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
 Source1: nrpe.sysconfig
 Source2: nrpe-tmpfiles.conf
@@ -36,10 +34,8 @@ Source3: nrpe.service
 Source4: commands.cfg
 Source5: hosts.cfg.example
 Source6: services.cfg.example
-Source7: OHPC_macros
 Patch1: nrpe-0003-Include-etc-npre.d-config-directory.patch
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 # For reconfiguration
 BuildRequires: autoconf
@@ -141,7 +137,6 @@ CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" LDFLAGS="%{?__global_ldflags}"
 make %{?_smp_mflags} all
 
 %install
-rm -rf %{buildroot}
 %if 0%{?el4}%{?el5}%{?el6}
 install -D -p -m 0755 init-script %{buildroot}/%{_initrddir}/nrpe
 %else
@@ -161,9 +156,6 @@ install -d %{buildroot}%{_localstatedir}/run/%{pname}
 install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{pname}.conf
 %endif
 
-
-%clean
-rm -rf %{buildroot}
 
 %pre
 getent group %{pname} >/dev/null || groupadd -r %{pname}

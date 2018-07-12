@@ -46,8 +46,6 @@ License: BSD-3-Clause
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/intel-ctrlsys/sensys
 Source0: https://github.com/intel-ctrlsys/sensys/archive/v1.0.0.tar.gz#/%{sensys_name}-%{version}.tar.gz
-Source1: OHPC_macros
-Prefix: %{_prefix}
 
 %{?systemd_requires}
 BuildRequires:  pkgconfig(systemd)
@@ -153,18 +151,12 @@ chmod -R +r *
 %if %{static_build}
 find -L -type f | sed -e s@^\.@@ > %{_sourcedir}/files.txt
 
-%clean
-
 %files -f %{_sourcedir}/files.txt
-%defattr(-,root,root,-)
 
 # Start of filelist definition for dynamic compilation
 %else
 
-%clean
-
 %files
-%defattr(-,root,root,-)
 %dir %{_prefix}
 %dir %{_prefix}/bin
 %dir %{_prefix}/etc

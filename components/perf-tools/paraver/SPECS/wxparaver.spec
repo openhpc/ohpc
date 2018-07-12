@@ -25,7 +25,6 @@ License:	LGPL-2.1
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/wxparaver/wxparaver-%{version}-src.tar.bz2
-Source1:	OHPC_macros
 
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison
@@ -57,7 +56,7 @@ Paraver was developed to respond to the need to have a qualitative global percep
 %ohpc_setup_compiler
 module load boost
 
-%if 0%{?centos_version}
+%if 0%{?centos_version} || 0%{?rhel}
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/libexec/wxGTK3/wx-config "
 %endif
 %if 0%{?suse_version}
@@ -70,14 +69,14 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/bin/wx-config "
 
 cd $RPM_BUILD_DIR/%{pname}-%{version}/src/paraver-kernel/
 
-make %{?_smp_mflags} 
+make %{?_smp_mflags}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
 
 cd $RPM_BUILD_DIR/%{pname}-%{version}/
 
-make %{?_smp_mflags} 
+make %{?_smp_mflags}
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
@@ -130,7 +129,6 @@ EOF
 
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 
 %doc

@@ -31,7 +31,6 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            https://bitbucket.org/mpi4py/mpi4py
 Source0:        https://bitbucket.org/mpi4py/mpi4py/downloads/%{pname}-%{version}.tar.gz
-Source1:        OHPC_macros
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 # Default library install path
@@ -98,6 +97,5 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc LICENSE.rst

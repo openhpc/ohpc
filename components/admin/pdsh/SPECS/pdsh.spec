@@ -20,7 +20,6 @@ License:   GPL
 Url:       http://sourceforge.net/projects/pdsh
 Group:     %{PROJ_NAME}/admin
 Source0:   https://github.com/chaos/%{pname}/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    pdsh-slurm-list.patch
 
 ### karl.w.schulz@intel.com (11/07/14) - temporarily disabling rcmd requirement
@@ -358,7 +357,6 @@ make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS"
 ##############################################################################
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %{__mkdir_p} $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
 if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.qshd ]; then
@@ -388,14 +386,7 @@ find ${RPM_BUILD_ROOT}
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-##############################################################################
-
-%clean
-rm -rf "$RPM_BUILD_ROOT"
-##############################################################################
-
 %files
-%defattr(-,root,root)
 %doc COPYING README NEWS DISCLAIMER.LLNS DISCLAIMER.UC
 %doc README.KRB4 README.modules
 %{OHPC_HOME}

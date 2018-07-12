@@ -28,10 +28,10 @@ License:   NetCDF
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://cucis.ece.northwestern.edu/projects/PnetCDF
 Source0:   http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-%{version}.tar.gz
-Source1:   OHPC_macros
 
 BuildRequires:  grep
 BuildRequires:  m4
+BuildRequires:  zlib-devel
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -120,6 +120,5 @@ EOF
 %{__mkdir_p} $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog COPYRIGHT CREDITS INSTALL NEWS README RELEASE_NOTES 

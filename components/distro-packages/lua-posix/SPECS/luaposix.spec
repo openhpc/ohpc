@@ -11,7 +11,6 @@
 %global ohpc_bootstrap 1
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname lua-posix
 
@@ -22,7 +21,6 @@
 %endif
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
-%define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:        33.2.1
@@ -33,8 +31,6 @@ Group:          %{PROJ_NAME}/distro-packages
 License:        MIT
 Url:            https://github.com/luaposix/luaposix
 Source0:        https://github.com/luaposix/luaposix/archive/release-v%{version}.tar.gz
-Source1:        OHPC_macros
-BuildRoot:      %{_tmppath}/luaposix-%{version}-%{release}-root-
 
 BuildRequires:  lua >= %{luaver}, lua-devel >= %{luaver}
 BuildRequires:  ncurses-devel
@@ -71,7 +67,6 @@ make %{?_smp_mflags}
 # include path to newer autotools
 export PATH=%{OHPC_PUB}/autotools/bin:$PATH
 
-rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 
 
@@ -79,12 +74,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 make check
 
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %doc README ChangeLog NEWS
 %dir %{_docdir}/examples
 %dir %{_docdir}/modules

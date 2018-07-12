@@ -87,7 +87,6 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %if 0%{?leap_version} >= 420200 || 0%{?suse_version} > 1320
 %license LICENSE.txt
 %else

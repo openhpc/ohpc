@@ -67,21 +67,17 @@ Name:      %{pbs_name}%{PROJ_DELIM}
 Version:   %{pbs_version}
 Release:   %{pbs_release}
 Source0: https://github.com/PBSPro/pbspro/releases/download/v%{version}/%{pbs_name}-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    systemd.patch
 Patch2:    pbs.null.patch
 License:   AGPLv3 with exceptions
 URL:       https://github.com/PBSPro/pbspro
 Prefix:    %{pbs_prefix}
-BuildRoot: %{_tmppath}/%{pbs_name}-%{pbs_version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %bcond_with alps
 %bcond_with cpuset
 %bcond_with ibm-ib
 %bcond_with ibm-hps
 
-BuildRoot: %{buildroot}
 BuildRequires: gcc
 BuildRequires: make
 BuildRequires: rpm-build
@@ -221,14 +217,6 @@ HPC clusters, clouds and supercomputers.
 
 This package is intended for a client host and provides
 the PBS Professional user commands.
-
-%if 0%{?opensuse_bs}
-# Do not specify debug_package for OBS builds.
-%else
-%if %{defined suse_version}
-%debug_package
-%endif
-%endif
 
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
@@ -370,7 +358,6 @@ fi
 #echo
 
 %files -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
-%defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_rcp
@@ -388,7 +375,6 @@ fi
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
 %files -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
-%defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_rcp
@@ -424,7 +410,6 @@ fi
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
 %files -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
-%defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff

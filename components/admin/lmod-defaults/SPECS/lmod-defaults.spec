@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Summary:   OpenHPC default login environments
 Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -19,8 +18,6 @@ License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
-Source0:   OHPC_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: lmod%{PROJ_DELIM}
 
 
@@ -67,11 +64,7 @@ if [ module-info mode remove ] {
 }
 EOF
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_HOME}
 %dir %{OHPC_PUB}
 %{OHPC_MODULES}

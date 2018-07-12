@@ -24,7 +24,6 @@ License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/mej/nhc/
 Source0: https://github.com/mej/nhc/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1: OHPC_macros
 # upstream patch will land in v1.4.3
 Patch1:  nhc-bash-substitution.patch
 Requires: bash
@@ -32,7 +31,6 @@ BuildRequires: automake autoconf
 BuildRequires: rpm-build
 Obsoletes: warewulf-nhc%{PROJ_DELIM} <= 1.4.2-1
 BuildArch: noarch
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{name}-%{version}-%{release}-root
 
 %description
 TORQUE (and other resource managers) allow for the execution of a
@@ -76,7 +74,6 @@ if [ $1 -gt 0 -a $2 -eq 0 ]; then
 
 
 %files
-%defattr(-, root, root)
 %doc COPYING ChangeLog LICENSE nhc.conf contrib/nhc.cron
 %dir %{_sysconfdir}/%{pname}/
 %dir %{_localstatedir}/lib/%{pname}/

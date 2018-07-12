@@ -22,7 +22,6 @@ License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://hpc.github.io/charliecloud/
 Source0:   https://github.com/hpc/charliecloud/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 Source2:   ch-build.1
 Source3:   ch-build2dir.1
 Source4:   ch-docker-run.1
@@ -34,8 +33,6 @@ Source9:   ch-tar2dir.1
 Source10:  charliecloud.1
 Patch1:    charliecloud-language_highlight.patch
 Patch2:    charliecloud-test-build.patch
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: python 
 BuildRequires: rsync
@@ -104,10 +101,6 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-, root, root)
 %doc LICENSE README.rst examples
 %{OHPC_PUB}

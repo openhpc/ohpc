@@ -12,7 +12,6 @@
 
 %define pname munge
 
-%define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:	0.5.13
@@ -43,14 +42,11 @@ BuildRequires:	zlib-devel
 BuildRequires:	systemd
 %endif
 %endif
-BuildRoot:	%{_tmppath}/%{pname}-%{version}
-DocDir:     %{OHPC_PUB}/doc/contrib
 #!BuildIgnore: post-build-checks
 
 Conflicts: munge 
 
 Source0:   https://github.com/dun/munge/archive/munge-%{version}.tar.gz
-Source1:   OHPC_macros
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
 Patch1:     %{pname}.logdir.patch
 # 6/12/14 karl.w.schulz@intel.com - define default runlevel
@@ -139,9 +135,6 @@ rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-%clean
-rm -rf "$RPM_BUILD_ROOT"
-
 %pre
 # karl.w.schulz@intel.com (9/10/18) - provide specific uid/gid to deal with 
 # possibility of getting alternate ownership within Warewulf
@@ -204,7 +197,6 @@ fi
 /sbin/ldconfig %{_libdir}
 
 %files
-%defattr(-,root,root,0755)
 %doc AUTHORS
 %doc COPYING
 %doc DISCLAIMER*
@@ -244,7 +236,6 @@ fi
 %endif
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %{_includedir}/*
 %{_libdir}/*.la
 %{_libdir}/pkgconfig/*.pc
@@ -253,6 +244,5 @@ fi
 %{_libdir}/*.so
 
 %files -n %{pname}-libs%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %{_libdir}/*.so.*
 

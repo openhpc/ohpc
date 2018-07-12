@@ -12,7 +12,6 @@
 # %global __strip /bin/true
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname nagios-plugins
@@ -24,14 +23,12 @@ Name: %{pname}%{PROJ_DELIM}
 Version: 2.2.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program plugins for Nagios
-DocDir:  %{OHPC_PUB}/doc/contrib
 Group: %{PROJ_NAME}/admin
 
 License: GPLv3
 URL: https://www.nagios-plugins.org/
 Source0: http://www.nagios-plugins.org/download/nagios-plugins-%{version}.tar.gz
 Source1: nagios-plugins.README.Fedora
-Source2: OHPC_macros
 Patch2: nagios-plugins-0002-Remove-assignment-of-not-parsed-to-jitter.patch
 # 3 & 4 appear to no longer be necessary in 2.1.1
 #Patch3: nagios-plugins-0003-Fedora-specific-fixes-for-searching-for-diff-and-tai.patch

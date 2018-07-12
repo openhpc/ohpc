@@ -12,7 +12,6 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define debug_package %{nil}
 %define _cross_compile 0%{?cross_compile}
 %define wwpkgdir /srv/warewulf
 
@@ -27,7 +26,6 @@ License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
-Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 BuildRequires: autoconf
@@ -52,8 +50,6 @@ BuildRequires: gcc-x86_64-linux-gnu
 %endif
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
-DocDir: %{OHPC_PUB}/doc/contrib
 Patch1: warewulf-provision.bin-file.patch
 Patch2: warewulf-provision.ipxe-kargs.patch
 Patch3: warewulf-provision.httpdconfdir.patch
@@ -213,12 +209,7 @@ semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/warewulf/ipxe(/.*
 semanage fcontext -d -t httpd_sys_content_t '%{_localstatedir}/warewulf/bootstrap(/.*)?' 2>/dev/null || :
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-, root, root)
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
@@ -242,7 +233,6 @@ rm -rf $RPM_BUILD_ROOT
 %{wwpkgdir}/*
 
 %files -n %{pname}-server%{PROJ_DELIM}
-%defattr(-, root, root)
 %config(noreplace) %{_sysconfdir}/warewulf/dhcpd-template.conf
 %if 0%{?sles_version} || 0%{?suse_version}
 %config(noreplace) %{_sysconfdir}/apache2/conf.d/warewulf-httpd.conf
@@ -277,5 +267,4 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %files -n %{pname}-gpl_sources%{PROJ_DELIM}
-%defattr(-, root, root)
 %{_prefix}/src/warewulf/3rd_party/GPL/

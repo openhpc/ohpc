@@ -30,21 +30,16 @@ Release: 1%{?dist}
 Summary: Parallel Linear Algebra Software for Multicore Architectures
 License: BSD-3-Clause
 Group:     %{PROJ_NAME}/serial-libs
-URL: https://bitbucket.org/icl/%{pname}		
+URL: https://bitbucket.org/icl/%{pname}
 Source0: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}_%{version}.tar.gz
 Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{version}.tar.gz
-Source2: http://www.netlib.org/lapack/lapack-3.7.0.tgz
+Source2: http://www.netlib.org/lapack/lapack-3.8.0.tar.gz
 Source3: %{pname}-rpmlintrc
-Source4: OHPC_macros
 Patch1:  plasma-lapack_version.patch
 Requires: lmod%{PROJ_DELIM} >= 7.6.1
 
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
-#!BuildIgnore: post-build-checks 
-# Disable debug packages
-%define debug_package %{nil}
+#!BuildIgnore: post-build-checks
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
@@ -75,7 +70,7 @@ module load openblas
 
 export SHARED_OPT=-shared
 
-%if %{compiler_family} == gnu7
+%if %{compiler_family} == gnu8
 export PIC_OPT=-fPIC
 export SONAME_OPT="-Wl,-soname"
 %endif
@@ -89,7 +84,7 @@ plasma-installer_%{version}/setup.py              \
     --cc=${CC}                                    \
     --fc=${FC}                                    \
     --notesting                                   \
-%if %{compiler_family} == gnu7
+%if %{compiler_family} == gnu8
     --cflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
     --fflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
@@ -109,7 +104,7 @@ plasma-installer_%{version}/setup.py              \
 #
 pushd install/lib  2>&1 > /dev/null
 find . -name "*.a"|while read static_lib
-do                                 
+do
     bname=`basename ${static_lib}`
     libname=`basename ${static_lib} .a`
     mkdir -p tmpdir
@@ -174,7 +169,7 @@ pushd install 2>&1 > /dev/null
 # Fix .pc files
 #
 find . -name "*.pc"|while read file
-do                                 
+do
     echo "Fix ${file} up"
     mv ${file} ${file}.tmp
     cat ${file}.tmp | \
@@ -195,10 +190,6 @@ pushd %{buildroot}%{install_path}/lib 2>&1 > /dev/null
 /sbin/ldconfig -N .
 popd 2>&1 > /dev/null
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc LICENSE README ReleaseNotes docs/pdf/*.pdf

@@ -25,9 +25,7 @@ Summary:   Easy-to-use IPMI server management utilities
 License:   BSD 3-clause
 Group:     %{PROJ_NAME}/distro-packages
 Source0:   https://downloads.sourceforge.net/project/ipmiutil/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 URL:       http://ipmiutil.sourceforge.net
-BuildRoot: %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 provides: %{pname}
 # Suggests: cron or vixie-cron or cronie or similar
 %if 0%{?fedora} >= 15
@@ -57,7 +55,6 @@ BuildRequires: gcc gcc-c++ libtool
 %define systemd_fls %{_datadir}/%{pname}
 %endif
 %define init_dir  %{_initrddir}
-%define debug_package %{nil}
 
 %description
 The ipmiutil package provides easy-to-use utilities to view the SEL,
@@ -104,14 +101,9 @@ autoconf
 make 
 
 %install
-rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-, root, root, -)
 %dir %{_datadir}/%{pname}
 %dir %{_var}/lib/%{pname}
 %{_bindir}/ipmiutil
@@ -184,7 +176,6 @@ rm -rf %{buildroot}
 %doc doc/UserGuide
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root)
 # %{_datadir}/%{name} is used by both ipmiutil and ipmituil-devel
 %dir %{_datadir}/%{pname}
 %{_datadir}/%{pname}/ipmi_sample.c
@@ -198,7 +189,6 @@ rm -rf %{buildroot}
 %{_libdir}/libipmiutil.so
 
 %files -n %{pname}-static%{PROJ_DELIM}
-%defattr(-,root,root)
 %{_libdir}/libipmiutil.a
 
 %pre

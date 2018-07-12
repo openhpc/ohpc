@@ -55,7 +55,6 @@ Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
 Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
 %endif
-Source4:   OHPC_macros
 
 BuildRequires:  bison
 BuildRequires:  flex
@@ -159,7 +158,6 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_MODULES}/gnu%{gnu_major_ver}/
 %if "%{compiler_family}" != "dts6"
 %dir %{OHPC_COMPILERS}/gcc

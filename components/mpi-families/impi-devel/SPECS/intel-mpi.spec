@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname intel-mpi-devel
 %define year 2018
@@ -18,13 +17,11 @@
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
 Version:   %{year}
-Source1:   OHPC_macros
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/mpi-families
 BuildArch: x86_64
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 AutoReq:   no
 
 #!BuildIgnore: post-build-checks
@@ -278,9 +275,5 @@ if [ "$1" = 0 ]; then
     fi
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_MODULEDEPS}

@@ -31,9 +31,6 @@ License:        LGPL-3.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://slepc.upv.es
 Source0:        http://slepc.upv.es/download/distrib/%{pname}-%{version}.tar.gz
-Source1:        OHPC_macros
-BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:         %{OHPC_PUB}/doc/contrib
 BuildRequires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
@@ -47,7 +44,6 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # Disable debug packages
-%define debug_package %{nil}
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
@@ -82,11 +78,11 @@ module load petsc
 make install
 
 # move from tmp install dir to %install_path
-rm -rf %buildroot
-mkdir -p %buildroot%{install_path}
+# dirname removes the last directory
+mkdir -p `dirname %{buildroot}%{install_path}`
 pushd /tmp
 export tmp_path=%{install_path}
-mv ${tmp_path#*/} %buildroot%{install_path}/..
+mv ${tmp_path#*/} `dirname %{buildroot}%{install_path}`
 popd
 
 # clean up
@@ -128,10 +124,6 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_ARCH       ""
 EOF
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
-%files 
-%defattr(-,root,root,-)
+%files
 %{OHPC_PUB}
 %doc LICENSE README docs/slepc.pdf

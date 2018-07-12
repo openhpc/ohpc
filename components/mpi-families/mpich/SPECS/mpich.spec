@@ -36,7 +36,6 @@ License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch0:    config.pmix.patch
 Patch1:    hydra_env.patch
 
@@ -132,11 +131,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc README.envvar
 %doc COPYRIGHT

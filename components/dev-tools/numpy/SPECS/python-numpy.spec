@@ -30,7 +30,6 @@ Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/numpy-%{version}.tar.gz
-Source1:        OHPC_macros
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
@@ -152,7 +151,6 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-,root,root)
 %{OHPC_PUB}
 %doc INSTALL.rst.txt
 %doc LICENSE.txt

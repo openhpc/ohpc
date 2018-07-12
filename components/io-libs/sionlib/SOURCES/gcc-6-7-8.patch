@@ -5,7 +5,7 @@
                    case ${COMPVER} in
                    4.0.*|4.1.*) ;;
 -                  4.*|5.*|6.*) MD=Makefile.defs.linux-gomp
-+                  4.*|5.*|6.*|7.*) MD=Makefile.defs.linux-gomp
++                  4.*|5.*|6.*|7.*|8.*) MD=Makefile.defs.linux-gomp
                                 GFORTRAN="yes"
                                 ;;
                    esac

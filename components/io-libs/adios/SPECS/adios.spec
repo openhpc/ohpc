@@ -28,7 +28,6 @@ License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
-Source1: OHPC_macros
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
@@ -44,7 +43,6 @@ Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: python-devel
 
 %if 0%{with_lustre}
 # This is the legacy name for lustre-lite
@@ -90,7 +88,7 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 module load autotools
 module load phdf5
 module load netcdf
-module load py2-numpy
+module load %{python_module_prefix}numpy
 
 TOPDIR=$PWD
 
@@ -158,17 +156,17 @@ export NO_BRP_CHECK_RPATH=true
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # this is clearly generated someway and shouldn't be static
-export PPATH="/lib64/python2.7/site-packages"
+export PPATH="/lib64/%{python_lib_dir}/site-packages"
 export PATH=$(pwd):$PATH
 
 %if "%{compiler_family}" != "intel"
 module load openblas
 %endif
-module load py2-numpy
+module load %{python_module_prefix}numpy
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
 make MPI=y python
-python setup.py install --prefix="%buildroot%{install_path}/python"
+%{python_prefix} setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
 install -m644 utils/skel/lib/skel_suite.py \
@@ -214,7 +212,7 @@ depends-on phdf5
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-prepend-path	PYTHONPATH          %{install_path}/python/lib64/python2.7/site-packages
+prepend-path	PYTHONPATH          %{install_path}/python/lib64/%{python_lib_dir}/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_DOC        %{install_path}/docs
@@ -241,7 +239,6 @@ EOF
 %endif
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc AUTHORS
 %doc COPYING

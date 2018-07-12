@@ -22,10 +22,7 @@ License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://icl.cs.utk.edu/papi/
 Source0:   http://icl.cs.utk.edu/projects/papi/downloads/papi-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    papi.ldconfig.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: ncurses-devel
 %if 0%{?suse_version}
@@ -37,7 +34,6 @@ BuildRequires: chrpath
 BuildRequires: kernel-headers >= 2.6.32
 #Right now libpfm does not know anything about s390 and will fail
 ExcludeArch: s390 s390x
-%global debug_package %{nil} 
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
@@ -58,8 +54,6 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" ./configure --with-s
 DBG="" CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" make
 
 %install
-
-rm -rf $RPM_BUILD_ROOT
 cd src
 
 make DESTDIR=$RPM_BUILD_ROOT install
@@ -115,12 +109,6 @@ rm -rf $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %{__mkdir_p} $RPM_BUILD_ROOT/%{_docdir}
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc ChangeLog*.txt INSTALL.txt LICENSE.txt README RELEASENOTES.txt

@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 %global gnu_major_ver 7
 %global openmpi_major_ver 3
 
@@ -27,11 +26,8 @@ License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
 URL:     https://github.com/openhpc/ohpc
 Source0: LICENSE
-Source1: OHPC_macros
 
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %description
 
@@ -622,9 +618,6 @@ Collection of serial library builds for use with Intel(R) Parallel Studio XE too
 %install
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 

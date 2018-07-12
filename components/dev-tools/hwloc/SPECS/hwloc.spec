@@ -7,22 +7,6 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-#
-# spec file for package hwloc
-#
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
 
 %include %{_sourcedir}/OHPC_macros
 
@@ -37,11 +21,8 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
 Source0:        https://www.open-mpi.org/software/hwloc/v1.11/downloads/%{pname}-%{version}.tar.bz2
-Source1:        OHPC_macros
 Source2:        LICENSE
 
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -84,7 +65,6 @@ BuildRequires:  libnuma-devel
 BuildRequires:  numactl-devel
 %endif
 %endif
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 #!BuildIgnore: post-build-checks rpmlint-Factory
 #!BuildIgnore: #!BuildIgnore: brp-check-suse
 
@@ -183,6 +163,5 @@ EOF
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-, root, root, -)
 %doc AUTHORS COPYING NEWS README VERSION
 %{OHPC_PUB}

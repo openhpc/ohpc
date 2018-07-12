@@ -25,7 +25,6 @@ License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.scalasca.org
 Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/2.3/dist/scalasca-%{version}.tar.gz
-Source1:   OHPC_macros
 Requires:  lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -143,6 +142,5 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc ChangeLog COPYING INSTALL OPEN_ISSUES README

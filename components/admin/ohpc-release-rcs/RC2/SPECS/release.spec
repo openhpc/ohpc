@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define RC_VER 2
 
@@ -24,8 +23,6 @@ Source1:  RPM-GPG-KEY-OpenHPC-1
 
 Provides: ohpc-release = %{version}
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %if 0%{?centos_version} || 0%{?rhel_version}
 Requires: epel-release
@@ -107,12 +104,7 @@ install -D -m 0644 %SOURCE1 ${RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHP
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %config /etc/ohpc-release
 
 %if 0%{?sles_version} || 0%{?suse_version}

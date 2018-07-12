@@ -33,7 +33,6 @@ License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
 Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 
 # karl.w.schulz@intel.com (04/13/2016)
 Patch0:    mvapich2-get_cycles.patch
@@ -152,11 +151,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc README.envvar
 %doc COPYRIGHT

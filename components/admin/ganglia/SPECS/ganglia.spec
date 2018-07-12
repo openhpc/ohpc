@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname ganglia
 
@@ -26,14 +25,12 @@ Summary:            Distributed Monitoring System
 Group:              %{PROJ_NAME}/admin
 License:            BSD-3-Clause
 URL:                http://ganglia.sourceforge.net/
-DocDir:             %{OHPC_PUB}/doc/contrib
 Source0:            http://downloads.sourceforge.net/ganglia/ganglia-%{version}.tar.gz
 Source1:            http://downloads.sourceforge.net/ganglia/ganglia-web-%{webver}.tar.gz
 Source2:            gmond.service
 Source3:            gmetad.service
 Source4:            ganglia-httpd24.conf.d
 Source6:            conf.php
-Source7:            OHPC_macros
 Patch0:             ganglia-web-3.5.7-statedir.patch
 #Patch1:             ganglia-3.7.1-py-syntax.patch
 Patch2:             ganglia-no-private-apr.patch

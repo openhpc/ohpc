@@ -31,8 +31,6 @@ Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-frame
 Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.tar.gz
 Source4:   https://pypi.io/packages/source/v/vsc-install/vsc-install-%{vsc_install_ver}.tar.gz
 Source5:   bootstrap_eb.py
-Source6:   OHPC_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: python
 BuildRequires: python-setuptools
 Requires: python-setuptools
@@ -45,7 +43,6 @@ Requires: python
 BuildRequires: lmod%{PROJ_DELIM}
 %endif
 
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
@@ -119,9 +116,5 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}

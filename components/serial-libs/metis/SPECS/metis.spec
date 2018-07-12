@@ -24,7 +24,6 @@ License: Apache License 2.0
 Group:   %{PROJ_NAME}/serial-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
 Source0: http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-%{version}.tar.gz
-Source1: OHPC_macros
 BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
@@ -122,6 +121,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root)
 %{OHPC_PUB}
 %doc BUILD.txt Changelog Install.txt LICENSE.txt

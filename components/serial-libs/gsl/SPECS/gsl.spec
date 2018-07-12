@@ -24,7 +24,6 @@ License:   GPL
 Group:     %{PROJ_NAME}/serial-libs
 URL:       http://www.gnu.org/software/gsl
 Source0:   https://ftp.gnu.org/gnu/%{pname}/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -103,10 +102,6 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README THANKS TODO

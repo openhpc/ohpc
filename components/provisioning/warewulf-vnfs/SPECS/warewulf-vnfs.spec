@@ -12,7 +12,6 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define debug_package %{nil}
 
 %define pname warewulf-vnfs
 %define dname vnfs
@@ -25,7 +24,6 @@ License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
-Source2: OHPC_macros
 Source3: rhel-7.tmpl
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -37,8 +35,6 @@ Conflicts: warewulf < 3
 %if 0%{!?sles_version} && 0%{!?suse_version}
 BuildArch: noarch
 %endif
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
-DocDir: %{OHPC_PUB}/doc/contrib
 # Previous version had an architecture in its release. This is necessary for
 # YUM to properly update a package of a different BuildArch...
 Obsoletes: warewulf-vnfs < 3.2-0
@@ -73,11 +69,7 @@ cd %{dname}
 
 install -m 755 %{SOURCE3} $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/*
 
-%clean
-
-
 %files
-%defattr(-,root,root)
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/vnfs.conf

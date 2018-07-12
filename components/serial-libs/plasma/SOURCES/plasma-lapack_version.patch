@@ -5,7 +5,7 @@
                      "1.0.1", "1.0.0")
      oldversions  = ("2.1.0", "2.0.0", "1.0.1", "1.0.0") # Releases from version which need the internal cblas and lapack
 -    lapversion   = "lapack-3.6.0"
-+    lapversion   = "lapack-3.7.0"
++    lapversion   = "lapack-3.8.0"
      ranlib       = ""                        # the ranlib command
      clean        = 0
      nbcores      = 2
@@ -19,3 +19,28 @@
  
          # set framework variables to point to the freshly installed BLAS library
          self.config.lapclib   = '-L'+os.path.join(self.prefix,'lib')+' -llapacke'
+ 
+--- plasma-installer_2.8.0/script/lapcwrapper.py.org	2018-07-11 08:12:56.098166020 -0400
++++ plasma-installer_2.8.0/script/lapcwrapper.py	2018-07-11 08:13:43.144487294 -0400
+@@ -36,7 +36,7 @@
+         self.prefix   = plasma.prefix
+         self.plasma   = plasma
+         self.lapversion = plasma.lapversion
+-        self.lapackurl  = "http://www.netlib.org/lapack/"+self.lapversion+".tgz"
++        self.lapackurl  = "http://www.netlib.org/lapack/"+self.lapversion+".tar.gz"
+ 
+         if self.downlapc == 2:
+             self.down_install_lapc()
+@@ -145,10 +145,10 @@
+ 
+             # unzip and untar
+             print 'Unzip and untar reference LAPACK C interface...',
+-            comm = 'gunzip -f '+self.lapversion+'.tgz'
++            comm = 'gunzip -f '+self.lapversion+'.tar.gz'
+             (output, error, retz) = runShellCommand(comm)
+             if retz:
+-                print '\n\nLAPCWRAPPER: cannot unzip '+self.lapversion+'.tgz'
++                print '\n\nLAPCWRAPPER: cannot unzip '+self.lapversion+'.tar.gz'
+                 print 'stderr:\n','*'*40,'\n',comm,'\n',error,'\n','*'*40
+                 sys.exit()
+ 

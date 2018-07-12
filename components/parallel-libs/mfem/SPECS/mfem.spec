@@ -22,10 +22,9 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Lightweight, general, scalable C++ library for finite element methods
 License:        LGPLv2.1
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.3.2
+Version:        3.4
 Release:        1%{?dist}
 Source0:        https://github.com/mfem/mfem/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
-Source1:        OHPC_macros
 Url:            http://mfem.org
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -75,7 +74,7 @@ make config \
     MFEM_USE_NETCDF=YES NETCDF_OPT=-I$NETCDF_INC NETCDF_LIB="-L$NETCDF_LIB -lnetcdf" \
     MFEM_USE_PETSC=YES PETSC_OPT=-I$PETSC_INC PETSC_LIB="-L$PETSC_LIB -lpetsc" \
     MFEM_USE_SUPERLU=YES SUPERLU_OPT=-I$SUPERLU_DIST_INC SUPERLU_LIB="-L$SUPERLU_DIST_LIB -lsuperlu_dist" \
-    STATIC=NO SHARED=YES MFEM_DEBUG=NO
+    STATIC=YES SHARED=YES MFEM_DEBUG=NO
 
 make %{?_smp_mflags}
 
@@ -100,7 +99,6 @@ sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/share/mfem/config.mk
 install -m 644 libmfem.so %{buildroot}%{install_path}/lib/libmfem.so.%{version}
 pushd %{buildroot}%{install_path}/lib
 ln -s libmfem.so.%{version} libmfem.so.3
-ln -s libmfem.so.3 libmfem.so
 rm -f libmfem.a
 popd
 
@@ -158,6 +156,5 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc LICENSE README INSTALL

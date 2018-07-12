@@ -8,23 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package openblas
-#
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
 # OpenBLAS build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
@@ -42,7 +25,6 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 Url:            http://www.openblas.net
 Source0:        https://github.com/xianyi/OpenBLAS/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:        OHPC_macros
 Patch0:         openblas-libs.patch
 # PATCH-FIX-UPSTREAM c_xerbla_no-void-return.patch
 Patch1:         c_xerbla_no-void-return.patch

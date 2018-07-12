@@ -11,7 +11,6 @@
 %global ohpc_bootstrap 1
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname lmod
 
@@ -32,10 +31,7 @@ Release:   1%{?dist}
 License:   MIT
 Group:     %{PROJ_NAME}/admin
 Url:       https://github.com/TACC/Lmod
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
@@ -67,7 +63,6 @@ Requires: tcl
 Requires: lua-filesystem%{PROJ_DELIM}
 Requires: lua-posix%{PROJ_DELIM}
 
-%define debug_package %{nil}
 
 %description 
 Lmod: An Environment Module System based on Lua, Reads TCL Modules,
@@ -171,12 +166,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_HOME}
 %dir %{OHPC_ADMIN}
 %{OHPC_ADMIN}/lmod

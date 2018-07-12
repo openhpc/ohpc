@@ -28,10 +28,7 @@ URL: http://www.labri.fr/perso/pelegrin/scotch/
 Source0: http://gforge.inria.fr/frs/download.php/file/34618/%{base_pname}_%{version}.tar.gz
 Source1: scotch-Makefile.%{compiler_family}.inc.in
 Source2: scotch-rpmlintrc
-Source3: OHPC_macros
 Patch0:  scotch-%{version}-destdir.patch
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires:	flex bison
 %if 0%{?suse_version} >= 1100
@@ -49,11 +46,6 @@ Requires:       bzip2-devel
 BuildRequires:  zlib-devel
 %endif
 %endif
-
-# Requires:	
-
-#Disable debug packages
-%define debug_package %{nil}
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%{version}
@@ -139,10 +131,6 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
 %files
-%defattr(-,root,root)
 %doc README.txt ./doc/*
 %{OHPC_PUB}

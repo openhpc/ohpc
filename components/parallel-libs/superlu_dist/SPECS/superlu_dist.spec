@@ -28,7 +28,6 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/parallel-libs
 URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
-Source1:        OHPC_macros
 Source2:        superlu_dist-make.inc
 Source3:        superlu_dist-intel-make.inc
 Patch1:         superlu_dist-parmetis.patch
@@ -168,6 +167,5 @@ EOF
 %{__mkdir_p} %{buildroot}/%_docdir
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc README.md

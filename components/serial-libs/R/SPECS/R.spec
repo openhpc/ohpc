@@ -8,24 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package R
-#-------------------------------------------------------------------------------
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
-# Copyright (c) 2015, Intel Corporation
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-#
-#
-#-------------------------------------------------------------------------------
-
 # R build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
@@ -42,7 +24,6 @@ Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Release:	1%{?dist}
 Version:        3.5.0
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
-Source1:        OHPC_macros
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
 License:        GPL-2.0 or GPL-3.0
@@ -233,7 +214,6 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root)
 %{OHPC_HOME}
 %doc ChangeLog
 %doc COPYING

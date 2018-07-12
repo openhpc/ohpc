@@ -23,22 +23,18 @@ License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
-Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
-BuildRoot: %_tmppath}%{pname}-%{version}-%{release}-root
-DocDir: %{OHPC_PUB}/doc/contrib
 #%if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
 #%if ! 0%{?suse_version}
 #BuildRequires: libdb4-utils
 #%endif
 #%endif
 
-%define debug_package %{nil}
 
 # 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
 Patch1: warewulf-cluster.wwinit.patch
@@ -106,11 +102,7 @@ rm -rf $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/wwfirstboot/*
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-, root, root)
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/LICENSE %{dname}/NEWS %{dname}/README %{dname}/README.node %{dname}/TODO
 %{_sysconfdir}/profile.d/*
@@ -122,7 +114,6 @@ rm -rf $RPM_BUILD_ROOT
 %if %{disable_node_package}
 
 %files -n %{pname}-node%{PROJ_DELIM}
-%defattr(-, root, root)
 %config(noreplace) %{_sysconfdir}/sysconfig/wwfirstboot.conf
 %if 0%{?suse_version}
 %dir %{_libexecdir}/warewulf/wwfirstboot

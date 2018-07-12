@@ -53,7 +53,6 @@ License: BSD-3-Clause-LBNL
 Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
 Source0: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
-Source1: OHPC_macros
 Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
 BuildRequires: autoconf
@@ -155,7 +154,6 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-, root, root)
 %doc examples CONTRIBUTORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
 %attr(0644, root, root) %config(noreplace) %{install_path}/etc/singularity/*
 %{OHPC_PUB}
@@ -166,6 +164,5 @@ EOF
 
 %if %slurm
 %files -n singularity-slurm%{PROJ_DELIM}
-%defattr(-, root, root)
 %{install_path}/lib/slurm/singularity.so
 %endif

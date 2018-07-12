@@ -8,8 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%include %{_sourcedir}/OHPC_macros
-
 Name: ohpc-filesystem
 Version: 1.3
 Release: 1.ohpc
@@ -21,7 +19,6 @@ Source0: OHPC_setup_compiler
 Source1: OHPC_setup_mpi
 Source2: ohpc-find-requires
 Source3: ohpc-find-provides
-Source4: OHPC_macros
 
 BuildArch: noarch
 

@@ -8,22 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#-------------------------------------------------------------------------------
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
-# Copyright (c) 2015, Intel Corporation
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-#
-#
-#-------------------------------------------------------------------------------
-
 # Build that is dependent on compiler/mpi toolchains
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
@@ -44,7 +28,6 @@ Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
 
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
-Source1:   OHPC_macros
 Patch0:    h5cc.patch
 Patch1:    h5fc.patch
 Patch2:    h5cxx.patch
@@ -71,6 +54,9 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 %patch0 -p0
 %patch1 -p0
 %patch2 -p0
+
+# Fix building with gcc8 (this should be a patch)
+sed "s/\(.*\)(void) HDF_NO_UBSAN/HDF_NO_UBSAN \1(void)/" -i src/H5detect.c
 
 %build
 
@@ -153,7 +139,6 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc COPYING
 %doc README.txt

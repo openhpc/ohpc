@@ -17,11 +17,11 @@
 # gnu compilers underneath in order to support call-site demangling
 %if "%{compiler_family}" == "intel"
 Requires:      intel-compilers-devel%{PROJ_DELIM}
-BuildRequires: gnu7-compilers%{PROJ_DELIM}
-Requires:      gnu7-compilers%{PROJ_DELIM}
+BuildRequires: gnu8-compilers%{PROJ_DELIM}
+Requires:      gnu8-compilers%{PROJ_DELIM}
 %if "%{mpi_family}" != "impi"
-BuildRequires: %{mpi_family}-gnu7%{PROJ_DELIM}
-Requires:      %{mpi_family}-gnu7%{PROJ_DELIM}
+BuildRequires: %{mpi_family}-gnu8%{PROJ_DELIM}
+Requires:      %{mpi_family}-gnu8%{PROJ_DELIM}
 %endif
 %endif
 
@@ -37,7 +37,6 @@ License:   BSD-3
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://mpip.sourceforge.net/
 Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    mpip.unwinder.patch
 
 BuildRequires: binutils-devel
@@ -72,7 +71,7 @@ cp /usr/lib/rpm/config.guess bin
 # OpenHPC compiler/mpi designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu7
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu8
 module load %{mpi_family}
 
 CC=mpicc
@@ -90,7 +89,7 @@ FC=mpif90
 # OpenHPC compiler designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu7
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu8
 module load %{mpi_family}
 
 make %{?_smp_mflags} shared
@@ -138,6 +137,5 @@ EOF
 rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc ChangeLog doc/PORTING.txt doc/README doc/UserGuide.txt

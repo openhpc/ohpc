@@ -1,19 +1,3 @@
-#
-# spec file for package python-rpm-macros
-#
-# Copyright (c) 2017 SUSE LINUX GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
 
 %include %{_sourcedir}/OHPC_macros
 
@@ -33,7 +17,6 @@ Provides:       python2-rpm-macros
 Provides:       python3-rpm-macros
 #!BuildIgnore:  python-rpm-macros
 BuildArch:      noarch
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %description
 This package contains SUSE RPM macros for Python build automation.
@@ -61,6 +44,5 @@ mkdir -p %{buildroot}%{install_path}
 install -m 644 macros.python_all %{buildroot}%{install_path}
 
 %files
-%defattr(-,root,root)
 %{install_path}/macros.python_all
 

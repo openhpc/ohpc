@@ -14,7 +14,6 @@
 
 %define pname warewulf-ipmi
 %define dname ipmi
-%define debug_package %{nil}
 %define wwpkgdir /srv/warewulf
 
 %if 0%{?PROJ_NAME:1}
@@ -31,7 +30,6 @@ License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/%{version}.tar.gz#/warewulf3-%{version}.tar.gz
-Source1: OHPC_macros
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 BuildRequires: autoconf
@@ -40,8 +38,6 @@ BuildRequires: openssl-devel
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 #!BuildIgnore: post-build-checks
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
-DocDir: %{OHPC_PUB}/doc/contrib
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -77,12 +73,7 @@ cd %{dname}
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root)
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO
 %{wwpkgdir}/*

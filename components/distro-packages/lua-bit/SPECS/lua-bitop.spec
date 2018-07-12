@@ -11,7 +11,6 @@
 %global ohpc_bootstrap 1
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname lua-bit
 
@@ -22,7 +21,6 @@
 %endif
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
-%define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:        1.0.2
@@ -32,9 +30,7 @@ Group:          %{PROJ_NAME}/distro-packages
 License:        MIT
 Url:            http://bitop.luajit.org
 Source0:        http://bitop.luajit.org/download/LuaBitOp-%{version}.tar.gz
-Source1:        OHPC_macros
 Patch0:         Makefile.patch
-BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 BuildRequires:  lua >= %{luaver}, lua-devel >= %{luaver}
 Requires:       lua >= %{luaver}
@@ -51,20 +47,12 @@ make
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
 make install LUA_LIBDIR=%{lualibdir} DESTDIR=$RPM_BUILD_ROOT
-
 
 %check
 make test
 
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %doc README
 %dir %{_libdir}/lua
 %dir %{lualibdir}

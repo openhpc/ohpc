@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname ndoutils
@@ -18,7 +17,6 @@
 Name:               %{pname}%{PROJ_DELIM}
 Version:            2.1.3
 Release:            7%{?dist}
-DocDir:             %{OHPC_PUB}/doc/contrib
 
 Summary:            Stores all configuration and event data from Nagios in a database
 Group:              %{PROJ_NAME}/admin
@@ -26,7 +24,6 @@ License:            GPLv2 and BSD
 # Bundled libpqueue header. It has been relicensed to BSD:
 # https://github.com/vy/libpqueue/commit/de6480009c60afff22d4c7edf4353ef87797e497
 URL:                http://www.nagios.org/download/addons/
-BuildRoot:          %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0:            http://downloads.sourceforge.net/nagios/ndoutils-%{version}.tar.gz
 Source1:            README.Fedora
@@ -34,7 +31,6 @@ Source2:            ndo2db.service
 Source3:            ndo2db.init
 Source4:            ndoutils.conf
 Source5:            gpl-2.0.txt
-Source6:            OHPC_macros
 # Fedora 21+: https://fedoraproject.org/wiki/Format-Security-FAQ
 Patch0:             %{pname}-2.1.2-format-security.patch
 # Better align with Fedora/Nagios places for temporary files
@@ -92,7 +88,6 @@ chmod 644 db/installdb db/prepsql db/upgradedb
 make %{?_smp_mflags} all
 
 %install
-rm -rf %{buildroot}
 cp %{SOURCE1} %{SOURCE5} .
 mkdir -p %{buildroot}%{_localstatedir}/log/nagios
 mkdir -p %{buildroot}%{_localstatedir}/cache/ndoutils
@@ -143,11 +138,7 @@ install -p -m 755 -D %{SOURCE3} %{buildroot}%{_initrddir}/ndo2db
 %endif
 mkdir -p %{buildroot}%{_localstatedir}/run/ndoutils
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root,-)
 %doc db README.Fedora gpl-2.0.txt
 %doc docs/html README REQUIREMENTS TODO UPGRADING
 %config(noreplace) %{_sysconfdir}/nagios/ndo2db.cfg

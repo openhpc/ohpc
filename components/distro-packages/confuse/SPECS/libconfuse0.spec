@@ -8,31 +8,11 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package libconfuse0
-#
-# Copyright (c) 2011 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
-
-
 Name:           libconfuse0
 Version:        2.7
 Release:        1
 License:        LGPL-2.1+
 Group:          Development/Libraries/C and C++
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  gcc-c++ gettext-devel libtool pkgconfig
 %if 0%{?suse_version} > 1020
 BuildRequires:  check-devel
@@ -106,12 +86,10 @@ rm -rf examples/.deps/ examples/Makefile*
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %{_libdir}/libconfuse.so.0.0.0
 %{_libdir}/libconfuse.so.0
 
 %files -n libconfuse-devel
-%defattr(-,root,root,-)
 %{_libdir}/libconfuse.so
 %{_libdir}/libconfuse.la
 %{_libdir}/pkgconfig/libconfuse.pc

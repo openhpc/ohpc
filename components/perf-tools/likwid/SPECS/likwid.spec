@@ -11,7 +11,7 @@
 # Build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%global gnu_family gnu7
+%global gnu_family gnu8
 
 # Base package name
 %define pname likwid
@@ -25,18 +25,16 @@ License:   GPLv3
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://github.com/RRZE-HPC/likwid
 Source0:   https://github.com/RRZE-HPC/likwid/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    likwid-gfortran.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
+BuildRequires: perl-Data-Dumper
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
-LIKWID stands for “Like I Knew What I’m Doing.” It is an easy to use yet powerful 
-command line performance tool suite for the GNU/Linux operating system. While the 
-focus of LIKWID is on x86 processors, some of the tools are portable and not 
+LIKWID stands for “Like I Knew What I’m Doing.” It is an easy to use yet powerful
+command line performance tool suite for the GNU/Linux operating system. While the
+focus of LIKWID is on x86 processors, some of the tools are portable and not
 limited to any specific architecture.
 
 %prep
@@ -85,7 +83,7 @@ make %{?_smp_mflags} \
     INSTALL_CHOWN="" \
     OPTFLAGS="%{optflags}" \
     Q="" \
-    install 
+    install
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -129,6 +127,5 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc INSTALL COPYING README.md

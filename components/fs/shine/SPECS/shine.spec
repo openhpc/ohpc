@@ -1,5 +1,4 @@
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 # Base package name
 %define pname shine
@@ -9,14 +8,11 @@ Summary:   Lustre administration utility
 Version:   1.5
 Release:   1%{?dist}
 Source0:   https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    29fbd8ca10bf6d672d25439a025c460001fad33e.patch 
 License:   GPLv2
 Group:     %{PROJ_NAME}/lustre
 Vendor:    CEA
 Url:       http://lustre-shine.sourceforge.net/
-DocDir:    %{OHPC_PUB}/doc/contrib
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
 BuildRequires: python
 #!BuildIgnore: post-build-checks
@@ -86,11 +82,7 @@ setenv          %{pname}_DIR        %{install_path}
 depends-on clustershell
 EOF
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root)
 %doc LICENSE README ChangeLog
 %{OHPC_ADMIN}
 %{OHPC_PUB}

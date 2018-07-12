@@ -8,23 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package scalapack
-#
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
 # Build that is is dependent on compiler toolchain and MPI
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
@@ -49,7 +32,6 @@ Release:        1%{?dist}
 Url:            http://www.netlib.org/lapack-dev/
 Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
-Source2:        OHPC_macros
 Patch0:         scalapack-2.0.2-shared-lib.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
@@ -150,6 +132,5 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc README LICENSE

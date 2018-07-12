@@ -26,7 +26,6 @@ License:   Tuning and Analysis Utilities License
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    tau-add-explicit-linking-option.patch
 Patch2:    tau-shared_libpdb.patch
 Patch3:    tau-disable_examples.patch
@@ -188,7 +187,6 @@ make exports
 
 
 # move from tmp install dir to %install_path
-rm -rf %{buildroot}
 # dirname removes the last directory
 mkdir -p `dirname %{buildroot}%{install_path}`
 pushd /tmp
@@ -299,6 +297,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*

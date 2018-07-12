@@ -1,7 +1,6 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname clustershell
 
@@ -14,9 +13,7 @@ Group:         %{PROJ_NAME}/admin
 License:       LGPLv2.1
 URL:           http://clustershell.sourceforge.net/
 Source0:       https://github.com/cea-hpc/%{pname}/archive/v%{version}.tar.gz
-Source1:       OHPC_macros
 Patch1:        clustershell-1.8-no-requires.patch
-BuildRoot:     %(mktemp -ud %{_tmppath}/%{pname}-%{version}-%{release}-XXXXXX)
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
@@ -56,7 +53,6 @@ Syntax highlighting in the VIM editor for ClusterShell configuration files.
 %{__python} setup.py build
 
 %install
-rm -rf %{buildroot}
 %{__python} setup.py install -O1 --prefix=%{install_path} --skip-build --root %{buildroot}
 
 # config files
@@ -122,11 +118,7 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 
-%clean
-rm -rf %{buildroot}
-
 %files
-%defattr(-,root,root,-)
 %doc ChangeLog COPYING.LGPLv2.1
 %doc doc/examples
 %{OHPC_PUB}
@@ -157,7 +149,6 @@ rm -rf %{buildroot}
 #%{_bindir}/nodeset
 
 %files -n vim-%{name}
-%defattr(-,root,root,-)
 %dir %{install_path}/share/vim/
 %dir %{vimdatadir}
 %dir %{vimdatadir}/ftdetect

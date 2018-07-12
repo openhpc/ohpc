@@ -25,7 +25,6 @@ License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
-Source1: OHPC_macros
 Patch1:  warewulf-common.bin-file.patch
 Patch2:  warewulf-common.dbinit.patch
 Patch3:  warewulf-common.mysql.r1978.patch
@@ -33,13 +32,11 @@ Patch4:  warewulf-common.rhel_service.patch
 ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
-DocDir: %{OHPC_PUB}/doc/contrib
 Conflicts: warewulf <= 2.9
 # 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
 %if 0%{!?sles_version} && 0%{!?suse_version}
 BuildArch: noarch
 %endif
-BuildRoot: %{?_tmppath}/%{pname}-%{version}-%{release}-root
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else
@@ -106,11 +103,7 @@ systemctl enable mariadb >/dev/null 2>&1 || :
 %endif
 
 
-%clean
-
-
 %files
-%defattr(-, root, root)
 %{_sysconfdir}/bash_completion.d/warewulf_completion
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE

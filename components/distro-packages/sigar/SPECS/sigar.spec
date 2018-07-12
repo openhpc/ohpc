@@ -11,7 +11,6 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname sigar
-%define debug_package %{nil}
 
 Name:		%{pname}%{PROJ_DELIM}
 Version:	1.6.5
@@ -36,8 +35,6 @@ Provides:       %{pname}
 #
 # The diff from 1.6.4 is too huge to contemplate cherrypicking from
 Source0:	https://github.com/hyperic/sigar/archive/%{sigar_hash}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:    OHPC_macros
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:	gcc cmake
 
@@ -88,23 +85,17 @@ sed -i.sed s:DESTINATION\ lib:DESTINATION\ %{_lib}: src/CMakeLists.txt
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %cmake 
 make install DESTDIR=$RPM_BUILD_ROOT
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %doc ChangeLog README LICENSE NOTICE AUTHORS
 %{_libdir}/libsigar.so
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root,-)
 %{_includedir}/sigar*.h
 %doc LICENSE NOTICE AUTHORS

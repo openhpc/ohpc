@@ -21,7 +21,6 @@ Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/hpcsi/losf
 Source0:   https://github.com/hpcsi/losf/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 
 %if 0%{?OHPC_BUILD}
 %{!?prefix: %global prefix %{OHPC_ADMIN}}
@@ -93,7 +92,6 @@ if [ "$1" = 0 ];then
 fi
 
 %files
-%defattr(-,root,root,-)
 %{installPath}
 %{_bindir}/*
 %doc LICENSE COPYING CHANGES README

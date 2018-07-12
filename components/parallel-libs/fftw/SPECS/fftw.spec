@@ -25,7 +25,6 @@ License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
 URL:       http://www.fftw.org
 Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
-Source1:   OHPC_macros
 
 %define openmp        1
 %define mpi           1
@@ -128,6 +127,5 @@ if [ "$1" = 0 ]; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO

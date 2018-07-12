@@ -22,7 +22,6 @@ Summary: Host/service/network monitoring program
 Group:   %{PROJ_NAME}/admin
 License: GPLv2
 URL: http://www.nagios.org/
-DocDir:  %{OHPC_PUB}/doc/contrib
 Source0: https://assets.nagios.com/downloads/nagioscore/releases/nagios-%{version}.tar.gz
 Source1: nagios.logrotate
 Source2: nagios.htaccess
@@ -34,7 +33,6 @@ Source7: nagios.service
 Source10: printer.png
 Source11: router.png
 Source12: switch.png
-Source13: OHPC_macros
 
 # looks fixed in 4.1.1
 #Patch1: nagios-0001-from-rpm.patch
@@ -277,7 +275,6 @@ exit 0
 
 
 %files
-%defattr(-,root,root,-)
 %dir %{_libdir}/%{pname}/plugins/eventhandlers
 %dir %{_libdir}/%{pname}/cgi-bin
 %dir %{_datadir}/%{pname}

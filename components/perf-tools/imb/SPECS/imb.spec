@@ -25,7 +25,6 @@ License:   CPL
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
 Source0:   https://github.com/intel/mpi-benchmarks/archive/v%{version}.tar.gz
-Source1:   OHPC_macros
 
 # OpenHPC patches
 Patch1: imb.cc.patch
@@ -107,6 +106,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc license/license.txt license/use-of-trademark-license.txt ReadMe_IMB.txt

@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Summary:   Integration test suite for OpenHPC
 Name:      test-suite%{PROJ_DELIM}
@@ -20,7 +19,6 @@ Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc/tests
 Source0:   tests-ohpc.tar
-Source1:   OHPC_macros
 
 BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
@@ -29,11 +27,8 @@ BuildRequires:  automake%{PROJ_DELIM}
 Requires(pre):  shadow
 %endif
 
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %define testuser ohpc-test
-%define debug_package %{nil}
 
 %description
 
@@ -59,25 +54,13 @@ cd tests
 cp -a * %{buildroot}/home/%{testuser}/tests
 find %{buildroot}/home/%{testuser}/tests -name .gitignore  -exec rm {} \;
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %pre
 getent passwd %{testuser} >/dev/null || \
     /usr/sbin/useradd -U -c "OpenHPC integration test account" \
     -s /bin/bash -m -b /home %{testuser}
 exit 0
 
-%post
-
-%postun
-
-
 %files
 %defattr(-,%{testuser},%{testuser},-)
 %dir /home/%{testuser}
 /home/%{testuser}/tests
-
-
-
-

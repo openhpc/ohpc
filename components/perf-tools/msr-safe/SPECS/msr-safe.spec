@@ -29,10 +29,6 @@ Source1:        msr-safe.service
 Source2:        msr-safe.sysconfig
 Source3:        10-msr-safe.rules
 Source4:        msr-safe.sh
-Source5:        OHPC_macros
-DocDir:         %{OHPC_PUB}/doc/contrib
-Prefix:         %{_prefix}
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  %kernel_module_package_buildreqs
 BuildRequires:  systemd
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -100,7 +96,6 @@ if [ "$1" -ge "1" ] ; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %dir %{_datadir}/msr-safe
 %dir %{_datadir}/msr-safe/whitelists
 %{_datadir}/msr-safe/whitelists/*

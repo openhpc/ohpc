@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname intel-compilers-devel
 %define year 2018
@@ -22,9 +21,7 @@ License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
-Source1:   OHPC_macros
 Source2:   OHPC_mod_generator.sh
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
@@ -263,10 +260,6 @@ if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
     rm -f %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix 
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_ADMIN}
 %{OHPC_MODULES}

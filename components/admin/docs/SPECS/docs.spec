@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Name:           docs%{PROJ_DELIM}
 Version:        1.3.6
@@ -19,7 +18,6 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/admin
 URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
-Source1:        OHPC_macros
 
 %if 0%{?suse_version}
 BuildRequires:  libstdc++6
@@ -48,10 +46,7 @@ BuildRequires:  texlive-dvips
 BuildRequires:  latexmk
 BuildRequires:  git
 
-%define debug_package %{nil}
 
-BuildRoot:     %{_tmppath}/%{name}-%{version}-build
-DocDir:        %{OHPC_PUB}/doc/contrib
 
 %description 
 
@@ -168,6 +163,5 @@ install -m 0644 -p docs/recipes/install/sles12/input.local.template %{buildroot}
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-,root,root)
 %dir %{OHPC_HOME}
 %{OHPC_PUB}

@@ -18,11 +18,8 @@ Version:   2.69
 Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
-DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
-Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 Requires: m4
 
@@ -70,11 +67,7 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-%{__rm} -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_HOME}
 %{OHPC_UTILS}
 %doc THANKS

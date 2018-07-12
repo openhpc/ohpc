@@ -23,13 +23,11 @@ Summary:	ConMan: The Console Manager
 Group:		%{PROJ_NAME}/admin
 License:	GPLv3+
 URL:		http://dun.github.io/conman/
-DocDir:         %{OHPC_PUB}/doc/contrib
 
 Requires:	expect
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 
 %if 0%{?suse_version}
@@ -42,7 +40,6 @@ BuildRequires:	freeipmi-devel
 
 Source0:	https://github.com/dun/conman/archive/%pname-%{version}.tar.gz
 Source1:    %{pname}.service
-Source2:       OHPC_macros
 Patch1:         conman.init.patch
 
 # 8/15/14 karl.w.schulz@intel.com - include prereq
@@ -74,7 +71,6 @@ Its features include:
 make %{?_smp_mflags}
 
 %install
-rm -rf "%{buildroot}"
 %{__mkdir_p} "%{buildroot}"
 make install DESTDIR="%{buildroot}"
 
@@ -83,8 +79,6 @@ rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf "%{buildroot}"
 
 %post
 %systemd_post conman.service
@@ -117,7 +111,6 @@ fi
 %endif
 
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS
 %doc COPYING
 %doc DISCLAIMER*

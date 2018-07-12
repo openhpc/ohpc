@@ -13,7 +13,6 @@
 # needssslcertforbuild
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 
 
@@ -201,11 +200,8 @@ Source4: kmp-lustre-osd-ldiskfs.files
 Source5: kmp-lustre-osd-zfs.preamble
 Source6: kmp-lustre-osd-zfs.files
 Source7: kmp-lustre-tests.files
-Source8: OHPC_macros
 Patch0:  6189ae07.diff
 URL: https://wiki.hpdd.intel.com/
-DocDir: %{OHPC_PUB}/doc/contrib
-BuildRoot: %{_tmppath}/lustre-%{version}-root
 Requires: %{requires_kmod_name} = %{requires_kmod_version} zlib
 Requires: %{requires_yaml_name}
 BuildRequires: libtool libyaml-devel zlib-devel
@@ -342,9 +338,6 @@ simulate MDT service threads) locally on the MDS node, and does not need Lustre
 clients in order to run
 %endif
 
-%if 0%{?suse_version}
-%debug_package
-%endif
 %prep
 %setup -qn lustre-%{version}
 %patch0 -p1
@@ -507,7 +500,6 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %endif
 
 %files -f lustre.files
-%defattr(-,root,root)
 %{_sbindir}/*
 %if %{with lustre_tests}
 %exclude %{_sbindir}/wirecheck
@@ -559,7 +551,6 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %if %{with ldiskfs}
 %if %{with lustre_utils}
 %files osd-ldiskfs-mount
-%defattr(-,root,root)
 %{_libdir}/lustre/mount_osd_ldiskfs.so
 %endif
 %endif
@@ -569,7 +560,6 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %if %{with zfs}
 %if %{with lustre_utils}
 %files osd-zfs-mount
-%defattr(-,root,root)
 %{_libdir}/lustre/mount_osd_zfs.so
 %{_sysconfdir}/zfs/zed.d/*
 %endif
@@ -586,12 +576,10 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 
 %if %{with lustre_tests}
 %files tests -f lustre-tests.files
-%defattr(-,root,root)
 %endif
 
 %if %{with lustre_iokit}
 %files -n lustre-iokit
-%defattr(-, root, root)
 %{_bindir}/iokit-config
 %{_bindir}/iokit-gather-stats
 %{_bindir}/iokit-libecho
@@ -627,7 +615,3 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %if %{with systemd}
 %systemd_postun_with_restart lnet.service
 %endif
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-rm -rf %{_tmppath}/kmp
