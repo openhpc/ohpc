@@ -11,14 +11,13 @@
  if test -z "$PERLBIN"; then
     AC_MSG_ERROR([perl not found])
 --- a/etc/Makefile.am	2018-07-11 13:56:05.000000000 -0700
-+++ b/etc/Makefile.am	2018-07-11 15:08:27.000000000 -0700
-@@ -6,7 +6,8 @@
++++ b/etc/Makefile.am	2018-07-11 20:16:02.000000000 -0700
+@@ -4,7 +4,7 @@
+ bash_completiondir = $(sysconfdir)/bash_completion.d/
+ 
  # Check for Debian
- if ISDEB
+-if ISDEB
++if ISDEB || ISSUSE
  httpdir = $(sysconfdir)/apache2/conf.d/
--else
-+else if ISSUSE
-+httpdir = $(sysconfdir)/apache2/conf.d/
+ else
  # Assume RHEL Layout
- httpdir = $(sysconfdir)/httpd/conf.d/
- endif
