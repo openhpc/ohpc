@@ -1,5 +1,5 @@
---- a/bin/wwbootstrap	2017-10-10 13:17:14.000000000 -0700
-+++ b/bin/wwbootstrap	2017-10-10 14:24:24.000000000 -0700
+--- a/bin/wwbootstrap	2018-07-12 10:18:54.000000000 -0700
++++ b/bin/wwbootstrap	2018-07-12 10:24:12.000000000 -0700
 @@ -153,8 +153,8 @@
  
  mkpath("$tmpdir/initramfs");
@@ -11,7 +11,7 @@
      exit 1;
  }
  
-@@ -310,7 +310,11 @@
+@@ -321,7 +321,11 @@
  
  # Attempt to gunzip the kernel, aarch64 kernels are compressed and iPXE can't boot gzip compressed kernels.
  # Note, if the kernel isn't a gzip, IO::Uncompress::Gunzip makes a direct copy of the file.

@@ -1,5 +1,5 @@
---- vnfs/bin/wwbootstrap	2017-09-06 16:18:10.000000000 -0500
-+++ vnfs/bin/wwbootstrap	2017-10-30 08:33:05.000000000 -0500
+--- a/bin/wwbootstrap	2018-07-12 10:18:54.000000000 -0700
++++ b/bin/wwbootstrap	2018-07-12 10:18:13.000000000 -0700
 @@ -36,6 +36,7 @@
  my $kversion;
  my $config;
@@ -31,7 +31,7 @@
  
  
  if ($config->get("drivers")) {
-@@ -310,7 +319,7 @@
+@@ -321,7 +330,7 @@
  
  # Attempt to gunzip the kernel, aarch64 kernels are compressed and iPXE can't boot gzip compressed kernels.
  # Note, if the kernel isn't a gzip, IO::Uncompress::Gunzip makes a direct copy of the file.
