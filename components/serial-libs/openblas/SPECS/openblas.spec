@@ -18,28 +18,18 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        0.2.20
+Version:        0.3.0
 Release:        1%{?dist}
 Summary:        An optimized BLAS library based on GotoBLAS2
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 Url:            http://www.openblas.net
 Source0:        https://github.com/xianyi/OpenBLAS/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Patch0:         openblas-libs.patch
-# PATCH-FIX-UPSTREAM c_xerbla_no-void-return.patch
-Patch1:         c_xerbla_no-void-return.patch
+Patch1:         openblas-libs.patch
 # PATCH-FIX-UPSTREAM openblas-noexecstack.patch
 Patch2:         openblas-noexecstack.patch
-# PATCH-FIX-UPSTREAM openblas-gemv.patch
-Patch3:         openblas-gemv.patch
 # PATCH-FIX-UPSTREADM fix-arm64-cpuid-return.patch
-Patch4:         fix-arm64-cpuid-return.patch
-# PATCH for https://github.com/xianyi/OpenBLAS/pull/1262
-Patch5:         1262.patch
-# PATCH for https://github.com/xianyi/OpenBLAS/pull/1236
-Patch6:         1236.patch
-# PATCH for https://github.com/xianyi/OpenBLAS/pull/1247
-Patch7:         1247.patch
+Patch3:         fix-arm64-cpuid-return.patch
 ExclusiveArch:  %ix86 ia64 ppc ppc64 ppc64le x86_64 aarch64
 
 %description
@@ -51,15 +41,9 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %prep
 %setup -q -n OpenBLAS-%{version}
 
-%patch0 -p1
 %patch1 -p1
 %patch2 -p1
-# karl.w.schulz@intel.com (9/19/16) - disabling patch3 for v0.2.19
-#%patch3 -p1
-%patch4 -p1
-#%patch5 -p1
-#%patch6 -p1
-#%patch7 -p1
+%patch3 -p1
 
 %build
 # OpenHPC compiler/mpi designation
