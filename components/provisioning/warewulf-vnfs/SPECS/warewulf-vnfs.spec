@@ -70,6 +70,7 @@ Virtual Node FileSystem objects.
 
 %prep
 %setup -n warewulf3-%{version}
+cd %{dname}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
