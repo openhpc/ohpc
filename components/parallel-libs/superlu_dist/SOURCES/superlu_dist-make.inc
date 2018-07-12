@@ -17,6 +17,7 @@
 #
 SuperLUroot	=
 DSUPERLULIB   	= $(SuperLUroot)/SRC/libsuperlu_dist.a
+INCLUDEDIR   	= $(SuperLUroot)/SRC
 BLASDEF		= -DUSE_VENDOR_BLAS
 BLASLIB		= -lopenblas
 

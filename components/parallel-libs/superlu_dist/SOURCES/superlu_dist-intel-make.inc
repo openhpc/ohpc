@@ -17,6 +17,7 @@
 #
 SuperLUroot	=
 DSUPERLULIB   	= $(SuperLUroot)/SRC/libsuperlu_dist.a
+INCLUDEDIR      = $(SuperLUroot)/SRC
 BLASDEF		= -DUSE_VENDOR_BLAS
 BLASLIB		= -L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 
