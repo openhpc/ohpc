@@ -150,10 +150,6 @@ available the included GPL software.
 %prep
 %setup -q -n warewulf3-%{version}
 cd %{dname}
-#%patch8 -p1
-if [ ! -f configure ]; then
-    ./autogen.sh
-fi
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
@@ -165,6 +161,9 @@ fi
 
 %build
 cd %{dname}
+if [ ! -f configure ]; then
+    ./autogen.sh
+fi
 
 %if 0%{?_cross_compile}
   %configure --enable-cross-compile --localstatedir=%{wwpkgdir}
