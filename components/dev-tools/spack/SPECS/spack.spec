@@ -41,6 +41,7 @@ Requires: python2-mock
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 %global install_path %{OHPC_ADMIN}/%{pname}/%version
+%global spack_install_path %{OHPC_PUB}/%{pname}/%version
 # Turn off the brp-python-bytecompile script
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
@@ -55,7 +56,11 @@ Most importantly, Spack is simple. It offers a simple spec syntax so that users 
 
 %install
 mkdir -p %{buildroot}%{install_path}
+mkdir -p %{buildroot}%{spack_install_path}
 rsync -av --exclude=.gitignore {etc,bin,lib,var,share,templates} %{buildroot}%{install_path}
+
+sed -i "s@    tcl:.*@    tcl: %{OHPC_MODULES}/spack@" %{buildroot}%{install_path}/etc/spack/defaults/config.yaml
+sed -i "s@  install_tree:.*@  install_tree: %{spack_install_path}@" %{buildroot}%{install_path}/etc/spack/defaults/config.yaml
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack
