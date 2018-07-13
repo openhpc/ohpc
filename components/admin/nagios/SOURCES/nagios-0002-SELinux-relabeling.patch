@@ -1,10 +1,10 @@
---- a/daemon-init.in	2017-08-24 14:43:48.000000000 -0700
-+++ b/daemon-init.in	2017-09-29 09:25:55.000000000 -0700
-@@ -210,6 +210,7 @@
+--- a/startup/default-init.in	2018-06-25 14:25:22.000000000 -0700
++++ b/startup/default-init.in	2018-07-13 09:48:30.000000000 -0700
+@@ -191,6 +191,7 @@
  		su $NagiosUser -c "touch $NagiosVarDir/nagios.log $NagiosRetentionFile"
- 		remove_commandfile
+ 		@BIN_RM@ -f $NagiosCommandFile
  		touch $NagiosRunFile
 +		[ -x /sbin/restorecon ] && /sbin/restorecon $NagiosRunFile
  		$NagiosBin -d $NagiosCfgFile
- 		if [ -d $NagiosLockDir ]; then touch $NagiosLockDir/$NagiosLockFile; fi
  
+ 		echo "done."

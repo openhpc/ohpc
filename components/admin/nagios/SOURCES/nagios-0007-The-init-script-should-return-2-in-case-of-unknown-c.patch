@@ -1,6 +1,6 @@
---- a/daemon-init.in	2017-08-24 14:43:48.000000000 -0700
-+++ b/daemon-init.in	2017-09-29 09:34:27.000000000 -0700
-@@ -304,7 +304,7 @@
+--- a/startup/default-init.in	2018-06-25 14:25:22.000000000 -0700
++++ b/startup/default-init.in	2018-07-13 10:54:31.000000000 -0700
+@@ -280,7 +280,7 @@
  
  	*)
  		echo "Usage: nagios {start|stop|restart|reload|force-reload|status|checkconfig|configtest}"

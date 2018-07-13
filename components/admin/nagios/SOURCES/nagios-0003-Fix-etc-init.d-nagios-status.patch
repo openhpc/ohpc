@@ -1,6 +1,6 @@
---- a/daemon-init.in	2017-08-24 14:43:48.000000000 -0700
-+++ b/daemon-init.in	2017-09-29 09:30:04.000000000 -0700
-@@ -134,11 +134,14 @@
+--- a/startup/default-init.in	2018-06-25 14:25:22.000000000 -0700
++++ b/startup/default-init.in	2018-07-13 10:47:53.000000000 -0700
+@@ -138,11 +138,14 @@
  
  printstatus_nagios ()
  {
@@ -16,9 +16,9 @@
  }
  
  killproc_nagios ()
-@@ -251,6 +254,7 @@
- 	status)
- 		pid_nagios
+@@ -236,6 +239,7 @@
+ 			exit 3
+ 		fi
  		printstatus_nagios
 +		exit $?
  		;;

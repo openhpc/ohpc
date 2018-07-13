@@ -1,7 +1,7 @@
---- nagios-4.3.1/Makefile.in	2017-02-23 12:00:40.000000000 -0800
-+++ nagios-4.3.1.patch/Makefile.in	2017-02-27 15:02:59.000000000 -0800
-@@ -295,6 +295,7 @@
- 	@echo ""
+--- a/Makefile.in	2018-06-25 14:25:22.000000000 -0700
++++ b/Makefile.in	2018-07-13 10:49:01.000000000 -0700
+@@ -337,6 +337,7 @@
+ 	@autoconf-macros/add_group_user $(DIST) $(NAGIOS_USER) $(NAGIOS_GRP) 1
  
  install-webconf:
 +	$(INSTALL) -m 775 $(INSTALL_OPTS) -d $(DESTDIR)$(HTTPD_CONF)

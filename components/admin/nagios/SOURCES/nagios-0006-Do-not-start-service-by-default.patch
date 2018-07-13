@@ -10,8 +10,8 @@ Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
 
 diff --git a/daemon-init.in b/daemon-init.in
 index ecd072a..5e52637 100644
---- a/daemon-init.in
-+++ b/daemon-init.in
+--- a/startup/default-init.in
++++ b/startup/default-init.in
 @@ -1,6 +1,6 @@
  #!/bin/sh
  #

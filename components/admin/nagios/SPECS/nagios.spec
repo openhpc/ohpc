@@ -16,7 +16,7 @@
 %global _hardened_build 1
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 4.3.4
+Version: 4.4.1
 Release: 1%{?dist}
 Summary: Host/service/network monitoring program
 Group:   %{PROJ_NAME}/admin
