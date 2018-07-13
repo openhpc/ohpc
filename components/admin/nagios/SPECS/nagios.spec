@@ -207,8 +207,6 @@ sed -i -e "s|resource.cfg|private/resource.cfg|" \
      -e "s|command_file=/var/log/nagios/rw/nagios.cmd|command_file=%{_localstatedir}/spool/%{pname}/cmd/nagios.cmd|" sample-config/nagios.cfg 
 sed -e "s|/usr/lib/|%{_libdir}/|" %{SOURCE2} > %{pname}.htaccess
 cp -f %{SOURCE3} internet.cfg
-cp -f %{SOURCE5} UpgradeToVersion3.ReadMe
-cp -f %{SOURCE6} UpgradeToVersion3.sh
 echo >> html/stylesheets/common.css
 
 
@@ -280,7 +278,7 @@ exit 0
 %dir %{_datadir}/%{pname}
 %dir %{_datadir}/%{pname}/html
 %doc %{_datadir}/%{pname}/html/docs
-%doc Changelog INSTALLING LICENSE README UPGRADING UpgradeToVersion3.ReadMe UpgradeToVersion3.sh
+%doc Changelog INSTALLING LICENSE README.md UPGRADING
 %doc internet.cfg
 %{_datadir}/%{pname}/html/[^d]*
 # d3 javascript appears to be new for 4.1.1, include directory and files
