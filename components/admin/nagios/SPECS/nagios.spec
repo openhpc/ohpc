@@ -171,7 +171,7 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
 %configure \
     --prefix=%{_datadir}/%{pname} \
     --exec-prefix=%{_localstatedir}/lib/%{pname} \
-    --with-init-dir=%{_initrddir} \
+    --with-init-dir=/etc/init.d \
     --with-cgiurl=/%{pname}/cgi-bin/ \
     --with-htmlurl=/%{pname} \
     --with-lockfile=%{_localstatedir}/run/%{pname}/%{pname}.pid \
