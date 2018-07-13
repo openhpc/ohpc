@@ -201,7 +201,7 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
 make %{?_smp_mflags} all
 
 #sed -i -e "s| package Embed::Persistent;|#\!%{_bindir}/perl\npackage Embed::Persistent;|" p1.pl
-sed -i -e "s|NagiosCmd=/var/log/nagios/rw/nagios.cmd|NagiosCmd=%{_localstatedir}/spool/%{pname}/cmd/nagios.cmd|" daemon-init
+sed -i -e "s|NagiosCmd=/var/log/nagios/rw/nagios.cmd|NagiosCmd=%{_localstatedir}/spool/%{pname}/cmd/nagios.cmd|" default-init
 sed -i -e "s|resource.cfg|private/resource.cfg|" \
      -e "s|#query_socket=/var/log/nagios/rw/nagios.qh|query_socket=%{_localstatedir}/log/%{pname}/nagios.qh|" \
      -e "s|command_file=/var/log/nagios/rw/nagios.cmd|command_file=%{_localstatedir}/spool/%{pname}/cmd/nagios.cmd|" sample-config/nagios.cfg 
