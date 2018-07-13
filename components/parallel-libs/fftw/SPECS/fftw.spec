@@ -30,7 +30,6 @@ Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
 %define mpi           1
 
 BuildRequires:        perl
-BuildRequires:        postfix
 BuildRequires:        util-linux
 Requires(post):       info
 Requires(preun):      info
