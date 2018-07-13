@@ -57,9 +57,14 @@ BASEFLAGS="$BASEFLAGS --enable-openmp"
 BASEFLAGS="$BASEFLAGS --enable-mpi"
 %endif
 
+# taken from https://src.fedoraproject.org/rpms/fftw/blob/master/f/fftw.spec
+%ifarch x86_64
+BASEFLAGS="$BASEFLAGS --enable-sse2 --enable-avx"
+%endif
+
 ./configure --prefix=%{install_path} ${BASEFLAGS} --enable-static=no || { cat config.log && exit 1; }
 
-make
+make %{?_smp_mflags}
 
 %install
 # OpenHPC compiler designation
