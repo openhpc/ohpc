@@ -26,8 +26,6 @@ Source0: https://assets.nagios.com/downloads/nagioscore/releases/nagios-%{versio
 Source1: nagios.logrotate
 Source2: nagios.htaccess
 Source3: nagios.internet.cfg
-Source5: nagios.upgrade_to_v3.ReadMe
-Source6: nagios.upgrade_to_v3.sh
 Source7: nagios.service
 # PNG files from the old nagios-0010-Added-several-images-to-the-sample-config.patch
 Source10: printer.png
