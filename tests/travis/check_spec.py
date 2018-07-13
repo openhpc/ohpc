@@ -8,8 +8,8 @@ import subprocess
 import sys
 
 regex_wrong = [
-    # make sure there is no Source999
-    '^Source999.*$',
+    # make sure there is no Source42
+    '^Source42.*$',
     # make sure OHPC_macros is not listed
     '^Source.*OHPC_macros$',
     # make sure there is no %changelog

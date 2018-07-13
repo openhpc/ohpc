@@ -35,9 +35,8 @@
 DocDir:    %{OHPC_PUB}/doc/contrib
 
 # Instead of having Source[1-9]: OHPC_macros in every SPEC file,
-# this sets Source999 for all SPEC files which include OHPC_macros.
-# Setting it to 999 and hoping it does not conflict with anything.
-Source999: OHPC_macros
+# this sets Source42 for all SPEC files which include OHPC_macros.
+Source42: OHPC_macros
 
 %if 0%{?rhel} == 7
     # OBS define's rhel_version to 700 for RHEL, in case we are
