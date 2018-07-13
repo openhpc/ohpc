@@ -28,7 +28,7 @@
 %global OHPC_MPI_STACKS %{OHPC_PUB}/mpi
 %global OHPC_UTILS      %{OHPC_PUB}/utils
 %global debug_package   %{nil}
-%global dist            .ohpc
+%global dist            .ohpc.1.3.6
 
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
