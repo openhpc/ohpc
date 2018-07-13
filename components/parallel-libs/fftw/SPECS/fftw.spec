@@ -31,8 +31,6 @@ Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
 
 BuildRequires:        perl
 BuildRequires:        util-linux
-Requires(post):       info
-Requires(preun):      info
 
 
 # Default library install path
@@ -114,16 +112,6 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
-
-
-%post
-/sbin/install-info --section="Math" %{_infodir}/%{pname}.info.gz %{_infodir}/dir  2>/dev/null || :
-exit 0
-
-%preun
-if [ "$1" = 0 ]; then
-  /sbin/install-info --delete %{_infodir}/%{pname}.info.gz %{_infodir}/dir 2>/dev/null || :
-fi
 
 %files
 %{OHPC_PUB}
