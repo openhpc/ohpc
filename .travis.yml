@@ -1,0 +1,8 @@
+sudo: required
+language: c
+env:
+  - TEST=check_spec
+services:
+  - docker
+script:
+  - sudo docker build -t ohpc.${TEST} -f tests/travis/Dockerfile.${TEST} --build-arg TRAVIS_COMMIT_RANGE=$TRAVIS_COMMIT_RANGE .
