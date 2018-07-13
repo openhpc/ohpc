@@ -63,3 +63,6 @@ install -D -m 0644 %SOURCE11 %{buildroot}%{OHPC_HOME}/pub/examples/example-mpi-d
 %dir %{OHPC_HOME}
 %doc LICENSE
 %{OHPC_PUB}
+
+%changelog
+* super awesome change
