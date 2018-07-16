@@ -19,7 +19,7 @@
 
 Summary:   A Fast Fourier Transform library
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   3.3.7
+Version:   3.3.8
 Release:   1%{?dist}
 License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
@@ -30,10 +30,7 @@ Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
 %define mpi           1
 
 BuildRequires:        perl
-BuildRequires:        postfix
 BuildRequires:        util-linux
-Requires(post):       info
-Requires(preun):      info
 
 
 # Default library install path
@@ -60,9 +57,14 @@ BASEFLAGS="$BASEFLAGS --enable-openmp"
 BASEFLAGS="$BASEFLAGS --enable-mpi"
 %endif
 
+# taken from https://src.fedoraproject.org/rpms/fftw/blob/master/f/fftw.spec
+%ifarch x86_64
+BASEFLAGS="$BASEFLAGS --enable-sse2 --enable-avx"
+%endif
+
 ./configure --prefix=%{install_path} ${BASEFLAGS} --enable-static=no || { cat config.log && exit 1; }
 
-make
+make %{?_smp_mflags}
 
 %install
 # OpenHPC compiler designation
@@ -115,16 +117,6 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
-
-
-%post
-/sbin/install-info --section="Math" %{_infodir}/%{pname}.info.gz %{_infodir}/dir  2>/dev/null || :
-exit 0
-
-%preun
-if [ "$1" = 0 ]; then
-  /sbin/install-info --delete %{_infodir}/%{pname}.info.gz %{_infodir}/dir 2>/dev/null || :
-fi
 
 %files
 %{OHPC_PUB}
