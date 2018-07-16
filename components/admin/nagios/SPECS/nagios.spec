@@ -67,6 +67,10 @@ BuildRequires: unzip
 BuildRequires: -post-build-checks
 %endif
 
+%ifarch aarch64
+BuildRequires: procps-ng
+%endif
+
 Requires: httpd
 Requires: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires: mailx
@@ -286,7 +290,11 @@ exit 0
 %{_bindir}/*
 %{_libdir}/%{pname}/cgi-bin/*cgi
 %{_unitdir}/%{pname}.service
+%ifarch aarch64
+/lib/systemd/system/nagios.service
+%else
 /etc/init.d/nagios
+%endif
 %if 0%{?sles_version} || 0%{?suse_version}
 %config(noreplace) %{_sysconfdir}/apache2/conf.d/nagios.conf
 %else
