@@ -17,6 +17,9 @@
 %define pname fftw
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
+# Not building quad-precision because: "quad precision is not supported in MPI"
+%global precision_list single double long-double
+
 Summary:   A Fast Fourier Transform library
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   3.3.8
@@ -57,20 +60,37 @@ BASEFLAGS="$BASEFLAGS --enable-openmp"
 BASEFLAGS="$BASEFLAGS --enable-mpi"
 %endif
 
-# taken from https://src.fedoraproject.org/rpms/fftw/blob/master/f/fftw.spec
+
+for i in %{precision_list} ; do
+	LOOPBASEFLAGS=${BASEFLAGS}
+	if [[ "${i} == "single" || "${i} == "double" ]]; then
+		# taken from https://src.fedoraproject.org/rpms/fftw/blob/master/f/fftw.spec
 %ifarch x86_64
-BASEFLAGS="$BASEFLAGS --enable-sse2 --enable-avx"
+		LOOPBASEFLAGS="${LOOPBASEFLAGS} --enable-sse2 --enable-avx"
 %endif
-
-./configure --prefix=%{install_path} ${BASEFLAGS} --enable-static=no || { cat config.log && exit 1; }
-
-make %{?_smp_mflags}
+%ifarch aarch64
+		LOOPBASEFLAGS="${LOOPBASEFLAGS} --enable-neon"
+%endif
+	fi
+	mkdir ${i}
+	cd ${i}
+	ln -s ../configure
+	./configure --prefix=%{install_path} ${LOOPBASEFLAGS} \
+		--enable-${i} \
+		--enable-static=no || { cat config.log && exit 1; }
+	make %{?_smp_mflags}
+	cd ..
+done
 
 %install
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-make DESTDIR=$RPM_BUILD_ROOT install
+for i in %{precision_list}; do
+	cd ${i}
+	make DESTDIR=$RPM_BUILD_ROOT install
+	cd ..
+done
 
 # don't package static libs
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*la
