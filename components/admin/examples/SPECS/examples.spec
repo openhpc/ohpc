@@ -28,7 +28,7 @@ Source7:  gmond.conf
 Source8:  job.pbs.mpi
 Source10: example.modulefile
 Source11: example-mpi-dependent.modulefile
-
+Source42: aconflict
 
 
 %description
@@ -63,3 +63,4 @@ install -D -m 0644 %SOURCE11 %{buildroot}%{OHPC_HOME}/pub/examples/example-mpi-d
 %dir %{OHPC_HOME}
 %doc LICENSE
 %{OHPC_PUB}
+
