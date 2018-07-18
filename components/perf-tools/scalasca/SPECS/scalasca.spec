@@ -19,7 +19,7 @@
 
 Summary:   Toolset for performance analysis of large-scale parallel applications
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   2.3.1
+Version:   2.4
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
