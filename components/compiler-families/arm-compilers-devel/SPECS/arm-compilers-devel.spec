@@ -9,9 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
-
-%define pname arm-compilers-devel
+%global pname arm-compilers-devel
 
 Summary:   OpenHPC compatibility package for Arm HPC compiler
 Name:      %{pname}%{PROJ_DELIM}
@@ -21,8 +19,6 @@ License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: aarch64
-Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
@@ -32,11 +28,7 @@ Provides: %{pname}%{PROJ_DELIM}
 
 %description
 
-Provides OpenHPC-style module compatability for use with the Arm HPC compiler suite.
-
-%prep
-
-%build
+Provides OpenHPC-style module compatibility for use with the Arm HPC compiler suite.
 
 %install
 
@@ -56,14 +48,14 @@ versions_all=`rpm -qal | grep ${arm_subpath}`
 if [ $? -eq 1 ];then
     echo ""
     echo "Error: Unable to detect local Arm compiler installation. The toolchain"
-    echo "       providing ${arm_subpath} must be installed prior to this compatability package"
+    echo "       providing ${arm_subpath} must be installed prior to this compatibility package"
     echo " "
     exit 1
 fi
 
 # Verify min version expectations
 
-min_ver="18.1"
+min_ver="18.3"
 versions=""
 for file in ${versions_all}; do
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
@@ -77,7 +69,7 @@ for file in ${versions_all}; do
 done
 if [ -z "${versions}" ]; then
     echo ""
-    echo "Error: local Arm compiler compatability support is for versions > ${min_ver}"
+    echo "Error: local Arm compiler compatibility support is for versions > ${min_ver}"
     echo " "
     exit 1
 fi
@@ -90,11 +82,11 @@ packages=`rpm -qal | grep ${arm_subpath}`
 if [ $? -eq 1 ];then
     echo ""
     echo "Error: Unable to detect local Arm compiler installation. The toolchain"
-    echo "       providing ${arm_subpath} must be installed prior to this compatability package"
+    echo "       providing ${arm_subpath} must be installed prior to this compatibility package"
     exit 1
 fi
 
-echo "Creating OpenHPC compatability modulefile for local Arm compiler installation(s)."
+echo "Creating OpenHPC compatibility modulefile for local Arm compiler installation(s)."
 
 # Create a top-level arm/compat module which appends the lmod modulepath to see
 # modulefiles provided by Arm installation
@@ -149,16 +141,13 @@ EOF
 
 %postun
 
-if [ -s %{OHPC_MODULES}/arm/compat ];then
-    rm -f %{OHPC_MODULES}/arm/compat 
+if [ $1 -eq 0 ];then
+
+    if [ -s %{OHPC_MODULES}/arm/compat ];then
+	rm -f %{OHPC_MODULES}/arm/compat 
+    fi
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_MODULES}
-
-%changelog
 
