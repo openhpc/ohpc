@@ -25,7 +25,7 @@ URL:		http://www.labri.fr/perso/pelegrin/%{pname}/
 Source0:	https://gforge.inria.fr/frs/download.php/file/37622/scotch_6.0.6.tar.gz
 Source1:	%{pname}-Makefile.%{compiler_family}.inc.in
 Source2:	%{pname}-rpmlintrc
-Patch0:         %{pname}-%{version}-destdir.patch
+Patch0:     scotch-6.0.4-destdir.patch
 
 BuildRequires:	flex bison
 %if 0%{?suse_version} >= 1100
