@@ -125,5 +125,4 @@ EOF
 
 %files
 %doc README.txt ./doc/*
-%{install_path}
-%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
+%{OHPC_PUB}
