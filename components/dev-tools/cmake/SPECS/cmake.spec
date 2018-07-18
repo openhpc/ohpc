@@ -13,7 +13,7 @@
 %define pname cmake
 
 %define major_version 3.11
-%define minor_version 1
+%define minor_version 4
 
 Summary: CMake is an open-source, cross-platform family of tools designed to build, test and package software.
 Name:    %{pname}%{PROJ_DELIM}
