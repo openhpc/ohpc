@@ -19,7 +19,7 @@
 
 Summary:   Scalable I/O Library for Parallel Access to Task-Local Files
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.7.1
+Version:   1.7.2
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/io-libs
@@ -40,7 +40,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %prep
 
 %setup -q -n %{pname}
-%patch0 -p0
+%patch0 -p1
 
 %build
 
