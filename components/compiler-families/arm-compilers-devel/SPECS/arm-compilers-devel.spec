@@ -24,7 +24,6 @@ BuildArch: aarch64
 #!BuildIgnore: post-build-checks
 
 Requires: lmod%{PROJ_DELIM}
-Provides: %{pname}%{PROJ_DELIM}
 
 %description
 
