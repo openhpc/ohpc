@@ -14,7 +14,7 @@
 
 Summary:   A GNU tool for automatically creating Makefiles
 Name:      %{pname}%{PROJ_DELIM}
-Version:   1.15
+Version:   1.16.1
 Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
