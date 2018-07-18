@@ -40,7 +40,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %prep
 
 %setup -q -n %{pname}
-%patch0 -p1
+#%patch0 -p1
 
 %build
 
