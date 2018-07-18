@@ -16,13 +16,13 @@
 %define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:	6.0.4
+Version:	6.0.6
 Release:	1
 Summary:	Graph, mesh and hypergraph partitioning library
 License:	CeCILL-C
 Group:		%{PROJ_NAME}/serial-libs
 URL:		http://www.labri.fr/perso/pelegrin/%{pname}/
-Source0:	http://gforge.inria.fr/frs/download.php/file/34618/%{pname}_%{version}.tar.gz
+Source0:	https://gforge.inria.fr/frs/download.php/file/37622/scotch_6.0.6.tar.gz
 Source1:	%{pname}-Makefile.%{compiler_family}.inc.in
 Source2:	%{pname}-rpmlintrc
 Patch0:         %{pname}-%{version}-destdir.patch
