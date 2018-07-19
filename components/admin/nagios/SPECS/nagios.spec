@@ -290,9 +290,10 @@ exit 0
 %{_libdir}/%{pname}/cgi-bin/*cgi
 %{_unitdir}/%{pname}.service
 %ifarch aarch64
-/lib/systemd/system/nagios.service
 %if 0%{?sles_version} || 0%{?suse_version}
-/etc/init.d/nagios
+/lib/systemd/system/nagios.service
+%else
+/usr/lib/systemd/system/nagios.service
 %endif
 %else
 /etc/init.d/nagios
