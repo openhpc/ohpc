@@ -291,6 +291,9 @@ exit 0
 %{_unitdir}/%{pname}.service
 %ifarch aarch64
 /lib/systemd/system/nagios.service
+%if 0%{?sles_version} || 0%{?suse_version}
+/etc/init.d/nagios
+%endif
 %else
 /etc/init.d/nagios
 %endif
