@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "CH-FROMHOST" "1" "2018-05-30 22:53 Coordinated Universal Time" "" "Charliecloud"
+.TH "CH-FROMHOST" "1" "2018-07-20 10:12 Coordinated Universal Time" "affc276c0" "Charliecloud"
 .SH NAME
 ch-fromhost \- Inject files from the host into an image directory
 .
@@ -58,11 +58,25 @@ a simple file copy, but that may change in the future.
 By default, file paths that contain the string \fB/bin\fP are assumed to be
 executables and are placed in \fB/usr/bin\fP within the container. File
 paths that contain the strings \fB/lib\fP or \fB\&.so\fP are assumed to be
-shared libraries and are placed in \fB/usr/lib\fP\&. Other files are placed in
-the directory specified by \fB\-\-dest\fP\&.
+shared libraries and are placed in the first\-priority directory reported by
+\fBldconfig\fP\&. Other files are placed in the directory specified by
+\fB\-\-dest\fP\&.
 .sp
-If any of the files appear to be shared libraries, run \fBldconfig\fP inside
-the container (using \fBch\-run \-w\fP) after injection.
+You can see where shared libraries will go with:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-run $IMG \-\- ldconfig \-v 2>/dev/null | egrep \(aq^/\(aq | cut \-d: \-f1 | head \-1
+/usr/local/lib
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+If any shared libraries are injected, run \fBldconfig\fP inside the
+container (using \fBch\-run \-w\fP) after injection.
 .SH OPTIONS
 .sp
 To specify which files to inject:
@@ -130,7 +144,7 @@ library functions directly. However, this would mean that Charliecloud
 would either (a) need to be compiled differently on machines with and
 without nVidia GPUs or (b) have \fBlibnvidia\-containers\fP available
 even on machines without nVidia GPUs. Neither of these is consistent with
-Charliecloud\(aqs philosophies of simplicity and minimal dependencies.
+Charliecloud’s philosophies of simplicity and minimal dependencies.
 .IP 2. 3
 Use \fBnvidia\-container\-cli configure\fP to do the injecting. This
 would require that containers have a half\-started state, where the
@@ -210,7 +224,7 @@ $ ch\-fromhost \-\-nvidia /var/tmp/baz
 .SH REPORTING BUGS
 .sp
 If Charliecloud was obtained from your Linux distribution, use your
-distribution\(aqs bug reporting procedures.
+distribution’s bug reporting procedures.
 .sp
 Otherwise, report bugs to: <\fI\%https://github.com/hpc/charliecloud/issues\fP>
 .SH SEE ALSO

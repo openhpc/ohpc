@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "CH-BUILD" "1" "2018-05-30 22:53 Coordinated Universal Time" "" "Charliecloud"
+.TH "CH-BUILD" "1" "2018-07-20 10:12 Coordinated Universal Time" "affc276c0" "Charliecloud"
 .SH NAME
 ch-build \- Wrapper for "docker build" that works around some of its annoying behaviors
 .
@@ -44,8 +44,8 @@ $ ch\-build \-t TAG [ARGS ...] CONTEXT
 .SH DESCRIPTION
 .sp
 Build a Docker image named \fBTAG\fP described by Dockerfile
-\fB\&./Dockerfile\fP or as specified. Pass the HTTP proxy environment
-variables through with \fB\-\-build\-arg\fP\&.
+\fB\&./Dockerfile\fP or as specified. This is a wrapper for \fBdocker
+build\fP with various enhancements.
 .sp
 Sudo privileges are required to run the \fBdocker\fP command.
 .sp
@@ -71,6 +71,26 @@ print version and exit
 .sp
 Additional arguments are accepted and passed unchanged to \fBdocker
 build\fP\&.
+.SH IMPROVEMENTS OVER PLAIN DOCKER BUILD
+.sp
+\fBch\-build\fP adds the following features to \fBdocker build\fP:
+.INDENT 0.0
+.IP \(bu 2
+If there is a file \fBDockerfile\fP in the current working directory and
+\fB\-f\fP is not already specified, add \fB\-f $PWD/Dockerfile\fP\&.
+.IP \(bu 2
+Pass the HTTP proxy environment variables through with \fB\-\-build\-arg\fP\&.
+.UNINDENT
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+The suffix \fB:latest\fP is somewhat misleading, as neither
+\fBch\-build\fP nor bare \fBdocker build\fP will notice if the base
+\fBFROM\fP image has been updated. Use \fB\-\-no\-cache\fP to make sure
+you have the latest base image, at the cost of rebuilding every layer.
+.UNINDENT
+.UNINDENT
 .SH EXAMPLES
 .sp
 Create a Docker image tagged \fBfoo\fP and specified by the file
@@ -116,7 +136,7 @@ confuse people.
 .SH REPORTING BUGS
 .sp
 If Charliecloud was obtained from your Linux distribution, use your
-distribution\(aqs bug reporting procedures.
+distribution’s bug reporting procedures.
 .sp
 Otherwise, report bugs to: <\fI\%https://github.com/hpc/charliecloud/issues\fP>
 .SH SEE ALSO
@@ -141,11 +161,11 @@ Anyone who can run the \fBdocker\fP command or interact with the Docker
 daemon can \fI\%trivially escalate to root\fP\&.
 This is considered a feature.
 .sp
-For this reason, don\(aqt create the \fBdocker\fP group, as this will allow
+For this reason, don’t create the \fBdocker\fP group, as this will allow
 passwordless, unlogged escalation for anyone in the group.
 .SS Images can contain bad stuff
 .sp
-Standard hygiene for "installing stuff from the internet" applies. Only work
+Standard hygiene for “installing stuff from the internet” applies. Only work
 with images you trust. The official Docker Hub repositories can help.
 .SS Containers run as root
 .sp
@@ -169,7 +189,7 @@ $ route \-n
 .UNINDENT
 .SS Docker installs services
 .sp
-If you don\(aqt want the service starting automatically at boot, e.g.:
+If you don’t want the service starting automatically at boot, e.g.:
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -206,11 +226,11 @@ Get https://index.docker.io/v1/repositories/library/hello\-world/images: dial tc
 .UNINDENT
 .sp
 If you have a systemd system, the \fI\%Docker documentation\fP explains how to
-configure this. If you don\(aqt have a systemd system, then
+configure this. If you don’t have a systemd system, then
 \fB/etc/default/docker\fP might be the place to go?
 .sp
 The second problem is that Docker containers need to know about the proxy as
-well. This manifests as images failing to build because they can\(aqt download
+well. This manifests as images failing to build because they can’t download
 stuff from the internet.
 .sp
 The fix is to set the proxy variables in your environment, e.g.:
@@ -246,7 +266,7 @@ Defaults env_keep+="HTTP_PROXY http_proxy HTTPS_PROXY https_proxy ALL_PROXY all_
 .UNINDENT
 .sp
 Because different programs use different subsets of these variables, and to
-avoid a situation where some things work and others don\(aqt, the Charliecloud
+avoid a situation where some things work and others don’t, the Charliecloud
 test suite (see below) includes a test that fails if some but not all of the
 above variables are set.
 .SH AUTHOR
