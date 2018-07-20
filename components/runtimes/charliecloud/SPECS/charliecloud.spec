@@ -16,7 +16,7 @@
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.2.4
+Version:   0.9.0
 Release:   %{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
