@@ -13,19 +13,19 @@
 %global clang_sha 64043d5cec9fb02d1b0fd80c9f2c4e9e4f09cf8f
 %global flang_sha 37e86e06f74d9bd91ef6bb511c026753b9124006
 
-%global pname llvm5-compilers
-%global major_ver 5
+%global pname llvm6-compilers
+%global major_ver 6
 
 Summary:   The LLVM Compiler Infrastructure
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.0.1
+Version:   6.0.1
 Release:   1%{?dist}
 License:   UIUC, Apache-2.0
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://www.llvm.org
 Source0:   http://releases.llvm.org/%{version}/llvm-%{version}.src.tar.xz
 Source1:   https://github.com/flang-compiler/clang/archive/%{clang_sha}.tar.gz
-Source2:   https://github.com/flang-compiler/flang/archive/flang_20180319.tar.gz
+Source2:   https://github.com/flang-compiler/flang/archive/flang_20180612.tar.gz
 Source3:   http://releases.llvm.org/%{version}/compiler-rt-%{version}.src.tar.xz
 Source4:   http://releases.llvm.org/%{version}/libcxx-%{version}.src.tar.xz
 Source5:   http://releases.llvm.org/%{version}/libcxxabi-%{version}.src.tar.xz
