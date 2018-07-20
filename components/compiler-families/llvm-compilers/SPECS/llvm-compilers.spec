@@ -92,7 +92,7 @@ ln -s ../../openmp-%{version}.src openmp
 cd ../..
 
 ln -s llvm-%{version}.src llvm
-ln -s flang-flang_20180319 flang
+ln -s flang-flang_20180612 flang
 
 # Flang code is not ready for -Werror
 %{__sed} -i -e 's/-Werror/-Wall/g' flang/CMakeLists.txt
