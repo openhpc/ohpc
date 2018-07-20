@@ -1,20 +1,21 @@
---- a/test/chtest/Build	2018-05-09 13:45:25.000000000 -0700
-+++ b/test/chtest/Build	2018-05-31 13:31:56.000000000 -0700
-@@ -13,9 +13,10 @@
+--- a/test/chtest/Build	2018-07-12 09:44:05.000000000 -0700
++++ b/test/chtest/Build	2018-07-20 10:20:14.000000000 -0700
+@@ -16,10 +16,11 @@
  
  set -ex
  
 -SRCDIR=$1
 -TARBALL=$2
--WORKDIR=$3
 +ARCH=$1
 +SRCDIR=$2
 +TARBALL=$3
+ TARBALL_UNCOMPRESSED=${TARBALL%.*}
+-WORKDIR=$3
 +WORKDIR=$4
  MIRROR=http://dl-cdn.alpinelinux.org/alpine/v3.6
  APK_TOOLS=apk-tools-static-2.7.5-r0.apk
  IMG="$WORKDIR/img"
-@@ -33,7 +34,7 @@
+@@ -37,7 +38,7 @@
  ## Bootstrap base Alpine Linux.
  
  # Download statically linked apk.
