@@ -17,7 +17,7 @@
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	17.11.7
+Version:	17.11.8
 %global rel	1
 Release:	%{rel}%{?dist}
 Summary:	Slurm Workload Manager
