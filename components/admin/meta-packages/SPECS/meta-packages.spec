@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%global gnu_major_ver 7
+%global gnu_major_ver 8
 %global openmpi_major_ver 3
 
 %if 0%{?rhel_version}
