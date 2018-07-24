@@ -11,6 +11,8 @@
 %include %{_sourcedir}/OHPC_macros
 %global _with_mysql  1
 %global _with_pmix --with-pmix=%{OHPC_ADMIN}/pmix
+%global _with_hwloc 1
+%global _with_numa 1
 
 %define pname slurm
 
