@@ -55,6 +55,9 @@ Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
 Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
 %endif
+# remove this in v8.2.0:
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85507
+Patch1:    partially-revert-rev259385.patch
 
 BuildRequires:  bison
 BuildRequires:  flex
@@ -87,6 +90,7 @@ frontend.
 %prep
 %if "%{compiler_family}" != "dts6"
 %setup -q -n %{source_directory} -a1 -a2 -a3
+%patch1 -p1
 
 ln -s gmp-%{gmp_version} gmp
 ln -s mpc-%{mpc_version} mpc
