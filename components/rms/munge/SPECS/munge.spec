@@ -139,10 +139,10 @@ rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 # karl.w.schulz@intel.com (9/10/18) - provide specific uid/gid to deal with 
 # possibility of getting alternate ownership within Warewulf
 /usr/bin/getent group munge >/dev/null 2>&1 || \
-  /usr/sbin/groupadd -r munge -g 201
+  /usr/sbin/groupadd -r munge -o -g 201
 /usr/bin/getent passwd munge >/dev/null 2>&1 || \
   /usr/sbin/useradd -c "MUNGE authentication service" \
-  -d "%{_sysconfdir}/munge" -g munge -s /bin/false -r munge -u 201
+  -d "%{_sysconfdir}/munge" -g munge -s /bin/false -o -r munge -u 201
 
 %post
 if [ ! -e %{_sysconfdir}/munge/munge.key -a -c /dev/urandom ]; then
