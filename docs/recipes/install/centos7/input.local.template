@@ -24,6 +24,10 @@ internal_netmask="${internal_netmask:-255.255.0.0}"
 # Local ntp server for time synchronization
 ntp_server="${ntp_server:-0.centos.pool.ntp.org}"
 
+# use ipmitool to start/stop the compute nodes
+bmc_use_ipmi="${bmc_ipmi_use:-1}"
+# IPMI version (VirtualBox with infra-ecosphere use version 1.5
+bmc_ipmi_version="${bmc_ipmi_version:-2.0}"
 # BMC user credentials for use by IPMI
 bmc_username="${bmc_username:-unknown}"
 bmc_password="${bmc_password:-unknown}"
