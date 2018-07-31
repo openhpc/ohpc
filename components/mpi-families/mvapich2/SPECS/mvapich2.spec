@@ -27,7 +27,7 @@
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}%{COMM_DELIM}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
-Version:   2.2
+Version:   2.3
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
@@ -84,7 +84,7 @@ across multiple networks.
 
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
-%patch1 -p0
+%patch1 -p1
 
 %build
 %ohpc_setup_compiler

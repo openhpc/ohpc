@@ -1,7 +1,6 @@
-diff -ruN mvapich2-2.1.old/src/mpid/ch3/channels/common/include/mv2_clock.h mvapich2-2.1/src/mpid/ch3/channels/common/include/mv2_clock.h
---- mvapich2-2.1.old/src/mpid/ch3/channels/common/include/mv2_clock.h	2015-04-02 22:00:25.000000000 +0100
-+++ mvapich2-2.1/src/mpid/ch3/channels/common/include/mv2_clock.h	2016-09-01 12:02:46.815596938 +0100
-@@ -83,8 +83,22 @@
+--- a/src/mpid/ch3/channels/common/include/mv2_clock.h	2018-07-24 07:30:00.000000000 -0700
++++ b/src/mpid/ch3/channels/common/include/mv2_clock.h	2018-07-31 15:49:19.000000000 -0700
+@@ -94,8 +94,22 @@
  }
  
  #else
