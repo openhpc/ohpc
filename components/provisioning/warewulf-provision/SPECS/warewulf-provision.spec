@@ -85,9 +85,9 @@ Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
-Requires: apache2 apache2-mod_perl tftp dhcp-server policycoreutils-python
+Requires: apache2 apache2-mod_perl tftp dhcp-server xinetd tcpdump policycoreutils-python
 %else
-Requires: mod_perl httpd tftp-server dhcp policycoreutils-python
+Requires: mod_perl httpd tftp-server dhcp xinetd tcpdump policycoreutils-python
 %endif
 
 # charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf
