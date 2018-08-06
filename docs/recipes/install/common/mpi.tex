@@ -40,12 +40,12 @@ OpenMPI                           & \multicolumn{1}{c}{\checkmark} & \multicolum
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 && ${enable_pmix} -eq 0 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) openmpi3-gnu7-ohpc mpich-gnu7-ohpc
+[sms](*\#*) (*\install*) openmpi3-gnu8-ohpc mpich-gnu8-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command elif [[ ${enable_mpi_defaults} -eq 1 && ${enable_pmix} -eq 1 ]];then
 % ohpc_indent 5
-% ohpc_command (*\install*) openmpi3-pmix-slurm-gnu7-ohpc mpich-gnu7-ohpc
+% ohpc_command (*\install*) openmpi3-pmix-slurm-gnu8-ohpc mpich-gnu8-ohpc
 % ohpc_indent 0
 % ohpc_command fi
 
@@ -58,7 +58,7 @@ MVAPICH2 family is available for use:
 % ohpc_command if [[ ${enable_ib} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) mvapich2-gnu7-ohpc
+[sms](*\#*) (*\install*) mvapich2-gnu8-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -71,7 +71,7 @@ variant of MVAPICH2 instead:
 % ohpc_command if [[ ${enable_opa} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) mvapich2-psm2-gnu7-ohpc
+[sms](*\#*) (*\install*) mvapich2-psm2-gnu8-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
@@ -80,4 +80,4 @@ variant of MVAPICH2 instead:
 An additional OpenMPI build variant is listed in Table~\ref{table:mpi} which
 enables \href{https://pmix.github.io/pmix/}{\color{blue}{PMIx}} job launch
 support for use with \SLURM{}. This optional variant is
-available as \texttt{openmpi3-pmix-slurm-gnu7-ohpc}.
+available as \texttt{openmpi3-pmix-slurm-gnu8-ohpc}.
