@@ -72,12 +72,12 @@ export SHARED_OPT=-shared
 
 %if %{compiler_family} == gnu8
 export PIC_OPT=-fPIC
-export SONAME_OPT="-Wl,-soname"
+export SONAME_OPT="-fopenmp -Wl,-soname"
 %endif
 
 %if %{compiler_family} == intel
 export PIC_OPT=-fpic
-export SONAME_OPT="-Xlinker -soname"
+export SONAME_OPT="-openmp -Xlinker -soname"
 %endif
 
 plasma-installer_%{version}/setup.py              \
@@ -85,14 +85,14 @@ plasma-installer_%{version}/setup.py              \
     --fc=${FC}                                    \
     --notesting                                   \
 %if %{compiler_family} == gnu8
-    --cflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
-    --fflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
+    --cflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
+    --fflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
     --cblaslib="-L${OPENBLAS_LIB} -lopenblas"     \
 %endif
 %if %{compiler_family} == intel
-    --cflags="${RPM_OPT_FLAGS} ${PIC_OPT}" \
-    --fflags="${RPM_OPT_FLAGS} ${PIC_OPT}" \
+    --cflags="${RPM_OPT_FLAGS} -openmp ${PIC_OPT}" \
+    --fflags="${RPM_OPT_FLAGS} -openmp ${PIC_OPT}" \
     --blaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
     --cblaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
     --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
