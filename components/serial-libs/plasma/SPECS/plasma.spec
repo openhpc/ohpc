@@ -87,15 +87,19 @@ plasma-installer_%{version}/setup.py              \
 %if %{compiler_family} == gnu8
     --cflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
     --fflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
-    --blaslib="-fopenmp -L${OPENBLAS_LIB} -lopenblas"      \
-    --cblaslib="-fopenmp -L${OPENBLAS_LIB} -lopenblas"     \
+    --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
+    --cblaslib="-L${OPENBLAS_LIB} -lopenblas"     \
+    --ldflags_c="-fopenmp" \
+    --ldflags_fc="-fopenmp" \
 %endif
 %if %{compiler_family} == intel
     --cflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
     --fflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
     --blaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
-    --cblaslib="-qopenmp -L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -liomp5" \
-    --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -liomp5" \
+    --cblaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
+    --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
+    --ldflags_c="-qopenmp" \
+    --ldflags_fc="-qopenmp" \
 %endif
     --downlapc
 
