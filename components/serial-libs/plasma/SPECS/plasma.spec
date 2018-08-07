@@ -94,8 +94,8 @@ plasma-installer_%{version}/setup.py              \
     --cflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
     --fflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
     --blaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
-    --cblaslib="-qopenmp -L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
-    --lapacklib="-qopenmp -L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
+    --cblaslib="-qopenmp -L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -liomp5" \
+    --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -liomp5" \
 %endif
     --downlapc
 
