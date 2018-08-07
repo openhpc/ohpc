@@ -77,7 +77,7 @@ export SONAME_OPT="-fopenmp -Wl,-soname"
 
 %if %{compiler_family} == intel
 export PIC_OPT=-fpic
-export SONAME_OPT="-openmp -Xlinker -soname"
+export SONAME_OPT="-qopenmp -Xlinker -soname"
 %endif
 
 plasma-installer_%{version}/setup.py              \
@@ -91,8 +91,8 @@ plasma-installer_%{version}/setup.py              \
     --cblaslib="-L${OPENBLAS_LIB} -lopenblas"     \
 %endif
 %if %{compiler_family} == intel
-    --cflags="${RPM_OPT_FLAGS} -openmp ${PIC_OPT}" \
-    --fflags="${RPM_OPT_FLAGS} -openmp ${PIC_OPT}" \
+    --cflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
+    --fflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
     --blaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
     --cblaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
     --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
