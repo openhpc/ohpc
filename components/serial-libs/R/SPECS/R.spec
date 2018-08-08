@@ -18,7 +18,6 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 %define 	pname R
-%define 	PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Release:	1%{?dist}

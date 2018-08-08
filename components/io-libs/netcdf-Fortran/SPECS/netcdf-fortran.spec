@@ -16,7 +16,6 @@
 # Base package name
 
 %define pname netcdf-fortran
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Fortran Libraries for the Unidata network Common Data Form

@@ -20,7 +20,6 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname scalapack
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        A subset of LAPACK routines redesigned for heterogenous computing

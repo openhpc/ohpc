@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname likwid
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Toolsuite of command line applications for performance oriented programmers
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}

@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname fftw
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 # Not building quad-precision because: "quad precision is not supported in MPI"
 %global precision_list single double long-double

@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname scorep
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

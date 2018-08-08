@@ -17,7 +17,6 @@
 
 # Base package name
 %define pname pnetcdf
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   A Parallel NetCDF library (PnetCDF)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

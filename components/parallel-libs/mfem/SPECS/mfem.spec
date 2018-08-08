@@ -16,7 +16,6 @@
 
 # Base package name
 %define pname mfem
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Lightweight, general, scalable C++ library for finite element methods

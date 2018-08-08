@@ -20,7 +20,6 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname hypre
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        2.14.0

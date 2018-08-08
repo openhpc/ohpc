@@ -12,7 +12,6 @@
 
 # Base package name
 %define pname easybuild
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %define vsc_base_ver 2.8.3
 %define vsc_install_ver 0.11.2

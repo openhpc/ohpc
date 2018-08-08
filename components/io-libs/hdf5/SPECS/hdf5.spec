@@ -14,7 +14,6 @@
 
 # Base package name
 %define pname hdf5
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}

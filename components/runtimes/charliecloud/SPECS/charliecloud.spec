@@ -12,7 +12,6 @@
 
 # Base package name
 %define pname charliecloud
-%define PNAME CHARLIECLOUD
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}

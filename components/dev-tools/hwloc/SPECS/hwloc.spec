@@ -11,7 +11,6 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname hwloc
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:        1.11.10

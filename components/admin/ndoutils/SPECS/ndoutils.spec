@@ -12,7 +12,6 @@
 
 # Base package name
 %define pname ndoutils
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:               %{pname}%{PROJ_DELIM}
 Version:            2.1.3

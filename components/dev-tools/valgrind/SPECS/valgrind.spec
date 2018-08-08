@@ -11,7 +11,6 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname valgrind
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Valgrind Memory Debugger
 Name:      %{pname}%{PROJ_DELIM}

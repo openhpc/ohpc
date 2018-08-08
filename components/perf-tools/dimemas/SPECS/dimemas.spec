@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname dimemas
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:	Dimemas tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

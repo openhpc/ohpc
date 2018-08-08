@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname scalasca
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Toolset for performance analysis of large-scale parallel applications
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

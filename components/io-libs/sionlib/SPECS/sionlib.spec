@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname sionlib
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Scalable I/O Library for Parallel Access to Task-Local Files
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

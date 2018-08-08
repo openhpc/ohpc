@@ -12,7 +12,6 @@
 
 # Base package name
 %define pname papi
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Performance Application Programming Interface
 Name:      %{pname}%{PROJ_DELIM}

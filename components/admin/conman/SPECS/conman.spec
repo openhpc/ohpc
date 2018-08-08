@@ -12,7 +12,6 @@
 
 # Base package name
 %define pname conman
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
 Name:		%{pname}%{PROJ_DELIM}

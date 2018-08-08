@@ -20,7 +20,6 @@ Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname petsc
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation

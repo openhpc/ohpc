@@ -10,7 +10,6 @@
 
 %include %{_sourcedir}/OHPC_macros
 %global pname pmix
-%global PNAME %(tr [a-z] [A-Z] <<< %{pname})
 
 Summary: An extended/exascale implementation of PMI
 Name: %{pname}%{PROJ_DELIM}

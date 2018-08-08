@@ -22,7 +22,6 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname plasma
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:	%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version: 2.8.0
