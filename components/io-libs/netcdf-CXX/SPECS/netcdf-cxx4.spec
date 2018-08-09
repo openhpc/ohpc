@@ -16,7 +16,6 @@
 # Base package name
 
 %define pname netcdf-cxx
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z] | tr - _)
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        C++ Libraries for the Unidata network Common Data Form

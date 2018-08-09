@@ -16,7 +16,6 @@
 # Base package name
 
 %define pname netcdf
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %define ncdf_so_major 7
 

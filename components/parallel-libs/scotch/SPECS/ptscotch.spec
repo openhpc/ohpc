@@ -16,7 +16,6 @@
 # Base package name
 %define base_pname scotch
 %define pname pt%{base_pname}
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:	%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version: 6.0.4

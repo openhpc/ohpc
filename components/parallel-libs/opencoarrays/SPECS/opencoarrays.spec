@@ -16,7 +16,6 @@
 
 # Base package name
 %define pname opencoarrays
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        ABI to leverage the parallel programming features of the Fortran 2018 DIS

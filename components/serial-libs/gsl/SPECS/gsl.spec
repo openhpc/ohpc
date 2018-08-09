@@ -14,7 +14,6 @@
 
 # Base package name
 %define pname gsl
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   GNU Scientific Library (GSL)
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}

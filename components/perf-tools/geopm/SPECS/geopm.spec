@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname geopm
-%define PNAME GEOPM
 
 # Install paths
 %define docdir %{OHPC_PUB}/doc/contrib/%{pname}-%{compiler_family}-%{mpi_family}-%{version}

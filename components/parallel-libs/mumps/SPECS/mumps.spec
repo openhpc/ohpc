@@ -17,7 +17,6 @@
 
 # Base package name
 %define pname mumps
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        5.1.2

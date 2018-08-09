@@ -14,7 +14,6 @@
 
 # Base package name
 %define pname ocr
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 # Build options
 

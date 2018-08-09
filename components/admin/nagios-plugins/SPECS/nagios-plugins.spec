@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname nagios-plugins
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %global _hardened_build 1
 

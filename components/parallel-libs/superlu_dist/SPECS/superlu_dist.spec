@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname superlu_dist
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %define major   5
 %define libname libsuperlu_dist

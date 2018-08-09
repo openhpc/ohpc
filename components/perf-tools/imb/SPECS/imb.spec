@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname imb
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

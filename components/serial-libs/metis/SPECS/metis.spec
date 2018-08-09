@@ -14,7 +14,6 @@
 
 # Base package name
 %define pname metis
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering

@@ -34,6 +34,9 @@
 
 DocDir:    %{OHPC_PUB}/doc/contrib
 
+# This actually does not work with %%global
+%define PNAME %(eval tr [a-z] [A-Z] <<< %{pname})
+
 # Instead of having Source[1-9]: OHPC_macros in every SPEC file,
 # this sets Source42 for all SPEC files which include OHPC_macros.
 Source42: OHPC_macros

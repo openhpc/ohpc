@@ -15,7 +15,6 @@
 
 # Base package name
 %define pname likwid
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Toolsuite of command line applications for performance oriented programmers
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -32,7 +31,7 @@ BuildRequires: perl-Data-Dumper
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
-LIKWID stands for “Like I Knew What I’m Doing.” It is an easy to use yet powerful
+LIKWID stands for "Like I Knew What I'm Doing." It is an easy to use yet powerful
 command line performance tool suite for the GNU/Linux operating system. While the
 focus of LIKWID is on x86 processors, some of the tools are portable and not
 limited to any specific architecture.

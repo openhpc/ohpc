@@ -27,7 +27,6 @@ Requires:      %{mpi_family}-gnu8%{PROJ_DELIM}
 
 # Base package name
 %define pname mpiP
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   mpiP: a lightweight profiling library for MPI applications.
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

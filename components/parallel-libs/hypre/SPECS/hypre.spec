@@ -20,14 +20,13 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname hypre
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        2.14.0
 Release:        1%{?dist}
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
-Group:          ohpc/parallel-libs
+Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         https://github.com/LLNL/hypre/archive/v%{version}.tar.gz#/hypre-%{version}.tar.gz
 %if 0%{?suse_version} <= 1110

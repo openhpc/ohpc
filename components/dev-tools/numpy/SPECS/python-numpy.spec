@@ -20,7 +20,6 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname numpy
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.15.0

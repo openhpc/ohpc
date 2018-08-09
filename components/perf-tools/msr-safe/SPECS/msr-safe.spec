@@ -14,7 +14,6 @@
 
 # Base package name
 %define pname msr-safe
-%define PNAME MSR-SAFE
 
 
 Name:           %{pname}%{PROJ_DELIM}

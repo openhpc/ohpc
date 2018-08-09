@@ -18,7 +18,6 @@
 
 # Base package name
 %define pname boost
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}

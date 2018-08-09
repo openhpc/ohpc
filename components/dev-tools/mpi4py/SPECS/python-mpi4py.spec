@@ -21,7 +21,6 @@
 
 # Base package name
 %define pname mpi4py
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        3.0.0

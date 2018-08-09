@@ -26,7 +26,7 @@ regex_wrong = [
 
 regex_required = [
     # Group designation should include %{PROJ_NAME} delimiter and known component area
-    '^Group:.*%{PROJ_NAME}/(admin|compiler-families|dev-tools|distro-packages|io-libs|lustre|mpi-families|parallel-libs|perf-tols|provisioning|rms|runtimes|serial-libs)$',
+    '^Group:.*%{PROJ_NAME}/(admin|compiler-families|dev-tools|distro-packages|io-libs|lustre|mpi-families|parallel-libs|perf-tools|provisioning|rms|runtimes|serial-libs)$',
     # Need a URL
     '(^URL:.*$|Url:.*$)',
     ]

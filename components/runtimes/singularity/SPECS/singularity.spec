@@ -34,7 +34,6 @@
 
 # Base package name
 %define pname singularity
-%define PNAME SINGULARITY
 
 # This allows us to pick up the default value from the configure
 %{!?with_slurm: %global with_slurm no}
