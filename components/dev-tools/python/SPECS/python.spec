@@ -21,7 +21,7 @@ Version:        2.7.12
 Release:        70.1%{?dist}
 Summary:        Python Interpreter
 License:        Python-2.0
-Group:          Development/Languages/Python
+Group:          %{PROJ_NAME}/distro-packages
 Url:            http://www.python.org/
 %define         tarversion %{version}
 %define         tarname Python-%{tarversion}
