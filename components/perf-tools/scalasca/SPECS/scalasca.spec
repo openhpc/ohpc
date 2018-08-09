@@ -38,8 +38,8 @@ BuildRequires: zlib-devel
 Scalasca is a software tool that supports the performance
 optimization of parallel programs by measuring and analyzing their
 runtime behavior. The analysis identifies potential performance
-bottlenecks – in particular those concerning communication and
-synchronization – and offers guidance in exploring their causes.
+bottlenecks - in particular those concerning communication and
+synchronization - and offers guidance in exploring their causes.
 
 Scalasca targets mainly scientific and engineering applications
 based on the programming interfaces MPI and OpenMP, including
