@@ -17,7 +17,7 @@ Name:      %{pname}%{PROJ_DELIM}
 Version:   2.33
 Release:   1%{?dist}
 License:   GPL
-Url:       http://sourceforge.net/projects/pdsh
+Url:       https://github.com/chaos/pdsh
 Group:     %{PROJ_NAME}/admin
 Source0:   https://github.com/chaos/%{pname}/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
 Patch1:    pdsh-slurm-list.patch
