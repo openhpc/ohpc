@@ -109,7 +109,7 @@ foreach my $category (@ohpcCategories) {
     OUTER: while(<IN>) {
 
 	# example format
-	# pdsh-ohpc 2.31 http://sourceforge.net/projects/pdsh ohpc/admin Parallel remote shell program
+	# pdsh-ohpc 2.31 https://github.com/chaos/pdsh ohpc/admin Parallel remote shell program
 	if($_ =~ /^(\S+) (\S+) (\S+) (ohpc\/\S+) (.+)$/) {
 	    my $name=$1;
 	    my $version=$2;
