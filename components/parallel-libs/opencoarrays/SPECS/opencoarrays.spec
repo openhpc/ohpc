@@ -21,7 +21,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        ABI to leverage the parallel programming features of the Fortran 2018 DIS
 License:        BSD-3-clause
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        2.1.0
+Version:        2.2.0
 Release:        1%{?dist}
 Source0:        https://github.com/sourceryinstitute/OpenCoarrays/releases/download/%{version}/OpenCoarrays-%{version}.tar.gz
 Url:            http://www.opencoarrays.org
