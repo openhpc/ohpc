@@ -28,9 +28,6 @@ License:       BSD-3-Clause
 Group:         %{PROJ_NAME}/perf-tools
 URL:           https://geopm.github.io
 Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
-Requires:      kmod-msr-safe%{PROJ_DELIM}
-Requires:      msr-safe%{PROJ_DELIM}
-Requires:      msr-safe-slurm%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: hwloc-devel

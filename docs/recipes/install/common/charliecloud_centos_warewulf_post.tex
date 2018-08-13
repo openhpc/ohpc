@@ -11,7 +11,7 @@ to build and run containers there.
 % ohpc_validation_comment Optionally, enable console redirection 
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Define node kernel arguments to support user namespaces
-[sms](*\#*) wwsh -y provision set "${compute_regex}" --kargs=namespace.unpriv_enable=1
+[sms](*\#*) export kargs="${kargs} namespace.unpriv_enable=1"
 
 # Increase per-user limit on the number of user namespaces that may be created
 [sms](*\#*) echo "user.max_user_namespaces=15076" >> $CHROOT/etc/sysctl.conf
