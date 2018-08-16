@@ -36,6 +36,8 @@ Provides: libarmpl_ilp64.so()(64bit)
 Provides: libarmpl_mp.so()(64bit)
 Provides: libarmpl_lp64_mp.so()(64bit)
 Provides: libarmpl_ilp64_mp.so()(64bit)
+Provides: libstdc++.so.6(GLIBCXX_3.4.20)(64bit)
+Provides: libstdc++.so.6(GLIBCXX_3.4.21)(64bit)
 AutoReq:  no
 
 %description
