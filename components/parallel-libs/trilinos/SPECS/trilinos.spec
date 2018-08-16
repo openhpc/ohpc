@@ -44,7 +44,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%if "%{compiler_family}" != intel
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if 0%{?suse_version} <= 1110
@@ -77,7 +77,7 @@ module load boost
 module load netcdf
 module load phdf5
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 
@@ -104,13 +104,26 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
         -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
 %else
+%if "%{compiler_family}" == "arm"
+        -DTPL_ENABLE_BLAS:BOOL=ON                                       \
+        -DBLAS_LIBRARY_DIRS:PATH="${ARMPL_LIBRARIES}"                   \
+        -DBLAS_LIBRARY_NAMES:STRING="armpl_mp"                          \
+        -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
+        -DLAPACK_LIBRARY_DIRS:PATH="${ARMPL_LIBRARIES}"                 \
+        -DLAPACK_LIBRARY_NAMES:STRING="armpl_mp"                        \
+%else
         -DTPL_ENABLE_BLAS:BOOL=ON                                       \
         -DBLAS_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                      \
         -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
         -DLAPACK_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                    \
         -DLAPACK_LIBRARY_NAMES:STRING="openblas"                        \
+%endif
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+        -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lflang"                    \
+%else
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
+%endif
 %endif
         -DTrilinos_ENABLE_MueLu:BOOL=ON                                 \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
@@ -200,10 +213,10 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
 
-# Autoload openblas for gnu builds
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+# Autoload openblas for gnu and llvm builds
+depends-on openblas
+%endif
 
 EOF
 
