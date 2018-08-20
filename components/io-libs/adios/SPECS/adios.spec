@@ -209,7 +209,7 @@ set             version             %{version}
 depends-on phdf5
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    INCLUDE             %{install_path}/include
+prepend-path    CPATH               %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path	PYTHONPATH          %{install_path}/python/lib64/%{python_lib_dir}/site-packages
 
