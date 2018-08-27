@@ -24,6 +24,14 @@ License:   BSD
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html
 Source0:   http://apps.fz-juelich.de/jsc/sionlib/download.php?version=%{version}#/%{pname}-%{version}.tar.gz
+Patch0:    sionlib-llvm-arm.patch
+
+# For pre-processor only:
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires: gcc-fortran
+%else
+BuildRequires: gcc-gfortran
+%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -38,6 +46,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %prep
 
 %setup -q -n %{pname}
+%patch0 -p1
 
 %build
 
@@ -46,6 +55,12 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %if %{compiler_family} == intel
 CONFIGURE_OPTIONS="--compiler=intel --disable-parutils "
+%endif
+%if %{compiler_family} == arm
+CONFIGURE_OPTIONS="--compiler=arm "
+%endif
+%if %{compiler_family} == llvm
+CONFIGURE_OPTIONS="--compiler=llvm "
 %endif
 
 %if %{mpi_family} == impi
