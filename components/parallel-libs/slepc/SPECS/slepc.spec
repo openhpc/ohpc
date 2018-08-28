@@ -37,7 +37,7 @@ Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 # A configure script in slepc is made by python
 BuildRequires: python
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -61,7 +61,7 @@ set -- *
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 module load petsc
@@ -70,7 +70,7 @@ make
 
 %install
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 module load petsc
