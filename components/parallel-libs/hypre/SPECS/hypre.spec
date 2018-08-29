@@ -13,7 +13,7 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -72,7 +72,7 @@ cp /usr/lib/rpm/config.guess src/config
 
 module load superlu
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 
@@ -92,8 +92,13 @@ cd src
     --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
     --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
 %else
+%if "%{compiler_family}" == "arm"
+    --with-blas-lib="-L$ARMPL_LIBRARIES -larmpl" \
+    --with-lapack-lib="-L$ARMPL_LIBRARIES -larmpl" \
+%else
     --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
     --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
+%endif
 %endif
     --with-mli \
     --with-fei \
@@ -119,7 +124,7 @@ cd ..
 
 module load superlu
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 
@@ -186,16 +191,18 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require superlu (and openblas for gnu compiler families)
+# Require superlu (and openblas for gnu and llvm compiler families)
 depends-on superlu
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+depends-on openblas
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+%if "%{compiler_family}" == "intel"
 prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
+%endif
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
