@@ -29,13 +29,14 @@ URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
 Source2:        superlu_dist-make.inc
 Source3:        superlu_dist-intel-make.inc
+Source4:        superlu_dist-arm-make.inc
 Patch1:         superlu_dist-parmetis.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -75,7 +76,11 @@ solutions.
 %if "%{compiler_family}" == "intel"
 cp %SOURCE3 make.inc
 %else
+%if "%{compiler_family}" == "arm"
+cp %SOURCE4 make.inc
+%else
 cp %SOURCE2 make.inc
+%endif
 %endif
 
 %build
@@ -85,8 +90,12 @@ cp %SOURCE2 make.inc
 module load metis ptscotch
 
 %if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "arm"
 module load openblas
 %define blas_lib -L$OPENBLAS_LIB -lopenblas
+%else
+%define blas_lib -L$ARMPL_LIBRARIES -larmpl_mp
+%endif
 %else
 %define blas_lib  -L$MKLROOT/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 %endif
