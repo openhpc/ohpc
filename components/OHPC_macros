@@ -89,6 +89,7 @@ BuildRequires: intel_licenses
 %if "%{compiler_family}" == "arm"
 BuildRequires: arm-compilers-devel%{PROJ_DELIM}
 Requires:      arm-compilers-devel%{PROJ_DELIM}
+%global __requires_exclude ^libflang.*\\.so.*$|^libompstub\\.so.*|^libomp\\.so.*$|^libarmpl.*\\.so.*$|^libstdc++\\.so.*$
 %endif
 %if "%{compiler_family}" == "dts6"
 BuildRequires: devtoolset-6
