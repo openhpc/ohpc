@@ -27,6 +27,7 @@ License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
+Patch1:  adios-return-value.patch
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
@@ -73,6 +74,7 @@ how they process the data.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 %build
 sed -i 's|@BUILDROOT@|%buildroot|' wrappers/numpy/setup*
@@ -158,7 +160,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 export PPATH="/lib64/%{python_lib_dir}/site-packages"
 export PATH=$(pwd):$PATH
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 module load %{python_module_prefix}numpy
