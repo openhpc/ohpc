@@ -12,8 +12,8 @@
 
 %define pname cmake
 
-%define major_version 3.11
-%define minor_version 4
+%define major_version 3.12
+%define minor_version 1
 
 Summary: CMake is an open-source, cross-platform family of tools designed to build, test and package software.
 Name:    %{pname}%{PROJ_DELIM}
@@ -25,15 +25,21 @@ Group:          %{PROJ_NAME}/dev-tools
 URL:            https://cmake.org/
 Source0:        https://cmake.org/files/v%{major_version}/cmake-%{version}.tar.gz
 BuildRequires:  gcc-c++
-BuildRequires:  libarchive-devel
+BuildRequires:  libarchive-devel >= 3.1
 BuildRequires:  curl-devel
 BuildRequires:  ncurses-devel
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig
-%if 0%{!?sles_version} && 0%{!?suse_version}
-BuildRequires:  bzip2-devel
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires:  libexpat-devel
+%else
 BuildRequires:  expat-devel
+
+# The following three dependencies on EL7 come from EPEL
+BuildRequires:  rhash-devel
+BuildRequires:  libuv-devel >= 1.10
+BuildRequires:  jsoncpp-devel
 %endif
 
 %define install_path %{OHPC_UTILS}/%{pname}/%version
@@ -47,18 +53,17 @@ of your choice.
 %prep
 %setup -q -n %{pname}-%{version}
 
-./bootstrap --prefix=%{install_path} --no-qt-gui \
-%if 0%{!?sles_version} && 0%{!?suse_version}
---system-bzip2 \
---system-expat \
+./bootstrap --system-libs \
+%if 0%{?sles_version} || 0%{?suse_version}
+--no-system-librhash \
+--no-system-libuv \
+--no-system-jsoncpp \
 %endif
---system-curl \
---system-zlib \
---system-liblzma \
---system-libarchive
+--no-qt-gui \
+--prefix=%{install_path}
 
 %build
-%{__make} %{?mflags}
+%{__make} %{?_smp_mflags}
 
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}

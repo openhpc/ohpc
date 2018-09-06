@@ -1,5 +1,5 @@
 CMake - Cross Platform Makefile Generator
-Copyright 2000-2017 Kitware, Inc. and Contributors
+Copyright 2000-2018 Kitware, Inc. and Contributors
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The following individuals and institutions are among the Contributors:
 
 * Aaron C. Meadows <cmake@shadowguarddev.com>
+* Adriaan de Groot <groot@kde.org>
 * Aleksey Avdeev <solo@altlinux.ru>
 * Alexander Neundorf <neundorf@kde.org>
 * Alexander Smorkalov <alexander.smorkalov@itseez.com>
@@ -68,13 +69,16 @@ The following individuals and institutions are among the Contributors:
 * Matthaeus G. Chajdas
 * Matthias Kretz <kretz@kde.org>
 * Matthias Maennich <matthias@maennich.net>
+* Michael Stürmer
 * Miguel A. Figueroa-Villanueva
 * Mike Jackson
 * Mike McQuaid <mike@mikemcquaid.com>
 * Nicolas Bock <nicolasbock@gmail.com>
 * Nicolas Despres <nicolas.despres@gmail.com>
 * Nikita Krupen'ko <krnekit@gmail.com>
+* NVIDIA Corporation <www.nvidia.com>
 * OpenGamma Ltd. <opengamma.com>
+* Patrick Stotko <stotko@cs.uni-bonn.de>
 * Per Øyvind Karlsen <peroyvind@mandriva.org>
 * Peter Collingbourne <peter@pcc.me.uk>
 * Petr Gotthard <gotthard@honeywell.com>
