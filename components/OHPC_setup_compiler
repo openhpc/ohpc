@@ -62,16 +62,6 @@ elif [ "$OHPC_COMPILER_FAMILY" = "arm" ]; then
     export F77=armflang
     module purge
     module load arm
-elif [ "$OHPC_COMPILER_FAMILY" = "dts6" ]; then
-    # dts is the devtoolset-6 software collection
-    # on top of CentOS7/RHEL7 which brings gcc 6.2.1
-    # http://mirror.centos.org/centos/7/sclo/$basearch/rh/
-    export CC=gcc
-    export CXX=g++
-    export FC=gfortran
-    export F77=gfortran
-    module purge
-    module load gnu/6
 elif [ "$OHPC_COMPILER_FAMILY" = "llvm" ]; then
     export toolset=clang
     export CC=clang

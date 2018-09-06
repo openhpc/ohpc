@@ -28,14 +28,6 @@
 %global source_directory gcc-%{version}
 %endif
 
-%if "%{compiler_family}" == "dts6"
-%global gnu_version 6
-%global gnu_major_ver 6
-%global gnu_release 0
-%global pname gnu-dts6-compilers
-%global source_directory %{nil}
-%endif
-
 # Define subcomponent versions required for build
 
 %global gmp_version 6.1.2
@@ -49,12 +41,10 @@ Release:   %{gnu_release}%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://gcc.gnu.org/
-%if "%{compiler_family}" != "dts6"
 Source0:   %{source}
 Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
 Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
-%endif
 # remove this in v8.2.0:
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85507
 Patch1:    partially-revert-rev259385.patch
@@ -76,11 +66,7 @@ BuildRequires:  fdupes
 Requires: glibc-devel
 
 
-%if "%{compiler_family}" == "dts6"
-%define install_path /opt/rh/devtoolset-6/root/usr
-%else
 %define install_path %{OHPC_COMPILERS}/gcc/%{version}
-%endif
 
 %description
 
@@ -88,7 +74,6 @@ Core package for the GNU Compiler Collection, including the C language
 frontend.
 
 %prep
-%if "%{compiler_family}" != "dts6"
 %setup -q -n %{source_directory} -a1 -a2 -a3
 %patch1 -p1
 
@@ -102,9 +87,7 @@ ln -s mpfr-%{mpfr_version} mpfr
 cd obj
 ../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path} --disable-static --enable-shared
 make %{?_smp_mflags}
-%endif
 %install
-%if "%{compiler_family}" != "dts6"
 cd obj
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
@@ -113,7 +96,6 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/lib
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/install-tools
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/share
-%endif
 %endif
 
 
@@ -163,7 +145,6 @@ EOF
 
 %files
 %{OHPC_MODULES}/gnu%{gnu_major_ver}/
-%if "%{compiler_family}" != "dts6"
 %dir %{OHPC_COMPILERS}/gcc
 %{install_path}
 %doc COPYING
@@ -176,5 +157,4 @@ EOF
 %doc COPYING.RUNTIME
 %if "%{compiler_family}" != "gnu7"
 %doc NEWS
-%endif
 %endif
