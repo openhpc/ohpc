@@ -1,0 +1,184 @@
+diff -ruN numpy-1.15.1.old/numpy/distutils/armclangccompiler.py numpy-1.15.1/numpy/distutils/armclangccompiler.py
+--- numpy-1.15.1.old/numpy/distutils/armclangccompiler.py	1970-01-01 01:00:00.000000000 +0100
++++ numpy-1.15.1/numpy/distutils/armclangccompiler.py	2018-08-23 08:07:13.168498370 +0100
+@@ -0,0 +1,23 @@
++from __future__ import division, absolute_import, print_function
++
++from distutils.unixccompiler import UnixCCompiler
++
++class ArmClangCCompiler(UnixCCompiler):
++
++    """
++    Arm HPC compiler.
++    """
++
++    compiler_type = 'armclang'
++    cc_exe = 'armclang -fPIC -DPIC'
++    cxx_exe = 'armclang++ -fPIC -DPIC'
++
++    def __init__ (self, verbose=0, dry_run=0, force=0):
++        UnixCCompiler.__init__ (self, verbose, dry_run, force)
++        cc_compiler = self.cc_exe
++        cxx_compiler = self.cxx_exe
++        self.set_executables(compiler=cc_compiler,
++                             compiler_so=cc_compiler,
++                             compiler_cxx=cxx_compiler,
++                             linker_exe=cc_compiler,
++                             linker_so=cc_compiler + ' -shared -rtlib=compiler-rt')
+diff -ruN numpy-1.15.1.old/numpy/distutils/ccompiler.py numpy-1.15.1/numpy/distutils/ccompiler.py
+--- numpy-1.15.1.old/numpy/distutils/ccompiler.py	2018-08-19 18:17:10.000000000 +0100
++++ numpy-1.15.1/numpy/distutils/ccompiler.py	2018-08-23 07:59:38.420533732 +0100
+@@ -508,6 +508,7 @@
+     # run on every extension so skip for known good compilers
+     if hasattr(self, 'compiler') and ('gcc' in self.compiler[0] or
+                                       'g++' in self.compiler[0] or
++                                      'armclang' in self.compiler[0] or
+                                       'clang' in self.compiler[0]):
+         self._auto_depends = True
+     elif os.name == 'posix':
+@@ -673,10 +674,16 @@
+                               "Intel C Compiler for 64-bit applications on Windows")
+ compiler_class['pathcc'] = ('pathccompiler', 'PathScaleCCompiler',
+                             "PathScale Compiler for SiCortex-based applications")
++compiler_class['armclang'] = ('armclangccompiler', 'ArmClangCCompiler',
++                            "Arm HPC compiler for 64-bit applications")
++compiler_class['clang'] = ('clangccompiler', 'ClangCCompiler',
++                            "LLVM compiler for 64-bit applications")
+ ccompiler._default_compilers += (('linux.*', 'intel'),
+                                  ('linux.*', 'intele'),
+                                  ('linux.*', 'intelem'),
+                                  ('linux.*', 'pathcc'),
++                                 ('linux.*', 'armclang'),
++                                 ('linux.*', 'clang'),
+                                  ('nt', 'intelw'),
+                                  ('nt', 'intelemw'))
+ 
+diff -ruN numpy-1.15.1.old/numpy/distutils/clangccompiler.py numpy-1.15.1/numpy/distutils/clangccompiler.py
+--- numpy-1.15.1.old/numpy/distutils/clangccompiler.py	1970-01-01 01:00:00.000000000 +0100
++++ numpy-1.15.1/numpy/distutils/clangccompiler.py	2018-08-23 07:56:25.061329095 +0100
+@@ -0,0 +1,23 @@
++from __future__ import division, absolute_import, print_function
++
++from distutils.unixccompiler import UnixCCompiler
++
++class ClangCCompiler(UnixCCompiler):
++
++    """
++    LLVM compiler.
++    """
++
++    compiler_type = 'clang'
++    cc_exe = 'clang -fPIC -DPIC'
++    cxx_exe = 'clang++ -fPIC -DPIC'
++
++    def __init__ (self, verbose=0, dry_run=0, force=0):
++        UnixCCompiler.__init__ (self, verbose, dry_run, force)
++        cc_compiler = self.cc_exe
++        cxx_compiler = self.cxx_exe
++        self.set_executables(compiler=cc_compiler,
++                             compiler_so=cc_compiler,
++                             compiler_cxx=cxx_compiler,
++                             linker_exe=cc_compiler,
++                             linker_so=cc_compiler + ' -shared -rtlib=compiler-rt')
+diff -ruN numpy-1.15.1.old/numpy/distutils/fcompiler/__init__.py numpy-1.15.1/numpy/distutils/fcompiler/__init__.py
+--- numpy-1.15.1.old/numpy/distutils/fcompiler/__init__.py	2018-08-21 02:23:21.000000000 +0100
++++ numpy-1.15.1/numpy/distutils/fcompiler/__init__.py	2018-08-23 08:02:03.319904984 +0100
+@@ -735,10 +735,10 @@
+ _default_compilers = (
+     # sys.platform mappings
+     ('win32', ('gnu', 'intelv', 'absoft', 'compaqv', 'intelev', 'gnu95', 'g95',
+-               'intelvem', 'intelem', 'flang')),
++               'intelvem', 'intelem', 'armflang', 'flang')),
+     ('cygwin.*', ('gnu', 'intelv', 'absoft', 'compaqv', 'intelev', 'gnu95', 'g95')),
+     ('linux.*', ('gnu95', 'intel', 'lahey', 'pg', 'absoft', 'nag', 'vast', 'compaq',
+-                 'intele', 'intelem', 'gnu', 'g95', 'pathf95', 'nagfor')),
++                 'intele', 'intelem', 'gnu', 'g95', 'pathf95', 'nagfor', 'armflang', 'flang')),
+     ('darwin.*', ('gnu95', 'nag', 'absoft', 'ibm', 'intel', 'gnu', 'g95', 'pg')),
+     ('sunos.*', ('sun', 'gnu', 'gnu95', 'g95')),
+     ('irix.*', ('mips', 'gnu', 'gnu95',)),
+diff -ruN numpy-1.15.1.old/numpy/distutils/fcompiler/armflang.py numpy-1.15.1/numpy/distutils/fcompiler/armflang.py
+--- numpy-1.15.1.old/numpy/distutils/fcompiler/armflang.py	1970-01-01 01:00:00.000000000 +0100
++++ numpy-1.15.1/numpy/distutils/fcompiler/armflang.py	2018-08-23 11:48:44.940592120 +0100
+@@ -0,0 +1,39 @@
++from __future__ import division, absolute_import, print_function
++
++from numpy.distutils.fcompiler import FCompiler
++
++compilers = ['ARMHPCFCompiler']
++
++class ARMHPCFCompiler(FCompiler):
++
++    compiler_type = 'armflang'
++    description = 'Arm HPC Fortran Compiler'
++    version_pattern =  r'Arm C/C\+\+/Fortran Compiler version (?P<version>[\d.]+)'
++
++    executables = {
++        'version_cmd'  : ["armflang", "--version"],
++        'compiler_f77' : ["armflang", "-Mfixed"],
++        'compiler_fix' : ["armflang", "-Mfixed"],
++        'compiler_f90' : ["armflang"],
++        'linker_so'    : ["armflang", "-shared"],
++        'archiver'     : ["ar", "-cr"],
++        'ranlib'       : ["ranlib"]
++    }
++    pic_flags = ['-fPIC -DPIC']
++    module_dir_switch = None
++    module_include_switch = '-I'
++
++    def get_flags_opt(self):
++        return ['-O2']
++    def get_flags_debug(self):
++        return ['-g']
++    def runtime_library_dir_option(self, dir):
++        return '-Wl,-rpath="%s"' % dir
++
++if __name__ == '__main__':
++    from distutils import log
++    log.set_verbosity(2)
++    from numpy.distutils.fcompiler import new_fcompiler
++    compiler = new_fcompiler(compiler='armflang')
++    compiler.customize()
++    print(compiler.get_version())
+diff -ruN numpy-1.15.1.old/numpy/distutils/fcompiler/flang.py numpy-1.15.1/numpy/distutils/fcompiler/flang.py
+--- numpy-1.15.1.old/numpy/distutils/fcompiler/flang.py	1970-01-01 01:00:00.000000000 +0100
++++ numpy-1.15.1/numpy/distutils/fcompiler/flang.py	2018-08-23 07:56:25.061329095 +0100
+@@ -0,0 +1,39 @@
++from __future__ import division, absolute_import, print_function
++
++from numpy.distutils.fcompiler import FCompiler
++
++compilers = ['LLVMFCompiler']
++
++class LLVMFCompiler(FCompiler):
++
++    compiler_type = 'flang'
++    description = 'LLVM Fortran Compiler'
++    version_pattern =  r'clang version (?P<version>[\d.]+)'
++
++    executables = {
++        'version_cmd'  : ["flang", "--version"],
++        'compiler_f77' : ["flang", "-Mfixed"],
++        'compiler_fix' : ["flang", "-Mfixed"],
++        'compiler_f90' : ["flang"],
++        'linker_so'    : ["flang", "-shared"],
++        'archiver'     : ["ar", "-cr"],
++        'ranlib'       : ["ranlib"]
++    }
++    pic_flags = ['-fPIC -DPIC']
++    module_dir_switch = None
++    module_include_switch = '-I'
++
++    def get_flags_opt(self):
++        return ['-O2']
++    def get_flags_debug(self):
++        return ['-g']
++    def runtime_library_dir_option(self, dir):
++        return '-Wl,-rpath="%s"' % dir
++
++if __name__ == '__main__':
++    from distutils import log
++    log.set_verbosity(2)
++    from numpy.distutils.fcompiler import new_fcompiler
++    compiler = new_fcompiler(compiler='flang')
++    compiler.customize()
++    print(compiler.get_version())
