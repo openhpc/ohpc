@@ -15,7 +15,7 @@
 
 # Build requires
 BuildRequires: python
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -59,11 +59,14 @@ mkdir -p build/download
 
 cp %{SOURCE0} build/download
 cp %{SOURCE2} build/download
+%if "%{compiler_family}" == "arm"
+cp %{SOURCE2} build/download/lapack-3.8.0.tgz
+%endif
 
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 
@@ -79,11 +82,19 @@ export PIC_OPT=-fpic
 export SONAME_OPT="-Xlinker -soname"
 %endif
 
+%if "%{compiler_family}" == "arm" || "%{compiler_family}" == "llvm"
+export PIC_OPT="-fPIC -DPIC"
+export SONAME_OPT="-Wl,-soname"
+%endif
+
+%if "%{compiler_family}" == "arm"
+echo "d" | LAPACKE_WITH_TMG=1 \
+%endif
 plasma-installer_%{version}/setup.py              \
     --cc=${CC}                                    \
     --fc=${FC}                                    \
     --notesting                                   \
-%if %{compiler_family} == gnu8
+%if "%{compiler_family}" == "gnu8" || "%{compiler_family}" == "llvm"
     --cflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
     --fflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
@@ -100,7 +111,20 @@ plasma-installer_%{version}/setup.py              \
     --ldflags_c="-qopenmp" \
     --ldflags_fc="-qopenmp" \
 %endif
+%if "%{compiler_family}" == "arm"
+    --cflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT}" \
+    --fflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT}" \
+    --blaslib="-L${ARMPL_LIBRARIES} -larmpl_mp"     \
+    --cblaslib="-L${ARMPL_LIBRARIES} -larmpl_mp"    \
+    --lapacklib="-L${ARMPL_LIBRARIES} -larmpl_mp"   \
+    --ldflags_c="-fopenmp"                          \
+    --ldflags_fc="-fopenmp"                         \
+%endif
     --downlapc
+
+%if "%{compiler_family}" == "arm"
+%{__cat} build/log/lapackcwrapperlog
+%endif
 
 #
 #Create shared libraries
@@ -149,11 +173,10 @@ module-whatis "URL %{url}"
 
 set     version			    %{version}
 
-
-# Require openblas for gnu compiler families
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+# Require openblas for gnu and llvm compiler families
+depends-on openblas
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
