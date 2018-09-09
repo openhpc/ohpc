@@ -59,8 +59,12 @@ differential equations.
 
 module load phdf5
 
-# Enable scalapack linkage for blas/lapack with gnu builds
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" == "arm"
+module load scalapack
+%endif
+
+# Enable scalapack and openblas linkage for blas/lapack with gnu and other (e.g. llvm) builds
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load scalapack openblas
 %endif
 
@@ -72,11 +76,19 @@ module load scalapack openblas
         --FFLAGS="-fPIC" \
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
+%if %{compiler_family} == arm
+        --CFLAGS="-fPIC -DPIC" \
+        --CXXFLAGS="-fPIC -DPIC" \
+        --FFLAGS="-fPIC" \
+        --with-blas-lapack-lib=$ARMPL_LIBRARIES/libarmpl.so \
+        --with-scalapack-dir=$SCALAPACK_DIR \
+%else
         --CFLAGS="-fPIC -DPIC" \
         --CXXFLAGS="-fPIC -DPIC" \
         --FFLAGS="-fPIC" \
         --with-blas-lapack-lib=$OPENBLAS_LIB/libopenblas.so \
         --with-scalapack-dir=$SCALAPACK_DIR \
+%endif
 %endif
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
@@ -85,7 +97,9 @@ module load scalapack openblas
         --with-fc=mpiifort  \
         --with-f77=mpiifort \
 %else
+%if "%{compiler_family}" == "gnu"
         --FFLAGS=-I$I_MPI_ROOT/include64/gfortran/4.9.0/ \
+%endif
 %endif
 %endif
         --with-clanguage=C++ \
@@ -131,11 +145,11 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 (and scalapack for gnu compiler families)
+# Require phdf5 (and scalapack for compiler families other than intel)
 depends-on phdf5
-if { ![is-loaded intel] } {
-    depends-on scalapack
-}
+%if "%{compiler_family}" != "intel"
+depends-on scalapack
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
