@@ -12,7 +12,7 @@
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -134,14 +134,25 @@ export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
 %if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" == "arm"
+BLAS="-L${ARMPL_LIBRARIES} -larmpl_mp -fopenmp"
+echo "ArmPL options flags .... ${BLAS} "
+%else
 module load openblas
 BLAS="-L${OPENBLAS_LIB} -lopenblas"
+%endif
 %else
 MKL_LIB_PATH=$MKLROOT/lib/intel64
 BLAS="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl -lpthread -lm"
 echo "MKL options flag .... $MKL "
 %endif
 
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+FFLAGS="-fPIC -DPIC -i4" \
+FCFLAGS="-fPIC -DPIC -i4" \
+FPICFLAGS="-i4" \
+FCPICFLAGS="-i4" \
+%endif
 ./configure  \
             --with-lapack="$BLAS" \
             --with-blas="$BLAS" \
@@ -196,9 +207,9 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_SHARE      %{install_path}/share
 
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+depends-on openblas
+%endif
 
 EOF
 
