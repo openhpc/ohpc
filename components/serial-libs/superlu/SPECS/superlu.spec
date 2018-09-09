@@ -98,10 +98,9 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
-
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+depends-on openblas
+%endif
 
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
