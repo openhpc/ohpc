@@ -92,7 +92,12 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 BuildRequires:  pbspro-server%{PROJ_DELIM}
 BuildRequires:  openssl-devel
 %endif
+
+%if "0%{?__requires_exclude}" == "0"
 %global __requires_exclude ^libpbs.so.*$
+%else
+%global __requires_exclude %{__requires_exclude}|^libpbs.so.*$
+%endif
 
 %if %{with_psm2}
 BuildRequires:  libpsm2-devel >= 10.2.0
