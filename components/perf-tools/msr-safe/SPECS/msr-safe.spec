@@ -28,8 +28,11 @@ Source1:        msr-safe.service
 Source2:        msr-safe.sysconfig
 Source3:        10-msr-safe.rules
 Source4:        msr-safe.sh
+Patch1:         0001-Correcting-hash_for_each_possible-function.-Fixes-41.patch
+Patch2:         0002-Adding-slurm-spank-plugin-to-enable-MSR-save-restore.patch
 BuildRequires:  %kernel_module_package_buildreqs
 BuildRequires:  systemd
+
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  udev
 #!BuildIgnore: post-build-checks
@@ -40,8 +43,28 @@ BuildRequires:  udev
 %description
 Allows safer access to model specific registers (MSRs)
 
+%package slurm
+Summary: msr-safe slurm spank plugin
+Group: Development/Libraries
+Requires:       %{pname}%{PROJ_DELIM}
+BuildRequires:  slurm%{PROJ_DELIM}
+BuildRequires:  slurm-devel%{PROJ_DELIM}
+
+%description slurm
+The purpose of this slurm plugin is to ensure that MSRs modified
+within a user slurm job allocation are reset to their original state
+before the compute node is returned to the pool available to other
+users of the system.  The msr-safe kernel module is targeting HPC
+systems that enforce single user occupancy per compute node, and is
+not appropriate for systems where compute nodes are shared between
+users.  The modifications that one user makes to whitelisted registers
+may impact subsequent users of the processor if not restored.
+
+
 %prep
-%autosetup -n %{pname}-%{version}
+%setup -q -n %{pname}-%{version}
+%patch1 -p1
+%patch2 -p1
 
 %build
 for flavor in %flavors_to_build; do
@@ -51,9 +74,12 @@ for flavor in %flavors_to_build; do
     %{__make} -C %{kernel_source $flavor} M=$PWD/obj/$flavor
 done
 %{__make} CPPFLAGS="-DVERSION=\\\"%{version}-%{release}\\\"" msrsave/msrsave
+%{__make} CPPFLAGS="-DVERSION=\\\"%{version}-%{release}\\\"" spank
 
 %install
 %{__make} install DESTDIR=%{buildroot} prefix=%{_prefix} sbindir=%{_sbindir} mandir=%{_mandir}
+%{__make} install-spank DESTDIR=%{buildroot} prefix=%{_prefix} libdir=%{_libdir}
+
 install -d %{buildroot}/%{_datadir}/msr-safe/whitelists
 install -m 0644 whitelists/* %{buildroot}/%{_datadir}/msr-safe/whitelists/
 install -d %{buildroot}%{_unitdir}
@@ -106,3 +132,6 @@ fi
 %{_sbindir}/msr-safe
 %dir %{_mandir}/man1
 %doc %{_mandir}/man1/msrsave.1.gz
+
+%files slurm
+%{_libdir}/slurm/libspank_msrsafe.so

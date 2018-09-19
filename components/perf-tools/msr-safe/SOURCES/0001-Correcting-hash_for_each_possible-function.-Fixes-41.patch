@@ -1,0 +1,26 @@
+From aeb315ea8afa7e6bc675df7e905b505b5c16e0bb Mon Sep 17 00:00:00 2001
+From: Stephanie Labasan <labasan1@llnl.gov>
+Date: Mon, 30 Jul 2018 08:39:15 -0700
+Subject: [PATCH 1/2] Correcting hash_for_each_possible function. Fixes #41.
+
+Signed-off-by: Stephanie Labasan <labasan1@llnl.gov>
+---
+ msr_whitelist.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/msr_whitelist.c b/msr_whitelist.c
+index 6353796..440625d 100644
+--- a/msr_whitelist.c
++++ b/msr_whitelist.c
+@@ -300,7 +300,7 @@ static struct whitelist_entry *find_in_whitelist(u64 msr)
+     struct hlist_node *node;
+     if (whitelist)
+     {
+-        hash_or_each_possible(whitelist_hash, entry, node, hlist, msr)
++        hash_for_each_possible(whitelist_hash, entry, node, hlist, msr)
+         if (entry && entry->msr == msr)
+         {
+             return entry;
+-- 
+1.8.3.1
+
