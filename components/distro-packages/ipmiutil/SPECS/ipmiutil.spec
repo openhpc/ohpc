@@ -14,7 +14,7 @@
 %define pname ipmiutil
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 2.9.6
+Version: 3.1.3
 Release: 1%{?dist}
 Summary:   Easy-to-use IPMI server management utilities
 License:   BSD 3-clause
@@ -110,6 +110,7 @@ make install DESTDIR=%{buildroot}
 %{_sbindir}/ifirewall
 %{_sbindir}/ifwum
 %{_sbindir}/ihpm
+%{_sbindir}/iuser
 %{_datadir}/%{pname}/ipmiutil_evt
 %{_datadir}/%{pname}/ipmiutil_asy
 %{_datadir}/%{pname}/ipmiutil_wdt
@@ -154,6 +155,9 @@ make install DESTDIR=%{buildroot}
 %{_mandir}/man8/iekanalyzer.8*
 %{_mandir}/man8/itsol.8*
 %{_mandir}/man8/idcmi.8*
+%{_mandir}/man8/iseltime.8*
+%{_mandir}/man8/iuser.8*
+%{_libdir}/libipmiutil.so.1
 %doc AUTHORS ChangeLog COPYING NEWS README TODO
 %doc doc/UserGuide
 
