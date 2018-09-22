@@ -14,10 +14,13 @@
 
 %define pname lmod
 
-%if 0%{?suse_version} <= 1220
-%define luaver 5.1
-%else
+%if 0%{?suse_version} > 1220
 %define luaver 5.2
+%else
+%define luaver 5.1
+%if 0%{?rhel} > 7
+%define luaver 5.3
+%endif
 %endif
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
@@ -33,10 +36,24 @@ Group:     %{PROJ_NAME}/admin
 Url:       https://github.com/TACC/Lmod
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 
+# Known dependencies
+Requires: lua >= %{luaver}
+Requires: tcl
+
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
+%if 0%{?rhel} > 7
+BuildRequires: lua-filesystem
+BuildRequires: lua-posix
+BuildRequires: procps-ng
+Requires: lua-filesystem
+Requires: lua-posix
+%else
 BuildRequires: lua-filesystem%{PROJ_DELIM}
 BuildRequires: lua-posix%{PROJ_DELIM}
+Requires: lua-filesystem%{PROJ_DELIM}
+Requires: lua-posix%{PROJ_DELIM}
+%endif
 
 BuildRequires: rsync
 BuildRequires: tcl
@@ -57,14 +74,7 @@ Patch2: lmod.site.patch
 # 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
 %global _default_patch_fuzz 2
 
-# Known dependencies
-Requires: lua >= %{luaver}
-Requires: tcl
-Requires: lua-filesystem%{PROJ_DELIM}
-Requires: lua-posix%{PROJ_DELIM}
-
-
-%description 
+%description
 Lmod: An Environment Module System based on Lua, Reads TCL Modules,
 Supports a Software Hierarchy
 
@@ -77,13 +87,17 @@ Supports a Software Hierarchy
 
 %build
 unset MODULEPATH
+%if 0%{?rhel} <= 7
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
+%endif
 ./configure --prefix=%{OHPC_ADMIN} --libdir=%{lualibdir} --datadir=%{luapkgdir} --with-redirect=yes --with-autoSwap=no
 
 %install
+%if 0%{?rhel} <= 7
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
+%endif
 make DESTDIR=$RPM_BUILD_ROOT install
 # Customize startup script to suit
 
