@@ -44,7 +44,7 @@ BuildRequires: tcl
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires: procps
 %endif
-   
+
 %if 0%{?sles_version} || 0%{?suse_version}
 Conflicts: Modules
 %else
@@ -152,7 +152,7 @@ setenv LMOD_PREPEND_BLOCK "normal"
 
 if ( \`id -u\` == "0" ) then
    setenv MODULEPATH "%{OHPC_ADMIN}/modulefiles:%{OHPC_MODULES}"
-else   
+else
    setenv MODULEPATH "%{OHPC_MODULES}"
 endif
 
@@ -160,7 +160,7 @@ endif
 source %{OHPC_ADMIN}/lmod/lmod/init/csh >/dev/null
 
 # Load baseline OpenHPC environment
-module try-add ohpc 
+module try-add ohpc
 
 EOF
 
@@ -174,4 +174,3 @@ EOF
 %config %{_sysconfdir}/profile.d/lmod.csh
 %{OHPC_PUB}
 %doc License README.md README_lua_modulefiles.txt INSTALL
-
