@@ -32,7 +32,9 @@ Requires(postun): systemd
 %if 0%{?suse_version}
 BuildRequires:	tcpd-devel
 %else
+%if 0%{?rhel} <= 7
 BuildRequires:	tcp_wrappers-devel
+%endif
 %endif
 BuildRequires:	freeipmi-devel
 #!BuildIgnore: post-build-checks
@@ -63,7 +65,12 @@ Its features include:
 %setup -q -n %{pname}-%{pname}-%{version}
 
 %build
-%configure --with-tcp-wrappers --with-freeipmi
+%configure --with-tcp-wrappers \
+%if 0%{?rhel} > 7
+	%{nil}
+%else
+	--with-tcp-wrappers
+%endif
 make %{?_smp_mflags}
 
 %install
