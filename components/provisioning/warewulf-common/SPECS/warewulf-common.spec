@@ -8,9 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-
-
 %include %{_sourcedir}/OHPC_macros
 
 %define pname warewulf-common
@@ -20,7 +17,7 @@
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
 Version: 3.8.1
-Release: %{_rel}%{?dist}
+Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
@@ -40,16 +37,8 @@ BuildArch: noarch
 %if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else
-# 07/23/14 travis.post@intel.com - alternate package names for RHEL7
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
 Requires: mariadb-server perl-DBD-MySQL
 Requires: perl-Term-ReadLine-Gnu
-%else
-%if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
-Requires: mysql-server perl-DBD-mysql
-BuildRequires: db4-utils
-%endif
-%endif
 %endif
 
 %description
