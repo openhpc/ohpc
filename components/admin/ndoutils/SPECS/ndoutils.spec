@@ -37,7 +37,6 @@ Patch1:             %{pname}-2.1.2-var-files.patch
 # Set user/group in files section, fix permissions on install
 Patch2:             %{pname}-2.1.3-install.patch
 
-BuildRequires:      mysql-devel
 Provides:           %{pname}
 
 # Nagios is required also for user and group
@@ -48,6 +47,11 @@ BuildRequires:      systemd
 Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
+%endif
+%if 0%{?rhel} > 7
+BuildRequires:      mariadb-devel
+%else
+BuildRequires:      mysql-devel
 %endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
