@@ -16,7 +16,7 @@
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
 Version:   0.9.2
-Release:   %{?dist}
+Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://hpc.github.io/charliecloud/
@@ -33,7 +33,7 @@ Source10:  charliecloud.1
 Patch1:    charliecloud-language_highlight.patch
 Patch2:    charliecloud-test-build.patch
 
-BuildRequires: python 
+BuildRequires: python
 BuildRequires: rsync
 
 # Default library install path
