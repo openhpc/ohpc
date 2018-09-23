@@ -10,7 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sles_version} || 0%{?suse_version} || 0%{rhel} > 7
 %define python3_prefix python3
 %else
 %define python3_prefix python34
@@ -31,8 +31,13 @@ BuildRequires:  fdupes
 Requires(post): update-alternatives
 Requires(postun): update-alternatives
 %else
+%if 0%{rhel} > 7
+BuildRequires:  %{python3_prefix}-libxml2
+Requires:       %{python3_prefix}-libxml2
+%else
 BuildRequires:  libxml2-python
 Requires:       libxml2-python
+%endif
 Requires(post): chkconfig
 Requires(postun): chkconfig
 %endif
