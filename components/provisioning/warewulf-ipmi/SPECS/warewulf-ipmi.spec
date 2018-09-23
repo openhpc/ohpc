@@ -8,29 +8,20 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-
 %include %{_sourcedir}/OHPC_macros
 
 %define pname warewulf-ipmi
 %define dname ipmi
 %define wwpkgdir /srv/warewulf
 
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
-%else
-%define rpmname %{pname}
-%endif
-
-Name: %{rpmname}
+Name: %{pname}%{PROJ_DELIM}
 Summary: IPMI Module for Warewulf
 Version: 3.8.1
-Release: %{_rel}%{?dist}
+Release: 1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/%{version}.tar.gz#/warewulf3-%{version}.tar.gz
-ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
@@ -64,12 +55,12 @@ if [ ! -f configure ]; then
     ./autogen.sh
 fi
 %configure --localstatedir=%{wwpkgdir}
-%{__make} %{?mflags}
+%{__make} %{?_smp_mflags}
 
 
 %install
 cd %{dname}
-%{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+%{__make} install DESTDIR=$RPM_BUILD_ROOT
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
