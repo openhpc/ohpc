@@ -60,7 +60,7 @@ BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires:  libevent-devel
 %endif
 BuildRequires:  hwloc-devel
-%if 0%{?centos_version} == 700
+%if 0%{?rhel}
 BuildRequires: libtool-ltdl
 %endif
 %if 0%{with_slurm}
