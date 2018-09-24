@@ -21,7 +21,12 @@
 %define with_psm 0
 %define with_psm2 0
 %else
+%if 0%{?rhel} > 7
+%define with_psm 0
+%define with_tm 0
+%else
 %define with_psm 1
+%endif
 %define with_psm2 1
 %endif
 
@@ -55,6 +60,7 @@ BuildRequires:  postfix
 BuildRequires:  opensm
 BuildRequires:  opensm-devel
 BuildRequires:  numactl
+BuildRequires:  zlib-devel
 %if 0%{with_pmix}
 BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires:  libevent-devel
