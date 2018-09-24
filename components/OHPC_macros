@@ -65,13 +65,17 @@ BuildRequires: ohpc-buildroot
 # these choices can be overridden by specifing the compiler_family/mpi_family
 # variables via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %global compiler_family gnu8}
+%{!?compiler_family: %global compiler_family gnu9}
 %{!?mpi_family: %global mpi_family openmpi3}
 %{!?python_family: %global python_family python3}
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
 
+%if "%{compiler_family}" == "gnu9"
+BuildRequires: gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+Requires:      gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+%endif
 %if "%{compiler_family}" == "gnu8"
 BuildRequires: gnu8-compilers%{PROJ_DELIM} >= 8.1.0
 Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.1.0
