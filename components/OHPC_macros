@@ -42,9 +42,15 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 Source42: OHPC_macros
 
 %if 0%{?rhel} == 7
-    # OBS define's rhel_version to 700 for RHEL, in case we are
+    # OBS defines rhel_version to 700 for RHEL, in case we are
     # not running in OBS
     %global rhel_version 700
+%endif
+
+%if 0%{?rhel} == 8
+    # OBS defines rhel_version to 800 for RHEL, in case we are
+    # not running in OBS
+    %global rhel_version 800
 %endif
 
 # OpenHPC packages require ohpc-filesystem which defines the basic
