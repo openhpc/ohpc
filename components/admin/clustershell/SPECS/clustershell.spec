@@ -1,3 +1,11 @@
+%if 0%{?rhel} > 7
+%global py_prefix python3
+%global py_sitelib python3.6
+%else
+%global py_prefix python
+%global py_sitelib python2.7
+%endif
+
 %include %{_sourcedir}/OHPC_macros
 
 %define pname clustershell
@@ -22,7 +30,7 @@ BuildArch:     x86_64
 BuildArch:     noarch
 %endif
 
-BuildRequires: python-devel python-setuptools
+BuildRequires: %{py_prefix}-devel %{py_prefix}-setuptools
 #!BuildIgnore: post-build-checks
 
 %description
@@ -47,10 +55,10 @@ Syntax highlighting in the VIM editor for ClusterShell configuration files.
 %patch1 -p1
 
 %build
-%{__python} setup.py build
+%{py_prefix} setup.py build
 
 %install
-%{__python} setup.py install -O1 --prefix=%{install_path} --skip-build --root %{buildroot}
+%{py_prefix} setup.py install -O1 --prefix=%{install_path} --skip-build --root %{buildroot}
 
 # config files
 mkdir -p %{buildroot}/%{_sysconfdir}/clustershell
@@ -96,7 +104,7 @@ module-whatis "URL %{url}"
 set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib/python2.7/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib/%{py_sitelib}/site-packages
 prepend-path    MANPATH             %{install_path}/share/man
 
 setenv          %{pname}_DIR        %{install_path}
