@@ -18,7 +18,7 @@
 %define pname pt%{base_pname}
 
 Name:	%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 6.0.4
+Version: 6.0.6
 Release: 1%{?dist}
 Summary: Graph, mesh and hypergraph partitioning library using MPI
 License: CeCILL-C
