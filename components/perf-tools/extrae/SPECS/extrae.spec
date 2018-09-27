@@ -18,17 +18,23 @@
 
 Summary:	Extrae tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	3.5.2
-Release:	3%{?dist}
+Version:	3.6.1
+Release:	1%{?dist}
 License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
 Patch1:     extrae.makefile-destdir.patch
 
+%if 0%{?rhel} > 7
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+%else
 BuildRequires:	autoconf%{PROJ_DELIM}
 BuildRequires:	automake%{PROJ_DELIM}
 BuildRequires:	libtool%{PROJ_DELIM}
+%endif
 BuildRequires:	binutils-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	papi%{PROJ_DELIM}
@@ -51,7 +57,9 @@ This is the %{compiler_family}-%{mpi_family} version.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%if 0%{?rhel} <= 7
 module load autotools
+%endif
 module load papi
 
 %if  "%{compiler_family}" == "intel"
