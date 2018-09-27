@@ -147,6 +147,9 @@ Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %if "%{rhel_version}" == "700"
 %global python_prefix python34
 %endif
+%if "%{rhel}" == "8"
+%global python_prefix python3
+%endif
 %if 0%{?suse_version}
 %global python_prefix python3
 %endif
