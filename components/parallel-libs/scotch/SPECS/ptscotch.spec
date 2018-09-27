@@ -27,7 +27,7 @@ URL: http://www.labri.fr/perso/pelegrin/scotch/
 Source0: http://gforge.inria.fr/frs/download.php/file/34618/%{base_pname}_%{version}.tar.gz
 Source1: scotch-Makefile.%{compiler_family}.inc.in
 Source2: scotch-rpmlintrc
-Patch0:  scotch-%{version}-destdir.patch
+Patch0:  scotch-6.0.4-destdir.patch
 
 BuildRequires:	flex bison
 %if 0%{?suse_version} >= 1100
