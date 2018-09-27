@@ -21,7 +21,10 @@ Group: %{PROJ_NAME}/rms
 Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 
 BuildRequires: libevent-devel
-BuildRequires: lmod-ohpc libtool-ohpc
+BuildRequires: lmod-ohpc
+%if 0%{?rhel} <= 7
+BuildRequires: libtool-ohpc
+%endif
 BuildRequires: gcc-c++
 #!BuildIgnore: post-build-checks
 
