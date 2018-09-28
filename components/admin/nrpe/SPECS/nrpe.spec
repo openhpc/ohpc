@@ -48,7 +48,9 @@ BuildRequires: -post-build-checks
 %if 0%{?suse_version}
 BuildRequires: tcpd-devel
 %else
+%if 0%{?rhel} == 7
 BuildRequires: tcp_wrappers-devel
+%endif
 %endif
 
 Requires(pre): %{_sbindir}/useradd
@@ -95,8 +97,13 @@ This package provides the nrpe plugin for Nagios-related applications.
 pushd build-aux
 mv config.sub config.sub.old
 mv config.guess config.guess.old
+%if 0%{?rhel} > 7
+cp /usr/share/libtool/build-aux/config.guess .
+cp /usr/share/libtool/build-aux/config.sub .
+%else
 cp /usr/share/libtool/config/config.guess .
 cp /usr/share/libtool/config/config.sub .
+%endif
 popd
 %endif
 
