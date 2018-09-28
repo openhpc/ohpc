@@ -108,6 +108,12 @@ find "%buildroot" -type f -name "*.a" -print0 | xargs -0 rm -f
 mkdir -p $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
 cp ../spec/ocr-1.0.1.pdf $RPM_BUILD_ROOT/%{install_path}/share/ocr/doc
 
+%if 0%{rhel} > 7
+# Setting to python2 explicitly
+sed -i -e "s,/usr/bin/python,/usr/bin/python2,g" $RPM_BUILD_ROOT/%{install_path}/share/ocr/scripts/Configs/config-generator.py
+# As this would introduce a python2 dependency chmod 644
+chmod 644 $RPM_BUILD_ROOT/%{install_path}/share/ocr/scripts/Configs/config-generator.py
+%endif
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
