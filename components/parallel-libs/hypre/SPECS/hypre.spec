@@ -39,11 +39,19 @@ BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  libxml2-devel
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+%if 0%{?rhel} > 7
+BuildRequires:  python3-devel
+%else
 BuildRequires:  python-devel
+%endif
 %if 0%{?suse_version}
 BuildRequires:  python-xml
 %else
+%if 0%{?rhel} > 7
+BuildRequires:  python3-libxml2
+%else
 BuildRequires:  libxml2-python
+%endif
 %endif
 BuildRequires:  xz
 
