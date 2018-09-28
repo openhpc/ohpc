@@ -28,12 +28,9 @@ Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 
 #!BuildIgnore: post-build-checks
-#define _unpackaged_files_terminate_build      0
-#define __check_files /bin/true
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
-
 
 %description
 Program Database Toolkit (PDT) is a framework for analyzing source code written in several programming languages and for making rich program knowledge accessible to developers of static and dynamic analysis tools. PDT implements a standard program representation, the program database (PDB), that can be accessed in a uniform way through a class library supporting common PDB operations.
