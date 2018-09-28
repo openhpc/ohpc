@@ -13,9 +13,6 @@
 # Base package name
 %define pname nrpe
 
-%if 0%{?fedora} > 19
-%global _hardened_build 1
-%endif
 %define nsport 5666
 
 Name: %{pname}%{PROJ_DELIM}
@@ -35,45 +32,29 @@ Source5: hosts.cfg.example
 Source6: services.cfg.example
 Patch1: nrpe-0003-Include-etc-npre.d-config-directory.patch
 
-
-# For reconfiguration
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: openssl-devel
 # OpenSSL package was split into openssl and openssl-libs in F18+
 BuildRequires: openssl
-#%if 0%{?fedora} > 17 || 0%{?rhel} > 6
 BuildRequires:  systemd
-#%endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
 #!BuildIgnore: brp-check-suse
 BuildRequires: -post-build-checks
 %endif
 
-%if 0%{?el4}%{?el5}
-BuildRequires: tcp_wrappers
-%else
 %if 0%{?suse_version}
 BuildRequires: tcpd-devel
 %else
 BuildRequires: tcp_wrappers-devel
 %endif
-%endif
 
 Requires(pre): %{_sbindir}/useradd
-
-%if 0%{?el4}%{?el5}%{?el6}
-Requires(preun): /sbin/service, /sbin/chkconfig
-Requires(post): /sbin/chkconfig, /sbin/service
-Requires(postun): /sbin/service
-Requires: initscripts
-%else
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-%endif
 
 # owns /etc/nagios
 Requires: nagios-common%{PROJ_DELIM}
@@ -110,7 +91,7 @@ This package provides the nrpe plugin for Nagios-related applications.
 
 # Allow building for aarch64
 # https://bugzilla.redhat.com/926244
-%if 0%{?fedora} > 17 || 0%{?rhel} > 6
+%if 0%{?rhel}
 pushd build-aux
 mv config.sub config.sub.old
 mv config.guess config.guess.old
@@ -136,11 +117,7 @@ CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS" LDFLAGS="%{?__global_ldflags}"
 make %{?_smp_mflags} all
 
 %install
-%if 0%{?el4}%{?el5}%{?el6}
-install -D -p -m 0755 init-script %{buildroot}/%{_initrddir}/nrpe
-%else
 install -D -m 0644 -p %{SOURCE3} %{buildroot}%{_unitdir}/%{pname}.service
-%endif
 install -D -p -m 0644 sample-config/nrpe.cfg %{buildroot}/%{_sysconfdir}/nagios/%{pname}.cfg
 mkdir -p %{buildroot}/%{_sysconfdir}/nagios/conf.d # install -D... this should be your job
 install -D -p -m 0640 %{SOURCE4} %{buildroot}/%{_sysconfdir}/nagios/conf.d/commands.cfg
@@ -151,7 +128,7 @@ install -D -p -m 0755 src/check_nrpe %{buildroot}/%{_libdir}/nagios/plugins/chec
 install -D -p -m 0644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/sysconfig/%{pname}
 install -d %{buildroot}%{_sysconfdir}/nrpe.d
 install -d %{buildroot}%{_localstatedir}/run/%{pname}
-%if 0%{?fedora} > 14 || 0%{?rhel} > 6
+%if 0%{?rhel}
 install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{pname}.conf
 %endif
 
@@ -162,44 +139,21 @@ getent passwd %{pname} >/dev/null || \
 %{_sbindir}/useradd -c "NRPE user for the NRPE service" -d %{_localstatedir}/run/%{pname} -r -g %{pname} -s /sbin/nologin %{pname} 2> /dev/null || :
 
 %preun
-%if 0%{?el4}%{?el5}%{?el6}
-if [ $1 = 0 ]; then
-	/sbin/service %{pname} stop > /dev/null 2>&1 || :
-	/sbin/chkconfig --del %{pname} || :
-fi
-%else
 %systemd_preun nrpe.service
-%endif
 
 %post
-%if 0%{?el4}%{?el5}%{?el6}
-/sbin/chkconfig --add %{pname} || :
-%else
-#%systemd_post nrpe.service
 /usr/bin/systemctl enable nrpe.service > /dev/null 2>&1 || :
 /usr/bin/systemctl start nrpe.service  > /dev/null 2>&1 || :
-%endif
 
 %postun
-%if 0%{?el4}%{?el5}%{?el6}
-if [ "$1" -ge "1" ]; then
-	/sbin/service %{pname} condrestart > /dev/null 2>&1 || :
-fi
-%else
-#%systemd_postun_with_restart nrpe.service
 if [ "$1" -ge "1" ]; then
 	/usr/bin/systemctl reload-or-try-restart nrpe.service
 else
 	/usr/bin/systemctl disable nrpe.service
 fi
-%endif
 
 %files
-%if 0%{?el4}%{?el5}%{?el6}
-%{_initrddir}/nrpe
-%else
 %{_unitdir}/%{pname}.service
-%endif
 %{_sbindir}/nrpe
 %dir %{_sysconfdir}/nrpe.d
 %config(noreplace) %{_sysconfdir}/nagios/nrpe.cfg
@@ -207,9 +161,7 @@ fi
 %attr( 640, root, nagios ) %{_sysconfdir}/nagios/conf.d/hosts.cfg.example
 %attr( 640, root, nagios ) %{_sysconfdir}/nagios/conf.d/services.cfg.example
 %config(noreplace) %{_sysconfdir}/sysconfig/%{pname}
-%if 0%{?fedora} > 14 || 0%{?rhel} > 6
 %config(noreplace) %{_tmpfilesdir}/%{pname}.conf
-%endif
 %doc CHANGELOG.md LEGAL README.md README.SSL.md SECURITY.md docs/NRPE.pdf
 %dir %attr(775, %{pname}, %{pname}) %{_localstatedir}/run/%{pname}
 
