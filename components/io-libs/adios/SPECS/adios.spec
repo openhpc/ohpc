@@ -12,6 +12,7 @@
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %define ohpc_python_dependent 1
+%global python_family python2
 %include %{_sourcedir}/OHPC_macros
 
 %{!?with_lustre: %global with_lustre 0}
@@ -167,7 +168,9 @@ module load %{python_module_prefix}numpy
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
 make MPI=y python
-%{python_prefix} setup.py install --prefix="%buildroot%{install_path}/python"
+
+#%{python_prefix} setup.py install --prefix="%buildroot%{install_path}/python"
+python setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
 install -m644 utils/skel/lib/skel_suite.py \
