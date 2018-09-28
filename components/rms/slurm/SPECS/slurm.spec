@@ -83,9 +83,15 @@ Requires: munge%{PROJ_DELIM}
 
 %{?systemd_requires}
 BuildRequires: systemd
+%if 0%{?rhel} <= 7
 BuildRequires: libssh2-devel
+%endif
 BuildRequires: munge-devel%{PROJ_DELIM} munge-libs%{PROJ_DELIM}
+%if 0%{?rhel} > 7
+BuildRequires: python3
+%else
 BuildRequires: python
+%endif
 BuildRequires: readline-devel
 Obsoletes: slurm-lua%{PROJ_DELIM} slurm-munge%{PROJ_DELIM} slurm-plugins%{PROJ_DELIM}
 
@@ -101,24 +107,18 @@ Requires: pmix%{PROJ_DELIM}
 %{!?_unitdir: %global _unitdir /lib/systemd/systemd}
 
 %if %{with openssl}
-%if 0%{?suse_version} 
+%if 0%{?suse_version}
 BuildRequires: libopenssl-devel openssl
 %else
 BuildRequires: openssl-devel >= 0.9.6 openssl >= 0.9.6
 %endif
 %endif
 
-%define use_mysql_devel %(perl -e '`rpm -q mariadb-devel`; print $?;')
-
 %if %{with mysql}
-%if %{use_mysql_devel}
-BuildRequires: mysql-devel >= 5.0.0
-%else
 %if 0%{?suse_version}
 BuildRequires: libmysqlclient-devel
 %else
 BuildRequires: mariadb-devel >= 5.0.0
-%endif
 %endif
 %endif
 
