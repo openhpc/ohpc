@@ -22,6 +22,13 @@
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 %{!?COMM_DELIM: %global COMM_DELIM %{nil}}
 
+%if 0%{rhel} > 7
+# No PSM libs in RHEL > 7
+%global with_psm 0
+# Slurm does not build in RHEL > 7
+%global with_slurm 0
+%endif
+
 # Base package name/config
 %define pname mvapich2
 
