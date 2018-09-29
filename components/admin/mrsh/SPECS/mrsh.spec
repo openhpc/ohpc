@@ -24,6 +24,7 @@ URL: https://github.com/chaos/mrsh
 Source:    https://github.com/chaos/mrsh/archive/mrsh-2-7-1.tar.gz
 Patch0: null-terminate.patch
 Patch1: mrsh-pam-suse.patch
+Patch2: mrlogin-Don-t-use-union-wait.patch
 BuildRequires: ncurses-devel pam-devel munge-devel%{PROJ_DELIM}
 Requires: munge%{PROJ_DELIM} >= 0.1-0
 Provides: mrsh
@@ -61,6 +62,7 @@ rsh compatability package for mrcp/mrlogin/mrsh
 %if 0%{?suse_version}
 %patch1 -p1
 %endif
+%patch2 -p1
 
 %build
 %configure %{?_without_pam}

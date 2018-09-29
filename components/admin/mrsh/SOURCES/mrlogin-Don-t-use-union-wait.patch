@@ -1,0 +1,34 @@
+From: Egbert Eich <eich@suse.de>
+Date: Mon Sep 12 08:11:11 2016 +0200
+Subject: [PATCH]mrlogin: Don't use 'union wait'
+Git-commit: 95f55a1b9b4320b504c3c26bcbf01c0a8156688b
+References: 
+Signed-off-by: Egbert Eich <eich@suse.com>
+
+Signed-off-by: Egbert Eich <eich@suse.de>
+---
+ mrlogin/mrlogin.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mrlogin/mrlogin.c b/mrlogin/mrlogin.c
+index a810298..cda2475 100644
+--- a/mrlogin/mrlogin.c
++++ b/mrlogin/mrlogin.c
+@@ -476,7 +476,7 @@ writeroob(int ignore)
+ void
+ catch_child(int ignore)
+ {
+-	union wait status;
++	int status;
+ 	int pid;
+ 
+ 	(void)ignore;
+@@ -487,7 +487,7 @@ catch_child(int ignore)
+ 			return;
+ 		/* if the child (reader) dies, just quit */
+ 		if (pid < 0 || (pid == childpid && !WIFSTOPPED(status)))
+-			done((int)(status.w_termsig | status.w_retcode));
++			done((int)(WEXITSTATUS(status) | WTERMSIG(status)));
+ 	}
+ 	/* NOTREACHED */
+ }
