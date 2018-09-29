@@ -33,7 +33,7 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 
-#%define _prefix %{OHPC_HOME}/admin/%{pname}
+%define _prefix %{OHPC_HOME}/admin/%{pname}
 
 %description
 Remote shell programs that use munge authentication rather than
@@ -63,7 +63,7 @@ rsh compatability package for mrcp/mrlogin/mrsh
 %endif
 
 %build
-%configure %{?_without_pam} 
+%configure %{?_without_pam}
 make
 
 %install
@@ -151,5 +151,5 @@ if [ -x /etc/init.d/xinetd ]; then
 elif [ -x /bin/systemctl ]; then
     if /bin/systemctl status xinetd | grep -q running; then
        /bin/systemctl restart xinetd
-    fi 
+    fi
 fi
