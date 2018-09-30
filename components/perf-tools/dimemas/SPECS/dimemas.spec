@@ -34,9 +34,16 @@ BuildRequires: flex
 BuildRequires: flex
 BuildRequires: flex-devel
 %endif
+%if 0%{?rhel} <= 7
 BuildRequires: autoconf%{PROJ_DELIM}
 BuildRequires: automake%{PROJ_DELIM}
 BuildRequires: libtool%{PROJ_DELIM}
+%else
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+%endif
+
 #!BuildIgnore: post-build-checks
 
 # Default library install path
@@ -59,7 +66,9 @@ systems.
 
 %build
 %ohpc_setup_compiler
+%if 0%{?rhel} <= 7
 module load autotools
+%endif
 module load boost
 
 ./bootstrap
