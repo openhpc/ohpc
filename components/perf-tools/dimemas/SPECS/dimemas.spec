@@ -65,11 +65,9 @@ module load boost
 ./bootstrap
 CFLAGS="-std=c99" LDFLAGS="-lstdc++" ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR
 
-
-make %{?_smp_mflags} 
+make %{?_smp_mflags}
 
 %install
-
 export NO_BRP_CHECK_RPATH=true
 
 # OpenHPC compiler designation
@@ -124,8 +122,6 @@ EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-
 %files
 %{OHPC_PUB}
-
 %doc
