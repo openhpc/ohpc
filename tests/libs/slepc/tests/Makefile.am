@@ -12,9 +12,9 @@ TESTS                  += ex16f90
 check_PROGRAMS         += ex16f90
 ex16f90_SOURCES         = ex16f90.F90
 
-TESTS                  += ex26
-check_PROGRAMS         += ex26
-ex26_SOURCES            = ex26.c
+TESTS                  += ex29
+check_PROGRAMS         += ex29
+ex29_SOURCES            = ex29.c
 
 TESTS                  += test_module
 TESTS                  += rm_execution

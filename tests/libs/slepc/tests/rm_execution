@@ -42,11 +42,11 @@ ARGS=8
     assert_success
 }
 
-@test "[libs/SLEPc] C Square root of the 2-D Laplacian binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s ex26 ];then
-	flunk "ex26 binary does not exist"
+@test "[libs/SLEPc] C nonsymmetric eignenproblem binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s ex29 ];then
+	flunk "ex29 binary does not exist"
     fi
     
-    run_mpi_binary ./ex26 "" $NODES $TASKS
+    run_mpi_binary ./ex29 "" $NODES $TASKS
     assert_success
 }
