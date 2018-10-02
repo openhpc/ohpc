@@ -1,0 +1,13 @@
+diff --git a/Source/CursesDialog/CMakeLists.txt b/Source/CursesDialog/CMakeLists.txt
+index 7d4e88c..0cc5357 100644
+--- a/Source/CursesDialog/CMakeLists.txt
++++ b/Source/CursesDialog/CMakeLists.txt
+@@ -17,7 +17,7 @@
+               CursesDialog/ccmake.cxx
+    )
+ 
+-include_directories(${CURSES_INCLUDE_PATH})
++include_directories(${CURSES_INCLUDE_PATH}/ncurses/)
+ 
+ 
+ add_executable(ccmake ${CURSES_SRCS} )

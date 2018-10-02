@@ -24,6 +24,8 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 URL:            https://cmake.org/
 Source0:        https://cmake.org/files/v%{major_version}/cmake-%{version}.tar.gz
+# PATCH-FIX-UPSTREAM form.patch -- set the correct include path for the ncurses includes
+Patch1:         form.patch
 BuildRequires:  gcc-c++
 BuildRequires:  libarchive-devel >= 3.1
 BuildRequires:  curl-devel
@@ -52,6 +54,7 @@ of your choice.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 ./bootstrap --system-libs \
 %if 0%{?sles_version} || 0%{?suse_version}
