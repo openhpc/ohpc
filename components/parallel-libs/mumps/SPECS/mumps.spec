@@ -96,7 +96,7 @@ cp -f %{S:5} Makefile.inc
 %if "%{mpi_family}" == "mpich"
 %global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if "%{compiler_family}" == "gnu"
+%if "%{compiler_family}" == "%{gnu_family}"
 cp -f %{S:2} Makefile.inc
 %endif
 %if "%{compiler_family}" == "intel"
@@ -110,7 +110,7 @@ cp -f %{S:5} Makefile.inc
 %if "%{mpi_family}" == "mvapich2"
 %global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if "%{compiler_family}" == "gnu"
+%if "%{compiler_family}" == "%{gnu_family}"
 cp -f %{S:2} Makefile.inc
 %endif
 %if "%{compiler_family}" == "intel"
@@ -124,7 +124,7 @@ cp -f %{S:5} Makefile.inc
 %if "%{mpi_family}" == "openmpi"
 %global MUMPS_MPI openmpi
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
-%if "%{compiler_family}" == "gnu"
+%if "%{compiler_family}" == "%{gnu_family}"
 cp -f %{S:1} Makefile.inc
 %endif
 %if "%{compiler_family}" == "intel"
