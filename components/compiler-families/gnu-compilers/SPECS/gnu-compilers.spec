@@ -10,23 +10,10 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" == "gnu8"
 %global gnu_version 8.2.0
 %global gnu_major_ver 8
 %global gnu_release 2
 %global pname gnu8-compilers
-%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
-%global source_directory gcc-%{version}
-%endif
-
-%if "%{compiler_family}" == "gnu7"
-%global gnu_version 7.3.0
-%global gnu_major_ver 7
-%global gnu_release 1
-%global pname gnu7-compilers
-%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
-%global source_directory gcc-%{version}
-%endif
 
 # Define subcomponent versions required for build
 
@@ -41,7 +28,7 @@ Release:   %{gnu_release}%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://gcc.gnu.org/
-Source0:   %{source}
+Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
 Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
 Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
@@ -71,7 +58,7 @@ Core package for the GNU Compiler Collection, including the C language
 frontend.
 
 %prep
-%setup -q -n %{source_directory} -a1 -a2 -a3
+%setup -q -n gcc-%{version} -a1 -a2 -a3
 
 ln -s gmp-%{gmp_version} gmp
 ln -s mpc-%{mpc_version} mpc
