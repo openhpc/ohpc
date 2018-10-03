@@ -11,9 +11,9 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if "%{compiler_family}" == "gnu8"
-%global gnu_version 8.1.0
+%global gnu_version 8.2.0
 %global gnu_major_ver 8
-%global gnu_release 1
+%global gnu_release 2
 %global pname gnu8-compilers
 %global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
 %global source_directory gcc-%{version}
@@ -45,9 +45,6 @@ Source0:   %{source}
 Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
 Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
-# remove this in v8.2.0:
-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85507
-Patch1:    partially-revert-rev259385.patch
 
 BuildRequires:  bison
 BuildRequires:  flex
@@ -75,7 +72,6 @@ frontend.
 
 %prep
 %setup -q -n %{source_directory} -a1 -a2 -a3
-%patch1 -p1
 
 ln -s gmp-%{gmp_version} gmp
 ln -s mpc-%{mpc_version} mpc
