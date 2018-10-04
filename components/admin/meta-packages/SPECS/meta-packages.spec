@@ -263,6 +263,9 @@ Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 %ifnarch aarch64
+Requires:  geopm-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  geopm-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  geopm-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -282,6 +285,9 @@ Requires:  tau-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
+%ifnarch aarch64
+Requires:  geopm-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+%endif
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mpich-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime
 
@@ -294,6 +300,9 @@ Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
+%ifnarch aarch64
+Requires:  geopm-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+%endif
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-mvapich2-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain and the MVAPICH2 runtime
 
@@ -306,6 +315,9 @@ Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
+%ifnarch aarch64
+Requires:  geopm-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+%endif
 %description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}-perf-tools
 Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime
 
@@ -583,6 +595,11 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
+Requires:  geopm-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  geopm-intel-impi%{PROJ_DELIM}
+Requires:  geopm-intel-mpich%{PROJ_DELIM}
+Requires:  geopm-intel-mvapich2%{PROJ_DELIM}
+Requires:  geopm-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  imb-intel-impi%{PROJ_DELIM}
 Requires:  imb-intel-mpich%{PROJ_DELIM}
@@ -611,6 +628,7 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-impi-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and Intel(R) MPI
+Requires:  geopm-intel-impi%{PROJ_DELIM}
 Requires:  imb-intel-impi%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  mpiP-intel-impi%{PROJ_DELIM}
@@ -623,6 +641,7 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE c
 
 %package -n %{PROJ_NAME}-intel-mpich-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MPICH
+Requires:  geopm-intel-mpich%{PROJ_DELIM}
 Requires:  imb-intel-mpich%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  mpiP-intel-mpich%{PROJ_DELIM}
@@ -635,6 +654,7 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE c
 
 %package -n %{PROJ_NAME}-intel-mvapich2-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MVAPICH2
+Requires:  geopm-intel-mvapich2%{PROJ_DELIM}
 Requires:  imb-intel-mvapich2%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  mpiP-intel-mvapich2%{PROJ_DELIM}
@@ -647,6 +667,7 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE c
 
 %package -n %{PROJ_NAME}-intel-openmpi%{openmpi_major_ver}-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and OpenMPI
+Requires:  geopm-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  imb-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  mpiP-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
