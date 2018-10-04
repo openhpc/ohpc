@@ -43,14 +43,14 @@ BuildRequires:  udev
 %description
 Allows safer access to model specific registers (MSRs)
 
-%package slurm
+%package -n %{pname}-slurm%{PROJ_DELIM}
 Summary: msr-safe slurm spank plugin
 Group: Development/Libraries
 Requires:       %{pname}%{PROJ_DELIM}
 BuildRequires:  slurm%{PROJ_DELIM}
 BuildRequires:  slurm-devel%{PROJ_DELIM}
 
-%description slurm
+%description -n %{pname}-slurm%{PROJ_DELIM}
 The purpose of this slurm plugin is to ensure that MSRs modified
 within a user slurm job allocation are reset to their original state
 before the compute node is returned to the pool available to other
@@ -133,5 +133,5 @@ fi
 %dir %{_mandir}/man1
 %doc %{_mandir}/man1/msrsave.1.gz
 
-%files slurm
+%files -n %{pname}-slurm%{PROJ_DELIM}
 %{_libdir}/slurm/libspank_msrsafe.so

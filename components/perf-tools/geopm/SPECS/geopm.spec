@@ -32,6 +32,7 @@ Patch1:        geopm-catch-value.patch
 Patch2:        geopm-string-truncate.patch
 Requires:      kmod-msr-safe%{PROJ_DELIM}
 Requires:      msr-safe%{PROJ_DELIM}
+Requires:      msr-safe-slurm%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: hwloc-devel
