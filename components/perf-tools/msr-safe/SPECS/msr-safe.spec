@@ -47,6 +47,7 @@ Allows safer access to model specific registers (MSRs)
 Summary: msr-safe slurm spank plugin
 Group: Development/Libraries
 Requires:       %{pname}%{PROJ_DELIM}
+Requires:       kmod-%{pname}%{PROJ_DELIM}
 BuildRequires:  slurm%{PROJ_DELIM}
 BuildRequires:  slurm-devel%{PROJ_DELIM}
 
