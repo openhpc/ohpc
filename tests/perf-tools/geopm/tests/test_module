@@ -121,7 +121,7 @@ rpm=geopm-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI-ohpc
 
     run man -w geopm
     assert_success
-    assert_output "${!DIR}/man/man7/geopm.7"
+    assert_output "${!DIR}/share/man/man7/geopm.7"
 }
 
 # ----------
