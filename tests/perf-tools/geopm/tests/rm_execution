@@ -23,6 +23,9 @@ TASKS=4
 
     rm -f geopm_test_0_report geopm_test_0_trace*
 
+    run_mpi_binary "./lscpu.sh" "" $NODES $NODES
+    assert_success
+
     run_mpi_binary "./geopm_test_0.sh" "" $NODES $TASKS
     assert_success
 
