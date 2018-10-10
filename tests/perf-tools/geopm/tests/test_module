@@ -39,6 +39,15 @@ rpm=geopm-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI-ohpc
     fi
 }
 
+@test "[$testname] Verify that intel_pstate driver is disabled ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -z "$SIMPLE_CI" ]; then
+        skip "Not supported in simple CI setup"
+    fi
+    if ! run_serial_binary grep 'intel_pstate=disable' /proc/cmdline >& /dev/null; then
+        flunk "Kernel command line does not disable intel_pstate driver"
+    fi
+}
+
 # ----------
 # Binaries
 # ----------
