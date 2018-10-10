@@ -427,7 +427,7 @@ Requires:  geopm-intel-impi%{PROJ_DELIM}
 Requires:  geopm-intel-mpich%{PROJ_DELIM}
 Requires:  geopm-intel-mvapich2%{PROJ_DELIM}
 Requires:  geopm-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-gnu%{gnu_major_ver}-geopm
+%description -n %{PROJ_NAME}-intel-geopm
 Global Extensible Open Power Manager for use with Intel(R) Parallel Studio XE software suite
 
 %package -n %{PROJ_NAME}-intel-io-libs
