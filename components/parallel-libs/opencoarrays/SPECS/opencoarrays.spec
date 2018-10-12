@@ -89,12 +89,12 @@ set     version                     %{version}
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+prepend-path    LD_LIBRARY_PATH     %{install_path}/lib64
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
-setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_LIB        %{install_path}/lib64
 
 EOF
 
