@@ -200,6 +200,8 @@ Requires:  mumps-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  opencoarrays-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  opencoarrays-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  slepc-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
@@ -217,6 +219,7 @@ Requires:  hypre-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  mfem-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  opencoarrays-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  slepc-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -234,6 +237,7 @@ Requires:  hypre-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  mfem-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  opencoarrays-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  slepc-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  ptscotch-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
@@ -250,6 +254,7 @@ Requires:  hypre-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mfem-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  opencoarrays-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  slepc-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  ptscotch-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
@@ -524,6 +529,7 @@ Requires:  hypre-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  mfem-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  opencoarrays-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  slepc-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
