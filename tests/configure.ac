@@ -326,6 +326,12 @@ AC_ARG_ENABLE([openblas],
    [AX_OPTION_DEFAULT(type=long,enable_openblas,yes)])
 AM_CONDITIONAL(OPENBLAS_ENABLED,test "x$enable_openblas" = "xyes" )
 #------------------------------------------------------------------------------------------
+# OpenCoarrays
+AC_ARG_ENABLE([opencoarrays],
+   [AS_HELP_STRING([--enable-opencoarrays],[Enable OpenCoarrays tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_opencoarrays,yes)])
+AM_CONDITIONAL(OPENCOARRAYS_ENABLED,test "x$enable_opencoarrays" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # Papi
 AC_ARG_ENABLE([papi],
    [AS_HELP_STRING([--enable-papi],[Enable papi tests (default=yes)])],[],
@@ -727,6 +733,12 @@ echo    Libraries:
        echo '    'OPENBLAS.................. : enabled
     else
        echo '    'OPENBLAS.................. : disabled
+    fi
+
+    if test "x$enable_opencoarrays" = "xyes"; then
+       echo '    'OpenCoarrays.............. : enabled
+    else
+       echo '    'OpenCoarrays.............. : disabled
     fi
 
     if test "x$enable_petsc" = "xyes"; then

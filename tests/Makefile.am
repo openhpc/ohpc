@@ -174,6 +174,10 @@ if OPENBLAS_ENABLED
    TESTS += libs/openblas/ohpc-tests/test_compiler_families
 endif
 
+if OPENCOARRAYS_ENABLED
+   TESTS += libs/opencoarrays/ohpc-tests/test_mpi_families
+endif
+
 if PETSC_ENABLED
    TESTS += libs/petsc/ohpc-tests/test_mpi_families
 endif
