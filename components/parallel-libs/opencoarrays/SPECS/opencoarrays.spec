@@ -64,6 +64,10 @@ make %{?_smp_mflags}
 cd build-opencoarrays
 make DESTDIR=$RPM_BUILD_ROOT install
 
+# remove static lib
+pushd %{buildroot}%{install_path}/lib64
+rm -rf *\.a
+
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
