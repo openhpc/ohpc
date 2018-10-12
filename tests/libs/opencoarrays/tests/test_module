@@ -72,17 +72,17 @@ check_rms
     fi 
 }
 
-#@test "[$testname] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-#    LIB=${PKG}_LIB
-#
-#    if [ -z ${!LIB} ];then
-#        flunk "${PKG}_LIB directory not defined"
-#    fi
-#
-#    if [ -e ${!LIB}/${library}.a ];then
-#        flunk "${library}.a exists when not expecting it"
-#    fi 
-#}
+@test "[$testname] Verify static library is not present in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ -e ${!LIB}/${library}.a ];then
+        flunk "${library}.a exists when not expecting it"
+    fi 
+}
 
 # --------------
 # Include Tests
