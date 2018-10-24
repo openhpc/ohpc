@@ -12,7 +12,7 @@ AC_MSG_CHECKING([for OPENCOARRAYS_DIR environment variable])
 if test "x$OPENCOARRAYS_DIR" = "x"; then
    AC_MSG_RESULT([no])
    echo
-   AC_ERROR([OPENCOARRAYS_DIR not defined - please load slepc environment.])
+   AC_ERROR([OPENCOARRAYS_DIR not defined - please load opencoarrays environment.])
 else
    AC_MSG_RESULT([no])
 fi
@@ -43,8 +43,8 @@ echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
-echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
-echo OHPC MPI toolchain............. : $LMOD_FAMILY_MPI
+echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
+echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo F77 compiler ................. : `which $F77`
 echo F90 compiler ................. : `which $F90`
