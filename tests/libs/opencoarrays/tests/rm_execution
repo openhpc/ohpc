@@ -19,6 +19,10 @@ ARGS=8
     if [ ! -s hello ];then
 	flunk "hello binary does not exist"
     fi
+
+    if echo "$LMOD_FAMILY_MPI" | grep -q mvapich ; then
+	export MV2_ENABLE_AFFINITY=0
+    fi
     
     run_mpi_binary ./hello "" $NODES $TASKS
     assert_success
