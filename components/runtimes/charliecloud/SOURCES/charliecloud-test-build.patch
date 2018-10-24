@@ -13,7 +13,7 @@
 -WORKDIR=$3
 +WORKDIR=$4
  MIRROR=http://dl-cdn.alpinelinux.org/alpine/v3.6
- APK_TOOLS=apk-tools-static-2.7.5-r0.apk
+ APK_TOOLS=apk-tools-static-2.7.6-r0.apk
  IMG="$WORKDIR/img"
 @@ -37,7 +38,7 @@
  ## Bootstrap base Alpine Linux.
