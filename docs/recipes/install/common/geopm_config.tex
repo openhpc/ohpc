@@ -7,18 +7,15 @@ individual compute node, to dynamic coordination of power policy and
 performance across all of the compute nodes hosting one MPI job on a portion of
 a distributed computing system.  The dynamic coordination is implemented as a
 hierarchical control system for scalable communication and decentralized
-control. The following commands can be used to enable development on the 
-{\em master} host and execution of the \GEOPM{} runtime on the {\em compute} 
-hosts.
+control. The following commands can be used to configure execution of the
+\GEOPM{} runtime on the {\em compute} hosts. The packages themselves will be
+installed in a later step.
 
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_command if [[ ${enable_geopm} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Install GEOPM meta-package on master
-[sms](*\#*) (*\install*) ohpc-gnu8-geopm
-
 # Disable Intel pstate driver for compute nodes because it interferes with GEOPM's operation.
 [sms](*\#*) export kargs="${kargs} intel_pstate=disable"
 \end{lstlisting}
