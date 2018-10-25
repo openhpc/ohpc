@@ -1,6 +1,6 @@
 --- a/test/chtest/Build	2018-09-04 12:15:54.000000000 -0700
-+++ b/test/chtest/Build	2018-10-24 08:51:20.000000000 -0700
-@@ -16,10 +16,11 @@
++++ b/test/chtest/Build	2018-10-24 20:48:27.000000000 -0700
+@@ -16,12 +16,13 @@
  
  set -ex
  
@@ -13,8 +13,11 @@
 -WORKDIR=$3
 +WORKDIR=$4
  MIRROR=http://dl-cdn.alpinelinux.org/alpine/v3.6
- APK_TOOLS=apk-tools-static-2.7.5-r0.apk
+-APK_TOOLS=apk-tools-static-2.7.5-r0.apk
++APK_TOOLS=apk-tools-static-2.7.6-r0.apk
  IMG="$WORKDIR/img"
+ 
+ cd $WORKDIR
 @@ -37,7 +38,7 @@
  ## Bootstrap base Alpine Linux.
  
