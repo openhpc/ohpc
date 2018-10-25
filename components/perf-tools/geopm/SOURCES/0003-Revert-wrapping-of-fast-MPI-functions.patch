@@ -1,0 +1,1872 @@
+From 637330764ed6e1480723eeba83b91747f2fb68d0 Mon Sep 17 00:00:00 2001
+From: "Christopher M. Cantalupo" <christopher.m.cantalupo@intel.com>
+Date: Tue, 16 Oct 2018 15:12:29 -0700
+Subject: [PATCH 3/5] Revert wrapping of fast MPI functions.
+
+- Recent patches below are reverted.
+- All C MPI wrapping routines have matching Fortran wrappers.
+- Revert "Expand list of profiled MPI interfaces for fortran."
+- This reverts commit 6289f3ea910b65fe9a9f75fe642440027e7489c4.
+- Revert "Expand list of profiled MPI interfaces."
+- This reverts commit 48353bdd691b029a5be201f3446d6bfffcfe5a0c.
+
+Change-Id: Ia65c62c9c838aeaf692b1df86232e9e25275ef87
+Signed-off-by: Christopher M. Cantalupo <christopher.m.cantalupo@intel.com>
+---
+ src/geopm_pmpi.c         | 555 ++++++++---------------------------------------
+ src/geopm_pmpi_fortran.c | 184 ----------------
+ 2 files changed, 96 insertions(+), 643 deletions(-)
+
+diff --git a/src/geopm_pmpi.c b/src/geopm_pmpi.c
+index 281e84f..bd6f604 100644
+--- a/src/geopm_pmpi.c
++++ b/src/geopm_pmpi.c
+@@ -557,6 +557,8 @@ int MPI_Rsend_init(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype,
+     return err;
+ }
+ 
++
++
+ int MPI_Scan(GEOPM_MPI_CONST void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm)
+ {
+     int err = 0;
+@@ -584,6 +586,7 @@ int MPI_Scatterv(GEOPM_MPI_CONST void *sendbuf, GEOPM_MPI_CONST int sendcounts[]
+     return err;
+ }
+ 
++/* Profile non-blocking waits */
+ int MPI_Waitall(int count, MPI_Request array_of_requests[], MPI_Status *array_of_statuses)
+ {
+     int err = 0;
+@@ -620,159 +623,93 @@ int MPI_Waitsome(int incount, MPI_Request array_of_requests[], int *outcount, in
+     return err;
+ }
+ 
++/* Replace MPI_COMM_WORLD, but do not profile the rest of the APIs*/
++
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Iallgather(GEOPM_MPI_CONST void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Iallgather(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Iallgather(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Iallgatherv(GEOPM_MPI_CONST void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, GEOPM_MPI_CONST int recvcounts[], GEOPM_MPI_CONST int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Iallgatherv(sendbuf, sendcount, sendtype, recvbuf, recvcounts, displs, recvtype, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Iallgatherv(sendbuf, sendcount, sendtype, recvbuf, recvcounts, displs, recvtype, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Iallreduce(GEOPM_MPI_CONST void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Iallreduce(sendbuf, recvbuf, count, datatype, op, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Iallreduce(sendbuf, recvbuf, count, datatype, op, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ialltoall(GEOPM_MPI_CONST void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ialltoall(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ialltoall(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ialltoallv(GEOPM_MPI_CONST void *sendbuf, GEOPM_MPI_CONST int sendcounts[], GEOPM_MPI_CONST int sdispls[], MPI_Datatype sendtype, void *recvbuf, GEOPM_MPI_CONST int recvcounts[], GEOPM_MPI_CONST int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ialltoallv(sendbuf, sendcounts, sdispls, sendtype, recvbuf, recvcounts, rdispls, recvtype, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ialltoallv(sendbuf, sendcounts, sdispls, sendtype, recvbuf, recvcounts, rdispls, recvtype, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ialltoallw(GEOPM_MPI_CONST void *sendbuf, GEOPM_MPI_CONST int sendcounts[], GEOPM_MPI_CONST int sdispls[], GEOPM_MPI_CONST MPI_Datatype sendtypes[], void *recvbuf, GEOPM_MPI_CONST int recvcounts[], GEOPM_MPI_CONST int rdispls[], GEOPM_MPI_CONST MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ialltoallw(sendbuf, sendcounts, sdispls, sendtypes, recvbuf, recvcounts, rdispls, recvtypes, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ialltoallw(sendbuf, sendcounts, sdispls, sendtypes, recvbuf, recvcounts, rdispls, recvtypes, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ibarrier(MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ibarrier(geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ibarrier(geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ibcast(void *buffer, int count, MPI_Datatype datatype, int root, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ibcast(buffer, count, datatype, root, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ibcast(buffer, count, datatype, root, geopm_swap_comm_world(comm), request);
+ }
+ #endif
+ 
+ int MPI_Cart_coords(MPI_Comm comm, int rank, int maxdims, int coords[])
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Cart_coords(geopm_swap_comm_world(comm), rank, maxdims, coords);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Cart_coords(geopm_swap_comm_world(comm), rank, maxdims, coords);
+ }
+ 
+ int MPI_Cart_create(MPI_Comm old_comm, int ndims, GEOPM_MPI_CONST int dims[], GEOPM_MPI_CONST int periods[], int reorder, MPI_Comm *comm_cart)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Cart_create(geopm_swap_comm_world(old_comm), ndims, dims, periods, reorder, comm_cart);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Cart_create(geopm_swap_comm_world(old_comm), ndims, dims, periods, reorder, comm_cart);
+ }
+ 
+ int MPI_Cart_get(MPI_Comm comm, int maxdims, int dims[], int periods[], int coords[])
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Cart_get(geopm_swap_comm_world(comm), maxdims, dims, periods, coords);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Cart_get(geopm_swap_comm_world(comm), maxdims, dims, periods, coords);
+ }
+ 
+ int MPI_Cart_map(MPI_Comm comm, int ndims, GEOPM_MPI_CONST int dims[], GEOPM_MPI_CONST int periods[], int *newrank)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Cart_map(geopm_swap_comm_world(comm), ndims, dims, periods, newrank);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Cart_map(geopm_swap_comm_world(comm), ndims, dims, periods, newrank);
+ }
+ 
+ int MPI_Cart_rank(MPI_Comm comm, GEOPM_MPI_CONST int coords[], int *rank)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Cart_rank(geopm_swap_comm_world(comm), coords, rank);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Cart_rank(geopm_swap_comm_world(comm), coords, rank);
+ }
+ 
+ int MPI_Cart_shift(MPI_Comm comm, int direction, int disp, int *rank_source, int *rank_dest)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Cart_shift(geopm_swap_comm_world(comm), direction, disp, rank_source, rank_dest);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Cart_shift(geopm_swap_comm_world(comm), direction, disp, rank_source, rank_dest);
+ }
+ 
+ int MPI_Cart_sub(MPI_Comm comm, GEOPM_MPI_CONST int remain_dims[], MPI_Comm *new_comm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Cart_sub(geopm_swap_comm_world(comm), remain_dims, new_comm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Cart_sub(geopm_swap_comm_world(comm), remain_dims, new_comm);
+ }
+ 
+ int MPI_Cartdim_get(MPI_Comm comm, int *ndims)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Cartdim_get(geopm_swap_comm_world(comm), ndims);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Cartdim_get(geopm_swap_comm_world(comm), ndims);
+ }
+ 
+ int MPI_Comm_accept(GEOPM_MPI_CONST char *port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm *newcomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_accept(port_name, info, root, geopm_swap_comm_world(comm), newcomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_accept(port_name, info, root, geopm_swap_comm_world(comm), newcomm);
+ }
+ 
+ // In mvapich this is defined as a macro.
+@@ -788,86 +725,50 @@ MPI_Fint MPI_Comm_c2f(MPI_Comm comm)
+ 
+ int MPI_Comm_call_errhandler(MPI_Comm comm, int errorcode)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_call_errhandler(geopm_swap_comm_world(comm), errorcode);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_call_errhandler(geopm_swap_comm_world(comm), errorcode);
+ }
+ 
+ int MPI_Comm_compare(MPI_Comm comm1, MPI_Comm comm2, int *result)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_compare(geopm_swap_comm_world(comm1), geopm_swap_comm_world(comm2), result);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_compare(geopm_swap_comm_world(comm1), geopm_swap_comm_world(comm2), result);
+ }
+ 
+ int MPI_Comm_connect(GEOPM_MPI_CONST char *port_name, MPI_Info info, int root, MPI_Comm comm, MPI_Comm *newcomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_connect(port_name, info, root, geopm_swap_comm_world(comm), newcomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_connect(port_name, info, root, geopm_swap_comm_world(comm), newcomm);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Comm_create_group(MPI_Comm comm, MPI_Group group, int tag, MPI_Comm *newcomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_create_group(geopm_swap_comm_world(comm), group, tag, newcomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_create_group(geopm_swap_comm_world(comm), group, tag, newcomm);
+ }
+ #endif
+ 
+ int MPI_Comm_create(MPI_Comm comm, MPI_Group group, MPI_Comm *newcomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_create(geopm_swap_comm_world(comm), group, newcomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_create(geopm_swap_comm_world(comm), group, newcomm);
+ }
+ 
+ int MPI_Comm_delete_attr(MPI_Comm comm, int comm_keyval)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_delete_attr(geopm_swap_comm_world(comm), comm_keyval);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_delete_attr(geopm_swap_comm_world(comm), comm_keyval);
+ }
+ 
+ int MPI_Comm_dup(MPI_Comm comm, MPI_Comm *newcomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_dup(geopm_swap_comm_world(comm), newcomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_dup(geopm_swap_comm_world(comm), newcomm);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Comm_idup(MPI_Comm comm, MPI_Comm *newcomm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_idup(geopm_swap_comm_world(comm), newcomm, request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_idup(geopm_swap_comm_world(comm), newcomm, request);
+ }
+ 
+ int MPI_Comm_dup_with_info(MPI_Comm comm, MPI_Info info, MPI_Comm *newcomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_dup_with_info(geopm_swap_comm_world(comm), info, newcomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_dup_with_info(geopm_swap_comm_world(comm), info, newcomm);
+ }
+ #endif
+ 
+@@ -884,217 +785,125 @@ MPI_Comm MPI_Comm_f2c(MPI_Fint comm)
+ 
+ int MPI_Comm_get_attr(MPI_Comm comm, int comm_keyval, void *attribute_val, int *flag)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_get_attr(geopm_swap_comm_world(comm), comm_keyval, attribute_val, flag);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_get_attr(geopm_swap_comm_world(comm), comm_keyval, attribute_val, flag);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Dist_graph_create(MPI_Comm comm_old, int n, GEOPM_MPI_CONST int nodes[], GEOPM_MPI_CONST int degrees[], GEOPM_MPI_CONST int targets[], GEOPM_MPI_CONST int weights[], MPI_Info info, int reorder, MPI_Comm * newcomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Dist_graph_create(geopm_swap_comm_world(comm_old), n, nodes, degrees, targets, weights, info, reorder, newcomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Dist_graph_create(geopm_swap_comm_world(comm_old), n, nodes, degrees, targets, weights, info, reorder, newcomm);
+ }
+ 
+ int MPI_Dist_graph_create_adjacent(MPI_Comm comm_old, int indegree, GEOPM_MPI_CONST int sources[], GEOPM_MPI_CONST int sourceweights[], int outdegree, GEOPM_MPI_CONST int destinations[], GEOPM_MPI_CONST int destweights[], MPI_Info info, int reorder, MPI_Comm *comm_dist_graph)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Dist_graph_create_adjacent(geopm_swap_comm_world(comm_old), indegree, sources, sourceweights, outdegree, destinations, destweights, info, reorder, comm_dist_graph);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Dist_graph_create_adjacent(geopm_swap_comm_world(comm_old), indegree, sources, sourceweights, outdegree, destinations, destweights, info, reorder, comm_dist_graph);
+ }
+ 
+ int MPI_Dist_graph_neighbors(MPI_Comm comm, int maxindegree, int sources[], int sourceweights[], int maxoutdegree, int destinations[], int destweights[])
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Dist_graph_neighbors(geopm_swap_comm_world(comm), maxindegree, sources, sourceweights, maxoutdegree, destinations, destweights);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Dist_graph_neighbors(geopm_swap_comm_world(comm), maxindegree, sources, sourceweights, maxoutdegree, destinations, destweights);
+ }
+ 
+ int MPI_Dist_graph_neighbors_count(MPI_Comm comm, int *inneighbors, int *outneighbors, int *weighted)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Dist_graph_neighbors_count(geopm_swap_comm_world(comm), inneighbors, outneighbors, weighted);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Dist_graph_neighbors_count(geopm_swap_comm_world(comm), inneighbors, outneighbors, weighted);
+ }
+ #endif
+ 
+ int MPI_Comm_get_errhandler(MPI_Comm comm, MPI_Errhandler *erhandler)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_get_errhandler(geopm_swap_comm_world(comm), erhandler);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_get_errhandler(geopm_swap_comm_world(comm), erhandler);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Comm_get_info(MPI_Comm comm, MPI_Info *info_used)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_get_info(geopm_swap_comm_world(comm), info_used);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_get_info(geopm_swap_comm_world(comm), info_used);
+ }
+ #endif
+ 
+ int MPI_Comm_get_name(MPI_Comm comm, char *comm_name, int *resultlen)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_get_name(geopm_swap_comm_world(comm), comm_name, resultlen);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_get_name(geopm_swap_comm_world(comm), comm_name, resultlen);
+ }
+ 
+ int MPI_Comm_get_parent(MPI_Comm *parent)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_get_parent(parent);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_get_parent(parent);
+ }
+ 
+ int MPI_Comm_group(MPI_Comm comm, MPI_Group *group)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_group(geopm_swap_comm_world(comm), group);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_group(geopm_swap_comm_world(comm), group);
+ }
+ 
+ int MPI_Comm_rank(MPI_Comm comm, int *rank)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_rank(geopm_swap_comm_world(comm), rank);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_rank(geopm_swap_comm_world(comm), rank);
+ }
+ 
+ int MPI_Comm_remote_group(MPI_Comm comm, MPI_Group *group)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_remote_group(geopm_swap_comm_world(comm), group);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_remote_group(geopm_swap_comm_world(comm), group);
+ }
+ 
+ int MPI_Comm_remote_size(MPI_Comm comm, int *size)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_remote_size(geopm_swap_comm_world(comm), size);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_remote_size(geopm_swap_comm_world(comm), size);
+ }
+ 
+ int MPI_Comm_set_attr(MPI_Comm comm, int comm_keyval, void *attribute_val)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_set_attr(geopm_swap_comm_world(comm), comm_keyval, attribute_val);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_set_attr(geopm_swap_comm_world(comm), comm_keyval, attribute_val);
+ }
+ 
+ int MPI_Comm_set_errhandler(MPI_Comm comm, MPI_Errhandler errhandler)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_set_errhandler(geopm_swap_comm_world(comm), errhandler);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_set_errhandler(geopm_swap_comm_world(comm), errhandler);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Comm_set_info(MPI_Comm comm, MPI_Info info)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_set_info(geopm_swap_comm_world(comm), info);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_set_info(geopm_swap_comm_world(comm), info);
+ }
+ #endif
+ 
+ int MPI_Comm_set_name(MPI_Comm comm, GEOPM_MPI_CONST char *comm_name)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_set_name(geopm_swap_comm_world(comm), comm_name);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_set_name(geopm_swap_comm_world(comm), comm_name);
+ }
+ 
+ int MPI_Comm_size(MPI_Comm comm, int *size)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_size(geopm_swap_comm_world(comm), size);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_size(geopm_swap_comm_world(comm), size);
+ }
+ 
+ int MPI_Comm_spawn(GEOPM_MPI_CONST char *command, char *argv[], int maxprocs, MPI_Info info, int root, MPI_Comm comm, MPI_Comm *intercomm, int array_of_errcodes[])
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_spawn(command, argv, maxprocs, info, root, geopm_swap_comm_world(comm), intercomm, array_of_errcodes);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_spawn(command, argv, maxprocs, info, root, geopm_swap_comm_world(comm), intercomm, array_of_errcodes);
+ }
+ 
+ int MPI_Comm_spawn_multiple(int count, char *array_of_commands[], char **array_of_argv[], GEOPM_MPI_CONST int array_of_maxprocs[], GEOPM_MPI_CONST MPI_Info array_of_info[], int root, MPI_Comm comm, MPI_Comm *intercomm, int array_of_errcodes[])
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_spawn_multiple(count, array_of_commands, array_of_argv, array_of_maxprocs, array_of_info, root, geopm_swap_comm_world(comm), intercomm, array_of_errcodes);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_spawn_multiple(count, array_of_commands, array_of_argv, array_of_maxprocs, array_of_info, root, geopm_swap_comm_world(comm), intercomm, array_of_errcodes);
+ }
+ 
+ int MPI_Comm_split(MPI_Comm comm, int color, int key, MPI_Comm *newcomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_split(geopm_swap_comm_world(comm), color, key, newcomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_split(geopm_swap_comm_world(comm), color, key, newcomm);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Comm_split_type(MPI_Comm comm, int split_type, int key, MPI_Info info, MPI_Comm *newcomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_split_type(geopm_swap_comm_world(comm), split_type, key, info, newcomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_split_type(geopm_swap_comm_world(comm), split_type, key, info, newcomm);
+ }
+ #endif
+ 
+ int MPI_Comm_test_inter(MPI_Comm comm, int *flag)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Comm_test_inter(geopm_swap_comm_world(comm), flag);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Comm_test_inter(geopm_swap_comm_world(comm), flag);
+ }
+ 
+ int MPI_Exscan(GEOPM_MPI_CONST void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm)
+@@ -1109,270 +918,154 @@ int MPI_Exscan(GEOPM_MPI_CONST void *sendbuf, void *recvbuf, int count, MPI_Data
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Iexscan(GEOPM_MPI_CONST void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Iexscan(sendbuf, recvbuf, count, datatype, op, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Iexscan(sendbuf, recvbuf, count, datatype, op, geopm_swap_comm_world(comm), request);
+ }
+ #endif
+ 
+ int MPI_File_open(MPI_Comm comm, GEOPM_MPI_CONST char *filename, int amode, MPI_Info info, MPI_File *fh)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_File_open(geopm_swap_comm_world(comm), filename, amode, info, fh);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_File_open(geopm_swap_comm_world(comm), filename, amode, info, fh);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Igather(GEOPM_MPI_CONST void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Igather(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, root, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Igather(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, root, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Igatherv(GEOPM_MPI_CONST void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, GEOPM_MPI_CONST int recvcounts[], GEOPM_MPI_CONST int displs[], MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Igatherv(sendbuf, sendcount, sendtype, recvbuf, recvcounts, displs, recvtype, root, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Igatherv(sendbuf, sendcount, sendtype, recvbuf, recvcounts, displs, recvtype, root, geopm_swap_comm_world(comm), request);
+ }
+ #endif
+ 
+ int MPI_Graph_create(MPI_Comm comm_old, int nnodes, GEOPM_MPI_CONST int index[], GEOPM_MPI_CONST int edges[], int reorder, MPI_Comm *comm_graph)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Graph_create(geopm_swap_comm_world(comm_old), nnodes, index, edges, reorder, comm_graph);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Graph_create(geopm_swap_comm_world(comm_old), nnodes, index, edges, reorder, comm_graph);
+ }
+ 
+ int MPI_Graph_get(MPI_Comm comm, int maxindex, int maxedges, int index[], int edges[])
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Graph_get(geopm_swap_comm_world(comm), maxindex, maxedges, index, edges);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Graph_get(geopm_swap_comm_world(comm), maxindex, maxedges, index, edges);
+ }
+ 
+ int MPI_Graph_map(MPI_Comm comm, int nnodes, GEOPM_MPI_CONST int index[], GEOPM_MPI_CONST int edges[], int *newrank)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Graph_map(geopm_swap_comm_world(comm), nnodes, index, edges, newrank);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Graph_map(geopm_swap_comm_world(comm), nnodes, index, edges, newrank);
+ }
+ 
+ int MPI_Graph_neighbors_count(MPI_Comm comm, int rank, int *nneighbors)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Graph_neighbors_count(geopm_swap_comm_world(comm), rank, nneighbors);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Graph_neighbors_count(geopm_swap_comm_world(comm), rank, nneighbors);
+ }
+ 
+ int MPI_Graph_neighbors(MPI_Comm comm, int rank, int maxneighbors, int neighbors[])
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Graph_neighbors(geopm_swap_comm_world(comm), rank, maxneighbors, neighbors);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Graph_neighbors(geopm_swap_comm_world(comm), rank, maxneighbors, neighbors);
+ }
+ 
+ int MPI_Graphdims_get(MPI_Comm comm, int *nnodes, int *nedges)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Graphdims_get(geopm_swap_comm_world(comm), nnodes, nedges);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Graphdims_get(geopm_swap_comm_world(comm), nnodes, nedges);
+ }
+ 
+ int MPI_Ibsend(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ibsend(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ibsend(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Improbe(int source, int tag, MPI_Comm comm, int *flag, MPI_Message *message, MPI_Status *status)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Improbe(source, tag, geopm_swap_comm_world(comm), flag, message, status);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Improbe(source, tag, geopm_swap_comm_world(comm), flag, message, status);
+ }
+ #endif
+ 
+ int MPI_Intercomm_create(MPI_Comm local_comm, int local_leader, MPI_Comm bridge_comm, int remote_leader, int tag, MPI_Comm *newintercomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Intercomm_create(geopm_swap_comm_world(local_comm), local_leader, geopm_swap_comm_world(bridge_comm), remote_leader, tag, newintercomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Intercomm_create(geopm_swap_comm_world(local_comm), local_leader, geopm_swap_comm_world(bridge_comm), remote_leader, tag, newintercomm);
+ }
+ 
+ int MPI_Intercomm_merge(MPI_Comm intercomm, int high, MPI_Comm *newintercomm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Intercomm_merge(geopm_swap_comm_world(intercomm), high, newintercomm);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Intercomm_merge(geopm_swap_comm_world(intercomm), high, newintercomm);
+ }
+ 
+ int MPI_Iprobe(int source, int tag, MPI_Comm comm, int *flag, MPI_Status *status)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+     return PMPI_Iprobe(source, tag, geopm_swap_comm_world(comm), flag, status);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
+ }
+ 
+ int MPI_Irecv(void *buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Irecv(buf, count, datatype, source, tag, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Irecv(buf, count, datatype, source, tag, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Irsend(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Irsend(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Irsend(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Isend(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Isend(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Isend(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Issend(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Issend(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Issend(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Mprobe(int source, int tag, MPI_Comm comm, MPI_Message *message, MPI_Status *status)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Mprobe(source, tag, geopm_swap_comm_world(comm), message, status);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Mprobe(source, tag, geopm_swap_comm_world(comm), message, status);
+ }
+ 
+ int MPI_Ineighbor_allgather(GEOPM_MPI_CONST void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ineighbor_allgather(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ineighbor_allgather(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ineighbor_allgatherv(GEOPM_MPI_CONST void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, GEOPM_MPI_CONST int recvcounts[], GEOPM_MPI_CONST int displs[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ineighbor_allgatherv(sendbuf, sendcount, sendtype, recvbuf, recvcounts, displs, recvtype, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ineighbor_allgatherv(sendbuf, sendcount, sendtype, recvbuf, recvcounts, displs, recvtype, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ineighbor_alltoall(GEOPM_MPI_CONST void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ineighbor_alltoall(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ineighbor_alltoall(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ineighbor_alltoallv(GEOPM_MPI_CONST void *sendbuf, GEOPM_MPI_CONST int sendcounts[], GEOPM_MPI_CONST int sdispls[], MPI_Datatype sendtype, void *recvbuf, GEOPM_MPI_CONST int recvcounts[], GEOPM_MPI_CONST int rdispls[], MPI_Datatype recvtype, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ineighbor_alltoallv(sendbuf, sendcounts, sdispls, sendtype, recvbuf, recvcounts, rdispls, recvtype, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ineighbor_alltoallv(sendbuf, sendcounts, sdispls, sendtype, recvbuf, recvcounts, rdispls, recvtype, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ineighbor_alltoallw(GEOPM_MPI_CONST void *sendbuf, GEOPM_MPI_CONST int sendcounts[], GEOPM_MPI_CONST MPI_Aint sdispls[], GEOPM_MPI_CONST MPI_Datatype sendtypes[], void *recvbuf, GEOPM_MPI_CONST int recvcounts[], GEOPM_MPI_CONST MPI_Aint rdispls[], GEOPM_MPI_CONST MPI_Datatype recvtypes[], MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ineighbor_alltoallw(sendbuf, sendcounts, sdispls, sendtypes, recvbuf, recvcounts, rdispls, recvtypes, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ineighbor_alltoallw(sendbuf, sendcounts, sdispls, sendtypes, recvbuf, recvcounts, rdispls, recvtypes, geopm_swap_comm_world(comm), request);
+ }
+ #endif
+ 
+ int MPI_Pack(GEOPM_MPI_CONST void *inbuf, int incount, MPI_Datatype datatype, void *outbuf, int outsize, int *position, MPI_Comm comm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Pack(inbuf, incount, datatype, outbuf, outsize, position, geopm_swap_comm_world(comm));
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Pack(inbuf, incount, datatype, outbuf, outsize, position, geopm_swap_comm_world(comm));
+ }
+ 
+ int MPI_Pack_size(int incount, MPI_Datatype datatype, MPI_Comm comm, int *size)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Pack_size(incount, datatype, geopm_swap_comm_world(comm), size);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Pack_size(incount, datatype, geopm_swap_comm_world(comm), size);
+ }
+ 
+ int MPI_Probe(int source, int tag, MPI_Comm comm, MPI_Status *status)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Probe(source, tag, geopm_swap_comm_world(comm), status);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Probe(source, tag, geopm_swap_comm_world(comm), status);
+ }
+ 
+ int MPI_Recv_init(void *buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Recv_init(buf, count, datatype, source, tag, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Recv_init(buf, count, datatype, source, tag, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag, MPI_Comm comm, MPI_Status *status)
+@@ -1387,66 +1080,38 @@ int MPI_Recv(void *buf, int count, MPI_Datatype datatype, int source, int tag, M
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Ireduce(GEOPM_MPI_CONST void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, int root, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ireduce(sendbuf, recvbuf, count, datatype, op, root, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ireduce(sendbuf, recvbuf, count, datatype, op, root, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ireduce_scatter(GEOPM_MPI_CONST void *sendbuf, void *recvbuf, GEOPM_MPI_CONST int recvcounts[], MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ireduce_scatter(sendbuf, recvbuf, recvcounts, datatype, op, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ireduce_scatter(sendbuf, recvbuf, recvcounts, datatype, op, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ireduce_scatter_block(GEOPM_MPI_CONST void *sendbuf, void *recvbuf, int recvcount, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ireduce_scatter_block(sendbuf, recvbuf, recvcount, datatype, op, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ireduce_scatter_block(sendbuf, recvbuf, recvcount, datatype, op, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Iscan(GEOPM_MPI_CONST void *sendbuf, void *recvbuf, int count, MPI_Datatype datatype, MPI_Op op, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Iscan(sendbuf, recvbuf, count, datatype, op, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Iscan(sendbuf, recvbuf, count, datatype, op, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Iscatter(GEOPM_MPI_CONST void *sendbuf, int sendcount, MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Iscatter(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, root, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Iscatter(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, root, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Iscatterv(GEOPM_MPI_CONST void *sendbuf, GEOPM_MPI_CONST int sendcounts[], GEOPM_MPI_CONST int displs[], MPI_Datatype sendtype, void *recvbuf, int recvcount, MPI_Datatype recvtype, int root, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Iscatterv(sendbuf, sendcounts, displs, sendtype, recvbuf, recvcount, recvtype, root, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Iscatterv(sendbuf, sendcounts, displs, sendtype, recvbuf, recvcount, recvtype, root, geopm_swap_comm_world(comm), request);
+ }
+ #endif
+ 
+ int MPI_Send_init(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Send_init(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Send_init(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Send(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm)
+@@ -1478,11 +1143,7 @@ int MPI_Sendrecv_replace(void * buf, int count, MPI_Datatype datatype, int dest,
+ 
+ int MPI_Ssend_init(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm, MPI_Request *request)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Ssend_init(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Ssend_init(buf, count, datatype, dest, tag, geopm_swap_comm_world(comm), request);
+ }
+ 
+ int MPI_Ssend(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype, int dest, int tag, MPI_Comm comm)
+@@ -1496,58 +1157,34 @@ int MPI_Ssend(GEOPM_MPI_CONST void *buf, int count, MPI_Datatype datatype, int d
+ 
+ int MPI_Topo_test(MPI_Comm comm, int *status)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Topo_test(geopm_swap_comm_world(comm), status);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Topo_test(geopm_swap_comm_world(comm), status);
+ }
+ 
+ int MPI_Unpack(GEOPM_MPI_CONST void *inbuf, int insize, int *position, void *outbuf, int outcount, MPI_Datatype datatype, MPI_Comm comm)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Unpack(inbuf, insize, position, outbuf, outcount, datatype, geopm_swap_comm_world(comm));
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Unpack(inbuf, insize, position, outbuf, outcount, datatype, geopm_swap_comm_world(comm));
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Win_allocate(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void *baseptr, MPI_Win *win)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Win_allocate(size, disp_unit, info, geopm_swap_comm_world(comm), baseptr, win);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Win_allocate(size, disp_unit, info, geopm_swap_comm_world(comm), baseptr, win);
+ }
+ 
+ int MPI_Win_allocate_shared(MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, void *baseptr, MPI_Win *win)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Win_allocate_shared(size, disp_unit, info, geopm_swap_comm_world(comm), baseptr, win);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Win_allocate_shared(size, disp_unit, info, geopm_swap_comm_world(comm), baseptr, win);
+ }
+ #endif
+ 
+ int MPI_Win_create(void *base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win *win)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Win_create(base, size, disp_unit, info, geopm_swap_comm_world(comm), win);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Win_create(base, size, disp_unit, info, geopm_swap_comm_world(comm), win);
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+ int MPI_Win_create_dynamic(MPI_Info info, MPI_Comm comm, MPI_Win *win)
+ {
+-    int err = 0;
+-    GEOPM_PMPI_ENTER_MACRO(__func__)
+-    err = PMPI_Win_create_dynamic(info, geopm_swap_comm_world(comm), win);
+-    GEOPM_PMPI_EXIT_MACRO
+-    return err;
++    return PMPI_Win_create_dynamic(info, geopm_swap_comm_world(comm), win);
+ }
+ #endif
+diff --git a/src/geopm_pmpi_fortran.c b/src/geopm_pmpi_fortran.c
+index 779ce35..55b7aeb 100644
+--- a/src/geopm_pmpi_fortran.c
++++ b/src/geopm_pmpi_fortran.c
+@@ -266,90 +266,70 @@ static void FMPI_Bsend_init(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype,
+ static void FMPI_Cart_coords(MPI_Fint *comm, MPI_Fint *rank, MPI_Fint *maxdims, MPI_Fint *coords, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_cart_coords_(&comm_swap, rank, maxdims, coords, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_CART_CREATE Fortran wrappers */
+ static void FMPI_Cart_create(MPI_Fint *old_comm, MPI_Fint *ndims, MPI_Fint *dims, MPI_Fint *periods, MPI_Fint *reorder, MPI_Fint *comm_cart, MPI_Fint *ierr)
+ {
+     MPI_Fint old_comm_swap = geopm_swap_comm_world_f(*old_comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_cart_create_(&old_comm_swap, ndims, dims, periods, reorder, comm_cart, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_CARTDIM_GET Fortran wrappers */
+ static void FMPI_Cartdim_get(MPI_Fint *comm, MPI_Fint *ndims, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_cartdim_get_(&comm_swap, ndims, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_CART_GET Fortran wrappers */
+ static void FMPI_Cart_get(MPI_Fint *comm, MPI_Fint *maxdims, MPI_Fint *dims, MPI_Fint *periods, MPI_Fint *coords, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_cart_get_(&comm_swap, maxdims, dims, periods, coords, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_CART_MAP Fortran wrappers */
+ static void FMPI_Cart_map(MPI_Fint *comm, MPI_Fint *ndims, MPI_Fint *dims, MPI_Fint *periods, MPI_Fint *newrank, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_cart_map(&comm_swap, ndims, dims, periods, newrank, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_CART_RANK Fortran wrappers */
+ static void FMPI_Cart_rank(MPI_Fint *comm, MPI_Fint *coords, MPI_Fint *rank, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_cart_rank_(&comm_swap, coords, rank, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_CART_SHIFT Fortran wrappers */
+ static void FMPI_Cart_shift(MPI_Fint *comm, MPI_Fint *direction, MPI_Fint *disp, MPI_Fint *rank_source, MPI_Fint *rank_dest, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_cart_shift_(&comm_swap, direction, disp, rank_source, rank_dest, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_CART_SUB Fortran wrappers */
+ static void FMPI_Cart_sub(MPI_Fint *comm, MPI_Fint *remain_dims, MPI_Fint *new_comm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_cart_sub_(&comm_swap, remain_dims, new_comm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_ACCEPT Fortran wrappers */
+ static void FMPI_Comm_accept(char *port_name, MPI_Fint *info, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *newcomm, MPI_Fint *ierr, int port_name_len)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_accept_(port_name, info, root, &comm_swap, newcomm, ierr, port_name_len);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_CALL_ERRHANDLER Fortran wrappers */
+ static void FMPI_Comm_call_errhandler(MPI_Fint *comm, MPI_Fint *errorcode, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_call_errhandler_(&comm_swap, errorcode, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_COMPARE Fortran wrappers */
+@@ -357,18 +337,14 @@ static void FMPI_Comm_compare(MPI_Fint *comm1, MPI_Fint *comm2, MPI_Fint *result
+ {
+     MPI_Fint comm1_swap = geopm_swap_comm_world_f(*comm1);
+     MPI_Fint comm2_swap = geopm_swap_comm_world_f(*comm2);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_compare_(&comm1_swap, &comm2_swap, result, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_CONNECT Fortran wrappers */
+ static void FMPI_Comm_connect(char *port_name, MPI_Fint *info, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *newcomm, MPI_Fint *ierr, int port_name_len)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_connect_(port_name, info, root, &comm_swap, newcomm, ierr, port_name_len);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -376,9 +352,7 @@ static void FMPI_Comm_connect(char *port_name, MPI_Fint *info, MPI_Fint *root, M
+ static void FMPI_Comm_create_group(MPI_Fint *comm, MPI_Fint *group, MPI_Fint *tag, MPI_Fint *newcomm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_create_group_(&comm_swap, group, tag, newcomm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -386,27 +360,21 @@ static void FMPI_Comm_create_group(MPI_Fint *comm, MPI_Fint *group, MPI_Fint *ta
+ static void FMPI_Comm_create(MPI_Fint *comm, MPI_Fint *group, MPI_Fint *newcomm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_create_(&comm_swap, group, newcomm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_DELETE_ATTR Fortran wrappers */
+ static void FMPI_Comm_delete_attr(MPI_Fint *comm, MPI_Fint *comm_keyval, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_delete_attr_(&comm_swap, comm_keyval, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_DUP Fortran wrappers */
+ static void FMPI_Comm_dup(MPI_Fint *comm, MPI_Fint *newcomm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_dup(&comm_swap, newcomm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -414,9 +382,7 @@ static void FMPI_Comm_dup(MPI_Fint *comm, MPI_Fint *newcomm, MPI_Fint *ierr)
+ static void FMPI_Comm_dup_with_info(MPI_Fint *comm, MPI_Fint *info, MPI_Fint *newcomm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_dup_with_info_(&comm_swap, info, newcomm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -424,18 +390,14 @@ static void FMPI_Comm_dup_with_info(MPI_Fint *comm, MPI_Fint *info, MPI_Fint *ne
+ static void FMPI_Comm_get_attr(MPI_Fint *comm, MPI_Fint *comm_keyval, MPI_Fint *attribute_val, MPI_Fint *flag, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_get_attr_(&comm_swap, comm_keyval, attribute_val, flag, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_GET_ERRHANDLER Fortran wrappers */
+ static void FMPI_Comm_get_errhandler(MPI_Fint *comm, MPI_Fint *erhandler, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_get_errhandler_(&comm_swap, erhandler, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -443,9 +405,7 @@ static void FMPI_Comm_get_errhandler(MPI_Fint *comm, MPI_Fint *erhandler, MPI_Fi
+ static void FMPI_Comm_get_info(MPI_Fint *comm, MPI_Fint *info_used, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_get_info_(&comm_swap, info_used, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -453,26 +413,20 @@ static void FMPI_Comm_get_info(MPI_Fint *comm, MPI_Fint *info_used, MPI_Fint *ie
+ static void FMPI_Comm_get_name(MPI_Fint *comm, char *comm_name, MPI_Fint *resultlen, MPI_Fint *ierr, int name_len)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_get_name_(&comm_swap, comm_name, resultlen, ierr, name_len);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_GET_PARENT Fortran wrappers */
+ static void FMPI_Comm_get_parent(MPI_Fint *parent, MPI_Fint *ierr)
+ {
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_get_parent_(parent, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_GROUP Fortran wrappers */
+ static void FMPI_Comm_group(MPI_Fint *comm, MPI_Fint *group, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_group_(&comm_swap, group, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -480,9 +434,7 @@ static void FMPI_Comm_group(MPI_Fint *comm, MPI_Fint *group, MPI_Fint *ierr)
+ static void FMPI_Comm_idup(MPI_Fint *comm, MPI_Fint *newcomm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_idup_(&comm_swap, newcomm, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -490,45 +442,35 @@ static void FMPI_Comm_idup(MPI_Fint *comm, MPI_Fint *newcomm, MPI_Fint *request,
+ static void FMPI_Comm_rank(MPI_Fint *comm, MPI_Fint *rank, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_rank_(&comm_swap, rank, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_REMOTE_GROUP Fortran wrappers */
+ static void FMPI_Comm_remote_group(MPI_Fint *comm, MPI_Fint *group, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_remote_group_(&comm_swap, group, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_REMOTE_SIZE Fortran wrappers */
+ static void FMPI_Comm_remote_size(MPI_Fint *comm, MPI_Fint *size, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_remote_size_(&comm_swap, size, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_SET_ATTR Fortran wrappers */
+ static void FMPI_Comm_set_attr(MPI_Fint *comm, MPI_Fint *comm_keyval, MPI_Fint *attribute_val, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_set_attr_(&comm_swap, comm_keyval, attribute_val, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_SET_ERRHANDLER Fortran wrappers */
+ static void FMPI_Comm_set_errhandler(MPI_Fint *comm, MPI_Fint *errhandler, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_set_errhandler_(&comm_swap, errhandler, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -536,9 +478,7 @@ static void FMPI_Comm_set_errhandler(MPI_Fint *comm, MPI_Fint *errhandler, MPI_F
+ static void FMPI_Comm_set_info(MPI_Fint *comm, MPI_Fint *info, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_set_info_(&comm_swap, info, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -546,45 +486,35 @@ static void FMPI_Comm_set_info(MPI_Fint *comm, MPI_Fint *info, MPI_Fint *ierr)
+ static void FMPI_Comm_set_name(MPI_Fint *comm,  char *comm_name, MPI_Fint *ierr, int name_len)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_set_name(&comm_swap, comm_name, ierr, name_len);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_SIZE Fortran wrappers */
+ static void FMPI_Comm_size(MPI_Fint *comm, MPI_Fint *size, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_size_(&comm_swap, size, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_SPAWN Fortran wrappers */
+ static void FMPI_Comm_spawn(char *command, char *argv, MPI_Fint *maxprocs, MPI_Fint *info, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *intercomm, MPI_Fint *array_of_errcodes, MPI_Fint *ierr, int cmd_len, int string_len)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_spawn_(command, argv, maxprocs, info, root, &comm_swap, intercomm, array_of_errcodes, ierr, cmd_len, string_len);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_SPAWN_MULTIPLE Fortran wrappers */
+ static void FMPI_Comm_spawn_multiple(MPI_Fint *count, char *array_of_commands, char *array_of_argv, MPI_Fint *array_of_maxprocs, MPI_Fint *array_of_info, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *intercomm, MPI_Fint *array_of_errcodes, MPI_Fint *ierr, int cmd_string_len, int argv_string_len)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_spawn_multiple_(count, array_of_commands, array_of_argv, array_of_maxprocs, array_of_info, root, &comm_swap, intercomm, array_of_errcodes, ierr, cmd_string_len, argv_string_len);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_COMM_SPLIT Fortran wrappers */
+ static void FMPI_Comm_split(MPI_Fint *comm, MPI_Fint *color, MPI_Fint *key, MPI_Fint *newcomm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_split(&comm_swap, color, key, newcomm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -592,9 +522,7 @@ static void FMPI_Comm_split(MPI_Fint *comm, MPI_Fint *color, MPI_Fint *key, MPI_
+ static void FMPI_Comm_split_type(MPI_Fint *comm, MPI_Fint *split_type, MPI_Fint *key, MPI_Fint *info, MPI_Fint *newcomm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_split_type_(&comm_swap, split_type, key, info, newcomm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -602,9 +530,7 @@ static void FMPI_Comm_split_type(MPI_Fint *comm, MPI_Fint *split_type, MPI_Fint
+ static void FMPI_Comm_test_inter(MPI_Fint *comm, MPI_Fint *flag, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_comm_test_inter_(&comm_swap, flag, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -612,36 +538,28 @@ static void FMPI_Comm_test_inter(MPI_Fint *comm, MPI_Fint *flag, MPI_Fint *ierr)
+ static void FMPI_Dist_graph_create_adjacent(MPI_Fint *comm_old, MPI_Fint *indegree, MPI_Fint *sources, MPI_Fint *sourceweights, MPI_Fint *outdegree, MPI_Fint *destinations, MPI_Fint *destweights, MPI_Fint *info, MPI_Fint *reorder, MPI_Fint *comm_dist_graph, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_old_swap = geopm_swap_comm_world_f(*comm_old);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_dist_graph_create_adjacent_(&comm_old_swap, indegree, sources, sourceweights, outdegree, destinations, destweights, info, reorder, comm_dist_graph, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_DIST_GRAPH_CREATE Fortran wrappers */
+ static void FMPI_Dist_graph_create(MPI_Fint *comm_old, MPI_Fint *n, MPI_Fint *nodes, MPI_Fint *degrees, MPI_Fint *targets, MPI_Fint *weights, MPI_Fint *info, MPI_Fint *reorder, MPI_Fint *newcomm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_old_swap = geopm_swap_comm_world_f(*comm_old);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_dist_graph_create_(&comm_old_swap, n, nodes, degrees, targets, weights, info, reorder, newcomm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_DIST_GRAPH_NEIGHBORS_COUNT Fortran wrappers */
+ static void FMPI_Dist_graph_neighbors_count(MPI_Fint *comm, MPI_Fint *inneighbors, MPI_Fint *outneighbors, MPI_Fint *weighted, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_dist_graph_neighbors_count_(&comm_swap, inneighbors, outneighbors, weighted, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_DIST_GRAPH_NEIGHBORS Fortran wrappers */
+ static void FMPI_Dist_graph_neighbors(MPI_Fint *comm, MPI_Fint *maxindegree, MPI_Fint *sources, MPI_Fint *sourceweights, MPI_Fint *maxoutdegree, MPI_Fint *destinations, MPI_Fint *destweights, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_dist_graph_neighbors(&comm_swap, maxindegree, sources, sourceweights, maxoutdegree, destinations, destweights, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -658,9 +576,7 @@ static void FMPI_Exscan(MPI_Fint *sendbuf, MPI_Fint *recvbuf, MPI_Fint *count, M
+ static void FMPI_File_open(MPI_Fint *comm, char *filename, MPI_Fint *amode, MPI_Fint *info, MPI_Fint *fh, MPI_Fint *ierr, int name_len)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_file_open_(&comm_swap, filename, amode, info, fh, ierr, name_len);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_FINALIZE Fortran wrappers */
+@@ -691,54 +607,42 @@ static void FMPI_Gatherv(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendt
+ static void FMPI_Graph_create(MPI_Fint *comm_old, MPI_Fint *nnodes, MPI_Fint *index, MPI_Fint *edges, MPI_Fint *reorder, MPI_Fint *comm_graph, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_old_swap = geopm_swap_comm_world_f(*comm_old);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_graph_create_(&comm_old_swap, nnodes, index, edges, reorder, comm_graph, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_GRAPHDIMS_GET Fortran wrappers */
+ static void FMPI_Graphdims_get(MPI_Fint *comm, MPI_Fint *nnodes, MPI_Fint *nedges, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_graphdims_get(&comm_swap, nnodes, nedges, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_GRAPH_GET Fortran wrappers */
+ static void FMPI_Graph_get(MPI_Fint *comm, MPI_Fint *maxindex, MPI_Fint *maxedges, MPI_Fint *index, MPI_Fint *edges, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_graph_get(&comm_swap, maxindex, maxedges, index, edges, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_GRAPH_MAP Fortran wrappers */
+ static void FMPI_Graph_map(MPI_Fint *comm, MPI_Fint *nnodes, MPI_Fint *index, MPI_Fint *edges, MPI_Fint *newrank, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_graph_map_(&comm_swap, nnodes, index, edges, newrank, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_GRAPH_NEIGHBORS_COUNT Fortran wrappers */
+ static void FMPI_Graph_neighbors_count(MPI_Fint *comm, MPI_Fint *rank, MPI_Fint *nneighbors, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_graph_neighbors_count_(&comm_swap, rank, nneighbors, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_GRAPH_NEIGHBORS Fortran wrappers */
+ static void FMPI_Graph_neighbors(MPI_Fint *comm, MPI_Fint *rank, MPI_Fint *maxneighbors, MPI_Fint *neighbors, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_graph_neighbors_(&comm_swap, rank, maxneighbors, neighbors, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -746,72 +650,56 @@ static void FMPI_Graph_neighbors(MPI_Fint *comm, MPI_Fint *rank, MPI_Fint *maxne
+ static void FMPI_Iallgather(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcount, MPI_Fint *recvtype, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_iallgather_(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IALLGATHERV Fortran wrappers */
+ static void FMPI_Iallgatherv(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcounts, MPI_Fint *displs, MPI_Fint *recvtype, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_iallgatherv_(sendbuf, sendcount, sendtype, recvbuf, recvcounts, displs, recvtype, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IALLREDUCE Fortran wrappers */
+ static void FMPI_Iallreduce(MPI_Fint *sendbuf, MPI_Fint *recvbuf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *op, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_iallreduce_(sendbuf, recvbuf, count, datatype, op, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IALLTOALL Fortran wrappers */
+ static void FMPI_Ialltoall(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcount, MPI_Fint *recvtype, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ialltoall_(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IALLTOALLV Fortran wrappers */
+ static void FMPI_Ialltoallv(MPI_Fint *sendbuf, MPI_Fint *sendcounts, MPI_Fint *sdispls, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcounts, MPI_Fint *rdispls, MPI_Fint *recvtype, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ialltoallv_(sendbuf, sendcounts, sdispls, sendtype, recvbuf, recvcounts, rdispls, recvtype, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IALLTOALLW Fortran wrappers */
+ static void FMPI_Ialltoallw(MPI_Fint *sendbuf, MPI_Fint *sendcounts, MPI_Fint *sdispls, MPI_Fint *sendtypes, MPI_Fint *recvbuf, MPI_Fint *recvcounts, MPI_Fint *rdispls, MPI_Fint *recvtypes, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ialltoallw_(sendbuf, sendcounts, sdispls, sendtypes, recvbuf, recvcounts, rdispls, recvtypes, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IBARRIER Fortran wrappers */
+ static void FMPI_Ibarrier(MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ibarrier_(&comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IBCAST Fortran wrappers */
+ static void FMPI_Ibcast(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ibcast_(buf, count, datatype, root, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -819,9 +707,7 @@ static void FMPI_Ibcast(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_
+ static void FMPI_Ibsend(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *dest, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ibsend_(buf, count, datatype, dest, tag, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -829,81 +715,63 @@ static void FMPI_Ibsend(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_
+ static void FMPI_Iexscan(MPI_Fint *sendbuf, MPI_Fint *recvbuf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *op, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_iexscan_(sendbuf, recvbuf, count, datatype, op, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IGATHER Fortran wrappers */
+ static void FMPI_Igather(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcount, MPI_Fint *recvtype, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_igather_(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, root, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IGATHERV Fortran wrappers */
+ static void FMPI_Igatherv(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcounts, MPI_Fint *displs, MPI_Fint *recvtype, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_igatherv_(sendbuf, sendcount, sendtype, recvbuf, recvcounts, displs, recvtype, root, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IMPROBE Fortran wrappers */
+ static void FMPI_Improbe(MPI_Fint *source, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *flag, MPI_Fint *message, MPI_Fint *status, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_improbe_(source, tag, &comm_swap, flag, message, status, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_INEIGHBOR_ALLGATHER Fortran wrappers */
+ static void FMPI_Ineighbor_allgather(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcount, MPI_Fint *recvtype, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ineighbor_allgather_(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_INEIGHBOR_ALLGATHERV Fortran wrappers */
+ static void FMPI_Ineighbor_allgatherv(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcounts, MPI_Fint *displs, MPI_Fint *recvtype, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ineighbor_allgatherv_(sendbuf, sendcount, sendtype, recvbuf, recvcounts, displs, recvtype, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_INEIGHBOR_ALLTOALL Fortran wrappers */
+ static void FMPI_Ineighbor_alltoall(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcount, MPI_Fint *recvtype, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ineighbor_alltoall_(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_INEIGHBOR_ALLTOALLV Fortran wrappers */
+ static void FMPI_Ineighbor_alltoallv(MPI_Fint *sendbuf, MPI_Fint *sendcounts, MPI_Fint *sdispls, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcounts, MPI_Fint *rdispls, MPI_Fint *recvtype, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ineighbor_alltoallv_(sendbuf, sendcounts, sdispls, sendtype, recvbuf, recvcounts, rdispls, recvtype, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_INEIGHBOR_ALLTOALLW Fortran wrappers */
+ static void FMPI_Ineighbor_alltoallw(MPI_Fint *sendbuf, MPI_Fint *sendcounts, MPI_Aint *sdispls, MPI_Fint *sendtypes, MPI_Fint *recvbuf, MPI_Fint *recvcounts, MPI_Aint *rdispls, MPI_Fint *recvtypes, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ineighbor_alltoallw_(sendbuf, sendcounts, sdispls, sendtypes, recvbuf, recvcounts, rdispls, recvtypes, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -928,36 +796,28 @@ static void FMPI_Intercomm_create(MPI_Fint *local_comm, MPI_Fint *local_leader,
+ {
+     MPI_Fint bridge_comm_swap = geopm_swap_comm_world_f(*bridge_comm);
+     MPI_Fint local_comm_swap = geopm_swap_comm_world_f(*local_comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_intercomm_create_(&local_comm_swap, local_leader, &bridge_comm_swap, remote_leader, tag, newintercomm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_INTERCOMM_MERGE Fortran wrappers */
+ static void FMPI_Intercomm_merge(MPI_Fint *intercomm, MPI_Fint *high, MPI_Fint *newintercomm, MPI_Fint *ierr)
+ {
+     MPI_Fint intercomm_swap = geopm_swap_comm_world_f(*intercomm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_intercomm_merge_(&intercomm_swap, high, newintercomm, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IPROBE Fortran wrappers */
+ static void FMPI_Iprobe(MPI_Fint *source, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *flag, MPI_Fint *status, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_iprobe_(source, tag, &comm_swap, flag, status, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IRECV Fortran wrappers */
+ static void FMPI_Irecv(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *source, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_irecv_(buf, count, datatype, source, tag, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -965,27 +825,21 @@ static void FMPI_Irecv(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_F
+ static void FMPI_Ireduce(MPI_Fint *sendbuf, MPI_Fint *recvbuf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *op, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ireduce_(sendbuf, recvbuf, count, datatype, op, root, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IREDUCE_SCATTER_BLOCK Fortran wrappers */
+ static void FMPI_Ireduce_scatter_block(MPI_Fint *sendbuf, MPI_Fint *recvbuf, MPI_Fint *recvcount, MPI_Fint *datatype, MPI_Fint *op, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ireduce_scatter_block_(sendbuf, recvbuf, recvcount, datatype, op, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_IREDUCE_SCATTER Fortran wrappers */
+ static void FMPI_Ireduce_scatter(MPI_Fint *sendbuf, MPI_Fint *recvbuf, MPI_Fint *recvcounts, MPI_Fint *datatype, MPI_Fint *op, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ireduce_scatter_(sendbuf, recvbuf, recvcounts, datatype, op, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -993,9 +847,7 @@ static void FMPI_Ireduce_scatter(MPI_Fint *sendbuf, MPI_Fint *recvbuf, MPI_Fint
+ static void FMPI_Irsend(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *dest, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_irsend_(buf, count, datatype, dest, tag, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -1003,27 +855,21 @@ static void FMPI_Irsend(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_
+ static void FMPI_Iscan(MPI_Fint *sendbuf, MPI_Fint *recvbuf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *op, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_iscan_(sendbuf, recvbuf, count, datatype, op, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_ISCATTER Fortran wrappers */
+ static void FMPI_Iscatter(MPI_Fint *sendbuf, MPI_Fint *sendcount, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcount, MPI_Fint *recvtype, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_iscatter_(sendbuf, sendcount, sendtype, recvbuf, recvcount, recvtype, root, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_ISCATTERV Fortran wrappers */
+ static void FMPI_Iscatterv(MPI_Fint *sendbuf, MPI_Fint *sendcounts, MPI_Fint *displs, MPI_Fint *sendtype, MPI_Fint *recvbuf, MPI_Fint *recvcount, MPI_Fint *recvtype, MPI_Fint *root, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_iscatterv_(sendbuf, sendcounts, displs, sendtype, recvbuf, recvcount, recvtype, root, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -1031,18 +877,14 @@ static void FMPI_Iscatterv(MPI_Fint *sendbuf, MPI_Fint *sendcounts, MPI_Fint *di
+ static void FMPI_Isend(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *dest, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_isend_(buf, count, datatype, dest, tag, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_ISSEND Fortran wrappers */
+ static void FMPI_Issend(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *dest, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_issend_(buf, count, datatype, dest, tag, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ #ifdef GEOPM_ENABLE_MPI3
+@@ -1050,9 +892,7 @@ static void FMPI_Issend(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_
+ static void FMPI_Mprobe(MPI_Fint *source, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *message, MPI_Fint *status, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_mprobe_(source, tag, &comm_swap, message, status, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_NEIGHBOR_ALLGATHER Fortran wrappers */
+@@ -1105,36 +945,28 @@ static void FMPI_Neighbor_alltoallw(MPI_Fint *sendbuf, MPI_Fint *sendcounts, MPI
+ static void FMPI_Pack(MPI_Fint *inbuf, MPI_Fint *incount, MPI_Fint *datatype, MPI_Fint *outbuf, MPI_Fint *outsize, MPI_Fint *position, MPI_Fint *comm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_pack_(inbuf, incount, datatype, outbuf, outsize, position, &comm_swap, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_PACK_SIZE Fortran wrappers */
+ static void FMPI_Pack_size(MPI_Fint *incount, MPI_Fint *datatype, MPI_Fint *comm, MPI_Fint *size, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_pack_size_(incount, datatype, &comm_swap, size, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_PROBE Fortran wrappers */
+ static void FMPI_Probe(MPI_Fint *source, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *status, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_probe_(source, tag, &comm_swap, status, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_RECV_INIT Fortran wrappers */
+ static void FMPI_Recv_init(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *source, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_recv_init_(buf, count, datatype, source, tag, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_RECV Fortran wrappers */
+@@ -1233,9 +1065,7 @@ static void FMPI_Send(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fi
+ static void FMPI_Send_init(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *dest, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_send_init_(buf, count, datatype, dest, tag, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_SENDRECV Fortran wrappers */
+@@ -1269,27 +1099,21 @@ static void FMPI_Ssend(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_F
+ static void FMPI_Ssend_init(MPI_Fint *buf, MPI_Fint *count, MPI_Fint *datatype, MPI_Fint *dest, MPI_Fint *tag, MPI_Fint *comm, MPI_Fint *request, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_ssend_init_(buf, count, datatype, dest, tag, &comm_swap, request, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_TOPO_TEST Fortran wrappers */
+ static void FMPI_Topo_test(MPI_Fint *comm, MPI_Fint *status, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_topo_test_(&comm_swap, status, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_UNPACK Fortran wrappers */
+ static void FMPI_Unpack(MPI_Fint *inbuf, MPI_Fint *insize, MPI_Fint *position, MPI_Fint *outbuf, MPI_Fint *outcount, MPI_Fint *datatype, MPI_Fint *comm, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_unpack_(inbuf, insize, position, outbuf, outcount, datatype, &comm_swap, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_WAITALL Fortran wrappers */
+@@ -1329,27 +1153,21 @@ static void FMPI_Waitsome(MPI_Fint *incount, MPI_Fint *array_of_requests, MPI_Fi
+ static void FMPI_Win_allocate(MPI_Fint *size, MPI_Fint *disp_unit, MPI_Fint *info, MPI_Fint *comm, MPI_Fint *baseptr, MPI_Fint *win, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_win_allocate_(size, disp_unit, info, &comm_swap, baseptr, win, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_WIN_ALLOCATE_SHARED Fortran wrappers */
+ static void FMPI_Win_allocate_shared(MPI_Fint *size, MPI_Fint *disp_unit, MPI_Fint *info, MPI_Fint *comm, MPI_Fint *baseptr, MPI_Fint *win, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_win_allocate_shared_(size, disp_unit, info, &comm_swap, baseptr, win, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* MPI_WIN_CREATE_DYNAMIC Fortran wrappers */
+ static void FMPI_Win_create_dynamic(MPI_Fint *info, MPI_Fint *comm, MPI_Fint *win, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_win_create_dynamic_(info, &comm_swap, win, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ #endif
+ 
+@@ -1357,9 +1175,7 @@ static void FMPI_Win_create_dynamic(MPI_Fint *info, MPI_Fint *comm, MPI_Fint *wi
+ static void FMPI_Win_create(MPI_Fint *base, MPI_Fint *size, MPI_Fint *disp_unit, MPI_Fint *info, MPI_Fint *comm, MPI_Fint *win, MPI_Fint *ierr)
+ {
+     MPI_Fint comm_swap = geopm_swap_comm_world_f(*comm);
+-    GEOPM_PMPI_ENTER_MACRO(__func__ + 1)
+     pmpi_win_create_(base, size, disp_unit, info, &comm_swap, win, ierr);
+-    GEOPM_PMPI_EXIT_MACRO
+ }
+ 
+ /* Alternate Fortran symbols for MPI functions */
+-- 
+1.8.3.1
+

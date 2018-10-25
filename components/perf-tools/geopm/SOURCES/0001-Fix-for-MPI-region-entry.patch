@@ -1,0 +1,30 @@
+From 5f049c91c234303ac667e621948da02dc6483b98 Mon Sep 17 00:00:00 2001
+From: Diana Guttman <diana.r.guttman@intel.com>
+Date: Tue, 16 Oct 2018 08:40:25 -0700
+Subject: [PATCH 1/5] Fix for MPI region entry.
+
+- MPI regions used in GEOPM startup were given a region ID of 0.
+- This change retries region ID lookup until it returns non-zero.
+
+Change-Id: I3e42a3d62d9acf3cc4b892504c5635fc710fea99
+Signed-off-by: Diana Guttman <diana.r.guttman@intel.com>
+---
+ src/geopm_pmpi.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/geopm_pmpi.h b/src/geopm_pmpi.h
+index 56f55c2..3492787 100644
+--- a/src/geopm_pmpi.h
++++ b/src/geopm_pmpi.h
+@@ -48,7 +48,7 @@ uint64_t geopm_mpi_func_rid(const char *func_name);
+ #define GEOPM_PMPI_ENTER_MACRO(FUNC) \
+     static unsigned is_once = 1; \
+     static uint64_t func_rid = 0; \
+-    if (is_once) { \
++    if (is_once || func_rid == 0) { \
+         func_rid = geopm_mpi_func_rid(FUNC); \
+         is_once = 0; \
+     } \
+-- 
+1.8.3.1
+

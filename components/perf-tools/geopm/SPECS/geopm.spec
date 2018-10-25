@@ -28,6 +28,11 @@ License:       BSD-3-Clause
 Group:         %{PROJ_NAME}/perf-tools
 URL:           https://geopm.github.io
 Source0:       https://github.com/geopm/geopm/releases/download/v%{version}/geopm-%{version}.tar.gz
+Patch1:        0001-Fix-for-MPI-region-entry.patch
+Patch2:        0002-Expand-list-of-profiled-MPI-interfaces-for-fortran.patch
+Patch3:        0003-Revert-wrapping-of-fast-MPI-functions.patch
+Patch4:        0004-Remove-TURBO_RATIO_LIMIT2-control-for-SKX.patch
+Patch5:        0005-Prevent-MSRIOGroup-from-throwing-when-saving-MSRs.patch
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: hwloc-devel
@@ -73,6 +78,12 @@ including support for static control.
 %prep
 
 %setup -q -n %{pname}-%{version}
+
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 %build
 %ohpc_setup_compiler

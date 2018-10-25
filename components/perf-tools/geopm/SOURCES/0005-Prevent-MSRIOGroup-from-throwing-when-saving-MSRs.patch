@@ -1,0 +1,54 @@
+From 25fb8ebceb8c4b7c7a0d1fdfc92643f6f3e702c6 Mon Sep 17 00:00:00 2001
+From: Diana Guttman <diana.r.guttman@intel.com>
+Date: Mon, 29 Oct 2018 13:15:30 -0700
+Subject: [PATCH 5/5] Prevent MSRIOGroup from throwing when saving MSRs.
+
+- Fixes #387.
+
+Change-Id: I84181da40b06ae7a65204b74d421c5766e85a256
+Signed-off-by: Diana Guttman <diana.r.guttman@intel.com>
+---
+ src/MSRIOGroup.cpp | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
+
+diff --git a/src/MSRIOGroup.cpp b/src/MSRIOGroup.cpp
+index dfb5ab5..3f34ca7 100644
+--- a/src/MSRIOGroup.cpp
++++ b/src/MSRIOGroup.cpp
+@@ -455,16 +455,25 @@ namespace geopm
+     void MSRIOGroup::save_control(void)
+     {
+         for (const auto &pair_it : m_name_cpu_control_map) {
++            bool do_skip = false;
+             for (MSRControl *ctl_ptr : pair_it.second) {
+-                auto it = m_per_cpu_restore[ctl_ptr->cpu_idx()].find(ctl_ptr->offset());
+-                if (it == m_per_cpu_restore[ctl_ptr->cpu_idx()].end()) {
+-                    struct m_restore_s restore {.value = m_msrio->read_msr(ctl_ptr->cpu_idx(),
+-                                                                           ctl_ptr->offset()),
+-                                                .mask = ctl_ptr->mask()};
+-                    m_per_cpu_restore[ctl_ptr->cpu_idx()].emplace(ctl_ptr->offset(), restore);
++                try {
++                    auto it = m_per_cpu_restore[ctl_ptr->cpu_idx()].find(ctl_ptr->offset());
++                    if (it == m_per_cpu_restore[ctl_ptr->cpu_idx()].end()) {
++                        struct m_restore_s restore {.value = m_msrio->read_msr(ctl_ptr->cpu_idx(),
++                                                                               ctl_ptr->offset()),
++                                                    .mask = ctl_ptr->mask()};
++                        m_per_cpu_restore[ctl_ptr->cpu_idx()].emplace(ctl_ptr->offset(), restore);
++                    }
++                    else {
++                        it->second.mask |= ctl_ptr->mask();
++                    }
+                 }
+-                else {
+-                    it->second.mask |= ctl_ptr->mask();
++                catch (const Exception &e) {
++                    if (!do_skip) {
++                        std::cerr << e.what() << std::endl;
++                    }
++                    do_skip = true;
+                 }
+             }
+         }
+-- 
+1.8.3.1
+

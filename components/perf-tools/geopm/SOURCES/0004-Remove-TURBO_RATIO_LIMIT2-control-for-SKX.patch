@@ -1,0 +1,50 @@
+From 3c732f0f041fd79cf86810877910deb48824aab4 Mon Sep 17 00:00:00 2001
+From: Diana Guttman <diana.r.guttman@intel.com>
+Date: Thu, 4 Oct 2018 16:20:25 -0700
+Subject: [PATCH 4/5] Remove TURBO_RATIO_LIMIT2 control for SKX.
+
+- Not supported in our SKU even though it is listed in the whitelist.
+
+Change-Id: I94c2c16bdf6bb12344a05efec0c2ae7b378801a7
+Signed-off-by: Diana Guttman <diana.r.guttman@intel.com>
+---
+ src/msr_skx.cpp | 23 -----------------------
+ 1 file changed, 23 deletions(-)
+
+diff --git a/src/msr_skx.cpp b/src/msr_skx.cpp
+index 21692e3..d8f05b1 100644
+--- a/src/msr_skx.cpp
++++ b/src/msr_skx.cpp
+@@ -243,29 +243,6 @@ namespace geopm
+                       .function  = IMSR::M_FUNCTION_SCALE,
+                       .units     = IMSR::M_UNITS_HZ,
+                       .scalar    = 1e8}}}),
+-            MSR("TURBO_RATIO_LIMIT2", 0x1AF,
+-                {},
+-                {{"MAX_RATIO_LIMIT_17CORES", (struct IMSR::m_encode_s) {
+-                      .begin_bit = 0,
+-                      .end_bit   = 8,
+-                      .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+-                      .function  = IMSR::M_FUNCTION_SCALE,
+-                      .units     = IMSR::M_UNITS_HZ,
+-                      .scalar    = 1e8}},
+-                {"MAX_RATIO_LIMIT_18CORES", (struct IMSR::m_encode_s) {
+-                      .begin_bit = 8,
+-                      .end_bit   = 16,
+-                      .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+-                      .function  = IMSR::M_FUNCTION_SCALE,
+-                      .units     = IMSR::M_UNITS_HZ,
+-                      .scalar    = 1e8}},
+-                {"PCU_SEMAPHORE", (struct IMSR::m_encode_s) {
+-                      .begin_bit = 63,
+-                      .end_bit   = 64,
+-                      .domain    = IPlatformTopo::M_DOMAIN_PACKAGE,
+-                      .function  = IMSR::M_FUNCTION_SCALE,
+-                      .units     = IMSR::M_UNITS_NONE,
+-                      .scalar    = 1.0}}}),
+             MSR("PACKAGE_THERM_STATUS", 0x1B1,
+                 {{"DIGITAL_READOUT", (struct IMSR::m_encode_s) {
+                       .begin_bit = 16,
+-- 
+1.8.3.1
+
