@@ -45,7 +45,7 @@ BuildRequires:  kernel-default-devel
 Allows safer access to model specific registers (MSRs)
 
 %package -n %{pname}-slurm%{PROJ_DELIM}
-Summary: msr-safe slurm spank plugin
+Summary: SLURM spank plugin for msr-safe
 Group: Development/Libraries
 Requires:       %{pname}%{PROJ_DELIM}
 %if 0%{?sles_version} || 0%{?suse_version}
