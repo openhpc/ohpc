@@ -24,6 +24,7 @@ Group:          %{PROJ_NAME}/parallel-libs
 Version:        2.2.0
 Release:        1%{?dist}
 Source0:        https://github.com/sourceryinstitute/OpenCoarrays/releases/download/%{version}/OpenCoarrays-%{version}.tar.gz
+Patch1:         opencoarrays-disable-get-comm-test.patch
 Url:            http://www.opencoarrays.org
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  cmake%{PROJ_DELIM}
@@ -42,6 +43,7 @@ TS 18508 Additional Parallel Features in Fortran.
 
 %prep
 %setup -q -n OpenCoarrays-%{version}
+%patch1 -p1
 
 
 %build
