@@ -35,6 +35,7 @@ BuildRequires:  systemd
 
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  udev
+BuildRequires:  kernel-default-devel
 #!BuildIgnore: post-build-checks
 %endif
 
