@@ -39,6 +39,11 @@ BuildRequires:  kernel-default-devel
 #!BuildIgnore: post-build-checks
 %endif
 
+%if 0%{?centos_version} == 700
+BuildRequires: kernel = %{centos_kernel}
+BuildRequires: kernel-devel = %{centos_kernel}
+%if
+
 %kernel_module_package default
 
 %description
