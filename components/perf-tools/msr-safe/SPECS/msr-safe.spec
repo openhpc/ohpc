@@ -10,8 +10,6 @@
 
 # msr-safe.spec
 
-# needssslcertforbuild
-
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -32,7 +30,7 @@ Source3:        10-msr-safe.rules
 Source4:        msr-safe.sh
 Patch1:         0001-Correcting-hash_for_each_possible-function.-Fixes-41.patch
 Patch2:         0002-Adding-slurm-spank-plugin-to-enable-MSR-save-restore.patch
-BuildRequires:  %kernel_module_package_buildreqs
+#BuildRequires:  %kernel_module_package_buildreqs
 BuildRequires:  systemd
 
 %if 0%{?sles_version} || 0%{?suse_version}
