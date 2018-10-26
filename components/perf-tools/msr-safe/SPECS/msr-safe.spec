@@ -30,12 +30,19 @@ Source3:        10-msr-safe.rules
 Source4:        msr-safe.sh
 Patch1:         0001-Correcting-hash_for_each_possible-function.-Fixes-41.patch
 Patch2:         0002-Adding-slurm-spank-plugin-to-enable-MSR-save-restore.patch
-BuildRequires:  %kernel_module_package_buildreqs
+#BuildRequires:  %kernel_module_package_buildreqs
 BuildRequires:  systemd
 
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  udev
+BuildRequires:  kernel-default-devel
 #!BuildIgnore: post-build-checks
+%endif
+
+%if 0%{?centos_version} == 700
+%define centos_kernel 3.10.0-862.el7
+BuildRequires: kernel = %{centos_kernel}
+BuildRequires: kernel-devel = %{centos_kernel}
 %endif
 
 %kernel_module_package default
@@ -44,7 +51,7 @@ BuildRequires:  udev
 Allows safer access to model specific registers (MSRs)
 
 %package -n %{pname}-slurm%{PROJ_DELIM}
-Summary: msr-safe slurm spank plugin
+Summary: SLURM spank plugin for msr-safe
 Group: Development/Libraries
 Requires:       %{pname}%{PROJ_DELIM}
 %if 0%{?sles_version} || 0%{?suse_version}
