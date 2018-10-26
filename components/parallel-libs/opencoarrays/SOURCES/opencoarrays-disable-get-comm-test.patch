@@ -1,5 +1,5 @@
---- a/src/tests/unit/teams/CMakeLists.txt2018-08-10 09:01:51.000000000 -0500
-+++ b/src/tests/unit/teams/CMakeLists.txt2018-10-26 17:02:12.963100898 -0500
+--- a/src/tests/unit/teams/CMakeLists.txt	2018-08-10 09:01:51.000000000 -0500
++++ b/src/tests/unit/teams/CMakeLists.txt	2018-10-26 17:21:11.478962894 -0500
 @@ -1,2 +1,2 @@
  caf_compile_executable(team_number team-number.f90)
 -caf_compile_executable(get_communicator get-communicator.f90)
