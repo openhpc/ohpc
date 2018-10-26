@@ -10,6 +10,8 @@
 
 # msr-safe.spec
 
+# needssslcertforbuild
+
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
