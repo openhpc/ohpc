@@ -25,7 +25,25 @@ installed in a later step.
 
 \noindent The \GEOPM{} package uses \OHPC{}'s msr-safe kernel module
 to enable users to directly read and write whitelisted Model Specific
-Registers (MSRs).  For documentation on how to use \GEOPM{} please see
+Registers (MSRs).  An associated \SLURM{} plugin ensures that MSRs modified
+within a user slurm job allocation are reset to their original state
+before the compute node is returned to the pool available to other
+users of the system.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_geopm} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install msr-safe kernel module and SLURM plugin
+[sms](*\#*) (*\chrootinstall*) kmod-msr-safe-ohpc
+[sms](*\#*) (*\chrootinstall*) msr-safe-slurm-ohpc
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+For documentation on how to use \GEOPM{} please see
 the \GEOPM{} man pages which are all linked from the geopm(7) overview
 man page available in html here:
 \href{http://geopm.github.io/man/geopm.7.html}

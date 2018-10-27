@@ -379,9 +379,6 @@ Collection of serial library builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-slurm-client
 Summary:   OpenHPC client packages for SLURM
-%ifnarch aarch64
-Requires:  msr-safe-slurm%{PROJ_DELIM}
-%endif
 Requires:  munge%{PROJ_DELIM}
 Requires:  slurm%{PROJ_DELIM}
 Requires:  slurm-slurmd%{PROJ_DELIM}
