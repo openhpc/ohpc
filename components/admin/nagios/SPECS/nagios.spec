@@ -193,7 +193,9 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
     --with-perlcache \
     --with-template-objects \
     --with-template-extinfo \
+    %ifarch aarch64
     --with-initdir=%{_unitdir} \
+    %endif
     %if 0%{?sles_version} || 0%{?suse_version}
     --with-httpd-conf=/etc/apache2/conf.d \
     %else
