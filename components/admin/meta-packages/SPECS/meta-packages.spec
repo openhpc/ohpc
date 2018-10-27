@@ -545,6 +545,7 @@ Requires:  mfem-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  mfem-intel-impi%{PROJ_DELIM}
 Requires:  mumps-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  mumps-intel-impi%{PROJ_DELIM}
+Requires:  opencoarrays-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  petsc-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  petsc-intel-impi%{PROJ_DELIM}
 Requires:  scalapack-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
