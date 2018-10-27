@@ -20,6 +20,10 @@ source ./common/functions || exit 1
 	export MV2_ENABLE_AFFINITY=0
     fi
 
+    if echo "$LMOD_FAMILY_MPI" | grep -q impi ; then
+	launch="mpiexec -np 1"
+    fi
+
     run $launch ./hello
     assert_success
 }

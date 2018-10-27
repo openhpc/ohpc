@@ -25,7 +25,7 @@ for compiler in gnu8 ; do
 	echo "-------------------------------------------------------"
 
 	module purge             || exit 1
-    module load prun         || exit 1
+	module load prun         || exit 1
 	module load $compiler    || exit 1
 	module load $mpi         || exit 1
 	module load opencoarrays || exit 1
@@ -34,7 +34,7 @@ for compiler in gnu8 ; do
 	make clean               || exit 1
 	make -k check            || status=1
 
-    save_logs_mpi_family tests $compiler $mpi
+	save_logs_mpi_family tests $compiler $mpi
 
 	make distclean
     done
