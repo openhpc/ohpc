@@ -193,6 +193,7 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
     --with-perlcache \
     --with-template-objects \
     --with-template-extinfo \
+    --with-initdir=%{_unitdir} \
     %if 0%{?sles_version} || 0%{?suse_version}
     --with-httpd-conf=/etc/apache2/conf.d \
     %else
@@ -292,8 +293,6 @@ exit 0
 %ifarch aarch64
 %if 0%{?sles_version} || 0%{?suse_version}
 /usr/lib/systemd/system/nagios.service
-%else
-/lib/systemd/system/nagios.service
 %endif
 %else
 /etc/init.d/nagios
