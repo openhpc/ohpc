@@ -89,7 +89,7 @@ BuildRequires: libXft
 %{!?py_site_pkg_64: %global py_site_pkg_64 %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 %description
-PBS Professional® is a fast, powerful workload manager and
+PBS Professional is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
@@ -119,7 +119,7 @@ Requires: libical
 Autoreq: 1
 
 %description -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
-PBS Professional® is a fast, powerful workload manager and
+PBS Professional is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
@@ -147,7 +147,7 @@ Requires: hwloc-libs
 Autoreq: 1
 
 %description -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
-PBS Professional® is a fast, powerful workload manager and
+PBS Professional is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
@@ -169,7 +169,7 @@ Requires: python < 3.0
 Autoreq: 1
 
 %description -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
-PBS Professional® is a fast, powerful workload manager and
+PBS Professional is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
