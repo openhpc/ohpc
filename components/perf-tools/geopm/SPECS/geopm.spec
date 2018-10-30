@@ -22,7 +22,7 @@
 
 Name:          %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:       Global Extensible Open Power Manager
-Version:       0.6.0
+Version:       0.6.1
 Release:       1
 License:       BSD-3-Clause
 Group:         %{PROJ_NAME}/perf-tools
