@@ -43,6 +43,7 @@ my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","open
                      "python34-build-patch","python34-scipy","python34-numpy","python34-mpi4py");
 
 my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
+		     "gnu8-compilers" => "Gnu Compiler Suite",
 		     "intel-compilers-devel" => "Intel Compiler Compatibility Package",
 		     "llvm4-compilers" => "LLVM Compiler Suite",
 		     "llvm5-compilers" => "LLVM Compiler Suite",
