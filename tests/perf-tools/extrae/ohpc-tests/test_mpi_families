@@ -1,0 +1,43 @@
+#!/bin/bash
+# -*-sh-*-
+
+TEST_LOGS=""
+MAKEFLAGS=""
+status=0
+
+source ./common/TEST_ENV  || exit 1
+source ./common/functions || exit 1
+
+cd perf-tools/extrae || exit 1
+export BATS_JUNIT_CLASS=Extrae
+
+# bootstrap the local autotools project if necessary
+
+./bootstrap || exit 1
+
+for compiler in $COMPILER_FAMILIES ; do
+    for mpi in $MPI_FAMILIES ; do
+
+    echo " "
+    echo " "
+    echo "-------------------------------------------------------"
+    echo "Libraries: Extrae tests: $compiler-$mpi"
+    echo "-------------------------------------------------------"
+
+    module purge          || exit 1
+    module load prun  || exit 1
+    module load $compiler || exit 1
+    module load $mpi      || exit 1
+    module load extrae    || exit 1
+
+    ./configure           || exit 1
+    make clean            || exit 1
+    make -k check         || status=1
+
+    save_logs_mpi_family tests $compiler $mpi
+
+    make distclean
+    done
+done
+
+exit ${status}

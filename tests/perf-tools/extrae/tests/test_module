@@ -1,0 +1,100 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions                  || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+PKG=EXTRAE
+testname="Extrae"
+module=extrae
+header=extrae.h
+library=libmpitrace
+rpm=extrae-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI${DELIM}
+
+setup() {
+    module purge
+    module load ohpc
+    module load $module
+}
+
+@test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+}
+
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    DIR=${PKG}_DIR
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+    
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+}
+
+# ----------
+# Binaries
+# ----------
+
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    BIN=${PKG}_BIN
+    if [ -z ${!BIN} ];then
+        flunk "${PKG}_BIN directory not defined"
+    fi
+    
+    if [ ! -d ${!BIN} || -z "${!BIN}" ];then
+        flunk "directory ${!BIN} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify availability of mpi2prv binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    run which mpi2prv
+    assert_success
+}
+
+@test "[$testname] Verify availability of extrae-cmd binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    run which extrae-cmd
+    assert_success
+}
+
+# ----------
+# Lib Tests
+# ----------
+
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+ 
+    if [ ! -d ${!LIB} ];then
+        flunk "directory ${!LIB} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify dynamic library available in ${PKG}_LIB ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -s ${!LIB}/${library}.so ];then
+        flunk "${library}.so does not exist"
+    fi 
+}
+
+rm -f .cmd_output
+
