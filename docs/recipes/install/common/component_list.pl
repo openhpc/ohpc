@@ -52,6 +52,7 @@ my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
 		     "openmpi3" => "openmpi",
 		     "openmpi3-pmix-slurm" => "openmpi",
                      "warewulf-common" => "warewulf",
+                     "wxparaver" => "paraver",
                      "ptscotch" => "scotch");
 my @package_uniq_delim = ("slurm");
 
