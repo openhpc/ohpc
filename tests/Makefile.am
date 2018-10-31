@@ -238,6 +238,10 @@ if GEOPM_ENABLED
    TESTS += perf-tools/geopm/ohpc-tests/test_mpi_families
 endif
 
+if EXTRAE_ENABLED
+   TESTS += perf-tools/extrae/ohpc-tests/test_mpi_families
+endif
+
 if LIKWID_ENABLED
    TESTS += perf-tools/likwid/ohpc-tests/test_compiler_families
 endif

@@ -260,6 +260,12 @@ AC_ARG_ENABLE([geopm],
    [AX_OPTION_DEFAULT(type=short,enable_geopm,yes)])
 AM_CONDITIONAL(GEOPM_ENABLED,test "x$enable_geopm" = "xyes" )
 #------------------------------------------------------------------------------------------
+# Extrae
+AC_ARG_ENABLE([extrae],
+   [AS_HELP_STRING([--enable-extrae],[Enable Extrae tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_extrae,no)])
+AM_CONDITIONAL(EXTRAE_ENABLED,test "x$enable_extrae" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # HYPRE
 AC_ARG_ENABLE([hypre],
    [AS_HELP_STRING([--enable-hypre],[Enable HYPRE tests (default=yes)])],[],
@@ -477,6 +483,7 @@ AC_OUTPUT( Makefile
        user-env/Makefile 
        bos/Makefile
        fabric/Makefile
+       perf-tools/extrae/Makefile
        perf-tools/geopm/Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
@@ -820,6 +827,12 @@ echo    Libraries:
     fi
 
 echo    Performance Tools:
+
+    if test "x$enable_extrae" = "xyes"; then
+       echo '    'Extrae.................... : enabled
+    else
+       echo '    'Extrae.................... : disabled
+    fi
 
     if test "x$enable_imb" = "xyes"; then
        echo '    'IMB....................... : enabled
