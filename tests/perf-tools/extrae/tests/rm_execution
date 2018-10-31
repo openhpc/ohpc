@@ -26,6 +26,7 @@ unset OMP_NUM_THREADS
     rm -f TRACE.mpits
     rm -f mpi_ping.prv
     rm -rf set-0
+    mkdir set-0
 
     run_mpi_binary "./tracef.sh ./mpi_ping" "" $NODES $TASKS
     assert_success
@@ -53,6 +54,5 @@ unset OMP_NUM_THREADS
 
     rm -rf profile*
     rm -rf *prv *row *pcf TRACE.*
-    rm -rf set-0
-
+#    rm -rf set-0
 }
