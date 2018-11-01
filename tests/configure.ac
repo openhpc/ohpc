@@ -263,7 +263,7 @@ AM_CONDITIONAL(GEOPM_ENABLED,test "x$enable_geopm" = "xyes" )
 # Extrae
 AC_ARG_ENABLE([extrae],
    [AS_HELP_STRING([--enable-extrae],[Enable Extrae tests (default=no)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_extrae,no)])
+   [AX_OPTION_DEFAULT(type=long,enable_extrae,yes)])
 AM_CONDITIONAL(EXTRAE_ENABLED,test "x$enable_extrae" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # HYPRE
