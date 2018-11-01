@@ -49,6 +49,18 @@ unset OMP_NUM_THREADS
     run ls trace.prv
     assert_success
 
+    # allow for some job output lag from pbs
+    for i in `seq 1 10`; do
+	if [ -s job.out ];then
+	    break
+	else
+	    sleep 0.2
+	fi
+    done
+
+    run ls job.out
+    assert_success
+
     run tail -1 job.out
     assert_output "mpi2prv: Congratulations! trace.prv has been generated."
 
