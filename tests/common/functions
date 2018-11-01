@@ -416,7 +416,9 @@ run_mpi_binary () {
 	rc=$?
 
 	if [ -n "$output_file" ];then
-	    mv job.out $output_file
+	    if [ "$output_file" != "job.out" ];then
+		mv job.out $output_file
+	    fi
 	fi
 	return $rc
     else
