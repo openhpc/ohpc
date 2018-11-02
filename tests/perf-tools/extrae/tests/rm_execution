@@ -43,6 +43,9 @@ unset OMP_NUM_THREADS
 
     rm -f job.out
 
+    mkdir -p .tmp.extrae
+    export MPI2PRV_TMP_DIR=.tmp.extrae
+
     run_mpi_binary -o "job.out" "mpimpi2prv -syn -f TRACE.mpits -o trace.prv" "" $NODES $TASKS
     assert_success
 
@@ -66,5 +69,6 @@ unset OMP_NUM_THREADS
 
     rm -rf profile*
     rm -rf *prv *row *pcf TRACE.*
+    rm -rf $MPI2PRV_TMP_DIR
 #    rm -rf set-0
 }
