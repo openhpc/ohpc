@@ -45,13 +45,13 @@
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.5.2
+Version: 2.6.0
 Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
 Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
-Source0: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
+Source0: https://github.com/sylabs/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
 Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
 BuildRequires: autoconf
