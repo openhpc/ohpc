@@ -35,8 +35,9 @@ users of the system.
 % ohpc_command if [[ ${enable_geopm} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Install msr-safe kernel module and SLURM plugin
+# Install msr-safe kernel module, supporting scripts, and SLURM plugin
 [sms](*\#*) (*\chrootinstall*) kmod-msr-safe-ohpc
+[sms](*\#*) (*\chrootinstall*) msr-safe-ohpc
 [sms](*\#*) (*\chrootinstall*) msr-safe-slurm-ohpc
 \end{lstlisting}
 % ohpc_indent 0
