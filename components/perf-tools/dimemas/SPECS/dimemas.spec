@@ -42,8 +42,16 @@ BuildRequires: libtool%{PROJ_DELIM}
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
-%description
-Dimemas is a performance analysis tool for message-passing programs. It enables the user to develop and tune parallel applications on a workstation, while providing an accurate prediction of their performance on the parallel target machine. The Dimemas simulator reconstructs the time behavior of a parallel application on a machine modeled by a set of performance parameters. Thus, performance experiments can be done easily. The supported target architecture classes include networks of workstations, single and clustered SMPs, distributed memory parallel computers, and even heterogeneous systems.
+%description 
+Dimemas is a performance analysis tool for message-passing
+programs. It enables the user to develop and tune parallel applications on a
+workstation, while providing an accurate prediction of their performance on the
+parallel target machine. The Dimemas simulator reconstructs the time behavior
+of a parallel application on a machine modeled by a set of performance
+parameters. Thus, performance experiments can be done easily. The supported
+target architecture classes include networks of workstations, single and
+clustered SMPs, distributed memory parallel computers, and even heterogeneous
+systems.
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -99,12 +107,8 @@ set     version			    %{version}
 depends-on boost
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    INCLUDE             %{install_path}/include
-prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 
 setenv          %{PNAME}_DIR        %{install_path}
-setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
