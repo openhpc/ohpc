@@ -238,6 +238,11 @@ if GEOPM_ENABLED
    TESTS += perf-tools/geopm/ohpc-tests/test_mpi_families
 endif
 
+if DIMEMAS_ENABLED
+   TESTS += perf-tools/dimemas/ohpc-tests/test_mpi_families
+endif
+
+
 if EXTRAE_ENABLED
    TESTS += perf-tools/extrae/ohpc-tests/test_mpi_families
 endif
