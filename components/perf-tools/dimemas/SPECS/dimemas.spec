@@ -26,6 +26,7 @@ URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
 
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison
 %if 0%{?suse_version}
 BuildRequires: flex
