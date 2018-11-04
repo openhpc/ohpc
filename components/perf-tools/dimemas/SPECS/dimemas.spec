@@ -109,6 +109,7 @@ depends-on boost
 prepend-path    PATH                %{install_path}/bin
 
 setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
