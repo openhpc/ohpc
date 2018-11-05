@@ -74,6 +74,8 @@ if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
     $page_breaks{"superlu_dist-gnu-impi-ohpc"} = 4;
     $page_breaks{"netcdf-fortran-gnu-impi-ohpc"} = 2;
     $page_breaks{"phdf5-gnu-impi-ohpc"} = 3;
+} elsif ( $ENV{'PWD'} =~ /\S+\/aarch64\// ) {
+    $page_breaks{"slepc-gnu7-openmpi-ohpc"} = 2;
 }
 
 my $longSummaryLine = 60;
