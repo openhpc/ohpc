@@ -16,8 +16,8 @@
 \end{table}
 \vspace*{0.5cm}
 
-\renewcommand{\firstColWidth}{4.5cm}
-\renewcommand{\secondColWidth}{2.0cm}
+\renewcommand{\firstColWidth}{6.25cm}
+\renewcommand{\secondColWidth}{0.95cm}
 
 % Provisioning
 \iftoggleverb{isWarewulf}
@@ -66,8 +66,15 @@
 \vspace*{\tabSpaceBot{}}
 \end{table}
 
-\renewcommand{\firstColWidth}{4.2cm}
-\renewcommand{\secondColWidth}{1.92cm}
+% Perf Tools (2)
+\begin{table}[h!]
+\caption*{Table~\ref{table:dev-tools} (cont): {\bf Development Tools} \vspace*{\captionSpace{}} }
+\input manifest/dev-tools2
+\vspace*{\tabSpaceBot{}}
+\end{table}
+
+\renewcommand{\firstColWidth}{4.5cm}
+\renewcommand{\secondColWidth}{1.7cm}
 
 % Perf Tools (1)
 \begin{table}[h!]
@@ -79,8 +86,14 @@
 % Perf Tools (2)
 \begin{table}[h!]
 \caption*{Table~\ref{table:perf-tools} (cont): {\bf Performance Analysis Tools} \vspace*{\captionSpace{}} }
-%\caption*{\bf Performance Analysis Tools (cont)} \vspace*{\captionSpace{}} 
 \input manifest/perf-tools2
+\vspace*{\tabSpaceBot{}}
+\end{table}
+
+% Perf Tools (3)
+\begin{table}[h!]
+\caption*{Table~\ref{table:perf-tools} (cont): {\bf Performance Analysis Tools} \vspace*{\captionSpace{}} }
+\input manifest/perf-tools3
 \vspace*{\tabSpaceBot{}}
 \end{table}
 
@@ -112,6 +125,13 @@
 \begin{table}[h!]
 \caption*{Table~\ref{table:io-libs} (cont): {\bf IO Libraries} \vspace*{\captionSpace{}} }
 \input manifest/io-libs2
+\vspace*{\tabSpaceBot{}}
+\end{table}
+
+% IO Libs (3)
+\begin{table}[h!]
+\caption*{Table~\ref{table:io-libs} (cont): {\bf IO Libraries} \vspace*{\captionSpace{}} }
+\input manifest/io-libs3
 \vspace*{\tabSpaceBot{}}
 \end{table}
 
@@ -151,6 +171,13 @@
 \begin{table}[h!]
 \caption*{Table~\ref{table:parallel-libs} (cont): {\bf Parallel Libraries} \vspace*{\captionSpace{}} }
 \input manifest/parallel-libs3
+\vspace*{\tabSpaceBot{}}
+\end{table}
+
+% Parallel libs (4)
+\begin{table}[h!]
+\caption*{Table~\ref{table:parallel-libs} (cont): {\bf Parallel Libraries} \vspace*{\captionSpace{}} }
+\input manifest/parallel-libs4
 \vspace*{\tabSpaceBot{}}
 \end{table}
 

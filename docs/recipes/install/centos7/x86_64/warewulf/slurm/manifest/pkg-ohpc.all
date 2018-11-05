@@ -486,7 +486,6 @@ python-scipy-gnu8-mpich-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientifi
 python-scipy-gnu8-mvapich2-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu8-openmpi3-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python34-Cython-ohpc 0.26.1 http://www.cython.org Development/Languages/Python The Cython compiler for writing C extensions for the Python language
-python34-build-patch-ohpc 0.1 https://github.com/openhpc/ohpc ohpc/dev-tools OpenHPC build package for python34 modules
 python34-mpi4py-gnu7-impi-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python34-mpi4py-gnu7-mpich-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python34-mpi4py-gnu7-mvapich2-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
