@@ -23,7 +23,7 @@ pre-packaged binary RPMs available per architecture type are summarized as follo
 
 Base OS     | aarch64 | x86_64  | noarch
 :---:       | :---:   | :---:   | :---:
-CentOS 7.5  | 407     | 724     | 45
+CentOS 7.5  | 407     | 723     | 45
 SLES 12 SP3 | 414     | 727     | 45
 
 A list of all available components is available on the OpenHPC
