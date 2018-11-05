@@ -1,4 +1,4 @@
-EasyBuild-ohpc 3.6.2 http://easybuilders.github.io/easybuild ohpc/dev-tools Build and installation framework
+EasyBuild-ohpc 3.7.1 http://easybuilders.github.io/easybuild ohpc/dev-tools Build and installation framework
 automake-ohpc 1.16.1 http://www.gnu.org/software/automake/ ohpc/dev-tools A GNU tool for automatically creating Makefiles
 autoconf-ohpc 2.69 http://www.gnu.org/software/autoconf/ ohpc/dev-tools A GNU tool for automatically configuring source code
 cmake-ohpc 3.12.2 https://cmake.org/ ohpc/dev-tools CMake is an open-source, cross-platform family of tools designed to build, test and package software.
