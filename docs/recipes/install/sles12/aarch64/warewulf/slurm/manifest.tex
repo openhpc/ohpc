@@ -13,8 +13,8 @@
 \end{table}
 \vspace*{0.5cm}
 
-\renewcommand{\firstColWidth}{4.3cm}
-\renewcommand{\secondColWidth}{1.8cm}
+\renewcommand{\firstColWidth}{6.25cm}
+\renewcommand{\secondColWidth}{0.95cm}
 
 % Provisioning
 
@@ -24,12 +24,17 @@
 \vspace*{\tabSpaceBot{}}
 \end{table} 
 
+\renewcommand{\firstColWidth}{4.1cm}
+\renewcommand{\secondColWidth}{1.8cm}
+
 % Resource Management
 \begin{table}[h!]
 \caption{\bf Resource Management} \vspace*{\captionSpace{}} \label{table:rms}
 \input manifest/rms
 \vspace*{\tabSpaceBot{}}
 \end{table}
+
+\renewcommand{\firstColWidth}{4.8cm}
 
 % Compiler Families
 \begin{table}[h!]
@@ -38,7 +43,7 @@
 \vspace*{\tabSpaceBot{}}
 \end{table}
 
-\renewcommand{\firstColWidth}{4.7cm}
+\renewcommand{\firstColWidth}{4.8cm}
 
 % MPI Families
 \begin{table}[h!]
@@ -117,7 +122,9 @@
 \vspace*{\tabSpaceBot{}}
 \end{table}
 
-
-
-
-
+% Parallel libs (2)
+\begin{table}[h!]
+\caption*{Table~\ref{table:parallel-libs} (cont): {\bf Parallel Libraries} \vspace*{\captionSpace{}} }
+\input manifest/parallel-libs2
+\vspace*{\tabSpaceBot{}}
+\end{table}
