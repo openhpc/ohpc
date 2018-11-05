@@ -18,12 +18,20 @@ sub usage {
 
 my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
                         "parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
-my @compiler_familes = ("gnu","gnu7","intel");
+my @compiler_familes = ("gnu","gnu7","intel","gnu8");
 my @mpi_families     = ("mvapich2","openmpi","openmpi3","impi","mpich");
 
 my @single_package_exceptions = ();
-my @exclude = ("slurm-sjstat-ohpc","slurm-slurmdb-direct-ohpc","slurm-sjobexit-ohpc");  # package name changes with slurm 17.02.9
+my @exclude = ("slurm-sjstat-ohpc","slurm-slurmdb-direct-ohpc","slurm-sjobexit-ohpc","slurm-sql-ohpc",
+               "slurm-munge-ohpc","slurm-plugins-ohpc");  # package name changes with slurm 17.02.9
 push @exclude, "lustre-client-ohpc-kmp-default";
+push @exclude, "R_base-ohpc";
+
+# skip older lmod defaults
+push @exclude, "lmod-defaults-gnu-impi-ohpc";
+push @exclude, "lmod-defaults-gnu-mpich-ohpc";
+push @exclude, "lmod-defaults-gnu-mvapich2-ohpc";
+push @exclude, "lmod-defaults-gnu-openmpi-ohpc";
 
 my $help;
 my $category_single;
@@ -58,10 +66,14 @@ $mpi_exceptions{"mkl-blacs"} = 1;
 
 my %page_breaks = ();
 if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
-    $page_breaks{"scorep-gnu-impi-ohpc"} = 2;
-    $page_breaks{"mumps-gnu-impi-ohpc"} = 2;
-    $page_breaks{"superlu_dist-gnu-impi-ohpc"} = 3;
-    $page_breaks{"netcdf-gnu-impi-ohpc"} = 2;
+    $page_breaks{"python-mpi4py-gnu7-impi-ohpc"} = 2;
+    $page_breaks{"mpiP-gnu-impi-ohpc"} = 2;
+    $page_breaks{"scorep-gnu-impi-ohpc"} = 3;
+    $page_breaks{"mfem-gnu7-impi-ohpc"} = 2;
+    $page_breaks{"ptscotch-gnu7-impi-ohpc"} = 3;
+    $page_breaks{"superlu_dist-gnu-impi-ohpc"} = 4;
+    $page_breaks{"netcdf-fortran-gnu-impi-ohpc"} = 2;
+    $page_breaks{"phdf5-gnu-impi-ohpc"} = 3;
 }
 
 my $longSummaryLine = 60;
