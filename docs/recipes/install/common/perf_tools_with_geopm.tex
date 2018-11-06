@@ -1,0 +1,29 @@
+\OHPC{} provides a variety of open-source tools to aid in application
+performance analysis (refer to Appendix~\ref{appendix:manifest} for a listing
+of available packages). This group of tools can be installed as follows:
+
+% begin_ohpc_run
+% ohpc_comment_header Install Performance Tools \ref{sec:install_perf_tools}
+\begin{lstlisting}[language=bash,keywords={},literate={-}{-}1]
+# Install perf-tools meta-package
+[sms](*\#*) (*\install*) ohpc-gnu8-perf-tools
+\end{lstlisting}
+% end_ohpc_run
+
+\noindent Optionally, the GEOPM power management framework can be installed
+using the convenience meta-package below. Note that GEOPM
+requires customization of the compute node environment to include an additional
+kernel module as highlighted previously in \S\ref{sec:add_geopm}):
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_geopm} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install GEOPM meta-package
+[sms](*\#*) (*\install*) ohpc-gnu8-geopm
+
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
