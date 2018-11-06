@@ -1,6 +1,6 @@
 # -*- mode: sh; fill-column: 120; -*-
 
-Version 1.3.6 (xx November 2018)
+Version 1.3.6 (07 November 2018)
 
 [Important Highlights/Notices]
 
@@ -19,6 +19,14 @@ Version 1.3.6 (xx November 2018)
 
 [General]
 
+  * updated RPM packaging defaults to include an ohpc version designation in release string
+    (https://github.com/openhpc/ohpc/issues/744)
+  * patch MPICH to allow use of HYDRA_BINDING environment variable for setting processor binding settings
+    (https://github.com/openhpc/ohpc/issues/750)
+  * update scalapack package group information for consistency (https://github.com/openhpc/ohpc/issues/753)
+  * include '-o' option during user/group add for munge install (https://github.com/openhpc/ohpc/issues/813)
+  * defined additional meta-packages for perf tools and io-libs with intel compiler variant
+    (https://github.com/openhpc/ohpc/issues/816)
   * variety of component version updates and other additions highlighted below
 
 [Component Additions]
