@@ -19,7 +19,7 @@ Version 1.3.6 (07 November 2018)
 
 [General]
 
-  * updated RPM packaging defaults to include an ohpc version designation in release string
+  * updated RPM package naming to include an ohpc version designation in release string
     (https://github.com/openhpc/ohpc/issues/744)
   * patch MPICH to allow use of HYDRA_BINDING environment variable for setting processor binding settings
     (https://github.com/openhpc/ohpc/issues/750)
