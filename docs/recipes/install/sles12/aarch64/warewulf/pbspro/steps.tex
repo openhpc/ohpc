@@ -171,6 +171,7 @@
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
+\vspace*{-.2cm}
 \paragraph{Add \Nagios{} monitoring}
 \input{common/nagios}
 
@@ -198,13 +199,13 @@
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
 %% \input{common/import_ww_files_ib_sles}
-\clearpage
+%\clearpage
 \input{common/finalize_provisioning}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_pbs}
 \input{common/add_ww_hosts_finalize}
 
-\vspace*{0.4cm}
+\clearpage
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 \input{common/kargs_post}
@@ -219,6 +220,7 @@
 \section{Install \OHPC{} Development Components} \label{sec:install_dev}
 \input{common/dev_intro.tex}
 
+%\clearpage
 \subsection{Development Tools} \label{sec:install_dev_tools}
 \input{common/dev_tools}
 
@@ -236,7 +238,6 @@
 
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
-\clearpage
 \input{common/third_party_libs_petsc_sles}
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_aarch}
