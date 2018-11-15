@@ -26,7 +26,11 @@ Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://trilinos.sandia.gov/index.html
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
+%if 0%{?rhel} > 7
+BuildRequires:  cmake
+%else
 BuildRequires:  cmake%{PROJ_DELIM}
+%endif
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
@@ -69,7 +73,9 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%if 0%{?rhel} <= 7
 module load cmake
+%endif
 module load boost
 module load netcdf
 module load phdf5
