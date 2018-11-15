@@ -47,9 +47,6 @@ BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
-%if 0%{?suse_version} <= 1110
-%{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-%endif
 
 #!BuildIgnore: post-build-checks
 #!BuildIgnore: brp-check-suse
