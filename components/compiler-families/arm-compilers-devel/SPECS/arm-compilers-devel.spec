@@ -10,6 +10,7 @@
 
 %include %{_sourcedir}/OHPC_macros
 %global pname arm-compilers-devel
+%global armhpc_ver 18.3
 
 Summary:   OpenHPC compatibility package for Arm HPC compiler
 Name:      %{pname}%{PROJ_DELIM}
@@ -24,17 +25,26 @@ BuildArch: aarch64
 #!BuildIgnore: post-build-checks
 
 Requires: lmod%{PROJ_DELIM}
+Provides: libflang.so()(64bit)
+Provides: libflangrti.so()(64bit)
+Provides: libompstub.so()(64bit)
+Provides: libomp.so()(64bit)
+Provides: libomp.so(VERSION)(64bit)
+Provides: libarmpl.so()(64bit)
+Provides: libarmpl_lp64.so()(64bit)
+Provides: libarmpl_ilp64.so()(64bit)
+Provides: libarmpl_mp.so()(64bit)
+Provides: libarmpl_lp64_mp.so()(64bit)
+Provides: libarmpl_ilp64_mp.so()(64bit)
+Provides: libstdc++.so.6(GLIBCXX_3.4.20)(64bit)
+Provides: libstdc++.so.6(GLIBCXX_3.4.21)(64bit)
+AutoReq:  no
 
 %description
 
 Provides OpenHPC-style module compatibility for use with the Arm HPC compiler suite.
 
-%install
-
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/arm
-
-
-%pre
+%prep
 
 # Verify Arm HPC compilers are installed. Punt if not detected.
 
@@ -54,7 +64,7 @@ fi
 
 # Verify min version expectations
 
-min_ver="18.3"
+min_ver="%{armhpc_ver}"
 versions=""
 for file in ${versions_all}; do
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
@@ -73,7 +83,9 @@ if [ -z "${versions}" ]; then
     exit 1
 fi
 
-%post
+%install
+
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/arm
 
 arm_subpath="aarch64-linux/bin/armclang$"
 packages=`rpm -qal | grep ${arm_subpath}`
@@ -111,7 +123,7 @@ else
 fi
 
 # Module header
-%{__cat} << EOF > %{OHPC_MODULES}/arm/compat
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/arm/compat
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -130,10 +142,13 @@ module-whatis "URL: https://developer.arm.com/products/software-development-tool
 set    ARM_GENERIC ${generic}
 setenv ARM_GENERIC \$ARM_GENERIC
 
+set    ARMPL_GENERIC ${generic}-%{armhpc_ver}/armpl
+setenv ARMPL_GENERIC \$ARMPL_GENERIC
+
 # update module path hierarchy
 prepend-path    MODULEPATH          ${modpath}:%{OHPC_MODULEDEPS}/arm
 # load generic variant
-depends-on      \$ARM_GENERIC
+depends-on      \$ARMPL_GENERIC
 family "compiler"
 EOF
 
