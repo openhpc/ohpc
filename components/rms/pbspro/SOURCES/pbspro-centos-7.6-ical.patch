@@ -1,0 +1,32 @@
+diff --git a/src/lib/Libutil/pbs_ical.c b/src/lib/Libutil/pbs_ical.c
+index a820845e2..f03112a38 100644
+--- a/src/lib/Libutil/pbs_ical.c
++++ b/src/lib/Libutil/pbs_ical.c
+@@ -126,7 +126,7 @@ get_num_occurrences(char *rrule, time_t dtstart, char *tz)
+ 
+ 	rt = icalrecurrencetype_from_string(rrule);
+ 
+-	start = icaltime_from_timet(dtstart, 0);
++	start = icaltime_from_timet_with_zone(dtstart, 0, NULL);
+ 	icaltimezone_convert_time(&start, icaltimezone_get_utc_timezone(), localzone);
+ 
+ 	itr = (struct icalrecur_iterator_impl*) icalrecur_iterator_new(rt, start);
+@@ -207,7 +207,7 @@ get_occurrence(char *rrule, time_t dtstart, char *tz, int idx)
+ 
+ 	rt = icalrecurrencetype_from_string(rrule);
+ 
+-	start = icaltime_from_timet(dtstart, 0);
++	start = icaltime_from_timet_with_zone(dtstart, 0, NULL);
+ 	icaltimezone_convert_time(&start, icaltimezone_get_utc_timezone(), localzone);
+ 	next = start;
+ 
+@@ -351,7 +351,7 @@ check_rrule(char *rrule, time_t dtstart, time_t dtend, char *tz, int *err_code)
+ 		return 0;
+ 	}
+ 
+-	start = icaltime_from_timet(dtstart, 0);
++	start = icaltime_from_timet_with_zone(dtstart, 0, NULL);
+ 	icaltimezone_convert_time(&start, icaltimezone_get_utc_timezone(), localzone);
+ 
+ 	itr = (struct icalrecur_iterator_impl*) icalrecur_iterator_new(rt, start);
+
