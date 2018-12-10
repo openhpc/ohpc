@@ -24,7 +24,6 @@ License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
-Patch1:     extrae.makefile-destdir.patch
 
 %if 0%{?rhel} > 7
 BuildRequires:  autoconf
@@ -45,13 +44,15 @@ Requires:	papi%{PROJ_DELIM}
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-Extrae is the package devoted to generate Paraver trace-files for a post-mortem analysis. Extrae is a tool that uses different interposition mechanisms to inject probes into the target application so as to gather information regarding the application performance.
+Extrae is the package devoted to generate Paraver trace-files for a post-mortem
+analysis. Extrae is a tool that uses different interposition mechanisms to
+inject probes into the target application so as to gather information regarding
+the application performance.
 
 This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
 
 %build
 # OpenHPC compiler/mpi designation
