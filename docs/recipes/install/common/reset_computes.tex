@@ -10,9 +10,18 @@ order to work interactively.
 % begin_ohpc_run
 % ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
-[sms](*\#*) for ((i=0; i<${num_computes}; i++)) ; do
-              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
-        done
+[sms](*\#*) if [[ ${bmc_use_ipmi} -eq 1 ]]; then
+  for ((i=0; i<${num_computes}; i++)) ; do
+    if [[ "${bmc_ipmi_version}" = "2.0" ]]; then
+      ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
+    else
+      ipmitool -E -I lan -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
+    fi
+  done
+else
+  read -n 1 -s -r -p "Press any key to continue after the compute nodes are up"
+  echo ''
+fi
 \end{lstlisting} 
 % end_ohpc_run
 
