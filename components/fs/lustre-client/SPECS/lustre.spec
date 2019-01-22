@@ -85,7 +85,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.11.0}
+%{!?version: %global version 2.12.0}
 %{!?kver:    %global kver    %(uname -r)}
 %{!?kdir:    %global kdir    /lib/modules/%{kver}/source}
 %{!?kobjdir: %global kobjdir %(if [ "%{kdir}" = "/lib/modules/%{kver}/source" ]; then echo "/lib/modules/%{kver}/build"; else echo "%{kdir}"; fi)}
@@ -201,7 +201,7 @@ Source5: kmp-lustre-osd-zfs.preamble
 Source6: kmp-lustre-osd-zfs.files
 Source7: kmp-lustre-tests.files
 Patch0:  6189ae07.diff
-URL: https://wiki.hpdd.intel.com/
+URL: https://wiki.whamcloud.com/
 Requires: %{requires_kmod_name} = %{requires_kmod_version} zlib
 Requires: %{requires_yaml_name}
 BuildRequires: libtool libyaml-devel zlib-devel
