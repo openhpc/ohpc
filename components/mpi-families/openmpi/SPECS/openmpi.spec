@@ -34,7 +34,7 @@ Summary:   A powerful implementation of MPI
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   3.1.2
+Version:   3.1.3
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
