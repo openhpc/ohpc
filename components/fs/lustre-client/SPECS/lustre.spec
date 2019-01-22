@@ -340,7 +340,7 @@ clients in order to run
 
 %prep
 %setup -qn lustre-%{version}
-%patch0 -p1
+##patch0 -p1
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
