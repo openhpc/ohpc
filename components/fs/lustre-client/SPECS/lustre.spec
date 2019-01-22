@@ -37,7 +37,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.aarch64/source/
 %define kobjdir /lib/modules/%{centos_kernel}.aarch64/build/
 %else
-%define centos_kernel 3.10.0-862.el7
+%define centos_kernel 3.10.0-957.el7
 BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.x86_64/source/
