@@ -9,11 +9,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# spec file for package ipmiutil 
-#
-# Copyright (c) 2012 Andy Cress
-#
-
 %include %{_sourcedir}/OHPC_macros
 
 %define pname ipmiutil
@@ -26,32 +21,22 @@ License:   BSD 3-clause
 Group:     %{PROJ_NAME}/distro-packages
 Source0:   https://downloads.sourceforge.net/project/ipmiutil/%{pname}-%{version}.tar.gz
 URL:       http://ipmiutil.sourceforge.net
-provides: %{pname}
-# Suggests: cron or vixie-cron or cronie or similar
-%if 0%{?fedora} >= 15
-BuildRequires: systemd autoconf automake
-Requires: systemd-units
-%endif
+Provides: %{pname}
 %if 0%{?suse_version} >= 1210
 %define req_systemd 1
 %endif
 %if 0%{?sles_version} >= 10
-BuildRequires: libopenssl-devel 
+BuildRequires: libopenssl-devel
 %else
-BuildRequires: openssl-devel 
+BuildRequires: openssl-devel
 %endif
 %if 0%{?req_systemd}
 BuildRequires: gcc gcc-c++ libtool systemd
 %define unit_dir  %{_unitdir}
 %define systemd_fls %{unit_dir}
-# Requires: %{?systemd_requires}
 %else
-BuildRequires: gcc gcc-c++ libtool 
-%if 0%{?fedora} == 16
-%define unit_dir  /lib/systemd/system
-%else
+BuildRequires: gcc gcc-c++ libtool
 %define unit_dir  %{_unitdir}
-%endif
 %define systemd_fls %{_datadir}/%{pname}
 %endif
 %define init_dir  %{_initrddir}
@@ -59,10 +44,10 @@ BuildRequires: gcc gcc-c++ libtool
 %description
 The ipmiutil package provides easy-to-use utilities to view the SEL,
 perform an IPMI chassis reset, set up the IPMI LAN and Platform Event Filter
-entries to allow SNMP alerts, Serial-Over-LAN console, event daemon, and 
+entries to allow SNMP alerts, Serial-Over-LAN console, event daemon, and
 other IPMI tasks.
 These can be invoked with the metacommand ipmiutil, or via subcommand
-shortcuts as well.  IPMIUTIL can also write sensor thresholds, FRU asset tags, 
+shortcuts as well.  IPMIUTIL can also write sensor thresholds, FRU asset tags,
 and has a full IPMI configuration save/restore.
 An IPMI driver can be provided by either the OpenIPMI driver (/dev/ipmi0)
 or the Intel IPMI driver (/dev/imb), etc.  If used locally and no driver is
@@ -90,15 +75,12 @@ useful for building custom IPMI applications.
 %setup -q -n %{pname}-%{version}
 
 %build
-%if 0%{?fedora} >= 15
-autoconf
-%endif
 %if 0%{?req_systemd}
 %configure --enable-systemd --enable-libsensors
 %else
 %configure --enable-libsensors
 %endif
-make 
+make
 
 %install
 make install DESTDIR=%{buildroot}
@@ -111,23 +93,23 @@ make install DESTDIR=%{buildroot}
 %{_bindir}/ievents
 %{_sbindir}/iseltime
 %{_sbindir}/ipmi_port
-%{_sbindir}/ialarms 
+%{_sbindir}/ialarms
 %{_sbindir}/iconfig
-%{_sbindir}/icmd 
-%{_sbindir}/ifru 
-%{_sbindir}/igetevent 
-%{_sbindir}/ihealth 
-%{_sbindir}/ilan 
-%{_sbindir}/ireset 
-%{_sbindir}/isel 
-%{_sbindir}/isensor 
-%{_sbindir}/iserial 
-%{_sbindir}/isol 
-%{_sbindir}/iwdt 
-%{_sbindir}/ipicmg 
-%{_sbindir}/ifirewall 
-%{_sbindir}/ifwum 
-%{_sbindir}/ihpm 
+%{_sbindir}/icmd
+%{_sbindir}/ifru
+%{_sbindir}/igetevent
+%{_sbindir}/ihealth
+%{_sbindir}/ilan
+%{_sbindir}/ireset
+%{_sbindir}/isel
+%{_sbindir}/isensor
+%{_sbindir}/iserial
+%{_sbindir}/isol
+%{_sbindir}/iwdt
+%{_sbindir}/ipicmg
+%{_sbindir}/ifirewall
+%{_sbindir}/ifwum
+%{_sbindir}/ihpm
 %{_datadir}/%{pname}/ipmiutil_evt
 %{_datadir}/%{pname}/ipmiutil_asy
 %{_datadir}/%{pname}/ipmiutil_wdt
@@ -172,11 +154,10 @@ make install DESTDIR=%{buildroot}
 %{_mandir}/man8/iekanalyzer.8*
 %{_mandir}/man8/itsol.8*
 %{_mandir}/man8/idcmi.8*
-%doc AUTHORS ChangeLog COPYING NEWS README TODO 
+%doc AUTHORS ChangeLog COPYING NEWS README TODO
 %doc doc/UserGuide
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-# %{_datadir}/%{name} is used by both ipmiutil and ipmituil-devel
 %dir %{_datadir}/%{pname}
 %{_datadir}/%{pname}/ipmi_sample.c
 %{_datadir}/%{pname}/ipmi_sample_evt.c
@@ -214,7 +195,7 @@ then
       cp -f ${scr_dir}/ipmiutil_wdt.service %{unit_dir}
       cp -f ${scr_dir}/ipmi_port.service    %{unit_dir}
       # systemctl enable ipmi_port.service >/dev/null 2>&1 || :
-   else 
+   else
       cp -f ${scr_dir}/ipmiutil_wdt %{init_dir}
       cp -f ${scr_dir}/ipmiutil_asy %{init_dir}
       cp -f ${scr_dir}/ipmiutil_evt %{init_dir}
@@ -224,7 +205,7 @@ then
 %endif
 
    # Run some ipmiutil command to see if any IPMI interface works.
-   %{_bindir}/ipmiutil sel -v >/dev/null 2>&1 || : 
+   %{_bindir}/ipmiutil sel -v >/dev/null 2>&1 || :
    IPMIret=$?
    # If IPMIret==0, the IPMI cmd was successful, and IPMI is enabled locally.
    if [ $IPMIret -eq 0 ]; then
@@ -239,11 +220,11 @@ then
          elif [ -x /sbin/chkconfig ]; then
             /sbin/chkconfig --add ipmi_port
             /sbin/chkconfig --add ipmiutil_wdt
-            /sbin/chkconfig --add ipmiutil_evt 
+            /sbin/chkconfig --add ipmiutil_evt
             /sbin/chkconfig --add ipmi_info
          fi
       fi
-   
+
       # Capture a snapshot of IPMI sensor data once now for later reuse.
       sensorout=$vardir/sensor_out.txt
       if [ ! -f $sensorout ]; then
@@ -295,7 +276,7 @@ then
         systemctl stop ipmi_port.service    >/dev/null 2>&1 || :
 %endif
      fi
-   else 
+   else
      if [ -x /sbin/service ]; then
         /sbin/service ipmi_port stop       >/dev/null 2>&1 || :
         /sbin/service ipmiutil_wdt stop    >/dev/null 2>&1 || :

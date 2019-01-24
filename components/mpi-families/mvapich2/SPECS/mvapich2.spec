@@ -59,14 +59,14 @@ Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %if 0%{?sles_version} || 0%{?suse_version}
 Buildrequires: ofed
 %endif
-%if 0%{?rhel_version} || 0%{?centos_version}
+%if 0%{?rhel}
 Buildrequires: rdma-core-devel
 %endif
 
 Requires: prun%{PROJ_DELIM}
 
 BuildRequires: bison
-BuildRequires: libibmad-devel 
+BuildRequires: libibmad-devel
 BuildRequires: zlib-devel
 
 # Default library install path

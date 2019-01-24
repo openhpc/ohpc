@@ -1,5 +1,3 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-
 %include %{_sourcedir}/OHPC_macros
 
 %define pname clustershell
@@ -21,7 +19,6 @@ Patch1:        clustershell-1.8-no-requires.patch
 %if 0%{?suse_version} == 1110
 BuildArch:     x86_64
 %else
-#%%if 0%%{?fedora} 
 BuildArch:     noarch
 %endif
 
@@ -47,7 +44,7 @@ Syntax highlighting in the VIM editor for ClusterShell configuration files.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1 
+%patch1 -p1
 
 %build
 %{__python} setup.py build
@@ -124,11 +121,6 @@ EOF
 %{OHPC_PUB}
 %exclude %{vimdatadir}
 %exclude %{install_path}/share/vim/
-#%{_mandir}/man1/clubak.1*
-#%{_mandir}/man1/clush.1*
-#%{_mandir}/man1/nodeset.1*
-#%{_mandir}/man5/clush.conf.5*
-#%{_mandir}/man5/groups.conf.5*
 %dir %{_sysconfdir}/clustershell
 %{_sysconfdir}/clustershell/clush.conf
 %{_sysconfdir}/clustershell/groups.conf
@@ -141,12 +133,6 @@ EOF
 %doc %{_sysconfdir}/clustershell/groups.d/*.example
 %doc %{_sysconfdir}/clustershell/groups.conf.d/README
 %doc %{_sysconfdir}/clustershell/groups.conf.d/*.example
-#%doc %{_sysconfdir}/clustershell/*.example
-#%{python_sitelib}/ClusterShell/
-#%{python_sitelib}/ClusterShell-*-py?.?.egg-info
-#%{_bindir}/clubak
-#%{_bindir}/clush
-#%{_bindir}/nodeset
 
 %files -n vim-%{name}
 %dir %{install_path}/share/vim/
@@ -156,4 +142,3 @@ EOF
 %{vimdatadir}/ftdetect/clustershell.vim
 %{vimdatadir}/syntax/clushconf.vim
 %{vimdatadir}/syntax/groupsconf.vim
-

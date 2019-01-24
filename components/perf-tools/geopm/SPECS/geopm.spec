@@ -36,6 +36,7 @@ BuildRequires: libtool-ltdl-devel
 BuildRequires: python
 BuildRequires: python-devel
 BuildRequires: unzip
+BuildRequires: zlib-devel
 
 %if 0%{?suse_version} >= 1320
 BuildRequires: openssh

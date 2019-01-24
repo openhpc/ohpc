@@ -41,24 +41,13 @@ BuildRequires:      mysql-devel
 Provides:           %{pname}
 
 # Nagios is required also for user and group
-%if 0%{?rhel} == 5
-Requires:           nagios < 3
-%else
 Requires:           nagios >= 4
-%endif
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
 BuildRequires:      systemd
 Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
-%endif
-
-%if 0%{?rhel} == 5 || 0%{?rhel} == 6
-Requires(post):     /sbin/chkconfig
-Requires(preun):    /sbin/chkconfig
-Requires(preun):    /sbin/service
-Requires(postun):   /sbin/service
 %endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -94,13 +83,6 @@ mkdir -p %{buildroot}%{_libdir}/nagios/brokers
 
 # Nagios 4 support + common components
 %make_install
-
-# Nagios 2 support (override)
-%if 0%{?rhel} == 5
-    pushd src
-    make install-2x DESTDIR=%{?buildroot}
-    popd
-%endif
 
 mv %{buildroot}%{_sbindir}/ndomod.o \
     %{buildroot}%{_libdir}/nagios/brokers/ndomod.so
@@ -152,16 +134,10 @@ mkdir -p %{buildroot}%{_localstatedir}/run/ndoutils
 %{_sbindir}/sockdebug
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
-
-#%dir %attr(-,nagios,root) /run/%{pname}/
 %{_tmpfilesdir}/ndoutils.conf
 %{_unitdir}/ndo2db.service
-
 %else
-
-#%dir %attr(-,nagios,root) %{_localstatedir}/run/ndoutils
 %{_initrddir}/ndo2db
-
 %endif
 %dir %attr(-,nagios,root) %{_localstatedir}/run/ndoutils
 
@@ -175,23 +151,5 @@ mkdir -p %{buildroot}%{_localstatedir}/run/ndoutils
 
 %postun
 %systemd_postun_with_restart ndo2db.service
-
-%endif
-
-%if 0%{?rhel} == 6
-
-%post
-/sbin/chkconfig --add ndo2db
-
-%preun
-if [ "$1" = 0 ]; then
-    /sbin/service ndo2db stop >/dev/null 2>&1 || :
-    /sbin/chkconfig --del ndo2db
-fi
-
-%postun
-if [ "$1" -ge "1" ]; then
-    /sbin/service ndo2db condrestart >/dev/null 2>&1 || :
-fi
 
 %endif

@@ -16,7 +16,7 @@
 
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:	6.0.6
-Release:	1
+Release:	1%{?dist}
 Summary:	Graph, mesh and hypergraph partitioning library
 License:	CeCILL-C
 Group:		%{PROJ_NAME}/serial-libs

@@ -148,7 +148,7 @@ export CONFIG_ARCH=%{machine}
 %if %{compiler_family} != intel
     -opari \
 %endif
-    -extrashlibopts="-fPIC -L/tmp%{install_path}/lib" 
+    -extrashlibopts="-fPIC -L/tmp%{install_path}/lib"
 
 make install
 make exports
@@ -179,7 +179,7 @@ make clean
 %if %{compiler_family} != intel
     -opari \
 %endif
-    -extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib" 
+    -extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib"
 
 make install
 make exports

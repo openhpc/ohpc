@@ -19,8 +19,8 @@
 Summary:	Extrae tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:	3.5.2
-Release:	3
-License:	GNU
+Release:	3%{?dist}
+License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
@@ -47,10 +47,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
 
-
 %build
-#export BUILDING_RPM=true
-
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
@@ -65,10 +62,9 @@ export compiler_vars="CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort"
 
 ./bootstrap
 ./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR
-make %{?_smp_mflags} 
+make %{?_smp_mflags}
 
 %install
-
 export NO_BRP_CHECK_RPATH=true
 
 # OpenHPC compiler designation
@@ -127,8 +123,5 @@ EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-
 %files
 %{OHPC_PUB}
-
-%doc
