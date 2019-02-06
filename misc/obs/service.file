@@ -1,0 +1,59 @@
+<!-- OpenHPC OBS configuration files -->
+
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you
+may not use this file except in compliance with the License. You may
+obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied. See the License for the specific language governing
+permissions and limitations under the License.
+-->
+
+<services>
+
+  <service name="tar_scm">
+
+    <!-- Begin INPUT ######################################  -->
+    <!--    Update following lines to define the             -->
+    <!--    correct component path in git and desired branch -->
+
+    <param name="subdir">components</param>
+    <param name="revision">obs/OpenHPC_!VERSION!_Factory</param>
+    <param name="include">!GROUP!</param>
+    <param name="include">OHPC_macros</param>
+
+    <!-- End INPUT ######################################    -->
+
+    <param name="scm">git</param>
+    <param name="url">git@github.com:openhpc/ohpc.git</param>
+    <param name="filename">git-infra</param>
+    <param name="changesgenerate">enable</param>
+  </service>
+
+  <service name="extract_file">
+
+    <!-- Begin INPUT 2 ####################################  -->
+    <!--    Update the following lines to define files to    -->
+    <!--    extract for package tarball                      -->
+
+    <param name="files">
+      */!GROUP!/!PACKAGE!/SPECS/*.spec
+      */!GROUP!/!PACKAGE!/SOURCES/*
+      */OHPC_macros
+    </param>
+
+    <!-- End INPUT 2 ###################################### -->
+
+    <param name="archive">*.tar</param>
+  </service>
+
+  <service name="download_files">
+    <param name="enforceupstream">yes</param>
+  </service>
+
+</services>
