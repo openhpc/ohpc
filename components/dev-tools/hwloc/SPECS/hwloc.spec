@@ -19,7 +19,7 @@ Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
-Source0:        https://www.open-mpi.org/software/hwloc/v1.11/downloads/%{pname}-%{version}.tar.bz2
+Source0:        https://download.open-mpi.org/release/hwloc/v2.0/%{pname}-%{version}.tar.bz2
 Source2:        LICENSE
 
 
