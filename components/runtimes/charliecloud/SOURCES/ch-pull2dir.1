@@ -1,8 +1,8 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "CH-BUILD" "1" "2019-02-06 15:33 Coordinated Universal Time" "" "Charliecloud"
+.TH "CH-PULL2DIR" "1" "2019-02-06 15:33 Coordinated Universal Time" "" "Charliecloud"
 .SH NAME
-ch-build \- Wrapper for "docker build" that works around some of its annoying behaviors
+ch-pull2dir \- Pull image from Docker Hub, flatten and unpack it
 .
 .nr rst2man-indent-level 0
 .
@@ -36,29 +36,26 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .sp
 .nf
 .ft C
-$ ch\-build \-t TAG [ARGS ...] CONTEXT
+$ ch\-pull2dir IMAGE[:TAG] DIR
 .ft P
 .fi
 .UNINDENT
 .UNINDENT
 .SH DESCRIPTION
 .sp
-Build a Docker image named \fBTAG\fP described by Dockerfile
-\fB\&./Dockerfile\fP or as specified. This is a wrapper for \fBdocker
-build\fP with various enhancements.
+Pull Docker image named \fBIMAGE[:TAG]\fP from Docker Hub and extract it
+into a subdirectory of \fBDIR\fP\&. A temporary tarball is stored in
+\fBDIR\fP\&.
 .sp
-Sudo privileges are required to run the \fBdocker\fP command.
+Sudo privileges are required to run the \fBdocker pull\fP command.
 .sp
-Arguments:
+This runs the following command sequence: \fBch\-pull2tar\fP,
+\fBch\-tar2dir\fP\&. See warning in the documentation for \fBch\-tar2dir\fP\&.
+.sp
+Additional arguments:
 .INDENT 0.0
 .INDENT 3.5
 .INDENT 0.0
-.TP
-.B \fB\-\-file\fP
-Dockerfile to use (default: \fB\&./Dockerfile\fP)
-.TP
-.B \fB\-t\fP
-name (tag) of Docker image to build
 .TP
 .B \fB\-\-help\fP
 print help and exit
@@ -68,71 +65,44 @@ print version and exit
 .UNINDENT
 .UNINDENT
 .UNINDENT
-.sp
-Additional arguments are accepted and passed unchanged to \fBdocker
-build\fP\&.
-.SH IMPROVEMENTS OVER PLAIN DOCKER BUILD
-.sp
-\fBch\-build\fP adds the following features to \fBdocker build\fP:
-.INDENT 0.0
-.IP \(bu 2
-If there is a file \fBDockerfile\fP in the current working directory and
-\fB\-f\fP is not already specified, add \fB\-f $PWD/Dockerfile\fP\&.
-.IP \(bu 2
-Pass the HTTP proxy environment variables through with \fB\-\-build\-arg\fP\&.
-.UNINDENT
-.sp
-\fBNOTE:\fP
-.INDENT 0.0
-.INDENT 3.5
-The suffix \fB:latest\fP is somewhat misleading, as neither
-\fBch\-build\fP nor bare \fBdocker build\fP will notice if the base
-\fBFROM\fP image has been updated. Use \fB\-\-no\-cache\fP to make sure
-you have the latest base image, at the cost of rebuilding every layer.
-.UNINDENT
-.UNINDENT
 .SH EXAMPLES
-.sp
-Create a Docker image tagged \fBfoo\fP and specified by the file
-\fBDockerfile\fP located in the current working directory. Use \fB/bar\fP
-as the Docker context directory:
 .INDENT 0.0
 .INDENT 3.5
 .sp
 .nf
 .ft C
-$ ch\-build \-t foo /bar
+$ ch\-pull2dir alpine /var/tmp
+Using default tag: latest
+latest: Pulling from library/alpine
+Digest: sha256:621c2f39f8133acb8e64023a94dbdf0d5ca81896102b9e57c0dc184cadaf5528
+Status: Image is up to date for alpine:latest
+\-rw\-r\-\-r\-\-. 1 charlie charlie 2.1M Oct  5 19:52 /var/tmp/alpine.tar.gz
+creating new image /var/tmp/alpine
+/var/tmp/alpine unpacked ok
+removed \(aq/var/tmp/alpine.tar.gz\(aq
 .ft P
 .fi
 .UNINDENT
 .UNINDENT
 .sp
-Equivalent to above:
+Same as above, except optional \fBTAG\fP is specified:
 .INDENT 0.0
 .INDENT 3.5
 .sp
 .nf
 .ft C
-$ ch\-build \-t foo \-\-file=./Dockerfile /bar
+$ ch\-pull2dir alpine:3.6 /var/tmp
+3.6: Pulling from library/alpine
+Digest: sha256:cc24af836d1377e092ecb4e8f0a4324c3b1aa2b5295c2239edcc7bbc86a9cbc6
+Status: Image is up to date for alpine:3.6
+\-rw\-r\-\-r\-\-. 1 charlie charlie 2.1M Oct  5 19:54 /var/tmp/alpine:3.6.tar.gz
+creating new image /var/tmp/alpine:3.6
+/var/tmp/alpine:3.6 unpacked ok
+removed \(aq/var/tmp/alpine:3.6.tar.gz\(aq
 .ft P
 .fi
 .UNINDENT
 .UNINDENT
-.sp
-Instead, use the Dockerfile \fB/baz/qux.docker\fP:
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-$ ch\-build \-t foo \-\-file=/baz/qux.docker /bar
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
-.sp
-Note that calling your Dockerfile anything other than \fBDockerfile\fP will
-confuse people.
 .SH REPORTING BUGS
 .sp
 If Charliecloud was obtained from your Linux distribution, use your

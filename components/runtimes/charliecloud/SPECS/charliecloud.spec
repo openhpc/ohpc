@@ -15,7 +15,7 @@
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.9.2
+Version:   0.9.6
 Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
@@ -23,9 +23,10 @@ URL:       https://hpc.github.io/charliecloud/
 Source0:   https://github.com/hpc/charliecloud/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Source2:   ch-build.1
 Source3:   ch-build2dir.1
-Source4:   ch-docker-run.1
 Source5:   ch-docker2tar.1
 Source6:   ch-fromhost.1
+Source4:   ch-pull2dir.1
+Source4:   ch-pull2tar.1
 Source7:   ch-run.1
 Source8:   ch-ssh.1
 Source9:   ch-tar2dir.1

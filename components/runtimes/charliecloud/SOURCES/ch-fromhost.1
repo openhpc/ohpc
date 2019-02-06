@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "CH-FROMHOST" "1" "2018-10-02 11:48 Coordinated Universal Time" "" "Charliecloud"
+.TH "CH-FROMHOST" "1" "2019-02-06 15:33 Coordinated Universal Time" "" "Charliecloud"
 .SH NAME
 ch-fromhost \- Inject files from the host into an image directory
 .
@@ -36,12 +36,20 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .sp
 .nf
 .ft C
-$ ch\-fromhost [OPTION ...] (\-c CMD | \-f FILE | \-\-nvidia ...) IMGDIR
+$ ch\-fromhost [OPTION ...] [FILE_OPTION ...] IMGDIR
 .ft P
 .fi
 .UNINDENT
 .UNINDENT
 .SH DESCRIPTION
+.sp
+\fBNOTE:\fP
+.INDENT 0.0
+.INDENT 3.5
+This command is experimental. Features may be incomplete and/or buggy.
+Please report any issues you find, so we can fix them!
+.UNINDENT
+.UNINDENT
 .sp
 Inject files from the host into the Charliecloud image directory
 \fBIMGDIR\fP\&.
@@ -55,31 +63,17 @@ Injection is not atomic; if an error occurs partway through injection, the
 image is left in an undefined state. Injection is currently implemented using
 a simple file copy, but that may change in the future.
 .sp
-By default, file paths that contain the string \fB/bin\fP are assumed to be
-executables and are placed in \fB/usr/bin\fP within the container. File
-paths that contain the strings \fB/lib\fP or \fB\&.so\fP are assumed to be
-shared libraries and are placed in the first\-priority directory reported by
-\fBldconfig\fP\&. Other files are placed in the directory specified by
-\fB\-\-dest\fP\&.
-.sp
-You can see where shared libraries will go with:
-.INDENT 0.0
-.INDENT 3.5
-.sp
-.nf
-.ft C
-$ ch\-run $IMG \-\- ldconfig \-v 2>/dev/null | egrep \(aq^/\(aq | cut \-d: \-f1 | head \-1
-/usr/local/lib
-.ft P
-.fi
-.UNINDENT
-.UNINDENT
+By default, file paths that contain the strings \fB/bin\fP or \fB/sbin\fP
+are assumed to be executables and placed in \fB/usr/bin\fP within the
+container. File paths that contain the strings \fB/lib\fP or \fB\&.so\fP are
+assumed to be shared libraries and are placed in the first\-priority directory
+reported by \fBldconfig\fP (see \fB\-\-lib\-path\fP below). Other files are
+placed in the directory specified by \fB\-\-dest\fP\&.
 .sp
 If any shared libraries are injected, run \fBldconfig\fP inside the
 container (using \fBch\-run \-w\fP) after injection.
 .SH OPTIONS
-.sp
-To specify which files to inject:
+.SS To specify which files to inject
 .INDENT 0.0
 .INDENT 3.5
 .INDENT 0.0
@@ -90,6 +84,13 @@ Inject files listed in the standard output of command \fBCMD\fP\&.
 .B \fB\-f\fP, \fB\-\-file FILE\fP
 Inject files listed in the file \fBFILE\fP\&.
 .TP
+.B \fB\-p\fP, \fB\-\-path PATH\fP
+Inject the file at \fBPATH\fP\&.
+.TP
+.B \fB\-\-cray\-mpi\fP
+Cray\-enable an MPICH installed inside the image. See important details
+below.
+.TP
 .B \fB\-\-nvidia\fP
 Use \fBnvidia\-container\-cli list\fP (from \fBlibnvidia\-container\fP)
 to find executables and libraries to inject.
@@ -98,34 +99,77 @@ to find executables and libraries to inject.
 .UNINDENT
 .sp
 These can be repeated, and at least one must be specified.
-.sp
-Additional arguments:
+.SS To specify the destination within the image
 .INDENT 0.0
 .INDENT 3.5
-\fB\-d\fP, \fB\-\-dest DST\fP
+.INDENT 0.0
+.TP
+.B \fB\-d\fP, \fB\-\-dest DST\fP
+Place files specified later in directory \fBIMGDIR/DST\fP, overriding the
+inferred destination, if any. If a file’s destination cannot be inferred
+and \fB\-\-dest\fP has not been specified, exit with an error. This can be
+repeated to place files in varying destinations.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Additional arguments
 .INDENT 0.0
 .INDENT 3.5
-Place files whose destination cannot be inferred in directory
-\fBIMGDIR/DST\fP\&. If such a file is found and this option is not
-specified, exit with an error.
-.UNINDENT
-.UNINDENT
 .INDENT 0.0
+.TP
+.B \fB\-\-lib\-path\fP
+Print the guest destination path for shared libraries inferred as
+described above.
+.TP
+.B \fB\-\-no\-ldconfig\fP
+Don’t run \fBldconfig\fP even if we appear to have injected shared
+libraries.
 .TP
 .B \fB\-h\fP, \fB\-\-help\fP
 Print help and exit.
 .TP
-.B \fB\-\-no\-infer\fP
-Do not infer the type of any files.
-.TP
 .B \fB\-v\fP, \fB\-\-verbose\fP
-Pist the injected files.
+List the injected files.
 .TP
 .B \fB\-\-version\fP
 Print version and exit.
 .UNINDENT
 .UNINDENT
 .UNINDENT
+.SH --CRAY-MPI PREREQUISITES AND QUIRKS
+.sp
+The implementation of \fB\-\-cray\-mpi\fP for MPICH is messy, foul smelling,
+and brittle. It replaces or overrides the open source MPICH libraries
+installed in the container. Users should be aware of the following.
+.INDENT 0.0
+.IP 1. 3
+Containers must have the following software installed:
+.INDENT 3.0
+.IP a. 3
+Open source \fI\%MPICH\fP\&.
+.IP b. 3
+\fI\%PatchELF with our patches\fP\&. Use the
+\fBshrink\-soname\fP branch.
+.IP c. 3
+\fBlibgfortran.so.3\fP, because Cray’s \fBlibmpi.so.12\fP links to
+it.
+.UNINDENT
+.IP 2. 3
+Applications must be linked to \fBlibmpi.so.12\fP (not e.g.
+\fBlibmpich.so.12\fP). How to configure MPICH to accomplish this is not
+yet clear to us; \fBtest/Dockerfile.mpich\fP does it, while the Debian
+packages do not.
+.IP 3. 3
+One of the \fBcray\-mpich\-abi\fP modules must be loaded when
+\fBch\-fromhost\fP is invoked.
+.IP 4. 3
+Tested only for C programs compiled with GCC, and it probably won’t work
+otherwise. If you’d like to use another compiler or another programming
+language, please get in touch so we can implement the necessary support.
+.UNINDENT
+.sp
+Please file a bug if we missed anything above or if you know how to make the
+code better.
 .SH NOTES
 .sp
 Symbolic links are dereferenced, i.e., the files pointed to are injected, not
@@ -159,13 +203,15 @@ Further, while these alternate approaches would simplify or eliminate this
 script for nVidia GPUs, they would not solve the problem for other situations.
 .SH BUGS
 .sp
-File paths may not contain newlines.
+File paths may not contain colons or newlines.
 .SH EXAMPLES
 .sp
 Place shared library \fB/usr/lib64/libfoo.so\fP at path
-\fB/usr/lib/libfoo.so\fP within the image \fB/var/tmp/baz\fP and
-executable \fB/bin/bar\fP at path \fB/usr/bin/bar\fP\&. Then, create
-appropriate symlinks to \fBlibfoo\fP and update the \fBld.so\fP cache.
+\fB/usr/lib/libfoo.so\fP (assuming \fB/usr/lib\fP is the first directory
+searched by the dynamic loader in the image), within the image
+\fB/var/tmp/baz\fP and executable \fB/bin/bar\fP at path
+\fB/usr/bin/bar\fP\&. Then, create appropriate symlinks to \fBlibfoo\fP and
+update the \fBld.so\fP cache.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -192,6 +238,31 @@ $ ch\-fromhost \-\-cmd \(aqcat qux.txt\(aq /var/tmp/baz
 .UNINDENT
 .UNINDENT
 .sp
+Same as above:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-fromhost \-\-path /bin/bar \-\-path /usr/lib64/libfoo.so /var/tmp/baz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Same as above, but place the files into \fB/corge\fP instead (and the shared
+library will not be found by \fBldconfig\fP):
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-fromhost \-\-dest /corge \-\-file qux.txt /var/tmp/baz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
 Same as above, and also place file \fB/etc/quux\fP at \fB/etc/quux\fP
 within the container:
 .INDENT 0.0
@@ -199,11 +270,7 @@ within the container:
 .sp
 .nf
 .ft C
-$ cat corge.txt
-/bin/bar
-/etc/quux
-/usr/lib64/libfoo.so
-$ ch\-fromhost \-\-file corge.txt \-\-dest /etc /var/tmp/baz
+$ ch\-fromhost \-\-file qux.txt \-\-dest /etc \-\-path /etc/quux /var/tmp/baz
 .ft P
 .fi
 .UNINDENT
@@ -221,6 +288,15 @@ $ ch\-fromhost \-\-nvidia /var/tmp/baz
 .fi
 .UNINDENT
 .UNINDENT
+.SH ACKNOWLEDGEMENTS
+.sp
+This command was inspired by the similar \fI\%Shifter\fP feature
+that allows Shifter containers to use the Cray Aires network. We particularly
+appreciate the help provided by Shane Canon and Doug Jacobsen during our
+implementation of \fB\-\-cray\-mpi\fP\&.
+.sp
+We appreciate the advice of Ryan Olson at nVidia on implementing
+\fB\-\-nvidia\fP\&.
 .SH REPORTING BUGS
 .sp
 If Charliecloud was obtained from your Linux distribution, use your

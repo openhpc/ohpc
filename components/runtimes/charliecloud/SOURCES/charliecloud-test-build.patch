@@ -1,29 +1,33 @@
---- a/test/chtest/Build	2018-09-04 12:15:54.000000000 -0700
-+++ b/test/chtest/Build	2018-10-24 20:48:27.000000000 -0700
-@@ -16,12 +16,13 @@
+--- a/test/chtest/Build	2018-12-13 12:49:21.000000000 -0800
++++ b/test/chtest/Build	2019-02-06 15:42:41.000000000 -0800
+@@ -16,16 +16,17 @@
  
  set -ex
  
--SRCDIR=$1
--TARBALL=$2
-+ARCH=$1
-+SRCDIR=$2
-+TARBALL=$3
- TARBALL_UNCOMPRESSED=${TARBALL%.*}
--WORKDIR=$3
-+WORKDIR=$4
- MIRROR=http://dl-cdn.alpinelinux.org/alpine/v3.6
--APK_TOOLS=apk-tools-static-2.7.5-r0.apk
-+APK_TOOLS=apk-tools-static-2.7.6-r0.apk
- IMG="$WORKDIR/img"
- 
- cd $WORKDIR
-@@ -37,7 +38,7 @@
+-srcdir=$1
+-tarball=$2
++arch=$1
++srcdir=$2
++tarball=$3
+ tarball_uncompressed=${tarball%.*}
+-workdir=$3
++workdir=$4
+ mirror=http://dl-cdn.alpinelinux.org/alpine/v3.8
+ # Dynamically select apk-tools-static version. We would prefer to hard-code a
+ # version (and upgrade on our schedule), but we can't because Alpine does not
+ # keep old package versions. If we try, the build breaks every few months (for
+ # example, see issue #242).
+-apk_tools=$(  wget -qO - "${mirror}/main/x86_64" \
++apk_tools=$(  wget -qO - "${mirror}/main/$arch" \
+             | grep -F apk-tools-static \
+             | sed -E 's/^.*(apk-tools-static-[0-9.r-]+\.apk).*$/\1/')
+ img="${workdir}/img"
+@@ -43,7 +44,7 @@
  ## Bootstrap base Alpine Linux.
  
  # Download statically linked apk.
--wget $MIRROR/main/x86_64/$APK_TOOLS
-+wget $MIRROR/main/$ARCH/$APK_TOOLS
+-wget ${mirror}/main/x86_64/"${apk_tools}"
++wget ${mirror}/main/$arch/"${apk_tools}"
  
  # Bootstrap directories.
  mkdir img

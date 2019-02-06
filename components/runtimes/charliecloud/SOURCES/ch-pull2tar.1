@@ -1,8 +1,8 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "CH-DOCKER-RUN" "1" "2018-10-02 11:48 Coordinated Universal Time" "" "Charliecloud"
+.TH "CH-PULL2TAR" "1" "2019-02-06 15:33 Coordinated Universal Time" "" "Charliecloud"
 .SH NAME
-ch-docker-run \- Run a command in a Docker container
+ch-pull2tar \- Pull image from Docker Hub and flatten into tarball
 .
 .nr rst2man-indent-level 0
 .
@@ -36,41 +36,26 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .sp
 .nf
 .ft C
-$ ch\-docker\-run [\-i] [\-b HOSTDIR:GUESTDIR ...] TAG CMD [ARGS ...]
+$ ch\-pull2tar IMAGE[:TAG] OUTDIR
 .ft P
 .fi
 .UNINDENT
 .UNINDENT
 .SH DESCRIPTION
 .sp
-Runs the command \fBCMD\fP in a Docker container using the image named
-\fBTAG\fP\&.
+Pull a Docker image named \fBIMAGE[:TAG]\fP from Docker Hub and flatten it
+into a Charliecloud tarball in directory \fBOUTDIR\fP\&.
 .sp
-Sudo privileges are required for \fBdocker run\fP\&.
+This runs the following command sequence: \fBdocker pull\fP,
+\fBch\-docker2tar\fP but provides less flexibility than the individual
+commands.
 .sp
-\fBCMD\fP is run under your user ID. The users and groups inside the
-container match those on the host.
+Sudo privileges are required for \fBdocker pull\fP\&.
 .sp
-\fBNOTE:\fP
-.INDENT 0.0
-.INDENT 3.5
-This command is intended as a convenience for debugging images and
-Charliecloud. Routine use for running applications is not recommended.
-Instead, use \fBch\-run\fP\&.
-.UNINDENT
-.UNINDENT
-.sp
-Arguments:
+Additional arguments:
 .INDENT 0.0
 .INDENT 3.5
 .INDENT 0.0
-.TP
-.B \fB\-i\fP
-run interactively with a pseudo\-TTY
-.TP
-.B \fB\-b\fP
-bind\-mount \fBHOSTDIR\fP at \fBGUESTDIR\fP inside the container (can
-be repeated)
 .TP
 .B \fB\-\-help\fP
 print help and exit
@@ -78,6 +63,38 @@ print help and exit
 .B \fB\-\-version\fP
 print version and exit
 .UNINDENT
+.UNINDENT
+.UNINDENT
+.SH EXAMPLES
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-pull2tar alpine /var/tmp
+Using default tag: latest
+latest: Pulling from library/alpine
+Digest: sha256:621c2f39f8133acb8e64023a94dbdf0d5ca81896102b9e57c0dc184cadaf5528
+Status: Image is up to date for alpine:latest
+\-rw\-r\-\-r\-\-. 1 charlie charlie 2.1M Oct  5 19:52 /var/tmp/alpine.tar.gz
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Same as above, except optional \fBTAG\fP is specified:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ ch\-pull2tar alpine:3.6
+3.6: Pulling from library/alpine
+Digest: sha256:cc24af836d1377e092ecb4e8f0a4324c3b1aa2b5295c2239edcc7bbc86a9cbc6
+Status: Image is up to date for alpine:3.6
+\-rw\-r\-\-r\-\-. 1 charlie charlie 2.1M Oct  5 19:54 /var/tmp/alpine:3.6.tar.gz
+.ft P
+.fi
 .UNINDENT
 .UNINDENT
 .SH REPORTING BUGS
