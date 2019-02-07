@@ -312,6 +312,7 @@ class ohpc_obs_tool(object):
         else:
             ERROR("Unable to read _service file template" % self.serviceFile)
 
+        pad = 15
 
         # verify we have a group definition for the parent package
         if(parent):
@@ -330,13 +331,13 @@ class ohpc_obs_tool(object):
 
         # check skip pattern to define build architectures
         if self.disableBuild(package,'aarch64'):
-            logging.info("--> disabling aarch64 build per pattern match request")
+            logging.info(" " * pad + "--> disabling aarch64 build per pattern match request")
             fp.writelines("<disable arch=\"aarch64\"/>\n")
         else:
             fp.writelines("<enable arch=\"aarch64\"/>\n")
 
         if self.disableBuild(package,'x86_64'):
-            logging.info("--> disabling x86_64 build per pattern match request")
+            logging.info(" " * pad + "--> disabling x86_64 build per pattern match request")
             fp.writelines("<disable arch=\"x86_64\"/>\n")
         else:
             fp.writelines("<enable arch=\"x86_64\"/>\n")
@@ -346,9 +347,11 @@ class ohpc_obs_tool(object):
         fp.flush()
         
         logging.debug("[%s]: new package _metadata written to %s" % (fname,fp.name))
-        command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_meta"]  
+        command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_meta"] 
+
+
         if self.dryRun:
-            logging.info("--> (dryrun) requesting addition of package: %s" % package)
+            logging.info("\n" + " " * pad + "--> (dryrun) requesting addition of package: %s" % package)
             
         logging.debug("[%s]: (command) %s" % (fname,command))
 
@@ -359,14 +362,14 @@ class ohpc_obs_tool(object):
                 ERROR("\nUnable to add new package (%s) to OBS" % package)
 
         # add marker file indicating this is a new OBS addition ready to be rebuilt (nothing in file, simply a marker)
-        if (parent):
+        if (True):
             fp = tempfile.NamedTemporaryFile(delete=False,mode='w+t')
             fp.flush()
 
             markerFile = "_obs_config_ready_for_build"
             command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + markerFile]  
             if self.dryRun:
-                logging.info("--> (dryrun) requesting addition of %s file for package: %s" % (markerFile,package))
+                logging.info(" " * pad + "--> (dryrun) requesting addition of %s file for package: %s" % (markerFile,package))
 
             logging.debug("[%s]: (command) %s" % (fname,command))
 
@@ -399,7 +402,7 @@ class ohpc_obs_tool(object):
             command = ["osc","api","-f",fp_serv.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_service"]  
 
             if self.dryRun:
-                logging.info("--> (dryrun) adding _service file for package: %s" % package)
+                logging.info(" " * pad + "--> (dryrun) adding _service file for package: %s" % package)
             
             logging.debug("[%s]: (command) %s" % (fname,command))
 
@@ -439,7 +442,7 @@ class ohpc_obs_tool(object):
             command = ["osc","api","-f",fp_link.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_link"]  
 
             if self.dryRun:
-                logging.info("--> (dryrun) adding _link file for package: %s (parent=%s)" % (package,parentName))
+                logging.info(" " * pad + "--> (dryrun) adding _link file for package: %s (parent=%s)" % (package,parentName))
             
             logging.debug("[%s]: (command) %s" % (fname,command))
 
@@ -449,9 +452,11 @@ class ohpc_obs_tool(object):
                 except:
                     ERROR("\nUnable to add _link file for package (%s) to OBS" % package)
 
+        if self.dryRun:
+            logging.info("")
+
         # Step 3 - register package to lock build once it kicks off 
-        if(parent):
-            self.buildsToCancel.append(package)
+        self.buildsToCancel.append(package)
 
     def cancelNewBuilds(self):
         fname = inspect.stack()[0][3]
