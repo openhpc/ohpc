@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 ##
-# Copyright 2013-2018 Ghent University
+# Copyright 2013-2019 Ghent University
 #
 # This file is part of EasyBuild,
 # originally created by the HPC team of Ghent University (http://ugent.be/hpc/en),
@@ -54,7 +54,7 @@ from distutils.version import LooseVersion
 from hashlib import md5
 
 
-EB_BOOTSTRAP_VERSION = '20180925.01'
+EB_BOOTSTRAP_VERSION = '20190112.01'
 
 # argparse preferrred, optparse deprecated >=2.7
 HAVE_ARGPARSE = False
@@ -526,6 +526,10 @@ def stage1(tmpdir, sourcepath, distribute_egg_dir, forcedversion):
     if not print_debug:
         cmd.insert(0, '--quiet')
 
+    # install vsc-install version prior to 0.11.4, where mock was introduced as a dependency
+    # workaround for problem reported in https://github.com/easybuilders/easybuild-framework/issues/2712
+    run_easy_install(cmd[:-1] + [VSC_INSTALL + '<0.11.4'])
+
     info("installing EasyBuild with 'easy_install %s'" % (' '.join(cmd)))
     run_easy_install(cmd)
 
@@ -643,7 +647,7 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
 
     # vsc-install is a runtime dependency for the EasyBuild unit test suite,
     # and is easily picked up from stage1 rather than being actually installed, so force it
-    vsc_install = 'vsc-install'
+    vsc_install = "'%s<0.11.4'" % VSC_INSTALL
     if sourcepath:
         vsc_install_tarball_paths = glob.glob(os.path.join(sourcepath, 'vsc-install*.tar.gz'))
         if len(vsc_install_tarball_paths) == 1:
@@ -926,7 +930,7 @@ sources = [%(sources)s]
 # usually, we want to use the system Python, so no actual Python dependency is listed
 allow_system_deps = [('Python', SYS_PYTHON_VERSION)]
 
-preinstallopts = '%(preinstallopts)s'
+preinstallopts = "%(preinstallopts)s"
 
 pyshortver = '.'.join(SYS_PYTHON_VERSION.split('.')[:2])
 sanity_check_paths = {
