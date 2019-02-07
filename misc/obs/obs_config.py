@@ -79,6 +79,7 @@ class ohpc_obs_tool(object):
                 self.dryRun            = self.buildConfig.getboolean('global','dry_run',fallback=True)
                 self.serviceFile       = self.buildConfig.get('global','service_template')
                 self.linkFile_compiler = self.buildConfig.get('global','link_compiler_template')
+                self.linkFile_mpi      = self.buildConfig.get('global','link_mpi_template')
                 self.compilerFamilies  = ast.literal_eval(self.buildConfig.get(vip,'compiler_families'))
                 self.MPIFamilies       = ast.literal_eval(self.buildConfig.get(vip,'mpi_families'))
 
@@ -95,6 +96,7 @@ class ohpc_obs_tool(object):
             logging.info("--> (global) dry run              = %s" % self.dryRun)
             logging.info("--> (global) service template     = %s" % self.serviceFile)
             logging.info("--> (global) link template (comp) = %s" % self.linkFile_compiler)
+            logging.info("--> (global) link template (mpi)  = %s" % self.linkFile_mpi)
             logging.info("\nCompiler families (%s):" % self.vip)
             
             for family in self.compilerFamilies:
@@ -270,6 +272,12 @@ class ohpc_obs_tool(object):
     def getParentCompiler(self):
         return self.parentCompiler
 
+
+    #---
+    # return parent cMPI
+    def getParentMPI(self):
+        return self.parentMPI
+
     #---
     # check package against skip build patterns 
     def disableBuild(self,package,arch):
@@ -299,9 +307,24 @@ class ohpc_obs_tool(object):
         logging.debug("[%s]: %s" % (fname,compiler_families))
         return(compiler_families)
 
+    #--- query MPI family builds for given package. Default to
+    #--  global settings unless overridden by package specific settings
+    def queryMPIFamilies(self,package):
+        fname = inspect.stack()[0][3]
+        mpi_families = self.MPIFamilies
+        
+        # check if any override options
+        if self.buildConfig.has_option(self.vip + "/" + package,"mpi_families"):
+            mpi_families = ast.literal_eval(self.buildConfig.get(self.vip + "/" + package,"mpi_families"))
+            logging.info("\n--> override of default mpi families requested for package = %s" % package)
+            logging.info("--> families %s\n" % mpi_families)
+
+        logging.debug("[%s]: %s" % (fname,mpi_families))
+        return(mpi_families)
+
     #---
     # add specified package to OBS
-    def addPackage(self,package,parent=True,isCompilerDep=False,compiler=None,parentName=None,gitName=None):
+    def addPackage(self,package,parent=True,isCompilerDep=False,isMPIDep=False,compiler=None,mpi=None,parentName=None,gitName=None):
         fname = inspect.stack()[0][3]
 
         # verify we have template _service file
@@ -417,7 +440,9 @@ class ohpc_obs_tool(object):
             if isCompilerDep:
                 linkFile = self.linkFile_compiler
                 assert(compiler is not None)
-
+            elif isMPIDep:
+                linkFile = self.linkFile_mpi
+            
             assert(parentName is not None)
                 
             # verify we have template _link file template
@@ -433,6 +458,9 @@ class ohpc_obs_tool(object):
             contents = contents.replace('!PACKAGE!',parentName)
             contents = contents.replace('!COMPILER!',compiler)
             contents = contents.replace('!PROJECT!',self.obsProject)
+            if isMPIDep:
+                contents = contents.replace('!MPI!',mpi)
+
 
             fp_link = tempfile.NamedTemporaryFile(delete=True,mode='w')
             fp_link.write(contents)
@@ -553,12 +581,37 @@ def main():
 
         elif obs.isMPIDep(package):
             logging.info("MPI dependent package: %s" % package)
+            ptype     = "MPI dep"
+            parent    = package + '-' + obs.getParentCompiler() + '-' + obs.getParentMPI()
+            compilers = obs.queryCompilers(package)
+            mpiFams   = obs.queryMPIFamilies(package)
+
+            # check on parent first (it must exist before any children are linked)
+            if parent in obsPackages:
+                logging.info("%20s (%13s): present in OBS" % (parent,ptype))
+            else:
+                logging.info("%20s (%13s): *not* present in OBS, need to add" % (parent,ptype))
+                obs.addPackage(parent,parent=True,isMPIDep=True,gitName=package)
+
+            # now, check on children
+            for compiler in compilers:
+                for mpi in mpiFams:
+                    child = package + '-' + compiler + '-' + mpi;
+                    if (child == parent):
+                        logging.debug("...skipping parent package %s" % child)
+                        continue
+                    
+                    if child in obsPackages:
+                        logging.info("%20s (%13s): present in OBS" % (child,ptype))
+                    else:
+                        logging.info("%20s (%13s): *not* present in OBS, need to add" % (child,ptype))
+                        obs.addPackage(child,parent=False,isMPIDep=True,compiler=compiler,mpi=mpi,parentName=parent)
+
         else:
             logging.error("Unsupported compiler/MPI dependency configuration")
 
     obs.cancelNewBuilds()
     
-#    print(obsPackages)
 
 if __name__ == '__main__':
     main()
