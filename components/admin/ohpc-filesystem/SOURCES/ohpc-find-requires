@@ -28,7 +28,7 @@ fi
 searchPath="$2"
 
 if [ -z "$searchPath" ];then
-    >&2echo "Required search path argument not provided"
+    >&2 echo "Required search path argument not provided"
     exit 1
 fi
 
