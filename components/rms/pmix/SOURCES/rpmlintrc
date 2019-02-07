@@ -2,3 +2,4 @@ addFilter("shlib-policy-name-error");
 addFilter("devel-file-in-non-devel-package");
 addFilter("spurious-executable-perm");
 addFilter("library-without-ldconfig-postin")
+addFilter("script-without-shebang");
