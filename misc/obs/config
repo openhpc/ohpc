@@ -8,7 +8,7 @@ dry_run=True  # do not make changes to OBS, just do a dry-run
 [1.3.7]
 
 # define patterns for a given arch in which to disable builds
-skip_aarch=["-intel\\b"]
+skip_aarch=["-intel\\b","lustre-client"]
 #skip_x86=[]
 
 # first entry in family lists is defined to be parent in OBS
@@ -17,21 +17,33 @@ mpi_families=["openmpi","mpich","mvapich","impi"]
 
 [groups]
 # used to identify where components reside in ohpc Github repo
-admin    =  ["clustershell","conman","docs","examples","ganglia","genders","lmod-defaults","lmod",
-	    "losf","mrsh","nagios","nagios-plugins","ndoutils","nhc","nrpe","pdsh","prun","test-suite"]
-dev-tools = ["autoconf","automake","cmake","hwloc","libtool","python-mpi4py","python-numpy",
-	    "python-scipy","spack","valgrind"]
+admin       = ["clustershell","conman","docs","examples","ganglia","genders","lmod-defaults","lmod",
+	       "losf","mrsh","nagios","nagios-plugins","ndoutils","nhc","nrpe","pdsh","prun","test-suite"]
+dev-tools   = ["autoconf","automake","cmake","easybuild","hwloc","libtool","python-mpi4py","python-numpy",
+	       "python-scipy","spack","valgrind"]
+runtimes    = ["singularity","ocr","charliecloud"]
+rms         = ["slurm","pbspro","pmix"]
+serial-libs = ["R","openblas"]
+
 compiler-families=["gnu"]
 mpi-families=["mpich","mvapich2","openmpi"]
 
 #--
 # non-compiler/MPI packages
 #--
+[1.3.7/charliecloud]
 [1.3.7/cmake]
 [1.3.7/conman]
+[1.3.7/easybuild]
+[1.3.7/hwloc]
 [1.3.7/lmod]
 [1.3.7/lustre-client]
+[1.3.7/pmix]
+[1.3.7/slurm]
+[1.3.7/spack]
+[1.3.7/singularity]
 [1.3.7/valgrind]
+
 
 #--
 # compiler dependent packages
@@ -39,6 +51,16 @@ mpi-families=["mpich","mvapich2","openmpi"]
 
 [1.3.7/openmpi]
 compiler_dep=True
+
+[1.3.7/R]
+compiler_dep=True
+# only build for gnu
+compiler_families=["gnu"]
+
+[1.3.7/openblas]
+compiler_dep=True
+# only build for gnu
+compiler_families=["gnu"]
 
 #--
 # MPI dependent packages

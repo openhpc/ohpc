@@ -292,15 +292,16 @@ class ohpc_obs_tool(object):
         
         # check if any override options
         if self.buildConfig.has_option(self.vip + "/" + package,"compiler_families"):
-            compiler_families = self.buildConfig.get(self.vip + "/" + package,"compiler_families")
-            logging.info("--> override of default compiler families for package = %s" % package)
+            compiler_families = ast.literal_eval(self.buildConfig.get(self.vip + "/" + package,"compiler_families"))
+            logging.info("\n--> override of default compiler families requested for package = %s" % package)
+            logging.info("--> families %s\n" % compiler_families)
 
         logging.debug("[%s]: %s" % (fname,compiler_families))
         return(compiler_families)
 
     #---
     # add specified package to OBS
-    def addPackage(self,package,parent=True,isCompilerDep=False,compiler=None,parentName=None):
+    def addPackage(self,package,parent=True,isCompilerDep=False,compiler=None,parentName=None,gitName=None):
         fname = inspect.stack()[0][3]
 
         # verify we have template _service file
@@ -311,21 +312,23 @@ class ohpc_obs_tool(object):
         else:
             ERROR("Unable to read _service file template" % self.serviceFile)
 
+
         # verify we have a group definition for the parent package
         if(parent):
-            group = self.checkPackageGroup(package)
+            if gitName is not None:
+                group = self.checkPackageGroup(gitName)
+            else:
+                group = self.checkPackageGroup(package)
+            logging.debug("[%s]: group assigned = %s" % (fname,group))
 
         # Step 1: create _meta file for obs package (this defines new obs package)
-        fp = tempfile.NamedTemporaryFile(delete=False,mode='w+t')
+        fp = tempfile.NamedTemporaryFile(delete=True,mode='w+t')
         fp.writelines("<package name = \"%s\" project=\"%s\">\n" % (package,self.obsProject))
         fp.writelines("<title/>\n")
-
-        # write custom description tag - github trigger will look for this and unlock the package if necessary
         fp.writelines("<description/>")
-        #fp.writelines("<description>obs_config:ready for build</description>\n")
         fp.writelines("<build>\n")
 
-        # check skip pattern for build status
+        # check skip pattern to define build architectures
         if self.disableBuild(package,'aarch64'):
             logging.info("--> disabling aarch64 build per pattern match request")
             fp.writelines("<disable arch=\"aarch64\"/>\n")
@@ -347,7 +350,7 @@ class ohpc_obs_tool(object):
         if self.dryRun:
             logging.info("--> (dryrun) requesting addition of package: %s" % package)
             
-        logging.info("[%s]: (command) %s" % (fname,command))
+        logging.debug("[%s]: (command) %s" % (fname,command))
 
         if not self.dryRun:
             try:
@@ -355,26 +358,23 @@ class ohpc_obs_tool(object):
             except:
                 ERROR("\nUnable to add new package (%s) to OBS" % package)
 
-        # add _constraint file
-        if True:
+        # add marker file indicating this is a new OBS addition ready to be rebuilt (nothing in file, simply a marker)
+        if (parent):
             fp = tempfile.NamedTemporaryFile(delete=False,mode='w+t')
-#            fp.writelines("<constraints>\n")
-#            fp.writelines("<hostlabel>ohpc_new_build_init</hostlabel>\n")
-#            fp.writelines("</constraints>")
             fp.flush()
 
-            logging.debug("[%s]: new package _constraint written to %s" % (fname,fp.name))
-            command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_obs_config_ready_for_build"]  
+            markerFile = "_obs_config_ready_for_build"
+            command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + markerFile]  
             if self.dryRun:
-                logging.info("--> (dryrun) requesting addition of _constraint file for package: %s" % package)
-            
-                logging.info("[%s]: (command) %s" % (fname,command))
+                logging.info("--> (dryrun) requesting addition of %s file for package: %s" % (markerFile,package))
+
+            logging.debug("[%s]: (command) %s" % (fname,command))
 
             if not self.dryRun:
                 try:
                     s = subprocess.check_output(command)
                 except:
-                    ERROR("\nUnable to add _constraint file for package (%s) to OBS" % package)
+                    ERROR("\nUnable to add marker file for package (%s) to OBS" % package)
         
 
         if(parent):   # Step 2a: add _service file for parent package
@@ -383,21 +383,25 @@ class ohpc_obs_tool(object):
             group = group.replace('-','[-]')
 
             # create package specific _service file
+
+            pname = package
+            if gitName is not None:
+                pname = gitName
             contents = contents.replace('!GROUP!',  group)
-            contents = contents.replace('!PACKAGE!',package)
+            contents = contents.replace('!PACKAGE!',pname)
             contents = contents.replace('!VERSION!',self.vip)
 
             fp_serv = tempfile.NamedTemporaryFile(delete=True,mode='w')
             fp_serv.write(contents)
             fp_serv.flush()
-            logging.info("--> _service file written to %s" % fp_serv.name)
+            logging.debug("--> _service file written to %s" % fp_serv.name)
 
             command = ["osc","api","-f",fp_serv.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_service"]  
 
             if self.dryRun:
                 logging.info("--> (dryrun) adding _service file for package: %s" % package)
             
-            logging.info("[%s]: (command) %s" % (fname,command))
+            logging.debug("[%s]: (command) %s" % (fname,command))
 
             if not self.dryRun:
                 try:
@@ -427,17 +431,17 @@ class ohpc_obs_tool(object):
             contents = contents.replace('!COMPILER!',compiler)
             contents = contents.replace('!PROJECT!',self.obsProject)
 
-            fp_link = tempfile.NamedTemporaryFile(delete=False,mode='w')
+            fp_link = tempfile.NamedTemporaryFile(delete=True,mode='w')
             fp_link.write(contents)
             fp_link.flush()
-            logging.info("--> _link file written to %s" % fp_link.name)
+            logging.debug("--> _link file written to %s" % fp_link.name)
 
             command = ["osc","api","-f",fp_link.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_link"]  
 
             if self.dryRun:
                 logging.info("--> (dryrun) adding _link file for package: %s (parent=%s)" % (package,parentName))
             
-            logging.info("[%s]: (command) %s" % (fname,command))
+            logging.debug("[%s]: (command) %s" % (fname,command))
 
             if not self.dryRun:
                 try:
@@ -445,24 +449,9 @@ class ohpc_obs_tool(object):
                 except:
                     ERROR("\nUnable to add _link file for package (%s) to OBS" % package)
 
-        # Step 3 - register package to abort build once it kicks off 
-        self.buildsToCancel.append(package)
-##
-##        # Step 3 - abort builds that start by simply adding package...we want build to be initiated by git checkin instaed
-##
-##        command = ["osc","api","-X","POST","/build/" + self.obsProject + "?cmd=abortbuild&package=" + package]
-##
-##        if self.dryRun:
-##            logging.info("--> (dryrun) requesting cancel of builds for package: %s" % package)
-##
-##        logging.info("[%s]: (command) %s" % (fname,command))
-##        
-##        if not self.dryRun:
-##            try:
-##                s = subprocess.check_output(command)
-##            except:
-##                ERROR("\nUnable to add cancel build for package (%s)" % package)
-
+        # Step 3 - register package to lock build once it kicks off 
+        if(parent):
+            self.buildsToCancel.append(package)
 
     def cancelNewBuilds(self):
         fname = inspect.stack()[0][3]
@@ -472,9 +461,8 @@ class ohpc_obs_tool(object):
             logging.info("\nNo new builds to cancel")
             return
         else:
-            logging.info("\n%i new build(s) need to be cancelled:" % numBuilds)
-            logging.info("--> will iterate and sleep periodically until the builds exist, and their cancellation confirmed.")
-            logging.info("--> you can terminate if you want to let builds complete or will clean up by hand...")
+            logging.info("\n%i new build(s) need to be locked:" % numBuilds)
+            logging.info("--> will lock for now and GitHub trigger will unlock on first commit")
 
         for package in self.buildsToCancel:
             command = ["osc","lock", self.obsProject,package]
@@ -482,7 +470,7 @@ class ohpc_obs_tool(object):
             if self.dryRun:
                 logging.info("--> (dryrun) requesting lock for package: %s" % package)
 
-            logging.info("[%s]: (command) %s" % (fname,command))
+            logging.debug("[%s]: (command) %s" % (fname,command))
 
             if not self.dryRun:
                 try:
@@ -537,18 +525,18 @@ def main():
             ptype     = "compiler dep"
             parent    = package + '-' + obs.getParentCompiler()
             compilers = obs.queryCompilers(package)
-#            logging.info("compiler dependent package: %s" % parent)
 
             # check on parent first (it must exist before any children are linked)
             if parent in obsPackages:
                 logging.info("%20s (%13s): present in OBS" % (parent,ptype))
             else:
                 logging.info("%20s (%13s): *not* present in OBS, need to add" % (parent,ptype))
-                obs.addPackage(parent,parent=True,isCompilerDep=True)
+                obs.addPackage(parent,parent=True,isCompilerDep=True,gitName=package)
 
             # now, check on children
             for compiler in compilers:
-                if compiler is parent:
+                if compiler == obs.getParentCompiler():
+                    logging.debug("...skipping parent compiler...")
                     continue
                 child = package + '-' + compiler
                 if child in obsPackages:
