@@ -12,7 +12,6 @@
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-
 # Base package name
 %define pname openblas
 
