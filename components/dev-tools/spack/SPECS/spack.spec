@@ -13,7 +13,7 @@
 %define pname spack
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.11.2
+Version:	0.12.1
 Release:	1%{?dist}
 Summary:	HPC software package management
 
@@ -53,7 +53,7 @@ Most importantly, Spack is simple. It offers a simple spec syntax so that users 
 
 %install
 mkdir -p %{buildroot}%{install_path}
-rsync -av --exclude=.gitignore {etc,bin,lib,var,share,templates} %{buildroot}%{install_path}
+rsync -av --exclude=.gitignore {etc,bin,lib,var,share} %{buildroot}%{install_path}
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack
@@ -78,4 +78,4 @@ EOF
 
 %files
 %{OHPC_HOME}
-%doc LICENSE README.md
+%doc LICENSE* README.md
