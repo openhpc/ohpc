@@ -97,6 +97,16 @@ BuildRequires: llvm-compilers%{PROJ_DELIM}
 Requires:      llvm-compilers%{PROJ_DELIM}
 %endif
 
+# For RHEL 8 based systems annobin is activated
+%if 0%{?rhel} == 8
+%if 0%{?bootstrap_annobin} != 1
+BuildRequires: annobin-%{compiler_family}%{PROJ_DELIM}
+%else
+# Disable annobin for bootstrapping
+%undefine _annotated_build
+%endif
+%endif
+
 %endif
 
 # Disable RPM symlink analysis on files in %%{OHPC_HOME}.
