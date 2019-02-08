@@ -149,6 +149,7 @@ Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %endif
 %if "%{rhel}" == "8"
 %global python_prefix python3
+%global python_lib_dir python3.6
 %endif
 %if 0%{?suse_version}
 %global python_prefix python3
