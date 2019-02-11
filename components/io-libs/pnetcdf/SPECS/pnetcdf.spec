@@ -20,7 +20,7 @@
 
 Summary:   A Parallel NetCDF library (PnetCDF)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.10.0
+Version:   1.11.0
 %global    sonum 1
 Release:   1%{?dist}
 License:   NetCDF
