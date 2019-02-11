@@ -19,8 +19,8 @@
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	17.11.10
-%global rel	1
+Version:	18.08.5
+%global rel	2
 Release:	%{rel}%{?dist}
 Summary:	Slurm Workload Manager
 
@@ -51,6 +51,7 @@ Source:		https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
 # --with openssl	%_with_openssl 1	require openssl RPM to be installed
 #						ensures auth/openssl and crypto/openssl are built
 # --without pam		%_without_pam 1		don't require pam-devel RPM to be installed
+# --without x11         %_without_x11 1         disable internal X11 support
 
 #  Options that are off by default (enable with --with <opt>)
 %bcond_with cray
@@ -63,6 +64,7 @@ Source:		https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
 %bcond_with mysql
 %bcond_with hdf5
 %bcond_with numa
+%bcond_with x11
 
 # Build with OpenSSL by default on all platforms (disable using --without openssl)
 %bcond_without openssl
@@ -365,11 +367,16 @@ notifies slurm about failed nodes.
 	%{?_with_freeipmi} \
 	%{?_with_hdf5} \
 	%{?_with_shared_libslurm} \
+        %{?_without_x11:--disable-x11} \ 
 	%{?_with_cflags}
 
 make %{?_smp_mflags}
 
 %install
+
+# Ignore redundant standard rpaths and insecure relative rpaths,
+# for RHEL based distros which use "check-rpaths" tool.
+export QA_RPATHS=0x5                                                                                                                               
 
 # Strip out some dependencies
 
