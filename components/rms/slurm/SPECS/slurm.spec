@@ -367,7 +367,7 @@ notifies slurm about failed nodes.
 	%{?_with_freeipmi} \
 	%{?_with_hdf5} \
 	%{?_with_shared_libslurm} \
-        %{?_without_x11:--disable-x11} \ 
+        %{?_without_x11:--disable-x11} \
 	%{?_with_cflags}
 
 make %{?_smp_mflags}
