@@ -40,6 +40,7 @@ Patch0:    config.pmix.patch
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
+BuildRequires: zlib-devel
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
