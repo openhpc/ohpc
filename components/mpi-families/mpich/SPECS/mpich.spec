@@ -37,7 +37,6 @@ Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
 Patch0:    config.pmix.patch
-Patch1:    hydra_env.patch
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
@@ -58,7 +57,6 @@ Message Passing Interface (MPI) standard.
 
 %setup -q -n %{pname}-%{version}
 %patch0 -p0
-%patch1 -p0
 
 %build
 # OpenHPC compiler designation
