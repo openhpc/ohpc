@@ -578,7 +578,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_docdir}
 %config %{_sysconfdir}/slurm.conf.example
 
 %{OHPC_PUB}
-%doc AUTHORS BUILD.NOTES COPYING DISCLAIMER INSTALL LICENSE.OpenSSL NEWS README.rst RELEASE_NOTES
+%doc AUTHORS CONTRIBUTING.md COPYING DISCLAIMER INSTALL LICENSE.OpenSSL NEWS README.rst RELEASE_NOTES
 
 # 9/8/14 karl.w.schulz@intel.com - provide starting config file
 %if 0%{?OHPC_BUILD}
