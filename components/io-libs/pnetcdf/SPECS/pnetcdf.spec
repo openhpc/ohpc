@@ -43,7 +43,7 @@ attributes, and variables (> 2B array elements).
 
 %prep
 
-%setup -q -n parallel-netcdf-%{version}
+%setup -q -n pnetcdf-%{version}
 
 %build
 
