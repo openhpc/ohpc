@@ -36,6 +36,7 @@ URL:		https://slurm.schedmd.com/
 %endif
 
 Source:		https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
+Source1:        slurm.epilog.clean
 
 # build options		.rpmmacros options	change to default action
 # ====================  ====================	========================
@@ -423,7 +424,9 @@ install -D -m644 etc/layouts.d.power.conf.example %{buildroot}/%{_sysconfdir}/la
 install -D -m644 etc/layouts.d.power_cpufreq.conf.example %{buildroot}/%{_sysconfdir}/layouts.d/power_cpufreq.conf.example
 install -D -m644 etc/layouts.d.unit.conf.example %{buildroot}/%{_sysconfdir}/layouts.d/unit.conf.example
 install -D -m644 etc/slurm.conf.example %{buildroot}/%{_sysconfdir}/slurm.conf.example
-install -D -m755 etc/slurm.epilog.clean %{buildroot}/%{_sysconfdir}/slurm.epilog.clean
+# 2/11/19 karl@ices.utexas.edu - include epilog cleanup file that shipped with 17.x releases
+install -D -m755 %{SOURCE1} %{buildroot}/%{_sysconfdir}/slurm.epilog.clean
+#
 install -D -m644 etc/slurmdbd.conf.example %{buildroot}/%{_sysconfdir}/slurmdbd.conf.example
 install -D -m755 contribs/sjstat %{buildroot}/%{_bindir}/sjstat
 
