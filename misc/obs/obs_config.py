@@ -324,8 +324,6 @@ class ohpc_obs_tool(object):
         # check if any override options exist for this package
         if self.buildConfig.has_option(self.vip,package + "_compiler"):
             compiler_families = ast.literal_eval(self.buildConfig.get(self.vip,package + "_compiler"))
-            logging.warn("\n--> override of default compiler families requested for package = %s" % package)
-            logging.warn("--> families %s\n" % compiler_families)
 
         logging.debug("[%s]: %s" % (fname,compiler_families))
         return(compiler_families)
@@ -397,7 +395,7 @@ class ohpc_obs_tool(object):
 
 
         if self.dryRun:
-            logging.error("\n" + " " * pad + "--> (dryrun) requesting addition of package: %s" % package)
+            logging.error(" " * pad + "--> (dryrun) requesting addition of package: %s" % package)
             
         logging.debug("[%s]: (command) %s" % (fname,command))
 
@@ -415,7 +413,7 @@ class ohpc_obs_tool(object):
             markerFile = "_obs_config_ready_for_build"
             command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + markerFile]  
             if self.dryRun:
-                logging.error(" " * pad + "--> (dryrun) requesting addition of %s file for package: %s" % (markerFile,package))
+                logging.debug(" " * pad + "--> (dryrun) requesting addition of %s file for package: %s" % (markerFile,package))
                 
             logging.debug("[%s]: (command) %s" % (fname,command))
 
@@ -503,8 +501,8 @@ class ohpc_obs_tool(object):
                 except:
                     ERROR("\nUnable to add _link file for package (%s) to OBS" % package)
 
-        if self.dryRun:
-            logging.info("")
+#        if self.dryRun:
+#            logging.info("")
 
         # Step 3 - register package to lock build once it kicks off 
         self.buildsToCancel.append(package)
@@ -514,7 +512,7 @@ class ohpc_obs_tool(object):
         numBuilds = len(self.buildsToCancel)
 
         if(numBuilds == 0):
-            logging.info("\nNo new builds to cancel")
+            logging.info("\nNo new builds created.")
             return
         else:
             logging.info("\n%i new build(s) need to be locked:" % numBuilds)
@@ -574,28 +572,35 @@ def main():
     for package in components['standalone']:
         ptype="standalone"
         if package in obsPackages:
-            logging.info("%20s (%13s): present in OBS" % (package,ptype))
+            logging.info("%27s (%13s): present in OBS" % (package,ptype))
         else:
-            logging.info("%20s (%13s): *not* present in OBS, need to add" % (package,ptype))
+            logging.info("%27s (%13s): *not* present in OBS, need to add" % (package,ptype))
             obs.addPackage(package,parent=True)
 
     # (2) compiler dependent packages
     for package in components['comp_dep']:
         ptype     = "compiler dep"
         parent    = package + '-' + obs.getParentCompiler()
-        compilers = obs.queryCompilers(package)
+
+        compilers    = obs.queryCompilers(package)
+        Defcompilers = obs.queryCompilers(package,noOverride=True)
+
+        if compilers != Defcompilers:
+            pad = 15
+            logging.warn(" " * pad + "--> override of default compiler families requested for %s" % package)
+            logging.warn(" " * pad + "--> families =  %s" % compilers)
 
         # check on parent first (it must exist before any children are linked)
         if parent in obsPackages:
-            logging.info("%20s (%13s): present in OBS" % (parent,ptype))
+            logging.info("%27s (%13s): present in OBS" % (parent,ptype))
         else:
-            logging.info("%20s (%13s): *not* present in OBS, need to add" % (parent,ptype))
+            logging.info("%27s (%13s): *not* present in OBS, need to add" % (parent,ptype))
             obs.addPackage(parent,parent=True,isCompilerDep=True,gitName=package)
 
         # now, check on children
         for compiler in compilers:
             # verify compiler is known (as user could override with unknown compiler family)
-            if compiler not in obs.queryCompilers(parent,noOverride=True):
+            if compiler not in Defcompilers:
                 ERROR("requested compiler %s is not one of known compiler families; double check config file" % compiler)
                    
             if compiler == obs.getParentCompiler():
@@ -605,9 +610,9 @@ def main():
             child = package + '-' + compiler
             logging.debug(" " * 22 + "checking on child compiler dependent package: %s" % child)
             if child in obsPackages:
-                logging.info("%20s (%13s): present in OBS" % (child,ptype))
+                logging.info("%27s (%13s): present in OBS" % (child,ptype))
             else:
-                logging.info("%20s (%13s): *not* present in OBS, need to add" % (child,ptype))
+                logging.info("%27s (%13s): *not* present in OBS, need to add" % (child,ptype))
                 obs.addPackage(child,parent=False,isCompilerDep=True,compiler=compiler,parentName=parent)
 
     # (3) MPI dependent packages
@@ -619,9 +624,9 @@ def main():
         
         # check on parent first (it must exist before any children are linked)
         if parent in obsPackages:
-            logging.info("%20s (%13s): present in OBS" % (parent,ptype))
+            logging.info("%27s (%13s): present in OBS" % (parent,ptype))
         else:
-            logging.info("%20s (%13s): *not* present in OBS, need to add" % (parent,ptype))
+            logging.info("%27s (%13s): *not* present in OBS, need to add" % (parent,ptype))
             obs.addPackage(parent,parent=True,isMPIDep=True,gitName=package)
     
         # now, check on children
@@ -633,81 +638,11 @@ def main():
                     continue
                 
                 if child in obsPackages:
-                    logging.info("%20s (%13s): present in OBS" % (child,ptype))
+                    logging.info("%27s (%13s): present in OBS" % (child,ptype))
                 else:
-                    logging.info("%20s (%13s): *not* present in OBS, need to add" % (child,ptype))
+                    logging.info("%27s (%13s): *not* present in OBS, need to add" % (child,ptype))
                     obs.addPackage(child,parent=False,isMPIDep=True,compiler=compiler,mpi=mpi,parentName=parent)
     
-##    for package in components:
-##        if obs.isStandalone(package):
-##            ptype="standalone"
-##            if package in obsPackages:
-##                logging.info("%20s (%13s): present in OBS" % (package,ptype))
-##            else:
-##                logging.info("%20s (%13s): *not* present in OBS, need to add" % (package,ptype))
-##                obs.addPackage(package,parent=True)
-##        elif obs.isCompilerDep(package):
-##            ptype     = "compiler dep"
-##            parent    = package + '-' + obs.getParentCompiler()
-##            compilers = obs.queryCompilers(package)
-##
-##            # check on parent first (it must exist before any children are linked)
-##            if parent in obsPackages:
-##                logging.info("%20s (%13s): present in OBS" % (parent,ptype))
-##            else:
-##                logging.info("%20s (%13s): *not* present in OBS, need to add" % (parent,ptype))
-##                obs.addPackage(parent,parent=True,isCompilerDep=True,gitName=package)
-##
-##            # now, check on children
-##            for compiler in compilers:
-##
-##                # verify compiler is known (as user could override with unknown compiler family)
-##                if compiler not in obs.queryCompilers(parent,noOverride=True):
-##                    ERROR("requested compiler %s is not one of known compiler families; double check config file" % compiler)
-##                    
-##                    
-##
-##                if compiler == obs.getParentCompiler():
-##                    logging.debug("...skipping parent compiler...")
-##                    continue
-##                child = package + '-' + compiler
-##                if child in obsPackages:
-##                    logging.info("%20s (%13s): present in OBS" % (child,ptype))
-##                else:
-##                    logging.info("%20s (%13s): *not* present in OBS, need to add" % (child,ptype))
-##                    obs.addPackage(child,parent=False,isCompilerDep=True,compiler=compiler,parentName=parent)
-##
-##
-##        elif obs.isMPIDep(package):
-##            ptype     = "MPI dep"
-##            parent    = package + '-' + obs.getParentCompiler() + '-' + obs.getParentMPI()
-##            compilers = obs.queryCompilers(package)
-##            mpiFams   = obs.queryMPIFamilies(package)
-##
-##            # check on parent first (it must exist before any children are linked)
-##            if parent in obsPackages:
-##                logging.info("%20s (%13s): present in OBS" % (parent,ptype))
-##            else:
-##                logging.info("%20s (%13s): *not* present in OBS, need to add" % (parent,ptype))
-##                obs.addPackage(parent,parent=True,isMPIDep=True,gitName=package)
-##
-##            # now, check on children
-##            for compiler in compilers:
-##                for mpi in mpiFams:
-##                    child = package + '-' + compiler + '-' + mpi;
-##                    if (child == parent):
-##                        logging.debug("...skipping parent package %s" % child)
-##                        continue
-##                    
-##                    if child in obsPackages:
-##                        logging.info("%20s (%13s): present in OBS" % (child,ptype))
-##                    else:
-##                        logging.info("%20s (%13s): *not* present in OBS, need to add" % (child,ptype))
-##                        obs.addPackage(child,parent=False,isMPIDep=True,compiler=compiler,mpi=mpi,parentName=parent)
-##
-##        else:
-##            logging.error("Unsupported compiler/MPI dependency configuration")
-
     obs.cancelNewBuilds()
     
 
