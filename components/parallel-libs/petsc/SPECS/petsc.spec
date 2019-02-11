@@ -175,3 +175,4 @@ EOF
 %files
 %{OHPC_PUB}
 %doc CONTRIBUTING LICENSE
+
