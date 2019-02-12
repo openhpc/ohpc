@@ -22,30 +22,16 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname hypre
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        2.14.0
+Version:        2.15.1
 Release:        1%{?dist}
 Summary:        Scalable algorithms for solving linear systems of equations
 License:        LGPL-2.1
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
 Source:         https://github.com/LLNL/hypre/archive/v%{version}.tar.gz#/hypre-%{version}.tar.gz
-%if 0%{?suse_version} <= 1110
-%{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-%endif
-# TODO : add babel
-#BuildRequires:  babel-devel
-#BuildRequires:  libltdl-devel
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
-BuildRequires:  libxml2-devel
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  python-devel
-%if 0%{?suse_version}
-BuildRequires:  python-xml
-%else
-BuildRequires:  libxml2-python
-%endif
-BuildRequires:  xz
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -143,12 +129,7 @@ cd ..
 # Fix wrong permissions
 chmod 644 %{buildroot}%{install_path}/include/LLNL_FEI_*.h
 
-# This files are provided with babel
-#rm -f %{buildroot}%{_libdir}/mpi/gcc/$mpi/%_lib/libsidl*
-#popd
-
 # shared libraries
-
 pushd %{buildroot}%{install_path}/lib
 LIBS="$(ls *.a|sed 's|\.a||'|sort)"
 mkdir tmp
@@ -158,7 +139,7 @@ for i in $LIBS; do
     then
         ar x ../$i.a
         mpicxx -shared * -L.. $ADDLIB \
-                       -Wl,-soname,$i.so -o ../$i.so 
+                       -Wl,-soname,$i.so -o ../$i.so
         ADDLIB="-lHYPRE"
     fi
 done
