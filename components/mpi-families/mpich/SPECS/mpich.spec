@@ -68,6 +68,7 @@ export CPATH=${PMIX_INC}
 %endif
 
 ./configure --prefix=%{install_path} \
+            --with-device=ch4:ofi,ucx \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
