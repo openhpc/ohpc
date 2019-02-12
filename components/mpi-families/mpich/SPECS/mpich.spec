@@ -88,7 +88,8 @@ export CPATH=${PMIX_INC}
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif
 
-make %{?_smp_mflags}
+#make %{?_smp_mflags}
+make 
 
 %install
 # OpenHPC compiler designation
