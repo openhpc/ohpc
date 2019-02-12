@@ -12,7 +12,7 @@ admin         = ["clustershell","conman","docs","examples","ganglia","genders","
 	         "losf","mrsh","nagios","nagios-plugins","ndoutils","nhc","nrpe","pdsh","prun","test-suite"]
 dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","python-mpi4py","python-numpy",
 	         "python-scipy","spack","valgrind"]
-io-libs       = ["hdf5","phdf5"]
+io-libs       = ["hdf5","netcdf","netcdf-fortran","phdf5","pnetcdf"]
 runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","pbspro","pmix"]
 serial-libs   = ["R","openblas","plasma"]
@@ -46,7 +46,8 @@ R_compiler=["gnu8"]
 openblas_compiler=["gnu8"]
 
 # define (MPI dependent)  packages
-mpi_dependent = ["boost","hypre","petsc","phdf5","scorep","slepc","superlu_dist","tau"]
+mpi_dependent = ["boost","hypre","netcdf","petsc","pnetcdf","phdf5",
+	          "scorep","slepc","superlu_dist","tau"]
 
 
 [1.3.8]
