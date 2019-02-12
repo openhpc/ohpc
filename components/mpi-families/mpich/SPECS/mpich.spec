@@ -41,7 +41,7 @@ Patch0:    config.pmix.patch
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
 BuildRequires: zlib-devel
-BuildRequires: ucx-devel
+BuildRequires: ucx ucx-devel
 %if 0%{?suse_version}
 BuildRequires:  libnuma-devel
 %else
