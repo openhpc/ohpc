@@ -17,13 +17,11 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-
 # Base package name
-
 %define pname slepc
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.9.1
+Version:        3.10.2
 Release:        1
 Summary:        A library for solving large scale sparse eigenvalue problems
 License:        LGPL-3.0
@@ -42,7 +40,6 @@ BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-# Disable debug packages
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
@@ -66,7 +63,7 @@ module load openblas
 %endif
 module load petsc
 ./configure --prefix=/tmp%{install_path}
-make 
+make
 
 %install
 %ohpc_setup_compiler
