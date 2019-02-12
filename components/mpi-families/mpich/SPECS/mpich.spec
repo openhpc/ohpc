@@ -42,7 +42,11 @@ Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
 BuildRequires: zlib-devel
 BuildRequires: ucx-devel
+%if 0%{?suse_version}
+BuildRequires:  libnuma-devel
+%else
 BuildRequires: numactl-devel
+%endif
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
