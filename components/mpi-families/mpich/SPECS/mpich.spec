@@ -30,17 +30,22 @@ BuildRequires: libevent-devel
 
 Summary:   MPICH MPI implementation
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
-Version:   3.2.1
+Version:   3.3
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
 Patch0:    config.pmix.patch
-Patch1:    hydra_env.patch
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
+BuildRequires: zlib-devel
+%if 0%{?suse_version}
+BuildRequires:  libnuma-devel
+%else
+BuildRequires: numactl-devel
+%endif
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -58,7 +63,6 @@ Message Passing Interface (MPI) standard.
 
 %setup -q -n %{pname}-%{version}
 %patch0 -p0
-%patch1 -p0
 
 %build
 # OpenHPC compiler designation
@@ -69,6 +73,7 @@ export CPATH=${PMIX_INC}
 %endif
 
 ./configure --prefix=%{install_path} \
+            --with-device=ch4:ofi,ucx \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
