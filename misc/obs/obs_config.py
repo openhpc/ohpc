@@ -182,22 +182,8 @@ class ohpc_obs_tool(object):
             components['mpi_dep'] = ast.literal_eval(self.buildConfig.get(self.vip,"mpi_dependent"))
             logging.info("--> [   mpi_dep]: %s" % components['mpi_dep'])
 
-        # prune global section
-##        if self.vip in sections:
-##            logging.debug("--> [query_components]: removing global section %s" % self.vip)
-##            sections.remove(self.vip)
-##
-##        # prune if component is not associated with this version in progress
-##        sections[:] = [key for key in sections if key.startswith(ver_delim)]
-##
-##        # only elements that remain should start with the version in progress, strip this off
-##        for index,key in enumerate(sections):
-##            sections[index] = key[len(ver_delim):]
-
         numComponents = len(components['standalone']) + len(components['comp_dep']) + len(components['mpi_dep'])
-###        logging.info("--> [query_components]: parsed components = %s" % sections)
         logging.info("# of requested components = %i\n" % numComponents)
-#        exit(0)
         return(components)
 
     #---
@@ -500,9 +486,6 @@ class ohpc_obs_tool(object):
                     s = subprocess.check_output(command)
                 except:
                     ERROR("\nUnable to add _link file for package (%s) to OBS" % package)
-
-#        if self.dryRun:
-#            logging.info("")
 
         # Step 3 - register package to lock build once it kicks off 
         self.buildsToCancel.append(package)
