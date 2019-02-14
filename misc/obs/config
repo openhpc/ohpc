@@ -16,8 +16,8 @@ io-libs       = ["hdf5","netcdf","netcdf-fortran","phdf5","pnetcdf"]
 runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","pbspro","pmix"]
 serial-libs   = ["R","openblas","plasma"]
-parallel-libs = ["boost","hypre","petsc","slepc","superlu_dist"]
-perf-tools    = ["likwid","scorep","tau"]
+parallel-libs = ["boost","hypre","opencoarrays","petsc","slepc","superlu_dist"]
+perf-tools    = ["dimemas","extrae","likwid","scorep","tau"]
 
 compiler-families=["gnu"]
 mpi-families=["mpich","mvapich2","openmpi"]
@@ -44,9 +44,11 @@ compiler_dependent = ["likwid","mpich","openblas","openmpi","R","plasma"]
 # overdefault compiler families for any desired components
 R_compiler=["gnu8"]
 openblas_compiler=["gnu8"]
+opencoarrays_compiler=["gnu8"]
 
 # define (MPI dependent)  packages
-mpi_dependent = ["boost","hypre","netcdf","petsc","pnetcdf","phdf5",
+mpi_dependent = ["boost","dimemas","extrae","hypre","netcdf",
+                  "opencoarrays","petsc","pnetcdf","phdf5",
 	          "scorep","slepc","superlu_dist","tau"]
 
 
