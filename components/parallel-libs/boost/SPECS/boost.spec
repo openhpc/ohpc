@@ -40,6 +40,9 @@ Patch1:         boost_fenv_suse.patch
 %endif
 %endif
 
+# https://github.com/boostorg/mpi/pull/81
+Patch2:        https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.69-mpi-c_data.patch
+
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
@@ -90,6 +93,7 @@ see the boost-doc package.
 %patch1 -p1
 %endif
 %endif
+%patch2 -p2
 
 %build
 # OpenHPC compiler/mpi designation
