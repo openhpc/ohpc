@@ -30,11 +30,13 @@ Summary:   PBS Professional
 Name:      %{pbs_name}%{PROJ_DELIM}
 Version:   %{pbs_version}
 Release:   %{pbs_release}
-#Source0:   https://github.com/PBSPro/pbspro/releases/download/v%{version}/%{pbs_name}-%{version}.tar.gz
 Source0:   https://github.com/PBSPro/pbspro/archive//v%{version}.tar.gz
 License:   AGPLv3 with exceptions
 URL:       https://github.com/PBSPro/pbspro
 Prefix:    %{pbs_prefix}
+# CentOS 7.6 updates libical to 3.0.3
+# Patch taken from https://github.com/PBSPro/pbspro/pull/910
+Patch0:     pbspro-centos-7.6-ical.patch
 
 %bcond_with alps
 %bcond_with cpuset
@@ -179,6 +181,9 @@ the PBS Professional user commands.
 
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
+%if 0%{?rhel}
+%patch0 -p1
+%endif
 
 %build
 
