@@ -1,15 +1,15 @@
---- a/test/chtest/Build	2018-12-13 12:49:21.000000000 -0800
-+++ b/test/chtest/Build	2019-02-06 15:42:41.000000000 -0800
+--- a/test/chtest/Build	2019-02-12 09:13:12.000000000 -0800
++++ b/test/chtest/Build	2019-02-27 20:18:10.000000000 -0800
 @@ -16,16 +16,17 @@
  
  set -ex
  
 -srcdir=$1
--tarball=$2
+-tarball_uncompressed=${2}.tar
 +arch=$1
 +srcdir=$2
-+tarball=$3
- tarball_uncompressed=${tarball%.*}
++tarball_uncompressed=${3}.tar
+ tarball=${tarball_uncompressed}.gz
 -workdir=$3
 +workdir=$4
  mirror=http://dl-cdn.alpinelinux.org/alpine/v3.8
@@ -21,13 +21,13 @@
 +apk_tools=$(  wget -qO - "${mirror}/main/$arch" \
              | grep -F apk-tools-static \
              | sed -E 's/^.*(apk-tools-static-[0-9.r-]+\.apk).*$/\1/')
- img="${workdir}/img"
+ img=${workdir}/img
 @@ -43,7 +44,7 @@
  ## Bootstrap base Alpine Linux.
  
  # Download statically linked apk.
--wget ${mirror}/main/x86_64/"${apk_tools}"
-+wget ${mirror}/main/$arch/"${apk_tools}"
+-wget "${mirror}/main/x86_64/${apk_tools}"
++wget "${mirror}/main/$arch/${apk_tools}"
  
  # Bootstrap directories.
  mkdir img
