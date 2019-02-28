@@ -89,7 +89,7 @@ require a setuid binary.
 
 
 %prep
-%setup -q -n %{pname}-%{version}
+%setup -q -n %{pname}
 %patch1 -p1
 
 %build
