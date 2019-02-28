@@ -54,11 +54,11 @@ URL: http://singularity.lbl.gov/
 Source0: https://github.com/sylabs/singularity/releases/download/v%{version}/%{pname}-%{version}.tar.gz
 Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: libarchive-devel
-BuildRequires: libtool
-BuildRequires: python
+BuildRequires: golang
+BuildRequires: openssl-devel
+BuildRequires: libuuid-devel
+BuildRequires: libseccomp-devel
+BuildRequires: squashfs-tools
 Requires: file
 %if 0%{?sles_version} || 0%{?suse_version}
 Requires: squashfs
