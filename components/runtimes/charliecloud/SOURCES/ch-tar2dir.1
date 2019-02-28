@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "CH-TAR2DIR" "1" "2019-02-06 15:33 Coordinated Universal Time" "" "Charliecloud"
+.TH "CH-TAR2DIR" "1" "2019-02-27 19:58 Coordinated Universal Time" "" "Charliecloud"
 .SH NAME
 ch-tar2dir \- Unpack an image tarball into a directory
 .
@@ -45,12 +45,14 @@ $ ch\-tar2dir TARBALL DIR
 .sp
 Extract the tarball \fBTARBALL\fP into a subdirectory of \fBDIR\fP\&.
 \fBTARBALL\fP must contain a Linux filesystem image, e.g. as created by
-\fBch\-docker2tar\fP\&.
+\fBch\-docker2tar\fP, and be compressed with \fBgzip\fP or \fBxz\fP\&. If
+\fBTARBALL\fP has no extension, try appending \fB\&.tar.gz\fP and
+\fB\&.tar.xz\fP\&.
 .sp
 Inside \fBDIR\fP, a subdirectory will be created whose name corresponds to
-the name of the tarball with the \fB\&.tar.gz\fP suffix removed. If such a
-directory exists already and appears to be a Charliecloud container image, it
-is removed and replaced. If the existing directory doesn’t appear to be a
+the name of the tarball with \fB\&.tar.gz\fP or other suffix removed. If such
+a directory exists already and appears to be a Charliecloud container image,
+it is removed and replaced. If the existing directory doesn’t appear to be a
 container image, the script aborts with an error.
 .sp
 Additional arguments:

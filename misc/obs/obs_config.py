@@ -59,6 +59,15 @@ class ohpc_obs_tool(object):
         self.obsProject="OpenHPC:" + self.branchVer + ":Update" + self.microVer + ":Factory"
         logging.info("--> OBS project     = %s" % self.obsProject)
 
+    def checkForDisabledComponents(self,components):
+        activeComponents = []
+        for item in components:
+            if item[0] == '!':
+                logging.warn("--> Skipping disabled component %s" % item)
+            else:
+                activeComponents.append(item)
+        return activeComponents
+
 
     def parseConfig(self,configFile=None):
         assert(configFile is not None)
@@ -181,6 +190,8 @@ class ohpc_obs_tool(object):
         if self.buildConfig.has_option(self.vip,'mpi_dependent'):
             components['mpi_dep'] = ast.literal_eval(self.buildConfig.get(self.vip,"mpi_dependent"))
             logging.info("--> [   mpi_dep]: %s" % components['mpi_dep'])
+
+            components['mpi_dep'] = self.checkForDisabledComponents(components['mpi_dep'])
 
         numComponents = len(components['standalone']) + len(components['comp_dep']) + len(components['mpi_dep'])
         logging.info("# of requested components = %i\n" % numComponents)

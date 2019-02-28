@@ -10,9 +10,9 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_version 8.2.0
+%global gnu_version 8.3.0
 %global gnu_major_ver 8
-%global gnu_release 2
+%global gnu_release 3
 %global pname gnu8-compilers
 
 # Define subcomponent versions required for build

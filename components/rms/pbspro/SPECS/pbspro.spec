@@ -245,6 +245,9 @@ functionality of PBS Professional.
 
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
+%if 0%{?rhel}
+%patch0 -p1
+%endif
 
 %build
 [ -d build ] && rm -rf build

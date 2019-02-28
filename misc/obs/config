@@ -19,7 +19,7 @@ serial-libs   = ["R","openblas","plasma"]
 parallel-libs = ["boost","hypre","opencoarrays","petsc","slepc","superlu_dist"]
 perf-tools    = ["dimemas","extrae","likwid","scorep","tau"]
 
-compiler-families=["gnu"]
+compiler-families=["gnu-compilers"]
 mpi-families=["mpich","mvapich2","openmpi"]
 
 
@@ -34,8 +34,8 @@ compiler_families=["gnu8","intel"]
 mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 # define (standalone) component packages
-standalone = ["charliecloud","cmake","conman","easybuild","hwloc",
-	      "lmod","lustre-client","nagios","pmix","singularity","slurm",
+standalone = ["charliecloud","cmake","conman","docs","easybuild","gnu-compilers","hwloc",
+	      "lmod","lustre-client","nagios","pbspro","pmix","singularity","slurm",
 	      "spack","valgrind"]
 
 # define (compiler dependent) packages
@@ -47,8 +47,8 @@ openblas_compiler=["gnu8"]
 opencoarrays_compiler=["gnu8"]
 
 # define (MPI dependent)  packages
-mpi_dependent = ["boost","dimemas","extrae","hypre","netcdf",
-                  "opencoarrays","petsc","pnetcdf","phdf5",
+mpi_dependent = ["boost","!dimemas","!extrae","hypre","netcdf",
+                  "!opencoarrays","petsc","pnetcdf","phdf5",
 	          "scorep","slepc","superlu_dist","tau"]
 
 

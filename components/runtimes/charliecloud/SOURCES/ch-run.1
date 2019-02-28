@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "CH-RUN" "1" "2019-02-06 15:33 Coordinated Universal Time" "" "Charliecloud"
+.TH "CH-RUN" "1" "2019-02-27 19:58 Coordinated Universal Time" "" "Charliecloud"
 .SH NAME
 ch-run \- Run a command in a Charliecloud container
 .
@@ -79,6 +79,9 @@ mounted at \fB/home/$USER\fP in the container)
 .B \fB\-t\fP, \fB\-\-private\-tmp\fP
 use container\-private \fB/tmp\fP (by default, \fB/tmp\fP is shared with
 the host)
+.TP
+.B \fB\-\-set\-env=FILE\fP
+set environment variables as specified in host path \fBFILE\fP
 .TP
 .B \fB\-u\fP, \fB\-\-uid=UID\fP
 run as user \fBUID\fP within container
@@ -217,9 +220,23 @@ Many of the arguments given to the race losers, such as the image path and
 .UNINDENT
 .SH ENVIRONMENT VARIABLES
 .sp
-\fBch\-run\fP generally tries to leave environment variables unchanged, but
-in some cases, guests can be significantly broken unless environment variables
-are tweaked. This section lists those changes.
+\fBch\-run\fP leaves environment variables unchanged, i.e. the host
+environment is passed through unaltered, except:
+.INDENT 0.0
+.IP \(bu 2
+limited tweaks to avoid significant guest breakage; and
+.IP \(bu 2
+user\-set variables via \fB\-\-set\-env\fP
+.UNINDENT
+.sp
+This section describes these features.
+.sp
+The default tweaks happen first, followed by \fB\-\-set\-env\fP\&. The
+latter can be repeated arbitrarily many times, e.g. to add multiple
+variable sets.
+.SS Default behavior
+.sp
+By default, \fBch\-run\fP makes the following environment variable changes:
 .INDENT 0.0
 .IP \(bu 2
 \fB$HOME\fP: If the path to your home directory is not \fB/home/$USER\fP
@@ -250,6 +267,197 @@ Further reading:
 \fI\%Debian\fP
 .UNINDENT
 .UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Setting environment variables with \fB\-\-set\-env\fP
+.sp
+The purpose of \fB\-\-set\-env=FILE\fP is to set environment variables that
+cannot be inherited from the host shell, e.g. Dockerfile \fBENV\fP
+directives or other build\-time configuration. \fBFILE\fP is a host path to
+provide the greatest flexibility; guest paths can be specified by prepending
+the image path.
+.sp
+Variable values in \fBFILE\fP replace any already set. If a variable is
+repeated, the last value wins.
+.sp
+The syntax of \fBFILE\fP is key\-value pairs separated by the first equals
+character (\fB=\fP, ASCII 61), one per line, with optional single straight
+quotes (\fB\(aq\fP, ASCII 39) around the value. Empty lines are ignored.
+Newlines (ASCII 10) are not permitted in either key or value. No variable
+expansion, comments, etc. are provided. The value may be empty, but not the
+key. (This syntax is designed to accept the output of \fBprintenv\fP and be
+easily produced by other simple mechanisms.) Examples of valid lines:
+.TS
+center;
+|l|l|l|.
+_
+T{
+Line
+T}	T{
+Key
+T}	T{
+Value
+T}
+_
+T{
+\fBFOO=bar\fP
+T}	T{
+\fBFOO\fP
+T}	T{
+\fBbar\fP
+T}
+_
+T{
+\fBFOO=bar=baz\fP
+T}	T{
+\fBFOO\fP
+T}	T{
+\fBbar=baz\fP
+T}
+_
+T{
+\fBFLAGS=\-march=foo \-mtune=bar\fP
+T}	T{
+\fBFLAGS\fP
+T}	T{
+\fB\-march=foo \-mtune=bar\fP
+T}
+_
+T{
+\fBFLAGS=\(aq\-march=foo \-mtune=bar\(aq\fP
+T}	T{
+\fBFLAGS\fP
+T}	T{
+\fB\-march=foo \-mtune=bar\fP
+T}
+_
+T{
+\fBFOO=\fP
+T}	T{
+\fBFOO\fP
+T}	T{
+(empty string)
+T}
+_
+T{
+\fBFOO=\(aq\(aq\fP
+T}	T{
+\fBFOO\fP
+T}	T{
+(empty string)
+T}
+_
+T{
+\fBFOO=\(aq\(aq\(aq\(aq\fP
+T}	T{
+\fBFOO\fP
+T}	T{
+\fB\(aq\(aq\fP (two single quotes)
+T}
+_
+.TE
+.sp
+Example invalid lines:
+.TS
+center;
+|l|l|.
+_
+T{
+Line
+T}	T{
+Problem
+T}
+_
+T{
+\fBFOO bar\fP
+T}	T{
+no separator
+T}
+_
+T{
+\fB=bar\fP
+T}	T{
+key cannot be empty
+T}
+_
+.TE
+.sp
+Example valid lines that are probably not what you want:
+.TS
+center;
+|l|l|l|l|.
+_
+T{
+Line
+T}	T{
+Key
+T}	T{
+Value
+T}	T{
+Problem
+T}
+_
+T{
+\fBFOO="bar"\fP
+T}	T{
+\fBFOO\fP
+T}	T{
+\fB"bar"\fP
+T}	T{
+double quotes aren’t stripped
+T}
+_
+T{
+\fBFOO=bar # baz\fP
+T}	T{
+\fBFOO\fP
+T}	T{
+\fBbar # baz\fP
+T}	T{
+comments not supported
+T}
+_
+T{
+\fBPATH=$PATH:/opt/bin\fP
+T}	T{
+\fBPATH\fP
+T}	T{
+\fB$PATH:/opt/bin\fP
+T}	T{
+variables not expanded
+T}
+_
+T{
+\fB​ FOO=bar\fP
+T}	T{
+\fB​ FOO\fP
+T}	T{
+\fBbar\fP
+T}	T{
+leading space in key
+T}
+_
+T{
+\fBFOO= bar\fP
+T}	T{
+\fBFOO\fP
+T}	T{
+\fB​ bar\fP
+T}	T{
+leading space in value
+T}
+_
+.TE
+.sp
+Example Docker command to produce a valid \fBFILE\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+$ docker inspect $TAG \-\-format=\(aq{{range .Config.Env}}{{println .}}{{end}}\(aq
+.ft P
+.fi
 .UNINDENT
 .UNINDENT
 .SH EXAMPLES
