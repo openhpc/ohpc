@@ -78,8 +78,6 @@ BuildRequires: libedit-devel
 BuildRequires: libical-devel
 BuildRequires: ncurses-devel
 BuildRequires: perl
-BuildRequires: postgresql-devel >= 9.1
-BuildRequires: postgresql-contrib >= 9.1
 BuildRequires: python-devel >= 2.6
 BuildRequires: python-devel < 3.0
 BuildRequires: tcl-devel
@@ -94,11 +92,15 @@ BuildRequires: libXft-devel
 BuildRequires: fontconfig
 BuildRequires: timezone
 BuildRequires: python-xml
+BuildRequires: postgresql10-devel
+BuildRequires: postgresql10-contrib
 %else
 BuildRequires: expat-devel
 BuildRequires: openssl-devel
 BuildRequires: libXext
 BuildRequires: libXft
+BuildRequires: postgresql-devel >= 9.1
+BuildRequires: postgresql-contrib >= 9.1
 %endif
 
 # Pure python extensions use the 32 bit library path
