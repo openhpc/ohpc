@@ -51,7 +51,7 @@ Release: 1%{?dist}
 License: BSD-3-Clause-LBNL
 Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
-Source0: https://github.com/sylabs/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
+Source0: https://github.com/sylabs/singularity/releases/download/v%{version}/%{pname}-%{version}.tar.gz
 Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
 BuildRequires: autoconf
