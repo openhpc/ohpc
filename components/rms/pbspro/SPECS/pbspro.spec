@@ -10,38 +10,59 @@
 
 %include %{_sourcedir}/OHPC_macros
 
+%if !%{defined pbs_name}
 %define pbs_name pbspro
+%endif
+
+%if !%{defined pbs_version}
+%define pbs_version 19.1.1
+%endif
+
+%if !%{defined pbs_release}
+%define pbs_release 0
+%endif
+
+%if !%{defined pbs_prefix}
+%define pbs_prefix /opt/pbs
+%endif
+
+%if !%{defined pbs_home}
+%define pbs_home /var/spool/pbs
+%endif
+
+%if !%{defined pbs_dbuser}
+%define pbs_dbuser postgres
+%endif
+
 %define pbs_client client
 %define pbs_execution execution
 %define pbs_server server
-%define pbs_version 18.1.3
-%define pbs_release 0
-%define pbs_prefix /opt/pbs
-%define pbs_home /var/spool/pbs
-%define pbs_dbuser postgres
 %define pbs_dist %{pbs_name}-%{pbs_version}.tar.gz
-%if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7 || 0%{?debian_version} >= 8
-%define have_systemd 1
-%else
+
+%if !%{defined _unitdir}
 %define _unitdir /usr/lib/systemd/system
 %endif
+%if %{_vendor} == debian && %(test -f /etc/os-release && echo 1 || echo 0)
+%define _vendor_ver %(cat /etc/os-release | awk -F[=\\".] '/^VERSION_ID=/ {print \$3}')
+%define _vendor_id %(cat /etc/os-release | awk -F= '/^ID=/ {print \$2}')
+%endif
+%if 0%{?suse_version} >= 1210 || 0%{?rhel} >= 7 || (x%{?_vendor_id} == xdebian && 0%{?_vendor_ver} >= 8) || (x%{?_vendor_id} == xubuntu && 0%{?_vendor_ver} >= 16)
+%define have_systemd 1
+%endif
 
-Summary:   PBS Professional
-Name:      %{pbs_name}%{PROJ_DELIM}
-Version:   %{pbs_version}
-Release:   %{pbs_release}
-Source0:   https://github.com/PBSPro/pbspro/archive//v%{version}.tar.gz
-License:   AGPLv3 with exceptions
-URL:       https://github.com/PBSPro/pbspro
-Prefix:    %{pbs_prefix}
-# CentOS 7.6 updates libical to 3.0.3
-# Patch taken from https://github.com/PBSPro/pbspro/pull/910
-Patch0:     pbspro-centos-7.6-ical.patch
+Name: %{pbs_name}%{PROJ_DELIM}
+Version: %{pbs_version}
+Release: %{pbs_release}
+Source0: https://github.com/PBSPro/pbspro/archive/v%{version}.tar.gz
+Summary: PBS Professional
+License: AGPLv3 with exceptions
+URL: https://github.com/PBSPro/pbspro
+Vendor: Altair Engineering, Inc.
+Prefix: %{?pbs_prefix}%{!?pbs_prefix:%{_prefix}}
 
 %bcond_with alps
 %bcond_with cpuset
-%bcond_with ibm-ib
-%bcond_with ibm-hps
+%bcond_with ptl
 
 BuildRequires: gcc
 BuildRequires: make
@@ -50,25 +71,21 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
-
-%if %{defined suse_version}
-BuildRequires: hwloc-devel < 2
-%else
 BuildRequires: hwloc-devel
-%endif
-
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
 BuildRequires: libedit-devel
 BuildRequires: libical-devel
 BuildRequires: ncurses-devel
 BuildRequires: perl
-BuildRequires: postgresql-devel
+BuildRequires: postgresql-devel >= 9.1
+BuildRequires: postgresql-contrib >= 9.1
 BuildRequires: python-devel >= 2.6
 BuildRequires: python-devel < 3.0
 BuildRequires: tcl-devel
 BuildRequires: tk-devel
 BuildRequires: swig
+BuildRequires: zlib-devel
 %if %{defined suse_version}
 BuildRequires: libexpat-devel
 BuildRequires: libopenssl-devel
@@ -84,8 +101,6 @@ BuildRequires: libXext
 BuildRequires: libXft
 %endif
 
-#!BuildIgnore: post-build-checks
-
 # Pure python extensions use the 32 bit library path
 %{!?py_site_pkg_32: %global py_site_pkg_32 %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(0)")}
 %{!?py_site_pkg_64: %global py_site_pkg_64 %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
@@ -99,25 +114,30 @@ HPC clusters, clouds and supercomputers.
 %package -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 Summary: PBS Professional for a server host
 Group:  %{PROJ_NAME}/rms
+Conflicts: pbspro-execution-ohpc
+Conflicts: pbspro-client-ohpc
+Conflicts: pbspro-server
 Conflicts: pbspro-execution
 Conflicts: pbspro-client
 Conflicts: pbs
 Conflicts: pbs-mom
 Conflicts: pbs-cmds
+Requires: bash
 Requires: expat
 Requires: libedit
-Requires: postgresql-server
+Requires: postgresql-server >= 9.1
+Requires: postgresql-contrib >= 9.1
 Requires: python >= 2.6
 Requires: python < 3.0
 Requires: tcl
 Requires: tk
 %if %{defined suse_version}
 Requires: smtp_daemon
-Requires: libical1
 %else
 Requires: smtpdaemon
-Requires: libical
 %endif
+Requires: hostname
+Requires: libical
 Autoreq: 1
 
 %description -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
@@ -132,11 +152,15 @@ PBS Professional components.
 %package -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
 Summary: PBS Professional for an execution host
 Group:   %{PROJ_NAME}/rms
+Conflicts: pbspro-server-ohpc
+Conflicts: pbspro-client-ohpc
 Conflicts: pbspro-server
+Conflicts: pbspro-execution
 Conflicts: pbspro-client
 Conflicts: pbs
 Conflicts: pbs-mom
 Conflicts: pbs-cmds
+Requires: bash
 Requires: expat
 Requires: python >= 2.6
 Requires: python < 3.0
@@ -146,6 +170,7 @@ Requires: libhwloc5
 %if 0%{?rhel} >= 7
 Requires: hwloc-libs
 %endif
+Requires: hostname
 Autoreq: 1
 
 %description -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
@@ -161,11 +186,15 @@ does include the PBS Professional user commands.
 %package -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
 Summary: PBS Professional for a client host
 Group: %{PROJ_NAME}/rms
+Conflicts: pbspro-server-ohpc
+Conflicts: pbspro-execution-ohpc
 Conflicts: pbspro-server
 Conflicts: pbspro-execution
+Conflicts: pbspro-client
 Conflicts: pbs
 Conflicts: pbs-mom
 Conflicts: pbs-cmds
+Requires: bash
 Requires: python >= 2.6
 Requires: python < 3.0
 Autoreq: 1
@@ -179,6 +208,41 @@ HPC clusters, clouds and supercomputers.
 This package is intended for a client host and provides
 the PBS Professional user commands.
 
+%if %{with ptl}
+
+%define pbs_ptl ptl
+
+%if !%{defined ptl_prefix}
+%define ptl_prefix %{pbs_prefix}/../ptl
+%endif
+
+%package %{pbs_ptl}
+Summary: PBS Test Lab for testing PBS Professional
+Group: System Environment/Base
+Requires: python-nose
+Requires: python-beautifulsoup
+%if 0%{?rhel} 
+Requires: pexpect
+%else
+Requires: python-pexpect
+%endif
+Requires: python-defusedxml
+Prefix: %{ptl_prefix}
+
+%description %{pbs_ptl}
+PBS Test Lab is a test harness and test suite intended to validate the
+functionality of PBS Professional.
+
+%endif
+
+%if 0%{?opensuse_bs}
+# Do not specify debug_package for OBS builds.
+%else
+%if %{defined suse_version}
+%debug_package
+%endif
+%endif
+
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
 %if 0%{?rhel}
@@ -186,7 +250,6 @@ the PBS Professional user commands.
 %endif
 
 %build
-
 [ -d build ] && rm -rf build
 ./autogen.sh
 mkdir build
@@ -194,6 +257,9 @@ cd build
 ../configure CFLAGS="-fPIC" \
 	PBS_VERSION=%{pbs_version} \
 	--prefix=%{pbs_prefix} \
+%if %{with ptl}
+	--enable-ptl \
+%endif
 %if %{defined suse_version}
 	--libexecdir=%{pbs_prefix}/libexec \
 %endif
@@ -203,12 +269,6 @@ cd build
 %if %{with cpuset}
 	--enable-cpuset \
 %endif
-%if %{with ibm-hps}
-	--enable-hps \
-%endif
-%if %{with ibm-ib}
-	--enable-aixib \
-%endif
 	--with-pbs-server-home=%{pbs_home} \
 	--with-database-user=%{pbs_dbuser}
 %{__make} %{?_smp_mflags}
@@ -217,21 +277,19 @@ cd build
 cd build
 %make_install
 
-# scott@altair.com (redirecting pbs_postinstall to /dev/null ; reducing verbosity)
-
 %post -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 # do not run pbs_postinstall when the CLE is greater than or equal to 6
 imps=0
 cle_release_version=0
 cle_release_path=/etc/opt/cray/release/cle-release
 if [ -f ${cle_release_path} ]; then
-    cle_release_version=`grep RELEASE ${cle_release_path} | cut -f2 -d= | cut -f1 -d.`
+	cle_release_version=`grep RELEASE ${cle_release_path} | cut -f2 -d= | cut -f1 -d.`
 fi
 [ "${cle_release_version}" -ge 6 ] 2>/dev/null && imps=1
-
 if [ $imps -eq 0 ]; then
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall server \
-	%{pbs_version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} %{pbs_dbuser} >/dev/null 2>&1
+	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} \
+	%{pbs_dbuser} >/dev/null 2>&1
 else
 	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
 fi
@@ -242,13 +300,12 @@ imps=0
 cle_release_version=0
 cle_release_path=/etc/opt/cray/release/cle-release
 if [ -f ${cle_release_path} ]; then
-    cle_release_version=`grep RELEASE ${cle_release_path} | cut -f2 -d= | cut -f1 -d.`
+	cle_release_version=`grep RELEASE ${cle_release_path} | cut -f2 -d= | cut -f1 -d.`
 fi
 [ "${cle_release_version}" -ge 6 ] 2>/dev/null && imps=1
-
 if [ $imps -eq 0 ]; then
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall execution \
-	%{pb_version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} >/dev/null 2>&1
+	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} >/dev/null 2>&1
 else
 	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
 fi
@@ -259,15 +316,14 @@ imps=0
 cle_release_version=0
 cle_release_path=/etc/opt/cray/release/cle-release
 if [ -f ${cle_release_path} ]; then
-    cle_release_version=`grep RELEASE ${cle_release_path} | cut -f2 -d= | cut -f1 -d.`
+	cle_release_version=`grep RELEASE ${cle_release_path} | cut -f2 -d= | cut -f1 -d.`
 fi
 [ "${cle_release_version}" -ge 6 ] 2>/dev/null && imps=1
-
 if [ $imps -eq 0 ]; then
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall client \
-	%{pbs_version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} >/dev/null 2>&1
+	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} >/dev/null 2>&1
 else
-    install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
+	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
 fi
 
 %preun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
@@ -325,31 +381,6 @@ if [ "$1" != "1" ]; then
 	rm -f /opt/modulefiles/pbs/%{version}
 fi
 
-# scott@altair.com (commenting out %postun; reducing verbosity)
-#%postrun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
-if [ "$1" != "1" ]; then
-	# This is an uninstall, not an upgrade.
-	#echo
-	#echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
-	echo
-fi
-
-#%postun -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
-if [ "$1" != "1" ]; then
-	# This is an uninstall, not an upgrade.
-	#echo
-	#echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
-	#echo
-fi
-
-#%postun -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
-if [ "$1" != "1" ]; then
-	# This is an uninstall, not an upgrade.
-	#echo
-	#echo "NOTE: /etc/pbs.conf must be deleted manually"
-	#echo
-fi
-
 %posttrans -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 # The %preun section of 14.x unconditially removes /etc/init.d/pbs
 # because it does not check whether the package is being removed
@@ -373,6 +404,7 @@ fi
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
+%config(noreplace) %{_sysconfdir}/profile.d/*
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %else
@@ -389,12 +421,12 @@ fi
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
+%config(noreplace) %{_sysconfdir}/profile.d/*
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %else
 %exclude %{_unitdir}/pbs.service
 %endif
-# %{_sysconfdir}/init.d/pbs
 %exclude %{pbs_prefix}/bin/printjob_svr.bin
 %exclude %{pbs_prefix}/etc/pbs_db_schema.sql
 %exclude %{pbs_prefix}/etc/pbs_dedicated
@@ -422,6 +454,7 @@ fi
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
+%config(noreplace) %{_sysconfdir}/profile.d/*
 %exclude %{pbs_prefix}/bin/mpiexec
 %exclude %{pbs_prefix}/bin/pbs_attach
 %exclude %{pbs_prefix}/bin/pbs_tmrsh
@@ -438,6 +471,7 @@ fi
 %exclude %{pbs_prefix}/lib*/python/pbs_bootcheck*
 %exclude %{pbs_prefix}/libexec/install_db
 %exclude %{pbs_prefix}/libexec/pbs_habitat
+%exclude %{pbs_prefix}/libexec/pbs_schema_upgrade
 %exclude %{pbs_prefix}/libexec/pbs_init.d
 %exclude %{pbs_prefix}/sbin/pbs_comm
 %exclude %{pbs_prefix}/sbin/pbs_demux
@@ -456,3 +490,12 @@ fi
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 %exclude %{_unitdir}/pbs.service
+
+%if %{with ptl}
+%files %{pbs_ptl}
+%defattr(-,root,root, -)
+%dir %{ptl_prefix}
+%{ptl_prefix}/*
+%{_sysconfdir}/profile.d/ptl.csh
+%{_sysconfdir}/profile.d/ptl.sh
+%endif
