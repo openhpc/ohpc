@@ -7,8 +7,8 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-
-# 
+#
+# Copyright (c) 2017-2018, SyLabs, Inc. All rights reserved.
 # Copyright (c) 2017, SingularityWare, LLC. All rights reserved.
 #
 # Copyright (c) 2015-2017, Gregory M. Kurtzer. All rights reserved.
@@ -35,13 +35,7 @@
 # Base package name
 %define pname singularity
 
-# This allows us to pick up the default value from the configure
-%{!?with_slurm: %global with_slurm no}
-%if "%{with_slurm}" == "yes"
-%global slurm 1
-%else
-%global slurm 0
-%endif
+%define singgopath src/github.com/sylabs/singularity
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
@@ -54,15 +48,17 @@ URL: http://singularity.lbl.gov/
 Source0: https://github.com/sylabs/singularity/releases/download/v%{version}/%{pname}-%{version}.tar.gz
 Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
-BuildRequires: golang
+BuildRequires: gcc
+BuildRequires: git
 BuildRequires: openssl-devel
 BuildRequires: libuuid-devel
 BuildRequires: libseccomp-devel
-BuildRequires: squashfs-tools
 Requires: file
 %if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires: go
 Requires: squashfs
 %else
+BuildRequires: golang
 Requires: squashfs-tools
 %endif
 
@@ -70,45 +66,41 @@ Requires: squashfs-tools
 %define install_path %{OHPC_LIBS}/%{pname}/%version
 
 %description
-Singularity provides functionality to build the smallest most minimal
-possible containers, and running those containers as single application
-environments.
-
-%if %slurm
-%package -n singularity-slurm%{PROJ_DELIM}
-Summary: Singularity plugin for SLURM
-Requires: singularity = %{version}-%{release}
-BuildRequires: slurm-devel%{PROJ_DELIM}
-
-%description -n singularity-slurm%{PROJ_DELIM}
-The Singularity plugin for SLURM allows jobs to be started within
-a container.  This provides a simpler interface to the user (they
-don't have to be aware of the singularity executable) and doesn't
-require a setuid binary.
-%endif
-
+Singularity provides functionality to make portable
+containers that can be used across host environments.
 
 %prep
-%setup -q -n %{pname}
-%patch1 -p1
+# Create our build root
+rm -rf %{name}-%{version}
+mkdir %{name}-%{version} 
 
 %build
-if [ ! -f configure ]; then
-  ./autogen.sh
-fi
+cd %{name}-%{version}
 
-./configure --prefix=%{install_path}  \
-  --disable-static --with-pic \
-%if %slurm
-  --with-slurm
-%else
-  --without-slurm
-%endif
+mkdir -p gopath/%{singgopath}
+tar -C "gopath/src/github.com/sylabs/" -xf "%SOURCE0"
 
-%{__make} %{?_smp_mflags}
+export GOPATH=$PWD/gopath
+export PATH=$GOPATH/bin:$PATH
+cd $GOPATH/%{singgopath}
+
+./mconfig -V %{version}-%{release} \ 
+    --prefix=%{install_path}  
+
+cd builddir
+make old_config=
 
 %install
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+cd %{name}-%{version}
+
+export GOPATH=$PWD/gopath
+export PATH=$GOPATH/bin:$PATH
+cd $GOPATH/%{singgopath}/builddir
+
+mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
+make DESTDIR=$RPM_BUILD_ROOT install man
+chmod 644 $RPM_BUILD_ROOT%{_sysconfdir}/singularity/actions/*
+
 # NO_BRP_CHECK_RPATH has no effect on CentOS 7
 export NO_BRP_CHECK_RPATH=true
 
@@ -153,15 +145,8 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%doc examples CONTRIBUTORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
+%doc examples CHANGELOG.md CONTRIBUTORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
 %attr(0644, root, root) %config(noreplace) %{install_path}/etc/singularity/*
 %{OHPC_PUB}
 #SUID programs
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/action-suid
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/mount-suid
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/start-suid
-
-%if %slurm
-%files -n singularity-slurm%{PROJ_DELIM}
-%{install_path}/lib/slurm/singularity.so
-%endif
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/starter-suid
