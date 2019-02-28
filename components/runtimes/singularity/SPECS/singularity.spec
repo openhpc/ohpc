@@ -84,8 +84,8 @@ export GOPATH=$PWD/gopath
 export PATH=$GOPATH/bin:$PATH
 cd $GOPATH/%{singgopath}
 
-./mconfig -V %{version}-%{release} \ 
-    --prefix=%{install_path}  
+./mconfig -V %{version}-%{release} \
+    --prefix=%{install_path}
 
 cd builddir
 make old_config=
