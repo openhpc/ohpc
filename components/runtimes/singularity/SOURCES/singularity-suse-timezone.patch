@@ -1,8 +1,8 @@
---- a/examples/opensuse/Singularity	2018-04-06 15:10:02.000000000 -0700
-+++ b/examples/opensuse/Singularity	2018-04-23 13:34:18.000000000 -0700
+--- a/examples/opensuse/Singularity	2019-02-21 18:47:02.000000000 -0800
++++ b/examples/opensuse/Singularity	2019-02-27 19:48:22.000000000 -0800
 @@ -1,7 +1,7 @@
  BootStrap: zypper
- OSVersion: 42.2
+ OSVersion: 42.3
  MirrorURL: http://download.opensuse.org/distribution/leap/%{OSVERSION}/repo/oss/
 -Include: zypper
 +Include: zypper timezone
