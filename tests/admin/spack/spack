@@ -27,7 +27,7 @@ setup() {
 }
 
 @test "[spack] test build" {
-    spack install libjpeg-turbo
+    spack install pkgconf
     assert_success
 }
 
@@ -36,11 +36,11 @@ setup() {
     spack compiler find
     assert_success
 
-    spack install libjpeg-turbo%clang
+    spack install pkgconf%clang
     assert_success
 }
 
 @test "[spack] test module refresh" {
-    echo y | spack module refresh
+    echo y | spack module tcl refresh
     assert_success
 }
