@@ -37,7 +37,7 @@ Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
 Patch0:    config.pmix.patch
-Patch1:    8a12577691979dbe3d9281b4c59e38558ab3e777
+Patch1:    8a12577691979dbe3d9281b4c59e38558ab3e777.patch
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
