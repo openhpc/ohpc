@@ -73,7 +73,6 @@ export CPATH=${PMIX_INC}
 %endif
 
 ./configure --prefix=%{install_path} \
-#            --with-device=ch4:ofi,ucx \
 %if 0%{with_slurm}
             --with-pm=no --with-pmi=slurm \
 %endif
@@ -86,6 +85,8 @@ export CPATH=${PMIX_INC}
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif
+
+#            --with-device=ch4:ofi,ucx \
 
 make %{?_smp_mflags}
 
