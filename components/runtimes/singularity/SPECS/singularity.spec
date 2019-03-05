@@ -58,7 +58,7 @@ Requires: file
 BuildRequires: go
 Requires: squashfs
 %else
-BuildRequires: golang
+BuildRequires: golang > 1.6
 Requires: squashfs-tools
 %endif
 
