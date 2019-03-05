@@ -136,8 +136,8 @@ Requires: smtp_daemon
 Requires: net-tools
 %else
 Requires: smtpdaemon
-%endif
 Requires: hostname
+%endif
 Requires: libical
 Autoreq: 1
 
