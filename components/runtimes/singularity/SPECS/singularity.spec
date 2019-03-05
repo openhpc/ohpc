@@ -74,10 +74,6 @@ containers that can be used across host environments.
 # Create our build root
 rm -rf %{name}-%{version}
 mkdir %{name}-%{version} 
-%if !(0%{?sles_version} || 0%{?suse_version})
-cd %{name}-%{version}
-%patch2 -p1
-%endif
 
 %build
 cd %{name}-%{version}
@@ -88,6 +84,9 @@ tar -C "gopath/src/github.com/sylabs/" -xf "%SOURCE0"
 export GOPATH=$PWD/gopath
 export PATH=$GOPATH/bin:$PATH
 cd $GOPATH/%{singgopath}
+%if !(0%{?sles_version} || 0%{?suse_version})
+%patch2 -p1
+%endif
 
 ./mconfig -V %{version}-%{release} \
     --prefix=%{install_path}
