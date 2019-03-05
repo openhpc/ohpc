@@ -74,7 +74,7 @@ containers that can be used across host environments.
 # Create our build root
 rm -rf %{name}-%{version}
 mkdir %{name}-%{version} 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if !(0%{?sles_version} || 0%{?suse_version})
 cd %{name}-%{version}
 %patch2
 %endif
