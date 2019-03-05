@@ -58,15 +58,14 @@ Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 Buildrequires: ofed
+BuildRequires: rdma-core-devel infiniband-diags-devel
 %endif
 %if 0%{?rhel}
-Buildrequires: rdma-core-devel
+Buildrequires: rdma-core-devel libibmad-devel
 %endif
 
 Requires: prun%{PROJ_DELIM}
-
 BuildRequires: bison
-BuildRequires: libibmad-devel
 BuildRequires: zlib-devel
 
 # Default library install path
