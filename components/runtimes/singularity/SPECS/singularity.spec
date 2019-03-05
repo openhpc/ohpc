@@ -47,7 +47,7 @@ Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
 Source0: https://github.com/sylabs/singularity/releases/download/v%{version}/%{pname}-%{version}.tar.gz
 Patch1: singularity-suse-timezone.patch
-Patch2: singularity-import-context.patch
+Source1: singularity-import-context.patch
 ExclusiveOS: linux
 BuildRequires: gcc
 BuildRequires: git
@@ -85,7 +85,7 @@ export GOPATH=$PWD/gopath
 export PATH=$GOPATH/bin:$PATH
 cd $GOPATH/%{singgopath}
 %if !(0%{?sles_version} || 0%{?suse_version})
-%patch2 -p1
+/usr/bin/patch -p1 < %SOURCE1
 %endif
 
 ./mconfig -V %{version}-%{release} \
