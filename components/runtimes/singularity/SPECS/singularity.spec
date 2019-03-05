@@ -76,7 +76,7 @@ rm -rf %{name}-%{version}
 mkdir %{name}-%{version} 
 %if !(0%{?sles_version} || 0%{?suse_version})
 cd %{name}-%{version}
-%patch2
+%patch2 -p1
 %endif
 
 %build
