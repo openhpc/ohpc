@@ -1,0 +1,11 @@
+--- a/cmd/internal/cli/build_linux.go	2019-02-21 18:47:02.000000000 -0800
++++ b/cmd/internal/cli/build_linux.go	2019-03-04 19:43:36.000000000 -0800
+@@ -6,7 +6,7 @@
+ package cli
+ 
+ import (
+-	"context"
++	"golang.org/x/net/context"
+ 	"os"
+ 
+ 	"github.com/spf13/cobra"

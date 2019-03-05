@@ -47,6 +47,7 @@ Group: %{PROJ_NAME}/runtimes
 URL: http://singularity.lbl.gov/
 Source0: https://github.com/sylabs/singularity/releases/download/v%{version}/%{pname}-%{version}.tar.gz
 Patch1: singularity-suse-timezone.patch
+Patch2: singularity-import-context.patch
 ExclusiveOS: linux
 BuildRequires: gcc
 BuildRequires: git
@@ -73,6 +74,10 @@ containers that can be used across host environments.
 # Create our build root
 rm -rf %{name}-%{version}
 mkdir %{name}-%{version} 
+%if 0%{?sles_version} || 0%{?suse_version}
+cd %{name}-%{version}
+%patch2
+%endif
 
 %build
 cd %{name}-%{version}
