@@ -145,7 +145,12 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%doc CHANGELOG.md CONTRIBUTORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
+cd %{name}-%{version}
+
+export GOPATH=$PWD/gopath
+export PATH=$GOPATH/bin:$PATH
+cd $GOPATH/%{singgopath}/builddir
+%doc examples CHANGELOG.md CONTRIBUTORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
 %attr(0644, root, root) %config(noreplace) %{install_path}/etc/singularity/*
 %{OHPC_PUB}
 #SUID programs
