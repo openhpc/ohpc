@@ -34,7 +34,7 @@ RANLIB       = /usr/bin/ranlib
 
 CC           = mpicc
 CXX          = mpicxx
-CFLAGS 	     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -std=c99 -fPIC -g
+CFLAGS 	     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -std=c11 -fPIC -g
 CXXFLAGS     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -fPIC -g
 NOOPTS       = -O0
 FORTRAN	     = mpif90
