@@ -121,12 +121,7 @@ AC_ARG_ENABLE([oob],
 	 [AS_HELP_STRING([--enable-oob],[Enable oob tests (default=yes, root only)])],
 	 [],[enable_oob=yes])
 AM_CONDITIONAL(OOB_ENABLED,test "x$enable_oob" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Singularity
-AC_ARG_ENABLE([singularity],
-     [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes, root only)])],
-	 [],[enable_singularity=yes])
-AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
+
 #------------------------------------------------------------------------------------------
 # spack
 AC_ARG_ENABLE([spack],
@@ -392,6 +387,12 @@ AC_ARG_ENABLE([scotch],
    [AX_OPTION_DEFAULT(type=long,enable_scotch,yes)])
 AM_CONDITIONAL(SCOTCH_ENABLED,test "x$enable_scotch" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Singularity
+AC_ARG_ENABLE([singularity],
+     [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes)])],[],
+     [AX_OPTION_DEFAULT(type=long,enable_singularity,yes)])
+AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
+#------------------------------------------------------------------------------------------
 # SLEPC
 AC_ARG_ENABLE([slepc],
    [AS_HELP_STRING([--enable-slepc],[Enable slepc tests (default=yes)])],[],
@@ -578,12 +579,6 @@ if test "x$ROOT_ENABLED" = "x1" ; then
        echo '    'Out of band tools......... : disabled
     fi
     
-    if test "x$enable_singularity" = "xyes"; then
-       echo '    'Singularity............... : enabled
-    else
-       echo '    'Singularity............... : disabled
-    fi
-
     if test "x$enable_spack" = "xyes"; then
        echo '    'Spack..................... : enabled
     else
@@ -901,6 +896,12 @@ echo    Runtimes:
        echo '    'OCR....................... : enabled
     else
        echo '    'OCR....................... : disabled
+    fi
+
+    if test "x$enable_singularity" = "xyes"; then
+       echo '    'Singularity............... : enabled
+    else
+       echo '    'Singularity............... : disabled
     fi
 
 echo    User Environment:

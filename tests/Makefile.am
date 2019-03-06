@@ -34,9 +34,7 @@ if OOB_ENABLED
    SUBDIRS += oob
 endif
 
-if SINGULARITY_ENABLED
-   SUBDIRS += runtimes/singularity
-endif
+
 
 if SPACK_ENABLED
    SUBDIRS += admin/spack
@@ -59,6 +57,10 @@ endif
 
 if MODULES_ENABLED
    SUBDIRS += modules 
+endif
+
+if SINGULARITY_ENABLED
+   SUBDIRS += runtimes/singularity
 endif
 
 if USERENV_ENABLED
