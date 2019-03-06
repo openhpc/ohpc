@@ -15,7 +15,7 @@
 
 This stack provides a variety of common, pre-built ingredients required to
 deploy and manage an HPC Linux cluster including provisioning tools, resource
-management, I/O clients, runtimes, development tools, and a variety of
+management, I/O clients, runtimes, development tools, containers, and a variety of
 scientific libraries.
 
 The compatible OS version(s) for this release and the total number of
