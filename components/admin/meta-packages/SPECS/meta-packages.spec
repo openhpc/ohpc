@@ -20,7 +20,7 @@
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 1.3.6
+Version: 1.3.7
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
@@ -68,6 +68,7 @@ Requires:  sudo
 %if 0%{?centos_version} || 0%{?rhel_version}
 Requires:  binutils
 Requires:  binutils-devel
+Requires:  libseccomp
 Requires:  man-db
 Requires:  yum-utils
 %endif
