@@ -9,7 +9,8 @@ dry_run=True  # do not make changes to OBS, just do a dry-run
 [groups]
 # used to identify where components reside in ohpc Github repo
 admin         = ["clustershell","conman","docs","examples","ganglia","genders","lmod-defaults","lmod",
-	         "losf","mrsh","nagios","nagios-plugins","ndoutils","nhc","nrpe","pdsh","prun","test-suite"]
+	         "losf","meta-packages","mrsh","nagios","nagios-plugins","ndoutils","nhc","nrpe","pdsh",
+		 "prun","test-suite"]
 dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","python-mpi4py","python-numpy",
 	         "python-scipy","spack","valgrind"]
 io-libs       = ["hdf5","netcdf","netcdf-fortran","phdf5","pnetcdf"]
@@ -35,11 +36,11 @@ mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 # define (standalone) component packages
 standalone = ["charliecloud","cmake","conman","docs","easybuild","gnu-compilers","hwloc",
-	      "lmod","lustre-client","nagios","pbspro","pmix","singularity","slurm",
+	      "lmod","lustre-client","meta-packages","nagios","pbspro","pmix","singularity","slurm",
 	      "spack","test-suite","valgrind"]
 
 # define (compiler dependent) packages
-compiler_dependent = ["likwid","mpich","openblas","openmpi","R","plasma"]
+compiler_dependent = ["likwid","mpich","openblas","openmpi","R"]
 
 # overdefault compiler families for any desired components
 R_compiler=["gnu8"]
