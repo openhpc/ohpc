@@ -61,6 +61,7 @@ Requires: squashfs
 BuildRequires: golang > 1.6
 Requires: squashfs-tools
 %endif
+#!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
