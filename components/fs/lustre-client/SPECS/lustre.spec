@@ -22,7 +22,7 @@
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
 
-%define sles_kernel 4.4.73-5-default
+%define sles_kernel 4.12.14-94.41-default
 %define kdir /lib/modules/%{sles_kernel}/source/
 %define kobjdir /lib/modules/%{sles_kernel}/build/
 %endif
