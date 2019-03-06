@@ -99,7 +99,7 @@ cd $GOPATH/%{singgopath}/builddir
 
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 make DESTDIR=$RPM_BUILD_ROOT install man
-chmod 644 $RPM_BUILD_ROOT%{_sysconfdir}/singularity/actions/*
+chmod 644 $RPM_BUILD_ROOT%{install_path}/etc/singularity/actions/*
 
 # NO_BRP_CHECK_RPATH has no effect on CentOS 7
 export NO_BRP_CHECK_RPATH=true
