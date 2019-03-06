@@ -145,7 +145,7 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%doc %{singgopath}/examples %{singopath}/*.md
+%doc singularity-ohpc-3.1.0/%{singgopath}/examples singularity-ohpc-3.1.0/%{singopath}/*.md
 %attr(0644, root, root) %config(noreplace) %{install_path}/etc/singularity/*
 %{OHPC_PUB}
 #SUID programs
