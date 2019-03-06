@@ -42,6 +42,15 @@ FFLAGS="-I ${SUPERLU_DIST_INC} ${FFLAGS}"
 LDFLAGS="-L${METIS_LIB} -L${SUPERLU_DIST_LIB} -L${SCALAPACK_LIB} -L${OPENBLAS_LIB} -lmetis -lsuperlu_dist -lscalapack -lopenblas ${LDFLAGS}"
 fi
 
+# check if using OpenMPI
+AC_MSG_CHECKING([if using OpenMPI variant])
+if ( sh -c "echo $LMOD_FAMILY_MPI" | grep -q openmpi ); then
+   AC_MSG_RESULT([yes])
+   LDFLAGS="${LDFLAGS} -lmpi_cxx"
+else
+   AC_MSG_RESULT([no])
+fi
+
 
 # Set subdirectories
 AC_CONFIG_FILES(Makefile tests/Makefile)

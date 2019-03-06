@@ -10,7 +10,7 @@ check_PROGRAMS               += superlu_mod
 superlu_mod_SOURCES           = superlu_mod.f90
 superlu_mod_FCFLAGS           = -c
 
-LIBS = -lstdc++ -lmpi_cxx
+LIBS = -lstdc++
 
 check_PROGRAMS               += pddrive
 pddrive_SOURCES               = pddrive.c dcreate_matrix.c
