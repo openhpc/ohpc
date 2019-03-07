@@ -112,11 +112,3 @@ check_rms
     fi 
 }
 
-@test "[$testname] Sample job ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -x "ex1f" ];then
-        flunk "ex1f binary not available"
-    fi
-
-    run_mpi_binary ./ex1f "atest" 1 1
-    assert_success
-}
