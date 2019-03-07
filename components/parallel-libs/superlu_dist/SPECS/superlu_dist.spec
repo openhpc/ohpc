@@ -31,6 +31,7 @@ Source2:        superlu_dist-make.inc
 Source3:        superlu_dist-intel-make.inc
 Source4:        superlu_dist-arm-make.inc
 Patch1:         superlu_dist-parmetis.patch
+Patch2:         noexamples.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -73,6 +74,9 @@ solutions.
 %prep
 %setup -q -n SuperLU_DIST_%{version}
 %patch1 -p1
+# disable build of examples which don't get installed (karl@ices.utexas.edu - 3/6/19)
+%patch2 -p0
+
 %if "%{compiler_family}" == "intel"
 cp %SOURCE3 make.inc
 %else
