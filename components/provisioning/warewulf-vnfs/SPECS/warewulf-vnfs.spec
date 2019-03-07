@@ -45,6 +45,8 @@ Patch8: warewulf-vnfs.centos_aarch64.patch
 Patch9: warewulf-vnfs.bootstrap.msr.patch
 # 05/14/18 reese.baird@intel.com - create /dev/urandom in chroot for centos7
 Patch10: warewulf-vnfs.urandom-chroot.patch
+### merged upstream -- remove in 3.8.2
+Patch11: warewulf-vnfs.nvme.patch
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: pigz
@@ -86,6 +88,7 @@ cd %{dname}
 %endif
 %patch9 -p1
 %patch10 -p1
+%patch11 -p2
 
 
 %build

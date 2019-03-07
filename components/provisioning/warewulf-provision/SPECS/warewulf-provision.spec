@@ -58,6 +58,8 @@ Patch5: warewulf-provision.ppc64le.patch
 Patch6: warewulf-provision.pxe_file_modes.patch
 Patch7: warewulf-provision.sles_tftpboot.patch
 Patch8: warewulf-provision.wwgetfiles.patch
+### merged upstream -- remove in 3.8.2
+Patch9: warewulf-provision.nvme.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -158,6 +160,7 @@ cd %{dname}
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p2
 
 %build
 cd %{dname}
