@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-compilers-devel
-%define year 2018
+%define year 2019
 
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
@@ -222,9 +222,6 @@ done
 if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
     %{__cp} -p %{OHPC_MODULES}/intel/.manifest %{_localstatedir}/lib/rpm-state/ohpc-manifest
 fi
-
-ls -l %{OHPC_MODULES}/intel/${version}
-cat %{OHPC_MODULES}/intel/.manifest
 
 %postun
 
