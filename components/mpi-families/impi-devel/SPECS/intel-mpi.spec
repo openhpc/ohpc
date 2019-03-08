@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-mpi-devel
-%define year 2018
+%define year 2019
 %global gnu_major_ver 8
 
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
