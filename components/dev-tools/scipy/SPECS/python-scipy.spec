@@ -25,7 +25,7 @@ Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname scipy
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.1.0
+Version:        1.2.1
 Release:        1%{?dist}
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
