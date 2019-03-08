@@ -84,12 +84,13 @@ function set_variable () {
 
 function launch_impi () {
     if [ $MODE == "native" ];then
-        LAUNCHER="mpiexec.hydra"
-        verify_launcher_avail $LAUNCHER
 
 	if [ ${RM} == "slurm" ];then
-            cmd="$LAUNCHER -bootstrap slurm $@"
+	    cmd="srun --mpi=pmi2 $@"
 	elif [ ${RM} == "pbspro" ];then
+            LAUNCHER="mpiexec.hydra"
+            verify_launcher_avail $LAUNCHER
+
 	    cmd="$LAUNCHER -rmk pbs $@"
 	fi
 
