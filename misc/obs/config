@@ -20,7 +20,7 @@ serial-libs   = ["R","openblas","plasma"]
 parallel-libs = ["boost","hypre","opencoarrays","petsc","slepc","superlu_dist"]
 perf-tools    = ["dimemas","extrae","likwid","scorep","tau"]
 
-compiler-families=["gnu-compilers"]
+compiler-families=["gnu-compilers","intel-compilers-devel"]
 mpi-families=["mpich","mvapich2","openmpi"]
 
 
@@ -35,7 +35,7 @@ compiler_families=["gnu8","intel"]
 mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 # define (standalone) component packages
-standalone = ["charliecloud","cmake","conman","docs","easybuild","gnu-compilers","hwloc",
+standalone = ["charliecloud","cmake","conman","docs","easybuild","gnu-compilers","hwloc","intel-compilers-devel",
 	      "lmod","losf","lustre-client","meta-packages","nagios","pbspro","pmix","singularity","slurm",
 	      "spack","test-suite","valgrind"]
 
