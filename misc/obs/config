@@ -36,7 +36,7 @@ mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 # define (standalone) component packages
 standalone = ["charliecloud","cmake","conman","docs","easybuild","gnu-compilers","hwloc","intel-compilers-devel",
-	      "lmod","losf","lustre-client","meta-packages","nagios","pbspro","pmix","singularity","slurm",
+	      "lmod","losf","lustre-client","meta-packages","nagios","pbspro","pmix","prun","singularity","slurm",
 	      "spack","test-suite","valgrind"]
 
 # define (compiler dependent) packages
