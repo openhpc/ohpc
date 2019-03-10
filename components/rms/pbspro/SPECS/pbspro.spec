@@ -167,11 +167,14 @@ Requires: python >= 2.6
 Requires: python < 3.0
 %if %{defined suse_version}
 Requires: libhwloc5
+Requires: net-tools
+%else
+Requires: hostname
 %endif
 %if 0%{?rhel} >= 7
 Requires: hwloc-libs
 %endif
-Requires: hostname
+
 Autoreq: 1
 
 %description -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
