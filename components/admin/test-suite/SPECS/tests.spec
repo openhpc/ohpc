@@ -27,6 +27,9 @@ BuildRequires:  automake%{PROJ_DELIM}
 Requires(pre):  shadow
 %endif
 
+%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+Requires(pre):  shadow-utils
+%endif
 
 %define testuser ohpc-test
 
