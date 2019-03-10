@@ -52,12 +52,14 @@ BuildRequires:      perl
 BuildRequires:      fdupes
 BuildRequires:      libapr1-devel
 BuildRequires:      libexpat-devel
+Requires(pre):      shadow
 # Can't find memcached built for SLES
 #BuildRequires:      php5-memcached
 %else
 BuildRequires:      apr-devel >= 1
 BuildRequires:      expat-devel
 BuildRequires:      libmemcached-devel
+Requires(pre):      shadow-utils
 %endif
 %if 0%{?suse_version} >= 1210
 BuildRequires: systemd-rpm-macros
