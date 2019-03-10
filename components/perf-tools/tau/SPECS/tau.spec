@@ -98,8 +98,8 @@ export fcomp=gfortran
 %endif
 
 %if %{mpi_family} == impi
-export MPI_INCLUDE_DIR=$I_MPI_ROOT/include64
-export MPI_LIB_DIR=$I_MPI_ROOT/lib64
+export MPI_INCLUDE_DIR=$I_MPI_ROOT/intel64/include
+export MPI_LIB_DIR=$I_MPI_ROOT/intel64/lib
 %else
 export MPI_INCLUDE_DIR=$MPI_DIR/include
 export MPI_LIB_DIR=$MPI_DIR/lib
