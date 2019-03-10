@@ -23,7 +23,11 @@ ARGS=8
     if echo "$LMOD_FAMILY_MPI" | grep -q mvapich ; then
 	export MV2_ENABLE_AFFINITY=0
     fi
+
+    if [ "$LMOD_FAMILY_MPI" != "impi" ];then
     
-    run_mpi_binary ./hello "" $NODES $TASKS
-    assert_success
+	run_mpi_binary ./hello "" $NODES $TASKS
+	assert_success
+    fi
+
 }
