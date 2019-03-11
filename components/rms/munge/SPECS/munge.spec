@@ -53,6 +53,8 @@ Patch1:     %{pname}.logdir.patch
 Patch2:     %{pname}.initd.patch
 # 11/10/14 karl.w.schulz@intel.com - enable systemd-based startup
 Patch3:     %{pname}.service.patch
+# 2019-03-11 janne.blomqvist@aalto.fi - Enable syslog
+Patch4:     %{pname}.syslog.patch
 
 %if 0%{?suse_version} >= 1230
 Requires(pre):	shadow

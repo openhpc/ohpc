@@ -1,0 +1,11 @@
+--- src/etc/munge.service.in
++++ src/etc/munge.service.in
+@@ -6,7 +6,7 @@ After=time-sync.target
+ 
+ [Service]
+ Type=forking
+-ExecStart=@sbindir@/munged
++ExecStart=@sbindir@/munged --syslog
+ PIDFile=@localstatedir@/run/munge/munged.pid
+ User=munge
+ Group=munge
