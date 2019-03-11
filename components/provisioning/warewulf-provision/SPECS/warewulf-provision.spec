@@ -28,6 +28,7 @@ URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
+Requires: warewulf-initramfs-%{_arch}{%PROJ_DELIM} = %{version}-%{release}
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
