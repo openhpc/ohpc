@@ -237,8 +237,8 @@ to execute, followed by any arguments including "%h", "%u", and
 %package   -n pdsh-mod-genders%{PROJ_DELIM}
 Summary:   Provides libgenders support for pdsh
 Group:     System Environment/Base
-Requires:  genders >= 1.1
-BuildRequires: genders
+Requires:  genders%{PROJ_DELIM} >= 1.1
+BuildRequires: genders%{PROJ_DELIM}
 Conflicts: pdsh-mod-nodeattr
 Conflicts: pdsh-mod-machines
 %description -n pdsh-mod-genders%{PROJ_DELIM}
