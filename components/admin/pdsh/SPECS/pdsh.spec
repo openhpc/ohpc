@@ -131,7 +131,8 @@ Patch1:    pdsh-slurm-list.patch
 %{?_with_readline:BuildRequires: readline-devel}
 %{?_with_readline:BuildRequires: ncurses-devel}
 %{?_with_nodeupdown:BuildRequires: whatsup}
-%{?_with_genders:BuildRequires: genders > 1.0}
+#%{?_with_genders:BuildRequires: genders > 1.0}
+#BuildRequires: genders > 1.0
 %{?_with_pam:BuildRequires: pam-devel}
 %{?_with_slurm:BuildRequires: slurm-devel%{PROJ_DELIM}}
 %{?_with_torque:BuildRequires: torque-devel}
@@ -233,13 +234,14 @@ The command executed for each host is built from the pdsh
 to execute, followed by any arguments including "%h", "%u", and
 "%n", which are the remote target, username, and rank respectively.
 
-%package   mod-genders
+%package   -n pdsh-mod-genders%{PROJ_DELIM}
 Summary:   Provides libgenders support for pdsh
 Group:     System Environment/Base
 Requires:  genders >= 1.1
+BuildRequires: genders
 Conflicts: pdsh-mod-nodeattr
 Conflicts: pdsh-mod-machines
-%description mod-genders
+%description -n pdsh-mod-genders%{PROJ_DELIM}
 Pdsh module for libgenders functionality.
 
 %package   mod-nodeattr
@@ -401,6 +403,11 @@ find ${RPM_BUILD_ROOT}
 # {OHPC_PUB}/share/doc/%{pname}
 %doc AUTHORS
 
+%endif
+
+%if %{?_with_genders:1}%{!?_with_genders:0}
+%files -n pdsh-mod-genders%{PROJ_DELIM}
+%{install_path}/lib/pdsh/genders.*
 %endif
 
 %if %{?_with_slurm:1}%{!?_with_slurm:0}
