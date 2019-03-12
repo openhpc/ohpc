@@ -396,6 +396,7 @@ find ${RPM_BUILD_ROOT}
 %{_bindir}/dshbak
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
+%exclude %{install_path}/lib/pdsh/genders.*
 %exclude %{install_path}/lib/pdsh/slurm.*
 
 %if 0%{?OHPC_BUILD}
