@@ -106,6 +106,7 @@ A shared library for applications using MUNGE.
 %patch1
 %patch2
 %patch3
+%patch4
 
 %build
 ##
