@@ -33,6 +33,10 @@ rolling updates are pre-configured.
 
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*)  (*\upgrade*) "*-ohpc"
+
+# Any new Base OS provided dependencies can be installed by
+# updating the ohpc-base metapackage
+[sms](*\#*)  (*\upgrade*) "ohpc-base"
 \end{lstlisting}
   
 \iftoggleverb{isWarewulf}
@@ -53,6 +57,10 @@ install this package on the SMS node.
 
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*)  (*\chrootupgrade*) "*-ohpc"
+
+# Any new compute-node Base OS provided dependencies can be installed by
+# updating the ohpc-base-compute metapackage
+[sms](*\#*)  (*\chrootupgrade*) "ohpc-base-compute"
 \end{lstlisting}
   
 \item Rebuild image(s)
