@@ -1,9 +1,6 @@
+### <img src="https://github.com/openhpc/ohpc/blob/master/docs/recipes/install/common/figures/ohpc_logo.png" width="170" valign="middle" hspace="5" alt="OpenHPC"/>
 
----
-
-### OpenHPC: Community building blocks for HPC systems. (v1.3.7)
-
----
+#### Community building blocks for HPC systems (v1.3.7)
 
 [![Components](https://img.shields.io/badge/components%20available-88-green.svg) ](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.7)
 [![Updates](https://img.shields.io/badge/updates-43%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.7.GA)
