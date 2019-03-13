@@ -47,4 +47,5 @@ echo "-------------------------------------------------------"
     run_serial_binary ch-run -w $image_dir/img -- cat /etc/os-release
     assert_success
 
+    rm -rf $image_dir/img
 }
