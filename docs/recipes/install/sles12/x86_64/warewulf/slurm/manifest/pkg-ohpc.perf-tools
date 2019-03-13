@@ -62,7 +62,7 @@ mpiP-intel-mvapich2-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP
 mpiP-intel-openmpi-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-intel-openmpi3-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
 msr-safe-ohpc 1.2.0 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
-msr-safe-ohpc-kmp-default 1.2.0_k4.12.14_94.41 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
+msr-safe-ohpc-kmp-default 1.2.0\_k4.12.14\_94.41 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
 paraver-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
 papi-ohpc 5.6.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 pdtoolkit-gnu-ohpc 3.25 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
