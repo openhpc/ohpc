@@ -1,8 +1,8 @@
-EasyBuild-ohpc 3.7.1 http://easybuilders.github.io/easybuild ohpc/dev-tools Build and installation framework
+EasyBuild-ohpc 3.8.1 http://easybuilders.github.io/easybuild ohpc/dev-tools Build and installation framework
 automake-ohpc 1.16.1 http://www.gnu.org/software/automake/ ohpc/dev-tools A GNU tool for automatically creating Makefiles
 autoconf-ohpc 2.69 http://www.gnu.org/software/autoconf/ ohpc/dev-tools A GNU tool for automatically configuring source code
-cmake-ohpc 3.12.2 https://cmake.org/ ohpc/dev-tools CMake is an open-source, cross-platform family of tools designed to build, test and package software.
-hwloc-ohpc 1.11.10 http://www.open-mpi.org/projects/hwloc/ ohpc/dev-tools Portable Hardware Locality
+cmake-ohpc 3.13.4 https://cmake.org/ ohpc/dev-tools CMake is an open-source, cross-platform family of tools designed to build, test and package software.
+hwloc-ohpc 2.0.3 http://www.open-mpi.org/projects/hwloc/ ohpc/dev-tools Portable Hardware Locality
 libtool-ohpc 2.4.6 http://www.gnu.org/software/libtool/ ohpc/dev-tools The GNU Portable Library Tool
 python-scipy-gnu-mpich-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu-openmpi-ohpc 0.19.1 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
@@ -28,5 +28,5 @@ python3-mpi4py-gnu7-mpich-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/de
 python3-mpi4py-gnu7-openmpi3-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3-mpi4py-gnu8-mpich-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python3-mpi4py-gnu8-openmpi3-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
-spack-ohpc 0.11.2 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
-valgrind-ohpc 3.13.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger
+spack-ohpc 0.12.1 https://github.com/LLNL/spack ohpc/dev-tools HPC software package management
+valgrind-ohpc 3.14.0 http://www.valgrind.org/ ohpc/dev-tools Valgrind Memory Debugger

@@ -387,6 +387,7 @@ paraver-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
 pbspro-client-ohpc 19.1.1 https://github.com/PBSPro/pbspro ohpc/rms PBS Professional for a client host
 pbspro-execution-ohpc 19.1.1 https://github.com/PBSPro/pbspro ohpc/rms PBS Professional for an execution host
 pbspro-server-ohpc 19.1.1 https://github.com/PBSPro/pbspro ohpc/rms PBS Professional for a server host
+pdsh-mod-genders-ohpc 2.33 https://github.com/chaos/pdsh System Environment/Base Provides libgenders support for pdsh
 pdsh-mod-slurm-ohpc 2.33 https://github.com/chaos/pdsh System Environment/Base Provides support for running pdsh under SLURM allocations
 pdsh-ohpc 2.33 https://github.com/chaos/pdsh ohpc/admin Parallel remote shell program
 pdtoolkit-gnu-ohpc 3.25 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
