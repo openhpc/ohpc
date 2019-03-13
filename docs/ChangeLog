@@ -4,13 +4,13 @@ Version 1.3.7 (March 2019)
 
 [Important Highlights/Notices]
 
-  * The provided SLURM builds have been updated to the 18.08 release series. Please see the SLURM release notes at
+  * SLURM builds in this release have been updated to the v18.08 series. Please see the SLURM release notes at
     https://github.com/SchedMD/slurm/blob/slurm-18.08/RELEASE_NOTES for details on upgrade procedures from previous
     versions; in particular, sites leveraging slurmdbd are advised to update this component first.
 
-  * CI testing for this release with newer versions of Intel MPI (2019.x) found that MPI applications linked against
-    these versions may no longer execute outside of the resource manager. If observed locally, users are advised to try
-    setting the following environment variable as highlighted in the following discussion:
+  * CI testing during this release found that MPI applications linked against newer versions of Intel MPI (2019.x) may
+    no longer execute outside of the resource manager. If observed locally, users are advised to try setting the
+    following environment variable as highlighted in this online discussion:
     https://software.intel.com/en-us/forums/intel-clusters-and-hpc-technology/topic/799716.
 
     $ export FI_PROVIDER=sockets
@@ -33,7 +33,7 @@ Version 1.3.7 (March 2019)
   * enable support for NVME devices in Warewulf provisioning (https://github.com/openhpc/ohpc/issues/890)
   * update ganglia dependency to call out shadow/shadow-utils (https://github.com/openhpc/ohpc/issues/938)
   * update munge startup configuration to write to syslog (https://github.com/openhpc/ohpc/issues/943)
-  * variety of component version updates and other additions highlighted below
+  * variety of component version updates highlighted below:
 
 [Component Version Changes]
 
