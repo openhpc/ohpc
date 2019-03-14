@@ -50,13 +50,13 @@ for mirroring the OpenHPC repositories with rsync can be found in the
 
 #### Architecture = (aarch64)
 
-###### [CentOS 7.5]
+###### [CentOS 7.6]
 * [Latest version of 'ohpc-release' for EL7](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.6.GA/Install_guide-CentOS7-Warewulf-PBSPro-1.3.6-aarch64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.6.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.6-aarch64.pdf)
 * [Tar Archive](http://build.openhpc.community/dist/1.3.6/OpenHPC-1.3.6.CentOS_7.aarch64.tar) mirror of yum repository (md5sum=54514a57246e95458ed44370769f6f18)
 
-###### [SLES 12 SP3]
+###### [SLES 12 SP4]
 * [Latest version of 'ohpc-release' for SLE_12](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.aarch64.rpm) (md5sum=706a42f7785952f8b543c501eeec05da)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.6.GA/Install_guide-SLE_12-Warewulf-PBSPro-1.3.6-aarch64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.6.GA/Install_guide-SLE_12-Warewulf-SLURM-1.3.6-aarch64.pdf)
@@ -66,7 +66,7 @@ for mirroring the OpenHPC repositories with rsync can be found in the
 
 #### Architecture = (x86_64)
 
-###### [CentOS 7.5]
+###### [CentOS 7.6]
 * [Latest version of 'ohpc-release' for EL7](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm) (md5sum=d5139cf3aa83d095e6851628e8a684fa)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.6.GA/Install_guide-CentOS7-Warewulf-PBSPro-1.3.6-x86_64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.6.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.6-x86_64.pdf)
@@ -74,7 +74,7 @@ for mirroring the OpenHPC repositories with rsync can be found in the
 * [Install Guide (with xCAT (Stateful) + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.6.GA/Install_guide-CentOS7-xCAT-Stateful-SLURM-1.3.6-x86_64.pdf)
 * [Tar Archive](http://build.openhpc.community/dist/1.3.6/OpenHPC-1.3.6.CentOS_7.x86_64.tar) mirror of yum repository (md5sum=372ee487e7cf7d58c495b31b5f58638f)
 
-###### [SLES 12 SP3]
+###### [SLES 12 SP4]
 * [Latest version of 'ohpc-release' for SLE_12](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.x86_64.rpm) (md5sum=0a5954a9520e067aeb09e5377e9964a2)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.6.GA/Install_guide-SLE_12-Warewulf-PBSPro-1.3.6-x86_64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.6.GA/Install_guide-SLE_12-Warewulf-SLURM-1.3.6-x86_64.pdf)
