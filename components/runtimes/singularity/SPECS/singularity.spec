@@ -73,7 +73,7 @@ containers that can be used across host environments.
 %prep
 # Create our build root
 rm -rf %{name}-%{version}
-mkdir %{name}-%{version} 
+mkdir %{name}-%{version}
 
 %build
 cd %{name}-%{version}
@@ -147,7 +147,13 @@ EOF
 
 %files
 %doc singularity-ohpc-3.1.0/gopath/%{singgopath}/examples singularity-ohpc-3.1.0/gopath/%{singgopath}/*.md
-%attr(0644, root, root) %config(noreplace) %{install_path}/etc/singularity/*
+%dir %{install_path}/etc/singularity
+%config(noreplace) %{install_path}/etc/singularity/*
+%attr(755, root, root) %{install_path}/etc/singularity/actions/exec
+%attr(755, root, root) %{install_path}/etc/singularity/actions/run
+%attr(755, root, root) %{install_path}/etc/singularity/actions/shell
+%attr(755, root, root) %{install_path}/etc/singularity/actions/start
+%attr(755, root, root) %{install_path}/etc/singularity/actions/test
 %{OHPC_PUB}
 #SUID programs
 %attr(4755, root, root) %{install_path}/libexec/singularity/bin/starter-suid
