@@ -10,12 +10,13 @@
 
 # OpenBLAS build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
+%define ohpc_uarch_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
 %define pname openblas
 
-Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
+Name:           %{pname}-%{compiler_family}%{UARCH_DELIM}%{PROJ_DELIM}
 Version:        0.3.5
 Release:        1%{?dist}
 Summary:        An optimized BLAS library based on GotoBLAS2
@@ -34,7 +35,7 @@ ExclusiveArch:  %ix86 ia64 ppc ppc64 ppc64le x86_64 aarch64
 OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}%{UARCH_DELIM}/%version
 
 %prep
 %setup -q -n OpenBLAS-%{version}
@@ -53,7 +54,11 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %endif
 # Temporary fix, OpenBLAS does not autodetect aarch64
 %ifarch aarch64
+%if "%{uarch}" == "tx2"
+%define openblas_target TARGET=THUNDERX2T99 NUM_THREADS=256
+%else
 %define openblas_target TARGET=ARMV8 NUM_THREADS=256
+%endif
 %define nbjobs_option MAKE_NB_JOBS=4
 %endif
 
@@ -79,8 +84,8 @@ sed -i 's|%{buildroot}||g' %{buildroot}%{install_path}/lib/pkgconfig/openblas.pc
 rm -f %{buildroot}%{install_path}/lib/*a
 
 # OpenHPC module file
-%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}%{UARCH_DELIM}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}%{UARCH_DELIM}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -109,10 +114,10 @@ setenv          %{PNAME}_INC        %{install_path}/include
 family "openblas"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}%{UARCH_DELIM}/.version.%{version}
 #%Module1.0#####################################################################
 ##
-## version file for %{pname}-%{version}
+## version file for %{pname}%{UARCH_DELIM}-%{version}
 ##
 set     ModulesVersion      "%{version}"
 EOF
