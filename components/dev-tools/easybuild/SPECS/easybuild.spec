@@ -13,12 +13,12 @@
 # Base package name
 %define pname easybuild
 
-%define vsc_base_ver 2.8.3
+%define vsc_base_ver 2.8.4
 %define vsc_install_ver 0.11.3
 
 Summary:   Build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   3.8.1
+Version:   3.9.0
 Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
