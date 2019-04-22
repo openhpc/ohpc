@@ -15,7 +15,7 @@
 
 Summary:   Performance Application Programming Interface
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.6.0
+Version:   5.7.0
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
