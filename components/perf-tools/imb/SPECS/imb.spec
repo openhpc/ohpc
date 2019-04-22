@@ -16,6 +16,9 @@
 # Base package name
 %define pname imb
 
+# Version prefix used by github packaging
+%define vprefix IMB-v
+
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   2019.2
@@ -23,10 +26,7 @@ Release:   1%{?dist}
 License:   CPL
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
-Source0:   https://github.com/intel/mpi-benchmarks/archive/IMB-v%{version}.tar.gz
-
-# OpenHPC patches
-Patch1: imb.cc.patch
+Source0:   https://github.com/intel/mpi-benchmarks/archive/%{vprefix}%{version}.tar.gz
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -37,19 +37,18 @@ measurements for point-to-point and global communication operations for
 a range of message sizes.
 
 %prep
-%setup -n mpi-benchmarks-%{version}
+%setup -n mpi-benchmarks-%{vprefix}%{version}
 
-# OpenHPC patches
-%patch1 -p0
 
 %build
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-cd src
-make all
-cd -
+export CC=mpicc
+export CXX=mpicxx
+
+make 
 
 %install
 
@@ -57,13 +56,13 @@ cd -
 %ohpc_setup_compiler
 
 %{__mkdir} -p %{buildroot}%{install_path}/bin
-cd src
 cp IMB-EXT  %{buildroot}%{install_path}/bin/.
 cp IMB-IO   %{buildroot}%{install_path}/bin/.
 cp IMB-MPI1 %{buildroot}%{install_path}/bin/.
 cp IMB-NBC  %{buildroot}%{install_path}/bin/.
 cp IMB-RMA  %{buildroot}%{install_path}/bin/.
-cd -
+cp IMB-P2P  %{buildroot}%{install_path}/bin/.
+cp IMB-MT   %{buildroot}%{install_path}/bin/.
 
 
 
