@@ -31,7 +31,7 @@ Version:   2.3
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
-URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
+URL:       http://mvapich.cse.ohio-state.edu
 Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
 
 # karl.w.schulz@intel.com (04/13/2016)
