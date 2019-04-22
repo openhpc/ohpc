@@ -44,7 +44,7 @@ Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
 Group: %{PROJ_NAME}/runtimes
-URL: http://singularity.lbl.gov/
+URL: https://www.sylabs.io/singularity/
 Source0: https://github.com/sylabs/singularity/releases/download/v%{version}/%{pname}-%{version}.tar.gz
 Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
