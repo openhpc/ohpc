@@ -23,7 +23,7 @@ Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
 Group:          %{PROJ_NAME}/parallel-libs
-Url:            http://trilinos.sandia.gov/index.html
+Url:            https://trilinos.org/
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
 BuildRequires:  cmake%{PROJ_DELIM}
