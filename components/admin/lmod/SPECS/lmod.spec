@@ -39,7 +39,7 @@ BuildRequires: lua-filesystem%{PROJ_DELIM}
 BuildRequires: lua-posix%{PROJ_DELIM}
 
 BuildRequires: rsync
-BuildRequires: tcl
+BuildRequires: tcl tcl-devel
 
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires: procps
