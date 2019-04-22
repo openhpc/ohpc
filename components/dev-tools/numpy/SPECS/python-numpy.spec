@@ -24,7 +24,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        1.15.3
 Release:        1%{?dist}
-Url:            http://sourceforge.net/projects/numpy
+Url:            https://github.com/numpy/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
