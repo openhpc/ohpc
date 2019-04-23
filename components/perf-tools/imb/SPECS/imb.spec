@@ -48,7 +48,7 @@ a range of message sizes.
 export CC=mpicc
 export CXX=mpicxx
 
-make 
+make all
 
 %install
 
