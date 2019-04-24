@@ -38,8 +38,8 @@ Simple example.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-%{configure}
-make prefix=%{install_path}
+%{configure} --prefix=%{install_path}
+make
 
 %install
 # OpenHPC compiler/mpi designation
