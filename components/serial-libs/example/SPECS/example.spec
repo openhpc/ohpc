@@ -22,6 +22,7 @@ Release: 1%{?dist}
 License: Apache License 2.0
 Group:   %{PROJ_NAME}/serial-libs
 URL:     https://github.com/shanecelis/amhello
+Source:  amhello-%{version}.tar.gz
 BuildRequires: make
 BuildRequires: pkgconfig
 
