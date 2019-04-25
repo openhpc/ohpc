@@ -43,6 +43,10 @@ Patch1:         boost_fenv_suse.patch
 # https://github.com/boostorg/mpi/pull/81
 Patch2:        https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.69-mpi-c_data.patch
 
+# optflag patch from Fedora
+Patch3: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-bjam-build-flags.patch
+Patch4: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-build-optflags.patch
+
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
@@ -95,6 +99,10 @@ see the boost-doc package.
 %endif
 %patch2 -p2
 
+# optflag patches from Fedora
+%patch3 -p1
+%patch4 -p1
+
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
@@ -119,19 +127,26 @@ export MPIFC=mpifc
 export MPICXX=mpicxx
 %endif
 
+export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
+export RPM_LD_FLAGS
+
+cat << "EOF" >> user-config.jam
+%if "%{compiler_family}" == "gnu8"
+import os ;
+local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
+local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
+using gcc : : : <compileflags>$(RPM_OPT_FLAGS) <linkflags>$(RPM_LD_FLAGS) ;
+%endif
+%if %build_mpi
+using mpi : mpicxx ;
+%endif
+EOF
 
 LIBRARIES_FLAGS=--with-libraries=all
 ./bootstrap.sh $LIBRARIES_FLAGS --prefix=%{install_path} --with-toolset=${toolset} || cat bootstrap.log
 
-%if %build_mpi
-cat << EOF >>user-config.jam
-using mpi : mpicxx ;
-EOF
-%endif
-
 # perform the compilation
-./b2 %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam
-
+./b2 -d+2 -q %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam
 
 %install
 # OpenHPC compiler/mpi designation
