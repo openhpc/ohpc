@@ -21,9 +21,9 @@
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.69.0
+Version:        1.70.0
 
-%define version_exp 1_69_0
+%define version_exp 1_70_0
 
 Release:        1%{?dist}
 License:        BSL-1.0
