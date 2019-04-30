@@ -8,16 +8,19 @@
 #
 #----------------------------------------------------------------------------eh-
 
+# Don't try to compile python files with /usr/bin/python
+%{?el7:%global __python %__python3}
+
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
 %define pname charliecloud
 
-# libexec path
-%define _libexecdir %{_prefix}/libexec
-
 # Specify python version of a given file
 %define versionize_script() (sed -i 's,/env python,/env% %1,g' %2)
+
+%{!?build_cflags:%global build_cflags $RPM_OPT_FLAGS}
+%{!?build_ldflags:%global build_ldflags %nil}
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
@@ -42,6 +45,9 @@ Requires:  /usr/bin/python3
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
 
+# libexec path
+%define _libexecdir %{install_path}/libexec
+
 %description
 Charliecloud uses Linux user namespaces to run containers with no privileged
 operations or daemons and minimal configuration changes on center resources.
@@ -63,10 +69,10 @@ container image builders such as Docker, Skopeo, and Buildah.
 %{versionize_script python3 test/make-perms-test}
 
 %build
-%{__make} %{?mflags}
+%make_build CFLAGS="%build_cflags -std=c11 -pthread" LDFLAGS="%build_ldflags"
 
 %install
-PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
+%make_install PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make}
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
@@ -123,10 +129,6 @@ instructions visit: https://hpc.github.io/charliecloud/test.html
 EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
-
-%check
-# Don't try to compile python files with /usr/bin/python
-%{?el7:%global __python %__python3}
 
 %files
 %license LICENSE
