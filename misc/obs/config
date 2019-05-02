@@ -18,7 +18,7 @@ runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","pbspro","pmix"]
 serial-libs   = ["R","openblas","plasma"]
 parallel-libs = ["boost","hypre","mumps","opencoarrays","petsc","slepc","superlu_dist"]
-perf-tools    = ["dimemas","extrae","likwid","scorep","tau"]
+perf-tools    = ["dimemas","extrae","likwid","papi","scorep","tau"]
 
 compiler-families=["gnu-compilers","intel-compilers-devel"]
 mpi-families=["mpich","mvapich2","openmpi"]
@@ -61,9 +61,14 @@ skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu"]
 compiler_families=["gnu8","intel"]
 mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
-standalone = ["charliecloud","clustershell","easybuild","lmod"]
+
+standalone = ["charliecloud","clustershell","cmake","easybuild","lmod","papi","slurm","valgrind"]
 
 # define (compiler dependent) packages
-compiler_dependent = ["hdf5","openmpi","mvapich2","likwid"]
+compiler_dependent = ["hdf5","openmpi","mvapich2","likwid","R"]
+
+# overdefault compiler families for any desired components
+R_compiler=["gnu8"]
+>>>>>>> misc: updating obs packages for v1.3.8
 
 mpi_dependent = ["boost","mumps","petsc","phdf5","scorep","slepc"]
