@@ -59,8 +59,8 @@ of your choice.
 %if 0%{?sles_version} || 0%{?suse_version}
 --no-system-librhash \
 --no-system-libuv \
---no-system-jsoncpp \
 %endif
+--no-system-jsoncpp \
 --no-qt-gui \
 --prefix=%{install_path}
 
