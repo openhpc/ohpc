@@ -38,10 +38,9 @@ BuildRequires:  libexpat-devel
 %else
 BuildRequires:  expat-devel
 
-# The following three dependencies on EL7 come from EPEL
+# The following dependencies on EL7 come from EPEL
 BuildRequires:  rhash-devel
 BuildRequires:  libuv-devel >= 1.10
-BuildRequires:  jsoncpp-devel
 %endif
 
 %define install_path %{OHPC_UTILS}/%{pname}/%version
