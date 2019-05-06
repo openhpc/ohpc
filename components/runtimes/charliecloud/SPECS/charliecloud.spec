@@ -8,60 +8,71 @@
 #
 #----------------------------------------------------------------------------eh-
 
+# Don't try to compile python files with /usr/bin/python
+%{?el7:%global __python %__python3}
+
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
 %define pname charliecloud
 
+# Specify python version of a given file
+%define versionize_script() (sed -i 's,/env python,/env% %1,g' %2)
+
+%{!?build_cflags:%global build_cflags $RPM_OPT_FLAGS}
+%{!?build_ldflags:%global build_ldflags %nil}
+
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.9.7
+Version:   0.9.9
 Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
-URL:       https://hpc.github.io/charliecloud/
-Source0:   https://github.com/hpc/charliecloud/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:   ch-build.1
-Source2:   ch-build2dir.1
-Source3:   ch-docker2tar.1
-Source4:   ch-fromhost.1
-Source5:   ch-pull2dir.1
-Source6:   ch-pull2tar.1
-Source7:   ch-run.1
-Source8:   ch-ssh.1
-Source9:   ch-tar2dir.1
-Source10:  charliecloud.1
-Patch1:    charliecloud-language_highlight.patch
-Patch2:    charliecloud-test-build.patch
+URL:       https://hpc.github.io/%{pname}/
+Source0:   https://github.com/hpc/%{pname}/releases/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 
-BuildRequires: python
-BuildRequires: rsync
+BuildRequires: gcc
+BuildRequires: /usr/bin/python3
+
+%package test
+Summary:   Charliecloud examples and test suite
+Requires:  %{name}%{?_isa} = %{version}-%{release}
+Requires:  bats
+Requires:  bash
+Requires:  wget
+Requires:  /usr/bin/python3
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
 
-# Turn off the brp-python-bytecompile script
-%global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
+# libexec path
+%define _libexecdir %{install_path}/libexec
 
 %description
-Charliecloud provides user-defined software stacks (UDSS) for
-high-performance computing (HPC) centers.
+Charliecloud uses Linux user namespaces to run containers with no privileged
+operations or daemons and minimal configuration changes on center resources.
+This simple approach avoids most security risks while maintaining access to
+the performance and functionality already on offer.
+
+Container images can be built using Docker or anything else that can generate
+a standard Linux filesystem tree.
+
+For more information: https://hpc.github.io/charliecloud/
+
+%description test
+Charliecloud test suite and examples. The test suite takes advantage of
+container image builders such as Docker, Skopeo, and Buildah.
 
 %prep
 %setup -q -n %{pname}-%{version}
-find doc-src -type f -print0 | xargs -0 sed -i '/.*:language: docker.*/d'
-%patch1 -p1
-%patch2 -p1
+%{versionize_script python3 test/make-auto}
+%{versionize_script python3 test/make-perms-test}
 
 %build
-%{__make} %{?mflags}
+%make_build CFLAGS="%build_cflags -std=c11 -pthread" LDFLAGS="%build_ldflags"
 
 %install
-PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
-
-# install externally generated man pages
-%{__mkdir} -p %{buildroot}%{install_path}/share/man/man1
-%{__install} -m644 %{_sourcedir}/ch*1 %{buildroot}%{install_path}/share/man/man1
+%make_install PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make}
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
@@ -99,8 +110,41 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+cat > README.EL7 <<EOF
+For RHEL7 you must increase the number of available user namespaces to a non-
+zero number (note the number below is taken from the default for RHEL8):
+
+  echo user.max_user_namespaces=3171 >/etc/sysctl.d/51-userns.conf
+  reboot
+
+Note for versions below RHEL7.6, you will also need to enable user namespaces:
+
+  grubby --args=namespace.unpriv_enable=1 --update-kernel=ALL
+  reboot
+EOF
+
+cat > README.TEST <<EOF
+Charliecloud comes with a fairly comprehensive Bats test suite. For testing
+instructions visit: https://hpc.github.io/charliecloud/test.html
+EOF
+
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%doc LICENSE README.rst examples
+%license LICENSE
+%doc README.rst %{?el7:README.EL7}
+%{_mandir}/man1/ch-*
+%exclude %{_datadir}/doc/%{pname}
+
+# Helper scripts and binaries
+%{_libexecdir}/%{pname}/base.sh
+%{_libexecdir}/%{pname}/version.sh
+%{_bindir}/ch-*
+
 %{OHPC_PUB}
+
+%files test
+%doc README.TEST
+%{_libexecdir}/%{name}/examples
+%{_libexecdir}/%{name}/test
+%exclude %{_datadir}/doc/%{name}
