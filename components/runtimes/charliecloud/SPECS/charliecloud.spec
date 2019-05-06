@@ -39,8 +39,6 @@ BuildRequires: python34
 BuildRequires: python3
 %endif
 
-%package test
-Summary:   Charliecloud examples and test suite
 Requires:  %{name}%{?_isa} = %{version}-%{release}
 Requires:  bats
 Requires:  bash
@@ -49,7 +47,7 @@ Requires:  wget
 Requires:  python34
 %endif
 %if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires: python3
+Requires: python3
 %endif
 
 # Default library install path
@@ -68,10 +66,6 @@ Container images can be built using Docker or anything else that can generate
 a standard Linux filesystem tree.
 
 For more information: https://hpc.github.io/charliecloud/
-
-%description test
-Charliecloud test suite and examples. The test suite takes advantage of
-container image builders such as Docker, Skopeo, and Buildah.
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -141,20 +135,5 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%license LICENSE
-%doc README.rst %{?el7:README.EL7}
-%{_mandir}/man1/ch-*
-%exclude %{_datadir}/doc/%{pname}
-
-# Helper scripts and binaries
-%{_libexecdir}/%{pname}/base.sh
-%{_libexecdir}/%{pname}/version.sh
-%{_bindir}/ch-*
-
+%doc LICENSE README.rst README.TEST %{?el7:README.EL7}
 %{OHPC_PUB}
-
-%files test
-%doc README.TEST
-%{_libexecdir}/%{name}/examples
-%{_libexecdir}/%{name}/test
-%exclude %{_datadir}/doc/%{name}
