@@ -18,12 +18,12 @@
 
 Summary:   Toolset for performance analysis of large-scale parallel applications
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   2.4
+Version:   2.5
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.scalasca.org
-Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/2.4/dist/scalasca-%{version}.tar.gz
+Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/%{version}/dist/scalasca-%{version}.tar.gz
 Requires:  lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 4.0
