@@ -29,7 +29,7 @@ Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://hpc.github.io/%{pname}/
-Source0:   https://github.com/hpc/%{pname}/releases/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
+Source0:   https://github.com/hpc/charliecloud/releases/download/v%{version}/charliecloud-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: /usr/bin/python3
