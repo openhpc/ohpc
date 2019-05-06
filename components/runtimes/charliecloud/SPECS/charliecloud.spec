@@ -79,10 +79,10 @@ container image builders such as Docker, Skopeo, and Buildah.
 %{versionize_script python3 test/make-perms-test}
 
 %build
-%make_build CFLAGS="%build_cflags -std=c11 -pthread" LDFLAGS="%build_ldflags"
+CFLAGS="%build_cflags -std=c11 -pthread" LDFLAGS="%build_ldflags" %{__make} %{?mflags}
 
 %install
-%make_install PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make}
+PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
