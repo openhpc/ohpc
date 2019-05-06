@@ -17,7 +17,7 @@
 %define pname charliecloud
 
 # Specify python version of a given file
-%define versionize_script() (sed -i 's,/env python,/env% %1,g' %2)
+%define versionize_script() (sed -i 's,/env python,/env %1,g' %2)
 
 %{!?build_cflags:%global build_cflags $RPM_OPT_FLAGS}
 %{!?build_ldflags:%global build_ldflags %nil}
