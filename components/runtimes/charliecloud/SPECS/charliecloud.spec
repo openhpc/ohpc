@@ -32,7 +32,12 @@ URL:       https://hpc.github.io/%{pname}/
 Source0:   https://github.com/hpc/charliecloud/releases/download/v%{version}/charliecloud-%{version}.tar.gz
 
 BuildRequires: gcc
-BuildRequires: /usr/bin/python3
+%if 0%{?centos_version} || 0%{?rhel_version}
+BuildRequires: python34
+%endif
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires: python3
+%endif
 
 %package test
 Summary:   Charliecloud examples and test suite
@@ -40,7 +45,12 @@ Requires:  %{name}%{?_isa} = %{version}-%{release}
 Requires:  bats
 Requires:  bash
 Requires:  wget
-Requires:  /usr/bin/python3
+%if 0%{?centos_version} || 0%{?rhel_version}
+Requires:  python34
+%endif
+%if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires: python3
+%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
