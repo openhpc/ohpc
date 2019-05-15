@@ -23,7 +23,7 @@ Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
-Source0:   http://www.vi-hps.org/upload/packages/scorep/scorep-%{version}.tar.gz
+Source0:   http://www.vi-hps.org/cms/upload/packages/scorep/scorep-%{version}.tar.gz
 
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
