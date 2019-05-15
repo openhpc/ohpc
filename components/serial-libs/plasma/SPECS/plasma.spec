@@ -115,3 +115,4 @@ for i in `./plasmatest | tail -n +7` ; do ./plasmatest $i || exit 1; done
 %files
 %{OHPC_PUB}
 %doc LICENSE README.md
+
