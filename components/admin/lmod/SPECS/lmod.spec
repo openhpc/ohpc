@@ -14,11 +14,23 @@
 
 %define pname lmod
 
-%if 0%{?suse_version} <= 1220
-%define luaver 5.1
+%if 0%{?rhel} > 7 || 0%{?suse_version} >= 1500
+%define next_distribution_release 1
 %else
-%define luaver 5.2
+%define next_distribution_release 0
 %endif
+
+%if %{next_distribution_release}
+%define luaver 5.3
+%else
+%if 0%{?suse_version} > 1220 && 0%{?suse_version} < 1500
+%define luaver 5.2
+%else
+%define luaver 5.1
+%endif
+%endif
+
+
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
 %define LUA_CPATH ?.so;?/?.so;%{lualibdir}/?.so
@@ -26,20 +38,42 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   8.0.6
+Version:   8.1.3
 Release:   1%{?dist}
 License:   MIT
 Group:     %{PROJ_NAME}/admin
 Url:       https://github.com/TACC/Lmod
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 
+# Known dependencies
+Requires: lua >= %{luaver}
+Requires: tcl
+
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
-BuildRequires: lua-filesystem%{PROJ_DELIM}
-BuildRequires: lua-posix%{PROJ_DELIM}
-
 BuildRequires: rsync
 BuildRequires: tcl tcl-devel
+
+%if %{next_distribution_release}
+%if 0%{?rhel} > 7
+BuildRequires: lua-filesystem
+BuildRequires: lua-posix
+BuildRequires: procps-ng
+Requires: lua-filesystem
+Requires: lua-posix
+%endif
+%if 0%{?suse_version} >= 1500
+BuildRequires: lua53-luafilesystem
+BuildRequires: lua53-luaposix
+Requires: lua53-luafilesystem
+Requires: lua53-luaposix
+%endif
+%else
+BuildRequires: lua-filesystem%{PROJ_DELIM}
+BuildRequires: lua-posix%{PROJ_DELIM}
+Requires: lua-filesystem%{PROJ_DELIM}
+Requires: lua-posix%{PROJ_DELIM}
+%endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires: procps
@@ -57,14 +91,7 @@ Patch2: lmod.site.patch
 # 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
 %global _default_patch_fuzz 2
 
-# Known dependencies
-Requires: lua >= %{luaver}
-Requires: tcl
-Requires: lua-filesystem%{PROJ_DELIM}
-Requires: lua-posix%{PROJ_DELIM}
-
-
-%description 
+%description
 Lmod: An Environment Module System based on Lua, Reads TCL Modules,
 Supports a Software Hierarchy
 
@@ -77,13 +104,18 @@ Supports a Software Hierarchy
 
 %build
 unset MODULEPATH
+%if !%{next_distribution_release}
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
+%endif
+
 ./configure --prefix=%{OHPC_ADMIN} --libdir=%{lualibdir} --datadir=%{luapkgdir} --with-redirect=yes --with-autoSwap=no
 
 %install
+%if !%{next_distribution_release}
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
+%endif
 make DESTDIR=$RPM_BUILD_ROOT install
 # Customize startup script to suit
 
