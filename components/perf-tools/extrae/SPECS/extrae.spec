@@ -18,13 +18,13 @@
 
 Summary:	Extrae tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	3.5.2
-Release:	3%{?dist}
+Version:	3.7.0
+Release:	1%{?dist}
 License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
-Patch1:     extrae.makefile-destdir.patch
+Patch1:         extrae.makefile-destdir.patch
 
 BuildRequires:	autoconf%{PROJ_DELIM}
 BuildRequires:	automake%{PROJ_DELIM}
