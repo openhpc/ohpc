@@ -37,6 +37,8 @@ URL:		https://slurm.schedmd.com/
 
 Source:		https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
 Source1:        slurm.epilog.clean
+# x11 patch from https://bugs.schedmd.com/show_bug.cgi?id=6785
+Patch1:         x11_util.patch
 
 # build options		.rpmmacros options	change to default action
 # ====================  ====================	========================
@@ -353,6 +355,7 @@ notifies slurm about failed nodes.
 %prep
 # when the rel number is one, the tarball filename does not include it
 %setup -n %{slurm_source_dir}
+%patch1 -p0
 
 %build
 %configure \
