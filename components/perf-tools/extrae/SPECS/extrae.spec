@@ -45,7 +45,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
-patch1 -p0
+%patch1 -p0
 
 %build
 # OpenHPC compiler/mpi designation
