@@ -24,7 +24,7 @@ License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
-Patch1:         extrae.makefile-destdir.patch
+Patch1:         mpicheck.patch
 
 BuildRequires:	autoconf%{PROJ_DELIM}
 BuildRequires:	automake%{PROJ_DELIM}
@@ -45,7 +45,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#patch1 -p1
+patch1 -p0
 
 %build
 # OpenHPC compiler/mpi designation

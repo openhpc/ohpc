@@ -1,0 +1,11 @@
+--- config/mpi-macros.m4~	2018-05-29 09:39:26.000000000 -0500
++++ config/mpi-macros.m4	2019-05-16 12:19:05.829036795 -0500
+@@ -106,6 +106,8 @@
+          dnl Specific for BG/P machine
+          elif test -f "${MPI_LIBSDIR}/libmpich.cnk.a" ; then
+             MPI_LIBS="-lmpich.cnk"
++         elif test -f "${MPI_LIBSDIR}/libmpi_ilp64.so" ; then
++            MPI_LIBS="-lmpi_ilp64"
+          else
+             MPI_LIBS="not found"
+          fi
