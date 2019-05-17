@@ -154,3 +154,8 @@ Requires:      %{python_prefix}
     %endif \
 }
 
+# check if user desires to override modulefile naming with custom delimiter (e.g optimized micro-architecture build)
+
+%global OHPC_CUSTOM_PKG_DELIM %{nil}
+%{?OHPC_CUSTOM_DELIM: %global OHPC_CUSTOM_PKG_DELIM -%{OHPC_CUSTOM_DELIM}}
+%{?OHPC_CUSTOM_DELIM: %global PROJ_DELIM -%{OHPC_CUSTOM_DELIM}%{PROJ_DELIM}}
