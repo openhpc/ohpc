@@ -78,10 +78,6 @@ else
     exit 1
 fi
 
-#----------------------------
-# Set default compiler flags
-#----------------------------
-
 echo " "
 echo "-------------------------------"
 echo "OpenHPC compiler/build flags":
@@ -91,36 +87,46 @@ echo "--> FC       = $FC"
 echo "--> F77      = $F77"
 echo " "
 
-if [ -z "$CFLAGS" ];then
-   if [ "$toolset" == "gcc" ];then
-       export CFLAGS="-O3 -g -pipe -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic"
-       echo "--> CFLAGS   = $CFLAGS"
-   elif [ "$toolset" == "intel" ];then
-       export CFLAGS="-O3 -g -m64 -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic"
-   fi
-else
-    echo "--> CFLAGS (user supplied)  = $CFLAGS"
+#-----------------------------
+# Set default compiler flags 
+# and check for user override
+#-----------------------------
+
+if [ "$toolset" == "gcc" ];then
+    DEFAULT_OPTS="-O3 -g -pipe -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic"
+elif [ "$toolset" == "intel" ];then
+    DEFAULT_OPTS="-O3 -g -m64 -Wall -fexceptions -fstack-protector-strong -grecord-gcc-switches -m64 -mtune=generic"
 fi
 
-if [ -z "$CXXLAGS" ];then
-    export CXXFLAGS=$CFLAGS
+if [ -z "$OHPC_CFLAGS" ];then
+    export CFLAGS=$DEFAULT_OPTS
+else
+    export CFLAGS=$OHPC_CFLAGS
+    echo "--> CFLAGS   (user override) = $CFLAGS"
+fi
+
+if [ -z "$OHPC_CXXFLAGS" ];then
+    export CXXFLAGS=$DEFAULT_OPTS
     echo "--> CXXFLAGS = $CXXFLAGS"
 else
-    echo "--> CXXFLAGS (user supplied) = $CXXFLAGS"
+    export CXXFLAGS=$OHPC_CXXFLAGS
+    echo "--> CXXFLAGS (user override) = $CXXFLAGS"
 fi
 
-if [ -z "$FCFLAGS" ];then
-    export FCFLAGS=$CFLAGS
+if [ -z "$OHPC_FCFLAGS" ];then
+    export FCFLAGS=$DEFAULT_OPTS
     echo "--> FCFLAGS  = $FCFLAGS"
 else
-    echo "--> FCFLAGS (user supplied) = $FCFLAGS"
+    export FCFLAGS=$OHPC_FCFLAGS
+    echo "--> FCFLAGS  (user override) = $FCFLAGS"
 fi
 
-if [ -z "$F77FLAGS" ];then
-    export F77FLAGS=$CFLAGS
+if [ -z "$OHPC_F77FLAGS" ];then
+    export F77FLAGS=$DEFAULT_OPTS
     echo "--> F77FLAGS = $F77FLAGS"
 else
-    echo "--> F77FLAGS (user supplied) = $F77FLAGS"
+    export F77FLAGS=$OHPC_F77FLAGS
+    echo "--> F77FLAGS (user override) = $F77FLAGS"
 fi
 
 echo "-------------------------------"
