@@ -38,7 +38,7 @@ Simple example.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-./configure --prefix=%{install_path}
+./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 make
 
 %install
