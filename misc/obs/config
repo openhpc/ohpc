@@ -62,13 +62,13 @@ compiler_families=["gnu8","intel"]
 mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 
-standalone = ["charliecloud","clustershell","cmake","easybuild","lmod","papi","slurm","valgrind"]
+standalone = ["charliecloud","clustershell","cmake","docs","easybuild","lmod","papi","slurm","valgrind"]
 
 # define (compiler dependent) packages
-compiler_dependent = ["hdf5","openmpi","mvapich2","likwid","R"]
+compiler_dependent = ["hdf5","openmpi","mvapich2","likwid","plasma","R"]
 
 # overdefault compiler families for any desired components
 R_compiler=["gnu8"]
->>>>>>> misc: updating obs packages for v1.3.8
+opencoarrays_compiler=["gnu8"]
 
-mpi_dependent = ["boost","mumps","petsc","phdf5","scorep","slepc"]
+mpi_dependent = ["boost","extrae","mumps","opencoarrays","petsc","phdf5","scorep","slepc"]
