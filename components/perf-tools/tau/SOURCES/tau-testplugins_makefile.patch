@@ -1,5 +1,5 @@
---- plugins/testplugins/Makefile.orig	2019-04-28 07:15:43.000000000 -0500
-+++ plugins/testplugins/Makefile	2019-05-22 16:12:33.000000000 -0500
+--- a/plugins/testplugins/Makefile	2019-04-28 07:15:43.000000000 -0500
++++ a/plugins/testplugins/Makefile	2019-05-22 16:12:33.000000000 -0500
 @@ -15,7 +15,7 @@
  
  CFLAGS = $(TAU_MPI_COMPILE_INCLUDE) $(TAU_INCLUDE) $(TAU_DEFS) $(USER_OPT) $(TAU_INTERNAL_FLAGS) -fPIC
