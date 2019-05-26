@@ -19,7 +19,7 @@
 %define pname mumps
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        5.1.2
+Version:        5.2.0
 Release:        1%{?dist}
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
