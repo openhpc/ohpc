@@ -54,7 +54,12 @@ rpm=geopm-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI-ohpc
     fi
 }
 
-@test "[$testname] Verify availability of geopmbench binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+@test "[$testname] Verify availability of geopmagent binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    run which geopmagent
+    assert_success
+}
+
+@test "[$testname] Verify availability of geopmagent binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     run which geopmbench
     assert_success
 }
@@ -64,8 +69,8 @@ rpm=geopm-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI-ohpc
     assert_success
 }
 
-@test "[$testname] Verify availability of geopmpolicy binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run which geopmpolicy
+@test "[$testname] Verify availability of geopmsrun binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    run which geopmlaunch
     assert_success
 }
 
@@ -76,31 +81,6 @@ rpm=geopm-$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI-ohpc
 
 @test "[$testname] Verify availability of geopmwrite binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     run which geopmwrite
-    assert_success
-}
-
-@test "[$testname] Verify availability of geopmagent binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run which geopmagent
-    assert_success
-}
-
-@test "[$testname] Verify availability of geopmanalysis binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run which geopmanalysis
-    assert_success
-}
-
-@test "[$testname] Verify availability of geopmaprun binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run which geopmaprun
-    assert_success
-}
-
-@test "[$testname] Verify availability of geopmplotter binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run which geopmplotter
-    assert_success
-}
-
-@test "[$testname] Verify availability of geopmsrun binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run which geopmsrun
     assert_success
 }
 
