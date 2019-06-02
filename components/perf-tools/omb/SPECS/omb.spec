@@ -14,7 +14,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name/config
-%define pname osumb
+%define pname omb
 
 Summary:   OSU Micro-benchmarks
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
