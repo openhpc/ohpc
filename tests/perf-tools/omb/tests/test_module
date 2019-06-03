@@ -1,0 +1,82 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+CMD_TIMEOUT="10:00"
+TEST_NUM_RANKS=8
+TEST_NUM_THREADS=4
+
+PKG=OMB
+module=omb
+family=$LMOD_FAMILY_COMPILER-$LMOD_FAMILY_MPI
+rpm=$module-$family${DELIM}
+
+@test "[$PKG] Verify $PKG module is loaded and matches rpm version ($family)" {
+    module list $module | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+    # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+}
+
+@test "[$PKG] Verify ${PKG}_DIR is defined and directory exists ($family)" {
+    PKG_DIR=${PKG}_DIR
+
+    if [ -z "${!PKG_DIR}" ];then
+        flunk "env setting ${PKG_DIR} not defined"
+    fi
+
+    if [ ! -d "${!PKG_DIR}" ];then
+        flunk "directory ${!PKG_DIR} does not exist"
+    fi
+}
+
+# -------------
+# Binary Tests
+# --------------
+
+
+@test "[$PKG] Verify osu_bw binary is available ($family)" {
+    binary=osu_bw
+
+    run which osu_bw
+    assert_success
+}
+
+
+@test "[$PKG] Verify osu_latency binary is available ($family)" {
+    binary=osu_latency
+
+    run which $binary
+    assert_success
+}
+
+@test "[$PKG] Verify osu_allgather binary is available ($family)" {
+    binary=osu_allgather
+
+    run which $binary
+    assert_success
+}
+
+@test "[$PKG] Verify osu_get_bw binary is available ($family)" {
+    binary=osu_get_bw
+
+    run which $binary
+    assert_success
+}
+
+@test "[$PKG] Verify osu_put_latency binary is available ($family)" {
+    binary=osu_put_latency
+
+    run which $binary
+    assert_success
+}
+

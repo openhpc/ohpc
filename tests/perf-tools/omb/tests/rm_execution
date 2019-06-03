@@ -1,0 +1,35 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+   . ./common/TEST_ENV
+else
+    ERROR "TEST_ENV does not exist"
+fi
+
+CMD_TIMEOUT="2:00"
+TEST_NUM_RANKS=8
+TEST_NUM_THREADS=4
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+@test "[OMB] run osu_bw on 2 nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=osu_bw
+
+    run_mpi_binary -t $CMD_TIMEOUT $EXE "-m 512" 2 2
+    assert_success
+}
+
+@test "[OMB] run osu_latency on 2 nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    EXE=osu_latency
+
+    run_mpi_binary -t $CMD_TIMEOUT $EXE "-m 512" 2 2
+    assert_success
+}
+
+rm -f .cmd_output
+

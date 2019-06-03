@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([test-suite], [1.3.0], [https://github.com/openhpc/ohpc])
+AC_INIT([test-suite], [1.3.8], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.14])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -206,6 +206,12 @@ AC_ARG_ENABLE([imb],
    [AS_HELP_STRING([--enable-imb],[Enable Intel MPI Benchmarks tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_imb,yes)])
 AM_CONDITIONAL(IMB_ENABLED,test "x$enable_imb" = "xyes" )
+#------------------------------------------------------------------------------------------
+# OMB
+AC_ARG_ENABLE([omb],
+   [AS_HELP_STRING([--enable-imb],[Enable OSU MPI Micro-benchmarks tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_omb,yes)])
+AM_CONDITIONAL(OMB_ENABLED,test "x$enable_omb" = "xyes" )
 #------------------------------------------------------------------------------------------
 # GSL
 AC_ARG_ENABLE([gsl],
@@ -864,6 +870,12 @@ echo    Performance Tools:
        echo '    'mpiP Profiler........ .... : enabled
     else
        echo '    'mpiP Profiler............. : disabled
+    fi
+
+    if test "x$enable_omb" = "xyes"; then
+       echo '    'OSU microbenchmarks....... : enabled
+    else
+       echo '    'OSU microbenchmarks....... : disabled
     fi
 
     if test "x$enable_papi" = "xyes"; then
