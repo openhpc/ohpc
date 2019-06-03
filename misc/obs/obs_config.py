@@ -187,6 +187,8 @@ class ohpc_obs_tool(object):
             components['comp_dep'] = ast.literal_eval(self.buildConfig.get(self.vip,"compiler_dependent"))
             logging.info("--> [  comp_dep]: %s" % components['comp_dep'])
 
+            components['comp_dep'] = self.checkForDisabledComponents(components['comp_dep'])
+
         if self.buildConfig.has_option(self.vip,'mpi_dependent'):
             components['mpi_dep'] = ast.literal_eval(self.buildConfig.get(self.vip,"mpi_dependent"))
             logging.info("--> [   mpi_dep]: %s" % components['mpi_dep'])
