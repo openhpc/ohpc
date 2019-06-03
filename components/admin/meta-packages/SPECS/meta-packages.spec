@@ -274,6 +274,8 @@ Requires:  imb-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  omb-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  omb-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
@@ -286,6 +288,7 @@ Requires:  extrae-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  omb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -300,6 +303,7 @@ Requires:  dimemas-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  extrae-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
+Requires:  omb-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mpich%{PROJ_DELIM}
@@ -314,6 +318,7 @@ Requires:  extrae-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
+Requires:  omb-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-mvapich2%{PROJ_DELIM}
@@ -328,6 +333,7 @@ Requires:  extrae-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  imb-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  likwid-gnu%{gnu_major_ver}%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  omb-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scorep-gnu%{gnu_major_ver}-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
@@ -638,6 +644,11 @@ Requires:  imb-intel-mvapich2%{PROJ_DELIM}
 Requires:  imb-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  mpiP-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  omb-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
+Requires:  omb-intel-impi%{PROJ_DELIM}
+Requires:  omb-intel-mpich%{PROJ_DELIM}
+Requires:  omb-intel-mvapich2%{PROJ_DELIM}
+Requires:  omb-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
 Requires:  tau-gnu%{gnu_major_ver}-impi%{PROJ_DELIM}
 Requires:  tau-intel-impi%{PROJ_DELIM}
@@ -662,6 +673,7 @@ Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and Intel(R
 Requires:  imb-intel-impi%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  mpiP-intel-impi%{PROJ_DELIM}
+Requires:  omb-intel-impi%{PROJ_DELIM}
 Requires:  tau-intel-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scorep-intel-impi%{PROJ_DELIM}
@@ -674,6 +686,7 @@ Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MPICH
 Requires:  imb-intel-mpich%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  mpiP-intel-mpich%{PROJ_DELIM}
+Requires:  omb-intel-mpich%{PROJ_DELIM}
 Requires:  tau-intel-mpich%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
 Requires:  scorep-intel-mpich%{PROJ_DELIM}
@@ -686,6 +699,7 @@ Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MVAPICH
 Requires:  imb-intel-mvapich2%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  mpiP-intel-mvapich2%{PROJ_DELIM}
+Requires:  omb-intel-mvapich2%{PROJ_DELIM}
 Requires:  tau-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-intel-mvapich2%{PROJ_DELIM}
 Requires:  scorep-intel-mvapich2%{PROJ_DELIM}
@@ -698,6 +712,7 @@ Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and OpenMPI
 Requires:  imb-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  mpiP-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
+Requires:  omb-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  tau-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scalasca-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
 Requires:  scorep-intel-openmpi%{openmpi_major_ver}%{PROJ_DELIM}
