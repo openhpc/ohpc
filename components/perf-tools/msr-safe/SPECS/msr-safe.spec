@@ -17,7 +17,7 @@
 
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        1.2.0
+Version:        1.2.1
 Release:        1
 License:        GPLv3+
 Summary:        Allows safer access to model specific registers (MSRs)
@@ -28,8 +28,6 @@ Source1:        msr-safe.service
 Source2:        msr-safe.sysconfig
 Source3:        10-msr-safe.rules
 Source4:        msr-safe.sh
-Patch1:         0001-Correcting-hash_for_each_possible-function.-Fixes-41.patch
-Patch2:         0002-Adding-slurm-spank-plugin-to-enable-MSR-save-restore.patch
 #BuildRequires:  %kernel_module_package_buildreqs
 BuildRequires:  systemd
 
@@ -75,8 +73,6 @@ may impact subsequent users of the processor if not restored.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
-%patch2 -p1
 
 %build
 for flavor in %flavors_to_build; do
