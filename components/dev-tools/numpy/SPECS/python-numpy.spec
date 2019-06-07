@@ -170,6 +170,7 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
+%exclude %{install_path}/bin/f2py
 %{OHPC_PUB}
 %doc INSTALL.rst.txt
 %doc LICENSE.txt
