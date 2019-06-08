@@ -25,12 +25,13 @@ Source0:       https://ftp.tools.bsc.es/wxparaver/wxparaver-%{version}-src.tar.b
 
 
 BuildRequires: bison
+BuildRequires: boost-devel
 %if 0%{?suse_version}
-BuildRequires: libboost_serialization1_54_0
+BuildRequires: libfabric1
 BuildRequires: flex
 BuildRequires: wxGTK3-3_2-devel
 %else
-BuildRequires: boost-devel
+
 BuildRequires: flex-devel
 BuildRequires: wxGTK3-devel
 %endif
