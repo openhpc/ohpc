@@ -24,7 +24,7 @@ License:	LGPLv2+
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
-Patch1:         mpicheck.patch
+
 
 BuildRequires:	autoconf%{PROJ_DELIM}
 BuildRequires:	automake%{PROJ_DELIM}
