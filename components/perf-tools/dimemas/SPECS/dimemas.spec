@@ -18,8 +18,8 @@
 
 Summary:	Dimemas tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	5.3.4
-Release:	5
+Version:	5.4.1
+Release:	1
 License:	GNU
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
