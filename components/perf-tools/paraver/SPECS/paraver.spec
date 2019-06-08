@@ -23,12 +23,14 @@ Group:         %{PROJ_NAME}/perf-tools
 URL:           https://tools.bsc.es
 Source0:       https://ftp.tools.bsc.es/wxparaver/wxparaver-%{version}-src.tar.bz2
 
-BuildRequires: boost-devel
+
 BuildRequires: bison
 %if 0%{?suse_version}
+BuildRequires: libboost_serialization1_54_0
 BuildRequires: flex
 BuildRequires: wxGTK3-3_2-devel
 %else
+BuildRequires: boost-devel
 BuildRequires: flex-devel
 BuildRequires: wxGTK3-devel
 %endif
