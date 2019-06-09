@@ -182,6 +182,8 @@ class ohpc_obs_tool(object):
             components['standalone'] = ast.literal_eval(self.buildConfig.get(self.vip,"standalone"))
             logging.info("Parsed components:")
             logging.info("--> [standalone]: %s" % components['standalone'])
+
+            components['standalone'] = self.checkForDisabledComponents(components['standalone'])
         
         if self.buildConfig.has_option(self.vip,'compiler_dependent'):
             components['comp_dep'] = ast.literal_eval(self.buildConfig.get(self.vip,"compiler_dependent"))
