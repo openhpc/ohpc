@@ -28,6 +28,9 @@ unset OMP_NUM_THREADS
     rm -rf set-0
     mkdir set-0
 
+    mkdir -p .tmp.extrae
+    export MPI2PRV_TMP_DIR=.tmp.extrae
+
     run_mpi_binary "./tracef.sh ./mpi_ping" "" $NODES $TASKS
     assert_success
 
@@ -68,6 +71,7 @@ unset OMP_NUM_THREADS
     assert_output "mpi2prv: Congratulations! trace.prv has been generated."
 
     rm -rf profile*
+    rm -f pingtmp?
     rm -rf *prv *row *pcf TRACE.*
     rm -rf $MPI2PRV_TMP_DIR
 #    rm -rf set-0
