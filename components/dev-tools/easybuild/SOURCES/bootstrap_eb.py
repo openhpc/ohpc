@@ -54,7 +54,7 @@ from distutils.version import LooseVersion
 from hashlib import md5
 
 
-EB_BOOTSTRAP_VERSION = '20190322.01'
+EB_BOOTSTRAP_VERSION = '20190523.01'
 
 # argparse preferrred, optparse deprecated >=2.7
 HAVE_ARGPARSE = False
@@ -528,14 +528,18 @@ def stage1(tmpdir, sourcepath, distribute_egg_dir, forcedversion):
 
         # install vsc-base again at the end, to avoid that the one available on the system is used instead
         post_vsc_base = cmd[:]
-        post_vsc_base[-1] = VSC_BASE
+        post_vsc_base[-1] = VSC_BASE + '<2.9.0'
 
     if not print_debug:
         cmd.insert(0, '--quiet')
 
     # install vsc-install version prior to 0.11.4, where mock was introduced as a dependency
     # workaround for problem reported in https://github.com/easybuilders/easybuild-framework/issues/2712
-    run_easy_install(cmd[:-1] + [VSC_INSTALL + '<0.11.4'])
+    # also stick to vsc-base < 2.9.0 to avoid requiring 'future' Python package as dependency
+    for pkg in [VSC_INSTALL + '<0.11.4', VSC_BASE + '<2.9.0']:
+        precmd = cmd[:-1] + [pkg]
+        info("running pre-install command 'easy_install %s'" % (' '.join(precmd)))
+        run_easy_install(precmd)
 
     info("installing EasyBuild with 'easy_install %s'" % (' '.join(cmd)))
     run_easy_install(cmd)
@@ -734,6 +738,11 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
             eb_args.append('--installpath=%s' % install_path)
         if sourcepath is not None:
             eb_args.append('--sourcepath=%s' % sourcepath)
+
+        # make sure EasyBuild can find EasyBuild-*.eb easyconfig file when it needs to;
+        # (for example when HierarchicalMNS is used as module naming scheme,
+        #  see https://github.com/easybuilders/easybuild-framework/issues/2393)
+        eb_args.append('--robot-paths=%s:' % tmpdir)
 
     # make sure parent modules path already exists (Lmod trips over a non-existing entry in $MODULEPATH)
     if install_path is not None:
