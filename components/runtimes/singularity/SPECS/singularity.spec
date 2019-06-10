@@ -56,6 +56,7 @@ BuildRequires: libseccomp-devel
 Requires: file
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires: go
+BuildRequires: binutils-gold
 Requires: squashfs
 %else
 BuildRequires: golang > 1.6
