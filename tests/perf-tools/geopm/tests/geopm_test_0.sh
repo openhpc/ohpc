@@ -38,7 +38,7 @@ I_MPI_PIN=yes \
 I_MPI_PIN_CELL=core \
 LD_PRELOAD=libgeopm.so \
 LD_DYNAMIC_WEAK=true \
-GEOPM_PMPI_CTL=process \
+GEOPM_CTL=pthread \
 GEOPM_REPORT=geopm_test_0_report \
 GEOPM_TRACE=geopm_test_0_trace \
 ./tutorial_0

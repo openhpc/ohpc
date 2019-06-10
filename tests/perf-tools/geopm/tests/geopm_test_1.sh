@@ -37,7 +37,7 @@ HYDRA_BINDING=core \
 I_MPI_PIN=yes \
 I_MPI_PIN_CELL=core \
 LD_DYNAMIC_WEAK=true \
-GEOPM_PMPI_CTL=process \
+GEOPM_CTL=pthread \
 GEOPM_REPORT=geopm_test_1_report \
 GEOPM_TRACE=geopm_test_1_trace \
 geopmbench geopm_test_1_app.json
