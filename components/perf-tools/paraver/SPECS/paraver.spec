@@ -87,8 +87,7 @@ export NO_BRP_CHECK_RPATH=true
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULES}/%{pname}
-%{__cat} <<EOF
- EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
+%{__cat} <<EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -117,8 +116,7 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} <<EOF
- EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
+%{__cat} <<EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
