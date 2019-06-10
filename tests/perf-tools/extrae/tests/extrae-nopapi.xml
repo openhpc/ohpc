@@ -91,7 +91,7 @@
 
 	<syscall enabled="no" />
 
-  <merge enabled="yes" 
+  <merge enabled="no" 
     synchronization="default"
     tree-fan-out="16"
     max-memory="512"
