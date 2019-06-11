@@ -1,6 +1,6 @@
-clustershell-ohpc 1.8 http://clustershell.sourceforge.net/ ohpc/admin Python framework for efficient cluster administration
+clustershell-ohpc 1.8.1 http://clustershell.sourceforge.net/ ohpc/admin Python framework for efficient cluster administration
 conman-ohpc 0.3.0 http://dun.github.io/conman/ ohpc/admin ConMan: The Console Manager
-docs-ohpc 1.3.7 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
+docs-ohpc 1.3.8 https://github.com/openhpc/ohpc ohpc/admin OpenHPC documentation
 examples-ohpc 1.5 https://github.com/openhpc/ohpc ohpc/admin Example source code and templates for use within OpenHPC environment.
 ganglia-ohpc 3.7.2 http://ganglia.sourceforge.net/ ohpc/admin Distributed Monitoring System
 genders-ohpc 1.22 https://github.com/chaos/genders ohpc/admin Static cluster configuration database
@@ -22,7 +22,7 @@ lmod-defaults-gnu8-mpich-ohpc 1.3.3 https://github.com/openhpc/ohpc ohpc/admin O
 lmod-defaults-gnu8-mvapich2-ohpc 1.3.3 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu8-openmpi3-ohpc 1.3.3 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-intel-openmpi3-ohpc 1.3.3 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
-lmod-ohpc 7.8.15 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
+lmod-ohpc 8.0.6 https://github.com/TACC/Lmod ohpc/admin Lua based Modules (lmod)
 losf-ohpc 0.56.0 https://github.com/hpcsi/losf ohpc/admin A Linux operating system framework for managing HPC clusters
 mrsh-ohpc 2.12 https://github.com/chaos/mrsh ohpc/admin Remote shell program that uses munge authentication
 nagios-plugins-ohpc 2.2.1 https://www.nagios-plugins.org/ ohpc/admin Host/service/network monitoring program plugins for Nagios
@@ -33,4 +33,4 @@ nrpe-ohpc 3.2.0 http://www.nagios.org ohpc/admin Host/service/network monitoring
 ohpc-release 1.3 https://github.com/openhpc/ohpc ohpc/admin OpenHPC release files
 pdsh-ohpc 2.33 https://github.com/chaos/pdsh ohpc/admin Parallel remote shell program
 prun-ohpc 1.3 https://github.com/openhpc/ohpc ohpc/admin Convenience utility for parallel job launch
-test-suite-ohpc 1.3.7 https://github.com/openhpc/ohpc/tests ohpc/admin Integration test suite for OpenHPC
+test-suite-ohpc 1.3.8 https://github.com/openhpc/ohpc/tests ohpc/admin Integration test suite for OpenHPC

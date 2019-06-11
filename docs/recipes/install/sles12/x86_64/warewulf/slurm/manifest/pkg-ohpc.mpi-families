@@ -7,10 +7,10 @@ mvapich2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/
 mvapich2-gnu7-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-gnu7-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-gnu8-ohpc 2.3 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-intel-ohpc 2.3 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-psm2-gnu8-ohpc 2.3 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-psm2-intel-ohpc 2.3 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
+mvapich2-gnu8-ohpc 2.3.1 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
+mvapich2-intel-ohpc 2.3.1 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
+mvapich2-psm2-gnu8-ohpc 2.3.1 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
+mvapich2-psm2-intel-ohpc 2.3.1 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
 openmpi-gnu-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi-gnu7-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi-intel-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
@@ -19,7 +19,7 @@ openmpi-psm2-gnu7-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerf
 openmpi-psm2-intel-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi3-gnu7-ohpc 3.1.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi3-pmix-slurm-gnu7-ohpc 3.1.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-gnu8-ohpc 3.1.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-intel-ohpc 3.1.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-pmix-slurm-gnu8-ohpc 3.1.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-pmix-slurm-intel-ohpc 3.1.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi3-gnu8-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi3-intel-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi3-pmix-slurm-gnu8-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi3-pmix-slurm-intel-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
