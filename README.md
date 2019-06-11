@@ -3,7 +3,7 @@
 #### Community building blocks for HPC systems (v1.3.8)
 
 [![Components](https://img.shields.io/badge/components%20available-89-green.svg) ](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.8)
-[![Updates](https://img.shields.io/badge/updates-43%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.8.GA)
+[![Updates](https://img.shields.io/badge/updates-36%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.8.GA)
 [![Tests](https://img.shields.io/badge/test%20coverage-%20%20%20-brightgreen.svg) ](http://test.openhpc.community:8080/job/1.3.x/view/1.3.8/)
 
 
