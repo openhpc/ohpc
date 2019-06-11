@@ -1,27 +1,27 @@
-dimemas-gnu8-impi-ohpc 5.3.4 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-gnu8-mpich-ohpc 5.3.4 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-gnu8-mvapich2-ohpc 5.3.4 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-gnu8-openmpi3-ohpc 5.3.4 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-intel-impi-ohpc 5.3.4 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-intel-mpich-ohpc 5.3.4 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-intel-mvapich2-ohpc 5.3.4 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-dimemas-intel-openmpi3-ohpc 5.3.4 https://tools.bsc.es ohpc/perf-tools Dimemas tool
-extrae-gnu8-impi-ohpc 3.5.2 https://tools.bsc.es ohpc/perf-tools Extrae tool
-extrae-gnu8-mpich-ohpc 3.5.2 https://tools.bsc.es ohpc/perf-tools Extrae tool
-extrae-gnu8-mvapich2-ohpc 3.5.2 https://tools.bsc.es ohpc/perf-tools Extrae tool
-extrae-gnu8-openmpi3-ohpc 3.5.2 https://tools.bsc.es ohpc/perf-tools Extrae tool
-extrae-intel-impi-ohpc 3.5.2 https://tools.bsc.es ohpc/perf-tools Extrae tool
-extrae-intel-mpich-ohpc 3.5.2 https://tools.bsc.es ohpc/perf-tools Extrae tool
-extrae-intel-mvapich2-ohpc 3.5.2 https://tools.bsc.es ohpc/perf-tools Extrae tool
-extrae-intel-openmpi3-ohpc 3.5.2 https://tools.bsc.es ohpc/perf-tools Extrae tool
-geopm-gnu8-impi-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-gnu8-mpich-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-gnu8-mvapich2-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-gnu8-openmpi3-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-intel-impi-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-intel-mpich-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-intel-mvapich2-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-intel-openmpi3-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+dimemas-gnu8-impi-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu8-mpich-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu8-mvapich2-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-gnu8-openmpi3-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-intel-impi-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-intel-mpich-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-intel-mvapich2-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+dimemas-intel-openmpi3-ohpc 5.4.1 https://tools.bsc.es ohpc/perf-tools Dimemas tool
+extrae-gnu8-impi-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
+extrae-gnu8-mpich-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
+extrae-gnu8-mvapich2-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
+extrae-gnu8-openmpi3-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
+extrae-intel-impi-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
+extrae-intel-mpich-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
+extrae-intel-mvapich2-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
+extrae-intel-openmpi3-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
+geopm-gnu8-impi-ohpc 1.0.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-gnu8-mpich-ohpc 1.0.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-gnu8-mvapich2-ohpc 1.0.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-gnu8-openmpi3-ohpc 1.0.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-impi-ohpc 1.0.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-mpich-ohpc 1.0.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-mvapich2-ohpc 1.0.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-openmpi3-ohpc 1.0.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
 imb-gnu-impi-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu-mpich-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu-mvapich2-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
@@ -41,8 +41,8 @@ imb-intel-mvapich2-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-m
 imb-intel-openmpi-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-intel-openmpi3-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 likwid-gnu7-ohpc 4.3.2 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Toolsuite of command line applications for performance oriented programmers
-likwid-gnu8-ohpc 4.3.3 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Toolsuite of command line applications for performance oriented programmers
-likwid-intel-ohpc 4.3.3 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Toolsuite of command line applications for performance oriented programmers
+likwid-gnu8-ohpc 4.3.4 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Toolsuite of command line applications for performance oriented programmers
+likwid-intel-ohpc 4.3.4 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Toolsuite of command line applications for performance oriented programmers
 mpiP-gnu-impi-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-gnu-mpich-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-gnu-mvapich2-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
@@ -61,9 +61,17 @@ mpiP-intel-mpich-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a
 mpiP-intel-mvapich2-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-intel-openmpi-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
 mpiP-intel-openmpi3-ohpc 3.4.1 http://mpip.sourceforge.net/ ohpc/perf-tools mpiP: a lightweight profiling library for MPI applications.
-msr-safe-ohpc 1.2.0 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
-paraver-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
-papi-ohpc 5.6.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
+msr-safe-ohpc 1.2.1 https://github.com/LLNL/msr-safe ohpc/perf-tools Allows safer access to model specific registers (MSRs)
+omb-gnu8-impi-ohpc 5.6.1 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu8-mpich-ohpc 5.6.1 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu8-mvapich2-ohpc 5.6.1 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-gnu8-openmpi3-ohpc 5.6.1 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-intel-impi-ohpc 5.6.1 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-intel-mpich-ohpc 5.6.1 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-intel-mvapich2-ohpc 5.6.1 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+omb-intel-openmpi3-ohpc 5.6.1 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
+paraver-ohpc 4.8.1 https://tools.bsc.es ohpc/perf-tools Paraver
+papi-ohpc 5.7.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
 pdtoolkit-gnu-ohpc 3.25 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
 pdtoolkit-gnu7-ohpc 3.25 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
 pdtoolkit-gnu8-ohpc 3.25 http://www.cs.uoregon.edu/Research/pdt ohpc/perf-tools PDT is a framework for analyzing source code
@@ -78,14 +86,14 @@ scalasca-gnu7-mvapich2-ohpc 2.3.1 http://www.scalasca.org ohpc/perf-tools Toolse
 scalasca-gnu7-openmpi-ohpc 2.3.1 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
 scalasca-gnu7-openmpi3-ohpc 2.3.1 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
 scalasca-intel-openmpi-ohpc 2.3.1 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
-scalasca-gnu8-impi-ohpc 2.4 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
-scalasca-gnu8-mpich-ohpc 2.4 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
-scalasca-gnu8-mvapich2-ohpc 2.4 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
-scalasca-gnu8-openmpi3-ohpc 2.4 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
-scalasca-intel-impi-ohpc 2.4 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
-scalasca-intel-mpich-ohpc 2.4 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
-scalasca-intel-mvapich2-ohpc 2.4 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
-scalasca-intel-openmpi3-ohpc 2.4 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-gnu8-impi-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-gnu8-mpich-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-gnu8-mvapich2-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-gnu8-openmpi3-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-intel-impi-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-intel-mpich-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-intel-mvapich2-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
+scalasca-intel-openmpi3-ohpc 2.5 http://www.scalasca.org ohpc/perf-tools Toolset for performance analysis of large-scale parallel applications
 scorep-gnu-impi-ohpc 3.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scorep-gnu-mpich-ohpc 3.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scorep-gnu-mvapich2-ohpc 3.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
@@ -96,14 +104,14 @@ scorep-gnu7-impi-ohpc 4.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tool
 scorep-gnu7-mpich-ohpc 4.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scorep-gnu7-mvapich2-ohpc 4.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 scorep-gnu7-openmpi3-ohpc 4.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
-scorep-gnu8-impi-ohpc 4.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
-scorep-gnu8-mpich-ohpc 4.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
-scorep-gnu8-mvapich2-ohpc 4.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
-scorep-gnu8-openmpi3-ohpc 4.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
-scorep-intel-impi-ohpc 4.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
-scorep-intel-mpich-ohpc 4.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
-scorep-intel-mvapich2-ohpc 4.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
-scorep-intel-openmpi3-ohpc 4.1 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-gnu8-impi-ohpc 5.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-gnu8-mpich-ohpc 5.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-gnu8-mvapich2-ohpc 5.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-gnu8-openmpi3-ohpc 5.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-intel-impi-ohpc 5.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-intel-mpich-ohpc 5.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-intel-mvapich2-ohpc 5.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
+scorep-intel-openmpi3-ohpc 5.0 http://www.vi-hps.org/projects/score-p/ ohpc/perf-tools Scalable Performance Measurement Infrastructure for Parallel Codes
 tau-gnu-impi-ohpc 2.27 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu-mpich-ohpc 2.27 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
 tau-gnu-mvapich2-ohpc 2.27 http://www.cs.uoregon.edu/research/tau/home.php ohpc/perf-tools Tuning and Analysis Utilities Profiling Package
