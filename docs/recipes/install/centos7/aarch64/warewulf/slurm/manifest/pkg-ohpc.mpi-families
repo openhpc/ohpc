@@ -5,5 +5,5 @@ openmpi-gnu-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful imp
 openmpi-gnu7-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi3-gnu7-ohpc 3.1.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi3-pmix-slurm-gnu7-ohpc 3.1.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-gnu8-ohpc 3.1.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-pmix-slurm-gnu8-ohpc 3.1.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi3-gnu8-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi3-pmix-slurm-gnu8-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI

@@ -3,8 +3,8 @@ boost-gnu-openmpi-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free
 boost-gnu7-openmpi-ohpc 1.66.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu7-mpich-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 boost-gnu7-openmpi3-ohpc 1.67.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-boost-gnu8-mpich-ohpc 1.69.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
-boost-gnu8-openmpi3-ohpc 1.69.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu8-mpich-ohpc 1.70.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
+boost-gnu8-openmpi3-ohpc 1.70.0 http://www.boost.org ohpc/parallel-libs Boost free peer-reviewed portable C++ source libraries
 fftw-gnu-mpich-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu-openmpi-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
 fftw-gnu7-mpich-ohpc 3.3.7 http://www.fftw.org ohpc/parallel-libs A Fast Fourier Transform library
@@ -28,17 +28,17 @@ mumps-gnu-openmpi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUlt
 mumps-gnu7-mpich-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu7-openmpi-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
 mumps-gnu7-openmpi3-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
-mumps-gnu8-mpich-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
-mumps-gnu8-openmpi3-ohpc 5.1.2 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
-opencoarrays-gnu8-mpich-ohpc 2.2.0 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
-opencoarrays-gnu8-openmpi3-ohpc 2.2.0 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
+mumps-gnu8-mpich-ohpc 5.2.0 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+mumps-gnu8-openmpi3-ohpc 5.2.0 http://mumps.enseeiht.fr/ ohpc/parallel-libs A MUltifrontal Massively Parallel Sparse direct Solver
+opencoarrays-gnu8-mpich-ohpc 2.6.3 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
+opencoarrays-gnu8-openmpi3-ohpc 2.6.3 http://www.opencoarrays.org ohpc/parallel-libs ABI to leverage the parallel programming features of the Fortran 2018 DIS
 petsc-gnu-mpich-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu-openmpi-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu7-openmpi-ohpc 3.8.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu7-mpich-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 petsc-gnu7-openmpi3-ohpc 3.9.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-gnu8-mpich-ohpc 3.10.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
-petsc-gnu8-openmpi3-ohpc 3.10.3 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu8-mpich-ohpc 3.11.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
+petsc-gnu8-openmpi3-ohpc 3.11.1 http://www.mcs.anl.gov/petsc/ ohpc/parallel-libs Portable Extensible Toolkit for Scientific Computation
 ptscotch-gnu7-mpich-ohpc 6.0.4 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
 ptscotch-gnu7-openmpi-ohpc 6.0.4 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
 ptscotch-gnu7-openmpi3-ohpc 6.0.4 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/parallel-libs Graph, mesh and hypergraph partitioning library using MPI
@@ -49,8 +49,8 @@ scalapack-gnu8-openmpi3-ohpc 2.0.2 http://www.netlib.org/lapack-dev/ ohpc/parall
 slepc-gnu7-openmpi-ohpc 3.8.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu7-mpich-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 slepc-gnu7-openmpi3-ohpc 3.9.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-gnu8-mpich-ohpc 3.10.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
-slepc-gnu8-openmpi3-ohpc 3.10.2 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-gnu8-mpich-ohpc 3.11.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
+slepc-gnu8-openmpi3-ohpc 3.11.1 http://slepc.upv.es ohpc/parallel-libs A library for solving large scale sparse eigenvalue problems
 superlu_dist-gnu-mpich-ohpc 4.2 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-gnu-openmpi-ohpc 4.2 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
 superlu_dist-gnu7-openmpi-ohpc 4.2 http://crd-legacy.lbl.gov/~xiaoye/SuperLU/ ohpc/parallel-libs A general purpose library for the direct solution of linear equations
