@@ -14,11 +14,6 @@
 
 %define pname lmod
 
-%if 0%{?suse_version} <= 1220
-%define luaver 5.1
-%else
-%define luaver 5.2
-%endif
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
 %define LUA_CPATH ?.so;?/?.so;%{lualibdir}/?.so
@@ -34,9 +29,19 @@ Url:       https://github.com/TACC/Lmod
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 
 BuildRequires: lua >= %{luaver}
-BuildRequires: lua-devel >= %{luaver}
+BuildRequires: lua-devel >= %{luaver} 
+%if "%{luaver}" == "5.2"
 BuildRequires: lua-filesystem%{PROJ_DELIM}
 BuildRequires: lua-posix%{PROJ_DELIM}
+%else
+%if 0%{?sle_version:1}
+BuildRequires: lua-luafilesystem
+BuildRequires: lua-luaposix
+%else
+BuildRequires: lua-filesystem
+BuildRequires: lua-posix
+%endif
+%endif
 
 BuildRequires: rsync
 BuildRequires: tcl tcl-devel
@@ -45,11 +50,8 @@ BuildRequires: tcl tcl-devel
 BuildRequires: procps
 %endif
 
-%if 0%{?sles_version} || 0%{?suse_version}
 Conflicts: Modules
-%else
 Conflicts: environment-modules
-%endif
 
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch
@@ -57,12 +59,21 @@ Patch2: lmod.site.patch
 # 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
 %global _default_patch_fuzz 2
 
-# Known dependencies
+# Installation dependencies
 Requires: lua >= %{luaver}
 Requires: tcl
+%if "%{luaver}" == "5.2"
 Requires: lua-filesystem%{PROJ_DELIM}
 Requires: lua-posix%{PROJ_DELIM}
-
+%else
+%if 0%{?sle_version:1}
+BuildRequires: lua-luafilesystem
+BuildRequires: lua-luaposix
+%else
+Requires: lua-filesystem
+Requires: lua-posix
+%endif
+%endif
 
 %description 
 Lmod: An Environment Module System based on Lua, Reads TCL Modules,
@@ -77,13 +88,17 @@ Supports a Software Hierarchy
 
 %build
 unset MODULEPATH
+%if "%{luaver}" == "5.2"
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
+%endif
 ./configure --prefix=%{OHPC_ADMIN} --libdir=%{lualibdir} --datadir=%{luapkgdir} --with-redirect=yes --with-autoSwap=no
 
 %install
+%if "%{luaver}" == "5.2"
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
+%endif
 make DESTDIR=$RPM_BUILD_ROOT install
 # Customize startup script to suit
 
