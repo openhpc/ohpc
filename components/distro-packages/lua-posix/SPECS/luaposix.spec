@@ -12,13 +12,12 @@
 
 %include %{_sourcedir}/OHPC_macros
 
+%if "%{luaver}" != "5.2"
+%{error: Build is only required for SLES12/Lua 5.2}
+%endif
+
 %define pname lua-posix
 
-%if 0%{?suse_version} <= 1220
-%define luaver 5.1
-%else
-%define luaver 5.2
-%endif
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
 
@@ -34,10 +33,6 @@ Source0:        https://github.com/luaposix/luaposix/archive/release-v%{version}
 
 BuildRequires:  lua >= %{luaver}, lua-devel >= %{luaver}
 BuildRequires:  ncurses-devel
-%if 0%{?suse_version} <= 1220
-BuildRequires:  lua-bit%{PROJ_DELIM}
-Requires:       lua-bit%{PROJ_DELIM}
-%endif
 Requires:       lua >= %{luaver}
 BuildRequires:  autoconf
 BuildRequires:  automake
