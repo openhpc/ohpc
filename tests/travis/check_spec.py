@@ -35,7 +35,7 @@ if len(sys.argv) != 2:
     print("SKIP. Needs a git range as parameter")
     sys.exit(0)
 
-command = ['git', 'diff', '--name-only', sys.argv[1]]
+command = ['git', 'diff', '--diff-filter=ACMRTUXB', '--name-only', sys.argv[1]]
 
 print("About to run command %s" % ' '.join(command))
 
