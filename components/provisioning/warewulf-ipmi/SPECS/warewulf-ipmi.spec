@@ -10,24 +10,34 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define pname warewulf-ipmi
 %define dname ipmi
+%define pname warewulf-%{dname}
 %define wwpkgdir /srv/warewulf
+
+%if 0%{?sle_version} >=150000 || 0%{?rhel_version} >= 800 || 0%{?centos_version} >= 800
+%define localipmi 1
+%define configopt_ipmi "--with-local-ipmitool"
+%else
+%define localipmi 0
+%endif
 
 Name: %{pname}%{PROJ_DELIM}
 Summary: IPMI Module for Warewulf
-Version: 3.8.1
-Release: 1%{?dist}
+Version: 3.9.0
+Release: .1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group: %{PROJ_NAME}/provisioning
 URL: http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/%{version}.tar.gz#/warewulf3-%{version}.tar.gz
+Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
 Requires: warewulf-common%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: openssl-devel
 BuildRequires: warewulf-common%{PROJ_DELIM}
-Conflicts: warewulf < 3
+%if %{localipmi}
+Requires: ipmitool
+%endif
+Conflicts: warewulf < 3.9
 #!BuildIgnore: post-build-checks
 
 %description
@@ -47,14 +57,13 @@ Warewulf Provisioning initramfs IPMI capabilities for %{_arch}.
 
 
 %prep
-%setup -n warewulf3-%{version}
+%setup -n warewulf3-development
 
 %build
 cd %{dname}
-if [ ! -f configure ]; then
-    ./autogen.sh
-fi
-%configure --localstatedir=%{wwpkgdir}
+NO_CONFIGURE=1 ./autogen.sh
+%configure --localstatedir=%{wwpkgdir} %{?configopt_ipmi}
+
 %{__make} %{?_smp_mflags}
 
 
@@ -68,7 +77,9 @@ cd %{dname}
 %{OHPC_PUB}
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO
 %{wwpkgdir}/*
+%if !%{localipmi}
 %{_libexecdir}/warewulf/ipmitool
+%endif
 %{perl_vendorlib}/Warewulf/Ipmi.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/*
 

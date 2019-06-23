@@ -10,31 +10,25 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define pname warewulf-common
 %define dname common
+%define pname warewulf-%{dname}
 %define wwpkgdir /srv/
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: A suite of tools for clustering
-Version: 3.8.1
-Release: 1%{?dist}
+Version: 3.9.0
+Release: 0.1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
-Patch1:  warewulf-common.bin-file.patch
-Patch2:  warewulf-common.dbinit.patch
-Patch3:  warewulf-common.mysql.r1978.patch
-Patch4:  warewulf-common.rhel_service.patch
+Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
+Patch1:  warewulf-common.mysql.r1978.patch
+Patch2:  warewulf-common.rhel_service.patch
 ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
-Conflicts: warewulf <= 2.9
-# 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
+Conflicts: warewulf < 3.9
 %if 0%{!?sles_version} && 0%{!?suse_version}
-BuildArch: noarch
-%endif
-%if 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else
 Requires: mariadb-server perl-DBD-MySQL
@@ -50,22 +44,16 @@ supporting libs.
 
 
 %prep
-%setup -q -n warewulf3-%{version}
+%setup -q -n warewulf3-development
 cd %{dname}
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
-
 
 %build
 cd %{dname}
-if [ ! -f configure ]; then
-    ./autogen.sh
-fi
+NO_CONFIGURE=1 ./autogen.sh
 %configure --localstatedir=%{wwpkgdir}
 %{__make} %{?mflags}
-
 
 %install
 cd %{dname}
@@ -76,14 +64,13 @@ cd %{dname}
 %pre
 groupadd -r warewulf >/dev/null 2>&1 || :
 
-
 %post
 if [ $1 -eq 2 ] ; then
     %{_bindir}/wwsh object canonicalize -t node >/dev/null 2>&1 || :
     %{_bindir}/wwsh object canonicalize -t file >/dev/null 2>&1 || :
 fi
 
-%if 0%{?suse_version}
+%if 0%{?suse_version} || 0%{?sle_version}
 systemctl start mysql >/dev/null 2>&1 || :
 systemctl enable mysql >/dev/null 2>&1 || :
 %else
@@ -98,7 +85,6 @@ systemctl enable mariadb >/dev/null 2>&1 || :
 %doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/defaults/
-%attr(0444, root, warewulf) %{_sysconfdir}/warewulf/functions
 %attr(0644, root, warewulf) %config(noreplace) %{_sysconfdir}/warewulf/database.conf
 %attr(0640, root, warewulf) %config(noreplace) %{_sysconfdir}/warewulf/database-root.conf
 %attr(0644, root, warewulf) %config(noreplace) %{_sysconfdir}/warewulf/defaults/node.conf
@@ -108,7 +94,3 @@ systemctl enable mariadb >/dev/null 2>&1 || :
 %{_mandir}/*
 %{perl_vendorlib}/*
 
-# 06/14/14 karl.w.schulz@intel.com - include required dir for SUSE
-%if 0%{?sles_version} || 0%{?suse_version}
-%dir %{_libexecdir}/warewulf/
-%endif

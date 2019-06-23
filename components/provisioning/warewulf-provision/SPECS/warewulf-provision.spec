@@ -8,8 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-
 %include %{_sourcedir}/OHPC_macros
 
 %define _cross_compile 0%{?cross_compile}
@@ -20,12 +18,12 @@
 
 Name:    %{pname}%{PROJ_DELIM}
 Summary: Warewulf - Provisioning Module
-Version: 3.8.1
-Release: %{_rel}%{?dist}
+Version: 3.9.0
+Release: .1%{?dist}
 License: US Dept. of Energy (BSD-like)
 Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
+Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: warewulf-provision-initramfs-%{_arch}%{PROJ_DELIM} = %{version}-%{release}
@@ -38,29 +36,27 @@ BuildRequires: libattr-devel
 BuildRequires: libuuid-devel
 BuildRequires: device-mapper-devel
 BuildRequires: xz-devel
-%if 0%{?_cross_compile}
+BuildRequires: libtirpc-devel
 
+%if 0%{?_cross_compile}
+%define configopt_cross "--enable-cross-compile"
 %if "%{_arch}" == "x86_64"
 BuildRequires: gcc-aarch64-linux-gnu
 %endif
-
 %if "%{_arch}" == "aarch64"
 BuildRequires: gcc-x86_64-linux-gnu
 %endif
-
 %endif
-Conflicts: warewulf < 3
+
+Conflicts: warewulf < 3.9
 #!BuildIgnore: post-build-checks
 Patch1: warewulf-provision.bin-file.patch
 Patch2: warewulf-provision.ipxe-kargs.patch
-Patch3: warewulf-provision.httpdconfdir.patch
-Patch4: warewulf-provision.parted_libdir.patch
-Patch5: warewulf-provision.ppc64le.patch
-Patch6: warewulf-provision.pxe_file_modes.patch
-Patch7: warewulf-provision.sles_tftpboot.patch
-Patch8: warewulf-provision.wwgetfiles.patch
-### merged upstream -- remove in 3.8.2
-Patch9: warewulf-provision.nvme.patch
+Patch3: warewulf-provision.parted_libdir.patch
+Patch4: warewulf-provision.ppc64le.patch
+Patch5: warewulf-provision.pxe_file_modes.patch
+Patch6: warewulf-provision.sles_tftpboot.patch
+Patch7: warewulf-provision.wwgetfiles.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -89,6 +85,7 @@ Requires: %{pname}%{PROJ_DELIM} = %{version}-%{release}
 # 07/22/14 karl.w.schulz@intel.com - differentiate requirements per Base OS
 %if 0%{?sles_version} || 0%{?suse_version}
 Requires: apache2 apache2-mod_perl tftp dhcp-server xinetd tcpdump policycoreutils-python
+%define configopt_suse "--with-apachemoddir=/usr/lib64/apache2"
 %else
 Requires: mod_perl httpd tftp-server dhcp xinetd tcpdump policycoreutils-python
 %endif
@@ -151,7 +148,7 @@ available the included GPL software.
 
 
 %prep
-%setup -q -n warewulf3-%{version}
+%setup -q -n warewulf3-development
 cd %{dname}
 %patch1 -p1
 %patch2 -p1
@@ -160,20 +157,12 @@ cd %{dname}
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
-%patch8 -p1
-%patch9 -p2
 
 %build
 cd %{dname}
-if [ ! -f configure ]; then
-    ./autogen.sh
-fi
+NO_CONFIGURE=1 ./autogen.sh
 
-%if 0%{?_cross_compile}
-  %configure --enable-cross-compile --localstatedir=%{wwpkgdir}
-%else
-  %configure --localstatedir=%{wwpkgdir}
-%endif
+%configure --localstatedir=%{wwpkgdir} %{?configopt_cross} %{?configopt_suse}
 
 %{__make} %{?mflags}
 
@@ -237,16 +226,12 @@ fi
 
 %files -n %{pname}-server%{PROJ_DELIM}
 %config(noreplace) %{_sysconfdir}/warewulf/dhcpd-template.conf
+%config(noreplace) %{_sysconfdir}/warewulf/dnsmasq-template.conf
 %if 0%{?sles_version} || 0%{?suse_version}
 %config(noreplace) %{_sysconfdir}/apache2/conf.d/warewulf-httpd.conf
-%else
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/warewulf-httpd.conf
-%endif
-
-# 07/22/14 karl.w.schulz@intel.com - specify alternate group per Base OS
-%if 0%{?sles_version} || 0%{?suse_version}
 %attr(0750, root, www) %{_libexecdir}/warewulf/cgi-bin/
 %else
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/warewulf-httpd.conf
 %attr(0750, root, apache) %{_libexecdir}/warewulf/cgi-bin/
 %endif
 
