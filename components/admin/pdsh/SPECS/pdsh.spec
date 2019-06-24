@@ -312,6 +312,7 @@ from an allocated Torque job.
 %prep
 %setup  -q -n %{pname}-%{version}
 %patch1 -p1
+%dump
 ##############################################################################
 
 %build
@@ -322,6 +323,7 @@ cp /usr/lib/rpm/config.guess config
 %endif
 
 ./configure --prefix=%{install_path} \
+    --libdir=%{install_path}/lib \
     --with-rcmd-rank-list="ssh mrsh rsh krb4 exec xcpu" \
     %{?_enable_debug}       \
     %{?_with_rsh}           \

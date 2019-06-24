@@ -10,10 +10,12 @@
 
 %include %{_sourcedir}/OHPC_macros
 
+%define pname examples
+
 Summary: Example source code and templates for use within OpenHPC environment.
-Name:    examples%{PROJ_DELIM}
+Name:    %{pname}%{PROJ_DELIM}
 Version: 1.5
-Release: 1
+Release: 1%{?dist}
 License: Apache-2.0
 Group:   %{PROJ_NAME}/admin
 URL:     https://github.com/openhpc/ohpc
