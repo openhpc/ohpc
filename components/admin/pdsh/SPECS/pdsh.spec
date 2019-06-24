@@ -312,7 +312,6 @@ from an allocated Torque job.
 %prep
 %setup  -q -n %{pname}-%{version}
 %patch1 -p1
-%dump
 ##############################################################################
 
 %build
