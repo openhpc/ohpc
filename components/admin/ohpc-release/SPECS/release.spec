@@ -13,21 +13,21 @@
 
 %if 0%{?centos_version} || 0%{?rhel_version}
 %if 0%{?centos_version} == 700
-%define disttag .el7
+%define disttag .el8
 %endif
 %endif
 
 %if 0%{?sles_version} || 0%{?suse_version}
 %if 0%{?suse_version} == 1315
-%define disttag .sle12
+%define disttag .leap15
 %endif
 %endif
 
 Summary:  OpenHPC release files
 Name:     ohpc-release
 Version:  %{ohpc_version}
-Release:  2%{?disttag}
-License:  BSD-3
+Release:  1%{?disttag}
+License:  Apache-2.0
 Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc
 Source1:  RPM-GPG-KEY-OpenHPC-1
