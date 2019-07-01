@@ -68,6 +68,27 @@ BuildRequires: ohpc-buildroot
 %{!?compiler_family: %global compiler_family gnu8}
 %{!?mpi_family: %global mpi_family openmpi3}
 %{!?python_family: %global python_family python3}
+%{!?uarch: %global uarch generic}
+
+# Default optimization flags are empty
+# These are only used if a spec file calls the "%ohpc_setup_optflags" macro.
+%define ohpc_optflags %{nil}
+%define ohpc_optflags_uarch %{nil}
+
+# Microarchitecture dependencies
+%if 0%{?ohpc_uarch_dependent} == 1
+
+%global UARCH_DELIM %{nil}
+
+# Arm uarch targets
+%ifarch aarch64
+%if "%{uarch}" == "tx2"
+%global UARCH_DELIM -tx2
+%global ohpc_optflags_uarch -mtune=thunderx2t99 -mcpu=thunderx2t99
+%endif
+%endif
+
+%endif
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
@@ -154,3 +175,9 @@ Requires:      %{python_prefix}
     %endif \
 }
 
+%global ohpc_setup_optflags %{expand:\
+    export CFLAGS="%ohpc_optflags %ohpc_optflags_uarch"
+    export CXXFLAGS="%ohpc_optflags %ohpc_optflags_uarch"
+    export FFLAGS="%ohpc_optflags %ohpc_optflags_uarch"
+    export FCFLAGS="%ohpc_optflags %ohpc_optflags_uarch"
+}
