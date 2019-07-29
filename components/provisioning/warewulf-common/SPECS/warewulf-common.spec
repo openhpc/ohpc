@@ -28,7 +28,7 @@ ExclusiveOS: linux
 BuildRequires: autoconf
 BuildRequires: automake
 Conflicts: warewulf < 3.9
-%if 0%{!?sles_version} && 0%{!?suse_version}
+%if 0%{?sles_version} || 0%{?suse_version}
 Requires: mysql perl-DBD-mysql
 %else
 Requires: mariadb-server perl-DBD-MySQL
