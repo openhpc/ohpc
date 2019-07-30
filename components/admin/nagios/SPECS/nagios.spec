@@ -64,7 +64,7 @@ BuildRequires: unzip
 
 %if 0%{?sles_version} || 0%{?suse_version}
 #!BuildIgnore: brp-check-suse
-BuildRequires: -post-build-checks
+#!BuildIgnore: post-build-checks
 BuildRequires: procps
 %else
 BuildRequires: procps-ng
