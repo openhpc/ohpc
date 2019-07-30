@@ -707,7 +707,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_docdir}
   /usr/sbin/groupadd -r slurm -g 202
 /usr/bin/getent passwd slurm >/dev/null 2>&1 || \
   /usr/sbin/useradd -c "SLURM resource manager" \
-  -d %{_sysconfdir} -g slurm -s /bin/nologin -r slurm -u 202
+  -d %{_sysconfdir} -g slurm -s /sbin/nologin -r slurm -u 202
   
 exit 0
 
