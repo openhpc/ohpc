@@ -28,7 +28,7 @@
 %global OHPC_MPI_STACKS %{OHPC_PUB}/mpi
 %global OHPC_UTILS      %{OHPC_PUB}/utils
 %global debug_package   %{nil}
-%global dist            .ohpc.1.3.6
+%global dist            .ohpc.2.0.0
 
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
@@ -43,13 +43,17 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 Source42: OHPC_macros
 
 %if 0%{?rhel} == 7
-    # OBS define's rhel_version to 700 for RHEL, in case we are
+    # OBS defines rhel_version to 700 for RHEL, in case we are
     # not running in OBS
     %global rhel_version 700
 %endif
 
-# OpenHPC packages require ohpc-filesystem which defines the basic
-# installation path layout
+%if 0%{?rhel} == 8
+    # OBS defines rhel_version to 800 for RHEL, in case we are
+    # not running in OBS
+    %global rhel_version 800
+%endif
+
 %if 0%{?ohpc_bootstrap} == 0
 Requires: ohpc-filesystem
 %endif
@@ -71,32 +75,41 @@ BuildRequires: ohpc-buildroot
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
-
 %if "%{compiler_family}" == "gnu8"
 BuildRequires: gnu8-compilers%{PROJ_DELIM} >= 8.1.0
 Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.1.0
-%endif
+%endif # gnu8
 %if "%{compiler_family}" == "gnu7"
 BuildRequires: gnu7-compilers%{PROJ_DELIM} >= 7.2.0
 Requires:      gnu7-compilers%{PROJ_DELIM} >= 7.2.0
-%endif
+%endif # gnu7
 %if "%{compiler_family}" == "intel"
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{OHPC_BUILD}
 BuildRequires: intel_licenses
-%endif
-%endif
+%endif # OHPC_BUILD
+%endif # intel
 %if "%{compiler_family}" == "arm"
 BuildRequires: arm-compilers-devel%{PROJ_DELIM}
 Requires:      arm-compilers-devel%{PROJ_DELIM}
 %global __requires_exclude ^libflang.*\\.so.*$|^libompstub\\.so.*|^libomp\\.so.*$|^libarmpl.*\\.so.*$|^libstdc++\\.so.*$
-%endif
+%endif # arm
 %if "%{compiler_family}" == "llvm"
 BuildRequires: llvm-compilers%{PROJ_DELIM}
 Requires:      llvm-compilers%{PROJ_DELIM}
-%endif
+%endif # llvm
+%endif # Compiler dependent
 
+
+# For RHEL 8 based systems annobin is activated
+%if 0%{?rhel} == 8
+%if 0%{?bootstrap_annobin} != 1
+BuildRequires: annobin-%{compiler_family}%{PROJ_DELIM}
+%else
+# Disable annobin for bootstrapping
+%undefine _annotated_build
+%endif
 %endif
 
 # Disable RPM symlink analysis on files in %%{OHPC_HOME}.
@@ -108,44 +121,52 @@ Requires:      llvm-compilers%{PROJ_DELIM}
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %global __requires_exclude ^libmpi\\.so.*$|^libmpifort\\.so.*$|^libmpicxx\\.so.*$
-%endif
+%endif # impi
 %if "%{mpi_family}" == "mpich"
 BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
 Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
+%endif # mpich
 %if "%{mpi_family}" == "mvapich2"
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
+%endif # mvapich2
 %if "%{mpi_family}" == "openmpi3"
 BuildRequires: openmpi3-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
-%endif
-%endif
+%endif # openmpi3
+%endif # MPI Dependent
 
 # Python dependencies and macros
 %if 0%{?ohpc_python_dependent} == 1
 %if "%{python_family}" == "python3"
 %global __python %__python3
 %global python_module_prefix py3-
-%global python_lib_dir python3.4
-%if "%{rhel_version}" == "700"
-%global python_prefix python34
-%endif
+%global python_site_dir %{python3_sitearch}
+%if "%{rhel}" == "7" || "%{rhel}" == "8"
+# EPEL updated to Python 3.6
+%global python_prefix python36
+%global python_lib_dir python3.6
+%endif # RHEL7 or RHEL8
 %if 0%{?suse_version}
 %global python_prefix python3
-%endif
-%endif
+%if 0%{sle_version} < 150000
+%global python_lib_dir python3.4
+%else
+%global python_lib_dir python3.6
+%endif # SLE version
+%endif # SUSE
+%endif # Python3
 %if "%{python_family}" == "python2"
 %global python_module_prefix py2-
 %global python_lib_dir python2.7
 %global python_prefix python
-%endif
+%global python_site_dir %{python_sitearch}
+%endif # Python2
 BuildRequires: %{python_prefix}-devel
 BuildRequires: %{python_prefix}-setuptools
 BuildRequires: python-rpm-macros
 Requires:      %{python_prefix}
-%endif
+%endif # Python dependent
 
 %global ohpc_setup_compiler %{expand:\
     . %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
