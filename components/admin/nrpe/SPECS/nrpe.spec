@@ -42,7 +42,7 @@ BuildRequires:  systemd
 
 %if 0%{?sles_version} || 0%{?suse_version}
 #!BuildIgnore: brp-check-suse
-BuildRequires: -post-build-checks
+#!BuildIgnore: post-build-checks
 %endif
 
 %if 0%{?suse_version}
