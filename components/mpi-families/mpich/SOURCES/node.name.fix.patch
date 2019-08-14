@@ -1,0 +1,65 @@
+From e069affcf2c8e98ef7e3cbbb9fae00a91161143b Mon Sep 17 00:00:00 2001
+From: Giuseppe Congiu <gcongiu@anl.gov>
+Date: Thu, 25 Jul 2019 21:47:00 -0500
+Subject: [PATCH] pm/hydra: fix bug in slurm nodelist parsing
+
+Current slurm nodelist parsing in hydra fails to detect cases in which
+the nodelist contains alpha-numeric component as basename of nodes,
+e.g., 'host00' or 'host00-00', but no range component, e.g., '[00-12]'.
+This happens because regexec() is not matching null strings as expected.
+As a result node names are being left out of the list of usable nodes.
+---
+ .../external/slurm_query_node_list.c          | 20 +++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/src/pm/hydra/tools/bootstrap/external/slurm_query_node_list.c b/src/pm/hydra/tools/bootstrap/external/slurm_query_node_list.c
+index 47d07a162d..ba44da9539 100644
+--- a/src/pm/hydra/tools/bootstrap/external/slurm_query_node_list.c
++++ b/src/pm/hydra/tools/bootstrap/external/slurm_query_node_list.c
+@@ -93,16 +93,16 @@ static HYD_status list_to_nodes(char *str)
+     regcomp(&ematch_old, "([a-zA-Z]+[0-9]+)", REG_EXTENDED);
+ 
+     /* compile group-0 regex for new format: "h00-[00-12,14] | h00[00-12,14] | h00-14 | h0014" */
+-    regcomp(&gmatch_new[0], "(,|^)([a-zA-Z0-9]+-?)(\\[[-,0-9]+\\]|[0-9]*)(,|$)", REG_EXTENDED);
++    regcomp(&gmatch_new[0], "(,|^)([a-zA-Z0-9-]+)(\\[[-,0-9]+\\]|[0-9]*)(,|$)", REG_EXTENDED);
+ 
+     /* compile group-1 regex for new format: "00-12 | 14 | " */
+-    regcomp(&gmatch_new[1], "([[,]|^)([0-9]+-[0-9]+|[0-9]*)([],]|$)", REG_EXTENDED);
++    regcomp(&gmatch_new[1], "([[,]|^)([0-9]+-[0-9]+|[0-9]+)([],]|$)", REG_EXTENDED);
+ 
+     /* compile range regex for new format: "00-12" */
+     regcomp(&rmatch_new, "([0-9]+)-([0-9]+)", REG_EXTENDED);
+ 
+     /* compile element regex for new format: "14 | " */
+-    regcomp(&ematch_new, "([0-9]*)", REG_EXTENDED);
++    regcomp(&ematch_new, "([0-9]+)", REG_EXTENDED);
+ 
+     gpattern[0] = string;
+ 
+@@ -162,7 +162,7 @@ static HYD_status list_to_nodes(char *str)
+         gpattern[0] += gmatch[0][0].rm_eo;
+     }
+ 
+-    /* match new group-0 pattern: (,|^)(h|h-)([00-12,14] | 00-12 | 14)(,|$) */
++    /* match new group-0 pattern: (,|^)(h|h-|h00|h00-)([00-12,14] | [00-12] | 14)(,|$) */
+     while (*gpattern[0] && regexec(&gmatch_new[0], gpattern[0], MAX_GMATCH, gmatch[0], 0) == 0) {
+         /* bound group-0 for group-1 matching: h-[00-h12,14],... -> h-[00-12,14]\0... */
+         tmp[0] = *(gpattern[0] + gmatch[0][0].rm_eo);
+@@ -172,6 +172,18 @@ static HYD_status list_to_nodes(char *str)
+         snprintf(basename, MAX_HOSTNAME_LEN, "%.*s",
+                  (int) (gmatch[0][2].rm_eo - gmatch[0][2].rm_so), gpattern[0] + gmatch[0][2].rm_so);
+ 
++        /*
++         * name is matched entirely by second atom of group-0 pattern;
++         * this happens when there is no numeric range, e.g., [00-12]:
++         * - h, h00, h00-0, h-b00, h-b00-00, etc ...
++         */
++        if (gmatch[0][3].rm_so == gmatch[0][3].rm_eo) {
++            status = HYDU_add_to_node_list(basename, tasks_per_node[k++], &global_node_list);
++            *(gpattern[0] + gmatch[0][0].rm_eo) = tmp[0];
++            gpattern[0] += gmatch[0][0].rm_eo;
++            continue;
++        }
++
+         /* select third atom in group-0 */
+         gpattern[1] = gpattern[0] + gmatch[0][3].rm_so;
