@@ -97,7 +97,11 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 export LDFLAGS="$RPM_LD_FLAGS"
-./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS
+./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --disable-static \
+            --enable-shared \
+            $CONFIGURE_OPTIONS
 
 make V=1 %{?_smp_mflags}
 

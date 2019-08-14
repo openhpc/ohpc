@@ -52,7 +52,7 @@ and GNU Automake).
 
 %build
 export PATH=%{install_path}/bin:$PATH
-./configure --prefix=%{install_path}
+./configure --prefix=%{install_path} --libdir=%{install_path}/lib
 
 %install
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install

@@ -80,12 +80,14 @@ NetCDF data is:
 %ohpc_setup_compiler
 
 module load phdf5
+
 export CPPFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 export CC=mpicc
 
 ./configure --prefix=%{install_path} \
+    --libdir=%{install_path}/lib \
     --enable-shared \
     --enable-netcdf-4 \
     --enable-dap \

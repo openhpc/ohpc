@@ -65,6 +65,7 @@ module load superlu_dist
 
 make config \
     PREFIX=%{install_path} \
+    LIBDIR=%{install_path} \
     CXXFLAGS="-O3 -fPIC" \
     MFEM_USE_MPI=YES \
     MFEM_USE_LAPACK=NO \

@@ -37,6 +37,12 @@ BuildRequires:  python
 BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  xz
 BuildRequires:  zlib-devel
+# Build fails if LMOD dependencies are missing -jcsiadal
+%if "%{mpi_family}" == "impi"
+BuildRequires:  intel-mpi-devel%{PROJ_DELIM}
+%else
+BuildRequires:  %{mpi_family}-%{compiler_family}%{PROJ_DELIM}
+%endif
 
 #!BuildIgnore: post-build-checks
 
@@ -72,6 +78,7 @@ module load scalapack openblas
 # gnu-impi finds include/4.8.0/mpi.mod first, unless told not to.
 ./config/configure.py \
         --prefix=%{install_path} \
+        --libdir=%{install_path}/lib \
 %if %{compiler_family} == intel
         --FFLAGS="-fPIC" \
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \

@@ -35,7 +35,7 @@ Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 Patch1:         boost_fenv_suse.patch
 %endif
 %endif
@@ -93,10 +93,11 @@ see the boost-doc package.
 %setup -q -n %{pname}_%{version_exp}
 
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 %patch1 -p1
 %endif
 %endif
+
 %patch2 -p2
 
 # optflag patches from Fedora

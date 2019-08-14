@@ -88,6 +88,7 @@ export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
 ./configure --prefix=%{install_path} \
+    --libdir=%{install_path}/lib \
     --enable-shared \
     --enable-netcdf-4 \
     --enable-dap \

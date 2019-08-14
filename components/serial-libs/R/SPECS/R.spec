@@ -37,6 +37,7 @@ BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
 BuildRequires:  perl
 BuildRequires:  readline-devel
+
 %if 0%{?suse_version} > 1020
 %if 0%{?suse_version} < 1230
 %if 0%{?suse_version} > 1120
@@ -45,6 +46,7 @@ BuildRequires:  readline-devel
 BuildRequires:  xdg-utils
 %endif
 %endif
+
 BuildRequires:  pango-devel
 BuildRequires:  tcl-devel
 BuildRequires:  xz-devel
@@ -55,6 +57,7 @@ BuildRequires:  libcurl-devel
 BuildRequires:  tk-devel
 # BuildRequires:  xorg-x11-devel
 # CentOS needs X11 headers/libs like Intrisic.h which suse provides
+
 %if 0%{?suse_version}
 #BuildRequires:  texlive-fonts-extra
 %else
@@ -62,19 +65,21 @@ BuildRequires:  libXt-devel
 BuildRequires:  texinfo >= 5.1
 BuildRequires:  bzip2-devel
 %endif
-Requires:       cairo >= 1.2
-Requires:       fontconfig
-Requires:       freetype2
-Requires:       make
-Requires:       readline
-Requires:       xdg-utils
-%if 0%{?suse_version}
+
+%if 0%{?suse_version} && 0%{?sle_version} < 150000
 BuildRequires:  libicu52_1
 Requires:	libicu52_1
 %else
 BuildRequires:  libicu
 Requires:	libicu
 %endif
+
+Requires:       cairo >= 1.2
+Requires:       fontconfig
+Requires:       freetype2
+Requires:       make
+Requires:       readline
+Requires:       xdg-utils
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 Provides:       R = %{version}

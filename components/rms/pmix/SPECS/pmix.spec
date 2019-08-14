@@ -50,7 +50,9 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %setup -q -n %{pname}-%{version}
 
 %build
-CFLAGS="%{optflags}" ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
+CFLAGS="%{optflags}" ./configure --prefix=%{install_path} \
+         --libdir=%{install_path}/lib \
+         || { cat config.log && exit 1; }
 %{__make} %{?_smp_mflags}
 
 %install

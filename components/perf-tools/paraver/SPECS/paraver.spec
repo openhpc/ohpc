@@ -26,15 +26,20 @@ Source0:       https://ftp.tools.bsc.es/wxparaver/wxparaver-%{version}-src.tar.b
 
 BuildRequires: bison
 BuildRequires: boost-devel
+
 %if 0%{?suse_version}
 BuildRequires: libfabric1
 BuildRequires: flex
 BuildRequires: wxGTK3-3_2-devel
+# libboost::DATE_TIME needed for build.
+%if 0%{?sle_version} >= 150000 
+BuildRequires: libboost_date_time1_66_0-devel
+%endif
 %else
-
 BuildRequires: flex-devel
 BuildRequires: wxGTK3-devel
 %endif
+
 BuildRequires: autoconf%{PROJ_DELIM}
 BuildRequires: automake%{PROJ_DELIM}
 BuildRequires: libtool%{PROJ_DELIM}
@@ -68,6 +73,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/bin/wx-config "
 %endif
 
 ./configure --prefix=%{install_path} $CONFIGURE_OPTIONS \
+    --libdir=%{install_path}/lib \
     --with-boost-libdir=/usr/lib64 \
     CXXFLAGS=-I$RPM_BUILD_ROOT/%{install_path}/include \
     LDFLAGS=-L$RPM_BUILD_ROOT/%{install_path}/lib/paraver-kernel

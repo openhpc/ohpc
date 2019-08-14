@@ -27,6 +27,8 @@ Patch1:         pdtoolkit-3.25-umask.patch
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 
+BuildRequires:  cmake-ohpc > 3.14
+
 #!BuildIgnore: post-build-checks
 
 # Default library install path
@@ -43,6 +45,11 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+module load cmake
+
+# Fix improperly configured left-bracket conditionals in configure script.
+# May cause OHPC compiler detection to be overridden
+sed -i "s/\$PLATFORM=apple/\$PLATFORM = apple/" configure
 
 ./configure -prefix=%buildroot%{install_path} \
         -useropt=-fPIC \
@@ -174,3 +181,4 @@ EOF
 %files
 %{OHPC_PUB}
 %doc CREDITS LICENSE README
+

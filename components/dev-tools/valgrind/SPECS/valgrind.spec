@@ -37,7 +37,7 @@ AMD64/MacOSX.
 %setup -q -n %{pname}-%{version}
 
 %build
-./configure --prefix=%{install_path} || { cat config.log && exit 1; }
+./configure --prefix=%{install_path} --libdir=%{install_path}/lib || { cat config.log && exit 1; }
 make %{?_smp_mflags}
 
 %install

@@ -25,7 +25,7 @@ Group:     %{PROJ_NAME}/perf-tools
 URL:       https://github.com/RRZE-HPC/likwid
 Source0:   https://github.com/RRZE-HPC/likwid/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 Patch1:    likwid-gfortran.patch
-BuildRequires: perl-Data-Dumper
+BuildRequires: perl(Data::Dumper)
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version

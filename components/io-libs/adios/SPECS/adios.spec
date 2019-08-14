@@ -54,7 +54,7 @@ Requires: lustre-client%{PROJ_DELIM}
 BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
 BuildRequires: fdupes libcurl4 libcurl-devel
 %else
@@ -91,6 +91,7 @@ module load autotools
 module load phdf5
 module load netcdf
 module load %{python_module_prefix}numpy
+module list
 
 TOPDIR=$PWD
 
@@ -120,6 +121,7 @@ cp /usr/lib/rpm/config.guess config
 %endif
 
 ./configure --prefix=%{install_path} \
+    --libdir=%{install_path}/lib \
     --enable-shared=yes \
     --enable-static=no \
 %if 0%{with_lustre}

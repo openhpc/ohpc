@@ -68,13 +68,17 @@ ln -s mpfr-%{mpfr_version} mpfr
 
 %{__mkdir} obj
 cd obj
-../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path} --disable-static --enable-shared
+../configure --disable-multilib \
+             --enable-languages="c,c++,fortran" \
+             --prefix=%{install_path} \
+             --disable-static \
+             --enable-shared
 make %{?_smp_mflags}
 %install
 cd obj
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/include
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/lib
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/install-tools

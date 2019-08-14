@@ -20,7 +20,7 @@ Summary:	Dimemas tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:	5.4.1
 Release:	1
-License:	GNU
+License:	GNU LGPL
 Group:		%{PROJ_NAME}/perf-tools
 URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
@@ -28,12 +28,12 @@ Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison
-%if 0%{?suse_version}
 BuildRequires: flex
-%else
-BuildRequires: flex
+
+%if 0%{!?suse_version}
 BuildRequires: flex-devel
 %endif
+
 BuildRequires: autoconf%{PROJ_DELIM}
 BuildRequires: automake%{PROJ_DELIM}
 BuildRequires: libtool%{PROJ_DELIM}
@@ -59,11 +59,16 @@ systems.
 
 %build
 %ohpc_setup_compiler
-module load autotools
+#module load autotools
 module load boost
 
 ./bootstrap
-CFLAGS="-std=c99" LDFLAGS="-lstdc++" ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR
+CFLAGS="-std=c99" LDFLAGS="-lstdc++" \
+./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --with-boost=$BOOST_DIR \
+            --with-boost-libdir=$BOOST_LIB \
+            --with-boost-program-options=$BOOST_LIB/libboost_program_options.so.1.70.0 \
 
 make %{?_smp_mflags}
 

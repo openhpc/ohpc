@@ -76,6 +76,7 @@ export MPIFC=mpifc
 export MPICXX=mpicxx
 
 ./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
 	    --enable-fortran         \
             --enable-static=no       \
             --enable-parallel        \

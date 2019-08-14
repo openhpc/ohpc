@@ -75,6 +75,7 @@ for i in %{precision_list} ; do
 	cd ${i}
 	ln -s ../configure
 	./configure --prefix=%{install_path} ${LOOPBASEFLAGS} \
+                --libdir=%{install_path}/lib \
 		--enable-${i} \
 		--enable-static=no || { cat config.log && exit 1; }
 	make %{?_smp_mflags}

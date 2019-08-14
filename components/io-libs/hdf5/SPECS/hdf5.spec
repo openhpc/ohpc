@@ -66,6 +66,7 @@ cp /usr/lib/rpm/config.guess bin
 %ohpc_setup_compiler
 
 ./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
 	    --enable-fortran         \
             --enable-static=no       \
 	    --enable-shared          \

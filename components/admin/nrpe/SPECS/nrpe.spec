@@ -128,7 +128,7 @@ install -D -p -m 0755 src/check_nrpe %{buildroot}/%{_libdir}/nagios/plugins/chec
 install -D -p -m 0644 %{SOURCE1} %{buildroot}/%{_sysconfdir}/sysconfig/%{pname}
 install -d %{buildroot}%{_sysconfdir}/nrpe.d
 install -d %{buildroot}%{_localstatedir}/run/%{pname}
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?sle_version} >= 150000
 install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{pname}.conf
 %endif
 

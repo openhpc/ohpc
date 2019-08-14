@@ -62,7 +62,7 @@ BuildRequires: perl(Test::More)
 BuildRequires: perl(Test::Simple)
 BuildRequires: unzip
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
 BuildRequires: procps
@@ -196,7 +196,7 @@ install -p -m 0644 %{SOURCE10} %{SOURCE11} %{SOURCE12} html/images/logos/
     %ifarch aarch64
     --with-initdir=%{_unitdir} \
     %endif
-    %if 0%{?sles_version} || 0%{?suse_version}
+    %if 0%{?sle_version} || 0%{?suse_version}
     --with-httpd-conf=/etc/apache2/conf.d \
     %else
     --with-httpd-conf=/etc/httpd/conf.d \
@@ -256,7 +256,7 @@ exit 0
 %systemd_preun %{pname}.service
 
 %post
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 /usr/sbin/a2enmod php5
 /usr/sbin/a2enmod version
 %{_sbindir}/usermod -a -G %{pname} wwwrun || :
@@ -269,7 +269,7 @@ exit 0
 
 
 %postun
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 /usr/bin/systemctl try-restart apache2 > /dev/null 2>&1 || :
 %else
 /usr/bin/systemctl try-restart httpd > /dev/null 2>&1 || :
@@ -292,18 +292,25 @@ exit 0
 %{_bindir}/*
 %{_libdir}/%{pname}/cgi-bin/*cgi
 %{_unitdir}/%{pname}.service
+
 %ifarch aarch64
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 /usr/lib/systemd/system/nagios.service
 %endif
-%else
+%else  # Arch is not aarch64
+%if 0%{?sle_version} >= 150000
+/usr/lib/systemd/system/nagios.service
+%else # Arch is not aarch64 and OS is not SLE15 or later
 /etc/init.d/nagios
-%endif
-%if 0%{?sles_version} || 0%{?suse_version}
+%endif 
+%endif # ifarch
+
+%if 0%{?sle_version} || 0%{?suse_version}
 %config(noreplace) %{_sysconfdir}/apache2/conf.d/nagios.conf
 %else
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/nagios.conf
 %endif
+
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{pname}
 %config(noreplace) %{_sysconfdir}/%{pname}/*cfg
 %config(noreplace) %{_sysconfdir}/%{pname}/objects/*cfg
@@ -311,7 +318,7 @@ exit 0
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/objects
 %attr(0750,root,nagios) %dir %{_sysconfdir}/%{pname}/conf.d
 %attr(0640,root,nagios) %config(noreplace) %{_sysconfdir}/%{pname}/private/resource.cfg
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 %attr(0640,root,www) %config(noreplace) %{_sysconfdir}/%{pname}/passwd
 %attr(0640,root,www) %config(noreplace) %{_datadir}/%{pname}/html/config.inc.php
 %else
