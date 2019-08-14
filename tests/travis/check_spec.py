@@ -20,8 +20,8 @@ regex_wrong = [
     '^BuildRoot.*',
     # make sure there is no %defattr(-,root,root)
     '^%defattr\(-,root,root\).*',
-    # make sure there is no global definition of PROJ_DELIM
-    '^.*%global.*PROJ_DELIM.*$',
+    # make sure there is no global redefinition of PROJ_DELIM
+    '^.*%global[ \t]*PROJ_DELIM.*$',
     ]
 
 regex_required = [
