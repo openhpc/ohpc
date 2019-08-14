@@ -22,7 +22,7 @@
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
 
-%define sles_kernel 4.12.14-94.41-default
+%define sles_kernel 4.12.14-lp151.28.10-default
 %define kdir /lib/modules/%{sles_kernel}/source/
 %define kobjdir /lib/modules/%{sles_kernel}/build/
 %endif
@@ -85,7 +85,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.12.0}
+%{!?version: %global version 2.12.2}
 %{!?kver:    %global kver    %(uname -r)}
 %{!?kdir:    %global kdir    /lib/modules/%{kver}/source}
 %{!?kobjdir: %global kobjdir %(if [ "%{kdir}" = "/lib/modules/%{kver}/source" ]; then echo "/lib/modules/%{kver}/build"; else echo "%{kdir}"; fi)}
@@ -367,6 +367,8 @@ fi
 # inside $CONFIGURE_ARGS
 # kmod tools/scripts require %{name} directory with kernel modules
 %define eval_configure %(echo '%configure' | sed -e 's#\./configure#eval ./configure#' -e 's/--\\(build\\|host\\|target\\)=[^ ][^ ]* //g')
+
+sh ./autogen.sh
 
 %eval_configure $CONFIGURE_ARGS \
 	%{?with_lustre_tests:--enable-tests}%{!?with_lustre_tests:--disable-tests} \
