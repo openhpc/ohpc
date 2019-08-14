@@ -22,12 +22,12 @@
 
 Summary:   Open Community Runtime (OCR) for shared memory
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.0.1
+Version:   1.2.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://xstack.exascale-tech.com/wiki
-Source0:   OCRv%{version}_ohpc.tbz2
+Source0:   OCRv%{version}_ohpc.tar.bz2
 
 %description
 The Open Community Runtime project is creating an application
@@ -72,7 +72,7 @@ This version is for clusters using MPI.
 
 %prep
 
-%setup -q -n ocr-OCRv%{version}_ohpc
+%setup -q -n ocr
 
 %build
 cd ocr/build
