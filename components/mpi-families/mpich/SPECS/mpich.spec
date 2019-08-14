@@ -37,8 +37,7 @@ Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
 Patch0:    config.pmix.patch
-Patch1:    8a12577691979dbe3d9281b4c59e38558ab3e777.patch
-Patch2:    node.name.fix.patch
+Patch1:    node.name.fix.patch
 # 08/14/19 karl@ices.utexas.edu - upping patch fuzz factor for node.name patch
 %global _default_patch_fuzz 2
 
@@ -68,7 +67,6 @@ Message Passing Interface (MPI) standard.
 %setup -q -n %{pname}-%{version}
 %patch0 -p0
 %patch1 -p1
-%patch2 -p1
 
 %build
 # OpenHPC compiler designation
