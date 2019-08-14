@@ -40,6 +40,8 @@ BuildRequires:	gcc cmake
 
 Patch100: bz714249-1-cpu-count.patch
 Patch101: bz746288-1-cpu-count-arch.patch
+Patch102: sigar-glibc-2.28.patch
+Patch103: sigar-inline-functions.patch
 
 %description
 The Sigar API provides a portable interface for gathering system
@@ -75,12 +77,13 @@ Header files for developing against the Sigar API
 
 %patch100 -p1 -b .bz714249
 %patch101 -p1 -b .bz746288
+%patch102 -p1
+%patch103 -p1
 
 %build
 
 # Fix lib directory
 sed -i.sed s:DESTINATION\ lib:DESTINATION\ %{_lib}: src/CMakeLists.txt
-
 %cmake 
 make %{?_smp_mflags}
 

@@ -1,0 +1,27 @@
+From b4e27b0b3167aac9a0f3f08dd2b2a0c0c9c4d797 Mon Sep 17 00:00:00 2001
+From: Logan Rosen <loganrosen@gmail.com>
+Date: Fri, 11 Jan 2019 22:52:21 -0500
+Subject: [PATCH] Fix build with glibc 2.28
+
+---
+ src/os/linux/linux_sigar.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/os/linux/linux_sigar.c b/src/os/linux/linux_sigar.c
+index a3fd2301..de9c960c 100644
+--- a/src/os/linux/linux_sigar.c
++++ b/src/os/linux/linux_sigar.c
+@@ -23,8 +23,13 @@
+ #include <sys/param.h>
+ #include <sys/stat.h>
+ #include <sys/times.h>
++#include <sys/types.h>
+ #include <sys/utsname.h>
+ 
++#ifdef __GNU_LIBRARY__
++#include <sys/sysmacros.h>
++#endif
++
+ #include "sigar.h"
+ #include "sigar_private.h"
+ #include "sigar_util.h"
