@@ -30,7 +30,7 @@ BuildRequires: libevent-devel
 
 Summary:   MPICH MPI implementation
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
-Version:   3.3
+Version:   3.3.1
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
