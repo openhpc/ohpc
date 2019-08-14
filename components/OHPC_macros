@@ -175,3 +175,16 @@ Requires:      %{python_prefix}
     %endif \
 }
 
+# Lua version
+%if 0%{!?luaver:1}
+# Set default Lua version to 5.1, the version used by CentOS 7
+%global luaver 5.1
+# Lua 5.2 is used by SLES 12
+%if 0%{?suse_version} >= 1200 && 0%{?suse_version} < 1350
+%global luaver 5.2
+%endif # sle12
+# Lua 5.3 is used by OpenSUSE/SLES 15 and RHEL/CentOS 8
+%if 0%{?sle_version} >= 150000 || 0%{?rhel_version} >=800 || 0%{?centos_version} >= 800
+%global luaver 5.3
+%endif # sle15/rh8
+%endif # luaver
