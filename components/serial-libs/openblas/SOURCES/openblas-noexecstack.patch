@@ -1,14 +1,14 @@
 --- a/exports/Makefile	2018-05-23 06:12:20.000000000 -0700
 +++ b/exports/Makefile	2018-07-12 12:20:33.000000000 -0700
-@@ -141,6 +141,7 @@
- endif
+@@ -151,6 +141,7 @@
+
  ifneq ($(C_COMPILER), LSB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o ../$(LIBSONAME) \
 +    -Wl,-z,noexecstack \
  	-Wl,--whole-archive $< -Wl,--no-whole-archive \
  	-Wl,-soname,$(INTERNALNAME) $(EXTRALIB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -w -o linktest linktest.c ../$(LIBSONAME) $(FEXTRALIB) && echo OK.
-@@ -168,6 +169,7 @@
+@@ -179,6 +169,7 @@
  ../$(LIBSONAME) : ../$(LIBNAME).renamed linktest.c
  endif
  	$(CC) $(CFLAGS) $(LDFLAGS)  -shared -o ../$(LIBSONAME) \
@@ -16,7 +16,7 @@
  	-Wl,--whole-archive $< -Wl,--no-whole-archive \
  	$(FEXTRALIB) $(EXTRALIB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -w -o linktest linktest.c ../$(LIBSONAME) $(FEXTRALIB) && echo OK.
-@@ -187,6 +189,7 @@
+@@ -199,6 +189,7 @@
  
  so : ../$(LIBSONAME)
  	$(CC) $(CFLAGS) $(LDFLAGS)  -shared -o ../$(LIBSONAME) \
