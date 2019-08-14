@@ -39,6 +39,8 @@ Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.
 Patch0:    config.pmix.patch
 Patch1:    8a12577691979dbe3d9281b4c59e38558ab3e777.patch
 Patch2:    node.name.fix.patch
+# 08/14/19 karl@ices.utexas.edu - upping patch fuzz factor for node.name patch
+%global _default_patch_fuzz 2
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
