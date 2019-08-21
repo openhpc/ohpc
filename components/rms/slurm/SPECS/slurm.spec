@@ -19,7 +19,7 @@
 # $Id$
 #
 Name:		%{pname}%{PROJ_DELIM}
-Version:	18.08.7
+Version:	18.08.8
 %global rel	1
 Release:	%{rel}%{?dist}
 Summary:	Slurm Workload Manager
@@ -37,8 +37,6 @@ URL:		https://slurm.schedmd.com/
 
 Source:		https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
 Source1:        slurm.epilog.clean
-# x11 patch from https://bugs.schedmd.com/show_bug.cgi?id=6785
-Patch1:         x11_util.patch
 
 # build options		.rpmmacros options	change to default action
 # ====================  ====================	========================
@@ -355,7 +353,6 @@ notifies slurm about failed nodes.
 %prep
 # when the rel number is one, the tarball filename does not include it
 %setup -n %{slurm_source_dir}
-%patch1 -p0
 
 %build
 %configure \
@@ -707,7 +704,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_docdir}
   /usr/sbin/groupadd -r slurm -g 202
 /usr/bin/getent passwd slurm >/dev/null 2>&1 || \
   /usr/sbin/useradd -c "SLURM resource manager" \
-  -d %{_sysconfdir} -g slurm -s /bin/nologin -r slurm -u 202
+  -d %{_sysconfdir} -g slurm -s /sbin/nologin -r slurm -u 202
   
 exit 0
 

@@ -1,5 +1,34 @@
 # -*- mode: sh; fill-column: 120; -*-
 
+Version 1.3.8.1 (20 August 2019)
+
+[General]
+
+  * updated SLURM version to address CVE-2019-12838
+  * fix path during slurm account creation (https://github.com/openhpc/ohpc/issues/1017)
+  * apply patches to MPICH build to support job launch with hostnames that do not end in a number
+    (https://github.com/openhpc/ohpc/issues/1016)
+
+[Component Version Changes]
+
+  * mpich-gnu8-ohpc                          (3.3 -> 3.3.1)
+  * mpich-intel-ohpc                         (3.3 -> 3.3.1)
+  * slurm-contribs-ohpc                      (18.08.7 -> 18.08.8)
+  * slurm-devel-ohpc                         (18.08.7 -> 18.08.8)
+  * slurm-example-configs-ohpc               (18.08.7 -> 18.08.8)
+  * slurm-libpmi-ohpc                        (18.08.7 -> 18.08.8)
+  * slurm-ohpc                               (18.08.7 -> 18.08.8)
+  * slurm-openlava-ohpc                      (18.08.7 -> 18.08.8)
+  * slurm-pam_slurm-ohpc                     (18.08.7 -> 18.08.8)
+  * slurm-perlapi-ohpc                       (18.08.7 -> 18.08.8)
+  * slurm-slurmctld-ohpc                     (18.08.7 -> 18.08.8)
+  * slurm-slurmd-ohpc                        (18.08.7 -> 18.08.8)
+  * slurm-slurmdbd-ohpc                      (18.08.7 -> 18.08.8)
+  * slurm-sview-ohpc                         (18.08.7 -> 18.08.8)
+  * slurm-torque-ohpc                        (18.08.7 -> 18.08.8)
+
+----------------------------------------------------------------------------------------------------------------------
+
 Version 1.3.8 (11 June 2019)
 
 [General]
