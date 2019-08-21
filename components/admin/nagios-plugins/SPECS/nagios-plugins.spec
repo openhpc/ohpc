@@ -29,11 +29,8 @@ URL: https://www.nagios-plugins.org/
 Source0: http://www.nagios-plugins.org/download/nagios-plugins-%{version}.tar.gz
 Source1: nagios-plugins.README.Fedora
 Patch2: nagios-plugins-0002-Remove-assignment-of-not-parsed-to-jitter.patch
-# 3 & 4 appear to no longer be necessary in 2.1.1
-#Patch3: nagios-plugins-0003-Fedora-specific-fixes-for-searching-for-diff-and-tai.patch
-#Patch4: nagios-plugins-0004-Fedora-specific-patch-for-not-to-fixing-fully-qualif.patch
-# https://bugzilla.redhat.com/512559
 Patch7: nagios-plugins-0007-Fix-the-use-lib-statement-and-the-external-ntp-comma.patch
+Patch8: nagios-plugins-0008-Fix-new-mariadb-support.patch
 
 %if 0%{?fedora} || 0%{?rhel}
 BuildRequires:  qstat
@@ -41,16 +38,13 @@ BuildRequires:  qstat
 
 %if 0%{?suse_version}
 BuildRequires: openldap2-devel
+BuildRequires: net-snmp
 %else
 BuildRequires: openldap-devel
+BuildRequires: net-snmp-utils
 %endif
 BuildRequires: mysql-devel
 BuildRequires: net-snmp-devel
-%if 0%{?suse_version}
-BuildRequires: net-snmp
-%else
-BuildRequires: net-snmp-utils
-%endif
 BuildRequires: samba-client
 BuildRequires: postgresql-devel
 BuildRequires: gettext
@@ -74,7 +68,7 @@ BuildRequires: radiusclient-ng-devel
 
 BuildRequires: libdbi-devel
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
 %endif
@@ -151,8 +145,11 @@ Requires:  nagios-plugins-time%{PROJ_DELIM}
 Requires:  nagios-plugins-ups%{PROJ_DELIM}
 Requires:  nagios-plugins-users%{PROJ_DELIM}
 Requires:  nagios-plugins-wave%{PROJ_DELIM}
-%if 0%{?fedora} > 14 || 0%{?rhel} > 6
+%if 0%{?fedora} > 14 || 0%{?rhel} > 6 || 0%{?sle_version} >= 150000
+%global include_game 1
 Requires: nagios-plugins-game
+%else
+%global include_game 0
 %endif
 
 %ifnarch ppc ppc64 ppc64p7 sparc sparc64
@@ -305,7 +302,7 @@ Provides: %{pname}-fping
 %description -n %{pname}-fping%{PROJ_DELIM}
 Provides check_fping support for Nagios.
 
-%if 0%{?fedora} > 14 || 0%{?rhel} > 6
+%if %{include_game}
 %package -n %{pname}-game%{PROJ_DELIM}
 Summary: Nagios Plugin - check_game
 Group: Applications/System
@@ -722,9 +719,8 @@ Provides check_wave support for Nagios.
 %setup -q -n %{pname}-%{version}
 
 %patch2 -p1 -b .not_parsed
-#%patch3 -p1 -b .proper_paths
-#%patch4 -p1 -b .no_need_fo_fix_paths
 %patch7 -p1 -b .ext_ntp_cmds
+%patch8 -p1 
 
 
 %build
@@ -734,7 +730,7 @@ export SUID_LDFLAGS=-pie
 	--libexecdir=%{_libdir}/nagios/plugins \
 	--with-dbi \
 	--with-mysql \
-%if 0%{?fedora} > 14 || 0%{?rhel} > 6
+%if %{include_game}
 	PATH_TO_QSTAT=%{_bindir}/quakestat \
 %endif
 	PATH_TO_FPING=%{_sbindir}/fping \
@@ -850,7 +846,7 @@ chmod 644 %{buildroot}/%{_libdir}/nagios/plugins/utils.pm
 %endif
 %{_libdir}/nagios/plugins/check_fping
 
-%if 0%{?fedora} > 14 || 0%{?rhel} > 6
+%if %{include_game}
 %files -n %{pname}-game%{PROJ_DELIM}
 %{_libdir}/nagios/plugins/check_game
 %endif
