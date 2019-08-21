@@ -43,9 +43,12 @@ BuildRequires:  texlive-ec
 BuildRequires:  texlive-cm-super
 BuildRequires:  texlive-dvips
 %endif
+%if 0%{?sle_version} >= 150000
+BuildRequires:  texlive-latexmk-bin
+%else
 BuildRequires:  latexmk
+%endif
 BuildRequires:  git
-
 
 
 %description 
