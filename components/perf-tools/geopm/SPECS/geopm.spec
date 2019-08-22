@@ -78,6 +78,7 @@ including support for static control.
 %ohpc_setup_compiler
 test -f configure || ./autogen.sh
 ./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
             --disable-doc \
             || ( cat config.log && false )
 %{__make}

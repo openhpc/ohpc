@@ -77,11 +77,14 @@ CC=mpicc
 CXX=mpicxx
 FC=mpif90
 
+./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --enable-demangling \
+            --disable-libunwind \
 %ifarch aarch64
-./configure --prefix=%{install_path} --enable-demangling --disable-libunwind --enable-setjmp || { cat config.log && exit 1; }
-%else
-./configure --prefix=%{install_path} --enable-demangling --disable-libunwind || { cat config.log && exit 1; }
+            --enable-setjmp \
 %endif
+            || { cat config.log && exit 1; }
 
 %install
 

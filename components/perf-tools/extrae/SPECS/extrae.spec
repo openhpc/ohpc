@@ -60,10 +60,17 @@ export compiler_vars="CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort"
 %endif
 
 ./bootstrap
-./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind \
-    --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR \
+./configure $compiler_vars \
+            --with-xml-prefix=/usr \
+            --with-papi=$PAPI_DIR  \
+            --without-unwind \
+            --without-dyninst \
+            --disable-openmp-intel \
+            --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --with-mpi=$MPI_DIR \
 %if  "%{mpi_family}" == "impi"
-    --with-mpi-libs=$MPI_DIR/lib/release \
+            --with-mpi-libs=$MPI_DIR/lib/release \
 %endif
     || { cat config.log && exit 1; }
 

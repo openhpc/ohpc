@@ -90,7 +90,7 @@ about the hardware, bind processes, and much more.
 sed -i 's/1.11 dist-bzip2 subdir-objects foreign tar-ustar parallel-tests -Wall -Werror/1.10 dist-bzip2 subdir-objects foreign tar-ustar -Wall -Werror/g' configure.ac
 %endif
 autoreconf --force --install
-./configure --prefix=%{install_path}
+./configure --prefix=%{install_path} --libdir=%{install_path}/lib
 ##sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 ##sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %{__make} %{?_smp_mflags} V=1
