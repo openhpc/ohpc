@@ -1,6 +1,6 @@
 --- petsc-3.7.0/config/BuildSystem/config/setCompilers.py	2016-04-25 08:17:04.000000000 -0700
 +++ petsc-3.7.0.patch/config/BuildSystem/config/setCompilers.py	2016-05-11 19:37:13.000000000 -0700
-@@ -1387,7 +1387,7 @@
+@@ -1443,7 +1443,7 @@
        self.pushLanguage(language)
        # test '-R' before '-rpath' as sun compilers [c,fortran] don't give proper errors with wrong options.
        if not Configure.isDarwin(self.log):
