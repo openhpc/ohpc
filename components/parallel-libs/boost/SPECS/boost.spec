@@ -40,9 +40,6 @@ Patch1:         boost_fenv_suse.patch
 %endif
 %endif
 
-# https://github.com/boostorg/mpi/pull/81
-Patch2:        https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.69-mpi-c_data.patch
-
 # optflag patch from Fedora
 Patch3: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-bjam-build-flags.patch
 Patch4: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-build-optflags.patch
@@ -97,7 +94,6 @@ see the boost-doc package.
 %patch1 -p1
 %endif
 %endif
-%patch2 -p2
 
 # optflag patches from Fedora
 %patch3 -p1
