@@ -41,7 +41,6 @@ Patch1:         boost_fenv_suse.patch
 %endif
 
 # optflag patch from Fedora
-Patch3: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-bjam-build-flags.patch
 Patch4: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-build-optflags.patch
 
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
@@ -95,8 +94,7 @@ see the boost-doc package.
 %endif
 %endif
 
-# optflag patches from Fedora
-%patch3 -p1
+# optflag patches from Fedora 
 %patch4 -p1
 
 %build
