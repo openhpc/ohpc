@@ -124,6 +124,10 @@ export MPICXX=mpicxx
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
 
+%if "%{compiler_family}" == "intel"
+export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -std=c++11"
+%endif
+
 cat << "EOF" >> user-config.jam
 %if "%{compiler_family}" == "gnu8"
 import os ;
