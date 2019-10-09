@@ -83,11 +83,11 @@ compiler_families=["gnu8","intel"]
 mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 
-standalone = ["!clustershell","!cmake","!docs","!easybuild","!lmod",
+standalone = ["clustershell","!cmake","!docs","!easybuild","!lmod",
 	      "!meta-packages","!papi","!singularity","!slurm","!test-suite","!valgrind"]
 
 # define (compiler dependent) packages
-compiler_dependent = ["!hdf5","!mvapich2","!likwid","!plasma","!R"]
+compiler_dependent = ["!hdf5","mvapich2","!likwid","!plasma","!R"]
 
 # overdefault compiler families for any desired components
 R_compiler=["gnu8"]
@@ -95,3 +95,4 @@ opencoarrays_compiler=["gnu8"]
 
 mpi_dependent = ["boost","!dimemas","!extrae","!geopm","!mumps","!opencoarrays","omb","!petsc","!phdf5",
 	         "!scorep","!slepc"]
+
