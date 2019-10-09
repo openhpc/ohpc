@@ -93,5 +93,5 @@ compiler_dependent = ["!hdf5","!mvapich2","!likwid","!plasma","!R"]
 R_compiler=["gnu8"]
 opencoarrays_compiler=["gnu8"]
 
-mpi_dependent = ["boost","!dimemas","!extrae","!geopm","!mumps","!opencoarrays","!omb","!petsc","!phdf5",
+mpi_dependent = ["boost","!dimemas","!extrae","!geopm","!mumps","!opencoarrays","omb","!petsc","!phdf5",
 	         "!scorep","!slepc"]
