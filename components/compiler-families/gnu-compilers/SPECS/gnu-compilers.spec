@@ -10,21 +10,20 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_version 8.3.0
-%global gnu_major_ver 8
-%global gnu_release 3
-%global pname gnu8-compilers
+%global gnu_version 9.2.0
+%global gnu_major_ver 9
+%global pname gnu9-compilers
 
 # Define subcomponent versions required for build
 
 %global gmp_version 6.1.2
-%global mpc_version 1.0.3
-%global mpfr_version 3.1.6
+%global mpc_version 1.1.0
+%global mpfr_version 4.0.2
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
 Version:   %{gnu_version}
-Release:   %{gnu_release}%{?dist}
+Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://gcc.gnu.org/
