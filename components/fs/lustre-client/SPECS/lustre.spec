@@ -201,6 +201,7 @@ Source5: kmp-lustre-osd-zfs.preamble
 Source6: kmp-lustre-osd-zfs.files
 Source7: kmp-lustre-tests.files
 Patch0:  8b77b0b1.diff
+Patch1:  dma-header.patch
 URL: https://wiki.whamcloud.com/
 Requires: %{requires_kmod_name} = %{requires_kmod_version} zlib
 Requires: %{requires_yaml_name}
@@ -341,6 +342,12 @@ clients in order to run
 %prep
 %setup -qn lustre-%{version}
 %patch0 -p1
+%if 0%{?centos_version} == 700
+# latest centos7.7 kernel no longer provides linux/pci-dma.h header
+# see discussion at: https://www.mail-archive.com/lustre-discuss@lists.lustre.org/msg15804.html
+%patch1 -p0
+%endif
+
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
