@@ -21,7 +21,7 @@ import coloredlogs
 #---
 # global config settings
 obsurl="https://build.openhpc.community"
-version_in_progress="1.3.8"
+version_in_progress="1.3.9"
 configFile="config"
 
 #---
