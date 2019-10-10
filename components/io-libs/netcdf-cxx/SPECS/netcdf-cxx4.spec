@@ -160,3 +160,4 @@ EOF
 %files
 %{OHPC_PUB}
 %doc COPYRIGHT
+
