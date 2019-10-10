@@ -23,7 +23,7 @@ permissions and limitations under the License.
     <!--    correct component path in git and desired branch -->
 
     <param name="subdir">components</param>
-    <param name="revision">obs/OpenHPC_!VERSION!_Factory</param>
+    <param name="revision">!VERSION!</param>
     <param name="include">!GROUP!</param>
     <param name="include">OHPC_macros</param>
 
