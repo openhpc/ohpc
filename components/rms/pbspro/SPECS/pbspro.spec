@@ -15,7 +15,7 @@
 %endif
 
 %if !%{defined pbs_version}
-%define pbs_version 19.1.1
+%define pbs_version 19.1.3
 %endif
 
 %if !%{defined pbs_release}
@@ -71,7 +71,7 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
-BuildRequires: hwloc-devel
+BuildRequires: hwloc-devel < 2.0
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
 BuildRequires: libedit-devel
@@ -114,8 +114,8 @@ HPC clusters, clouds and supercomputers.
 %package -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 Summary: PBS Professional for a server host
 Group:  %{PROJ_NAME}/rms
-Conflicts: pbspro-execution-ohpc
-Conflicts: pbspro-client-ohpc
+Conflicts: pbspro-execution%{PROJ_DELIM}
+Conflicts: pbspro-client%{PROJ_DELIM}
 Conflicts: pbspro-server
 Conflicts: pbspro-execution
 Conflicts: pbspro-client
@@ -153,8 +153,8 @@ PBS Professional components.
 %package -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
 Summary: PBS Professional for an execution host
 Group:   %{PROJ_NAME}/rms
-Conflicts: pbspro-server-ohpc
-Conflicts: pbspro-client-ohpc
+Conflicts: pbspro-server%{PROJ_DELIM}
+Conflicts: pbspro-client%{PROJ_DELIM}
 Conflicts: pbspro-server
 Conflicts: pbspro-execution
 Conflicts: pbspro-client
@@ -190,8 +190,8 @@ does include the PBS Professional user commands.
 %package -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
 Summary: PBS Professional for a client host
 Group: %{PROJ_NAME}/rms
-Conflicts: pbspro-server-ohpc
-Conflicts: pbspro-execution-ohpc
+Conflicts: pbspro-server%{PROJ_DELIM}
+Conflicts: pbspro-execution%{PROJ_DELIM}
 Conflicts: pbspro-server
 Conflicts: pbspro-execution
 Conflicts: pbspro-client
@@ -249,12 +249,10 @@ functionality of PBS Professional.
 
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
-%if 0%{?rhel}
-%endif
 
 %build
+[ -f configure ] || ./autogen.sh
 [ -d build ] && rm -rf build
-./autogen.sh
 mkdir build
 cd build
 ../configure CFLAGS="-fPIC" \
@@ -413,7 +411,6 @@ fi
 %else
 %exclude %{_unitdir}/pbs.service
 %endif
-# %{_sysconfdir}/init.d/pbs
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 
