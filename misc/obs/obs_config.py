@@ -33,14 +33,14 @@ def ERROR(output):
 #---
 # Main worker class to read config setup from file and interact with OBS
 class ohpc_obs_tool(object):
-    def __init__(self):
+    def __init__(self,version):
         coloredlogs.install(level='INFO',fmt="%(message)s")
 #        logging.basicConfig(format="%(message)s",level=logging.INFO,stream=sys.stdout)
 #        logger = logging.getLogger()
 #        logger.setLevel("INFO")
-        logging.info("\nVersion in Progress = %s" % version_in_progress)
+        self.vip            = version
 
-        self.vip            = version_in_progress
+        logging.info("\nVersion in Progress = %s" % self.vip)
 
         self.buildConfig    = None
         self.parentCompiler = None
@@ -55,8 +55,11 @@ class ohpc_obs_tool(object):
 
         logging.info("--> Branch version  = %s" % self.branchVer)
         logging.info("--> Micro release   = %s" % self.microVer)
-
-        self.obsProject="OpenHPC:" + self.branchVer + ":Update" + self.microVer + ":Factory"
+        
+        if self.microVer == '0':
+            self.obsProject="OpenHPC:" + self.branchVer + ":Factory"
+        else:
+            self.obsProject="OpenHPC:" + self.branchVer + ":Update" + self.microVer + ":Factory"
         logging.info("--> OBS project     = %s" % self.obsProject)
 
     def checkForDisabledComponents(self,components):
@@ -206,6 +209,7 @@ class ohpc_obs_tool(object):
     # Return: dict of defined packages
     def queryOBSPackages(self):
         base="OpenHPC"
+        
         logging.info("[queryOBSPackages]: checking for packages currently defined in OBS (%s)" % self.vip)
 
         command = ["osc","api","-X","GET","/source/" + self.obsProject]
@@ -437,7 +441,10 @@ class ohpc_obs_tool(object):
                 pname = gitName
             contents = contents.replace('!GROUP!',  group)
             contents = contents.replace('!PACKAGE!',pname)
-            contents = contents.replace('!VERSION!',self.vip)
+            if self.microVer == '0':
+                contents = contents.replace('!VERSION!',self.branchVer)
+            else:
+                contents = contents.replace('!VERSION!',self.vip)
 
             fp_serv = tempfile.NamedTemporaryFile(delete=True,mode='w')
             fp_serv.write(contents)
@@ -541,11 +548,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--configFile",help="filename with package definition options (default = config)",type=str)
     parser.add_argument("--no-dryrun",dest='dryrun',help="flag to disable dryrun mode and execute obs commands",action="store_false")
+    parser.add_argument("--version"   ,help="version in progress",type=str)
     parser.set_defaults(dryrun=True)
     args = parser.parse_args()
 
+    if args.version is None:
+        logging.error("\nPlease specify desired version\n")
+        parser.print_help()
+        parser.exit()
+#        exit(1)
+
     # main worker bee class
-    obs = ohpc_obs_tool()
+    obs = ohpc_obs_tool(args.version)
 
     # read config file and parse component packages desiredfor current version
     obs.parseConfig(configFile=configFile)
