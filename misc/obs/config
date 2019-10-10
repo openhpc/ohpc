@@ -13,11 +13,11 @@ admin         = ["clustershell","conman","docs","examples","ganglia","genders","
 		 "prun","test-suite"]
 dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","python-mpi4py","python-numpy",
 	         "python-scipy","spack","valgrind"]
-io-libs       = ["hdf5","netcdf","netcdf-fortran","phdf5","pnetcdf"]
+io-libs       = ["hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf"]
 runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","pbspro","pmix"]
 serial-libs   = ["R","openblas","plasma"]
-parallel-libs = ["boost","hypre","mumps","opencoarrays","petsc","slepc","superlu_dist"]
+parallel-libs = ["boost","hypre","mfem","mumps","opencoarrays","petsc","slepc","superlu_dist"]
 perf-tools    = ["dimemas","extrae","geopm","likwid","omb","papi","scorep","tau"]
 
 compiler-families=["gnu-compilers","intel-compilers-devel"]
@@ -83,8 +83,8 @@ compiler_families=["gnu8","intel"]
 mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 
-standalone = ["clustershell","!cmake","!docs","!easybuild","!lmod",
-	      "!meta-packages","!papi","!singularity","!slurm","!test-suite","!valgrind"]
+standalone = ["clustershell","!cmake","docs","!easybuild","lmod",
+	      "!meta-packages","!papi","singularity","!slurm","!test-suite","!valgrind"]
 
 # define (compiler dependent) packages
 compiler_dependent = ["!hdf5","mvapich2","!likwid","!plasma","!R"]
@@ -93,6 +93,7 @@ compiler_dependent = ["!hdf5","mvapich2","!likwid","!plasma","!R"]
 R_compiler=["gnu8"]
 opencoarrays_compiler=["gnu8"]
 
-mpi_dependent = ["boost","!dimemas","!extrae","!geopm","!mumps","!opencoarrays","omb","!petsc","!phdf5",
+mpi_dependent = ["boost","!dimemas","!extrae","!geopm","mfem","mumps","netcdf-cxx","netcdf-fortran",
+	         "!opencoarrays","omb","!petsc","!phdf5",
 	         "!scorep","!slepc"]
 
