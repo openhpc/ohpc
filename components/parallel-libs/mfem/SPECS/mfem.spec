@@ -21,7 +21,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Lightweight, general, scalable C++ library for finite element methods
 License:        LGPLv2.1
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.4
+Version:        4.0
 Release:        1%{?dist}
 Source0:        https://github.com/mfem/mfem/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar
 Url:            http://mfem.org
