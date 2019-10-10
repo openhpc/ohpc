@@ -40,6 +40,12 @@ Patch1:         boost_fenv_suse.patch
 %endif
 %endif
 
+# intel-linux toolset fix: https://github.com/boostorg/build/issues/475
+%if "%{compiler_family}" == "intel"
+Patch2:         boost-1.71.0-intel-bootstrap.patch
+%endif
+
+
 # optflag patch from Fedora
 Patch4: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-build-optflags.patch
 
@@ -92,6 +98,10 @@ see the boost-doc package.
 %if 0%{?sles_version} || 0%{?suse_version}
 %patch1 -p1
 %endif
+%endif
+
+%if "%{compiler_family}" == "intel"
+%patch2 -p1
 %endif
 
 # optflag patches from Fedora 
