@@ -131,10 +131,6 @@ export MPIFC=mpifc
 export MPICXX=mpicxx
 %endif
 
-%if "%{compiler_family}" == "intel"
-export MPICXX="$MPICXX -std=c++11"
-%endif
-
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
 
