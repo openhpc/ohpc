@@ -34,7 +34,6 @@ Source5:        Makefile.arm.impi.inc
 Source6:        Makefile.arm.openmpi.inc
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
-Patch2:         mumps-5.0.2-psxe2017.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 %if 0%{?suse_version}
@@ -62,9 +61,6 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %setup -q -n MUMPS_%{version}
 %patch0 -p1
 %patch1 -p1
-%if "%{compiler_family}" == "intel"
-#%patch2 -p2
-%endif
 
 %build
 %ohpc_setup_compiler
