@@ -65,7 +65,7 @@ module load superlu_dist
 
 make config \
     PREFIX=%{install_path} \
-    CXXFLAGS="-O3 -fPIC" \
+    CXXFLAGS="-O3 -fPIC -std=c++11" \
     MFEM_USE_MPI=YES \
     MFEM_USE_LAPACK=NO \
     HYPRE_OPT=-I$HYPRE_INC HYPRE_LIB="-L$HYPRE_LIB -lHYPRE" \
