@@ -30,6 +30,8 @@ Patch2:         openblas-noexecstack.patch
 Patch3:         fix-arm64-cpuid-return.patch
 ExclusiveArch:  %ix86 ia64 ppc ppc64 ppc64le x86_64 aarch64
 
+%global _default_patch_fuzz 1
+
 %description
 OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 
