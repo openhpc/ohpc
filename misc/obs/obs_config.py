@@ -394,7 +394,6 @@ class ohpc_obs_tool(object):
         logging.debug("[%s]: new package _metadata written to %s" % (fname,fp.name))
         command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_meta"] 
 
-
         if self.dryRun:
             logging.error(" " * pad + "--> (dryrun) requesting addition of package: %s" % package)
             
@@ -424,6 +423,22 @@ class ohpc_obs_tool(object):
                 except:
                     ERROR("\nUnable to add marker file for package (%s) to OBS" % package)
         
+        # add a constraint file if present
+        if os.path.isfile("constraints/%s" % package):
+            logging.warn(" " * pad + "--> constraint file provided for %s" % package)
+            constraintFile = "constraints/%s" % package
+
+            command = ["osc","api","-f",constraintFile,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + "_constraints"]  
+            if self.dryRun:
+                logging.debug(" " * pad + "--> (dryrun) requesting addition of %s file for package: %s" % ('_constraints',package))
+
+            logging.debug("[%s]: (command) %s" % (fname,command))
+
+            if not self.dryRun:
+                try:
+                    s = subprocess.check_output(command)
+                except:
+                    ERROR("\nUnable to add _constraint file for package (%s) to OBS" % package)
 
         if(parent):   # Step 2a: add _service file for parent package
 
