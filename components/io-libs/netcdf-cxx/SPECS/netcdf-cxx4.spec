@@ -90,6 +90,7 @@ export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
     --enable-ncgen4 \
     --with-pic \
     --disable-doxygen \
+    --disable-filter-testing \
     --disable-static || { cat config.log && exit 1; }
 
 make %{?_smp_mflags}
