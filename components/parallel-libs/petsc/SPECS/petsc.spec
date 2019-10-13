@@ -37,6 +37,7 @@ BuildRequires:  python
 BuildRequires:  valgrind%{PROJ_DELIM}
 BuildRequires:  xz
 BuildRequires:  zlib-devel
+BuildRequires:  openssh
 
 #!BuildIgnore: post-build-checks
 
