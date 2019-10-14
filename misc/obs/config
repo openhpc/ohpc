@@ -4,6 +4,8 @@ service_template=service.file
 link_compiler_template=link_compiler
 link_mpi_template=link_mpi
 
+override_templates=templates
+
 dry_run=True  # do not make changes to OBS, just do a dry-run
 
 [groups]
@@ -84,7 +86,7 @@ mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 
 standalone = ["clustershell","!cmake","docs","!easybuild","lmod",
-	      "!meta-packages","!papi","singularity","!slurm","!test-suite","!valgrind"]
+	      "!meta-packages","!papi","singularity","!slurm","test-suite","!valgrind"]
 
 # define (compiler dependent) packages
 compiler_dependent = ["!hdf5","mvapich2","!likwid","!plasma","!R"]

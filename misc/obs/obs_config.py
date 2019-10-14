@@ -91,6 +91,7 @@ class ohpc_obs_tool(object):
                 self.serviceFile       = self.buildConfig.get('global','service_template')
                 self.linkFile_compiler = self.buildConfig.get('global','link_compiler_template')
                 self.linkFile_mpi      = self.buildConfig.get('global','link_mpi_template')
+                self.overrides         = self.buildConfig.get('global','override_templates')
                 self.compilerFamilies  = ast.literal_eval(self.buildConfig.get(vip,'compiler_families'))
                 self.MPIFamilies       = ast.literal_eval(self.buildConfig.get(vip,'mpi_families'))
 
@@ -348,16 +349,23 @@ class ohpc_obs_tool(object):
     # add specified package to OBS
     def addPackage(self,package,parent=True,isCompilerDep=False,isMPIDep=False,compiler=None,mpi=None,parentName=None,gitName=None):
         fname = inspect.stack()[0][3]
+        pad = 15
 
-        # verify we have template _service file
+        # verify we have template _service file and cache contents
         if os.path.isfile(self.serviceFile):
-            with open(self.serviceFile,'r') as filehandle:
-                contents = filehandle.read()
-            filehandle.close()
+            # use package-specific template if present, otherwise, use default serviceFile
+            if os.path.isfile("%s/_service.%s" % (self.overrides,package)):
+                logging.warn(" " * pad + "--> package-specific _service file provided for %s" % package)
+                fileOverride = "%s/_service.%s" % (self.overrides,package)
+                with open(fileOverride,'r') as filehandle:
+                    contents = filehandle.read()
+                    filehandle.close()
+            else:
+                with open(self.serviceFile,'r') as filehandle:
+                    contents = filehandle.read()
+                    filehandle.close()
         else:
             ERROR("Unable to read _service file template" % self.serviceFile)
-
-        pad = 15
 
         # verify we have a group definition for the parent package
         if(parent):
