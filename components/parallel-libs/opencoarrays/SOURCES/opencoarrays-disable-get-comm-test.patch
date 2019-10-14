@@ -1,7 +1,10 @@
---- a/src/tests/unit/teams/CMakeLists.txt	2019-04-10 16:06:09.000000000 -0500
-+++ b/src/tests/unit/teams/CMakeLists.txt	2019-05-24 17:10:12.000000000 -0500
-@@ -1,3 +1,3 @@
+--- a/src/tests/unit/teams/CMakeLists.txt	2019-10-08 16:54:36.000000000 -0700
++++ b/src/tests/unit/teams/CMakeLists.txt	2019-10-13 19:55:54.000000000 -0700
+@@ -1,6 +1,6 @@
  caf_compile_executable(team_number team-number.f90)
  caf_compile_executable(teams_subset teams_subset.f90)
 -caf_compile_executable(get_communicator get-communicator.F90)
 +#caf_compile_executable(get_communicator get-communicator.F90)
+ caf_compile_executable(teams_coarray_get teams_coarray_get.f90)
+ caf_compile_executable(teams_coarray_get_by_ref teams_coarray_get.f90)
+ caf_compile_executable(teams_coarray_send teams_coarray_send.f90)
