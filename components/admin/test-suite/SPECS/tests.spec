@@ -67,3 +67,4 @@ exit 0
 %defattr(-,%{testuser},%{testuser},-)
 %dir /home/%{testuser}
 /home/%{testuser}/tests
+
