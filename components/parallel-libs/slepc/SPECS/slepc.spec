@@ -122,4 +122,4 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc LICENSE README docs/slepc.pdf
+%doc LICENSE.md README.md docs/slepc.pdf
