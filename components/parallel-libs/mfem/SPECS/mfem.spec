@@ -33,7 +33,7 @@ Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:       petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 3.12.0
 BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
