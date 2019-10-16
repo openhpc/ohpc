@@ -87,11 +87,8 @@ export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
-./configure --prefix=%{install_path} \
+./configure FC=mpif90 --prefix=%{install_path} \
     --enable-shared \
-    --enable-netcdf-4 \
-    --enable-dap \
-    --enable-ncgen4 \
     --with-pic \
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }
