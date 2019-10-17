@@ -85,7 +85,7 @@ compiler_families=["gnu8","intel"]
 mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 
-standalone = ["clustershell","!cmake","docs","!easybuild","lmod",
+standalone = ["clustershell","!cmake","docs","easybuild","lmod",
 	      "!meta-packages","!papi","singularity","!slurm","test-suite","!valgrind"]
 
 # define (compiler dependent) packages
