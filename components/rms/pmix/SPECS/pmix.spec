@@ -13,15 +13,14 @@
 
 Summary: An extended/exascale implementation of PMI
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.2.2
+Version: 2.2.3
 Release: 1%{?dist}
 License: BSD
 URL: https://pmix.github.io/pmix/
 Group: %{PROJ_NAME}/rms
-Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
+Source0: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 
 BuildRequires: libevent-devel
-BuildRequires: lmod-ohpc libtool-ohpc
 BuildRequires: gcc-c++
 #!BuildIgnore: post-build-checks
 
