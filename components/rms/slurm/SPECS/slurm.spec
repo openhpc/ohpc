@@ -108,17 +108,11 @@ BuildRequires: openssl-devel >= 0.9.6 openssl >= 0.9.6
 %endif
 %endif
 
-%define use_mysql_devel %(perl -e '`rpm -q mariadb-devel`; print $?;')
-
 %if %{with mysql}
-%if %{use_mysql_devel}
-BuildRequires: mysql-devel >= 5.0.0
-%else
 %if 0%{?suse_version}
 BuildRequires: libmysqlclient-devel
 %else
 BuildRequires: mariadb-devel >= 5.0.0
-%endif
 %endif
 %endif
 
@@ -134,11 +128,7 @@ BuildRequires: pkg-config
 %endif
 
 %if %{with cray_network}
-%if %{use_mysql_devel}
-BuildRequires: mysql-devel
-%else
 BuildRequires: mariadb-devel
-%endif
 BuildRequires: cray-libalpscomm_cn-devel
 BuildRequires: cray-libalpscomm_sn-devel
 BuildRequires: hwloc-devel
