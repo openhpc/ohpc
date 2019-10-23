@@ -135,7 +135,9 @@ fi
 %{_unitdir}/msr-safe.service
 %{_udevrulesdir}/10-msr-safe.rules
 %config %{_sysconfdir}/sysconfig/msr-safe
-%doc README
+%doc README.md
+%doc LICENSE
+%doc THANKS
 %{_sbindir}/msrsave
 %{_sbindir}/msr-safe
 %dir %{_mandir}/man1
