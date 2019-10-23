@@ -85,7 +85,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.12.2}
+%{!?version: %global version 2.12.3}
 %{!?kver:    %global kver    %(uname -r)}
 %{!?kdir:    %global kdir    /lib/modules/%{kver}/source}
 %{!?kobjdir: %global kobjdir %(if [ "%{kdir}" = "/lib/modules/%{kver}/source" ]; then echo "/lib/modules/%{kver}/build"; else echo "%{kdir}"; fi)}
@@ -243,7 +243,7 @@ Userspace tools and files for the Lustre file system.
 %if %{with lustre_utils}
 %package osd-ldiskfs-mount
 Summary: osd-ldiskfs-mount contains mount's ldiskfs specific dso.
-Provides: lustre-osd-mount = %{version}-%{fullrelease}
+Provides: lustre-osd-mount = %{version}
 Group: System Environment/Kernel
 
 %description osd-ldiskfs-mount
@@ -257,7 +257,7 @@ LDISKFS hooks for mount/mkfs into a dynamic library.
 %if %{with lustre_utils}
 %package osd-zfs-mount
 Summary: osd-zfs-mount contains mount's zfs specific dso.
-Provides: lustre-osd-mount = %{version}-%{fullrelease}
+Provides: lustre-osd-mount = %{version}
 Group: System Environment/Kernel
 
 %description osd-zfs-mount
@@ -292,7 +292,7 @@ Requires: %{name} = %{version}
 %endif
 Requires: %{requires_kmod_name} = %{requires_kmod_version}
 Requires: %{requires_kmod_tests_name} = %{requires_kmod_version}
-Requires: attr, rsync, perl, lsof, /usr/bin/getconf
+Requires: attr, rsync, perl, lsof, libtool, /usr/bin/getconf
 
 %description tests
 This package contains a set of test binaries and scripts that are intended
@@ -307,7 +307,7 @@ to be used by the Lustre testing framework.
 %package -n lustre-iokit
 Summary: The Lustre IO-Kit is a collection of benchmark tools for a cluster with the Lustre file system.
 Group: Applications/System
-Requires: python > 2.2, sg3_utils
+Requires: python2 > 2.2, sg3_utils
 
 %description -n lustre-iokit
 This package includes five tools:
@@ -446,7 +446,7 @@ echo '%{_unitdir}/lnet.service' >>lustre.files
 echo '%{_sysconfdir}/init.d/lustre' >>lustre.files
 echo '%{_sysconfdir}/sysconfig/lustre' >>lustre.files
 %if %{with gss_keyring}
-echo '%{_sysconfdir}/init.d/lsvcgss' >>lustre.files
+echo '%config(noreplace) %{_sysconfdir}/sysconfig/lsvcgss' >>lustre.files
 echo '%{_sysconfdir}/sysconfig/lsvcgss' >>lustre.files
 echo '%config(noreplace) %{_sysconfdir}/request-key.d/lgssc.conf' >>lustre.files
 %endif
