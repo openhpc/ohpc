@@ -1,12 +1,7 @@
-warewulf-common-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning A suite of tools for clustering
-warewulf-ipmi-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning IPMI Module for Warewulf
-warewulf-provision-gpl_sources-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning This package contains the GPL sources used in Warewulf
-warewulf-cluster-node-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Tools used for clustering with Warewulf
-warewulf-cluster-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Tools used for clustering with Warewulf
-warewulf-vnfs-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf VNFS Module
-warewulf-provision-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module
-warewulf-provision-initramfs-aarch64-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - Initramfs Base and Capabilities for aarch64
-warewulf-provision-initramfs-x86_64-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - Initramfs Base and Capabilities for x86_64
-warewulf-provision-server-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - Server
-warewulf-provision-server-ipxe-aarch64-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - iPXE Bootloader aarch64
-warewulf-provision-server-ipxe-x86_64-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - iPXE Bootloader x86_64
+warewulf-common-ohpc 3.7pre http://warewulf.lbl.gov/ ohpc/provisioning A suite of tools for clustering
+warewulf-ipmi-ohpc 3.7pre http://warewulf.lbl.gov/ ohpc/provisioning IPMI Module for Warewulf
+warewulf-cluster-node-ohpc 3.7pre http://warewulf.lbl.gov/ ohpc/provisioning Tools used for clustering with Warewulf
+warewulf-cluster-ohpc 3.7pre http://warewulf.lbl.gov/ ohpc/provisioning Tools used for clustering with Warewulf
+warewulf-vnfs-ohpc 3.7pre http://warewulf.lbl.gov/ ohpc/provisioning Warewulf VNFS Module
+warewulf-provision-ohpc 3.7pre http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module
+warewulf-provision-server-ohpc 3.7pre http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - Server
