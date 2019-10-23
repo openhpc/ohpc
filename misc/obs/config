@@ -96,6 +96,6 @@ R_compiler=["gnu8"]
 opencoarrays_compiler=["gnu8"]
 
 mpi_dependent = ["boost","!dimemas","!extrae","!geopm","mfem","mumps","netcdf-cxx","netcdf-fortran",
-	         "opencoarrays","omb","!petsc","!phdf5",
-	         "!scorep","!slepc","trilinos"]
+	         "opencoarrays","omb","petsc","!phdf5",
+	         "scorep","slepc","trilinos"]
 
