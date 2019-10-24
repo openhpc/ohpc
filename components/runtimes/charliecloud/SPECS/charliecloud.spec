@@ -24,16 +24,17 @@
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.9.10
+Version:   0.11
 Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://hpc.github.io/%{pname}/
 Source0:   https://github.com/hpc/charliecloud/releases/download/v%{version}/charliecloud-%{version}.tar.gz
+Patch1:    charliecloud-skiptest.patch
 
 BuildRequires: gcc
 %if 0%{?centos_version} || 0%{?rhel_version}
-BuildRequires: python34
+BuildRequires: python36
 %endif
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires: python3
@@ -44,7 +45,7 @@ Requires:  bats
 Requires:  bash
 Requires:  wget
 %if 0%{?centos_version} || 0%{?rhel_version}
-Requires:  python34
+Requires:  python36
 %endif
 %if 0%{?sles_version} || 0%{?suse_version}
 Requires: python3
@@ -69,6 +70,7 @@ For more information: https://hpc.github.io/charliecloud/
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 %{versionize_script python3 test/make-auto}
 %{versionize_script python3 test/make-perms-test}
 
@@ -137,3 +139,4 @@ EOF
 %files
 %doc LICENSE README.rst README.TEST %{?el7:README.EL7}
 %{OHPC_PUB}
+
