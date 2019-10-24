@@ -200,8 +200,6 @@ Source4: kmp-lustre-osd-ldiskfs.files
 Source5: kmp-lustre-osd-zfs.preamble
 Source6: kmp-lustre-osd-zfs.files
 Source7: kmp-lustre-tests.files
-Patch0:  8b77b0b1.diff
-Patch1:  dma-header.patch
 URL: https://wiki.whamcloud.com/
 Requires: %{requires_kmod_name} = %{requires_kmod_version} zlib
 Requires: %{requires_yaml_name}
@@ -341,7 +339,6 @@ clients in order to run
 
 %prep
 %setup -qn lustre-%{version}
-#patch0 -p1
 
 
 ln lustre/ChangeLog ChangeLog-lustre
