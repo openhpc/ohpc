@@ -13,16 +13,18 @@
 \end{table}
 \vspace*{0.5cm}
 
-\renewcommand{\firstColWidth}{4.3cm}
-\renewcommand{\secondColWidth}{1.8cm}
+\renewcommand{\firstColWidth}{6.25cm}
+\renewcommand{\secondColWidth}{0.95cm}
 
 % Provisioning
-
 \begin{table}[h!]
 \caption{\bf Provisioning} \vspace*{\captionSpace{}} \label{table:provisioning}
 \input manifest/provisioning
 \vspace*{\tabSpaceBot{}}
 \end{table}
+
+\renewcommand{\firstColWidth}{4.1cm}
+\renewcommand{\secondColWidth}{1.8cm}
 
 % Resource Management
 \begin{table}[h!]
@@ -31,7 +33,7 @@
 \vspace*{\tabSpaceBot{}}
 \end{table}
 
-\renewcommand{\firstColWidth}{4.7cm}
+\renewcommand{\firstColWidth}{4.8cm}
 
 % Compiler Families
 \begin{table}[h!]
@@ -40,8 +42,8 @@
 \vspace*{\tabSpaceBot{}}
 \end{table}
 
-\renewcommand{\firstColWidth}{5.6cm}
-\renewcommand{\secondColWidth}{1.5cm}
+\renewcommand{\firstColWidth}{4.8cm}
+%\renewcommand{\secondColWidth}{1.5cm}
 
 % MPI Families
 \begin{table}[h!]
@@ -60,8 +62,8 @@
 \vspace*{\tabSpaceBot{}}
 \end{table}
 
-\renewcommand{\firstColWidth}{4.2cm}
-\renewcommand{\secondColWidth}{1.92cm}
+\renewcommand{\firstColWidth}{4.4cm}
+\renewcommand{\secondColWidth}{1.72cm}
 
 % Perf Tools
 \begin{table}[h!]
@@ -119,7 +121,9 @@
 \vspace*{\tabSpaceBot{}}
 \end{table}
 
-
-
-
-
+% Parallel libs (2)
+\begin{table}[h!]
+\caption*{Table~\ref{table:parallel-libs} (cont): {\bf Parallel Libraries} \vspace*{\captionSpace{}} }
+\input manifest/parallel-libs2
+\vspace*{\tabSpaceBot{}}
+\end{table}

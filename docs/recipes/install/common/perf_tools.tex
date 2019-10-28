@@ -9,17 +9,3 @@ of available packages). This group of tools can be installed as follows:
 [sms](*\#*) (*\install*) ohpc-gnu8-perf-tools
 \end{lstlisting}
 % end_ohpc_run
-
-Optionally, the GEOPM power management framework can be installed as follows:
-% begin_ohpc_run
-% ohpc_validation_newline
-% ohpc_command if [[ ${enable_geopm} -eq 1 ]];then
-% ohpc_indent 5
-\begin{lstlisting}[language=bash,keywords={},upquote=true]
-# Install GEOPM meta-package on master
-[sms](*\#*) (*\install*) ohpc-gnu8-geopm
-
-\end{lstlisting}
-% ohpc_indent 0
-% ohpc_command fi
-% end_ohpc_run

@@ -1,4 +1,4 @@
-EasyBuild-ohpc 3.6.2 http://easybuilders.github.io/easybuild ohpc/dev-tools Build and installation framework
+EasyBuild-ohpc 3.7.1 http://easybuilders.github.io/easybuild ohpc/dev-tools Build and installation framework
 R-gnu7-ohpc 3.5.0 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 R-gnu8-ohpc 3.5.0 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
 R_base-ohpc 3.3.3 http://www.r-project.org/ ohpc/serial-libs R is a language and environment for statistical computing and graphics (S-Plus like).
@@ -80,14 +80,14 @@ ganglia-ohpc 3.7.2 http://ganglia.sourceforge.net/ ohpc/admin Distributed Monito
 ganglia-web-ohpc 3.7.2 http://ganglia.sourceforge.net/ Applications/Internet Ganglia Web Frontend
 genders-compat-ohpc 1.22 https://github.com/chaos/genders System Environment/Base Compatibility Library
 genders-ohpc 1.22 https://github.com/chaos/genders ohpc/admin Static cluster configuration database
-geopm-gnu8-impi-ohpc 0.6.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-gnu8-mpich-ohpc 0.6.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-gnu8-mvapich2-ohpc 0.6.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-gnu8-openmpi3-ohpc 0.6.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-intel-impi-ohpc 0.6.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-intel-mpich-ohpc 0.6.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-intel-mvapich2-ohpc 0.6.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
-geopm-intel-openmpi3-ohpc 0.6.0 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-gnu8-impi-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-gnu8-mpich-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-gnu8-mvapich2-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-gnu8-openmpi3-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-impi-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-mpich-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-mvapich2-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
+geopm-intel-openmpi3-ohpc 0.6.1 https://geopm.github.io ohpc/perf-tools Global Extensible Open Power Manager
 gnu-compilers-ohpc 5.4.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
 gnu7-compilers-ohpc 7.3.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
 gnu8-compilers-ohpc 8.2.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
@@ -135,7 +135,6 @@ imb-intel-mpich-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-
 imb-intel-mvapich2-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-intel-openmpi-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-intel-openmpi3-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
-impi-f90-modules-gnu8-ohpc 1.0 None ohpc/parallel-libs Intel MPI bindings for GCC 8
 intel-compilers-devel-ohpc 2018 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Intel(R) Parallel Studio XE
 intel-mpi-devel-ohpc 2018 https://github.com/openhpc/ohpc ohpc/mpi-families OpenHPC compatibility package for Intel(R) MPI Library
 kmod-lustre-client-ohpc 2.11.0 https://wiki.hpdd.intel.com/ System Environment/Kernel lustre-client-ohpc kernel module(s)
@@ -147,10 +146,6 @@ likwid-gnu8-ohpc 4.3.2 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Toolsu
 likwid-intel-ohpc 4.3.2 https://github.com/RRZE-HPC/likwid ohpc/perf-tools Toolsuite of command line applications for performance oriented programmers
 llvm4-compilers-ohpc 4.0.1 http://www.llvm.org ohpc/compiler-families The LLVM Compiler Infrastructure
 llvm5-compilers-ohpc 5.0.1 http://www.llvm.org ohpc/compiler-families The LLVM Compiler Infrastructure
-lmod-defaults-gnu-impi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
-lmod-defaults-gnu-mpich-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
-lmod-defaults-gnu-mvapich2-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
-lmod-defaults-gnu-openmpi-ohpc 1.2 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu7-impi-ohpc 1.3.1 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu7-mpich-ohpc 1.3.1 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
 lmod-defaults-gnu7-mvapich2-ohpc 1.3.1 https://github.com/openhpc/ohpc ohpc/admin OpenHPC default login environments
@@ -384,6 +379,7 @@ openmpi3-pmix-slurm-gnu7-ohpc 3.1.0 http://www.open-mpi.org ohpc/mpi-families A 
 openmpi3-pmix-slurm-gnu8-ohpc 3.1.2 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 openmpi3-pmix-slurm-intel-ohpc 3.1.2 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
 papi-ohpc 5.6.0 http://icl.cs.utk.edu/papi/ ohpc/perf-tools Performance Application Programming Interface
+paraver-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
 pbspro-client-ohpc 18.1.3 https://github.com/PBSPro/pbspro ohpc/rms PBS Professional for a client host
 pbspro-execution-ohpc 18.1.3 https://github.com/PBSPro/pbspro ohpc/rms PBS Professional for an execution host
 pbspro-server-ohpc 18.1.3 https://github.com/PBSPro/pbspro ohpc/rms PBS Professional for a server host
@@ -490,7 +486,6 @@ python-scipy-gnu8-mpich-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientifi
 python-scipy-gnu8-mvapich2-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python-scipy-gnu8-openmpi3-ohpc 1.1.0 http://www.scipy.org ohpc/dev-tools Scientific Tools for Python
 python34-Cython-ohpc 0.26.1 http://www.cython.org Development/Languages/Python The Cython compiler for writing C extensions for the Python language
-python34-build-patch-ohpc 0.1 https://github.com/openhpc/ohpc ohpc/dev-tools OpenHPC build package for python34 modules
 python34-mpi4py-gnu7-impi-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python34-mpi4py-gnu7-mpich-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
 python34-mpi4py-gnu7-mvapich2-ohpc 3.0.0 https://bitbucket.org/mpi4py/mpi4py ohpc/dev-tools Python bindings for the Message Passing Interface (MPI) standard.
@@ -570,7 +565,7 @@ scotch-gnu7-ohpc 6.0.4 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-li
 scotch-gnu8-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 scotch-intel-ohpc 6.0.6 http://www.labri.fr/perso/pelegrin/scotch/ ohpc/serial-libs Graph, mesh and hypergraph partitioning library
 shine-ohpc 1.5 http://lustre-shine.sourceforge.net/ ohpc/lustre Lustre administration utility
-singularity-ohpc 2.5.2 http://singularity.lbl.gov/ ohpc/runtimes Application and environment virtualization
+singularity-ohpc 2.6.0 http://singularity.lbl.gov/ ohpc/runtimes Application and environment virtualization
 sionlib-gnu-impi-ohpc 1.7.1 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-gnu-mpich-ohpc 1.7.1 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
 sionlib-gnu-mvapich2-ohpc 1.7.1 http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html ohpc/io-libs Scalable I/O Library for Parallel Access to Task-Local Files
@@ -698,12 +693,4 @@ warewulf-provision-server-ipxe-aarch64-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/
 warewulf-provision-server-ipxe-x86_64-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - iPXE Bootloader x86_64
 warewulf-provision-server-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf - Provisioning Module - Server
 warewulf-vnfs-ohpc 3.8.1 http://warewulf.lbl.gov/ ohpc/provisioning Warewulf VNFS Module
-wxparaver-gnu8-impi-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
-wxparaver-gnu8-mpich-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
-wxparaver-gnu8-mvapich2-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
-wxparaver-gnu8-openmpi3-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
-wxparaver-intel-impi-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
-wxparaver-intel-mpich-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
-wxparaver-intel-mvapich2-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
-wxparaver-intel-openmpi3-ohpc 4.7.2 https://tools.bsc.es ohpc/perf-tools Paraver
 ohpc-release 1.3 https://github.com/openhpc/ohpc ohpc/admin OpenHPC release files

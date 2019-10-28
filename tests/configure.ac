@@ -248,6 +248,12 @@ AC_ARG_ENABLE([charliecloud],
    [AX_OPTION_DEFAULT(type=long,enable_charliecloud,yes)])
 AM_CONDITIONAL(CHARLIECLOUD_ENABLED,test "x$enable_charliecloud" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Dimemas
+AC_ARG_ENABLE([dimemas],
+   [AS_HELP_STRING([--enable-dimemas],[Enable Dimemas tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_dimemas,yes)])
+AM_CONDITIONAL(DIMEMAS_ENABLED,test "x$enable_dimemas" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # EasyBuild
 AC_ARG_ENABLE([easybuild],
    [AS_HELP_STRING([--enable-easybuild],[Enable EasyBuild tests (default=yes)])],[],
@@ -262,7 +268,7 @@ AM_CONDITIONAL(GEOPM_ENABLED,test "x$enable_geopm" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Extrae
 AC_ARG_ENABLE([extrae],
-   [AS_HELP_STRING([--enable-extrae],[Enable Extrae tests (default=no)])],[],
+   [AS_HELP_STRING([--enable-extrae],[Enable Extrae tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_extrae,yes)])
 AM_CONDITIONAL(EXTRAE_ENABLED,test "x$enable_extrae" = "xyes" ) 
 #------------------------------------------------------------------------------------------
@@ -483,6 +489,7 @@ AC_OUTPUT( Makefile
        user-env/Makefile 
        bos/Makefile
        fabric/Makefile
+       perf-tools/dimemas/Makefile
        perf-tools/extrae/Makefile
        perf-tools/geopm/Makefile
        perf-tools/scalasca/Makefile
@@ -827,6 +834,12 @@ echo    Libraries:
     fi
 
 echo    Performance Tools:
+
+    if test "x$enable_dimemas" = "xyes"; then
+       echo '    'Dimemas................... : enabled
+    else
+       echo '    'Dimemas................... : disabled
+    fi
 
     if test "x$enable_extrae" = "xyes"; then
        echo '    'Extrae.................... : enabled

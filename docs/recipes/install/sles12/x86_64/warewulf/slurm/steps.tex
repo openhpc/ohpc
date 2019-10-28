@@ -95,6 +95,7 @@
 \input{common/enable_pxe}
 \input{common/time}
 
+\vspace*{0.2cm}
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
@@ -108,9 +109,11 @@
 \input{common/warewulf_setup}
 \input{common/warewulf_setup_sles}
 
+%\clearpage
 \subsection{Define {\em compute} image for provisioning}
 \input{common/warewulf_mkchroot_sles}
 
+%\vspace*{.5cm}
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 \input{common/add_to_compute_chroot_intro}
 
@@ -159,7 +162,7 @@
 % ohpc_command fi
 % end_ohpc_run
 
-\newpage
+%\newpage
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
@@ -185,35 +188,35 @@
 \input{common/lustre-client-sles}
 \input{common/lustre-client-post}
 
-\clearpage
+%\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
 %\vspace*{0.4cm}
+\clearpage
 \paragraph{Add \Nagios{} monitoring}
 \input{common/nagios}
-
 
 \paragraph{Add \Ganglia{} monitoring}
 \input{common/ganglia}
 
-\clearpage
+
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
-%\clearpage
+\clearpage
 \paragraph{Add \mrsh{}}
 \input{common/mrsh}
 
 \paragraph{Add \genders{}}
 \input{common/genders}
 
-\clearpage
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
 \paragraph{Add \nhc{}} \label{sec:add_nhc}
 \input{common/nhc}
+\input{common/nhc_slurm}
 
 \paragraph{Add \GEOPM{}} \label{sec:add_geopm}
 \input{common/geopm_config}
@@ -221,27 +224,27 @@
 %\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
-\vspace*{0.3cm}
 \input{common/import_ww_files_slurm}
 \input{common/import_ww_files_ib_sles}
+\vspace*{-.1cm}
 \input{common/finalize_provisioning}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_slurm}
 \input{common/add_ww_hosts_finalize}
 
-\vspace*{0.4cm}
+\vspace*{-0.2cm}
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 \input{common/kargs_post}
 
+\vspace*{-0.2cm}
 \subsubsection{Optionally configure stateful provisioning}
 \input{common/stateful}
 
-\clearpage
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes}
 
-\clearpage
+%\clearpage
 \section{Install \OHPC{} Development Components}
 \input{common/dev_intro.tex}
 
@@ -255,7 +258,7 @@
 \input{common/mpi}
 
 \subsection{Performance Tools} \label{sec:install_perf_tools}
-\input{common/perf_tools}
+\input{common/perf_tools_with_geopm}
 \input{common/perf_tools_sles}
 
 \subsection{Setup default development environment}
@@ -268,12 +271,12 @@
 \input{common/third_party_mpi_libs_x86}
 
 \subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
-\input{common/psxe_enabled_builds}
+\input{common/psxe_enabled_builds_with_geopm}
 
+\clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/slurm_startup}
 
-%\clearpage
 \section{Run a Test Job} \label{sec:test_job}
 \input{common/slurm_test_job}
 

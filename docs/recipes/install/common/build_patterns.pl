@@ -14,7 +14,7 @@ my $FIXD_WIDTH=1;
 
 my %page_breaks = ();
 if ( $ENV{'PWD'} =~ /\S+\/x86_64\// ) {
-    $page_breaks{"ohpc-intel-python-libs"} = 2;
+    $page_breaks{"ohpc-intel-mvapich2-io-libs"} = 2;
 }
 
 sub write_table_header {

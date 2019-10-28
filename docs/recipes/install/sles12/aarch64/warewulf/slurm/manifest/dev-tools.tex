@@ -10,14 +10,14 @@
 
 % <-- begin entry for EasyBuild-ohpc
 \multirow{2}{*}{EasyBuild-ohpc} & 
-\multirow{2}{*}{3.6.1} & 
+\multirow{2}{*}{3.7.1} & 
 Build and installation framework. \newline { \color{logoblue} \url{http://easybuilders.github.io/easybuild}} 
 \\ \hline 
 % <-- end entry for EasyBuild-ohpc
 
 % <-- begin entry for automake-ohpc
 \multirow{2}{*}{automake-ohpc} & 
-\multirow{2}{*}{1.15} & 
+\multirow{2}{*}{1.16.1} & 
 A GNU tool for automatically creating Makefiles. \newline { \color{logoblue} \url{http://www.gnu.org/software/automake}} 
 \\ \hline 
 % <-- end entry for automake-ohpc
@@ -31,7 +31,7 @@ A GNU tool for automatically configuring source code. \newline { \color{logoblue
 
 % <-- begin entry for cmake-ohpc
 \multirow{2}{*}{cmake-ohpc} & 
-\multirow{2}{*}{3.11.1} & 
+\multirow{2}{*}{3.12.2} & 
 CMake is an open-source, cross-platform family of tools designed to build, test and package software.  { \color{logoblue} \url{https://cmake.org}} 
 \\ \hline 
 % <-- end entry for cmake-ohpc
@@ -53,23 +53,31 @@ The GNU Portable Library Tool. \newline { \color{logoblue} \url{http://www.gnu.o
 % <-- begin entry for python-scipy
 python-scipy-gnu-mpich-ohpc &
 \multirow{3}{*}{0.19.1} & 
-\multirow{5}{\linewidth}{Scientific Tools for Python. \newline {\color{logoblue} \url{http://www.scipy.org}}} \\ 
+\multirow{7}{\linewidth}{Scientific Tools for Python. \newline {\color{logoblue} \url{http://www.scipy.org}}} \\ 
 python-scipy-gnu-openmpi-ohpc &
 & \\ 
 python-scipy-gnu7-openmpi-ohpc &
 & \\ 
-\cline{1-2} python-scipy-gnu7-mpich-ohpc &\multirow{2}{*}{1.1.0}
+\cline{1-2} python-scipy-gnu7-mpich-ohpc &\multirow{4}{*}{1.1.0}
 & \\ 
 python-scipy-gnu7-openmpi3-ohpc &
+& \\ 
+python-scipy-gnu8-mpich-ohpc &
+& \\ 
+python-scipy-gnu8-openmpi3-ohpc &
 & \\ 
 \hline
 % <-- end entry for python-scipy
 
 % <-- begin entry for python3-scipy
 python3-scipy-gnu7-mpich-ohpc &
-\multirow{2}{*}{1.1.0} & 
-\multirow{2}{\linewidth}{Scientific Tools for Python. \newline {\color{logoblue} \url{http://www.scipy.org}}} \\ 
+\multirow{4}{*}{1.1.0} & 
+\multirow{4}{\linewidth}{Scientific Tools for Python. \newline {\color{logoblue} \url{http://www.scipy.org}}} \\ 
 python3-scipy-gnu7-openmpi3-ohpc &
+& \\ 
+python3-scipy-gnu8-mpich-ohpc &
+& \\ 
+python3-scipy-gnu8-openmpi3-ohpc &
 & \\ 
 \hline
 % <-- end entry for python3-scipy
@@ -77,33 +85,58 @@ python3-scipy-gnu7-openmpi3-ohpc &
 % <-- begin entry for python-numpy
 python-numpy-gnu-ohpc &
 \multirow{1}{*}{1.12.1} & 
-\multirow{2}{\linewidth}{NumPy array processing for numbers, strings, records and objects.  {\color{logoblue} \url{http://sourceforge.net/projects/numpy}}} \\ 
+\multirow{5}{\linewidth}{NumPy array processing for numbers, strings, records and objects.  {\color{logoblue} \url{http://sourceforge.net/projects/numpy}}} \\ 
 \cline{1-2} python-numpy-gnu7-ohpc &\multirow{1}{*}{1.14.3}
 & \\ 
-\hline
+%% \hline
 % <-- end entry for python-numpy
 
 % <-- begin entry for python3-numpy
-\multirow{2}{*}{python3-numpy-gnu7-ohpc} &
-\multirow{2}{*}{1.14.3} & 
-NumPy array processing for numbers, strings, records and objects.  {\color{logoblue} \url{http://sourceforge.net/projects/numpy}} \\ 
+python3-numpy-gnu7-ohpc &
+\multirow{1}{*}{1.14.3} & 
+%% \multirow{1}{\linewidth}{NumPy array processing for numbers, strings, records and objects.  {\color{logoblue} \url{http://sourceforge.net/projects/numpy}}} \\ 
+%%\hline
+\\
+% <-- end entry for python3-numpy
+
+% <-- begin entry for python-numpy
+\cline{1-2} python-numpy-gnu8-ohpc &
+\multirow{1}{*}{1.15.1} & 
+%% \multirow{1}{\linewidth}{NumPy array processing for numbers, strings, records and objects.  {\color{logoblue} \url{http://sourceforge.net/projects/numpy}}} \\ 
+%% \hline
+\\
+% <-- end entry for python-numpy
+
+% <-- begin entry for python3-numpy
+python3-numpy-gnu8-ohpc &
+\multirow{1}{*}{1.15.1} & 
+%% \multirow{1}{\linewidth}{NumPy array processing for numbers, strings, records and objects.  {\color{logoblue} \url{http://sourceforge.net/projects/numpy}}} \\ 
+\\
 \hline
 % <-- end entry for python3-numpy
 
 % <-- begin entry for python-mpi4py
 python-mpi4py-gnu7-mpich-ohpc &
-\multirow{2}{*}{3.0.0} & 
-\multirow{2}{\linewidth}{Python bindings for the Message Passing Interface (MPI) standard.  {\color{logoblue} \url{https://bitbucket.org/mpi4py/mpi4py}}} \\ 
+\multirow{4}{*}{3.0.0} & 
+\multirow{4}{\linewidth}{Python bindings for the Message Passing Interface (MPI) standard. \newline {\color{logoblue} \url{https://bitbucket.org/mpi4py/mpi4py}}} \\ 
 python-mpi4py-gnu7-openmpi3-ohpc &
+& \\ 
+python-mpi4py-gnu8-mpich-ohpc &
+& \\ 
+python-mpi4py-gnu8-openmpi3-ohpc &
 & \\ 
 \hline
 % <-- end entry for python-mpi4py
 
 % <-- begin entry for python3-mpi4py
 python3-mpi4py-gnu7-mpich-ohpc &
-\multirow{2}{*}{3.0.0} & 
-\multirow{2}{\linewidth}{Python bindings for the Message Passing Interface (MPI) standard.  {\color{logoblue} \url{https://bitbucket.org/mpi4py/mpi4py}}} \\ 
+\multirow{4}{*}{3.0.0} & 
+\multirow{4}{\linewidth}{Python bindings for the Message Passing Interface (MPI) standard. \newline {\color{logoblue} \url{https://bitbucket.org/mpi4py/mpi4py}}} \\ 
 python3-mpi4py-gnu7-openmpi3-ohpc &
+& \\ 
+python3-mpi4py-gnu8-mpich-ohpc &
+& \\ 
+python3-mpi4py-gnu8-openmpi3-ohpc &
 & \\ 
 \hline
 % <-- end entry for python3-mpi4py

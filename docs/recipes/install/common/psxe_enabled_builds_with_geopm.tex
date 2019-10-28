@@ -1,0 +1,73 @@
+In addition to the 3rd party development libraries built using the open source
+toolchains mentioned in \S\ref{sec:3rdparty}, \OHPC{} also provides {\em
+  optional} compatible builds for use with the compilers and MPI stack included
+in newer versions of the \IntelR{}~Parallel Studio XE software suite.  These
+packages provide a similar hierarchical user
+environment experience as other compiler and MPI families present in \OHPC{}.
+
+To take advantage of the available builds, the Parallel Studio software suite
+must be obtained and installed separately. Once installed locally, the \OHPC{}
+compatible packages can be installed using standard package manager semantics.
+Note that licenses are provided free of charge for many categories of use. In
+particular, licenses for compilers and developments tools are provided at no
+cost to academic researchers or developers contributing to open-source software
+projects. More information on this program can be found at:
+
+\begin{center}
+  \href{https://software.intel.com/en-us/qualify-for-free-software}
+       {\color{blue}{https://software.intel.com/en-us/qualify-for-free-software}}
+\end{center}
+
+\begin{center}
+\begin{tcolorbox}[]
+As noted in \S\ref{sec:master_customization}, the default installation path for
+\OHPC{} (\texttt{/opt/ohpc/pub}) is exported over NFS from the {\em master} to the 
+compute nodes, but the Parallel Studio installer defaults to a path of 
+\texttt{/opt/intel}. To make the \IntelR{} compilers available to the compute 
+nodes one must either customize the Parallel Studio installation path to be 
+within \texttt{/opt/ohpc/pub}, or alternatively, add an additional NFS export
+for \texttt{/opt/intel} that is mounted on desired compute nodes.
+\end{tcolorbox}
+\end{center}
+
+\noindent To enable all 3rd party builds available in \OHPC{} that are compatible with
+\IntelR{}~Parallel Studio, issue the following:
+
+% begin_ohpc_run
+% ohpc_comment_header Install Optional Development Tools for use with Intel Parallel Studio \ref{sec:3rdparty_intel}
+% ohpc_command if [[ ${enable_intel_packages} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Install OpenHPC compatibility packages (requires prior installation of Parallel Studio)
+[sms](*\#*) (*\install*) intel-compilers-devel-ohpc
+[sms](*\#*) (*\install*) intel-mpi-devel-ohpc
+\end{lstlisting}
+
+% ohpc_command if [[ ${enable_opa} -eq 1 ]];then
+% ohpc_indent 10
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Optionally, choose the Omni-Path enabled build for MVAPICH2. Otherwise, skip to retain IB variant
+[sms](*\#*) (*\install*) mvapich2-psm2-intel-ohpc
+\end{lstlisting}
+% ohpc_indent 5
+% ohpc_command fi
+
+%\iftoggle{isSLES_ww_slurm_x86}{\clearpage}
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Install 3rd party libraries/tools meta-packages built with Intel toolchain
+[sms](*\#*) (*\install*) ohpc-intel-serial-libs
+[sms](*\#*) (*\install*) ohpc-intel-geopm
+[sms](*\#*) (*\install*) ohpc-intel-io-libs
+[sms](*\#*) (*\install*) ohpc-intel-perf-tools
+[sms](*\#*) (*\install*) ohpc-intel-python-libs
+[sms](*\#*) (*\install*) ohpc-intel-runtimes
+[sms](*\#*) (*\install*) ohpc-intel-mpich-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-mvapich2-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-openmpi3-parallel-libs
+[sms](*\#*) (*\install*) ohpc-intel-impi-parallel-libs
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
