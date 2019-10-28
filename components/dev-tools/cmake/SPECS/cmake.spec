@@ -35,6 +35,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  libexpat-devel
+BuildRequires:  libbz2-devel
 %else
 BuildRequires:  expat-devel
 
