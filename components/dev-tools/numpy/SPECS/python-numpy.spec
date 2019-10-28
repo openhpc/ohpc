@@ -38,6 +38,7 @@ Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
 %else
+BuildRequires: python3-devel
 %if "%{compiler_family}" == "intel" || "%{compiler_family}" == "arm"
 BuildRequires: python34-build-patch%{PROJ_DELIM}
 %endif
