@@ -39,11 +39,18 @@ echo "-------------------------------------------------------"
 }
 
 @test "[charliecloud] exec image locally" {
+    run ls -l $image_dir/img
+    assert_success
+
     run ch-run $image_dir/img -- cat /etc/os-release
     assert_success
 }
 
 @test "[charliecloud] exec image via $rm" {
+
+    run ls -l $image_dir/img
+    assert_success
+
     run_serial_binary ch-run -w $image_dir/img -- cat /etc/os-release
     assert_success
 
