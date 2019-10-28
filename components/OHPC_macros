@@ -130,7 +130,7 @@ Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %global python_module_prefix py3-
 %global python_lib_dir python3.4
 %if "%{rhel_version}" == "700"
-%global python_prefix python34
+%global python_prefix python3
 %endif
 %if 0%{?suse_version}
 %global python_prefix python3
