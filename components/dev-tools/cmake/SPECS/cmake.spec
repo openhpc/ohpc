@@ -60,6 +60,7 @@ of your choice.
 --no-system-librhash \
 --no-system-libuv \
 %endif
+--no-system-libarchive \
 --no-system-jsoncpp \
 --no-qt-gui \
 --prefix=%{install_path}
