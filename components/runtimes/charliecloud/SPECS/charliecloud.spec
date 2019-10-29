@@ -80,6 +80,9 @@ CFLAGS="%build_cflags -std=c11 -pthread" LDFLAGS="%build_ldflags" %{__make} %{?m
 %install
 PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
 
+%{__mkdir_p} %{buildroot}/%{install_path}/share/doc/charliecloud//test/chtest/
+%{__cp} ./test/chtest/Build %{buildroot}/%{install_path}/share/doc/charliecloud//test/chtest/Build
+
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/%{pname}/%{version}
