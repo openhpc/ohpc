@@ -42,7 +42,7 @@ echo "-------------------------------------------------------"
     run ls -l $image_dir/img
     assert_success
 
-    run ch-run $image_dir/img -- cat /etc/os-release
+    run timeout 20s ch-run $image_dir/img -- cat /etc/os-release
     assert_success
 }
 
@@ -51,7 +51,7 @@ echo "-------------------------------------------------------"
     run ls -l $image_dir/img
     assert_success
 
-    run_serial_binary ch-run -w $image_dir/img -- cat /etc/os-release
+    run_serial_binary timeout 20s ch-run -w $image_dir/img -- cat /etc/os-release
     assert_success
 
     rm -rf $image_dir/img
