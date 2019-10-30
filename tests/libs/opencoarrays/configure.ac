@@ -18,8 +18,8 @@ else
 fi
 
 # set compilers to use MPI toolchain 
-F77=mpif77
-FC=mpif90
+F77=caf
+FC=caf
 
 # test compilers
 AC_PROG_F77
