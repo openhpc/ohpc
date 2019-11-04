@@ -19,7 +19,6 @@
 # Specify python version of a given file
 %define versionize_script() (sed -i 's,/env python,/env %1,g' %2)
 
-%{!?build_cflags:%global build_cflags $RPM_OPT_FLAGS}
 %{!?build_ldflags:%global build_ldflags %nil}
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
@@ -75,7 +74,7 @@ For more information: https://hpc.github.io/charliecloud/
 %{versionize_script python3 test/make-perms-test}
 
 %build
-CFLAGS="%build_cflags -std=c11 -pthread" LDFLAGS="%build_ldflags" %{__make} %{?mflags}
+CFLAGS="-std=c11 -pthread" LDFLAGS="%build_ldflags" %{__make} %{?mflags}
 
 %install
 PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
