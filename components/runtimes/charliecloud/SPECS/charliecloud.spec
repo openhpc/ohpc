@@ -40,7 +40,6 @@ BuildRequires: python3
 %endif
 
 Requires:  %{name}%{?_isa} = %{version}-%{release}
-Requires:  bats
 Requires:  bash
 Requires:  wget
 %if 0%{?centos_version} || 0%{?rhel_version}
