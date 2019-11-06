@@ -86,7 +86,7 @@ across multiple networks.
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
 %patch1 -p1
-%patch1 -p2
+%patch2 -p1
 
 %build
 %ohpc_setup_compiler
