@@ -1,0 +1,45 @@
+--- a/src/mpid/ch3/src/mpid_rma.c	2019-08-08 18:26:25.000000000 -0500
++++ b/src/mpid/ch3/src/mpid_rma.c	2019-11-05 19:15:49.000000000 -0600
+@@ -289,6 +289,7 @@
+ 
+ #ifdef _OSU_MVAPICH_	
+     win_comm_ptr = comm_ptr;
++    MPIR_Comm_add_ref(win_comm_ptr);
+ #else
+     mpi_errno = MPIR_Comm_dup_impl(comm_ptr, &win_comm_ptr);
+     if (mpi_errno)
+--- a/src/mpid/ch3/src/mpidi_rma.c	2019-11-05 19:16:00.000000000 -0600
++++ b/src/mpid/ch3/src/mpidi_rma.c	2019-11-05 19:18:10.000000000 -0600
+@@ -147,7 +147,7 @@
+ {
+     int mpi_errno = MPI_SUCCESS;
+     int in_use;
+-    MPID_Comm *comm_ptr;
++    MPID_Comm *comm_ptr = (*win_ptr)->comm_ptr;
+     MPIR_Errflag_t errflag = MPIR_ERR_NONE;
+     MPIDI_STATE_DECL(MPID_STATE_MPID_WIN_FREE);
+ 
+@@ -178,7 +178,7 @@
+             MPIR_ERR_POP(mpi_errno);
+     }
+ 
+-    mpi_errno = MPIR_Barrier_impl((*win_ptr)->comm_ptr, &errflag);
++    mpi_errno = MPIR_Barrier_impl(comm_ptr, &errflag);
+     if (mpi_errno)
+         MPIR_ERR_POP(mpi_errno);
+ 
+@@ -211,12 +211,11 @@
+     MPIU_Free((*win_ptr)->rank_mapping);
+ #endif /* CHANNEL_PSM */
+ 
+-#ifndef _OSU_MVAPICH_
+-    comm_ptr = (*win_ptr)->comm_ptr;
+     mpi_errno = MPIR_Comm_free_impl(comm_ptr);
+     if (mpi_errno)
+         MPIR_ERR_POP(mpi_errno);
+-#endif
++
++    (*win_ptr)->comm_ptr = NULL;
+ 
+     if ((*win_ptr)->basic_info_table != NULL)
+         MPIU_Free((*win_ptr)->basic_info_table);
