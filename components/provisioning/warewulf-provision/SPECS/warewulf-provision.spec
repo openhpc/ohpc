@@ -61,6 +61,7 @@ Patch7: warewulf-provision.sles_tftpboot.patch
 Patch8: warewulf-provision.wwgetfiles.patch
 ### merged upstream -- remove in 3.8.2
 Patch9: warewulf-provision.nvme.patch
+Patch10: warewulf-provision.uefi.patch
 
 %description
 Warewulf >= 3 is a set of utilities designed to better enable
@@ -162,6 +163,7 @@ cd %{dname}
 %patch7 -p1
 %patch8 -p1
 %patch9 -p2
+%patch9 -p1
 
 %build
 cd %{dname}

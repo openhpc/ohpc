@@ -1,0 +1,29 @@
+From 9d861afd9336787b8161729b24be368177539a58 Mon Sep 17 00:00:00 2001
+From: Naohiro Tamura <naohirot@jp.fujitsu.com>
+Date: Wed, 4 Sep 2019 11:04:44 +0900
+Subject: [PATCH] Fixed stateful provisioning UEFI boot settings for aarch64
+
+This patch fixed stateful provisioning UEFI boot settings for aarch64
+so as not to call grub2-install by checking the existance of
+/boot/efi/EFI/*/grubaa64.efi in the same way as grubx64.efi for
+x86_64.
+
+Without this fix, wrong grub boot entry is created and the boot from
+local disk fails.
+---
+ .../initramfs/capabilities/setup-filesystems/80-mkbootable      | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/provision/initramfs/capabilities/setup-filesystems/80-mkbootable b/provision/initramfs/capabilities/setup-filesystems/80-mkbootable
+index f8b8463..f5323c4 100644
+--- a/initramfs/capabilities/setup-filesystems/80-mkbootable
++++ b/initramfs/capabilities/setup-filesystems/80-mkbootable
+@@ -75,7 +75,7 @@ check_efi() {
+ check_grubx() {
+   local GRUBX
+ 
+-  for GRUBX in "${NEWROOT}"/boot/efi/EFI/*/grubx64.efi; do
++  for GRUBX in "${NEWROOT}"/boot/efi/EFI/*/grub*64.efi; do
+     if [ -e "${GRUBX}" ]; then
+       return 0
+     fi
