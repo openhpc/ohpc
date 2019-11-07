@@ -33,6 +33,7 @@ ARGS=8
 }
 
 @test "[libs/OpenCoarrays] hello_multiverse binary runs under resource manager using cafrun script ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    skip "cafrun not supported for all MPI variants"
     if [ ! -s hello ];then
 		flunk "hello binary does not exist"
     fi
