@@ -21,6 +21,10 @@ fi
 F77=caf
 FC=caf
 
+if test "x$LMOD_FAMILY_MPI" = "xmvapich2"; then
+   export MV2_ENABLE_AFFINITY=0
+fi
+
 # test compilers
 AC_PROG_F77
 AC_PROG_FC
