@@ -1,8 +1,8 @@
 TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
 
-TESTS                   = ex1f
-check_PROGRAMS          = ex1f
-ex1f_SOURCES            = ex1f.F
+TESTS                   = test4f
+check_PROGRAMS          = test4f
+test4f_SOURCES          = test4f.F
 
 TESTS                  += ex15
 check_PROGRAMS         += ex15
