@@ -17,12 +17,21 @@ else
    AC_MSG_RESULT([no])
 fi
 
-# set compilers to use MPI toolchain 
-F77=caf
-FC=caf
+# set compilers to use MPI toolchain.  
+# note that the caf compiler wrapper hard-codes paths to MPI libraries and is
+# not recommended for normal usage (instead, use modules and link in libs
+# directly).
 
 if test "x$LMOD_FAMILY_MPI" = "xmvapich2"; then
    export MV2_ENABLE_AFFINITY=0
+fi
+
+if test "x$LMOD_FAMILY_MPI" = "ximpi"; then
+   F77=mpif77
+   FC=mpif90
+else
+   F77=caf
+   FC=caf
 fi
 
 # test compilers
