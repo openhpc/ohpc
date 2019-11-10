@@ -1,10 +1,10 @@
 ### <img src="https://github.com/openhpc/ohpc/blob/master/docs/recipes/install/common/figures/ohpc_logo.png" width="170" valign="middle" hspace="5" alt="OpenHPC"/>
 
-#### Community building blocks for HPC systems (v1.3.8)
+#### Community building blocks for HPC systems (v1.3.9)
 
-[![Components](https://img.shields.io/badge/components%20available-89-green.svg) ](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.8)
-[![Updates](https://img.shields.io/badge/updates-36%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.8.GA)
-[![Tests](https://img.shields.io/badge/test%20coverage-%20%20%20-brightgreen.svg) ](http://test.openhpc.community:8080/job/1.3.x/view/1.3.8/)
+[![Components](https://img.shields.io/badge/components%20available-89-green.svg) ](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.9)
+[![Updates](https://img.shields.io/badge/updates-36%25-lightgrey.svg) ](https://github.com/openhpc/ohpc/releases/tag/v1.3.9.GA)
+[![Tests](https://img.shields.io/badge/test%20coverage-%20%20%20-brightgreen.svg) ](http://test.openhpc.community:8080/job/1.3.x/view/1.3.9/)
 
 
 #### Introduction
@@ -19,15 +19,15 @@ pre-packaged binary RPMs available per architecture type are summarized as follo
 
 Base OS     | aarch64 | x86_64  | noarch
 :---:       | :---:   | :---:   | :---:
-CentOS 7.6  | 411     | 732     | 45
-SLES 12 SP4 | 418     | 736     | 45
+CentOS 7.7  | 413     | 743     | 45
+SLES 12 SP4 | 417     | 736     | 45
 
 A list of all available components is available on the OpenHPC
-[wiki](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.8), and
+[wiki](https://github.com/openhpc/ohpc/wiki/Component-List-v1.3.9), and
 specific versioning details can be found in the "Package Manifest" appendix
 located in each of the companion install guide documents. A list of updated
 packages can be found in the [release
-notes](https://github.com/openhpc/ohpc/releases/tag/v1.3.8.GA). The release
+notes](https://github.com/openhpc/ohpc/releases/tag/v1.3.9.GA). The release
 notes also contain important information for those upgrading from previous
 versions of OpenHPC.
 
@@ -42,7 +42,7 @@ the URL locations for [base] and [update] package repositories. Copies of the
 ```ohpc-release``` package are provided below for convenience. Installation guides 
 tailored for each supported resource manager are also available below or in
 the downloads section of the latest
-[release](https://github.com/openhpc/ohpc/releases/tag/v1.3.8.GA). Instructions
+[release](https://github.com/openhpc/ohpc/releases/tag/v1.3.9.GA). Instructions
 for mirroring the OpenHPC repositories with rsync can be found in the
 [wiki](https://github.com/openhpc/ohpc/wiki/Repository-Access-via-rsync).
 
@@ -50,7 +50,7 @@ for mirroring the OpenHPC repositories with rsync can be found in the
 
 #### Architecture = (aarch64)
 
-###### [CentOS 7.6]
+###### [CentOS 7.7]
 * [Latest version of 'ohpc-release' for EL7](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.8.GA/Install_guide-CentOS7-Warewulf-PBSPro-1.3.8-aarch64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.8.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.8-aarch64.pdf)
@@ -66,7 +66,7 @@ for mirroring the OpenHPC repositories with rsync can be found in the
 
 #### Architecture = (x86_64)
 
-###### [CentOS 7.6]
+###### [CentOS 7.7]
 * [Latest version of 'ohpc-release' for EL7](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.x86_64.rpm) (md5sum=d5139cf3aa83d095e6851628e8a684fa)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.8.GA/Install_guide-CentOS7-Warewulf-PBSPro-1.3.8-x86_64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.8.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.8-x86_64.pdf)
