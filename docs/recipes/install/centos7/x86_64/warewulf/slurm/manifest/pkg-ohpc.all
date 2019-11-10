@@ -94,7 +94,6 @@ gnu8-compilers-ohpc 8.3.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C C
 gsl-gnu-ohpc 2.4 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 gsl-gnu7-ohpc 2.4 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 gsl-gnu8-ohpc 2.6 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
-gsl-intel-ohpc 2.6 http://www.gnu.org/software/gsl ohpc/serial-libs GNU Scientific Library (GSL)
 hdf5-gnu-ohpc 1.10.1 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 hdf5-gnu7-ohpc 1.10.2 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
 hdf5-gnu8-ohpc 1.10.5 http://www.hdfgroup.org/HDF5 ohpc/io-libs A general purpose library and file format for storing scientific data
@@ -243,7 +242,7 @@ mvapich2-intel-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OS
 mvapich2-psm2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-gnu7-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-gnu8-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-psm2-intel-ohpc 2.3 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
+mvapich2-psm2-intel-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
 nagios-common-ohpc 4.4.3 http://www.nagios.org/ Applications/System Provides common directories, uid and gid among nagios-related packages.
 nagios-devel-ohpc 4.4.3 http://www.nagios.org/ Applications/System Provides include files that Nagios-related applications may compile against
 nagios-ohpc 4.4.3 http://www.nagios.org/ ohpc/admin Host/service/network monitoring program
