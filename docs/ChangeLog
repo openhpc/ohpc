@@ -3,6 +3,10 @@
 Version 1.3.9 (November 2019)
 
 [General]
+
+  * updates to support CentOS7.7
+  * fix for Warewulf stateful UEFI on aarch64 (https://github.com/openhpc/ohpc/issues/1027)
+  * variety of component version updates and other additions highlighted below:
  
 [Component Version Changes]
   * EasyBuild-ohpc                           (3.9.2 -> 3.9.4)
