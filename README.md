@@ -54,13 +54,13 @@ for mirroring the OpenHPC repositories with rsync can be found in the
 * [Latest version of 'ohpc-release' for EL7](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.el7.aarch64.rpm) (md5sum=16ad76e74b591a3b6dcc3cb8597d3f7d)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.9.GA/Install_guide-CentOS7-Warewulf-PBSPro-1.3.9-aarch64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.9.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.9-aarch64.pdf)
-* [Tar Archive](http://build.openhpc.community/dist/1.3.9/OpenHPC-1.3.9.CentOS_7.aarch64.tar) mirror of yum repository (md5sum=cd503c9bfbebac63e8b09ae35f95509c))
+* [Tar Archive](http://build.openhpc.community/dist/1.3.9/OpenHPC-1.3.9.CentOS_7.aarch64.tar) mirror of yum repository (md5sum=f6c3b935eb52931f0b9a142826bd5e0e))
 
 ###### [SLES 12 SP4]
 * [Latest version of 'ohpc-release' for SLE_12](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.aarch64.rpm) (md5sum=706a42f7785952f8b543c501eeec05da)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.9.GA/Install_guide-SLE_12-Warewulf-PBSPro-1.3.9-aarch64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.9.GA/Install_guide-SLE_12-Warewulf-SLURM-1.3.9-aarch64.pdf)
-* [Tar Archive](http://build.openhpc.community/dist/1.3.9/OpenHPC-1.3.9.SLE_12.aarch64.tar) mirror of zypper repository (md5sum=0133161a91c39c35e45697fd50e4cf08)
+* [Tar Archive](http://build.openhpc.community/dist/1.3.9/OpenHPC-1.3.9.SLE_12.aarch64.tar) mirror of zypper repository (md5sum=9d68dcda779dbd8f255423f71d55d2fa)
 
 ---
 
@@ -72,13 +72,13 @@ for mirroring the OpenHPC repositories with rsync can be found in the
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.9.GA/Install_guide-CentOS7-Warewulf-SLURM-1.3.9-x86_64.pdf)
 * [Install Guide (with xCAT (Stateless) + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.9.GA/Install_guide-CentOS7-xCAT-Stateless-SLURM-1.3.9-x86_64.pdf)
 * [Install Guide (with xCAT (Stateful) + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.9.GA/Install_guide-CentOS7-xCAT-Stateful-SLURM-1.3.9-x86_64.pdf)
-* [Tar Archive](http://build.openhpc.community/dist/1.3.9/OpenHPC-1.3.9.CentOS_7.x86_64.tar) mirror of yum repository (md5sum=a55574153083c940d7023f6796ebec3e))
+* [Tar Archive](http://build.openhpc.community/dist/1.3.9/OpenHPC-1.3.9.CentOS_7.x86_64.tar) mirror of yum repository (md5sum=2a97a0995b5b046f36e83dec76e4cd4d))
 
 ###### [SLES 12 SP4]
 * [Latest version of 'ohpc-release' for SLE_12](https://github.com/openhpc/ohpc/releases/download/v1.3.GA/ohpc-release-1.3-1.sle12.x86_64.rpm) (md5sum=0a5954a9520e067aeb09e5377e9964a2)
 * [Install Guide (with Warewulf + PBS Professional)](https://github.com/openhpc/ohpc/releases/download/v1.3.9.GA/Install_guide-SLE_12-Warewulf-PBSPro-1.3.9-x86_64.pdf)
 * [Install Guide (with Warewulf + Slurm)](https://github.com/openhpc/ohpc/releases/download/v1.3.9.GA/Install_guide-SLE_12-Warewulf-SLURM-1.3.9-x86_64.pdf)
-* [Tar Archive](http://build.openhpc.community/dist/1.3.9/OpenHPC-1.3.9.SLE_12.x86_64.tar) mirror of zypper repository (md5sum=be8e195c61cb3372205caac91a79f385)
+* [Tar Archive](http://build.openhpc.community/dist/1.3.9/OpenHPC-1.3.9.SLE_12.x86_64.tar) mirror of zypper repository (md5sum=3a303ec35d6f77fe7463507892aa9095)
 
 ---
 
