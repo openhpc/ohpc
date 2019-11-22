@@ -11,6 +11,9 @@
 # Build that is is dependent on compiler toolchain and MPI
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
+# Supporting only Python3 here, but a quick way to set python variables
+%define ohpc_python_dependent 1
+%define python_family python3
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -36,36 +39,34 @@ BuildRequires: python3
 BuildRequires: python3-devel
 BuildRequires: unzip
 BuildRequires: zlib-devel
+BuildRequires: unzip
 BuildRequires: openssh
 
+%if 0%{?suse_version}%{?sle_version}
+BuildRequires: libelf-devel
+%else 
+BuildRequires: elfutils-libelf-devel
+%endif
+
 %description
-Global Extensible Open Power Manager (GEOPM) is an extensible power
-management framework targeting high performance computing.  The library can be
-extended to support new control algorithms and new hardware power management
-features.  The GEOPM package provides built in features ranging from static
-management of power policy for each individual compute node, to dynamic
-coordination of power policy and performance across all of the compute nodes
-hosting one MPI job on a portion of a distributed computing system.  The
-dynamic coordination is implemented as a hierarchical control system for
-scalable communication and decentralized control.  The hierarchical control
-system can optimize for various objective functions including maximizing
-global application performance within a power bound.  The root of the control
-hierarchy tree can communicate through shared memory with the system resource
-management daemon to extend the hierarchy above the individual MPI job level
-and enable management of system power resources for multiple MPI jobs and
-multiple users by the system resource manager.  The GEOPM package provides the
-libgeopm library, the libgeopmpolicy library, the geopmctl application and the
-geopmpolicy application.  The libgeopm library can be called within MPI
-applications to enable application feedback for informing the control
-decisions.  If modification of the target application is not desired then the
-geopmctl application can be run concurrently with the target application.  In
-this case, target application feedback is inferred by querying the hardware
-through Model Specific Registers (MSRs).  With either method (libgeopm or
-geopmctl), the control hierarchy tree writes processor power policy through
-MSRs to enact policy decisions.  The libgeopmpolicy library is used by a
-resource manager to set energy policy control parameters for MPI jobs.  Some
-features of libgeopmpolicy are available through the geopmpolicy application
-including support for static control.
+The Global Extensible Open Power Manager (GEOPM) is a framework for
+exploring power and energy optimizations targeting high performance
+computing.  The GEOPM package provides many built-in features.  A
+simple use case is reading hardware counters and setting hardware
+controls with platform independant syntax using a command line tool on
+a particular compute node.  An advanced use case is dynamically
+coordinating hardware settings across all compute nodes used by an
+application in response to the application's behavior and requests
+from the resource manager.  The dynamic coordination is implemented as
+a hierarchical control system for scalable communication and
+decentralized control. The hierarchical control system can optimize
+for various objective functions including maximizing global
+application performance within a power bound or minimizing energy
+consumption with marginal degradation of application performance.  The
+root of the control hierarchy tree can communicate with the system
+resource manager to extend the hierarchy above the individual MPI
+application and enable the management of system power resources for
+multiple MPI jobs and multiple users by the system resource manager.
 
 %prep
 
@@ -76,7 +77,9 @@ including support for static control.
 test -f configure || ./autogen.sh
 ./configure --prefix=%{install_path} \
             --with-python=python3 \
+            --libdir=%{install_path}/lib \
             --disable-doc \
+            --with-python=%{python_family} \
             || ( cat config.log && false )
 %{__make}
 
@@ -111,7 +114,7 @@ module-whatis "URL %{url}"
 set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib/python%{python3_version}/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib/%{python_lib_dir}/site-packages
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path    MANPATH             %{install_path}/share/man
@@ -126,3 +129,4 @@ EOF
 %files
 %{OHPC_PUB}
 %doc README COPYING VERSION
+
