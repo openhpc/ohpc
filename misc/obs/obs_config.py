@@ -21,7 +21,7 @@ import coloredlogs
 #---
 # global config settings
 obsurl="https://build.openhpc.community"
-version_in_progress="1.3.8"
+version_in_progress="1.3.9"
 configFile="config"
 
 #---
@@ -94,6 +94,7 @@ class ohpc_obs_tool(object):
                 self.serviceFile       = self.buildConfig.get('global','service_template')
                 self.linkFile_compiler = self.buildConfig.get('global','link_compiler_template')
                 self.linkFile_mpi      = self.buildConfig.get('global','link_mpi_template')
+                self.overrides         = self.buildConfig.get('global','override_templates')
                 self.compilerFamilies  = ast.literal_eval(self.buildConfig.get(vip,'compiler_families'))
                 self.MPIFamilies       = ast.literal_eval(self.buildConfig.get(vip,'mpi_families'))
 
@@ -352,16 +353,23 @@ class ohpc_obs_tool(object):
     # add specified package to OBS
     def addPackage(self,package,parent=True,isCompilerDep=False,isMPIDep=False,compiler=None,mpi=None,parentName=None,gitName=None):
         fname = inspect.stack()[0][3]
+        pad = 15
 
-        # verify we have template _service file
+        # verify we have template _service file and cache contents
         if os.path.isfile(self.serviceFile):
-            with open(self.serviceFile,'r') as filehandle:
-                contents = filehandle.read()
-            filehandle.close()
+            # use package-specific template if present, otherwise, use default serviceFile
+            if os.path.isfile("%s/_service.%s" % (self.overrides,package)):
+                logging.warn(" " * pad + "--> package-specific _service file provided for %s" % package)
+                fileOverride = "%s/_service.%s" % (self.overrides,package)
+                with open(fileOverride,'r') as filehandle:
+                    contents = filehandle.read()
+                    filehandle.close()
+            else:
+                with open(self.serviceFile,'r') as filehandle:
+                    contents = filehandle.read()
+                    filehandle.close()
         else:
             ERROR("Unable to read _service file template" % self.serviceFile)
-
-        pad = 15
 
         # verify we have a group definition for the parent package
         if(parent):
@@ -398,7 +406,6 @@ class ohpc_obs_tool(object):
         logging.debug("[%s]: new package _metadata written to %s" % (fname,fp.name))
         command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_meta"] 
 
-
         if self.dryRun:
             logging.error(" " * pad + "--> (dryrun) requesting addition of package: %s" % package)
             
@@ -428,6 +435,22 @@ class ohpc_obs_tool(object):
                 except:
                     ERROR("\nUnable to add marker file for package (%s) to OBS" % package)
         
+        # add a constraint file if present
+        if os.path.isfile("constraints/%s" % package):
+            logging.warn(" " * pad + "--> constraint file provided for %s" % package)
+            constraintFile = "constraints/%s" % package
+
+            command = ["osc","api","-f",constraintFile,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + "_constraints"]  
+            if self.dryRun:
+                logging.debug(" " * pad + "--> (dryrun) requesting addition of %s file for package: %s" % ('_constraints',package))
+
+            logging.debug("[%s]: (command) %s" % (fname,command))
+
+            if not self.dryRun:
+                try:
+                    s = subprocess.check_output(command)
+                except:
+                    ERROR("\nUnable to add _constraint file for package (%s) to OBS" % package)
 
         if(parent):   # Step 2a: add _service file for parent package
 

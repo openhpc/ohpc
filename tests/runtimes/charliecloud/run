@@ -19,7 +19,7 @@ setup() {
     if [ x$rm = "xpbspro" ];then
         . /etc/profile.d/pbs.sh || exit 1
     fi
-    module purge        || exit 1
+    module purge             || exit 1
     module load charliecloud || exit 1
 }
 
@@ -34,18 +34,38 @@ echo "-------------------------------------------------------"
 }
 
 @test "[charliecloud] build image" {
-    run $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest/Build $ARCH $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest chtest.tar.gz $image_dir
+    skip "skip experimental charliecloud image builder"
+    run timeout 20s $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest/Build $CHARLIECLOUD_DIR/share/doc/charliecloud/test/chtest chtest.tar.gz $image_dir
     assert_success
 }
 
+@test "[charliecloud] build alpine image from Docker (using singularity)" {
+
+    if [ -d alpine ];then
+       	rm -rf ./alpine
+    fi 
+
+    module load singularity
+    run timeout 30s singularity build --sandbox alpine docker://alpine:3
+    assert_success
+}
+
+
 @test "[charliecloud] exec image locally" {
-    run ch-run $image_dir/img -- cat /etc/os-release
+    run ls -l alpine/etc/os-release
+    assert_success
+
+    run timeout 20s ch-run alpine -- cat /etc/os-release
     assert_success
 }
 
 @test "[charliecloud] exec image via $rm" {
-    run_serial_binary ch-run -w $image_dir/img -- cat /etc/os-release
+
+    run ls -l alpine/etc/os-release
     assert_success
 
-    rm -rf $image_dir/img
+    run_serial_binary timeout 20s ch-run alpine -- cat /etc/os-release
+    assert_success
+
+    rm -rf ./alpine
 }

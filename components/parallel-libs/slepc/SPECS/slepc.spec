@@ -21,7 +21,7 @@
 %define pname slepc
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.11.1
+Version:        3.12.0
 Release:        1
 Summary:        A library for solving large scale sparse eigenvalue problems
 License:        LGPL-3.0
@@ -122,4 +122,4 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc LICENSE README docs/slepc.pdf
+%doc LICENSE.md README.md docs/slepc.pdf
