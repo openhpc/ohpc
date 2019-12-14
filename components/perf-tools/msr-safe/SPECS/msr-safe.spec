@@ -15,6 +15,11 @@
 # Base package name
 %define pname msr-safe
 
+# Set kmod default kernel variant for SUSE; blank for Red Hat
+# Can override on the rpmbuild line
+%if 0%{?sle_version} || 0%{?suse_version}
+%{!?kvariant: %global kvariant default}
+%endif
 
 Name:           %{pname}%{PROJ_DELIM}
 Version:        1.4.0
@@ -28,22 +33,11 @@ Source1:        msr-safe.service
 Source2:        msr-safe.sysconfig
 Source3:        10-msr-safe.rules
 Source4:        msr-safe.sh
-#BuildRequires:  %kernel_module_package_buildreqs
 BuildRequires:  systemd
-
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  udev
-BuildRequires:  kernel-default-devel
+BuildRequires:  %kernel_module_package_buildreqs
 #!BuildIgnore: post-build-checks
-%endif
 
-%if 0%{?centos_version} == 700
-%define centos_kernel 3.10.0-957.el7
-BuildRequires: kernel = %{centos_kernel}
-BuildRequires: kernel-devel = %{centos_kernel}
-%endif
-
-%kernel_module_package default
+%kernel_module_package %{?kvariant}
 
 %description
 Allows safer access to model specific registers (MSRs)
@@ -52,8 +46,8 @@ Allows safer access to model specific registers (MSRs)
 Summary: SLURM spank plugin for msr-safe
 Group: Development/Libraries
 Requires:       %{pname}%{PROJ_DELIM}
-%if 0%{?sles_version} || 0%{?suse_version}
-Requires:       %{pname}%{PROJ_DELIM}-kmp-default
+%if 0%{?sle_version} || 0%{?suse_version}
+Requires:       %{pname}%{PROJ_DELIM}-kmp
 %else
 Requires:       kmod-%{pname}%{PROJ_DELIM}
 %endif
@@ -73,6 +67,7 @@ may impact subsequent users of the processor if not restored.
 
 %prep
 %setup -q -n %{pname}-%{version}
+# Recent post-4.0 rpm bugfix
 
 %build
 for flavor in %flavors_to_build; do
@@ -135,7 +130,7 @@ fi
 %{_unitdir}/msr-safe.service
 %{_udevrulesdir}/10-msr-safe.rules
 %config %{_sysconfdir}/sysconfig/msr-safe
-%doc README
+%doc README.md
 %{_sbindir}/msrsave
 %{_sbindir}/msr-safe
 %dir %{_mandir}/man1
