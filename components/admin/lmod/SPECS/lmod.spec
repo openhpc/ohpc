@@ -26,7 +26,7 @@
 
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   8.0.6
+Version:   8.1.18
 Release:   1%{?dist}
 License:   MIT
 Group:     %{PROJ_NAME}/admin

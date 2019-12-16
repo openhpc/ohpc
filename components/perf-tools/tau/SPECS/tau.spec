@@ -30,6 +30,7 @@ Patch2:    tau-shared_libpdb.patch
 Patch3:    tau-disable_examples.patch
 Patch4:    tau-ucontext.patch
 Patch5:    tau-testplugins_makefile.patch
+Patch6:    paraprof.patch
 
 Provides:  lib%PNAME.so()(64bit)(%PROJ_NAME)
 Provides:  perl(ebs2otf)
@@ -78,6 +79,7 @@ automatic instrumentation tool.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
