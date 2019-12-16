@@ -18,7 +18,7 @@
 
 Summary:   Toolsuite of command line applications for performance oriented programmers
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   4.3.4
+Version:   5.0.0
 Release:   1%{?dist}
 License:   GPLv3
 Group:     %{PROJ_NAME}/perf-tools
@@ -47,10 +47,28 @@ limited to any specific architecture.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%ifarch x86_64
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
 %else
 %define compiler ICC
+%endif
+%endif
+
+%ifarch aarch64
+%if "%{compiler_family}" == "%{gnu_family}"
+%define compiler GCCARMv8
+%else
+%define compiler ARMCLANG
+%endif
+%endif
+
+%ifarch ppc64le
+%if "%{compiler_family}" == "%{gnu_family}"
+%define compiler GCCPOWER
+%else
+%define compiler XLC
+%endif
 %endif
 
 make \
@@ -68,10 +86,28 @@ make \
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
+%ifarch x86_64
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
 %else
 %define compiler ICC
+%endif
+%endif
+
+%ifarch aarch64
+%if "%{compiler_family}" == "%{gnu_family}"
+%define compiler GCCARMv8
+%else
+%define compiler ARMCLANG
+%endif
+%endif
+
+%ifarch ppc64le
+%if "%{compiler_family}" == "%{gnu_family}"
+%define compiler GCCPOWER
+%else
+%define compiler XLC
+%endif
 %endif
 
 make %{?_smp_mflags} \
