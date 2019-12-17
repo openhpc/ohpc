@@ -17,7 +17,7 @@
 %endif
 %endif
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 %if 0%{?suse_version} == 1315
 %define disttag .leap15
 %endif
@@ -35,7 +35,7 @@ Source1:  RPM-GPG-KEY-OpenHPC-1
 Provides: ohpc-release = %{version}
 
 
-%if 0%{?centos_version} || 0%{?rhel_version}
+%if 0%{?rhel_version}
 Requires: epel-release
 %endif
 
@@ -61,7 +61,7 @@ EOF
 
 # package repository definitions
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 %define __repodir /etc/zypp/repos.d
 %else
 %define __repodir /etc/yum.repos.d
