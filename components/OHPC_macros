@@ -134,25 +134,25 @@ Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %global python_module_prefix py3-
 %global python_site_dir %{python3_sitearch}
 # Failback in the event new python macros are undefined
-%if 0{!?python3_version_nodots:1}
+%if 0%{!?python3_version:1}
 %if 0%{sle_version} < 150000
-% global python3_version=3.4
-% global python3_version_nodots=34
+%global python3_version=3.4
+%global python3_version_nodots=34
 %else
-% global python3_version=3.6
-% global python3_version_nodots=36
+%global python3_version=3.6
+%global python3_version_nodots=36
 %endif # sle_version
 %endif # python3_version
-%global python_prefix python%{python3_version_nodots}
+%global python_prefix python3
 %global python_lib_dir python%{python3_version}
 %endif # Python3
 
 %if "%{python_family}" == "python2"
 %global python_module_prefix py2-
 %global python_prefix python
-%if 0{!?python_version:1}
-% global python_version=2.7
-% global python_version_nodots=27
+%if 0%{!?python_version:1}
+%global python_version=2.7
+%global python_version_nodots=27
 %endif # python_version
 %global python_lib_dir python%{python_version}
 %global python_site_dir %{python_sitearch}
