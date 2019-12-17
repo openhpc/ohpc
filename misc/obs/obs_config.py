@@ -93,6 +93,7 @@ class ohpc_obs_tool(object):
                 self.serviceFile       = self.buildConfig.get('global','service_template')
                 self.linkFile_compiler = self.buildConfig.get('global','link_compiler_template')
                 self.linkFile_mpi      = self.buildConfig.get('global','link_mpi_template')
+                self.overrides         = self.buildConfig.get('global','override_templates')
                 self.compilerFamilies  = ast.literal_eval(self.buildConfig.get(self.vip,'compiler_families'))
                 self.MPIFamilies       = ast.literal_eval(self.buildConfig.get(self.vip,'mpi_families'))
 
