@@ -12,15 +12,11 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if 0%{?centos_version} || 0%{?rhel_version}
-%if 0%{?centos_version} == 700
 %define disttag .el8
 %endif
-%endif
 
-%if 0%{?sles_version} || 0%{?suse_version}
-%if 0%{?suse_version} == 1315
+%if 0%{?suse_version}
 %define disttag .leap15
-%endif
 %endif
 
 Summary:  OpenHPC release files
@@ -30,7 +26,7 @@ Release:  1%{?disttag}
 License:  Apache-2.0
 Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc
-Source1:  RPM-GPG-KEY-OpenHPC-1
+Source1:  RPM-GPG-KEY-OpenHPC-2
 
 Provides: ohpc-release = %{version}
 
