@@ -21,7 +21,7 @@ if [ "$#" = "1" ]; then
 fi
 
 if [ -z "$OHPC_COMPILER_FAMILY" ]; then
-    echo "Unknown OHPC_COMPILER_FAMILY"
+    echo "OHPC_COMPILER_FAMILY not defined"
     exit 1
 fi
 
@@ -33,13 +33,6 @@ if [ "$OHPC_COMPILER_FAMILY" = "gnu" ]; then
     export F77=gfortran
     module purge
     module load gnu
-elif [ "$OHPC_COMPILER_FAMILY" = "gnu7" ]; then
-    export CC=gcc
-    export CXX=g++
-    export FC=gfortran
-    export F77=gfortran
-    module purge
-    module load gnu7
 elif [ "$OHPC_COMPILER_FAMILY" = "gnu8" ]; then
     export CC=gcc
     export CXX=g++
@@ -47,6 +40,13 @@ elif [ "$OHPC_COMPILER_FAMILY" = "gnu8" ]; then
     export F77=gfortran
     module purge
     module load gnu8
+elif [ "$OHPC_COMPILER_FAMILY" = "gnu9" ]; then
+    export CC=gcc
+    export CXX=g++
+    export FC=gfortran
+    export F77=gfortran
+    module purge
+    module load gnu9
 elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
     export toolset=intel-linux
     export CC=icc
