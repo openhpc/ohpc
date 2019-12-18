@@ -70,8 +70,8 @@ BuildRequires: ohpc-buildroot
 # these choices can be overridden by specifing the compiler_family/mpi_family
 # variables via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %global compiler_family gnu8}
-%{!?mpi_family: %global mpi_family openmpi3}
+%{!?compiler_family: %global compiler_family gnu9}
+%{!?mpi_family: %global mpi_family openmpi4}
 %{!?python_family: %global python_family python3}
 
 # Compiler dependencies
@@ -124,45 +124,24 @@ Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: openmpi3-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
 %endif # openmpi3
+%if "%{mpi_family}" == "openmpi4"
+BuildRequires: openmpi4-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi4-%{compiler_family}%{PROJ_DELIM}
+%endif # openmpi4
 %endif # ohpc_mpi_dependent
 
 # Python dependencies and macros
 %if 0%{?ohpc_python_dependent} == 1
-
-%if "%{python_family}" == "python3"
 %global __python %__python3
 %global python_module_prefix py3-
 %global python_site_dir %{python3_sitearch}
-# Failback in the event new python macros are undefined
-%if 0%{!?python3_version:1}
-%if 0%{sle_version} < 150000
-%global python3_version=3.4
-%global python3_version_nodots=34
-%else
-%global python3_version=3.6
-%global python3_version_nodots=36
-%endif # sle_version
-%endif # python3_version
 %global python_prefix python3
 %global python_lib_dir python%{python3_version}
-%endif # Python3
-
-%if "%{python_family}" == "python2"
-%global python_module_prefix py2-
-%global python_prefix python
-%if 0%{!?python_version:1}
-%global python_version=2.7
-%global python_version_nodots=27
-%endif # python_version
-%global python_lib_dir python%{python_version}
-%global python_site_dir %{python_sitearch}
-%endif # Python2
-
 BuildRequires: %{python_prefix}-devel
 BuildRequires: %{python_prefix}-setuptools
 BuildRequires: python-rpm-macros
 Requires:      %{python_prefix}
-%endif # python_dependent
+%endif
 
 # Single-line macro for running compiler/MPI setup scripts
 # Script bodies are evaluated and stored in this macro definition
