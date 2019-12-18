@@ -12,25 +12,21 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if 0%{?centos_version} || 0%{?rhel_version}
-%if 0%{?centos_version} == 700
 %define disttag .el8
 %endif
-%endif
 
-%if 0%{?sle_version} || 0%{?suse_version}
-%if 0%{?suse_version} == 1315
+%if 0%{?suse_version}
 %define disttag .leap15
-%endif
 %endif
 
 Summary:  OpenHPC release files
 Name:     ohpc-release
-Version:  %{ohpc_version}
+Version:  2
 Release:  1%{?disttag}
 License:  Apache-2.0
 Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc
-Source1:  RPM-GPG-KEY-OpenHPC-1
+Source1:  RPM-GPG-KEY-OpenHPC-2
 
 Provides: ohpc-release = %{version}
 
@@ -74,32 +70,32 @@ cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 name=OpenHPC-%{ohpc_version} - Base
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/%{_repository}
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 
 [OpenHPC-updates]
 name=OpenHPC-%{ohpc_version} - Updates
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/updates/%{_repository}
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 
 [OpenHPC-Sources]
 name=OpenHPC-%{ohpc_version} - Sources
 baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/sources/%{_repository}
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 enabled=0
 EOF
 
 # repository GPG key
 
-install -D -m 0644 %SOURCE1 ${RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+install -D -m 0644 %SOURCE1 ${RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
 %config /etc/ohpc-release
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 %dir /etc/zypp
 %endif
 
