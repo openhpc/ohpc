@@ -14,7 +14,7 @@
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
 # Base package name/config
-%define pname openmpi3
+%define pname openmpi4
 %define with_openib 1
 
 %ifarch aarch64 || ppc64le
@@ -30,18 +30,18 @@
 %{!?with_tm: %global with_tm 1}
 %{!?with_pmix: %define with_pmix 0}
 
-Summary:   A powerful implementation of MPI
+Summary:   A powerful implementation of MPI/SHMEM
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   3.1.4
+Version:   4.0.2
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-Source0:   http://www.open-mpi.org/software/ompi/v3.1/downloads/openmpi-%{version}.tar.bz2
+Source0:   http://www.open-mpi.org/software/ompi/v4.0/downloads/openmpi-%{version}.tar.bz2
 Source3:   pbs-config
-Patch0:    openmpi-3.0-pbs-config.patch
+Patch0:    openmpi-4.0-pbs-config.patch
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -110,13 +110,16 @@ Requires: prun%{PROJ_DELIM} >= 1.2
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
 %description
+Open MPI is an open source implementation of the Message Passing
+Interface specification (http://www.mpi-forum.org/) developed and
+maintained by a consortium of research, academic, and industry
+partners.
 
-Open MPI is a project combining technologies and resources from several
-other projects (FT-MPI, LA-MPI, LAM/MPI, and PACX-MPI) in order to
-build the best MPI library available.
-
-This RPM contains all the tools necessary to compile, link, and run
-Open MPI jobs.
+Open MPI also includes an implementation of the OpenSHMEM parallel
+programming API (http://www.openshmem.org/).  OpenSHMEM is a
+Partitioned Global Address Space (PGAS) abstraction layer, which
+provides fast inter-process communication using one-sided
+communication techniques.
 
 %prep
 
