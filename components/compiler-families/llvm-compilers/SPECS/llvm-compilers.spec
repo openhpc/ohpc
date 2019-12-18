@@ -39,7 +39,7 @@ Source7:   http://releases.llvm.org/%{version}/openmp-%{version}.src.tar.xz
 Source8:   http://releases.llvm.org/%{version}/clang-tools-extra-%{version}.src.tar.xz
 
 BuildRequires: cmake%{PROJ_DELIM}
-BuildRequires: gnu8-compilers%{PROJ_DELIM}
+BuildRequires: gnu9-compilers%{PROJ_DELIM}
 BuildRequires: python
 BuildRequires: zlib-devel
 BuildRequires: pkgconfig
@@ -82,7 +82,7 @@ This package includes: clang, clang-tools-extra, libcxx, libcxxabi, compiler-rt,
 
 %install
 module load cmake
-module load gnu8
+module load gnu9
 
 GNU8=$(command -v g++ | sed s#/bin.*##)
 
@@ -128,7 +128,7 @@ cmake --enable-optimise -Wno-dev -G"Unix Makefiles" ../llvm \
 cd $MAIN
 # End Stage 1
 
-module unload gnu8
+module unload gnu9
 
 # STAGE 2
 # Rebuild all components with clang
