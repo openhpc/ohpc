@@ -159,7 +159,7 @@ BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
 export BASEFLAGS
 
 %if %{with_tm}
-cp %{SOURCE3} .
+%{__cp} %{SOURCE3} .
 %{__chmod} 700 pbs-config
 export PATH="./:$PATH"
 %endif
@@ -177,13 +177,9 @@ make %{?_smp_mflags}
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
-# Remove .la files detected by rpm
 
-rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
-
-# rename prun to avoid namespace conflict with ohpc
-%{__mv} $RPM_BUILD_ROOT/%{install_path}/bin/prun $RPM_BUILD_ROOT/%{install_path}/bin/prun.ompi
-%{__mv} $RPM_BUILD_ROOT/%{install_path}/share/man/man1/prun.1 $RPM_BUILD_ROOT/%{install_path}/share/man/man1/prun.ompi.1
+# Remove any .la files that might exist
+%{__rm} -f $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
