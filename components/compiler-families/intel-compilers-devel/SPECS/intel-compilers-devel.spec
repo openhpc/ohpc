@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-compilers-devel
-%define year 2019
+%define year 2020
 
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
@@ -36,29 +36,25 @@ Provides: %{pname}%{PROJ_DELIM}
 Provides OpenHPC-style compatible modules for use with the Intel(R) Parallel
 Studio compiler suite.
 
+
 %prep
 
 %build
 
 %install
-
 install -D -m755 %{SOURCE2}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
 
-
-
 %pre
-
-
 # Special accommodation check for upgrades. Older versions of this
 # package incorrectly remove modulefiles during an upgrade. Check if
 # currently installed version is older than fixed version and flag so
 # we can fix after the fact.
 if [ $1 -gt 1 ];then
 
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' %{name}`
+    version=$(rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' %{name})
     minVerFix="2018.1.1"
-    result=`echo -e "${version}\n${minVerFix}" | sort -V | head -n 1`
+    result=$(echo -e "${version}\n${minVerFix}" | sort -V | head -n 1)
     if [ "$result" != "$minVerFix" ];then
 	touch %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix
     fi
@@ -70,7 +66,7 @@ icc_subpath="linux/bin/intel64/icc$"
 
 echo "Checking for local PSXE compiler installation(s)."
 
-versions_all=`rpm -qal | grep ${icc_subpath}`
+versions_all=$(rpm -qal | grep ${icc_subpath})
 
 if [ $? -eq 1 ];then
     echo ""
@@ -85,7 +81,7 @@ fi
 min_ver="16.0"
 versions=""
 for file in ${versions_all}; do
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    version=$(rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file})
     echo "--> Version ${version} detected"
     echo -e "${version}\n${min_ver}" | sort -V | head -n 1 | grep -q "^${min_ver}"
     if [ $? -ne 0 ];then
@@ -102,11 +98,10 @@ if [ -z "${versions}" ]; then
 fi
 
 %post
-
 icc_subpath="linux/bin/intel64/icc"
 scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
-versions=`rpm -qal | grep ${icc_subpath}$`
+versions=$(rpm -qal | grep ${icc_subpath}$)
 
 if [ $? -eq 1 ];then
     echo ""
@@ -124,8 +119,8 @@ fi
 
 # Create modulefiles for each locally detected installation.
 for file in ${versions}; do
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
-    topDir=`echo $file | sed "s|$icc_subpath||"`
+    version=$(rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file})
+    topDir=$(echo $file | sed "s|$icc_subpath||")
     echo "--> Installing modulefile for version=${version}"
 
     # Module header
@@ -224,10 +219,9 @@ if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
 fi
 
 %postun
-
 if [ $1 -eq 0 ];then
    if [ -s %{OHPC_MODULES}/intel/.manifest ];then
-       for file in `cat %{OHPC_MODULES}/intel/.manifest`; do
+       for file in $(cat %{OHPC_MODULES}/intel/.manifest); do
 	   if [ -e $file ];then
                rm $file
 	   fi
@@ -237,17 +231,16 @@ if [ $1 -eq 0 ];then
 fi
 
 %posttrans
-
 # special accommodation for older versions of this package which incorrectly remove
 # modulefiles during a package upgrade.
 if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
     echo "--> Applying upgrade fix to reinstate OpenHPC-style modulefiles"
-    for file in `find /var/lib/rpm-state/ohpc-intel-compiler-versions/ -type f`; do 
+    for file in $(find /var/lib/rpm-state/ohpc-intel-compiler-versions/ -type f); do 
 	%{__mv} $file %{OHPC_MODULES}/intel/
     done
     rmdir /var/lib/rpm-state/ohpc-intel-compiler-versions/
 
-    for file in `find /var/lib/rpm-state/ohpc-gnu-mkl-versions/ -type f`; do 
+    for file in $(find /var/lib/rpm-state/ohpc-gnu-mkl-versions/ -type f); do 
 	%{__mv} $file %{OHPC_MODULEDEPS}/gnu/mkl/
     done
     rmdir /var/lib/rpm-state/ohpc-gnu-mkl-versions/

@@ -11,8 +11,8 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-mpi-devel
-%define year 2019
-%global gnu_major_ver 8
+%define year 2020
+%global gnu_major_ver 9
 
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
@@ -52,7 +52,7 @@ mpicc_subpath="linux/mpi/intel64/bin/mpicc$"
 
 echo "Checking for local PSXE MPI installation(s)."
 
-versions_all=`rpm -qal | grep ${mpicc_subpath}`
+versions_all=$(rpm -qal | grep ${mpicc_subpath})
 
 if [ $? -eq 1 ];then
     echo ""
@@ -69,7 +69,7 @@ fi
 min_ver="5.1"
 versions=""
 for file in ${versions_all}; do 
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    version=$(rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file})
     echo "--> Version ${version} detected"
     echo -e "${version}\n${min_ver}" | sort -V | head -n 1 | grep -q "^${min_ver}"
     if [ $? -ne 0 ];then
@@ -90,7 +90,7 @@ fi
 mpicc_subpath="linux/mpi/intel64/bin/mpicc"
 scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 
-versions=`rpm -qal | grep ${mpicc_subpath}$`
+versions=$(rpm -qal | grep ${mpicc_subpath}$)
 
 if [ $? -eq 1 ];then
     echo ""
@@ -105,8 +105,8 @@ echo "Creating OpenHPC-style modulefiles for local PSXE MPI installation(s)."
 
 for file in ${versions}; do
 
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
-    topDir=`echo $file | sed "s|$mpicc_subpath||"`
+    version=$(rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file})
+    topDir=$(echo $file | sed "s|$mpicc_subpath||")
     echo "--> Installing modulefile for MPI version=${version}"
 	    
     # Create soft links for standard MPI wrapper usage
@@ -177,7 +177,7 @@ prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 EOF
 
     # Also define MPI_DIR based on $I_MPI_ROOT
-    IMPI_DIR=`egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}'`
+    IMPI_DIR=$(egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}')
     if [ -d "$IMPI_DIR/intel64" ];then
 	echo "setenv          MPI_DIR        $IMPI_DIR/intel64" >> %{OHPC_MODULEDEPS}/intel/impi/${version}
     fi
@@ -229,7 +229,7 @@ set     ModulesVersion      "${version}"
 EOF
 
     # Also define MPI_DIR based on $I_MPI_ROOT
-    IMPI_DIR=`egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}'`
+    IMPI_DIR=$(egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}')
     if [ -d "$IMPI_DIR/intel64" ];then
 	echo "setenv          MPI_DIR        $IMPI_DIR/intel64" >> %{OHPC_MODULEDEPS}/gnu/impi/${version}
     fi
@@ -254,11 +254,11 @@ done
 if [ "$1" = 0 ]; then
 
     mpicc_subpath="linux/mpi/intel64/bin/mpicc"
-    versions=`rpm -qal | grep ${mpicc_subpath}$`
+    versions=$(rpm -qal | grep ${mpicc_subpath}$)
 
     for file in ${versions}; do
-	version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
-	topDir=`echo $file | sed "s|$mpicc_subpath||"`
+	version=$(rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file})
+	topDir=$(echo $file | sed "s|$mpicc_subpath||")
 
 	if [ -d ${topDir}/linux/mpi/intel64/bin_ohpc ];then
 	    rm -rf ${topDir}/linux/mpi/intel64/bin_ohpc
@@ -266,7 +266,7 @@ if [ "$1" = 0 ]; then
     done
 
     if [ -s %{OHPC_MODULEDEPS}/intel/impi/.manifest ];then
-	for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
+	for file in $(cat %{OHPC_MODULEDEPS}/intel/impi/.manifest); do
 	   if [ -e $file ];then
                rm $file
 	   fi
