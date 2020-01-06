@@ -37,7 +37,7 @@ compiler_families=["gnu8","intel"]
 mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 
-standalone = ["ohpc-filesystem"]
+standalone = ["ohpc-filesystem","gnu-compilers"]
 
 # define (compiler dependent) packages
 #compiler_dependent = ["!hdf5","!openmpi","!mvapich2","!likwid","!plasma","!R"]
