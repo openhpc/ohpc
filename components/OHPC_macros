@@ -65,13 +65,17 @@ BuildRequires: ohpc-buildroot
 # these choices can be overridden by specifing the compiler_family/mpi_family
 # variables via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %global compiler_family gnu8}
+%{!?compiler_family: %global compiler_family gnu9}
 %{!?mpi_family: %global mpi_family openmpi3}
 %{!?python_family: %global python_family python3}
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
 
+%if "%{compiler_family}" == "gnu9"
+BuildRequires: gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+Requires:      gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+%endif
 %if "%{compiler_family}" == "gnu8"
 BuildRequires: gnu8-compilers%{PROJ_DELIM} >= 8.1.0
 Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.1.0
@@ -95,6 +99,16 @@ Requires:      arm-compilers-devel%{PROJ_DELIM}
 %if "%{compiler_family}" == "llvm"
 BuildRequires: llvm-compilers%{PROJ_DELIM}
 Requires:      llvm-compilers%{PROJ_DELIM}
+%endif
+
+# For RHEL 8 based systems annobin is activated
+%if 0%{?rhel} == 8
+%if 0%{?bootstrap_annobin} != 1
+BuildRequires: annobin-%{compiler_family}%{PROJ_DELIM}
+%else
+# Disable annobin for bootstrapping
+%undefine _annotated_build
+%endif
 %endif
 
 %endif

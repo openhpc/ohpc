@@ -15,6 +15,11 @@
 %global _with_numa 1
 
 %define pname slurm
+%if 0%{?rhel} > 7
+# this removes '-Wl,-z,now' from ldflags
+# slurm plugins are not working without this on RHEL 8
+%undefine _hardened_build
+%endif
 
 # $Id$
 #
@@ -35,8 +40,8 @@ URL:		https://slurm.schedmd.com/
 %global slurm_source_dir %{pname}-%{version}-%{rel}
 %endif
 
-Source:		https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
-Source1:        slurm.epilog.clean
+Source0:	https://download.schedmd.com/slurm/%{slurm_source_dir}.tar.bz2
+Source1:	slurm.epilog.clean
 
 # build options		.rpmmacros options	change to default action
 # ====================  ====================	========================
@@ -79,13 +84,22 @@ Source1:        slurm.epilog.clean
 # Build with PAM by default on linux
 %bcond_without pam
 
-Requires: munge%{PROJ_DELIM}
 
 %{?systemd_requires}
 BuildRequires: systemd
+%if 0%{?rhel} <= 7 || 0%{?suse_version}
+Requires: munge%{PROJ_DELIM}
 BuildRequires: libssh2-devel
 BuildRequires: munge-devel%{PROJ_DELIM} munge-libs%{PROJ_DELIM}
+%else
+Requires: munge
+BuildRequires: munge-devel munge-libs
+%endif
+%if 0%{?rhel} > 7
+BuildRequires: python2
+%else
 BuildRequires: python
+%endif
 BuildRequires: readline-devel
 Obsoletes: slurm-lua%{PROJ_DELIM} slurm-munge%{PROJ_DELIM} slurm-plugins%{PROJ_DELIM}
 
@@ -108,17 +122,11 @@ BuildRequires: openssl-devel >= 0.9.6 openssl >= 0.9.6
 %endif
 %endif
 
-%define use_mysql_devel %(perl -e '`rpm -q mariadb-devel`; print $?;')
-
 %if %{with mysql}
-%if %{use_mysql_devel}
-BuildRequires: mysql-devel >= 5.0.0
-%else
 %if 0%{?suse_version}
 BuildRequires: libmysqlclient-devel
 %else
 BuildRequires: mariadb-devel >= 5.0.0
-%endif
 %endif
 %endif
 
@@ -134,11 +142,7 @@ BuildRequires: pkg-config
 %endif
 
 %if %{with cray_network}
-%if %{use_mysql_devel}
-BuildRequires: mysql-devel
-%else
 BuildRequires: mariadb-devel
-%endif
 BuildRequires: cray-libalpscomm_cn-devel
 BuildRequires: cray-libalpscomm_sn-devel
 BuildRequires: hwloc-devel
@@ -244,6 +248,7 @@ and static libraries for the Slurm API
 %package -n %{pname}-example-configs%{PROJ_DELIM}
 Summary: Example config files for Slurm
 Group: %{PROJ_NAME}/rms
+Requires: munge
 %description -n %{pname}-example-configs%{PROJ_DELIM}
 Example configuration files for Slurm.
 
@@ -353,8 +358,15 @@ notifies slurm about failed nodes.
 %prep
 # when the rel number is one, the tarball filename does not include it
 %setup -n %{slurm_source_dir}
+%if 0%{?rhel} > 7
+mkdir bin
+ln -s /usr/bin/python2 bin/python
+%endif
 
 %build
+%if 0%{?rhel} > 7
+export PATH="$PWD/bin:$PATH"
+%endif
 %configure \
 	%{?_without_debug:--disable-debug} \
 	%{?_with_pam_dir} \
@@ -374,10 +386,13 @@ notifies slurm about failed nodes.
 make %{?_smp_mflags}
 
 %install
+%if 0%{?rhel} > 7
+export PATH="$PWD/bin:$PATH"
+%endif
 
 # Ignore redundant standard rpaths and insecure relative rpaths,
 # for RHEL based distros which use "check-rpaths" tool.
-export QA_RPATHS=0x5                                                                                                                               
+export QA_RPATHS=0x5
 
 # Strip out some dependencies
 
@@ -544,6 +559,14 @@ touch $LIST
 	echo /lib64/security/pam_slurm_adopt.so		>>$LIST
 %endif
 mkdir -p $RPM_BUILD_ROOT/%{_docdir}
+
+%post -n %{pname}-example-configs%{PROJ_DELIM}
+if [ ! -e %{_sysconfdir}/munge/munge.key -a -c /dev/urandom ]; then
+  /bin/dd if=/dev/urandom bs=1 count=1024 \
+    >%{_sysconfdir}/munge/munge.key 2>/dev/null
+  /bin/chown munge:munge %{_sysconfdir}/munge/munge.key
+  /bin/chmod 0400 %{_sysconfdir}/munge/munge.key
+fi
 
 %files -f slurm.files
 %{_datadir}/doc
