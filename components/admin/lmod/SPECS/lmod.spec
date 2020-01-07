@@ -42,8 +42,9 @@ BuildRequires: procps-ng
 Requires: lua-filesystem
 Requires: lua-posix
 %else
-BuildRequires: lua-luafilesystem
-BuildRequires: lua-luaposix
+# SUSE Leap
+BuildRequires: lua53-luafilesystem
+BuildRequires: lua53-luaposix
 %endif
 
 BuildRequires: rsync
