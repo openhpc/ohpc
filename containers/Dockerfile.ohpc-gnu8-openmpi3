@@ -1,0 +1,8 @@
+FROM ohpc-gnu8:1.3.9
+
+MAINTAINER The OpenHPC Project
+
+RUN yum -y install openmpi3-gnu8-ohpc && \
+    yum clean all
+
+ENV PATH="/opt/ohpc/pub/mpi/openmpi3-gnu8/3.1.4/bin:${PATH}"

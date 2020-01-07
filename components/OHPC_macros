@@ -76,6 +76,11 @@ BuildRequires: ohpc-buildroot
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
+
+%if "%{compiler_family}" == "gnu9"
+BuildRequires: gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+Requires:      gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+%endif
 %if "%{compiler_family}" == "gnu8"
 BuildRequires: gnu8-compilers%{PROJ_DELIM} >= 8.3.0
 Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.3.0
@@ -100,7 +105,18 @@ Requires:      arm-compilers-devel%{PROJ_DELIM}
 BuildRequires: llvm-compilers%{PROJ_DELIM} >= 9.0.0
 Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
 %endif # llvm
-%endif # compiler_dependent
+
+# For RHEL 8 based systems annobin is activated
+%if 0%{?rhel} == 8
+%if 0%{?bootstrap_annobin} != 1
+BuildRequires: annobin-%{compiler_family}%{PROJ_DELIM}
+%else
+# Disable annobin for bootstrapping
+%undefine _annotated_build
+%endif
+%endif
+
+%endif # compiler_depdendent
 
 # Disable RPM symlink analysis on files in %%{OHPC_HOME}.
 %global __libsymlink_exclude_path  %{OHPC_HOME}/.*$

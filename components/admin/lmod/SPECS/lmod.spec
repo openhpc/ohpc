@@ -28,19 +28,22 @@ Group:     %{PROJ_NAME}/admin
 Url:       https://github.com/TACC/Lmod
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 
+# Known dependencies
+Requires: lua >= %{luaver}
+Requires: tcl
+
 BuildRequires: lua >= %{luaver}
-BuildRequires: lua-devel >= %{luaver} 
-%if "%{luaver}" == "5.2"
-BuildRequires: lua-filesystem%{PROJ_DELIM}
-BuildRequires: lua-posix%{PROJ_DELIM}
-%else
-%if 0%{?sle_version:1}
-BuildRequires: lua-luafilesystem
-BuildRequires: lua-luaposix
-%else
+BuildRequires: lua-devel >= %{luaver}
+
+%if 0%{?rhel} > 7
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
-%endif
+BuildRequires: procps-ng
+Requires: lua-filesystem
+Requires: lua-posix
+%else
+BuildRequires: lua-luafilesystem
+BuildRequires: lua-luaposix
 %endif
 
 BuildRequires: rsync
@@ -50,30 +53,27 @@ BuildRequires: tcl tcl-devel
 BuildRequires: procps
 %endif
 
+%if 0%{?sle_version} || 0%{?suse_version}
 Conflicts: Modules
+%else
+%if 0%{?rhel} > 7
+# Starting with RHEL8 packages in RHEL8 depending on
+# environment modules no longer depend on the package
+# but on the virtual provide 'environment(modules)'.
+# By extending the MODULEPATH of this lmod we can easily
+# also use the OS provided modulesfiles.
+Provides: environment(modules)
+Obsoletes: environment-modules
+%else
 Conflicts: environment-modules
+%endif
+%endif
 
 # 8/28/14 karl.w.schulz@intel.com - include patches to remove consulting notice and setting of TACC env variables
 Patch1: lmod.consulting.patch
 Patch2: lmod.site.patch
 # 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
 %global _default_patch_fuzz 2
-
-# Installation dependencies
-Requires: lua >= %{luaver}
-Requires: tcl
-%if "%{luaver}" == "5.2"
-Requires: lua-filesystem%{PROJ_DELIM}
-Requires: lua-posix%{PROJ_DELIM}
-%else
-%if 0%{?sle_version:1}
-BuildRequires: lua-luafilesystem
-BuildRequires: lua-luaposix
-%else
-Requires: lua-filesystem
-Requires: lua-posix
-%endif
-%endif
 
 %description 
 Lmod: An Environment Module System based on Lua, Reads TCL Modules,
@@ -88,14 +88,14 @@ Supports a Software Hierarchy
 
 %build
 unset MODULEPATH
-%if "%{luaver}" == "5.2"
+%if 0%{?rhel} <= 7
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
 %endif
 ./configure --prefix=%{OHPC_ADMIN} --libdir=%{lualibdir} --datadir=%{luapkgdir} --with-redirect=yes --with-autoSwap=no
 
 %install
-%if "%{luaver}" == "5.2"
+%if 0%{?rhel} <= 7
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
 %endif
@@ -178,6 +178,19 @@ source %{OHPC_ADMIN}/lmod/lmod/init/csh >/dev/null
 module try-add ohpc
 
 EOF
+
+# Starting with RHEL 8 we can load OS provided modules
+%{__mkdir_p} %{buildroot}/%{OHPC_MODULES}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULES}/os
+#%Module1.0#####################################################################
+
+proc ModulesHelp { } { puts stderr "Enable operating system provided modules" }
+
+module-whatis "Name: Operating System provided modules"
+
+append-path MODULEPATH /etc/modulefiles:/usr/share/modulefiles
+EOF
+
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
