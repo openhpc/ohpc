@@ -14,14 +14,6 @@
 
 %define pname lmod
 
-%if 0%{?suse_version} > 1220
-%define luaver 5.2
-%else
-%define luaver 5.1
-%if 0%{?rhel} > 7
-%define luaver 5.3
-%endif
-%endif
 %define lualibdir %{_libdir}/lua/%{luaver}
 %define luapkgdir %{_datadir}/lua/%{luaver}
 %define LUA_CPATH ?.so;?/?.so;%{lualibdir}/?.so
@@ -42,6 +34,7 @@ Requires: tcl
 
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
+
 %if 0%{?rhel} > 7
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
@@ -49,20 +42,18 @@ BuildRequires: procps-ng
 Requires: lua-filesystem
 Requires: lua-posix
 %else
-BuildRequires: lua-filesystem%{PROJ_DELIM}
-BuildRequires: lua-posix%{PROJ_DELIM}
-Requires: lua-filesystem%{PROJ_DELIM}
-Requires: lua-posix%{PROJ_DELIM}
+BuildRequires: lua-luafilesystem
+BuildRequires: lua-luaposix
 %endif
 
 BuildRequires: rsync
 BuildRequires: tcl tcl-devel
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 BuildRequires: procps
 %endif
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 Conflicts: Modules
 %else
 %if 0%{?rhel} > 7
@@ -84,7 +75,7 @@ Patch2: lmod.site.patch
 # 4/25/17 karl.w.schulz@intel.com - upping patch fuzz factor for newer lmod
 %global _default_patch_fuzz 2
 
-%description
+%description 
 Lmod: An Environment Module System based on Lua, Reads TCL Modules,
 Supports a Software Hierarchy
 
