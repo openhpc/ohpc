@@ -31,6 +31,7 @@ BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
 
 %if 0%{?rhel} > 7
+BuildRequires: lua-libs
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
 BuildRequires: procps-ng
