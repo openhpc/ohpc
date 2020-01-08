@@ -29,7 +29,6 @@ Requires: tcl
 
 BuildRequires: lua
 BuildRequires: lua-devel
-BuildRequires: lua-libs
 BuildRequires: rsync
 BuildRequires: tcl tcl-devel
 
