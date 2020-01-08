@@ -29,6 +29,7 @@ Requires: tcl
 
 BuildRequires: lua >= %{luaver}
 BuildRequires: lua-devel >= %{luaver}
+BuildRequires: lua-libs
 
 %if 0%{?rhel} > 7
 BuildRequires: lua-libs
