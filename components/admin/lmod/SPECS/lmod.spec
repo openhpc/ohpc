@@ -93,7 +93,7 @@ unset MODULEPATH
 export LUA_CPATH="%{LUA_CPATH}"
 export LUA_PATH="%{LUA_PATH}"
 %endif
-./configure --prefix=%{OHPC_ADMIN} --libdir=%{lualibdir} --datadir=%{luapkgdir} --with-redirect=yes --with-autoSwap=no
+./configure --prefix=%{OHPC_ADMIN} --with-redirect=yes --with-autoSwap=no
 
 %install
 %if 0%{?rhel} <= 7
