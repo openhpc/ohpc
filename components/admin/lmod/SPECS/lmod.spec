@@ -14,11 +14,6 @@
 
 %define pname lmod
 
-%define lualibdir %{_libdir}/lua/%{luaver}
-%define luapkgdir %{_datadir}/lua/%{luaver}
-%define LUA_CPATH ?.so;?/?.so;%{lualibdir}/?.so
-%define LUA_PATH ?.lua;?/?.lua;%{luapkgdir}/?.lua
-
 Summary:   Lua based Modules (lmod)
 Name:      %{pname}%{PROJ_DELIM}
 Version:   8.1.18
@@ -89,17 +84,9 @@ Supports a Software Hierarchy
 
 %build
 unset MODULEPATH
-%if 0%{?rhel} <= 7
-export LUA_CPATH="%{LUA_CPATH}"
-export LUA_PATH="%{LUA_PATH}"
-%endif
 ./configure --prefix=%{OHPC_ADMIN} --with-redirect=yes --with-autoSwap=no
 
 %install
-%if 0%{?rhel} <= 7
-export LUA_CPATH="%{LUA_CPATH}"
-export LUA_PATH="%{LUA_PATH}"
-%endif
 make DESTDIR=$RPM_BUILD_ROOT install
 # Customize startup script to suit
 
