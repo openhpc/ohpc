@@ -24,12 +24,14 @@ Url:       https://github.com/TACC/Lmod
 Source0:   https://github.com/TACC/Lmod/archive/%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
 
 # Known dependencies
-Requires: lua >= %{luaver}
+Requires: lua
 Requires: tcl
 
-BuildRequires: lua >= %{luaver}
-BuildRequires: lua-devel >= %{luaver}
+BuildRequires: lua
+BuildRequires: lua-devel
 BuildRequires: lua-libs
+BuildRequires: rsync
+BuildRequires: tcl tcl-devel
 
 %if 0%{?rhel} > 7
 BuildRequires: lua-libs
@@ -42,12 +44,6 @@ Requires: lua-posix
 # SUSE Leap
 BuildRequires: lua53-luafilesystem
 BuildRequires: lua53-luaposix
-%endif
-
-BuildRequires: rsync
-BuildRequires: tcl tcl-devel
-
-%if 0%{?sle_version} || 0%{?suse_version}
 BuildRequires: procps
 %endif
 
@@ -55,7 +51,7 @@ BuildRequires: procps
 Conflicts: Modules
 %else
 %if 0%{?rhel} > 7
-# Starting with RHEL8 packages in RHEL8 depending on
+# Starting with RHEL8, packages in RHEL8 depending on
 # environment modules no longer depend on the package
 # but on the virtual provide 'environment(modules)'.
 # By extending the MODULEPATH of this lmod we can easily
