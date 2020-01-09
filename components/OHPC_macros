@@ -106,14 +106,9 @@ BuildRequires: llvm-compilers%{PROJ_DELIM} >= 9.0.0
 Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
 %endif # llvm
 
-# For RHEL 8 based systems annobin is activated
+# Disable annobin on RHEL based systems
 %if 0%{?rhel} == 8
-%if 0%{?bootstrap_annobin} != 1
-BuildRequires: annobin-%{compiler_family}%{PROJ_DELIM}
-%else
-# Disable annobin for bootstrapping
 %undefine _annotated_build
-%endif
 %endif
 
 %endif # compiler_depdendent
