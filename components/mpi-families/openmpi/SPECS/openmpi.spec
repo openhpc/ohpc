@@ -251,6 +251,7 @@ BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
   KNEM_DIR=$(find /opt -maxdepth 1 -type d -name "knem*" -print0)
   HCOLL_DIR=/opt/mellanox/hcoll
   BASEFLAGS="$BASEFLAGS --with-hcoll=$HCOLL_DIR --with-knem=$KNEM_DIR"
+%endif
 %if %{with_lustre}
   BASEFLAGS="$BASEFLAGS --with-io-romio-flags=--with-file-system=testfs+ufs+nfs+lustre"
 %endif
