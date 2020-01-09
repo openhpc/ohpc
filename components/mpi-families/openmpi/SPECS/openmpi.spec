@@ -15,7 +15,8 @@
 
 # Base package name/config
 %define pname openmpi3
-%define with_openib 1
+%define with_openib 0
+%define with_mofed 1
 
 %ifarch aarch64 || ppc64le
 %define with_psm 0
@@ -105,6 +106,103 @@ BuildRequires:  libpsm2-devel >= 10.2.0
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 #!BuildIgnore: post-build-checks
+%if %{with_mofed}
+BuildRequires: ar_mgr >= 1.0-0.42.g750eb1e.46101
+BuildRequires: cc_mgr >= 1.0-0.41.g750eb1e.46101
+BuildRequires: dump_pr >= 1.0-0.37.g750eb1e.46101
+BuildRequires: hcoll >= 4.3.2708-1.46101
+BuildRequires: ibacm >= 41mlnx1-OFED.4.3.3.0.0.46101
+BuildRequires: ibdump >= 5.0.0-3.46101
+BuildRequires: ibsim >= 0.7mlnx1-0.11.g85c342b.46101
+BuildRequires: ibutils >= 1.5.7.1-0.12.gdcaeae2.46101
+BuildRequires: ibutils2 >= 2.1.1-0.104.MLNX20190408.gb55795e.46101
+BuildRequires: infiniband-diags >= 5.4.0.MLNX20190422.d1468cd-0.1.46101
+BuildRequires: infiniband-diags-compat >= 5.4.0.MLNX20190422.d1468cd-0.1.46101
+BuildRequires: libibcm >= 41mlnx1-OFED.4.1.0.1.0.46101
+BuildRequires: libibcm-devel >= 41mlnx1-OFED.4.1.0.1.0.46101
+BuildRequires: libibmad >= 5.4.0.MLNX20190423.1d917ae-0.1.46101
+BuildRequires: libibmad-devel >= 5.4.0.MLNX20190423.1d917ae-0.1.46101
+BuildRequires: libibmad-static >= 5.4.0.MLNX20190423.1d917ae-0.1.46101
+BuildRequires: libibumad >= 43.1.1.MLNX20190422.87b4d9b-0.1.46101
+BuildRequires: libibumad-devel >= 43.1.1.MLNX20190422.87b4d9b-0.1.46101
+BuildRequires: libibumad-static >= 43.1.1.MLNX20190422.87b4d9b-0.1.46101
+BuildRequires: libibverbs >= 41mlnx1-OFED.4.6.0.4.1.46101
+BuildRequires: libibverbs-devel >= 41mlnx1-OFED.4.6.0.4.1.46101
+BuildRequires: libibverbs-devel-static >= 41mlnx1-OFED.4.6.0.4.1.46101
+BuildRequires: libibverbs-utils >= 41mlnx1-OFED.4.6.0.4.1.46101
+BuildRequires: libmlx4 >= 41mlnx1-OFED.4.5.0.0.3.46101
+BuildRequires: libmlx4-devel >= 41mlnx1-OFED.4.5.0.0.3.46101
+BuildRequires: libmlx5 >= 41mlnx1-OFED.4.6.0.0.4.46101
+BuildRequires: libmlx5-devel >= 41mlnx1-OFED.4.6.0.0.4.46101
+BuildRequires: librdmacm >= 41mlnx1-OFED.4.6.0.0.1.46101
+BuildRequires: librdmacm-devel >= 41mlnx1-OFED.4.6.0.0.1.46101
+BuildRequires: librdmacm-utils >= 41mlnx1-OFED.4.6.0.0.1.46101
+BuildRequires: librxe >= 41mlnx1-OFED.4.4.2.4.6.46101
+BuildRequires: librxe-devel-static >= 41mlnx1-OFED.4.4.2.4.6.46101
+BuildRequires: mft >= 4.12.0-105
+BuildRequires: mlnx-ethtool >= 4.19-1.46101
+BuildRequires: mlnx-iproute2 >= 4.20.0-1.46101
+BuildRequires: mstflint >= 4.11.0-1.14.g840c9c2.46101
+BuildRequires: ofed-scripts >= 4.6-OFED.4.6.1.0.1
+BuildRequires: opensm >= 5.4.0.MLNX20190422.ed81811-0.1.46101
+BuildRequires: opensm-devel >= 5.4.0.MLNX20190422.ed81811-0.1.46101
+BuildRequires: opensm-libs >= 5.4.0.MLNX20190422.ed81811-0.1.46101
+BuildRequires: opensm-static >= 5.4.0.MLNX20190422.ed81811-0.1.46101
+BuildRequires: perftest >= 4.4-0.5.g1ceab48.46101
+BuildRequires: qperf >= 0.4.9-9.46101
+BuildRequires: sharp >= 1.8.1.MLNX20190422.6c05a05-1.46101
+BuildRequires: srptools >= 41mlnx1-5.46101
+BuildRequires: knem
+BuildRequires: systemd-devel
+Requires: ar_mgr >= 1.0-0.42.g750eb1e.46101
+Requires: cc_mgr >= 1.0-0.41.g750eb1e.46101
+Requires: dump_pr >= 1.0-0.37.g750eb1e.46101
+Requires: hcoll >= 4.3.2708-1.46101
+Requires: ibacm >= 41mlnx1-OFED.4.3.3.0.0.46101
+Requires: ibdump >= 5.0.0-3.46101
+Requires: ibsim >= 0.7mlnx1-0.11.g85c342b.46101
+Requires: ibutils >= 1.5.7.1-0.12.gdcaeae2.46101
+Requires: ibutils2 >= 2.1.1-0.104.MLNX20190408.gb55795e.46101
+Requires: infiniband-diags >= 5.4.0.MLNX20190422.d1468cd-0.1.46101
+Requires: infiniband-diags-compat >= 5.4.0.MLNX20190422.d1468cd-0.1.46101
+Requires: libibcm >= 41mlnx1-OFED.4.1.0.1.0.46101
+Requires: libibcm-devel >= 41mlnx1-OFED.4.1.0.1.0.46101
+Requires: libibmad >= 5.4.0.MLNX20190423.1d917ae-0.1.46101
+Requires: libibmad-devel >= 5.4.0.MLNX20190423.1d917ae-0.1.46101
+Requires: libibmad-static >= 5.4.0.MLNX20190423.1d917ae-0.1.46101
+Requires: libibumad >= 43.1.1.MLNX20190422.87b4d9b-0.1.46101
+Requires: libibumad-devel >= 43.1.1.MLNX20190422.87b4d9b-0.1.46101
+Requires: libibumad-static >= 43.1.1.MLNX20190422.87b4d9b-0.1.46101
+Requires: libibverbs >= 41mlnx1-OFED.4.6.0.4.1.46101
+Requires: libibverbs-devel >= 41mlnx1-OFED.4.6.0.4.1.46101
+Requires: libibverbs-devel-static >= 41mlnx1-OFED.4.6.0.4.1.46101
+Requires: libibverbs-utils >= 41mlnx1-OFED.4.6.0.4.1.46101
+Requires: libmlx4 >= 41mlnx1-OFED.4.5.0.0.3.46101
+Requires: libmlx4-devel >= 41mlnx1-OFED.4.5.0.0.3.46101
+Requires: libmlx5 >= 41mlnx1-OFED.4.6.0.0.4.46101
+Requires: libmlx5-devel >= 41mlnx1-OFED.4.6.0.0.4.46101
+Requires: librdmacm >= 41mlnx1-OFED.4.6.0.0.1.46101
+Requires: librdmacm-devel >= 41mlnx1-OFED.4.6.0.0.1.46101
+Requires: librdmacm-utils >= 41mlnx1-OFED.4.6.0.0.1.46101
+Requires: librxe >= 41mlnx1-OFED.4.4.2.4.6.46101
+Requires: librxe-devel-static >= 41mlnx1-OFED.4.4.2.4.6.46101
+Requires: mft >= 4.12.0-105
+Requires: mlnx-ethtool >= 4.19-1.46101
+Requires: mlnx-iproute2 >= 4.20.0-1.46101
+Requires: mstflint >= 4.11.0-1.14.g840c9c2.46101
+Requires: ofed-scripts >= 4.6-OFED.4.6.1.0.1
+Requires: opensm >= 5.4.0.MLNX20190422.ed81811-0.1.46101
+Requires: opensm-devel >= 5.4.0.MLNX20190422.ed81811-0.1.46101
+Requires: opensm-libs >= 5.4.0.MLNX20190422.ed81811-0.1.46101
+Requires: opensm-static >= 5.4.0.MLNX20190422.ed81811-0.1.46101
+Requires: perftest >= 4.4-0.5.g1ceab48.46101
+Requires: qperf >= 0.4.9-9.46101
+Requires: sharp >= 1.8.1.MLNX20190422.6c05a05-1.46101
+Requires: srptools >= 41mlnx1-5.46101
+Requires: knem
+Requires: systemd-devel
+%endif
+
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
@@ -149,6 +247,10 @@ BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
 %if %{with_openib}
   BASEFLAGS="$BASEFLAGS --with-verbs"
 %endif
+%if %{with_mofed}
+  KNEM_DIR=$(find /opt -maxdepth 1 -type d -name "knem*" -print0)
+  HCOLL_DIR=/opt/mellanox/hcoll
+  BASEFLAGS="$BASEFLAGS --with-hcoll=$HCOLL_DIR --with-knem=$KNEM_DIR"
 %if %{with_lustre}
   BASEFLAGS="$BASEFLAGS --with-io-romio-flags=--with-file-system=testfs+ufs+nfs+lustre"
 %endif
