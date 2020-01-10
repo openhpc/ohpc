@@ -31,13 +31,13 @@ BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig
 
+%if 0%{?rhel}
+BuildRequires:  expat-devel
+BuildRequires:  bzip2-devel
+%endif
 %if 0%{?suse_version}
 BuildRequires:  libexpat-devel
 BuildRequires:  libbz2-devel
-%endif
-%if 0%{?rhel_version}
-BuildRequires:  expat-devel
-BuildRequires:  bzip2-devel
 %endif
 
 %define install_path %{OHPC_UTILS}/%{pname}/%version
