@@ -32,21 +32,23 @@ BuildRequires: lua-devel
 BuildRequires: rsync
 BuildRequires: tcl tcl-devel
 
-%if 0%{?rhel} > 7
+%if 0%{?rhel}
 BuildRequires: lua-libs
 BuildRequires: lua-filesystem
 BuildRequires: lua-posix
 BuildRequires: procps-ng
 Requires: lua-filesystem
 Requires: lua-posix
-%else
-# SUSE Leap
-BuildRequires: lua53-luafilesystem
-BuildRequires: lua53-luaposix
+%endif
+%if 0%{?suse_version}
+BuildRequires: lua-luafilesystem
+BuildRequires: lua-luaposix
 BuildRequires: procps
+Requires: lua-luafilesystem
+Requires: lua-luaposix
 %endif
 
-%if 0%{?sle_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 Conflicts: Modules
 %else
 %if 0%{?rhel} > 7
