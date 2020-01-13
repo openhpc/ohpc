@@ -31,18 +31,11 @@ Requires(postun): systemd
 
 %if 0%{?suse_version}
 BuildRequires:	tcpd-devel
-%else
-BuildRequires:	tcp_wrappers-devel
 %endif
 BuildRequires:	freeipmi-devel
 #!BuildIgnore: post-build-checks
 
 Source0:	https://github.com/dun/conman/archive/%pname-%{version}.tar.gz
-
-# 8/15/14 karl.w.schulz@intel.com - include prereq
-%if 0%{?sles_version} || 0%{?suse_version}
-PreReq: %{insserv_prereq} %{fillup_prereq}
-%endif
 
 %description
 ConMan is a serial console management program designed to support a large
@@ -63,7 +56,12 @@ Its features include:
 %setup -q -n %{pname}-%{pname}-%{version}
 
 %build
-%configure --with-tcp-wrappers --with-freeipmi
+%configure \
+%if 0%{?suse_version}
+	--with-tcp-wrappers \
+%endif
+	--with-freeipmi
+
 make %{?_smp_mflags}
 
 %install
@@ -100,10 +98,6 @@ fi
 
 %postun
 %systemd_postun_with_restart conman.service
-
-%if %{?insserv_cleanup:1}0
-%insserv_cleanup
-%endif
 
 %files
 %doc AUTHORS
