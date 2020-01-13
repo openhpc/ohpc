@@ -12,8 +12,8 @@
 
 %define pname cmake
 
-%define major_version 3.14
-%define minor_version 3
+%define major_version 3.16
+%define minor_version 2
 
 Summary: CMake is an open-source, cross-platform family of tools designed to build, test and package software.
 Name:    %{pname}%{PROJ_DELIM}
@@ -24,23 +24,20 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 URL:            https://cmake.org/
 Source0:        https://cmake.org/files/v%{major_version}/cmake-%{version}.tar.gz
-# PATCH-FIX-UPSTREAM form.patch -- set the correct include path for the ncurses includes
-Patch1:         form.patch
 BuildRequires:  gcc-c++
-BuildRequires:  libarchive-devel >= 3.1
 BuildRequires:  curl-devel
 BuildRequires:  ncurses-devel
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  libexpat-devel
-%else
-BuildRequires:  expat-devel
 
-# The following dependencies on EL7 come from EPEL
-BuildRequires:  rhash-devel
-BuildRequires:  libuv-devel >= 1.10
+%if 0%{?rhel}
+BuildRequires:  expat-devel
+BuildRequires:  bzip2-devel
+%endif
+%if 0%{?suse_version}
+BuildRequires:  libexpat-devel
+BuildRequires:  libbz2-devel
 %endif
 
 %define install_path %{OHPC_UTILS}/%{pname}/%version
@@ -53,13 +50,11 @@ of your choice.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
 
 ./bootstrap --system-libs \
-%if 0%{?sles_version} || 0%{?suse_version}
 --no-system-librhash \
 --no-system-libuv \
-%endif
+--no-system-libarchive \
 --no-system-jsoncpp \
 --no-qt-gui \
 --prefix=%{install_path}

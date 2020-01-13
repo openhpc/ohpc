@@ -21,7 +21,7 @@ for i in `find . -name "${PATTERN}"`; do
 	pushd `dirname ${i}` > /dev/null
 	BASE=`basename ${i}`
 
-	SOURCES=`rpmspec --parse --define '_sourcedir ../SOURCES' --define 'rhel 7' ${BASE} | grep Source`
+	SOURCES=`rpmspec --parse --define '_sourcedir ../../..' --define 'rhel 8' ${BASE} | grep Source`
 	for u in ${SOURCES}; do
 		echo ${u}
 		if [[ "${u}" != *"http"* ]]; then

@@ -20,9 +20,8 @@ import coloredlogs
 
 #---
 # global config settings
-obsurl="https://build.openhpc.community"
-version_in_progress="1.3.8"
-configFile="config"
+obsurl="https://obs.openhpc.community"
+configFile="config.2.x"
 
 #---
 # Simple error wrapper to include exit
@@ -87,22 +86,24 @@ class ohpc_obs_tool(object):
             logging.info("--> file parsing ok")
 
             # read global settings for this version in progress
-            vip = version_in_progress
+            #vip = version_in_progress
 
             try:
                 self.dryRun            = self.buildConfig.getboolean('global','dry_run',fallback=True)
                 self.serviceFile       = self.buildConfig.get('global','service_template')
                 self.linkFile_compiler = self.buildConfig.get('global','link_compiler_template')
                 self.linkFile_mpi      = self.buildConfig.get('global','link_mpi_template')
-                self.compilerFamilies  = ast.literal_eval(self.buildConfig.get(vip,'compiler_families'))
-                self.MPIFamilies       = ast.literal_eval(self.buildConfig.get(vip,'mpi_families'))
-
+                self.overrides         = self.buildConfig.get('global','override_templates')
+                self.compilerFamilies  = ast.literal_eval(self.buildConfig.get(self.vip,'compiler_families'))
+                self.MPIFamilies       = ast.literal_eval(self.buildConfig.get(self.vip,'mpi_families'))
 
             except:
                 ERROR("Unable to parse global settings for %s" % vip)
 
             assert(len(self.compilerFamilies) > 0)
             assert(len(self.MPIFamilies) > 0)
+
+            self.Lock = True      # flag to indicate whether to lock new packages after creation (git trigger will unlock)
 
             self.parentCompiler = self.compilerFamilies[0]
             self.parentMPI      = self.MPIFamilies[0]
@@ -132,9 +133,9 @@ class ohpc_obs_tool(object):
             self.NoBuildPatterns ={}
 
             if self.buildConfig.has_option(self.vip,'skip_aarch'):
-                self.NoBuildPatterns['aarch64'] = ast.literal_eval(self.buildConfig.get(vip,'skip_aarch'))
+                self.NoBuildPatterns['aarch64'] = ast.literal_eval(self.buildConfig.get(self.vip,'skip_aarch'))
             if self.buildConfig.has_option(self.vip,'skip_x86'):
-                self.NoBuildPatterns['x86_64'] = ast.literal_eval(self.buildConfig.get(vip,'skip_x86'))
+                self.NoBuildPatterns['x86_64'] = ast.literal_eval(self.buildConfig.get(self.vip,'skip_x86'))
 
             logging.info("Architecture skip patterns:")
             for pattern in self.NoBuildPatterns:
@@ -200,7 +201,16 @@ class ohpc_obs_tool(object):
 
             components['mpi_dep'] = self.checkForDisabledComponents(components['mpi_dep'])
 
+        numComponents = 0
+        if 'standalone' not in components:
+            components['standalone'] = []
+        if 'comp_dep' not in components:
+            components['comp_dep'] = []
+        if 'mpi_dep' not in components:
+            components['mpi_dep'] = []
+
         numComponents = len(components['standalone']) + len(components['comp_dep']) + len(components['mpi_dep'])
+            
         logging.info("# of requested components = %i\n" % numComponents)
         return(components)
 
@@ -287,9 +297,15 @@ class ohpc_obs_tool(object):
             ERROR("package %s not assocated with any groups, please check config" % package)
 
     #---
-    # update dryrun options
+    # update dryrun option
     def overrideDryRun(self):
         self.dryRun = False
+        return
+
+    #---
+    # update lock option
+    def overrideLock(self):
+        self.Lock = False
         return
 
     #---
@@ -352,16 +368,23 @@ class ohpc_obs_tool(object):
     # add specified package to OBS
     def addPackage(self,package,parent=True,isCompilerDep=False,isMPIDep=False,compiler=None,mpi=None,parentName=None,gitName=None):
         fname = inspect.stack()[0][3]
+        pad = 15
 
-        # verify we have template _service file
+        # verify we have template _service file and cache contents
         if os.path.isfile(self.serviceFile):
-            with open(self.serviceFile,'r') as filehandle:
-                contents = filehandle.read()
-            filehandle.close()
+            # use package-specific template if present, otherwise, use default serviceFile
+            if os.path.isfile("%s/_service.%s" % (self.overrides,package)):
+                logging.warn(" " * pad + "--> package-specific _service file provided for %s" % package)
+                fileOverride = "%s/_service.%s" % (self.overrides,package)
+                with open(fileOverride,'r') as filehandle:
+                    contents = filehandle.read()
+                    filehandle.close()
+            else:
+                with open(self.serviceFile,'r') as filehandle:
+                    contents = filehandle.read()
+                    filehandle.close()
         else:
             ERROR("Unable to read _service file template" % self.serviceFile)
-
-        pad = 15
 
         # verify we have a group definition for the parent package
         if(parent):
@@ -398,7 +421,6 @@ class ohpc_obs_tool(object):
         logging.debug("[%s]: new package _metadata written to %s" % (fname,fp.name))
         command = ["osc","api","-f",fp.name,"-X","PUT","/source/" + self.obsProject + "/" + package + "/_meta"] 
 
-
         if self.dryRun:
             logging.error(" " * pad + "--> (dryrun) requesting addition of package: %s" % package)
             
@@ -411,7 +433,7 @@ class ohpc_obs_tool(object):
                 ERROR("\nUnable to add new package (%s) to OBS" % package)
 
         # add marker file indicating this is a new OBS addition ready to be rebuilt (nothing in file, simply a marker)
-        if (True):
+        if (True and self.Lock):
             fp = tempfile.NamedTemporaryFile(delete=False,mode='w+t')
             fp.flush()
 
@@ -428,6 +450,22 @@ class ohpc_obs_tool(object):
                 except:
                     ERROR("\nUnable to add marker file for package (%s) to OBS" % package)
         
+        # add a constraint file if present
+        if os.path.isfile("constraints/%s" % package):
+            logging.warn(" " * pad + "--> constraint file provided for %s" % package)
+            constraintFile = "constraints/%s" % package
+
+            command = ["osc","api","-f",constraintFile,"-X","PUT","/source/" + self.obsProject + "/" + package + "/" + "_constraints"]  
+            if self.dryRun:
+                logging.debug(" " * pad + "--> (dryrun) requesting addition of %s file for package: %s" % ('_constraints',package))
+
+            logging.debug("[%s]: (command) %s" % (fname,command))
+
+            if not self.dryRun:
+                try:
+                    s = subprocess.check_output(command)
+                except:
+                    ERROR("\nUnable to add _constraint file for package (%s) to OBS" % package)
 
         if(parent):   # Step 2a: add _service file for parent package
 
@@ -516,6 +554,9 @@ class ohpc_obs_tool(object):
         fname = inspect.stack()[0][3]
         numBuilds = len(self.buildsToCancel)
 
+        if self.Lock is False:
+            return
+
         if(numBuilds == 0):
             logging.info("\nNo new builds created.")
             return
@@ -549,14 +590,16 @@ def main():
     parser.add_argument("--configFile",help="filename with package definition options (default = config)",type=str)
     parser.add_argument("--no-dryrun",dest='dryrun',help="flag to disable dryrun mode and execute obs commands",action="store_false")
     parser.add_argument("--version"   ,help="version in progress",type=str)
+    parser.add_argument("--no-lock",dest='lock',help="do not lock new build additions",action="store_false")
+
     parser.set_defaults(dryrun=True)
+    parser.set_defaults(lock=True)
     args = parser.parse_args()
 
     if args.version is None:
         logging.error("\nPlease specify desired version\n")
         parser.print_help()
         parser.exit()
-#        exit(1)
 
     # main worker bee class
     obs = ohpc_obs_tool(args.version)
@@ -565,10 +608,15 @@ def main():
     obs.parseConfig(configFile=configFile)
     components = obs.query_components()
 
-    # override dryrun option is requested
+    # override dryrun option if requested
     if not args.dryrun:
         logging.info("--no-dryrun command line arg requested: will execute commands\n")
         obs.overrideDryRun()
+
+    # override lock option if requested
+    if not args.lock:
+        logging.info("--no-lock command line arg requested: will not lock new builds\n")
+        obs.overrideLock()
 
     # query components defined in existing OBS project
     obsPackages = obs.queryOBSPackages()

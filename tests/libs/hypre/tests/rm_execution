@@ -106,6 +106,7 @@ ARGS=8
 }
 
 @test "[libs/HYPRE] 2 PE C++ Finite Element Interface binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    skip "C++ example depends on non-installed header"
     if [ ! -s ex10 ];then
 	flunk "ex10 binary does not exist"
     fi

@@ -9,8 +9,8 @@
 #----------------------------------------------------------------------------eh-
 
 Name: ohpc-filesystem
-Version: 1.3
-Release: 1.ohpc
+Version: 2.0
+Release: 1%{?dist}
 Summary: Common top-level OpenHPC directories
 
 Group: ohpc/admin

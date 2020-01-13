@@ -18,7 +18,7 @@
 
 Summary:   Scalable I/O Library for Parallel Access to Task-Local Files
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.7.3
+Version:   1.7.4
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/io-libs

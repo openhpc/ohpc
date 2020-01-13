@@ -28,7 +28,7 @@
 %global OHPC_MPI_STACKS %{OHPC_PUB}/mpi
 %global OHPC_UTILS      %{OHPC_PUB}/utils
 %global debug_package   %{nil}
-%global dist            .ohpc.1.3.6
+%global dist            .ohpc.2.0.0
 
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
@@ -42,21 +42,26 @@ DocDir:    %{OHPC_PUB}/doc/contrib
 # this sets Source42 for all SPEC files which include OHPC_macros.
 Source42: OHPC_macros
 
+# Pre-process global OS version macros for operation outside OBS
+# Supports build on clone distros without requiring distro-specific
+# macros defined in each specfile.
+%if 0%{!?rhel_version:1}
+%{?centos_version: %global rhel_version=%{centos_version}}
+%{?scientificlinux_version: %global rhel_version=%{scientific_version}}
 %if 0%{?rhel} == 7
-    # OBS define's rhel_version to 700 for RHEL, in case we are
-    # not running in OBS
+    # OBS defines rhel_version to 700 for RHEL7
     %global rhel_version 700
-%endif
-
-# OpenHPC packages require ohpc-filesystem which defines the basic
-# installation path layout
-%if 0%{?ohpc_bootstrap} == 0
-Requires: ohpc-filesystem
-%endif
+%endif # rhel=7
+%if 0%{?rhel} == 8
+    # OBS defines rhel_version to 800 for RHEL8
+    %global rhel_version 800
+%endif # rhel=8
+%endif # rhel_version
 
 # OpenHPC packages also require ohpc-buildroot to access macros used to define
 # compiler and MPI families
-%if 0%{?ohpc_bootstrap} == 0
+%if 0%{!?ohpc_bootstrap:1}
+Requires: ohpc-filesystem
 BuildRequires: ohpc-buildroot
 %endif
 
@@ -65,39 +70,48 @@ BuildRequires: ohpc-buildroot
 # these choices can be overridden by specifing the compiler_family/mpi_family
 # variables via rpmbuild or other mechanisms.
 
-%{!?compiler_family: %global compiler_family gnu8}
-%{!?mpi_family: %global mpi_family openmpi3}
+%{!?compiler_family: %global compiler_family gnu9}
+%{!?mpi_family: %global mpi_family openmpi4}
 %{!?python_family: %global python_family python3}
 
 # Compiler dependencies
 %if 0%{?ohpc_compiler_dependent} == 1
 
+%if "%{compiler_family}" == "gnu9"
+BuildRequires: gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+Requires:      gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+%endif
 %if "%{compiler_family}" == "gnu8"
-BuildRequires: gnu8-compilers%{PROJ_DELIM} >= 8.1.0
-Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.1.0
-%endif
-%if "%{compiler_family}" == "gnu7"
-BuildRequires: gnu7-compilers%{PROJ_DELIM} >= 7.2.0
-Requires:      gnu7-compilers%{PROJ_DELIM} >= 7.2.0
-%endif
+BuildRequires: gnu8-compilers%{PROJ_DELIM} >= 8.3.0
+Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.3.0
+%endif # gnu8
+%if "%{compiler_family}" == "gnu9"
+BuildRequires: gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+Requires:      gnu9-compilers%{PROJ_DELIM} >= 9.2.0
+%endif # gnu9
 %if "%{compiler_family}" == "intel"
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{OHPC_BUILD}
 BuildRequires: intel_licenses
-%endif
-%endif
+%endif # OHPC_BUILD
+%endif # intel
 %if "%{compiler_family}" == "arm"
 BuildRequires: arm-compilers-devel%{PROJ_DELIM}
 Requires:      arm-compilers-devel%{PROJ_DELIM}
 %global __requires_exclude ^libflang.*\\.so.*$|^libompstub\\.so.*|^libomp\\.so.*$|^libarmpl.*\\.so.*$|^libstdc++\\.so.*$
-%endif
+%endif # arm
 %if "%{compiler_family}" == "llvm"
-BuildRequires: llvm-compilers%{PROJ_DELIM}
-Requires:      llvm-compilers%{PROJ_DELIM}
+BuildRequires: llvm-compilers%{PROJ_DELIM} >= 9.0.0
+Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
+%endif # llvm
+
+# Disable annobin on RHEL based systems
+%if 0%{?rhel} == 8
+%undefine _annotated_build
 %endif
 
-%endif
+%endif # compiler_depdendent
 
 # Disable RPM symlink analysis on files in %%{OHPC_HOME}.
 %global __libsymlink_exclude_path  %{OHPC_HOME}/.*$
@@ -108,45 +122,40 @@ Requires:      llvm-compilers%{PROJ_DELIM}
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %global __requires_exclude ^libmpi\\.so.*$|^libmpifort\\.so.*$|^libmpicxx\\.so.*$
-%endif
+%endif # impi
 %if "%{mpi_family}" == "mpich"
 BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
 Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
-%endif
+%endif # mpich
 %if "%{mpi_family}" == "mvapich2"
 BuildRequires: mvapich2-%{compiler_family}%{PROJ_DELIM}
 Requires:      mvapich2-%{compiler_family}%{PROJ_DELIM}
-%endif
+%endif # mvapich2
 %if "%{mpi_family}" == "openmpi3"
 BuildRequires: openmpi3-%{compiler_family}%{PROJ_DELIM}
 Requires:      openmpi3-%{compiler_family}%{PROJ_DELIM}
-%endif
-%endif
+%endif # openmpi3
+%if "%{mpi_family}" == "openmpi4"
+BuildRequires: openmpi4-%{compiler_family}%{PROJ_DELIM}
+Requires:      openmpi4-%{compiler_family}%{PROJ_DELIM}
+%endif # openmpi4
+%endif # ohpc_mpi_dependent
 
 # Python dependencies and macros
 %if 0%{?ohpc_python_dependent} == 1
-%if "%{python_family}" == "python3"
 %global __python %__python3
 %global python_module_prefix py3-
-%global python_lib_dir python3.4
-%if "%{rhel_version}" == "700"
-%global python_prefix python34
-%endif
-%if 0%{?suse_version}
+%global python_site_dir %{python3_sitearch}
 %global python_prefix python3
-%endif
-%endif
-%if "%{python_family}" == "python2"
-%global python_module_prefix py2-
-%global python_lib_dir python2.7
-%global python_prefix python
-%endif
+%global python_lib_dir python%{python3_version}
 BuildRequires: %{python_prefix}-devel
 BuildRequires: %{python_prefix}-setuptools
 BuildRequires: python-rpm-macros
 Requires:      %{python_prefix}
 %endif
 
+# Single-line macro for running compiler/MPI setup scripts
+# Script bodies are evaluated and stored in this macro definition
 %global ohpc_setup_compiler %{expand:\
     . %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
     %if 0%{?ohpc_mpi_dependent} == 1 \
@@ -154,3 +163,21 @@ Requires:      %{python_prefix}
     %endif \
 }
 
+# Lua version
+%if 0%{!?luaver:1}
+# Set luaver to lua_version if it exists
+%if 0%{?lua_version:1}
+%global luaver %{lua_version}
+%else
+# Set default Lua version to 5.1, the version used by CentOS 7
+%global luaver 5.1
+# Lua 5.2 is used by older SUSE
+%if 0%{?suse_version} >= 1200 && 0%{?suse_version} < 1350
+%global luaver 5.2
+%endif # sle12
+# Lua 5.3 is used by OpenSUSE/SLES 15 and RHEL/CentOS 8
+%if 0%{?sle_version} >= 150000 || 0%{?rhel_version} >=800
+%global luaver 5.3
+%endif # sle15/rh8
+%endif # lua_version not set
+%endif # luaver

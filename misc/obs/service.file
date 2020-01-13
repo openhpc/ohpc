@@ -30,7 +30,7 @@ permissions and limitations under the License.
     <!-- End INPUT ######################################    -->
 
     <param name="scm">git</param>
-    <param name="url">git@github.com:openhpc/ohpc.git</param>
+    <param name="url">https://github.com/openhpc/ohpc.git</param>
     <param name="filename">git-infra</param>
     <param name="changesgenerate">enable</param>
   </service>

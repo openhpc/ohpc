@@ -16,7 +16,7 @@
 %define pname openblas
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        0.3.5
+Version:        0.3.7
 Release:        1%{?dist}
 Summary:        An optimized BLAS library based on GotoBLAS2
 License:        BSD-3-Clause
@@ -29,6 +29,8 @@ Patch2:         openblas-noexecstack.patch
 # PATCH-FIX-UPSTREADM fix-arm64-cpuid-return.patch
 Patch3:         fix-arm64-cpuid-return.patch
 ExclusiveArch:  %ix86 ia64 ppc ppc64 ppc64le x86_64 aarch64
+
+%global _default_patch_fuzz 1
 
 %description
 OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.

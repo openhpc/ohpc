@@ -34,6 +34,7 @@ delimiter="$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
 }
 
 @test "[$testname] verify nc4 available for C++ interface ($delimiter)" {
+    skip "option no longer supported"
     run ncxx4-config --has-nc4
     assert_output "yes"
 }
