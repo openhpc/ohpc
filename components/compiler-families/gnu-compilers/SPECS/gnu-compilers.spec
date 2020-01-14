@@ -8,6 +8,9 @@
 #
 #----------------------------------------------------------------------------eh-
 
+# GNU compilers are required for bootstrapping OpenHPC annobin
+%define no_ohpc_annobin 1
+
 %include %{_sourcedir}/OHPC_macros
 
 %global gnu_version 9.2.0
@@ -43,7 +46,7 @@ BuildRequires:  makeinfo
 BuildRequires:  texinfo
 %endif
 BuildRequires:  zlib-devel
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
 Requires: glibc-devel
@@ -67,7 +70,11 @@ ln -s mpfr-%{mpfr_version} mpfr
 
 %{__mkdir} obj
 cd obj
-../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path} --disable-static --enable-shared
+../configure --disable-multilib \
+             --enable-languages="c,c++,fortran" \
+             --prefix=%{install_path} \
+             --disable-static \
+             --enable-shared 
 make %{?_smp_mflags}
 %install
 cd obj

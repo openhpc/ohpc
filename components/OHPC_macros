@@ -47,7 +47,7 @@ Source42: OHPC_macros
 # macros defined in each specfile.
 %if 0%{!?rhel_version:1}
 %{?centos_version: %global rhel_version=%{centos_version}}
-%{?scientificlinux_version: %global rhel_version=%{scientific_version}}
+%{?scientificlinux_version: %global rhel_version=%{scientificlinux_version}}
 %if 0%{?rhel} == 7
     # OBS defines rhel_version to 700 for RHEL7
     %global rhel_version 700
@@ -57,13 +57,6 @@ Source42: OHPC_macros
     %global rhel_version 800
 %endif # rhel=8
 %endif # rhel_version
-
-# OpenHPC packages also require ohpc-buildroot to access macros used to define
-# compiler and MPI families
-%if 0%{!?ohpc_bootstrap:1}
-Requires: ohpc-filesystem
-BuildRequires: ohpc-buildroot
-%endif
 
 # OpenHPC convention: the default build configuration for compiler/MPI
 # dependent packages assumes the gnu compiler and openmpi family; however,
@@ -80,15 +73,11 @@ BuildRequires: ohpc-buildroot
 %if "%{compiler_family}" == "gnu9"
 BuildRequires: gnu9-compilers%{PROJ_DELIM} >= 9.2.0
 Requires:      gnu9-compilers%{PROJ_DELIM} >= 9.2.0
-%endif
+%endif # gnu9
 %if "%{compiler_family}" == "gnu8"
 BuildRequires: gnu8-compilers%{PROJ_DELIM} >= 8.3.0
 Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.3.0
 %endif # gnu8
-%if "%{compiler_family}" == "gnu9"
-BuildRequires: gnu9-compilers%{PROJ_DELIM} >= 9.2.0
-Requires:      gnu9-compilers%{PROJ_DELIM} >= 9.2.0
-%endif # gnu9
 %if "%{compiler_family}" == "intel"
 BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
@@ -106,15 +95,29 @@ BuildRequires: llvm-compilers%{PROJ_DELIM} >= 9.0.0
 Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
 %endif # llvm
 
-# Disable annobin on RHEL based systems
-%if 0%{?rhel} == 8
-%undefine _annotated_build
-%endif
+# If this is RHEL8, and we're using an OpenHPC compiler, and
+# annobin is not explicitly disabled, then enable OpenHPC annobin.
+# For everything else, it will default to system annobin.
+%if 0%{?rhel} >= 8 && ! 0%{?no_ohpc_annobin}
+Requires: annobin-%{compiler_family}%{PROJ_DELIM}
+%endif # Use OHPC annobin
 
 %endif # compiler_depdendent
 
+# Explicitly disable annobin on non-RHEL 8 systems
+%if 0%{?rhel} != 8 
+%undefine _annotated_build
+%endif
+
+# OpenHPC packages also require ohpc-buildroot to access macros used to define
+# compiler and MPI families
+%if 0%{?ohpc_bootstrap} != 1
+Requires: ohpc-filesystem
+BuildRequires: ohpc-buildroot
+%endif
+
 # Disable RPM symlink analysis on files in %%{OHPC_HOME}.
-%global __libsymlink_exclude_path  %{OHPC_HOME}/.*$
+%global __libsymlink_exclude_path %{OHPC_HOME}/.*$
 
 # MPI dependencies
 %if 0%{?ohpc_mpi_dependent} == 1
@@ -176,7 +179,7 @@ Requires:      %{python_prefix}
 %global luaver 5.2
 %endif # sle12
 # Lua 5.3 is used by OpenSUSE/SLES 15 and RHEL/CentOS 8
-%if 0%{?sle_version} >= 150000 || 0%{?rhel_version} >=800
+%if 0%{?sle_version} >= 150000 || 0%{?rhel} >= 8
 %global luaver 5.3
 %endif # sle15/rh8
 %endif # lua_version not set
