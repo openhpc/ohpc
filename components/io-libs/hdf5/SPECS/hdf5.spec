@@ -48,9 +48,9 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p0
-%patch1 -p0
-%patch2 -p0
+#%patch0 -p0
+#%patch1 -p0
+#%patch2 -p0
 
 # Fix building with gcc8 (this should be a patch)
 sed "s/\(.*\)(void) HDF_NO_UBSAN/HDF_NO_UBSAN \1(void)/" -i src/H5detect.c
