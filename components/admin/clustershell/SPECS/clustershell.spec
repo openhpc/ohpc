@@ -3,7 +3,7 @@
 %define pname clustershell
 
 Name:          clustershell%{PROJ_DELIM}
-Version:       1.8.2
+Version:       1.8.3
 Release:       1%{?dist}
 Summary:       Python framework for efficient cluster administration
 
@@ -16,13 +16,9 @@ Patch1:        clustershell-1.8-no-requires.patch
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
 
-%if 0%{?suse_version} == 1110
-BuildArch:     x86_64
-%else
 BuildArch:     noarch
-%endif
 
-BuildRequires: python-devel python-setuptools
+BuildRequires: python3-devel python3-setuptools
 #!BuildIgnore: post-build-checks
 
 %description
@@ -47,15 +43,13 @@ Syntax highlighting in the VIM editor for ClusterShell configuration files.
 %patch1 -p1
 
 %build
-%{__python} setup.py build
+%{__python3} setup.py build
 
 %install
-%{__python} setup.py install -O1 --prefix=%{install_path} --skip-build --root %{buildroot}
+%{__python3} setup.py install -O1 --prefix=%{install_path} --skip-build --root %{buildroot}
 
 # config files
 mkdir -p %{buildroot}/%{_sysconfdir}/clustershell
-mv  %{buildroot}/%{install_path}/etc/clustershell/groups.conf.d %{buildroot}/%{_sysconfdir}/clustershell
-mv %{buildroot}/%{install_path}/etc/clustershell/groups.d %{buildroot}/%{_sysconfdir}/clustershell
 mv conf/*.conf %{buildroot}/%{_sysconfdir}/clustershell/
 mv conf/groups.conf.d/*.conf.example %{buildroot}/%{_sysconfdir}/clustershell/groups.conf.d
 
@@ -96,7 +90,7 @@ module-whatis "URL %{url}"
 set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib/python2.7/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib/python%{python3_version}/site-packages
 prepend-path    MANPATH             %{install_path}/share/man
 
 setenv          %{pname}_DIR        %{install_path}
@@ -114,7 +108,6 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-
 %files
 %doc ChangeLog COPYING.LGPLv2.1
 %doc doc/examples
@@ -122,11 +115,10 @@ EOF
 %exclude %{vimdatadir}
 %exclude %{install_path}/share/vim/
 %dir %{_sysconfdir}/clustershell
-%{_sysconfdir}/clustershell/clush.conf
-%{_sysconfdir}/clustershell/groups.conf
 %config(noreplace) %{_sysconfdir}/clustershell/clush.conf
 %config(noreplace) %{_sysconfdir}/clustershell/groups.conf
 %config(noreplace) %{_sysconfdir}/clustershell/groups.d/local.cfg
+%config(noreplace) %{_sysconfdir}/clustershell/topology.conf.example
 %dir %{_sysconfdir}/clustershell/groups.conf.d
 %dir %{_sysconfdir}/clustershell/groups.d
 %doc %{_sysconfdir}/clustershell/groups.d/README
