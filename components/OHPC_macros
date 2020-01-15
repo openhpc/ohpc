@@ -15,7 +15,6 @@
 #-----------------------------------------------------------------------
 
 # Top-level OpenHPC installation paths
-%global OHPC_BUILD 1
 %global PROJ_NAME       ohpc
 %global OHPC_HOME       /opt/%{PROJ_NAME}
 %global OHPC_ADMIN      %{OHPC_HOME}/admin
@@ -90,11 +89,12 @@ BuildRequires: gnu9-compilers%{PROJ_DELIM} >= 9.2.0
 Requires:      gnu9-compilers%{PROJ_DELIM} >= 9.2.0
 %endif # gnu9
 %if "%{compiler_family}" == "intel"
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{OHPC_BUILD}
 BuildRequires: intel_licenses
+BuildRequires: psxe
 %endif # OHPC_BUILD
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %endif # intel
 %if "%{compiler_family}" == "arm"
 BuildRequires: arm-compilers-devel%{PROJ_DELIM}
