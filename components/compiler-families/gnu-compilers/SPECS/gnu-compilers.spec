@@ -8,9 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# GNU compilers are required for bootstrapping OpenHPC annobin
-%define no_ohpc_annobin 1
-
 %include %{_sourcedir}/OHPC_macros
 
 %global gnu_version 9.2.0

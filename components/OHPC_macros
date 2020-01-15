@@ -95,19 +95,10 @@ BuildRequires: llvm-compilers%{PROJ_DELIM} >= 9.0.0
 Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
 %endif # llvm
 
-# If this is RHEL8, and we're using an OpenHPC compiler, and
-# annobin is not explicitly disabled, then enable OpenHPC annobin.
-# For everything else, it will default to system annobin.
-%if 0%{?rhel} >= 8 && ! 0%{?no_ohpc_annobin}
-Requires: annobin-%{compiler_family}%{PROJ_DELIM}
-%endif # Use OHPC annobin
-
 %endif # compiler_depdendent
 
-# Explicitly disable annobin on non-RHEL 8 systems
-%if 0%{?rhel} != 8 
+# Explicitly disable annobin on OopenHPC builds
 %undefine _annotated_build
-%endif
 
 # OpenHPC packages also require ohpc-buildroot to access macros used to define
 # compiler and MPI families

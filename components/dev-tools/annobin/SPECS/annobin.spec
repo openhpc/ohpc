@@ -9,7 +9,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%define no_ohpc_annobin 1
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 %undefine _annotated_build
