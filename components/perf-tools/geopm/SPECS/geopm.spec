@@ -14,6 +14,7 @@
 # Supporting only Python3 here, but a quick way to set python variables
 %define ohpc_python_dependent 1
 %define python_family python3
+%define python_family_lib_dir /lib/python%{expand:%{%{python_family}_version}}/site-packages
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -39,7 +40,7 @@ BuildRequires: unzip
 
 %if 0%{?suse_version}%{?sle_version}
 BuildRequires: libelf-devel
-%else 
+%else
 BuildRequires: elfutils-libelf-devel
 %endif
 
@@ -112,7 +113,7 @@ module-whatis "URL %{url}"
 set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib/%{python_lib_dir}/site-packages
+prepend-path    PYTHONPATH          %{install_path}%{python_family_lib_dir}
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path    MANPATH             %{install_path}/share/man
@@ -127,4 +128,3 @@ EOF
 %files
 %{OHPC_PUB}
 %doc README COPYING VERSION
-
