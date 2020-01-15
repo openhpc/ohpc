@@ -25,11 +25,16 @@ Group:   %{PROJ_NAME}/dev-tools
 URL:     https://fedoraproject.org/wiki/Toolchain/Watermark
 Source:  https://nickc.fedorapeople.org/annobin-%{version}.tar.xz
 BuildRequires: gmp-devel
-BuildRequires: elfutils-devel
 BuildRequires: binutils-devel
 BuildRequires: rpm-devel
+%if 0%{?rhel_version}
 BuildRequires: gcc-plugin-devel
-BuildRequires: annobin
+BuildRequires: elfutils-devel
+%endif
+%if 0%{?sle_version}
+BuildRequires: libdwarf-devel
+BuildRequires: libdw-devel
+%endif
 
 %description
 Provides a plugin for GCC that records extra information in the files
@@ -59,6 +64,10 @@ export ANNOBIN_PLUGIN_DIR=$(gcc --print-file-name=plugin)
 mkdir BUILDTMP
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="%{optflags}" 
+%if %{?sle_version}
+export CFLAGS="$CFLAGS -I/usr/include/libdwarf"
+export CXXFLAGS="$CXXFLAGS -I/usr/include/libdwarf" 
+%endif
 
 # Bootstrap build with OS-provided gcc and annobin
 ./configure --prefix=%{install_path} \
