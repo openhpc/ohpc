@@ -29,8 +29,6 @@ Source2:   OHPC_mod_generator.sh
 Requires: gcc-c++
 Requires: grep
 
-Provides: %{pname}%{PROJ_DELIM}
-
 %description
 
 Provides OpenHPC-style compatible modules for use with the Intel(R) Parallel
