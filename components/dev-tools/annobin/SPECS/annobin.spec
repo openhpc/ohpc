@@ -64,7 +64,7 @@ export ANNOBIN_PLUGIN_DIR=$(gcc --print-file-name=plugin)
 mkdir BUILDTMP
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="%{optflags}" 
-%if %{?sle_version}
+%if 0%{?sle_version}
 export CFLAGS="$CFLAGS -I/usr/include/libdwarf"
 export CXXFLAGS="$CXXFLAGS -I/usr/include/libdwarf" 
 %endif
