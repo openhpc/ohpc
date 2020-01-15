@@ -1,4 +1,5 @@
 #----------------------------------------------------------------------------bh-
+
 # This RPM .spec file is part of the OpenHPC project.
 #
 # It may have been modified from the default version supplied by the underlying
@@ -8,10 +9,11 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# If building annobin the first time for a new compiler set this to 1
-%define bootstrap_annobin 0
+%define no_ohpc_annobin 1
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
+%undefine _annotated_build
+
 %define pname annobin
 
 Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -26,6 +28,8 @@ BuildRequires: gmp-devel
 BuildRequires: elfutils-devel
 BuildRequires: binutils-devel
 BuildRequires: rpm-devel
+BuildRequires: gcc-plugin-devel
+BuildRequires: annobin
 
 %description
 Provides a plugin for GCC that records extra information in the files
@@ -40,7 +44,6 @@ provided by the redhat-rpm-macros package.
 
 %prep
 %setup -q -n annobin-%{version}
-
 # The plugin has to be configured with the same arcane configure
 # scripts used by gcc.  Hence we must not allow the Fedora build
 # system to regenerate any of the configure files.
@@ -49,23 +52,33 @@ touch configure */configure Makefile.in */Makefile.in
 # Similarly we do not want to rebuild the documentation.
 touch doc/annobin.info
 
-#---------------------------------------------------------------------------------
 
 %build
 %ohpc_setup_compiler
-export ANNOBIN_PLUGIN_DIR=`gcc --print-file-name=plugin`
-CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{install_path} --quiet --with-gcc-plugin-dir=$ANNOBIN_PLUGIN_DIR
-make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS"
+export ANNOBIN_PLUGIN_DIR=$(gcc --print-file-name=plugin)
+mkdir BUILDTMP
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="%{optflags}" 
+
+# Bootstrap build with OS-provided gcc and annobin
+./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --with-gcc_plugin-dir=$ANNOBIN_PLUGIN_DIR
+make %{_smp_mflags}
+
+# Store a copy of the new annobin library
+%{__mv} plugin/.libs/annobin.so.0.0.0 BUILDTMP/annobin.so
+
 # Rebuild the plugin, this time using the plugin itself!  This
 # ensures that the plugin works, and that it contains annotations
-# of its own.  This could mean that we end up with a plugin with
-# double annotations in it.  (If the build system enables annotations
-# for plugins by default).  I have not tested this yet, but I think
-# that it should be OK.
-cp plugin/.libs/annobin.so.0.0.0 %{_tmppath}/tmp_annobin.so
+# of its own. 
+
 make -C plugin clean
-make -C plugin CXXFLAGS="%{optflags} -fplugin=%{_tmppath}/tmp_annobin.so -fplugin-arg-tmp_annobin-rename"
-rm %{_tmppath}/tmp_annobin.so
+
+export ANNOFLAGS="-fplugin=annobin -iplugindir=$(pwd)/BUILDTMP -fplugin-arg-annobin-rename -fplugin-arg-annobin-verbose"
+export CFLAGS="$CFLAGS $ANNOFLAGS"
+export CXXFLAGS="$CXXFLAGS $ANNOFLAGS"
+make -C plugin
 
 %install
 make DESTDIR=$RPM_BUILD_ROOT install
