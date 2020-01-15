@@ -1,2 +1,3 @@
 addFilter("no-changelogname-tag")
 addFilter("non-standard-group")
+addFilter("suse-filelist-forbidden-opt")
