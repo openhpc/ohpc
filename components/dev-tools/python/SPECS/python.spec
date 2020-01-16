@@ -57,7 +57,7 @@ Patch37:        python-2.7.12-makeopcode.patch
 # COMMON-PATCH-END
 %define         python_version    %(echo %{tarversion} | head -c 3)
 BuildRequires:  automake
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 BuildRequires:  netcfg
 BuildRequires:  libbz2-devel
@@ -140,6 +140,7 @@ touch Parser/asdl* Python/Python-ast.c Include/Python-ast.h
 
 ./configure \
     --prefix=%{install_path} \
+    --libdir=%{install_path}/lib \
     --with-fpectl \
     --enable-ipv6 \
     --enable-shared \

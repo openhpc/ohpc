@@ -83,7 +83,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
-./configure --prefix=%{install_path} $CONFIGURE_OPTIONS
+./configure --prefix=%{install_path} --libdir=%{install_path}/lib $CONFIGURE_OPTIONS
 
 %install
 
