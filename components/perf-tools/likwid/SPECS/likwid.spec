@@ -32,10 +32,8 @@ BuildRequires: gcc-gfortran
 BuildRequires: gcc-fortran
 %endif
 
-#BuildRequires: lua-devel
 BuildRequires: perl
 BuildRequires: lua
-#BuildRequires: perl(Data::Dumper)
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
