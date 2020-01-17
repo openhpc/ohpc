@@ -174,5 +174,8 @@ chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
 
 %files
 %{OHPC_PUB}
-%doc INSTALL COPYING README.md
+%doc INSTALL README.md
+%license COPYING
 %doc %{install_path}/man/man1/*
+%doc %{install_path}/share/likwid/docs/*
+
