@@ -70,22 +70,28 @@ It consists of:
 
 %build
 
-# OpenHPC compiler/mpi designation
+# OpenHPC compiler setup
 %ohpc_setup_compiler
 
 %if "%{compiler_family}" == "intel"
-%define compileropts COMPILER="ICC" FC="ifort" FCFLAGS="-module ./"
+COMPILER="ICC"
+FC="ifort"
+FCFLAGS="-module ./"
 %else
-%define compileropts 'COMPILER=%{quote:GCC} FC=%{quote:gfortran} FCFLAGS=%{quote:-J ./ -fsyntax-only}'
+COMPILER="GCC"
+FC="gfortran"
+FCFLAGS="-J ./ -fsyntax-only"
 %endif
 
-%{__make} %{compileropts} \
-    FORTRAN_INTERFACE="true" \
-    PREFIX="%{install_path}" \
-    LIBDIR="%{install_path}/lib" \
-    MANPREFIX="%{install_path}/man" \
-    OPTFLAGS="%{optflags}" \
-    Q=""
+%{__make} FORTRAN_INTERFACE="true" \
+          COMPILER="$COMPILER" \
+          FC="$FC" \
+          FCFLAGS="$FCFLAGS" \
+          PREFIX="%{install_path}" \
+          LIBDIR="%{install_path}/lib" \
+          MANPREFIX="%{install_path}/man" \
+          OPTFLAGS="%{optflags}" \
+          Q=""
 
 
 %install
@@ -94,22 +100,28 @@ It consists of:
 %ohpc_setup_compiler
 
 %if "%{compiler_family}" == "intel"
-%define compileropts 'COMPILER="ICC" FC="ifort" FCFLAGS="-module ./"'
+COMPILER="ICC"
+FC="ifort"
+FCFLAGS="-module ./"
 %else
-%define compileropts 'COMPILER="GCC" FC="gfortran" FCFLAGS="-J ./  -fsyntax-only"'
+COMPILER="GCC"
+FC="gfortran"
+FCFLAGS="-J ./ -fsyntax-only"
 %endif
 
-%{__make} install %{compileropts} \
-    FORTRAN_INTERFACE="true" \
-    PREFIX="%{buildroot}%{install_path}" \
-    LIBDIR="%{buildroot}%{install_path}/lib" \
-    MANPREFIX="%{buildroot}%{install_path}/man" \
-    INSTALL_CHOWN="" \
-    OPTFLAGS="%{optflags}" \
-    Q=""
+%{__make} FORTRAN_INTERFACE="true" \
+          COMPILER="$COMPILER" \
+          FC="$FC" \
+          FCFLAGS="$FCFLAGS" \
+          PREFIX="%{buildroot}%{install_path}" \
+          LIBDIR="%{buildroot}%{install_path}/lib" \
+          MANPREFIX="%{buildroot}%{install_path}/man" \
+          INSTALL_CHOWN="" \
+          OPTFLAGS="%{optflags}" \
+          Q="" install
 
-chmod 755 $RPM_BUILD_ROOT/%{_prefix}/sbin/likwid-accessD
-chmod 755 $RPM_BUILD_ROOT/%{_prefix}/sbin/likwid-setFreq
+chmod 755 $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-accessD
+chmod 755 $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -154,8 +166,8 @@ EOF
 
 %post
 /sbin/ldconfig
-chmod u+s $RPM_BUILD_ROOT/%{_prefix}/sbin/likwid-accessD
-chmod u+s $RPM_BUILD_ROOT/%{_prefix}/sbin/likwid-setFreq
+chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-accessD
+chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
 
 %postun
 /sbin/ldconfig
@@ -163,3 +175,4 @@ chmod u+s $RPM_BUILD_ROOT/%{_prefix}/sbin/likwid-setFreq
 %files
 %{OHPC_PUB}
 %doc INSTALL COPYING README.md
+%doc %{install_path}/man/man1/*
