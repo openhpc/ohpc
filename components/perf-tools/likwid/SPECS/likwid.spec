@@ -33,7 +33,9 @@ BuildRequires: gcc-fortran
 %endif
 
 BuildRequires: perl
+Requires: perl
 BuildRequires: lua
+Requires: lua
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
