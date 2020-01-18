@@ -21,7 +21,11 @@
 %define with_psm 0
 %define with_psm2 0
 %else
+%if 0%{?rhel}
+%define with_psm 0
+%else
 %define with_psm 1
+%endif
 %define with_psm2 1
 %endif
 
