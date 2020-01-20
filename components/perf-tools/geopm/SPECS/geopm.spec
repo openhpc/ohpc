@@ -22,7 +22,7 @@
 
 Name:          %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:       Global Extensible Open Power Manager
-Version:       1.0.0
+Version:       1.1.0
 Release:       1
 License:       BSD-3-Clause
 Group:         %{PROJ_NAME}/perf-tools
@@ -32,14 +32,11 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
-BuildRequires: python
-BuildRequires: python-devel
+BuildRequires: python3
+BuildRequires: python3-devel
 BuildRequires: unzip
 BuildRequires: zlib-devel
-
-%if 0%{?suse_version} >= 1320
 BuildRequires: openssh
-%endif
 
 %description
 Global Extensible Open Power Manager (GEOPM) is an extensible power
@@ -78,6 +75,7 @@ including support for static control.
 %ohpc_setup_compiler
 test -f configure || ./autogen.sh
 ./configure --prefix=%{install_path} \
+            --with-python=python3 \
             --disable-doc \
             || ( cat config.log && false )
 %{__make}
@@ -113,7 +111,7 @@ module-whatis "URL %{url}"
 set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib/python2.7/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib/python%{python3_version}/site-packages
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 prepend-path    MANPATH             %{install_path}/share/man
