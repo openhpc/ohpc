@@ -17,11 +17,11 @@
 # gnu compilers underneath in order to support call-site demangling
 %if "%{compiler_family}" == "intel"
 Requires:      intel-compilers-devel%{PROJ_DELIM}
-BuildRequires: gnu8-compilers%{PROJ_DELIM}
-Requires:      gnu8-compilers%{PROJ_DELIM}
+BuildRequires: gnu9-compilers%{PROJ_DELIM}
+Requires:      gnu9-compilers%{PROJ_DELIM}
 %if "%{mpi_family}" != "impi"
-BuildRequires: %{mpi_family}-gnu8%{PROJ_DELIM}
-Requires:      %{mpi_family}-gnu8%{PROJ_DELIM}
+BuildRequires: %{mpi_family}-gnu9%{PROJ_DELIM}
+Requires:      %{mpi_family}-gnu9%{PROJ_DELIM}
 %endif
 %endif
 
@@ -39,7 +39,7 @@ Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{ver
 Patch1:    mpip.unwinder.patch
 
 BuildRequires: binutils-devel
-BuildRequires: python
+BuildRequires: python2
 
 # Default library install path
 %global install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -59,8 +59,11 @@ file.
 
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
+mkdir .bin
+ln -s /usr/bin/python2 .bin/python
 
 %build
+export PATH="$PWD/.bin:$PATH"
 
 # override with newer config.guess for aarch64
 %ifarch aarch64 || ppc64le
@@ -70,7 +73,7 @@ cp /usr/lib/rpm/config.guess bin
 # OpenHPC compiler/mpi designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu8
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu9
 module load %{mpi_family}
 
 CC=mpicc
@@ -84,11 +87,12 @@ FC=mpif90
 %endif
 
 %install
+export PATH="$PWD/.bin:$PATH"
 
 # OpenHPC compiler designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu8
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu9
 module load %{mpi_family}
 
 make %{?_smp_mflags} shared
