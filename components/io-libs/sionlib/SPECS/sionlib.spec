@@ -27,10 +27,10 @@ Source0:   http://apps.fz-juelich.de/jsc/sionlib/download.php?version=%{version}
 Patch0:    sionlib-llvm-arm.patch
 
 # For pre-processor only:
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires: gcc-fortran
-%else
+%if 0%{?rhel}
 BuildRequires: gcc-gfortran
+%else
+BuildRequires: gcc-fortran
 %endif
 
 # Default library install path
@@ -79,7 +79,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 
-%if %{mpi_family} == openmpi3
+%if %{mpi_family} == openmpi4
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 
