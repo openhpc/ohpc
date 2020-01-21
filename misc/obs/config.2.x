@@ -19,7 +19,7 @@ dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","py
 	         "python-scipy","spack","valgrind"]
 io-libs       = ["hdf5","netcdf","netcdf-fortran","phdf5","pnetcdf"]
 runtimes      = ["singularity","ocr","charliecloud"]
-rms           = ["slurm","pbspro","pmix"]
+rms           = ["slurm","pbspro","pmix","munge"]
 serial-libs   = ["R","openblas","plasma"]
 parallel-libs = ["boost","hypre","mumps","opencoarrays","petsc","slepc","superlu_dist"]
 perf-tools    = ["dimemas","extrae","geopm","likwid","omb","papi","scorep","tau"]
@@ -37,7 +37,7 @@ compiler_families=["gnu8","intel"]
 mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 
-standalone = ["ohpc-filesystem"]
+standalone = ["cmake","lmod","ohpc-filesystem","gnu-compilers","pmix","slurm"]
 
 # define (compiler dependent) packages
 #compiler_dependent = ["!hdf5","!openmpi","!mvapich2","!likwid","!plasma","!R"]

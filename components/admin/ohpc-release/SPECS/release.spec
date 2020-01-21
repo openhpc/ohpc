@@ -31,8 +31,12 @@ Source1:  RPM-GPG-KEY-OpenHPC-2
 Provides: ohpc-release = %{version}
 
 
-%if 0%{?centos_version} || 0%{?rhel_version}
+%if 0%{?rhel_version}
 Requires: epel-release
+Requires: redhat-release >= 8.0
+%endif
+%if 0%{?suse_version}
+Requires: suse-release >= 15.1
 %endif
 
 %description
@@ -57,7 +61,7 @@ EOF
 
 # package repository definitions
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 %define __repodir /etc/zypp/repos.d
 %else
 %define __repodir /etc/yum.repos.d

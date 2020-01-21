@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-compilers-devel
-%define year 2019
+%define year 2020
 
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
@@ -28,8 +28,6 @@ Source2:   OHPC_mod_generator.sh
 
 Requires: gcc-c++
 Requires: grep
-
-Provides: %{pname}%{PROJ_DELIM}
 
 %description
 

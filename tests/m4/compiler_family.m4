@@ -34,16 +34,17 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xgnu8"; then
    CXX=g++
    FC=gfortran
    AC_MSG_RESULT([gnu8])
-elif test "x$LMOD_FAMILY_COMPILER" = "xllvm4"; then
+elif test "x$LMOD_FAMILY_COMPILER" = "xllvm9"; then
    CC=clang
    CXX=clang++
-   FC=flang
-   AC_MSG_RESULT([llvm4])
+# Use placeholder until F18 is added to LLVM [JCS 11/19/19]
+   FC=gfortran
+   AC_MSG_RESULT([llvm9])
 elif test "x$LMOD_FAMILY_COMPILER" = "xllvm5"; then
    CC=clang
    CXX=clang++
    FC=flang
-   AC_MSG_RESULT([llvm4])
+   AC_MSG_RESULT([llvm5])
 elif test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
    CC=icc
    CXX=icpc
