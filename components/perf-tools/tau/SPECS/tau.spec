@@ -18,7 +18,7 @@
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.28
+Version:   2.29
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
@@ -46,7 +46,7 @@ BuildRequires: libgomp
 BuildRequires: curl
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
-BuildRequires: libotf-devel zlib-devel python-devel
+BuildRequires: zlib-devel python2-devel
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 %ifarch x86_64
@@ -117,6 +117,49 @@ export TAUROOT=`pwd`
 cp /usr/lib/rpm/config.guess utils/opari2/build-config/.
 cp /usr/lib/rpm/config.sub utils/opari2/build-config/.
 %endif
+
+# Fix errors above unversioned python shebangs
+for file in \
+	apex/src/scripts/task_scatterplot.py \
+	examples/test.py \
+	examples/gpu/pycuda/matmult.py \
+	examples/sos/pycoolrgui/pycoolr-plot/clr_utils.py \
+	examples/sos/pycoolrgui/pycoolr-plot/coolr-sos-db.py \
+	examples/sos/pycoolrgui/pycoolr-plot/listrotate.py \
+	examples/sos/pycoolrgui/pycoolr-plot/coolr.py \
+	examples/sos/pycoolrgui/pycoolr-plot/layout.py \
+	examples/sos/pycoolrgui/pycoolr-plot/init_coolr.py \
+	examples/sos/pycoolrgui/pycoolr-plot/coolr-launch.py \
+	examples/sos/pycoolrgui/pycoolr-plot/coolr-back.py \
+	examples/python/auto.py \
+	examples/python/firstprime.py \
+	examples/python/cpi.py \
+	examples/python/manual.py \
+	examples/python/hello-mpi.py \
+	src/Profile/ltau.py \
+	src/Profile/tau.py \
+	src/Profile/tau_pyspark_wrapper.py \
+	tau_validate \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/clr_utils.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr-sos-db.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/listrotate.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/layout.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/init_coolr.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr-launch.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr-back.py \
+	tools/src/tau_resolve_addresses.py \
+	tools/src/perfexplorer/examples/MicroLoadImbalance/trunc.py \
+	tools/src/tau_prof2json.py \
+	tools/src/tau_portal/bin/portal.py.skel \
+	tools/src/tau_portal/bin/tau_portal.py \
+	tools/src/tau_prof_to_json.py \
+	tools/src/tau_baseline; do
+		sed -e "s,/env python,/env python2,g" -i $file;
+done
+
+# Fix using the right compiler
+sed -e "s,/usr/bin/g++,g++,g" -i utils/include/Makefile.skel
 
 # Try and figure out architecture
 detectarch=unknown
