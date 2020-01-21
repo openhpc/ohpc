@@ -37,27 +37,14 @@ BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
 BuildRequires:  perl
 BuildRequires:  readline-devel
-%if 0%{?suse_version} > 1020
-%if 0%{?suse_version} < 1230
-%if 0%{?suse_version} > 1120
-%endif
-%else
 BuildRequires:  xdg-utils
-%endif
-%endif
 BuildRequires:  pango-devel
 BuildRequires:  tcl-devel
 BuildRequires:  xz-devel
 BuildRequires:  pcre-devel
 BuildRequires:  libcurl-devel
-### Moved to CENTOS only until SLES has a newer texinfo version
-###BuildRequires:  texinfo >= 5.1
 BuildRequires:  tk-devel
-# BuildRequires:  xorg-x11-devel
-# CentOS needs X11 headers/libs like Intrisic.h which suse provides
-%if 0%{?suse_version}
-#BuildRequires:  texlive-fonts-extra
-%else
+%if 0%{?rhel}
 BuildRequires:  libXt-devel
 BuildRequires:  texinfo >= 5.1
 BuildRequires:  bzip2-devel
@@ -68,13 +55,8 @@ Requires:       freetype2
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
-%if 0%{?suse_version}
-BuildRequires:  libicu52_1
-Requires:	libicu52_1
-%else
-BuildRequires:  libicu
+BuildRequires:  libicu-devel
 Requires:	libicu
-%endif
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 Provides:       R = %{version}
