@@ -73,49 +73,41 @@ It consists of:
 # OpenHPC compiler setup
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" == "intel"
-COMPILER="ICC"
-FC="ifort"
-FCFLAGS="-module ./"
-%else
-COMPILER="GCC"
-FC="gfortran"
-FCFLAGS="-J ./ -fsyntax-only"
-%endif
-
 %{__make} FORTRAN_INTERFACE="true" \
-          COMPILER="$COMPILER" \
-          FC="$FC" \
-          FCFLAGS="$FCFLAGS" \
           PREFIX="%{install_path}" \
           LIBDIR="%{install_path}/lib" \
           MANPREFIX="%{install_path}/man" \
+%if "%{compiler_family}" == "intel"
+          COMPILER="ICC" \
+          FC="ifort" \
+          FCFLAGS="-module ./" \
+%else
+          COMPILER="GCC" \
+          FC="gfortran" \
+          FCFLAGS="-J ./ -fsyntax-only" \
+%endif
           OPTFLAGS="%{optflags}" \
           Q=""
 
 
 %install
 
-# OpenHPC compiler/mpi designation
+# OpenHPC compiler setup
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" == "intel"
-COMPILER="ICC"
-FC="ifort"
-FCFLAGS="-module ./"
-%else
-COMPILER="GCC"
-FC="gfortran"
-FCFLAGS="-J ./ -fsyntax-only"
-%endif
-
 %{__make} FORTRAN_INTERFACE="true" \
-          COMPILER="$COMPILER" \
-          FC="$FC" \
-          FCFLAGS="$FCFLAGS" \
           PREFIX="%{buildroot}%{install_path}" \
           LIBDIR="%{buildroot}%{install_path}/lib" \
           MANPREFIX="%{buildroot}%{install_path}/man" \
+%if "%{compiler_family}" == "intel"
+          COMPILER="ICC" \
+          FC="ifort" \
+          FCFLAGS="-module ./" \
+%else
+          COMPILER="GCC" \
+          FC="gfortran" \
+          FCFLAGS="-J ./ -fsyntax-only" \
+%endif
           INSTALL_CHOWN="" \
           OPTFLAGS="%{optflags}" \
           Q="" install
