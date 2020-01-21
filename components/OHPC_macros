@@ -33,6 +33,7 @@
 %{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 DocDir:    %{OHPC_PUB}/doc/contrib
+%define _licensedir     %{OHPC_PUB}/doc/licenses
 
 # Define PNAME which can be used in modulefile generation for env vars (derived
 # from pname defined in each component .spec file)
