@@ -54,6 +54,7 @@ Name: %{pbs_name}%{PROJ_DELIM}
 Version: %{pbs_version}
 Release: %{pbs_release}
 Source0: https://github.com/PBSPro/pbspro/archive/v%{version}.tar.gz
+Patch0: versioned_python.patch
 Summary: PBS Professional
 License: AGPLv3 with exceptions
 URL: https://github.com/PBSPro/pbspro
@@ -80,8 +81,7 @@ BuildRequires: ncurses-devel
 BuildRequires: perl
 BuildRequires: postgresql-devel >= 9.1
 BuildRequires: postgresql-contrib >= 9.1
-BuildRequires: python-devel >= 2.6
-BuildRequires: python-devel < 3.0
+BuildRequires: python2-devel
 BuildRequires: tcl-devel
 BuildRequires: tk-devel
 BuildRequires: swig
@@ -102,8 +102,8 @@ BuildRequires: libXft
 %endif
 
 # Pure python extensions use the 32 bit library path
-%{!?py_site_pkg_32: %global py_site_pkg_32 %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(0)")}
-%{!?py_site_pkg_64: %global py_site_pkg_64 %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
+%{!?py_site_pkg_32: %global py_site_pkg_32 %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(0)")}
+%{!?py_site_pkg_64: %global py_site_pkg_64 %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 %description
 PBS Professional is a fast, powerful workload manager and
@@ -127,8 +127,7 @@ Requires: expat
 Requires: libedit
 Requires: postgresql-server >= 9.1
 Requires: postgresql-contrib >= 9.1
-Requires: python >= 2.6
-Requires: python < 3.0
+Requires: python2
 Requires: tcl
 Requires: tk
 %if %{defined suse_version}
@@ -249,6 +248,7 @@ functionality of PBS Professional.
 
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
+%patch0 -p0
 
 %build
 [ -f configure ] || ./autogen.sh

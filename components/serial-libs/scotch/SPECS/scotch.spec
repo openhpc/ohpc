@@ -24,23 +24,17 @@ URL:		http://www.labri.fr/perso/pelegrin/%{pname}/
 Source0:	https://gforge.inria.fr/frs/download.php/file/37622/scotch_6.0.6.tar.gz
 Source1:	%{pname}-Makefile.%{compiler_family}.inc.in
 Source2:	%{pname}-rpmlintrc
-Patch0:     scotch-6.0.4-destdir.patch
+Patch0:		scotch-6.0.4-destdir.patch
 
 BuildRequires:	flex bison
-%if 0%{?suse_version} >= 1100
-BuildRequires:  libbz2-devel
-Requires:       libbz2-devel
-BuildRequires:  zlib-devel
-%else
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  bzip2
-Requires:       bzip2
-BuildRequires:  zlib-devel
-%else
+%if 0%{?rhel}
 BuildRequires:  bzip2-devel
 Requires:       bzip2-devel
 BuildRequires:  zlib-devel
-%endif
+%else
+BuildRequires:  libbz2-devel
+Requires:       libbz2-devel
+BuildRequires:  zlib-devel
 %endif
 
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
@@ -52,7 +46,7 @@ sparse matrix ordering.
 %prep
 %setup -q -n %{pname}_%{version}
 %patch0 -p1
-sed s/@RPMFLAGS@/'%{optflags} -fPIC'/ < %{SOURCE1} > src/Makefile.inc
+sed s:@RPMFLAGS@:'%{optflags} -fPIC': < %{SOURCE1} > src/Makefile.inc
 
 %build
 # OpenHPC compiler/mpi designation

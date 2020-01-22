@@ -13,8 +13,6 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%define _unpackaged_files_terminate_build 0
-
 # Base package name
 %define pname hdf5
 
