@@ -13,7 +13,7 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu8
+%global gnu_family gnu9
 
 # Base package name
 %define pname mumps
@@ -36,10 +36,10 @@ Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
-%if 0%{?suse_version}
-BuildRequires: libgomp1
-%else
+%if 0%{?rhel}
 BuildRequires: libgomp
+%else
+BuildRequires: libgomp1
 %endif
 
 # Every other family needs scalapack
@@ -131,7 +131,7 @@ cp -f %{S:6} Makefile.inc
 %endif
 %endif
 
-%if "%{mpi_family}" == "openmpi3"
+%if "%{mpi_family}" == "openmpi4"
 %global MUMPS_MPI openmpi
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "intel"
