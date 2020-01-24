@@ -8,37 +8,32 @@
 #
 #----------------------------------------------------------------------------eh-
 
+%define ohpc_python_dependent 1
+
 %include %{_sourcedir}/OHPC_macros
 
-%if 0%{?sles_version} || 0%{?suse_version}
-%define python3_prefix python3
-%else
-%define python3_prefix python34
-%endif
-
-Name:           %{python3_prefix}-Cython%{PROJ_DELIM}
-Version:        0.26.1
-Release:        0
+Name:           python3-Cython%{PROJ_DELIM}
+Version:        0.29.14
+Release:        1%{?dist}
 Url:            http://www.cython.org
 Summary:        The Cython compiler for writing C extensions for the Python language
 License:        Apache-2.0
 Group:          Development/Languages/Python
 Source:         https://files.pythonhosted.org/packages/source/C/Cython/Cython-%{version}.tar.gz
 Source1:        python-Cython-rpmlintrc
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  %{python3_prefix}-xml
-BuildRequires:  fdupes
-Requires(post): update-alternatives
-Requires(postun): update-alternatives
-%else
-BuildRequires:  libxml2-python
-Requires:       libxml2-python
+%if 0%{?rhel}
+BuildRequires: python3-libxml2
+Requires: python3-libxml2
 Requires(post): chkconfig
 Requires(postun): chkconfig
+%else
+BuildRequires: python3-xml
+BuildRequires: fdupes
+Requires(post): update-alternatives
+Requires(postun): update-alternatives
 %endif
-BuildRequires:  gcc-c++
-BuildRequires:  %{python3_prefix}-devel
-Requires:       %{python3_prefix}-devel
+BuildRequires: gcc-c++
+Requires: python3-devel
 
 %description
 The Cython language allows for writing C extensions for the Python
@@ -68,7 +63,6 @@ for p in cython cythonize cygdb ; do
     ln -s -f %{_sysconfdir}/alternatives/$p %{buildroot}%{_bindir}/$p
     # create a dummy target for /etc/alternatives/$p
     touch %{buildroot}%{_sysconfdir}/alternatives/$p
-
 done
 
 %if 0%{?sles_version} || 0%{?suse_version}
@@ -87,12 +81,8 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %files
-%if 0%{?leap_version} >= 420200 || 0%{?suse_version} > 1320
 %license LICENSE.txt
-%else
-%doc LICENSE.txt
-%endif
-%doc COPYING.txt README.txt ToDo.txt USAGE.txt
+%doc COPYING.txt README.rst ToDo.txt USAGE.txt
 %{_bindir}/cygdb
 %{_bindir}/cython
 %{_bindir}/cythonize
