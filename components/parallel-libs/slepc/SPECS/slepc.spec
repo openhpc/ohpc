@@ -33,7 +33,9 @@ Requires:       petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 # A configure script in slepc is made by python
-BuildRequires: python
+BuildRequires: python3
+# petsc requires python2 to build
+BuildRequires: python2
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
@@ -62,7 +64,7 @@ set -- *
 module load openblas
 %endif
 module load petsc
-./configure --prefix=/tmp%{install_path}
+python3 ./configure --prefix=/tmp%{install_path}
 make
 
 %install
