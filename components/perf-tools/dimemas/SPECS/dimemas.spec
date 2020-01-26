@@ -28,21 +28,21 @@ Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison
-%if 0%{?suse_version}
 BuildRequires: flex
-%else
-BuildRequires: flex
+%if 0%{?rhel}
 BuildRequires: flex-devel
+%else
+BuildRequires: libfl-devel
 %endif
-BuildRequires: autoconf%{PROJ_DELIM}
-BuildRequires: automake%{PROJ_DELIM}
-BuildRequires: libtool%{PROJ_DELIM}
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
 #!BuildIgnore: post-build-checks
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
-%description 
+%description
 Dimemas is a performance analysis tool for message-passing
 programs. It enables the user to develop and tune parallel applications on a
 workstation, while providing an accurate prediction of their performance on the
@@ -59,11 +59,10 @@ systems.
 
 %build
 %ohpc_setup_compiler
-module load autotools
 module load boost
 
 ./bootstrap
-CFLAGS="-std=c99" LDFLAGS="-lstdc++" ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR
+CFLAGS="-std=c99" LDFLAGS="-lstdc++" ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR || cat config.log
 
 make %{?_smp_mflags}
 
