@@ -16,7 +16,7 @@
 
 Summary:       Paraver
 Name:          %{pname}%{PROJ_DELIM}
-Version:       4.8.1
+Version:       4.8.2
 Release:       1%{?dist}
 License:       LGPL-2.1
 Group:         %{PROJ_NAME}/perf-tools
@@ -24,20 +24,23 @@ URL:           https://tools.bsc.es
 Source0:       https://ftp.tools.bsc.es/wxparaver/wxparaver-%{version}-src.tar.bz2
 
 
+BuildRequires: gcc-c++
 BuildRequires: bison
 BuildRequires: boost-devel
-%if 0%{?suse_version}
+%if 0%{?rhel}
+BuildRequires: libfabric-devel
+BuildRequires: flex-devel
+BuildRequires: wxGTK3-devel
+%else
 BuildRequires: libfabric1
 BuildRequires: flex
 BuildRequires: wxGTK3-3_2-devel
-%else
-
-BuildRequires: flex-devel
-BuildRequires: wxGTK3-devel
+BuildRequires: libboost_date_time-devel
+BuildRequires: libboost_serialization-devel
 %endif
-BuildRequires: autoconf%{PROJ_DELIM}
-BuildRequires: automake%{PROJ_DELIM}
-BuildRequires: libtool%{PROJ_DELIM}
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
 BuildRequires: binutils-devel
 BuildRequires: libxml2-devel
 
@@ -46,7 +49,7 @@ BuildRequires: libxml2-devel
 # Default library install path
 %define install_path %{OHPC_UTILS}/%{pname}/%version
 
-%description 
+%description
 Paraver was developed to respond to the need to have a qualitative
 global perception of the application behavior by visual inspection and then to
 be able to focus on the detailed quantitative analysis of the
@@ -60,7 +63,7 @@ achieving these targets.
 
 %build
 
-%if 0%{?centos_version} || 0%{?rhel}
+%if 0%{?rhel}
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-wx-config=/usr/bin/wx-config-3.0 "
 %endif
 %if 0%{?suse_version}
@@ -126,8 +129,5 @@ EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-
 %files
 %{OHPC_PUB}
-
-%doc

@@ -47,9 +47,9 @@ Patch2:         boost-1.71.0-intel-bootstrap.patch
 
 
 # optflag patch from Fedora
-Patch4: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-build-optflags.patch
+Patch4: boost-1.66.0-build-optflags.patch
 
-%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
+%if 0%{?rhel}
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
 BuildRequires:  xorg-x11-server-devel
@@ -59,7 +59,7 @@ BuildRequires:  libexpat-devel
 BuildRequires:  xorg-x11-devel
 %endif
 BuildRequires:  libicu-devel >= 4.4
-BuildRequires:  python-devel
+BuildRequires:  python3-devel
 BuildRequires:  zlib-devel
 
 # (Tron: 3/4/16) Add libicu dependency for SLES12sp1 as the distro does not seem to have it by default and some tests are failing
@@ -104,7 +104,7 @@ see the boost-doc package.
 %patch2 -p1
 %endif
 
-# optflag patches from Fedora 
+# optflag patches from Fedora
 %patch4 -p1
 
 %build
@@ -137,7 +137,7 @@ export RPM_LD_FLAGS
 
 
 cat << "EOF" >> user-config.jam
-%if "%{compiler_family}" == "gnu8"
+%if "%{compiler_family}" == "gnu9"
 import os ;
 local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
 local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;

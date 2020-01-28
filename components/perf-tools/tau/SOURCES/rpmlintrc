@@ -1,3 +1,6 @@
 addFilter("devel-file-in-non-devel-package")
 addFilter("suse-filelist-forbidden")
 addFilter("library-without-ldconfig-postin")
+addFilter("env-script-interpreter")
+addFilter("files-duplicated-waste")
+addFilter("spurious-executable-perm")

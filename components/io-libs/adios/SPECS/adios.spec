@@ -12,7 +12,7 @@
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %define ohpc_python_dependent 1
-%global python_family python2
+%global python_family python3
 %include %{_sourcedir}/OHPC_macros
 
 %{!?with_lustre: %global with_lustre 0}
@@ -37,7 +37,7 @@ Requires:      zlib zlib-devel
 # libm.a from CMakeLists
 BuildRequires: glibc-static
 
-BuildRequires: libtool%{PROJ_DELIM}
+BuildRequires: libtool
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -87,7 +87,6 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load autotools
 module load phdf5
 module load netcdf
 module load %{python_module_prefix}numpy
@@ -167,10 +166,13 @@ module load openblas
 module load %{python_module_prefix}numpy
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
+mkdir .bin
+ln -s /usr/bin/python3 .bin/python
+export PATH="$PWD/.bin:$PATH"
 make MPI=y python
 
 #%{python_prefix} setup.py install --prefix="%buildroot%{install_path}/python"
-python setup.py install --prefix="%buildroot%{install_path}/python"
+python3 setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
 install -m644 utils/skel/lib/skel_suite.py \
@@ -189,6 +191,10 @@ cp -fR examples %buildroot%{install_path}/lib
 
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
 find %buildroot%{install_path}/python -name \*pyc -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
+
+for file in skel_cat.py skel skel_extract.py; do
+	sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/bin/$file
+done
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}

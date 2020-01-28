@@ -41,12 +41,12 @@ Requires:       metis-%{compiler_family}%{PROJ_DELIM}
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires:  libbz2-devel
-Requires:       libbz2-1
-%else
+%if 0%{?rhel}
 BuildRequires:  bzip2-devel
 Requires:       bzip2
+%else
+BuildRequires:  libbz2-devel
+Requires:       libbz2-1
 %endif
 BuildRequires:  zlib-devel
 Requires:       zlib

@@ -43,6 +43,7 @@ BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 Requires:      pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+#!BuildIgnore: post-build-checks
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -90,7 +91,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
-%if %{mpi_family} == openmpi3
+%if %{mpi_family} == openmpi4
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
