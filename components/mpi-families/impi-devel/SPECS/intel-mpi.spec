@@ -28,7 +28,6 @@ AutoReq:   no
 
 Requires: prun%{PROJ_DELIM}
 Requires: intel-compilers-devel%{PROJ_DELIM}
-Provides: %{pname}%{PROJ_DELIM}
 
 %description
 
