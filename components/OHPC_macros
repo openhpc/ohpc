@@ -15,7 +15,6 @@
 #-----------------------------------------------------------------------
 
 # Top-level OpenHPC installation paths
-%global OHPC_BUILD 1
 %global PROJ_NAME       ohpc
 %global OHPC_HOME       /opt/%{PROJ_NAME}
 %global OHPC_ADMIN      %{OHPC_HOME}/admin
@@ -89,18 +88,22 @@ Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.3.0
 BuildRequires: gnu9-compilers%{PROJ_DELIM} >= 9.2.0
 Requires:      gnu9-compilers%{PROJ_DELIM} >= 9.2.0
 %endif # gnu9
+
 %if "%{compiler_family}" == "intel"
-BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
-Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %if 0%{OHPC_BUILD}
 BuildRequires: intel_licenses
+BuildRequires: psxe%{PROJ_DELIM}
 %endif # OHPC_BUILD
+BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
+Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %endif # intel
+
 %if "%{compiler_family}" == "arm"
 BuildRequires: arm-compilers-devel%{PROJ_DELIM}
 Requires:      arm-compilers-devel%{PROJ_DELIM}
 %global __requires_exclude ^libflang.*\\.so.*$|^libompstub\\.so.*|^libomp\\.so.*$|^libarmpl.*\\.so.*$|^libstdc++\\.so.*$
 %endif # arm
+
 %if "%{compiler_family}" == "llvm"
 BuildRequires: llvm-compilers%{PROJ_DELIM} >= 9.0.0
 Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
