@@ -73,7 +73,7 @@ versions_all=`rpm -qal | grep ${icc_subpath}`
 if [ $? -eq 1 ];then
     echo ""
     echo "Error: Unable to detect local Parallel Studio installation. The toolchain"
-    echo "       providing ${icc_subpath} must be installed prior to this compatability package"
+    echo "       providing ${icc_subpath} must be installed prior to this compatibility package"
     echo " "
     exit 1
 fi
@@ -94,7 +94,7 @@ for file in ${versions_all}; do
 done
 if [ -z "${versions}" ]; then
     echo ""
-    echo "Error: local PSXE compatability support is for versions > ${min_ver}"
+    echo "Error: local PSXE compatibility support is for versions > ${min_ver}"
     echo " "
     exit 1
 fi
@@ -109,7 +109,7 @@ versions=`rpm -qal | grep ${icc_subpath}$`
 if [ $? -eq 1 ];then
     echo ""
     echo "Error: Unable to detect local Parallel Studio installation. The toolchain"
-    echo "       providing ${icc_subpath} must be installed prior to this compatability package"
+    echo "       providing ${icc_subpath} must be installed prior to this compatibility package"
     exit 1
 fi
 
