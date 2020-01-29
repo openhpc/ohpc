@@ -31,18 +31,20 @@ mpi-families=["mpich","mvapich2","openmpi"]
 [2.0.0]
 
 # define patterns for a given arch in which to disable builds
-skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","geopm"]
+skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","geopm",
+            "intel-compilers-devel","impi-devel"]
 # define compiler/MPI families: first entry in list is defined to be parent in OBS
 compiler_families=["gnu9","intel"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 
-standalone = ["clustershell","cmake","lmod","ohpc-filesystem","gnu-compilers",
-              "pmix","prun","slurm"]
+standalone = ["clustershell","cmake","conman","gnu-compilers","intel-compilers-devel",
+              "lmod","losf","ohpc-filesystem","papi","pbspro","pmix","prun","slurm"]
+              
 
 # define (compiler dependent) packages
 compiler_dependent = ["gsl","hdf5","openmpi","mpich","mvapich2","!likwid",
-                      "!plasma","R","scotch","superlu"]
+                      "openblas","!plasma","R","scotch","superlu"]
 
 # overdefault compiler families for any desired components
 R_compiler=["gnu9"]
