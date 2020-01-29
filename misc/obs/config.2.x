@@ -20,8 +20,8 @@ dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","py
 io-libs       = ["hdf5","netcdf","netcdf-fortran","phdf5","pnetcdf"]
 runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","pbspro","pmix","munge"]
-serial-libs   = ["R","openblas","plasma"]
-parallel-libs = ["boost","hypre","mumps","opencoarrays","petsc","slepc","superlu_dist"]
+serial-libs   = ["R","gsl","openblas","plasma","superlu"]
+parallel-libs = ["boost","hypre","mumps","opencoarrays","petsc","scotch","slepc","superlu_dist"]
 perf-tools    = ["dimemas","extrae","geopm","likwid","omb","papi","scorep","tau"]
 
 compiler-families=["gnu-compilers","intel-compilers-devel"]
@@ -41,10 +41,12 @@ standalone = ["clustershell","cmake","lmod","ohpc-filesystem","gnu-compilers",
               "pmix","prun","slurm"]
 
 # define (compiler dependent) packages
-compiler_dependent = ["hdf5","openmpi","!mvapich2","!likwid","!plasma","!R"]
+compiler_dependent = ["gsl","hdf5","openmpi","mpich","mvapich2","!likwid",
+                      "!plasma","R","scotch","superlu"]
 
 # overdefault compiler families for any desired components
-#R_compiler=["gnu8"]
-#opencoarrays_compiler=["gnu8"]
+R_compiler=["gnu9"]
+gsl_compiler=["gnu9"]
+#opencoarrays_compiler=["gnu9"]
 
 #mpi_dependent = ["!boost","!dimemas","!extrae","!geopm","!mumps","!opencoarrays","!omb","!petsc","!phdf5","!scorep","!slepc"]
