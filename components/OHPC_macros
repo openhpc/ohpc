@@ -98,10 +98,13 @@ BuildRequires: gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %endif # intel
 
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
+%if 0%{OHPC_BUILD}
+BuildRequires: arm_licenses
+BuildRequires: arm%{PROJ_DELIM}
+%endif # OHPC_BUILD
 BuildRequires: arm-compilers-devel%{PROJ_DELIM}
 Requires:      arm-compilers-devel%{PROJ_DELIM}
-%global __requires_exclude ^libflang.*\\.so.*$|^libompstub\\.so.*|^libomp\\.so.*$|^libarmpl.*\\.so.*$|^libstdc++\\.so.*$
 %endif # arm
 
 %if "%{compiler_family}" == "llvm"

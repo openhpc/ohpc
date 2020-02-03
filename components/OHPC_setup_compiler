@@ -55,7 +55,7 @@ elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
     export F77=ifort
     module purge
     module load intel
-elif [ "$OHPC_COMPILER_FAMILY" = "arm" ]; then
+elif [ "$OHPC_COMPILER_FAMILY" = "arm1" ]; then
     export CC=armclang
     export CXX=armclang++
     export FC=armflang
