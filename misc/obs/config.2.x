@@ -24,7 +24,7 @@ serial-libs   = ["R","gsl","openblas","plasma","superlu"]
 parallel-libs = ["boost","hypre","mumps","opencoarrays","petsc","scotch","slepc","superlu_dist"]
 perf-tools    = ["dimemas","extrae","geopm","likwid","omb","papi","scorep","tau"]
 
-compiler-families=["gnu-compilers","intel-compilers-devel"]
+compiler-families=["gnu-compilers","intel-compilers-devel","arm-compilers-devel"]
 mpi-families=["mpich","mvapich2","openmpi"]
 
 
@@ -38,8 +38,9 @@ compiler_families=["gnu9","intel"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 
-standalone = ["clustershell","cmake","conman","gnu-compilers","intel-compilers-devel",
-              "lmod","losf","ohpc-filesystem","papi","pbspro","pmix","prun","slurm"]
+standalone = ["arm-compilers-devel","clustershell","cmake","conman","gnu-compilers",
+              "intel-compilers-devel","lmod","losf","ohpc-filesystem","papi","pbspro",
+	      "pmix","prun","slurm"]
               
 
 # define (compiler dependent) packages
