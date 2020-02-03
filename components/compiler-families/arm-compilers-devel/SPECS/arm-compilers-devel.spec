@@ -13,7 +13,7 @@
 
 Summary:   OpenHPC compatibility package for Arm HPC compiler
 Name:      %{pname}%{PROJ_DELIM}
-Version:   1.3.4
+Version:   2.0
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -54,7 +54,7 @@ fi
 
 # Verify min version expectations
 
-min_ver="18.3"
+min_ver="20.0.51"
 versions=""
 for file in ${versions_all}; do
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
