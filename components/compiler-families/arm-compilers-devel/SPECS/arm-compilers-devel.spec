@@ -57,7 +57,7 @@ fi
 min_ver="20.0.51"
 versions=""
 for file in ${versions_all}; do
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
     echo "--> Version ${version} detected"
     echo -e "${version}\n${min_ver}" | sort -V | head -n 1 | grep -q "^${min_ver}"
     if [ $? -ne 0 ];then
