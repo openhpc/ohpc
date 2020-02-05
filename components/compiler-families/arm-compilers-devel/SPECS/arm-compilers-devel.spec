@@ -101,7 +101,7 @@ fi
 
 # cache path to generic compiler modulename
 
-generic=`find /opt/arm/modulefiles/Generic-AArch64/ -name arm-hpc-compiler | awk -F '/opt/arm/modulefiles/' '{print $2}'`
+generic=`find $modpath/Generic-AArch64/ -name arm-hpc-compiler | awk -F "$modpath" '{print $2}'`
 if [ ! -n "${generic}" ];then
     echo ""
     echo "Error: Unable to determine path to Generic modulefiles provided by Arm compiler toolchain"
