@@ -28,6 +28,7 @@ Source2:   OHPC_mod_generator.sh
 
 Requires: gcc-c++
 Requires: grep
+Requires: rpm
 
 %description
 
