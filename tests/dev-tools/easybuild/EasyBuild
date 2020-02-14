@@ -16,6 +16,23 @@ module load EasyBuild
 }
 
 @test "[EasyBuild] test executable" {
-    run eb -H
+    run eb --help
     assert_success
+    run eb --version
+    assert_success
+}
+
+@test "[EasyBuild] quick test install of bzip2" {
+    EB_TEST_TMPDIR=$(mktemp -d)
+    export EASYBUILD_PREFIX=$EB_TEST_TMPDIR
+    eb --show-config
+    assert_success
+    eb bzip2-1.0.6.eb
+    assert_success
+    module use $EASYBUILD_PREFIX/modules/all
+    module load bzip2/1.0.6
+    assert_success
+    test -f $EBROOTBZIP2/bin/bzip2
+    assert_success
+    rm -r $EB_TEST_TMPDIR
 }

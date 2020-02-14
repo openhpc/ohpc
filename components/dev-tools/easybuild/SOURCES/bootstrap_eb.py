@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 ##
-# Copyright 2013-2019 Ghent University
+# Copyright 2013-2020 Ghent University
 #
 # This file is part of EasyBuild,
 # originally created by the HPC team of Ghent University (http://ugent.be/hpc/en),
@@ -40,6 +40,7 @@ inspired by https://bitbucket.org/pdubroy/pip/raw/tip/getpip.py
 (via http://dubroy.com/blog/so-you-want-to-install-a-python-package/)
 """
 
+import codecs
 import copy
 import glob
 import os
@@ -49,12 +50,19 @@ import site
 import sys
 import tempfile
 import traceback
-import urllib2
 from distutils.version import LooseVersion
 from hashlib import md5
+from platform import python_version
+
+IS_PY3 = sys.version_info[0] == 3
+
+if not IS_PY3:
+    import urllib2 as std_urllib
+else:
+    import urllib.request as std_urllib
 
 
-EB_BOOTSTRAP_VERSION = '20190523.01'
+EB_BOOTSTRAP_VERSION = '20200203.01'
 
 # argparse preferrred, optparse deprecated >=2.7
 HAVE_ARGPARSE = False
@@ -68,7 +76,9 @@ PYPI_SOURCE_URL = 'https://pypi.python.org/packages/source'
 
 VSC_BASE = 'vsc-base'
 VSC_INSTALL = 'vsc-install'
-EASYBUILD_PACKAGES = [VSC_INSTALL, VSC_BASE, 'easybuild-framework', 'easybuild-easyblocks', 'easybuild-easyconfigs']
+# Python 3 is not supported by the vsc-* packages
+EASYBUILD_PACKAGES = (([] if IS_PY3 else [VSC_INSTALL, VSC_BASE]) +
+                      ['easybuild-framework', 'easybuild-easyblocks', 'easybuild-easyconfigs'])
 
 STAGE1_SUBDIR = 'eb_stage1'
 
@@ -101,6 +111,7 @@ easybuild_installpath_modules = os.environ.get('EASYBUILD_INSTALLPATH_MODULES', 
 easybuild_subdir_modules = os.environ.get('EASYBUILD_SUBDIR_MODULES', 'modules')
 easybuild_suffix_modules_path = os.environ.get('EASYBUILD_SUFFIX_MODULES_PATH', 'all')
 
+
 #
 # Utility functions
 #
@@ -126,8 +137,10 @@ def error(msg, exit=True):
 
 def mock_stdout_stderr():
     """Mock stdout/stderr channels"""
-    # cStringIO is only available in Python 2
-    from cStringIO import StringIO
+    try:
+        from cStringIO import StringIO
+    except ImportError:
+        from io import StringIO
     orig_stdout, orig_stderr = sys.stdout, sys.stderr
     sys.stdout.flush()
     sys.stdout = StringIO()
@@ -238,7 +251,6 @@ def prep(path):
         debug("$EASYBUILD_MODULE_SYNTAX set to %s" % os.environ['EASYBUILD_MODULE_SYNTAX'])
 
 
-
 def check_module_command(tmpdir):
     """Check which module command is available, and prepare for using it."""
     global easybuild_modules_tool
@@ -324,19 +336,19 @@ def check_setuptools():
 
     # check setuptools version
     try:
-        os.system(cmd_tmpl % "import setuptools; print setuptools.__version__")
-        setuptools_version = LooseVersion(open(outfile).read().strip())
-        debug("Found setuptools version %s" % setuptools_version)
+        os.system(cmd_tmpl % "import setuptools; print(setuptools.__version__)")
+        setuptools_ver = LooseVersion(open(outfile).read().strip())
+        debug("Found setuptools version %s" % setuptools_ver)
 
-        min_setuptools_version = '0.6c11'
-        if setuptools_version < LooseVersion(min_setuptools_version):
-            debug("Minimal setuptools version %s not satisfied, found '%s'" % (min_setuptools_version, setuptools_version))
+        min_setuptools_ver = '0.6c11'
+        if setuptools_ver < LooseVersion(min_setuptools_ver):
+            debug("Minimal setuptools version %s not satisfied, found '%s'" % (min_setuptools_ver, setuptools_ver))
             res = False
     except Exception as err:
         debug("Failed to check setuptools version: %s" % err)
         res = False
 
-    os.system(cmd_tmpl % "from setuptools.command import easy_install; print easy_install.__file__")
+    os.system(cmd_tmpl % "from setuptools.command import easy_install; print(easy_install.__file__)")
     out = open(outfile).read().strip()
     debug("Location of setuptools' easy_install module: %s" % out)
     if 'setuptools/command/easy_install' not in out:
@@ -344,7 +356,7 @@ def check_setuptools():
         res = False
 
     if res is None:
-        os.system(cmd_tmpl % "import setuptools; print setuptools.__file__")
+        os.system(cmd_tmpl % "import setuptools; print(setuptools.__file__)")
         setuptools_loc = open(outfile).read().strip()
         res = os.path.dirname(os.path.dirname(setuptools_loc))
         debug("Location of setuptools installation: %s" % res)
@@ -523,25 +535,36 @@ def stage1(tmpdir, sourcepath, distribute_egg_dir, forcedversion):
         # install meta-package easybuild from PyPI
         if forcedversion:
             cmd.append('easybuild==%s' % forcedversion)
+        elif IS_PY3:
+            cmd.append('easybuild>=4.0')  # Python 3 support added in EasyBuild 4
         else:
             cmd.append('easybuild')
 
-        # install vsc-base again at the end, to avoid that the one available on the system is used instead
-        post_vsc_base = cmd[:]
-        post_vsc_base[-1] = VSC_BASE + '<2.9.0'
+        if not IS_PY3:
+            # install vsc-base again at the end, to avoid that the one available on the system is used instead
+            post_vsc_base = cmd[:]
+            post_vsc_base[-1] = VSC_BASE + '<2.9.0'
 
     if not print_debug:
         cmd.insert(0, '--quiet')
 
-    # install vsc-install version prior to 0.11.4, where mock was introduced as a dependency
-    # workaround for problem reported in https://github.com/easybuilders/easybuild-framework/issues/2712
-    # also stick to vsc-base < 2.9.0 to avoid requiring 'future' Python package as dependency
-    for pkg in [VSC_INSTALL + '<0.11.4', VSC_BASE + '<2.9.0']:
-        precmd = cmd[:-1] + [pkg]
-        info("running pre-install command 'easy_install %s'" % (' '.join(precmd)))
-        run_easy_install(precmd)
+    # There is no support for Python3 in the older vsc-* packages and EasyBuild 4 includes working versions of vsc-*
+    if not IS_PY3:
+        # install vsc-install version prior to 0.11.4, where mock was introduced as a dependency
+        # workaround for problem reported in https://github.com/easybuilders/easybuild-framework/issues/2712
+        # also stick to vsc-base < 2.9.0 to avoid requiring 'future' Python package as dependency
+        for pkg in [VSC_INSTALL + '<0.11.4', VSC_BASE + '<2.9.0']:
+            precmd = cmd[:-1] + [pkg]
+            info("running pre-install command 'easy_install %s'" % (' '.join(precmd)))
+            run_easy_install(precmd)
 
-    info("installing EasyBuild with 'easy_install %s'" % (' '.join(cmd)))
+    info("installing EasyBuild with 'easy_install %s'\n" % (' '.join(cmd)))
+    syntax_error_note = '\n'.join([
+        "Note: a 'SyntaxError' may be reported for the easybuild/tools/py2vs3/py%s.py module." % ('3', '2')[IS_PY3],
+        "You can safely ignore this message, it will not affect the functionality of the EasyBuild installation.",
+        '',
+    ])
+    info(syntax_error_note)
     run_easy_install(cmd)
 
     if post_vsc_base:
@@ -601,7 +624,7 @@ def stage1(tmpdir, sourcepath, distribute_egg_dir, forcedversion):
                 error("Failed to determine version for easybuild-%s package from %s with %s" % tup)
 
     # figure out EasyBuild version via eb command line
-    # note: EasyBuild uses some magic to determine the EasyBuild version based on the versions of the individual packages
+    # note: EasyBuild uses some magic to determine the EasyBuild version based on the versions of the individual pkgs
     pattern = "This is EasyBuild (?P<version>%(v)s) \(framework: %(v)s, easyblocks: %(v)s\)" % {'v': '[0-9.]*[a-z0-9]*'}
     version_re = re.compile(pattern)
     version_out_file = os.path.join(tmpdir, 'eb_version.out')
@@ -626,8 +649,13 @@ def stage1(tmpdir, sourcepath, distribute_egg_dir, forcedversion):
     # make sure we're getting the expected EasyBuild packages
     import easybuild.framework
     import easybuild.easyblocks
-    import vsc.utils.fancylogger
-    for pkg in [easybuild.framework, easybuild.easyblocks, vsc.utils.fancylogger]:
+    pkgs_to_check = [easybuild.framework, easybuild.easyblocks]
+    # vsc is part of EasyBuild 4
+    if LooseVersion(eb_version) < LooseVersion('4'):
+        import vsc.utils.fancylogger
+        pkgs_to_check.append(vsc.utils.fancylogger)
+
+    for pkg in pkgs_to_check:
         if tmpdir not in pkg.__file__:
             error("Found another %s than expected: %s" % (pkg.__name__, pkg.__file__))
         else:
@@ -645,7 +673,10 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
 
     preinstallopts = ''
 
-    if distribute_egg_dir is not None:
+    eb_looseversion = LooseVersion(templates['version'])
+
+    # setuptools is no longer required for EasyBuild v4.0 & newer, so skip the setuptools stuff in that case
+    if eb_looseversion < LooseVersion('4.0') and distribute_egg_dir is not None:
         # inject path to distribute installed in stage 0 into $PYTHONPATH via preinstallopts
         # other approaches are not reliable, since EasyBuildMeta easyblock unsets $PYTHONPATH;
         # this is required for the easy_install from stage 0 to work
@@ -656,14 +687,16 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
         # this is necessary since we provide our own distribute installation during the bootstrap (cfr. stage0)
         preinstallopts += "%s -m easy_install -U --prefix %%(installdir)s setuptools && " % sys.executable
 
-    # vsc-install is a runtime dependency for the EasyBuild unit test suite,
-    # and is easily picked up from stage1 rather than being actually installed, so force it
-    vsc_install = "'%s<0.11.4'" % VSC_INSTALL
-    if sourcepath:
-        vsc_install_tarball_paths = glob.glob(os.path.join(sourcepath, 'vsc-install*.tar.gz'))
-        if len(vsc_install_tarball_paths) == 1:
-            vsc_install = vsc_install_tarball_paths[0]
-    preinstallopts += "%s -m easy_install -U --prefix %%(installdir)s %s && " % (sys.executable, vsc_install)
+    # vsc-install is no longer required for EasyBuild v4.0, so skip pre-installed vsc-install in that case
+    if eb_looseversion < LooseVersion('4.0'):
+        # vsc-install is a runtime dependency for the EasyBuild unit test suite,
+        # and is easily picked up from stage1 rather than being actually installed, so force it
+        vsc_install = "'%s<0.11.4'" % VSC_INSTALL
+        if sourcepath:
+            vsc_install_tarball_paths = glob.glob(os.path.join(sourcepath, 'vsc-install*.tar.gz'))
+            if len(vsc_install_tarball_paths) == 1:
+                vsc_install = vsc_install_tarball_paths[0]
+        preinstallopts += "%s -m easy_install -U --prefix %%(installdir)s %s && " % (sys.executable, vsc_install)
 
     templates.update({
         'preinstallopts': preinstallopts,
@@ -672,6 +705,12 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
     # determine PyPI URLs for individual packages
     pkg_urls = []
     for pkg in EASYBUILD_PACKAGES:
+
+        # vsc-base and vsc-install are not dependencies anymore for EasyBuild v4.0,
+        # so skip them here for recent EasyBuild versions
+        if eb_looseversion >= LooseVersion('4.0') and pkg in [VSC_INSTALL, VSC_BASE]:
+            continue
+
         # format of pkg entries in templates: "'<pkg_filename>',"
         pkg_filename = templates[pkg][1:-2]
 
@@ -681,8 +720,8 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
         # determine download URL via PyPI's 'simple' API
         pkg_simple = None
         try:
-            pkg_simple = urllib2.urlopen('https://pypi.python.org/simple/%s' % pkg, timeout=10).read()
-        except (urllib2.URLError, urllib2.HTTPError) as err:
+            pkg_simple = std_urllib.urlopen('https://pypi.python.org/simple/%s' % pkg, timeout=10).read()
+        except (std_urllib.URLError, std_urllib.HTTPError) as err:
             # failing to figure out the package download URl may be OK when source tarballs are provided
             if sourcepath:
                 info("Ignoring failed attempt to determine '%s' download URL since source tarballs are provided" % pkg)
@@ -690,20 +729,28 @@ def stage2(tmpdir, templates, install_path, distribute_egg_dir, sourcepath):
                 raise err
 
         if pkg_simple:
+            if IS_PY3:
+                pkg_simple = pkg_simple.decode('utf-8')
             pkg_url_part_regex = re.compile('/(packages/[^#]+)/%s#' % pkg_filename)
             res = pkg_url_part_regex.search(pkg_simple)
             if res:
-                pkg_url_part = res.group(1)
+                pkg_url = 'https://pypi.python.org/' + res.group(1)
+                pkg_urls.append(pkg_url)
+            elif sourcepath:
+                info("Ignoring failure to determine source URL for '%s' (source tarballs are provided)" % pkg_filename)
             else:
                 error_msg = "Failed to determine PyPI package URL for %s using pattern '%s': %s\n"
                 error(error_msg % (pkg, pkg_url_part_regex.pattern, pkg_simple))
 
-            pkg_url = 'https://pypi.python.org/' + pkg_url_part
-            pkg_urls.append(pkg_url)
+    # vsc-base and vsc-install are no longer required for EasyBuild v4.0.0,
+    # so only include them in 'sources' for older versions
+    sources_tmpl = "%(easybuild-framework)s%(easybuild-easyblocks)s%(easybuild-easyconfigs)s"
+    if eb_looseversion < LooseVersion('4.0'):
+        sources_tmpl = "%(vsc-install)s%(vsc-base)s" + sources_tmpl
 
     templates.update({
-        'source_urls': '\n'.join(["'%s'," % pkg_url for pkg_url in pkg_urls]),
-        'sources': "%(vsc-install)s%(vsc-base)s%(easybuild-framework)s%(easybuild-easyblocks)s%(easybuild-easyconfigs)s" % templates,
+        'source_urls': '\n'.join(["'%s'," % x for x in pkg_urls]),
+        'sources': sources_tmpl % templates,
         'pythonpath': distribute_egg_dir,
     })
 
@@ -804,6 +851,8 @@ def main():
     """Main script: bootstrap EasyBuild in stages."""
 
     self_txt = open(__file__).read()
+    if IS_PY3:
+        self_txt = self_txt.encode('utf-8')
     info("EasyBuild bootstrap script (version %s, MD5: %s)" % (EB_BOOTSTRAP_VERSION, md5(self_txt).hexdigest()))
     info("Found Python %s\n" % '; '.join(sys.version.split('\n')))
 
@@ -843,6 +892,9 @@ def main():
     forcedversion = EASYBUILD_BOOTSTRAP_FORCE_VERSION
     if forcedversion:
         info("Forcing specified version %s..." % forcedversion)
+        if IS_PY3 and LooseVersion(forcedversion) < LooseVersion('4'):
+            error('Python 3 support is only available with EasyBuild 4.x but you are trying to install EasyBuild %s'
+                  % forcedversion)
 
     # create temporary dir for temporary installations
     tmpdir = tempfile.mkdtemp()
@@ -923,8 +975,9 @@ def main():
     info("Set $EASYBUILD_MODULES_TOOL to '%s' to use the same modules tool as was used now." % modtool)
     print('')
     info("By default, EasyBuild will install software to $HOME/.local/easybuild.")
-    info("To install software with EasyBuild to %s, make sure $EASYBUILD_INSTALLPATH is set accordingly." % install_path)
+    info("To install software with EasyBuild to %s, set $EASYBUILD_INSTALLPATH accordingly." % install_path)
     info("See http://easybuild.readthedocs.org/en/latest/Configuration.html for details on configuring EasyBuild.")
+
 
 # template easyconfig file for EasyBuild
 EASYBUILD_EASYCONFIG_TEMPLATE = """
@@ -949,20 +1002,21 @@ allow_system_deps = [('Python', SYS_PYTHON_VERSION)]
 
 preinstallopts = "%(preinstallopts)s"
 
-pyshortver = '.'.join(SYS_PYTHON_VERSION.split('.')[:2])
 sanity_check_paths = {
     'files': ['bin/eb'],
-    'dirs': [('lib/python%%s/site-packages' %% pyshortver, 'lib64/python%%s/site-packages' %% pyshortver)],
+    'dirs': ['lib'],
 }
 
 moduleclass = 'tools'
 """
 
 # check Python version
-if sys.version_info[0] != 2 or sys.version_info[1] < 6:
-    pyver = sys.version.split(' ')[0]
-    sys.stderr.write("ERROR: Incompatible Python version: %s (should be Python 2 >= 2.6)\n" % pyver)
-    sys.stderr.write("Please try again using 'python2 %s <prefix>'\n" % os.path.basename(__file__))
+loose_pyver = LooseVersion(python_version())
+min_pyver2 = LooseVersion('2.6')
+min_pyver3 = LooseVersion('3.5')
+if loose_pyver < min_pyver2 or (loose_pyver >= LooseVersion('3') and loose_pyver < min_pyver3):
+    sys.stderr.write("ERROR: Incompatible Python version: %s (should be Python 2 >= %s or Python 3 >= %s)\n"
+                     % (python_version(), min_pyver2, min_pyver3))
     sys.exit(1)
 
 # distribute_setup.py script (https://pypi.python.org/pypi/distribute)
@@ -1094,8 +1148,10 @@ a57g3dmmXQS2POEhp2tDi6BpsbvYgrchyDXvMtUBMNdztyKrFjoDQzdC8qQ/GqBUi4XHpDsLnkKt
 T4E5Gl7wpTxDXdQtzS1Hv52qHSilmOtEVO3IVjCdl5cgC5VC9T6CY1N4U4B0E1tltaqRtuYc/PyB
 i9tGe6+O/V0LCkGXvNkrKK2++u9qLFyTkO2sp7xSt/Bfil9os3SeOlY5fvv9mLcFj5zSNUqsRZfU
 7lwukTHLpfpLDH2GT+yCCf8D2cp1xw==
-
-""".decode("base64").decode("zlib")
+"""
+if IS_PY3:
+    DISTRIBUTE_SETUP_PY = DISTRIBUTE_SETUP_PY.encode('ascii')
+DISTRIBUTE_SETUP_PY = codecs.decode(codecs.decode(DISTRIBUTE_SETUP_PY, "base64"), "zlib")
 
 # run main function as body of script
 main()

@@ -13,12 +13,9 @@
 # Base package name
 %define pname easybuild
 
-%define vsc_base_ver 2.8.4
-%define vsc_install_ver 0.11.3
-
-Summary:   Build and installation framework
+Summary:   Software build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   3.9.4
+Version:   4.1.1
 Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
@@ -27,19 +24,17 @@ URL:       http://easybuilders.github.io/easybuild
 Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
 Source1:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
 Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
-Source3:   https://pypi.io/packages/source/v/vsc-base/vsc-base-%{vsc_base_ver}.tar.gz
-Source4:   https://pypi.io/packages/source/v/vsc-install/vsc-install-%{vsc_install_ver}.tar.gz
-Source5:   bootstrap_eb.py
-BuildRequires: python
-BuildRequires: python-setuptools
-Requires: python-setuptools
-Requires: python
+Source3:   bootstrap_eb.py
+BuildRequires: python3
+BuildRequires: python3-setuptools
+Requires: python3
 #!BuildIgnore: post-build-checks
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
 # environment; if building outside, lmod remains a formal build dependency).
 %if !0%{?OHPC_BUILD}
 BuildRequires: lmod%{PROJ_DELIM}
+Requires: lmod%{PROJ_DELIM}
 %endif
 
 
@@ -64,7 +59,7 @@ export EASYBUILD_INSTALLPATH=%{install_path}
 export EASYBUILD_MODULE_SYNTAX=Tcl
 export PATH=${LMOD_DIR}:${PATH}
 
-MODULEPATH= python ./bootstrap_eb.py %{buildroot}/%{install_path}
+MODULEPATH= python3 ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 rm bootstrap_eb.py*
 pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
@@ -88,7 +83,7 @@ module-whatis "Name: %{pname}"
 module-whatis "Version: %{version}"
 module-whatis "Category: system tool"
 module-whatis "Description: %{summary}"
-module-whatis "URL: http://easybuilders.github.io/easybuild/"
+module-whatis "URL: https://easybuilders.github.io/easybuild/"
 
 set             version                 %{version}
 set             home                    \$::env(HOME)
@@ -101,9 +96,9 @@ module          use                     \$home/.local/easybuild/modules/all
 
 setenv          EBROOTEASYBUILD         %{install_path}/software/EasyBuild/%{version}
 setenv          EBVERSIONEASYBUILD      %{version}
-setenv          EASYBUILD_MODULES_TOOL  Lmod
+setenv          EB_PYTHON               python3
 
-prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/python2.7/site-packages
+prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/python{python3_version}/site-packages
 
 EOF
 
