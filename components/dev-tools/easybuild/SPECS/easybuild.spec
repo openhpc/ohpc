@@ -98,7 +98,7 @@ setenv          EBROOTEASYBUILD         %{install_path}/software/EasyBuild/%{ver
 setenv          EBVERSIONEASYBUILD      %{version}
 setenv          EB_PYTHON               python3
 
-prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/python{python3_version}/site-packages
+prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/python%{python3_version}/site-packages
 
 EOF
 
