@@ -13,7 +13,7 @@
 %define pname spack
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.12.1
+Version:	0.13.4
 Release:	1%{?dist}
 Summary:	HPC software package management
 
@@ -23,29 +23,34 @@ URL:		https://github.com/LLNL/spack
 Source0:	https://github.com/LLNL/%{pname}/archive/v%{version}.tar.gz
 
 BuildArch: noarch
-BuildRequires:	rsync
-BuildRequires:	python
-Requires:	python >= 2.6
+BuildRequires: rsync
+BuildRequires: python3
 Requires: bash
 Requires: curl
 Requires: coreutils
 Requires: subversion
 Requires: hg
 Requires: patch
-%if 0%{?suse_version}
-Requires: python-mock
-%else
-Requires: python2-mock
-%endif
+Requires: python3-mock
 
 %global install_path %{OHPC_ADMIN}/%{pname}/%version
 # Turn off the brp-python-bytecompile script
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
 %description
-Spack is a package management tool designed to support multiple versions and configurations of software on a wide variety of platforms and environments. It was designed for large supercomputing centers, where many users and application teams share common installations of software on clusters with exotic architectures, using libraries that do not have a standard ABI. Spack is non-destructive: installing a new version does not break existing installations, so many configurations can coexist on the same system.
+Spack is a package management tool designed to support multiple versions and
+configurations of software on a wide variety of platforms and environments. It
+was designed for large supercomputing centers, where many users and application
+teams share common installations of software on clusters with exotic
+architectures, using libraries that do not have a standard ABI. Spack is
+non-destructive: installing a new version does not break existing
+installations, so many configurations can coexist on the same system.
 
-Most importantly, Spack is simple. It offers a simple spec syntax so that users can specify versions and configuration options concisely. Spack is also simple for package authors: package files are written in pure Python, and specs allow package authors to write a single build script for many different builds of the same package.
+Most importantly, Spack is simple. It offers a simple spec syntax so that users
+can specify versions and configuration options concisely. Spack is also simple
+for package authors: package files are written in pure Python, and specs allow
+package authors to write a single build script for many different builds of the
+same package.
 
 
 %prep
@@ -54,6 +59,8 @@ Most importantly, Spack is simple. It offers a simple spec syntax so that users 
 %install
 mkdir -p %{buildroot}%{install_path}
 rsync -av --exclude=.gitignore {etc,bin,lib,var,share} %{buildroot}%{install_path}
+
+sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/lib/spack/external/pyqver2.py
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}/%{OHPC_ADMIN}/modulefiles/spack
