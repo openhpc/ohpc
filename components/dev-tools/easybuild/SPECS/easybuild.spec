@@ -25,9 +25,9 @@ Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easy
 Source1:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
 Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
 Source3:   bootstrap_eb.py
-BuildRequires: python36
-BuildRequires: python36-setuptools
-Requires: python36
+BuildRequires: python3
+BuildRequires: python3-setuptools
+Requires: python3
 #!BuildIgnore: post-build-checks
 
 # Lmod dependency (note that lmod is pre-populated in the OpenHPC OBS build
@@ -59,7 +59,7 @@ export EASYBUILD_INSTALLPATH=%{install_path}
 export EASYBUILD_MODULE_SYNTAX=Tcl
 export PATH=${LMOD_DIR}:${PATH}
 
-MODULEPATH= python36 ./bootstrap_eb.py %{buildroot}/%{install_path}
+MODULEPATH= python3 ./bootstrap_eb.py %{buildroot}/%{install_path}
 
 rm bootstrap_eb.py*
 pushd %{buildroot}%{install_path}/modules/tools/EasyBuild/
@@ -96,9 +96,9 @@ module          use                     \$home/.local/easybuild/modules/all
 
 setenv          EBROOTEASYBUILD         %{install_path}/software/EasyBuild/%{version}
 setenv          EBVERSIONEASYBUILD      %{version}
-setenv          EB_PYTHON               python36
+setenv          EB_PYTHON               python3
 
-prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/python3.6/site-packages
+prepend-path	PYTHONPATH	    %{install_path}/software/EasyBuild/%{version}/lib/python{python3_version}/site-packages
 
 EOF
 
