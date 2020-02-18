@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 #usage: validate_minidft.py filename
 
 import sys
