@@ -28,7 +28,7 @@ BuildRequires: python3-devel
 
 %if 0%{?rhel_version}
 BuildRequires: byacc
-%endi
+%endif
 
 Provides: %{pname} = %{version}
 
