@@ -23,6 +23,8 @@ Source0:   tests-ohpc.tar
 BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
 
+%global __mangle_shebangs_exclude bats
+
 %if 0%{?suse_version} >= 1230
 Requires(pre):  shadow
 %endif
