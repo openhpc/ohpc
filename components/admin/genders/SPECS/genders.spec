@@ -57,7 +57,7 @@ genders API that is compatible with earlier releases of genders
 %{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %global _with_perl_vendor_arch --with-perl-vendor-arch}}
 
 %prep
-%setup  -q -n %{pname}-%{version}
+%setup  -q -n %{pname}-%{pname}-1-27-3
 
 %build
 
