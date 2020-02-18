@@ -25,12 +25,14 @@ BuildRequires:  automake%{PROJ_DELIM}
 
 %global __brp_mangle_shebangs_exclude bats
 
-%if 0%{?suse_version} >= 1230
+%if 0%{?suse_version}
 Requires(pre):  shadow
+Requires: python-base
 %endif
 
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?rhel_version}
 Requires(pre):  shadow-utils
+Requires: python2
 %endif
 
 %define testuser ohpc-test
