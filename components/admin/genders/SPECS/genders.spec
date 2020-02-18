@@ -24,8 +24,13 @@ Requires: perl
 BuildRequires: gcc-c++
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: python
-BuildRequires: python-devel
+BuildRequires: python2
+BuildRequires: python2-devel
+
+%if 0%{?rhel_version}
+BuildRequires: byacc
+%endif
+
 Provides: %{pname} = %{version}
 
 %description
@@ -56,7 +61,7 @@ genders API that is compatible with earlier releases of genders
 
 %build
 
-%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
+%configure PYTHON=/usr/bin/python2 --program-prefix=%{?_program_prefix:%{_program_prefix}} \
     --with-extension-destdir="$RPM_BUILD_ROOT" \
     %{?_with_perl_extensions} \
     %{?_without_perl_extensions} \
