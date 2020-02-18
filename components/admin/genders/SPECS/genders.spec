@@ -25,6 +25,11 @@ BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: python3
 BuildRequires: python3-devel
+
+%if 0%{?rhel_version}
+BuildRequires: byacc
+%endi
+
 Provides: %{pname} = %{version}
 
 %description
