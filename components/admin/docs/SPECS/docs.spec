@@ -33,6 +33,7 @@ BuildRequires:  texlive-tcolorbox
 BuildRequires:  texlive-environ
 BuildRequires:  texlive-trimspaces
 BuildRequires:  texlive-amsmath
+BuildRequires:  texlive-latexmk
 %if 0%{?rhel}
 BuildRequires:  texlive-texconfig
 BuildRequires:  texlive-metafont
@@ -42,8 +43,9 @@ BuildRequires:  texlive-helvetic
 BuildRequires:  texlive-ec
 BuildRequires:  texlive-cm-super
 BuildRequires:  texlive-dvips
-%endif
 BuildRequires:  latexmk
+%endif
+
 BuildRequires:  git
 
 
