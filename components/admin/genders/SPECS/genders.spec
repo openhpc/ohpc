@@ -12,11 +12,11 @@
 %define pname genders
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 1.22
+Version: 1.27
 Release: 1%{?dist}
 Summary: Static cluster configuration database
 License: GPL
-Source: https://github.com/chaos/genders/releases/download/genders-1-22-1/%{pname}-%{version}.tar.gz
+Source: https://github.com/chaos/genders/releases/download/genders-1-27-3/%{pname}-%{version}.tar.gz
 Requires: perl
 Group:     %{PROJ_NAME}/admin
 URL: https://github.com/chaos/genders
