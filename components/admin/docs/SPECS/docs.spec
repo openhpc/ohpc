@@ -19,9 +19,7 @@ Group:          %{PROJ_NAME}/admin
 URL:            https://github.com/openhpc/ohpc
 Source0:        docs-ohpc.tar
 
-%if 0%{?suse_version}
-BuildRequires:  libstdc++6
-%endif
+BuildRequires:  git
 BuildRequires:  texlive-latex
 BuildRequires:  texlive-caption
 BuildRequires:  texlive-colortbl
@@ -33,7 +31,12 @@ BuildRequires:  texlive-tcolorbox
 BuildRequires:  texlive-environ
 BuildRequires:  texlive-trimspaces
 BuildRequires:  texlive-amsmath
+
+%if 0%{?suse_version}
+BuildRequires:  libstdc++6
 BuildRequires:  texlive-latexmk
+%endif
+
 %if 0%{?rhel}
 BuildRequires:  texlive-texconfig
 BuildRequires:  texlive-metafont
@@ -45,9 +48,6 @@ BuildRequires:  texlive-cm-super
 BuildRequires:  texlive-dvips
 BuildRequires:  latexmk
 %endif
-
-BuildRequires:  git
-
 
 
 %description 
