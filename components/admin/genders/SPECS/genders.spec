@@ -23,8 +23,8 @@ URL: https://github.com/chaos/genders
 BuildRequires: gcc-c++
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: python3
-BuildRequires: python3-devel
+BuildRequires: python2
+BuildRequires: python2-devel
 
 %if 0%{?rhel_version}
 BuildRequires: byacc
@@ -60,7 +60,7 @@ genders API that is compatible with earlier releases of genders
 
 %build
 
-%configure PYTHON=/usr/bin/python3 --program-prefix=%{?_program_prefix:%{_program_prefix}} \
+%configure PYTHON=/usr/bin/python2 --program-prefix=%{?_program_prefix:%{_program_prefix}} \
     --with-extension-destdir="$RPM_BUILD_ROOT" \
     %{?_with_perl_extensions} \
     %{?_without_perl_extensions} \
