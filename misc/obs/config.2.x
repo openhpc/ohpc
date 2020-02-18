@@ -38,9 +38,9 @@ compiler_families=["gnu9","intel"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 
-standalone = ["arm-compilers-devel","clustershell","cmake","conman","gnu-compilers",
-              "intel-compilers-devel","lmod","losf","ohpc-filesystem","papi","pbspro",
-	      "pmix","prun","slurm"]
+standalone = ["arm-compilers-devel","autoconf","automake","clustershell","cmake","conman",
+              "docs","examples","genders","gnu-compilers","intel-compilers-devel","lmod",
+	      "losf","mrsh","ohpc-filesystem","papi","pbspro","pmix","prun","slurm","test-suite"]
               
 
 # define (compiler dependent) packages

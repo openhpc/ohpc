@@ -18,16 +18,17 @@ permissions and limitations under the License.
 
   <service name="tar_scm">
     <param name="revision">!VERSION!</param>
-    <param name="include">tests</param>
+    <param name="include">docs</param>
+    <param name="include">*git*</param>
     
-    <param name="filename">tests</param>
+    <param name="filename">docs</param>
     <param name="version">ohpc</param>
     <param name="package-meta">yes</param>
     
     <param name="scm">git</param>
     <param name="url">https://github.com/openhpc/ohpc.git</param>
   </service>
-  
+
   <service name="tar_scm">
 
     <!-- Begin INPUT ######################################  -->
@@ -54,8 +55,8 @@ permissions and limitations under the License.
     <!--    extract for package tarball                      -->
 
     <param name="files">
-      */admin/test-suite/SPECS/*.spec
-      */admin/test-suite/SOURCES/*
+      */!GROUP!/!PACKAGE!/SPECS/*.spec
+      */!GROUP!/!PACKAGE!/SOURCES/*
       */OHPC_macros
     </param>
 
@@ -63,5 +64,7 @@ permissions and limitations under the License.
 
     <param name="archive">*git-infra*.tar</param>
   </service>
+
+
 
 </services>
