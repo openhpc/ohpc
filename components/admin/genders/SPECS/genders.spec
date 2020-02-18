@@ -16,10 +16,11 @@ Version: 1.27
 Release: 1%{?dist}
 Summary: Static cluster configuration database
 License: GPL
-Source: https://github.com/chaos/genders/releases/download/genders-1-27-3/%{pname}-%{version}.tar.gz
+Source:  https://github.com/chaos/genders/archive/genders-1-27-3.tar.gz
+Group:   %{PROJ_NAME}/admin
+URL:     https://github.com/chaos/genders
+
 Requires: perl
-Group:     %{PROJ_NAME}/admin
-URL: https://github.com/chaos/genders
 BuildRequires: gcc-c++
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
