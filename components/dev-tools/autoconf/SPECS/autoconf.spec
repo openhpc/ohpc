@@ -57,7 +57,7 @@ their use.
 cp /usr/lib/rpm/config.guess build-aux
 %endif
 
-./configure --prefix=%{install_path}
+./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %install
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
