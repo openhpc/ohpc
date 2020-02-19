@@ -315,4 +315,3 @@ license, GPL source files are included in this package.
 
 
 # ====================
-%changelog

@@ -68,7 +68,6 @@ cd %{_builddir}
 
 
 %files
-%defattr(-,root,root)
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO
 %license COPYING
 %if ! %{localipmi}
@@ -99,4 +98,3 @@ node boot image.
 
 
 # ====================
-%changelog

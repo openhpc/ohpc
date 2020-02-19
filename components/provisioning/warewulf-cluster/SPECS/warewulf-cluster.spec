@@ -66,4 +66,3 @@ cd %{_builddir}
 %{perl_vendorlib}/Warewulf/Module/Cli/*
 
 
-%changelog

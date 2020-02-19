@@ -76,7 +76,6 @@ cd %{_builddir}
 
 
 %files
-%defattr(-,root,root)
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO
 %license COPYING LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/vnfs.conf
@@ -86,4 +85,3 @@ cd %{_builddir}
 %{_mandir}/*
 
 
-%changelog

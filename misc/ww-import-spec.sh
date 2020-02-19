@@ -50,6 +50,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# ==================== Start main loop
 for WWMOD in cluster common ipmi provision vnfs; do
 echo "Creating warewulf-$WWMOD.$EXTENSION"
 MODDIR=$TMPDIR/$EXTRACT/$WWMOD
@@ -152,7 +153,12 @@ sed -i "s#^Source:.*#Group:   %{PROJ_NAME}/provisioning#" $SPECFILE
 # Need to add autogen script to build from pristine source
 sed -i "/^%build/a ./autogen.sh" $SPECFILE
 
+# Delete items not used by OHPC
+sed -i "/^%changelog/d" $SPECFILE
+sed -i "/^%defattr(-,root,root)/d" $SPECFILE
+
 done
+# ==================== End main loop
 
 rm -rf $TMPDIR
 
