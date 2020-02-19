@@ -11,8 +11,8 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-mpi-devel
-%define year 2019
-%global gnu_major_ver 8
+%define year 2020
+%global gnu_major_ver 9
 
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
@@ -22,12 +22,12 @@ License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/mpi-families
 BuildArch: x86_64
+Source1:   mod_generator_impi.sh
 AutoReq:   no
 
 #!BuildIgnore: post-build-checks
 
 Requires: prun%{PROJ_DELIM}
-Requires: intel-compilers-devel%{PROJ_DELIM}
 
 %description
 
@@ -39,6 +39,7 @@ suite.
 %build
 
 %install
+install -D -m755 %{SOURCE1}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_generator_impi.sh
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi
@@ -62,10 +63,7 @@ if [ $? -eq 1 ];then
 fi
 
 # Verify min version expectations
-# 2016 used 5.1 and 5.3 while 2017 and newer used 2017.x similar to the
-# associated compiler version.  Ether way, 2016 and newer translates to
-# impi package version >= 5.1
-min_ver="5.1"
+min_ver="2020"
 versions=""
 for file in ${versions_all}; do 
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
@@ -87,7 +85,7 @@ fi
 %post
 
 mpicc_subpath="linux/mpi/intel64/bin/mpicc"
-scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
+scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator_impi.sh
 
 versions=`rpm -qal | grep ${mpicc_subpath}$`
 
@@ -275,4 +273,5 @@ if [ "$1" = 0 ]; then
 fi
 
 %files
+%{OHPC_ADMIN}/compat/modulegen/mod_generator_impi.sh
 %{OHPC_MODULEDEPS}
