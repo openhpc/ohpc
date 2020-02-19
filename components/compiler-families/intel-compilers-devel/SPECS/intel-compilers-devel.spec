@@ -21,7 +21,7 @@ License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
-Source2:   OHPC_mod_generator.sh
+Source1:   mod_generator.sh
 
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
@@ -41,7 +41,7 @@ Studio compiler suite.
 
 %install
 
-install -D -m755 %{SOURCE2}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
+install -D -m755 %{SOURCE1}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
 
 
@@ -81,7 +81,7 @@ fi
 
 # Verify min version expectations
 
-min_ver="16.0"
+min_ver="20.0"
 versions=""
 for file in ${versions_all}; do
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
@@ -257,5 +257,5 @@ if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
 fi
 
 %files
-%{OHPC_ADMIN}
+%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 %{OHPC_MODULES}
