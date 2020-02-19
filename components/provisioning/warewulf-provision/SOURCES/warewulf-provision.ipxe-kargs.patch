@@ -1,13 +1,13 @@
---- a/lib/Warewulf/Provision/Pxe.pm	2017-10-16 10:59:00.000000000 -0700
-+++ b/lib/Warewulf/Provision/Pxe.pm	2017-10-16 11:01:37.000000000 -0700
-@@ -278,7 +278,9 @@
-                     print IPXE "set base http://$master_ipaddr/WW/bootstrap\n";
-                     print IPXE "initrd \${base}/$arch/$bootstrapid/initfs.gz\n";
-                     print IPXE "kernel \${base}/$arch/$bootstrapid/kernel ro initrd=initfs.gz wwhostname=$hostname ";
--                    print IPXE join(" ", @kargs) . " ";
-+                    if ($kargs[0]) {
-+                        print IPXE join(" ", @kargs) . " ";
-+                    }
-                     if ($console) {
-                         print IPXE "console=tty0 console=$console ";
-                     }
+--- a/lib/Warewulf/Provision/Pxe.pm	2019-06-17 14:01:40.000000000 -0700
++++ b/lib/Warewulf/Provision/Pxe.pm	2019-06-25 13:34:04.790845258 -0700
+@@ -282,7 +282,9 @@
+                         print IPXE "set base http://$master_ipaddr/WW/bootstrap\n";
+                         print IPXE "initrd \${base}/$arch/$bootstrapid/initfs.gz\n";
+                         print IPXE "kernel \${base}/$arch/$bootstrapid/kernel ro initrd=initfs.gz wwhostname=$hostname ";
+-                        print IPXE join(" ", @kargs) . " ";
++                        if ($kargs[0]) { 
++                            print IPXE join(" ", @kargs) . " ";
++                        }
+                         if ($console) {
+                             print IPXE "console=tty0 console=$console ";
+                         }
