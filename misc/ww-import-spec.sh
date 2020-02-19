@@ -68,9 +68,15 @@ EOF
 sed -n '/^Name:/,/^Source:/p' $MODDIR/warewulf-$WWMOD.spec >> $SPECFILE
 
 # Add patches found in patch directory
-PATCHES=($(find $WWDIR/SOURCES -type f -name *.patch -exec basename {} \;))
+PATCHES=($(find $WWDIR/SOURCES -type f -name *.patch -exec basename {} \; | sort))
 COUNT=${#PATCHES[@]}
+ARMON="-1"
+ARMOFF="-1"
 for (( i=0; i<$COUNT; i++ )); do
+    if [[ ${PATCHES[$i]} =~ '.aarch64.' ]]; then
+       [[ "$ARMON" == "-1" ]] && ARMON=$i
+       ARMOFF=$((i+1))
+    fi
     echo "Patch$i:  ${PATCHES[$i]}" >> $SPECFILE
 done
 
@@ -94,6 +100,8 @@ EOF
 
 # Apply patches found in patch directory
 for (( i=0; i<$COUNT; i++ )); do
+    [[ $i == $ARMON ]] && echo "%ifarch aarch64" >> $SPECFILE
+    [[ $i == $ARMOFF ]] && echo "%endif" >> $SPECFILE
     echo "%patch$i -p1" >> $SPECFILE
 done
 
