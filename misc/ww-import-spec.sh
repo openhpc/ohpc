@@ -117,6 +117,14 @@ sed -i "s/@WWNAME@/$WWMOD/g" $SPECFILE
 # Update the package name
 sed -i "s#^Name:.*#Name:    %\{pname\}%\{PROJ_DELIM\}#" $SPECFILE
 
+# Provide the original package, since non-OHPC parallel install is impossible 
+VERSION=$(awk -F '[[:space:]]+' '/^Version:/{print $2}' $MODDIR/warewulf-$WWMOD.spec)
+sed -i "/^Version:/a Provides: warewulf-$WWMOD = $VERSION" $SPECFILE
+
+# Update Tags to OHPC WW RPMs
+sed -i "/^\(Build\)\?Requires:/s/\bwarewulf-[^,\s]*\b/&\{PROJ_DELIM\}/g" $SPECFILE
+sed -i "/^Conflicts:/s/\bwarewulf-[^,\s]*\b/&\{PROJ_DELIM\}/g" $SPECFILE
+
 # Update the release and add the group definition
 sed -i "s#^Release:.*#Release: 1%\{\?dist\}#" $SPECFILE
 
@@ -124,7 +132,7 @@ sed -i "s#^Release:.*#Release: 1%\{\?dist\}#" $SPECFILE
 sed -i "s#^Source:.*#Group:   %\{PROJ_NAME\}/provisioning#" $SPECFILE
 
 # Need to add autogen script to build from pristine source
-sed -i "s#%build#%build\n./autogen.sh#" $SPECFILE
+sed -i "/%build/a ./autogen.sh" $SPECFILE
 
 done
 
