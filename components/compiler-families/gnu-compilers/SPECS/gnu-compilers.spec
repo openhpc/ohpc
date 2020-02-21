@@ -13,6 +13,8 @@
 %global gnu_version 9.2.0
 %global gnu_major_ver 9
 %global pname gnu9-compilers
+%global module_name gnu%{gnu_major_ver}
+%global easybuild_name GCC
 
 # Define subcomponent versions required for build
 
@@ -125,7 +127,10 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
+%{easybuild_metadata}
+
 %files
+%{OHPC_EB_META}/*cfg
 %{OHPC_MODULES}/gnu%{gnu_major_ver}/
 %dir %{OHPC_COMPILERS}/gcc
 %{install_path}
