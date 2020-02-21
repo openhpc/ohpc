@@ -57,3 +57,4 @@
  	rm -f rootfs/linuxrc rootfs/lib64/*.la rootfs/lib/*.la rootfs/usr/lib64/*.la rootfs/usr/lib/*.la
  	rm -rf rootfs/usr/share rootfs/usr/include rootfs/usr/lib/pkgconfig
  	find -type d \! -perm -u=w -exec chmod u+w {} \;
+

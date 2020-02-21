@@ -74,3 +74,4 @@
              } else {
                  &eprint("Bad characters in hwaddr: $hwaddr\n");
              }
+
