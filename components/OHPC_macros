@@ -25,6 +25,9 @@
 %global OHPC_MODULES    %{OHPC_PUB}/modulefiles
 %global OHPC_MODULEDEPS %{OHPC_PUB}/moduledeps
 %global OHPC_MPI_STACKS %{OHPC_PUB}/mpi
+%global OHPC_EASYBUILD  %{OHPC_PUB}/easybuild
+%global OHPC_EB_META    %{OHPC_EASYBUILD}/metadata
+%global OHPC_EB_ROBOT   %{OHPC_EASYBUILD}/robot
 %global OHPC_UTILS      %{OHPC_PUB}/utils
 %global debug_package   %{nil}
 %global dist            .ohpc.2.0.0
@@ -166,6 +169,17 @@ Requires:      %{python_prefix}
     %if 0%{?ohpc_mpi_dependent} == 1 \
         . %{OHPC_ADMIN}/ohpc/OHPC_setup_mpi %{mpi_family} \
     %endif \
+}
+
+%{!?module_name: %global module_name %{pname}}
+%{!?easybuild_name: %global easybuild_name %{pname}}
+
+%define easybuild_metadata %{expand:\
+	mkdir -p %{buildroot}%{OHPC_EB_META} \
+	echo "[%{module_name}/%{version}]" > %{buildroot}%{OHPC_EB_META}/%{module_name}-%{version}.cfg \
+	echo "name = %{easybuild_name}" >> %{buildroot}%{OHPC_EB_META}/%{module_name}-%{version}.cfg \
+	echo "version = %{version}" >> %{buildroot}%{OHPC_EB_META}/%{module_name}-%{version}.cfg \
+	echo "prefix = %{install_path}" >> %{buildroot}%{OHPC_EB_META}/%{module_name}-%{version}.cfg \
 }
 
 # Lua version
