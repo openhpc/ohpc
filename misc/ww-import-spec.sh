@@ -2,10 +2,17 @@
 
 # Script to build updated Warewulf specfile templates from the latest source 
 
-TARBALL="development.tar.gz"
-SOURCE="https://github.com/warewulf/warewulf3/archive/$TARBALL"
-EXTRACT="warewulf3-development"
-PWDIR=$(pwd)
+#SOURCE="https://github.com/warewulf/warewulf3/archive/$TARBALL"
+SOURCE=https://github.com/jcsiadal/warewulf3/tarball/specfixes
+
+if [ "$1" == "overwrite" ]; then
+	echo "Overwriting original specfiles"
+	EXTENSION="spec"
+else
+	EXTENSION="spec.new"
+fi
+
+TARBALL=$(basename $SOURCE)
 cd ..
 
 TMPDIR=$(mktemp -d)
@@ -33,8 +40,11 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+EXTRACT=$(tar --no-recursion --exclude='*/*' -tzf $TMPDIR/$TARBALL | tr -d /)
+
 # Extract it to a temp directory
-tar -zxf $TMPDIR/$TARBALL -C $TMPDIR
+mkdir -p $TMPDIR/$EXTRACT
+tar --strip-components=1 -zxf $TMPDIR/$TARBALL -C $TMPDIR/$EXTRACT
 if [ $? -ne 0 ]; then
     echo "Cannot extract Warewulf tarball."
     exit 1
@@ -44,28 +54,39 @@ for WWMOD in cluster common ipmi provision vnfs; do
 echo "Creating warewulf-$WWMOD.spec"
 MODDIR=$TMPDIR/$EXTRACT/$WWMOD
 WWDIR=$MISCDIR/../components/provisioning/warewulf-$WWMOD
-SPECFILE=$WWDIR/SPECS/warewulf-$WWMOD.spec.new
+SPECFILE=$WWDIR/SPECS/warewulf-$WWMOD.$EXTENSION
 cd $MODDIR
 
-# Generate the source specfiles
-./autogen.sh > /dev/null
+# Grab the package version from the autoconf file
+WWVER=$(awk -F ',' '/^AC_INIT/{print $2}' $MODDIR/configure.ac | tr -d "[:blank:]\[\]")
+
+# If overwrite is enabled, copy the source tarball
+if [ "$1" == "overwrite" ]; then
+     rm -f $WWDIR/SOURCES/$TARBALL
+     cp $TMPDIR/$TARBALL $WWDIR/SOURCES
+     echo "Tarball copied to warewulf-$WWMOD/SOURCES"
+fi
 
 # Create a new specfile, adding the standard header
 /bin/cat $MISCDIR/HEADER > $SPECFILE
 
-# Add OpenHPC macros
+# Add OpenHPC macros (avoiding escape characters)
 /bin/cat <<EOF >> $SPECFILE
 
 %include %{_sourcedir}/OHPC_macros
 
-%define dname @WWNAME@
+%define dname @WWMOD@
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
+%define wwextract @EXTRACT@
 
 EOF
 
+sed -i "s/@WWMOD@/$WWMOD/" $SPECFILE
+sed -i "s/@EXTRACT@/$EXTRACT/" $SPECFILE
+
 # Copy the source specfile starting at package name, through the Source tag. 
-sed -n '/^Name:/,/^Source:/p' $MODDIR/warewulf-$WWMOD.spec >> $SPECFILE
+sed -n '/^Name:/,/^Source:/p' $MODDIR/warewulf-$WWMOD.spec.in >> $SPECFILE
 
 # Add patches found in patch directory
 PATCHES=($(find $WWDIR/SOURCES -type f -name *.patch -exec basename {} \; | sort))
@@ -84,7 +105,7 @@ done
 sed -i "s#^Source:.*#Source0: $SOURCE#" $SPECFILE
 
 # Copy the source specfile from the Source tag, through the prep section. 
-sed -n '/^Source:/,/^%prep/p' $MODDIR/warewulf-$WWMOD.spec >> $SPECFILE
+sed -n '/^Source:/,/^%prep/p' $MODDIR/warewulf-$WWMOD.spec.in >> $SPECFILE
 
 # Create a new prep section.
 # Manually perform a CD and clean of the new build directory
@@ -93,8 +114,8 @@ sed -n '/^Source:/,/^%prep/p' $MODDIR/warewulf-$WWMOD.spec >> $SPECFILE
 # Then run the setup macro, disabling automatic pre-cleaning.
 /bin/cat <<EOF >> $SPECFILE
 cd %{_builddir}
-%{__rm} -rf %{name}-%{version} @WWEXTRACT@
-%{__ln_s} @WWEXTRACT@/%{dname} %{name}-%{version}
+%{__rm} -rf %{name}-%{version} %{wwextract}
+%{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
 %setup -q -D
 EOF
 
@@ -108,33 +129,29 @@ done
 printf "\n\n" >> $SPECFILE
 
 # Copy the remaining specfile contents, starting at the build section
-sed -n '/^%build/,/^%changelog/p' $MODDIR/warewulf-$WWMOD.spec >> $SPECFILE
-
-# Replace the placeholders from the literal text
-sed -i "s/@WWEXTRACT@/$EXTRACT/g" $SPECFILE
-sed -i "s/@WWNAME@/$WWMOD/g" $SPECFILE
+sed -n '/^%build/,/^%changelog/p' $MODDIR/warewulf-$WWMOD.spec.in >> $SPECFILE
 
 # Update the package name
-sed -i "s#^Name:.*#Name:    %\{pname\}%\{PROJ_DELIM\}#" $SPECFILE
+sed -i "s#^Name:.*#Name:    %\{pname\}%{PROJ_DELIM}#" $SPECFILE
 
-# Provide the original package, since non-OHPC parallel install is impossible 
-VERSION=$(awk -F '[[:space:]]+' '/^Version:/{print $2}' $MODDIR/warewulf-$WWMOD.spec)
-sed -i "/^Version:/a Provides: warewulf-$WWMOD = $VERSION" $SPECFILE
+# Update the version; also provide original package for dependencies,
+# since only 1 WW install can exist on a system.
+sed -i "s#^Version:.*#Version: $WWVER\nProvides: warewulf-$WWMOD = $WWVER#" $SPECFILE
 
 # Update Tags to OHPC WW RPMs
-sed -i "/^\(Build\)\?Requires:/s/\bwarewulf-[^,\s]*\b/&\{PROJ_DELIM\}/g" $SPECFILE
-sed -i "/^Conflicts:/s/\bwarewulf-[^,\s]*\b/&\{PROJ_DELIM\}/g" $SPECFILE
+sed -i "/^\(Build\)\?Requires:/s/\bwarewulf-[^,\s]*\b/&%{PROJ_DELIM}/g" $SPECFILE
+sed -i "/^Conflicts:/s/\bwarewulf-[^,\s]*\b/&%{PROJ_DELIM}/g" $SPECFILE
 
 # Update the release and add the group definition
-sed -i "s#^Release:.*#Release: 1%\{\?dist\}#" $SPECFILE
+sed -i "s#^Release:.*#Release: 1%{?dist}#" $SPECFILE
 
 # Replace the duplicate source entry with the group definition
-sed -i "s#^Source:.*#Group:   %\{PROJ_NAME\}/provisioning#" $SPECFILE
+sed -i "s#^Source:.*#Group:   %{PROJ_NAME}/provisioning#" $SPECFILE
 
 # Need to add autogen script to build from pristine source
-sed -i "/%build/a ./autogen.sh" $SPECFILE
+sed -i "/^%build/a ./autogen.sh" $SPECFILE
 
 done
 
-cd $PWDIR
 rm -rf $TMPDIR
+
