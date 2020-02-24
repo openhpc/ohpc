@@ -10,18 +10,24 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define pname warewulf-common
 %define dname common
+%define pname warewulf-%{dname}
+%define wwsrvdir /srv
+%define wwextract warewulf3-development
 
 Name:    %{pname}%{PROJ_DELIM}
-Summary: Scalable systems management suite for high performance clusters
 Version: 3.9.0
+Provides: warewulf-common = 3.9.0
 Release: 1%{?dist}
+Summary: Scalable systems management suite for high performance clusters
 License: US Dept. of Energy (BSD-like)
-URL:     http://warewulf.lbl.gov/
+URL: http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
+Patch0:  warewulf-common.mysql_r1978.patch
+Patch1:  warewulf-common.rhel_service.patch
+Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
-Conflicts: warewulf < 3.9
+Conflicts: warewulf < 3
 BuildArch: noarch
 BuildRequires: autoconf, automake
 Requires: perl(DBD::mysql), perl(DBD::Pg), perl(DBD::SQLite), perl(JSON::PP)
@@ -56,22 +62,24 @@ handlers and a basic command line interface.
 
 
 %prep
-# Create a symlink from the default setup directory to the correct subdirectory
-# under the extracted tarball. [jcsiadal-2/18/20] 
 cd %{_builddir}
-%{__rm} -rf %{name}-%{version} warewulf3-develpment
-%{__ln_s} warewulf3-development/%{dname} %{name}-%{version}
-%setup -q -D 
+%{__rm} -rf %{name}-%{version} %{wwextract}
+%{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
+%setup -q -D
+%patch0 -p1
+%patch1 -p1
 
 
 %build
 ./autogen.sh
-%configure
+WAREWULF_STATEDIR=%{wwsrvdir}
+%configure --localstatedir=%{wwsrvdir}
 %{__make} %{?mflags}
 
 
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
+
 
 %pre
 /usr/sbin/groupadd -r warewulf >/dev/null 2>&1 || :

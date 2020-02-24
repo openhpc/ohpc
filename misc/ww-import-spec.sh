@@ -2,9 +2,9 @@
 
 # Script to build updated Warewulf specfile templates from the latest source 
 
-#SOURCE="https://github.com/warewulf/warewulf3/archive/$TARBALL"
-SOURCE=https://github.com/jcsiadal/warewulf3/tarball/specfixes
+SOURCE="https://github.com/warewulf/warewulf3/archive/development.tar.gz"
 
+# Option to replace everything in the source tree.
 if [ "$1" == "overwrite" ]; then
 	echo "Overwriting original specfiles"
 	EXTENSION="spec"
@@ -30,7 +30,7 @@ fi
 if ! [ -d $MISCDIR/../components/provisioning/warewulf-common ]; then
     echo "Cannot find Warewulf component directory."
     exit 1
-else echo "Warewulf found at $WWDIR"
+else echo "Warewulf found at $MISCDIR/../components/provisioning/warewulf-common"
 fi
 
 # Download latest Warewulf tarball
@@ -51,7 +51,7 @@ if [ $? -ne 0 ]; then
 fi
 
 for WWMOD in cluster common ipmi provision vnfs; do
-echo "Creating warewulf-$WWMOD.spec"
+echo "Creating warewulf-$WWMOD.$EXTENSION"
 MODDIR=$TMPDIR/$EXTRACT/$WWMOD
 WWDIR=$MISCDIR/../components/provisioning/warewulf-$WWMOD
 SPECFILE=$WWDIR/SPECS/warewulf-$WWMOD.$EXTENSION
@@ -139,8 +139,9 @@ sed -i "s#^Name:.*#Name:    %\{pname\}%{PROJ_DELIM}#" $SPECFILE
 sed -i "s#^Version:.*#Version: $WWVER\nProvides: warewulf-$WWMOD = $WWVER#" $SPECFILE
 
 # Update Tags to OHPC WW RPMs
-sed -i "/^\(Build\)\?Requires:/s/\bwarewulf-[^,\s]*\b/&%{PROJ_DELIM}/g" $SPECFILE
-sed -i "/^Conflicts:/s/\bwarewulf-[^,\s]*\b/&%{PROJ_DELIM}/g" $SPECFILE
+VALIDTEXT='warewulf-\(cluster\|common\|ipmi\|provision\|vnfs\)'
+sed -i "/^\(Build\)\?Requires:/s/$VALIDTEXT/&%{PROJ_DELIM}/g" $SPECFILE
+sed -i "/^Conflicts:/s/$VALIDTEXT/&%{PROJ_DELIM}/g" $SPECFILE
 
 # Update the release and add the group definition
 sed -i "s#^Release:.*#Release: 1%{?dist}#" $SPECFILE
