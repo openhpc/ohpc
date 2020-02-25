@@ -18,7 +18,7 @@
 
 Summary:   Toolsuite of command line applications for performance oriented programmers
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   5.0.0
+Version:   5.0.1
 Release:   1%{?dist}
 License:   GPLv3
 Group:     %{PROJ_NAME}/perf-tools
