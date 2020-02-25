@@ -402,17 +402,24 @@ class ohpc_obs_tool(object):
         fp.writelines("<build>\n")
 
         # check skip pattern to define build architectures
+        numEnabled = 0
         if self.disableBuild(package,'aarch64'):
             logging.warn(" " * pad + "--> disabling aarch64 build per pattern match request")
             fp.writelines("<disable arch=\"aarch64\"/>\n")
         else:
             fp.writelines("<enable arch=\"aarch64\"/>\n")
+            numEnabled += 1
 
         if self.disableBuild(package,'x86_64'):
             logging.warn(" " * pad + "--> disabling x86_64 build per pattern match request")
             fp.writelines("<disable arch=\"x86_64\"/>\n")
         else:
             fp.writelines("<enable arch=\"x86_64\"/>\n")
+            numEnabled += 1
+
+        if numEnabled == 0:
+            logging.warn(" " * pad + "--> no remaining architectures enabled, skipping package add")
+            return
 
         fp.writelines("</build>\n")
         fp.writelines("</package>\n")
