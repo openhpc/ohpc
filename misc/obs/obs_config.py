@@ -598,6 +598,7 @@ def main():
     parser.add_argument("--no-dryrun",dest='dryrun',help="flag to disable dryrun mode and execute obs commands",action="store_false")
     parser.add_argument("--version"   ,help="version in progress",type=str)
     parser.add_argument("--no-lock",dest='lock',help="do not lock new build additions",action="store_false")
+    parser.add_argument("--package",help="check OBS config for provided package only",type=str)
 
     parser.set_defaults(dryrun=True)
     parser.set_defaults(lock=True)
@@ -625,6 +626,9 @@ def main():
         logging.info("--no-lock command line arg requested: will not lock new builds\n")
         obs.overrideLock()
 
+    if args.package:
+        logging.info("checking on single package only: %s" % args.package)
+
     # query components defined in existing OBS project
     obsPackages = obs.queryOBSPackages()
 
@@ -646,6 +650,14 @@ def main():
 
     # (2) compiler dependent packages
     for package in components['comp_dep']:
+
+        # check if override package is desired
+        if args.package and (package != args.package):
+            logging.info("skipping %s" % package)
+            continue
+        else:
+            logging.info("desired overide package %s is compiler dependent" % package)
+
         ptype     = "compiler dep"
         parent    = package + '-' + obs.getParentCompiler()
 
