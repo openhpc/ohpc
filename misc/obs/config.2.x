@@ -32,9 +32,11 @@ mpi-families=["mpich","mvapich2","openmpi"]
 
 # define patterns for a given arch in which to disable builds
 skip_aarch=["-intel\\b","lustre-client","-impi\\b","-mvapich2\\b","likwid-gnu","geopm",
-            "intel-compilers-devel","impi-devel"]
+            "intel-compilers-devel","impi-devel","mvapich2","openblas-arm1"]
+skip_x86  = ["-arm1"]
+
 # define compiler/MPI families: first entry in list is defined to be parent in OBS
-compiler_families=["gnu9","intel"]
+compiler_families=["gnu9","intel","arm1"]
 mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 
@@ -52,4 +54,4 @@ R_compiler=["gnu9"]
 gsl_compiler=["gnu9"]
 #opencoarrays_compiler=["gnu9"]
 
-#mpi_dependent = ["!boost","!dimemas","!extrae","!geopm","!mumps","!opencoarrays","!omb","!petsc","!phdf5","!scorep","!slepc"]
+mpi_dependent = ["boost","!dimemas","!extrae","!geopm","!mumps","!opencoarrays","!omb","!petsc","!phdf5","!scorep","!slepc"]
