@@ -72,7 +72,7 @@ cp /usr/lib/rpm/config.guess bin
 	    --enable-cxx             \
 	    --enable-fortran2003    || { cat config.log && exit 1; }
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif
