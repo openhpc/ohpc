@@ -23,6 +23,9 @@ import coloredlogs
 obsurl="https://obs.openhpc.community"
 configFile="config.2.x"
 
+# define known compiler/mpi combos to skip
+skip_combos = ["arm1-impi","arm1-mvapich2"]
+
 #---
 # Simple error wrapper to include exit
 def ERROR(output):
@@ -46,6 +49,8 @@ class ohpc_obs_tool(object):
         self.parentMPI      = None
         self.dryRun         = True
         self.buildsToCancel = []
+
+
 
         # parse version to derive obs-specific version info
         vparse = VersionInfo.parse(self.vip)
@@ -700,7 +705,7 @@ def main():
         parent    = package + '-' + obs.getParentCompiler() + '-' + obs.getParentMPI()
         compilers = obs.queryCompilers(package)
         mpiFams   = obs.queryMPIFamilies(package)
-        
+
         # check on parent first (it must exist before any children are linked)
         if parent in obsPackages:
             logging.info("%27s (%13s): present in OBS" % (parent,ptype))
@@ -714,6 +719,10 @@ def main():
                 child = package + '-' + compiler + '-' + mpi;
                 if (child == parent):
                     logging.debug("...skipping parent package %s" % child)
+                    continue
+
+                combo = compiler + "-" + mpi
+                if combo in skip_combos:
                     continue
                 
                 if child in obsPackages:
