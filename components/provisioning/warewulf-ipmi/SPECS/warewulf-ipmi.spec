@@ -13,7 +13,8 @@
 %define dname ipmi
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define wwextract warewulf3-development
+%define develSHA f5bdc3c9de534472323ef7ebe135c8c2451dc3ca
+%define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 3.9.0
@@ -22,12 +23,13 @@ Release: 1%{?dist}
 Summary: Warewulf - IPMI support
 License: US Dept. of Energy (BSD-like)
 URL: http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Conflicts: warewulf < 3
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
+
 
 %if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000
 %global localipmi 1
@@ -38,7 +40,10 @@ Requires: ipmitool
 %global localipmi 0
 %endif
 
-BuildRequires: warewulf-common%{PROJ_DELIM} openssl-devel
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: warewulf-common%{PROJ_DELIM}
+BuildRequires: openssl-devel
 
 %description
 Warewulf is an operating system management toolkit designed to facilitate
@@ -68,8 +73,7 @@ cd %{_builddir}
 
 
 %files
-%doc AUTHORS ChangeLog INSTALL NEWS README TODO
-%license COPYING
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING
 %if ! %{localipmi}
 %{_libexecdir}/warewulf/ipmitool
 %endif
