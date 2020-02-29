@@ -35,6 +35,8 @@ ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
 Conflicts: warewulf < 3
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel, libacl-devel, libattr-devel
 BuildRequires: libuuid-devel, device-mapper-devel, xz-devel
