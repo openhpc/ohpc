@@ -13,16 +13,16 @@
 %define dname cluster
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
+%define develSHA f5bdc3c9de534472323ef7ebe135c8c2451dc3ca
 %define wwextract warewulf3-development
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 3.9.0
-Provides: warewulf-cluster = 3.9.0
 Release: 1%{?dist}
 Summary: Warewulf - HPC cluster configuration
 License: US Dept. of Energy (BSD-like)
-URL: http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
+URL:     http://warewulf.lbl.gov/
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}, warewulf-provision%{PROJ_DELIM}
@@ -58,8 +58,7 @@ cd %{_builddir}
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS ChangeLog INSTALL NEWS README TODO
-%license LICENSE COPYING
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO LICENSE COPYING
 %{_sysconfdir}/profile.d/*
 %{_bindir}/*
 %{_libexecdir}/warewulf/wwinit/*
