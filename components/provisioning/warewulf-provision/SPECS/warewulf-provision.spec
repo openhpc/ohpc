@@ -13,16 +13,16 @@
 %define dname provision
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
+%define develSHA f5bdc3c9de534472323ef7ebe135c8c2451dc3ca
 %define wwextract warewulf3-development
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 3.9.0
-Provides: warewulf-provision = 3.9.0
 Release: 1%{?dist}
 Summary: Warewulf - System provisioning core
 License: US Dept. of Energy (BSD-like) and BSD-3 Clause
-URL: http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
+URL:     http://warewulf.lbl.gov/
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Patch0:  warewulf-provision.bin-file.patch
 Patch1:  warewulf-provision.ipxe-kargs.patch
 Patch2:  warewulf-provision.parted_libdir.patch
@@ -132,8 +132,7 @@ fi
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS ChangeLog INSTALL NEWS README TODO
-%license COPYING LICENSE
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf
 %config(noreplace) %{_sysconfdir}/warewulf/defaults/provision.conf
