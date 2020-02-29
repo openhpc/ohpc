@@ -118,6 +118,12 @@ cd %{_builddir}
 
 %build
 ./autogen.sh
+
+# update search path for suse to resolve mkfs binaries (karl@oden.utexas.edu)
+%if 0%{?suse_version}
+export PATH=/usr/sbin:$PATH
+%endif
+
 %configure --localstatedir=%{wwsrvdir} %{?CONF_FLAGS} %{?CROSS_FLAG}
 %{__make} %{?mflags}
 
