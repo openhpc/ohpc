@@ -77,7 +77,7 @@ BuildRequires: gcc-x86_64-linux-gnu
 # New RHEL and SLE include the required FS tools
 %if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000
 %global localtools 1
-BuildRequires: parted, e2fsprogs
+BuildRequires: parted, e2fsprogs bsdtar
 Requires: parted, autofs, e2fsprogs
 BuildRequires: libarchive.so.13()(64bit)
 Requires: libarchive.so.13()(64bit)
