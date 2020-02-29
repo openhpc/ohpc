@@ -110,6 +110,11 @@ fi
 %{_libexecdir}/warewulf/wwinit
 %{perl_vendorlib}/*
 
+# 06/14/14 karl.w.schulz@intel.com - include required dir for SUSE
+%if 0%{?suse_version}
+%dir %{_libexecdir}/warewulf/
+%endif
+
 
 # ====================
 %package localdb
