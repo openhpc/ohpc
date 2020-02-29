@@ -95,8 +95,7 @@ fi
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS ChangeLog INSTALL NEWS README TODO
-%license COPYING LICENSE
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/defaults/
 %attr(0444, root, warewulf) %{_libexecdir}/warewulf/wwinit/functions
