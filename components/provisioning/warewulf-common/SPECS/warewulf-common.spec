@@ -13,15 +13,15 @@
 %define dname common
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define wwextract warewulf3-development
+%define develSHA f5bdc3c9de534472323ef7ebe135c8c2451dc3ca
+%define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 3.9.0
-Provides: warewulf-common = 3.9.0
 Release: 1%{?dist}
 Summary: Scalable systems management suite for high performance clusters
 License: US Dept. of Energy (BSD-like)
-URL: http://warewulf.lbl.gov/
+URL:     http://warewulf.lbl.gov/
 Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
 Patch0:  warewulf-common.mysql_r1978.patch
 Patch1:  warewulf-common.rhel_service.patch
