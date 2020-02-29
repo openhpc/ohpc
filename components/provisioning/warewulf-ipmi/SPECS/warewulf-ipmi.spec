@@ -98,7 +98,10 @@ Warewulf IPMI-initramfs adds IPMI configuration to the %{_arch} cluster
 node boot image.
 
 %files initramfs-%{_arch}
-%{wwsrvdir}/warewulf/initramfs/%{_arch}/capabilities/setup-ipmi
+%dir %{wwsrvdir}/warewulf
+%dir %{wwsrvdir}/warewulf/initramfs
+%{wwsrvdir}/warewulf/initramfs/%{_arch}/*
+#{wwsrvdir}/warewulf/initramfs/%{_arch}/capabilities/setup-ipmi
 
 
 # ====================
