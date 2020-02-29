@@ -13,16 +13,16 @@
 %define dname vnfs
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define wwextract warewulf3-development
+%define develSHA f5bdc3c9de534472323ef7ebe135c8c2451dc3ca
+%define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 3.9.0
-Provides: warewulf-vnfs = 3.9.0
 Release: 1%{?dist}
 Summary: Warewulf - Virtual Node File System support
 License: US Dept. of Energy (BSD-like)
-URL: http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
+URL:     http://warewulf.lbl.gov/
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Patch0:  warewulf-vnfs.aarch64.bootstrap.patch
 Patch1:  warewulf-vnfs.aarch64.bootstrap_usb.patch
 Patch2:  warewulf-vnfs.bootstrap_msr.patch
@@ -33,6 +33,9 @@ Patch6:  warewulf-vnfs.utf8.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
+Requires: pigz
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 BuildArch: noarch
@@ -76,8 +79,7 @@ cd %{_builddir}
 
 
 %files
-%doc AUTHORS ChangeLog INSTALL NEWS README TODO
-%license COPYING LICENSE
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/vnfs.conf
 %config(noreplace) %{_sysconfdir}/warewulf/bootstrap.conf
 %{_libexecdir}/warewulf/*
