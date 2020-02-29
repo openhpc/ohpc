@@ -14,7 +14,7 @@
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
 %define develSHA f5bdc3c9de534472323ef7ebe135c8c2451dc3ca
-%define wwextract warewulf3-development
+%define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 3.9.0
