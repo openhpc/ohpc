@@ -26,6 +26,8 @@ Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}, warewulf-provision%{PROJ_DELIM}
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
 
