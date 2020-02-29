@@ -22,7 +22,7 @@ Release: 1%{?dist}
 Summary: Scalable systems management suite for high performance clusters
 License: US Dept. of Energy (BSD-like)
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Patch0:  warewulf-common.mysql_r1978.patch
 Patch1:  warewulf-common.rhel_service.patch
 Group:   %{PROJ_NAME}/provisioning
