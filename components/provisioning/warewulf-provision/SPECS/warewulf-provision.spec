@@ -283,7 +283,7 @@ of groups of homogenous systems.
 This package provides bundled iPXE binaries for x86_64.
 
 %files server-ipxe-x86_64
-%{dir} %{_datadir}/warewulf/ipxe
+%dir %{_datadir}/warewulf/ipxe
 %{_datadir}/warewulf/ipxe/bin-i386-efi
 %{_datadir}/warewulf/ipxe/bin-i386-pcbios
 %{_datadir}/warewulf/ipxe/bin-x86_64-efi
