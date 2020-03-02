@@ -149,6 +149,8 @@ fi
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf
 %config(noreplace) %{_sysconfdir}/warewulf/defaults/provision.conf
+%dir %{_sysconfdir}/warewulf/filesystem
+%dir %{_sysconfdir}/warewulf/filesystem/examples
 %{_sysconfdir}/warewulf/filesystem/examples/*.cmds
 %{_mandir}/*
 %{perl_vendorlib}/Warewulf/Bootstrap.pm
@@ -180,6 +182,8 @@ This package includes tools and files to create an initramfs
 image and to provide boot capability for %{_arch} architecture.
 
 %files initramfs-%{_arch}
+%dir %{wwsrvdir}/warewulf
+%dir %{wwsrvdir}/warewulf/initramfs
 %{wwsrvdir}/warewulf/initramfs/%{_arch}
 
 
@@ -252,6 +256,8 @@ fi
 %defattr(-, root, root)
 %config(noreplace) %{_sysconfdir}/warewulf/dhcpd-template.conf
 %config(noreplace) %{_sysconfdir}/warewulf/dnsmasq-template.conf
+%dir %{_sysconfdir}/%{httpsvc}
+%dir %{_sysconfdir}/%{httpsvc}/conf.d
 %config(noreplace) %{_sysconfdir}/%{httpsvc}/conf.d/warewulf-httpd.conf
 %{_bindir}/*
 %attr(0750, root, %{httpgrp}) %{_libexecdir}/warewulf/cgi-bin/
@@ -277,6 +283,7 @@ of groups of homogenous systems.
 This package provides bundled iPXE binaries for x86_64.
 
 %files server-ipxe-x86_64
+%{dir} %{_datadir}/warewulf/ipxe
 %{_datadir}/warewulf/ipxe/bin-i386-efi
 %{_datadir}/warewulf/ipxe/bin-i386-pcbios
 %{_datadir}/warewulf/ipxe/bin-x86_64-efi
@@ -323,6 +330,8 @@ license, GPL source files are included in this package.
 
 %files gpl_sources
 %defattr(-, root, root)
+%dir %{_prefix}/src/warewulf
+%dir %{_prefix}/src/warewulf/3rd_party
 %{_prefix}/src/warewulf/3rd_party/GPL/
 
 
