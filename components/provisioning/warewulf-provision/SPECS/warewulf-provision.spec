@@ -305,6 +305,7 @@ of groups of homogenous systems.
 This package provides bundled iPXE binaries for aarch64.
 
 %files server-ipxe-aarch64
+%dir %{_datadir}/warewulf/ipxe
 %{_datadir}/warewulf/ipxe/bin-arm64-efi
 %endif
 
