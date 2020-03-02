@@ -42,6 +42,11 @@ BuildRequires: libselinux-devel, libacl-devel, libattr-devel
 BuildRequires: libuuid-devel, device-mapper-devel, xz-devel
 BuildRequires: libtirpc-devel
 
+# charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf
+%if 0%{?suse_version}
+BuildRequires: openSUSE-release
+%endif
+
 %if 0%{?rhel:1}
 %global httpsvc httpd
 %global httpgrp apache
