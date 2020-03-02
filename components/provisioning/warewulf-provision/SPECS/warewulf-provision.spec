@@ -13,16 +13,16 @@
 %define dname provision
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define wwextract warewulf3-development
+%define develSHA f5bdc3c9de534472323ef7ebe135c8c2451dc3ca
+%define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 3.9.0
-Provides: warewulf-provision = 3.9.0
 Release: 1%{?dist}
 Summary: Warewulf - System provisioning core
 License: US Dept. of Energy (BSD-like) and BSD-3 Clause
-URL: http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
+URL:     http://warewulf.lbl.gov/
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Patch0:  warewulf-provision.bin-file.patch
 Patch1:  warewulf-provision.ipxe-kargs.patch
 Patch2:  warewulf-provision.parted_libdir.patch
@@ -35,10 +35,17 @@ ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
 Conflicts: warewulf < 3
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 BuildRequires: libselinux-devel, libacl-devel, libattr-devel
 BuildRequires: libuuid-devel, device-mapper-devel, xz-devel
 BuildRequires: libtirpc-devel
+
+# charles.r.baird@intel.com - required to determine where to stick warewulf-httpd.conf
+%if 0%{?suse_version}
+BuildRequires: openSUSE-release
+%endif
 
 %if 0%{?rhel:1}
 %global httpsvc httpd
@@ -75,7 +82,7 @@ BuildRequires: gcc-x86_64-linux-gnu
 # New RHEL and SLE include the required FS tools
 %if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000
 %global localtools 1
-BuildRequires: parted, e2fsprogs
+BuildRequires: parted, e2fsprogs bsdtar
 Requires: parted, autofs, e2fsprogs
 BuildRequires: libarchive.so.13()(64bit)
 Requires: libarchive.so.13()(64bit)
@@ -116,6 +123,12 @@ cd %{_builddir}
 
 %build
 ./autogen.sh
+
+# update search path for suse to resolve mkfs binaries (karl@oden.utexas.edu)
+%if 0%{?suse_version}
+export PATH=/usr/sbin:$PATH
+%endif
+
 %configure --localstatedir=%{wwsrvdir} %{?CONF_FLAGS} %{?CROSS_FLAG}
 %{__make} %{?mflags}
 
@@ -132,11 +145,12 @@ fi
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS ChangeLog INSTALL NEWS README TODO
-%license COPYING LICENSE
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE
 %config(noreplace) %{_sysconfdir}/warewulf/provision.conf
 %config(noreplace) %{_sysconfdir}/warewulf/livesync.conf
 %config(noreplace) %{_sysconfdir}/warewulf/defaults/provision.conf
+%dir %{_sysconfdir}/warewulf/filesystem
+%dir %{_sysconfdir}/warewulf/filesystem/examples
 %{_sysconfdir}/warewulf/filesystem/examples/*.cmds
 %{_mandir}/*
 %{perl_vendorlib}/Warewulf/Bootstrap.pm
@@ -168,6 +182,8 @@ This package includes tools and files to create an initramfs
 image and to provide boot capability for %{_arch} architecture.
 
 %files initramfs-%{_arch}
+%dir %{wwsrvdir}/warewulf
+%dir %{wwsrvdir}/warewulf/initramfs
 %{wwsrvdir}/warewulf/initramfs/%{_arch}
 
 
@@ -240,6 +256,8 @@ fi
 %defattr(-, root, root)
 %config(noreplace) %{_sysconfdir}/warewulf/dhcpd-template.conf
 %config(noreplace) %{_sysconfdir}/warewulf/dnsmasq-template.conf
+%dir %{_sysconfdir}/%{httpsvc}
+%dir %{_sysconfdir}/%{httpsvc}/conf.d
 %config(noreplace) %{_sysconfdir}/%{httpsvc}/conf.d/warewulf-httpd.conf
 %{_bindir}/*
 %attr(0750, root, %{httpgrp}) %{_libexecdir}/warewulf/cgi-bin/
@@ -265,6 +283,7 @@ of groups of homogenous systems.
 This package provides bundled iPXE binaries for x86_64.
 
 %files server-ipxe-x86_64
+%dir %{_datadir}/warewulf/ipxe
 %{_datadir}/warewulf/ipxe/bin-i386-efi
 %{_datadir}/warewulf/ipxe/bin-i386-pcbios
 %{_datadir}/warewulf/ipxe/bin-x86_64-efi
@@ -286,6 +305,7 @@ of groups of homogenous systems.
 This package provides bundled iPXE binaries for aarch64.
 
 %files server-ipxe-aarch64
+%dir %{_datadir}/warewulf/ipxe
 %{_datadir}/warewulf/ipxe/bin-arm64-efi
 %endif
 
@@ -311,6 +331,8 @@ license, GPL source files are included in this package.
 
 %files gpl_sources
 %defattr(-, root, root)
+%dir %{_prefix}/src/warewulf
+%dir %{_prefix}/src/warewulf/3rd_party
 %{_prefix}/src/warewulf/3rd_party/GPL/
 
 

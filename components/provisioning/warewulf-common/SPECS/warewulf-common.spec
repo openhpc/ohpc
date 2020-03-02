@@ -13,16 +13,16 @@
 %define dname common
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define wwextract warewulf3-development
+%define develSHA f5bdc3c9de534472323ef7ebe135c8c2451dc3ca
+%define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
 Version: 3.9.0
-Provides: warewulf-common = 3.9.0
 Release: 1%{?dist}
 Summary: Scalable systems management suite for high performance clusters
 License: US Dept. of Energy (BSD-like)
-URL: http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/development.tar.gz
+URL:     http://warewulf.lbl.gov/
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
 Patch0:  warewulf-common.mysql_r1978.patch
 Patch1:  warewulf-common.rhel_service.patch
 Group:   %{PROJ_NAME}/provisioning
@@ -95,8 +95,7 @@ fi
 
 %files
 %defattr(-, root, root)
-%doc AUTHORS ChangeLog INSTALL NEWS README TODO
-%license COPYING LICENSE
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/defaults/
 %attr(0444, root, warewulf) %{_libexecdir}/warewulf/wwinit/functions
@@ -109,6 +108,11 @@ fi
 %{_datadir}/warewulf/
 %{_libexecdir}/warewulf/wwinit
 %{perl_vendorlib}/*
+
+# 06/14/14 karl.w.schulz@intel.com - include required dir for SUSE
+%if 0%{?suse_version}
+%dir %{_libexecdir}/warewulf/
+%endif
 
 
 # ====================

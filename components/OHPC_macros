@@ -45,8 +45,8 @@ Source42: OHPC_macros
 # Supports build on clone distros without requiring distro-specific
 # macros defined in each specfile.
 %if 0%{!?rhel_version:1}
-%{?centos_version: %global rhel_version=%{centos_version}}
-%{?scientificlinux_version: %global rhel_version=%{scientific_version}}
+%{?centos_version:%global rhel_version %{centos_version}}
+%{?scientificlinux_version:%global rhel_version %{scientific_version}}
 %if 0%{?rhel} == 7
     # OBS defines rhel_version to 700 for RHEL7
     %global rhel_version 700
