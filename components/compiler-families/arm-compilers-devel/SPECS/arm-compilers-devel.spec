@@ -9,7 +9,7 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%global pname arm-compilers-devel
+%global pname arm1-compilers-devel
 
 Summary:   OpenHPC compatibility package for Arm HPC compiler
 Name:      %{pname}%{PROJ_DELIM}
@@ -31,7 +31,7 @@ Provides OpenHPC-style module compatibility for use with the Arm HPC compiler su
 
 %install
 
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/arm
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/arm1
 
 
 %pre
@@ -111,7 +111,7 @@ else
 fi
 
 # Module header
-%{__cat} << EOF > %{OHPC_MODULES}/arm/compat
+%{__cat} << EOF > %{OHPC_MODULES}/arm1/compat
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -142,8 +142,8 @@ EOF
 
 if [ $1 -eq 0 ];then
 
-    if [ -s %{OHPC_MODULES}/arm/compat ];then
-	rm -f %{OHPC_MODULES}/arm/compat 
+    if [ -s %{OHPC_MODULES}/arm1/compat ];then
+	rm -f %{OHPC_MODULES}/arm1/compat
     fi
 fi
 
