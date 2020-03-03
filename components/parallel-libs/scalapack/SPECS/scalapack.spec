@@ -72,8 +72,8 @@ cp SLmake.inc.example SLmake.inc
 %ohpc_setup_compiler
 %if "%{compiler_family}" != "intel"
 %if "%{compiler_family}" == "arm1"
-%{__sed} -i -e 's#-lblas#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
-%{__sed} -i -e 's#-llapack#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
+%{__sed} -i -e 's#-lblas#-armpl#g' SLmake.inc
+%{__sed} -i -e 's#-llapack#-armpl#g' SLmake.inc
 %{__cat} SLmake.inc
 %else
 module load openblas
