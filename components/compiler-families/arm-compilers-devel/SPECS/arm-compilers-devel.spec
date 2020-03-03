@@ -131,7 +131,7 @@ set    ARM_GENERIC ${generic}
 setenv ARM_GENERIC \$ARM_GENERIC
 
 # update module path hierarchy
-prepend-path    MODULEPATH          ${modpath}:%{OHPC_MODULEDEPS}/arm
+prepend-path    MODULEPATH          ${modpath}:%{OHPC_MODULEDEPS}/arm1
 # load generic variant
 depends-on      \$ARM_GENERIC
 family "compiler"
