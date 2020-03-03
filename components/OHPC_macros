@@ -99,8 +99,8 @@ Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 BuildRequires: arm_licenses
 BuildRequires: arm%{PROJ_DELIM}
 %endif # OHPC_BUILD
-BuildRequires: arm-compilers-devel%{PROJ_DELIM}
-Requires:      arm-compilers-devel%{PROJ_DELIM}
+BuildRequires: arm1-compilers-devel%{PROJ_DELIM}
+Requires:      arm1-compilers-devel%{PROJ_DELIM}
 %endif # arm
 
 %if "%{compiler_family}" == "llvm"
