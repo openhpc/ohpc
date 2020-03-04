@@ -61,7 +61,7 @@ EOF
 
 # package repository definitions
 
-%if 0%{?sle_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 %define __repodir /etc/zypp/repos.d
 %else
 %define __repodir /etc/yum.repos.d
@@ -72,19 +72,19 @@ EOF
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
 name=OpenHPC-%{ohpc_version} - Base
-baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/%{_repository}
+baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 
 [OpenHPC-updates]
 name=OpenHPC-%{ohpc_version} - Updates
-baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/updates/%{_repository}
+baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/updates/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 
 [OpenHPC-Sources]
 name=OpenHPC-%{ohpc_version} - Sources
-baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/sources/%{_repository}
+baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/sources/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 enabled=0
