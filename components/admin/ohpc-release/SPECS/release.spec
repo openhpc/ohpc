@@ -11,7 +11,7 @@
 %global ohpc_bootstrap 1
 %include %{_sourcedir}/OHPC_macros
 
-%if 0%{?centos_version} || 0%{?rhel_version}
+%if 0%{?rhel}
 %define disttag .el8
 %endif
 
@@ -31,9 +31,9 @@ Source1:  RPM-GPG-KEY-OpenHPC-2
 Provides: ohpc-release = %{version}
 
 
-%if 0%{?rhel_version}
+%if 0%{?rhel}
 Requires: epel-release
-Requires: redhat-release >= 8.0
+Requires: redhat-release >= 8.1
 %endif
 %if 0%{?suse_version}
 Requires: suse-release >= 15.1
