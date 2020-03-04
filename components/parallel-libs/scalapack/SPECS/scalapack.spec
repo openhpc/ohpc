@@ -74,6 +74,7 @@ cp SLmake.inc.example SLmake.inc
 %if "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#-lblas#-armpl#g' SLmake.inc
 %{__sed} -i -e 's#-llapack#-armpl#g' SLmake.inc
+%{__sed} -i -e 's#$(RPM_OPT_FLAGS)#-O3 -fsimdmath#g' SLmake.inc
 %{__cat} SLmake.inc
 %else
 module load openblas
