@@ -9,24 +9,18 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%global gnu_major_ver 8
-%global openmpi_major_ver 3
-
-%if 0%{?rhel_version}
-%global python3_prefix python34
-%else
+%global gnu_major_ver 9
+%global openmpi_major_ver 4
 %global python3_prefix python3
-%endif
 
 Summary: Meta-packages to ease installation
 Name:    meta-packages
-Version: 1.3.8
+Version: 2.0
 Release: 1
 License: Apache-2.0
 Group:   %{PROJ_NAME}/meta-package
 URL:     https://github.com/openhpc/ohpc
 Source0: LICENSE
-
 
 
 %description
