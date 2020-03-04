@@ -61,13 +61,13 @@ Requires:  OpenIPMI
 Requires:  pdsh%{PROJ_DELIM}
 Requires:  screen
 Requires:  sudo
-%if 0%{?rhel_version}
+%if 0%{?rhel}
 Requires:  binutils
 Requires:  binutils-devel
 Requires:  man-db
 Requires:  yum-utils
 %endif
-%if 0%{?sle_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 Requires:  glibc-locale
 Requires:  nfs-kernel-server
 %endif
@@ -80,16 +80,15 @@ Requires:  binutils
 Requires:  libicu
 Requires:  libunwind
 Requires:  numactl
-%if 0%{?rhel_version}
+Requires:  python3
+%if 0%{?rhel}
 Requires:  cairo-devel
 Requires:  libpciaccess
-Requires:  python3
 Requires:  libseccomp
 %endif
-%if 0%{?sle_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 Requires:  libcairo2
 Requires:  libpciaccess0
-Requires:  python3
 %endif
 %description -n %{PROJ_NAME}-base-compute
 Collection of compute node base packages
@@ -385,10 +384,10 @@ Requires:  slurm-slurmd%{PROJ_DELIM}
 Requires:  slurm-contribs%{PROJ_DELIM}
 Requires:  slurm-example-configs%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
-%if 0%{?rhel_version}
+%if 0%{?rhel}
 Requires:  hwloc-libs
 %endif
-%if 0%{?sle_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 Requires:  libhwloc5
 %endif
 %description -n %{PROJ_NAME}-slurm-client
