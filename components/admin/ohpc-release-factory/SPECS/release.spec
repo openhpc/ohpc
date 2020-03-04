@@ -23,7 +23,7 @@
 Summary:  OpenHPC release files
 Name:     ohpc-release-factory
 Version:  %{ohpc_version}
-Release:  2%{?disttag}
+Release:  1%{?disttag}
 License:  Apache-2.0
 Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc
