@@ -37,11 +37,13 @@ provides: perl(LosF_rpm_utils)
 provides: perl(LosF_utils)
 provides: perl(LosF_history_utils)
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 Requires: perl-Config-IniFiles >= 2.43
 Requires: perl-Log-Log4perl
-%else
+%else #rhel
+%if 0%{?rhel_version} < 800
 requires: yum-plugin-downloadonly
+%endif
 %endif
 
 %define __spec_install_post %{nil}
