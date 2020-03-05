@@ -6,7 +6,7 @@
  
 -if (! -f "$opt_chroot/boot/vmlinuz-$opt_kversion") {
 -    &eprint("Can't locate the boot kernel: ". $opt_chroot ."/boot/vmlinuz-$opt_kversion\n");
-+if (! -f "$opt_chroot/boot/vmlinuz-$opt_kversion" && -f "$opt_chroot/boot/vmlinux-$opt_kversion.gz") {
++if (! -f "$opt_chroot/boot/vmlinuz-$opt_kversion" && ! -f "$opt_chroot/boot/vmlinux-$opt_kversion.gz") {
 +    &eprint("Can't locate the boot kernel\n");
      exit 1;
  }
