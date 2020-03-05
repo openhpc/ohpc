@@ -33,6 +33,7 @@ Patch6:  warewulf-provision.wwgetfiles.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
+Requires: perl-CGI
 Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
 Conflicts: warewulf < 3
 BuildRequires: autoconf
