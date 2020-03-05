@@ -13,7 +13,7 @@
 %define dname ipmi
 %define pname warewulf-%{dname}
 %define wwsrvdir /srv
-%define develSHA f5bdc3c9de534472323ef7ebe135c8c2451dc3ca
+%define develSHA f53a97b32f9b6792f6d51cf60c02dc20b4caa208
 %define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
