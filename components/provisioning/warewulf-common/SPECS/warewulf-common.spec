@@ -42,9 +42,11 @@ Requires: perl(DBD::mysql), perl(DBD::Pg), perl(DBD::SQLite), perl(JSON::PP)
 
 %if 0%{?rhel} >= 8
 BuildRequires: systemd
+Requires: perl-Sys-Syslog
 %endif
-%if 0%{?sle_version:1}
+%if 0%{?suse_version:1}
 BuildRequires: systemd-rpm-macros
+Requires: perl-Unix-Syslog
 %endif
 
 Requires: %sql_name
