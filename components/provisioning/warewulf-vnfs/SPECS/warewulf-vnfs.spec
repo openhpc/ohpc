@@ -34,6 +34,9 @@ Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
 Requires: pigz
+%if 0%{?rhel}
+Requires: perl-IO-Compress
+%endif
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
