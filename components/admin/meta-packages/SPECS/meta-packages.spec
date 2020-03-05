@@ -57,6 +57,7 @@ Requires:  man
 Requires:  net-tools
 Requires:  nfs-utils
 Requires:  chrony
+Requires:  rsyslog
 Requires:  OpenIPMI
 Requires:  pdsh%{PROJ_DELIM}
 Requires:  screen
