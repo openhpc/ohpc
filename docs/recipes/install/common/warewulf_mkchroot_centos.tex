@@ -41,5 +41,6 @@ default location for this example is in
 
 # Build initial chroot image
 [sms](*\#*) wwmkchroot centos-8 $CHROOT
+[sms](*\#*) echo "reposdir=/etc/yum.repos.d" >> $CHROOT/etc/dnf/dnf.conf
 \end{lstlisting}
 % end_ohpc_run
