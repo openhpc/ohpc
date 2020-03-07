@@ -54,7 +54,7 @@ Provides: rsh
 rsh compatability package for mrcp/mrlogin/mrsh
 
 %prep
-%setup -q
+%setup -q -n %{pname}-%{version}
 ./autogen.sh
 %if 0%{?suse_version}
 %patch1 -p1
