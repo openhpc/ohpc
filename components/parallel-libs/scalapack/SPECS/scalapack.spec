@@ -13,7 +13,7 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -71,9 +71,10 @@ cp SLmake.inc.example SLmake.inc
 %build
 %ohpc_setup_compiler
 %if "%{compiler_family}" != "intel"
-%if "%{compiler_family}" == "arm"
-%{__sed} -i -e 's#-lblas#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
-%{__sed} -i -e 's#-llapack#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
+%if "%{compiler_family}" == "arm1"
+%{__sed} -i -e 's#-lblas#-armpl#g' SLmake.inc
+%{__sed} -i -e 's#-llapack#-armpl#g' SLmake.inc
+%{__sed} -i -e 's#$(RPM_OPT_FLAGS)#-O3 -fsimdmath#g' SLmake.inc
 %{__cat} SLmake.inc
 %else
 module load openblas
@@ -117,7 +118,7 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 depends-on openblas
 %endif
 
