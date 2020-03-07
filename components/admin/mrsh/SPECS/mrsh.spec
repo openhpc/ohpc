@@ -21,7 +21,7 @@ Summary: Remote shell program that uses munge authentication
 License: none
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/chaos/mrsh
-Source:    https://github.com/chaos/mrsh/archive/mrsh-2-7-1.tar.gz
+Source:    https://github.com/chaos/mrsh/archive/%{version}.tar.gz#/mrsh-%{version}.tar.gz
 Patch0: null-terminate.patch
 Patch1: mrsh-pam-suse.patch
 BuildRequires: ncurses-devel pam-devel munge-devel
