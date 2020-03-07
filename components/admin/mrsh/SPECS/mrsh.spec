@@ -59,8 +59,8 @@ rsh compatability package for mrcp/mrlogin/mrsh
 ./autogen.sh
 %if 0%{?suse_version}
 %patch1 -p1
-%patch2 -p1
 %endif
+%patch2 -p1
 
 %build
 %configure %{?_without_pam}
