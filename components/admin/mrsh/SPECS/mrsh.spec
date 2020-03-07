@@ -22,7 +22,6 @@ License: none
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/chaos/mrsh
 Source:    https://github.com/chaos/mrsh/archive/%{version}.tar.gz#/mrsh-%{version}.tar.gz
-Patch0: null-terminate.patch
 Patch1: mrsh-pam-suse.patch
 BuildRequires: ncurses-devel pam-devel munge-devel
 Requires: munge
@@ -55,9 +54,8 @@ Provides: rsh
 rsh compatability package for mrcp/mrlogin/mrsh
 
 %prep
-%setup -q -n mrsh-mrsh-2-7-1
+%setup -q
 ./autogen.sh
-%patch0 -p1
 %if 0%{?suse_version}
 %patch1 -p1
 %endif
