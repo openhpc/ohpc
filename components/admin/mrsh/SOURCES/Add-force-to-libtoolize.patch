@@ -1,0 +1,25 @@
+From: Egbert Eich <eich@suse.de>
+Date: Mon Oct 17 23:36:00 2016 +0200
+Subject: [PATCH]autogen.sh: Add --force to libtoolize
+Git-commit: 9f0c25a5e7a4579a9aa656636de77b62b99e66fe
+References: 
+Signed-off-by: Egbert Eich <eich@suse.com>
+
+Signed-off-by: Egbert Eich <eich@suse.de>
+---
+ autogen.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/autogen.sh b/autogen.sh
+index 15d1add..adbf35a 100755
+--- a/autogen.sh
++++ b/autogen.sh
+@@ -6,7 +6,7 @@
+ echo "running aclocal ... "
+ aclocal -I config
+ echo "running libtoolize ... "
+-libtoolize --automake --copy 
++libtoolize --automake --copy --force
+ echo "running autoheader ... "
+ autoheader
+ echo "running automake ... "
