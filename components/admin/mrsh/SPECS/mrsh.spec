@@ -69,7 +69,7 @@ rsh compatability package for mrcp/mrlogin/mrsh
 make
 
 %install
-DESTDIR="$%{buildroot}" make install
+DESTDIR="%{buildroot}" make install
 
 ln -sf in.mrlogind %{buildroot}%{_sbindir}/in.rlogind
 ln -sf in.mrshd %{buildroot}%{_sbindir}/in.rshd
