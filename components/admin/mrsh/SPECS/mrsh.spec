@@ -91,7 +91,6 @@ sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrshd
 %{_bindir}/mrcp
 %{_bindir}/mrsh
 %{_bindir}/mrlogin
-/usr/bin/mr*
 %dir /opt/ohpc/admin/mrsh
 %dir /opt/ohpc/admin/mrsh/bin
 %dir /opt/ohpc/admin/mrsh/share
