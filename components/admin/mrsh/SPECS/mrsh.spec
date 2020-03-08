@@ -69,19 +69,19 @@ make
 %install
 DESTDIR="$RPM_BUILD_ROOT" make install
 
-%{__mkdir_p} ${RPM_BUILD_ROOT}/usr/bin
-ln -sf %{_prefix}/bin/mrcp ${RPM_BUILD_ROOT}/usr/bin/
-ln -sf %{_prefix}/bin/mrsh ${RPM_BUILD_ROOT}/usr/bin/
-ln -sf %{_prefix}/bin/mrlogin ${RPM_BUILD_ROOT}/usr/bin/
+ln -sf in.mrlogind %{buildroot}%{_sbindir}/in.rlogind
+ln -sf in.mrshd %{buildroot}%{_sbindir}/in.rshd
 
-ln -sf %{_prefix}/bin/rcp ${RPM_BUILD_ROOT}/usr/bin/
-ln -sf %{_prefix}/bin/rsh ${RPM_BUILD_ROOT}/usr/bin/
-ln -sf %{_prefix}/bin/rlogin ${RPM_BUILD_ROOT}/usr/bin/
+for i in mrsh mrlogin
+do
+    sed -i 's#\(account\s\+include\s\+\)system-auth#\1common-account#' %{buildroot}/%{_sysconfdir}/pam.d/$i
+    sed -i 's#\(session\s\+include\s\+\)system-auth#\1common-session#' %{buildroot}/%{_sysconfdir}/pam.d/$i
+done
+%if 0%{!?have_systemd}
+sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrlogind
+sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrshd
+%endif
 
-sed -i 's#/usr/sbin/in.mrshd#/opt/ohpc/admin/mrsh/sbin/in.mrshd#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
-sed -i 's#/usr/sbin/in.mrlogind#/opt/ohpc/admin/mrsh/sbin/in.mrlogind#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrlogind
-sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrlogind
-sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 
 %files
 %doc NEWS README ChangeLog COPYING DISCLAIMER DISCLAIMER.UC
