@@ -57,12 +57,12 @@ rsh compatability package for mrcp/mrlogin/mrsh
 
 %prep
 %setup -q -n %{pname}-%{version}
-./autogen.sh
 %if 0%{?suse_version}
 %patch1 -p1
 %endif
 %patch2 -p1
 %patch3 -p1
+./autogen.sh
 
 %build
 %configure %{?_without_pam}
