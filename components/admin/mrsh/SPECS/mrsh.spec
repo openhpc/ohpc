@@ -67,7 +67,7 @@ rsh compatability package for mrcp/mrlogin/mrsh
 make
 
 %install
-DESTDIR="$RPM_BUILD_ROOT" make install
+DESTDIR="$%{buildroot}" make install
 
 ln -sf in.mrlogind %{buildroot}%{_sbindir}/in.rlogind
 ln -sf in.mrshd %{buildroot}%{_sbindir}/in.rshd
@@ -77,10 +77,9 @@ do
     sed -i 's#\(account\s\+include\s\+\)system-auth#\1common-account#' %{buildroot}/%{_sysconfdir}/pam.d/$i
     sed -i 's#\(session\s\+include\s\+\)system-auth#\1common-session#' %{buildroot}/%{_sysconfdir}/pam.d/$i
 done
-%if 0%{!?have_systemd}
+
 sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrlogind
 sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrshd
-%endif
 
 
 %files
@@ -129,18 +128,6 @@ sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrshd
 %dir /opt/ohpc/admin/mrsh/share/man/man8
 
 %post -n %{pname}-server%{PROJ_DELIM}
-if ! grep "^mshell" /etc/services > /dev/null; then
-        echo "mshell          21212/tcp                  # mrshd" >> /etc/services
-fi
-if ! grep "^mlogin" /etc/services > /dev/null; then
-        echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
-fi
-if ! grep "^mrsh" /etc/securetty > /dev/null; then
-        echo "mrsh" >> /etc/securetty
-fi
-if ! grep "^mrlogin" /etc/securetty > /dev/null; then
-        echo "mrlogin" >> /etc/securetty
-fi
 # 'condrestart' is not portable
 if [ -x /etc/init.d/xinetd ]; then
     if /etc/init.d/xinetd status | grep -q running; then
