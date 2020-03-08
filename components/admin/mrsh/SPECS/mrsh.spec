@@ -126,7 +126,6 @@ sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrshd
 %{_bindir}/rcp
 %{_bindir}/rsh
 %{_bindir}/rlogin
-/usr/bin/r*
 %dir /opt/ohpc/admin/mrsh/share/man/man8
 
 %post -n %{pname}-server%{PROJ_DELIM}
