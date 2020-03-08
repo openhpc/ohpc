@@ -101,6 +101,7 @@ done
 %config(noreplace) /etc/pam.d/mrsh
 %config(noreplace) /etc/pam.d/mrlogin
 %endif
+%{_unitdir}/*
 %{_mandir}/man8/in.mrlogind.8*
 %{_mandir}/man8/in.mrshd.8*
 %{_mandir}/man8/mrlogind.8*
