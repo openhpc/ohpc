@@ -28,6 +28,7 @@ Patch3: Add-force-to-libtoolize.patch
 BuildRequires: ncurses-devel pam-devel munge-devel
 Requires: munge
 Provides: mrsh
+BuildRequires:  systemd-devel
 
 # support re-run of autogen
 BuildRequires: autoconf
@@ -43,7 +44,7 @@ reserved ports for security.
 %package -n %{pname}-server%{PROJ_DELIM}
 Summary: Servers for remote access commands (mrsh, mrlogin, mrcp)
 Group: System Environment/Daemons
-Requires: xinetd
+Requires(post): systemd
 %description -n %{pname}-server%{PROJ_DELIM}
 Server daemons for remote access commands (mrsh, mrlogin, mrcp)
 
@@ -80,9 +81,6 @@ do
     sed -i 's#\(session\s\+include\s\+\)system-auth#\1common-session#' %{buildroot}/%{_sysconfdir}/pam.d/$i
 done
 
-sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrlogind
-sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrshd
-
 
 %files
 %doc NEWS README ChangeLog COPYING DISCLAIMER DISCLAIMER.UC
@@ -99,8 +97,6 @@ sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrshd
 %dir /opt/ohpc/admin/mrsh/share/man/man1
 
 %files -n %{pname}-server%{PROJ_DELIM}
-%config(noreplace) /etc/xinetd.d/mrshd
-%config(noreplace) /etc/xinetd.d/mrlogind
 %if %{?_without_pam:0}%{!?_without_pam:1}
 %config(noreplace) /etc/pam.d/mrsh
 %config(noreplace) /etc/pam.d/mrlogin
@@ -130,13 +126,4 @@ sed -i 's#disable\s*= yes#disable			= no#' %{buildroot}/etc/xinetd.d/mrshd
 %dir /opt/ohpc/admin/mrsh/share/man/man8
 
 %post -n %{pname}-server%{PROJ_DELIM}
-# 'condrestart' is not portable
-if [ -x /etc/init.d/xinetd ]; then
-    if /etc/init.d/xinetd status | grep -q running; then
-       /etc/init.d/xinetd restart
-    fi
-elif [ -x /bin/systemctl ]; then
-    if /bin/systemctl status xinetd | grep -q running; then
-       /bin/systemctl restart xinetd
-    fi
-fi
+%service_add_post mrshd.socket mrlogind.socket
