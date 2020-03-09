@@ -93,14 +93,16 @@ cp %SOURCE2 make.inc
 
 module load metis ptscotch
 
-%if "%{compiler_family}" != "intel"
-%if "%{compiler_family}" != "arm1"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 %define blas_lib -L$OPENBLAS_LIB -lopenblas
-%else
-%define blas_lib -L$ARMPL_LIBRARIES -larmpl_mp
 %endif
-%else
+
+%if "%{compiler_family}" = "arm1"
+%define blas_lib -armpl
+%endif
+
+%if "%{compiler_family}" != "intel"
 %define blas_lib  -L$MKLROOT/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 %endif
 
