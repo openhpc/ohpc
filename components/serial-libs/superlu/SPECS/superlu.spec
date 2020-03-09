@@ -98,7 +98,7 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 depends-on openblas
 %endif
 
