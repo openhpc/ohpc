@@ -56,6 +56,9 @@ Docu can be found on http://www.netlib.org.
 
 %build
 %ohpc_setup_compiler
+%if "%{compiler_family}" == "arm1"
+%{__sed} -i -e 's#$(RPM_OPT_FLAGS)#-O3 -fsimdmath#g' make.inc
+%endif
 
 make lib
 
