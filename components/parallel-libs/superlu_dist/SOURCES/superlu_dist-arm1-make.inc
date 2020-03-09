@@ -8,8 +8,8 @@
 #
 #  Creation date:   March 1, 2016	version 5.0.0
 #
-#  Modified:	    
-#		    
+#  Modified:
+#
 #
 ############################################################################
 #
@@ -34,8 +34,8 @@ RANLIB       = /usr/bin/ranlib
 
 CC           = mpicc
 CXX          = mpicxx
-CFLAGS 	     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -std=c11 -fPIC -DPIC -g
-CXXFLAGS     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -fPIC -g
+CFLAGS 	     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -std=c11 -fPIC -DPIC -g -fsimdmath
+CXXFLAGS     += -O3 -DNDEBUG $(BLASDEF) -DDEBUGlevel=0 -DPRNTlevel=0 $(INCLUDES) -fopenmp -fPIC -g -fsimdmath
 NOOPTS       = -O0
 FORTRAN	     = mpif90
 
