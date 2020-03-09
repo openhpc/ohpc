@@ -17,12 +17,13 @@ admin         = ["clustershell","conman","docs","examples","ganglia","genders","
 		 "pdsh","prun","test-suite"]
 dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","python-mpi4py","python-numpy",
 	         "python-scipy","spack","valgrind"]
-io-libs       = ["hdf5","netcdf","netcdf-fortran","phdf5","pnetcdf","sionlib"]
+io-libs       = ["hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf","sionlib"]
 runtimes      = ["singularity","ocr","charliecloud"]
 rms           = ["slurm","pbspro","pmix","munge"]
-serial-libs   = ["R","gsl","metis","openblas","plasma","superlu"]
-parallel-libs = ["boost","fftw","hypre","mumps","opencoarrays","petsc","scalapack","scotch","slepc","superlu_dist"]
-perf-tools    = ["dimemas","extrae","geopm","likwid","omb","papi","scorep","tau"]
+serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
+parallel-libs = ["boost","fftw","hypre","mumps","opencoarrays","petsc","scalapack","ptscotch","slepc","superlu_dist"]
+perf-tools    = ["dimemas","extrae","geopm","likwid","omb","papi","paraver","pdtoolkit",
+                 "scalasca","scorep","tau"]
 
 compiler-families=["gnu-compilers","intel-compilers-devel","arm-compilers-devel"]
 mpi-families=["mpich","mvapich2","openmpi"]
@@ -42,13 +43,13 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["arm-compilers-devel","autoconf","automake","clustershell","cmake","conman",
               "docs","examples","genders","gnu-compilers","hwloc","intel-compilers-devel","libtool",
-	      "lmod","losf","mrsh","ohpc-filesystem","papi","pbspro","pdsh","pmix",
-	      "prun","slurm","test-suite","valgrind"]
+	      "lmod","losf","meta-packages","mrsh","ohpc-filesystem","papi","paraver","pbspro",
+	      "pdsh","pmix","prun","slurm","test-suite","valgrind"]
               
 
 # define (compiler dependent) packages
 compiler_dependent = ["gsl","hdf5","metis","mpich","mvapich2","!likwid",
-                      "openblas","openmpi","plasma","R","scotch","superlu"]
+                      "openblas","openmpi","pdtoolkit","plasma","R","scotch","superlu"]
 
 # overdefault compiler families for any desired components
 R_compiler=["gnu9"]
@@ -57,8 +58,8 @@ openblas_compiler=["gnu9"]
 
 #opencoarrays_compiler=["gnu9"]
 
-mpi_dependent = ["boost","dimemas","extrae","fftw","!geopm","hypre","mumps","!opencoarrays",
-                 "omb","petsc","!phdf5","scalapack","!scorep","sionlib","!slepc"]
+mpi_dependent = ["adios","boost","dimemas","extrae","fftw","!geopm","hypre","mumps","netcdf","netcdf-cxx",
+                 "netcdf-fortran","!opencoarrays","omb","petsc","phdf5","scalapack","scalasca","scorep","sionlib","slepc","ptscotch"]
 
 fftw_compiler=["gnu9","arm1"]
 scalapack_compiler=["gnu9","arm1"]
