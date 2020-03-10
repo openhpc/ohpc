@@ -266,14 +266,14 @@ Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  mpiP-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  mpiP-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires: imb-%{compiler_family}-mpich%{PROJ_DELIM}
+## TODO Requires: imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  mpiP-%{compiler_family}-mpich%{PROJ_DELIM}
+## TODO Requires:  mpiP-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
+## TODO Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -281,12 +281,12 @@ Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
-Requires:  imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
-Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
-Requires:  mpiP-%{compiler_family}-mvapich2%{PROJ_DELIM}
+## TODO Requires: imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
+## TODO Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
+## TODO Requires:  mpiP-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
-Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
+## TODO Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mvapich2%{PROJ_DELIM}
 %endif
@@ -297,10 +297,10 @@ Collection of performance tool builds for use with GNU compiler toolchain
 Summary:   OpenHPC performance tools for GNU and MPICH
 Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  mpiP-%{compiler_family}-mpich%{PROJ_DELIM}
+## TODO Requires: imb-%{compiler_family}-mpich%{PROJ_DELIM}
+## TODO Requires:  mpiP-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
+## TODO Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -311,11 +311,11 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 Summary:   OpenHPC performance tools for GNU and MVAPICH2
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
-Requires:  imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
-Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
-Requires:  mpiP-%{compiler_family}-mvapich2%{PROJ_DELIM}
+## TODO Requires: imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
+## TODO Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
+## TODO Requires:  mpiP-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mvapich2%{PROJ_DELIM}
-Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
+## TODO Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -326,11 +326,11 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 Summary:   OpenHPC performance tools for GNU and OpenMPI
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
-Requires:  mpiP-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires: imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
+## TODO Requires:  mpiP-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -616,24 +616,24 @@ Requires:  extrae-intel-impi%{PROJ_DELIM}
 Requires:  extrae-intel-mpich%{PROJ_DELIM}
 Requires:  extrae-intel-mvapich2%{PROJ_DELIM}
 Requires:  extrae-intel-%{mpi_family}%{PROJ_DELIM}
-Requires:  imb-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  imb-intel-impi%{PROJ_DELIM}
-Requires:  imb-intel-mpich%{PROJ_DELIM}
-Requires:  imb-intel-mvapich2%{PROJ_DELIM}
-Requires:  imb-intel-%{mpi_family}%{PROJ_DELIM}
-Requires:  likwid-intel%{PROJ_DELIM}
-Requires:  mpiP-%{compiler_family}-impi%{PROJ_DELIM}
+## TODO Requires: imb-%{compiler_family}-impi%{PROJ_DELIM}
+## TODO Requires: imb-intel-impi%{PROJ_DELIM}
+## TODO Requires: imb-intel-mpich%{PROJ_DELIM}
+## TODO Requires: imb-intel-mvapich2%{PROJ_DELIM}
+## TODO Requires: imb-intel-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  likwid-intel%{PROJ_DELIM}
+## TODO Requires:  mpiP-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  omb-intel-impi%{PROJ_DELIM}
 Requires:  omb-intel-mpich%{PROJ_DELIM}
 Requires:  omb-intel-mvapich2%{PROJ_DELIM}
 Requires:  omb-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
-Requires:  tau-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  tau-intel-impi%{PROJ_DELIM}
-Requires:  tau-intel-mpich%{PROJ_DELIM}
-Requires:  tau-intel-mvapich2%{PROJ_DELIM}
-Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  tau-%{compiler_family}-impi%{PROJ_DELIM}
+## TODO Requires:  tau-intel-impi%{PROJ_DELIM}
+## TODO Requires:  tau-intel-mpich%{PROJ_DELIM}
+## TODO Requires:  tau-intel-mvapich2%{PROJ_DELIM}
+## TODO Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
@@ -649,11 +649,11 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-impi-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and Intel(R) MPI
-Requires:  imb-intel-impi%{PROJ_DELIM}
-Requires:  likwid-intel%{PROJ_DELIM}
-Requires:  mpiP-intel-impi%{PROJ_DELIM}
+## TODO Requires: imb-intel-impi%{PROJ_DELIM}
+## TODO Requires:  likwid-intel%{PROJ_DELIM}
+## TODO Requires:  mpiP-intel-impi%{PROJ_DELIM}
 Requires:  omb-intel-impi%{PROJ_DELIM}
-Requires:  tau-intel-impi%{PROJ_DELIM}
+## TODO Requires:  tau-intel-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scorep-intel-impi%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -662,11 +662,11 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE c
 
 %package -n %{PROJ_NAME}-intel-mpich-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MPICH
-Requires:  imb-intel-mpich%{PROJ_DELIM}
-Requires:  likwid-intel%{PROJ_DELIM}
-Requires:  mpiP-intel-mpich%{PROJ_DELIM}
+## TODO Requires: imb-intel-mpich%{PROJ_DELIM}
+## TODO Requires:  likwid-intel%{PROJ_DELIM}
+## TODO Requires:  mpiP-intel-mpich%{PROJ_DELIM}
 Requires:  omb-intel-mpich%{PROJ_DELIM}
-Requires:  tau-intel-mpich%{PROJ_DELIM}
+## TODO Requires:  tau-intel-mpich%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
 Requires:  scorep-intel-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -675,11 +675,11 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE c
 
 %package -n %{PROJ_NAME}-intel-mvapich2-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MVAPICH2
-Requires:  imb-intel-mvapich2%{PROJ_DELIM}
-Requires:  likwid-intel%{PROJ_DELIM}
-Requires:  mpiP-intel-mvapich2%{PROJ_DELIM}
+## TODO Requires: imb-intel-mvapich2%{PROJ_DELIM}
+## TODO Requires:  likwid-intel%{PROJ_DELIM}
+## TODO Requires:  mpiP-intel-mvapich2%{PROJ_DELIM}
 Requires:  omb-intel-mvapich2%{PROJ_DELIM}
-Requires:  tau-intel-mvapich2%{PROJ_DELIM}
+## TODO Requires:  tau-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-intel-mvapich2%{PROJ_DELIM}
 Requires:  scorep-intel-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -688,11 +688,11 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE c
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and OpenMPI
-Requires:  imb-intel-%{mpi_family}%{PROJ_DELIM}
-Requires:  likwid-intel%{PROJ_DELIM}
-Requires:  mpiP-intel-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires: imb-intel-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  likwid-intel%{PROJ_DELIM}
+## TODO Requires:  mpiP-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  omb-intel-%{mpi_family}%{PROJ_DELIM}
-Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
