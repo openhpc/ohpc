@@ -30,8 +30,7 @@ Source1:        Makefile.gnu.openmpi.inc
 Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
-Source5:        Makefile.arm1.impi.inc
-Source6:        Makefile.arm1.openmpi.inc
+Source5:        Makefile.arm.openmpi.inc
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
@@ -127,7 +126,7 @@ cp -f %{S:1} Makefile.inc
 cp -f %{S:4} Makefile.inc
 %endif
 %if "%{compiler_family}" == "arm1"
-cp -f %{S:6} Makefile.inc
+cp -f %{S:5} Makefile.inc
 %endif
 %endif
 
@@ -138,7 +137,7 @@ export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 cp -f %{S:4} Makefile.inc
 %else
 %if "%{compiler_family}" == "arm1"
-cp -f %{S:6} Makefile.inc
+cp -f %{S:5} Makefile.inc
 %else
 cp -f %{S:1} Makefile.inc
 %endif
