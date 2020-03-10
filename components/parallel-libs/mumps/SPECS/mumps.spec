@@ -30,8 +30,8 @@ Source1:        Makefile.gnu.openmpi.inc
 Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
-Source5:        Makefile.arm.impi.inc
-Source6:        Makefile.arm.openmpi.inc
+Source5:        Makefile.arm1.impi.inc
+Source6:        Makefile.arm1.openmpi.inc
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
@@ -65,12 +65,12 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %build
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 module load scalapack
 %endif
 
 # Enable scalapack and openblas linkage for blas/lapack with gnu and other (e.g. llvm) builds
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load scalapack openblas
 %endif
 
@@ -84,7 +84,7 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
 %endif
 %endif
@@ -98,7 +98,7 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
 %endif
 %endif
@@ -112,7 +112,7 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
 %endif
 %endif
@@ -126,7 +126,7 @@ cp -f %{S:1} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:6} Makefile.inc
 %endif
 %endif
@@ -137,7 +137,7 @@ export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
 %else
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cp -f %{S:6} Makefile.inc
 %else
 cp -f %{S:1} Makefile.inc
