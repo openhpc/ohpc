@@ -41,5 +41,8 @@ default location for this example is in
 
 # Build initial chroot image
 [sms](*\#*) wwmkchroot -v centos-8 $CHROOT
+# Enable OpenHPC and EPEL repos inside chroot
+[sms](*\#*) dnf -y --installroot $CHROOT install epel-release
+[sms](*\#*) cp -p /etc/yum.repos.d/OpenHPC.repo $CHROOT/etc/yum.repos.d
 \end{lstlisting}
 % end_ohpc_run
