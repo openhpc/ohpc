@@ -1,0 +1,10 @@
+--- vnfs/libexec/wwmkchroot/centos-8.tmpl	2020-03-10 17:48:48.115020748 -0500
++++ vnfs/libexec/wwmkchroot/centos-8.tmpl	2020-03-10 17:47:48.946017801 -0500
+@@ -28,6 +28,6 @@
+     shadow-utils rsyslog tzdata util-linux words
+     zlib tar less gzip which util-linux openssh-clients 
+     openssh-server dhclient pciutils vim-minimal shadow-utils
+-    strace cronie crontabs cpio wget redhat-release"
++    strace cronie crontabs cpio wget redhat-release hostname"
+ 
+ # vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:

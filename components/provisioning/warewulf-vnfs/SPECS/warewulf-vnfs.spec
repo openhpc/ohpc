@@ -31,6 +31,7 @@ Patch4:  warewulf-vnfs.rhel-proxy.patch
 Patch5:  warewulf-vnfs.sle.bootstrap_kernel.patch
 Patch6:  warewulf-vnfs.utf8.patch
 Patch7:  warewulf-vnfs.dnf.rhel8.patch
+Patch8:  warewulf-vnfs.centos8.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -71,6 +72,7 @@ cd %{_builddir}
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
+%patch8 -p1
 
 
 %build
