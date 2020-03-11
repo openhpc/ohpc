@@ -32,6 +32,7 @@ Patch5:  warewulf-vnfs.sle.bootstrap_kernel.patch
 Patch6:  warewulf-vnfs.utf8.patch
 Patch7:  warewulf-vnfs.dnf.rhel8.patch
 Patch8:  warewulf-vnfs.centos8.patch
+Patch9:  warewulf-vnfs.varlog.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -73,6 +74,7 @@ cd %{_builddir}
 %patch6 -p1
 %patch7 -p1
 %patch8 -p1
+%patch9 -p1
 
 
 %build
