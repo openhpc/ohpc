@@ -15,7 +15,7 @@ export BATS_JUNIT_CLASS=rms-harness
 
 ./bootstrap || exit 1
 
-for compiler in gnu8 ; do
+for compiler in ${GCC_DEFAULT} ; do
     for mpi in $MPI_FAMILIES ; do
 
 	echo " "
