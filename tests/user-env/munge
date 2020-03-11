@@ -8,8 +8,8 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
-@test "[munge] check for RPM" {
-    run rpm -q munge${DELIM}
+@test "[munge] check for OS provdied RPM" {
+    run rpm -q munge
     assert_success
 }
 
