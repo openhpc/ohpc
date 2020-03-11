@@ -18,7 +18,7 @@
 
 Summary:   Toolsuite of command line applications for performance oriented programmers
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   4.3.4
+Version:   5.0.1
 Release:   1%{?dist}
 License:   GPLv3
 Group:     %{PROJ_NAME}/perf-tools
@@ -34,7 +34,8 @@ BuildRequires: perl-Data-Dumper
 LIKWID stands for "Like I Knew What I'm Doing." It is an easy to use yet powerful
 command line performance tool suite for the GNU/Linux operating system. While the
 focus of LIKWID is on x86 processors, some of the tools are portable and not
-limited to any specific architecture.
+limited to any specific architecture. With version 5.x, ARMv8 and POWER
+processors are supported as well.
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -50,7 +51,11 @@ limited to any specific architecture.
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
 %else
+%if "%{compiler_family}" == "arm"
+%define compiler ARMCLANG
+%else
 %define compiler ICC
+%endif
 %endif
 
 make \
@@ -71,11 +76,16 @@ make \
 %if "%{compiler_family}" == "%{gnu_family}"
 %define compiler GCC
 %else
+%if "%{compiler_family}" == "arm"
+%define compiler ARMCLANG
+%else
 %define compiler ICC
+%endif
 %endif
 
 make %{?_smp_mflags} \
     FORTRAN_INTERFACE="true" \
+    COMPILER="%{compiler}" \
     PREFIX="%{buildroot}%{install_path}" \
     LIBDIR="%{buildroot}%{install_path}/lib" \
     MANPREFIX="%{buildroot}%{install_path}/man" \
