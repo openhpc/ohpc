@@ -12,7 +12,7 @@
 
 Summary:   OpenHPC default login environments
 Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.3.3
+Version:   2.0
 Release:   1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
