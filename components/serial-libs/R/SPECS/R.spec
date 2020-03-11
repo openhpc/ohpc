@@ -12,7 +12,7 @@
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -21,7 +21,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Release:	1%{?dist}
-Version:        3.6.2
+Version:        3.6.3
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
@@ -116,7 +116,7 @@ export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
 %if "%{compiler_family}" != "intel"
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 BLAS="-L${ARMPL_LIBRARIES} -larmpl_mp -fopenmp"
 echo "ArmPL options flags .... ${BLAS} "
 %else
@@ -129,7 +129,7 @@ BLAS="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl 
 echo "MKL options flag .... $MKL "
 %endif
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 FFLAGS="-fPIC -DPIC -i4" \
 FCFLAGS="-fPIC -DPIC -i4" \
 FPICFLAGS="-i4" \
@@ -189,7 +189,7 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_SHARE      %{install_path}/share
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 depends-on openblas
 %endif
 
