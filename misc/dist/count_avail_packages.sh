@@ -39,9 +39,11 @@ if [[ ${USE_FACTORY} -eq 1 ]]; then
 fi
 
 for os in ${oses}; do
-    repobase="http://build.openhpc.community/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
+    repobase="http://obs.openhpc.community:82/OpenHPC:/%{minor_ver}${colon}/${factory}${os}"
+#    repobase="http://build.openhpc.community/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
     if [[ $micro_ver -gt 0 ]];then
-	repoupdate="http://build.openhpc.community/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
+	#repoupdate="http://build.openhpc.community/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
+	repoupdate="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
     fi
 
     echo " "
