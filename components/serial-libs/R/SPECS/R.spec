@@ -90,6 +90,9 @@ Provides:       R-tcltk = %{version}
 Provides:       R-tools = %{version}
 Provides:       R-utils = %{version}
 
+# disable shebang mangling, otherwise R binaries not executable
+%define __brp_mangle_shebangs /usr/bin/true
+
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 %description
