@@ -66,6 +66,7 @@ C interfaces, and can interface with ordering tools such as Scotch.
 
 %if "%{compiler_family}" == "arm1"
 module load scalapack
+RPM_OPT_FLAGS="-O3 -fsimdmath -fPIC"
 %endif
 
 # Enable scalapack and openblas linkage for blas/lapack with gnu and other (e.g. llvm) builds
@@ -96,7 +97,6 @@ cp -f %{S:3} Makefile.inc
 %endif
 %if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
-RPM_OPT_FLAGS="-O3 -fsimdmath"
 %endif
 %endif
 
@@ -136,7 +136,6 @@ cp -f %{S:4} Makefile.inc
 %else
 %if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
-RPM_OPT_FLAGS="-O3 -fsimdmath"
 %else
 cp -f %{S:1} Makefile.inc
 %endif
