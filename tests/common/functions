@@ -162,6 +162,10 @@ check_compiler_family()
 	myCC=gcc
 	myCXX=g++
 	myFC=gfortran
+    elif [ $LMOD_FAMILY_COMPILER == "gnu9" ];then
+	myCC=gcc
+	myCXX=g++
+	myFC=gfortran
     elif [[ $LMOD_FAMILY_COMPILER == "llvm9" ]];then
 	myCC=clang
 	myCXX=clang++
