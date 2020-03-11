@@ -88,7 +88,7 @@ CDEFS   = -DAdd_
 #Begin Optimized options
 #OPTF    = -O  -DALLOW_NON_INIT -nofor_main
 #OPTL    = -O -nofor_main
-OPTF    = -O  -DALLOW_NON_INIT
+OPTF    = -O3 -fsimdmath -DALLOW_NON_INIT
 OPTL    = -O
 OPTC    = -O
 #End Optimized options
