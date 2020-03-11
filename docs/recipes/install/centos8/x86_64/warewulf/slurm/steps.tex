@@ -151,7 +151,7 @@ repository, which is shipped with CentOS and is enabled by default.
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add Slurm client support meta-package
-[sms](*\#*) cp /etc/passwd /etc/group  $CHROOT
+[sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
 # Add Network Time Protocol (NTP) support
