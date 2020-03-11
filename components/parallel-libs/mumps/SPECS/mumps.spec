@@ -138,11 +138,13 @@ cp -f %{S:4} Makefile.inc
 %else
 %if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
+RPM_OPT_FLAGS="-O3 -fsimdmath"
 %else
 cp -f %{S:1} Makefile.inc
 %endif
 %endif
 %endif
+
 
 make MUMPS_MPI=%{MUMPS_MPI} \
      FC=mpif77 \
