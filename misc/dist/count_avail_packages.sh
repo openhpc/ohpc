@@ -14,7 +14,7 @@ which repoquery >& /dev/null || { echo "repoquery must be installed locally"; ex
 
 version=$1
 arches="x86_64 aarch64 noarch"
-oses="CentOS_7 SLE_12"
+oses="CentOS_8 Leap_15"
 
 
 minor_ver=`echo ${version} | cut -d '.' -f1,2`
