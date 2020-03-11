@@ -115,8 +115,8 @@ Global Extensible Open Power Manager for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-io-libs
 Summary:   OpenHPC IO libraries for GNU
-Requires:  adios-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  adios-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+# TODO Requires:  adios-%{compiler_family}-mpich%{PROJ_DELIM}
+# TODO Requires:  adios-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  hdf5-%{compiler_family}%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -129,7 +129,7 @@ Requires:  pnetcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  phdf5-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
-Requires:  adios-%{compiler_family}-mvapich2%{PROJ_DELIM}
+# TODO Requires:  adios-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-fortran-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-%{compiler_family}-mvapich2%{PROJ_DELIM}
@@ -231,15 +231,15 @@ Summary:   OpenHPC parallel libraries for GNU and MPICH
 Requires:  boost-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  fftw-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  mfem-%{compiler_family}-mpich%{PROJ_DELIM}
+## TODO Requires:  mfem-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  mumps-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  petsc-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  opencoarrays-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scalapack-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  slepc-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  ptscotch-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  superlu_dist-%{compiler_family}-mpich%{PROJ_DELIM}
-Requires:  trilinos-%{compiler_family}-mpich%{PROJ_DELIM}
+## TODO Requires:  superlu_dist-%{compiler_family}-mpich%{PROJ_DELIM}
+## TODO Requires:  trilinos-%{compiler_family}-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-mpich-parallel-libs
 Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
 
@@ -248,15 +248,15 @@ Summary:   OpenHPC parallel libraries for GNU and OpenMPI
 Requires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  mfem-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  mfem-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  opencoarrays-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  trilinos-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  trilinos-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 
