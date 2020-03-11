@@ -88,9 +88,9 @@ CDEFS   = -DAdd_
 #Begin Optimized options
 #OPTF    = -O  -DALLOW_NON_INIT -nofor_main
 #OPTL    = -O -nofor_main
-OPTF    = -O  -DALLOW_NON_INIT -fPIC
-OPTL    = -O -fPIC
-OPTC    = -O -fPIC
+OPTF    = -O  -DALLOW_NON_INIT
+OPTL    = -O
+OPTC    = -O
 #End Optimized options
 INCS = $(INCPAR)
 LIBS = $(LIBPAR)
