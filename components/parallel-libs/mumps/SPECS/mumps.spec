@@ -83,9 +83,6 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm1"
-cp -f %{S:5} Makefile.inc
-%endif
 %endif
 
 %if "%{mpi_family}" == "mpich"
@@ -99,6 +96,7 @@ cp -f %{S:3} Makefile.inc
 %endif
 %if "%{compiler_family}" == "arm1"
 cp -f %{S:5} Makefile.inc
+RPM_OPT_FLAGS="-O3 -fsimdmath"
 %endif
 %endif
 
