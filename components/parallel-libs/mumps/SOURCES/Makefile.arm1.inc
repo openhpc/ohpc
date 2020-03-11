@@ -25,7 +25,7 @@
 # You have to choose one among the following two lines depending on
 # the type of analysis you want to perform. If you want to perform only
 # sequential analysis choose the first (remember to add -Dscotch in the ORDERINGSF
-# variable below); for both parallel and sequential analysis choose the second 
+# variable below); for both parallel and sequential analysis choose the second
 # line (remember to add -Dptscotch in the ORDERINGSF variable below)
 
 #LSCOTCH    = -L$(SCOTCHDIR)/lib -lesmumps -lscotch -lscotcherr
@@ -42,7 +42,7 @@ LPORD    = -L$(LPORDDIR) -lpord
 # You have to choose one among the following two lines depending on
 # the type of analysis you want to perform. If you want to perform only
 # sequential analysis choose the first (remember to add -Dmetis in the ORDERINGSF
-# variable below); for both parallel and sequential analysis choose the second 
+# variable below); for both parallel and sequential analysis choose the second
 # line (remember to add -Dparmetis in the ORDERINGSF variable below)
 
 #LMETIS    = -L$(LMETISDIR) -lmetis
@@ -64,23 +64,23 @@ IORDERINGSC = $(IMETIS) $(IPORD) $(ISCOTCH)
 
 PLAT    =
 LIBEXT  = .a
-OUTC    = -o 
-OUTF    = -o 
+OUTC    = -o
+OUTF    = -o
 RM = /bin/rm -f
 CC = mpicc
 FC = mpif77
 FL = mpif77
-AR = ar vr 
+AR = ar rv 
 #RANLIB = ranlib
 RANLIB  = echo
 SCALAP  = -L$(SCALAPACK_LIB) -lscalapack
 INCPAR = -I$(MPI_DIR)/include
 # LIBPAR = $(SCALAP)  -L/usr/local/lib/ -llamf77mpi -lmpi -llam
-LIBPAR = $(SCALAP)  -L$(MPI_DIR)/lib -lmpi 
+LIBPAR = $(SCALAP)  -L$(MPI_DIR)/lib -lmpi
 #LIBPAR = -lmpi++ -lmpi -ltstdio -ltrillium -largs -lt
 INCSEQ = -I$(topdir)/libseq
 LIBSEQ  =  -L$(topdir)/libseq -lmpiseq
-LIBBLAS = -L$(ARMPL_LIBRARIES) -larmpl
+LIBBLAS = -armpl
 LIBOTHERS = -lpthread
 #Preprocessor defs for calling Fortran from C (-DAdd_ or -DAdd__ or -DUPPER)
 CDEFS   = -DAdd_
@@ -88,7 +88,7 @@ CDEFS   = -DAdd_
 #Begin Optimized options
 #OPTF    = -O  -DALLOW_NON_INIT -nofor_main
 #OPTL    = -O -nofor_main
-OPTF    = -O  -DALLOW_NON_INIT
+OPTF    = -O3 -fsimdmath -DALLOW_NON_INIT
 OPTL    = -O
 OPTC    = -O
 #End Optimized options
