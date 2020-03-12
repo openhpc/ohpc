@@ -54,6 +54,7 @@ Requires:  lmod%{PROJ_DELIM}
 Requires:  losf%{PROJ_DELIM}
 Requires:  make
 Requires:  man
+Requires:  wget
 Requires:  net-tools
 Requires:  nfs-utils
 Requires:  chrony
