@@ -98,7 +98,7 @@ module load openblas
 %define blas_lib -L$OPENBLAS_LIB -lopenblas
 %endif
 
-%if "%{compiler_family}" = "arm1"
+%if "%{compiler_family}" == "arm1"
 %define blas_lib -armpl
 %endif
 
