@@ -2,23 +2,23 @@
 +++ MUMPS_5.1.1.patch/PORD/lib/Makefile	2017-04-05 10:06:15.000000000 -0700
 @@ -22,14 +22,18 @@
  # OUTC = -o
-
+ 
  .c.o:
 -	$(CC) $(COPTIONS) -c $*.c $(OUTC)$*.o
 +	$(CC) $(COPTIONS) -fPIC -c $*.c $(OUTC)$*.o
-
+ 
 -libpord$(LIBEXT):$(OBJS)
 +libpord$(PLAT)$(LIBEXT):$(OBJS)
  	$(AR)$@ $(OBJS)
  	$(RANLIB) $@
-
+ 
 +libpord$(PLAT).so:$(OBJS)
 +	$(CC) -shared $(OBJS) -Wl,-soname,libpord$(PLAT).so.5.0.0 -o libpord$(PLAT).so.5.0.0
 +	ln -s libpord$(PLAT).so.5.0.0 $@
 +
  clean:
  	rm -f *.o
-
+ 
  realclean:
 -	rm -f *.o libpord.a
 +	rm -f *.o libpord*.a *.so
@@ -27,12 +27,12 @@
 @@ -54,7 +54,7 @@
  multi_example:	s d c z
  	(cd examples ; $(MAKE) multi)
-
+ 
 -requiredobj: Makefile.inc $(LIBSEQNEEDED) $(libdir)/libpord$(PLAT)$(LIBEXT)
 +requiredobj: Makefile.inc $(LIBSEQNEEDED) $(libdir)/libpord$(PLAT)$(LIBEXT) $(libdir)/libpord$(PLAT).so
-
+ 
  # dummy MPI library (sequential version)
-
+ 
 @@ -68,13 +68,23 @@
  	  $(MAKE) CC="$(CC)" CFLAGS="$(OPTC)" AR="$(AR)" RANLIB="$(RANLIB)" OUTC="$(OUTC)" LIBEXT=$(LIBEXT); \
  	fi;
@@ -45,12 +45,12 @@
 +$(libdir)/libpord$(PLAT).so:
 +	if [ "$(LPORDDIR)" != "" ] ; then \
 +	  cd $(LPORDDIR); \
-+	  $(MAKE) CC="$(CC)" CFLAGS="$(OPTC) -fPIC" AR="$(AR) " RANLIB="$(RANLIB)" libpord$(PLAT).so; \
++	  $(MAKE) CC="$(CC)" CFLAGS="$(OPTC) -fPIC" AR="$(AR)" RANLIB="$(RANLIB)" libpord$(PLAT).so; \
 +	fi;
 +	if [ "$(LPORDDIR)" != "" ] ; then \
 +	  cp $(LPORDDIR)/libpord*.so $@; \
  	fi;
-
+ 
  clean:
  	(cd src; $(MAKE) clean)
  	(cd examples; $(MAKE) clean)
