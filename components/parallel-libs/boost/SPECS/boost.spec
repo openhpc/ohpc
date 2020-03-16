@@ -18,7 +18,6 @@
 
 # Base package name
 %define pname boost
-
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.71.0
@@ -34,20 +33,21 @@ Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
+
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
-%if 0%{?sles_version} || 0%{?suse_version}
-Patch1:         boost_fenv_suse.patch
+%if 0%{?sle_version} || 0%{?suse_version}
+Patch1:         boost-fenv_suse.patch
+%define fenv_patch 1
 %endif
 %endif
 
 # intel-linux toolset fix: https://github.com/boostorg/build/issues/475
 %if "%{compiler_family}" == "intel"
-Patch2:         boost-1.71.0-intel-bootstrap.patch
+Patch2:         boost-intel_bootstrap.patch
 %endif
 
-
 # optflag patch from Fedora
-Patch4: boost-1.66.0-build-optflags.patch
+Patch3: boost-build_optflags.patch
 
 %if 0%{?rhel}
 BuildRequires:  bzip2-devel
@@ -58,14 +58,15 @@ BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  xorg-x11-devel
 %endif
-BuildRequires:  libicu-devel >= 4.4
-BuildRequires:  python3-devel
-BuildRequires:  zlib-devel
 
-# (Tron: 3/4/16) Add libicu dependency for SLES12sp1 as the distro does not seem to have it by default and some tests are failing
-%if 0%{?suse_version}
-Requires: libicu-devel >= 4.4
-%endif
+BuildRequires:  m4
+BuildRequires:  libicu-devel(x86-64)
+Requires: libicu-devel(x86-64)
+BuildRequires: libquadmath-devel(x86-64)
+Requires: libquadmath-devel(x86-64)
+BuildRequires:  python3-devel(x86-64)
+BuildRequires:  libstdc++-devel(x86-64)
+BuildRequires:  zlib-devel(x86-64)
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -91,13 +92,12 @@ using Boost, you also need the boost-devel package. For documentation,
 see the boost-doc package.
 
 
+
 %prep
 %setup -q -n %{pname}_%{version_exp}
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?fenv_patch}
 %patch1 -p1
-%endif
 %endif
 
 %if "%{compiler_family}" == "intel"
@@ -105,7 +105,21 @@ see the boost-doc package.
 %endif
 
 # optflag patches from Fedora
-%patch4 -p1
+%patch3 -p1
+
+sed -i "s/-ip/-qnextgen/g" tools/build/src/tools/intel-linux.jam
+sed -i "/flags.*-inline-level.*;/d" tools/build/src/tools/intel-linux.jam
+sed -i "s/-fabi-version=./-O3/g" libs/numeric/ublas/test/Jamfile
+sed -i "s/-fabi-version=./-O3/g" libs/numeric/ublas/IDEs/qtcreator/test/concepts.pro
+sed -i "s/-w2/-O3/g" tools/build/src/tools/intel-linux.jam
+sed -i "s/-w1/-O3/g" tools/build/src/tools/intel-linux.jam
+sed -i "s/-O3/-O3/g" tools/build/src/tools/intel-linux.jam
+sed -i "s/-fabi-version=./-O3/g" libs/log/build/Jamfile.v2
+sed -i "s/-xCORE-AVX2/-mavx2/g" libs/log/build/Jamfile.v2
+sed -i "s/-xSSSE3/-mavx2/g" libs/log/build/Jamfile.v2
+sed -i "s/-fabi-version=./-O3/g" libs/log/config/x86-ext/Jamfile.jam 
+sed -i "s/-xCORE-AVX2/-mavx2/g" libs/log/config/x86-ext/Jamfile.jam
+sed -i "s/-xSSSE3/-mavx2/g" libs/log/config/x86-ext/Jamfile.jam
 
 %build
 # OpenHPC compiler/mpi designation
@@ -113,6 +127,8 @@ see the boost-doc package.
 
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
 export toolset=clang
+%else
+export toolset=intel-linux
 %endif
 
 %if "%{compiler_family}" == "arm"
@@ -122,19 +138,17 @@ export PATH=${where_armclang}/../llvm-bin:$PATH
 %endif
 
 %if %build_mpi
-export CC=mpicc
-export CXX=mpicxx
-export F77=mpif77
-export FC=mpif90
-export MPICC=mpicc
-export MPIFC=mpifc
-export MPICXX=mpicxx
+export CC=%{mpicc}
+export CXX=%{mpicxx}
+export F77=%{mpif77}
+export FC=%{mpif90}
+export MPICC=%{mpicc}
+export MPIFC=%{mpifc}
+export MPICXX=%{mpicxx}
 %endif
 
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
-
-
 
 cat << "EOF" >> user-config.jam
 %if "%{compiler_family}" == "gnu9"
@@ -142,17 +156,19 @@ import os ;
 local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
 local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
 using gcc : : : <compileflags>$(RPM_OPT_FLAGS) <linkflags>$(RPM_LD_FLAGS) ;
-%endif
+%endif # GNU 9 compiler
 %if %build_mpi
-using mpi : mpicxx ;
-%endif
+using mpi : %{mpicxx} ;
+%endif # MPI enabled
 EOF
 
 LIBRARIES_FLAGS=--with-libraries=all
 ./bootstrap.sh $LIBRARIES_FLAGS --prefix=%{install_path} --with-toolset=${toolset} || cat bootstrap.log
 
 # perform the compilation
-./b2 -d+2 -q %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam
+./b2 -d2 -q %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam toolset=${toolset}
+
+
 
 %install
 # OpenHPC compiler/mpi designation
@@ -165,17 +181,16 @@ export PATH=${where_armclang}/../llvm-bin:$PATH
 %endif
 
 %if %build_mpi
-export CC=mpicc
-export CXX=mpicxx
-export F77=mpif77
-export FC=mpif90
-export MPICC=mpicc
-export MPIFC=mpifc
-export MPICXX=mpicxx
+export CC=%{mpicc}
+export CXX=%{mpicxx}
+export F77=%{mpif77}
+export FC=%{mpif90}
+export MPICC=%{mpicc}
+export MPIFC=%{mpifc}
+export MPICXX=%{mpicxx}
 %endif
 
 ./b2 %{?_smp_mflags} install threading=multi link=shared --prefix=%{buildroot}/%{install_path} --user-config=./user-config.jam
-
 
 # OpenHPC module file
 %if %build_mpi
@@ -226,6 +241,8 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
+
+
 
 %files
 %{OHPC_PUB}

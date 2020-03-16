@@ -6,7 +6,7 @@
          fi
 -        B2_CXX="${CXX} -xc++"
 +       # https://github.com/boostorg/build/issues/475
-+        B2_CXX="${CXX} -xc++  -std=c++11"
++        B2_CXX="${CXX} -xc++  -std=c++11 -qnextgen"
          B2_CXXFLAGS_RELEASE="-O3 -s"
          B2_CXXFLAGS_DEBUG="-O0 -g -p"
      ;;
