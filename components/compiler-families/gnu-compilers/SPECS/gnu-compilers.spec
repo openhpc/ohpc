@@ -47,6 +47,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  fdupes
 %endif
 Requires: glibc-devel
+Requires: binutils
 
 
 %define install_path %{OHPC_COMPILERS}/gcc/%{version}
