@@ -63,9 +63,9 @@ Requires:  OpenIPMI
 Requires:  pdsh%{PROJ_DELIM}
 Requires:  screen
 Requires:  sudo
-%if 0%{?rhel}
 Requires:  binutils
 Requires:  binutils-devel
+%if 0%{?rhel}
 Requires:  man-db
 Requires:  yum-utils
 %endif
