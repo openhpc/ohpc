@@ -48,5 +48,6 @@ default location for this example is in
 [sms](*\#*) mkdir -m 755 $CHROOT/dev                       # create chroot /dev dir
 [sms](*\#*) mknod -m 666 $CHROOT/dev/zero c 1 5            # create /dev/zero device
 [sms](*\#*) wwmkchroot -v opensuse-15.1 $CHROOT            # create base image
+[sms](*\#*) cp -p /etc/zypp/repos.d/OpenHPC.repo $CHROOT/etc/zypp/repos.d
 \end{lstlisting}
 % end_ohpc_run
