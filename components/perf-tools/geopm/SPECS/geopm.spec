@@ -14,6 +14,7 @@
 # Supporting only Python3 here, but a quick way to set python variables
 %define ohpc_python_dependent 1
 %define python_family python3
+
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -76,7 +77,6 @@ multiple MPI jobs and multiple users by the system resource manager.
 %ohpc_setup_compiler
 test -f configure || ./autogen.sh
 ./configure --prefix=%{install_path} \
-            --with-python=python3 \
             --libdir=%{install_path}/lib \
             --disable-doc \
             --with-python=%{python_family} \
