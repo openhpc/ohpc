@@ -47,6 +47,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  fdupes
 %endif
 Requires: glibc-devel
+Requires: binutils
 
 
 %define install_path %{OHPC_COMPILERS}/gcc/%{version}
@@ -110,7 +111,7 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib64
-prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}
 
 family "compiler"
 EOF

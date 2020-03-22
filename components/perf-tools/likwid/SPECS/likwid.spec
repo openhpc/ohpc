@@ -11,78 +11,109 @@
 # Build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
-%global gnu_family gnu8
 
 # Base package name
 %define pname likwid
 
-Summary:   Toolsuite of command line applications for performance oriented programmers
+Summary:   Performance tools for the Linux console
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   4.3.4
+Version:   5.0.1
 Release:   1%{?dist}
-License:   GPLv3
+License:   GPL-3.0+
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://github.com/RRZE-HPC/likwid
-Source0:   https://github.com/RRZE-HPC/likwid/archive/%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Patch1:    likwid-gfortran.patch
-BuildRequires: perl-Data-Dumper
+Source0:   https://github.com/RRZE-HPC/likwid/archive/v%{version}.tar.gz
+
+%if 0%{?rhel_version}
+BuildRequires: gcc-gfortran
+%endif
+
+%if 0%{?sle_version}
+BuildRequires: gcc-fortran
+%endif
+
+BuildRequires: perl
+Requires: perl
+BuildRequires: lua
+Requires: lua
+Requires(post): /sbin/ldconfig
+Requires(postun): /sbin/ldconfig
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
 %description
-LIKWID stands for "Like I Knew What I'm Doing." It is an easy to use yet powerful
-command line performance tool suite for the GNU/Linux operating system. While the
-focus of LIKWID is on x86 processors, some of the tools are portable and not
-limited to any specific architecture.
+Likwid is a simple to install and use toolsuite of command line applications
+for performance oriented programmers. It works for Intel and AMD processors
+on the Linux operating system.
+
+It consists of:
+
+ * likwid-topology:
+     print thread, cache and NUMA topology
+ * likwid-perfctr:
+     configure and read out hardware performance counters on x86, ARM and POWER
+     processors
+ * likwid-powermeter:
+     read out RAPL Energy information and get info about Turbo mode steps
+ * likwid-pin:
+     pin your threaded application (pthread, Intel and gcc OpenMP to dedicated
+     processors)
+ * likwid-genTopoCfg:
+     Dumps topology information to a file
+ * likwid-memsweeper:
+     Sweep memory of NUMA domains and evict cachelines from the last level cache
+
 
 %prep
 %setup -q -n %{pname}-%{version}
-%if "%{compiler_family}" == "%{gnu_family}"
-%patch1 -p1
-%endif
 
 %build
 
-# OpenHPC compiler/mpi designation
+# OpenHPC compiler setup
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" == "%{gnu_family}"
-%define compiler GCC
+%{__make} FORTRAN_INTERFACE="true" \
+          PREFIX="%{install_path}" \
+          LIBDIR="%{install_path}/lib" \
+          MANPREFIX="%{install_path}/man" \
+%if "%{compiler_family}" == "intel"
+          COMPILER="ICC" \
+          FC="ifort" \
+          FCFLAGS="-module ./" \
 %else
-%define compiler ICC
+          COMPILER="GCC" \
+          FC="gfortran" \
+          FCFLAGS="-J ./ -fsyntax-only" \
 %endif
-
-make \
-    FORTRAN_INTERFACE="true" \
-    COMPILER="%{compiler}" \
-    PREFIX="%{install_path}" \
-    LIBDIR="%{install_path}/lib" \
-    MANPREFIX="%{install_path}/man" \
-    OPTFLAGS="%{optflags}" \
-    Q=""
+          OPTFLAGS="%{optflags}" \
+          Q=""
 
 
 %install
 
-# OpenHPC compiler/mpi designation
+# OpenHPC compiler setup
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" == "%{gnu_family}"
-%define compiler GCC
+%{__make} FORTRAN_INTERFACE="true" \
+          PREFIX="%{buildroot}%{install_path}" \
+          LIBDIR="%{buildroot}%{install_path}/lib" \
+          MANPREFIX="%{buildroot}%{install_path}/man" \
+%if "%{compiler_family}" == "intel"
+          COMPILER="ICC" \
+          FC="ifort" \
+          FCFLAGS="-module ./" \
 %else
-%define compiler ICC
+          COMPILER="GCC" \
+          FC="gfortran" \
+          FCFLAGS="-J ./ -fsyntax-only" \
 %endif
+          INSTALL_CHOWN="" \
+          OPTFLAGS="%{optflags}" \
+          Q="" install
 
-make %{?_smp_mflags} \
-    FORTRAN_INTERFACE="true" \
-    PREFIX="%{buildroot}%{install_path}" \
-    LIBDIR="%{buildroot}%{install_path}/lib" \
-    MANPREFIX="%{buildroot}%{install_path}/man" \
-    INSTALL_CHOWN="" \
-    OPTFLAGS="%{optflags}" \
-    Q="" \
-    install
+chmod 755 $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-accessD
+chmod 755 $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -125,6 +156,18 @@ EOF
 set     ModulesVersion      "%{version}"
 EOF
 
+%post
+/sbin/ldconfig
+chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-accessD
+chmod u+s $RPM_BUILD_ROOT/%{install_path}/sbin/likwid-setFreq
+
+%postun
+/sbin/ldconfig
+
 %files
 %{OHPC_PUB}
-%doc INSTALL COPYING README.md
+%doc INSTALL README.md
+%license COPYING
+%doc %{install_path}/man/man1/*
+%doc %{install_path}/share/likwid/docs/*
+

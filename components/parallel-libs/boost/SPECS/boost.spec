@@ -21,9 +21,9 @@
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.70.0
+Version:        1.71.0
 
-%define version_exp 1_70_0
+%define version_exp 1_71_0
 
 Release:        1%{?dist}
 License:        BSL-1.0
@@ -40,14 +40,16 @@ Patch1:         boost_fenv_suse.patch
 %endif
 %endif
 
-# https://github.com/boostorg/mpi/pull/81
-Patch2:        https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.69-mpi-c_data.patch
+# intel-linux toolset fix: https://github.com/boostorg/build/issues/475
+%if "%{compiler_family}" == "intel"
+Patch2:         boost-1.71.0-intel-bootstrap.patch
+%endif
+
 
 # optflag patch from Fedora
-Patch3: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-bjam-build-flags.patch
-Patch4: https://src.fedoraproject.org/rpms/boost/raw/master/f/boost-1.66.0-build-optflags.patch
+Patch4: boost-1.66.0-build-optflags.patch
 
-%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
+%if 0%{?rhel}
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
 BuildRequires:  xorg-x11-server-devel
@@ -57,7 +59,7 @@ BuildRequires:  libexpat-devel
 BuildRequires:  xorg-x11-devel
 %endif
 BuildRequires:  libicu-devel >= 4.4
-BuildRequires:  python-devel
+BuildRequires:  python3-devel
 BuildRequires:  zlib-devel
 
 # (Tron: 3/4/16) Add libicu dependency for SLES12sp1 as the distro does not seem to have it by default and some tests are failing
@@ -97,10 +99,12 @@ see the boost-doc package.
 %patch1 -p1
 %endif
 %endif
-%patch2 -p2
+
+%if "%{compiler_family}" == "intel"
+%patch2 -p1
+%endif
 
 # optflag patches from Fedora
-%patch3 -p1
 %patch4 -p1
 
 %build
@@ -130,8 +134,10 @@ export MPICXX=mpicxx
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
 
+
+
 cat << "EOF" >> user-config.jam
-%if "%{compiler_family}" == "gnu8"
+%if "%{compiler_family}" == "gnu9"
 import os ;
 local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
 local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;

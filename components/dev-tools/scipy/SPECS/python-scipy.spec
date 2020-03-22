@@ -14,7 +14,7 @@
 %define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu8
+%global gnu_family gnu9
 
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
@@ -25,7 +25,7 @@ Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname scipy
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.2.1
+Version:        1.3.1
 Release:        1%{?dist}
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause

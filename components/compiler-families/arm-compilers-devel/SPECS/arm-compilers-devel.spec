@@ -9,11 +9,11 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%global pname arm-compilers-devel
+%global pname arm1-compilers-devel
 
 Summary:   OpenHPC compatibility package for Arm HPC compiler
 Name:      %{pname}%{PROJ_DELIM}
-Version:   1.3.4
+Version:   2.0
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
@@ -31,7 +31,7 @@ Provides OpenHPC-style module compatibility for use with the Arm HPC compiler su
 
 %install
 
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/arm
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/arm1
 
 
 %pre
@@ -54,10 +54,10 @@ fi
 
 # Verify min version expectations
 
-min_ver="18.3"
+min_ver="20.0.51"
 versions=""
 for file in ${versions_all}; do
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
     echo "--> Version ${version} detected"
     echo -e "${version}\n${min_ver}" | sort -V | head -n 1 | grep -q "^${min_ver}"
     if [ $? -ne 0 ];then
@@ -101,7 +101,7 @@ fi
 
 # cache path to generic compiler modulename
 
-generic=`find /opt/arm/modulefiles/Generic-AArch64/ -name arm-hpc-compiler | awk -F '/opt/arm/modulefiles/' '{print $2}'`
+generic=`find $modpath/Generic-AArch64/ -name arm-linux-compiler | awk -F "$modpath/" '{print $2}'`
 if [ ! -n "${generic}" ];then
     echo ""
     echo "Error: Unable to determine path to Generic modulefiles provided by Arm compiler toolchain"
@@ -111,7 +111,7 @@ else
 fi
 
 # Module header
-%{__cat} << EOF > %{OHPC_MODULES}/arm/compat
+%{__cat} << EOF > %{OHPC_MODULES}/arm1/compat
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -131,7 +131,7 @@ set    ARM_GENERIC ${generic}
 setenv ARM_GENERIC \$ARM_GENERIC
 
 # update module path hierarchy
-prepend-path    MODULEPATH          ${modpath}:%{OHPC_MODULEDEPS}/arm
+prepend-path    MODULEPATH          ${modpath}:%{OHPC_MODULEDEPS}/arm1
 # load generic variant
 depends-on      \$ARM_GENERIC
 family "compiler"
@@ -142,8 +142,8 @@ EOF
 
 if [ $1 -eq 0 ];then
 
-    if [ -s %{OHPC_MODULES}/arm/compat ];then
-	rm -f %{OHPC_MODULES}/arm/compat 
+    if [ -s %{OHPC_MODULES}/arm1/compat ];then
+	rm -f %{OHPC_MODULES}/arm1/compat
     fi
 fi
 

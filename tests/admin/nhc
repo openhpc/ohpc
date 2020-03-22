@@ -14,6 +14,9 @@ fi
 }
 
 @test "[nhc] generate config file" {
+    run which nhc-genconf
+    assert_success
+
     run nhc-genconf
     if [ ! -f /etc/nhc/nhc.conf.auto ]; then
         flunk
@@ -21,10 +24,10 @@ fi
 }
 
 @test "[nhc] service failure detection and restart" {
-    grep ntpd /etc/nhc/nhc.conf.auto > /etc/nhc/nhc.conf.ntpd
-    systemctl stop ntpd
-    run nhc -c /etc/nhc/nhc.conf.ntpd
+    grep rsyslog /etc/nhc/nhc.conf.auto > /etc/nhc/nhc.conf.rsyslog
+    systemctl stop rsyslog
+    run nhc -c /etc/nhc/nhc.conf.rsyslog
     assert_failure
-    run systemctl status ntpd
+    run systemctl status rsyslog
     assert_success
 }

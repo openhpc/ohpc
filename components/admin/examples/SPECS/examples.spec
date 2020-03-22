@@ -10,14 +10,14 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-Summary: Example source code and templates for use within OpenHPC environment.
-Name:    examples%{PROJ_DELIM}
-Version: 1.5
-Release: 1
-License: Apache-2.0
-Group:   %{PROJ_NAME}/admin
-URL:     https://github.com/openhpc/ohpc
-Source0: LICENSE
+Summary:  Example source code and templates for use within OpenHPC environment.
+Name:     examples%{PROJ_DELIM}
+Version:  2.0
+Release:  1
+License:  Apache-2.0
+Group:    %{PROJ_NAME}/admin
+URL:      https://github.com/openhpc/ohpc
+Source0:  LICENSE
 Source1:  hello.c
 Source2:  ifcfg-ib0
 Source3:  ifcfg-ib0.sles.ww

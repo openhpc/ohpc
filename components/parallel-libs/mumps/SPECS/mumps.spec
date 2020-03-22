@@ -13,13 +13,13 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu8
+%global gnu_family gnu9
 
 # Base package name
 %define pname mumps
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        5.2.0
+Version:        5.2.1
 Release:        1%{?dist}
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
@@ -34,13 +34,12 @@ Source5:        Makefile.arm.impi.inc
 Source6:        Makefile.arm.openmpi.inc
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
-Patch2:         mumps-5.0.2-psxe2017.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
-%if 0%{?suse_version}
-BuildRequires: libgomp1
-%else
+%if 0%{?rhel}
 BuildRequires: libgomp
+%else
+BuildRequires: libgomp1
 %endif
 
 # Every other family needs scalapack
@@ -62,9 +61,6 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %setup -q -n MUMPS_%{version}
 %patch0 -p1
 %patch1 -p1
-%if "%{compiler_family}" == "intel"
-#%patch2 -p2
-%endif
 
 %build
 %ohpc_setup_compiler
@@ -135,7 +131,7 @@ cp -f %{S:6} Makefile.inc
 %endif
 %endif
 
-%if "%{mpi_family}" == "openmpi3"
+%if "%{mpi_family}" == "openmpi4"
 %global MUMPS_MPI openmpi
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "intel"

@@ -69,8 +69,8 @@ for line in open(sys.argv[1]):
     if ((line[2].startswith('nagios-plugins')) and
             (not line[2].startswith('nagios-plugins-ohpc'))):
         continue
-    # This tries to filter out versions with a "."
-    if "." in line[2]:
+    # This tries to filter out versions with a "." or _isa with a "("
+    if "." in line[2] or "(" in line[2]:
         continue
     if line[0] in dependency:
         if line[2] not in dependency[line[0]]:
@@ -83,8 +83,21 @@ additional = {}
 # Add entries to the dict which have no dependencies
 for v in dependency.values():
     for value in v:
-        if spec_dict[value] not in dependency.keys():
-            additional[spec_dict[value]] = []
+        try:
+            if spec_dict[value] not in dependency.keys():
+               additional[spec_dict[value]] = []
+        except KeyError as err:
+            # Handle python_prefix rpm macro
+            if '-numpy-' in value:
+                spec_dict[value] = 'python-numpy.spec'
+            elif '-Cython-' in value:
+                spec_dict[value] = 'python-Cython.spec'
+            elif '-scipy-' in value:
+                spec_dict[value] = 'python-scipy.spec'
+            elif '-mpi4py-' in value:
+                spec_dict[value] = 'python-mpi4py.spec'
+            else:
+                print(err)
 
 dependency.update(additional)
 

@@ -10,105 +10,153 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%define pname warewulf-common
 %define dname common
-%define wwpkgdir /srv/
+%define pname warewulf-%{dname}
+%define wwsrvdir /srv
+%define develSHA 98fcdc336349378c8ca1b5b0e7073a69a868a40f
+%define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
-Summary: A suite of tools for clustering
-Version: 3.8.1
+Version: 3.9.0
 Release: 1%{?dist}
+Summary: Scalable systems management suite for high performance clusters
 License: US Dept. of Energy (BSD-like)
-Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/warewulf/warewulf3/archive/3.8.1.tar.gz#/warewulf3-%{version}.tar.gz
-Patch1:  warewulf-common.bin-file.patch
-Patch2:  warewulf-common.dbinit.patch
-Patch3:  warewulf-common.mysql.r1978.patch
-Patch4:  warewulf-common.rhel_service.patch
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
+Patch0:  warewulf-common.mysql_r1978.patch
+Patch1:  warewulf-common.rhel_service.patch
+Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
-BuildRequires: autoconf
-BuildRequires: automake
-Conflicts: warewulf <= 2.9
-# 06/14/14 karl.w.schulz@intel.com - SUSE does not allow files in /usr/lib64 for noarch package
-%if 0%{!?sles_version} && 0%{!?suse_version}
+Conflicts: warewulf < 3
 BuildArch: noarch
-%endif
-%if 0%{?suse_version}
-Requires: mysql perl-DBD-mysql
+BuildRequires: autoconf, automake
+Requires: perl(DBD::mysql), perl(DBD::Pg), perl(DBD::SQLite), perl(JSON::PP)
+
+%if 0%{?rhel:1} || 0%{?sle_version} > 150000
+%global sql_name mariadb
+%global daemon_name mariadb
 %else
-Requires: mariadb-server perl-DBD-MySQL
-Requires: perl-Term-ReadLine-Gnu
+%global sql_name mysql
+%global daemon_name mysqld
 %endif
+
+%if 0%{?rhel} >= 8
+BuildRequires: systemd
+Requires: perl-Sys-Syslog
+%endif
+%if 0%{?suse_version:1}
+BuildRequires: systemd-rpm-macros
+Requires: perl-Unix-Syslog
+%endif
+
+Requires: %sql_name
 
 %description
-Warewulf >= 3 is a set of utilities designed to better enable
-utilization and maintenance of clusters or groups of computers.
+Warewulf is an operating system management toolkit designed to facilitate
+large scale deployments of systems on physical, virtual and cloud-based
+infrastructures. It facilitates elastic and large deployments consisting
+of groups of homogenous systems.
 
-This is the main package which includes the main daemon and
-supporting libs.
+Warewulf Common contains the core functionality of Warewulf. It provides
+the base libraries that are shared and utilized by the other Warewulf
+modules as well as the backend data store interface, event and trigger
+handlers and a basic command line interface.
 
 
 %prep
-%setup -q -n warewulf3-%{version}
-cd %{dname}
+cd %{_builddir}
+%{__rm} -rf %{name}-%{version} %{wwextract}
+%{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
+%setup -q -D
+%patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 
 %build
-cd %{dname}
-if [ ! -f configure ]; then
-    ./autogen.sh
-fi
-%configure --localstatedir=%{wwpkgdir}
+./autogen.sh
+WAREWULF_STATEDIR=%{wwsrvdir}
+%configure --localstatedir=%{wwsrvdir}
 %{__make} %{?mflags}
 
 
 %install
-cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
 
-%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %pre
-groupadd -r warewulf >/dev/null 2>&1 || :
+/usr/sbin/groupadd -r warewulf >/dev/null 2>&1 || :
 
 
 %post
-if [ $1 -eq 2 ] ; then
+# Canonicalize on upgrade, before old package is removed
+if [ $1 -gt 1 ] ; then
     %{_bindir}/wwsh object canonicalize -t node >/dev/null 2>&1 || :
     %{_bindir}/wwsh object canonicalize -t file >/dev/null 2>&1 || :
 fi
 
-%if 0%{?suse_version}
-systemctl start mysql >/dev/null 2>&1 || :
-systemctl enable mysql >/dev/null 2>&1 || :
-%else
-systemctl start mariadb >/dev/null 2>&1 || :
-systemctl enable mariadb >/dev/null 2>&1 || :
-%endif
-
 
 %files
-%{_sysconfdir}/bash_completion.d/warewulf_completion
-%{OHPC_PUB}
-%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO %{dname}/LICENSE
+%defattr(-, root, root)
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING LICENSE
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/
 %attr(0755, root, warewulf) %dir %{_sysconfdir}/warewulf/defaults/
-%attr(0444, root, warewulf) %{_sysconfdir}/warewulf/functions
+%attr(0444, root, warewulf) %{_libexecdir}/warewulf/wwinit/functions
+%attr(0644, root, root) %{_sysconfdir}/bash_completion.d/warewulf_completion
 %attr(0644, root, warewulf) %config(noreplace) %{_sysconfdir}/warewulf/database.conf
 %attr(0640, root, warewulf) %config(noreplace) %{_sysconfdir}/warewulf/database-root.conf
 %attr(0644, root, warewulf) %config(noreplace) %{_sysconfdir}/warewulf/defaults/node.conf
+%{_mandir}/*
 %{_bindir}/*
 %{_datadir}/warewulf/
 %{_libexecdir}/warewulf/wwinit
-%{_mandir}/*
 %{perl_vendorlib}/*
 
 # 06/14/14 karl.w.schulz@intel.com - include required dir for SUSE
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 %dir %{_libexecdir}/warewulf/
 %endif
+
+
+# ====================
+%package localdb
+Summary: Warewulf - Install local database server
+Requires: %{sql_name}-server
+
+%description localdb
+Warewulf is an operating system management toolkit designed to facilitate
+large scale deployments of systems on physical, virtual and cloud-based
+infrastructures. It facilitates elastic and large deployments consisting
+of groups of homogenous systems.
+
+This metapackage installs a local MySQL or MariaDB instance. It is not
+required for installs that will use an external database server.
+
+By default, removing this package will not remove or disable the installed
+SQL server.
+
+%post localdb
+# Start services on install.
+# For upgrades or removal, restart after the old package is removed.
+if [ $1 -eq 1 ] ; then
+%if 0%{?sle_version:1} || 0%{?rhel} >= 8
+%systemd_post %{daemon_name}.service
+%else
+/usr/bin/systemctl --no-reload preset %{daemon_name}.service  &> /dev/null || :
+%endif
+
+/usr/bin/systemctl reenable %{daemon_name}.service &> /dev/null || :
+/usr/bin/systemctl restart %{daemon_name}.service  &> /dev/null || : 
+fi
+
+%postun localdb
+%if 0%{?sle_version:1} || 0%{?rhel} >= 8
+%systemd_postun_with_restart %{daemon_name}.service
+%else
+/usr/bin/systemctl try-restart %{daemon_name}.service  &> /dev/null || :
+%endif
+
+%files localdb
+%defattr(-, root, root)
+
+
+# ====================

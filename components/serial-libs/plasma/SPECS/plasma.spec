@@ -14,7 +14,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 # Build requires
-BuildRequires: python
+BuildRequires: python2
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
@@ -53,8 +53,11 @@ value problems.
 %prep
 %setup -q -a 1 -n %{pname}_%{version}
 %patch1 -p 0
+mkdir bin
+ln -s /usr/bin/python2 bin/python
 
 %build
+export PATH="$PWD/bin:$PATH"
 mkdir -p build/download
 
 cp %{SOURCE0} build/download
@@ -72,7 +75,7 @@ module load openblas
 
 export SHARED_OPT=-shared
 
-%if %{compiler_family} == gnu8
+%if %{compiler_family} == gnu9
 export PIC_OPT=-fPIC
 export SONAME_OPT="-Wl,-soname"
 %endif
@@ -94,7 +97,7 @@ plasma-installer_%{version}/setup.py              \
     --cc=${CC}                                    \
     --fc=${FC}                                    \
     --notesting                                   \
-%if "%{compiler_family}" == "gnu8" || "%{compiler_family}" == "llvm"
+%if "%{compiler_family}" == "gnu9" || "%{compiler_family}" == "llvm"
     --cflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
     --fflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
@@ -149,7 +152,7 @@ popd 2>&1 > /dev/null
 rm -f install/lib/*.a
 
 %install
-
+export PATH="$PWD/bin:$PATH"
 mkdir -p %{buildroot}%{install_path}
 
 # OpenHPC module file
@@ -219,4 +222,3 @@ popd 2>&1 > /dev/null
 %files
 %{OHPC_PUB}
 %doc LICENSE README ReleaseNotes docs/pdf/*.pdf
-

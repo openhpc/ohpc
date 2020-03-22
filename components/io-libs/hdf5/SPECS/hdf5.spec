@@ -17,7 +17,7 @@
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.10.5
+Version:   1.10.6
 Release:   1%{?dist}
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
@@ -48,9 +48,9 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 %prep
 
 %setup -q -n %{pname}-%{version}
-%patch0 -p0
-%patch1 -p0
-%patch2 -p0
+#%patch0 -p0
+#%patch1 -p0
+#%patch2 -p0
 
 # Fix building with gcc8 (this should be a patch)
 sed "s/\(.*\)(void) HDF_NO_UBSAN/HDF_NO_UBSAN \1(void)/" -i src/H5detect.c
@@ -72,7 +72,7 @@ cp /usr/lib/rpm/config.guess bin
 	    --enable-cxx             \
 	    --enable-fortran2003    || { cat config.log && exit 1; }
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif

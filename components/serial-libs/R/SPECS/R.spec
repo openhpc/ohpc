@@ -12,7 +12,7 @@
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -21,7 +21,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 
 Name:		%{pname}-%{compiler_family}%{PROJ_DELIM}
 Release:	1%{?dist}
-Version:        3.5.3
+Version:        3.6.3
 Source:         https://cran.r-project.org/src/base/R-3/R-%{version}.tar.gz
 Url:            http://www.r-project.org/
 Summary:        R is a language and environment for statistical computing and graphics (S-Plus like).
@@ -37,27 +37,14 @@ BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
 BuildRequires:  perl
 BuildRequires:  readline-devel
-%if 0%{?suse_version} > 1020
-%if 0%{?suse_version} < 1230
-%if 0%{?suse_version} > 1120
-%endif
-%else
 BuildRequires:  xdg-utils
-%endif
-%endif
 BuildRequires:  pango-devel
 BuildRequires:  tcl-devel
 BuildRequires:  xz-devel
 BuildRequires:  pcre-devel
 BuildRequires:  libcurl-devel
-### Moved to CENTOS only until SLES has a newer texinfo version
-###BuildRequires:  texinfo >= 5.1
 BuildRequires:  tk-devel
-# BuildRequires:  xorg-x11-devel
-# CentOS needs X11 headers/libs like Intrisic.h which suse provides
-%if 0%{?suse_version}
-#BuildRequires:  texlive-fonts-extra
-%else
+%if 0%{?rhel}
 BuildRequires:  libXt-devel
 BuildRequires:  texinfo >= 5.1
 BuildRequires:  bzip2-devel
@@ -68,13 +55,8 @@ Requires:       freetype2
 Requires:       make
 Requires:       readline
 Requires:       xdg-utils
-%if 0%{?suse_version}
-BuildRequires:  libicu52_1
-Requires:	libicu52_1
-%else
-BuildRequires:  libicu
+BuildRequires:  libicu-devel
 Requires:	libicu
-%endif
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 Provides:       R = %{version}
@@ -108,6 +90,9 @@ Provides:       R-tcltk = %{version}
 Provides:       R-tools = %{version}
 Provides:       R-utils = %{version}
 
+# disable shebang mangling, otherwise R binaries not executable
+%define __brp_mangle_shebangs /usr/bin/true
+
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 %description
@@ -134,7 +119,7 @@ export R_BROWSER="xdg-open"
 export R_PDFVIEWER="xdg-open"
 
 %if "%{compiler_family}" != "intel"
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 BLAS="-L${ARMPL_LIBRARIES} -larmpl_mp -fopenmp"
 echo "ArmPL options flags .... ${BLAS} "
 %else
@@ -147,7 +132,7 @@ BLAS="-L${MKL_LIB_PATH} -lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -fopenmp -ldl 
 echo "MKL options flag .... $MKL "
 %endif
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 FFLAGS="-fPIC -DPIC -i4" \
 FCFLAGS="-fPIC -DPIC -i4" \
 FPICFLAGS="-i4" \
@@ -207,7 +192,7 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_LIB        %{install_path}/lib64
 setenv          %{PNAME}_SHARE      %{install_path}/share
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 depends-on openblas
 %endif
 

@@ -30,7 +30,7 @@ BuildRequires: libevent-devel
 
 Summary:   MPICH MPI implementation
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
-Version:   3.3.1
+Version:   3.3.2
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
@@ -85,7 +85,7 @@ export CPATH=${PMIX_INC}
 %endif
     || { cat config.log && exit 1; }
 
-%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif

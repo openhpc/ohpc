@@ -19,32 +19,31 @@
 # Specify python version of a given file
 %define versionize_script() (sed -i 's,/env python,/env %1,g' %2)
 
-%{!?build_cflags:%global build_cflags $RPM_OPT_FLAGS}
 %{!?build_ldflags:%global build_ldflags %nil}
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.9.10
+Version:   0.11
 Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://hpc.github.io/%{pname}/
 Source0:   https://github.com/hpc/charliecloud/releases/download/v%{version}/charliecloud-%{version}.tar.gz
+Patch1:    charliecloud-skiptest.patch
 
 BuildRequires: gcc
 %if 0%{?centos_version} || 0%{?rhel_version}
-BuildRequires: python34
+BuildRequires: python36
 %endif
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires: python3
 %endif
 
 Requires:  %{name}%{?_isa} = %{version}-%{release}
-Requires:  bats
 Requires:  bash
 Requires:  wget
 %if 0%{?centos_version} || 0%{?rhel_version}
-Requires:  python34
+Requires:  python36
 %endif
 %if 0%{?sles_version} || 0%{?suse_version}
 Requires: python3
@@ -69,14 +68,18 @@ For more information: https://hpc.github.io/charliecloud/
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 %{versionize_script python3 test/make-auto}
 %{versionize_script python3 test/make-perms-test}
 
 %build
-CFLAGS="%build_cflags -std=c11 -pthread" LDFLAGS="%build_ldflags" %{__make} %{?mflags}
+CFLAGS="-std=c11 -pthread" LDFLAGS="%build_ldflags" %{__make} %{?mflags}
 
 %install
 PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
+
+%{__mkdir_p} %{buildroot}/%{install_path}/share/doc/charliecloud//test/chtest/
+%{__cp} ./test/chtest/Build %{buildroot}/%{install_path}/share/doc/charliecloud//test/chtest/Build
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
@@ -137,3 +140,4 @@ EOF
 %files
 %doc LICENSE README.rst README.TEST %{?el7:README.EL7}
 %{OHPC_PUB}
+

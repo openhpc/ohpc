@@ -38,7 +38,7 @@ BuildRequires:  kernel-default-devel
 %endif
 
 %if 0%{?centos_version} == 700
-%define centos_kernel 3.10.0-957.el7
+%define centos_kernel 3.10.0-1062.el7
 BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
 %endif
@@ -135,7 +135,9 @@ fi
 %{_unitdir}/msr-safe.service
 %{_udevrulesdir}/10-msr-safe.rules
 %config %{_sysconfdir}/sysconfig/msr-safe
-%doc README
+%doc README.md
+%doc LICENSE
+%doc THANKS
 %{_sbindir}/msrsave
 %{_sbindir}/msr-safe
 %dir %{_mandir}/man1

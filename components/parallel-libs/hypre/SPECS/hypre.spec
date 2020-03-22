@@ -22,13 +22,13 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname hypre
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        2.15.1
+Version:        2.18.1
 Release:        1%{?dist}
 Summary:        Scalable algorithms for solving linear systems of equations
-License:        LGPL-2.1
+License:        Apache-2.0 or MIT
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
-Source:         https://github.com/LLNL/hypre/archive/v%{version}.tar.gz#/hypre-%{version}.tar.gz
+Source0:        https://github.com/hypre-space/hypre/archive/v%{version}.tar.gz#/hypre-%{version}.tar.gz
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
@@ -87,7 +87,6 @@ cd src
 %endif
 %endif
     --with-mli \
-    --with-fei \
     --with-superlu-include=$SUPERLU_INC \
     --with-superlu-lib=$SUPERLU_LIB \
     CC="mpicc $FLAGS" \
@@ -120,14 +119,6 @@ make install HYPRE_INSTALL_DIR=%{buildroot}%{install_path} \
              HYPRE_LIB_INSTALL=%{buildroot}%{install_path}/lib \
              HYPRE_INC_INSTALL=%{buildroot}%{install_path}/include
 install -m644 hypre/lib/* %{buildroot}%{install_path}/lib
-
-# install LLNL FEI headers
-mkdir %{buildroot}%{install_path}/include/FEI_mv
-cp -r FEI_mv/fei-base %{buildroot}%{install_path}/include/FEI_mv/.
-cd ..
-
-# Fix wrong permissions
-chmod 644 %{buildroot}%{install_path}/include/LLNL_FEI_*.h
 
 # shared libraries
 pushd %{buildroot}%{install_path}/lib
@@ -204,4 +195,4 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
+%doc CHANGELOG COPYRIGHT INSTALL.md README.md LICENSE-APACHE LICENSE-MIT NOTICE

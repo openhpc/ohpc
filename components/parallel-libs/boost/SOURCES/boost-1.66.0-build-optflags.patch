@@ -18,7 +18,7 @@
  }
  
  actions compile.c.preprocess bind PCH_FILE
-@@ -702,19 +702,19 @@ actions compile.c.pch
+@@ -704,19 +704,19 @@ actions compile.c.pch
  ###
  
  # Declare flags and action for compilation.

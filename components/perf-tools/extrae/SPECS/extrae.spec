@@ -26,9 +26,9 @@ URL:		https://tools.bsc.es
 Source0:	https://ftp.tools.bsc.es/extrae/extrae-%{version}-src.tar.bz2
 
 
-BuildRequires:	autoconf%{PROJ_DELIM}
-BuildRequires:	automake%{PROJ_DELIM}
-BuildRequires:	libtool%{PROJ_DELIM}
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool
 BuildRequires:	binutils-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	papi%{PROJ_DELIM}
@@ -50,7 +50,6 @@ This is the %{compiler_family}-%{mpi_family} version.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load autotools
 module load papi
 
 %if  "%{compiler_family}" == "intel"

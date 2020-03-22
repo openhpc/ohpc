@@ -11,7 +11,7 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname intel-compilers-devel
-%define year 2019
+%define year 2020
 
 Summary:   OpenHPC compatibility package for Intel(R) Parallel Studio XE
 Name:      %{pname}%{PROJ_DELIM}
@@ -21,15 +21,14 @@ License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/compiler-families
 BuildArch: x86_64
-Source2:   OHPC_mod_generator.sh
+Source1:   mod_generator.sh
 
 #!BuildIgnore: brp-check-suse
 #!BuildIgnore: post-build-checks
 
 Requires: gcc-c++
 Requires: grep
-
-Provides: %{pname}%{PROJ_DELIM}
+Requires: rpm
 
 %description
 
@@ -42,7 +41,7 @@ Studio compiler suite.
 
 %install
 
-install -D -m755 %{SOURCE2}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
+install -D -m755 %{SOURCE1}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULES}/intel
 
 
@@ -75,14 +74,14 @@ versions_all=`rpm -qal | grep ${icc_subpath}`
 if [ $? -eq 1 ];then
     echo ""
     echo "Error: Unable to detect local Parallel Studio installation. The toolchain"
-    echo "       providing ${icc_subpath} must be installed prior to this compatability package"
+    echo "       providing ${icc_subpath} must be installed prior to this compatibility package"
     echo " "
     exit 1
 fi
 
 # Verify min version expectations
 
-min_ver="16.0"
+min_ver="20.0"
 versions=""
 for file in ${versions_all}; do
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
@@ -96,7 +95,7 @@ for file in ${versions_all}; do
 done
 if [ -z "${versions}" ]; then
     echo ""
-    echo "Error: local PSXE compatability support is for versions > ${min_ver}"
+    echo "Error: local PSXE compatibility support is for versions > ${min_ver}"
     echo " "
     exit 1
 fi
@@ -111,7 +110,7 @@ versions=`rpm -qal | grep ${icc_subpath}$`
 if [ $? -eq 1 ];then
     echo ""
     echo "Error: Unable to detect local Parallel Studio installation. The toolchain"
-    echo "       providing ${icc_subpath} must be installed prior to this compatability package"
+    echo "       providing ${icc_subpath} must be installed prior to this compatibility package"
     exit 1
 fi
 
@@ -258,5 +257,5 @@ if [ -e %{_localstatedir}/lib/rpm-state/%{name}-needs-upgrade-fix ];then
 fi
 
 %files
-%{OHPC_ADMIN}
+%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
 %{OHPC_MODULES}

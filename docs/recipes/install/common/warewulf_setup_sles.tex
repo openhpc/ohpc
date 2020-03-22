@@ -24,12 +24,13 @@
 [sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
 
 # Restart/enable relevant services to support provisioning
-[sms](*\#*) systemctl restart xinetd
 [sms](*\#*) systemctl enable mysql.service
 [sms](*\#*) systemctl restart mysql
 [sms](*\#*) systemctl enable apache2.service
 [sms](*\#*) systemctl restart apache2
 [sms](*\#*) systemctl enable dhcpd.service
+[sms](*\#*) systemctl enable tftp.socket
+[sms](*\#*) systemctl start tftp.socket
 \end{lstlisting}
 %\end{verbatim}
 % end_ohpc_run

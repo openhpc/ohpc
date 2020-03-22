@@ -1,0 +1,11 @@
+--- vnfs/libexec/wwmkchroot/include-rhel	2020-03-10 13:01:53.229699503 -0500
++++ vnfs/libexec/wwmkchroot/include-rhel	2020-03-10 13:04:18.117706719 -0500
+@@ -85,8 +85,6 @@
+     echo "obsoletes=1" >> $CHROOTDIR/$YUM_CONF
+     echo "gpgcheck=0" >> $CHROOTDIR/$YUM_CONF
+     echo "plugins=1" >> $CHROOTDIR/$YUM_CONF
+-    echo "reposdir=0" >> $CHROOTDIR/$YUM_CONF
+-    echo "reposdir=0" >> $CHROOTDIR/$YUM_CONF
+    # 03/13/15 karl.w.schulz@intel.com - honor proxy setting if configured on local host
+    proxy_host=`grep "^proxy=" /etc/yum.conf`
+    if [ $? -eq 0 ];then

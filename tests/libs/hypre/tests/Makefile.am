@@ -36,9 +36,9 @@ TESTS                  += ex9
 check_PROGRAMS         += ex9
 ex9_SOURCES             = ex9.c
 
-TESTS                  += ex10
-check_PROGRAMS         += ex10
-ex10_SOURCES            = ex10.cxx
+## TESTS                  += ex10
+## check_PROGRAMS         += ex10
+## ex10_SOURCES            = ex10.cxx
 
 TESTS                  += ex11
 check_PROGRAMS         += ex11

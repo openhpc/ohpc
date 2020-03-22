@@ -14,7 +14,7 @@ which repoquery >& /dev/null || { echo "repoquery must be installed locally"; ex
 
 version=$1
 arches="x86_64 aarch64 noarch"
-oses="CentOS_7 SLE_12"
+oses="CentOS_8 Leap_15"
 
 
 minor_ver=`echo ${version} | cut -d '.' -f1,2`
@@ -39,9 +39,11 @@ if [[ ${USE_FACTORY} -eq 1 ]]; then
 fi
 
 for os in ${oses}; do
-    repobase="http://build.openhpc.community/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
+    repobase="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
+#    repobase="http://build.openhpc.community/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
     if [[ $micro_ver -gt 0 ]];then
-	repoupdate="http://build.openhpc.community/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
+	#repoupdate="http://build.openhpc.community/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
+	repoupdate="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
     fi
 
     echo " "

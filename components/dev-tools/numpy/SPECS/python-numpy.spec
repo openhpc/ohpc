@@ -22,7 +22,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname numpy
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.16.4
+Version:        1.18.2
 Release:        1%{?dist}
 Url:            https://github.com/numpy/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
@@ -60,7 +60,7 @@ basic linear algebra and random number generation.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
+#patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1

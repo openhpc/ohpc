@@ -15,10 +15,10 @@
 
 # Base package name
 %define pname trilinos
-%define ver_exp 12-12-1
+%define ver_exp 12-18-1
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        12.12.1
+Version:        12.18.1
 Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
@@ -26,18 +26,13 @@ Group:          %{PROJ_NAME}/parallel-libs
 Url:            https://trilinos.org/
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
-BuildRequires:  cmake%{PROJ_DELIM}
+BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  perl
-%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
-BuildRequires:  qt-devel
-%else
-BuildRequires:  libqt4-devel
-%endif
 BuildRequires:  swig > 2.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel
@@ -69,7 +64,6 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load cmake
 module load boost
 module load netcdf
 module load phdf5
@@ -179,6 +173,9 @@ cd ..
 cd tmp
 make %{?_smp_mflags} DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
+
+# fix unversioned python interpreter
+sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/bin/phalanx_create_evaluator.py
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}

@@ -21,13 +21,13 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        ABI to leverage the parallel programming features of the Fortran 2018 DIS
 License:        BSD-3-clause
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        2.6.3
+Version:        2.8.0
 Release:        1%{?dist}
 Source0:        https://github.com/sourceryinstitute/OpenCoarrays/releases/download/%{version}/OpenCoarrays-%{version}.tar.gz
 Patch1:         opencoarrays-disable-get-comm-test.patch
 Url:            http://www.opencoarrays.org
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  cmake%{PROJ_DELIM}
+BuildRequires:  cmake
 
 #!BuildIgnore: post-build-checks
 
@@ -35,9 +35,9 @@ BuildRequires:  cmake%{PROJ_DELIM}
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-OpenCoarrays is an open-source software project that supports the coarray 
-Fortran (CAF) parallel programming features of the Fortran 2008 standard and 
-several features proposed for Fortran 2015 in the draft Technical Specification 
+OpenCoarrays is an open-source software project that supports the coarray
+Fortran (CAF) parallel programming features of the Fortran 2008 standard and
+several features proposed for Fortran 2015 in the draft Technical Specification
 TS 18508 Additional Parallel Features in Fortran.
 
 
@@ -50,13 +50,11 @@ TS 18508 Additional Parallel Features in Fortran.
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load cmake
-
 %{__mkdir_p} build-opencoarrays
 cd build-opencoarrays
 cmake -DCMAKE_INSTALL_PREFIX=%{install_path} ..
 
-make %{?_smp_mflags}
+make %{?_smp_mflags} VERBOSE=1
 
 
 %install
@@ -116,4 +114,4 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc LICENSE README.md INSTALL 
+%doc LICENSE README.md INSTALL

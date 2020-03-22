@@ -1,5 +1,5 @@
---- a/initramfs/Makefile.am	2017-11-07 09:52:15.000000000 -0800
-+++ b/initramfs/Makefile.am	2017-11-07 10:03:12.000000000 -0800
+--- a/initramfs/Makefile.am	2019-06-17 14:01:40.000000000 -0700
++++ b/initramfs/Makefile.am	2019-06-25 13:47:36.842849489 -0700
 @@ -24,7 +24,7 @@
  PARTED_VERSION = 3.2
  PARTED_SOURCE = $(top_srcdir)/3rd_party/GPL/parted-$(PARTED_VERSION).tar.xz
@@ -8,4 +8,4 @@
 +PARTED_CONFIGARGS = --prefix=/usr --libdir=/usr/lib64 --without-readline --disable-static --disable-nls --disable-dynamic-loading --disable-debug
  
  e2fsprogs:
- 	@ if [ ! -d "_work/$(E2FSPROGS_DIR)" ]; then \
+ 	@ if [ -n "@local_e2fsprogs_path@" -a -f "@local_e2fsprogs_path@" ]; then \

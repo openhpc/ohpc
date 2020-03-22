@@ -11,7 +11,7 @@
  tau_instrumentor.o: tau_instrumentor.cpp 
 @@ -123,13 +123,13 @@
  tau_trace2json.o: tau_trace2json.cpp
- 		$(CXX) $(CFLAGS) $< -c 
+ 		$(CXX) $(CFLAGS) -std=c++11  $< -c 
  
 -tau_wrap: tau_wrap.o tau_selective.o tau_instrument.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.a 
 +tau_wrap: tau_wrap.o tau_selective.o tau_instrument.o $(PDTDIR)/$(PDTARCHDIR)/lib/libpdb.so 

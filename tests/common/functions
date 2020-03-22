@@ -162,7 +162,15 @@ check_compiler_family()
 	myCC=gcc
 	myCXX=g++
 	myFC=gfortran
-    elif [[ $LMOD_FAMILY_COMPILER =~ "llvm" ]];then
+    elif [ $LMOD_FAMILY_COMPILER == "gnu9" ];then
+	myCC=gcc
+	myCXX=g++
+	myFC=gfortran
+    elif [[ $LMOD_FAMILY_COMPILER == "llvm9" ]];then
+	myCC=clang
+	myCXX=clang++
+	myFC=gfortran
+    elif [[ $LMOD_FAMILY_COMPILER == "llvm5" ]];then
 	myCC=clang
 	myCXX=clang++
 	myFC=flang
@@ -304,7 +312,7 @@ run_mpi_binary () {
     fi
     
     if [ "$RESOURCE_MANAGER" = "slurm" ];then
-	if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" -o "$LMOD_FAMILY_MPI" = "openmpi3" -o "$LMOD_FAMILY_MPI" = "mpich" ];then
+	if [ "$LMOD_FAMILY_MPI" = "impi" -o "$LMOD_FAMILY_MPI" = "mvapich2" -o "$LMOD_FAMILY_MPI" = "openmpi4" -o "$LMOD_FAMILY_MPI" = "mpich" ];then
 
 	    jobScript=/tmp/job.$USER.$RANDOM
 

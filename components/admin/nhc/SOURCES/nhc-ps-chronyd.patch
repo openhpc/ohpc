@@ -1,0 +1,11 @@
+--- a/nhc-genconf	2015-11-11 13:05:42.000000000 -0800
++++ b/nhc-genconf	2020-03-11 21:16:18.000000000 -0700
+@@ -411,6 +411,8 @@
+                     echo " $HOSTNAME || check_ps_service -r -d qmgr postfix"
+                 elif mcheck "${ARGS[0]}" '/ntpd$/'; then
+                     echo " $HOSTNAME || check_ps_service -S ntpd"
++                elif mcheck "${ARGS[0]}" '/chronyd$/'; then
++                    echo " $HOSTNAME || check_ps_service -S chronyd"
+                 fi
+             fi
+         done

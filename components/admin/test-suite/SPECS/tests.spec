@@ -12,7 +12,7 @@
 
 Summary:   Integration test suite for OpenHPC
 Name:      test-suite%{PROJ_DELIM}
-Version:   1.3.8
+Version:   2.0.0
 Release:   1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
@@ -23,12 +23,16 @@ Source0:   tests-ohpc.tar
 BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
 
-%if 0%{?suse_version} >= 1230
+%global __brp_mangle_shebangs_exclude bats
+
+%if 0%{?suse_version}
 Requires(pre):  shadow
+Requires: python-base
 %endif
 
-%if 0%{?rhel_version} > 600 || 0%{?centos_version} > 600
+%if 0%{?rhel_version}
 Requires(pre):  shadow-utils
+Requires: python2
 %endif
 
 %define testuser ohpc-test
@@ -67,3 +71,4 @@ exit 0
 %defattr(-,%{testuser},%{testuser},-)
 %dir /home/%{testuser}
 /home/%{testuser}/tests
+

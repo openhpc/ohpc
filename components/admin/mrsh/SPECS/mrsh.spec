@@ -21,12 +21,14 @@ Summary: Remote shell program that uses munge authentication
 License: none
 Group: %{PROJ_NAME}/admin
 URL: https://github.com/chaos/mrsh
-Source:    https://github.com/chaos/mrsh/archive/mrsh-2-7-1.tar.gz
-Patch0: null-terminate.patch
+Source:    https://github.com/chaos/mrsh/archive/%{version}.tar.gz#/mrsh-%{version}.tar.gz
 Patch1: mrsh-pam-suse.patch
-BuildRequires: ncurses-devel pam-devel munge-devel%{PROJ_DELIM}
-Requires: munge%{PROJ_DELIM} >= 0.1-0
+Patch2: mrlogin-Don-t-use-union-wait.patch
+Patch3: Add-force-to-libtoolize.patch
+BuildRequires: ncurses-devel pam-devel munge-devel
+Requires: munge
 Provides: mrsh
+BuildRequires:  systemd-devel
 
 # support re-run of autogen
 BuildRequires: autoconf
@@ -42,7 +44,7 @@ reserved ports for security.
 %package -n %{pname}-server%{PROJ_DELIM}
 Summary: Servers for remote access commands (mrsh, mrlogin, mrcp)
 Group: System Environment/Daemons
-Requires: xinetd
+Requires(post): systemd
 %description -n %{pname}-server%{PROJ_DELIM}
 Server daemons for remote access commands (mrsh, mrlogin, mrcp)
 
@@ -55,33 +57,30 @@ Provides: rsh
 rsh compatability package for mrcp/mrlogin/mrsh
 
 %prep
-%setup -q -n mrsh-mrsh-2-7-1
-./autogen.sh
-%patch0 -p1
+%setup -q -n %{pname}-%{version}
 %if 0%{?suse_version}
 %patch1 -p1
 %endif
+%patch2 -p1
+%patch3 -p1
+./autogen.sh
 
 %build
 %configure %{?_without_pam}
 make
 
 %install
-DESTDIR="$RPM_BUILD_ROOT" make install
+DESTDIR="%{buildroot}" make install
 
-%{__mkdir_p} ${RPM_BUILD_ROOT}/usr/bin
-ln -sf %{_prefix}/bin/mrcp ${RPM_BUILD_ROOT}/usr/bin/
-ln -sf %{_prefix}/bin/mrsh ${RPM_BUILD_ROOT}/usr/bin/
-ln -sf %{_prefix}/bin/mrlogin ${RPM_BUILD_ROOT}/usr/bin/
+ln -sf in.mrlogind %{buildroot}%{_sbindir}/in.rlogind
+ln -sf in.mrshd %{buildroot}%{_sbindir}/in.rshd
 
-ln -sf %{_prefix}/bin/rcp ${RPM_BUILD_ROOT}/usr/bin/
-ln -sf %{_prefix}/bin/rsh ${RPM_BUILD_ROOT}/usr/bin/
-ln -sf %{_prefix}/bin/rlogin ${RPM_BUILD_ROOT}/usr/bin/
+for i in mrsh mrlogin
+do
+    sed -i 's#\(account\s\+include\s\+\)system-auth#\1common-account#' %{buildroot}/%{_sysconfdir}/pam.d/$i
+    sed -i 's#\(session\s\+include\s\+\)system-auth#\1common-session#' %{buildroot}/%{_sysconfdir}/pam.d/$i
+done
 
-sed -i 's#/usr/sbin/in.mrshd#/opt/ohpc/admin/mrsh/sbin/in.mrshd#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
-sed -i 's#/usr/sbin/in.mrlogind#/opt/ohpc/admin/mrsh/sbin/in.mrlogind#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrlogind
-sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrlogind
-sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 
 %files
 %doc NEWS README ChangeLog COPYING DISCLAIMER DISCLAIMER.UC
@@ -91,7 +90,6 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %{_bindir}/mrcp
 %{_bindir}/mrsh
 %{_bindir}/mrlogin
-/usr/bin/mr*
 %dir /opt/ohpc/admin/mrsh
 %dir /opt/ohpc/admin/mrsh/bin
 %dir /opt/ohpc/admin/mrsh/share
@@ -99,12 +97,11 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %dir /opt/ohpc/admin/mrsh/share/man/man1
 
 %files -n %{pname}-server%{PROJ_DELIM}
-%config(noreplace) /etc/xinetd.d/mrshd
-%config(noreplace) /etc/xinetd.d/mrlogind
 %if %{?_without_pam:0}%{!?_without_pam:1}
 %config(noreplace) /etc/pam.d/mrsh
 %config(noreplace) /etc/pam.d/mrlogin
 %endif
+%{_unitdir}/*
 %{_mandir}/man8/in.mrlogind.8*
 %{_mandir}/man8/in.mrshd.8*
 %{_mandir}/man8/mrlogind.8*
@@ -127,29 +124,7 @@ sed -i 's#disable\s*= yes#disable			= no#' ${RPM_BUILD_ROOT}/etc/xinetd.d/mrshd
 %{_bindir}/rcp
 %{_bindir}/rsh
 %{_bindir}/rlogin
-/usr/bin/r*
 %dir /opt/ohpc/admin/mrsh/share/man/man8
 
 %post -n %{pname}-server%{PROJ_DELIM}
-if ! grep "^mshell" /etc/services > /dev/null; then
-        echo "mshell          21212/tcp                  # mrshd" >> /etc/services
-fi
-if ! grep "^mlogin" /etc/services > /dev/null; then
-        echo "mlogin            541/tcp                  # mrlogind" >> /etc/services
-fi
-if ! grep "^mrsh" /etc/securetty > /dev/null; then
-        echo "mrsh" >> /etc/securetty
-fi
-if ! grep "^mrlogin" /etc/securetty > /dev/null; then
-        echo "mrlogin" >> /etc/securetty
-fi
-# 'condrestart' is not portable
-if [ -x /etc/init.d/xinetd ]; then
-    if /etc/init.d/xinetd status | grep -q running; then
-       /etc/init.d/xinetd restart
-    fi
-elif [ -x /bin/systemctl ]; then
-    if /bin/systemctl status xinetd | grep -q running; then
-       /bin/systemctl restart xinetd
-    fi
-fi
+%service_add_post mrshd.socket mrlogind.socket

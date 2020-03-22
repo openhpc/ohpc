@@ -39,7 +39,7 @@
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
-Version: 3.2.1
+Version: 3.4.1
 Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
@@ -62,6 +62,7 @@ Requires: squashfs
 BuildRequires: golang > 1.6
 Requires: squashfs-tools
 %endif
+BuildRequires: cryptsetup
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path

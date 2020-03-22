@@ -13,45 +13,27 @@
 %define pname hwloc
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        2.0.3
+Version:        2.1.0
 Release:        1%{?dist}
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
-Source0:        https://download.open-mpi.org/release/hwloc/v2.0/%{pname}-%{version}.tar.bz2
+Source0:        https://download.open-mpi.org/release/hwloc/v2.1/%{pname}-%{version}.tar.bz2
 
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  doxygen
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
 BuildRequires:  gcc-c++
 BuildRequires:  libtool
-%if 0%{?suse_version} <= 1220 && !0%{?suse_version}
-BuildRequires:  pkgconfig(cairo)
-BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  pkgconfig(pciaccess)
-BuildRequires:  pkgconfig(x11)
-%else
 BuildRequires:  cairo-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  ncurses-devel
-BuildRequires:  xorg-x11-libICE-devel
-BuildRequires:  xorg-x11-libSM-devel
-BuildRequires:  xorg-x11-libX11-devel
-%endif
-#BuildRequires:  libXNVCtrl-devel
 BuildRequires:  ncurses-devel
-#BuildRequires:  texlive-latex
-%if 0%{?suse_version} && 0%{?suse_version} <= 1220
-BuildRequires:  texlive-bin-latex
-%else
-BuildRequires:  texlive-latex-bin
-%endif
 BuildRequires:  transfig
-BuildRequires:  w3m
 # % ifnarch s390 s390x
 # BuildRequires:  libibverbs-devel
 # % endif
