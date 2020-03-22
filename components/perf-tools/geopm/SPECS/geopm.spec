@@ -40,7 +40,6 @@ BuildRequires: python3
 BuildRequires: python3-devel
 BuildRequires: unzip
 BuildRequires: zlib-devel
-BuildRequires: unzip
 BuildRequires: openssh
 
 %if 0%{?suse_version}%{?sle_version}
@@ -128,5 +127,6 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc README COPYING VERSION
+%doc README VERSION
+%license COPYING
 
