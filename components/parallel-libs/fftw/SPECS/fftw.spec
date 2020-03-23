@@ -34,7 +34,10 @@ Patch0:    fftw-icc_2020_fix.patch
 
 BuildRequires:        perl
 BuildRequires:        util-linux
-
+BuildRequires:        make
+%if %{compiler_family} == "intel"
+BuildRequires:        autoconf, automake
+%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
