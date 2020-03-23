@@ -27,6 +27,7 @@ License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
 URL:       http://www.fftw.org
 Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
+Patch0:    fftw-icc_2020_fix.patch
 
 %define openmp        1
 %define mpi           1
@@ -46,6 +47,7 @@ data, and of arbitrary input size.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch0 -p1 
 
 %build
 # OpenHPC compiler/mpi designation
@@ -59,6 +61,11 @@ BASEFLAGS="$BASEFLAGS --enable-openmp"
 BASEFLAGS="$BASEFLAGS --enable-mpi"
 %endif
 
+%if %{compiler_family} == "intel"
+rm -rf autom4te.cache
+autoreconf --verbose --install --symlink --force
+rm -f config.cache
+%endif
 
 for i in %{precision_list} ; do
 	LOOPBASEFLAGS=${BASEFLAGS}
