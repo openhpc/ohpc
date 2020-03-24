@@ -34,6 +34,7 @@ Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
 Patch4:         numpy-llvm-arm.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+BuildRequires:  python3-Cython
 %if 0%{?suse_version}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
