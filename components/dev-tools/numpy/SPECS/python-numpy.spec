@@ -38,10 +38,6 @@ BuildRequires:  python3-Cython%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
-%else
-%if "%{compiler_family}" == "intel" || "%{compiler_family}" == "arm"
-BuildRequires: python34-build-patch%{PROJ_DELIM}
-%endif
 %endif
 
 # Default library install path
