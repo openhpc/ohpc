@@ -13,7 +13,7 @@
 %define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -78,7 +78,7 @@ COMPILER_FLAG="--compiler=intelem"
 COMPILER_FLAG="--fcompiler=flang --compiler=clang"
 %endif
 
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 COMPILER_FLAG="--fcompiler=armflang --compiler=armclang"
 %endif
 
@@ -92,7 +92,7 @@ lapack_libs = mkl_rt
 EOF
 %endif
 
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cat > site.cfg << EOF
 [openblas]
 libraries = armpl
@@ -101,7 +101,7 @@ include_dirs = $ARMPL_INCLUDES
 EOF
 %endif
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 cat > site.cfg << EOF
 [openblas]
@@ -147,7 +147,7 @@ module-whatis "URL %{url}"
 family                      numpy
 set     version             %{version}
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 # Require openblas for gnu and llvm compiler families
 depends-on openblas
 %endif
