@@ -42,12 +42,14 @@ default location for this example is in
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces,literate={BOSVER}{\baseos{}}1]
 # Define chroot location
 [sms](*\#*) export CHROOT=/opt/ohpc/admin/images/BOSVER
-
 # Build initial chroot image
 [sms](*\#*) mkdir -p -m 755 $CHROOT                        # create chroot housing dir
 [sms](*\#*) mkdir -m 755 $CHROOT/dev                       # create chroot /dev dir
 [sms](*\#*) mknod -m 666 $CHROOT/dev/zero c 1 5            # create /dev/zero device
 [sms](*\#*) wwmkchroot -v opensuse-15.1 $CHROOT            # create base image
+# Enable OpenHPC repo in chroot
 [sms](*\#*) cp -p /etc/zypp/repos.d/OpenHPC.repo $CHROOT/etc/zypp/repos.d
+# Import GPG keys for chroot repository usage
+[sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 \end{lstlisting}
 % end_ohpc_run
