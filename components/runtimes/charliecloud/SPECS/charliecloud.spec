@@ -73,7 +73,7 @@ For more information: https://hpc.github.io/charliecloud/
 %{versionize_script python3 test/make-perms-test}
 
 %build
-CFLAGS="-std=c11 -pthread" LDFLAGS="%build_ldflags" %{__make} %{?mflags}
+CFLAGS="-std=c11 -fPIC -pthread" LDFLAGS="%build_ldflags" %{__make} %{?mflags}
 
 %install
 PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
