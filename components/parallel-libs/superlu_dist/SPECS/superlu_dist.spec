@@ -102,7 +102,7 @@ module load openblas
 %define blas_lib -armpl
 %endif
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" == "intel"
 %define blas_lib  -L$MKLROOT/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
 %endif
 
