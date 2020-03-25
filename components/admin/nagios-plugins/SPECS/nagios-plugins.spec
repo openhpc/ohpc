@@ -56,7 +56,7 @@ BuildRequires: postgresql-devel
 BuildRequires: gettext
 #BuildRequires: %{_bindir}/ssh
 BuildRequires: bind-utils
-BuildRequires: ntp
+BuildRequires: chrony
 #BuildRequires: %{_bindir}/mailq
 #%if 0%{?suse_version}
 #BuildRequires: ssmtp
