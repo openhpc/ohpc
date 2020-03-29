@@ -21,6 +21,7 @@ URL:       http://www.valgrind.org/
 Group:     %{PROJ_NAME}/dev-tools
 Source:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
 
+BuildRequires: make
 # Default library install path
 %define install_path %{OHPC_UTILS}/%{pname}/%version
 
@@ -37,7 +38,8 @@ AMD64/MacOSX.
 %setup -q -n %{pname}-%{version}
 
 %build
-./configure --prefix=%{install_path} || { cat config.log && exit 1; }
+./configure --prefix=%{install_path} \
+          --libdir=%{install_path}/lib || { cat config.log && exit 1; }
 make %{?_smp_mflags}
 
 %install
@@ -85,9 +87,10 @@ EOF
 %doc AUTHORS
 %doc README_DEVELOPERS
 %doc README
-%doc COPYING.DOCS
+%license COPYING
+%license COPYING.DOCS
 %doc README_PACKAGERS
 %doc README_MISSING_SYSCALL_OR_IOCTL
 %doc FAQ.txt
 %doc NEWS
-%doc COPYING
+
