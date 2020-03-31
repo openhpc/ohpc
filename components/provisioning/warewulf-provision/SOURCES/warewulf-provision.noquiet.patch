@@ -1,5 +1,5 @@
---- a/provision/etc/provision.conf			2020-03-31 22:09:25.980000000 +0000
-+++ a/provision/etc/provision.conf			2020-03-31 22:09:36.370000000 +0000
+--- a/etc/provision.conf			2020-03-31 22:09:25.980000000 +0000
++++ b/etc/provision.conf			2020-03-31 22:09:36.370000000 +0000
 @@ -34,5 +34,5 @@
  use localdomain = yes
  
