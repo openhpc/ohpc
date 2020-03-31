@@ -11,7 +11,7 @@ order to work interactively.
 % ohpc_comment_header Boot compute nodes \ref{sec:boot_computes}
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 [sms](*\#*) for ((i=0; i<${num_computes}; i++)) ; do
-              ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} chassis power reset
+             ipmitool -E -I lanplus -H ${c_bmc[$i]} -U ${bmc_username} -P ${bmc_password} chassis power reset
         done
 \end{lstlisting} 
 % end_ohpc_run
