@@ -116,8 +116,8 @@ Global Extensible Open Power Manager for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-io-libs
 Summary:   OpenHPC IO libraries for GNU
-# TODO Requires:  adios-%{compiler_family}-mpich%{PROJ_DELIM}
-# TODO Requires:  adios-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  adios-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  adios-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  hdf5-%{compiler_family}%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
