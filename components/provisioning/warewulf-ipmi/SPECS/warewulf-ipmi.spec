@@ -74,7 +74,7 @@ cd %{_builddir}
 
 %files
 %doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING
-%if ! %{localipmi}
+%if %{localipmi}
 %{_libexecdir}/warewulf/ipmitool
 %endif
 %{perl_vendorlib}/Warewulf/Ipmi.pm
