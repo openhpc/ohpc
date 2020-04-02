@@ -240,7 +240,7 @@ Requires:  scalapack-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  slepc-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  ptscotch-%{compiler_family}-mpich%{PROJ_DELIM}
 ## TODO Requires:  superlu_dist-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  trilinos-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  trilinos-%{compiler_family}-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-mpich-parallel-libs
 Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
 
@@ -257,7 +257,7 @@ Requires:  scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 ## TODO Requires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  trilinos-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  trilinos-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 
