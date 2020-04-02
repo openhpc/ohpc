@@ -17,37 +17,31 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-
 # Base package name
-
 %define pname slepc
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.7.4
+Version:        3.12.0
 Release:        1
 Summary:        A library for solving large scale sparse eigenvalue problems
 License:        LGPL-3.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://slepc.upv.es
 Source0:        http://slepc.upv.es/download/distrib/%{pname}-%{version}.tar.gz
-Source1:        OHPC_macros
-BuildRoot:      %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:         %{OHPC_PUB}/doc/contrib
 BuildRequires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
 # A configure script in slepc is made by python
-BuildRequires: python
+BuildRequires: python3
+# petsc requires python2 to build
+BuildRequires: python2
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
-# Disable debug packages
-%define debug_package %{nil}
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
@@ -66,27 +60,27 @@ set -- *
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 module load petsc
-./configure --prefix=/tmp%{install_path}
-make 
+python3 ./configure --prefix=/tmp%{install_path}
+make
 
 %install
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 module load petsc
 make install
 
 # move from tmp install dir to %install_path
-rm -rf %buildroot
-mkdir -p %buildroot%{install_path}
+# dirname removes the last directory
+mkdir -p `dirname %{buildroot}%{install_path}`
 pushd /tmp
 export tmp_path=%{install_path}
-mv ${tmp_path#*/} %buildroot%{install_path}/..
+mv ${tmp_path#*/} `dirname %{buildroot}%{install_path}`
 popd
 
 # clean up
@@ -128,12 +122,6 @@ setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_ARCH       ""
 EOF
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
-%files 
-%defattr(-,root,root,-)
+%files
 %{OHPC_PUB}
-%doc COPYING COPYING.LESSER README docs/slepc.pdf
-
-%changelog
+%doc LICENSE.md README.md docs/slepc.pdf

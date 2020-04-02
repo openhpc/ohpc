@@ -8,59 +8,42 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package mumps
-#
-# Copyright (c) 2012 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
 # Build that is is dependent on compiler toolchain and MPI
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%global gnu_family gnu7
+%global gnu_family gnu9
 
 # Base package name
 %define pname mumps
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        5.1.1
+Version:        5.2.1
 Release:        1%{?dist}
 Summary:        A MUltifrontal Massively Parallel Sparse direct Solver
 License:        CeCILL-C
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://mumps.enseeiht.fr/
-Source0:        http://mumps.enseeiht.fr/MUMPS_%{version}.tar.gz
+Source0:        http://graal.ens-lyon.fr/MUMPS/MUMPS_%{version}.tar.gz
 Source1:        Makefile.gnu.openmpi.inc
 Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
-Source5:        OHPC_macros
+Source5:        Makefile.arm.impi.inc
+Source6:        Makefile.arm.openmpi.inc
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
-Patch2:         mumps-5.0.2-psxe2017.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
-%if 0%{?suse_version}
-BuildRequires: libgomp1
-%else
+%if 0%{?rhel}
 BuildRequires: libgomp
+%else
+BuildRequires: libgomp1
 %endif
 
-%if %{compiler_family} == "%{gnu_family}"
+# Every other family needs scalapack
+%if %{compiler_family} != "intel"
 BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
@@ -78,15 +61,16 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %setup -q -n MUMPS_%{version}
 %patch0 -p1
 %patch1 -p1
-%if "%{compiler_family}" == "intel"
-#%patch2 -p2
-%endif
 
 %build
 %ohpc_setup_compiler
 
-# Enable scalapack linkage for blas/lapack with gnu builds
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" == "arm"
+module load scalapack
+%endif
+
+# Enable scalapack and openblas linkage for blas/lapack with gnu and other (e.g. llvm) builds
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load scalapack openblas
 %endif
 
@@ -100,44 +84,64 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
+%if "%{compiler_family}" == "arm"
+cp -f %{S:5} Makefile.inc
+%endif
 %endif
 
 %if "%{mpi_family}" == "mpich"
 %global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
-%if "%{compiler_family}" == "intel"
-cp -f %{S:3} Makefile.inc
-%else
+%if "%{compiler_family}" == "%{gnu_family}"
 cp -f %{S:2} Makefile.inc
 %endif
+%if "%{compiler_family}" == "intel"
+cp -f %{S:3} Makefile.inc
 %endif
+%if "%{compiler_family}" == "arm"
+cp -f %{S:5} Makefile.inc
+%endif
+%endif
+
 %if "%{mpi_family}" == "mvapich2"
 %global MUMPS_MPI $OHPC_MPI_FAMILY
 export LIBS="-L$MPI_DIR/lib -lmpi"
+%if "%{compiler_family}" == "%{gnu_family}"
+cp -f %{S:2} Makefile.inc
+%endif
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
-%else
-cp -f %{S:2} Makefile.inc
+%endif
+%if "%{compiler_family}" == "arm"
+cp -f %{S:5} Makefile.inc
 %endif
 %endif
 
 %if "%{mpi_family}" == "openmpi"
 %global MUMPS_MPI openmpi
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
+%if "%{compiler_family}" == "%{gnu_family}"
+cp -f %{S:1} Makefile.inc
+%endif
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
-%else
-cp -f %{S:1} Makefile.inc
+%endif
+%if "%{compiler_family}" == "arm"
+cp -f %{S:6} Makefile.inc
 %endif
 %endif
 
-%if "%{mpi_family}" == "openmpi3"
+%if "%{mpi_family}" == "openmpi4"
 %global MUMPS_MPI openmpi
 export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
 %else
+%if "%{compiler_family}" == "arm"
+cp -f %{S:6} Makefile.inc
+%else
 cp -f %{S:1} Makefile.inc
+%endif
 %endif
 %endif
 
@@ -187,9 +191,9 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if { ![is-loaded intel] } {
-    depends-on scalapack
-}
+%if "%{compiler_family}" != "intel"
+depends-on scalapack
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
@@ -213,16 +217,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc ChangeLog CREDITS INSTALL LICENSE README VERSION
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 5.1.1-1
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 5.1.1-0
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 5.0.2-0
-- Switching to %%ohpc_compiler macro

@@ -8,64 +8,30 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package hypre
-#
-# Copyright (c) 2012 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
 # Build that is is dependent on compiler toolchain and MPI
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # Base package name
 %define pname hypre
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        2.11.2
+Version:        2.18.1
 Release:        1%{?dist}
 Summary:        Scalable algorithms for solving linear systems of equations
-License:        LGPL-2.1
-Group:          ohpc/parallel-libs
+License:        Apache-2.0 or MIT
+Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.llnl.gov/casc/hypre/
-Source:         https://computation.llnl.gov/project/linear_solvers/download/hypre-%{version}.tar.gz
-Source1:        OHPC_macros
-%if 0%{?suse_version} <= 1110
-%{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-%endif
-# TODO : add babel
-#BuildRequires:  babel-devel
-#BuildRequires:  libltdl-devel
+Source0:        https://github.com/hypre-space/hypre/archive/v%{version}.tar.gz#/hypre-%{version}.tar.gz
 BuildRequires:  superlu-%{compiler_family}%{PROJ_DELIM}
 Requires:       superlu-%{compiler_family}%{PROJ_DELIM}
-BuildRequires:  libxml2-devel
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  python-devel
-BuildRequires:  python-numpy-%{compiler_family}%{PROJ_DELIM}
-%if 0%{?suse_version}
-BuildRequires:  python-xml
-%else
-BuildRequires:  libxml2-python
-%endif
-BuildRequires:  xz
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -84,7 +50,7 @@ phenomena in the defense, environmental, energy, and biological sciences.
 
 %build
 
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess src/config
 %endif
 
@@ -92,12 +58,12 @@ cp /usr/lib/rpm/config.guess src/config
 
 module load superlu
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 
 
-FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_ "
+FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
 cd src
 ./configure \
     --prefix=%{install_path} \
@@ -112,12 +78,17 @@ cd src
     --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
     --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
 %else
+%if "%{compiler_family}" == "arm"
+    --with-blas-lib="-L$ARMPL_LIBRARIES -larmpl" \
+    --with-lapack-lib="-L$ARMPL_LIBRARIES -larmpl" \
+%else
     --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
     --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
 %endif
+%endif
     --with-mli \
-    --with-fei \
-    --with-superlu \
+    --with-superlu-include=$SUPERLU_INC \
+    --with-superlu-lib=$SUPERLU_LIB \
     CC="mpicc $FLAGS" \
     CXX="mpicxx $FLAGS" \
     F77="mpif77 $FLAGS"
@@ -138,7 +109,7 @@ cd ..
 
 module load superlu
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 
@@ -149,20 +120,7 @@ make install HYPRE_INSTALL_DIR=%{buildroot}%{install_path} \
              HYPRE_INC_INSTALL=%{buildroot}%{install_path}/include
 install -m644 hypre/lib/* %{buildroot}%{install_path}/lib
 
-# install LLNL FEI headers
-mkdir %{buildroot}%{install_path}/include/FEI_mv
-cp -r FEI_mv/fei-base %{buildroot}%{install_path}/include/FEI_mv/.
-cd ..
-
-# Fix wrong permissions
-chmod 644 %{buildroot}%{install_path}/include/LLNL_FEI_*.h
-
-# This files are provided with babel
-#rm -f %{buildroot}%{_libdir}/mpi/gcc/$mpi/%_lib/libsidl*
-#popd
-
 # shared libraries
-
 pushd %{buildroot}%{install_path}/lib
 LIBS="$(ls *.a|sed 's|\.a||'|sort)"
 mkdir tmp
@@ -172,7 +130,7 @@ for i in $LIBS; do
     then
         ar x ../$i.a
         mpicxx -shared * -L.. $ADDLIB \
-                       -Wl,-soname,$i.so -o ../$i.so 
+                       -Wl,-soname,$i.so -o ../$i.so
         ADDLIB="-lHYPRE"
     fi
 done
@@ -205,16 +163,18 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require superlu (and openblas for gnu compiler families)
+# Require superlu (and openblas for gnu and llvm compiler families)
 depends-on superlu
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+depends-on openblas
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
+%if "%{compiler_family}" == "intel"
 prepend-path    LD_LIBRARY_PATH     %{MKLROOT}/lib/intel64
+%endif
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
@@ -234,16 +194,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
-%doc CHANGELOG COPYING.LESSER COPYRIGHT INSTALL README
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.11.1-1
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.11.1-0
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 2.11.1-0
-- Switching to %%ohpc_compiler macro
+%doc CHANGELOG COPYRIGHT INSTALL.md README.md LICENSE-APACHE LICENSE-MIT NOTICE

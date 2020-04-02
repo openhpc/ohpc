@@ -84,12 +84,13 @@ function set_variable () {
 
 function launch_impi () {
     if [ $MODE == "native" ];then
-        LAUNCHER="mpiexec.hydra"
-        verify_launcher_avail $LAUNCHER
 
 	if [ ${RM} == "slurm" ];then
-            cmd="$LAUNCHER -bootstrap slurm $@"
+	    cmd="srun --mpi=pmi2 $@"
 	elif [ ${RM} == "pbspro" ];then
+            LAUNCHER="mpiexec.hydra"
+            verify_launcher_avail $LAUNCHER
+
 	    cmd="$LAUNCHER -rmk pbs $@"
 	fi
 
@@ -255,6 +256,8 @@ elif [ $LMOD_FAMILY_MPI == "mvapich2" ];then
 elif [ $LMOD_FAMILY_MPI == "openmpi" ];then
     launch_openmpi $EXEC $ARGS
 elif [ $LMOD_FAMILY_MPI == "openmpi3" ];then
+    launch_openmpi $EXEC $ARGS
+elif [ $LMOD_FAMILY_MPI == "openmpi4" ];then
     launch_openmpi $EXEC $ARGS
 else
     _error "Unsupported or unknown MPI family -> $LMOD_FAMILY_MPI"

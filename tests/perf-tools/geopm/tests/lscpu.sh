@@ -1,0 +1,3 @@
+#!/bin/bash
+
+geopmread --cache

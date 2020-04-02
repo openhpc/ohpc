@@ -1,0 +1,29 @@
+#!./common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+
+@test "[libs/OpenCoarrays] hello_multiverse binary runs on head node ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s hello ];then
+    flunk "hello binary does not exist"
+    fi
+
+    launch=""
+    if echo "$LMOD_FAMILY_MPI" | grep -q mpich ; then
+        launch="mpiexec"
+    fi
+
+    if echo "$LMOD_FAMILY_MPI" | grep -q mvapich ; then
+	launch="mpiexec"
+	export MV2_ENABLE_AFFINITY=0
+    fi
+
+    if echo "$LMOD_FAMILY_MPI" | grep -q impi ; then
+	launch="mpiexec -np 1"
+    fi
+
+    run $launch ./hello
+    assert_success
+}

@@ -1,0 +1,10 @@
+% begin_ohpc_run
+% ohpc_validation_newline
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Register as SLURM's health check program
+[sms](*\#*) echo "HealthCheckProgram=/usr/sbin/nhc" >> /etc/slurm/slurm.conf
+[sms](*\#*) echo "HealthCheckInterval=300" >> /etc/slurm/slurm.conf  # execute every five minutes
+\end{lstlisting}
+% end_ohpc_run
+
+

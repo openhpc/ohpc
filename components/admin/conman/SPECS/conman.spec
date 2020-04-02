@@ -12,43 +12,30 @@
 
 # Base package name
 %define pname conman
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 
 Name:		%{pname}%{PROJ_DELIM}
-Version:	0.2.8
+Version:	0.3.0
 Release:	1%{?dist}
 
 Summary:	ConMan: The Console Manager
 Group:		%{PROJ_NAME}/admin
 License:	GPLv3+
 URL:		http://dun.github.io/conman/
-DocDir:         %{OHPC_PUB}/doc/contrib
 
 Requires:	expect
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 
 %if 0%{?suse_version}
 BuildRequires:	tcpd-devel
-%else
-BuildRequires:	tcp_wrappers-devel
 %endif
 BuildRequires:	freeipmi-devel
 #!BuildIgnore: post-build-checks
 
 Source0:	https://github.com/dun/conman/archive/%pname-%{version}.tar.gz
-Source1:    %{pname}.service
-Source2:       OHPC_macros
-Patch1:         conman.init.patch
-
-# 8/15/14 karl.w.schulz@intel.com - include prereq
-%if 0%{?sles_version} || 0%{?suse_version}
-PreReq: %{insserv_prereq} %{fillup_prereq}
-%endif
 
 %description
 ConMan is a serial console management program designed to support a large
@@ -67,24 +54,24 @@ Its features include:
 
 %prep
 %setup -q -n %{pname}-%{pname}-%{version}
-%patch1 -p1
 
 %build
-%configure --with-tcp-wrappers --with-freeipmi
+%configure \
+%if 0%{?suse_version}
+	--with-tcp-wrappers \
+%endif
+	--with-freeipmi
+
 make %{?_smp_mflags}
 
 %install
-rm -rf "%{buildroot}"
 %{__mkdir_p} "%{buildroot}"
 make install DESTDIR="%{buildroot}"
 
-install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/%{pname}.service
 rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf "%{buildroot}"
 
 %post
 %systemd_post conman.service
@@ -112,12 +99,7 @@ fi
 %postun
 %systemd_postun_with_restart conman.service
 
-%if %{?insserv_cleanup:1}0
-%insserv_cleanup
-%endif
-
 %files
-%defattr(-,root,root,-)
 %doc AUTHORS
 %doc COPYING
 %doc DISCLAIMER*

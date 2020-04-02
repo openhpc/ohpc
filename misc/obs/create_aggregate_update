@@ -1,0 +1,259 @@
+#!/bin/bash
+
+
+
+if [ "$#" -lt 4 ];then
+    echo "usage: `basename $0` project minor-version start-micro end-micro"
+    exit 1
+fi
+
+project=$1
+minorVer=$2
+startMicroVer=$3
+endMicroVer=$4
+
+ENABLE_CMDS=1
+
+# v1.3.3 is when we converted to using a Staging project area. Once
+# v1.4 comes out, this can be set to a value of 1
+stagingTransition=3	
+
+# define non-x86 packages that need to also be retained
+
+aarch_sles="freeipmi:2"
+aarch_centos=""
+
+# define any packages which need to be skipped.
+skip_packages=""
+
+# 1.3.5 setting
+if [[ "${minorVer}" == "1.3" && "${endMicroVer}" -eq 5 ]];then
+    skip_packages="mpiP-gnu-openmpi"
+fi
+
+echo "skip_packages = $skip_packages"
+
+run_cmd () {
+    local cmd="$@"
+
+    if [[ ${ENABLE_CMDS} -eq 0 ]];then
+	echo "   [would have run]: $cmd"
+    else
+	echo "running $cmd"
+	eval $cmd
+    fi
+}
+
+ERROR () {
+
+    echo "[ERROR]: $1" >&2
+    exit 1
+}
+
+# verify expected obs projects exist
+for i in `seq ${startMicroVer} ${endMicroVer}`; do
+    if [[ $i -lt $endMicroVer ]];then
+	igot=$(osc ls ${project}:${minorVer}:Update$i) || ERROR "Unable to query OBS project -> ${project}:${minorVer}:Update:$i"
+    else
+	igot=$(osc ls ${project}:${minorVer}:Update$i:Staging) || ERROR "Unable to query OBS project -> ${project}:${minorVer}:Update:$i:Staging"
+    fi
+done
+
+
+for i in `seq ${startMicroVer} ${endMicroVer}`; do
+    if [[ $i -lt ${endMicroVer} ]];then
+	obsProject=${project}:${minorVer}:Update$i
+	repoURL="http://build.openhpc.community/${project}:/${minorVer}:/Update$i/CentOS_7"
+        # The staging area was introduced with v1.3.3 release
+	if [[ $i -ge 3 ]];then
+	    obsProject=${project}:${minorVer}:Update$i:Staging
+	    repoURL="http://build.openhpc.community/${project}:/${minorVer}:/Update$i:/Staging/CentOS_7"
+	fi
+    else
+	obsProject=${project}:${minorVer}:Update$i:Staging
+	repoURL="http://build.openhpc.community/${project}:/${minorVer}:/Update$i:/Staging/CentOS_7"
+    fi
+
+    igot=$(osc ls ${obsProject} 2> /dev/null)
+#    igot="mpiP-gnu-openmpi"
+
+    echo " "
+    echo "Scanning packages in $obsProject..."
+    for pkg in $igot; do
+	echo "-------"
+	echo -n "$pkg ($minorVer.$i): "
+	binary=`osc ls -b ${obsProject} ${pkg} CentOS_7 x86_64 | egrep -v "^_buildenv|^_statistics|.src.rpm$" | head -1`
+	if [[ -z ${binary} ]];then
+	    echo "Warning: no binaries included with package $pkg ($minorVer.$i)...skipping"
+	    continue
+	fi
+
+	if [[ "$binary" =~ ".noarch.rpm" ]];then
+	    binaryURL="$repoURL/noarch"
+	else
+	    binaryURL="$repoURL/x86_64"
+	fi
+	version=`rpm --queryformat "%{VERSION}\n" -qp ${binaryURL}/${binary} 2> /dev/null` || ERROR "Unable to query version from ${binaryURL}/${binary}"
+	name=`rpm --queryformat "%{NAME}\n" -qp ${binaryURL}/${binary} 2> /dev/null` || ERROR "Unable to query name from ${binary}"
+	nameShort=`echo $name | sed s/-ohpc//`
+
+	echo "RPM=$binary, name=$name, version=$version"
+
+	# does RPM name exist in newer micro releases, if not, register for inclusion
+	newerVersionExists=0
+
+	if [[ $i -lt ${endMicroVer} ]];then
+	    let count="$i + 1"
+
+	    for j in `seq $count ${endMicroVer}`; do
+		echo "  --> checking if package is superseded by newer version in ${minorVer}.$j"
+		if [[ $j -ge ${stagingTransition} ]];then
+		    obsProjectNewer="${project}:${minorVer}:Update$j:Staging"
+		    URLNewerBase="http://build.openhpc.community/${project}:/${minorVer}:/Update$j:/Staging"
+		else
+		    obsProjectNewer=${project}:${minorVer}:Update$j
+		    URLNewerBase="http://build.openhpc.community/${project}:/${minorVer}:/Update$j"
+		fi
+
+		# Skip package in latest rev (e.g. it is defined, but has no binaries built)
+		if [[ $j -eq ${endMicroVer} ]];then
+		    skipme=0
+		    for skip in ${skip_packages}; do
+			if [[ "${skip}" == "${pkg}" ]];then
+			    echo "      --> skipping ${pkg} due to presence in skip_packages"
+			    skipme=1
+			fi
+		    done
+		    if [[ $skipme -eq 1 ]];then 
+			continue
+		    fi
+			
+		fi
+
+		igot=$(osc ls ${obsProjectNewer} ${pkg} 2> /dev/null) 
+		if [[ $? -ne 0 ]]; then
+		    echo "  --> ${pkg} not present in ${obsProjectNewer}"
+		    continue
+		fi
+
+		binary=`osc ls -b ${obsProjectNewer} ${pkg} CentOS_7 x86_64 2> /dev/null | egrep -v "^_buildenv|^_statistics|.src.rpm$" | head -1`
+		[[ -z "${binary}" ]] && ERROR "Unable to query binary for ${pkg} from ${obsProjectNewer}"
+
+		    if [[ "$binary" =~ ".noarch.rpm" ]];then
+			binaryURLNewer="${URLNewerBase}/CentOS_7/noarch"
+		    else
+			binaryURLNewer="${URLNewerBase}/CentOS_7/x86_64"
+		    fi
+
+		    versionNew=`rpm --queryformat "%{VERSION}\n" -qp ${binaryURLNewer}/${binary} 2> /dev/null` || ERROR "Unable to query versionNew from ${binary}"
+		    nameNew=`rpm --queryformat "%{NAME}\n" -qp ${binaryURLNewer}/${binary} 2> /dev/null` || ERROR "Unable to query nameNew from ${binary}"
+
+		    if [[ "$nameNew" == "$name" ]];then
+			newerVersionExists=1
+		    else
+			echo "      --> newer package exists, but RPM name differs (alternate variant,$name,$nameNew)..."
+		    fi
+	    done
+
+	    if [[ $newerVersionExists -eq 0 ]];then
+		osc api -X GET "/source/${project}:${minorVer}:Update${endMicroVer}/$nameShort-v$minorVer.${i}/_aggregate" >& /dev/null
+		if [[ $? -eq 0 ]];then
+		    echo "  --> _aggregate already exists...skiping request"
+		else
+		    run_cmd "osc aggregatepac ${obsProject} $pkg ${project}:${minorVer}:Update${endMicroVer} $nameShort-v$minorVer.${i}"
+		    echo "$pkg: INCLUDED from v$minorVer.$i"
+		fi
+	    else
+		echo "$pkg: OBSOLETE from v$minorVer.$i"
+	    fi
+	else
+	    # All packages from the most recent micro release are included
+	    osc api -X GET "/source/${project}:${minorVer}:Update${endMicroVer}/$nameShort-v$minorVer.${i}/_aggregate" >& /dev/null
+	    if [[ $? -eq 0 ]];then
+		echo "  --> _aggregate already exists...skiping request"
+	    else
+		run_cmd "osc aggregatepac ${obsProject} $pkg ${project}:${minorVer}:Update${endMicroVer} $nameShort-v$minorVer.${i}"
+		echo "$pkg INCLUDED from v$minorVer.$i (latest release)"
+	    fi
+	fi
+	
+    done
+done
+
+echo " "
+echo " "
+# additional packages not built for x86
+if [[ -n "$aarch_sles" ]];then
+    for pkgs in ${aarch_sles}; do
+	pkg=`echo $pkgs | awk -F: '{print $1}'`
+	sourceVer=`echo $pkgs | awk -F: '{print $2}'`
+	obsProject=${project}:${minorVer}:Update$sourceVer
+	binary=`osc ls -b ${obsProject} ${pkg} SLE_12 aarch64 | egrep -v "^_buildenv|^_statistics|.src.rpm$"`
+	if [[ -n "${binary}" ]];then
+	    echo "$pkg: INCLUDED from v$minorVer.$sourceVer (SLE/aarch64)"
+	    #run_cmd "osc aggregatepac ${obsProject} $pkg ${project}:${minorVer}:Update${endMicroVer} $pkg-v$minorVer.${sourceVer}"
+	    osc aggregatepac ${obsProject} $pkg ${project}:${minorVer}:Update${endMicroVer} $pkg-v$minorVer.${sourceVer}
+	fi
+    done
+fi
+
+# changes/removals for specific release
+
+packages=""
+project="${project}:${minorVer}:Update${endMicroVer}"
+
+# Version 1.3.4
+if [[ "${minorVer}" == "1.3" && "${endMicroVer}" -eq 4 ]];then
+    packages="slurm-devel-v1.3.1
+              llvm4-compilers-v1.3.2
+              python-mpi4py-gnu7-mpich-v1.3.3
+              python-mpi4py-gnu7-mvapich2-v1.3.3
+              python-mpi4py-gnu7-openmpi3-v1.3.3
+              python-mpi4py-gnu7-impi-v1.3.3
+              python-mpi4py-intel-impi-v1.3.3
+              python-mpi4py-intel-mpich-v1.3.3
+              python-mpi4py-intel-mvapich2-v1.3.3
+              python-mpi4py-intel-openmpi3-v1.3.3
+              python-numpy-gnu7-v1.3.2 python-numpy-intel-v1.3.2
+              python-scipy-gnu7-mpich-v1.3.2 python-scipy-gnu7-mvapich2-v1.3.2 python-scipy-gnu7-openmpi-v1.3.2 python-scipy-gnu7-openmpi3-v1.3.3
+              python-Cython-v1.3.3"
+fi
+
+# Version 1.3.4
+if [[ "${minorVer}" == "1.3" && "${endMicroVer}" -eq 5 ]];then
+
+    packages="slurm-devel-v1.3.1
+              llvm4-compilers-v1.3.2
+              python-mpi4py-gnu7-mpich-v1.3.3
+              python-mpi4py-gnu7-mvapich2-v1.3.3
+              python-mpi4py-gnu7-openmpi3-v1.3.3
+              python-mpi4py-gnu7-impi-v1.3.3
+              python-mpi4py-intel-impi-v1.3.3
+              python-mpi4py-intel-mpich-v1.3.3
+              python-mpi4py-intel-mvapich2-v1.3.3
+              python-mpi4py-intel-openmpi3-v1.3.3
+              python-numpy-gnu7-v1.3.2 python-numpy-intel-v1.3.2
+              python-scipy-gnu7-mpich-v1.3.2 python-scipy-gnu7-mvapich2-v1.3.2 
+              python-scipy-gnu7-openmpi-v1.3.2 python-scipy-gnu7-openmpi3-v1.3.3
+              imb-gnu7-openmpi-v1.3.2
+              tau-gnu7-openmpi-v1.3.2
+              netcdf-gnu7-openmpi-v1.3.2
+              boost-gnu7-openmpi-v1.3.2
+              mumps-gnu7-openmpi-v1.3.2
+              trilinos-gnu7-openmpi-v1.3.2
+              phdf5-gnu7-openmpi-v1.3.2
+              scalapack-gnu7-openmpi-v1.3.2
+              hypre-gnu7-openmpi-v1.3.2
+              petsc-gnu7-openmpi-v1.3.2
+              fftw-gnu7-openmpi-v1.3.2"
+fi
+
+for pkg in $packages; do
+    echo "v${minorVer}.${endMicroVer}: checking if $pkg exists..."
+    igot=$(osc ls ${project} ${pkg} 2> /dev/null) 
+    if [[ $? -eq 0 ]]; then
+	echo "--> removing package $pkg...."
+	osc rdelete -m "remove deprecated package ${pkg}" ${project} $pkg
+    fi
+
+done

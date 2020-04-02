@@ -1,0 +1,15 @@
+--- a/src/others/Makefile.am	2017-12-21 03:13:23.000000000 -0800
++++ b/src/others/Makefile.am	2018-05-14 15:58:14.000000000 -0700
+@@ -56,9 +56,9 @@
+ #else
+ 	$(top_srcdir)/substitute $(SED) "@sub_Extrae_eventandcounters@" Extrae_event pyextrae/common/extrae.py
+ #endif
+-	mkdir -p $(libexecdir)/pyextrae
+-	cp -rL pyextrae/* $(libexecdir)/pyextrae
+-	rm $(libexecdir)/pyextrae/common/extrae.py.in
++	$(MKDIR_P) $(DESTDIR)$(libexecdir)/pyextrae
++	cp -rL pyextrae/* $(DESTDIR)$(libexecdir)/pyextrae
++	rm $(DESTDIR)$(libexecdir)/pyextrae/common/extrae.py.in
+ 
+ CLEANFILES = pyextrae/common/extrae.py
+ 

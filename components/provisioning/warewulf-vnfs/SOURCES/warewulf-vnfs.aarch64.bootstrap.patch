@@ -1,0 +1,42 @@
+--- a/bin/wwbootstrap	2018-07-12 10:18:54.000000000 -0700
++++ b/bin/wwbootstrap	2018-07-12 10:18:13.000000000 -0700
+@@ -36,6 +36,7 @@
+ my $kversion;
+ my $config;
+ my $wwsh_bin;
++my $kernel_file = "";
+ 
+ my $help = "USAGE: $0 [options] kernel_version
+     SUMMARY:
+@@ -153,11 +154,19 @@
+ 
+ mkpath("$tmpdir/initramfs");
+ 
+-if (! -f "$opt_chroot/boot/vmlinuz-$opt_kversion") {
+-    &eprint("Can't locate the boot kernel: ". $opt_chroot ."/boot/vmlinuz-$opt_kversion\n");
+-    exit 1;
++# RHEL variants on aarch64 use vmlinuz, SUSE uses Image file - check for existence of either
++if ( -f "$opt_chroot/boot/Image-$opt_kversion") {
++    $kernel_file = "$opt_chroot/boot/Image-$opt_kversion";
++} elsif ( -f "$opt_chroot/boot/vmlinuz-$opt_kversion") {
++    $kernel_file = "$opt_chroot/boot/vmlinuz-$opt_kversion";
+ }
+ 
++if ( $kernel_file eq "") {
++    &eprint("Can't locate the boot kernel, expecting one of the following:\n");
++    &eprintf("--> ".$opt_chroot ."boot/Image-$opt_kversion\n");
++    &eprintf("--> ".$opt_chroot ."boot/vmlinuz-$opt_kversion\n");
++    exit 1;
++}
+ 
+ 
+ if ($config->get("drivers")) {
+@@ -321,7 +330,7 @@
+ 
+ # Attempt to gunzip the kernel, aarch64 kernels are compressed and iPXE can't boot gzip compressed kernels.
+ # Note, if the kernel isn't a gzip, IO::Uncompress::Gunzip makes a direct copy of the file.
+-gunzip "$opt_chroot/boot/vmlinuz-$opt_kversion" => "$tmpdir/kernel" or die "gunzip of kernel failed: $GunzipError\n";
++gunzip "$kernel_file" => "$tmpdir/kernel" or die "gunzip of kernel failed: $GunzipError\n";
+ 
+ &nprint("Building and compressing bootstrap\n");
+ system("(cd $tmpdir; find . | cpio -o --quiet -H newc ) | gzip -c9 > $output");

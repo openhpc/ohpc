@@ -30,17 +30,25 @@ BuildRequires: libevent-devel
 
 Summary:   MPICH MPI implementation
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
-Version:   3.2
+Version:   3.3.2
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.mpich.org
 Source0:   http://www.mpich.org/static/downloads/%{version}/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch0:    config.pmix.patch
+Patch1:    node.name.fix.patch
+# 08/14/19 karl@ices.utexas.edu - upping patch fuzz factor for node.name patch
+%global _default_patch_fuzz 2
 
 Requires: prun%{PROJ_DELIM} >= 1.2
 Requires: perl
+BuildRequires: zlib-devel
+%if 0%{?suse_version}
+BuildRequires:  libnuma-devel
+%else
+BuildRequires: numactl-devel
+%endif
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -58,6 +66,7 @@ Message Passing Interface (MPI) standard.
 
 %setup -q -n %{pname}-%{version}
 %patch0 -p0
+%patch1 -p1
 
 %build
 # OpenHPC compiler designation
@@ -75,6 +84,13 @@ export CPATH=${PMIX_INC}
             LIBS="-L%{OHPC_ADMIN}/pmix/pmix/lib -lpmix" --with-pm=none --with-pmi=slurm \
 %endif
     || { cat config.log && exit 1; }
+
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
+%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
+%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
+%endif
+
+#            --with-device=ch4:ofi,ucx \
 
 make %{?_smp_mflags}
 
@@ -130,28 +146,10 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc README.envvar
 %doc COPYRIGHT
 %doc CHANGES
 %doc README
 %doc RELEASE_NOTES
-
-
-%changelog
-* Tue Oct  3 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.2-1
-- enabled build using external pmix library
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.2-1
-- switch to ohpc_compiler_dependent flag
-
-* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 3.2-1
-- Switching to %%ohpc_compiler macro
-
-* Thu Sep  1 2016  <raffenet@mcs.anl.gov>
-- Initial build.

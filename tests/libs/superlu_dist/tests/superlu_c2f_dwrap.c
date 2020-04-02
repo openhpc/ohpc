@@ -4,10 +4,10 @@
  * \brief C interface functions for the Fortran90 wrapper.
  *
  * <pre>
- * -- Distributed SuperLU routine (version 3.2) --
+ * -- Distributed SuperLU routine (version 4.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * October 2012
- *
+ * April 5, 2015
  */
 
 #include "superlu_ddefs.h"
@@ -55,7 +55,7 @@ void f_create_gridinfo_handle(fptr *handle)
 
 void f_create_options_handle(fptr *handle)
 {
-   *handle = (fptr) SUPERLU_MALLOC(sizeof(superlu_options_t));
+   *handle = (fptr) SUPERLU_MALLOC(sizeof(superlu_dist_options_t));
 }
 
 void f_create_ScalePerm_handle(fptr *handle)
@@ -169,17 +169,17 @@ void f_get_superlu_options(fptr *opt, int *Fact, int *Equil, int *ParSymbFact,
 			   int *SolveInitialized, int *RefineInitialized,
 			   int *PrintStat)
 {
-   *Fact = (int) ((superlu_options_t *) *opt)->Fact;
-   *Equil = (int) ((superlu_options_t *) *opt)->Equil;
-   *ParSymbFact = (int) ((superlu_options_t *) *opt)->ParSymbFact;
-   *ColPerm = (int) ((superlu_options_t *) *opt)->ColPerm;
-   *RowPerm = (int) ((superlu_options_t *) *opt)->RowPerm;
-   *IterRefine = (int) ((superlu_options_t *) *opt)->IterRefine;
-   *Trans = (int) ((superlu_options_t *) *opt)->Trans;
-   *ReplaceTinyPivot = (int) ((superlu_options_t *) *opt)->ReplaceTinyPivot;
-   *SolveInitialized = (int) ((superlu_options_t *) *opt)->SolveInitialized;
-   *RefineInitialized = (int) ((superlu_options_t *) *opt)->RefineInitialized;
-   *PrintStat = (int) ((superlu_options_t *) *opt)->PrintStat;
+   *Fact = (int) ((superlu_dist_options_t *) *opt)->Fact;
+   *Equil = (int) ((superlu_dist_options_t *) *opt)->Equil;
+   *ParSymbFact = (int) ((superlu_dist_options_t *) *opt)->ParSymbFact;
+   *ColPerm = (int) ((superlu_dist_options_t *) *opt)->ColPerm;
+   *RowPerm = (int) ((superlu_dist_options_t *) *opt)->RowPerm;
+   *IterRefine = (int) ((superlu_dist_options_t *) *opt)->IterRefine;
+   *Trans = (int) ((superlu_dist_options_t *) *opt)->Trans;
+   *ReplaceTinyPivot = (int) ((superlu_dist_options_t *) *opt)->ReplaceTinyPivot;
+   *SolveInitialized = (int) ((superlu_dist_options_t *) *opt)->SolveInitialized;
+   *RefineInitialized = (int) ((superlu_dist_options_t *) *opt)->RefineInitialized;
+   *PrintStat = (int) ((superlu_dist_options_t *) *opt)->PrintStat;
 }
 
 void f_set_superlu_options(fptr *opt, int *Fact, int *Equil, int *ParSymbFact,
@@ -188,25 +188,25 @@ void f_set_superlu_options(fptr *opt, int *Fact, int *Equil, int *ParSymbFact,
 			   int *SolveInitialized, int *RefineInitialized,
 			   int *PrintStat)
 {
-    superlu_options_t *l_options = (superlu_options_t*) *opt;
+    superlu_dist_options_t *l_options = (superlu_dist_options_t*) *opt;
     l_options->Fact = (fact_t) *Fact;
-   ((superlu_options_t *) *opt)->Equil = (yes_no_t) *Equil;
-   ((superlu_options_t *) *opt)->ParSymbFact = (yes_no_t) *ParSymbFact;
-   ((superlu_options_t *) *opt)->ColPerm = (colperm_t) *ColPerm;
-   ((superlu_options_t *) *opt)->RowPerm = (rowperm_t) *RowPerm;
-   ((superlu_options_t *) *opt)->IterRefine = (IterRefine_t) *IterRefine;
-   ((superlu_options_t *) *opt)->Trans = (trans_t) *Trans;
-   ((superlu_options_t *) *opt)->ReplaceTinyPivot = (yes_no_t) *ReplaceTinyPivot;
-   ((superlu_options_t *) *opt)->SolveInitialized = (yes_no_t) *SolveInitialized;
-   ((superlu_options_t *) *opt)->RefineInitialized = (yes_no_t) *RefineInitialized;
-   ((superlu_options_t *) *opt)->PrintStat = (yes_no_t) *PrintStat;
+   ((superlu_dist_options_t *) *opt)->Equil = (yes_no_t) *Equil;
+   ((superlu_dist_options_t *) *opt)->ParSymbFact = (yes_no_t) *ParSymbFact;
+   ((superlu_dist_options_t *) *opt)->ColPerm = (colperm_t) *ColPerm;
+   ((superlu_dist_options_t *) *opt)->RowPerm = (rowperm_t) *RowPerm;
+   ((superlu_dist_options_t *) *opt)->IterRefine = (IterRefine_t) *IterRefine;
+   ((superlu_dist_options_t *) *opt)->Trans = (trans_t) *Trans;
+   ((superlu_dist_options_t *) *opt)->ReplaceTinyPivot = (yes_no_t) *ReplaceTinyPivot;
+   ((superlu_dist_options_t *) *opt)->SolveInitialized = (yes_no_t) *SolveInitialized;
+   ((superlu_dist_options_t *) *opt)->RefineInitialized = (yes_no_t) *RefineInitialized;
+   ((superlu_dist_options_t *) *opt)->PrintStat = (yes_no_t) *PrintStat;
 }
 
 /* wrappers for SuperLU functions */
 
 void f_set_default_options(fptr *options)
 {
-   set_default_options_dist((superlu_options_t *) *options);
+   set_default_options_dist((superlu_dist_options_t *) *options);
 }
 
 void f_superlu_gridinit(int *Bcomm, int_t *nprow, int_t *npcol, fptr *grid)
@@ -215,7 +215,8 @@ void f_superlu_gridinit(int *Bcomm, int_t *nprow, int_t *npcol, fptr *grid)
    superlu_gridinit(f2c_comm(Bcomm), *nprow, *npcol, (gridinfo_t *) *grid);
 }
 
-void f_superlu_gridmap(int *Bcomm, int_t *nprow, int_t *npcol, int *usermap, int *ldumap,
+void f_superlu_gridmap(int *Bcomm, int_t *nprow, int_t *npcol, 
+                       int_t *usermap, int_t *ldumap,
 	 fptr *grid)
 {
    superlu_gridmap(f2c_comm(Bcomm), *nprow, *npcol, usermap, *ldumap, (gridinfo_t *) *grid);
@@ -246,19 +247,17 @@ void f_PStatFree(fptr *stat)
    PStatFree((SuperLUStat_t *) *stat);
 }
 
-/*
 void f_LUstructInit(int_t *m, int_t *n, fptr *LUstruct)
 {
-   LUstructInit(*m, *n, (LUstruct_t *) *LUstruct);
-}
-*/
-void f_LUstructInit(int_t *m, fptr *LUstruct)
-{
+   extern void LUstructInit(const int_t, LUstruct_t *);
+
    LUstructInit(*m, (LUstruct_t *) *LUstruct);
 }
 
 void f_LUstructFree(fptr *LUstruct)
 {
+   extern void LUstructFree(LUstruct_t *);
+
    LUstructFree((LUstruct_t *) *LUstruct);
 }
 
@@ -290,7 +289,7 @@ void f_Destroy_SuperMat_Store_dist(fptr *A)
 
 void f_dSolveFinalize(fptr *options, fptr *SOLVEstruct)
 {
-   dSolveFinalize((superlu_options_t *) *options,
+   dSolveFinalize((superlu_dist_options_t *) *options,
                   (SOLVEstruct_t *) *SOLVEstruct);
 }
 
@@ -298,13 +297,13 @@ void f_pdgssvx(fptr *options, fptr *A, fptr *ScalePermstruct, double *B,
                int *ldb, int *nrhs, fptr *grid, fptr *LUstruct,
                fptr *SOLVEstruct, double *berr, fptr *stat, int *info)
 {
-    pdgssvx((superlu_options_t *) *options, (SuperMatrix *) *A,
+    pdgssvx((superlu_dist_options_t *) *options, (SuperMatrix *) *A,
 	    (ScalePermstruct_t *) *ScalePermstruct, B, *ldb, *nrhs,
 	    (gridinfo_t *) *grid, (LUstruct_t *) *LUstruct,
 	    (SOLVEstruct_t *) *SOLVEstruct, berr,
 	    (SuperLUStat_t *) *stat, info);
 
-    PStatPrint((superlu_options_t *) *options, (SuperLUStat_t *) *stat,
+    PStatPrint((superlu_dist_options_t *) *options, (SuperLUStat_t *) *stat,
 	       (gridinfo_t *) *grid);
 }
 

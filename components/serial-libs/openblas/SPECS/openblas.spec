@@ -8,57 +8,29 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package openblas
-#
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
 # OpenBLAS build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-
 # Base package name
 %define pname openblas
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        0.2.20
+Version:        0.3.7
 Release:        1%{?dist}
 Summary:        An optimized BLAS library based on GotoBLAS2
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/serial-libs
 Url:            http://www.openblas.net
 Source0:        https://github.com/xianyi/OpenBLAS/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
-Source1:        OHPC_macros
-Patch0:         openblas-libs.patch
-# PATCH-FIX-UPSTREAM c_xerbla_no-void-return.patch
-Patch1:         c_xerbla_no-void-return.patch
+Patch1:         openblas-libs.patch
 # PATCH-FIX-UPSTREAM openblas-noexecstack.patch
 Patch2:         openblas-noexecstack.patch
-# PATCH-FIX-UPSTREAM openblas-gemv.patch
-Patch3:         openblas-gemv.patch
 # PATCH-FIX-UPSTREADM fix-arm64-cpuid-return.patch
-Patch4:         fix-arm64-cpuid-return.patch
-# PATCH for https://github.com/xianyi/OpenBLAS/pull/1262
-Patch5:         1262.patch
-# PATCH for https://github.com/xianyi/OpenBLAS/pull/1236
-Patch6:         1236.patch
-# PATCH for https://github.com/xianyi/OpenBLAS/pull/1247
-Patch7:         1247.patch
-ExclusiveArch:  %ix86 ia64 ppc ppc64 x86_64 aarch64
+Patch3:         fix-arm64-cpuid-return.patch
+ExclusiveArch:  %ix86 ia64 ppc ppc64 ppc64le x86_64 aarch64
+
+%global _default_patch_fuzz 1
 
 %description
 OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
@@ -69,15 +41,9 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 %prep
 %setup -q -n OpenBLAS-%{version}
 
-%patch0 -p1
 %patch1 -p1
 %patch2 -p1
-# karl.w.schulz@intel.com (9/19/16) - disabling patch3 for v0.2.19
-#%patch3 -p1
-%patch4 -p1
-#%patch5 -p1
-#%patch6 -p1
-#%patch7 -p1
+%patch3 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -90,9 +56,10 @@ OpenBLAS is an optimized BLAS library based on GotoBLAS2 1.13 BSD version.
 # Temporary fix, OpenBLAS does not autodetect aarch64
 %ifarch aarch64
 %define openblas_target TARGET=ARMV8 NUM_THREADS=256
+%define nbjobs_option MAKE_NB_JOBS=4
 %endif
 
-make    %{?openblas_target} USE_THREAD=1 USE_OPENMP=1 \
+make %{?openblas_target} USE_THREAD=1 USE_OPENMP=1 %{?nbjobs_option} \
         PREFIX=%{buildroot}%{install_path}
 
 %install
@@ -157,10 +124,3 @@ EOF
 %files
 %{OHPC_PUB}
 %doc BACKERS.md Changelog.txt CONTRIBUTORS.md GotoBLAS_00License.txt GotoBLAS_01Readme.txt GotoBLAS_02QuickInstall.txt GotoBLAS_03FAQ.txt GotoBLAS_04FAQ.txt GotoBLAS_05LargePage.txt GotoBLAS_06WeirdPerformance.txt LICENSE README.md TargetList.txt
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 0.2.19-1
-- switch to ohpc_compiler_dependent flag
-
-* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 0.2.19-1
-- Switching to %%ohpc_compiler macro

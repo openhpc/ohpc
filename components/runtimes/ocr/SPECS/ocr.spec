@@ -14,7 +14,6 @@
 
 # Base package name
 %define pname ocr
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 # Build options
 
@@ -28,8 +27,7 @@ Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://xstack.exascale-tech.com/wiki
-Source0:   https://xstack.exascale-tech.com/git/public/snapshots/ocr-refs/tags/OCRv%{version}_ohpc.tbz2
-Source1:   OHPC_macros
+Source0:   OCRv%{version}_ohpc.tbz2
 
 %description
 The Open Community Runtime project is creating an application
@@ -192,7 +190,6 @@ EOF
 %endif
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
 %exclude %{install_path}/bin/ocrrun_mpi
@@ -203,7 +200,6 @@ EOF
 
 %if %{with mpi}
 %files -n %{pname}_mpi-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc %{install_path}/share/ocr/doc/ocr-1.0.1.pdf
 %exclude %{install_path}/bin/ocrrun_x86
@@ -212,10 +208,3 @@ EOF
 %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
 %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
 %endif
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.0.1-1
-- switch to use of ohpc_compiler_dependent flag
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 1.0.1-1
-- Switching to %%ohpc_compiler macro

@@ -1,0 +1,307 @@
+#!/bin/bash
+#--------------------------------------------------------------------
+# Script to use osc command line to copy a package to new 
+# branch in OBS using configuration from previous version. This
+# script will automatically update the branch information in _service
+# and _link files.
+#
+# Originally: 11/29/2017 - karl.w.schulz@intel.com
+#--------------------------------------------------------------------
+
+if [ "$#" -lt 3 ];then
+    echo " "
+    echo "usage: `basename $0` <OPTIONS> [source-project] [target-project] [pkg-name]"
+    echo " "
+    echo "where OPTIONS are:"
+    echo "  -i             maintain release string during copy and increment by 1"
+    echo "  -p <newname>   use newname for target-project instead of pkg-name"
+    echo " "
+    exit 1
+fi
+
+incrementRelease=0
+newName=0
+
+while getopts "ip:" opt; do
+    case ${opt} in
+	i ) 
+	    incrementRelease=1
+	    ;;
+	p ) 
+	    newPackageName=${OPTARG}
+	    newName=1
+	    ;;
+    esac
+done
+shift $((OPTIND -1))
+
+export branchCurrent=$1
+export branchNew=$2
+
+ENABLE_CMDS=1
+DISABLE_ARCH="x86_64 aarch64"
+SKIP_LINK_UPDATES="latexmk"
+SKIP_SERVICE_UPDATES="XXXXXXX"
+
+TMPDIR=$(mktemp -d) || exit 1
+
+ERROR () {
+
+    echo "[ERROR]: $1" >&2
+    exit 1
+}
+
+
+run_cmd () {
+    local cmd="$@"
+
+    if [[ ${ENABLE_CMDS} -eq 0 ]];then
+	echo "   [would have run]: $cmd"
+    else
+	echo "running $cmd"
+	eval $cmd
+    fi
+}
+
+# determine repos and build architectures available in parent repo
+query_source_repos_and_arches () {
+    export repos=$(osc api -X GET "/build/$branchCurrent" | grep entry | awk -F 'name="' '{print $2}' | awk -F '"' '{print $1}')
+    for repo in $repos; do
+	echo "--> Available repos = $repo"
+    done
+
+    testArch=$(echo $repos | awk '{print $1}')
+    export arches=$(osc api -X GET "/build/$branchCurrent/$testArch" | grep entry | awk -F 'name="' '{print $2}' | awk -F '"' '{print $1}')
+    for arch in $arches; do
+	echo "--> Available arches = $arch"
+    done
+}
+
+# determine highest release number for package
+query_rpm_release () {
+    package=$1
+    maxRelease=0
+
+    # Loop over each distro and arch type to determine max release number.
+
+    for repo in $repos; do
+	for arch in $arches; do
+	    release=$(osc api -X GET "/build/$branchCurrent/$repo/$arch/$package/" | grep $arch.rpm | head -1 | perl -pe "s/.*binary filename=\S+-(\d+)\.(\d+)\.$arch\.rpm\".*\$/\$1/")
+
+            if [[ "${package}" == "losf" ]];then
+		release=$(osc api -X GET "/build/$branchCurrent/$repo/$arch/$package/" | grep noarch.rpm | head -1 | perl -pe "s/.*binary filename=\S+-(\d+)\.(\d+)\.noarch\.rpm\".*\$/\$1/")
+	    fi
+	    if [ -n "$release" ];then
+		if [ $release -gt $maxRelease ];then
+		    maxRelease=$release
+		fi
+	    fi
+
+	done
+    done
+
+    if [ $maxRelease -eq 0 ];then
+	ERROR "Unable to determine RPM release number"
+    else
+	echo "--> Upstream RPM release = $maxRelease"
+    fi
+
+    export maxRelease
+
+}
+
+query_minor_branch () {
+    export SOURCE_VER=`echo $1 | awk -F : '{print $2}'`
+    [[ -z "${SOURCE_VER}" ]] && { echo "Error querying minor branch for $1"; exit 1; }
+
+    export PARENT_PROJ=`echo $1 | awk -F : '{print $1}'`
+    [[ -z "${PARENT_PROJ}" ]] && { echo "Error querying project name for $1"; exit 1; }
+}
+
+update_pkg_if_link () {
+
+    local localdir="${branchNew}/$1"
+    local parent_path="${branchCurrent}"
+
+    cd $TMPDIR || ERROR "unable to cd to $TMPDIR"
+    osc co ${branchNew} $1
+
+    osc api -X GET "/source/${parent_path}/$2/_link" > ${localdir}/_link || ERROR "unable to copy _link from ${parent_path}"
+
+    osc add ${localdir}/_link || ERROR "Unable to add _link file for $1"
+    if [ -e ${localdir}/_service ];then
+	osc rm ${localdir}/_service || ERROR "Unable to remove _service file for $1"
+    fi
+
+    # update the _link to the new branch (unless in SKIP list)
+
+    echo "${SKIP_LINK_UPDATES}" | grep -q $1
+    if [ $? -eq 1 ];then
+	echo "Updating _link for to latest branch"
+	perl -pi -e "s/project=\S+/project=\'${branchNew}\'/" ${localdir}/_link || ERROR "unable to update parent in _link for $1"
+    fi
+
+    # update to latest gnu compiler family
+    gnu_family=gnu7
+
+    echo $1 | grep -q gnu
+    if [ $? -eq 0 ];then
+	echo "Updating _link for gnu compiler family"
+	perl -pi -e "s/compiler_family gnu</compiler_family ${gnu_family}</" ${localdir}/_link
+    fi
+
+    cd -
+} # end update_pkg_if_link()
+
+update_pkg_if_service () {
+
+    local localdir="${branchNew}/$1"
+    local version=`echo $branchNew | awk -F : '{print $2}'`
+
+    echo "${branchNew}" | grep -q ":Update" 
+
+    if [ $? -eq 0 ];then
+	local update_ver=`echo $branchNew | awk -F : '{print $3}' | awk -F 'Update' '{print $2}'`
+	version="$version.$update_ver"
+    fi
+
+    local revision="obs/OpenHPC_${version}_Factory"
+
+    echo "--> _service file: revision = $revision"
+
+    cd $TMPDIR || ERROR "unable to cd to $TMPDIR"
+    osc co ${branchNew} $1
+
+    # update the _service to the new branch (unless in SKIP list)
+
+    echo "${SKIP_SERVICE_UPDATES}" | grep -q $1
+    if [ $? -eq 1 ];then
+	perl -i -pe "s!revision\">(\S+)<!revision\">$revision<!"  ${localdir}/_service || ERROR "unable to update revision in _service for $1"
+    fi
+
+    osc ci ${localdir} -m "committing updated _service file for $1"
+
+    cd -
+}
+
+echo " "
+echo "Using source branch = $branchCurrent"
+query_minor_branch $branchCurrent
+echo "Minor version branch (source) = ${SOURCE_VER}"
+echo "Parent project                = ${PARENT_PROJ}"
+echo "TMPDIR                        = $TMPDIR"
+echo " "
+
+PKG=$3
+
+echo "Copying existing package $PKG from ${branchCurrent} to ${branchNew}..."
+
+# verify packages exists in source project
+osc api -X GET "/source/${branchCurrent}/$PKG" &> /dev/null 
+if [[ $? -ne 0 ]];then
+    echo " "
+    echo "whoa slow your roll....package $PKG not found in ${branchCurrent}"
+    echo "--> cowardly refusing to continue"
+    exit 1
+fi
+
+# grab release string
+if [ $incrementRelease -eq 1 ];then
+    query_source_repos_and_arches
+    query_rpm_release $PKG
+    #relNumber=$(osc api -X GET "/source/${branchCurrent}/${PKG}" | grep vrev | perl -pe 's/.*vrev="(\d+)".*$/$1/')
+    let relNumber="$maxRelease+1"
+    if [ $relNumber -lt 1 ];then
+	ERROR "target release number must be > 0"
+    fi
+fi
+
+if [ $newName -eq 1 ];then
+    cmd="osc copypac ${branchCurrent} $PKG ${branchNew} ${newPackageName}"
+    PKGNEW=${newPackageName}
+else
+    cmd="osc copypac ${branchCurrent} $PKG ${branchNew}"
+    PKGNEW=${PKG}
+fi
+run_cmd "$cmd"
+
+# check if this is a child package with _link
+osc api -X GET "/source/${branchCurrent}/$PKG/_link" &> /dev/null && found_link=1 || found_link=0
+
+# disable arch'es present in previous build (to avoid rebuilds)
+
+for myarch in ${DISABLE_ARCH}; do    
+    cmd="osc api -X POST \"/source/${branchNew}/${PKGNEW}?cmd=set_flag&flag=build&status=disable&arch=${myarch}\""
+    run_cmd "$cmd"
+done
+
+# Update path in _service files to match new release branch
+
+if [[ ($found_link -eq 0) && ($ENABLE_CMDS -eq 1) ]]; then
+    echo "Upating _service file to use latest branch for source"
+    update_pkg_if_service ${PKGNEW} 
+fi
+    
+# update config if source_package was a link, since "osc release" will simply create a _service file
+if [[ ($found_link -eq 1) && ($ENABLE_CMDS -eq 1) ]]; then
+    echo "Originating package source for $PKG is a _link..."
+    update_pkg_if_link ${PKGNEW} ${PKG}
+fi
+    
+    
+if [[ $found_link -eq 1 ]];then
+    echo " "
+    echo "At least 1 _link file updated. committing staged changes in $TMPDIR..."
+    if [ $# -gt 2 ];then
+	cd $TMPDIR/$branchNew/$PKGNEW
+    else
+	cd $TMPDIR
+    fi
+    osc ci -m "committing updated _link files"
+    cd -
+fi
+
+if [ $incrementRelease -eq 1 ];then
+    echo "--> Updating package to have desired Release string setting = $relNumber"
+    cd $TMPDIR/$branchNew/$PKGNEW
+
+    let numIters="$relNumber-1"
+    
+    # strategy for packages with _service files
+    if [ -f _service ];then
+
+	# make additional commits to match desired release number
+	if [ $relNumber -eq 1 ];then
+	    echo "No change necessary, minimum release string is 2"
+	elif [ $relNumber -eq 2 ];then
+	    echo "No change necessary, minimum release string is 2"
+	elif [ $relNumber -eq 3 ];then
+	    osc commit -f -m "copy_package: final commit for release matching (3 of tgt=$relNumber)"
+	elif [ $relNumber -eq 4 ];then
+	    osc commit -f -m "copy_package: temp noop commit for release matching (3 of tgt=$relNumber)"
+	    osc commit -f -m "copy_package: final commit for release matching (4 of tgt=$relNumber)"
+	else
+	    mv _service _service.orig
+	    osc rm _service
+	    osc ci -m "copy_package: temp removal for release matching (3 of tgt=$relNumber)"
+
+	    for j in `seq 4 $numIters`; do
+		osc commit -f -m "copy_package: temp noop commit for release matching ($j of tgt=$relNumber)"
+	    done
+	    mv _service.orig _service
+	    osc add _service
+	    osc ci -m "copy_package: final commit for release matching ($relNumber of tgt=$relNumber)"
+	fi
+    elif [ -f _link ];then
+	# Note: evidence dictates linked packages can have release numbers that are different than the OBS vrev. Therefore, query package
+	# directly
+	echo "updating package with _link ($TMPDIR)"
+	osc repairwc .
+	rm _link
+	osc up -u .
+	for j in `seq 3 $numIters`; do
+	    osc commit -f -m "copy_package: temp noop commit for release matching ($j of tgt=$relNumber)"
+	done
+	osc ci -f -m "copy_package: final commit for release matching ($relNumber of tgt=$relNumber)"
+    fi
+fi

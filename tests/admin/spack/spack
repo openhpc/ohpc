@@ -21,21 +21,26 @@ setup() {
 }
 
 @test "[spack] add compiler" {
-    module load  gnu7
+    module load  gnu8
     spack compiler find
     assert_success
 }
 
 @test "[spack] test build" {
-    spack install libjpeg-turbo
+    spack install bats
     assert_success
 }
 
-@test "[spack] build with llvm" {
+@test "[spack] build add llvm compiler" {
     module load llvm5
     spack compiler find
     assert_success
 
-    spack install libjpeg-turbo%clang
+#    spack install pkgconf%clang
+#    assert_success
+}
+
+@test "[spack] test module refresh" {
+    echo y | spack module tcl refresh
     assert_success
 }

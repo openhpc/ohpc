@@ -10,40 +10,34 @@
 
 # Numpy python library build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
+%define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # Base package name
 %define pname numpy
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-Name:           python-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.13.1
+Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
+Version:        1.18.2
 Release:        1%{?dist}
-Url:            http://sourceforge.net/projects/numpy
+Url:            https://github.com/numpy/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Source0:        https://github.com/numpy/numpy/releases/download/v%{version}/numpy-%{version}.tar.gz
-Source1:        OHPC_macros
 Patch1:         numpy-buildfix.patch
 Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
+Patch4:         numpy-llvm-arm.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  python-devel python-setuptools
-Requires:       python
-Provides:       numpy = %{version}
+BuildRequires:  python3-Cython%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
-%endif
-%if ! 0%{?fedora_version}
-Provides:       python-numeric = %{version}
-Obsoletes:      python-numeric < %{version}
 %endif
 
 # Default library install path
@@ -63,9 +57,10 @@ basic linear algebra and random number generation.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
+#patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -73,8 +68,14 @@ basic linear algebra and random number generation.
 
 %if "%{compiler_family}" == "intel"
 COMPILER_FLAG="--compiler=intelem"
-%else
-module load openblas
+%endif
+
+%if "%{compiler_family}" == "llvm"
+COMPILER_FLAG="--fcompiler=flang --compiler=clang"
+%endif
+
+%if "%{compiler_family}" == "arm1"
+COMPILER_FLAG="--fcompiler=armflang --compiler=armclang"
 %endif
 
 %if "%{compiler_family}" == "intel"
@@ -85,7 +86,19 @@ library_dirs = $MKLROOT/lib/intel64
 mkl_libs = mkl_rt
 lapack_libs = mkl_rt
 EOF
-%else
+%endif
+
+%if "%{compiler_family}" == "arm1"
+cat > site.cfg << EOF
+[openblas]
+libraries = armpl
+library_dirs = $ARMPL_LIBRARIES
+include_dirs = $ARMPL_INCLUDES
+EOF
+%endif
+
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+module load openblas
 cat > site.cfg << EOF
 [openblas]
 libraries = openblas
@@ -94,55 +107,56 @@ include_dirs = $OPENBLAS_INC
 EOF
 %endif
 
-#CFLAGS="%{optflags} -fno-strict-aliasing" python setup.py build $COMPILER_FLAG
-python setup.py build $COMPILER_FLAG
+CFLAGS="%{optflags} -fno-strict-aliasing" %__python setup.py build $COMPILER_FLAG
 
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+%__python setup.py install --root="%{buildroot}" --prefix="%{install_path}"
+
 %if 0%{?suse_version}
 %fdupes -s %{buildroot}%{install_path}
 %endif
 
 # OpenHPC module file
 %{!?compiler_family: %global compiler_family gnu}
-%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{python_module_prefix}%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{python_module_prefix}%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler"
-puts stderr "toolchain."
+puts stderr "This module loads the %{pname} library built with %{python_prefix}"
+puts stderr "and the %{compiler_family} compiler toolchain."
 puts stderr "\nVersion %{version}\n"
 
 }
-module-whatis "Name: %{pname} built with %{compiler_family} compiler"
+module-whatis "Name: %{python_prefix}-%{pname} built with %{compiler_family} compiler"
 module-whatis "Version: %{version}"
 module-whatis "Category: python module"
 module-whatis "Description: %{summary}"
 module-whatis "URL %{url}"
 
+family                      numpy
 set     version             %{version}
 
-# Require openblas for gnu compiler families
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+# Require openblas for gnu and llvm compiler families
+depends-on openblas
+%endif
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    PYTHONPATH          %{install_path}/lib64/python2.7/site-packages
+prepend-path    PYTHONPATH          %{install_path}/lib64/%{python_lib_dir}/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_BIN        %{install_path}/bin
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{python_module_prefix}%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -153,16 +167,9 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-,root,root)
+%exclude %{install_path}/bin/f2py
 %{OHPC_PUB}
 %doc INSTALL.rst.txt
 %doc LICENSE.txt
 %doc PKG-INFO
 %doc THANKS.txt
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.12.1-1
-- switch to ohpc_compiler_dependent flag
-
-* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.11.1-1
-- Switching to %%ohpc_compiler macro

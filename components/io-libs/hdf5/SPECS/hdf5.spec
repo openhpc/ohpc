@@ -8,43 +8,27 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#-------------------------------------------------------------------------------
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
-# Copyright (c) 2015, Intel Corporation
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-#
-#
-#-------------------------------------------------------------------------------
-
 # Serial HDF5 library build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
 %define pname hdf5
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   A general purpose library and file format for storing scientific data
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   1.10.1
+Version:   1.10.6
 Release:   1%{?dist}
 License:   Hierarchical Data Format (HDF) Software Library and Utilities License
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.hdfgroup.org/HDF5
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/%{pname}-%{version}/src/%{pname}-%{version}.tar.bz2
-Source1:   OHPC_macros
+Patch0:    h5cc.patch
+Patch1:    h5fc.patch
+Patch2:    h5cxx.patch
 
 BuildRequires: zlib-devel
-Requires:      zlib-devel
+Requires:      zlib
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -64,11 +48,17 @@ grids. You can also mix and match them in HDF5 files according to your needs.
 %prep
 
 %setup -q -n %{pname}-%{version}
+#%patch0 -p0
+#%patch1 -p0
+#%patch2 -p0
+
+# Fix building with gcc8 (this should be a patch)
+sed "s/\(.*\)(void) HDF_NO_UBSAN/HDF_NO_UBSAN \1(void)/" -i src/H5detect.c
 
 %build
 
 # override with newer config.guess for aarch64
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess bin
 %endif
 
@@ -81,6 +71,11 @@ cp /usr/lib/rpm/config.guess bin
 	    --enable-shared          \
 	    --enable-cxx             \
 	    --enable-fortran2003    || { cat config.log && exit 1; }
+
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
+%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
+%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
+%endif
 
 make %{?_smp_mflags}
 
@@ -140,18 +135,7 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc COPYING
 %doc README.txt
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.10.0-1
-- switch to ohpc_compiler_dependent flag
-
-* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.8.17-1
-- Switching to %%ohpc_compiler macro

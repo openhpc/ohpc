@@ -1,0 +1,36 @@
+#!../../../common/bats/bin/bats
+# -*-sh-*-
+
+load ./common/test_helper_functions || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+testname="perf-tools/likwid"
+
+NODES=2
+TASKS=5
+ARGS=5
+
+@test "[$testname] C marker API under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s C_markerAPI ];then
+	flunk "C_markerAPI binary does not exist"
+    fi
+
+    run_serial_binary ./run_c.sh
+    assert_success
+}
+
+@test "[$testname] FORTRAN marker API under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    if [ ! -s F_markerAPI ];then
+	flunk "F_markerAPI binary does not exist"
+    fi
+
+    run_serial_binary ./run_f90.sh
+    assert_success
+}

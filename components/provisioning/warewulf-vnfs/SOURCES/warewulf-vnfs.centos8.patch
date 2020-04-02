@@ -1,0 +1,19 @@
+--- vnfs/libexec/wwmkchroot/centos-8.tmpl	2020-03-10 17:48:48.115020748 -0500
++++ vnfs/libexec/wwmkchroot/centos-8.tmpl	2020-03-10 17:47:48.946017801 -0500
+@@ -18,7 +18,7 @@
+     if [ -z "$YUM_MIRROR_BASE" ]; then
+         YUM_MIRROR_BASE="http://mirror.centos.org/centos-8"
+     fi
+-    YUM_MIRROR="${YUM_MIRROR_BASE}/8/BaseOS/\$basearch/os","${YUM_MIRROR_BASE}/8/AppStream/\$basearch/os"
++    YUM_MIRROR="${YUM_MIRROR_BASE}/8/BaseOS/\$basearch/os","${YUM_MIRROR_BASE}/8/AppStream/\$basearch/os","${YUM_MIRROR_BASE}/8/PowerTools/\$basearch/os"
+ fi
+ 
+ # Install only what is necessary/specific for this distribution
+@@ -28,6 +28,6 @@
+     shadow-utils rsyslog tzdata util-linux words
+     zlib tar less gzip which util-linux openssh-clients 
+     openssh-server dhclient pciutils vim-minimal shadow-utils
+-    strace cronie crontabs cpio wget redhat-release"
++    strace cronie crontabs cpio wget redhat-release hostname"
+ 
+ # vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:

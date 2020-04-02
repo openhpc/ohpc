@@ -1,0 +1,46 @@
+ohpc-autotools Collection of GNU autotools packages
+ohpc-base Collection of base packages
+ohpc-base-compute Collection of compute node base packages
+ohpc-ganglia Collection of Ganglia monitoring and metrics packages
+ohpc-gnu8-geopm Global Extensible Open Power Manager for use with GNU compiler toolchain
+ohpc-gnu8-io-libs Collection of IO library builds for use with GNU compiler toolchain
+ohpc-gnu8-mpich-io-libs Collection of IO library builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-gnu8-mpich-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-gnu8-mpich-perf-tools Collection of performance tool builds for use with GNU compiler toolchain and the MPICH runtime
+ohpc-gnu8-mvapich2-io-libs Collection of IO library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
+ohpc-gnu8-mvapich2-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the MVAPICH2 runtime
+ohpc-gnu8-mvapich2-perf-tools Collection of performance tool builds for use with GNU compiler toolchain and the MVAPICH2 runtime
+ohpc-gnu8-openmpi3-io-libs Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime
+ohpc-gnu8-openmpi3-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
+ohpc-gnu8-openmpi3-perf-tools Collection of performance tool builds for use with GNU compiler toolchain and the OpenMPI runtime
+ohpc-gnu8-parallel-libs Collection of parallel library builds for use with GNU compiler toolchain
+ohpc-gnu8-perf-tools Collection of performance tool builds for use with GNU compiler toolchain
+ohpc-gnu8-python-libs Collection of python related library builds for use with GNU compiler toolchain
+ohpc-gnu8-python2-libs Collection of python2 related library builds for use with GNU compiler toolchain
+ohpc-gnu8-python3-libs Collection of python3 related library builds for use with GNU compiler toolchain
+ohpc-gnu8-runtimes Collection of runtimes for use with GNU compiler toolchain
+ohpc-gnu8-serial-libs Collection of serial library builds for use with GNU compiler toolchain
+ohpc-intel-geopm Global Extensible Open Power Manager for use with Intel(R) Parallel Studio XE software suite
+ohpc-intel-impi-io-libs Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite and Intel(R) MPI runtime
+ohpc-intel-impi-parallel-libs Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
+ohpc-intel-impi-perf-tools Collection of performance tool builds for use with Intel(R) Parallel Studio XE compiler toolchain and the Intel(R) MPI runtime
+ohpc-intel-io-libs Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite
+ohpc-intel-mpich-io-libs Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite and MPICH runtime
+ohpc-intel-mpich-parallel-libs Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
+ohpc-intel-mpich-perf-tools Collection of performance tool builds for use with Intel(R) Parallel Studio XE compiler toolchain and the MPICH runtime
+ohpc-intel-mvapich2-io-libs Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite and MVAPICH2 runtime
+ohpc-intel-mvapich2-parallel-libs Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
+ohpc-intel-mvapich2-perf-tools Collection of performance tool builds for use with Intel(R) Parallel Studio XE compiler toolchain and the MVAPICH2 runtime
+ohpc-intel-openmpi3-io-libs Collection of IO library builds for use with Intel(R) Parallel Studio XE software suite and OpenMPI runtime
+ohpc-intel-openmpi3-parallel-libs Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
+ohpc-intel-openmpi3-perf-tools Collection of performance tool builds for use with Intel(R) Parallel Studio XE compiler toolchain and the OpenMPI runtime
+ohpc-intel-perf-tools Collection of performance tool builds for use with Intel(R) Parallel Studio XE toolchain
+ohpc-intel-python-libs Collection of python related library builds for use with Intel(R) Parallel Studio XE toolchain
+ohpc-intel-python2-libs Collection of python2 related library builds for use with Intel(R) Parallel Studio XE toolchain
+ohpc-intel-python3-libs Collection of python3 related library builds for use with Intel(R) Parallel Studio XE toolchain
+ohpc-intel-runtimes Collection of runtimes for use with Intel(R) Parallel Studio XE toolchain
+ohpc-intel-serial-libs Collection of serial library builds for use with Intel(R) Parallel Studio XE toolchain
+ohpc-nagios Collection of Nagios monitoring and metrics packages
+ohpc-slurm-client Collection of client packages for SLURM
+ohpc-slurm-server Collection of server packages for SLURM
+ohpc-warewulf Collection of base packages for Warewulf provisioning

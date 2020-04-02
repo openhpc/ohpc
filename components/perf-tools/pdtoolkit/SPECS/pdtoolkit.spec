@@ -14,33 +14,30 @@
 
 # Base package name
 %define pname pdtoolkit
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        3.24
+Version:        3.25
 Release:        1%{?dist}
 License:        Program Database Toolkit License
 Summary:        PDT is a framework for analyzing source code
 Url:            http://www.cs.uoregon.edu/Research/pdt
 Group:          %{PROJ_NAME}/perf-tools
 Source:         https://www.cs.uoregon.edu/research/paracomp/pdtoolkit/Download/pdtoolkit-%{version}.tar.gz
-Source1:        OHPC_macros
+Patch1:         pdtoolkit-3.25-umask.patch
 Provides:       %{name} = %{version}%{release}
 Provides:       %{name} = %{version}
 
 #!BuildIgnore: post-build-checks
-#define _unpackaged_files_terminate_build      0
-#define __check_files /bin/true
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
-
 
 %description
 Program Database Toolkit (PDT) is a framework for analyzing source code written in several programming languages and for making rich program knowledge accessible to developers of static and dynamic analysis tools. PDT implements a standard program representation, the program database (PDB), that can be accessed in a uniform way through a class library supporting common PDB operations.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 
 %build
@@ -55,18 +52,7 @@ Program Database Toolkit (PDT) is a framework for analyzing source code written 
         -GNU
 %endif
 
-export DONT_STRIP=1
 make %{?_smp_mflags}
-
-%install
-%ohpc_setup_compiler
-
-./configure -prefix=%buildroot%{install_path} \
-%if "%{compiler_family}" == "intel"
-        -icpc
-%else
-        -GNU
-%endif
 
 export DONT_STRIP=1
 make %{?_smp_mflags} install
@@ -84,8 +70,12 @@ rm -f %buildroot%{install_path}/.last_config
 
 %ifarch aarch64
 %define arch_dir arm64_linux
-%else
+%endif
+%ifarch x86_64
 %define arch_dir x86_64
+%endif
+%ifarch ppc64le
+%define arch_dir ibm64linux
 %endif
 
 pushd %buildroot%{install_path}/%{arch_dir}/lib
@@ -102,17 +92,17 @@ ln -s ../../contrib/rose/roseparse/upcparse edg33-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/roseparse/upcparse
 %endif
 rm -f edg44-c-roseparse
-%ifnarch aarch64
+%ifnarch aarch64 || ppc64le
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-c-roseparse
 %endif
 rm -f edg44-cxx-roseparse
-%ifnarch aarch64
+%ifnarch aarch64 || ppc64le
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-cxx-roseparse
 %endif
 rm -f edg44-upcparse
-%ifnarch aarch64
+%ifnarch aarch64 || ppc64le
 ln -s  ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 sed -i 's|%buildroot||g' ../../contrib/rose/edg44/%{arch_dir}/roseparse/edg44-upcparse
 %endif
@@ -182,13 +172,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc CREDITS LICENSE README
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.23-1
-- switch to use of ohpc_compiler_dependent flag
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.22-1
-- Switching to %%ohpc_compiler macro

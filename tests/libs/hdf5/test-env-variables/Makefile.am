@@ -26,10 +26,8 @@ if V18
 DO_18=1_8
 endif
 
-### karl.w.schulz@intel.com - disable 1.10 API (8/24/14)
+if V110
+DO_110=1_10
+endif
 
-### if V110
-### DO_110=1_10
-### endif
-
-SUBDIRS = $(DO_16) $(DO_18) $(DO_110)
+SUBDIRS = $(DO_16) $(DO_18) $(DO_110) ohpc_module

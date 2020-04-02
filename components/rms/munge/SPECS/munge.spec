@@ -12,10 +12,9 @@
 
 %define pname munge
 
-%define debug_package %{nil}
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:	0.5.12
+Version:	0.5.13
 Release:	1%{?dist}
 
 Summary:	MUNGE authentication service
@@ -43,20 +42,19 @@ BuildRequires:	zlib-devel
 BuildRequires:	systemd
 %endif
 %endif
-BuildRoot:	%{_tmppath}/%{pname}-%{version}
-DocDir:     %{OHPC_PUB}/doc/contrib
 #!BuildIgnore: post-build-checks
 
 Conflicts: munge 
 
 Source0:   https://github.com/dun/munge/archive/munge-%{version}.tar.gz
-Source1:   OHPC_macros
 # 6/12/14 karl.w.schulz@intel.com - logdir patch for use with Warewulf
 Patch1:     %{pname}.logdir.patch
 # 6/12/14 karl.w.schulz@intel.com - define default runlevel
 Patch2:     %{pname}.initd.patch
 # 11/10/14 karl.w.schulz@intel.com - enable systemd-based startup
 Patch3:     %{pname}.service.patch
+# 2019-03-11 janne.blomqvist@aalto.fi - Enable syslog
+Patch4:     %{pname}.syslog.patch
 
 %if 0%{?suse_version} >= 1230
 Requires(pre):	shadow
@@ -108,6 +106,7 @@ A shared library for applications using MUNGE.
 %patch1
 %patch2
 %patch3
+%patch4
 
 %build
 ##
@@ -139,17 +138,14 @@ rm "$RPM_BUILD_ROOT"/etc/rc.d/init.d/munge
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-%clean
-rm -rf "$RPM_BUILD_ROOT"
-
 %pre
 # karl.w.schulz@intel.com (9/10/18) - provide specific uid/gid to deal with 
 # possibility of getting alternate ownership within Warewulf
 /usr/bin/getent group munge >/dev/null 2>&1 || \
-  /usr/sbin/groupadd -r munge -g 200
+  /usr/sbin/groupadd -r munge -o -g 201
 /usr/bin/getent passwd munge >/dev/null 2>&1 || \
   /usr/sbin/useradd -c "MUNGE authentication service" \
-  -d "%{_sysconfdir}/munge" -g munge -s /bin/false -r munge -u 200
+  -d "%{_sysconfdir}/munge" -g munge -s /bin/false -o -r munge -u 201
 
 %post
 if [ ! -e %{_sysconfdir}/munge/munge.key -a -c /dev/urandom ]; then
@@ -204,7 +200,6 @@ fi
 /sbin/ldconfig %{_libdir}
 
 %files
-%defattr(-,root,root,0755)
 %doc AUTHORS
 %doc COPYING
 %doc DISCLAIMER*
@@ -244,7 +239,6 @@ fi
 %endif
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %{_includedir}/*
 %{_libdir}/*.la
 %{_libdir}/pkgconfig/*.pc
@@ -253,6 +247,5 @@ fi
 %{_libdir}/*.so
 
 %files -n %{pname}-libs%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %{_libdir}/*.so.*
 

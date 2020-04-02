@@ -114,6 +114,10 @@ AC_CONFIG_FILES([makefile 1_6/makefile 1_6/C/makefile 1_6/C/H5G/makefile \
 1_10/C/makefile 1_10/C/H5G/makefile 1_10/C/H5D/makefile 1_10/C/H5T/makefile \
 1_10/FORTRAN/makefile 1_10/FORTRAN/H5G/makefile 1_10/FORTRAN/H5D/makefile 1_10/FORTRAN/H5T/makefile ])
 
+AC_CONFIG_FILES([1_10/C/H5D/test.sh], [chmod +x 1_10/C/H5D/test.sh])
+AC_CONFIG_FILES([1_10/C/H5G/test.sh], [chmod +x 1_10/C/H5G/test.sh])
+AC_CONFIG_FILES([1_10/C/H5T/test.sh], [chmod +x 1_10/C/H5T/test.sh])
+
 # Configure
 AC_OUTPUT
 

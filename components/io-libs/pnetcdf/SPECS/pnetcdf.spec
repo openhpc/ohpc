@@ -17,21 +17,20 @@
 
 # Base package name
 %define pname pnetcdf
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   A Parallel NetCDF library (PnetCDF)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.8.1
+Version:   1.12.1
 %global    sonum 1
 Release:   1%{?dist}
 License:   NetCDF
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://cucis.ece.northwestern.edu/projects/PnetCDF
-Source0:   http://cucis.ece.northwestern.edu/projects/PnetCDF/Release/parallel-netcdf-%{version}.tar.gz
-Source1:   OHPC_macros
+Source0:   https://parallel-netcdf.github.io/Release/pnetcdf-%{version}.tar.gz
 
 BuildRequires:  grep
 BuildRequires:  m4
+BuildRequires:  zlib-devel
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -44,12 +43,12 @@ attributes, and variables (> 2B array elements).
 
 %prep
 
-%setup -q -n parallel-netcdf-%{version}
+%setup -q -n pnetcdf-%{version}
 
 %build
 
 # override with newer config.guess for aarch64
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess scripts
 %endif
 
@@ -120,10 +119,5 @@ EOF
 %{__mkdir_p} $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
-%doc COPYRIGHT CREDITS INSTALL README README.LINUX README.consistency README.large_files RELEASE_NOTES cobalt.script pbs.script src/lib/ncconfig.h
-
-%changelog
-* Mon May  1 2017 Paul Osmialowski <pawel.osmialowski@foss.arm.com> - 1.8.1-1
-- Initial build.
+%doc AUTHORS ChangeLog COPYRIGHT CREDITS INSTALL NEWS README RELEASE_NOTES 

@@ -9,16 +9,15 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
-Summary: Example source code and templates for use within OpenHPC environment.
-Name:    examples%{PROJ_DELIM}
-Version: 1.4
-Release: 1
-License: Apache-2.0
-Group:   %{PROJ_NAME}/admin
-URL:     https://github.com/openhpc/ohpc
-Source0: LICENSE
+Summary:  Example source code and templates for use within OpenHPC environment.
+Name:     examples%{PROJ_DELIM}
+Version:  2.0
+Release:  1
+License:  Apache-2.0
+Group:    %{PROJ_NAME}/admin
+URL:      https://github.com/openhpc/ohpc
+Source0:  LICENSE
 Source1:  hello.c
 Source2:  ifcfg-ib0
 Source3:  ifcfg-ib0.sles.ww
@@ -27,13 +26,10 @@ Source5:  job.mpi
 Source6:  60-ipath.rules
 Source7:  gmond.conf
 Source8:  job.pbs.mpi
-Source9:  OHPC_macros
 Source10: example.modulefile
 Source11: example-mpi-dependent.modulefile
 
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 %description
 
@@ -63,15 +59,7 @@ install -D -m 0644 %SOURCE11 %{buildroot}%{OHPC_HOME}/pub/examples/example-mpi-d
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_HOME}
 %doc LICENSE
 %{OHPC_PUB}
-
-%changelog
-

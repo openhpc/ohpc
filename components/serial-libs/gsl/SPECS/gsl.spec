@@ -14,17 +14,15 @@
 
 # Base package name
 %define pname gsl
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   GNU Scientific Library (GSL)
 Name:      %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:   2.4
+Version:   2.6
 Release:   1%{?dist}
 License:   GPL
 Group:     %{PROJ_NAME}/serial-libs
 URL:       http://www.gnu.org/software/gsl
 Source0:   https://ftp.gnu.org/gnu/%{pname}/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -103,17 +101,6 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README THANKS TODO
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.3-1
-- switch to ohpc_compiler_dependent flag
-
-* Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 2.2.1-1
-- Switching to %%ohpc_compiler macro

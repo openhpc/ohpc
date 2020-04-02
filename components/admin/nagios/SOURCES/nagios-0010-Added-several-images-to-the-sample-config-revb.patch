@@ -1,26 +1,26 @@
---- nagios-4.3.1/sample-config/template-object/templates.cfg.in	2017-02-23 12:00:40.000000000 -0800
-+++ nagios-4.3.1.patch/sample-config/template-object/templates.cfg.in	2017-02-27 15:15:49.000000000 -0800
-@@ -115,6 +115,7 @@
- 	notification_interval	30		; Resend notifications every 30 minutes
- 	notification_options	d,r		; Only send notifications for specific host states
- 	contact_groups		admins		; Notifications get sent to the admins by default
-+	statusmap_image		printer.png
- 	register		0		; DONT REGISTER THIS - ITS JUST A TEMPLATE
- 	}
+--- a/sample-config/template-object/templates.cfg.in	2018-06-25 14:25:22.000000000 -0700
++++ b/sample-config/template-object/templates.cfg.in	2018-07-13 11:00:30.000000000 -0700
+@@ -123,6 +123,7 @@
+     notification_interval           30                      ; Resend notifications every 30 minutes
+     notification_options            d,r                     ; Only send notifications for specific host states
+     contact_groups                  admins                  ; Notifications get sent to the admins by default
++    statusmap_image                 printer.png
+     register                        0                       ; DON'T REGISTER THIS - ITS JUST A TEMPLATE
+ }
  
-@@ -132,6 +133,15 @@
- 	notification_interval	30		; Resend notifications every 30 minutes
- 	notification_options	d,r		; Only send notifications for specific host states
- 	contact_groups		admins		; Notifications get sent to the admins by default
-+	statusmap_image		switch.png
-+	register		0		; DONT REGISTER THIS - ITS JUST A TEMPLATE
-+	}
+@@ -142,6 +143,15 @@
+     notification_interval           30                      ; Resend notifications every 30 minutes
+     notification_options            d,r                     ; Only send notifications for specific host states
+     contact_groups                  admins                  ; Notifications get sent to the admins by default
++    statusmap_image                 switch.png
++    register                        0       ; DONT REGISTER THIS - ITS JUST A TEMPLATE
++}
 +
 +# Define a template for routers that we can reuse
 +define host{
-+	name			generic-router	; The name of this host template
-+	use			generic-switch	; Inherit default values from the generic-host template
-+	statusmap_image		router.png
- 	register		0		; DONT REGISTER THIS - ITS JUST A TEMPLATE
- 	}
++    name                            generic-router  ; The name of this host template
++    use                             generic-switch  ; Inherit default values from the generic-host template
++    statusmap_image                 router.png
+     register                        0                       ; DON'T REGISTER THIS - ITS JUST A TEMPLATE
+ }
  

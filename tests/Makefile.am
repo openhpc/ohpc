@@ -34,9 +34,7 @@ if OOB_ENABLED
    SUBDIRS += oob
 endif
 
-if SINGULARITY_ENABLED
-   SUBDIRS += runtimes/singularity
-endif
+
 
 if SPACK_ENABLED
    SUBDIRS += admin/spack
@@ -44,6 +42,10 @@ endif
 
 
 else # non root tests
+
+if CHARLIECLOUD_ENABLED
+   SUBDIRS += runtimes/charliecloud
+endif
 
 if EASYBUILD_ENABLED
    SUBDIRS += dev-tools/easybuild
@@ -55,6 +57,10 @@ endif
 
 if MODULES_ENABLED
    SUBDIRS += modules 
+endif
+
+if SINGULARITY_ENABLED
+   SUBDIRS += runtimes/singularity
 endif
 
 if USERENV_ENABLED
@@ -150,6 +156,10 @@ if HYPRE_ENABLED
    TESTS += libs/hypre/ohpc-tests/test_mpi_families
 endif
 
+if MFEM_ENABLED
+   TESTS += libs/mfem/ohpc-tests/test_mpi_families
+endif
+
 if METIS_ENABLED
    TESTS += libs/metis/ohpc-tests/test_compiler_families
 endif
@@ -164,6 +174,10 @@ endif
 
 if OPENBLAS_ENABLED
    TESTS += libs/openblas/ohpc-tests/test_compiler_families
+endif
+
+if OPENCOARRAYS_ENABLED
+   TESTS += libs/opencoarrays/ohpc-tests/test_mpi_families
 endif
 
 if PETSC_ENABLED
@@ -220,6 +234,27 @@ endif
 
 if IMB_ENABLED
    TESTS += perf-tools/imb/ohpc-tests/test_mpi_families
+endif
+
+if OMB_ENABLED
+   TESTS += perf-tools/omb/ohpc-tests/test_mpi_families
+endif
+
+if GEOPM_ENABLED
+   TESTS += perf-tools/geopm/ohpc-tests/test_mpi_families
+endif
+
+if DIMEMAS_ENABLED
+   TESTS += perf-tools/dimemas/ohpc-tests/test_mpi_families
+endif
+
+
+if EXTRAE_ENABLED
+   TESTS += perf-tools/extrae/ohpc-tests/test_mpi_families
+endif
+
+if LIKWID_ENABLED
+   TESTS += perf-tools/likwid/ohpc-tests/test_compiler_families
 endif
 
 if MPIP_ENABLED

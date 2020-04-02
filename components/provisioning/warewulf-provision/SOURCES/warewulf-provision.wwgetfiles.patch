@@ -1,0 +1,11 @@
+--- a/initramfs/capabilities/transport-http/wwgetfiles	2018-07-02 09:22:25.000000000 -0700
++++ b/initramfs/capabilities/transport-http/wwgetfiles	2018-07-02 09:23:37.000000000 -0700
+@@ -29,7 +29,7 @@
+     exit
+ fi
+ 
+-WWGETFILES_INTERVAL=${WWGETFILES_INTERVAL:-180}
++WWGETFILES_INTERVAL=${WWGETFILES_INTERVAL:-0}
+ 
+ if [ -n "$WWGETFILES_INTERVAL" -a $WWGETFILES_INTERVAL -gt 0 ];then
+     if [ -n "$RANDOM" -a ! -f "/init" ]; then

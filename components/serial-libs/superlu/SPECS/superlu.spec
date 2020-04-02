@@ -8,30 +8,12 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package superlu
-#
-# Copyright (c) 2013 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
 # SuperLU library build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
 %define pname superlu
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary:        A general purpose library for the direct solution of linear equations
@@ -40,7 +22,6 @@ Group:          %{PROJ_NAME}/serial-libs
 Version:        5.2.1
 Release:        0%{?dist}
 Source:         http://crd-legacy.lbl.gov/%7Exiaoye/SuperLU/%{pname}_%{version}.tar.gz
-Source1:        OHPC_macros
 # PATCH-FEATURE-OPENSUSE superlu-5.1-make.patch : add compiler and build flags in make.inc
 Patch:          superlu-5.2-make.patch
 # PATCH-FIX-UPSTREAM superlu-4.3-include.patch : avoid implicit declaration warnings
@@ -75,6 +56,9 @@ Docu can be found on http://www.netlib.org.
 
 %build
 %ohpc_setup_compiler
+%if "%{compiler_family}" == "arm1"
+%{__sed} -i -e 's#$(RPM_OPT_FLAGS)#-O3 -fsimdmath#g' make.inc
+%endif
 
 make lib
 
@@ -117,10 +101,9 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
-
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+depends-on openblas
+%endif
 
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
@@ -142,13 +125,5 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc README
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 5.2.1-0
-- switch to ohpc_compiler_dependent flag
-
-* Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 5.2.1-0
-- Switching to %%ohpc_compiler macro

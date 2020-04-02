@@ -11,39 +11,39 @@
 # Build that is dependent on compiler/mpi toolchains
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
+%define ohpc_python_dependent 1
+%global python_family python3
 %include %{_sourcedir}/OHPC_macros
 
 %{!?with_lustre: %global with_lustre 0}
 
 # Base package name
 %define pname adios
-%define PNAME %(tr [a-z] [A-Z] <<< %{pname})
 
 Summary: The Adaptable IO System (ADIOS)
 Name:    %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version: 1.12.0
+Version: 1.13.1
 Release: 1%{?dist}
 License: BSD-3-Clause
 Group:   %{PROJ_NAME}/io-libs
 Url:     http://www.olcf.ornl.gov/center-projects/adios/
 Source0: http://users.nccs.gov/~pnorbert/adios-%{version}.tar.gz
-Source1: OHPC_macros
+Patch1:  adios-return-value.patch
 AutoReq: no
 
 BuildRequires: zlib-devel glib2-devel
-Requires:      zlib
+Requires:      zlib zlib-devel
 
 # libm.a from CMakeLists
 BuildRequires: glibc-static
 
-BuildRequires: libtool%{PROJ_DELIM}
+BuildRequires: libtool
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 BuildRequires: netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: python-devel
 
 %if 0%{with_lustre}
 # This is the legacy name for lustre-lite
@@ -51,12 +51,14 @@ BuildRequires: python-devel
 BuildRequires: lustre-lite
 Requires: lustre-client%{PROJ_DELIM}
 %endif
-BuildRequires: python-numpy-%{compiler_family}%{PROJ_DELIM}
+BuildRequires: %{python_prefix}-numpy-%{compiler_family}%{PROJ_DELIM}
 
 
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
-BuildRequires: fdupes
+BuildRequires: fdupes libcurl4 libcurl-devel
+%else
+BuildRequires: libcurl libcurl-devel
 %endif
 
 # Default library install path
@@ -73,6 +75,7 @@ how they process the data.
 
 %prep
 %setup -q -n %{pname}-%{version}
+%patch1 -p1
 
 %build
 sed -i 's|@BUILDROOT@|%buildroot|' wrappers/numpy/setup*
@@ -84,10 +87,9 @@ sed -i "s|@64@|$LIBSUFF|" wrappers/numpy/setup*
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load autotools
 module load phdf5
 module load netcdf
-module load numpy
+module load %{python_module_prefix}numpy
 
 TOPDIR=$PWD
 
@@ -155,17 +157,22 @@ export NO_BRP_CHECK_RPATH=true
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # this is clearly generated someway and shouldn't be static
-export PPATH="/lib64/python2.7/site-packages"
+export PPATH="/lib64/%{python_lib_dir}/site-packages"
 export PATH=$(pwd):$PATH
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
-module load numpy
+module load %{python_module_prefix}numpy
 export CFLAGS="-I$NUMPY_DIR$PPATH/numpy/core/include -I$(pwd)/src/public -L$(pwd)/src"
 pushd wrappers/numpy
+mkdir .bin
+ln -s /usr/bin/python3 .bin/python
+export PATH="$PWD/.bin:$PATH"
 make MPI=y python
-python setup.py install --prefix="%buildroot%{install_path}/python"
+
+#%{python_prefix} setup.py install --prefix="%buildroot%{install_path}/python"
+python3 setup.py install --prefix="%buildroot%{install_path}/python"
 popd
 
 install -m644 utils/skel/lib/skel_suite.py \
@@ -184,6 +191,10 @@ cp -fR examples %buildroot%{install_path}/lib
 
 mv %buildroot%{install_path}/lib/python/*.py %buildroot%{install_path}/python
 find %buildroot%{install_path}/python -name \*pyc -exec sed -i "s|$RPM_BUILD_ROOT||g" {} \;
+
+for file in skel_cat.py skel skel_extract.py; do
+	sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/bin/$file
+done
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
@@ -211,7 +222,7 @@ depends-on phdf5
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-prepend-path	PYTHONPATH          %{install_path}/python/lib64/python2.7/site-packages
+prepend-path	PYTHONPATH          %{install_path}/python/lib64/%{python_lib_dir}/site-packages
 
 setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_DOC        %{install_path}/docs
@@ -238,7 +249,6 @@ EOF
 %endif
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc AUTHORS
 %doc COPYING
@@ -247,13 +257,3 @@ EOF
 %doc NEWS
 %doc README.md
 %doc TODO
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 1.11.0-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.11.0-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 1.11.0-1
-- Switching to %%ohpc_compiler macro

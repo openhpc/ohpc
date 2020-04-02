@@ -7,73 +7,33 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-#
-# spec file for package hwloc
-#
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
 
 %include %{_sourcedir}/OHPC_macros
 
 %define pname hwloc
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}%{PROJ_DELIM}
-Version:        1.11.8
-Release:        2%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        Portable Hardware Locality
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 Url:            http://www.open-mpi.org/projects/hwloc/
-Source0:        https://www.open-mpi.org/software/hwloc/v1.11/downloads/%{pname}-%{version}.tar.bz2
-Source1:   OHPC_macros
-Source2:   LICENSE
-
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
+Source0:        https://download.open-mpi.org/release/hwloc/v2.1/%{pname}-%{version}.tar.bz2
 
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  doxygen
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
 BuildRequires:  gcc-c++
 BuildRequires:  libtool
-%if 0%{?suse_version} <= 1220 && !0%{?suse_version}
-BuildRequires:  pkgconfig(cairo)
-BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  pkgconfig(pciaccess)
-BuildRequires:  pkgconfig(x11)
-%else
 BuildRequires:  cairo-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  ncurses-devel
-BuildRequires:  xorg-x11-libICE-devel
-BuildRequires:  xorg-x11-libSM-devel
-BuildRequires:  xorg-x11-libX11-devel
-%endif
-#BuildRequires:  libXNVCtrl-devel
 BuildRequires:  ncurses-devel
-#BuildRequires:  texlive-latex
-%if 0%{?suse_version} && 0%{?suse_version} <= 1220
-BuildRequires:  texlive-bin-latex
-%else
-BuildRequires:  texlive-latex-bin
-%endif
 BuildRequires:  transfig
-BuildRequires:  w3m
 # % ifnarch s390 s390x
 # BuildRequires:  libibverbs-devel
 # % endif
@@ -84,7 +44,6 @@ BuildRequires:  libnuma-devel
 BuildRequires:  numactl-devel
 %endif
 %endif
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 #!BuildIgnore: post-build-checks rpmlint-Factory
 #!BuildIgnore: #!BuildIgnore: brp-check-suse
 
@@ -120,9 +79,6 @@ autoreconf --force --install
 
 %install
 %{__make} install DESTDIR=%{buildroot} INSTALL="%{__install} -p"
-
-#Fix wrong permition on file hwloc-assembler-remote => I have reported this to upstream already
-%{__chmod} 0755 %{buildroot}%{install_path}/bin/hwloc-assembler-remote
 
 # We don't ship .la files.
 %{__rm} -rf %{buildroot}%{install_path}/lib/libhwloc.la
@@ -183,10 +139,5 @@ EOF
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-, root, root, -)
 %doc AUTHORS COPYING NEWS README VERSION
 %{OHPC_PUB}
-
-%changelog
-
-

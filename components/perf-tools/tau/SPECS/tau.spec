@@ -15,23 +15,24 @@
 
 # Base package name
 %define pname tau
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name: %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
-Version:   2.26.1
+Version:   2.29
 Release:   1%{?dist}
 Summary:   Tuning and Analysis Utilities Profiling Package
 License:   Tuning and Analysis Utilities License
 Group:     %{PROJ_NAME}/perf-tools
 Url:       http://www.cs.uoregon.edu/research/tau/home.php
 Source0:   https://www.cs.uoregon.edu/research/tau/tau_releases/tau-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    tau-add-explicit-linking-option.patch
 Patch2:    tau-shared_libpdb.patch
 Patch3:    tau-disable_examples.patch
+Patch4:    tau-ucontext.patch
+Patch5:    tau-testplugins_makefile.patch
+Patch6:    paraprof.patch
 
-Provides:  lib%PNAME.so()(64bit)
+Provides:  lib%PNAME.so()(64bit)(%PROJ_NAME)
 Provides:  perl(ebs2otf)
 Conflicts: lib%pname < %version-%release
 Obsoletes: lib%pname < %version-%release
@@ -45,7 +46,7 @@ BuildRequires: libgomp
 BuildRequires: curl
 BuildRequires: postgresql-devel binutils-devel
 Requires: binutils-devel
-BuildRequires: libotf-devel zlib-devel python-devel
+BuildRequires: zlib-devel python2-devel
 Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 %ifarch x86_64
@@ -76,6 +77,9 @@ automatic instrumentation tool.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel
@@ -96,8 +100,8 @@ export fcomp=gfortran
 %endif
 
 %if %{mpi_family} == impi
-export MPI_INCLUDE_DIR=$I_MPI_ROOT/include64
-export MPI_LIB_DIR=$I_MPI_ROOT/lib64
+export MPI_INCLUDE_DIR=$I_MPI_ROOT/intel64/include
+export MPI_LIB_DIR=$I_MPI_ROOT/intel64/lib
 %else
 export MPI_INCLUDE_DIR=$MPI_DIR/include
 export MPI_LIB_DIR=$MPI_DIR/lib
@@ -109,10 +113,53 @@ export FFLAGS="$FFLAGS -I$MPI_INCLUDE_DIR"
 export TAUROOT=`pwd`
 
 # override with newer config.guess for aarch64
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess utils/opari2/build-config/.
 cp /usr/lib/rpm/config.sub utils/opari2/build-config/.
 %endif
+
+# Fix errors above unversioned python shebangs
+for file in \
+	apex/src/scripts/task_scatterplot.py \
+	examples/test.py \
+	examples/gpu/pycuda/matmult.py \
+	examples/sos/pycoolrgui/pycoolr-plot/clr_utils.py \
+	examples/sos/pycoolrgui/pycoolr-plot/coolr-sos-db.py \
+	examples/sos/pycoolrgui/pycoolr-plot/listrotate.py \
+	examples/sos/pycoolrgui/pycoolr-plot/coolr.py \
+	examples/sos/pycoolrgui/pycoolr-plot/layout.py \
+	examples/sos/pycoolrgui/pycoolr-plot/init_coolr.py \
+	examples/sos/pycoolrgui/pycoolr-plot/coolr-launch.py \
+	examples/sos/pycoolrgui/pycoolr-plot/coolr-back.py \
+	examples/python/auto.py \
+	examples/python/firstprime.py \
+	examples/python/cpi.py \
+	examples/python/manual.py \
+	examples/python/hello-mpi.py \
+	src/Profile/ltau.py \
+	src/Profile/tau.py \
+	src/Profile/tau_pyspark_wrapper.py \
+	tau_validate \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/clr_utils.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr-sos-db.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/listrotate.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/layout.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/init_coolr.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr-launch.py \
+	tools/src/pycoolr/src/pycoolrgui/pycoolr-plot/coolr-back.py \
+	tools/src/tau_resolve_addresses.py \
+	tools/src/perfexplorer/examples/MicroLoadImbalance/trunc.py \
+	tools/src/tau_prof2json.py \
+	tools/src/tau_portal/bin/portal.py.skel \
+	tools/src/tau_portal/bin/tau_portal.py \
+	tools/src/tau_prof_to_json.py \
+	tools/src/tau_baseline; do
+		sed -e "s,/env python,/env python2,g" -i $file;
+done
+
+# Fix using the right compiler
+sed -e "s,/usr/bin/g++,g++,g" -i utils/include/Makefile.skel
 
 # Try and figure out architecture
 detectarch=unknown
@@ -128,34 +175,62 @@ export CONFIG_ARCH=%{machine}
     -arch=%{machine} \
     -prefix=/tmp%{install_path} \
     -exec-prefix= \
-	-c++=mpicxx \
-	-cc=mpicc \
-	-fortran=$fcomp \
-	-iowrapper \
-	-mpi \
-	-mpiinc=$MPI_INCLUDE_DIR \
-	-mpilib=$MPI_LIB_DIR \
-	-slog2 \
-	-CPUTIME \
+    -c++=$CXX \
+    -cc=$CC \
+    -fortran=$fcomp \
+    -iowrapper \
+    -slog2 \
+    -CPUTIME \
     -PROFILE \
     -PROFILECALLPATH \
-	-PROFILEPARAM \
+    -PROFILEPARAM \
 %ifarch x86_64
     -papi=$PAPI_DIR \
 %endif
-	-pdt=$PDTOOLKIT_DIR \
-	-useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
-	-openmp \
+    -pdt=$PDTOOLKIT_DIR \
+    -useropt="%optflags -I$PWD/include -fno-strict-aliasing" \
+    -openmp \
 %if %{compiler_family} != intel
     -opari \
 %endif
-	-extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp/%{install_path}/lib -L/tmp/%{install_path}/%{machine}/lib" 
+    -extrashlibopts="-fPIC -L/tmp%{install_path}/lib"
+
+make install
+make exports
+make clean
+
+./configure \
+    -arch=%{machine} \
+    -prefix=/tmp%{install_path} \
+    -exec-prefix= \
+    -c++=mpicxx \
+    -cc=mpicc \
+    -fortran=$fcomp \
+    -iowrapper \
+    -mpi \
+    -mpiinc=$MPI_INCLUDE_DIR \
+    -mpilib=$MPI_LIB_DIR \
+    -slog2 \
+    -CPUTIME \
+    -PROFILE \
+    -PROFILECALLPATH \
+    -PROFILEPARAM \
+%ifarch x86_64
+    -papi=$PAPI_DIR \
+%endif
+    -pdt=$PDTOOLKIT_DIR \
+    -useropt="%optflags -I$MPI_INCLUDE_DIR -I$PWD/include -fno-strict-aliasing" \
+    -openmp \
+%if %{compiler_family} != intel
+    -opari \
+%endif
+    -extrashlibopts="-fPIC -L$MPI_LIB_DIR -lmpi -L/tmp%{install_path}/lib"
 
 make install
 make exports
 
+
 # move from tmp install dir to %install_path
-rm -rf %{buildroot}
 # dirname removes the last directory
 mkdir -p `dirname %{buildroot}%{install_path}`
 pushd /tmp
@@ -266,16 +341,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc Changes COPYRIGHT CREDITS INSTALL LICENSE README*
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.26.1-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.26.1-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 2.26-1
-- Switching to %%ohpc_compiler macro

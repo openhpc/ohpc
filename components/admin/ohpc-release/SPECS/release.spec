@@ -11,34 +11,32 @@
 %global ohpc_bootstrap 1
 %include %{_sourcedir}/OHPC_macros
 
-%if 0%{?centos_version} || 0%{?rhel_version}
-%if 0%{?centos_version} == 700
-%define disttag .el7
-%endif
+%if 0%{?rhel}
+%define disttag .el8
 %endif
 
-%if 0%{?sles_version} || 0%{?suse_version}
-%if 0%{?suse_version} == 1315
-%define disttag .sle12
-%endif
+%if 0%{?suse_version}
+%define disttag .leap15
 %endif
 
 Summary:  OpenHPC release files
 Name:     ohpc-release
-Version:  %{ohpc_version}
-Release:  2%{?disttag}
-License:  BSD-3
+Version:  2
+Release:  1%{?disttag}
+License:  Apache-2.0
 Group:    %{PROJ_NAME}/admin
 URL:      https://github.com/openhpc/ohpc
-Source1:  RPM-GPG-KEY-OpenHPC-1
+Source1:  RPM-GPG-KEY-OpenHPC-2
 
 Provides: ohpc-release = %{version}
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
-%if 0%{?centos_version} || 0%{?rhel_version}
+%if 0%{?rhel}
 Requires: epel-release
+Requires: redhat-release >= 8.1
+%endif
+%if 0%{?suse_version}
+Requires: suse-release >= 15.1
 %endif
 
 %description
@@ -63,7 +61,7 @@ EOF
 
 # package repository definitions
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 %define __repodir /etc/zypp/repos.d
 %else
 %define __repodir /etc/yum.repos.d
@@ -74,44 +72,36 @@ EOF
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
 name=OpenHPC-%{ohpc_version} - Base
-baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/%{_repository}
+baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/%{_repository}
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 
 [OpenHPC-updates]
 name=OpenHPC-%{ohpc_version} - Updates
-baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/updates/%{_repository}
+baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/updates/%{_repository}
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 
 [OpenHPC-Sources]
 name=OpenHPC-%{ohpc_version} - Sources
-baseurl=%{ohpc_repo}/OpenHPC:/%{ohpc_version}/sources/%{_repository}
+baseurl=%{ohpc_repo}/OpenHPC/%{ohpc_version}/sources/%{_repository}
 gpgcheck=1
-gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 enabled=0
 EOF
 
 # repository GPG key
 
-install -D -m 0644 %SOURCE1 ${RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-1
+install -D -m 0644 %SOURCE1 ${RPM_BUILD_ROOT}/etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
-
 %files
-%defattr(-,root,root,-)
 %config /etc/ohpc-release
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 %dir /etc/zypp
 %endif
 
 %{__repodir}
 /etc/pki
-
-%changelog
-

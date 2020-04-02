@@ -8,23 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#-------------------------------------------------------------------------------
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
-# Copyright (c) 2015, Intel Corporation
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-#
-#
-#-------------------------------------------------------------------------------
-#
-
 # Build that is dependent on compiler/mpi toolchains
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
@@ -33,7 +16,6 @@
 # Base package name
 
 %define pname netcdf
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 %define ncdf_so_major 7
 
@@ -41,12 +23,12 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        C Libraries for the Unidata network Common Data Form
 License:        NetCDF
 Group:          %{PROJ_NAME}/io-libs
-Version:        4.4.1.1
+Version:        4.7.3
 Release:        1%{?dist}
 Url:            http://www.unidata.ucar.edu/software/netcdf/
 Source0:	https://github.com/Unidata/netcdf-c/archive/v%{version}.tar.gz
-Source101:	OHPC_macros
 
+BuildRequires:  curl-devel
 BuildRequires:  zlib-devel >= 1.2.5
 BuildRequires:  m4
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
@@ -107,12 +89,16 @@ export CC=mpicc
     --enable-shared \
     --enable-netcdf-4 \
     --enable-dap \
-    --enable-ncgen4 \
     --with-pic \
     --disable-doxygen \
     --disable-static || { cat config.log && exit 1; }
 
-make %{?_smp_mflags}
+# karl@ices.utexas.edu (5/17/18) - switching to serial make to avoid
+# problems. Others also reporing error with parallel build.
+#
+# https://github.com/Unidata/netcdf-c/issues/896
+make
+#make %{?_smp_mflags}
 
 %install
 # OpenHPC compiler/mpi designation
@@ -176,17 +162,6 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc COPYRIGHT
 %doc README.md
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 4.4.1.1-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 4.4.1.1-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 4.4.1.1-1
-- Switching to %%ohpc_compiler macro

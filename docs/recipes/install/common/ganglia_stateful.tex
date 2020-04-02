@@ -1,0 +1,52 @@
+\Ganglia{} is a scalable distributed system monitoring tool for high-performance
+computing systems such as clusters and grids. It allows the user to remotely
+view live or historical statistics (such as CPU load averages or network
+utilization) for all machines running the {\em gmond} daemon. The following 
+commands can be used to enable \Ganglia{} to monitor both the {\em master} and 
+{\em compute} hosts.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_ganglia} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_validation_comment Install Ganglia on master
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install Ganglia meta-package on master
+[sms](*\#*) (*\install*) ohpc-ganglia
+
+# Install Ganglia compute node daemon
+[sms](*\#*) (*\chrootinstall*) ganglia-gmond-ohpc
+
+# Use example configuration script to enable unicast receiver on master host
+[sms](*\#*) cp /opt/ohpc/pub/examples/ganglia/gmond.conf /etc/ganglia/gmond.conf
+[sms](*\#*) perl -pi -e "s/<sms>/${sms_name}/" /etc/ganglia/gmond.conf
+
+# Add configuration to compute nodes and provide gridname 
+[sms](*\#*) xdcp compute /etc/ganglia/gmond.conf /etc/ganglia/gmond.conf
+[sms](*\#*) echo "gridname MySite" >> /etc/ganglia/gmetad.conf
+
+# Start and enable Ganglia services
+[sms](*\#*) systemctl enable gmond
+[sms](*\#*) systemctl enable gmetad
+[sms](*\#*) systemctl start gmond
+[sms](*\#*) systemctl start gmetad
+[sms](*\#*) psh compute systemctl enable gmond
+[sms](*\#*) psh compute systemctl start gmond
+
+# Restart web server
+[sms](*\#*) systemctl try-restart httpd
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\noindent Once enabled and running, Ganglia should provide access to a web-based
+monitoring console on the {\em master} host. Read access to monitoring metrics
+will be enabled by default and can be accessed via a web browser. When running
+a web browser directly on the {\em master} host, the Ganglia top-level overview
+is available
+at \href{http://localhost/ganglia}{\color{blue}{http://localhost/ganglia}}.
+When accessing remotely, replace {\em localhost} with the chosen name of your
+master host (\texttt{\$\{sms\_name\}}).
+
+

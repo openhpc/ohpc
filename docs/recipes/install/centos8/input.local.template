@@ -1,0 +1,134 @@
+# -*-sh-*-
+# ------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------
+# Template input file to define local variable settings for use with
+# an OpenHPC installation recipe.
+# ------------------------------------------------------------------------------------------------
+
+# ---------------------------
+# SMS (master) node settings
+# ---------------------------
+
+# Hostname for master server (SMS)
+sms_name="${sms_name:-sms}"
+
+# Local (internal) IP address on SMS
+sms_ip="${sms_ip:-172.16.0.1}"
+
+# Internal ethernet interface on SMS
+sms_eth_internal="${sms_eth_internal:-eth1}"
+
+# Subnet netmask for internal cluster network
+internal_netmask="${internal_netmask:-255.255.0.0}"
+
+# Local ntp server for time synchronization
+ntp_server="${ntp_server:-0.centos.pool.ntp.org}"
+
+# BMC user credentials for use by IPMI
+bmc_username="${bmc_username:-unknown}"
+bmc_password="${bmc_password:-unknown}"
+
+# Additional time to wait for compute nodes to provision (seconds)
+provision_wait="${provision_wait:-180}"
+
+# Local domainname for cluster (xCAT recipe only)
+domain_name="${domain_name:-local}"
+
+# Path to copy of OS ISO image (xCAT recipe only)
+iso_path="${iso_path:-}"
+
+# Path to local repository web roots (xCAT recipe only)
+ohpc_repo_dir="${ohpc_repo_dir:-/install/ohpc}"
+epel_repo_dir="${epel_repo_dir:-/install/epel}"
+
+# Provisioning interface used by compute hosts (Warewulf recipe only)
+eth_provision="${eth_provision:-eth0}"
+
+# Flags for optional installation/configuration
+enable_ib="${enable_ib:-0}"
+enable_opa="${enable_opa:-0}"
+enable_opafm="${enable_opafm:-0}"
+enable_mpi_defaults="${enable_mpi_defaults:-1}"
+enable_ipoib="${enable_ipoib:-0}"
+
+enable_clustershell="${enable_clustershell:-0}"
+enable_ipmisol="${enable_ipmisol:-0}"
+enable_opensm="${enable_opensm:-0}"
+enable_ganglia="${enable_ganglia:-0}"
+enable_genders="${enable_genders:-0}"
+enable_kargs="${enable_kargs:-0}"
+enable_beegfs_client="${enable_beegfs_client:-0}"
+enable_lustre_client="${enable_lustre_client:-0}"
+enable_mrsh="${enable_mrsh:-0}"
+enable_nagios="${enable_nagios:-0}"
+enable_powerman="${enable_powerman:-0}"
+enable_pmix="${enable_pmix:-0}"
+enable_geopm="${enable_geopm:-0}"
+enable_intel_packages="${enable_intel_packages:-0}"
+
+nagios_web_password="${nagios_web_password:-unknown}"
+update_slurm_nodeconfig="${update_slurm_nodeconfig:-0}"
+slurm_node_config="${slurm_node_config:-c[1-4] Sockets=2 CoresPerSocket=12 ThreadsPerCore=2}"
+
+# -------------------------
+# compute node settings
+# -------------------------
+
+# total number of computes
+num_computes="${num_computes:-4}"
+
+# regex and starting prefix that matches defined compute hostnames
+compute_regex="${compute_regex:-c*}"
+compute_prefix="${compute_prefix:-c}"
+
+# compute hostnames
+c_name[0]=c1
+c_name[1]=c2
+c_name[2]=c3
+c_name[3]=c4
+
+# compute node IP addresses
+c_ip[0]=172.16.1.1
+c_ip[1]=172.16.1.2
+c_ip[2]=172.16.1.3
+c_ip[3]=172.16.1.4
+
+# compute node MAC addreses for provisioning interface
+c_mac[0]=00:1a:2b:3c:4f:56
+c_mac[1]=00:1a:2b:3c:4f:56
+c_mac[2]=00:1a:2b:3c:4f:56
+c_mac[3]=00:1a:2b:3c:4f:56
+
+# compute node BMC addresses
+c_bmc[0]=10.16.1.1
+c_bmc[1]=10.16.1.2
+c_bmc[2]=10.16.1.3
+c_bmc[3]=10.16.1.4
+
+#-------------------
+# Optional settings
+#-------------------
+
+# additional arguments to enable optional arguments for bootstrap kernel
+kargs="${kargs:-acpi_pad.disable=1}"
+
+# BeeGFS repository URL
+beegfs_repo="${beegfs_repo:-https://www.beegfs.io/release/beegfs_6/dists/beegfs-rhel7.repo}"
+
+# BeeGFS sysMgmtdHost
+sysmgmtd_host="${sysmgmtd_host:-172.17.1.16}"
+
+# Lustre MGS mount name
+mgs_fs_name="${mgs_fs_name:-192.168.100.254@o2ib:/lustre1}"
+
+# Subnet netmask for IPoIB network
+ipoib_netmask="${ipoib_netmask:-255.255.0.0}"
+
+# IPoIB address for SMS server
+sms_ipoib="${sms_ipoib:-192.168.0.1}"
+
+# IPoIB addresses for computes
+c_ipoib[0]=192.168.1.1		            
+c_ipoib[1]=192.168.1.2
+c_ipoib[2]=192.168.1.3
+c_ipoib[3]=192.168.1.4

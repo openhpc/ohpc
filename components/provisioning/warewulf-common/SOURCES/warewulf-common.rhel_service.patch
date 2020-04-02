@@ -1,0 +1,11 @@
+--- a/lib/Warewulf/System/Rhel.pm	2018-03-12 15:18:19.000000000 -0700
++++ b/lib/Warewulf/System/Rhel.pm	2018-07-11 10:21:57.000000000 -0700
+@@ -128,7 +128,7 @@
+             &dprint("Error running: /sbin/chkconfig $service $command\n");
+         }
+     }
+-    return();
++    return(1);
+ }
+ 
+ 

@@ -8,22 +8,6 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#-------------------------------------------------------------------------------
-# Copyright (c) 2015 SUSE LINUX GmbH, Nuernberg, Germany.
-# Copyright (c) 2015, Intel Corporation
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-#
-#
-#-------------------------------------------------------------------------------
-
 # Boost C++ library that is is dependent on compiler toolchain and MPI
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
@@ -34,26 +18,39 @@
 
 # Base package name
 %define pname boost
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.65.1
+Version:        1.71.0
 
-%define version_exp 1_65_1
+%define version_exp 1_71_0
 
 Release:        1%{?dist}
 License:        BSL-1.0
-Group:		%{PROJ_NAME}/parallel-libs
+Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.boost.org
-Source0:        http://sourceforge.net/projects/boost/files/boost/%{version}/boost_%{version_exp}.tar.gz
+Source0:        https://dl.bintray.com/boostorg/release/%{version}/source/boost_%{version_exp}.tar.gz
 Source1:        boost-rpmlintrc
 Source2:        mkl_boost_ublas_gemm.hpp
 Source3:        mkl_boost_ublas_matrix_prod.hpp
 Source100:      baselibs.conf
-Source101:	OHPC_macros
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if 0%{?sles_version} || 0%{?suse_version}
+Patch1:         boost_fenv_suse.patch
+%endif
+%endif
 
-%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
+# intel-linux toolset fix: https://github.com/boostorg/build/issues/475
+%if "%{compiler_family}" == "intel"
+Patch2:         boost-1.71.0-intel-bootstrap.patch
+Patch3:         intel.qnextgen.patch
+%endif
+
+
+# optflag patch from Fedora
+Patch4: boost-1.66.0-build-optflags.patch
+
+%if 0%{?rhel}
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
 BuildRequires:  xorg-x11-server-devel
@@ -63,7 +60,7 @@ BuildRequires:  libexpat-devel
 BuildRequires:  xorg-x11-devel
 %endif
 BuildRequires:  libicu-devel >= 4.4
-BuildRequires:  python-devel
+BuildRequires:  python3-devel
 BuildRequires:  zlib-devel
 
 # (Tron: 3/4/16) Add libicu dependency for SLES12sp1 as the distro does not seem to have it by default and some tests are failing
@@ -98,9 +95,33 @@ see the boost-doc package.
 %prep
 %setup -q -n %{pname}_%{version_exp}
 
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%if 0%{?sles_version} || 0%{?suse_version}
+%patch1 -p1
+%endif
+%endif
+
+%if "%{compiler_family}" == "intel"
+%patch2 -p1
+%patch3 -p1
+%endif
+
+# optflag patches from Fedora
+%patch4 -p1
+
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+export toolset=clang
+%endif
+
+%if "%{compiler_family}" == "arm"
+which_armclang=`which armclang`
+where_armclang=`dirname ${which_armclang}`
+export PATH=${where_armclang}/../llvm-bin:$PATH
+%endif
 
 %if %build_mpi
 export CC=mpicc
@@ -112,23 +133,38 @@ export MPIFC=mpifc
 export MPICXX=mpicxx
 %endif
 
+export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
+export RPM_LD_FLAGS
+
+
+
+cat << "EOF" >> user-config.jam
+%if "%{compiler_family}" == "gnu9"
+import os ;
+local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
+local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
+using gcc : : : <compileflags>$(RPM_OPT_FLAGS) <linkflags>$(RPM_LD_FLAGS) ;
+%endif
+%if %build_mpi
+using mpi : mpicxx ;
+%endif
+EOF
 
 LIBRARIES_FLAGS=--with-libraries=all
 ./bootstrap.sh $LIBRARIES_FLAGS --prefix=%{install_path} --with-toolset=${toolset} || cat bootstrap.log
 
-%if %build_mpi
-cat << EOF >>user-config.jam
-using mpi : mpicxx ;
-EOF
-%endif
-
 # perform the compilation
-./b2 %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam
-
+./b2 -d+2 -q %{?_smp_mflags} threading=multi link=shared variant=release --prefix=%{install_path} --user-config=./user-config.jam
 
 %install
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
+
+%if "%{compiler_family}" == "arm"
+which_armclang=`which armclang`
+where_armclang=`dirname ${which_armclang}`
+export PATH=${where_armclang}/../llvm-bin:$PATH
+%endif
 
 %if %build_mpi
 export CC=mpicc
@@ -194,16 +230,5 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc INSTALL LICENSE_1_0.txt
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 1.63.0-1
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.63.0-0
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 1.61.0-0
-- Switching to %%ohpc_compiler macro

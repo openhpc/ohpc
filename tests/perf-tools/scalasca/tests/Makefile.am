@@ -1,4 +1,5 @@
 TESTS_ENVIRONMENT = BATS_NO_SUMMARY=1
+AUTOMAKE_OPTIONS  = no-dependencies
 
 check_PROGRAMS          = CXX_mpi_test
 CXX_mpi_test_LDFLAGS    = $(LDFLAGS)

@@ -1,0 +1,11 @@
+--- a/src/modules/slurm.c	2017-06-28 17:33:05.000000000 -0700
++++ b/src/modules/slurm.c	2018-01-19 15:36:10.000000000 -0800
+@@ -28,6 +28,8 @@
+ #  include "config.h"
+ #endif
+ 
++#  define __list_datatypes_defined
++
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>

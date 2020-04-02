@@ -1,11 +1,8 @@
 If you chose to enable \conman{} in \S\ref{sec:add_conman}, additional
-boot-time kernel arguments are needed to enable serial console
-redirection. An example provisioning setting which adds to any other kernel arguments defined
-in \texttt{\$\{kargs\}} is as follows:
-
+warewulf configuration is needed as follows:
 % begin_ohpc_run
 % ohpc_validation_newline
-% ohpc_validation_comment Optionally, enable console redirection 
+% ohpc_validation_comment Optionally, enable console redirection
 % ohpc_command if [[ ${enable_ipmisol} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
@@ -15,3 +12,14 @@ in \texttt{\$\{kargs\}} is as follows:
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run
+
+%%% If any components have added to the boot time kernel command line argumenst for the compute nodes,
+%%% the following command is required to store the configuration in Warewulf:
+%%% % ohpc_validation_newline
+%%% % ohpc_validation_comment Optionally, add arguments to bootstrap kernel
+%%% % ohpc_command if [[ ${enable_kargs} -eq 1 ]]; then
+%%% \begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily]
+%%% # Set optional compute node kernel command line arguments.
+%%% [sms](*\#*) wwsh -y provision set "${compute_regex}" --kargs="${kargs}"
+%%% \end{lstlisting}
+%%% % ohpc_command fi

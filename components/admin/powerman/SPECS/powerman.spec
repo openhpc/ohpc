@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname powerman
 
@@ -19,32 +18,14 @@ Release: 1%{?dist}
 
 Summary: PowerMan - centralized power control for clusters
 License: GPL
-DocDir:    %{OHPC_PUB}/doc/contrib
-Group:     %{PROJ_NAME}/admin
+Group: %{PROJ_NAME}/admin
 Url: http://code.google.com/p/powerman/
-#Source0: %{pname}-%{version}.tar.gz
 Source0: https://github.com/chaos/%{pname}/releases/download/%{version}/%{pname}-%{version}.tar.gz
-Source1: OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if 0%{?rhel}
 %define _with_httppower 1
 %define _with_snmppower 1
 %define _with_genders 1
-%define _with_tcp_wrappers 1
-%endif
-
-%if 0%{?chaos}
-%define _with_httppower 1
-%define _with_snmppower 1
-%define _with_genders 1
-%define _with_tcp_wrappers 1
-%endif
-
-%if 0%{?fedora}
-%define _with_httppower 1
-%define _with_snmppower 1
-%define _with_genders 0
 %define _with_tcp_wrappers 1
 %endif
 
@@ -73,8 +54,8 @@ Summary: Libraries for applications using PowerMan
 Group: System Environment/Libraries
 
 %description
-PowerMan is a tool for manipulating remote power control (RPC) devices from a 
-central location. Several RPC varieties are supported natively by PowerMan and 
+PowerMan is a tool for manipulating remote power control (RPC) devices from a
+central location. Several RPC varieties are supported natively by PowerMan and
 Expect-like configurability simplifies the addition of new devices.
 
 %description -n %{pname}-devel%{PROJ_DELIM}
@@ -96,14 +77,10 @@ A shared library for applications using PowerMan.
 make
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT 
+make install DESTDIR=$RPM_BUILD_ROOT
 
 #drop local state dir to avoid making systemd angry when it creates the statedir on start
 rm -rf $RPM_BUILD_ROOT/%{_localstatedir}
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %post
 /bin/systemctl enable powerman > /dev/null 2>&1 || :
@@ -126,8 +103,7 @@ fi
 if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 
 %files
-%defattr(-,root,root,0755)
-%doc DISCLAIMER 
+%doc DISCLAIMER
 %doc COPYING
 %doc NEWS
 %doc TODO
@@ -155,7 +131,6 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %attr(0644,root,root) %{_unitdir}/powerman.service
 
 %files -n %{pname}-devel%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %{_includedir}/*
 %{_libdir}/*.la
 %{_mandir}/*3/*
@@ -166,7 +141,6 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %endif
 
 %files -n %{pname}-libs%{PROJ_DELIM}
-%defattr(-,root,root,0755)
 %ifnos aix5.3 aix5.2 aix5.1 aix5.0 aix4.3
 %{_libdir}/*.so.*
 %else

@@ -8,80 +8,100 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?_rel:%{expand:%%global _rel 0.r%(test "1686" != "0000" && echo "1686" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || git svn find-rev `git show -s --pretty=format:%h` || echo 0000)}}
-
 %include %{_sourcedir}/OHPC_macros
 
-%define pname warewulf-ipmi
 %define dname ipmi
-%define debug_package %{nil}
-%define wwpkgdir /srv/warewulf
-%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
+%define pname warewulf-%{dname}
+%define wwsrvdir /srv
+%define develSHA 98fcdc336349378c8ca1b5b0e7073a69a868a40f
+%define wwextract warewulf3-%{develSHA}
 
-%if 0%{?PROJ_NAME:1}
-%define rpmname %{pname}-%{PROJ_NAME}
+Name:    %{pname}%{PROJ_DELIM}
+Version: 3.9.0
+Provides: warewulf-ipmi = 3.9.0
+Release: 1%{?dist}
+Summary: Warewulf - IPMI support
+License: US Dept. of Energy (BSD-like)
+URL: http://warewulf.lbl.gov/
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
+Group:   %{PROJ_NAME}/provisioning
+ExclusiveOS: linux
+Conflicts: warewulf < 3
+Requires: warewulf-common%{PROJ_DELIM}
+Requires: %{name}-initramfs-%{_arch} = %{version}-%{release}
+
+
+%if 0%{?rhel} >= 8 || 0%{?sle_version} >= 150000
+%global localipmi 1
+BuildRequires: ipmitool
+Requires: ipmitool
+%define CONF_FLAGS "--with-local-ipmitool=yes"
 %else
-%define rpmname %{pname}
+%global localipmi 0
 %endif
 
-Name: %{rpmname}
-Summary: IPMI Module for Warewulf
-Version: 3.8pre
-Release: %{_rel}%{?dist}
-License: US Dept. of Energy (BSD-like)
-Group: %{PROJ_NAME}/provisioning
-URL: http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
-Source1: OHPC_macros
-ExclusiveOS: linux
-Requires: warewulf-common%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
-BuildRequires: openssl-devel
 BuildRequires: warewulf-common%{PROJ_DELIM}
-Conflicts: warewulf < 3
-#!BuildIgnore: post-build-checks
-BuildRoot: %{?_tmppath}%{!?_tmppath:/var/tmp}/%{pname}-%{version}-%{release}-root
-DocDir: %{OHPC_PUB}/doc/contrib
+BuildRequires: openssl-devel
 
 %description
-Warewulf >= 3 is a set of utilities designed to better enable
-utilization and maintenance of clusters or groups of computers.
+Warewulf is an operating system management toolkit designed to facilitate
+large scale deployments of systems on physical, virtual and cloud-based
+infrastructures. It facilitates elastic and large deployments consisting
+of groups of homogenous systems.
 
-This is the IPMI module package.  It contains Warewulf modules for
-adding IPMI functionality.
+Warewulf IPMI adds required tools and libraries to support IPMI on
+cluster nodes. 
 
 
 %prep
-%setup -n warewulf3-%{dev_branch_sha}
+cd %{_builddir}
+%{__rm} -rf %{name}-%{version} %{wwextract}
+%{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
+%setup -q -D
+
 
 %build
-cd %{dname}
-if [ ! -f configure ]; then
-    ./autogen.sh
-fi
-%configure --localstatedir=%{wwpkgdir}
+./autogen.sh
+%configure --localstatedir=%{wwsrvdir} %{?CONF_FLAGS}
 %{__make} %{?mflags}
 
 
 %install
-cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
-
-%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root)
-%{OHPC_PUB}
-%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/NEWS %{dname}/README %{dname}/TODO
-%{wwpkgdir}/*
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO COPYING
+%if ! %{localipmi}
 %{_libexecdir}/warewulf/ipmitool
+%endif
 %{perl_vendorlib}/Warewulf/Ipmi.pm
 %{perl_vendorlib}/Warewulf/Module/Cli/*
 
 
-%changelog
+# ====================
+%package initramfs-%{_arch}
+Summary: Warewulf - Add IPMI to %{_arch} initramfs 
+BuildArch: noarch
+Requires: warewulf-common%{PROJ_DELIM}
+Requires: warewulf-provision%{PROJ_DELIM}-initramfs-%{_arch}
+
+%description initramfs-%{_arch}
+Warewulf is an operating system management toolkit designed to facilitate
+large scale deployments of systems on physical, virtual and cloud-based
+infrastructures. It facilitates elastic and large deployments consisting
+of groups of homogenous systems.
+
+Warewulf IPMI-initramfs adds IPMI configuration to the %{_arch} cluster
+node boot image.
+
+%files initramfs-%{_arch}
+%dir %{wwsrvdir}/warewulf
+%dir %{wwsrvdir}/warewulf/initramfs
+%{wwsrvdir}/warewulf/initramfs/%{_arch}
+#{wwsrvdir}/warewulf/initramfs/%{_arch}/capabilities/setup-ipmi
+
+
+# ====================

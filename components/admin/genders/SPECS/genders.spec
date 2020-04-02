@@ -12,20 +12,25 @@
 %define pname genders
 
 Name:    %{pname}%{PROJ_DELIM}
-Version: 1.22
+Version: 1.27
 Release: 1%{?dist}
 Summary: Static cluster configuration database
 License: GPL
-Source: https://github.com/chaos/genders/releases/download/genders-1-22-1/%{pname}-%{version}.tar.gz
-Source1: OHPC_macros
+Source:  https://github.com/chaos/genders/archive/genders-1-27-3.tar.gz
+Group:   %{PROJ_NAME}/admin
+URL:     https://github.com/chaos/genders
+
 Requires: perl
-Group:     %{PROJ_NAME}/admin
-URL: https://github.com/chaos/genders
 BuildRequires: gcc-c++
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: python
-BuildRequires: python-devel
+BuildRequires: python2
+BuildRequires: python2-devel
+
+%if 0%{?rhel_version}
+BuildRequires: byacc
+%endif
+
 Provides: %{pname} = %{version}
 
 %description
@@ -52,11 +57,11 @@ genders API that is compatible with earlier releases of genders
 %{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %global _with_perl_vendor_arch --with-perl-vendor-arch}}
 
 %prep
-%setup  -q -n %{pname}-%{version}
+%setup  -q -n %{pname}-%{pname}-1-27-3
 
 %build
 
-%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
+%configure PYTHON=/usr/bin/python2 --program-prefix=%{?_program_prefix:%{_program_prefix}} \
     --with-extension-destdir="$RPM_BUILD_ROOT" \
     %{?_with_perl_extensions} \
     %{?_without_perl_extensions} \
@@ -87,7 +92,6 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 
 %files
-%defattr(-,root,root)
 %doc README NEWS ChangeLog DISCLAIMER DISCLAIMER.UC COPYING TUTORIAL genders.sample
 # It doesn't matter if the user chooses a 32bit or 64bit target.  The
 # packaging must work off whatever Perl is installed.
@@ -116,7 +120,6 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %endif
 
 %files -n %{pname}-compat%{PROJ_DELIM}
-%defattr(-,root,root)
 %{_mandir}/man3/gendlib*
 %dir %{_prefix}/lib/genders
 %{_prefix}/lib/genders/*

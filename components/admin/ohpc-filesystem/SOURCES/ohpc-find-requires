@@ -1,0 +1,75 @@
+#!/bin/bash
+#
+# ohpc-find-requires
+#-----------------------------------------------------------------------
+# Licensed under the Apache License, Version 2.0 (the "License"); you
+# may not use this file except in compliance with the License. You may
+# obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied. See the License for the specific language governing
+# permissions and limitations under the License.
+#-----------------------------------------------------------------------
+
+IFS=$'\n'
+
+# First argument is buildroot
+buildroot="$1"
+if [ ! -d "$buildroot" ]; then
+    >&2 echo "Invalid buildroot"
+    exit 1
+fi
+
+# Second argument is default search path.
+searchPath="$2"
+
+if [ -z "$searchPath" ];then
+    >&2 echo "Required search path argument not provided"
+    exit 1
+fi
+
+if [ ! -x /usr/lib/rpm/elfdeps ]; then
+    >&2 echo "Required /usr/lib/rpm/elfdeps binary not available locally"
+    exit 1
+fi
+
+# Get the list of files.
+filelist=`sed "s/[]['\"*?{}]/\\\\\&/g"`
+
+if [ -z "$filelist" ]; then exit 0; fi
+
+
+# Step 1: use standard elfdeps analysis and cache results
+requireList=$(echo ${filelist} | /usr/lib/rpm/elfdeps -R)
+
+# Step 2: append additional color delimiter for ohpc provided packages (that
+# install into $searchPath)
+	      
+for require in ${requireList}; do
+
+    # Check if this is owned by ohpc pre-requisite
+    package=$(rpm -q --queryformat '%{NAME}\n' --whatprovides "$require(ohpc)")
+    if [ $? -eq 0 ];then
+	echo "$require(ohpc)"
+    else
+
+	# check if this requirement is housed in ${buildroot}/opt/ohpc.
+	# If so, we append an (ohpc) color designation, otherwise we
+	# leave the requirement as is.
+	
+	libname=${require%%(*}  # strip off () to get libname
+	match=$(find ${buildroot}/${searchPath} -name ${libname})
+
+	if [ -n "${match}" ];then
+	    echo "$require(ohpc)"
+	else
+	    echo "$require"
+	fi
+	
+     fi
+		  
+ done

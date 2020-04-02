@@ -9,7 +9,6 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname ganglia
 
@@ -26,18 +25,17 @@ Summary:            Distributed Monitoring System
 Group:              %{PROJ_NAME}/admin
 License:            BSD-3-Clause
 URL:                http://ganglia.sourceforge.net/
-DocDir:             %{OHPC_PUB}/doc/contrib
 Source0:            http://downloads.sourceforge.net/ganglia/ganglia-%{version}.tar.gz
 Source1:            http://downloads.sourceforge.net/ganglia/ganglia-web-%{webver}.tar.gz
 Source2:            gmond.service
 Source3:            gmetad.service
 Source4:            ganglia-httpd24.conf.d
 Source6:            conf.php
-Source7:            OHPC_macros
 Patch0:             ganglia-web-3.5.7-statedir.patch
 #Patch1:             ganglia-3.7.1-py-syntax.patch
 Patch2:             ganglia-no-private-apr.patch
 Patch3:             ganglia-3.7.2-apache.patch
+Patch4:             disk_monitoring.patch
 %if 0%{?systemd}
 BuildRequires:      systemd
 %endif
@@ -51,15 +49,17 @@ BuildRequires:      pcre-devel
 BuildRequires:      perl
 %if 0%{?sles_version} || 0%{?suse_version}
 # define fdupes, clean up rpmlint errors
-BuildRequires: fdupes
-BuildRequires: libapr1-devel
+BuildRequires:      fdupes
+BuildRequires:      libapr1-devel
 BuildRequires:      libexpat-devel
+Requires(pre):      shadow
 # Can't find memcached built for SLES
 #BuildRequires:      php5-memcached
 %else
 BuildRequires:      apr-devel >= 1
 BuildRequires:      expat-devel
 BuildRequires:      libmemcached-devel
+Requires(pre):      shadow-utils
 %endif
 %if 0%{?suse_version} >= 1210
 BuildRequires: systemd-rpm-macros
@@ -166,6 +166,10 @@ install -m 0644 %{SOURCE2} gmond/gmond.service.in
 install -m 0644 %{SOURCE3} gmetad/gmetad.service.in
 
 %patch3 -p0
+
+# karl.w.schulz@ices.utexas.edu (03/19/18)
+# fix timings for disk_totals (https://github.com/openhpc/ohpc/issues/681)
+%patch4 -p1
 
 # web part
 %setup -n ganglia-%{gangver} -q -T -D -a 1

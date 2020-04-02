@@ -9,31 +9,33 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 Summary:   Integration test suite for OpenHPC
 Name:      test-suite%{PROJ_DELIM}
-Version:   1.3.3
+Version:   2.0.0
 Release:   1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/openhpc/ohpc/tests
 Source0:   tests-ohpc.tar
-Source1:   OHPC_macros
 
 BuildRequires:  autoconf%{PROJ_DELIM}
 BuildRequires:  automake%{PROJ_DELIM}
 
-%if 0%{?suse_version} >= 1230
+%global __brp_mangle_shebangs_exclude bats
+
+%if 0%{?suse_version}
 Requires(pre):  shadow
+Requires: python-base
 %endif
 
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
+%if 0%{?rhel_version}
+Requires(pre):  shadow-utils
+Requires: python2
+%endif
 
 %define testuser ohpc-test
-%define debug_package %{nil}
 
 %description
 
@@ -59,25 +61,14 @@ cd tests
 cp -a * %{buildroot}/home/%{testuser}/tests
 find %{buildroot}/home/%{testuser}/tests -name .gitignore  -exec rm {} \;
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %pre
 getent passwd %{testuser} >/dev/null || \
     /usr/sbin/useradd -U -c "OpenHPC integration test account" \
     -s /bin/bash -m -b /home %{testuser}
 exit 0
 
-%post
-
-%postun
-
-
 %files
 %defattr(-,%{testuser},%{testuser},-)
 %dir /home/%{testuser}
 /home/%{testuser}/tests
-
-
-
 

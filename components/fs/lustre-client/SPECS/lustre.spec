@@ -13,7 +13,6 @@
 # needssslcertforbuild
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 
 
@@ -23,7 +22,7 @@
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
 
-%define sles_kernel 4.4.73-5-default
+%define sles_kernel 4.12.14-94.41-default
 %define kdir /lib/modules/%{sles_kernel}/source/
 %define kobjdir /lib/modules/%{sles_kernel}/build/
 %endif
@@ -38,7 +37,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.aarch64/source/
 %define kobjdir /lib/modules/%{centos_kernel}.aarch64/build/
 %else
-%define centos_kernel 3.10.0-693.el7
+%define centos_kernel 3.10.0-1062.el7
 BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
 %define kdir /lib/modules/%{centos_kernel}.x86_64/source/
@@ -63,11 +62,21 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %bcond_without lustre_utils
 %bcond_without lustre_iokit
 %bcond_without lustre_modules
-%bcond_with lnet_dlc
+%bcond_with snmp
+%bcond_with gss
+%bcond_with gss_keyring
 %bcond_without manpages
 %bcond_without shared
 %bcond_without static
 %bcond_with    systemd
+
+# By default both gss and gss keyring are disabled.
+# gss keyring requires the gss core. If the builder
+# request gss_keyring we must enable gss core even if
+# the builder attempts to disable gss.
+%if %{with gss_keyring}
+    %define with_gss
+%endif
 
 %if %{without servers}
     # --without servers overrides --with {ldiskfs|zfs}
@@ -76,7 +85,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.10.0}
+%{!?version: %global version 2.12.3}
 %{!?kver:    %global kver    %(uname -r)}
 %{!?kdir:    %global kdir    /lib/modules/%{kver}/source}
 %{!?kobjdir: %global kobjdir %(if [ "%{kdir}" = "/lib/modules/%{kver}/source" ]; then echo "/lib/modules/%{kver}/build"; else echo "%{kdir}"; fi)}
@@ -140,12 +149,18 @@ BuildRequires: kernel-devel = %{centos_kernel}
 %global modules_fs_path /lib/modules/%{kversion}/%{kmoddir}
 
 %if %{_vendor}=="redhat" || %{_vendor}=="fedora"
+	%global requires_yaml_name libyaml
 	%global requires_kmod_name kmod-%{lustre_name}
-	%global requires_kmod_tests_name kmod-%{lustre_name}-tests
+	%if %{with lustre_tests}
+		%global requires_kmod_tests_name kmod-%{lustre_name}-tests
+	%endif
 	%global requires_kmod_version %{version}
 %else	#for Suse
+	%global requires_yaml_name libyaml-0-2
 	%global requires_kmod_name %{lustre_name}-kmp
-	%global requires_kmod_tests_name %{lustre_name}-tests-kmp
+	%if %{with lustre_tests}
+		%global requires_kmod_tests_name %{lustre_name}-tests-kmp
+	%endif
 	%define krequires %(echo %{kversion} | sed -e 's/\.x86_64$//' -e 's/\.i[3456]86$//' -e 's/-smp$//' -e 's/-bigsmp$//' -e 's/[-.]ppc64$//' -e 's/\.aarch64$//' -e 's/-default$//')
 	%if 0%{?suse_version} >= 1200
 		%global requires_kmod_version %{version}_k%(echo %{krequires} | sed -r 'y/-/_/; s/^(2\.6\.[0-9]+)_/\\1.0_/;')
@@ -185,16 +200,14 @@ Source4: kmp-lustre-osd-ldiskfs.files
 Source5: kmp-lustre-osd-zfs.preamble
 Source6: kmp-lustre-osd-zfs.files
 Source7: kmp-lustre-tests.files
-Source8: OHPC_macros
-URL: https://wiki.hpdd.intel.com/
-DocDir: %{OHPC_PUB}/doc/contrib
-BuildRoot: %{_tmppath}/lustre-%{version}-root
-Requires: %{requires_kmod_name} = %{requires_kmod_version}
-BuildRequires: libtool
+URL: https://wiki.whamcloud.com/
+Requires: %{requires_kmod_name} = %{requires_kmod_version} zlib
+Requires: %{requires_yaml_name}
+BuildRequires: libtool libyaml-devel zlib-devel
 %if %{with servers}
 Requires: lustre-osd
 Requires: lustre-osd-mount
-Obsoletes: lustre-client <= %{version}
+Obsoletes: lustre-client < %{version}
 Provides: lustre-client = %{version}-%{release}
 %endif
 # GSS requires this: BuildRequires: pkgconfig, libgssapi-devel >= 0.10
@@ -228,7 +241,7 @@ Userspace tools and files for the Lustre file system.
 %if %{with lustre_utils}
 %package osd-ldiskfs-mount
 Summary: osd-ldiskfs-mount contains mount's ldiskfs specific dso.
-Provides: lustre-osd-mount = %{version}-%{fullrelease}
+Provides: lustre-osd-mount = %{version}
 Group: System Environment/Kernel
 
 %description osd-ldiskfs-mount
@@ -242,7 +255,7 @@ LDISKFS hooks for mount/mkfs into a dynamic library.
 %if %{with lustre_utils}
 %package osd-zfs-mount
 Summary: osd-zfs-mount contains mount's zfs specific dso.
-Provides: lustre-osd-mount = %{version}-%{fullrelease}
+Provides: lustre-osd-mount = %{version}
 Group: System Environment/Kernel
 
 %description osd-zfs-mount
@@ -265,14 +278,19 @@ A set of scripts to operate Lustre resources in a High Availablity
 environment for both Pacemaker and rgmanager.
 %endif
 
+%if %{with lustre_tests}
 %package tests
 Summary: Lustre testing framework
 Group: System Environment/Kernel
 Provides: %{name}-tests = %{version}
+%if %{with lustre_iokit}
 Requires: %{name} = %{version}, lustre-iokit
+%else
+Requires: %{name} = %{version}
+%endif
 Requires: %{requires_kmod_name} = %{requires_kmod_version}
 Requires: %{requires_kmod_tests_name} = %{requires_kmod_version}
-Requires: attr, rsync, perl, lsof, /usr/bin/getconf
+Requires: attr, rsync, perl, lsof, libtool, /usr/bin/getconf
 
 %description tests
 This package contains a set of test binaries and scripts that are intended
@@ -281,12 +299,13 @@ to be used by the Lustre testing framework.
 %if %{with lustre_modules}
 %kernel_module_package -n %{name}-tests -f %SOURCE7 default
 %endif
+%endif
 
 %if %{with lustre_iokit}
 %package -n lustre-iokit
-Summary: The Lustre IO-Kit is a collection of benchmark tools for a cluster with the Lustre file system
+Summary: The Lustre IO-Kit is a collection of benchmark tools for a cluster with the Lustre file system.
 Group: Applications/System
-Requires: python > 2.2, sg3_utils
+Requires: python2 > 2.2, sg3_utils
 
 %description -n lustre-iokit
 This package includes five tools:
@@ -318,11 +337,10 @@ simulate MDT service threads) locally on the MDS node, and does not need Lustre
 clients in order to run
 %endif
 
-%if 0%{?suse_version}
-%debug_package
-%endif
 %prep
 %setup -qn lustre-%{version}
+
+
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
@@ -360,7 +378,9 @@ fi
 	%{!?with_ldiskfs:--disable-ldiskfs} \
 	%{!?with_servers:--disable-server} \
 	%{!?with_zfs:--without-zfs} \
-	%{!?with_lnet_dlc:--disable-dlc} \
+	%{!?with_snmp:--disable-snmp} \
+	%{!?with_gss:--disable-gss} \
+	%{!?with_gss_keyring:--disable-gss-keyring} \
 	%{!?with_manpages:--disable-manpages} \
 	%{!?with_systemd:--with-systemdsystemunitdir=no} \
 	%{?with_systemd:--with-systemdsystemunitdir=%{_unitdir}} \
@@ -371,7 +391,6 @@ fi
 make %{?_smp_mflags} -s %{?make_args}
 
 %install
-
 make install DESTDIR=$RPM_BUILD_ROOT
 
 # RHEL's kernel_module_path macro expects that all the modules
@@ -381,7 +400,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 # RHEL, we handle this here in the spec file rather than in
 # Lustre's build system.  This is not expected to bother SLES's
 # kernel_module_path macro.
-
 basemodpath=$RPM_BUILD_ROOT%{modules_fs_path}/%{lustre_name}
 %if %{with ldiskfs}
 mkdir -p $basemodpath-osd-ldiskfs/fs
@@ -418,16 +436,18 @@ echo '%{_unitdir}/lnet.service' >>lustre.files
 %if %{_vendor}=="redhat"
 # The following scripts are Red Hat specific
 %if %{with servers}
-echo '%{_sysconfdir}/sysconfig/lustre' >>lustre.files
-echo '%{_sysconfdir}/sysconfig/lsvcgss' >>lustre.files
 echo '%{_sysconfdir}/init.d/lustre' >>lustre.files
+echo '%{_sysconfdir}/sysconfig/lustre' >>lustre.files
+%if %{with gss_keyring}
+echo '%config(noreplace) %{_sysconfdir}/sysconfig/lsvcgss' >>lustre.files
+echo '%{_sysconfdir}/sysconfig/lsvcgss' >>lustre.files
+echo '%config(noreplace) %{_sysconfdir}/request-key.d/lgssc.conf' >>lustre.files
+%endif
 %endif
 
 %if %{without systemd}
 echo '%{_sysconfdir}/init.d/lnet' >>lustre.files
 %endif
-
-echo '%{_sysconfdir}/init.d/lsvcgss' >>lustre.files
 %endif
 
 %if %{with servers}
@@ -438,7 +458,6 @@ install -m 0755 contrib/scripts/pacemaker/* $RPM_BUILD_ROOT%{_prefix}/lib/ocf/re
 # fc18 needs 'x' permission for library files
 find $RPM_BUILD_ROOT -name \*.so -type f -exec chmod +x {} \;
 
-%if %{with lnet_dlc}
 rm -f $RPM_BUILD_ROOT%{_libdir}/liblnetconfig.la
 %if %{with static}
 echo '%attr(-, root, root) %{_libdir}/liblnetconfig.a' >>lustre.files
@@ -447,25 +466,29 @@ echo '%attr(-, root, root) %{_libdir}/liblnetconfig.a' >>lustre.files
 echo '%attr(-, root, root) %{_libdir}/liblnetconfig.so' >>lustre.files
 echo '%attr(-, root, root) %{_libdir}/liblnetconfig.so.*' >>lustre.files
 %endif
-%endif
 
 %if %{with ldiskfs}
 echo '%{_libdir}/libiam.a' >>lustre.files
 %endif
 
-if [ -d $RPM_BUILD_ROOT%{_libdir}/lustre/snmp ] ; then
-	echo '%{_libdir}/lustre/snmp' >>lustre.files
-fi
+%if %{with snmp}
+mkdir -p $RPM_BUILD_ROOT/%{_libdir}/lustre/snmp
+echo '%{_libdir}/lustre/snmp' >>lustre.files
+%endif
 
 %if %{with lustre_utils}
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/lustre
-find $RPM_BUILD_ROOT%{_libdir}/lustre -name \*.la -type f -exec rm -f {} \;
+if [ -d $RPM_BUILD_ROOT%{_libdir}/lustre ] ; then
+	find $RPM_BUILD_ROOT%{_libdir}/lustre -name \*.la -type f -exec rm -f {} \;
+fi
 %endif
 
 %if %{with lustre_modules}
 # mark modules executable for find-debuginfo.sh
 find $RPM_BUILD_ROOT/lib/modules -name \*.ko -type f -exec chmod u+x {} \;
 %endif
+
+rm -f $RPM_BUILD_ROOT%{_libdir}/liblustreapi.la
 
 %if %{with lustre_tests}
 :> lustre-tests.files
@@ -477,10 +500,11 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %endif
 
 %files -f lustre.files
-%defattr(-,root,root)
 %{_sbindir}/*
+%if %{with lustre_tests}
 %exclude %{_sbindir}/wirecheck
 %exclude %{_sbindir}/wiretest
+%endif
 %if %{with zfs}
 %exclude %{_sbindir}/zfsobj2fid
 %endif
@@ -498,40 +522,47 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %{_bindir}/lfs
 %{_bindir}/lfs_migrate
 /sbin/mount.lustre
-%{_libdir}/libptlctl.a
-%{_libdir}/libcfsutil.a
+%if %{with static}
 %{_libdir}/liblustreapi.a
-%{_libdir}/liblustreapi.so
+%endif
+%if %{with shared}
+%{_libdir}/liblustreapi.so*
+%endif
 %if %{with manpages}
 %{_mandir}/man?/*
 %endif
 %{_datadir}/lustre
 %{_includedir}/lustre
+%{_includedir}/linux/lnet
+%{_includedir}/linux/lustre
 %endif
 %{_sysconfdir}/udev/rules.d/99-lustre.rules
+%if %{with zfs}
 %config(noreplace) %{_sysconfdir}/ldev.conf
-%if %{with lnet_dlc}
-%config(noreplace) %{_sysconfdir}/lnet.conf
 %endif
+%config(noreplace) %{_sysconfdir}/lnet.conf
 %config(noreplace) %{_sysconfdir}/modprobe.d/ko2iblnd.conf
 %if %{with lustre_utils}
 %config(noreplace) %{_sysconfdir}/lnet_routes.conf
 %endif
 %if %{with lustre_modules}
 
+%if %{with shared}
 %if %{with ldiskfs}
 %if %{with lustre_utils}
 %files osd-ldiskfs-mount
-%defattr(-,root,root)
 %{_libdir}/lustre/mount_osd_ldiskfs.so
 %endif
 %endif
+%endif
 
+%if %{with shared}
 %if %{with zfs}
 %if %{with lustre_utils}
 %files osd-zfs-mount
-%defattr(-,root,root)
 %{_libdir}/lustre/mount_osd_zfs.so
+%{_sysconfdir}/zfs/zed.d/*
+%endif
 %endif
 %endif
 
@@ -545,12 +576,10 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 
 %if %{with lustre_tests}
 %files tests -f lustre-tests.files
-%defattr(-,root,root)
 %endif
 
 %if %{with lustre_iokit}
 %files -n lustre-iokit
-%defattr(-, root, root)
 %{_bindir}/iokit-config
 %{_bindir}/iokit-gather-stats
 %{_bindir}/iokit-libecho
@@ -586,7 +615,3 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %if %{with systemd}
 %systemd_postun_with_restart lnet.service
 %endif
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-rm -rf %{_tmppath}/kmp

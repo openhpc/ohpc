@@ -1,0 +1,49 @@
+The Global Extensible Open Power Manager (\GEOPM{}) is a framework for
+exploring power and energy optimizations targeting high performance computing.
+The \GEOPM{} package provides built-in features ranging from static management
+of power policy for each individual compute node, to dynamic coordination of
+the power policy and performance across all compute nodes hosting an MPI
+application on a portion of a distributed computing system.  The dynamic
+coordination is implemented as a hierarchical control system for scalable
+communication and decentralized control. The following commands customize the
+provisioning environment to support \GEOPM{} installation which is done in a
+later step in \S\ref{sec:install_perf_tools}.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, update compute image to support geopm
+% ohpc_command if [[ ${enable_geopm} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Disable Intel pstate driver for compute nodes as it interferes with GEOPM's operation.
+[sms](*\#*) export kargs="${kargs} intel_pstate=disable"
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\noindent \GEOPM{} uses the \texttt{msr-safe} kernel module
+to allow users read/write access to whitelisted model specific
+registers (MSRs).  An associated \SLURM{} plugin ensures that MSRs modified
+within a user's slurm job are reset to their original state after job completion.
+%before the compute node is returned to the pool available to other
+%users of the system.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_command if [[ ${enable_geopm} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install msr-safe kernel module and SLURM plugin into compute image
+[sms](*\#*) (*\chrootinstall*) kmod-msr-safe-ohpc
+[sms](*\#*) (*\chrootinstall*) msr-safe-ohpc
+[sms](*\#*) (*\chrootinstall*) msr-safe-slurm-ohpc
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
+\noindent For documentation on how to configure and use \GEOPM{}, please see
+the \texttt{geopm} man page and tutorials
+available \href{https://github.com/geopm/geopm/tree/dev/tutorial}{online}.
+

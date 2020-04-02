@@ -9,28 +9,25 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
-%{!?PROJ_DELIM: %global PROJ_DELIM -ohpc}
 
 %define pname intel-mpi-devel
-%define year 2017
+%define year 2020
+%global gnu_major_ver 9
 
 Summary:   OpenHPC compatibility package for Intel(R) MPI Library
 Name:      %{pname}%{PROJ_DELIM}
 Version:   %{year}
-Source1:   OHPC_macros
 Release:   1
 License:   Apache-2.0
 URL:       https://github.com/openhpc/ohpc
 Group:     %{PROJ_NAME}/mpi-families
 BuildArch: x86_64
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+Source1:   mod_generator_impi.sh
 AutoReq:   no
 
 #!BuildIgnore: post-build-checks
 
 Requires: prun%{PROJ_DELIM}
-Requires: intel-compilers-devel%{PROJ_DELIM}
-Provides: %{pname}%{PROJ_DELIM}
 
 %description
 
@@ -42,17 +39,18 @@ suite.
 %build
 
 %install
+install -D -m755 %{SOURCE1}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_generator_impi.sh
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/intel/impi
 %{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu/impi
-%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu7/impi
+%{__mkdir} -p %{buildroot}/%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi
 
 %pre
 
-# Verify pxse mpi stack is installed. Punt if not detected.
+# Verify psxe mpi stack is installed. Punt if not detected.
 
 mpicc_subpath="linux/mpi/intel64/bin/mpicc$"
 
-echo "Checking for local PXSE MPI installation(s)."
+echo "Checking for local PSXE MPI installation(s)."
 
 versions_all=`rpm -qal | grep ${mpicc_subpath}`
 
@@ -65,10 +63,7 @@ if [ $? -eq 1 ];then
 fi
 
 # Verify min version expectations
-# 2016 used 5.1 and 5.3 while 2017 and newer used 2017.x similar to the
-# associated compiler version.  Ether way, 2016 and newer translates to
-# impi package version >= 5.1
-min_ver="5.1"
+min_ver="2020"
 versions=""
 for file in ${versions_all}; do 
     version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
@@ -82,7 +77,7 @@ for file in ${versions_all}; do
 done
 if [ -z "${versions}" ]; then
     echo ""
-    echo "Error: local PXSE compatability support is for versions > ${min_ver}"
+    echo "Error: local PSXE compatability support is for versions > ${min_ver}"
     echo ""
     exit 1
 fi
@@ -90,7 +85,7 @@ fi
 %post
 
 mpicc_subpath="linux/mpi/intel64/bin/mpicc"
-scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator.sh
+scanner=%{OHPC_ADMIN}/compat/modulegen/mod_generator_impi.sh
 
 versions=`rpm -qal | grep ${mpicc_subpath}$`
 
@@ -101,7 +96,7 @@ if [ $? -eq 1 ];then
     exit 1
 fi
 
-echo "Creating OpenHPC-style modulefiles for local PXSE MPI installation(s)."
+echo "Creating OpenHPC-style modulefiles for local PSXE MPI installation(s)."
 
 # Create modulefiles for each locally detected installation.
 
@@ -178,6 +173,12 @@ EOF
 prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
 EOF
 
+    # Also define MPI_DIR based on $I_MPI_ROOT
+    IMPI_DIR=`egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}'`
+    if [ -d "$IMPI_DIR/intel64" ];then
+	echo "setenv          MPI_DIR        $IMPI_DIR/intel64" >> %{OHPC_MODULEDEPS}/intel/impi/${version}
+    fi
+
     # Version file
     %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/.version.${version}
 #%Module1.0#####################################################################
@@ -224,18 +225,24 @@ EOF
 set     ModulesVersion      "${version}"
 EOF
 
+    # Also define MPI_DIR based on $I_MPI_ROOT
+    IMPI_DIR=`egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}'`
+    if [ -d "$IMPI_DIR/intel64" ];then
+	echo "setenv          MPI_DIR        $IMPI_DIR/intel64" >> %{OHPC_MODULEDEPS}/gnu/impi/${version}
+    fi
+
     # support for additional gnu variants
-    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/${version} %{OHPC_MODULEDEPS}/gnu7/impi/${version}
-    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/.version.${version} %{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}
-    perl -pi -e 's!moduledeps/gnu-impi!moduledeps/gnu7-impi!' %{OHPC_MODULEDEPS}/gnu7/impi/${version}
+    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/${version} %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/${version}
+    %{__cp} %{OHPC_MODULEDEPS}/gnu/impi/.version.${version} %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version.${version}
+    perl -pi -e 's!moduledeps/gnu-impi!moduledeps/gnu%{gnu_major_ver}-impi!' %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/${version}
     
     # Inventory for later removal
     echo "%{OHPC_MODULEDEPS}/intel/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
     echo "%{OHPC_MODULEDEPS}/intel/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
     echo "%{OHPC_MODULEDEPS}/gnu/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
     echo "%{OHPC_MODULEDEPS}/gnu/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-    echo "%{OHPC_MODULEDEPS}/gnu7/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
-    echo "%{OHPC_MODULEDEPS}/gnu7/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
+    echo "%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest
+    echo "%{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}/impi/.version.${version}" >> %{OHPC_MODULEDEPS}/intel/impi/.manifest   
 
 done
 
@@ -257,18 +264,14 @@ if [ "$1" = 0 ]; then
 
     if [ -s %{OHPC_MODULEDEPS}/intel/impi/.manifest ];then
 	for file in `cat %{OHPC_MODULEDEPS}/intel/impi/.manifest`; do
-            rm $file
+	   if [ -e $file ];then
+               rm $file
+	   fi
 	done
 	rm -f %{OHPC_MODULEDEPS}/intel/impi/.manifest
     fi
 fi
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
+%{OHPC_ADMIN}/compat/modulegen/mod_generator_impi.sh
 %{OHPC_MODULEDEPS}
-
-%changelog
-

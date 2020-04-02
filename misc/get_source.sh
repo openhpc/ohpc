@@ -21,7 +21,7 @@ for i in `find . -name "${PATTERN}"`; do
 	pushd `dirname ${i}` > /dev/null
 	BASE=`basename ${i}`
 
-	SOURCES=`rpmspec --parse --define '_sourcedir ../SOURCES' --define 'rhel 7' ${BASE} | grep Source`
+	SOURCES=`rpmspec --parse --define '_sourcedir ../../..' --define 'rhel 8' ${BASE} | grep Source`
 	for u in ${SOURCES}; do
 		echo ${u}
 		if [[ "${u}" != *"http"* ]]; then
@@ -30,7 +30,7 @@ for i in `find . -name "${PATTERN}"`; do
 		u=`awk '{ print $2 }' <<< ${u}`
 		echo "Trying to get ${u}"
 		# Try to download only if newer
-		WGET=`wget -N -nv -P ../SOURCES ${u}x 2>&1`
+		WGET=`wget -N -nv -P ../SOURCES ${u} 2>&1`
 		# Handling for github URLs with #/ or #$/
 		if grep -E "#[$]?/" <<< ${u}; then
 			URL=`echo ${u} | cut -d# -f1`

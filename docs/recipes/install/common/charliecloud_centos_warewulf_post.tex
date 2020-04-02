@@ -1,0 +1,33 @@
+The Charliecloud container runtime requires enabling the user namespaces mapping
+option. This allows applications to run with root privilege inside a container, 
+but have them run as a different, typically non-privileged, user on the host.
+Though generally regarded as mature and safe, CentOS considers this a Technology
+Preview, so it must be manually enabled with kernel arguments. We demonstrate
+enabling on compute nodes, but it would also be required on the SMS if you wish
+to build and run containers there.
+
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Optionally, enable user namespaces
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Define node kernel arguments to support user namespaces
+[sms](*\#*) export kargs="${kargs} namespace.unpriv_enable=1"
+
+# Increase per-user limit on the number of user namespaces that may be created
+[sms](*\#*) echo "user.max_user_namespaces=15076" >> $CHROOT/etc/sysctl.conf
+# rebuild VNFS
+[sms](*\#*) wwvnfs --chroot $CHROOT
+\end{lstlisting}
+% end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+Typical Charliecloud workflows are based around Docker containers, but it is not
+strictly necessary to install Docker itself on the HPC resource. A common
+pattern is to build the Docker container on a laptop or VM and upload the result
+to the cluster for use with Charliecloud. More information can be found at
+\href{https://hpc.github.io/charliecloud/}
+    {\color{blue}{https://hpc.github.io/charliecloud/}}
+\end{tcolorbox}
+\end{center}

@@ -15,12 +15,12 @@ NODES=2
 TASKS=4
 ARGS=8
 
-@test "[libs/SLEPc] F77 eigensystem with EPS object test binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s ex1f ];then
-	flunk "ex1f binary does not exist"
+@test "[libs/SLEPc] F90 SVD test binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s test4f ];then
+	flunk "test4f binary does not exist"
     fi
     
-    run_mpi_binary ./ex1f "" $NODES $TASKS
+    run_mpi_binary ./test4f "" $NODES $TASKS
     assert_success
 }
 
@@ -42,11 +42,11 @@ ARGS=8
     assert_success
 }
 
-@test "[libs/SLEPc] C Square root of the 2-D Laplacian binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    if [ ! -s ex26 ];then
-	flunk "ex26 binary does not exist"
+@test "[libs/SLEPc] C nonsymmetric eignenproblem binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    if [ ! -s ex29 ];then
+	flunk "ex29 binary does not exist"
     fi
     
-    run_mpi_binary ./ex26 "" $NODES $TASKS
+    run_mpi_binary ./ex29 "" $NODES $TASKS
     assert_success
 }

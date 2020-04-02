@@ -27,18 +27,19 @@
 
 Summary:   OSU MVAPICH2 MPI implementation
 Name:      %{pname}%{COMM_DELIM}-%{compiler_family}%{RMS_DELIM}%{PROJ_DELIM}
-Version:   2.2
+Version:   2.3.2
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/mpi-families
-URL:       http://mvapich.cse.ohio-state.edu/overview/mvapich2/
+URL:       http://mvapich.cse.ohio-state.edu
 Source0:   http://mvapich.cse.ohio-state.edu/download/mvapich/mv2/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 
 # karl.w.schulz@intel.com (04/13/2016)
 Patch0:    mvapich2-get_cycles.patch
 # karl.w.schulz@intel.com (05/21/2017)
-Patch1:     mpidimpl.opt.patch
+Patch1:    mpidimpl.opt.patch
+# karl@oden.utexas.edu (11/5/2019)
+Patch2:    winptr.patch
 
 %if 0%{with_slurm}
 BuildRequires: slurm-devel%{PROJ_DELIM} slurm%{PROJ_DELIM}
@@ -59,15 +60,15 @@ Conflicts: %{pname}-%{compiler_family}%{PROJ_DELIM}
 
 %if 0%{?sles_version} || 0%{?suse_version}
 Buildrequires: ofed
+BuildRequires: rdma-core-devel infiniband-diags-devel
 %endif
-%if 0%{?rhel_version} || 0%{?centos_version}
-Buildrequires: rdma-core-devel
+%if 0%{?rhel}
+Buildrequires: rdma-core-devel libibmad-devel
 %endif
 
 Requires: prun%{PROJ_DELIM}
-
 BuildRequires: bison
-BuildRequires: libibmad-devel 
+BuildRequires: zlib-devel
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
@@ -84,7 +85,8 @@ across multiple networks.
 
 %setup -q -n %{pname}-%{version}
 %patch0 -p1
-%patch1 -p0
+%patch1 -p1
+%patch2 -p1
 
 %build
 %ohpc_setup_compiler
@@ -99,6 +101,11 @@ across multiple networks.
             --with-pm=no --with-pmi=slurm \
 %endif
 	    --enable-fast=O3 || { cat config.log && exit 1; }
+
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
+%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
+%endif
 
 make %{?_smp_mflags}
 
@@ -151,28 +158,10 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_HOME}
 %doc README.envvar
 %doc COPYRIGHT
 %doc CHANGELOG
 %doc CHANGES
 %doc README
-
-
-%changelog
-* Wed May 31 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.2-1
-- re-enable parallel builds, add patch for gcc7 optimization issue, remove unused patches
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.2-1
-- switch to ohpc_compiler_dependent flag
-
-* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 2.2-1
-- Switching to %%ohpc_compiler macro
-
-* Tue Aug  5 2014  <karl.w.schulz@intel.com>
-- Initial build.

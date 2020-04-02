@@ -14,15 +14,14 @@
 %include %{_sourcedir}/OHPC_macros
 
 # Build requires
-BuildRequires: python
-%if "%{compiler_family}" != "intel"
+BuildRequires: python2
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # Base package name
 %define pname plasma
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:	%{pname}-%{compiler_family}%{PROJ_DELIM}
 Version: 2.8.0
@@ -30,21 +29,16 @@ Release: 1%{?dist}
 Summary: Parallel Linear Algebra Software for Multicore Architectures
 License: BSD-3-Clause
 Group:     %{PROJ_NAME}/serial-libs
-URL: https://bitbucket.org/icl/%{pname}		
+URL: https://bitbucket.org/icl/%{pname}
 Source0: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}_%{version}.tar.gz
 Source1: http://icl.cs.utk.edu/projectsfiles/%{pname}/pubs/%{pname}-installer_%{version}.tar.gz
-Source2: http://www.netlib.org/lapack/lapack-3.7.0.tgz
+Source2: http://www.netlib.org/lapack/lapack-3.8.0.tar.gz
 Source3: %{pname}-rpmlintrc
-Source4: OHPC_macros
 Patch1:  plasma-lapack_version.patch
 Requires: lmod%{PROJ_DELIM} >= 7.6.1
 
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
-#!BuildIgnore: post-build-checks 
-# Disable debug packages
-%define debug_package %{nil}
+#!BuildIgnore: post-build-checks
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
 
@@ -59,23 +53,29 @@ value problems.
 %prep
 %setup -q -a 1 -n %{pname}_%{version}
 %patch1 -p 0
+mkdir bin
+ln -s /usr/bin/python2 bin/python
 
 %build
+export PATH="$PWD/bin:$PATH"
 mkdir -p build/download
 
 cp %{SOURCE0} build/download
 cp %{SOURCE2} build/download
+%if "%{compiler_family}" == "arm"
+cp %{SOURCE2} build/download/lapack-3.8.0.tgz
+%endif
 
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 
 export SHARED_OPT=-shared
 
-%if %{compiler_family} == gnu7
+%if %{compiler_family} == gnu9
 export PIC_OPT=-fPIC
 export SONAME_OPT="-Wl,-soname"
 %endif
@@ -85,31 +85,56 @@ export PIC_OPT=-fpic
 export SONAME_OPT="-Xlinker -soname"
 %endif
 
+%if "%{compiler_family}" == "arm" || "%{compiler_family}" == "llvm"
+export PIC_OPT="-fPIC -DPIC"
+export SONAME_OPT="-Wl,-soname"
+%endif
+
+%if "%{compiler_family}" == "arm"
+echo "d" | LAPACKE_WITH_TMG=1 \
+%endif
 plasma-installer_%{version}/setup.py              \
     --cc=${CC}                                    \
     --fc=${FC}                                    \
     --notesting                                   \
-%if %{compiler_family} == gnu7
-    --cflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
-    --fflags="${RPM_OPT_FLAGS} ${PIC_OPT} -I${OPENBLAS_INC}" \
+%if "%{compiler_family}" == "gnu9" || "%{compiler_family}" == "llvm"
+    --cflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
+    --fflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT} -I${OPENBLAS_INC}" \
     --blaslib="-L${OPENBLAS_LIB} -lopenblas"      \
     --cblaslib="-L${OPENBLAS_LIB} -lopenblas"     \
+    --ldflags_c="-fopenmp" \
+    --ldflags_fc="-fopenmp" \
 %endif
 %if %{compiler_family} == intel
-    --cflags="${RPM_OPT_FLAGS} ${PIC_OPT}" \
-    --fflags="${RPM_OPT_FLAGS} ${PIC_OPT}" \
+    --cflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
+    --fflags="${RPM_OPT_FLAGS} -qopenmp ${PIC_OPT}" \
     --blaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
     --cblaslib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
     --lapacklib="-L/intel/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_sequential -lmkl_core" \
+    --ldflags_c="-qopenmp" \
+    --ldflags_fc="-qopenmp" \
+%endif
+%if "%{compiler_family}" == "arm"
+    --cflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT}" \
+    --fflags="${RPM_OPT_FLAGS} -fopenmp ${PIC_OPT}" \
+    --blaslib="-L${ARMPL_LIBRARIES} -larmpl_mp"     \
+    --cblaslib="-L${ARMPL_LIBRARIES} -larmpl_mp"    \
+    --lapacklib="-L${ARMPL_LIBRARIES} -larmpl_mp"   \
+    --ldflags_c="-fopenmp"                          \
+    --ldflags_fc="-fopenmp"                         \
 %endif
     --downlapc
+
+%if "%{compiler_family}" == "arm"
+%{__cat} build/log/lapackcwrapperlog
+%endif
 
 #
 #Create shared libraries
 #
 pushd install/lib  2>&1 > /dev/null
 find . -name "*.a"|while read static_lib
-do                                 
+do
     bname=`basename ${static_lib}`
     libname=`basename ${static_lib} .a`
     mkdir -p tmpdir
@@ -127,7 +152,7 @@ popd 2>&1 > /dev/null
 rm -f install/lib/*.a
 
 %install
-
+export PATH="$PWD/bin:$PATH"
 mkdir -p %{buildroot}%{install_path}
 
 # OpenHPC module file
@@ -151,11 +176,10 @@ module-whatis "URL %{url}"
 
 set     version			    %{version}
 
-
-# Require openblas for gnu compiler families
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+# Require openblas for gnu and llvm compiler families
+depends-on openblas
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
@@ -174,7 +198,7 @@ pushd install 2>&1 > /dev/null
 # Fix .pc files
 #
 find . -name "*.pc"|while read file
-do                                 
+do
     echo "Fix ${file} up"
     mv ${file} ${file}.tmp
     cat ${file}.tmp | \
@@ -195,12 +219,6 @@ pushd %{buildroot}%{install_path}/lib 2>&1 > /dev/null
 /sbin/ldconfig -N .
 popd 2>&1 > /dev/null
 
-%clean
-rm -rf ${RPM_BUILD_ROOT}
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc LICENSE README ReleaseNotes docs/pdf/*.pdf
-
-%changelog

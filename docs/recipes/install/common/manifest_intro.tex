@@ -16,13 +16,21 @@ list of the available meta-packages and a brief description is presented in
 Table~\ref{table:groups}.
 
 \vspace*{1.25cm}
-\begin{table}[h] 
+\begin{table}[h!] 
 \caption{\bf Available \OHPC{} Meta-packages} \vspace*{\captionSpace{}}
 \label{table:groups}
 \input manifest/patterns
 \end{table}
 
-\newpage
+% meta-packages (2)
+\iftoggleverb{isx86}
+\begin{table}[h!] 
+\caption*{Table~\ref{table:groups} (cont): {\bf Available \OHPC{} Meta-packages} \vspace*{\captionSpace{}} }
+\input manifest/patterns2
+\end{table}
+\fi
+
+\clearpage
 What follows next in this Appendix is a series of tables that summarize the
 underlying RPM packages available in this \OHPC{} release. These packages are
 organized by groupings based on their general functionality and each table

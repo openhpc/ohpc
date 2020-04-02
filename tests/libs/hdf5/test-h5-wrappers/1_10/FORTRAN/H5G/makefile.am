@@ -28,5 +28,4 @@ testfiles/h5ex_g_compact1.ddl testfiles/h5ex_g_compact2.ddl testfiles/h5ex_g_cor
 testfiles/h5ex_g_phase.tst \
 test.sh
 
-TESTS_ENVIRONMENT = sh
-TESTS = test.sh
+TESTS = tests

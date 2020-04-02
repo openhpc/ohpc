@@ -15,46 +15,36 @@
 
 # Base package name
 %define pname trilinos
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
-%define ver_exp 12-10-1
+%define ver_exp 12-18-1
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        12.10.1
+Version:        12.18.1
 Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.0
 Group:          %{PROJ_NAME}/parallel-libs
-Url:            http://trilinos.sandia.gov/index.html
+Url:            https://trilinos.org/
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
-Source1:        OHPC_macros
 Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
-Patch1:         Trilinos-trilinos-aarch64.patch
-BuildRequires:  cmake%{PROJ_DELIM}
+BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  perl
-%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
-BuildRequires:  qt-devel
-%else
-BuildRequires:  libqt4-devel
-%endif
 BuildRequires:  swig > 2.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%if "%{compiler_family}" != intel
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
-%endif
-%if 0%{?suse_version} <= 1110
-%{!?python_sitearch: %global python_sitearch %(python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
 
 #!BuildIgnore: post-build-checks
+#!BuildIgnore: brp-check-suse
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -69,18 +59,16 @@ Trilinos top layer providing a common look-and-feel and infrastructure.
 %prep
 %setup -q -n  Trilinos-trilinos-release-%{ver_exp}
 %patch0 -p1
-%patch1 -p1
 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load cmake
 module load boost
 module load netcdf
 module load phdf5
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load openblas
 %endif
 
@@ -96,7 +84,6 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
 %if "%{compiler_family}" == "intel"
-        -DTrilinos_ENABLE_MueLu:BOOL=OFF                                \
         -DTPL_ENABLE_MKL:BOOL=ON                                        \
         -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
         -DMKL_LIBRARY_DIRS:FILEPATH="${MKLROOT}/lib/intel64"            \
@@ -108,14 +95,28 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DLAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"             \
         -DLAPACK_LIBRARY_NAMES:STRING="mkl_rt"                          \
 %else
+%if "%{compiler_family}" == "arm"
+        -DTPL_ENABLE_BLAS:BOOL=ON                                       \
+        -DBLAS_LIBRARY_DIRS:PATH="${ARMPL_LIBRARIES}"                   \
+        -DBLAS_LIBRARY_NAMES:STRING="armpl_mp"                          \
+        -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
+        -DLAPACK_LIBRARY_DIRS:PATH="${ARMPL_LIBRARIES}"                 \
+        -DLAPACK_LIBRARY_NAMES:STRING="armpl_mp"                        \
+%else
         -DTPL_ENABLE_BLAS:BOOL=ON                                       \
         -DBLAS_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                      \
         -DBLAS_LIBRARY_NAMES:STRING="openblas"                          \
         -DTPL_ENABLE_LAPACK:BOOL=ON                                     \
         -DLAPACK_LIBRARY_DIRS:PATH="${OPENBLAS_LIB}"                    \
         -DLAPACK_LIBRARY_NAMES:STRING="openblas"                        \
+%endif
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+        -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lflang"                    \
+%else
         -DTrilinos_EXTRA_LINK_FLAGS:STRING="-lgfortran"                 \
 %endif
+%endif
+        -DTrilinos_ENABLE_MueLu:BOOL=ON                                 \
         -DTrilinos_ENABLE_Phalanx:BOOL=ON                               \
         -DTrilinos_ENABLE_Stokhos:BOOL=ON                               \
         -DTrilinos_ENABLE_Didasko:BOOL=ON                               \
@@ -125,9 +126,11 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
 %if 0%{?suse_version} >= 1210
         -DTrilinos_ENABLE_ForTrilinos:BOOL=ON                           \
 %endif
+        -DTrilinos_ENABLE_EXAMPLES:BOOL=OFF                             \
         -DTrilinos_ENABLE_STK:BOOL=OFF                                  \
         -DTrilinos_ENABLE_TESTS:BOOL=OFF                                \
         -DTrilinos_ENABLE_OpenMP:BOOL=ON                                \
+        -DTrilinos_ENABLE_EXPLICIT_INSTANTIATION:BOOL=ON                \
         -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
         -DTEUCHOS_ENABLE_expat:BOOL=ON                                  \
         -DTEUCHOS_ENABLE_libxml2:BOOL=ON                                \
@@ -171,6 +174,9 @@ cd tmp
 make %{?_smp_mflags} DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
 
+# fix unversioned python interpreter
+sed -e "s,/env python,/python3,g" -i %{buildroot}%{install_path}/bin/phalanx_create_evaluator.py
+
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
@@ -201,10 +207,10 @@ setenv          %{PNAME}_BIN        %{install_path}/bin
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_LIB        %{install_path}/lib
 
-# Autoload openblas for gnu builds
-if { ![is-loaded intel] } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+# Autoload openblas for gnu and llvm builds
+depends-on openblas
+%endif
 
 EOF
 
@@ -219,16 +225,5 @@ EOF
 %{__mkdir_p} %{buildroot}/%_docdir
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 12.10.1-1
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 12.10.1-0
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 12.10.1-0
-- Switching to %%ohpc_compiler macro

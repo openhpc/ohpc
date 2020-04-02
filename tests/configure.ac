@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([test-suite], [1.3.0], [https://github.com/openhpc/ohpc])
+AC_INIT([test-suite], [1.3.8], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.14])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -50,20 +50,22 @@ AC_CHECK_FILE(/etc/profile.d/xcat.sh,[enable_xcat=yes],[enable_cat=no])
 AM_CONDITIONAL(XCAT_ENABLED,test "x$enable_xcat" = "xyes" )
 
 # Option for testing against multiple compiler/MPI families
-AC_MSG_CHECKING([if enable PXSE toolchain related tests])
-AC_ARG_ENABLE([pxse],
-	 [AS_HELP_STRING([--enable-pxse],[Enable development tool tests with PXSE toolchain (default=no)],,120)],
-	 [],[enable_pxse=no])
+AC_MSG_CHECKING([if enable PSXE toolchain related tests])
+AC_ARG_ENABLE([psxe],
+	 [AS_HELP_STRING([--enable-psxe],[Enable development tool tests with PSXE toolchain (default=no)],,120)],
+	 [],[enable_psxe=no])
 
 # Default MPI families to test
-if test x$enable_pxse = xyes ;then
+if test x$enable_psxe = xyes ;then
    AC_MSG_RESULT([yes])
-   AC_SUBST(COMPILER_FAMILIES,["gnu7 intel"])       
-   AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi3 impi"])
+   AC_SUBST(COMPILER_FAMILIES,["gnu9 intel"])
+   AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi4 impi"])
+   AC_SUBST(PYTHON_FAMILIES,["python3"])
 else
    AC_MSG_RESULT([no])
-   AC_SUBST(COMPILER_FAMILIES,[gnu7])       
-   AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi3"])
+   AC_SUBST(COMPILER_FAMILIES,[gnu9])
+   AC_SUBST(MPI_FAMILIES,["mpich mvapich2 openmpi4"])
+   AC_SUBST(PYTHON_FAMILIES,["python3"])
 fi
 
 # Compiler families can be overriden by user
@@ -75,6 +77,11 @@ AC_ARG_WITH(compiler-families,
 AC_ARG_WITH(mpi-families,
 	[AS_HELP_STRING([--with-mpi-families=[MPI]],[Override desired MPI families])],
 	[MPI_FAMILIES=$withval])
+
+# Python families can be overriden by user
+AC_ARG_WITH(python-families,
+	[AS_HELP_STRING([--with-python-families=[PYTHON]],[Override desired Python families])],
+	[PYTHON_FAMILIES=$withval])
 
 # Fabric options
 AC_ARG_WITH(fabric,
@@ -114,12 +121,7 @@ AC_ARG_ENABLE([oob],
 	 [AS_HELP_STRING([--enable-oob],[Enable oob tests (default=yes, root only)])],
 	 [],[enable_oob=yes])
 AM_CONDITIONAL(OOB_ENABLED,test "x$enable_oob" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# Singularity
-AC_ARG_ENABLE([singularity],
-     [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes, root only)])],
-	 [],[enable_singularity=yes])
-AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
+
 #------------------------------------------------------------------------------------------
 # spack
 AC_ARG_ENABLE([spack],
@@ -205,6 +207,12 @@ AC_ARG_ENABLE([imb],
    [AX_OPTION_DEFAULT(type=long,enable_imb,yes)])
 AM_CONDITIONAL(IMB_ENABLED,test "x$enable_imb" = "xyes" )
 #------------------------------------------------------------------------------------------
+# OMB
+AC_ARG_ENABLE([omb],
+   [AS_HELP_STRING([--enable-imb],[Enable OSU MPI Micro-benchmarks tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_omb,yes)])
+AM_CONDITIONAL(OMB_ENABLED,test "x$enable_omb" = "xyes" )
+#------------------------------------------------------------------------------------------
 # GSL
 AC_ARG_ENABLE([gsl],
    [AS_HELP_STRING([--enable-gsl],[Enable GSL library tests (default=yes)])],[],
@@ -235,17 +243,47 @@ AC_ARG_ENABLE([boost-mpi],
    [AX_OPTION_DEFAULT(type=long,enable_boost_mpi,yes)])
 AM_CONDITIONAL(BOOST_MPI_ENABLED,test "x$enable_boost_mpi" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# Charliecloud
+AC_ARG_ENABLE([charliecloud],
+   [AS_HELP_STRING([--enable-charliecloud],[Enable Charliecloud tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_charliecloud,yes)])
+AM_CONDITIONAL(CHARLIECLOUD_ENABLED,test "x$enable_charliecloud" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# Dimemas
+AC_ARG_ENABLE([dimemas],
+   [AS_HELP_STRING([--enable-dimemas],[Enable Dimemas tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_dimemas,yes)])
+AM_CONDITIONAL(DIMEMAS_ENABLED,test "x$enable_dimemas" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # EasyBuild
 AC_ARG_ENABLE([easybuild],
    [AS_HELP_STRING([--enable-easybuild],[Enable EasyBuild tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_easybuild,yes)])
 AM_CONDITIONAL(EASYBUILD_ENABLED,test "x$enable_easybuild" = "xyes" ) 
 #------------------------------------------------------------------------------------------
+# GEOPM
+AC_ARG_ENABLE([geopm],
+   [AS_HELP_STRING([--enable-geopm],[Enable geopm tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_geopm,yes)])
+AM_CONDITIONAL(GEOPM_ENABLED,test "x$enable_geopm" = "xyes" )
+#------------------------------------------------------------------------------------------
+# Extrae
+AC_ARG_ENABLE([extrae],
+   [AS_HELP_STRING([--enable-extrae],[Enable Extrae tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_extrae,yes)])
+AM_CONDITIONAL(EXTRAE_ENABLED,test "x$enable_extrae" = "xyes" ) 
+#------------------------------------------------------------------------------------------
 # HYPRE
 AC_ARG_ENABLE([hypre],
    [AS_HELP_STRING([--enable-hypre],[Enable HYPRE tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_hypre,yes)])
 AM_CONDITIONAL(HYPRE_ENABLED,test "x$enable_hypre" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# Likwid
+AC_ARG_ENABLE([likwid],
+   [AS_HELP_STRING([--enable-likwid],[Enable likwid tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=short,enable_likwid,yes)])
+AM_CONDITIONAL(LIKWID_ENABLED,test "x$enable_likwid" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # MODULES
 AC_ARG_ENABLE([modules],
@@ -264,6 +302,12 @@ AC_ARG_ENABLE([metis],
    [AS_HELP_STRING([--enable-metis],[Enable metis tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_metis,yes)])
 AM_CONDITIONAL(METIS_ENABLED,test "x$enable_metis" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# MFEM
+AC_ARG_ENABLE([mfem],
+   [AS_HELP_STRING([--enable-mfem],[Enable mfem tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_mfem,yes)])
+AM_CONDITIONAL(MFEM_ENABLED,test "x$enable_mfem" = "xyes" )
 #------------------------------------------------------------------------------------------
 # mpi4py
 AC_ARG_ENABLE([mpi4py],
@@ -294,6 +338,12 @@ AC_ARG_ENABLE([openblas],
    [AS_HELP_STRING([--enable-openblas],[Enable OPENBLAS tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_openblas,yes)])
 AM_CONDITIONAL(OPENBLAS_ENABLED,test "x$enable_openblas" = "xyes" )
+#------------------------------------------------------------------------------------------
+# OpenCoarrays
+AC_ARG_ENABLE([opencoarrays],
+   [AS_HELP_STRING([--enable-opencoarrays],[Enable OpenCoarrays tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_opencoarrays,yes)])
+AM_CONDITIONAL(OPENCOARRAYS_ENABLED,test "x$enable_opencoarrays" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Papi
 AC_ARG_ENABLE([papi],
@@ -342,6 +392,12 @@ AC_ARG_ENABLE([scotch],
    [AS_HELP_STRING([--enable-scotch],[Enable scotch tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=long,enable_scotch,yes)])
 AM_CONDITIONAL(SCOTCH_ENABLED,test "x$enable_scotch" = "xyes" ) 
+#------------------------------------------------------------------------------------------
+# Singularity
+AC_ARG_ENABLE([singularity],
+     [AS_HELP_STRING([--enable-singularity],[Enable singularity tests (default=yes)])],[],
+     [AX_OPTION_DEFAULT(type=long,enable_singularity,yes)])
+AM_CONDITIONAL(SINGULARITY_ENABLED,test "x$enable_singularity" = "xyes" )
 #------------------------------------------------------------------------------------------
 # SLEPC
 AC_ARG_ENABLE([slepc],
@@ -440,9 +496,13 @@ AC_OUTPUT( Makefile
        user-env/Makefile 
        bos/Makefile
        fabric/Makefile
+       perf-tools/dimemas/Makefile
+       perf-tools/extrae/Makefile
+       perf-tools/geopm/Makefile
        perf-tools/scalasca/Makefile
        perf-tools/tau/Makefile
        oob/Makefile
+       runtimes/charliecloud/Makefile
        runtimes/singularity/Makefile
        fs/beegfs/Makefile
        fs/lustre/Makefile
@@ -473,6 +533,7 @@ echo Host operating system......... : ${DISTRO_FAMILY}
 
 echo Compiler Families............. : ${COMPILER_FAMILIES}
 echo MPI Families.................. : ${MPI_FAMILIES}
+echo Python Families............... : ${PYTHON_FAMILIES}
 if test "x$enable_slurm" = "xyes" ; then
    echo Resource manager ............. : SLURM
 fi
@@ -524,12 +585,6 @@ if test "x$ROOT_ENABLED" = "x1" ; then
        echo '    'Out of band tools......... : disabled
     fi
     
-    if test "x$enable_singularity" = "xyes"; then
-       echo '    'Singularity............... : enabled
-    else
-       echo '    'Singularity............... : disabled
-    fi
-
     if test "x$enable_spack" = "xyes"; then
        echo '    'Spack..................... : enabled
     else
@@ -653,6 +708,12 @@ echo    Libraries:
        echo '    'HYPRE..................... : disabled
     fi
 
+    if test "x$enable_mfem" = "xyes"; then
+       echo '    'MFEM...................... : enabled
+    else
+       echo '    'MFEM...................... : disabled
+    fi
+
     if test "x$enable_metis" = "xyes"; then
        echo '    'Metis..................... : enabled
     else
@@ -687,6 +748,12 @@ echo    Libraries:
        echo '    'OPENBLAS.................. : enabled
     else
        echo '    'OPENBLAS.................. : disabled
+    fi
+
+    if test "x$enable_opencoarrays" = "xyes"; then
+       echo '    'OpenCoarrays.............. : enabled
+    else
+       echo '    'OpenCoarrays.............. : disabled
     fi
 
     if test "x$enable_petsc" = "xyes"; then
@@ -769,16 +836,46 @@ echo    Libraries:
 
 echo    Performance Tools:
 
+    if test "x$enable_dimemas" = "xyes"; then
+       echo '    'Dimemas................... : enabled
+    else
+       echo '    'Dimemas................... : disabled
+    fi
+
+    if test "x$enable_extrae" = "xyes"; then
+       echo '    'Extrae.................... : enabled
+    else
+       echo '    'Extrae.................... : disabled
+    fi
+
     if test "x$enable_imb" = "xyes"; then
        echo '    'IMB....................... : enabled
     else
        echo '    'IMB....................... : disabled
     fi
 
+    if test "x$enable_geopm" = "xyes"; then
+       echo '    'GEOPM..................... : enabled
+    else
+       echo '    'GEOPM..................... : disabled
+    fi
+
+    if test "x$enable_likwid" = "xyes"; then
+       echo '    'Likwid.................... : enabled
+    else
+       echo '    'Likwid.................... : disabled
+    fi
+
     if test "x$enable_mpiP" = "xyes"; then
        echo '    'mpiP Profiler........ .... : enabled
     else
        echo '    'mpiP Profiler............. : disabled
+    fi
+
+    if test "x$enable_omb" = "xyes"; then
+       echo '    'OSU microbenchmarks....... : enabled
+    else
+       echo '    'OSU microbenchmarks....... : disabled
     fi
 
     if test "x$enable_papi" = "xyes"; then
@@ -801,10 +898,22 @@ echo    Performance Tools:
 
 echo    Runtimes:
 
+    if test "x$enable_charliecloud" = "xyes"; then
+       echo '    'Charliecloud.............. : enabled
+    else
+       echo '    'Charliecloud.............. : disabled
+    fi
+
     if test "x$enable_ocr" = "xyes"; then
        echo '    'OCR....................... : enabled
     else
        echo '    'OCR....................... : disabled
+    fi
+
+    if test "x$enable_singularity" = "xyes"; then
+       echo '    'Singularity............... : enabled
+    else
+       echo '    'Singularity............... : disabled
     fi
 
 echo    User Environment:

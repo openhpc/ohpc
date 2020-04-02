@@ -12,20 +12,16 @@
 
 # Base package name
 %define pname papi
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Performance Application Programming Interface
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.5.1
+Version:   5.7.0
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://icl.cs.utk.edu/papi/
 Source0:   http://icl.cs.utk.edu/projects/papi/downloads/papi-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    papi.ldconfig.patch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-DocDir:    %{OHPC_PUB}/doc/contrib
 
 BuildRequires: ncurses-devel
 %if 0%{?suse_version}
@@ -37,7 +33,6 @@ BuildRequires: chrpath
 BuildRequires: kernel-headers >= 2.6.32
 #Right now libpfm does not know anything about s390 and will fail
 ExcludeArch: s390 s390x
-%global debug_package %{nil} 
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
@@ -58,8 +53,6 @@ CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" ./configure --with-s
 DBG="" CFLAGS="-fPIC -DPIC" CXXFLAGS="-fPIC -DPIC" FCFLAGS="-fPIC" make
 
 %install
-
-rm -rf $RPM_BUILD_ROOT
 cd src
 
 make DESTDIR=$RPM_BUILD_ROOT install
@@ -86,7 +79,7 @@ module-whatis "URL %{url}"
 set     version                     %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/man
+prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
@@ -115,14 +108,6 @@ rm -rf $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %{__mkdir_p} $RPM_BUILD_ROOT/%{_docdir}
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc ChangeLog*.txt INSTALL.txt LICENSE.txt README RELEASENOTES.txt
-
-%changelog

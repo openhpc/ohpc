@@ -8,143 +8,62 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%{!?_rel:%{expand:%%global _rel 0.r%(test "1547" != "0000" && echo "1547" || svnversion | sed 's/[^0-9].*$//' | grep '^[0-9][0-9]*$' || echo 0000)}}
-
 %include %{_sourcedir}/OHPC_macros
 
-%define pname warewulf-cluster
 %define dname cluster
-%define dev_branch_sha 166bcf8938e8e460fc200b0dfe4b61304c7d010a
+%define pname warewulf-%{dname}
+%define wwsrvdir /srv
+%define develSHA 98fcdc336349378c8ca1b5b0e7073a69a868a40f
+%define wwextract warewulf3-%{develSHA}
 
 Name:    %{pname}%{PROJ_DELIM}
-Summary: Tools used for clustering with Warewulf
-Version: 3.8pre
-Release: %{_rel}
+Version: 3.9.0
+Release: 1%{?dist}
+Summary: Warewulf - HPC cluster configuration
 License: US Dept. of Energy (BSD-like)
-Group:   %{PROJ_NAME}/provisioning
 URL:     http://warewulf.lbl.gov/
-Source0: https://github.com/crbaird/warewulf3/archive/%{dev_branch_sha}.tar.gz#/warewulf3-%{version}.ohpc1.3.tar.gz
-Source1: OHPC_macros
+Source0: https://github.com/warewulf/warewulf3/archive/%{develSHA}.tar.gz
+Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
-Requires: warewulf-common%{PROJ_DELIM} warewulf-provision%{PROJ_DELIM} ntp
+Requires: warewulf-common%{PROJ_DELIM}, warewulf-provision%{PROJ_DELIM}
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: warewulf-common%{PROJ_DELIM}
 Conflicts: warewulf < 3
-BuildRoot: %_tmppath}%{pname}-%{version}-%{release}-root
-DocDir: %{OHPC_PUB}/doc/contrib
-#%if 0%{?rhel_version} < 700 || 0%{?centos_version} < 700
-#%if ! 0%{?suse_version}
-#BuildRequires: libdb4-utils
-#%endif
-#%endif
-
-%define debug_package %{nil}
-
-# 06/13/14 charles.r.baird@intel.com - wwinit patch for SLES
-Patch1: warewulf-cluster.wwinit.patch
-# 06/14/14 karl.w.schulz@intel.com - OpenHPC flag used to disable inclusion of node package
-%if %{OHPC_BUILD}
-%define disable_node_package 1
-%endif
 
 %description
-Warewulf >= 3 is a set of utilities designed to better enable
-utilization and maintenance of clusters or groups of computers.
+Warewulf is an operating system management toolkit designed to facilitate
+large scale deployments of systems on physical, virtual and cloud-based
+infrastructures. It facilitates elastic and large deployments consisting
+of groups of homogenous systems.
 
-This package contains tools to facilitate management of a Cluster
-with Warewulf.
+Warewulf Cluster contains tools and libraries to facilitate the
+configuration of a cluster and its nodes.
 
-# 06/14/14 karl.w.schulz@intel.com - disable warewulf-cluster-node package
-%if %{disable_node_package}
-%package -n %{pname}-node%{PROJ_DELIM}
-Summary: Tools used for clustering with Warewulf
-Group: %{PROJ_NAME}/provisioning
-Requires: /sbin/sfdisk
-%if 0%{?sles_version} || 0%{?suse_version}
-PreReq: %{insserv_prereq} %{fillup_prereq}
-%endif
-
-%description -n %{pname}-node%{PROJ_DELIM}
-Warewulf >= 3 is a set of utilities designed to better enable
-utilization and maintenance of clusters or groups of computers.
-
-This is the cluster-node module, that is installed onto the
-provisioned nodes.
-%endif
 
 %prep
-%setup -n warewulf3-%{dev_branch_sha}
-cd %{dname}
-%patch1 -p1
+cd %{_builddir}
+%{__rm} -rf %{name}-%{version} %{wwextract}
+%{__ln_s} %{wwextract}/%{dname} %{name}-%{version}
+%setup -q -D
+
 
 %build
-cd %{dname}
-if [ ! -f configure ]; then
-    ./autogen.sh
-fi
-%configure
+./autogen.sh
+%configure --localstatedir=%{wwsrvdir}
 %{__make} %{?mflags}
 
 
 %install
-cd %{dname}
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
-cp -r $RPM_BUILD_ROOT/etc/warewulf/vnfs/include/* $RPM_BUILD_ROOT
-rm -rf $RPM_BUILD_ROOT/etc/warewulf/vnfs
-rmdir $RPM_BUILD_ROOT/etc/warewulf >/dev/null 2>&1 || :
 
-%if 0%{?suse_version}
-mv $RPM_BUILD_ROOT/etc/rc.d/init.d  $RPM_BUILD_ROOT/etc/init.d
-%endif
-
-# 06/14/14 karl.w.schulz@intel.com - disable warewulf-cluster-node package
-%if !%{disable_node_package}
-rm -rf $RPM_BUILD_ROOT/etc/sysconfig/wwfirstboot.conf
-rm -rf $RPM_BUILD_ROOT/etc/rc.d/init.d/wwfirstboot
-rm -rf $RPM_BUILD_ROOT/%{_libexecdir}/warewulf/wwfirstboot/*
-%endif
-
-%{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-, root, root)
-%{OHPC_PUB}
-%doc %{dname}/AUTHORS %{dname}/COPYING %{dname}/ChangeLog %{dname}/INSTALL %{dname}/LICENSE %{dname}/NEWS %{dname}/README %{dname}/README.node %{dname}/TODO
+%doc AUTHORS ChangeLog INSTALL NEWS README TODO LICENSE COPYING
 %{_sysconfdir}/profile.d/*
 %{_bindir}/*
 %{_libexecdir}/warewulf/wwinit/*
 %{perl_vendorlib}/Warewulf/Module/Cli/*
 
-# 06/14/14 karl.w.schulz@intel.com - disable warewulf-cluster-node package
-%if %{disable_node_package}
 
-%files -n %{pname}-node%{PROJ_DELIM}
-%defattr(-, root, root)
-%config(noreplace) %{_sysconfdir}/sysconfig/wwfirstboot.conf
-%if 0%{?suse_version}
-%dir %{_libexecdir}/warewulf/wwfirstboot
-%{_sysconfdir}/init.d/wwfirstboot
-%else
-%{_sysconfdir}/rc.d/init.d/wwfirstboot
-%endif
-%defattr(0755, root, root)
-%{_libexecdir}/warewulf/wwfirstboot/*
-
-
-%post -n %{pname}-node%{PROJ_DELIM}
-%if 0%{?suse_version}
-%{fillup_and_insserv -f}
-%else
-if [ $1 = 1 ]; then
-   [ -x /sbin/chkconfig ] && /sbin/chkconfig --add wwfirstboot
-fi
-%endif
-
-%endif
-
-
-%changelog

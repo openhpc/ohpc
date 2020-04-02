@@ -1,5 +1,5 @@
---- numpy-1.13.1/numpy/distutils/fcompiler/intel.py	2017-07-01 08:18:08.000000000 -0700
-+++ numpy-1.13.1.patch/numpy/distutils/fcompiler/intel.py	2017-07-28 09:56:28.000000000 -0700
+--- a/numpy/distutils/fcompiler/intel.py	2017-09-24 17:47:22.000000000 -0700
++++ b/numpy/distutils/fcompiler/intel.py	2017-12-08 14:36:37.000000000 -0800
 @@ -2,6 +2,7 @@
  from __future__ import division, absolute_import, print_function
  
@@ -9,7 +9,7 @@
  from numpy.distutils.ccompiler import simple_version_match
  from numpy.distutils.fcompiler import FCompiler, dummy_fortran_file
 @@ -61,7 +62,7 @@
-         return ['-xhost -fp-model strict -O1 -{}'.format(mpopt)]
+         return ['-fp-model strict -O1 -{}'.format(mpopt)]
  
      def get_flags_arch(self):
 -        return []

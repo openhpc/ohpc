@@ -4,12 +4,14 @@ use warnings;
 use strict;
 use Getopt::Long;
 use Cwd;
+use Sort::Versions;
 
 sub usage {
     print "\n";
     print "Usage: component_list.pl [OPTIONS]\n\n";
     print "  where available OPTIONS are as follows:\n\n";
     print "     -h --help                      generate help message and exit\n";
+    print "        --version  [version]        desired version to analyze\n";
     print "        --category [name]           update provided category table only\n";
     print "\n";
     
@@ -33,12 +35,15 @@ my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 			    'serial-libs' => 'Serial / Threaded Libraries');
 			
 			 
-my @compiler_familes = ("gnu","gnu7","intel");
+my @compiler_familes = ("gnu","gnu7","intel","gnu8");
 my @mpi_families     = ("mvapich2","openmpi","openmpi3","impi","mpich");
 
 my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","openmpi-psm2","scotch",
-                    "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs");
+                    "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs",
+                     "python34-build-patch","python34-scipy","python34-numpy","python34-mpi4py");
+
 my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
+		     "gnu8-compilers" => "Gnu Compiler Suite",
 		     "intel-compilers-devel" => "Intel Compiler Compatibility Package",
 		     "llvm4-compilers" => "LLVM Compiler Suite",
 		     "llvm5-compilers" => "LLVM Compiler Suite",
@@ -47,20 +52,35 @@ my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
 		     "openmpi3" => "openmpi",
 		     "openmpi3-pmix-slurm" => "openmpi",
                      "warewulf-common" => "warewulf",
+                     "wxparaver" => "paraver",
                      "ptscotch" => "scotch");
 my @package_uniq_delim = ("slurm");
 
 my $help;
 my $category_single;
+my $version;
 my $i;
 
 GetOptions("h"          => \$help,
+	   "version=s"  => \$version,
            "category=s" => \$category_single ) || usage();
 
 if($help) {usage()};
 if($category_single) {
     print "--> updating table contents for $category_single only\n";
     @ohpcCategories = $category_single;
+}
+
+if($version) {
+    print "--> using version=$version for analysis\n";
+} else {
+    die("Please specify desired version to analyzie with --version");
+}
+
+# version-specific packages to skip (ie. when new variants introduced)
+
+if( versioncmp($version,"1.3.1") >= 0 ) {
+    push(@package_skip,"gnu-compilers")
 }
 
 my $REMOVE_HTTP=0;
@@ -75,7 +95,9 @@ print $header;
 foreach my $category (@ohpcCategories) {
     print "\n### $ohpcCategoryHeadings{$category}:\n";
 
+
     my $filein="pkg-ohpc.$category";
+    next unless (-s $filein);
     open(IN,"<$filein")  || die "Cannot open file -> $filein\n";
 
     
@@ -89,7 +111,7 @@ foreach my $category (@ohpcCategories) {
     OUTER: while(<IN>) {
 
 	# example format
-	# pdsh-ohpc 2.31 http://sourceforge.net/projects/pdsh ohpc/admin Parallel remote shell program
+	# pdsh-ohpc 2.31 https://github.com/chaos/pdsh ohpc/admin Parallel remote shell program
 	if($_ =~ /^(\S+) (\S+) (\S+) (ohpc\/\S+) (.+)$/) {
 	    my $name=$1;
 	    my $version=$2;

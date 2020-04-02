@@ -15,21 +15,18 @@
 
 # Base package name
 %define pname scalasca
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Toolset for performance analysis of large-scale parallel applications
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   2.3.1
+Version:   2.5
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.scalasca.org
-Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/2.3/dist/scalasca-%{version}.tar.gz
-Source1:   OHPC_macros
+Source0:   http://apps.fz-juelich.de/scalasca/releases/scalasca/%{version}/dist/scalasca-%{version}.tar.gz
 Requires:  lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires: scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM} >= 4.0
 BuildRequires: zlib-devel
 
 # Default library install path
@@ -39,8 +36,8 @@ BuildRequires: zlib-devel
 Scalasca is a software tool that supports the performance
 optimization of parallel programs by measuring and analyzing their
 runtime behavior. The analysis identifies potential performance
-bottlenecks – in particular those concerning communication and
-synchronization – and offers guidance in exploring their causes.
+bottlenecks - in particular those concerning communication and
+synchronization - and offers guidance in exploring their causes.
 
 Scalasca targets mainly scientific and engineering applications
 based on the programming interfaces MPI and OpenMP, including
@@ -82,7 +79,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
-%if %{mpi_family} == openmpi3
+%if %{mpi_family} == openmpi4
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
@@ -143,17 +140,5 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc ChangeLog COPYING INSTALL OPEN_ISSUES README
-
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.3.1-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.3.1-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 2.3.1-1
-- Switching to %%ohpc_compiler macro

@@ -1,0 +1,3 @@
+addFilter('devel-file-in-non-devel-package')
+addFilter('no-return-in-nonvoid-function')
+addFilter('file-contains-buildroot')

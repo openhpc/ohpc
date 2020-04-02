@@ -1,0 +1,6 @@
+gnu-compilers-ohpc 5.4.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
+gnu7-compilers-ohpc 7.3.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
+gnu8-compilers-ohpc 8.3.0 http://gcc.gnu.org/ ohpc/compiler-families The GNU C Compiler and Support Files
+intel-compilers-devel-ohpc 2019 https://github.com/openhpc/ohpc ohpc/compiler-families OpenHPC compatibility package for Intel(R) Parallel Studio XE
+llvm4-compilers-ohpc 4.0.1 http://www.llvm.org ohpc/compiler-families The LLVM Compiler Infrastructure
+llvm5-compilers-ohpc 5.0.1 http://www.llvm.org ohpc/compiler-families The LLVM Compiler Infrastructure

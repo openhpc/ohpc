@@ -14,14 +14,18 @@
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
 
 # Base package name/config
-%define pname openmpi3
+%define pname openmpi4
 %define with_openib 1
 
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 %define with_psm 0
 %define with_psm2 0
 %else
+%if 0%{?rhel}
+%define with_psm 0
+%else
 %define with_psm 1
+%endif
 %define with_psm2 1
 %endif
 
@@ -30,19 +34,18 @@
 %{!?with_tm: %global with_tm 1}
 %{!?with_pmix: %define with_pmix 0}
 
-Summary:   A powerful implementation of MPI
+Summary:   A powerful implementation of MPI/SHMEM
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   3.0.0
+Version:   4.0.2
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
 URL:       http://www.open-mpi.org
-Source0:   http://www.open-mpi.org/software/ompi/v3.0/downloads/openmpi-%{version}.tar.bz2
-Source1:   OHPC_macros
+Source0:   http://www.open-mpi.org/software/ompi/v4.0/downloads/openmpi-%{version}.tar.bz2
 Source3:   pbs-config
-Patch0:    openmpi-3.0-pbs-config.patch
+Patch0:    openmpi-4.0-pbs-config.patch
 
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
@@ -61,7 +64,7 @@ BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires:  libevent-devel
 %endif
 BuildRequires:  hwloc-devel
-%if 0%{?centos_version} == 700
+%if 0%{?rhel}
 BuildRequires: libtool-ltdl
 %endif
 %if 0%{with_slurm}
@@ -93,7 +96,12 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 BuildRequires:  pbspro-server%{PROJ_DELIM}
 BuildRequires:  openssl-devel
 %endif
+
+%if "0%{?__requires_exclude}" == "0"
 %global __requires_exclude ^libpbs.so.*$
+%else
+%global __requires_exclude %{__requires_exclude}|^libpbs.so.*$
+%endif
 
 %if %{with_psm2}
 BuildRequires:  libpsm2-devel >= 10.2.0
@@ -106,13 +114,16 @@ Requires: prun%{PROJ_DELIM} >= 1.2
 %define install_path %{OHPC_MPI_STACKS}/%{pname}-%{compiler_family}/%version
 
 %description
+Open MPI is an open source implementation of the Message Passing
+Interface specification (http://www.mpi-forum.org/) developed and
+maintained by a consortium of research, academic, and industry
+partners.
 
-Open MPI is a project combining technologies and resources from several
-other projects (FT-MPI, LA-MPI, LAM/MPI, and PACX-MPI) in order to
-build the best MPI library available.
-
-This RPM contains all the tools necessary to compile, link, and run
-Open MPI jobs.
+Open MPI also includes an implementation of the OpenSHMEM parallel
+programming API (http://www.openshmem.org/).  OpenSHMEM is a
+Partitioned Global Address Space (PGAS) abstraction layer, which
+provides fast inter-process communication using one-sided
+communication techniques.
 
 %prep
 
@@ -152,12 +163,17 @@ BASEFLAGS="$BASEFLAGS --with-libevent=external --with-hwloc=external"
 export BASEFLAGS
 
 %if %{with_tm}
-cp %{SOURCE3} .
+%{__cp} %{SOURCE3} .
 %{__chmod} 700 pbs-config
 export PATH="./:$PATH"
 %endif
 
 ./configure ${BASEFLAGS} || { cat config.log && exit 1; }
+
+%if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
+%{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
+%{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
+%endif
 
 make %{?_smp_mflags}
 
@@ -165,10 +181,9 @@ make %{?_smp_mflags}
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
-# Remove .la files detected by rpm
 
-rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
-
+# Remove any .la files that might exist
+%{__rm} -f $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
@@ -221,22 +236,3 @@ EOF
 %doc LICENSE
 %doc AUTHORS
 %doc README.JAVA.txt
-
-%changelog
-* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 3.0.0-1
-- update to 3.0.0
-- use the OpenHPC pmix package
-- use the same libevent as pmix (external)
-- small cleanups
-
-* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 1.10.7-1
-- default to building with PSM and PSM2 at the same time
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.10.4-1
-- switch to ohpc_compiler_dependent flag
-
-* Fri Feb 17 2017 Adrian Reber <areber@redhat.com> - 1.10.6-1
-- Switching to %%ohpc_compiler macro
-
-* Tue Aug  5 2014  <karl.w.schulz@intel.com>
-- Initial build.

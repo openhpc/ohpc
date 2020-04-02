@@ -4,7 +4,9 @@ This installation recipe assumes the availability of a single head node {\em
  master}, and four {\em compute} nodes. The {\em master} node serves as the
 overall system management server (SMS) and is provisioned with \baseOS{} and is
 subsequently configured to provision the remaining {\em compute} nodes with
-\provisioner{} in a stateless configuration. The terms {\em master} and SMS are
+\provisioner{} in a 
+\iftoggleverb{isxCATstateful} stateful \else stateless \fi 
+configuration. The terms {\em master} and SMS are
 used interchangeably in this guide. For power management, we assume that
 the compute node baseboard management controllers (BMCs) are available via IPMI
 from the chosen master host. For file systems, we assume that the chosen master

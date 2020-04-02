@@ -1,0 +1,6 @@
+test-driver
+tests/*.o
+tests/*.log
+tests/*.trs
+tests/tutorial_0
+

@@ -8,196 +8,204 @@
 #
 #----------------------------------------------------------------------------eh-
 
-%define compiler_family gnu7
 %include %{_sourcedir}/OHPC_macros
 
-# Remember to drop this gnu-compilers dependency in the future,
-# when gcc-5.3+ appear in all the targeted Linux distros.
-%global gnuver 7.2.0
+%ifarch aarch64 
+%global triple aarch64-pc-linux-gnu
+%global build_target AArch64
+%else
+%global triple x86_64-pc-linux-gnu
+%global build_target X86
+%endif
 
-%global clang_sha b11539abc46cbd19189c5719d1e30539de3a93b9
-%global flang_sha 37e86e06f74d9bd91ef6bb511c026753b9124006
+%global major_ver 9
+%global pname llvm%{major_ver}-compilers
 
-%global pname llvm5-compilers
-%global major_ver 5
-
-Summary:   The LLVM Compiler Infrastructure
+Summary:   LLVM (An Optimizing Compiler Infrastructure)
 Name:      %{pname}%{PROJ_DELIM}
-Version:   5.0.0
+Version:   9.0.0
 Release:   1%{?dist}
-License:   UIUC, Apache-2.0
+License:   Apache-2.0 with LLVM exception
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://www.llvm.org
 Source0:   http://releases.llvm.org/%{version}/llvm-%{version}.src.tar.xz
-Source1:   https://github.com/flang-compiler/clang/archive/%{clang_sha}.tar.gz
-Source2:   https://github.com/flang-compiler/flang/archive/%{flang_sha}.tar.gz
-Source3:   http://releases.llvm.org/%{version}/compiler-rt-%{version}.src.tar.xz
-Source4:   http://releases.llvm.org/%{version}/libcxx-%{version}.src.tar.xz
-Source5:   http://releases.llvm.org/%{version}/libcxxabi-%{version}.src.tar.xz
-Source6:   http://releases.llvm.org/%{version}/libunwind-%{version}.src.tar.xz
-Source7:   http://releases.llvm.org/%{version}/lld-%{version}.src.tar.xz
-Source8:   http://releases.llvm.org/%{version}/openmp-%{version}.src.tar.xz
-Source9:   OHPC_macros
-BuildRequires: gnu7-compilers%{PROJ_DELIM}
+Source1:   http://releases.llvm.org/%{version}/cfe-%{version}.src.tar.xz
+Source2:   http://releases.llvm.org/%{version}/compiler-rt-%{version}.src.tar.xz
+Source3:   http://releases.llvm.org/%{version}/libcxx-%{version}.src.tar.xz
+Source4:   http://releases.llvm.org/%{version}/libcxxabi-%{version}.src.tar.xz
+Source5:   http://releases.llvm.org/%{version}/libunwind-%{version}.src.tar.xz
+Source6:   http://releases.llvm.org/%{version}/lld-%{version}.src.tar.xz
+Source7:   http://releases.llvm.org/%{version}/openmp-%{version}.src.tar.xz
+Source8:   http://releases.llvm.org/%{version}/clang-tools-extra-%{version}.src.tar.xz
+
 BuildRequires: cmake%{PROJ_DELIM}
-BuildRequires: make
-BuildRequires: perl
+BuildRequires: gnu9-compilers%{PROJ_DELIM}
 BuildRequires: python
+BuildRequires: zlib-devel
 BuildRequires: pkgconfig
 BuildRequires: binutils-devel
-BuildRequires: libstdc++-devel
+BuildRequires: perl
+BuildRequires: perl(Data::Dumper)
+BuildRequires: zlib-devel
+BuildRequires: glibc >= 2.26
 Requires:      binutils
-Requires:      gcc-c++
-Requires:      gnu7-compilers%{PROJ_DELIM}
-%if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
-BuildRequires: perl-Data-Dumper
-%endif
+
 
 %define install_path %{OHPC_COMPILERS}/llvm/%{version}
-%define gnu_path %{OHPC_COMPILERS}/gcc/%{gnuver}
-%if 0%{?sles_version} || 0%{?suse_version}
-%define compiler_path `%{OHPC_COMPILERS}/gcc/%{gnuver}/bin/g++ -v --version 2>&1|grep COMPILER_PATH|cut -f 2- -d '='`
-%define library_path `%{OHPC_COMPILERS}/gcc/%{gnuver}/bin/g++ -v --version 2>&1|grep LIBRARY_PATH|cut -f 2- -d '='`
-%endif
 
 %description
-
-The LLVM Compiler Infrastructure.
+LLVM is a compiler infrastructure designed for compile-time, link-time, runtime,
+and idle-time optimization of programs from arbitrary programming languages.
+LLVM is written in C++ and has been developed since 2000 at the University of
+Illinois and Apple. It currently supports compilation of C and C++ programs, 
+using front-ends derived from GCC 4.0.1. The compiler infrastructure
+includes mirror sets of programming tools as well as libraries with equivalent
+functionality.
+This package includes: clang, clang-tools-extra, libcxx, libcxxabi, compiler-rt,
+                       openmp, libunwind, and lld
+  
 
 %prep
-%setup -q -c -b1 -b2 -b3 -b4 -b5 -b6 -b7 -b8
+%setup -q -c -a1 -a2 -a3 -a4 -a5 -a6 -a7 -a8 
 
-cd llvm-%{version}.src/tools
-ln -s ../../clang-%{clang_sha} clang
-cd ../..
+%{__ln_s} llvm-%{version}.src llvm
+%{__ln_s} cfe-%{version}.src clang
+%{__ln_s} lld-%{version}.src lld
+%{__mv} clang-tools-extra-%{version}.src clang/tools/extra
+%{__ln_s} clang/tools/extra clang-tools-extra
+%{__ln_s} compiler-rt-%{version}.src compiler-rt
+%{__ln_s} libcxx-%{version}.src libcxx
+%{__ln_s} libcxxabi-%{version}.src libcxxabi
+%{__ln_s} libunwind-%{version}.src libunwind
+%{__ln_s} openmp-%{version}.src openmp
 
-cd llvm-%{version}.src/tools
-ln -s ../../lld-%{version}.src lld
-cd ../..
-
-cd llvm-%{version}.src/projects
-ln -s ../../compiler-rt-%{version}.src compiler-rt
-cd ../..
-
-cd llvm-%{version}.src/projects
-ln -s ../../libcxx-%{version}.src libcxx
-cd ../..
-
-cd llvm-%{version}.src/projects
-ln -s ../../libcxxabi-%{version}.src libcxxabi
-cd ../..
-
-cd llvm-%{version}.src/projects
-ln -s ../../libunwind-%{version}.src libunwind
-cd ../..
-
-cd llvm-%{version}.src/projects
-ln -s ../../openmp-%{version}.src openmp
-cd ../..
-
-ln -s llvm-%{version}.src llvm
-ln -s flang-%{flang_sha} flang
-
-# Flang code is not ready for -Werror
-%{__sed} -i -e 's/-Werror/-Wall/g' flang/CMakeLists.txt
 
 %install
-%ohpc_setup_compiler
 module load cmake
+module load gnu9
 
-mkdir build-clang
-cd build-clang
-cmake \
---enable-optimise ../llvm \
--DBUILD_SHARED_LIBS=True \
--DCMAKE_BUILD_TYPE=Release \
--DLIBOMP_FORTRAN_MODULES=False \
--DLIBOMP_COPY_EXPORTS=False \
--DLIBOMP_USE_HWLOC=False \
--DLIBOMP_OMPT_SUPPORT=ON \
--DLLVM_BINUTILS_INCDIR=/usr/include \
--DLLVM_ENABLE_FFI=False \
--DCMAKE_INSTALL_PREFIX=%{install_path}
+GNU8=$(command -v g++ | sed s#/bin.*##)
 
-%{__make} %{?_smp_mflags} VERBOSE=1
-%{__make} DESTDIR=$RPM_BUILD_ROOT INSTALL="%{__install} -p" install
-cd ..
+MAIN=$(pwd)
+%{__mkdir} bootstrap
+BOOTSTRAP=$MAIN/bootstrap
+%{__mkdir} build
 
-%if 0%{?sles_version} || 0%{?suse_version}
-SUSE_CXXFLAGS="-I%{gnu_path}/include/c++/%{gnuver}"
-%ifarch aarch64
-SUSE_CXXFLAGS="$SUSE_CXXFLAGS -I%{gnu_path}/include/c++/%{gnuver}/aarch64-unknown-linux-gnu"
-%endif
-%ifarch x86_64
-SUSE_CXXFLAGS="$SUSE_CXXFLAGS -I%{gnu_path}/include/c++/%{gnuver}/x86_64-pc-linux-gnu"
-%endif
-%endif
+# STAGE 1
+# Bootstrap clang with gcc
+# Then (re)build all components in stage 2
+# This is done manually as the BOOTSTRAP cmake option wouldn't
+#    build libc++ in stage 1 when needed for stage 2 build [JCS 13NOV19]
+cd build
+cmake --enable-optimise -Wno-dev -G"Unix Makefiles" ../llvm \
+      -DCMAKE_INSTALL_PREFIX="/" \
+      -DCMAKE_C_COMPILER=gcc \
+      -DCMAKE_CXX_COMPILER=g++ \
+      -DCMAKE_C_FLAGS=-Wl,-rpath,${GNU8}/lib64 \
+      -DCMAKE_CXX_FLAGS=-Wl,-rpath,${GNU8}/lib64 \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DLLVM_DEFAULT_TARGET_TRIPLE=%{triple} \
+      -DLLVM_ENABLE_PROJECTS="clang;lld" \
+      -DLLVM_ENABLE_RUNTIMES="compiler-rt;libunwind;libcxxabi;libcxx" \
+      -DLLVM_BUILD_TOOLS=llvm-config \
+      -DLLVM_BINUTILS_INCDIR=/usr/include \
+      -DLLVM_TARGETS_TO_BUILD=%{build_target} \
+      -DCOMPILER_RT_BUILD_BUILTINS=On \
+      -DCOMPILER_RT_BUILD_SANITIZERS=Off \
+      -DCOMPILER_RT_BUILD_XRAY=Off \
+      -DCOMPILER_RT_BUILD_LIBFUZZER=Off \
+      -DCOMPILER_RT_BUILD_PROFILE=Off \
+      -DBUILD_SHARED_LIBS=On
 
-mkdir build-flang
-cd build-flang
-CC=$RPM_BUILD_ROOT/%{install_path}/bin/clang \
-CXX=$RPM_BUILD_ROOT/%{install_path}/bin/clang++ \
-CFLAGS="-fPIC -DPIC" \
-%if 0%{?sles_version} || 0%{?suse_version}
-CXXFLAGS="-fPIC -DPIC $SUSE_CXXFLAGS" \
-%else
-CXXFLAGS="-fPIC -DPIC" \
-%endif
-FFLAGS="-fPIC -DPIC" \
-FCFLAGS="-fPIC -DPIC" \
-%if 0%{?sles_version} || 0%{?suse_version}
-COMPILER_PATH=%{compiler_path} \
-LIBRARY_PATH=%{library_path} \
-%endif
-cmake \
-../flang \
--DCMAKE_SKIP_RPATH=YES \
--DBUILD_SHARED_LIBS=False \
--DCMAKE_BUILD_TYPE=Release \
--DC_INCLUDE_DIRS=$RPM_BUILD_ROOT/%{install_path}/include \
--DLLVM_BINARY_DIR=$RPM_BUILD_ROOT/%{install_path} \
--DLLVM_TOOLS_BINARY_DIR=$RPM_BUILD_ROOT/%{install_path}/bin \
--DLLVM_CONFIG=$RPM_BUILD_ROOT/%{install_path}/bin/llvm-config \
--DLLVM_LIBRARY_DIR=$RPM_BUILD_ROOT/%{install_path}/lib \
--DLLVM_MAIN_INCLUDE_DIR=$RPM_BUILD_ROOT/%{install_path}/include \
--DCMAKE_Fortran_COMPILER=$RPM_BUILD_ROOT/%{install_path}/bin/flang \
--DFLANG_LIBOMP=$RPM_BUILD_ROOT/%{install_path}/lib/libomp.so \
--DCMAKE_INSTALL_PREFIX=%{install_path}
+# Occasional failure when using make all. Appears to be race condition [JCS 13NOV19]
+# Compliation takes a long time if the -j option is removed [JCS 13NOV19]
+%{__make} %{?_smp_mflags} VERBOSE=1 clang
+%{__make} %{?_smp_mflags} VERBOSE=1 lld
+%{__make} %{?_smp_mflags} VERBOSE=1 cxxabi
+%{__make} %{?_smp_mflags} VERBOSE=1 cxx
+%{__make} %{?_smp_mflags} VERBOSE=1 
+%{__make} DESTDIR=$MAIN/bootstrap INSTALL="%{__install} -p" install
+cd $MAIN
+# End Stage 1
 
-%if 0%{?sles_version} || 0%{?suse_version}
-COMPILER_PATH=%{compiler_path} \
-LIBRARY_PATH=%{library_path} \
-%endif
+module unload gnu9
+
+# STAGE 2
+# Rebuild all components with clang
+# Swtich to LLVM libc++, compiler-rt, and libunwind
+# The gnu8 stack isn't needed after rebuild
+
+# Rebuild llvm+clang
+%{__mkdir_p} llvm/build/lib
+%{__cp} $BOOTSTRAP/lib/%{triple}/c++/* $MAIN/llvm/build/lib
+cd llvm/build
+cmake --enable-optimise -Wno-dev -G"Unix Makefiles" .. \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX="%{install_path}" \
+      -DCMAKE_C_COMPILER=$BOOTSTRAP/bin/clang \
+      -DCMAKE_CXX_COMPILER=$BOOTSTRAP/bin/clang++ \
+      -DCMAKE_ASM_COMPILER=$BOOTSTRAP/bin/clang \
+      -DCMAKE_AR=$BOOTSTRAP/bin/llvm-ar \
+      -DCMAKE_RANLIB=$BOOTSTRAP/bin/llvm-ranlib \
+      -DCMAKE_C_FLAGS="-I$BOOTSTRAP/include/c++/v1" \
+      -DCMAKE_CXX_FLAGS="-I$BOOTSTRAP/include/c++/v1" \
+      -DCMAKE_EXE_LINKER_FLAGS="-rtlib=compiler-rt -L$MAIN/llvm/build/lib -lunwind" \
+      -DCMAKE_SHARED_LINKER_FLAGS="-rtlib=compiler-rt -L$MAIN/llvm/build/lib -lunwind" \
+      -DLLVM_ENABLE_LIBCXX=On \
+      -DLLVM_ENABLE_LIBCXXABI=On \
+      -DLLVM_DEFAULT_TARGET_TRIPLE=%{triple} \
+      -DLLVM_BINUTILS_INCDIR=/usr/include \
+      -DLLVM_ENABLE_LLD=On \
+      -DLLVM_ENABLE_FPIC=On \
+      -DLLVM_CONFIG_PATH=$BOOTSTRAP/bin/llvm-config \
+      -DLLVM_ENABLE_PROJECTS="clang;lld;clang-tools-extra;openmp" \
+      -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxxabi;libcxx;libunwind" \
+      -DLLVM_ENABLE_LTO=Thin \
+      -DLLVM_TARGETS_TO_BUILD=%{build_target} \
+      -DLLVM_LINK_LLVM_DYLIB=On \
+      -DLLVM_DYLIB_COMPONENTS=all \
+      -DLLVM_INSTALL_TOOLCHAIN_ONLY=On \
+      -DCLANG_DEFAULT_LINKER=lld \
+      -DCLANG_DEFAULT_RTLIB=compiler-rt \
+      -DCLANG_DEFAULT_UNWINDLIB=libunwind \
+      -DCLANG_DEFAULT_CXX_STDLIB=libc++ \
+      -DLIBOMP_FORTRAN_MODULES=Off \
+      -DLIBOMP_COPY_EXPORTS=Off \
+      -DLIBOMP_USE_HWLOC=Off \
+      -DLIBOMP_OMPT_SUPPORT=On \
+      -DLIBOMP_ENABLE_SHARED=On \
+      -DLIBOMP_CFLAGS="-fuse-ld=lld -stdlib=libc++" \
+      -DLIBOMP_CPPFLAGS="-fuse-ld=lld -stdlib=libc++" \
+      -DLIBOMP_CXXFLAGS="-fuse-ld=lld -stdlib=libc++" \
+      -DLIBOMP_LDFLAGS="-rtlib=compiler-rt" \
+      -DLIBOMP_LLVM_TOOLS_DIR="$BOOTSTRAP/bin" \
+      -DLIBOMP_LIBFLAGS="-lm" \
+      -DLIBUNWIND_USE_COMPILER_RT=On \
+      -DCOMPILER_RT_USE_LIBCXX=On \
+      -DCOMPILER_RT_BUILD_BUILTINS=On \
+      -DCOMPILER_RT_USE_BUILTINS_LIBRARY=On \
+      -DLIBCXXABI_USE_LLVM_UNWINDER=On \
+      -DLIBCXXABI_USE_COMPILER_RT=On \
+      -DLIBCXX_CXX_ABI_INCLUDE_PATHS=$MAIN/libcxxabi/include \
+      -DLIBCXX_CXX_ABI_LIBRARY_PATH=$MAIN/llvm/build/lib/%{triple}/c++ \
+      -DLIBCXX_CXX_ABI=libcxxabi \
+      -DLIBCXX_USE_COMPILER_RT=On \
+      -DLIBCXX_ENABLE_SHARED=On \
+      -DLIBCXX_ENABLE_STATIC=Off 
+
+%{__make} %{?_smp_mflags} VERBOSE=1 clang
+%{__make} %{?_smp_mflags} VERBOSE=1 lld
+%{__make} %{?_smp_mflags} VERBOSE=1 compiler-rt
+%{__make} %{?_smp_mflags} VERBOSE=1 unwind
+%{__make} %{?_smp_mflags} VERBOSE=1 cxxabi
+%{__make} %{?_smp_mflags} VERBOSE=1 cxx
+%{__make} %{?_smp_mflags} VERBOSE=1 omp
+# Race condition persists with remaining components; remove -j option
 %{__make} VERBOSE=1
-%{__make} VERBOSE=1 DESTDIR=$RPM_BUILD_ROOT INSTALL="%{__install} -p" install
-cd ..
-
-# Additional step: build OpenMP runtime with compatible Fortran module
-mkdir build-openmp
-cd build-openmp
-FC=$RPM_BUILD_ROOT/%{install_path}/bin/flang \
-F77=$RPM_BUILD_ROOT/%{install_path}/bin/flang \
-F90=$RPM_BUILD_ROOT/%{install_path}/bin/flang \
-F95=$RPM_BUILD_ROOT/%{install_path}/bin/flang \
-F03=$RPM_BUILD_ROOT/%{install_path}/bin/flang \
-LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{install_path}/lib:$LD_LIBRARY_PATH \
-%if 0%{?sles_version} || 0%{?suse_version}
-COMPILER_PATH=%{compiler_path} \
-LIBRARY_PATH=%{library_path} \
-%endif
-cmake \
-../llvm/projects/openmp \
--DBUILD_SHARED_LIBS=True \
--DCMAKE_BUILD_TYPE=Release \
--DLIBOMP_FORTRAN_MODULES=True \
--DLIBOMP_COPY_EXPORTS=False \
--DLIBOMP_USE_HWLOC=False \
--DLIBOMP_OMPT_SUPPORT=ON \
--DCMAKE_INSTALL_PREFIX=%{install_path}
-
-%{__make} VERBOSE=1
-%{__make} DESTDIR=$RPM_BUILD_ROOT INSTALL="%{__install} -p" install
-cd ..
+%{__make} DESTDIR=%{buildroot} INSTALL="%{__install} -p" install
+%{__rm} %{buildroot}/%{install_path}/lib/%{triple}/c++/*.a
+cd $MAIN
+# End stage 2
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULES}/llvm%{major_ver}
@@ -219,23 +227,14 @@ module-whatis "Category: compiler, runtime support"
 module-whatis "Description: LLVM Compiler Infrastructure"
 module-whatis "URL: http://www.llvm.org"
 
-set     version                            %{version}
+set     version           %{version}
 
-prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
-prepend-path    LD_LIBRARY_PATH     %{gnu_path}/lib64:%{install_path}/lib
-prepend-path    CMAKE_MODULE_PATH   %{install_path}/lib/cmake/clang:%{install_path}/lib/cmake/llvm
-prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/llvm
-%if 0%{?sles_version} || 0%{?suse_version}
-prepend-path    COMPILER_PATH       %{compiler_path}
-prepend-path    LIBRARY_PATH        %{library_path}
-%ifarch aarch64
-prepend-path    CPLUS_INCLUDE_PATH  %{gnu_path}/include/c++/%{gnuver}:%{gnu_path}/include/c++/%{gnuver}/aarch64-unknown-linux-gnu
-%endif
-%ifarch x86_64
-prepend-path    CPLUS_INCLUDE_PATH  %{gnu_path}/include/c++/%{gnuver}:%{gnu_path}/include/c++/%{gnuver}/x86_64-pc-linux-gnu
-%endif
-%endif
+setenv         LLVM%{major_ver}_PATH         %{install_path}
+prepend-path   PATH               %{install_path}/bin
+prepend-path   MANPATH            %{install_path}/share/man
+prepend-path   LD_LIBRARY_PATH    %{install_path}/lib:%{install_path}/lib/%{triple}/c++
+prepend-path   MODULEPATH         %{OHPC_MODULEDEPS}/llvm
+
 
 family "compiler"
 EOF
@@ -249,18 +248,11 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_MODULES}/llvm%{major_ver}
 %dir %{OHPC_COMPILERS}/llvm
 %{install_path}
 %doc llvm/CODE_OWNERS.TXT
 %doc llvm/CREDITS.TXT
 %doc llvm/LICENSE.TXT
-%doc flang/LICENSE.txt
 %doc llvm/README.txt
-%doc flang/README.md
 %doc llvm/RELEASE_TESTERS.TXT
-
-%changelog
-* Thu May 25 2017 Paul Osmialowski <pawel.osmialowski@foss.arm.com> - 4.0.0-1
-- add Fortran language frontend and runtime libraries (Flang)

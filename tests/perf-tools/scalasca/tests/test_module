@@ -19,7 +19,7 @@ setup() {
     module load $module
 }
 
-@test "[$testname] Verify $module module is loaded and matches rpm version" {
+@test "[$testname] Verify $module module is loaded and matches rpm version ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     module list $module | grep "1) $module" >& .cmd_output || exit 1
     run grep $module .cmd_output 
     assert_success
@@ -30,7 +30,7 @@ setup() {
     assert_output "  1) $module/$version"
 }
 
-@test "[$testname] Verify module ${PKG}_DIR is defined and exists" {
+@test "[$testname] Verify module ${PKG}_DIR is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     DIR=${PKG}_DIR
     if [ -z ${!DIR} ];then
         flunk "${PKG}_DIR directory not defined"
@@ -45,7 +45,7 @@ setup() {
 # Binaries
 # ----------
 
-@test "[$testname] Verify module ${PKG}_BIN is defined and exists" {
+@test "[$testname] Verify module ${PKG}_BIN is defined and exists ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     BIN=${PKG}_BIN
     if [ -z ${!BIN} ];then
         flunk "${PKG}_BIN directory not defined"
@@ -56,12 +56,12 @@ setup() {
     fi 
 }
 
-@test "[$testname] Verify availability of scalasca binary" {
+@test "[$testname] Verify availability of scalasca binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     run which scalasca
     assert_success
 }
 
-@test "[$testname] Verify availability of scout.mpi binary" {
+@test "[$testname] Verify availability of scout.mpi binary ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     run which scout.mpi
     assert_success
 }
@@ -70,7 +70,7 @@ setup() {
 # Documentation
 # ----------
 
-@test "[$testname] Verify availability of user guide for scalasca" {
+@test "[$testname] Verify availability of user guide for scalasca ($LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
 
     run ls ${SCALASCA_DIR}/share/doc/scalasca/manual/UserGuide.pdf
     assert_success

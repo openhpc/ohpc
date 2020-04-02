@@ -1,0 +1,25 @@
+# Charliecloud uses pivot_root(2), not chroot(2), for containerization. The
+# calls to chroot(2) are part of the pivot_root(2) dance and not relevant to
+# Charliecloud's security posture.
+addFilter(r'missing-call-to-chdir-with-chroot')
+
+# charliecloud-debuginfo
+
+# The only files under /usr/lib are those placed there by rpmbuild.
+addFilter(r'only-non-binary-in-usr-lib')
+
+# charliecloud-test
+
+# Charliecloud is a container runtime. The libsotest objects are test suite
+# resources that are injected into a container (guest), these objects are not
+# used on the host.
+addFilter(r'no-ldconfig-symlink')
+addFilter(r'library-without-ldconfig-postin')
+addFilter(r'library-without-ldconfig-postun')
+
+# The example/*.c and test/*.c files are example files that illustrate various
+# details of the charliecloud runtime.
+addFilter(r'devel-file-in-non-devel-package')
+
+# The symlink to /usr/bin is created and does exist.
+addFilter(r'dangling-relative-symlink')

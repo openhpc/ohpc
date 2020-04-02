@@ -7,22 +7,6 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-#
-# spec file for package python
-#
-# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
 
 # Python build that is dependent on compiler toolchain
 %define ohpc_compiler_dependent 1
@@ -30,14 +14,13 @@
 
 # Base package name
 %define pname python
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}%{PROJ_DELIM}
 Version:        2.7.12
 Release:        70.1%{?dist}
 Summary:        Python Interpreter
 License:        Python-2.0
-Group:          Development/Languages/Python
+Group:          %{PROJ_NAME}/distro-packages
 Url:            http://www.python.org/
 %define         tarversion %{version}
 %define         tarname Python-%{tarversion}
@@ -47,7 +30,6 @@ Source6:        python.keyring
 Source1:        macros.python
 Source2:        baselibs.conf
 Source5:        local.pth
-Source7:        OHPC_macros
 # COMMON-PATCH-BEGIN
 Patch1:         python-2.7-dirs.patch
 Patch2:         python-distutils-rpm-8.patch
@@ -314,15 +296,7 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-, root, root, -)
 %{OHPC_HOME}
 
 %{OHPC_PUB}
 %doc LICENSE README
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.7.12-70.1
-- switch to ohpc_compiler_dependent flag
-
-* Tue Feb 21 2017 Adrian Reber <areber@redhat.com> - 2.7.12-70.1
-- Switching to %%ohpc_compiler macro

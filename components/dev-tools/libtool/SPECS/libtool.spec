@@ -19,15 +19,11 @@ Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
 URL:       http://www.gnu.org/software/libtool/
-DocDir:    %{OHPC_PUB}/doc/contrib
 Source0:   https://ftp.gnu.org/gnu/libtool/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 %global __provides_exclude ^libltdl\\.so.*$
 
-%define debug_package %{nil}
 %define install_path %{OHPC_UTILS}/autotools
 
 Requires:      autoconf%{PROJ_DELIM} >= 2.69
@@ -89,11 +85,8 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS
 %doc ChangeLog
@@ -102,10 +95,3 @@ rm -rf $RPM_BUILD_ROOT
 %doc README
 %doc THANKS
 %doc TODO
-
-
-
-%changelog
-* Mon Sep 15 2014  <karl.w.schulz@intel.com> - 
-- Initial build.
-

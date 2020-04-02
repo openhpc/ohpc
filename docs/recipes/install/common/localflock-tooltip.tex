@@ -1,0 +1,14 @@
+\begin{center}
+\begin{tcolorbox}[]
+\small
+
+The suggested mount options shown for Lustre leverage the
+\texttt{localflock} option. This is a
+\href{http://wiki.lustre.org/Mounting_a_Lustre_File_System_on_Client_Nodes}{\color{blue}{Lustre-specific}}
+setting that enables client-local flock support. It is much faster
+than cluster-wide flock, but if you have an application requiring
+cluster-wide, coherent file locks, use the standard \texttt{flock}
+attribute instead.
+
+\end{tcolorbox}
+\end{center}

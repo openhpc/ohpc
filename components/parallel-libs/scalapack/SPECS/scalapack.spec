@@ -8,48 +8,29 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package scalapack
-#
-# Copyright (c) 2014 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
 # Build that is is dependent on compiler toolchain and MPI
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # Base package name
 %define pname scalapack
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        A subset of LAPACK routines redesigned for heterogenous computing
 License:        netlib ScaLAPACK License
-Group:          Development/Libraries/Parallel
-Version:        2.0.2
+Group:          %{PROJ_NAME}/parallel-libs
+Version:        2.1.0
 Release:        1%{?dist}
 # This is freely distributable without any restrictions.
 Url:            http://www.netlib.org/lapack-dev/
 Source0:        http://www.netlib.org/scalapack/scalapack-%{version}.tgz
 Source1:        baselibs.conf
-Source2:        OHPC_macros
 Patch0:         scalapack-2.0.2-shared-lib.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 
@@ -90,7 +71,13 @@ cp SLmake.inc.example SLmake.inc
 %build
 %ohpc_setup_compiler
 %if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" == "arm"
+%{__sed} -i -e 's#-lblas#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
+%{__sed} -i -e 's#-llapack#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
+%{__cat} SLmake.inc
+%else
 module load openblas
+%endif
 %endif
 
 make lib
@@ -130,9 +117,9 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-if { ![is-loaded intel]  } {
-    depends-on openblas
-}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+depends-on openblas
+%endif
 
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
@@ -150,16 +137,5 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc README LICENSE
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 2.0.2-13.2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.0.2-13.1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 2.0.2-13.1
-- Switching to %%ohpc_compiler macro

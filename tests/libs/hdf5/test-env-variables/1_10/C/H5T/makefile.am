@@ -43,5 +43,4 @@ testfiles/h5ex_t_regref.ddl testfiles/h5ex_t_regrefatt.ddl testfiles/h5ex_t_comm
 testfiles/h5ex_t_convert.ddl test.sh
 
 
-TESTS_ENVIRONMENT = sh
-TESTS = test.sh
+TESTS = tests

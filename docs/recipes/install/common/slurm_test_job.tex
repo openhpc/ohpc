@@ -41,18 +41,7 @@ via the following:
 \end{tcolorbox}
 \end{center}
 
-%We must first update the database with the change we just made to passwd and 
-%shadow files, and since we are impatient we will trigger the compute node pull.
-
-\OHPC{} includes a simple ``hello-world'' MPI application in the
-\path{/opt/ohpc/pub/examples} directory that can be used for this quick
-compilation and execution. \OHPC{} also provides a companion job-launch script
-named \texttt{prun} that is installed in concert with the pre-packaged MPI
-toolchains. At present, \OHPC{} is unable to include the PMI process management
-server normally included within \SLURM{} which implies that \texttt{srun} cannot
-be use for MPI job launch. Instead, native job launch mechanisms provided by
-the MPI stacks are utilized and \texttt{prun} abstracts this process for the
-various stacks to retain a single launch command.
+\input{common/prun}
 
 %\iftoggle{isSLES_ww_slurm_x86}{\clearpage}
 %\iftoggle{isCentOS_ww_slurm_x86}{\clearpage}

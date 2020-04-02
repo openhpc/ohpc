@@ -8,10 +8,10 @@ if [ -s ./common/TEST_ENV ];then
     source ./common/TEST_ENV
 fi
 
-module load numpy
-module load scipy
+module load $python_module_prefix-numpy
+module load $python_module_prefix-scipy
 
-@test "[dev-tools/scipy] Coupled Spring-Mass System ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
-    run python springs.py
+@test "[dev-tools/$python_module_prefix-scipy] Coupled Spring-Mass System ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    run $_python springs.py
     [[ "${lines[249]}" =~ "10.0" ]]
 }

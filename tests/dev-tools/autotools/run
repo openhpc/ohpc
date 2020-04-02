@@ -38,9 +38,9 @@ echo "-------------------------------------------------------"
 echo "Dev Tools: Autotools tests"
 echo "-------------------------------------------------------"
 
-module purge          || exit 1
-module load autotools || exit 1
-module load gnu7       || exit 1
+module purge               || exit 1
+module load autotools      || exit 1
+module load ${GCC_DEFAULT} || exit 1
 
 ./resolve_paths  $BATS_OPTS
 ./version_check  $BATS_OPTS

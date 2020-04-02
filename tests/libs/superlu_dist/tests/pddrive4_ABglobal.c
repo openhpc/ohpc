@@ -1,12 +1,23 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 
 
 /*! @file 
  * \brief This example illustrates how to divide up the processes into subgroups
  *
  * <pre>
- * -- Distributed SuperLU routine (version 1.0) --
+ * -- Distributed SuperLU routine (version 4.1) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * September 1, 1999
+ * April 5, 2015
  * </pre>
  */
 
@@ -38,7 +49,7 @@
 
 int main(int argc, char *argv[])
 {
-    superlu_options_t options;
+    superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
     ScalePermstruct_t ScalePermstruct;
@@ -56,6 +67,10 @@ int main(int argc, char *argv[])
     char     **cpp, c;
     FILE *fp, *fopen();
 
+    /* prototypes */
+    extern void LUstructInit(const int_t, LUstruct_t *);
+    extern void LUstructFree(LUstruct_t *);
+    extern void Destroy_LU(int_t, gridinfo_t *, LUstruct_t *);
 
     /* ------------------------------------------------------------
        INITIALIZE MPI ENVIRONMENT. 
@@ -134,7 +149,7 @@ int main(int argc, char *argv[])
 	    dreadhb_dist(iam, fp, &m, &n, &nnz, &a, &asub, &xa);
 	
 	    printf("\tDimension\t%dx%d\t # nonzeros %d\n", m, n, nnz);
-	    printf("\tProcess grid\t%d X %d\n", grid1.nprow, grid1.npcol);
+	    printf("\tProcess grid\t%d X %d\n", (int) grid1.nprow, (int) grid1.npcol);
 
 	    /* Broadcast matrix A to the other PEs. */
 	    MPI_Bcast( &m,   1,   mpi_int_t,  0, grid1.comm );
@@ -240,7 +255,7 @@ int main(int argc, char *argv[])
 	    dreadhb_dist(iam, fp, &m, &n, &nnz, &a, &asub, &xa);
 	
 	    printf("\tDimension\t%dx%d\t # nonzeros %d\n", m, n, nnz);
-	    printf("\tProcess grid\t%d X %d\n", grid2.nprow, grid2.npcol);
+	    printf("\tProcess grid\t%d X %d\n", (int) grid2.nprow, (int) grid2.npcol);
 
 	    /* Broadcast matrix A to the other PEs. */
 	    MPI_Bcast( &m,   1,   mpi_int_t,  0, grid2.comm );

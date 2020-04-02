@@ -1,7 +1,8 @@
 #!./common/bats/bin/bats
+# -*-sh-*-
 
 export BATS_JUNIT_CLASS=Singularity
-load ./common/test_helper_functions || exit 1
+source ./common/test_helper_functions.bash || exit 1
 source ./common/functions || exit 1
 
 if [ -s ./common/TEST_ENV ];then
@@ -10,62 +11,38 @@ fi
 
 check_rms
 rm=$RESOURCE_MANAGER
-
-setup() {
-    if [ -z "$MODULEPATH" ];then
-        . /etc/profile.d/lmod.sh || exit 1
-    fi
-    if [ x$rm = "xpbspro" ];then
-        . /etc/profile.d/pbs.sh || exit 1
-    fi
-    module purge        || exit 1
-    module load singularity || exit 1
-}
-
-echo " "
-echo " "
-echo "-------------------------------------------------------"
-echo "Runtimes: Singularity"
-echo "-------------------------------------------------------"
-
-if [ "x$DISTRO_FAMILY" == "xCentOS" -o "x$DISTRO_FAMILY" == "xRHEL" ];then
-    export DISTRO=centos
-    export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc-2.4/examples/${DISTRO}/Singularity
-    export ALTARCH_MIRROR=http://mirror.centos.org/altarch/7.4.1708/os/aarch64/
-else
-    export DISTRO=opensuse
-    export BOOTSTRAP_DEF=/opt/ohpc/pub/doc/contrib/singularity-ohpc/examples/${DISTRO}/Singularity
-    export ALTARCH_MIRROR=http://download.opensuse.org/ports/aarch64/distribution/leap/42.3/repo/oss/
+module purge || exit 1
+module load singularity || exit 1
+ARCH=`uname -m`
+echo $ARCH > foo.out
+if [ "$ARCH" == "aarch64" ];then
+    export DOCKER_ARCHITECTURE=arm64
 fi
 
-if [ "x$ARCH" == "xaarch64" ];then
-    perl -pi -e "s#^MirrorURL: (\S+)\S+#MirrorURL: ${ALTARCH_MIRROR}#" $BOOTSTRAP_DEF
-fi
+DISTRO=ubuntu
+IMAGE=./${DISTRO}.sif
 
 @test "[singularity] check for RPM" {
     check_if_rpm_installed "singularity${DELIM}"
 }
 
-@test "[singularity] create image" {
-    singularity create /tmp/${DISTRO}.img
-    assert_success
-}
+@test "[singularity] pull down $DISTRO docker image" {
+    rm -f ${IMAGE}
 
-@test "[singularity] build image" {
-    singularity build /tmp/${DISTRO}.img ${BOOTSTRAP_DEF}
+    singularity pull ${IMAGE} docker://${DISTRO}:latest
+
+    run test -s ${IMAGE}
     assert_success
 }
 
 @test "[singularity] exec image" {
-    singularity exec /tmp/${DISTRO}.img cat /etc/os-release
+    singularity exec ${IMAGE} cat /etc/os-release | grep "^ID=${DISTRO}" 
     assert_success
 }
 
 @test "[singularity] exec image via $rm" {
-    export -f run_serial_binary check_exe
-    mv /tmp/$DISTRO.img ~ohpc-test/.
-    su ohpc-test -c "run_serial_binary singularity exec ~/${DISTRO}.img cat /etc/os-release"
+    run_serial_binary singularity exec ${IMAGE} cat /etc/os-release
     assert_success
 
-    rm -f ~ohpc-test/${DISTRO}.img
+    rm -f ${IMAGE}
 }

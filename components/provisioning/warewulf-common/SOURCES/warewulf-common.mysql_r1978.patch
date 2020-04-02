@@ -1,0 +1,20 @@
+--- a/lib/Warewulf/DataStore/SQL/MySQL.pm	2018-03-12 15:18:19.000000000 -0700
++++ b/lib/Warewulf/DataStore/SQL/MySQL.pm	2018-07-11 10:22:10.000000000 -0700
+@@ -245,13 +245,16 @@
+     my $dbh;
+     my $conn_str = "DBI:mysql:database=$db_name";
+ 
++    # Use the DB's transaction handling
++    my %attr = ( AutoCommit => 1, );
++
+     if ( $db_server ) {
+         $conn_str .= ";host=$db_server";
+         if ( $db_port && $db_port > 0 ) {
+             $conn_str .= ";port=$db_port";
+         }
+     }
+-    $dbh = DBI->connect_cached($conn_str, $db_user, $db_pass);
++    $dbh = DBI->connect_cached($conn_str, $db_user, $db_pass, \%attr);
+     if ( $dbh ) {
+         $dbh->{'mysql_auto_reconnect'} = 1;
+     }

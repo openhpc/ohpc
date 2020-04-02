@@ -1,0 +1,4 @@
+addFilter("suse-filelist-forbidden-sysconfig")
+addFilter("files-attr-not-set")
+addFilter("invalid-spec-name")
+addFilter("suse-policy-kmp-missing-supplements")

@@ -1,0 +1,109 @@
+--- a/functions.lua	2017-12-07 11:46:04.000000000 -0800
++++ b/functions.lua	2018-01-29 12:17:01.000000000 -0800
+@@ -21,6 +21,10 @@
+     return result
+ end
+ 
++function is_centos()
++    local s = rpm.expand("%_host_vendor")
++    return s == 'redhat'
++end
+ -- macro replacements
+ SHORT_FLAVORS = {
+     -- ??
+@@ -56,10 +60,23 @@
+ end
+ 
+ function package_name(flavor, modname, subpkg, append)
++    local compiler_family = rpm.expand("%compiler_family")
++    local mpi_family = rpm.expand("%mpi_family")
++    local ohpc_suffix = rpm.expand("%PROJ_DELIM")
++
++    if string.match(rpm.expand("%name"), mpi_family) then
++        ohpc_suffix = "-" .. mpi_family .. ohpc_suffix
++    end
++    if string.match(rpm.expand("%name"), compiler_family) then
++        ohpc_suffix = "-" .. compiler_family .. ohpc_suffix
++    end
+     if flavor == "python2" and old_python2 then
+         flavor = "python"
+     end
+-    local name = flavor .. "-" .. modname
++    if flavor == "python3" and is_centos() then
++        flavor = "python34"
++    end
++    local name = flavor .. "-" .. modname .. ohpc_suffix
+     if subpkg and subpkg ~= "" then
+         name = name .. "-" .. subpkg
+     end
+--- a/macros.lua	2017-12-07 11:46:04.000000000 -0800
++++ b/macros.lua	2018-01-29 12:18:15.000000000 -0800
+@@ -1,4 +1,6 @@
+ function _python_scan_spec()
++    local compiler_family = rpm.expand("%compiler_family")
++    local mpi_family = rpm.expand("%mpi_family")
+     local last_python = rpm.expand("%python_for_executables")
+     local insert_last_python = false
+ 
+@@ -14,7 +16,9 @@
+     -- ...but check that it is actually in the buildset
+     if insert_last_python then table.insert(pythons, last_python) end
+ 
+-    modname = rpm.expand("%name")
++    modname = string.gsub(rpm.expand("%name"), rpm.expand("%PROJ_DELIM"), "")
++    modname = string.gsub(modname, "-" .. compiler_family, "")
++    modname = string.gsub(modname, "-" .. mpi_family, "")
+     local spec_name_prefix = "python"
+     -- modname from name
+     local name = modname
+@@ -53,18 +57,18 @@
+     end
+ 
+     -- find the spec file
+-    specpath = rpm.expand("%_specfile")
++--    specpath = rpm.expand("%_specfile")
+ 
+     -- search possible locations - shouldn't be necessary anymore
+---    local locations = { rpm.expand("%_sourcedir"), rpm.expand("%_specdir"), posix.getcwd(), posix.getcwd() .. "/" .. name }
+---    for _,loc in ipairs(locations) do
+---        local filename = loc .. "/" .. name .. ".spec"
+---        if posix.stat(filename, "mode") ~= nil then
+---            io.stderr:write("could not find spec as " .. filename .. "\n")
+---            specpath = filename
+---            break
+---        end
+---    end
++    local locations = { rpm.expand("%_specdir"), rpm.expand("%_sourcedir"), posix.getcwd(), posix.getcwd() .. "/" .. name }
++    for _,loc in ipairs(locations) do
++        local filename = loc .. "/" .. name .. ".spec"
++        if posix.stat(filename, "mode") ~= nil then
++            io.stderr:write("could not find spec as " .. filename .. "\n")
++            specpath = filename
++            break
++        end
++    end
+ end
+ 
+ function python_subpackages()
+@@ -118,7 +122,11 @@
+         local function rename_package(package, flavor)
+             if package == "python" or package == flavor then
+                 -- specialcase plain "python"
+-                package = current_flavor
++                if current_flavor == "python3" and is_centos() then
++                    package = "python34"
++                else
++                    package = current_flavor
++                end
+             else
+                 package = package:gsub("^" .. flavor .. "(%W)", current_flavor .. "%1")
+                 package = package:gsub("^python(%W)", current_flavor .. "%1")
+@@ -281,7 +289,7 @@
+ 
+     -- before we start, print Provides: python2-modname
+     if is_called_python and old_python2 then
+-        print(rpm.expand("Provides: python2-" .. modname .. " = %{version}-%{release}\n"))
++        print(rpm.expand("Provides: python-" .. modname .. " = %{version}-%{release}\n"))
+     end
+ 
+     for _,python in ipairs(pythons) do

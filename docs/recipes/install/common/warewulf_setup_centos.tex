@@ -14,12 +14,11 @@
 [sms](*\#*) ip address add ${sms_ip}/${internal_netmask} broadcast + dev ${sms_eth_internal}
 
 # Restart/enable relevant services to support provisioning
-[sms](*\#*) systemctl restart xinetd
-[sms](*\#*) systemctl enable mariadb.service
-[sms](*\#*) systemctl restart mariadb
 [sms](*\#*) systemctl enable httpd.service
 [sms](*\#*) systemctl restart httpd
 [sms](*\#*) systemctl enable dhcpd.service
+[sms](*\#*) systemctl enable tftp
+[sms](*\#*) systemctl restart tftp
 \end{lstlisting}
 %\end{verbatim}
 % end_ohpc_run

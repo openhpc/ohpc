@@ -11,7 +11,7 @@ diff --git a/cpuid_arm64.c b/cpuid_arm64.c
 index c7a27f8..95fc708 100644
 --- a/cpuid_arm64.c
 +++ b/cpuid_arm64.c
-@@ -59,7 +59,7 @@ int get_feature(char *search)
+@@ -302,7 +302,7 @@ int get_feature(char *search)
    	fclose(infile);
  
  

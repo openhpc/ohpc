@@ -1,1 +1,2 @@
 addFilter("file-contains-buildroot")
+addFilter("suse-filelist-forbidden-backup-file")

@@ -17,13 +17,16 @@
 # gnu compilers underneath in order to support call-site demangling
 %if "%{compiler_family}" == "intel"
 Requires:      intel-compilers-devel%{PROJ_DELIM}
-BuildRequires: gnu7-compilers%{PROJ_DELIM}
-Requires:      gnu7-compilers%{PROJ_DELIM}
+BuildRequires: gnu9-compilers%{PROJ_DELIM}
+Requires:      gnu9-compilers%{PROJ_DELIM}
+%if "%{mpi_family}" != "impi"
+BuildRequires: %{mpi_family}-gnu9%{PROJ_DELIM}
+Requires:      %{mpi_family}-gnu9%{PROJ_DELIM}
+%endif
 %endif
 
 # Base package name
 %define pname mpiP
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   mpiP: a lightweight profiling library for MPI applications.
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -33,14 +36,14 @@ License:   BSD-3
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://mpip.sourceforge.net/
 Source0:   http://sourceforge.net/projects/mpip/files/mpiP/mpiP-3.4.1/mpiP-%{version}.tar.gz
-Source1:   OHPC_macros
 Patch1:    mpip.unwinder.patch
 
 BuildRequires: binutils-devel
-BuildRequires: python
+BuildRequires: python2
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%global install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%global module_dir %{compiler_family}-%{mpi_family}
 
 %description
 
@@ -56,20 +59,22 @@ file.
 
 %setup -q -n %{pname}-%{version}
 %patch1 -p1
+mkdir .bin
+ln -s /usr/bin/python2 .bin/python
 
 %build
+export PATH="$PWD/.bin:$PATH"
 
 # override with newer config.guess for aarch64
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess bin
 %endif
 
 # OpenHPC compiler/mpi designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-# see above where compiler_family is changed
-%define compiler_family gnu7
-%ohpc_setup_compiler
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu9
+module load %{mpi_family}
 
 CC=mpicc
 CXX=mpicxx
@@ -82,20 +87,20 @@ FC=mpif90
 %endif
 
 %install
+export PATH="$PWD/.bin:$PATH"
 
 # OpenHPC compiler designation
 
 # note: in order to support call-site demangling, we compile mpiP with gnu
-# see above where compiler_family is changed
-%define compiler_family gnu7
-%ohpc_setup_compiler
+. %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler gnu9
+module load %{mpi_family}
 
 make %{?_smp_mflags} shared
 make DESTDIR=$RPM_BUILD_ROOT install
 
 # OpenHPC module file
-%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{module_dir}/%{pname}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{module_dir}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -121,7 +126,7 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{module_dir}/%{pname}/.version.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -135,16 +140,5 @@ EOF
 rm -rf $RPM_BUILD_ROOT/%{install_path}/lib/*.a
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc ChangeLog doc/PORTING.txt doc/README doc/UserGuide.txt
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.4.1-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.4.1-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.4.1-1
-- Switching to %%ohpc_compiler macro

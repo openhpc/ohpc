@@ -33,12 +33,34 @@ rolling updates are pre-configured.
 
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*)  (*\upgrade*) "*-ohpc"
+
+# Any new Base OS provided dependencies can be installed by
+# updating the ohpc-base metapackage
+[sms](*\#*)  (*\upgrade*) "ohpc-base"
 \end{lstlisting}
   
+\iftoggleverb{isWarewulf}
+\begin{center}
+\begin{tcolorbox}[]
+\small
+The version of \Warewulf{} included in \OHPC{} v1.3.6 added a new
+architecture-specific package containing iPXE files. Upgraders will need to
+install this package on the SMS node.
+\begin{lstlisting}[language=bash,keywords={},literate={-}{-}1 {ARCH}{\arch{}}1]
+[sms](*\#*)  (*\install*) warewulf-provision-server-ipxe-ARCH-ohpc
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}
+\fi
+
 \item Upgrade packages in compute image
 
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*)  (*\chrootupgrade*) "*-ohpc"
+
+# Any new compute-node Base OS provided dependencies can be installed by
+# updating the ohpc-base-compute metapackage
+[sms](*\#*)  (*\chrootupgrade*) "ohpc-base-compute"
 \end{lstlisting}
   
 \item Rebuild image(s)
@@ -74,31 +96,28 @@ In the case of a fresh install, \OHPC{} recipes default to installation of the
 latest toolchains available in a given release branch. However, if upgrading a
 previously installed system, administrators can {\em opt-in} to enable new
 variants as they become available. To illustrate this point, consider the
-previous \OHPC{} 1.3.2 release as an example which contained an {``openmpi''}
-MPI variant providing OpenMPI 1.10.x along with runtimes and libraries compiled
-with this toolchain. That release also contained the {``llvm4''} compiler
-family which has been updated to {``llvm5''} in \OHPC{} 1.3.3.  In the case
-where an admin would like to enable the newer {``openmpi3''} toolchain,
+previous \OHPC{} 1.3.5 release as an example which contained GCC 7.3.0
+along with runtimes and libraries compiled with this toolchain.  In the case
+where an admin would like to enable the newer {``gnu8''} toolchain,
 installation of these additions is simplified with the use of \OHPC{}'s
 meta-packages (see Table~\ref{table:groups} in Appendix
 \ref{appendix:manifest}).  The following example illustrates adding the
-complete ``openmpi3'' toolchain.  Note that we leverage the convenience
+complete ``gnu8'' toolchain.  Note that we leverage the convenience
 meta-packages containing MPI-dependent builds, and we also update the
 modules environment to make it the default.
 
 \begin{lstlisting}[language=bash,keywords={}]
+# Install GCC 8.x-compiled meta-packages with dependencies
+[sms](*\#*)  (*\install*) ohpc-gnu8-perf-tools \
+                         ohpc-gnu8-io-libs \
+                         ohpc-gnu8-python-libs \
+                         ohpc-gnu8-runtimes \
+                         ohpc-gnu8-serial \
+                         ohpc-gnu8-parallel-libs
+
 # Update default environment
-[sms](*\#*) (*\remove*) lmod-defaults-gnu7-openmpi-ohpc
-[sms](*\#*) (*\install*) lmod-defaults-gnu7-openmpi3-ohpc
+[sms](*\#*) (*\remove*) lmod-defaults-gnu7-openmpi3-ohpc
+[sms](*\#*) (*\install*) lmod-defaults-gnu8-openmpi3-ohpc
 
-# Install OpenMPI 3.x-compiled meta-packages with dependencies
-[sms](*\#*)  (*\install*) ohpc-gnu7-perf-tools \
-                         ohpc-gnu7-io-libs \
-                         ohpc-gnu7-python-libs \
-                         ohpc-gnu7-runtimes \
-                         ohpc-gnu7-openmpi3-parallel-libs
-
-# Install LLVM/Clang 5.x
-[sms](*\#*)  (*\install*) llvm5-compilers-ohpc
 \end{lstlisting}
 

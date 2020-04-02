@@ -1,16 +1,29 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 
 
 /*! @file 
  * \brief Driver program for PDGSSVX example
  *
  * <pre>
- * -- Distributed SuperLU routine (version 2.0) --
+ * -- Distributed SuperLU routine (version 5.1.3) --
  * Lawrence Berkeley National Lab, Univ. of California Berkeley.
  * March 15, 2003
+ * April 5, 2015
+ * December 31, 2016 version 5.1.3
  * </pre>
  */
 
 #include <math.h>
+#include <superlu_dist_config.h>
 #include "superlu_ddefs.h"
 
 /*! \brief
@@ -29,14 +42,14 @@
  *        ScalePermstruct : perm_c
  *        LUstruct        : etree
  *
- * On an IBM SP, the program may be run by typing:
- *    poe pddrive2 -r <proc rows> -c <proc columns> <input_matrix> -procs <p>
+ * With MPICH,  program may be run by typing:
+ *    mpiexec -n <np> pddrive2 -r <proc rows> -c <proc columns> g20.rua
  * </pre>
  */
 
 int main(int argc, char *argv[])
 {
-    superlu_options_t options;
+    superlu_dist_options_t options;
     SuperLUStat_t stat;
     SuperMatrix A;
     NRformat_loc *Astore;
@@ -45,14 +58,19 @@ int main(int argc, char *argv[])
     SOLVEstruct_t SOLVEstruct;
     gridinfo_t grid;
     double   *berr;
-    double   *b, *b1, *xtrue, *nzval, *nzval1;
+    double   *b, *b1, *xtrue, *xtrue1;
     int_t    *colind, *colind1, *rowptr, *rowptr1;
-    int_t    i, j, m, n, nnz_loc, m_loc, fst_row;
+    int_t    i, j, m, n, nnz_loc, m_loc;
     int      nprow, npcol;
     int      iam, info, ldb, ldx, nrhs;
     char     **cpp, c;
     FILE *fp, *fopen();
+    int cpp_defs();
 
+    /* prototypes */
+    extern int dcreate_matrix_perturbed
+        (SuperMatrix *, int, double **, int *, double **, int *,
+         FILE *, gridinfo_t *);
 
     nprow = 1;  /* Default process rows.      */
     npcol = 1;  /* Default process columns.   */
@@ -71,8 +89,8 @@ int main(int argc, char *argv[])
 	    switch (c) {
 	      case 'h':
 		  printf("Options:\n");
-		  printf("\t-r <int>: process rows    (default %d)\n", nprow);
-		  printf("\t-c <int>: process columns (default %d)\n", npcol);
+		  printf("\t-r <int>: process rows    (default %4d)\n", nprow);
+		  printf("\t-c <int>: process columns (default %4d)\n", npcol);
 		  exit(0);
 		  break;
 	      case 'r': nprow = atoi(*cpp);
@@ -97,8 +115,13 @@ int main(int argc, char *argv[])
     iam = grid.iam;
     if ( iam >= nprow * npcol )	goto out;
     if ( !iam ) {
-	printf("Input matrix file: %s\n", *cpp);
-        printf("\tProcess grid\t%d X %d\n", grid.nprow, grid.npcol);
+	int v_major, v_minor, v_bugfix;
+	superlu_dist_GetVersionNumber(&v_major, &v_minor, &v_bugfix);
+	printf("Library version:\t%d.%d.%d\n", v_major, v_minor, v_bugfix);
+
+	printf("Input matrix file:\t%s\n", *cpp);
+        printf("Process grid:\t\t%d X %d\n", (int)grid.nprow, (int)grid.npcol);
+	fflush(stdout);
     }
     
 #if ( DEBUGlevel>=1 )
@@ -106,35 +129,16 @@ int main(int argc, char *argv[])
 #endif
 
     /* ------------------------------------------------------------
-       GET THE MATRIX FROM FILE AND SETUP THE RIGHT HAND SIDE. 
+       GET THE MATRIX FROM FILE AND SETUP THE RIGHT-HAND SIDE. 
        ------------------------------------------------------------*/
     dcreate_matrix(&A, nrhs, &b, &ldb, &xtrue, &ldx, fp, &grid);
 
-    if ( !(b1 = doubleMalloc_dist(ldb * nrhs)) )
-        ABORT("Malloc fails for b1[]");
-    for (j = 0; j < nrhs; ++j)
-        for (i = 0; i < ldb; ++i) b1[i+j*ldb] = b[i+j*ldb];
     if ( !(berr = doubleMalloc_dist(nrhs)) )
 	ABORT("Malloc fails for berr[].");
     m = A.nrow;
     n = A.ncol;
-
-    /* Save a copy of the matrix A. */
     Astore = (NRformat_loc *) A.Store;
-    nnz_loc = Astore->nnz_loc;
     m_loc = Astore->m_loc;
-    fst_row = Astore->fst_row;
-    nzval = Astore->nzval;
-    colind = Astore->colind;
-    rowptr = Astore->rowptr;
-    nzval1 = doubleMalloc_dist(nnz_loc);
-    colind1 = intMalloc_dist(nnz_loc);
-    rowptr1 = intMalloc_dist(m_loc+1);
-    for (i = 0; i < nnz_loc; ++i) {
-        nzval1[i] = nzval[i];
-        colind1[i] = colind[i];
-    }
-    for (i = 0; i < m_loc+1; ++i) rowptr1[i] = rowptr[i];
 
     /* ------------------------------------------------------------
        WE SOLVE THE LINEAR SYSTEM FOR THE FIRST TIME.
@@ -145,7 +149,7 @@ int main(int argc, char *argv[])
         options.Equil = YES;
         options.ColPerm = METIS_AT_PLUS_A;
         options.RowPerm = LargeDiag;
-        options.ReplaceTinyPivot = YES;
+        options.ReplaceTinyPivot = NO;
         options.Trans = NOTRANS;
         options.IterRefine = DOUBLE;
         options.SolveInitialized = NO;
@@ -157,6 +161,7 @@ int main(int argc, char *argv[])
     if (!iam) {
 	print_sp_ienv_dist(&options);
 	print_options_dist(&options);
+	fflush(stdout);
     }
 
     /* Initialize ScalePermstruct and LUstruct. */
@@ -179,19 +184,28 @@ int main(int argc, char *argv[])
     Destroy_LU(n, &grid, &LUstruct); /* Deallocate storage associated with 
 					the L and U matrices.               */
     SUPERLU_FREE(b);                 /* Free storage of right-hand side.    */
-
+    SUPERLU_FREE(xtrue);             /* Free storage of the exact solution. */
 
     /* ------------------------------------------------------------
        NOW WE SOLVE ANOTHER LINEAR SYSTEM.
        ONLY THE SPARSITY PATTERN OF MATRIX A IS THE SAME.
        ------------------------------------------------------------*/
     options.Fact = SamePattern;
-    PStatInit(&stat); /* Initialize the statistics variables. */
 
-    /* Set up the local A in NR_loc format */
-    dCreate_CompRowLoc_Matrix_dist(&A, m, n, nnz_loc, m_loc, fst_row,
-				   nzval1, colind1, rowptr1,
-				   SLU_NR_loc, SLU_D, SLU_GE);
+    if (iam==0) {
+	print_options_dist(&options);
+#if ( PRNTlevel>=2 )
+	PrintInt10("perm_r", m, ScalePermstruct.perm_r);
+	PrintInt10("perm_c", n, ScalePermstruct.perm_c);
+#endif
+    }
+
+    /* Get the matrix from file, perturbed some diagonal entries to force
+       a different perm_r[]. Set up the right-hand side.   */
+    if ( !(fp = fopen(*cpp, "r")) ) ABORT("File does not exist");
+    dcreate_matrix_perturbed(&A, nrhs, &b1, &ldb, &xtrue1, &ldx, fp, &grid);
+
+    PStatInit(&stat); /* Initialize the statistics variables. */
 
     /* Solve the linear system. */
     pdgssvx(&options, &A, &ScalePermstruct, b1, ldb, nrhs, &grid,
@@ -199,8 +213,14 @@ int main(int argc, char *argv[])
 
     /* Check the accuracy of the solution. */
     if ( !iam ) printf("Solve the system with the same sparsity pattern.\n");
-    pdinf_norm_error(iam, m_loc, nrhs, b1, ldb, xtrue, ldx, &grid);
+    pdinf_norm_error(iam, m_loc, nrhs, b1, ldb, xtrue1, ldx, &grid);
 
+#if ( PRNTlevel>=2 )
+    if (iam==0) {
+	PrintInt10("new perm_r", m, ScalePermstruct.perm_r);
+	PrintInt10("new perm_c", n, ScalePermstruct.perm_c);
+    }
+#endif
     /* Print the statistics. */
     PStatPrint(&options, &stat, &grid);
 
@@ -217,7 +237,7 @@ int main(int argc, char *argv[])
         dSolveFinalize(&options, &SOLVEstruct);
     }
     SUPERLU_FREE(b1);	             /* Free storage of right-hand side.    */
-    SUPERLU_FREE(xtrue);             /* Free storage of the exact solution. */
+    SUPERLU_FREE(xtrue1);             /* Free storage of the exact solution. */
     SUPERLU_FREE(berr);
 
 

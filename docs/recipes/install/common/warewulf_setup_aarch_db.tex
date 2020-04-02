@@ -1,0 +1,6 @@
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
+# Set chunk size for database
+[sms](*\#*) perl -pi -e "s/^# database chunk.*$/database chunk size = 10000000/" /etc/warewulf/database.conf
+\end{lstlisting}
+% end_ohpc_run

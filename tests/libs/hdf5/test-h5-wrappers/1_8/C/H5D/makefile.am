@@ -35,4 +35,4 @@ testfiles/h5ex_d_checksum.ddl testfiles/h5ex_d_shuffle.ddl testfiles/h5ex_d_tran
 testfiles/h5ex_d_fillval.ddl testfiles/h5ex_d_alloc.ddl test.sh
 
 AM_CPPFLAGS = '-D H5_USE_18_API'
-TESTS = test.sh
+TESTS = tests

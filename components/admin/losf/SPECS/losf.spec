@@ -14,14 +14,13 @@
 
 Summary:   A Linux operating system framework for managing HPC clusters
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.55.0
+Version:   0.56.0
 Release:   1%{?dist}
 License:   GPL-2
 Group:     %{PROJ_NAME}/admin
 BuildArch: noarch
 URL:       https://github.com/hpcsi/losf
 Source0:   https://github.com/hpcsi/losf/archive/v%{version}.tar.gz#$/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
 
 %if 0%{?OHPC_BUILD}
 %{!?prefix: %global prefix %{OHPC_ADMIN}}
@@ -38,11 +37,13 @@ provides: perl(LosF_rpm_utils)
 provides: perl(LosF_utils)
 provides: perl(LosF_history_utils)
 
-%if 0%{?sles_version} || 0%{?suse_version}
-requires: perl-Config-IniFiles >= 2.43
-requires: perl-Log-Log4perl
-%else
+%if 0%{?sle_version} || 0%{?suse_version}
+Requires: perl-Config-IniFiles >= 2.43
+Requires: perl-Log-Log4perl
+%else #rhel
+%if 0%{?rhel_version} < 800
 requires: yum-plugin-downloadonly
+%endif
 %endif
 
 %define __spec_install_post %{nil}
@@ -93,7 +94,6 @@ if [ "$1" = 0 ];then
 fi
 
 %files
-%defattr(-,root,root,-)
 %{installPath}
 %{_bindir}/*
 %doc LICENSE COPYING CHANGES README

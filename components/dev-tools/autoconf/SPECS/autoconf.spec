@@ -18,16 +18,13 @@ Version:   2.69
 Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/dev-tools
-DocDir:    %{OHPC_PUB}/doc/contrib
 URL:       http://www.gnu.org/software/autoconf/
 Source0:   https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
-Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
+BuildRequires: m4
 Requires: m4
 
 %if 0%{?rhel_version} || 0%{?centos_version} || 0%{?rhel}
-BuildRequires: m4
 BuildRequires: perl-macros
 BuildRequires: perl(Data::Dumper)
 # from f19, Text::ParseWords is not the part of 'perl' package
@@ -56,7 +53,11 @@ their use.
 %setup -n autoconf-%{version}
 
 %build
-./configure --prefix=%{install_path}
+%ifarch ppc64le
+cp /usr/lib/rpm/config.guess build-aux
+%endif
+
+./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 
 %install
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
@@ -66,11 +67,7 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%clean
-%{__rm} -rf $RPM_BUILD_ROOT
-
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_HOME}
 %{OHPC_UTILS}
 %doc THANKS
@@ -86,12 +83,3 @@ rm -f $RPM_BUILD_ROOT/%{install_path}/share/info/dir
 %doc ChangeLog.1
 %doc TODO
 %doc COPYING.EXCEPTION
-
-
-%changelog
-* Wed Feb 08 2017 Adrian Reber <adrian@lisas.de> - 2.69-1
-- fix building on CentOS 7.3
-
-* Mon Sep 15 2014  <karl.w.schulz@intel.com> - 
-- Initial build.
-

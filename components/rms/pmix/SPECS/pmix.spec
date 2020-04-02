@@ -10,21 +10,19 @@
 
 %include %{_sourcedir}/OHPC_macros
 %global pname pmix
-%global PNAME %(tr [a-z] [A-Z] <<< %{pname})
 
 Summary: An extended/exascale implementation of PMI
 Name: %{pname}%{PROJ_DELIM}
-Version: 1.2.3
+Version: 3.1.4
 Release: 1%{?dist}
 License: BSD
 URL: https://pmix.github.io/pmix/
 Group: %{PROJ_NAME}/rms
-Source: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
-Source1: OHPC_macros
-Patch0: singleton.5391e43.patch
+Source0: https://github.com/pmix/pmix/releases/download/v%{version}/pmix-%{version}.tar.bz2
 
 BuildRequires: libevent-devel
-BuildRequires: lmod-ohpc libtool-ohpc
+BuildRequires: gcc-c++
+#!BuildIgnore: post-build-checks
 
 %global install_path %{OHPC_ADMIN}/%{pname}
 
@@ -49,12 +47,9 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
-module load autotools
-./autogen.sh 
 
 %build
-CFLAGS="%{optflags}" ./configure --prefix=%{install_path}
+CFLAGS="%{optflags}" ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
 %{__make} %{?_smp_mflags}
 
 %install
@@ -86,12 +81,3 @@ EOF
 %files
 %{OHPC_ADMIN}
 %{OHPC_MODULES}/%{pname}
-
-%changelog
-* Tue Sep 26 2017 Karl W Schulz <karl.w.schulz@intel.com> - 2.0.1-1
-- downgrade to v1.2.3 for slurm support
-- tweak install path
-
-* Thu Sep 21 2017 Adrian Reber <areber@redhat.com> - 2.0.1-1
-- Update to 2.0.1
-- Delete most of the original spec file

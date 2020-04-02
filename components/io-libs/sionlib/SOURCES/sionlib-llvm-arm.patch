@@ -1,0 +1,350 @@
+diff -ruN sionlib.old/config/determine-compiler-version.sh sionlib/config/determine-compiler-version.sh
+--- sionlib.old/config/determine-compiler-version.sh	2018-05-02 15:36:33.000000000 +0100
++++ sionlib/config/determine-compiler-version.sh	2018-08-27 00:16:15.678646405 +0100
+@@ -28,6 +28,10 @@
+        #COMPVER=`gcc -v 2>&1 | grep -i 'Version [0-9]' \
+        #  | sed -e 's/^.*ersion \(.\..\..\).*$/\1/'`
+        ;;
++  arm) COMPVER=`armclang --version`
++       ;;
++  llvm) COMPVER=`clang --version`
++       ;;
+   *)   ErrorAndExit "Unknown compiler '${COMP}'"
+        ;;
+ esac
+diff -ruN sionlib.old/configure sionlib/configure
+--- sionlib.old/configure	2018-05-02 15:46:24.000000000 +0100
++++ sionlib/configure	2018-08-27 00:15:34.278846115 +0100
+@@ -440,6 +440,12 @@
+                       ;;
+                   esac
+                   ;;
++             arm) CFGMSG="${CMSG} Arm HPC compilers and ${MPI} MPI"
++                  MD=Makefile.defs.linux-arm
++                  ;;
++             llvm) CFGMSG="${CMSG} LLVM compilers and ${MPI} MPI"
++                  MD=Makefile.defs.linux-llvm
++                  ;;
+              *)   ErrorAndExit "Unknown compiler '${COMP}'"
+                   ;;
+            esac
+diff -ruN sionlib.old/mf/Makefile.defs.linux-arm sionlib/mf/Makefile.defs.linux-arm
+--- sionlib.old/mf/Makefile.defs.linux-arm	1970-01-01 01:00:00.000000000 +0100
++++ sionlib/mf/Makefile.defs.linux-arm	2018-08-27 00:18:52.337891909 +0100
+@@ -0,0 +1,156 @@
++#------------------------------------------------------------------------------
++# SIONlib Makefile Definitions (Makefile.defs.linux-arm)
++#------------------------------------------------------------------------------
++
++CFGKEY = linux-arm
++CONFIG = Linux cluster with Arm HPC OpenMP compilers with MPICH mpi
++
++PREFIX           = $(TOPDIR)/../../install/sionlib_linux_arm
++
++#------------------------------------------------------------------------------
++# Platform Settings
++#------------------------------------------------------------------------------
++PREC   = 64
++PFLAG  =
++AFLAG  =
++
++PLAT     = linux
++MACHINE  = -DMACHINE=\"Linux\ Cluster\"
++#PLAT_LDIR= -DPFORM_LDIR=\"/tmp\"
++PLATCC   = $(MPICC) $(PFLAG)
++PLAT_CONF= $(MACHINE) $(PLAT_LDIR)
++
++#------------------------------------------------------------------------------
++# SIONlib General Settings
++#------------------------------------------------------------------------------
++OPTFLAGS = -g -O0 -Wall
++
++CC       = armclang
++CFLAGS   = $(PFLAG) $(OPTFLAGS) -fPIC
++CPP      = gcc -P -E
++CXX      = armclang++
++CXXFLAGS = $(PFLAG) $(OPTFLAGS) -O3
++
++F77      = armflang
++FFLAGS   = $(PFLAG) $(OPTFLAGS)
++
++F90      = $(F77)
++F90FLAGS = $(PFLAG) $(OPTFLAGS) -ffree-form
++
++FPP      =
++FDOPT    = -D
++
++LDFLAGS  = $(PFLAG) $(OPTFLAGS) $(HINTSLIB)
++UTILLIB  =
++FOBASE   = pomp_fwrapper_base.o
++
++#------------------------------------------------------------------------------
++# SIONlib Settings
++#------------------------------------------------------------------------------
++
++SION_PLATFORM    = -D_SION_LINUX 
++ARCH             = LINUX
++
++# Library Naming Scheme: sion{API}{FE}${DEVICE}${GCC}${LANG}${PREC}
++#                        API=(com|ser|gen|omp|mpi|ompi)
++#			 FE=(|fe)
++#			 DEVICE=(|mic)
++#			 GCC=(|gcc)
++#			 LANG=(|_cxx|_f77|_f90)
++#			 PREC=(_32|_64)
++
++# Library Naming Scheme: see Makefile.defs.linux-arm
++SION_LIBNAME_COM = sioncom_$(PREC)
++SION_LIBNAME_SER = sionser_$(PREC)
++SION_LIBNAME_GEN = siongen_$(PREC)
++SION_LIBNAME_OMP     = sionomp_$(PREC)
++SION_LIBNAME_MPI     = sionmpi_$(PREC)
++SION_LIBNAME_OMPI    = sionompi_$(PREC)
++
++PARUTILENABLE    = 1
++
++FORTRANENABLE    = 1
++FORTRANNAMES     = -D_FORTRANUNDERSCORE
++SION_LIBNAME_F77_SER = sionser_f77_$(PREC)
++SION_LIBNAME_F77_MPI = sionmpi_f77_$(PREC)
++SION_LIBNAME_F90_SER = sionser_f90_$(PREC)
++SION_LIBNAME_F90_MPI = sionmpi_f90_$(PREC)
++SION_MODPATH = mod_$(PREC)
++
++CXXENABLE            = 1
++SION_LIBNAME_CXX_SER = sionser_cxx_$(PREC)
++SION_LIBNAME_CXX_MPI = sionmpi_cxx_$(PREC)
++
++PYTHONENABLE    = 0
++
++SION_DEBUG       = 
++
++#------------------------------------------------------------------------------
++# MPI Settings
++#------------------------------------------------------------------------------
++
++MPIENABLE = 1
++MPICC     = mpicc
++MPICXX    = mpicxx
++MPIF77    = mpif77
++MPIF90    = mpif90
++MPILIB    = -lmpich
++PMPILIB   = -lpmpich
++#PMPILIB   = # MPICH2
++FMPILIB   = -lfmpich
++FMPIOBJ   =
++MPI_CONFIG_TARGETS  = 
++
++#------------------------------------------------------------------------------
++# OpenMP Settings
++#------------------------------------------------------------------------------
++
++OMPENABLE = 1
++OMPCC      = $(CC)
++OMPCXX     = $(CXX)
++OMPF77     = $(F77)
++OMPF90     = $(F90)
++OMPFLAG    = -fopenmp
++
++#------------------------------------------------------------------------------
++# Hybrid MPI/OpenMP Settings
++#------------------------------------------------------------------------------
++
++HYBENABLE  = 1
++HYBCC      = $(MPICC)
++HYBCXX     = $(MPICXX)
++HYBF77     = $(MPIF77)
++HYBF90     = $(MPIF90)
++HYBFLAG    = $(OMPFLAG)
++
++#------------------------------------------------------------------------------
++# Compression Support
++#------------------------------------------------------------------------------
++
++SZLIB          = szlib
++SZLIB_OPTFLAGS = -O3
++SZLIB_CFLAGS   = -I$(TOPDIR)/utils/szlib -DELG_COMPRESSED -DCUBE_COMPRESSED
++SZLIB_LIBPATH  = -L$(TOPDIR)/utils/szlib
++SZLIB_LIB      = -lsc.z
++
++#------------------------------------------------------------------------------
++# SIONlib HINTS library
++#------------------------------------------------------------------------------
++GPFS_HINTS_LIB  = -L/usr/lpp/mmfs/lib -lgpfs
++GPFS_HINTS_INC  = -I/usr/lpp/mmfs/include
++LINUX_HINTS_LIB = -L/usr/lib
++LINUX_HINTS_INC = -I/usr/include
++
++HINTSDEF=
++HINTSINC=
++HINTSLIB=
++
++#------------------------------------------------------------------------------
++# SIONlib Cache Settings
++#------------------------------------------------------------------------------
++
++CACHEFLAGS=
++CACHELIB=
++#CACHEFLAGS=-D_SION_CACHE
++#CACHELIB=-lrt
++
+diff -ruN sionlib.old/mf/Makefile.defs.linux-llvm sionlib/mf/Makefile.defs.linux-llvm
+--- sionlib.old/mf/Makefile.defs.linux-llvm	1970-01-01 01:00:00.000000000 +0100
++++ sionlib/mf/Makefile.defs.linux-llvm	2018-08-27 00:13:56.399318924 +0100
+@@ -0,0 +1,156 @@
++#------------------------------------------------------------------------------
++# SIONlib Makefile Definitions (Makefile.defs.linux-llvm)
++#------------------------------------------------------------------------------
++
++CFGKEY = linux-llvm
++CONFIG = Linux cluster with LLVM OpenMP compilers with MPICH mpi
++
++PREFIX           = $(TOPDIR)/../../install/sionlib_linux_llvm
++
++#------------------------------------------------------------------------------
++# Platform Settings
++#------------------------------------------------------------------------------
++PREC   = 64
++PFLAG  =
++AFLAG  =
++
++PLAT     = linux
++MACHINE  = -DMACHINE=\"Linux\ Cluster\"
++#PLAT_LDIR= -DPFORM_LDIR=\"/tmp\"
++PLATCC   = $(MPICC) $(PFLAG)
++PLAT_CONF= $(MACHINE) $(PLAT_LDIR)
++
++#------------------------------------------------------------------------------
++# SIONlib General Settings
++#------------------------------------------------------------------------------
++OPTFLAGS = -g -O0 -Wall
++
++CC       = clang
++CFLAGS   = $(PFLAG) $(OPTFLAGS) -fPIC
++CPP      = gcc -P -E
++CXX      = clang++
++CXXFLAGS = $(PFLAG) $(OPTFLAGS) -O3
++
++F77      = flang
++FFLAGS   = $(PFLAG) $(OPTFLAGS)
++
++F90      = $(F77)
++F90FLAGS = $(PFLAG) $(OPTFLAGS) -ffree-form
++
++FPP      =
++FDOPT    = -D
++
++LDFLAGS  = $(PFLAG) $(OPTFLAGS) $(HINTSLIB)
++UTILLIB  =
++FOBASE   = pomp_fwrapper_base.o
++
++#------------------------------------------------------------------------------
++# SIONlib Settings
++#------------------------------------------------------------------------------
++
++SION_PLATFORM    = -D_SION_LINUX 
++ARCH             = LINUX
++
++# Library Naming Scheme: sion{API}{FE}${DEVICE}${GCC}${LANG}${PREC}
++#                        API=(com|ser|gen|omp|mpi|ompi)
++#			 FE=(|fe)
++#			 DEVICE=(|mic)
++#			 GCC=(|gcc)
++#			 LANG=(|_cxx|_f77|_f90)
++#			 PREC=(_32|_64)
++
++# Library Naming Scheme: see Makefile.defs.linux-llvm
++SION_LIBNAME_COM = sioncom_$(PREC)
++SION_LIBNAME_SER = sionser_$(PREC)
++SION_LIBNAME_GEN = siongen_$(PREC)
++SION_LIBNAME_OMP     = sionomp_$(PREC)
++SION_LIBNAME_MPI     = sionmpi_$(PREC)
++SION_LIBNAME_OMPI    = sionompi_$(PREC)
++
++PARUTILENABLE    = 1
++
++FORTRANENABLE    = 1
++FORTRANNAMES     = -D_FORTRANUNDERSCORE
++SION_LIBNAME_F77_SER = sionser_f77_$(PREC)
++SION_LIBNAME_F77_MPI = sionmpi_f77_$(PREC)
++SION_LIBNAME_F90_SER = sionser_f90_$(PREC)
++SION_LIBNAME_F90_MPI = sionmpi_f90_$(PREC)
++SION_MODPATH = mod_$(PREC)
++
++CXXENABLE            = 1
++SION_LIBNAME_CXX_SER = sionser_cxx_$(PREC)
++SION_LIBNAME_CXX_MPI = sionmpi_cxx_$(PREC)
++
++PYTHONENABLE    = 0
++
++SION_DEBUG       = 
++
++#------------------------------------------------------------------------------
++# MPI Settings
++#------------------------------------------------------------------------------
++
++MPIENABLE = 1
++MPICC     = mpicc
++MPICXX    = mpicxx
++MPIF77    = mpif77
++MPIF90    = mpif90
++MPILIB    = -lmpich
++PMPILIB   = -lpmpich
++#PMPILIB   = # MPICH2
++FMPILIB   = -lfmpich
++FMPIOBJ   =
++MPI_CONFIG_TARGETS  = 
++
++#------------------------------------------------------------------------------
++# OpenMP Settings
++#------------------------------------------------------------------------------
++
++OMPENABLE = 1
++OMPCC      = $(CC)
++OMPCXX     = $(CXX)
++OMPF77     = $(F77)
++OMPF90     = $(F90)
++OMPFLAG    = -fopenmp
++
++#------------------------------------------------------------------------------
++# Hybrid MPI/OpenMP Settings
++#------------------------------------------------------------------------------
++
++HYBENABLE  = 1
++HYBCC      = $(MPICC)
++HYBCXX     = $(MPICXX)
++HYBF77     = $(MPIF77)
++HYBF90     = $(MPIF90)
++HYBFLAG    = $(OMPFLAG)
++
++#------------------------------------------------------------------------------
++# Compression Support
++#------------------------------------------------------------------------------
++
++SZLIB          = szlib
++SZLIB_OPTFLAGS = -O3
++SZLIB_CFLAGS   = -I$(TOPDIR)/utils/szlib -DELG_COMPRESSED -DCUBE_COMPRESSED
++SZLIB_LIBPATH  = -L$(TOPDIR)/utils/szlib
++SZLIB_LIB      = -lsc.z
++
++#------------------------------------------------------------------------------
++# SIONlib HINTS library
++#------------------------------------------------------------------------------
++GPFS_HINTS_LIB  = -L/usr/lpp/mmfs/lib -lgpfs
++GPFS_HINTS_INC  = -I/usr/lpp/mmfs/include
++LINUX_HINTS_LIB = -L/usr/lib
++LINUX_HINTS_INC = -I/usr/include
++
++HINTSDEF=
++HINTSINC=
++HINTSLIB=
++
++#------------------------------------------------------------------------------
++# SIONlib Cache Settings
++#------------------------------------------------------------------------------
++
++CACHEFLAGS=
++CACHELIB=
++#CACHEFLAGS=-D_SION_CACHE
++#CACHELIB=-lrt
++

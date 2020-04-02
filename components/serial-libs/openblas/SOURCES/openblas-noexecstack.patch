@@ -1,14 +1,14 @@
---- OpenBLAS-0.2.20/exports/Makefile	2017-07-23 21:03:35.000000000 -0700
-+++ OpenBLAS-0.2.20.patch/exports/Makefile	2017-08-01 13:17:26.000000000 -0700
-@@ -137,6 +137,7 @@
- endif
+--- a/exports/Makefile	2019-08-11 16:23:27.000000000 -0500
++++ b/exports/Makefile	2019-10-12 10:23:44.000000000 -0500
+@@ -155,6 +155,7 @@
+ 
  ifneq ($(C_COMPILER), LSB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o ../$(LIBSONAME) \
 +    -Wl,-z,noexecstack \
  	-Wl,--whole-archive $< -Wl,--no-whole-archive \
  	-Wl,-soname,$(INTERNALNAME) $(EXTRALIB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -w -o linktest linktest.c ../$(LIBSONAME) $(FEXTRALIB) && echo OK.
-@@ -164,6 +165,7 @@
+@@ -183,6 +184,7 @@
  ../$(LIBSONAME) : ../$(LIBNAME).renamed linktest.c
  endif
  	$(CC) $(CFLAGS) $(LDFLAGS)  -shared -o ../$(LIBSONAME) \
@@ -16,7 +16,7 @@
  	-Wl,--whole-archive $< -Wl,--no-whole-archive \
  	$(FEXTRALIB) $(EXTRALIB)
  	$(CC) $(CFLAGS) $(LDFLAGS) -w -o linktest linktest.c ../$(LIBSONAME) $(FEXTRALIB) && echo OK.
-@@ -183,6 +185,7 @@
+@@ -202,6 +204,7 @@
  
  so : ../$(LIBSONAME)
  	$(CC) $(CFLAGS) $(LDFLAGS)  -shared -o ../$(LIBSONAME) \

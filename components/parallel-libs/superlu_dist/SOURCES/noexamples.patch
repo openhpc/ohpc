@@ -1,0 +1,11 @@
+--- Makefile.orig	2019-03-06 18:57:47.885399489 -0600
++++ Makefile	2019-03-06 18:57:55.580399872 -0600
+@@ -14,7 +14,7 @@
+ 
+ include make.inc
+ 
+-all: lib install example
++all: lib install
+ 
+ lib: superlulib
+ 

@@ -1,3 +1,13 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 
 
 /*! @file 
@@ -67,7 +77,8 @@ int dcreate_matrix(SuperMatrix *A, int nrhs, double **rhs,
     int_t    m_loc, fst_row, nnz_loc;
     int_t    m_loc_fst; /* Record m_loc of the first p-1 processors,
 			   when mod(m, p) is not zero. */ 
-    int_t    iam, row, col, i, j, relpos;
+    int_t    row, col, i, j, relpos;
+    int      iam;
     char     trans[1];
     int_t      *marker;
 
@@ -78,8 +89,13 @@ int dcreate_matrix(SuperMatrix *A, int nrhs, double **rhs,
 #endif
 
     if ( !iam ) {
+        double t = SuperLU_timer_();
+
         /* Read the matrix stored on disk in Harwell-Boeing format. */
         dreadhb_dist(iam, fp, &m, &n, &nnz, &nzval, &rowind, &colptr);
+
+	printf("Time to read and distribute matrix %.2f\n", 
+	        SuperLU_timer_() - t);  fflush(stdout);
 
 	/* Broadcast matrix A to the other PEs. */
 	MPI_Bcast( &m,     1,   mpi_int_t,  0, grid->comm );
@@ -212,7 +228,7 @@ int dcreate_matrix(SuperMatrix *A, int nrhs, double **rhs,
     SUPERLU_FREE(marker);
 
 #if ( DEBUGlevel>=1 )
-    printf("sizeof(NRforamt_loc) %d\n", sizeof(NRformat_loc));
+    printf("sizeof(NRforamt_loc) %lu\n", sizeof(NRformat_loc));
     CHECK_MALLOC(iam, "Exit dcreate_matrix()");
 #endif
     return 0;

@@ -1,0 +1,19 @@
+--- tau-2.28/tools/src/paraprof/bin/paraprof.skel.orig	2019-11-11 11:13:39.482395350 -0600
++++ tau-2.28/tools/src/paraprof/bin/paraprof.skel	2019-11-11 11:16:33.453104733 -0600
+@@ -179,14 +179,14 @@
+   javaLocation="$javaLocation:$javaLocation/../lib:$javaLocation/../lib/amd64"
+ fi
+ 
+-if [ $MACHINE = arm_linux ]
++if [ "$MACHINE" = arm_linux ]
+ then
+   javaLocation="$javaLocation:$javaLocation/../lib:$javaLocation/../lib/arm:$javaLocation/../lib/arm/server"
+ #  echo "javaLocation=$javaLocation"
+   export LD_LIBRARY_PATH=$javaLocation:${LIBDIR}:${LD_LIBRARY_PATH}
+ fi
+ 
+-if [ $MACHINE = bgq  -o $MACHINE = bgp -o $MACHINE = bgl -o $MACHINE = ppc64 ]
++if [ "$MACHINE" = bgq  -o "$MACHINE" = bgp -o "$MACHINE" = bgl -o "$MACHINE" = ppc64 ]
+ then
+   javaLocation="$javaLocation:$javaLocation/../lib:$javaLocation/../lib/ppc64"
+   export LD_LIBRARY_PATH=$javaLocation:${LIBDIR}:${LD_LIBRARY_PATH}

@@ -20,25 +20,28 @@ Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 
 # Base package name
 %define pname petsc
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.7.6
+Version:        3.12.0
 Release:        1%{?dist}
 Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
-Source1:        OHPC_macros
 Patch1:         petsc.rpath.patch
 Url:            http://www.mcs.anl.gov/petsc/
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:       phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-BuildRequires:  python
-BuildRequires:  valgrind%{PROJ_DELIM}
+BuildRequires:  python2-devel
+BuildRequires:  valgrind-devel
 BuildRequires:  xz
 BuildRequires:  zlib-devel
+%if 0%{?rhel}
+BuildRequires:  openssh-clients
+%else
+BuildRequires:  openssh
+%endif
 
 #!BuildIgnore: post-build-checks
 
@@ -61,24 +64,35 @@ differential equations.
 
 module load phdf5
 
-# Enable scalapack linkage for blas/lapack with gnu builds
-%if "%{compiler_family}" != "intel"
+%if "%{compiler_family}" == "arm"
+module load scalapack
+%endif
+
+# Enable scalapack and openblas linkage for blas/lapack with gnu and other (e.g. llvm) builds
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load scalapack openblas
 %endif
 
+export COPTFLAGS="%{optflags}"
+export CXXOPTFLAGS="%{optflags}"
+export FOPTFLAGS="%{optflags}"
+
 # icc-impi requires mpiicc wrappers, otherwise dynamic libs are not generated.
 # gnu-impi finds include/4.8.0/mpi.mod first, unless told not to.
-./config/configure.py \
+%{__python2} ./config/configure.py \
         --prefix=%{install_path} \
-%if %{compiler_family} == intel
         --FFLAGS="-fPIC" \
+%if %{compiler_family} == intel
         --with-blas-lapack-dir=$MKLROOT/lib/intel64 \
 %else
         --CFLAGS="-fPIC -DPIC" \
         --CXXFLAGS="-fPIC -DPIC" \
-        --FFLAGS="-fPIC" \
-        --with-blas-lapack-lib=$OPENBLAS_LIB/libopenblas.so \
         --with-scalapack-dir=$SCALAPACK_DIR \
+%if %{compiler_family} == arm
+        --with-blas-lapack-lib=$ARMPL_LIBRARIES/libarmpl.so \
+%else
+        --with-blas-lapack-lib=$OPENBLAS_LIB/libopenblas.so \
+%endif
 %endif
 %if %{mpi_family} == impi
 %if %{compiler_family} == intel
@@ -87,7 +101,9 @@ module load scalapack openblas
         --with-fc=mpiifort  \
         --with-f77=mpiifort \
 %else
+%if "%{compiler_family}" == "gnu"
         --FFLAGS=-I$I_MPI_ROOT/include64/gfortran/4.9.0/ \
+%endif
 %endif
 %endif
         --with-clanguage=C++ \
@@ -105,9 +121,25 @@ make
 
 %install
 
-make install DESTDIR=$RPM_BUILD_ROOT/%{install_path}
+make install DESTDIR=$RPM_BUILD_ROOT
 
-rm %{buildroot}%{install_path}/lib/petsc/conf/configure.log
+cd %{buildroot}%{install_path}
+for file in \
+	lib/petsc/bin/petsc_gen_xdmf.py \
+	lib/petsc/bin/PetscBinaryIOTrajectory.py \
+	lib/petsc/bin/petsc_tas_analysis.py \
+	lib/petsc/bin/petsc-performance-view \
+	lib/petsc/bin/petscnagfor \
+	lib/petsc/bin/taucc.py \
+	lib/petsc/bin/petscnagupgrade.py \
+	lib/petsc/bin/saws/SAWs.py \
+	lib/petsc/bin/petsclogformat.py \
+	share/petsc/examples/config/testparse.py \
+	share/petsc/examples/config/gmakegen.py \
+	share/petsc/examples/config/gmakegentest.py \
+	share/petsc/examples/config/report_tests.py; do
+		sed -e "s,/env python,/python2,g" -i $file
+done
 
 # remove stock module file
 rm -rf %{buildroot}%{install_path}/lib/modules
@@ -135,11 +167,11 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-# Require phdf5 (and scalapack for gnu compiler families)
+# Require phdf5 (and scalapack for compiler families other than intel)
 depends-on phdf5
-if { ![is-loaded intel] } {
-    depends-on scalapack
-}
+%if "%{compiler_family}" != "intel"
+depends-on scalapack
+%endif
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
@@ -163,16 +195,6 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc CONTRIBUTING LICENSE
 
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.7.6-1
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.7.6-0
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.7.5-0
-- Switching to %%ohpc_compiler macro

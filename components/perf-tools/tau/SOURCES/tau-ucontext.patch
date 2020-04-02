@@ -1,0 +1,20 @@
+--- tau-2.26.1/src/Profile/TauSampling_stackwalker.cpp.orig	2017-11-21 15:11:59.429718525 +0100
++++ tau-2.26.1/src/Profile/TauSampling_stackwalker.cpp	2017-11-21 15:13:27.005698367 +0100
+@@ -81,7 +81,7 @@
+ //   Only support for x86_64 for now.
+ static inline unsigned long get_sp(void *p) {
+   unsigned long sp;
+-  struct ucontext *uc = (struct ucontext *)p;
++  ucontext_t *uc = (ucontext_t *)p;
+ 
+ #ifdef TAU_BGP
+   // *CWL* returns void ** but used directly as the SP.
+@@ -99,7 +99,7 @@
+ //   Only support for x86_64 for now.
+ static inline unsigned long get_fp(void *p) {
+   unsigned long fp;
+-  struct ucontext *uc = (struct ucontext *)p;
++  ucontext_t *uc = (ucontext_t *)p;
+ 
+ #ifdef TAU_BGP
+   // *CWL* returns void ** but used directly as the FP.

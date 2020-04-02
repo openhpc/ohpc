@@ -15,37 +15,35 @@
 
 # Base package name
 %define pname scorep
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   3.1
+Version:   6.0
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
-Source0:   http://www.vi-hps.org/upload/packages/scorep/scorep-%{version}.tar.gz
-Source1:   OHPC_macros
-Patch0:    scorep-gcc7.patch
+Source0:   http://www.vi-hps.org/cms/upload/packages/scorep/scorep-%{version}.tar.gz
 
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
 BuildRequires: automake
 BuildRequires: binutils-devel
-Requires     : binutils-devel
+Requires:      binutils-devel
 BuildRequires: libunwind-devel
-Requires     : libunwind-devel
-Requires     : lmod%{PROJ_DELIM} >= 7.6.1
+Requires:      libunwind-devel
+Requires:      lmod%{PROJ_DELIM} >= 7.6.1
 BuildRequires: zlib-devel
 %ifarch x86_64
 BuildRequires: papi%{PROJ_DELIM}
-Requires     : papi%{PROJ_DELIM}
+Requires:      papi%{PROJ_DELIM}
 %endif
 BuildRequires: pdtoolkit-%{compiler_family}%{PROJ_DELIM}
-Requires     : pdtoolkit-%{compiler_family}%{PROJ_DELIM}
+Requires:      pdtoolkit-%{compiler_family}%{PROJ_DELIM}
 BuildRequires: sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires     : sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:      sionlib-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+#!BuildIgnore: post-build-checks
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -61,7 +59,6 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch0 -p1
 
 %build
 
@@ -94,11 +91,16 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
-%if %{mpi_family} == openmpi3
+%if %{mpi_family} == openmpi4
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 %endif
 
+export CFLAGS="$RPM_OPT_FLAGS"
+export CXXFLAGS="$RPM_OPT_FLAGS"
+export LDFLAGS="$RPM_LD_FLAGS"
 ./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS
+
+make V=1 %{?_smp_mflags}
 
 %install
 
@@ -172,16 +174,5 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog COPYING INSTALL OPEN_ISSUES README THANKS
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.0-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.0-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.0-1
-- Switching to %%ohpc_compiler macro

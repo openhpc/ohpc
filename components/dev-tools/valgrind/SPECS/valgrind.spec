@@ -11,19 +11,15 @@
 %include %{_sourcedir}/OHPC_macros
 
 %define pname valgrind
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Valgrind Memory Debugger
 Name:      %{pname}%{PROJ_DELIM}
-Version:   3.13.0
+Version:   3.15.0
 Release:   1%{?dist}
 License:   GPL
 URL:       http://www.valgrind.org/
-DocDir:    %{OHPC_PUB}/doc/contrib
 Group:     %{PROJ_NAME}/dev-tools
 Source:    https://sourceware.org/pub/%{pname}/%{pname}-%{version}.tar.bz2
-Source1:   OHPC_macros
-BuildRoot: %{_tmppath}/%{pname}-%{version}-%{release}-root
 
 # Default library install path
 %define install_path %{OHPC_UTILS}/%{pname}/%version
@@ -85,7 +81,6 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-,root,root)
 %{OHPC_HOME}
 %doc AUTHORS
 %doc README_DEVELOPERS
@@ -96,6 +91,3 @@ EOF
 %doc FAQ.txt
 %doc NEWS
 %doc COPYING
-
-%clean
-rm -rf $RPM_BUILD_ROOT

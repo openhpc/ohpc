@@ -1,0 +1,236 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+PKG=HDF5
+testname=libs/HDF5_1_10_API_Fortran_env-tests
+
+check_rms
+
+@test "[$testname] Verify h5ex_d_rdwr ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_rdwr
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+    
+}
+
+
+@test "[$testname] Verify h5ex_d_hyper ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_hyper
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+    
+}
+
+@test "[$testname] Verify h5ex_d_chunk ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_chunk
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+    
+}
+
+@test "[$testname] Verify h5ex_d_gzip ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_gzip
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+    
+}
+
+@test "[$testname] Verify h5ex_d_extern ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_extern
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+    
+}
+
+@test "[$testname] Verify h5ex_d_compact ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_compact
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+    
+}
+
+@test "[$testname] Verify h5ex_d_unlimmod ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_unlimmod
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+    
+}
+
+@test "[$testname] Verify h5ex_d_checksum ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_checksum
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+    
+}
+
+
+
+@test "[$testname] Verify h5ex_d_fillval ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_fillval
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+    
+}
+
+@test "[$testname] Verify h5ex_d_alloc ($LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_alloc
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    rm -f $binary.h5
+
+    run "./$binary"
+    assert_success
+
+    if [ ! -s "$binary.h5" ];then
+	flunk "$binary.h5 file not created"
+    else
+	h5dump $binary.h5  > tmp.test
+	run cmp -s tmp.test ./testfiles/$binary.ddl
+	assert_success
+    fi
+
+    rm -f *.h5
+    rm -f tmp.test
+    
+}
+
+@test "[$testname] Sample h5ex_d_alloc job ($RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER)" {
+    binary=h5ex_d_alloc
+    if [ ! -x "$binary" ];then
+        flunk "$binary binary not available"
+    fi
+
+    run_serial_binary ./$binary
+    assert_success
+}

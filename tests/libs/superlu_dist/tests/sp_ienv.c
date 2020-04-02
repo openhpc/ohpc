@@ -1,3 +1,13 @@
+/*! \file
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
 /*! @file
  * \brief Chooses machine-dependent parameters for the local environment
  */
@@ -9,7 +19,8 @@
 #include "machines.h"
 
 /*! \brief
-<pre>
+
+</pre>
     Purpose   
     =======   
 
@@ -26,7 +37,7 @@
     =========   
 
     ISPEC   (input) int
-            Specifies the parameter to be returned as the value of SP_IENV_DIST.
+            Specifies the parameter to be returned as the value of SP_IENV_DIST.   
             = 1: the panel size w; a panel consists of w consecutive
 	         columns of matrix A in the process of Gaussian elimination.
 		 The best value depends on machine's cache characters.
@@ -40,6 +51,8 @@
 	    = 5: the minimum column dimension for 2-D blocking to be used;
 	    = 6: the estimated fills factor for the adjacency structures 
 	         of L and U, compared with A;
+	    = 7: the minimum value of the product M*N*K for a GEMM call
+	         to be off-loaded to accelerator (e.g., GPU, Xeon Phi).
 	    
    (SP_IENV_DIST) (output) int
             >= 0: the value of the parameter specified by ISPEC   
@@ -48,29 +61,64 @@
     ===================================================================== 
 </pre>
 */
+
+
+#include <stdlib.h>
+#include <stdio.h>
+
+
 int_t
 sp_ienv_dist(int_t ispec)
 {
+    // printf(" this function called\n");
     int i;
+
+    char* ttemp;
 
     switch (ispec) {
 #if ( MACH==CRAY_T3E )
-	case 2: return (1);
+	case 2: return (6);
 	case 3: return (30);
+
 #elif ( MACH==IBM )
-	case 2: return (1);
+	case 2: return (20);
 	case 3: return (100);
 #else
-	case 2: return (1);
-	case 3: return (50);
+	case 2: 
+            ttemp = getenv("NREL");
+            if(ttemp)
+            {
+                return(atoi(ttemp));
+            }
+            else
+            return 20;
+            
+	case 3: 
+            ttemp = getenv("NSUP");
+            if(ttemp)
+            {
+                return(atoi(ttemp));
+            }
+            else
+            return 128;
+
 #endif
-        case 6: return (4);
+        case 6: 
+            ttemp = getenv("FILL");
+            if ( ttemp ) return(atoi(ttemp));
+            else return (5);
+        case 7:
+	    ttemp = getenv ("N_GEMM");
+	    if (ttemp) return atoi (ttemp);
+	    else return 10000;
+
     }
 
     /* Invalid value for ISPEC */
     i = 1;
-    xerbla_("sp_ienv", &i);
+    xerr_dist("sp_ienv", &i);
     return 0;
+
 
 } /* sp_ienv_dist */
 

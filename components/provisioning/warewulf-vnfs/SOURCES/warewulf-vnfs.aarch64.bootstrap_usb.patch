@@ -1,0 +1,13 @@
+--- a/etc/bootstrap.conf	2018-07-12 10:18:54.000000000 -0700
++++ b/etc/bootstrap.conf	2018-07-12 10:33:29.000000000 -0700
+@@ -32,6 +32,10 @@
+ modprobe += xhci-hcd, sl811-hcd, sd_mod
+ # modprobe += ib_ipoib
+ 
++# support USB and SoftIron network devices
++modprobe += xhci_pci, usbcore, libphy, mii, usbnet, asix
++modprobe += amd-xgbe
++
+ #OpenHPC additions for SLES12
+ drivers += af_packet, dns_resolver, auth_rpcgss, lockd, sunrpc
+ drivers += dm_mod, dcdbas, dell_rbu, ipmi_msghandler, shpchp, ehci_pci

@@ -14,14 +14,13 @@
 
 Summary:   Parallel remote shell program
 Name:      %{pname}%{PROJ_DELIM}
-Version:   2.33
+Version:   2.34
 Release:   1%{?dist}
 License:   GPL
-Url:       http://sourceforge.net/projects/pdsh
+Url:       https://github.com/chaos/pdsh
 Group:     %{PROJ_NAME}/admin
 Source0:   https://github.com/chaos/%{pname}/releases/download/%{pname}-%{version}/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
-
+Patch1:    pdsh-slurm-list.patch
 
 ### karl.w.schulz@intel.com (11/07/14) - temporarily disabling rcmd requirement
 ### Requires: pdsh-rcmd
@@ -235,13 +234,14 @@ The command executed for each host is built from the pdsh
 to execute, followed by any arguments including "%h", "%u", and
 "%n", which are the remote target, username, and rank respectively.
 
-%package   mod-genders
+%package   -n pdsh-mod-genders%{PROJ_DELIM}
 Summary:   Provides libgenders support for pdsh
 Group:     System Environment/Base
-Requires:  genders >= 1.1
+Requires:  genders%{PROJ_DELIM} >= 1.1
+BuildRequires: genders%{PROJ_DELIM}
 Conflicts: pdsh-mod-nodeattr
 Conflicts: pdsh-mod-machines
-%description mod-genders
+%description -n pdsh-mod-genders%{PROJ_DELIM}
 Pdsh module for libgenders functionality.
 
 %package   mod-nodeattr
@@ -311,12 +311,13 @@ from an allocated Torque job.
 
 %prep
 %setup  -q -n %{pname}-%{version}
+%patch1 -p1
 ##############################################################################
 
 %build
 
 # work around old config.guess on aarch64 systems
-%ifarch aarch64
+%ifarch aarch64 || ppc64le
 cp /usr/lib/rpm/config.guess config
 %endif
 
@@ -357,7 +358,6 @@ make %{_smp_mflags} CFLAGS="$RPM_OPT_FLAGS"
 ##############################################################################
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %{__mkdir_p} $RPM_BUILD_ROOT
 DESTDIR="$RPM_BUILD_ROOT" make install
 if [ -x $RPM_BUILD_ROOT/%{_sbindir}/in.qshd ]; then
@@ -387,14 +387,7 @@ find ${RPM_BUILD_ROOT}
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-##############################################################################
-
-%clean
-rm -rf "$RPM_BUILD_ROOT"
-##############################################################################
-
 %files
-%defattr(-,root,root)
 %doc COPYING README NEWS DISCLAIMER.LLNS DISCLAIMER.UC
 %doc README.KRB4 README.modules
 %{OHPC_HOME}
@@ -403,6 +396,7 @@ rm -rf "$RPM_BUILD_ROOT"
 %{_bindir}/dshbak
 %{_bindir}/pdcp
 %{_bindir}/rpdcp
+%exclude %{install_path}/lib/pdsh/genders.*
 %exclude %{install_path}/lib/pdsh/slurm.*
 
 %if 0%{?OHPC_BUILD}
@@ -412,9 +406,12 @@ rm -rf "$RPM_BUILD_ROOT"
 
 %endif
 
+%if %{?_with_genders:1}%{!?_with_genders:0}
+%files -n pdsh-mod-genders%{PROJ_DELIM}
+%{install_path}/lib/pdsh/genders.*
+%endif
+
 %if %{?_with_slurm:1}%{!?_with_slurm:0}
 %files -n pdsh-mod-slurm%{PROJ_DELIM}
 %{install_path}/lib/pdsh/slurm.*
 %endif
-
-%changelog

@@ -14,7 +14,6 @@
 
 # Base package name
 %define pname metis
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Name:    %{pname}-%{compiler_family}%{PROJ_DELIM}
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
@@ -24,7 +23,6 @@ License: Apache License 2.0
 Group:   %{PROJ_NAME}/serial-libs
 URL:     http://glaros.dtc.umn.edu/gkhome/metis/metis/overview
 Source0: http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-%{version}.tar.gz
-Source1: OHPC_macros
 BuildRequires: make
 BuildRequires: pkgconfig
 BuildRequires: cmake
@@ -122,13 +120,5 @@ EOF
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
-%defattr(-,root,root)
 %{OHPC_PUB}
 %doc BUILD.txt Changelog Install.txt LICENSE.txt
-
-%changelog
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 5.1.0-1
-- switch to ohpc_compiler_dependent flag
-
-* Mon Feb 20 2017 Adrian Reber <areber@redhat.com> - 5.1.0-1
-- Switching to %%ohpc_compiler macro

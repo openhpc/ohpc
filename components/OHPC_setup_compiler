@@ -21,7 +21,7 @@ if [ "$#" = "1" ]; then
 fi
 
 if [ -z "$OHPC_COMPILER_FAMILY" ]; then
-    echo "Unknown OHPC_COMPILER_FAMILY"
+    echo "OHPC_COMPILER_FAMILY not defined"
     exit 1
 fi
 
@@ -33,13 +33,20 @@ if [ "$OHPC_COMPILER_FAMILY" = "gnu" ]; then
     export F77=gfortran
     module purge
     module load gnu
-elif [ "$OHPC_COMPILER_FAMILY" = "gnu7" ]; then
+elif [ "$OHPC_COMPILER_FAMILY" = "gnu8" ]; then
     export CC=gcc
     export CXX=g++
     export FC=gfortran
     export F77=gfortran
     module purge
-    module load gnu7
+    module load gnu8
+elif [ "$OHPC_COMPILER_FAMILY" = "gnu9" ]; then
+    export CC=gcc
+    export CXX=g++
+    export FC=gfortran
+    export F77=gfortran
+    module purge
+    module load gnu9
 elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
     export toolset=intel-linux
     export CC=icc
@@ -48,16 +55,13 @@ elif [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
     export F77=ifort
     module purge
     module load intel
-elif [ "$OHPC_COMPILER_FAMILY" = "dts6" ]; then
-    # dts is the devtoolset-6 software collection
-    # on top of CentOS7/RHEL7 which brings gcc 6.2.1
-    # http://mirror.centos.org/centos/7/sclo/$basearch/rh/
-    export CC=gcc
-    export CXX=g++
-    export FC=gfortran
-    export F77=gfortran
+elif [ "$OHPC_COMPILER_FAMILY" = "arm1" ]; then
+    export CC=armclang
+    export CXX=armclang++
+    export FC=armflang
+    export F77=armflang
     module purge
-    module load gnu/6
+    module load arm1
 elif [ "$OHPC_COMPILER_FAMILY" = "llvm" ]; then
     export toolset=clang
     export CC=clang

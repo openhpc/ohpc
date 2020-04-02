@@ -15,18 +15,23 @@
 
 # Base package name
 %define pname sionlib
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
 Summary:   Scalable I/O Library for Parallel Access to Task-Local Files
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   1.7.1
+Version:   1.7.4
 Release:   1%{?dist}
 License:   BSD
 Group:     %{PROJ_NAME}/io-libs
 URL:       http://www.fz-juelich.de/ias/jsc/EN/Expertise/Support/Software/SIONlib/_node.html
 Source0:   http://apps.fz-juelich.de/jsc/sionlib/download.php?version=%{version}#/%{pname}-%{version}.tar.gz
-Source1:   OHPC_macros
-Patch0:    gcc-6-7.patch
+Patch0:    sionlib-llvm-arm.patch
+
+# For pre-processor only:
+%if 0%{?rhel}
+BuildRequires: gcc-gfortran
+%else
+BuildRequires: gcc-fortran
+%endif
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
@@ -41,7 +46,7 @@ This is the %{compiler_family}-%{mpi_family} version.
 %prep
 
 %setup -q -n %{pname}
-%patch0 -p0
+%patch0 -p1
 
 %build
 
@@ -50,6 +55,12 @@ This is the %{compiler_family}-%{mpi_family} version.
 
 %if %{compiler_family} == intel
 CONFIGURE_OPTIONS="--compiler=intel --disable-parutils "
+%endif
+%if %{compiler_family} == arm
+CONFIGURE_OPTIONS="--compiler=arm "
+%endif
+%if %{compiler_family} == llvm
+CONFIGURE_OPTIONS="--compiler=llvm "
 %endif
 
 %if %{mpi_family} == impi
@@ -68,7 +79,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=mpich3 "
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 
-%if %{mpi_family} == openmpi3
+%if %{mpi_family} == openmpi4
 CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --mpi=openmpi "
 %endif
 
@@ -141,16 +152,5 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc COPYRIGHT LICENSE README INSTALL RELEASE
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 1.7.1-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 1.7.1-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 1.7.0-1
-- Switching to %%ohpc_compiler macro

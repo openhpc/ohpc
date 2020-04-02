@@ -15,26 +15,24 @@
 
 # Base package name
 %define pname fftw
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
+
+# Not building quad-precision because: "quad precision is not supported in MPI"
+%global precision_list single double long-double
 
 Summary:   A Fast Fourier Transform library
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   3.3.6
+Version:   3.3.8
 Release:   1%{?dist}
 License:   GPLv2+
 Group:     %{PROJ_NAME}/parallel-libs
 URL:       http://www.fftw.org
-Source0:   http://www.fftw.org/fftw-%{version}-pl2.tar.gz
-Source1:   OHPC_macros
+Source0:   http://www.fftw.org/fftw-%{version}.tar.gz
 
 %define openmp        1
 %define mpi           1
 
 BuildRequires:        perl
-BuildRequires:        postfix
 BuildRequires:        util-linux
-Requires(post):       info
-Requires(preun):      info
 
 
 # Default library install path
@@ -47,7 +45,7 @@ data, and of arbitrary input size.
 
 
 %prep
-%setup -q -n %{pname}-%{version}-pl2
+%setup -q -n %{pname}-%{version}
 
 %build
 # OpenHPC compiler/mpi designation
@@ -61,15 +59,37 @@ BASEFLAGS="$BASEFLAGS --enable-openmp"
 BASEFLAGS="$BASEFLAGS --enable-mpi"
 %endif
 
-./configure --prefix=%{install_path} ${BASEFLAGS} --enable-static=no || { cat config.log && exit 1; }
 
-make
+for i in %{precision_list} ; do
+	LOOPBASEFLAGS=${BASEFLAGS}
+	if [[ "${i} == "single" || "${i} == "double" ]]; then
+		# taken from https://src.fedoraproject.org/rpms/fftw/blob/master/f/fftw.spec
+%ifarch x86_64
+		LOOPBASEFLAGS="${LOOPBASEFLAGS} --enable-sse2 --enable-avx"
+%endif
+%ifarch aarch64
+		LOOPBASEFLAGS="${LOOPBASEFLAGS} --enable-neon"
+%endif
+	fi
+	mkdir ${i}
+	cd ${i}
+	ln -s ../configure
+	./configure --prefix=%{install_path} ${LOOPBASEFLAGS} \
+		--enable-${i} \
+		--enable-static=no || { cat config.log && exit 1; }
+	make %{?_smp_mflags}
+	cd ..
+done
 
 %install
 # OpenHPC compiler designation
 %ohpc_setup_compiler
 
-make DESTDIR=$RPM_BUILD_ROOT install
+for i in %{precision_list}; do
+	cd ${i}
+	make DESTDIR=$RPM_BUILD_ROOT install
+	cd ..
+done
 
 # don't package static libs
 rm -f $RPM_BUILD_ROOT%{install_path}/lib/*la
@@ -117,30 +137,6 @@ EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
-
-%post
-/sbin/install-info --section="Math" %{_infodir}/%{pname}.info.gz %{_infodir}/dir  2>/dev/null || :
-exit 0
-
-%preun
-if [ "$1" = 0 ]; then
-  /sbin/install-info --delete %{_infodir}/%{pname}.info.gz %{_infodir}/dir 2>/dev/null || :
-fi
-
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
 %doc AUTHORS ChangeLog CONVENTIONS COPYING COPYRIGHT INSTALL NEWS README TODO
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 3.3.6-2
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 3.3.6-1
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 3.3.4-1
-- Switching to %%ohpc_compiler macro
-
-* Tue Aug  5 2014  <karl.w.schulz@intel.com> -
-- Initial build.

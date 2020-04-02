@@ -7,8 +7,8 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-
-# 
+#
+# Copyright (c) 2017-2018, SyLabs, Inc. All rights reserved.
 # Copyright (c) 2017, SingularityWare, LLC. All rights reserved.
 #
 # Copyright (c) 2015-2017, Gregory M. Kurtzer. All rights reserved.
@@ -35,79 +35,75 @@
 # Base package name
 %define pname singularity
 
-# This allows us to pick up the default value from the configure
-%{!?with_slurm: %global with_slurm no}
-%if "%{with_slurm}" == "yes"
-%global slurm 1
-%else
-%global slurm 0
-%endif
+%define singgopath src/github.com/sylabs/singularity
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
-Version: 2.4
+Version: 3.4.1
 Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
 Group: %{PROJ_NAME}/runtimes
-URL: http://singularity.lbl.gov/
-Source0: https://github.com/singularityware/singularity/releases/download/%{version}/%{pname}-%{version}.tar.gz
-Source1: OHPC_macros
+URL: https://www.sylabs.io/singularity/
+Source0: https://github.com/sylabs/singularity/releases/download/v%{version}/%{pname}-%{version}.tar.gz
+Patch1: singularity-suse-timezone.patch
 ExclusiveOS: linux
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: libtool
-BuildRequires: python
+BuildRequires: gcc
+BuildRequires: git
+BuildRequires: openssl-devel
+BuildRequires: libuuid-devel
+BuildRequires: libseccomp-devel
 Requires: file
 %if 0%{?sles_version} || 0%{?suse_version}
+BuildRequires: go
+BuildRequires: binutils-gold
 Requires: squashfs
 %else
+BuildRequires: golang > 1.6
 Requires: squashfs-tools
 %endif
+BuildRequires: cryptsetup
+#!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{pname}/%version
 
 %description
-Singularity provides functionality to build the smallest most minimal
-possible containers, and running those containers as single application
-environments.
-
-%if %slurm
-%package -n singularity-slurm%{PROJ_DELIM}
-Summary: Singularity plugin for SLURM
-Requires: singularity = %{version}-%{release}
-BuildRequires: slurm-devel%{PROJ_DELIM}
-
-%description -n singularity-slurm%{PROJ_DELIM}
-The Singularity plugin for SLURM allows jobs to be started within
-a container.  This provides a simpler interface to the user (they
-don't have to be aware of the singularity executable) and doesn't
-require a setuid binary.
-%endif
-
+Singularity provides functionality to make portable
+containers that can be used across host environments.
 
 %prep
-%setup -q -n %{pname}-%{version}
-
+# Create our build root
+rm -rf %{name}-%{version}
+mkdir %{name}-%{version}
 
 %build
-if [ ! -f configure ]; then
-  ./autogen.sh
-fi
+cd %{name}-%{version}
 
-./configure --prefix=%{install_path}  \
-  --disable-static --with-pic \
-%if %slurm
-  --with-slurm
-%else
-  --without-slurm
-%endif
+mkdir -p gopath/%{singgopath}
+tar -C "gopath/src/github.com/sylabs/" -xf "%SOURCE0"
 
-%{__make} %{?_smp_mflags}
+export GOPATH=$PWD/gopath
+export PATH=$GOPATH/bin:$PATH
+cd $GOPATH/%{singgopath}
+
+./mconfig -V %{version}-%{release} \
+    --prefix=%{install_path}
+
+cd builddir
+make old_config=
 
 %install
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+cd %{name}-%{version}
+
+export GOPATH=$PWD/gopath
+export PATH=$GOPATH/bin:$PATH
+cd $GOPATH/%{singgopath}/builddir
+
+mkdir -p $RPM_BUILD_ROOT%{install_path}/share/man/man1
+make DESTDIR=$RPM_BUILD_ROOT install man
+chmod 644 $RPM_BUILD_ROOT%{install_path}/etc/singularity/actions/*
+
 # NO_BRP_CHECK_RPATH has no effect on CentOS 7
 export NO_BRP_CHECK_RPATH=true
 
@@ -133,11 +129,10 @@ module-whatis "URL %{url}"
 set     version             %{version}
 
 prepend-path    PATH                %{install_path}/bin
-prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
-prepend-path    MANPATH             %{install_path}/man
+prepend-path    MANPATH             %{install_path}/share/man
 
-setenv          %{pname}_DIR        %{install_path}
-setenv          %{pname}_BIN        %{install_path}/bin
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_BIN        %{install_path}/bin
 
 EOF
 
@@ -152,19 +147,14 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-, root, root)
-%doc examples CONTRIBUTORS.md CONTRIBUTING.md COPYRIGHT.md INSTALL.md LICENSE-LBNL.md LICENSE.md README.md
-%attr(0644, root, root) %config(noreplace) %{install_path}/etc/singularity/*
+%doc singularity-ohpc-%{version}/gopath/%{singgopath}/examples singularity-ohpc-%{version}/gopath/%{singgopath}/*.md
+%dir %{install_path}/etc/singularity
+%config(noreplace) %{install_path}/etc/singularity/*
+%attr(755, root, root) %{install_path}/etc/singularity/actions/exec
+%attr(755, root, root) %{install_path}/etc/singularity/actions/run
+%attr(755, root, root) %{install_path}/etc/singularity/actions/shell
+%attr(755, root, root) %{install_path}/etc/singularity/actions/start
+%attr(755, root, root) %{install_path}/etc/singularity/actions/test
 %{OHPC_PUB}
 #SUID programs
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/action-suid
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/mount-suid
-%attr(4755, root, root) %{install_path}/libexec/singularity/bin/start-suid
-
-%if %slurm
-%files -n singularity-slurm%{PROJ_DELIM}
-%defattr(-, root, root)
-%{install_path}/lib/slurm/singularity.so
-%endif
-
-%changelog
+%attr(4755, root, root) %{install_path}/libexec/singularity/bin/starter-suid

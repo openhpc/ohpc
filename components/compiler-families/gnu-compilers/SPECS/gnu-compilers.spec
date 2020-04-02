@@ -10,43 +10,27 @@
 
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" == "gnu7"
-%global gnu_version 7.2.0
-%global gnu_major_ver 7
-%global gnu_release 1
-%global pname gnu7-compilers
-%global source https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
-%global source_directory gcc-%{version}
-%endif
-
-%if "%{compiler_family}" == "dts6"
-%global gnu_version 6
-%global gnu_major_ver 6
-%global gnu_release 0
-%global pname gnu-dts6-compilers
-%global source_directory %{nil}
-%endif
+%global gnu_version 9.2.0
+%global gnu_major_ver 9
+%global pname gnu9-compilers
 
 # Define subcomponent versions required for build
 
 %global gmp_version 6.1.2
-%global mpc_version 1.0.3
-%global mpfr_version 3.1.6
+%global mpc_version 1.1.0
+%global mpfr_version 4.0.2
 
 Summary:   The GNU C Compiler and Support Files
 Name:      %{pname}%{PROJ_DELIM}
 Version:   %{gnu_version}
-Release:   %{gnu_release}%{?dist}
+Release:   1%{?dist}
 License:   GNU GPL
 Group:     %{PROJ_NAME}/compiler-families
 URL:       http://gcc.gnu.org/
-%if "%{compiler_family}" != "dts6"
-Source0:   %{source}
+Source0:   https://ftp.gnu.org/gnu/gcc/gcc-%{gnu_version}/gcc-%{gnu_version}.tar.xz
 Source1:   https://ftp.gnu.org/gnu/gmp/gmp-%{gmp_version}.tar.bz2
 Source2:   https://ftp.gnu.org/gnu/mpc/mpc-%{mpc_version}.tar.gz
 Source3:   https://ftp.gnu.org/gnu/mpfr/mpfr-%{mpfr_version}.tar.gz
-%endif
-Source4:   OHPC_macros
 
 BuildRequires:  bison
 BuildRequires:  flex
@@ -63,13 +47,10 @@ BuildRequires:  zlib-devel
 BuildRequires:  fdupes
 %endif
 Requires: glibc-devel
+Requires: binutils
 
 
-%if "%{compiler_family}" == "dts6"
-%define install_path /opt/rh/devtoolset-6/root/usr
-%else
 %define install_path %{OHPC_COMPILERS}/gcc/%{version}
-%endif
 
 %description
 
@@ -77,8 +58,7 @@ Core package for the GNU Compiler Collection, including the C language
 frontend.
 
 %prep
-%if "%{compiler_family}" != "dts6"
-%setup -q -n %{source_directory} -a1 -a2 -a3
+%setup -q -n gcc-%{version} -a1 -a2 -a3
 
 ln -s gmp-%{gmp_version} gmp
 ln -s mpc-%{mpc_version} mpc
@@ -88,11 +68,9 @@ ln -s mpfr-%{mpfr_version} mpfr
 
 %{__mkdir} obj
 cd obj
-../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path}
+../configure --disable-multilib --enable-languages="c,c++,fortran"  --prefix=%{install_path} --disable-static --enable-shared
 make %{?_smp_mflags}
-%endif
 %install
-%if "%{compiler_family}" != "dts6"
 cd obj
 make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 
@@ -101,7 +79,6 @@ make %{?_smp_mflags} DESTDIR=$RPM_BUILD_ROOT install
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/lib
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/install-tools
 %fdupes -s $RPM_BUILD_ROOT/%{install_path}/share
-%endif
 %endif
 
 
@@ -134,7 +111,7 @@ prepend-path    PATH                %{install_path}/bin
 prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib64
-prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}
+prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/gnu%{gnu_major_ver}
 
 family "compiler"
 EOF
@@ -150,9 +127,7 @@ EOF
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_MODULES}/gnu%{gnu_major_ver}/
-%if "%{compiler_family}" != "dts6"
 %dir %{OHPC_COMPILERS}/gcc
 %{install_path}
 %doc COPYING
@@ -166,15 +141,3 @@ EOF
 %if "%{compiler_family}" != "gnu7"
 %doc NEWS
 %endif
-%endif
-
-%changelog
-* Fri Jun  9 2017 Karl W Schulz <karl.w.schulz@intel.com>
-- include major version in modulefile schema
-
-* Fri Feb 17 2017 Adrian Reber <areber@redhat.com>
-- Added support to build gnu-compilers (5.4.0) and
-  gnu-7-compilers from same SPEC file
-
-* Tue Aug  5 2014  <karl.w.schulz@intel.com> -
-- Initial build.

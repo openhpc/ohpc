@@ -1,3 +1,5 @@
 setBadness('permissions-file-setuid-bit', 0)
 setBadness('non-position-independent-executable', 0)
 addFilter("devel-file-in-non-devel-package")
+addFilter("library-without-ldconfig")
+addFilter("files-duplicated-waste")

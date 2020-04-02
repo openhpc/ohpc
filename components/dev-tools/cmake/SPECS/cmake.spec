@@ -12,7 +12,7 @@
 
 %define pname cmake
 
-%define major_version 3.9
+%define major_version 3.16
 %define minor_version 2
 
 Summary: CMake is an open-source, cross-platform family of tools designed to build, test and package software.
@@ -24,17 +24,20 @@ License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/dev-tools
 URL:            https://cmake.org/
 Source0:        https://cmake.org/files/v%{major_version}/cmake-%{version}.tar.gz
-Source1:        OHPC_macros
 BuildRequires:  gcc-c++
-BuildRequires:  libarchive-devel
 BuildRequires:  curl-devel
 BuildRequires:  ncurses-devel
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig
-%if 0%{!?sles_version} && 0%{!?suse_version}
-BuildRequires:  bzip2-devel
+
+%if 0%{?rhel}
 BuildRequires:  expat-devel
+BuildRequires:  bzip2-devel
+%endif
+%if 0%{?suse_version}
+BuildRequires:  libexpat-devel
+BuildRequires:  libbz2-devel
 %endif
 
 %define install_path %{OHPC_UTILS}/%{pname}/%version
@@ -48,18 +51,16 @@ of your choice.
 %prep
 %setup -q -n %{pname}-%{version}
 
-./bootstrap --prefix=%{install_path} --no-qt-gui \
-%if 0%{!?sles_version} && 0%{!?suse_version}
---system-bzip2 \
---system-expat \
-%endif
---system-curl \
---system-zlib \
---system-liblzma \
---system-libarchive
+./bootstrap --system-libs \
+--no-system-librhash \
+--no-system-libuv \
+--no-system-libarchive \
+--no-system-jsoncpp \
+--no-qt-gui \
+--prefix=%{install_path}
 
 %build
-%{__make} %{?mflags}
+%{__make} %{?_smp_mflags}
 
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT %{?mflags_install}
@@ -98,11 +99,6 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%defattr(-,root,root,-)
 %dir %{OHPC_UTILS}
 %{OHPC_UTILS}/%{pname}
 %{OHPC_MODULES}/%{pname}
-
-%changelog
-* Tue May 30 2017 Paul Osmialowski <pawel.osmialowski@foss.arm.com> - 3.8.1-1
-- Initial build.

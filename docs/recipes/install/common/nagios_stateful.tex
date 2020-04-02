@@ -1,0 +1,64 @@
+\Nagios{} is an open source infrastructure monitoring package that monitors
+servers, switches, applications, and services and offers user-defined alerting
+facilities. As provided by \OHPC{}, it consists of a base monitoring daemon and
+a set of plug-ins for monitoring various aspects of an HPC cluster. The
+following commands can be used to install and configure a \Nagios{} server on the {\em
+master} node, and add the facility to run tests and gather metrics from
+provisioned {\em compute} nodes.
+
+% begin_ohpc_run
+% ohpc_command if [[ ${enable_nagios} -eq 1 ]];then
+% ohpc_indent 5
+% ohpc_validation_comment Install Nagios on master and compute
+\begin{lstlisting}[language=bash,keywords={},upquote=true]
+# Install Nagios meta-package on master host
+[sms](*\#*) (*\install*) ohpc-nagios
+
+# Install plugins on compute nodes
+[sms](*\#*) (*\chrootinstall*) nagios-plugins-all-ohpc nrpe-ohpc
+
+# Enable and configure NRPE on compute nodes
+[sms](*\#*) psh compute systemctl enable nrpe
+[sms](*\#*) psh compute perl -pi -e "\""s/^allowed_hosts=/\# allowed_hosts=/"\"" /etc/nagios/nrpe.cfg
+[sms](*\#*) psh compute echo "\""nrpe 5666/tcp \# NRPE"\""         \>\> /etc/services
+[sms](*\#*) psh compute echo "\""nrpe : ${sms_ip}  : ALLOW"\"" \>\> /etc/hosts.allow
+[sms](*\#*) psh compute echo "\""nrpe : ALL : DENY"\""         \>\> /etc/hosts.allow
+[sms](*\#*) psh compute "/usr/sbin/useradd -c "\""NRPE user for the NRPE service"\"" -d /var/run/nrpe \
+        -r -g nrpe -s /sbin/nologin nrpe"
+[sms](*\#*) psh compute /usr/sbin/groupadd -r nrpe
+
+# Configure remote services to test on compute nodes
+[sms](*\#*) mv /etc/nagios/conf.d/services.cfg.example /etc/nagios/conf.d/services.cfg
+
+# Define compute nodes as hosts to monitor
+[sms](*\#*) mv /etc/nagios/conf.d/hosts.cfg.example /etc/nagios/conf.d/hosts.cfg
+[sms](*\#*) for ((i=0; i<$num_computes; i++)) ; do
+              perl -pi -e "s/HOSTNAME$(($i+1))/${c_name[$i]}/ || s/HOST$(($i+1))_IP/${c_ip[$i]}/" \
+              /etc/nagios/conf.d/hosts.cfg
+           done
+
+# Update location of mail binary for alert commands
+[sms](*\#*) perl -pi -e "s/ \/bin\/mail/ \/usr\/bin\/mailx/g" /etc/nagios/objects/commands.cfg
+
+# Update email address of contact for alerts
+[sms](*\#*) perl -pi -e "s/nagios\@localhost/root\@${sms_name}/" /etc/nagios/objects/contacts.cfg
+
+# Add check_ssh command for remote hosts
+[sms](*\#*) psh compute "echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost \
+        >> /etc/nagios/nrpe.cfg"
+
+# define password for nagiosadmin to be able to connect to web interface
+[sms](*\#*) htpasswd -bc /etc/nagios/passwd nagiosadmin ${nagios_web_password}
+
+# Enable Nagios on master, and configure
+[sms](*\#*) chkconfig nagios on
+[sms](*\#*) systemctl start nagios
+[sms](*\#*) chmod u+s `which ping`
+
+# Start on compute hosts
+[sms](*\#*) psh compute systemctl start  nrpe
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+

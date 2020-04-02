@@ -8,56 +8,48 @@
 #
 #----------------------------------------------------------------------------eh-
 
-#
-# spec file for package superlu_dist
-#
-# Copyright (c) 2012 SUSE LINUX Products GmbH, Nuernberg, Germany.
-#
-# All modifications and additions to the file contributed by third parties
-# remain the property of their copyright owners, unless otherwise agreed
-# upon. The license for this file, and modifications and additions to the
-# file, is the same license as for the pristine package itself (unless the
-# license for the pristine package is not an Open Source License, in which
-# case the license is the MIT License). An "Open Source License" is a
-# license that conforms to the Open Source Definition (Version 1.9)
-# published by the Open Source Initiative.
-
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
-#
-
-# Build that is is dependent on compiler toolchain and MPI
+# superlu_dist build that is is dependent on compiler toolchain and MPI
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel"
-BuildRequires: scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
-
 # Base package name
 %define pname superlu_dist
-%define PNAME %(echo %{pname} | tr [a-z] [A-Z])
 
-%define major   4
+%define major   5
 %define libname libsuperlu_dist
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        4.2
+Version:        6.1.1
 Release:        1%{?dist}
 Summary:        A general purpose library for the direct solution of linear equations
 License:        BSD-3-Clause
 Group:          %{PROJ_NAME}/parallel-libs
 URL:            http://crd-legacy.lbl.gov/~xiaoye/SuperLU/
 Source0:        http://crd-legacy.lbl.gov/~xiaoye/SuperLU/superlu_dist_%{version}.tar.gz
-Source1:        OHPC_macros
-Patch0:         superlu_dist-4.1-sequence-point.patch
-Patch1:         superlu_dist-4.2-make.patch
-Patch2:         superlu_dist-4.1-example-no-return-in-non-void.patch
-Patch3:         superlu_dist-4.1-parmetis.patch
+Source2:        superlu_dist-make.inc
+Source3:        superlu_dist-intel-make.inc
+Source4:        superlu_dist-arm1-make.inc
+Patch1:         superlu_dist-parmetis.patch
+Patch2:         noexamples.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+BuildRequires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:       ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  metis-%{compiler_family}%{PROJ_DELIM}
 Requires:       metis-%{compiler_family}%{PROJ_DELIM}
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
+Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
+%endif
+%if 0%{?rhel}
+BuildRequires:  bzip2-devel
+Requires:       bzip2
+%else
+BuildRequires:  libbz2-devel
+Requires:       libbz2-1
+%endif
+BuildRequires:  zlib-devel
+Requires:       zlib
 
 #!BuildIgnore: post-build-checks
 
@@ -81,29 +73,48 @@ solutions.
 
 %prep
 %setup -q -n SuperLU_DIST_%{version}
-%patch0 -p1
 %patch1 -p1
-%patch2 -p1
-%patch3 -p1
+# disable build of examples which don't get installed (karl@ices.utexas.edu - 3/6/19)
+%patch2 -p0
+
+%if "%{compiler_family}" == "intel"
+cp %SOURCE3 make.inc
+%else
+%if "%{compiler_family}" == "arm1"
+cp %SOURCE4 make.inc
+%else
+cp %SOURCE2 make.inc
+%endif
+%endif
 
 %build
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-module load metis
+module load metis ptscotch
 
-%if "%{compiler_family}" != "intel"
-module load scalapack
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+module load openblas
+%define blas_lib -L$OPENBLAS_LIB -lopenblas
 %endif
 
-make superlulib DSuperLUroot=$PWD
+%if "%{compiler_family}" == "arm1"
+%define blas_lib -armpl
+%endif
+
+%if "%{compiler_family}" == "intel"
+%define blas_lib  -L$MKLROOT/lib/intel64 -lmkl_intel_ilp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl
+%endif
+
+make SuperLUroot=$(pwd)
 
 mkdir tmp
-(cd tmp; ar x ../lib/libsuperlu_dist_%{version}.a)
-mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} -o lib/%{libname}.so.%{version} tmp/*.o
-pushd lib
-ln -s %{libname}.so.%{version} %{libname}.so
-popd
+(cd tmp; ar x ../SRC/libsuperlu_dist.a)
+mpif90 -z muldefs -shared -Wl,-soname=%{libname}.so.%{major} \
+    -o ./%{libname}.so.%{version} tmp/*.o -fopenmp -L$METIS_LIB \
+    -L$PTSCOTCH_LIB -lptscotchparmetis \
+    -lptscotch -lptscotcherr -lscotch -lmetis %{blas_lib} \
+    -lbz2 -lz %{?__global_ldflags}
 
 
 %install
@@ -112,15 +123,12 @@ popd
 install -m644 make.inc %{buildroot}%{install_path}/etc
 
 %{__mkdir_p} %{buildroot}%{install_path}/include
-install -m644 SRC/Cnames.h SRC/dcomplex.h SRC/machines.h SRC/psymbfact.h \
-              SRC/superlu_ddefs.h SRC/superlu_defs.h SRC/superlu_enum_consts.h \
-              SRC/superlu_zdefs.h SRC/supermatrix.h SRC/util_dist.h \
-              %{buildroot}%{install_path}/include/
+install -m644 SRC/*.h %{buildroot}%{install_path}/include/
 
 %{__mkdir_p} %{buildroot}%{install_path}/lib
-install -m 755 lib/libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
+install -m 755 libsuperlu_dist.so.%{version} %{buildroot}%{install_path}/lib
 pushd %{buildroot}%{install_path}/lib
-ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.4
+ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so.%{major}
 ln -s libsuperlu_dist.so.%{version} libsuperlu_dist.so
 popd
 
@@ -150,6 +158,7 @@ module-whatis "%{url}"
 set     version                     %{version}
 
 depends-on metis
+depends-on ptscotch
 
 prepend-path    PATH                %{install_path}/bin
 prepend-path    INCLUDE             %{install_path}/include
@@ -172,16 +181,5 @@ EOF
 %{__mkdir_p} %{buildroot}/%_docdir
 
 %files
-%defattr(-,root,root,-)
 %{OHPC_PUB}
-%doc README
-
-%changelog
-* Tue May 23 2017 Adrian Reber <areber@redhat.com> - 4.2-1
-- Remove separate mpi setup; it is part of the %%ohpc_compiler macro
-
-* Fri May 12 2017 Karl W Schulz <karl.w.schulz@intel.com> - 4.2-0
-- switch to use of ohpc_compiler_dependent and ohpc_mpi_dependent flags
-
-* Wed Feb 22 2017 Adrian Reber <areber@redhat.com> - 4.2-0
-- Switching to %%ohpc_compiler macro
+%doc README.md

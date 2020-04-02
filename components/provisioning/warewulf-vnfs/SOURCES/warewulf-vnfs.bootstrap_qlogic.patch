@@ -1,0 +1,10 @@
+--- a/etc/bootstrap.conf.orig	    2020-04-01 15:40:31.760000000 +0000
++++ b/etc/bootstrap.conf	    2020-04-01 15:40:56.070000000 +0000
+@@ -25,6 +25,7 @@
+ # What Firmware images should be included in the bootstrap image.
+ firmware += 3com/*, acenic/*, bnx2*, cxgb3/*, e100/*, myricom/*, ti_*
+ firmware += tigon/*
++firmware += qed/*
+ 
+ # Modules that should be called directly by /sbin/modprobe (including
+ # options if any exist). Modules will be loaded in the order given, before

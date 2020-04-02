@@ -101,11 +101,11 @@ main (void)
             /*
              * Get the member name and print it.  Note that
              * H5Tget_member_name allocates space for the string in
-             * name, so we must free() it after use.
+             * name, so we must H5free_memory() it after use.
              */
             name = H5Tget_member_name (filetype, i);
             printf ("   %s\n", name);
-            free (name);
+            H5free_memory (name);
         }
     }
 
