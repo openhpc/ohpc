@@ -43,6 +43,7 @@ Patch1:         boost_fenv_suse.patch
 # intel-linux toolset fix: https://github.com/boostorg/build/issues/475
 %if "%{compiler_family}" == "intel"
 Patch2:         boost-1.71.0-intel-bootstrap.patch
+Patch3:         intel.qnextgen.patch
 %endif
 
 
@@ -102,6 +103,7 @@ see the boost-doc package.
 
 %if "%{compiler_family}" == "intel"
 %patch2 -p1
+%patch3 -p1
 %endif
 
 # optflag patches from Fedora
