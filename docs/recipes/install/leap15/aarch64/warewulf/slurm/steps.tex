@@ -123,6 +123,7 @@
 [sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 
 # Add SLURM client support meta-package
+[sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
