@@ -16,7 +16,7 @@
 //
 
 #include "generative_tests.hpp"
-#include "boost/static_assert.hpp"
+#include <boost/static_assert.hpp>
 
 template <typename Array>
 void access(Array& A, const mutable_array_tag&) {
@@ -42,8 +42,8 @@ void access(Array& A, const const_array_tag&) {
   for (index i = idx0; i != idx0+2; ++i)
     for (index j = idx1; j != idx1+3; ++j)
       for (index k = idx2; k != idx2+4; ++k) {
-        BOOST_CHECK(A[i][j][k] == cnum++);
-        BOOST_CHECK(CA[i][j][k] == A[i][j][k]);
+        BOOST_TEST(A[i][j][k] == cnum++);
+        BOOST_TEST(CA[i][j][k] == A[i][j][k]);
       }
 
   // operator()
@@ -52,12 +52,12 @@ void access(Array& A, const const_array_tag&) {
       for (index k2 = idx2; k2 != idx2+4; ++k2) {
         boost::array<index,ndims> indices;
         indices[0] = i2; indices[1] = j2; indices[2] = k2;
-        BOOST_CHECK(A(indices) == A[i2][j2][k2]);
-        BOOST_CHECK(CA(indices) == A(indices));
+        BOOST_TEST(A(indices) == A[i2][j2][k2]);
+        BOOST_TEST(CA(indices) == A(indices));
       }
   ++tests_run;
 }
 
-int test_main(int,char*[]) {
+int main() {
   return run_generative_tests();
 }
