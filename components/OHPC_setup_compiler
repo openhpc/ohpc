@@ -80,7 +80,7 @@ else
 fi
 
 echo " "
-echo "-------------------------------"
+echo "--"
 echo "OpenHPC compiler/build flags":
 echo "--> CC       = $CC"
 echo "--> CXX      = $CXX"
@@ -137,7 +137,7 @@ else
     echo "--> F77FLAGS (user override) = $F77FLAGS"
 fi
 
-echo "-------------------------------"
+echo "--"
 echo " "
 
 
