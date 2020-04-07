@@ -72,6 +72,15 @@ make
 %install
 DESTDIR="%{buildroot}" make install
 
+%{__mkdir_p} %{buildroot}/usr/bin
+ln -sf %{_prefix}/bin/mrcp %{buildroot}/usr/bin/
+ln -sf %{_prefix}/bin/mrsh %{buildroot}/usr/bin/
+ln -sf %{_prefix}/bin/mrlogin %{buildroot}/usr/bin/
+
+ln -sf %{_prefix}/bin/rcp %{buildroot}/usr/bin/
+ln -sf %{_prefix}/bin/rsh %{buildroot}/usr/bin/
+ln -sf %{_prefix}/bin/rlogin %{buildroot}/usr/bin/
+
 ln -sf in.mrlogind %{buildroot}%{_sbindir}/in.rlogind
 ln -sf in.mrshd %{buildroot}%{_sbindir}/in.rshd
 
@@ -90,6 +99,7 @@ done
 %{_bindir}/mrcp
 %{_bindir}/mrsh
 %{_bindir}/mrlogin
+/usr/bin/mr*
 %dir /opt/ohpc/admin/mrsh
 %dir /opt/ohpc/admin/mrsh/bin
 %dir /opt/ohpc/admin/mrsh/share
