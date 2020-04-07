@@ -44,6 +44,7 @@ reserved ports for security.
 %package -n %{pname}-server%{PROJ_DELIM}
 Summary: Servers for remote access commands (mrsh, mrlogin, mrcp)
 Group: System Environment/Daemons
+Requires: xinetd
 Requires(post): systemd
 %description -n %{pname}-server%{PROJ_DELIM}
 Server daemons for remote access commands (mrsh, mrlogin, mrcp)
