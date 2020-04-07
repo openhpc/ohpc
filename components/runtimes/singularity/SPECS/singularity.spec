@@ -54,8 +54,8 @@ BuildRequires: openssl-devel
 BuildRequires: libuuid-devel
 BuildRequires: libseccomp-devel
 Requires: file
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires: go
+%if 0%{?suse_version}
+BuildRequires: go1.12
 BuildRequires: binutils-gold
 Requires: squashfs
 %else
