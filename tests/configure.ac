@@ -329,8 +329,8 @@ AM_CONDITIONAL(OOM_ENABLED,test "x$enable_oom" = "xyes" )
 #------------------------------------------------------------------------------------------
 # OCR
 AC_ARG_ENABLE([ocr],
-   [AS_HELP_STRING([--enable-ocr],[Enable OCR tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_ocr,yes)])
+   [AS_HELP_STRING([--enable-ocr],[Enable OCR tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_ocr,no)])
 AM_CONDITIONAL(OCR_ENABLED,test "x$enable_ocr" = "xyes" )
 #------------------------------------------------------------------------------------------
 # OPENBLAS
