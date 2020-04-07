@@ -17,8 +17,6 @@
 # Sets up build environment for supported compiler families
 #-----------------------------------------------------------------------
 
-set +x
-
 if [ "$#" = "1" ]; then
     OHPC_COMPILER_FAMILY=$1
 fi
