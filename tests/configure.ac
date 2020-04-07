@@ -155,8 +155,8 @@ AM_CONDITIONAL(LUSTRE_ENABLED,test "x$enable_lustre" = "xyes" )
 #------------------------------------------------------------------------------------------
 # mpiP
 AC_ARG_ENABLE([mpiP],
-   [AS_HELP_STRING([--enable-mpiP],[Enable mpiP profiler tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_mpiP,yes)])
+   [AS_HELP_STRING([--enable-mpiP],[Enable mpiP profiler tests (default=no)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_mpiP,no)])
 AM_CONDITIONAL(MPIP_ENABLED,test "x$enable_mpiP" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Valgrind
