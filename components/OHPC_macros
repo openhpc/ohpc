@@ -162,6 +162,18 @@ Requires:      %{python_prefix}
 # Single-line macro for running compiler/MPI setup scripts
 # Script bodies are evaluated and stored in this macro definition
 %global ohpc_setup_compiler %{expand:\
+    %if 0%{?OHPC_CFLAGS:1} \
+         export OHPC_CFLAGS=%{OHPC_CFLAGS} \
+    %endif \
+    %if 0%{?OHPC_CXXFLAGS:1} \
+         export OHPC_CXXFLAGS=%{OHPC_CXXFLAGS} \
+    %endif \
+    %if 0%{?OHPC_FCFLAGS:1} \
+         export OHPC_FCFLAGS=%{OHPC_FCFLAGS} \
+    %endif \
+    %if 0%{?OHPC_F77FLAGS:1} \
+         export OHPC_F77FLAGS=%{OHPC_F77FLAGS} \
+    %endif \
     . %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
     %if 0%{?ohpc_mpi_dependent} == 1 \
         . %{OHPC_ADMIN}/ohpc/OHPC_setup_mpi %{mpi_family} \
@@ -186,3 +198,12 @@ Requires:      %{python_prefix}
 %endif # sle15/rh8
 %endif # lua_version not set
 %endif # luaver
+
+# check if user desires to override package and modulefile naming with
+# custom delimiter (e.g optimized micro-architecture build)
+
+%global OHPC_CUSTOM_PKG_DELIM %{nil}
+
+%{?OHPC_CUSTOM_DELIM: %global OHPC_CUSTOM_PKG_DELIM -%{OHPC_CUSTOM_DELIM}}
+%{?OHPC_CUSTOM_DELIM: %global PROJ_DELIM -%{OHPC_CUSTOM_DELIM}%{PROJ_DELIM}}
+
