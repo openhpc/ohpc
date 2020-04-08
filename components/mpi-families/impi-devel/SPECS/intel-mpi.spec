@@ -63,10 +63,10 @@ if [ $? -eq 1 ];then
 fi
 
 # Verify min version expectations
-min_ver="2020"
+min_ver="2019"
 versions=""
 for file in ${versions_all}; do 
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
     echo "--> Version ${version} detected"
     echo -e "${version}\n${min_ver}" | sort -V | head -n 1 | grep -q "^${min_ver}"
     if [ $? -ne 0 ];then
@@ -102,7 +102,7 @@ echo "Creating OpenHPC-style modulefiles for local PSXE MPI installation(s)."
 
 for file in ${versions}; do
 
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
     topDir=`echo $file | sed "s|$mpicc_subpath||"`
     echo "--> Installing modulefile for MPI version=${version}"
 	    
@@ -254,7 +254,7 @@ if [ "$1" = 0 ]; then
     versions=`rpm -qal | grep ${mpicc_subpath}$`
 
     for file in ${versions}; do
-	version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+	version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
 	topDir=`echo $file | sed "s|$mpicc_subpath||"`
 
 	if [ -d ${topDir}/linux/mpi/intel64/bin_ohpc ];then

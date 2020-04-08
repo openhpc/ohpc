@@ -48,7 +48,7 @@ unset LIBRARY_PATH
 MYPATH=\${PATH}
 
 #source $inFile "$remainArgs" >& /dev/null
-source $inFile ${remainArgs}
+source $inFile ${remainArgs} >& /dev/null
 
 /usr/bin/printenv | sed s!:\${MYPATH}!!
 EOF
