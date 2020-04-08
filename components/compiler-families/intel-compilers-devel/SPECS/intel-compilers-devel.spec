@@ -81,7 +81,7 @@ fi
 
 # Verify min version expectations
 
-min_ver="20.0"
+min_ver="19.1.0"
 versions=""
 for file in ${versions_all}; do
     version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
