@@ -55,7 +55,7 @@ install -D -m755 %{SOURCE1}  $RPM_BUILD_ROOT/%{OHPC_ADMIN}/compat/modulegen/mod_
 # we can fix after the fact.
 if [ $1 -gt 1 ];then
 
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' %{name}`
+    version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' %{name}`
     minVerFix="2018.1.1"
     result=`echo -e "${version}\n${minVerFix}" | sort -V | head -n 1`
     if [ "$result" != "$minVerFix" ];then
@@ -84,7 +84,7 @@ fi
 min_ver="20.0"
 versions=""
 for file in ${versions_all}; do
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
     echo "--> Version ${version} detected"
     echo -e "${version}\n${min_ver}" | sort -V | head -n 1 | grep -q "^${min_ver}"
     if [ $? -ne 0 ];then
@@ -123,7 +123,7 @@ fi
 
 # Create modulefiles for each locally detected installation.
 for file in ${versions}; do
-    version=`rpm -q --qf '%{VERSION}.%{RELEASE}\n' -f ${file}`
+    version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
     topDir=`echo $file | sed "s|$icc_subpath||"`
     echo "--> Installing modulefile for version=${version}"
 
