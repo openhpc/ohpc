@@ -33,7 +33,7 @@ as desired on login nodes, service nodes, or compute hosts.
 
 # Copy example Nagios config file to define a compute group and ssh check
 # (note: edit as desired to add all desired compute hosts)
-[sms](*\#*) cp /opt/ohpc/pub/examples/compute.cfg /etc/nagios/objects
+[sms](*\#*) cp /opt/ohpc/pub/examples/nagios/compute.cfg /etc/nagios/objects
 # Register the config file with nagios
 [sms](*\#*) echo "cfg_file=/etc/nagios/objects/compute.cfg" >> /etc/nagios/nagios.cfg
 
