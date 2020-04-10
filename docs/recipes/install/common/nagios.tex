@@ -1,8 +1,8 @@
-\Nagios{} is an open source infrastructure monitoring package that monitors
-servers, switches, applications, and services and offers user-defined
+\Nagios{} is an open source infrastructure network monitoring package designed
+to watch servers, switches, and various services and offers user-defined
 alerting facilities for monitoring various aspects of an HPC
 cluster. The core \Nagios{} daemon and a variety of monitoring plugins
-are provided by the underlying distro and the following commands can
+are provided by the underlying OS distro and the following commands can
 be used to install and configure a \Nagios{} server on the {\em
 master} node, and add the facility to run tests and gather metrics
 from provisioned {\em compute} nodes. This simple configuration
@@ -11,7 +11,7 @@ compute host group and enabling an ssh check for the computes. Users
 are encouraged to
 consult \Nagios{} \href{https://assets.nagios.com/downloads/nagioscore/docs/nagioscore/4/en/}{\color{blue}
 documentation} for more information and can install additional plugins
-as desired on on login nodes, service nodes, or compute hosts.
+as desired on login nodes, service nodes, or compute hosts.
 
 % begin_ohpc_run
 % ohpc_command if [[ ${enable_nagios} -eq 1 ]];then
@@ -21,7 +21,7 @@ as desired on on login nodes, service nodes, or compute hosts.
 # Install nagios, nrep, and all available plugins on master host
 [sms](*\#*) (*\install*) nagios nrpe nagios-plugins-*
 
-# Install nrpe and two additional plugins into compute node image
+# Install nrpe and an example plugin into compute node image
 [sms](*\#*) (*\chrootinstall*) nrpe nagios-plugins-ssh
 
 # Enable and configure Nagios NRPE daemon in compute image 
@@ -31,7 +31,7 @@ as desired on on login nodes, service nodes, or compute hosts.
 [sms](*\#*) echo "nrpe : ALL : DENY"            >> $CHROOT/etc/hosts.allow
 
 # Copy example Nagios config file to define a compute group and ssh check
-# (edit as desired to add all desired compute hosts)
+# (note: edit as desired to add all desired compute hosts)
 [sms](*\#*) cp /opt/ohpc/pub/examples/compute.cfg /etc/nagios/objects
 # Register the config file with nagios
 [sms](*\#*) echo "cfg_file=/etc/nagios/objects/compute.cfg" >> /etc/nagios/nagios.cfg
@@ -43,8 +43,7 @@ as desired on on login nodes, service nodes, or compute hosts.
 [sms](*\#*) perl -pi -e "s/nagios\@localhost/root\@${sms_name}/" /etc/nagios/objects/contacts.cfg
 
 # Add check_ssh command for remote hosts
-[sms](*\#*) echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost \
-        >> $CHROOT/etc/nagios/nrpe.cfg
+[sms](*\#*) echo command[check_ssh]=/usr/lib64/nagios/plugins/check_ssh localhost $CHROOT/etc/nagios/nrpe.cfg
 
 # define password for nagiosadmin to be able to connect to web interface
 [sms](*\#*) htpasswd -bc /etc/nagios/passwd nagiosadmin ${nagios_web_password}
@@ -52,7 +51,7 @@ as desired on on login nodes, service nodes, or compute hosts.
 # Enable Nagios on master, and configure
 [sms](*\#*) systemctl enable nagios
 [sms](*\#*) systemctl start nagios
-# Update perms on ping command to allow nagios user to execute
+# Update permissions on ping command to allow nagios user to execute
 [sms](*\#*) chmod u+s `which ping`
 \end{lstlisting}
 % ohpc_indent 0
