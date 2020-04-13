@@ -106,30 +106,6 @@ for file in ${versions}; do
     topDir=`echo $file | sed "s|$mpicc_subpath||"`
     echo "--> Installing modulefile for MPI version=${version}"
 	    
-    # Create soft links for standard MPI wrapper usage
-
-    ohpc_path=${topDir}/linux/mpi/intel64/bin_ohpc
-
-    %{__mkdir_p} ${ohpc_path} || exit 1
-    if [ -e ${topDir}/linux/mpi/intel64/bin/mpiicc ];then
-	if [ ! -e ${ohpc_path}/mpicc ];then
-	    %{__ln_s} ${topDir}/linux/mpi/intel64/bin/mpiicc ${ohpc_path}/mpicc
-	fi
-    fi
-    if [ -e ${topDir}/linux/mpi/intel64/bin/mpiicpc ];then
-	if [ ! -e ${ohpc_path}/mpicxx ];then
-	    %{__ln_s} ${topDir}/linux/mpi/intel64/bin/mpiicpc ${ohpc_path}/mpicxx
-	fi
-    fi
-    if [ -e ${topDir}/linux/mpi/intel64/bin/mpiifort ];then
-	if [ ! -e ${ohpc_path}/mpif90 ];then
-	    %{__ln_s} ${topDir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif90
-	fi
-	if [ ! -e ${ohpc_path}/mpif77 ];then
-	    %{__ln_s} ${topDir}/linux/mpi/intel64/bin/mpiifort ${ohpc_path}/mpif77
-	fi
-    fi
-	    
     # Module header
 
     %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/${version}
@@ -163,15 +139,6 @@ EOF
 
     # Append with environment vars parsed directlry from mpivars.sh
     ${scanner} ${topDir}/linux/mpi/intel64/bin/mpivars.sh  >> %{OHPC_MODULEDEPS}/intel/impi/${version} || exit 1
-
-    # Prepend bin_ohpc
-    %{__cat} << EOF >> %{OHPC_MODULEDEPS}/intel/impi/${version}
-#
-# Prefer bin_ohpc to allow developers to use standard mpicc, mpif90,
-# etc to access Intel toolchain.
- 
-prepend-path    PATH            ${topDir}/${dir}/linux/mpi/intel64/bin_ohpc
-EOF
 
     # Also define MPI_DIR based on $I_MPI_ROOT
     IMPI_DIR=`egrep "^setenv\s+I_MPI_ROOT"  %{OHPC_MODULEDEPS}/intel/impi/${version} | awk '{print $3}'`
@@ -256,10 +223,6 @@ if [ "$1" = 0 ]; then
     for file in ${versions}; do
 	version=`rpm -q --qf '%%{VERSION}.%%{RELEASE}\n' -f ${file}`
 	topDir=`echo $file | sed "s|$mpicc_subpath||"`
-
-	if [ -d ${topDir}/linux/mpi/intel64/bin_ohpc ];then
-	    rm -rf ${topDir}/linux/mpi/intel64/bin_ohpc
-	fi
     done
 
     if [ -s %{OHPC_MODULEDEPS}/intel/impi/.manifest ];then

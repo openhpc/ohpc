@@ -31,16 +31,47 @@ if [ -z "$MODULEPATH" ]; then
 fi
 
 if [ "$OHPC_MPI_FAMILY" = "openmpi" ]; then
+    export ICC=mpicc
+    export CXX=mpicxx
+    export FC=mpifort
+    export F77=mpif77   
     module load openmpi
 elif [ "$OHPC_MPI_FAMILY" = "openmpi3" ]; then
+    export ICC=mpicc
+    export CXX=mpicxx
+    export FC=mpifort
+    export F77=mpifort    
     module load openmpi3
 elif [ "$OHPC_MPI_FAMILY" = "openmpi4" ]; then
+    export ICC=mpicc
+    export CXX=mpicxx
+    export FC=mpifort
+    export F77=mpifort
     module load openmpi4
 elif [ "$OHPC_MPI_FAMILY" = "impi" ]; then
-    module load impi
+    if [ "$OHPC_COMPILER_FAMILY" = "intel" ]; then
+       export CC=mpiicc
+       export CXX=mpiicpc
+       export FC=mpiifort
+       export F77=mpiifort
+    else
+       export CC=mpicc
+       export CXX=mpicxx
+       export FC=mpifort
+       export F77=mpifort
+    fi 
+       module load impi
 elif [ "$OHPC_MPI_FAMILY" = "mvapich2" ]; then
+    export CC=mpicc
+    export CXX=mpicxx
+    export FC=mpifort
+    export F77=mpif77
     module load mvapich2
 elif [ "$OHPC_MPI_FAMILY" = "mpich" ]; then
+    export CC=mpicc
+    export CXX=mpicxx
+    export FC=mpifort
+    export F77=mpif77
     module load mpich
 else
     echo "Unsupported OHPC_MPI_FAMILY -> $OHPC_MPI_FAMILY"
