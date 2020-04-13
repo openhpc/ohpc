@@ -146,6 +146,16 @@ EOF
 	echo "setenv          MPI_DIR        $IMPI_DIR/intel64" >> %{OHPC_MODULEDEPS}/intel/impi/${version}
     fi
 
+    # Change typical MPI compiler commands to use the Intel compilers by default
+
+    %{__cat} << EOF >> %{OHPC_MODULEDEPS}/intel/impi/${version}
+setenv          I_MPI_CC        "icc"
+setenv          I_MPI_CXX       "icpc"
+setenv          I_MPI_FC        "ifort"
+setenv          I_MPI_F77       "ifort"
+setenv          I_MPI_F90       "ifort"
+EOF
+
     # Version file
     %{__cat} << EOF > %{OHPC_MODULEDEPS}/intel/impi/.version.${version}
 #%Module1.0#####################################################################
