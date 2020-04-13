@@ -47,9 +47,6 @@ The generated benchmark data fully characterizes:
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-export CFLAGS="$CFLAGS -I$MPI_DIR/include"
-export CPPFLAGS="$CPPFLAGS -I$MPI_DIR/include"
-export CXXFLAGS="$CXXFLAGS -I$MPI_DIR/include"
 make all
 
 
