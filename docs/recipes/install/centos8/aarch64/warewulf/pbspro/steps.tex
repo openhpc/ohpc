@@ -151,10 +151,10 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 [sms](*\#*) chroot $CHROOT systemctl enable pbs
 
 # Add Network Time Protocol (NTP) support
-[sms](*\#*) (*\chrootinstall*) ntp
+[sms](*\#*) (*\chrootinstall*) chrony
 
-# Add kernel drivers
-[sms](*\#*) (*\chrootinstall*) kernel
+# Add kernel drivers (matching kernel version on SMS node)
+[sms](*\#*) (*\chrootinstall*) kernel-`uname -r`
 
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
