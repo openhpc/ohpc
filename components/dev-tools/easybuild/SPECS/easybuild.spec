@@ -15,17 +15,14 @@
 
 Summary:   Software build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   4.1.2
+Version:   4.2.0
 Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
-URL:       http://easybuilders.github.io/easybuild
+URL:       https://easybuilders.github.io/easybuild
 
-# there is no 4.1.2 release of easybuild-easyblocks & easybuild-easyconfigs, only for easybuild-framework,
-# so we're hardcoding to 4.1.1 below;
-# this should be changed back to using the %{version} template instead on the next update!
-Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-4.1.1.tar.gz
-Source1:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-4.1.1.tar.gz
+Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
+Source1:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz
 Source2:   https://pypi.io/packages/source/e/easybuild-framework/easybuild-framework-%{version}.tar.gz
 Source3:   bootstrap_eb.py
 BuildRequires: python3
