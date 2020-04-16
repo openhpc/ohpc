@@ -58,11 +58,16 @@ export compiler_vars="CC=icc CXX=icpc MPICC=mpicc MPIF90=mpiifort"
 %endif
 %endif
 
+
+
 ./bootstrap
 ./configure $compiler_vars --with-xml-prefix=/usr --with-papi=$PAPI_DIR  --without-unwind \
     --without-dyninst --disable-openmp-intel --prefix=%{install_path} --with-mpi=$MPI_DIR \
 %if  "%{mpi_family}" == "impi"
     --with-mpi-libs=$MPI_DIR/lib/release \
+%endif
+%if  "%{compiler_family}" == "arm1"
+    CFLAGS="-O3 -fsimdmath -fPIC" CXXFLAGS="-O3 -fsimdmath -fPIC" FCFLAGS="-O3 -fsimdmath -fPIC"
 %endif
     || { cat config.log && exit 1; }
 
