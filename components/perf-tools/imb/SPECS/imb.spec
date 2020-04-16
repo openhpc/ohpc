@@ -11,6 +11,7 @@
 # Build that is dependent on compiler/mpi toolchains
 %define ohpc_compiler_dependent 1
 %define ohpc_mpi_dependent 1
+
 %include %{_sourcedir}/OHPC_macros
 
 # Base package name
@@ -18,38 +19,42 @@
 
 Summary:   Intel MPI Benchmarks (IMB)
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:   2018.1
+Version:   2019.6
 Release:   1%{?dist}
 License:   CPL
 Group:     %{PROJ_NAME}/perf-tools
 URL:       https://software.intel.com/en-us/articles/intel-mpi-benchmarks
-Source0:   https://github.com/intel/mpi-benchmarks/archive/v%{version}.tar.gz
-
-# OpenHPC patches
-Patch1: imb.cc.patch
+Source0:   https://github.com/intel/mpi-benchmarks/archive/IMB-v%{version}.tar.gz
 
 # Default library install path
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-The Intel MPI Benchmarks (IMB) perform a set of MPI performance
-measurements for point-to-point and global communication operations for
-a range of message sizes.
+The Intel MPI Benchmarks perform a set of MPI performance measurements for
+point-to-point and global communication operations for a range of message sizes.
+
+The generated benchmark data fully characterizes:
+   - Performance of a cluster system, including node performance, network latency,
+     and throughput
+   - Efficiency of the MPI implementation used 
 
 %prep
-%setup -n mpi-benchmarks-%{version}
+%setup -n mpi-benchmarks-IMB-v%{version}
 
-# OpenHPC patches
-%patch1 -p0
 
 %build
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
 
-cd src
+export CC=mpicc
+export CXX=mpicxx
+
+export CFLAGS="$CFLAGS -I$MPI_DIR/include"
+export CPPFLAGS="$CPPFLAGS -I$MPI_DIR/include"
+export CXXFLAGS="$CXXFLAGS -I$MPI_DIR/include"
 make all
-cd -
+
 
 %install
 
@@ -57,18 +62,15 @@ cd -
 %ohpc_setup_compiler
 
 %{__mkdir} -p %{buildroot}%{install_path}/bin
-cd src
-cp IMB-EXT  %{buildroot}%{install_path}/bin/.
-cp IMB-IO   %{buildroot}%{install_path}/bin/.
-cp IMB-MPI1 %{buildroot}%{install_path}/bin/.
-cp IMB-NBC  %{buildroot}%{install_path}/bin/.
-cp IMB-RMA  %{buildroot}%{install_path}/bin/.
-cd -
-
-
+%{__cp} IMB-EXT  %{buildroot}%{install_path}/bin/.
+%{__cp} IMB-IO   %{buildroot}%{install_path}/bin/.
+%{__cp} IMB-MPI1 %{buildroot}%{install_path}/bin/.
+%{__cp} IMB-NBC  %{buildroot}%{install_path}/bin/.
+%{__cp} IMB-RMA  %{buildroot}%{install_path}/bin/.
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
+
 %{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
 #%Module1.0#####################################################################
 
@@ -104,6 +106,7 @@ EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
+
 %files
 %{OHPC_PUB}
-%doc license/license.txt license/use-of-trademark-license.txt ReadMe_IMB.txt
+%doc ReadMe_IMB.txt license/license.txt license/use-of-trademark-license.txt 
