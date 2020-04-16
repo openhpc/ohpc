@@ -106,5 +106,4 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc ReadMe_IMB.txt
-%license license/license.txt license/use-of-trademark-license.txt 
+%doc ReadMe_IMB.txt license/license.txt license/use-of-trademark-license.txt 
