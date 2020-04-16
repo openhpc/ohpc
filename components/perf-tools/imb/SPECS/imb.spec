@@ -30,7 +30,7 @@ Source0:   https://github.com/intel/mpi-benchmarks/archive/IMB-v%{version}.tar.g
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
 
 %description
-The Intel® MPI Benchmarks perform a set of MPI performance measurements for
+The Intel MPI Benchmarks perform a set of MPI performance measurements for
 point-to-point and global communication operations for a range of message sizes.
 
 The generated benchmark data fully characterizes:
