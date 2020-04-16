@@ -297,7 +297,7 @@ Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 ## TODO Requires: imb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -658,7 +658,7 @@ Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MPICH
 ## TODO Requires: imb-intel-mpich%{PROJ_DELIM}
 Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-mpich%{PROJ_DELIM}
-Requires:  tau-intel-mpich%{PROJ_DELIM}
+## TODO Requires:  tau-intel-mpich%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
 Requires:  scorep-intel-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
