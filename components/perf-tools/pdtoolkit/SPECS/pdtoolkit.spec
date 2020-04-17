@@ -16,7 +16,7 @@
 %define pname pdtoolkit
 
 Name: %{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        3.25
+Version:        3.25.1
 Release:        1%{?dist}
 License:        Program Database Toolkit License
 Summary:        PDT is a framework for analyzing source code
