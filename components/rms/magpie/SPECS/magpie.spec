@@ -42,7 +42,9 @@ URL: https://github.com/LLNL/magpie
 Group: %{PROJ_NAME}/rms
 Source0: https://github.com/LLNL/magpie/archive/%{version}.tar.gz
 
-Requires: %{pname}-common%{PROJ_DELIM} = %{version}
+# Java 8 or greater required on all cluster nodes.
+# Java development package added to head node.
+Requires: java-devel >= 1.8
 
 #!BuildIgnore: post-build-checks
 
@@ -84,7 +86,7 @@ module-whatis "Description: Scripts for running Big Data in HPC environments"
 module-whatis "URL: https://github.com/LLNL/magpie"
 
 set     java_check                  [exec which java]
-if { [exec \$java_check --version > /dev/null] } {
+if { [catch {exec \$java_check --version > /dev/null}] } {
    puts stderr "ERROR: Java not available."
    exit 2
 }
@@ -92,7 +94,7 @@ if { [exec \$java_check --version > /dev/null] } {
 set     version			    %{version}
 setenv          MAGPIE_PATH         %{install_path}
 setenv          MAGPIE_SCRIPTS_HOME %{install_path}
-setenv          JAVA_HOME           [file dirname [file dirname [exec readlink -f \$java_check]]]]
+setenv          JAVA_HOME           [file dirname [file dirname [exec readlink -f \$java_check]]]
 setenv          %{PNAME}_DIR        %{install_path}
 EOF
 
@@ -112,14 +114,3 @@ EOF
 %license COPYING DISCLAIMER
 %{OHPC_MODULES}/%{pname}
 
-%package -n %{pname}-common%{PROJ_DELIM}
-
-Summary: Magpie runtime prerequisites
-Requires: java-devel >= 1.8
-
-%description -n %{pname}-common%{PROJ_DELIM}
-Magpie contains a number of scripts for running Big Data software in HPC environments.
-This package installs runtime requirements for Magpie. It must be installed on all
-nodes where Magpie scripts will be run.
-
-%files -n %{pname}-common%{PROJ_DELIM}
