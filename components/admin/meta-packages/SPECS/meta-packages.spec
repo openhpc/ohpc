@@ -267,12 +267,12 @@ Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires: imb-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires: imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -280,11 +280,11 @@ Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires: imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mvapich2%{PROJ_DELIM}
 %endif
