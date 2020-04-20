@@ -45,6 +45,7 @@ Source0: https://github.com/LLNL/magpie/archive/%{version}.tar.gz
 # Java 8 or greater required on all cluster nodes.
 # Java development package added to head node.
 Requires: java-devel >= 1.8
+Requires: python2
 
 #!BuildIgnore: post-build-checks
 
@@ -62,7 +63,7 @@ manager support for Slurm, Moab, Torque, and LSF.
 
 %build
 # Fix-up file permissions and shebang data that cause warnings/errors in CentOS 8
-# Not `install` command in next section due to large file count
+# Not using `install` command in next section due to large file count
 %{__chmod} -x magpie/job/magpie-job-ray-rayips.py
 %{__chmod} -x magpie/job/magpie-job-tensorflow-horovod-synthetic-benchmark.py
 %{__chmod} -x magpie/job/magpie-job-tensorflow-tfadd.py
@@ -82,15 +83,18 @@ manager support for Slurm, Moab, Torque, and LSF.
 %{__chmod} -x conf/zeppelin/zeppelin-site.xml
 %{__chmod} -x testsuite/testscripts/test-ray.py
 %{__chmod} -x testsuite/testscripts/test-tensorflow.py
+%{__chmod} +x testsuite/test-config.sh
 %{__chmod} -x examples/example-environment-extra
-%{__sed} -i "s#/usr/bin/env bash#/usr/bin/bash#" conf/hadoop/hadoop-user-functions-3-X.sh
-%{__sed} -i "s#/usr/bin/env bash#/usr/bin/bash#" conf/spark/spark-env-0.X.sh
-%{__sed} -i "s#/usr/bin/env bash#/usr/bin/bash#" conf/spark/spark-env-1.X.sh
-%{__sed} -i "s#/usr/bin/env bash#/usr/bin/bash#" conf/spark/spark-env-2.X.sh
-%{__sed} -i "s#/usr/bin/env python#%{__python3}#" magpie/job/magpie-job-zeppelin-checkzeppelinup.py
+%{__sed} -i "s#/usr/bin/env bash#/bin/bash#" conf/hadoop/hadoop-user-functions-3-X.sh
+%{__sed} -i "s#/usr/bin/env bash#/bin/bash#" conf/spark/spark-env-0.X.sh
+%{__sed} -i "s#/usr/bin/env bash#/bin/bash#" conf/spark/spark-env-1.X.sh
+%{__sed} -i "s#/usr/bin/env bash#/bin/bash#" conf/spark/spark-env-2.X.sh
+%{__sed} -i "s#/usr/bin/env python#%{__python2}#" magpie/job/magpie-job-zeppelin-checkzeppelinup.py
+find . -name \.gitignore -type f -delete
+%{__rm} .travis.yml
 
 %install
-%{__mkdir} -p -m 775 ${RPM_BUILD_ROOT}%{install_path}
+%{__mkdir} -p -m 755 ${RPM_BUILD_ROOT}%{install_path}
 %{__cp} -a . ${RPM_BUILD_ROOT}%{install_path}
 
 # OpenHPC module file
