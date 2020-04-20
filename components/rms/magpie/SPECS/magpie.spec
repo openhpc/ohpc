@@ -61,9 +61,36 @@ manager support for Slurm, Moab, Torque, and LSF.
 %setup -q -n %{pname}-%{version}
 
 %build
+# Fix-up file permissions and shebang data that cause warnings/errors in CentOS 8
+# Not `install` command in next section due to large file count
+%{__chmod} -x magpie/job/magpie-job-ray-rayips.py
+%{__chmod} -x magpie/job/magpie-job-tensorflow-horovod-synthetic-benchmark.py
+%{__chmod} -x magpie/job/magpie-job-tensorflow-tfadd.py
+%{__chmod} -x submission-scripts/script-templates/magpie-hive
+%{__chmod} -x doc/README.hive
+%{__chmod} -x conf/zookeeper/zookeeper-env.sh
+%{__chmod} -x conf/zookeeper/zookeeper-master-env.sh
+%{__chmod} -x conf/hive/hive-env.sh
+%{__chmod} -x conf/hive/hive-log4j2.properties
+%{__chmod} -x conf/hive/hive-site.xml
+%{__chmod} -x conf/hive/postgresql.conf
+%{__chmod} -x conf/hive/spark-hive-site.xml
+%{__chmod} -x conf/hive/tez-site.xml
+%{__chmod} -x conf/storm/storm-daemon-env.sh
+%{__chmod} -x conf/hadoop/hadoop-env-2.X.sh
+%{__chmod} -x conf/hadoop/yarn-env-2.X.sh
+%{__chmod} -x conf/zeppelin/zeppelin-site.xml
+%{__chmod} -x testsuite/testscripts/test-ray.py
+%{__chmod} -x testsuite/testscripts/test-tensorflow.py
+%{__chmod} -x examples/example-environment-extra
+%{__sed} -i "s#/usr/bin/env bash#/usr/bin/bash#" conf/hadoop/hadoop-user-functions-3-X.sh
+%{__sed} -i "s#/usr/bin/env bash#/usr/bin/bash#" conf/spark/spark-env-0.X.sh
+%{__sed} -i "s#/usr/bin/env bash#/usr/bin/bash#" conf/spark/spark-env-1.X.sh
+%{__sed} -i "s#/usr/bin/env bash#/usr/bin/bash#" conf/spark/spark-env-2.X.sh
+%{__sed} -i "s#/usr/bin/env python#%{__python3}#" magpie/job/magpie-job-zeppelin-checkzeppelinup.py
 
 %install
-%{__mkdir_p} ${RPM_BUILD_ROOT}%{install_path}
+%{__mkdir} -p -m 775 ${RPM_BUILD_ROOT}%{install_path}
 %{__cp} -a . ${RPM_BUILD_ROOT}%{install_path}
 
 # OpenHPC module file
@@ -85,16 +112,16 @@ module-whatis "Category: Resource Managers"
 module-whatis "Description: Scripts for running Big Data in HPC environments"
 module-whatis "URL: https://github.com/LLNL/magpie"
 
-set     java_check                  [exec which java]
-if { [catch {exec \$java_check --version > /dev/null}] } {
+set     java_check                  [exec which javac]
+if { [catch {exec \$java_check -version 2> /dev/null}] } {
    puts stderr "ERROR: Java not available."
-   exit 2
+} else {
+   setenv          JAVA_HOME           [file dirname [file dirname [exec readlink -f \$java_check]]]
 }
 
 set     version			    %{version}
 setenv          MAGPIE_PATH         %{install_path}
 setenv          MAGPIE_SCRIPTS_HOME %{install_path}
-setenv          JAVA_HOME           [file dirname [file dirname [exec readlink -f \$java_check]]]
 setenv          %{PNAME}_DIR        %{install_path}
 EOF
 
