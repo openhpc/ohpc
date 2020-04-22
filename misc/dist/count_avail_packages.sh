@@ -38,11 +38,11 @@ if [[ ${USE_FACTORY} -eq 1 ]]; then
     factory="Factory/"
 fi
 
+total=0
+
 for os in ${oses}; do
     repobase="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
-#    repobase="http://build.openhpc.community/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
     if [[ $micro_ver -gt 0 ]];then
-	#repoupdate="http://build.openhpc.community/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
 	repoupdate="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
     fi
 
@@ -58,12 +58,18 @@ for os in ${oses}; do
 	echo -n "  ${arch}: "
 
 	if [[ $micro_ver -eq 0 ]];then
-	    repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base '*' | wc -l
+	    numrpms=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base '*' | wc -l`
+	    echo $numrpms
+	    let "total=$total+1"
 	else
-	    repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base '*' \
-	        --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update '*' | wc -l
+	    numrpms=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base '*' \
+	        --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update '*' | wc -l`
+	    echo $numrpms
+	    let "total=$total+1"
 	fi
     done
 done
 
 
+echo " "
+echo "Total # of all RPMs = $total"
