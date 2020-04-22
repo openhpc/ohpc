@@ -252,7 +252,9 @@ Requires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  mfem-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%if 0%{?rhel}
 Requires:  opencoarrays-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%endif
 Requires:  scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
