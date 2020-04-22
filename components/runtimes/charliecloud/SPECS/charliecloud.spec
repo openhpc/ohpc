@@ -23,13 +23,13 @@
 
 Summary:   Lightweight user-defined software stacks for high-performance computing
 Name:      %{pname}%{PROJ_DELIM}
-Version:   0.11
+Version:   0.15
 Release:   1%{?dist}
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/runtimes
 URL:       https://hpc.github.io/%{pname}/
 Source0:   https://github.com/hpc/charliecloud/releases/download/v%{version}/charliecloud-%{version}.tar.gz
-Patch1:    charliecloud-skiptest.patch
+Source1:   Build
 
 BuildRequires: gcc
 %if 0%{?centos_version} || 0%{?rhel_version}
@@ -68,18 +68,19 @@ For more information: https://hpc.github.io/charliecloud/
 
 %prep
 %setup -q -n %{pname}-%{version}
-%patch1 -p1
-%{versionize_script python3 test/make-auto}
+%{versionize_script python3 test/docs-sane}
 %{versionize_script python3 test/make-perms-test}
 
 %build
+./configure --prefix=%{install_path}
 CFLAGS="-std=c11 -fPIC -pthread" LDFLAGS="%build_ldflags" %{__make} %{?mflags}
+
 
 %install
 PREFIX=%{install_path} DESTDIR=$RPM_BUILD_ROOT %{__make} install %{?mflags_install}
 
-%{__mkdir_p} %{buildroot}/%{install_path}/share/doc/charliecloud//test/chtest/
-%{__cp} ./test/chtest/Build %{buildroot}/%{install_path}/share/doc/charliecloud//test/chtest/Build
+%{__mkdir_p} %{buildroot}/%{install_path}/share/doc/charliecloud/test/chtest/
+%{__cp} %{SOURCE1} %{buildroot}/%{install_path}/share/doc/charliecloud/test/chtest/Build
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}%{OHPC_MODULES}/%{pname}
@@ -140,4 +141,3 @@ EOF
 %files
 %doc LICENSE README.rst README.TEST %{?el7:README.EL7}
 %{OHPC_PUB}
-
