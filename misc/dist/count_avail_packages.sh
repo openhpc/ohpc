@@ -60,12 +60,12 @@ for os in ${oses}; do
 	if [[ $micro_ver -eq 0 ]];then
 	    numrpms=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base '*' | wc -l`
 	    echo $numrpms
-	    let "total=$total+1"
+	    let "total=$total+$numrpms"
 	else
 	    numrpms=`repoquery --archlist=${arch} --repofrompath="ohpc-base,${repobase}" --repoid=ohpc-base '*' \
 	        --repofrompath="ohpc-update,${repoupdate}" --repoid=ohpc-update '*' | wc -l`
 	    echo $numrpms
-	    let "total=$total+1"
+	    let "total=$total+$numrpms"
 	fi
     done
 done
