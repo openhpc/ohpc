@@ -85,11 +85,11 @@ cd src
 #%if "%{compiler_family}" == "arm1"
 #    --with-blas-lib="" \
 #    --with-lapack-lib="" \
-#%else
-%elif "%{compiler_family}" != "arm1"
+%else
+%if "%{compiler_family}" != "arm1"
     --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
     --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
-#%endif
+%endif
 %endif
     --with-mli \
     --with-superlu-include=$SUPERLU_INC \
