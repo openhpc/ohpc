@@ -82,10 +82,6 @@ cd src
     --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
     --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
 %else
-#%if "%{compiler_family}" == "arm1"
-#    --with-blas-lib="" \
-#    --with-lapack-lib="" \
-%else
 %if "%{compiler_family}" != "arm1"
     --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
     --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
