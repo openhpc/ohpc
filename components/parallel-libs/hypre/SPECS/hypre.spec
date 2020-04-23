@@ -67,7 +67,7 @@ module load openblas
 %endif
 
 
-FLAGS="%{optflags} -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
+FLAGS="$optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
 cd src
 ./configure \
     --prefix=%{install_path} \
@@ -83,8 +83,8 @@ cd src
     --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
 %else
 %if "%{compiler_family}" == "arm1"
-    --with-blas-lib="" \
-    --with-lapack-lib="" \
+#    --with-blas-lib="" \
+#    --with-lapack-lib="" \
 %else
     --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
     --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
