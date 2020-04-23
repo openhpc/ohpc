@@ -63,11 +63,11 @@ module load openblas
 %endif
 
 %if "%{compiler_family}" == "arm1"
-  optflags="-O3 -fsimdmath -larmpl"
+  %define optflags -O3 -fsimdmath -larmpl
 %endif
 
 
-FLAGS="$optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
+FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
 cd src
 ./configure \
     --prefix=%{install_path} \
@@ -82,13 +82,14 @@ cd src
     --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
     --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
 %else
-%if "%{compiler_family}" == "arm1"
+#%if "%{compiler_family}" == "arm1"
 #    --with-blas-lib="" \
 #    --with-lapack-lib="" \
-%else
+#%else
+%elif "%{compiler_family}" != "arm1"
     --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
     --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
-%endif
+#%endif
 %endif
     --with-mli \
     --with-superlu-include=$SUPERLU_INC \
