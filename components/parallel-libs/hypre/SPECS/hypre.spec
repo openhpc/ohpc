@@ -88,7 +88,7 @@ cd src
 #%else
     --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
     --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
-%endif
+#%endif
 %endif
     --with-mli \
     --with-superlu-include=$SUPERLU_INC \
