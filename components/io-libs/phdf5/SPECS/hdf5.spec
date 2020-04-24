@@ -67,13 +67,13 @@ export CXX=mpicxx
 export F77=mpif77
 export FC=mpif90
 export MPICC=mpicc
-export MPIFC=mpifc
+export MPIFC=mpif90
 export MPICXX=mpicxx
 
 ./configure --prefix=%{install_path} \
 	    --enable-fortran         \
-            --enable-static=no       \
-            --enable-parallel        \
+      --enable-static=no       \
+      --enable-parallel        \
 	    --enable-shared          \
 	    --enable-fortran2003     || { cat config.log && exit 1; }
 
