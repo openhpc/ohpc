@@ -76,6 +76,13 @@ cd src
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
     --with-timing \
     --without-openmp \
+    --with-mli \
+    --with-superlu-include=$SUPERLU_INC \
+    --with-superlu-lib=$SUPERLU_LIB \
+    CC="mpicc $FLAGS" \
+    CXX="mpicxx $FLAGS" \
+    F77="mpif77 $FLAGS"
+
 #%if "%{compiler_family}" == "intel"
 #    --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
 #    --with-blas-lib-dirs=$MKLROOT/intel64/lib \
@@ -87,12 +94,6 @@ cd src
 #    --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
 #%endif
 #%endif
-    --with-mli \
-    --with-superlu-include=$SUPERLU_INC \
-    --with-superlu-lib=$SUPERLU_LIB \
-    CC="mpicc $FLAGS" \
-    CXX="mpicxx $FLAGS" \
-    F77="mpif77 $FLAGS"
 
 mkdir -p hypre/lib
 pushd FEI_mv/femli
