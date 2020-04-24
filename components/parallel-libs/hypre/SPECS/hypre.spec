@@ -62,9 +62,24 @@ module load superlu
 module load openblas
 %endif
 
+
 %if "%{compiler_family}" == "arm1"
   %define optflags -O3 -fsimdmath -armpl
 %endif
+
+#handle blas and lapack with definitions
+%if "%{compiler_family}" == "intel"
+    %define blas_lapack_flags --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+    --with-blas-lib-dirs=$MKLROOT/intel64/lib \
+    --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+    --with-lapack-lib-dirs=$MKLROOT/intel64/lib 
+%endif
+
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+    %define blas_lapack_flags --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
+    --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" 
+%endif
+
 
 
 FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_ -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla"
@@ -79,12 +94,7 @@ cd src
     --with-mli \
     --with-superlu-include=$SUPERLU_INC \
     --with-superlu-lib=$SUPERLU_LIB \
-%if "%{compiler_family}" == "intel"
-    --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-    --with-blas-lib-dirs=$MKLROOT/intel64/lib \
-    --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-    --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
-%endif
+    %blas_lapack_flags \
     CC="mpicc" \
     CFLAGS="$FLAGS" \
     CXX="mpicxx"
