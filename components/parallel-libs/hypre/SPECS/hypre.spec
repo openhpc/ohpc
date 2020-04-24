@@ -76,17 +76,17 @@ cd src
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
     --with-timing \
     --without-openmp \
-%if "%{compiler_family}" == "intel"
-    --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-    --with-blas-lib-dirs=$MKLROOT/intel64/lib \
-    --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-    --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
-%else
-%if "%{compiler_family}" != "arm1"
-    --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
-    --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
-%endif
-%endif
+#%if "%{compiler_family}" == "intel"
+#    --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+#    --with-blas-lib-dirs=$MKLROOT/intel64/lib \
+#    --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+#    --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
+#%else
+#%if "%{compiler_family}" != "arm1"
+#    --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
+#    --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
+#%endif
+#%endif
     --with-mli \
     --with-superlu-include=$SUPERLU_INC \
     --with-superlu-lib=$SUPERLU_LIB \
