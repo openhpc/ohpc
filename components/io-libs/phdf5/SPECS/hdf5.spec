@@ -55,9 +55,9 @@ sed "s/\(.*\)(void) HDF_NO_UBSAN/HDF_NO_UBSAN \1(void)/" -i src/H5detect.c
 %build
 
 # override with newer config.guess for aarch64
-%ifarch aarch64 || ppc64le
-cp /usr/lib/rpm/config.guess bin
-%endif
+#%ifarch aarch64 || ppc64le
+#cp /usr/lib/rpm/config.guess bin
+#%endif
 
 # OpenHPC compiler/mpi designation
 %ohpc_setup_compiler
