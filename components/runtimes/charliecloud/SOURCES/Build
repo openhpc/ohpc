@@ -1,0 +1,133 @@
+#!/bin/bash
+
+# Build an Alpine Linux image roughly following the chroot(2) instructions:
+# https://wiki.alpinelinux.org/wiki/Installing_Alpine_Linux_in_a_chroot
+#
+# We deliberately do not sudo. It's a little rough around the edges, because
+# apk expects root, but it better follows the principle of least privilege. We
+# could tidy by using the fakeroot utility, but AFAICT that's not particularly
+# common and we'd prefer not to introduce another dependency. For example,
+# it's a standard tool on Debian but only in EPEL for CentOS.
+#
+# ch-test-scope: quick
+
+set -ex
+
+srcdir=$1
+tarball_uncompressed=${2}.tar
+tarball=${tarball_uncompressed}.gz
+workdir=$3
+
+arch=$(uname -m)
+mirror=http://dl-cdn.alpinelinux.org/alpine/v3.9
+# Dynamically select apk-tools-static version. We would prefer to hard-code a
+# version (and upgrade on our schedule), but we can't because Alpine does not
+# keep old package versions. If we try, the build breaks every few months (for
+# example, see issue #242).
+apk_tools=$(  wget -qO - "${mirror}/main/${arch}" \
+            | grep -F apk-tools-static \
+            | sed -E 's/^.*(apk-tools-static-[0-9.r-]+\.apk).*$/\1/')
+img=${workdir}/img
+
+cd "$workdir"
+
+# "apk add" wants to install a bunch of files root:root. Thus, if we don't map
+# ourselves to root:root, we get thousands of errors about "Failed to set
+# ownership".
+#
+# For most Build scripts, we'd simply error out with missing prerequisites,
+# but this is a core image that much of the test suite depends on.
+ch_run="ch-run -u0 -g0 -w --no-home ${img}"
+
+## Bootstrap base Alpine Linux.
+
+# Download statically linked apk.
+wget "${mirror}/main/${arch}/${apk_tools}"
+
+# Bootstrap directories.
+mkdir img
+mkdir img/{dev,etc,proc,sys,tmp}
+touch img/etc/{group,hosts,passwd,resolv.conf}
+
+# Bootstrap static apk.
+(cd img && tar xf "../${apk_tools}")
+mkdir img/etc/apk
+echo ${mirror}/main > img/etc/apk/repositories
+
+# Install the base system and a dynamically linked apk.
+#
+# This will give a few errors about chown failures. However, the install does
+# seem to work, so we ignore the failed exit code.
+$ch_run -- /sbin/apk.static \
+           --allow-untrusted --initdb --update-cache \
+           add alpine-base apk-tools \
+  || true
+
+# Now that we've bootstrapped, we don't need apk.static any more. It wasn't
+# installed using apk, so it's not in the database and can just be rm'ed.
+rm img/sbin/apk.static.*
+
+# Install packages we need for our tests.
+$ch_run -- /sbin/apk add gcc make musl-dev python3 || true
+
+# Validate the install.
+$ch_run -- /sbin/apk audit --system
+$ch_run -- /sbin/apk stats
+
+# Fix permissions.
+#
+# Note that this removes setuid/setgid bits from a few files (and
+# directories). There is not a race condition, i.e., a window where setuid
+# executables could become the invoking users, which would be a security hole,
+# because the setuid/setgid binaries are not group- or world-readable until
+# after this chmod.
+chmod -R u+rw,ug-s img
+
+
+## Install our test stuff.
+
+# Sentinel file for --no-home --bind test
+echo "tmpfs and host home are not overmounted" \
+  > img/home/overmount-me
+
+# We want ch-ssh
+touch img/usr/bin/ch-ssh
+
+# Test programs.
+cp -r "$srcdir" img/test
+$ch_run --cd /test -- sh -c 'make clean && make'
+
+# Fixtures for /dev cleaning.
+touch img/dev/deleteme
+mkdir -p img/mnt/dev
+touch img/mnt/dev/dontdeleteme
+
+# Fixture to make sure we raise hidden files in non-tarbombs.
+touch img/.hiddenfile1 img/..hiddenfile2 img/...hiddenfile3
+
+
+## Tar it up.
+
+# Using pigz saves about 8 seconds. Normally we wouldn't care about that, but
+# this script is part of the quick scope, which we'd like developers to use
+# frequently, so every second matters.
+if ( command -v pigz >/dev/null 2>&1 ); then
+    gzip_cmd=pigz
+else
+    gzip_cmd=gzip
+fi
+
+# Charliecloud supports images both with a single top level directory and
+# without (tarbomb). The Docker images in the test suite are all tarbombs
+# (because that's what "docker export" gives us), so use a containing
+# directory for this one.
+tar cf "$tarball_uncompressed" -- img
+
+# Add in the /dev fixtures in a couple more places. Note that this will cause
+# the tarball to no longer have a single root directory, but they'll be
+# removed during unpacking, restoring that condition.
+( cd img && tar rf "$tarball_uncompressed" ./dev/deleteme dev/deleteme )
+
+# Finalize the tarball.
+$gzip_cmd -f "$tarball_uncompressed"
+[[ -f $tarball ]]

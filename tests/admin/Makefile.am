@@ -14,6 +14,5 @@ TESTS  += warewulf
 endif
 
 if SLURM_ENABLED
-#TESTS  += mrsh
 TESTS  += slurm-plugins
 endif
