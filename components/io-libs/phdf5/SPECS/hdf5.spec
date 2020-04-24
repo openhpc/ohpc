@@ -74,9 +74,9 @@ export MPICXX=mpicxx
 	    --enable-fortran         \
       --enable-static=no       \
       --enable-parallel        \
-	    --enable-shared         # \
-#	    --enable-fortran2003     || { cat config.log && exit 1; }
-
+	    --enable-shared          \
+      || { cat config.log && exit 1; }
+#	    --enable-fortran2003     
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
