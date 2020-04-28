@@ -4,7 +4,6 @@ TESTS = init.sh
 
 TESTS  += clustershell
 TESTS  += conman
-#TESTS  += ganglia
 TESTS  += genders
 TESTS  += nagios
 TESTS  += nhc
