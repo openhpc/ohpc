@@ -36,6 +36,7 @@ Patch9:  warewulf-vnfs.varlog.patch
 Patch10: warewulf-vnfs.leap.aarch.patch
 Patch11: warewulf-vnfs.wwbootstrap.vmlinuz.patch
 Patch12: warewulf-vnfs.bootstrap_qlogic.patch
+Patch13: warewulf-vnfs.leap.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -81,7 +82,7 @@ cd %{_builddir}
 %patch10 -p2
 %patch11 -p1
 %patch12 -p1
-
+%patch13 -p2
 
 %build
 ./autogen.sh
