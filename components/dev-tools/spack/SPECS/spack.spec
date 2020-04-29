@@ -56,6 +56,10 @@ same package.
 %prep
 %setup -q -n %{pname}-%{version}
 
+# cleanup any recipes that have hard-coded /bin/env in them as this will
+# prevent installation on Leap
+grep -rl '#!/bin/env ' . | xargs -i@ sed -i 's|#!/bin/env|#!/usr/bin/env|g' @
+
 %install
 mkdir -p %{buildroot}%{install_path}
 rsync -av --exclude=.gitignore {etc,bin,lib,var,share} %{buildroot}%{install_path}
