@@ -54,8 +54,8 @@ unset OMP_NUM_THREADS
     if [ "x$ARCH" == "xx86_64" ];then
 	export TAU_METRICS=PAPI_L1_DCM
     fi
-    if [ ! -s C_omp_test ];then
-	flunk "C_omp_test binary does not exist"
+    if [ ! -s C_hybrid_test ];then
+	flunk "C_hybrid_test binary does not exist"
     fi
 
     run_mpi_binary ./run_C_hybrid_test.sh $ARGS $NODES $TASKS
