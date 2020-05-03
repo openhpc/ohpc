@@ -153,12 +153,6 @@ AC_ARG_ENABLE([lustre],
    [AX_OPTION_DEFAULT(type=short,enable_lustre,no)])
 AM_CONDITIONAL(LUSTRE_ENABLED,test "x$enable_lustre" = "xyes" ) 
 #------------------------------------------------------------------------------------------
-# mpiP
-AC_ARG_ENABLE([mpiP],
-   [AS_HELP_STRING([--enable-mpiP],[Enable mpiP profiler tests (default=no)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_mpiP,no)])
-AM_CONDITIONAL(MPIP_ENABLED,test "x$enable_mpiP" = "xyes" ) 
-#------------------------------------------------------------------------------------------
 # Valgrind
 AC_ARG_ENABLE([valgrind],
    [AS_HELP_STRING([--enable-valgrind],[Enable valgrind tests (default=yes)])],[],
@@ -326,12 +320,6 @@ AC_ARG_ENABLE([oom],
    [AS_HELP_STRING([--enable-oom],[Enable out-of-memory tests under resource manager (default=yes)],,120)],[],
    [AX_OPTION_DEFAULT(type=short,enable_oom,yes)])
 AM_CONDITIONAL(OOM_ENABLED,test "x$enable_oom" = "xyes" )
-#------------------------------------------------------------------------------------------
-# OCR
-AC_ARG_ENABLE([ocr],
-   [AS_HELP_STRING([--enable-ocr],[Enable OCR tests (default=no)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_ocr,no)])
-AM_CONDITIONAL(OCR_ENABLED,test "x$enable_ocr" = "xyes" )
 #------------------------------------------------------------------------------------------
 # OPENBLAS
 AC_ARG_ENABLE([openblas],
@@ -866,12 +854,6 @@ echo    Performance Tools:
        echo '    'Likwid.................... : disabled
     fi
 
-    if test "x$enable_mpiP" = "xyes"; then
-       echo '    'mpiP Profiler........ .... : enabled
-    else
-       echo '    'mpiP Profiler............. : disabled
-    fi
-
     if test "x$enable_omb" = "xyes"; then
        echo '    'OSU microbenchmarks....... : enabled
     else
@@ -902,12 +884,6 @@ echo    Runtimes:
        echo '    'Charliecloud.............. : enabled
     else
        echo '    'Charliecloud.............. : disabled
-    fi
-
-    if test "x$enable_ocr" = "xyes"; then
-       echo '    'OCR....................... : enabled
-    else
-       echo '    'OCR....................... : disabled
     fi
 
     if test "x$enable_singularity" = "xyes"; then

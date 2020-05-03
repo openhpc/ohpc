@@ -257,10 +257,6 @@ if LIKWID_ENABLED
    TESTS += perf-tools/likwid/ohpc-tests/test_compiler_families
 endif
 
-if MPIP_ENABLED
-   TESTS += perf-tools/mpiP/ohpc-tests/test_mpi_families
-endif
-
 if PAPI_ENABLED
    TESTS += perf-tools/papi/ohpc-tests/test_compiler_families
 endif
@@ -271,10 +267,6 @@ endif
 
 if TAU_ENABLED
    TESTS += perf-tools/tau/ohpc-tests/test_mpi_families
-endif
-
-if OCR_ENABLED
-   TESTS += runtimes/ocr/ohpc-tests/test_compiler_families
 endif
 
 if RMS_HARNESS_ENABLED
