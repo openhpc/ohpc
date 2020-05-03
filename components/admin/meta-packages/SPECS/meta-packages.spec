@@ -265,8 +265,10 @@ Collection of parallel library builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-perf-tools
 Summary:   OpenHPC performance tools for GNU
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires: imb-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -280,7 +282,9 @@ Requires:  scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires: imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
@@ -295,7 +299,9 @@ Collection of performance tool builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mpich-perf-tools
 Summary:   OpenHPC performance tools for GNU and MPICH
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 ## TODO Requires: imb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -308,7 +314,9 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mvapich2-perf-tools
 Summary:   OpenHPC performance tools for GNU and MVAPICH2
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
 ## TODO Requires: imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
@@ -322,7 +330,9 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-perf-tools
 Summary:   OpenHPC performance tools for GNU and OpenMPI
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 ## TODO Requires: imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
@@ -603,11 +613,13 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  dimemas-intel-impi%{PROJ_DELIM}
 Requires:  dimemas-intel-mpich%{PROJ_DELIM}
 Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
 Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  extrae-intel-impi%{PROJ_DELIM}
 Requires:  extrae-intel-mpich%{PROJ_DELIM}
