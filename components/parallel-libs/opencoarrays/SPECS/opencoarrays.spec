@@ -27,7 +27,7 @@ Source0:        https://github.com/sourceryinstitute/OpenCoarrays/releases/downl
 Patch1:         opencoarrays-disable-get-comm-test.patch
 Url:            http://www.opencoarrays.org
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  cmake
+BuildRequires:  cmake%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks
 
@@ -52,6 +52,7 @@ TS 18508 Additional Parallel Features in Fortran.
 
 %{__mkdir_p} build-opencoarrays
 cd build-opencoarrays
+module load cmake
 cmake -DCMAKE_INSTALL_PREFIX=%{install_path} ..
 
 make %{?_smp_mflags} VERBOSE=1
