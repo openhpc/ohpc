@@ -167,13 +167,23 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
+%{OHPC_MPI_STACKS}/%{name}
+%dir %{install_path}
+%dir %{install_path}/bin
+%dir %{install_path}/include
+%dir %{install_path}/lib
+%dir %{install_path}/share
 %{install_path}/lib/lib*.so.*
 %{install_path}/lib/lib*.so
 %{install_path}/lib/pkgconfig/ucx.pc
 %{install_path}/bin/uc*
 %{install_path}/share/ucx
 %{install_path}/include/uc*
+%exclude %{install_path}/lib/ucx/libuct_cma.so.*
+%exclude %{install_path}/lib/ucx/libuct_rdmacm.so.*
+%exclude %{install_path}/lib/ucx/libuct_ib.so.*
 %{OHPC_MODULES}
+
 
 %doc README AUTHORS NEWS
 %{!?_licensedir:%global license %%doc}
