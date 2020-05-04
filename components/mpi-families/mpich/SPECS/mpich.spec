@@ -25,6 +25,12 @@ BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires: libevent-devel
 %endif
 
+%{!?with_ucx: %define with_ucx 1}
+%if 0%{with_ucx}
+BuildRequires: ucx%{PROJ_DELIM}
+Requires: ucx%{PROJ_DELIM}
+%endif
+
 # Base package name
 %define pname mpich
 
@@ -54,6 +60,10 @@ BuildRequires: numactl-devel
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
 
+%if 0%{?suse_version}
+#!BuildIgnore: post-build-checks
+%endif
+
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{name}/%version
 
@@ -75,6 +85,9 @@ Message Passing Interface (MPI) standard.
 module load pmix
 export CPATH=${PMIX_INC}
 %endif
+%if 0%{with_ucx}
+module load ucx
+%endif
 
 ./configure --prefix=%{install_path} \
 %if 0%{with_slurm}
@@ -83,14 +96,15 @@ export CPATH=${PMIX_INC}
 %if 0%{with_pmix}
             LIBS="-L%{OHPC_ADMIN}/pmix/pmix/lib -lpmix" --with-pm=none --with-pmi=slurm \
 %endif
+%if 0%{with_ucx}
+            --with-device=ch4:ucx --with-ucx=$UCX_DIR \
+%endif
     || { cat config.log && exit 1; }
 
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif
-
-#            --with-device=ch4:ofi,ucx \
 
 make %{?_smp_mflags}
 
@@ -133,6 +147,9 @@ prepend-path	LD_LIBRARY_PATH	    %{install_path}/lib
 prepend-path    MODULEPATH          %{OHPC_MODULEDEPS}/%{compiler_family}-%{pname}
 prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
+%if 0%{with_ucx}
+depends-on ucx
+%endif
 family "MPI"
 EOF
 
