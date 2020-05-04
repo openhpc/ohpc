@@ -13,11 +13,7 @@
 %bcond_with    cuda
 %bcond_with    gdrcopy
 %bcond_without ib
-%if 0%{?fedora} >= 30 || 0%{?rhel} >= 7
-%bcond_with ib_cm
-%else
-%bcond_without ib_cm
-%endif
+%bcond_with    ib_cm
 %bcond_with    knem
 %bcond_without rdmacm
 %bcond_with    rocm
@@ -107,6 +103,7 @@ This package was built from '' branch, commit c30b7da.
            --disable-debug \
            --disable-assertions \
            --disable-params-check \
+	   --libdir=%{install_path}/lib \
            %_enable_arg cma cma \
            %_with_arg cuda cuda \
            %_with_arg gdrcopy gdrcopy \
