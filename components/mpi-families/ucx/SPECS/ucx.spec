@@ -38,7 +38,7 @@ Summary: UCX is a communication library implementing high-performance messaging
 Group:   %{PROJ_NAME}/mpi-families
 License: BSD
 URL:     http://www.openucx.org
-Source:  https://github.com/openucx/%{pname}/releases/download/%{version}/%{pname}-%{version}.tar.gz
+Source:  https://github.com/openucx/%{pname}/releases/download/v%{version}/%{pname}-%{version}.tar.gz
 
 # UCX currently supports only the following architectures
 ExclusiveArch: aarch64 ppc64le x86_64
