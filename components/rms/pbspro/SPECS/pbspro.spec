@@ -162,8 +162,12 @@ Conflicts: pbs-mom
 Conflicts: pbs-cmds
 Requires: bash
 Requires: expat
+%if 0%{?rhel}
+Requires: python2 >= 2.6
+%else
 Requires: python >= 2.6
 Requires: python < 3.0
+%endif
 %if %{defined suse_version}
 Requires: libhwloc5
 Requires: net-tools
