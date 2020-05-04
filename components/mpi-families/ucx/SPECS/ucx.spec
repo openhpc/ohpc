@@ -167,7 +167,13 @@ set     ModulesVersion      "%{version}"
 EOF
 
 %files
-%{OHPC_PUB}
+%{install_path}/lib/lib*.so.*
+%{install_path}/lib/lib*.so
+%{install_path}/lib/pkgconfig/ucx.pc
+%{install_path}/bin/uc*
+%{install_path}/share/ucx
+%{install_path}/include/uc*
+%{OHPC_MODULES}
 
 %doc README AUTHORS NEWS
 %{!?_licensedir:%global license %%doc}
