@@ -417,6 +417,12 @@ AC_ARG_ENABLE([tau],
    [AX_OPTION_DEFAULT(type=long,enable_tau,yes)])
 AM_CONDITIONAL(TAU_ENABLED,test "x$enable_tau" = "xyes" )
 #------------------------------------------------------------------------------------------
+# UCX
+AC_ARG_ENABLE([ucx],
+   [AS_HELP_STRING([--enable-ucx],[Enable ucx tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_ucx,yes)])
+   AM_CONDITIONAL(UCX_ENABLED,test "x$enable_ucx" = "xyes" )
+#------------------------------------------------------------------------------------------
 # Autotools
 AC_ARG_ENABLE([autotools],
    [AS_HELP_STRING([--enable-autotools],[Enable autotools tests (default=yes)])],[],
@@ -506,6 +512,7 @@ AC_OUTPUT( Makefile
        dev-tools/tbb/tests/Makefile
        dev-tools/cilk/Makefile
        libs/R/Makefile
+       libs/ucx/Makefile
        modules/Makefile )
 
 echo
@@ -820,6 +827,12 @@ echo    Libraries:
        echo '    'Trilinos ................. : enabled
     else
        echo '    'Trilinos.................. : disabled
+    fi
+
+    if test "x$enable_ucx" = "xyes"; then
+       echo '    'UCX....................... : enabled
+    else
+       echo '    'UCX....................... : disabled
     fi
 
 echo    Performance Tools:

@@ -1,0 +1,103 @@
+#!./common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions                  || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+PKG=UCX
+testname=UCX
+module=ucx
+library=libucp
+rpm=ucx${DELIM}
+
+setup() {
+    module purge        || exit 1
+    module load $module || exit 1
+}
+
+
+@test "[$testname] Verify $module module loads and matches rpm version" {
+    module list $module/ | grep "1) $module" >& .cmd_output || exit 1
+    run grep $module .cmd_output 
+    assert_success
+    
+   # check version against rpm
+    local version="$(rpm -q --queryformat='%{VERSION}\n' $rpm)"
+    run cat .cmd_output
+    assert_output "  1) $module/$version"
+
+    # check binary version against rpm
+    ucx_info -v | head -1 | awk '{print $3}'  | awk -F 'version=' '{print $2}' >& .cmd_output
+    run cat .cmd_output
+    assert_output $version
+    
+}
+
+@test "[$testname] Verify ${PKG}_DIR is defined and exists" {
+    DIR=${PKG}_DIR
+    if [ -z ${!DIR} ];then
+        flunk "${PKG}_DIR directory not defined"
+    fi
+    
+    if [ ! -d ${!DIR} || -z "${!DIR}" ];then
+        flunk "directory ${!DIR} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify module ${PKG}_LIB is defined and exists" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+ 
+    if [ ! -d ${!LIB} ];then
+        flunk "directory ${!LIB} does not exist"
+    fi 
+}
+
+@test "[$testname] Verify dynamic library available in ${PKG}_LIB" {
+    LIB=${PKG}_LIB
+
+    if [ -z ${!LIB} ];then
+        flunk "${PKG}_LIB directory not defined"
+    fi
+
+    if [ ! -s ${!LIB}/${library}.so ];then
+        flunk "${library}.so does not exist"
+    fi 
+}
+
+@test "[$testname] Verify ucp.h header file is present in ${PKG}_INC" {
+    INC=${PKG}_INC
+
+    if [ -z ${!INC} ];then
+        flunk "${PKG}_INC directory not defined"
+    fi
+    
+    if [ ! -s ${!INC}/ucp/api/ucp.h ];then
+        flunk "directory $header file does not exist"
+    fi 
+}
+
+@test "[$testname] Check for tcp transport" {
+    run ucx_info -d -t tcp
+    assert_success
+    [ "${lines[1]}"  = "# Memory domain: tcp" ]
+}
+
+@test "[$testname] Test build using UCX profiling interface" {
+    module load ${GCC_DEFAULT}
+
+    rm -f ucx_profiling
+    run gcc -o ucx_profiling ucx_profiling.c -I$UCX_INC -L$UCX_LIB -lucp -lucs -lm
+    assert_success
+
+    run ls ucx_profiling
+    assert_success
+}
+

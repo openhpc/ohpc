@@ -63,6 +63,10 @@ if SINGULARITY_ENABLED
    SUBDIRS += runtimes/singularity
 endif
 
+if UCX_ENABLED
+   SUBDIRS += libs/ucx
+endif
+
 if USERENV_ENABLED
    SUBDIRS += user-env
 endif
