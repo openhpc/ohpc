@@ -1,7 +1,0 @@
-addFilter("suse-filelist-forbidden")
-addFilter("summary-ended-with-dot")
-addFilter("files-duplicated-waste")
-addFilter("devel-file-in-non-devel-package")
-addFilter("invalid-spec-name")
-addFilter("non-standard-group")
-addFilter("dir-or-file-in-var-run")
