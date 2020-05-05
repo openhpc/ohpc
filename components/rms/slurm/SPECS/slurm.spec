@@ -455,7 +455,7 @@ echo "Epilog=/etc/slurm/slurm.epilog.clean" >> $RPM_BUILD_ROOT/%{_sysconfdir}/sl
 echo "NodeName=c[1-4] Sockets=2 CoresPerSocket=8 ThreadsPerCore=2 State=UNKNOWN" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 echo "PartitionName=normal Nodes=c[1-4] Default=YES MaxTime=24:00:00 State=UP Oversubscribe=EXCLUSIVE" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 # 5/5/2020 karl@oden.utexas.edu - enable configless option
-SlurmctldParameters=enable_configless
+echo "SlurmctldParameters=enable_configless" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 # 6/3/16 nirmalasrjn@gmail.com - Adding ReturnToService Directive to starting config file (note removal of variable during above creation)
 echo "ReturnToService=1" >> $RPM_BUILD_ROOT/%{_sysconfdir}/slurm.conf
 # 9/17/14 karl.w.schulz@intel.com - Add option to drop VM cache during epilog
