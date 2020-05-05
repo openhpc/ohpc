@@ -131,7 +131,7 @@
 [sms](*\#*) chroot $CHROOT systemctl enable munge
 
 # Register Slurm server with computes (using configless option)
-[sms](*\#*) echo 'SLURMD_OPTIONS="--conf-server ${sms_ip}"' > $CHROOT/etc/sysconfig/slurmd
+[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
 [sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/

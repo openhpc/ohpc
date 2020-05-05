@@ -159,7 +159,7 @@ repository, which is shipped with CentOS and is enabled by default.
 [sms](*\#*) chroot $CHROOT systemctl enable munge
 
 # Register Slurm server with computes (using configless option)
-[sms](*\#*) echo 'SLURMD_OPTIONS="--conf-server ${sms_ip}"' > $CHROOT/etc/sysconfig/slurmd
+[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) chrony

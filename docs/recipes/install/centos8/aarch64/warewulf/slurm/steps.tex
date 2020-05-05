@@ -150,6 +150,9 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 [sms](*\#*) chroot $CHROOT systemctl enable munge
 
+# Register Slurm server with computes (using configless option)
+[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
+
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) chrony
 # Identify master host as local NTP server
