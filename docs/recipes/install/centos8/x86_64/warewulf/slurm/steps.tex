@@ -148,14 +148,23 @@ repository, which is shipped with CentOS and is enabled by default.
 
 %\newpage
 % begin_ohpc_run
-% ohpc_validation_comment Add OpenHPC components to compute instance
+% ohpc_validation_comment Add SLURM and other components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Add Slurm client support meta-package
+# copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
+# install. Note that these will be syncronized with future updates via the provisioning system.
 [sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
+
+# Add Slurm client support meta-package and enable munge
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
+[sms](*\#*) chroot $CHROOT systemctl enable munge
+
+# Register Slurm server with computes (using configless option)
+[sms](*\#*) echo 'SLURMD_OPTIONS="--conf-server ${sms_ip}"' > $CHROOT/etc/sysconfig/slurmd
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) chrony
+# Identify master host as local NTP server
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
 # Add kernel drivers (matching kernel version on SMS node)
 [sms](*\#*) (*\chrootinstall*) kernel-`uname -r`
@@ -177,8 +186,6 @@ repository, which is shipped with CentOS and is enabled by default.
 % ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
 % ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
 
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
 % ohpc_command fi
 % end_ohpc_run
 

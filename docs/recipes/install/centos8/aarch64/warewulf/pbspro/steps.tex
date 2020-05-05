@@ -152,6 +152,7 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) chrony
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
 # Add kernel drivers (matching kernel version on SMS node)
 [sms](*\#*) (*\chrootinstall*) kernel-`uname -r`
