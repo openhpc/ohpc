@@ -24,6 +24,12 @@ Group:     %{PROJ_NAME}/serial-libs
 URL:       http://www.gnu.org/software/gsl
 Source0:   https://ftp.gnu.org/gnu/%{pname}/%{pname}-%{version}.tar.gz
 
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+BuildRequires: make
+BuildRequires: pkgconfig
+
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
@@ -49,7 +55,9 @@ lends itself to being used in very high level languages (VHLLs).
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-./configure --prefix=%{install_path} --disable-static || { cat config.log && exit 1; }
+./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --disable-static || { cat config.log && exit 1; }
 make %{?_smp_mflags}
 
 %install
@@ -103,4 +111,5 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README THANKS TODO
+%doc AUTHORS BUGS ChangeLog INSTALL NEWS README THANKS TODO
+%license COPYING
