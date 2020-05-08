@@ -540,8 +540,8 @@ Collection of parallel library builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-intel-impi-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and Intel(R) MPI Library
-Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  boost-intel-impi%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-intel-impi%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  hypre-intel-impi%{PROJ_DELIM}
 ## TODO Requires:  mfem-%{compiler_family}-impi%{PROJ_DELIM}
@@ -550,7 +550,7 @@ Requires:  mumps-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  mumps-intel-impi%{PROJ_DELIM}
 Requires:  opencoarrays-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  petsc-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  petsc-intel-impi%{PROJ_DELIM}
+## BUILDBROKEN Requires:  petsc-intel-impi%{PROJ_DELIM}
 Requires:  scalapack-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  scalapack-intel-impi%{PROJ_DELIM}
 Requires:  slepc-%{compiler_family}-impi%{PROJ_DELIM}
@@ -560,37 +560,37 @@ Requires:  ptscotch-intel-impi%{PROJ_DELIM}
 ## TODO Requires:  superlu_dist-%{compiler_family}-impi%{PROJ_DELIM}
 ## TODO Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
 Requires:  trilinos-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  trilinos-intel-impi%{PROJ_DELIM}
+## BUILDBROKEN Requires:  trilinos-intel-impi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-impi-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
 
 %package -n %{PROJ_NAME}-intel-mpich-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
-Requires:  boost-intel-mpich%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-intel-mpich%{PROJ_DELIM}
 Requires:  hypre-intel-mpich%{PROJ_DELIM}
 ## TODO Requires:  mfem-intel-mpich%{PROJ_DELIM}
 Requires:  mumps-intel-mpich%{PROJ_DELIM}
-Requires:  petsc-intel-mpich%{PROJ_DELIM}
+## BUILDBROKEN Requires:  petsc-intel-mpich%{PROJ_DELIM}
 Requires:  scalapack-intel-mpich%{PROJ_DELIM}
-Requires:  slepc-intel-mpich%{PROJ_DELIM}
+## BUILDBROKEN Requires:  slepc-intel-mpich%{PROJ_DELIM}
 Requires:  ptscotch-intel-mpich%{PROJ_DELIM}
 ## TODO Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
-Requires:  trilinos-intel-mpich%{PROJ_DELIM}
+## BUILDBROKEN Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 
 %package -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
-Requires:  boost-intel-mvapich2%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-intel-mvapich2%{PROJ_DELIM}
 Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
 ## TODO Requires:  mfem-intel-mvapich2%{PROJ_DELIM}
 Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
-Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
+## BUILDBROKEN Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
-Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
+## BUILDBROKEN Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-intel-mvapich2%{PROJ_DELIM}
 ## TODO Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
-Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
+## BUILDBROKEN Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
 
