@@ -25,7 +25,7 @@
 \newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
 \newcommand{\clean}{yum clean expire-cache}
 \newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
-\newcommand{\install}{yum -y --skip-broken install}
+\newcommand{\install}{yum -y install}
 \newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
 \newcommand{\groupinstall}{yum -y groupinstall}
 \newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
