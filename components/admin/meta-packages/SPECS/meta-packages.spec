@@ -596,16 +596,16 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
-Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  hypre-intel-%{mpi_family}%{PROJ_DELIM}
 ## TODO Requires:  mfem-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-intel-%{mpi_family}%{PROJ_DELIM}
-Requires:  petsc-intel-%{mpi_family}%{PROJ_DELIM}
+## BUILDBROKEN Requires:  petsc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalapack-intel-%{mpi_family}%{PROJ_DELIM}
 ## TODO Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  superlu_dist-intel-%{mpi_family}%{PROJ_DELIM}
-Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
+## BUILDBROKEN Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 
