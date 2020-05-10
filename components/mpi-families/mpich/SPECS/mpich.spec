@@ -25,10 +25,16 @@ BuildRequires:  pmix%{PROJ_DELIM}
 BuildRequires: libevent-devel
 %endif
 
-%{!?with_ucx: %define with_ucx 1}
+%{!?with_ucx: %define with_ucx 0}
 %if 0%{with_ucx}
 BuildRequires: ucx%{PROJ_DELIM}
 Requires: ucx%{PROJ_DELIM}
+%endif
+
+%{!?with_ofi: %define with_ofi 1}
+%if 0%{with_ofi}
+BuildRequires: libfabric%{PROJ_DELIM}
+Requires: libfabric%{PROJ_DELIM}
 %endif
 
 # Base package name
@@ -88,6 +94,9 @@ export CPATH=${PMIX_INC}
 %if 0%{with_ucx}
 module load ucx
 %endif
+%if 0%{with_ofi}
+module load libfabric
+%endif
 
 ./configure --prefix=%{install_path} \
 %if 0%{with_slurm}
@@ -98,6 +107,9 @@ module load ucx
 %endif
 %if 0%{with_ucx}
             --with-device=ch4:ucx --with-ucx=$UCX_DIR \
+%endif
+%if 0%{with_ofi}
+            --with-device=ch4:ofi --with-libfabric=$LIBFABRIC_DIR \
 %endif
     || { cat config.log && exit 1; }
 
@@ -149,6 +161,9 @@ prepend-path    PKG_CONFIG_PATH     %{install_path}/lib/pkgconfig
 
 %if 0%{with_ucx}
 depends-on ucx
+%endif
+%if 0%{with_ofi}
+depends-on libfabric
 %endif
 family "MPI"
 EOF
