@@ -420,7 +420,7 @@ AM_CONDITIONAL(TAU_ENABLED,test "x$enable_tau" = "xyes" )
 # UCX
 AC_ARG_ENABLE([ucx],
    [AS_HELP_STRING([--enable-ucx],[Enable ucx tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_ucx,yes)])
+   [AX_OPTION_DEFAULT(type=long,enable_ucx,no)])
    AM_CONDITIONAL(UCX_ENABLED,test "x$enable_ucx" = "xyes" )
 #------------------------------------------------------------------------------------------
 # Autotools
