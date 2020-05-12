@@ -39,6 +39,7 @@ BuildRequires:  xz
 BuildRequires:  zlib-devel
 %if 0%{?rhel}
 BuildRequires:  openssh-clients
+BuildRequires:  glibc-langpack-en
 %else
 BuildRequires:  openssh
 %endif
@@ -73,9 +74,14 @@ module load scalapack
 module load scalapack openblas
 %endif
 
-export COPTFLAGS="%{optflags}"
-export CXXOPTFLAGS="%{optflags}"
-export FOPTFLAGS="%{optflags}"
+# PETSc build system doesn't honor canonical CFLAGS,CXXFLAGS, etc
+# directly. Place them in OPTFLAG variants instead.
+COPTFLAGS="${CFLAGS}"
+CXXOPTFLAGS="${CXXFLAGS}"
+FOPTFLAGS="${FCFLAGS}"
+unset CFLAGS
+unset CXXFLAGS
+unset FCFLAGS
 
 # icc-impi requires mpiicc wrappers, otherwise dynamic libs are not generated.
 # gnu-impi finds include/4.8.0/mpi.mod first, unless told not to.
