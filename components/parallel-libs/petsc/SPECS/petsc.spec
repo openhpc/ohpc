@@ -112,7 +112,9 @@ unset FCFLAGS
 %endif
 %endif
 %endif
-        --with-clanguage=C++ \
+%if 0%{?OHPC_BUILD}
+        --with-make-np=3 \
+%endif
         --with-c-support \
         --with-fortran-interfaces=1 \
         --with-debugging=no \
