@@ -550,7 +550,7 @@ Requires:  mumps-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  mumps-intel-impi%{PROJ_DELIM}
 Requires:  opencoarrays-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  petsc-%{compiler_family}-impi%{PROJ_DELIM}
-## BUILDBROKEN Requires:  petsc-intel-impi%{PROJ_DELIM}
+Requires:  petsc-intel-impi%{PROJ_DELIM}
 Requires:  scalapack-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  scalapack-intel-impi%{PROJ_DELIM}
 Requires:  slepc-%{compiler_family}-impi%{PROJ_DELIM}
@@ -570,9 +570,9 @@ Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
 Requires:  hypre-intel-mpich%{PROJ_DELIM}
 ## TODO Requires:  mfem-intel-mpich%{PROJ_DELIM}
 Requires:  mumps-intel-mpich%{PROJ_DELIM}
-## BUILDBROKEN Requires:  petsc-intel-mpich%{PROJ_DELIM}
+Requires:  petsc-intel-mpich%{PROJ_DELIM}
 Requires:  scalapack-intel-mpich%{PROJ_DELIM}
-## BUILDBROKEN Requires:  slepc-intel-mpich%{PROJ_DELIM}
+Requires:  slepc-intel-mpich%{PROJ_DELIM}
 Requires:  ptscotch-intel-mpich%{PROJ_DELIM}
 ## TODO Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
 ## BUILDBROKEN Requires:  trilinos-intel-mpich%{PROJ_DELIM}
@@ -585,9 +585,9 @@ Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPIC
 Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
 ## TODO Requires:  mfem-intel-mvapich2%{PROJ_DELIM}
 Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
-## BUILDBROKEN Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
+Requires:  petsc-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
-## BUILDBROKEN Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
+Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-intel-mvapich2%{PROJ_DELIM}
 ## TODO Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
 ## BUILDBROKEN Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
@@ -600,9 +600,9 @@ Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMP
 Requires:  hypre-intel-%{mpi_family}%{PROJ_DELIM}
 ## TODO Requires:  mfem-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-intel-%{mpi_family}%{PROJ_DELIM}
-## BUILDBROKEN Requires:  petsc-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  petsc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalapack-intel-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  superlu_dist-intel-%{mpi_family}%{PROJ_DELIM}
 ## BUILDBROKEN Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
