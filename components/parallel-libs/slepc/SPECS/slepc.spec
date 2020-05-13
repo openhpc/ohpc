@@ -21,7 +21,7 @@
 %define pname slepc
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.12.0
+Version:        3.13.2
 Release:        1
 Summary:        A library for solving large scale sparse eigenvalue problems
 License:        LGPL-3.0
@@ -60,16 +60,16 @@ set -- *
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 %endif
 module load petsc
 python3 ./configure --prefix=/tmp%{install_path}
-make
+make SLEPC_DIR=${RPM_BUILD_DIR}/%{pname}-%{version} PETSC=$PETSC_DIR
 
 %install
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 %endif
 module load petsc
