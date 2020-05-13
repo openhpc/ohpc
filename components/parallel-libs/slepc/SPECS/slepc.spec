@@ -73,7 +73,7 @@ make SLEPC_DIR=${RPM_BUILD_DIR}/%{pname}-%{version} PETSC=$PETSC_DIR
 module load openblas
 %endif
 module load petsc
-make install
+make SLEPC_DIR=${RPM_BUILD_DIR}/%{pname}-%{version} PETSC=$PETSC_DIR install
 
 # move from tmp install dir to %install_path
 # dirname removes the last directory
