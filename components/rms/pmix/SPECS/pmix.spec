@@ -13,10 +13,10 @@
 %global rt_pname prrte
 
 # Temp SHAs until formal release
-%global pmix_sha 8c457aa469d87b76477da74e66622bda6d066b9e
-%global pmix_sha7 8c457aa
-%global prrte_sha 04f63ba18598925a68b1b7b7db2fe1cc931a6da2
-%global prrte_sha7 04f63ba
+%global pmix_sha a0cc2f8b7790c8cb599f7d67f60d74fba63ebf74
+%global pmix_sha7 a0cc2f8
+%global prrte_sha c23fd248ffe3aea05c98496801217d5239dd2078
+%global prrte_sha7 c23fd24
 
 %global rt_version 1.0.%{prrte_sha7}
 
@@ -32,11 +32,18 @@ Source1: https://github.com/openpmix/prrte/archive/%{prrte_sha}.tar.gz
 
 Obsoletes: pmix%{PROJ_DELIM}
 
+Conflicts: libev
+
 BuildRequires: libevent-devel
 BuildRequires: gcc-c++
-BuildRequires: cmake, automake-ohpc, autoconf-ohpc
-BuildRequires: slurm-ohpc
-BuildRequires: pbspro-server-ohpc
+BuildRequires: pandoc > 1.12
+BuildRequires: libpsm2-devel
+BuildRequires: libopamgt-devel
+BuildRequires: hwloc-devel
+BuildRequires: munge-devel
+BuildRequires: cmake%{PROJ_DELIM}, automake%{PROJ_DELIM}, autoconf%{PROJ_DELIM}
+BuildRequires: slurm%{PROJ_DELIM}
+BuildRequires: pbspro-server%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks
 
@@ -66,7 +73,7 @@ This RPM contains all the tools necessary to compile and link against PMIx.
 %prep
 %setup -q -n %{pname}-%{pmix_sha} -b 0 -a 1
 %{__mv} %{rt_pname}-%{prrte_sha} %{rt_pname}
-%{__ln_s} src/.libs lib64
+%{__ln_s} src/.libs lib
 
 
 %build
@@ -74,12 +81,19 @@ module load cmake
 PMIX_DIR=$(pwd)
 
 ./autogen.pl
-CFLAGS="%{optflags}" ./configure --prefix=%{install_path} || { cat config.log && exit 1; }
+CFLAGS="%{optflags}" ./configure --prefix=%{install_path} \
+                                 --libdir=%{install_path}/lib \
+                                 --with-psm2 \
+                                 --with-opamgt \
+                                 --with-munge \
+                                 --with-libevent \
+                                 --with-hwloc || { cat config.log && exit 1; }
 %{__make} %{?_smp_mflags}
 
 cd $PMIX_DIR/%{rt_pname}
 ./autogen.pl
-CFLAGS="%{optflags} -L${PMIX_DIR}/lib64" ./configure --prefix=%{rt_install_path} \
+CFLAGS="%{optflags}" ./configure --prefix=%{rt_install_path} \
+                                 --libdir=%{rt_install_path}/lib \
                                  --with-slurm \
                                  --with-tm=/opt/pbs \
                                  --with-pmix=$PMIX_DIR || { cat config.log && exit 1; }
