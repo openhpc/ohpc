@@ -27,11 +27,8 @@ family=$LMOD_FAMILY_COMPILER
     local my_mod_version=`cat .cmd_output | sed '/^\s*$/d' | sed 's/^[ \t]*//' | tail -1 | awk -F "$family/" '{print $2}'`
 
     if [[ "$family" = "intel" ]];then
-	version=`icc -V 2>&1 | grep Version | awk -F 'Version' '{print $2}' | awk '{print $1}'` || exit 1
-	assert_equal "$my_mod_version" "$version"
-	version=`icpc -V 2>&1 | grep Version | awk -F 'Version' '{print $2}' | awk '{print $1}'` || exit 1
-	assert_equal "$my_mod_version" "$version"
-	version=`ifort -V 2>&1 | grep Version | awk -F 'Version' '{print $2}' | awk '{print $1}'` || exit 1
+	compiler=`which icc`
+	version=`rpm -q --qf '%{VERSION}.%{RELEASE}' -f $compiler`
 	assert_equal "$my_mod_version" "$version"
     elif [[ "$family" =~ "gnu"  ]];then
 	version=`gcc --version | head -1 | awk '{print $3}'`
