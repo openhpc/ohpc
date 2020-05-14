@@ -22,7 +22,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname numpy
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.18.2
+Version:        1.17.4
 Release:        1%{?dist}
 Url:            https://github.com/numpy/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
@@ -57,10 +57,6 @@ basic linear algebra and random number generation.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -76,16 +72,6 @@ COMPILER_FLAG="--fcompiler=flang --compiler=clang"
 
 %if "%{compiler_family}" == "arm1"
 COMPILER_FLAG="--fcompiler=armflang --compiler=armclang"
-%endif
-
-%if "%{compiler_family}" == "intel"
-cat > site.cfg << EOF
-[mkl]
-include_dirs = $MKLROOT/include
-library_dirs = $MKLROOT/lib/intel64
-mkl_libs = mkl_rt
-lapack_libs = mkl_rt
-EOF
 %endif
 
 %if "%{compiler_family}" == "arm1"
