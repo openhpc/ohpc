@@ -38,7 +38,7 @@ BuildRequires: libevent-devel
 BuildRequires: gcc-c++
 BuildRequires: pandoc > 1.12
 BuildRequires: libpsm2-devel
-BuildRequires: libopamgt-devel
+BuildRequires: (opa-libopamgt-devel or libopamgt-devel)
 BuildRequires: hwloc-devel
 BuildRequires: munge-devel
 BuildRequires: cmake%{PROJ_DELIM}, automake%{PROJ_DELIM}, autoconf%{PROJ_DELIM}
