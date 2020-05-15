@@ -62,12 +62,27 @@ module load superlu
 module load openblas
 %endif
 
+
 %if "%{compiler_family}" == "arm1"
-  optflags="-O3 -fsimdmath"
+  %define optflags -O3 -fsimdmath -armpl
+%endif
+
+#handle blas and lapack with definitions
+%if "%{compiler_family}" == "intel"
+    %define blas_lapack_flags --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+    --with-blas-lib-dirs=$MKLROOT/intel64/lib \
+    --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
+    --with-lapack-lib-dirs=$MKLROOT/intel64/lib 
+%endif
+
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+    %define blas_lapack_flags --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
+    --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" 
 %endif
 
 
-FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
+
+FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_ -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla"
 cd src
 ./configure \
     --prefix=%{install_path} \
@@ -76,26 +91,16 @@ cd src
     --with-MPI-lib-dirs="$MPI_DIR/lib" \
     --with-timing \
     --without-openmp \
-%if "%{compiler_family}" == "intel"
-    --with-blas-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-    --with-blas-lib-dirs=$MKLROOT/intel64/lib \
-    --with-lapack-libs="mkl_core mkl_intel_lp64 mkl_sequential" \
-    --with-lapack-lib-dirs=$MKLROOT/intel64/lib \
-%else
-%if "%{compiler_family}" == "arm1"
-    --with-blas-lib="-armpl" \
-    --with-lapack-lib="-armpl" \
-%else
-    --with-blas-lib="-L$OPENBLAS_LIB -lopenblas" \
-    --with-lapack-lib="-L$OPENBLAS_LIB -lopenblas" \
-%endif
-%endif
     --with-mli \
     --with-superlu-include=$SUPERLU_INC \
     --with-superlu-lib=$SUPERLU_LIB \
-    CC="mpicc $FLAGS" \
-    CXX="mpicxx $FLAGS" \
-    F77="mpif77 $FLAGS"
+    %blas_lapack_flags \
+    CC="mpicc" \
+    CFLAGS="$FLAGS" \
+    CXX="mpicxx"
+    CXXFLAGS="$FLAGS" \
+    FC="mpif90" \
+    FCFLAGS="$FLAGS"
 
 mkdir -p hypre/lib
 pushd FEI_mv/femli
