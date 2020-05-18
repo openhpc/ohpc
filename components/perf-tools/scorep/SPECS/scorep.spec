@@ -20,12 +20,12 @@ Summary:   Scalable Performance Measurement Infrastructure for Parallel Codes
 Name:      %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:   6.0
 Release:   1%{?dist}
-License:   BSD
+License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/perf-tools
 URL:       http://www.vi-hps.org/projects/score-p/
 Source0:   http://www.vi-hps.org/cms/upload/packages/scorep/scorep-%{version}.tar.gz
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?sle_version} || 0%{?suse_version}
 BuildRequires:  fdupes
 %endif
 BuildRequires: automake
@@ -98,7 +98,7 @@ CONFIGURE_OPTIONS="$CONFIGURE_OPTIONS --with-mpi=openmpi "
 export CFLAGS="$RPM_OPT_FLAGS"
 export CXXFLAGS="$RPM_OPT_FLAGS"
 export LDFLAGS="$RPM_LD_FLAGS"
-./configure --prefix=%{install_path} --disable-static --enable-shared $CONFIGURE_OPTIONS
+./configure --prefix=%{install_path} --libdir=%{install_path}/lib --disable-static --enable-shared $CONFIGURE_OPTIONS
 
 make V=1 %{?_smp_mflags}
 
@@ -174,5 +174,8 @@ EOF
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}
 
 %files
-%{OHPC_PUB}
-%doc AUTHORS ChangeLog COPYING INSTALL OPEN_ISSUES README THANKS
+%{install_path}
+%doc AUTHORS ChangeLog INSTALL OPEN_ISSUES README THANKS
+%doc %{install_path}/share/doc/*
+%license COPYING
+%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
