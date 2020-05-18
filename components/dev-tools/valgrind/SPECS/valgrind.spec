@@ -7,7 +7,6 @@
 # desired integration conventions.
 #
 #----------------------------------------------------------------------------eh-
-
 %include %{_sourcedir}/OHPC_macros
 
 %define pname valgrind
@@ -35,13 +34,17 @@ can also use Valgrind to build new tools.  Valgrind runs on the following
 platforms: x86/Linux, AMD64/Linux, PPC32/Linux, PPC64/Linux, x86/MacOSX,
 AMD64/MacOSX.
 
+
 %prep
 %setup -q -n %{pname}-%{version}
 
+
 %build
 ./configure --prefix=%{install_path} \
-            --libdir=%{install_path}/lib || { cat config.log && exit 1; }
+            --libdir=%{install_path}/lib \
+            --enable-only64bit || { cat config.log && exit 1; }
 make %{?_smp_mflags}
+
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
@@ -83,15 +86,11 @@ EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
 
-%files
-%{OHPC_HOME}
-%doc AUTHORS
-%doc README_DEVELOPERS
-%doc README
-%license COPYING
-%license COPYING.DOCS
-%doc README_PACKAGERS
-%doc README_MISSING_SYSCALL_OR_IOCTL
-%doc FAQ.txt
-%doc NEWS
 
+%files
+%{install_path}
+%defattr(-,root,root)
+%doc AUTHORS FAQ.txt NEWS NEWS.old README*
+%doc %{install_path}/share/doc/*
+%license COPYING COPYING.DOCS
+%{OHPC_MODULES}/%{pname}
