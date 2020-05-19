@@ -28,6 +28,7 @@ if [ $LMOD_FAMILY_MPI == "mvapich2" ];then
 fi
 
 @test "[Libs/IMB] run IMB-NBC on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    skip
     EXE=$IMB_DIR/bin/IMB-NBC
     ARGS="-npmin 100 -msglog 1:8 Ibcast"
 
@@ -41,7 +42,7 @@ fi
 
 @test "[Libs/IMB] run IMB-RMA on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=$IMB_DIR/bin/IMB-RMA
-    ARGS="Unidir_put Unidir_get"
+    ARGS="-npmin 100 -msglog 1:4 Unidir_put Unidir_get"
 
     if [ ! -x $EXE ];then
         flunk "missing $EXE"
