@@ -410,6 +410,7 @@ run_mpi_binary () {
 	#	echo "#PBS -lnodes=$NNODES:ppn=$tasksPerNode"        >> $jobScript
 	echo "#PBS -l select=$NNODES:mpiprocs=$tasksPerNode -l place=scatter" >> $jobScript
 	echo "#PBS -l walltime=$timeout"                     >> $jobScript
+	echo "#PBS -l place=excl"                            >> $jobScript
 	echo "#PBS -o job.out"                               >> $jobScript
 	echo "cd \$PBS_O_WORKDIR"                            >> $jobScript
 
