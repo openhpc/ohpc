@@ -62,12 +62,8 @@ module load superlu
 module load openblas
 %endif
 
-%if "%{compiler_family}" == "arm1"
-  optflags="-O3 -fsimdmath"
-%endif
 
-
-FLAGS="%optflags -fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
+FLAGS="-fPIC -Dhypre_dgesvd=dgesvd_ -Dhypre_dlamch=dlamch_  -Dhypre_blas_lsame=hypre_lapack_lsame -Dhypre_blas_xerbla=hypre_lapack_xerbla "
 cd src
 ./configure \
     --prefix=%{install_path} \
