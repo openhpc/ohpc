@@ -91,6 +91,7 @@ Requires:  libseccomp
 %if 0%{?suse_version}
 Requires:  libcairo2
 Requires:  libpciaccess0
+Requires:  libatomic1
 %endif
 %description -n %{PROJ_NAME}-base-compute
 Collection of compute node base packages
