@@ -131,7 +131,7 @@ Requires:  pnetcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  phdf5-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
-# TODO Requires:  adios-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  adios-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-fortran-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-%{compiler_family}-mvapich2%{PROJ_DELIM}
