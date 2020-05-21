@@ -614,10 +614,10 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
 %if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  dimemas-intel-impi%{PROJ_DELIM}
-Requires:  dimemas-intel-mpich%{PROJ_DELIM}
-Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
-Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  dimemas-intel-impi%{PROJ_DELIM}
+## TODO Requires:  dimemas-intel-mpich%{PROJ_DELIM}
+## TODO Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
+## TODO Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
 %endif
 Requires:  extrae-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  extrae-intel-impi%{PROJ_DELIM}
