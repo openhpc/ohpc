@@ -8,10 +8,11 @@
 #
 #----------------------------------------------------------------------------eh-
 
-# MPICH MPI stack that is dependent on compiler toolchain
+# MPICH MPI stack that is dependent on compiler toolchain 
 %define ohpc_compiler_dependent 1
 %include %{_sourcedir}/OHPC_macros
 %{!?RMS_DELIM: %global RMS_DELIM %{nil}}
+%{!?FABRIC_DELIM: %global FABRIC_DELIM %{nil}}
 
 %define with_slurm 0
 %{!?with_slurm: %define with_slurm 0}
@@ -29,19 +30,21 @@ BuildRequires: libevent-devel
 %if 0%{with_ucx}
 BuildRequires: ucx%{PROJ_DELIM}
 Requires: ucx%{PROJ_DELIM}
+%define FABRIC_DELIM -ucx
 %endif
 
 %{!?with_ofi: %define with_ofi 1}
 %if 0%{with_ofi}
 BuildRequires: libfabric%{PROJ_DELIM}
 Requires: libfabric%{PROJ_DELIM}
+%define FABRIC_DELIM -ofi
 %endif
 
 # Base package name
 %define pname mpich
 
 Summary:   MPICH MPI implementation
-Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
+Name:      %{pname}%{RMS_DELIM}%{FABRIC_DELIM}-%{compiler_family}%{PROJ_DELIM}
 Version:   3.3.2
 Release:   1%{?dist}
 License:   BSD
@@ -132,7 +135,7 @@ rm $RPM_BUILD_ROOT/%{install_path}/lib/*.la
 
 # OpenHPC module file
 %{__mkdir_p} %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}%{FABRIC_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -169,7 +172,7 @@ depends-on libfabric
 family "MPI"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version%{FABRIC_DELIM}.%{version}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
