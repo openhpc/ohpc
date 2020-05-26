@@ -4,7 +4,7 @@
  # What Firmware images should be included in the bootstrap image.
  firmware += 3com/*, acenic/*, bnx2*, cxgb3/*, e100/*, myricom/*, ti_*
  firmware += tigon/*
-+firmware += qed/*
++firmware += qed/*, hfi*
  
  # Modules that should be called directly by /sbin/modprobe (including
  # options if any exist). Modules will be loaded in the order given, before
