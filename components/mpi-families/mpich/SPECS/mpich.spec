@@ -181,7 +181,7 @@ EOF
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{FABRIC_DELIM}"
 EOF
 
 %{__mkdir_p} ${RPM_BUILD_ROOT}/%{_docdir}
