@@ -30,6 +30,7 @@ BuildRequires: libevent-devel
 %if 0%{with_ucx}
 BuildRequires: ucx%{PROJ_DELIM}
 Requires: ucx%{PROJ_DELIM}
+Requires: ucx-ib%{PROJ_DELIM}
 %define FABRIC_DELIM -ucx
 %endif
 
