@@ -30,7 +30,9 @@ BuildRequires: rdma-core-devel infiniband-diags-devel
 %if 0%{?rhel}
 Buildrequires: rdma-core-devel libibmad-devel
 %endif
+%ifarch x86_64
 BuildRequires: libpsm2-devel >= 10.2.0
+%endif
 
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}/%version
