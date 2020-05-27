@@ -68,6 +68,9 @@ BuildRequires: numactl-devel
 %if "%{RMS_DELIM}" != "%{nil}"
 Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
 %endif
+%if "%{FABRIC_DELIM}" != "%{nil}"
+Provides: %{pname}-%{compiler_family}%{PROJ_DELIM}
+%endif
 
 %if 0%{?suse_version}
 #!BuildIgnore: post-build-checks
