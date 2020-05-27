@@ -23,6 +23,15 @@ License: GPLv2 or BSD
 Url:     http://www.github.com/ofiwg/libfabric
 Source:  https://github.com/ofiwg/%{pname}/releases/download/v%{version}/%{pname}-%{version}.tar.bz2
 
+%if 0%{?suse_version}
+Buildrequires: ofed
+BuildRequires: rdma-core-devel infiniband-diags-devel
+%endif
+%if 0%{?rhel}
+Buildrequires: rdma-core-devel libibmad-devel
+%endif
+BuildRequires: libpsm2-devel >= 10.2.0
+
 # Default library install path
 %define install_path %{OHPC_MPI_STACKS}/%{pname}/%version
 
