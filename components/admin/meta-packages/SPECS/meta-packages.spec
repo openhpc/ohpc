@@ -87,11 +87,15 @@ Requires:  python3
 Requires:  cairo-devel
 Requires:  libpciaccess
 Requires:  libseccomp
+Requires:  librdmacm
+Requires:  libpsm2
 %endif
 %if 0%{?suse_version}
 Requires:  libcairo2
 Requires:  libpciaccess0
 Requires:  libatomic1
+Requires:  librdmacm1
+Requires:  libpsm2-2
 %endif
 %description -n %{PROJ_NAME}-base-compute
 Collection of compute node base packages
