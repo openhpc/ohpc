@@ -88,14 +88,18 @@ Requires:  cairo-devel
 Requires:  libpciaccess
 Requires:  libseccomp
 Requires:  librdmacm
+%ifarch x86_64
 Requires:  libpsm2
+%endif
 %endif
 %if 0%{?suse_version}
 Requires:  libcairo2
 Requires:  libpciaccess0
 Requires:  libatomic1
 Requires:  librdmacm1
+%ifarch x86_64
 Requires:  libpsm2-2
+%endif
 %endif
 %description -n %{PROJ_NAME}-base-compute
 Collection of compute node base packages
