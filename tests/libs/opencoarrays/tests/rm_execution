@@ -12,7 +12,7 @@ check_rms
 rm=$RESOURCE_MANAGER
 
 NODES=2
-TASKS=4
+TASKS=2
 ARGS=8
 
 @test "[libs/OpenCoarrays] hello_multiverse binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
@@ -26,6 +26,11 @@ ARGS=8
 
     if [[ "$LMOD_FAMILY_MPI" == "mpich" ]];then
 	export FI_PROVIDER=sockets
+    fi
+
+    if [[ "$LMOD_FAMILY_MPI" =~ "openmpi" ]];then
+        export OMPI_MCA_osc="^ucx"
+        export OMPI_MCA_pml="^ucx"
     fi
 
     if [ "$LMOD_FAMILY_MPI" != "impi" ];then
