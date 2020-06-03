@@ -1,0 +1,60 @@
+In addition to the 3rd party development libraries built using the open source
+toolchains mentioned in \S\ref{sec:3rdparty}, \OHPC{} also provides a subset of
+{\em optional} compatible builds for use with the Arm Compiler for Linux.
+These packages provide a similar hierarchical user environment experience as
+other compiler families present in \OHPC{}.  To take advantage of the
+available builds, the \OHPC{} variant of the Arm Compiler for Linux (and any
+required licenses) must be downloaded and installed separately. See the
+following for more information on obtaining this toolchain:
+
+\begin{center}
+  \href{https://developer.arm.com/tools-and-software/server-and-hpc/downloads/arm-allinea-studio/openhpc}
+       {\color{blue}{https://developer.arm.com/tools-and-software/server-and-hpc/downloads/arm-allinea-studio/openhpc}}
+\end{center}
+
+
+
+\begin{center}
+\begin{tcolorbox}[]
+As noted in \S\ref{sec:master_customization}, the default installation path for
+\OHPC{} (\texttt{/opt/ohpc/pub}) is exported over NFS from the {\em master} to the 
+compute nodes, but the Arm Linux compiler installer defaults to a path of 
+\texttt{/opt/arm}. To make the Arm Linux compiler available to the compute 
+nodes one must either customize the installation path to be 
+within \texttt{/opt/ohpc/pub} (e.g. using the \texttt{-i /opt/ohpc/pub/arm}
+option with the Arm installer), or alternatively, add an additional NFS export
+for \texttt{/opt/arm} that is mounted on desired compute nodes.
+\end{tcolorbox}
+\end{center}
+
+Once installed locally, the \OHPC{}
+compatible packages can be installed using standard package manager semantics
+after installation of a compatability package.
+\noindent To enable all 3rd party builds available in \OHPC{} that are compatible with
+Arm Linux Compiler, issue the following:
+
+% begin_ohpc_run
+% ohpc_comment_header Install Optional Development Tools for use with Arm Linux Compiler \ref{sec:3rdparty_arm}
+% ohpc_command if [[ ${enable_arm_packages} -eq 1 ]];then
+% ohpc_indent 5
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Install OpenHPC compatibility packages (requires prior installation of Arm Linux Compiler)
+[sms](*\#*) (*\install*) arm1-compilers-devel-ohpc
+\end{lstlisting}
+
+\iftoggle{isSLES_ww_slurm_x86}{\clearpage}
+
+\begin{lstlisting}[language=bash,keywords={},upquote=true,keepspaces]
+# Install 3rd party libraries/tools meta-packages built with Arm vendor toolchain
+[sms](*\#*) (*\install*) ohpc-arm1-serial-libs
+[sms](*\#*) (*\install*) ohpc-arm1-io-libs
+[sms](*\#*) (*\install*) ohpc-arm1-perf-tools
+[sms](*\#*) (*\install*) ohpc-arm1-python-libs
+[sms](*\#*) (*\install*) ohpc-arm1-runtimes
+[sms](*\#*) (*\install*) ohpc-arm1-mpich-parallel-libs
+[sms](*\#*) (*\install*) ohpc-arm1-openmpi4-parallel-libs
+\end{lstlisting}
+% ohpc_indent 0
+% ohpc_command fi
+% end_ohpc_run
+
