@@ -37,6 +37,10 @@ Requires: ucx-ib%{PROJ_DELIM}
 %{!?with_ofi: %define with_ofi 1}
 %if 0%{with_ofi}
 BuildRequires: libfabric%{PROJ_DELIM}
+BuildRequires: rdma-core-devel
+%ifarch x86_64
+BuildRequires: libpsm2-devel
+%endif
 Requires: libfabric%{PROJ_DELIM}
 %define FABRIC_DELIM -ofi
 %endif
@@ -126,7 +130,7 @@ module load libfabric
 %{__sed} -i -e 's#pic_flag=""#pic_flag=" -fPIC -DPIC"#g' libtool
 %endif
 
-make %{?_smp_mflags}
+make V=1 %{?_smp_mflags}
 
 %install
 # OpenHPC compiler designation
