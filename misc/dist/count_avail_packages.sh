@@ -17,6 +17,7 @@ arches="x86_64 aarch64 noarch"
 oses="CentOS_8 Leap_15"
 
 
+major_ver=`echo ${version} | cut -d '.' -f1`
 minor_ver=`echo ${version} | cut -d '.' -f1,2`
 micro_ver=`echo ${version} | cut -d '.' -f3`
 
@@ -41,7 +42,12 @@ fi
 total=0
 
 for os in ${oses}; do
-    repobase="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
+    if [[ ${USE_FACTORY} -eq 1 ]]; then
+	repobase="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
+    else
+	repobase="http://repos.openhpc.community:82/OpenHPC/${major_ver}/${os}"
+    fi
+
     if [[ $micro_ver -gt 0 ]];then
 	repoupdate="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}:/Update${micro_ver}${colon}/${factory}${os}"
     fi
