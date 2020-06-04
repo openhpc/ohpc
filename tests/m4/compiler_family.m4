@@ -55,6 +55,11 @@ elif test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
    CXX=icpc
    FC=ifort
    AC_MSG_RESULT([intel])
+elif test "x$LMOD_FAMILY_COMPILER" = "xarm1"; then
+   CC=armclang
+   CXX=armclang++
+   FC=armflang
+   AC_MSG_RESULT([arm])
 else
    AC_MSG_RESULT([unknown])
    echo
