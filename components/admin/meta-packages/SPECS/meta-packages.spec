@@ -742,7 +742,102 @@ Requires:  superlu-intel%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-serial-libs
 Collection of serial library builds for use with Intel(R) Parallel Studio XE toolchain
 
+%endif  # <-- end non-aarch64 only
+
+# aarch64 specific groups
+%ifarch aarch64
+
+%package -n %{PROJ_NAME}-arm1-serial-libs
+Summary:   OpenHPC serial libraries for use with Arm Compiler for Linux
+Requires:  metis-arm1%{PROJ_DELIM}
+Requires:  plasma-arm1%{PROJ_DELIM}
+### Requires:  scotch-arm1%{PROJ_DELIM}
+Requires:  superlu-arm1%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-serial-libs
+Collection of serial library builds for use with the Arm Compiler for Linux toolchain
+
+%package -n %{PROJ_NAME}-arm1-io-libs
+Summary:   OpenHPC IO libraries for use with Arm Compiler for Linux
+### Requires:  adios-arm1-mpich%{PROJ_DELIM}
+### Requires:  adios-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  hdf5-arm1%{PROJ_DELIM}
+### Requires:  netcdf-cxx-arm1-mpich%{PROJ_DELIM}
+### Requires:  netcdf-cxx-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  netcdf-fortran-arm1-mpich%{PROJ_DELIM}
+### Requires:  netcdf-fortran-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  netcdf-arm1-mpich%{PROJ_DELIM}
+### Requires:  netcdf-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  pnetcdf-arm1-mpich%{PROJ_DELIM}
+### Requires:  pnetcdf-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  phdf5-arm1-mpich%{PROJ_DELIM}
+### Requires:  phdf5-arm1-%{mpi_family}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-io-libs
+Collection of IO library builds for use with the Arm Compiler for Linux toolchain
+
+%package -n %{PROJ_NAME}-arm1-perf-tools
+Summary:   OpenHPC performance tools for use with Arm Compiler for Linux
+%if 0%{?rhel}
+## TODO Requires:  dimemas-arm1-impi%{PROJ_DELIM}
+## TODO Requires:  dimemas-arm1-mpich%{PROJ_DELIM}
+## TODO Requires:  dimemas-arm1-mvapich2%{PROJ_DELIM}
+## TODO Requires:  dimemas-arm1-%{mpi_family}%{PROJ_DELIM}
 %endif
+### Requires:  extrae-arm1-mpich%{PROJ_DELIM}
+### Requires:  extrae-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  imb-arm1-mpich%{PROJ_DELIM}
+### Requires:  imb-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  likwid-arm1%{PROJ_DELIM}
+Requires:  omb-arm1-mpich%{PROJ_DELIM}
+Requires:  omb-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  papi%{PROJ_DELIM}
+### Requires:  tau-arm1-mpich%{PROJ_DELIM}
+### Requires:  tau-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  scalasca-arm1-mpich%{PROJ_DELIM}
+### Requires:  scalasca-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  scorep-arm1-mpich%{PROJ_DELIM}
+### Requires:  scorep-arm1-%{mpi_family}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-perf-tools
+Collection of performance tool builds for use with the Arm Compiler for Linux toolchain
+
+## %package -n %{PROJ_NAME}-arm1-python3-libs
+## Summary:   OpenHPC python3 libraries for use with Arm Compiler for Linux
+## ### Requires:  %{python_prefix}-numpy-arm1%{PROJ_DELIM}
+## ### Requires:  %{python_prefix}-mpi4py-arm1-mpich%{PROJ_DELIM}
+## ### Requires:  %{python_prefix}-mpi4py-arm1-%{mpi_family}%{PROJ_DELIM}
+## %description -n %{PROJ_NAME}-arm1-python3-libs
+## Collection of python3 related library builds for use with the Arm Compiler for Linux toolchain
+
+%package -n %{PROJ_NAME}-arm1-mpich-parallel-libs
+Summary:   OpenHPC parallel libraries for use with Arm Compiler for Linux
+## Requires:  boost-arm1-mpich%{PROJ_DELIM}
+## Requires:  hypre-arm1-mpich%{PROJ_DELIM}
+## Requires:  mfem-arm1-mpich%{PROJ_DELIM}
+## Requires:  mumps-arm1-mpich%{PROJ_DELIM}
+## Requires:  petsc-arm1-mpich%{PROJ_DELIM}
+## ## Requires:  scalapack-arm1-mpich%{PROJ_DELIM}
+## Requires:  slepc-arm1-mpich%{PROJ_DELIM}
+Requires:  ptscotch-arm1-mpich%{PROJ_DELIM}
+Requires:  superlu_dist-arm1-mpich%{PROJ_DELIM}
+## Requires:  trilinos-arm1-mpich%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-mpich-parallel-libs
+Collection of parallel library builds for use with the Arm Compiler for Linux and the MPICH runtime
+
+%package -n %{PROJ_NAME}-arm1-%{mpi_family}-parallel-libs
+Summary:   OpenHPC parallel libraries for use with Arm Compiler for Linux
+## Requires:  boost-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  hypre-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  mfem-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  mumps-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  petsc-arm1-%{mpi_family}%{PROJ_DELIM}
+## ## Requires:  scalapack-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  slepc-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  ptscotch-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  superlu_dist-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  trilinos-arm1-%{mpi_family}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-%{mpi_family}-parallel-libs
+Collection of parallel library builds for use with the Arm Compiler for Linux and the %{MPI_FAMILY} runtime
+
+%endif  # <-- end aarch64 only
 
 
 %prep
@@ -798,8 +893,18 @@ Collection of serial library builds for use with Intel(R) Parallel Studio XE too
 %files -n %{PROJ_NAME}-intel-mpich-perf-tools
 %files -n %{PROJ_NAME}-intel-mvapich2-perf-tools
 %files -n %{PROJ_NAME}-intel-%{mpi_family}-perf-tools
-%files -n %{PROJ_NAME}-intel-python-libs
 %files -n %{PROJ_NAME}-intel-python3-libs
 %files -n %{PROJ_NAME}-intel-runtimes
 %files -n %{PROJ_NAME}-intel-serial-libs
+%endif
+
+# aarch64 specific groups
+%ifarch aarch64
+%files -n %{PROJ_NAME}-arm1-serial-libs
+%files -n %{PROJ_NAME}-arm1-io-libs
+%files -n %{PROJ_NAME}-arm1-perf-tools
+## %files -n %{PROJ_NAME}-arm1-python3-libs
+## %files -n %{PROJ_NAME}-arm1-runtimes
+%files -n %{PROJ_NAME}-arm1-mpich-parallel-libs
+%files -n %{PROJ_NAME}-arm1-%{mpi_family}-parallel-libs
 %endif
