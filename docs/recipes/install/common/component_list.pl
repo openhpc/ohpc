@@ -18,7 +18,7 @@ sub usage {
     exit(0);
 }
 
-my @ohpcCategories       = ("admin","compiler-families","dev-tools","distro-packages","io-libs","lustre","mpi-families",
+my @ohpcCategories       = ("admin","compiler-families","dev-tools","io-libs","lustre","mpi-families",
 			    "parallel-libs","perf-tools","provisioning","rms", "runtimes","serial-libs");
 my %ohpcCategoryHeadings = ('admin' => 'Administrative Tools',
 			    'compiler-families' => 'Compiler Families',
@@ -41,7 +41,7 @@ my @mpi_families     = ("mvapich2","openmpi","openmpi3","openmpi4","impi","mpich
 my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","openmpi-psm2","scotch",
                     "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs",
 		     "warewulf-common-ohpc-localdb","lmod-defaults-gnu9-mpich-ofi","lmod-defaults-gnu9-mpich-ucx",
-                     "python34-build-patch","python34-scipy","python34-numpy","python34-mpi4py");
+                     "python34-build-patch","python34-scipy","python34-numpy","python34-mpi4py","python3-Cython");
 
 my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
 		     "gnu8-compilers" => "Gnu Compiler Suite",
