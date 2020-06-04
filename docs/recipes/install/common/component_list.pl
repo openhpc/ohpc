@@ -13,6 +13,7 @@ sub usage {
     print "     -h --help                      generate help message and exit\n";
     print "        --version  [version]        desired version to analyze\n";
     print "        --category [name]           update provided category table only\n";
+    print "        --package  [plist]          add hard-coded package (category|name|url) format\n";
     print "\n";
     
     exit(0);
@@ -60,10 +61,12 @@ my @package_uniq_delim = ("slurm");
 my $help;
 my $category_single;
 my $version;
+my $addlpackages;
 my $i;
 
 GetOptions("h"          => \$help,
 	   "version=s"  => \$version,
+	   "package=s"  => \$addlpackages,
            "category=s" => \$category_single ) || usage();
 
 if($help) {usage()};
@@ -75,14 +78,24 @@ if($category_single) {
 if($version) {
     print "--> using version=$version for analysis\n";
 } else {
-    die("Please specify desired version to analyzie with --version");
+    die("Please specify desired version to analyze with --version");
+}
+
+
+my @addons=();
+
+if($addlpackages) {
+    print "--> Included hard-coded components: $addlpackages\n";
+    @addons=split(',',$addlpackages);
 }
 
 # version-specific packages to skip (ie. when new variants introduced)
 
 if( versioncmp($version,"1.3.1") >= 0 ) {
-    push(@package_skip,"gnu-compilers")
+    push(@package_skip,"gnu-compilers");
 }
+
+
 
 my $REMOVE_HTTP=0;
 my $component_cnt=0;
@@ -192,6 +205,19 @@ foreach my $category (@ohpcCategories) {
     }
 
     close(IN);
+
+    # include any hard-coded additions
+    if ($addlpackages) {
+	foreach my $addon (@addons) {
+	    my @entry = split('\|',$addon);
+	    if ( $entry[0] eq $category ) {
+		push(@nameData,$entry[1]);
+		push(@versionData,'unknown');
+		push(@urlData,$entry[2]);
+	    }
+	}
+    }
+
 
     $i = 0;
     foreach my $name (@nameData) {
