@@ -104,17 +104,6 @@ Requires:  libpsm2-2
 %description -n %{PROJ_NAME}-base-compute
 Collection of compute node base packages
 
-%package -n %{PROJ_NAME}-ganglia
-Summary:   OpenHPC Ganglia monitoring
-Requires:  ganglia%{PROJ_DELIM}
-Requires:  ganglia-devel%{PROJ_DELIM}
-Requires:  ganglia-gmetad%{PROJ_DELIM}
-Requires:  ganglia-gmond%{PROJ_DELIM}
-Requires:  ganglia-gmond-python%{PROJ_DELIM}
-Requires:  ganglia-web%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-ganglia
-Collection of Ganglia monitoring and metrics packages
-
 %package -n %{PROJ_NAME}-%{compiler_family}-geopm
 Summary:   OpenHPC GEOPM power management for GNU
 Requires:  geopm-%{compiler_family}-mpich%{PROJ_DELIM}
