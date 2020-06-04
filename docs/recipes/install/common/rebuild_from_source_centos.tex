@@ -32,14 +32,16 @@ co-installation and use.
 [test@sms ~rpmbuild/SPECS]$ perl -pi -e "s/Release:   5.1/Release:   6.1/" fftw.spec
 
 # Rebuild binary RPM. Note that additional directives can be specified to modify build
-[test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "OHPC_CFLAGS '-O3 -mtune=native'" --define "OHPC_CUSTOM_DELIM static" fftw.spec
+[test@sms ~rpmbuild/SPECS]$ rpmbuild -bb --define "OHPC_CFLAGS '-O3 -mtune=native'" \
+        --define "OHPC_CUSTOM_DELIM static" fftw.spec
 
 # Install the new package
-[test@sms ~]$ sudo (*\install*) ~test/rpmbuild/RPMS/ARCH/fftw-gnu9-openmpi4-static-ohpc.2.0-3.3.8-6.1.ARCH.rpm
+[test@sms ~rpmbuild/SPECS]$ sudo (*\install*) \
+        ../RPMS/ARCH/fftw-gnu9-openmpi4-static-ohpc.2.0-3.3.8-6.1.ARCH.rpm
 
 # The new module file appears along side the default
 [test@sms ~]$ module avail fftw
 
--------------------------------------------------------- /opt/ohpc/pub/moduledeps/gnu9-openmpi4 ---------------------------------------------------------
+-------------------------- /opt/ohpc/pub/moduledeps/gnu9-openmpi4 ---------------------------
    fftw/3.3.8-static    fftw/3.3.8 (D)
 \end{lstlisting}
