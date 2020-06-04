@@ -45,7 +45,7 @@ for os in ${oses}; do
     if [[ ${USE_FACTORY} -eq 1 ]]; then
 	repobase="http://obs.openhpc.community:82/OpenHPC:/${minor_ver}${colon}/${factory}${os}"
     else
-	repobase="http://repos.openhpc.community:82/OpenHPC/${major_ver}/${os}"
+	repobase="http://repos.openhpc.community/OpenHPC/${major_ver}/${os}"
     fi
 
     if [[ $micro_ver -gt 0 ]];then
