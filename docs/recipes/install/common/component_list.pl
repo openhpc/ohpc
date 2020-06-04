@@ -40,7 +40,7 @@ my @mpi_families     = ("mvapich2","openmpi","openmpi3","openmpi4","impi","mpich
 
 my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","openmpi-psm2","scotch",
                     "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs",
-		     "warewulf-common-ohpc-localdb","mod-defaults-gnu9-mpich-ofi","lmod-defaults-gnu9-mpich-ucx",
+		     "warewulf-common-ohpc-localdb","lmod-defaults-gnu9-mpich-ofi","lmod-defaults-gnu9-mpich-ucx",
                      "python34-build-patch","python34-scipy","python34-numpy","python34-mpi4py");
 
 my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
