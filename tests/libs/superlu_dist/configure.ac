@@ -4,6 +4,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(superlu_dist, 4.0, [https://github.com/openhpc/ohpc])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
@@ -16,6 +17,8 @@ if test "x$SUPERLU_DIST_DIR" = "x"; then
 else
    AC_MSG_RESULT([no])
 fi
+
+OHPC_COMPILER_FAMILY
 
 # set compilers to use MPI toolchain 
 CC=mpicc
@@ -30,17 +33,9 @@ AC_PROG_RANLIB
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 
-if test "x$LMOD_FAMILY_COMPILER" = "xintel"; then
-CFLAGS="-I ${SUPERLU_DIST_INC} -I ${MKLROOT}/include ${CFLAGS}"
-CXXFLAGS="-I ${SUPERLU_DIST_INC} -I ${MKLROOT}/include ${CXXFLAGS} -fopenmp"
-FFLAGS="-I ${SUPERLU_DIST_INC} -I ${MKLROOT}/include ${FFLAGS}"
-LDFLAGS="-L${METIS_LIB} -L${SUPERLU_DIST_LIB} -lmetis -lsuperlu_dist -L$MKLROOT/lib/intel64 -lmkl_rt -lm ${LDFLAGS}"
-else
-CFLAGS="-I ${SUPERLU_DIST_INC} ${CFLAGS}"
-CXXFLAGS="-I ${SUPERLU_DIST_INC} ${CXXFLAGS}"
-FFLAGS="-I ${SUPERLU_DIST_INC} ${FFLAGS}"
-LDFLAGS="-L${METIS_LIB} -L${SUPERLU_DIST_LIB} -L${SCALAPACK_LIB} -L${OPENBLAS_LIB} -lmetis -lsuperlu_dist -lscalapack -lopenblas ${LDFLAGS}"
-fi
+CFLAGS="-I${SUPERLU_DIST_INC} ${CFLAGS}"
+FFLAGS="-I${SUPERLU_DIST_INC} ${FFLAGS}"
+LDFLAGS="-L${SUPERLU_DIST_LIB} -lsuperlu_dist ${OHPC_BLAS} ${LDFLAGS}"
 
 # check if using OpenMPI
 AC_MSG_CHECKING([if using OpenMPI variant])
@@ -62,17 +57,15 @@ echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
-echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
-echo OHPC MPI toolchain............. : $LMOD_FAMILY_MPI
+echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
+echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
-echo C++ compiler.................. : `which $CXX`
 echo Fortran compiler ............. : `which $FC`
 echo 
 echo C compiler flags.............. : $CFLAGS
-echo C++ compiler flags............ : $CXXFLAGS
 echo Fortran compiler flags........ : $FFLAGS
-echo 
-echo LD flags........ : $LDFLAGS
+echo
+echo LDFLAGS linker flags.......... : $LDFLAGS
 echo 
 echo '-------------------------------------------------------------------------------------------------------------'
