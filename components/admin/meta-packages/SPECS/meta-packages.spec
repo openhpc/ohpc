@@ -843,7 +843,6 @@ Collection of parallel library builds for use with the Arm Compiler for Linux an
 %files -n %{PROJ_NAME}-autotools
 %files -n %{PROJ_NAME}-base
 %files -n %{PROJ_NAME}-base-compute
-%files -n %{PROJ_NAME}-ganglia
 %files -n %{PROJ_NAME}-%{compiler_family}-geopm
 %files -n %{PROJ_NAME}-%{compiler_family}-io-libs
 %files -n %{PROJ_NAME}-%{compiler_family}-mpich-io-libs
