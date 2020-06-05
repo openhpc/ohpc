@@ -27,7 +27,7 @@ my @distros = ('Leap_15','CentOS_8');
 
 my $base_repo_path = "/repos/OpenHPC";
 my $dest_dir = "/repos/dist/$release";
-my $tmp_path = "/repos/tmp/dist";
+my $tmp_path = "/stage/dist/tmp";
 
 # basic usage
 sub usage { 
