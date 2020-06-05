@@ -8,6 +8,7 @@ if [ -s "/etc/os-release" ];then
     [[ `grep "CentOS"  /etc/os-release` ]] && repodir=/etc/yum.repos.d
     [[ `grep "Red Hat" /etc/os-release` ]] && repodir=/etc/yum.repos.d
     [[ `grep "SLES"    /etc/os-release` ]] && repodir=/etc/zypp/repos.d
+    [[ `grep "Leap"    /etc/os-release` ]] && repodir=/etc/zypp/repos.d
 else
     echo "Error: no /etc/os-release file found"
     exit 1
