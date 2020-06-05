@@ -1,6 +1,6 @@
 ohpc-arm1-io-libs Collection of IO library builds for use with the Arm Compiler for Linux toolchain
 ohpc-arm1-mpich-parallel-libs Collection of parallel library builds for use with the Arm Compiler for Linux and the MPICH runtime
-ohpc-arm1-openmpi4-parallel-libs Collection of parallel library builds for use with the Arm Compiler for Linux and the %{MPI_FAMILY} runtime
+ohpc-arm1-openmpi4-parallel-libs Collection of parallel library builds for use with the Arm Compiler for Linux and the openmpi4 runtime
 ohpc-arm1-perf-tools Collection of performance tool builds for use with the Arm Compiler for Linux toolchain
 ohpc-arm1-serial-libs Collection of serial library builds for use with the Arm Compiler for Linux toolchain
 ohpc-autotools Collection of GNU autotools packages
