@@ -1,6 +1,5 @@
 extrae-gnu9-mpich-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
 extrae-gnu9-openmpi4-ohpc 3.7.0 https://tools.bsc.es ohpc/perf-tools Extrae tool
-imb-arm1-mpich-ohpc 2018.1 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu9-mpich-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 imb-gnu9-openmpi4-ohpc 2019.6 https://software.intel.com/en-us/articles/intel-mpi-benchmarks ohpc/perf-tools Intel MPI Benchmarks (IMB)
 omb-arm1-mpich-ohpc 5.6.2 http://mvapich.cse.ohio-state.edu/benchmarks/ ohpc/perf-tools OSU Micro-benchmarks
