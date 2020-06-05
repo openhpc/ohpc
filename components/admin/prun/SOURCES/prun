@@ -77,9 +77,13 @@ function set_variable () {
 
     local var=$1
     local set=$2
-    
-    _debug "Setting env variable: $var=$2"
-    export $var="$2"
+
+    if [[ -z ${!var} ]];then
+        export $var="$2"
+        _debug "Setting env variable: $var=$2"
+    else
+        _debug "Keeping existing env variable: $var=${!var}"
+    fi
 }
 
 function launch_impi () {
