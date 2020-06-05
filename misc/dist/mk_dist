@@ -150,7 +150,7 @@ if($skipCopy) {
 
 # parse release
 my ($major, $minor, $micro) = split(/\./, $release);
-my $base_release = "$major.$minor";
+my $base_release = "$major";
 
 # stage repo in tmp
 
