@@ -19,7 +19,7 @@ sub usage {
 my @ohpcCategories    = ("admin","compiler-families","dev-tools","distro-packages","io-libs","mpi-families",
                         "parallel-libs","serial-libs","perf-tools","provisioning","rms", "runtimes");
 # disable lustre
-my @compiler_familes = ("gnu","gnu7","intel","gnu8","gnu9");
+my @compiler_familes = ("gnu","gnu7","intel","gnu8","gnu9","arm1");
 my @mpi_families     = ("mvapich2","openmpi","openmpi3","impi","mpich");
 
 my @single_package_exceptions = ();

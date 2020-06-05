@@ -8,38 +8,46 @@
 {\bf RPM Package Name} & {\bf Version} & {\bf Info/URL}  \\ 
 \midrule
 
-% <-- begin entry for mpich
-mpich-gnu-ohpc &
-\multirow{2}{*}{3.2.1} & 
-\multirow{3}{\linewidth}{MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}}} \\ 
-mpich-gnu7-ohpc &
-& \\ 
-\cline{1-2} mpich-gnu8-ohpc &\multirow{1}{*}{3.3.1}
-& \\ 
-\hline
-% <-- end entry for mpich
+% <-- begin entry for libfabric-ohpc
+\multirow{2}{*}{libfabric-ohpc} & 
+\multirow{2}{*}{1.10.1} & 
+User-space RDMA Fabric Interfaces. \newline { \color{logoblue} \url{http://www.github.com/ofiwg/libfabric}} 
+\\ \hline 
+% <-- end entry for libfabric-ohpc
 
-% <-- begin entry for openmpi
-openmpi-gnu-ohpc &
-\multirow{2}{*}{1.10.7} & 
-\multirow{2}{\linewidth}{A powerful implementation of MPI. \newline {\color{logoblue} \url{http://www.open-mpi.org}}} \\ 
-openmpi-gnu7-ohpc &
+% <-- begin entry for mpich-ofi
+mpich-ofi-arm1-ohpc &
+\multirow{2}{*}{3.3.2} & 
+\multirow{2}{\linewidth}{MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}}} \\ 
+mpich-ofi-gnu9-ohpc &
 & \\ 
 \hline
-% <-- end entry for openmpi
+% <-- end entry for mpich-ofi
 
-% <-- begin entry for openmpi3
-openmpi3-gnu7-ohpc &
-\multirow{2}{*}{3.1.0} & 
-\multirow{4}{\linewidth}{A powerful implementation of MPI. \newline {\color{logoblue} \url{http://www.open-mpi.org}}} \\ 
-openmpi3-pmix-slurm-gnu7-ohpc &
-& \\ 
-\cline{1-2} openmpi3-gnu8-ohpc &\multirow{2}{*}{3.1.4}
-& \\ 
-openmpi3-pmix-slurm-gnu8-ohpc &
+% <-- begin entry for mpich-ucx
+mpich-ucx-arm1-ohpc &
+\multirow{2}{*}{3.3.2} & 
+\multirow{2}{\linewidth}{MPICH MPI implementation. \newline {\color{logoblue} \url{http://www.mpich.org}}} \\ 
+mpich-ucx-gnu9-ohpc &
 & \\ 
 \hline
-% <-- end entry for openmpi3
+% <-- end entry for mpich-ucx
+
+% <-- begin entry for openmpi4
+openmpi4-arm1-ohpc &
+\multirow{2}{*}{4.0.3} & 
+\multirow{2}{\linewidth}{A powerful implementation of MPI/SHMEM. \newline {\color{logoblue} \url{http://www.open-mpi.org}}} \\ 
+openmpi4-gnu9-ohpc &
+& \\ 
+\hline
+% <-- end entry for openmpi4
+
+% <-- begin entry for ucx-ohpc
+\multirow{2}{*}{ucx-ohpc} & 
+\multirow{2}{*}{1.8.0} & 
+UCX is a communication library implementing high-performance messaging.  { \color{logoblue} \url{http://www.openucx.org}} 
+\\ \hline 
+% <-- end entry for ucx-ohpc
 
 \bottomrule
 \end{tabularx}
