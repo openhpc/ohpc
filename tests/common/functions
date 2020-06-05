@@ -150,6 +150,10 @@ check_compiler_family()
 	myCC=icc
 	myCXX=icpc
 	myFC=ifort
+  elif [[ $LMOD_FAMILY_COMPILER =~ "arm" ]];then
+        myCC=armclang
+        myCXX=armclang++
+        myFC=armflang
     elif [ $LMOD_FAMILY_COMPILER == "gnu" ];then
 	myCC=gcc
 	myCXX=g++
