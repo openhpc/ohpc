@@ -10,18 +10,26 @@ deploy and manage an HPC Linux cluster including provisioning tools, resource
 management, I/O clients, runtimes, development tools, containers, and a variety of
 scientific libraries.
 
-There are currently two release series: [1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.9) and [2.x](https://github.com/openhpc/ohpc/wiki/2.x)
+There are currently two release series:
+[1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.9) and
+[2.x](https://github.com/openhpc/ohpc/wiki/2.x), which target different major
+Linux OS distributions. The 1.3.x series targets CentOS7 and SLES12 while the
+2.x series targets CentOS8 and Leap15.
 
 
 #### Getting started
 
 OpenHPC provides pre-built binaries via repositories for use with standard
-Linux package manager tools (e.g. ```yum``` or ```zypper```). To get started, you
-can enable an OpenHPC repository locally through installation of an
+Linux package manager tools (e.g. ```yum``` or ```zypper```). To get started,
+you can enable an OpenHPC repository locally through installation of an
 ```ohpc-release``` RPM which includes gpg keys for package signing and defines
-the URL locations for [base] and [update] package repositories. Installation guides 
-tailored for each supported provisioning system and resource manager are also available.  Copies of the
-```ohpc-release``` package and installation guides along with more information is available on the relevant release series pages ([1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.9) or [2.x](https://github.com/openhpc/ohpc/wiki/2.x)).
+the URL locations for [base] and [update] package repositories. Installation
+guides tailored for each supported provisioning system and resource manager
+with detailed example instructions for installaing a cluster are also available.
+Copies of the ```ohpc-release``` package and installation guides along with
+more information is available on the relevant release series pages
+([1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.9) or
+[2.x](https://github.com/openhpc/ohpc/wiki/2.x)).
 
 ---
 
