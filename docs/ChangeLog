@@ -1,23 +1,317 @@
 # -*- mode: sh; fill-column: 120; -*-
 
-Version 2.0.0 (2020)
+Version 2.0 RC1 (05 June 2020)
+
+[2.x Series]
+
+  * This initial release candidate (2.0 RC1) represents a significant update for OpenHPC to target support for two new
+    major OS distro versions: CentOS8.1 and OpenSUSE Leap 15.1.
+
+     o As the OpenHPC 2.x series targets major new distro versions, please note that the 2.x series 
+       is **not** backwards compatible with the OpenHPC 1.3.x series.
+     o OpenHPC 2.x is intended for fresh installs with the newer distro versions (or containers based 
+       on these distro versions).
+
+  * Note that 2.x builds for SUSE based systems are now performed against Leap instead of SLES.  Leap 15.1 is intended
+    to be compatible with SLES 15 SP1.
+
+  * Systems that start with 2.0RC1 installs will be able to upgrade to future 2.X releases.
+
+[Important Highlights/Notices]
+
+  * A new compiler variant (gnu9) is introduced with this release
+  * A new openmpi variant (openmpi4) is introduced with this release
+  * MPICH builds now use the newer ch4 interface
+  * 2.x introduces the use of two related transport layers for MPICH and OpenMPI family builds that support a variety of
+    underlying fabrics: UCX (Unified Communication X) and OFI (OpenFabrics interfaces)
+  * 2.x also introduces initial 3rd party builds against the Arm Linux compiler for aarch64
+  * 2.x package repositories are now hosted on a new site: http://repos.openhpc.community
 
 [General]
 
-  * major updates for newer base OS distributions (CentOS 8.1 and OpenSUSE Leap 15.1). OpenHPC 2.0 version is targeted
-    for new or fresh system installs using these distro versions
-  * gcc compiler variant updated -> gnu9
-  * openmpi MPI variant updated -> openmpi4
-  * use of chrony on rhel8
-  * use ip instead of ifconfig in example installation recipe commands (https://github.com/openhpc/ohpc/pull/600)
+  * nagios, munge, and clustershell installs in recipes now leverage distro-provided versions
+  * ip is now used in place of ifconfig in documentation recipes (https://github.com/openhpc/ohpc/pull/600)
+  * the intel-mpi-devel-ohpc compatibility package can now be installed independently of the companion compiler
+    (https://github.com/openhpc/ohpc/issues/955)
+  * installation recipes have been updated to use chrony instead of ntpd for time synchronization
+    (https://github.com/openhpc/ohpc/issues/1107)
+  * packaging for a number of development components has been updated to allow better alternate build flag support. This
+    is intended for sites who would like to rebuild from an ohpc provided src.rpm and provide alternate build settings
+    (e.g. to apply additional processor-specific optimization flags) (https://github.com/openhpc/ohpc/issues/1183)
+  * slurm configuration example in installation recipes updated to use configless option
+    (https://github.com/openhpc/ohpc/issues/1205)
 
-[Deprecated]
-  * clustershell - now available in EPEL8 and Leap 15.1
+[Known Issues]
+
+  * This initial RC1 release provides a subset of installation recipes (we expect xCat and PBS Professional for CentOS8
+    to return in a future release)
+  * Lustre client and BeeGFS are not yet available
+  * Several packages with the Intel compiler variant are not available: Boost, Trilinos, and geopm
+
+[Component Additions]
+
+  * libfabric-ohpc                           (1.10.1)
+  * ucx-cma-ohpc                             (1.8.0)
+  * ucx-ib-ohpc                              (1.8.0)
+  * ucx-ohpc                                 (1.8.0)
+  * ucx-rdmacm-ohpc                          (1.8.0)
+
+[Component Deprecation]
+
   * ganglia
   * mpiP
   * ocr
-  * nagios (nagios-plugins, ndotils,nrpe) - installation recipes now leverage OS provided versions
+  * mrsh
 
+[Compiler Variant Addition (gnu9)]
+
+  * R-gnu9-ohpc                              (3.6.3)
+  * adios-gnu9-impi-ohpc                     (1.13.1)
+  * adios-gnu9-mpich-ohpc                    (1.13.1)
+  * adios-gnu9-mvapich2-ohpc                 (1.13.1)
+  * adios-gnu9-openmpi4-ohpc                 (1.13.1)
+  * boost-gnu9-impi-ohpc                     (1.71.0)
+  * boost-gnu9-mpich-ohpc                    (1.71.0)
+  * boost-gnu9-mvapich2-ohpc                 (1.71.0)
+  * boost-gnu9-openmpi4-ohpc                 (1.71.0)
+  * dimemas-gnu9-impi-ohpc                   (5.4.1)
+  * dimemas-gnu9-mpich-ohpc                  (5.4.1)
+  * dimemas-gnu9-mvapich2-ohpc               (5.4.1)
+  * dimemas-gnu9-openmpi4-ohpc               (5.4.1)
+  * extrae-gnu9-impi-ohpc                    (3.7.0)
+  * extrae-gnu9-mpich-ohpc                   (3.7.0)
+  * extrae-gnu9-mvapich2-ohpc                (3.7.0)
+  * extrae-gnu9-openmpi4-ohpc                (3.7.0)
+  * fftw-gnu9-impi-ohpc                      (3.3.8)
+  * fftw-gnu9-mpich-ohpc                     (3.3.8)
+  * fftw-gnu9-mvapich2-ohpc                  (3.3.8)
+  * fftw-gnu9-openmpi4-ohpc                  (3.3.8)
+  * geopm-gnu9-impi-ohpc                     (1.1.0)
+  * geopm-gnu9-mpich-ohpc                    (1.1.0)
+  * geopm-gnu9-mvapich2-ohpc                 (1.1.0)
+  * geopm-gnu9-openmpi4-ohpc                 (1.1.0)
+  * gnu9-compilers-ohpc                      (9.2.0)
+  * gsl-gnu9-ohpc                            (2.6)
+  * hdf5-gnu9-ohpc                           (1.10.6)
+  * hypre-gnu9-impi-ohpc                     (2.18.1)
+  * hypre-gnu9-mpich-ohpc                    (2.18.1)
+  * hypre-gnu9-mvapich2-ohpc                 (2.18.1)
+  * hypre-gnu9-openmpi4-ohpc                 (2.18.1)
+  * imb-gnu9-impi-ohpc                       (2019.6)
+  * imb-gnu9-mpich-ohpc                      (2019.6)
+  * imb-gnu9-mvapich2-ohpc                   (2019.6)
+  * imb-gnu9-openmpi4-ohpc                   (2019.6)
+  * likwid-gnu9-ohpc                         (5.0.1)
+  * lmod-defaults-gnu9-impi-ohpc             (2.0)
+  * lmod-defaults-gnu9-mpich-ofi-ohpc        (2.0)
+  * lmod-defaults-gnu9-mpich-ucx-ohpc        (2.0)
+  * lmod-defaults-gnu9-mvapich2-ohpc         (2.0)
+  * lmod-defaults-gnu9-openmpi4-ohpc         (2.0)
+  * metis-gnu9-ohpc                          (5.1.0)
+  * mfem-gnu9-impi-ohpc                      (4.0)
+  * mfem-gnu9-mpich-ohpc                     (4.0)
+  * mfem-gnu9-mvapich2-ohpc                  (4.0)
+  * mfem-gnu9-openmpi4-ohpc                  (4.0)
+  * mpich-ofi-gnu9-ohpc                      (3.3.2)
+  * mpich-ucx-gnu9-ohpc                      (3.3.2)
+  * mumps-gnu9-impi-ohpc                     (5.2.1)
+  * mumps-gnu9-mpich-ohpc                    (5.2.1)
+  * mumps-gnu9-mvapich2-ohpc                 (5.2.1)
+  * mumps-gnu9-openmpi4-ohpc                 (5.2.1)
+  * mvapich2-gnu9-ohpc                       (2.3.2)
+  * mvapich2-psm2-gnu9-ohpc                  (2.3.2)
+  * netcdf-cxx-gnu9-impi-ohpc                (4.3.1)
+  * netcdf-cxx-gnu9-mpich-ohpc               (4.3.1)
+  * netcdf-cxx-gnu9-mvapich2-ohpc            (4.3.1)
+  * netcdf-cxx-gnu9-openmpi4-ohpc            (4.3.1)
+  * netcdf-fortran-gnu9-impi-ohpc            (4.5.2)
+  * netcdf-fortran-gnu9-mpich-ohpc           (4.5.2)
+  * netcdf-fortran-gnu9-mvapich2-ohpc        (4.5.2)
+  * netcdf-fortran-gnu9-openmpi4-ohpc        (4.5.2)
+  * netcdf-gnu9-impi-ohpc                    (4.7.3)
+  * netcdf-gnu9-mpich-ohpc                   (4.7.3)
+  * netcdf-gnu9-mvapich2-ohpc                (4.7.3)
+  * netcdf-gnu9-openmpi4-ohpc                (4.7.3)
+  * omb-gnu9-impi-ohpc                       (5.6.2)
+  * omb-gnu9-mpich-ohpc                      (5.6.2)
+  * omb-gnu9-mvapich2-ohpc                   (5.6.2)
+  * omb-gnu9-openmpi4-ohpc                   (5.6.2)
+  * openblas-gnu9-ohpc                       (0.3.7)
+  * opencoarrays-gnu9-impi-ohpc              (2.8.0)
+  * opencoarrays-gnu9-mpich-ohpc             (2.8.0)
+  * opencoarrays-gnu9-mvapich2-ohpc          (2.8.0)
+  * opencoarrays-gnu9-openmpi4-ohpc          (2.8.0)
+  * openmpi4-gnu9-ohpc                       (4.0.3)
+  * pdtoolkit-gnu9-ohpc                      (3.25.1)
+  * petsc-gnu9-impi-ohpc                     (3.13.1)
+  * petsc-gnu9-mpich-ohpc                    (3.13.1)
+  * petsc-gnu9-mvapich2-ohpc                 (3.13.1)
+  * petsc-gnu9-openmpi4-ohpc                 (3.13.1)
+  * phdf5-gnu9-impi-ohpc                     (1.10.6)
+  * phdf5-gnu9-mpich-ohpc                    (1.10.6)
+  * phdf5-gnu9-mvapich2-ohpc                 (1.10.6)
+  * phdf5-gnu9-openmpi4-ohpc                 (1.10.6)
+  * plasma-gnu9-ohpc                         (2.8.0)
+  * pnetcdf-gnu9-impi-ohpc                   (1.12.1)
+  * pnetcdf-gnu9-mpich-ohpc                  (1.12.1)
+  * pnetcdf-gnu9-mvapich2-ohpc               (1.12.1)
+  * pnetcdf-gnu9-openmpi4-ohpc               (1.12.1)
+  * ptscotch-gnu9-impi-ohpc                  (6.0.6)
+  * ptscotch-gnu9-mpich-ohpc                 (6.0.6)
+  * ptscotch-gnu9-mvapich2-ohpc              (6.0.6)
+  * ptscotch-gnu9-openmpi4-ohpc              (6.0.6)
+  * python3-mpi4py-gnu9-impi-ohpc            (3.0.3)
+  * python3-mpi4py-gnu9-mpich-ohpc           (3.0.3)
+  * python3-mpi4py-gnu9-mvapich2-ohpc        (3.0.3)
+  * python3-mpi4py-gnu9-openmpi4-ohpc        (3.0.3)
+  * python3-numpy-gnu9-ohpc                  (1.17.4)
+  * python3-scipy-gnu9-mpich-ohpc            (1.3.3)
+  * python3-scipy-gnu9-mvapich2-ohpc         (1.3.3)
+  * python3-scipy-gnu9-openmpi4-ohpc         (1.3.3)
+  * scalapack-gnu9-impi-ohpc                 (2.1.0)
+  * scalapack-gnu9-mpich-ohpc                (2.1.0)
+  * scalapack-gnu9-mvapich2-ohpc             (2.1.0)
+  * scalapack-gnu9-openmpi4-ohpc             (2.1.0)
+  * scalasca-gnu9-impi-ohpc                  (2.5)
+  * scalasca-gnu9-mpich-ohpc                 (2.5)
+  * scalasca-gnu9-mvapich2-ohpc              (2.5)
+  * scalasca-gnu9-openmpi4-ohpc              (2.5)
+  * scorep-gnu9-impi-ohpc                    (6.0)
+  * scorep-gnu9-mpich-ohpc                   (6.0)
+  * scorep-gnu9-mvapich2-ohpc                (6.0)
+  * scorep-gnu9-openmpi4-ohpc                (6.0)
+  * scotch-gnu9-ohpc                         (6.0.6)
+  * sionlib-gnu9-impi-ohpc                   (1.7.4)
+  * sionlib-gnu9-mpich-ohpc                  (1.7.4)
+  * sionlib-gnu9-mvapich2-ohpc               (1.7.4)
+  * sionlib-gnu9-openmpi4-ohpc               (1.7.4)
+  * slepc-gnu9-impi-ohpc                     (3.13.2)
+  * slepc-gnu9-mpich-ohpc                    (3.13.2)
+  * slepc-gnu9-mvapich2-ohpc                 (3.13.2)
+  * slepc-gnu9-openmpi4-ohpc                 (3.13.2)
+  * superlu-gnu9-ohpc                        (5.2.1)
+  * superlu_dist-gnu9-impi-ohpc              (6.1.1)
+  * superlu_dist-gnu9-mpich-ohpc             (6.1.1)
+  * superlu_dist-gnu9-mvapich2-ohpc          (6.1.1)
+  * superlu_dist-gnu9-openmpi4-ohpc          (6.1.1)
+  * tau-gnu9-impi-ohpc                       (2.29)
+  * tau-gnu9-mpich-ohpc                      (2.29)
+  * tau-gnu9-mvapich2-ohpc                   (2.29)
+  * tau-gnu9-openmpi4-ohpc                   (2.29)
+  * trilinos-gnu9-impi-ohpc                  (12.18.1)
+  * trilinos-gnu9-mpich-ohpc                 (12.18.1)
+  * trilinos-gnu9-mvapich2-ohpc              (12.18.1)
+  * trilinos-gnu9-openmpi4-ohpc              (12.18.1)
+
+[Compiler Variant Addition (arm1)]
+
+  * arm1-compilers-devel-ohpc                (2.0)
+  * boost-arm1-mpich-ohpc                    (1.71.0)
+  * boost-arm1-openmpi4-ohpc                 (1.71.0)
+  * fftw-arm1-mpich-ohpc                     (3.3.8)
+  * fftw-arm1-openmpi4-ohpc                  (3.3.8)
+  * gsl-arm1-ohpc                            (2.6)
+  * hdf5-arm1-ohpc                           (1.10.6)
+  * hypre-arm1-mpich-ohpc                    (2.18.1)
+  * hypre-arm1-openmpi4-ohpc                 (2.18.1)
+  * lmod-defaults-arm1-mpich-ohpc            (2.0)
+  * lmod-defaults-arm1-openmpi4-ohpc         (2.0)
+  * metis-arm1-ohpc                          (5.1.0)
+  * mpich-ofi-arm1-ohpc                      (3.3.2)
+  * mpich-ucx-arm1-ohpc                      (3.3.2)
+  * mumps-arm1-mpich-ohpc                    (5.2.1)
+  * mumps-arm1-openmpi4-ohpc                 (5.2.1)
+  * omb-arm1-mpich-ohpc                      (5.6.2)
+  * omb-arm1-openmpi4-ohpc                   (5.6.2)
+  * openmpi4-arm1-ohpc                       (4.0.3)
+  * pdtoolkit-arm1-ohpc                      (3.25.1)
+  * plasma-arm1-ohpc                         (2.8.0)
+  * pnetcdf-arm1-mpich-ohpc                  (1.12.1)
+  * pnetcdf-arm1-openmpi4-ohpc               (1.12.1)
+  * ptscotch-arm1-mpich-ohpc                 (6.0.6)
+  * ptscotch-arm1-openmpi4-ohpc              (6.0.6)
+  * scalapack-arm1-mpich-ohpc                (2.1.0)
+  * scalapack-arm1-openmpi4-ohpc             (2.1.0)
+  * scotch-arm1-ohpc                         (6.0.6)
+  * sionlib-arm1-mpich-ohpc                  (1.7.4)
+  * sionlib-arm1-openmpi4-ohpc               (1.7.4)
+  * superlu-arm1-ohpc                        (5.2.1)
+  * superlu_dist-arm1-mpich-ohpc             (6.1.1)
+  * superlu_dist-arm1-openmpi4-ohpc          (6.1.1)
+
+[Component Version Changes (since 1.3.9)]
+
+  * EasyBuild-ohpc                           (3.9.4 -> 4.2.0)
+  * charliecloud-ohpc                        (0.11 -> 0.15)
+  * cmake-ohpc                               (3.15.4 -> 3.16.2)
+  * docs-ohpc                                (1.3.9 -> 2.0.0)
+  * examples-ohpc                            (1.5 -> 2.0)
+  * genders-compat-ohpc                      (1.22 -> 1.27)
+  * genders-ohpc                             (1.22 -> 1.27)
+  * hdf5-intel-ohpc                          (1.10.5 -> 1.10.6)
+  * imb-intel-impi-ohpc                      (2018.1 -> 2019.6)
+  * imb-intel-mpich-ohpc                     (2018.1 -> 2019.6)
+  * imb-intel-mvapich2-ohpc                  (2018.1 -> 2019.6)
+  * intel-compilers-devel-ohpc               (2019 -> 2020)
+  * intel-mpi-devel-ohpc                     (2019 -> 2020)
+  * likwid-intel-ohpc                        (4.3.4 -> 5.0.1)
+  * lmod-defaults-intel-impi-ohpc            (1.3.1 -> 2.0)
+  * lmod-defaults-intel-mpich-ohpc           (1.3.1 -> 2.0)
+  * lmod-defaults-intel-mvapich2-ohpc        (1.3.1 -> 2.0)
+  * lmod-ohpc                                (8.1.18 -> 8.2.10)
+  * netcdf-intel-impi-ohpc                   (4.7.1 -> 4.7.3)
+  * netcdf-intel-mpich-ohpc                  (4.7.1 -> 4.7.3)
+  * netcdf-intel-mvapich2-ohpc               (4.7.1 -> 4.7.3)
+  * ohpc-release                             (1.3 -> 2)
+  * paraver-ohpc                             (4.8.1 -> 4.8.2)
+  * pdsh-mod-genders-ohpc                    (2.33 -> 2.34)
+  * pdsh-mod-slurm-ohpc                      (2.33 -> 2.34)
+  * pdsh-ohpc                                (2.33 -> 2.34)
+  * pdtoolkit-intel-ohpc                     (3.25 -> 3.25.1)
+  * petsc-intel-impi-ohpc                    (3.12.0 -> 3.13.1)
+  * petsc-intel-mpich-ohpc                   (3.12.0 -> 3.13.1)
+  * petsc-intel-mvapich2-ohpc                (3.12.0 -> 3.13.1)
+  * phdf5-intel-impi-ohpc                    (1.10.5 -> 1.10.6)
+  * phdf5-intel-mpich-ohpc                   (1.10.5 -> 1.10.6)
+  * phdf5-intel-mvapich2-ohpc                (1.10.5 -> 1.10.6)
+  * pmix-ohpc                                (2.2.2 -> 3.1.4)
+  * pnetcdf-intel-impi-ohpc                  (1.12.0 -> 1.12.1)
+  * pnetcdf-intel-mpich-ohpc                 (1.12.0 -> 1.12.1)
+  * pnetcdf-intel-mvapich2-ohpc              (1.12.0 -> 1.12.1)
+  * prun-ohpc                                (1.3 -> 2.0)
+  * python3-mpi4py-intel-impi-ohpc           (3.0.2 -> 3.0.3)
+  * python3-mpi4py-intel-mpich-ohpc          (3.0.2 -> 3.0.3)
+  * python3-mpi4py-intel-mvapich2-ohpc       (3.0.2 -> 3.0.3)
+  * python3-numpy-intel-ohpc                 (1.15.4 -> 1.17.4)
+  * scalapack-intel-impi-ohpc                (2.0.2 -> 2.1.0)
+  * scalapack-intel-mpich-ohpc               (2.0.2 -> 2.1.0)
+  * scalapack-intel-mvapich2-ohpc            (2.0.2 -> 2.1.0)
+  * singularity-ohpc                         (3.4.1 -> 3.4.2)
+  * slepc-intel-impi-ohpc                    (3.12.0 -> 3.13.2)
+  * slepc-intel-mpich-ohpc                   (3.12.0 -> 3.13.2)
+  * slepc-intel-mvapich2-ohpc                (3.12.0 -> 3.13.2)
+  * slurm-contribs-ohpc                      (18.08.8 -> 20.02.1)
+  * slurm-devel-ohpc                         (18.08.8 -> 20.02.1)
+  * slurm-example-configs-ohpc               (18.08.8 -> 20.02.1)
+  * slurm-libpmi-ohpc                        (18.08.8 -> 20.02.1)
+  * slurm-ohpc                               (18.08.8 -> 20.02.1)
+  * slurm-openlava-ohpc                      (18.08.8 -> 20.02.1)
+  * slurm-pam_slurm-ohpc                     (18.08.8 -> 20.02.1)
+  * slurm-perlapi-ohpc                       (18.08.8 -> 20.02.1)
+  * slurm-slurmctld-ohpc                     (18.08.8 -> 20.02.1)
+  * slurm-slurmd-ohpc                        (18.08.8 -> 20.02.1)
+  * slurm-slurmdbd-ohpc                      (18.08.8 -> 20.02.1)
+  * slurm-torque-ohpc                        (18.08.8 -> 20.02.1)
+  * spack-ohpc                               (0.12.1 -> 0.13.4)
+  * tau-intel-impi-ohpc                      (2.28 -> 2.29)
+  * tau-intel-mpich-ohpc                     (2.28 -> 2.29)
+  * tau-intel-mvapich2-ohpc                  (2.28 -> 2.29)
+  * test-suite-ohpc                          (1.3.9 -> 2.0.0)
+  * warewulf-cluster-ohpc                    (3.8.1 -> 3.9.0)
+  * warewulf-common-ohpc                     (3.8.1 -> 3.9.0)
+  * warewulf-ipmi-ohpc                       (3.8.1 -> 3.9.0)
+  * warewulf-provision-ohpc                  (3.8.1 -> 3.9.0)
+  * warewulf-vnfs-ohpc                       (3.8.1 -> 3.9.0)
 
 ----------------------------------------------------------------------------------------------------------------------
 
