@@ -123,14 +123,14 @@
 [sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 
 # copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
-# install. Note that these will be syncronized with future updates via the provisioning system.
+# install. Note that these will be synchronized with future updates via the provisioning system.
 [sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
 
 # Add SLURM client support meta-package and enable munge
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 [sms](*\#*) chroot $CHROOT systemctl enable munge
 
-# Register Slurm server with computes (using configless option)
+# Register Slurm server with computes (using "configless" option)
 [sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
