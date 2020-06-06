@@ -10,24 +10,18 @@ deploy and manage an HPC Linux cluster including provisioning tools, resource
 management, I/O clients, runtimes, development tools, containers, and a variety of
 scientific libraries.
 
-There are currently two release series: [1.3.9](https://github.com/openhpc/ohpc/wiki/1.3.9) and [2.0](https://github.com/openhpc/ohpc/wiki/2.x)
+There are currently two release series: [1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.9) and [2.x](https://github.com/openhpc/ohpc/wiki/2.x)
 
 
 #### Getting started
 
 OpenHPC provides pre-built binaries via repositories for use with standard
-Linux package manager tools (e.g. ```yum``` or ```zypper```). Package
-repositories are housed at https://build.openhpc.community. To get started, you
+Linux package manager tools (e.g. ```yum``` or ```zypper```). To get started, you
 can enable an OpenHPC repository locally through installation of an
 ```ohpc-release``` RPM which includes gpg keys for package signing and defines
-the URL locations for [base] and [update] package repositories. Copies of the
-```ohpc-release``` package are provided below for convenience. Installation guides 
-tailored for each supported resource manager are also available below or in
-the downloads section of the latest
-[1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.9) or [2.x](https://github.com/openhpc/ohpc/wiki/2.x) releases. Instructions
-for mirroring the OpenHPC repositories with rsync can be found in the
-[wiki](https://github.com/openhpc/ohpc/wiki/Repository-Access-via-rsync).
-
+the URL locations for [base] and [update] package repositories. Installation guides 
+tailored for each supported provisioning system and resource manager are also available.  Copies of the
+```ohpc-release``` package and installation guides along with more information is available on the relevant release series pages ([1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.9) or [2.x](https://github.com/openhpc/ohpc/wiki/2.x)).
 
 ---
 
