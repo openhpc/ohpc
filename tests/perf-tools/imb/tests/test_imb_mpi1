@@ -29,7 +29,7 @@ fi
 
 @test "[Libs/IMB] run IMB-MPI1 on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=$IMB_DIR/bin/IMB-MPI1
-    ARGS="PingPong Sendrecv Bcast Allreduce"
+    ARGS="-off_cache -1 -time 1.5 -msglog 1:10 PingPong Sendrecv Bcast Allreduce"
 
     if [ ! -x $EXE ];then
         flunk "missing $EXE"

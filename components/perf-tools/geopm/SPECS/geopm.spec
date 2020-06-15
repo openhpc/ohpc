@@ -38,6 +38,12 @@ BuildRequires: unzip
 BuildRequires: zlib-devel
 BuildRequires: openssh
 
+%if 0%{?suse_version}
+Buildrequires: libelf1
+%else
+BuildRequires: elfutils-libelf
+%endif
+
 %description
 Global Extensible Open Power Manager (GEOPM) is an extensible power
 management framework targeting high performance computing.  The library can be

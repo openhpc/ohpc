@@ -25,7 +25,7 @@ Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Summary:        Portable Extensible Toolkit for Scientific Computation
 License:        2-clause BSD
 Group:          %{PROJ_NAME}/parallel-libs
-Version:        3.12.0
+Version:        3.13.1
 Release:        1%{?dist}
 Source0:        http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-%{version}.tar.gz
 Patch1:         petsc.rpath.patch
@@ -39,6 +39,7 @@ BuildRequires:  xz
 BuildRequires:  zlib-devel
 %if 0%{?rhel}
 BuildRequires:  openssh-clients
+BuildRequires:  glibc-langpack-en
 %else
 BuildRequires:  openssh
 %endif
@@ -46,7 +47,7 @@ BuildRequires:  openssh
 #!BuildIgnore: post-build-checks
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
 PETSc is a suite of data structures and routines for the scalable
@@ -73,9 +74,14 @@ module load scalapack
 module load scalapack openblas
 %endif
 
-export COPTFLAGS="%{optflags}"
-export CXXOPTFLAGS="%{optflags}"
-export FOPTFLAGS="%{optflags}"
+# PETSc build system doesn't honor canonical CFLAGS,CXXFLAGS, etc
+# directly. Place them in OPTFLAG variants instead.
+COPTFLAGS="${CFLAGS}"
+CXXOPTFLAGS="${CXXFLAGS}"
+FOPTFLAGS="${FCFLAGS}"
+unset CFLAGS
+unset CXXFLAGS
+unset FCFLAGS
 
 # icc-impi requires mpiicc wrappers, otherwise dynamic libs are not generated.
 # gnu-impi finds include/4.8.0/mpi.mod first, unless told not to.
@@ -106,7 +112,9 @@ export FOPTFLAGS="%{optflags}"
 %endif
 %endif
 %endif
-        --with-clanguage=C++ \
+%if 0%{?OHPC_BUILD}
+        --with-make-np=3 \
+%endif
         --with-c-support \
         --with-fortran-interfaces=1 \
         --with-debugging=no \
@@ -146,7 +154,7 @@ rm -rf %{buildroot}%{install_path}/lib/modules
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -184,12 +192,12 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}

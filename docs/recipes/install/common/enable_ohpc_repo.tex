@@ -11,13 +11,13 @@ package directly from the \OHPC{} build server.
 % CentOS
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.6}{10}\ttfamily,
 	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*) yum install http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.TAG.ARCH.rpm
+[sms](*\#*) yum install http://repos.openhpc.community/OpenHPC/VER/OSREPO/ARCH/ohpc-release-VER-1.TAG.ARCH.rpm
 \end{lstlisting}
 \else
 % non-CentOS
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{7.8}{10}\ttfamily,
 	literate={VER}{\OHPCVerTree{}}1 {OSREPO}{\OSTree{}}1 {TAG}{\OSTag{}}1 {ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*) rpm -ivh http://build.openhpc.community/OpenHPC:/VER/OSREPO/ARCH/ohpc-release-VER-1.TAG.ARCH.rpm
+[sms](*\#*) rpm -ivh http://repos.openhpc.community/OpenHPC/VER/OSREPO/ARCH/ohpc-release-VER-1.TAG.ARCH.rpm
 \end{lstlisting}
 \fi
 
@@ -30,7 +30,7 @@ available updates, and one containing a repository of source RPMS. The tar files
 also contain a simple bash script to configure the package manager to use the
 local repository after download. To use, simply unpack the tarball where you
 would like to host the local repository and execute the \texttt{make\_repo.sh} script.
-Tar files for this release can be found at \href{http://build.openhpc.community/dist/\OHPCVersion}
-        {\color{blue}{http://build.openhpc.community/dist/\OHPCVersion}}
+Tar files for this release can be found at \href{http://repos.openhpc.community/dist/\OHPCVersion}
+        {\color{blue}{http://repos.openhpc.community/dist/\OHPCVersion}}
 \end{tcolorbox}
 \end{center}

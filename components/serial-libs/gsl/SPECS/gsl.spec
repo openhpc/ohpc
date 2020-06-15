@@ -24,10 +24,16 @@ Group:     %{PROJ_NAME}/serial-libs
 URL:       http://www.gnu.org/software/gsl
 Source0:   https://ftp.gnu.org/gnu/%{pname}/%{pname}-%{version}.tar.gz
 
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+BuildRequires: make
+BuildRequires: pkgconfig
+
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
 
@@ -49,7 +55,9 @@ lends itself to being used in very high level languages (VHLLs).
 export CFLAGS="-fp-model strict $CFLAGS"
 %endif
 
-./configure --prefix=%{install_path} --disable-static || { cat config.log && exit 1; }
+./configure --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --disable-static || { cat config.log && exit 1; }
 make %{?_smp_mflags}
 
 %install
@@ -62,7 +70,7 @@ find "%buildroot" -type f -name "*.la" | xargs rm -f
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -91,16 +99,17 @@ setenv          %{PNAME}_INC        %{install_path}/include
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}
 
 %files
 %{OHPC_PUB}
-%doc AUTHORS BUGS ChangeLog COPYING INSTALL NEWS README THANKS TODO
+%doc AUTHORS BUGS ChangeLog INSTALL NEWS README THANKS TODO
+%license COPYING

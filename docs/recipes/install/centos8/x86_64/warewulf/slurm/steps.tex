@@ -99,24 +99,7 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{common/enable_ohpc_repo}
-
-In addition to the \OHPC{} package repository, the {\em master} host also
-requires access to the standard base OS distro repositories in order to resolve
-necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base OS and EPEL repositories for which mirrors are freely available online:
-
-\begin{itemize*}
-\item CentOS-7 - Base 7.7.1908
-  (e.g. \href{http://mirror.centos.org/centos-7/7/os/x86\_64}
-             {\color{blue}{http://mirror.centos.org/centos-7/7/os/x86\_64}} )
-\item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
-                        {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
-\end{itemize*}
-
-\noindent The public EPEL repository will be enabled automatically upon installation of the 
-\texttt{ohpc-release} package. Note that this requires the CentOS Extras
-repository, which is shipped with CentOS and is enabled by default.
-
+\input{common/centos_repos}
 \input{common/automation}
 
 
@@ -125,6 +108,7 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/enable_pxe}
 \input{common/time}
 
+\vspace*{0.15cm}
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
 \input{common/install_slurm}
 
@@ -148,17 +132,26 @@ repository, which is shipped with CentOS and is enabled by default.
 
 %\newpage
 % begin_ohpc_run
-% ohpc_validation_comment Add OpenHPC components to compute instance
+% ohpc_validation_comment Add SLURM and other components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Add Slurm client support meta-package
+# copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
+# install. Note that these will be synchronized with future updates via the provisioning system.
 [sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
+
+# Add Slurm client support meta-package and enable munge
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
+[sms](*\#*) chroot $CHROOT systemctl enable munge
+
+# Register Slurm server with computes (using "configless" option)
+[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) chrony
+# Identify master host as local NTP server
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
-# Add kernel drivers
-[sms](*\#*) (*\chrootinstall*) kernel
+# Add kernel drivers (matching kernel version on SMS node)
+[sms](*\#*) (*\chrootinstall*) kernel-`uname -r`
 
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
@@ -177,8 +170,6 @@ repository, which is shipped with CentOS and is enabled by default.
 % ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
 % ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" /etc/slurm/slurm.conf
 
-% ohpc_command    perl -pi -e "s/^NodeName=(\S+)/NodeName=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
-% ohpc_command    perl -pi -e "s/^PartitionName=normal Nodes=(\S+)/PartitionName=normal Nodes=${compute_prefix}[1-${num_computes}]/" $CHROOT/etc/slurm/slurm.conf
 % ohpc_command fi
 % end_ohpc_run
 
@@ -199,8 +190,8 @@ repository, which is shipped with CentOS and is enabled by default.
 \paragraph{Enable ssh control via resource manager} 
 \input{common/slurm_pam}
 
-\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
-\input{common/install_beegfs_client_centos}
+%% \paragraph{Add \beegfs{}} \label{sec:add_beegfs}
+%% \input{common/install_beegfs_client_centos}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}
@@ -214,12 +205,8 @@ repository, which is shipped with CentOS and is enabled by default.
 \paragraph{Add \Nagios{} monitoring} \label{sec:add_nagios}
 \input{common/nagios}
 
-\clearpage
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
-
-\paragraph{Add \mrsh{}}
-\input{common/mrsh}
 
 \paragraph{Add \genders{}}
 \input{common/genders}
@@ -238,7 +225,7 @@ repository, which is shipped with CentOS and is enabled by default.
 %\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
-\vspace*{0.3cm}
+%\vspace*{0.3cm}
 \input{common/import_ww_files_slurm}
 \input{common/import_ww_files_ib_centos}
 %\vspace*{0.3cm}

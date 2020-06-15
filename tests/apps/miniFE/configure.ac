@@ -21,8 +21,8 @@ echo
 echo '-------------------------------------------------- SUMMARY --------------------------------------------------'
 echo
 echo Package version............... : $PACKAGE-$VERSION
-echo OHPC compiler toolchain........ : $LMOD_FAMILY_COMPILER
-echo OHPC MPI toolchain............. : $LMOD_FAMILY_MPI
+echo OHPC compiler toolchain....... : $LMOD_FAMILY_COMPILER
+echo OHPC MPI toolchain............ : $LMOD_FAMILY_MPI
 echo
 echo C compiler.................... : `which $CC`
 echo C++ compiler.................. : `which $CXX`

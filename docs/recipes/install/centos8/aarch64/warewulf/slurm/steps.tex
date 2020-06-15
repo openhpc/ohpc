@@ -98,21 +98,7 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{common/enable_ohpc_repo}
-
-In addition to the \OHPC{} package repository, the {\em master} host also
-requires access to the standard base OS distro repositories in order to resolve
-necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base OS and EPEL repositories for which mirrors are freely available online:
-
-\begin{itemize*}
-\item CentOS-7 - Base 7.7.1908
-  (e.g. \href{http://mirror.centos.org/altarch/7.7.1908/os/aarch64/}
-  {\color{blue}{http://mirror.centos.org/altarch/7.7.1908/os/aarch64/}} )
-  \item EPEL 7
-    (e.g. \href{http://download.fedoraproject.org/pub/epel/7/aarch64}
-                            {\color{blue}{http://download.fedoraproject.org/pub/epel/7/aarch64}})
-\end{itemize*}
-
+\input{common/centos_repos}
 \input{common/automation}
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
@@ -141,15 +127,25 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 % begin_ohpc_run
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Add Slurm client support meta-package
+# copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
+# install. Note that these will be synchronized with future updates via the
+# provisioning system.
 [sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
+
+# Add Slurm client support meta-package and enable munge
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
+[sms](*\#*) chroot $CHROOT systemctl enable munge
+
+# Register Slurm server with computes (using "configless" option)
+[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
 
 # Add Network Time Protocol (NTP) support
-[sms](*\#*) (*\chrootinstall*) ntp
+[sms](*\#*) (*\chrootinstall*) chrony
+# Identify master host as local NTP server
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
-# Add kernel drivers
-[sms](*\#*) (*\chrootinstall*) kernel
+# Add kernel drivers (matching kernel version on SMS node)
+[sms](*\#*) (*\chrootinstall*) kernel-`uname -r`
 
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
@@ -197,14 +193,8 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 \paragraph{Add \Nagios{} monitoring} \label{sec:add_nagios}
 \input{common/nagios}
 
-\clearpage
-
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
-
-\clearpage
-\paragraph{Add \mrsh{}}
-\input{common/mrsh}
 
 \paragraph{Add \genders{}}
 \input{common/genders}
@@ -266,6 +256,9 @@ both the base OS and EPEL repositories for which mirrors are freely available on
 \input{common/third_party_libs_petsc_centos}
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_aarch}
+
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_arm}
+\input{common/armhpc_enabled_builds}
 
 \clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}

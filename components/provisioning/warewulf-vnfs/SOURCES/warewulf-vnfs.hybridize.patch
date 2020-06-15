@@ -1,0 +1,13 @@
+--- a/etc/vnfs.conf		2020-05-05 14:06:12.049501943 -0500
++++ a/etc/vnfs.conf		2020-05-05 14:07:20.549111967 -0500
+@@ -65,8 +65,8 @@
+ #
+ 
+ hybridize += /usr/X11R6
+-hybridize += /usr/lib/locale
+-hybridize += /usr/lib64/locale
++#hybridize += /usr/lib/locale
++#hybridize += /usr/lib64/locale
+ hybridize += /usr/include
+ hybridize += /usr/share/man
+ hybridize += /usr/share/doc

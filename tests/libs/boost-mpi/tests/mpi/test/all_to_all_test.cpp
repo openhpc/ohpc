@@ -105,7 +105,9 @@ int test_main(int argc, char* argv[])
 
   communicator comm;
   all_to_all_test(comm, int_generator(), "integers");
+#if 0
   all_to_all_test(comm, gps_generator(), "GPS positions");
+#endif
   all_to_all_test(comm, string_generator(), "string");
   all_to_all_test(comm, string_list_generator(), "list of strings");
 

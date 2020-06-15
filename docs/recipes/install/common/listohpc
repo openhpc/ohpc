@@ -23,6 +23,7 @@ shift $((OPTIND -1))
 
 version=$1
 
+major_ver=`echo ${version} | cut -d '.' -f1`
 minor_ver=`echo ${version} | cut -d '.' -f1,2`
 micro_ver=`echo ${version} | cut -d '.' -f3`
 
@@ -58,6 +59,12 @@ if [ $? -eq 0 ];then
     pwd | grep -q centos7 && baseos="CentOS_7"
 fi
 
+echo $version | egrep -q "^2."
+if [ $? -eq 0 ];then
+    pwd | grep -q leap15  && baseos="Leap_15"
+    pwd | grep -q centos8 && baseos="CentOS_8"
+fi
+
 pwd | grep -q aarch64 && arch="aarch64"
 pwd | grep -q x86_64  && arch="x86_64"
     
@@ -78,7 +85,7 @@ if [[ "${arch}" == "aarch64" ]];then
     skip="mvapich2|impi-ohpc|lmod-defaults-intel"
 fi
 
-repobase="http://build.openhpc.community/OpenHPC:/${minor_ver}/${baseos}"
+repobase="http://repos.openhpc.community/OpenHPC/${major_ver}/${baseos}"
 if [[ $micro_ver -gt 0 ]];then
     repoupdate="http://build.openhpc.community/OpenHPC:/${minor_ver}:/Update${micro_ver}/${baseos}"
 fi

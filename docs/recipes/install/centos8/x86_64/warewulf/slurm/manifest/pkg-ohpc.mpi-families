@@ -1,25 +1,13 @@
-intel-mpi-devel-ohpc 2019 https://github.com/openhpc/ohpc ohpc/mpi-families OpenHPC compatibility package for Intel(R) MPI Library
-mpich-gnu-ohpc 3.2.1 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-mpich-gnu7-ohpc 3.2.1 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-mpich-gnu8-ohpc 3.3.1 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-mpich-intel-ohpc 3.3.1 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-mvapich2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-gnu7-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-psm2-gnu-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-psm2-gnu7-ohpc 2.2 http://mvapich.cse.ohio-state.edu/overview/mvapich2/ ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-gnu8-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
+intel-mpi-devel-ohpc 2020 https://github.com/openhpc/ohpc ohpc/mpi-families OpenHPC compatibility package for Intel(R) MPI Library
+libfabric-ohpc 1.10.1 http://www.github.com/ofiwg/libfabric ohpc/mpi-families User-space RDMA Fabric Interfaces
+mpich-ofi-gnu9-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-ofi-intel-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-ucx-gnu9-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-ucx-intel-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mvapich2-gnu9-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-intel-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
-mvapich2-psm2-gnu8-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
+mvapich2-psm2-gnu9-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
 mvapich2-psm2-intel-ohpc 2.3.2 http://mvapich.cse.ohio-state.edu ohpc/mpi-families OSU MVAPICH2 MPI implementation
-openmpi-gnu-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-gnu7-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-intel-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-psm2-gnu-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-psm2-gnu7-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-psm2-intel-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-gnu7-ohpc 3.1.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-pmix-slurm-gnu7-ohpc 3.1.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-gnu8-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-intel-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-pmix-slurm-gnu8-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-pmix-slurm-intel-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+openmpi4-gnu9-ohpc 4.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi4-intel-ohpc 4.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+ucx-ohpc 1.8.0 http://www.openucx.org ohpc/mpi-families UCX is a communication library implementing high-performance messaging

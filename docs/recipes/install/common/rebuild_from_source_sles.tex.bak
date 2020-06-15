@@ -1,0 +1,49 @@
+Users of \OHPC{} may find it desirable to rebuild one of the supplied packages
+to apply build customizations or satisfy local requirements. One way to
+accomplish this is to install the appropriate source RPM, modify the spec file
+as needed, and rebuild to obtain an updated binary RPM. \OHPC{} spec files
+contain macros to facilitate local customizations of compiler, compilation
+flags and MPI family. A brief example using
+the FFTW library is highlighted below.  Note that the source RPMs can be downloaded from the
+community build server at \href{https://build.openhpc.community}
+{\color{blue}{https://build.openhpc.community}} via a web browser or directly
+via \texttt{zypper} as highlighted below. In this example we make an explicit
+change to FFTW's configuration, as well as modifying the CFLAGS environment
+variable. The package is also tagged with an aditional delimiter to allow easy
+co-installation and use. 
+
+\begin{center}
+\begin{tcolorbox}[]
+\small
+Packages modified locally will not be cryptographically signed like the packages
+    in the \OHPC{} repository. Zypper requires and additional flag
+    (\texttt{--no-gpg-checks}) to install unsigned packages.
+\end{tcolorbox}
+\end{center}
+
+\begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\footnotesize\ttfamily,
+    literate={ARCH}{\arch{}}1 {-}{-}1]
+# Install rpm-build package from base OS distro
+sms:~ # (*\install*) rpm-build
+
+# Download SRPM from OpenHPC repository and install locally
+sms001:~ # zypper source-install fftw-gnu9-openmpi4-ohpc
+
+# Modify spec file as desired
+sms001:~ # cd ~/rpmbuild/SPECS
+sms:~rpmbuild/SPECS # perl -pi -e "s/enable-static=no/enable-static=yes/" fftw.spec
+
+# Rebuild binary RPM. Note that additional directives can be specified to modify build
+sms ~rpmbuild/SPECS # rpmbuild -bb --define "OHPC_CFLAGS '-O3 -mtune=native'" \
+        --define "OHPC_CUSTOM_DELIM static" fftw.spec
+
+# Install the new package
+sms ~rpmbuild/SPECS # zypper --no-gpg-checks in \
+        ../RPMS/ARCH/fftw-gnu9-openmpi4-static-ohpc.2.0-3.3.8-6.1.ARCH.rpm
+
+# The new module file appears along side the default
+sms ~ # module avail fftw
+
+-------------------------- /opt/ohpc/pub/moduledeps/gnu9-openmpi4 ---------------------------
+   fftw/3.3.8-static    fftw/3.3.8 (D)
+\end{lstlisting}

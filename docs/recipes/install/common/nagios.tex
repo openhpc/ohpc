@@ -20,7 +20,7 @@ as desired on login nodes, service nodes, or compute hosts.
 % ohpc_validation_comment Install Nagios on master and vnfs image
 \begin{lstlisting}[language=bash,keywords={},upquote=true]
 # Install nagios, nrep, and all available plugins on master host
-[sms](*\#*) (*\install*) nagios nrpe nagios-plugins-*
+[sms](*\#*) (*\install*) --skip-broken nagios nrpe nagios-plugins-*
 
 # Install nrpe and an example plugin into compute node image
 [sms](*\#*) (*\chrootinstall*) nrpe nagios-plugins-ssh

@@ -28,19 +28,19 @@ Source1:        msr-safe.service
 Source2:        msr-safe.sysconfig
 Source3:        10-msr-safe.rules
 Source4:        msr-safe.sh
-#BuildRequires:  %kernel_module_package_buildreqs
 BuildRequires:  systemd
 
-%if 0%{?sles_version} || 0%{?suse_version}
+%if 0%{?suse_version}
 BuildRequires:  udev
 BuildRequires:  kernel-default-devel
 #!BuildIgnore: post-build-checks
 %endif
 
-%if 0%{?centos_version} == 700
-%define centos_kernel 3.10.0-1062.el7
+%if 0%{?centos_version} == 800
+%define centos_kernel 4.18.0-147.8.1.el8_1
 BuildRequires: kernel = %{centos_kernel}
 BuildRequires: kernel-devel = %{centos_kernel}
+BuildRequires: kernel-abi-whitelists kernel-rpm-macros elfutils-libelf-devel
 %endif
 
 %kernel_module_package default

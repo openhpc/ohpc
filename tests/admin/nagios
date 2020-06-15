@@ -14,7 +14,11 @@ rm=$RESOURCE_MANAGER
 @test "[nagios] check for RPM" {
     run check_if_rpm_installed "nagios"
     assert_success
-    run check_if_rpm_installed "nagios-plugins-ssh"
+    if [ "x$DISTRO_FAMILY" == "xSLES"  ];then
+	run check_if_rpm_installed "monitoring-plugins-ssh"
+    else
+	run check_if_rpm_installed "nagios-plugins-ssh"
+    fi
     assert_success
     run check_if_rpm_installed "nrpe"
     assert_success

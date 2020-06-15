@@ -135,6 +135,8 @@
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) ntp
+# Identify master host as local NTP server
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
 # Add kernel drivers
 [sms](*\#*) (*\chrootinstall*) kernel-default
@@ -182,7 +184,7 @@
 
 \clearpage
 \paragraph{Add \Nagios{} monitoring} \label{sec:add_nagios}
-\input{common/nagios}
+\input{common/nagios_suse}
 
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
@@ -205,13 +207,13 @@
 \input{common/import_ww_files}
 \input{common/import_ww_files_ib_sles}
 \input{common/finalize_provisioning}
-\vspace*{0.1cm}
+%\vspace*{0.1cm}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_pbs}
 %\clearpage
 \input{common/add_ww_hosts_finalize}
 
-%\vspace*{0.2cm}
+\clearpage
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 \input{common/kargs_post}
