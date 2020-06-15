@@ -11,7 +11,7 @@
 #
 # CONTRIBUTORS
 #
-#   Karl W. Schulz <karl.w.schulz@intel.com>
+#   Karl W. Schulz <karl@oden.utexas.edu>
 
 AC_DEFUN([OHPC_DISTRO_FAMILY],
 [
@@ -27,6 +27,9 @@ if test -r "/etc/os-release"; then
       DISTRO_FAMILY=RHEL
    elif grep -q "SLES" /etc/os-release; then
       AC_MSG_RESULT([SLES])
+      DISTRO_FAMILY=SLES
+   elif grep -q "openSUSE Leap" /etc/os-release; then
+      AC_MSG_RESULT([openSUSE Leap])
       DISTRO_FAMILY=SLES
    else  
       AC_MSG_RESULT([unknown])

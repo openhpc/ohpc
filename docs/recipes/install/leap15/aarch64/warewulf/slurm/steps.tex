@@ -7,12 +7,12 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{SLES12SP4}
-\newcommand{\OSRepo}{SLE\_12\_SP4}
-\newcommand{\OSTree}{SLE\_12}
-\newcommand{\OSTag}{sle12}
-\newcommand{\baseos}{sles12sp4}
-\newcommand{\baseosshort}{sles12}
+\newcommand{\baseOS}{OpenSUSE Leap 15.1}
+\newcommand{\OSRepo}{Leap\_15\_1}
+\newcommand{\OSTree}{Leap\_15}
+\newcommand{\OSTag}{leap15}
+\newcommand{\baseos}{leap15.1}
+\newcommand{\baseosshort}{leap15}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{SLURM}
@@ -111,7 +111,7 @@
 
 \vspace*{-0.25cm}
 \subsection{Define {\em compute} image for provisioning}
-\input{common/warewulf_mkchroot_sles}
+\input{common/warewulf_mkchroot_suse}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 \input{common/add_to_compute_chroot_intro}
@@ -122,14 +122,24 @@
 # Import GPG keys for chroot repository usage
 [sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 
-# Add SLURM client support meta-package
+# copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
+# install. Note that these will be synchronized with future updates via the provisioning system.
+[sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
+
+# Add SLURM client support meta-package and enable munge
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
+[sms](*\#*) chroot $CHROOT systemctl enable munge
+
+# Register Slurm server with computes (using "configless" option)
+[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
 
 # Provide udev rules to enable /dev/ipath access for InfiniPath devices
 [sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) ntp
+# Identify master host as local NTP server
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
 # Add kernel drivers
 [sms](*\#*) (*\chrootinstall*) kernel-default
@@ -185,19 +195,11 @@
 \input{common/syslog}
 
 
-\paragraph{Add \Nagios{} monitoring}
-\input{common/nagios}
+\paragraph{Add \Nagios{} monitoring} \label{sec:add_nagios}
+\input{common/nagios_suse}
 
-\vspace*{0.35cm}
-\paragraph{Add \Ganglia{} monitoring}
-\input{common/ganglia}
-
-%\clearpage
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
-
-\paragraph{Add \mrsh{}}
-\input{common/mrsh}
 
 \paragraph{Add \genders{}}
 \input{common/genders}
@@ -208,7 +210,6 @@
 
 \paragraph{Add \nhc{}} \label{sec:add_nhc}
 \input{common/nhc}
-\clearpage
 \input{common/nhc_slurm}
 
 \subsubsection{Import files} \label{sec:file_import}
@@ -256,6 +257,9 @@
 \input{common/third_party_libs_petsc_sles}
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_aarch}
+
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_arm}
+\input{common/armhpc_enabled_builds}
 
 \clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}

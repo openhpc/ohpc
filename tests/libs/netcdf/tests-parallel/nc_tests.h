@@ -18,10 +18,10 @@ for conditions of use.
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "netcdf.h"
 #ifdef USE_PARALLEL
 #include "netcdf_par.h"
 #endif
-#include "netcdf.h"
 #include "err_macros.h"
 
 /** Useful define for tests. */

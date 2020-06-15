@@ -17,9 +17,9 @@
 
 #define MULTIARRAY_TEST_ASSIGN
 #include "generative_tests.hpp"
-#include "boost/concept_check.hpp" // for ignore_unused_variable_warning
-#include "boost/mpl/if.hpp"
-#include "boost/type_traits/is_same.hpp"
+#include <boost/concept_check.hpp> // for ignore_unused_variable_warning
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 // iterator-test-specific code
 
@@ -107,8 +107,8 @@ void test_iterators(Array& A, const IterTraits&) {
     typedef typename IterTraits::iterator3 iterator;
     iterator i1 = A.begin();
     iterator i2 = A.end();
-    BOOST_CHECK(i1 < i2);
-    BOOST_CHECK((i2 - i1) == typename iterator::difference_type(2));
+    BOOST_TEST(i1 < i2);
+    BOOST_TEST((i2 - i1) == typename iterator::difference_type(2));
   }
 
   // Standard Array Iteration
@@ -121,7 +121,7 @@ void test_iterators(Array& A, const IterTraits&) {
     for (iterator3 i = A.begin(); i != A.end(); ++i)
       for(iterator2 ii = (*i).begin(); ii != (*i).end(); ++ii)
         for(iterator1  iii = (*ii).begin(); iii != (*ii).end(); ++iii)
-          BOOST_CHECK(*iii == vals++);
+          BOOST_TEST(*iii == vals++);
   }
 
   // Using operator->() on iterators
@@ -134,7 +134,7 @@ void test_iterators(Array& A, const IterTraits&) {
     for (iterator3 i = A.begin(); i != A.end(); ++i)
       for(iterator2 ii = i->begin(); ii != i->end(); ++ii)
         for(iterator1  iii = ii->begin(); iii != ii->end(); ++iii)
-          BOOST_CHECK(*iii == vals++);
+          BOOST_TEST(*iii == vals++);
   }
 
   // Reverse Iterator Hierarchy Test
@@ -148,7 +148,7 @@ void test_iterators(Array& A, const IterTraits&) {
       for(riterator2 ii = (*i).rbegin(); ii != (riterator2)(*i).rend(); ++ii)
         for(riterator1 iii = (*ii).rbegin(); iii != (riterator1)(*ii).rend();
             ++iii)
-          BOOST_CHECK(*iii == check_iter_val--);
+          BOOST_TEST(*iii == check_iter_val--);
   }
   ++tests_run;
 }
@@ -182,7 +182,7 @@ void access(Array& A, const const_array_tag&) {
 
 
 int
-test_main(int, char*[])
+main()
 {
   return run_generative_tests();
 }

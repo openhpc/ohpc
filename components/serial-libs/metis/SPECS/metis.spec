@@ -31,7 +31,7 @@ Provides:      libmetis = %{version}
 Provides:      libmetis0 = %{version}
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
 METIS is a family of programs for partitioning unstructured graphs and hypergraph
@@ -79,7 +79,7 @@ make install DESTDIR=${RPM_BUILD_ROOT}
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -109,12 +109,12 @@ setenv          %{PNAME}_INC        %{install_path}/include
 family "metis"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}

@@ -1,0 +1,16 @@
+--- vnfs/etc/bootstrap.conf	2020-05-03 11:16:45.000000000 -0500
++++ vnfs/etc/bootstrap.conf	2020-05-03 11:20:43.000000000 -0500
+@@ -33,10 +33,12 @@
+ modprobe += xhci-hcd, sl811-hcd, sd_mod
+ # modprobe += ib_ipoib
+ 
+-#OpenHPC additions for SLES12
++# OpenHPC additions
+ drivers += af_packet, dns_resolver, auth_rpcgss, lockd, sunrpc
+ drivers += dm_mod, dcdbas, dell_rbu, ipmi_msghandler, shpchp, ehci_pci
+ drivers += wmi, processor, button, sg, igb, i2c_algo_bit, dca, ptp
+ drivers += pps_core, ahci, libahci, libata, scsi_mod
+ drivers += nfs_acl, nfsv3, nfsv4, coretemp
+ drivers += msr
++drivers += overlay, squashfs
++drivers += kernel/drivers/infiniband/

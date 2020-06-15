@@ -43,7 +43,8 @@ Patch1:         boost-fenv_suse.patch
 
 # intel-linux toolset fix: https://github.com/boostorg/build/issues/475
 %if "%{compiler_family}" == "intel"
-Patch2:         boost-intel_bootstrap.patch
+Patch2:         boost-1.71.0-intel-bootstrap.patch
+Patch3:         intel.qnextgen.patch
 %endif
 
 # optflag patch from Fedora
@@ -71,7 +72,7 @@ BuildRequires:  zlib-devel(x86-64)
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
 Boost provides free peer-reviewed portable C++ source libraries. The
@@ -102,6 +103,7 @@ see the boost-doc package.
 
 %if "%{compiler_family}" == "intel"
 %patch2 -p1
+%patch3 -p1
 %endif
 
 # optflag patches from Fedora
@@ -195,10 +197,10 @@ export MPICXX=%{mpicxx}
 # OpenHPC module file
 %if %build_mpi
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 %else
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 %endif
 #%Module1.0#####################################################################
 
@@ -232,12 +234,12 @@ setenv          %{PNAME}_INC        %{install_path}/include
 family "boost"
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}

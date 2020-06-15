@@ -1,5 +1,0 @@
-*.o
-*.trs
-*.log
-config.h
-config.h.in

@@ -23,11 +23,11 @@ if(defined $ENV{'OverWritePrevoius'} ) {
 } 
 
 my @arches = ('aarch64', 'x86_64');
-my @distros = ('SLE_12','CentOS_7');
+my @distros = ('Leap_15','CentOS_8');
 
-my $base_repo_path = "/srv/obs/repos/OpenHPC:";
-my $dest_dir = "/srv/www/dist/$release";
-my $tmp_path = "/srv/tmp/dist";
+my $base_repo_path = "/repos/OpenHPC";
+my $dest_dir = "/repos/dist/$release";
+my $tmp_path = "/stage/dist/tmp";
 
 # basic usage
 sub usage { 
@@ -150,7 +150,7 @@ if($skipCopy) {
 
 # parse release
 my ($major, $minor, $micro) = split(/\./, $release);
-my $base_release = "$major.$minor";
+my $base_release = "$major";
 
 # stage repo in tmp
 

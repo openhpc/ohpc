@@ -30,7 +30,8 @@ Source1:        Makefile.gnu.openmpi.inc
 Source2:        Makefile.gnu.impi.inc
 Source3:        Makefile.mkl.intel.impi.inc
 Source4:        Makefile.mkl.intel.openmpi.inc
-Source5:        Makefile.arm1.inc
+Source5:        Makefile.arm.impi.inc
+Source6:        Makefile.arm.openmpi.inc
 Patch0:         mumps-5.0.1-shared-mumps.patch
 Patch1:         mumps-5.0.0-shared-pord.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
@@ -48,7 +49,7 @@ Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
 MUMPS implements a direct solver for large sparse linear systems, with a
@@ -64,13 +65,12 @@ C interfaces, and can interface with ordering tools such as Scotch.
 %build
 %ohpc_setup_compiler
 
-%if "%{compiler_family}" == "arm1"
+%if "%{compiler_family}" == "arm"
 module load scalapack
-RPM_OPT_FLAGS="-O3 -fsimdmath -fPIC"
 %endif
 
 # Enable scalapack and openblas linkage for blas/lapack with gnu and other (e.g. llvm) builds
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 module load scalapack openblas
 %endif
 
@@ -84,6 +84,9 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
+%if "%{compiler_family}" == "arm"
+cp -f %{S:5} Makefile.inc
+%endif
 %endif
 
 %if "%{mpi_family}" == "mpich"
@@ -95,7 +98,7 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm1"
+%if "%{compiler_family}" == "arm"
 cp -f %{S:5} Makefile.inc
 %endif
 %endif
@@ -109,7 +112,7 @@ cp -f %{S:2} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:3} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm1"
+%if "%{compiler_family}" == "arm"
 cp -f %{S:5} Makefile.inc
 %endif
 %endif
@@ -123,8 +126,8 @@ cp -f %{S:1} Makefile.inc
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
 %endif
-%if "%{compiler_family}" == "arm1"
-cp -f %{S:5} Makefile.inc
+%if "%{compiler_family}" == "arm"
+cp -f %{S:6} Makefile.inc
 %endif
 %endif
 
@@ -134,14 +137,13 @@ export LIBS="-L$MPI_DIR/lib -lmpi_mpifh -lmpi"
 %if "%{compiler_family}" == "intel"
 cp -f %{S:4} Makefile.inc
 %else
-%if "%{compiler_family}" == "arm1"
-cp -f %{S:5} Makefile.inc
+%if "%{compiler_family}" == "arm"
+cp -f %{S:6} Makefile.inc
 %else
 cp -f %{S:1} Makefile.inc
 %endif
 %endif
 %endif
-
 
 make MUMPS_MPI=%{MUMPS_MPI} \
      FC=mpif77 \
@@ -168,7 +170,7 @@ install -m 644 Makefile.inc %{buildroot}%{install_path}/etc
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -204,12 +206,12 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}

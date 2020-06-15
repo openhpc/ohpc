@@ -14,13 +14,13 @@
 // resize.cpp - Test of resizing multi_arrays
 //
 
-#include "boost/test/minimal.hpp"
-#include "boost/multi_array.hpp"
+#include <boost/core/lightweight_test.hpp>
+#include <boost/multi_array.hpp>
 #include <iostream>
 using namespace std;
 
 
-int test_main(int,char*[]) {
+int main() {
 
   typedef boost::multi_array<int,3> marray;
 
@@ -58,7 +58,7 @@ int test_main(int,char*[]) {
     marray A(boost::extents[2][3][4]);
     A.assign(A_data,A_data+(2*3*4));
     A.resize(boost::extents[4][3][2]);
-    BOOST_CHECK(std::equal(A_resize,A_resize+(4*3*2),A.data()));
+    BOOST_TEST(std::equal(A_resize,A_resize+(4*3*2),A.data()));
   }  
 
   // resize through the Collection
@@ -67,14 +67,14 @@ int test_main(int,char*[]) {
     A.assign(A_data,A_data+(2*3*4));
     boost::array<int,3> new_extents = {{4,3,2}};
     A.resize(new_extents);
-    BOOST_CHECK(std::equal(A_resize,A_resize+(4*3*2),A.data()));
+    BOOST_TEST(std::equal(A_resize,A_resize+(4*3*2),A.data()));
   }  
 
   // default construct all the new elements (in this case, all elements)
   {
     marray defaultA;
     defaultA.resize(boost::extents[2][3][4]);
-    BOOST_CHECK(std::accumulate(defaultA.data(),
+    BOOST_TEST(std::accumulate(defaultA.data(),
                                defaultA.data()+(2*3*4),0) == 0);
   }
 
@@ -107,7 +107,7 @@ int test_main(int,char*[]) {
     for (int x = 0; x < 3; x++) { 
       for (int y = 0; y < 4; y++) {
         for (int z = 0; z < 2; z++) {
-          BOOST_CHECK(*(A.data() + check) == check);
+          BOOST_TEST(*(A.data() + check) == check);
           ++check;
         }
       }
@@ -123,5 +123,5 @@ int test_main(int,char*[]) {
   }
 
 
-  return boost::exit_success;
+  return boost::report_errors();
 }

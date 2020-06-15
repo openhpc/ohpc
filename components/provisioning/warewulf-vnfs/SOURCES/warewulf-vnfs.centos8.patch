@@ -14,6 +14,6 @@
      zlib tar less gzip which util-linux openssh-clients 
      openssh-server dhclient pciutils vim-minimal shadow-utils
 -    strace cronie crontabs cpio wget redhat-release"
-+    strace cronie crontabs cpio wget redhat-release hostname"
++    strace cronie crontabs cpio wget redhat-release hostname grub2-common glibc-langpack-en"
  
  # vim:filetype=sh:syntax=sh:expandtab:ts=4:sw=4:

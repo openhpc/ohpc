@@ -21,7 +21,7 @@
 %define pname slepc
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        3.12.0
+Version:        3.13.2
 Release:        1
 Summary:        A library for solving large scale sparse eigenvalue problems
 License:        LGPL-3.0
@@ -43,7 +43,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
 SLEPc is a software library for the solution of large scale sparse
@@ -60,20 +60,20 @@ set -- *
 
 %build
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 %endif
 module load petsc
 python3 ./configure --prefix=/tmp%{install_path}
-make
+make SLEPC_DIR=${RPM_BUILD_DIR}/%{pname}-%{version} PETSC=$PETSC_DIR
 
 %install
 %ohpc_setup_compiler
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 %endif
 module load petsc
-make install
+make SLEPC_DIR=${RPM_BUILD_DIR}/%{pname}-%{version} PETSC=$PETSC_DIR install
 
 # move from tmp install dir to %install_path
 # dirname removes the last directory
@@ -92,7 +92,7 @@ popd
 # Module file
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -120,6 +120,14 @@ setenv          %{PNAME}_DIR        %{install_path}
 setenv          %{PNAME}_LIB        %{install_path}/lib
 setenv          %{PNAME}_INC        %{install_path}/include
 setenv          %{PNAME}_ARCH       ""
+EOF
+
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
+#%Module1.0#####################################################################
+##
+## version file for %{pname}-%{version}
+##
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %files

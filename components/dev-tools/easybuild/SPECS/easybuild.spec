@@ -15,11 +15,11 @@
 
 Summary:   Software build and installation framework
 Name:      EasyBuild%{PROJ_DELIM}
-Version:   4.1.1
+Version:   4.2.0
 Release:   1%{?dist}
 License:   GPLv2
 Group:     %{PROJ_NAME}/dev-tools
-URL:       http://easybuilders.github.io/easybuild
+URL:       https://easybuilders.github.io/easybuild
 
 Source0:   https://pypi.io/packages/source/e/easybuild-easyblocks/easybuild-easyblocks-%{version}.tar.gz
 Source1:   https://pypi.io/packages/source/e/easybuild-easyconfigs/easybuild-easyconfigs-%{version}.tar.gz

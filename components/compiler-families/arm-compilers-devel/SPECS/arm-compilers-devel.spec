@@ -100,7 +100,6 @@ if [ ! -n "${modpath}" ];then
 fi
 
 # cache path to generic compiler modulename
-
 generic=`find $modpath/Generic-AArch64/ -name arm-linux-compiler | awk -F "$modpath/" '{print $2}'`
 if [ ! -n "${generic}" ];then
     echo ""
@@ -108,6 +107,16 @@ if [ ! -n "${generic}" ];then
     exit 1
 else
     echo "--> Setting generic variant path to: $generic"
+fi
+
+# cache path to generic armpl modulename
+armpl_generic=`find $modpath/Generic-AArch64/ -name armpl | grep arm-linux-compiler | awk -F "$modpath/" '{print $2}'`
+if [ ! -n "${generic}" ];then
+    echo ""
+    echo "Error: Unable to determine path to Generic Performance Library modulefile provided by Arm compiler toolchain"
+    exit 1
+else
+    echo "--> Setting ARM PL generic variant to: $armpl_generic"
 fi
 
 # Module header
@@ -134,6 +143,7 @@ setenv ARM_GENERIC \$ARM_GENERIC
 prepend-path    MODULEPATH          ${modpath}:%{OHPC_MODULEDEPS}/arm1
 # load generic variant
 depends-on      \$ARM_GENERIC
+depends-on      ${armpl_generic}
 family "compiler"
 EOF
 

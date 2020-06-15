@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([test-suite], [1.3.8], [https://github.com/openhpc/ohpc])
+AC_INIT([test-suite], [2.0.0], [https://github.com/openhpc/ohpc])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([1.14])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -152,12 +152,6 @@ AC_ARG_ENABLE([lustre],
    [AS_HELP_STRING([--enable-lustre],[Enable Lustre utility tests (default=no)])],[],
    [AX_OPTION_DEFAULT(type=short,enable_lustre,no)])
 AM_CONDITIONAL(LUSTRE_ENABLED,test "x$enable_lustre" = "xyes" ) 
-#------------------------------------------------------------------------------------------
-# mpiP
-AC_ARG_ENABLE([mpiP],
-   [AS_HELP_STRING([--enable-mpiP],[Enable mpiP profiler tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_mpiP,yes)])
-AM_CONDITIONAL(MPIP_ENABLED,test "x$enable_mpiP" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # Valgrind
 AC_ARG_ENABLE([valgrind],
@@ -327,12 +321,6 @@ AC_ARG_ENABLE([oom],
    [AX_OPTION_DEFAULT(type=short,enable_oom,yes)])
 AM_CONDITIONAL(OOM_ENABLED,test "x$enable_oom" = "xyes" )
 #------------------------------------------------------------------------------------------
-# OCR
-AC_ARG_ENABLE([ocr],
-   [AS_HELP_STRING([--enable-ocr],[Enable OCR tests (default=yes)])],[],
-   [AX_OPTION_DEFAULT(type=long,enable_ocr,yes)])
-AM_CONDITIONAL(OCR_ENABLED,test "x$enable_ocr" = "xyes" )
-#------------------------------------------------------------------------------------------
 # OPENBLAS
 AC_ARG_ENABLE([openblas],
    [AS_HELP_STRING([--enable-openblas],[Enable OPENBLAS tests (default=yes)])],[],
@@ -429,6 +417,12 @@ AC_ARG_ENABLE([tau],
    [AX_OPTION_DEFAULT(type=long,enable_tau,yes)])
 AM_CONDITIONAL(TAU_ENABLED,test "x$enable_tau" = "xyes" )
 #------------------------------------------------------------------------------------------
+# UCX
+AC_ARG_ENABLE([ucx],
+   [AS_HELP_STRING([--enable-ucx],[Enable ucx tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_ucx,no)])
+   AM_CONDITIONAL(UCX_ENABLED,test "x$enable_ucx" = "xyes" )
+#------------------------------------------------------------------------------------------
 # Autotools
 AC_ARG_ENABLE([autotools],
    [AS_HELP_STRING([--enable-autotools],[Enable autotools tests (default=yes)])],[],
@@ -518,6 +512,7 @@ AC_OUTPUT( Makefile
        dev-tools/tbb/tests/Makefile
        dev-tools/cilk/Makefile
        libs/R/Makefile
+       libs/ucx/Makefile
        modules/Makefile )
 
 echo
@@ -834,6 +829,12 @@ echo    Libraries:
        echo '    'Trilinos.................. : disabled
     fi
 
+    if test "x$enable_ucx" = "xyes"; then
+       echo '    'UCX....................... : enabled
+    else
+       echo '    'UCX....................... : disabled
+    fi
+
 echo    Performance Tools:
 
     if test "x$enable_dimemas" = "xyes"; then
@@ -866,12 +867,6 @@ echo    Performance Tools:
        echo '    'Likwid.................... : disabled
     fi
 
-    if test "x$enable_mpiP" = "xyes"; then
-       echo '    'mpiP Profiler........ .... : enabled
-    else
-       echo '    'mpiP Profiler............. : disabled
-    fi
-
     if test "x$enable_omb" = "xyes"; then
        echo '    'OSU microbenchmarks....... : enabled
     else
@@ -902,12 +897,6 @@ echo    Runtimes:
        echo '    'Charliecloud.............. : enabled
     else
        echo '    'Charliecloud.............. : disabled
-    fi
-
-    if test "x$enable_ocr" = "xyes"; then
-       echo '    'OCR....................... : enabled
-    else
-       echo '    'OCR....................... : disabled
     fi
 
     if test "x$enable_singularity" = "xyes"; then

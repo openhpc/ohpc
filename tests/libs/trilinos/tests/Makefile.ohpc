@@ -14,7 +14,8 @@ LIBRARIES=$(Trilinos_LIBRARIES)
 
 LINK_FLAGS=$(Trilinos_EXTRA_LD_FLAGS)
 
-all: lesson_kokkos_memspace.exe lesson_tpetra_init.exe lesson_tpetra_dataredist.exe lesson_epetra_dataredist.exe lesson_epetra_galeri.exe lesson_epetra_ifpack.exe lesson_teuchos_pl.exe lesson_teuchos_sdm.exe lesson_teuchos_blas.exe lesson_teuchos_lapack.exe
+all: lesson_kokkos_memspace.exe lesson_tpetra_init.exe lesson_tpetra_dataredist.exe lesson_epetra_dataredist.exe \
+     lesson_teuchos_pl.exe lesson_teuchos_sdm.exe lesson_teuchos_blas.exe lesson_teuchos_lapack.exe
 
 %.exe : %.o
 	$(CXX) $(CXX_FLAGS) $< -o $@ $(LINK_FLAGS) $(LIBRARY_DIRS) $(LIBRARIES)

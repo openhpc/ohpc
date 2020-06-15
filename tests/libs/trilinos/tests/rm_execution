@@ -58,6 +58,7 @@ ARGS=null
 }
 
 @test "[$testname] Epetra-Galeri runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    skip "skip Epetra-Galeri in 2.x"
     EXE=./lesson_epetra_galeri.exe
     if [ ! -s $EXE ];then
         flunk "$EXE binary does not exist"
@@ -68,6 +69,7 @@ ARGS=null
 }
 
 @test "[$testname] Epetra-Ifpack runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    skip "skip Epetra-Ifpack in 2.x"
     EXE=./lesson_epetra_ifpack.exe
     if [ ! -s $EXE ];then
         flunk "$EXE binary does not exist"

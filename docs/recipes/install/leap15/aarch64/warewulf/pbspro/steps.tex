@@ -7,12 +7,12 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{SLES12SP4}
-\newcommand{\OSRepo}{SLE\_12\_SP4}
-\newcommand{\OSTree}{SLE\_12}
-\newcommand{\OSTag}{sle12}
-\newcommand{\baseos}{sles12sp4}
-\newcommand{\baseosshort}{sles12}
+\newcommand{\baseOS}{OpenSUSE Leap 15.1}
+\newcommand{\OSRepo}{Leap\_15\_1}
+\newcommand{\OSTree}{Leap\_15}
+\newcommand{\OSTag}{leap15}
+\newcommand{\baseos}{leap15.1}
+\newcommand{\baseosshort}{leap15}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\provheader}{\provisioner{}}
 \newcommand{\rms}{PBS Professional}
@@ -112,7 +112,7 @@
 
 \vspace*{.5cm}
 \subsection{Define {\em compute} image for provisioning}
-\input{common/warewulf_mkchroot_sles}
+\input{common/warewulf_mkchroot_suse}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 \input{common/add_to_compute_chroot_intro}
@@ -137,6 +137,8 @@
 
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) ntp
+# Identify master host as local NTP server
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
 # Add kernel drivers
 [sms](*\#*) (*\chrootinstall*) kernel-default
@@ -175,13 +177,9 @@
 \input{common/syslog}
 
 \vspace*{-.2cm}
-\paragraph{Add \Nagios{} monitoring}
-\input{common/nagios}
+\paragraph{Add \Nagios{} monitoring} \label{sec:add_nagios}
+\input{common/nagios_suse}
 
-\paragraph{Add \Ganglia{} monitoring}
-\input{common/ganglia}
-
-%\clearpage
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
@@ -243,6 +241,9 @@
 \input{common/third_party_libs_petsc_sles}
 \input{common/third_party_libs}
 \input{common/third_party_mpi_libs_aarch}
+
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_arm}
+\input{common/armhpc_enabled_builds}
 
 \section{Resource Manager Startup} \label{sec:rms_startup}
 \input{common/pbspro_startup}

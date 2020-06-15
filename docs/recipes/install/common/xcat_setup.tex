@@ -8,7 +8,8 @@ register this network interface with \xCAT{}.
 %\begin{verbatim}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 # Enable internal interface for provisioning
-[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
+[sms](*\#*) ip link set dev ${sms_eth_internal} up
+[sms](*\#*) ip address add ${sms_ip}/${internal_netmask} broadcast + dev ${sms_eth_internal}
 
 # Register internal provisioning interface with xCAT for DHCP
 [sms](*\#*) chdef -t site dhcpinterfaces="xcatmn|${sms_eth_internal}"

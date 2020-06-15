@@ -1,5 +1,0 @@
-addFilter("64bit-portability-issue")
-addFilter("no-return-in-nonvoid-function")
-addFilter("summary-ended-with-dot")
-addFilter("permissions-file-setuid-bit")
-addFilter("non-position-independent-executable")

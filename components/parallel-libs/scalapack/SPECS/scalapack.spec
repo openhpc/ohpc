@@ -13,7 +13,7 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -61,7 +61,7 @@ BLACS. One of the design goals of ScaLAPACK was to have the ScaLAPACK
 routines resemble their LAPACK equivalents as much as possible.
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -71,10 +71,9 @@ cp SLmake.inc.example SLmake.inc
 %build
 %ohpc_setup_compiler
 %if "%{compiler_family}" != "intel"
-%if "%{compiler_family}" == "arm1"
-%{__sed} -i -e 's#-lblas#-armpl#g' SLmake.inc
-%{__sed} -i -e 's#-llapack#-armpl#g' SLmake.inc
-%{__sed} -i -e 's#$(RPM_OPT_FLAGS)#-O3 -fsimdmath#g' SLmake.inc
+%if "%{compiler_family}" == "arm"
+%{__sed} -i -e 's#-lblas#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
+%{__sed} -i -e 's#-llapack#-L$(ARMPL_LIBRARIES) -larmpl#g' SLmake.inc
 %{__cat} SLmake.inc
 %else
 module load openblas
@@ -97,7 +96,7 @@ popd
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -118,7 +117,7 @@ module-whatis "%{url}"
 
 set     version                     %{version}
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 depends-on openblas
 %endif
 
@@ -129,12 +128,12 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %files

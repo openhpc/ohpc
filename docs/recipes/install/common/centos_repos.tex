@@ -1,0 +1,23 @@
+In addition to the \OHPC{} package repository, the {\em master} host also
+requires access to the standard base OS distro repositories in order to resolve
+necessary dependencies. For \baseOS{}, the requirements are to have access to
+the BaseOS, Appstream, Extras, PowerTools, and EPEL repositories for which mirrors are freely available online:
+
+\begin{itemize*}
+\item CentOS-8 - Base 8.1.1911
+  (e.g. \href{http://mirror.centos.org/centos-8/8/}
+             {\color{blue}{http://mirror.centos.org/centos-8/8/}} )
+\item EPEL 8 (e.g. \href{http://download.fedoraproject.org/pub/epel/8/}
+                        {\color{blue}{http://download.fedoraproject.org/pub/epel/8/}} )
+\end{itemize*}
+
+\noindent The public EPEL repository will be enabled automatically upon
+installation of the \texttt{ohpc-release} package. Note that this does depend
+on the CentOS Extras repository, which is shipped with CentOS and is typically
+enabled by default.  In contrast, the CentOS PowerTools repository is typically
+disabled in a standard install, but can be enabled as follows:
+
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+[sms](*\#*) yum install dnf-plugins-core
+[sms](*\#*) yum config-manager --set-enabled PowerTools
+\end{lstlisting}

@@ -39,7 +39,7 @@
 
 Summary: Application and environment virtualization
 Name: %{pname}%{PROJ_DELIM}
-Version: 3.4.1
+Version: 3.4.2
 Release: 1%{?dist}
 # https://spdx.org/licenses/BSD-3-Clause-LBNL.html
 License: BSD-3-Clause-LBNL
@@ -54,8 +54,8 @@ BuildRequires: openssl-devel
 BuildRequires: libuuid-devel
 BuildRequires: libseccomp-devel
 Requires: file
-%if 0%{?sles_version} || 0%{?suse_version}
-BuildRequires: go
+%if 0%{?suse_version}
+BuildRequires: go1.12
 BuildRequires: binutils-gold
 Requires: squashfs
 %else

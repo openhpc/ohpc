@@ -33,6 +33,12 @@ Patch6:  warewulf-vnfs.utf8.patch
 Patch7:  warewulf-vnfs.dnf.rhel8.patch
 Patch8:  warewulf-vnfs.centos8.patch
 Patch9:  warewulf-vnfs.varlog.patch
+Patch10: warewulf-vnfs.leap.aarch.patch
+Patch11: warewulf-vnfs.wwbootstrap.vmlinuz.patch
+Patch12: warewulf-vnfs.bootstrap_qlogic.patch
+Patch13: warewulf-vnfs.leap.patch
+Patch14: warewulf-vnfs.bootstrap_drivers.patch
+Patch15: warewulf-vnfs.hybridize.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -75,7 +81,12 @@ cd %{_builddir}
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
-
+%patch10 -p2
+%patch11 -p1
+%patch12 -p1
+%patch13 -p2
+%patch14 -p1
+%patch15 -p1
 
 %build
 ./autogen.sh

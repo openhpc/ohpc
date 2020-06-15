@@ -53,7 +53,7 @@ int ComputeResidual(const local_int_t n, const Vector & v1, const Vector & v2, d
   double local_residual = 0.0;
 
 #ifndef HPCG_NO_OPENMP
-  #pragma omp parallel default(none) shared(local_residual, v1v, v2v)
+#pragma omp parallel default(none) shared(n, local_residual, v1v, v2v)
   {
     double threadlocal_residual = 0.0;
     #pragma omp for

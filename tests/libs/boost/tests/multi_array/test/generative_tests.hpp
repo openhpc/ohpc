@@ -45,9 +45,9 @@
 //
 //  int test_main(int,char*[]) { return run_generative_tests(); }
 //
-#include "boost/multi_array.hpp"
+#include <boost/multi_array.hpp>
 
-#include "boost/test/minimal.hpp"
+#include <boost/core/lightweight_test.hpp>
 
 #include <boost/config.hpp> /* BOOST_NO_SFINAE */
 #include <algorithm>
@@ -100,7 +100,7 @@ template <typename Array>
 void access(Array& A, const const_array_tag&);
 
 template <typename StorageOrder3,typename StorageOrder4,typename Modifier>
-int run_configuration(const StorageOrder3& so3,
+void run_configuration(const StorageOrder3& so3,
                       const StorageOrder4& so4,
                       const Modifier& modifier) {
   // multi_array
@@ -213,11 +213,10 @@ int run_configuration(const StorageOrder3& so3,
       access(C,const_array_tag());
     }
   }
-  return boost::exit_success;
 }
 
 template <typename ArrayModifier>
-int run_storage_tests(const ArrayModifier& modifier) {
+void run_storage_tests(const ArrayModifier& modifier) {
   run_configuration(boost::c_storage_order(),
                     boost::c_storage_order(),modifier);
   run_configuration(boost::fortran_storage_order(),
@@ -228,8 +227,6 @@ int run_storage_tests(const ArrayModifier& modifier) {
   run_configuration(boost::general_storage_order<3>(ordering,ascending),
                     boost::general_storage_order<4>(ordering,ascending),
                     modifier); 
-
-  return boost::exit_success;
 }
 
 struct null_modifier {
@@ -279,7 +276,7 @@ int run_generative_tests() {
   run_storage_tests(reindex_modifier());
   run_storage_tests(reshape_modifier());
   std::cout << "Total Tests Run: " << tests_run << '\n';
-  return boost::exit_success;
+  return boost::report_errors();
 }
 
 #endif // GENERATIVE_TESTS_RG072001_HPP

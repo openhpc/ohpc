@@ -22,7 +22,7 @@ TIMEOUT="00:05:00"
 	flunk "C_test binary does not exist"
     fi
     
-    run_serial_binary -t ${TIMEOUT} ./C_test
+    run run_serial_binary -t ${TIMEOUT} ./C_test
     assert_success
 }
 
@@ -31,7 +31,12 @@ TIMEOUT="00:05:00"
 	flunk "C_mpi_test binary does not exist"
     fi
 
-    run_mpi_binary -t ${TIMEOUT} ./C_mpi_test $ARGS $NODES $TASKS
+    # choose specific pml for openmpi4
+    if [[ "$LMOD_FAMILY_MPI" == "openmpi4" ]];then
+	export OMPI_MCA_pml=ob1
+    fi
+
+    run run_mpi_binary -t ${TIMEOUT} ./C_mpi_test $ARGS $NODES $TASKS
     assert_success
 }
 
@@ -40,7 +45,7 @@ TIMEOUT="00:05:00"
 	flunk "F_test binary does not exist"
     fi
 
-    run_serial_binary -t ${TIMEOUT} ./F_test
+    run run_serial_binary -t ${TIMEOUT} ./F_test
     assert_success
 }
 

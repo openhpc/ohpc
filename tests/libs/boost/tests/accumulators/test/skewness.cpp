@@ -9,7 +9,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/random.hpp>
 #include <boost/test/unit_test.hpp>
-#include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/tools/floating_point_comparison.hpp>
 #include <boost/accumulators/numeric/functional/vector.hpp>
 #include <boost/accumulators/numeric/functional/complex.hpp>
 #include <boost/accumulators/numeric/functional/valarray.hpp>

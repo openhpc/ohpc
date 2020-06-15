@@ -27,12 +27,12 @@ Source0:        https://github.com/sourceryinstitute/OpenCoarrays/releases/downl
 Patch1:         opencoarrays-disable-get-comm-test.patch
 Url:            http://www.opencoarrays.org
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  cmake
+BuildRequires:  cmake%{PROJ_DELIM}
 
 #!BuildIgnore: post-build-checks
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
 OpenCoarrays is an open-source software project that supports the coarray
@@ -52,6 +52,7 @@ TS 18508 Additional Parallel Features in Fortran.
 
 %{__mkdir_p} build-opencoarrays
 cd build-opencoarrays
+module load cmake
 cmake -DCMAKE_INSTALL_PREFIX=%{install_path} ..
 
 make %{?_smp_mflags} VERBOSE=1
@@ -70,7 +71,7 @@ rm -rf *\.a
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -102,12 +103,12 @@ setenv          %{PNAME}_LIB        %{install_path}/lib64
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %{__mkdir} -p $RPM_BUILD_ROOT/%{_docdir}

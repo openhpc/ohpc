@@ -25,7 +25,7 @@ fi
 
 @test "[nhc] service failure detection and restart" {
     grep rsyslog /etc/nhc/nhc.conf.auto > /etc/nhc/nhc.conf.rsyslog
-    systemctl stop rsyslog
+    killall -w -s SIGTERM rsyslogd
     run nhc -c /etc/nhc/nhc.conf.rsyslog
     assert_failure
     run systemctl status rsyslog

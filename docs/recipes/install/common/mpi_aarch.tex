@@ -1,17 +1,46 @@
 For MPI development and runtime support, \OHPC{} provides pre-packaged builds
-for two MPI families that are compatible with ethernet fabrics. These MPI
-stacks can be installed as follows:
+for two MPI families that are compatible with both ethernet and high-speed
+fabrics.  These MPI stacks can be installed as follows:
 
 % begin_ohpc_run
 % ohpc_comment_header Install MPI Stacks \ref{sec:mpi}
 % ohpc_command if [[ ${enable_mpi_defaults} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash]
-[sms](*\#*) (*\install*) openmpi4-gnu9-ohpc mpich-gnu9-ohpc
+[sms](*\#*) (*\install*) openmpi4-gnu9-ohpc mpich-ofi-gnu9-ohpc
 \end{lstlisting}
 % ohpc_indent 0
 % ohpc_command fi
 % end_ohpc_run
+
+Note that OpenHPC 2.x introduces the use of two related transport layers for
+the MPICH and OpenMPI builds that support a variety of underlying
+fabrics: \href{https://www.openucx.org}{UCX} (Unified Communication X)
+and \href{https://ofiwg.github.io/libfabric/}{OFI} (OpenFabrics interfaces).
+In the case of OpenMPI, a monolithic build is provided which supports both
+transports and end-users can customize their runtime preferences with
+environment variables. For MPICH, two separate builds are provided and the
+example above highlighted installing the {\texttt ofi} variant.  However, the
+packaging is designed such that both versions can be installed simultaneously
+and users can switch between the two via normal module command
+semantics. Alternatively, a site can choose to install the {\texttt ucx} variant
+instead as a drop-in MPICH replacement:
+
+\begin{lstlisting}[language=bash]
+[sms](*\#*) (*\install*) mpich-ucx-gnu9-ohpc
+\end{lstlisting}
+
+In the case where both MPICH variants are installed, two modules will be
+visible in the end-user environment and an example of this configuration is
+highlighted is below. 
+
+\begin{lstlisting}[language=bash]
+[sms](*\#*) module avail mpich
+
+-------------------- /opt/ohpc/pub/moduledeps/gnu9 ---------------------
+   mpich/3.3.2-ofi    mpich/3.3.2-ucx (D)
+\end{lstlisting}
+
 
 
 
