@@ -15,9 +15,9 @@
 \newcommand{\baseosshort}{leap15}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\provheader}{\provisioner{}}
-\newcommand{\rms}{PBS Professional}
-\newcommand{\rmsshort}{pbspro}
-\newcommand{\arch}{x86\_64}
+\newcommand{\rms}{OpenPBS}
+\newcommand{\rmsshort}{OpenPBS}
+\newcommand{\arch}{aarch64}
 
 % Define package manager commands
 \newcommand{\pkgmgr}{zypper}
@@ -33,13 +33,13 @@
 \newcommand{\upgrade}{zypper -n up}
 \newcommand{\chrootupgrade}{zypper -n --root \$CHROOT up}
 \newcommand{\tftppkg}{syslinux}
-\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7\_1/dists/beegfs-sles12.repo}
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
-\toggletrue{isSLES_ww_pbs_x86}
+\toggletrue{isaarch}
+\toggletrue{isSLES_ww_pbs_aarch}
+\toggletrue{ispbs}
 \toggletrue{isWarewulf}
-\toggletrue{isx86}
 
 \begin{document}
 \graphicspath{{common/figures/}}
@@ -96,19 +96,21 @@
 
 \input{common/time}
 
+\vspace*{.25cm}
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
-\input{common/install_pbspro}
+\input{common/install_openpbs}
 
-\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
-\input{common/ibsupport_sms_sles}
+%% Add if/when IB is available for testing
+%% \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+%% \input{common/ibsupport_sms_sles}
 
-\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
-\input{common/opasupport_sms_sles}
-
+\vspace*{.25cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
 \input{common/warewulf_setup_sles}
+\input{common/warewulf_setup_aarch_db}
 
+\vspace*{.5cm}
 \subsection{Define {\em compute} image for provisioning}
 \input{common/warewulf_mkchroot_suse}
 
@@ -121,8 +123,8 @@
 # Import GPG keys for chroot repository usage
 [sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
 
-# Add PBS Professional client support
-[sms](*\#*) (*\chrootinstall*) pbspro-execution-ohpc
+# Add OpenPBS client support
+[sms](*\#*) (*\chrootinstall*) openpbs-execution-ohpc
 [sms](*\#*) perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
 [sms](*\#*) echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
 [sms](*\#*) chroot $CHROOT opt/pbs/libexec/pbs_habitat
@@ -152,68 +154,58 @@
 \end{lstlisting}
 % end_ohpc_run
 
-\vspace*{-0.3cm}
+%\clearpage
 \subsubsection{Customize system configuration} \label{sec:master_customization}
 \input{common/warewulf_chroot_customize_sles}
 
+%\clearpage
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
-\paragraph{Enable \InfiniBand{} drivers}
-\input{common/ibsupport_compute_sles.tex}
+%% Add if/when IB is available for testing
+%% \paragraph{Increase locked memory limits}
+%% \input{common/memlimits} 
 
-\vspace*{-.1cm}
-\paragraph{Enable \OmniPath{} drivers}
-\input{common/opasupport_compute_sles.tex}
+%% \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+%% \input{common/lustre-client}
+%% \input{common/lustre-client}
+%% \input{common/lustre-client-sles}
+%% \input{common/lustre-client-post}
 
-\vspace*{-.1cm}
-\paragraph{Increase locked memory limits}
-\input{common/memlimits} 
-
-\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
-\input{common/install_beegfs_client_sles}
-
-\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
-\input{common/lustre-client}
-\vspace*{0.1cm}
-\input{common/lustre-client-sles}
-\input{common/lustre-client-post}
-
+%\clearpage
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
-\clearpage
+\vspace*{-.2cm}
 \paragraph{Add \Nagios{} monitoring} \label{sec:add_nagios}
 \input{common/nagios_suse}
 
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
-\vspace*{0.25cm}
+%\paragraph{Add \mrsh{}}
+%\input{common/mrsh}
+
 \paragraph{Add \genders{}}
 \input{common/genders}
 
+%\clearpage
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
 \paragraph{Add \nhc{}} \label{sec:add_nhc}
 \input{common/nhc}
 
-\paragraph{Add \GEOPM{}} \label{sec:add_geopm}
-\input{common/geopm_config}
-
-%\clearpage
+\vspace*{-0.1cm}
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
-\input{common/import_ww_files_ib_sles}
+%% \input{common/import_ww_files_ib_sles}
+%\clearpage
 \input{common/finalize_provisioning}
-%\vspace*{0.1cm}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_pbs}
-%\clearpage
 \input{common/add_ww_hosts_finalize}
 
-\clearpage
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 \input{common/kargs_post}
@@ -225,9 +217,10 @@
 \subsection{Boot compute nodes} \label{sec:boot_computes}
 \input{common/reset_computes}
 
-\section{Install \OHPC{} Development Components}
+\section{Install \OHPC{} Development Components} \label{sec:install_dev}
 \input{common/dev_intro.tex}
 
+%\clearpage
 \subsection{Development Tools} \label{sec:install_dev_tools}
 \input{common/dev_tools}
 
@@ -235,31 +228,30 @@
 \input{common/compilers}
 
 \subsection{MPI Stacks} \label{sec:mpi}
-\input{common/mpi}
+\input{common/mpi_aarch}
 
 \subsection{Performance Tools} \label{sec:install_perf_tools}
-\input{common/perf_tools_with_geopm}
-\input{common/perf_tools_sles}
-\vspace*{-0.6cm}
+\input{common/perf_tools}
 
 \subsection{Setup default development environment}
 \input{common/default_dev}
-%\vspace*{-0.6cm}
+
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
 \input{common/third_party_libs_petsc_sles}
 \input{common/third_party_libs}
-\input{common/third_party_mpi_libs_x86}
+\input{common/third_party_mpi_libs_aarch}
 
-\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
-\input{common/psxe_enabled_builds_with_geopm}
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_arm}
+\input{common/armhpc_enabled_builds}
 
 \section{Resource Manager Startup} \label{sec:rms_startup}
-\input{common/pbspro_startup}
+\input{common/openpbs_startup}
 
 %\clearpage
+%\vspace*{-1cm}
 \section{Run a Test Job} \label{sec:test_job}
-\input{common/pbspro_test_job}
+\input{common/openpbs_test_job}
 
 \clearpage
 \appendix

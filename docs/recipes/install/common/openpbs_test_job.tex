@@ -64,7 +64,7 @@ the underlying native job launch mechanism being used):
 [test@c1 ~]$ prun ./a.out
 
 [prun] Master compute host = c1
-[prun] Resource manager = pbspro
+[prun] Resource manager = openpbs
 [prun] Launch cmd = mpiexec.hydra -rmk pbs ./a.out
 
  Hello, world (8 procs total)
@@ -81,7 +81,7 @@ the underlying native job launch mechanism being used):
 
 \begin{center}
 \begin{tcolorbox}[]
-The following table provides approximate command equivalences between PBS Pro
+The following table provides approximate command equivalences between OpenPBS
 and SLURM:
 
 \vspace*{0.15cm}
@@ -106,7 +106,7 @@ example.
 
 \begin{lstlisting}[language=bash,keywords={}]
 # Copy example job script
-[test@sms ~]$ cp /opt/ohpc/pub/examples/pbspro/job.mpi .
+[test@sms ~]$ cp /opt/ohpc/pub/examples/openpbs/job.mpi .
 
 # Examine contents (and edit to set desired job sizing characteristics)
 [test@sms ~]$ cat job.mpi
