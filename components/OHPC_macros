@@ -14,9 +14,6 @@
 # permissions and limitations under the License.
 #-----------------------------------------------------------------------
 
-# Allow OHPC_BUILD set from shell if not defined
-%{!?OHPC_BUILD:%{expand:%%define OHPC_BUILD 0%{getenv:OHPC_BUILD}}}
-
 # Top-level OpenHPC installation paths
 %global PROJ_NAME       ohpc
 %global OHPC_HOME       /opt/%{PROJ_NAME}
@@ -133,38 +130,7 @@ BuildRequires: impi%{PROJ_DELIM}
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
 Requires:      intel-mpi-devel%{PROJ_DELIM}
 %global __requires_exclude ^libmpi\\.so.*$|^libmpifort\\.so.*$|^libmpicxx\\.so.*$
-
-# Set correct Intel(R) MPI Library wrapper
-%if "%compiler_family" == "gnu9" || "%compiler_family" == "gnu8"
-%global mpicc mpigcc
-%global mpicxx mpigxx
-%global mpif77 mpif77
-%global mpif90 mpif90
-%global mpifc mpif90
-%else # Not GNU
-%if "%compiler_family" == "intel"
-%global mpicc mpiicc
-%global mpicxx mpiicpc
-%global mpif77 mpiifort
-%global mpif90 mpiifort
-%global mpifc mpiifort
-%else # Other compilers
-%global mpicc mpicc
-%global mpicxx mpicxx
-%global mpif77 mpifc
-%global mpif90 mpifc
-%global mpifc mpifc
-%endif intel
-%endif gnu8/9
-
-%else # Not IMPI
-%global mpicc mpicc
-%global mpicxx mpicxx
-%global mpif77 mpif77
-%global mpif90 mpif90
-%global mpifc mpifc
 %endif # impi
-
 %if "%{mpi_family}" == "mpich"
 BuildRequires: mpich-%{compiler_family}%{PROJ_DELIM}
 Requires:      mpich-%{compiler_family}%{PROJ_DELIM}
