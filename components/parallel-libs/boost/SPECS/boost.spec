@@ -49,19 +49,21 @@ BuildRequires:  expat-devel
 BuildRequires:  xorg-x11-server-devel
 BuildRequires: libquadmath-devel
 Requires: libquadmath-devel
+BuildRequires:  python3-numpy
+BuildRequires:  glibc-devel >= 2.28-101
 %else
 %if 0%{?sle_version}
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  xorg-x11-devel
 BuildRequires: libquadmath0
+BuildRequires:  python3-numpy-devel
 Requires: libquadmath0
 %endif
 %endif
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-lxml
-BuildRequires:  python3-numpy-devel
 BuildRequires:  m4
 BuildRequires:  libicu-devel
 Requires: libicu-devel
