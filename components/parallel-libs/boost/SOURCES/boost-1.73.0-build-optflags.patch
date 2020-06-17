@@ -1,6 +1,6 @@
---- boost_1_66_0/tools/build/src/tools/gcc.jam~ 2017-12-13 23:56:50.000000000 +0000
-+++ boost_1_66_0/tools/build/src/tools/gcc.jam	2018-01-19 12:48:26.264755316 +0000
-@@ -603,7 +603,7 @@ rule compile.fortran ( targets * : sourc
+--- boost_1_73_0/tools/build/src/tools/gcc.jam~	2020-03-31 21:50:30.687635266 +0100
++++ boost_1_73_0/tools/build/src/tools/gcc.jam	2020-03-31 21:50:32.943632779 +0100
+@@ -574,7 +574,7 @@
  
  actions compile.c++ bind PCH_FILE
  {
@@ -9,7 +9,7 @@
  }
  
  actions compile.c bind PCH_FILE
-@@ -613,7 +613,7 @@ actions compile.c bind PCH_FILE
+@@ -584,7 +584,7 @@
  
  actions compile.c++.preprocess bind PCH_FILE
  {
@@ -18,7 +18,7 @@
  }
  
  actions compile.c.preprocess bind PCH_FILE
-@@ -704,19 +704,19 @@ actions compile.c.pch
+@@ -707,20 +707,20 @@
  ###
  
  # Declare flags and action for compilation.
@@ -35,6 +35,7 @@
 -toolset.flags gcc.compile OPTIONS <warnings>all : -Wall ;
 -toolset.flags gcc.compile OPTIONS <warnings>extra : -Wall -Wextra ;
 -toolset.flags gcc.compile OPTIONS <warnings>pedantic : -Wall -Wextra -pedantic ;
+-toolset.flags gcc.compile OPTIONS <warnings-as-errors>on : -Werror ;
 +toolset.flags gcc.compile OPTIONS <optimization>off   :  ;
 +toolset.flags gcc.compile OPTIONS <optimization>speed :  ;
 +toolset.flags gcc.compile OPTIONS <optimization>space :  ;
@@ -48,6 +49,7 @@
 +toolset.flags gcc.compile OPTIONS <warnings>all :  ;
 +toolset.flags gcc.compile OPTIONS <warnings>extra : ;
 +toolset.flags gcc.compile OPTIONS <warnings>pedantic : ;
- toolset.flags gcc.compile OPTIONS <warnings-as-errors>on : -Werror ;
++toolset.flags gcc.compile OPTIONS <warnings-as-errors>on : ;
  
  toolset.flags gcc.compile OPTIONS <debug-symbols>on : -g ;
+ toolset.flags gcc.compile OPTIONS <profiling>on : -pg ;

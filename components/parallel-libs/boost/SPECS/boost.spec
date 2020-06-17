@@ -28,16 +28,20 @@ Url:            http://www.boost.org
 %global tbname boost_%{lua: print((string.gsub(rpm.expand("%{version}"),"%.","_")))}
 Source0:        https://dl.bintray.com/boostorg/release/%{version}/source/%{tbname}.tar.gz
 Source1:        boost-rpmlintrc
-Source2:        mkl_boost_ublas_gemm.hpp
-Source3:        mkl_boost_ublas_matrix_prod.hpp
-Source100:      baselibs.conf
 
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
 %if 0%{?sle_version} || 0%{?suse_version}
-Patch1:         boost-fenv_suse.patch
+# Patch for misc. changes needed for building ARM packages
+Patch1: boost-fenv_suse.patch
 %define fenv_patch 1
 %endif
 %endif
+
+# Patch included from Fedora project 
+# Downloaded from https://src.fedoraproject.org/rpms/boost/blob/master/f/boost-1.73.0-build-optflags.patch
+# After download, all patch line numbers were all adjusted by +3
+# Resolves https://bugzilla.redhat.com/show_bug.cgi?id=1190039 - boost package doesn't honor optflags
+Patch2: boost-1.73.0-build-optflags.patch
 
 %if 0%{?rhel}
 BuildRequires:  bzip2-devel
@@ -63,11 +67,12 @@ BuildRequires:  libicu-devel
 Requires: libicu-devel
 BuildRequires:  libstdc++-devel
 BuildRequires:  zlib-devel
+BuildRequires:  bison
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{PROJ_DELIM}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
 Boost provides free peer-reviewed portable C++ source libraries. The
@@ -95,8 +100,8 @@ see the boost-doc package.
 %if 0%{?fenv_patch}
 %patch1 -p1
 %endif
-
-#sed -i "s#-ip#-gxx-name=/opt/ohpc/pub/compiler/gcc/9.2.0/bin/g++ -gcc-name=/opt/ohpc/pub/compiler/gcc/9.2.0/bin/gcc#g" tools/build/src/tools/intel-linux.jam
+%global _default_patch_fuzz 2
+%patch2 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -118,14 +123,16 @@ where_armclang=`dirname ${which_armclang}`
 export PATH=${where_armclang}/../llvm-bin:$PATH
 %endif
 
-%if %build_mpi
-export CC=%{mpicc}
-export CXX=%{mpicxx}
-export F77=%{mpif77}
-export FC=%{mpif90}
-export MPICC=%{mpicc}
-export MPIFC=%{mpifc}
-export MPICXX=%{mpicxx}
+%if %{build_mpi}
+%if %{mpi_family} == "impi" && %{compiler_family} == "intel"
+export CC=mpiicc
+export CXX=mpiicpc
+%else
+export CC=mpicc
+export CXX=mpicxx
+%endif
+export MPICC=$CC
+export MPICXX=$CXX
 %endif
 
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
@@ -140,13 +147,18 @@ local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
 using gcc : : : <compileflags>$(RPM_OPT_FLAGS) <linkflags>$(RPM_LD_FLAGS) ;
 %endif
 %if %{build_mpi}
-using mpi : %{mpicxx} ;
+using mpi : $MPICXX ;
+option.set prefix : %{install_path} ;
+option.set libdir : lib ;
+option.set includedir : include ;
 %endif
 EOF
 
 # Generate b2
 ./bootstrap.sh --with-libraries=all \
                --prefix=%{install_path} \
+               --libdir=lib \
+               --includedir=include \
                --with-python=python3 \
                --with-toolset=${toolset} || cat bootstrap.log
 
@@ -167,14 +179,16 @@ where_armclang=`dirname ${which_armclang}`
 export PATH=${where_armclang}/../llvm-bin:$PATH
 %endif
 
-%if %build_mpi
-export CC=%{mpicc}
-export CXX=%{mpicxx}
-export F77=%{mpif77}
-export FC=%{mpif90}
-export MPICC=%{mpicc}
-export MPIFC=%{mpifc}
-export MPICXX=%{mpicxx}
+%if %{build_mpi}
+%if %{mpi_family} == "impi" && %{compiler_family} == "intel"
+export CC=mpiicc
+export CXX=mpiicpc
+%else
+export CC=mpicc
+export CXX=mpicxx
+%endif
+export MPICC=$CC
+export MPICXX=$CXX
 %endif
 
 ./b2 %{?_smp_mflags} install threading=multi link=shared \
@@ -184,35 +198,40 @@ export MPICXX=%{mpicxx}
 %{__rm} -rf %{buildroot}/%{install_path}/lib/cmake
 
 # OpenHPC module file
-%if %build_mpi
-%global modulename %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}%{PROJ_DELIM}
+%if %{build_mpi}
+%global modulepath %{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
 %else
-%global modulename %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}/%{version}%{PROJ_DELIM}
+%global modulepath %{OHPC_MODULEDEPS}/%{compiler_family}/%{pname}
 %endif
 
-%{__mkdir} -p %{dirname: %{modulename}}
-%{__cat} << EOF > %{modulename}
+%{__mkdir} -p %{buildroot}/%{modulepath}
+%{__cat} << EOF > %{buildroot}/%{modulepath}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
 
 puts stderr " "
-puts stderr "This module loads the %{pname} library built with the %{compiler_family} compiler toolchain"
-puts stderr "and the %{mpi_family} MPI stack."
+puts stderr "This module loads the %{pname} library built with " 
+%if %{build_mpi}
+puts stderr "the %{compiler_family} compiler toolchain and the %{mpi_family} MPI stack."
+%else
+puts stderr "the %{compiler_family} compiler toolchain." 
+%endif
 puts stderr "\nVersion %{version}\n"
 
 }
+%if %{build_mpi}
 module-whatis "Name: %{pname} built with %{compiler_family} compiler and %{mpi_family} MPI"
+%else
+module-whatis "Name: %{pname} built with %{compiler_family} compiler
+%endif
 module-whatis "Version: %{version}"
 module-whatis "Category: runtime library"
-module-whatis "Description: %{description}"
+module-whatis "Description: %{summary}"
 module-whatis "%{url}"
 
 set             version             %{version}
 
-
-prepend-path    PATH                %{install_path}/bin
-prepend-path    MANPATH             %{install_path}/share/man
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
@@ -224,7 +243,7 @@ setenv          %{pname}_INC        %{install_path}/include
 family "boost"
 EOF
 
-%{__cat} << EOF > %{dirname: %{modulename}}/.version.%{basename: %{modulename}}
+%{__cat} << EOF > %{buildroot}/%{modulepath}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
@@ -238,5 +257,6 @@ EOF
 
 %files
 %{install_path}
+%{modulepath}
 %doc INSTALL
 %license LICENSE_1_0.txt
