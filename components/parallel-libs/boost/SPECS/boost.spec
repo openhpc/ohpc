@@ -43,24 +43,26 @@ Patch1:         boost-fenv_suse.patch
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
 BuildRequires:  xorg-x11-server-devel
+BuildRequires: libquadmath-devel
+Requires: libquadmath-devel
 %else
 %if 0%{?sle_version}
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  xorg-x11-devel
+BuildRequires: libquadmath0
+Requires: libquadmath0
 %endif
 %endif
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-lxml
+BuildRequires:  python3-numpy-devel
 BuildRequires:  m4
-BuildRequires:  libicu-devel(x86-64)
-Requires: libicu-devel(x86-64)
-BuildRequires: libquadmath-devel(x86-64)
-Requires: libquadmath-devel(x86-64)
-BuildRequires:  python3-devel(x86-64)
-BuildRequires:  libstdc++-devel(x86-64)
-BuildRequires:  zlib-devel(x86-64)
+BuildRequires:  libicu-devel
+Requires: libicu-devel
+BuildRequires:  libstdc++-devel
+BuildRequires:  zlib-devel
 
 #!BuildIgnore: post-build-checks rpmlint-Factory
 
@@ -137,7 +139,7 @@ local RPM_OPT_FLAGS = [ os.environ RPM_OPT_FLAGS ] ;
 local RPM_LD_FLAGS = [ os.environ RPM_LD_FLAGS ] ;
 using gcc : : : <compileflags>$(RPM_OPT_FLAGS) <linkflags>$(RPM_LD_FLAGS) ;
 %endif
-%if %build_mpi
+%if %{build_mpi}
 using mpi : %{mpicxx} ;
 %endif
 EOF
