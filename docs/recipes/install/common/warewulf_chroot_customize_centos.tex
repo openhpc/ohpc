@@ -21,7 +21,14 @@ example configuration.
 # Initialize warewulf database and ssh_keys
 [sms](*\#*) wwinit database
 [sms](*\#*) wwinit ssh_keys
+\end{lstlisting}
+% end_ohpc_run
 
+\paragraph{NFSv3}
+To configure NFSv3, you can do the following:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add NFS client mounts of /home and /opt/ohpc/pub to base image
 [sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,nodev,nosuid 0 0" >> $CHROOT/etc/fstab
 [sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev 0 0" >> $CHROOT/etc/fstab
@@ -35,3 +42,27 @@ example configuration.
 \end{lstlisting}
 % end_ohpc_run
 
+\paragraph{NFSv4}
+If you would like to configure NFSv4 instead of NFSv3 in order to make
+it easier to firewall the service, you can do the following:
+
+% begin_ohpc_run
+\begin{lstlisting}[language=bash,keywords={}]
+# Add NFSv4 client mounts of /home and /opt/ohpc/pub to base image
+[sms](*\#*) echo "${sms_ip}/home /home nfs4 _netdev,nodev,nosuid 0 0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}/opt/ohpc/pub /opt/ohpc/pub nfs4 _netdev,nodev 0 0" >> $CHROOT/etc/fstab
+
+# Add bind mounts for /home and /opt
+[sms](*\#*) echo -e "/home\t\t\t/exports/home\t\tnone\tbind\t\t0 0" >> /etc/fstab
+[sms](*\#*) echo -e "/opt\t\t\t/exports/opt\t\tnone\tbind\t\t0 0" >> /etc/fstab
+[sms](*\#*) mount -a
+
+# Export /home and OpenHPC public packages from master server
+[sms](*\#*) echo "/exports *(fsid=0,no_subtree_check,no_root_squash)" >> /etc/exports.d/ohpc.exports
+[sms](*\#*) echo "/exports/home *(rw,no_subtree_check,no_root_squash)" >> /etc/exports.d/ohpc.exports
+[sms](*\#*) echo "/opt/ohpc/pub *(ro,no_subtree_check)" >> /etc/exports.d/ohpc.exports
+[sms](*\#*) exportfs -a
+[sms](*\#*) systemctl restart nfs-server
+[sms](*\#*) systemctl enable nfs-server
+\end{lstlisting}
+% end_ohpc_run
