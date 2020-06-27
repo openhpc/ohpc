@@ -1,28 +1,37 @@
---- a/lib/Warewulf/Bootstrap.pm	2019-06-17 14:01:40.000000000 -0700
-+++ b/lib/Warewulf/Bootstrap.pm	2019-06-25 14:42:31.410866655 -0700
-@@ -210,7 +210,9 @@
-             my $dirname = dirname($file);
+diff --git a/lib/Warewulf/Bootstrap.pm b/lib/Warewulf/Bootstrap.pm
+index ff2ad21..3b4ded0 100644
+--- a/lib/Warewulf/Bootstrap.pm
++++ b/lib/Warewulf/Bootstrap.pm
+@@ -16,6 +16,7 @@ use Warewulf::DataStore;
+ use Warewulf::Util;
+ use File::Basename;
+ use File::Path;
++use File::Path qw(make_path);
+ use Digest::MD5 qw(md5_hex);
+ use POSIX qw(uname);
+ 
+@@ -211,6 +212,9 @@ bootstrap_export()
  
              if (! -d $dirname) {
--                mkpath($dirname);
-+                mkpath($dirname, {
-+                    mode => 0755,
+                 mkpath($dirname);
++                make_path($dirname, {
++                    chmod => 0755,
 +                });
              }
          }
  
-@@ -350,7 +352,9 @@
+@@ -350,7 +354,9 @@ build_local_bootstrap()
              }
  
              mkpath($tmpdir);
 -            mkpath($bootstrapdir);
-+            mkpath($bootstrapdir, {
-+                mode => 0755,
++            make_path($bootstrapdir, {
++                chmod => 0755,
 +            });
              chdir($tmpdir);
  
              &dprint("Opening gunzip/cpio pipe\n");
-@@ -381,10 +385,13 @@
+@@ -381,10 +387,13 @@ build_local_bootstrap()
              system("cd $tmpdir/initramfs; find . | cpio -o --quiet -H newc -F $bootstrapdir/initfs");
              &nprint("Compressing the initramfs\n");
              system("gzip -f -9 $bootstrapdir/initfs");
@@ -36,35 +45,64 @@
              print COOKIE $self->checksum();
              close COOKIE;
              &nprint("Bootstrap image '$bootstrap_name' is ready\n");
---- a/lib/Warewulf/Provision/Pxe.pm	2019-06-17 14:01:40.000000000 -0700
-+++ b/lib/Warewulf/Provision/Pxe.pm	2019-06-25 14:42:31.414866655 -0700
-@@ -94,8 +94,11 @@
+diff --git a/lib/Warewulf/Provision/Pxe.pm b/lib/Warewulf/Provision/Pxe.pm
+index c9f6a7b..c843206 100644
+--- a/lib/Warewulf/Provision/Pxe.pm
++++ b/lib/Warewulf/Provision/Pxe.pm
+@@ -19,6 +19,7 @@ use Warewulf::DataStore;
+ use Warewulf::Provision::Tftp;
+ use File::Basename;
+ use File::Path;
++use File::Path qw(make_path);
+ use POSIX qw(uname);
+ 
+ our @ISA = ('Warewulf::Object');
+@@ -94,8 +95,11 @@ setup()
                  if (-f "$datadir/warewulf/ipxe/$f") {
                      &iprint("Copying $f to the tftp root\n");
                      my $dirname = dirname("$tftpdir/warewulf/ipxe/$f");
 -                    mkpath($dirname);
-+                    mkpath($dirname, {
-+                        mode => 0755,
++                    make_path($dirname, {
++                        chmod => 0755,
 +                    });
                      system("cp $datadir/warewulf/ipxe/$f $tftpdir/warewulf/ipxe/$f");
 +                    chmod 0644, "$tftpdir/warewulf/ipxe/$f";
                  } elsif ($arch eq "x86_64") {
                      &eprint("Could not locate Warewulf's internal $datadir/warewulf/ipxe/$f! Things might be broken!\n");
                  }
-@@ -106,8 +109,11 @@
+@@ -106,8 +110,11 @@ setup()
                  if (-f "$datadir/warewulf/ipxe/$f") {
                      &iprint("Copying $f to the tftp root\n");
                      my $dirname = dirname("$tftpdir/warewulf/ipxe/$f");
 -                    mkpath($dirname);
-+                    mkpath($dirname, {
-+                        mode => 0755,
++                    make_path($dirname, {
++                        chmod => 0755,
 +                    });
                      system("cp $datadir/warewulf/ipxe/$f $tftpdir/warewulf/ipxe/$f");
 +                    chmod 0644, "$tftpdir/warewulf/ipxe/$f";
                  } elsif ($arch eq "aarch64") {
                      &eprint("Could not locate Warewulf's internal $datadir/warewulf/ipxe/$f! Things might be broken!\n");
                  }
-@@ -372,6 +380,9 @@
+@@ -154,7 +161,9 @@ update()
+ 
+     if (! -d "$statedir/warewulf/ipxe/cfg") {
+         &iprint("Creating ipxe configuration directory: $statedir/warewulf/ipxe/cfg");
+-        mkpath("$statedir/warewulf/ipxe/cfg");
++        make_path("$statedir/warewulf/ipxe/cfg", {
++            chmod => 0755,
++        });
+     }
+ 
+     foreach my $nodeobj (@nodeobjs) {
+@@ -322,6 +331,7 @@ update()
+                     if (! close IPXE) {
+                         &eprint("Could not write iPXE configuration file: $!\n");
+                     }
++		    chmod 0644, "$statedir/warewulf/ipxe/cfg/$config";
+                 } else {
+                     &eprint("Node: $nodename-$devname: Bad characters in hwaddr: '$hwaddr'\n");
+                 }
+@@ -372,6 +382,9 @@ delete()
                  if (-f "$statedir/warewulf/ipxe/cfg/$config") {
                      unlink("$statedir/warewulf/ipxe/cfg/$config");
                  }
@@ -74,4 +112,3 @@
              } else {
                  &eprint("Bad characters in hwaddr: $hwaddr\n");
              }
-
