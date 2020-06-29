@@ -1,16 +1,17 @@
 diff --git a/lib/Warewulf/Bootstrap.pm b/lib/Warewulf/Bootstrap.pm
-index ff2ad21..3b4ded0 100644
+index ff2ad21..daf794a 100644
 --- a/lib/Warewulf/Bootstrap.pm
 +++ b/lib/Warewulf/Bootstrap.pm
-@@ -16,6 +16,7 @@ use Warewulf::DataStore;
+@@ -15,7 +15,7 @@ use Warewulf::Logger;
+ use Warewulf::DataStore;
  use Warewulf::Util;
  use File::Basename;
- use File::Path;
+-use File::Path;
 +use File::Path qw(make_path);
  use Digest::MD5 qw(md5_hex);
  use POSIX qw(uname);
  
-@@ -211,6 +212,9 @@ bootstrap_export()
+@@ -211,6 +211,9 @@ bootstrap_export()
  
              if (! -d $dirname) {
                  mkpath($dirname);
@@ -20,7 +21,7 @@ index ff2ad21..3b4ded0 100644
              }
          }
  
-@@ -350,7 +354,9 @@ build_local_bootstrap()
+@@ -350,7 +353,9 @@ build_local_bootstrap()
              }
  
              mkpath($tmpdir);
@@ -31,33 +32,34 @@ index ff2ad21..3b4ded0 100644
              chdir($tmpdir);
  
              &dprint("Opening gunzip/cpio pipe\n");
-@@ -381,10 +387,13 @@ build_local_bootstrap()
+@@ -381,10 +386,13 @@ build_local_bootstrap()
              system("cd $tmpdir/initramfs; find . | cpio -o --quiet -H newc -F $bootstrapdir/initfs");
              &nprint("Compressing the initramfs\n");
              system("gzip -f -9 $bootstrapdir/initfs");
-+            chmod 0644, "$bootstrapdir/initfs.gz";
++            chmod(0644, "$bootstrapdir/initfs.gz");
              &nprint("Locating the kernel object\n");
              system("cp $tmpdir/kernel $bootstrapdir/kernel");
-+            chmod 0644, "$bootstrapdir/kernel";
++            chmod(0644, "$bootstrapdir/kernel");
              system("rm -rf $tmpdir");
              open(COOKIE, "> $bootstrapdir/cookie");
-+            chmod 0644, "$bootstrapdir/cookie";
++            chmod(0644, "$bootstrapdir/cookie");
              print COOKIE $self->checksum();
              close COOKIE;
              &nprint("Bootstrap image '$bootstrap_name' is ready\n");
 diff --git a/lib/Warewulf/Provision/Pxe.pm b/lib/Warewulf/Provision/Pxe.pm
-index c9f6a7b..c843206 100644
+index c9f6a7b..bd3e0ac 100644
 --- a/lib/Warewulf/Provision/Pxe.pm
 +++ b/lib/Warewulf/Provision/Pxe.pm
-@@ -19,6 +19,7 @@ use Warewulf::DataStore;
+@@ -18,7 +18,7 @@ use Warewulf::Network;
+ use Warewulf::DataStore;
  use Warewulf::Provision::Tftp;
  use File::Basename;
- use File::Path;
+-use File::Path;
 +use File::Path qw(make_path);
  use POSIX qw(uname);
  
  our @ISA = ('Warewulf::Object');
-@@ -94,8 +95,11 @@ setup()
+@@ -94,8 +94,11 @@ setup()
                  if (-f "$datadir/warewulf/ipxe/$f") {
                      &iprint("Copying $f to the tftp root\n");
                      my $dirname = dirname("$tftpdir/warewulf/ipxe/$f");
@@ -66,11 +68,11 @@ index c9f6a7b..c843206 100644
 +                        chmod => 0755,
 +                    });
                      system("cp $datadir/warewulf/ipxe/$f $tftpdir/warewulf/ipxe/$f");
-+                    chmod 0644, "$tftpdir/warewulf/ipxe/$f";
++                    chmod(0644, "$tftpdir/warewulf/ipxe/$f");
                  } elsif ($arch eq "x86_64") {
                      &eprint("Could not locate Warewulf's internal $datadir/warewulf/ipxe/$f! Things might be broken!\n");
                  }
-@@ -106,8 +110,11 @@ setup()
+@@ -106,8 +109,11 @@ setup()
                  if (-f "$datadir/warewulf/ipxe/$f") {
                      &iprint("Copying $f to the tftp root\n");
                      my $dirname = dirname("$tftpdir/warewulf/ipxe/$f");
@@ -79,11 +81,11 @@ index c9f6a7b..c843206 100644
 +                        chmod => 0755,
 +                    });
                      system("cp $datadir/warewulf/ipxe/$f $tftpdir/warewulf/ipxe/$f");
-+                    chmod 0644, "$tftpdir/warewulf/ipxe/$f";
++                    chmod(0644, "$tftpdir/warewulf/ipxe/$f");
                  } elsif ($arch eq "aarch64") {
                      &eprint("Could not locate Warewulf's internal $datadir/warewulf/ipxe/$f! Things might be broken!\n");
                  }
-@@ -154,7 +161,9 @@ update()
+@@ -154,7 +160,9 @@ update()
  
      if (! -d "$statedir/warewulf/ipxe/cfg") {
          &iprint("Creating ipxe configuration directory: $statedir/warewulf/ipxe/cfg");
@@ -94,15 +96,15 @@ index c9f6a7b..c843206 100644
      }
  
      foreach my $nodeobj (@nodeobjs) {
-@@ -322,6 +331,7 @@ update()
+@@ -322,6 +330,7 @@ update()
                      if (! close IPXE) {
                          &eprint("Could not write iPXE configuration file: $!\n");
                      }
-+		    chmod 0644, "$statedir/warewulf/ipxe/cfg/$config";
++		    chmod(0644, "$statedir/warewulf/ipxe/cfg/$config");
                  } else {
                      &eprint("Node: $nodename-$devname: Bad characters in hwaddr: '$hwaddr'\n");
                  }
-@@ -372,6 +382,9 @@ delete()
+@@ -372,6 +381,9 @@ delete()
                  if (-f "$statedir/warewulf/ipxe/cfg/$config") {
                      unlink("$statedir/warewulf/ipxe/cfg/$config");
                  }
