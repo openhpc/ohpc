@@ -1,10 +1,10 @@
-FROM centos:7
+FROM centos:8
 
 ARG TRAVIS_COMMIT_RANGE
 ENV TRAVIS_COMMIT_RANGE=$TRAVIS_COMMIT_RANGE
 ENV PYTHON_BINARY=python3
 
-RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 RUN yum install -y git ${PYTHON_BINARY}
 
 COPY . /ohpc
