@@ -517,7 +517,7 @@ ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
 %doc README.md
 %license LICENSE
 
-%files %{pbs_devel}
+%files -n %{pbs_name}-%{pbs_devel}%{PROJ_DELIM}
 %defattr(-,root,root, -)
 %{pbs_prefix}/lib*/*.a
 %{pbs_prefix}/include/*
