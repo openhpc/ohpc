@@ -333,7 +333,7 @@ ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall client \
 	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}
 fi
 
-%post %{pbs_devel}
+%post -n %{pbs_name}-%{pbs_devel}%{PROJ_DELIM}
 ldconfig %{_libdir}
 
 %preun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
