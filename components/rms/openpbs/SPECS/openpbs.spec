@@ -11,11 +11,11 @@
 %include %{_sourcedir}/OHPC_macros
 
 %if !%{defined pbs_name}
-%define pbs_name pbspro
+%define pbs_name openpbs
 %endif
 
 %if !%{defined pbs_version}
-%define pbs_version 19.1.3
+%define pbs_version 20.0.0
 %endif
 
 %if !%{defined pbs_release}
@@ -37,6 +37,7 @@
 %define pbs_client client
 %define pbs_execution execution
 %define pbs_server server
+%define pbs_devel devel
 %define pbs_dist %{pbs_name}-%{pbs_version}.tar.gz
 
 %if !%{defined _unitdir}
@@ -53,16 +54,14 @@
 Name: %{pbs_name}%{PROJ_DELIM}
 Version: %{pbs_version}
 Release: %{pbs_release}
-Source0: https://github.com/PBSPro/pbspro/archive/v%{version}.tar.gz
-Patch0: versioned_python.patch
-Summary: PBS Professional
+Source0: https://github.com/openpbs/openpbs/archive/v%{version}.tar.gz
+Summary: OpenPBS
 License: AGPLv3 with exceptions
-URL: https://github.com/PBSPro/pbspro
+URL: http://www.openpbs.org
 Vendor: Altair Engineering, Inc.
 Prefix: %{?pbs_prefix}%{!?pbs_prefix:%{_prefix}}
 
 %bcond_with alps
-%bcond_with cpuset
 %bcond_with ptl
 
 BuildRequires: gcc
@@ -72,7 +71,7 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
-BuildRequires: hwloc-devel < 2.0
+BuildRequires: hwloc-devel
 BuildRequires: libX11-devel
 BuildRequires: libXt-devel
 BuildRequires: libedit-devel
@@ -81,7 +80,7 @@ BuildRequires: ncurses-devel
 BuildRequires: perl
 BuildRequires: postgresql-devel >= 9.1
 BuildRequires: postgresql-contrib >= 9.1
-BuildRequires: python2-devel
+BuildRequires: python3-devel >= 3.5
 BuildRequires: tcl-devel
 BuildRequires: tk-devel
 BuildRequires: swig
@@ -101,21 +100,20 @@ BuildRequires: libXext
 BuildRequires: libXft
 %endif
 
-# Pure python extensions use the 32 bit library path
-%{!?py_site_pkg_32: %global py_site_pkg_32 %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(0)")}
-%{!?py_site_pkg_64: %global py_site_pkg_64 %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
-
 %description
-PBS Professional is a fast, powerful workload manager and
+OpenPBS is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
 
 %package -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
-Summary: PBS Professional for a server host
+Summary: OpenPBS for a server host
 Group:  %{PROJ_NAME}/rms
-Conflicts: pbspro-execution%{PROJ_DELIM}
-Conflicts: pbspro-client%{PROJ_DELIM}
+Conflicts: openpbs-execution%{PROJ_DELIM}
+Conflicts: openpbs-client%{PROJ_DELIM}
+Conflicts: openpbs-server
+Conflicts: openpbs-execution
+Conflicts: openpbs-client
 Conflicts: pbspro-server
 Conflicts: pbspro-execution
 Conflicts: pbspro-client
@@ -127,33 +125,40 @@ Requires: expat
 Requires: libedit
 Requires: postgresql-server >= 9.1
 Requires: postgresql-contrib >= 9.1
-Requires: python2
+Requires: python3 >= 3.5
 Requires: tcl
 Requires: tk
 %if %{defined suse_version}
 Requires: smtp_daemon
+Requires: libhwloc5
 Requires: net-tools
 %else
 Requires: smtpdaemon
 Requires: hostname
 %endif
+%if 0%{?rhel} >= 7
+Requires: hwloc-libs
+%endif
 Requires: libical
 Autoreq: 1
 
 %description -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
-PBS Professional is a fast, powerful workload manager and
+OpenPBS is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
 
 This package is intended for a server host. It includes all
-PBS Professional components.
+PBS components.
 
 %package -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
-Summary: PBS Professional for an execution host
+Summary: OpenPBS for an execution host
 Group:   %{PROJ_NAME}/rms
-Conflicts: pbspro-server%{PROJ_DELIM}
-Conflicts: pbspro-client%{PROJ_DELIM}
+Conflicts: openpbs-server%{PROJ_DELIM}
+Conflicts: openpbs-client%{PROJ_DELIM}
+Conflicts: openpbs-server
+Conflicts: openpbs-execution
+Conflicts: openpbs-client
 Conflicts: pbspro-server
 Conflicts: pbspro-execution
 Conflicts: pbspro-client
@@ -162,12 +167,7 @@ Conflicts: pbs-mom
 Conflicts: pbs-cmds
 Requires: bash
 Requires: expat
-%if 0%{?rhel}
-Requires: python2 >= 2.6
-%else
-Requires: python >= 2.6
-Requires: python < 3.0
-%endif
+Requires: python3 >= 3.5
 %if %{defined suse_version}
 Requires: libhwloc5
 Requires: net-tools
@@ -177,24 +177,26 @@ Requires: hostname
 %if 0%{?rhel} >= 7
 Requires: hwloc-libs
 %endif
-
 Autoreq: 1
 
 %description -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
-PBS Professional is a fast, powerful workload manager and
+OpenPBS is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
 
 This package is intended for an execution host. It does not
 include the scheduler, server, or communication agent. It
-does include the PBS Professional user commands.
+does include the PBS user commands.
 
 %package -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
-Summary: PBS Professional for a client host
+Summary: OpenPBS for a client host
 Group: %{PROJ_NAME}/rms
-Conflicts: pbspro-server%{PROJ_DELIM}
-Conflicts: pbspro-execution%{PROJ_DELIM}
+Conflicts: openpbs-server%{PROJ_DELIM}
+Conflicts: openpbs-execution%{PROJ_DELIM}
+Conflicts: openpbs-server
+Conflicts: openpbs-execution
+Conflicts: openpbs-client
 Conflicts: pbspro-server
 Conflicts: pbspro-execution
 Conflicts: pbspro-client
@@ -202,18 +204,30 @@ Conflicts: pbs
 Conflicts: pbs-mom
 Conflicts: pbs-cmds
 Requires: bash
-Requires: python >= 2.6
-Requires: python < 3.0
+Requires: python3 >= 3.5
 Autoreq: 1
 
 %description -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
-PBS Professional is a fast, powerful workload manager and
+OpenPBS is a fast, powerful workload manager and
 job scheduler designed to improve productivity, optimize
 utilization & efficiency, and simplify administration for
 HPC clusters, clouds and supercomputers.
 
 This package is intended for a client host and provides
-the PBS Professional user commands.
+the PBS user commands.
+
+%package -n %{pbs_name}-%{pbs_devel}%{PROJ_DELIM}
+Summary: OpenPBS Development Package
+Group: Development/System
+Conflicts: openpbs-devel
+Conflicts: pbspro-devel
+
+%description -n %{pbs_name}-%{pbs_devel}%{PROJ_DELIM}
+OpenPBS is a fast, powerful workload manager and
+job scheduler designed to improve productivity, optimize
+utilization & efficiency, and simplify administration for
+HPC clusters, clouds and supercomputers.
+
 
 %if %{with ptl}
 
@@ -223,36 +237,28 @@ the PBS Professional user commands.
 %define ptl_prefix %{pbs_prefix}/../ptl
 %endif
 
-%package %{pbs_ptl}
-Summary: PBS Test Lab for testing PBS Professional
-Group: System Environment/Base
-Requires: python-nose
-Requires: python-beautifulsoup
-%if 0%{?rhel} 
-Requires: pexpect
-%else
-Requires: python-pexpect
-%endif
-Requires: python-defusedxml
+%package -n %{pbs_name}-%{pbs_ptl}%{PROJ_DELIM}
+Summary: Testing framework for PBS
+Group: %{PROJ_NAME}/rms
 Prefix: %{ptl_prefix}
+Conflicts: pbspro-ptl
 
-%description %{pbs_ptl}
-PBS Test Lab is a test harness and test suite intended to validate the
-functionality of PBS Professional.
+%description -n %{pbs_name}-%{pbs_ptl}%{PROJ_DELIM}
+PBS Test Lab is a testing framework intended to test and validate the
+functionality of PBS.
 
 %endif
 
 %if 0%{?opensuse_bs}
 # Do not specify debug_package for OBS builds.
 %else
-%if %{defined suse_version}
+%if 0%{?suse_version} || x%{?_vendor_id} == xdebian || x%{?_vendor_id} == xubuntu
 %debug_package
 %endif
 %endif
 
 %prep
 %setup -n %{pbs_name}-%{pbs_version}
-%patch0 -p0
 
 %build
 [ -f configure ] || ./autogen.sh
@@ -271,9 +277,6 @@ cd build
 %if %{with alps}
 	--enable-alps \
 %endif
-%if %{with cpuset}
-	--enable-cpuset \
-%endif
 	--with-pbs-server-home=%{pbs_home} \
 	--with-database-user=%{pbs_dbuser}
 %{__make} %{?_smp_mflags}
@@ -281,8 +284,12 @@ cd build
 %install
 cd build
 %make_install
+mandir=$(find %{buildroot} -type d -name man)
+[ -d "$mandir" ] && find $mandir -type f -exec gzip -9 -n {} \;
+install -D %{buildroot}/%{pbs_prefix}/libexec/pbs_init.d %{buildroot}/etc/init.d/pbs
 
 %post -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
+ldconfig %{_libdir}
 # do not run pbs_postinstall when the CLE is greater than or equal to 6
 imps=0
 cle_release_version=0
@@ -293,13 +300,11 @@ fi
 [ "${cle_release_version}" -ge 6 ] 2>/dev/null && imps=1
 if [ $imps -eq 0 ]; then
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall server \
-	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} \
-	%{pbs_dbuser} >/dev/null 2>&1
-else
-	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
+	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} %{pbs_dbuser}
 fi
 
 %post -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
+ldconfig %{_libdir}
 # do not run pbs_postinstall when the CLE is greater than or equal to 6
 imps=0
 cle_release_version=0
@@ -310,12 +315,11 @@ fi
 [ "${cle_release_version}" -ge 6 ] 2>/dev/null && imps=1
 if [ $imps -eq 0 ]; then
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall execution \
-	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home} >/dev/null 2>&1
-else
-	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
+	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{pbs_home}
 fi
 
 %post -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
+ldconfig %{_libdir}
 # do not run pbs_postinstall when the CLE is greater than or equal to 6
 imps=0
 cle_release_version=0
@@ -326,106 +330,108 @@ fi
 [ "${cle_release_version}" -ge 6 ] 2>/dev/null && imps=1
 if [ $imps -eq 0 ]; then
 ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_postinstall client \
-	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} >/dev/null 2>&1
-else
-	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
+	%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}
 fi
+
+%post %{pbs_devel}
+ldconfig %{_libdir}
 
 %preun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
 if [ "$1" != "1" ]; then
 	# This is an uninstall, not an upgrade.
-	[ -x /etc/init.d/pbs ] && /etc/init.d/pbs stop
-	[ -x /sbin/chkconfig ] && /sbin/chkconfig --del pbs >/dev/null 2>&1
-	rm -f /etc/rc.d/rc?.d/[KS]??pbs
-	if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
-		top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
-		if [ -h $top_level/default ]; then
-			link_target=`readlink $top_level/default`
-			[ `basename "$link_target"` = %{version} ] && rm -f $top_level/default
-		fi
-	fi
-	rm -f /etc/init.d/pbs
-	rm -f /opt/modulefiles/pbs/%{version}
-	%if %{defined have_systemd}
-		systemctl disable pbs
-		rm -f /usr/lib/systemd/system-preset/95-pbs.preset
-	%endif
+	${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_preuninstall server \
+		%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{defined have_systemd}
 fi
 
 %preun -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
 if [ "$1" != "1" ]; then
 	# This is an uninstall, not an upgrade.
-	[ -x /etc/init.d/pbs ] && /etc/init.d/pbs stop
-	[ -x /sbin/chkconfig ] && /sbin/chkconfig --del pbs >/dev/null 2>&1
-	rm -f /etc/rc.d/rc?.d/[KS]??pbs
-	if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
-		top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
-		if [ -h $top_level/default ]; then
-			link_target=`readlink $top_level/default`
-			[ `basename "$link_target"` = %{version} ] && rm -f $top_level/default
-		fi
-	fi
-	rm -f /etc/init.d/pbs
-	rm -f /opt/modulefiles/pbs/%{version}
-	%if %{defined have_systemd}
-		systemctl disable pbs
-		rm -f /usr/lib/systemd/system-preset/95-pbs.preset
-	%endif
+	${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_preuninstall execution \
+		%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{defined have_systemd}
 fi
 
 %preun -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
 if [ "$1" != "1" ]; then
 	# This is an uninstall, not an upgrade.
-	if [ `basename ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}` = %{version} ]; then
-		top_level=`dirname ${RPM_INSTALL_PREFIX:=%{pbs_prefix}}`
-		if [ -h $top_level/default ]; then
-			link_target=`readlink $top_level/default`
-			[ `basename "$link_target"` = %{version} ] && rm -f $top_level/default
-		fi
-	fi
-	rm -f /opt/modulefiles/pbs/%{version}
+	${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_preuninstall client \
+		%{version} ${RPM_INSTALL_PREFIX:=%{pbs_prefix}} %{defined have_systemd}
 fi
+
+%postun -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
+if [ "$1" != "1" ]; then
+	# This is an uninstall, not an upgrade.
+	ldconfig %{_libdir}
+	echo
+	echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
+	echo
+fi
+
+%postun -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
+if [ "$1" != "1" ]; then
+	# This is an uninstall, not an upgrade.
+	ldconfig %{_libdir}
+	echo
+	echo "NOTE: /etc/pbs.conf and the PBS_HOME directory must be deleted manually"
+	echo
+fi
+
+%postun -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
+if [ "$1" != "1" ]; then
+	# This is an uninstall, not an upgrade.
+	ldconfig %{_libdir}
+	echo
+	echo "NOTE: /etc/pbs.conf must be deleted manually"
+	echo
+fi
+
+%postun -n %{pbs_name}-%{pbs_devel}%{PROJ_DELIM}
+ldconfig %{_libdir}
 
 %posttrans -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
-# The %preun section of 14.x unconditially removes /etc/init.d/pbs
-# because it does not check whether the package is being removed
-# or upgraded. Make sure it exists here.
-if [ -r %{pbs_prefix}/libexec/pbs_init.d ]; then
-	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
-fi
+${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
+	${RPM_INSTALL_PREFIX:=%{pbs_prefix}}
 
 %posttrans -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
-# The %preun section of 14.x unconditially removes /etc/init.d/pbs
-# because it does not check whether the package is being removed
-# or upgraded. Make sure it exists here.
-if [ -r %{pbs_prefix}/libexec/pbs_init.d ]; then
-	install -D %{pbs_prefix}/libexec/pbs_init.d /etc/init.d/pbs
-fi
+${RPM_INSTALL_PREFIX:=%{pbs_prefix}}/libexec/pbs_posttrans \
+	${RPM_INSTALL_PREFIX:=%{pbs_prefix}}
 
 %files -n %{pbs_name}-%{pbs_server}%{PROJ_DELIM}
+%defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_rcp
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
+%attr(644, root, root) %{pbs_prefix}/lib*/libpbs.la
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
-%config(noreplace) %{_sysconfdir}/profile.d/*
+%config(noreplace) %{_sysconfdir}/profile.d/pbs.*
+%exclude %{_sysconfdir}/profile.d/ptl.csh
+%exclude %{_sysconfdir}/profile.d/ptl.sh
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %else
 %exclude %{_unitdir}/pbs.service
 %endif
+%exclude %{pbs_prefix}/unsupported/fw
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
+%exclude %{pbs_prefix}/lib*/*.a
+%exclude %{pbs_prefix}/include/*
+%doc README.md
+%license LICENSE
 
 %files -n %{pbs_name}-%{pbs_execution}%{PROJ_DELIM}
+%defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_rcp
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
+%attr(644, root, root) %{pbs_prefix}/lib*/libpbs.la
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
-%config(noreplace) %{_sysconfdir}/profile.d/*
+%config(noreplace) %{_sysconfdir}/profile.d/pbs.*
+%exclude %{_sysconfdir}/profile.d/ptl.csh
+%exclude %{_sysconfdir}/profile.d/ptl.sh
 %if %{defined have_systemd}
 %attr(644, root, root) %{_unitdir}/pbs.service
 %else
@@ -433,6 +439,7 @@ fi
 %endif
 %exclude %{pbs_prefix}/bin/printjob_svr.bin
 %exclude %{pbs_prefix}/etc/pbs_db_schema.sql
+%exclude %{pbs_prefix}/libexec/pbs_schema_upgrade
 %exclude %{pbs_prefix}/etc/pbs_dedicated
 %exclude %{pbs_prefix}/etc/pbs_holidays*
 %exclude %{pbs_prefix}/etc/pbs_resource_group
@@ -449,16 +456,25 @@ fi
 %exclude %{pbs_prefix}/sbin/pbs_server
 %exclude %{pbs_prefix}/sbin/pbs_server.bin
 %exclude %{pbs_prefix}/sbin/pbsfs
+%exclude %{pbs_prefix}/unsupported/fw
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
+%exclude %{pbs_prefix}/lib*/*.a
+%exclude %{pbs_prefix}/include/*
+%doc README.md
+%license LICENSE
 
 %files -n %{pbs_name}-%{pbs_client}%{PROJ_DELIM}
+%defattr(-,root,root, -)
 %dir %{pbs_prefix}
 %{pbs_prefix}/*
 %attr(4755, root, root) %{pbs_prefix}/sbin/pbs_iff
+%attr(644, root, root) %{pbs_prefix}/lib*/libpbs.la
 %{_sysconfdir}/profile.d/pbs.csh
 %{_sysconfdir}/profile.d/pbs.sh
-%config(noreplace) %{_sysconfdir}/profile.d/*
+%config(noreplace) %{_sysconfdir}/profile.d/pbs.*
+%exclude %{_sysconfdir}/profile.d/ptl.csh
+%exclude %{_sysconfdir}/profile.d/ptl.sh
 %exclude %{pbs_prefix}/bin/mpiexec
 %exclude %{pbs_prefix}/bin/pbs_attach
 %exclude %{pbs_prefix}/bin/pbs_tmrsh
@@ -491,9 +507,22 @@ fi
 %exclude %{pbs_prefix}/sbin/pbs_server.bin
 %exclude %{pbs_prefix}/sbin/pbs_upgrade_job
 %exclude %{pbs_prefix}/sbin/pbsfs
+%exclude %{pbs_prefix}/unsupported/fw
 %exclude %{pbs_prefix}/unsupported/*.pyc
 %exclude %{pbs_prefix}/unsupported/*.pyo
 %exclude %{_unitdir}/pbs.service
+%exclude %{pbs_prefix}/lib*/*.a
+%exclude %{pbs_prefix}/include/*
+%exclude /etc/init.d/pbs
+%doc README.md
+%license LICENSE
+
+%files %{pbs_devel}
+%defattr(-,root,root, -)
+%{pbs_prefix}/lib*/*.a
+%{pbs_prefix}/include/*
+%doc README.md
+%license LICENSE
 
 %if %{with ptl}
 %files %{pbs_ptl}
@@ -502,4 +531,33 @@ fi
 %{ptl_prefix}/*
 %{_sysconfdir}/profile.d/ptl.csh
 %{_sysconfdir}/profile.d/ptl.sh
+%config(noreplace) %{_sysconfdir}/profile.d/ptl.*
+
+%post %{pbs_ptl}
+installed_pkg="$(pip3 list)"
+IFS=$'\n' required_pkg=($(cat %{ptl_prefix}/fw/requirements.txt))
+for i in "${required_pkg[@]}"; do
+	if [[ "$installed_pkg" =~ "$i" ]]; then
+		continue
+	else
+		pip3 install --trusted-host pypi.org --trusted-host files.pythonhosted.org "$i"
+		if [ $? -eq 0 ]; then
+			echo "$i installed successfully"
+		else
+			echo "Failed to install thirdparty package $i required by PTL"
+		fi
+	fi
+done
+
+%preun %{pbs_ptl}
+installed_pkg="$(pip3 list)"
+IFS=$'\n' required_pkg=($(cat %{ptl_prefix}/fw/requirements.txt))
+for i in "${required_pkg[@]}"; do
+	if [[ "$installed_pkg" =~ "$i" ]]; then
+		pip3 uninstall --yes "$i"
+	else
+		continue
+	fi
+done
 %endif
+

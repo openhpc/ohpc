@@ -15,7 +15,7 @@ resource management under \rms{}.
 % begin_ohpc_run
 % ohpc_comment_header Resource Manager Startup \ref{sec:rms_startup}
 \begin{lstlisting}[language=bash,keywords={}]
-# start pbspro daemons on master host
+# start PBS daemons on master host
 [sms](*\#*) systemctl enable pbs
 [sms](*\#*) systemctl start pbs
 \end{lstlisting}
@@ -38,7 +38,7 @@ options.
 [sms](*\#*) qmgr -c "set server resources_default.place=scatter"
 # enable support for job accounting
 [sms](*\#*) qmgr -c "set server job_history_enable=True"
-# register compute hosts with pbspro
+# register compute hosts with PBS
 [sms](*\#*) for host in "${c_name[@]}"; do
            qmgr -c "create node $host"
         done

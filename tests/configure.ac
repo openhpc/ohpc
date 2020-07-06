@@ -533,7 +533,7 @@ if test "x$enable_slurm" = "xyes" ; then
    echo Resource manager ............. : SLURM
 fi
 if test "x$enable_pbs" = "xyes" ; then
-   echo Resource manager ............. : PBS Pro
+   echo Resource manager ............. : OpenPBS
 fi
 if test "x$enable_warewulf" = "xyes" ; then
    echo Provisioner .................. : Warewulf

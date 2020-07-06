@@ -57,7 +57,7 @@ ARGS=8
 		if [ "$rm" = "slurm" ];then
 			srun $cafcmd
 			assert_success
-		elif [ "$rm" = "pbspro" ];then
+		elif [ "$rm" = "openpbs" ];then
 			qsub -W block=true $cafcmd
 			assert_success
 		fi

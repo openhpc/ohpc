@@ -19,7 +19,7 @@ dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","py
 	         "python-scipy","spack","valgrind"]
 io-libs       = ["hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf","sionlib"]
 runtimes      = ["singularity","ocr","charliecloud"]
-rms           = ["slurm","pbspro","pmix","munge"]
+rms           = ["slurm","openpbs","pmix","munge"]
 serial-libs   = ["R","gsl","metis","openblas","plasma","scotch","superlu"]
 parallel-libs = ["boost","fftw","hypre","mumps","opencoarrays","petsc","scalapack","ptscotch","slepc","superlu_dist"]
 perf-tools    = ["dimemas","extrae","geopm","likwid","omb","papi","paraver","pdtoolkit",
@@ -43,7 +43,7 @@ mpi_families=["openmpi4","mpich","mvapich2","impi"]
 
 standalone = ["arm-compilers-devel","autoconf","automake","clustershell","cmake","conman",
               "docs","examples","genders","gnu-compilers","hwloc","intel-compilers-devel","libtool",
-	      "lmod","losf","meta-packages","mrsh","ohpc-filesystem","papi","paraver","pbspro",
+	      "lmod","losf","meta-packages","mrsh","ohpc-filesystem","papi","paraver","openpbs",
 	      "pdsh","pmix","prun","slurm","test-suite","valgrind"]
               
 

@@ -91,7 +91,7 @@ function launch_impi () {
 
 	if [ ${RM} == "slurm" ];then
 	    cmd="srun --mpi=pmi2 $@"
-	elif [ ${RM} == "pbspro" ];then
+	elif [ ${RM} == "openpbs" ];then
             LAUNCHER="mpiexec.hydra"
             verify_launcher_avail $LAUNCHER
 
@@ -113,7 +113,7 @@ function launch_mpich () {
 	    verify_launcher_avail mpiexec.hydra
 	    cmd="mpiexec.hydra -bootstrap slurm $@"
 	fi
-    elif [[ ${RM} == "pbspro" ]];then
+    elif [[ ${RM} == "openpbs" ]];then
 	verify_launcher_avail mpiexec.hydra
 	cmd="mpiexec.hydra -rmk pbs $@"
     else
@@ -134,7 +134,7 @@ function launch_mvapich2 () {
 	
 	if [ ${RM} == "slurm" ];then
             cmd="$LAUNCHER -bootstrap slurm $@"
-	elif [ ${RM} == "pbspro" ];then
+	elif [ ${RM} == "openpbs" ];then
 	    cmd="$LAUNCHER -rmk pbs $@"
 	else
             _error "Unknown resource manager -> ${RM}"
@@ -179,7 +179,7 @@ function launch_openmpi () {
 	    verify_launcher_avail mpirun
             cmd="mpirun $@"
 	fi
-    elif [[ ${RM} == "pbspro" ]];then
+    elif [[ ${RM} == "openpbs" ]];then
             verify_launcher_avail mpiexec
 	    cmd="mpiexec -x LD_LIBRARY_PATH --prefix ${MPI_DIR} --hostfile ${PBS_NODEFILE} $@"
     else
@@ -231,7 +231,7 @@ ARGS=$@
 # from locally installed packages. Like Highlander, we assume there can be only one.
 
 if [ -z "$RM" ];then
-    [[ -s /etc/pbs.conf ]] && RM=pbspro
+    [[ -s /etc/pbs.conf ]] && RM=openpbs
     [[ -s /etc/slurm/slurm.conf ]] && RM=slurm
 fi
 

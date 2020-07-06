@@ -7,45 +7,46 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{OpenSUSE Leap 15.1}
-\newcommand{\OSRepo}{Leap\_15\_1}
-\newcommand{\OSTree}{Leap\_15}
-\newcommand{\OSTag}{leap15}
-\newcommand{\baseos}{leap15.1}
-\newcommand{\baseosshort}{leap15}
+\newcommand{\baseOS}{CentOS8.1}
+\newcommand{\OSRepo}{CentOS\_8.1}
+\newcommand{\OSTree}{CentOS\_8}
+\newcommand{\OSTag}{el8}
+\newcommand{\baseos}{centos8.1}
+\newcommand{\baseosshort}{centos8}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\provheader}{\provisioner{}}
-\newcommand{\rms}{PBS Professional}
-\newcommand{\rmsshort}{pbspro}
-\newcommand{\arch}{aarch64}
+\newcommand{\rms}{OpenPBS}
+\newcommand{\rmsshort}{OpenPBS}
+\newcommand{\arch}{x86\_64}
 
 % Define package manager commands
-\newcommand{\pkgmgr}{zypper}
-\newcommand{\addrepo}{zypper ar}
-\newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/zypp/repos.d}
-\newcommand{\clean}{zypper clean -a}
-\newcommand{\chrootclean}{zypper --root \$CHROOT clean}
-\newcommand{\install}{zypper -n install}
-\newcommand{\chrootinstall}{zypper -n --root \$CHROOT install}
-\newcommand{\groupinstall}{zypper -n install -t pattern}
-\newcommand{\groupchrootinstall}{zypper -n --root \$CHROOT install -t pattern}
-\newcommand{\remove}{zypper -n remove}
-\newcommand{\upgrade}{zypper -n up}
-\newcommand{\chrootupgrade}{zypper -n --root \$CHROOT up}
-\newcommand{\tftppkg}{syslinux}
+\newcommand{\pkgmgr}{yum}
+\newcommand{\addrepo}{wget -P /etc/yum.repos.d}
+\newcommand{\chrootaddrepo}{wget -P \$CHROOT/etc/yum.repos.d}
+\newcommand{\clean}{yum clean expire-cache}
+\newcommand{\chrootclean}{yum --installroot=\$CHROOT clean expire-cache}
+\newcommand{\install}{yum -y install}
+\newcommand{\chrootinstall}{yum -y --installroot=\$CHROOT install}
+\newcommand{\groupinstall}{yum -y groupinstall}
+\newcommand{\groupchrootinstall}{yum -y --installroot=\$CHROOT groupinstall}
+\newcommand{\remove}{yum -y remove}
+\newcommand{\upgrade}{yum -y upgrade}
+\newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
+\newcommand{\tftppkg}{syslinux-tftpboot}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7\_1/dists/beegfs-rhel7.repo}
 
 % boolean for os-specific formatting
-\togglefalse{isCentOS}
-\toggletrue{isaarch}
-\toggletrue{isSLES_ww_pbs_aarch}
-\toggletrue{ispbs}
+\toggletrue{isCentOS}
+\toggletrue{isx86}
 \toggletrue{isWarewulf}
+\toggletrue{ispbs}
+\toggletrue{isCentOS_ww_pbs_x86}
 
 \begin{document}
 \graphicspath{{common/figures/}}
 \thispagestyle{empty}
 
-% Title Page --------------------------------------------------------
+% Title Page
 \input{common/title}
 % Disclaimer
 \input{common/legal} 
@@ -54,7 +55,7 @@
 \tableofcontents
 \newpage
 
-% Introduction  ----------------------------------------------------
+% Introduction  --------------------------------------------------
 
 \section{Introduction} \label{sec:introduction}
 \input{common/install_header}
@@ -65,6 +66,17 @@
 \input{common/requirements}
 \input{common/inputs}
 
+% begin_ohpc_run
+% ohpc_validation_newline
+% ohpc_validation_comment Verify OpenHPC repository has been enabled before proceeding
+% ohpc_validation_newline
+% ohpc_command yum repolist | grep -q OpenHPC
+% ohpc_command if [ $? -ne 0 ];then
+% ohpc_command    echo "Error: OpenHPC repository must be enabled locally"
+% ohpc_command    exit 1
+% ohpc_command fi
+% end_ohpc_run
+
 % Base Operating System --------------------------------------------
 
 \section{Install Base Operating System (BOS)}
@@ -74,8 +86,8 @@
 % ohpc_validation_newline
 % ohpc_validation_comment Disable firewall 
 \begin{lstlisting}[language=bash,keywords={}]
-[sms](*\#*) systemctl disable SuSEfirewall2
-[sms](*\#*) systemctl stop SuSEfirewall2
+[sms](*\#*) systemctl disable firewalld
+[sms](*\#*) systemctl stop firewalld
 \end{lstlisting}
 % end_ohpc_run
 
@@ -86,45 +98,40 @@
 
 \subsection{Enable \OHPC{} repository for local use} \label{sec:enable_repo}
 \input{common/enable_ohpc_repo}
-\input{common/sles_os_repos}
+\input{common/centos_repos}
 \input{common/automation}
+
 
 \subsection{Add provisioning services on {\em master} node} \label{sec:add_provisioning}
 \input{common/install_provisioning_intro}
-
 \input{common/enable_pxe}
-
 \input{common/time}
 
-\vspace*{.25cm}
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
-\input{common/install_pbspro}
+\input{common/install_openpbs}
 
-%% Add if/when IB is available for testing
-%% \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
-%% \input{common/ibsupport_sms_sles}
+\subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
+\input{common/ibsupport_sms_centos}
 
-\vspace*{.25cm}
+\subsection{Optionally add \OmniPath{} support services on {\em master} node} \label{sec:add_opa}
+\input{common/opasupport_sms_centos}
+
+\vspace*{-0.15cm}
 \subsection{Complete basic Warewulf setup for {\em master} node} \label{sec:setup_ww}
 \input{common/warewulf_setup}
-\input{common/warewulf_setup_sles}
-\input{common/warewulf_setup_aarch_db}
+\input{common/warewulf_setup_centos}
 
-\vspace*{.5cm}
 \subsection{Define {\em compute} image for provisioning}
-\input{common/warewulf_mkchroot_suse}
+\input{common/warewulf_mkchroot_centos}
 
 \subsubsection{Add \OHPC{} components} \label{sec:add_components}
 \input{common/add_to_compute_chroot_intro}
 
-%\clearpage
 % begin_ohpc_run
+% ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Import GPG keys for chroot repository usage
-[sms](*\#*) zypper -n --root $CHROOT --no-gpg-checks --gpg-auto-import-keys refresh
-
-# Add PBS Professional client support
-[sms](*\#*) (*\chrootinstall*) pbspro-execution-ohpc
+# Add OpenPBS client support
+[sms](*\#*) (*\chrootinstall*) openpbs-execution-ohpc
 [sms](*\#*) perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
 [sms](*\#*) echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
 [sms](*\#*) chroot $CHROOT opt/pbs/libexec/pbs_habitat
@@ -132,80 +139,78 @@
 [sms](*\#*) echo "\$usecp *:/home /home" >> $CHROOT/var/spool/pbs/mom_priv/config
 [sms](*\#*) chroot $CHROOT systemctl enable pbs
 
-# Provide udev rules to enable /dev/ipath access for InfiniPath devices
-[sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
-
 # Add Network Time Protocol (NTP) support
-[sms](*\#*) (*\chrootinstall*) ntp
+[sms](*\#*) (*\chrootinstall*) chrony
 # Identify master host as local NTP server
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
-# Add kernel drivers
-[sms](*\#*) (*\chrootinstall*) kernel-default
+# Add kernel drivers (matching kernel version on SMS node)
+[sms](*\#*) (*\chrootinstall*) kernel-`uname -r`
 
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*) lmod-ohpc
-
-# Enable ssh access 
-[sms](*\#*) chroot $CHROOT systemctl enable sshd.service
-
-# Remove default hostname to allow WW to provision network names
-[sms](*\#*) mv $CHROOT/etc/hostname $CHROOT/etc/hostname.orig
 \end{lstlisting}
 % end_ohpc_run
 
-%\clearpage
 \subsubsection{Customize system configuration} \label{sec:master_customization}
-\input{common/warewulf_chroot_customize_sles}
+\input{common/warewulf_chroot_customize_centos}
 
 %\clearpage
 \subsubsection{Additional Customization ({\em optional})} \label{sec:addl_customizations}
 \input{common/compute_customizations_intro}
 
-%% Add if/when IB is available for testing
-%% \paragraph{Increase locked memory limits}
-%% \input{common/memlimits} 
+\paragraph{Enable \InfiniBand{} drivers}
+\input{common/ibsupport_compute_centos.tex}
 
-%% \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
-%% \input{common/lustre-client}
-%% \input{common/lustre-client}
-%% \input{common/lustre-client-sles}
-%% \input{common/lustre-client-post}
+\paragraph{Enable \OmniPath{} drivers}
+\input{common/opasupport_compute_centos.tex}
 
-%\clearpage
+
+\paragraph{Increase locked memory limits}
+\input{common/memlimits}
+
+\clearpage
+%% \paragraph{Add \beegfs{}} \label{sec:add_beegfs}
+%% \input{common/install_beegfs_client_centos}
+
+\paragraph{Add \Lustre{} client} \label{sec:lustre_client}
+\input{common/lustre-client}
+\input{common/lustre-client-centos}
+\input{common/lustre-client-post}
+
 \paragraph{Enable forwarding of system logs} \label{sec:add_syslog}
 \input{common/syslog}
 
-\vspace*{-.2cm}
 \paragraph{Add \Nagios{} monitoring} \label{sec:add_nagios}
-\input{common/nagios_suse}
+\input{common/nagios}
 
+\clearpage
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
 
-%\paragraph{Add \mrsh{}}
-%\input{common/mrsh}
-
+%\clearpage
 \paragraph{Add \genders{}}
 \input{common/genders}
 
-%\clearpage
 \paragraph{Add \conman{}} \label{sec:add_conman}
 \input{common/conman}
 
 \paragraph{Add \nhc{}} \label{sec:add_nhc}
 \input{common/nhc}
 
-\vspace*{-0.1cm}
+\paragraph{Add \GEOPM{}} \label{sec:add_geopm}
+\input{common/geopm_config}
+
+%\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
-%% \input{common/import_ww_files_ib_sles}
-%\clearpage
+\input{common/import_ww_files_ib_centos}
 \input{common/finalize_provisioning}
 \input{common/add_ww_hosts_intro}
 \input{common/add_ww_hosts_pbs}
 \input{common/add_ww_hosts_finalize}
 
+%\clearpage
 \subsubsection{Optional kernel arguments} \label{sec:optional_kargs}
 \input{common/conman_post}
 \input{common/kargs_post}
@@ -213,48 +218,53 @@
 \subsubsection{Optionally configure stateful provisioning}
 \input{common/stateful}
 
-%\clearpage
+\vspace*{0.15cm}
 \subsection{Boot compute nodes} \label{sec:boot_computes}
-\input{common/reset_computes}
+\input{common/reset_computes} 
 
-\section{Install \OHPC{} Development Components} \label{sec:install_dev}
+%\vspace*{-0.50cm}
+\section{Install \OHPC{} Development Components}
 \input{common/dev_intro.tex}
 
-%\clearpage
+%\vspace*{-0.15cm}
 \subsection{Development Tools} \label{sec:install_dev_tools}
 \input{common/dev_tools}
 
+%\vspace*{-0.15cm}
 \subsection{Compilers} \label{sec:install_compilers}
 \input{common/compilers}
 
+%\clearpage
 \subsection{MPI Stacks} \label{sec:mpi}
-\input{common/mpi_aarch}
+\input{common/mpi}
 
 \subsection{Performance Tools} \label{sec:install_perf_tools}
-\input{common/perf_tools}
+\input{common/perf_tools_with_geopm}
 
 \subsection{Setup default development environment}
 \input{common/default_dev}
 
 \subsection{3rd Party Libraries and Tools} \label{sec:3rdparty}
 \input{common/third_party_libs_intro}
-\input{common/third_party_libs_petsc_sles}
+\input{common/third_party_libs_petsc_centos}
 \input{common/third_party_libs}
-\input{common/third_party_mpi_libs_aarch}
+\input{common/third_party_mpi_libs_x86}
 
-\subsection{Optional Development Tool Builds} \label{sec:3rdparty_arm}
-\input{common/armhpc_enabled_builds}
+%\vspace*{0.8cm}
+\subsection{Optional Development Tool Builds} \label{sec:3rdparty_intel}
+\vspace*{0.2cm}
+\input{common/psxe_enabled_builds_with_geopm}
 
+\clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
-\input{common/pbspro_startup}
+\input{common/openpbs_startup}
 
-%\clearpage
-%\vspace*{-1cm}
 \section{Run a Test Job} \label{sec:test_job}
-\input{common/pbspro_test_job}
+\input{common/openpbs_test_job}
 
 \clearpage
 \appendix
+%\section*{Appendices}
 {\bf \LARGE \centerline{Appendices}} \vspace*{0.2cm}
 
 \addcontentsline{toc}{section}{Appendices}
@@ -263,7 +273,7 @@
 \input{common/automation_appendix}
 \input{common/upgrade}
 \input{common/test_suite}
-\input{common/customization_appendix_sles}
+\input{common/customization_appendix_centos}
 \input{manifest}
 \input{common/signature}
 

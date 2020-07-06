@@ -15,8 +15,8 @@
 \newcommand{\baseosshort}{centos8}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\provheader}{\provisioner{}}
-\newcommand{\rms}{PBS Professional}
-\newcommand{\rmsshort}{pbspro}
+\newcommand{\rms}{OpenPBS}
+\newcommand{\rmsshort}{OpenPBS}
 \newcommand{\arch}{aarch64}
 
 % Define package manager commands
@@ -107,7 +107,7 @@
 \input{common/time}
 
 \subsection{Add resource management services on {\em master} node} \label{sec:add_rm}
-\input{common/install_pbspro}
+\input{common/install_openpbs}
 
 %% Add if/when IB is available for testing
 %% \subsection{Optionally add \InfiniBand{} support services on {\em master} node} \label{sec:add_ofed}
@@ -127,8 +127,8 @@
 % begin_ohpc_run
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Add PBS Professional client support
-[sms](*\#*) (*\chrootinstall*) pbspro-execution-ohpc
+# Add OpenPBS client support
+[sms](*\#*) (*\chrootinstall*) openpbs-execution-ohpc
 [sms](*\#*) perl -pi -e "s/PBS_SERVER=\S+/PBS_SERVER=${sms_name}/" $CHROOT/etc/pbs.conf
 [sms](*\#*) echo "PBS_LEAF_NAME=${sms_name}" >> /etc/pbs.conf
 [sms](*\#*) chroot $CHROOT opt/pbs/libexec/pbs_habitat
@@ -249,10 +249,10 @@
 
 \clearpage
 \section{Resource Manager Startup} \label{sec:rms_startup}
-\input{common/pbspro_startup}
+\input{common/openpbs_startup}
 
 \section{Run a Test Job} \label{sec:test_job}
-\input{common/pbspro_test_job}
+\input{common/openpbs_test_job}
 
 \clearpage
 \appendix

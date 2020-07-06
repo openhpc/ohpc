@@ -16,7 +16,7 @@ setup() {
     if [ -z "$MODULEPATH" ];then
         . /etc/profile.d/lmod.sh || exit 1
     fi
-    if [ x$rm = "xpbspro" ];then
+    if [ x$rm = "xopenpbs" ];then
         . /etc/profile.d/pbs.sh || exit 1
     fi
     module purge             || exit 1
