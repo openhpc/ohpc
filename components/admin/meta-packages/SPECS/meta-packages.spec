@@ -174,14 +174,6 @@ Requires:  hdf5-%{compiler_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-io-libs
 Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime
 
-%package -n %{PROJ_NAME}-nagios
-Summary:   OpenHPC Nagios monitoring
-Requires:  nagios%{PROJ_DELIM}
-Requires:  nagios-plugins-all%{PROJ_DELIM}
-Requires:  nrpe%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-nagios
-Collection of Nagios monitoring and metrics packages
-
 %package -n %{PROJ_NAME}-%{compiler_family}-parallel-libs
 Summary:   OpenHPC parallel libraries for GNU
 Requires:  boost-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -857,7 +849,6 @@ Collection of parallel library builds for use with the Arm Compiler for Linux an
 %files -n %{PROJ_NAME}-%{compiler_family}-python3-libs
 %files -n %{PROJ_NAME}-%{compiler_family}-runtimes
 %files -n %{PROJ_NAME}-%{compiler_family}-serial-libs
-%files -n %{PROJ_NAME}-nagios
 %files -n %{PROJ_NAME}-slurm-client
 %files -n %{PROJ_NAME}-slurm-server
 %files -n %{PROJ_NAME}-warewulf
