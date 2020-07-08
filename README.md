@@ -11,7 +11,7 @@ management, I/O clients, runtimes, development tools, containers, and a variety 
 scientific libraries.
 
 There are currently two release series:
-[1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.9) and
+[1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.X) and
 [2.x](https://github.com/openhpc/ohpc/wiki/2.x), which target different major
 Linux OS distributions. The 1.3.x series targets CentOS7 and SLES12 while the
 2.x series targets CentOS8 and Leap15.
@@ -28,7 +28,7 @@ guides tailored for each supported provisioning system and resource manager
 with detailed example instructions for installaing a cluster are also available.
 Copies of the ```ohpc-release``` package and installation guides along with
 more information is available on the relevant release series pages
-([1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.9) or
+([1.3.x](https://github.com/openhpc/ohpc/wiki/1.3.X) or
 [2.x](https://github.com/openhpc/ohpc/wiki/2.x)).
 
 ---
