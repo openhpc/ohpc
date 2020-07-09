@@ -103,7 +103,7 @@ BuildRequires:  infinipath-psm infinipath-psm-devel
 %endif
 
 %if %{with_tm}
-BuildRequires:  openpbs-server%{PROJ_DELIM}
+BuildRequires:  openpbs-server%{PROJ_DELIM} openpbs-devel%{PROJ_DELIM}
 BuildRequires:  openssl-devel
 %endif
 
