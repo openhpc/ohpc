@@ -40,7 +40,7 @@ Summary:   A powerful implementation of MPI/SHMEM
 
 Name:      %{pname}%{RMS_DELIM}-%{compiler_family}%{PROJ_DELIM}
 
-Version:   4.0.3
+Version:   4.0.4
 Release:   1%{?dist}
 License:   BSD-3-Clause
 Group:     %{PROJ_NAME}/mpi-families
@@ -67,6 +67,9 @@ BuildRequires:  libevent-devel
 %endif
 %if 0%{with_ofi}
 BuildRequires:  libfabric%{PROJ_DELIM}
+%ifarch x86_64
+BuildRequires:  libpsm2-devel
+%endif
 %endif
 %if 0%{with_ucx}
 BuildRequires:  ucx%{PROJ_DELIM}
