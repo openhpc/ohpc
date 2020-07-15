@@ -6,19 +6,19 @@
 
 The OpenHPC project currently provides the following container images:
 
- * ohpc-gnu8:1.3.9
- * ohpc-gnu8-mpich:1.3.9
- * ohpc-gnu8-mvapich2:1.3.9
- * ohpc-gnu8-openmpi3:1.3.9
+ * ohpc-gnu9:2.0.0
+ * ohpc-gnu9-mpich:2.0.0
+ * ohpc-gnu9-mvapich2:2.0.0
+ * ohpc-gnu9-openmpi4:2.0.0
 
 All containers images are also available with the version specifier `latest`.
 
-`ohpc-gnu8` is based on `centos7` and all other container images are based on
-`ohpc-gnu8`.
+`ohpc-gnu9` is based on `centos8` and all other container images are based on
+`ohpc-gnu9`.
 
-Currently all container images are reachable at `quay.io/adrianreber/`:
+Currently all container images are reachable at `quay.io/ohpc/`:
 
-`podman pull quay.io/adrianreber/ohpc-gnu8:latest`
+`podman pull quay.io/ohpc/ohpc-gnu9:latest`
 
 ## Rebuilding the OpenHPC container images
 
@@ -42,11 +42,11 @@ int main()
 {
 	printf("Hello, world!\n");
 }
-$ podman run --rm -v `pwd`/test:/tmp:z ohpc-gnu8:1.3.9 gcc -o /tmp/hello /tmp/hello.c
-$ podman run --rm -v `pwd`/test:/tmp:z ohpc-gnu8:1.3.9 /tmp/hello
+$ podman run --rm -v `pwd`/test:/tmp:z quay.io/ohpc/ohpc-gnu9:2.0.0 gcc -o /tmp/hello /tmp/hello.c
+$ podman run --rm -v `pwd`/test:/tmp:z quay.io/ohpc/ohpc-gnu9:2.0.0 /tmp/hello
 Hello, world!
-$ podman run --rm -v `pwd`/test:/tmp:z ohpc-gnu8-mpich:1.3.9 mpicc -o /tmp/mpi-hello /tmp/mpi-hello.c
-$ podman run --rm -v `pwd`/test:/tmp:z ohpc-gnu8-mpich:1.3.9 /tmp/mpi-hello
+$ podman run --rm -v `pwd`/test:/tmp:z quay.io/ohpc/ohpc-gnu9-mpich:2.0.0 mpicc -o /tmp/mpi-hello /tmp/mpi-hello.c
+$ podman run --rm -v `pwd`/test:/tmp:z quay.io/ohpc/ohpc-gnu9-mpich:2.0.0 /tmp/mpi-hello
  Hello, world (1 procs total)
     --> Process #   0 of   1 is alive. ->962f5dcd6374
 ```
@@ -54,7 +54,7 @@ $ podman run --rm -v `pwd`/test:/tmp:z ohpc-gnu8-mpich:1.3.9 /tmp/mpi-hello
 It is also possible to build containers based on the OpenHPC containers:
 ```
 $ cat Dockerfile
-FROM quay.io/adrianreber/ohpc-gnu8-mpich:latest
+FROM quay.io/ohpc/ohpc-gnu9-mpich:latest
 
 COPY mpi-hello.c /home
 RUN mpicc -o /home/mpi-hello /home/mpi-hello.c
