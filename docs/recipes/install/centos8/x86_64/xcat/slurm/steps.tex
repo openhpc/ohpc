@@ -109,27 +109,11 @@ distributions. To enable for local use, issue the following:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*)  (*\addrepo*) https://xcat.org/files/xcat/repos/yum/xcat-dep/rh7/ARCH/xcat-dep.repo
+[sms](*\#*)  (*\addrepo*) https://xcat.org/files/xcat/repos/yum/xcat-dep/rh8/ARCH/xcat-dep.repo
 \end{lstlisting}
 % end_ohpc_run
 
-In addition to the \OHPC{} and \xCAT{} package repositories, the {\em master} host also
-requires access to the standard base OS distro repositories in order to resolve
-necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base OS and EPEL repositories for which mirrors are freely available online:
-
-\begin{itemize*}
-\item CentOS-7 - Base 7.7.1908
-  (e.g. \href{http://mirror.centos.org/centos-7/7/os/x86\_64}
-             {\color{blue}{http://mirror.centos.org/centos-7/7/os/x86\_64}} )
-\item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
-                        {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
-\end{itemize*}
-
-\noindent The public EPEL repository will be enabled automatically upon installation of the 
-\texttt{ohpc-release} package. Note that this requires the CentOS Extras
-repository, which is shipped with CentOS and is enabled by default.
-
+\input{common/centos_repos}
 \input{common/automation}
 
 
