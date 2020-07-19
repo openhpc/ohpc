@@ -12,8 +12,7 @@ example configuration.
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add NFS client mounts of /home and /opt/ohpc/pub to base image
 [sms](*\#*) echo "${sms_ip}:/home /home nfs nfsvers=3,nodev,nosuid 0 0" >> $CHROOT/etc/fstab
-[sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev 0
-0" >> $CHROOT/etc/fstab
+[sms](*\#*) echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev 0 0" >> $CHROOT/etc/fstab
 
 # Disable /tftpboot and /install export entries
 [sms](*\#*) perl -pi -e "s/tftpboot/#tftpboot/" /etc/exports
