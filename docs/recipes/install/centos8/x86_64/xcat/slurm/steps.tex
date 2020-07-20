@@ -153,6 +153,9 @@ distributions. To enable for local use, issue the following:
 # Add Slurm client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
+# Register Slurm server with computes (using "configless" option)
+[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
+
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) chrony
 # Identify master host as local NTP server
