@@ -88,6 +88,7 @@ ARGS=8
 }
 
 @test "[libs/HYPRE] 2 PE Semi-Structured convection binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    skip
     if [ ! -s ex7 ];then
 	flunk "ex7 binary does not exist"
     fi
@@ -97,6 +98,7 @@ ARGS=8
 }
 
 @test "[libs/HYPRE] 2 PE biharmonic binary runs under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    skip
     if [ ! -s ex9 ];then
 	flunk "ex9 binary does not exist"
     fi

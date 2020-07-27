@@ -42,10 +42,10 @@ BuildRequires: unzip
 BuildRequires: zlib-devel
 BuildRequires: openssh
 
-%if 0%{?suse_version}%{?sle_version}
-BuildRequires: libelf-devel
-%else 
-BuildRequires: elfutils-libelf-devel
+%if 0%{?sle_version}
+Buildrequires: libelf1
+%else
+BuildRequires: elfutils-libelf
 %endif
 
 %description

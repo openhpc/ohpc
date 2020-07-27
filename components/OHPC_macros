@@ -86,7 +86,7 @@ Requires:      gnu8-compilers%{PROJ_DELIM} >= 8.3.0
 %endif # gnu8
 
 %if "%{compiler_family}" == "intel"
-%if 0%{OHPC_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: intel_licenses
 BuildRequires: psxe%{PROJ_DELIM}
 %endif # OHPC_BUILD
@@ -95,7 +95,7 @@ Requires:      gcc-c++ intel-compilers-devel%{PROJ_DELIM}
 %endif # intel
 
 %if "%{compiler_family}" == "arm1"
-%if 0%{OHPC_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: arm_licenses
 BuildRequires: arm%{PROJ_DELIM}
 %endif # OHPC_BUILD
@@ -115,13 +115,16 @@ Requires:      llvm-compilers%{PROJ_DELIM} >= 9.0.0
 
 %endif # compiler_depdendent
 
+# Disable generation of .build-id links
+%global _build_id_links none
+
 # Disable RPM symlink analysis on files in %%{OHPC_HOME}.
 %global __libsymlink_exclude_path  %{OHPC_HOME}/.*$
 
 # MPI dependencies
 %if 0%{?ohpc_mpi_dependent} == 1
 %if "%{mpi_family}" == "impi"
-%if 0%{OHPC_BUILD}
+%if 0%{?OHPC_BUILD}
 BuildRequires: impi%{PROJ_DELIM}
 %endif # OHPC_BUILD
 BuildRequires: intel-mpi-devel%{PROJ_DELIM}
@@ -162,6 +165,18 @@ Requires:      %{python_prefix}
 # Single-line macro for running compiler/MPI setup scripts
 # Script bodies are evaluated and stored in this macro definition
 %global ohpc_setup_compiler %{expand:\
+    %if 0%{?OHPC_CFLAGS:1} \
+         export OHPC_CFLAGS=%{OHPC_CFLAGS} \
+    %endif \
+    %if 0%{?OHPC_CXXFLAGS:1} \
+         export OHPC_CXXFLAGS=%{OHPC_CXXFLAGS} \
+    %endif \
+    %if 0%{?OHPC_FCFLAGS:1} \
+         export OHPC_FCFLAGS=%{OHPC_FCFLAGS} \
+    %endif \
+    %if 0%{?OHPC_F77FLAGS:1} \
+         export OHPC_F77FLAGS=%{OHPC_F77FLAGS} \
+    %endif \
     . %{OHPC_ADMIN}/ohpc/OHPC_setup_compiler %{compiler_family} \
     %if 0%{?ohpc_mpi_dependent} == 1 \
         . %{OHPC_ADMIN}/ohpc/OHPC_setup_mpi %{mpi_family} \
@@ -186,3 +201,12 @@ Requires:      %{python_prefix}
 %endif # sle15/rh8
 %endif # lua_version not set
 %endif # luaver
+
+# check if user desires to override package and modulefile naming with
+# custom delimiter (e.g optimized micro-architecture build)
+
+%global OHPC_CUSTOM_PKG_DELIM %{nil}
+
+%{?OHPC_CUSTOM_DELIM: %global OHPC_CUSTOM_PKG_DELIM -%{OHPC_CUSTOM_DELIM}}
+%{?OHPC_CUSTOM_DELIM: %global PROJ_DELIM -%{OHPC_CUSTOM_DELIM}%{PROJ_DELIM}}
+

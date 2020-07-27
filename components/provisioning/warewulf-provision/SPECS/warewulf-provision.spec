@@ -30,6 +30,8 @@ Patch3:  warewulf-provision.ppc64le.patch
 Patch4:  warewulf-provision.pxe_file_modes.patch
 Patch5:  warewulf-provision.sle_tftpboot.patch
 Patch6:  warewulf-provision.wwgetfiles.patch
+Patch7:  warewulf-provision.noquiet.patch
+Patch8:  c5a90be.patch
 Group:   %{PROJ_NAME}/provisioning
 ExclusiveOS: linux
 Requires: warewulf-common%{PROJ_DELIM}
@@ -120,6 +122,8 @@ cd %{_builddir}
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
+%patch8 -p1
 
 
 %build

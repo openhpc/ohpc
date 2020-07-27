@@ -6,11 +6,9 @@
 # Configure Warewulf provisioning to use desired internal interface
 [sms](*\#*) perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf
 
-# Enable tftp service for compute node image distribution
-[sms](*\#*) perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
-
 # Enable internal interface for provisioning
-[sms](*\#*) ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
+[sms](*\#*) ip link set dev ${sms_eth_internal} up
+[sms](*\#*) ip address add ${sms_ip}/${internal_netmask} broadcast + dev ${sms_eth_internal}
 
 # Restart/enable relevant services to support provisioning
 [sms](*\#*) systemctl enable httpd.service

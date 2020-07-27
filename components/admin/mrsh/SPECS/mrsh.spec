@@ -44,6 +44,7 @@ reserved ports for security.
 %package -n %{pname}-server%{PROJ_DELIM}
 Summary: Servers for remote access commands (mrsh, mrlogin, mrcp)
 Group: System Environment/Daemons
+Requires: xinetd
 Requires(post): systemd
 %description -n %{pname}-server%{PROJ_DELIM}
 Server daemons for remote access commands (mrsh, mrlogin, mrcp)
@@ -72,6 +73,15 @@ make
 %install
 DESTDIR="%{buildroot}" make install
 
+%{__mkdir_p} %{buildroot}/usr/bin
+ln -sf %{_prefix}/bin/mrcp %{buildroot}/usr/bin/
+ln -sf %{_prefix}/bin/mrsh %{buildroot}/usr/bin/
+ln -sf %{_prefix}/bin/mrlogin %{buildroot}/usr/bin/
+
+ln -sf %{_prefix}/bin/rcp %{buildroot}/usr/bin/
+ln -sf %{_prefix}/bin/rsh %{buildroot}/usr/bin/
+ln -sf %{_prefix}/bin/rlogin %{buildroot}/usr/bin/
+
 ln -sf in.mrlogind %{buildroot}%{_sbindir}/in.rlogind
 ln -sf in.mrshd %{buildroot}%{_sbindir}/in.rshd
 
@@ -90,6 +100,7 @@ done
 %{_bindir}/mrcp
 %{_bindir}/mrsh
 %{_bindir}/mrlogin
+/usr/bin/mr*
 %dir /opt/ohpc/admin/mrsh
 %dir /opt/ohpc/admin/mrsh/bin
 %dir /opt/ohpc/admin/mrsh/share
@@ -124,6 +135,7 @@ done
 %{_bindir}/rcp
 %{_bindir}/rsh
 %{_bindir}/rlogin
+/usr/bin/r*
 %dir /opt/ohpc/admin/mrsh/share/man/man8
 
 %post -n %{pname}-server%{PROJ_DELIM}

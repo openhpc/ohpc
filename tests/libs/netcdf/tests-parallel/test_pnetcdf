@@ -55,7 +55,7 @@ delimiter="$RESOURCE_MANAGER/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI"
 
     rm -f f90tst_parallel.nc
 
-    run_mpi_binary ./F90_parallel "atest" 2 4
+    run_mpi_binary -t "00:02:00" ./F90_parallel "atest" 2 4
     assert_success
 
     run ls f90tst_parallel.nc

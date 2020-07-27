@@ -89,7 +89,7 @@ int main(int argc,char **argv)
   PetscBool      pre_check,post_check,post_setsubksp; /* flag indicating whether we're checking candidate iterates */
   PetscScalar    xp,*FF,*UU,none = -1.0;
   PetscErrorCode ierr;
-  PetscInt       its,N = 5,i,maxit,maxf,xs,xm;
+  PetscInt       its,N = 15,i,maxit,maxf,xs,xm;
   PetscReal      abstol,rtol,stol,norm;
   PetscBool      flg;
 

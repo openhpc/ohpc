@@ -28,8 +28,9 @@ if [ $LMOD_FAMILY_MPI == "mvapich2" ];then
 fi
 
 @test "[Libs/IMB] run IMB-NBC on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
+    skip
     EXE=$IMB_DIR/bin/IMB-NBC
-    ARGS="Ibcast"
+    ARGS="-npmin 100 -msglog 1:8 Ibcast"
 
     if [ ! -x $EXE ];then
         flunk "missing $EXE"
@@ -41,10 +42,15 @@ fi
 
 @test "[Libs/IMB] run IMB-RMA on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=$IMB_DIR/bin/IMB-RMA
-    ARGS="Unidir_put Unidir_get"
+    ARGS="-npmin 100 -msglog 1:4 Unidir_put Unidir_get"
 
     if [ ! -x $EXE ];then
         flunk "missing $EXE"
+    fi
+
+    # openmpi4 needs to use specific management layer to run RMA tests
+    if [[ "$LMOD_FAMILY_MPI" == "openmpi4" ]];then
+        export OMPI_MCA_pml=ob1
     fi
 
     run_mpi_binary -t $CMD_TIMEOUT $EXE "$ARGS" $NODES $TASKS

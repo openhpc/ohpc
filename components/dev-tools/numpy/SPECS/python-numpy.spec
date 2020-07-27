@@ -13,7 +13,7 @@
 %define ohpc_python_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 BuildRequires: openblas-%{compiler_family}%{PROJ_DELIM}
 Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
@@ -22,7 +22,7 @@ Requires:      openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname numpy
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}%{PROJ_DELIM}
-Version:        1.18.2
+Version:        1.19.0
 Release:        1%{?dist}
 Url:            https://github.com/numpy/numpy
 Summary:        NumPy array processing for numbers, strings, records and objects
@@ -34,13 +34,10 @@ Patch2:         numpy-intelccomp.patch
 Patch3:         numpy-intelfcomp.patch
 Patch4:         numpy-llvm-arm.patch
 Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+BuildRequires:  python3-Cython%{PROJ_DELIM}
 %if 0%{?suse_version}
 BuildRequires:  fdupes
 #!BuildIgnore: post-build-checks
-%else
-%if "%{compiler_family}" == "intel" || "%{compiler_family}" == "arm"
-BuildRequires: python34-build-patch%{PROJ_DELIM}
-%endif
 %endif
 
 # Default library install path
@@ -60,10 +57,6 @@ basic linear algebra and random number generation.
 
 %prep
 %setup -q -n %{pname}-%{version}
-#patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 %build
 # OpenHPC compiler/mpi designation
@@ -77,21 +70,11 @@ COMPILER_FLAG="--compiler=intelem"
 COMPILER_FLAG="--fcompiler=flang --compiler=clang"
 %endif
 
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 COMPILER_FLAG="--fcompiler=armflang --compiler=armclang"
 %endif
 
-%if "%{compiler_family}" == "intel"
-cat > site.cfg << EOF
-[mkl]
-include_dirs = $MKLROOT/include
-library_dirs = $MKLROOT/lib/intel64
-mkl_libs = mkl_rt
-lapack_libs = mkl_rt
-EOF
-%endif
-
-%if "%{compiler_family}" == "arm"
+%if "%{compiler_family}" == "arm1"
 cat > site.cfg << EOF
 [openblas]
 libraries = armpl
@@ -100,7 +83,7 @@ include_dirs = $ARMPL_INCLUDES
 EOF
 %endif
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 module load openblas
 cat > site.cfg << EOF
 [openblas]
@@ -146,7 +129,7 @@ module-whatis "URL %{url}"
 family                      numpy
 set     version             %{version}
 
-%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
+%if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm1"
 # Require openblas for gnu and llvm compiler families
 depends-on openblas
 %endif

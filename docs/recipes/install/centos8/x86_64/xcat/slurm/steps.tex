@@ -7,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{CentOS8.1}
-\newcommand{\OSRepo}{CentOS\_8.1}
+\newcommand{\baseOS}{CentOS8.2}
+\newcommand{\OSRepo}{CentOS\_8.2}
 \newcommand{\OSTree}{CentOS\_8}
 \newcommand{\OSTag}{el8}
-\newcommand{\baseos}{centos8.1}
+\newcommand{\baseos}{centos8.2}
 \newcommand{\baseosshort}{centos8}
 \newcommand{\provisioner}{xCAT}
 \newcommand{\provheader}{xCAT (stateless)}
@@ -109,27 +109,11 @@ distributions. To enable for local use, issue the following:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
-[sms](*\#*)  (*\addrepo*) https://xcat.org/files/xcat/repos/yum/xcat-dep/rh7/ARCH/xcat-dep.repo
+[sms](*\#*) (*\addrepo*) http://xcat.org/files/xcat/repos/yum/devel/xcat-dep/rh8/ARCH/xcat-dep.repo
 \end{lstlisting}
 % end_ohpc_run
 
-In addition to the \OHPC{} and \xCAT{} package repositories, the {\em master} host also
-requires access to the standard base OS distro repositories in order to resolve
-necessary dependencies. For \baseOS{}, the requirements are to have access to
-both the base OS and EPEL repositories for which mirrors are freely available online:
-
-\begin{itemize*}
-\item CentOS-7 - Base 7.7.1908
-  (e.g. \href{http://mirror.centos.org/centos-7/7/os/x86\_64}
-             {\color{blue}{http://mirror.centos.org/centos-7/7/os/x86\_64}} )
-\item EPEL 7 (e.g. \href{http://download.fedoraproject.org/pub/epel/7/x86\_64}
-                        {\color{blue}{http://download.fedoraproject.org/pub/epel/7/x86\_64}} )
-\end{itemize*}
-
-\noindent The public EPEL repository will be enabled automatically upon installation of the 
-\texttt{ohpc-release} package. Note that this requires the CentOS Extras
-repository, which is shipped with CentOS and is enabled by default.
-
+\input{common/centos_repos}
 \input{common/automation}
 
 
@@ -162,17 +146,26 @@ repository, which is shipped with CentOS and is enabled by default.
 % begin_ohpc_run
 % ohpc_validation_comment Add OpenHPC components to compute instance
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+# copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
+# install. Note that these will be synchronized with future updates via the provisioning system.
+[sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
+
 # Add Slurm client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
 
+# Register Slurm server with computes (using "configless" option)
+[sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
+
 # Add Network Time Protocol (NTP) support
-[sms](*\#*) (*\chrootinstall*) ntp
+[sms](*\#*) (*\chrootinstall*) chrony
+# Identify master host as local NTP server
+[sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
 # Add kernel drivers
 [sms](*\#*) (*\chrootinstall*) kernel
 
 # Include modules user environment
-[sms](*\#*) (*\chrootinstall*) lmod-ohpc
+[sms](*\#*) (*\chrootinstall*)  --enablerepo=PowerTools lmod-ohpc
 \end{lstlisting}
 
 % ohpc_comment_header Optionally add InfiniBand support services in compute node image \ref{sec:add_components}
@@ -181,7 +174,6 @@ repository, which is shipped with CentOS and is enabled by default.
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Optionally add IB support and enable
 [sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
-[sms](*\#*) (*\chrootinstall*) infinipath-psm
 [sms](*\#*) chroot $CHROOT systemctl enable rdma
 \end{lstlisting}
 % ohpc_indent 0
@@ -223,18 +215,13 @@ repository, which is shipped with CentOS and is enabled by default.
 \input{common/lustre-client-centos}
 \input{common/lustre-client-post}
 
-\paragraph{Add \Nagios{} monitoring}
+\paragraph{Add \Nagios{} monitoring} \label{sec:add_nagios}
 \input{common/nagios}
 
 \clearpage
-\paragraph{Add \Ganglia{} monitoring}
-\input{common/ganglia}
 
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
-
-\paragraph{Add \mrsh{}}
-\input{common/mrsh}
 
 \paragraph{Add \genders{}}
 \input{common/genders}

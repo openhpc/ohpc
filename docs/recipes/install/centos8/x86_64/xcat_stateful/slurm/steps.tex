@@ -7,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{CentOS8.1}
-\newcommand{\OSRepo}{CentOS\_8.1}
+\newcommand{\baseOS}{CentOS8.2}
+\newcommand{\OSRepo}{CentOS\_8.2}
 \newcommand{\OSTree}{CentOS\_8}
 \newcommand{\OSTag}{el8}
-\newcommand{\baseos}{centos8.1}
+\newcommand{\baseos}{centos8.2}
 \newcommand{\baseosshort}{centos8}
 \newcommand{\provisioner}{xCAT}
 \newcommand{\provheader}{xCAT (stateful)}
@@ -222,7 +222,6 @@ issue the following
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Optionally add IB support and enable
 [sms](*\#*) (*\groupchrootinstall*) "InfiniBand Support"
-[sms](*\#*) (*\chrootinstall*) infinipath-psm
 [sms](*\#*) psh compute systemctl enable rdma
 [sms](*\#*) psh compute systemctl start rdma
 \end{lstlisting}
@@ -261,18 +260,13 @@ issue the following
 \input{common/lustre-client-centos-stateful}
 \input{common/lustre-client-post-stateful}
 
-\paragraph{Add \Nagios{} monitoring}
+\paragraph{Add \Nagios{} monitoring} \label{sec:add_nagios}
 \input{common/nagios_stateful}
 
 \vspace*{0.4cm}
-\paragraph{Add \Ganglia{} monitoring}
-\input{common/ganglia_stateful}
 
 \paragraph{Add \clustershell{}}
 \input{common/clustershell}
-
-\paragraph{Add \mrsh{}}
-\input{common/mrsh_stateful}
 
 \paragraph{Add \genders{}}
 \input{common/genders}

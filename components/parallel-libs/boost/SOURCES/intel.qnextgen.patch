@@ -1,0 +1,116 @@
+--- a/tools/build/src/tools/intel-linux.jam	2020-04-02 10:45:03.000000000 -0500
++++ a/tools/build/src/tools/intel-linux.jam	2020-04-02 10:52:20.000000000 -0500
+@@ -117,23 +117,17 @@
+             flags intel-linux.compile OPTIONS $(condition)/<inlining>on : "-Ob1" ;
+             flags intel-linux.compile OPTIONS $(condition)/<inlining>full : "-Ob2" ;            
+             flags intel-linux.compile OPTIONS $(condition)/<optimization>space : "-O1" ;
+-            flags intel-linux.compile OPTIONS $(condition)/<optimization>speed : "-O3 -ip" ;
++            flags intel-linux.compile OPTIONS $(condition)/<optimization>speed : "-O3 -qnextgen" ;
+         }
+         else if $(major) && [ numbers.less $(major) 11 ]
+         {
+-            flags intel-linux.compile OPTIONS $(condition)/<inlining>off : "-inline-level=0" ; 
+-            flags intel-linux.compile OPTIONS $(condition)/<inlining>on : "-inline-level=1" ; 
+-            flags intel-linux.compile OPTIONS $(condition)/<inlining>full : "-inline-level=2" ;                
+             flags intel-linux.compile OPTIONS $(condition)/<optimization>space : "-O1" ;
+-            flags intel-linux.compile OPTIONS $(condition)/<optimization>speed : "-O3 -ip" ;
++            flags intel-linux.compile OPTIONS $(condition)/<optimization>speed : "-O3 -qnextgen" ;
+         }
+         else # newer version of intel do have -Os (at least 11+, don't know about 10)
+         {                        
+-            flags intel-linux.compile OPTIONS $(condition)/<inlining>off : "-inline-level=0" ; 
+-            flags intel-linux.compile OPTIONS $(condition)/<inlining>on : "-inline-level=1" ; 
+-            flags intel-linux.compile OPTIONS $(condition)/<inlining>full : "-inline-level=2" ;                
+             flags intel-linux.compile OPTIONS $(condition)/<optimization>space : "-Os" ;
+-            flags intel-linux.compile OPTIONS $(condition)/<optimization>speed : "-O3 -ip" ;
++            flags intel-linux.compile OPTIONS $(condition)/<optimization>speed : "-O3 -qnextgen" ;
+         }        
+            
+         if $(root)
+@@ -155,8 +149,8 @@
+ SPACE = " " ;
+ 
+ flags intel-linux.compile OPTIONS <warnings>off : -w0 ;
+-flags intel-linux.compile OPTIONS <warnings>on : -w1 ;
+-flags intel-linux.compile OPTIONS <warnings>all : -w2 ;
++flags intel-linux.compile OPTIONS <warnings>on : -O3 ;
++flags intel-linux.compile OPTIONS <warnings>all : -O3 ;
+ 
+ rule compile.c++ ( targets * : sources * : properties * )
+ {
+--- a/libs/numeric/ublas/test/Jamfile	2020-04-02 10:50:48.000000000 -0500
++++ a/libs/numeric/ublas/test/Jamfile	2020-04-02 10:52:20.000000000 -0500
+@@ -154,7 +154,7 @@
+ #            <define>INTERAL
+ #            <define>SKIP_BAD
+             <toolset>intel-linux:<cxxflags>"-Xc"
+-            <toolset>darwin:<cxxflags>"-fabi-version=0"
++            <toolset>darwin:<cxxflags>"-O3"
+       ]
+       [ run test_lu.cpp
+         : : :
+--- a/libs/numeric/ublas/IDEs/qtcreator/test/concepts.pro	2020-04-02 10:51:17.000000000 -0500
++++ a/libs/numeric/ublas/IDEs/qtcreator/test/concepts.pro	2020-04-02 10:52:20.000000000 -0500
+@@ -9,7 +9,7 @@
+ # SKIP_BAD
+ 
+ linux: icc: QMAKE_CXXFLAGS += -Xc
+-macx: QMAKE_CXXFLAGS += -fabi-version=0
++macx: QMAKE_CXXFLAGS += -O3
+ 
+ 
+ SOURCES += \
+--- a/libs/log/build/Jamfile.v2	2020-04-02 10:51:44.000000000 -0500
++++ a/libs/log/build/Jamfile.v2	2020-04-02 10:52:20.000000000 -0500
+@@ -308,7 +308,7 @@
+                 }
+                 else
+                 {
+-                    result = <cxxflags>"-xSSSE3" ;
++                    result = <cxxflags>"-mavx2" ;
+                 }
+             }
+             else if <toolset>msvc in $(properties)
+@@ -361,7 +361,7 @@
+             result = ;
+             if <toolset>gcc in $(properties)
+             {
+-                result = <cxxflags>"-mavx -mavx2 -fabi-version=0" ;
++                result = <cxxflags>"-mavx -mavx2 -O3" ;
+             }
+             else if <toolset>clang in $(properties)
+             {
+@@ -375,7 +375,7 @@
+                 }
+                 else
+                 {
+-                    result = <cxxflags>"-xCORE-AVX2 -fabi-version=0" ;
++                    result = <cxxflags>"-mavx2 -O3" ;
+                 }
+             }
+             else if <toolset>msvc in $(properties)
+--- a/libs/log/config/x86-ext/Jamfile.jam	2020-04-02 10:51:58.000000000 -0500
++++ a/libs/log/config/x86-ext/Jamfile.jam	2020-04-02 10:52:20.000000000 -0500
+@@ -17,17 +17,17 @@
+     :
+         <toolset>gcc:<cxxflags>"-msse -msse2 -msse3 -mssse3"
+         <toolset>clang:<cxxflags>"-msse -msse2 -msse3 -mssse3"
+-        <toolset>intel-linux:<cxxflags>"-xSSSE3"
+-        <toolset>intel-darwin:<cxxflags>"-xSSSE3"
++        <toolset>intel-linux:<cxxflags>"-mavx2"
++        <toolset>intel-darwin:<cxxflags>"-mavx2"
+         <toolset>intel-win:<cxxflags>"/QxSSSE3"
+     ;
+ 
+ obj avx2 : avx2.cpp
+     :
+-        <toolset>gcc:<cxxflags>"-mavx -mavx2 -fabi-version=0"
++        <toolset>gcc:<cxxflags>"-mavx -mavx2 -O3"
+         <toolset>clang:<cxxflags>"-mavx -mavx2"
+-        <toolset>intel-linux:<cxxflags>"-xCORE-AVX2 -fabi-version=0"
+-        <toolset>intel-darwin:<cxxflags>"-xCORE-AVX2 -fabi-version=0"
++        <toolset>intel-linux:<cxxflags>"-mavx2 -O3"
++        <toolset>intel-darwin:<cxxflags>"-mavx2 -O3"
+         <toolset>intel-win:<cxxflags>"/arch:CORE-AVX2"
+         <toolset>msvc:<cxxflags>"/arch:AVX"
+     ;

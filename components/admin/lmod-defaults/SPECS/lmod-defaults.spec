@@ -9,17 +9,18 @@
 #----------------------------------------------------------------------------eh-
 
 %include %{_sourcedir}/OHPC_macros
+%{!?transport: %global transport %{nil}}
 
 Summary:   OpenHPC default login environments
-Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Name:      lmod-defaults-%{compiler_family}-%{mpi_family}%{transport}%{PROJ_DELIM}
 Version:   2.0
 Release:   1
 License:   Apache-2.0
 Group:     %{PROJ_NAME}/admin
 URL:       https://github.com/openhpc/ohpc
 BuildArch: noarch
-Requires: lmod%{PROJ_DELIM}
-
+Requires:  lmod%{PROJ_DELIM}
+Requires:  %{mpi_family}%{transport}-%{compiler_family}%{PROJ_DELIM}
 
 %description
 
@@ -63,6 +64,40 @@ if [ module-info mode remove ] {
         module del autotools
 }
 EOF
+
+# Additional logic for mpich-(ucx|ofi) variants
+%if "%{mpi_family}" == "mpich"
+%post
+
+if [ $1 -ge 1 ];then
+
+    version=`rpm -q --qf '%%{VERSION}\n' %{mpi_family}%{transport}-%{compiler_family}%{PROJ_DELIM} | sort -rV | head -1`
+
+    moduleFile=$version%{transport}
+    echo $moduleFile
+    if [ -f %{OHPC_MODULEDEPS}/%{compiler_family}/%{mpi_family}/$moduleFile ];then
+        pushd %{OHPC_MODULEDEPS}/%{compiler_family}/%{mpi_family}
+        # remove previous default if it exists
+        if [ -f default ];then
+            rm -f default
+        fi
+        # establish latest default
+        ln -s $moduleFile default
+        popd
+    fi
+fi
+
+%preun
+
+if [ $1 -ge 0 ];then
+    if [ -L %{OHPC_MODULEDEPS}/%{compiler_family}/%{mpi_family}/default ];then
+        rm -f %{OHPC_MODULEDEPS}/%{compiler_family}/%{mpi_family}/default
+    fi
+
+fi
+
+%endif
+
 
 %files
 %dir %{OHPC_HOME}

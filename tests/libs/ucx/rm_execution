@@ -1,0 +1,39 @@
+#!.//common/bats/bin/bats 
+# -*-sh-*-
+
+source ./common/test_helper_functions.bash || exit 1
+source ./common/functions || exit 1
+
+if [ -s ./common/TEST_ENV ];then
+    source ./common/TEST_ENV
+fi
+
+check_rms
+rm=$RESOURCE_MANAGER
+
+PKG="UCX"
+
+
+@test "[$PKG] Running ucx_profiling under resource manager ($rm/$LMOD_FAMILY_COMPILER)" {
+    test="ucx_profiling"
+
+    module purge
+    module load ${GCC_DEFAULT}
+    module load ucx
+
+    if [ ! -e $test ];then
+        flunk "$test does not exist"
+    fi
+
+    rm -f $test.results
+    run run_serial_binary -o $test.results $test
+    assert_success
+
+    run ls $test.results
+    assert_success
+
+    run grep "PI estimation is 3.04" $test.results 
+    assert_success
+
+}
+

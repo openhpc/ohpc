@@ -49,7 +49,7 @@ Requires:      scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
 MUMPS implements a direct solver for large sparse linear systems, with a
@@ -170,7 +170,7 @@ install -m 644 Makefile.inc %{buildroot}%{install_path}/etc
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -206,12 +206,12 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %{__mkdir} -p %{buildroot}/%{_docdir}

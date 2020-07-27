@@ -26,6 +26,7 @@ Source5:  job.mpi
 Source6:  60-ipath.rules
 Source7:  gmond.conf
 Source8:  job.pbs.mpi
+Source9:  compute.cfg
 Source10: example.modulefile
 Source11: example-mpi-dependent.modulefile
 
@@ -53,7 +54,8 @@ install -D -m 0644 %SOURCE4 %{buildroot}%{OHPC_HOME}/pub/examples/network/centos
 install -D -m 0644 %SOURCE5 %{buildroot}%{OHPC_HOME}/pub/examples/slurm/job.mpi
 install -D -m 0644 %SOURCE6 %{buildroot}%{OHPC_HOME}/pub/examples/udev/60-ipath.rules
 install -D -m 0644 %SOURCE7 %{buildroot}%{OHPC_HOME}/pub/examples/ganglia/gmond.conf
-install -D -m 0644 %SOURCE8 %{buildroot}%{OHPC_HOME}/pub/examples/pbspro/job.mpi
+install -D -m 0644 %SOURCE8 %{buildroot}%{OHPC_HOME}/pub/examples/openpbs/job.mpi
+install -D -m 0644 %SOURCE9 %{buildroot}%{OHPC_HOME}/pub/examples/nagios/compute.cfg
 install -D -m 0644 %SOURCE10 %{buildroot}%{OHPC_HOME}/pub/examples/example.modulefile
 install -D -m 0644 %SOURCE11 %{buildroot}%{OHPC_HOME}/pub/examples/example-mpi-dependent.modulefile
 

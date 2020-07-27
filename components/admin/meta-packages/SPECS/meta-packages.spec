@@ -87,24 +87,22 @@ Requires:  python3
 Requires:  cairo-devel
 Requires:  libpciaccess
 Requires:  libseccomp
+Requires:  librdmacm
+%ifarch x86_64
+Requires:  libpsm2
+%endif
 %endif
 %if 0%{?suse_version}
 Requires:  libcairo2
 Requires:  libpciaccess0
+Requires:  libatomic1
+Requires:  librdmacm1
+%ifarch x86_64
+Requires:  libpsm2-2
+%endif
 %endif
 %description -n %{PROJ_NAME}-base-compute
 Collection of compute node base packages
-
-%package -n %{PROJ_NAME}-ganglia
-Summary:   OpenHPC Ganglia monitoring
-Requires:  ganglia%{PROJ_DELIM}
-Requires:  ganglia-devel%{PROJ_DELIM}
-Requires:  ganglia-gmetad%{PROJ_DELIM}
-Requires:  ganglia-gmond%{PROJ_DELIM}
-Requires:  ganglia-gmond-python%{PROJ_DELIM}
-Requires:  ganglia-web%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-ganglia
-Collection of Ganglia monitoring and metrics packages
 
 %package -n %{PROJ_NAME}-%{compiler_family}-geopm
 Summary:   OpenHPC GEOPM power management for GNU
@@ -116,8 +114,8 @@ Global Extensible Open Power Manager for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-io-libs
 Summary:   OpenHPC IO libraries for GNU
-# TODO Requires:  adios-%{compiler_family}-mpich%{PROJ_DELIM}
-# TODO Requires:  adios-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  adios-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  adios-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  hdf5-%{compiler_family}%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
@@ -130,7 +128,7 @@ Requires:  pnetcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  phdf5-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
-# TODO Requires:  adios-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  adios-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-cxx-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-fortran-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  netcdf-%{compiler_family}-mvapich2%{PROJ_DELIM}
@@ -175,14 +173,6 @@ Requires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  hdf5-%{compiler_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-io-libs
 Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime
-
-%package -n %{PROJ_NAME}-nagios
-Summary:   OpenHPC Nagios monitoring
-Requires:  nagios%{PROJ_DELIM}
-Requires:  nagios-plugins-all%{PROJ_DELIM}
-Requires:  nrpe%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-nagios
-Collection of Nagios monitoring and metrics packages
 
 %package -n %{PROJ_NAME}-%{compiler_family}-parallel-libs
 Summary:   OpenHPC parallel libraries for GNU
@@ -232,15 +222,15 @@ Summary:   OpenHPC parallel libraries for GNU and MPICH
 Requires:  boost-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  fftw-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  mfem-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  mfem-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  mumps-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  petsc-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  opencoarrays-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scalapack-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  slepc-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  ptscotch-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  superlu_dist-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  trilinos-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  superlu_dist-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  trilinos-%{compiler_family}-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-mpich-parallel-libs
 Collection of parallel library builds for use with GNU compiler toolchain and the MPICH runtime
 
@@ -249,45 +239,46 @@ Summary:   OpenHPC parallel libraries for GNU and OpenMPI
 Requires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  mfem-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  mfem-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  petsc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  opencoarrays-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalapack-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  trilinos-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  superlu_dist-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  trilinos-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with GNU compiler toolchain and the OpenMPI runtime
 
 %package -n %{PROJ_NAME}-%{compiler_family}-perf-tools
 Summary:   OpenHPC performance tools for GNU
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  mpiP-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  mpiP-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %ifnarch aarch64
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
-## TODO Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
-## TODO Requires:  mpiP-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mvapich2%{PROJ_DELIM}
 %endif
@@ -296,12 +287,13 @@ Collection of performance tool builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mpich-perf-tools
 Summary:   OpenHPC performance tools for GNU and MPICH
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  mpiP-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -310,13 +302,14 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mvapich2-perf-tools
 Summary:   OpenHPC performance tools for GNU and MVAPICH2
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
-## TODO Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
-## TODO Requires:  mpiP-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mvapich2%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -325,13 +318,14 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-perf-tools
 Summary:   OpenHPC performance tools for GNU and OpenMPI
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
-## TODO Requires:  mpiP-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -360,7 +354,6 @@ Collection of python3 related library builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-runtimes
 Summary:   OpenHPC runtimes for GNU
-Requires:  ocr-%{compiler_family}%{PROJ_DELIM}
 Requires:  charliecloud%{PROJ_DELIM}
 Requires:  singularity%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-runtimes
@@ -536,8 +529,8 @@ Collection of parallel library builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-intel-impi-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and Intel(R) MPI Library
-Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  boost-intel-impi%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-intel-impi%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  hypre-intel-impi%{PROJ_DELIM}
 Requires:  mfem-%{compiler_family}-impi%{PROJ_DELIM}
@@ -556,13 +549,13 @@ Requires:  ptscotch-intel-impi%{PROJ_DELIM}
 Requires:  superlu_dist-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
 Requires:  trilinos-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  trilinos-intel-impi%{PROJ_DELIM}
+## BUILDBROKEN Requires:  trilinos-intel-impi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-impi-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
 
 %package -n %{PROJ_NAME}-intel-mpich-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
-Requires:  boost-intel-mpich%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-intel-mpich%{PROJ_DELIM}
 Requires:  hypre-intel-mpich%{PROJ_DELIM}
 Requires:  mfem-intel-mpich%{PROJ_DELIM}
 Requires:  mumps-intel-mpich%{PROJ_DELIM}
@@ -571,13 +564,13 @@ Requires:  scalapack-intel-mpich%{PROJ_DELIM}
 Requires:  slepc-intel-mpich%{PROJ_DELIM}
 Requires:  ptscotch-intel-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
-Requires:  trilinos-intel-mpich%{PROJ_DELIM}
+## BUILDBROKEN Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 
 %package -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
-Requires:  boost-intel-mvapich2%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-intel-mvapich2%{PROJ_DELIM}
 Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
 Requires:  mfem-intel-mvapich2%{PROJ_DELIM}
 Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
@@ -586,13 +579,13 @@ Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
 Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-intel-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
-Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
+## BUILDBROKEN Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
-Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
+## BUILDBROKEN Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  hypre-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mfem-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-intel-%{mpi_family}%{PROJ_DELIM}
@@ -601,40 +594,41 @@ Requires:  scalapack-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  superlu_dist-intel-%{mpi_family}%{PROJ_DELIM}
-Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
+## BUILDBROKEN Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 
 %package -n %{PROJ_NAME}-intel-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
+%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-impi%{PROJ_DELIM}
-Requires:  dimemas-intel-impi%{PROJ_DELIM}
-Requires:  dimemas-intel-mpich%{PROJ_DELIM}
-Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
-Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
+## TODO Requires:  dimemas-intel-impi%{PROJ_DELIM}
+## TODO Requires:  dimemas-intel-mpich%{PROJ_DELIM}
+## TODO Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
+## TODO Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
+%endif
 Requires:  extrae-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  extrae-intel-impi%{PROJ_DELIM}
 Requires:  extrae-intel-mpich%{PROJ_DELIM}
 Requires:  extrae-intel-mvapich2%{PROJ_DELIM}
 Requires:  extrae-intel-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires: imb-%{compiler_family}-impi%{PROJ_DELIM}
-## TODO Requires: imb-intel-impi%{PROJ_DELIM}
-## TODO Requires: imb-intel-mpich%{PROJ_DELIM}
-## TODO Requires: imb-intel-mvapich2%{PROJ_DELIM}
-## TODO Requires: imb-intel-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  likwid-intel%{PROJ_DELIM}
-## TODO Requires:  mpiP-%{compiler_family}-impi%{PROJ_DELIM}
+Requires:  imb-%{compiler_family}-impi%{PROJ_DELIM}
+Requires:  imb-intel-impi%{PROJ_DELIM}
+Requires:  imb-intel-mpich%{PROJ_DELIM}
+Requires:  imb-intel-mvapich2%{PROJ_DELIM}
+Requires:  imb-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  omb-intel-impi%{PROJ_DELIM}
 Requires:  omb-intel-mpich%{PROJ_DELIM}
 Requires:  omb-intel-mvapich2%{PROJ_DELIM}
 Requires:  omb-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
-## TODO Requires:  tau-%{compiler_family}-impi%{PROJ_DELIM}
-## TODO Requires:  tau-intel-impi%{PROJ_DELIM}
-## TODO Requires:  tau-intel-mpich%{PROJ_DELIM}
-## TODO Requires:  tau-intel-mvapich2%{PROJ_DELIM}
-## TODO Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  tau-%{compiler_family}-impi%{PROJ_DELIM}
+Requires:  tau-intel-impi%{PROJ_DELIM}
+Requires:  tau-intel-mpich%{PROJ_DELIM}
+Requires:  tau-intel-mvapich2%{PROJ_DELIM}
+Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
@@ -650,11 +644,10 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-impi-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and Intel(R) MPI
-## TODO Requires: imb-intel-impi%{PROJ_DELIM}
-## TODO Requires:  likwid-intel%{PROJ_DELIM}
-## TODO Requires:  mpiP-intel-impi%{PROJ_DELIM}
+Requires:  imb-intel-impi%{PROJ_DELIM}
+Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-impi%{PROJ_DELIM}
-## TODO Requires:  tau-intel-impi%{PROJ_DELIM}
+Requires:  tau-intel-impi%{PROJ_DELIM}
 Requires:  scalasca-intel-impi%{PROJ_DELIM}
 Requires:  scorep-intel-impi%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -663,11 +656,10 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE c
 
 %package -n %{PROJ_NAME}-intel-mpich-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MPICH
-## TODO Requires: imb-intel-mpich%{PROJ_DELIM}
-## TODO Requires:  likwid-intel%{PROJ_DELIM}
-## TODO Requires:  mpiP-intel-mpich%{PROJ_DELIM}
+Requires:  imb-intel-mpich%{PROJ_DELIM}
+Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-mpich%{PROJ_DELIM}
-## TODO Requires:  tau-intel-mpich%{PROJ_DELIM}
+Requires:  tau-intel-mpich%{PROJ_DELIM}
 Requires:  scalasca-intel-mpich%{PROJ_DELIM}
 Requires:  scorep-intel-mpich%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -676,11 +668,10 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE c
 
 %package -n %{PROJ_NAME}-intel-mvapich2-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and MVAPICH2
-## TODO Requires: imb-intel-mvapich2%{PROJ_DELIM}
-## TODO Requires:  likwid-intel%{PROJ_DELIM}
-## TODO Requires:  mpiP-intel-mvapich2%{PROJ_DELIM}
+Requires:  imb-intel-mvapich2%{PROJ_DELIM}
+Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-mvapich2%{PROJ_DELIM}
-## TODO Requires:  tau-intel-mvapich2%{PROJ_DELIM}
+Requires:  tau-intel-mvapich2%{PROJ_DELIM}
 Requires:  scalasca-intel-mvapich2%{PROJ_DELIM}
 Requires:  scorep-intel-mvapich2%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -689,11 +680,10 @@ Collection of performance tool builds for use with Intel(R) Parallel Studio XE c
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-perf-tools
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE and OpenMPI
-## TODO Requires: imb-intel-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  likwid-intel%{PROJ_DELIM}
-## TODO Requires:  mpiP-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  imb-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  likwid-intel%{PROJ_DELIM}
 Requires:  omb-intel-%{mpi_family}%{PROJ_DELIM}
-## TODO Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  tau-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scalasca-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  scorep-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  papi%{PROJ_DELIM}
@@ -719,7 +709,6 @@ Collection of python3 related library builds for use with Intel(R) Parallel Stud
 
 %package -n %{PROJ_NAME}-intel-runtimes
 Summary:   OpenHPC runtimes for Intel(R) Parallel Studio XE toolchain
-Requires:  ocr-intel%{PROJ_DELIM}
 Requires:  charliecloud%{PROJ_DELIM}
 Requires:  singularity%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-runtimes
@@ -734,7 +723,102 @@ Requires:  superlu-intel%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-serial-libs
 Collection of serial library builds for use with Intel(R) Parallel Studio XE toolchain
 
+%endif  # <-- end non-aarch64 only
+
+# aarch64 specific groups
+%ifarch aarch64
+
+%package -n %{PROJ_NAME}-arm1-serial-libs
+Summary:   OpenHPC serial libraries for use with Arm Compiler for Linux
+Requires:  metis-arm1%{PROJ_DELIM}
+Requires:  plasma-arm1%{PROJ_DELIM}
+### Requires:  scotch-arm1%{PROJ_DELIM}
+Requires:  superlu-arm1%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-serial-libs
+Collection of serial library builds for use with the Arm Compiler for Linux toolchain
+
+%package -n %{PROJ_NAME}-arm1-io-libs
+Summary:   OpenHPC IO libraries for use with Arm Compiler for Linux
+### Requires:  adios-arm1-mpich%{PROJ_DELIM}
+### Requires:  adios-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  hdf5-arm1%{PROJ_DELIM}
+### Requires:  netcdf-cxx-arm1-mpich%{PROJ_DELIM}
+### Requires:  netcdf-cxx-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  netcdf-fortran-arm1-mpich%{PROJ_DELIM}
+### Requires:  netcdf-fortran-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  netcdf-arm1-mpich%{PROJ_DELIM}
+### Requires:  netcdf-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  pnetcdf-arm1-mpich%{PROJ_DELIM}
+### Requires:  pnetcdf-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  phdf5-arm1-mpich%{PROJ_DELIM}
+### Requires:  phdf5-arm1-%{mpi_family}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-io-libs
+Collection of IO library builds for use with the Arm Compiler for Linux toolchain
+
+%package -n %{PROJ_NAME}-arm1-perf-tools
+Summary:   OpenHPC performance tools for use with Arm Compiler for Linux
+%if 0%{?rhel}
+## TODO Requires:  dimemas-arm1-impi%{PROJ_DELIM}
+## TODO Requires:  dimemas-arm1-mpich%{PROJ_DELIM}
+## TODO Requires:  dimemas-arm1-mvapich2%{PROJ_DELIM}
+## TODO Requires:  dimemas-arm1-%{mpi_family}%{PROJ_DELIM}
 %endif
+### Requires:  extrae-arm1-mpich%{PROJ_DELIM}
+### Requires:  extrae-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  imb-arm1-mpich%{PROJ_DELIM}
+### Requires:  imb-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  likwid-arm1%{PROJ_DELIM}
+Requires:  omb-arm1-mpich%{PROJ_DELIM}
+Requires:  omb-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  papi%{PROJ_DELIM}
+### Requires:  tau-arm1-mpich%{PROJ_DELIM}
+### Requires:  tau-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  scalasca-arm1-mpich%{PROJ_DELIM}
+### Requires:  scalasca-arm1-%{mpi_family}%{PROJ_DELIM}
+### Requires:  scorep-arm1-mpich%{PROJ_DELIM}
+### Requires:  scorep-arm1-%{mpi_family}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-perf-tools
+Collection of performance tool builds for use with the Arm Compiler for Linux toolchain
+
+## %package -n %{PROJ_NAME}-arm1-python3-libs
+## Summary:   OpenHPC python3 libraries for use with Arm Compiler for Linux
+## ### Requires:  %{python_prefix}-numpy-arm1%{PROJ_DELIM}
+## ### Requires:  %{python_prefix}-mpi4py-arm1-mpich%{PROJ_DELIM}
+## ### Requires:  %{python_prefix}-mpi4py-arm1-%{mpi_family}%{PROJ_DELIM}
+## %description -n %{PROJ_NAME}-arm1-python3-libs
+## Collection of python3 related library builds for use with the Arm Compiler for Linux toolchain
+
+%package -n %{PROJ_NAME}-arm1-mpich-parallel-libs
+Summary:   OpenHPC parallel libraries for use with Arm Compiler for Linux
+## Requires:  boost-arm1-mpich%{PROJ_DELIM}
+## Requires:  hypre-arm1-mpich%{PROJ_DELIM}
+## Requires:  mfem-arm1-mpich%{PROJ_DELIM}
+## Requires:  mumps-arm1-mpich%{PROJ_DELIM}
+## Requires:  petsc-arm1-mpich%{PROJ_DELIM}
+## ## Requires:  scalapack-arm1-mpich%{PROJ_DELIM}
+## Requires:  slepc-arm1-mpich%{PROJ_DELIM}
+Requires:  ptscotch-arm1-mpich%{PROJ_DELIM}
+Requires:  superlu_dist-arm1-mpich%{PROJ_DELIM}
+## Requires:  trilinos-arm1-mpich%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-mpich-parallel-libs
+Collection of parallel library builds for use with the Arm Compiler for Linux and the MPICH runtime
+
+%package -n %{PROJ_NAME}-arm1-%{mpi_family}-parallel-libs
+Summary:   OpenHPC parallel libraries for use with Arm Compiler for Linux
+## Requires:  boost-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  hypre-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  mfem-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  mumps-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  petsc-arm1-%{mpi_family}%{PROJ_DELIM}
+## ## Requires:  scalapack-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  slepc-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  ptscotch-arm1-%{mpi_family}%{PROJ_DELIM}
+Requires:  superlu_dist-arm1-%{mpi_family}%{PROJ_DELIM}
+## Requires:  trilinos-arm1-%{mpi_family}%{PROJ_DELIM}
+%description -n %{PROJ_NAME}-arm1-%{mpi_family}-parallel-libs
+Collection of parallel library builds for use with the Arm Compiler for Linux and the %{mpi_family} runtime
+
+%endif  # <-- end aarch64 only
 
 
 %prep
@@ -751,7 +835,6 @@ Collection of serial library builds for use with Intel(R) Parallel Studio XE too
 %files -n %{PROJ_NAME}-autotools
 %files -n %{PROJ_NAME}-base
 %files -n %{PROJ_NAME}-base-compute
-%files -n %{PROJ_NAME}-ganglia
 %files -n %{PROJ_NAME}-%{compiler_family}-geopm
 %files -n %{PROJ_NAME}-%{compiler_family}-io-libs
 %files -n %{PROJ_NAME}-%{compiler_family}-mpich-io-libs
@@ -766,7 +849,6 @@ Collection of serial library builds for use with Intel(R) Parallel Studio XE too
 %files -n %{PROJ_NAME}-%{compiler_family}-python3-libs
 %files -n %{PROJ_NAME}-%{compiler_family}-runtimes
 %files -n %{PROJ_NAME}-%{compiler_family}-serial-libs
-%files -n %{PROJ_NAME}-nagios
 %files -n %{PROJ_NAME}-slurm-client
 %files -n %{PROJ_NAME}-slurm-server
 %files -n %{PROJ_NAME}-warewulf
@@ -790,8 +872,18 @@ Collection of serial library builds for use with Intel(R) Parallel Studio XE too
 %files -n %{PROJ_NAME}-intel-mpich-perf-tools
 %files -n %{PROJ_NAME}-intel-mvapich2-perf-tools
 %files -n %{PROJ_NAME}-intel-%{mpi_family}-perf-tools
-%files -n %{PROJ_NAME}-intel-python-libs
 %files -n %{PROJ_NAME}-intel-python3-libs
 %files -n %{PROJ_NAME}-intel-runtimes
 %files -n %{PROJ_NAME}-intel-serial-libs
+%endif
+
+# aarch64 specific groups
+%ifarch aarch64
+%files -n %{PROJ_NAME}-arm1-serial-libs
+%files -n %{PROJ_NAME}-arm1-io-libs
+%files -n %{PROJ_NAME}-arm1-perf-tools
+## %files -n %{PROJ_NAME}-arm1-python3-libs
+## %files -n %{PROJ_NAME}-arm1-runtimes
+%files -n %{PROJ_NAME}-arm1-mpich-parallel-libs
+%files -n %{PROJ_NAME}-arm1-%{mpi_family}-parallel-libs
 %endif

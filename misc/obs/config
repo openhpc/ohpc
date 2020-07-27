@@ -17,7 +17,7 @@ dev-tools     = ["autoconf","automake","cmake","easybuild","hwloc","libtool","py
 	         "python-scipy","spack","valgrind"]
 io-libs       = ["hdf5","netcdf","netcdf-cxx","netcdf-fortran","phdf5","pnetcdf"]
 runtimes      = ["singularity","ocr","charliecloud"]
-rms           = ["slurm","pbspro","pmix"]
+rms           = ["slurm","openpbs","pmix"]
 serial-libs   = ["R","openblas","plasma"]
 parallel-libs = ["boost","hypre","mfem","mumps","opencoarrays","petsc","slepc","superlu_dist","trilinos"]
 perf-tools    = ["dimemas","extrae","geopm","likwid","omb","papi","scorep","tau"]
@@ -38,7 +38,7 @@ mpi_families=["openmpi3","mpich","mvapich2","impi"]
 
 # define (standalone) component packages
 standalone = ["charliecloud","cmake","conman","docs","easybuild","gnu-compilers","hwloc","intel-compilers-devel",
-	      "lmod","losf","lustre-client","meta-packages","nagios","pbspro","pmix","prun","singularity","slurm",
+	      "lmod","losf","lustre-client","meta-packages","nagios","openpbs","pmix","prun","singularity","slurm",
 	      "spack","test-suite","valgrind"]
 
 # define (compiler dependent) packages

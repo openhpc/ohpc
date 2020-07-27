@@ -13,7 +13,7 @@
 %define pname powerman
 
 Name:  %{pname}%{PROJ_DELIM}
-Version: 2.3.24
+Version: 2.3.26
 Release: 1%{?dist}
 
 Summary: PowerMan - centralized power control for clusters
@@ -26,12 +26,8 @@ Source0: https://github.com/chaos/%{pname}/releases/download/%{version}/%{pname}
 %define _with_httppower 1
 %define _with_snmppower 1
 %define _with_genders 1
-%define _with_tcp_wrappers 1
 %endif
 
-%if 0%{?_with_tcp_wrappers}
-BuildRequires: tcp_wrappers-devel
-%endif
 %if 0%{?_with_genders}
 BuildRequires: genders%{PROJ_DELIM}
 %endif
@@ -42,6 +38,7 @@ BuildRequires: curl-devel
 BuildRequires: net-snmp-devel
 %endif
 BuildRequires: systemd
+BuildRequires: make, gcc
 
 %package -n %{pname}-devel%{PROJ_DELIM}
 Requires: %{name} = %{version}-%{release}
@@ -68,19 +65,22 @@ A shared library for applications using PowerMan.
 %setup -n %{pname}-%{version}
 
 %build
-%configure \
+%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
   %{?_with_genders: --with-genders} \
   %{?_with_httppower: --with-httppower} \
-  %{?_with_snmppower: --with-snmppower} \
-  %{?_with_tcp_wrappers: --with-tcp-wrappers} \
-  --program-prefix=%{?_program_prefix:%{_program_prefix}}
+  %{?_with_snmppower: --with-snmppower} 
+           
 make
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
 
+# Put the systemd directry in the right location. -JCSIADAL 3/29/20 
+%{__mv} $RPM_BUILD_ROOT/usr/usr/lib/systemd $RPM_BUILD_ROOT/usr/lib/
+%{__rm} -rd $RPM_BUILD_ROOT/usr/usr
+
 #drop local state dir to avoid making systemd angry when it creates the statedir on start
-rm -rf $RPM_BUILD_ROOT/%{_localstatedir}
+%{__rm} -rf $RPM_BUILD_ROOT/%{_localstatedir}
 
 %post
 /bin/systemctl enable powerman > /dev/null 2>&1 || :
@@ -104,7 +104,7 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 
 %files
 %doc DISCLAIMER
-%doc COPYING
+%license COPYING
 %doc NEWS
 %doc TODO
 %{_bindir}/powerman
@@ -129,6 +129,7 @@ if [ -x /sbin/ldconfig ]; then /sbin/ldconfig %{_libdir}; fi
 %dir %attr(0755,daemon,root) %{_libdir}/stonith/plugins
 %dir %attr(0755,daemon,root) %{_libdir}/stonith/plugins/external
 %attr(0644,root,root) %{_unitdir}/powerman.service
+%config %attr(0644,root,root) %{_tmpfilesdir}/powerman.conf
 
 %files -n %{pname}-devel%{PROJ_DELIM}
 %{_includedir}/*

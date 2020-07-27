@@ -1,9 +1,8 @@
-mpich-gnu-ohpc 3.2.1 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-mpich-gnu7-ohpc 3.2.1 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-mpich-gnu8-ohpc 3.3.1 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
-openmpi-gnu-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi-gnu7-ohpc 1.10.7 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-gnu7-ohpc 3.1.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-pmix-slurm-gnu7-ohpc 3.1.0 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-gnu8-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
-openmpi3-pmix-slurm-gnu8-ohpc 3.1.4 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI
+libfabric-ohpc 1.10.1 http://www.github.com/ofiwg/libfabric ohpc/mpi-families User-space RDMA Fabric Interfaces
+mpich-ofi-arm1-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-ofi-gnu9-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-ucx-arm1-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+mpich-ucx-gnu9-ohpc 3.3.2 http://www.mpich.org ohpc/mpi-families MPICH MPI implementation
+openmpi4-arm1-ohpc 4.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+openmpi4-gnu9-ohpc 4.0.3 http://www.open-mpi.org ohpc/mpi-families A powerful implementation of MPI/SHMEM
+ucx-ohpc 1.8.0 http://www.openucx.org ohpc/mpi-families UCX is a communication library implementing high-performance messaging

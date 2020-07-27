@@ -1,4 +1,0 @@
-addFilter("suse-filelist-forbidden")
-addFilter("summary-ended-with-dot")
-addFilter("files-duplicated-waste")
-addFilter("devel-file-in-non-devel-package")

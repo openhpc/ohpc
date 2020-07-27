@@ -80,7 +80,7 @@ if test "x$LMOD_FAMILY_COMPILER" = "xintel" ; then
 fi
 
 # Set subdirectories
-AC_CONFIG_FILES(Makefile tests/Makefile tests/tbb/Makefile)
+AC_CONFIG_FILES(Makefile tests/Makefile)
 
 # Configure
 AC_OUTPUT()

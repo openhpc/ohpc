@@ -25,7 +25,7 @@ Requires: openblas-%{compiler_family}%{PROJ_DELIM}
 %define pname scipy
 
 Name:           %{python_prefix}-%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        1.3.1
+Version:        1.5.1
 Release:        1%{?dist}
 Summary:        Scientific Tools for Python
 License:        BSD-3-Clause
@@ -34,7 +34,11 @@ Url:            http://www.scipy.org
 Source0:        https://github.com/scipy/scipy/archive/v%{version}.tar.gz#/%{pname}-%{version}.tar.gz
 %if 0%{?sles_version} || 0%{?suse_version}
 BuildRequires:  fdupes
+BuildRequires:  %{python_prefix}-pybind11-devel
+%else
+BuildRequires:  pybind11-devel
 %endif
+BuildRequires:  %{python_prefix}-pybind11
 %if "%{compiler_family}" != "arm"
 BuildRequires:  fftw-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 %endif

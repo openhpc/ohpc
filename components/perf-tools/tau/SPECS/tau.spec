@@ -31,6 +31,7 @@ Patch3:    tau-disable_examples.patch
 Patch4:    tau-ucontext.patch
 Patch5:    tau-testplugins_makefile.patch
 Patch6:    paraprof.patch
+Patch7:    c7b3c18-pomp2_begin.diff
 
 Provides:  lib%PNAME.so()(64bit)(%PROJ_NAME)
 Provides:  perl(ebs2otf)
@@ -74,12 +75,16 @@ automatic instrumentation tool.
 
 %prep
 %setup -q -n %{pname}-%{version}
+
+%global _default_patch_fuzz 2
+
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1 
 
 %ifarch x86_64
 sed -i -e 's/^BITS.*/BITS = 64/' src/Profile/Makefile.skel

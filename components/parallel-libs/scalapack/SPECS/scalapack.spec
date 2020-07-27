@@ -61,7 +61,7 @@ BLACS. One of the design goals of ScaLAPACK was to have the ScaLAPACK
 routines resemble their LAPACK equivalents as much as possible.
 
 # Default library install path
-%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}/%version
+%define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %prep
 %setup -q -n %{pname}-%{version}
@@ -96,7 +96,7 @@ popd
 
 # OpenHPC module file
 %{__mkdir} -p %{buildroot}%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 
 proc ModulesHelp { } {
@@ -128,12 +128,12 @@ setenv          %{PNAME}_LIB        %{install_path}/lib
 
 EOF
 
-%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}
+%{__cat} << EOF > %{buildroot}/%{OHPC_MODULEDEPS}/%{compiler_family}-%{mpi_family}/%{pname}/.version.%{version}%{OHPC_CUSTOM_PKG_DELIM}
 #%Module1.0#####################################################################
 ##
 ## version file for %{pname}-%{version}
 ##
-set     ModulesVersion      "%{version}"
+set     ModulesVersion      "%{version}%{OHPC_CUSTOM_PKG_DELIM}"
 EOF
 
 %files
