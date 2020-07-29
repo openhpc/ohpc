@@ -101,7 +101,7 @@ see the boost-doc package.
 
 
 %prep
-%setup -q -n %{tbname}
+%setup -q -n %{pname}_%{version_exp}
 
 %if 0%{?fenv_patch}
 %patch1 -p1
