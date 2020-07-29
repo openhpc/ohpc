@@ -49,8 +49,9 @@ Patch2: boost-1.73.0-build-optflags.patch
 BuildRequires:  bzip2-devel
 BuildRequires:  expat-devel
 BuildRequires:  xorg-x11-server-devel
+%ifarch x86_64
 BuildRequires: libquadmath-devel
-Requires: libquadmath-devel
+%endif
 BuildRequires:  python3-numpy
 BuildRequires:  glibc-devel >= 2.28-101
 %else
@@ -58,9 +59,10 @@ BuildRequires:  glibc-devel >= 2.28-101
 BuildRequires:  libbz2-devel
 BuildRequires:  libexpat-devel
 BuildRequires:  xorg-x11-devel
+%ifarch x86_64
 BuildRequires: libquadmath0
+%endif
 BuildRequires:  python3-numpy-devel
-Requires: libquadmath0
 %endif
 %endif
 
