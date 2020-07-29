@@ -529,8 +529,8 @@ Collection of parallel library builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-intel-impi-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and Intel(R) MPI Library
-## BUILDBROKEN Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
-## BUILDBROKEN Requires:  boost-intel-impi%{PROJ_DELIM}
+Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
+Requires:  boost-intel-impi%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  hypre-intel-impi%{PROJ_DELIM}
 Requires:  mfem-%{compiler_family}-impi%{PROJ_DELIM}
@@ -555,7 +555,7 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-mpich-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
-## BUILDBROKEN Requires:  boost-intel-mpich%{PROJ_DELIM}
+Requires:  boost-intel-mpich%{PROJ_DELIM}
 Requires:  hypre-intel-mpich%{PROJ_DELIM}
 Requires:  mfem-intel-mpich%{PROJ_DELIM}
 Requires:  mumps-intel-mpich%{PROJ_DELIM}
@@ -570,7 +570,7 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
-## BUILDBROKEN Requires:  boost-intel-mvapich2%{PROJ_DELIM}
+Requires:  boost-intel-mvapich2%{PROJ_DELIM}
 Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
 Requires:  mfem-intel-mvapich2%{PROJ_DELIM}
 Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
@@ -585,7 +585,7 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
-## BUILDBROKEN Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  hypre-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mfem-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-intel-%{mpi_family}%{PROJ_DELIM}
