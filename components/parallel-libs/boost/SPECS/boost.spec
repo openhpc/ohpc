@@ -21,11 +21,14 @@
 Summary:	Boost free peer-reviewed portable C++ source libraries
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        1.73.0
+
+%define version_exp 1_73_0
+
 Release:        1%{?dist}
 License:        BSL-1.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.boost.org
-%global tbname boost_%{lua: print((string.gsub(rpm.expand("%{version}"),"%.","_")))}
+Source0:        https://dl.bintray.com/boostorg/release/%{version}/source/boost_%{version_exp}.tar.gz
 Source0:        https://dl.bintray.com/boostorg/release/%{version}/source/%{tbname}.tar.gz
 Source1:        boost-rpmlintrc
 
@@ -237,10 +240,10 @@ set             version             %{version}
 prepend-path    INCLUDE             %{install_path}/include
 prepend-path    LD_LIBRARY_PATH     %{install_path}/lib
 
-setenv          %{pname}_DIR        %{install_path}
-setenv          %{pname}_ROOT       %{install_path}
-setenv          %{pname}_LIB        %{install_path}/lib
-setenv          %{pname}_INC        %{install_path}/include
+setenv          %{PNAME}_DIR        %{install_path}
+setenv          %{PNAME}_ROOT       %{install_path}
+setenv          %{PNAME}_LIB        %{install_path}/lib
+setenv          %{PNAME}_INC        %{install_path}/include
 
 family "boost"
 EOF
