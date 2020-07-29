@@ -29,7 +29,6 @@ License:        BSL-1.0
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            http://www.boost.org
 Source0:        https://dl.bintray.com/boostorg/release/%{version}/source/boost_%{version_exp}.tar.gz
-Source0:        https://dl.bintray.com/boostorg/release/%{version}/source/%{tbname}.tar.gz
 Source1:        boost-rpmlintrc
 
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
