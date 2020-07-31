@@ -381,9 +381,6 @@ Requires:  slurm-pam_slurm%{PROJ_DELIM}
 %if 0%{?rhel}
 Requires:  hwloc-libs
 %endif
-%if 0%{?suse_version}
-Requires:  libhwloc5
-%endif
 %description -n %{PROJ_NAME}-slurm-client
 Collection of client packages for SLURM
 
