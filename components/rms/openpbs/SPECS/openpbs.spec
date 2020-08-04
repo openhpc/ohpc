@@ -168,7 +168,6 @@ Requires: bash
 Requires: expat
 Requires: python3 >= 3.5
 %if %{defined suse_version}
-Requires: libhwloc5
 Requires: net-tools
 %else
 Requires: hostname
