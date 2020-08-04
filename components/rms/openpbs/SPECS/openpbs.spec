@@ -130,7 +130,6 @@ Requires: tcl
 Requires: tk
 %if %{defined suse_version}
 Requires: smtp_daemon
-Requires: libhwloc5
 Requires: net-tools
 %else
 Requires: smtpdaemon
