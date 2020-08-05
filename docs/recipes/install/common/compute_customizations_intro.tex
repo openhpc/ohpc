@@ -19,13 +19,13 @@ include:
 \iftoggle{isWarewulf}{\item Enable syslog forwarding}
 
 \item Add \Nagios{} Core monitoring
-\item Add \Sensys{} monitoring
 \item Add \clustershell{}
 \item Add \mrsh{}
 \item Add \genders{}
-%%\item Add \powerman{}
-\item Add \conman{}  
+\item Add \conman{}
+\iftoggleverb{isSLURM}
 \item Add \GEOPM{}
+\fi
 \end{itemize*}
 \end{multicols}
 
