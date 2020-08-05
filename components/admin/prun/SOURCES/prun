@@ -233,6 +233,7 @@ ARGS=$@
 if [ -z "$RM" ];then
     [[ -s /etc/pbs.conf ]] && RM=openpbs
     [[ -s /etc/slurm/slurm.conf ]] && RM=slurm
+    [[ -s /var/run/slurm/conf/slurm.conf ]] && RM=slurm
 fi
 
 if ! [ -x "$(command -v $EXEC)" ];then
