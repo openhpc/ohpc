@@ -37,6 +37,7 @@
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
+\togglefalse{isSLURM}
 \toggletrue{isSLES_ww_pbs_x86}
 \toggletrue{isWarewulf}
 \toggletrue{isx86}
@@ -199,9 +200,6 @@
 \paragraph{Add \nhc{}} \label{sec:add_nhc}
 \input{common/nhc}
 
-\paragraph{Add \GEOPM{}} \label{sec:add_geopm}
-\input{common/geopm_config}
-
 %\clearpage
 \subsubsection{Import files} \label{sec:file_import}
 \input{common/import_ww_files}
@@ -238,7 +236,7 @@
 \input{common/mpi}
 
 \subsection{Performance Tools} \label{sec:install_perf_tools}
-\input{common/perf_tools_with_geopm}
+\input{common/perf_tools}
 \input{common/perf_tools_sles}
 \vspace*{-0.6cm}
 
