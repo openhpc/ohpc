@@ -145,25 +145,23 @@ distributions. To enable for local use, issue the following:
 %\newpage
 % begin_ohpc_run
 % ohpc_validation_comment Add OpenHPC components to compute instance
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,
+    literate={BOSSHORT}{\baseosshort{}}1 {ARCH}{\arch{}}1]
 # copy credential files into $CHROOT to ensure consistent uid/gids for slurm/munge at
 # install. Note that these will be synchronized with future updates via the provisioning system.
 [sms](*\#*) cp /etc/passwd /etc/group  $CHROOT/etc
-
 # Add Slurm client support meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-slurm-client
-
 # Register Slurm server with computes (using "configless" option)
 [sms](*\#*) echo SLURMD_OPTIONS="--conf-server ${sms_ip}" > $CHROOT/etc/sysconfig/slurmd
-
 # Add Network Time Protocol (NTP) support
 [sms](*\#*) (*\chrootinstall*) chrony
 # Identify master host as local NTP server
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
-
-# Add kernel drivers
+# Add kernel
 [sms](*\#*) (*\chrootinstall*) kernel
-
+# Include matching kernel from head node into compute image
+[sms](*\#*) genimage BOSSHORT-ARCH-netboot-compute -k `uname -r`
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*)  --enablerepo=PowerTools lmod-ohpc
 \end{lstlisting}
