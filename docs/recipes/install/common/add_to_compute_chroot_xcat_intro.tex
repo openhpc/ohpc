@@ -16,12 +16,14 @@ the chroot.
 \end{lstlisting}
 % end_ohpc_run
 
-\noindent Next, install a base compute package:
+\noindent Next, install a base compute package and disable firewall:
 % begin_ohpc_run
 % ohpc_comment_header Add OpenHPC base components to compute image \ref{sec:add_components}
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Install compute node base meta-package
 [sms](*\#*) (*\chrootinstall*) ohpc-base-compute
+# Disable firewall for computes
+[sms](*\#*) chroot $CHROOT systemctl disable firewalld
 \end{lstlisting}
 % end_ohpc_run
 
