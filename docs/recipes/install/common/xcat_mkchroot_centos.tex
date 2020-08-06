@@ -4,6 +4,6 @@
 # Save chroot location for compute image
 [sms](*\#*) export CHROOT=/install/netboot/BOSSHORT/x86_64/compute/rootimg/
 # Build initial chroot image
-[sms](*\#*) genimage BOSSHORT-x86_64-netboot-compute
+[sms](*\#*) genimage BOSSHORT-x86_64-netboot-compute -k `uname -r`
 \end{lstlisting}
 % end_ohpc_run
