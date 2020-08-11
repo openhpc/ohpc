@@ -15,39 +15,18 @@
 %include %{_sourcedir}/OHPC_macros
 
 
-
 %if 0%{?OHPC_BUILD}
 
 %if 0%{?suse_version}
 BuildRequires: kernel-source
 BuildRequires: kernel-default-devel
-
-%define sles_kernel 4.12.14-94.41-default
-%define kdir /lib/modules/%{sles_kernel}/source/
-%define kobjdir /lib/modules/%{sles_kernel}/build/
 %endif
-
-%if 0%{?centos_version} == 700
-
-# 7.4 kernel version
-%ifarch aarch64
-%define centos_kernel 4.2.0-0.21.el7
-BuildRequires: kernel = %{centos_kernel}
-BuildRequires: kernel-devel = %{centos_kernel}
-%define kdir /lib/modules/%{centos_kernel}.aarch64/source/
-%define kobjdir /lib/modules/%{centos_kernel}.aarch64/build/
-%else
-%define centos_kernel 3.10.0-1062.el7
-BuildRequires: kernel = %{centos_kernel}
-BuildRequires: kernel-devel = %{centos_kernel}
-%define kdir /lib/modules/%{centos_kernel}.x86_64/source/
-%define kobjdir /lib/modules/%{centos_kernel}.x86_64/build/
+%if 0%{?rhel}
+BuildRequires: kernel
+BuildRequires: kernel-devel
+BuildRequires: kernel-abi-whitelists
 %endif
-
-%endif
-
 #!BuildIgnore: post-build-checks
-
 %endif
 
 # Declare rpmbuild --with/--without parameters
@@ -75,7 +54,7 @@ BuildRequires: kernel-devel = %{centos_kernel}
 # request gss_keyring we must enable gss core even if
 # the builder attempts to disable gss.
 %if %{with gss_keyring}
-    %define with_gss
+    %define with_gss 1
 %endif
 
 %if %{without servers}
@@ -85,8 +64,12 @@ BuildRequires: kernel-devel = %{centos_kernel}
     %undefine with_zfs
 %endif
 
-%{!?version: %global version 2.12.3}
-%{!?kver:    %global kver    %(uname -r)}
+%{!?version: %global version 2.12.5}
+%if 0%{?suse_version}
+%{!?kver:    %global kver    %(readlink /usr/src/linux | sed 's/linux-//' | sed 's/$/-default/')}
+%else
+%{!?kver:    %global kver    %(rpm -q --qf '%{VERSION}-%{RELEASE}.%{ARCH}' kernel-devel)}
+%endif
 %{!?kdir:    %global kdir    /lib/modules/%{kver}/source}
 %{!?kobjdir: %global kobjdir %(if [ "%{kdir}" = "/lib/modules/%{kver}/source" ]; then echo "/lib/modules/%{kver}/build"; else echo "%{kdir}"; fi)}
 
@@ -217,7 +200,11 @@ BuildRequires: libselinux-devel
 Requires: libselinux
 %endif
 %if %{with lustre_modules}
-#BuildRequires: %kernel_module_package_buildreqs
+
+%if 0%{?rhel} >= 8
+BuildRequires: redhat-rpm-config kernel-rpm-macros elfutils-libelf-devel kmod
+#BuildRequires: redhat-rpm-config elfutils-libelf-devel kmod
+%endif
 %if %{_vendor}=="redhat"
 BuildRequires: redhat-rpm-config
 %endif
@@ -339,8 +326,6 @@ clients in order to run
 
 %prep
 %setup -qn lustre-%{version}
-
-
 ln lustre/ChangeLog ChangeLog-lustre
 ln lnet/ChangeLog ChangeLog-lnet
 
@@ -350,8 +335,11 @@ cd $RPM_BUILD_DIR/lustre-%{version}
 # override %optflags so that the vendor's overzealous flags don't create
 # build failures
 %define optflags -g -O2 -Werror
+%undefine _annotated_build
+%undefine _hardened_build
 
 CONFIGURE_ARGS="%{?configure_args}"
+
 if [ -n "$CONFIGURE_ARGS" ]; then
 	# make sure %%kdir and %%kobjdir are not in the configure arguments
 	CONFIGURE_ARGS=$(echo $CONFIGURE_ARGS | sed -e 's/"\?--with-linux=[^ ][^ ]* \?//')
@@ -532,6 +520,7 @@ echo '%{_sbindir}/wiretest' >>lustre-tests.files
 %{_mandir}/man?/*
 %endif
 %{_datadir}/lustre
+%{_datadir}/bash-completion/completions/*
 %{_includedir}/lustre
 %{_includedir}/linux/lnet
 %{_includedir}/linux/lustre
