@@ -59,6 +59,7 @@ Conflicts: Modules
 # also use the OS provided modulesfiles.
 Provides: environment(modules)
 Obsoletes: environment-modules
+Conflicts: Lmod
 %else
 Conflicts: environment-modules
 %endif
