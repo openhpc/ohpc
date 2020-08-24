@@ -203,7 +203,6 @@ Requires: libselinux
 
 %if 0%{?rhel} >= 8
 BuildRequires: redhat-rpm-config kernel-rpm-macros elfutils-libelf-devel kmod
-#BuildRequires: redhat-rpm-config elfutils-libelf-devel kmod
 %endif
 %if %{_vendor}=="redhat"
 BuildRequires: redhat-rpm-config
