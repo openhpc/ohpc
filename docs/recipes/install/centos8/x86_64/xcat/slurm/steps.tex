@@ -163,6 +163,8 @@ distributions. To enable additional respoitories for local use, issue the follow
 [sms](*\#*) (*\chrootinstall*) kernel
 # Include matching kernel from head node into compute image
 [sms](*\#*) genimage BOSSHORT-ARCH-netboot-compute -k `uname -r`
+# Re-enable BaseOS repo
+[sms](*\#*) yum-config-manager --installroot=$CHROOT --enable BaseOS
 # Include modules user environment
 [sms](*\#*) (*\chrootinstall*)  --enablerepo=PowerTools lmod-ohpc
 \end{lstlisting}
