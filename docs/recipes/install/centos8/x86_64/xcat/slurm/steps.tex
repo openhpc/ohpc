@@ -105,10 +105,11 @@
 
 \noindent \xCAT{} has a number of dependencies that are required for
 installation that are housed in separate public repositories for various
-distributions. To enable for local use, issue the following:
+distributions. To enable additional respoitories for local use, issue the following:
 
 % begin_ohpc_run
 \begin{lstlisting}[language=bash,keywords={},basicstyle=\fontencoding{T1}\fontsize{8.0}{10}\ttfamily,literate={ARCH}{\arch{}}1 {-}{-}1]
+[sms](*\#*) (*\install*) centos-release-stream
 [sms](*\#*) (*\addrepo*) http://xcat.org/files/xcat/repos/yum/devel/xcat-dep/rh8/ARCH/xcat-dep.repo
 \end{lstlisting}
 % end_ohpc_run
