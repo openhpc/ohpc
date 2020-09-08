@@ -48,7 +48,6 @@ OpenHPC development environment.
 install -D -m 0644 %SOURCE1 %{buildroot}%{OHPC_HOME}/pub/examples/mpi/hello.c
 install -D -m 0644 %SOURCE2 %{buildroot}%{OHPC_HOME}/pub/examples/network/sles/ifcfg-ib0
 install -D -m 0644 %SOURCE2 %{buildroot}%{OHPC_HOME}/pub/examples/network/centos/ifcfg-ib0
-
 install -D -m 0644 %SOURCE3 %{buildroot}%{OHPC_HOME}/pub/examples/network/sles/ifcfg-ib0.ww
 install -D -m 0644 %SOURCE4 %{buildroot}%{OHPC_HOME}/pub/examples/network/centos/ifcfg-ib0.ww
 install -D -m 0644 %SOURCE5 %{buildroot}%{OHPC_HOME}/pub/examples/slurm/job.mpi
@@ -63,5 +62,5 @@ install -D -m 0644 %SOURCE11 %{buildroot}%{OHPC_HOME}/pub/examples/example-mpi-d
 
 %files
 %dir %{OHPC_HOME}
-%doc LICENSE
+%license LICENSE
 %{OHPC_PUB}
