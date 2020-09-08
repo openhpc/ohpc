@@ -68,6 +68,7 @@ Requires:  binutils-devel
 %if 0%{?rhel}
 Requires:  man-db
 Requires:  yum-utils
+Requires:  NetworkManager
 %endif
 %if 0%{?suse_version}
 Requires:  glibc-locale
