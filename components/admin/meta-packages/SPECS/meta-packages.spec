@@ -89,6 +89,7 @@ Requires:  cairo-devel
 Requires:  libpciaccess
 Requires:  libseccomp
 Requires:  librdmacm
+Requires:  NetworkManager
 %ifarch x86_64
 Requires:  libpsm2
 %endif
