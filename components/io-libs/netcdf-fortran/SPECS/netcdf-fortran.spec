@@ -80,18 +80,19 @@ NetCDF data is:
 module load phdf5
 module load netcdf
 
-
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export CXXFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export FCFLAGS="-L$HDF5_LIB -I$HDF5_INC -L$NETCDF_LIB -I$NETCDF_INC"
 export CPPFLAGS="-I$HDF5_INC -I$NETCDF_INC"
 export LDFLAGS="-L$HDF5_LIB -L$NETCDF_LIB"
 
-./configure FC=mpif90 --prefix=%{install_path} \
-    --enable-shared \
-    --with-pic \
-    --disable-doxygen \
-    --disable-static || { cat config.log && exit 1; }
+./configure FC=mpif90 \
+            --prefix=%{install_path} \
+            --libdir=%{install_path}/lib \
+            --enable-shared \
+            --with-pic \
+            --disable-doxygen \
+            --disable-static || { cat config.log && exit 1; }
 
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool

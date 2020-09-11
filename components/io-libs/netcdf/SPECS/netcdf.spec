@@ -80,18 +80,20 @@ NetCDF data is:
 %ohpc_setup_compiler
 
 module load phdf5
+
 export CPPFLAGS="-I$HDF5_INC"
 export LDFLAGS="-L$HDF5_LIB"
 export CFLAGS="-L$HDF5_LIB -I$HDF5_INC"
 export CC=mpicc
 
 ./configure --prefix=%{install_path} \
-    --enable-shared \
-    --enable-netcdf-4 \
-    --enable-dap \
-    --with-pic \
-    --disable-doxygen \
-    --disable-static || { cat config.log && exit 1; }
+            --libdir=%{install_path}/lib \
+            --enable-shared \
+            --enable-netcdf-4 \
+            --enable-dap \
+            --with-pic \
+            --disable-doxygen \
+            --disable-static || { cat config.log && exit 1; }
 
 # karl@ices.utexas.edu (5/17/18) - switching to serial make to avoid
 # problems. Others also reporing error with parallel build.

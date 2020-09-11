@@ -71,11 +71,12 @@ export MPIFC=mpifc
 export MPICXX=mpicxx
 
 ./configure --prefix=%{install_path} \
-	    --enable-fortran         \
+            --libdir=%{install_path}/lib \
+            --enable-fortran         \
             --enable-static=no       \
             --enable-parallel        \
-	    --enable-shared          \
-	    --enable-fortran2003     || { cat config.log && exit 1; }
+            --enable-shared          \
+            --enable-fortran2003     || { cat config.log && exit 1; }
 
 %if "%{compiler_family}" == "llvm" || "%{compiler_family}" == "arm1"
 %{__sed} -i -e 's#wl=""#wl="-Wl,"#g' libtool
