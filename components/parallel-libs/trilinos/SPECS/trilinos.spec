@@ -13,8 +13,10 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
+
 # Base package name
 %define pname trilinos
+%define ver_exp 13-0-0
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Version:        13.0.0
@@ -24,7 +26,6 @@ Summary:        A collection of libraries of numerical algorithms
 License:        LGPL-2.1 and BSD-3-Clause
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            https://trilinos.org/
-%global         ver_exp %{lua: print((string.gsub(rpm.expand("%{version}"),"%.","-")))}
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
 Patch0:         trilinos-13_0_0-destdir_fix.patch
 
