@@ -13,34 +13,41 @@
 %define ohpc_mpi_dependent 1
 %include %{_sourcedir}/OHPC_macros
 
+
 # Base package name
 %define pname trilinos
-%define ver_exp 12-18-1
+%define ver_exp 13-0-0
 
 Name:           %{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:        12.18.1
+Version:        13.0.0
 Release:        1%{?dist}
 Summary:        A collection of libraries of numerical algorithms
-License:        LGPL-2.0
+# Trilinos is licensed on a per-package basis. Refer to https://trilinos.github.io/license.html
+License:        LGPL-2.1 and BSD-3-Clause
 Group:          %{PROJ_NAME}/parallel-libs
 Url:            https://trilinos.org/
 Source0:        https://github.com/trilinos/Trilinos/archive/trilinos-release-%{ver_exp}.tar.gz
-Patch0:         trilinos-11.14.3-no-return-in-non-void.patch
+Patch0:         trilinos-13_0_0-destdir_fix.patch
+
+Requires:       lmod%{PROJ_DELIM} >= 7.6.1
+Requires:       python3
+
 BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  expat
 BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
-Requires:       lmod%{PROJ_DELIM} >= 7.6.1
-BuildRequires:  perl
-BuildRequires:  swig > 2.0.0
+BuildRequires:  swig > 3.0.0
 BuildRequires:  xz
 BuildRequires:  zlib-devel
 BuildRequires:  boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  phdf5-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires:  netcdf-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
+BuildRequires:  python3
+
 %if "%{compiler_family}" != "intel" && "%{compiler_family}" != "arm"
 BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
+Requires:       openblas-%{compiler_family}%{PROJ_DELIM}
 %endif
 
 #!BuildIgnore: post-build-checks
@@ -50,11 +57,16 @@ BuildRequires:  openblas-%{compiler_family}%{PROJ_DELIM}
 %define install_path %{OHPC_LIBS}/%{compiler_family}/%{mpi_family}/%{pname}%{OHPC_CUSTOM_PKG_DELIM}/%version
 
 %description
-Trilinos is a collection of compatible software packages that support parallel
-linear algebra computations, solution of linear, non-linear and eigen systems
-of equations and related capabilities. The majority of packages are written in
-C++ using object-oriented techniques. All packages are self-contained, with the
-Trilinos top layer providing a common look-and-feel and infrastructure.
+Trilinos is a collection of reusable scientific software libraries, known
+in particular for linear solvers, non-linear solvers, transient solvers,
+optimization solvers, and uncertainty quantification (UQ) solvers.
+
+The Trilinos Project is an effort to develop algorithms and enabling
+technologies within an object-oriented software framework for the solution of
+large-scale, complex multi-physics engineering and scientific problems
+
+Trilinos is organized around fundamental software elements called packages.
+For a summary of included packages see https://trilinos.github.io/packages.html
 
 %prep
 %setup -q -n  Trilinos-trilinos-release-%{ver_exp}
@@ -72,8 +84,8 @@ module load phdf5
 module load openblas
 %endif
 
-mkdir tmp
-cd tmp
+mkdir build
+cd build
 cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_EXE_LINKER_FLAGS:STRING="-fPIC"                         \
         -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE                              \
@@ -83,6 +95,7 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DCMAKE_SKIP_RPATH:BOOL=ON                                      \
         -DTrilinos_VERBOSE_CONFIGURE:BOOL=ON                            \
         -DTrilinos_ENABLE_ALL_PACKAGES:BOOL=OFF                         \
+        -DTrilinos_INSTALL_LIB_DIR="%{install_path}/lib"                                \
 %if "%{compiler_family}" == "intel"
         -DTPL_ENABLE_MKL:BOOL=ON                                        \
         -DMKL_INCLUDE_DIRS:FILEPATH="${MKLROOT}/include"                \
@@ -157,20 +170,13 @@ cmake   -DCMAKE_INSTALL_PREFIX=%{install_path}                          \
         -DTPL_ENABLE_Matio=OFF                                          \
         -DTPL_ENABLE_GLM=OFF                                            \
         ..
-#       -DTPL_ENABLE_SCALAPACK:BOOL=ON                                  \
-#       -DSCALAPACK_LIBRARY_DIRS:PATH="${MKLROOT}/lib/intel64"          \
-#       -DSCALAPACK_LIBRARY_NAMES:STRING="mkl_rt"                       \
-#       -DTPL_ENABLE_BLACS:BOOL=ON                                      \
-#       -DBLACS_LIBRARY_DIRS:PATH="$MKLROOT/lib/intel64"                \
-#       -DBLACS_INCLUDE_DIRS:PATH="$MKLROOT/include"                    \
-#       -DBLACS_LIBRARY_NAMES:STRING="mkl_rt"                           \
 
 make %{?_smp_mflags} VERBOSE=1
 cd ..
 
 %install
 %ohpc_setup_compiler
-cd tmp
+cd build
 make %{?_smp_mflags} DESTDIR=%{buildroot} install INSTALL='install -p'
 cd ..
 
@@ -226,4 +232,6 @@ EOF
 
 %files
 %{OHPC_PUB}
-%doc Copyright.txt INSTALL LICENSE README RELEASE_NOTES
+%doc INSTALL README RELEASE_NOTES
+%license Copyright.txt LICENSE
+
