@@ -71,6 +71,10 @@ if USERENV_ENABLED
    SUBDIRS += user-env
 endif
 
+if NTP_ENABLED
+   SUBDIRS += time
+endif
+
 #----------------------------------------------------------------------
 # run OHPC wrapper tests for embeded autotools project (e.g. those that
 # have compiler and/or mpi dependencies)
