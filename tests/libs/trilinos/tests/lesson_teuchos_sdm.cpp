@@ -68,7 +68,8 @@ int main(int argc, char* argv[])
   }
 
   // A matrix can be sent to the output stream:
-  std::cout<< My_Matrix << std::endl;
+  //std::cout<< My_Matrix << std::endl;
+  My_Matrix.print(std::cout);
 
   return 0;
 }
