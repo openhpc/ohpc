@@ -82,6 +82,7 @@ including support for static control.
 test -f configure || ./autogen.sh
 ./configure --prefix=%{install_path} \
             --with-python=python3 \
+            --disable-ompt \
             --disable-doc \
             || ( cat config.log && false )
 %{__make}
