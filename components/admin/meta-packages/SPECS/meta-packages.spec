@@ -548,7 +548,7 @@ Requires:  ptscotch-intel-impi%{PROJ_DELIM}
 Requires:  superlu_dist-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
 Requires:  trilinos-%{compiler_family}-impi%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-impi%{PROJ_DELIM}
+Requires:  trilinos-intel-impi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-impi-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
 
@@ -563,7 +563,7 @@ Requires:  scalapack-intel-mpich%{PROJ_DELIM}
 Requires:  slepc-intel-mpich%{PROJ_DELIM}
 Requires:  ptscotch-intel-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-mpich%{PROJ_DELIM}
+Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 
@@ -578,7 +578,7 @@ Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
 Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-intel-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
+Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
 
@@ -593,7 +593,7 @@ Requires:  scalapack-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  superlu_dist-intel-%{mpi_family}%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 
