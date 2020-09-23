@@ -965,7 +965,7 @@ echo    User Environment:
     if test "x$enable_ntp" = "xyes"; then
        echo '    'Time synchronization...... : enabled 
     else
-       echo '    'Time synchronization...... : disasbled
+       echo '    'Time synchronization...... : disabled
     fi
 
 fi
