@@ -37,9 +37,8 @@ BuildRequires:  kernel-default-devel
 %endif
 
 %if 0%{?centos_version} == 800
-%define centos_kernel 4.18.0-193.14.2.el8_2
-BuildRequires: kernel = %{centos_kernel}
-BuildRequires: kernel-devel = %{centos_kernel}
+BuildRequires: kernel
+BuildRequires: kernel-devel
 BuildRequires: kernel-abi-whitelists kernel-rpm-macros elfutils-libelf-devel
 %endif
 

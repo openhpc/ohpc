@@ -1,0 +1,8 @@
+DEVICE=ib0
+BOOTPROTO=static
+IPADDR=master_ipoib
+NETMASK=ipoib_netmask
+ONBOOT=yes
+STARTMODE='auto'
+NM_CONTROLLED=yes
+TYPE=Infiniband

@@ -1,6 +1,7 @@
 HPC systems rely on synchronized clocks throughout the system and the
 NTP protocol can be used to facilitate this synchronization. To enable NTP
-services on the SMS host with a specific server \texttt{\$\{ntp\_server\}},
+services on the SMS host with a specific server \texttt{\$\{ntp\_server\}}, and
+allow this server to serve as a local time server for the cluster, 
 issue the following:
 
 % begin_ohpc_run
@@ -8,6 +9,19 @@ issue the following:
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true,keepspaces]
 [sms](*\#*) systemctl enable chronyd.service
 [sms](*\#*) echo "server ${ntp_server}" >> /etc/chrony.conf
+[sms](*\#*) echo "allow all" >> /etc/chrony.conf
 [sms](*\#*) systemctl restart chronyd
 \end{lstlisting}
 % end_ohpc_run
+
+\begin{center}
+\begin{tcolorbox}[]
+\small Note that the ``allow all'' option specified for the chrony time daemon
+allows all servers on the local network to be able to synchronize with the SMS
+host. Alternatively, you can restrict access to fixed IP ranges and an example
+config line allowing access to a local class B subnet is as follows:
+\begin{lstlisting}[language=bash]
+allow 192.168.0.0/16
+\end{lstlisting}
+\end{tcolorbox}
+\end{center}

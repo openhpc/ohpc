@@ -27,7 +27,7 @@ fi
 
 @test "[Libs/IMB] run IMB-EXT on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     EXE=$IMB_DIR/bin/IMB-EXT
-    ARGS="-npmin 100 -msglog 1:6 Window"
+    ARGS="-npmin 100 -msglog 1:4 Window"
 
     if [[ "$LMOD_FAMILY_MPI" =~ "openmpi" ]];then
         export OMPI_MCA_osc="^ucx"

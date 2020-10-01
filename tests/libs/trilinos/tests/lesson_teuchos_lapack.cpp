@@ -24,8 +24,13 @@ int main(int argc, char* argv[])
   // Print out the original linear system.
   std::cout << "ORIGINAL LINEAR SYSTEM:" << std::endl;
 
+#if 0
   std::cout << My_Matrix << std::endl;
   std::cout << My_Vector << std::endl;
+#else
+  My_Matrix.print(std::cout);
+  My_Vector.print(std::cout);
+#endif
 
   // Perform an LU factorization of this matrix.
   int ipiv[4], info;
@@ -41,7 +46,11 @@ int main(int argc, char* argv[])
   // Print out the solution.
   std::cout << "SOLUTION RETURNED FROM LAPACK:" << std::endl;
 
+#if 0
   std::cout << My_Vector << std::endl;
+#else
+  My_Vector.print(std::cout);
+#endif
 
   return 0;
 }

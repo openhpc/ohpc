@@ -89,6 +89,7 @@ Requires:  cairo-devel
 Requires:  libpciaccess
 Requires:  libseccomp
 Requires:  librdmacm
+Requires:  NetworkManager
 %ifarch x86_64
 Requires:  libpsm2
 %endif
@@ -254,10 +255,8 @@ Collection of parallel library builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-perf-tools
 Summary:   OpenHPC performance tools for GNU
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -288,9 +287,7 @@ Collection of performance tool builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mpich-perf-tools
 Summary:   OpenHPC performance tools for GNU and MPICH
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -303,9 +300,7 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mvapich2-perf-tools
 Summary:   OpenHPC performance tools for GNU and MVAPICH2
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
@@ -319,9 +314,7 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-perf-tools
 Summary:   OpenHPC performance tools for GNU and OpenMPI
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
@@ -547,7 +540,7 @@ Requires:  ptscotch-intel-impi%{PROJ_DELIM}
 Requires:  superlu_dist-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
 Requires:  trilinos-%{compiler_family}-impi%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-impi%{PROJ_DELIM}
+Requires:  trilinos-intel-impi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-impi-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
 
@@ -562,7 +555,7 @@ Requires:  scalapack-intel-mpich%{PROJ_DELIM}
 Requires:  slepc-intel-mpich%{PROJ_DELIM}
 Requires:  ptscotch-intel-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-mpich%{PROJ_DELIM}
+Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 
@@ -577,7 +570,7 @@ Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
 Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-intel-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
+Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
 
@@ -592,7 +585,7 @@ Requires:  scalapack-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  superlu_dist-intel-%{mpi_family}%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 
@@ -600,10 +593,10 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
 %if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-impi%{PROJ_DELIM}
-## TODO Requires:  dimemas-intel-impi%{PROJ_DELIM}
-## TODO Requires:  dimemas-intel-mpich%{PROJ_DELIM}
-## TODO Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
-## TODO Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  dimemas-intel-impi%{PROJ_DELIM}
+Requires:  dimemas-intel-mpich%{PROJ_DELIM}
+Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
+Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
 %endif
 Requires:  extrae-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  extrae-intel-impi%{PROJ_DELIM}

@@ -33,7 +33,7 @@
 \newcommand{\upgrade}{zypper -n up}
 \newcommand{\chrootupgrade}{zypper -n --root \$CHROOT up}
 \newcommand{\tftppkg}{syslinux}
-\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7\_1/dists/beegfs-sles12.repo}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.2/dists/beegfs-sles15.repo}
 
 % boolean for os-specific formatting
 \togglefalse{isCentOS}
@@ -137,7 +137,8 @@
 [sms](*\#*) cp /opt/ohpc/pub/examples/udev/60-ipath.rules $CHROOT/etc/udev/rules.d/
 
 # Add Network Time Protocol (NTP) support
-[sms](*\#*) (*\chrootinstall*) ntp
+[sms](*\#*) (*\chrootinstall*) chrony
+[sms](*\#*) chroot $CHROOT systemctl enable chrony
 # Identify master host as local NTP server
 [sms](*\#*) echo "server ${sms_ip}" >> $CHROOT/etc/chrony.conf
 
