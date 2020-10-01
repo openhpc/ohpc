@@ -12,9 +12,9 @@ installed first.
 % ohpc_command if [[ ${enable_beegfs_client} -eq 1 ]];then
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-# Add BeeGFS client software to master host
+# Add BeeGFS client software and dependencies to master host
 [sms](*\#*) (*\addrepo*) (*\beegfsrepo*)
-[sms](*\#*) (*\install*) kernel-devel gcc
+[sms](*\#*) (*\install*) kernel-devel gcc elfutils-libelf-devel
 [sms](*\#*) (*\install*) beegfs-client beegfs-helperd beegfs-utils
 
 # Enable OFED support in client
@@ -29,19 +29,19 @@ installed first.
 [sms](*\#*) systemctl start beegfs-client
 \end{lstlisting}
 
-Due to changes that came along with kernel 3.10.0-862.el7.x86\_64 , an error 
-appears when accessing the BeeGFS mount point. A patch is available and can be 
-downloaded from the BeeGFS repository:
-
-\begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
-[sms](*\#*) (*\install*) patch
-[sms](*\#*) wget https://www.beegfs.io/release/beegfs_6/0001-client-fix-readdir-in-rhel-7.5.patch  \
-        -O /opt/beegfs/src/client/beegfs_client_module_6/0001-client-fix-readdir-in-rhel-7.5.patch
-[sms](*\#*) cd /opt/beegfs/src/client/beegfs_client_module_6
-[sms](*\#*) patch -p2 < 0001-client-fix-readdir-in-rhel-7.5.patch
-[sms](*\#*) /etc/init.d/beegfs-client rebuild
-[sms](*\#*) /etc/init.d/beegfs-client try-restart
-\end{lstlisting}
+%%%% Due to changes that came along with kernel 3.10.0-862.el7.x86\_64 , an error 
+%%%% appears when accessing the BeeGFS mount point. A patch is available and can be 
+%%%% downloaded from the BeeGFS repository:
+%%%% 
+%%%% \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
+%%%% [sms](*\#*) (*\install*) patch
+%%%% [sms](*\#*) wget https://www.beegfs.io/release/beegfs_6/0001-client-fix-readdir-in-rhel-7.5.patch  \
+%%%%         -O /opt/beegfs/src/client/beegfs_client_module_6/0001-client-fix-readdir-in-rhel-7.5.patch
+%%%% [sms](*\#*) cd /opt/beegfs/src/client/beegfs_client_module_6
+%%%% [sms](*\#*) patch -p2 < 0001-client-fix-readdir-in-rhel-7.5.patch
+%%%% [sms](*\#*) /etc/init.d/beegfs-client rebuild
+%%%% [sms](*\#*) /etc/init.d/beegfs-client try-restart
+%%%% \end{lstlisting}
 
 \begin{lstlisting}[language=bash,literate={-}{-}1,keywords={},upquote=true]
 # Add BeeGFS client software to compute node image

@@ -7,11 +7,11 @@
 \input{vc.tex}
 
 % Define Base OS and other local macros
-\newcommand{\baseOS}{CentOS 8.1}
-\newcommand{\OSRepo}{CentOS\_8.1}
+\newcommand{\baseOS}{CentOS 8.2}
+\newcommand{\OSRepo}{CentOS\_8.2}
 \newcommand{\OSTree}{CentOS\_8}
 \newcommand{\OSTag}{el8}
-\newcommand{\baseos}{centos8.1}
+\newcommand{\baseos}{centos8.2}
 \newcommand{\baseosshort}{centos8}
 \newcommand{\provisioner}{Warewulf}
 \newcommand{\provheader}{\provisioner{}}
@@ -33,7 +33,7 @@
 \newcommand{\upgrade}{yum -y upgrade}
 \newcommand{\chrootupgrade}{yum -y --installroot=\$CHROOT upgrade}
 \newcommand{\tftppkg}{syslinux-tftpboot}
-\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7\_1/dists/beegfs-rhel7.repo}
+\newcommand{\beegfsrepo}{https://www.beegfs.io/release/beegfs\_7.2/dists/beegfs-rhel8.repo}
 
 % boolean for os-specific formatting
 \toggletrue{isCentOS}
@@ -190,8 +190,8 @@
 \paragraph{Enable ssh control via resource manager} 
 \input{common/slurm_pam}
 
-%% \paragraph{Add \beegfs{}} \label{sec:add_beegfs}
-%% \input{common/install_beegfs_client_centos}
+\paragraph{Add \beegfs{}} \label{sec:add_beegfs}
+\input{common/install_beegfs_client_centos}
 
 \paragraph{Add \Lustre{} client} \label{sec:lustre_client}
 \input{common/lustre-client}

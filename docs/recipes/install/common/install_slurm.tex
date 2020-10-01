@@ -9,6 +9,9 @@ the corresponding compute image in a subsequent step.
 # Install slurm server meta-package
 [sms](*\#*) (*\install*) ohpc-slurm-server
 
+# Use ohpc-provided file for starting SLURM configuration
+[sms](*\#*) cp /etc/slurm/slurm.conf.ohpc /etc/slurm/slurm.conf
+
 # Identify resource manager hostname on master host
 [sms](*\#*) perl -pi -e "s/ControlMachine=\S+/ControlMachine=${sms_name}/" /etc/slurm/slurm.conf
 \end{lstlisting}

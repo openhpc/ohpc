@@ -7,7 +7,6 @@ to the chosen {\em master} host.
 % ohpc_indent 5
 \begin{lstlisting}[language=bash,keywords={}]
 [sms](*\#*) (*\groupinstall*) "InfiniBand Support"
-[sms](*\#*) (*\install*) infinipath-psm
 
 # Load IB drivers
 [sms](*\#*) systemctl start rdma
@@ -41,7 +40,8 @@ naming as appropriate if system contains dual-ported or multiple HCAs).
 [sms](*\#*) perl -pi -e "s/master_ipoib/${sms_ipoib}/" /etc/sysconfig/network-scripts/ifcfg-ib0
 [sms](*\#*) perl -pi -e "s/ipoib_netmask/${ipoib_netmask}/" /etc/sysconfig/network-scripts/ifcfg-ib0
 
-# Initiate ib0
+# Verify NetworkManager is running and initiate ib0
+[sms](*\#*) systemctl start NetworkManager
 [sms](*\#*) ifup ib0
 \end{lstlisting}
 % ohpc_indent 0

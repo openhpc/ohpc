@@ -68,6 +68,7 @@ Requires:  binutils-devel
 %if 0%{?rhel}
 Requires:  man-db
 Requires:  yum-utils
+Requires:  NetworkManager
 %endif
 %if 0%{?suse_version}
 Requires:  glibc-locale
@@ -88,6 +89,7 @@ Requires:  cairo-devel
 Requires:  libpciaccess
 Requires:  libseccomp
 Requires:  librdmacm
+Requires:  NetworkManager
 %ifarch x86_64
 Requires:  libpsm2
 %endif
@@ -174,14 +176,6 @@ Requires:  hdf5-%{compiler_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-io-libs
 Collection of IO library builds for use with GNU compiler toolchain and the OpenMPI runtime
 
-%package -n %{PROJ_NAME}-nagios
-Summary:   OpenHPC Nagios monitoring
-Requires:  nagios%{PROJ_DELIM}
-Requires:  nagios-plugins-all%{PROJ_DELIM}
-Requires:  nrpe%{PROJ_DELIM}
-%description -n %{PROJ_NAME}-nagios
-Collection of Nagios monitoring and metrics packages
-
 %package -n %{PROJ_NAME}-%{compiler_family}-parallel-libs
 Summary:   OpenHPC parallel libraries for GNU
 Requires:  boost-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -261,10 +255,8 @@ Collection of parallel library builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-perf-tools
 Summary:   OpenHPC performance tools for GNU
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -295,9 +287,7 @@ Collection of performance tool builds for use with GNU compiler toolchain
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mpich-perf-tools
 Summary:   OpenHPC performance tools for GNU and MPICH
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mpich%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-mpich%{PROJ_DELIM}
 Requires:  omb-%{compiler_family}-mpich%{PROJ_DELIM}
@@ -310,9 +300,7 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-mvapich2-perf-tools
 Summary:   OpenHPC performance tools for GNU and MVAPICH2
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-mvapich2%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-mvapich2%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
@@ -326,9 +314,7 @@ Collection of performance tool builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-%{compiler_family}-%{mpi_family}-perf-tools
 Summary:   OpenHPC performance tools for GNU and OpenMPI
-%if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-%endif
 Requires:  extrae-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  imb-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:  likwid-%{compiler_family}%{PROJ_DELIM}
@@ -388,9 +374,6 @@ Requires:  slurm-example-configs%{PROJ_DELIM}
 Requires:  slurm-pam_slurm%{PROJ_DELIM}
 %if 0%{?rhel}
 Requires:  hwloc-libs
-%endif
-%if 0%{?suse_version}
-Requires:  libhwloc5
 %endif
 %description -n %{PROJ_NAME}-slurm-client
 Collection of client packages for SLURM
@@ -537,8 +520,8 @@ Collection of parallel library builds for use with GNU compiler toolchain and th
 
 %package -n %{PROJ_NAME}-intel-impi-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and Intel(R) MPI Library
-## BUILDBROKEN Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
-## BUILDBROKEN Requires:  boost-intel-impi%{PROJ_DELIM}
+Requires:  boost-%{compiler_family}-impi%{PROJ_DELIM}
+Requires:  boost-intel-impi%{PROJ_DELIM}
 Requires:  hypre-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  hypre-intel-impi%{PROJ_DELIM}
 Requires:  mfem-%{compiler_family}-impi%{PROJ_DELIM}
@@ -557,13 +540,13 @@ Requires:  ptscotch-intel-impi%{PROJ_DELIM}
 Requires:  superlu_dist-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  superlu_dist-intel-impi%{PROJ_DELIM}
 Requires:  trilinos-%{compiler_family}-impi%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-impi%{PROJ_DELIM}
+Requires:  trilinos-intel-impi%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-impi-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the Intel(R) MPI Library
 
 %package -n %{PROJ_NAME}-intel-mpich-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MPICH
-## BUILDBROKEN Requires:  boost-intel-mpich%{PROJ_DELIM}
+Requires:  boost-intel-mpich%{PROJ_DELIM}
 Requires:  hypre-intel-mpich%{PROJ_DELIM}
 Requires:  mfem-intel-mpich%{PROJ_DELIM}
 Requires:  mumps-intel-mpich%{PROJ_DELIM}
@@ -572,13 +555,13 @@ Requires:  scalapack-intel-mpich%{PROJ_DELIM}
 Requires:  slepc-intel-mpich%{PROJ_DELIM}
 Requires:  ptscotch-intel-mpich%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mpich%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-mpich%{PROJ_DELIM}
+Requires:  trilinos-intel-mpich%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mpich-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MPICH runtime
 
 %package -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and MVAPICH2
-## BUILDBROKEN Requires:  boost-intel-mvapich2%{PROJ_DELIM}
+Requires:  boost-intel-mvapich2%{PROJ_DELIM}
 Requires:  hypre-intel-mvapich2%{PROJ_DELIM}
 Requires:  mfem-intel-mvapich2%{PROJ_DELIM}
 Requires:  mumps-intel-mvapich2%{PROJ_DELIM}
@@ -587,13 +570,13 @@ Requires:  scalapack-intel-mvapich2%{PROJ_DELIM}
 Requires:  slepc-intel-mvapich2%{PROJ_DELIM}
 Requires:  ptscotch-intel-mvapich2%{PROJ_DELIM}
 Requires:  superlu_dist-intel-mvapich2%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
+Requires:  trilinos-intel-mvapich2%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-mvapich2-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the MVAPICH2 runtime
 
 %package -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
 Summary:   OpenHPC parallel libraries for Intel(R) Parallel Studio XE and OpenMPI
-## BUILDBROKEN Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  boost-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  hypre-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mfem-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  mumps-intel-%{mpi_family}%{PROJ_DELIM}
@@ -602,7 +585,7 @@ Requires:  scalapack-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  slepc-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  ptscotch-intel-%{mpi_family}%{PROJ_DELIM}
 Requires:  superlu_dist-intel-%{mpi_family}%{PROJ_DELIM}
-## BUILDBROKEN Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  trilinos-intel-%{mpi_family}%{PROJ_DELIM}
 %description -n %{PROJ_NAME}-intel-%{mpi_family}-parallel-libs
 Collection of parallel library builds for use with Intel(R) Parallel Studio XE toolchain and the OpenMPI runtime
 
@@ -610,10 +593,10 @@ Collection of parallel library builds for use with Intel(R) Parallel Studio XE t
 Summary:   OpenHPC performance tools for Intel(R) Parallel Studio XE
 %if 0%{?rhel}
 Requires:  dimemas-%{compiler_family}-impi%{PROJ_DELIM}
-## TODO Requires:  dimemas-intel-impi%{PROJ_DELIM}
-## TODO Requires:  dimemas-intel-mpich%{PROJ_DELIM}
-## TODO Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
-## TODO Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
+Requires:  dimemas-intel-impi%{PROJ_DELIM}
+Requires:  dimemas-intel-mpich%{PROJ_DELIM}
+Requires:  dimemas-intel-mvapich2%{PROJ_DELIM}
+Requires:  dimemas-intel-%{mpi_family}%{PROJ_DELIM}
 %endif
 Requires:  extrae-%{compiler_family}-impi%{PROJ_DELIM}
 Requires:  extrae-intel-impi%{PROJ_DELIM}
@@ -857,7 +840,6 @@ Collection of parallel library builds for use with the Arm Compiler for Linux an
 %files -n %{PROJ_NAME}-%{compiler_family}-python3-libs
 %files -n %{PROJ_NAME}-%{compiler_family}-runtimes
 %files -n %{PROJ_NAME}-%{compiler_family}-serial-libs
-%files -n %{PROJ_NAME}-nagios
 %files -n %{PROJ_NAME}-slurm-client
 %files -n %{PROJ_NAME}-slurm-server
 %files -n %{PROJ_NAME}-warewulf

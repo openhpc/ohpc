@@ -30,7 +30,7 @@ fi
 @test "[Libs/IMB] run IMB-NBC on $NODES nodes under resource manager ($rm/$LMOD_FAMILY_COMPILER/$LMOD_FAMILY_MPI)" {
     skip
     EXE=$IMB_DIR/bin/IMB-NBC
-    ARGS="-npmin 100 -msglog 1:8 Ibcast"
+    ARGS="-npmin 100 -msglog 1:4 Ibcast"
 
     if [ ! -x $EXE ];then
         flunk "missing $EXE"

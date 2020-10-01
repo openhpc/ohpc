@@ -18,7 +18,7 @@
 
 Summary:	Dimemas tool
 Name:		%{pname}-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
-Version:	5.4.1
+Version:	5.4.2
 Release:	1
 License:	GNU
 Group:		%{PROJ_NAME}/perf-tools
@@ -28,11 +28,13 @@ Source0:	https://ftp.tools.bsc.es/dimemas/dimemas-%{version}-src.tar.bz2
 BuildRequires: boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 Requires:      boost-%{compiler_family}-%{mpi_family}%{PROJ_DELIM}
 BuildRequires: bison
-BuildRequires: flex
 %if 0%{?rhel}
 BuildRequires: flex-devel
-%else
+BuildRequires: flex
+%endif
+%if 0%{?suse_version}
 BuildRequires: libfl-devel
+BuildRequires: flex%{PROJ_DELIM}
 %endif
 BuildRequires: autoconf
 BuildRequires: automake
@@ -61,8 +63,15 @@ systems.
 %ohpc_setup_compiler
 module load boost
 
-./bootstrap
-CFLAGS="-std=c99" LDFLAGS="-lstdc++" ./configure --prefix=%{install_path} --with-boost=$BOOST_DIR || cat config.log
+#./bootstrap
+
+%if 0%{?suse_version}
+module load flex
+export LDFLAGS="-L$FLEX_LIB"
+%endif
+
+./configure --prefix=%{install_path} \
+            --with-boost=$BOOST_DIR || cat config.log
 
 make %{?_smp_mflags}
 

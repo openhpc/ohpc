@@ -1,0 +1,10 @@
+steps.aux
+steps.fdb_latexmk
+steps.fls
+steps.log
+steps.out
+steps.toc
+steps.pdf
+vc.tex
+pkg-ohpc.chglog*
+

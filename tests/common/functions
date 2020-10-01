@@ -25,7 +25,7 @@ check_if_rpm_installed () {
 check_rms(){
 
     if [ -s /etc/pbs.conf ]; then
-	export RESOURCE_MANAGER=pbspro
+	export RESOURCE_MANAGER=openpbs
     elif [ -s /etc/slurm/slurm.conf ]; then
 	export RESOURCE_MANAGER=slurm
     else
@@ -229,7 +229,7 @@ run_serial_binary () {
 	    eval srun -n 1 -N 1 -t $timeout $EXE "$@"
 	fi
 	return $?
-   elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
+   elif [ "$RESOURCE_MANAGER" = "openpbs" ];then
 
 	# pbs presently won't search PATH and doesn't run out of cwd;cull out full path to $EXE
 	echo "EXE = $EXE"
@@ -403,7 +403,7 @@ run_mpi_binary () {
 	else
 	    ERROR_RETURN "Unsupported MPI family"
 	fi
-    elif [ "$RESOURCE_MANAGER" = "pbspro" ];then
+    elif [ "$RESOURCE_MANAGER" = "openpbs" ];then
 	jobScript=/tmp/job.$USER.$RANDOM
 
 	# infer tasks/node from total tasks

@@ -457,7 +457,13 @@ AM_CONDITIONAL(TRILINOS_ENABLED,test "x$enable_trilinos" = "xyes" )
 AC_ARG_ENABLE([munge],
    [AS_HELP_STRING([--enable-munge],[Enable munge authentication tests (default=yes)])],[],
    [AX_OPTION_DEFAULT(type=short,enable_munge,yes)])
-AM_CONDITIONAL(USERENV_ENABLED,test "x$enable_munge" = "xyes" ) 
+AM_CONDITIONAL(USERENV_ENABLED,test "x$enable_munge" = "xyes" )
+#------------------------------------------------------------------------------------------
+# ntp
+AC_ARG_ENABLE([ntp],
+   [AS_HELP_STRING([--enable-ntp],[Enable ntp tests (default=yes)])],[],
+   [AX_OPTION_DEFAULT(type=long,enable_ntp,yes)])
+AM_CONDITIONAL(NTP_ENABLED,test "x$enable_ntp" = "xyes" ) 
 #------------------------------------------------------------------------------------------
 # MiniFE
 AC_ARG_ENABLE([minife],
@@ -513,7 +519,8 @@ AC_OUTPUT( Makefile
        dev-tools/cilk/Makefile
        libs/R/Makefile
        libs/ucx/Makefile
-       modules/Makefile )
+       modules/Makefile
+       time/Makefile )
 
 echo
 echo '--------------------------------------------- SUMMARY ---------------------------------------------'
@@ -533,7 +540,7 @@ if test "x$enable_slurm" = "xyes" ; then
    echo Resource manager ............. : SLURM
 fi
 if test "x$enable_pbs" = "xyes" ; then
-   echo Resource manager ............. : PBS Pro
+   echo Resource manager ............. : OpenPBS
 fi
 if test "x$enable_warewulf" = "xyes" ; then
    echo Provisioner .................. : Warewulf
@@ -953,6 +960,12 @@ echo    User Environment:
        echo '    'RMS test harness.......... : enabled 
     else   
        echo '    'RMS test harness.......... : disabled 
+    fi
+
+    if test "x$enable_ntp" = "xyes"; then
+       echo '    'Time synchronization...... : enabled 
+    else
+       echo '    'Time synchronization...... : disabled
     fi
 
 fi

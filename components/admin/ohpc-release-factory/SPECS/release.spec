@@ -77,7 +77,7 @@ EOF
 cat >> ${RPM_BUILD_ROOT}/%{__repodir}/OpenHPC.repo <<EOF
 [OpenHPC]
 name=OpenHPC-%{ohpc_version} - Base
-baseurl=%{ohpc_factory_repo}/OpenHPC:/%{ohpc_version}:/Factory/%{_repository}
+baseurl=%{ohpc_factory_repo}/OpenHPC:/%{ohpc_version}.0:/Factory/%{_repository}
 gpgcheck=1
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-OpenHPC-2
 

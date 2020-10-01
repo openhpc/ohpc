@@ -40,7 +40,7 @@ my @compiler_familes = ("gnu","gnu7","intel","gnu8","gnu9","arm1");
 my @mpi_families     = ("mvapich2","openmpi","openmpi3","openmpi4","impi","mpich");
 
 my @package_skip = ("ohpc-release","gnu-compilers","R_base","mvapich2-psm","openmpi-psm2","scotch",
-                    "pbspro-client","pbspro-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs",
+                    "openpbs-client","openpbs-execution","warewulf-cluster","warewulf-provision","warewulf-ipmi","warewulf-vnfs",
 		     "warewulf-common-ohpc-localdb","lmod-defaults-gnu9-mpich-ofi","lmod-defaults-gnu9-mpich-ucx",
                      "python34-build-patch","python34-scipy","python34-numpy","python34-mpi4py","python3-Cython");
 
@@ -50,7 +50,7 @@ my %package_equiv = ("gnu7-compilers" => "Gnu Compiler Suite",
 		     "llvm4-compilers" => "LLVM Compiler Suite",
 		     "llvm5-compilers" => "LLVM Compiler Suite",
                      "intel-mpi-devel" => "Intel MPI Compatibility Package",
-                     "pbspro-server" => "PBSPro",
+                     "openpbs-server" => "OpenPBS",
 		     "openmpi3" => "openmpi",
 		     "openmpi3-pmix-slurm" => "openmpi",
                      "warewulf-common" => "warewulf",

@@ -102,7 +102,7 @@ accomplished as follows:
 % begin_ohpc_run
 % ohpc_validation_newline
 % ohpc_validation_comment Complete networking setup, associate provisioning image
-\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSVER}{\baseos{}}1 {IMAGE}{\installimage{}}1]
+\begin{lstlisting}[language=bash,keywords={},upquote=true,basicstyle=\footnotesize\ttfamily,literate={BOSSHORT}{\baseosshort{}}1 {IMAGE}{\installimage{}}1]
 
 # Complete network service configurations
 [sms](*\#*) makehosts
@@ -111,7 +111,7 @@ accomplished as follows:
 [sms](*\#*) makedns -n
 
 # Associate desired provisioning image for computes
-[sms](*\#*) nodeset compute osimage=BOSVER-x86_64-IMAGE-compute
+[sms](*\#*) nodeset compute osimage=BOSSHORT-x86_64-IMAGE-compute
 \end{lstlisting}
 
 %%% If the Lustre client was enabled for computes in \S\ref{sec:lustre_client}, you
